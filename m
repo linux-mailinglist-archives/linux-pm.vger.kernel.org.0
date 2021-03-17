@@ -2,514 +2,476 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDE533E964
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 06:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2E933E9D7
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 07:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbhCQF55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 01:57:57 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:40644 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhCQF5o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 01:57:44 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12H5vGAi012730;
-        Wed, 17 Mar 2021 00:57:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1615960636;
-        bh=6fyAje9Jk0h/VrMlswPV48PGPEeQ+MvXXLc0Wg1SthE=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=apnj6mp97H+lYE7qx1/NCryfkPxkSx1gDT66PZGR1gj3uFlivg9h0bIUrUP+OLjOV
-         3oHwYkZwsE8jSdM1GVb6zrEOoyLT9VVuLpIkLoKcwUVyTWy+3M6/gfQMHjcPMywm9s
-         bMTdA5nDhYDZM5CBSxGuH+4YHN6/efSbIqZWkGhc=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12H5vGRo112362
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 17 Mar 2021 00:57:16 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 17
- Mar 2021 00:57:15 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 17 Mar 2021 00:57:16 -0500
-Received: from [10.250.235.175] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12H5v7KM098914;
-        Wed, 17 Mar 2021 00:57:08 -0500
-Subject: Re: [PATCH] dt-bindings: Clean-up undocumented compatible strings
-To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-clk@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i3c@lists.infradead.org>, <linux-iio@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>
-References: <20210316194918.3528417-1-robh@kernel.org>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <0a253cda-d441-c59a-0542-50b945a40265@ti.com>
-Date:   Wed, 17 Mar 2021 11:27:06 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230033AbhCQGhY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 02:37:24 -0400
+Received: from mga11.intel.com ([192.55.52.93]:51748 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229909AbhCQGhW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Mar 2021 02:37:22 -0400
+IronPort-SDR: cXLbL4jNspQLfxPPWR2fs05Csqc55V1Rd19iQOFDIfH7YDtpdd4dU3OuE0O8vhQioL5Q154QKP
+ PiCkwYqkLkig==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="186042643"
+X-IronPort-AV: E=Sophos;i="5.81,255,1610438400"; 
+   d="scan'208";a="186042643"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 23:37:21 -0700
+IronPort-SDR: +VU2TxR8QhJHEjJy7gEJVTzMXHZUeDf2J/bjl+gqagY2fU5Wxs1h5Q7XudG/gxgoXMLDVIvxk4
+ Jh7gZvMr68oQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,255,1610438400"; 
+   d="scan'208";a="379165951"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.174]) ([10.237.72.174])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Mar 2021 23:37:14 -0700
+Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
+To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, cang@codeaurora.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux-PM mailing list <linux-pm@vger.kernel.org>
+References: <cover.1614725302.git.asutoshd@codeaurora.org>
+ <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
+ <85086647-7292-b0a2-d842-290818bd2858@intel.com>
+ <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
+ <20210306161616.GC74411@rowland.harvard.edu>
+ <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
+ <CAJZ5v0iJ4yqRTt=mTCC930HULNFNTgvO4f9ToVO6pNz53kxFkw@mail.gmail.com>
+ <f1e9b21d-1722-d20b-4bae-df7e6ce50bbc@codeaurora.org>
+ <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
+ <b13086f3-eea1-51a7-2117-579d520f21fc@intel.com>
+ <20cbd52d-7254-3e1c-06a3-712326c99f75@codeaurora.org>
+ <c1b38327-fece-4e31-709b-84ec775c6e18@intel.com>
+ <ae871d38-4865-5836-d370-e5f9b7be762c@codeaurora.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <24dfb6fc-5d54-6ee2-9195-26428b7ecf8a@intel.com>
+Date:   Wed, 17 Mar 2021 08:37:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210316194918.3528417-1-robh@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <ae871d38-4865-5836-d370-e5f9b7be762c@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 16/03/21 10:35 pm, Asutosh Das (asd) wrote:
+> On 3/16/2021 12:48 AM, Adrian Hunter wrote:
+>> On 16/03/21 12:22 am, Asutosh Das (asd) wrote:
+>>> On 3/14/2021 1:11 AM, Adrian Hunter wrote:
+>>>> On 10/03/21 5:04 am, Asutosh Das (asd) wrote:
+>>>>> On 3/9/2021 7:56 AM, Asutosh Das (asd) wrote:
+>>>>>> On 3/8/2021 9:17 AM, Rafael J. Wysocki wrote:
+>>>>>>> On Mon, Mar 8, 2021 at 5:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>>>>>>
+>>>>>>>> On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>>>>>>
+>>>>>>>>> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
+>>>>>>>>>
+>>>>>>>>>> Now during my testing I see a weird issue sometimes (1 in 7).
+>>>>>>>>>> Scenario - bootups
+>>>>>>>>>>
+>>>>>>>>>> Issue:
+>>>>>>>>>> The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
+>>>>>>>>>> when one/more of its consumers are in RPM_ACTIVE state.
+>>>>>>>>>>
+>>>>>>>>>> *Log:
+>>>>>>>>>> [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
+>>>>>>>>>> [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
+>>>>>>>>>> [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
+>>>>>>>>>> [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
+>>>>>>>>>> [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
+>>>>>>>>>> [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
+>>>>>>>>>> [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+>>>>>>>>>>
+>>>>>>>>>> /** Printing all the consumer nodes of supplier **/
+>>>>>>>>>> [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
+>>>>>>>>>> <-- this is the usage_count
+>>>>>>>>>> [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
+>>>>>>>>>> [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
+>>>>>>>>>> [   11.005453][    T5] sd 0:0:0:0: PM state - 2
+>>>>>>>>>> [   11.009958][    T5] sd 0:0:0:1: PM state - 2
+>>>>>>>>>> [   11.014469][    T5] sd 0:0:0:2: PM state - 2
+>>>>>>>>>> [   11.019072][    T5] sd 0:0:0:3: PM state - 2
+>>>>>>>>>> [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
+>>>>>>>>>> [   11.353298][    T5] sd 0:0:0:5: PM state - 2
+>>>>>>>>>> [   11.357726][    T5] sd 0:0:0:6: PM state - 2
+>>>>>>>>>> [   11.362155][    T5] sd 0:0:0:7: PM state - 2
+>>>>>>>>>> [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
+>>>>>>>>>> [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
+>>>>>>>>>> (0) has rpm_active flags
+>>>>>>>>
+>>>>>>>> Do you mean that rpm_active of the link between the consumer and the
+>>>>>>>> supplier is greater than 0 at this point and the consumer is
+>>>>>>>
+>>>>>>> I mean is rpm_active of the link greater than 1 (because 1 means "no
+>>>>>>> active references to the supplier")?
+>>>>>> Hi Rafael:
+>>>>>> No - it is not greater than 1.
+>>>>>>
+>>>>>> I'm trying to understand what's going on in it; will update when I've something.
+>>>>>>
+>>>>>>>
+>>>>>>>> RPM_ACTIVE, but the supplier suspends successfully nevertheless?
+>>>>>>>>
+>>>>>>>>>> [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
+>>>>>>>>>> ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
+>>>>>>>>>> [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
+>>>>>>>>>>
+>>>>>>>>>> And the the suspend of sde is stuck now:
+>>>>>>>>>> schedule+0x9c/0xe0
+>>>>>>>>>> schedule_timeout+0x40/0x128
+>>>>>>>>>> io_schedule_timeout+0x44/0x68
+>>>>>>>>>> wait_for_common_io+0x7c/0x100
+>>>>>>>>>> wait_for_completion_io+0x14/0x20
+>>>>>>>>>> blk_execute_rq+0x90/0xcc
+>>>>>>>>>> __scsi_execute+0x104/0x1c4
+>>>>>>>>>> sd_sync_cache+0xf8/0x2a0
+>>>>>>>>>> sd_suspend_common+0x74/0x11c
+>>>>>>>>>> sd_suspend_runtime+0x14/0x20
+>>>>>>>>>> scsi_runtime_suspend+0x64/0x94
+>>>>>>>>>> __rpm_callback+0x80/0x2a4
+>>>>>>>>>> rpm_suspend+0x308/0x614
+>>>>>>>>>> pm_runtime_work+0x98/0xa8
+>>>>>>>>>>
+>>>>>>>>>> I added 'DL_FLAG_RPM_ACTIVE' while creating links.
+>>>>>>>>>>          if (hba->sdev_ufs_device) {
+>>>>>>>>>>                  link = device_link_add(&sdev->sdev_gendev,
+>>>>>>>>>>                                      &hba->sdev_ufs_device->sdev_gendev,
+>>>>>>>>>>                                     DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
+>>>>>>>>>> I didn't expect this to resolve the issue anyway and it didn't.
+>>>>>>>>>>
+>>>>>>>>>> Another interesting point here is when I resume any of the above suspended
+>>>>>>>>>> consumers, it all goes back to normal, which is kind of expected. I tried
+>>>>>>>>>> resuming the consumer and the supplier is resumed and the supplier is
+>>>>>>>>>> suspended when all the consumers are suspended.
+>>>>>>>>>>
+>>>>>>>>>> Any pointers on this issue please?
+>>>>>>>>>>
+>>>>>>>>>> @Bart/@Alan - Do you've any pointers please?
+>>>>>>>>>
+>>>>>>>>> It's very noticeable that although you seem to have isolated a bug in
+>>>>>>>>> the power management subsystem (supplier goes into runtime suspend
+>>>>>>>>> even when one of its consumers is still active), you did not CC the
+>>>>>>>>> power management maintainer or mailing list.
+>>>>>>>>>
+>>>>>>>>> I have added the appropriate CC's.
+>>>>>>>>
+>>>>>>>> Thanks Alan!
+>>>>>>
+>>>>>>
+>>>>>
+>>>>> Hello
+>>>>> I & Can (thanks CanG) debugged this further:
+>>>>>
+>>>>> Looks like this issue can occur if the sd probe is asynchronous.
+>>>>>
+>>>>> Essentially, the sd_probe() is done asynchronously and driver_probe_device() invokes pm_runtime_get_suppliers() before invoking sd_probe().
+>>>>>
+>>>>> But scsi_probe_and_add_lun() runs in a separate context.
+>>>>> So the scsi_autopm_put_device() invoked from scsi_scan_host() context reduces the link->rpm_active to 1. And sd_probe() invokes scsi_autopm_put_device() and starts a timer. And then driver_probe_device() invoked from __device_attach_async_helper context reduces the link->rpm_active to 1 thus enabling the supplier to suspend before the consumer suspends.
+>>>>>
+>>>>> So if:
+>>>>> Context T1:
+>>>>> [1] scsi_probe_and_add_lun()
+>>>>> [2]    |- scsi_autopm_put_device() - reduce the link->rpm_active to 1
+>>>>>
+>>>>> Context T2:
+>>>>> __device_attach_async_helper()
+>>>>>       |- driver_probe_device()
+>>>>>           |- sd_probe()
+>>>>> In between [1] and [2] say, driver_probe_device() -> sd_probe() is invoked in a separate context from __device_attach_async_helper().
+>>>>> The driver_probe_device() -> pm_runtime_get_suppliers() but [2] would reduce link->rpm_active to 1.
+>>>>> Then sd_probe() would invoke rpm_resume() and proceed as is.
+>>>>> When sd_probe() invokes scsi_autopm_put_device() it'd start a timer, dev->power.timer_autosuspends = 1.
+>>>>>
+>>>>> Now then, pm_runtime_put_suppliers() is invoked from driver_probe_device() and that makes the link->rpm_active = 1.
+>>>>> But by now, the corresponding 'sd dev' (consumer) usage_count = 0, state = RPM_ACTIVE and link->rpm_active = 1.
+>>>>> At this point of time, all other 'sd dev' (consumers) _may_ be suspended or active but would have the link->rpm_active = 1.
+>>>>
+>>>> Is this with DL_FLAG_RPM_ACTIVE?  In that case, wouldn't active
+>>>> consumers have link->rpm_active = 2 and also have incremented
+>>>> the supplier's usage_count?
+> 
+> Yes this is with DL_FLAG_RPM_ACTIVE.
+> 
+> Please let me share a log here:
+> BEF means - Before, AFT means After.
+> 
+> [    6.843445][    T7] scsi 0:0:0:4: [UFSDBG]: ufshcd_setup_links:4779:  supp: usage_cnt: 3 Link - 0:0:0:49488 link-rpm_active: 2 avail_luns: 5
+> [    6.892545][    T7] scsi 0:0:0:4: pm_runtime_get_suppliers: (0:0:0:49488): supp: usage_count: 5 rpm_active: 4
+> 
+> In the above log, T7 is the context in which this scsi device is being added - scsi_sysfs_add_sdev()
+> 
+> [    6.931846][    T7] ufs_rpmb_wlun 0:0:0:4: [UFSDBG]: ufshcd_rpmb_probe:9692: invoked
+> [    6.941246][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: rpm_active: 4
+> 
+> [    6.941246][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: (0:0:0:49488) [BEF] usage_count: 5
+> [    6.941247][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: (0:0:0:49488) [AFT] usage_count: 4 rpm_active: 3
+> 
+> [    6.941267][    T7] scsi 0:0:0:4: rpm_put_suppliers: [BEF] Supp (0:0:0:49488) usage_count: 4 rpm_active: 3
+> 
+> ------ T196 Context comes in while T7 is running ----------
+> [    6.941466][  T196] scsi 0:0:0:4: pm_runtime_get_suppliers: (0:0:0:49488): supp: usage_count: 5 rpm_active: 4
+> --------------------------------------------------------------
+> 
+> [    7.788397][    T7] scsi 0:0:0:4: rpm_put_suppliers: [AFT] Supp (0:0:0:49488) usage_count: 2 rpm_active: 1
 
 
-On 17/03/21 1:19 am, Rob Herring wrote:
-> Adding checks for undocumented compatible strings reveals a bunch of
-> warnings in the DT binding examples. Fix the cases which are typos, just
-> a mismatch between the schema and the example, or aren't documented at all.
-> In a couple of cases, fixing the compatible revealed some schema errors
-> which are fixed.
-> 
-> There's a bunch of others remaining after this which have bindings, but
-> those aren't converted to schema yet.
-> 
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i3c@lists.infradead.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+> 
+> -- 
+> 
+> T196 is the context in which sd_probe() is invoked for this scsi device.
+> 
+> [    7.974410][  T196] sd 0:0:0:4: [sde] Attached SCSI disk
+> [    7.984188][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: rpm_active: 2
+> [    7.998424][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: (0:0:0:49488) [BEF] usage_count: 4
+> [    8.017320][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: (0:0:0:49488) [AFT] usage_count: 1 rpm_active: 1
+> 
+> The reference to the link is released after sd_probe() is completed.
+> At this point, the rpm_active should be 2. And the rpm_active should become 1 when sd 0:0:0:4 actually suspends. But at the end of sd_probe() the suspend is only scheduled. However the supplier is now free to suspend.
+> 
+> In this log, the usage_count of supplier becomes 0 here:
+> [   11.963885][  T117] sd 0:0:0:7: rpm_put_suppliers: [BEF] Supp (0:0:0:49488) usage_count: 1 rpm_active: 2
+> [   11.973821][  T117] sd 0:0:0:7: rpm_put_suppliers: [AFT] Supp (0:0:0:49488) usage_count: 0 rpm_active: 1
+> 
+> However, the consumer sd 0:0:0:4 is still active but has released the reference to the supplier:
 
-> ---
->  .../clock/allwinner,sun4i-a10-pll1-clk.yaml   |  2 +-
->  .../bindings/clock/milbeaut-clock.yaml        | 12 +++++----
->  .../bindings/display/brcm,bcm2835-dsi0.yaml   |  6 -----
->  .../bindings/display/panel/panel-dpi.yaml     |  2 +-
->  .../devicetree/bindings/dma/qcom,gpi.yaml     |  2 +-
->  .../devicetree/bindings/i3c/i3c.yaml          |  7 ++---
->  .../iio/adc/brcm,iproc-static-adc.yaml        |  5 ----
->  .../iio/gyroscope/nxp,fxas21002c.yaml         |  2 +-
->  .../bindings/iio/light/upisemi,us5182.yaml    |  4 +--
->  .../interrupt-controller/loongson,htpic.yaml  |  2 +-
->  .../devicetree/bindings/leds/leds-lgm.yaml    | 26 ++++++++++++++++---
->  .../bindings/phy/ti,phy-j721e-wiz.yaml        |  2 +-
->  .../bindings/power/supply/cw2015_battery.yaml |  2 +-
->  .../bindings/power/supply/power-supply.yaml   | 22 ----------------
->  .../devicetree/bindings/serial/serial.yaml    |  2 +-
->  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  4 +--
->  .../bindings/spi/spi-controller.yaml          | 21 ++++++++-------
->  .../devicetree/bindings/spi/spi-mux.yaml      |  8 ++----
->  .../devicetree/bindings/spi/st,stm32-spi.yaml |  6 -----
->  19 files changed, 58 insertions(+), 79 deletions(-)
+If that is the case, then it is an error in PM not UFS.
+
+A second look at the code around rpm_put_suppliers() does look
+potentially racy, since there does not appear to be anything
+stopping the runtime_status changing between
+spin_unlock_irq(&dev->power.lock) and device_links_read_lock().
+
+Rafael, can you comment?
+
+	/*
+	 * If the device is suspending and the callback has returned success,
+	 * drop the usage counters of the suppliers that have been reference
+	 * counted on its resume.
+	 *
+	 * Do that if the resume fails too.
+	 */
+	put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
+	if (put)
+		__update_runtime_status(dev, RPM_SUSPENDED);
+	else
+		put = get && retval;
+
+	if (put) {
+		spin_unlock_irq(&dev->power.lock);
+
+		idx = device_links_read_lock();
+
+fail:
+		rpm_put_suppliers(dev);
+
+		device_links_read_unlock(idx);
+
+		spin_lock_irq(&dev->power.lock);
+	}
+
+
+
+
+> [   12.002792][  T117] scsi 0:0:0:49456: rpm_status - 2
+> [   12.002806][  T117] sd 0:0:0:0: rpm_status - 2
+> [   12.002834][  T117] sd 0:0:0:1: rpm_status - 2
+> [   12.017730][  T117] sd 0:0:0:2: rpm_status - 2
+> [   12.041317][  T117] sd 0:0:0:3: rpm_status - 2
+> [   12.045953][  T117] sd 0:0:0:4: rpm_status - 0
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll1-clk.yaml b/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll1-clk.yaml
-> index e9c4cf834aa7..e5d9d45dab8a 100644
-> --- a/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll1-clk.yaml
-> +++ b/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll1-clk.yaml
-> @@ -44,7 +44,7 @@ examples:
->    - |
->      clk@1c20000 {
->          #clock-cells = <0>;
-> -        compatible = "allwinner,sun4i-a10-pll1";
-> +        compatible = "allwinner,sun4i-a10-pll1-clk";
->          reg = <0x01c20000 0x4>;
->          clocks = <&osc24M>;
->          clock-output-names = "osc24M";
-> diff --git a/Documentation/devicetree/bindings/clock/milbeaut-clock.yaml b/Documentation/devicetree/bindings/clock/milbeaut-clock.yaml
-> index 0e8b07710451..6d39344d2b70 100644
-> --- a/Documentation/devicetree/bindings/clock/milbeaut-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/milbeaut-clock.yaml
-> @@ -18,10 +18,12 @@ description: |
->  
->  properties:
->    compatible:
-> -    oneOf:
-> -      - items:
-> -          - enum:
-> -              - socionext,milbeaut-m10v-ccu
-> +    enum:
-> +      - socionext,milbeaut-m10v-ccu
-> +
-> +  reg:
-> +    maxItems: 1
-> +
->    clocks:
->      maxItems: 1
->      description: external clock
-> @@ -41,7 +43,7 @@ examples:
->    # Clock controller node:
->    - |
->      m10v-clk-ctrl@1d021000 {
-> -        compatible = "socionext,milbeaut-m10v-clk-ccu";
-> +        compatible = "socionext,milbeaut-m10v-ccu";
->          reg = <0x1d021000 0x4000>;
->          #clock-cells = <1>;
->          clocks = <&clki40mhz>;
-> diff --git a/Documentation/devicetree/bindings/display/brcm,bcm2835-dsi0.yaml b/Documentation/devicetree/bindings/display/brcm,bcm2835-dsi0.yaml
-> index 55c60919991f..32608578a352 100644
-> --- a/Documentation/devicetree/bindings/display/brcm,bcm2835-dsi0.yaml
-> +++ b/Documentation/devicetree/bindings/display/brcm,bcm2835-dsi0.yaml
-> @@ -77,12 +77,6 @@ examples:
->  
->          clock-output-names = "dsi1_byte", "dsi1_ddr2", "dsi1_ddr";
->  
-> -        pitouchscreen: panel@0 {
-> -            compatible = "raspberrypi,touchscreen";
-> -            reg = <0>;
-> -
-> -            /* ... */
-> -        };
->      };
->  
->  ...
-> diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> index 0cd74c8dab42..dae0676b5c6e 100644
-> --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> @@ -40,7 +40,7 @@ additionalProperties: false
->  examples:
->    - |
->      panel {
-> -        compatible = "osddisplays,osd057T0559-34ts", "panel-dpi";
-> +        compatible = "startek,startek-kd050c", "panel-dpi";
->          label = "osddisplay";
->          power-supply = <&vcc_supply>;
->          backlight = <&backlight>;
-> diff --git a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> index f8142adf9aea..2e66840a78fe 100644
-> --- a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> +++ b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> @@ -64,7 +64,7 @@ examples:
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      #include <dt-bindings/dma/qcom-gpi.h>
->      gpi_dma0: dma-controller@800000 {
-> -        compatible = "qcom,gpi-dma";
-> +        compatible = "qcom,sdm845-gpi-dma";
->          #dma-cells = <3>;
->          reg = <0x00800000 0x60000>;
->          iommus = <&apps_smmu 0x0016 0x0>;
-> diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
-> index 52042aa44d19..1f82fc923799 100644
-> --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
-> +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
-> @@ -157,9 +157,10 @@ examples:
->          i2c-scl-hz = <100000>;
->  
->          /* I2C device. */
-> -        nunchuk: nunchuk@52 {
-> -            compatible = "nintendo,nunchuk";
-> -            reg = <0x52 0x0 0x10>;
-> +        eeprom@57 {
-> +            compatible = "atmel,24c01";
-> +            reg = <0x57 0x0 0x10>;
-> +            pagesize = <0x8>;
->          };
->  
->          /* I3C device with a static I2C address. */
-> diff --git a/Documentation/devicetree/bindings/iio/adc/brcm,iproc-static-adc.yaml b/Documentation/devicetree/bindings/iio/adc/brcm,iproc-static-adc.yaml
-> index c562d25bee3b..547697e8bc8b 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/brcm,iproc-static-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/brcm,iproc-static-adc.yaml
-> @@ -53,11 +53,6 @@ examples:
->          #address-cells = <1>;
->          #size-cells = <1>;
->  
-> -        ts_adc_syscon: ts_adc_syscon@180a6000 {
-> -            compatible = "brcm,iproc-ts-adc-syscon","syscon";
-> -            reg = <0x180a6000 0xc30>;
-> -        };
-> -
->          adc {
->              compatible = "brcm,iproc-static-adc";
->              adc-syscon = <&ts_adc_syscon>;
-> diff --git a/Documentation/devicetree/bindings/iio/gyroscope/nxp,fxas21002c.yaml b/Documentation/devicetree/bindings/iio/gyroscope/nxp,fxas21002c.yaml
-> index d97ee774d6a6..3f57a1b813e6 100644
-> --- a/Documentation/devicetree/bindings/iio/gyroscope/nxp,fxas21002c.yaml
-> +++ b/Documentation/devicetree/bindings/iio/gyroscope/nxp,fxas21002c.yaml
-> @@ -83,7 +83,7 @@ examples:
->          #size-cells = <0>;
->  
->          gyroscope@0 {
-> -          compatible = "nxp,fxas2102c";
-> +          compatible = "nxp,fxas21002c";
->            reg = <0x0>;
->  
->            spi-max-frequency = <2000000>;
-> diff --git a/Documentation/devicetree/bindings/iio/light/upisemi,us5182.yaml b/Documentation/devicetree/bindings/iio/light/upisemi,us5182.yaml
-> index de5882cb3360..dd78abe0ec8d 100644
-> --- a/Documentation/devicetree/bindings/iio/light/upisemi,us5182.yaml
-> +++ b/Documentation/devicetree/bindings/iio/light/upisemi,us5182.yaml
-> @@ -11,12 +11,12 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: upisemi,asd5182
-> +    const: upisemi,usd5182
->  
->    reg:
->      maxItems: 1
->  
-> -  upsemi,glass-coef:
-> +  upisemi,glass-coef:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description: |
->        glass attenuation factor - compensation factor of resolution 1000
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,htpic.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,htpic.yaml
-> index d1d52d1db2be..d6bc1a687fc7 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,htpic.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,htpic.yaml
-> @@ -47,7 +47,7 @@ examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
->      htintc: interrupt-controller@1fb000080 {
-> -      compatible = "loongson,htintc-1.0";
-> +      compatible = "loongson,htpic-1.0";
->        reg = <0xfb000080 0x40>;
->        interrupt-controller;
->        #interrupt-cells = <1>;
-> diff --git a/Documentation/devicetree/bindings/leds/leds-lgm.yaml b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
-> index 32bbf146c01d..f8d7963c3a13 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-lgm.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
-> @@ -14,6 +14,17 @@ properties:
->    compatible:
->      const: intel,lgm-ssoled
->  
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: sso
-> +      - const: fpid
-> +
->    gpio-controller: true
->  
->    '#gpio-cells':
-> @@ -36,8 +47,15 @@ properties:
->  
->      additionalProperties: false
->  
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
->      patternProperties:
-> -      "^led@[0-23]$":
-> +      "^led@[0-2]$":
->          type: object
->  
->          properties:
-> @@ -81,7 +99,7 @@ examples:
->      #include <dt-bindings/leds/common.h>
->  
->      ssogpio: ssogpio@e0d40000 {
-> -      compatible = "intel,sso-led";
-> +      compatible = "intel,lgm-ssoled";
->        reg = <0xE0D40000 0x2E4>;
->        gpio-controller;
->        #gpio-cells = <2>;
-> @@ -103,8 +121,8 @@ examples:
->            led-gpio = <&ssogpio 0 0>;
->          };
->  
-> -        led@23 {
-> -          reg = <23>;
-> +        led@2 {
-> +          reg = <2>;
->            function = LED_FUNCTION_POWER;
->            color = <LED_COLOR_ID_GREEN>;
->            led-gpio = <&ssogpio 23 0>;
-> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-> index bbbd85501ada..d0040255c591 100644
-> --- a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-> +++ b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-> @@ -218,7 +218,7 @@ examples:
->             };
->  
->             serdes@5000000 {
-> -                  compatible = "cdns,ti,sierra-phy-t0";
-> +                  compatible = "ti,sierra-phy-t0";
->                    reg-names = "serdes";
->                    reg = <0x5000000 0x10000>;
->                    #address-cells = <1>;
-> diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> index 5fcdf5801536..c73abb2ff513 100644
-> --- a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> @@ -61,7 +61,7 @@ examples:
->          #size-cells = <0>;
->  
->          cw2015@62 {
-> -            compatible = "cellwise,cw201x";
-> +            compatible = "cellwise,cw2015";
->              reg = <0x62>;
->              cellwise,battery-profile = /bits/ 8 <
->                  0x17 0x67 0x80 0x73 0x6E 0x6C 0x6B 0x63
-> diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-> index c5c55f627251..259760167759 100644
-> --- a/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-> @@ -18,25 +18,3 @@ properties:
->  
->  additionalProperties: true
->  
-> -examples:
-> -  - |
-> -    power {
-> -      #address-cells = <1>;
-> -      #size-cells = <0>;
-> -
-> -      usb_charger:charger@e {
-> -        compatible = "some,usb-charger";
-> -        reg = <0xe>;
-> -      };
-> -
-> -      ac_charger:charger@c {
-> -        compatible = "some,ac-charger";
-> -        reg = <0xc>;
-> -      };
-> -
-> -      battery:battery@b {
-> -        compatible = "some,battery";
-> -        reg = <0xb>;
-> -        power-supplies = <&usb_charger>, <&ac_charger>;
-> -      };
-> -    };
-> diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
-> index 65e75d040521..eea300405816 100644
-> --- a/Documentation/devicetree/bindings/serial/serial.yaml
-> +++ b/Documentation/devicetree/bindings/serial/serial.yaml
-> @@ -134,7 +134,7 @@ examples:
->              interrupts = <1>;
->  
->              bluetooth {
-> -                    compatible = "brcm,bcm43341-bt";
-> +                    compatible = "brcm,bcm4330-bt";
->                      interrupt-parent = <&gpio>;
->                      interrupts = <10>;
->              };
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> index 667dedefd69f..e3fb553d9180 100644
-> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> @@ -90,8 +90,8 @@ examples:
->            #address-cells = <1>;
->            #size-cells = <0>;
->  
-> -          ethernet-switch@0 {
-> -              compatible = "micrel,ks8995m";
-> +          display@0 {
-> +              compatible = "lg,lg4573";
->                spi-max-frequency = <1000000>;
->                reg = <0>;
->            };
-> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> index 06786f1b43d2..0477396e4945 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> @@ -181,22 +181,23 @@ additionalProperties: true
->  
->  examples:
->    - |
-> -    spi@f00 {
-> +    spi@80010000 {
->          #address-cells = <1>;
->          #size-cells = <0>;
-> -        compatible = "fsl,mpc5200b-spi","fsl,mpc5200-spi";
-> -        reg = <0xf00 0x20>;
-> -        interrupts = <2 13 0 2 14 0>;
-> -        interrupt-parent = <&mpc5200_pic>;
-> -
-> -        ethernet-switch@0 {
-> -            compatible = "micrel,ks8995m";
-> +        compatible = "fsl,imx28-spi";
-> +        reg = <0x80010000 0x2000>;
-> +        interrupts = <96>;
-> +        dmas = <&dma_apbh 0>;
-> +        dma-names = "rx-tx";
-> +
-> +        display@0 {
-> +            compatible = "lg,lg4573";
->              spi-max-frequency = <1000000>;
->              reg = <0>;
->          };
->  
-> -        codec@1 {
-> -            compatible = "ti,tlv320aic26";
-> +        sensor@1 {
-> +            compatible = "bosch,bme680";
->              spi-max-frequency = <100000>;
->              reg = <1>;
->          };
-> diff --git a/Documentation/devicetree/bindings/spi/spi-mux.yaml b/Documentation/devicetree/bindings/spi/spi-mux.yaml
-> index 6c21a132b51f..d09c6355e22d 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-mux.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-mux.yaml
-> @@ -75,16 +75,12 @@ examples:
->              spi-flash@0 {
->                  compatible = "jedec,spi-nor";
->                  reg = <0>;
-> -                #address-cells = <1>;
-> -                #size-cells = <0>;
->                  spi-max-frequency = <40000000>;
->              };
->  
-> -            spi-device@1 {
-> -                compatible = "lineartechnology,ltc2488";
-> +            sensor@1 {
-> +                compatible = "bosch,bme680";
->                  reg = <1>;
-> -                #address-cells = <1>;
-> -                #size-cells = <0>;
->                  spi-max-frequency = <10000000>;
->              };
->          };
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> index d11806b1ede3..2d9af4c506bb 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -96,12 +96,6 @@ examples:
->        dma-names = "rx", "tx";
->        cs-gpios = <&gpioa 11 0>;
->  
-> -      aardvark@0 {
-> -        compatible = "totalphase,aardvark";
-> -        reg = <0>;
-> -        spi-max-frequency = <4000000>;
-> -        st,spi-midi-ns = <4000>;
-> -      };
->      };
->  
->  ...
+> And sd 0:0:0:4 tries to suspend here:
+> [   15.465914][  T117] sd 0:0:0:4: [sde] Synchronizing SCSI cache
 > 
+>>>>
+>>>> Another outstanding issue that comes to mind, is to ensure
+>>>> hba->sdev_ufs_device does not runtime suspend before it is probed.
+>>>> I suggest changing ufshcd_slave_configure() so it does not set
+>>>> sdev->rpm_autosuspend for hba->sdev_ufs_device, and instead do
+>>>> pm_runtime_allow / pm_runtime_forbid() in ufshcd_wl_probe() /
+>>>> ufshcd_wl_remove() respectively.
+>>>>
+> If pm_runtime_allow() is invoked from ufshcd_wl_probe() it'd invoke runtime_suspend on hba->sdev_ufs_device before exiting scsi_sysfs_add_sdev(). So I think pm_runtime_allow() should be invoked in ufshcd_scsi_add_wlus().
+> 
+>>>> However we still want to stop hba->sdev_ufs_device runtime
+>>>> suspending while consumers are being added.  With that in mind,
+>>>> I would expect pm_runtime_get_noresume(&hba->sdev_ufs_device->sdev_gendev)
+>>>> in ufshcd_scsi_add_wlus() to come *before*
+>>>> ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).  In fact, it would
+>>>> be more logical to make it, pm_runtime_get_sync() since we require
+>>>> hba->sdev_ufs_device to be active at that point.
+>>>>
+> Correct, scsi_autopm_get_device(hba->sdev_ufs_device) should be invoked before ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).
+> Now a corresponding scsi_autopm_put_device(hba->sdev_ufs_device) is invoked after the consumers are added in ufshcd_setup_links().
+> Even then I think this issue would still pop up.
+> 
+>>>>
+>>>
+>>> Hi Adrian,
+>>> I think the v11 that I pushed can handle this.
+>>> runtime-suspend is forbidden at probe and is re-enabled after probe is done. Please take a look and let me know if I'm missing something.
+>>
+>> If the PM APIs are being used correctly, the usage and active
+>> counts should never be wrong.  If they were, then that would
+>> be an issue for the PM framework.
+>> It is more likely that I'm using it incorrectly :).
+> 
+>> However, it is hard to tell what the issues are until all the
+>> UFS driver changes have been completed, such as the ones I
+>> suggested above above.
+>>
+> Ok, understood.
+> 
+>> v11 could be hiding issues rather than fixing them.
+>>
+> Based on the logs, in v11, I tried to forbid any runtime-suspend until sd_probe() is done.
+> I could be misunderstanding the whole thing though.
+> 
+> Having said that, I will make the changes as per your suggestions and push a v12. I will test with v12 as well and see if this issue is seen.
+> 
+>>>
+>>>>>
+>>>>> Since the supplier has 0 auto-suspend delay, it now suspends!
+>>>>>
+>>>>>
+>>>>> Context [T1]
+>>>>> Call trace:
+>>>>> dump_backtrace+0x0/0x1d4
+>>>>> show_stack+0x18/0x24
+>>>>> dump_stack+0xc4/0x144
+>>>>> __pm_runtime_idle+0xb4/0x184
+>>>>> scsi_autopm_put_device+0x18/0x24
+>>>>> scsi_sysfs_add_sdev+0x26c/0x278
+>>>>> scsi_probe_and_add_lun+0xbac/0xd48
+>>>>> __scsi_scan_target+0x38c/0x510
+>>>>> scsi_scan_host_selected+0x14c/0x1e4
+>>>>> scsi_scan_host+0x1e0/0x228
+>>>>> ufshcd_async_scan+0x39c/0x408
+>>>>> async_run_entry_fn+0x48/0x128
+>>>>> process_one_work+0x1f0/0x470
+>>>>> worker_thread+0x26c/0x4c8
+>>>>> kthread+0x13c/0x320
+>>>>> ret_from_fork+0x10/0x18
+>>>>>
+>>>>>
+>>>>> Context [T2]
+>>>>> Call trace:
+>>>>> dump_backtrace+0x0/0x1d4
+>>>>> show_stack+0x18/0x24
+>>>>> dump_stack+0xc4/0x144
+>>>>> rpm_get_suppliers+0x48/0x1ac
+>>>>> __rpm_callback+0x58/0x12c
+>>>>> rpm_resume+0x3a4/0x618
+>>>>> __pm_runtime_resume+0x50/0x80
+>>>>> scsi_autopm_get_device+0x20/0x54
+>>>>> sd_probe+0x40/0x3d0
+>>>>> really_probe+0x1bc/0x4a0
+>>>>> driver_probe_device+0x84/0xf0
+>>>>> __device_attach_driver+0x114/0x138
+>>>>> bus_for_each_drv+0x84/0xd0
+>>>>> __device_attach_async_helper+0x7c/0xf0
+>>>>> async_run_entry_fn+0x48/0x128
+>>>>> process_one_work+0x1f0/0x470
+>>>>> worker_thread+0x26c/0x4c8
+>>>>> kthread+0x13c/0x320
+>>>>> ret_from_fork+0x10/0x18
+>>>>>
+>>>>> Below prints show how link->rpm_active becomes 1 for sd 0:0:0:4
+>>>>> [    7.574654][  T212] Call trace:
+>>>>> [    7.574657][  T212]  dump_backtrace+0x0/0x1d4
+>>>>> [    7.574661][  T212]  show_stack+0x18/0x24
+>>>>> [    7.574665][  T212]  dump_stack+0xc4/0x144
+>>>>> [    7.574668][  T212]  __pm_runtime_idle+0xb4/0x184
+>>>>> [    7.574671][  T212]  scsi_autopm_put_device+0x18/0x24
+>>>>> [    7.574675][  T212]  sd_probe+0x314/0x3d0
+>>>>> [    7.574677][  T212]  really_probe+0x1bc/0x4a0
+>>>>> [    7.574680][  T212]  driver_probe_device+0x84/0xf0
+>>>>> [    7.574683][  T212]  __device_attach_driver+0x114/0x138
+>>>>> [    7.574686][  T212]  bus_for_each_drv+0x84/0xd0
+>>>>> [    7.574689][  T212]  __device_attach_async_helper+0x7c/0xf0
+>>>>> [    7.574692][  T212]  async_run_entry_fn+0x48/0x128
+>>>>> [    7.574695][  T212]  process_one_work+0x1f0/0x470
+>>>>> [    7.574698][  T212]  worker_thread+0x26c/0x4c8
+>>>>> [    7.574700][  T212]  kthread+0x13c/0x320
+>>>>> [    7.574703][  T212]  ret_from_fork+0x10/0x18
+>>>>> [    7.574706][  T212] sd 0:0:0:4: scsi_runtime_idle
+>>>>> [    7.574712][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: -16 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>>> [    7.574715][  T212] sd 0:0:0:4: sd_probe: [UFSDBG]: Exit
+>>>>> [    7.574738][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>>>
+>>>>> [    7.574752][  T212] Workqueue: events_unbound async_run_entry_fn
+>>>>> [    7.574754][  T212] Call trace:
+>>>>> [    7.574758][  T212]  dump_backtrace+0x0/0x1d4
+>>>>> [    7.574761][  T212]  show_stack+0x18/0x24
+>>>>> [    7.574765][  T212]  dump_stack+0xc4/0x144
+>>>>> [    7.574767][  T212]  __pm_runtime_idle+0xb4/0x184
+>>>>> [    7.574770][  T212]  driver_probe_device+0x94/0xf0
+>>>>> [    7.574773][  T212]  __device_attach_driver+0x114/0x138
+>>>>> [    7.574775][  T212]  bus_for_each_drv+0x84/0xd0
+>>>>> [    7.574778][  T212]  __device_attach_async_helper+0x7c/0xf0
+>>>>> [    7.574781][  T212]  async_run_entry_fn+0x48/0x128
+>>>>> [    7.574783][  T212]  process_one_work+0x1f0/0x470
+>>>>> [    7.574786][  T212]  worker_thread+0x26c/0x4c8
+>>>>> [    7.574788][  T212]  kthread+0x13c/0x320
+>>>>> [    7.574791][  T212]  ret_from_fork+0x10/0x18
+>>>>> [    7.574848][   T80] sd 0:0:0:4: scsi_runtime_idle
+>>>>> [    7.574858][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: 0 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>>> [    7.574863][  T212] sd 0:0:0:4: pm_runtime_put_suppliers: [UFSDBG]: rpm_status: 0 link-rpm_active:1
+>>>>> [    7.574866][  T212] sd 0:0:0:4: async probe completed
+>>>>> [    7.574870][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:1
+>>>>>
+>>>>>
+>>>>> So, from the above it looks like when async probe is enabled this is a possibility.
+>>>>>
+>>>>> I don't see a way around this. Please let me know if you (@Alan/@Bart/@Adrian) have any thoughts on this.
+>>>>>
+>>>>> Thanks,
+>>>>> -asd
+>>>>>
+>>>>
+>>>
+>>>
+>>
+> 
+> 
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> Linux Foundation Collaborative Project
+
