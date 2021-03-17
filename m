@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D2F33E3E9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 01:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DD033E4B1
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 02:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbhCQA5w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 20:57:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35252 "EHLO mail.kernel.org"
+        id S232505AbhCQBAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 21:00:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231536AbhCQA5S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:57:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15F2A64F9B;
-        Wed, 17 Mar 2021 00:57:17 +0000 (UTC)
+        id S232068AbhCQA62 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:58:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E77CF64FB5;
+        Wed, 17 Mar 2021 00:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942637;
-        bh=+eUHutKYIktr+Eq43papny8RGVP67Auq//PQTZkp4f4=;
+        s=k20201202; t=1615942699;
+        bh=xqcx6d71Un00AaqJTis7UNPrbtDRn8FQVFgouZYa7lU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOy1ZeH01NBn8kqS0pTQ047doG/1cSjdfqzvtySzi0sMENoWrIWvCNHaP7dfsitK7
-         ToSHOIU4e6nGDMjRvszThByIrH+MpoO0Jpfv8mG46HBk3fPKSVpX1la9Dx3cIH5Hll
-         YJNeh0QWJFCszrojFCXWedBu130LN+pw+LXjcZ7FWyaB6jpd1JlSbbPQcdIDO6r8UE
-         asmpBFdPahWb9vLo7aRD7wOFOkILU6RQyYF0Z3I7dbeyEki8CH5h5RXUTdMbjfRHEs
-         Jw2JovDbV/dYi+k1FsXCbII0SiPLter6xAy+hlL6MVogli8arSU5ZDmvIvSFfPwrGY
-         L1YdPK+xJN7Yg==
+        b=Emi9Q65kwI+s5Gew7rqkWhwFXFi88x7eWctDvdciF2oxHxK5W+jZqjNI7XyR6j1b7
+         oCQP5KPtu+1DR768v4wZe852CknJ9dFQLQrGdnT+wX9NVEsBXAyNPQ2SYcqhtQuXvz
+         M13GZhzcecCM+Jsi27fUzlRpCxbhqudKjKdV9NReSxlGX1j5IrliSl7QvjMnJIE2Kd
+         Us4DXTtNsFnH6up9wt3XZ0ES16ej3ovh+9PoMDCs9BYoF5PaywD2P9lMZAXyrvmSXV
+         8pm31sxcx95vKL9b5qhXDRBbW3Q+z/7RSqCMRP5m9UBre5VA10XpgR9cMwKxurqiLv
+         CUMMNGFEYVwww==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 18/54] cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev
-Date:   Tue, 16 Mar 2021 20:56:17 -0400
-Message-Id: <20210317005654.724862-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 13/37] cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev
+Date:   Tue, 16 Mar 2021 20:57:38 -0400
+Message-Id: <20210317005802.725825-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
-References: <20210317005654.724862-1-sashal@kernel.org>
+In-Reply-To: <20210317005802.725825-1-sashal@kernel.org>
+References: <20210317005802.725825-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,7 +58,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 3776d960f405..1c192a42f11e 100644
+index bca8d1f47fd2..1200842c3da4 100644
 --- a/drivers/cpufreq/cpufreq-dt-platdev.c
 +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
 @@ -103,6 +103,8 @@ static const struct of_device_id whitelist[] __initconst = {
