@@ -2,151 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E2333EC15
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 10:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EAF33EC20
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 10:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbhCQJA2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 05:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S229636AbhCQJDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 05:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhCQJAD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 05:00:03 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF9AC061760
-        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 02:00:02 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k8so963785wrc.3
-        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 02:00:02 -0700 (PDT)
+        with ESMTP id S229767AbhCQJCy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 05:02:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8422C06174A
+        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 02:02:53 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id j4-20020a05600c4104b029010c62bc1e20so821330wmi.3
+        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 02:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NVFDyKO2ygUhA+HtmUiSLptg/TxB303zHN8TrRH0yhE=;
-        b=or4XyHJGYy7z/dShZG1PvqNQ3+mrCRPDpPdx3PI6+1HwU8DEjPF4JQ3oy1zyni9pND
-         +3mwGjlcdWHO6loLexzfwiDwlYaMrZ+Mat11LPLoJzLks0dNZDeVznd3o9Bkh22yAdxx
-         aMAShraWmd/P7VcYr5ttJ5A1V0dgI7FmJsZjcsPD91Y2lyaioIkw3downPUsGLClM5aE
-         bJk5cIPKAKbr3oI/YbZMh43PxIIf55zSoYn7FR3tkQ1vit7fyCDDmv1xHjvuoIGVV3Ok
-         ZI5iNHKZQCuIiM7FKPo1g+jlfDUQ3SzWXk5/fUba8z2cTLeASOVi8vFa11WHyj2w8TI/
-         lV1g==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=ApKtBPoSIWQUrCpVqiKRCFyvDrL2J8ftPogTa611uXo=;
+        b=Pofurp6lLuNNVnbzZViJEc4FphgHvqaEx+4UUzNw9uzdRPg4FL79SjMJDjlhNXhtNF
+         MZeWgvBeeSfIU7CEQqBfacL+MldhAZoA1uObz4sIoOHVEp8q0/TeuqLhZAqp3H+JL76Q
+         uYFUr7N5UMQC0sSopMaAT5IUD7Tojz6eR+duvDcFLUX2C+ozPmBiiNAW82mn1KQR1/gP
+         rulgwUfXpM4BIVafGDAMbqNFSs95abHf4eBa85Nhx1KdioBuP3IC+Vmy6zSw9zOTOv+V
+         kwIroFvMRdKbvskJhDsHKUzXVrxvKbhKKqoGKQ3gTrCBP228p/bAmVC39vF4lfthHVVz
+         7iWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NVFDyKO2ygUhA+HtmUiSLptg/TxB303zHN8TrRH0yhE=;
-        b=UHw1uD+7SJW59QkXN208JLzGowHfMenSDHzbqLpqhExer6wlTEwpl5Z7GUe4aq6nhR
-         xZUBBmiFwbp4Zm/3kh1QrYps497A7NOfzz/GuppbAHEqwMZToHpib6SV/rzkT6PCxS39
-         Kd48ZADVjQ/q+88EEJve/X8+EAXCF11tlvvqE52ISCFv0iwEgG2o1/OALZ6EzVePdPn5
-         ojyWbGjX6ITvbAe3I18c8/vgcSF5KKISBUinCG4sTOg24wU0ROmdMiFdrcAexDJ6vGx3
-         4s6bPX1h8N2GoVlnsW5e1mTJV3FfxnWepLFLYLBwbua84esuKOzuBGrU2JSpinFBofEz
-         ugLg==
-X-Gm-Message-State: AOAM531EJlzvrpovyLoJf+AOWV0sEwyl+wEaYuKgFz5vvEP851Td7lO6
-        KvJf5SUgS7KRkjSgd3gbQqkulQ==
-X-Google-Smtp-Source: ABdhPJyFsp2Dg+7R5QEB0wMODNdEp2hrkl7dZYkRMuhX4iedkaQnZgEMAu9IeLIWguFwdF0mzGxzDQ==
-X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr3221240wru.78.1615971601574;
-        Wed, 17 Mar 2021 02:00:01 -0700 (PDT)
-Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.googlemail.com with ESMTPSA id l4sm24505097wrt.60.2021.03.17.01.59.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Mar 2021 02:00:00 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-References: <20210316194858.3527845-1-robh@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <265c3486-2c85-5c63-e1b5-9b88eaddbb14@linaro.org>
-Date:   Wed, 17 Mar 2021 08:59:59 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=ApKtBPoSIWQUrCpVqiKRCFyvDrL2J8ftPogTa611uXo=;
+        b=l/D9fgLYJfafkSfcdjmEIezvzgxTAKh41YugA0NVl93nkousAO3HuDx2ATWhGeuAyU
+         P3QGcXZOH1nGwBxQti3+284N1S1IcCBBrKsGB1kvK10H9XmpDChnjT0TpFmzyFJKSAtO
+         WGL/qyHJqprINrt1NKQ3d6zrZeabn8iAywM4jNTr+NnB4HNek7KIgCojwPG1dAwgTNkC
+         bDlUlcMcE1zB8o8RIDPJ0UMsWfPDCdljFCCHeqhkEDhkvUTKR4+yZJe8rPXtbMrI9TD0
+         4jY+Cecj9rkk7v795O6On0IC28DOUIZFkQr6bkr8Mdmx2P6GhPAy2V5ZpGqKSczvxZ90
+         04Ww==
+X-Gm-Message-State: AOAM533e8wvyywtz6mUAWPu6CokALWuIpotconJsbeNQFuGPEdv50Mdc
+        ho2m8DUTb7YFdLWiu0Te3o1FrA==
+X-Google-Smtp-Source: ABdhPJztarvfabT2tgmwWehxbS8/7jiw8NqwxYGzn/kk4ZlADIA4gwU2EPIGOp2vpsgDeYHqlzOegQ==
+X-Received: by 2002:a05:600c:4146:: with SMTP id h6mr2733051wmm.32.1615971772433;
+        Wed, 17 Mar 2021 02:02:52 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:94c7:f1f0:53fd:90e4? ([2a01:e34:ed2f:f020:94c7:f1f0:53fd:90e4])
+        by smtp.googlemail.com with ESMTPSA id u2sm2317811wmm.5.2021.03.17.02.02.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Mar 2021 02:02:52 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal fixes for v5.12
+Message-ID: <64ffeeef-45de-6e0d-0ce9-767024d8dd22@linaro.org>
+Date:   Wed, 17 Mar 2021 10:02:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+Hi Linus,
 
-On 16/03/2021 19:48, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. Drop all the unnecessary type
-> references in the tree.
-> 
-> A meta-schema update to catch these is pending.
-> 
-> Cc: Nicolas Saenz Julienne<nsaenzjulienne@suse.de>
-> Cc: Maxime Ripard<mripard@kernel.org>
-> Cc: Linus Walleij<linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski<bgolaszewski@baylibre.com>
-> Cc: Bjorn Andersson<bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski<krzk@kernel.org>
-> Cc: Marc Kleine-Budde<mkl@pengutronix.de>
-> Cc: "David S. Miller"<davem@davemloft.net>
-> Cc: Jakub Kicinski<kuba@kernel.org>
-> Cc: Srinivas Kandagatla<srinivas.kandagatla@linaro.org>
-> Cc: Ohad Ben-Cohen<ohad@wizery.com>
-> Cc: Mark Brown<broonie@kernel.org>
-> Cc: Cheng-Yi Chiang<cychiang@chromium.org>
-> Cc: Benson Leung<bleung@chromium.org>
-> Cc: Zhang Rui<rui.zhang@intel.com>
-> Cc: Daniel Lezcano<daniel.lezcano@linaro.org>
-> Cc: Greg Kroah-Hartman<gregkh@linuxfoundation.org>
-> Cc: Stefan Wahren<wahrenst@gmx.net>
-> Cc: Masahiro Yamada<yamada.masahiro@socionext.com>
-> Cc: Odelu Kukatla<okukatla@codeaurora.org>
-> Cc: Alex Elder<elder@kernel.org>
-> Cc: Suman Anna<s-anna@ti.com>
-> Cc: Kuninori Morimoto<kuninori.morimoto.gx@renesas.com>
-> Cc: Dmitry Baryshkov<dmitry.baryshkov@linaro.org>
-> Cc:linux-gpio@vger.kernel.org
-> Cc:linux-pm@vger.kernel.org
-> Cc:linux-can@vger.kernel.org
-> Cc:netdev@vger.kernel.org
-> Cc:linux-remoteproc@vger.kernel.org
-> Cc:alsa-devel@alsa-project.org
-> Cc:linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring<robh@kernel.org>
-> ---
->   .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
->   Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
->   .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
->   .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
->   .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
->   .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->   .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
->   Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
->   Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->   Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
+please consider pulling this single fix for the thermal framework.
 
-For nvmem parts,
+Thanks
 
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+  -- Daniel
 
---srini
+
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+
+are available in the Git repository at:
+
+
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.12-rc4
+
+for you to fetch changes up to 2046a24ae121cd107929655a6aaf3b8c5beea01f:
+
+  thermal/core: Add NULL pointer check before using cooling device stats
+(2021-03-17 09:55:58 +0100)
+
+----------------------------------------------------------------
+- Fix NULL pointer access when the cooling device transition stats
+  table failed to allocate due to a big number of states (Manaf
+  Meethalavalappu Pallikunhi).
+
+----------------------------------------------------------------
+Manaf Meethalavalappu Pallikunhi (1):
+      thermal/core: Add NULL pointer check before using cooling device stats
+
+ drivers/thermal/thermal_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
