@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D47A333F1F3
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 14:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6379633F1EB
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 14:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbhCQN4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 09:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S231510AbhCQN4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 09:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbhCQN4E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 09:56:04 -0400
+        with ESMTP id S231396AbhCQN4D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 09:56:03 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88966C06174A;
-        Wed, 17 Mar 2021 06:56:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02DDC061762;
+        Wed, 17 Mar 2021 06:56:01 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 790261F45201
+        with ESMTPSA id 98C6D1F451E9
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 1B5E2480119; Wed, 17 Mar 2021 14:49:06 +0100 (CET)
+        id 1DBCF48011A; Wed, 17 Mar 2021 14:49:06 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -26,9 +26,9 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv2 31/38] dt-bindings: power: supply: lt3651: Convert to DT schema format
-Date:   Wed, 17 Mar 2021 14:48:57 +0100
-Message-Id: <20210317134904.80737-32-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 32/38] dt-bindings: power: supply: ltc294x: Convert to DT schema format
+Date:   Wed, 17 Mar 2021 14:48:58 +0100
+Message-Id: <20210317134904.80737-33-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210317134904.80737-1-sebastian.reichel@collabora.com>
 References: <20210317134904.80737-1-sebastian.reichel@collabora.com>
@@ -42,25 +42,32 @@ Convert the binding to DT schema format.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../power/supply/lltc,lt3651-charger.yaml     | 44 +++++++++++++++++++
- .../bindings/power/supply/lt3651-charger.txt  | 29 ------------
- 2 files changed, 44 insertions(+), 29 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/lltc,lt3651-charger.yaml
- delete mode 100644 Documentation/devicetree/bindings/power/supply/lt3651-charger.txt
+ .../bindings/power/supply/lltc,ltc294x.yaml   | 66 +++++++++++++++++++
+ .../bindings/power/supply/ltc2941.txt         | 28 --------
+ 2 files changed, 66 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/ltc2941.txt
 
-diff --git a/Documentation/devicetree/bindings/power/supply/lltc,lt3651-charger.yaml b/Documentation/devicetree/bindings/power/supply/lltc,lt3651-charger.yaml
+diff --git a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
 new file mode 100644
-index 000000000000..e2d8d2aebb73
+index 000000000000..043bf378040f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/lltc,lt3651-charger.yaml
-@@ -0,0 +1,44 @@
++++ b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
+@@ -0,0 +1,66 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/power/supply/lltc,lt3651-charger.yaml#"
++$id: "http://devicetree.org/schemas/power/supply/lltc,ltc294x.yaml#"
 +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Analog Devices LT3651 Charger Power Supply bindings
++title: Binding for LTC2941, LTC2942, LTC2943 and LTC2944 battery fuel gauges
++
++description: |
++  All chips measure battery capacity.
++  The LTC2942 is pin compatible with the LTC2941, it adds voltage and
++  temperature monitoring, and is runtime detected. LTC2943 and LTC2944
++  are software compatible, uses a slightly different conversion formula
++  for the charge counter and adds voltage, current and temperature monitoring.
 +
 +maintainers:
 +  - Sebastian Reichel <sre@kernel.org>
@@ -71,67 +78,81 @@ index 000000000000..e2d8d2aebb73
 +properties:
 +  compatible:
 +    enum:
-+      - lltc,lt3651-charger
-+      - lltc,ltc3651-charger  # deprecated, use lltc,lt3651-charger
++      - lltc,ltc2941
++      - lltc,ltc2942
++      - lltc,ltc2943
++      - lltc,ltc2944
 +
-+  lltc,acpr-gpios:
++  reg:
 +    maxItems: 1
 +
-+  lltc,fault-gpios:
-+    maxItems: 1
++  lltc,resistor-sense:
++    $ref: /schemas/types.yaml#/definitions/int32
++    description: |
++      Sense resistor value in milli-ohms.
++      Can be negative value when the battery has been connected to the wrong end of the resistor.
 +
-+  lltc,chrg-gpios:
-+    maxItems: 1
++  lltc,prescaler-exponent:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The prescaler exponent as explained in the datasheet.
++      This determines the range and accuracy of the gauge.
++      The value is programmed into the chip only if it differs from the current setting.
++      The setting is lost when the battery is disconnected.
 +
 +required:
 +  - compatible
-+  - lltc,acpr-gpios
++  - reg
++  - lltc,resistor-sense
++  - lltc,prescaler-exponent
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    charger {
-+      compatible = "lltc,lt3651-charger";
-+      lltc,acpr-gpios = <&gpio0 68 GPIO_ACTIVE_LOW>;
-+      lltc,fault-gpios = <&gpio0 64 GPIO_ACTIVE_LOW>;
-+      lltc,chrg-gpios = <&gpio0 63 GPIO_ACTIVE_LOW>;
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      battery@64 {
++        compatible = "lltc,ltc2943";
++        reg = <0x64>;
++        lltc,resistor-sense = <15>;
++        lltc,prescaler-exponent = <5>; /* 2^(2*5) = 1024 */
++      };
 +    };
-diff --git a/Documentation/devicetree/bindings/power/supply/lt3651-charger.txt b/Documentation/devicetree/bindings/power/supply/lt3651-charger.txt
+diff --git a/Documentation/devicetree/bindings/power/supply/ltc2941.txt b/Documentation/devicetree/bindings/power/supply/ltc2941.txt
 deleted file mode 100644
-index 40811ff8de10..000000000000
---- a/Documentation/devicetree/bindings/power/supply/lt3651-charger.txt
+index 3b9ba147b041..000000000000
+--- a/Documentation/devicetree/bindings/power/supply/ltc2941.txt
 +++ /dev/null
-@@ -1,29 +0,0 @@
--Analog Devices LT3651 Charger Power Supply bindings: lt3651-charger
+@@ -1,28 +0,0 @@
+-binding for LTC2941, LTC2942, LTC2943 and LTC2944 battery gauges
+-
+-All chips measure battery capacity.
+-The LTC2942 is pin compatible with the LTC2941, it adds voltage and
+-temperature monitoring, and is runtime detected. LTC2943 and LTC2944
+-is software compatible, uses a slightly different conversion formula
+-for the charge counter and adds voltage, current and temperature monitoring.
 -
 -Required properties:
--- compatible: Should contain one of the following:
-- * "lltc,ltc3651-charger", (DEPRECATED: Use "lltc,lt3651-charger")
-- * "lltc,lt3651-charger"
-- - lltc,acpr-gpios: Connect to ACPR output. See remark below.
+-- compatible: Should contain "lltc,ltc2941", "lltc,ltc2942", "lltc,ltc2943"
+-    or "lltc,ltc2944" which also indicates the type of I2C chip attached.
+-- reg: The 7-bit I2C address.
+-- lltc,resistor-sense: The sense resistor value in milli-ohms. Can be a 32-bit
+-    negative value when the battery has been connected to the wrong end of the
+-    resistor.
+-- lltc,prescaler-exponent: The prescaler exponent as explained in the datasheet.
+-    This determines the range and accuracy of the gauge. The value is programmed
+-    into the chip only if it differs from the current setting. The setting is
+-    lost when the battery is disconnected.
 -
--Optional properties:
-- - lltc,fault-gpios: Connect to FAULT output. See remark below.
-- - lltc,chrg-gpios: Connect to CHRG output. See remark below.
+-Example from the Topic Miami Florida board:
 -
--The lt3651 outputs are open-drain type and active low. The driver assumes the
--GPIO reports "active" when the output is asserted, so if the pins have been
--connected directly, the GPIO flags should be set to active low also.
--
--The driver will attempt to aquire interrupts for all GPIOs to detect changes in
--line state. If the system is not capabale of providing interrupts, the driver
--cannot report changes and userspace will need to periodically read the sysfs
--attributes to detect changes.
--
--Example:
--
--	charger: battery-charger {
--		compatible = "lltc,lt3651-charger";
--		lltc,acpr-gpios = <&gpio0 68 GPIO_ACTIVE_LOW>;
--		lltc,fault-gpios = <&gpio0 64 GPIO_ACTIVE_LOW>;
--		lltc,chrg-gpios = <&gpio0 63 GPIO_ACTIVE_LOW>;
+-	fuelgauge: ltc2943@64 {
+-		compatible = "lltc,ltc2943";
+-		reg = <0x64>;
+-		lltc,resistor-sense = <15>;
+-		lltc,prescaler-exponent = <5>; /* 2^(2*5) = 1024 */
 -	};
 -- 
 2.30.2
