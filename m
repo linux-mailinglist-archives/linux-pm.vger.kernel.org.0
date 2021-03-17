@@ -2,121 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3168533E94A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 06:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76EC33E952
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 06:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbhCQFxD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 01:53:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45950 "EHLO mail.kernel.org"
+        id S229727AbhCQF4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 01:56:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229862AbhCQFwr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Mar 2021 01:52:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9BAE64F8C;
-        Wed, 17 Mar 2021 05:52:46 +0000 (UTC)
+        id S229487AbhCQF4F (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Mar 2021 01:56:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 822F464F8B;
+        Wed, 17 Mar 2021 05:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615960367;
-        bh=tOgFJ4o5PgryrZSo/91PbTtI3nbI+1J8paf/6XTa9WM=;
+        s=korg; t=1615960554;
+        bh=Uw2XR+KFoqF44PVTyFewSL9xW7snb+4K3fw3fuSjnvI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJ9lKY4hGhS1co2uTb9cICsaNrZmtCRDTA55GJgvzxAPdZEb1OjpPKZIOfBwYDu7+
-         xn+uL5wP9w8GPZvQZijePGNwKkZHL+c8obT2jisoZudWe1R+gYYnEZfI1GJ87WqKsw
-         VWZICVxNTlWraAgPFUH1RTY+mog6FAfryPhI102k=
-Date:   Wed, 17 Mar 2021 06:52:44 +0100
+        b=m27XvL8TxF9jhV2YY0futtPmw28Pe+73gg3r1i6uzIChvm/IUeblmGr8HUXw7/i4e
+         cVM+apyehxlcs7BE+4gtXSg1VqhZWwue9KVObKsqlOxXvWzWdihUegkfAwsNpshvBG
+         OpiPNqStHfdyNNIsqf5Qd8cpDOpFuI3ak+Pd0M6M=
+Date:   Wed, 17 Mar 2021 06:55:51 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Stephen Boyd <sboyd@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
-Message-ID: <YFGZLM7MbypuE15L@kroah.com>
-References: <20210316194858.3527845-1-robh@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Clean-up undocumented compatible strings
+Message-ID: <YFGZ5zsh5zWQXBU6@kroah.com>
+References: <20210316194918.3528417-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+In-Reply-To: <20210316194918.3528417-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 01:48:58PM -0600, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. Drop all the unnecessary type
-> references in the tree.
+On Tue, Mar 16, 2021 at 01:49:18PM -0600, Rob Herring wrote:
+> Adding checks for undocumented compatible strings reveals a bunch of
+> warnings in the DT binding examples. Fix the cases which are typos, just
+> a mismatch between the schema and the example, or aren't documented at all.
+> In a couple of cases, fixing the compatible revealed some schema errors
+> which are fixed.
 > 
-> A meta-schema update to catch these is pending.
+> There's a bunch of others remaining after this which have bindings, but
+> those aren't converted to schema yet.
 > 
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
 > Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
 > Cc: Mark Brown <broonie@kernel.org>
-> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Stefan Wahren <wahrenst@gmx.net>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Odelu Kukatla <okukatla@codeaurora.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Suman Anna <s-anna@ti.com>
-> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-clk@vger.kernel.org
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i3c@lists.infradead.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
 > Cc: linux-pm@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
->  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
->  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
->  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
->  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
->  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
->  Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
->  .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
->  Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
->  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
->  Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
->  16 files changed, 5 insertions(+), 23 deletions(-)
 
 Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
