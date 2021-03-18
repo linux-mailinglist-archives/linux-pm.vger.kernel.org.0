@@ -2,56 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F609340328
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 11:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2DA34035D
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 11:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhCRK1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Mar 2021 06:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S229600AbhCRKdK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Mar 2021 06:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbhCRK10 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 06:27:26 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C4AC06174A;
-        Thu, 18 Mar 2021 03:27:25 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id q13so3713102lfu.8;
-        Thu, 18 Mar 2021 03:27:25 -0700 (PDT)
+        with ESMTP id S229996AbhCRKcy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 06:32:54 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9211C061762
+        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 03:32:53 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id v8so1075507plz.10
+        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 03:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+G5VKNAaAyEgyOk4kXK4F5H9gvSmpSo6KZM19Tya+Lk=;
-        b=aD929HKe7uY3AZfVyxFMPdWuC9U1T//tmhP7QxvkO0F6yRCI8jfaNPIq7lGNlaqTTO
-         h2nUkumC4xFTgxZ91CfUFlbj7iJPaoKpYPX2fcrKhQooiZ2PLqL9++9Z1d9ODETuCovr
-         iTB4nqgkXPsOnRMd4QnhwwXuzQFo0A4G9urpIxGtCXF/H8HtRpBXzKsLOPUF1LYGbVqa
-         4MXvsYdlq+A2q2AMx74KA4apsgOta8eg2mgdZAInKYg78VekJNaV2OSRZUL10TYFRGAq
-         PI1hbT/CkLdT1qxvrw+St0YQsP5BJGcnObVt/OYbHwSMtrO/iiVwo9jtdwXLcMW6GOvG
-         Gh2g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hvOZrihWdisZdnlkHkbs2gZ7Njlm0i8zYMMhkfhvOGo=;
+        b=S2UsjbTYxqFDkJmL1RWqn2nZBITRq5U6c3mweI+lLm7HLUBWLkByttTApuwC/4ls/J
+         qOFDWTbQSzJHxVAoQEIgLtd4mX02gTwLEhGPcjp/vtaLzdFEff+LoRtobKX/3SLhcfQf
+         rPNJkGGAKBYPEdIB7CHrGkfwsghn93SHGuPVWyLOlWipesF9aatnSWY1KniDWtKGJ0Ar
+         wza3mwKKLlcSNUvWZEdgakmDjZd5HGwu48BgV2E1AWbDJdxh7DkWRtaDCHvwNxk793k7
+         qkfRPEKVNnFOqX3s0kwR+G1RTfOARX3PTMTXnNTxRvFv6g16m9oIp6BIAwgkH6ZWjB/i
+         Gi1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+G5VKNAaAyEgyOk4kXK4F5H9gvSmpSo6KZM19Tya+Lk=;
-        b=oFXi9j9pOZL/fauobyg7IgF4M5POUExmFxlEbKYaTjyfM+ef6I6ohFdUkFZyMb2C7u
-         Tka3oNPCf5+rAbATZgPU4ZIZJhcVNQaCKLTLSEb0MbkRGxUnmZ9t622lKRs48Do+5HIy
-         rOvWQz3lSOMc0eqiQW3G26AtIGzis2KnWtLk4KLwAopEOZtiFTCpXa85s27t0dxAZQSm
-         MgUtQAZdx2Ks2heXBT92lwEPCg8Wf8RblHkl+MeIwW8dmchgQdMEuVueBN3jL5Lf0T0N
-         wQwuAjwj+3NCqtYBvjpOQW5kTipaC1InUcHfx+1T+VT6qdTklIjypkIyxEs35jdBmbeE
-         cV4g==
-X-Gm-Message-State: AOAM5332WyI91BdT3kQD1bpy49bFqSFrkCU5mlP5gCmOrRp8kfq3nDqo
-        AVHFWRwe6JGejv80nVuy4ArZeVYjpOE=
-X-Google-Smtp-Source: ABdhPJy9yoZ8KvENtEhAIDIIhdTp1HL+oReVacHd00IDhBi0w5ioO6SGToZwLeOBVyylCE4ZAfUo/Q==
-X-Received: by 2002:a05:6512:1094:: with SMTP id j20mr5223574lfg.442.1616063243556;
-        Thu, 18 Mar 2021 03:27:23 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id e18sm184915ljl.92.2021.03.18.03.27.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Mar 2021 03:27:22 -0700 (PDT)
-Subject: Re: [PATCH v4 1/6] soc/tegra: Add
- devm_tegra_core_dev_init_opp_table()
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=hvOZrihWdisZdnlkHkbs2gZ7Njlm0i8zYMMhkfhvOGo=;
+        b=RA+w5cABA3LupmZ1cQXWJHgzS5rETAR4TTddp4TWPkM1FIYHME/UxvTm9hU7Ntimxj
+         MpZKdGBZkdJfzHboJNXC2CK3OLQ6vJ+GsR26P2olZVf3AWh5OyU9ao/aVRsaFrWfeAci
+         d6TiIIiqmGhPo8tAZxP8SQrQlKbrtQvwwyiPTMMO9g0ZACiWbYsMziFZj9gsancX04+P
+         CK1x8I4Ku/7dRyPgCpuLGnrBCieG8OU8bN8T7xeNFWy6u2uZrWr5y+Ju9ZUopqVwwirT
+         LLZ9wKe9lzqKdZ7NxEDwIrp+TzaFW1id0ZzJQyRXjvIOSFAu3GyVnH3DNIlyLzHiJ+AV
+         WwYw==
+X-Gm-Message-State: AOAM531KT9rLZ1x++ftw6wAzwGKP6LXTsEYN4+hgiCjLJg94841VXFzn
+        gH/1QmiABF9NwJeImbnG/EijwQ==
+X-Google-Smtp-Source: ABdhPJxWTgJJz1w4lucXWykRQdhmBaaDMgCw060xrjRN50G8JIQFVTHFYPdL4bHtHsnxms2ADWbjbQ==
+X-Received: by 2002:a17:90a:d311:: with SMTP id p17mr3639700pju.43.1616063572778;
+        Thu, 18 Mar 2021 03:32:52 -0700 (PDT)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id a19sm1945524pfn.181.2021.03.18.03.32.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Mar 2021 03:32:52 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 16:02:50 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Mark Brown <broonie@kernel.org>,
         Paul Fertser <fercerpav@gmail.com>,
@@ -61,39 +62,48 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Nicolas Chauvet <kwizart@gmail.com>,
         Viresh Kumar <vireshk@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/6] soc/tegra: Add
+ devm_tegra_core_dev_init_opp_table()
+Message-ID: <20210318103250.shjyd66pxw2g2nsd@vireshk-i7>
 References: <20210314164810.26317-1-digetx@gmail.com>
  <20210314164810.26317-2-digetx@gmail.com>
-Message-ID: <8f78a014-eeab-d788-7d3b-b52b8109cb2c@gmail.com>
-Date:   Thu, 18 Mar 2021 13:27:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ <8f78a014-eeab-d788-7d3b-b52b8109cb2c@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210314164810.26317-2-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f78a014-eeab-d788-7d3b-b52b8109cb2c@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-14.03.2021 19:48, Dmitry Osipenko пишет:
-> Add common helper which initializes OPP table for Tegra SoC core devices.
+On 18-03-21, 13:27, Dmitry Osipenko wrote:
+> 14.03.2021 19:48, Dmitry Osipenko пишет:
+> > Add common helper which initializes OPP table for Tegra SoC core devices.
+> > 
+> > Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> > Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+> > Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+> > Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > ---
+> >  drivers/soc/tegra/common.c | 137 +++++++++++++++++++++++++++++++++++++
+> >  include/soc/tegra/common.h |  30 ++++++++
+> >  2 files changed, 167 insertions(+)
 > 
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/soc/tegra/common.c | 137 +++++++++++++++++++++++++++++++++++++
->  include/soc/tegra/common.h |  30 ++++++++
->  2 files changed, 167 insertions(+)
+> Viresh, do you think it will be possible to take this patch via the OPP
+> tree along with the devres patches if Thierry will give an ack? This
+> will allow us to start adding power management support to Tegra drivers
+> once 5.13 will be released.
 
-Viresh, do you think it will be possible to take this patch via the OPP
-tree along with the devres patches if Thierry will give an ack? This
-will allow us to start adding power management support to Tegra drivers
-once 5.13 will be released.
+I can do that.. OR
+
+I can give an immutable to Thierry over which he can base these patches..
+
+-- 
+viresh
