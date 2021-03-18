@@ -2,153 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA80340CAD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 19:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154AA340C88
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 19:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbhCRSQN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Mar 2021 14:16:13 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55420 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbhCRSPp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 14:15:45 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.3)
- id 1e0020f270e78a72; Thu, 18 Mar 2021 19:15:44 +0100
-Received: from kreacher.localnet (89-64-80-250.dynamic.chello.pl [89.64.80.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 7DEAF668FA9;
-        Thu, 18 Mar 2021 19:15:43 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        "elaine.zhang" <zhangqing@rock-chips.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v1 1/2] Revert "PM: runtime: Update device status before letting suppliers suspend"
-Date:   Thu, 18 Mar 2021 19:09:06 +0100
-Message-ID: <4304785.LvFx2qVVIh@kreacher>
-In-Reply-To: <5448054.DvuYhMxLoT@kreacher>
-References: <5448054.DvuYhMxLoT@kreacher>
+        id S229469AbhCRSKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Mar 2021 14:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229958AbhCRSKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 14:10:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57F4C06174A;
+        Thu, 18 Mar 2021 11:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=VpBVHEHjT9Gn8HLTeG3OWujXi0ViVeHzxP9bjFBnQQo=; b=Mbevz6wwP8YcVaAWZYp9yt4OYl
+        +0eC0M9P7IddC9+MkZCAJIoQTfbeb2eQYebx5ht2ZmXdliNKEUl/eOl/mQYjzh1uQCR8ciuyg+6Pu
+        e2UBRCnHfwmW0teD5Q6Nch43yUylbtZ82Fa0bT8bEKH8aa/CAOepq5fLUvvO8ckkcSn6oDhBp7kiG
+        qR/sbQBLj3rrbyFSg7u+ns5oq3Wq8J6Mwy0AdgeJMIT4lsqFryyy0aKKUUzX1buibJUYLlXk5Qc6l
+        QRT05zRHo2gkyq5Ubp0Ci7p15ChIn54y1LDDDBX+KfOkQLc0Hrg7zTN6bJ2qO4oip+NfaeIc0W6Kc
+        s528fZUg==;
+Received: from [2601:1c0:6280:3f0::9757]
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lMx6I-003Kat-UF; Thu, 18 Mar 2021 18:10:34 +0000
+Subject: Re: [PATCH] PM: devfreq: Couple of typo fixes
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, cw00.choi@samsung.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210318112025.22755-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <46a5ce65-c5c9-8d1e-9bc1-12ff56c28186@infradead.org>
+Date:   Thu, 18 Mar 2021 11:10:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudefiedguddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttddvnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffeuvddutdelgfdvtefgiefftddvfffgjeelvdethfehgfekfeeluedvueevvedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepkeelrdeigedrkedtrddvhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrddvhedtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepiihhrghnghhqihhnghesrhhotghkqdgthhhiphhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+In-Reply-To: <20210318112025.22755-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+On 3/18/21 4:20 AM, Bhaskar Chowdhury wrote:
+> 
+> s/stoping/stopping/
+> s/opeations/operations/
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-Revert commit 44cc89f76464 ("PM: runtime: Update device status
-before letting suppliers suspend") that introduced a race condition
-into __rpm_callback() which allowed a concurrent rpm_resume() to
-run and resume the device prematurely after its status had been
-changed to RPM_SUSPENDED by __rpm_callback().
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Fixes: 44cc89f76464 ("PM: runtime: Update device status before letting suppliers suspend")
-Link: https://lore.kernel.org/linux-pm/24dfb6fc-5d54-6ee2-9195-26428b7ecf8a@intel.com/
-Reported by: Adrian Hunter <adrian.hunter@intel.com>
-Cc: 4.10+ <stable@vger.kernel.org> # 4.10+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/runtime.c | 62 +++++++++++++++---------------------
- 1 file changed, 25 insertions(+), 37 deletions(-)
+> ---
+>  drivers/devfreq/devfreq-event.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
+> index 6765c03334bc..2f841d7d9d8d 100644
+> --- a/drivers/devfreq/devfreq-event.c
+> +++ b/drivers/devfreq/devfreq-event.c
+> @@ -155,7 +155,7 @@ EXPORT_SYMBOL_GPL(devfreq_event_set_event);
+>   * @edata	: the calculated data of devfreq-event device
+>   *
+>   * Note that this function get the calculated event data from devfreq-event dev
+> - * after stoping the progress of whole sequence of devfreq-event dev.
+> + * after stopping the progress of whole sequence of devfreq-event dev.
+>   */
+>  int devfreq_event_get_event(struct devfreq_event_dev *edev,
+>  			    struct devfreq_event_data *edata)
+> @@ -184,7 +184,7 @@ int devfreq_event_get_event(struct devfreq_event_dev *edev,
+>  EXPORT_SYMBOL_GPL(devfreq_event_get_event);
+> 
+>  /**
+> - * devfreq_event_reset_event() - Reset all opeations of devfreq-event dev.
+> + * devfreq_event_reset_event() - Reset all operations of devfreq-event dev.
+>   * @edev	: the devfreq-event device
+>   *
+>   * Note that this function stop all operations of devfreq-event dev and reset
+> --
+> 2.26.2
+> 
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 18b82427d0cb..a46a7e30881b 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -325,22 +325,22 @@ static void rpm_put_suppliers(struct device *dev)
- static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 	__releases(&dev->power.lock) __acquires(&dev->power.lock)
- {
--	bool use_links = dev->power.links_count > 0;
--	bool get = false;
- 	int retval, idx;
--	bool put;
-+	bool use_links = dev->power.links_count > 0;
- 
- 	if (dev->power.irq_safe) {
- 		spin_unlock(&dev->power.lock);
--	} else if (!use_links) {
--		spin_unlock_irq(&dev->power.lock);
- 	} else {
--		get = dev->power.runtime_status == RPM_RESUMING;
--
- 		spin_unlock_irq(&dev->power.lock);
- 
--		/* Resume suppliers if necessary. */
--		if (get) {
-+		/*
-+		 * Resume suppliers if necessary.
-+		 *
-+		 * The device's runtime PM status cannot change until this
-+		 * routine returns, so it is safe to read the status outside of
-+		 * the lock.
-+		 */
-+		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
- 			idx = device_links_read_lock();
- 
- 			retval = rpm_get_suppliers(dev);
-@@ -355,36 +355,24 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 
- 	if (dev->power.irq_safe) {
- 		spin_lock(&dev->power.lock);
--		return retval;
--	}
--
--	spin_lock_irq(&dev->power.lock);
--
--	if (!use_links)
--		return retval;
--
--	/*
--	 * If the device is suspending and the callback has returned success,
--	 * drop the usage counters of the suppliers that have been reference
--	 * counted on its resume.
--	 *
--	 * Do that if the resume fails too.
--	 */
--	put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
--	if (put)
--		__update_runtime_status(dev, RPM_SUSPENDED);
--	else
--		put = get && retval;
--
--	if (put) {
--		spin_unlock_irq(&dev->power.lock);
--
--		idx = device_links_read_lock();
-+	} else {
-+		/*
-+		 * If the device is suspending and the callback has returned
-+		 * success, drop the usage counters of the suppliers that have
-+		 * been reference counted on its resume.
-+		 *
-+		 * Do that if resume fails too.
-+		 */
-+		if (use_links
-+		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
-+		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
-+			idx = device_links_read_lock();
- 
--fail:
--		rpm_put_suppliers(dev);
-+ fail:
-+			rpm_put_suppliers(dev);
- 
--		device_links_read_unlock(idx);
-+			device_links_read_unlock(idx);
-+		}
- 
- 		spin_lock_irq(&dev->power.lock);
- 	}
+
 -- 
-2.26.2
-
-
-
+~Randy
 
