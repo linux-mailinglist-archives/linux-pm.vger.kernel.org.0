@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94613401A1
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 10:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFB33401AB
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 10:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbhCRJOl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Mar 2021 05:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S229708AbhCRJPN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Mar 2021 05:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbhCRJOe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 05:14:34 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B3FC06174A
-        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 02:14:27 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t9so4659146wrn.11
-        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 02:14:27 -0700 (PDT)
+        with ESMTP id S229784AbhCRJOx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 05:14:53 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDC9C06175F
+        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 02:14:53 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x16so4676431wrn.4
+        for <linux-pm@vger.kernel.org>; Thu, 18 Mar 2021 02:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=to:cc:references:from:subject:message-id:date:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=Uiv09UGTwFa3RRLsvY7QxQvxRJLPKqm4niX7REF+uBI=;
-        b=coPhGBtIDCp11up6qLgepezHxSY9MAu+TIL4HmsjE1SENNt1EVWlXvVyN4/KFhHvND
-         ZWEfg4iOZxb5sdttHrJQyfNcNKxiLHvhk5SHivOpsOaL+s1XROwwR79ZZn3g+Al3BusC
-         DbUooT4K6XGJXBE+wAqn1msIvpva4OwXZEQeW1c3vFRKBxJ5MIX2/0Nj2m4XHNrzqLot
-         XANEtb6ctkGxDim4PP3+ZcTUIhSTGgg0FxsHBJckeSgQwEQO2g+RDstg+VOeGVTv2WIX
-         3ITK+0hRnIW4P4n7Gr+Zy+1rY7qWgmc+efNrUw3q6ceHH1f3lqU1GXZUpYRcB4SpDVBa
-         oDBQ==
+        bh=WwfwygZ0uyO/8qnwByDJeqKuIzR1LpilYHqI7Bczxo8=;
+        b=uUyOQOXeDjrR28SpCD0JA/vq1e3Sml4lVpehemL4k+jNHeSJBExwZLl5xy6cDaoE88
+         gKg1vR0b7fxBR5sY6uNxRGxI9OAKBnuS2/zLKqH8bSg4PjuXAOruyYW4XE5TgeJ9QDEz
+         P7e7cL9HioJlbXpjNbu7vHym3l4pm1C1O5psBsH/sBtb4EWGx/UrpRs5LZ8wX0zaJQOj
+         pWiGWit+PPUinxd+C5Nd0xU2hO3BWY6ix0fTNYJAAViEgew0TlNRLcU5T5GBqqzOi+SP
+         dh/2Wgf3/0UlS/m6UK3T0QhbS2SsvTNanQOWyxITmsRTae1HPjXYJBA3eboDRHdbkr9U
+         GhJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:to:cc:references:from:subject:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Uiv09UGTwFa3RRLsvY7QxQvxRJLPKqm4niX7REF+uBI=;
-        b=rQuZTo+NiRjwr6BSnZRGxUy4QlyEju5pWv/HgcDAUS2iJjdRFpPaMF4Moy4KVfMz+8
-         Ian+PUH48g56vCYpVCxSnjZsNdrRP1L3+98OP/UPgUlPtHuR99vN8Yin3mVfAQZ1p3rI
-         4ZmH9ri1SY8dtiveB62oPb6ofHjPQ6087jgWiWkKu6am6VUBEUvYaop5CfiQH6lAA1q6
-         Zo80XGh91Rxr4Kpw1GvyExzXjThvAq+dqXQI19i/S79wpU6+KUaS1V6w5hiFh2Xwz9+3
-         z6M/Z3VTMp/MFkur8rBaTwaZV1TLu3CcMi76d/JiiRuQ1n+jkY/u1lm9jn5fRO6LJhx6
-         ub3A==
-X-Gm-Message-State: AOAM530Rw/UO2/rwc5xFoF4TQ/8ai7hFs3Y+i4sISj+otP+6LVD2fAWm
-        cYJUNc+F+4s1fsszuG0vpPCPgojFq0QWpQ==
-X-Google-Smtp-Source: ABdhPJwCAE5GuLxhwuncmpoKP2i/ihcBTLpoW7+Qpnjtwc5szQ26Ujm9zCiwDkLrmji6uToHNGYY1w==
-X-Received: by 2002:adf:c64a:: with SMTP id u10mr8561102wrg.412.1616058866201;
-        Thu, 18 Mar 2021 02:14:26 -0700 (PDT)
+        bh=WwfwygZ0uyO/8qnwByDJeqKuIzR1LpilYHqI7Bczxo8=;
+        b=gr1PuR4JIMzMJCJq63nEQ2tO7GCzYKS/Eq7guSBxi/9j7Ttn401XqqX8napg4W4IA1
+         Rb3U9lbzU9gM77GB73EGOj9jJVgj0X29crYt0CZW+OIq9n6QvabU8rL92yoP20WK7z1y
+         pjXiLgN3Cy64/21vSLXxu6wh6+HZdCdkYA5i+hfrgKAw+1YasNBMyUAP2glnhaFGA9bb
+         U+LjgdfE+VUlm5Uv4YDy3maE4tuJ1LftgV/PfGI/HoemeLccdf4VL8rYHADFaJuQ/1V8
+         eFqnNR8HBgklTVLrcKPYDaCpRXc1JX1R/Z0VwTOmnwBoEB9rV9Myoy1RJ6vpIGnFuqqB
+         CQ9w==
+X-Gm-Message-State: AOAM531VYw7cyKgy3FtEN57ZdcUZZ6S+fY1/oBr7dacPK/LCY5Z/RPc3
+        qjisa/tIr3matxKWf/KGh0RTY8JZb0lbbg==
+X-Google-Smtp-Source: ABdhPJwdLMlTIT5VmEKupwPrWeSSoNTJaF3z3AqcVnE8J0jPyMEHT5LG1zTyMrqXoRjGF7sP52krLA==
+X-Received: by 2002:a5d:5043:: with SMTP id h3mr8515651wrt.120.1616058891911;
+        Thu, 18 Mar 2021 02:14:51 -0700 (PDT)
 Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id l8sm2122201wrx.83.2021.03.18.02.14.24
+        by smtp.googlemail.com with ESMTPSA id l4sm2002873wrt.60.2021.03.18.02.14.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Mar 2021 02:14:25 -0700 (PDT)
+        Thu, 18 Mar 2021 02:14:51 -0700 (PDT)
 To:     Henry Chen <henryc.chen@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -61,13 +61,14 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <1614656863-8530-1-git-send-email-henryc.chen@mediatek.com>
- <1614656863-8530-4-git-send-email-henryc.chen@mediatek.com>
+ <1614656863-8530-9-git-send-email-henryc.chen@mediatek.com>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
-Subject: Re: [PATCH V9 03/12] soc: mediatek: add driver for dvfsrc support
-Message-ID: <c1c96a65-b322-44ad-39ad-5f9f27fdc4a4@linaro.org>
-Date:   Thu, 18 Mar 2021 11:14:22 +0200
+Subject: Re: [PATCH V9 08/12] interconnect: mediatek: Add interconnect
+ provider driver
+Message-ID: <cc1d4ea2-22f6-e962-07bc-815ce73b2cb9@linaro.org>
+Date:   Thu, 18 Mar 2021 11:14:50 +0200
 MIME-Version: 1.0
-In-Reply-To: <1614656863-8530-4-git-send-email-henryc.chen@mediatek.com>
+In-Reply-To: <1614656863-8530-9-git-send-email-henryc.chen@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,91 +76,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Henry,
-
 On 3/2/21 05:47, Henry Chen wrote:
-> Add dvfsrc driver for MT6873/MT8183/MT8192
+> Introduce Mediatek MT6873/MT8183/MT8192 specific provider driver
+> using the interconnect framework.
 > 
+>              ICC provider         ICC Nodes
+>                               ----          ----
+>              ---------       |CPU |   |--- |VPU |
+>     -----   |         |-----  ----    |     ----
+>    |DRAM |--|DRAM     |       ----    |     ----
+>    |     |--|scheduler|----- |GPU |   |--- |DISP|
+>    |     |--|(EMI)    |       ----    |     ----
+>    |     |--|         |       -----   |     ----
+>     -----   |         |----- |MMSYS|--|--- |VDEC|
+>              ---------        -----   |     ----
+>                /|\                    |     ----
+>                 |change DRAM freq     |--- |VENC|
+>              ----------               |     ----
+>             |  DVFSR   |              |
+>             |          |              |     ----
+>              ----------               |--- |IMG |
+>                                       |     ----
+>                                       |     ----
+>                                       |--- |CAM |
+>                                             ----
 > Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
 > ---
->  drivers/soc/mediatek/Kconfig            |  11 +
->  drivers/soc/mediatek/Makefile           |   1 +
->  drivers/soc/mediatek/mtk-dvfsrc.c       | 421 ++++++++++++++++++++++++++++++++
->  include/linux/soc/mediatek/mtk_dvfsrc.h |  35 +++
->  4 files changed, 468 insertions(+)
->  create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
->  create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
-> 
-> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
-> index fdd8bc0..2dcf023 100644
-> --- a/drivers/soc/mediatek/Kconfig
-> +++ b/drivers/soc/mediatek/Kconfig
-> @@ -26,6 +26,17 @@ config MTK_DEVAPC
->  	  The violation information is logged for further analysis or
->  	  countermeasures.
->  
-> +config MTK_DVFSRC
-> +	tristate "MediaTek DVFSRC Support"
-> +	depends on ARCH_MEDIATEK
-I'm wondering whether adding COMPILE_TEST would make sense here, but it's
-also fine as is.
-
-> +	help
-> +	  Say yes here to add support for the MediaTek DVFSRC (dynamic voltage
-> +	  and frequency scaling resource collector) found
-> +	  on different MediaTek SoCs. The DVFSRC is a proprietary
-> +	  hardware which is used to collect all the requests from
-> +	  system and turn into the decision of minimum Vcore voltage
-> +	  and minimum DRAM frequency to fulfill those requests.
-> +
->  config MTK_INFRACFG
->  	bool "MediaTek INFRACFG Support"
->  	select REGMAP
-> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
-> index b6908db..4ead103 100644
-> --- a/drivers/soc/mediatek/Makefile
-> +++ b/drivers/soc/mediatek/Makefile
+>  drivers/interconnect/Kconfig            |   1 +
+>  drivers/interconnect/Makefile           |   1 +
+>  drivers/interconnect/mediatek/Kconfig   |  13 ++
+>  drivers/interconnect/mediatek/Makefile  |   3 +
+>  drivers/interconnect/mediatek/mtk-emi.c | 331 ++++++++++++++++++++++++++++++++
+>  5 files changed, 349 insertions(+)
+>  create mode 100644 drivers/interconnect/mediatek/Kconfig
+>  create mode 100644 drivers/interconnect/mediatek/Makefile
+>  create mode 100644 drivers/interconnect/mediatek/mtk-emi.c
 [..]
-> +void mtk_dvfsrc_send_request(const struct device *dev, u32 cmd, u64 data)
-> +{
-> +	int ret, state;
-> +	struct mtk_dvfsrc *dvfsrc = dev_get_drvdata(dev);
+> +++ b/drivers/interconnect/mediatek/mtk-emi.c
+> @@ -0,0 +1,331 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + *
+> + */
 > +
-> +	dev_dbg(dvfsrc->dev, "cmd: %d, data: %llu\n", cmd, data);
-> +
-> +	switch (cmd) {
-> +	case MTK_DVFSRC_CMD_BW_REQUEST:
-> +		dvfsrc->dvd->set_dram_bw(dvfsrc, data);
-> +		return;
-> +	case MTK_DVFSRC_CMD_PEAK_BW_REQUEST:
-> +		if (dvfsrc->dvd->set_dram_peak_bw)
-> +			dvfsrc->dvd->set_dram_peak_bw(dvfsrc, data);
-> +		return;
-> +	case MTK_DVFSRC_CMD_OPP_REQUEST:
-> +		if (dvfsrc->dvd->set_opp_level)
-> +			dvfsrc->dvd->set_opp_level(dvfsrc, data);
-> +		break;
-> +	case MTK_DVFSRC_CMD_VCORE_REQUEST:
-> +		dvfsrc->dvd->set_vcore_level(dvfsrc, data);
-> +		break;
-> +	case MTK_DVFSRC_CMD_HRTBW_REQUEST:
-> +		if (dvfsrc->dvd->set_dram_hrtbw)
-> +			dvfsrc->dvd->set_dram_hrtbw(dvfsrc, data);
-> +		else
-> +			return;
-> +		break;
-> +	case MTK_DVFSRC_CMD_VSCP_REQUEST:
-> +		dvfsrc->dvd->set_vscp_level(dvfsrc, data);
-> +		break;
-> +	default:
-> +		dev_err(dvfsrc->dev, "unknown command: %d\n", cmd);
-> +		return;
-> +	}
-> +
-> +	/* DVFSRC need to wait at least 2T(~196ns) to handle request
-> +	 * after recieving command
+> +#include <linux/device.h>
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/soc/mediatek/mtk_dvfsrc.h>
 
-Nit: s/recieving/receiving/
+The patch looks good to me, but as there is a build dependency I'll wait
+until the dvfsrc patches are reviewed/picked by Matthias.
 
 Thanks,
 Georgi
