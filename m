@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B27340661
+	by mail.lfdr.de (Postfix) with ESMTP id 76463340660
 	for <lists+linux-pm@lfdr.de>; Thu, 18 Mar 2021 14:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhCRNGm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Mar 2021 09:06:42 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:56013 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbhCRNGW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 09:06:22 -0400
+        id S231502AbhCRNGn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Mar 2021 09:06:43 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:64258 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231564AbhCRNG2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 09:06:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1616072797; x=1647608797;
+  t=1616072788; x=1647608788;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=xRjkSngl6JrbFhQW624YAadKdBN5mGoNhLFzY2zwGK8=;
-  b=VzidpTIe7qZfVq4W27jQYBfUCl0LMdCYI77QM/K6PfyP7xwLl8ZdY3Bs
-   WsjGxCyd+UkfxS8l87j7kqLg82Iez30vLvU4wTV6fILigr/jnC28Bf4nf
-   xQeInTNJWyScBz3bDnr0EY1KGbAStvJ6KpZsJ2FTaxLoWq+uwHGnGTztG
-   L4Xd55j7jmWkcTubci6ZB5SEo9+GAbp3Y8IDJ3jNz/IAUwuzzthuwd4ez
-   zlUo0tWQmlvqYAGRIOMKSIg0xwm4tOTsTNdzU18CsUiTCfzYaSaBF34I7
-   jEONS1RD5ww0FaVO86cM/tMwEV285AAMdgwjZSfe3rxsMJsnsSGYwHgh7
-   Q==;
-IronPort-SDR: VNT/A6IO40d374IFJfylZaypKvsQhG7Xg4rFYArU9AcD/LVsIMD16OtYKek8A/E1hbq52YXBGS
- 6RHcsqtkLbSReL1/n6rVygu8RmKPjh1/e6cruMpdwvi40C9/jrakwrd69W/Ve7Zdgabm/P+GpT
- tG7Kgv5hE9Aj/QUJu+0PC72KRenVCbDPT77FcNhNYgut6GGcra9/SIA4vvUZ4qTr5svrcWkIV2
- /b2ZJhcomXSMOPfNwNRSpxr8IYiHnF2sr4rGzmAK4XnpWhOni/LJX8D8rqUcgNm/tkpLl+6+Wc
- q7s=
+  bh=pR2wxBY+iMhZsJPkv7P7bYvnirPMPbSXsPYMbbe2YNg=;
+  b=aZfWTuo+gLAfTQCUM7JimxbBWSdRskS4bwUzzKJB0SRHh6DV6bQoC9gN
+   x/rb1mnvBsz9AIFl1WsLb4D761351h7I9zh2KhTSS1Eo7rThsfem0jErq
+   RrwAzTvdcUDyyEJpg6JUDM08GTJ1rK/IfKVflKuE2DfjZNMHAFNfP9K7H
+   nk9HdPR5Su4cqUW5ipfoVzYLgGWf7r8yHbaSp5K9wqfR0v0IxjoHiLns+
+   cKwRykzhZ7VBJWyzNBsWYxh0f5esPtTgplX230td6NnBH6DPRJY4mABnG
+   sLcuJNh7JRxhlWZLmgE5OUqkp1rASZlKXOsWTnAJsBIWORXxL+9pBB5qX
+   w==;
+IronPort-SDR: 7SXFQ5lJIpmVThZYCIiXMlCxwGB9sYakTYPbUSYGS+55vEkeH2JJQr6bkaMC3nLYsVx/p6LlfX
+ 4kC7b7wV3Cbrlug2mwWMWfNALA3wlkcC89MsfdIBOj7ojMgN2rr8FF0hYu814icbDOtkG7eRjy
+ PFmyW7UM15PjFuz4N+SzNA4/4sobu7AeV96KQxTKeBViSyjyPZvlGmRpznPPaomH7mPC6sBRQr
+ gJWA/HHM4B9mU8fDgHFO3FGHGC+2gsVOFz0QxsGX8YYNWVmkBGtwEurqoJV67+W9sjq1AAWNau
+ Ofw=
 X-IronPort-AV: E=Sophos;i="5.81,258,1610380800"; 
-   d="scan'208";a="266856988"
-Received: from mail-bn8nam11lp2173.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.173])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Mar 2021 21:06:34 +0800
+   d="scan'208";a="162461312"
+Received: from mail-sn1nam02lp2053.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.36.53])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Mar 2021 21:06:27 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ngC/7k/hY6b5jaADHBN2sPpz/laeA3667epRGS2e6Tf84shtHY0HJbeUJZP1vYJWKNL50bu9hoqsJ4JITHguVSaZMKBa2XNfNQTAPTTSfCLsDC7KNvTVrG+q2h0PBZVh+P7YpUDmvqsS1PW7tq0yy7t0efG/fJRO7bkzH7KthJWDZ5O/A66BPjyLU45uSVmbtu4aDPqG/uquiAdufNcz8+wMCFp6sCkchlii51jEvCtdaCSs8eWZRTfXyhUdOXB5QGop7y/CAaWbhEdkRwVfyt1lCa/ZAEvvfJxTezGbWrRxe1wkP/K8nsSkwshVElOaFww2Q+rcv6M3x/pooBZeCA==
+ b=fJe3Y9rwhdBMNnTLbAf3+5lCIn6FvueYi+cx7M99iLvWC2ZzXAcYOgTMmXauWK7dSCh8Las7ZFrIep0yjTDHqPxtr5qhtdHH6KH7/7ZGPNIfD1+cRaUBjnlfca22cegJZwVSa1rtpndWQNKWfPrvvg3IUI8il5RjXdLwXfVxN1mdW6W6G7C1/EI+k2Tk0/QQSfbYsPT4ysZjrqFCmq81hTsVmNaWwDF73dYymJL7HzQIr2TXWKV5ucGVxlj1EOM5ACCNT+T1tMNEjYCXLaHPTWcrtdDeBKjl+6dhltxgQ3ffrKSB3iz6Z8jwj1AF9NtI8lEvhz3fnBVUGARKng6dtQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=czXf1ICfMmkfzxSxs5d9LOjTxH0S62mIndNT9t7IroQ=;
- b=gGLHz0nw8bcjaDueRI08MLvScX+DQUKWH/fIRDECTO9+544F3aSOHI6VVmMfVJUAG9VpQ7n8opRua9zP/VwTZl1ztkmqo0jkSu8Rce/fsJxUB4T3PucLNUntvXAKz8TgjPjBDuZDRtkvR+YC/biir1jDplRIRnQgUgkzvejufcb4XDT/J1syQP46TuJk0iXJwOgbVShKOHpK/8FerQ2pyVz2zCxTs064b8UTqsr/teSCO9NpI/UnRYJ8J0Af4JA9wmUD2E03i4slGc6GJHi4Y3QBYnn9t6bbXQjRsVWovn8PDHJNPTGsGzMIBQJV0AhUuXBKGWJeaH7zkdNP27tZVg==
+ bh=Q3tQsb5V1u/7UhsC0q5xAr4kp47ttW4XxfsQ94h6ILU=;
+ b=gwj9lQfCigrV2+YPxsE9At12E/GvCf3OkLpWO+pKIxzDguY/owjzuBnqu6SXEj0VVAqFgmswLpR2PpNkYYx53S8TWvE0i8wZCmE2ow2u1cFrk/FxcmRb/izd5LK8J24VUbpXIyEYcOVar8Puf3mHjjUfl8HUYfzUvYmWWDqWoT3DFo3iIkmvoReHBgPwlhGTDwmQnudAOSND7qX29JYeXwd+aSwdsgzg78yKdlXjCJMxIBJRJ0M6U38qZrmm3k4RJLXVwvRdm2YukopJ71idMb2No+ZF9n8HyRqztHAM3WAo08KAEIXcX3eZKlaFu+qPMMBWy+Cj2m+B0Kzr2RfujQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=czXf1ICfMmkfzxSxs5d9LOjTxH0S62mIndNT9t7IroQ=;
- b=oqtW2JOepN3332uO9IezDP2EaNxJKT0P1k0bHoao/JpAR6t1kRhMG3qPYSP0tfsgcwRUyBwO+cY4fVVo30ONuCI5SSuQjQh3LLlR9y22KKo/20SQ1EVJbmB2O6RM9dbycfA4qrbPE+aSHAIha5XwSv37v8IyAOW7/pvmpeI5sYg=
+ bh=Q3tQsb5V1u/7UhsC0q5xAr4kp47ttW4XxfsQ94h6ILU=;
+ b=cwe535t5o6yijsLOVxUb67SHuLal5rsgTbQLh6F6vnBy2KvL/96s4yRHnMcx3NEVREkMgfA5X2ep/eQ8mghRBOvT10kd2aM2mrdLsov1vpsZvrt3Ugu3OqGEDsp2q49LXcbbxAircFr1zirD2ZnynMl1VzK9wSeZruvCQ5BsF2A=
 Authentication-Results: dabbelt.com; dkim=none (message not signed)
  header.d=none;dabbelt.com; dmarc=none action=none header.from=wdc.com;
 Received: from DM6PR04MB6201.namprd04.prod.outlook.com (2603:10b6:5:127::32)
  by DM5PR04MB0826.namprd04.prod.outlook.com (2603:10b6:3:100::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Thu, 18 Mar
- 2021 13:06:18 +0000
+ 2021 13:06:23 +0000
 Received: from DM6PR04MB6201.namprd04.prod.outlook.com
  ([fe80::38c0:cc46:192b:1868]) by DM6PR04MB6201.namprd04.prod.outlook.com
  ([fe80::38c0:cc46:192b:1868%7]) with mapi id 15.20.3955.018; Thu, 18 Mar 2021
- 13:06:18 +0000
+ 13:06:24 +0000
 From:   Anup Patel <anup.patel@wdc.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
@@ -76,9 +76,9 @@ Cc:     Sandeep Tripathy <milun.tripathy@gmail.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Anup Patel <anup.patel@wdc.com>
-Subject: [RFC PATCH v3 6/8] cpuidle: Add RISC-V SBI CPU idle driver
-Date:   Thu, 18 Mar 2021 18:35:10 +0530
-Message-Id: <20210318130512.1025416-7-anup.patel@wdc.com>
+Subject: [RFC PATCH v3 7/8] dt-bindings: Add common bindings for ARM and RISC-V idle states
+Date:   Thu, 18 Mar 2021 18:35:11 +0530
+Message-Id: <20210318130512.1025416-8-anup.patel@wdc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210318130512.1025416-1-anup.patel@wdc.com>
 References: <20210318130512.1025416-1-anup.patel@wdc.com>
@@ -90,651 +90,407 @@ X-ClientProxiedBy: MA1PR01CA0148.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:5:127::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from wdc.com (122.167.155.94) by MA1PR01CA0148.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:71::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend Transport; Thu, 18 Mar 2021 13:06:12 +0000
+Received: from wdc.com (122.167.155.94) by MA1PR01CA0148.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:71::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend Transport; Thu, 18 Mar 2021 13:06:18 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 74da500f-7461-4e22-c7ea-08d8ea0e9e40
+X-MS-Office365-Filtering-Correlation-Id: 42bffb8a-2254-4095-2c4e-08d8ea0ea1c4
 X-MS-TrafficTypeDiagnostic: DM5PR04MB0826:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR04MB0826C8853946BEF266078C798D699@DM5PR04MB0826.namprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM5PR04MB0826CFC579F6E109FC2295CF8D699@DM5PR04MB0826.namprd04.prod.outlook.com>
 WDCIPOUTBOUND: EOP-TRUE
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: liVaOLrpiO7tPKAdnTxW84cq+L8uxkGF3Bj+ICvzzPmE4TkIflBw7AJDVmuciAdJlOimaF7TkpUFQ9rcIBrFG41oD/IVLwa6Wo3JoTnZBTZ2cFsu5f0AKZxcpDPTTiSAYXCcygO8XJjXwu3SR0A1H/N1Oizge0tMGGyfj5ZzappNiNeWagVJ5XsM1MgechqNiPlnYiVy52gHoXk664irPbXYaXFByhLf/Zelhact1vO7n5zjiBK77albxF7av4j1rBkTtPPcuqRgquHasDx5llCvl/kULB+kgiLR9FCCP9CxusvmDSd8ZKmd3VMavpngmsdiimxfOkaUR8LR36IZKA8p2OPhA5ggk+CtVSXakGtEqN+Q011YStshWNDM3tgaNsttaWWxGI25S1M/QJNY0fm7z7rdHYFAjboWx9c0bjdTgF30UctOM8WXLS2luDbuEBexjymO66hjb0UnEvZTUTPzn3V/CtxwW18F4p/Z9yhrYMUEv1mLkf4UISm6jSNcfqhm1vpZNF2uqxgqVeH59rCnH7PKfYkK3zRgcCyaKmLiXBGCg7t4M8FcMXJ7oxBjJa1ildvTh1L1vNImD81zF2rOLXi7DYpr82T2D3Jdzb5xX84pZecG4pPdlnZbA5YU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6201.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(346002)(396003)(136003)(39860400002)(4326008)(86362001)(44832011)(30864003)(2906002)(186003)(36756003)(478600001)(110136005)(1076003)(38100700001)(316002)(956004)(55016002)(2616005)(8936002)(8886007)(26005)(7416002)(54906003)(66556008)(5660300002)(16526019)(8676002)(66946007)(66476007)(7696005)(83380400001)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?qBQ44aQSG8R2TsM/z453s9TP/P5SyjIWynzln8M/a+xNjT2BWfH3T8Rw25Ef?=
- =?us-ascii?Q?2/pcEZqC/iaYwejq5H9/X0sxWJvNAOLlfc4vX8Id0y55Npabo9xgCwSyS7Eb?=
- =?us-ascii?Q?xg4shSkxL7NXNGCkuHOSD2Nptgv7Kf+xlp9OzbfwpOavGgUVzNRxok0Ssgjf?=
- =?us-ascii?Q?bDijfZCbmB633w6B1xpvB1QeWZUcuAKl0+89NYuek5W4U21/8OMJaVK3pOEM?=
- =?us-ascii?Q?6pcgIofkMpJ3WmdLJYE4oivNeuE3znOPrZXBb1vOebvxbrJarfKZYD4geHLF?=
- =?us-ascii?Q?w3SBSbFlRrPh8YsI1Bv4C4nmWrZHWEOGO1OlSszMyshbsC9RYzqTI2RFJI28?=
- =?us-ascii?Q?C13rETQLLPu3zsP+ajoUVtyRL2F2nUH7yM2d4Nt9E44O7Ihz3Lj5PBoKD/zv?=
- =?us-ascii?Q?kz2XH/v2OHoOdCmIL+EFvw4HuJKtFFM+U579SoUIwuAh9tIXsEfp8xB78qLt?=
- =?us-ascii?Q?1wlWgQ+BZVFW+CjysSMh85HorfvFt2WS2ighX/cwgJz0v+kry3fkqnadS4OE?=
- =?us-ascii?Q?XgWVMnDj73xY1chcGE7htplKHK2r/msTvEWsVfvYnCgq+FeSXLI+GfnPzB7P?=
- =?us-ascii?Q?cFxptI4XxUH9/tXuqueQlKzbNd+dvWw7YuhMiD5l3wiVJNALTLEc+xK/99Q9?=
- =?us-ascii?Q?FCE4DBraMyiva9ycHP3CxB2aJbOYq+oz0Ac/2T466Cj0cnUnlewPHMO9f3xZ?=
- =?us-ascii?Q?caEDh7Fhkzg2HIywDdWFVimaSF+ogPyysO39dUvXzvpLh70HWGu6T8x1f6l1?=
- =?us-ascii?Q?m6VaLU1UgXiIDYie85CbiES55faVUQVZHcgGXeaX8cg8Vb1tYMyho3nWfpEx?=
- =?us-ascii?Q?O+SJ0d3s8zzvw00f7X9i/ei0yCgix+cEOoMzu+KrcrTPvfJwC9DKDlHRTW59?=
- =?us-ascii?Q?FIAgtcLmk1bPq2+pb5um7qNBnYZHFMSJZoxxR/IZ2Wh7eWxU1TymYlU6zH/Z?=
- =?us-ascii?Q?4wrv0UQ/kL6b/1eUUbivHSUFGQRobtJhcDkRn+S0bO6+QOwbkrqzemJPZcJ1?=
- =?us-ascii?Q?rgUzK7WWgWsN781ZfCkrCaC0CgcYRNuyERJB38YsYN1Os+3np8JIe56+jRSv?=
- =?us-ascii?Q?bpEfVRswt3HElSCSYKPB0kQXmqn367dfPSX0HSKAAwIBGrKCTg8c0anOpa8I?=
- =?us-ascii?Q?J30f6G9N996MgCbb/CholV5hSrnaK3qkrXLsHGv2OEWBoThIw5yPKCPdzol9?=
- =?us-ascii?Q?iqL5xiW1BK0wE2iom4z7Ce3lnTJF2eNxIn9YoDy4rreOmSGiaOxR1LRbAyBO?=
- =?us-ascii?Q?guYTN2wO4OenVYvPe42GjcOxA4Pg8HIhiWgHeghyb26mqs8QO2ehFl8mzxXC?=
- =?us-ascii?Q?a7v4qaYCZzARslFUTExafdQZ?=
+X-Microsoft-Antispam-Message-Info: pXuvKmpyWSVTLmuF+5ZW6IreF7lYTSHSUuacp1kVtXyEjyNAfOSNaG+yJFKOvhSbEqpSst0Aoqzna6+XDSOm27zk25ePdhhln6CEj83HpPA5rPuy1dT4LdqIbAb7KLcCydyLhyd6AEyOuSPRom9OmMvBkw8iXY1oWKkJBouEk0T9RCNvotXwHtHqlTXEIbCeAKIWB4xrgWnAF0kwYbamsOs/omfGgShOz+GzUfmRQLRzdT29FPm/xHxbPjJRI522clZ2XPaYXX3EmaYQZePPcoJZyqqo/zKRIfuC/vNMj7JmjEGM7u+dAhjG8iGH3f6Mi+CWNE4F+foqqBf4Vd3n8X+WOpZGzfXtfrkdF8hu8hLrBPFitbR4X08/csZKC/y9TH2/pmUdcEQ/OKOSSQ3E+cv7DZxUJCWp0DtP4JjKHlpRaLr3d0n2vRvaUlHlHrE5oRpdCJ7Drlxmp4pb+dtbmIHDrnw7+Qrd395hNrlZsIWeIvSkdMeStqNTui18WBw7QUiCMhFRyqbgWQLvRh28fqGngHofowsJlPCY6ZURrsXQxkiGMk7DgNuga4+NrGXUjOQOlahpYI/bLIrd3cbXbNG/1QYAEFT3q0SRbfejd5j/QZs0ZAeQueBSfuMNQKz9STZhUsJVWxQscGi4/dweIc6v/8UMjGdlkIvSPtHqKDOZCpwwAc7Lx59oBfp6QmD3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6201.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(346002)(396003)(136003)(39860400002)(4326008)(86362001)(44832011)(30864003)(2906002)(186003)(36756003)(478600001)(110136005)(1076003)(38100700001)(316002)(956004)(55016002)(2616005)(8936002)(8886007)(26005)(7416002)(54906003)(66556008)(5660300002)(16526019)(8676002)(66946007)(6666004)(66476007)(7696005)(83380400001)(52116002)(966005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?j1keNqwR5nmJSDs+/uW+NO91pkBjyN1gUlLHCbFRGXrCtC8erh355P4EaQdh?=
+ =?us-ascii?Q?z7Gjo5nXD7FQpU7t/e6ukwHYvb7jbm6eElmQYyp7pupp8agZSWVkWF9Yf09z?=
+ =?us-ascii?Q?BxgteA0qSgnqJLi7oFutPKWNjHBgIuNrCntv4lI0kKeekt2O4nQvSBGH3fTO?=
+ =?us-ascii?Q?+K9qlABedVoyyh7W4TXq2hhJzeOq8idHgKmNI1omNtNYcc2nndp4sBb54+VF?=
+ =?us-ascii?Q?T4HkyP+82akUJ/YcibwOn2DM+ge11jg31x/49tdLIrEKQ7EkH2cZmwxR7103?=
+ =?us-ascii?Q?h5n1H57w4oHX/8WbPvdt2oxHvag0mftuJ/R60jTcMrUzVHtysHbcPUDGfKbi?=
+ =?us-ascii?Q?DrcBAvf4gN5KSabD27sgWp8KvzM/0d0r9/a7g+f0+id4fHJRvATWtXvHq/jz?=
+ =?us-ascii?Q?pQJXLBW0y2B8Xj/PgAW5ownvlhyFTr3GnY01PbOXTRIVr5FkKNh95ohQmUbJ?=
+ =?us-ascii?Q?KzhGNgTNjctnBU1mub/8waxApxx9B/CxQGS0hnvzTGNSBHXF6AbMCLxTRpD9?=
+ =?us-ascii?Q?tTWxy7c2JA40p32CGaEL0+GgsvfBQoM2xBSOv3QFS611Wgz49N62Z+J/C45m?=
+ =?us-ascii?Q?/2LbXjWjjoovAMawU//MABNDbMMsp/BeYsd/NvTq+ZgauKUxRxLEPMxWYMN3?=
+ =?us-ascii?Q?IAHcTljM1Gz7M+fMwTAOtzYm0+9uoyge26xYH/iFgCqXwMkzUDydECLpRLDJ?=
+ =?us-ascii?Q?C+tT0dC009TYG2CbI2ud7GThCO+J/7nOTDg38zyZyJx1sh/xKHswUVcYg+fX?=
+ =?us-ascii?Q?3Fug5ohbwjIYDkuMQa9ox3Hszj6i5lGhNaWEb3nk3XjNpERy9fCQFz0r+Qla?=
+ =?us-ascii?Q?yOKUQ+9YfH7cPGIrTjyy8SX2lckaUQCT8Vxe8ufxpVLZjfkFW659K4908miR?=
+ =?us-ascii?Q?1+JfiXhxzT5o4r1z+KG8D9SZARPpdpEq2mWqDaRBUIMaiJIj2+I+WSjhwRRh?=
+ =?us-ascii?Q?l0tfBObd/pv+3+/B7N21PHfI3jJWRkd7u4PVOSRTvc9ZtM2LhJ0gilF4PXfx?=
+ =?us-ascii?Q?/Mvferxnnt0Mg0oyds3Me8bYD48Iq5w78pTJL103uf8sfBvwxu1qdM5PEYCs?=
+ =?us-ascii?Q?lW1D2TS7JwCexwx6A8Ox+Umc5nTIKyqkZlvhmYKSElf12ItE5skCxNqTIBh8?=
+ =?us-ascii?Q?grcEC8iCarQ14trMT2OQjoSSwg/Ragk7nE8tp32SALOsIcbtp0Hi+6HNfbS8?=
+ =?us-ascii?Q?+A5Ze674Ky8z0uvjMIqxtCe+ltaU9vBsN3gdf8/uqsA4wKUB7FahYkqYy3J+?=
+ =?us-ascii?Q?iWTgATygdGCOTM8TV0m/HZRspuzzgYp47ZQXA//tl9Bb6ZIgtjZQCle2uixI?=
+ =?us-ascii?Q?tTIyiaykqX2HGBN+Z+wZIcAG?=
 X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74da500f-7461-4e22-c7ea-08d8ea0e9e40
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42bffb8a-2254-4095-2c4e-08d8ea0ea1c4
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6201.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2021 13:06:18.0121
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2021 13:06:23.8794
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cXxfK6dE30gek8OMwJrcjTrps02diMQ0+HSaSavYSg19YVrsADBFPtdFEOFdsXYALlG3QO7QeXL+e7EmCZ9CGA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: mUSIlZNeE1S/Ih0dXs9o7nkn6s3d44oTB0MmwVdbDHKf7ScnbJBHibGGOibGOYo7wtqHf2r5w7imHQdceLrzWA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0826
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The RISC-V SBI HSM extension provides HSM suspend call which can
-be used by Linux RISC-V to enter platform specific low-power state.
+The RISC-V CPU idle states will be described in under the
+/cpus/idle-states DT node in the same way as ARM CPU idle
+states.
 
-This patch adds a CPU idle driver based on RISC-V SBI calls which
-will populate idle states from device tree and use SBI calls to
-entry these idle states.
+This patch adds common bindings documentation for both ARM
+and RISC-V idle states.
 
 Signed-off-by: Anup Patel <anup.patel@wdc.com>
 ---
- MAINTAINERS                   |   8 +
- drivers/cpuidle/Kconfig       |   5 +
- drivers/cpuidle/Kconfig.riscv |  15 +
- drivers/cpuidle/Makefile      |   4 +
- drivers/cpuidle/cpuidle-sbi.c | 502 ++++++++++++++++++++++++++++++++++
- 5 files changed, 534 insertions(+)
- create mode 100644 drivers/cpuidle/Kconfig.riscv
- create mode 100644 drivers/cpuidle/cpuidle-sbi.c
+ .../bindings/{arm => cpu}/idle-states.yaml    | 228 ++++++++++++++++--
+ .../devicetree/bindings/riscv/cpus.yaml       |   6 +
+ 2 files changed, 217 insertions(+), 17 deletions(-)
+ rename Documentation/devicetree/bindings/{arm => cpu}/idle-states.yaml (74%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa84121c5611..4954112efdb4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4679,6 +4679,14 @@ S:	Supported
- F:	drivers/cpuidle/cpuidle-psci.h
- F:	drivers/cpuidle/cpuidle-psci-domain.c
+diff --git a/Documentation/devicetree/bindings/arm/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+similarity index 74%
+rename from Documentation/devicetree/bindings/arm/idle-states.yaml
+rename to Documentation/devicetree/bindings/cpu/idle-states.yaml
+index 52bce5dbb11f..74466f160cb2 100644
+--- a/Documentation/devicetree/bindings/arm/idle-states.yaml
++++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+@@ -1,25 +1,30 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/arm/idle-states.yaml#
++$id: http://devicetree.org/schemas/cpu/idle-states.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
-+CPUIDLE DRIVER - RISC-V SBI
-+M:	Anup Patel <anup.patel@wdc.com>
-+R:	Sandeep Tripathy <milun.tripathy@gmail.com>
-+L:	linux-pm@vger.kernel.org
-+L:	linux-riscv@lists.infradead.org
-+S:	Supported
-+F:	drivers/cpuidle/cpuidle-sbi.c
-+
- CRAMFS FILESYSTEM
- M:	Nicolas Pitre <nico@fluxnic.net>
- S:	Maintained
-diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-index f1afe7ab6b54..ff71dd662880 100644
---- a/drivers/cpuidle/Kconfig
-+++ b/drivers/cpuidle/Kconfig
-@@ -66,6 +66,11 @@ depends on PPC
- source "drivers/cpuidle/Kconfig.powerpc"
- endmenu
+-title: ARM idle states binding description
++title: Idle states binding description
  
-+menu "RISC-V CPU Idle Drivers"
-+depends on RISCV
-+source "drivers/cpuidle/Kconfig.riscv"
-+endmenu
-+
- config HALTPOLL_CPUIDLE
- 	tristate "Halt poll cpuidle driver"
- 	depends on X86 && KVM_GUEST
-diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
-new file mode 100644
-index 000000000000..78518c26af74
---- /dev/null
-+++ b/drivers/cpuidle/Kconfig.riscv
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# RISC-V CPU Idle drivers
-+#
-+
-+config RISCV_SBI_CPUIDLE
-+	bool "RISC-V SBI CPU idle Driver"
-+	depends on RISCV_SBI
-+	select DT_IDLE_STATES
-+	select CPU_IDLE_MULTIPLE_DRIVERS
-+	select DT_IDLE_GENPD if PM_GENERIC_DOMAINS_OF
-+	help
-+	  Select this option to enable RISC-V SBI firmware based CPU idle
-+	  driver for RISC-V systems. This drivers also supports hierarchical
-+	  DT based layout of the idle state.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 11a26cef279f..a36922c18510 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -35,3 +35,7 @@ obj-$(CONFIG_MIPS_CPS_CPUIDLE)		+= cpuidle-cps.o
- # POWERPC drivers
- obj-$(CONFIG_PSERIES_CPUIDLE)		+= cpuidle-pseries.o
- obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
-+
-+###############################################################################
-+# RISC-V drivers
-+obj-$(CONFIG_RISCV_SBI_CPUIDLE)		+= cpuidle-sbi.o
-diff --git a/drivers/cpuidle/cpuidle-sbi.c b/drivers/cpuidle/cpuidle-sbi.c
-new file mode 100644
-index 000000000000..47938fff61e1
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-sbi.c
-@@ -0,0 +1,502 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * RISC-V SBI CPU idle driver.
-+ *
-+ * Copyright (c) 2021 Western Digital Corporation or its affiliates.
-+ */
-+
-+#define pr_fmt(fmt) "cpuidle-sbi: " fmt
-+
-+#include <linux/cpuidle.h>
-+#include <linux/cpumask.h>
-+#include <linux/cpu_pm.h>
-+#include <linux/cpu_cooling.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/slab.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+#include <asm/cpuidle.h>
-+#include <asm/sbi.h>
-+#include <asm/suspend.h>
-+
-+#include "dt_idle_states.h"
-+#include "dt_idle_genpd.h"
-+
-+struct sbi_cpuidle_data {
-+	u32 *states;
-+	struct device *dev;
-+};
-+
-+struct sbi_domain_state {
-+	bool available;
-+	u32 state;
-+};
-+
-+static DEFINE_PER_CPU_READ_MOSTLY(struct sbi_cpuidle_data, sbi_cpuidle_data);
-+static DEFINE_PER_CPU(struct sbi_domain_state, domain_state);
-+static bool sbi_cpuidle_use_osi;
-+static bool sbi_cpuidle_use_cpuhp;
-+static bool sbi_cpuidle_pd_allow_domain_state;
-+
-+static inline void sbi_set_domain_state(u32 state)
-+{
-+	struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-+
-+	data->available = true;
-+	data->state = state;
-+}
-+
-+static inline u32 sbi_get_domain_state(void)
-+{
-+	struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-+
-+	return data->state;
-+}
-+
-+static inline void sbi_clear_domain_state(void)
-+{
-+	struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-+
-+	data->available = false;
-+}
-+
-+static inline bool sbi_is_domain_state_available(void)
-+{
-+	struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-+
-+	return data->available;
-+}
-+
-+static int sbi_suspend_finisher(unsigned long suspend_type,
-+				unsigned long resume_addr,
-+				unsigned long opaque)
-+{
-+	struct sbiret ret;
-+
-+	ret = sbi_ecall(SBI_EXT_HSM, SBI_EXT_HSM_HART_SUSPEND,
-+			suspend_type, resume_addr, opaque, 0, 0, 0);
-+
-+	return (ret.error) ? sbi_err_map_linux_errno(ret.error) : 0;
-+}
-+
-+static int sbi_suspend(u32 state)
-+{
-+	if (state & SBI_HSM_SUSP_NON_RET_BIT)
-+		return cpu_suspend(state, sbi_suspend_finisher);
-+	else
-+		return sbi_suspend_finisher(state, 0, 0);
-+}
-+
-+static int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
-+				   struct cpuidle_driver *drv, int idx)
-+{
-+	u32 *states = __this_cpu_read(sbi_cpuidle_data.states);
-+
-+	return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, states[idx]);
-+}
-+
-+static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-+					  struct cpuidle_driver *drv, int idx,
-+					  bool s2idle)
-+{
-+	struct sbi_cpuidle_data *data = this_cpu_ptr(&sbi_cpuidle_data);
-+	u32 *states = data->states;
-+	struct device *pd_dev = data->dev;
-+	u32 state;
-+	int ret;
-+
-+	ret = cpu_pm_enter();
-+	if (ret)
-+		return -1;
-+
-+	/* Do runtime PM to manage a hierarchical CPU toplogy. */
-+	rcu_irq_enter_irqson();
-+	if (s2idle)
-+		dev_pm_genpd_suspend(pd_dev);
-+	else
-+		pm_runtime_put_sync_suspend(pd_dev);
-+	rcu_irq_exit_irqson();
-+
-+	if (sbi_is_domain_state_available())
-+		state = sbi_get_domain_state();
-+	else
-+		state = states[idx];
-+
-+	ret = sbi_suspend(state) ? -1 : idx;
-+
-+	rcu_irq_enter_irqson();
-+	if (s2idle)
-+		dev_pm_genpd_resume(pd_dev);
-+	else
-+		pm_runtime_get_sync(pd_dev);
-+	rcu_irq_exit_irqson();
-+
-+	cpu_pm_exit();
-+
-+	/* Clear the domain state to start fresh when back from idle. */
-+	sbi_clear_domain_state();
-+	return ret;
-+}
-+
-+static int sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-+				       struct cpuidle_driver *drv, int idx)
-+{
-+	return __sbi_enter_domain_idle_state(dev, drv, idx, false);
-+}
-+
-+static int sbi_enter_s2idle_domain_idle_state(struct cpuidle_device *dev,
-+					      struct cpuidle_driver *drv,
-+					      int idx)
-+{
-+	return __sbi_enter_domain_idle_state(dev, drv, idx, true);
-+}
-+
-+static int sbi_cpuidle_cpuhp_up(unsigned int cpu)
-+{
-+	struct device *pd_dev = __this_cpu_read(sbi_cpuidle_data.dev);
-+
-+	if (pd_dev)
-+		pm_runtime_get_sync(pd_dev);
-+
-+	return 0;
-+}
-+
-+static int sbi_cpuidle_cpuhp_down(unsigned int cpu)
-+{
-+	struct device *pd_dev = __this_cpu_read(sbi_cpuidle_data.dev);
-+
-+	if (pd_dev) {
-+		pm_runtime_put_sync(pd_dev);
-+		/* Clear domain state to start fresh at next online. */
-+		sbi_clear_domain_state();
-+	}
-+
-+	return 0;
-+}
-+
-+static void sbi_idle_init_cpuhp(void)
-+{
-+	int err;
-+
-+	if (!sbi_cpuidle_use_cpuhp)
-+		return;
-+
-+	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
-+					"cpuidle/sbi:online",
-+					sbi_cpuidle_cpuhp_up,
-+					sbi_cpuidle_cpuhp_down);
-+	if (err)
-+		pr_warn("Failed %d while setup cpuhp state\n", err);
-+}
-+
-+static const struct of_device_id sbi_cpuidle_state_match[] = {
-+	{ .compatible = "riscv,idle-state",
-+	  .data = sbi_cpuidle_enter_state },
-+	{ },
-+};
-+
-+static bool sbi_suspend_state_is_valid(u32 state)
-+{
-+	if (state > SBI_HSM_SUSPEND_RET_DEFAULT &&
-+	    state < SBI_HSM_SUSPEND_RET_PLATFORM)
-+		return false;
-+	if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
-+	    state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
-+		return false;
-+	return true;
-+}
-+
-+static int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
-+{
-+	int err = of_property_read_u32(np, "riscv,sbi-suspend-param", state);
-+
-+	if (err) {
-+		pr_warn("%pOF missing riscv,sbi-suspend-param property\n", np);
-+		return err;
-+	}
-+
-+	if (!sbi_suspend_state_is_valid(*state)) {
-+		pr_warn("Invalid SBI suspend state %#x\n", *state);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sbi_dt_cpu_init_topology(struct cpuidle_driver *drv,
-+				     struct sbi_cpuidle_data *data,
-+				     unsigned int state_count, int cpu)
-+{
-+	/* Currently limit the hierarchical topology to be used in OSI mode. */
-+	if (!sbi_cpuidle_use_osi)
-+		return 0;
-+
-+	data->dev = dt_idle_genpd_attach_cpu(cpu, "sbi");
-+	if (IS_ERR_OR_NULL(data->dev))
-+		return PTR_ERR_OR_ZERO(data->dev);
-+
-+	/*
-+	 * Using the deepest state for the CPU to trigger a potential selection
-+	 * of a shared state for the domain, assumes the domain states are all
-+	 * deeper states.
-+	 */
-+	drv->states[state_count - 1].enter = sbi_enter_domain_idle_state;
-+	drv->states[state_count - 1].enter_s2idle = sbi_enter_s2idle_domain_idle_state;
-+	sbi_cpuidle_use_cpuhp = true;
-+
-+	return 0;
-+}
-+
-+static int sbi_cpuidle_dt_init_states(struct device *dev,
-+					struct cpuidle_driver *drv,
-+					unsigned int cpu,
-+					unsigned int state_count)
-+{
-+	struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
-+	struct device_node *state_node;
-+	struct device_node *cpu_node;
-+	u32 *states;
-+	int i, ret;
-+
-+	cpu_node = of_cpu_device_node_get(cpu);
-+	if (!cpu_node)
-+		return -ENODEV;
-+
-+	states = devm_kcalloc(dev, state_count, sizeof(*states), GFP_KERNEL);
-+	if (!states) {
-+		ret = -ENOMEM;
-+		goto fail;
-+	}
-+
-+	/* Parse SBI specific details from state DT nodes */
-+	for (i = 1; i < state_count; i++) {
-+		state_node = of_get_cpu_state_node(cpu_node, i - 1);
-+		if (!state_node)
-+			break;
-+
-+		ret = sbi_dt_parse_state_node(state_node, &states[i]);
-+		of_node_put(state_node);
-+
-+		if (ret)
-+			return ret;
-+
-+		pr_debug("sbi-state %#x index %d\n", states[i], i);
-+	}
-+	if (i != state_count) {
-+		ret = -ENODEV;
-+		goto fail;
-+	}
-+
-+	/* Initialize optional data, used for the hierarchical topology. */
-+	ret = sbi_dt_cpu_init_topology(drv, data, state_count, cpu);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Store states in the per-cpu struct. */
-+	data->states = states;
-+
-+fail:
-+	of_node_put(cpu_node);
-+
-+	return ret;
-+}
-+
-+static void sbi_cpuidle_deinit_cpu(int cpu)
-+{
-+	struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
-+
-+	dt_idle_genpd_detach_cpu(data->dev);
-+	sbi_cpuidle_use_cpuhp = false;
-+}
-+
-+static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-+{
-+	struct cpuidle_driver *drv;
-+	unsigned int state_count = 0;
-+	int ret = 0;
-+
-+	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	drv->name = "sbi_cpuidle";
-+	drv->owner = THIS_MODULE;
-+	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-+
-+	/* RISC-V architectural WFI to be represented as state index 0. */
-+	drv->states[0].enter = sbi_cpuidle_enter_state;
-+	drv->states[0].exit_latency = 1;
-+	drv->states[0].target_residency = 1;
-+	drv->states[0].power_usage = UINT_MAX;
-+	strcpy(drv->states[0].name, "WFI");
-+	strcpy(drv->states[0].desc, "RISC-V WFI");
-+
-+	/*
-+	 * If no DT idle states are detected (ret == 0) let the driver
-+	 * initialization fail accordingly since there is no reason to
-+	 * initialize the idle driver if only wfi is supported, the
-+	 * default archictectural back-end already executes wfi
-+	 * on idle entry.
-+	 */
-+	ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-+	if (ret <= 0) {
-+		pr_debug("HART%ld: failed to parse DT idle states\n",
-+			 cpuid_to_hartid_map(cpu));
-+		return ret ? : -ENODEV;
-+	}
-+	state_count = ret + 1; /* Include WFI state as well */
-+
-+	/* Initialize idle states from DT. */
-+	ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-+	if (ret) {
-+		pr_err("HART%ld: failed to init idle states\n",
-+		       cpuid_to_hartid_map(cpu));
-+		return ret;
-+	}
-+
-+	ret = cpuidle_register(drv, NULL);
-+	if (ret)
-+		goto deinit;
-+
-+	cpuidle_cooling_register(drv);
-+
-+	return 0;
-+deinit:
-+	sbi_cpuidle_deinit_cpu(cpu);
-+	return ret;
-+}
-+
-+static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
-+{
-+	struct genpd_power_state *state = &pd->states[pd->state_idx];
-+	u32 *pd_state;
-+
-+	if (!state->data)
-+		return 0;
-+
-+	if (!sbi_cpuidle_pd_allow_domain_state)
-+		return -EBUSY;
-+
-+	/* OSI mode is enabled, set the corresponding domain state. */
-+	pd_state = state->data;
-+	sbi_set_domain_state(*pd_state);
-+
-+	return 0;
-+}
-+
-+static void sbi_cpuidle_domain_sync_state(struct device *dev)
-+{
-+	/*
-+	 * All devices have now been attached/probed to the PM domain
-+	 * topology, hence it's fine to allow domain states to be picked.
-+	 */
-+	sbi_cpuidle_pd_allow_domain_state = true;
-+}
-+
-+static struct dt_idle_genpd_ops sbi_genpd_ops = {
-+	.parse_state_node = sbi_dt_parse_state_node,
-+};
-+
-+static int sbi_cpuidle_probe(struct platform_device *pdev)
-+{
-+	int cpu, ret;
-+	struct cpuidle_driver *drv;
-+	struct cpuidle_device *dev;
-+	struct device_node *np, *pds_node;
-+
-+	/* Detect OSI support based on CPU DT nodes */
-+	sbi_cpuidle_use_osi = true;
-+	for_each_possible_cpu(cpu) {
-+		np = of_cpu_device_node_get(cpu);
-+		if (np &&
-+		    of_find_property(np, "power-domains", NULL) &&
-+		    of_find_property(np, "power-domain-names", NULL)) {
-+			continue;
-+		} else {
-+			sbi_cpuidle_use_osi = false;
-+			break;
-+		}
-+	}
-+
-+	if (sbi_cpuidle_use_osi)
-+		sbi_genpd_ops.power_off = sbi_cpuidle_pd_power_off;
-+
-+	/* Populate generic power domains from DT nodes */
-+	pds_node = of_find_node_by_path("/cpus/power-domains");
-+	if (pds_node) {
-+		ret = dt_idle_genpd_probe(&sbi_genpd_ops, pds_node);
-+		of_node_put(pds_node);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Initialize CPU idle driver for each CPU */
-+	for_each_possible_cpu(cpu) {
-+		ret = sbi_cpuidle_init_cpu(&pdev->dev, cpu);
-+		if (ret) {
-+			pr_debug("HART%ld: idle driver init failed\n",
-+				 cpuid_to_hartid_map(cpu));
-+			goto out_fail;
-+		}
-+	}
-+
-+	/* Setup CPU hotplut notifiers */
-+	sbi_idle_init_cpuhp();
-+
-+	pr_info("idle driver registered for all CPUs\n");
-+
-+	return 0;
-+
-+out_fail:
-+	while (--cpu >= 0) {
-+		dev = per_cpu(cpuidle_devices, cpu);
-+		drv = cpuidle_get_cpu_driver(dev);
-+		cpuidle_unregister(drv);
-+		sbi_cpuidle_deinit_cpu(cpu);
-+	}
-+
-+	return ret;
-+}
-+
-+static struct platform_driver sbi_cpuidle_driver = {
-+	.probe = sbi_cpuidle_probe,
-+	.driver = {
-+		.name = "sbi-cpuidle",
-+		.sync_state = sbi_cpuidle_domain_sync_state,
-+	},
-+};
-+
-+static int __init sbi_cpuidle_init(void)
-+{
-+	int ret;
-+	struct platform_device *pdev;
-+
-+	/*
-+	 * The SBI HSM suspend function is only available when:
-+	 * 1) SBI version is 0.3 or higher
-+	 * 2) SBI HSM extension is available
-+	 */
-+	if ((sbi_spec_version < sbi_mk_version(0, 3)) ||
-+	    sbi_probe_extension(SBI_EXT_HSM) <= 0) {
-+		pr_info("HSM suspend not available\n");
-+		return 0;
-+	}
-+
-+	ret = platform_driver_register(&sbi_cpuidle_driver);
-+	if (ret)
-+		return ret;
-+
-+	pdev = platform_device_register_simple("sbi-cpuidle",
-+						-1, NULL, 0);
-+	if (IS_ERR(pdev)) {
-+		platform_driver_unregister(&sbi_cpuidle_driver);
-+		return PTR_ERR(pdev);
-+	}
-+
-+	return 0;
-+}
-+device_initcall(sbi_cpuidle_init);
+ maintainers:
+   - Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
++  - Anup Patel <anup.patel@wdc.com>
+ 
+ description: |+
+   ==========================================
+   1 - Introduction
+   ==========================================
+ 
+-  ARM systems contain HW capable of managing power consumption dynamically,
+-  where cores can be put in different low-power states (ranging from simple wfi
+-  to power gating) according to OS PM policies. The CPU states representing the
+-  range of dynamic idle states that a processor can enter at run-time, can be
+-  specified through device tree bindings representing the parameters required to
+-  enter/exit specific idle states on a given processor.
++  ARM and RISC-V systems contain HW capable of managing power consumption
++  dynamically, where cores can be put in different low-power states (ranging
++  from simple wfi to power gating) according to OS PM policies. The CPU states
++  representing the range of dynamic idle states that a processor can enter at
++  run-time, can be specified through device tree bindings representing the
++  parameters required to enter/exit specific idle states on a given processor.
++
++  ==========================================
++  2 - ARM idle states
++  ==========================================
+ 
+   According to the Server Base System Architecture document (SBSA, [3]), the
+   power states an ARM CPU can be put into are identified by the following list:
+@@ -43,8 +48,23 @@ description: |+
+   The device tree binding definition for ARM idle states is the subject of this
+   document.
+ 
++  ==========================================
++  3 - RISC-V idle states
++  ==========================================
++
++  On RISC-V systems, the HARTs (or CPUs) [6] can be put in platform specific
++  suspend (or idle) states (ranging from simple WFI, power gating, etc). The
++  RISC-V SBI v0.3 (or higher) [7] hart state management extension provides a
++  standard mechanism for OS to request HART state transitions.
++
++  The platform specific suspend (or idle) states of a hart can be either
++  retentive or non-rententive in nature. A retentive suspend state will
++  preserve HART registers and CSR values for all privilege modes whereas
++  a non-retentive suspend state will not preserve HART registers and CSR
++  values.
++
+   ===========================================
+-  2 - idle-states definitions
++  4 - idle-states definitions
+   ===========================================
+ 
+   Idle states are characterized for a specific system through a set of
+@@ -211,10 +231,10 @@ description: |+
+   properties specification that is the subject of the following sections.
+ 
+   ===========================================
+-  3 - idle-states node
++  5 - idle-states node
+   ===========================================
+ 
+-  ARM processor idle states are defined within the idle-states node, which is
++  The processor idle states are defined within the idle-states node, which is
+   a direct child of the cpus node [1] and provides a container where the
+   processor idle states, defined as device tree nodes, are listed.
+ 
+@@ -223,7 +243,7 @@ description: |+
+   just supports idle_standby, an idle-states node is not required.
+ 
+   ===========================================
+-  4 - References
++  6 - References
+   ===========================================
+ 
+   [1] ARM Linux Kernel documentation - CPUs bindings
+@@ -238,9 +258,15 @@ description: |+
+   [4] ARM Architecture Reference Manuals
+       http://infocenter.arm.com/help/index.jsp
+ 
+-  [6] ARM Linux Kernel documentation - Booting AArch64 Linux
++  [5] ARM Linux Kernel documentation - Booting AArch64 Linux
+       Documentation/arm64/booting.rst
+ 
++  [6] RISC-V Linux Kernel documentation - CPUs bindings
++      Documentation/devicetree/bindings/riscv/cpus.yaml
++
++  [7] RISC-V Supervisor Binary Interface (SBI)
++      http://github.com/riscv/riscv-sbi-doc/riscv-sbi.adoc
++
+ properties:
+   $nodename:
+     const: idle-states
+@@ -253,7 +279,7 @@ properties:
+       On ARM 32-bit systems this property is optional
+ 
+       This assumes that the "enable-method" property is set to "psci" in the cpu
+-      node[6] that is responsible for setting up CPU idle management in the OS
++      node[5] that is responsible for setting up CPU idle management in the OS
+       implementation.
+     const: psci
+ 
+@@ -265,8 +291,8 @@ patternProperties:
+       as follows.
+ 
+       The idle state entered by executing the wfi instruction (idle_standby
+-      SBSA,[3][4]) is considered standard on all ARM platforms and therefore
+-      must not be listed.
++      SBSA,[3][4]) is considered standard on all ARM and RISC-V platforms and
++      therefore must not be listed.
+ 
+       In addition to the properties listed above, a state node may require
+       additional properties specific to the entry-method defined in the
+@@ -275,7 +301,27 @@ patternProperties:
+ 
+     properties:
+       compatible:
+-        const: arm,idle-state
++        oneOf:
++          - const: arm,idle-state
++          - const: riscv,idle-state
++
++      arm,psci-suspend-param:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: |
++          power_state parameter to pass to the ARM PSCI suspend call.
++
++          Device tree nodes that require usage of PSCI CPU_SUSPEND function
++          (i.e. idle states node with entry-method property is set to "psci")
++          must specify this property.
++
++      riscv,sbi-suspend-param:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: |
++          suspend_type parameter to pass to the RISC-V SBI HSM suspend call.
++
++          This property is required in idle state nodes of device tree meant
++          for RISC-V systems. For more details on the suspend_type parameter
++          refer the SBI specifiation v0.3 (or higher) [7].
+ 
+       local-timer-stop:
+         description:
+@@ -317,6 +363,8 @@ patternProperties:
+         description:
+           A string used as a descriptive name for the idle state.
+ 
++    additionalProperties: false
++
+     required:
+       - compatible
+       - entry-latency-us
+@@ -658,4 +706,150 @@ examples:
+         };
+     };
+ 
++  - |
++    // Example 3 (RISC-V 64-bit, 4-cpu systems, two clusters):
++
++    cpus {
++        #size-cells = <0>;
++        #address-cells = <1>;
++
++        cpu@0 {
++            device_type = "cpu";
++            compatible = "riscv";
++            reg = <0x0>;
++            riscv,isa = "rv64imafdc";
++            mmu-type = "riscv,sv48";
++            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
++                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
++
++            cpu_intc0: interrupt-controller {
++                #interrupt-cells = <1>;
++                compatible = "riscv,cpu-intc";
++                interrupt-controller;
++            };
++        };
++
++        cpu@1 {
++            device_type = "cpu";
++            compatible = "riscv";
++            reg = <0x1>;
++            riscv,isa = "rv64imafdc";
++            mmu-type = "riscv,sv48";
++            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
++                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
++
++            cpu_intc1: interrupt-controller {
++                #interrupt-cells = <1>;
++                compatible = "riscv,cpu-intc";
++                interrupt-controller;
++            };
++        };
++
++        cpu@10 {
++            device_type = "cpu";
++            compatible = "riscv";
++            reg = <0x10>;
++            riscv,isa = "rv64imafdc";
++            mmu-type = "riscv,sv48";
++            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
++                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
++
++            cpu_intc10: interrupt-controller {
++                #interrupt-cells = <1>;
++                compatible = "riscv,cpu-intc";
++                interrupt-controller;
++            };
++        };
++
++        cpu@11 {
++            device_type = "cpu";
++            compatible = "riscv";
++            reg = <0x11>;
++            riscv,isa = "rv64imafdc";
++            mmu-type = "riscv,sv48";
++            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
++                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
++
++            cpu_intc11: interrupt-controller {
++                #interrupt-cells = <1>;
++                compatible = "riscv,cpu-intc";
++                interrupt-controller;
++            };
++        };
++
++        idle-states {
++            CPU_RET_0_0: cpu-retentive-0-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x10000000>;
++                entry-latency-us = <20>;
++                exit-latency-us = <40>;
++                min-residency-us = <80>;
++            };
++
++            CPU_NONRET_0_0: cpu-nonretentive-0-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x90000000>;
++                entry-latency-us = <250>;
++                exit-latency-us = <500>;
++                min-residency-us = <950>;
++            };
++
++            CLUSTER_RET_0: cluster-retentive-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x11000000>;
++                local-timer-stop;
++                entry-latency-us = <50>;
++                exit-latency-us = <100>;
++                min-residency-us = <250>;
++                wakeup-latency-us = <130>;
++            };
++
++            CLUSTER_NONRET_0: cluster-nonretentive-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x91000000>;
++                local-timer-stop;
++                entry-latency-us = <600>;
++                exit-latency-us = <1100>;
++                min-residency-us = <2700>;
++                wakeup-latency-us = <1500>;
++            };
++
++            CPU_RET_1_0: cpu-retentive-1-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x10000010>;
++                entry-latency-us = <20>;
++                exit-latency-us = <40>;
++                min-residency-us = <80>;
++            };
++
++            CPU_NONRET_1_0: cpu-nonretentive-1-0 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x90000010>;
++                entry-latency-us = <250>;
++                exit-latency-us = <500>;
++                min-residency-us = <950>;
++            };
++
++            CLUSTER_RET_1: cluster-retentive-1 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x11000010>;
++                local-timer-stop;
++                entry-latency-us = <50>;
++                exit-latency-us = <100>;
++                min-residency-us = <250>;
++                wakeup-latency-us = <130>;
++            };
++
++            CLUSTER_NONRET_1: cluster-nonretentive-1 {
++                compatible = "riscv,idle-state";
++                riscv,sbi-suspend-param = <0x91000010>;
++                local-timer-stop;
++                entry-latency-us = <600>;
++                exit-latency-us = <1100>;
++                min-residency-us = <2700>;
++                wakeup-latency-us = <1500>;
++            };
++        };
++    };
++
+ ...
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index e534f6a7cfa1..482936630525 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -95,6 +95,12 @@ properties:
+       - compatible
+       - interrupt-controller
+ 
++  cpu-idle-states:
++    $ref: '/schemas/types.yaml#/definitions/phandle-array'
++    description: |
++      List of phandles to idle state nodes supported
++      by this hart (see ./idle-states.yaml).
++
+ required:
+   - riscv,isa
+   - interrupt-controller
 -- 
 2.25.1
 
