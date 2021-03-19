@@ -2,109 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1FF341F0A
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 15:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8404F341F89
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 15:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbhCSOLw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Mar 2021 10:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbhCSOL0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Mar 2021 10:11:26 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ED1C061760
-        for <linux-pm@vger.kernel.org>; Fri, 19 Mar 2021 07:11:24 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id f12so6779961qtq.4
-        for <linux-pm@vger.kernel.org>; Fri, 19 Mar 2021 07:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=n05/sUnctT8JNpCXRuTVFYfsWiFecSrOrifRVD4fRAo=;
-        b=uQjDbyQuWf0O/YJbUTQbMaXA4pFNWX0tz2Myqmvcmf6G9Cd6FKUqO3gptczGs80b7/
-         Yh1P5BwMoIJck3kcZWF5mxExv5Qy+AOmFXD6Q8XkIqzbsrR3JveJEi0dlxcOiQoebzyP
-         04xz+97zEDc4qCB/lYqCVYKU2uUbv0ZXw+Y1EBzHVke3bIUuQjsz/8gcIS5sTb+iSIEZ
-         MGJJGhgUGCOxg85n5n6k7anttmwhcIRcxMsBogTCeZfujc7DzJ/vpwE79a06Mo/RbBiQ
-         u8MC2gI+FJeUzhSr7GLLUpAAQIeKFb0GRRQ3NCGKx75z2LF0Dt1S5tuqmHpmlzuBM3ZX
-         ao4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=n05/sUnctT8JNpCXRuTVFYfsWiFecSrOrifRVD4fRAo=;
-        b=bYfFJyFgTMHQyCDMy+eBRy1DCxrB9RNvDGQhdro2kDWhtOJd1/6vleW1LrbThIR96F
-         Vw0R3dkC6I03PEVtZ24B+b1GeEpGVUtLyiGD/C4QvGF/ma5qo9cKPFQW0Y/TUhE5Kou5
-         om9GwtNuI6XG+rnNLool4YypKl+A+NiXIPwQPX6PuNIgxqX5sg2m73z0h4B1IWGsg/94
-         9g6gtmQm6Id414lvKRV6UsEdMPpq1nJUJQIW1BHTJWRN4RcukPn+LQcLQX2Ba19T51bT
-         Fjy/TtCCoBBQBqa2TArgIZq7Ylbet6cLPCPgsd9S2puKIhD4Ss3Jt2M8MmejJPAtA3nF
-         CIag==
-X-Gm-Message-State: AOAM533pEdfrIghnlj9TdLKSk5QY094G/C12gom07XfSDSY7oV0qa4Dl
-        OQagFK3hf6b3ln8otQss+ohXTg==
-X-Google-Smtp-Source: ABdhPJwVohUpLTVKBQsZX8ZJ3mo/T8pKdNPg5RWYYQxr3M9rJmhdKyY6tuj7lSeJjc2dRHuYtN1goQ==
-X-Received: by 2002:aed:31e2:: with SMTP id 89mr8577216qth.272.1616163083298;
-        Fri, 19 Mar 2021 07:11:23 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id g6sm4496940qkd.62.2021.03.19.07.11.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Mar 2021 07:11:22 -0700 (PDT)
-Subject: Re: [PATCH v11 1/9] drivers: thermal: tsens: Add VER_0 tsens version
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210319005228.1250-1-ansuelsmth@gmail.com>
- <20210319005228.1250-2-ansuelsmth@gmail.com>
- <7c38ea02-d957-6f63-ccce-1c35dd5d04de@linaro.org>
- <YFSm5rz3ivnzxoJ4@Ansuel-xps.localdomain>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <8850c559-45cb-45cd-9d39-287b8c041c79@linaro.org>
-Date:   Fri, 19 Mar 2021 10:11:21 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229973AbhCSOfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Mar 2021 10:35:51 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:44700 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230129AbhCSOfr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Mar 2021 10:35:47 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.3)
+ id 9de933e05a2b666b; Fri, 19 Mar 2021 15:35:45 +0100
+Received: from kreacher.localnet (89-64-81-50.dynamic.chello.pl [89.64.81.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id EE65E668FB8;
+        Fri, 19 Mar 2021 15:35:44 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [RFC][PATCH] sched: Optimize cpufreq_update_util
+Date:   Fri, 19 Mar 2021 15:35:43 +0100
+Message-ID: <5452200.DvuYhMxLoT@kreacher>
+In-Reply-To: <20210319073751.qz2ytpxl2ikrt2b7@vireshk-i7>
+References: <20210318212826.GW4746@worktop.programming.kicks-ass.net> <20210319073751.qz2ytpxl2ikrt2b7@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <YFSm5rz3ivnzxoJ4@Ansuel-xps.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudefkedgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdeigedrkedurdehtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdekuddrhedtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopehvihhntggvnhhtrdhguhhithhtohhtsehlihhnrghrohdrohhrghdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrghnnhesrghrmhdrtghomhdprhgtphhtthho
+ pehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhpohhimhgsohgvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 3/19/21 9:28 AM, Ansuel Smith wrote:
-> On Fri, Mar 19, 2021 at 09:11:38AM -0400, Thara Gopinath wrote:
->>
->>
->> On 3/18/21 8:52 PM, Ansuel Smith wrote:
->>> VER_0 is used to describe device based on tsens version before v0.1.
->>> These device are devices based on msm8960 for example apq8064 or
->>> ipq806x.
->>
->> Hi Ansuel,
->>
->> There are still checkpatch check warnings in this patch. Please run
->> checkpatch.pl --strict and fix them. Once that is done, you can add
->>
->> Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
->>
->> Warm Regards
->> Thara
->>
+On Friday, March 19, 2021 8:37:51 AM CET Viresh Kumar wrote:
+> On 18-03-21, 22:28, Peter Zijlstra wrote:
+> > Also, is there a lock order comment in cpufreq somewhere?
 > 
-> Hi,
-> thanks a lot for the review. The only warning I have is a line ending
-> with ( that i think I can't fix or I will go over the max char for line.
-> Do you have something more?
+> I don't think so.
+> 
+> > I tried
+> > following it, but eventually gave up and figured 'asking' lockdep was
+> > far simpler.
+> 
+> This will get called from CPU's online/offline path at worst, nothing more.
 
-I see two warning for line ending with (. The max char limit is 100.
+I'm not sure if I understand you correctly, but for completeness the callback
+is also set/unset on driver registration and governor switch.
 
--- 
-Warm Regards
-Thara
+> > +static void cpufreq_update_optimize(void)
+> > +{
+> > +	struct update_util_data *data;
+> > +	cpu_util_update_f func = NULL, dfunc;
+> > +	int cpu;
+> > +
+> > +	for_each_online_cpu(cpu) {
+> > +		data = per_cpu(cpufreq_update_util_data, cpu);
+> > +		dfunc = data ? READ_ONCE(data->func) : NULL;
+> > +
+> > +		if (dfunc) {
+> > +			if (!func)
+> > +				func = dfunc;
+> > +			else if (func != dfunc)
+> > +				return;
+> > +		} else if (func)
+> > +			return;
+> > +	}
+> 
+> So there is nothing cpufreq specific IIRC that can help make this better, this
+> is basically per policy.
+
+Well, in some cases the driver knows that there will never be more that 1 CPU
+per policy and so schedutil will never use the "shared" variant.
+
+For instance, with intel_pstate all CPUs will always use the same callback.
+
+> For example, on an ARM platform we have two cpufreq policies with one policy
+> covering 4 CPUs, while the other one covering only 1 (maybe because we didn't
+> add those CPUs in DT or something else), then also we will end up separate
+> routines.
+> 
+> Or if we take all CPUs of a policy offline and then bring them up one by one, I
+> think for the first CPU online event in that policy we will end up using the
+> sugov_update_single_freq() variant for some time, until the time more CPUs come
+> up.
+> 
+> So traversing the way you did this is probably something that will work properly
+> in all corner cases.
+
+Agreed.
+
+It might be simplified in some cases, though, AFAICS.
+
+
+
