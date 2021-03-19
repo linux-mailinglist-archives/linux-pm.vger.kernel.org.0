@@ -2,181 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987BE3411BC
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 01:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62673412D3
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 03:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbhCSAxL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Mar 2021 20:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S230108AbhCSC2E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Mar 2021 22:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbhCSAxE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 20:53:04 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F56C06174A;
-        Thu, 18 Mar 2021 17:53:04 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id k10so6912282ejg.0;
-        Thu, 18 Mar 2021 17:53:04 -0700 (PDT)
+        with ESMTP id S230516AbhCSC1g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Mar 2021 22:27:36 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1272FC06174A;
+        Thu, 18 Mar 2021 19:27:36 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id q3so1472602qkq.12;
+        Thu, 18 Mar 2021 19:27:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=21TRq5T7n/YlJzaiHd/rYW7/ONn9U06XAcWKZPDtNYI=;
-        b=HfVgopGoETyq/qL91s46wIh+DPOYwlenzABf9SnprD/fPcZDwBJr/erbz2wJCHxPjf
-         B2NuP6K1rNjWefJkzymM/3V6aEGeL15usMaiuNowsbuY99umQf6jw7hXi4OcBm8bCHki
-         He0VBb7uPgnsWKmC1OLidSVRYzkT6IAy2V4sSeqk8agWhCsU43BybkyonRJ9Vd2R2Spy
-         EEcczaCaGD7nnQRin07ma5REaxrUZ/EkSinRgaDTbocCQ9nVM2ywRvAZ9qQ+rirPbaeq
-         Ijjrd4zQ7wmA1XcpIuJPee9bsy5earsCgM2aTiFoxJ+AI1BOM+hGh+j76aRmq4uYZGKP
-         BP+w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3gQFACQh2J2voYdbNJbhk2x5hfKRQ+CwodIJFBLLlQ=;
+        b=D+pwhdG+PGHcEsrNP/dfpimJNAx4nfhh12lcLCxSvnoc0HPoSyG4SjJLxM3q1IagdJ
+         j/HbKS6aAoN8k8lYBqSSnSfzLT/ZZ0+2i+qbUgSazKKmu/piE88cbJKZBmnoAWhcBJ72
+         9Nl+wZDHYNvSrVa8Jsu8fpV+2pGndfDoY+v447STh/abD8TsKfhznc0LSsjJx39FbHRx
+         Of4U5la11acCkAWI+QuUG4nIKVGOfxrGZaIEV4eFwwI8/XRu29A3vsltbaJ0W9FnwYx7
+         KOMNpQqAwWglqD+04KlPx+r1TnemF1S9OY73jONTzQBz//OocyBN0qaZXbVUQUsZJcxA
+         EtKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=21TRq5T7n/YlJzaiHd/rYW7/ONn9U06XAcWKZPDtNYI=;
-        b=ID174VNhRKncsMfqXMN3OlFxFkTpLmdE8yZVo2h1wsWX+EJ4hBQZnFxkg36Dkpsu3Y
-         msJziWnNx25qNKgIDnD3ioOkeVoYkWF/XxHZuzZGs/IenQo6HYDZNe1IvaTBbuo2slmI
-         PNfblCy6Sw+Zx8ewqy/am1VbUK5mHiDdPhrwNjUEDCyQU17KtMQZ6t7WoEFN5RFyT+Zn
-         9snra+PVLl8TEXNGsWsa/+PZXkfuLLMcdTU7PjuTdvnaEOhYU5oa8ytHyJblrzqw837/
-         JaJ4KDt7gmi97p1ol14aZsS0REtrFn8Itr0uHL2cFyhTbwOTHUgQBdPHBlok2o57c01S
-         j+2Q==
-X-Gm-Message-State: AOAM532BfPVrVJAbuF/TO5qTr3WGB59VBpS7QbHnrtvBdRazUHokvk9r
-        n94po+oMMtRLnwTWg/0os4A=
-X-Google-Smtp-Source: ABdhPJyRp77kRe/bUrg00EgV0RbYbBbnjm25fQkgj9cvvya1zbaw+FdG0oFO5Xc+VlmduMkyytZLLQ==
-X-Received: by 2002:a17:907:77d4:: with SMTP id kz20mr1455770ejc.93.1616115183180;
-        Thu, 18 Mar 2021 17:53:03 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (host-95-233-52-6.retail.telecomitalia.it. [95.233.52.6])
-        by smtp.googlemail.com with ESMTPSA id q25sm3186976edt.51.2021.03.18.17.53.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3gQFACQh2J2voYdbNJbhk2x5hfKRQ+CwodIJFBLLlQ=;
+        b=lPfOJ1uVMFcZaTfbHioYA1R2nGSL0UYVe9zlk09R9LpEYt1mwQ/zyr0TP4v/2d6MSa
+         B0I06R/4I6SM1OO75sudF4nMLBeIWzJ9g0S453oXPf4ebmMGvUTMDXKkwioH0tk95x+5
+         C5GJ4P9KfxEVCvWE3QrHb1tuq0r5cxLu9u0xp7FGVzNjgJ0763zcXAPN8NyM02MG/0WZ
+         Zur7qK7jj9hvMbgQB35RbDJXhkQ6DlHHtHSzgyBLip2QDhwci6udsy6+aEXhRD0ZLo/9
+         WgamZ21A6pHq4TInxM2b0HLfjdxnClZje0RH7tyXVWPc6J5DuHtULYLoxaCFv9HpQCJV
+         /P7Q==
+X-Gm-Message-State: AOAM531rqTQyulihNLLv1rDFaLAcFuYKm7t4bZU323mac18x4Lb4vXc7
+        tbAWOt4nwCdZ5y6BNPsEvgM=
+X-Google-Smtp-Source: ABdhPJy6oti7JVZmuM/u6IKcBhsExqWFVLcxTxAp6GtYiHE1339H5lXW1yhBwpkf92CY6cR0HXc+wQ==
+X-Received: by 2002:a37:8905:: with SMTP id l5mr7679827qkd.321.1616120855354;
+        Thu, 18 Mar 2021 19:27:35 -0700 (PDT)
+Received: from localhost.localdomain ([37.19.198.87])
+        by smtp.gmail.com with ESMTPSA id o7sm3460814qkb.104.2021.03.18.19.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Mar 2021 17:53:02 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>, Rob Herring <robh@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v11 9/9] dt-bindings: thermal: tsens: Document ipq8064 bindings
-Date:   Fri, 19 Mar 2021 01:52:27 +0100
-Message-Id: <20210319005228.1250-10-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210319005228.1250-1-ansuelsmth@gmail.com>
-References: <20210319005228.1250-1-ansuelsmth@gmail.com>
+        Thu, 18 Mar 2021 19:27:34 -0700 (PDT)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     cw00.choi@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Subject: [PATCH] PM/devfreq: event: A typo fix
+Date:   Fri, 19 Mar 2021 07:55:21 +0530
+Message-Id: <20210319022521.20663-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document the use of bindings used for msm8960 tsens based devices.
-msm8960 use the same gcc regs and is set as a child of the qcom gcc.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+s/devie/device/
+
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 ---
- .../bindings/thermal/qcom-tsens.yaml          | 56 ++++++++++++++++---
- 1 file changed, 48 insertions(+), 8 deletions(-)
+ include/linux/devfreq-event.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 95462e071ab4..1785b1c75a3c 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -19,6 +19,11 @@ description: |
- properties:
-   compatible:
-     oneOf:
-+      - description: msm9860 TSENS based
-+        items:
-+          - enum:
-+              - qcom,ipq8064-tsens
-+
-       - description: v0.1 of TSENS
-         items:
-           - enum:
-@@ -73,7 +78,9 @@ properties:
-     maxItems: 2
-     items:
-       - const: calib
--      - const: calib_sel
-+      - enum:
-+          - calib_backup
-+          - calib_sel
- 
-   "#qcom,sensors":
-     description:
-@@ -88,12 +95,20 @@ properties:
-       Number of cells required to uniquely identify the thermal sensors. Since
-       we have multiple sensors this is set to 1
- 
-+required:
-+  - compatible
-+  - interrupts
-+  - interrupt-names
-+  - "#thermal-sensor-cells"
-+  - "#qcom,sensors"
-+
- allOf:
-   - if:
-       properties:
-         compatible:
-           contains:
-             enum:
-+              - qcom,ipq8064-tsens
-               - qcom,msm8916-tsens
-               - qcom,msm8974-tsens
-               - qcom,msm8976-tsens
-@@ -114,17 +129,42 @@ allOf:
-         interrupt-names:
-           minItems: 2
- 
--required:
--  - compatible
--  - reg
--  - "#qcom,sensors"
--  - interrupts
--  - interrupt-names
--  - "#thermal-sensor-cells"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,tsens-v0_1
-+              - qcom,tsens-v1
-+              - qcom,tsens-v2
-+
-+    then:
-+      required:
-+        - reg
- 
- additionalProperties: false
- 
- examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    // Example msm9860 based SoC (ipq8064):
-+    gcc: clock-controller {
-+
-+           /* ... */
-+
-+           tsens: thermal-sensor {
-+                compatible = "qcom,ipq8064-tsens";
-+
-+                 nvmem-cells = <&tsens_calib>, <&tsens_calib_backup>;
-+                 nvmem-cell-names = "calib", "calib_backup";
-+                 interrupts = <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
-+                 interrupt-names = "uplow";
-+
-+                 #qcom,sensors = <11>;
-+                 #thermal-sensor-cells = <1>;
-+          };
-+    };
-+
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     // Example 1 (legacy: for pre v1 IP):
--- 
-2.30.2
+diff --git a/include/linux/devfreq-event.h b/include/linux/devfreq-event.h
+index 4a50a5c71a5f..2489d11e0513 100644
+--- a/include/linux/devfreq-event.h
++++ b/include/linux/devfreq-event.h
+@@ -56,7 +56,7 @@ struct devfreq_event_data {
+  * @disable	: Disable the devfreq-event device.
+  * @reset	: Reset all setting of the devfreq-event device.
+  * @set_event	: Set the specific event type for the devfreq-event device.
+- * @get_event	: Get the result of the devfreq-event devie with specific
++ * @get_event	: Get the result of the devfreq-event device with specific
+  *		  event type.
+  *
+  * This structure contains devfreq-event device operations which can be
+--
+2.26.2
 
