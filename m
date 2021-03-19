@@ -2,93 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840BA3425B8
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 20:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128BF34267E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Mar 2021 20:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbhCSTGB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Mar 2021 15:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S230096AbhCSTvQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Mar 2021 15:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbhCSTFq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Mar 2021 15:05:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F3AC06174A
-        for <linux-pm@vger.kernel.org>; Fri, 19 Mar 2021 12:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        References:Message-ID:In-Reply-To:Subject:cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OJu1FIdOLMRqMJARpLk/5nKNLWrqCZCUJyegNVwyv70=; b=LWAAaxO2G1UfajDz5kDYnqp5On
-        FJHu6aUxPQUnc8DeiM7PQvaZb/EkXg/k/EYEaO4hx18/MFR1ex5SaLQCgIiWRoOpqsa3Hk2/XuGop
-        AyFzr9c9SnkDO4T5cM+USTRKW1G3qXw44qB9FjsuWnBbWzh63s1VLgPMZ2USFy3kouLQk1Vv9q8RO
-        RCvQXNEjZE1oJ2WzjJ4OVbm+pHVCPgDEtqzaxO5K47fgzYiDM7Tqw5b7uVSqCKlUwdojHWfGmpvoJ
-        JVT631zfVIpGgGpI7+HmOf18YpSRdu+QBqb2Dl2T7PUix0zQW67L2DUkaaKVsApArRGs8dKE9WPuD
-        GgifCABw==;
-Received: from rdunlap (helo=localhost)
-        by bombadil.infradead.org with local-esmtp (Exim 4.94 #2 (Red Hat Linux))
-        id 1lNJUu-001RUa-Iy; Fri, 19 Mar 2021 18:05:21 +0000
-Date:   Fri, 19 Mar 2021 11:05:20 -0700 (PDT)
-From:   Randy Dunlap <rdunlap@bombadil.infradead.org>
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
-cc:     cw00.choi@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM/devfreq: event: A typo fix
-In-Reply-To: <20210319022521.20663-1-unixbhaskar@gmail.com>
-Message-ID: <8ae361a8-5fa-7d63-b17c-6ce0ed2fef64@bombadil.infradead.org>
-References: <20210319022521.20663-1-unixbhaskar@gmail.com>
+        with ESMTP id S229974AbhCSTuw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Mar 2021 15:50:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB32C06175F
+        for <linux-pm@vger.kernel.org>; Fri, 19 Mar 2021 12:50:51 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 12so6050114wmf.5
+        for <linux-pm@vger.kernel.org>; Fri, 19 Mar 2021 12:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=SIG/oeaheQf2RId7wNZ0IHpB5oAGz2xYHIdZLF5AREY=;
+        b=OwNI0Xo2GExgCdX4OhQ96/2J9OLrs4ysS6hwdQwAW67WfcabCbKQ03p2EyuaCAhNxv
+         49N3qxWcQkwpdUkErhZNLIIkd9ldMkZrlU5KFo1jd7N6pVkQDqqBrO2mgJf7M4mx6FRz
+         64AaVk77xzOPm+TfqddHfEmHKbkZ+m822TCKZJ6fjObPtlO2aAUQ/BLEsOCd6w15BioP
+         X+HWKS5whEJ83L6RIX1iPpWORbIC3awS6qzohBu1F+JsmQ8/UOp5nQenFbmI6h6cfElz
+         qEq/5SK/tART4nK7ssXAkSMikM/prmVN24cmQWY3SFzZdeCf+hCgEfsmWl6UNYMsqZLD
+         HWpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SIG/oeaheQf2RId7wNZ0IHpB5oAGz2xYHIdZLF5AREY=;
+        b=KEYiPII7lR+oVPNzYZGgRCf9zzbMXDOXaXpUBj2JNHpG8ZcrOtI3jJXjkwPimfiiQU
+         R/Qt6dk1VRUa85wjesjvdMWnl+80D1sN/iEHp+Umgkl+AA/Dc+uzrflMuclvQ+Tn5SwB
+         tZfzm906f30eLYorPY6a8ahhJ5ytzqeYx9qgQN3b4a0qJ6Anq+wzaDwfwV3KhsICWOex
+         Q5rTZczYeUZW3wmtamFXayrqbQGC1akcLUGbXwNguY8Qz0C5kFKs9E1YkM256sfUmD0Q
+         DQL+vHPWH2eeIRhWA2P7uzFaBEfFa7A785StNrNtu8FgZZcNUD6BlfzEeFLDPWpGlZCQ
+         KrvA==
+X-Gm-Message-State: AOAM530kMvrhzjm9rH5wGIHiMSMOlAUDi0G0tr3xUPm/FILPqMVLwzBu
+        btKmt08sWCsPElviD5/azaSyAQ==
+X-Google-Smtp-Source: ABdhPJwefTZKFom1qu8f13r6YV4bqflGFWavA7uF2YjxOx0WJC3fv3FOKMSaOcz2sFsXadiQrbCvog==
+X-Received: by 2002:a1c:4e0f:: with SMTP id g15mr5198371wmh.144.1616183450257;
+        Fri, 19 Mar 2021 12:50:50 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:ddd7:1eb:a66:7a85? ([2a01:e34:ed2f:f020:ddd7:1eb:a66:7a85])
+        by smtp.googlemail.com with ESMTPSA id j26sm9357777wrh.57.2021.03.19.12.50.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Mar 2021 12:50:49 -0700 (PDT)
+Subject: Re: [bug report] drivers: thermal: tsens: Merge tsens-8974 into
+ tsens-v0_1
+To:     amit.kucheria@linaro.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, linux-pm@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@linaro.org>
+References: <20190514090635.GA21833@mwanda> <20200713114454.GR2571@kadam>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <44dab74b-eb4d-04b8-c800-c1471ac6adfc@linaro.org>
+Date:   Fri, 19 Mar 2021 20:50:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-Sender: Randy Dunlap <rdunlap@infradead.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210319_110520_646330_51260CF0 
-X-CRM114-Status: GOOD (  12.30  )
-X-Spam-Score: -0.0 (/)
-X-Spam-Report: Spam detection software, running on the system "bombadil.infradead.org",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote: > > s/devie/device/
-    > > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com> Acked-by: Randy
-    Dunlap <rdunlap@infradead.org> 
- Content analysis details:   (-0.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -0.0 NO_RELAYS              Informational: message was not relayed via SMTP
+In-Reply-To: <20200713114454.GR2571@kadam>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 13/07/2020 13:44, Dan Carpenter wrote:
+> Did we ever look into this?
 
+Thara,
 
-On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote:
+is it possible to have a look at this bug report?
 
+Thanks
+
+  -- Daniel
+
+> regards,
+> dan carpenter
 >
-> s/devie/device/
->
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+> On Tue, May 14, 2019 at 12:06:35PM +0300, Dan Carpenter wrote:
+>> Hello Amit Kucheria,
+>>
+>> The patch c80cbb79e851: "drivers: thermal: tsens: Merge tsens-8974
+>> into tsens-v0_1" from Mar 20, 2019, leads to the following static
+>> checker warning:
+>>
+>> 	drivers/thermal/qcom/tsens-v0_1.c:237 calibrate_8974()
+>> 	warn: mask and shift to zero
+>>
+>> drivers/thermal/qcom/tsens-v0_1.c
+>>    226                  case ONE_PT_CALIB:
+>>    227                  case ONE_PT_CALIB2:
+>>    228                          base1 = bkp[0] & BASE1_MASK;
+>>    229                          p1[0] = (bkp[0] & S0_P1_MASK) >> S0_P1_SHIFT;
+>>    230                          p1[1] = (bkp[0] & S1_P1_MASK) >> S1_P1_SHIFT;
+>>    231                          p1[2] = (bkp[0] & S2_P1_MASK) >> S2_P1_SHIFT;
+>>    232                          p1[3] = (bkp[0] & S3_P1_MASK) >> S3_P1_SHIFT;
+>>    233                          p1[4] = (bkp[1] & S4_P1_MASK);
+>>    234                          p1[5] = (bkp[1] & S5_P1_MASK) >> S5_P1_SHIFT;
+>>    235                          p1[6] = (bkp[1] & S6_P1_MASK) >> S6_P1_SHIFT;
+>>    236                          p1[7] = (bkp[1] & S7_P1_MASK) >> S7_P1_SHIFT;
+>>    237                          p1[8] = (bkp[2] & S8_P1_MASK_BKP) >> S8_P1_SHIFT;
+>>                                                   ^^^^^^^^^^^^^^     ^^^^^^^^^^^
+>> #define S8_P1_MASK_BKP          0x3f
+>> #define S8_P1_SHIFT 24
+>>
+>> Other places define S8_P1_SHIFT as 4, so that's maybe something to
+>> consider.
+>>
+>>    238                          p1[9] = (bkp[2] & S9_P1_MASK_BKP) >> S9_P1_BKP_SHIFT;
+>>    239                          p1[10] = (bkp[2] & S10_P1_MASK_BKP) >> S10_P1_BKP_SHIFT;
+>>    240                          break;
+>>    241                  }
+>>    242          } else {
+>>    243                  mode = (calib[1] & CAL_SEL_0_1) >> CAL_SEL_SHIFT;
+>>    244                  mode |= (calib[3] & CAL_SEL_2) >> CAL_SEL_SHIFT_2;
+>>
+>> regards,
+>> dan carpenter
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> ---
-> include/linux/devfreq-event.h | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/devfreq-event.h b/include/linux/devfreq-event.h
-> index 4a50a5c71a5f..2489d11e0513 100644
-> --- a/include/linux/devfreq-event.h
-> +++ b/include/linux/devfreq-event.h
-> @@ -56,7 +56,7 @@ struct devfreq_event_data {
->  * @disable	: Disable the devfreq-event device.
->  * @reset	: Reset all setting of the devfreq-event device.
->  * @set_event	: Set the specific event type for the devfreq-event device.
-> - * @get_event	: Get the result of the devfreq-event devie with specific
-> + * @get_event	: Get the result of the devfreq-event device with specific
->  *		  event type.
->  *
->  * This structure contains devfreq-event device operations which can be
-> --
-> 2.26.2
->
->
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
