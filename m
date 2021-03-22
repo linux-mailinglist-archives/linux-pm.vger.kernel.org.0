@@ -2,97 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6A4344663
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E7A34466A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbhCVN76 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 09:59:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45788 "EHLO mail.kernel.org"
+        id S230108AbhCVOBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 10:01:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230501AbhCVN70 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Mar 2021 09:59:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A02F61931;
-        Mon, 22 Mar 2021 13:59:25 +0000 (UTC)
+        id S231334AbhCVOAh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Mar 2021 10:00:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 83E5D6196C;
+        Mon, 22 Mar 2021 14:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616421565;
-        bh=6uNGZYiD7TptJN9tSXE/bFTNOQAIFTxSCqtDwCYJemM=;
+        s=k20201202; t=1616421635;
+        bh=gMbyLIsDgdrx2p+wsSzWRpnq2aTtrR6qI7dJYUusx5Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N+IE9qtbr+8FlphNLpfm5zQ33ol3vtZB83BpNmoToW2PlftLptO+K0aM9HEkldptQ
-         G9n0InbUkoCU37kiTQXoPYc+OdiPCFfzSS+bHINadxmW7h3WVr5zbWQP+f12c42Wr3
-         bgP3F5le9bqMR9OVZp/LdE2ksdSWIP+imxrO/vfPX5XYW83a5jD03lQ3LGr3zPZ0wR
-         0VKOuSnSSadvm1UikL5TbojH2QGLd0wrrHXDsIUffIp9zX7LdNimLHfIeLQyqr9NYC
-         Lu83CCJ5BfHgK5MCfbB4K4jNZs14+BP3wH8NiVP7srDqbpk/d/XQecjlPzWagHYWbH
-         iptWTKMmr5Ggw==
+        b=kw8ylOp5OcG1vmTzkycRqwkjUu8cFq1IgXcOiISlCvxMCaXDtTWyUMz1EgTxI/dWp
+         mVoOQUmD8163+D6D6ZfiTs+XUQu+sbmCEPxmDf7pNQSfvqUmZOpAkGMg4QCJPaoLWh
+         z2BL3Lib8FrHdYhGUgwjGfoRlDH/fwjrmMSQBgTZXptSWKipjhk4jl+5iJ4idd53oW
+         4wDMCv5OV4286PGQs3wt1nlIUMgkSyfOD413Myi7dwarE7dj1VuaiUHrhiLswappeD
+         zmQuF+6RHXr/L8tv3DIng0eOgTgTn9+B1BZiLOpT/4Dm9JX1u3XLSdX3udJtGgXbGS
+         CRQrn7aHERBBQ==
 Received: by earth.universe (Postfix, from userid 1000)
-        id 6897A3C0C96; Mon, 22 Mar 2021 14:59:23 +0100 (CET)
-Date:   Mon, 22 Mar 2021 14:59:23 +0100
+        id B27383C0C96; Mon, 22 Mar 2021 15:00:33 +0100 (CET)
+Date:   Mon, 22 Mar 2021 15:00:33 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     robh+dt@kernel.org, pali@kernel.org, krzk@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        grygorii.tertychnyi@leica-geosystems.com,
-        andrey.zhizhikin@leica-geosystems.com
-Subject: Re: [PATCH V7 0/2] power: supply: bq27xxx: Add support for BQ78Z100
-Message-ID: <20210322135923.mwva57vzokpu4wee@earth.universe>
-References: <20210319110236.4353-1-Qing-wu.Li@leica-geosystems.com.cn>
+To:     Randy Dunlap <rdunlap@bombadil.infradead.org>
+Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: charger-manager: Fix a typo
+Message-ID: <20210322140033.iqarbpbwsibmb25h@earth.universe>
+References: <20210319055230.32220-1-unixbhaskar@gmail.com>
+ <469f4918-bd2d-8586-accd-77eeaf6dcd68@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7rts4mwuk3ytnhn2"
+        protocol="application/pgp-signature"; boundary="iecqdof7l5rn7ahq"
 Content-Disposition: inline
-In-Reply-To: <20210319110236.4353-1-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <469f4918-bd2d-8586-accd-77eeaf6dcd68@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---7rts4mwuk3ytnhn2
+--iecqdof7l5rn7ahq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Mar 19, 2021 at 11:02:34AM +0000, LI Qingwu wrote:
-> Changes in V7:
+On Fri, Mar 19, 2021 at 11:11:47AM -0700, Randy Dunlap wrote:
+> On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote:
 >=20
-> Add    POWER_SUPPLY_CHARGE_NOW
-> Remove POWER_SUPPLY_PROP_ENERGY_NOW
-> Refresh result of dump uevent
+> > s/systme/system/
+> >=20
+> > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 >=20
->=20
-> LI Qingwu (2):
->   dt-bindings: power: bq27xxx: add bq78z100
->   power: supply: bq27xxx: Add support for BQ78Z100
->=20
->  .../bindings/power/supply/bq27xxx.yaml        |  1 +
->  drivers/power/supply/bq27xxx_battery.c        | 44 +++++++++++++++++++
->  drivers/power/supply/bq27xxx_battery_i2c.c    |  2 +
->  include/linux/power/bq27xxx_battery.h         |  1 +
->  4 files changed, 48 insertions(+)
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
 Thanks, queued.
 
 -- Sebastian
 
---7rts4mwuk3ytnhn2
+> > ---
+> > drivers/power/supply/charger-manager.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/sup=
+ply/charger-manager.c
+> > index 4dea8ecd70bc..45da870aecca 100644
+> > --- a/drivers/power/supply/charger-manager.c
+> > +++ b/drivers/power/supply/charger-manager.c
+> > @@ -1604,7 +1604,7 @@ static int charger_manager_probe(struct platform_=
+device *pdev)
+> > 	mutex_unlock(&cm_list_mtx);
+> >=20
+> > 	/*
+> > -	 * Charger-manager is capable of waking up the systme from sleep
+> > +	 * Charger-manager is capable of waking up the system from sleep
+> > 	 * when event is happened through cm_notify_event()
+> > 	 */
+> > 	device_init_wakeup(&pdev->dev, true);
+> > --
+> > 2.26.2
+> >=20
+> >=20
+
+--iecqdof7l5rn7ahq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBYorsACgkQ2O7X88g7
-+ppUxhAApT+tGZZdr1XjomjDjh+1wuDJlUhB8l4OTAVmdyVpn2qe6VKKiP4USmVS
-B5now5XQEpRPZPRN/Ya0TglNQSam/7xYQndzysZ/oFP6YMA1H6sdbSWABw7U4peh
-bjnYGCHTZY5VpsERMfqftv8GVWHPLo61Hvm2Tpgste0VmOgRqg3DyuzIT65dzynd
-JX+yxy11DfKvbN+WI6VsOcXRo8lHkW52/JsgC08qOVHdXoGcJfFILxeOhhYrwRjY
-3oGbfz8tof0tbBMhN0F4W0F1J/qdwu1x5UJyA4oiGXVApkwzWQ3LI/v9WnMehV3a
-1y0z2N60FemGHNZfEJjyJ/XtX07BTIU/rnAsNaUK73FORL7HiCvIBhTMAQV70Wyj
-+n1VIlNW9FT0XeTm/Grh1e6onP4FFOjKLA6vim4QKI5ARxOEvdAm+W6dyWFX1akf
-2SkCoYw73esglbznPPCJpWxj25a8fqyqDJ4QzpPfQAGzReeNCytZAJUXgL8yabRW
-oNNoO3P/230LGM2mKwoU6Vo9qUBE4by29ru6Z79y/ecXIWK43NaQ5PZeJow9dOlM
-Xq+wn+aEZ8mQ62HR1iIoCuernyJqRyCe7ftQ2a3Pg/Suar3DfoZpw4JsdAtVCmAs
-3MeSqt95sealtJNzf5xaNTKycW2wzzmhRmOs17ZhL9Dc/FZ4MOc=
-=eEyc
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBYowEACgkQ2O7X88g7
++pr2ng/+PwNcOIxr/cG8gA27xJ/v/6NY3YHdp8hZYtIL0HOz5vpZkGuFw8ZUQL23
+fPWelqgG6qNj17WVZoXzDi+J0JcYUZo/Fz31KX5fjvE97CRg2ACiJdd6XXH14B/w
+5jgwPOz+hWCtSWC1d8RAWZoTaD7IEsosRo0ZtmJfxWsJQsKUttPO1JQHyW3HmdKD
+36pivPoe36efaNLeGAw1gYZeufsXlVGWbeEYvnILUOIrxTJOSjNuar6drtbUVAxS
+iwTVAafH2E5FCknr/1Gm9OXayTmwH+P7g/oKRrqlaDw+ekk2uyCrzjQs8RVd4kMb
+D5/RKzFLXQXprfr1DuPkQ1R1Q22mra+/ox0b++m5JQXtZTAGxPuNvHeojDDRDTQ5
+prkzbIm0EetFmBsYWvls/tjI/YMXr7k0tvkVkkm8ofd75wEz1sfI8hxlhHwu3ket
+sAxF0S4N6+os1Z3Pl2+73mNdghHWseakSj7VCSDqu4pkeY/PCmtQVE1cZ6utiIqB
+Sw5b6RBZQMQzbKQXjwYqBx+utCSv//u2Iso71kAuC3mY5p9k+1ApZpe9MtHJOp9t
+xOOQVa6wVh874kF+7KepyZOZtGY1P3H40YiTBC+x8/dflyOBbs83U/hUeknXNNce
+TVr5EOK+kXFw2rgetU5pU7WnMN7MoomTTIYNwPr6eOISUdeCV6Y=
+=FlLL
 -----END PGP SIGNATURE-----
 
---7rts4mwuk3ytnhn2--
+--iecqdof7l5rn7ahq--
