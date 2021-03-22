@@ -2,136 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EC83446C0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EECE3446C2
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhCVOJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 10:09:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48622 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229879AbhCVOIi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Mar 2021 10:08:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 38B5E61931;
-        Mon, 22 Mar 2021 14:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616422117;
-        bh=7caE9N26jv0l5ZnLHGx7Et17KdeDOuGVZwE3GJ5eC/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=usfo7ArLyujRxLVN0WQM3dLozR/ZOP84SjTA9R6YfVO2xpnK+ZDCIz2ch+Je60Gr3
-         eQYkHI8j6lqPynZS7H80CmKLsQwBLd2VAzI6ElAo2aRISKmWbVPhq/azgvNzAIeTkZ
-         dqEfoZzl4gJ1UnQ5IymBm3gnNiPO+17s9LndqZGukIzCOmdIjtaBo3MN+gEbwFY2bX
-         hxcDstVLdEf0WZTkn1dIvB9uWpy7C7AayiM/9C1tOaDcq0ttXL0v9GKF/YXZkmxZdb
-         /16IEjozeZLTZNomMswrcNIlZjpMf5HhoXj39yB1RDG5UZVCzdwfxOUy5Wal0RVD0q
-         1cg8bkeEk0wow==
-Received: by earth.universe (Postfix, from userid 1000)
-        id BE9123C0C96; Mon, 22 Mar 2021 15:08:34 +0100 (CET)
-Date:   Mon, 22 Mar 2021 15:08:34 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Jian Dong <dj0227@163.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyue2@yulong.com, dongjian <dongjian@yulong.com>
-Subject: Re: [PATCH] power-supply: use kobj_to_dev()
-Message-ID: <20210322140834.5tcrgo4n76bdcov4@earth.universe>
-References: <1615877652-31829-1-git-send-email-dj0227@163.com>
+        id S230035AbhCVOJI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 10:09:08 -0400
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:43943 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230366AbhCVOIv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Mar 2021 10:08:51 -0400
+Received: by mail-lj1-f181.google.com with SMTP id y1so21178520ljm.10;
+        Mon, 22 Mar 2021 07:08:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=DjeXTzNazMiJiGna6zzafYIk3RTDoVxg5DdIRkouymA=;
+        b=PbGMyDHWpAIolO0N4UTxDNgiWzGcbtPKpdRe7BhX5uUWBeiYVf5WGRdKJNJjIBPRh5
+         5xS3PhDwV4mAWvE0zQq0TWhK2Nx7qPGISV/d6B6H1pEfMWafWgKfBOGYVmBlnNY59rxs
+         eT8OlYU1QnxRuPokDc8Cbvp3LV64s60OScLavi46Hb2egWqGFcrjWoqYXokCcohCtE9X
+         hIfT5vIOmCRT7zYz4rDcBty/Yht944R80VtYM+SAh63PDVGdi7L4sYNM5RXUyeO1lBvP
+         B0nml0YOAuXtCPX4rSfyr3fxbGOVBymAzajIHeIuCN/EuuCedwNa6+8ZMdTqqYBcNwcN
+         CiyQ==
+X-Gm-Message-State: AOAM530Bwo9tgcd9JlBdjqVqXdDxVMQ/5izGgWF5DyEjIbt5obnXP66A
+        g4FWbkeTq9GYCnJS7Vr5TJIVC/izv3XY7g==
+X-Google-Smtp-Source: ABdhPJwv8R60LY6+kYLi+DbQVo78lRQg3ib80v+EZcsB/l7XMEqptMwlo2LIe4IBpZftqSA4tjXvDA==
+X-Received: by 2002:a2e:9204:: with SMTP id k4mr9597080ljg.203.1616422129298;
+        Mon, 22 Mar 2021 07:08:49 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id z10sm1583260lfe.114.2021.03.22.07.08.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Mar 2021 07:08:49 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id o126so12006781lfa.0;
+        Mon, 22 Mar 2021 07:08:49 -0700 (PDT)
+X-Received: by 2002:a19:e12:: with SMTP id 18mr9671138lfo.296.1616422128984;
+ Mon, 22 Mar 2021 07:08:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iwzobb3xlpjvnd7l"
-Content-Disposition: inline
-In-Reply-To: <1615877652-31829-1-git-send-email-dj0227@163.com>
+References: <cover.1616395565.git.matti.vaittinen@fi.rohmeurope.com> <a4588ab46ab6ae621f24cd3b6983c72032f41360.1616395565.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <a4588ab46ab6ae621f24cd3b6983c72032f41360.1616395565.git.matti.vaittinen@fi.rohmeurope.com>
+Reply-To: wens@csie.org
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Mon, 22 Mar 2021 22:08:38 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64cat4mr=5FJfYRG85mt7_sFwG-XjWbDjkekuEEAUQvnQ@mail.gmail.com>
+Message-ID: <CAGb2v64cat4mr=5FJfYRG85mt7_sFwG-XjWbDjkekuEEAUQvnQ@mail.gmail.com>
+Subject: Re: [RFC RESEND PATCH v2 6/8] power: supply: Clean-up few drivers by
+ using managed work init
+To:     matti.vaittinen@fi.rohmeurope.com
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---iwzobb3xlpjvnd7l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Tue, Mar 16, 2021 at 02:54:12PM +0800, Jian Dong wrote:
-> From: dongjian <dongjian@yulong.com>
->=20
-> Use kobj_to_dev() instead of open-coding it
->=20
-> Signed-off-by: dongjian <dongjian@yulong.com>
+On Mon, Mar 22, 2021 at 3:38 PM Matti Vaittinen
+<matti.vaittinen@fi.rohmeurope.com> wrote:
+>
+> Few drivers implement remove call-back only for ensuring a delayed
+> work gets cancelled prior driver removal. Clean-up these by switching
+> to use devm_delayed_work_autocancel() instead.
+>
+> This change is compile-tested only. All testing is appreciated.
+>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
+>  drivers/power/supply/axp20x_usb_power.c      | 15 +++++----------
+>  drivers/power/supply/bq24735-charger.c       | 18 ++++++------------
+>  drivers/power/supply/ltc2941-battery-gauge.c | 20 +++++++-------------
+>  drivers/power/supply/sbs-battery.c           | 16 +++++-----------
+>  4 files changed, 23 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+> index 8933ae26c3d6..4259709e3491 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -8,6 +8,7 @@
+>
+>  #include <linux/bitops.h>
+>  #include <linux/device.h>
+> +#include <linux/devm-helpers.h>
+>  #include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -646,21 +647,16 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       ret = devm_delayed_work_autocancel(&pdev->dev, &power->vbus_detect,
+> +                                          axp20x_usb_power_poll_vbus);
+> +       if (ret)
+> +               return ret;
 
-Thanks, queued.
+This doesn't look right. The IRQ is requested before this, and the delayed_work
+struct is initialized even earlier, so you'd be re-initializing the struct,
+with the work item potentially running or queued up already.
 
--- Sebastian
 
->  drivers/power/supply/ds2781_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply=
-/ds2781_battery.c
-> index 3df3c82..05b859b 100644
-> --- a/drivers/power/supply/ds2781_battery.c
-> +++ b/drivers/power/supply/ds2781_battery.c
-> @@ -626,7 +626,7 @@ static ssize_t ds2781_read_param_eeprom_bin(struct fi=
-le *filp,
->  				struct bin_attribute *bin_attr,
->  				char *buf, loff_t off, size_t count)
->  {
-> -	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct device *dev =3D kobj_to_dev(kobj);
->  	struct power_supply *psy =3D to_power_supply(dev);
->  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
-> =20
-> @@ -639,7 +639,7 @@ static ssize_t ds2781_write_param_eeprom_bin(struct f=
-ile *filp,
->  				struct bin_attribute *bin_attr,
->  				char *buf, loff_t off, size_t count)
->  {
-> -	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct device *dev =3D kobj_to_dev(kobj);
->  	struct power_supply *psy =3D to_power_supply(dev);
->  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
->  	int ret;
-> @@ -671,7 +671,7 @@ static ssize_t ds2781_read_user_eeprom_bin(struct fil=
-e *filp,
->  				struct bin_attribute *bin_attr,
->  				char *buf, loff_t off, size_t count)
->  {
-> -	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct device *dev =3D kobj_to_dev(kobj);
->  	struct power_supply *psy =3D to_power_supply(dev);
->  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
-> =20
-> @@ -685,7 +685,7 @@ static ssize_t ds2781_write_user_eeprom_bin(struct fi=
-le *filp,
->  				struct bin_attribute *bin_attr,
->  				char *buf, loff_t off, size_t count)
->  {
-> -	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct device *dev =3D kobj_to_dev(kobj);
->  	struct power_supply *psy =3D to_power_supply(dev);
->  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
->  	int ret;
-> --=20
-> 1.9.1
->=20
+ChenYu
 
---iwzobb3xlpjvnd7l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBYpOIACgkQ2O7X88g7
-+pq2eg//Szgo6OaEduFcKvhuFr2h5C/QHthQMKuGOcrVq0xsnhxIiEO6S+jfJDTv
-Y0vzbUekN9x/o2cP6HxxaixWDOK/pVOy+jjWvmbrIAj1viVzEyY4y2Gekw7Rwd42
-SWGbGacg8FxytOX9Ngh85ofjFo4Lx8ivqM0tacEXJqNzv8Ojqf6hsSr/Gnt3Y7L9
-k36f/LKWi/TEL1Hr9Cmmo8qFYyfpGaLFZzPqOzh5K4ehKJAVa/9H07gJXqX/fXs2
-OaeIQgMiFUKMTaomZJmRbGeGV96CzDxOupFYSaAfEnDbQT8ZNdUYxQ8mLGcG3Win
-y0NyEA2eWvQ7s/xMLNWtrp6yeoo+GP3ga7k5Db/D6DeIXj27wnZsiGrRtLO2qd2x
-CkbUa61vzcLiFIaHv/9bHZzf5qQgZSWmxrx1mb5YtrVlNIg9+MEnNcOMRRMaxcsK
-aBicRWFguKnsl9JHnkdHIjUhM8wMeXlUGDFzrgmaVeA916vcOeAjzuZeZqqwOV+w
-0k6YSfuPjbM0ltKJRXk8ukLD2iV61Jh8AxsvPFOLUe8Xv6XNwK2w+GfUl9yO3dLa
-5ojZ5E5JnvKU7zpcjq4PMpPKNKKg2onOUDu09ncNek2QVpVJQudadDTn/jtpHUD2
-b75zEtFpMbw0pI85j4Z+WMFsrUwT4k8Jv81lOPDKwRL2Vzn25yI=
-=j5VT
------END PGP SIGNATURE-----
-
---iwzobb3xlpjvnd7l--
+>         if (axp20x_usb_vbus_needs_polling(power))
+>                 queue_delayed_work(system_power_efficient_wq, &power->vbus_detect, 0);
+>
+>         return 0;
+>  }
+>
+> -static int axp20x_usb_power_remove(struct platform_device *pdev)
+> -{
+> -       struct axp20x_usb_power *power = platform_get_drvdata(pdev);
+> -
+> -       cancel_delayed_work_sync(&power->vbus_detect);
+> -
+> -       return 0;
+> -}
+> -
+>  static const struct of_device_id axp20x_usb_power_match[] = {
+>         {
+>                 .compatible = "x-powers,axp202-usb-power-supply",
+> @@ -680,7 +676,6 @@ MODULE_DEVICE_TABLE(of, axp20x_usb_power_match);
+>
+>  static struct platform_driver axp20x_usb_power_driver = {
+>         .probe = axp20x_usb_power_probe,
+> -       .remove = axp20x_usb_power_remove,
+>         .driver = {
+>                 .name           = DRVNAME,
+>                 .of_match_table = axp20x_usb_power_match,
