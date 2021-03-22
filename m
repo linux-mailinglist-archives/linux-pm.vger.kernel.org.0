@@ -2,154 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B75343AD4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 08:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33374343B45
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 09:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbhCVHlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 03:41:53 -0400
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:33504 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbhCVHlW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Mar 2021 03:41:22 -0400
-Received: by mail-lf1-f41.google.com with SMTP id o126so10183250lfa.0;
-        Mon, 22 Mar 2021 00:41:20 -0700 (PDT)
+        id S229548AbhCVIIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 04:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhCVIIk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Mar 2021 04:08:40 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CD3C061574
+        for <linux-pm@vger.kernel.org>; Mon, 22 Mar 2021 01:08:39 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id t5-20020a1c77050000b029010e62cea9deso8724304wmi.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Mar 2021 01:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=b7CN6JdpOmja3Ya9/8A0Yc6qp4xL6xo6CnNKb5MDcgU=;
+        b=Qw9T73UaV1U8h8LxfGhg+9skYAOyd6FhNRHGzS4USWYsbHsCjClsUwuTZe58023L2x
+         jfJ76qnzVXyYwINInQ3FwPaBMCdLhJfnzwcKrLrSutmCMf9CXDZGsElLC8gML9xnUPjw
+         bUOUnZCl2LhHlq7VjJBqOj0h4nRIlhWnfBccMdDByAvmxboyybHI7vFlZmiKIn+SkhZt
+         9yWNmGwUZBtkyeg+8y6P+CFg6/7TVQDcZYo6vKNR5TLFVUFr3L7JoLULclDYO+tLcNsX
+         TQQYvgSAnn3l1yzRKXJDsmmFU2xK4XLnD4D1Nc59SPi5RB/isg2iMmCK1pqeopAmq0Ql
+         Dk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9OvoXTfYE4NotW19A5lNKAEwdwJKknjVSZLpfYohfiw=;
-        b=VzC4FcgfWmpRvAY1ZjHnkHhhR8pff7riEIOnn1jcmr1/jknLwznzqfD5EvK9rTzPmz
-         r5lRU3/ht0h/yFd/8CklvGrYUFFWmL96EJ06jQEueph3puBRPRI2bKDvIS8l1fDm9ayW
-         FGUDlj+3m8e8Nf4KpR/D363tYrcuJVQJe7DmMJ5hvjB4No4GtqkN/4fQIGnt1nDvT2pd
-         +jtBZy7FEPhbDKiA5J7JpQhJuIgdToSoV5PkUlT9dPzGqwSVfNEtYNFwAWwCGVEBQADa
-         ulCEJXHxauGfA4o8vazsS0J1csuLPfyK68+MVK34LKvGTpOzxfnbQkTl7zM66zhcfhDG
-         g2Iw==
-X-Gm-Message-State: AOAM530jBzBA1RB7NXgnpIxqR2eB6/u71YdWGjDJtjtIHjVEtDyVNFYF
-        eGNrXxJDp2rp1zUIiJ2IOEA=
-X-Google-Smtp-Source: ABdhPJzjl/BCA7ObW6HNjx3diUaqpRbdVbzl+Zwdos1ACNDo5uSXH9iWMVBGSZK7KTlvXmN4GMDRew==
-X-Received: by 2002:ac2:5519:: with SMTP id j25mr8615753lfk.220.1616398879758;
-        Mon, 22 Mar 2021 00:41:19 -0700 (PDT)
-Received: from localhost.localdomain (mobile-access-5673b7-246.dhcp.inet.fi. [86.115.183.246])
-        by smtp.gmail.com with ESMTPSA id y4sm1472866lfj.254.2021.03.22.00.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 00:41:19 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 09:41:13 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: [RFC RESEND PATCH v2 0/8] Add managed version of delayed work init
-Message-ID: <cover.1616395565.git.matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=b7CN6JdpOmja3Ya9/8A0Yc6qp4xL6xo6CnNKb5MDcgU=;
+        b=XLDGwb7oKuBXcfm0gPS6KTZwn1/0KFMTIy1FkuzMzPGUReM6CVOxxolJNvjK27F2Cj
+         YtAFbfpRBrD5h41Bbri/qpkt9fuNvl+2txYkHCUjDeDVz1J32RsVKvEXwKG3XySfsBKP
+         dnljFHIN8vThoxcx6Iqgu5NAdAm/EAndtWoQlv+EgO65NYT2JuaAc2RQMokllFD7qRht
+         /2R/mHIfFTs+XNNZy2qRAlsZeS74jd6pQNKN6SGVn+O6yX1POtGY8lYYTNflywwUq7kE
+         3XBQbgJTE4vpPDcLGAWyXXDjBzIzWI/MMF7qVUTi5qxxWNslbb1dOFBpTfgdHKAAnl9e
+         BmhQ==
+X-Gm-Message-State: AOAM531ppQr1MPWCukzcOKyQURKQjsR372cuieBk37YN+FVBx7bUrwl3
+        QbGKijAm6IFxBUAPvqwoT/3/bA==
+X-Google-Smtp-Source: ABdhPJz2mztkkc3xYlJs3i61gDWH1UuGnnW5WMrLPF7qAO52KtghzeIEso0c8MS13TDrtALhC7NbYQ==
+X-Received: by 2002:a05:600c:2cd8:: with SMTP id l24mr14511400wmc.88.1616400518535;
+        Mon, 22 Mar 2021 01:08:38 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d8b:d5f9:2138:169c? ([2a01:e34:ed2f:f020:d8b:d5f9:2138:169c])
+        by smtp.googlemail.com with ESMTPSA id v7sm16067242wme.47.2021.03.22.01.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Mar 2021 01:08:38 -0700 (PDT)
+Subject: Re: [PATCH] thermal/drivers/cpuidle_cooling: Fix use after error
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <YFMpUDNGIiLOzr0/@mwanda>
+ <20210319202522.891061-1-daniel.lezcano@linaro.org>
+ <20210322032946.jstyrnc6dctq4fzj@vireshk-i7>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <dcbf21e2-e2da-7e0d-66bb-ae7f4dc28858@linaro.org>
+Date:   Mon, 22 Mar 2021 09:08:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20210322032946.jstyrnc6dctq4fzj@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's not rare that device drivers need delayed work.
-It's not rare that this work needs driver's data.
+On 22/03/2021 04:29, Viresh Kumar wrote:
+> On 19-03-21, 21:25, Daniel Lezcano wrote:
+>> When the function successfully finishes it logs an information about
+>> the registration of the cooling device and use its name to build the
+>> message. Unfortunately it was freed right before:
+>>
+>> drivers/thermal/cpuidle_cooling.c:218 __cpuidle_cooling_register()
+>> 	warn: 'name' was already freed.
+>>
+>> Fix this by freeing after the message happened.
+>>
+>> Fixes: 6fd1b186d900 ("thermal/drivers/cpuidle_cooling: Use device name instead of auto-numbering")
+> 
+> Why not merge this with the Fixes patch itself since it isn't there in Linus's
+> tree yet ?
+> 
+> Or is your branch strictly immutable ?
 
-Often this means that driver must ensure the work is not queued when
-driver is detached. Often it is done by ensuring new work is not added and
-then calling cancel_delayed_work_sync() at remove(). In many cases this
-may also require cleanup at probe error path - which is easy to forget.
+Hi Viresh;
 
-Also the "by ensuring new work is not added" has a gotcha.
+The changes follow the path:
 
-It is not strange to see devm managed IRQs scheduling (delayed) work.
-Mixing this with manua wq clean-up is hard to do correctly because the
-devm is likely to free the IRQ only after the remove() is ran. So manual
-wq cancellation and devm-based IRQ management do not mix well - there is
-a short(?) time-window after the wq clean-up when IRQs are still not
-freed and may schedule new work.
+testing -> linux-next -> next
 
-When both WQs and IRQs are managed by devm things are likely to just
-work. WQs should be initialized before IRQs (when IRQs need to schedule
-work) and devm unwinds things in "FILO" order.
+The branch next is never rebased. The patch above reached it. This is
+notified by the thermal-bot [1].
 
-This series implements delayed wq cancellation on top of devm and replaces
-the obvious cases where only thing remove call-back in a driver does is
-cancelling the work. There might be other cases where we could switch
-more than just work cancellation to use managed version and thus get rid
-of remove or mixed (manual and devm) resource management.
+  -- Daniel
 
-This RFC does also introduce include/linux/devm-helpers.h file which
-hopefully works as a place where this kind of helpers can be inlined.
-
-Please see previous discussion here:
-RFC v1:
-https://lore.kernel.org/lkml/cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com/
-
-Changelog v2 resend:
-  - rebased on 5.12-rc4
-
-Changelog v2:
-  - used correct terminology ("driver detach" instead of "exit, ...")
-  - inlined the devm_delayed_work_autocancel() in a header
-  - added Hans as a maintainer for the new header + myself as a reviewer
-  - used devm_add_action() instead of using plain devres_add()
-
----
-
-Matti Vaittinen (8):
-  workqueue: Add resource managed version of delayed work init
-  MAINTAINERS: Add entry for devm helpers
-  extconn: Clean-up few drivers by using managed work init
-  hwmon: raspberry-pi: Clean-up few drivers by using managed work init
-  platform/x86: gpd pocket fan: Clean-up by using managed work init
-  power: supply: Clean-up few drivers by using managed work init
-  regulator: qcom_spmi-regulator: Clean-up by using managed work init
-  watchdog: retu_wdt: Clean-up by using managed work init
-
- MAINTAINERS                                  |  6 +++
- drivers/extcon/extcon-gpio.c                 | 15 ++----
- drivers/extcon/extcon-intel-int3496.c        | 16 ++----
- drivers/extcon/extcon-palmas.c               | 17 +++----
- drivers/extcon/extcon-qcom-spmi-misc.c       | 17 +++----
- drivers/hwmon/raspberrypi-hwmon.c            | 17 +++----
- drivers/platform/x86/gpd-pocket-fan.c        | 17 +++----
- drivers/power/supply/axp20x_usb_power.c      | 15 ++----
- drivers/power/supply/bq24735-charger.c       | 18 +++----
- drivers/power/supply/ltc2941-battery-gauge.c | 20 +++-----
- drivers/power/supply/sbs-battery.c           | 16 ++----
- drivers/regulator/qcom_spmi-regulator.c      | 34 +++----------
- drivers/watchdog/retu_wdt.c                  | 22 +++-----
- include/linux/devm-helpers.h                 | 53 ++++++++++++++++++++
- 14 files changed, 128 insertions(+), 155 deletions(-)
- create mode 100644 include/linux/devm-helpers.h
-
-
-base-commit: 0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b
--- 
-2.25.4
+[1]
+https://lore.kernel.org/linux-pm/20210314111333.16551-3-daniel.lezcano@linaro.org/T/#ma257519efc70ee60faca47dbd458b05de5449bf8
 
 
 -- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
