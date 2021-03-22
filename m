@@ -2,122 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A90D34475D
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2714E344B33
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 17:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbhCVOdT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 10:33:19 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:45707 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbhCVOdN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Mar 2021 10:33:13 -0400
-Received: by mail-ot1-f45.google.com with SMTP id f73-20020a9d03cf0000b02901b4d889bce0so16099029otf.12;
-        Mon, 22 Mar 2021 07:33:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tdNjLAFkKExyySktCu7V5Bpz2cnyF7BEvssvzh+7BTo=;
-        b=cx7fy9+H1Y4XBo0UIHXufE+9Znzedi5tZRFBVZ+VltucEbGIHDrsenB4E+SDvyRL2y
-         K9GyKeAPSFB5IIfaQEd+MRAU4b71JCHIWp6YmIBs/P/aG9OpwXObsmVEhuKVY/84GwtG
-         qtYXrWdvhUAqNUglIwApUMhR67NY8vVZQXyeJVJSK4C+IdmQ2a7sEp0TQkXfIG4XNOXI
-         7oqZVEWhW7w1kyLPYqg2WijKL2+Lw3gY5X8zXqqMIdwaKZlbZfk/k4dNV8ozOswJQ3w0
-         e10qkWmCNiRJ+ztSXWye5F8M1BVTE3V2VpKXfp3taxpxORaUHwP5QsLWnVUdNQhZJbhG
-         xG7g==
-X-Gm-Message-State: AOAM532uiv+bW9VobhArHgxu73MHhpDICKpDbiTLAdLNZkZfVfA7wdxU
-        MOPouJWn51iEq89R6/VxdtlEGQA0s18PMbMuHhw=
-X-Google-Smtp-Source: ABdhPJzkJoMaAR9z6HBKHF/TbDPxYzvAs7IoZZ69mFl3/xeSpEaCq/3dEr0P7DpmqDnhQnVarA9hGPOVdV3gBE4ynSA=
-X-Received: by 2002:a9d:4811:: with SMTP id c17mr233186otf.206.1616423593071;
- Mon, 22 Mar 2021 07:33:13 -0700 (PDT)
+        id S231130AbhCVQ0P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 12:26:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231807AbhCVQ0D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Mar 2021 12:26:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A448D61923;
+        Mon, 22 Mar 2021 16:26:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616430362;
+        bh=ceQ5NOwJb9FM/epRVuKXnXy9KZ3kKLgrUadTmgZr2Nk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XQ4OnlKCgYf2qA8cha/7tibsbD3VcoMYzhKL5Lf38Y3CHx2XWKqHvppccXKaPGmTW
+         td4U1Th95B0qy1EC9R2ZBOAxsS1aTZxM5M00htG6bkjsVOmGd8jpFg/eXyEnhB/QsK
+         RcL7oJN9nUwuFO+1b2nSvkkmywyH9DuftEgS5fGbj7zpWql43hi1histS4PPXU9omk
+         t4KJG+GD8no22EGODQRQfktSYPKDYuuwAaMLqWQ0JhmXQ9BP74+RVZcfpqTFezYCGp
+         1VHxVg5d2Rjpjq0Fzz/LfNg5uUyRCYJp2WhocWWwCrkovhkRlPWWnsxaIXIhse/Vml
+         WhLWPbAdhry6A==
+Received: by mail-ed1-f53.google.com with SMTP id dm8so20123902edb.2;
+        Mon, 22 Mar 2021 09:26:02 -0700 (PDT)
+X-Gm-Message-State: AOAM532KmTd8ixaf4Ud618nivEF7RPakY2GuwmumCPWClMxRtYFiqDnI
+        0KB2sGTfKrygI6K4hWfgmcXA+JhMC+pCg7rkPQ==
+X-Google-Smtp-Source: ABdhPJwuPn8U7kIVUhCfwZoxyYPPdZcXFdxetHAglstyF75ep9cAElEhNjBTsVpxYryDcJzvlZY0sdWXj7LXFY54zpA=
+X-Received: by 2002:aa7:d385:: with SMTP id x5mr353341edq.289.1616430361296;
+ Mon, 22 Mar 2021 09:26:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <3219454.74lMxhSOWB@kreacher>
-In-Reply-To: <3219454.74lMxhSOWB@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 22 Mar 2021 15:32:58 +0100
-Message-ID: <CAJZ5v0gkhfRRGLpqLN555O7RG3jmScfxTTAzz6AgFrOoh42e=g@mail.gmail.com>
-Subject: Re: [PATCH] PCI: PM: Do not read power state in pci_enable_device_flags()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
+References: <20210317134904.80737-1-sebastian.reichel@collabora.com>
+In-Reply-To: <20210317134904.80737-1-sebastian.reichel@collabora.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 22 Mar 2021 10:25:49 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLASixNRTf712201w1nghxdaB28HsN7fdsjeogsoA=oQg@mail.gmail.com>
+Message-ID: <CAL_JsqLASixNRTf712201w1nghxdaB28HsN7fdsjeogsoA=oQg@mail.gmail.com>
+Subject: Re: [PATCHv2 00/38] Convert power-supply DT bindings to YAML
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 4:52 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Wed, Mar 17, 2021 at 7:49 AM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Hi,
 >
-> It should not be necessary to update the current_state field of
-> struct pci_dev in pci_enable_device_flags() before calling
-> do_pci_enable_device() for the device, because none of the
-> code between that point and the pci_set_power_state() call in
-> do_pci_enable_device() invoked later depends on it.
+> I keep getting patches for existing drivers, that modify DT behaviour
+> without updating the binding file. Let's move everything to DT schema
+> files, so that this can easily be cached automatically by dtbs_check.
 >
-> Moreover, doing that is actively harmful in some cases.  For example,
-> if the given PCI device depends on an ACPI power resource whose _STA
-> method initially returns 0 ("off"), but the config space of the PCI
-> device is accessible and the power state retrieved from the
-> PCI_PM_CTRL register is D0, the current_state field in the struct
-> pci_dev representing that device will get out of sync with the
-> power.state of its ACPI companion object and that will lead to
-> power management issues going forward.
+> After this series only three bindings are left unconverted:
 >
-> To avoid such issues it is better to leave the current_state value
-> as is until it is changed to PCI_D0 by do_pci_enable_device() as
-> appropriate.  However, the power state of the device is not changed
-> to PCI_D0 if it is already enabled when pci_enable_device_flags()
-> gets called for it, so update its current_state in that case, but
-> use pci_update_current_state() covering platform PM too for that.
+> 1. max8925_battery.txt
+>    This describes a node below the PMIC, which does not have its own
+>    compatible value. It needs to be described in the PMIC binding
+>    file, which has not yet been converted.
 >
-> Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
-> Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
-> Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 2. stericsson,ab8500-battery.txt
+>    This also describes a node below the PMIC, which does not have
+>    its own compatible value. The same applies.
+>
+> 3. charger-manager.txt
+>    This is far more complex to convert than the other files, due
+>    to the 'cm-regulator-name' / "<>-supply" thing. I skipped it
+>    for now.
+>
+> I tested the series using dt-validate 2021.3.dev6+g38efe3f and nothing
+> is reported when running dtbs_check like this:
+>
+> make -s -j100 dtbs_check DT_SCHEMA_FILES="Documentation/devicetree/bindings/power/supply/*.yaml"
+>
+> Also nothing is reported when checking the power-supply binding files
+> like this:
+>
+> for file in Documentation/devicetree/bindings/power/supply/*yaml ; do
+>     make -s -j42 dt_binding_check DT_SCHEMA_FILES=$file ;
+> done
+>
+> This is also available as 'psy-yaml-binding' branch from my repository:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git
+>
+> Changes since PATCHv1:
+> [1] https://lore.kernel.org/linux-devicetree/20210312154357.1561730-1-sebastian.reichel@collabora.com/
+>  * Drop #gpio-cells/gpio-controller dependency (inherited from standard binding)
+>  * Drop $ref for properties with standard suffix
+>  * ti,bq24735: Add $ref property for poll-interval
+>  * ti,lp8727: Combine usb and ac property information using patternProperties
+>
+> Thanks for reviewing it,
+>
+> -- Sebastian
+>
+> Sebastian Reichel (38):
+>   ARM: dts: motorola-cpcap-mapphone: Prepare for dtbs_check parsing
+>   dt-bindings: power: supply: cpcap-battery: Convert to DT schema format
+>   dt-bindings: power: supply: cpcap-charger: Convert to DT schema format
+>   dt-bindings: power: supply: bq25890: Convert to DT schema format
+>   dt-bindings: power: supply: bq24257: Convert to DT schema format
+>   dt-bindings: power: supply: bq24190: Convert to DT schema format
+>   dt-bindings: power: supply: bq2415x: Convert to DT schema format
+>   dt-bindings: power: supply: bq24735: Convert to DT schema format
+>   dt-bindings: power: supply: isp1704: Convert to DT schema format
+>   dt-bindings: power: supply: sbs-charger: Convert to DT schema format
+>   dt-bindings: power: supply: sbs-manager: Convert to DT schema format
+>   dt-bindings: power: supply: ds2760: Convert to DT schema format
+>   dt-bindings: power: supply: sc27xx-fg: Convert to DT schema format
+>   dt-bindings: power: supply: sc2731-charger: Convert to DT schema
+>     format
+>   dt-bindings: power: supply: tps65090: Convert to DT schema format
+>   dt-bindings: power: supply: tps65217: Convert to DT schema format
+>   dt-bindings: power: supply: twl4030: Convert to DT schema format
+>   dt-bindings: power: supply: n900-battery: Convert to DT schema format
+>   dt-bindings: power: supply: lego-ev3-battery: Convert to DT schema
+>     format
+>   dt-bindings: power: supply: max17040: Convert to DT schema format
+>   dt-bindings: power: supply: max14656: Convert to DT schema format
+>   dt-bindings: power: supply: max17042: Convert to DT schema format
+>   dt-bindings: power: supply: max8903: Convert to DT schema format
+>   dt-bindings: power: supply: ucs1002: Convert to DT schema format
+>   dt-bindings: power: supply: pm8941-charger: Convert to DT schema
+>     format
+>   dt-bindings: power: supply: pm8941-coincell: Convert to DT schema
+>     format
+>   dt-bindings: power: supply: act8945a: Convert to DT schema format
+>   dt-bindings: power: supply: axp20x: Convert to DT schema format
+>   dt-bindings: power: supply: da9150: Convert to DT schema format
+>   dt-bindings: power: supply: lp8727: Convert to DT schema format
+>   dt-bindings: power: supply: lt3651: Convert to DT schema format
+>   dt-bindings: power: supply: ltc294x: Convert to DT schema format
+>   dt-bindings: power: supply: rt9455: Convert to DT schema format
+>   dt-bindings: power: supply: olpc-battery: Convert to DT schema format
+>   dt-bindings: power: supply: ab8500: Convert to DT schema format
+>   dt-bindings: power: supply: sbs-battery: Fix dtbs_check
+>   dt-bindings: power: supply: Fix remaining battery.txt links
+>   dt-bindings: power: supply: Drop power_supply.txt
 
-Bjorn, can I take this, or do you want to take care of it yourself?
+Thanks! For the series:
 
-> ---
->
-> Max, I've added a T-by from you even though the patch is slightly different
-> from what you have tested, but the difference shouldn't matter for your case.
->
-> ---
->  drivers/pci/pci.c |   16 +++-------------
->  1 file changed, 3 insertions(+), 13 deletions(-)
->
-> Index: linux-pm/drivers/pci/pci.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci.c
-> +++ linux-pm/drivers/pci/pci.c
-> @@ -1870,20 +1870,10 @@ static int pci_enable_device_flags(struc
->         int err;
->         int i, bars = 0;
->
-> -       /*
-> -        * Power state could be unknown at this point, either due to a fresh
-> -        * boot or a device removal call.  So get the current power state
-> -        * so that things like MSI message writing will behave as expected
-> -        * (e.g. if the device really is in D0 at enable time).
-> -        */
-> -       if (dev->pm_cap) {
-> -               u16 pmcsr;
-> -               pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> -       }
-> -
-> -       if (atomic_inc_return(&dev->enable_cnt) > 1)
-> +       if (atomic_inc_return(&dev->enable_cnt) > 1) {
-> +               pci_update_current_state(dev, dev->current_state);
->                 return 0;               /* already enabled */
-> +       }
->
->         bridge = pci_upstream_bridge(dev);
->         if (bridge)
->
->
->
+Reviewed-by: Rob Herring <robh@kernel.org>
