@@ -2,110 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7A34466A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EC83446C0
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Mar 2021 15:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhCVOBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 10:01:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46302 "EHLO mail.kernel.org"
+        id S230053AbhCVOJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 10:09:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231334AbhCVOAh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Mar 2021 10:00:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 83E5D6196C;
-        Mon, 22 Mar 2021 14:00:35 +0000 (UTC)
+        id S229879AbhCVOIi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Mar 2021 10:08:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 38B5E61931;
+        Mon, 22 Mar 2021 14:08:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616421635;
-        bh=gMbyLIsDgdrx2p+wsSzWRpnq2aTtrR6qI7dJYUusx5Q=;
+        s=k20201202; t=1616422117;
+        bh=7caE9N26jv0l5ZnLHGx7Et17KdeDOuGVZwE3GJ5eC/E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kw8ylOp5OcG1vmTzkycRqwkjUu8cFq1IgXcOiISlCvxMCaXDtTWyUMz1EgTxI/dWp
-         mVoOQUmD8163+D6D6ZfiTs+XUQu+sbmCEPxmDf7pNQSfvqUmZOpAkGMg4QCJPaoLWh
-         z2BL3Lib8FrHdYhGUgwjGfoRlDH/fwjrmMSQBgTZXptSWKipjhk4jl+5iJ4idd53oW
-         4wDMCv5OV4286PGQs3wt1nlIUMgkSyfOD413Myi7dwarE7dj1VuaiUHrhiLswappeD
-         zmQuF+6RHXr/L8tv3DIng0eOgTgTn9+B1BZiLOpT/4Dm9JX1u3XLSdX3udJtGgXbGS
-         CRQrn7aHERBBQ==
+        b=usfo7ArLyujRxLVN0WQM3dLozR/ZOP84SjTA9R6YfVO2xpnK+ZDCIz2ch+Je60Gr3
+         eQYkHI8j6lqPynZS7H80CmKLsQwBLd2VAzI6ElAo2aRISKmWbVPhq/azgvNzAIeTkZ
+         dqEfoZzl4gJ1UnQ5IymBm3gnNiPO+17s9LndqZGukIzCOmdIjtaBo3MN+gEbwFY2bX
+         hxcDstVLdEf0WZTkn1dIvB9uWpy7C7AayiM/9C1tOaDcq0ttXL0v9GKF/YXZkmxZdb
+         /16IEjozeZLTZNomMswrcNIlZjpMf5HhoXj39yB1RDG5UZVCzdwfxOUy5Wal0RVD0q
+         1cg8bkeEk0wow==
 Received: by earth.universe (Postfix, from userid 1000)
-        id B27383C0C96; Mon, 22 Mar 2021 15:00:33 +0100 (CET)
-Date:   Mon, 22 Mar 2021 15:00:33 +0100
+        id BE9123C0C96; Mon, 22 Mar 2021 15:08:34 +0100 (CET)
+Date:   Mon, 22 Mar 2021 15:08:34 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Randy Dunlap <rdunlap@bombadil.infradead.org>
-Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: charger-manager: Fix a typo
-Message-ID: <20210322140033.iqarbpbwsibmb25h@earth.universe>
-References: <20210319055230.32220-1-unixbhaskar@gmail.com>
- <469f4918-bd2d-8586-accd-77eeaf6dcd68@bombadil.infradead.org>
+To:     Jian Dong <dj0227@163.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, dongjian <dongjian@yulong.com>
+Subject: Re: [PATCH] power-supply: use kobj_to_dev()
+Message-ID: <20210322140834.5tcrgo4n76bdcov4@earth.universe>
+References: <1615877652-31829-1-git-send-email-dj0227@163.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iecqdof7l5rn7ahq"
+        protocol="application/pgp-signature"; boundary="iwzobb3xlpjvnd7l"
 Content-Disposition: inline
-In-Reply-To: <469f4918-bd2d-8586-accd-77eeaf6dcd68@bombadil.infradead.org>
+In-Reply-To: <1615877652-31829-1-git-send-email-dj0227@163.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---iecqdof7l5rn7ahq
+--iwzobb3xlpjvnd7l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Mar 19, 2021 at 11:11:47AM -0700, Randy Dunlap wrote:
-> On Fri, 19 Mar 2021, Bhaskar Chowdhury wrote:
+On Tue, Mar 16, 2021 at 02:54:12PM +0800, Jian Dong wrote:
+> From: dongjian <dongjian@yulong.com>
 >=20
-> > s/systme/system/
-> >=20
-> > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+> Use kobj_to_dev() instead of open-coding it
 >=20
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: dongjian <dongjian@yulong.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
-> > ---
-> > drivers/power/supply/charger-manager.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/sup=
-ply/charger-manager.c
-> > index 4dea8ecd70bc..45da870aecca 100644
-> > --- a/drivers/power/supply/charger-manager.c
-> > +++ b/drivers/power/supply/charger-manager.c
-> > @@ -1604,7 +1604,7 @@ static int charger_manager_probe(struct platform_=
-device *pdev)
-> > 	mutex_unlock(&cm_list_mtx);
-> >=20
-> > 	/*
-> > -	 * Charger-manager is capable of waking up the systme from sleep
-> > +	 * Charger-manager is capable of waking up the system from sleep
-> > 	 * when event is happened through cm_notify_event()
-> > 	 */
-> > 	device_init_wakeup(&pdev->dev, true);
-> > --
-> > 2.26.2
-> >=20
-> >=20
+>  drivers/power/supply/ds2781_battery.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply=
+/ds2781_battery.c
+> index 3df3c82..05b859b 100644
+> --- a/drivers/power/supply/ds2781_battery.c
+> +++ b/drivers/power/supply/ds2781_battery.c
+> @@ -626,7 +626,7 @@ static ssize_t ds2781_read_param_eeprom_bin(struct fi=
+le *filp,
+>  				struct bin_attribute *bin_attr,
+>  				char *buf, loff_t off, size_t count)
+>  {
+> -	struct device *dev =3D container_of(kobj, struct device, kobj);
+> +	struct device *dev =3D kobj_to_dev(kobj);
+>  	struct power_supply *psy =3D to_power_supply(dev);
+>  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
+> =20
+> @@ -639,7 +639,7 @@ static ssize_t ds2781_write_param_eeprom_bin(struct f=
+ile *filp,
+>  				struct bin_attribute *bin_attr,
+>  				char *buf, loff_t off, size_t count)
+>  {
+> -	struct device *dev =3D container_of(kobj, struct device, kobj);
+> +	struct device *dev =3D kobj_to_dev(kobj);
+>  	struct power_supply *psy =3D to_power_supply(dev);
+>  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
+>  	int ret;
+> @@ -671,7 +671,7 @@ static ssize_t ds2781_read_user_eeprom_bin(struct fil=
+e *filp,
+>  				struct bin_attribute *bin_attr,
+>  				char *buf, loff_t off, size_t count)
+>  {
+> -	struct device *dev =3D container_of(kobj, struct device, kobj);
+> +	struct device *dev =3D kobj_to_dev(kobj);
+>  	struct power_supply *psy =3D to_power_supply(dev);
+>  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
+> =20
+> @@ -685,7 +685,7 @@ static ssize_t ds2781_write_user_eeprom_bin(struct fi=
+le *filp,
+>  				struct bin_attribute *bin_attr,
+>  				char *buf, loff_t off, size_t count)
+>  {
+> -	struct device *dev =3D container_of(kobj, struct device, kobj);
+> +	struct device *dev =3D kobj_to_dev(kobj);
+>  	struct power_supply *psy =3D to_power_supply(dev);
+>  	struct ds2781_device_info *dev_info =3D to_ds2781_device_info(psy);
+>  	int ret;
+> --=20
+> 1.9.1
+>=20
 
---iecqdof7l5rn7ahq
+--iwzobb3xlpjvnd7l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBYowEACgkQ2O7X88g7
-+pr2ng/+PwNcOIxr/cG8gA27xJ/v/6NY3YHdp8hZYtIL0HOz5vpZkGuFw8ZUQL23
-fPWelqgG6qNj17WVZoXzDi+J0JcYUZo/Fz31KX5fjvE97CRg2ACiJdd6XXH14B/w
-5jgwPOz+hWCtSWC1d8RAWZoTaD7IEsosRo0ZtmJfxWsJQsKUttPO1JQHyW3HmdKD
-36pivPoe36efaNLeGAw1gYZeufsXlVGWbeEYvnILUOIrxTJOSjNuar6drtbUVAxS
-iwTVAafH2E5FCknr/1Gm9OXayTmwH+P7g/oKRrqlaDw+ekk2uyCrzjQs8RVd4kMb
-D5/RKzFLXQXprfr1DuPkQ1R1Q22mra+/ox0b++m5JQXtZTAGxPuNvHeojDDRDTQ5
-prkzbIm0EetFmBsYWvls/tjI/YMXr7k0tvkVkkm8ofd75wEz1sfI8hxlhHwu3ket
-sAxF0S4N6+os1Z3Pl2+73mNdghHWseakSj7VCSDqu4pkeY/PCmtQVE1cZ6utiIqB
-Sw5b6RBZQMQzbKQXjwYqBx+utCSv//u2Iso71kAuC3mY5p9k+1ApZpe9MtHJOp9t
-xOOQVa6wVh874kF+7KepyZOZtGY1P3H40YiTBC+x8/dflyOBbs83U/hUeknXNNce
-TVr5EOK+kXFw2rgetU5pU7WnMN7MoomTTIYNwPr6eOISUdeCV6Y=
-=FlLL
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBYpOIACgkQ2O7X88g7
++pq2eg//Szgo6OaEduFcKvhuFr2h5C/QHthQMKuGOcrVq0xsnhxIiEO6S+jfJDTv
+Y0vzbUekN9x/o2cP6HxxaixWDOK/pVOy+jjWvmbrIAj1viVzEyY4y2Gekw7Rwd42
+SWGbGacg8FxytOX9Ngh85ofjFo4Lx8ivqM0tacEXJqNzv8Ojqf6hsSr/Gnt3Y7L9
+k36f/LKWi/TEL1Hr9Cmmo8qFYyfpGaLFZzPqOzh5K4ehKJAVa/9H07gJXqX/fXs2
+OaeIQgMiFUKMTaomZJmRbGeGV96CzDxOupFYSaAfEnDbQT8ZNdUYxQ8mLGcG3Win
+y0NyEA2eWvQ7s/xMLNWtrp6yeoo+GP3ga7k5Db/D6DeIXj27wnZsiGrRtLO2qd2x
+CkbUa61vzcLiFIaHv/9bHZzf5qQgZSWmxrx1mb5YtrVlNIg9+MEnNcOMRRMaxcsK
+aBicRWFguKnsl9JHnkdHIjUhM8wMeXlUGDFzrgmaVeA916vcOeAjzuZeZqqwOV+w
+0k6YSfuPjbM0ltKJRXk8ukLD2iV61Jh8AxsvPFOLUe8Xv6XNwK2w+GfUl9yO3dLa
+5ojZ5E5JnvKU7zpcjq4PMpPKNKKg2onOUDu09ncNek2QVpVJQudadDTn/jtpHUD2
+b75zEtFpMbw0pI85j4Z+WMFsrUwT4k8Jv81lOPDKwRL2Vzn25yI=
+=j5VT
 -----END PGP SIGNATURE-----
 
---iecqdof7l5rn7ahq--
+--iwzobb3xlpjvnd7l--
