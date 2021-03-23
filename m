@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE4E346021
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 14:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C69346071
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 14:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbhCWNto (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 09:49:44 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:42655 "EHLO
+        id S231603AbhCWN4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 09:56:43 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:37554 "EHLO
         mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbhCWNtb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 09:49:31 -0400
-Received: by mail-lj1-f175.google.com with SMTP id 184so25677965ljf.9;
-        Tue, 23 Mar 2021 06:49:30 -0700 (PDT)
+        with ESMTP id S231264AbhCWN42 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 09:56:28 -0400
+Received: by mail-lj1-f175.google.com with SMTP id r20so25744028ljk.4;
+        Tue, 23 Mar 2021 06:56:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=mFWNgc1FW5QaVvw/wsJgMcMblBrOgtay4PdG9vIWiv0=;
-        b=FvVyVQVsLQoE4k5/J1DM8EN5nXrnEwwGou+LREOttVV++wOuq/w19+yy6kvngoIypl
-         b2hwIJqaId0vkehPrAKTy3mmSYFPjdQsLzTD+O3b8SJOKWhz7/ehXJBAduY63o/xCXKF
-         ctl9Bt7CHW66JZ2Lk/sFc+8M762u/3aFRA0hhhgWKxAw8WF8gAIZBRawgRKvS0LFKuxO
-         jb5oloSGf0EE0N4VpkeO4qYcZEdWrqQQfmN8Kparl2f+w6ZQ6d5xAEBZiwTsTb/onUvW
-         O38yvciw4SEqBawanEGzOCOT5KPhBfubQZukp1IvM3p0Pj+mncdXDMIe3P/XHqzJN3f4
-         /6Ug==
-X-Gm-Message-State: AOAM5321c8uPfPcT0FIM4pKrkY04Hx2jMHvLvmOAjLAm7Dm3ayjPBn+K
-        ykfyp6vFGVJLM2rNWf1jg+E=
-X-Google-Smtp-Source: ABdhPJzCrYWUnFHopBuwoTQCnEVSaGjYd/0HCeCkwyJiUJo8kLjKK212FjDHsyFBrcl4geyYwMfp3w==
-X-Received: by 2002:a2e:9b4a:: with SMTP id o10mr3196706ljj.485.1616507369334;
-        Tue, 23 Mar 2021 06:49:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YkgDIkTmim/5O1glQvMKfNSxF6ObBNcULBvb2FB6ZQQ=;
+        b=bJFEAz74eKHvKE2ulO63o7LNI8KJZk/auj0Gl+MmNsuhy9/YEDeRnC4i93gpz9+8lf
+         4jUdc3W18bMJk2GsfTOXwG/ZxY4kZGQix1kdMzOih7ga8vEwKiBFJXZPyBHEwBfaMQSv
+         bqs4C0goMBqJ5VWFJLYWqQNHrDjfW+cSmyU11zKjjc2KBDg7m40ulRz1K5DKH+PsFrkV
+         06eMIL1J3hBU6gPkYfxARI4orX1ny3LOy/w/gHwpmp71MvFOulLQUkIZYCYkUnLSD0Hi
+         HDG0vULZ0boG4Q9uVwRGI42pjVI2Hqmm4FMgg+3p0nVVwIFHGTXff07jzTOhbTHGhD6N
+         FB5g==
+X-Gm-Message-State: AOAM531SiPiZRRIa5aOeMUcj6PrGQeotjO5lN8wQapbfKqmr6/ZPRBhb
+        mTVk/kCj5YEzB+SL0oo/y+k=
+X-Google-Smtp-Source: ABdhPJyq5feOEictEeFvfmt8qtd4uPXsGM6InICgywJruZvfoOZLCjpQIM+ajmYsqEt7lv77ngAV4g==
+X-Received: by 2002:a2e:9310:: with SMTP id e16mr3265214ljh.226.1616507785244;
+        Tue, 23 Mar 2021 06:56:25 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id i30sm1079430lfj.206.2021.03.23.06.49.27
+        by smtp.gmail.com with ESMTPSA id u11sm1863085lfm.78.2021.03.23.06.56.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 06:49:28 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 15:49:21 +0200
+        Tue, 23 Mar 2021 06:56:24 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 15:56:17 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
@@ -55,93 +55,93 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 0/8] Add managed version of delayed work init
-Message-ID: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v3 1/8] workqueue: Add resource managed version of delayed
+ work init
+Message-ID: <51769ea4668198deb798fe47fcfb5f5288d61586.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's not rare that device drivers need delayed work.
-It's not rare that this work needs driver's data.
+A few drivers which need a delayed work-queue must cancel work at driver
+detach. Some of those implement remove() solely for this purpose. Help
+drivers to avoid unnecessary remove and error-branch implementation by
+adding managed verision of delayed work initialization. This will also
+help drivers to avoid mixing manual and devm based unwinding when other
+resources are handled by devm.
 
-Often this means that driver must ensure the work is not queued when
-driver is detached. Often it is done by ensuring new work is not added and
-then calling cancel_delayed_work_sync() at remove(). In many cases this
-may also require cleanup at probe error path - which is easy to forget.
-
-Also the "by ensuring new work is not added" has a gotcha.
-
-It is not strange to see devm managed IRQs scheduling (delayed) work.
-Mixing this with manua wq clean-up is hard to do correctly because the
-devm is likely to free the IRQ only after the remove() is ran. So manual
-wq cancellation and devm-based IRQ management do not mix well - there is
-a short(?) time-window after the wq clean-up when IRQs are still not
-freed and may schedule new work.
-
-When both WQs and IRQs are managed by devm things are likely to just
-work. WQs should be initialized before IRQs (when IRQs need to schedule
-work) and devm unwinds things in "FILO" order.
-
-This series implements delayed wq cancellation on top of devm and replaces
-the obvious cases where only thing remove call-back in a driver does is
-cancelling the work. There might be other cases where we could switch
-more than just work cancellation to use managed version and thus get rid
-of remove or mixed (manual and devm) resource management.
-
-The series introduces include/linux/devm-helpers.h file which
-hopefully works as a place where this kind of helpers can be inlined.
-
-Please see previous discussion here:
-RFC v1:
-https://lore.kernel.org/lkml/cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com/
-
-Changelog v3:
-  - Dropped RFC as advieced by Greg.
-  - No functional changes.
-
-Changelog RFC v2 resend:
-  - rebased on 5.12-rc4
-
-Changelog RFC v2:
-  - used correct terminology ("driver detach" instead of "exit, ...")
-  - inlined the devm_delayed_work_autocancel() in a header
-  - added Hans as a maintainer for the new header + myself as a reviewer
-  - used devm_add_action() instead of using plain devres_add()
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
+Changelog from RFCv2:
+ - RFC dropped. No functional changes.
 
-Matti Vaittinen (8):
-  workqueue: Add resource managed version of delayed work init
-  MAINTAINERS: Add entry for devm helpers
-  extconn: Clean-up few drivers by using managed work init
-  hwmon: raspberry-pi: Clean-up few drivers by using managed work init
-  platform/x86: gpd pocket fan: Clean-up by using managed work init
-  power: supply: Clean-up few drivers by using managed work init
-  regulator: qcom_spmi-regulator: Clean-up by using managed work init
-  watchdog: retu_wdt: Clean-up by using managed work init
-
- MAINTAINERS                                  |  6 +++
- drivers/extcon/extcon-gpio.c                 | 15 ++----
- drivers/extcon/extcon-intel-int3496.c        | 16 ++----
- drivers/extcon/extcon-palmas.c               | 17 +++----
- drivers/extcon/extcon-qcom-spmi-misc.c       | 17 +++----
- drivers/hwmon/raspberrypi-hwmon.c            | 17 +++----
- drivers/platform/x86/gpd-pocket-fan.c        | 17 +++----
- drivers/power/supply/axp20x_usb_power.c      | 15 ++----
- drivers/power/supply/bq24735-charger.c       | 18 +++----
- drivers/power/supply/ltc2941-battery-gauge.c | 20 +++-----
- drivers/power/supply/sbs-battery.c           | 16 ++----
- drivers/regulator/qcom_spmi-regulator.c      | 34 +++----------
- drivers/watchdog/retu_wdt.c                  | 22 +++-----
- include/linux/devm-helpers.h                 | 53 ++++++++++++++++++++
- 14 files changed, 128 insertions(+), 155 deletions(-)
+ include/linux/devm-helpers.h | 53 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
  create mode 100644 include/linux/devm-helpers.h
 
-
-base-commit: 0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b
+diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+new file mode 100644
+index 000000000000..f64e0c9f3763
+--- /dev/null
++++ b/include/linux/devm-helpers.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __LINUX_DEVM_HELPERS_H
++#define __LINUX_DEVM_HELPERS_H
++
++/*
++ * Functions which do automatically cancel operations or release resources upon
++ * driver detach.
++ *
++ * These should be helpful to avoid mixing the manual and devm-based resource
++ * management which can be source of annoying, rarely occurring,
++ * hard-to-reproduce bugs.
++ *
++ * Please take into account that devm based cancellation may be performed some
++ * time after the remove() is ran.
++ *
++ * Thus mixing devm and manual resource management can easily cause problems
++ * when unwinding operations with dependencies. IRQ scheduling a work in a queue
++ * is typical example where IRQs are often devm-managed and WQs are manually
++ * cleaned at remove(). If IRQs are not manually freed at remove() (and this is
++ * often the case when we use devm for IRQs) we have a period of time after
++ * remove() - and before devm managed IRQs are freed - where new IRQ may fire
++ * and schedule a work item which won't be cancelled because remove() was
++ * already ran.
++ */
++
++#include <linux/device.h>
++#include <linux/workqueue.h>
++
++static inline void devm_delayed_work_drop(void *res)
++{
++	cancel_delayed_work_sync(res);
++}
++
++/**
++ * devm_delayed_work_autocancel - Resource-managed work allocation
++ * @dev: Device which lifetime work is bound to
++ * @pdata: work to be cancelled when driver is detached
++ *
++ * Initialize work which is automatically cancelled when driver is detached.
++ * A few drivers need delayed work which must be cancelled before driver
++ * is detached to avoid accessing removed resources.
++ * devm_delayed_work_autocancel() can be used to omit the explicit
++ * cancelleation when driver is detached.
++ */
++static inline int devm_delayed_work_autocancel(struct device *dev,
++					       struct delayed_work *w,
++					       work_func_t worker)
++{
++	INIT_DELAYED_WORK(w, worker);
++	return devm_add_action(dev, devm_delayed_work_drop, w);
++}
++
++#endif
 -- 
 2.25.4
 
