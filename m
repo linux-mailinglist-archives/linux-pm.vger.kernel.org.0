@@ -2,112 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5651034607B
+	by mail.lfdr.de (Postfix) with ESMTP id 0A97B34607A
 	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 14:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhCWN5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S231741AbhCWN5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 23 Mar 2021 09:57:16 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:40727 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbhCWN4y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 09:56:54 -0400
-Received: by mail-lj1-f177.google.com with SMTP id u10so25749019lju.7;
-        Tue, 23 Mar 2021 06:56:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SG2RU9BGddGqc8+LmYNU3X5hDH9nRq0LsOGSuQU+0vQ=;
-        b=s0VzzVyD4zLCXcSoRrl9DTO8JC+CvDbhokb//KimK1eBtV39qos6dh4RL8WpZfNyy+
-         CvUKTkxaPbEKJl9EObDmy9vRdD6YBjPj0fqKAwlpo/MWTFEb7cW9189Feab189UJDBym
-         gQenjUAhWA01lATvWfss2fxtrsfODF4up1MMnlvGK/zZlVkaG3NVSuiK7OVZwEXooszi
-         AY5rbjGfk8HOivJ6wuC8Fyn7JYibXH/SzCtMG2oHHX3lr5FFllHmH5B4bh4Tkf3NF/+c
-         ogtKvygdKjbDM9F9+izHiBag4WEGGcrRgSiKL7HYaG3C+pFH4JXgtNA8eOrtfgf9jj57
-         2jbw==
-X-Gm-Message-State: AOAM530EoB2L87yRjZ7RQM3g7mfl9jndPNAPzVvDCTSGmWbnPWnLu33n
-        kTaAKYh8vWYH54m0ldtm/v0=
-X-Google-Smtp-Source: ABdhPJy3Q4ez4TI4HgvOym73a7CNZxNo9F4RX6+quzkcgtglSKAIYgcyFhe8wnD7m830kMhc58yt5Q==
-X-Received: by 2002:a2e:810a:: with SMTP id d10mr3149259ljg.304.1616507812249;
-        Tue, 23 Mar 2021 06:56:52 -0700 (PDT)
-Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id l12sm2351935lji.122.2021.03.23.06.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 06:56:51 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 15:56:44 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 2/8] MAINTAINERS: Add entry for devm helpers
-Message-ID: <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+Received: from mailgw01.mediatek.com ([210.61.82.183]:34751 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231602AbhCWN5E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 09:57:04 -0400
+X-UUID: 831725d4f06a420883594fa86afc2c17-20210323
+X-UUID: 831725d4f06a420883594fa86afc2c17-20210323
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 597238201; Tue, 23 Mar 2021 21:57:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 23 Mar 2021 21:56:58 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 23 Mar 2021 21:56:58 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v13 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Tue, 23 Mar 2021 21:56:50 +0800
+Message-ID: <20210323135657.2701-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: A33E67F89CD86AA5EB5C20A89A9B6C49CB4E1286C37074145C82D3EADA8A33B72000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Devm helper header containing small inline helpers was added.
-Hans promised to maintain it.
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device(). After retrieving subsys device, SVS driver does
+device_link_add() to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-Add Hans as maintainer and myself as designated reviewer.
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-Changelog from RFCv2:
- - RFC dropped. No functional changes.
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1360551/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
 
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+changes since v12:
+- Change reg_data[3][] to reg_data[SVSB_PHASE_NUM][]
+- Change MT8192 SVS GPU opp count from 16 to 14 for project requirment
+- Remove redundant "pd_req = false" in svs_mt8192_banks
+- Assign svsp->bank_num by ARRAY_SIZE(svs_mt81xx_banks)
+- Replace `,` with `;` in svs_get_svs_mt8192_platform_data()
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9e876927c60d..fa5ac3164678 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
- S:	Maintained
- W:	http://lanana.org/docs/device-list/index.html
- 
-+DEVICE RESOURCE MANAGEMENT HELPERS
-+M:	Hans de Goede <hdegoede@redhat.com>
-+R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+S:	Maintained
-+F:	include/linux/devm-helpers.h
-+
- DEVICE-MAPPER  (LVM)
- M:	Alasdair Kergon <agk@redhat.com>
- M:	Mike Snitzer <snitzer@redhat.com>
--- 
-2.25.4
+Roger Lu (7):
+  [v13,1/7]: dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v13,2/7]: arm64: dts: mt8183: add svs device information
+  [v13,3/7]: soc: mediatek: SVS: introduce MTK SVS engine
+  [v13,4/7]: soc: mediatek: SVS: add debug commands
+  [v13,5/7]: dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v13,6/7]: arm64: dts: mt8192: add svs device information
+  [v13,7/7]: soc: mediatek: SVS: add mt8192 SVS GPU driver
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   89 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2494 +++++++++++++++++
+ 6 files changed, 2646 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
 
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
