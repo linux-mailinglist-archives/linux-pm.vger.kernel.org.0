@@ -2,89 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0936B34549C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 02:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4BA345501
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 02:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbhCWBFw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Mar 2021 21:05:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231481AbhCWBFm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Mar 2021 21:05:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 867E3619A0;
-        Tue, 23 Mar 2021 01:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616461541;
-        bh=cjs3F39gfgCw4AONgF6JQMceGgCHpX/zP/p6JQ+Ogpc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cJHadrQlVuJMF/6i9v/ECHltUVcdnCEDOo2FMlbPHMvJWy+8mrcGWNjUitPh5SU0W
-         /aX2VvpuGNSnJYoDYUX65pQsflqssJQEvg394N6yCpRXDqUw6D9TvMeZzmdA4AsaQ3
-         nJ2vgLwRDIHXHK2Gb963LgcMd6MzgijlJ7LsT8vlUt5+0aHpEGswGs7m5+OsOy0xKZ
-         lUXkiztvg1bAtiCW+uRUKJCov2f2g93qH1RMim2M5sSo/iBYOfyKhhHJ+X9beaIpb6
-         w6Uh7U3DTUXzCgUxAtgspDRKGpbP+MKkc6cGweEHZQDT+8KiIcS2ioszueWPFNIcY3
-         EHpxDetgvbzRw==
-Received: by mail-ej1-f44.google.com with SMTP id a7so24319769ejs.3;
-        Mon, 22 Mar 2021 18:05:41 -0700 (PDT)
-X-Gm-Message-State: AOAM531ovWgesX9SjX1gLylFjuzKG5+AMydwe0QCdz1ZA2yH/q3lnl3s
-        twXg7tIb/GMMPBIlIxU64GebAYhWPifv2P2kDw==
-X-Google-Smtp-Source: ABdhPJwQnmr8ntzvspPT3CUa58Lov2gbyZ6FvMCvVwjklpPn58MIRTIwtRtEQjG1XNpC269TmEWu/wQHLRl7vp4jQR0=
-X-Received: by 2002:a17:906:7d48:: with SMTP id l8mr2385795ejp.108.1616461540092;
- Mon, 22 Mar 2021 18:05:40 -0700 (PDT)
+        id S231289AbhCWB3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Mar 2021 21:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231152AbhCWB3F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Mar 2021 21:29:05 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762C8C061574
+        for <linux-pm@vger.kernel.org>; Mon, 22 Mar 2021 18:29:05 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id f10so3016204pgl.9
+        for <linux-pm@vger.kernel.org>; Mon, 22 Mar 2021 18:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=AhTfzSBxQjBBvs+iC1V0yeRtlM8h96+GbKw4uTi17XY=;
+        b=LJ5vm8ZC3yibIf6reoyG0nK4Xttnw4KQraPh0kjc9fSrVXBvF++I6bqL/GgVONMH0r
+         uKYVfflwowcymHfHiLRmnRml/Lu5NEBEwg4L9H4/89micsAe+murTwfYwGGGBQfXzIdP
+         3/g6x4ICNHJRbz7RnR29kbpUZEsOC4j3zr3p7LuDu8SBdvY735UbrzUXEYPUxr2bn585
+         VvNkd+6OJ0Zor+VvS0aNP894GhL1454RcvRFSIOX0JsML4V9nyoWvSEIxog6WVjMf6zk
+         VOZH4AV6hWTzhfI8kp2J7/UIQoZobQOFfh2CsRMqqz2Vlfqj9fDRyUGPBKfBbEhHiKKj
+         2pcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=AhTfzSBxQjBBvs+iC1V0yeRtlM8h96+GbKw4uTi17XY=;
+        b=pYVwoTitdXXDBPPSt9DlAVGdslxTh2tPluFZy+Va65G7V3HbDnTi2hnKSGzChvoGDW
+         bBSX6Gn4fWZumvLyB7KLmS0yETr23N+JEzbVnp+zRGna7yPT8F3SX388ziZJF3UYCRkk
+         DJMw/6+xLXPFoWicBqoM2xWKOKMOMYJ/aBhVkCUgN2SgtH7jAv5s/XfaVzjq7IePP9LU
+         ODbd5zvtMb/0pYl/fPPWnHgiJiDqTsh5wsCQnODBIIypxGyJM/86cPBlO2GGGY6i1fue
+         gnfQ/lWCYKhLfOrGz3OqHoMvegv3RwpVNfX1hBoEodv4sUMb+zOGuUF18jw4xy5CDMij
+         nCXg==
+X-Gm-Message-State: AOAM531e6vjme55k5RDSBS4c1GB/yvPsGfjyTZYfaS3oBPgOiT8H6gks
+        tRz2ZxLKuxs9Q8b77AO57fGRFw==
+X-Google-Smtp-Source: ABdhPJxqk5AyiXgMYMzmDY3lz55RihGmXVfHZPWMMbods7J/J0ySOUO0zxyRrX5Kp3qO9r7a65QvkQ==
+X-Received: by 2002:a05:6a00:72b:b029:218:6603:a6a9 with SMTP id 11-20020a056a00072bb02902186603a6a9mr2349783pfm.78.1616462945051;
+        Mon, 22 Mar 2021 18:29:05 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id il6sm546982pjb.56.2021.03.22.18.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 18:29:04 -0700 (PDT)
+Message-ID: <60594460.1c69fb81.b4b7c.27ae@mx.google.com>
+Date:   Mon, 22 Mar 2021 18:29:04 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210317134904.80737-1-sebastian.reichel@collabora.com>
- <CAL_JsqLASixNRTf712201w1nghxdaB28HsN7fdsjeogsoA=oQg@mail.gmail.com> <20210322214257.3u6dkmygygnewpyl@earth.universe>
-In-Reply-To: <20210322214257.3u6dkmygygnewpyl@earth.universe>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 22 Mar 2021 19:05:27 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJg_P3+hG3VeG0FkdxNDjrt8DKu-cfUT8yD9Q2=4y5D1A@mail.gmail.com>
-Message-ID: <CAL_JsqJg_P3+hG3VeG0FkdxNDjrt8DKu-cfUT8yD9Q2=4y5D1A@mail.gmail.com>
-Subject: Re: [PATCHv2 00/38] Convert power-supply DT bindings to YAML
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.12-rc4-38-g0fc4b6feae23
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.12-rc4-38-g0fc4b6feae23)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 3:43 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Hi,
->
-> On Mon, Mar 22, 2021 at 10:25:49AM -0600, Rob Herring wrote:
-> > On Wed, Mar 17, 2021 at 7:49 AM Sebastian Reichel wrote:
-> > > Sebastian Reichel (38):
-> > >   ARM: dts: motorola-cpcap-mapphone: Prepare for dtbs_check parsing
-> > >   dt-bindings: power: supply: cpcap-battery: Convert to DT schema format
-> > >   dt-bindings: power: supply: cpcap-charger: Convert to DT schema format
-> > >   [...]
-> >
-> > Thanks! For the series:
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
->
-> How should we proceed with the DTS patch?
->
-> a) Tony takes DT through his tree, I take all YAML files through my tree.
->    The verification might be broken for some time when being merged
->    in wrong order. Looks like there are already quite a few warnings
->    for in-tree DTS files, so it might be ok to have some more
->    temporarily? It's obviously the most simple solution.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.12-rc4-38-g0f=
+c4b6feae23)
 
-This is fine. We're not anywhere close to warning free.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+12-rc4-38-g0fc4b6feae23/
 
->
-> b) Tony takes DTS and the cpcap related patches through his tree;
->    I take the other ones.
->
-> c) I take the full series through my tree.
->
-> d) I can merge the DT through an immutable branch and provide a PR.
->
-> I'm fine with either way.
->
-> -- Sebastian
+Tree: pm
+Branch: testing
+Git Describe: v5.12-rc4-38-g0fc4b6feae23
+Git Commit: 0fc4b6feae239ecf9e355838c15521f9896dda22
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
+mbol check will be entirely skipped.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
+check will be entirely skipped.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
