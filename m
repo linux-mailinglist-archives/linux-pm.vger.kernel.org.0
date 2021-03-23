@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B8E3458CA
+	by mail.lfdr.de (Postfix) with ESMTP id 450853458C9
 	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 08:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhCWHe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S229866AbhCWHe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 23 Mar 2021 03:34:28 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:38636 "EHLO inva020.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:38680 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229508AbhCWHd6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S229591AbhCWHd6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 23 Mar 2021 03:33:58 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 114F61A1D04;
-        Tue, 23 Mar 2021 08:33:55 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8F83B1A0A6C;
+        Tue, 23 Mar 2021 08:33:56 +0100 (CET)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 50E221A1D09;
-        Tue, 23 Mar 2021 08:33:50 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C18751A1D01;
+        Tue, 23 Mar 2021 08:33:51 +0100 (CET)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8376A402AC;
-        Tue, 23 Mar 2021 08:33:44 +0100 (CET)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id A576A402C9;
+        Tue, 23 Mar 2021 08:33:45 +0100 (CET)
 From:   Dong Aisheng <aisheng.dong@nxp.com>
 To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
@@ -27,9 +27,9 @@ Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, abel.vesa@nxp.com,
         Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH V2 RESEND 3/4] PM / devfreq: bail out early if no freq changes in devfreq_set_target
-Date:   Tue, 23 Mar 2021 15:20:10 +0800
-Message-Id: <1616484011-26702-4-git-send-email-aisheng.dong@nxp.com>
+Subject: [PATCH V2 RESEND 4/4] PM / devfreq: imx8m-ddrc: remove imx8m_ddrc_get_dev_status
+Date:   Tue, 23 Mar 2021 15:20:11 +0800
+Message-Id: <1616484011-26702-5-git-send-email-aisheng.dong@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1616484011-26702-1-git-send-email-aisheng.dong@nxp.com>
 References: <1616484011-26702-1-git-send-email-aisheng.dong@nxp.com>
@@ -38,53 +38,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's unnecessary to set the same freq again and run notifier calls.
+Current driver actually does not support simple ondemand governor
+as it's unable to provide device load information. So removing
+the unnecessary callback to avoid confusing.
+Right now the driver is using userspace governor by default.
+
+polling_ms was also dropped as it's not needed for non-ondemand
+governor.
 
 Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 ---
- drivers/devfreq/devfreq.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/devfreq/imx8m-ddrc.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 85927bd7ee76..a6ee91dd17bd 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -352,13 +352,16 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
- {
- 	struct devfreq_freqs freqs;
- 	unsigned long cur_freq;
--	int err = 0;
-+	int err;
- 
- 	if (devfreq->profile->get_cur_freq)
- 		devfreq->profile->get_cur_freq(devfreq->dev.parent, &cur_freq);
- 	else
- 		cur_freq = devfreq->previous_freq;
- 
-+	if (new_freq == cur_freq)
-+		return 0;
-+
- 	freqs.old = cur_freq;
- 	freqs.new = new_freq;
- 	devfreq_notify_transition(devfreq, &freqs, DEVFREQ_PRECHANGE);
-@@ -375,7 +378,7 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
- 	 * and DEVFREQ_POSTCHANGE because for showing the correct frequency
- 	 * change order of between devfreq device and passive devfreq device.
- 	 */
--	if (trace_devfreq_frequency_enabled() && new_freq != cur_freq)
-+	if (trace_devfreq_frequency_enabled())
- 		trace_devfreq_frequency(devfreq, new_freq, cur_freq);
- 
- 	freqs.new = new_freq;
-@@ -390,7 +393,7 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
- 	if (devfreq->suspend_freq)
- 		devfreq->resume_freq = new_freq;
- 
--	return err;
-+	return 0;
+diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
+index bc82d3653bff..ecb9375aa877 100644
+--- a/drivers/devfreq/imx8m-ddrc.c
++++ b/drivers/devfreq/imx8m-ddrc.c
+@@ -280,18 +280,6 @@ static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned long *freq)
+ 	return 0;
  }
  
- /**
+-static int imx8m_ddrc_get_dev_status(struct device *dev,
+-				     struct devfreq_dev_status *stat)
+-{
+-	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+-
+-	stat->busy_time = 0;
+-	stat->total_time = 0;
+-	stat->current_frequency = clk_get_rate(priv->dram_core);
+-
+-	return 0;
+-}
+-
+ static int imx8m_ddrc_init_freq_info(struct device *dev)
+ {
+ 	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+@@ -429,9 +417,7 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		goto err;
+ 
+-	priv->profile.polling_ms = 1000;
+ 	priv->profile.target = imx8m_ddrc_target;
+-	priv->profile.get_dev_status = imx8m_ddrc_get_dev_status;
+ 	priv->profile.exit = imx8m_ddrc_exit;
+ 	priv->profile.get_cur_freq = imx8m_ddrc_get_cur_freq;
+ 	priv->profile.initial_freq = clk_get_rate(priv->dram_core);
 -- 
 2.25.1
 
