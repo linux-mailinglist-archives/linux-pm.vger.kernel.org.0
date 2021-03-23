@@ -2,137 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4DF346196
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 15:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8560346204
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 15:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbhCWOgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 10:36:36 -0400
-Received: from mail-vs1-f45.google.com ([209.85.217.45]:33485 "EHLO
-        mail-vs1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbhCWOgT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 10:36:19 -0400
-Received: by mail-vs1-f45.google.com with SMTP id a15so9482938vsi.0;
-        Tue, 23 Mar 2021 07:36:18 -0700 (PDT)
+        id S232170AbhCWOz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 10:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232336AbhCWOzo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 10:55:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF39DC061574;
+        Tue, 23 Mar 2021 07:55:43 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s21so10210455pjq.1;
+        Tue, 23 Mar 2021 07:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Pg9T2MTEN35QjvsDZjp1LyYPIImInS7zlj/2/HkUfNU=;
+        b=teMQr5Fcd/UwSGILs5LErs+LpR2TdrOqbLw1FyqRVh/ln/ts5Pti0tt8xX5QKWfdj3
+         usEH3Qh0XEzcZP0XMNWJEgh7A4B7zydYSlvXTlcWz3jNFDrbKUDYZdFWenxEJ5CCPRk1
+         cJ2ckhIIXYuBK1OyHpbtbgdcBlOjBJ9l056kQrW8ZOBlFffnAprwfZ7on2P1ITTGNU8P
+         vawOkD+Y4S2p7SOHFKsXMzWcOE/EUnZNcTRoy+hFWKrhL1EZ9BqAXg+yemvFaJK1naWv
+         6HD7zP9p8CD0Ei/GQQTt2zjKuLpUUtLWvpr7dsKsoEfAnEFjZNCxz3gr50GiNkE1T/oo
+         RT8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=p0MfGa/L8ELLoIQbdgOitYXykyrEfb/PHZvBkwW0O0I=;
-        b=ZE/e8C/7rWQIDZgB5/sfWlVxMk3XitHX+JWRX4VQjB/wojvQt+1NSUMD5ytE7Yc7jp
-         aFap7Nbvznqelhu7D0+6yonejK01C4yb7K/GYSFQrLBUGE3lutXtze5q1AfUg2zRZNCS
-         6DruaJSV24O/lnNLKBCsR5gwZ5oEa+UcowJz2QMtdzSOdvUatW9Znzuca+ggYuzLqkX6
-         r4WD9OyM2sg0jJUktfwmApMzroR0ZYGwBT2GpKxWfWnHW5FLUk3mwfl9hRV/ztrks2XD
-         a4tQNHhu1LOX5pZODoEPEjEHTKVkyEQFiZlxhLdHRzG/LxfcZOWbwL8IZ3n9kmh9ZUJZ
-         7h+Q==
-X-Gm-Message-State: AOAM530httNMGhdxxZUS0poL0b3oSpexcDVumYrqV25GuQjl44Afdxcs
-        lkcQ8WzWbXR9gCRRPawl/Fu22r7qJCHtuA==
-X-Google-Smtp-Source: ABdhPJwhnUByn5LLoIQPKqTJ/exoifsFX9MxoLdiqZ8ED4tG4wsPAV1NNJscnBkxWhD5c5YNDE6ceA==
-X-Received: by 2002:a05:6102:902:: with SMTP id x2mr3665257vsh.31.1616510178033;
-        Tue, 23 Mar 2021 07:36:18 -0700 (PDT)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id e142sm2272649vsc.16.2021.03.23.07.36.17
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Pg9T2MTEN35QjvsDZjp1LyYPIImInS7zlj/2/HkUfNU=;
+        b=d/i6p//3RJKPZpzRjFp2AV+b3bzjNM2hphYO/rlQw+5XNfsB3v9nObZCbY6wy2dSF/
+         7YQZq3zr9ODWbF8U2LkV/sRyxJuwZwv3KuHLLRFgnORVOhqinyN/HaKmDlApf0Te9qYi
+         khh8Sp1lFd+ENNxqGmgG1f2YMewg9SjJrX6r05pGgzLftskpqv9ypiSbOlXv+4DHLmYf
+         dsrF9KYZXHV7Ea5V4UinLSVYBObf3w/x13zrO61iN2feWfXx1DKt8alzWb3f48O/dP77
+         XU3SBYQvfnaBawEafD+bG3kidwMlyYmrvuQE8gXph8xQj5QkWjYtIbc851gSlQwC1th/
+         sQtg==
+X-Gm-Message-State: AOAM531TaVdZ71GfaAukFnPA0PKOl84s+2N4pap6fIDgI7kF81nqKdkc
+        dr3n7t7i6CfIM/oHp1xj08s=
+X-Google-Smtp-Source: ABdhPJyxFiJrgCyjQEDE253x6kG2zm9pSYy9DgFzXowidPQ6wIgHswHb9G6SgMAnhaGtFxkXm1mTsw==
+X-Received: by 2002:a17:90a:5d09:: with SMTP id s9mr4757401pji.172.1616511343106;
+        Tue, 23 Mar 2021 07:55:43 -0700 (PDT)
+Received: from [172.30.1.19] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id v18sm17567538pfn.117.2021.03.23.07.55.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Mar 2021 07:36:17 -0700 (PDT)
-Received: by mail-ua1-f44.google.com with SMTP id q18so6758454uas.11;
-        Tue, 23 Mar 2021 07:36:17 -0700 (PDT)
-X-Received: by 2002:a9f:3fcf:: with SMTP id m15mr3393309uaj.55.1616510176948;
- Tue, 23 Mar 2021 07:36:16 -0700 (PDT)
+        Tue, 23 Mar 2021 07:55:42 -0700 (PDT)
+Subject: Re: [PATCH V2 RESEND 1/4] PM / devfreq: Use more accurate returned
+ new_freq as resume_freq
+To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, abel.vesa@nxp.com
+References: <1616484011-26702-1-git-send-email-aisheng.dong@nxp.com>
+ <1616484011-26702-2-git-send-email-aisheng.dong@nxp.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <c7242528-42a3-a799-c542-66867486c330@gmail.com>
+Date:   Tue, 23 Mar 2021 23:55:37 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com> <e5b1b0380cdd1aa066c9ac6d7a8b1a86ba1ddbbe.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <e5b1b0380cdd1aa066c9ac6d7a8b1a86ba1ddbbe.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Tue, 23 Mar 2021 22:36:05 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67Jd6qFS-zmD+Hm4BJHA+-kx0nAxvDovUwW=WwZTEGYeg@mail.gmail.com>
-Message-ID: <CAGb2v67Jd6qFS-zmD+Hm4BJHA+-kx0nAxvDovUwW=WwZTEGYeg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/8] power: supply: Clean-up few drivers by using
- managed work init
-To:     matti.vaittinen@fi.rohmeurope.com
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1616484011-26702-2-git-send-email-aisheng.dong@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On Tue, Mar 23, 2021 at 9:58 PM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
->
-> Few drivers implement remove call-back only for ensuring a delayed
-> work gets cancelled prior driver removal. Clean-up these by switching
-> to use devm_delayed_work_autocancel() instead.
->
-> This change is compile-tested only. All testing is appreciated.
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On 21. 3. 23. 오후 4:20, Dong Aisheng wrote:
+> Use the more accurate returned new_freq as resume_freq.
+> It's the same as how devfreq->previous_freq was updated.
+> 
+> Fixes: 83f8ca45afbf0 ("PM / devfreq: add support for suspend/resume of a
+> devfreq device")
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 > ---
-> Changelog from RFCv2:
->  - RFC dropped. No functional changes.
->
->  drivers/power/supply/axp20x_usb_power.c      | 15 +++++----------
->  drivers/power/supply/bq24735-charger.c       | 18 ++++++------------
->  drivers/power/supply/ltc2941-battery-gauge.c | 20 +++++++-------------
->  drivers/power/supply/sbs-battery.c           | 16 +++++-----------
->  4 files changed, 23 insertions(+), 46 deletions(-)
->
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-> index 8933ae26c3d6..4259709e3491 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -8,6 +8,7 @@
->
->  #include <linux/bitops.h>
->  #include <linux/device.h>
-> +#include <linux/devm-helpers.h>
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
-> @@ -646,21 +647,16 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
->                 }
->         }
->
-> +       ret = devm_delayed_work_autocancel(&pdev->dev, &power->vbus_detect,
-> +                                          axp20x_usb_power_poll_vbus);
-> +       if (ret)
-> +               return ret;
+>   drivers/devfreq/devfreq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index b6d3e7db0b09..85927bd7ee76 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -388,7 +388,7 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
+>   	devfreq->previous_freq = new_freq;
+>   
+>   	if (devfreq->suspend_freq)
+> -		devfreq->resume_freq = cur_freq;
+> +		devfreq->resume_freq = new_freq;
+>   
+>   	return err;
+>   }
+> 
 
-This doesn't look right. The IRQ is requested before this, and the delayed_work
-struct is initialized even earlier, so you'd be re-initializing the struct,
-with the work item potentially running or queued up already.
+Applied it.
 
-
-ChenYu
-
->         if (axp20x_usb_vbus_needs_polling(power))
->                 queue_delayed_work(system_power_efficient_wq, &power->vbus_detect, 0);
->
->         return 0;
->  }
->
-> -static int axp20x_usb_power_remove(struct platform_device *pdev)
-> -{
-> -       struct axp20x_usb_power *power = platform_get_drvdata(pdev);
-> -
-> -       cancel_delayed_work_sync(&power->vbus_detect);
-> -
-> -       return 0;
-> -}
-> -
->  static const struct of_device_id axp20x_usb_power_match[] = {
->         {
->                 .compatible = "x-powers,axp202-usb-power-supply",
-> @@ -680,7 +676,6 @@ MODULE_DEVICE_TABLE(of, axp20x_usb_power_match);
->
->  static struct platform_driver axp20x_usb_power_driver = {
->         .probe = axp20x_usb_power_probe,
-> -       .remove = axp20x_usb_power_remove,
->         .driver = {
->                 .name           = DRVNAME,
->                 .of_match_table = axp20x_usb_power_match,
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
