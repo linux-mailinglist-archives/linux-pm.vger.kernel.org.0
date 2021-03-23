@@ -2,117 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 744A1346168
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 15:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4DF346196
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 15:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbhCWOYr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 10:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbhCWOYh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 10:24:37 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C66FC061763
-        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 07:24:37 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id n21so17851110ioa.7
-        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 07:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f3ffjUDEfdpupg8pOxs1DbNdOM7s/25GYVkBS3ZIJKU=;
-        b=QQLotKf2dEUsBufVdFz/Gwl322r+MKxtGAJ4yMe4ovpBB+GAEUYmXcMk1rcijaSgCA
-         ZufTsf7XG9FlO57lBCmtHvPhREGIEYl6VhEC6TUEMwLX8/v6oJkS50uuUKlR+sxNJvFj
-         RSnu71Cuo8NtjPEKaBP2yY/qiSjGA5uqSSCqmmDSSBkmwV4MQi2q56PZttTu2GwTsEpU
-         lFEpDWQqBfYDYyMA7PF4eMiMYU5LXGXeDugJOht6oPhb36sBVXVsWBgoU9Ru4z5i+OiP
-         FO+HF0XKyMa7R6kY8q/5fNspiQXGW2Zkl6ICBTfBkQxuj94a8dAJxtYiFG8Kuz2Gs7LK
-         vuJg==
+        id S232186AbhCWOgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 10:36:36 -0400
+Received: from mail-vs1-f45.google.com ([209.85.217.45]:33485 "EHLO
+        mail-vs1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232148AbhCWOgT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 10:36:19 -0400
+Received: by mail-vs1-f45.google.com with SMTP id a15so9482938vsi.0;
+        Tue, 23 Mar 2021 07:36:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f3ffjUDEfdpupg8pOxs1DbNdOM7s/25GYVkBS3ZIJKU=;
-        b=nSxCSYbdEOP6yTcynmlF7xykX+1EICN9hAHMLL+A6cSXHEi67nRcQWdMXgILGF7Vkh
-         nQLSy2OIldac5EjoGZrJMCaBgaci1Jsl88nOklTptDf+of5MlWe7XLkyjDgypq0r0qyY
-         oua1T4cv7iHmVvfiM8NSpIg35LkGoaGSpx2dImjdlpYANoym1jEoZKLC3He8z0KZtHWx
-         mz/qt4xpsDhRmymgrs70DmGTkKO4Tjgaeen1xHFcQgZMR28/Ex3yGWJnxDxRZJlqdSD3
-         ShrwwU8/Q9ECZSXYM0uvP2dm8u9RyFmCJ8rQxfj9Flo9ET4yfK1NK7zUtJVQ+hasamoM
-         ntFg==
-X-Gm-Message-State: AOAM530nD19r4ozYXOpnFHLiuT3UFstjelDjhL8J2meZMAtU51bstnAU
-        lWxEUiqb1k9DCHtUWj0K33vmry5PIck67/XnFzIhRQ==
-X-Google-Smtp-Source: ABdhPJzZSN+E9lqMeu6pwYPPzrV612O72rKDlSb2lCnDk6sNkgU1WgQRlF/q8JGKLmFjKwqzZNH+xI4C7iIS7SU8lWQ=
-X-Received: by 2002:a6b:ea04:: with SMTP id m4mr4499897ioc.160.1616509476421;
- Tue, 23 Mar 2021 07:24:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=p0MfGa/L8ELLoIQbdgOitYXykyrEfb/PHZvBkwW0O0I=;
+        b=ZE/e8C/7rWQIDZgB5/sfWlVxMk3XitHX+JWRX4VQjB/wojvQt+1NSUMD5ytE7Yc7jp
+         aFap7Nbvznqelhu7D0+6yonejK01C4yb7K/GYSFQrLBUGE3lutXtze5q1AfUg2zRZNCS
+         6DruaJSV24O/lnNLKBCsR5gwZ5oEa+UcowJz2QMtdzSOdvUatW9Znzuca+ggYuzLqkX6
+         r4WD9OyM2sg0jJUktfwmApMzroR0ZYGwBT2GpKxWfWnHW5FLUk3mwfl9hRV/ztrks2XD
+         a4tQNHhu1LOX5pZODoEPEjEHTKVkyEQFiZlxhLdHRzG/LxfcZOWbwL8IZ3n9kmh9ZUJZ
+         7h+Q==
+X-Gm-Message-State: AOAM530httNMGhdxxZUS0poL0b3oSpexcDVumYrqV25GuQjl44Afdxcs
+        lkcQ8WzWbXR9gCRRPawl/Fu22r7qJCHtuA==
+X-Google-Smtp-Source: ABdhPJwhnUByn5LLoIQPKqTJ/exoifsFX9MxoLdiqZ8ED4tG4wsPAV1NNJscnBkxWhD5c5YNDE6ceA==
+X-Received: by 2002:a05:6102:902:: with SMTP id x2mr3665257vsh.31.1616510178033;
+        Tue, 23 Mar 2021 07:36:18 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id e142sm2272649vsc.16.2021.03.23.07.36.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 07:36:17 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id q18so6758454uas.11;
+        Tue, 23 Mar 2021 07:36:17 -0700 (PDT)
+X-Received: by 2002:a9f:3fcf:: with SMTP id m15mr3393309uaj.55.1616510176948;
+ Tue, 23 Mar 2021 07:36:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210308133146.3168995-1-raychi@google.com> <20210309185807.ka4iljasq5cmpmil@earth.universe>
- <CAPBYUsCJ3ftC4ur412rFZGeeM_kDHrCh=BVci3=8SE2eFdPcQg@mail.gmail.com> <YFnxY7AW9QGQApKQ@kroah.com>
-In-Reply-To: <YFnxY7AW9QGQApKQ@kroah.com>
-From:   Ray Chi <raychi@google.com>
-Date:   Tue, 23 Mar 2021 22:24:25 +0800
-Message-ID: <CAPBYUsCo4p+4qy551+3=3PXmnKR96K6qN+CP=Y7sjKGwpemXSw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: fix build error when POWER_SUPPLY is not enabled
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Kyle Tso <kyletso@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com> <e5b1b0380cdd1aa066c9ac6d7a8b1a86ba1ddbbe.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <e5b1b0380cdd1aa066c9ac6d7a8b1a86ba1ddbbe.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+Reply-To: wens@csie.org
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Tue, 23 Mar 2021 22:36:05 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67Jd6qFS-zmD+Hm4BJHA+-kx0nAxvDovUwW=WwZTEGYeg@mail.gmail.com>
+Message-ID: <CAGb2v67Jd6qFS-zmD+Hm4BJHA+-kx0nAxvDovUwW=WwZTEGYeg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/8] power: supply: Clean-up few drivers by using
+ managed work init
+To:     matti.vaittinen@fi.rohmeurope.com
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+Hi,
 
-I will upload fixes for power supply usage in dwc3 and dt-binding
-documentation for the new device tree this week.
+On Tue, Mar 23, 2021 at 9:58 PM Matti Vaittinen
+<matti.vaittinen@fi.rohmeurope.com> wrote:
+>
+> Few drivers implement remove call-back only for ensuring a delayed
+> work gets cancelled prior driver removal. Clean-up these by switching
+> to use devm_delayed_work_autocancel() instead.
+>
+> This change is compile-tested only. All testing is appreciated.
+>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+> Changelog from RFCv2:
+>  - RFC dropped. No functional changes.
+>
+>  drivers/power/supply/axp20x_usb_power.c      | 15 +++++----------
+>  drivers/power/supply/bq24735-charger.c       | 18 ++++++------------
+>  drivers/power/supply/ltc2941-battery-gauge.c | 20 +++++++-------------
+>  drivers/power/supply/sbs-battery.c           | 16 +++++-----------
+>  4 files changed, 23 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+> index 8933ae26c3d6..4259709e3491 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -8,6 +8,7 @@
+>
+>  #include <linux/bitops.h>
+>  #include <linux/device.h>
+> +#include <linux/devm-helpers.h>
+>  #include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -646,21 +647,16 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       ret = devm_delayed_work_autocancel(&pdev->dev, &power->vbus_detect,
+> +                                          axp20x_usb_power_poll_vbus);
+> +       if (ret)
+> +               return ret;
 
-Thanks,
-Ray
+This doesn't look right. The IRQ is requested before this, and the delayed_work
+struct is initialized even earlier, so you'd be re-initializing the struct,
+with the work item potentially running or queued up already.
 
-On Tue, Mar 23, 2021 at 9:47 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+
+ChenYu
+
+>         if (axp20x_usb_vbus_needs_polling(power))
+>                 queue_delayed_work(system_power_efficient_wq, &power->vbus_detect, 0);
 >
-> On Fri, Mar 12, 2021 at 09:57:56PM +0800, Ray Chi wrote:
-> > Hi Sebastian,
-> >
-> > Sorry for the late reply.
-> >
-> > On Wed, Mar 10, 2021 at 2:58 AM Sebastian Reichel <sre@kernel.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Mon, Mar 08, 2021 at 09:31:46PM +0800, Ray Chi wrote:
-> > > > Fix build error when CONFIG_POWER_SUPPLY is not enabled.
-> > > >
-> > > > The build error occurs in mips (cavium_octeon_defconfig).
-> > > >
-> > > > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
-> > > > drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
-> > > > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
-> > > > drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
-> > > > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
-> > > > drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
-> > > >
-> > > > Fixes: 59fa3def35de ("usb: dwc3: add a power supply for current control")
-> > > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > > > Signed-off-by: Ray Chi <raychi@google.com>
-> > > > ---
-> > >
-> > > While I'm fine with merging this after fixing up the subject, the
-> > > original patch for dwc3 [0] looks completly incorrect to me.
-> > >
-> > > First of all it uses wrong scale (power-supply uses uA, not mA),
-> > > so you are charging 1000x slower than expected. Then the patchset
-> > > introduces a new DT property to get the power-supply device, but
-> > > does not update the DT binding documentation and does not Cc the
-> > > DT binding maintainer.
-> >
-> > Yes, it should use uA and send this information, and I will update a
-> > patch to fix it and add the DT binding documentation.
+>         return 0;
+>  }
 >
-> So should I revert what we currently have in my usb-next tree, or do
-> you have a fix for this?
+> -static int axp20x_usb_power_remove(struct platform_device *pdev)
+> -{
+> -       struct axp20x_usb_power *power = platform_get_drvdata(pdev);
+> -
+> -       cancel_delayed_work_sync(&power->vbus_detect);
+> -
+> -       return 0;
+> -}
+> -
+>  static const struct of_device_id axp20x_usb_power_match[] = {
+>         {
+>                 .compatible = "x-powers,axp202-usb-power-supply",
+> @@ -680,7 +676,6 @@ MODULE_DEVICE_TABLE(of, axp20x_usb_power_match);
 >
-> thanks,
->
-> greg k-h
+>  static struct platform_driver axp20x_usb_power_driver = {
+>         .probe = axp20x_usb_power_probe,
+> -       .remove = axp20x_usb_power_remove,
+>         .driver = {
+>                 .name           = DRVNAME,
+>                 .of_match_table = axp20x_usb_power_match,
