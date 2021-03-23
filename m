@@ -2,104 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40C83466AB
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 18:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8EB34678A
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 19:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhCWRsc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 13:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
+        id S231401AbhCWS0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 14:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbhCWRsI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 13:48:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252D0C061574;
-        Tue, 23 Mar 2021 10:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=WAaAPdguDLLP2yVKPdLWr0ZxkEKHN3J+rUw3FYzZDXo=; b=aPsyQ8nH70OWaOsS4KSMB28jwu
-        fINSBkOnYLyEwJy8So6O83yVEfVFmrZOB3n+0quresGKpXUua1pPeMBbUqmCq+4t4jUlUQTtGK4r3
-        LZU/1JfDRXSJqyKoDYOPhoM7BoeYsjDp4CRBRVkyHfbqE5ejt939m2tpFPeLeBY84g3USjTBVAYJS
-        EexI2KFzeEvGUB2chekrq9QyBG1C6kdcxjlyQn/9/zGNR87wes9nM8yGo7paHg2TWfl9IJeLPaa7H
-        PNaxN87c9MIDt3CnqhEmnCheX6stEch3PqwjJO78pnfOyjtqqgs1uhWflsMCrSKq16zc0IwodZeMA
-        VfHTkg3A==;
-Received: from [2601:1c0:6280:3f0::3ba4]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lOl7v-00AMZz-LG; Tue, 23 Mar 2021 17:47:46 +0000
-Subject: Re: [PATCH] power: supply: Trivial spelling fixes
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, sre@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210323124206.24813-1-unixbhaskar@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <1f35f9ff-ae16-443c-b18e-40f32013ccdb@infradead.org>
-Date:   Tue, 23 Mar 2021 10:47:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        with ESMTP id S230378AbhCWSZi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 14:25:38 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66B4C061574;
+        Tue, 23 Mar 2021 11:25:37 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id o19so24572271edc.3;
+        Tue, 23 Mar 2021 11:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RL/yMvfsbK2kLwVMu3qOXkXrjIz29yMvsOfbsVlvXuk=;
+        b=casirC+q54L+/GDTIVWTQ9+s7i7XGQut4WdeZOSWnaZ/V+F00SrARas3jdyvojt8pR
+         i5DnYJxgvAuTnK9NNC4LpznZSuFwUndPX6qv2FrrETWyHTpYr3N+LEgsMbYJyuo6KrfP
+         v5dHagLwpJ6m1/QruTy4G5cMc0APTvpI6wVElE+nNo5897Pb9s9w78dVEyC1GH91FPD0
+         It9k94nIfdcIcqwYMaH2t9m6kloxlCMN50V7X9yOYQ9Vjf6wQYZ4Jm8kp3JSp7m/zwFk
+         cjmZh7Nq2LgbqrM0OnWVDjyjBXvqPcf2cX1I0k9rby4bLDMr+NtBtXvMvJfRD0N4irMR
+         t8Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RL/yMvfsbK2kLwVMu3qOXkXrjIz29yMvsOfbsVlvXuk=;
+        b=W6I1bBrLUnjyToo8ZUAV2iDJBla545ecUtnEXxmE/Gqo4le+nS4AGFqnlws52OoWDg
+         SBSNJCXuzCLxMF6nFjoW5ogfPYXPSEkQFcjco+6xXGBAOXkLfHZFvxLLEQPJaXRagT3g
+         sSE9gqD8Chf4iDmiCqZ37H0RcM2sanQQO06y6o+Bt7ftTWxnlc3wurvCrA7X4qh0UqDO
+         v0im9FYF1z6/5UHSOOu4dAIgJ1QCGVx+O+XaWXIBUcs1Hs+mcdhnQ4aV9kojQ1YAXAof
+         vkSr3SicsfRG07VDnEhL8GkkOwoHodD/FX0al3tsaIkAOE1K2Ozkd1neNiLCAjYobgLE
+         FkMw==
+X-Gm-Message-State: AOAM530C4tyILyL1fRtbFoZwvZxeBXoHkjyKKs9BzS7qKW1rbjSx2ZSd
+        ucHapH6XGTYWA0RKlBdOLkw=
+X-Google-Smtp-Source: ABdhPJydKbSF4UEFWOTRuav/CiK1rgiPR9YcVluCGcIPzynZGxrHESDRplRTFIlyyMnn51IVzU623w==
+X-Received: by 2002:a05:6402:5113:: with SMTP id m19mr6062668edd.78.1616523936651;
+        Tue, 23 Mar 2021 11:25:36 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id si7sm11667903ejb.84.2021.03.23.11.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 11:25:30 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 19:25:51 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org
+Subject: Re: [PATCH] thermal: Fix a typo in the file soctherm.c
+Message-ID: <YFoyrxkZWrHmu8Ll@orome.fritz.box>
+References: <20210305015320.7614-1-unixbhaskar@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210323124206.24813-1-unixbhaskar@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t3F6Uw8G/Uh7que2"
+Content-Disposition: inline
+In-Reply-To: <20210305015320.7614-1-unixbhaskar@gmail.com>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/23/21 5:42 AM, Bhaskar Chowdhury wrote:
-> Few trivial spelling fixes .
-> 
+
+--t3F6Uw8G/Uh7que2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 05, 2021 at 07:23:20AM +0530, Bhaskar Chowdhury wrote:
+>=20
+> s/calibaration/calibration/
+>=20
 > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-
 > ---
->  drivers/power/supply/max17042_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index 79d4b5988360..1d7326cd8fc6 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -131,7 +131,7 @@ static int max17042_get_status(struct max17042_chip *chip, int *status)
->  	 *
->  	 * When this cycle the battery gets charged to a higher (calculated)
->  	 * capacity then the previous cycle then FullCAP will get updated
-> -	 * contineously once end-of-charge detection kicks in, so allow the
-> +	 * continuously once end-of-charge detection kicks in, so allow the
->  	 * 2 to differ a bit.
->  	 */
-> 
-> @@ -739,7 +739,7 @@ static void max17042_load_new_capacity_params(struct max17042_chip *chip)
-> 
->  /*
->   * Block write all the override values coming from platform data.
-> - * This function MUST be called before the POR initialization proceedure
-> + * This function MUST be called before the POR initialization procedure
->   * specified by maxim.
->   */
->  static inline void max17042_override_por_values(struct max17042_chip *chip)
-> @@ -811,7 +811,7 @@ static int max17042_init_chip(struct max17042_chip *chip)
->  	 */
->  	msleep(500);
-> 
-> -	/* Initialize configaration */
-> +	/* Initialize configuration */
->  	max17042_write_config_regs(chip);
-> 
->  	/* write cell characterization data */
-> @@ -855,7 +855,7 @@ static void max17042_set_soc_threshold(struct max17042_chip *chip, u16 off)
->  	struct regmap *map = chip->regmap;
->  	u32 soc, soc_tr;
-> 
-> -	/* program interrupt thesholds such that we should
-> +	/* program interrupt thresholds such that we should
->  	 * get interrupt for every 'off' perc change in the soc
->  	 */
->  	regmap_read(map, MAX17042_RepSOC, &soc);
-> --
+>  drivers/thermal/tegra/soctherm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Acked-by: Thierry Reding <treding@nvidia.com>
 
--- 
-~Randy
+--t3F6Uw8G/Uh7que2
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBaMq8ACgkQ3SOs138+
+s6HgrRAAmGguCBaPzSxRoiAWGnB8WW8dtR9aHF6aoz6npvlyb+vXvF2ZdWgM0pAN
+L2jwQSbqkWSDRGurJ2LZzIifOXrKPYc+bcb9geSN56vBFtLfJyY6q6OD1w7y/2VI
+WyCJ/LTWeFigDynt81GEFkZUNcgIxESuddCHHiWKVLN5VKCniNWqDASDdOUXg/pn
+eyNfK9NXygF1VxjFsyyLKbrN1NEdtc/XM85lUVnBao+8WMSOjsk84R2ea/jGCSs/
+q2ZhV0jwYHpp1Vfuh9nWMZzje1HhX4r1QIwTbsqLznagAX6bqBCu4cBEh2DoDG5Z
+/Yxf07kcnXdmqZBPRXnRiHg/d0djQl+KzR/ftGWPfNOP8qlmuPB/WmIbLZuul86z
+rtEm2NQHc6rx6CGMTPjnE8rvGeZACz2ITaxezR1AabbOsj+9Wb+tOSbnKjPEiICo
+KWwY0Yy3WpQn7C2W2Zg1FHhrRV2mAu9sgldIxbg3NnJaHwEoWGkKMF3biOEwZMp8
+JCtRKC8WPoKLkEFzzULoCkPAoikpCH0bcL7XVpdiatSMh5hmrOLXSqVLlyB8MrPC
+MNQUR2xIX5REqIOo37q+eYeLsLgtm79dWkTYzMd0YpSCe64bHkPkSga9FK3GUA4y
+x2+6tz19Gs28io3FkwgveGZBlmTGj/O9lltdeyA61q5epQ3hfTE=
+=s+sR
+-----END PGP SIGNATURE-----
+
+--t3F6Uw8G/Uh7que2--
