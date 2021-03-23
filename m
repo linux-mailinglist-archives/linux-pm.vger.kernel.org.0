@@ -2,74 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A784234640E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 16:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939A334643F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 17:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbhCWP6Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 11:58:25 -0400
-Received: from foss.arm.com ([217.140.110.172]:48432 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232912AbhCWP5z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Mar 2021 11:57:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8A04D6E;
-        Tue, 23 Mar 2021 08:57:54 -0700 (PDT)
-Received: from [10.57.6.111] (unknown [10.57.6.111])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36A4F3F718;
-        Tue, 23 Mar 2021 08:57:52 -0700 (PDT)
-Subject: Re: [PATCH] PM / EM: postpone creating the debugfs dir till
- fs_initcall
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rjw@rjwysocki.net, rafael@kernel.org, ionela.voinescu@arm.com,
-        Dietmar.Eggemann@arm.com
-References: <20210323145608.29832-1-lukasz.luba@arm.com>
- <YFoIjt3E+MIK3yQQ@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <39cee1e7-c085-88d2-9b3b-e4ffbbee04eb@arm.com>
-Date:   Tue, 23 Mar 2021 15:57:51 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232861AbhCWQAB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 12:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233087AbhCWP77 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 11:59:59 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB5CC061763
+        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 08:59:58 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id j4-20020a05600c4104b029010c62bc1e20so11136713wmi.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 08:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EnmmDyggAPflRAaQCTg3wppfJzBgN0JGaB14tjos9c0=;
+        b=Q+TmW/roG4k+tejpfFry3lutYo8+nsqkPocgK+U9Ez5mH9ey5+jTNs4GjWy3NlRN0k
+         UlNrZvX6PNXX1dNwxmplhDKfYU+L1H1nQ4w2765jkRpdJdzzzCNQkWPZ9MOhKyA26n2V
+         lhcSlSUFU7yE0PVB01quV9BN2ilxUOg2blO0qNqJehQB2KgpIrBiGdHxzL/r2tBFnMi/
+         MZny2ap41FAbE7IaCnJZTwNB3QEQ7wQ38fa8NmiOa2sd2yJfJxXpbLkKqn+H1i1gyIi8
+         uwyg9axR1h+J8UmOPdYsLa0KNB4iBXD6OYJpChmOwKAqz47HDdRCwuMHK9h3XIRqXNZW
+         3TNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EnmmDyggAPflRAaQCTg3wppfJzBgN0JGaB14tjos9c0=;
+        b=ZQhB2sP5x0SBx5JqpzkWaiQQILS0BlgfaCDzD0s1Rigd4/+RR1MRSLunHJ2iYd/ZEU
+         S48YT1dSw6wGGncItwIvUP3oloy4QWk9qNI1IWHLNQNAmk9GQGaHWJhiPmLadstALjTk
+         uzpKHV39iTJVoCiOhMjA04Cwv+M7Ce/uOj27NNI7Os5rYzCZ2LrWCYPccgp5DJfwQUKs
+         Y2J88FaHSp204lCrIbNcPlOBkZlogVJlQqvgbSR9WpAqrnMFx/WdduDx3YfACFWTh+L2
+         jzO2Jn7WfEQjcu+u9789loz0/srTOogQ4LMRIXGu5ikwBosBg2/CQXlQ609L6R2fN4HY
+         7LJA==
+X-Gm-Message-State: AOAM530zG2eyZ//wVOmCUQigx2KAnwF75gS/oRvkL3h69GH7lXKhRfR2
+        lnlNdCorV3xoBNInEz1M10hs8w==
+X-Google-Smtp-Source: ABdhPJxNCgPMDHZiGsXzDevWQJr0r951c/0Rvmbk8hQ+TO2TIhuPA8AFqJo1qAkmK4vk0bzTHeloNA==
+X-Received: by 2002:a1c:541a:: with SMTP id i26mr3888198wmb.75.1616515197459;
+        Tue, 23 Mar 2021 08:59:57 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:91e2:6a05:a4ac:7d0a? ([2a01:e34:ed2f:f020:91e2:6a05:a4ac:7d0a])
+        by smtp.googlemail.com with ESMTPSA id c8sm25845957wrd.55.2021.03.23.08.59.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 08:59:56 -0700 (PDT)
+Subject: Re: [PATCH] powercap/drivers/dtpm: Add dtpm devfreq with energy model
+ support
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     cwchoi00@gmail.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org
+References: <20210319162836.9364-1-daniel.lezcano@linaro.org>
+ <9a9931f4-ece5-4fe9-5f88-871a2e759200@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <030ccf82-cc25-7287-7409-d33a2dbd2cee@linaro.org>
+Date:   Tue, 23 Mar 2021 16:59:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YFoIjt3E+MIK3yQQ@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <9a9931f4-ece5-4fe9-5f88-871a2e759200@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 3/23/21 3:26 PM, Greg KH wrote:
-> On Tue, Mar 23, 2021 at 02:56:08PM +0000, Lukasz Luba wrote:
->> The debugfs directory '/sys/kernel/debug/energy_model' is needed before
->> the Energy Model registration can happen. With the recent change in
->> debugfs subsystem it's not allowed to create this directory at early stage
->> (core_initcall). Thus creating this directory would fail.
->> Postpone the creation of the EM debug dir to later stage: fs_initcall.
->> It should be safe since all clients: CPUFreq drivers, Devfreq drivers will
->> be initialized in later stages.
->> The custom debug log below prints the time of creation the EM debug dir at
->> fs_initcall and successful registration of EMs at later stages.
->>
->> [    1.505717] energy_model: creating rootdir
->> [    3.698307] cpu cpu0: EM: created perf domain
->> [    3.709022] cpu cpu1: EM: created perf domain
->>
->> fixes: 56348560d495 ("debugfs: do not attempt to create a new file before the filesystem is initalized")
->> Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->> Hi Rafael,
->>
->> Please take this patch into your PM v5.12 fixes. The change described in
->> the patch above landed in v5.12-rc1. Some of our EAS/EM tests are failing.
+On 23/03/2021 16:56, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> On 3/19/21 4:28 PM, Daniel Lezcano wrote:
+>> Currently the dtpm supports the CPUs via cpufreq and the energy
+>> model. This change provides the same for the device which supports
+>> devfreq.
+>>
+>> Each device supporting devfreq and having an energy model can register
+>> themselves in the list of supported devices.
+>>
+>> The concept is the same as the cpufreq dtpm support: the QoS is used
+>> to aggregate the requests and the energy model gives the value of the
+>> instantaneous power consumption ponderated by the load of the device.
+>>
 > 
+> 
+> I've just started the review, but I have a blocking question:
+> 
+> Why there is no unregister function (like 'dtmp_unregister_devfreq')?
+> Do you consider any devfreq drivers to be modules?
+> 
+> The code looks like an API that it's going to be called directly in
+> e.g. GPU driver in it's probe function. In that case probably the
+> module unloading should call dtmp unregister.
+> 
+> Could you explain this to me please? So I can continue the review.
 
-Thank you Greg!
+Just forgot the unregister function :)
 
-Regards,
-Lukasz
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
