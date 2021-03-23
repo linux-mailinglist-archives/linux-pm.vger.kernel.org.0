@@ -2,108 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35552346444
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 17:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4593464E4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Mar 2021 17:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbhCWQBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 12:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S233192AbhCWQVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Mar 2021 12:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbhCWQAq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 12:00:46 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A68CC061574
-        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 09:00:45 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v11so21302390wro.7
-        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 09:00:45 -0700 (PDT)
+        with ESMTP id S233223AbhCWQVT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 12:21:19 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EBFC061765
+        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 09:21:18 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id bx7so24121271edb.12
+        for <linux-pm@vger.kernel.org>; Tue, 23 Mar 2021 09:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rb30UVZ55q+aHE7qbQlMjCU87RYU/feR0BvSjXj15jE=;
-        b=JmxgIGE10nYdq/DMa3kCiNQbxHtH70ncg6bXCwk0YMqewDHglakJLZn1qYN02PIpxB
-         aCrKE79jIib34rb0LhfZRHjDguFtzkpcuIC/6pqUy3kBtb0MpLhNQ6JiShzLya5+rQhg
-         pDP90KMknf2Kq1gpzlOuQIu9IwN9qoepciCK50JOEA5hOl0/FYtdvfDjzqE2/S1CoP75
-         90H04TEHgt0hDyhu+uyMNEvSd4W1Pu4VTegMlI/IwXEDyyOlh7fKel40BKDKMkbO+fgw
-         n0YckGGw7RhRIHLzjmT6OXUiUIxJz0ACW7kLiz7MTWh8D1sxGkziRczuE3ayKu3wi/YP
-         tVfQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4MMIWmOGPIsR0xho5N27j4o+/w9x0jn+auFZmDm/Rh4=;
+        b=k4figRsb7ehAHKGJZSH8XI2W8HNKoHDfgKtvHe2ScJ9DuTpt6rZGbnKFjEKjZBllk7
+         U9HuVlgEkirwWajIqaFuqMLI0tyNuS7zCs6V4+51wV2130VT93C2UAC0DzLq5iruk2Qw
+         BI/MVUK+mr+IqXm+oG1KGd6Vhz5q5YzgCN/RgOSuA/xoXlcssfKSanH5y8bzMDiYwlIr
+         GbP0+nXRAlXMxOdeuKE5Lln9b/VgMn/GNh9W3Q6/CTFu92/RwFWFN9BEC5WCI4u7Y8QM
+         rtTN2338r1Lsd2kFuUDMD9MLqzhxIPD4n6gL7EWo7l18e7H5WeEzYCKSkanXJ1sOhiPT
+         LMyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rb30UVZ55q+aHE7qbQlMjCU87RYU/feR0BvSjXj15jE=;
-        b=gmxe7xSAynp92FTjIYLVvK7qyK5LOorVc/Z7+PzIWUdXlQuPwO8g+3YdPybEpUO44z
-         eTLZQ7YyXkKNTMxPN8ql5sVFew2qktSnn/97JXO5Fs87NJsvPhheXDeVzxXw4Uogn8mT
-         N0z+4nbXwsNH2Tbmw4+w1KcZSr5IdudwcifFFid+ocK+2ySHPQoyrM2zKeYDRsRpW5JY
-         SEeC/nsu8OsqYJjSE7W0nA0GjPI3ad5GPjQluKEdwKhLUqscA0OMy2Y9gCgh7DNG0gV4
-         VheXUnRTvhr4BsJbwcfXs7+Md0+6lxq61BiaVG6OHAT497lnPVQiKAz5Teh/dVHGQZlW
-         BwSA==
-X-Gm-Message-State: AOAM531OM+IClTLmDCD8edGDulXgGYoifFT5ZBo+MZIi9E603ml7pdm4
-        ah5zHMneXvxePelbQYpGCxMjAw==
-X-Google-Smtp-Source: ABdhPJwXtBkoS3nmkQWlQig8N9oIHyerRJ4rSGpnzIwtMaPrqpU5f5wrHG5Gdix8saYvn1lJ8GO4xg==
-X-Received: by 2002:a5d:4ac4:: with SMTP id y4mr4643829wrs.86.1616515244301;
-        Tue, 23 Mar 2021 09:00:44 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:91e2:6a05:a4ac:7d0a? ([2a01:e34:ed2f:f020:91e2:6a05:a4ac:7d0a])
-        by smtp.googlemail.com with ESMTPSA id v3sm2935532wmj.25.2021.03.23.09.00.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Mar 2021 09:00:43 -0700 (PDT)
-Subject: Re: [PATCH] powercap/drivers/dtpm: Add dtpm devfreq with energy model
- support
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     cwchoi00@gmail.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org
-References: <20210319162836.9364-1-daniel.lezcano@linaro.org>
- <9a9931f4-ece5-4fe9-5f88-871a2e759200@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <06c5bbfc-29dd-2883-97de-3523cf235776@linaro.org>
-Date:   Tue, 23 Mar 2021 17:00:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=4MMIWmOGPIsR0xho5N27j4o+/w9x0jn+auFZmDm/Rh4=;
+        b=VXjbXx/p2lc3jsDmuBXMpdLCd2PGIa4Um7v6UTmR3U9dBn9fyxyfBcFLre0SxVKc0k
+         Z2QX7XCoCn71gvZwBShwK+SocSFMgQ2wUap9WBcnUk1V9IWuIBEodENKIXJ6kM61678s
+         NCqeX0aqlvk/c+cxA9XyfWgLUZJyBPwwq7mAefaT3w94xWpv+GfC/7VSS4b2knfzdssG
+         mq7ES5TchF3eTBNil2+tL2LoyuGVLaeQSI8KTqGj6wjP6t3q2EQGnf19r9cbMj/gmoav
+         oCrVjWaZB30A+66PICCmivbeNjvgd1fzr/1ZBVOthwC07tD66xYv3R8XWdQGTR85eDnM
+         fVWA==
+X-Gm-Message-State: AOAM532Kzkj9TM3ExRuQJG4yKZTgUGpHBPfDEeGK5FOAPm6sDLlmHs/s
+        YxQ9nbFdYWjCYInNTkEbxl5GHA==
+X-Google-Smtp-Source: ABdhPJwUh7getxQNs0HhjsRf55crVwO9SbqJuWpHtenqoArbuxu0HMHjhYk5FpvoQxFcQxRKCvFDIA==
+X-Received: by 2002:aa7:d385:: with SMTP id x5mr5399254edq.289.1616516477357;
+        Tue, 23 Mar 2021 09:21:17 -0700 (PDT)
+Received: from localhost.localdomain ([37.120.1.234])
+        by smtp.gmail.com with ESMTPSA id v8sm13073478edq.76.2021.03.23.09.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 09:21:16 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     amitk@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vinod.koul@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Robert Foss <robert.foss@linaro.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v2 1/2] dt-bindings: thermal: qcom-tsens: Add compatible for sm8350
+Date:   Tue, 23 Mar 2021 17:20:53 +0100
+Message-Id: <20210323162052.1143515-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.31.0.30.g398dba342d.dirty
 MIME-Version: 1.0
-In-Reply-To: <9a9931f4-ece5-4fe9-5f88-871a2e759200@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/03/2021 16:56, Lukasz Luba wrote:
-> Hi Daniel,
-> 
-> On 3/19/21 4:28 PM, Daniel Lezcano wrote:
->> Currently the dtpm supports the CPUs via cpufreq and the energy
->> model. This change provides the same for the device which supports
->> devfreq.
->>
->> Each device supporting devfreq and having an energy model can register
->> themselves in the list of supported devices.
->>
->> The concept is the same as the cpufreq dtpm support: the QoS is used
->> to aggregate the requests and the energy model gives the value of the
->> instantaneous power consumption ponderated by the load of the device.
->>
-> 
-> 
-> I've just started the review, but I have a blocking question:
-> 
-> Why there is no unregister function (like 'dtmp_unregister_devfreq')?
-> Do you consider any devfreq drivers to be modules?
-> 
-> The code looks like an API that it's going to be called directly in
-> e.g. GPU driver in it's probe function. In that case probably the
-> module unloading should call dtmp unregister.
-> 
-> Could you explain this to me please? So I can continue the review.
+Add tsens bindings for sm8350.
 
-BTW, thanks for taking the time to review the patch.
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+---
 
+Changes since v2:
+ - Vinod: Add r-b
 
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 95462e071ab4..e788378eff8d 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -43,6 +43,7 @@ properties:
+               - qcom,sdm845-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
+   reg:
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.31.0.30.g398dba342d.dirty
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
