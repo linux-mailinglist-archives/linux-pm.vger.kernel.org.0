@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F7934761C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 11:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B35D34761B
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 11:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbhCXK2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 06:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S231309AbhCXK2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 06:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbhCXK2O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 06:28:14 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81497C0613DF
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:27:56 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y5so16994708pfn.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:27:56 -0700 (PDT)
+        with ESMTP id S235816AbhCXK2L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 06:28:11 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B300AC0613E0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id g10so7677274plt.8
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=to:cc:from:subject:message-id:date:user-agent:mime-version
          :content-transfer-encoding;
-        bh=g9iyCmKt9j7N3Numx34OcndHvuD7K8yaOLuNRmiCrps=;
-        b=WcG1Bo5BZ6Hwgugfkis5NHOqz+/TjXZDQFSGE+syryZ6OYENWbgB6SV3i+Xf7WSXKS
-         8BZe8RUcaUHclOw1YBJ5BxCC041uncrYLgMkN10sTcFI51h7fPyTJ+Ftxluu+YAYTCb0
-         AeQRAxV/xVzAHt9Ud1nytvoDasU/f+sYLhSAMyssx1XWgRbyp759paysLsf8mc+WJCAP
-         Khp3DF/DJLqq6DWdiDIbHSEshbJ7zaephtlqKAEWui23L0mo2mXlHgBDwt9m7YZ8Ia3r
-         GT2CGc6pv2tevRPROSYVfnEnoR7I12XN+RUzYL9EyIGTkODRZWvMAIps5CYVwoA69kVb
-         nVHg==
+        bh=WEBWemoFlRUxDAbCOU3NDRqXpUI03UUvlFIm/pLjApQ=;
+        b=CYYeJbjrV8vZbCZbbhcN71gEbVRP0wGfVvYukP1jBaKV/abhvcAEEhipldOWxkq9rn
+         z3o5RensIhxNdOFL2duyElfITMGckHutAnuWJ9tMF8iUBT4eAp9ata7bKiWZOFhRJqIq
+         3IPFUnNsSgCPLn1OUhtyamVjXXWCgupWH1rDWGmrujf+4O/Eh2xvrw9QocRbI4lW4GzS
+         qlfmrB1tNM5DvzAR+ZNCNBwZx5iylxKVLjhgZ2UJWbSYC09lMXdhgIfcw3OV77sSOfWP
+         rzMSnGrvRB/ch/LojbAcn86mMBf5pJwPm4EIfwmQnavbbcDyIZAA1HrN5eBooM6xIVUo
+         eGGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
          :mime-version:content-transfer-encoding;
-        bh=g9iyCmKt9j7N3Numx34OcndHvuD7K8yaOLuNRmiCrps=;
-        b=UKjDOffI/EI1DR5jtJ/69B2IsdmUD1LBoVWtcuIJL+DY+N/7mY1AoHhAK6bQbk82h3
-         zsBjgxbAU74bugh/fZFyoUtoP1YgRS9QU2/3tkh0LAInCGdKSduYp/862HZvtmi2oG1Q
-         1Z1HAPoGlwbAVyYoyXI6nd3TG1+PPp5220ZsoezE1PEAFM1GPuNYaxW1grfoLQDBIKXV
-         5lF7mHrUfOhKvQ8BQ/Hd49pLJFaddTukSD0RKDyGVubyR7sRIbPzFg2/54uMsJS3Jirn
-         0057CBiq48UQLQvRJ4PnHbQKXGFqHeH/1oh8G2+byAZwgj9VCJEJWd+TKRliQ1NgleYj
-         wRSQ==
-X-Gm-Message-State: AOAM530w3F8/veCr48El+bGeAYw/ouBb/KASf+msdz38EupLM4jRjtZL
-        Rmw7vwcErtrA1d12oaOCTAU=
-X-Google-Smtp-Source: ABdhPJykuGIfkKU8uzinOfLHKJD87RsBhAtlu2wAxvx/fIhz1sImyz0O0Vk9aNWurO2sT9OqXn30TA==
-X-Received: by 2002:aa7:9824:0:b029:1ef:2104:c72d with SMTP id q4-20020aa798240000b02901ef2104c72dmr2342650pfl.20.1616581675701;
-        Wed, 24 Mar 2021 03:27:55 -0700 (PDT)
-Received: from MacBook-Pro.local ([154.48.252.70])
-        by smtp.gmail.com with ESMTPSA id e190sm2226447pfh.115.2021.03.24.03.27.53
+        bh=WEBWemoFlRUxDAbCOU3NDRqXpUI03UUvlFIm/pLjApQ=;
+        b=BgXk4T3QUDbCBiHqNIhUf8EFbl4HUE6QqsBCEo7EIsgcbcRoDip3UMliv7j6IgzYGj
+         mpQvLxCWM4SYewfFM23CKbur62sWFTLnYuJVUoeOglXu1Oa4ccngh91sd5fVGo86QZeB
+         3lO/TL+y8uBYmPV/SdVyuZdC067HWtwjzNtg3U551T5BRoAaLNeUHAEu+019AgMmiXC2
+         RyBW/3Px3MuTILTH77X4KqsGmEVmoQIByEv5nfEQq5KtEUSPMdH9bCuXD1FgLT92S9lR
+         VxmPJC3Y6XevNwHt1+wSzVAz+a2nZRZUbRvfElW6d5iAlcKEtPymFplcifsSkEqdYJm+
+         BEZw==
+X-Gm-Message-State: AOAM531WOzOZV+lhkTHS3vswQQIujoSz0vGCF7jwrlp1rqxiHdOIkBsA
+        zkai7wYTcTeimNqpnmAu+cc=
+X-Google-Smtp-Source: ABdhPJxdHo/ZM+cnOAGT6X96x1jRbbr1j93R/LIDztG82wVbDY1bssL5bIHxXpiKyuLtoWdb5KwJWw==
+X-Received: by 2002:a17:90a:f2d5:: with SMTP id gt21mr2888722pjb.197.1616581687195;
+        Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
+Received: from MacBook-Pro.local ([103.112.79.203])
+        by smtp.gmail.com with ESMTPSA id gf20sm1968176pjb.39.2021.03.24.03.28.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Mar 2021 03:27:55 -0700 (PDT)
+        Wed, 24 Mar 2021 03:28:06 -0700 (PDT)
 To:     linux@dominikbrodowski.net, sherry.hurwitz@amd.com, trenn@suse.com,
         linux-pm@vger.kernel.org
 Cc:     lishujin@kuaishou.com
 From:   xufuhai <xufuhai1992@gmail.com>
-Subject: [PATCH 1/2] cpupower: fix amd cpu (family < 0x17) active state issue
-Message-ID: <35ab0d0a-f9ce-b4d7-cd85-3cd8a8638ab6@gmail.com>
-Date:   Wed, 24 Mar 2021 18:27:52 +0800
+Subject: [PATCH 2/2] cpupower: fix amd cpu (family >= 0x17) active state issue
+Message-ID: <e3f8c0f1-63dc-9b25-7129-d0a4ee87f62a@gmail.com>
+Date:   Wed, 24 Mar 2021 18:28:03 +0800
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.8.1
 MIME-Version: 1.0
@@ -65,40 +65,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: xufuhai <xufuhai@kuaishou.com>
 
-For the old  AMD processor (family < 0x17), cpupower will call the
-amd_pci_get_num_boost_states function, but for the non-root user
-pci_read_byte function (implementation comes from the psutil library),
-val will be set to 0xff, indicating that there is no read function
-callback. At this time, the original logic will set the cpupower turbo
-active state to yes. This is an obvious issue~
+If the read_msr function is executed by a non-root user, the function
+returns -1, which means that there is no permission to access /dev/cpu/%d/msr,
+but cpufreq_has_boost_support should also return -1 immediately, and should not
+follow the original logic to return 0, which will cause amd The cpupower tool
+returns the turbo active status as 0.
 
 Reproduce procedure:
-	cpupower frequency-info
+        cpupower frequency-info
 
 Signed-off-by: xufuhai <xufuhai@kuaishou.com>
 Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
 Signed-off-by: lishujin <lishujin@kuaishou.com>
 ---
- tools/power/cpupower/utils/helpers/amd.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/power/cpupower/utils/helpers/misc.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index 97f2c857048e..6f9504906afa 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -137,6 +137,13 @@ int amd_pci_get_num_boost_states(int *active, int *states)
- 		return -ENODEV;
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index fc6e34511721..be96f9ce18eb 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -30,10 +30,15 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+ 		 */
  
- 	val = pci_read_byte(device, 0x15c);
-+
-+	/* If val is 0xff, meaning has no permisson to
-+	 * get the boost states, return -1
-+	 */
-+	if (val == 0xff)
-+		return -1;
-+
- 	if (val & 3)
- 		*active = 1;
- 	else
+ 		if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
+-			if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
++			ret = read_msr(cpu, MSR_AMD_HWCR, &val);
++			if (!ret) {
+ 				if (!(val & CPUPOWER_AMD_CPBDIS))
+ 					*active = 1;
+-			}
++			} else
++				/* no permission to access /dev/cpu/%d/msr, return -1 immediately,
++				 * and should not follow the original logic to return 0
++				 */
++				return ret;
+ 		} else {
+ 			ret = amd_pci_get_num_boost_states(active, states);
+ 			if (ret)
 -- 
 2.24.3 (Apple Git-128)
