@@ -2,70 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 507B2346FC6
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 04:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18E8347219
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 08:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbhCXDCi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Mar 2021 23:02:38 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:38629 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbhCXDCN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Mar 2021 23:02:13 -0400
-Received: by mail-lj1-f173.google.com with SMTP id s17so28326148ljc.5;
-        Tue, 23 Mar 2021 20:02:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=L0ASU9cck84A4SR2JsZ6ZvDNL4r9jv1aWJ8Dv/WoYzw=;
-        b=PSTNMV++VT4nJlNKVhZXUTc2qDeZDXj1atcrGjMbs6dZ4VKzizFF0a6HwbzOVV4hEl
-         tVduja7OgTTUq25KYBFXpjTvM0x78g6mXwGguG2ppj5wqvAa6SMILBNqDe8d2BcE5cWU
-         kPSGalpgMyPFTRje/BteYNb+eN/ixtxznyS2JJqP4C89ajrtq9vmKjOnTJ7m3pirExPZ
-         jT7/ut1OgqM6yqpvbqoA4Hb1cPklYg8J2PQQosxh/u/8EAT6yGwf8o5xM95D78McmBEK
-         gc4lCsaFasv1zBo45kYOXz07GpPPOJkv15OtyItpvsnls8BSJCb2cZ9d5TNCKqzDedKL
-         +jYw==
-X-Gm-Message-State: AOAM531RpJC4fokdzLa7LmUkjrj5sDGL4AQyfPI4KAFlQiyP/kwdKrVe
-        XyBf3Rfg4YJ737rWx2pkH62ub/4N8NU=
-X-Google-Smtp-Source: ABdhPJwJLXLm8L4PWQbaQnawfiLyDPBUQHSNwJSAxzwSo3+Z7cprqAUdYqst9h4ILxVGfPy6Oo1qzg==
-X-Received: by 2002:a2e:b88e:: with SMTP id r14mr601832ljp.450.1616554932233;
-        Tue, 23 Mar 2021 20:02:12 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id i16sm121296ljj.74.2021.03.23.20.02.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Mar 2021 20:02:11 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id u20so28285144lja.13;
-        Tue, 23 Mar 2021 20:02:11 -0700 (PDT)
-X-Received: by 2002:a2e:9b14:: with SMTP id u20mr582784lji.463.1616554931635;
- Tue, 23 Mar 2021 20:02:11 -0700 (PDT)
+        id S230419AbhCXHLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 03:11:33 -0400
+Received: from mga04.intel.com ([192.55.52.120]:64960 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235724AbhCXHLW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Mar 2021 03:11:22 -0400
+IronPort-SDR: SyPMFeaBjzgVgCk0OyvTxY3ymZYJ82a3hoiy/QoE3vWOeYnT1dI7WeAGAJxKeoDM+pikAHwz5X
+ B4S7b6dyZsyA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="188334200"
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="188334200"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 00:11:21 -0700
+IronPort-SDR: 3rB1Vgo9eYH16EdowpJLEHjIRK3J0eXOrpdRwp10lM1hjL2Gr0RgXXDkrPiVtrMgsCYgMrWEur
+ GGUnyRw8ACIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="374547211"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2021 00:11:19 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lOxfi-00015w-PU; Wed, 24 Mar 2021 07:11:18 +0000
+Date:   Wed, 24 Mar 2021 15:10:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 8293f64f5e42b8ffe71896671103b0e82919013d
+Message-ID: <605ae5ee.jtwoa6GL0HY6siDG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-29-sebastian.reichel@collabora.com>
-In-Reply-To: <20210312154357.1561730-29-sebastian.reichel@collabora.com>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Wed, 24 Mar 2021 11:02:00 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67qO0acst+5QPDs_9WC0uYXwMUXYJE+1g=9WoM6_BnCfA@mail.gmail.com>
-Message-ID: <CAGb2v67qO0acst+5QPDs_9WC0uYXwMUXYJE+1g=9WoM6_BnCfA@mail.gmail.com>
-Subject: Re: [PATCH 28/38] dt-bindings: power: supply: axp20x: Convert to DT
- schema format
-To:     sebastian.reichel@collabora.com
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 11:52 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Convert the binding to DT schema format.
->
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 8293f64f5e42b8ffe71896671103b0e82919013d  Merge branch 'pm-em' into bleeding-edge
 
-Looks good to me. Though I'm not well versed in the new YAML binding format yet.
+elapsed time: 723m
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+configs tested: 95
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+powerpc                     redwood_defconfig
+mips                            ar7_defconfig
+m68k                            mac_defconfig
+arm                          imote2_defconfig
+mips                  cavium_octeon_defconfig
+arm                       imx_v4_v5_defconfig
+mips                        workpad_defconfig
+powerpc64                           defconfig
+m68k                        mvme147_defconfig
+arm                     davinci_all_defconfig
+arm                   milbeaut_m10v_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          rsk7201_defconfig
+arm                  colibri_pxa300_defconfig
+mips                           jazz_defconfig
+mips                        bcm47xx_defconfig
+powerpc                 mpc837x_mds_defconfig
+sh                           se7619_defconfig
+m68k                        stmark2_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210323
+i386                 randconfig-a004-20210323
+i386                 randconfig-a001-20210323
+i386                 randconfig-a002-20210323
+i386                 randconfig-a006-20210323
+i386                 randconfig-a005-20210323
+i386                 randconfig-a014-20210323
+i386                 randconfig-a011-20210323
+i386                 randconfig-a015-20210323
+i386                 randconfig-a016-20210323
+i386                 randconfig-a012-20210323
+i386                 randconfig-a013-20210323
+x86_64               randconfig-a002-20210323
+x86_64               randconfig-a003-20210323
+x86_64               randconfig-a006-20210323
+x86_64               randconfig-a001-20210323
+x86_64               randconfig-a004-20210323
+x86_64               randconfig-a005-20210323
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a012-20210323
+x86_64               randconfig-a015-20210323
+x86_64               randconfig-a013-20210323
+x86_64               randconfig-a014-20210323
+x86_64               randconfig-a011-20210323
+x86_64               randconfig-a016-20210323
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
