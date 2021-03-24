@@ -2,109 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A82C1347947
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 14:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96433347AEB
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 15:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbhCXNLh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 09:11:37 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:52052 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbhCXNLY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 09:11:24 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12ODABc0097128;
-        Wed, 24 Mar 2021 08:10:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1616591411;
-        bh=kCE6XAbW93A1ZaxfNylsnT3LZBbsR3uZFEg2DAupuiQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=PNT87nHoIszwHHhCJsVls+hYtHnedvbr+v68KrQupcnBP0Z6qz6L4FBsL7RSHgldb
-         nqgXHMsIRrc6FPWy9Iw1uGRL5CR+v2d4SwH7RIADsuJJZa+SSHjHt6HBzSZwNJDIMb
-         QOdfjgKkNsnartg3Rryo3mBpTSOk458UU85FLQhM=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12ODABMm115818
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 24 Mar 2021 08:10:11 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 24
- Mar 2021 08:10:10 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 24 Mar 2021 08:10:11 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12ODAAiZ018945;
-        Wed, 24 Mar 2021 08:10:11 -0500
-Date:   Wed, 24 Mar 2021 08:10:10 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Roger Lu <roger.lu@mediatek.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: Re: [PATCH v13 1/7] dt-bindings: soc: mediatek: add mtk svs
- dt-bindings
-Message-ID: <20210324131010.zgkyhmgcedax3w3s@undaunted>
-References: <20210323135657.2701-1-roger.lu@mediatek.com>
- <20210323135657.2701-2-roger.lu@mediatek.com>
+        id S236269AbhCXOjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 10:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236251AbhCXOjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 10:39:37 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1BEC0613DE
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 07:39:35 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id n198so21741309iod.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 07:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=omwS5puHKjv17pejHb5i9USkJJrZLYB9ETUsyowGcHo=;
+        b=L/zTmISKkPm4Bb8Zkz4hwGV9sdssGr2Fgi5D8wpbJMWJtrWdC+gTJCS9fZpsh1in1+
+         wyzsjiYY1QuChIqAyEZI+fo2geyk4/Tn8TohZZ2W+LSh/CdmgtZVagTv0j0E4bjg9P0K
+         Vup7OM0afjZgAcOZh5YBZiSDSi74G+2KdsJT2Yrt0ruc21A0ybA+V/7ekMdjTXMPneYO
+         azIOAZp2YDdCQIBIS6kBXxsK0QRk0te0OTgj4Zkhg6wYK5WsqXNTT6zbGRz8mWwrh8JM
+         NXj6jI+WIYRDAreFfy2WR0KNfD3GkJ1Ca86UrKD5SjX5zwVlHbJMKCXW6SxsyOTi397S
+         bsiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=omwS5puHKjv17pejHb5i9USkJJrZLYB9ETUsyowGcHo=;
+        b=dt2aPL0tKljQRGwOil5dgoN+Jek7JhLuJlN+H+86uioTLJsSCmvbzo13eSknOBYzlH
+         w+6y/v7aX1D+UhxN7azFW/THoD92u9XHV+rG+z7XQ2OwOtpbzjkAPHSREWjbIcNpacO3
+         zNDng1FVEkzRJHI/w3igYhRmueTli933DGpUXQ+NH5Y9l6junDgwrD+zETxesI7OQIpP
+         xdcXT/BpnBC3iX4HKtlmben6EhYChaqahC1kEmEPF4BKoHkGq0EhkMwcueibnqHtRWTR
+         MGbMW4vFyOVkn9Tyeh1B+arGjDq7AtJTfjwWjyH7JpNkHcbUfHrF7Bnw2rhqR8KdJxqx
+         oKeQ==
+X-Gm-Message-State: AOAM533qCRp4ee244co8Ue2kSrwbNYXe62cQqkum7tK1SWNK1qNQM/Y2
+        gRQjvCXsFqM+xW4QtGDzk5FrH1tTvS7M3DGN0SSe5A==
+X-Google-Smtp-Source: ABdhPJyTsVk1YCFajPZcgUTfkypi6NhdFvf0Emaq+8hkliOyOsf0lxwOTl6O/jALPngnl9Lo4OcfuWGA+zv8KAt4SuY=
+X-Received: by 2002:a5d:93ce:: with SMTP id j14mr2794167ioo.172.1616596774845;
+ Wed, 24 Mar 2021 07:39:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210323135657.2701-2-roger.lu@mediatek.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <1f1fb01e-0616-34ea-ede6-dc7dd679c3d4@garloff.de>
+ <c7074c16-5d64-e829-10f6-ef91f5f6222b@garloff.de> <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
+ <YFsyh5tEaiVNjqT1@lorien.valinor.li>
+In-Reply-To: <YFsyh5tEaiVNjqT1@lorien.valinor.li>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 24 Mar 2021 07:39:28 -0700
+Message-ID: <CAAYoRsXw5-ATytCdgDaOS0dCZ3e=wn_z1tKaxSAsNBkSrSeWWQ@mail.gmail.com>
+Subject: Re: turbostat: Fix Pkg Power on Zen
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Christian Kastner <ckk@debian.org>,
+        Kurt Garloff <kurt@garloff.de>
+Cc:     Len Brown <len.brown@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21:56-20210323, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->  .../bindings/soc/mediatek/mtk-svs.yaml        | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> new file mode 100644
-> index 000000000000..0d8d12f927de
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/mediatek/mtk-svs.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek Smart Voltage Scaling (SVS) Device Tree Bindings
-> +
-> +maintainers:
-> +  - Roger Lu <roger.lu@mediatek.com>
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +  - Kevin Hilman <khilman@kernel.org>
-> +  - Nishanth Menon <nm@ti.com>
+On Wed, Mar 24, 2021 at 5:38 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
+> On Mon, Mar 15, 2021 at 10:54:24PM +0100, Christian Kastner wrote:
+> > On 01.02.21 10:01, Kurt Garloff wrote:
+> > > Issue persists on Ryzen in 5.11-rc6:
+> > > kvmadmin@KurtSrv2018(//):~ [0]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat
 
-Please drop me off the list. I would'nt know what to do with SVS :)
+... deleted stuff that doesn't display properly ...
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+> > I was seeing the same issue (no stats, program just exits with 243), and
+> > Kurt's simple patch resolved it for me.
+>
+> Does Kurt's patch seems good to you and can be applied or is there
+> anything missing?
+
+There were multiple patch submissions. Chen Yu kindly merged them into
+one, which was put out for testing a couple of weeks ago. Try it and
+report back. I'll forward it in a moment.
