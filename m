@@ -2,101 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C2D34789E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 13:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C767C3478C1
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 13:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbhCXMhv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 08:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S233942AbhCXMoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 08:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbhCXMhb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 08:37:31 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B1C061763;
-        Wed, 24 Mar 2021 05:37:30 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id z2so24304125wrl.5;
-        Wed, 24 Mar 2021 05:37:30 -0700 (PDT)
+        with ESMTP id S233738AbhCXMoO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 08:44:14 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9367BC061763
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 05:44:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id e14so14412944ejz.11
+        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 05:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Mt31SZR/o6YA2k4YRrLR3VTpnaJxsF0VK5o2je/XXYw=;
-        b=HeqpHWrQg+9WKd/M/HkkOepQ9pCfOPP7erzYnn5cvvTdI2Sj+qcIwQ4mJjkkuxG62P
-         HzuIJJGYmJIn/QADpwshwcD8o+BouFeovHH9Q1NCu6G0bB61IP10mB9BRLSAEP9quXfn
-         Yo9nLo59oqsPKn9MRV/WkYSKlDAhzsmVCHtm3pwyFEr8N5M4KBWIuuqGUb3qeJAtErtx
-         gE17I0782yWQPmHWgtz1AKgAn1sbZGBBRNFRFmAHwk5wOFnK3XEhArdofOE6lJ/J1Ip6
-         IvsEbMuHPs7aHdkjrh9rLEZy+doiEJQeukErlFFfJ9tUdj/TS1Hfy/7PgZPK7J56Yksl
-         wFIQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I3C+3mDs8vGmnW3km7Uq11zgkVw2a5Nc8ErirW+ALE4=;
+        b=iwYZy1Nsr2QY6H2EgfrT9yG2cqScpO7/uDnbcVCg4chL4tDG6Jm+y8HzUtygPO5mfp
+         KA6MAzjXw3rF8SbIWSEDOvryWfORNmdChDyPIX/4HwfvdsJkJsRr1QXS1h500r1weACy
+         w66GqswG/yjthcAzY+1uW23IWJnk5wbvWWr4hwBN2Olv90AhPn0tRkYaJYKPdIdmsfk7
+         Uej5/7fZoeVzsF2HpHB0gLOWAIqbGvNG5jVEYpY3zeWQElIW5Bl0GSw+nbBn4lzx4nP/
+         aaRbMtdo+wZaKO3lRjlXUdGnAa/yW6fbjXAs6Du2JRr7GZoeN2bQcgMqn+wguOYgOAE/
+         03cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Mt31SZR/o6YA2k4YRrLR3VTpnaJxsF0VK5o2je/XXYw=;
-        b=HslZpyus3aMXr9Lszj4j1UekQVGbyP5HKMYHRBeAHnLx9fXcGELkMj7UR7zK5hkS2J
-         YmM13Jd8wQXJI8q2gX383md8LAQPKeeK/kd0v/fSLQyb4G76ZBGYAuH/BskA7RiE+ReV
-         SK48Uu7VIEwqXGYcJA4w5yxWp6x2zok9D4isOGG+uQzDIhO3jfHawtWRYDOK4exrNMSW
-         iOiffI7WUJObYWTgVW2WoR2arsl9H8/79mX2mRq+Z649Ej2CVfpbTxU1aVdNQKIrSAj5
-         xdDR2JOvNRdqgGHwD9a2uA3W1VQUbT/ITbGrXxvT7gnE/2FJV2Vgg5DC1eNwVSTLeINU
-         jMuQ==
-X-Gm-Message-State: AOAM531hLl2T+D2QETzz+OHagbZs/OD1tEywY3DNaEFZIbfQhFWQoRi/
-        MhhEGJbGPfRngArZYy7F+kRie/tImLTmnQ==
-X-Google-Smtp-Source: ABdhPJwJSZtK2QyZG5pEslcyp3jo/3lnS7Itz0DzeXC8cikmyEC1jw6q0FQZllHunPrNBSi8F/goDQ==
-X-Received: by 2002:a05:6000:18cd:: with SMTP id w13mr3271926wrq.20.1616589448657;
-        Wed, 24 Mar 2021 05:37:28 -0700 (PDT)
-Received: from lorien (lorien.valinor.li. [2a01:4f8:192:61d5::2])
-        by smtp.gmail.com with ESMTPSA id m11sm3132366wri.44.2021.03.24.05.37.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I3C+3mDs8vGmnW3km7Uq11zgkVw2a5Nc8ErirW+ALE4=;
+        b=dP7DncQu26nMJE3mqyYZxzLn4pPOhkcDj1gtfH4cfoYoK6i6JFcyN4CqRMWo1zONaD
+         Lh5K99S/4W1L2wmmSwe6jtDZF0ulGP2AD9dVBpVMELC+IuE812LvQGh7XoAWgC/b1yYY
+         AAUn4tvlp9BPKLA/vD4+FBQorFXMS1oXCJUwb9G0EovDH7hysYwJJvx9dZjiPjOoBAkI
+         LDCzJbsNajYGZ0vTcd69tXMKigCo7UCmOXEg2R8iGmtLmDzo8mH/8vXgiuG3IhuyK6VA
+         2kOGrxK2IuIiTcvzDDpUR3jRMONOz7RiSBWczu1/Vym9QJT1VvBJwNjgHNd0gfcl9raX
+         c/+A==
+X-Gm-Message-State: AOAM5304BrIs9euYy/KTFxSKriP3dLJMqWS7MwY7GyfFR/eun7UoX0EK
+        DHsncLgpNTl9OwkYB2zb8f3c/Q==
+X-Google-Smtp-Source: ABdhPJz6Nec0sefAZdpW0T3BFckZyWqLrM/834NeK8Ct79eMtTu1trIebowmcEEYisfPNZ3Ku72r2A==
+X-Received: by 2002:a17:906:3b99:: with SMTP id u25mr3453210ejf.277.1616589841323;
+        Wed, 24 Mar 2021 05:44:01 -0700 (PDT)
+Received: from localhost.localdomain ([37.120.1.234])
+        by smtp.gmail.com with ESMTPSA id la15sm876077ejb.46.2021.03.24.05.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 05:37:27 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Wed, 24 Mar 2021 13:37:27 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Len Brown <len.brown@intel.com>
-Cc:     Christian Kastner <ckk@debian.org>, Kurt Garloff <kurt@garloff.de>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: turbostat: Fix Pkg Power on Zen
-Message-ID: <YFsyh5tEaiVNjqT1@lorien.valinor.li>
-References: <1f1fb01e-0616-34ea-ede6-dc7dd679c3d4@garloff.de>
- <c7074c16-5d64-e829-10f6-ef91f5f6222b@garloff.de>
- <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
+        Wed, 24 Mar 2021 05:44:00 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vinod.koul@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Robert Foss <robert.foss@linaro.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: thermal: qcom-tsens: Add compatible for sm8350
+Date:   Wed, 24 Mar 2021 13:43:08 +0100
+Message-Id: <20210324124308.1265626-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.31.0.30.g398dba342d.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Len,
+Add tsens bindings for sm8350.
 
-On Mon, Mar 15, 2021 at 10:54:24PM +0100, Christian Kastner wrote:
-> Hi,
-> 
-> On 01.02.21 10:01, Kurt Garloff wrote:
-> > Issue persists on Ryzen in 5.11-rc6:
-> > 
-> > kvmadmin@KurtSrv2018(//):~ [0]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat
-> > [...]
-> > kvmadmin@KurtSrv2018(//):~ [243]$
-> > 
-> > ?????????????????????????????????????????????????????? ^^^ Exit code
-> > 
-> > With the patch:
-> > 
-> > kvmadmin@KurtSrv2018(//):~ [243]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat??????
-> > [...]???????????????????????????????????? 
-> > Core?????? CPU???????? Avg_MHz Busy%???? Bzy_MHz TSC_MHz IRQ???????? POLL?????? C1?????????? C2?????????? POLL%???? C1%???????? C2%???????? CorWatt PkgWatt
-> > -???????????? -???????????? 27?????????? 1.04?????? 2562?????? 3411?????? 16046???? 33?????????? 2931?????? 12895???? 0.00?????? 0.85?????? 98.48???? 1.57?????? 18.81
-> > 0???????????? 0???????????? 12?????????? 0.55?????? 2193?????? 3400?????? 885???????? 1???????????? 111???????? 757???????? 0.00?????? 1.12?????? 98.42???? 0.04?????? 18.74
-> > 0???????????? 16?????????? 1???????????? 0.05?????? 2351?????? 3400?????? 53?????????? 0???????????? 3???????????? 54?????????? 0.00?????? 0.05?????? 99.92????????????
-> > 1???????????? 1???????????? 20?????????? 0.89?????? 2261?????? 3400?????? 478???????? 0???????????? 39?????????? 427???????? 0.00?????? 0.37?????? 98.80???? 0.06
-> > 1???????????? 17?????????? 9???????????? 0.40?????? 2329?????? 3400?????? 308???????? 0???????????? 38?????????? 282???????? 0.00?????? 0.35?????? 99.29????????????
-> > [...]
-> 
-> I was seeing the same issue (no stats, program just exits with 243), and
-> Kurt's simple patch resolved it for me.
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+---
 
-Does Kurt's patch seems good to you and can be applied or is there
-anything missing?
+Changes since v1:
+ - Vinod: Remove comment
 
-Regards,
-Salvatore
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 95462e071ab4..e788378eff8d 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -43,6 +43,7 @@ properties:
+               - qcom,sdm845-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
+   reg:
+-- 
+2.31.0.30.g398dba342d.dirty
+
