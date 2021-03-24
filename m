@@ -2,106 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B35D34761B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 11:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C2D34789E
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 13:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhCXK2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 06:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S233405AbhCXMhv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 08:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235816AbhCXK2L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 06:28:11 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B300AC0613E0
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id g10so7677274plt.8
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
+        with ESMTP id S232787AbhCXMhb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 08:37:31 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B1C061763;
+        Wed, 24 Mar 2021 05:37:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z2so24304125wrl.5;
+        Wed, 24 Mar 2021 05:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=WEBWemoFlRUxDAbCOU3NDRqXpUI03UUvlFIm/pLjApQ=;
-        b=CYYeJbjrV8vZbCZbbhcN71gEbVRP0wGfVvYukP1jBaKV/abhvcAEEhipldOWxkq9rn
-         z3o5RensIhxNdOFL2duyElfITMGckHutAnuWJ9tMF8iUBT4eAp9ata7bKiWZOFhRJqIq
-         3IPFUnNsSgCPLn1OUhtyamVjXXWCgupWH1rDWGmrujf+4O/Eh2xvrw9QocRbI4lW4GzS
-         qlfmrB1tNM5DvzAR+ZNCNBwZx5iylxKVLjhgZ2UJWbSYC09lMXdhgIfcw3OV77sSOfWP
-         rzMSnGrvRB/ch/LojbAcn86mMBf5pJwPm4EIfwmQnavbbcDyIZAA1HrN5eBooM6xIVUo
-         eGGw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Mt31SZR/o6YA2k4YRrLR3VTpnaJxsF0VK5o2je/XXYw=;
+        b=HeqpHWrQg+9WKd/M/HkkOepQ9pCfOPP7erzYnn5cvvTdI2Sj+qcIwQ4mJjkkuxG62P
+         HzuIJJGYmJIn/QADpwshwcD8o+BouFeovHH9Q1NCu6G0bB61IP10mB9BRLSAEP9quXfn
+         Yo9nLo59oqsPKn9MRV/WkYSKlDAhzsmVCHtm3pwyFEr8N5M4KBWIuuqGUb3qeJAtErtx
+         gE17I0782yWQPmHWgtz1AKgAn1sbZGBBRNFRFmAHwk5wOFnK3XEhArdofOE6lJ/J1Ip6
+         IvsEbMuHPs7aHdkjrh9rLEZy+doiEJQeukErlFFfJ9tUdj/TS1Hfy/7PgZPK7J56Yksl
+         wFIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=WEBWemoFlRUxDAbCOU3NDRqXpUI03UUvlFIm/pLjApQ=;
-        b=BgXk4T3QUDbCBiHqNIhUf8EFbl4HUE6QqsBCEo7EIsgcbcRoDip3UMliv7j6IgzYGj
-         mpQvLxCWM4SYewfFM23CKbur62sWFTLnYuJVUoeOglXu1Oa4ccngh91sd5fVGo86QZeB
-         3lO/TL+y8uBYmPV/SdVyuZdC067HWtwjzNtg3U551T5BRoAaLNeUHAEu+019AgMmiXC2
-         RyBW/3Px3MuTILTH77X4KqsGmEVmoQIByEv5nfEQq5KtEUSPMdH9bCuXD1FgLT92S9lR
-         VxmPJC3Y6XevNwHt1+wSzVAz+a2nZRZUbRvfElW6d5iAlcKEtPymFplcifsSkEqdYJm+
-         BEZw==
-X-Gm-Message-State: AOAM531WOzOZV+lhkTHS3vswQQIujoSz0vGCF7jwrlp1rqxiHdOIkBsA
-        zkai7wYTcTeimNqpnmAu+cc=
-X-Google-Smtp-Source: ABdhPJxdHo/ZM+cnOAGT6X96x1jRbbr1j93R/LIDztG82wVbDY1bssL5bIHxXpiKyuLtoWdb5KwJWw==
-X-Received: by 2002:a17:90a:f2d5:: with SMTP id gt21mr2888722pjb.197.1616581687195;
-        Wed, 24 Mar 2021 03:28:07 -0700 (PDT)
-Received: from MacBook-Pro.local ([103.112.79.203])
-        by smtp.gmail.com with ESMTPSA id gf20sm1968176pjb.39.2021.03.24.03.28.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Mar 2021 03:28:06 -0700 (PDT)
-To:     linux@dominikbrodowski.net, sherry.hurwitz@amd.com, trenn@suse.com,
-        linux-pm@vger.kernel.org
-Cc:     lishujin@kuaishou.com
-From:   xufuhai <xufuhai1992@gmail.com>
-Subject: [PATCH 2/2] cpupower: fix amd cpu (family >= 0x17) active state issue
-Message-ID: <e3f8c0f1-63dc-9b25-7129-d0a4ee87f62a@gmail.com>
-Date:   Wed, 24 Mar 2021 18:28:03 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Mt31SZR/o6YA2k4YRrLR3VTpnaJxsF0VK5o2je/XXYw=;
+        b=HslZpyus3aMXr9Lszj4j1UekQVGbyP5HKMYHRBeAHnLx9fXcGELkMj7UR7zK5hkS2J
+         YmM13Jd8wQXJI8q2gX383md8LAQPKeeK/kd0v/fSLQyb4G76ZBGYAuH/BskA7RiE+ReV
+         SK48Uu7VIEwqXGYcJA4w5yxWp6x2zok9D4isOGG+uQzDIhO3jfHawtWRYDOK4exrNMSW
+         iOiffI7WUJObYWTgVW2WoR2arsl9H8/79mX2mRq+Z649Ej2CVfpbTxU1aVdNQKIrSAj5
+         xdDR2JOvNRdqgGHwD9a2uA3W1VQUbT/ITbGrXxvT7gnE/2FJV2Vgg5DC1eNwVSTLeINU
+         jMuQ==
+X-Gm-Message-State: AOAM531hLl2T+D2QETzz+OHagbZs/OD1tEywY3DNaEFZIbfQhFWQoRi/
+        MhhEGJbGPfRngArZYy7F+kRie/tImLTmnQ==
+X-Google-Smtp-Source: ABdhPJwJSZtK2QyZG5pEslcyp3jo/3lnS7Itz0DzeXC8cikmyEC1jw6q0FQZllHunPrNBSi8F/goDQ==
+X-Received: by 2002:a05:6000:18cd:: with SMTP id w13mr3271926wrq.20.1616589448657;
+        Wed, 24 Mar 2021 05:37:28 -0700 (PDT)
+Received: from lorien (lorien.valinor.li. [2a01:4f8:192:61d5::2])
+        by smtp.gmail.com with ESMTPSA id m11sm3132366wri.44.2021.03.24.05.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Mar 2021 05:37:27 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Wed, 24 Mar 2021 13:37:27 +0100
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Len Brown <len.brown@intel.com>
+Cc:     Christian Kastner <ckk@debian.org>, Kurt Garloff <kurt@garloff.de>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: turbostat: Fix Pkg Power on Zen
+Message-ID: <YFsyh5tEaiVNjqT1@lorien.valinor.li>
+References: <1f1fb01e-0616-34ea-ede6-dc7dd679c3d4@garloff.de>
+ <c7074c16-5d64-e829-10f6-ef91f5f6222b@garloff.de>
+ <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: xufuhai <xufuhai@kuaishou.com>
+Hi Len,
 
-If the read_msr function is executed by a non-root user, the function
-returns -1, which means that there is no permission to access /dev/cpu/%d/msr,
-but cpufreq_has_boost_support should also return -1 immediately, and should not
-follow the original logic to return 0, which will cause amd The cpupower tool
-returns the turbo active status as 0.
+On Mon, Mar 15, 2021 at 10:54:24PM +0100, Christian Kastner wrote:
+> Hi,
+> 
+> On 01.02.21 10:01, Kurt Garloff wrote:
+> > Issue persists on Ryzen in 5.11-rc6:
+> > 
+> > kvmadmin@KurtSrv2018(//):~ [0]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat
+> > [...]
+> > kvmadmin@KurtSrv2018(//):~ [243]$
+> > 
+> > ?????????????????????????????????????????????????????? ^^^ Exit code
+> > 
+> > With the patch:
+> > 
+> > kvmadmin@KurtSrv2018(//):~ [243]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat??????
+> > [...]???????????????????????????????????? 
+> > Core?????? CPU???????? Avg_MHz Busy%???? Bzy_MHz TSC_MHz IRQ???????? POLL?????? C1?????????? C2?????????? POLL%???? C1%???????? C2%???????? CorWatt PkgWatt
+> > -???????????? -???????????? 27?????????? 1.04?????? 2562?????? 3411?????? 16046???? 33?????????? 2931?????? 12895???? 0.00?????? 0.85?????? 98.48???? 1.57?????? 18.81
+> > 0???????????? 0???????????? 12?????????? 0.55?????? 2193?????? 3400?????? 885???????? 1???????????? 111???????? 757???????? 0.00?????? 1.12?????? 98.42???? 0.04?????? 18.74
+> > 0???????????? 16?????????? 1???????????? 0.05?????? 2351?????? 3400?????? 53?????????? 0???????????? 3???????????? 54?????????? 0.00?????? 0.05?????? 99.92????????????
+> > 1???????????? 1???????????? 20?????????? 0.89?????? 2261?????? 3400?????? 478???????? 0???????????? 39?????????? 427???????? 0.00?????? 0.37?????? 98.80???? 0.06
+> > 1???????????? 17?????????? 9???????????? 0.40?????? 2329?????? 3400?????? 308???????? 0???????????? 38?????????? 282???????? 0.00?????? 0.35?????? 99.29????????????
+> > [...]
+> 
+> I was seeing the same issue (no stats, program just exits with 243), and
+> Kurt's simple patch resolved it for me.
 
-Reproduce procedure:
-        cpupower frequency-info
+Does Kurt's patch seems good to you and can be applied or is there
+anything missing?
 
-Signed-off-by: xufuhai <xufuhai@kuaishou.com>
-Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
-Signed-off-by: lishujin <lishujin@kuaishou.com>
----
- tools/power/cpupower/utils/helpers/misc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index fc6e34511721..be96f9ce18eb 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -30,10 +30,15 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
- 		 */
- 
- 		if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
--			if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
-+			ret = read_msr(cpu, MSR_AMD_HWCR, &val);
-+			if (!ret) {
- 				if (!(val & CPUPOWER_AMD_CPBDIS))
- 					*active = 1;
--			}
-+			} else
-+				/* no permission to access /dev/cpu/%d/msr, return -1 immediately,
-+				 * and should not follow the original logic to return 0
-+				 */
-+				return ret;
- 		} else {
- 			ret = amd_pci_get_num_boost_states(active, states);
- 			if (ret)
--- 
-2.24.3 (Apple Git-128)
+Regards,
+Salvatore
