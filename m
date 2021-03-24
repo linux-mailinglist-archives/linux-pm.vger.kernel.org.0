@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358503472E7
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 08:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F643347306
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 08:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbhCXHn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 03:43:59 -0400
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:36442 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbhCXHnk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 03:43:40 -0400
-Received: by mail-lj1-f182.google.com with SMTP id z25so28952913lja.3;
-        Wed, 24 Mar 2021 00:43:39 -0700 (PDT)
+        id S235985AbhCXHws (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 03:52:48 -0400
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:46925 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235974AbhCXHwh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 03:52:37 -0400
+Received: by mail-lf1-f43.google.com with SMTP id w37so30525542lfu.13;
+        Wed, 24 Mar 2021 00:52:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
          :in-reply-to:references:mime-version:date:user-agent
          :content-transfer-encoding;
-        bh=VxtNnj3/UL7oLhV4/T5M1JANhE4KKsYGM2Lhl6l/dI4=;
-        b=nxUydPLzWaY7RqIMqAeJNIX1mY9bqj2eBfv9dY8ZlVSTTcOh/He3rtNwFsPFziU10W
-         u7cbpfQ3G0eiusW8fEXTui2isgqJzxLsIL6qK+Hx5vVOhtL495LGs29FpAI0HovI2rxE
-         Tv0G+w+us9WHewQ4neIruq+9HxsOxhzRpcpbF6XoS/MtHlJxe1cS83HgISW2NwNdrGY5
-         tkHdJuU9NyqOrlAdduWZuyb8bgM9ipWFApQpNomJ0dJqQDV1B0POOo2FAE67dk3mCFfS
-         uzbwxVe4RED6zEVpls4AGMQxcdwvVKsRsyf/B9D5zb2RxC3hPh5QniL3qOmpWKdE3K94
-         24RA==
-X-Gm-Message-State: AOAM531tk4Ekxy9SVYArH10KpTjXX1Pp8ekaFdFtUMEYywoL2kYjGhw7
-        obxAha1CQr4A2uevRuVWAp0=
-X-Google-Smtp-Source: ABdhPJyun+swdu2/euwllY2kOmlsVWC3aDUQOA4jS8ERZ9zDXsgfOKlfh5B7zC0rSxbi1oam+GCisQ==
-X-Received: by 2002:a2e:bc1e:: with SMTP id b30mr1357288ljf.18.1616571819157;
-        Wed, 24 Mar 2021 00:43:39 -0700 (PDT)
+        bh=W5FgzHcFQYsfbsYv8RtYcChjckSHsGvp9iSM4MMtVzw=;
+        b=GybPQk6nVWoZ/9aPKyq5lwdTlyvgfPn4NUIBFwlvXdifZM6xJ270SBpNWVkcM8yMko
+         VnF2A94hdGgVYFUF+/toAwDJP1sPS0cqccaxnViapu+J+J5EgUsZaOMU1r5kGMZtxUEf
+         1y7qzIM7EwI8mcZxqeIKC7Kd5dr56aXLBD2APHhCiBLxZRpVVje4wxSgStKtBNbm6Nr9
+         f7wdDf+xBh1gCjuCJc/AVJInFJ5JXcWoDRQ6RdNNitnWSMOyS3mpQlmQ5bundzbfAa1W
+         W9ptabFv2RE4qBexbq3krYOwJvjlFxEEcJBRiA1a8RYdC1uoaQ6o9RuQYVKrUi8ZuOKo
+         XolA==
+X-Gm-Message-State: AOAM532Ar5P+P6pJwiV5uSHSOOVQUjHiZkOavCF5WH5jvQdAwdSArTy5
+        ePWCqDrWv1ovqoSLIvSMVCE=
+X-Google-Smtp-Source: ABdhPJw6SooYDd8b1Vdawq1iwYwladaPohKMb615LICYXbLkVeQN1KKnLpcnCWBueLHs7giUPkE5gw==
+X-Received: by 2002:a05:6512:4c6:: with SMTP id w6mr1228595lfq.258.1616572345706;
+        Wed, 24 Mar 2021 00:52:25 -0700 (PDT)
 Received: from dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id t11sm196032ljk.65.2021.03.24.00.43.38
+        by smtp.gmail.com with ESMTPSA id l12sm207318ljg.39.2021.03.24.00.52.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 00:43:38 -0700 (PDT)
-Message-ID: <d26f1e700b98ed9069e6508aefa8137675343b99.camel@fi.rohmeurope.com>
+        Wed, 24 Mar 2021 00:52:24 -0700 (PDT)
+Message-ID: <4e85a49272e734fc0dc1b7a9da66d6977516a47a.camel@fi.rohmeurope.com>
 Subject: Re: [PATCH v3 6/8] power: supply: Clean-up few drivers by using
  managed work init
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -51,14 +51,13 @@ References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
          <CAGb2v67Jd6qFS-zmD+Hm4BJHA+-kx0nAxvDovUwW=WwZTEGYeg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Date:   Wed, 24 Mar 2021 09:43:33 +0200
+Date:   Wed, 24 Mar 2021 09:52:14 +0200
 User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Chen-Yu, Hans, Greg,
 
 On Tue, 2021-03-23 at 22:36 +0800, Chen-Yu Tsai wrote:
 > Hi,
@@ -117,10 +116,14 @@ On Tue, 2021-03-23 at 22:36 +0800, Chen-Yu Tsai wrote:
 > struct,
 > with the work item potentially running or queued up already.
 
-Sigh. The company mail had redirected this to spam... :/
-I will check this and send appropriate follow-up fix(es) to Greg. Big
-thanks for the heads-up!
+I checked this and you are 100% correct.
 
---Matti
+b5e8642ed95ff6ecc20cc6038fe831affa9d098c
+"power: supply: axp20x_usb_power: Init work before enabling IRQs" had
+fixed the order between RFCv1 and the patch v3. This is what one gets
+when not being careful with rebase. Thanks again for the heads-up! I'll
+send follow-up fix still today.
 
+Br,
+	Matti Vaittinen
 
