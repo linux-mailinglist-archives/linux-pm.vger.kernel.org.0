@@ -2,217 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A220F347D49
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 17:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468F53483F6
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 22:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236959AbhCXQII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 12:08:08 -0400
-Received: from mail-io1-f47.google.com ([209.85.166.47]:41845 "EHLO
-        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236958AbhCXQHy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 12:07:54 -0400
-Received: by mail-io1-f47.google.com with SMTP id z3so22090934ioc.8;
-        Wed, 24 Mar 2021 09:07:53 -0700 (PDT)
+        id S238580AbhCXVoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 17:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234434AbhCXVoJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 17:44:09 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A804C06174A;
+        Wed, 24 Mar 2021 14:44:09 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id h13so136164eds.5;
+        Wed, 24 Mar 2021 14:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KI09jULnQMxaDNbbeoqVbnTxCI/Lhru0LQ39tpImnP0=;
+        b=CU7x5ACG0Fur0j7uy6ARJ9w2zKxQ2oLjEej3RjBEe7non01RIKqzw87JYDBGYKC2yd
+         aslZ+HjxBLZvr5Oir/SUhZE3Rb1Z+FIxqYo3p/BGjAmWh8IVU1T59RWeg3gRS3FXaOxN
+         JHa8t236bFKL3o2Ae+9eZjbQoJzPTtxa6exME1xI6+OswLio6sGB+Jd5ZF+h/4/LTlgK
+         TjIqoPeEqC06tQHEuK4gXBbUYxrQr5e9z7ly5nUaJm52/18dr5H+BJ/6zLLhQp7HGZk6
+         3T/MTfajZ0Q2l71Ild13h4Uk2cCQgpT+U/mYOhRHgH1K8Gjamd5mGSogwzDWT7O42Cyj
+         mDDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+TKJ7TFEwQUAbTBq1YwmMD5zRQ+v2F+z93Rbx7y6w3w=;
-        b=hMj9qJiT73MQmoT/9wJxQfrHewN1bubAp5ujpHfSGcPQARVdUbF56uz3YoiLXbc9rc
-         JS0jFD/6i/4S8xJJf759M9V8cZe3T45HF4ouzH9/24Bqxj4NChHlUJ3A77GCoVvnMPJm
-         IVscc6Bjoj2kVdjB1pdTqxX+FYeUDBps7rB8b22MP3GqcE6rQ8RLMQpc17F8cpsEQJra
-         kBS2Jjw/QirlRsLZU95Ej5NE+xpL2rVPQTgjOaMHyoP1baoGV+bAo2q77K/UornezS+N
-         II2mKZwnJ0AwRAYH81ddH0qMqpHCpm92JWDXQQt+td0uCelIn+TmV6OvhO5pAxESifZj
-         ai4g==
-X-Gm-Message-State: AOAM5301OGZRZWZf+u0KhTn9iLE/cTikKvPkll6duOjZnUYM2O89KlB8
-        OzQbsyyPxzhtD7i4z1EgBQ==
-X-Google-Smtp-Source: ABdhPJya1dN4uozCjZmQ2auHAPj9umaWDlRyWBJXtu3w7IXLRDTFyu35xHocwAJF6I49H2oa8mwhzg==
-X-Received: by 2002:a5e:980e:: with SMTP id s14mr3134530ioj.63.1616602073375;
-        Wed, 24 Mar 2021 09:07:53 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id x2sm1279900ilv.36.2021.03.24.09.07.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KI09jULnQMxaDNbbeoqVbnTxCI/Lhru0LQ39tpImnP0=;
+        b=MmHPmBqcn/SiyKu6DYaNNBe1lGBTxJaek1ZRvC3JiWUoGoHV9kzz3Ih2Ag+xvI+zZd
+         2GJg72DFjlOvhzahMw0Bv1brOQVjyoO0dMCI4oTb42nhck9VEgZb8CPBXSUMrcMnYwg8
+         4xfIsZJp4LzVZ40kgJegRfcyx70gT+pbrnUxcBfsKlD4yJFxifB9q7BPDVXjvcgu/qOd
+         hsI13mXzjDJGl1AZXUYB3nMIHeqoljHryDjGS6vKUOqsFEcO173fbmx+VQqhnQDIDk9O
+         8ceVRmvVhErezNlgNblQ9dWX9hQbDZwiqExKYfijfEvbP6c/OByOc5lgxVbIT/2Z/OKb
+         cQDA==
+X-Gm-Message-State: AOAM531srDi5AznYifF++FcK4zIhM3D+gt0dTdo8cfqU137HRZorDz3l
+        j/zggjzfF7r4JD2iSn6dWC4=
+X-Google-Smtp-Source: ABdhPJwQuyvl4aKf5lRW29xfAg47tf4LewQt7l31YnZ3S+t9XkF42yFQtrGxSfDiyUNz8GpTkwoWWA==
+X-Received: by 2002:a05:6402:12d5:: with SMTP id k21mr5773832edx.318.1616622247551;
+        Wed, 24 Mar 2021 14:44:07 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (host-79-34-220-97.business.telecomitalia.it. [79.34.220.97])
+        by smtp.googlemail.com with ESMTPSA id z9sm1871211edr.75.2021.03.24.14.44.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 09:07:52 -0700 (PDT)
-Received: (nullmailer pid 3162147 invoked by uid 1000);
-        Wed, 24 Mar 2021 16:07:50 -0000
-Date:   Wed, 24 Mar 2021 10:07:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v11 2/2] dt-bindings: cpufreq: add bindings for MediaTek
- cpufreq HW
-Message-ID: <20210324160750.GA3154702@robh.at.kernel.org>
-References: <1615549235-27700-1-git-send-email-hector.yuan@mediatek.com>
- <1615549235-27700-3-git-send-email-hector.yuan@mediatek.com>
+        Wed, 24 Mar 2021 14:44:06 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v13 0/9] Add support for ipq8064 tsens
+Date:   Wed, 24 Mar 2021 22:43:54 +0100
+Message-Id: <20210324214404.798-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1615549235-27700-3-git-send-email-hector.yuan@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 07:40:35PM +0800, Hector Yuan wrote:
-> From: "Hector.Yuan" <hector.yuan@mediatek.com>
-> 
-> Add devicetree bindings for MediaTek HW driver.
-> 
-> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
-> ---
->  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  127 ++++++++++++++++++++
->  1 file changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> new file mode 100644
-> index 0000000..0f3ad47
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> @@ -0,0 +1,127 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-mediatek-hw.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek's CPUFREQ Bindings
-> +
-> +maintainers:
-> +  - Hector Yuan <hector.yuan@mediatek.com>
-> +
-> +description:
-> +  CPUFREQ HW is a hardware engine used by MediaTek
-> +  SoCs to manage frequency in hardware. It is capable of controlling frequency
-> +  for multiple clusters.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,cpufreq-hw
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      Addresses and sizes for the memory of the
-> +      HW bases in each frequency domain.
-> +
-> +  "#performance-domain-cells":
+This patchset convert msm8960 to reg_filed, use int_common instead 
+of a custom function and fix wrong tsens get_temp function for msm8960.
+Ipq8064 SoCs tsens driver is based on 8960 tsens driver. Ipq8064 needs
+to be registered as a gcc child as the tsens regs on this platform are
+shared with the controller.
+This is based on work and code here
+https://git.linaro.org/people/amit.kucheria/kernel.git/log/?h=wrk3/tsens-8960-breakage
 
-A common binding schema for this and 'performance-domains' needs to land 
-first.
+v13:
+* Simple reword
+v12:
+* Even more fix reported by Thara
+v11:
+* Address comments from Thara (thx)
+v10:
+* Fix wrong tsens init for ver_0 (crit_trips needs to be set in tsens_register)
+v9:
+* Fix warning from Documentation bot
+v8:
+* Drop MIN and MAX THRESH and use CRIT_THRESH instead
+* Fix broken documentation patch
+v7:
+* Rework calibrate function to use get_temp_common
+* Fix wrong required in the Documentation for ipq8064
+* Fix hardware bug in sensor enable function
+v6:
+* Fix spelling error (can't find the problem with variable misallignment)
+* Rework big if-else
+* Remove extra comments
+* Add description about different interrupts
+v5:
+* Conver driver to use reg_fiedl
+* Use init_common 
+* Drop custom set_trip and set_interrupt
+* Use common set_trip and set_interrupt
+* Fix bad get_temp function
+* Add missing hardcoded slope
+v4:
+* Fix compilation error and warning reported by the bot
+v3:
+* Change driver to register as child instead of use phandle
+v2:
+* Fix dt-bindings problems
 
-> +    description:
-> +      Number of cells in a performance domain specifier. Typically 0 for nodes
-> +      representing a single performance domain and 1 for nodes providing
-> +      multiple performance domains (e.g. performance controllers), but can be
-> +      any value as specified by device tree binding documentation of particular
-> +      provider.
-> +    enum: [ 0, 1 ]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#performance-domain-cells"
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    cpus {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            cpu0: cpu@0 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x000>;
-> +            };
-> +
-> +            cpu1: cpu@100 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x100>;
-> +            };
-> +
-> +            cpu2: cpu@200 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x200>;
-> +            };
-> +
-> +            cpu3: cpu@300 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x300>;
-> +            };
-> +
-> +            cpu4: cpu@400 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
+Ansuel Smith (9):
+  drivers: thermal: tsens: Add VER_0 tsens version
+  drivers: thermal: tsens: Don't hardcode sensor slope
+  drivers: thermal: tsens: Convert msm8960 to reg_field
+  drivers: thermal: tsens: Use init_common for msm8960
+  drivers: thermal: tsens: Fix bug in sensor enable for msm8960
+  drivers: thermal: tsens: Replace custom 8960 apis with generic apis
+  drivers: thermal: tsens: Drop unused define for msm8960
+  drivers: thermal: tsens: Add support for ipq8064-tsens
+  dt-bindings: thermal: tsens: Document ipq8064 bindings
 
-Seems a bit odd that a55 and a75 share a perf domain?
+ .../bindings/thermal/qcom-tsens.yaml          |  56 ++++-
+ drivers/thermal/qcom/tsens-8960.c             | 233 +++++++++---------
+ drivers/thermal/qcom/tsens.c                  | 151 +++++++++---
+ drivers/thermal/qcom/tsens.h                  |   4 +-
+ 4 files changed, 288 insertions(+), 156 deletions(-)
 
+-- 
+2.30.2
 
-> +                reg = <0x400>;
-> +            };
-> +
-> +            cpu5: cpu@500 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x500>;
-> +            };
-> +
-> +            cpu6: cpu@600 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a75";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x600>;
-> +            };
-> +
-> +            cpu7: cpu@700 {
-
-Do we really need to show 8 cores to show how to use this binding?
-
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a75";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x700>;
-> +            };
-> +    };
-> +
-> +    /* ... */
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        performance: performance-controller@11bc00 {
-> +            compatible = "mediatek,cpufreq-hw";
-> +            reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
-> +
-> +            #performance-domain-cells = <1>;
-> +        };
-> +    };
-> -- 
-> 1.7.9.5
-> 
