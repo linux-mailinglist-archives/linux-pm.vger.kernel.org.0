@@ -2,82 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96433347AEB
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 15:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D07347CDE
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 16:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbhCXOjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 10:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbhCXOjh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 10:39:37 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1BEC0613DE
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 07:39:35 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id n198so21741309iod.0
-        for <linux-pm@vger.kernel.org>; Wed, 24 Mar 2021 07:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=omwS5puHKjv17pejHb5i9USkJJrZLYB9ETUsyowGcHo=;
-        b=L/zTmISKkPm4Bb8Zkz4hwGV9sdssGr2Fgi5D8wpbJMWJtrWdC+gTJCS9fZpsh1in1+
-         wyzsjiYY1QuChIqAyEZI+fo2geyk4/Tn8TohZZ2W+LSh/CdmgtZVagTv0j0E4bjg9P0K
-         Vup7OM0afjZgAcOZh5YBZiSDSi74G+2KdsJT2Yrt0ruc21A0ybA+V/7ekMdjTXMPneYO
-         azIOAZp2YDdCQIBIS6kBXxsK0QRk0te0OTgj4Zkhg6wYK5WsqXNTT6zbGRz8mWwrh8JM
-         NXj6jI+WIYRDAreFfy2WR0KNfD3GkJ1Ca86UrKD5SjX5zwVlHbJMKCXW6SxsyOTi397S
-         bsiA==
+        id S236750AbhCXPn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 11:43:57 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:40489 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236704AbhCXPn0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 11:43:26 -0400
+Received: by mail-ot1-f53.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so23147728otb.7;
+        Wed, 24 Mar 2021 08:43:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=omwS5puHKjv17pejHb5i9USkJJrZLYB9ETUsyowGcHo=;
-        b=dt2aPL0tKljQRGwOil5dgoN+Jek7JhLuJlN+H+86uioTLJsSCmvbzo13eSknOBYzlH
-         w+6y/v7aX1D+UhxN7azFW/THoD92u9XHV+rG+z7XQ2OwOtpbzjkAPHSREWjbIcNpacO3
-         zNDng1FVEkzRJHI/w3igYhRmueTli933DGpUXQ+NH5Y9l6junDgwrD+zETxesI7OQIpP
-         xdcXT/BpnBC3iX4HKtlmben6EhYChaqahC1kEmEPF4BKoHkGq0EhkMwcueibnqHtRWTR
-         MGbMW4vFyOVkn9Tyeh1B+arGjDq7AtJTfjwWjyH7JpNkHcbUfHrF7Bnw2rhqR8KdJxqx
-         oKeQ==
-X-Gm-Message-State: AOAM533qCRp4ee244co8Ue2kSrwbNYXe62cQqkum7tK1SWNK1qNQM/Y2
-        gRQjvCXsFqM+xW4QtGDzk5FrH1tTvS7M3DGN0SSe5A==
-X-Google-Smtp-Source: ABdhPJyTsVk1YCFajPZcgUTfkypi6NhdFvf0Emaq+8hkliOyOsf0lxwOTl6O/jALPngnl9Lo4OcfuWGA+zv8KAt4SuY=
-X-Received: by 2002:a5d:93ce:: with SMTP id j14mr2794167ioo.172.1616596774845;
- Wed, 24 Mar 2021 07:39:34 -0700 (PDT)
+        bh=2LlnlKXH3YzdwPwZvOCp+nvzSAq22UqWfFbrRfMlBJc=;
+        b=eZ9uKHrR5WrnJOBBzqa1m1UU/gUVA9ls3rbI7C3VL1xRgTAShPfML7QdfufX38OBFC
+         IkZqA4ZTD6pRnDfgoxFR8XtGy1hKfmB7pQ2oBFvRxYlInoV3gOCOCovZn1aPJbRO7gI/
+         3KK6KSd3I7Qp7BCbhlydgzyj7EgIC6AlLi8epvb+x8StkUsnKX43dVG9EBuhJIESuM/Z
+         uNrAGUfG6dQO7u0dsKOs6lok+OXd81kWm8N5YjvowrIiiWYmzsiQLtJFMTZBKLSnATkl
+         pdcjHmXU61CVF2TVJQ5n0fvfeu9YrEIpVx7diKR4ODLKIJ/hphCogmvuvDOyO/+ONI1q
+         /IBw==
+X-Gm-Message-State: AOAM5328Ee+d0cOEt7JMSGU5uOpOIy4iSb4wcexX/ccZ0sH9ehDknwmk
+        lxa6ODqilxB7vkJgJxg52PII1JE1AvosJr1ZjNI=
+X-Google-Smtp-Source: ABdhPJxNMKZPyOtlHWS9CFGr1m+5WKdkr7FCUdWw3lktEmn/S/Ih+XgaUBMc39h6BnJOQ1THP81t3kXd4HWkbwC8oLk=
+X-Received: by 2002:a05:6830:20d2:: with SMTP id z18mr3673941otq.260.1616600605781;
+ Wed, 24 Mar 2021 08:43:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <1f1fb01e-0616-34ea-ede6-dc7dd679c3d4@garloff.de>
- <c7074c16-5d64-e829-10f6-ef91f5f6222b@garloff.de> <f6143d7a-079d-3f3c-c947-47fc9858a2bb@debian.org>
- <YFsyh5tEaiVNjqT1@lorien.valinor.li>
-In-Reply-To: <YFsyh5tEaiVNjqT1@lorien.valinor.li>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 24 Mar 2021 07:39:28 -0700
-Message-ID: <CAAYoRsXw5-ATytCdgDaOS0dCZ3e=wn_z1tKaxSAsNBkSrSeWWQ@mail.gmail.com>
-Subject: Re: turbostat: Fix Pkg Power on Zen
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Christian Kastner <ckk@debian.org>,
-        Kurt Garloff <kurt@garloff.de>
-Cc:     Len Brown <len.brown@intel.com>,
+References: <3219454.74lMxhSOWB@kreacher> <CAJZ5v0gkhfRRGLpqLN555O7RG3jmScfxTTAzz6AgFrOoh42e=g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gkhfRRGLpqLN555O7RG3jmScfxTTAzz6AgFrOoh42e=g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 Mar 2021 16:43:14 +0100
+Message-ID: <CAJZ5v0hu+UTZm+SaZtnaer7XZ-BQhOR_AAzdZwB0mBdYLYpFKQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: PM: Do not read power state in pci_enable_device_flags()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 5:38 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
-> On Mon, Mar 15, 2021 at 10:54:24PM +0100, Christian Kastner wrote:
-> > On 01.02.21 10:01, Kurt Garloff wrote:
-> > > Issue persists on Ryzen in 5.11-rc6:
-> > > kvmadmin@KurtSrv2018(//):~ [0]$ sudo /casa/src/linux-stable/tools/power/x86/turbostat/turbostat
-
-... deleted stuff that doesn't display properly ...
-
-> > I was seeing the same issue (no stats, program just exits with 243), and
-> > Kurt's simple patch resolved it for me.
+On Mon, Mar 22, 2021 at 3:32 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Does Kurt's patch seems good to you and can be applied or is there
-> anything missing?
+> On Tue, Mar 16, 2021 at 4:52 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > It should not be necessary to update the current_state field of
+> > struct pci_dev in pci_enable_device_flags() before calling
+> > do_pci_enable_device() for the device, because none of the
+> > code between that point and the pci_set_power_state() call in
+> > do_pci_enable_device() invoked later depends on it.
+> >
+> > Moreover, doing that is actively harmful in some cases.  For example,
+> > if the given PCI device depends on an ACPI power resource whose _STA
+> > method initially returns 0 ("off"), but the config space of the PCI
+> > device is accessible and the power state retrieved from the
+> > PCI_PM_CTRL register is D0, the current_state field in the struct
+> > pci_dev representing that device will get out of sync with the
+> > power.state of its ACPI companion object and that will lead to
+> > power management issues going forward.
+> >
+> > To avoid such issues it is better to leave the current_state value
+> > as is until it is changed to PCI_D0 by do_pci_enable_device() as
+> > appropriate.  However, the power state of the device is not changed
+> > to PCI_D0 if it is already enabled when pci_enable_device_flags()
+> > gets called for it, so update its current_state in that case, but
+> > use pci_update_current_state() covering platform PM too for that.
+> >
+> > Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
+> > Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Bjorn, can I take this, or do you want to take care of it yourself?
 
-There were multiple patch submissions. Chen Yu kindly merged them into
-one, which was put out for testing a couple of weeks ago. Try it and
-report back. I'll forward it in a moment.
+I'm taking the silence as consent, so the patch has been applied as
+5.13 material with the R-by from Mika.
+
+> > ---
+> >
+> > Max, I've added a T-by from you even though the patch is slightly different
+> > from what you have tested, but the difference shouldn't matter for your case.
+> >
+> > ---
+> >  drivers/pci/pci.c |   16 +++-------------
+> >  1 file changed, 3 insertions(+), 13 deletions(-)
+> >
+> > Index: linux-pm/drivers/pci/pci.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/pci/pci.c
+> > +++ linux-pm/drivers/pci/pci.c
+> > @@ -1870,20 +1870,10 @@ static int pci_enable_device_flags(struc
+> >         int err;
+> >         int i, bars = 0;
+> >
+> > -       /*
+> > -        * Power state could be unknown at this point, either due to a fresh
+> > -        * boot or a device removal call.  So get the current power state
+> > -        * so that things like MSI message writing will behave as expected
+> > -        * (e.g. if the device really is in D0 at enable time).
+> > -        */
+> > -       if (dev->pm_cap) {
+> > -               u16 pmcsr;
+> > -               pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > -       }
+> > -
+> > -       if (atomic_inc_return(&dev->enable_cnt) > 1)
+> > +       if (atomic_inc_return(&dev->enable_cnt) > 1) {
+> > +               pci_update_current_state(dev, dev->current_state);
+> >                 return 0;               /* already enabled */
+> > +       }
+> >
+> >         bridge = pci_upstream_bridge(dev);
+> >         if (bridge)
+> >
+> >
+> >
