@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 388F434746E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 10:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0519347475
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Mar 2021 10:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbhCXJVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Mar 2021 05:21:38 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:44961 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbhCXJVX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 05:21:23 -0400
-Received: by mail-lj1-f173.google.com with SMTP id u9so1630285ljd.11;
-        Wed, 24 Mar 2021 02:21:23 -0700 (PDT)
+        id S231760AbhCXJWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Mar 2021 05:22:11 -0400
+Received: from mail-lj1-f169.google.com ([209.85.208.169]:33397 "EHLO
+        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234656AbhCXJVl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Mar 2021 05:21:41 -0400
+Received: by mail-lj1-f169.google.com with SMTP id 15so29354212ljj.0;
+        Wed, 24 Mar 2021 02:21:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+gMqvRolEZnnoKM5KaXGodkWheXP+g5d9dALKOnmgGY=;
-        b=X1E4lFdv2nLEJRifNEVhs5Z0ev/zG0yIPj6Ug+EODpET30WXbBmsvadutVpr92uYKo
-         3+lVkAMULIFBds0zhZ9fXbL0PNu8mEduX3Ww7sDZrTS+EXYJFwD7mQZg/g1pR0KAu3ZI
-         tg+pD/iUSI0HjafjEuLt2+vQBhOYpdBX+4iXJNb2URs1BLMDqSxzQPqHZsoGn8XUhRjK
-         hIh+MWWylRNXHR9Pl0GRwxekH5T+1H8WOBoUiWJ79k9ibV46Utfo3PR3Yd64qfSfp2Mr
-         sfDYEBvKtFmsVgt8d2jgNcv2wA4MMaU5cN9gep0utZ4Pw8e5zOvG8UnxKqHzOMNpMARF
-         /cfQ==
-X-Gm-Message-State: AOAM533YNmN7TZX/Xk8L61WNOT8GOH3B+38X4PplSY6Ze5C0kJlq8SKX
-        DBNadl8vSH7IzxcWLcP92Ww=
-X-Google-Smtp-Source: ABdhPJwAk8NX4Fjgxdj3cpFu2LhijJDIo2BxsTSTwgO1c7egREXS33T7qJcmSQqEbdjyHTIRc+4M3A==
-X-Received: by 2002:a2e:b7c1:: with SMTP id p1mr1498436ljo.198.1616577682372;
-        Wed, 24 Mar 2021 02:21:22 -0700 (PDT)
+        bh=l2s71zdl6Ez98egv6WkHsjsQArym1MCaFt9Bj1GaoS0=;
+        b=K3OvwEycIC0XpaaCvpF++8gju9Ah9k7fSw3hnRM21LEANwkJpC/qatgYxvcQSoZb4d
+         lxIEfnxTrXvRwm2M0rGY90is5o1n8R27GLyw+NaqINwDEGQ3YG4d6QC45hviCJ3QTrM3
+         OorOSU8m2ja6YzIvu6hTfJah6tsk4ozTFTdU027fWIJqlCRP4+Z+7vi5YkXUaid1Zylv
+         GvKMt2qt3V34d5gvVLcYdfqvUyFmylN1R8SUqsVQBkZ7emplw/IgxehARctahAeVZEmu
+         0fgt3hATY8KUpeGk3G0MFBlNXwCV2bv3A31BOBDJ+bNOtMnayHfAQDncNJVcMkyNZbNV
+         Ypfg==
+X-Gm-Message-State: AOAM530Gl8fToYGHoA1fTD8LAG5fFln80KD7m07ALoca3D+tWWzKaKu3
+        B37BfB+I7YoorEnTWPr3bxI=
+X-Google-Smtp-Source: ABdhPJz4zboU+CsWwucsqAkmbqnwBVmwnmhni1ldEaRx3beredWRDGvpSSnUAHa6PMiMiShXmZmMxQ==
+X-Received: by 2002:a2e:9a0a:: with SMTP id o10mr1488317lji.432.1616577700292;
+        Wed, 24 Mar 2021 02:21:40 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id e9sm236846ljj.52.2021.03.24.02.21.21
+        by smtp.gmail.com with ESMTPSA id i12sm181191lfv.220.2021.03.24.02.21.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 02:21:22 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 11:21:16 +0200
+        Wed, 24 Mar 2021 02:21:39 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 11:21:34 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
@@ -45,8 +45,8 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 1/2] extcon: extcon-gpio: Log error if work-queue init fails
-Message-ID: <bfd893701ac3d239fef856d2f589063983422100.1616574973.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH 2/2] power: supply: axp20x_usb_power: fix work-queue init
+Message-ID: <a774ca25010b7c932c07f22ce8a548466705c023.1616574973.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1616574973.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -56,31 +56,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add error print for probe failure when resource managed work-queue
-initialization fails.
+The commit 6d0c5de2fd84
+("power: supply: Clean-up few drivers by using managed work init")
+Re-introduced wrong order of initializing work-queue and requesting
+the IRQs which was originally fixed by the commit b5e8642ed95f
+("power: supply: axp20x_usb_power: Init work before enabling IRQs")
+
+In addition this caused the work queue to be initialized twice.
+
+Fix it again.
+
+Fixes: 6d0c5de2fd84 ("power: supply: Clean-up few drivers by using managed work init")
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Suggested-by: Chanwoo Choi <cw00.choi@samsung.com>
+Reported-by: Chen-Yu Tsai <wens@csie.org>
 ---
- drivers/extcon/extcon-gpio.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/power/supply/axp20x_usb_power.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/extcon/extcon-gpio.c b/drivers/extcon/extcon-gpio.c
-index 4105df74f2b0..8ea2cda8f7f3 100644
---- a/drivers/extcon/extcon-gpio.c
-+++ b/drivers/extcon/extcon-gpio.c
-@@ -114,8 +114,10 @@ static int gpio_extcon_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+index 4259709e3491..e954970b50e6 100644
+--- a/drivers/power/supply/axp20x_usb_power.c
++++ b/drivers/power/supply/axp20x_usb_power.c
+@@ -594,7 +594,11 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+ 	power->axp20x_id = axp_data->axp20x_id;
+ 	power->regmap = axp20x->regmap;
+ 	power->num_irqs = axp_data->num_irq_names;
+-	INIT_DELAYED_WORK(&power->vbus_detect, axp20x_usb_power_poll_vbus);
++
++	ret = devm_delayed_work_autocancel(&pdev->dev, &power->vbus_detect,
++					   axp20x_usb_power_poll_vbus);
++	if (ret)
++		return ret;
  
- 	ret = devm_delayed_work_autocancel(dev, &data->work, gpio_extcon_work);
+ 	if (power->axp20x_id == AXP202_ID) {
+ 		/* Enable vbus valid checking */
+@@ -647,10 +651,6 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	ret = devm_delayed_work_autocancel(&pdev->dev, &power->vbus_detect,
+-					   axp20x_usb_power_poll_vbus);
 -	if (ret)
-+	if (ret) {
-+		dev_err(dev, "Failed to initialize delayed_work");
- 		return ret;
-+	}
+-		return ret;
+ 	if (axp20x_usb_vbus_needs_polling(power))
+ 		queue_delayed_work(system_power_efficient_wq, &power->vbus_detect, 0);
  
- 	/*
- 	 * Request the interrupt of gpio to detect whether external connector
 -- 
 2.25.4
 
