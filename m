@@ -2,179 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF84349A56
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 20:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EB7349AAB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 20:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbhCYThd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Mar 2021 15:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbhCYThA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Mar 2021 15:37:00 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C82C06175F
-        for <linux-pm@vger.kernel.org>; Thu, 25 Mar 2021 12:36:58 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id j20-20020a05600c1914b029010f31e15a7fso3745192wmq.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Mar 2021 12:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=c28V1qEol1I4QrexdXU8KtR/UuqWaDR44oRtym8omog=;
-        b=rqHrJiGtdaFIDWFvz2/YQL40pxirOdoQHfB+PAgJ0oYhv9k4vd3ALvRKEewsisgmtD
-         POIKgErjUeibWdmqe+uCwplydDvG1qzxc/1w1rB7cQqjpahs7gG5Ih2T/TqCplsPrInz
-         qUodO7S70wOSVekTbKaK+Hi11An+CrW4w73zPBAOen6GkfHjaJhXxY1M+Unl27tPHswB
-         /5P9kS+jkE5w/niDGNqWJBP3Mog7C2cklB7fGL9C2RRGRzyKsVEBPFOuHObqvKekM6WF
-         6sIuXkeeYNdqqRqzha5169RgSAQqEHdZ6jP/HJlOOEyMEaBktXCrlQImF040GvHlTU9K
-         imEA==
+        id S229930AbhCYTvd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Mar 2021 15:51:33 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:39828 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbhCYTvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Mar 2021 15:51:05 -0400
+Received: by mail-ot1-f45.google.com with SMTP id h6-20020a0568300346b02901b71a850ab4so3116950ote.6;
+        Thu, 25 Mar 2021 12:51:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=c28V1qEol1I4QrexdXU8KtR/UuqWaDR44oRtym8omog=;
-        b=XtffsfDHMsVqLI8k+ze/IyAdy15xX1GJCy0SsekkQO580FRLQgouMCfAYbYF73k+PO
-         OeTASqTqGUx07pgjm5XCalDn1OKtk7trueW6rml9sk0FufMPaAbqcEfu2rYynWGX1pLe
-         H9n8Vzb0+LSOdBQvZgPLpdXONvySMeGj7IQb463SWwVtd6lIKNicTl84Hidyz65ZvP9v
-         fXf+5Wk0mVj/qqiJR5WK9/roEwcsVpLFdp54+4CuNR1cUz2R7iAvuYs8osT5wy9Mj34h
-         CzBTavHbswIhYQ85EUvGky1AmkXy9FszVxxJrx+6t8MD7uwQgFohQzcrVI3/5Ue4avoW
-         rLKw==
-X-Gm-Message-State: AOAM532d9CB9Km/nrHL/82yoOF4ArwucD1122EYZJ2LYinpY5zd8FEQ7
-        CEAR1tT5anvvt41s7HwGlhAKtQ==
-X-Google-Smtp-Source: ABdhPJzAgzLcQ9/+8u4JXx39HNXYUE0hH5J8RR+sFfQa2gG9t4cbr7wwLCsDJPg7ZmwASkeB9WA3aQ==
-X-Received: by 2002:a1c:df46:: with SMTP id w67mr9475403wmg.176.1616701017347;
-        Thu, 25 Mar 2021 12:36:57 -0700 (PDT)
-Received: from localhost.localdomain ([82.142.13.80])
-        by smtp.gmail.com with ESMTPSA id h12sm2240217wrv.58.2021.03.25.12.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 12:36:56 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     rkumbako@quicinc.com, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list),
-        linux-api@vger.kernel.org (open list:ABI/API)
-Subject: [PATCH] thermal/drivers/netlink: Add the temperature when crossing a trip point
-Date:   Thu, 25 Mar 2021 20:36:32 +0100
-Message-Id: <20210325193633.19592-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xcBD+yV296KejJumcNog1gY0dMH71GzRffk+94rnKhA=;
+        b=gExrAyv1RcyptcNeVJgTPr4BDo+YZGen0fMUbkWdPcU7nrt0VKOD32aTNrgwU4zoIO
+         3NQYVMGWNCYfYbni51XmHoh6S8pIvp6YyT6gSqGGQkmvqiHEHcOYOZdmLLzMmsljpxaU
+         VcrktFsJEHSk8hhLOrplBSlIPsdPzRFvyTISxBVRx5dJkMMuWOoTAfsmJCFIPY7uWOLI
+         yVPSv0hA+hwv90Yw/529X7IywQjVVa2l9XjAznopF6CnD8y8mBO6x+kKpi3LUuHnPuVU
+         FPeWkFqr7OeBYr+bNZsYXv1kyDmJYkKBtmqvJhbTfyEAH0KRLLX5nYqNQEafVK9N8e6V
+         jAFQ==
+X-Gm-Message-State: AOAM532i1g2SgHNgXgm4mg3KHegwuT/23JrTspHKw7qlweMc8NK2mC+g
+        MUWdV94CV8k0nsw90uyacfHsWZ5jbF382viw2p4=
+X-Google-Smtp-Source: ABdhPJy2F3aKMX/jQtTbjZ0DPU13F0IGt77twoi7kIOQwSUOE7hvcufQqnODQ0HtPmc1jQnrZhFqMpC2Vhviqr8hzrE=
+X-Received: by 2002:a9d:4811:: with SMTP id c17mr9328124otf.206.1616701865328;
+ Thu, 25 Mar 2021 12:51:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210311123708.23501-1-frederic@kernel.org> <YTBPR01MB3262D78448BD2FB3AD5EB4F9C46B9@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
+ <20210325131400.GA938586@lothringen> <5712356.lOV4Wx5bFT@kreacher> <YTBPR01MB326253A7B094A2F603488EA8C4629@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
+In-Reply-To: <YTBPR01MB326253A7B094A2F603488EA8C4629@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 Mar 2021 20:50:54 +0100
+Message-ID: <CAJZ5v0h2BZdj4ds1NUKUcdJ_WCZe-0EogE1k5qbJkoEGFkjJyw@mail.gmail.com>
+Subject: =?UTF-8?B?UmU6IOWbnuWkjTogW1BBVENIIDAxLzEwXSB0aWNrL25vaHo6IFByZXZlbnQgdGlja19ubw==?=
+        =?UTF-8?B?aHpfZ2V0X3NsZWVwX2xlbmd0aCgpIGZyb20gcmV0dXJuaW5nIG5lZ2F0aXZlIHZhbHVl?=
+To:     "Zhou Ti (x2019cwm)" <x2019cwm@stfx.ca>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yunfeng Ye <yeyunfeng@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The slope of the temperature increase or decrease can be high and when
-the temperature crosses the trip point, there could be a significant
-difference between the trip temperature and the measured temperatures.
+On Thu, Mar 25, 2021 at 8:18 PM Zhou Ti (x2019cwm) <x2019cwm@stfx.ca> wrote:
+>
+> On March 25, 2021 14:56, Rafael J. Wysocki wrote:
+> > On Thursday, March 25, 2021 2:14:00 PM CET Frederic Weisbecker wrote:
+> > > On Tue, Mar 16, 2021 at 04:08:08PM +0000, Zhou Ti (x2019cwm) wrote:
+> > > > But I don't think it's a good idea to handle this in callers, because logically the function shouldn't return negative values. Returning 0 directly would allow idle governors to get another chance to select again.
+> > >
+> > > Hmm, I'm going to leave the last word to Rafael since cpuidle are the only
+> > > callers of this. In any case we need to fix it.
+> >
+> > Yes, we do.
+> >
+> > So I said that I preferred to address this in the callers and the reason why
+> > is because, for example, for the teo governor it would be a matter of using
+> > a different data type to store the tick_nohz_get_sleep_length() return value,
+> > like in the (untested) patch below.
+> >
+> > So at least in this case there is no need to add any new branches anywhere.
+> >
+> > I'm still not sure about menu, because it is more complicated, but even if
+> > that one needs an extra branch, that is a win already.
+>
+> I would like to point out the potential trouble that fixing this issue in the
+> callers could cause.
+>
+> 1. This function is called multiple times in menu governor and TEO
+> governor.
 
-That forces the userspace to read the temperature back right after
-receiving a trip violation notification.
+What do you mean by "multiple times"?
 
-In order to be efficient, give the temperature which resulted in the
-trip violation.
+Each of the governors calls it once per cycle and its previous return
+value is not used in the next cycle at least in teo.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c    |  6 ++++--
- drivers/thermal/thermal_netlink.c | 11 ++++++-----
- drivers/thermal/thermal_netlink.h |  8 ++++----
- include/uapi/linux/thermal.h      |  2 +-
- 4 files changed, 15 insertions(+), 12 deletions(-)
+> I'm not sure that receiving results using signed integers is enough
+> to solve all the problems, in the worst case it may require increasing
+> the logical complexity of the code.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 996c038f83a4..948020ef51b1 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -430,10 +430,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
- 	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
- 		if (tz->last_temperature < trip_temp &&
- 		    tz->temperature >= trip_temp)
--			thermal_notify_tz_trip_up(tz->id, trip);
-+			thermal_notify_tz_trip_up(tz->id, trip,
-+						  tz->temperature);
- 		if (tz->last_temperature >= trip_temp &&
- 		    tz->temperature < (trip_temp - hyst))
--			thermal_notify_tz_trip_down(tz->id, trip);
-+			thermal_notify_tz_trip_down(tz->id, trip,
-+						    tz->temperature);
- 	}
- 
- 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
-diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-index 1234dbe95895..a16dd4d5d710 100644
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
- static int thermal_genl_event_tz_trip_up(struct param *p)
- {
- 	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
--	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
-+	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
-+	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
- 		return -EMSGSIZE;
- 
- 	return 0;
-@@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
- }
- 
--int thermal_notify_tz_trip_down(int tz_id, int trip_id)
-+int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
- {
--	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-+	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
- 
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
- }
- 
--int thermal_notify_tz_trip_up(int tz_id, int trip_id)
-+int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
- {
--	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-+	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
- 
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
- }
-diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-index 828d1dddfa98..e554f76291f4 100644
---- a/drivers/thermal/thermal_netlink.h
-+++ b/drivers/thermal/thermal_netlink.h
-@@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
- int thermal_notify_tz_delete(int tz_id);
- int thermal_notify_tz_enable(int tz_id);
- int thermal_notify_tz_disable(int tz_id);
--int thermal_notify_tz_trip_down(int tz_id, int id);
--int thermal_notify_tz_trip_up(int tz_id, int id);
-+int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
-+int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
- int thermal_notify_tz_trip_delete(int tz_id, int id);
- int thermal_notify_tz_trip_add(int tz_id, int id, int type,
- 			       int temp, int hyst);
-@@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
- 	return 0;
- }
- 
--static inline int thermal_notify_tz_trip_down(int tz_id, int id)
-+static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
- {
- 	return 0;
- }
- 
--static inline int thermal_notify_tz_trip_up(int tz_id, int id)
-+static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
- {
- 	return 0;
- }
-diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-index c105054cbb57..bf5d9c8ef16f 100644
---- a/include/uapi/linux/thermal.h
-+++ b/include/uapi/linux/thermal.h
-@@ -18,7 +18,7 @@ enum thermal_trip_type {
- 
- /* Adding event notification support elements */
- #define THERMAL_GENL_FAMILY_NAME		"thermal"
--#define THERMAL_GENL_VERSION			0x01
-+#define THERMAL_GENL_VERSION			0x02
- #define THERMAL_GENL_SAMPLING_GROUP_NAME	"sampling"
- #define THERMAL_GENL_EVENT_GROUP_NAME		"event"
- 
--- 
-2.17.1
+That is a valid concern, so it is a tradeoff between increasing the
+logical complexity of the code and adding branches to it.
 
+> 2. This function is important for developing idle governor.
+> If the problem is not fixed in the function itself, then this potential
+> pitfall should be explicitly stated in the documentation.
+
+That I can agree with.
+
+> This is because
+> it is difficult to predict from the definition and naming of the function
+> that it might return a negative number. I actually discovered this anomaly
+> when I was doing data analysis on my own idle governor. For some idle control
+> algorithms, this exception return could lead to serious consequences,
+> because negative return logically won't happen.
+
+Well, it's a matter of how to take the possible negative return value
+into account so it does not affect the result of the computations.
+
+> >
+> > ---
+> >  drivers/cpuidle/governors/teo.c |    8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > Index: linux-pm/drivers/cpuidle/governors/teo.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/cpuidle/governors/teo.c
+> > +++ linux-pm/drivers/cpuidle/governors/teo.c
+> > @@ -100,8 +100,8 @@ struct teo_idle_state {
+> >   * @intervals: Saved idle duration values.
+> >   */
+> >  struct teo_cpu {
+> > -       u64 time_span_ns;
+> > -       u64 sleep_length_ns;
+> > +       s64 time_span_ns;
+> > +       s64 sleep_length_ns;
+> >         struct teo_idle_state states[CPUIDLE_STATE_MAX];
+> >         int interval_idx;
+> >         u64 intervals[INTERVALS];
+> > @@ -216,7 +216,7 @@ static bool teo_time_ok(u64 interval_ns)
+> >   */
+> >  static int teo_find_shallower_state(struct cpuidle_driver *drv,
+> >                                     struct cpuidle_device *dev, int state_idx,
+> > -                                   u64 duration_ns)
+> > +                                   s64 duration_ns)
+> >  {
+> >         int i;
+> >
+> > @@ -242,7 +242,7 @@ static int teo_select(struct cpuidle_dri
+> >  {
+> >         struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+> >         s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
+> > -       u64 duration_ns;
+> > +       s64 duration_ns;
+> >         unsigned int hits, misses, early_hits;
+> >         int max_early_idx, prev_max_early_idx, constraint_idx, idx, i;
+> >         ktime_t delta_tick;
+>
