@@ -2,197 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0A234948C
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 15:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4F8349607
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 16:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbhCYOtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Mar 2021 10:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbhCYOt3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Mar 2021 10:49:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066DBC06174A;
-        Thu, 25 Mar 2021 07:49:29 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id d191so1339297wmd.2;
-        Thu, 25 Mar 2021 07:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SWvMHK4Ot07NYjs1TXQxHKnMoJ0tlX8FET1AI29AVZg=;
-        b=aqniE4xUchEMgXVFlAfySinuErd1wsZkzuNF6K0y8IG8kaOUIfUufGVbP3IwOq7GnO
-         T9Cl8iG2I8LrPrRr8NxQrYQUY8BPqjphyCUSavaa+AxFXVBWbCmbgIXYRAZeSB3OgIKW
-         VcIpoWqNHxtg7gQ8ND3tPbzTuRTFkMV0m0jBHM+Mm1F9XWeu/z0a6nupn2zHyhrbYvsQ
-         kGthDsHIFeaOP8KDeYgmgdMx/0AFZfvXUuuX2Fg/9mpfBfGA6+uh7mxheCwsRshT4V8Z
-         mp3bmeMOLAf1a6xMMoOxQKffBHOCxsHW+QOyqEu9omzRQsunSemHYf6VB8FYfq7uf1PT
-         QXvA==
+        id S231683AbhCYPsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Mar 2021 11:48:19 -0400
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:38665 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230322AbhCYPrp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Mar 2021 11:47:45 -0400
+Received: by mail-ua1-f46.google.com with SMTP id h34so646723uah.5;
+        Thu, 25 Mar 2021 08:47:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SWvMHK4Ot07NYjs1TXQxHKnMoJ0tlX8FET1AI29AVZg=;
-        b=FCoTfOKPeXcvGh0cM+fBTz+IuiEunmmrHQiddm/LUPseHI1k1O5JGUTLwRhBNG9K9W
-         QKQTSGvuyFzMFtPYzVktevNgpwWMFFUEdHanVutqdnyfrdJw7ksBd3WhyejvOkuLgl+V
-         2OrNRqugTIn5kPHP4PGUKtDvDbsrS3XSzzVJkDIvQOhOByD5L+Vm84JgUHJBn+jMq/TR
-         hbll0CR28weD9m4iRfUo3X8Dn3BufBqZ/ui5fF8AndKvTEwGkLsrE1d9sfO+SXfHIMMe
-         kYDWq7GbtZhYApR2W+CVcIx3vyAFNLX6TeV44J26vmosX/9F+dkHUrmHTAAIcrIFi7vv
-         QIcQ==
-X-Gm-Message-State: AOAM533/+Yq4076jn/R8Y4zr2h1Z+DjhJlNWClkYVVjbS/mZWyqBvGxi
-        dIloYdGuymw3A+rL0rFkLTM=
-X-Google-Smtp-Source: ABdhPJxIjM6YO03HPGXR9x2Aq4ifABfHiBTvBqGsj9bs6OhqGRpc7VI3dZTXyRSRrsLs0/EtdBuZAg==
-X-Received: by 2002:a7b:c188:: with SMTP id y8mr8266237wmi.76.1616683767692;
-        Thu, 25 Mar 2021 07:49:27 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id l9sm6259966wmq.2.2021.03.25.07.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 07:49:26 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 15:49:48 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/6] dt-bindings: power: tegra: Add binding for core
- power domain
-Message-ID: <YFyjDNYAkbTQU5G0@orome.fritz.box>
-References: <20210314164810.26317-1-digetx@gmail.com>
- <20210314164810.26317-4-digetx@gmail.com>
- <20210323224826.GA1490612@robh.at.kernel.org>
- <fd60e507-37b4-acc1-b19a-a3904cd13f65@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VORyg37KyhTM2pEju2vrHYnS2b444LAJS39AyI1tLyU=;
+        b=NIbnJ/1DUbHA/K0FQzgEn+Ml5S10WVEPFyT3/1vYjTjpW6U7GEpOwvhiMco+9NXhUn
+         pM8GXczkW4Y+qLQv1zdt3fRLRdpmBulI+eYp9vlx1uUh7Ze2zmwdIVUbIYzVwkSjK2nE
+         XdzH1O5k/IaC7hnqpDWr9Je+wFj7T7EwkhTp77XknpPIhumlQIuI2QqP6K9tB9s7M1N/
+         n+sT0E/xaUFXeVhmMoF2VeKcg7306o62/30lfniz+RxDsd6psnA7u8Cts4LD7E9Vn5MP
+         Ga02gLhpGFlRTMhcgphZpOk0rNhH+gqPzrGRCt80N8pQKRbiOjnKsp6qKsNXwNb2f10k
+         FOQg==
+X-Gm-Message-State: AOAM532az4ky0wLWB4fzXHMsA1IsqEZ5xy9OqfmLSj0GtIpE0Z8nTwgC
+        qVTxrGTkph8BWpxvBKMfCwjTKFuPIIu1Q34jfVc=
+X-Google-Smtp-Source: ABdhPJz9ribtsSNo45nfPsfI32D2+XmTQUPrUgHfSYuhDyGOQqll7eBC8nUPPybEDHZ0rx9LbEO15UIVaXecG/fpF7Q=
+X-Received: by 2002:ab0:2c16:: with SMTP id l22mr5452914uar.100.1616687264304;
+ Thu, 25 Mar 2021 08:47:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AKB8U57WCp8yhm9E"
-Content-Disposition: inline
-In-Reply-To: <fd60e507-37b4-acc1-b19a-a3904cd13f65@gmail.com>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
+References: <20210205222644.2357303-9-saravanak@google.com>
+ <20210210114435.122242-1-tudor.ambarus@microchip.com> <CGME20210325133159eucas1p297b769beb681743fb32d362a86cc6e3e@eucas1p2.samsung.com>
+ <20210210114435.122242-2-tudor.ambarus@microchip.com> <d24bebc5-0f78-021f-293f-e58defa32531@samsung.com>
+In-Reply-To: <d24bebc5-0f78-021f-293f-e58defa32531@samsung.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 25 Mar 2021 16:47:33 +0100
+Message-ID: <CAMuHMdUaROcMbjAM1fu8und4g=BFZe3C3f8-rbB3q+85RWvgeA@mail.gmail.com>
+Subject: Re: [PATCH] clk: Mark fwnodes when their clock provider is added
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Saravana Kannan <saravanak@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Marek,
 
---AKB8U57WCp8yhm9E
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 25, 2021 at 2:32 PM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+> On 10.02.2021 12:44, Tudor Ambarus wrote:
+> > This is a follow-up for:
+> > commit 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+> >
+> > The above commit updated the deprecated of_clk_add_provider(),
+> > but missed to update the preferred of_clk_add_hw_provider().
+> > Update it now.
+> >
+> > Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>
+> This patch, which landed in linux-next as commit 6579c8d97ad7 ("clk:
+> Mark fwnodes when their clock provider is added") causes the following
+> NULL pointer dereference on Raspberry Pi 3b+ boards:
+>
+> --->8---
+>
+> raspberrypi-firmware soc:firmware: Attached to firmware from
+> 2020-01-06T13:05:25
+> Unable to handle kernel NULL pointer dereference at virtual address
+> 0000000000000050
+> Mem abort info:
+>    ESR = 0x96000004
+>    EC = 0x25: DABT (current EL), IL = 32 bits
+>    SET = 0, FnV = 0
+>    EA = 0, S1PTW = 0
+> Data abort info:
+>    ISV = 0, ISS = 0x00000004
+>    CM = 0, WnR = 0
+> [0000000000000050] user address but active_mm is swapper
+> Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 0 PID: 10 Comm: kworker/0:1 Not tainted 5.12.0-rc4+ #2764
+> Hardware name: Raspberry Pi 3 Model B (DT)
+> Workqueue: events deferred_probe_work_func
+> pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
+> pc : of_clk_add_hw_provider+0xac/0xe8
+> lr : of_clk_add_hw_provider+0x94/0xe8
+> sp : ffff8000130936b0
+> x29: ffff8000130936b0 x28: ffff800012494e04
+> x27: ffff00003b18cb05 x26: ffff00003aa5c010
+> x25: 0000000000000000 x24: 0000000000000000
+> x23: ffff00003aa1e380 x22: ffff8000106830d0
+> x21: ffff80001233f180 x20: 0000000000000018
+> x19: 0000000000000000 x18: ffff8000124d38b0
+> x17: 0000000000000013 x16: 0000000000000014
+> x15: ffff8000125758b0 x14: 00000000000184e0
+> x13: 000000000000292e x12: ffff80001258dd98
+> x11: 0000000000000001 x10: 0101010101010101
+> x9 : ffff80001233f288 x8 : 7f7f7f7f7f7f7f7f
+> x7 : fefefefeff6c626f x6 : 5d636d8080808080
+> x5 : 00000000006d635d x4 : 0000000000000000
+> x3 : 0000000000000000 x2 : 540eb5edae191600
+> x1 : 0000000000000000 x0 : 0000000000000000
+> Call trace:
+>   of_clk_add_hw_provider+0xac/0xe8
+>   devm_of_clk_add_hw_provider+0x5c/0xb8
+>   raspberrypi_clk_probe+0x110/0x210
+>   platform_probe+0x90/0xd8
+>   really_probe+0x108/0x3c0
+>   driver_probe_device+0x60/0xc0
+>   __device_attach_driver+0x9c/0xd0
+>   bus_for_each_drv+0x70/0xc8
+>   __device_attach+0xec/0x150
+>   device_initial_probe+0x10/0x18
+>   bus_probe_device+0x94/0xa0
+>   device_add+0x47c/0x780
+>   platform_device_add+0x110/0x248
+>   platform_device_register_full+0x120/0x150
+>   rpi_firmware_probe+0x158/0x1f8
 
-On Wed, Mar 24, 2021 at 02:01:29AM +0300, Dmitry Osipenko wrote:
-> 24.03.2021 01:48, Rob Herring =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Sun, Mar 14, 2021 at 07:48:07PM +0300, Dmitry Osipenko wrote:
-> >> All NVIDIA Tegra SoCs have a core power domain where majority of hardw=
-are
-> >> blocks reside. Add binding for the core power domain.
-> >>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >>  .../power/nvidia,tegra20-core-domain.yaml     | 51 +++++++++++++++++++
-> >>  1 file changed, 51 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/power/nvidia,teg=
-ra20-core-domain.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/power/nvidia,tegra20-co=
-re-domain.yaml b/Documentation/devicetree/bindings/power/nvidia,tegra20-cor=
-e-domain.yaml
-> >> new file mode 100644
-> >> index 000000000000..4692489d780a
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/power/nvidia,tegra20-core-doma=
-in.yaml
-> >> @@ -0,0 +1,51 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/power/nvidia,tegra20-core-domain.y=
-aml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: NVIDIA Tegra Core Power Domain
-> >> +
-> >> +maintainers:
-> >> +  - Dmitry Osipenko <digetx@gmail.com>
-> >> +  - Jon Hunter <jonathanh@nvidia.com>
-> >> +  - Thierry Reding <thierry.reding@gmail.com>
-> >> +
-> >> +allOf:
-> >> +  - $ref: power-domain.yaml#
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - nvidia,tegra20-core-domain
-> >> +      - nvidia,tegra30-core-domain
-> >> +
-> >> +  operating-points-v2:
-> >> +    description:
-> >> +      Should contain level, voltages and opp-supported-hw property.
-> >> +      The supported-hw is a bitfield indicating SoC speedo or process
-> >> +      ID mask.
-> >> +
-> >> +  "#power-domain-cells":
-> >> +    const: 0
-> >> +
-> >> +  power-supply:
-> >> +    description:
-> >> +      Phandle to voltage regulator connected to the SoC Core power ra=
-il.
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +  - operating-points-v2
-> >> +  - "#power-domain-cells"
-> >> +  - power-supply
-> >> +
-> >> +additionalProperties: false
-> >> +
-> >> +examples:
-> >> +  - |
-> >> +    power-domain {
-> >> +        compatible =3D "nvidia,tegra20-core-domain";
-> >> +        operating-points-v2 =3D <&opp_table>;
-> >> +        power-supply =3D <&regulator>;
-> >> +        #power-domain-cells =3D <0>;
-> >=20
-> > AFAICT, there's no way to access this 'hardware'?
-> correct
+> This patch mainly revealed that clk/bcm/clk-raspberrypi.c driver calls
+> devm_of_clk_add_hw_provider(), with a device pointer, which has a NULL
+> dev->of_node. I'm not sure if adding a check for a NULL np in
+> of_clk_add_hw_provider() is a right fix, though.
 
-To avoid exposing this "virtual" device in device tree, could this
-instead be modelled as a child node of the PMC node? We already expose a
-couple of generic power domains that way on Tegra210 and later, so
-perhaps some of that infrastructure can be reused? I suppose given that
-this is different from the standard powergate domains that we expose so
-far, this may need a different implementation, but from a device tree
-bindings point of view it could fit in with that.
+raspberrypi_clk_probe():
 
-Thierry
+        /*
+         * We can be probed either through the an old-fashioned
+         * platform device registration or through a DT node that is a
+         * child of the firmware node. Handle both cases.
+         */
 
---AKB8U57WCp8yhm9E
-Content-Type: application/pgp-signature; name="signature.asc"
+So the real issue is rpi_register_clk_driver() creating a platform
+device for the firmware clocks if they're missing in DT.
 
------BEGIN PGP SIGNATURE-----
+Then, the clock driver calls devm_of_clk_add_hw_provider(),
+regardless of a DT node being present or not.
+I'm wondering how power consumers are supposed to refer
+to these firmware clocks, without a DT node?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBcowwACgkQ3SOs138+
-s6ETIxAAmh5YGcmIWmbAM0xfHAlBQir8X7TqZ4NdKhevxGI5RuvKoShdRwnT2YtR
-MO8mtDXq2c0O5kWkx0XPl53tf06Q1Kdn1VNcAAZ7afPnvAylEme3zBuUJUzK/vX+
-f1jp1jXtZtYka2l9XZ1IIynGvFgY+nlAmI8+LRAzl5QDUbE7+WkUVBOcwFKRrTzW
-Fff1gfSWjAVav4DuzFQ1lrmikuAdxc/yXpiRzYofWBipdr7yXqL7+HfCDikQfyF0
-vV7lNEi4LT4Jh8M32fb2X+RlVwZUG+gnn+tpKPG/n0j/hfdCyGlp4zElLVff9MX+
-IXyrU08//EzZCGx/R5JoaBvvtQrdhakv0P3pknVFFvnuMGt/Z+XOKj5kTwRfzlCx
-Ag+v7Yt1T5ujtFGp+r6Mh0wvaUyd1JSVoAqc2k8DrDJL3jnafUPEFFtjxUehPHZo
-NrZzfuPHk11uvRw+TSkdRFMjb7jO/+8OxitcFYnYff41YiRpu+CgohsBsMnmBnJN
-XoZMr/7tjd6CGkfvzcipH1zhQhQSMzAis0K+AO8zFLczTRImcVdTczA7DpxugJX9
-kHL3R4kVBZN6o3cVRDIbIyV09WuU1v1snSwoGLTpTP+o2/ymlcJUZIjm+8MkbF8G
-WJe/KQ7/tytxfzDm4Nov979REyChdesDw+RSt/ij9l0WrPm6xZU=
-=Rodt
------END PGP SIGNATURE-----
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -4594,6 +4594,8 @@ int of_clk_add_hw_provider(struct device_node *np,
+> >       if (ret < 0)
+> >               of_clk_del_provider(np);
+> >
+> > +     fwnode_dev_initialized(&np->fwnode, true);
+> > +
+> >       return ret;
+> >   }
+> >   EXPORT_SYMBOL_GPL(of_clk_add_hw_provider);
 
---AKB8U57WCp8yhm9E--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
