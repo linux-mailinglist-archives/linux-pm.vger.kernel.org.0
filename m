@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B332E348F6F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 12:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF657348F71
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 12:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbhCYL1j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Mar 2021 07:27:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35186 "EHLO mail.kernel.org"
+        id S231162AbhCYL1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Mar 2021 07:27:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35542 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231173AbhCYL0f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Mar 2021 07:26:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BBE661A38;
-        Thu, 25 Mar 2021 11:26:25 +0000 (UTC)
+        id S230163AbhCYL0j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Mar 2021 07:26:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4206761A4A;
+        Thu, 25 Mar 2021 11:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616671586;
-        bh=5lkXy9QAJUzflm//ImAiJZsaODEjkF9zLcTFNlU8a1U=;
+        s=k20201202; t=1616671598;
+        bh=0PspNJECVDrJESPZ4603uo9HjeciJGkf37foAb3OEAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R975u3c4jKZ6vIPPk6VxOwk0mzdmhgSgIojkxzs8GfAyO+oi0RNHNvPPhCd85g2yj
-         +U5YxMfKA5lbmANcxJ+fZFmwlxbzMUoGA5Owd7AUSne6FTAYxXxCMnnF8W0GUTm1kY
-         MVThrKqok9k2rDc/gxMB8zv35shLHMyiNriKGGvi376Pvupk69BcP8p6+wlSAvhJCv
-         hy19U3/HH3c1T6qFTE5F04KklEBpZJzPhDd+4u8eY00cX6SmkHCCvUN7fd8KFdNRYY
-         2BJSjYL+G1SEnk6UgdEnHSWTdGPDu3KbIYzAaMI+Xzvz+jeh8894wiMJcFVE3EpQ1C
-         +P/LOs+jevxBw==
+        b=KUUMSn5dQ26YeNenncGtnfbit9PfuiY03UHrX2TfKphn4IZ5Xc15r/H31pI2wS2gC
+         TnM5dJFFXV2Gbv9OOjeeQyQyeCjOnjEwtbuCR5yVm4bLvkhkf4Pc3XolfhAwNczCx9
+         T43fQ2etOeHcdAXlSXX53MCHKh+SAe9LB5fkiiSniaPX0SqzNahvQ9dWFP4ZHXYI//
+         NOiHwxx1N1ZQXj68otVTe4GQgX3xxZu9qB6d7f1ckjw1FgbiymJ/yEee1oEwtyz3Px
+         rLSq2gsQo3zpuMTXtZSex3lh3aFdQog/1AFA9r92Eni7rBnrJKrQnTcQ5kOXEGV3iU
+         G8JONW01qP6Vg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 20/39] kernel: freezer should treat PF_IO_WORKER like PF_KTHREAD for freezing
-Date:   Thu, 25 Mar 2021 07:25:39 -0400
-Message-Id: <20210325112558.1927423-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 30/39] thermal/core: Add NULL pointer check before using cooling device stats
+Date:   Thu, 25 Mar 2021 07:25:49 -0400
+Message-Id: <20210325112558.1927423-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210325112558.1927423-1-sashal@kernel.org>
 References: <20210325112558.1927423-1-sashal@kernel.org>
@@ -42,34 +42,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
 
-[ Upstream commit 15b2219facadec583c24523eed40fa45865f859f ]
+[ Upstream commit 2046a24ae121cd107929655a6aaf3b8c5beea01f ]
 
-Don't send fake signals to PF_IO_WORKER threads, they don't accept
-signals. Just treat them like kthreads in this regard, all they need
-is a wakeup as no forced kernel/user transition is needed.
+There is a possible chance that some cooling device stats buffer
+allocation fails due to very high cooling device max state value.
+Later cooling device update sysfs can try to access stats data
+for the same cooling device. It will lead to NULL pointer
+dereference issue.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Add a NULL pointer check before accessing thermal cooling device
+stats data. It fixes the following bug
+
+[ 26.812833] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
+[ 27.122960] Call trace:
+[ 27.122963] do_raw_spin_lock+0x18/0xe8
+[ 27.122966] _raw_spin_lock+0x24/0x30
+[ 27.128157] thermal_cooling_device_stats_update+0x24/0x98
+[ 27.128162] cur_state_store+0x88/0xb8
+[ 27.128166] dev_attr_store+0x40/0x58
+[ 27.128169] sysfs_kf_write+0x50/0x68
+[ 27.133358] kernfs_fop_write+0x12c/0x1c8
+[ 27.133362] __vfs_write+0x54/0x160
+[ 27.152297] vfs_write+0xcc/0x188
+[ 27.157132] ksys_write+0x78/0x108
+[ 27.162050] ksys_write+0xf8/0x108
+[ 27.166968] __arm_smccc_hvc+0x158/0x4b0
+[ 27.166973] __arm_smccc_hvc+0x9c/0x4b0
+[ 27.186005] el0_svc+0x8/0xc
+
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/1607367181-24589-1-git-send-email-manafm@codeaurora.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/freezer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/thermal_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index dc520f01f99d..1a2d57d1327c 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -134,7 +134,7 @@ bool freeze_task(struct task_struct *p)
- 		return false;
- 	}
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index a6f371fc9af2..f52708f310e0 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -754,6 +754,9 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+ {
+ 	struct cooling_dev_stats *stats = cdev->stats;
  
--	if (!(p->flags & PF_KTHREAD))
-+	if (!(p->flags & (PF_KTHREAD | PF_IO_WORKER)))
- 		fake_signal_wake_up(p);
- 	else
- 		wake_up_state(p, TASK_INTERRUPTIBLE);
++	if (!stats)
++		return;
++
+ 	spin_lock(&stats->lock);
+ 
+ 	if (stats->state == new_state)
 -- 
 2.30.1
 
