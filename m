@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB44348FF7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 12:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68C3349024
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 12:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhCYLbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Mar 2021 07:31:00 -0400
+        id S230155AbhCYLdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Mar 2021 07:33:01 -0400
 Received: from mail.kernel.org ([198.145.29.99]:35442 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230101AbhCYL3O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Mar 2021 07:29:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E75161A3F;
-        Thu, 25 Mar 2021 11:27:20 +0000 (UTC)
+        id S231848AbhCYLat (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Mar 2021 07:30:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B85461A57;
+        Thu, 25 Mar 2021 11:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616671640;
+        s=k20201202; t=1616671668;
         bh=NbXGtagGC6nta9wmmqR4lJoh5XClR+lCZLLHV+MV860=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pz89Xfrx8Pl7E5PmtOFfAFGFU0Z1Ogn5l1j77ffrJQ37X9HtuadBD4MaTEc9GRi2G
-         6gObv07gBXqQzvP8LVOWCAjqYue9++6KAwKbTmeH5rOMpqs3tX8dvYZqTMv9derAzw
-         vnsorl8pARXsBaFx5jKxM2gA2UgW8s28jA1Qrmzc9cwy8mTl5kTWhfQpvpcRXLl6TA
-         hoO48ojtAhUHruNEwVnJV9Y2XnLuOnQXRMraTWie7+OUvS5zD+kHIJCVIyF7ZWwvnB
-         k3igS9ZcZspecMmx6n/3FiUuTthFwNKMYliO/V97vADHWwQpUrPypk7rJMLzw1hs+O
-         0GYpS/53pwlsQ==
+        b=X/xhE8hiEmYuWg/pVLCVrb7EmZ8mg/TtbwxeCQTxjPv0LUcNQT9OXift56VOnXyQ4
+         MIcazr9YxHUthH4poucBmgug0LPbXit7bDb7JZbkNMVAXNLRKPWjX+vGONteXSVrKO
+         F1f32qHhWjdQBQmO1CcTOAw82k+zTLepDODyVip6IgN4aYgsDgIbB5z0xzrgRTRplI
+         d2hDnBMWj2g88acVDvsHhuwvN+pj9/tXt+wd4yXu6WPb9K96MG/HLZay8/TizvnDsC
+         uEnfhzt4qk8ZuajpcIrOrLm8AczH0TJwR6HF/sj+DaDC1a5HIBfcQLGZ7zSrw2aAJG
+         nci0xzMrupuHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 22/24] thermal/core: Add NULL pointer check before using cooling device stats
-Date:   Thu, 25 Mar 2021 07:26:48 -0400
-Message-Id: <20210325112651.1927828-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 18/20] thermal/core: Add NULL pointer check before using cooling device stats
+Date:   Thu, 25 Mar 2021 07:27:22 -0400
+Message-Id: <20210325112724.1928174-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210325112651.1927828-1-sashal@kernel.org>
-References: <20210325112651.1927828-1-sashal@kernel.org>
+In-Reply-To: <20210325112724.1928174-1-sashal@kernel.org>
+References: <20210325112724.1928174-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
