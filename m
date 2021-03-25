@@ -2,116 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F2A348C3D
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 10:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA260348F10
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Mar 2021 12:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbhCYJJk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Mar 2021 05:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbhCYJJM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Mar 2021 05:09:12 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E728C061763
-        for <linux-pm@vger.kernel.org>; Thu, 25 Mar 2021 02:09:12 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id q5so1366094pfh.10
-        for <linux-pm@vger.kernel.org>; Thu, 25 Mar 2021 02:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VWsn6esj8imf1uae7i0PYfEIqahCeH1CMSkS7p/mVYk=;
-        b=HIBYhMJ3tP1aKPSwg0gUFOAmtXGabKSCvtt0vxq0cKr4wnvUWwGpH5l0/daMM0gb/q
-         eIwN1cktfuMgY07XYtnR4aTFv6SgzyJlgqyBDscikKf+wOHVSMQVAuIXcbyikkFclA/K
-         MuGM/06m6QL2fjldeVmJVaoJ/1ivyC1rsOIPx9oWGRx1XrxxHELz9ghFbUAAZcItYjAX
-         62xPTBRZVJzPGGYRrt1LTVxDKe/NVKOQ3EyxKwXzDRmp9/8Q35XveLxwWjLE3b4jWTiY
-         TguamkqvVDR4TQ+2YgOyTpHcp1WGhmTN0kndzst7ijFQqpPPyH+K2OR8r/0QkVhkChQD
-         PfFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VWsn6esj8imf1uae7i0PYfEIqahCeH1CMSkS7p/mVYk=;
-        b=oERygKHWbNf8RbQgd6k/VeM5h2Gzm5Kuf5VMjmiy2PPgjy6YmkENyijUGQeBcjkaFQ
-         WStNU/1TxtjESKEk1qnMZ9VnDa2zySD+rjeAJMpqtYpr97u36YAyagOjYRi4Sb5kJ8r9
-         LcTBuCv7GgWLf3lr7KfkjlFDxrLlUr24p3VfayGBSD/ScEDExKxA2M2fLTgNkMRnaxIA
-         qgNHCky7RqudGMsl7SzgzVzkXYiFTseB+s8YO8IxWhRYVhGre0Bp+/9sU3Kn0+12eFWs
-         uuCqXKurRKIwuh+ymxq6TZ98vorosR6NIZqCKIFNVPd1/y/WOHf9Bjs48SivjAouwa66
-         Y51g==
-X-Gm-Message-State: AOAM533UDS4aQPIUcJEWn0adV6a6EnV2sBrt83ozMeFnGffVKvTaVwT5
-        /BuglcS+q2b/nQ38FFZ3Dllrug==
-X-Google-Smtp-Source: ABdhPJx75YaqoIXZKRzV6JNv+rXXkBOJ5fO88bVSyJdWvRiD9Mrig/3TUZdgxk+pZ1DK2jZHu6G8NA==
-X-Received: by 2002:a63:e44a:: with SMTP id i10mr6546829pgk.404.1616663351651;
-        Thu, 25 Mar 2021 02:09:11 -0700 (PDT)
-Received: from localhost ([122.172.6.13])
-        by smtp.gmail.com with ESMTPSA id s184sm5341831pgb.63.2021.03.25.02.09.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Mar 2021 02:09:10 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 14:39:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, Qiang Yu <yuq825@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 14/15] media: venus: Convert to use resource-managed
- OPP API
-Message-ID: <20210325090909.pyzyt3xds2ajvm7i@vireshk-i7>
-References: <20210314163408.22292-1-digetx@gmail.com>
- <20210314163408.22292-15-digetx@gmail.com>
- <b780c19f-7f5d-5453-dec1-062fa7c1dc07@linaro.org>
+        id S230386AbhCYL0A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Mar 2021 07:26:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230115AbhCYLZ1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Mar 2021 07:25:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A040B61A2F;
+        Thu, 25 Mar 2021 11:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616671527;
+        bh=5lkXy9QAJUzflm//ImAiJZsaODEjkF9zLcTFNlU8a1U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lHcXKmpzXmyNSH/C0k1VMriScIicrOfVVOR2XR4Ukylkx9SkreT4bPReZb4FjyqhF
+         HzYFzU+3sBwaPFIPXeU5BJmNuTnv+ipF+6sX1Eskja2/2LFgv/Mu9NZ8LGoBu2XwD4
+         sQslW8KFkiHHQTX0wR0Jnm1CDUE/R6cTrTxtp2enucrQeVCeOGBle3DZyfXk0Cl8v9
+         eCf6SROJ/KgXUz2DfAtHEnFWTLcyUTmDw6LtwG0dtYFdv0HYSvBQJdNZVX3tvEPz8p
+         PY2KK59F8NJF5dh0mAE0ASOO7Z92as69lMPFrHOGUKTRPVhHJ58ax2yxc7NHDZbKSV
+         /NAjMHsNgcLtQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 21/44] kernel: freezer should treat PF_IO_WORKER like PF_KTHREAD for freezing
+Date:   Thu, 25 Mar 2021 07:24:36 -0400
+Message-Id: <20210325112459.1926846-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210325112459.1926846-1-sashal@kernel.org>
+References: <20210325112459.1926846-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b780c19f-7f5d-5453-dec1-062fa7c1dc07@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-03-21, 10:13, Stanimir Varbanov wrote:
-> Hi,
-> 
-> On 3/14/21 6:34 PM, Dmitry Osipenko wrote:
-> > From: Yangtao Li <tiny.windzz@gmail.com>
-> > 
-> > Use resource-managed OPP API to simplify code.
-> > 
-> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
-> >  drivers/media/platform/qcom/venus/core.h      |  1 -
-> >  .../media/platform/qcom/venus/pm_helpers.c    | 35 +++++--------------
-> >  2 files changed, 8 insertions(+), 28 deletions(-)
-> 
-> 
-> I'll take this through media-tree once OPP API changes are merged.
+From: Jens Axboe <axboe@kernel.dk>
 
-Okay, dropped from my tree.
+[ Upstream commit 15b2219facadec583c24523eed40fa45865f859f ]
 
-Thanks.
+Don't send fake signals to PF_IO_WORKER threads, they don't accept
+signals. Just treat them like kthreads in this regard, all they need
+is a wakeup as no forced kernel/user transition is needed.
 
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/freezer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/freezer.c b/kernel/freezer.c
+index dc520f01f99d..1a2d57d1327c 100644
+--- a/kernel/freezer.c
++++ b/kernel/freezer.c
+@@ -134,7 +134,7 @@ bool freeze_task(struct task_struct *p)
+ 		return false;
+ 	}
+ 
+-	if (!(p->flags & PF_KTHREAD))
++	if (!(p->flags & (PF_KTHREAD | PF_IO_WORKER)))
+ 		fake_signal_wake_up(p);
+ 	else
+ 		wake_up_state(p, TASK_INTERRUPTIBLE);
 -- 
-viresh
+2.30.1
+
