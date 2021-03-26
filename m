@@ -2,74 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052DA34B128
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 22:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC24D34B200
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 23:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhCZVR6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Mar 2021 17:17:58 -0400
-Received: from mail-il1-f173.google.com ([209.85.166.173]:33683 "EHLO
-        mail-il1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbhCZVR6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Mar 2021 17:17:58 -0400
-Received: by mail-il1-f173.google.com with SMTP id r17so14762ilt.0;
-        Fri, 26 Mar 2021 14:17:58 -0700 (PDT)
+        id S230274AbhCZWNP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Mar 2021 18:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhCZWMu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Mar 2021 18:12:50 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBB6C0613B1;
+        Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id 19so6299970ilj.2;
+        Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VKRu/20dm1kx8lx57omGSjuR80s186bmUyk42/yIwsA=;
+        b=C5tZkbk+9pDwahw0uqoqYov69orWGgkoeSD9AVzTJg+UwqQ2froXblxyfprXV8V1aL
+         6AgWDxcDS6XWgsV9bq+CHyeNTd4wefqpaQeFniwBTGRW1zY7takF0+/KlBukVR0A439M
+         x0tXjlcOSZ6UTqpob3Ln+ftFg4tXBBM99KwhNFVJ3MabD3DapQVXDrUMxJruF1/iKv66
+         yaecCNuaDUCXOXNDfFMp61GLhTWdYT8y40NzuBp5JmabyPwZ+15ECuUdZzDhsPsW53MG
+         pTEerwWnx6ahhp43RqYvy29IDKQHbCwp0+Ok43tr6SVXTO6JOJqljpB6IqPtW4Z0HWp0
+         8KZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zsTvpCrYT0Lc4X3Z73PNNolhuuDLCbvnaIUlG9Bl/gA=;
-        b=Xgxt+Z3/86kJcgRtHgm5Lghgtp6+Nr25fTxVjgKRrauSVqXd7/8skxWdBOcRRWORlD
-         X6SoanePPNjP62C9ZOViJZDxHNlYS3w5yDyHsxxCy465dUPz/+0fX2/SEIWUGxLIANYq
-         tRAftnHCLE6XwQV/aNCP8kKfk+4oCvmc3icm2ef1K7HTuxKxzMVgnT8bB8/D7w47dldf
-         Dr3GWgaSyR9J/otJim5h7YfuU66igfxXj3sBjOpkHS5Z10SgjCXDg5qDA4DIaBCoW6qX
-         +EpgtVggLOhZkp1cyKTIQUUHU3gcJmEbpDEc59+x1Dr1h3sMs9YAEu2Yzac369nFgeJB
-         S5nw==
-X-Gm-Message-State: AOAM532uL8rrPkk5t502uKaKnrk4SjID9foE09jYKos9+FMZAySgxyfZ
-        akV34ejLF0x/DfmPSY0x4A==
-X-Google-Smtp-Source: ABdhPJymPho/jDMKEZRBOFRsIGbnBuOV45w3lMbXDDVrh2c6zpyvhIrqJWUfBfpsvmt+1BRd+56+4g==
-X-Received: by 2002:a92:c0c6:: with SMTP id t6mr11978351ilf.210.1616793477754;
-        Fri, 26 Mar 2021 14:17:57 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id a4sm4714882iow.55.2021.03.26.14.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 14:17:57 -0700 (PDT)
-Received: (nullmailer pid 3876305 invoked by uid 1000);
-        Fri, 26 Mar 2021 21:17:54 -0000
-Date:   Fri, 26 Mar 2021 15:17:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>, martin.botka@somainline.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RESEND PATCH v4 1/2] dt-bindings: tsens: qcom: Document MDM9607
- compatible
-Message-ID: <20210326211754.GA3876275@robh.at.kernel.org>
-References: <20210319220802.198215-1-konrad.dybcio@somainline.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VKRu/20dm1kx8lx57omGSjuR80s186bmUyk42/yIwsA=;
+        b=FWnlHmFgcRJZV2GghYDpHdVatzM0Y4pzIrRya53BWq83nkBXcvvFSigGG8xGF/RKEq
+         j59wbbBAU2WnCeVM1e/PPClHwXLqLzWh/MEUbRja5U7UqqOAzadINSzvAcBFnTh4xBRP
+         FiH4gG9xcbYaaynMAf7TWCKRbK/Nm4T2BIB+xsmp64ihmiPMjQg06CrrR999K4/Oi9ro
+         jpBJ9z+Zf51iarX9bGvyT5Mvc7oGZhcbljZD63iGffrdq31w48QWUuFjFxew5bL+VwDh
+         wl+haQIEwild0lrcXyhkP5wZH/7hnEFhoBk3RlvXxkPBE8ZbxGxYrORSw3fDPmHlMjmN
+         yVEA==
+X-Gm-Message-State: AOAM5338q4srXLKqel1gTCGU4YqjHTgUpxgsy5WiEQYHbCZKPikwWicA
+        sBDAXKXpEpnOtzTwYw0dSHvF+iiNKn+VcTgm6f8=
+X-Google-Smtp-Source: ABdhPJwdl4VGs/tkLkbpXsDNTVJ/2e4MIdPgFV7jnZyb31LofH3vnWHNyCk9SeYav7qDJrki2HQ3NJKEWw3vPqxiPcM=
+X-Received: by 2002:a05:6e02:20c3:: with SMTP id 3mr11909241ilq.164.1616796769368;
+ Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210319220802.198215-1-konrad.dybcio@somainline.org>
+References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
+ <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
+In-Reply-To: <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sat, 27 Mar 2021 03:42:37 +0530
+Message-ID: <CACG_h5pb0pA+cTNPGircAM3UrV5BGmqgk45LF_9phU_J4FaRyw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 19 Mar 2021 23:08:01 +0100, Konrad Dybcio wrote:
-> Add the compatible for MDM9607.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> v4: separate from the main patch
-> 
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+On Fri, Mar 26, 2021 at 11:32 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> > +       bitmap_set_value(old, 64, state[0], 32, 0);
+> > +       bitmap_set_value(old, 64, state[1], 32, 32);
+>
+> Isn't it effectively bitnap_from_arr32() ?
+>
+> > +       bitmap_set_value(new, 64, state[0], 32, 0);
+> > +       bitmap_set_value(new, 64, state[1], 32, 32);
+>
+> Ditto.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hi Andy,
+
+With bitmap_set_value() we are also specifying the offset (or start)
+position too. so that the remainder of the array remains unaffected. I
+think it would not be feasible to use bitmap_from/to_arr32()  here.
+
+Regards
+Syed Nayyar Waris
