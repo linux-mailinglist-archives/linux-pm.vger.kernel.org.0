@@ -2,205 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A368E34AE0E
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 18:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F634AE14
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 18:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhCZR4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Mar 2021 13:56:30 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:38619 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230170AbhCZR4G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 26 Mar 2021 13:56:06 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1616781366; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=u/VtdjESDjksBi2yOB2iBmWEjhKxDbDuGwlnPRV1uLA=; b=gtkUddDYSSBdziIZVFK636j2fFET7CQJUn2wf5BN5f4TcjlXhYk8C6e20x8cLpSC+nRj9+LK
- NoYlSOG+To29NSzzl4Lo78zIn/sFqXBWsD0n+aqBDotxlweCJ2AYHzKyQea+FX6g9fo1RjzY
- zxpn3dlSKldcyaRtH7AufU1R5tY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 605e2029c39407c32726aac4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 26 Mar 2021 17:55:53
- GMT
-Sender: rkumbako=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 69789C433ED; Fri, 26 Mar 2021 17:55:52 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.1.64] (unknown [209.131.238.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rkumbako)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 65822C433CA;
-        Fri, 26 Mar 2021 17:55:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 65822C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rkumbako@codeaurora.org
-Subject: Re: [PATCH] thermal/drivers/netlink: Add the temperature when
- crossing a trip point
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rkumbako@quicinc.com, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>
-References: <20210325193633.19592-1-daniel.lezcano@linaro.org>
-From:   Ram Chandrasekar <rkumbako@codeaurora.org>
-Message-ID: <626b2fa4-73f7-86b5-8b94-689334316ede@codeaurora.org>
-Date:   Fri, 26 Mar 2021 11:55:49 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230202AbhCZR6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Mar 2021 13:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230131AbhCZR5w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Mar 2021 13:57:52 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76164C0613AA;
+        Fri, 26 Mar 2021 10:57:52 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id h20so1282427plr.4;
+        Fri, 26 Mar 2021 10:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JHogjTfSCS2FM3EMJ+VUC86fJfamL4FpcAdJOuvKlos=;
+        b=Nxm3UcRVOUnmqeZwyVEW2OWDZ+j/aPRFVyefMabGxG3BS3rOGuwLSh8EzzgfuAJR65
+         6pmIMcCvJvrgQ5/XnrCfBj3Dp+qvE2tQMHH0Go01Re229FUzTv2YHp5O+n88s5WqZLen
+         IREhlsbWStqk6gWirYZ6dO0FBlzQDfOcvuJlI/b/dY/rDyOnUmJZnYmD8+KyPUpggHE+
+         XDQB6AVmwEKflOV/CTo1yOuowEWlyFOalhWIi7H7eESp5pFw/qxD0+p6N5mimzNTkcI6
+         uE7sRt4/S9UKoFp8Rd8dVW4ogLVXTZ+dlxowSJbMkoXLZA7k9aOuCDwk+eD8srOAWX8E
+         95vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JHogjTfSCS2FM3EMJ+VUC86fJfamL4FpcAdJOuvKlos=;
+        b=eM+SA6zipqZF69EyBo/MteOodzwYGK1EuOLK0oIE4ieZdGgt2iBTuaFR1/HC+ykCq4
+         vWjpbBSozpmTXCXJV5SZeS833C26j7oCnhkHj4Nz9CFzckLfEH7FC2D5jRE2kBGO5rJM
+         C2IOPYEHytFQWbXayp6499htv7bZGyEVDen2xyNm0UgKBbN8ZIswfnHostNBfrIvY+US
+         FszJjGAaS78KFbXbpzus8JLOiT2xCNjGQPUPnqw43IZDvfrcWM2oOuQkn3CoDzmNDkoa
+         ZyIADlQ159ZhVIi2wKRWQqw/6xrJrPZt8E8yl434utG3lRQxT820rH1m+or3Z+Da7NMo
+         GPPA==
+X-Gm-Message-State: AOAM53264FMN9/Fn7iHhUh4T7PMAQO+TIlfn0BF9mtjRfKYcvXsswgHs
+        VmqtGU/shuUhfDDIhQdlLGJ+2/IMhNyzDuGhBj0=
+X-Google-Smtp-Source: ABdhPJwAbExeWIMbpFKTjqhO748MOLVjDiBBlAwJFixGI71xALQdNhI30s9oEel/s31WNXXDIHX6ULECiPqQDy/fkXQ=
+X-Received: by 2002:a17:90a:e454:: with SMTP id jp20mr15425421pjb.129.1616781471941;
+ Fri, 26 Mar 2021 10:57:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210325193633.19592-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
+In-Reply-To: <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 Mar 2021 19:57:35 +0200
+Message-ID: <CAHp75VePT-Df1F8ma1__ay8+9DHtYwonvwTZtK-OFqCtXshx-w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> This patch reimplements the xgpio_set_multiple() function in
+> drivers/gpio/gpio-xilinx.c to use the new generic functions:
+> bitmap_get_value() and bitmap_set_value(). The code is now simpler
+> to read and understand. Moreover, instead of looping for each bit
+> in xgpio_set_multiple() function, now we can check each channel at
+> a time and save cycles.
 
+...
 
-On 3/25/2021 1:36 PM, Daniel Lezcano wrote:
-> The slope of the temperature increase or decrease can be high and when
-> the temperature crosses the trip point, there could be a significant
-> difference between the trip temperature and the measured temperatures.
-> 
-> That forces the userspace to read the temperature back right after
-> receiving a trip violation notification.
-> 
-> In order to be efficient, give the temperature which resulted in the
-> trip violation.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> +       u32 *const state = chip->gpio_state;
+> +       unsigned int *const width = chip->gpio_width;
 
-To add to Daniel's point, this patch will save a lot of back and forth 
-between userspace and kernel, when the temperature is hovering around 
-the trip temperature.
+> +
 
-Certain sensors are capable of supporting temperatures with more 
-granular resolution (like deci C). In those cases after a trip occurs, a 
-0.1 C reduction in temperature when userspace reads will make it wait 
-for some more time before taking an action.
+Extra blank line.
 
-It is not just a delay in action, but more trip notifications before 
-userspace reads the temperature above trip to take an action.
+> +       DECLARE_BITMAP(old, 64);
+> +       DECLARE_BITMAP(new, 64);
+> +       DECLARE_BITMAP(changed, 64);
 
-I have seen this back and forth in Snapdragon chipsets.
+> +       spin_lock_irqsave(&chip->gpio_lock[0], flags);
+> +       spin_lock(&chip->gpio_lock[1]);
 
-This patch helps userspace to see the same temperature as thermal 
-framework and temperature violations can be handled faster and more 
-efficiently.
+I understand why this is done at the top of the function in the original code.
+I do not understand why you put some operations under spin lock.
 
-> ---
->   drivers/thermal/thermal_core.c    |  6 ++++--
->   drivers/thermal/thermal_netlink.c | 11 ++++++-----
->   drivers/thermal/thermal_netlink.h |  8 ++++----
->   include/uapi/linux/thermal.h      |  2 +-
->   4 files changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 996c038f83a4..948020ef51b1 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -430,10 +430,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
->   	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
->   		if (tz->last_temperature < trip_temp &&
->   		    tz->temperature >= trip_temp)
-> -			thermal_notify_tz_trip_up(tz->id, trip);
-> +			thermal_notify_tz_trip_up(tz->id, trip,
-> +						  tz->temperature);
->   		if (tz->last_temperature >= trip_temp &&
->   		    tz->temperature < (trip_temp - hyst))
-> -			thermal_notify_tz_trip_down(tz->id, trip);
-> +			thermal_notify_tz_trip_down(tz->id, trip,
-> +						    tz->temperature);
->   	}
->   
->   	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
-> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-> index 1234dbe95895..a16dd4d5d710 100644
-> --- a/drivers/thermal/thermal_netlink.c
-> +++ b/drivers/thermal/thermal_netlink.c
-> @@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
->   static int thermal_genl_event_tz_trip_up(struct param *p)
->   {
->   	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
-> -	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
-> +	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
-> +	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
->   		return -EMSGSIZE;
->   
->   	return 0;
-> @@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
->   	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
->   }
->   
-> -int thermal_notify_tz_trip_down(int tz_id, int trip_id)
-> +int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
->   {
-> -	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-> +	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
->   
->   	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
->   }
->   
-> -int thermal_notify_tz_trip_up(int tz_id, int trip_id)
-> +int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
->   {
-> -	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-> +	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
->   
->   	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
->   }
-> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-> index 828d1dddfa98..e554f76291f4 100644
-> --- a/drivers/thermal/thermal_netlink.h
-> +++ b/drivers/thermal/thermal_netlink.h
-> @@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
->   int thermal_notify_tz_delete(int tz_id);
->   int thermal_notify_tz_enable(int tz_id);
->   int thermal_notify_tz_disable(int tz_id);
-> -int thermal_notify_tz_trip_down(int tz_id, int id);
-> -int thermal_notify_tz_trip_up(int tz_id, int id);
-> +int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
-> +int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
->   int thermal_notify_tz_trip_delete(int tz_id, int id);
->   int thermal_notify_tz_trip_add(int tz_id, int id, int type,
->   			       int temp, int hyst);
-> @@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
->   	return 0;
->   }
->   
-> -static inline int thermal_notify_tz_trip_down(int tz_id, int id)
-> +static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
->   {
->   	return 0;
->   }
->   
-> -static inline int thermal_notify_tz_trip_up(int tz_id, int id)
-> +static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
->   {
->   	return 0;
->   }
-> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-> index c105054cbb57..bf5d9c8ef16f 100644
-> --- a/include/uapi/linux/thermal.h
-> +++ b/include/uapi/linux/thermal.h
-> @@ -18,7 +18,7 @@ enum thermal_trip_type {
->   
->   /* Adding event notification support elements */
->   #define THERMAL_GENL_FAMILY_NAME		"thermal"
-> -#define THERMAL_GENL_VERSION			0x01
-> +#define THERMAL_GENL_VERSION			0x02
->   #define THERMAL_GENL_SAMPLING_GROUP_NAME	"sampling"
->   #define THERMAL_GENL_EVENT_GROUP_NAME		"event"
->   
-> 
+Have you checked what each of these spin locks protects?
+Please check and try to lock as minimum as possible.
+
+> +       bitmap_set_value(old, 64, state[0], width[0], 0);
+> +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
+> +       bitmap_replace(new, old, bits, mask, gc->ngpio);
+> +
+> +       bitmap_set_value(old, 64, state[0], 32, 0);
+> +       bitmap_set_value(old, 64, state[1], 32, 32);
+> +       state[0] = bitmap_get_value(new, 0, width[0]);
+> +       state[1] = bitmap_get_value(new, width[0], width[1]);
+> +       bitmap_set_value(new, 64, state[0], 32, 0);
+> +       bitmap_set_value(new, 64, state[1], 32, 32);
+> +       bitmap_xor(changed, old, new, 64);
+
+Original code and this is cryptic. Can you add a few comments
+explaining what is going on here?
+
+> +       spin_unlock(&chip->gpio_lock[1]);
+> +       spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
+
+-- 
+With Best Regards,
+Andy Shevchenko
