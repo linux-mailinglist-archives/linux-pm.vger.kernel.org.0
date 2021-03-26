@@ -2,166 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C290634AD0C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 18:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C9F34AD52
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Mar 2021 18:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhCZRC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Mar 2021 13:02:27 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:35375 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbhCZRB7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Mar 2021 13:01:59 -0400
-Received: by mail-ot1-f49.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so5844758oto.2;
-        Fri, 26 Mar 2021 10:01:58 -0700 (PDT)
+        id S230080AbhCZR1t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Mar 2021 13:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbhCZR1q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Mar 2021 13:27:46 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6AEC0613B3
+        for <linux-pm@vger.kernel.org>; Fri, 26 Mar 2021 10:27:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id r12so9576106ejr.5
+        for <linux-pm@vger.kernel.org>; Fri, 26 Mar 2021 10:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1JrvGVjvnU4OleZHvZNBHn3IUwN+tQcLM7GpfSmRkZk=;
+        b=cwpkHyQrULLTxS7hyIyPePeFi/FNtWZ3wrU8DFAd6e74G1o94qmH7Z5PjWR8yr5z1r
+         sgpyKyCURNT2pAZYYtT4o1xIv830XPuXSi07uQQ+jqPykxJW/tfNNu1GDRVqbAXCl4Hz
+         nBRpS61VfXySqkW2Bx1fZJC4qhxNH9f04jCpVCDUd1Brf9Ko4JlEUr1S5u+1WhMo9n/Z
+         GkzwtQ0CYVWe4DfIsGLtfv6b+/ocnK8JELWYGPm57NUUs4U0GaouCUQWF/T81DrMcXuq
+         Z6tLBq2cU/VsK4UcPMjLnxwxXN++4BJ+LINlfni/VXPu6o1YOZnpxfeGHVfUjnDUYY1l
+         hhRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=j39tFeNSOySBzRr0wRwu5Hg3GUh0t1N0ZoAe65Kuhwc=;
-        b=ClRXMBeuamL9zd7JCu7Kxykdh3j35FuNYh77lBuXaUYAOx4/6oDzCFWtdAf6XiBTMz
-         FtoDkUQLJpJnSXvFj5GSESWbgQE2AWv8euTAX6rjrNPXsxEB+0Ay0caD1E0JKiq5MQaR
-         i+v8UJVWOnY98Y3thMg2PwkN0PCON4X7OhWVD2vW6/GAEiY/Dcny8b/INPeZQXpdij0N
-         iIhbfExBGkcKTXKz2SFwC0tx3VaY6Lm/Ao4E6HOMtH2tKgSAV9FUo+oVdjV93pDpBwU7
-         F2muCpAzEyHGMhHq8pT3901bfa3pjLscs4ePWwq2ZxhKu067W0oz/8Wuc9BpmzoZELLz
-         9+Jg==
-X-Gm-Message-State: AOAM530E9O5gve/zfITYabe/zjxXfkUdLKTli1r+kXOrSvzf2uLhmjH2
-        xk5T/DfABeqQ2ViplVxl0ZQTfDyKxp3TEYCOebA=
-X-Google-Smtp-Source: ABdhPJzhdEB0Upgt5eIFHCBU3pd8mUn/BbOPMYqJ4636WlCPkQ08Kxo6XhTvOV2M+da8gU3J8MYPGzJ4TRX+Zi4A/iw=
-X-Received: by 2002:a9d:4811:: with SMTP id c17mr12982365otf.206.1616778118573;
- Fri, 26 Mar 2021 10:01:58 -0700 (PDT)
+        bh=1JrvGVjvnU4OleZHvZNBHn3IUwN+tQcLM7GpfSmRkZk=;
+        b=ak5tRx14dJhyZbGRznvYN+4UHcXCaAFSWEhSday7zejNqYEA4Gkv44r/M0dcnxjms5
+         NEgd8UcGlFsuqciZF5eQs3DEs4S9cgQTbqVEDuRw/9B7BnrHlu4WViRPEEVnA1Rk3gQC
+         kundK5bK09gPJsNzALEitX3v/qYxtCoXUmEkRl44cc9HCw4qeBX21h7ZdPKl5v55ioUN
+         af6Hm6nNWLhwnIIyrmsR5Rjmccfs0DeUHL+kD6+nNynPJdUUI0J8qvsdHK9pqKaLo309
+         U5vAKeuo2v8AX8CJ4X8qzOiKGHFcOhxuDJD/jnruUVYlzstIVy/BfapLkrCfX4jEdmqq
+         zwmg==
+X-Gm-Message-State: AOAM531dMJ9nu/VwU/fK8E9hcXklW/D6YoEg41QEFDKQQFBbOpE6QIpi
+        IjKeaBJJjiuLbR88DAM3EoeANdaEQo4qJkRXUdWGDg==
+X-Google-Smtp-Source: ABdhPJwkzOGb6kE59IAEyH6N7nsGGo1eTapaAq2lAelIByUXV1mPNIRkTEVwayCCs+LsYnVuKETqP2Nuv9zd7ozrBwM=
+X-Received: by 2002:a17:906:c0c8:: with SMTP id bn8mr16475296ejb.445.1616779663961;
+ Fri, 26 Mar 2021 10:27:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210311123708.23501-1-frederic@kernel.org> <YTBPR01MB3262D78448BD2FB3AD5EB4F9C46B9@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
- <20210325131400.GA938586@lothringen> <5712356.lOV4Wx5bFT@kreacher>
- <YTBPR01MB326253A7B094A2F603488EA8C4629@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
- <CAJZ5v0h2BZdj4ds1NUKUcdJ_WCZe-0EogE1k5qbJkoEGFkjJyw@mail.gmail.com> <YTBPR01MB3262C64BEB4DBA0ED48F3168C4629@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
-In-Reply-To: <YTBPR01MB3262C64BEB4DBA0ED48F3168C4629@YTBPR01MB3262.CANPRD01.PROD.OUTLOOK.COM>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 26 Mar 2021 18:01:47 +0100
-Message-ID: <CAJZ5v0ihHPm22+r_FD=edrz7-4u_tnjHVZ9GdyN3O8w5FLbGBg@mail.gmail.com>
-Subject: =?UTF-8?B?UmU6IOWbnuWkjTogW1BBVENIIDAxLzEwXSB0aWNrL25vaHo6IFByZXZlbnQgdGlja19ubw==?=
-        =?UTF-8?B?aHpfZ2V0X3NsZWVwX2xlbmd0aCgpIGZyb20gcmV0dXJuaW5nIG5lZ2F0aXZlIHZhbHVl?=
-To:     "Zhou Ti (x2019cwm)" <x2019cwm@stfx.ca>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
+References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
+ <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com>
+In-Reply-To: <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 26 Mar 2021 18:27:33 +0100
+Message-ID: <CAMpxmJUv0iU0Ntmks1f6ThDAG6x_eJLYYCaDSjy+1Syedzc5dQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     Syed Nayyar Waris <syednwaris@gmail.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yunfeng Ye <yeyunfeng@huawei.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Srinivas Goud <srinivas.goud@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 9:37 PM Zhou Ti (x2019cwm) <x2019cwm@stfx.ca> wrote:
+On Mon, Mar 8, 2021 at 8:13 AM Michal Simek <michal.simek@xilinx.com> wrote:
 >
-> On March 25, 2021 15:50, Rafael J. Wysocki wrote:
-> > On Thu, Mar 25, 2021 at 8:18 PM Zhou Ti (x2019cwm) <x2019cwm@stfx.ca> wrote:
-> > >
-> > > On March 25, 2021 14:56, Rafael J. Wysocki wrote:
-> > > > On Thursday, March 25, 2021 2:14:00 PM CET Frederic Weisbecker wrote:
-> > > > > On Tue, Mar 16, 2021 at 04:08:08PM +0000, Zhou Ti (x2019cwm) wrote:
-> > > > > > But I don't think it's a good idea to handle this in callers, because logically the function shouldn't return negative values. Returning 0 directly would allow idle governors to get another chance to select again.
-> > > > >
-> > > > > Hmm, I'm going to leave the last word to Rafael since cpuidle are the only
-> > > > > callers of this. In any case we need to fix it.
-> > > >
-> > > > Yes, we do.
-> > > >
-> > > > So I said that I preferred to address this in the callers and the reason why
-> > > > is because, for example, for the teo governor it would be a matter of using
-> > > > a different data type to store the tick_nohz_get_sleep_length() return value,
-> > > > like in the (untested) patch below.
-> > > >
-> > > > So at least in this case there is no need to add any new branches anywhere.
-> > > >
-> > > > I'm still not sure about menu, because it is more complicated, but even if
-> > > > that one needs an extra branch, that is a win already.
-> > >
-> > > I would like to point out the potential trouble that fixing this issue in the
-> > > callers could cause.
-> > >
-> > > 1. This function is called multiple times in menu governor and TEO
-> > > governor.
-> >
-> > What do you mean by "multiple times"?
-> >
-> > Each of the governors calls it once per cycle and its previous return
-> > value is not used in the next cycle at least in teo.
 >
-> I remember a governor called this function twice in a cycle, I guess I remember
-> wrong.
-
-That obviously depends on the governor, but both teo and menu call it
-once per cycle.
-
-> > > I'm not sure that receiving results using signed integers is enough
-> > > to solve all the problems, in the worst case it may require increasing
-> > > the logical complexity of the code.
-> >
-> > That is a valid concern, so it is a tradeoff between increasing the
-> > logical complexity of the code and adding branches to it.
-> >
-> > > 2. This function is important for developing idle governor.
-> > > If the problem is not fixed in the function itself, then this potential
-> > > pitfall should be explicitly stated in the documentation.
-> >
-> > That I can agree with.
-> >
-> > > This is because
-> > > it is difficult to predict from the definition and naming of the function
-> > > that it might return a negative number. I actually discovered this anomaly
-> > > when I was doing data analysis on my own idle governor. For some idle control
-> > > algorithms, this exception return could lead to serious consequences,
-> > > because negative return logically won't happen.
-> >
-> > Well, it's a matter of how to take the possible negative return value
-> > into account so it does not affect the result of the computations.
 >
-> I think it is challenging for some algorithms to take negative return values
-> into account properly. For TEO (and even menu), it is possible to
-> solve the problem by just changing the way the data is received is because the
-> learning mechanism for both algorithms is simple.
+> On 3/6/21 3:06 PM, Syed Nayyar Waris wrote:
+> > This patch reimplements the xgpio_set_multiple() function in
+> > drivers/gpio/gpio-xilinx.c to use the new generic functions:
+> > bitmap_get_value() and bitmap_set_value(). The code is now simpler
+> > to read and understand. Moreover, instead of looping for each bit
+> > in xgpio_set_multiple() function, now we can check each channel at
+> > a time and save cycles.
+> >
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Michal Simek <michal.simek@xilinx.com>
+> > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+> > Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+> > ---
+> >  drivers/gpio/gpio-xilinx.c | 63 +++++++++++++++++++-------------------
+> >  1 file changed, 32 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+> > index be539381fd82..8445e69cf37b 100644
+> > --- a/drivers/gpio/gpio-xilinx.c
+> > +++ b/drivers/gpio/gpio-xilinx.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/of_device.h>
+> >  #include <linux/of_platform.h>
+> >  #include <linux/slab.h>
+> > +#include "gpiolib.h"
+> >
+> >  /* Register Offset Definitions */
+> >  #define XGPIO_DATA_OFFSET   (0x0)    /* Data register  */
+> > @@ -141,37 +142,37 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+> >  {
+> >       unsigned long flags;
+> >       struct xgpio_instance *chip = gpiochip_get_data(gc);
+> > -     int index = xgpio_index(chip, 0);
+> > -     int offset, i;
+> > -
+> > -     spin_lock_irqsave(&chip->gpio_lock[index], flags);
+> > -
+> > -     /* Write to GPIO signals */
+> > -     for (i = 0; i < gc->ngpio; i++) {
+> > -             if (*mask == 0)
+> > -                     break;
+> > -             /* Once finished with an index write it out to the register */
+> > -             if (index !=  xgpio_index(chip, i)) {
+> > -                     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
+> > -                                    index * XGPIO_CHANNEL_OFFSET,
+> > -                                    chip->gpio_state[index]);
+> > -                     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
+> > -                     index =  xgpio_index(chip, i);
+> > -                     spin_lock_irqsave(&chip->gpio_lock[index], flags);
+> > -             }
+> > -             if (__test_and_clear_bit(i, mask)) {
+> > -                     offset =  xgpio_offset(chip, i);
+> > -                     if (test_bit(i, bits))
+> > -                             chip->gpio_state[index] |= BIT(offset);
+> > -                     else
+> > -                             chip->gpio_state[index] &= ~BIT(offset);
+> > -             }
+> > -     }
+> > -
+> > -     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
+> > -                    index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
+> > -
+> > -     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
+> > +     u32 *const state = chip->gpio_state;
+> > +     unsigned int *const width = chip->gpio_width;
+> > +
+> > +     DECLARE_BITMAP(old, 64);
+> > +     DECLARE_BITMAP(new, 64);
+> > +     DECLARE_BITMAP(changed, 64);
+> > +
+> > +     spin_lock_irqsave(&chip->gpio_lock[0], flags);
+> > +     spin_lock(&chip->gpio_lock[1]);
+> > +
+> > +     bitmap_set_value(old, 64, state[0], width[0], 0);
+> > +     bitmap_set_value(old, 64, state[1], width[1], width[0]);
+> > +     bitmap_replace(new, old, bits, mask, gc->ngpio);
+> > +
+> > +     bitmap_set_value(old, 64, state[0], 32, 0);
+> > +     bitmap_set_value(old, 64, state[1], 32, 32);
+> > +     state[0] = bitmap_get_value(new, 0, width[0]);
+> > +     state[1] = bitmap_get_value(new, width[0], width[1]);
+> > +     bitmap_set_value(new, 64, state[0], 32, 0);
+> > +     bitmap_set_value(new, 64, state[1], 32, 32);
+> > +     bitmap_xor(changed, old, new, 64);
+> > +
+> > +     if (((u32 *)changed)[0])
+> > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET,
+> > +                             state[0]);
+> > +     if (((u32 *)changed)[1])
+> > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
+> > +                             XGPIO_CHANNEL_OFFSET, state[1]);
+> > +
+> > +     spin_unlock(&chip->gpio_lock[1]);
+> > +     spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
+> >  }
+> >
+> >  /**
+> >
+>
+> Srinivas N: Can you please test this code?
+>
+> Thanks,
+> Michal
 
-Of course this depends on the governor.
+Hey, any chance of getting that Tested-by?
 
-> One of the interesting things about the CPUIdle subsystem is that it is well
-> suited to introduce machine learning and probabilistic statistical methods.
-
-You need to remember that the governor code runs in the idle loop
-context which is expected to be reasonably fast.
-
-That's why we are worrying about individual branches here.
-
-> This means that many of the more complex and data-sensitive algorithms can
-> potentially be explored. In the best case we will still need to add additional
-> code complexity to a new algorithm.
-
-So I'm not sure what the problem with adding an upfront negative value
-check to the governor is.
-
-> It would reduce a lot of unnecessary considerations (for example, highlight
-> this shortcoming in the documentation) if we could ensure that this function
-> would work as it is logically defined. But I don't really understand
-> how much of a burden adding an extra branch would impose, so I don't know if
-> this tradeoff is worth it.
-
-It ultimately depends on the governor, which is why I think that the
-negative value check should be done by the governor, if needed, and
-not by the function called by it, because in the latter case the check
-may be redundant and we end up with an extra branch (or two branches
-in this particular case) for no good reason whatsoever.
-
-Yes, there are governors which simply can do the negative value check
-upfront right after calling that function and ensure that they will
-not deal with negative values going forward.  This is probably what
-I'll do in the menu case.
-
-However, if the governor is simple enough and it can avoid doing the
-explicit negative value check, I don't see a reason to do that check
-elsewhere "just in case".
+Bart
