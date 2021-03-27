@@ -2,66 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1061134B923
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 20:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB3134B949
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 21:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbhC0Tlm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Mar 2021 15:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S230127AbhC0U0F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Mar 2021 16:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbhC0Tl2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Mar 2021 15:41:28 -0400
+        with ESMTP id S230114AbhC0UZc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Mar 2021 16:25:32 -0400
 Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D7AC0613B2
-        for <linux-pm@vger.kernel.org>; Sat, 27 Mar 2021 12:41:27 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id c8so8828329wrq.11
-        for <linux-pm@vger.kernel.org>; Sat, 27 Mar 2021 12:41:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAEFC0613B3
+        for <linux-pm@vger.kernel.org>; Sat, 27 Mar 2021 13:25:31 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z2so8915887wrl.5
+        for <linux-pm@vger.kernel.org>; Sat, 27 Mar 2021 13:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ijT/RGW2Oruf35uIX4P52vJI8Z11oGvR31aKC7kUzBY=;
-        b=nzxoKcrUAkF+l/1YTJ2iBy24d7u1ggVNPgLL4wlwSkwGy0pXFnkhQfEOGvu/6z+cUj
-         BnNTD9CNiE5EHRGLz6Qm74077pX59q1I4fM+uj4CCzaMrLF99cqYHz4xyBFC6z2ahYkv
-         SjD+UUg6MfT7NXTlT08WvRByF2/9CVXBbtRA8wqvoeDHB7qGHnWep5g4+HNN+9dsZLNw
-         3+tGCgiTXGNCBcvhYJ8R+9zmFL2ZDHCYz25qy5ajppb8768SW9Z5drJ/GtIPPZ4c6/xU
-         Sk3+CQ5VzkbT84pLzqiRn2cJuBi/Xal5qOzLbFSxbj0ZXI7ydxvoOerz/YLu4DsSsjdO
-         FvkQ==
+        bh=s8gzVxqzuc1k7in7AHl85pKPO4uHenSLvBWD/D32x1s=;
+        b=HKBOAWkY+TK1W/RRlNJCrPiYtO35hOT0v4na7AtOn577L3fUIrSTK+slP+bZPtFczB
+         rTz2g7ATJVmSVkQKtg35AMBc4/UQEsKHN3O1XDMfvdd3DM+ttF9FCuxjDvArIQ/2Xvma
+         Z8tmj+IUnPQZY0pG8d26oazwN43iL9x0SinLCUvGRsQml6+Wl5YV8ZtcYCfrEoWHslQx
+         +aJWMtGejacJsQjSoy1b8SwJzaHUh/DC/qyd0bq7x0d5pVkERnheHOi+xwaszSSpUtmQ
+         HqfOLVwrZAbJazcTuF/IvjtTSrAlkA/GNaOJqhuqgiZISDENndr0RsRSX3D+mJRC9zIB
+         PQ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ijT/RGW2Oruf35uIX4P52vJI8Z11oGvR31aKC7kUzBY=;
-        b=VNkNT42N1e0RXr7JtiCWjrF9dB23VbB7we5RASG31rrRRwP3f5AwZPTwHuMIpdEQRG
-         NWEWSgaaf5ZGh/lWiXT8U0icLlBzqrsIc9ufTtou+EtOT/WRkb9gYqqUgW473m+b96f2
-         ABuWtVV1z256YvKnqtHiDA1a69P/P6/Ebfj8eTgtZE1CX/MHD+ihUFbKG9NAtohM67Rw
-         /xNT+W+F5+pfZUzIGI/BYq3K2wK/gQwW9ibd/SXomcmK97281mxF4PUTGIjk5PJhQRom
-         Ifrpi2u1qicowaAd8E26QM0pcbFaXdsFvy1VLIFwKZAHGekS2mMCrZrLDrkGIjEBlkBN
-         YTvg==
-X-Gm-Message-State: AOAM530qH4ehMzBQhMvL7U9qLXr9Dki7Y8cKAay4uKN5L20lIdWofkVf
-        2sFtpQurSZCR3HnGh1POoACk9w==
-X-Google-Smtp-Source: ABdhPJzEzxZyBR1DY3Q5pHHVrjiQBXLW3ok1jhaSsQsJaiVqRb+qLmrJJTUQkyzklSXRZWONzBdJvg==
-X-Received: by 2002:a5d:4443:: with SMTP id x3mr20773159wrr.49.1616874086050;
-        Sat, 27 Mar 2021 12:41:26 -0700 (PDT)
+        bh=s8gzVxqzuc1k7in7AHl85pKPO4uHenSLvBWD/D32x1s=;
+        b=G52wFaNO3FlgSil16elhe23Q5NiEMHPIZfmmTN1avffl/XiGaR3fysVtuHuOOhESlc
+         mWsekS6PE9FbH3kzjtCLwrRDALDk8/kuN6e9XHi/rW5q1/pLmXwkdvm+xGjX7B+q6Rgm
+         ri2jN5/+/omC9PgdYfhALzG4AWupu5pDX1i7CguWr2mh+U1gjEoHutjmG7PIGB8XezMf
+         g7Jdb7hrORI4x5vjrG98j57zy7RnkFV5+3gGTACZja9HTWxhC0dLSLOj8A/B59Er98+4
+         fl+4YoJm4432+D8WhjN28n41dK0Vs1So21YKHZwbJU4cNvrELhkw8v2Ez9rCzuKkt2iN
+         hM/Q==
+X-Gm-Message-State: AOAM530e1V1G/C78IiH6gXXbi1JNP7WZo1h+B+NlLnzoMbxBRBiGt92O
+        RMtp1hBCCOvP6fkO7gu7EAHt3A==
+X-Google-Smtp-Source: ABdhPJzuMpV1UB85AeDicHaBE3aPiyJvZp+lIVriNnz1Ivuxlawm4QYMNucTm4el2a8GiLjULkdAcA==
+X-Received: by 2002:a5d:65cd:: with SMTP id e13mr21261121wrw.334.1616876730170;
+        Sat, 27 Mar 2021 13:25:30 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:2d8b:2e0e:777b:e562? ([2a01:e34:ed2f:f020:2d8b:2e0e:777b:e562])
-        by smtp.googlemail.com with ESMTPSA id i8sm19202067wrx.43.2021.03.27.12.41.25
+        by smtp.googlemail.com with ESMTPSA id u8sm20285874wrr.42.2021.03.27.13.25.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Mar 2021 12:41:25 -0700 (PDT)
-Subject: Re: [PATCH v4 2/5] powercap/drivers/dtpm: Create a registering system
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, lukasz.luba@arm.com
-References: <20210312130411.29833-1-daniel.lezcano@linaro.org>
- <20210312130411.29833-2-daniel.lezcano@linaro.org>
- <YF8qIw4UBLnj9TCA@kroah.com>
+        Sat, 27 Mar 2021 13:25:29 -0700 (PDT)
+Subject: Re: [PATCH] thermal/drivers/netlink: Add the temperature when
+ crossing a trip point
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rkumbako@quicinc.com, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>
+References: <20210325193633.19592-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0g58LMVwRWdJaTWVOx09gt6KRGTa974k3cvHYQyxk0EYg@mail.gmail.com>
+ <444a7fc72e6525575b929760fcad186630577afc.camel@linux.intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <433ec4ac-a7a9-ecf9-f1c1-f658d279a2df@linaro.org>
-Date:   Sat, 27 Mar 2021 20:41:24 +0100
+Message-ID: <ae16d810-e5ec-ad63-7b29-fd1ddab68907@linaro.org>
+Date:   Sat, 27 Mar 2021 21:25:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YF8qIw4UBLnj9TCA@kroah.com>
+In-Reply-To: <444a7fc72e6525575b929760fcad186630577afc.camel@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -69,87 +74,194 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/03/2021 13:50, Greg KH wrote:
-> On Fri, Mar 12, 2021 at 02:04:08PM +0100, Daniel Lezcano wrote:
->> A SoC can be differently structured depending on the platform and the
->> kernel can not be aware of all the combinations, as well as the
->> specific tweaks for a particular board.
->>
->> The creation of the hierarchy must be delegated to userspace.
->>
->> These changes provide a registering mechanism where the different
->> subsystems will initialize their dtpm backends and register with a
->> name the dtpm node in a list.
->>
->> The next changes will provide an userspace interface to create
->> hierarchically the different nodes. Those will be created by name and
->> found via the list filled by the different subsystem.
->>
->> If a specified name is not found in the list, it is assumed to be a
->> virtual node which will have children and the default is to allocate
->> such node.
->>
->> When the node register in the list, the function will be dtpm_register
->> where the previous semantic was to create the node. Thus, the
->> functions are renamed to reflect their purpose.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
 
-[ ... ]
+Hi Srinivas,
 
->> +static void dtpm_release(struct kref *kref)
->> +{
->> +	struct dtpm *dtpm = container_of(kref, struct dtpm, kref);
->> +
->> +	kfree(dtpm);
->> +}
->> +
->> +/**
->> + * dtpm_put - Release a reference on a dtpm device
->> + * @dtpm: a pointer to a dtpm structure
->> + *
->> + * Release the reference on the specified dtpm device. The last
->> + * reference leads to a memory release.
->> + */
->> +void dtpm_put(struct dtpm *dtpm)
->> +{
->> +	kref_put(&dtpm->kref, dtpm_release);
+On 27/03/2021 18:46, Srinivas Pandruvada wrote:
+> On Fri, 2021-03-26 at 17:37 +0100, Rafael J. Wysocki wrote:
+>> On Thu, Mar 25, 2021 at 8:38 PM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>> The slope of the temperature increase or decrease can be high and
+>>> when
+>>> the temperature crosses the trip point, there could be a
+>>> significant
+>>> difference between the trip temperature and the measured
+>>> temperatures.
+>>>
+>>> That forces the userspace to read the temperature back right after
+>>> receiving a trip violation notification.
+>>>
+>>> In order to be efficient, give the temperature which resulted in
+>>> the
+>>> trip violation.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> Srinivas, what do you think?
 > 
-> You forgot to also grab the dtpm_lock before calling this, right?  What
-> is preventing a get and put from being called at the same time?
+> - IMO netlink message should also be treated as we treat other ABIs. So
+> add only when this is a must. Although here GENL version is incremented
+> , users are not that careful. At least on x86, we know users created
+> their own applications.
+
+I don't see where is the problem. The protocol is still compatible with
+the previous version, so that does not break the existing AFAICT. That
+is done on purpose.
+
+There is a new attribute added, the application using the previous
+version will just not be aware of its presence and parse the message
+without getting the temperature.
+
+> - Here the concern is temperature is changing so fast then netlink +
+> user space processing latency is enough to change further to read
+> temperature again. Atleast we assume that and read temperature again.
+> So not sure that this is the right approach to add another field for
+> the temperature.
+
+I'm not sure to understand your comment. Whatever the mechanism
+(interrupt based or polling), the temperature is read in any case by the
+call to thermal_zone_device_update() which in turns calls
+handle_trip_point and then send the message. So, why not add the
+temperature as the userspace is interested on getting the temperature
+anyway.
+
+For instance, in polling mode, (usually set to 1000ms), the trip point
+crossing is detected with a long delay and during this time the
+temperature could be far beyond the trip temperature.
+
+It is not about netlink latency but about avoiding a back and forth when
+the trip point is crossed and the temperature wavering around.
+
+
+>>> ---
+>>>  drivers/thermal/thermal_core.c    |  6 ++++--
+>>>  drivers/thermal/thermal_netlink.c | 11 ++++++-----
+>>>  drivers/thermal/thermal_netlink.h |  8 ++++----
+>>>  include/uapi/linux/thermal.h      |  2 +-
+>>>  4 files changed, 15 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c
+>>> b/drivers/thermal/thermal_core.c
+>>> index 996c038f83a4..948020ef51b1 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -430,10 +430,12 @@ static void handle_thermal_trip(struct
+>>> thermal_zone_device *tz, int trip)
+>>>         if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+>>>                 if (tz->last_temperature < trip_temp &&
+>>>                     tz->temperature >= trip_temp)
+>>> -                       thermal_notify_tz_trip_up(tz->id, trip);
+>>> +                       thermal_notify_tz_trip_up(tz->id, trip,
+>>> +                                                 tz->temperature);
+>>>                 if (tz->last_temperature >= trip_temp &&
+>>>                     tz->temperature < (trip_temp - hyst))
+>>> -                       thermal_notify_tz_trip_down(tz->id, trip);
+>>> +                       thermal_notify_tz_trip_down(tz->id, trip,
+>>> +                                                   tz-
+>>>> temperature);
+>>>         }
+>>>
+>>>         if (type == THERMAL_TRIP_CRITICAL || type ==
+>>> THERMAL_TRIP_HOT)
+>>> diff --git a/drivers/thermal/thermal_netlink.c
+>>> b/drivers/thermal/thermal_netlink.c
+>>> index 1234dbe95895..a16dd4d5d710 100644
+>>> --- a/drivers/thermal/thermal_netlink.c
+>>> +++ b/drivers/thermal/thermal_netlink.c
+>>> @@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param
+>>> *p)
+>>>  static int thermal_genl_event_tz_trip_up(struct param *p)
+>>>  {
+>>>         if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id)
+>>> ||
+>>> -           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p-
+>>>> trip_id))
+>>> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p-
+>>>> trip_id) ||
+>>> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p-
+>>>> temp))
+>>>                 return -EMSGSIZE;
+>>>
+>>>         return 0;
+>>> @@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
+>>>         return
+>>> thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
+>>>  }
+>>>
+>>> -int thermal_notify_tz_trip_down(int tz_id, int trip_id)
+>>> +int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
+>>>  {
+>>> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+>>> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id,
+>>> .temp = temp };
+>>>
+>>>         return
+>>> thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
+>>>  }
+>>>
+>>> -int thermal_notify_tz_trip_up(int tz_id, int trip_id)
+>>> +int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
+>>>  {
+>>> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+>>> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id,
+>>> .temp = temp };
+>>>
+>>>         return
+>>> thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
+>>>  }
+>>> diff --git a/drivers/thermal/thermal_netlink.h
+>>> b/drivers/thermal/thermal_netlink.h
+>>> index 828d1dddfa98..e554f76291f4 100644
+>>> --- a/drivers/thermal/thermal_netlink.h
+>>> +++ b/drivers/thermal/thermal_netlink.h
+>>> @@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const
+>>> char *name);
+>>>  int thermal_notify_tz_delete(int tz_id);
+>>>  int thermal_notify_tz_enable(int tz_id);
+>>>  int thermal_notify_tz_disable(int tz_id);
+>>> -int thermal_notify_tz_trip_down(int tz_id, int id);
+>>> -int thermal_notify_tz_trip_up(int tz_id, int id);
+>>> +int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
+>>> +int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
+>>>  int thermal_notify_tz_trip_delete(int tz_id, int id);
+>>>  int thermal_notify_tz_trip_add(int tz_id, int id, int type,
+>>>                                int temp, int hyst);
+>>> @@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int
+>>> tz_id)
+>>>         return 0;
+>>>  }
+>>>
+>>> -static inline int thermal_notify_tz_trip_down(int tz_id, int id)
+>>> +static inline int thermal_notify_tz_trip_down(int tz_id, int id,
+>>> int temp)
+>>>  {
+>>>         return 0;
+>>>  }
+>>>
+>>> -static inline int thermal_notify_tz_trip_up(int tz_id, int id)
+>>> +static inline int thermal_notify_tz_trip_up(int tz_id, int id, int
+>>> temp)
+>>>  {
+>>>         return 0;
+>>>  }
+>>> diff --git a/include/uapi/linux/thermal.h
+>>> b/include/uapi/linux/thermal.h
+>>> index c105054cbb57..bf5d9c8ef16f 100644
+>>> --- a/include/uapi/linux/thermal.h
+>>> +++ b/include/uapi/linux/thermal.h
+>>> @@ -18,7 +18,7 @@ enum thermal_trip_type {
+>>>
+>>>  /* Adding event notification support elements */
+>>>  #define THERMAL_GENL_FAMILY_NAME               "thermal"
+>>> -#define THERMAL_GENL_VERSION                   0x01
+>>> +#define THERMAL_GENL_VERSION                   0x02
+>>>  #define THERMAL_GENL_SAMPLING_GROUP_NAME       "sampling"
+>>>  #define THERMAL_GENL_EVENT_GROUP_NAME          "event"
+>>>
+>>> --
+>>> 2.17.1
+>>>
 > 
-> You protect things at get time, but not put from what I can see :(
-
-Thanks for spotting this, I will send a fix for that.
-
-[ ... ]
-
->> +	list_add(&node->node, &dtpm_list);
->> +
->> +	pr_info("Registered %s\n", name);
-> 
-> When kernel code works properly, it is quiet.  This is debugging code a
-> the most, never something that everyone should be seeing all the time,
-> please remove.
-
-Initially, a comment asked for debug traces in the code. There are more
-traces in the code at the pr_debug level.
-
-Is your suggestion to remove the pr_info as well as other debug traces
-or convert those pr_info to pr_debug ?
-
-[ ... ]
-
-> And any reason why you are not using "real" struct devices in this
-> subsystem?  You seem to be rolling your own infrastructure for no good
-> reason.  I imagine you want sysfs support next, right?
-
-Actually, the framework is on top of powercap, so it has de facto the
-sysfs support. On the other side, the dtpm backends are tied with the
-device they manage.
-
 
 
 -- 
