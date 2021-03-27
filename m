@@ -2,73 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FC434B54B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 08:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FD734B6DB
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 12:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhC0Hvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Mar 2021 03:51:52 -0400
-Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25576 "EHLO
-        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbhC0Hvo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Mar 2021 03:51:44 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Mar 2021 03:51:44 EDT
-ARC-Seal: i=1; a=rsa-sha256; t=1616830597; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=L7RoJufF7tTskibx7JNSmfobQIg7ub/xEhvYpysY/wIQQ6pSmigeYd1HBj7t/UWa2s3m3bqyTCGNRLDGQDRe4+P2wCigMzY+pxQAf2KRRDaLsMkMnXZv/eWbQWvjPVwG2URW+U1L9md7d3sqnaoJKys2F0/xXUc3FpuzeaHetYw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1616830597; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=JXV2C3QRfZwpVe624SV2Rt/jHM07FVh8LsURJOnPjVk=; 
-        b=Jbpq0RhgbCKz23PT5VH0tSPshPshob1O0R96uprdTinNIB7eVpWUV/EKbkNpYhEPWyk5YUggdUmfA66zvzPnxwaFTbM6TBGeVWwBNuuNA9nNI1vEaH2NwVwtzrUH3vaVTcpm6i3VyKdet1cdgqyyhj789OcJ8S9bwbi/pJQg1ag=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=mdjurovic@zohomail.com;
-        dmarc=pass header.from=<mdjurovic@zohomail.com> header.from=<mdjurovic@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1616830597;
-        s=zm2020; d=zohomail.com; i=mdjurovic@zohomail.com;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
-        bh=JXV2C3QRfZwpVe624SV2Rt/jHM07FVh8LsURJOnPjVk=;
-        b=XpWzsokB8zMCeVUNFc7dfLopjzgaaC5Z6GlPGzKwPqUyywyIFwqyi/7HzDYy+o8p
-        iCT4LiBgPKygMFAW7kAzLEHn5qR0NN3NfIbHnm6sKErnVFu9sRvgn1g/UKdNYMhED1R
-        EiYTtzmutLs0nbfhV1Fzh2Kd4NtUchf3/WJG+2LM=
-Received: from milan-pc.attlocal.net (107-220-151-69.lightspeed.sntcca.sbcglobal.net [107.220.151.69]) by mx.zohomail.com
-        with SMTPS id 1616830595107321.69318646500085; Sat, 27 Mar 2021 00:36:35 -0700 (PDT)
-From:   Milan Djurovic <mdjurovic@zohomail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, Milan Djurovic <mdjurovic@zohomail.com>
-Subject: [PATCH] power: supply: 88pm860x_battery: Remove unnecessary int for long long
-Date:   Sat, 27 Mar 2021 00:36:05 -0700
-Message-Id: <20210327073605.7626-1-mdjurovic@zohomail.com>
-X-Mailer: git-send-email 2.31.0
+        id S230420AbhC0Ln5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Mar 2021 07:43:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51700 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230288AbhC0Ln5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 27 Mar 2021 07:43:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AB2160C40;
+        Sat, 27 Mar 2021 11:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616845436;
+        bh=95hulK7NfqIjV7CFH5YuyGaaZJhEO5HRIqLyyBSU0ZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RURTVUa4AIk+H1Y6DBJfg+R7+FtzteRCrfqDEf0czMlVrTRqiU0CF2UcB73YknMQ9
+         9g+8MAqwbHzxq2uYtGGOI/Fy6oXM3Ahnz6c1KGwT96iC8vbsU6M2UfWi+jUUFkT5Z6
+         qSdj5pjDcerguzHY03kiAuYgzw6Y6c7baxgw6G5c=
+Date:   Sat, 27 Mar 2021 12:43:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: Re: [GIT PULL] interconnect fixes for 5.12-rc
+Message-ID: <YF8aev/+soLjlMM0@kroah.com>
+References: <20210326164603.28202-1-djakov@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210326164603.28202-1-djakov@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change 'long long int' to 'long long' because the int is unnecessary,
-as suggested by checkpatch.pl.
+On Fri, Mar 26, 2021 at 06:46:03PM +0200, Georgi Djakov wrote:
+> Hello Greg,
+> 
+> Here is a pull request with a few tiny interconnect fixes for 5.12-rc.
+> The details are in the signed tag. Please take them into char-misc-linus
+> when possible. The patches have been in linux-next for more than a week.
+> 
+> Thanks,
+> Georgi
+> 
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+> 
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.12-rc5
 
-Signed-off-by: Milan Djurovic <mdjurovic@zohomail.com>
----
- drivers/power/supply/88pm860x_battery.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Pulled and pushed out, thanks.
 
-diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
-index 590da88a17a2..f3f3f8cd1a7f 100644
---- a/drivers/power/supply/88pm860x_battery.c
-+++ b/drivers/power/supply/88pm860x_battery.c
-@@ -109,8 +109,8 @@ struct pm860x_battery_info {
- };
- 
- struct ccnt {
--	unsigned long long int pos;
--	unsigned long long int neg;
-+	unsigned long long pos;
-+	unsigned long long neg;
- 	unsigned int spos;
- 	unsigned int sneg;
- 
--- 
-2.31.0
-
+greg k-h
