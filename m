@@ -2,157 +2,305 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F066B34B6FB
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 13:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB4D34B74E
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 13:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhC0MCR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Mar 2021 08:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbhC0MCQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Mar 2021 08:02:16 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7248C0613B1;
-        Sat, 27 Mar 2021 05:02:14 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id ha17so3825924pjb.2;
-        Sat, 27 Mar 2021 05:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9GuMh3RIjKhQ71SqoJ2mPU1mliL0r43h9jfwFp6j2R0=;
-        b=H8wEFCo2mObk+QHo8ir1liiH9/Q00u/3NcyjOra0PFTlmCjYa+2Ru3+1HkAEmSjiQl
-         yU+iw3ZlWp/d0zIc+KvZBcY5dBfMxB9JO+8COxbbOl2apNEwLDUUXz+bGuh9c8sq1VtF
-         hW3qNxb5uyY6umazNR+bAlWTW1CnADCScNmMqdg4rQIxPwUwoY6UDeNe2JhSQgOtA5Hw
-         0o0QKR43VkpC3ic6Y6z2cBYJymHk3bEE1q90JxEeJ6DwVGOUukfrr64/RNDn5WTfZl1R
-         35u69B9ULcl+20Hc5IhEkFEZXkOhcNSP9QATy1Oc3MGViCLuQmrXCTOtsTO9i2DqAzNx
-         oqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9GuMh3RIjKhQ71SqoJ2mPU1mliL0r43h9jfwFp6j2R0=;
-        b=UQi70CF9GSQj2rtJp1He4pz0IBcS5rUT2h1lQxsoIBAZaGDYvsqaUywUM+uV+9aCeS
-         qgZ0sfH7czFh14WW6eYiI5Do0iok4pmo8rX93ygTT6ODiYbl65ZzJ4AJ+HUsSQw+TJwi
-         0pjAGCWOhcHB4aWrPgyqSHocO4NsWbF86w6WSU0D/TDcVjlJHsXunxPU2v+1pPX+Mp0W
-         n6e14lRoWEEEnAOuTxO6nz74VK1gi+iOPJSL+JdV6+YJ/VzFUbSmkb6DXxB4jY0IeHSQ
-         J+JBxi+6t5sYM0UIvWjO8gEHcMEg0ta0sNVQVFhYpQoy7adbQ5aNpzc7vLoq9T4Wsh+7
-         q2xg==
-X-Gm-Message-State: AOAM532mgblbDOMBxZhay8aG52bN5X0B5WQo0X0ICULZg89rjdNyOf0g
-        3JKI5IKl9U0BUVUQsRIoL4w=
-X-Google-Smtp-Source: ABdhPJx+5NWZYn5Vu21FCM+NuSMKIFHdNigHI0luKxsb/htenfL54ztmoteL6KD9GOL+Y9191rSpNA==
-X-Received: by 2002:a17:902:be0c:b029:e6:f007:71d with SMTP id r12-20020a170902be0cb02900e6f007071dmr20153245pls.15.1616846533692;
-        Sat, 27 Mar 2021 05:02:13 -0700 (PDT)
-Received: from shinobu ([156.146.35.76])
-        by smtp.gmail.com with ESMTPSA id a29sm8999811pfg.130.2021.03.27.05.02.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Mar 2021 05:02:12 -0700 (PDT)
-Date:   Sat, 27 Mar 2021 21:02:04 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Syed Nayyar Waris <syednwaris@gmail.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value
- and _set_value
-Message-ID: <YF8evJTkiBYjnDON@shinobu>
-References: <cover.1615038553.git.syednwaris@gmail.com>
- <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
- <CACG_h5pb0pA+cTNPGircAM3UrV5BGmqgk45LF_9phU_J4FaRyw@mail.gmail.com>
- <CAHp75VfDZbJjCOEGdHc=-D6W8_7m2=CinXj-itwn6hvoVqdWYQ@mail.gmail.com>
+        id S229980AbhC0Muq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Mar 2021 08:50:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229582AbhC0Muq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 27 Mar 2021 08:50:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3CC8B619E5;
+        Sat, 27 Mar 2021 12:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616849446;
+        bh=sg1/Exkej0/n+wciolWG61NxonQWasHm41PjUh1+UAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W4iQosa8TPDtYeRwOGJonLa/JNVKsHEfE9M8UGOsbhOLXK2opXbPGyDi8pC4R3StX
+         Sy+OSpkQy06iKKwYJMMH0HCrMm9r0qkGIZtHUDYff0rAhCXblVVrvwDXI3EcuukxgR
+         7LbBLqUYwFI+UUYLmk4gSolCUAv7F6ybziDfNLQo=
+Date:   Sat, 27 Mar 2021 13:50:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, lukasz.luba@arm.com
+Subject: Re: [PATCH v4 2/5] powercap/drivers/dtpm: Create a registering system
+Message-ID: <YF8qIw4UBLnj9TCA@kroah.com>
+References: <20210312130411.29833-1-daniel.lezcano@linaro.org>
+ <20210312130411.29833-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U8fuNQh2GYN2BerP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75VfDZbJjCOEGdHc=-D6W8_7m2=CinXj-itwn6hvoVqdWYQ@mail.gmail.com>
+In-Reply-To: <20210312130411.29833-2-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Mar 12, 2021 at 02:04:08PM +0100, Daniel Lezcano wrote:
+> A SoC can be differently structured depending on the platform and the
+> kernel can not be aware of all the combinations, as well as the
+> specific tweaks for a particular board.
+> 
+> The creation of the hierarchy must be delegated to userspace.
+> 
+> These changes provide a registering mechanism where the different
+> subsystems will initialize their dtpm backends and register with a
+> name the dtpm node in a list.
+> 
+> The next changes will provide an userspace interface to create
+> hierarchically the different nodes. Those will be created by name and
+> found via the list filled by the different subsystem.
+> 
+> If a specified name is not found in the list, it is assumed to be a
+> virtual node which will have children and the default is to allocate
+> such node.
+> 
+> When the node register in the list, the function will be dtpm_register
+> where the previous semantic was to create the node. Thus, the
+> functions are renamed to reflect their purpose.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+> 
+> V4:
+>   - Fixed typo in the commit log
+> 
+> V2:
+>   - Fixed error code path by dropping lock
+> ---
+>  drivers/powercap/dtpm.c     | 161 ++++++++++++++++++++++++++++++++++--
+>  drivers/powercap/dtpm_cpu.c |   4 +-
+>  include/linux/dtpm.h        |  12 ++-
+>  3 files changed, 164 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index 58433b8ef9a1..d00f55f0ee30 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/dtpm.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> +#include <linux/kref.h>
+>  #include <linux/powercap.h>
+>  #include <linux/slab.h>
+>  #include <linux/mutex.h>
+> @@ -34,6 +35,14 @@ static DEFINE_MUTEX(dtpm_lock);
+>  static struct powercap_control_type *pct;
+>  static struct dtpm *root;
+>  
+> +struct dtpm_node {
+> +	const char *name;
+> +	struct dtpm *dtpm;
+> +	struct list_head node;
+> +};
+> +
+> +static LIST_HEAD(dtpm_list);
+> +
+>  static int get_time_window_us(struct powercap_zone *pcz, int cid, u64 *window)
+>  {
+>  	return -ENOSYS;
+> @@ -152,6 +161,138 @@ static int __dtpm_update_power(struct dtpm *dtpm)
+>  	return ret;
+>  }
+>  
+> +static struct dtpm *__dtpm_lookup(const char *name)
+> +{
+> +	struct dtpm_node *node;
+> +
+> +	list_for_each_entry(node, &dtpm_list, node) {
+> +		if (!strcmp(name, node->name))
+> +			return node->dtpm;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +/**
+> + * dtpm_get - Get a reference to a dtpm structure
+> + * @name: the name of the dtpm device
+> + *
+> + * The function looks up in the list of the registered dtpm
+> + * devices. If the dtpm device is not found, a virtual one is
+> + * allocated. This function must be called to create a dtpm node in
+> + * the powercap hierarchy.
+> + *
+> + * Return: a pointer to a dtpm structure, NULL if there is not enough
+> + * memory
+> + */
+> +struct dtpm *dtpm_get(const char *name)
+> +{
+> +	struct dtpm *dtpm;
+> +
+> +	mutex_lock(&dtpm_lock);
+> +	dtpm = __dtpm_lookup(name);
+> +	if (!dtpm)
+> +		dtpm = dtpm_alloc(NULL);
+> +	else
+> +		kref_get(&dtpm->kref);
+> +	mutex_unlock(&dtpm_lock);
+> +
+> +	return dtpm;
+> +}
+> +
+> +static void dtpm_release(struct kref *kref)
+> +{
+> +	struct dtpm *dtpm = container_of(kref, struct dtpm, kref);
+> +
+> +	kfree(dtpm);
+> +}
+> +
+> +/**
+> + * dtpm_put - Release a reference on a dtpm device
+> + * @dtpm: a pointer to a dtpm structure
+> + *
+> + * Release the reference on the specified dtpm device. The last
+> + * reference leads to a memory release.
+> + */
+> +void dtpm_put(struct dtpm *dtpm)
+> +{
+> +	kref_put(&dtpm->kref, dtpm_release);
 
---U8fuNQh2GYN2BerP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You forgot to also grab the dtpm_lock before calling this, right?  What
+is preventing a get and put from being called at the same time?
 
-On Sat, Mar 27, 2021 at 09:29:26AM +0200, Andy Shevchenko wrote:
-> On Saturday, March 27, 2021, Syed Nayyar Waris <syednwaris@gmail.com> wro=
-te:
->=20
-> > On Fri, Mar 26, 2021 at 11:32 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.co=
-m>
-> > wrote:
-> > >
-> > > > +       bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > +       bitmap_set_value(old, 64, state[1], 32, 32);
-> > >
-> > > Isn't it effectively bitnap_from_arr32() ?
-> > >
-> > > > +       bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > +       bitmap_set_value(new, 64, state[1], 32, 32);
-> > >
-> > > Ditto.
-> > >
-> > > --
-> > > With Best Regards,
-> > > Andy Shevchenko
-> >
-> > Hi Andy,
-> >
-> > With bitmap_set_value() we are also specifying the offset (or start)
-> > position too. so that the remainder of the array remains unaffected. I
-> > think it would not be feasible to use bitmap_from/to_arr32()  here.
->=20
->=20
-> You have hard coded start and nbits parameters to 32. How is it not the
-> same?
+You protect things at get time, but not put from what I can see :(
 
-Would these four lines become something like this:
 
-	bitmap_from_arr32(old, state, 64);
-	...
-	bitmap_from_arr32(new, state, 64);
+> +}
+> +
+> +/**
+> + * dtpm_register - Register the dtpm in the dtpm list
+> + * @name: a name used as an identifier
+> + * @dtpm: the dtpm node to be registered
+> + *
+> + * Stores the dtpm device in a list.
+> + *
+> + * Return: 0 on success, -EEXIST if the device name is already present
+> + * in the list, -ENOMEM in case of memory allocation failure.
+> + */
+> +int dtpm_register(const char *name, struct dtpm *dtpm)
+> +{
+> +	struct dtpm_node *node;
+> +	int ret;
+> +
+> +	mutex_lock(&dtpm_lock);
+> +
+> +	ret = -EEXIST;
+> +	if (__dtpm_lookup(name))
+> +		goto out_unlock;
+> +
+> +	ret = -ENOMEM;
+> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +	if (!node)
+> +		goto out_unlock;
+> +
+> +	node->name = kstrdup(name, GFP_KERNEL);
+> +	if (!node->name) {
+> +		kfree(node);
+> +		goto out_unlock;
+> +	}
+> +
+> +	node->dtpm = dtpm;
+> +
+> +	list_add(&node->node, &dtpm_list);
+> +
+> +	pr_info("Registered %s\n", name);
 
-Sincerely,
+When kernel code works properly, it is quiet.  This is debugging code a
+the most, never something that everyone should be seeing all the time,
+please remove.
 
-William Breathitt Gray
 
---U8fuNQh2GYN2BerP
-Content-Type: application/pgp-signature; name="signature.asc"
+> +
+> +	ret = 0;
+> +out_unlock:
+> +	mutex_unlock(&dtpm_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * dtpm_unregister - Remove the dtpm device from the list
+> + * @name: the dtpm device name to be removed
+> + *
+> + * Remove the dtpm device from the list of the registered devices.
+> + */
+> +void dtpm_unregister(const char *name)
+> +{
+> +	struct dtpm_node *node;
+> +
+> +	mutex_lock(&dtpm_lock);
+> +
+> +	list_for_each_entry(node, &dtpm_list, node) {
+> +
+> +		if (strcmp(name, node->name))
+> +			continue;
+> +
+> +		list_del(&node->node);
+> +		kfree(node->name);
+> +		kfree(node);
+> +
+> +		pr_info("Unregistered %s\n", name);
 
------BEGIN PGP SIGNATURE-----
+Again, debugging code should be removed.
 
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmBfHrMACgkQhvpINdm7
-VJIQVg//bgl/dKfym1/4ndQLg+79vTreGgUHlj9VHg6VMMpGBC5c0d/M5WlBKEiC
-jMZAd8mW61HunaeUShz7s9pUh8qbdGGSdNk1DvtAv/A4ouJhUxzmChjXRtd7OhS5
-EpgNqEykCO5DJIaloltUabGk4ds5S+L+cFfLHwQsFMrrE+gFdADfiPziDanNVExM
-1q+dxTml+/rl6g0L6oX3hnN17Et/p1mggRx1MC8Tnn5dQlEz9MIqT1OY0iKhdiuF
-ruiOgQqO7zQWYzQzIH+SehA3wSLu5Y/uiQMEWS1wAWH7Ep44cmhMaj5P+f2tx8Wr
-Q7CHT0SF01lgS7MKR48J1ClXGeLL9ae4Iw1t3SS9zl1obUYWdvwWHGaKmFmIzapv
-+r+KF4sJFaDT42pSolIfQUQN4qBNZwJbVyU2URxwZEPBvuO9lgGbmZ1TFKNlZvPt
-+L27a74cmk/iRKKJtTWLsSnEnGcQ2jLBW4L06Luw0aSDC8YlHFHPB8PbME8V0SR7
-5MhOFaoupDeyU4j1rQddZHJg/FvEpu0Vm1pL/8ZWuHKnVm6PzSxkzggmW0dAasrq
-bfYIlZqYMWzB+QNoIRZcI1D3BMLwDBsoLx+HjZ0S7fwEfYO1Z+l34pXazdXKGkNN
-EbF1yuJQD55Si4RSPDDArnJEKJ/FJ1lxALGklpco/80gCLvtJ8M=
-=oqqt
------END PGP SIGNATURE-----
+> +
+> +		break;
+> +	}
+> +
+> +	mutex_unlock(&dtpm_lock);
+> +}
+> +
+>  /**
+>   * dtpm_update_power - Update the power on the dtpm
+>   * @dtpm: a pointer to a dtpm structure to update
+> @@ -208,7 +349,7 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+>  	if (root == dtpm)
+>  		root = NULL;
+>  
+> -	kfree(dtpm);
+> +	dtpm_put(dtpm);
+>  
+>  	return 0;
+>  }
+> @@ -370,6 +511,7 @@ struct dtpm *dtpm_alloc(struct dtpm_ops *ops)
+>  	if (dtpm) {
+>  		INIT_LIST_HEAD(&dtpm->children);
+>  		INIT_LIST_HEAD(&dtpm->sibling);
+> +		kref_init(&dtpm->kref);
+>  		dtpm->weight = 1024;
+>  		dtpm->ops = ops;
+>  	}
+> @@ -378,28 +520,29 @@ struct dtpm *dtpm_alloc(struct dtpm_ops *ops)
+>  }
+>  
+>  /**
+> - * dtpm_unregister - Unregister a dtpm node from the hierarchy tree
+> - * @dtpm: a pointer to a dtpm structure corresponding to the node to be removed
+> + * dtpm_destroy - Destroy a dtpm node from the hierarchy tree
+> + * @dtpm: a pointer to a dtpm structure corresponding to the node to be
+> + *	  removed and destroyed
+>   *
+>   * Call the underlying powercap unregister function. That will call
+>   * the release callback of the powercap zone.
+>   */
+> -void dtpm_unregister(struct dtpm *dtpm)
+> +void dtpm_destroy(struct dtpm *dtpm)
+>  {
+>  	powercap_unregister_zone(pct, &dtpm->zone);
+>  
+> -	pr_info("Unregistered dtpm node '%s'\n", dtpm->zone.name);
+> +	pr_info("Destroyed dtpm node '%s'\n", dtpm->zone.name);
 
---U8fuNQh2GYN2BerP--
+Again, please make pr_dbg().
+
+And any reason why you are not using "real" struct devices in this
+subsystem?  You seem to be rolling your own infrastructure for no good
+reason.  I imagine you want sysfs support next, right?
+
+thanks,
+
+greg k-h
