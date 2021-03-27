@@ -2,159 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F16F934B44B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 05:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FC434B54B
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Mar 2021 08:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbhC0E47 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Mar 2021 00:56:59 -0400
-Received: from mga04.intel.com ([192.55.52.120]:46058 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229436AbhC0E4p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 27 Mar 2021 00:56:45 -0400
-IronPort-SDR: ayHbOi5kObJ98nXBwgzk/WevQWAwLyz4/lutotm1VScWjpRDge0KJf4eni+GXivEOD4Rtrm8U4
- u3TFMLBybZbg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="188996971"
-X-IronPort-AV: E=Sophos;i="5.81,282,1610438400"; 
-   d="scan'208";a="188996971"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 21:56:44 -0700
-IronPort-SDR: G/4xWkbGQ6VhAWfbTruOkelhVwlEnu0AGW3OQEYcaxQB61Tei6v4Q+1jz13MnmJ8lUv+slRd70
- 6s2U+aatRedA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,282,1610438400"; 
-   d="scan'208";a="410203387"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 21:56:42 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lQ105-0003EH-O6; Sat, 27 Mar 2021 04:56:41 +0000
-Date:   Sat, 27 Mar 2021 12:56:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 5fdb42f06656bb3434d22a8d455dbb34512e572a
-Message-ID: <605ebb05.L0i44vx1DEBqYKoZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230288AbhC0Hvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Mar 2021 03:51:52 -0400
+Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25576 "EHLO
+        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231698AbhC0Hvo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Mar 2021 03:51:44 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Mar 2021 03:51:44 EDT
+ARC-Seal: i=1; a=rsa-sha256; t=1616830597; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=L7RoJufF7tTskibx7JNSmfobQIg7ub/xEhvYpysY/wIQQ6pSmigeYd1HBj7t/UWa2s3m3bqyTCGNRLDGQDRe4+P2wCigMzY+pxQAf2KRRDaLsMkMnXZv/eWbQWvjPVwG2URW+U1L9md7d3sqnaoJKys2F0/xXUc3FpuzeaHetYw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1616830597; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=JXV2C3QRfZwpVe624SV2Rt/jHM07FVh8LsURJOnPjVk=; 
+        b=Jbpq0RhgbCKz23PT5VH0tSPshPshob1O0R96uprdTinNIB7eVpWUV/EKbkNpYhEPWyk5YUggdUmfA66zvzPnxwaFTbM6TBGeVWwBNuuNA9nNI1vEaH2NwVwtzrUH3vaVTcpm6i3VyKdet1cdgqyyhj789OcJ8S9bwbi/pJQg1ag=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=mdjurovic@zohomail.com;
+        dmarc=pass header.from=<mdjurovic@zohomail.com> header.from=<mdjurovic@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1616830597;
+        s=zm2020; d=zohomail.com; i=mdjurovic@zohomail.com;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+        bh=JXV2C3QRfZwpVe624SV2Rt/jHM07FVh8LsURJOnPjVk=;
+        b=XpWzsokB8zMCeVUNFc7dfLopjzgaaC5Z6GlPGzKwPqUyywyIFwqyi/7HzDYy+o8p
+        iCT4LiBgPKygMFAW7kAzLEHn5qR0NN3NfIbHnm6sKErnVFu9sRvgn1g/UKdNYMhED1R
+        EiYTtzmutLs0nbfhV1Fzh2Kd4NtUchf3/WJG+2LM=
+Received: from milan-pc.attlocal.net (107-220-151-69.lightspeed.sntcca.sbcglobal.net [107.220.151.69]) by mx.zohomail.com
+        with SMTPS id 1616830595107321.69318646500085; Sat, 27 Mar 2021 00:36:35 -0700 (PDT)
+From:   Milan Djurovic <mdjurovic@zohomail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, Milan Djurovic <mdjurovic@zohomail.com>
+Subject: [PATCH] power: supply: 88pm860x_battery: Remove unnecessary int for long long
+Date:   Sat, 27 Mar 2021 00:36:05 -0700
+Message-Id: <20210327073605.7626-1-mdjurovic@zohomail.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 5fdb42f06656bb3434d22a8d455dbb34512e572a  Merge branch 'pm-cpufreq-fixes' into bleeding-edge
+Change 'long long int' to 'long long' because the int is unnecessary,
+as suggested by checkpatch.pl.
 
-elapsed time: 721m
-
-configs tested: 96
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-arm                         hackkit_defconfig
-arm                         lpc18xx_defconfig
-sh                          kfr2r09_defconfig
-sh                ecovec24-romimage_defconfig
-sh                           se7780_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                      arches_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                       eiger_defconfig
-sh                          polaris_defconfig
-powerpc                      walnut_defconfig
-arm                         s3c6400_defconfig
-powerpc                     mpc5200_defconfig
-mips                           mtx1_defconfig
-arm                          exynos_defconfig
-sh                             shx3_defconfig
-xtensa                  cadence_csp_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20210326
-i386                 randconfig-a003-20210326
-i386                 randconfig-a001-20210326
-i386                 randconfig-a002-20210326
-i386                 randconfig-a006-20210326
-i386                 randconfig-a005-20210326
-x86_64               randconfig-a012-20210326
-x86_64               randconfig-a015-20210326
-x86_64               randconfig-a014-20210326
-x86_64               randconfig-a013-20210326
-x86_64               randconfig-a016-20210326
-x86_64               randconfig-a011-20210326
-i386                 randconfig-a014-20210326
-i386                 randconfig-a011-20210326
-i386                 randconfig-a015-20210326
-i386                 randconfig-a016-20210326
-i386                 randconfig-a012-20210326
-i386                 randconfig-a013-20210326
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a002-20210326
-x86_64               randconfig-a003-20210326
-x86_64               randconfig-a001-20210326
-x86_64               randconfig-a006-20210326
-x86_64               randconfig-a004-20210326
-x86_64               randconfig-a005-20210326
-
+Signed-off-by: Milan Djurovic <mdjurovic@zohomail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/power/supply/88pm860x_battery.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
+index 590da88a17a2..f3f3f8cd1a7f 100644
+--- a/drivers/power/supply/88pm860x_battery.c
++++ b/drivers/power/supply/88pm860x_battery.c
+@@ -109,8 +109,8 @@ struct pm860x_battery_info {
+ };
+ 
+ struct ccnt {
+-	unsigned long long int pos;
+-	unsigned long long int neg;
++	unsigned long long pos;
++	unsigned long long neg;
+ 	unsigned int spos;
+ 	unsigned int sneg;
+ 
+-- 
+2.31.0
+
