@@ -2,120 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E55D34CEFB
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Mar 2021 13:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5145634D000
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Mar 2021 14:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbhC2L3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Mar 2021 07:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S231139AbhC2MYs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Mar 2021 08:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbhC2L3c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 07:29:32 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0EDC061574;
-        Mon, 29 Mar 2021 04:29:31 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k8so12489606wrc.3;
-        Mon, 29 Mar 2021 04:29:31 -0700 (PDT)
+        with ESMTP id S229910AbhC2MYp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 08:24:45 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A3DC061574
+        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 05:24:44 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id x14so12113934qki.10
+        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 05:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i2Q5jhlwjrk9FBYJg4e9MsdVUp4rHTY83siPq5FBlxc=;
-        b=tZ/j8mBOAsEl8O51Jd/uLW/7eD7Yc0kadz6MTsdOPkHO62+I2TOPHXn2I3XDFtQo6s
-         KILd/fbgO82YSdcx7sT4Cv7TYGcson5CtGe62Eh5aD/ybie/wVhfWV2nT1ZzJ1WBz9+B
-         +5bqRICvmP79uZ0Ce1nC8BH0a7/O0NkaWhu10n0PKXOrKLx+kJGvvuPRyVaX60bxzCeF
-         NUFChgzyHjgLpAkofiZqbkOM+dzdyBah9Ip2OiXIaUPK6jA78RCXSujTloex5u0Usmro
-         DTe0nF9jLinyH3KTX5ga6l82h6ERfqNwqClBmmqG3/VwOJDHSUQrEzrQZgHmstXpgab6
-         eIDg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T/fMBYR4Yd5piX+1pA3p+PIx0zWWBB+T3lnvR9rHYBo=;
+        b=q6qRHAQXV+hKgpBAY9KIiHljsognBYKZkanegA1uC8hRRCT4gWZPseYrnWDS8FV0Qi
+         gBt3SxuKNYAwbXVrY1VILIUGdqyLLjXb1B2vUGXAE3ih1zbpJhCP6gX4gN6mSaweckQ1
+         OIbZeQFoqOrXA2svbTGXRwWDxXB74UPjowsRYbvapsNhwao5gHm1J++nTBK6X1GrVklh
+         ISPmnv+D9/m6npYrovZ3meGiis3N3tc+KUUo0xSoljpI5sNcDpDzbRfQxl+LcgeOuo+c
+         PdHhpjNpfYCRxbCY5dfhkyFi5EIzN1E7bI4tJayHcOwQ86MO6JLmp4Vw4z7QC6wEsqM9
+         dtOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=i2Q5jhlwjrk9FBYJg4e9MsdVUp4rHTY83siPq5FBlxc=;
-        b=ju/gIPH1pausyOkD7GkuXhdLhk0H0PvipuyDGUYyfd+w0bk+TQr+c517/C84MNSpsf
-         IyJDOKarJKhW9OCXmO/LHHzzTIEPrTp1/tpAu9gsrVJrmsC+g//IUNSoGtLB7g8Z9m6J
-         topeXS+uX1u7GkOaD1AM+eMJ44B0e1esmDbHN0hQNnG1MMBgrbJFpXGP8KZ+P4lIpZhi
-         gVUs/z16UHzsvJLfVkHbDHRtThXaDtPgoAXky497i0+Dd4S6fEbEhGIYJTEYBCwuXl46
-         9r/ZTekhCLCHDdcj4V6zLVzcuOUsFrLCmTBPJKg4JEeldl9UXq+ynGtWlUr9HY4nY3Z4
-         vo0Q==
-X-Gm-Message-State: AOAM530+MmHVu52L/0SRCpqyyH9oGpKskBHg36uAQvJXPvG5qtomRBGz
-        C+rBXQaGz4Ib/qhOofjSMxU=
-X-Google-Smtp-Source: ABdhPJy/hWvL+p84DPBEAVpW9viyFKwk9h3tUV6b9J6xEIHRfpzQ202GV7+umxvUEZOSt8Cc/97NXw==
-X-Received: by 2002:a5d:6384:: with SMTP id p4mr23695472wru.368.1617017370459;
-        Mon, 29 Mar 2021 04:29:30 -0700 (PDT)
-Received: from ziggy.stardust (80.174.240.175.dyn.user.ono.com. [80.174.240.175])
-        by smtp.gmail.com with ESMTPSA id k13sm34402847wri.27.2021.03.29.04.29.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 04:29:29 -0700 (PDT)
-Subject: Re: [PATCH 2/2] dt-bindings: cpufreq: update cpu type and clock name
- for MT8173 SoC
-To:     Seiya Wang <seiya.wang@mediatek.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com
-References: <20210326031227.2357-1-seiya.wang@mediatek.com>
- <20210326031227.2357-2-seiya.wang@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <e460b0b8-9e99-974d-e6bc-e6fc89177ecb@gmail.com>
-Date:   Mon, 29 Mar 2021 13:29:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=T/fMBYR4Yd5piX+1pA3p+PIx0zWWBB+T3lnvR9rHYBo=;
+        b=pyarMO2G6dp6A+rmTHS2BdIIrMzXgk8jRYgUa9cgq7vKwxj+Eja/XYUsC/ZToeGENa
+         mWJxQnLEWXNr3uzk3e2ytcSgAMuEFYx7l94EzNu1B5OFaUowOckrmfZtytKViBlGdDqt
+         BUD+jushhvAxn4ITtmwJE0WmNKei9HT2OIFtlxWL3PyusdccDOJSn7BmRS3FwJ0revpQ
+         +A+1wyoci9OD7+pfOhEjurXBOk150c5USC4T/dBiYWsUQUTG35tQEraDeg5Ah33OXyKf
+         WSerBUpJS3nuwla+oHP13gCEE19JDxg3/C7ftIkpY8PIkycGCMlXwI9L4Iiq468zSoC7
+         zV+w==
+X-Gm-Message-State: AOAM533pRpxeyUV3paI4SoBzt+mwK/odskfg/xvi5NyktutTjWmaOHrc
+        N+QbPPFnpSO78QU8OQffyJGWSy+gyyE=
+X-Google-Smtp-Source: ABdhPJyC84R1sthJRLTxBia2zf5iDkKMTOyg3Ynh1tFBadaliwhJol5lwHH5Cm/I9F9PiK5KklVQ9g==
+X-Received: by 2002:a37:9fd2:: with SMTP id i201mr24090294qke.435.1617020683910;
+        Mon, 29 Mar 2021 05:24:43 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:482:919:7898:56c:200:f2a5])
+        by smtp.gmail.com with ESMTPSA id s13sm13246877qkg.17.2021.03.29.05.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 05:24:43 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     cw00.choi@samsung.com
+Cc:     linux-imx@nxp.com, linux-pm@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH 1/2] PM / devfreq: imx-bus: Remove unneeded of_match_ptr()
+Date:   Mon, 29 Mar 2021 09:24:24 -0300
+Message-Id: <20210329122425.579386-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210326031227.2357-2-seiya.wang@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+i.MX is a DT-only platform, so of_match_ptr() can be safely
+removed.
 
+Remove the unneeded of_match_ptr(). 
 
-On 26/03/2021 04:12, Seiya Wang wrote:
-> Update the cpu type of cpu2 and cpu3 since MT8173 used Cortex-a72.
-> 
-> Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/devfreq/imx-bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
+index 4f38455ad742..3fc3fd77492d 100644
+--- a/drivers/devfreq/imx-bus.c
++++ b/drivers/devfreq/imx-bus.c
+@@ -169,7 +169,7 @@ static struct platform_driver imx_bus_platdrv = {
+ 	.probe		= imx_bus_probe,
+ 	.driver = {
+ 		.name	= "imx-bus-devfreq",
+-		.of_match_table = of_match_ptr(imx_bus_of_match),
++		.of_match_table = imx_bus_of_match,
+ 	},
+ };
+ module_platform_driver(imx_bus_platdrv);
+-- 
+2.25.1
 
-> ---
->  Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
-> index ea4994b35207..ef68711716fb 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
-> @@ -202,11 +202,11 @@ Example 2 (MT8173 SoC):
->  
->  	cpu2: cpu@100 {
->  		device_type = "cpu";
-> -		compatible = "arm,cortex-a57";
-> +		compatible = "arm,cortex-a72";
->  		reg = <0x100>;
->  		enable-method = "psci";
->  		cpu-idle-states = <&CPU_SLEEP_0>;
-> -		clocks = <&infracfg CLK_INFRA_CA57SEL>,
-> +		clocks = <&infracfg CLK_INFRA_CA72SEL>,
->  			 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  		clock-names = "cpu", "intermediate";
->  		operating-points-v2 = <&cpu_opp_table_b>;
-> @@ -214,11 +214,11 @@ Example 2 (MT8173 SoC):
->  
->  	cpu3: cpu@101 {
->  		device_type = "cpu";
-> -		compatible = "arm,cortex-a57";
-> +		compatible = "arm,cortex-a72";
->  		reg = <0x101>;
->  		enable-method = "psci";
->  		cpu-idle-states = <&CPU_SLEEP_0>;
-> -		clocks = <&infracfg CLK_INFRA_CA57SEL>,
-> +		clocks = <&infracfg CLK_INFRA_CA72SEL>,
->  			 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  		clock-names = "cpu", "intermediate";
->  		operating-points-v2 = <&cpu_opp_table_b>;
-> 
