@@ -2,216 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E14A34D5C2
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Mar 2021 19:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6B734D5CB
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Mar 2021 19:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbhC2RJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Mar 2021 13:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S230362AbhC2RMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Mar 2021 13:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbhC2RIp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 13:08:45 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D70AC061574;
-        Mon, 29 Mar 2021 10:08:45 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 12so6969046wmf.5;
-        Mon, 29 Mar 2021 10:08:45 -0700 (PDT)
+        with ESMTP id S229910AbhC2RMN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 13:12:13 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DD7C061574;
+        Mon, 29 Mar 2021 10:12:13 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x13so13604741wrs.9;
+        Mon, 29 Mar 2021 10:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y2ZHeMj4ec57luc4oS02DRiziRVFT/KvHjnr58lcOHE=;
-        b=NrOmoj8+szpaD0TUhTvIHhUPkTOQ4tVlROIC1p2MCcryzroeZGHR3ttV2nqcQ6oH5c
-         DB5Hsax5Ay315Hv2z6ey7gCtkk5cZa32qjHVVEnR1x+IhlGqsDYxvMT8bHXri9eH5OdU
-         iV91ITQsfx4xQmpheYY61o487elN7DDJXcQOKAFwhDUqzEBUwQ62Om7I411XW8n00GlQ
-         zN6pBQPrqEuT2ZLESk0oz4jpwGdimFrZxe21VX1PzHzHcwrjLpmavXsAVeKqM5ZocEy3
-         PmlQBi6XAX1JpR9uGn5aIq2Xe0Oo6HdvSx8rG+0qKaby+UGTty7qiwGdhpaHSCn7wjDm
-         oZbA==
+        bh=Rqpj3tJ8Hp0uec22wW3HCaakBv7Gn530wlfuwOnGxhw=;
+        b=svjoxxu8FXf762k81J7JdAXqRNI+vJYzDQsRHhKReveRENd5hA/nL4sxdOCM8Tpw2b
+         jms8DR+rMzQA+E8eHeSxAVD3gBLZ0fmbX/nOvEs+yhJ9Cd7NHwaNkZp+6OMruZL7M3nM
+         14EtQNaq1ZeRqx4VQSZFvbGHGPL3ZCJLyZudwVwVvev+WX/qHbvM6oZ7IFuRyCWjne47
+         tFZWU54daMIHV/6GmTa5DpzB0aa2HZj6beq9z4vBy8FmPAR6LWLmL1RW32gmhrG/1E77
+         bmiftc2mdowy7poAXlHwHXUi+hKWTLswhIfff4RDuRi+cqB8Ur8iKbAaEVKicuXnjvJh
+         uddQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=y2ZHeMj4ec57luc4oS02DRiziRVFT/KvHjnr58lcOHE=;
-        b=VoQ3r4Z9Fec3TewuHI7i+G25+LascosOHrE4FnDehvDSjq/u2gaCvXEkyqg3V75HHH
-         AOnDzp0tLs22ajLJb90uL5AWSPLP0wAEaSS+XAF7ejwoIl8KUkD0ejOMX32YQ4uVmxT0
-         +B7MwAEz8mTPxbuR+HZ6eL4ONe4jotQpvPKGCkfzExvkHH1aGJlWQT2blB6CTifIRF2G
-         YW/CjOkWlm3wmoQ0dFutA1YV1VcZ5vdnEsfyVqMlPNMXQ5KCl7df70FdeyZpfXyrBL1O
-         i5hoXBCZxBnKTY7PQadxquV/BW2HY7lmapk4hfev71M93DVMVbyfMfoAFRwnGFhCREIe
-         c09A==
-X-Gm-Message-State: AOAM532dg6yxtUmy65OnBpOpsMP/LlnWcKYWFkey+vwwlg7U0Tph/kvu
-        ZSKr6HXMurv+mmfXHYaCHvM=
-X-Google-Smtp-Source: ABdhPJz/bx5hehJCuehhLrvgunl5jW1+LBDS5GpNha2CBGC2FnW+8T+XE8v2Vs/jtpJf5vn6ags7Iw==
-X-Received: by 2002:a1c:1f4c:: with SMTP id f73mr100191wmf.25.1617037724150;
-        Mon, 29 Mar 2021 10:08:44 -0700 (PDT)
+        bh=Rqpj3tJ8Hp0uec22wW3HCaakBv7Gn530wlfuwOnGxhw=;
+        b=A652Xc2khtIH0YMmDxHFKjMW+V9Pxv96WwGd8MXflRz2XxAo+EZA9nxNCLvm9G44EM
+         goCIl80rFeQGH6zaW2X7wrYNSgp788fx05em5RDRpRIymPfRS3jBMOzOHvTCEkX72qqK
+         zy1Qm4bIRzarw66uv/G5IPmHfvBBMSfVA/iJ5y34XyxBGiVZcuvy7bys8uJBFGlnFCCO
+         pYFXeJPvYLk/S+96TjDLRHdbWxfeRLQmzd2MWuBE0dpVLCXL2s28hlhlsC56xxJ0AOva
+         qeZPoeerngf0XxODXHWlGZKeZCyUwGGW5qgxPn1pCanVVV7Xb0leVtWF4mFIcex6QGSL
+         TB9Q==
+X-Gm-Message-State: AOAM533euQoBZHrztUTQtFpXRETS4+BQ4uFZ5qipeWUiiHAs+2AK0lQw
+        AQKM0oO9vylG3OyPEUOsXAg=
+X-Google-Smtp-Source: ABdhPJwutr/FGR0+TNlVNDBj+Z8mVQFMNgwXhcRLsKhhcyvZ+gR2gDLvdYZOR88VUK8ix8W0Ot/K+g==
+X-Received: by 2002:a05:6000:137b:: with SMTP id q27mr30057996wrz.168.1617037932014;
+        Mon, 29 Mar 2021 10:12:12 -0700 (PDT)
 Received: from ziggy.stardust (80.174.240.175.dyn.user.ono.com. [80.174.240.175])
-        by smtp.gmail.com with ESMTPSA id c8sm34819213wrd.55.2021.03.29.10.08.42
+        by smtp.gmail.com with ESMTPSA id g11sm30636553wrw.89.2021.03.29.10.12.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 10:08:43 -0700 (PDT)
-Subject: Re: [v7,1/3] arm64: dts: mt8183: add thermal zone node
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-Cc:     fan.chen@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        Mon, 29 Mar 2021 10:12:11 -0700 (PDT)
+Subject: Re: [v7,2/3] arm64: dts: mt8183: Configure CPU cooling
+To:     Michael Kao <michael.kao@mediatek.com>, fan.chen@mediatek.com,
+        Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        srv_heupstream@mediatek.com,
-        Eduardo Valentin <edubezval@gmail.com>,
+        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
+        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>
 References: <20210316070144.28440-1-michael.kao@mediatek.com>
- <20210316070144.28440-2-michael.kao@mediatek.com>
- <CAJMQK-gQxMmq-4+Hb2vuTmz9T7XOZPV3=uwTp-8doHRVD4y_Jg@mail.gmail.com>
+ <20210316070144.28440-3-michael.kao@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <b4fb751f-c440-9a39-ea89-21c4543c9d8b@gmail.com>
-Date:   Mon, 29 Mar 2021 19:08:42 +0200
+Message-ID: <25e4c77d-7548-a135-3f94-4f6224de1f91@gmail.com>
+Date:   Mon, 29 Mar 2021 19:12:10 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <CAJMQK-gQxMmq-4+Hb2vuTmz9T7XOZPV3=uwTp-8doHRVD4y_Jg@mail.gmail.com>
+In-Reply-To: <20210316070144.28440-3-michael.kao@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 22/03/2021 12:20, Hsin-Yi Wang wrote:
-> On Tue, Mar 16, 2021 at 3:02 PM Michael Kao <michael.kao@mediatek.com> wrote:
->>
->> From: "michael.kao" <michael.kao@mediatek.com>
->>
->> Add thermal zone node to Mediatek MT8183 dts file.
->>
->> Evaluate the thermal zone every 500ms while not cooling
->> and every 100ms when passive cooling is performed.
->>
->> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
->> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+On 16/03/2021 08:01, Michael Kao wrote:
+> From: Matthias Kaehlcke <mka@chromium.org>
 > 
+> Add two passive trip points at 68°C and 80°C for the CPU temperature.
+> 
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> 
 
 Applied to v5.12-next/dts64
 
-Thanks!
+Thanks.
+Matthias
 
-> Tested this patch on mt8183 devices.
+
+
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 56 ++++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
 > 
->> ---
->>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 85 ++++++++++++++++++++++++
->>  1 file changed, 85 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> index 5b782a4769e7..d3550af06408 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> @@ -657,6 +657,87 @@
->>                         status = "disabled";
->>                 };
->>
->> +               thermal: thermal@1100b000 {
->> +                       #thermal-sensor-cells = <1>;
->> +                       compatible = "mediatek,mt8183-thermal";
->> +                       reg = <0 0x1100b000 0 0x1000>;
->> +                       clocks = <&infracfg CLK_INFRA_THERM>,
->> +                                <&infracfg CLK_INFRA_AUXADC>;
->> +                       clock-names = "therm", "auxadc";
->> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
->> +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
->> +                       mediatek,auxadc = <&auxadc>;
->> +                       mediatek,apmixedsys = <&apmixedsys>;
->> +                       nvmem-cells = <&thermal_calibration>;
->> +                       nvmem-cell-names = "calibration-data";
->> +               };
->> +
->> +               thermal-zones {
->> +                       cpu_thermal: cpu_thermal {
->> +                               polling-delay-passive = <100>;
->> +                               polling-delay = <500>;
->> +                               thermal-sensors = <&thermal 0>;
->> +                               sustainable-power = <5000>;
->> +                       };
->> +
->> +                       /* The tzts1 ~ tzts6 don't need to polling */
->> +                       /* The tzts1 ~ tzts6 don't need to thermal throttle */
->> +
->> +                       tzts1: tzts1 {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 1>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +
->> +                       tzts2: tzts2 {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 2>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +
->> +                       tzts3: tzts3 {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 3>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +
->> +                       tzts4: tzts4 {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 4>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +
->> +                       tzts5: tzts5 {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 5>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +
->> +                       tztsABB: tztsABB {
->> +                               polling-delay-passive = <0>;
->> +                               polling-delay = <0>;
->> +                               thermal-sensors = <&thermal 6>;
->> +                               sustainable-power = <5000>;
->> +                               trips {};
->> +                               cooling-maps {};
->> +                       };
->> +               };
->> +
->>                 pwm0: pwm@1100e000 {
->>                         compatible = "mediatek,mt8183-disp-pwm";
->>                         reg = <0 0x1100e000 0 0x1000>;
->> @@ -926,6 +1007,10 @@
->>                         reg = <0 0x11f10000 0 0x1000>;
->>                         #address-cells = <1>;
->>                         #size-cells = <1>;
->> +                       thermal_calibration: calib@180 {
->> +                               reg = <0x180 0xc>;
->> +                       };
->> +
->>                         mipi_tx_calibration: calib@190 {
->>                                 reg = <0x190 0xc>;
->>                         };
->> --
->> 2.18.0
->>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index d3550af06408..1ad0a1d55d53 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -13,6 +13,7 @@
+>  #include <dt-bindings/power/mt8183-power.h>
+>  #include <dt-bindings/reset-controller/mt8183-resets.h>
+>  #include <dt-bindings/phy/phy.h>
+> +#include <dt-bindings/thermal/thermal.h>
+>  #include "mt8183-pinfunc.h"
+>  
+>  / {
+> @@ -678,6 +679,61 @@
+>  				polling-delay = <500>;
+>  				thermal-sensors = <&thermal 0>;
+>  				sustainable-power = <5000>;
+> +
+> +				trips {
+> +					threshold: trip-point@0 {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +					};
+> +
+> +					target: trip-point@1 {
+> +						temperature = <80000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +					};
+> +
+> +					cpu_crit: cpu-crit {
+> +						temperature = <115000>;
+> +						hysteresis = <2000>;
+> +						type = "critical";
+> +					};
+> +				};
+> +
+> +				cooling-maps {
+> +					map0 {
+> +						trip = <&target>;
+> +						cooling-device = <&cpu0
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu1
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu2
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu3
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>;
+> +						contribution = <3072>;
+> +					};
+> +					map1 {
+> +						trip = <&target>;
+> +						cooling-device = <&cpu4
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu5
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu6
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>,
+> +								 <&cpu7
+> +							THERMAL_NO_LIMIT
+> +							THERMAL_NO_LIMIT>;
+> +						contribution = <1024>;
+> +					};
+> +				};
+>  			};
+>  
+>  			/* The tzts1 ~ tzts6 don't need to polling */
+> 
