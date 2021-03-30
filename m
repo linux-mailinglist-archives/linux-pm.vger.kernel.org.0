@@ -2,62 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FF534E153
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Mar 2021 08:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A27A34E17E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Mar 2021 08:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbhC3Gjh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Mar 2021 02:39:37 -0400
-Received: from mail-m17637.qiye.163.com ([59.111.176.37]:36578 "EHLO
-        mail-m17637.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhC3Gjg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Mar 2021 02:39:36 -0400
-Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
-        by mail-m17637.qiye.163.com (Hmail) with ESMTPA id 2274998045C;
-        Tue, 30 Mar 2021 14:39:34 +0800 (CST)
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] linux/intel_rapl.h: Modify struct declaration
-Date:   Tue, 30 Mar 2021 14:39:23 +0800
-Message-Id: <20210330063923.2269702-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.25.1
+        id S231131AbhC3Gsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Mar 2021 02:48:50 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14191 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229468AbhC3GsT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Mar 2021 02:48:19 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8g1v44gdzmc94;
+        Tue, 30 Mar 2021 14:45:39 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 30 Mar 2021 14:48:06 +0800
+From:   Hao Fang <fanghao11@huawei.com>
+To:     <edubezval@gmail.com>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>
+CC:     <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <prime.zeng@hisilicon.com>,
+        <fanghao11@huawei.com>
+Subject: [PATCH] thermal/drivers/hisi: Use the correct HiSilicon copyright
+Date:   Tue, 30 Mar 2021 14:45:33 +0800
+Message-ID: <1617086733-2705-1-git-send-email-fanghao11@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZGU8YH0gaTElMH0pCVkpNSkxLQ01ITE9PQkpVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PlE6Kyo6ET8OSzcYLyEIP1Yc
-        Nk0aCzRVSlVKTUpMS0NNSExPTE5JVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
-        TVVKTklVSk9OVUpDSVlXWQgBWUFKT0xJNwY+
-X-HM-Tid: 0a7881dbe162d992kuws2274998045c
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-struct rapl_package is declared twice. One has been declared
-at 80th line.
-By reviewing the code, it should declare struct rapl_domain
-rather than rapl_package. Modify it.
+s/Hisilicon/HiSilicon/g.
+It should use capital S, according to
+https://www.hisilicon.com/en/terms-of-use.
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Hao Fang <fanghao11@huawei.com>
 ---
- include/linux/intel_rapl.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/hisi_thermal.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-index 50b8398ffd21..93780834fc8f 100644
---- a/include/linux/intel_rapl.h
-+++ b/include/linux/intel_rapl.h
-@@ -33,7 +33,7 @@ enum rapl_domain_reg_id {
- 	RAPL_DOMAIN_REG_MAX,
- };
+diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
+index ee05950..d902db9 100644
+--- a/drivers/thermal/hisi_thermal.c
++++ b/drivers/thermal/hisi_thermal.c
+@@ -1,7 +1,7 @@
+ /*
+- * Hisilicon thermal sensor driver
++ * HiSilicon thermal sensor driver
+  *
+- * Copyright (c) 2014-2015 Hisilicon Limited.
++ * Copyright (c) 2014-2015 HiSilicon Limited.
+  * Copyright (c) 2014-2015 Linaro Limited.
+  *
+  * Xinwei Kong <kong.kongxinwei@hisilicon.com>
+@@ -672,5 +672,5 @@ module_platform_driver(hisi_thermal_driver);
  
--struct rapl_package;
-+struct rapl_domain;
- 
- enum rapl_primitives {
- 	ENERGY_COUNTER,
+ MODULE_AUTHOR("Xinwei Kong <kong.kongxinwei@hisilicon.com>");
+ MODULE_AUTHOR("Leo Yan <leo.yan@linaro.org>");
+-MODULE_DESCRIPTION("Hisilicon thermal driver");
++MODULE_DESCRIPTION("HiSilicon thermal driver");
+ MODULE_LICENSE("GPL v2");
 -- 
-2.25.1
+2.8.1
 
