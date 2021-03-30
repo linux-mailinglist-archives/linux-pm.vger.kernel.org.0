@@ -2,166 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E99034DF8E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Mar 2021 05:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3519C34DF91
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Mar 2021 05:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbhC3DrX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Mar 2021 23:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S230161AbhC3DtB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Mar 2021 23:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbhC3DrU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 23:47:20 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE73C061762
-        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 20:47:18 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c17so11233029pfn.6
-        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 20:47:18 -0700 (PDT)
+        with ESMTP id S229689AbhC3Dsj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Mar 2021 23:48:39 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE12C061765
+        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 20:48:39 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 68-20020a9d0f4a0000b02901b663e6258dso14304092ott.13
+        for <linux-pm@vger.kernel.org>; Mon, 29 Mar 2021 20:48:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=FVRmLiWdAw/CCW46qV2/87Kd0uZ4yjbtVU6KpzNizvQ=;
-        b=Fam5KFwNZXaBR6EBzlNCdGCmupCWzYIdAhaFbtg8lqn8A8RnrJOlB+NXFAer2fPigX
-         4GPiuHuflbxM1tMhZPgmr4LhPPdbjbO9gqo471BkoPaABUqfw5RTVeGpTEa31yoIsdfP
-         RoctZcD/WyqQA44/V7dWLmrSFr42GbZOsU8hk86JKvE8mGiKsICbz+t0b/ik+4ufOwgK
-         k/JB8WFQJGTkU8RNeDTEz+h7aRJi8vZUFrhAPeRfkRcdxdva+Q8BpITmM3oRaalfAIpp
-         Z+D7IQOdWi3HX9eEyUN8RjdH53dRFnP3n6aUlojqPoyH4P/x9hoGS0Eh+hpnGIRxlCN4
-         B3Iw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZaWpeqY25MeDhtAts3m3c7ZDqv8GKc5eM14JLBJ3UhM=;
+        b=aria6U2aOK6GNQcIMqfIxcq4rDTxMTjlMu8p5Gj0XcnZDv6UluWjUciozLsMrU6ilw
+         U0HikIaK3NQMBUMW2/fCPa22dSCeaj/KcZcvtJrrzr/wzbj/KLS6Y+EFEXuOgX4YdmRA
+         W/B9dGHzbRfo+bIYqx7XluDewImcQRnP44+uPb/sUcYm1+yhiLzRlS1a/SP/xFzBVgMV
+         OtWLSXViZyg6VOX4f2rxhInfbe8ohYLkH0W2NjJVcveY85UaUbf+Bp7ZaBvFpPRRD6DM
+         JwZFPCWY2XNXrET4EUcAt/5+faX6oJDyHe65d/wNbwkkGLuszr1ZRFVf0McjW3NSQpUu
+         jVdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=FVRmLiWdAw/CCW46qV2/87Kd0uZ4yjbtVU6KpzNizvQ=;
-        b=kDnaaULxszG6M1LDe4r6eCkVmGHakJZpLxqS5dzr9LEYSv+gM+kPKjxiP8sIYzPBAA
-         6v4WnYbqbQ+XKn/fW/lLpw7VDWup+Px2b1eROf7Pm7S+1k1RHvnvwJrkw2vUoIZaV8eJ
-         XlmblqtmcdkO6QFZNPG8QL2vC/pEOAKD4D3Db9cQcQsD04SfgyacWhOCGavIGosp7nsD
-         a2vU9/YfKhYGRiM6qM+g/b/NHazAYoIEJ2bq9+dJBr+PfuZYLYORQdZAiivtN/9DY9DF
-         fB2Gt7wCCsDk2AJpM3ZNTe3WOjMzZeV76OGkokGXzqtZulAkQ66G9ND3rT/eeAslOxKu
-         POkQ==
-X-Gm-Message-State: AOAM531O73UxGGOhB4EjAKg4bvFaytysROfyh08Vt+czMpw+7/EOtcQr
-        IyDlcR6WdOxl9OxBDLllJnvqx6arzRKDbDHK
-X-Google-Smtp-Source: ABdhPJxG6ydVyCtfRloPrtYcUqpO0nRb6iP1CHJ6jWHcW6mPx07HxHZPtSiApJ14KwNtLXMwYfzu+w==
-X-Received: by 2002:a63:6683:: with SMTP id a125mr26049696pgc.382.1617076038040;
-        Mon, 29 Mar 2021 20:47:18 -0700 (PDT)
-Received: from MacBook-Pro.local ([122.10.101.134])
-        by smtp.gmail.com with ESMTPSA id r16sm18609266pfq.211.2021.03.29.20.47.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 20:47:17 -0700 (PDT)
-Subject: Re: [PATCH 1/2] cpupower: fix amd cpu (family < 0x17) active state
- issue
-To:     Thomas Renninger <trenn@suse.com>, linux@dominikbrodowski.net,
-        sherry.hurwitz@amd.com, linux-pm@vger.kernel.org
-Cc:     lishujin@kuaishou.com, xufuhai <xufuhai@kuaishou.com>
-References: <20210324082838.41462-1-xufuhai1992@gmail.com>
- <5120169.VkIDyNCUOm@c100>
-From:   xufuhai <xufuhai1992@gmail.com>
-Message-ID: <a1dd4790-7308-4bfc-bd13-4341812a10ca@gmail.com>
-Date:   Tue, 30 Mar 2021 11:47:10 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZaWpeqY25MeDhtAts3m3c7ZDqv8GKc5eM14JLBJ3UhM=;
+        b=i6wTZYce/7nJpPJkmrsv0w9u/fSapzs0BGM/89/PFD9SIwn5kCvkuGyzlijHQ2IUPu
+         eTTHq2JcZ1sn2bZCtEuw0G7jCtleJzWrwhuycbURau7M5YbxmUoG0FhrbFBcU9BkLH3Y
+         BIPYtyGMuBufCtdLJl3UDg0xGXrIO3ApZUJSSd4BRFPkHkpx92Cs5H44+DKJH7OTOKLH
+         jXgeo/BRiMhabMLHDrMcxy0lmloY1jV8dbSFhPF5teqkq6m0SaWFIAmKeMQB2C1puZhR
+         TGXMxxkBnNrldkWLzVfb2/DJqtLD6Bu8gSd8WZyj2IlFfH+qW+mOoqjfwCR15Vd5tpdv
+         s+jw==
+X-Gm-Message-State: AOAM5335eHjM8gzF9EMxJuTCeiGQ8/Ehp/x5/fawexvVBUtCRZZyy9cG
+        jbXV+M4x1vRslzbaIET9iHlnDQ==
+X-Google-Smtp-Source: ABdhPJxSE5litT1P7lJr0s8y9tEBHQh2kQ64l0iMcjvplDaeF9Eb9bMTzeSINA+qu1qZDc4bknkFkg==
+X-Received: by 2002:a9d:6e09:: with SMTP id e9mr25522900otr.195.1617076118577;
+        Mon, 29 Mar 2021 20:48:38 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w10sm4791878oth.7.2021.03.29.20.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 20:48:37 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 22:48:36 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Foss <robert.foss@linaro.org>, daniel.lezcano@linaro.org
+Cc:     agross@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vinod Koul <vinod.koul@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: qcom-tsens: Add compatible
+ for sm8350
+Message-ID: <YGKflK/Ey16UDYT7@builder.lan>
+References: <20210324124308.1265626-1-robert.foss@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <5120169.VkIDyNCUOm@c100>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210324124308.1265626-1-robert.foss@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-hi Thomas,
+On Wed 24 Mar 07:43 CDT 2021, Robert Foss wrote:
 
-Thanks for your reply
-
-I believe the only way that pci_read_byte can return 0xff is no permission to 
-access the pci_dev read function. Because for pci_read_byte, the pos offset is
-0x15c that the offset has excessed the capacity of pci_dev cache_len, so can't
-get val via memcpy from cache. 
-
-And then for read callback function, I think that is read val from pci_dev 0x15c 
-register. I have looked up the amd family 0x15 code, the 0x15c register is called
-"Core Performance Boost Control Register" and this register base addr is D18F4x15C.
-We just concern the lower 8bit of D18F4x15C register, the detailed as below: 
-
-Quote from https://chromium.googlesource.com/chromiumos/third_party/coreboot/+/796af1
-7f18554380a49d69d7768ac18ee039d711/src/vendorcode/amd/agesa/f15/Proc/CPU/Family/0x15/cpuF15PowerMgmt.h
-
-/* Core Performance Boost Control Register D18F4x15C */
-#define CPB_CTRL_REG 0x15C
-#define CPB_CTRL_PCI_ADDR (MAKE_SBDFO (0, 0, 0x18, FUNC_4, CPB_CTRL_REG))
-/// Core Performance Boost Control Register of Family 15h common aceess
-typedef struct {
-  UINT32 BoostSrc:2;                 ///< Boost source
-  UINT32 NumBoostStates:3;           ///< Number of boosted states
-  UINT32 :2;                         ///< Reserved
-  UINT32 ApmMasterEn:1;              ///< APM master enable
-  UINT32 :23;                        ///< Reserved
-  UINT32 BoostLock:1;                ///<
-} F15_CPB_CTRL_REGISTER;
-
-the amd 0x15 family specification pdf:
-https://www.amd.com/system/files/TechDocs/42301_15h_Mod_00h-0Fh_BKDG.pdf
-
-so I believe that val is nealy impossible to return 0xff unless no permisson to access read callback.
-
-what do you think? Thomas
-
-And at last I have a new doubt why the amd_pci_get_num_boost_states about setting "*active=1"
-condition is "val & 3", should not be "val & 1"? I accidently found that "00b Boosting disabled / 01b Boosting enabled / 1*b Reserved" 
-via above amd specification about D18F4x15C register description.
-I am just curious about this point, maybe I am wrong~ : 
-
-	if (val & 3)
-		*active = 1;
-	else
-		*active = 0;
-
-Thanks for your reading, Thomas
-
-在 2021/3/29 下午7:10, Thomas Renninger 写道:
-> Hi,
+> Add tsens bindings for sm8350.
 > 
-> Am Mittwoch, 24. März 2021, 09:28:37 CEST schrieb xufuhai:
->> From: xufuhai <xufuhai@kuaishou.com>
->>
->> For the old  AMD processor (family < 0x17), cpupower will call the
->> amd_pci_get_num_boost_states function, but for the non-root user
->> pci_read_byte function (implementation comes from the psutil library),
->> val will be set to 0xff, indicating that there is no read function
->> callback. At this time, the original logic will set the cpupower turbo
->> active state to yes. This is an obvious issue~
->>
->> Reproduce procedure:
->> 	cpupower frequency-info
->>
->> Signed-off-by: xufuhai <xufuhai@kuaishou.com>
->> ---
->>  tools/power/cpupower/utils/helpers/amd.c | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/tools/power/cpupower/utils/helpers/amd.c
->> b/tools/power/cpupower/utils/helpers/amd.c index 97f2c857048e..6f9504906afa
->> 100644
->> --- a/tools/power/cpupower/utils/helpers/amd.c
->> +++ b/tools/power/cpupower/utils/helpers/amd.c
->> @@ -137,6 +137,13 @@ int amd_pci_get_num_boost_states(int *active, int
->> *states) return -ENODEV;
->>
->>  	val = pci_read_byte(device, 0x15c);
->> +
->> +	/* If val is 0xff, meaning has no permisson to
->> +	 * get the boost states, return -1
->> +	 */
->> +	if (val == 0xff)
->> +		return -1;
->> +
-> There is certainly a cleaner way to do this.., theoretically
-> pci_read_byte can return 0xff in other cases?
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+@Daniel, I presume it's better that you take this patch (1/2) through
+your tree. I've picked patch 2.
+
+Regards,
+Bjorn
+
+> ---
 > 
-> But I guess this is a sufficient way to handle this for now.
+> Changes since v1:
+>  - Vinod: Remove comment
 > 
-> Reviewed-by: Thomas Renninger <trenn@suse.de>
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Thanks,
-> 
->         Thomas
-> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 95462e071ab4..e788378eff8d 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -43,6 +43,7 @@ properties:
+>                - qcom,sdm845-tsens
+>                - qcom,sm8150-tsens
+>                - qcom,sm8250-tsens
+> +              - qcom,sm8350-tsens
+>            - const: qcom,tsens-v2
+>  
+>    reg:
+> -- 
+> 2.31.0.30.g398dba342d.dirty
 > 
