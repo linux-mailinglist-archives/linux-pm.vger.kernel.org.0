@@ -2,97 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA1A34F895
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 08:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9EE34F966
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 09:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbhCaGRg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Mar 2021 02:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbhCaGRf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Mar 2021 02:17:35 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F75DC061574
-        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 23:17:35 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t140so6105645pgb.13
-        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 23:17:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0F12Kqjhl0+Wf+5+6nbUD2UhZbKGbE/zQkJq2rrwfrg=;
-        b=ETKZ6m2dIhEdGl7lpyRoB2yUuf70I1IvaCTOjGvIMaaKvmtRKgBNwRrZiHlHFF9FLC
-         5IC6C4vdPQfEv6N9iSc4Y/a+GHyAnDa/WQP8QCEuA2JeHJ0tCQd1PCs2hm37m3a83FdG
-         lUJN2la5H5SNG9ca4n6Gvz2gWOCHTXI7Hqt1+547fOpkVLYFjK4s4Kab7qcoYbhdF8kt
-         R/dbJehnFZVN2FS2VWRKYZ+5jEYXJif9lA1zRfNYdQQ/Db8fExQuFG8WIr7VffGYuHqL
-         Gep9ggHp2FyYVKkJYhQjfi6+fmWJ3Q2h/mPQ9LOZPSrL7WZsQ/H4gU4xespePd5Be6Ke
-         hjBg==
+        id S233806AbhCaHFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Mar 2021 03:05:16 -0400
+Received: from mail-vs1-f44.google.com ([209.85.217.44]:35518 "EHLO
+        mail-vs1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233833AbhCaHFN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Mar 2021 03:05:13 -0400
+Received: by mail-vs1-f44.google.com with SMTP id h11so772176vsl.2;
+        Wed, 31 Mar 2021 00:05:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0F12Kqjhl0+Wf+5+6nbUD2UhZbKGbE/zQkJq2rrwfrg=;
-        b=sbuiWXBkUh6fCnir+F267BM+UZbZoG+bPHhZNDv9Q6BSJr9TMwU7+XJFws7AhktNZP
-         3+zicNPkIecGs5KI0aZKurycZAXF7lLYgiS2dj86g/IGpHkXkYDWzQBAVojeDY8JePQB
-         Q7u9yLeGV6Jj7Ka95cKwuH1ayGUz2qB6cGZuURwsl79rXChEoU90fhLD1MwyqUerLUYi
-         ldby6ZFn6/XXGsdx+uFhg17GmRXdNUHdPIJ41Ll+BKos8FUazdpN0mxmmUtJgD5BQ4Rj
-         S2rhRf3T4wGk0QbWym+BiafW3IRhyZVQ+NAFwqoP9fIBKgOpsG7iCecaI0kzI/8YQGM0
-         0gtA==
-X-Gm-Message-State: AOAM530mGSapGuxi8MvqIqLOUkctaLd3V3y+s5Ebi3NGKJQpAExP2c2d
-        DmggMFp1HY5QAJXvLakCDDhENw==
-X-Google-Smtp-Source: ABdhPJyUuKeYXCKEUA4NkOYUgk8Iyh6P7JgE4L/NH6X8jw8VdbsGYKbm85djXpBaeUhPOWcYBHroZA==
-X-Received: by 2002:a63:1820:: with SMTP id y32mr1724701pgl.157.1617171454697;
-        Tue, 30 Mar 2021 23:17:34 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id d6sm902402pfn.197.2021.03.30.23.17.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Mar 2021 23:17:34 -0700 (PDT)
-Date:   Wed, 31 Mar 2021 11:47:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH V8 2/8] cpufreq: mediatek: Enable clock and regulator
-Message-ID: <20210331061732.c7rfrzehcqo62ndc@vireshk-i7>
-References: <1616499241-4906-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <1616499241-4906-3-git-send-email-andrew-sh.cheng@mediatek.com>
- <20210330043629.x62j2apv2nv4mw67@vireshk-i7>
- <1617168099.18405.8.camel@mtksdaap41>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5FcWqzUO5UA3cR6NbW4yOHK8OR5G4ZVaphs7Wom8voI=;
+        b=ljnC7bzJ+PyI0IB1/8/PJhjQD2cdKwo34oODmegXwaFIoI9IUzci4Ah4ogKkIkh7u3
+         I2uUKzpdGqt7PFKEwVjhr8KiGmWeAZa4V4LpMAwof1vL6/jaZMaVxpXlvh38hkC2JfuO
+         x9mbm2Oo+gwlQan9nu0bvazBLyf7hWJ9pn7lc4GFcPM4Oje/1nVfjAYjMgjt3LnsdoPE
+         y3cKpUUDd3K6luPZsgOHiEOvO/9FrOAZOm9QK4H6r26pkUUNa+WHLeM0DRF+GdRjuRWC
+         iGtL6Tg/1wEznYkTYXB9qe501FpezwDHdX3F1ia0v9gptZ7koFbwpd0l9zWtwGuN5zXd
+         wRDg==
+X-Gm-Message-State: AOAM533QpVQ3XU7W4j5tZqacQvGPyy02ppwX/psc8k+TRMIKo7T0Rb2n
+        3yVYZ4zcLv6qEt3PzT76ttRUz3rKLCLKviWtsZc=
+X-Google-Smtp-Source: ABdhPJz12mWOTz8tEinky2k83Ps60+VailbnPpLTMg//vGWbxzLaGxgDV6inNb8fwJdVyog4bNT7013JCqCOb6ltT/E=
+X-Received: by 2002:a05:6102:7cd:: with SMTP id y13mr691011vsg.40.1617174312465;
+ Wed, 31 Mar 2021 00:05:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1617168099.18405.8.camel@mtksdaap41>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20210205222644.2357303-9-saravanak@google.com>
+ <CGME20210325133159eucas1p297b769beb681743fb32d362a86cc6e3e@eucas1p2.samsung.com>
+ <d24bebc5-0f78-021f-293f-e58defa32531@samsung.com> <9b206c4d00dfe8b7f941260f18909914b2b2eecb.camel@suse.de>
+ <161678243444.3012082.5031467952132861429@swboyd.mtv.corp.google.com>
+ <CAMuHMdV5PGUujsFP2TXMxij4UxVnrrurh_qVhq8+480w21jJAg@mail.gmail.com>
+ <161705310317.3012082.15148238105608149214@swboyd.mtv.corp.google.com>
+ <CAGETcx8reqKoPoJ8dV7f9=SHYKmNhcVpkNHoCS-0L4UHCBahoA@mail.gmail.com>
+ <161706920822.3012082.10047587064612237296@swboyd.mtv.corp.google.com>
+ <CAMuHMdX7OxTjwQmdP8xDbVkjtZ5442qFao8K6bNpDQ5S3GPSgQ@mail.gmail.com> <161715734080.2260335.881350237641202575@swboyd.mtv.corp.google.com>
+In-Reply-To: <161715734080.2260335.881350237641202575@swboyd.mtv.corp.google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 31 Mar 2021 09:05:00 +0200
+Message-ID: <CAMuHMdXMhiOBSSwrC2A_ijXCaekBMfC8h9PFhqLtNGhtPDba=A@mail.gmail.com>
+Subject: Re: [PATCH] clk: Mark fwnodes when their clock provider is added
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        DOCUMENTATION <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetre e
+        @vger.kernel.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>, linux-rpi-kernel" 
+        <linux-rpi-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31-03-21, 13:21, andrew-sh.cheng wrote:
-> Hi Viresh,
-> Yes.
-> As you mentioned, it will be enable by OPP core.
-> 
-> Per discuss with hotplug owner and regulator owner,
-> they suggest that "users should not suppose other module, will enable
-> regulators for them".
-> They suggest to add enable_regulator here.
+Hi Stephen,
 
-Which is fine if the modules in question aren't closely related to each other,
-but OPP core and cpufreq are too closely bound to each other. So much that the
-cpufreq driver can depend on the OPP core for doing it.
+On Wed, Mar 31, 2021 at 4:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Geert Uytterhoeven (2021-03-29 23:58:23)
+> > On Tue, Mar 30, 2021 at 3:53 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > Quoting Saravana Kannan (2021-03-29 16:28:20)
+> > > > On Mon, Mar 29, 2021 at 2:25 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > > > Quoting Geert Uytterhoeven (2021-03-26 11:29:55)
+> > > > > > On Fri, Mar 26, 2021 at 7:13 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > > > > > Quoting Nicolas Saenz Julienne (2021-03-25 11:25:24)
+> > > > > > > > >
+> > > > > > > > > This patch mainly revealed that clk/bcm/clk-raspberrypi.c driver calls
+> > > > > > > > > devm_of_clk_add_hw_provider(), with a device pointer, which has a NULL
+> > > > > > > > > dev->of_node. I'm not sure if adding a check for a NULL np in
+> > > > > > > > > of_clk_add_hw_provider() is a right fix, though.
+> > > > > > > >
+> > > > > > > > I believe the right fix is not to call 'devm_of_clk_add_hw_provider()' if
+> > > > > > > > 'pdev->dev.of_node == NULL'. In such case, which is RPi3's, only the CPU clock
+> > > > > > > > is used, and it's defined and queried later through
+> > > > > > > > devm_clk_hw_register_clkdev().
+> > > > > > > >
+> > > > > > > > @Marek, I don't mind taking care of it if it's OK with you.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Ah I see this is related to the patch I just reviewed. Can you reference
+> > > > > > > this in the commit text? And instead of putting the change into the clk
+> > > > > > > provider let's check for NULL 'np' in of_clk_add_hw_provider() instead
+> > > > > > > and return 0 if there's nothing to do. That way we don't visit this
+> > > > > > > problem over and over again.
+> > > > > >
+> > > > > > I'm not sure the latter is what we reall want: shouldn't calling
+> > > > > > *of*_clk_add_hw_provider() with a NULL np be a bug in the provider?
+> > > > > >
+> > > > >
+> > > > > I don't have a strong opinion either way. Would it be useful if the
+> > > > > function returned an error when 'np' is NULL?
+> > > >
+> > > > I lean towards returning an error. Not a strong opinion either.
+> > >
+> > > Does it have any use?
+> >
+> > of_clk_del_provider() removes the first provider found with node == NULL.
+> > If there are two drivers calling of_clk_add_hw_provider(), and one of
+> > hem calls of_clk_del_provider() later, the wrong provider may be
+> > removed from the list.
+> >
+>
+> So you're saying we shouldn't add a NULL device node pointer to the list
+> so that this can't happen? That doesn't mean returning an error from
+> of_clk_add_hw_provider() would be useful though.
+> of_clk_add_hw_provider() can return 0 if np == NULL and
+> of_clk_del_provider() can return early if np == NULL too.
 
-Though I won't Nack a patch just for that, but it was just a suggestion.
+I don't know if I grasp all meanings of the above.
+
+The main question is if it is valid for a driver to call
+of_clk_add_hw_provider()
+with np == NULL.
+  - If yes, should that register the provider?
+      - If yes, how to handle two drivers calling of_clk_add_hw_provider()
+        with np = NULL, as their unregistration order is not guaranteed to
+        be correct.
+
+If no, is that something to ignore (0), or a bug (error)?
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-viresh
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
