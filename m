@@ -2,117 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685FE34F6DE
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 04:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA1A34F895
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 08:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbhCaCju (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Mar 2021 22:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
+        id S233705AbhCaGRg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Mar 2021 02:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbhCaCjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Mar 2021 22:39:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712D6C061574
-        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 19:39:44 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id a22-20020a17090aa516b02900c1215e9b33so403751pjq.5
-        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 19:39:44 -0700 (PDT)
+        with ESMTP id S233748AbhCaGRf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Mar 2021 02:17:35 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F75DC061574
+        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 23:17:35 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id t140so6105645pgb.13
+        for <linux-pm@vger.kernel.org>; Tue, 30 Mar 2021 23:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=VUZRgF5E24pnBMmmHrAM5xXK1gFeg2Ymb2GHL6L9Fsc=;
-        b=k72TsxPxJkS7ntnLVYJtKteL1cbrwkuGWLp7W0XJ+YNEZ/5qKTcFrnOwgx9MasP67v
-         8cSjAz/CO31iJZ835cpdJTm172UNM5NodTjUuqNO06QaIuz1FPMl477uCTZE43naeXNA
-         F3HQG9E+pZQKqzZJF+ABwef60WeBid5Em/GWsr/GKh2SEUsxVCJQE1/EJNfoT22JnL5w
-         L2iegTJHodS6NiiQJHlpdNL0K7Cypw3oIlDIFxPgm9sYtaj6K/KRE4zAfWuzjk0NtNEZ
-         NZloewPwTEt6X8en6lovM+J5o//o1xoTUwhW8dgv4f838Hkwck98FddO6AVMOUYSyPFL
-         QbjA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0F12Kqjhl0+Wf+5+6nbUD2UhZbKGbE/zQkJq2rrwfrg=;
+        b=ETKZ6m2dIhEdGl7lpyRoB2yUuf70I1IvaCTOjGvIMaaKvmtRKgBNwRrZiHlHFF9FLC
+         5IC6C4vdPQfEv6N9iSc4Y/a+GHyAnDa/WQP8QCEuA2JeHJ0tCQd1PCs2hm37m3a83FdG
+         lUJN2la5H5SNG9ca4n6Gvz2gWOCHTXI7Hqt1+547fOpkVLYFjK4s4Kab7qcoYbhdF8kt
+         R/dbJehnFZVN2FS2VWRKYZ+5jEYXJif9lA1zRfNYdQQ/Db8fExQuFG8WIr7VffGYuHqL
+         Gep9ggHp2FyYVKkJYhQjfi6+fmWJ3Q2h/mPQ9LOZPSrL7WZsQ/H4gU4xespePd5Be6Ke
+         hjBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=VUZRgF5E24pnBMmmHrAM5xXK1gFeg2Ymb2GHL6L9Fsc=;
-        b=dF4Y4wTkhmNyNjPBM+KrWGnDrarImGMo8K6Xm4dJu1vZxzc9T3nUWVytemT5QWol/a
-         hqlwkmiUU604tdNV6DPepA8y73rlS+6pEIglBSH8JeED/cn74rdaJYqhNgyvpHMQE1zI
-         vL0cZlQl6UaG0xrSfrEFKJo24uudPvxeru7eQedO+A/eBG/c/VMt+nHqnhfDsPY4dolZ
-         BcOeJ21kH4bVlOxOT4OGLLBYRpSBCdCsvdb5z/ZUXYCmpTeHYaIMp0M28D0dOjjSmpbR
-         yysbPNmWgwJFFtrooJamiGGZZJ6xFWkVXfK1tkI4CHF/hjI4UHyU4p6di/gYtBXnhmye
-         EkXQ==
-X-Gm-Message-State: AOAM531gS2S1WAUg8+FQppcnGaXJbKxRlqtiPge0a4XoKMH9Ntal8JxQ
-        xC5rcNEBUKoOgSjPodVpqadz8w==
-X-Google-Smtp-Source: ABdhPJxlW64ohdEvbi4O8lZmmmBtiG1q5ZZu+/S73LtYhvsBcwy+STTLamBcScIbGkFDlQq3+jtZ/g==
-X-Received: by 2002:a17:90a:a789:: with SMTP id f9mr1325628pjq.192.1617158384057;
-        Tue, 30 Mar 2021 19:39:44 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y15sm571271pgi.31.2021.03.30.19.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Mar 2021 19:39:43 -0700 (PDT)
-Message-ID: <6063e0ef.1c69fb81.f8e7c.2b80@mx.google.com>
-Date:   Tue, 30 Mar 2021 19:39:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0F12Kqjhl0+Wf+5+6nbUD2UhZbKGbE/zQkJq2rrwfrg=;
+        b=sbuiWXBkUh6fCnir+F267BM+UZbZoG+bPHhZNDv9Q6BSJr9TMwU7+XJFws7AhktNZP
+         3+zicNPkIecGs5KI0aZKurycZAXF7lLYgiS2dj86g/IGpHkXkYDWzQBAVojeDY8JePQB
+         Q7u9yLeGV6Jj7Ka95cKwuH1ayGUz2qB6cGZuURwsl79rXChEoU90fhLD1MwyqUerLUYi
+         ldby6ZFn6/XXGsdx+uFhg17GmRXdNUHdPIJ41Ll+BKos8FUazdpN0mxmmUtJgD5BQ4Rj
+         S2rhRf3T4wGk0QbWym+BiafW3IRhyZVQ+NAFwqoP9fIBKgOpsG7iCecaI0kzI/8YQGM0
+         0gtA==
+X-Gm-Message-State: AOAM530mGSapGuxi8MvqIqLOUkctaLd3V3y+s5Ebi3NGKJQpAExP2c2d
+        DmggMFp1HY5QAJXvLakCDDhENw==
+X-Google-Smtp-Source: ABdhPJyUuKeYXCKEUA4NkOYUgk8Iyh6P7JgE4L/NH6X8jw8VdbsGYKbm85djXpBaeUhPOWcYBHroZA==
+X-Received: by 2002:a63:1820:: with SMTP id y32mr1724701pgl.157.1617171454697;
+        Tue, 30 Mar 2021 23:17:34 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id d6sm902402pfn.197.2021.03.30.23.17.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Mar 2021 23:17:34 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 11:47:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH V8 2/8] cpufreq: mediatek: Enable clock and regulator
+Message-ID: <20210331061732.c7rfrzehcqo62ndc@vireshk-i7>
+References: <1616499241-4906-1-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1616499241-4906-3-git-send-email-andrew-sh.cheng@mediatek.com>
+ <20210330043629.x62j2apv2nv4mw67@vireshk-i7>
+ <1617168099.18405.8.camel@mtksdaap41>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.12-rc5-47-g506a524e05e2
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 3 runs, 1 regressions (v5.12-rc5-47-g506a524e05e2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1617168099.18405.8.camel@mtksdaap41>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 1 regressions (v5.12-rc5-47-g506a524e05e2)
+On 31-03-21, 13:21, andrew-sh.cheng wrote:
+> Hi Viresh,
+> Yes.
+> As you mentioned, it will be enable by OPP core.
+> 
+> Per discuss with hotplug owner and regulator owner,
+> they suggest that "users should not suppose other module, will enable
+> regulators for them".
+> They suggest to add enable_regulator here.
 
-Regressions Summary
--------------------
+Which is fine if the modules in question aren't closely related to each other,
+but OPP core and cpufreq are too closely bound to each other. So much that the
+cpufreq driver can depend on the OPP core for doing it.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+Though I won't Nack a patch just for that, but it was just a suggestion.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
-5-47-g506a524e05e2/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.12-rc5-47-g506a524e05e2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      506a524e05e240d2878cf86a56c47e72e09d329f =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6063d475521cb2c29cdac6c0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc5-47-g506a5=
-24e05e2/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc5-47-g506a5=
-24e05e2/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0315.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/6063d475521cb2c29cdac6c1
-        failing since 223 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+-- 
+viresh
