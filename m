@@ -2,215 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A48734FB01
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 10:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E8C34FB48
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Mar 2021 10:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234123AbhCaIAT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Mar 2021 04:00:19 -0400
-Received: from mga01.intel.com ([192.55.52.88]:30386 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234293AbhCaH7t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:59:49 -0400
-IronPort-SDR: S6CoU/QmkbXGaIUNXbhiNNMb0CphKQfjFF/xDa1tfNeHu0KuwDk/aB9HbOPAxkAxJa3qwosxOn
- 9qZLNgbzwgeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="212177378"
-X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="212177378"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 00:59:48 -0700
-IronPort-SDR: aLOedz153PmDqwYsOkJgWhRs4bc/2wotTaHPjnNRtKr0gja1R5bnI/bOHTXFEOf1qV21foKBDU
- 6J1zyo/z/8oQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="516776708"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 31 Mar 2021 00:59:47 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lRVlS-0005kg-Di; Wed, 31 Mar 2021 07:59:46 +0000
-Date:   Wed, 31 Mar 2021 15:59:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 506a524e05e240d2878cf86a56c47e72e09d329f
-Message-ID: <60642bd7./m2WooV6CS58fgIS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234202AbhCaIMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Mar 2021 04:12:09 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15051 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234294AbhCaILo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Mar 2021 04:11:44 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F9Jqd2BcCzPmMW;
+        Wed, 31 Mar 2021 16:09:01 +0800 (CST)
+Received: from huawei.com (10.67.174.47) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.498.0; Wed, 31 Mar 2021
+ 16:11:30 +0800
+From:   He Ying <heying24@huawei.com>
+To:     <rjw@rjwysocki.net>, <daniel.lezcano@linaro.org>
+CC:     <heying24@huawei.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration
+Date:   Wed, 31 Mar 2021 04:11:28 -0400
+Message-ID: <20210331081128.158113-1-heying24@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.47]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 506a524e05e240d2878cf86a56c47e72e09d329f  Merge branches 'acpi-scan' and 'acpi-processor-fixes' into linux-next
+When CONFIG_ARM_QCOM_SPM_CPUIDLE is y and CONFIG_MMU is not set,
+compiling errors are encountered as follows:
 
-Warning reports:
+drivers/cpuidle/cpuidle-qcom-spm.o: In function `spm_dev_probe':
+cpuidle-qcom-spm.c:(.text+0x140): undefined reference to `cpu_resume_arm'
+cpuidle-qcom-spm.c:(.text+0x148): undefined reference to `cpu_resume_arm'
 
-https://lore.kernel.org/linux-acpi/202103310719.fEFGj0lc-lkp@intel.com
-https://lore.kernel.org/linux-acpi/202103310741.YpByfbnj-lkp@intel.com
+So, add dependency on MMU in ARM_QCOM_SPM_CPUIDLE configuration.
 
-Warning in current branch:
-
-drivers/acpi/processor_idle.c:542:15: warning: extra tokens at end of #ifdef directive
-drivers/acpi/processor_idle.c:546:15: warning: extra tokens at end of #ifdef directive
-drivers/acpi/processor_idle.c:546:15: warning: extra tokens at end of #ifdef directive [-Wextra-tokens]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- ia64-allmodconfig
-|   `-- drivers-acpi-processor_idle.c:warning:extra-tokens-at-end-of-ifdef-directive
-|-- ia64-allyesconfig
-|   `-- drivers-acpi-processor_idle.c:warning:extra-tokens-at-end-of-ifdef-directive
-|-- x86_64-allmodconfig
-|   `-- drivers-acpi-processor_idle.c:warning:extra-tokens-at-end-of-ifdef-directive
-`-- x86_64-randconfig-s022-20210330
-    `-- drivers-acpi-processor_idle.c:warning:extra-tokens-at-end-of-ifdef-directive
-
-clang_recent_errors
-`-- x86_64-randconfig-a012-20210330
-    `-- drivers-acpi-processor_idle.c:warning:extra-tokens-at-end-of-ifdef-directive
-
-elapsed time: 723m
-
-configs tested: 128
-configs skipped: 4
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-mips                           gcw0_defconfig
-powerpc                        warp_defconfig
-powerpc                     kmeter1_defconfig
-mips                           ip22_defconfig
-powerpc                 mpc837x_rdb_defconfig
-nios2                         3c120_defconfig
-xtensa                    xip_kc705_defconfig
-openrisc                            defconfig
-mips                           rs90_defconfig
-arm                         s3c2410_defconfig
-mips                         db1xxx_defconfig
-arm                        cerfcube_defconfig
-arm                           tegra_defconfig
-sh                              ul2_defconfig
-arm                        neponset_defconfig
-powerpc                 mpc836x_rdk_defconfig
-xtensa                         virt_defconfig
-sh                            titan_defconfig
-arm                        mini2440_defconfig
-arm                          gemini_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                        fsp2_defconfig
-arc                              alldefconfig
-ia64                      gensparse_defconfig
-sh                          sdk7780_defconfig
-m68k                          amiga_defconfig
-sh                               j2_defconfig
-arm                        magician_defconfig
-arm                          exynos_defconfig
-h8300                               defconfig
-arm                     am200epdkit_defconfig
-sh                           se7343_defconfig
-ia64                            zx1_defconfig
-parisc                           allyesconfig
-mips                         cobalt_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                      obs600_defconfig
-mips                        bcm47xx_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                      ppc44x_defconfig
-nios2                               defconfig
-mips                            ar7_defconfig
-mips                     cu1000-neo_defconfig
-sparc                       sparc64_defconfig
-sh                           se7619_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                      arches_defconfig
-mips                        qi_lb60_defconfig
-mips                malta_kvm_guest_defconfig
-powerpc                       ebony_defconfig
-sh                            migor_defconfig
-mips                       lemote2f_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210330
-x86_64               randconfig-a003-20210330
-x86_64               randconfig-a002-20210330
-x86_64               randconfig-a001-20210330
-x86_64               randconfig-a005-20210330
-x86_64               randconfig-a006-20210330
-i386                 randconfig-a004-20210330
-i386                 randconfig-a006-20210330
-i386                 randconfig-a003-20210330
-i386                 randconfig-a002-20210330
-i386                 randconfig-a001-20210330
-i386                 randconfig-a005-20210330
-i386                 randconfig-a015-20210330
-i386                 randconfig-a011-20210330
-i386                 randconfig-a014-20210330
-i386                 randconfig-a013-20210330
-i386                 randconfig-a016-20210330
-i386                 randconfig-a012-20210330
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a012-20210330
-x86_64               randconfig-a015-20210330
-x86_64               randconfig-a014-20210330
-x86_64               randconfig-a016-20210330
-x86_64               randconfig-a013-20210330
-x86_64               randconfig-a011-20210330
-
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: He Ying <heying24@huawei.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/cpuidle/Kconfig.arm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+index 0844fadc4be8..334f83e56120 100644
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -107,7 +107,7 @@ config ARM_TEGRA_CPUIDLE
+ 
+ config ARM_QCOM_SPM_CPUIDLE
+ 	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+-	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
++	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
+ 	select ARM_CPU_SUSPEND
+ 	select CPU_IDLE_MULTIPLE_DRIVERS
+ 	select DT_IDLE_STATES
+-- 
+2.17.1
+
