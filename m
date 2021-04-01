@@ -2,162 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2D0351983
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D883519E7
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbhDARyA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 13:54:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23856 "EHLO
+        id S234636AbhDAR4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 13:56:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39388 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234972AbhDARoI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:44:08 -0400
+        by vger.kernel.org with ESMTP id S235931AbhDARxb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:53:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617299047;
+        s=mimecast20190719; t=1617299610;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:in-reply-to:in-reply-to:references:references;
-        bh=L6weqK0EgOdnKM6eI+LLl6Quz9MwIP8tW17Rjuf/Yjc=;
-        b=djhcnNCRoIJZMjERQMcJ+22XLqlSl3qSMKYjxUpj9kewUrvJOS1y+xaXg+PGvB6TMQ8XII
-        e5Zweh5zdXkSb9522W/YUi9ZutOysQQ+I48ffygK1ohN3BGRimksIEP7drT/Njpgz+yyDX
-        pN7klPqal+biICN1TX9ufMxjv4GMHG4=
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l8/dySFN4v+yQFlMN3vPmAf3KiTWg3DM/WffjDS3ers=;
+        b=Bkv+hTqn3RdNKQys+0erUaCYwsd5G9a0Wqcg7fP3xDUhkAd8uSlPH0Qpt9GXdsig5AZ95B
+        3JN5VO6Z5FGfuqeATXrkrUZKVDimtNH0WMVMSwLvQphJsg2rLBfeNlAH3y5HyifNF70EQi
+        D7EYvfGgxLOnOYAngcXVLvaLuJVP8eM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-220-pPFPgX6bPdCeTjGQaFVDyw-1; Thu, 01 Apr 2021 12:43:17 -0400
-X-MC-Unique: pPFPgX6bPdCeTjGQaFVDyw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-462-BIqoePmMOaa190kVodQkqA-1; Thu, 01 Apr 2021 13:53:26 -0400
+X-MC-Unique: BIqoePmMOaa190kVodQkqA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 093FF8015B6;
-        Thu,  1 Apr 2021 16:42:52 +0000 (UTC)
-Received: from crecklin.bos.com (unknown [10.22.8.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC1C35D9DE;
-        Thu,  1 Apr 2021 16:42:49 +0000 (UTC)
-From:   Chris von Recklinghausen <crecklin@redhat.com>
-To:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
-        decui@microsoft.com, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] use crc32 instead of md5 for hibernation e820 integrity check
-Date:   Thu,  1 Apr 2021 12:41:45 -0400
-Message-Id: <20210401164145.8051-2-crecklin@redhat.com>
-In-Reply-To: <20210401164145.8051-1-crecklin@redhat.com>
-References: <20210401164145.8051-1-crecklin@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B02D6501FF;
+        Thu,  1 Apr 2021 17:53:24 +0000 (UTC)
+Received: from ovpn-113-84.phx2.redhat.com (ovpn-113-84.phx2.redhat.com [10.3.113.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 01EE310023AF;
+        Thu,  1 Apr 2021 17:53:23 +0000 (UTC)
+Message-ID: <e136aba47e21e60735eac045f40add43e41ea8cb.camel@redhat.com>
+Subject: Re: Fix hibernation in FIPS mode?
+From:   Simo Sorce <simo@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "crecklin@redhat.com" <crecklin@redhat.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Thu, 01 Apr 2021 13:53:22 -0400
+In-Reply-To: <CAJZ5v0iHMvZuAifGGLA=Hn9Zb5iiLKfoyuKVyM0HFxzX3=Ht0Q@mail.gmail.com>
+References: <MW2PR2101MB08924CD74C6EB773C4D5FAFDBF7E9@MW2PR2101MB0892.namprd21.prod.outlook.com>
+         <CAJZ5v0g+=AnRAmAAn8NpHm8bmZ1WkwDpjb5rr_zPOVABW1PYug@mail.gmail.com>
+         <4e95307db43e2f7cc8516e645b81db7db0dd8ad4.camel@redhat.com>
+         <CAMj1kXHg2RDgwmOhJkaAPoWeHpxnd6tixp94Kha1-bzNvCaQUg@mail.gmail.com>
+         <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
+         <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
+         <CAJZ5v0hKPBtUzGKfGHD6KX-c2QEETfatCkNjCK8ukh-AhVfUhA@mail.gmail.com>
+         <CAMj1kXFrBGTitSNYZC58=UdmfgbbF2MvTcfLVRpkxJ-uYX3piw@mail.gmail.com>
+         <CAJZ5v0iPneWK69GTzWigdXjjb6VN6Hyd5=hLCdGasfnTxXCYNg@mail.gmail.com>
+         <44e4e4e62bff778d3b0b59235c793ec84794372b.camel@redhat.com>
+         <CAJZ5v0iHMvZuAifGGLA=Hn9Zb5iiLKfoyuKVyM0HFxzX3=Ht0Q@mail.gmail.com>
+Organization: Red Hat, Inc.
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Suspend fails on a system in fips mode because md5 is used for the e820
-integrity check and is not available. Use crc32 instead.
+On Thu, 2021-04-01 at 18:31 +0200, Rafael J. Wysocki wrote:
+> On Thu, Apr 1, 2021 at 6:22 PM Simo Sorce <simo@redhat.com> wrote:
+> > On Thu, 2021-04-01 at 18:02 +0200, Rafael J. Wysocki wrote:
+> > > On Thu, Apr 1, 2021 at 3:54 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > On Thu, 1 Apr 2021 at 15:38, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > On Thu, Apr 1, 2021 at 10:47 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > On Tue, 30 Mar 2021 at 21:56, Simo Sorce <simo@redhat.com> wrote:
+> > > > > > > On Tue, 2021-03-30 at 21:45 +0200, Ard Biesheuvel wrote:
+> > > > > > > > On Tue, 30 Mar 2021 at 20:05, Simo Sorce <simo@redhat.com> wrote:
+> > > > > > > > > On Tue, 2021-03-30 at 16:46 +0200, Rafael J. Wysocki wrote:
+> > > > > > > > > > On Tue, Mar 30, 2021 at 12:14 AM Dexuan Cui <decui@microsoft.com> wrote:
+> > > > > > > > > > > Hi,
+> > > > > > > > > > > MD5 was marked incompliant with FIPS in 2009:
+> > > > > > > > > > > a3bef3a31a19 ("crypto: testmgr - Skip algs not flagged fips_allowed in fips mode")
+> > > > > > > > > > > a1915d51e8e7 ("crypto: testmgr - Mark algs allowed in fips mode")
+> > > > > > > > > > > 
+> > > > > > > > > > > But hibernation_e820_save() is still using MD5, and fails in FIPS mode
+> > > > > > > > > > > due to the 2018 patch:
+> > > > > > > > > > > 749fa17093ff ("PM / hibernate: Check the success of generating md5 digest before hibernation")
+> > > > > > > > > > > 
+> > > > > > > > > > > As a result, hibernation doesn't work when FIPS is on.
+> > > > > > > > > > > 
+> > > > > > > > > > > Do you think if hibernation_e820_save() should be changed to use a
+> > > > > > > > > > > FIPS-compliant algorithm like SHA-1?
+> > > > > > > > > > 
+> > > > > > > > > > I would say yes, it should.
+> > > > > > > > > > 
+> > > > > > > > > > > PS, currently it looks like FIPS mode is broken in the mainline:
+> > > > > > > > > > > https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg49414.html
+> > > > > > > > > 
+> > > > > > > > > FYI, SHA-1 is not a good choice, it is only permitted in HMAC
+> > > > > > > > > constructions and only for specified uses. If you need to change
+> > > > > > > > > algorithm you should go straight to SHA-2 or SHA-3 based hashes.
+> > > > > > > > > 
+> > > > > > > > 
+> > > > > > > > What is the reason for using a [broken] cryptographic hash here? if
+> > > > > > > > this is just an integrity check, better use CRC32
+> > > > > 
+> > > > > Not really.
+> > > > > 
+> > > > > CRC32 is not really sufficient for integrity checking here AFAICS.  It
+> > > > > might be made a fallback option if MD5 is not available, but making it
+> > > > > the default would be somewhat over the top IMO.
+> > > > > 
+> > > > > > > If the integrity check is used exclusively to verify there were no
+> > > > > > > accidental changes and is not used as a security measure, by all means
+> > > > > > > I agree that using crc32 is a better idea.
+> > > > > > > 
+> > > > > > 
+> > > > > > Looking at 62a03defeabd58f74e07ca030d6c21e069d4d88e which introduced
+> > > > > > this, it is only a best effort check which is simply omitted if md5
+> > > > > > happens to be unavailable, so there is definitely no need for crypto
+> > > > > > here.
+> > > > > 
+> > > > > Yes, it is about integrity checking only.  No, CRC32 is not equivalent
+> > > > > to MD5 in that respect AFAICS.
+> > > > > 
+> > > > 
+> > > > There are two possibilities:
+> > > > - we care about an adversary attempting to forge a collision, in which
+> > > > case you need a cryptographic hash which is not broken;
+> > > > - we only care about integrity, in which case crypto is overkill, and
+> > > > CRC32 is sufficient. (Note that the likelihood of an honest,
+> > > > inadvertent modification not being caught by CRC32 is 1 in 4 billion)
+> > > 
+> > > That depends on how you count.
+> > > 
+> > > Surely, there are modifications caught by MD5 that will not be caught by CRC32.
+> > 
+> > This is a technically correct statement, but does it matter in this
+> > context? (Hint, probably not)
+> > 
+> > > > MD5 does not meet either requirement, given that it is known to be
+> > > > broken, and overkill for simple integrity checks. MD5 should be phased
+> > > > out and removed, and moving this code onto the correct abstraction
+> > > > would be a reasonable step towards that goal.
+> > > 
+> > > This clearly is a matter of opinion.
+> > 
+> > Sorry, but this is not a matter of opinion.
+> > The only reason to use a cryptographic hash is that you want to protect
+> > from active tampering, rather than from accidental changes. And if you
+> > need to protect from active tampering then you cannot use a known
+> > broken hash, there is no point.
+> > 
+> > OTOH if you do not care for active tampering but only to catch
+> > transmission/storage errors then all you care for is error checking. In
+> > that case a cryptographic hash is overkill because it entails a lot
+> > more computation than is needed.
+> 
+> But the amount of data in question is not huge in this case.
+> 
+> > > I'm not religious about it though.  If there is a general consensus
+> > > that CRC32 is sufficient for error detection in hibernation files,
+> > > then it can be used.  So is there such a consensus and if so, can you
+> > > give me a pointer to some research that it is based on?
+> > 
+> > CRC32 is an industry standard to check for accidental modifications of
+> > a bit stream. The chances of missing an accidental change are 1 in 4
+> > billion.
+> 
+> This is not about accidental change which basically is my point.
+> 
+> The BIOSes in question change the memory map over hibernation/resume,
+> because they think that the memory layout is now different, so this is
+> about detecting a sort of intentional change.  Definitely not random,
+> though.
 
-Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
-       by md5 digest")
-Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
----
- arch/x86/power/hibernate.c | 35 +++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
+Ok, not random, but also not intentional, it is just "accidental".
 
-diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-index cd3914fc9f3d..b56172553275 100644
---- a/arch/x86/power/hibernate.c
-+++ b/arch/x86/power/hibernate.c
-@@ -55,31 +55,31 @@ int pfn_is_nosave(unsigned long pfn)
- }
- 
- 
--#define MD5_DIGEST_SIZE 16
-+#define CRC32_DIGEST_SIZE 16
- 
- struct restore_data_record {
- 	unsigned long jump_address;
- 	unsigned long jump_address_phys;
- 	unsigned long cr3;
- 	unsigned long magic;
--	u8 e820_digest[MD5_DIGEST_SIZE];
-+	u8 e820_digest[CRC32_DIGEST_SIZE];
- };
- 
--#if IS_BUILTIN(CONFIG_CRYPTO_MD5)
-+#if IS_BUILTIN(CONFIG_CRYPTO_CRC32)
- /**
-- * get_e820_md5 - calculate md5 according to given e820 table
-+ * get_e820_crc32 - calculate crc32 according to given e820 table
-  *
-  * @table: the e820 table to be calculated
-- * @buf: the md5 result to be stored to
-+ * @buf: the crc32 result to be stored to
-  */
--static int get_e820_md5(struct e820_table *table, void *buf)
-+static int get_e820_crc32(struct e820_table *table, void *buf)
- {
- 	struct crypto_shash *tfm;
- 	struct shash_desc *desc;
- 	int size;
- 	int ret = 0;
- 
--	tfm = crypto_alloc_shash("md5", 0, 0);
-+	tfm = crypto_alloc_shash("crc32", 0, 0);
- 	if (IS_ERR(tfm))
- 		return -ENOMEM;
- 
-@@ -107,24 +107,24 @@ static int get_e820_md5(struct e820_table *table, void *buf)
- 
- static int hibernation_e820_save(void *buf)
- {
--	return get_e820_md5(e820_table_firmware, buf);
-+	return get_e820_crc32(e820_table_firmware, buf);
- }
- 
- static bool hibernation_e820_mismatch(void *buf)
- {
- 	int ret;
--	u8 result[MD5_DIGEST_SIZE];
-+	u8 result[CRC32_DIGEST_SIZE];
- 
--	memset(result, 0, MD5_DIGEST_SIZE);
-+	memset(result, 0, CRC32_DIGEST_SIZE);
- 	/* If there is no digest in suspend kernel, let it go. */
--	if (!memcmp(result, buf, MD5_DIGEST_SIZE))
-+	if (!memcmp(result, buf, CRC32_DIGEST_SIZE))
- 		return false;
- 
--	ret = get_e820_md5(e820_table_firmware, result);
-+	ret = get_e820_crc32(e820_table_firmware, result);
- 	if (ret)
- 		return true;
- 
--	return memcmp(result, buf, MD5_DIGEST_SIZE) ? true : false;
-+	return memcmp(result, buf, CRC32_DIGEST_SIZE) ? true : false;
- }
- #else
- static int hibernation_e820_save(void *buf)
-@@ -134,15 +134,15 @@ static int hibernation_e820_save(void *buf)
- 
- static bool hibernation_e820_mismatch(void *buf)
- {
--	/* If md5 is not builtin for restore kernel, let it go. */
-+	/* If crc32 is not builtin for restore kernel, let it go. */
- 	return false;
- }
- #endif
- 
- #ifdef CONFIG_X86_64
--#define RESTORE_MAGIC	0x23456789ABCDEF01UL
-+#define RESTORE_MAGIC	0x23456789ABCDEF02UL
- #else
--#define RESTORE_MAGIC	0x12345678UL
-+#define RESTORE_MAGIC	0x12345679UL
- #endif
- 
- /**
-@@ -160,6 +160,9 @@ int arch_hibernation_header_save(void *addr, unsigned int max_size)
- 	rdr->jump_address = (unsigned long)restore_registers;
- 	rdr->jump_address_phys = __pa_symbol(restore_registers);
- 
-+	/* crc32 digest size is 4 but digest buffer size is 16 so zero it all */
-+	memset(rdr->e820_digest, 0, CRC32_DIGEST_SIZE);
-+
- 	/*
- 	 * The restore code fixes up CR3 and CR4 in the following sequence:
- 	 *
+> But as stated elsewhere, it is just about failing more gracefully at
+> least in some cases, so let's just go ahead with using CRC32 here
+> (worst case, it will not fail more gracefully in super-corner cases).
+
+Sounds good.
+
+Simo.
+
 -- 
-2.18.1
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
+
+
+
 
