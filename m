@@ -2,104 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD273519E8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5233351982
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbhDAR4z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 13:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbhDARyj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:54:39 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF11C02FEAC;
-        Thu,  1 Apr 2021 09:20:10 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id k25so2313666oic.4;
-        Thu, 01 Apr 2021 09:20:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hoy9JWbZpNKKgJwwAmTLHFplX2rUrxGqNdm9v8L9dMU=;
-        b=j7/QkXhOpGVwzChbSZ94wE8RHL2qth7PoVtFxL9ypQ7Vb4OtJEQ1qVfN4jQdIBxToB
-         m6lH/8CiEitgkAtDGLyHGbRGF0fEEBnPAOband/GhQSBE0gfA9zKIqvzRu6PwOdyMU+e
-         fxhXQoauxr8naE+uZ2rxkne3vV6faJCtU70NYGjB3BPzkuih+X4qQz3M4FZYmxUX0AyK
-         nF4prV0jkQGEu7a61eu57DXJn8qIsPf5ZGkA3rWrJ/cYw+dcuPs78sBtXALAYKzxw6gd
-         7scwNxYKLJ24HXOonS6RAaSZo9C0NkoWKbDXj40YTyFlBdrzs/3O5sytibKbZ5INduQe
-         bs8Q==
-X-Gm-Message-State: AOAM530w6bpgKVrlctRqrinAk3YimROJYkJnvtku35h3BHAB6YOzAlmn
-        71rcB/9JtVIlPTS+b1sL+uc54Jjl923+W+HKCuM=
-X-Google-Smtp-Source: ABdhPJwLLFe8AN0azUamchJsJA2GytFp8mOWOLpmp56AWSXoBEUHQmtJLTpZhJIOrc4IiBnN23gOPVFKYY4e5y8xWD8=
-X-Received: by 2002:aca:5fc3:: with SMTP id t186mr6329836oib.69.1617294008998;
- Thu, 01 Apr 2021 09:20:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210401122458.12663-1-crecklin@redhat.com> <20210401122458.12663-2-crecklin@redhat.com>
- <CAJZ5v0gCkhoKC_81WP6wdehZBYpEpmNhHwDygYawFdrWk3K6vg@mail.gmail.com> <CAMj1kXFKRtB_YNGCKAGmRfvZTERCYJHR3hRdZ9-vyiRrB67rdg@mail.gmail.com>
-In-Reply-To: <CAMj1kXFKRtB_YNGCKAGmRfvZTERCYJHR3hRdZ9-vyiRrB67rdg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 1 Apr 2021 18:19:57 +0200
-Message-ID: <CAJZ5v0iqB7h1i_wuHTHTV-cvX+uQsbuae8W7wcFS8QffitD4aw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chris von Recklinghausen <crecklin@redhat.com>,
-        Simo Sorce <simo@redhat.com>, Dexuan Cui <decui@microsoft.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S236202AbhDARx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 13:53:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49837 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234080AbhDARoC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:44:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617299041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc; bh=PuFHoI6wZ2vqFN8F+7P4hon8RWN2+MjgjmIvpt1EN7A=;
+        b=HOc1hJKFzmXCdJU6jeBCcfXNSwbW1LCM9p1C74qk3cIdndcLN1xvVAsSglpicy4xk++cUJ
+        SJRJbi+7juHrYieeGBsPW/0aflBLEvjjgqrXCsEic1nvM4ntmf2Vje08/hN8o0snerYiJS
+        luG6ZHcnTR9MujAh2jaJDyr3oXl4k64=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-187-lgkESsc8PAKfec_O1C3O2g-1; Thu, 01 Apr 2021 12:42:57 -0400
+X-MC-Unique: lgkESsc8PAKfec_O1C3O2g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 767721005D61;
+        Thu,  1 Apr 2021 16:42:49 +0000 (UTC)
+Received: from crecklin.bos.com (unknown [10.22.8.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C88C5D9CC;
+        Thu,  1 Apr 2021 16:42:43 +0000 (UTC)
+From:   Chris von Recklinghausen <crecklin@redhat.com>
+To:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
+        decui@microsoft.com, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] use crc32 instead of md5 for hibernation e820 integrity check
+Date:   Thu,  1 Apr 2021 12:41:44 -0400
+Message-Id: <20210401164145.8051-1-crecklin@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 1, 2021 at 3:59 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 1 Apr 2021 at 15:34, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Thu, Apr 1, 2021 at 2:25 PM Chris von Recklinghausen
-> > <crecklin@redhat.com> wrote:
-> > >
-> > > Suspend fails on a system in fips mode because md5 is used for the e820
-> > > integrity check and is not available. Use crc32 instead.
-> > >
-> > > Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
-> > >        by md5 digest")
-> > > Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
-> > > ---
-> > >  arch/x86/power/hibernate.c | 31 +++++++++++++++++--------------
-> > >  1 file changed, 17 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-> > > index cd3914fc9f3d..6a3f4e32e49c 100644
-> > > --- a/arch/x86/power/hibernate.c
-> > > +++ b/arch/x86/power/hibernate.c
-> > > @@ -55,31 +55,31 @@ int pfn_is_nosave(unsigned long pfn)
-> > >  }
-> > >
-> > >
-> > > -#define MD5_DIGEST_SIZE 16
-> > > +#define CRC32_DIGEST_SIZE 16
-> > >
-> > >  struct restore_data_record {
-> > >         unsigned long jump_address;
-> > >         unsigned long jump_address_phys;
-> > >         unsigned long cr3;
-> > >         unsigned long magic;
-> > > -       u8 e820_digest[MD5_DIGEST_SIZE];
-> > > +       u8 e820_digest[CRC32_DIGEST_SIZE];
-> > >  };
-> >
-> > No.
-> >
-> > CRC32 was used here before and it was deemed insufficient.
-> >
->
-> Why? The git commit log does not have an explanation of this.
+Currently, suspend on x86_64 fails when FIPS mode is enabled because it uses md5
+to generate a digest of the e820 region. MD5 is not FIPS compliant so an error
+is reported and the suspend fails.
 
-IIRC there was an example of a memory map that would produce the same
-CRC32 value as the original or something like that.
+MD5 is used only to create a digest to ensure integrity of the region, no actual
+encryption is done. This patch set changes the integrity check to use crc32
+instead of md5 since crc32 is available in both FIPS and non-FIPS modes.
 
-But that said this code is all about failing more gracefully, so I
-guess it isn't a big deal if the failure is more graceful in fewer
-cases ...
+Chris von Recklinghausen (1):
+  use crc32 instead of md5 for hibernation e820 integrity check
+
+ arch/x86/power/hibernate.c | 35 +++++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
+
+-- 
+v1 -> v2
+   bump up RESTORE_MAGIC
+2.18.1
+
