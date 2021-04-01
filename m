@@ -2,96 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F15D351116
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 10:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53767351122
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 10:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbhDAIrm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 04:47:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36622 "EHLO mail.kernel.org"
+        id S233496AbhDAIua (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 04:50:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229459AbhDAIrL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 1 Apr 2021 04:47:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFF56610A5;
-        Thu,  1 Apr 2021 08:47:10 +0000 (UTC)
+        id S232585AbhDAIu1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 1 Apr 2021 04:50:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 05D366100C;
+        Thu,  1 Apr 2021 08:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617266831;
-        bh=kIY39xSiWjoF6sZnoaotfSd9UwS1ZraiYATimaHn4q4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dthggg8b7dAPmVCaE/dTavdjFa9rPW8UC6EfXQSxSbfgnQ9ohbBnbsZA43xvhJI/s
-         z5AUK4v+HYnJ5wBTqGGETFvrn6t7evM30qoWMU4SvAvJis8ig8zAD2M+K3dxU7pRjN
-         FvmyysaLIlQ/m4hZkAK1hPCX6sqxtbFEVdVewtBbcYW9KSc+cIBKDRyBb0T3xXdKak
-         PydMSo+vl7MDbweuD2w+RK4JAEeWVootOCKB20Rk5gQXPQF4rkAulqJ95gZruqdCYn
-         AsM1FKvblH5PGVDShbZ2Q4PDUuXU2qJn8cKgzxqPwv7l3c6SQkGb2dIquF0hgKdRuJ
-         Nh9W3nV64Iunw==
-Received: by mail-ot1-f48.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so1465812otk.5;
-        Thu, 01 Apr 2021 01:47:10 -0700 (PDT)
-X-Gm-Message-State: AOAM532c6aKaIx4bB0ecoyi09cpft/YYs0vXQ2FrL8AvMunLTDPP6+Yt
-        EBhXL1YiKZwLJh0HvMCMUw3W0jJsbfeOd6YZ1jc=
-X-Google-Smtp-Source: ABdhPJxMNssJ30KB6dSY69fDuCOr4LCVZh/D5LIw2zyYA6sUCNNW1VJBb7EkMscKsxoRWI5AjBchYD6rYN1Quvypp1A=
-X-Received: by 2002:a9d:12cb:: with SMTP id g69mr5843158otg.77.1617266830166;
- Thu, 01 Apr 2021 01:47:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <MW2PR2101MB08924CD74C6EB773C4D5FAFDBF7E9@MW2PR2101MB0892.namprd21.prod.outlook.com>
- <CAJZ5v0g+=AnRAmAAn8NpHm8bmZ1WkwDpjb5rr_zPOVABW1PYug@mail.gmail.com>
- <4e95307db43e2f7cc8516e645b81db7db0dd8ad4.camel@redhat.com>
- <CAMj1kXHg2RDgwmOhJkaAPoWeHpxnd6tixp94Kha1-bzNvCaQUg@mail.gmail.com> <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
-In-Reply-To: <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 1 Apr 2021 10:46:59 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
-Message-ID: <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
-Subject: Re: Fix hibernation in FIPS mode?
-To:     Simo Sorce <simo@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
+        s=k20201202; t=1617267027;
+        bh=WLeEOkXRnQggZlpQiabWsxB4X+Trc5s5h6NpQ7uPC/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OrD9WP/wfF1ggVOG+wpY13YqFGnUzJk4XsS/B3Rz6Xdq15Pk7oitvp+TEXOmmz2wg
+         Tzqp+ilPBe1bVCmK5rnMxvcCnXVx/htZx5yP4ZzIA3imoXQutqPzxV2rQS5ISy285+
+         ZTeOHl2F5TAR3eAQ3Q5RtEQJJMvh3jkCfj1LH9JEEXUIf90BJhLXYA9vdbnUsrM+ll
+         a6OBJDcfSkZrqz5QMEaDYe9r7TR5nz/tyn8WceOrQSDkZDeZrOCLOph9fzbU6maXNU
+         RUEx3rqtusY6NdzuK47ULLGchSZAlFlZA86tXJqr1j5KXFAWqaK+bVzzwGs+Jp9f8G
+         mGpBCvp5roZbA==
+Received: by pali.im (Postfix)
+        id 92E1C825; Thu,  1 Apr 2021 10:50:24 +0200 (CEST)
+Date:   Thu, 1 Apr 2021 10:50:24 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Hermes Zhang <Hermes.Zhang@axis.com>
+Cc:     "lars@metafoo.de" <lars@metafoo.de>,
+        Sebastian Reichel <sre@kernel.org>, kernel <kernel@axis.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "crecklin@redhat.com" <crecklin@redhat.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] power: supply: bq27xxx: Return the value instead of
+ -ENODATA
+Message-ID: <20210401085024.r3u26yftibbxvhnr@pali>
+References: <20210331135141.8063-1-chenhui.zhang@axis.com>
+ <20210331140238.jl3qprpqhqave4bf@pali>
+ <3acaabf2ec63418891e3f698c16b9a21@XBOX01.axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3acaabf2ec63418891e3f698c16b9a21@XBOX01.axis.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 30 Mar 2021 at 21:56, Simo Sorce <simo@redhat.com> wrote:
->
-> On Tue, 2021-03-30 at 21:45 +0200, Ard Biesheuvel wrote:
-> > On Tue, 30 Mar 2021 at 20:05, Simo Sorce <simo@redhat.com> wrote:
-> > > On Tue, 2021-03-30 at 16:46 +0200, Rafael J. Wysocki wrote:
-> > > > On Tue, Mar 30, 2021 at 12:14 AM Dexuan Cui <decui@microsoft.com> wrote:
-> > > > > Hi,
-> > > > > MD5 was marked incompliant with FIPS in 2009:
-> > > > > a3bef3a31a19 ("crypto: testmgr - Skip algs not flagged fips_allowed in fips mode")
-> > > > > a1915d51e8e7 ("crypto: testmgr - Mark algs allowed in fips mode")
-> > > > >
-> > > > > But hibernation_e820_save() is still using MD5, and fails in FIPS mode
-> > > > > due to the 2018 patch:
-> > > > > 749fa17093ff ("PM / hibernate: Check the success of generating md5 digest before hibernation")
-> > > > >
-> > > > > As a result, hibernation doesn't work when FIPS is on.
-> > > > >
-> > > > > Do you think if hibernation_e820_save() should be changed to use a
-> > > > > FIPS-compliant algorithm like SHA-1?
-> > > >
-> > > > I would say yes, it should.
-> > > >
-> > > > > PS, currently it looks like FIPS mode is broken in the mainline:
-> > > > > https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg49414.html
-> > >
-> > > FYI, SHA-1 is not a good choice, it is only permitted in HMAC
-> > > constructions and only for specified uses. If you need to change
-> > > algorithm you should go straight to SHA-2 or SHA-3 based hashes.
-> > >
+On Thursday 01 April 2021 01:51:28 Hermes Zhang wrote:
+> On 3/31/21 10:02 PM, Pali Rohár wrote:
+> > @@ -1655,9 +1655,6 @@ static int bq27xxx_battery_read_time(struct bq27xxx_device_info *di, u8 reg)
+> >  		return tval;
+> >  	}
+> >  
+> > -	if (tval == 65535)
+> > -		return -ENODATA;
+> > -
+> >  	return tval * 60;
+> > I'm not sure if this is correct change. If value 65535 is special which
+> > indicates that data are not available then driver should not return
+> > (converted) value 65535*60. If -ENODATA is there to indicate that data
+> > are not available then -ENODATA should not be used.
 > >
-> > What is the reason for using a [broken] cryptographic hash here? if
-> > this is just an integrity check, better use CRC32
->
-> If the integrity check is used exclusively to verify there were no
-> accidental changes and is not used as a security measure, by all means
-> I agree that using crc32 is a better idea.
->
+> > And if there is application which does not handle -ENODATA for state
+> > when data are not available then it is a bug in application.
+> 
+> Yeah, I just have a feeling return -ENODATA for time_to_full/empty is
+> not good here. Because:
+> 
+> 1. From chip datasheet, it mentioned return 65535 when it's not
+> available (e.g. read time_to_full when discharging), but the driver
+> changes behavior here.
 
-Looking at 62a03defeabd58f74e07ca030d6c21e069d4d88e which introduced
-this, it is only a best effort check which is simply omitted if md5
-happens to be unavailable, so there is definitely no need for crypto
-here.
+So if chip reports that value is not available (by special value 65535)
+then driver should not report that data are available with value 3932100s.
+
+> 2. There is other case will return -ENODATA (e.g. the gauge not
+> calibrated), so it will confuse application which is real failure.
+
+In both cases, driver does not have (meaningful) value, so it reports
+-ENODATA. If you think that some other error code is better for 2. then
+we can discuss about it.
+
+But -ENODATA seems a correct error code for reporting when data are not
+available.
+
+> Could we change the value in minute instead of seconds in
+> bq27xxx_battery_read_time(), so that means driver do nothing but only
+> pass the value from the chip?
+
+No, according to API, driver must report value in seconds, not in
+minutes, see documentation: Documentation/power/power_supply_class.rst
+
+  All voltages, currents, charges, energies, time and temperatures in µV,
+  µA, µAh, µWh, seconds and tenths of degree Celsius unless otherwise
+  stated. It's driver's job to convert its raw values to units in which
+  this class operates.
+
+There is no API for reporting value in minutes.
