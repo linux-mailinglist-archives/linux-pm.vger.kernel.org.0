@@ -2,141 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6B1352021
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 21:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1444C3521FD
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 00:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbhDATun (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 15:50:43 -0400
-Received: from mail-dm6nam11on2100.outbound.protection.outlook.com ([40.107.223.100]:16831
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234062AbhDATun (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 1 Apr 2021 15:50:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WdFtOQPooGXZ/+7zcZOaAUnaqfve2duqDNIU6B2NDVYCBjHGdMrXMx796A28OmIfKNQAWXeEA/99mDfaj6SDqTfdWzcs8lT9RcSNX2/9J/unSz0Xixi5x3BSX2sTzjj12dnxDB/t+x9v9BdAQfvCrx+161n4bfCLgi98kXYLJKZEFrTJfCtlffhCaw91C8ZTloVzSlpqmjos+fHtn1Mj+r2+aZPx/Y4QGzhO0e8Wl623lKw1pqV6UmXbWtQuwDPqy5klz71Q2fH0q5DPibZJ/bdrpb6zdYoF0zBwaIVGIsNf8+nxpOGrgoiuOQOMrRGcEFUYTE16GB/l1SV0eeg3HQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BD299SDxZW8BSIm4ktv1Cfw5J3Tau2eiC5MHieyurIw=;
- b=WbEQLr4Ti+xoX9Bp1bJgr8pMr0QP+r9RTgeJaq1FVjre/44osnaF1E3XfukR6XFlXJnYUAyv4M2u6PhfqeNPYkuKweNmVQ8xM39JJgmVYZ4XND69cMoue6Zd98sNzoSmO5XpDzzNO353dDCKXBqvSVg01rClHa9+F4ScBD7NaoG85rlD++Xz5Tgtk3zKewLiL3dQqWRwjA1KzOT1mZvWAgjA8Zn9hTQ9zB88Oh5iXuqEXg8YDvWORz/oMxujIGD9YGoo+oYcCufF/GWmpZPYps6HDlqfv4c9rwAXSxest43DMZNJtLKcIxX9rGAxesQA817HCVtgpuzyQCqBI+FH9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BD299SDxZW8BSIm4ktv1Cfw5J3Tau2eiC5MHieyurIw=;
- b=HkW0NVzmiv0Dqhr6Zh8wPtZhVUjd4k875WHiT4TUpBgksGIbErwKY166oQMMgqH1BRR+eL7gykVafw9uzaZ8uzn0udgd+040Z0w8bvs7RWV5qlYoOo4VqLSp45WbR54VYUvTKdNJvPYNhR1QqAEngEFae2RJpW9m9Svi8CX1E0A=
-Received: from MW2PR2101MB0892.namprd21.prod.outlook.com
- (2603:10b6:302:10::24) by MW4PR21MB1939.namprd21.prod.outlook.com
- (2603:10b6:303:76::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.1; Thu, 1 Apr
- 2021 19:50:41 +0000
-Received: from MW2PR2101MB0892.namprd21.prod.outlook.com
- ([fe80::5548:cbd8:43cd:aa3d]) by MW2PR2101MB0892.namprd21.prod.outlook.com
- ([fe80::5548:cbd8:43cd:aa3d%6]) with mapi id 15.20.4020.010; Thu, 1 Apr 2021
- 19:50:41 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Chris von Recklinghausen <crecklin@redhat.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "simo@redhat.com" <simo@redhat.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-Thread-Topic: [PATCH v2 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-Thread-Index: AQHXJxYhzW3+9PxxoUavzmBfwhC66KqgEbAw
-Date:   Thu, 1 Apr 2021 19:50:41 +0000
-Message-ID: <MW2PR2101MB0892DC42B3FFA456968E0F24BF7B9@MW2PR2101MB0892.namprd21.prod.outlook.com>
-References: <20210401164145.8051-1-crecklin@redhat.com>
- <20210401164145.8051-2-crecklin@redhat.com>
-In-Reply-To: <20210401164145.8051-2-crecklin@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ee9d046f-86b3-40dd-9af4-fb3b259c4d11;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-04-01T19:48:04Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=microsoft.com;
-x-originating-ip: [2601:600:8b00:6b90:5df2:4327:6490:f40a]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 41901a95-bf1a-4831-c543-08d8f5476e67
-x-ms-traffictypediagnostic: MW4PR21MB1939:
-x-microsoft-antispam-prvs: <MW4PR21MB1939486A24D7A8DF5560B3EEBF7B9@MW4PR21MB1939.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2733;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Q2kmmt2E+YxXax6eb+c/H8xmsOGkna041+AMuFNCCO2uKlfNi+iEn+KrZ2ut+P87g6Ym6It8i3CkzNaffZExSf3nX/DlOpVRZ1IdOO/M+/qQKlesWOzxspQQaDWIWGvh7Xhh+gh713ZeDi/32xYWE2YMDDmDXBcyM/PH82wk4v0OG+OGdGnfKmIeM9bsgzeU17nMowgompptoD4BVJ8OvYljyuG29G5a83v9XPJKUMpjHjThyWJougDtzHOWafEn9is0OgRxUTG5eDChkaZoPjkPAzy9AaOJ+tx3EwBcMAk5PGXcE1WBi6IEyn9JkG/hv6Aa0VVjxSM+eSITkGNuGP/Nzosbag1csh4lGmOgzuQc8RQr5EZiWjeEbzy5//44YHmQrId1ilrz1DHpxYaZXvJSueH8YfWxnS6jBUxeuvf7IFU/qJMx/8nPOVMzasilhKZUVhkdw+s1QfmpXH4uh2iwWwD2eDRgA2EpXqLd8v+IcvpnAbOKM84iy+MMkXL0F7Ucwyk4/6+KjAFPQ6nSNfVqEEseQq9h9dQpJtJdcXjg8+42fzrcgKSMSM+3gF90tOAqrldw7YvWfet7XmukRodaXFtvXV0y1KmyiTSqyWF49pZWBPxxjocq2fiW8KzItQXdyMKeHG/9C8SDMzqFRDrFBZLWU2DHgPtXVe82mQw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR2101MB0892.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(396003)(346002)(136003)(376002)(8936002)(4744005)(478600001)(83380400001)(8990500004)(9686003)(10290500003)(316002)(2906002)(8676002)(110136005)(55016002)(6506007)(53546011)(71200400001)(7696005)(86362001)(52536014)(66946007)(76116006)(64756008)(66476007)(66556008)(66446008)(33656002)(38100700001)(82950400001)(82960400001)(5660300002)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?j4xrXveSF2V1rgE/Ped2r9jDohcgsCSUPIat76bBUIdmDUPGaBuod6w0NC5d?=
- =?us-ascii?Q?nKNp7mudRm/3yFRQW5GSrYw4OdlUPHUvYTa5EJzz2GyvCpAkYHHSR4KhAepk?=
- =?us-ascii?Q?98kosiuhkH2uVTRbDkL3sJ2EF0ZHKe4XdSE7je94+JlHuAAawmhcw535B7Ip?=
- =?us-ascii?Q?WjMCZUmH9rmUg2htJ7sN5WiZ7DS84G0tgiqECf2hsmDKyV3tEoLtUHqcSRh+?=
- =?us-ascii?Q?kmf1Hm7U828bE8d4ZAl9kia9FFeCn5WRPIsdtwYZa+XALNstkvMBibJoz1NT?=
- =?us-ascii?Q?zHh98xxN+kn9eKLb1JiScGhckXjA7STFZYvdmSFrtZGhj0IdrNvOiuw8aVJr?=
- =?us-ascii?Q?qgRhFY5aC48Oh1IPXtcU/aByUElS5GSn7R7qsScfa1hQMJ+blZxmEM8kCZt4?=
- =?us-ascii?Q?f5SEVl1eqKa3Itqbs5A7UrkW04BFxAZXBIhmBJctiuOMpezp80Ape6EFPRpW?=
- =?us-ascii?Q?Sh9pkcekMO+LWTTm6baVXJKD4j2pPLmnVo8wewVxeHwXj2xdBlr1Jyr4Gb70?=
- =?us-ascii?Q?qmIs8oFW+qLnFa59f9ohGfLnfajQBwTTxIu67k/PCobbWSKPd6i0ohmoQVbS?=
- =?us-ascii?Q?OI0OVnWTY5vwWSiYJA3OZ5H8owJPxi2GAzgO9QHR34GerB532GLPEVyjYzZL?=
- =?us-ascii?Q?9ZwsH3XoxF6UUB5pQ7X3ssLulC7fxQCenHNCGNdz6wogAgUinXhixuJMBtZF?=
- =?us-ascii?Q?mOSJmS09mvzruQaPn8/b3yt1PHwcRt2bde+OsGgLGgtHPloIP5cxBNwGDrh4?=
- =?us-ascii?Q?daYeyekzxBODkNVJkZT1WECJr5MK3Fs27rvI6TOeh55qJKXxJp4qYpgJre69?=
- =?us-ascii?Q?bKml8c6TOvwSb42iEYz98QJdTHj/TOUxJMhnYxF26L2mgDLw/dQLYErutCMR?=
- =?us-ascii?Q?Fg7/6Z5OVGdoLyEVuXPFvsek0fgVbBPz5AsTYaRcs18xdTD/O6rYSQiQbraO?=
- =?us-ascii?Q?e3VW3J/IAh5tJulaUoILyzNmd0QYZNTmohrXoQNTXGuG5/rMcNUQT+9AAF0L?=
- =?us-ascii?Q?W02dJ48HAj817bIx8Ms+dACy7+UsjZbbnxYpqn3t8FYtMTNauhY8ZvVTZ4vx?=
- =?us-ascii?Q?SmJlOU273gp2lfxQsmDKg0NGQ1PfahAoec435uT9H+Tkt/pAlhyegFgvmWiX?=
- =?us-ascii?Q?5wVOJct0LHSdV6qn3o5yGvXamSDd0GQUuFX+nD0Rul2agCBh4RvJ+ZSyIOet?=
- =?us-ascii?Q?DikoU3Dqj33S8UGomGn/MZNsjX+VWxUmcSaG0ZHrGT7oP3iIOVRcKV7FTcfN?=
- =?us-ascii?Q?asMlSqCcR1rocozIG00JinF4ZPTikiBcz22JcADsLi62h5zBv48zIsxoVYPG?=
- =?us-ascii?Q?YeDJojYr2AByBbHgu/sJ4UlaDCTn4JkyReJwroQQAG31rkjrigVkgikewMD5?=
- =?us-ascii?Q?xzZzD5SF+2AV14hfAr77epsr6dgR?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S233803AbhDAWIx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 18:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233710AbhDAWIx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 18:08:53 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADE6C061788
+        for <linux-pm@vger.kernel.org>; Thu,  1 Apr 2021 15:08:52 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z2so3172494wrl.5
+        for <linux-pm@vger.kernel.org>; Thu, 01 Apr 2021 15:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LVnk/U0WbnlpUYYM+S6Qz/SpyHTLRPx/Vw8szN4QhO8=;
+        b=PiaEbRevd3uh1rN8q4RORO5cvT0HsbngzeNxHJOaAzO+Wlb1nWF75GMYtHAqYqBAsX
+         p2sYelIbCurnO3rzZLBw0RyYqPuG36qrjMlkz7EDqUpBz9Ynzk/9h0+Si/fPVZBw7Slk
+         oDJU5b76pPZpu3fpXeKSSG6f7SVrX10ubWayMfT9o4DUADypZxooCOlzFwNCzV/+5Im3
+         QZBJIebTU60DNkEz09WZtjId1xCk0skcwul1EqdxoEzm+bWA20LGeNg8GIIHXIeZ61M/
+         VM4L+yHcgZyIZ0e4WUcMi/T+HJOqw6pY04kVdlQICumegLSN9deReKYDStzYSz9yiOeP
+         pQkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LVnk/U0WbnlpUYYM+S6Qz/SpyHTLRPx/Vw8szN4QhO8=;
+        b=jn+Wb8pdqNpSY0w4Cg668+c8fIM593/U5gt/BtURaBFcPlmsAxua0mebh4mOubIa1N
+         6gPrjDns/ThfoH53SGLKac3bQeuVgwF7DKpeMEtoPglwgVTpt5daohC/AIDIU0OhouQy
+         vx/80ySee5o2mCfGNQCVeqKYExW1iTSD38Hk1gxiYTx71pAsaHYCNw1/doHycWV3gOvr
+         z0JvZl4/KmicKIN9oOzVh4qwD92ezrQcAqR79KwwW5BG8M5Aa3jMl6kNJZQL7rVarvOD
+         JPNcpj2ZWnjU8ErXvji53hKl4I5X+I88hHVkcVr3n47Tc+Ae90RSsKom/0wo8ThRth9R
+         LiPQ==
+X-Gm-Message-State: AOAM5332SrTEwOemri7q60qZAfSA+5ar1s/HcroPVOBIrl2v1+tOy/r+
+        aAS9mRHjo5EnAtpvYg9dm5+I3A==
+X-Google-Smtp-Source: ABdhPJxqjkJty6L9W+sQvodBiYlEfI8iN21rP1srtDp7aU4mqjZOQnrWVrWMUi+CZmEXLW9qt343wg==
+X-Received: by 2002:adf:82aa:: with SMTP id 39mr12325286wrc.114.1617314931237;
+        Thu, 01 Apr 2021 15:08:51 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c9d5:e4dc:e7c5:5fcf? ([2a01:e34:ed2f:f020:c9d5:e4dc:e7c5:5fcf])
+        by smtp.googlemail.com with ESMTPSA id z66sm10490853wmc.4.2021.04.01.15.08.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Apr 2021 15:08:50 -0700 (PDT)
+Subject: Re: [PATCH v6 2/7] powercap/drivers/dtpm: Create a registering system
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, rafael@kernel.org,
+        Ram Chandrasekar <rkumbako@codeaurora.org>
+References: <20210401183654.27214-1-daniel.lezcano@linaro.org>
+ <20210401183654.27214-2-daniel.lezcano@linaro.org>
+ <YGYe9p3oyNpMnsBT@kroah.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <d0f818c7-3262-268b-bcc2-8036ce559d7b@linaro.org>
+Date:   Fri, 2 Apr 2021 00:08:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR2101MB0892.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41901a95-bf1a-4831-c543-08d8f5476e67
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2021 19:50:41.5513
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pPHD6UsFyN763J64MK0RWtOJy2oekVGfZBtOB03mhwBLo59rjweCq31DGXuSQLoyFUKzojHLFoDSTXMRNUY5fA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1939
+In-Reply-To: <YGYe9p3oyNpMnsBT@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> From: Chris von Recklinghausen <crecklin@redhat.com>
-> Sent: Thursday, April 1, 2021 9:42 AM
-> To: ardb@kernel.org; simo@redhat.com; rafael@kernel.org; Dexuan Cui
-> <decui@microsoft.com>; linux-pm@vger.kernel.org;
-> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH v2 1/1] use crc32 instead of md5 for hibernation e820 int=
-egrity
-> check
->=20
-> Suspend fails on a system in fips mode because md5 is used for the e820
-> integrity check and is not available. Use crc32 instead.
->=20
-> Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memor=
-y
-> map
->        by md5 digest")
-> Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
-> ---
->  arch/x86/power/hibernate.c | 35 +++++++++++++++++++----------------
->  1 file changed, 19 insertions(+), 16 deletions(-)
 
-Thanks Chris and all! This patch looks good to me.
+Hi Greg,
 
-Tested-by: Dexuan Cui <decui@microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
+On 01/04/2021 21:28, Greg KH wrote:
+> On Thu, Apr 01, 2021 at 08:36:49PM +0200, Daniel Lezcano wrote:
+>> A SoC can be differently structured depending on the platform and the
+>> kernel can not be aware of all the combinations, as well as the
+>> specific tweaks for a particular board.
+>>
+>> The creation of the hierarchy must be delegated to userspace.
+> 
+> Why?  Isn't this what DT is for?
 
+I've always been told the DT describes the hardware. Here we are more
+describing a configuration, that is the reason why I've let the
+userspace to handle that through configfs.
+
+> What "userspace tool" is going to be created to manage all of this?
+> Pointers to that codebase?
+
+You are certainly aware of most of it but let me give a bit more of context.
+
+The thermal framework has cooling devices which export their 'state', a
+representation of their performance level, in sysfs. Unfortunately that
+gives access from the user space to act on the performance as a power
+limiter in total conflict with the in-kernel thermal governor decisions.
+
+That is done from thermal daemon the different SoC vendors tweak for
+their platform. Depending on the application running and identified as a
+scenario, the daemon acts proactively on the different cooling devices
+to ensure a skin temperature which is far below the thermal limit of the
+components.
+
+This usage of the cooling devices hijacked the real purpose of the
+thermal framework which is to protect the silicon. Nobody to blame,
+there is no alternative for userspace.
+
+The use case falls under the power limitation framework prerogative and
+that is the reason why we provided a new framework to limit the power
+based on the powercap framework. The thermal daemon can then use it and
+stop abusing the thermal framework.
+
+This DTPM framework allows to read the power consumption and set a power
+limit to a device.
+
+While the powercap simple backend gives a single device entry, DTPM
+aggregates the different devices power by summing their power and their
+limits. The tree representation of the different DTPM nodes describe how
+their limits are set and how the power is computed along the different
+devices.
+
+For more info, we did a presentation at ELC [1] and Linux PM
+microconference [2] and there is an article talking about it [3].
+
+
+To answer your questions, there is a SoC vendor thermal daemon using
+DTPM and there is a tool created to watch the thermal framework and read
+the DTPM values, it is available at [4]. It is currently under
+development with the goal of doing power rebalancing / capping across
+the different nodes when there is a violation of the parent's power limit.
+
+
+
+[1]
+https://ossna2020.sched.com/event/c3Wf/ideas-for-finer-grained-control-over-your-heat-budget-amit-kucheria-daniel-lezcano-linaro
+
+[2]
+https://www.linuxplumbersconf.org/event/7/page/80-accepted-microconferences#power-cr
+
+[3] https://www.linaro.org/blog/using-energy-model-to-stay-in-tdp-budget/
+
+[4] https://git.linaro.org/people/daniel.lezcano/dtpm.git
+
+
+>> These changes provide a registering mechanism where the different
+>> subsystems will initialize their dtpm backends and register with a
+>> name the dtpm node in a list.
+>>
+>> The next changes will provide an userspace interface to create
+>> hierarchically the different nodes. Those will be created by name and
+>> found via the list filled by the different subsystem.
+>>
+>> If a specified name is not found in the list, it is assumed to be a
+>> virtual node which will have children and the default is to allocate
+>> such node.
+> 
+> So userspace sets the name?
+> 
+> Why not use the name in the device itself?  I thought I asked that last
+> time...
+
+I probably missed it, sorry for that.
+
+When the userspace creates the directory in the configfs, there is a
+lookup with the name in the device list name. If it is found, then the
+device is used, otherwise a virtual node is created instead, its power
+consumption is equal to the sum of the children.
+
+The different drivers register themselves with their name and the
+associated dtpm structure. The userspace pick in this list to create a
+hierarchy via configfs.
+
+For example, a big.Little system.
+
+- little CPUs power limiter will have the name cpu0-cpufreq
+- big CPUs will have the name cpu4-cpufreq
+- gpu will have the name ff9a0000.gpu-devfreq
+- charger will have the name power-supply-charge
+- DDR memory controller can have the name dmc-devfreq
+
+Userspace may want to create this hierarchy:
+
+soc
+ - package
+   - cluster0
+     - cpu0-cpufreq
+   - cluster1
+     - ff9a0000.gpu-devfreq
+   - dmc-devfreq
+ - battery
+   - power-supply-charge
+
+It will do:
+
+mkdir soc (virtual node)
+mkdir soc/cluster0 (virtual node)
+mkdir soc/cluster0/cpu0-cpufreq (real device)
+etc ...
+
+The configfs does not represent the layout of the sensors or the floor
+plan of the devices but only the constraints we want to tie together.
+
+That is the reason why I think using configfs instead of OF is more
+adequate and flexible as userspace deals with the power numbers.
+Moreover, we won't be facing issues with devices initialization priority
+when the daemon starts.
+
+I thought we can add OF later, when the framework has more users and
+more devices. The configfs and OF can certainly co-exist or be mutually
+exclusive via the Kconfig option.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
