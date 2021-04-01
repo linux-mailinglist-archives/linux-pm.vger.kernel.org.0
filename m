@@ -2,237 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFCA351872
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 19:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D3B3518E9
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 19:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbhDARpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 13:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S235709AbhDARsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 13:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbhDARig (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:38:36 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B39C05BD43
-        for <linux-pm@vger.kernel.org>; Thu,  1 Apr 2021 05:51:48 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id w8so1673305ybt.3
-        for <linux-pm@vger.kernel.org>; Thu, 01 Apr 2021 05:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M1VB1ralBR7+e/H7JqA/6mMiYo3JOylCfFNbfyvT27M=;
-        b=C8Z1fGmD0ugXE9aGQpDEEcbJPwy2biu89w6Y8hjTLRV+uZ6Y+fa5ayeevztvzJk+dU
-         PX2Rwh+sIiRbjGzRPRKXUXZk7IfGSsgtMCvqlVkz2WF9P4XXjC9JtmvDJGd8cQp5iUEW
-         7h6YWHc3ZAchF/U59kTlgfc/r1dtfTFNnoFrMgOKzlAVOcb3zHPu9VtojLYbJwtLFk/6
-         +oKvoicUnGd7b8+54QGsxVhMEFiJZjn8JHAoY4jACV/jFQTp8R152wz4eg52V/LGZfJp
-         JojHcn5GNEp6DijbKwabno/N5j2/fkHlrKTeccFq0wC3lrmyC7nKB0xUN6+/ttzTnaXt
-         bEpA==
+        with ESMTP id S236323AbhDARoU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:44:20 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78B0C08EADC;
+        Thu,  1 Apr 2021 06:34:27 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id d12so1757865oiw.12;
+        Thu, 01 Apr 2021 06:34:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M1VB1ralBR7+e/H7JqA/6mMiYo3JOylCfFNbfyvT27M=;
-        b=f3RFKqtTIIuMitqZPWpMKgsRGFN3DhabWnkSV1wctpJNacLV2KMBjzE6C5QyskzJjK
-         vbXXCycvZ0bScGjqeP1TUJVyf0irB2duBOMRXMwPVuOHWYDJbNq5X3DcByLC1Wx3fn1N
-         9eqU7sQVEYnX1NYpcrBvo+YQY+9O59LbLafePDMLUxS5jQVbdvcLET398FOa8agu+GGq
-         WfgbYGt64iHAIhy45uDc6LcZcpUNG2vp9YQT0/dK+3F/VyOkwnbFLdUSbxU6XOF54YE4
-         JWvMwX9dnwtHCHafQJBNP74CxPemlM1VGFlkGKk/Kz6Rn45AEwBU+ASbaXV6XGexG6LY
-         7I/g==
-X-Gm-Message-State: AOAM530TpQpEp7Ccx1UFz7qLPWDdoTFHxc1n0mDBeOsjxn70n/mPPaiY
-        eOIa5IV9p4AEa4ZCou0MfXU10WEX9uUuCzO58BremQ==
-X-Google-Smtp-Source: ABdhPJzvynb+mFT6Mi7hEx6IXLxnNBonNu1ObAo/1/4cv6eeRaXfFt+HU09XZQgNU5/AQabX6bp6nFyK8dybNvj64T8=
-X-Received: by 2002:a25:d2d3:: with SMTP id j202mr11341988ybg.157.1617281507590;
- Thu, 01 Apr 2021 05:51:47 -0700 (PDT)
+        bh=2FWGYGFl/q/RksH9elhWIRdaES8PRAXWHrFmVuENWB4=;
+        b=GTeChfiMPnkoodzdhfPOUBirOBvRXjbbGdc2RJD655/vvvG9bStfPvTudLgj61H4Nj
+         n9/p/NRWUxyS5Lw7F2Xml5rS1xXuV2sGik0PPGPtHvSpCpUhR/3GUFFHdRTgptmR12MX
+         6K8jVM1RmAU2KS9kTMiTYP5kIJEUetMZWEUJKy3fqiIOG+ZVkKHJOWhXizTH3Abc+9PG
+         uNioX+g7zUopb6Jf8OeNhc58yCNuD+atp0Khcwcz6Hty0fV4k5imRXeYMa8P6T6Wn63u
+         FVbwK8uKOIWPPTTaHYPcdGbNgFzCP2v2hqtrN2d/FeDUlnQF57selQ4N0o/xpaqEwqW+
+         33jg==
+X-Gm-Message-State: AOAM531hrdZzrk0c71a/2AOzjrpy435C3qAM9sGLRY8xVOiDEtbHZZit
+        dWNIvRZMh/fz7Yr6dDvgzSDCfNopOKtB+2miqOg=
+X-Google-Smtp-Source: ABdhPJxy5cvNVArY7YtmFVwj2bftPEF9/Fi0jNClW4lM+qdCXnk+a0ThuQW3ynp5/rwcBik4xoJf8bq32A9F3IvNj3I=
+X-Received: by 2002:aca:5fc3:: with SMTP id t186mr5776955oib.69.1617284067177;
+ Thu, 01 Apr 2021 06:34:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com> <CAMpxmJUv0iU0Ntmks1f6ThDAG6x_eJLYYCaDSjy+1Syedzc5dQ@mail.gmail.com>
- <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
- <CACG_h5q6P5NiNByttQ-NZvq8x3GCTKfSU=Yyywk7PcO6_=i2Mw@mail.gmail.com>
-In-Reply-To: <CACG_h5q6P5NiNByttQ-NZvq8x3GCTKfSU=Yyywk7PcO6_=i2Mw@mail.gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 1 Apr 2021 14:51:36 +0200
-Message-ID: <CAMpxmJUO48Aor0zSofOPJgtKJPL-DKe01a=FOd-Aqz-OHYeZOg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Srinivas Neeli <sneeli@xilinx.com>
+References: <20210401122458.12663-1-crecklin@redhat.com> <20210401122458.12663-2-crecklin@redhat.com>
+In-Reply-To: <20210401122458.12663-2-crecklin@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 1 Apr 2021 15:34:13 +0200
+Message-ID: <CAJZ5v0gCkhoKC_81WP6wdehZBYpEpmNhHwDygYawFdrWk3K6vg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] use crc32 instead of md5 for hibernation e820
+ integrity check
+To:     Chris von Recklinghausen <crecklin@redhat.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, simo@redhat.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 1, 2021 at 1:16 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+On Thu, Apr 1, 2021 at 2:25 PM Chris von Recklinghausen
+<crecklin@redhat.com> wrote:
 >
-> On Wed, Mar 31, 2021 at 8:56 PM Srinivas Neeli <sneeli@xilinx.com> wrote:
-> >
-> > Hi,
-> >
-> > > -----Original Message-----
-> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > Sent: Friday, March 26, 2021 10:58 PM
-> > > To: Michal Simek <michals@xilinx.com>
-> > > Cc: Syed Nayyar Waris <syednwaris@gmail.com>; Srinivas Neeli
-> > > <sneeli@xilinx.com>; Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com>; William Breathitt Gray
-> > > <vilhelm.gray@gmail.com>; Arnd Bergmann <arnd@arndb.de>; Robert
-> > > Richter <rrichter@marvell.com>; Linus Walleij <linus.walleij@linaro.org>;
-> > > Masahiro Yamada <yamada.masahiro@socionext.com>; Andrew Morton
-> > > <akpm@linux-foundation.org>; Zhang Rui <rui.zhang@intel.com>; Daniel
-> > > Lezcano <daniel.lezcano@linaro.org>; Amit Kucheria
-> > > <amit.kucheria@verdurent.com>; Linux-Arch <linux-arch@vger.kernel.org>;
-> > > linux-gpio <linux-gpio@vger.kernel.org>; LKML <linux-
-> > > kernel@vger.kernel.org>; arm-soc <linux-arm-kernel@lists.infradead.org>;
-> > > linux-pm <linux-pm@vger.kernel.org>; Srinivas Goud <sgoud@xilinx.com>
-> > > Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and
-> > > _set_value
-> > >
-> > > On Mon, Mar 8, 2021 at 8:13 AM Michal Simek <michal.simek@xilinx.com>
-> > > wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 3/6/21 3:06 PM, Syed Nayyar Waris wrote:
-> > > > > This patch reimplements the xgpio_set_multiple() function in
-> > > > > drivers/gpio/gpio-xilinx.c to use the new generic functions:
-> > > > > bitmap_get_value() and bitmap_set_value(). The code is now simpler
-> > > > > to read and understand. Moreover, instead of looping for each bit in
-> > > > > xgpio_set_multiple() function, now we can check each channel at a
-> > > > > time and save cycles.
-> > > > >
-> > > > > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > > > Cc: Michal Simek <michal.simek@xilinx.com>
-> > > > > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> > > > > Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> > > > > ---
-> > > > >  drivers/gpio/gpio-xilinx.c | 63
-> > > > > +++++++++++++++++++-------------------
-> > > > >  1 file changed, 32 insertions(+), 31 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> > > > > index be539381fd82..8445e69cf37b 100644
-> > > > > --- a/drivers/gpio/gpio-xilinx.c
-> > > > > +++ b/drivers/gpio/gpio-xilinx.c
-> > > > > @@ -15,6 +15,7 @@
-> > > > >  #include <linux/of_device.h>
-> > > > >  #include <linux/of_platform.h>
-> > > > >  #include <linux/slab.h>
-> > > > > +#include "gpiolib.h"
-> > > > >
-> > > > >  /* Register Offset Definitions */
-> > > > >  #define XGPIO_DATA_OFFSET   (0x0)    /* Data register  */
-> > > > > @@ -141,37 +142,37 @@ static void xgpio_set_multiple(struct
-> > > > > gpio_chip *gc, unsigned long *mask,  {
-> > > > >       unsigned long flags;
-> > > > >       struct xgpio_instance *chip = gpiochip_get_data(gc);
-> > > > > -     int index = xgpio_index(chip, 0);
-> > > > > -     int offset, i;
-> > > > > -
-> > > > > -     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > > -
-> > > > > -     /* Write to GPIO signals */
-> > > > > -     for (i = 0; i < gc->ngpio; i++) {
-> > > > > -             if (*mask == 0)
-> > > > > -                     break;
-> > > > > -             /* Once finished with an index write it out to the register */
-> > > > > -             if (index !=  xgpio_index(chip, i)) {
-> > > > > -                     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > > -                                    index * XGPIO_CHANNEL_OFFSET,
-> > > > > -                                    chip->gpio_state[index]);
-> > > > > -                     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > > -                     index =  xgpio_index(chip, i);
-> > > > > -                     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > > -             }
-> > > > > -             if (__test_and_clear_bit(i, mask)) {
-> > > > > -                     offset =  xgpio_offset(chip, i);
-> > > > > -                     if (test_bit(i, bits))
-> > > > > -                             chip->gpio_state[index] |= BIT(offset);
-> > > > > -                     else
-> > > > > -                             chip->gpio_state[index] &= ~BIT(offset);
-> > > > > -             }
-> > > > > -     }
-> > > > > -
-> > > > > -     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > > -                    index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
-> > > > > -
-> > > > > -     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > > +     u32 *const state = chip->gpio_state;
-> > > > > +     unsigned int *const width = chip->gpio_width;
-> > > > > +
-> > > > > +     DECLARE_BITMAP(old, 64);
-> > > > > +     DECLARE_BITMAP(new, 64);
-> > > > > +     DECLARE_BITMAP(changed, 64);
-> > > > > +
-> > > > > +     spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> > > > > +     spin_lock(&chip->gpio_lock[1]);
-> > > > > +
-> > > > > +     bitmap_set_value(old, 64, state[0], width[0], 0);
-> > > > > +     bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> > > > > +     bitmap_replace(new, old, bits, mask, gc->ngpio);
-> > > > > +
-> > > > > +     bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > > +     bitmap_set_value(old, 64, state[1], 32, 32);
-> > > > > +     state[0] = bitmap_get_value(new, 0, width[0]);
-> > > > > +     state[1] = bitmap_get_value(new, width[0], width[1]);
-> > > > > +     bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > > +     bitmap_set_value(new, 64, state[1], 32, 32);
-> > > > > +     bitmap_xor(changed, old, new, 64);
-> > > > > +
-> > > > > +     if (((u32 *)changed)[0])
-> > > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET,
-> > > > > +                             state[0]);
-> > > > > +     if (((u32 *)changed)[1])
-> > > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > > +                             XGPIO_CHANNEL_OFFSET, state[1]);
-> > > > > +
-> > > > > +     spin_unlock(&chip->gpio_lock[1]);
-> > > > > +     spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
-> > > > >  }
-> > > > >
-> > > > >  /**
-> > > > >
-> > > >
-> > > > Srinivas N: Can you please test this code?
-> > > >
-> > > > Thanks,
-> > > > Michal
-> > >
-> > > Hey, any chance of getting that Tested-by?
-> > I tested patches with few modifications in code (spin_lock handling and merge conflict).
-> > functionality wise it's working fine.
-> >
-> > >
-> > > Bart
+> Suspend fails on a system in fips mode because md5 is used for the e820
+> integrity check and is not available. Use crc32 instead.
 >
-> Hi Bartosz,
+> Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
+>        by md5 digest")
+> Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
+> ---
+>  arch/x86/power/hibernate.c | 31 +++++++++++++++++--------------
+>  1 file changed, 17 insertions(+), 14 deletions(-)
 >
-> May I please know the URL of the tree that you are using. I had been
-> using the tree below for submitting this patchset on GPIO to you.
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+> index cd3914fc9f3d..6a3f4e32e49c 100644
+> --- a/arch/x86/power/hibernate.c
+> +++ b/arch/x86/power/hibernate.c
+> @@ -55,31 +55,31 @@ int pfn_is_nosave(unsigned long pfn)
+>  }
 >
-> I think I am using the wrong tree. On which tree should I base my
-> patches on for my next  (v4) submission? Should I use the tree below?
-> :
-> https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
 >
-> Regards
-> Syed Nayyar Waris
+> -#define MD5_DIGEST_SIZE 16
+> +#define CRC32_DIGEST_SIZE 16
+>
+>  struct restore_data_record {
+>         unsigned long jump_address;
+>         unsigned long jump_address_phys;
+>         unsigned long cr3;
+>         unsigned long magic;
+> -       u8 e820_digest[MD5_DIGEST_SIZE];
+> +       u8 e820_digest[CRC32_DIGEST_SIZE];
+>  };
 
-Yes this is the one. Please address new issues raised by reviewers.
+No.
 
-Bart
+CRC32 was used here before and it was deemed insufficient.
+
+Please find a different way to address this issue.
+
+> -#if IS_BUILTIN(CONFIG_CRYPTO_MD5)
+> +#if IS_BUILTIN(CONFIG_CRYPTO_CRC32)
+>  /**
+> - * get_e820_md5 - calculate md5 according to given e820 table
+> + * get_e820_crc32 - calculate crc32 according to given e820 table
+>   *
+>   * @table: the e820 table to be calculated
+> - * @buf: the md5 result to be stored to
+> + * @buf: the crc32 result to be stored to
+>   */
+> -static int get_e820_md5(struct e820_table *table, void *buf)
+> +static int get_e820_crc32(struct e820_table *table, void *buf)
+>  {
+>         struct crypto_shash *tfm;
+>         struct shash_desc *desc;
+>         int size;
+>         int ret = 0;
+>
+> -       tfm = crypto_alloc_shash("md5", 0, 0);
+> +       tfm = crypto_alloc_shash("crc32", 0, 0);
+>         if (IS_ERR(tfm))
+>                 return -ENOMEM;
+>
+> @@ -107,24 +107,24 @@ static int get_e820_md5(struct e820_table *table, void *buf)
+>
+>  static int hibernation_e820_save(void *buf)
+>  {
+> -       return get_e820_md5(e820_table_firmware, buf);
+> +       return get_e820_crc32(e820_table_firmware, buf);
+>  }
+>
+>  static bool hibernation_e820_mismatch(void *buf)
+>  {
+>         int ret;
+> -       u8 result[MD5_DIGEST_SIZE];
+> +       u8 result[CRC32_DIGEST_SIZE];
+>
+> -       memset(result, 0, MD5_DIGEST_SIZE);
+> +       memset(result, 0, CRC32_DIGEST_SIZE);
+>         /* If there is no digest in suspend kernel, let it go. */
+> -       if (!memcmp(result, buf, MD5_DIGEST_SIZE))
+> +       if (!memcmp(result, buf, CRC32_DIGEST_SIZE))
+>                 return false;
+>
+> -       ret = get_e820_md5(e820_table_firmware, result);
+> +       ret = get_e820_crc32(e820_table_firmware, result);
+>         if (ret)
+>                 return true;
+>
+> -       return memcmp(result, buf, MD5_DIGEST_SIZE) ? true : false;
+> +       return memcmp(result, buf, CRC32_DIGEST_SIZE) ? true : false;
+>  }
+>  #else
+>  static int hibernation_e820_save(void *buf)
+> @@ -134,7 +134,7 @@ static int hibernation_e820_save(void *buf)
+>
+>  static bool hibernation_e820_mismatch(void *buf)
+>  {
+> -       /* If md5 is not builtin for restore kernel, let it go. */
+> +       /* If crc32 is not builtin for restore kernel, let it go. */
+>         return false;
+>  }
+>  #endif
+> @@ -160,6 +160,9 @@ int arch_hibernation_header_save(void *addr, unsigned int max_size)
+>         rdr->jump_address = (unsigned long)restore_registers;
+>         rdr->jump_address_phys = __pa_symbol(restore_registers);
+>
+> +       /* crc32 digest size is 4 but digest buffer size is 16 so zero it all */
+> +       memset(rdr->e820_digest, 0, CRC32_DIGEST_SIZE);
+> +
+>         /*
+>          * The restore code fixes up CR3 and CR4 in the following sequence:
+>          *
+> --
+> 2.18.1
+>
