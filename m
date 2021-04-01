@@ -2,118 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB6E350FB2
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 09:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F15D351116
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 10:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbhDAHBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 03:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbhDAHBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 03:01:22 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B1AC061788
-        for <linux-pm@vger.kernel.org>; Thu,  1 Apr 2021 00:01:11 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j7so705045wrd.1
-        for <linux-pm@vger.kernel.org>; Thu, 01 Apr 2021 00:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XxW6GzMrN0Or1bqQ0qn35Sh1DN+NPsw4YzuK1fkqU8M=;
-        b=uSQ7twNO8Hh+u3wc9cVoL6ADPfa0uu3xna/Rh02Bf4Xywxvm6b4/6ZcIsCYmavIpaf
-         TzINuLiCIvRmI2dChUtfxEBkfTgKEQKirov5pdFW/mfNvhdjBi+AnErb5VWiYXv01oyP
-         lwejUKPKVkTDm4gqFXsRIegotWDpYx30b15wDd3J6FhX2RLnCic+5D7/6YepP5HChbvM
-         S/y87wVx9GDxyiVnooPP+bu0oMV2YNrhSLEb6WF34JJ/zEAcVEXalpdDQ8zwpDNNEqyH
-         7SzZdUmb3esYYDYZXdEO3Eay2osuh9v3KoiyR3oUmlD2EiLBFLXJ5UDs+2Ho5TxxZWtj
-         0zzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XxW6GzMrN0Or1bqQ0qn35Sh1DN+NPsw4YzuK1fkqU8M=;
-        b=U/G9WKzlYy0Yxwt0J/iuR9FAFps8AtrGGhiSEJNHX2idnDTKaEqqNIou9ke19V4gmL
-         OusDkZ0PXBEJd9/erNTWnPNpqoQ0Z0pysqfn2I/MuTPE2weBSarxxJbihYryNZ0KNZ30
-         VNMz5XDrQJPYHGFsMk8XhjJg28gzkle8Zp3R6Fmow5wccEr0lNE8RMkXZDVyYItkjQnG
-         Qgrav4ulOLJxD4s1S81JHDqinQImNuPEAgHYDP0B2jOIYt6ds1NJ30SNN6TnGzvKFsPO
-         ZpAUGAdR2xiN/mZLHJ9laSEasHy1aOsXmSNDDiIObYv2SjdXqA4v+slC5t6q0fhWBYni
-         Qo2A==
-X-Gm-Message-State: AOAM5302aoWeNH31EY6g3xEPj5pqSB71kaM1Zpfzfx9Xpf1RmqUJiqy0
-        dgiGWeHjUiNqH3hazgiraAbVsTlSqqjCzg==
-X-Google-Smtp-Source: ABdhPJy4uwdCMh0heaa9ytrLR5P9/OzE4GjRaqDhpvlvNXJefDqYnWYoYL84Y4/RNP5KHUjSRPM/iA==
-X-Received: by 2002:a05:6000:223:: with SMTP id l3mr7811596wrz.5.1617260470516;
-        Thu, 01 Apr 2021 00:01:10 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:1573:1dd5:899d:6362? ([2a01:e34:ed2f:f020:1573:1dd5:899d:6362])
-        by smtp.googlemail.com with ESMTPSA id c8sm6894817wmb.34.2021.04.01.00.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Apr 2021 00:01:10 -0700 (PDT)
-Subject: Re: [PATCH v5 2/5] powercap/drivers/dtpm: Create a registering system
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, rafael@kernel.org
-References: <20210331110048.24956-1-daniel.lezcano@linaro.org>
- <20210331110048.24956-2-daniel.lezcano@linaro.org>
- <YGS6NraFr6+qvzda@kroah.com>
- <918bc42d-0bd7-753c-1132-fd19617349ed@linaro.org>
- <YGVh9onNL7hVu2mr@kroah.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <fb8d7551-b8b8-22fc-63ad-768adb14b3e1@linaro.org>
-Date:   Thu, 1 Apr 2021 09:01:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230284AbhDAIrm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 04:47:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36622 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229459AbhDAIrL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 1 Apr 2021 04:47:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EFF56610A5;
+        Thu,  1 Apr 2021 08:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617266831;
+        bh=kIY39xSiWjoF6sZnoaotfSd9UwS1ZraiYATimaHn4q4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dthggg8b7dAPmVCaE/dTavdjFa9rPW8UC6EfXQSxSbfgnQ9ohbBnbsZA43xvhJI/s
+         z5AUK4v+HYnJ5wBTqGGETFvrn6t7evM30qoWMU4SvAvJis8ig8zAD2M+K3dxU7pRjN
+         FvmyysaLIlQ/m4hZkAK1hPCX6sqxtbFEVdVewtBbcYW9KSc+cIBKDRyBb0T3xXdKak
+         PydMSo+vl7MDbweuD2w+RK4JAEeWVootOCKB20Rk5gQXPQF4rkAulqJ95gZruqdCYn
+         AsM1FKvblH5PGVDShbZ2Q4PDUuXU2qJn8cKgzxqPwv7l3c6SQkGb2dIquF0hgKdRuJ
+         Nh9W3nV64Iunw==
+Received: by mail-ot1-f48.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so1465812otk.5;
+        Thu, 01 Apr 2021 01:47:10 -0700 (PDT)
+X-Gm-Message-State: AOAM532c6aKaIx4bB0ecoyi09cpft/YYs0vXQ2FrL8AvMunLTDPP6+Yt
+        EBhXL1YiKZwLJh0HvMCMUw3W0jJsbfeOd6YZ1jc=
+X-Google-Smtp-Source: ABdhPJxMNssJ30KB6dSY69fDuCOr4LCVZh/D5LIw2zyYA6sUCNNW1VJBb7EkMscKsxoRWI5AjBchYD6rYN1Quvypp1A=
+X-Received: by 2002:a9d:12cb:: with SMTP id g69mr5843158otg.77.1617266830166;
+ Thu, 01 Apr 2021 01:47:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YGVh9onNL7hVu2mr@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <MW2PR2101MB08924CD74C6EB773C4D5FAFDBF7E9@MW2PR2101MB0892.namprd21.prod.outlook.com>
+ <CAJZ5v0g+=AnRAmAAn8NpHm8bmZ1WkwDpjb5rr_zPOVABW1PYug@mail.gmail.com>
+ <4e95307db43e2f7cc8516e645b81db7db0dd8ad4.camel@redhat.com>
+ <CAMj1kXHg2RDgwmOhJkaAPoWeHpxnd6tixp94Kha1-bzNvCaQUg@mail.gmail.com> <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
+In-Reply-To: <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 1 Apr 2021 10:46:59 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
+Message-ID: <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
+Subject: Re: Fix hibernation in FIPS mode?
+To:     Simo Sorce <simo@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "crecklin@redhat.com" <crecklin@redhat.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/04/2021 08:02, Greg KH wrote:
-> On Wed, Mar 31, 2021 at 10:46:48PM +0200, Daniel Lezcano wrote:
->>
->> Hi Greg,
->>
->> On 31/03/2021 20:06, Greg KH wrote:
->>> On Wed, Mar 31, 2021 at 01:00:45PM +0200, Daniel Lezcano wrote:
->>>> +struct dtpm *dtpm_lookup(const char *name);
->>>> +
->>>> +int dtpm_add(const char *name, struct dtpm *dtpm);
->>>> +
->>>> +void dtpm_del(const char *name);
->>>
->>> You can not add new kernel apis that have no user.  How do you know if
->>> they actually work or not?  We have no idea as we do not see anyone
->>> using them :(
->>>
->>> So no need to add things with no user, feel free to just drop this patch
->>> until you have one.
->>
->> I've sent a couple of patches [1] on top of the previous series. I'm
->> finishing to respin it against this new one.
->>
->>   -- Daniel
->>
->> [1] https://lkml.org/lkml/2021/3/12/1514
-> 
-> Please use lore.kernel.org, we do not control lkml and it has been down
-> in the past and it's impossible to reply from.
-> 
-> Please always provide a user of a function in the patch series,
-> otherwise you will end up with comments like mine above.
+On Tue, 30 Mar 2021 at 21:56, Simo Sorce <simo@redhat.com> wrote:
+>
+> On Tue, 2021-03-30 at 21:45 +0200, Ard Biesheuvel wrote:
+> > On Tue, 30 Mar 2021 at 20:05, Simo Sorce <simo@redhat.com> wrote:
+> > > On Tue, 2021-03-30 at 16:46 +0200, Rafael J. Wysocki wrote:
+> > > > On Tue, Mar 30, 2021 at 12:14 AM Dexuan Cui <decui@microsoft.com> wrote:
+> > > > > Hi,
+> > > > > MD5 was marked incompliant with FIPS in 2009:
+> > > > > a3bef3a31a19 ("crypto: testmgr - Skip algs not flagged fips_allowed in fips mode")
+> > > > > a1915d51e8e7 ("crypto: testmgr - Mark algs allowed in fips mode")
+> > > > >
+> > > > > But hibernation_e820_save() is still using MD5, and fails in FIPS mode
+> > > > > due to the 2018 patch:
+> > > > > 749fa17093ff ("PM / hibernate: Check the success of generating md5 digest before hibernation")
+> > > > >
+> > > > > As a result, hibernation doesn't work when FIPS is on.
+> > > > >
+> > > > > Do you think if hibernation_e820_save() should be changed to use a
+> > > > > FIPS-compliant algorithm like SHA-1?
+> > > >
+> > > > I would say yes, it should.
+> > > >
+> > > > > PS, currently it looks like FIPS mode is broken in the mainline:
+> > > > > https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg49414.html
+> > >
+> > > FYI, SHA-1 is not a good choice, it is only permitted in HMAC
+> > > constructions and only for specified uses. If you need to change
+> > > algorithm you should go straight to SHA-2 or SHA-3 based hashes.
+> > >
+> >
+> > What is the reason for using a [broken] cryptographic hash here? if
+> > this is just an integrity check, better use CRC32
+>
+> If the integrity check is used exclusively to verify there were no
+> accidental changes and is not used as a security measure, by all means
+> I agree that using crc32 is a better idea.
+>
 
-Ok, will do.
-
-Thanks
-
-  -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Looking at 62a03defeabd58f74e07ca030d6c21e069d4d88e which introduced
+this, it is only a best effort check which is simply omitted if md5
+happens to be unavailable, so there is definitely no need for crypto
+here.
