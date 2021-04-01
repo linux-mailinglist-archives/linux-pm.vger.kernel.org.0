@@ -2,301 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 844BD351985
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53449351AE4
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbhDARyB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 13:54:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8226 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236478AbhDARpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:45:12 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 131BZGTV145437;
-        Thu, 1 Apr 2021 07:45:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=LuDD8VzmtFl5Y8oY6EKB24UqifZWh7WEjtXEmMC2hko=;
- b=CEDmJcu9s1CXHGA8JMfcITgC0TvDAC7j2TisHYEu0TdjuWLgub1KNgzZeOkcTrhzcMix
- /fKHbDlt/SZnLAqeRoEWoVDijtDVTiXOXae+o+AJ+JGF/oPVJ9lbOi6sJjqUDROO8DpI
- li+EMT+fp+cP7zHejXKNpBuWqUscqcFbV5BNvO0Bw6UdE1hXjugGbRWqf671cMNy4E5M
- lg4Gna4q2hYpB/lEZOozEwycSH6/pf/3NAcWvzoiUOm8ZmbFQmUzYhKFgpNGDBfSH3PC
- Mu4ep8tQM0m/+JJROZRgG3gzhqvjsdWddQj8vXJoncAfqkz/SSufBfUiEwkUyCo+1zxI 1g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37n2ea13sp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Apr 2021 07:45:15 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 131BdBIe158179;
-        Thu, 1 Apr 2021 07:45:14 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37n2ea13s2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Apr 2021 07:45:14 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 131Bg5iD004696;
-        Thu, 1 Apr 2021 11:45:12 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 37n28rrev9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Apr 2021 11:45:12 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 131Bj9iW36307344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Apr 2021 11:45:09 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B17FDA4069;
-        Thu,  1 Apr 2021 11:45:09 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76415A4053;
-        Thu,  1 Apr 2021 11:45:07 +0000 (GMT)
-Received: from pratiks-thinkpad.ibmuc.com (unknown [9.199.46.97])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Apr 2021 11:45:07 +0000 (GMT)
-From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
-To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, shuah@kernel.org,
-        dsmythies@telus.net, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
-        psampat@linux.ibm.com
-Subject: [RFC v2 1/2] cpuidle: Extract IPI based and timer based wakeup latency from idle states
-Date:   Thu,  1 Apr 2021 17:15:03 +0530
-Message-Id: <20210401114504.13466-2-psampat@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210401114504.13466-1-psampat@linux.ibm.com>
-References: <20210401114504.13466-1-psampat@linux.ibm.com>
+        id S234954AbhDASD1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 14:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237078AbhDAR7Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:59:24 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D42C061225
+        for <linux-pm@vger.kernel.org>; Thu,  1 Apr 2021 05:27:16 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id r17so1914872ilt.0
+        for <linux-pm@vger.kernel.org>; Thu, 01 Apr 2021 05:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iWl62oGTxpsnb8MfsXXVQ5OE+zxxuQ8ZrjZT5mqhmk8=;
+        b=m3677M48tkn2V4ziKwwwBU2+rjUUc5Y3kj9IMK3hkZIsyEAd+wXLJPXp9d2zToyTZY
+         OtfzMXSxLpduWxLqZdB5iSGbld4WQ4wx09lwTchEkZim1b4qw598CREf3Cj8U5CrMJJZ
+         yWNUM3aYMlHDLxX9T6S0zoY30xB+V4HRp8h0996xITMmbP+CwG33gV5IGbnuSHwSFcNR
+         UpMROF7sOkhWtZZSrwV0YFKVy+2ta9KN79NWM+hB73LuOq3yVUbbkY1faeq8wh3RI8py
+         rEkjdFtpH6W3uwW45xeGv/oDcvlyw3ul7ACWkVz9KSVZeGxpK1Cy0RAvfonUTZqDCnxl
+         279g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iWl62oGTxpsnb8MfsXXVQ5OE+zxxuQ8ZrjZT5mqhmk8=;
+        b=MTsTHBhc4jd+LrJ+KLD4qb3zrGnfJQDbs6G//51ja6UeJDcBRZ13nzwTWfQW6wlme2
+         D5iD5GnF4PqMb/QiDan2MG8yf1waRh52sR5VX6r/ZGKdk8dIyFdegjjjSXxdJoebuqXw
+         D3+1AFcB5D+BT4cytjXDv2Tl1YUJ287clm4UTf6mWOOlvQR/cDcH2il5IQW5NOg0QpRE
+         W/IxWlopnOgk97K5eoo673EUQBKm7Yelz50BN5jYETW9r2+WGZ3LBOYw3oc5DbG8xF1M
+         pR+889eMhiCKtWxDO+EsI0nrWMhDpZ0KQNTZWBnzYfKPDYDncFj/6kObsROfklH3leU6
+         cO3g==
+X-Gm-Message-State: AOAM533243TI+LjBwtZwp3toj44bB9R7GgxPCtN82AEvdmtFEaDShLJm
+        1P/g5L6TF1idfk79ZvSeqTcjxqMrUEsxOrUQ
+X-Google-Smtp-Source: ABdhPJxz4i1NViOjDljoXKjIaTUxYrlyylEQ9VAbjNxwF2W8jdt1X3/G2E9h4ykpRvGW5oG6LbrB4Q==
+X-Received: by 2002:a05:6e02:1a45:: with SMTP id u5mr6717204ilv.4.1617280035922;
+        Thu, 01 Apr 2021 05:27:15 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id k4sm2846785iol.18.2021.04.01.05.27.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Apr 2021 05:27:15 -0700 (PDT)
+Subject: Re: [PATCH] interconnect: qcom: sm8350: Add missing link between
+ nodes
+To:     Georgi Djakov <georgi.djakov@linaro.org>, djakov@kernel.org,
+        vkoul@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210401094435.28937-1-georgi.djakov@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+Message-ID: <7ab2be33-9269-8c28-71d7-1611e60c72fe@linaro.org>
+Date:   Thu, 1 Apr 2021 07:27:14 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pjj6RQbFSGyJlsuQ7MEJLwdjiD3ZVneC
-X-Proofpoint-ORIG-GUID: B8lTuSTebxeXt1Eq8NgfHj7w0yCUYSHu
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-04-01_04:2021-03-31,2021-04-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 spamscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2103310000 definitions=main-2104010082
+In-Reply-To: <20210401094435.28937-1-georgi.djakov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce a mechanism to fire directed IPIs from a specified source CPU
-to a specified target CPU and measure the difference in time incurred on
-wakeup.
+On 4/1/21 4:44 AM, Georgi Djakov wrote:
+> There is a link between the GEM NoC and C NoC nodes, which is currently
+> missing from the topology. Let's add it to allow consumers request paths
+> that use this link.
+> 
+> Reported-by: Alex Elder <elder@linaro.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Also, introduce a mechanism to queue a HR timer on a specified CPU and
-subsequently measure the time taken to wakeup the CPU.
+Thanks Georgi.
 
-Finally define a simple debugfs interface to control the knobs to fire
-the IPI and Timer events on specified CPU and view their incurred idle
-wakeup latencies.
+Tested-by: Alex Elder <elder@linaro.org>
 
-Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
----
- drivers/cpuidle/Makefile               |   1 +
- drivers/cpuidle/test-cpuidle_latency.c | 157 +++++++++++++++++++++++++
- lib/Kconfig.debug                      |  10 ++
- 3 files changed, 168 insertions(+)
- create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
-
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 26bbc5e74123..3b4ee06a9164 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
- obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
- obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
- obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
-+obj-$(CONFIG_IDLE_LATENCY_SELFTEST)	  += test-cpuidle_latency.o
- 
- ##################################################################################
- # ARM SoC drivers
-diff --git a/drivers/cpuidle/test-cpuidle_latency.c b/drivers/cpuidle/test-cpuidle_latency.c
-new file mode 100644
-index 000000000000..f138011ac225
---- /dev/null
-+++ b/drivers/cpuidle/test-cpuidle_latency.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module-based API test facility for cpuidle latency using IPIs and timers
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+/*
-+ * IPI based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a IPI sent from another CPU
-+ * The latency measured also includes the latency of sending the IPI
-+ */
-+struct latency {
-+	unsigned int src_cpu;
-+	unsigned int dest_cpu;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	u64 latency_ns;
-+} ipi_wakeup;
-+
-+static void measure_latency(void *info)
-+{
-+	struct latency *v;
-+	ktime_t time_diff;
-+
-+	v = (struct latency *)info;
-+	v->time_end = ktime_get();
-+	time_diff = ktime_sub(v->time_end, v->time_start);
-+	v->latency_ns = ktime_to_ns(time_diff);
-+}
-+
-+void run_smp_call_function_test(unsigned int cpu)
-+{
-+	ipi_wakeup.src_cpu = smp_processor_id();
-+	ipi_wakeup.dest_cpu = cpu;
-+	ipi_wakeup.time_start = ktime_get();
-+	smp_call_function_single(cpu, measure_latency, &ipi_wakeup, 1);
-+}
-+
-+/*
-+ * Timer based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a timer being armed and fired
-+ */
-+struct timer_data {
-+	unsigned int src_cpu;
-+	u64 timeout;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	struct hrtimer timer;
-+	u64 timeout_diff_ns;
-+} timer_wakeup;
-+
-+static enum hrtimer_restart timer_called(struct hrtimer *hrtimer)
-+{
-+	struct timer_data *w;
-+	ktime_t time_diff;
-+
-+	w = container_of(hrtimer, struct timer_data, timer);
-+	w->time_end = ktime_get();
-+
-+	time_diff = ktime_sub(w->time_end, w->time_start);
-+	time_diff = ktime_sub(time_diff, ns_to_ktime(w->timeout));
-+	w->timeout_diff_ns = ktime_to_ns(time_diff);
-+	return HRTIMER_NORESTART;
-+}
-+
-+static void run_timer_test(unsigned int ns)
-+{
-+	hrtimer_init(&timer_wakeup.timer, CLOCK_MONOTONIC,
-+		     HRTIMER_MODE_REL);
-+	timer_wakeup.timer.function = timer_called;
-+	timer_wakeup.src_cpu = smp_processor_id();
-+	timer_wakeup.timeout = ns;
-+	timer_wakeup.time_start = ktime_get();
-+
-+	hrtimer_start(&timer_wakeup.timer, ns_to_ktime(ns),
-+		      HRTIMER_MODE_REL_PINNED);
-+}
-+
-+static struct dentry *dir;
-+
-+static int cpu_read_op(void *data, u64 *dest_cpu)
-+{
-+	*dest_cpu = ipi_wakeup.dest_cpu;
-+	return 0;
-+}
-+
-+static int cpu_write_op(void *data, u64 value)
-+{
-+	run_smp_call_function_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(ipi_ops, cpu_read_op, cpu_write_op, "%llu\n");
-+
-+static int timeout_read_op(void *data, u64 *timeout)
-+{
-+	*timeout = timer_wakeup.timeout;
-+	return 0;
-+}
-+
-+static int timeout_write_op(void *data, u64 value)
-+{
-+	run_timer_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(timeout_ops, timeout_read_op, timeout_write_op, "%llu\n");
-+
-+static int __init latency_init(void)
-+{
-+	struct dentry *temp;
-+
-+	dir = debugfs_create_dir("latency_test", 0);
-+	if (!dir) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/latency_test\n");
-+		return -1;
-+	}
-+	temp = debugfs_create_file("ipi_cpu_dest",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &ipi_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/ipi_cpu_dest\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("ipi_latency_ns", 0444, dir, &ipi_wakeup.latency_ns);
-+	debugfs_create_u32("ipi_cpu_src", 0444, dir, &ipi_wakeup.src_cpu);
-+
-+	temp = debugfs_create_file("timeout_expected_ns",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &timeout_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/timeout_expected_ns\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("timeout_diff_ns", 0444, dir, &timer_wakeup.timeout_diff_ns);
-+	debugfs_create_u32("timeout_cpu_src", 0444, dir, &timer_wakeup.src_cpu);
-+	pr_info("Latency Test module loaded\n");
-+	return 0;
-+}
-+
-+static void __exit latency_cleanup(void)
-+{
-+	pr_info("Cleaning up Latency Test module.\n");
-+	debugfs_remove_recursive(dir);
-+}
-+
-+module_init(latency_init);
-+module_exit(latency_cleanup);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("IBM Corporation");
-+MODULE_DESCRIPTION("Measuring idle latency for IPIs and Timers");
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2779c29d9981..60fa46a99a4f 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1513,6 +1513,16 @@ config DEBUG_KOBJECT
- 	  If you say Y here, some extra kobject debugging messages will be sent
- 	  to the syslog.
- 
-+config IDLE_LATENCY_SELFTEST
-+	tristate "Cpuidle latency selftests"
-+	depends on CPU_IDLE
-+	help
-+	  This option provides a kernel module that runs tests using the IPI and
-+	  timers to measure latency.
-+
-+	  Say M if you want these self tests to build as a module.
-+	  Say N if you are unsure.
-+
- config DEBUG_KOBJECT_RELEASE
- 	bool "kobject release debugging"
- 	depends on DEBUG_OBJECTS_TIMERS
--- 
-2.17.1
+> ---
+>   drivers/interconnect/qcom/sm8350.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
+> index 01202989a5b2..579b6ce8e046 100644
+> --- a/drivers/interconnect/qcom/sm8350.c
+> +++ b/drivers/interconnect/qcom/sm8350.c
+> @@ -139,7 +139,7 @@ DEFINE_QNODE(qhs_llcc, SM8350_SLAVE_LLCC_CFG, 1, 4);
+>   DEFINE_QNODE(qns_gemnoc, SM8350_SLAVE_GEM_NOC_CFG, 1, 4);
+>   DEFINE_QNODE(qhs_mdsp_ms_mpu_cfg, SM8350_SLAVE_MSS_PROC_MS_MPU_CFG, 1, 4);
+>   DEFINE_QNODE(qhs_modem_ms_mpu_cfg, SM8350_SLAVE_MCDMA_MS_MPU_CFG, 1, 4);
+> -DEFINE_QNODE(qns_gem_noc_cnoc, SM8350_SLAVE_GEM_NOC_CNOC, 1, 16);
+> +DEFINE_QNODE(qns_gem_noc_cnoc, SM8350_SLAVE_GEM_NOC_CNOC, 1, 16, SM8350_MASTER_GEM_NOC_CNOC);
+>   DEFINE_QNODE(qns_llcc, SM8350_SLAVE_LLCC, 4, 16, SM8350_MASTER_LLCC);
+>   DEFINE_QNODE(qns_pcie, SM8350_SLAVE_MEM_NOC_PCIE_SNOC, 1, 8);
+>   DEFINE_QNODE(srvc_even_gemnoc, SM8350_SLAVE_SERVICE_GEM_NOC_1, 1, 4);
+> 
 
