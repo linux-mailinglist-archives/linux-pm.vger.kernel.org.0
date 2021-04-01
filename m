@@ -2,230 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AAD351987
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7E03519E6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbhDARyC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 13:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbhDARth (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:49:37 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46170C0617AB;
-        Thu,  1 Apr 2021 04:28:05 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id k8so1797603iop.12;
-        Thu, 01 Apr 2021 04:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=ifnqDCESEWCwygu7Q8TcEEjwG35Ap4TGL1lIxVlgSIHnbzmG25rF7VK74GW/oT/Lgh
-         2UJ9bIQNzSDOlkch2hOCYH1HpIqOco9idX9WVqPyouTWaS8Ou04kvDlzHghlRMp4jHPf
-         nskapKeDijNI6NmbdwMQ0kmLLDvSqDkg1MFJwvHTqGAGSsKLk5VXeqNC5Euy8zgxYvnF
-         O3TzXfeLmGd9cTk7Hw7vPqePTLusUXV5nmy1w7nHwPPWrDqSZAM1o5RCdXpXwBhAZ9SF
-         he5bn3R+I/nx5KU477ajaxMPDRxH3dbiHtmAvkpsU7i0mKguLtw3QMN4BcDqvQv0/j90
-         uHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=kHhW+NJQO3z63t/oCc+6zGf8AhETEZabjnLpYw4FXB7iG35u2fc30tSO9+tVymtdeO
-         JCZR4QmFL2OiI2jMiJtoP2SMWn5RqjrP44sa28ft7G9tJTaiA4X9EHEWFqVA0Ar4mipk
-         n6hla3mMHMPc8TZH+MM0mvvKcI+23znEY2u5STX/UNw6u3ht/SqfNyPb+Ena2CRvWejR
-         +L/KpN+IHXcU89bDuES+8zB0zTOIsEPqvBIMHvMWov6IPyDqTLpzd327x/8S8uZ1ZOkD
-         DeRbmcYYbytKkn2lcyBYR8rLd6kSQpOZiIzqN7Rh2LMhQYGKexuX9LRYa46cXxvzx1tc
-         GxMg==
-X-Gm-Message-State: AOAM533BHM4sBB3om+ON/d6xRvL0Ngl+Z9InSujeZmgYvMPWUq852m7t
-        QmngFRiMURBi+ppQAVJTVqDd6RXKeWfiu1OMJGSClh+xhZrFLA==
-X-Google-Smtp-Source: ABdhPJxhpMPww1OveGSHxepFu4l+A0e2gZ/exiHFMOBtsrHDLLr9n61X8fXz/bnSkzdlVx94sCa1xegT1QRnmXoNsps=
-X-Received: by 2002:a05:6602:21cd:: with SMTP id c13mr6082518ioc.44.1617275764762;
- Thu, 01 Apr 2021 04:16:04 -0700 (PDT)
+        id S234592AbhDAR4x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 13:56:53 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56676 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234717AbhDARvx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 13:51:53 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 131BXZFc100722;
+        Thu, 1 Apr 2021 07:45:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=ztAzfy6jhoXLsRiJo7Zf+DjAAnk1x010w0I8Ijtkw1I=;
+ b=kqvSIDKXQ5KmDpIwze7EbsKYOkhHsbywdx84S1rVVqvvugV/zwdHbWjEwj8wbi61wnmZ
+ Ka+Vspq7FTmBG97g+3UIi0Qooz0IBuKDvnYM7yHcWP102EQRiiq+ALVEPosFyHSwc2pq
+ 0uWLkobOaIDZpbVE3LE+h0JOc/3Gw2LS8veXPvDvA1k+a61++uNLnDGCOgV0eDpxLfSk
+ /xO8/4nqPi8UfC2zSoUR3vsrX6xyltG3JSQZKSBiZjovZJ2DlTBpykD/dz7CAJNsgm0W
+ m7nxNPcdVfJIEJ5hTnzmEfysrr2HHFncTOtszyd9TMyvTRgkYmmEGLI0OmdFEMiBD0b4 Qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37n2jg88r7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Apr 2021 07:45:12 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 131BXsR5101323;
+        Thu, 1 Apr 2021 07:45:12 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37n2jg88qd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Apr 2021 07:45:12 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 131BjA0B001098;
+        Thu, 1 Apr 2021 11:45:10 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 37n28xr85y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Apr 2021 11:45:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 131Bj70732571768
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Apr 2021 11:45:07 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 284BFA405D;
+        Thu,  1 Apr 2021 11:45:07 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06F31A4040;
+        Thu,  1 Apr 2021 11:45:05 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.199.46.97])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Apr 2021 11:45:04 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, shuah@kernel.org,
+        dsmythies@telus.net, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        psampat@linux.ibm.com
+Subject: [RFC v2 0/2] CPU-Idle latency selftest framework
+Date:   Thu,  1 Apr 2021 17:15:02 +0530
+Message-Id: <20210401114504.13466-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.30.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5R5E2xZkivbWy_-aNp4lvkrJSAcGvy4P
+X-Proofpoint-ORIG-GUID: WFJ8F6e3KBWVJLsY9QIYy2B7Hm5Xf3AG
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com> <CAMpxmJUv0iU0Ntmks1f6ThDAG6x_eJLYYCaDSjy+1Syedzc5dQ@mail.gmail.com>
- <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-In-Reply-To: <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Thu, 1 Apr 2021 16:45:52 +0530
-Message-ID: <CACG_h5q6P5NiNByttQ-NZvq8x3GCTKfSU=Yyywk7PcO6_=i2Mw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Srinivas Neeli <sneeli@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-04-01_04:2021-03-31,2021-04-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 lowpriorityscore=0
+ adultscore=0 malwarescore=0 mlxscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103310000
+ definitions=main-2104010082
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 8:56 PM Srinivas Neeli <sneeli@xilinx.com> wrote:
->
-> Hi,
->
-> > -----Original Message-----
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > Sent: Friday, March 26, 2021 10:58 PM
-> > To: Michal Simek <michals@xilinx.com>
-> > Cc: Syed Nayyar Waris <syednwaris@gmail.com>; Srinivas Neeli
-> > <sneeli@xilinx.com>; Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com>; William Breathitt Gray
-> > <vilhelm.gray@gmail.com>; Arnd Bergmann <arnd@arndb.de>; Robert
-> > Richter <rrichter@marvell.com>; Linus Walleij <linus.walleij@linaro.org>;
-> > Masahiro Yamada <yamada.masahiro@socionext.com>; Andrew Morton
-> > <akpm@linux-foundation.org>; Zhang Rui <rui.zhang@intel.com>; Daniel
-> > Lezcano <daniel.lezcano@linaro.org>; Amit Kucheria
-> > <amit.kucheria@verdurent.com>; Linux-Arch <linux-arch@vger.kernel.org>;
-> > linux-gpio <linux-gpio@vger.kernel.org>; LKML <linux-
-> > kernel@vger.kernel.org>; arm-soc <linux-arm-kernel@lists.infradead.org>;
-> > linux-pm <linux-pm@vger.kernel.org>; Srinivas Goud <sgoud@xilinx.com>
-> > Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and
-> > _set_value
-> >
-> > On Mon, Mar 8, 2021 at 8:13 AM Michal Simek <michal.simek@xilinx.com>
-> > wrote:
-> > >
-> > >
-> > >
-> > > On 3/6/21 3:06 PM, Syed Nayyar Waris wrote:
-> > > > This patch reimplements the xgpio_set_multiple() function in
-> > > > drivers/gpio/gpio-xilinx.c to use the new generic functions:
-> > > > bitmap_get_value() and bitmap_set_value(). The code is now simpler
-> > > > to read and understand. Moreover, instead of looping for each bit in
-> > > > xgpio_set_multiple() function, now we can check each channel at a
-> > > > time and save cycles.
-> > > >
-> > > > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > > Cc: Michal Simek <michal.simek@xilinx.com>
-> > > > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> > > > Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> > > > ---
-> > > >  drivers/gpio/gpio-xilinx.c | 63
-> > > > +++++++++++++++++++-------------------
-> > > >  1 file changed, 32 insertions(+), 31 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> > > > index be539381fd82..8445e69cf37b 100644
-> > > > --- a/drivers/gpio/gpio-xilinx.c
-> > > > +++ b/drivers/gpio/gpio-xilinx.c
-> > > > @@ -15,6 +15,7 @@
-> > > >  #include <linux/of_device.h>
-> > > >  #include <linux/of_platform.h>
-> > > >  #include <linux/slab.h>
-> > > > +#include "gpiolib.h"
-> > > >
-> > > >  /* Register Offset Definitions */
-> > > >  #define XGPIO_DATA_OFFSET   (0x0)    /* Data register  */
-> > > > @@ -141,37 +142,37 @@ static void xgpio_set_multiple(struct
-> > > > gpio_chip *gc, unsigned long *mask,  {
-> > > >       unsigned long flags;
-> > > >       struct xgpio_instance *chip = gpiochip_get_data(gc);
-> > > > -     int index = xgpio_index(chip, 0);
-> > > > -     int offset, i;
-> > > > -
-> > > > -     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -
-> > > > -     /* Write to GPIO signals */
-> > > > -     for (i = 0; i < gc->ngpio; i++) {
-> > > > -             if (*mask == 0)
-> > > > -                     break;
-> > > > -             /* Once finished with an index write it out to the register */
-> > > > -             if (index !=  xgpio_index(chip, i)) {
-> > > > -                     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                                    index * XGPIO_CHANNEL_OFFSET,
-> > > > -                                    chip->gpio_state[index]);
-> > > > -                     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > -                     index =  xgpio_index(chip, i);
-> > > > -                     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -             }
-> > > > -             if (__test_and_clear_bit(i, mask)) {
-> > > > -                     offset =  xgpio_offset(chip, i);
-> > > > -                     if (test_bit(i, bits))
-> > > > -                             chip->gpio_state[index] |= BIT(offset);
-> > > > -                     else
-> > > > -                             chip->gpio_state[index] &= ~BIT(offset);
-> > > > -             }
-> > > > -     }
-> > > > -
-> > > > -     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                    index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
-> > > > -
-> > > > -     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > +     u32 *const state = chip->gpio_state;
-> > > > +     unsigned int *const width = chip->gpio_width;
-> > > > +
-> > > > +     DECLARE_BITMAP(old, 64);
-> > > > +     DECLARE_BITMAP(new, 64);
-> > > > +     DECLARE_BITMAP(changed, 64);
-> > > > +
-> > > > +     spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> > > > +     spin_lock(&chip->gpio_lock[1]);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], width[0], 0);
-> > > > +     bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> > > > +     bitmap_replace(new, old, bits, mask, gc->ngpio);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(old, 64, state[1], 32, 32);
-> > > > +     state[0] = bitmap_get_value(new, 0, width[0]);
-> > > > +     state[1] = bitmap_get_value(new, width[0], width[1]);
-> > > > +     bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(new, 64, state[1], 32, 32);
-> > > > +     bitmap_xor(changed, old, new, 64);
-> > > > +
-> > > > +     if (((u32 *)changed)[0])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET,
-> > > > +                             state[0]);
-> > > > +     if (((u32 *)changed)[1])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > +                             XGPIO_CHANNEL_OFFSET, state[1]);
-> > > > +
-> > > > +     spin_unlock(&chip->gpio_lock[1]);
-> > > > +     spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
-> > > >  }
-> > > >
-> > > >  /**
-> > > >
-> > >
-> > > Srinivas N: Can you please test this code?
-> > >
-> > > Thanks,
-> > > Michal
-> >
-> > Hey, any chance of getting that Tested-by?
-> I tested patches with few modifications in code (spin_lock handling and merge conflict).
-> functionality wise it's working fine.
->
-> >
-> > Bart
+Changelog
+RFC v1-->v2
 
-Hi Bartosz,
+The timer based test produces run to run variance on some intel based
+systems that sport a mechansim of "C-state pre-wake" which can
+pre-wake a CPU from an idle state when timers are armed.
+Hence invoking the timer tests is now parameterized for systems and
+architectures that don't support pre-wakeup logic and need granular
+timer measurements along with IPI results.
 
-May I please know the URL of the tree that you are using. I had been
-using the tree below for submitting this patchset on GPIO to you.
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+This RFC does not yet support treating of CPU 0s idle states differently
+especially as reported on Intel systems. More understanding is needed
+on systems to determine if only CPU 0 is treated differently of if they
+are more CPUs that cannot have its idle state properties changed. 
 
-I think I am using the wrong tree. On which tree should I base my
-patches on for my next  (v4) submission? Should I use the tree below?
-:
-https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+RFC v1: https://lkml.org/lkml/2021/3/15/492
+---
+A kernel module + userspace driver to estimate the wakeup latency
+caused by going into stop states. The motivation behind this program is
+to find significant deviations behind advertised latency and residency
+values.
 
-Regards
-Syed Nayyar Waris
+The patchset measures latencies for two kinds of events. IPIs and Timers
+As this is a software-only mechanism, there will additional latencies of
+the kernel-firmware-hardware interactions. To account for that, the
+program also measures a baseline latency on a 100 percent loaded CPU
+and the latencies achieved must be in view relative to that.
+
+To achieve this, we introduce a kernel module and expose its control
+knobs through the debugfs interface that the selftests can engage with.
+
+The kernel module provides the following interfaces within
+/sys/kernel/debug/latency_test/ for,
+
+IPI test:
+    ipi_cpu_dest = Destination CPU for the IPI
+    ipi_cpu_src = Origin of the IPI
+    ipi_latency_ns = Measured latency time in ns
+Timeout test:
+    timeout_cpu_src = CPU on which the timer to be queued
+    timeout_expected_ns = Timer duration
+    timeout_diff_ns = Difference of actual duration vs expected timer
+
+Sample output on a POWER9 system is as follows:
+# --IPI Latency Test---
+# Baseline Average IPI latency(ns): 3114
+# Observed Average IPI latency(ns) - State0: 3265
+# Observed Average IPI latency(ns) - State1: 3507
+# Observed Average IPI latency(ns) - State2: 3739
+# Observed Average IPI latency(ns) - State3: 3807
+# Observed Average IPI latency(ns) - State4: 17070
+# Observed Average IPI latency(ns) - State5: 1038174
+# Observed Average IPI latency(ns) - State6: 1068784
+# 
+# --Timeout Latency Test--
+# Baseline Average timeout diff(ns): 1420
+# Observed Average timeout diff(ns) - State0: 1640
+# Observed Average timeout diff(ns) - State1: 1764
+# Observed Average timeout diff(ns) - State2: 1715
+# Observed Average timeout diff(ns) - State3: 1845
+# Observed Average timeout diff(ns) - State4: 16581
+# Observed Average timeout diff(ns) - State5: 939977
+# Observed Average timeout diff(ns) - State6: 1073024
+
+
+Things to keep in mind:
+
+1. This kernel module + bash driver does not guarantee idleness on a
+   core when the IPI and the Timer is armed. It only invokes sleep and
+   hopes that the core is idle once the IPI/Timer is invoked onto it.
+   Hence this program must be run on a completely idle system for best
+   results
+
+2. Even on a completely idle system, there maybe book-keeping tasks or
+   jitter tasks that can run on the core we want idle. This can create
+   outliers in the latency measurement. Thankfully, these outliers
+   should be large enough to easily weed them out.
+
+3. A userspace only selftest variant was also sent out as RFC based on
+   suggestions over the previous patchset to simply the kernel
+   complexeity. However, a userspace only approach had more noise in
+   the latency measurement due to userspace-kernel interactions
+   which led to run to run variance and a lesser accurate test.
+   Another downside of the nature of a userspace program is that it
+   takes orders of magnitude longer to complete a full system test
+   compared to the kernel framework.
+   RFC patch: https://lkml.org/lkml/2020/9/2/356
+
+4. For Intel Systems, the Timer based latencies don't exactly give out
+   the measure of idle latencies. This is because of a hardware
+   optimization mechanism that pre-arms a CPU when a timer is set to
+   wakeup. That doesn't make this metric useless for Intel systems,
+   it just means that is measuring IPI/Timer responding latency rather
+   than idle wakeup latencies.
+   (Source: https://lkml.org/lkml/2020/9/2/610)
+   For solution to this problem, a hardware based latency analyzer is
+   devised by Artem Bityutskiy from Intel.
+   https://youtu.be/Opk92aQyvt0?t=8266
+   https://intel.github.io/wult/
+
+Pratik Rajesh Sampat (2):
+  cpuidle: Extract IPI based and timer based wakeup latency from idle
+    states
+  selftest/cpuidle: Add support for cpuidle latency measurement
+
+ drivers/cpuidle/Makefile                   |   1 +
+ drivers/cpuidle/test-cpuidle_latency.c     | 157 ++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/Makefile           |   1 +
+ tools/testing/selftests/cpuidle/Makefile   |   6 +
+ tools/testing/selftests/cpuidle/cpuidle.sh | 323 +++++++++++++++++++++
+ tools/testing/selftests/cpuidle/settings   |   2 +
+ 7 files changed, 500 insertions(+)
+ create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle.sh
+ create mode 100644 tools/testing/selftests/cpuidle/settings
+
+-- 
+2.17.1
+
