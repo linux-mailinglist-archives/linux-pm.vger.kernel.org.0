@@ -2,130 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F56351F1F
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7ABA351DF7
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Apr 2021 20:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbhDASxk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240508AbhDASvo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Apr 2021 14:51:44 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66509C061793;
-        Thu,  1 Apr 2021 10:50:31 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id h7so2733823ilj.8;
-        Thu, 01 Apr 2021 10:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+XaU3R90qixaVV7aW+rUvI7mZW0sgqPkaDVLLZSANpk=;
-        b=PAOXjaNp3KR9wkaqwzGajUV+bY15zWzlA+x/vHCeUTnxF2zu1Fe2viAmSmIB7UJ3km
-         c3MirZ6IcUQH/AU93wLX+XRldUcJznMOZksUvqClnSPh2zMf7QzNRNen5iAhTA2iAvQx
-         +uCXc64hqKPVmXXWLUZx7NNiOkaaO6LuB1AHrvI1qB4c2wIZbXLt8BWASpzpQod59IWQ
-         UPMMUaMA5OkGaeCztLQukKuWJL2sdH7uijreieUDBAu+O8aStfDW9wLyJFDLaefvLL96
-         kEH1/vjzh2KmRxFH52PKsfxCeij4a6x/bbRWimLfVxFmdPlXDlGRdSxbrN9MJY1v4waV
-         mPWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+XaU3R90qixaVV7aW+rUvI7mZW0sgqPkaDVLLZSANpk=;
-        b=gPzNhUnFOvuG9NaoEb98icE06z27rBgw+jNI6Qq2o5aTbHM5+BD420OdNVQ2pdVRal
-         asauFsGuz5nRZYSv4Op8wCydxezz4ttsHRZdCeNYZ4i7mOQNkNRhIPgPAytI7cEqG+Ug
-         RgRY76TGoZLxC+VC5srVyfpJkHQA1FKChfmdK6uw2vxqPrFlK6TodFFGPayVdbgDcGnj
-         zdBlEAiiJLsOu5kuBG4LEOqL3elqJvyOcVRV/XZcXWdTjNdna31DnG2MKvtm1FHA4fs5
-         Cm33wygJhZJ6Q851knxCwpxsdyDqwpd9SEkKlQjQePbKpTd+HgQUK6szmsH45f7D2FLa
-         U7sg==
-X-Gm-Message-State: AOAM533a4knUpQdDGqtlPf9adG7nhxhrydx602gnaMENSZXOMrHuJZ3R
-        WIn+45a6nPLZJ4iHNb1TXzJ4rIYUmexkiJHpOho=
-X-Google-Smtp-Source: ABdhPJypdKxpeEkzgLCokUxyMCMz480lSKKdcgSUnSJMv1uQm0VHIbMAqvXRye1H8rAFcLAtk2dSHPm1P2RfBItEowg=
-X-Received: by 2002:a05:6e02:8:: with SMTP id h8mr7415793ilr.164.1617299430937;
- Thu, 01 Apr 2021 10:50:30 -0700 (PDT)
+        id S237757AbhDASda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Apr 2021 14:33:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53242 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239990AbhDAS0t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:26:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DBCF56023C;
+        Thu,  1 Apr 2021 18:26:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617301609;
+        bh=XM/eKl64AYtF/NjYhxGawQinsb3OUrzVM5Yt/ORJnc8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iUfU1tk4s1agyreSXqTLRnrvXWc+nxCQOErH69opvfdFYdsoEWg3KkBNDPgCuFwkh
+         kxFFooCipCdAUjy1yQZpJ+7ae23TJMUXguBCmTMUVmLeAT/pEpRP11mgNz1EFqrKbn
+         MK2i5goUcObSnNYFwLi3t6fspZqfNL9gm7bdPZRtc4gMbVoknzIdAYBVPwlmz7eX0l
+         EXBa5y9Bm1jZ/UAzVYQwGPwGtKCqtSGZ27mdjKa+DnJvqWwfdMESOo3thUAy5B32cT
+         eMbzuDTT2IEU8qjxDnHspVTP5eaODb/RPTyebX5eL3oXIAzgZ5AN29QOqOoVA7RSEC
+         3ALbNShPAU1dQ==
+Date:   Thu, 1 Apr 2021 11:26:47 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Chris von Recklinghausen <crecklin@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, Simo Sorce <simo@redhat.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Fix hibernation in FIPS mode?
+Message-ID: <YGYQZwRhpVkwVBjw@gmail.com>
+References: <MW2PR2101MB08924CD74C6EB773C4D5FAFDBF7E9@MW2PR2101MB0892.namprd21.prod.outlook.com>
+ <CAJZ5v0g+=AnRAmAAn8NpHm8bmZ1WkwDpjb5rr_zPOVABW1PYug@mail.gmail.com>
+ <4e95307db43e2f7cc8516e645b81db7db0dd8ad4.camel@redhat.com>
+ <CAMj1kXHg2RDgwmOhJkaAPoWeHpxnd6tixp94Kha1-bzNvCaQUg@mail.gmail.com>
+ <504652e70f0a4e42e4927583b9ed47cd78590329.camel@redhat.com>
+ <CAMj1kXHRduBs0TJcLC4iMkyoGXyyrXPM_WpVVij33ki8THf9Kw@mail.gmail.com>
+ <CAJZ5v0hKPBtUzGKfGHD6KX-c2QEETfatCkNjCK8ukh-AhVfUhA@mail.gmail.com>
+ <2b452865-ca6c-892d-f04e-3e6e2a74b598@redhat.com>
 MIME-Version: 1.0
-References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
- <CACG_h5pb0pA+cTNPGircAM3UrV5BGmqgk45LF_9phU_J4FaRyw@mail.gmail.com>
- <CAHp75VfDZbJjCOEGdHc=-D6W8_7m2=CinXj-itwn6hvoVqdWYQ@mail.gmail.com>
- <YF8evJTkiBYjnDON@shinobu> <CAHp75VektkxSH7S3qTkYd1De613HGrBDvXn36FFex_p1n9BDng@mail.gmail.com>
-In-Reply-To: <CAHp75VektkxSH7S3qTkYd1De613HGrBDvXn36FFex_p1n9BDng@mail.gmail.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Thu, 1 Apr 2021 23:20:19 +0530
-Message-ID: <CACG_h5pox5CCmhy7+itc7cpjCSYtzSXGA85ow14nPrAThyNTDA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b452865-ca6c-892d-f04e-3e6e2a74b598@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 27, 2021 at 10:05 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sat, Mar 27, 2021 at 2:02 PM William Breathitt Gray
-> <vilhelm.gray@gmail.com> wrote:
-> > On Sat, Mar 27, 2021 at 09:29:26AM +0200, Andy Shevchenko wrote:
-> > > On Saturday, March 27, 2021, Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> > > > On Fri, Mar 26, 2021 at 11:32 PM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.com>
-> > > > wrote:
-> > > > >
-> > > > > > +       bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > > > +       bitmap_set_value(old, 64, state[1], 32, 32);
-> > > > >
-> > > > > Isn't it effectively bitnap_from_arr32() ?
-> > > > >
-> > > > > > +       bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > > > +       bitmap_set_value(new, 64, state[1], 32, 32);
-> > > > >
-> > > > > Ditto.
->
-> > > > With bitmap_set_value() we are also specifying the offset (or start)
-> > > > position too. so that the remainder of the array remains unaffected. I
-> > > > think it would not be feasible to use bitmap_from/to_arr32()  here.
-> > >
-> > >
-> > > You have hard coded start and nbits parameters to 32. How is it not the
-> > > same?
-> >
-> > Would these four lines become something like this:
-> >
-> >         bitmap_from_arr32(old, state, 64);
-> >         ...
-> >         bitmap_from_arr32(new, state, 64);
->
-> This is my understanding, but I might miss something. I mean driver
-> specifics that make my proposal incorrect.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On Thu, Apr 01, 2021 at 09:54:21AM -0400, Chris von Recklinghausen wrote:
+> On 4/1/21 9:38 AM, Rafael J. Wysocki wrote:
+> > On Thu, Apr 1, 2021 at 10:47 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > On Tue, 30 Mar 2021 at 21:56, Simo Sorce <simo@redhat.com> wrote:
+> > > > On Tue, 2021-03-30 at 21:45 +0200, Ard Biesheuvel wrote:
+> > > > > On Tue, 30 Mar 2021 at 20:05, Simo Sorce <simo@redhat.com> wrote:
+> > > > > > On Tue, 2021-03-30 at 16:46 +0200, Rafael J. Wysocki wrote:
+> > > > > > > On Tue, Mar 30, 2021 at 12:14 AM Dexuan Cui <decui@microsoft.com> wrote:
+> > > > > > > > Hi,
+> > > > > > > > MD5 was marked incompliant with FIPS in 2009:
+> > > > > > > > a3bef3a31a19 ("crypto: testmgr - Skip algs not flagged fips_allowed in fips mode")
+> > > > > > > > a1915d51e8e7 ("crypto: testmgr - Mark algs allowed in fips mode")
+> > > > > > > > 
+> > > > > > > > But hibernation_e820_save() is still using MD5, and fails in FIPS mode
+> > > > > > > > due to the 2018 patch:
+> > > > > > > > 749fa17093ff ("PM / hibernate: Check the success of generating md5 digest before hibernation")
+> > > > > > > > 
+> > > > > > > > As a result, hibernation doesn't work when FIPS is on.
+> > > > > > > > 
+> > > > > > > > Do you think if hibernation_e820_save() should be changed to use a
+> > > > > > > > FIPS-compliant algorithm like SHA-1?
+> > > > > > > I would say yes, it should.
+> > > > > > > 
+> > > > > > > > PS, currently it looks like FIPS mode is broken in the mainline:
+> > > > > > > > https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg49414.html
+> > > > > > FYI, SHA-1 is not a good choice, it is only permitted in HMAC
+> > > > > > constructions and only for specified uses. If you need to change
+> > > > > > algorithm you should go straight to SHA-2 or SHA-3 based hashes.
+> > > > > > 
+> > > > > What is the reason for using a [broken] cryptographic hash here? if
+> > > > > this is just an integrity check, better use CRC32
+> > Not really.
+> > 
+> > CRC32 is not really sufficient for integrity checking here AFAICS.  It
+> > might be made a fallback option if MD5 is not available, but making it
+> > the default would be somewhat over the top IMO.
+> 
+> 
+> Would ghash be a better choice? It produces the same size digest as md5.
+> 
+> Does anyone have any other suggestions of algorithms to try?
+> 
+> Thanks,
+> 
+> Chris
+> 
+> > 
+> > > > If the integrity check is used exclusively to verify there were no
+> > > > accidental changes and is not used as a security measure, by all means
+> > > > I agree that using crc32 is a better idea.
+> > > > 
+> > > Looking at 62a03defeabd58f74e07ca030d6c21e069d4d88e which introduced
+> > > this, it is only a best effort check which is simply omitted if md5
+> > > happens to be unavailable, so there is definitely no need for crypto
+> > > here.
+> > Yes, it is about integrity checking only.  No, CRC32 is not equivalent
+> > to MD5 in that respect AFAICS.
+> > 
 
-I initially (incorrectly) thought that all of the bitmap_set_value()
-statements have to be replaced. But now I realised, only those
-specific bitmap_set_value() calls containing 32 bits width have to
-replaced.
+If you need to detect intentional changes (ensure authenticity, not just
+integrity) then you need a cryptographic MAC, such as HMAC-SHA256.
 
-I will incorporate the above review comments in my next v4 submission.
+If you only need to detect accidental changes (ensure integrity-only), then a
+checksum such as CRC-32 or xxHash64 is sufficient.  A cryptographic hash
+function such as SHA-256 would also be sufficient, though much slower.  Using a
+broken cryptographic hash function such as MD5 doesn't make sense because it is
+broken (so doesn't actually provide cryptographic security), and is much slower
+than a checksum.
 
-Regards
-Syed Nayyar Waris
+If the 1 in 4 billion collision rate of a CRC-32 isn't sufficient, then use
+CRC-64 or xxHash64 for a 1 in 2^64 collision rate.
+
+Don't use GHASH, as it is neither a checksum nor a cryptographic hash function.
+
+- Eric
