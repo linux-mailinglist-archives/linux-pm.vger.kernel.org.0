@@ -2,281 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 187C5352479
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 02:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E9E352655
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 06:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbhDBAdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Apr 2021 20:33:24 -0400
-Received: from mga02.intel.com ([134.134.136.20]:49361 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233677AbhDBAdX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 1 Apr 2021 20:33:23 -0400
-IronPort-SDR: UCn1Eok2CixVMSDvVzvDviXUUhtJJcjayySb5aB5xiXGheflkzmyEddfqVjIBBtB47Pmv3ANAy
- E0KM20oRvfjQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="179494343"
-X-IronPort-AV: E=Sophos;i="5.81,298,1610438400"; 
-   d="scan'208";a="179494343"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 17:33:23 -0700
-IronPort-SDR: bBCSzCcJM3pHGlGAiPHV58G8GSwJLLzko45xOWEVI05LohvedQwnP2GDRqq0zdODNC1VIT7l1z
- 2SIiVpGviRUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,298,1610438400"; 
-   d="scan'208";a="412942651"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Apr 2021 17:33:21 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lS7kW-0006mz-Kv; Fri, 02 Apr 2021 00:33:20 +0000
-Date:   Fri, 02 Apr 2021 08:32:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 85f34ae663986081df77a1df26e08fd1978573a3
-Message-ID: <60666615.oPGdrOaZwSnTidEZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229722AbhDBE4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 00:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhDBE4V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 00:56:21 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA235C0613E6;
+        Thu,  1 Apr 2021 21:56:20 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id y3so146588pgi.0;
+        Thu, 01 Apr 2021 21:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=kVdcgww23VdErQfrCwBlNpGo/FOajrGJ912n2nUaTcE=;
+        b=qIE+CxChq8Pd5YUAkG3mWlCe/XJ9vL3eagK5/HekCLLfGabaqENuMTuTEFOO866xGL
+         1pRFGxSJ5MJJL6e8/cFcguS+N9tbV92JGtm0hNSn7i4x6z5v3qIlRH1NgrhzKqSw8p+a
+         nGPs6f13SSbIlLWiIVYLKg1Rj493pvEQLPi7Uf0Hh2I+rni4igNUKVWGk+1xWJrpgEbv
+         5WQm5Tr7vwMOpULUdN9695I3Ze3P5bEHnT2SjY1lKJFDP84mpN3iWcquZLdtAzS5UdR1
+         zSFx4r5otwXfdRBJHfQOHuihEcN7LRWVbyigxD7HOYLVE2GrmjFDIXzutHYFkwh/n1op
+         orwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kVdcgww23VdErQfrCwBlNpGo/FOajrGJ912n2nUaTcE=;
+        b=cJuZdSRhxMg2YMXFI0+mTnvL5OpD/eVcJZUBz6pRbRj29pVlPH5Lo1TrpdBGNKeS19
+         f0Zs0A5sPxTs9z8KmszLHKlQYnVoElqT8r+xWi9eGS3rlX2W1pa7Ta0ZRM7GtJ3B7vtL
+         wdTtU3PgcEFWQYixagKpWExhFHJbz/aEO1jYltlFCqZ5EmfVWJN82KmErCA6o9iaiI2l
+         BIRoga8BRb0tsI+9O+huQ6UTBq44DgFvgWjYCL0EbPZck06TxI0f6ZjFRrotaU+SjBMh
+         0K5Xvk40F3eZhjp3J6F1axF1aVEJGPA44iW+JlKfuEKr3NH7m6B5nPIRUI/Ug+XX59Ez
+         nFgg==
+X-Gm-Message-State: AOAM532HWcFe/WmMgHjjaT7a9JTKBFMBS9g80/5YRs9xvEOCp4YiTf8I
+        Lj8iSMz/SdoV6eLt+Kp7BJo=
+X-Google-Smtp-Source: ABdhPJxu0ecpZKFkEfVjbKD6wzATRCTM0JlUiM/CtZULrBPTOEH1SQ6FJIbB+dtdWd+t9yIWpZhUPA==
+X-Received: by 2002:aa7:96f0:0:b029:1f3:97a4:19d2 with SMTP id i16-20020aa796f00000b02901f397a419d2mr10422788pfq.73.1617339380302;
+        Thu, 01 Apr 2021 21:56:20 -0700 (PDT)
+Received: from localhost.localdomain ([96.44.140.50])
+        by smtp.gmail.com with ESMTPSA id o4sm6942987pfk.15.2021.04.01.21.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 21:56:19 -0700 (PDT)
+From:   zhuguangqing83@gmail.com
+To:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guangqing Zhu <zhuguangqing83@gmail.com>
+Subject: [PATCH] thermal/drivers/cpuidle_cooling: Make sure that idle_duration is larger than residency
+Date:   Fri,  2 Apr 2021 12:56:14 +0800
+Message-Id: <20210402045615.22630-1-zhuguangqing83@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 85f34ae663986081df77a1df26e08fd1978573a3  Merge branches 'acpi-scan' and 'acpi-processor-fixes' into linux-next
+From: Guangqing Zhu <zhuguangqing83@gmail.com>
 
-elapsed time: 721m
+The injected idle duration should be greater than the idle state min
+residency, otherwise we end up consuming more energy and potentially invert
+the mitigation effect.
 
-configs tested: 218
-configs skipped: 2
+In function __cpuidle_cooling_register(), if
+of_property_read_u32(np, "exit-latency-us", &latency_us) is failed, then
+maybe we should not use latency_us. In this case, a zero latency_us for
+forced_idle_latency_limit_ns is better than UMAX_INT. It means to use
+governors in the usual way.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-sh                          rsk7203_defconfig
-arc                    vdk_hs38_smp_defconfig
-s390                             allmodconfig
-arm                           h5000_defconfig
-m68k                         amcore_defconfig
-arm                       spear13xx_defconfig
-arm                           viper_defconfig
-um                            kunit_defconfig
-xtensa                  cadence_csp_defconfig
-xtensa                generic_kc705_defconfig
-sh                            titan_defconfig
-arm                      footbridge_defconfig
-arm                             ezx_defconfig
-arm                        trizeps4_defconfig
-alpha                            alldefconfig
-arm                           sama5_defconfig
-sh                         apsh4a3a_defconfig
-arm                           omap1_defconfig
-m68k                            q40_defconfig
-arm                       netwinder_defconfig
-powerpc                       ppc64_defconfig
-xtensa                       common_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                   bluestone_defconfig
-sh                          rsk7264_defconfig
-powerpc                      ppc64e_defconfig
-mips                         tb0226_defconfig
-powerpc                     tqm8548_defconfig
-sh                           se7619_defconfig
-m68k                             alldefconfig
-powerpc                 mpc8560_ads_defconfig
-sh                          r7785rp_defconfig
-xtensa                  audio_kc705_defconfig
-arm                        vexpress_defconfig
-mips                     cu1830-neo_defconfig
-mips                     cu1000-neo_defconfig
-mips                      pistachio_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                             allmodconfig
-riscv                          rv32_defconfig
-mips                malta_kvm_guest_defconfig
-sh                        edosk7760_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                     redwood_defconfig
-parisc                generic-32bit_defconfig
-mips                            gpr_defconfig
-powerpc                     tqm8540_defconfig
-sh                     magicpanelr2_defconfig
-arm                       omap2plus_defconfig
-arm                        spear6xx_defconfig
-arm                          pcm027_defconfig
-arm                        oxnas_v6_defconfig
-m68k                         apollo_defconfig
-arc                           tb10x_defconfig
-arm                            dove_defconfig
-arm                        multi_v7_defconfig
-powerpc                  mpc866_ads_defconfig
-powerpc               mpc834x_itxgp_defconfig
-m68k                          atari_defconfig
-x86_64                           alldefconfig
-arm                          exynos_defconfig
-mips                        nlm_xlp_defconfig
-arm                         shannon_defconfig
-powerpc                      acadia_defconfig
-powerpc                     mpc512x_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                             pxa_defconfig
-mips                        workpad_defconfig
-nios2                         10m50_defconfig
-arm                          iop32x_defconfig
-ia64                             alldefconfig
-sh                          r7780mp_defconfig
-m68k                          sun3x_defconfig
-ia64                         bigsur_defconfig
-h8300                            alldefconfig
-arm                         nhk8815_defconfig
-m68k                          hp300_defconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                        mvme16x_defconfig
-arc                        nsim_700_defconfig
-arm                         lpc32xx_defconfig
-powerpc                     tqm8560_defconfig
-sh                          landisk_defconfig
-arm                      integrator_defconfig
-powerpc                 mpc836x_rdk_defconfig
-sh                                  defconfig
-arm                           corgi_defconfig
-arm                            pleb_defconfig
-mips                          malta_defconfig
-arm                        magician_defconfig
-ia64                      gensparse_defconfig
-arm                         cm_x300_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                   lite5200b_defconfig
-arm                          imote2_defconfig
-arm                     eseries_pxa_defconfig
-arm                     am200epdkit_defconfig
-h8300                    h8300h-sim_defconfig
-sh                          lboxre2_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                         ap325rxa_defconfig
-powerpc                     ep8248e_defconfig
-arm                         orion5x_defconfig
-mips                        qi_lb60_defconfig
-mips                       rbtx49xx_defconfig
-arm                           tegra_defconfig
-powerpc                       maple_defconfig
-powerpc                     rainier_defconfig
-sh                        dreamcast_defconfig
-mips                            e55_defconfig
-mips                        vocore2_defconfig
-powerpc                 mpc8315_rdb_defconfig
-riscv                               defconfig
-s390                                defconfig
-arm                         socfpga_defconfig
-powerpc                 linkstation_defconfig
-m68k                           sun3_defconfig
-ia64                            zx1_defconfig
-powerpc                       eiger_defconfig
-arm                          ixp4xx_defconfig
-arm                       cns3420vb_defconfig
-m68k                        mvme147_defconfig
-arm                              alldefconfig
-mips                         tb0219_defconfig
-mips                malta_qemu_32r6_defconfig
-m68k                       m5208evb_defconfig
-mips                       capcella_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                           se7751_defconfig
-sh                             sh03_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                            shmin_defconfig
-arm                          lpd270_defconfig
-sh                           se7750_defconfig
-riscv                    nommu_k210_defconfig
-arm                         lpc18xx_defconfig
-arm                          moxart_defconfig
-s390                             allyesconfig
-sh                              ul2_defconfig
-powerpc64                        alldefconfig
-arc                        nsimosci_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20210401
-i386                 randconfig-a003-20210401
-i386                 randconfig-a001-20210401
-i386                 randconfig-a004-20210401
-i386                 randconfig-a002-20210401
-i386                 randconfig-a005-20210401
-i386                 randconfig-a006-20210402
-i386                 randconfig-a003-20210402
-i386                 randconfig-a001-20210402
-i386                 randconfig-a004-20210402
-i386                 randconfig-a005-20210402
-i386                 randconfig-a002-20210402
-x86_64               randconfig-a014-20210401
-x86_64               randconfig-a015-20210401
-x86_64               randconfig-a011-20210401
-x86_64               randconfig-a013-20210401
-x86_64               randconfig-a012-20210401
-x86_64               randconfig-a016-20210401
-i386                 randconfig-a014-20210401
-i386                 randconfig-a011-20210401
-i386                 randconfig-a016-20210401
-i386                 randconfig-a012-20210401
-i386                 randconfig-a013-20210401
-i386                 randconfig-a015-20210401
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a004-20210401
-x86_64               randconfig-a005-20210401
-x86_64               randconfig-a003-20210401
-x86_64               randconfig-a001-20210401
-x86_64               randconfig-a002-20210401
-x86_64               randconfig-a006-20210401
-
+Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/powercap/idle_inject.c    | 1 -
+ drivers/thermal/cpuidle_cooling.c | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index 6e1a0043c411..d76eef1e9387 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -309,7 +309,6 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
+ 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
+ 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	ii_dev->timer.function = idle_inject_timer_fn;
+-	ii_dev->latency_us = UINT_MAX;
+ 
+ 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
+ 
+diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
+index 7ecab4b16b29..de770eb5b2ba 100644
+--- a/drivers/thermal/cpuidle_cooling.c
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -175,7 +175,8 @@ static int __cpuidle_cooling_register(struct device_node *np,
+ 	struct cpuidle_cooling_device *idle_cdev;
+ 	struct thermal_cooling_device *cdev;
+ 	unsigned int idle_duration_us = TICK_USEC;
+-	unsigned int latency_us = UINT_MAX;
++	unsigned int latency_us = 0;
++	unsigned int residency_us = UINT_MAX;
+ 	char dev_name[THERMAL_NAME_LENGTH];
+ 	int id, ret;
+ 
+@@ -199,6 +200,11 @@ static int __cpuidle_cooling_register(struct device_node *np,
+ 
+ 	of_property_read_u32(np, "duration-us", &idle_duration_us);
+ 	of_property_read_u32(np, "exit-latency-us", &latency_us);
++	of_property_read_u32(np, "min-residency-us", &residency_us);
++	if (idle_duration_us <= residency_us) {
++		ret = -EINVAL;
++		goto out_unregister;
++	}
+ 
+ 	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
+ 	idle_inject_set_latency(ii_dev, latency_us);
+-- 
+2.17.1
+
