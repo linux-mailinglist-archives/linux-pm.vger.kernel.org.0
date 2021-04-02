@@ -2,97 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91505352A7F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 14:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0365352B6A
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 16:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhDBMQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Apr 2021 08:16:22 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56616 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhDBMQV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 08:16:21 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 322E61F46A50
-Received: by earth.universe (Postfix, from userid 1000)
-        id 872E93C0C96; Fri,  2 Apr 2021 14:16:17 +0200 (CEST)
-Date:   Fri, 2 Apr 2021 14:16:17 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Milan Djurovic <mdjurovic@zohomail.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: 88pm860x_battery: Remove unnecessary int
- for long long
-Message-ID: <20210402121617.pi5mg5ipcxk7rrds@earth.universe>
-References: <20210327073605.7626-1-mdjurovic@zohomail.com>
+        id S235702AbhDBOY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 10:24:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235659AbhDBOY1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Apr 2021 10:24:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 169CD610D0;
+        Fri,  2 Apr 2021 14:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617373466;
+        bh=gI487BhAFPlE5oHkIiCHCYtn8mSEtMWk0Gw5ZEJJ/R4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JyMP8lNt4/WbeL9UPbMrvkumEXVarXIhzUAX/jn5ysmgx4ZbhnMKbkuyahKJMUpdj
+         Tlr3iTOKIvUzGlqOc4ISrrFq900RU9DvRI4PzvOR8TdN18O8Ksf61HPuWrye/NsjyX
+         gBKVf7N13XnniEICy4xm4YVsTXDSgcO2nNm1HZZA=
+Date:   Fri, 2 Apr 2021 16:24:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 3/7] PM: runtime: remove kernel-doc warnings
+Message-ID: <YGcpFzW7/Usqu9qL@kroah.com>
+References: <20210331232614.304591-1-pierre-louis.bossart@linux.intel.com>
+ <20210331232614.304591-4-pierre-louis.bossart@linux.intel.com>
+ <CAJZ5v0jS0Wfzq0M45ZbP2vNX4y=e+tvZjrmn4AiE+ycxij+CWg@mail.gmail.com>
+ <579db6b4-d6ed-2dcb-b633-fe7fb94cb3c9@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qr4ugwfiylzlrnog"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210327073605.7626-1-mdjurovic@zohomail.com>
+In-Reply-To: <579db6b4-d6ed-2dcb-b633-fe7fb94cb3c9@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Apr 01, 2021 at 09:13:18AM -0500, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 4/1/21 8:40 AM, Rafael J. Wysocki wrote:
+> > On Thu, Apr 1, 2021 at 1:26 AM Pierre-Louis Bossart
+> > <pierre-louis.bossart@linux.intel.com> wrote:
+> > > 
+> > > remove make W=1 warnings
+> > > 
+> > > drivers/base/power/runtime.c:926: warning: Function parameter or
+> > > member 'timer' not described in 'pm_suspend_timer_fn'
+> > > 
+> > > drivers/base/power/runtime.c:926: warning: Excess function parameter
+> > > 'data' description in 'pm_suspend_timer_fn'
+> > > 
+> > > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > > ---
+> > >   drivers/base/power/runtime.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > index fe1dad68aee4..1fc1a992f90c 100644
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -951,7 +951,7 @@ static void pm_runtime_work(struct work_struct *work)
+> > > 
+> > >   /**
+> > >    * pm_suspend_timer_fn - Timer function for pm_schedule_suspend().
+> > > - * @data: Device pointer passed by pm_schedule_suspend().
+> > > + * @timer: hrtimer used by pm_schedule_suspend().
+> > >    *
+> > >    * Check if the time is right and queue a suspend request.
+> > >    */
+> > > --
+> > 
+> > I can apply this along with the [4-5/7].  Do you want me to do that?
+> 
+> Works for me. I wasn't sure by looking at the MAINTAINERS file which files
+> in drivers/base/ are maintained by whom, so sent the patches as a single
+> set.
 
---qr4ugwfiylzlrnog
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Sat, Mar 27, 2021 at 12:36:05AM -0700, Milan Djurovic wrote:
-> Change 'long long int' to 'long long' because the int is unnecessary,
-> as suggested by checkpatch.pl.
->=20
-> Signed-off-by: Milan Djurovic <mdjurovic@zohomail.com>
-> ---
-
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/88pm860x_battery.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supp=
-ly/88pm860x_battery.c
-> index 590da88a17a2..f3f3f8cd1a7f 100644
-> --- a/drivers/power/supply/88pm860x_battery.c
-> +++ b/drivers/power/supply/88pm860x_battery.c
-> @@ -109,8 +109,8 @@ struct pm860x_battery_info {
->  };
-> =20
->  struct ccnt {
-> -	unsigned long long int pos;
-> -	unsigned long long int neg;
-> +	unsigned long long pos;
-> +	unsigned long long neg;
->  	unsigned int spos;
->  	unsigned int sneg;
-> =20
-> --=20
-> 2.31.0
->=20
-
---qr4ugwfiylzlrnog
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBnCxEACgkQ2O7X88g7
-+poW3Q//TArHuylecXQGYa+h8lsaJNj2ROoDzz75WA7uibHXJ8avyFj8nvW9k6rt
-0lhF/WeV1bsC6n07nLS/vDU9cFyzlZKjrQweAdBRuHzR4U77/4EgnLv8Ovw1+AxA
-V75AbVcoIfouTdcEH7BdZjygOnww7FgQeBG6LcUWYBZ+j2vUPgVu3EwL7mnoHnLp
-sVRGaqTqLEe+8mW4g7tcPH+bzEGLlZCSasiNZq5BYN5EHDgH3RRdC885B569kbpj
-KuEjV4R86LJ4tEDz4DrKf8rCDuEBIZMc1COQDbP4mqpenwkNvjpKAkBcYnJajD4Z
-+s9SCT7HXS3IuLuSUUJHSf6j7DXYRvfkupI2hXtONYfns8SYeOhFAY8g+puynFtR
-wFSrrPfmZHc+brhe9s5VDTfAY5FBv0XJaOJS8SWE0dR732NltWtZ0m2ZAZlGPTdP
-o99Qhv/dQKuUo30694W3R/y9FPe+qbIPMtHHt+b7XnpEGv2pEqZN2k5da4i58usD
-QbdrXiHOtvGyeuGSFIHGHPDNSpGZPpag4Eqf77mWTRkU30fftYm++c6jzdZP/XbY
-uti3fnEgfUehiG/lRSBamEd5kSvEWSkpSvovV1VsBJbPASODOF1Csb/f/Hq19sFs
-UztrX797x6nFOJRU0NPA6KZTxYuGDqhkjQT/985Slx5o0/8l1cE=
-=peoA
------END PGP SIGNATURE-----
-
---qr4ugwfiylzlrnog--
+That's fine, we can work it out :)
