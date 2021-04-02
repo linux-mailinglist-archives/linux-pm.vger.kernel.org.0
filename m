@@ -2,163 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C03BA352DD6
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 18:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4772E352E5E
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 19:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbhDBQhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Apr 2021 12:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S236216AbhDBRbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 13:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbhDBQhx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 12:37:53 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952BC0613E6;
-        Fri,  2 Apr 2021 09:37:52 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w11so2737815ply.6;
-        Fri, 02 Apr 2021 09:37:52 -0700 (PDT)
+        with ESMTP id S236037AbhDBRbF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 13:31:05 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63ECC06178C;
+        Fri,  2 Apr 2021 10:31:03 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so2871713pjv.1;
+        Fri, 02 Apr 2021 10:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=y8eBCCmlCiBAb49e1Y44XUdLGF33+F00lNn7YXoNQhY=;
-        b=KqSpFXxoAFj8zHVyLFT5IkMX4zwL3c8hnpc9JsakNm1CZF9IM3UGDbEnWaMcb2mMmo
-         Q/MWeiiRAzvfoWInmPS1blTIipL/ScTf4jC244bntda/aGUjxfJ0EpO0Ny1zzhooAcaH
-         mq43vWBksxacKe8s7/I16HSHsuDik6MLfmRa+qTlZOcdYSy9QY1kAxDpoJSu/Neml0XY
-         jBYsELkh3XAYBRveHCc4Yjy7zJwYieQmgKALjbSO/8YH3Tc68y1xL8r2iPqUwDUehANo
-         HWMksLHa8GKauJpUdqdqWDsxmcX4u/dWfKgDiMhlk6h19f+Ojcaii/OLE24awJXjNcdL
-         ktmA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FZh3mSDQYQE4cryDjboNauvPGmXp8rg2ygYGDJ2001s=;
+        b=uti1Q7UenDxJjSzrbi/Y+R9MqhtCk5ki73a/PkSsfbXLG2vCctRNOtellfI/d77Pbe
+         KpJ5TO2lQxQ6HWlZ8YIEdneuOV1gPhhwKQO5PkgHsJvv6k/rtcJ7vqarbSoFIGVY5R35
+         NRAa5szbAjGqdKjSRv6eizO5naZBpUBWvqIP46n9+3CjECqvRcrgKxdhbbZYymx6YmJX
+         DBJ+xah/0RKHOmC8RXzQKsI8FcBiGqw8o69IQlcXrAiS8EUPQGHlSAgMm7x2gZ+lSqEc
+         guyhTWR2cY1VHsknOiTZpJz+MYH8oXYG6qYJMRjbpkbqqW3XF/qvEdMFeFGPcW27k2ec
+         GQIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=y8eBCCmlCiBAb49e1Y44XUdLGF33+F00lNn7YXoNQhY=;
-        b=Qq6cBpq76d6klR6/XDU966Bs0rdhZzqkiJz3hD/8EJUO9ZggKuCoPjEJTYXV6Bkc2U
-         7pfboVwX5Nz3BGbgefvn8MPkhfTsRKtWnhvJzSPvexQk0EEBGQn4OgtiJpJa9ynisGIr
-         OeGfpuQhq0MhsGDhaJ2UiyUqjlUCb2zgd2x+bwPmXccwpMDW5Dt6FZKhVo/miugp0Yw1
-         zu16l2zKxkgHrmUMD4TciK1WxBd+VmANS5y1o12SNFJsmusp9Jr3uk9e3vsYfS0BGjHa
-         6xLAa2Jht+np2RJSCQ6j5C/e4Z95QWtZJKsmbnDNQParlJQRMk1bqtsRlRGguRYhYj2B
-         lqww==
-X-Gm-Message-State: AOAM532JFrvLbHGhReOdY3zzgo2q9/zXMhSWi5+TJWwE3Io8umvoQ71j
-        xNSdOFn+xHfajBpZYLCtfLY=
-X-Google-Smtp-Source: ABdhPJyGQMF+MUGjKiku6ifz1SggVMS5kG1l6WlgiEaxFGfXZfiER05E3luxOPCRSpCAxle6KdWV1w==
-X-Received: by 2002:a17:902:7b90:b029:e6:f01d:9db2 with SMTP id w16-20020a1709027b90b02900e6f01d9db2mr13415174pll.69.1617381472160;
-        Fri, 02 Apr 2021 09:37:52 -0700 (PDT)
-Received: from syed ([223.225.109.149])
-        by smtp.gmail.com with ESMTPSA id g10sm8352570pfh.212.2021.04.02.09.37.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Apr 2021 09:37:51 -0700 (PDT)
-Date:   Fri, 2 Apr 2021 22:07:36 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     bgolaszewski@baylibre.com
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, akpm@linux-foundation.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, linux-arch@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [RESEND PATCH v4 3/3] gpio: xilinx: Utilize generic bitmap_get_value
- and _set_value
-Message-ID: <d150bd18acc767c86c23ec06cc2abd5ca74ccbbb.1617380819.git.syednwaris@gmail.com>
-References: <cover.1617380819.git.syednwaris@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FZh3mSDQYQE4cryDjboNauvPGmXp8rg2ygYGDJ2001s=;
+        b=Ra/4vrGSZJufyD4yPtue9EppOeJyKs+G3sO4CMKy5u0pVFX6mv1gbtI9urIUIwic7A
+         nG2ec+KteZBC9JqBOBnfhkEMLs+x11vipiiBjHxXKTXE3hdXMC86aXjryEsNVPtglZfH
+         c1hyOSTH8TefiliBwZKMo2Ibpdv7ANU0dA59HKX5DwVpqGbjh+SF17Dn1Kq+zz+AaHkA
+         FK82D7TwJag/zjk6Z4L+pEOm0atIiRh5BnMY2vuVfcHsSy1+FatwKqJ9/CA+G4t29xc+
+         0mk4tzbitFs5ENHhtDhTKRTMeItVVbfnP/1PGQsQQRRxVdy2OWu7C4X34n1vXa6jik5H
+         Eufg==
+X-Gm-Message-State: AOAM532/KEy2EcKyJfnhIm07D2A+t+DMDWYA7MSWdwodgkHpCgZt6y4x
+        bAKQuETsMAmXevkO5jwqHGUrEkjfhKdBG/XwdaZEpRwvJHc=
+X-Google-Smtp-Source: ABdhPJxCTl+Sc6X0Z4Dse3zRWdNYRmPss0rGxu3wQV2szTOEDu9IZf9Q9PG0rFPR5VkGvD0TXyjN+3Q3K64Fclz9qjY=
+X-Received: by 2002:a17:90a:db49:: with SMTP id u9mr15258280pjx.181.1617384663176;
+ Fri, 02 Apr 2021 10:31:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1617380819.git.syednwaris@gmail.com>
 In-Reply-To: <cover.1617380819.git.syednwaris@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Apr 2021 20:30:45 +0300
+Message-ID: <CAHp75VdUJE_G7D8prW53_p9s06Qs_XzoF9AaYL5HRkDooKCUcw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v4 0/3] Introduce the for_each_set_nbits macro
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch reimplements the xgpio_set_multiple() function in
-drivers/gpio/gpio-xilinx.c to use the new generic functions:
-bitmap_get_value() and bitmap_set_value(). The code is now simpler
-to read and understand. Moreover, instead of looping for each bit
-in xgpio_set_multiple() function, now we can check each channel at
-a time and save cycles.
+On Fri, Apr 2, 2021 at 7:36 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> Hello Bartosz,
+>
+> Since this patchset primarily affects GPIO drivers, would you like
+> to pick it up through your GPIO tree?
+>
+> This patchset introduces a new generic version of for_each_set_nbits.
+> The previous version of for_each_set_clump8 used a fixed size 8-bit
+> clump, but the new generic version can work with clump of any size but
 
-Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
----
- drivers/gpio/gpio-xilinx.c | 52 +++++++++++++++++++-------------------
- 1 file changed, 26 insertions(+), 26 deletions(-)
+clumps
 
-diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-index b411d3156e0b..512198250b02 100644
---- a/drivers/gpio/gpio-xilinx.c
-+++ b/drivers/gpio/gpio-xilinx.c
-@@ -18,6 +18,7 @@
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
-+#include "gpiolib.h"
- 
- /* Register Offset Definitions */
- #define XGPIO_DATA_OFFSET   (0x0)	/* Data register  */
-@@ -161,35 +162,34 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
- {
- 	unsigned long flags;
- 	struct xgpio_instance *chip = gpiochip_get_data(gc);
--	int index = xgpio_index(chip, 0);
--	int offset, i;
- 
--	spin_lock_irqsave(&chip->gpio_lock, flags);
-+	u32 *state = chip->gpio_state;
-+	unsigned int *width = chip->gpio_width;
-+	DECLARE_BITMAP(old, 64);
-+	DECLARE_BITMAP(new, 64);
-+	DECLARE_BITMAP(changed, 64);
- 
--	/* Write to GPIO signals */
--	for (i = 0; i < gc->ngpio; i++) {
--		if (*mask == 0)
--			break;
--		/* Once finished with an index write it out to the register */
--		if (index !=  xgpio_index(chip, i)) {
--			xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
--				       index * XGPIO_CHANNEL_OFFSET,
--				       chip->gpio_state[index]);
--			spin_unlock_irqrestore(&chip->gpio_lock, flags);
--			index =  xgpio_index(chip, i);
--			spin_lock_irqsave(&chip->gpio_lock, flags);
--		}
--		if (__test_and_clear_bit(i, mask)) {
--			offset =  xgpio_offset(chip, i);
--			if (test_bit(i, bits))
--				chip->gpio_state[index] |= BIT(offset);
--			else
--				chip->gpio_state[index] &= ~BIT(offset);
--		}
--	}
-+	spin_lock_irqsave(&chip->gpio_lock, flags);
- 
--	xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
--		       index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
-+	/* Copy initial value of state bits into 'old' contiguously */
-+	bitmap_set_value(old, 64, state[0], width[0], 0);
-+	bitmap_set_value(old, 64, state[1], width[1], width[0]);
-+	/* Copy value from 'old' into 'new' with mask applied */
-+	bitmap_replace(new, old, bits, mask, gc->ngpio);
-+
-+	bitmap_from_arr32(old, state, 64);
-+	/* Update 'state' */
-+	state[0] = bitmap_get_value(new, 0, width[0]);
-+	state[1] = bitmap_get_value(new, width[0], width[1]);
-+	bitmap_from_arr32(new, state, 64);
-+	/* XOR operation sets only changed bits */
-+	bitmap_xor(changed, old, new, 64);
-+
-+	if (((u32 *)changed)[0])
-+		xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET, state[0]);
-+	if (((u32 *)changed)[1])
-+		xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-+			XGPIO_CHANNEL_OFFSET, state[1]);
- 
- 	spin_unlock_irqrestore(&chip->gpio_lock, flags);
- }
+> less than or equal to BITS_PER_LONG. The patchset utilizes the new macro
+> in several GPIO drivers.
+>
+> The earlier 8-bit for_each_set_clump8 facilitated a
+> for-loop syntax that iterates over a memory region entire groups of set
+> bits at a time.
+>
+> For example, suppose you would like to iterate over a 32-bit integer 8
+> bits at a time, skipping over 8-bit groups with no set bit, where
+> XXXXXXXX represents the current 8-bit group:
+>
+>     Example:        10111110 00000000 11111111 00110011
+>     First loop:     10111110 00000000 11111111 XXXXXXXX
+>     Second loop:    10111110 00000000 XXXXXXXX 00110011
+>     Third loop:     XXXXXXXX 00000000 11111111 00110011
+>
+> Each iteration of the loop returns the next 8-bit group that has at
+> least one set bit.
+>
+> But with the new for_each_set_nbits the clump size can be different from 8 bits.
+> Moreover, the clump can be split at word boundary in situations where word
+
+boundaries
+
+> size is not multiple of clump size. Following are examples showing the working
+> of new macro for clump sizes of 24 bits and 6 bits.
+>
+> Example 1:
+> clump size: 24 bits, Number of clumps (or ports): 10
+> bitmap stores the bit information from where successive clumps are retrieved.
+>
+>      /* bitmap memory region */
+>         0x00aa0000ff000000;  /* Most significant bits */
+>         0xaaaaaa0000ff0000;
+>         0x000000aa000000aa;
+>         0xbbbbabcdeffedcba;  /* Least significant bits */
+>
+> Different iterations of for_each_set_nbits:-
+> 'offset' is the bit position and 'clump' is the 24 bit clump from the
+> above bitmap.
+> Iteration first:        offset: 0 clump: 0xfedcba
+> Iteration second:       offset: 24 clump: 0xabcdef
+> Iteration third:        offset: 48 clump: 0xaabbbb
+> Iteration fourth:       offset: 96 clump: 0xaa
+> Iteration fifth:        offset: 144 clump: 0xff
+> Iteration sixth:        offset: 168 clump: 0xaaaaaa
+> Iteration seventh:      offset: 216 clump: 0xff
+> Loop breaks because in the end the remaining bits (0x00aa) size was less
+> than clump size of 24 bits.
+>
+> In above example it can be seen that in iteration third, the 24 bit clump
+> that was retrieved was split between bitmap[0] and bitmap[1]. This example
+> also shows that 24 bit zeroes if present in between, were skipped (preserving
+> the previous for_each_set_macro8 behaviour).
+>
+> Example 2:
+> clump size = 6 bits, Number of clumps (or ports) = 3.
+>
+>      /* bitmap memory region */
+>         0x00aa0000ff000000;  /* Most significant bits */
+>         0xaaaaaa0000ff0000;
+>         0x0f00000000000000;
+>         0x0000000000000ac0;  /* Least significant bits */
+>
+> Different iterations of for_each_set_nbits:
+> 'offset' is the bit position and 'clump' is the 6 bit clump from the
+> above bitmap.
+> Iteration first:        offset: 6 clump: 0x2b
+> Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+> Here 6 * 3 is clump size * no. of clumps.
+
+Bart, I would like to have a fresh look at this.
+
+(missed changelog)
+
+> Changes in v4:
+>  - [Patch 3/3]: Remove extra line and add few comments.
+>  - [Patch 3/3]: Use single lock (and unlock) call instead of two
+>    lock (and two unlock) calls.
+>  - [Patch 3/3]: Use bitmap_from_arr32() where applicalble.
+>  - [Patch 3/3]: Remove unnecessary 'const'.
+>
+> Changes in v3:
+>  - [Patch 1/3]: Rename for_each_set_clump to for_each_set_nbits.
+>  - [Patch 1/3]: Shift function definitions outside 'ifdef CONFIG_DEBUG_FS'
+>    macro guard to resolve build (linking) error in xilinx Patch[3/3].
+>  - [Patch 2/3]: Rename for_each_set_clump to for_each_set_nbits.
+>
+> Changes in v2:
+>  - [Patch 1/3]: Shift the macros and related functions to gpiolib inside
+>    gpio/. Reduce the visibilty of 'for_each_set_clump' to gpio.
+>  - [Patch 1/3]: Remove __builtin_unreachable and simply use return
+>    statement.
+>  - Remove tests from lib/test_bitmap.c as 'for_each_set_clump' is
+>    now localised inside gpio/ only.
+>
+> Syed Nayyar Waris (3):
+>   gpiolib: Introduce the for_each_set_nbits macro
+>   gpio: thunderx: Utilize for_each_set_nbits macro
+>   gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+>
+>  drivers/gpio/gpio-thunderx.c | 13 ++++--
+>  drivers/gpio/gpio-xilinx.c   | 52 ++++++++++-----------
+>  drivers/gpio/gpiolib.c       | 90 ++++++++++++++++++++++++++++++++++++
+>  drivers/gpio/gpiolib.h       | 28 +++++++++++
+>  4 files changed, 152 insertions(+), 31 deletions(-)
+>
+>
+> base-commit: e1b7033ecdac56c1cc4dff72d67cac25d449efc6
+> --
+> 2.29.0
+>
+
+
 -- 
-2.29.0
-
+With Best Regards,
+Andy Shevchenko
