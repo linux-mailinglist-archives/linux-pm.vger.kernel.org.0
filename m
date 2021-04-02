@@ -2,86 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB53352A7D
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 14:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91505352A7F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 14:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhDBMO2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Apr 2021 08:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbhDBMO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 08:14:28 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99609C0613E6;
-        Fri,  2 Apr 2021 05:14:27 -0700 (PDT)
+        id S229599AbhDBMQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 08:16:22 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56616 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229932AbhDBMQV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 08:16:21 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 4EB681F46A50
+        with ESMTPSA id 322E61F46A50
 Received: by earth.universe (Postfix, from userid 1000)
-        id 2F4823C0C96; Fri,  2 Apr 2021 14:14:24 +0200 (CEST)
-Date:   Fri, 2 Apr 2021 14:14:24 +0200
+        id 872E93C0C96; Fri,  2 Apr 2021 14:16:17 +0200 (CEST)
+Date:   Fri, 2 Apr 2021 14:16:17 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Timon Baetz <timon.baetz@protonmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v2 0/1] charger-supply for max8997_charger
-Message-ID: <20210402121424.2imblhsxrkocjg7n@earth.universe>
-References: <20210329143715.806981-1-timon.baetz@protonmail.com>
+To:     Milan Djurovic <mdjurovic@zohomail.com>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: 88pm860x_battery: Remove unnecessary int
+ for long long
+Message-ID: <20210402121617.pi5mg5ipcxk7rrds@earth.universe>
+References: <20210327073605.7626-1-mdjurovic@zohomail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wbfo3p5zroxgn7zs"
+        protocol="application/pgp-signature"; boundary="qr4ugwfiylzlrnog"
 Content-Disposition: inline
-In-Reply-To: <20210329143715.806981-1-timon.baetz@protonmail.com>
+In-Reply-To: <20210327073605.7626-1-mdjurovic@zohomail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---wbfo3p5zroxgn7zs
+--qr4ugwfiylzlrnog
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Mar 29, 2021 at 02:37:47PM +0000, Timon Baetz wrote:
-> Based on the discussion from [0] add an optional DT property to retrieve
-> the regulator used for charging control in the max8997_charger driver.
+On Sat, Mar 27, 2021 at 12:36:05AM -0700, Milan Djurovic wrote:
+> Change 'long long int' to 'long long' because the int is unnecessary,
+> as suggested by checkpatch.pl.
 >=20
-> [0] https://lore.kernel.org/lkml/20210118124505.GG4455@sirena.org.uk/
->=20
-> Changes in v2:
->=20
-> * drop accepted patches
->=20
-> Timon Baetz (1):
->   power: supply: max8997_charger: Switch to new binding
->=20
->  drivers/power/supply/max8997_charger.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+> Signed-off-by: Milan Djurovic <mdjurovic@zohomail.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---wbfo3p5zroxgn7zs
+>  drivers/power/supply/88pm860x_battery.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supp=
+ly/88pm860x_battery.c
+> index 590da88a17a2..f3f3f8cd1a7f 100644
+> --- a/drivers/power/supply/88pm860x_battery.c
+> +++ b/drivers/power/supply/88pm860x_battery.c
+> @@ -109,8 +109,8 @@ struct pm860x_battery_info {
+>  };
+> =20
+>  struct ccnt {
+> -	unsigned long long int pos;
+> -	unsigned long long int neg;
+> +	unsigned long long pos;
+> +	unsigned long long neg;
+>  	unsigned int spos;
+>  	unsigned int sneg;
+> =20
+> --=20
+> 2.31.0
+>=20
+
+--qr4ugwfiylzlrnog
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBnCpoACgkQ2O7X88g7
-+ppTag/+IkqQNu9jDkrBooJ96hNXWxts8q4CbwpUn7dknkpGC7Ti2OOWYaeG55lo
-BipXr6Seuiv4Ug9vasHK2PCy629aBfh6k/FbNus//iAgPl9dZH1OdPKJr6tw3NMf
-zpPQWC2LeVAAgchUo7OxGyEXWDJOIOd01IIjwx+7pqyIU0/IrBbLUvlsYKyE4OtK
-x1UQ2wZfE5j7ZTFiB/SXcJRUxBvESEURbvCY1fzVoFaMGEo+qDuE+21yDB0saJ2P
-wlCz4LhNuHm7CCX8XhWDaibFWpsu8i7i7SSTzJPmICg1gCrl8/px2AZCjoQWJ+o8
-SpyjZp6KmOHDUyirh4Ne9iFzrdNVLW97OvQ4aU5Z5cHBgtocbdhIH5sIHZHmJtbc
-jnd8stIMeSuyA8SpQ+yk/GcR1Wn7fdMO0EopZ2NMth29Mh4t6/XRta7IpVMt99kl
-3s+mAp3NCtkXNNzhrgVEvC9l2jb6D0NWsJaZPL///iuUcGbC7md+Y7KYzlR53QFg
-9u8kF292MxQ1oZphJP9uicrGC0PycuR/F/lIZbn9JXUphJNwTjAoAZ1wYGXnppzn
-YtKkzvxkcIbA0Jng9as00P5J1WphAElxkIrUmQl9EJO+mRMD7x2HoBkFPgd0ZX/j
-cHSYYLVsWz/clGfxHmoAab9qw40YqaazVbsdYCt/zh0RjZm0ZXg=
-=MzoX
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBnCxEACgkQ2O7X88g7
++poW3Q//TArHuylecXQGYa+h8lsaJNj2ROoDzz75WA7uibHXJ8avyFj8nvW9k6rt
+0lhF/WeV1bsC6n07nLS/vDU9cFyzlZKjrQweAdBRuHzR4U77/4EgnLv8Ovw1+AxA
+V75AbVcoIfouTdcEH7BdZjygOnww7FgQeBG6LcUWYBZ+j2vUPgVu3EwL7mnoHnLp
+sVRGaqTqLEe+8mW4g7tcPH+bzEGLlZCSasiNZq5BYN5EHDgH3RRdC885B569kbpj
+KuEjV4R86LJ4tEDz4DrKf8rCDuEBIZMc1COQDbP4mqpenwkNvjpKAkBcYnJajD4Z
++s9SCT7HXS3IuLuSUUJHSf6j7DXYRvfkupI2hXtONYfns8SYeOhFAY8g+puynFtR
+wFSrrPfmZHc+brhe9s5VDTfAY5FBv0XJaOJS8SWE0dR732NltWtZ0m2ZAZlGPTdP
+o99Qhv/dQKuUo30694W3R/y9FPe+qbIPMtHHt+b7XnpEGv2pEqZN2k5da4i58usD
+QbdrXiHOtvGyeuGSFIHGHPDNSpGZPpag4Eqf77mWTRkU30fftYm++c6jzdZP/XbY
+uti3fnEgfUehiG/lRSBamEd5kSvEWSkpSvovV1VsBJbPASODOF1Csb/f/Hq19sFs
+UztrX797x6nFOJRU0NPA6KZTxYuGDqhkjQT/985Slx5o0/8l1cE=
+=peoA
 -----END PGP SIGNATURE-----
 
---wbfo3p5zroxgn7zs--
+--qr4ugwfiylzlrnog--
