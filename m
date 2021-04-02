@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C253529EE
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 12:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22BC3529F4
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 12:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhDBKyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Apr 2021 06:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S235064AbhDBKy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 06:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbhDBKyN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 06:54:13 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B77C0613E6
-        for <linux-pm@vger.kernel.org>; Fri,  2 Apr 2021 03:54:11 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id d191so2335238wmd.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 Apr 2021 03:54:11 -0700 (PDT)
+        with ESMTP id S229605AbhDBKy3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 06:54:29 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA693C0613E6
+        for <linux-pm@vger.kernel.org>; Fri,  2 Apr 2021 03:54:27 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e18so4405214wrt.6
+        for <linux-pm@vger.kernel.org>; Fri, 02 Apr 2021 03:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
         bh=qR3Y/pQ3iKdcYn1dnHBVpeHWq1US+Hbl+nSLawsbjwU=;
-        b=sz6zFcYtmrpm1jdkM3cQR+MBVCcQWt1uUObxKF4nf0BPq3HftfKsV5f6gNrH6J8MHk
-         Rf9asp2g7TuoanHE4J8p9cLYDm5+Q9sJjlAxDAfI3sZMYFfzRArqsTxKxiHD7bYElWng
-         EYzBVTx2tmYUtR0GM4Ut26WVYZLUv3Twz1Nk0AiOLtDBtD2v9jNcc+uK6UVFIac9SdJT
-         Fq8nBKgSJR1pHceSjfd/LjYtBy1RKAz2dOryCdOv2lj43BErbTYplTHuLgQOzE6p0Ml6
-         8o9bYrHkJX7O/0j+Ye+I9Phb0UQB/2PhYHCJErDBakApXhYTtCZBmfhk3EhzOG28Rz2i
-         OW/w==
+        b=twT2vrbqFmAZXeUPI1nfAb035BOgX4bEwyiHRWgXaXOJbJsBwGII6BD0bVACSU3hgU
+         7SkNv1OWiYSGtKsGovqMNpJ8St9PFg3awG/ydZkftko0wr2ebVvQBON0n7tbcuOvja56
+         HeClfafXLdRlX/yepCtw6tPMP0GZQZljOWudswAZ4ox96INmA4XlaR/GYlzhkxbIoJ5z
+         557WnwfyBw7ydq9PvJNHu+0rYNt0PBUmB+a09RxA++aWMpi6pNuHniCnFAmY3SRDYbTq
+         pV1VnvOF9mZJevrnHz7EeTRZzShTuYnN9sH98wutchdX2aOD1crApcVAfCq1cVpCLsD4
+         wlUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
         bh=qR3Y/pQ3iKdcYn1dnHBVpeHWq1US+Hbl+nSLawsbjwU=;
-        b=B0QxXwE6iw88YRGcBV4RRJQNHTcfXiHpftmpnTG8tT961KAddWLPak+EDoi4y/8Iuc
-         PJ7hx5EX2IQBTDAz4OzpEJMHFEuq8+ssVLrcKB7qGnuxtANOOfBkEKQZ73va/sVgpF3d
-         N7rev8vd7NaLqA7YIvjbRRseXlZg6plDUzHLoDsIiIsZQ1+ZV5jANRZspqSjNQbcSKcV
-         shx5xZfdcrOoTDrSwjlxNE0NjslHDzQUrxvxaf4IfqH6puOk86Hxhw0XJ1Cz9ew6LbTy
-         wPg1xWFuqqHwzYXcN/scWcSKlgQCAxRuRC88EpdJ6vHIXKX7rl/5jkJ9pgnEca6i231n
-         7HRw==
-X-Gm-Message-State: AOAM530ru3kq6fkVTmLf+YjBBL6FcxtkkyKJ+T5CsrCKvW2ZuWdmbpG0
-        huMh5/ycqCrMQcDFRlo7oMMg7g==
-X-Google-Smtp-Source: ABdhPJzNt9ON5Lr98AJbzOpCk7bEodVqJHbIvSzsrR+I3Hlup2gA3n3Hud/5PAGaf5dWDp6vpsEQhw==
-X-Received: by 2002:a7b:cb55:: with SMTP id v21mr12229721wmj.188.1617360850061;
-        Fri, 02 Apr 2021 03:54:10 -0700 (PDT)
+        b=UW4BIsId1i6PYDErOIwJhehWx+2tFZw8yA2Qrry6vExYgb+sy09oHGYjelXHvL9OfZ
+         zt0KgXyykV6ghJwsDLdtwDep+tN5mdMHrXNljhi0/TaG64/QuboS6JnlwTGhpK7rOd70
+         794ZX6pli+cp6t9Ql8qc6C5b9OABJxXZbvkZcM8OAZ+24urlXLFYalkEU4rjRj7D/2uA
+         1+1FUWUrkusYr28WD2w9J427PRf/pe8pndTSdSNaNTSOzQis07Lm50HZTKQKu8svQb1T
+         cfmWzI6GV7saJqxyj2pbYcDI5hqUow2ODA93vXyuqkMyLWqTWgigTtrf26tahhfLJS5z
+         h9Jw==
+X-Gm-Message-State: AOAM533GNCpV3E4taDx5HaN9lwdtYPiVZPLhI5dgpt3zHGqoTedNBzW9
+        oLZHy6pjlNyBUUs4vTauUdpjIw==
+X-Google-Smtp-Source: ABdhPJx44r/f06WsoxqUjxjFwI2qefInJEA+qqUn6GtWxCII+f5urhqpd7qB4QakQ5OgaNl1uCq8UA==
+X-Received: by 2002:a5d:6ca6:: with SMTP id a6mr14484806wra.179.1617360866337;
+        Fri, 02 Apr 2021 03:54:26 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:c9d5:e4dc:e7c5:5fcf? ([2a01:e34:ed2f:f020:c9d5:e4dc:e7c5:5fcf])
-        by smtp.googlemail.com with ESMTPSA id m15sm13374681wrp.96.2021.04.02.03.54.08
+        by smtp.googlemail.com with ESMTPSA id b15sm14429493wmd.41.2021.04.02.03.54.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Apr 2021 03:54:09 -0700 (PDT)
+        Fri, 02 Apr 2021 03:54:25 -0700 (PDT)
 Subject: Re: [PATCH v6 7/7] powercap/drivers/dtpm: Allow dtpm node device
  creation through configfs
 To:     Greg KH <gregkh@linuxfoundation.org>
@@ -57,8 +57,8 @@ References: <20210401183654.27214-1-daniel.lezcano@linaro.org>
  <20210401183654.27214-7-daniel.lezcano@linaro.org>
  <YGYg6ZeZ1181/pXk@kroah.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <ae246c6c-10cf-949e-c5b0-eff3d290c50b@linaro.org>
-Date:   Fri, 2 Apr 2021 12:54:08 +0200
+Message-ID: <d34bd0c8-f0fe-ada4-ebc8-433df51aaefa@linaro.org>
+Date:   Fri, 2 Apr 2021 12:54:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
