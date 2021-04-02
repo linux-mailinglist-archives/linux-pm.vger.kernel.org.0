@@ -2,131 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F841352D1F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 18:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BF8352D53
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Apr 2021 18:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbhDBPzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Apr 2021 11:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbhDBPyy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 11:54:54 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8668CC061797
-        for <linux-pm@vger.kernel.org>; Fri,  2 Apr 2021 08:54:29 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id x7so5091707wrw.10
-        for <linux-pm@vger.kernel.org>; Fri, 02 Apr 2021 08:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ti7CnZ58ioPvRJAxkKcVR48hDbgDyg23JEYsm8ZJBog=;
-        b=iSRjkTqLZUuJikPDzHYiXZ8jIF/uxsMAUYe4ao54ac2AYPnBjtwTdT3D7BomFgr1fe
-         q47RUynjmfMwBWCvyHhC7HwslAUPDbmvLOmE17nksDiLS+3JJxxM1DRJ0nwZRVlDmMWT
-         vm5HWYIyxaHdBCHzoBL66Shnbt0Zd52W88Lifkh1bFuydGOvx3lJU1Ed+zl55W33xRjF
-         IebEDt1lmKXGs92j7jZhJnwIKuDd03ALBk75RimAeFcqxcBs/u1aJWhV/jkPSvUfpx+e
-         os5TieoYDXBt6OrWbLDClxOabOCD237MiE1Vk59hOZlCVVr7ofnFC6E6KJfzLMKUpmNj
-         jVkQ==
+        id S236448AbhDBQBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Apr 2021 12:01:55 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:37435 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236144AbhDBQBy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Apr 2021 12:01:54 -0400
+Received: by mail-ot1-f46.google.com with SMTP id t23-20020a0568301e37b02901b65ab30024so5324295otr.4;
+        Fri, 02 Apr 2021 09:01:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ti7CnZ58ioPvRJAxkKcVR48hDbgDyg23JEYsm8ZJBog=;
-        b=YovrV6uW4A8Su7nopzhznwvgYDz8Sh8Sn07Kc5xTu9pDFecHFCswYhcZynjVhTnaZK
-         YXIdydiklVMI7CFhTKBNvHr2snD6KAImVtAWdETJSU0EQNokWXwGXOC+7wvHpFMubFz0
-         s2O3Zd09elwWCZ6chstoi/8//2iO8zYcTybG+q99AHy1Ss2IrcGzokytbjG8lwZ7b4jH
-         Ud+FER57Ba43YXwdcz1qXuAFY4xn5tFcqeXnCA27r+sFNStVL1D9n2XpTpUTO2urH8qz
-         q4f4XbObCrjCZqVq3fAW06Q+nt3v8/kn/GtB/7ywOu1Z29txWBB/KVMWzGFm1xl02IXd
-         24kQ==
-X-Gm-Message-State: AOAM531OUjIkxQrEay1R4WWtPytahI3riDy0CXZ9/iijQmLGSPn7dbm9
-        g44D6rTKNpBx+/0/uD2MkN3sxA==
-X-Google-Smtp-Source: ABdhPJzaVDJiLDo9IUQhDeV/SCNHxTwjdoKMLCtOajCASmmDBBxLQozwfEAS3QNWgYqpTWJRTQho5A==
-X-Received: by 2002:adf:f742:: with SMTP id z2mr15552411wrp.130.1617378868075;
-        Fri, 02 Apr 2021 08:54:28 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:34f1:44bb:31bf:7aaf? ([2a01:e34:ed2f:f020:34f1:44bb:31bf:7aaf])
-        by smtp.googlemail.com with ESMTPSA id j123sm12943231wmb.1.2021.04.02.08.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Apr 2021 08:54:27 -0700 (PDT)
-Subject: Re: [PATCH 1/2] thermal: power_allocator: maintain the device
- statistics from going stale
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, amitk@kernel.org, rui.zhang@intel.com
-References: <20210331163352.32416-1-lukasz.luba@arm.com>
- <20210331163352.32416-2-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b27e0c79-de27-f9b1-ad16-17825b302615@linaro.org>
-Date:   Fri, 2 Apr 2021 17:54:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Fief/Icmx2DGoSQURBgLOaPVIgMEWoRAyM9pQI7OxwU=;
+        b=BX0Fx83TrYi2a1EQt5Wsol39Yl8iuSL07OrenUzkc8kMIYiVM13txa00Kohcgx1xrD
+         ksqD4STYzsnRNLhB4K2Cm3jbCK+QVFs4yXXjbzeV5IUMcBNvSxMI9UiJ5EV6sAJp1tWe
+         eWgogkoVYZf+dCCdI0CsZApzQpejtfon9/Kv98QNp7UzgwgSgSYeM9wyY3GwdrnD9ZJv
+         8zdm3ZtaMIHcjMdOdlcx+fVjUtg3JUz+n72Kipu3tSwib/DsFpQB/xb8zkeRKhElLU0r
+         SpnNWrb922mI3VIXJj6bVg7XrlwImM1XlK2jOftS26U7db3Y0cXYK9c8NmqMjlDcf3Oq
+         09+w==
+X-Gm-Message-State: AOAM531FNEdT5zcfygXQAW6W37DGDftLinH+2SMHs4Ch4PKVbt9z5fhR
+        22vqdEdJJ3Omy42TghqhxOTCGYUUSJO9ggJu1fbI4lKCFEk=
+X-Google-Smtp-Source: ABdhPJxGVytUzz97GC3qR4bJBOLOfTgO5Iq7otUs1Z9p+EwOiax4h/DTxzD3SJtIn+cFAag8/oycp+zTt/rmKNP9GmM=
+X-Received: by 2002:a9d:4811:: with SMTP id c17mr12176225otf.206.1617379313308;
+ Fri, 02 Apr 2021 09:01:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210331163352.32416-2-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Apr 2021 18:01:42 +0200
+Message-ID: <CAJZ5v0h=RmqSfW-F0YHsbDeg191ut4ZS7SN9dcCAFg_+EoQqcQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.12-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/03/2021 18:33, Lukasz Luba wrote:
-> When the temperature is below the first activation trip point the cooling
-> devices are not checked, so they cannot maintain fresh statistics. It
-> leads into the situation, when temperature crosses first trip point, the
-> statistics are stale and show state for very long period. 
+Hi Linus,
 
-Can you elaborate the statistics you are referring to ?
+Please pull from the tag
 
-I can understand the pid controller needs temperature but I don't
-understand the statistics with the cooling device.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.12-rc6
 
+with top-most commit ac1790ad78f8f0cf9a588ffb530c700ad758e8b6
 
-> This has impact
-> on IPA algorithm calculation and wrong decisions. Thus, check the cooling
-> devices even when the temperature is low, to refresh these statistics.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/thermal/gov_power_allocator.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 2802a0e13c88..0cbd10cab193 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -575,15 +575,27 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
->  {
->  	struct thermal_instance *instance;
->  	struct power_allocator_params *params = tz->governor_data;
-> +	u32 req_power;
->  
->  	mutex_lock(&tz->lock);
->  	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-> +		struct thermal_cooling_device *cdev = instance->cdev;
-> +
->  		if ((instance->trip != params->trip_max_desired_temperature) ||
->  		    (!cdev_is_power_actor(instance->cdev)))
->  			continue;
->  
->  		instance->target = 0;
->  		mutex_lock(&instance->cdev->lock);
-> +		/*
-> +		 * Call for updating the cooling devices local stats and avoid
-> +		 * periods of dozen of seconds when those have not been
-> +		 * maintained. The long period would come into the first check
-> +		 * when lower threshold is crossed. Thus, limit it to single
-> +		 * one longer polling period.
-> +		 */
-> +		cdev->ops->get_requested_power(cdev, &req_power);
-> +
->  		instance->cdev->updated = false;
->  		mutex_unlock(&instance->cdev->lock);
->  		thermal_cdev_update(instance->cdev);
-> 
+ Merge branch 'pm-cpufreq'
+
+on top of commit a5e13c6df0e41702d2b2c77c8ad41677ebb065b3
+
+ Linux 5.12-rc5
+
+to receive power management fixes for 5.12-rc6.
+
+These fix a race condition and an ordering issue related to
+using device links in the runtime PM framework and two
+kerneldoc comments in cpufreq.
+
+Specifics:
+
+ - Fix race condition related to the handling of supplier devices
+   during consumer device probe and fix the order of decrementation
+   of two related reference counters in the runtime PM core code
+   handling supplier devices (Adrian Hunter).
+
+ - Fix kerneldoc comments in cpufreq that have not been updated along
+   with the functions documented by them (Geert Uytterhoeven).
+
+Thanks!
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+---------------
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Adrian Hunter (2):
+      PM: runtime: Fix ordering in pm_runtime_get_suppliers()
+      PM: runtime: Fix race getting/putting suppliers at probe
+
+Geert Uytterhoeven (1):
+      cpufreq: Fix scaling_{available,boost}_frequencies_show() comments
+
+---------------
+
+ drivers/base/power/runtime.c | 10 ++++++++--
+ drivers/cpufreq/freq_table.c |  4 ++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
