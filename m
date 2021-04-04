@@ -2,65 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC733539D3
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Apr 2021 22:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF253539D6
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Apr 2021 22:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhDDUfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Apr 2021 16:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S231614AbhDDUfU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Apr 2021 16:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbhDDUfR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Apr 2021 16:35:17 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CB8C061756;
-        Sun,  4 Apr 2021 13:35:11 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id n2so8089577ejy.7;
-        Sun, 04 Apr 2021 13:35:11 -0700 (PDT)
+        with ESMTP id S231601AbhDDUfS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Apr 2021 16:35:18 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA970C061788;
+        Sun,  4 Apr 2021 13:35:12 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id w3so14337866ejc.4;
+        Sun, 04 Apr 2021 13:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fu81fKlLAFW3uWu/bLxRNDUvKBG2yYeAnb3WyHS2HYs=;
-        b=oHdeN+HWREMDFKHEiq6vJ1juBIUqR+r8sa3Z/GUyIpYBuy31O7khXOlOsiUUt+VWp5
-         9epJ7pAVKhC09oU5ZSWD+gRKgg7L0ZvxETIlnpt19EAIowKK/XXIK5CZI3tOUiTEIoll
-         hH2u8o9/40VqiCU0MUgqv7jJiC2hEeL8duMXsv6mC28sXEUFm0PON4zUBAzmTw6+kfuN
-         gukrwp1eLGhJ8+NhgKN1uohFWGftr9nE1DigCMDE5vnOv6sFFhGrXSaKeJc5p9hs1pJ9
-         VZtG5+jnI3ck52YAadeNS3Zd0tVKo/X5Osq0ZoumBmgRWamVr+cYXUwtsOEU+DmaD9ka
-         0SIg==
+        bh=EDfaDBQwdj1r2Yr+BxzE8VnBhjB9D9cT/n8UjW/MV9w=;
+        b=Aze1QDeonXwMNGhzRavTs7Eth2conRKTpO33XAZrCeDHOo7ayejcQ7Cvwr/wmvkv2a
+         gvZn4KTuH/Mo+EJcsuHKNiYg7EP/reoW9ulVUBUPCy5nVR2HpQIeXSP7sH6nwHeo4FUZ
+         WVsKbyVOQLJ2ukQHBACMcXr+IpXuG0Om/BMep+HVtJ4ALxw48IvRklgAxawAumz4uPYx
+         KDi8wnDt/2Jg8rFuh/RTOgGlE7OLtwnGQCU7agK2eA62XApDTvfg2W1zXxv/es3Kr16y
+         hnjRBaHV6lAmVUQmW+jOVjhv5mDURsvnJu2io67uzwOM7IShfSOiJTQmrMES771t1/zp
+         n6sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fu81fKlLAFW3uWu/bLxRNDUvKBG2yYeAnb3WyHS2HYs=;
-        b=evQd89RYShBdBUEnxikUtYSn2p9vjUblOtvnhB+D0CjXuJHDicEO8vBKVSRSp0UoKW
-         jfTKqs5xQwi9GT1tCwLMvTt+Xr4bro+sNgLWxtHyUoWKem1J+EDSwlkB3tq0vc73BVZ1
-         E5BI2pYBTTspPr90IqwBkGNSWZx+4dKFD4++LB1C/OpA8CENiReiYd56fKADfPUVgAQx
-         3/+15Tfu+cB4k8bZeCMRB20nZ00z1axxPNudcJHrGRm/bSAPu7hSVH4i8d2UiHOW3Anu
-         RFzKKyYtJTWyC2YrN0uCa0VzQqcCoaij31WLgIlHFb3xw/1yUMLUWpmMdcAW7AWmvGR2
-         e2QQ==
-X-Gm-Message-State: AOAM533SHZR0ka/6m+EucLaGIjIHDRr10COBJ3L5rKRSukykNpEWuGOq
-        IHC4FsOtXVLn9/4/WJHiFVc=
-X-Google-Smtp-Source: ABdhPJzp5wanaQiKFAM8qZJ+bJAEvYco5nxRmyhNphZu+F5jf+tmtCqL8CdetYRJS4jVjme7V/ttzg==
-X-Received: by 2002:a17:906:9501:: with SMTP id u1mr25435512ejx.324.1617568509727;
-        Sun, 04 Apr 2021 13:35:09 -0700 (PDT)
+        bh=EDfaDBQwdj1r2Yr+BxzE8VnBhjB9D9cT/n8UjW/MV9w=;
+        b=XrqpofZJ8VTJhFeoPUIru2AbEhip/x9AYhokJxgmFNIgingd+eMAIDM6R8JXImQ+CX
+         IWTur4eG+nJk4EWZPmkBc2zWyZD/jsFBodWYpyCiGFh/ufiJIbGy155dFhwCfCzh3qh5
+         3iorHDLWArhWPBGURFUJ+ySRhAKaKazxfveKmzuBJATS7YZoxs6yKlLKTZLqtMdw+HI7
+         k74mMCCTIg4Qdk8ZAVUay/ktPZwEBNKJZDhDuyGlHNSk8W6XBxSD/uwi8eihHXvJPXIs
+         pXgM01242XD5a8x2d8pxGS7qjfScsthq7xjH8w6OnaOhVDonO9GQJzFq3j/1VbvXF4ZK
+         TTLg==
+X-Gm-Message-State: AOAM530fC8cXdNSxYIdooZ9Iq7HWpYC4iljuikY5/BiyEw/uEcBGJKai
+        N2A6kELtN7h5XoFBnuIOHy8=
+X-Google-Smtp-Source: ABdhPJw7a7eaH7hcklDqCOBU6qUiRGu42Eoj2Pptad1kLUo0DqoudmQ+L+fiNxvMZIgyYLUqwi/SFA==
+X-Received: by 2002:a17:906:ce4e:: with SMTP id se14mr12246031ejb.54.1617568511454;
+        Sun, 04 Apr 2021 13:35:11 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (host-79-52-251-187.retail.telecomitalia.it. [79.52.251.187])
-        by smtp.googlemail.com with ESMTPSA id s4sm7191140ejf.108.2021.04.04.13.35.08
+        by smtp.googlemail.com with ESMTPSA id s4sm7191140ejf.108.2021.04.04.13.35.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Apr 2021 13:35:09 -0700 (PDT)
+        Sun, 04 Apr 2021 13:35:11 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Thara Gopinath <thara.gopinath@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v14 3/9] drivers: thermal: tsens: Convert msm8960 to reg_field
-Date:   Sun,  4 Apr 2021 16:48:17 +0200
-Message-Id: <20210404144823.31867-4-ansuelsmth@gmail.com>
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v14 4/9] drivers: thermal: tsens: Use init_common for msm8960
+Date:   Sun,  4 Apr 2021 16:48:18 +0200
+Message-Id: <20210404144823.31867-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210404144823.31867-1-ansuelsmth@gmail.com>
 References: <20210404144823.31867-1-ansuelsmth@gmail.com>
@@ -70,122 +70,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert msm9860 driver to reg_field to use the init_common
-function.
+Use init_common and drop custom init for msm8960.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
 ---
- drivers/thermal/qcom/tsens-8960.c | 80 ++++++++++++++++++++++++++++++-
- 1 file changed, 79 insertions(+), 1 deletion(-)
+ drivers/thermal/qcom/tsens-8960.c | 52 +------------------------------
+ 1 file changed, 1 insertion(+), 51 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-index 2a28a5af209e..3f4fc1ffe679 100644
+index 3f4fc1ffe679..86585f439985 100644
 --- a/drivers/thermal/qcom/tsens-8960.c
 +++ b/drivers/thermal/qcom/tsens-8960.c
-@@ -51,11 +51,22 @@
- #define MIN_LIMIT_TH		0x0
- #define MAX_LIMIT_TH		0xff
- 
--#define S0_STATUS_ADDR		0x3628
- #define INT_STATUS_ADDR		0x363c
- #define TRDY_MASK		BIT(7)
- #define TIMEOUT_US		100
- 
-+#define S0_STATUS_OFF		0x3628
-+#define S1_STATUS_OFF		0x362c
-+#define S2_STATUS_OFF		0x3630
-+#define S3_STATUS_OFF		0x3634
-+#define S4_STATUS_OFF		0x3638
-+#define S5_STATUS_OFF		0x3664  /* Sensors 5-10 found on apq8064/msm8960 */
-+#define S6_STATUS_OFF		0x3668
-+#define S7_STATUS_OFF		0x366c
-+#define S8_STATUS_OFF		0x3670
-+#define S9_STATUS_OFF		0x3674
-+#define S10_STATUS_OFF		0x3678
-+
- static int suspend_8960(struct tsens_priv *priv)
- {
- 	int ret;
-@@ -269,6 +280,71 @@ static int get_temp_8960(const struct tsens_sensor *s, int *temp)
- 	return -ETIMEDOUT;
+@@ -173,56 +173,6 @@ static void disable_8960(struct tsens_priv *priv)
+ 	regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
  }
  
-+static struct tsens_features tsens_8960_feat = {
-+	.ver_major	= VER_0,
-+	.crit_int	= 0,
-+	.adc		= 1,
-+	.srot_split	= 0,
-+	.max_sensors	= 11,
-+};
-+
-+static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
-+	/* ----- SROT ------ */
-+	/* No VERSION information */
-+
-+	/* CNTL */
-+	[TSENS_EN]     = REG_FIELD(CNTL_ADDR,  0, 0),
-+	[TSENS_SW_RST] = REG_FIELD(CNTL_ADDR,  1, 1),
-+	/* 8960 has 5 sensors, 8660 has 11, we only handle 5 */
-+	[SENSOR_EN]    = REG_FIELD(CNTL_ADDR,  3, 7),
-+
-+	/* ----- TM ------ */
-+	/* INTERRUPT ENABLE */
-+	/* NO INTERRUPT ENABLE */
-+
-+	/* Single UPPER/LOWER TEMPERATURE THRESHOLD for all sensors */
-+	[LOW_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR,  0,  7),
-+	[UP_THRESH_0]    = REG_FIELD(THRESHOLD_ADDR,  8, 15),
-+	/* MIN_THRESH_0 and MAX_THRESH_0 are not present in the regfield
-+	 * Recycle CRIT_THRESH_0 and 1 to set the required regs to hardcoded temp
-+	 * MIN_THRESH_0 -> CRIT_THRESH_1
-+	 * MAX_THRESH_0 -> CRIT_THRESH_0
-+	 */
-+	[CRIT_THRESH_1]   = REG_FIELD(THRESHOLD_ADDR, 16, 23),
-+	[CRIT_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR, 24, 31),
-+
-+	/* UPPER/LOWER INTERRUPT [CLEAR/STATUS] */
-+	/* 1 == clear, 0 == normal operation */
-+	[LOW_INT_CLEAR_0]   = REG_FIELD(CNTL_ADDR,  9,  9),
-+	[UP_INT_CLEAR_0]    = REG_FIELD(CNTL_ADDR, 10, 10),
-+
-+	/* NO CRITICAL INTERRUPT SUPPORT on 8960 */
-+
-+	/* Sn_STATUS */
-+	[LAST_TEMP_0]  = REG_FIELD(S0_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_1]  = REG_FIELD(S1_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_2]  = REG_FIELD(S2_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_3]  = REG_FIELD(S3_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_4]  = REG_FIELD(S4_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_5]  = REG_FIELD(S5_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_6]  = REG_FIELD(S6_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_7]  = REG_FIELD(S7_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_8]  = REG_FIELD(S8_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_9]  = REG_FIELD(S9_STATUS_OFF,  0,  7),
-+	[LAST_TEMP_10] = REG_FIELD(S10_STATUS_OFF, 0,  7),
-+
-+	/* No VALID field on 8960 */
-+	/* TSENS_INT_STATUS bits: 1 == threshold violated */
-+	[MIN_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 0, 0),
-+	[LOWER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 1, 1),
-+	[UPPER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 2, 2),
-+	/* No CRITICAL field on 8960 */
-+	[MAX_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 3, 3),
-+
-+	/* TRDY: 1=ready, 0=in progress */
-+	[TRDY] = REG_FIELD(INT_STATUS_ADDR, 7, 7),
-+};
-+
- static const struct tsens_ops ops_8960 = {
- 	.init		= init_8960,
- 	.calibrate	= calibrate_8960,
-@@ -282,4 +358,6 @@ static const struct tsens_ops ops_8960 = {
- struct tsens_plat_data data_8960 = {
- 	.num_sensors	= 11,
- 	.ops		= &ops_8960,
-+	.feat		= &tsens_8960_feat,
-+	.fields		= tsens_8960_regfields,
+-static int init_8960(struct tsens_priv *priv)
+-{
+-	int ret, i;
+-	u32 reg_cntl;
+-
+-	priv->tm_map = dev_get_regmap(priv->dev, NULL);
+-	if (!priv->tm_map)
+-		return -ENODEV;
+-
+-	/*
+-	 * The status registers for each sensor are discontiguous
+-	 * because some SoCs have 5 sensors while others have more
+-	 * but the control registers stay in the same place, i.e
+-	 * directly after the first 5 status registers.
+-	 */
+-	for (i = 0; i < priv->num_sensors; i++) {
+-		if (i >= 5)
+-			priv->sensor[i].status = S0_STATUS_ADDR + 40;
+-		priv->sensor[i].status += i * 4;
+-	}
+-
+-	reg_cntl = SW_RST;
+-	ret = regmap_update_bits(priv->tm_map, CNTL_ADDR, SW_RST, reg_cntl);
+-	if (ret)
+-		return ret;
+-
+-	if (priv->num_sensors > 1) {
+-		reg_cntl |= SLP_CLK_ENA | (MEASURE_PERIOD << 18);
+-		reg_cntl &= ~SW_RST;
+-		ret = regmap_update_bits(priv->tm_map, CONFIG_ADDR,
+-					 CONFIG_MASK, CONFIG);
+-	} else {
+-		reg_cntl |= SLP_CLK_ENA_8660 | (MEASURE_PERIOD << 16);
+-		reg_cntl &= ~CONFIG_MASK_8660;
+-		reg_cntl |= CONFIG_8660 << CONFIG_SHIFT_8660;
+-	}
+-
+-	reg_cntl |= GENMASK(priv->num_sensors - 1, 0) << SENSOR0_SHIFT;
+-	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
+-	if (ret)
+-		return ret;
+-
+-	reg_cntl |= EN;
+-	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
+-}
+-
+ static int calibrate_8960(struct tsens_priv *priv)
+ {
+ 	int i;
+@@ -346,7 +296,7 @@ static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
  };
+ 
+ static const struct tsens_ops ops_8960 = {
+-	.init		= init_8960,
++	.init		= init_common,
+ 	.calibrate	= calibrate_8960,
+ 	.get_temp	= get_temp_8960,
+ 	.enable		= enable_8960,
 -- 
 2.30.2
 
