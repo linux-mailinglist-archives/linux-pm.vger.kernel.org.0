@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA00354431
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 18:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE31354441
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 18:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242022AbhDEQEZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 12:04:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55544 "EHLO mail.kernel.org"
+        id S242098AbhDEQEu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 12:04:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56378 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241916AbhDEQEO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 5 Apr 2021 12:04:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4275D613B8;
-        Mon,  5 Apr 2021 16:04:07 +0000 (UTC)
+        id S242082AbhDEQEk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 5 Apr 2021 12:04:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 28F8E613D6;
+        Mon,  5 Apr 2021 16:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617638647;
+        s=k20201202; t=1617638673;
         bh=bqcHL98/5DIfVZ4OpfrnQ/Lr5T/8yN1YD9VjwhQTA2g=;
         h=From:To:Cc:Subject:Date:From;
-        b=By8QQuI0ybx3rNKeDgWczVAOrK21KLR+KCOa/Fu9MHmwKeb7jx63hLUg/E/Ab61ks
-         LJZkz/Btb+gq4FK/PEb0HcmQIAw4HA+CWttS3H1sO2YriGAc87iMSqBdZWL7DZr+Dh
-         jry62JrWW6fe+X/0gfmyebtUCCzbmtE4saqGzCbFwzUPu5CZfs5HOyY9vdS1bx/UT5
-         AqJRQ2sG5Hd8OTs6hI/4fv21byBHFRw5SAq4R1zIvvZqel0/GSuAdlcnfAZrWDzADC
-         3hlqAmlHUt+eKuiqSVjOAqvNytb/25C+gIAbyGgljNP8Q1DUOvXhQsSXrC1hJz5Mij
-         N7QQKbl+HzwpQ==
+        b=CO6QIQ4Cleujgm/LHeoGEbFcKkI82Bc7lt0lAEQ7qtjzas2IawbCyD4PaPxbPtKD0
+         JntFBb8bOnnhi6pIocK5TgfWuuL3rSw2dbGioFQTDk5USRaZgfudNkw1/kYMPB0EC2
+         RoLKn7YFw7K78ZzX+WLGLiMvH0/XaJW6YjiGVn5To9HZsoK1ZdR5jogaUCQl00C8iQ
+         wpRsVKEPyz/NSGYsvwxlCgthFLWJvDBmukXKIgLWg8nOXWnh1JiYmqijk4V/GnjQAd
+         kKQUuapGkHIkWHG4B/+9w9jzlIS6Z+Q0lbNCe1YA5xTZulwpYheJHRHK0Zprq5lrLp
+         eDrXIbTKkNPgw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
         TOTE Robot <oslab@tsinghua.edu.cn>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 01/22] interconnect: core: fix error return code of icc_link_destroy()
-Date:   Mon,  5 Apr 2021 12:03:44 -0400
-Message-Id: <20210405160406.268132-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 01/22] interconnect: core: fix error return code of icc_link_destroy()
+Date:   Mon,  5 Apr 2021 12:04:10 -0400
+Message-Id: <20210405160432.268374-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-stable: review
