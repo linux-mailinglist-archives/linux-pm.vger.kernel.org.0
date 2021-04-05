@@ -2,103 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E01A5353C56
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 10:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58634353C5C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 10:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbhDEIWK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 04:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhDEIWK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 04:22:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC0EC061756;
-        Mon,  5 Apr 2021 01:22:04 -0700 (PDT)
+        id S232099AbhDEIXe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 04:23:34 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56792 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhDEIXe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 04:23:34 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 608AA1F40EDB
+        with ESMTPSA id 012561F44ABA
 Received: by earth.universe (Postfix, from userid 1000)
-        id 17ED93C0C96; Mon,  5 Apr 2021 10:22:01 +0200 (CEST)
-Date:   Mon, 5 Apr 2021 10:22:01 +0200
+        id 7954A3C0C96; Mon,  5 Apr 2021 10:23:25 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 10:23:25 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Tony Lindgren <tony@atomide.com>
 Cc:     Carl Philipp Klemm <philipp@uvos.xyz>, linux-pm@vger.kernel.org,
         linux-omap@vger.kernel.org,
         Arthur Demchenkov <spinal.by@gmail.com>,
         Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH 4/5] power: supply: cpcap-charger: fix small mistake in
- current to register conversion
-Message-ID: <20210405082201.v2nbm7bsej25uyva@earth.universe>
-References: <20210117224745.40c38ae352761663db1752c9@uvos.xyz>
- <YGlpb+AHo/qtLxDI@atomide.com>
+Subject: Re: [PATCH 5/5] power: supply: cpcap-charger: Add usleep to cpcap
+ charger to avoid usb plug bounce
+Message-ID: <20210405082325.3a4uqgyf4qie2vbu@earth.universe>
+References: <20210117224853.3602368391c9785e74748239@uvos.xyz>
+ <YGlpCr26qU6F/Uwl@atomide.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxvbqvlnpo7oos5f"
+        protocol="application/pgp-signature"; boundary="2oyjihuqahnkx7yh"
 Content-Disposition: inline
-In-Reply-To: <YGlpb+AHo/qtLxDI@atomide.com>
+In-Reply-To: <YGlpCr26qU6F/Uwl@atomide.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---mxvbqvlnpo7oos5f
+--2oyjihuqahnkx7yh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Apr 04, 2021 at 10:23:27AM +0300, Tony Lindgren wrote:
-> * Carl Philipp Klemm <philipp@uvos.xyz> [210117 23:47]:
+On Sun, Apr 04, 2021 at 10:21:46AM +0300, Tony Lindgren wrote:
+> * Carl Philipp Klemm <philipp@uvos.xyz> [210117 23:48]:
+> > Adds 80000 us sleep when the usb cable is plugged in to hopefully avoid
+> > bouncing contacts.
+> >=20
+> > Upon pluging in the usb cable vbus will bounce for some time, causing c=
+pcap to
+> > dissconnect charging due to detecting an undervoltage condition. This i=
+s a
+> > scope of vbus on xt894 while quickly inserting the usb cable with firm =
+force,
+> > probed at the far side of the usb socket and vbus loaded with approx 1k:
+> > http://uvos.xyz/maserati/usbplug.jpg.
+> >=20
+> > As can clearly be seen, vbus is all over the place for the first 15 ms =
+or so
+> > with a small blip at ~40 ms this causes the cpcap to trip up and disable
+> > charging again.
+> >=20
+> > The delay helps cpcap_usb_detect avoid the worst of this. It is, howeve=
+r, still
+> > not ideal as strong vibrations can cause the issue to reapear any time =
+during
+> > charging. I have however not been able to cause the device to stop char=
+ging due
+> > to this in practice as it is hard to vibrate the device such that the v=
+bus pins
+> > start bouncing again but cpcap_usb_detect is not called again due to a =
+detected
+> > disconnect/reconnect event.
+> >=20
 > > Signed-off-by: Carl Philipp Klemm <philipp@uvos.xyz>
 >=20
-> Acked-by: Tony Lindgren <tony@atomide.com>
+> This patch fixes an issue where connecting a charger often fails for me:
+>=20
+> Tested-by: Tony Lindgren <tony@atomide.com>
 
 Thanks, queued.
 
 -- Sebastian
 
 > > ---
-> >  drivers/power/supply/cpcap-charger.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  drivers/power/supply/cpcap-charger.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >=20
 > > diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/suppl=
 y/cpcap-charger.c
-> > index 152090faf5b2..be7d1da7a5a5 100644
+> > index be7d1da7a5a5..3e5fbdbdd645 100644
 > > --- a/drivers/power/supply/cpcap-charger.c
 > > +++ b/drivers/power/supply/cpcap-charger.c
-> > @@ -300,7 +300,7 @@ static int cpcap_charger_current_to_regval(int micr=
-oamp)
-> >  		return CPCAP_REG_CRM_ICHRG(0x0);
-> >  	if (miliamp < 177)
-> >  		return CPCAP_REG_CRM_ICHRG(0x1);
-> > -	if (miliamp > 1596)
-> > +	if (miliamp >=3D 1596)
-> >  		return CPCAP_REG_CRM_ICHRG(0xe);
+> > @@ -650,6 +650,9 @@ static void cpcap_usb_detect(struct work_struct *wo=
+rk)
+> >  		return;
+> >  	}
 > > =20
-> >  	res =3D microamp / 88666;
+> > +	/* Delay for 80ms to avoid vbus bouncing when usb cable is plugged in=
+ */
+> > +	usleep_range(80000, 120000);
+> > +
+> >  	/* Throttle chrgcurr2 interrupt for charger done and retry */
+> >  	switch (ddata->status) {
+> >  	case POWER_SUPPLY_STATUS_CHARGING:
 > > --=20
 > > 2.29.2
 > >=20
 
---mxvbqvlnpo7oos5f
+--2oyjihuqahnkx7yh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBqyKgACgkQ2O7X88g7
-+ppATQ//SDH1jDSHKp9+Q8mBAHsBDkO/iPHr/dwNpHHND45bdZz1DZVA13zkPkTZ
-txJ/LRZLlieytbwMU/UKW/2J0hIhqWfO4+7YR+NX393OGPLNT9v7KfP3eRI5MCUg
-+G5vm6iro09nVNznVjRF+xVJndY4P3fzTS11kw7BbQP4DM4G8osMnPQgqWn0Ygwg
-Dm/7bnaPqvO8yKxE0omWrmGBuB31c/ABKeEi8Dgs/KIE6NFzBeXdwcbSFVBMNSvU
-c9vLGD2QlBVHLqreHvLBuIzS8gIgN3/C+zmUhAEEY3OXt3vFGx2aI/UyRHu6Cu8M
-CbNVpna502ogvUKyS/1bOi2/DZvL95HNaNE8VIJ+9WfMtvS0Q9n9No3lIt2E/aQy
-Az9jfJFaXaGPOJlMlmzahNiocRWsw1XHWBpZRAMbAJb3wce6YGiuo+nfRiFkn0Ls
-tEQVEtUJ0zUsf0i45kY03jfDhAtBZYZfEeuMMoXqciWCwU4deErVhzSCrS6dGm+r
-uuVwbjWhLxs/5yiSJQRhtcwy5ZCQlMdMEAlY0Rkkmjcb8o6fm3YUN3CKG9+u1Tl6
-B+gxj8ZWq8BTTX/GX3Xi8E1I6Ki87E4k49lfFE2jsa+NBGYteS4qN7ZZ0xmiKTGB
-R1srVADJIsEOcs/INmhoOOVxEoSZ/69e8Nb7HPbtCqSk2tmR380=
-=HnDd
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBqyP0ACgkQ2O7X88g7
++po/ug//YcLANSAYucd6FCtQ6Reb+hK1JN0XpFx82V4ULVTxFOjc8q8n7FRMg0fe
+Z117ErR76DnBMD+zkEoEhJ/8E9Bz10IrKKoOg12/vauypLCjewFanaEMxdGOg+yA
+gBY+wSReWz28BDXUgMLrArZZdOD9+mJN5AO5asFQymkYPRfFKsRjZyUYyyT8yoy1
+RzUtzza6gWTLQ5w4wnyRrlpP7tr6uqHizRtuIPQcSTR1wFmeRgl95jB29ZUApnFK
+yZL+IYv8HRf3XQSdHfwfrNytgTC1WyRmj7jXNhtu0tKVlBCp/ugheXY00zzFAFSo
+WDq530BSDOws3v+hHWTgm6PNyOtA+gJi13gW8t7P7siYOqscijHs3yTr3JlWbhpl
+9eR349ceOmbkqzoxNpI/TuWmiO23Zd/E37a+fCrgB0z7nH4I7PdWQdlYbPN6rKMd
+qp3EMFR4mvDVYN8FzpycnbAPw9tjpE9bteVEQEvGL87Bf1kc6B3n37sEgIw8nbLT
+Zp7PT3w66zx6GgjTmPGHMxVbCb8QUMYR/lXjEeaky6vcuXHZp0MFuI8lXEAO/yaR
+ppa4f7GPM2c34Ep+594NLi4VSciQGKwFNzVAOaBKg8VruogKXkwp7uWhM0Wtltpd
+DiG7Og2UisJxzr//PERRRk1vPWgm+IXDEWnN3jdXKZoRdpPj18Y=
+=1w2V
 -----END PGP SIGNATURE-----
 
---mxvbqvlnpo7oos5f--
+--2oyjihuqahnkx7yh--
