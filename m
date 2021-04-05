@@ -2,97 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCF435410D
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E73354113
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240938AbhDEKDC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 06:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S241051AbhDEKHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 06:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbhDEKDC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:03:02 -0400
+        with ESMTP id S232609AbhDEKHF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:07:05 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F94C061756;
-        Mon,  5 Apr 2021 03:02:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319CC061756;
+        Mon,  5 Apr 2021 03:07:00 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id CAFE11F44D7D
+        with ESMTPSA id BDAB11F4449C
 Received: by earth.universe (Postfix, from userid 1000)
-        id 9F8CE3C0C96; Mon,  5 Apr 2021 12:02:53 +0200 (CEST)
-Date:   Mon, 5 Apr 2021 12:02:53 +0200
+        id 3B5A43C0C96; Mon,  5 Apr 2021 12:06:56 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 12:06:56 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmurphy@ti.com
-Subject: Re: [PATCH v5 0/2] Introduce the BQ25790 charger driver
-Message-ID: <20210405100253.qjf3u7u37lqh5mpt@earth.universe>
-References: <20210202021747.717-1-r-rivera-matos@ti.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marek Czerski <ma.czerski@gmail.com>, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] power: reset: ltc2952: make trigger delay configurable
+Message-ID: <20210405100656.xphmgza4jurxcs2q@earth.universe>
+References: <20210203214900.71677-1-ma.czerski@gmail.com>
+ <20210210220413.GA2878331@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o4sdkivip26urrbr"
+        protocol="application/pgp-signature"; boundary="uymfseyv447fvjcc"
 Content-Disposition: inline
-In-Reply-To: <20210202021747.717-1-r-rivera-matos@ti.com>
+In-Reply-To: <20210210220413.GA2878331@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---o4sdkivip26urrbr
+--uymfseyv447fvjcc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Feb 01, 2021 at 08:17:45PM -0600, Ricardo Rivera-Matos wrote:
-> This patchset introduces the BQ25790 integrated buck-boost charging IC.
-
-Please add changelogs compared to previous version to
-your cover letters.
-
-> Dan Murphy (2):
->   dt-bindings: power: Add the bq25790 dt bindings
->   power: supply: bq25790: Introduce the BQ25790 charger driver
+On Wed, Feb 10, 2021 at 04:04:13PM -0600, Rob Herring wrote:
+> On Wed, 03 Feb 2021 22:49:00 +0100, Marek Czerski wrote:
+> > Make trigger delay configurable through device tree with
+> > trigger-delay-ms property.
+> >=20
+> > Trigger delay is the time to wait before starting shutdown
+> > sequence after trigger line assertion.
+> > Trigger delay must take into account the OFFT time configured
+> > with the capacitor connected to OFFT pin of the LTC2952 chip.
+> > Basically, the higher the capacitance connected to OFFT pin,
+> > the larger trigger delay must be.
+> >=20
+> > Signed-off-by: Marek Czerski <ma.czerski@gmail.com>
+> > ---
+> >  .../devicetree/bindings/power/reset/ltc2952-poweroff.txt  | 4 ++++
+> >  drivers/power/reset/ltc2952-poweroff.c                    | 8 ++++++++
+> >  2 files changed, 12 insertions(+)
+> >=20
 >=20
->  .../bindings/power/supply/bq25790.yaml        |   95 ++
->  drivers/power/supply/Kconfig                  |    8 +
->  drivers/power/supply/Makefile                 |    1 +
->  drivers/power/supply/bq25790_charger.c        | 1100 +++++++++++++++++
->  drivers/power/supply/bq25790_charger.h        |  148 +++
->  5 files changed, 1352 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/bq2579=
-0.yaml
->  create mode 100644 drivers/power/supply/bq25790_charger.c
->  create mode 100644 drivers/power/supply/bq25790_charger.h
+> Acked-by: Rob Herring <robh@kernel.org>
 
-FYI: I don't have further review notes and wait for a new version
-with the things pointed out by Krzysztof being fixed. For cleanup
-of usb_register_notifier you might want to check how you fixed the
-same issue for bq256xx via bq256xx_charger_reset() or my ignored
-comment in v4 patchset.
-
-Thanks,
+Thanks, queued.
 
 -- Sebastian
 
---o4sdkivip26urrbr
+--uymfseyv447fvjcc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq4D4ACgkQ2O7X88g7
-+pqoCw/9EJV3eqvyVbAUdbPAN0r8CkKvxSdrenSBsIhm/XDfEnlb/35PDnOj9fKc
-rkXuKWkBucXt1kVCqzvp5atD4zPx3kYtqOTR6TB9zVEZeKFC3pik9fkIQPMD3TcC
-bSotGYQhAo+yWNEAAgcf1Is/N82Z8lHanMtuwEIi/DQfK8IfuQaEYigkOZPdY7dY
-xiJknYbHJGXRAjOBkJpGJZc3vSOxu6oRbYphHBsvYoj2NavIwHRM6vsmiMmpGLnq
-0PCK1uDzthz7DxmEXdGKO2uuYT+41ptfV+RNtX7auairOvjX5j8w65zrSEv3HWUo
-9BkF687Gt8XfaMWaCZ+zE2u4i/A/8gUrdqoV7+YGJ72y39GgZtnXQgu3v9nQZMSV
-2famp4WM7caK88qRDtTsOBlh02nYXHpmE3G4TClj2R745hh7rzqPvcgacOZF9I8v
-5HorsO7hpqEOZkx8gjVs4AGO1kpDTNYCHYg6puGuVo4v6kgccdtfdQPeUzfvDJqI
-JrUleoP0K0VB10855RuUZAJE1D+uLrJgTTYx/BYPcVY15eseky9qMB2Yo5G7v5vS
-qpm686vlYWJUtfjmDokFDYY8AIbwRZe67W1Ef4r5pyHHxvUqBrC/CLb94ooPTvu0
-ogqBV6HNkexVUEhRaablDdA3sDQNZdP7nEJQ88/rqhUVhjuWLT0=
-=AYAc
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq4UAACgkQ2O7X88g7
++popgw/9GcGIK8qgWXxvNtHh3YVOonZvs+Rf9UlBY1+pWUXsQQUIPTtDymT5Uzzj
+9gGenw+vaNeM9JwKTHbhDa/0j8MGcjEDg4LOABNeOazM+2HZuWbQhDAsjtaWL6Ni
+27NyF3nMIWZBeO/D948RPSFUVBgC+y3DXhgqNAozUsUN0RlZ0df/2O/ikKNt6MUu
+eo/n3AfFuqh6feTDudzoyW6ngeoCOTLW7z+xqCQWLHg5eaARIwg2yL1qyzqP1Vcn
+qivo1pE422zwU2/NTBaqN5r8lurvDrW5fDQGss77s1treoAY6IOGg7dhnf5yVFUF
++qw5SgrYIP3GddCHLTS35m3IfSJ4+tbKhdMvG+QUzHYK4gToS/J5CdezfVXqXNO/
+LmlJtuO5301V91qddd6uISOeUWQerpvxh6Va0LWAJcssEYsXb/esX/o4uqmhRsQR
+BIxrfPaIdQDBLoe0p0+Fs/7hCgggnrT3N9FzAB1X1lOpXSQz2QSt25pA3cCNQk3c
+WbMn3j61MiEa7J3ko/UDV1rXutxbGpycci+YWc003sUpV5lYBBIccs/Fj7h3xfxE
+QY6ynlGJLFuvL1gIpBqXiZE0rLlxk9zN9WoApBHrIx7Lp+iCiAfUYydWa4Mpwtn0
+xU+eUuebHx6a7FvWAaSAaKQRbAhyaZA+SGMeP6A1G/eUKJQ4lbs=
+=UvUo
 -----END PGP SIGNATURE-----
 
---o4sdkivip26urrbr--
+--uymfseyv447fvjcc--
