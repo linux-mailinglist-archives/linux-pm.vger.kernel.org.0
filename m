@@ -2,92 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E73354113
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6316F35411F
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbhDEKHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 06:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S241685AbhDEKPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 06:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbhDEKHF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:07:05 -0400
+        with ESMTP id S241681AbhDEKPO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:15:14 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319CC061756;
-        Mon,  5 Apr 2021 03:07:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA58C061756;
+        Mon,  5 Apr 2021 03:15:08 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id BDAB11F4449C
+        with ESMTPSA id 262EF1F44D7D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 3B5A43C0C96; Mon,  5 Apr 2021 12:06:56 +0200 (CEST)
-Date:   Mon, 5 Apr 2021 12:06:56 +0200
+        id C6AD83C0C96; Mon,  5 Apr 2021 12:15:04 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 12:15:04 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marek Czerski <ma.czerski@gmail.com>, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] power: reset: ltc2952: make trigger delay configurable
-Message-ID: <20210405100656.xphmgza4jurxcs2q@earth.universe>
-References: <20210203214900.71677-1-ma.czerski@gmail.com>
- <20210210220413.GA2878331@robh.at.kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Use true and false for bool variable
+Message-ID: <20210405101504.67fowho7fhfojcxp@earth.universe>
+References: <1612864723-57143-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uymfseyv447fvjcc"
+        protocol="application/pgp-signature"; boundary="itravfoy4wvih4x2"
 Content-Disposition: inline
-In-Reply-To: <20210210220413.GA2878331@robh.at.kernel.org>
+In-Reply-To: <1612864723-57143-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---uymfseyv447fvjcc
+--itravfoy4wvih4x2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Feb 10, 2021 at 04:04:13PM -0600, Rob Herring wrote:
-> On Wed, 03 Feb 2021 22:49:00 +0100, Marek Czerski wrote:
-> > Make trigger delay configurable through device tree with
-> > trigger-delay-ms property.
-> >=20
-> > Trigger delay is the time to wait before starting shutdown
-> > sequence after trigger line assertion.
-> > Trigger delay must take into account the OFFT time configured
-> > with the capacitor connected to OFFT pin of the LTC2952 chip.
-> > Basically, the higher the capacitance connected to OFFT pin,
-> > the larger trigger delay must be.
-> >=20
-> > Signed-off-by: Marek Czerski <ma.czerski@gmail.com>
-> > ---
-> >  .../devicetree/bindings/power/reset/ltc2952-poweroff.txt  | 4 ++++
-> >  drivers/power/reset/ltc2952-poweroff.c                    | 8 ++++++++
-> >  2 files changed, 12 insertions(+)
-> >=20
+On Tue, Feb 09, 2021 at 05:58:43PM +0800, Jiapeng Chong wrote:
+> Fix the following coccicheck warning:
 >=20
-> Acked-by: Rob Herring <robh@kernel.org>
+> ./include/linux/power_supply.h:507:9-10: WARNING: return of 0/1 in
+> function 'power_supply_is_watt_property' with return type bool.
+>=20
+> ./include/linux/power_supply.h:479:9-10: WARNING: return of 0/1 in
+> function 'power_supply_is_amp_property' with return type bool.
+>=20
+> Reported-by: Abaci Robot<abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---uymfseyv447fvjcc
+>  include/linux/power_supply.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 81a55e9..029e6e9 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -476,12 +476,12 @@ static inline bool power_supply_is_amp_property(enu=
+m power_supply_property psp)
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>  	case POWER_SUPPLY_PROP_CURRENT_AVG:
+>  	case POWER_SUPPLY_PROP_CURRENT_BOOT:
+> -		return 1;
+> +		return true;
+>  	default:
+>  		break;
+>  	}
+> =20
+> -	return 0;
+> +	return false;
+>  }
+> =20
+>  static inline bool power_supply_is_watt_property(enum power_supply_prope=
+rty psp)
+> @@ -504,12 +504,12 @@ static inline bool power_supply_is_watt_property(en=
+um power_supply_property psp)
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+>  	case POWER_SUPPLY_PROP_POWER_NOW:
+> -		return 1;
+> +		return true;
+>  	default:
+>  		break;
+>  	}
+> =20
+> -	return 0;
+> +	return false;
+>  }
+> =20
+>  #ifdef CONFIG_POWER_SUPPLY_HWMON
+> --=20
+> 1.8.3.1
+>=20
+
+--itravfoy4wvih4x2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq4UAACgkQ2O7X88g7
-+popgw/9GcGIK8qgWXxvNtHh3YVOonZvs+Rf9UlBY1+pWUXsQQUIPTtDymT5Uzzj
-9gGenw+vaNeM9JwKTHbhDa/0j8MGcjEDg4LOABNeOazM+2HZuWbQhDAsjtaWL6Ni
-27NyF3nMIWZBeO/D948RPSFUVBgC+y3DXhgqNAozUsUN0RlZ0df/2O/ikKNt6MUu
-eo/n3AfFuqh6feTDudzoyW6ngeoCOTLW7z+xqCQWLHg5eaARIwg2yL1qyzqP1Vcn
-qivo1pE422zwU2/NTBaqN5r8lurvDrW5fDQGss77s1treoAY6IOGg7dhnf5yVFUF
-+qw5SgrYIP3GddCHLTS35m3IfSJ4+tbKhdMvG+QUzHYK4gToS/J5CdezfVXqXNO/
-LmlJtuO5301V91qddd6uISOeUWQerpvxh6Va0LWAJcssEYsXb/esX/o4uqmhRsQR
-BIxrfPaIdQDBLoe0p0+Fs/7hCgggnrT3N9FzAB1X1lOpXSQz2QSt25pA3cCNQk3c
-WbMn3j61MiEa7J3ko/UDV1rXutxbGpycci+YWc003sUpV5lYBBIccs/Fj7h3xfxE
-QY6ynlGJLFuvL1gIpBqXiZE0rLlxk9zN9WoApBHrIx7Lp+iCiAfUYydWa4Mpwtn0
-xU+eUuebHx6a7FvWAaSAaKQRbAhyaZA+SGMeP6A1G/eUKJQ4lbs=
-=UvUo
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq4ygACgkQ2O7X88g7
++po/wg//bH7c/cyVKOnSjDYR5ldUnEWi6WDYyNq8M1ygK864h57r++X0l4lI+8eC
+g2lqAVD3Wx5WrUNMEuIbR+zw5e8NNJCye3gUvcoTZBHfstt+PJgum+1EBBMy2Uco
+uqnaLQLLI/UT3QaIsOXC/4Gf/j4gi6zR7dyTylExtGSqm7oYVzwAK82N816td7+c
+qYKCEoDsL7kMn/X2THEgN9uW7A3B4ekjepXkhg6x/3FgrLyz8XmZuRfMfxJGnCp0
+fS25UKwnEGWwzDXF1L9aNJ0aXWd7trPeDfladk/qJM+R4Tz0+rePWB2ETPfWOVpe
+iy01QPzXLNQubGhEbLEBDGdvthQ5q8tiTXlIwSi18JLcv/oK0vAMYvfljC9pUA3R
+QZjWGdCWv9Wd9wSfX3mg4gpW/KWqm5pavEMxuZW8ifQFkvv0fdZ2QSDvl132p6+S
+k79hxyFal2XMkorY+tB12SCJttmeqFRrxTVfVqaawl3+lDWcwdB66QvpiniGXqGO
+mXpaFLPX3X4A6rmqU6tVbbXkunSYU0Cx6rh/bXneZiTUFiOZj34wAcwU9hznHNMs
+RhGH1JA0yOckFkni2lXX/9dTO/ta2ygjDI/NcAHWd+fTsdExsIV9QXqhJfRzglmR
+x9zN7OHZjuv93I49QBmmZ9mXycMNvYlFfKr/P/nCOXOUOU2/U0A=
+=Uj5I
 -----END PGP SIGNATURE-----
 
---uymfseyv447fvjcc--
+--itravfoy4wvih4x2--
