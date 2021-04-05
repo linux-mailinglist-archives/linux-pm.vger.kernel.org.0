@@ -2,114 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AD8354127
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3CF35415A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 13:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238171AbhDEKUC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 06:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbhDEKUB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:20:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAC3C061756;
-        Mon,  5 Apr 2021 03:19:56 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 0E9DB1F449BA
-Received: by earth.universe (Postfix, from userid 1000)
-        id A3B813C0C96; Mon,  5 Apr 2021 12:19:52 +0200 (CEST)
-Date:   Mon, 5 Apr 2021 12:19:52 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/3] MAINTAINERS: power: supply: add entry for S3C ADC
- battery driver
-Message-ID: <20210405101952.itm5xxthn4qphj3u@earth.universe>
-References: <20210210172108.334896-1-krzk@kernel.org>
+        id S233298AbhDELEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 07:04:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59846 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232355AbhDELEu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 5 Apr 2021 07:04:50 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6B79CB03C;
+        Mon,  5 Apr 2021 11:04:43 +0000 (UTC)
+Message-ID: <8f147485af325181c57bdf0dd3b0e3dd54000ac8.camel@suse.de>
+Subject: Re: [PATCH] clk: Mark fwnodes when their clock provider is added
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J.Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        DOCUMENTATION <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS "
+         "<devicetree@vger.ke rnel.org>, ACPI Devel Maling List "
+         "<linux-acpi@vger.kernel.org>, Android Kernel Team "
+         "<kernel-team@android.com>, linux-rpi-kernel" 
+        <linux-rpi-kernel@lists.infradead.org>
+Date:   Mon, 05 Apr 2021 13:04:40 +0200
+In-Reply-To: <161721871083.2260335.2392646934517115770@swboyd.mtv.corp.google.com>
+References: <20210205222644.2357303-9-saravanak@google.com>
+         <9b206c4d00dfe8b7f941260f18909914b2b2eecb.camel@suse.de>
+         <161678243444.3012082.5031467952132861429@swboyd.mtv.corp.google.com>
+         <CAMuHMdV5PGUujsFP2TXMxij4UxVnrrurh_qVhq8+480w21jJAg@mail.gmail.com>
+         <161705310317.3012082.15148238105608149214@swboyd.mtv.corp.google.com>
+         <CAGETcx8reqKoPoJ8dV7f9=SHYKmNhcVpkNHoCS-0L4UHCBahoA@mail.gmail.com>
+         <161706920822.3012082.10047587064612237296@swboyd.mtv.corp.google.com>
+         <CAMuHMdX7OxTjwQmdP8xDbVkjtZ5442qFao8K6bNpDQ5S3GPSgQ@mail.gmail.com>
+         <161715734080.2260335.881350237641202575@swboyd.mtv.corp.google.com>
+         <CAMuHMdXMhiOBSSwrC2A_ijXCaekBMfC8h9PFhqLtNGhtPDba=A@mail.gmail.com>
+         <161721871083.2260335.2392646934517115770@swboyd.mtv.corp.google.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-ffRO6YGGlkKiYOjSl+0D"
+User-Agent: Evolution 3.40.0 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="royifewygga4fejm"
-Content-Disposition: inline
-In-Reply-To: <20210210172108.334896-1-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---royifewygga4fejm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-ffRO6YGGlkKiYOjSl+0D
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Wed, Feb 10, 2021 at 06:21:06PM +0100, Krzysztof Kozlowski wrote:
-> The S3C ADC battery driver is a very old piece of code but still used by
-> (very old as well) S3C24xx platforms (iPAQ h1930/h1940/rx1950).
-> Currently the header file is not covered by maintainers file, so it
-> might look abandoned.  Add a new entry for entire S3C ADC battery driver
-> with Krzysztof Kozlowski as maintainer (as Krzysztof maintains still
-> Samsung S3C24xx platform) to indicate that some basic review can take
-> place.
+On Wed, 2021-03-31 at 12:25 -0700, Stephen Boyd wrote:
+> Quoting Geert Uytterhoeven (2021-03-31 00:05:00)
+> > On Wed, Mar 31, 2021 at 4:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > > > Does it have any use?
+> > > >=20
+> > > > of_clk_del_provider() removes the first provider found with node =
+=3D=3D NULL.
+> > > > If there are two drivers calling of_clk_add_hw_provider(), and one =
+of
+> > > > hem calls of_clk_del_provider() later, the wrong provider may be
+> > > > removed from the list.
+> > > >=20
+> > >=20
+> > > So you're saying we shouldn't add a NULL device node pointer to the l=
+ist
+> > > so that this can't happen? That doesn't mean returning an error from
+> > > of_clk_add_hw_provider() would be useful though.
+> > > of_clk_add_hw_provider() can return 0 if np =3D=3D NULL and
+> > > of_clk_del_provider() can return early if np =3D=3D NULL too.
+> >=20
+> > I don't know if I grasp all meanings of the above.
+> >=20
+> > The main question is if it is valid for a driver to call
+> > of_clk_add_hw_provider()
+> > with np =3D=3D NULL.
+> > =C2=A0=C2=A0- If yes, should that register the provider?
 >=20
-> However considering that the S3C24xx platform is quite old with only few
-> users currently and Krzysztof does not have the actual hardware, let's
-> mark the driver as "Odd fixes".
+> No it should not register the provider. That would be bad as you pointed
+> out.
 >=20
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
-
-Thanks, much appreciated. I queued this series some time ago, but
-forgot to send a notification.
-
--- Sebastian
-
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- If yes, how to handle two drivers=
+ calling of_clk_add_hw_provider()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0with np =3D NULL, as th=
+eir unregistration order is not guaranteed to
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0be correct.
+> >=20
+> > If no, is that something to ignore (0), or a bug (error)?
 >=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5f7aa507b812..6abf7cc513df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15614,6 +15614,13 @@ S:	Supported
->  W:	http://www.ibm.com/developerworks/linux/linux390/
->  F:	drivers/s390/scsi/zfcp_*
-> =20
-> +S3C ADC BATTERY DRIVER
-> +M:	Krzysztof Kozlowski <krzk@kernel.org>
-> +L:	linux-samsung-soc@vger.kernel.org
-> +S:	Odd Fixes
-> +F:	drivers/power/supply/s3c_adc_battery.c
-> +F:	include/linux/s3c_adc_battery.h
-> +
->  S3C24XX SD/MMC Driver
->  M:	Ben Dooks <ben-linux@fluff.org>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> --=20
-> 2.25.1
+> This is my question above. Is there a use to having
+> of_clk_add_hw_provider() return an error value when np =3D=3D NULL? I dou=
+bt
+> it.
 >=20
+> Returning 0 would reduce the if conditions in driver code in this case
+> and be consistent with the CONFIG_OF=3Dn inline stub that returns 0 when
+> CONFIG_OF is disabled. The only case an error would be returned is if we
+> couldn't allocate memory or if the assigned clocks code failed. Seems
+> sane to me. The downside is that drivers would maybe register clkdev
+> lookups when they don't need to and waste some memory. I'm fine with
+> that until we have some sort of non-DT based clk provider lookup
+> mechanism that could unify the two methods.
 
---royifewygga4fejm
+What about devm_of_clk_add_hw_provider() users, do we care that a seemingly
+empty managed resource will be created?
+
+Regards,
+Nicolas
+
+
+--=-ffRO6YGGlkKiYOjSl+0D
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq5EgACgkQ2O7X88g7
-+pouPA/+JJt47wBPf5nSss12X06nU0PBmJqvJI2u7ft7BX1GDlO/r06M6dJJGbI+
-B8+H3tFh1usN7HMxY4u4un2VsnF69q3TQNzQIXRWmrnDU+VTDidEnl82L9g6oIFR
-nCSQLvyiZQJjQJL7F8C4gjwwDslKvhXnKQg9dIP2kUMA/aMAThkx9M8QBJuPLezZ
-sc4VqZyZyuIo1tVRwojHjbNV2i4gUlbYSO8ugnc0uPUxoc4RWGiAwvAaWj/AXovI
-eT9I9uPDV57uu+jYUg8HxFxvYxZxUSw2x8pEAfhBp1mlt7Ih4I6jCDfhw/efgXQw
-DDahWmSXtTUkBgf05QTikIH5zquG9P7KiNr3Vq0aOyOLTwj4aHZ8N82W9i/PnpKv
-EDeye+3nF51UfNPvc5pdePrQBWEAqcneiG61F7oGDRsdQJ40wh8s8QchN2RAO1uJ
-FEyHLpliJ0wK4aLOGcT4Y2C//VcPaJHh7UP/ugzaCMkJBVXHwo2af9S+pvUVGZHX
-drKQt7ymEumPhkRG+xietbH3mg9vRlIR/9YJpLbhYZyqP5mIIRKJRfGhu3VevlEc
-EaLra3B9MggIp2D5pS7h/ViZ3PMp25EFJZFc78mP/IIDwOIafnRvLdKJunQyfDO6
-oOPkYqmb8g5/hdeOY5FxtlRHiq1gCGITnbLdgd3/XFdcFF9MSew=
-=q3bO
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAmBq7sgACgkQlfZmHno8
+x/5ZSwf9HS5H+QT20eiJRWn3bELAv3sRiJTSXv7nkK9YBffB4RHKSH28Ocj04LdC
+75oUWS2K08zuwHEK78YAo3wnD95KNIWq4Q3iNtkkmHxvm+DA/1fwbljVilKAtF0O
++HwypDjA3TMJm37VgB6AL9VKrO4/fQHdkq89m4WRl/ui9TP+LMpUfmpGMOT2g5KZ
+r4OA+AsGfAjJpEOjvc+O+BAjfFaw53bDX2BqdWAodMSF5iAOYi+6/jQftxKRym4y
+yw9x+YWxx6cG/I5rXJAC6es5foHtjHxgY9vL3BE7vN3ClQ5ZwcJmMq+gS/SKGopu
+CY4Wm2CjB1YMigXfwLmvYxpMW5ubbw==
+=EzAP
 -----END PGP SIGNATURE-----
 
---royifewygga4fejm--
+--=-ffRO6YGGlkKiYOjSl+0D--
+
