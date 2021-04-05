@@ -2,96 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A39354908
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 00:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0630B354954
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 01:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbhDEW5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 18:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S239221AbhDEXmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 19:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbhDEW5y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 18:57:54 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07007C06178C
-        for <linux-pm@vger.kernel.org>; Mon,  5 Apr 2021 15:57:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id x15so2989163wrq.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Apr 2021 15:57:46 -0700 (PDT)
+        with ESMTP id S232109AbhDEXl7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 19:41:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01661C06174A;
+        Mon,  5 Apr 2021 16:41:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id e7so14290341edu.10;
+        Mon, 05 Apr 2021 16:41:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GsALzx0Rjvc16XQc7wuGcWWs8xedjpRc0kR3W8dinuE=;
-        b=mE3omOY/EFLMCJc3dDUmtHxXvkjrAkxlLz4C5kho710fWtkKrs6ZnjM8oPE3yIfemZ
-         nAdrNh3jOusTpcwmN1PxGMxadU2rImNXnLBV5kTnh0A4+8lcIAgARsmLkfeSUc7vYpux
-         Ot8/2TingupqyorxLkpeX0YUlKZM7PR8Uik+ttPgJzZMXa9UkpRN7kkvjjP0/r1zSqhg
-         h06zgNv0WDXi3DJP//DDOmhTghhWfl/+RTbqSW5NRKf8Sz8kP6UXadxiHcuBitO7EgrP
-         RsX4eBSJMkGdwuIR9icrUTB8HdBv9sfGDgfQu9ju+IT8ELS5BAFBp32+ZaYQiBHokiIR
-         Uzyg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B35rLoHmGQZLUMghM7yXpUEqwEattMshTSUNBkk8ekI=;
+        b=EJe8ieHqHTtUPoTrMsRzrepU1dBfY0166Z0ooZeyGWUuRQV0w53Q6UqSE2FPPL3EKs
+         62+Apa+4PlcN9NB4LAtMfnYVNHJnEsIpF5X9Rr1Vo79oCICfiGAz6ifF/dTKm5bbSHSR
+         zPdpddnxaVTM5BvYfJxHVSoLtMIAMMwsYfTAhgEl4lN1eMJs2otPhzcfRsrQXZaZkTyI
+         07azUgr2Av5kddzqzKWPyujtXETMEygQtOlhPL1nth4fWBdJ+uI4aTLWnhIBuaXx8QRp
+         P7Fi6AEn+VVUdZsb3XUwRBVKWqdYzst4+DXDyeykBseD+6mYxi9UitmUkD6hjI0SFgsO
+         GkRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GsALzx0Rjvc16XQc7wuGcWWs8xedjpRc0kR3W8dinuE=;
-        b=UnMeW/7wmZN02SDJH8ooM0t9RwLY8aptiagSiJXiyG/dEx6thW1Gs30VlS04eDo6fF
-         8mHc1t9kakuXDVnphDqJjeHApIIqDKt0bqkrRoXgJIiKiFQNp4diSoe/2u9ZVk7PHW8S
-         Eq98iwAQnY1EBVMcDJC0XenDfTggJ9m4GHshbrFS6XATvUZMfduJPw9A5EMz5+Dqr6gc
-         ZCD6C5fSf5nBhj9DZvZgwHSl9i9AnxyBXcs4GMWAC2UkAUFYQP+yq4nBRvjkhmor9uMt
-         JAKQffokbSK0EzQvB56m1UZtOPbvvGFeZd4laKoNuy8ONc1PajioeXuC63sYbJmDweQ+
-         R8UQ==
-X-Gm-Message-State: AOAM530nTw2h5LUAEcTvjcJa7hEDSTGl22qdTzHuqiYyCbQs6gx+KRSt
-        tKzXpxRgYj9285Jy8zYQd9rQ4w==
-X-Google-Smtp-Source: ABdhPJxB7LQBvAilsUzNItl26qAaZg+6/4Bbyj6m+LxE0fncKjRk1axkNV4VyzHNOL7bW6aOas0ypw==
-X-Received: by 2002:a05:6000:1209:: with SMTP id e9mr6545242wrx.36.1617663465585;
-        Mon, 05 Apr 2021 15:57:45 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d506:6f5d:adb6:da14? ([2a01:e34:ed2f:f020:d506:6f5d:adb6:da14])
-        by smtp.googlemail.com with ESMTPSA id c2sm910286wmr.22.2021.04.05.15.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Apr 2021 15:57:44 -0700 (PDT)
-Subject: Re: [PATCH v14 0/9] Add support for ipq8064 tsens
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Amit Kucheria <amitk@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        bh=B35rLoHmGQZLUMghM7yXpUEqwEattMshTSUNBkk8ekI=;
+        b=SDGa6Mp5EfFkizLMPIm5ru9zCBNaODfb0ZGYEAAKSuf1YyFsyeZ/Avy+aBGMBKLHip
+         aKvdZlN7lJBzqx8he2jXyVc50DE90WDPpFmGfaCFP/erR+cOb0jLDYLo9bivYB6CQ0dM
+         sjcLigzRO31qx1GSubYFGEC1CYsaqIyR2VVsQgQZ5ny03tctotsre1k7/pbrs0D147kG
+         f++iADXIjGmMqN+rsahkD5TwzqVR91n0uS0Igxi0/+fVmL2z0iH116w5pIhYr7Zf8xgs
+         q1p5TGreuMjjikwB43b0SkoGXlQoF0kkUQtaEaStHUpy4s85Rz5SVJkfzVP8hdpNjngR
+         ZR/g==
+X-Gm-Message-State: AOAM533vJbT1ee5ICdiOcVmFvoNnduIxudEUTCXsW7i0MU7o2YeYuqRj
+        vlOU/fbcOGmq4RuC7tdoses=
+X-Google-Smtp-Source: ABdhPJzIIsI2v+IDIEqVU2n4+uXqO4tuIzwG2MNMCPSAseBCM/PDOMjxAvEURORC8/vxFGSnmNxwNw==
+X-Received: by 2002:a05:6402:441:: with SMTP id p1mr21112671edw.298.1617666109821;
+        Mon, 05 Apr 2021 16:41:49 -0700 (PDT)
+Received: from xws.localdomain ([37.58.58.229])
+        by smtp.gmail.com with ESMTPSA id h21sm4747963ejb.31.2021.04.05.16.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Apr 2021 16:41:49 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210404144823.31867-1-ansuelsmth@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <00314fdb-c9f4-03b0-5639-a8b8f5afbba2@linaro.org>
-Date:   Tue, 6 Apr 2021 00:57:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: [PATCH v2 0/2] power: supply: Add battery and AC drivers for Surface devices
+Date:   Tue,  6 Apr 2021 01:41:24 +0200
+Message-Id: <20210405234126.667532-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210404144823.31867-1-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/04/2021 16:48, Ansuel Smith wrote:
-> This patchset convert msm8960 to reg_filed, use int_common instead 
-> of a custom function and fix wrong tsens get_temp function for msm8960.
-> Ipq8064 SoCs tsens driver is based on 8960 tsens driver. Ipq8064 needs
-> to be registered as a gcc child as the tsens regs on this platform are
-> shared with the controller.
-> This is based on work and code here
-> https://git.linaro.org/people/amit.kucheria/kernel.git/log/?h=wrk3/tsens-8960-breakage
+This series provides battery and AC drivers for Microsoft Surface
+devices, where this information is provided via an embedded controller
+(the Surface System Aggregator Module, SSAM) instead of the usual ACPI
+interface.
 
-Applied, the series.
+Specifically, 7th generation Surface devices, i.e. Surface Pro 7,
+Surface Book 3, Surface Laptop 3, as well as the Surface Laptop Go use
+this new interface.
 
-Fixed a minor conflict with patch 9/9 and "dt-bindings: thermal:
-qcom-tsens: Add compatible for sm8350"
+Note: This series depends on the
 
-Thanks
+    platform/surface: Add Surface Aggregator device registry
 
-  -- Daniel
+series. More specifically patch
+
+    platform/surface: Set up Surface Aggregator device registry
+
+The full series has been merged into the for-next branch of the
+platform-drivers-x86 tree and is available as immutable tag at
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-surface-aggregator-v5.13-1
+
+Maximilian Luz (2):
+  power: supply: Add battery driver for Surface Aggregator Module
+  power: supply: Add AC driver for Surface Aggregator Module
+
+ .../ABI/testing/sysfs-class-power-surface     |  15 +
+ MAINTAINERS                                   |   8 +
+ drivers/power/supply/Kconfig                  |  32 +
+ drivers/power/supply/Makefile                 |   2 +
+ drivers/power/supply/surface_battery.c        | 865 ++++++++++++++++++
+ drivers/power/supply/surface_charger.c        | 282 ++++++
+ 6 files changed, 1204 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-surface
+ create mode 100644 drivers/power/supply/surface_battery.c
+ create mode 100644 drivers/power/supply/surface_charger.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.31.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
