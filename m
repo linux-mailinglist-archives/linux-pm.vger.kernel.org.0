@@ -2,100 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B42B353C32
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 09:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67788353C49
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 10:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbhDEHhn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 03:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbhDEHhm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 03:37:42 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EF5C061756
-        for <linux-pm@vger.kernel.org>; Mon,  5 Apr 2021 00:37:35 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id h10so11603566edt.13
-        for <linux-pm@vger.kernel.org>; Mon, 05 Apr 2021 00:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=irvAfDqJe1hQB3fJxlaJ3x9w9qp/XEy9b8ACpfP/PLU=;
-        b=Zj3YKEZPqWQzrbdT6bTk47osuUMEHiQZ9n7qwpwmFX1PZUBCe7S7K+Tj4pJa3tto+K
-         og0Oj57R0bhHHBoAro78rkt402NIZq8kegcyDf/JvKtg1nTu+S1Ro1tL/HcsWH9pppNv
-         oa9cciQOUtHVhwKP8wXHCn3JmW3xllVLY74NSVCBh8LgmZZ+Vrtw+lj2jfsP8EG8zMsV
-         GJLjYEO2I28wYI02+RM12TcBjrR0y2Q6tWnsclWj2nUytnqA40JoEwt9umfIO6J7SYxs
-         9RWfx2Edzt7ejtToBnVxPBr5YAcqLxm8/fiwG/983p8BLFqMzww6fIFwciqkQxEDXUVF
-         B2wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=irvAfDqJe1hQB3fJxlaJ3x9w9qp/XEy9b8ACpfP/PLU=;
-        b=SSb6GM45XwdsIFPqJ1jiQR2Z41e3/8lzr01TZ/32shhEqQJJHZZjrq2l5SfgXl85tL
-         FDy1iCeNPdrZqXEwH+/cPpEcFFeVNaHeiJuZvrk4/NxOUDMMY4OWuaK5uKe0F8O2mrRD
-         Z1+lVeX0mn4L1a5WNfcSXkiS8TE3T4LyJnwNab/P/6P0rGjX5S/27/pWR4JIFhDM53HI
-         cAQHN5VeTCOsH5WmkBp5skI/guEQ2bU3Lqz0j8WbaQgsKxAbN8qDGGeGAbyY6vYQaKT0
-         pD9gVAuQtI/fGzVqrswEhQ476DC1euhqq27q5ymOFrd188pW85ihx7GpNuC9fPRBQtdt
-         h1gQ==
-X-Gm-Message-State: AOAM5338DR1SBf6HxzZZtB5CH0j8qfE6R3T7jvIHr6JcOREAvnrZvEmP
-        AVGHIYkYnT0+hm87EpC4z6yrIu7uYjrqlTY/v/k=
-X-Google-Smtp-Source: ABdhPJzQwoLN5aVMDM/PeGa46T3CbVdNQoK8dwDXPNPOoM9PghO4aTH+b/IWpKBr++HhfHAlmSMDuoGFTtCJSwc7oxU=
-X-Received: by 2002:aa7:d841:: with SMTP id f1mr29623167eds.286.1617608253933;
- Mon, 05 Apr 2021 00:37:33 -0700 (PDT)
+        id S232185AbhDEIMQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 04:12:16 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56716 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232041AbhDEIMQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 04:12:16 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 687081F40EDB
+Received: by earth.universe (Postfix, from userid 1000)
+        id 4241E3C0C96; Mon,  5 Apr 2021 10:12:07 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 10:12:07 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Carl Philipp Klemm <philipp@uvos.xyz>
+Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        Arthur Demchenkov <spinal.by@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH 3/5] power: supply: cpcap-battery: invalidate
+ empty->counter_uah and charge_full when they are grossly wrong
+Message-ID: <20210405081207.oqkd37scsimj4lpo@earth.universe>
+References: <20210117224638.10c9d9aee7c0144fafd70520@uvos.xyz>
 MIME-Version: 1.0
-Received: by 2002:a17:906:2ed7:0:0:0:0 with HTTP; Mon, 5 Apr 2021 00:37:33
- -0700 (PDT)
-Reply-To: LishaHaman225@gmail.com
-From:   Miss Lisha Haman <rhamatouwashidha55@gmail.com>
-Date:   Mon, 5 Apr 2021 00:37:33 -0700
-Message-ID: <CA+iwAOiGuGkqsyvRDyViZVxCVfNd26TfHFkX56VSx-HyYkU2iQ@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ssvre46dn3edmrrv"
+Content-Disposition: inline
+In-Reply-To: <20210117224638.10c9d9aee7c0144fafd70520@uvos.xyz>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-My dear I am Miss Lisha Haman 23 years of age , I am the only daughter
-to Dr Abdul Haman from France-Paris who work with (SEMAFO) the biggest
-Canadian gold producer here in West Africa Burkina Faso,
 
-Unfortunately my father was a victim on the deadliest attack by the
-jihadist On the 6 November 2019 when gunmen ambushed a convoy
-transporting workers of the Canadian mining firm Semafo, it is my sad
-moment each time I think about this, but the reason why I contacted
-you is that I have my late father receipt of deposit he made with a
-bank in abroad with my name as next of kin, The total amount deposited
-was 3.7 million United Stated dollars,
+--ssvre46dn3edmrrv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Now I decided to travel for the money but embassy here deny me visa
-due to the Corona virus outbreak,
+Hi,
 
-I talk to the bank regarding my visa problem and they advise me to
-look for my relative trusted bank account so that they will transfer
-the total fund in there, But I am the only daughter of my father and
-have no relative to present, that is why I want to present you to the
-bank as my relative who will receive the total fund on my behalf and
-also take care of me as well,
+On Sun, Jan 17, 2021 at 10:46:38PM +0100, Carl Philipp Klemm wrote:
+> This invalidates empty->counter_uah and charge_full when charge_now indic=
+ates
+> that they are grossly wrong and adds some tolerance to
+> POWER_SUPPLY_PROP_CHARGE_FULL to allow for inaccuracies in the charge cou=
+nter
+> and manufacturing tolerances in the battery.
+>=20
+> Signed-off-by: Carl Philipp Klemm <philipp@uvos.xyz>
+> ---
+>  drivers/power/supply/cpcap-battery.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/=
+cpcap-battery.c
+> index 86ed41d9627f..8ae0c9c7ebcb 100644
+> --- a/drivers/power/supply/cpcap-battery.c
+> +++ b/drivers/power/supply/cpcap-battery.c
+> @@ -667,10 +667,22 @@ static int cpcap_battery_get_property(struct power_=
+supply *psy,
+>  		if (!empty->voltage)
+>  			return -ENODATA;
+>  		val->intval =3D empty->counter_uah - latest->counter_uah;
+> -		if (val->intval < 0)
+> +		if (val->intval < 0) {
+> +			if (ddata->charge_full && abs(val->intval) > ddata->charge_full/5) {
 
-I attached my picture  with this mail please send me your complete
-full details such as, Your Full Name:
+Please add a comment what this check is doing. It's hard to grasp
+without context of the commit when reading the driver at a later
+point.
 
-Home and Office Addresses:
+/* Assume invalid config if CHARGE_NOW is -20% */
 
-Telephone Number:
+> +				empty->voltage =3D 0;
+> +				ddata->charge_full =3D 0;
+> +				return -ENODATA;
+> +			}
+>  			val->intval =3D 0;
+> -		else if (ddata->charge_full && ddata->charge_full < val->intval)
+> +		}
+> +		else if (ddata->charge_full && ddata->charge_full < val->intval) {
 
-Occupation:
+put closing curly bracket into the same line as the else. Also
+please add sth. like
 
-Country of Residence:
+/* Assume invalid config if CHARGE_NOW exceeds CHARGE_FULL by 20% */
 
-Your Bank account number where the bank will remit the fund
+> +			if (val->intval > (6*ddata->charge_full)/5) {
+> +				empty->voltage =3D 0;
+> +				ddata->charge_full =3D 0;
+> +				return -ENODATA;
+> +			}
+>  			val->intval =3D ddata->charge_full;
+> +		}
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL:
+>  		if (!ddata->charge_full)
+> @@ -747,7 +759,7 @@ static int cpcap_battery_set_property(struct power_su=
+pply *psy,
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL:
+>  		if (val->intval < 0)
+>  			return -EINVAL;
+> -		if (val->intval > ddata->config.info.charge_full_design)
+> +		if (val->intval > (6*ddata->config.info.charge_full_design)/5)
+>  			return -EINVAL;
+> =20
+>  		ddata->charge_full =3D val->intval;
 
-Once I received your details, I will give you the bank contact so that
-you can contact them directly to discuss how they can transfer the
-total fund in your bank account so that you can relocate me to join
-you over there in your country,
+-- Sebastian
 
-Sincerely
+--ssvre46dn3edmrrv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Lisha Haman
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBqxlAACgkQ2O7X88g7
++pp+4A//WNcSZJnmCk+7d8molNw4pQC8m8OB59QVII+Uh9iOk7TldIrYs6n0Ph2n
+TWRhrm7iDRkJhoJzSljtOeKJThXSY5enDGuGsIiTxwTO5EEUNGajbm2lOpbhTv8m
+/FvKreJJdsEzNDdgwgDWuw+FCvkhw926YXipqmqYvZ2HaITefujWyfJ/avPRM6be
+WUyRtFICYEsAcwI6wsD7OKqlNpTtut1CNcap4WiR1tqbFu9fTMivNrrhsyBVNEl1
+8twbzEaIio8F3/C+RQlsx8qA0hDh+n/eyjZxPKI7yw4UFTxcYg6vc7CDvgCHSTA/
+FDW1BHv91CVqe9tmnDVOOtUKDYtH4+H0h2RnRNwUuMo4A75JbtSko4FiJ9EI2+bS
+o0NwDzknAeij2Bsk1UttjN3Ztb9JXHfbHc2653mbJt7sWq66MAkswejhCFWlqMrY
+2CNUxi5GZc5HYCd0Oz6G9JKqxfUPZA+5jlP52dy6iGZqiuVM43Yr6uhUtTWyWMu7
+O8frwXsfVGXEkXgi3jprXi49odvgBk5xNa3tqTO4GpqEAl9KzZUKRIMmIRe9d4mL
+uChGycJkguvQMWulFLUIQMDsZyA3EGALvu7lsueQLBi+aR6qf3M3bXl5XJfq9Wf4
+kn8Pm16Wxbe+m2EqvriAs+ND6qaAz++0PPRYlJEJtTxUBxbe4JI=
+=wqOj
+-----END PGP SIGNATURE-----
+
+--ssvre46dn3edmrrv--
