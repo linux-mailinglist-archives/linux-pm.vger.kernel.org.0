@@ -2,126 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6316F35411F
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AD8354127
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Apr 2021 12:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241685AbhDEKPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Apr 2021 06:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S238171AbhDEKUC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Apr 2021 06:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241681AbhDEKPO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:15:14 -0400
+        with ESMTP id S232530AbhDEKUB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Apr 2021 06:20:01 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA58C061756;
-        Mon,  5 Apr 2021 03:15:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAC3C061756;
+        Mon,  5 Apr 2021 03:19:56 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 262EF1F44D7D
+        with ESMTPSA id 0E9DB1F449BA
 Received: by earth.universe (Postfix, from userid 1000)
-        id C6AD83C0C96; Mon,  5 Apr 2021 12:15:04 +0200 (CEST)
-Date:   Mon, 5 Apr 2021 12:15:04 +0200
+        id A3B813C0C96; Mon,  5 Apr 2021 12:19:52 +0200 (CEST)
+Date:   Mon, 5 Apr 2021 12:19:52 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Use true and false for bool variable
-Message-ID: <20210405101504.67fowho7fhfojcxp@earth.universe>
-References: <1612864723-57143-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/3] MAINTAINERS: power: supply: add entry for S3C ADC
+ battery driver
+Message-ID: <20210405101952.itm5xxthn4qphj3u@earth.universe>
+References: <20210210172108.334896-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="itravfoy4wvih4x2"
+        protocol="application/pgp-signature"; boundary="royifewygga4fejm"
 Content-Disposition: inline
-In-Reply-To: <1612864723-57143-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20210210172108.334896-1-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---itravfoy4wvih4x2
+--royifewygga4fejm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Feb 09, 2021 at 05:58:43PM +0800, Jiapeng Chong wrote:
-> Fix the following coccicheck warning:
+On Wed, Feb 10, 2021 at 06:21:06PM +0100, Krzysztof Kozlowski wrote:
+> The S3C ADC battery driver is a very old piece of code but still used by
+> (very old as well) S3C24xx platforms (iPAQ h1930/h1940/rx1950).
+> Currently the header file is not covered by maintainers file, so it
+> might look abandoned.  Add a new entry for entire S3C ADC battery driver
+> with Krzysztof Kozlowski as maintainer (as Krzysztof maintains still
+> Samsung S3C24xx platform) to indicate that some basic review can take
+> place.
 >=20
-> ./include/linux/power_supply.h:507:9-10: WARNING: return of 0/1 in
-> function 'power_supply_is_watt_property' with return type bool.
+> However considering that the S3C24xx platform is quite old with only few
+> users currently and Krzysztof does not have the actual hardware, let's
+> mark the driver as "Odd fixes".
 >=20
-> ./include/linux/power_supply.h:479:9-10: WARNING: return of 0/1 in
-> function 'power_supply_is_amp_property' with return type bool.
->=20
-> Reported-by: Abaci Robot<abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
 
-Thanks, queued.
+Thanks, much appreciated. I queued this series some time ago, but
+forgot to send a notification.
 
 -- Sebastian
 
->  include/linux/power_supply.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  MAINTAINERS | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >=20
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 81a55e9..029e6e9 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -476,12 +476,12 @@ static inline bool power_supply_is_amp_property(enu=
-m power_supply_property psp)
->  	case POWER_SUPPLY_PROP_CURRENT_NOW:
->  	case POWER_SUPPLY_PROP_CURRENT_AVG:
->  	case POWER_SUPPLY_PROP_CURRENT_BOOT:
-> -		return 1;
-> +		return true;
->  	default:
->  		break;
->  	}
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5f7aa507b812..6abf7cc513df 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15614,6 +15614,13 @@ S:	Supported
+>  W:	http://www.ibm.com/developerworks/linux/linux390/
+>  F:	drivers/s390/scsi/zfcp_*
 > =20
-> -	return 0;
-> +	return false;
->  }
-> =20
->  static inline bool power_supply_is_watt_property(enum power_supply_prope=
-rty psp)
-> @@ -504,12 +504,12 @@ static inline bool power_supply_is_watt_property(en=
-um power_supply_property psp)
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
->  	case POWER_SUPPLY_PROP_POWER_NOW:
-> -		return 1;
-> +		return true;
->  	default:
->  		break;
->  	}
-> =20
-> -	return 0;
-> +	return false;
->  }
-> =20
->  #ifdef CONFIG_POWER_SUPPLY_HWMON
+> +S3C ADC BATTERY DRIVER
+> +M:	Krzysztof Kozlowski <krzk@kernel.org>
+> +L:	linux-samsung-soc@vger.kernel.org
+> +S:	Odd Fixes
+> +F:	drivers/power/supply/s3c_adc_battery.c
+> +F:	include/linux/s3c_adc_battery.h
+> +
+>  S3C24XX SD/MMC Driver
+>  M:	Ben Dooks <ben-linux@fluff.org>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 > --=20
-> 1.8.3.1
+> 2.25.1
 >=20
 
---itravfoy4wvih4x2
+--royifewygga4fejm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq4ygACgkQ2O7X88g7
-+po/wg//bH7c/cyVKOnSjDYR5ldUnEWi6WDYyNq8M1ygK864h57r++X0l4lI+8eC
-g2lqAVD3Wx5WrUNMEuIbR+zw5e8NNJCye3gUvcoTZBHfstt+PJgum+1EBBMy2Uco
-uqnaLQLLI/UT3QaIsOXC/4Gf/j4gi6zR7dyTylExtGSqm7oYVzwAK82N816td7+c
-qYKCEoDsL7kMn/X2THEgN9uW7A3B4ekjepXkhg6x/3FgrLyz8XmZuRfMfxJGnCp0
-fS25UKwnEGWwzDXF1L9aNJ0aXWd7trPeDfladk/qJM+R4Tz0+rePWB2ETPfWOVpe
-iy01QPzXLNQubGhEbLEBDGdvthQ5q8tiTXlIwSi18JLcv/oK0vAMYvfljC9pUA3R
-QZjWGdCWv9Wd9wSfX3mg4gpW/KWqm5pavEMxuZW8ifQFkvv0fdZ2QSDvl132p6+S
-k79hxyFal2XMkorY+tB12SCJttmeqFRrxTVfVqaawl3+lDWcwdB66QvpiniGXqGO
-mXpaFLPX3X4A6rmqU6tVbbXkunSYU0Cx6rh/bXneZiTUFiOZj34wAcwU9hznHNMs
-RhGH1JA0yOckFkni2lXX/9dTO/ta2ygjDI/NcAHWd+fTsdExsIV9QXqhJfRzglmR
-x9zN7OHZjuv93I49QBmmZ9mXycMNvYlFfKr/P/nCOXOUOU2/U0A=
-=Uj5I
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBq5EgACgkQ2O7X88g7
++pouPA/+JJt47wBPf5nSss12X06nU0PBmJqvJI2u7ft7BX1GDlO/r06M6dJJGbI+
+B8+H3tFh1usN7HMxY4u4un2VsnF69q3TQNzQIXRWmrnDU+VTDidEnl82L9g6oIFR
+nCSQLvyiZQJjQJL7F8C4gjwwDslKvhXnKQg9dIP2kUMA/aMAThkx9M8QBJuPLezZ
+sc4VqZyZyuIo1tVRwojHjbNV2i4gUlbYSO8ugnc0uPUxoc4RWGiAwvAaWj/AXovI
+eT9I9uPDV57uu+jYUg8HxFxvYxZxUSw2x8pEAfhBp1mlt7Ih4I6jCDfhw/efgXQw
+DDahWmSXtTUkBgf05QTikIH5zquG9P7KiNr3Vq0aOyOLTwj4aHZ8N82W9i/PnpKv
+EDeye+3nF51UfNPvc5pdePrQBWEAqcneiG61F7oGDRsdQJ40wh8s8QchN2RAO1uJ
+FEyHLpliJ0wK4aLOGcT4Y2C//VcPaJHh7UP/ugzaCMkJBVXHwo2af9S+pvUVGZHX
+drKQt7ymEumPhkRG+xietbH3mg9vRlIR/9YJpLbhYZyqP5mIIRKJRfGhu3VevlEc
+EaLra3B9MggIp2D5pS7h/ViZ3PMp25EFJZFc78mP/IIDwOIafnRvLdKJunQyfDO6
+oOPkYqmb8g5/hdeOY5FxtlRHiq1gCGITnbLdgd3/XFdcFF9MSew=
+=q3bO
 -----END PGP SIGNATURE-----
 
---itravfoy4wvih4x2--
+--royifewygga4fejm--
