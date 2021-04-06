@@ -2,167 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A093551FB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 13:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEB9355317
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 14:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242100AbhDFLYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Apr 2021 07:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbhDFLYm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Apr 2021 07:24:42 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23CC061756
-        for <linux-pm@vger.kernel.org>; Tue,  6 Apr 2021 04:24:33 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id b133-20020a1c678b0000b02901231346381dso164284wmc.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Apr 2021 04:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y90qJiQJqj37slq7UDOicfYU3rLq+cqTTBwcfI0ELt8=;
-        b=xVk3VZ+or4GiLIJqeHTK5qCXO7NcGvZFnZ+qikep6aLBm6rQKqQKHG0QXGMmaKI8Yf
-         IahXP/BQH7EXeqSMxxXWhJptggzME7OTb9y+DEzZJPwANOHaAPQ7b/GFmW9gw8M+mzES
-         uL19uCTbAmDpQ1+mPobjg/RCtKTf/KwspkgWAGiAsbfHFT2mgiIkgmkRSNBZ9EGjvBPf
-         CuwAEk7nzx6q9ss9VoPU60tBNBWASkFp+AL1+3tgrkUdvJMueI8+TeOhiKPabpYGOPjR
-         jaIeKqFfDq69ZBZJy95pVFpJWc24oyf01Gv801IMOIUUjgirxe/3x9YBe3D1XxtR2b8I
-         ueFA==
+        id S1343673AbhDFMFy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Apr 2021 08:05:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28533 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232861AbhDFMFy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Apr 2021 08:05:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617710746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vp3T9WyxmxyZPRwkl/3ZtSCMVT5sfpKeevKbiLuA1gE=;
+        b=aSbd0lyhuV5usUFnESv/RHSM4wnaR7o6EwI4/+6MnE/ZlsK9zapkk0/CEAK2A1/C/liJFU
+        eOppGC8Ng9phooSkt7QFQJ5NId+YmcjabUM1VGS+Y00SkC+UxBUR7mOaH6qwyveApAbeS1
+        jNkJfaVpYOg7wCX8GY21zxEX1KBe098=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-564-slBiYSWlNCSx1_Tyh4TfcA-1; Tue, 06 Apr 2021 08:05:42 -0400
+X-MC-Unique: slBiYSWlNCSx1_Tyh4TfcA-1
+Received: by mail-ed1-f72.google.com with SMTP id n20so10369976edr.8
+        for <linux-pm@vger.kernel.org>; Tue, 06 Apr 2021 05:05:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y90qJiQJqj37slq7UDOicfYU3rLq+cqTTBwcfI0ELt8=;
-        b=IMyxI5fdHe+k0LfRjKbwqm+O9+AU3VL74XoRR25giNkNSWZRvyMzBcT6itzmF1XXOW
-         cnnXo7IQoRhSt1mnLo8dIvvL8uy+zuK+cXwAvej+qoRKI0xQu+MM+3pG1SI1/zY1hzob
-         aX+QYcdDq66YTjKTxZTCUdzg271siyQ2SkZB8mdyjy3ZEX8lhIt1sQWih95CA+pzrAQF
-         vxcz/zqyaJFwKGGXzHhIvrRqHyOctrvlZwKO4Bg6SvN1xG5bMxDv2iRay4KgmauqhgpS
-         YVBb2QYVdZIUCfoUWVJyLSP3rbQ56sqZoBRb6mfAP4ObdEgI4rD7MZOuLbMLRago8Ag2
-         oIkQ==
-X-Gm-Message-State: AOAM530jbujTDZjPV5O0S+aLXTTDUphn+DXjG57uOR8LJs3Ss7tKSHqF
-        mZcdojGiKS+b/bZMIFPNx2Xg7g==
-X-Google-Smtp-Source: ABdhPJxY5q/XFvk9uCVb3DLlsLqRUZk2jLzDBdX+Qi4WvkX8bEl/int4cIstoggJNNbuoX8M6r0A7A==
-X-Received: by 2002:a7b:cdef:: with SMTP id p15mr3745051wmj.0.1617708271814;
-        Tue, 06 Apr 2021 04:24:31 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d506:6f5d:adb6:da14? ([2a01:e34:ed2f:f020:d506:6f5d:adb6:da14])
-        by smtp.googlemail.com with ESMTPSA id c6sm31378321wri.32.2021.04.06.04.24.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 04:24:31 -0700 (PDT)
-Subject: Re: [PATCH 1/2] thermal: power_allocator: maintain the device
- statistics from going stale
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com
-References: <20210331163352.32416-1-lukasz.luba@arm.com>
- <20210331163352.32416-2-lukasz.luba@arm.com>
- <b27e0c79-de27-f9b1-ad16-17825b302615@linaro.org>
- <1f0710d5-cd78-dfff-1ce2-bba5f6e469b7@arm.com>
- <1a0b6e4a-1717-91d6-a664-d50e6aa8a809@linaro.org>
- <d74b8e8e-64b0-d724-d572-f98eb597a60e@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <cbc40019-8b2d-5d14-f0fd-b0018fb4a1f6@linaro.org>
-Date:   Tue, 6 Apr 2021 13:24:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=vp3T9WyxmxyZPRwkl/3ZtSCMVT5sfpKeevKbiLuA1gE=;
+        b=TMmf6iU19BfWU9KllXxmK0fKRlH+G68Bnuu8GgU5Tg9fT9mU3tS0dHpITS2Cj7QreE
+         l2isaQ7+bQJ5maJnIa1+sujBR+fr6kSLijy1mlMUcnkBzztud2tciFHZnqjdDnW8Pmvo
+         sXFHulSkhalkmsuh1oUdh6n9pfygrYsZrGvX8kbBjhrJCeGK3KdzBEtmteCCMXULVaE2
+         O0uK5LNcxPnzL7BbUiPQSqc6mAOX0iPW8aW4dYH/S9NLtTrYWK1X9hzssBQ/AqGJaBnh
+         HwlPzUj6nJnTUEfI0MpInH0ZaACQJiJGGd5DFVUrP7pT0K76gtmVFLpOXh8ENSBlItEj
+         tM/Q==
+X-Gm-Message-State: AOAM533kNifsn0yDyJEj7uB4CZ9kiauYzbi2qOSvwNcx+HDImkSWEXnJ
+        +eNaiP6X2SYPevbedBQK1gYWdrbKe87obKj1N+4lA4jGlOPrD+1f+kvQqpoch0/Cn9OCoN4Hr2w
+        nLnqKvHd1e0LMhaQi394=
+X-Received: by 2002:aa7:da48:: with SMTP id w8mr36467706eds.81.1617710741363;
+        Tue, 06 Apr 2021 05:05:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBKpJ9E534Qj1pqc/mP9nueThPgXDagj2Ht/zBw/U/QtOJmV3/8q6pbAm9VCHPpc7z+5bBoA==
+X-Received: by 2002:aa7:da48:: with SMTP id w8mr36467698eds.81.1617710741254;
+        Tue, 06 Apr 2021 05:05:41 -0700 (PDT)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id u13sm5594888ejr.100.2021.04.06.05.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 05:05:40 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, kernel test robot <lkp@intel.com>, x86@kernel.org
+Subject: Re: [pm:acpi 1/2] ERROR: modpost: "wakeup_cpu0"
+ [drivers/acpi/processor.ko] undefined!
+In-Reply-To: <202104030252.XSSunJui-lkp@intel.com>
+References: <202104030252.XSSunJui-lkp@intel.com>
+Date:   Tue, 06 Apr 2021 14:05:40 +0200
+Message-ID: <87pmz7d3e3.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <d74b8e8e-64b0-d724-d572-f98eb597a60e@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/04/2021 12:39, Lukasz Luba wrote:
-> 
-> 
-> On 4/6/21 11:16 AM, Daniel Lezcano wrote:
->> On 06/04/2021 10:44, Lukasz Luba wrote:
->>>
->>>
->>> On 4/2/21 4:54 PM, Daniel Lezcano wrote:
->>>> On 31/03/2021 18:33, Lukasz Luba wrote:
->>>>> When the temperature is below the first activation trip point the
->>>>> cooling
->>>>> devices are not checked, so they cannot maintain fresh statistics. It
->>>>> leads into the situation, when temperature crosses first trip
->>>>> point, the
->>>>> statistics are stale and show state for very long period.
->>>>
->>>> Can you elaborate the statistics you are referring to ?
->>>>
->>>> I can understand the pid controller needs temperature but I don't
->>>> understand the statistics with the cooling device.
->>>>
->>>>
->>>
->>> The allocate_power() calls cooling_ops->get_requested_power(),
->>> which is for CPUs cpufreq_get_requested_power() function.
->>> In that cpufreq implementation for !SMP we still has the
->>> issue of stale statistics. Viresh, when he introduced the usage
->>> of sched_cpu_util(), he fixed that 'long non-meaningful period'
->>> of the broken statistics and it can be found since v5.12-rc1.
->>>
->>> The bug is still there for the !SMP. Look at the way how idle time
->>> is calculated in get_load() [1]. It relies on 'idle_time->timestamp'
->>> for calculating the period. But when this function is not called,
->>> the value can be very far away in time, e.g. a few seconds back,
->>> when the last allocate_power() was called.
->>>
->>> The bug is there for both SMP and !SMP [2] for older kernels, which can
->>> be used in Android or ChromeOS. I've been considering to put this simple
->>> IPA fix also to some other kernels, because Viresh's change is more
->>> a 'feature' and does not cover both platforms.
->>
->> Ok, so IIUC, the temperature is needed as well as the power to do the
->> connection for the pid loop (temp vs power).
->>
->> I'm trying to figure out how to delegate the mitigation switch on/off to
->> the core code instead of the governor (and kill tz->passive) but how
->> things are implemented for the IPA makes this very difficult.
->>
->> AFAICT, this fix is not correct.
->>
->> If the temperature is below the 'switch_on_temp' the passive is set to
->> zero and the throttle function is not called anymore (assuming it is
->> interrupt mode not polling mode), so the power number is not updated
->> also.
-> 
-> IPA doesn't work well in asynchronous mode, because it needs this fixed
-> length for the period. I have been experimenting with tsens IRQs and
-> also both fixed polling + sporadic asynchronous IRQs, trying to fix it
-> and have 'predictable' IPA, but without a luck.
-> IPA needs synchronous polling events like we have for high temp e.g.
-> 100ms and low temp e.g. 1000ms. The asynchronous events are root of
-> undesirable states (too low or to high) calculated and set for cooling
-> devices. It's also harder to escape these states with asynchronous
-> events. I don't recommend using IPA with asynchronous events from IRQs,
-> for now. It might change in future, though.
+kernel test robot <lkp@intel.com> writes:
 
-I understand that but there is the 'switch_on_temp' trip point which is
-supposed to begin to collect the power values ahead of the
-'desired_temp' (aka mitigation trip point / sustainable power).
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi
+> head:   91463ebff32d3e6fc71134784ae6aa91402bfe3d
+> commit: 8cdddd182bd7befae6af49c5fd612893f55d6ccb [1/2] ACPI: processor: Fix CPU0 wakeup in acpi_idle_play_dead()
+> config: x86_64-randconfig-r016-20210401 (attached as .config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=8cdddd182bd7befae6af49c5fd612893f55d6ccb
+>         git remote add pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+>         git fetch --no-tags pm acpi
+>         git checkout 8cdddd182bd7befae6af49c5fd612893f55d6ccb
+>         # save the attached .config to linux build tree
+>         make W=1 ARCH=x86_64 
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+>>> ERROR: modpost: "wakeup_cpu0" [drivers/acpi/processor.ko] undefined!
+>>> ERROR: modpost: "start_cpu0" [drivers/acpi/processor.ko] undefined!
+>
 
+This happens when we have
 
-> The patch 2/2 should calm down the unnecessary updates/notifications so
-> your request.
-> The longer polling, which we have for temperature below 'switch_on_temp'
-> (e.g. every 1sec) shouldn't harm the performance of the system, but
-> definitely makes IPA more predictable and stable.
+CONFIG_ACPI_PROCESSOR=m
 
-The change I proposed is correct then no ? The polling is still effective.
-
-If the IPA needs a sampling, it may be more adequate to separate the
-sampling from the polling. So the other governors won't be impacted by
-the IPA specific setup, and we do not end up with polling/passive delays
-tricks for a governor. The IPA would have its own self-encapsulated
-sampling rate and the thermal zone setup won't depend on the governor.
-
-What do you think ?
+as wakeup_cpu0()/start_cpu0() are not exported, sorry about the breakage
+:-( I'll be sending a patch to fix things up shortly.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Vitaly
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
