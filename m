@@ -2,131 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F50335510C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 12:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A562355112
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Apr 2021 12:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242809AbhDFKiY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Apr 2021 06:38:24 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37952 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhDFKiX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Apr 2021 06:38:23 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 136Ac6bf078390;
-        Tue, 6 Apr 2021 05:38:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617705486;
-        bh=cDx/BwVmTsGaf5kP1m/T9FAofm5zp1u5vU0B5W3CTHs=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=ABkS/SKlqsRcbCliGG7T9RnRYUkShhDqgYSm9NfXTWValsqPvPUxwdwweFQBhKTk9
-         UIhLx1GwLtQPCvhqKMz7FEaYE0bKoMgaaNLKmr4lHc7XZRXHx3NK9/1tn49oeXU8dk
-         gqdJKPq8ci4lu2S5zdZhZg0KSVuk1oAxFUEfLJPM=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 136Ac5Be026725
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 6 Apr 2021 05:38:06 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 6 Apr
- 2021 05:38:05 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Tue, 6 Apr 2021 05:38:05 -0500
-Received: from [10.250.232.146] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 136Ac1k7038264;
-        Tue, 6 Apr 2021 05:38:02 -0500
-Subject: Re: [PATCH v2 1/1] thermal: ti-soc-thermal: Remove duplicated header
- file inclusion
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210406091912.2583-1-thunder.leizhen@huawei.com>
- <20210406091912.2583-2-thunder.leizhen@huawei.com>
-From:   "J, KEERTHY" <j-keerthy@ti.com>
-Message-ID: <a8471ca7-461d-2b78-1d95-cda8e384bd9e@ti.com>
-Date:   Tue, 6 Apr 2021 16:08:01 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S232817AbhDFKjT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Apr 2021 06:39:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:40582 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229968AbhDFKjT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Apr 2021 06:39:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6737531B;
+        Tue,  6 Apr 2021 03:39:11 -0700 (PDT)
+Received: from [10.57.24.162] (unknown [10.57.24.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 275233F73D;
+        Tue,  6 Apr 2021 03:39:09 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: power_allocator: maintain the device
+ statistics from going stale
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
+References: <20210331163352.32416-1-lukasz.luba@arm.com>
+ <20210331163352.32416-2-lukasz.luba@arm.com>
+ <b27e0c79-de27-f9b1-ad16-17825b302615@linaro.org>
+ <1f0710d5-cd78-dfff-1ce2-bba5f6e469b7@arm.com>
+ <1a0b6e4a-1717-91d6-a664-d50e6aa8a809@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d74b8e8e-64b0-d724-d572-f98eb597a60e@arm.com>
+Date:   Tue, 6 Apr 2021 11:39:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20210406091912.2583-2-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <1a0b6e4a-1717-91d6-a664-d50e6aa8a809@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 4/6/2021 2:49 PM, Zhen Lei wrote:
-> Delete one of the header files <linux/of_device.h> that are included
-> twice, all included header files are then rearranged alphabetically.
+On 4/6/21 11:16 AM, Daniel Lezcano wrote:
+> On 06/04/2021 10:44, Lukasz Luba wrote:
+>>
+>>
+>> On 4/2/21 4:54 PM, Daniel Lezcano wrote:
+>>> On 31/03/2021 18:33, Lukasz Luba wrote:
+>>>> When the temperature is below the first activation trip point the
+>>>> cooling
+>>>> devices are not checked, so they cannot maintain fresh statistics. It
+>>>> leads into the situation, when temperature crosses first trip point, the
+>>>> statistics are stale and show state for very long period.
+>>>
+>>> Can you elaborate the statistics you are referring to ?
+>>>
+>>> I can understand the pid controller needs temperature but I don't
+>>> understand the statistics with the cooling device.
+>>>
+>>>
+>>
+>> The allocate_power() calls cooling_ops->get_requested_power(),
+>> which is for CPUs cpufreq_get_requested_power() function.
+>> In that cpufreq implementation for !SMP we still has the
+>> issue of stale statistics. Viresh, when he introduced the usage
+>> of sched_cpu_util(), he fixed that 'long non-meaningful period'
+>> of the broken statistics and it can be found since v5.12-rc1.
+>>
+>> The bug is still there for the !SMP. Look at the way how idle time
+>> is calculated in get_load() [1]. It relies on 'idle_time->timestamp'
+>> for calculating the period. But when this function is not called,
+>> the value can be very far away in time, e.g. a few seconds back,
+>> when the last allocate_power() was called.
+>>
+>> The bug is there for both SMP and !SMP [2] for older kernels, which can
+>> be used in Android or ChromeOS. I've been considering to put this simple
+>> IPA fix also to some other kernels, because Viresh's change is more
+>> a 'feature' and does not cover both platforms.
+> 
+> Ok, so IIUC, the temperature is needed as well as the power to do the
+> connection for the pid loop (temp vs power).
+> 
+> I'm trying to figure out how to delegate the mitigation switch on/off to
+> the core code instead of the governor (and kill tz->passive) but how
+> things are implemented for the IPA makes this very difficult.
+> 
+> AFAICT, this fix is not correct.
+> 
+> If the temperature is below the 'switch_on_temp' the passive is set to
+> zero and the throttle function is not called anymore (assuming it is
+> interrupt mode not polling mode), so the power number is not updated also.
 
-Reviewed-by: Keerthy <j-keerthy@ti.com>
+IPA doesn't work well in asynchronous mode, because it needs this fixed
+length for the period. I have been experimenting with tsens IRQs and
+also both fixed polling + sporadic asynchronous IRQs, trying to fix it
+and have 'predictable' IPA, but without a luck.
+IPA needs synchronous polling events like we have for high temp e.g.
+100ms and low temp e.g. 1000ms. The asynchronous events are root of
+undesirable states (too low or to high) calculated and set for cooling
+devices. It's also harder to escape these states with asynchronous
+events. I don't recommend using IPA with asynchronous events from IRQs,
+for now. It might change in future, though.
 
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->   drivers/thermal/ti-soc-thermal/ti-bandgap.c | 35 ++++++++++++++---------------
->   1 file changed, 17 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> index 8a3646e26ddd208..5e7e80b4a8171c4 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> @@ -9,30 +9,29 @@
->    *   Eduardo Valentin <eduardo.valentin@ti.com>
->    */
->   
-> -#include <linux/module.h>
-> +#include <linux/clk.h>
-> +#include <linux/cpu_pm.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
->   #include <linux/export.h>
-> +#include <linux/gpio/consumer.h>
->   #include <linux/init.h>
-> -#include <linux/kernel.h>
->   #include <linux/interrupt.h>
-> -#include <linux/clk.h>
-> -#include <linux/gpio/consumer.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/err.h>
-> -#include <linux/types.h>
-> -#include <linux/spinlock.h>
-> -#include <linux/sys_soc.h>
-> -#include <linux/reboot.h>
-> -#include <linux/of_device.h>
-> -#include <linux/of_platform.h>
-> -#include <linux/of_irq.h>
->   #include <linux/io.h>
->   #include <linux/iopoll.h>
-> -#include <linux/cpu_pm.h>
-> -#include <linux/device.h>
-> -#include <linux/pm_runtime.h>
-> -#include <linux/pm.h>
-> -#include <linux/of.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
->   #include <linux/of_device.h>
-> +#include <linux/of.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/reboot.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/sys_soc.h>
-> +#include <linux/types.h>
->   
->   #include "ti-bandgap.h"
->   
-> 
+The patch 2/2 should calm down the unnecessary updates/notifications so
+your request.
+The longer polling, which we have for temperature below 'switch_on_temp'
+(e.g. every 1sec) shouldn't harm the performance of the system, but
+definitely makes IPA more predictable and stable.
+
