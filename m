@@ -2,72 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8B73572F5
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 19:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643CB357310
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 19:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347872AbhDGRTx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Apr 2021 13:19:53 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:39517 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347825AbhDGRTw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 13:19:52 -0400
-Received: by mail-oi1-f178.google.com with SMTP id i81so19509867oif.6;
-        Wed, 07 Apr 2021 10:19:41 -0700 (PDT)
+        id S236291AbhDGRXt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Apr 2021 13:23:49 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:35358 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhDGRXq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 13:23:46 -0400
+Received: by mail-oi1-f172.google.com with SMTP id x2so19537312oiv.2;
+        Wed, 07 Apr 2021 10:23:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Fkgm8HAgL/Gal4L28d+A7F24+oEWebbCO/PFXp5cWhQ=;
-        b=Oyb1flSSBsDMza0Cba+SSjHWLu4Fs0fqYsGACQErimUw5JxeMx2l0Ysyao+p5Ftabh
-         MY+VI5Z4X3TkorFCarrHYiINpIGx6xoXg99SQk9nnkWiBrHDpKLZWQztgSQifvRoopgP
-         5JP/Y6wf6ncW4lfqr+94szOOiBl9cd6Y/B3gaiJ4QroMr/t42Z+7esDIKMJQAvjVNi25
-         EFSw88TU6dQv/0Lvi9Ua7kJLhP8hF9tsu6Ob4RT8dYoYuaLORi1NmKj8ITckK5el8GZ+
-         wJw6WkcqShcQxUmFJxmEhdDfD1E0/YE49EM2sXYc6GZwJE0cDeoGzVGQv7mnk0WxSW4y
-         Kxww==
-X-Gm-Message-State: AOAM532XTKZGLtu+fpSuWnOKlTWvlC/R4lZ7mG5CWmWouei4nY5v/Leq
-        wGWrQcaHEKtjCpN+mPvnc5gn1MEHzPGD/nzpgX4=
-X-Google-Smtp-Source: ABdhPJxt8u8Tjz8h2lok5NThS4zt0oc6H4V2sQd1IfhMrpLhLYGtLeBhl0aaFt30aSSEWLkYoktWSnwx1nJYj9Kdnvo=
-X-Received: by 2002:aca:5fc3:: with SMTP id t186mr2906295oib.69.1617815980877;
- Wed, 07 Apr 2021 10:19:40 -0700 (PDT)
+        bh=Rkdu8+l6BGRFtlZuPgRS4588UVpEsZHH3+pJ7Lsomjo=;
+        b=D3QkplMaPwTy+C869vIDCckIOOrIFcmiqL83pkVklo3ppNokYn+FJnZWDOo7nZYgaA
+         8ydCszGIzAaJ+gAi9J66h8KA+aTQQG4/up1bDznmbCYsqiAIunCp/ORCsyykPuRdPdrr
+         vEk9agAlILAC5KKkwqmN4C6I3VmicK0DCypG/Bv9/x6L7mz+UGI+iIeeaaiz2qytdHU8
+         dI1nQn+vMiYpk+bfoaq1TZn8RF6qySLku/ONxspqL1QDQRszi8F+n9KLAgvfYDFppRu0
+         fWNzH8363W6bRcmaV54tNb4zTaB7XUG2fIEY0TuUzMZ77fLd5Xrzme3Sp8fRAHNVvOGM
+         1XsA==
+X-Gm-Message-State: AOAM532suJnpA+NqgiNA2NGbURxqq9Ti3d9Ejwv1S4lSFs/0zWB2I6VW
+        mxdRzkbW4OEw/YLR0C8gSHgLM6D3YbTvKnGor1U=
+X-Google-Smtp-Source: ABdhPJzps5NTECKCtvxzufHr2bPXF8124nGW2e+neaAmOF2twcZBxLs/VpNnFWZ6vxEh1t3xQwXdTJLLkZyNbS8PJqs=
+X-Received: by 2002:a05:6808:24b:: with SMTP id m11mr3034768oie.157.1617816216713;
+ Wed, 07 Apr 2021 10:23:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210324072912.737621-1-wanjiabing@vivo.com>
-In-Reply-To: <20210324072912.737621-1-wanjiabing@vivo.com>
+References: <20210331232614.304591-1-pierre-louis.bossart@linux.intel.com>
+ <20210331232614.304591-4-pierre-louis.bossart@linux.intel.com>
+ <CAJZ5v0jS0Wfzq0M45ZbP2vNX4y=e+tvZjrmn4AiE+ycxij+CWg@mail.gmail.com> <579db6b4-d6ed-2dcb-b633-fe7fb94cb3c9@linux.intel.com>
+In-Reply-To: <579db6b4-d6ed-2dcb-b633-fe7fb94cb3c9@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Apr 2021 19:19:29 +0200
-Message-ID: <CAJZ5v0h8Zsq0W2Cxx4ufkbejbisJJUcv8gSkE8jzLsnmT2ADKA@mail.gmail.com>
-Subject: Re: [PATCH] include: linux: pm: Remove duplicate declaration
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
+Date:   Wed, 7 Apr 2021 19:23:25 +0200
+Message-ID: <CAJZ5v0jVc4mQZVXGNFUYx1tk7pk4Sfkbj1aZV52GX-4VYnxb+Q@mail.gmail.com>
+Subject: Re: [PATCH 3/7] PM: runtime: remove kernel-doc warnings
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kael_w@yeah.net
+        Johannes Berg <johannes@sipsolutions.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 8:30 AM Wan Jiabing <wanjiabing@vivo.com> wrote:
+On Thu, Apr 1, 2021 at 4:13 PM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
 >
-> struct device is declared twice.So remove the duplicate.
 >
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  include/linux/pm.h | 1 -
->  1 file changed, 1 deletion(-)
 >
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 482313a8ccfc..c9657408fee1 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -39,7 +39,6 @@ static inline void pm_vt_switch_unregister(struct device *dev)
->   * Device power management
->   */
+> On 4/1/21 8:40 AM, Rafael J. Wysocki wrote:
+> > On Thu, Apr 1, 2021 at 1:26 AM Pierre-Louis Bossart
+> > <pierre-louis.bossart@linux.intel.com> wrote:
+> >>
+> >> remove make W=1 warnings
+> >>
+> >> drivers/base/power/runtime.c:926: warning: Function parameter or
+> >> member 'timer' not described in 'pm_suspend_timer_fn'
+> >>
+> >> drivers/base/power/runtime.c:926: warning: Excess function parameter
+> >> 'data' description in 'pm_suspend_timer_fn'
+> >>
+> >> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> >> ---
+> >>   drivers/base/power/runtime.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> >> index fe1dad68aee4..1fc1a992f90c 100644
+> >> --- a/drivers/base/power/runtime.c
+> >> +++ b/drivers/base/power/runtime.c
+> >> @@ -951,7 +951,7 @@ static void pm_runtime_work(struct work_struct *work)
+> >>
+> >>   /**
+> >>    * pm_suspend_timer_fn - Timer function for pm_schedule_suspend().
+> >> - * @data: Device pointer passed by pm_schedule_suspend().
+> >> + * @timer: hrtimer used by pm_schedule_suspend().
+> >>    *
+> >>    * Check if the time is right and queue a suspend request.
+> >>    */
+> >> --
+> >
+> > I can apply this along with the [4-5/7].  Do you want me to do that?
 >
-> -struct device;
->
->  #ifdef CONFIG_PM
->  extern const char power_group_name[];          /* = "power" */
-> --
+> Works for me. I wasn't sure by looking at the MAINTAINERS file which
+> files in drivers/base/ are maintained by whom, so sent the patches as a
+> single set.
 
-Applied as 5.13 material, thanks!
+All three applied now as 5.13 material, thanks!
