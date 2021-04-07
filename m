@@ -2,66 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064753563C1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 08:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F32E356674
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 10:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhDGGKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Apr 2021 02:10:45 -0400
-Received: from mga09.intel.com ([134.134.136.24]:23493 "EHLO mga09.intel.com"
+        id S1347111AbhDGIVY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Apr 2021 04:21:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230075AbhDGGKl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Apr 2021 02:10:41 -0400
-IronPort-SDR: 5i8oDm3nKMWhlrzNLyi2vu9ocoVE8KSJMcrnlg0/xHDmVZGu/l8c4HZngnS6M4BgFdsfZIfzTp
- BIi2AQTPpQVg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="193344296"
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="193344296"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2021 23:10:30 -0700
-IronPort-SDR: S5x9dEHJ08xW5NjN6YaWzRb+GWM4nAVCIxhD5gcr74aO0K6fwtFSt7B1KX/YGOpBIhdmIbyLTE
- Lx5JThFKWmag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="379701369"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by orsmga003.jf.intel.com with ESMTP; 06 Apr 2021 23:10:29 -0700
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH] intel_idle: add Iclelake-D support
-Date:   Wed,  7 Apr 2021 09:10:28 +0300
-Message-Id: <20210407061028.3072316-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        id S240626AbhDGIVR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Apr 2021 04:21:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F450613CF;
+        Wed,  7 Apr 2021 08:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617783662;
+        bh=1IWlmRG9OD413dWYIjvrcWiKG5N1mPS/69ftZBnxCPE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MU/hOdvwtzxehLxToSu65R5aOnRU3HIBxCz57ZiasngM+1MaaWazON3N+zEdOJZYr
+         lE/KionJZjqUql+6V09QR1bUu6M/Qzp30HMFgSPenbnw9CCxb2i+Qqcl0VX7BDmpmR
+         72Bj0HiREn8JRuhw+qPf2Z0zeTluUs0xTJtuLdltHzF1SvY7HcsWGui04BfyRIU/J3
+         RBXvcAMPzUyJR/kmeTo5tEfpXoyEyzNJ088/ukU4X+xY5oshHbYlcUgWMGVUob0u3b
+         6EIxlJUed/GABQ+UyyICvPqtEJrxu8Ym8Ad1HvtfmGdAqRpoZG0oW++4Tx/bGTfSnR
+         oSZ3RBmaWKnhg==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lU3Qq-005i24-4N; Wed, 07 Apr 2021 10:21:00 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Przemys=C5=82aw=20Gaj?= <pgaj@cadence.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Harry Wei <harryxiyou@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Vitor Soares <vitor.soares@synopsys.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kvm@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 00/19] Fix broken documentation file references
+Date:   Wed,  7 Apr 2021 10:20:39 +0200
+Message-Id: <cover.1617783062.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Hi Jon,
 
-This patch adds Icelake Xeon D support to 'intel_idle' driver. Since Icelake D
-and Icelake SP C-state characteristics the same, we use Icelake SP C-states
-table for Icelake D as well.
+As files keep being moved around and DT bindings are 
+converted and renamed to yaml, their doc references get 
+outdated, pointing to an invalid places.
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Acked-by: Chen Yu <yu.c.chen@intel.com>
----
- drivers/idle/intel_idle.c | 1 +
- 1 file changed, 1 insertion(+)
+This series address those. It is based on the top of docs-next tree,
+and most patches here are independent from the other ones.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 3273360f30f7..3c2cdc766203 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1156,6 +1156,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		&idle_cpu_skl),
- 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
+v2:
+  - Dropped patches that were already applied, Most of those
+    will be following via Jonathan Cameron's iio tree;
+  - Dropped patches that don't apply on the top of docs next.
+  - Added some new patches fixing other breakages.
+
+PS.:  
+  I placed the dropped patches on a separate branch. I'll track 
+  them and re-submit any missing ones after -rc1.
+
+Mauro Carvalho Chehab (19):
+  MAINTAINERS: update ste,mcde.yaml reference
+  MAINTAINERS: update brcm,bcm-v3d.yaml reference
+  MAINTAINERS: update fsl,dpaa2-console.yaml reference
+  MAINTAINERS: update mtk-sd.yaml reference
+  MAINTAINERS: update snps,dw-axi-dmac.yaml reference
+  dt-bindings: don't use ../dir for doc references
+  dt-bindings: fix references for iio-bindings.txt
+  dt-bindings: iommu: mediatek: update mediatek,iommu.yaml references
+  dt-bindings: i3c: update i3c.yaml references
+  dt-bindings:iio:adc: update motorola,cpcap-adc.yaml reference
+  dt-bindings:iio:adc: update dlg,da9150-gpadc.yaml reference
+  dt-bindings: power: supply: da9150: update da9150-charger.txt
+    reference
+  dt-bindings: power: supply: da9150: update da9150-fg.txt reference
+  docs: update sysfs-platform_profile.rst reference
+  docs: update rcu_dereference.rst reference
+  docs: vcpu-requests.rst: fix reference for atomic ops
+  docs: replace transation references for reporting-bugs.rst
+  docs: translations/zh_CN: fix a typo at 8.Conclusion.rst
+  docs: sched-bwc.rst: fix a typo on a doc name
+
+ .../bindings/display/mediatek/mediatek,disp.txt  |  2 +-
+ .../devicetree/bindings/hwmon/ntc_thermistor.txt |  2 +-
+ .../devicetree/bindings/i3c/cdns,i3c-master.txt  |  6 +++---
+ .../bindings/i3c/snps,dw-i3c-master.txt          |  6 +++---
+ .../devicetree/bindings/iio/adc/ingenic,adc.yaml |  5 +++--
+ .../devicetree/bindings/input/adc-joystick.yaml  |  4 +++-
+ .../input/touchscreen/resistive-adc-touch.txt    |  5 ++++-
+ .../bindings/media/mediatek-jpeg-decoder.txt     |  2 +-
+ .../bindings/media/mediatek-jpeg-encoder.txt     |  2 +-
+ .../devicetree/bindings/media/mediatek-mdp.txt   |  2 +-
+ .../bindings/media/mediatek-vcodec.txt           |  2 +-
+ Documentation/devicetree/bindings/mfd/ab8500.txt |  4 +++-
+ Documentation/devicetree/bindings/mfd/da9150.txt |  8 ++++----
+ .../devicetree/bindings/mfd/motorola-cpcap.txt   | 16 ++++++++--------
+ .../bindings/power/supply/da9150-charger.txt     |  2 +-
+ Documentation/scheduler/sched-bwc.rst            |  2 +-
+ .../translations/it_IT/process/howto.rst         |  2 +-
+ Documentation/translations/ja_JP/howto.rst       |  2 +-
+ Documentation/translations/zh_CN/SecurityBugs    |  2 +-
+ .../zh_CN/admin-guide/reporting-issues.rst       |  4 ++--
+ .../translations/zh_CN/process/8.Conclusion.rst  |  2 +-
+ .../translations/zh_CN/process/howto.rst         |  2 +-
+ Documentation/virt/kvm/vcpu-requests.rst         |  2 +-
+ MAINTAINERS                                      | 10 +++++-----
+ include/linux/platform_profile.h                 |  2 +-
+ tools/memory-model/Documentation/glossary.txt    |  2 +-
+ 26 files changed, 54 insertions(+), 46 deletions(-)
+
 -- 
-2.29.2
+2.30.2
+
 
