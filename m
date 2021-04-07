@@ -2,78 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6AC357129
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 17:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8B73572F5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 19:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbhDGP4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Apr 2021 11:56:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:59716 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347463AbhDGP4N (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Apr 2021 11:56:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A4A61063;
-        Wed,  7 Apr 2021 08:56:04 -0700 (PDT)
-Received: from [10.57.26.91] (unknown [10.57.26.91])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E88DF3F694;
-        Wed,  7 Apr 2021 08:56:02 -0700 (PDT)
-Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: handle clk_set_parent()
- failure
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-References: <20210407154535.70756-1-krzysztof.kozlowski@canonical.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Message-ID: <1906533a-e86a-10fe-5bc3-4600af98d579@arm.com>
-Date:   Wed, 7 Apr 2021 16:56:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1347872AbhDGRTx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Apr 2021 13:19:53 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:39517 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347825AbhDGRTw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 13:19:52 -0400
+Received: by mail-oi1-f178.google.com with SMTP id i81so19509867oif.6;
+        Wed, 07 Apr 2021 10:19:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fkgm8HAgL/Gal4L28d+A7F24+oEWebbCO/PFXp5cWhQ=;
+        b=Oyb1flSSBsDMza0Cba+SSjHWLu4Fs0fqYsGACQErimUw5JxeMx2l0Ysyao+p5Ftabh
+         MY+VI5Z4X3TkorFCarrHYiINpIGx6xoXg99SQk9nnkWiBrHDpKLZWQztgSQifvRoopgP
+         5JP/Y6wf6ncW4lfqr+94szOOiBl9cd6Y/B3gaiJ4QroMr/t42Z+7esDIKMJQAvjVNi25
+         EFSw88TU6dQv/0Lvi9Ua7kJLhP8hF9tsu6Ob4RT8dYoYuaLORi1NmKj8ITckK5el8GZ+
+         wJw6WkcqShcQxUmFJxmEhdDfD1E0/YE49EM2sXYc6GZwJE0cDeoGzVGQv7mnk0WxSW4y
+         Kxww==
+X-Gm-Message-State: AOAM532XTKZGLtu+fpSuWnOKlTWvlC/R4lZ7mG5CWmWouei4nY5v/Leq
+        wGWrQcaHEKtjCpN+mPvnc5gn1MEHzPGD/nzpgX4=
+X-Google-Smtp-Source: ABdhPJxt8u8Tjz8h2lok5NThS4zt0oc6H4V2sQd1IfhMrpLhLYGtLeBhl0aaFt30aSSEWLkYoktWSnwx1nJYj9Kdnvo=
+X-Received: by 2002:aca:5fc3:: with SMTP id t186mr2906295oib.69.1617815980877;
+ Wed, 07 Apr 2021 10:19:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210407154535.70756-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210324072912.737621-1-wanjiabing@vivo.com>
+In-Reply-To: <20210324072912.737621-1-wanjiabing@vivo.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 7 Apr 2021 19:19:29 +0200
+Message-ID: <CAJZ5v0h8Zsq0W2Cxx4ufkbejbisJJUcv8gSkE8jzLsnmT2ADKA@mail.gmail.com>
+Subject: Re: [PATCH] include: linux: pm: Remove duplicate declaration
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kael_w@yeah.net
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
-
-On 4/7/21 4:45 PM, Krzysztof Kozlowski wrote:
-> clk_set_parent() can fail and ignoring such case could lead to invalid
-> clock setup for given frequency.
-> 
-> Addresses-Coverity: Unchecked return value
-> Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On Wed, Mar 24, 2021 at 8:30 AM Wan Jiabing <wanjiabing@vivo.com> wrote:
+>
+> struct device is declared twice.So remove the duplicate.
+>
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 > ---
->   drivers/memory/samsung/exynos5422-dmc.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> index 56f6e65d40cd..9c8318923ed0 100644
-> --- a/drivers/memory/samsung/exynos5422-dmc.c
-> +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> @@ -1293,7 +1293,9 @@ static int exynos5_dmc_init_clks(struct exynos5_dmc *dmc)
->   
->   	dmc->curr_volt = target_volt;
->   
-> -	clk_set_parent(dmc->mout_mx_mspll_ccore, dmc->mout_spll);
-> +	ret = clk_set_parent(dmc->mout_mx_mspll_ccore, dmc->mout_spll);
-> +	if (ret)
-> +		return ret;
->   
->   	clk_prepare_enable(dmc->fout_bpll);
->   	clk_prepare_enable(dmc->mout_bpll);
-> 
+>  include/linux/pm.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 482313a8ccfc..c9657408fee1 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -39,7 +39,6 @@ static inline void pm_vt_switch_unregister(struct device *dev)
+>   * Device power management
+>   */
+>
+> -struct device;
+>
+>  #ifdef CONFIG_PM
+>  extern const char power_group_name[];          /* = "power" */
+> --
 
-Thanks for running these tests and for the patch.
-I've checked how many many places this function is used in the kernel
-and return is ignored - in a lot of places...
-
-This patch LGTM.
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
+Applied as 5.13 material, thanks!
