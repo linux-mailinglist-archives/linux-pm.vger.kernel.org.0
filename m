@@ -2,102 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FC03569E0
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 12:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7029356AE1
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 13:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351212AbhDGKkK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Apr 2021 06:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351158AbhDGKkA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 06:40:00 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F489C061756;
-        Wed,  7 Apr 2021 03:39:51 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id E79D01F453CF
-Received: by earth.universe (Postfix, from userid 1000)
-        id 2F75D3C0C96; Wed,  7 Apr 2021 12:39:46 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 12:39:46 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 07/19] dt-bindings: fix references for iio-bindings.txt
-Message-ID: <20210407103946.hxr3yoeasumuzsdk@earth.universe>
-References: <cover.1617783062.git.mchehab+huawei@kernel.org>
- <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
+        id S1351771AbhDGLPX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Apr 2021 07:15:23 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37700 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243105AbhDGLPX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 07:15:23 -0400
+Received: from mail-wr1-f71.google.com ([209.85.221.71])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lU69R-00081T-2I
+        for linux-pm@vger.kernel.org; Wed, 07 Apr 2021 11:15:13 +0000
+Received: by mail-wr1-f71.google.com with SMTP id v8so5308587wrv.7
+        for <linux-pm@vger.kernel.org>; Wed, 07 Apr 2021 04:15:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HouJQzuf2a1RcT0yofIoKLAiQ7qd5aclheZGD67RW3Q=;
+        b=p6phQLlXxbrALm88hDeaPqITUc47+dty2qGw3XK7W5PER+jhI8PoQA/YHi/1rdDuNF
+         R6T4ZxW+t8GDnIAdAUIjbn4eIGr1AJsgy+nNnTGHOrsyr8V7w32woZzgKgesrnef+OKe
+         lmYo4kbcaZFS30lV5ENPUUgeToDqZYnW79RJdQLFha6MlcAQf4HzPLu27fk05SgOqgu9
+         WLf5f7PGsTLomFBl66M+9o8x9lgElxGDMAWcO0z/hpL/TdvWcWAsUkJv0CvXw+H54ncq
+         9hbhhGRx/+tBhTgc/pknPIGk49qSl4otE39OPhVGkM0Jy15N5tWeylD7DLNVnjGiTgDa
+         BWZA==
+X-Gm-Message-State: AOAM530++0mAXKMrsY4gJonK3pq1sJ1a+3JUOoJuzKJx+6ze9aXGEUC/
+        BWCMRhhvOgaOrjhfaIm6Ckyj4bvzaUFLkvktfnAVo5DfwsBRsxrW+vJlLOsM5HkB6+EINYCK1m6
+        PF18rtH/7ws+ga+P0i3V5ZHm+n5eBWJctf9Ok
+X-Received: by 2002:a05:600c:289:: with SMTP id 9mr2579316wmk.135.1617794112789;
+        Wed, 07 Apr 2021 04:15:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzO6lh76dqAK/8ySaxATJaX1KSJP2CwlW9U/9Lc9KH0/ThKDYRhCZamwGMwGpbLu9yd7DIm7w==
+X-Received: by 2002:a05:600c:289:: with SMTP id 9mr2579295wmk.135.1617794112628;
+        Wed, 07 Apr 2021 04:15:12 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id i127sm8297328wma.6.2021.04.07.04.15.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Apr 2021 04:15:12 -0700 (PDT)
+Subject: Re: [PATCH -next] power: supply: s3c_adc_battery: fix possible
+ use-after-free in s3c_adc_bat_remove()
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     sre@kernel.org
+References: <20210407091903.3268399-1-yangyingliang@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <59bbbad2-a82b-e08d-5225-267fee168ed1@canonical.com>
+Date:   Wed, 7 Apr 2021 13:15:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2ca4km7phoijhn6n"
-Content-Disposition: inline
-In-Reply-To: <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210407091903.3268399-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---2ca4km7phoijhn6n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Apr 07, 2021 at 10:20:46AM +0200, Mauro Carvalho Chehab wrote:
-> The iio-bindings.txt was converted into two files and merged
-> at the dt-schema git tree at:
->=20
-> 	https://github.com/devicetree-org/dt-schema
->=20
-> Yet, some documents still refer to the old file. Fix their
-> references, in order to point to the right URL.
->=20
-> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as conten=
-t now in dt-schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On 07/04/2021 11:19, Yang Yingliang wrote:
+> This driver's remove path calls cancel_delayed_work(). However, that
+> function does not wait until the work function finishes. This means
+> that the callback function may still be running after the driver's
+> remove function has finished, which would result in a use-after-free.
+> 
+> Fix by calling cancel_delayed_work_sync(), which ensures that
+> the work is properly cancelled, no longer running, and unable
+> to re-schedule itself.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
+>  drivers/power/supply/s3c_adc_battery.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-[...]
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
->  .../devicetree/bindings/power/supply/da9150-charger.txt      | 2 +-
-
-This file got converted to YAML in my tree and no longer exists in
-linux-next. The new YAML file no longer references iio-bindings.txt.
-
--- Sebastian
-
---2ca4km7phoijhn6n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBti+YACgkQ2O7X88g7
-+ppT7Q/+MFaaDYk56GF+wi+QyV+vfgvcoBWD2eDgLGinJVCETdwJNtd7P8qw9BdT
-yHp+Mzz5Zq+fpJrZg9JvfEw/kL6eHJfoOimW/r6qQAA4tdHYD053pZXPa9lSPlSU
-NgK+TR0UlM6vDXIcl2tUSo0ps/eofdUSvjLmjfAXC+WBOvbokDtijr9FDCm5eXAE
-iEtUplHH1SLkxrIBDZhnNoIiHc4xj/D5AaZSg9LB4zHuJsF66vG763wwKyTgtE8A
-MqF8F/IR0ZFRuCAlmJDogQ3HM/1lirXhqPX3Ife1uuyzSA1Zz0vqkCRwEV/9itwT
-qH0YFWVo/GU2MZeshUOgsP/rMHPEiXIH8pG2s+FUMx3BISgk/CH7WysSei58SSJE
-tUyC+ByP3mukLaDYtVBEZVlIDDgypcdO+UH6WrMyPhMaTpVSVYWJ9p2nEgUX5qF5
-jWwi6lmeExNir9fqnCsXp4O5V2bk11w0jKr2QepOtRx4ak/7HQJkznQEj+Wmv+DW
-Zz60FghpDaMs8yG8x7v8xOcOf0PPtREEYNhCIPffQsIqPclRYS3hgEt+nuU2CxkU
-ayf7dN4DsDVG/amwymw40QvKRGjugmGjxK80kkXoPhZ/yVxH0pyjolWkaox2XjxN
-LnqE/vsJZGi1NLTbWgg7/MSRIxuGAEmJJCEJLCtPhiCyDv06aas=
-=RoNN
------END PGP SIGNATURE-----
-
---2ca4km7phoijhn6n--
+Best regards,
+Krzysztof
