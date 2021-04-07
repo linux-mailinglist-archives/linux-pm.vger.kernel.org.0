@@ -2,172 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DF63568E2
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 12:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3609C35694C
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Apr 2021 12:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350669AbhDGKF2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Apr 2021 06:05:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29675 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233206AbhDGKEj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 06:04:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617789869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc; bh=hcG8hAioBizixLnzGlBmF7WJ9S27SPuTNee6pSwarp0=;
-        b=Vek/CW159qablsROoNQLNjtSu/KrCWUc0Qf1ZCOZXHgH8EySNl1IZV7VvbWvBSX7FNTJRT
-        D5ra/idF5tvEvY8nLHOfI7np/KCDcZO/BYop/Ww2QWg7m/H+51ApOZHpxsV3dYJuwjN+Tp
-        uH6GoebYUaITU5anouxb62Cvtng5b6c=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-MbZHkvC-NASv29juh8kWNA-1; Wed, 07 Apr 2021 06:04:27 -0400
-X-MC-Unique: MbZHkvC-NASv29juh8kWNA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 477B518766D2;
-        Wed,  7 Apr 2021 10:04:26 +0000 (UTC)
-Received: from crecklin.bos.com (ovpn-113-158.rdu2.redhat.com [10.10.113.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D1695D762;
-        Wed,  7 Apr 2021 10:04:22 +0000 (UTC)
-From:   Chris von Recklinghausen <crecklin@redhat.com>
-To:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
-        decui@microsoft.com, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] use crc32 instead of md5 for hibernation e820 integrity check
-Date:   Wed,  7 Apr 2021 06:04:21 -0400
-Message-Id: <20210407100421.27542-1-crecklin@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S238333AbhDGKTw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Apr 2021 06:19:52 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2781 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233283AbhDGKTu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Apr 2021 06:19:50 -0400
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FFgHD3pH2z687Zx;
+        Wed,  7 Apr 2021 18:14:32 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 7 Apr 2021 12:19:38 +0200
+Received: from localhost (10.47.92.157) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 7 Apr 2021
+ 11:19:37 +0100
+Date:   Wed, 7 Apr 2021 11:18:14 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+CC:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Peter Meerwald-Stadler" <pmeerw@pmeerw.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 07/19] dt-bindings: fix references for
+ iio-bindings.txt
+Message-ID: <20210407111814.000046a8@Huawei.com>
+In-Reply-To: <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
+References: <cover.1617783062.git.mchehab+huawei@kernel.org>
+        <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.92.157]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Suspend fails on a system in fips mode because md5 is used for the e820
-integrity check and is not available. Use crc32 instead.
+On Wed, 7 Apr 2021 10:20:46 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
-Prior to this patch, MD5 is used only to create a digest to ensure integrity of
-the region, no actual encryption is done. This patch set changes the integrity
-check to use crc32 instead of md5 since crc32 is available in both FIPS and
-non-FIPS modes.
+> The iio-bindings.txt was converted into two files and merged
+> at the dt-schema git tree at:
+> 
+> 	https://github.com/devicetree-org/dt-schema
+> 
+> Yet, some documents still refer to the old file. Fix their
+> references, in order to point to the right URL.
+> 
+> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as content now in dt-schema")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
-       by md5 digest")
+Given the spread of this one across various other binding docs, perhaps this is one
+for Rob to pick up?
 
-Tested-by: Dexuan Cui <decui@microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
----
-v1 -> v2
-   bump up RESTORE_MAGIC
-v2 -> v3
-   move embelishment from cover letter to commit comments (no code change)
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
- arch/x86/power/hibernate.c | 35 +++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
-
-diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-index cd3914fc9f3d..b56172553275 100644
---- a/arch/x86/power/hibernate.c
-+++ b/arch/x86/power/hibernate.c
-@@ -55,31 +55,31 @@ int pfn_is_nosave(unsigned long pfn)
- }
- 
- 
--#define MD5_DIGEST_SIZE 16
-+#define CRC32_DIGEST_SIZE 16
- 
- struct restore_data_record {
- 	unsigned long jump_address;
- 	unsigned long jump_address_phys;
- 	unsigned long cr3;
- 	unsigned long magic;
--	u8 e820_digest[MD5_DIGEST_SIZE];
-+	u8 e820_digest[CRC32_DIGEST_SIZE];
- };
- 
--#if IS_BUILTIN(CONFIG_CRYPTO_MD5)
-+#if IS_BUILTIN(CONFIG_CRYPTO_CRC32)
- /**
-- * get_e820_md5 - calculate md5 according to given e820 table
-+ * get_e820_crc32 - calculate crc32 according to given e820 table
-  *
-  * @table: the e820 table to be calculated
-- * @buf: the md5 result to be stored to
-+ * @buf: the crc32 result to be stored to
-  */
--static int get_e820_md5(struct e820_table *table, void *buf)
-+static int get_e820_crc32(struct e820_table *table, void *buf)
- {
- 	struct crypto_shash *tfm;
- 	struct shash_desc *desc;
- 	int size;
- 	int ret = 0;
- 
--	tfm = crypto_alloc_shash("md5", 0, 0);
-+	tfm = crypto_alloc_shash("crc32", 0, 0);
- 	if (IS_ERR(tfm))
- 		return -ENOMEM;
- 
-@@ -107,24 +107,24 @@ static int get_e820_md5(struct e820_table *table, void *buf)
- 
- static int hibernation_e820_save(void *buf)
- {
--	return get_e820_md5(e820_table_firmware, buf);
-+	return get_e820_crc32(e820_table_firmware, buf);
- }
- 
- static bool hibernation_e820_mismatch(void *buf)
- {
- 	int ret;
--	u8 result[MD5_DIGEST_SIZE];
-+	u8 result[CRC32_DIGEST_SIZE];
- 
--	memset(result, 0, MD5_DIGEST_SIZE);
-+	memset(result, 0, CRC32_DIGEST_SIZE);
- 	/* If there is no digest in suspend kernel, let it go. */
--	if (!memcmp(result, buf, MD5_DIGEST_SIZE))
-+	if (!memcmp(result, buf, CRC32_DIGEST_SIZE))
- 		return false;
- 
--	ret = get_e820_md5(e820_table_firmware, result);
-+	ret = get_e820_crc32(e820_table_firmware, result);
- 	if (ret)
- 		return true;
- 
--	return memcmp(result, buf, MD5_DIGEST_SIZE) ? true : false;
-+	return memcmp(result, buf, CRC32_DIGEST_SIZE) ? true : false;
- }
- #else
- static int hibernation_e820_save(void *buf)
-@@ -134,15 +134,15 @@ static int hibernation_e820_save(void *buf)
- 
- static bool hibernation_e820_mismatch(void *buf)
- {
--	/* If md5 is not builtin for restore kernel, let it go. */
-+	/* If crc32 is not builtin for restore kernel, let it go. */
- 	return false;
- }
- #endif
- 
- #ifdef CONFIG_X86_64
--#define RESTORE_MAGIC	0x23456789ABCDEF01UL
-+#define RESTORE_MAGIC	0x23456789ABCDEF02UL
- #else
--#define RESTORE_MAGIC	0x12345678UL
-+#define RESTORE_MAGIC	0x12345679UL
- #endif
- 
- /**
-@@ -160,6 +160,9 @@ int arch_hibernation_header_save(void *addr, unsigned int max_size)
- 	rdr->jump_address = (unsigned long)restore_registers;
- 	rdr->jump_address_phys = __pa_symbol(restore_registers);
- 
-+	/* crc32 digest size is 4 but digest buffer size is 16 so zero it all */
-+	memset(rdr->e820_digest, 0, CRC32_DIGEST_SIZE);
-+
- 	/*
- 	 * The restore code fixes up CR3 and CR4 in the following sequence:
- 	 *
--- 
-2.18.1
+> ---
+>  Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt   | 2 +-
+>  Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml   | 5 +++--
+>  Documentation/devicetree/bindings/input/adc-joystick.yaml    | 4 +++-
+>  .../bindings/input/touchscreen/resistive-adc-touch.txt       | 5 ++++-
+>  Documentation/devicetree/bindings/mfd/ab8500.txt             | 4 +++-
+>  .../devicetree/bindings/power/supply/da9150-charger.txt      | 2 +-
+>  6 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> index 37f18d684f6a..4c5c3712970e 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> @@ -32,7 +32,7 @@ Optional node properties:
+>  - "#thermal-sensor-cells" Used to expose itself to thermal fw.
+>  
+>  Read more about iio bindings at
+> -	Documentation/devicetree/bindings/iio/iio-bindings.txt
+> +	https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/
+>  
+>  Example:
+>  	ncp15wb473@0 {
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> index 9f414dbdae86..433a3fb55a2e 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> @@ -14,8 +14,9 @@ description: >
+>    Industrial I/O subsystem bindings for ADC controller found in
+>    Ingenic JZ47xx SoCs.
+>  
+> -  ADC clients must use the format described in iio-bindings.txt, giving
+> -  a phandle and IIO specifier pair ("io-channels") to the ADC controller.
+> +  ADC clients must use the format described in
+> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml,
+> +  giving a phandle and IIO specifier pair ("io-channels") to the ADC controller.
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> index 054406bbd22b..721878d5b7af 100644
+> --- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> +++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> @@ -24,7 +24,9 @@ properties:
+>      description: >
+>        List of phandle and IIO specifier pairs.
+>        Each pair defines one ADC channel to which a joystick axis is connected.
+> -      See Documentation/devicetree/bindings/iio/iio-bindings.txt for details.
+> +      See
+> +      https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +      for details.
+>  
+>    '#address-cells':
+>      const: 1
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> index fee0da12474e..af5223bb5bdd 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> @@ -5,7 +5,10 @@ Required properties:
+>   - compatible: must be "resistive-adc-touch"
+>  The device must be connected to an ADC device that provides channels for
+>  position measurement and optional pressure.
+> -Refer to Documentation/devicetree/bindings/iio/iio-bindings.txt for details
+> +Refer to
+> +https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +for details
+> +
+>   - iio-channels: must have at least two channels connected to an ADC device.
+>  These should correspond to the channels exposed by the ADC device and should
+>  have the right index as the ADC device registers them. These channels
+> diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> index d2a6e835c257..937b3e5505e0 100644
+> --- a/Documentation/devicetree/bindings/mfd/ab8500.txt
+> +++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> @@ -72,7 +72,9 @@ Required child device properties:
+>                                                 pwm|regulator|rtc|sysctrl|usb]";
+>  
+>    A few child devices require ADC channels from the GPADC node. Those follow the
+> -  standard bindings from iio/iio-bindings.txt and iio/adc/adc.txt
+> +  standard bindings from
+> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +  and Documentation/devicetree/bindings/iio/adc/adc.yaml
+>  
+>    abx500-temp		 : io-channels "aux1" and "aux2" for measuring external
+>  			   temperatures.
+> diff --git a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> index f3906663c454..033a9b6e1dd5 100644
+> --- a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> @@ -7,7 +7,7 @@ Optional properties:
+>  - io-channels: List of phandle and IIO specifier pairs
+>  - io-channel-names: List of channel names used by charger
+>        ["CHAN_IBUS", "CHAN_VBUS", "CHAN_TJUNC", "CHAN_VBAT"]
+> -  (See Documentation/devicetree/bindings/iio/iio-bindings.txt for further info)
+> +  (See https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml for further info)
+>  
+>  
+>  Example:
 
