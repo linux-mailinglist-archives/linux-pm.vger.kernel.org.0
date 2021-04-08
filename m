@@ -2,218 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59626358403
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 15:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CED735840C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 15:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbhDHNAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 09:00:17 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46980 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbhDHNAQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 09:00:16 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id BC0EA1F45CE5
-Received: by earth.universe (Postfix, from userid 1000)
-        id 36FAC3C0C96; Thu,  8 Apr 2021 15:00:01 +0200 (CEST)
-Date:   Thu, 8 Apr 2021 15:00:01 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     satya priya <skakit@codeaurora.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
- PON binding to yaml
-Message-ID: <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
-References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
- <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pwh33wz7f4hiy5eg"
-Content-Disposition: inline
-In-Reply-To: <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+        id S231294AbhDHNCI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 09:02:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27070 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229964AbhDHNCH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 09:02:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617886915;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SC4hNMbbB4hm2+rL5qMmQKUw2dEFlVpMyX9e9hUazm0=;
+        b=i+tqxyV1cBD7G9ZwQYFrYyUt6DVuMjfmS5LzIWni8WNggGrVTlkPyIypCacZduOwcKiROY
+        EoknCSHBLktguJJzCf6pLF2ZEAbE8FkDlCjl7REoRY4ceCf5bqlxdjrKm6/4onsTOBhghQ
+        Mq1xTuA8Wv+T6PyAU7Wer6kayYI1crE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-386-eei0jnrKMlCu2J2fgu6mzA-1; Thu, 08 Apr 2021 09:01:53 -0400
+X-MC-Unique: eei0jnrKMlCu2J2fgu6mzA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BD4A2DF8A3;
+        Thu,  8 Apr 2021 13:01:52 +0000 (UTC)
+Received: from ovpn-113-96.phx2.redhat.com (ovpn-113-96.phx2.redhat.com [10.3.113.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1186119CBF;
+        Thu,  8 Apr 2021 13:01:51 +0000 (UTC)
+Message-ID: <e22b105449b6970177d5907d9cbb9e7f55bc72bb.camel@redhat.com>
+Subject: Re: [PATCH v4 1/1] use crc32 instead of md5 for hibernation e820
+ integrity check
+From:   Simo Sorce <simo@redhat.com>
+To:     Chris von Recklinghausen <crecklin@redhat.com>, ardb@kernel.org,
+        rafael@kernel.org, decui@microsoft.com, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 08 Apr 2021 09:01:51 -0400
+In-Reply-To: <20210408104629.31357-1-crecklin@redhat.com>
+References: <20210408104629.31357-1-crecklin@redhat.com>
+Organization: Red Hat, Inc.
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 2021-04-08 at 06:46 -0400, Chris von Recklinghausen wrote:
+> Suspend fails on a system in fips mode because md5 is used for the e820
+> integrity check and is not available. Use crc32 instead.
+> 
+> Prior to this patch, MD5 is used only to create a digest to ensure integrity of
+> the region, no actual encryption is done. This patch set changes the integrity
+> check to use crc32 instead of md5 since crc32 is available in both FIPS and
+> non-FIPS modes.
+> 
+> Note that the digest is only used as an integrity check. No actual encryption
+> is done.
+> 
+> Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
+>        by md5 digest")
+> 
+> Tested-by: Dexuan Cui <decui@microsoft.com>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
 
---pwh33wz7f4hiy5eg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Chris,
+I would reword it this way:
+----------
+This patch(set) changes the integrity check algorithm from md5 to
+crc32. This integrity check is used only to verify accidental
+corruption of the hybernation data and is not intended as a
+cryptographic integrity check.
+Md5 is overkill in this case and also disabled in FIPS mode because it
+is known to be broken for cryptographic purposes.
+----------
 
-Hi,
+HTH,
+Simo.
 
-On Thu, Apr 08, 2021 at 05:01:08PM +0530, satya priya wrote:
-> Convert qcom PON binding from .txt to .yaml format.
->=20
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> ---
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
 
-Thanks for doing this.
 
-> Changes in V2:
->  - As per Rob's comments, converted the main PON binding and added in V2.
->=20
->  .../devicetree/bindings/power/reset/qcom,pon.txt   | 49 ----------------=
-------
->  .../devicetree/bindings/power/reset/qcom,pon.yaml  | 41 ++++++++++++++++=
-++
->  2 files changed, 41 insertions(+), 49 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/power/reset/qcom,po=
-n.txt
->  create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,po=
-n.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt b=
-/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
-> deleted file mode 100644
-> index 0c0dc3a..0000000
-> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
-> +++ /dev/null
-> @@ -1,49 +0,0 @@
-> -Qualcomm PON Device
-> -
-> -The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
-> -and resin along with the Android reboot-mode.
-> -
-> -This DT node has pwrkey and resin as sub nodes.
-> -
-> -Required Properties:
-> --compatible: Must be one of:
-> -	"qcom,pm8916-pon"
-> -	"qcom,pms405-pon"
-> -	"qcom,pm8998-pon"
-> -
-> --reg: Specifies the physical address of the pon register
-> -
-> -Optional subnode:
-> --pwrkey: Specifies the subnode pwrkey and should follow the
-> - qcom,pm8941-pwrkey.txt description.
-> --resin: Specifies the subnode resin and should follow the
-> - qcom,pm8xxx-pwrkey.txt description.
-> -
-> -The rest of the properties should follow the generic reboot-mode descrip=
-tion
-> -found in reboot-mode.txt
-> -
-> -Example:
-> -
-> -	pon@800 {
-> -		compatible =3D "qcom,pm8916-pon";
-> -
-> -		reg =3D <0x800>;
-> -		mode-bootloader =3D <0x2>;
-> -		mode-recovery =3D <0x1>;
-> -
-> -		pwrkey {
-> -			compatible =3D "qcom,pm8941-pwrkey";
-> -			interrupts =3D <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
-> -			debounce =3D <15625>;
-> -			bias-pull-up;
-> -			linux,code =3D <KEY_POWER>;
-> -		};
-> -
-> -		resin {
-> -			compatible =3D "qcom,pm8941-resin";
-> -			interrupts =3D <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-> -			debounce =3D <15625>;
-> -			bias-pull-up;
-> -			linux,code =3D <KEY_VOLUMEDOWN>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml =
-b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> new file mode 100644
-> index 0000000..40eea5f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/qcom,pon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PON Device
-> +
-> +maintainers:
-> +  - Vinod Koul <vkoul@kernel.org>
-> +
-> +description: |
-> +  The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
-> +  and resin along with the Android reboot-mode.
-> +
-> +  This DT node has pwrkey and resin as sub nodes.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8916-pon
-> +      - qcom,pms405-pon
-> +      - qcom,pm8998-pon
-> +
-> +  reg:
-> +    description: Specifies the physical address of the pon register
 
-That description is obvious and pointless. Instead add
 
-maxItems: 1
-
-> +  pwrkey:
-> +    type: object
-> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
-> +
-> +  resin:
-> +    type: object
-> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: true
-
-Instead of allowing arbitrary properties, only valid modes
-should be allowed. So drop additionalProperties and do this
-instead:
-
-allOf:
-  - $ref: reboot-mode.yaml#
-
-unevaluatedProperties: false
-
-> +...
-
-Please do not drop the example :)
-
--- Sebastian
-
---pwh33wz7f4hiy5eg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBu/kgACgkQ2O7X88g7
-+ppAeRAAkhWuK8jM17WlU33LPMDBqGwlit1V4YED46pLirpINtFqnT/4ci0BeDV/
-U+8uENhHjrM+TE8dC3LJOWXK33xEaczB93IuQfdpV7CLiSGSwT8QJ8s18vOZkoqF
-wgdDLw12PdSS4RcJZfD4Pn0fgR2hmCGQgs6IorpYEOhJZEx16kTqPkrZnaDkKPkg
-YA/maaol7zbfofYHDhvdqqLuC3qhk2+mgmLftFz5mGQuLD5pzPWLYmRhqe8FsbIT
-2QE5S4fc30KiQVufnncRJOuU4XBMScwY1ayHT0N+s4Muo8mDXK5dx613kxckuW6/
-R7JnXHiaO8rilZ1BBVcKb0gPcZgAGunJmh3elWrPc/K2idInkDnwhWmfHftgc5zx
-vtaFDntNSFXyTEBp09CjQShxi1p6OsYXIyrMfN6FpcnGZqJvR0s2EmJeR9ac9ZSs
-Vxn6+OhLRsyEBFSaIefNtAinIHyKTv44AEoWMHopWO0di9J/wHnJCDelGdgUOE3S
-lgWb5yZMynmOxWrc7tLZOJDcT/yxfBQ9ATo+FOwYzoN0GQJYnfzVNvou4bTzRgWm
-uOHVQ6HkFHIsVvqLe2xeOl3fyxfOVpo6j/ADUxxpL69m9wdoN1B4b+zs3x5nXSQz
-BztPpOLY0doi6ILnP6KU6aVC1y4aSU5iYBujcBhiVvQJ9iJDLUw=
-=YShM
------END PGP SIGNATURE-----
-
---pwh33wz7f4hiy5eg--
