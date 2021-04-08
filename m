@@ -2,219 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E687C3581ED
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 13:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE83D358235
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 13:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhDHLce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 07:32:34 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:3632 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbhDHLca (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 07:32:30 -0400
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Apr 2021 04:32:20 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Apr 2021 04:32:17 -0700
-X-QCInternal: smtphost
-Received: from c-skakit-linux.ap.qualcomm.com (HELO c-skakit-linux.qualcomm.com) ([10.242.51.242])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 08 Apr 2021 17:01:40 +0530
-Received: by c-skakit-linux.qualcomm.com (Postfix, from userid 2344709)
-        id 64340448F; Thu,  8 Apr 2021 17:01:39 +0530 (IST)
-From:   satya priya <skakit@codeaurora.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, satya priya <skakit@codeaurora.org>
-Subject: [PATCH V2 4/4] dt-bindings: input: pm8941-pwrkey: Convert pm8941 power key binding to yaml
-Date:   Thu,  8 Apr 2021 17:01:09 +0530
-Message-Id: <1617881469-31965-5-git-send-email-skakit@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
-References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+        id S231132AbhDHLmj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 07:42:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39196 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230291AbhDHLmj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Apr 2021 07:42:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1294661139;
+        Thu,  8 Apr 2021 11:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617882148;
+        bh=qYlGZW2SMBY0Bez1jSD2bTQlAc/FCgWwYoTOfL0UmvY=;
+        h=From:To:Subject:Date:From;
+        b=G3771ASouv4ufWB1sCmFZQpnQYI5xB6YqtorUbsOqFsYYeK3DcQ6ajM+7N83dS0uM
+         J2CYt7JzboiWW6KiA71PxbFua4msGSmvMBbyPeX9vUXHnjL3/X4Cu6sZKtrLUqTg3n
+         5BDioFb4K7ewBrb+moX7ssCntd2VCW1ViRQy2dPOaxBXeFhapzNiQsHVZIp4ox4cO9
+         AWVitViw0dEGWfjMa1lr6VYUZ/t+GZ8YJIFnttKLrFHJcHBSYuTrJ+HipsdgtcAKbl
+         LfBo47oTfSfZic99uspve6pZOr1Zw5aUQ2gPG2nmgiTKNgekz9fCpzZ/HBbZ4Y8r1Z
+         8biONp4dUFj5A==
+Received: by pali.im (Postfix)
+        id 95C71EBC; Thu,  8 Apr 2021 13:42:25 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     linux-pm@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [RESEND PATCH mvebu v3 00/10] Armada 37xx: Fix cpufreq changing base CPU speed to 800 MHz from 1000 MHz
+Date:   Thu,  8 Apr 2021 13:42:14 +0200
+Message-Id: <20210408114223.8471-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert qcom pm8941 power key binding from .txt to .yaml format.
+From: Pali Rohár <pali.rohar@gmail.com>
 
-Signed-off-by: satya priya <skakit@codeaurora.org>
----
-Changes in V2:
- - Fixed bot errors, took reference from input.yaml for "linux,code"
- - Added one complete example for powerkey and resin, and referenced it
-   in main PON binding.
- - Moved this patch to the end of the series.
+Hello!
 
- .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
- .../bindings/input/qcom,pm8941-pwrkey.yaml         | 88 ++++++++++++++++++++++
- 2 files changed, 88 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
- create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
+The armada-37xx-cpufreq driver changes base CPU speed from 1000 MHz to
+800 MHz on EspressoBIN and Turris MOX. The commit message in patch 2/10
+explains why and how can this be discovered.
 
-diff --git a/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt b/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
-deleted file mode 100644
-index 6cd08bc..0000000
---- a/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
--Qualcomm PM8941 PMIC Power Key
--
--PROPERTIES
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be one of:
--		    "qcom,pm8941-pwrkey"
--		    "qcom,pm8941-resin"
--		    "qcom,pmk8350-pwrkey"
--		    "qcom,pmk8350-resin"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: base address of registers for block
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: key change interrupt; The format of the specifier is
--		    defined by the binding document describing the node's
--		    interrupt parent.
--
--- debounce:
--	Usage: optional
--	Value type: <u32>
--	Definition: time in microseconds that key must be pressed or released
--		    for state change interrupt to trigger.
--
--- bias-pull-up:
--	Usage: optional
--	Value type: <empty>
--	Definition: presence of this property indicates that the KPDPWR_N pin
--		    should be configured for pull up.
--
--- linux,code:
--	Usage: optional
--	Value type: <u32>
--	Definition: The input key-code associated with the power key.
--		    Use the linux event codes defined in
--		    include/dt-bindings/input/linux-event-codes.h
--		    When property is omitted KEY_POWER is assumed.
--
--EXAMPLE
--
--	pwrkey@800 {
--		compatible = "qcom,pm8941-pwrkey";
--		reg = <0x800>;
--		interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
--		debounce = <15625>;
--		bias-pull-up;
--		linux,code = <KEY_POWER>;
--	};
-diff --git a/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml b/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
-new file mode 100644
-index 0000000..fb6cbe8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
-@@ -0,0 +1,88 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/qcom,pm8941-pwrkey.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PM8941 PMIC Power Key
-+
-+maintainers:
-+  - Courtney Cavin <courtney.cavin@sonymobile.com>
-+  - Vinod Koul <vkoul@kernel.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pm8941-pwrkey
-+      - qcom,pm8941-resin
-+      - qcom,pmk8350-pwrkey
-+      - qcom,pmk8350-resin
-+
-+  interrupts:
-+    description: |
-+          Key change interrupt; The format of the specifier is
-+          defined by the binding document describing the node's
-+          interrupt parent.
-+
-+  debounce:
-+    description: |
-+          Time in microseconds that key must be pressed or
-+          released for state change interrupt to trigger.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  bias-pull-up:
-+    description: |
-+           Presence of this property indicates that the KPDPWR_N
-+           pin should be configured for pull up.
-+    $ref: /schemas/types.yaml#/definitions/flag
-+
-+  linux,code:
-+    description: |
-+           The input key-code associated with the power key.
-+           Use the linux event codes defined in
-+           include/dt-bindings/input/linux-event-codes.h
-+           When property is omitted KEY_POWER is assumed.
-+    $ref: "input.yaml#"
-+
-+required:
-+  - compatible
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+   #include <dt-bindings/interrupt-controller/irq.h>
-+   #include <dt-bindings/input/linux-event-codes.h>
-+   #include <dt-bindings/spmi/spmi.h>
-+   spmi_bus: spmi@c440000 {
-+     reg = <0x0c440000 0x1100>;
-+     #address-cells = <2>;
-+     #size-cells = <0>;
-+     pmk8350: pmic@0 {
-+       reg = <0x0 SPMI_USID>;
-+       #address-cells = <1>;
-+       #size-cells = <0>;
-+       pmk8350_pon: pon_hlos@1300 {
-+         reg = <0x1300>;
-+         compatible = "qcom,pm8998-pon";
-+
-+         pwrkey {
-+            compatible = "qcom,pm8941-pwrkey";
-+            interrupts = < 0x0 0x8 0 IRQ_TYPE_EDGE_BOTH >;
-+            debounce = <15625>;
-+            bias-pull-up;
-+            linux,code = <KEY_POWER>;
-+         };
-+
-+         resin {
-+            compatible = "qcom,pm8941-resin";
-+            interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-+            debounce = <15625>;
-+            bias-pull-up;
-+            linux,code = <KEY_VOLUMEDOWN>;
-+         };
-+       };
-+     };
-+   };
-+...
+That patch 2/10 led us to discover another bug, in the SOC itself,
+that causes the CPU to behave weirdly when frequency changes to 1 GHz.
+A similar erratum is documented by Marvell but only for systems where
+base frequency is 1.2 GHz.
+
+We've discovered that to make cpufreq scaling stable on Armada 3720
+systems with base frequency 1 GHz, we also have to set voltage levels
+for L0 and L1 loads to at least 1108 mV. We were led to this by patch we
+found in Marvell kernel fork. Fix is in the patch 4/10.
+
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/dc33b62c90696afb6adc7dbcc4ebbd48bedec269
+
+During fixing this voltage issue for 1 GHz we discovered another bug in
+armada-37xx-cpufreq driver that causes CPU instability. Erratum for VDD
+stabilization was improperly implemented, details are in patch 6/10.
+
+We have tested this patch series on Espressobin v5 and Turris MOX
+boards. If you have other Armada 3720 boards (Espressobin v5/v7, uDPU,
+Devel Board, ...) then it will be nice to do an additional tests and
+check if instability issues are finally fixed.
+
+There is a discussion on armbian forum that Espressobin v7 is unstable
+when running at 1 GHz and in this thread was also mentioned above
+voltage patch from Marvell kernel fork:
+
+https://forum.armbian.com/topic/10429-how-to-make-espressobin-v7-stable/
+
+The only change in this third version is modified patch 04/10 with fixes
+for 1.2 GHz variant of Espressobin. Minimal CPU voltage in L1 load for
+1.2 GHz variant was increased to 1.155V.
+
+Patch 01/10 was already applied by Gregory into his DT tree, so it is
+not RESEND to linux-pm.
+
+Marek & Pali
+
+Marek Behún (3):
+  arm64: dts: marvell: armada-37xx: add syscon compatible to NB clk node
+  cpufreq: armada-37xx: Fix setting TBG parent for load levels
+  clk: mvebu: armada-37xx-periph: remove .set_parent method for CPU PM
+    clock
+
+Pali Rohár (7):
+  cpufreq: armada-37xx: Fix the AVS value for load L1
+  clk: mvebu: armada-37xx-periph: Fix switching CPU freq from 250 Mhz to
+    1 GHz
+  clk: mvebu: armada-37xx-periph: Fix workaround for switching from L1
+    to L0
+  cpufreq: armada-37xx: Fix driver cleanup when registration failed
+  cpufreq: armada-37xx: Fix determining base CPU frequency
+  cpufreq: armada-37xx: Remove cur_frequency variable
+  cpufreq: armada-37xx: Fix module unloading
+
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi |   3 +-
+ drivers/clk/mvebu/armada-37xx-periph.c       |  83 +++++++-------
+ drivers/cpufreq/armada-37xx-cpufreq.c        | 111 +++++++++++++++----
+ 3 files changed, 135 insertions(+), 62 deletions(-)
+
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+2.20.1
 
