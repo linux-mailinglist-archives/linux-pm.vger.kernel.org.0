@@ -2,72 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C16358B43
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 19:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8D6358B5A
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 19:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbhDHRYr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 13:24:47 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:38661 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbhDHRYr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 13:24:47 -0400
-Received: by mail-ot1-f44.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so3050294otk.5;
-        Thu, 08 Apr 2021 10:24:36 -0700 (PDT)
+        id S232568AbhDHR2q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 13:28:46 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:40862 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232503AbhDHR2m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 13:28:42 -0400
+Received: by mail-ot1-f46.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so3051599otb.7
+        for <linux-pm@vger.kernel.org>; Thu, 08 Apr 2021 10:28:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vGCnfDw9SSDsfCUsuqEnV4jC28XwKrPjr5OR4iCLoO4=;
-        b=Cy79LZ1j8kgo/KaJ2INautQXYoz9OQxDF+NIW3BdHsf4TqhN6xFKMkItmkSeU8NpRv
-         o3DY84cHo8cQFeqDWCCWkT940qDoljHXXX9bzKNb8PH7X+QGhSpy3+2K5L/LNhLrSqY3
-         PdZ21Io8TN7XOquBPZlXjIQYnfPIyBGJOgJLPfnBNqHmRq5ymV+1oZ8dKri4xl2kt6++
-         b6AZKCnRA+xEhg9jhDGttOTK8DrJWZjfq0tC6ClPLCA1MSHbfQ8TBUMLX2r3Q3roUDOh
-         Pn7QAgdGAYvrX9SQIVRUgWeAybQy5LE9U9YvPOwGXk7G+3Ic4uo/eUctircFR/f9k5tt
-         edag==
-X-Gm-Message-State: AOAM530E+xGI+9qH8bAVAEav1fPb5Wj3XqzDLObb/n9/5hUDpjTw+6FE
-        /9BDLZ1CgqiuF2eeHgMSqVvpte7raKPZqnlCskc=
-X-Google-Smtp-Source: ABdhPJxYzwWsy6QKevubEqHV1CWr7Kmw0Fyj01QRPmGVrsD3Z2QLvvZFgPUrvHaELkygiK4GEYkLyLvBazYAZsL2CUY=
-X-Received: by 2002:a9d:4811:: with SMTP id c17mr8894282otf.206.1617902675805;
- Thu, 08 Apr 2021 10:24:35 -0700 (PDT)
+        bh=PFxfofckR+xJjPfRTF1dAqAqmYnNKAadcXq/0MJsC3w=;
+        b=osRteitUzqDwpsyoyShROog8cuy7S1bD91KfJNnARYOJ+HgXNw8N8Nm+wSw8YazlPo
+         sQW+u2Nke5fg9kkhEC97JTaNA5kjA0V+E+D8Jxnrl6+US08znZfPbCNU2yQzoqeQn3HR
+         v6zZNTKlqlc0r+cwRu2S6ps09ECeyzjtrfH+wCz4qaCGv0RDY9UYF8Ydfg8AohvmWqy/
+         eF/VBbW7jHdAht4/VVWqZpb3a+T68PJLucfBmbw4TfpFAv9CkUcPkHcXXXOdVa5UO3A6
+         eNtq7U76iQkWmhBt/ouS6aD7FC7TGm467lCuBPBKBILK7U9vR3Dg6J6i99JT9+ToNpXS
+         ex9A==
+X-Gm-Message-State: AOAM532cQCnABjiyEfjjSgxJvW8ln+3Y+6nSzPAXQceCFkj8BvJ7B/Nm
+        a/II93RY+PwxYQNSWugvkwJofa+Shlg//80KABY=
+X-Google-Smtp-Source: ABdhPJxX7A4aAaazAFTTs0RFKofJsU9DOsy8L5OkKWaLFjIz3LFyRtM7Ao4BaDCYzf9L0EEsXZ88lEO7Y0QNXk+1LTY=
+X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr8598377otb.260.1617902910982;
+ Thu, 08 Apr 2021 10:28:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <03743d3c-a3bf-066f-614c-1a49f566fdb2@linaro.org>
-In-Reply-To: <03743d3c-a3bf-066f-614c-1a49f566fdb2@linaro.org>
+References: <1617692459-35670-1-git-send-email-zhangshaokun@hisilicon.com> <20210406070645.73l2oeqrdlwzxxi4@vireshk-i7>
+In-Reply-To: <20210406070645.73l2oeqrdlwzxxi4@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Apr 2021 19:24:24 +0200
-Message-ID: <CAJZ5v0iGQGRvjaesmvvxpmot9vkyEEVWHkj3Wka24xZCzL351w@mail.gmail.com>
-Subject: Re: [GIT PULL] cpuidle for v5.13-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        He Ying <heying24@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
+Date:   Thu, 8 Apr 2021 19:28:20 +0200
+Message-ID: <CAJZ5v0hdKEwsgLvFkUAqMq61hFiGt68XcGzq5YNMcMtzKFRnUA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Remove unused for_each_policy macro
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 5:10 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Tue, Apr 6, 2021 at 9:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
+> On 06-04-21, 15:00, Shaokun Zhang wrote:
+> > macro 'for_each_policy' has become unused since commit
+> > f963735a3ca3 ("cpufreq: Create for_each_{in}active_policy()"),
+> > Remove it.
+> >
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 1d1b563cea4b..802abc925b2a 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -42,9 +42,6 @@ static LIST_HEAD(cpufreq_policy_list);
+> >  #define for_each_inactive_policy(__policy)           \
+> >       for_each_suitable_policy(__policy, false)
+> >
+> > -#define for_each_policy(__policy)                    \
+> > -     list_for_each_entry(__policy, &cpufreq_policy_list, policy_list)
+> > -
+> >  /* Iterate over governors */
+> >  static LIST_HEAD(cpufreq_governor_list);
+> >  #define for_each_governor(__governor)                                \
 >
-> Hi Rafael,
->
-> please consider pulling the following change for cpuidle on ARM for
-> v5.13-rc1
->
-> Thanks
->
->   -- Daniel
->
->
-> The following changes since commit dde8740bd9b505c58ec8b2277d5d55c6951b7e42:
->
->   Merge branch 'acpi-processor-fixes' into linux-next (2021-04-07
-> 19:02:56 +0200)
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Can you please rebase this on 5.12-rc6?  My linux-next branch is
-re-merged on a regular basis.
-
-Generally speaking, if you want me to pull from a branch, please make
-sure that this branch is based on a commit present in the Linus' tree,
-preferably one of the commits tagged as -rc or a specific merge.
+Applied as 5.13 material, thanks!
