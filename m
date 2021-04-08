@@ -2,78 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8D6358B5A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 19:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FD8358B75
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 19:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbhDHR2q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 13:28:46 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:40862 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbhDHR2m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 13:28:42 -0400
-Received: by mail-ot1-f46.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so3051599otb.7
-        for <linux-pm@vger.kernel.org>; Thu, 08 Apr 2021 10:28:31 -0700 (PDT)
+        id S231918AbhDHRf5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 13:35:57 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:47079 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231566AbhDHRf5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 13:35:57 -0400
+Received: by mail-ot1-f51.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso1165970otb.13;
+        Thu, 08 Apr 2021 10:35:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PFxfofckR+xJjPfRTF1dAqAqmYnNKAadcXq/0MJsC3w=;
-        b=osRteitUzqDwpsyoyShROog8cuy7S1bD91KfJNnARYOJ+HgXNw8N8Nm+wSw8YazlPo
-         sQW+u2Nke5fg9kkhEC97JTaNA5kjA0V+E+D8Jxnrl6+US08znZfPbCNU2yQzoqeQn3HR
-         v6zZNTKlqlc0r+cwRu2S6ps09ECeyzjtrfH+wCz4qaCGv0RDY9UYF8Ydfg8AohvmWqy/
-         eF/VBbW7jHdAht4/VVWqZpb3a+T68PJLucfBmbw4TfpFAv9CkUcPkHcXXXOdVa5UO3A6
-         eNtq7U76iQkWmhBt/ouS6aD7FC7TGm467lCuBPBKBILK7U9vR3Dg6J6i99JT9+ToNpXS
-         ex9A==
-X-Gm-Message-State: AOAM532cQCnABjiyEfjjSgxJvW8ln+3Y+6nSzPAXQceCFkj8BvJ7B/Nm
-        a/II93RY+PwxYQNSWugvkwJofa+Shlg//80KABY=
-X-Google-Smtp-Source: ABdhPJxX7A4aAaazAFTTs0RFKofJsU9DOsy8L5OkKWaLFjIz3LFyRtM7Ao4BaDCYzf9L0EEsXZ88lEO7Y0QNXk+1LTY=
-X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr8598377otb.260.1617902910982;
- Thu, 08 Apr 2021 10:28:30 -0700 (PDT)
+        bh=H+fSlnRPEdSZKgHQdXlMbx5JPJdYx/PLPtXPK2wwm7o=;
+        b=B8OnKVXy1WpUagAtYco7x+1ZAJYHjbKdt04ShsuuT/eUiFksCBVtP8aWHTSNtNd773
+         zPPJDVXc9B2Qpe6WGGuDOkhhOlUTR9Yq8vWzZQYHX8T8ifI9a0J8/jRaQjr+YEaJOMgn
+         ASa53vaW/HI5L+m/r636Ae6TyAEAFEAvAhzzZ9BmFmstcXIHyJBGNi+mnac6hC3kyCis
+         dw6rFWBXfZW5orH4CtxKW8N02EkvDdADBT7Lje7i5K6FCWNhhUYREBnW+RxCft9wCuzL
+         xQm1LY/UtXmWA6UNqTEYfCGrnPMJQLj0e0bcCoETKms6WXekseHaRjTnrsRKCp+CKKPr
+         7X4w==
+X-Gm-Message-State: AOAM530x/IT9y7e/KNt6v72bwZorLTSmDwn8Wpvy6BaaFkEkKTKc0O0R
+        g/Mku6uPCBGfA3LlMLkCIP/WfsWnKiNv533+9zg=
+X-Google-Smtp-Source: ABdhPJwa7hG8mV20XkU6Va9EP0WIZMhykAbYJ4c0IDZEo0LKXh5zFFmxI8IDFbRBxlpnPLSxPoxfUxKuCB/AjgpMf6w=
+X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr8627869otb.260.1617903345582;
+ Thu, 08 Apr 2021 10:35:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <1617692459-35670-1-git-send-email-zhangshaokun@hisilicon.com> <20210406070645.73l2oeqrdlwzxxi4@vireshk-i7>
-In-Reply-To: <20210406070645.73l2oeqrdlwzxxi4@vireshk-i7>
+References: <CGME20210408061152epcas1p195531dcfe84ab8d4a8f15f7d550993cf@epcas1p1.samsung.com>
+ <3d4f6d28-5d8e-df33-882e-0e5dafe575b9@samsung.com>
+In-Reply-To: <3d4f6d28-5d8e-df33-882e-0e5dafe575b9@samsung.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Apr 2021 19:28:20 +0200
-Message-ID: <CAJZ5v0hdKEwsgLvFkUAqMq61hFiGt68XcGzq5YNMcMtzKFRnUA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Remove unused for_each_policy macro
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Date:   Thu, 8 Apr 2021 19:35:34 +0200
+Message-ID: <CAJZ5v0h9F9q6i6m40fmZpw79DbtJuzMFddAGfwn0W+-5__ZQCQ@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for v5.13
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chanwoo Choi (samsung.com)" <chanwoo@kernel.org>,
+        Chanwoo Choi <cwchoi00@gmail.com>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 6, 2021 at 9:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Apr 8, 2021 at 8:12 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
 >
-> On 06-04-21, 15:00, Shaokun Zhang wrote:
-> > macro 'for_each_policy' has become unused since commit
-> > f963735a3ca3 ("cpufreq: Create for_each_{in}active_policy()"),
-> > Remove it.
-> >
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 1d1b563cea4b..802abc925b2a 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -42,9 +42,6 @@ static LIST_HEAD(cpufreq_policy_list);
-> >  #define for_each_inactive_policy(__policy)           \
-> >       for_each_suitable_policy(__policy, false)
-> >
-> > -#define for_each_policy(__policy)                    \
-> > -     list_for_each_entry(__policy, &cpufreq_policy_list, policy_list)
-> > -
-> >  /* Iterate over governors */
-> >  static LIST_HEAD(cpufreq_governor_list);
-> >  #define for_each_governor(__governor)                                \
+> Dear Rafael,
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> This is devfreq-next pull request for v5.13-rc1. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with following updates.
+> - tag name : devfreq-next-for-5.12
+>
+> This pull request contains the immutable branch to keep the immutable patch[1]
+> between devfreq and drm for gpu driver.
+> [1] https://patchwork.kernel.org/project/linux-pm/patch/20210308133041.10516-1-daniel.lezcano@linaro.org/
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit e49d033bddf5b565044e2abe4241353959bc9120:
+>
+>   Linux 5.12-rc6 (2021-04-04 14:15:36 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.13
+>
+> for you to fetch changes up to 0a7dc8318c2817fb33dc50946f7ca6e0ff28f036:
+>
+>   PM / devfreq: imx8m-ddrc: Remove unneeded of_match_ptr() (2021-04-08 13:14:51 +0900)
 
-Applied as 5.13 material, thanks!
+Pulled, thanks!
