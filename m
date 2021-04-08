@@ -2,126 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C62B358BEB
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 20:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B0B358EFD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 23:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbhDHSIJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 8 Apr 2021 14:08:09 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:34386 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbhDHSII (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 14:08:08 -0400
-Received: by mail-ot1-f54.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so3205171otn.1;
-        Thu, 08 Apr 2021 11:07:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Hha4WLCdP1Tred4k8z/7+ghIuMbscDUDnCCYfhCr11w=;
-        b=byDsUxX0YiP8fNBxdqfK06Zyr5g5Ompu49RXYgrUN2bqs2DUJvVJSH4iKD8wiPQpWw
-         G1YMTqmDu6rXG8/mdzLCbDjHrnAwCYgCBiRFnTHAL6jO42VlIJ+KeQdoNbt5NmKT0JrG
-         +D+po84FGQtKdm83VgSO5yjXw4ZFIuU6R+VfFAeQVrZtPbSYo2eqEHp8RhmEz7Xoi0qH
-         qaQ1W+O+UCrvkhbxChECAqi0Ip6LY7W5kgwlol61gnFxYnLcLqsQf+0tDY+hvqO2GSp1
-         whsmgRvuKJbHTx8cCTKMfyrPTYmnfNhaSNA8IgczzjLASkCSi6znm6lJ2q7eB3LUWi7/
-         dIYA==
-X-Gm-Message-State: AOAM531Dx6USESkOH43my+KG1Bj39n7ctl30nuo7zSI6PcS8xwO/APPT
-        Aw1SuJeXn0QRu5aJCTJ8Nh2kEq26jqS/FGJOt6s=
-X-Google-Smtp-Source: ABdhPJykvn7GHTDQHeTAFgBSw7yNPQg2mzia76ADzeIDipJKfYEn0lTtjqQl9KkkV6NzPvEFXkUXGHAqnKu5tpw9NOM=
-X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr8762177otb.260.1617905276522;
- Thu, 08 Apr 2021 11:07:56 -0700 (PDT)
+        id S232332AbhDHVKc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 17:10:32 -0400
+Received: from condef-10.nifty.com ([202.248.20.75]:61249 "EHLO
+        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231862AbhDHVKb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 17:10:31 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Apr 2021 17:10:30 EDT
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-10.nifty.com with ESMTP id 138Kxvkl031146;
+        Fri, 9 Apr 2021 05:59:57 +0900
+Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 138Kx46x002644;
+        Fri, 9 Apr 2021 05:59:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 138Kx46x002644
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1617915545;
+        bh=CMNsK6z9omY3K2WcWrv+g7O+FAyKXeHXo7JaGbnAshQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mCAELu1K9iNcHwzxPpkt2QeYzsGvXO3xtV9FO7Le8ftDrt50ftucQPKlGRH7qugRy
+         Ya3grKSZw2YFqHeSRjzjleVybuCxC+F+LDqxW2ODDfZDizTzeFFEkS6xgklZ8DNySf
+         sgjxmlZOGgylBtk14MT/msL3h5+0RgNqd1KhWiFHvZojROpII/2xzBmIKYk5FrMILE
+         JH+ze/FBtu+Utc1Sh1V3UapkGiwD83/r25JpRXNpVeB6q8+2OIyrktRiLXSQ5RNZ6Y
+         WT1cfD2EQCAGNfK7s+unVooFzVx+HATnyUBAB+3r8X2pMEEL5HCT32AGFF6izs7hFa
+         M6AzFOhU0pc5Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] linux/kconfig.h: move IF_ENABLED() out of <linux/kconfig.h>
+Date:   Fri,  9 Apr 2021 05:58:56 +0900
+Message-Id: <20210408205858.51751-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <03743d3c-a3bf-066f-614c-1a49f566fdb2@linaro.org>
- <CAJZ5v0iGQGRvjaesmvvxpmot9vkyEEVWHkj3Wka24xZCzL351w@mail.gmail.com> <4b8b0bc5-492c-7e95-9b08-ab87c9ac65d5@linaro.org>
-In-Reply-To: <4b8b0bc5-492c-7e95-9b08-ab87c9ac65d5@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Apr 2021 20:07:45 +0200
-Message-ID: <CAJZ5v0iT28V07sg1cPTvNur4=y=H7pBw2FQZNMoMggmDVsWh2A@mail.gmail.com>
-Subject: Re: [GIT PULL] cpuidle for v5.13-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        He Ying <heying24@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 8:02 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 08/04/2021 19:24, Rafael J. Wysocki wrote:
-> > On Thu, Apr 8, 2021 at 5:10 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >>
-> >> Hi Rafael,
-> >>
-> >> please consider pulling the following change for cpuidle on ARM for
-> >> v5.13-rc1
-> >>
-> >> Thanks
-> >>
-> >>   -- Daniel
-> >>
-> >>
-> >> The following changes since commit dde8740bd9b505c58ec8b2277d5d55c6951b7e42:
-> >>
-> >>   Merge branch 'acpi-processor-fixes' into linux-next (2021-04-07
-> >> 19:02:56 +0200)
-> >
-> > Can you please rebase this on 5.12-rc6?  My linux-next branch is
-> > re-merged on a regular basis.
-> >
-> > Generally speaking, if you want me to pull from a branch, please make
-> > sure that this branch is based on a commit present in the Linus' tree,
-> > preferably one of the commits tagged as -rc or a specific merge.
-> >
->
-> Sure, here is the pull request based on v5.12-rc6 with the signed tag
-> cpuidle-v5.13-rc1
 
-Pulled, thanks!
+I insist on <linux/kconfig.h> having only minimal set of macros
+that are needed to evaluate CONFIG options.
+
+Everytime somebody added an alien to <linux/kconfig.h>, I needed to
+kick it out.
+
+I did not notice 1b399bb04837183cecdc1b32ef1cfc7fcfa75d32 because
+I was not addressed by [1].
+
+[1]: https://lore.kernel.org/lkml/?q=kconfig.h%3A+Add+IF_ENABLED%28%29+macro
+
+I like Paul's idea, but if I had noticed the patch in time, I would
+have tried my best to persuade to implement it outside of <linux/kconfig.h>
+(Paul's initial patch was adding it to a new header instead of <linux/kconfig.h>)
+
+Before it is widely used, I want to fix it.
+
+In 2/2, I converted pm.h to allow driver cleanups.
 
 
-> The following changes since commit e49d033bddf5b565044e2abe4241353959bc9120:
->
->   Linux 5.12-rc6 (2021-04-04 14:15:36 -0700)
->
-> are available in the Git repository at:
->
->   https://git.linaro.org/people/daniel.lezcano/linux tags/cpuidle-v5.13-rc1
->
-> for you to fetch changes up to 498ba2a8a2756694b6f3888857426dbc8a5e6b6c:
->
->   cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration (2021-04-08 19:54:14
-> +0200)
->
-> ----------------------------------------------------------------
-> - Fix the C7 state on the tegra114 by setting the L2-no-flush flag
->   unconditionally (Dmitry Osipenko)
->
-> - Remove the do_idle firmware call as it is not supported by the ATF
->   on tegra SoC (Dmitry Osipenko)
->
-> - Add a missing dependency on CONFIG_MMU to prevent linkage error (He
->   Ying)
->
-> ----------------------------------------------------------------
-> Dmitry Osipenko (2):
->       cpuidle: tegra: Fix C7 idling state on Tegra114
->       cpuidle: tegra: Remove do_idle firmware call
->
-> He Ying (1):
->       cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration
->
->  drivers/cpuidle/Kconfig.arm     |  2 +-
->  drivers/cpuidle/cpuidle-tegra.c | 19 ++++---------------
->  2 files changed, 5 insertions(+), 16 deletions(-)
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+
+Masahiro Yamada (2):
+  linux/kconfig.h: replace IF_ENABLED() with PTR_IF() in
+    <linux/kernel.h>
+  pm: allow drivers to drop #ifdef and __maybe_unused from pm callbacks
+
+ drivers/pinctrl/pinctrl-ingenic.c | 20 ++++-----
+ include/linux/kconfig.h           |  6 ---
+ include/linux/kernel.h            |  2 +
+ include/linux/pm.h                | 67 +++++++++++--------------------
+ 4 files changed, 36 insertions(+), 59 deletions(-)
+
+-- 
+2.27.0
+
