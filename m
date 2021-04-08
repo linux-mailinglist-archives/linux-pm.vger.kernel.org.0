@@ -2,61 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694B035881E
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 17:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C318358857
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 17:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbhDHPWW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 11:22:22 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56429 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231765AbhDHPWW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 11:22:22 -0400
-Received: (qmail 1299752 invoked by uid 1000); 8 Apr 2021 11:22:09 -0400
-Date:   Thu, 8 Apr 2021 11:22:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Zhang Qilong <zhangqilong3@huawei.com>,
-        Linux-PM mailing list <linux-pm@vger.kernel.org>
-Subject: [PATCH] PM: Add documentation for pm_runtime_resume_and_get()
-Message-ID: <20210408152209.GA1299604@rowland.harvard.edu>
+        id S231965AbhDHP0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 11:26:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231791AbhDHP0q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Apr 2021 11:26:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BB23D61103;
+        Thu,  8 Apr 2021 15:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617895594;
+        bh=RI1xiofESuBoPYR+YavH1V/ABEGPCfLun0uC+7Y/teY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Knd2XdQIwF8kiwz56AKLmRPFQQfmE9dRyVJC4JRFu2DwXaQ0nSF4OWH+Wk401QJUY
+         iIRF4/zDHxqyGviyzH+mMvNGhjHfmMgXfunU44BYhauKeH6qh+u09K0/81+gV8GtJk
+         QS3rhUMaVi0CP/DxEXe1M+MutzTX+FbmnXzTfkr1RMengMMMDNPv+aDIn63I8V6TLG
+         juvfQ7KDxHeNKcZbwkYJiqbr3glqLlWSJHLqceQCRs2tVKqeeh2bEX/twxA+JdoXJo
+         h2tNZ8XNIJnnn5m4sfMDnKYDbk9M/oiw79xny77dm2GuG+DsdJKHAb2IB3WpYwMNfk
+         HQctSdPRnjTuA==
+Date:   Thu, 8 Apr 2021 08:26:33 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Chris von Recklinghausen <crecklin@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Simo Sorce <simo@redhat.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/1] use crc32 instead of md5 for hibernation e820
+ integrity check
+Message-ID: <YG8gqZoZGutPmROz@sol.localdomain>
+References: <20210408131506.17941-1-crecklin@redhat.com>
+ <CAJZ5v0ib+jmbsD9taGW0RujY5c9BCK8yLHv065u44mb0AwO9vQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJZ5v0ib+jmbsD9taGW0RujY5c9BCK8yLHv065u44mb0AwO9vQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to
-deal with usage counter") added a new runtime-PM API function without
-adding any documentation for it.  This patch adds the missing
-documentation.
+On Thu, Apr 08, 2021 at 03:32:38PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Apr 8, 2021 at 3:15 PM Chris von Recklinghausen
+> <crecklin@redhat.com> wrote:
+> >
+> > Suspend fails on a system in fips mode because md5 is used for the e820
+> > integrity check and is not available. Use crc32 instead.
+> >
+> > This patch changes the integrity check algorithm from md5 to
+> > crc32. This integrity check is used only to verify accidental
+> > corruption of the hybernation data
+> 
+> It isn't used for that.
+> 
+> In fact, it is used to detect differences between the memory map used
+> before hibernation and the one made available by the BIOS during the
+> subsequent resume.  And the check is there, because it is generally
+> unsafe to load the hibernation image into memory if the current memory
+> map doesn't match the one used when the image was created.
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: Zhang Qilong <zhangqilong3@huawei.com>
-Fixes: dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+So what types of "differences" are you trying to detect?  If you need to detect
+differences caused by someone who maliciously made changes ("malicious" implies
+they may try to avoid detection), then you need to use a cryptographic hash
+function (or a cryptographic MAC if the hash value isn't stored separately).  If
+you only need to detect non-malicious changes (normally these would be called
+"accidental" changes, but sure, it could be changes that are "intentionally"
+made provided that the other side can be trusted to not try to avoid
+detection...), then a non-cryptographic checksum would be sufficient.
 
----
-
-
-[as1954]
-
-
- Documentation/power/runtime_pm.rst |    4 ++++
- 1 file changed, 4 insertions(+)
-
-Index: usb-devel/Documentation/power/runtime_pm.rst
-===================================================================
---- usb-devel.orig/Documentation/power/runtime_pm.rst
-+++ usb-devel/Documentation/power/runtime_pm.rst
-@@ -339,6 +339,10 @@ drivers/base/power/runtime.c and include
-       checked additionally, and -EACCES means that 'power.disable_depth' is
-       different from 0
- 
-+  `int pm_runtime_resume_and_get(struct device *dev);`
-+    - run pm_runtime_resume(dev) and if successful, increment the device's
-+      usage counter; return the result of pm_runtime_resume
-+
-   `int pm_request_idle(struct device *dev);`
-     - submit a request to execute the subsystem-level idle callback for the
-       device (the request is represented by a work item in pm_wq); returns 0 on
+- Eric
