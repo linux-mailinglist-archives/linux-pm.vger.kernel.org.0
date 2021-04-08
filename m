@@ -2,164 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D45358382
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 14:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59626358403
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Apr 2021 15:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhDHMoI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 08:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbhDHMoH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 08:44:07 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7072C061760;
-        Thu,  8 Apr 2021 05:43:56 -0700 (PDT)
+        id S231571AbhDHNAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 09:00:17 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46980 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229803AbhDHNAQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 09:00:16 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 7CA971F45CCE
+        with ESMTPSA id BC0EA1F45CE5
 Received: by earth.universe (Postfix, from userid 1000)
-        id 59D743C0C96; Thu,  8 Apr 2021 14:43:52 +0200 (CEST)
-Date:   Thu, 8 Apr 2021 14:43:52 +0200
+        id 36FAC3C0C96; Thu,  8 Apr 2021 15:00:01 +0200 (CEST)
+Date:   Thu, 8 Apr 2021 15:00:01 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     zhuguangqing83@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Fix missing IRQF_ONESHOT as only threaded
- handler
-Message-ID: <20210408124352.3kvfpwj74ymfjqfm@earth.universe>
-References: <20210406052829.22826-1-zhuguangqing83@gmail.com>
+To:     satya priya <skakit@codeaurora.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+Message-ID: <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="25m4cz6hxukmhk4d"
+        protocol="application/pgp-signature"; boundary="pwh33wz7f4hiy5eg"
 Content-Disposition: inline
-In-Reply-To: <20210406052829.22826-1-zhuguangqing83@gmail.com>
+In-Reply-To: <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---25m4cz6hxukmhk4d
+--pwh33wz7f4hiy5eg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Apr 06, 2021 at 01:28:29PM +0800, zhuguangqing83@gmail.com wrote:
-> From: Guangqing Zhu <zhuguangqing83@gmail.com>
+On Thu, Apr 08, 2021 at 05:01:08PM +0530, satya priya wrote:
+> Convert qcom PON binding from .txt to .yaml format.
 >=20
-> Coccinelle noticed:
->  1. drivers/power/supply/pm2301_charger.c:1089:7-27: ERROR: Threaded IRQ
->     with no primary handler requested without IRQF_ONESHOT
->  2. drivers/power/supply/tps65090-charger.c:303:8-33: ERROR: Threaded IRQ
->     with no primary handler requested without IRQF_ONESHOT
->  3. drivers/power/supply/tps65217_charger.c:239:8-33: ERROR: Threaded IRQ
->     with no primary handler requested without IRQF_ONESHOT
->  4. drivers/power/supply/lp8788-charger.c:502:8-28: ERROR: Threaded IRQ
->     with no primary handler requested without IRQF_ONESHOT
->=20
-> Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
+> Signed-off-by: satya priya <skakit@codeaurora.org>
 > ---
 
-I merged a patch fixing missing IRQF_ONESHOT flags in power-supply
-=66rom dongjian two weeks ago as 2469b836fa83. Please make sure you
-are basing your work on up to date for-next branches before sending
-out patches!
+Thanks for doing this.
 
-Thanks,
+> Changes in V2:
+>  - As per Rob's comments, converted the main PON binding and added in V2.
+>=20
+>  .../devicetree/bindings/power/reset/qcom,pon.txt   | 49 ----------------=
+------
+>  .../devicetree/bindings/power/reset/qcom,pon.yaml  | 41 ++++++++++++++++=
+++
+>  2 files changed, 41 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/qcom,po=
+n.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,po=
+n.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt b=
+/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+> deleted file mode 100644
+> index 0c0dc3a..0000000
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -Qualcomm PON Device
+> -
+> -The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
+> -and resin along with the Android reboot-mode.
+> -
+> -This DT node has pwrkey and resin as sub nodes.
+> -
+> -Required Properties:
+> --compatible: Must be one of:
+> -	"qcom,pm8916-pon"
+> -	"qcom,pms405-pon"
+> -	"qcom,pm8998-pon"
+> -
+> --reg: Specifies the physical address of the pon register
+> -
+> -Optional subnode:
+> --pwrkey: Specifies the subnode pwrkey and should follow the
+> - qcom,pm8941-pwrkey.txt description.
+> --resin: Specifies the subnode resin and should follow the
+> - qcom,pm8xxx-pwrkey.txt description.
+> -
+> -The rest of the properties should follow the generic reboot-mode descrip=
+tion
+> -found in reboot-mode.txt
+> -
+> -Example:
+> -
+> -	pon@800 {
+> -		compatible =3D "qcom,pm8916-pon";
+> -
+> -		reg =3D <0x800>;
+> -		mode-bootloader =3D <0x2>;
+> -		mode-recovery =3D <0x1>;
+> -
+> -		pwrkey {
+> -			compatible =3D "qcom,pm8941-pwrkey";
+> -			interrupts =3D <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
+> -			debounce =3D <15625>;
+> -			bias-pull-up;
+> -			linux,code =3D <KEY_POWER>;
+> -		};
+> -
+> -		resin {
+> -			compatible =3D "qcom,pm8941-resin";
+> -			interrupts =3D <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+> -			debounce =3D <15625>;
+> -			bias-pull-up;
+> -			linux,code =3D <KEY_VOLUMEDOWN>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml =
+b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> new file mode 100644
+> index 0000000..40eea5f1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/qcom,pon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PON Device
+> +
+> +maintainers:
+> +  - Vinod Koul <vkoul@kernel.org>
+> +
+> +description: |
+> +  The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
+> +  and resin along with the Android reboot-mode.
+> +
+> +  This DT node has pwrkey and resin as sub nodes.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pm8916-pon
+> +      - qcom,pms405-pon
+> +      - qcom,pm8998-pon
+> +
+> +  reg:
+> +    description: Specifies the physical address of the pon register
+
+That description is obvious and pointless. Instead add
+
+maxItems: 1
+
+> +  pwrkey:
+> +    type: object
+> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+> +
+> +  resin:
+> +    type: object
+> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: true
+
+Instead of allowing arbitrary properties, only valid modes
+should be allowed. So drop additionalProperties and do this
+instead:
+
+allOf:
+  - $ref: reboot-mode.yaml#
+
+unevaluatedProperties: false
+
+> +...
+
+Please do not drop the example :)
 
 -- Sebastian
 
->  drivers/power/supply/lp8788-charger.c   | 2 +-
->  drivers/power/supply/pm2301_charger.c   | 2 +-
->  drivers/power/supply/tps65090-charger.c | 3 ++-
->  drivers/power/supply/tps65217_charger.c | 4 ++--
->  4 files changed, 6 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
-/lp8788-charger.c
-> index e7931ffb7151..397e5a03b7d9 100644
-> --- a/drivers/power/supply/lp8788-charger.c
-> +++ b/drivers/power/supply/lp8788-charger.c
-> @@ -501,7 +501,7 @@ static int lp8788_set_irqs(struct platform_device *pd=
-ev,
-> =20
->  		ret =3D request_threaded_irq(virq, NULL,
->  					lp8788_charger_irq_thread,
-> -					0, name, pchg);
-> +					IRQF_ONESHOT, name, pchg);
->  		if (ret)
->  			break;
->  	}
-> diff --git a/drivers/power/supply/pm2301_charger.c b/drivers/power/supply=
-/pm2301_charger.c
-> index ac06ecf7fc9c..a3bfb9612b17 100644
-> --- a/drivers/power/supply/pm2301_charger.c
-> +++ b/drivers/power/supply/pm2301_charger.c
-> @@ -1089,7 +1089,7 @@ static int pm2xxx_wall_charger_probe(struct i2c_cli=
-ent *i2c_client,
->  	ret =3D request_threaded_irq(gpio_to_irq(pm2->pdata->gpio_irq_number),
->  				NULL,
->  				pm2xxx_charger_irq[0].isr,
-> -				pm2->pdata->irq_type,
-> +				pm2->pdata->irq_type | IRQF_ONESHOT,
->  				pm2xxx_charger_irq[0].name, pm2);
-> =20
->  	if (ret !=3D 0) {
-> diff --git a/drivers/power/supply/tps65090-charger.c b/drivers/power/supp=
-ly/tps65090-charger.c
-> index 6b0098e5a88b..d55bcc341854 100644
-> --- a/drivers/power/supply/tps65090-charger.c
-> +++ b/drivers/power/supply/tps65090-charger.c
-> @@ -301,7 +301,8 @@ static int tps65090_charger_probe(struct platform_dev=
-ice *pdev)
-> =20
->  	if (irq !=3D -ENXIO) {
->  		ret =3D devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> -			tps65090_charger_isr, 0, "tps65090-charger", cdata);
-> +			tps65090_charger_isr, IRQF_ONESHOT,
-> +			"tps65090-charger", cdata);
->  		if (ret) {
->  			dev_err(cdata->dev,
->  				"Unable to register irq %d err %d\n", irq,
-> diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supp=
-ly/tps65217_charger.c
-> index 814c2b81fdfe..cba3967ff275 100644
-> --- a/drivers/power/supply/tps65217_charger.c
-> +++ b/drivers/power/supply/tps65217_charger.c
-> @@ -238,8 +238,8 @@ static int tps65217_charger_probe(struct platform_dev=
-ice *pdev)
->  	for (i =3D 0; i < NUM_CHARGER_IRQS; i++) {
->  		ret =3D devm_request_threaded_irq(&pdev->dev, irq[i], NULL,
->  						tps65217_charger_irq,
-> -						0, "tps65217-charger",
-> -						charger);
-> +						IRQF_ONESHOT,
-> +						"tps65217-charger", charger);
->  		if (ret) {
->  			dev_err(charger->dev,
->  				"Unable to register irq %d err %d\n", irq[i],
-> --=20
-> 2.17.1
->=20
-
---25m4cz6hxukmhk4d
+--pwh33wz7f4hiy5eg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBu+ogACgkQ2O7X88g7
-+pr2Sw//WaQngatrCsqnO9qhac4PWDv+5Qe11OdgvwB453MMiSqeZFd5BO/b/z2O
-6zctraiKJWyhQAOZOGZPL8RPb2psFaFmGGJCAXPYEmIxFhF8y/r5YoMNOjPoJrSy
-mSumlKeIU2jbwm6q7flQogjiKQeyiO/7TGfqgqIlBNjRon5bSOPzjExEyq5SGc+V
-iiAhPt1ng0wdTDlLOns/gMBK2HgWpPShrSFzKOtbThc6REAV2NEgvsSiOGp0MF5i
-YBV/11M9E8eNrtnNvOnLc2QLTEzuUPlvhmN1JkBVDQqcJ6InQCf0xqZQhnDhtty5
-clCKs4IDklUWuCIwmRBLOJ1i/C6YoQmIKn5M5XtGM/o2xA29LXc7h5ieXwyiOmWM
-x7lH4NIzjShoj8na0pPcQN/7v18B4BQbuV5rwvj5m7OlKdeEXyhPv6853zb4ZutM
-mB+NwtILbPGMwtpQKveFbvOPkLRd9gmOcT3r6WFefoscng6RXwXK1kbuTyeibsvy
-xRtAQBaH0BKQQTUEzzI4Bdasf7PzHDJbHECfFG18si4LiVFcz0tlf3GTGn2APHQ7
-g/YzCh/9hJtyUNzT8SHIq10709b67ckpW89QfbZ9JNuX9h0GUkPHoXPJRNh+ZZ4Z
-jj2/YaZ4q6XCbSOWpZVgWhWmykd5b1MPxm7mx19yZiw3ZXsuqh4=
-=dScd
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBu/kgACgkQ2O7X88g7
++ppAeRAAkhWuK8jM17WlU33LPMDBqGwlit1V4YED46pLirpINtFqnT/4ci0BeDV/
+U+8uENhHjrM+TE8dC3LJOWXK33xEaczB93IuQfdpV7CLiSGSwT8QJ8s18vOZkoqF
+wgdDLw12PdSS4RcJZfD4Pn0fgR2hmCGQgs6IorpYEOhJZEx16kTqPkrZnaDkKPkg
+YA/maaol7zbfofYHDhvdqqLuC3qhk2+mgmLftFz5mGQuLD5pzPWLYmRhqe8FsbIT
+2QE5S4fc30KiQVufnncRJOuU4XBMScwY1ayHT0N+s4Muo8mDXK5dx613kxckuW6/
+R7JnXHiaO8rilZ1BBVcKb0gPcZgAGunJmh3elWrPc/K2idInkDnwhWmfHftgc5zx
+vtaFDntNSFXyTEBp09CjQShxi1p6OsYXIyrMfN6FpcnGZqJvR0s2EmJeR9ac9ZSs
+Vxn6+OhLRsyEBFSaIefNtAinIHyKTv44AEoWMHopWO0di9J/wHnJCDelGdgUOE3S
+lgWb5yZMynmOxWrc7tLZOJDcT/yxfBQ9ATo+FOwYzoN0GQJYnfzVNvou4bTzRgWm
+uOHVQ6HkFHIsVvqLe2xeOl3fyxfOVpo6j/ADUxxpL69m9wdoN1B4b+zs3x5nXSQz
+BztPpOLY0doi6ILnP6KU6aVC1y4aSU5iYBujcBhiVvQJ9iJDLUw=
+=YShM
 -----END PGP SIGNATURE-----
 
---25m4cz6hxukmhk4d--
+--pwh33wz7f4hiy5eg--
