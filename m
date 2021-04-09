@@ -2,100 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E4835A720
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 21:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B694235A75F
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 21:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbhDIT2j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 15:28:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27985 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234887AbhDIT2h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 15:28:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617996504;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gtQRyJkei76MgWJGNFUnR7KOo7QbxlHYKJLaZxgsRec=;
-        b=dN1JdqjwSzrJHiZXkmw5O7rc4eVrfHEtj9F4nl4N6E5uU8Gq4H1iHjChAXpb5qZpG61cAj
-        EQBRi0EKFQNRR21ve/2Wk4NNSAOenKjJhPpylDw19lyDLzIdMAoTR81z7S2iTf+QXyjbCx
-        +3jHS4kKxWm3TLkVquf0sJXicpJd1os=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-400-z8sidzyZP0CHhR2Aqn2ACg-1; Fri, 09 Apr 2021 15:28:22 -0400
-X-MC-Unique: z8sidzyZP0CHhR2Aqn2ACg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 102BB1008062;
-        Fri,  9 Apr 2021 19:28:21 +0000 (UTC)
-Received: from crecklin.bos.csb (ovpn-113-158.rdu2.redhat.com [10.10.113.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1A7019704;
-        Fri,  9 Apr 2021 19:28:15 +0000 (UTC)
-Reply-To: crecklin@redhat.com
-Subject: Re: [PATCH v4 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "simo@redhat.com" <simo@redhat.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "decui@microsoft.com" <decui@microsoft.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210408104629.31357-1-crecklin@redhat.com>
- <6be63531313d46caa7161697bf240dfc@AcuMS.aculab.com>
-From:   Chris von Recklinghausen <crecklin@redhat.com>
-Organization: Red Hat
-Message-ID: <822eaebf-4ef9-d469-4238-54107c8ba6a6@redhat.com>
-Date:   Fri, 9 Apr 2021 15:28:15 -0400
+        id S234466AbhDITqq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 15:46:46 -0400
+Received: from mout.gmx.net ([212.227.17.20]:39269 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233883AbhDITql (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Apr 2021 15:46:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1617997367;
+        bh=iNspAAUXd0TGc9idWuqJezj9FgSbVIrdnHkC34OI6ys=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=ldsXgBGJ3GSKvmbTxvP1itO26Qt3rKVAXa7HCeRwn7x6vvwIVyKAuuWMT/9Mbs/eq
+         eUjUvdYyHT2oPnald/g3Raad9aGgTRMlgrGQZ1cKX9WKZtuOkezCA/ZBkxeKHYWicC
+         dFguhZZAb4murEW3qrRROxlPjGsI5cEXZ4497eEg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.181.63]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1My36N-1lmD5l41nT-00zVNp; Fri, 09
+ Apr 2021 21:42:47 +0200
+Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
+From:   Helge Deller <deller@gmx.de>
+Message-ID: <cef5d4ba-9d91-7249-3ba4-c7f1c89ab119@gmx.de>
+Date:   Fri, 9 Apr 2021 21:41:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <6be63531313d46caa7161697bf240dfc@AcuMS.aculab.com>
+In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:A9ZHNG4WxpUBFm/OLrSjy4wmvepyAKfJ/9J0GMwZPVvou+WL0jt
+ juhLu46u1kS+URbP+8+Pw+p7oQ3JpIMBAMo3AEr85dJ6auKoY3YWnT5NDC8TMlGFgRljwyK
+ +Z8x/lMp3a1Sj6G+ejcETzf/1wuAwQ3HVr+B/sOgfO9g9aKIA+KstHHg98r0RbXaN5gO1f1
+ c2FCqtclGkoW83386bLAQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QTiAIr1d9DU=:ouDY+zoQbxd0AYwIoqdq7+
+ aGg5cjuhFxN4dPlhbUVe4gHa8V6O/ob8/GYNsz48eMGoWdTSBWNdigEx/P3CeG5ajt1K/D1wj
+ ZsuimGcNU/JIwDEC4hAa9wiKwplSRt9GyqnNpMymPpOincerI2QNIINtkESpmD/MQtIZKWIBd
+ LzLZQt5g5JHyD7KSRX3CSO3kxsUbUK397UnmPrlbBzZiG2Ki8L87whx1HhStGiOawVNU3NX1U
+ 1qJ/Q2KXhaSRyDrR5JobMbpVJ16dZyIPC+nB+S5uAuxAgE/sFmpim0FlFwngs3hHA1Ua7nKDx
+ vaviKH0ZdVtdmwFCmPWXldfwgaGRXmcVHieN8y3Cf4AES1arvvUXfDdU8TlIFPlMWolAfy75b
+ aF6Vq+x5W46hFMRh+gkaDVvXSN0IJLemCnzysIaYGHy5hfBua6u7o+npWjwJ1MLna90v6WJqp
+ qtsmLRv7qq9JD3rE3mLnbgCeyikpDMiwYezxJc5y085Nda4MocVjIUyHwfrItCcTJy+6nK+32
+ QtS5ysQPbZtg/0BLTkwmTgg1C9wyCqJwqSPkJHKs0fedY3Cg4AmlYSUFZ+l1+yWlahYNrwIjD
+ 1LvXS6jFdPgrwM0Bw5zEn5iTaVsN3Dpg/BK7RBEnkSXG2EhjbG0P5JyU6ZQFlyoWZsOBl1Dnp
+ 9RlHsz3O6/vJl501tNpFzFkE9v1fbjuJiCnsWIZVHwcbxwgsYWs1VvePFQoqRLQUoGWk7YlQ8
+ Mycnfd16TOkM/BTklN35/8ZoVz9X6VjMTLQhDSDUL5LeX75GwKdRnpVjwg+mpqmINujIEDZVj
+ bRIcfuM8kM4QXmEUEjmqZoVNDqdo0531mNm3kN19X3Wj5I9ywhlJarAEaPUOs1zKkdzPb4HdC
+ +5ul9M6a4WBWbT5U1mKmQOeT0D6MCEGVKv+v/aWQ+A07Sxs9cad/sxt/XXniiusfDTtv1wpHL
+ 48xz68wHDUi6JHhewqK39v9CUwOqs24U/FOrqR6QogsoMdeib8LB3HQXiJzJhPuxnfQKT5n0E
+ 2KocVJOLOCpFD00uImKyPG4urooQInY0CgXuaTbgwb2QXtNz/HWsnU7bcGH95t//ETUS0YST/
+ HIEC4Jt3JrZiU2K24JZ5uAUtc1tWcvMl+zNPO7uqbferwivk7BjAs0A1bkS3994pg0p9gu7e6
+ IGlScHPk65VIaL0560ZSSQDJOn/n987RThMli+dnKucI6xieqz82byl0Okk5UU49D7L5Y=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/9/21 12:56 PM, David Laight wrote:
-> From: Chris von Recklinghausen
->> Sent: 08 April 2021 11:46
->>
->> Suspend fails on a system in fips mode because md5 is used for the e820
->> integrity check and is not available. Use crc32 instead.
->>
->> Prior to this patch, MD5 is used only to create a digest to ensure integrity of
->> the region, no actual encryption is done. This patch set changes the integrity
->> check to use crc32 instead of md5 since crc32 is available in both FIPS and
->> non-FIPS modes.
->>
->> Note that the digest is only used as an integrity check. No actual encryption
->> is done.
-> If crc32 is good enough, would a 1's compliment sum be good enough?
-> It is likely to be faster to calculate and not need special
-> functions be built into the kernel at all.
-
-
-Eric Biggers <ebiggers@kernel.org> suggested using crc32_le() which is 
-in the library interface (lib/crc32.c) and will always be available 
-without any special ifdefs. That's what my next version will be based on.
-
-Thanks,
-
-Chris
-
-
+On 4/9/21 12:02 PM, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
 >
-> 	David
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
 >
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
+Acked-by: Helge Deller <deller@gmx.de> # parisc
+
+Helge
