@@ -2,96 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD98D359DF5
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 13:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D0F359E13
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 13:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbhDILwO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 07:52:14 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35874 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhDILwO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 07:52:14 -0400
+        id S233637AbhDIL6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 07:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231611AbhDIL6F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 07:58:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B04C061760;
+        Fri,  9 Apr 2021 04:57:52 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 74AF61F464C8
+        with ESMTPSA id A26831F4659F
 Received: by earth.universe (Postfix, from userid 1000)
-        id D80423C0C96; Fri,  9 Apr 2021 13:51:57 +0200 (CEST)
-Date:   Fri, 9 Apr 2021 13:51:57 +0200
+        id 0F1A63C0C96; Fri,  9 Apr 2021 13:57:48 +0200 (CEST)
+Date:   Fri, 9 Apr 2021 13:57:48 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Chen Lifu <chenlifu@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] power: reset: hisi-reboot: add missing
- MODULE_DEVICE_TABLE
-Message-ID: <20210409115157.cifirven2au4mj45@earth.universe>
-References: <20210409025011.8796-1-chenlifu@huawei.com>
+To:     skakit@codeaurora.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+Message-ID: <20210409115748.xfxukqgoyvscgpln@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+ <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5pez7hzvzer77b36"
+        protocol="application/pgp-signature"; boundary="ioziho372aqje6wl"
 Content-Disposition: inline
-In-Reply-To: <20210409025011.8796-1-chenlifu@huawei.com>
+In-Reply-To: <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---5pez7hzvzer77b36
+--ioziho372aqje6wl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Apr 09, 2021 at 10:50:11AM +0800, Chen Lifu wrote:
-> This patch adds missing MODULE_DEVICE_TABLE definition which generates
-> correct modalias for automatic loading of this driver when it is built
-> as an external module.
+On Fri, Apr 09, 2021 at 01:48:58PM +0530, skakit@codeaurora.org wrote:
+>> Please do not drop the example :)
 >=20
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
-> ---
+> As per my understanding on Rob's comments [1] I have added one complete
+> example in qcom,pm8941-pwrkey.yaml (see patch 4/4) and dropped it here.
+>=20
+> [1] https://lore.kernel.org/patchwork/patch/1390062/#1588027
 
-Thanks, queued.
+Ok, please add a note about this in the commit message.
+Something like:
+
+The example has been removed in favour of full example being
+available in the qcom,pm8941-pwrkey binding.
+
+Thanks,
 
 -- Sebastian
 
->  drivers/power/reset/hisi-reboot.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/reset/hisi-reboot.c b/drivers/power/reset/hisi=
--reboot.c
-> index 5abc5f6ba0fd..34409340528f 100644
-> --- a/drivers/power/reset/hisi-reboot.c
-> +++ b/drivers/power/reset/hisi-reboot.c
-> @@ -68,6 +68,7 @@ static const struct of_device_id hisi_reboot_of_match[]=
- =3D {
->  	{ .compatible =3D "hisilicon,sysctrl" },
->  	{}
->  };
-> +MODULE_DEVICE_TABLE(of, hisi_reboot_of_match);
-> =20
->  static struct platform_driver hisi_reboot_driver =3D {
->  	.probe =3D hisi_reboot_probe,
->=20
-
---5pez7hzvzer77b36
+--ioziho372aqje6wl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBwP90ACgkQ2O7X88g7
-+podlg//Q/InvDUDGeGGzBjK9HaUmbZ9yb9A2n4jKp1hpxH0kdy3DDu63+k+uHtp
-ZcwsrVjtVzdMsCb/g/S7cqZIZEcjB6g6fyRqvgul5g6sZJkMrx+ASdersUCALXua
-yfC7nxzigWncVGV+H0DT96FwUHQYjfR7riD0yGI3hweXO8MDM+NK6OGAJIJ/maHW
-Fb6rC6WMwEkc+sKmDyrKRKVnTcbTiDE+4zBVmi5c9RMQOk0xchs/lJqU36NzYflI
-rmZnFrMwuwszVjaDc6AHAIPgyPcCZtgnF3souUKn67FrTTNtPsNNXmmATQAZkiDM
-nIdWFt5PYX5b4MlC20H4sWvvGG5ojJacd14NB/1u2wGROhCL5lkvrg65sSysQty8
-/+U9vTR7v4S3uNrM9C9fefERRcvt2M7y0nLumKlhwnY0HW4EgeUXMOTMwCpgij1g
-l85P7Gf0s55dw8XeB7fJ4gwQ5bc/qvE/9yqt5o1J0u+Pr1cr6tqENUH2fUsNb/Zp
-9hAiBhw67LWW/dBvoyDbR/nAVGBwFbqYB/h7+kJiuoAUoD0ATaESPf8zC0v8BCdF
-qDg+K1CVngSLIqVFQ1o0L1jxBIx8ojNNUxkjYpTliJs/ChR6UKiYor4Sft9xMJSJ
-nXvyBoSmpVPe5rZxBfKZe6QMNbvlt8d+PigGWXZ7459FyI8LEVU=
-=XwSD
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBwQTsACgkQ2O7X88g7
++ppvxA//ZDqA2HcgKmkY/5edbV1Mv2x1kz92+zc6n7n8g0HO5qCxbIDi0BVH+O9X
+OPP6eoyMRa2zTcKh9Z9j/KxRVNSx7ntnIm9CS/q8nDD6f99tyCCUTcNcHsd0QC0I
+Ff4T4FlGYVWwbyb3p5Qly2YaAAngd5C6zV1ln9RtKOUJs+eJxfy6lluJwSgyPPGq
+ssQtuRpUdq7Ql9vuxbHa5fMzFlwvibz9UYKMfNTxIc8KU/E8NtZVegtP0q1GDX0O
+Df9iNLTAYcN1olyG5gTo9223kPFwcuJtGAHMVrORjpXsmrY6kznRWtRVEB/YBZE6
+8pihnV01bgdalxXkn17VvBulRzUERYzXTaLUC0z90BI9/qg8ZeUgWAk7O4TGBiuF
+vo4TERUhwbI0KwOwaQ1F/qHVSlJN6XQiiq9MB5Pr7SxzNdvcCp6p6OBmGyjWhBwU
+jb/0XOBG9n6C8MNjwc6GGyM6W92Vd7jRca1RRvPQaXWTKX8zijFvdXKhKgY4DCAy
+yxtHKsxqUDi/uW6rQZYh1jDVKTjN4MbTJoXdlNfyHU2nkijBDKWJumtxHh5tetj4
+W+ouewINUSGbpzyeiHLHWXXnPXBetuh8OOA9J3IF39wFJzp2O5kAdnpcQ35QhvIz
+zc0tY9CRl4/dAl4UMezOF9RTtWIeuA0h0U0dmc6rnrnwGY4ibFc=
+=KCef
 -----END PGP SIGNATURE-----
 
---5pez7hzvzer77b36--
+--ioziho372aqje6wl--
