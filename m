@@ -2,62 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BF135A77F
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 21:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE47735A8B5
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Apr 2021 00:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbhDIT7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 15:59:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234449AbhDIT7n (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Apr 2021 15:59:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 287CC61041;
-        Fri,  9 Apr 2021 19:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617998370;
-        bh=npXF1Qaz0j0RJC2c9EBMUOTu6euRpJjriL/xwCaLRLg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Si8cHjtL78lTrc62v1AUE+MssYBH0kLn2zmNL5PfcOkxehxPQqPv7h40HpWjAPB01
-         +3XWZ4f4Qb9L91e5pfdZz1YDxeHzHqYFbBeCyQ/GpoD6IDJ9ER6wrHtpZ6W8avufok
-         WxiSK1dDPtUMO5m+QM2pC3Ob3+4CO4dcb9XKSAeQasJeagKXzlxK4ocR1uBMJ0AM+E
-         552WAPPf65Ml7OV5lI028g8v7lN3ilFOSHJaqTaVzrqujgi02I8H8UKnXSpfndGzBY
-         QHv2Nl5uoMAnfC+LZJFjeH73/X7jljQo+iAnZC8y990jbCzwj09Tak6T8XTlao7n8I
-         kmB2c5exQVxVA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 219A760A2A;
-        Fri,  9 Apr 2021 19:59:30 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fix for v5.12-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0ii5+k8j-9LwGxjHnJZ5ru3UNSLP=Z_BoE4pOWZN0nTyQ@mail.gmail.com>
-References: <CAJZ5v0ii5+k8j-9LwGxjHnJZ5ru3UNSLP=Z_BoE4pOWZN0nTyQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0ii5+k8j-9LwGxjHnJZ5ru3UNSLP=Z_BoE4pOWZN0nTyQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.12-rc7
-X-PR-Tracked-Commit-Id: fa26d0c778b432d3d9814ea82552e813b33eeb5c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ccd6c35c72c771616c37d1978e02a982da0678ef
-Message-Id: <161799837013.7895.1785409507519991680.pr-tracker-bot@kernel.org>
-Date:   Fri, 09 Apr 2021 19:59:30 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
+        id S234909AbhDIW2U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 18:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234602AbhDIW2U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 18:28:20 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969C9C061762
+        for <linux-pm@vger.kernel.org>; Fri,  9 Apr 2021 15:28:06 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id lr1-20020a17090b4b81b02900ea0a3f38c1so7117960pjb.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Apr 2021 15:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=hmZ9HSf1chGUEAbtEPPe3LvMOELrxTE0c6dAZSknpiQ=;
+        b=YzAlaXzY7NK8/Jhs/QDsdGmEhsPrkJnS2A5S3kKRoLDdh84MyipyqBLtX8CWqVHBaG
+         5fc+uhjPoDM6onc6qCr+6IdGLuyvglNQCKw5tDBhEkytyvdEJq8zPcNMf6DG3Aj6uBGX
+         IhN+8YfpuluZhE65Aw2H4zpfN3BXx33gr01ZwdiGydEKD2ls/ivV1cDS7+Qi8DdTGbVo
+         TUbXkiouzZEQ6r8RC/GVGj8HvpK81bMA0hy1moOK5Px+B8b4kjv46a7yDxq/6SqUivAr
+         7znaK5dK2JhYhDRIvGWYvUQRLgxu1nDghyuT8o7zWzlSeOrW8RtjG22gryMgjzhfUKvO
+         jV4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=hmZ9HSf1chGUEAbtEPPe3LvMOELrxTE0c6dAZSknpiQ=;
+        b=W6IYGmkrQU2MqleHX6ppuLV8YS40QEMxhfm3Z351eG3JRZfjC2dQZPlbun9OEXu1tJ
+         s5lRECrtBzVMTcIB/k6uaEtAgnHUXYp35lh277s3JKS4dyRkc+0lqocW5RHSwOhFbeNB
+         +r84QCPYvQTlXvEOBYuK4pfMRxBe+oQelfC5m4Xw5ki5m+gLTJELgwqVdxfIp/3Asbcy
+         LTjGRADYWLHx5OXwDa7RYkOBaeZZOPth7+wy0xgQ4WvMqy3iyAom1KU6/12Y170Szc1A
+         X0dFmpj1GcJrJ/aYcxc6D+7H2vDgz7eTKf9lZWE5/aOR3+T6fe9J4AW76iiYheolPX1L
+         6nrA==
+X-Gm-Message-State: AOAM530e90Y1UPyjWvltNINGrwxAlrpuz5s5DTr1o2PwSsjWy9bNnjHT
+        0/ctguSxJBXywral+RqlNHw9ZA==
+X-Google-Smtp-Source: ABdhPJxkS0cL5XZ2Pv6LFV0n51SuxKnc9UR5jK9CaoCvEGz0CZd7spOycJ3XOlbzi3droQx/RQ/Lcg==
+X-Received: by 2002:a17:90a:74c6:: with SMTP id p6mr15791905pjl.218.1618007286049;
+        Fri, 09 Apr 2021 15:28:06 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h8sm2796881pjp.37.2021.04.09.15.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 15:28:05 -0700 (PDT)
+Message-ID: <6070d4f5.1c69fb81.edd68.72b5@mx.google.com>
+Date:   Fri, 09 Apr 2021 15:28:05 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: acpi-5.12-rc7-125-g45f505d811b4
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (acpi-5.12-rc7-125-g45f505d811b4)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 9 Apr 2021 17:44:47 +0200:
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (acpi-5.12-rc7-12=
+5-g45f505d811b4)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.12-rc7
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
+i-5.12-rc7-125-g45f505d811b4/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ccd6c35c72c771616c37d1978e02a982da0678ef
+Tree: pm
+Branch: testing
+Git Describe: acpi-5.12-rc7-125-g45f505d811b4
+Git Commit: 45f505d811b4a64b2909019c0e0cba141114a007
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Thank you!
+Warnings Detected:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
+mbol check will be entirely skipped.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
+check will be entirely skipped.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
