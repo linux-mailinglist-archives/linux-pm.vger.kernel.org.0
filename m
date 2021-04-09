@@ -2,96 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C687835A0FF
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 16:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F04D35A232
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 17:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbhDIO1A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 10:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbhDIO07 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 10:26:59 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19892C061761
-        for <linux-pm@vger.kernel.org>; Fri,  9 Apr 2021 07:26:45 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id x16so6111619iob.1
-        for <linux-pm@vger.kernel.org>; Fri, 09 Apr 2021 07:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4ThxPDQhM4kEVDLwubZDAdURyhcYo7/BXJ9Qt3etGlA=;
-        b=GQ2HjbBqbU54oGdh+pNfj9lLnSjk3I2zlzKyK2fhwKEhXWgb0UpY0jg9qujwPGWZuf
-         EjSc4KSApOTWC0F9Xks4NITd1MCy2QEMFmso0aLUavxykJVoH8PrvnfRbpgn3OjTw2NT
-         07u7Wum1sRvT+v+eSonaywAuwfb9aOtHqaGJxJI2hEzWNSSRqpdP2L6SORSiSbBBrrcu
-         iONtHPHt+jwr9rRt5Udp/6RtKvA2igtxqtnZLCtN0nGXNEyMucH/CJNzlLsBpwPIqZLU
-         tktxjOBN1pX0QwqUvRF2QjLv7UO7KaWzISR+lAi4iEeDKP4+9WT82FT4ux/yFqRgDMv2
-         /tjA==
+        id S232395AbhDIPpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 11:45:12 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:38436 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhDIPpL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 11:45:11 -0400
+Received: by mail-ot1-f43.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so6090959otk.5;
+        Fri, 09 Apr 2021 08:44:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4ThxPDQhM4kEVDLwubZDAdURyhcYo7/BXJ9Qt3etGlA=;
-        b=H4zWaVpIu0hQnPp/S6DQR6CYIahn9bEM7byuQTkWymikI5eRovu/5ejvWaaJajYl+/
-         UBuqbES9Wk23mFeSyhJVbJSLgPta3kZEBoWWiCOrK3pxlOwQVB2XzPKochX9lSvO6iFZ
-         srFUECVgWCD+ZPpBTRaqbTxZWXDCSiC4R7gOwemymZryHbyQiu8G3nnIQjWvoZGijuCd
-         flPPoiuopo0SOKPnRqbPnlwiqAF78l6LGx67lYQ7WI8ZkQIQMAby4Rc6q2mayccu1Pjh
-         /e/np0AverH+bOHy5yVBkEAKhTjpBcCubvl4oNcwNZ+Sd+fSCjCVI/Duau7IaZSdtLq1
-         mABg==
-X-Gm-Message-State: AOAM5302lcyaQu+hw+xAcTx8+ZVV0fobvdE3arjrwMsm1qJUe3Ia34Zk
-        gnj5ZHVqIMlmR9ar7+kCRqJ5aIkUm3U6AbAebAnnsw==
-X-Google-Smtp-Source: ABdhPJx1yiAQTbQmfApjZVBT1ZKcxc0hOjVD/FrMOFRtbg2H9B7rCYKh67hBs4harU9XFVkYpm+aUoc1wsUryOBkcM8=
-X-Received: by 2002:a05:6638:338a:: with SMTP id h10mr14570283jav.129.1617978404469;
- Fri, 09 Apr 2021 07:26:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=VEs+wjuKWR88LlB/ggXhauOBmGil7c6BjaxvckBhYQ4=;
+        b=a06WFuZgHMU0O82/cciLXpl2GH3Ld1MrXyAWH4PHUpaPARP1QDEJBONN3sZD/KBwXZ
+         bNu1rhGqLkv3EB4Z1d3trLpckJKwt2yD2ABa9NEcQGEW10dB8cHyqd5VexxYYpFeMkaS
+         EdTyiddNSa0WWd7GGTg57ZUJUEA1T7s4j41UkrLJffi4QtzBZhPVFsGfhaDjbF8tIZZe
+         Z29cEFAUU/tGLIecllgtJ8EpmkjiGJt6id6NXJKDm4TdcDCuQFdy/ZsJs18oOVzeB22f
+         2vEdwkYagMG0RcS7MjpIWf0eRDenonOOxMfF8xpgUDze+pN5LhzaGDP0zSHpcXJS5moy
+         ikoA==
+X-Gm-Message-State: AOAM533brFgrZIBi9S+VARh79BVTEprflpVjVcmuel3QVZ9GUB/MFPr9
+        49XwiqmWRFoV3laOXOBBECw2kawCws4whQqzb3YzKXBJNJE=
+X-Google-Smtp-Source: ABdhPJwWVM3ciwS3ypd+YxjYLoj0wKLxTpwAipbch/ikf/aK4FVW/HTpcTzEtEX8IDCOmsYbognCVSRNejrymwzsKc0=
+X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr12669145otb.260.1617983098087;
+ Fri, 09 Apr 2021 08:44:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210404083354.23060-1-psampat@linux.ibm.com> <CAAYoRsWaAmyuJU4FCb7gtK0y-ZprdDVvp0vMpy=ZohzoC7YX1Q@mail.gmail.com>
- <0a4b32e0-426e-4886-ae37-6d0bdafdea7f@linux.ibm.com>
-In-Reply-To: <0a4b32e0-426e-4886-ae37-6d0bdafdea7f@linux.ibm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Fri, 9 Apr 2021 07:26:38 -0700
-Message-ID: <CAAYoRsXqUpkVxDuRUoapBJ__EUPbMBSWJ7QigVcKbr6ApRxzbg@mail.gmail.com>
-Subject: Re: [RFC v3 0/2] CPU-Idle latency selftest framework
-To:     Pratik Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 9 Apr 2021 17:44:47 +0200
+Message-ID: <CAJZ5v0ii5+k8j-9LwGxjHnJZ5ru3UNSLP=Z_BoE4pOWZN0nTyQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fix for v5.12-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
-        dsmythies <dsmythies@telus.net>
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 9, 2021 at 12:43 AM Pratik Sampat <psampat@linux.ibm.com> wrote:
-> On 09/04/21 10:53 am, Doug Smythies wrote:
-> > I tried V3 on a Intel i5-10600K processor with 6 cores and 12 CPUs.
-> > The core to cpu mappings are:
-> > core 0 has cpus 0 and 6
-> > core 1 has cpus 1 and 7
-> > core 2 has cpus 2 and 8
-> > core 3 has cpus 3 and 9
-> > core 4 has cpus 4 and 10
-> > core 5 has cpus 5 and 11
-> >
-> > By default, it will test CPUs 0,2,4,6,10 on cores 0,2,4,0,2,4.
-> > wouldn't it make more sense to test each core once?
->
-> Ideally it would be better to run on all the CPUs, however on larger systems
-> that I'm testing on with hundreds of cores and a high a thread count, the
-> execution time increases while not particularly bringing any additional
-> information to the table.
->
-> That is why it made sense only run on one of the threads of each core to make
-> the experiment faster while preserving accuracy.
->
-> To handle various thread topologies it maybe worthwhile if we parse
-> /sys/devices/system/cpu/cpuX/topology/thread_siblings_list for each core and
-> use this information to run only once per physical core, rather than
-> assuming the topology.
->
-> What are your thoughts on a mechanism like this?
+Hi Linus,
 
-Yes, seems like a good solution.
+Please pull from the tag
 
-... Doug
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.12-rc7
+
+with top-most commit fa26d0c778b432d3d9814ea82552e813b33eeb5c
+
+ ACPI: processor: Fix build when CONFIG_ACPI_PROCESSOR=m
+
+on top of commit e49d033bddf5b565044e2abe4241353959bc9120
+
+ Linux 5.12-rc6
+
+to receive an ACPI fix for 5.12-rc7.
+
+This fixes a build issue introduced by a previous fix in the ACPI
+processor driver (Vitaly Kuznetsov).
+
+Thanks!
+
+
+---------------
+
+Vitaly Kuznetsov (1):
+      ACPI: processor: Fix build when CONFIG_ACPI_PROCESSOR=m
+
+---------------
+
+ arch/x86/include/asm/smp.h    |  2 +-
+ arch/x86/kernel/smpboot.c     | 26 ++++++++++++--------------
+ drivers/acpi/processor_idle.c |  4 +---
+ 3 files changed, 14 insertions(+), 18 deletions(-)
