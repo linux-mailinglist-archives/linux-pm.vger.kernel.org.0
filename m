@@ -2,148 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043A93595E6
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 08:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5F235961A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 09:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbhDIGzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 02:55:13 -0400
-Received: from mga12.intel.com ([192.55.52.136]:40391 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231540AbhDIGzN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Apr 2021 02:55:13 -0400
-IronPort-SDR: d1yiPPasJ9R79uehsvCUEDVkOWsbpivla7BwiEWvWDfLxF3CI/DICbSL/3a66ZK8Su2FS5e6vt
- MGGl10tDwX6A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="173181663"
-X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
-   d="scan'208";a="173181663"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 23:55:00 -0700
-IronPort-SDR: pjGxxRloPxYmczMy6KLK8xypZTeXgKK+qC4pJL/3sz5IxyZVCUc5ZwXDOf8ki6XE1Blo32mwmo
- dJoBEwPi2GIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
-   d="scan'208";a="416140990"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2021 23:54:59 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lUl2f-000GJE-WA; Fri, 09 Apr 2021 06:54:57 +0000
-Date:   Fri, 09 Apr 2021 14:54:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- d632b6ec9bc410cf46b6e4b0c142c93f6a7713f4
-Message-ID: <606ffa28.ovHX0V7D09apt73R%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231829AbhDIHMh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 03:12:37 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42382 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231679AbhDIHMg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 03:12:36 -0400
+X-UUID: 96e6dfa9373a443c949729cfb833874e-20210409
+X-UUID: 96e6dfa9373a443c949729cfb833874e-20210409
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 871725561; Fri, 09 Apr 2021 15:12:21 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 9 Apr 2021 15:11:58 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 9 Apr 2021 15:11:58 +0800
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     <michael.kao@mediatek.com>, <fan.chen@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/1] arm64: dts: mt8183-kukui: Enable thermal Tboard
+Date:   Fri, 9 Apr 2021 15:11:58 +0800
+Message-ID: <20210409071158.2346-1-michael.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d632b6ec9bc410cf46b6e4b0c142c93f6a7713f4  Merge branch 'pm-cpuidle' into bleeding-edge
+Add Tboard thermal sensor settings.
 
-elapsed time: 727m
+pull-up voltage: 1800 mv
+pull-up resistor: 75K
 
-configs tested: 85
-configs skipped: 2
+Vsense = pull-up voltage * Rntc / ( pull-up resistor + Rntc )
+AuxIn = Vsense * 4096 / 1500
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+TEST=boot kukui
+     check /sys/class/thermal/thermal_zone*/type
+     check /sys/class/thermal/thermal_zone*/temp
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-s390                          debug_defconfig
-arm                          pxa3xx_defconfig
-um                           x86_64_defconfig
-mips                         rt305x_defconfig
-arm                            xcep_defconfig
-riscv                               defconfig
-ia64                            zx1_defconfig
-sh                  sh7785lcr_32bit_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210408
-x86_64               randconfig-a005-20210408
-x86_64               randconfig-a003-20210408
-x86_64               randconfig-a001-20210408
-x86_64               randconfig-a002-20210408
-x86_64               randconfig-a006-20210408
-i386                 randconfig-a006-20210408
-i386                 randconfig-a003-20210408
-i386                 randconfig-a001-20210408
-i386                 randconfig-a004-20210408
-i386                 randconfig-a005-20210408
-i386                 randconfig-a002-20210408
-i386                 randconfig-a014-20210408
-i386                 randconfig-a016-20210408
-i386                 randconfig-a011-20210408
-i386                 randconfig-a012-20210408
-i386                 randconfig-a013-20210408
-i386                 randconfig-a015-20210408
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a014-20210408
-x86_64               randconfig-a015-20210408
-x86_64               randconfig-a012-20210408
-x86_64               randconfig-a011-20210408
-x86_64               randconfig-a013-20210408
-x86_64               randconfig-a016-20210408
-
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 14 ++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi       |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index bf2ad1294dd3..202acb542b12 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -801,6 +801,20 @@
+ 	status = "okay";
+ };
+ 
++&thermal_zones {
++	Tboard1 {
++		polling-delay = <1000>; /* milliseconds */
++		polling-delay-passive = <0>; /* milliseconds */
++		thermal-sensors = <&tboard_thermistor1>;
++	};
++
++	Tboard2 {
++		polling-delay = <1000>; /* milliseconds */
++		polling-delay-passive = <0>; /* milliseconds */
++		thermal-sensors = <&tboard_thermistor2>;
++	};
++};
++
+ &u3phy {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 1ad0a1d55d53..f0719dbef249 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -673,7 +673,7 @@
+ 			nvmem-cell-names = "calibration-data";
+ 		};
+ 
+-		thermal-zones {
++		thermal_zones: thermal-zones {
+ 			cpu_thermal: cpu_thermal {
+ 				polling-delay-passive = <100>;
+ 				polling-delay = <500>;
+-- 
+2.18.0
+
