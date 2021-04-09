@@ -2,70 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8D1359E15
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 13:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0797D359FFD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 15:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbhDIL6P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 07:58:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:4320 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233838AbhDIL6O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:58:14 -0400
-IronPort-SDR: TZb+Kap/wx8uKo/oSuzcd6f/iOUDge2G6JCfLOovsGnfaioHTyg36q1b4QJikgfb7wgUAxfln7
- qHThbYdkxYXw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="190546815"
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="190546815"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 04:58:01 -0700
-IronPort-SDR: sExNdMNJgxTZOJB478Bjt/IzpOobnLLdAjfirJrL7gvmBwfQWc9rBSgrWDPGNM0aZfXT/A3tWh
- /OssJJVFcpRw==
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="613694408"
-Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.173])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 04:57:59 -0700
-Date:   Fri, 9 Apr 2021 20:01:57 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Simplify
- intel_pstate_update_perf_limits()
-Message-ID: <20210409120157.GA229488@chenyu-desktop>
-References: <5450142.DvuYhMxLoT@kreacher>
+        id S233603AbhDINjO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 09:39:14 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:25764 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233527AbhDINjN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 09:39:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617975541; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=nCLKJ3txbssGA/MS9THnoJcM1/EpV+VVOtQ0VWZ6Umc=;
+ b=AmcL94NG7Ck1xkGZlwlWfi/r3pf526qZKsLyVMdw1xxqxcRsva9Lqh4znvfyB/gDqYqekUOH
+ I9SSXN2h7DsoEsRjzPknCaC6p7hH7Gcs+mvoWQE9XwEZdza4TUtaNfFYVbFv/OMvLRLWYGkj
+ C52tz8yeAvioAStsGGO+xuTaEQY=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 607058ec8807bcde1de095c9 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 09 Apr 2021 13:38:52
+ GMT
+Sender: skakit=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3D8B1C43462; Fri,  9 Apr 2021 13:38:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: skakit)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99624C43461;
+        Fri,  9 Apr 2021 13:38:51 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5450142.DvuYhMxLoT@kreacher>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 09 Apr 2021 19:08:51 +0530
+From:   skakit@codeaurora.org
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+In-Reply-To: <20210409115748.xfxukqgoyvscgpln@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+ <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
+ <20210409115748.xfxukqgoyvscgpln@earth.universe>
+Message-ID: <ad5d04c2a806213e9922834e996da15a@codeaurora.org>
+X-Sender: skakit@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 04:21:55PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 2021-04-09 17:27, Sebastian Reichel wrote:
+> Hi,
 > 
-> Because pstate.max_freq is always equal to the product of
-> pstate.max_pstate and pstate.scaling and, analogously,
-> pstate.turbo_freq is always equal to the product of
-> pstate.turbo_pstate and pstate.scaling, the result of the
-> max_policy_perf computation in intel_pstate_update_perf_limits() is
-> always equal to the quotient of policy_max and pstate.scaling,
-> regardless of whether or not turbo is disabled.  Analogously, the
-> result of min_policy_perf in intel_pstate_update_perf_limits() is
-> always equal to the quotient of policy_min and pstate.scaling.
+> On Fri, Apr 09, 2021 at 01:48:58PM +0530, skakit@codeaurora.org wrote:
+>>> Please do not drop the example :)
+>> 
+>> As per my understanding on Rob's comments [1] I have added one 
+>> complete
+>> example in qcom,pm8941-pwrkey.yaml (see patch 4/4) and dropped it 
+>> here.
+>> 
+>> [1] https://lore.kernel.org/patchwork/patch/1390062/#1588027
 > 
-> Accordingly, intel_pstate_update_perf_limits() need not check
-> whether or not turbo is enabled at all and in order to compute
-> max_policy_perf and min_policy_perf it can always divide policy_max
-> and policy_min, respectively, by pstate.scaling.  Make it do so.
+> Ok, please add a note about this in the commit message.
+> Something like:
 > 
-> While at it, move the definition and initialization of the
-> turbo_max local variable to the code branch using it.
+> The example has been removed in favour of full example being
+> available in the qcom,pm8941-pwrkey binding.
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Tested-by: Chen Yu <yu.c.chen@intel.com>
+Okay.
+
+> Thanks,
+> 
+> -- Sebastian
