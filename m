@@ -2,276 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 385A4359775
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 10:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805E9359786
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 10:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbhDIIQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 04:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbhDIIQU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 04:16:20 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A31C061760
-        for <linux-pm@vger.kernel.org>; Fri,  9 Apr 2021 01:16:08 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 12so2440162wmf.5
-        for <linux-pm@vger.kernel.org>; Fri, 09 Apr 2021 01:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LRj04aylh/M/utY6Vb5m6Brz3i8rRk89mp42xbGh50c=;
-        b=Y1Ye8Pu1vzTfpaMER5fLdOOHuYOydweGzPny7okrNuORSfaLyQm1nP3qMuwfQi1MUU
-         iE0KlyYkAWj3ExylYBFMoly7Ns7Dpf7fcKW/LATImCn7chh4AP8/WIT4SjWZ+1qUWwTt
-         4CGsRmxprOJthB1JXY1MLsZr9KUJcoMaBny3rTWp+XU9Jbe7mtdcChkz9WbR/Keru0yr
-         iIyzpUX54xlUqP8eET7sHoKYCIfhii8dLC1++yUIugvalYMSoEoCggbYZbj4uhSNXPFI
-         lbKw2l8vSIjsPz22udPFlOq/QyXAfevUiW8enCN7H+sbo4bSWuv3CU44pdRRUIqzGJCG
-         DMQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LRj04aylh/M/utY6Vb5m6Brz3i8rRk89mp42xbGh50c=;
-        b=Xeq6HhDTbCp8d47dpLH4wGuvglWU03PoNlysA++YdatHsLNK0Qtnl3YSmsZ8U1YEcq
-         zuoPFlVnInx71XXA0D9A3xewYWfa5WL7wADKrDdq8NfNJE1QD1RxBYNCX8LWzxqgpgQL
-         sDQtmF1bt5N9Z9xhiEIPbhlOYyGB6+MluXS00FKftLAg0Uc63Ve7YOMM/ohcajKxcYYZ
-         wrpdTrwsTZKieaFTBT3rmN6uCgUaZZvbfJtZgxvi1wrlOHppUxKU7t4C6ulR5SeN6Yci
-         NK6hMcV1hz4cd4SdLlKk4+5DembrGQGhwY0Zgt8/9p1jDYSr31XSZZ2dhw4cd8EYKjM2
-         QzGw==
-X-Gm-Message-State: AOAM530onVLHbrrwJoTAAckAsAVyDn11NyMlTZiGzmtujf8Vr7sBU4O7
-        GZqUvG91NGohh0GPf7abFvdX8Q==
-X-Google-Smtp-Source: ABdhPJxC8OUe5wkOGAsqADIeWX+ybHtiZ41Qw6+hkby8yn3SMoV79nHh+S2e94pcqlrgUd/tFtGliQ==
-X-Received: by 2002:a05:600c:3541:: with SMTP id i1mr12594653wmq.97.1617956166600;
-        Fri, 09 Apr 2021 01:16:06 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5d29:55c:ba8e:9bff? ([2a01:e34:ed2f:f020:5d29:55c:ba8e:9bff])
-        by smtp.googlemail.com with ESMTPSA id z1sm3313831wrt.8.2021.04.09.01.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 01:16:06 -0700 (PDT)
-Subject: Re: [v7,3/3] thermal: mediatek: add another get_temp ops for thermal
- sensors
-To:     Michael Kao <michael.kao@mediatek.com>, fan.chen@mediatek.com,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20210316070144.28440-1-michael.kao@mediatek.com>
- <20210316070144.28440-4-michael.kao@mediatek.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <dac1f9bc-6caa-9cb7-97d6-882a8bd20fea@linaro.org>
-Date:   Fri, 9 Apr 2021 10:16:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229696AbhDIITO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 04:19:14 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:30116 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229545AbhDIITO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Apr 2021 04:19:14 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617956342; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=UM9uhxnzJhVi5iLX05PsBl0YNEH1zzB5iVkmTJT1W5c=;
+ b=D5eZU60b9L9N14NpAb//VIUBoiENpQh5lXCh/fMpaDPSSIqWAeUTXTGEpZKHk8lAblOSqfwh
+ A8wjKNS3UN+pWgVHv9BItveszLxsueCJsYP1abVDMy79hU86XDFpJlylz51K5YBaf9vtRAhi
+ ZbEH9uSI8BqCtmaKybSZCjMzT40=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60700df38807bcde1df43cb7 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 09 Apr 2021 08:18:59
+ GMT
+Sender: skakit=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CF88CC43463; Fri,  9 Apr 2021 08:18:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: skakit)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 81100C433CA;
+        Fri,  9 Apr 2021 08:18:58 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20210316070144.28440-4-michael.kao@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 09 Apr 2021 13:48:58 +0530
+From:   skakit@codeaurora.org
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+In-Reply-To: <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+Message-ID: <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
+X-Sender: skakit@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/03/2021 08:01, Michael Kao wrote:
-> Provide thermal zone to read thermal sensor
-> in the SoC. We can read all the thermal sensors
-> value in the SoC by the node /sys/class/thermal/
+Hi Sebastian,
+
+On 2021-04-08 18:30, Sebastian Reichel wrote:
+> Hi,
 > 
-> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> on the first read of sensor that often are bogus values.
-> This can avoid following warning on boot:
+> On Thu, Apr 08, 2021 at 05:01:08PM +0530, satya priya wrote:
+>> Convert qcom PON binding from .txt to .yaml format.
+>> 
+>> Signed-off-by: satya priya <skakit@codeaurora.org>
+>> ---
 > 
->   thermal thermal_zone6: failed to read out thermal zone (-13)
-
-This patch is changing more things than described in the changelog.
-
-Is it possible to share some technical details about how the sensor(s)
-are working or point to some documentation if any ? and possibly the
-layout ?
-
-IIUC there is a fake thermal zone zero with the purpose of aggregating
-all the other sensors by taking the max temperature of all the sensors.
-
-This patch adds a thermal zone per sensor, and each sensor is per CPU.
-CPU0 being actually the max of all the other sensors, right ?
-
-
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> ---
->  drivers/thermal/mtk_thermal.c | 100 +++++++++++++++++++++++++---------
->  1 file changed, 75 insertions(+), 25 deletions(-)
+> Thanks for doing this.
 > 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 149c6d7fd5a0..57e4f08a947e 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -245,6 +245,11 @@ enum mtk_thermal_version {
->  
->  struct mtk_thermal;
->  
-> +struct mtk_thermal_zone {
-> +	struct mtk_thermal *mt;
-> +	int id;
-> +};
-> +
->  struct thermal_bank_cfg {
->  	unsigned int num_sensors;
->  	const int *sensors;
-> @@ -637,6 +642,30 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->  		mutex_unlock(&mt->lock);
->  }
->  
-> +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
-> +{
-> +	u32 raw;
-> +	int temp;
-> +
-> +	raw = readl(mt->thermal_base + mt->conf->msr[id]);
-> +
-> +	if (mt->conf->version == MTK_THERMAL_V1)
-> +		temp = raw_to_mcelsius_v1(mt, id, raw);
-> +	else
-> +		temp = raw_to_mcelsius_v2(mt, id, raw);
-> +
-> +	/*
-> +	 * The first read of a sensor often contains very high bogus
-> +	 * temperature value. Filter these out so that the system does
-> +	 * not immediately shut down.
-> +	 */
-> +
-> +	if (temp > 200000)
-> +		return -EAGAIN;
-> +	else
-> +		return temp;
-> +}
-> +
->  /**
->   * mtk_thermal_bank_temperature - get the temperature of a bank
->   * @bank:	The bank
-> @@ -647,28 +676,11 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->  static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->  {
->  	struct mtk_thermal *mt = bank->mt;
-> -	const struct mtk_thermal_data *conf = mt->conf;
->  	int i, temp = INT_MIN, max = INT_MIN;
-> -	u32 raw;
-> -
-> -	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-> -		raw = readl(mt->thermal_base + conf->msr[i]);
->  
-> -		if (mt->conf->version == MTK_THERMAL_V1) {
-> -			temp = raw_to_mcelsius_v1(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		} else {
-> -			temp = raw_to_mcelsius_v2(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		}
-> +	for (i = 0; i < mt->conf->bank_data[bank->id].num_sensors; i++) {
->  
-> -		/*
-> -		 * The first read of a sensor often contains very high bogus
-> -		 * temperature value. Filter these out so that the system does
-> -		 * not immediately shut down.
-> -		 */
-> -		if (temp > 200000)
-> -			temp = 0;
-> +		temp = _get_sensor_temp(mt, i);
->  
->  		if (temp > max)
->  			max = temp;
-> @@ -679,7 +691,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->  
->  static int mtk_read_temp(void *data, int *temperature)
->  {
-> -	struct mtk_thermal *mt = data;
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
->  	int i;
->  	int tempmax = INT_MIN;
->  
-> @@ -698,10 +711,28 @@ static int mtk_read_temp(void *data, int *temperature)
->  	return 0;
->  }
->  
-> +static int mtk_read_sensor_temp(void *data, int *temperature)
-> +{
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
-> +	int id = tz->id - 1;
-> +
-> +	if (id < 0)
-> +		return -EACCES;
-> +
-> +	*temperature = _get_sensor_temp(mt, id);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
->  	.get_temp = mtk_read_temp,
->  };
->  
-> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
-> +	.get_temp = mtk_read_sensor_temp,
-> +};
-> +
->  static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->  				  u32 apmixed_phys_base, u32 auxadc_phys_base,
->  				  int ctrl_id)
-> @@ -992,6 +1023,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  	u64 auxadc_phys_base, apmixed_phys_base;
->  	struct thermal_zone_device *tzdev;
->  	void __iomem *apmixed_base, *auxadc_base;
-> +	struct mtk_thermal_zone *tz;
->  
->  	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->  	if (!mt)
-> @@ -1080,11 +1112,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, mt);
->  
-> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
-> -						     &mtk_thermal_ops);
-> -	if (IS_ERR(tzdev)) {
-> -		ret = PTR_ERR(tzdev);
-> -		goto err_disable_clk_peri_therm;
-> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-> +		if (!tz)
-> +			return -ENOMEM;
-> +
-> +		tz->mt = mt;
-> +		tz->id = i;
-> +
-> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
-> +							     &mtk_thermal_ops :
-> +							     &mtk_thermal_sensor_ops);
-> +
-> +		if (IS_ERR(tzdev)) {
-> +			if (PTR_ERR(tzdev) == -ENODEV) {
-> +				dev_warn(&pdev->dev,
-> +					 "sensor %d not registered in thermal zone in dt\n", i);
-> +				continue;
-> +			}
-> +			if (PTR_ERR(tzdev) == -EACCES) {
-> +				ret = PTR_ERR(tzdev);
-> +				goto err_disable_clk_peri_therm;
-> +			}
-> +		}
->  	}
->  
->  	return 0;
+>> Changes in V2:
+>>  - As per Rob's comments, converted the main PON binding and added in 
+>> V2.
+>> 
+>>  .../devicetree/bindings/power/reset/qcom,pon.txt   | 49 
+>> ----------------------
+>>  .../devicetree/bindings/power/reset/qcom,pon.yaml  | 41 
+>> ++++++++++++++++++
+>>  2 files changed, 41 insertions(+), 49 deletions(-)
+>>  delete mode 100644 
+>> Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+>>  create mode 100644 
+>> Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt 
+>> b/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+>> deleted file mode 100644
+>> index 0c0dc3a..0000000
+>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+>> +++ /dev/null
+>> @@ -1,49 +0,0 @@
+>> -Qualcomm PON Device
+>> -
+>> -The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
+>> -and resin along with the Android reboot-mode.
+>> -
+>> -This DT node has pwrkey and resin as sub nodes.
+>> -
+>> -Required Properties:
+>> --compatible: Must be one of:
+>> -	"qcom,pm8916-pon"
+>> -	"qcom,pms405-pon"
+>> -	"qcom,pm8998-pon"
+>> -
+>> --reg: Specifies the physical address of the pon register
+>> -
+>> -Optional subnode:
+>> --pwrkey: Specifies the subnode pwrkey and should follow the
+>> - qcom,pm8941-pwrkey.txt description.
+>> --resin: Specifies the subnode resin and should follow the
+>> - qcom,pm8xxx-pwrkey.txt description.
+>> -
+>> -The rest of the properties should follow the generic reboot-mode 
+>> description
+>> -found in reboot-mode.txt
+>> -
+>> -Example:
+>> -
+>> -	pon@800 {
+>> -		compatible = "qcom,pm8916-pon";
+>> -
+>> -		reg = <0x800>;
+>> -		mode-bootloader = <0x2>;
+>> -		mode-recovery = <0x1>;
+>> -
+>> -		pwrkey {
+>> -			compatible = "qcom,pm8941-pwrkey";
+>> -			interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
+>> -			debounce = <15625>;
+>> -			bias-pull-up;
+>> -			linux,code = <KEY_POWER>;
+>> -		};
+>> -
+>> -		resin {
+>> -			compatible = "qcom,pm8941-resin";
+>> -			interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+>> -			debounce = <15625>;
+>> -			bias-pull-up;
+>> -			linux,code = <KEY_VOLUMEDOWN>;
+>> -		};
+>> -	};
+>> diff --git 
+>> a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml 
+>> b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> new file mode 100644
+>> index 0000000..40eea5f1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> @@ -0,0 +1,41 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/reset/qcom,pon.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm PON Device
+>> +
+>> +maintainers:
+>> +  - Vinod Koul <vkoul@kernel.org>
+>> +
+>> +description: |
+>> +  The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
+>> +  and resin along with the Android reboot-mode.
+>> +
+>> +  This DT node has pwrkey and resin as sub nodes.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,pm8916-pon
+>> +      - qcom,pms405-pon
+>> +      - qcom,pm8998-pon
+>> +
+>> +  reg:
+>> +    description: Specifies the physical address of the pon register
+> 
+> That description is obvious and pointless. Instead add
+> 
+> maxItems: 1
 > 
 
+Okay.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>> +  pwrkey:
+>> +    type: object
+>> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+>> +
+>> +  resin:
+>> +    type: object
+>> +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: true
+> 
+> Instead of allowing arbitrary properties, only valid modes
+> should be allowed. So drop additionalProperties and do this
+> instead:
+> 
+> allOf:
+>   - $ref: reboot-mode.yaml#
+> 
+> unevaluatedProperties: false
+> 
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Okay.
+
+>> +...
+> 
+> Please do not drop the example :)
+> 
+
+As per my understanding on Rob's comments [1] I have added one complete 
+example in qcom,pm8941-pwrkey.yaml (see patch 4/4) and dropped it here.
+
+[1] https://lore.kernel.org/patchwork/patch/1390062/#1588027
+
+> -- Sebastian
+
+Thanks,
+Satya Priya
