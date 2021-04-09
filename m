@@ -2,58 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14606359236
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 04:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4E63592EF
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 05:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbhDICvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Apr 2021 22:51:46 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15633 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbhDICvp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 22:51:45 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FGjHt5pSSznZ5M;
-        Fri,  9 Apr 2021 10:48:42 +0800 (CST)
-Received: from huawei.com (10.67.174.78) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.498.0; Fri, 9 Apr 2021
- 10:51:21 +0800
-From:   Chen Lifu <chenlifu@huawei.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Chen Lifu <chenlifu@huawei.com>,
-        <linux-pm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: [PATCH -next] power: reset: hisi-reboot: add missing MODULE_DEVICE_TABLE
-Date:   Fri, 9 Apr 2021 10:50:11 +0800
-Message-ID: <20210409025011.8796-1-chenlifu@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S233142AbhDIDSP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Apr 2021 23:18:15 -0400
+Received: from conssluserg-05.nifty.com ([210.131.2.90]:61345 "EHLO
+        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233083AbhDIDSO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Apr 2021 23:18:14 -0400
+X-Greylist: delayed 22695 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Apr 2021 23:18:12 EDT
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 1393HgZa023146;
+        Fri, 9 Apr 2021 12:17:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 1393HgZa023146
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1617938262;
+        bh=nRXeibRU4AcCoB24uvxQcso/vauounCB7Cy+XT2rzsI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VubqTYkRf4d5Up7TWCG9toaQseeku33piHD4ogq2gNSVmWkJd3z+EAeqSDxMrQuVc
+         YxrmhZjriQ0JSqFRx/nQX781uIWMZ1vs6FIN9iJAwzgvaL7MaWBbO1MAnuFvIwfF27
+         beESDMnlEEZKFDvqdPM2+L4x7c0Lja37o6yrvN9HJzQCvU0xi8mx7FhafayQs8lS/k
+         UlvzLHOPkLDS+PO3jrCWMmL0O0Xn2K9z2Syov+7ts0Lp3W4SVoLurFETGoUZU4jjsO
+         2VcWolwAGzP5qSxZ9cng7K3/r9Ymu5wxr7bZvwRIqnRhwAkCoiYryAuCYEeCc7r8n8
+         y4G4Qki3Nxs/g==
+X-Nifty-SrcIP: [209.85.216.50]
+Received: by mail-pj1-f50.google.com with SMTP id i4so2200152pjk.1;
+        Thu, 08 Apr 2021 20:17:42 -0700 (PDT)
+X-Gm-Message-State: AOAM531SobHQV1ZUx4ZRFE+Jn2qylXaNhDcaj2GAIm2PHF08YkvCHIay
+        dfj75FAUtZIo+pP/ClUMTA140CAb5klLMEivim8=
+X-Google-Smtp-Source: ABdhPJyKfwZlYOHfHkv5mwhrVgfiEf7eb7BzBT7fqlh6AUhG9PCC+r574MXFnfpu5GfVF+p/vrKZdmLmmtvfHp0+VFU=
+X-Received: by 2002:a17:90a:1056:: with SMTP id y22mr11010180pjd.153.1617938261656;
+ Thu, 08 Apr 2021 20:17:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.174.78]
-X-CFilter-Loop: Reflected
+References: <20210408205858.51751-1-masahiroy@kernel.org> <20210408205858.51751-3-masahiroy@kernel.org>
+ <CAK8P3a3gzfZhNdp-_=HCxoMw385nGQeNOhhH8X+uyN=AMvHJ8Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a3gzfZhNdp-_=HCxoMw385nGQeNOhhH8X+uyN=AMvHJ8Q@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 9 Apr 2021 12:17:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR9+u5Q3Sf2jgBSUcpit6xbD_5_Hc-xr-9Ge_m_da-1CA@mail.gmail.com>
+Message-ID: <CAK7LNAR9+u5Q3Sf2jgBSUcpit6xbD_5_Hc-xr-9Ge_m_da-1CA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pm: allow drivers to drop #ifdef and __maybe_unused
+ from pm callbacks
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds missing MODULE_DEVICE_TABLE definition which generates
-correct modalias for automatic loading of this driver when it is built
-as an external module.
+On Fri, Apr 9, 2021 at 6:30 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Apr 8, 2021 at 11:00 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Drivers typically surround suspend and resume callbacks with #ifdef
+> > CONFIG_PM(_SLEEP) or mark them as __maybe_unused in order to avoid
+> > -Wunused-const-variable warnings.
+> >
+> > With this commit, drivers will be able to remove #ifdef CONFIG_PM(_SLEEP)
+> > and __maybe_unsed because unused functions are dropped by the compiler
+> > instead of the preprocessor.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I tried this before and could not get it to work right.
+>
+> >
+> > -#ifdef CONFIG_PM_SLEEP
+> > +#define pm_ptr(_ptr)           PTR_IF(IS_ENABLED(CONFIG_PM), _ptr)
+> > +#define pm_sleep_ptr(_ptr)     PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), _ptr)
+> > +
+> >  #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> > -       .suspend = suspend_fn, \
+> > -       .resume = resume_fn, \
+> > -       .freeze = suspend_fn, \
+> > -       .thaw = resume_fn, \
+> > -       .poweroff = suspend_fn, \
+> > -       .restore = resume_fn,
+> > -#else
+> > -#define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> > -#endif
+> > +       .suspend  = pm_sleep_ptr(suspend_fn), \
+> > +       .resume   = pm_sleep_ptr(resume_fn), \
+> > +       .freeze   = pm_sleep_ptr(suspend_fn), \
+> > +       .thaw     = pm_sleep_ptr(resume_fn), \
+> > +       .poweroff = pm_sleep_ptr(suspend_fn), \
+> > +       .restore  = pm_sleep_ptr(resume_fn),
+>
+> The problem that I think you inevitably hit is that you run into a missing
+> declaration for any driver that still uses an #ifdef around a static
+> function.
+>
+> The only way I can see us doing this is to create a new set of
+> macros that behave like the version you propose here but leave
+> the old macros in place until the last such #ifdef has been removed.
+>
+>        Arnd
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Chen Lifu <chenlifu@huawei.com>
----
- drivers/power/reset/hisi-reboot.c | 1 +
- 1 file changed, 1 insertion(+)
+Agh, you are right.
+We cannot change all the callsites atomically due to the huge amount of users.
 
-diff --git a/drivers/power/reset/hisi-reboot.c b/drivers/power/reset/hisi-reboot.c
-index 5abc5f6ba0fd..34409340528f 100644
---- a/drivers/power/reset/hisi-reboot.c
-+++ b/drivers/power/reset/hisi-reboot.c
-@@ -68,6 +68,7 @@ static const struct of_device_id hisi_reboot_of_match[] = {
- 	{ .compatible = "hisilicon,sysctrl" },
- 	{}
- };
-+MODULE_DEVICE_TABLE(of, hisi_reboot_of_match);
- 
- static struct platform_driver hisi_reboot_driver = {
- 	.probe = hisi_reboot_probe,
-
+-- 
+Best Regards
+Masahiro Yamada
