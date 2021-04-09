@@ -2,165 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87163359480
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 07:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A02359491
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 07:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhDIFYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 01:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S233049AbhDIFc2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 01:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbhDIFYA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 01:24:00 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C28C061761
-        for <linux-pm@vger.kernel.org>; Thu,  8 Apr 2021 22:23:47 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id c18so3755328iln.7
-        for <linux-pm@vger.kernel.org>; Thu, 08 Apr 2021 22:23:47 -0700 (PDT)
+        with ESMTP id S231440AbhDIFc2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 01:32:28 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82D9C061763
+        for <linux-pm@vger.kernel.org>; Thu,  8 Apr 2021 22:32:15 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so4419375pjb.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Apr 2021 22:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iDvYE3lo6mdtPyL38hcLZsUZ7A2Go0Bp2cFLK0Yzql8=;
-        b=dTP+Zg0XNWCGh0/GeznXbP4zFivhq7Gf7UKRwBny6Ks7gGOxEJUkjX/tAK1GHpF/lD
-         BVJjrx35Dm4dp9fhkx6HX+2lviAu6doNehUEW5O979DMX+LYSk8z87+Y5uuAlWgfEHyX
-         FxuThKDDRnfO2+kgZpC1HF+Qm52L8DCzqf+hxPGjGc6329itw4PCSYYvp7M3iA/sFQbo
-         UvEJ5TxV9/+hAjN00n8LtzmGh6NWepMFCk+3VQ5cA0LVjM85fa5C00Jy9wLFEo75vIJU
-         sFP/HxH9ninIjQM203jbk0HfjhfVHnwJcrOPQT5RRkLj+iVQpz1uaJ4AOa0ybUuGSp5R
-         MyiQ==
+        bh=F9hM9nVGMcr2Nn1IqoOQ93AahNtfT8Yn/VYqHGfn/7I=;
+        b=MlT+CXpVe+YEXKYqQu+W958NQrZdgi88YdwzAZb96qmte++WWwYbcPdfBo8w4W3bF5
+         JIaOtfDEIqS8acjBkZCExhGijH3MWedQIyH4PXz3ifDaeWUiS1qCyBAowfUb27mx9Rpu
+         3f9lWtKfDlW4KBt36XMD4DabDKOX6pOSbHuKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iDvYE3lo6mdtPyL38hcLZsUZ7A2Go0Bp2cFLK0Yzql8=;
-        b=FcFhAvInBHzgJiqFJe1Lh0KylVLvqgCqawKWuuC22Ch1+W9/ct/cc8oFgIu8tvdF86
-         LJEpfl/ZQ1AzOGsMhB4j0zIT6j7jO0o+dWi0hnEbUzxbYyNWLZjAy82AavAxMOR8Zs70
-         K0EoTXXi7sK1x77CphveAJrZUC376isIK9DPrn/l56DA1YFCd5yGBeJHC+E540kbv+pP
-         w3PlBrIchKdi9oPrBB5RtCNFKBA7BXzU3zRb9V2/hNrBSR/Raxg2B9E8KZa43wvU2dbb
-         fLghbY8WvvyH83eNsOQkYLQ4cNrJ23+nm0GN9N66wrXuti3IATln5On5IO2Zxy+obkbf
-         9GRg==
-X-Gm-Message-State: AOAM531NTTn9tBhXR+E6OXxUXCdirHWcW6bcNRS8eY/rtciPcpThwqAf
-        gmY/q5TpotiOCRoJUNBXWz7qmtQr8OlbBNURpsLnAg==
-X-Google-Smtp-Source: ABdhPJxTEr4WZEbUEtGTg0cnowxse6HWF8plMi3jVnhxNxBtxKg4fnIIej4/QL1DqlM5Z1owCB2Mz98wp+nr9un5HFs=
-X-Received: by 2002:a05:6e02:1a81:: with SMTP id k1mr41418ilv.18.1617945826941;
- Thu, 08 Apr 2021 22:23:46 -0700 (PDT)
+        bh=F9hM9nVGMcr2Nn1IqoOQ93AahNtfT8Yn/VYqHGfn/7I=;
+        b=agvL2I0R8pFELbLk7fWjx+nq4fVBrz2SBV/iFP/M69MWMadaBMfjJdvLaO2f6rtxxf
+         bKEL0xwZ8Vnf+o5GrngrjjxXSdP9kWeM+t5fVf1c20QIbtow5O6GL6xxZQVQKsKjCEtu
+         vOtqmsOEn9tsRxaKNsha7GUqDCLakKmsqPRs7xeZ75a1VU4Kb6dSWMQRP1ek73dS/ny9
+         o+sa2HJjWWvORNiHmHOiktXwxEaHc6dCwZ5sqEEVR8u3DBhpwEYz+qL64YzuNcj6jt/N
+         uH1PncUziD9y6BHT+APZJhfUm2n1YYcyzQmmC97PcufwtXao5osalJYZixw45kIWnOFH
+         OITg==
+X-Gm-Message-State: AOAM5322/gqGVmdLh3I6cx00E3v3aYZ1YYk0xRRL8SSMuwx3Jf8pm88m
+        33OJGlsJO48MsxuGC5WN7IUHwSWycAWrX0KZFEZPTQ==
+X-Google-Smtp-Source: ABdhPJw4untB2Yt+WuL7MDli++gq98wN7FFwz1Ypr7nEtpVbX1vrn8JldU8HxzojRAQ4i24YV68DXHWAvSagpB3Hq60=
+X-Received: by 2002:a17:90a:d3c8:: with SMTP id d8mr11825381pjw.144.1617946335435;
+ Thu, 08 Apr 2021 22:32:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210404083354.23060-1-psampat@linux.ibm.com>
-In-Reply-To: <20210404083354.23060-1-psampat@linux.ibm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 8 Apr 2021 22:23:38 -0700
-Message-ID: <CAAYoRsWaAmyuJU4FCb7gtK0y-ZprdDVvp0vMpy=ZohzoC7YX1Q@mail.gmail.com>
-Subject: Re: [RFC v3 0/2] CPU-Idle latency selftest framework
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
+References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 9 Apr 2021 13:32:04 +0800
+Message-ID: <CAATdQgCQ5Gm1CNEbVgLFiFcgDX0yP5G=48Fa29WYbpSuz25WXg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] PM: runtime: enable wake irq after runtime_suspend
+ hook called
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pratik,
+Hi Chunfeng,
 
-I tried V3 on a Intel i5-10600K processor with 6 cores and 12 CPUs.
-The core to cpu mappings are:
-core 0 has cpus 0 and 6
-core 1 has cpus 1 and 7
-core 2 has cpus 2 and 8
-core 3 has cpus 3 and 9
-core 4 has cpus 4 and 10
-core 5 has cpus 5 and 11
+On Thu, Apr 8, 2021 at 5:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> When the dedicated wake irq is level trigger, enable it before
+> calling runtime_suspend, will trigger an interrupt.
+>
+> e.g.
+> for a low level trigger type, it's low level at running time (0),
+> and becomes high level when enters suspend (runtime_suspend (1) is
+> called), a wakeup signal at (2) make it become low level, wake irq
+> will be triggered.
+>
+>                 ------------------
+>                |           ^     ^|
+> ----------------           |     | --------------
+>  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
+>
 
-By default, it will test CPUs 0,2,4,6,10 on cores 0,2,4,0,2,4.
-wouldn't it make more sense to test each core once?
-With the source CPU always 0, I think the results from the results
-from the destination CPUs 0 and 6, on core 0 bias the results, at
-least in the deeper idle states. They don't make much difference in
-the shallow states. Myself, I wouldn't include them in the results.
-Example, where I used the -v option for all CPUs:
+Can't we just use a falling edge type for this irq line?
 
---IPI Latency Test---
---Baseline IPI Latency measurement: CPU Busy--
-SRC_CPU   DEST_CPU IPI_Latency(ns)
-0            0          101
-0            1          790
-0            2          609
-0            3          595
-0            4          737
-0            5          759
-0            6          780
-0            7          741
-0            8          574
-0            9          681
-0           10          527
-0           11          552
-Baseline Avg IPI latency(ns): 620  <<<< suggest 656 here
----Enabling state: 0---
-SRC_CPU   DEST_CPU IPI_Latency(ns)
-0            0           76
-0            1          471
-0            2          420
-0            3          462
-0            4          454
-0            5          468
-0            6          453
-0            7          473
-0            8          380
-0            9          483
-0           10          492
-0           11          454
-Expected IPI latency(ns): 0
-Observed Avg IPI latency(ns) - State 0: 423 <<<<< suggest 456 here
----Enabling state: 1---
-SRC_CPU   DEST_CPU IPI_Latency(ns)
-0            0          112
-0            1          866
-0            2          663
-0            3          851
-0            4         1090
-0            5         1314
-0            6         1941
-0            7         1458
-0            8          687
-0            9          802
-0           10         1041
-0           11         1284
-Expected IPI latency(ns): 1000
-Observed Avg IPI latency(ns) - State 1: 1009 <<<< suggest 1006 here
----Enabling state: 2---
-SRC_CPU   DEST_CPU IPI_Latency(ns)
-0            0           75
-0            1        16362
-0            2        16785
-0            3        19650
-0            4        17356
-0            5        17606
-0            6         2217
-0            7        17958
-0            8        17332
-0            9        16615
-0           10        17382
-0           11        17423
-Expected IPI latency(ns): 120000
-Observed Avg IPI latency(ns) - State 2: 14730 <<<< suggest 17447 here
----Enabling state: 3---
-SRC_CPU   DEST_CPU IPI_Latency(ns)
-0            0          103
-0            1        17416
-0            2        17961
-0            3        16651
-0            4        17867
-0            5        17726
-0            6         2178
-0            7        16620
-0            8        20951
-0            9        16567
-0           10        17131
-0           11        17563
-Expected IPI latency(ns): 1034000
-Observed Avg IPI latency(ns) - State 3: 14894 <<<< suggest 17645 here
-
-Hope this helps.
-
-... Doug
+> if we enable the wake irq before calling runtime_suspend during (0),
+> an interrupt will arise, it causes resume immediately;
+> enable wake irq after calling runtime_suspend, e.g. at (3) or (4),
+> will works.
+>
+> This patch seems no side effect on edge trigger wake irq.
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  drivers/base/power/runtime.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index a46a7e30881b..796739a015a5 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -619,12 +619,12 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+>         __update_runtime_status(dev, RPM_SUSPENDING);
+>
+>         callback = RPM_GET_CALLBACK(dev, runtime_suspend);
+> -
+> -       dev_pm_enable_wake_irq_check(dev, true);
+>         retval = rpm_callback(callback, dev);
+>         if (retval)
+>                 goto fail;
+>
+> +       dev_pm_enable_wake_irq_check(dev, true);
+> +
+>   no_callback:
+>         __update_runtime_status(dev, RPM_SUSPENDED);
+>         pm_runtime_deactivate_timer(dev);
+> @@ -659,7 +659,6 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+>         return retval;
+>
+>   fail:
+> -       dev_pm_disable_wake_irq_check(dev);
+>         __update_runtime_status(dev, RPM_ACTIVE);
+>         dev->power.deferred_resume = false;
+>         wake_up_all(&dev->power.wait_queue);
+> --
+> 2.18.0
+>
