@@ -2,188 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6954B35A623
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 20:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E4835A720
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 21:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbhDISvB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 14:51:01 -0400
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:44606 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbhDISvA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 14:51:00 -0400
-Received: by mail-oi1-f171.google.com with SMTP id a8so6751595oic.11;
-        Fri, 09 Apr 2021 11:50:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i8GbqRQEHeP2EqgmGjEjIt2ox7NZUNUdFG+++1UPJcw=;
-        b=m9hjZ3wRay9VqknNqtpNOIlmlYxO8lwJN45VvC6UFy4UmrZM0+F70ecuXeBrGG3lta
-         DevPZSuXSLO9gWorS1R2lh5uMps6Qzen7vTAOtSmx9v6TnTP1Cm6afCruTeJsN4Jvp+5
-         U2JE6PG+61zBDWE4/LvdRUYidFPqS5LPR7jViZuV5KUvYEDTFxQ37X1TBdBw1ar+1yIl
-         S7xY/4+85nf2LyUtQ+5b8Tgi9U6COYyiHWKUc5h3oHQiyASmiNHWziOkfepnAbcaGoqG
-         iU+m1usvzqiSuKxGtsR5bxUOdEjEIIYYsN7qLitnuLQaekwa9Rbx2j1xDSDLvbTcYCn3
-         VPvQ==
-X-Gm-Message-State: AOAM530c8GaBZInKjmonJ6gHynj2jE9AYUODU4AFKKrfUqDdmucf5vJV
-        8K6ipeUfL8kCouOSkaqisg==
-X-Google-Smtp-Source: ABdhPJxOgsx3W5p0J/SDAcjcLj5PyF88Mg/SrjGRlhpKG8oigPtomU39Q41f5SfM333pLvW2+yHg5Q==
-X-Received: by 2002:aca:3f87:: with SMTP id m129mr10867257oia.82.1617994245972;
-        Fri, 09 Apr 2021 11:50:45 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m129sm670785oif.34.2021.04.09.11.50.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 11:50:45 -0700 (PDT)
-Received: (nullmailer pid 3949822 invoked by uid 1000);
-        Fri, 09 Apr 2021 18:50:44 -0000
-Date:   Fri, 9 Apr 2021 13:50:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     satya priya <skakit@codeaurora.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V2 4/4] dt-bindings: input: pm8941-pwrkey: Convert pm8941
- power key binding to yaml
-Message-ID: <20210409185044.GA3946207@robh.at.kernel.org>
-References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
- <1617881469-31965-5-git-send-email-skakit@codeaurora.org>
+        id S234818AbhDIT2j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 15:28:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27985 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234887AbhDIT2h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 15:28:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617996504;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gtQRyJkei76MgWJGNFUnR7KOo7QbxlHYKJLaZxgsRec=;
+        b=dN1JdqjwSzrJHiZXkmw5O7rc4eVrfHEtj9F4nl4N6E5uU8Gq4H1iHjChAXpb5qZpG61cAj
+        EQBRi0EKFQNRR21ve/2Wk4NNSAOenKjJhPpylDw19lyDLzIdMAoTR81z7S2iTf+QXyjbCx
+        +3jHS4kKxWm3TLkVquf0sJXicpJd1os=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-400-z8sidzyZP0CHhR2Aqn2ACg-1; Fri, 09 Apr 2021 15:28:22 -0400
+X-MC-Unique: z8sidzyZP0CHhR2Aqn2ACg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 102BB1008062;
+        Fri,  9 Apr 2021 19:28:21 +0000 (UTC)
+Received: from crecklin.bos.csb (ovpn-113-158.rdu2.redhat.com [10.10.113.158])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D1A7019704;
+        Fri,  9 Apr 2021 19:28:15 +0000 (UTC)
+Reply-To: crecklin@redhat.com
+Subject: Re: [PATCH v4 1/1] use crc32 instead of md5 for hibernation e820
+ integrity check
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "simo@redhat.com" <simo@redhat.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "decui@microsoft.com" <decui@microsoft.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210408104629.31357-1-crecklin@redhat.com>
+ <6be63531313d46caa7161697bf240dfc@AcuMS.aculab.com>
+From:   Chris von Recklinghausen <crecklin@redhat.com>
+Organization: Red Hat
+Message-ID: <822eaebf-4ef9-d469-4238-54107c8ba6a6@redhat.com>
+Date:   Fri, 9 Apr 2021 15:28:15 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1617881469-31965-5-git-send-email-skakit@codeaurora.org>
+In-Reply-To: <6be63531313d46caa7161697bf240dfc@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 05:01:09PM +0530, satya priya wrote:
-> Convert qcom pm8941 power key binding from .txt to .yaml format.
-> 
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> ---
-> Changes in V2:
->  - Fixed bot errors, took reference from input.yaml for "linux,code"
->  - Added one complete example for powerkey and resin, and referenced it
->    in main PON binding.
->  - Moved this patch to the end of the series.
-> 
->  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
->  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 88 ++++++++++++++++++++++
->  2 files changed, 88 insertions(+), 55 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
->  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
+On 4/9/21 12:56 PM, David Laight wrote:
+> From: Chris von Recklinghausen
+>> Sent: 08 April 2021 11:46
+>>
+>> Suspend fails on a system in fips mode because md5 is used for the e820
+>> integrity check and is not available. Use crc32 instead.
+>>
+>> Prior to this patch, MD5 is used only to create a digest to ensure integrity of
+>> the region, no actual encryption is done. This patch set changes the integrity
+>> check to use crc32 instead of md5 since crc32 is available in both FIPS and
+>> non-FIPS modes.
+>>
+>> Note that the digest is only used as an integrity check. No actual encryption
+>> is done.
+> If crc32 is good enough, would a 1's compliment sum be good enough?
+> It is likely to be faster to calculate and not need special
+> functions be built into the kernel at all.
 
 
-> diff --git a/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml b/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
-> new file mode 100644
-> index 0000000..fb6cbe8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/qcom,pm8941-pwrkey.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PM8941 PMIC Power Key
-> +
-> +maintainers:
-> +  - Courtney Cavin <courtney.cavin@sonymobile.com>
-> +  - Vinod Koul <vkoul@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8941-pwrkey
-> +      - qcom,pm8941-resin
-> +      - qcom,pmk8350-pwrkey
-> +      - qcom,pmk8350-resin
-> +
-> +  interrupts:
+Eric Biggers <ebiggers@kernel.org> suggested using crc32_le() which is 
+in the library interface (lib/crc32.c) and will always be available 
+without any special ifdefs. That's what my next version will be based on.
 
-How many?
+Thanks,
 
-> +    description: |
-> +          Key change interrupt; The format of the specifier is
-> +          defined by the binding document describing the node's
-> +          interrupt parent.
+Chris
 
-The 2nd sentence is every 'interrupts' property. Drop.
 
-> +
-> +  debounce:
-> +    description: |
-> +          Time in microseconds that key must be pressed or
-> +          released for state change interrupt to trigger.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  bias-pull-up:
-> +    description: |
-> +           Presence of this property indicates that the KPDPWR_N
-> +           pin should be configured for pull up.
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +
-> +  linux,code:
-> +    description: |
-> +           The input key-code associated with the power key.
-> +           Use the linux event codes defined in
-> +           include/dt-bindings/input/linux-event-codes.h
-> +           When property is omitted KEY_POWER is assumed.
-> +    $ref: "input.yaml#"
+>
+> 	David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>
 
-You've just defined that 'linux,code' is a node with properties defined 
-in input.yaml. Need to move this up to the top level.
-
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +   #include <dt-bindings/interrupt-controller/irq.h>
-> +   #include <dt-bindings/input/linux-event-codes.h>
-> +   #include <dt-bindings/spmi/spmi.h>
-> +   spmi_bus: spmi@c440000 {
-> +     reg = <0x0c440000 0x1100>;
-> +     #address-cells = <2>;
-> +     #size-cells = <0>;
-> +     pmk8350: pmic@0 {
-> +       reg = <0x0 SPMI_USID>;
-> +       #address-cells = <1>;
-> +       #size-cells = <0>;
-> +       pmk8350_pon: pon_hlos@1300 {
-> +         reg = <0x1300>;
-> +         compatible = "qcom,pm8998-pon";
-> +
-> +         pwrkey {
-> +            compatible = "qcom,pm8941-pwrkey";
-> +            interrupts = < 0x0 0x8 0 IRQ_TYPE_EDGE_BOTH >;
-> +            debounce = <15625>;
-> +            bias-pull-up;
-> +            linux,code = <KEY_POWER>;
-> +         };
-> +
-> +         resin {
-> +            compatible = "qcom,pm8941-resin";
-> +            interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-> +            debounce = <15625>;
-> +            bias-pull-up;
-> +            linux,code = <KEY_VOLUMEDOWN>;
-> +         };
-> +       };
-> +     };
-> +   };
-> +...
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
