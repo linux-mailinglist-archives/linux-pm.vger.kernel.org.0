@@ -2,221 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CA63596A0
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 09:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C933596B7
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Apr 2021 09:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbhDIHnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Apr 2021 03:43:33 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38592 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230181AbhDIHnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 03:43:32 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1397YsjU146039;
-        Fri, 9 Apr 2021 03:43:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xiUtlMdV1qmOtUTS0mAOTmFtl+PR5P0QOUvxxRJMJII=;
- b=QXzXVPNMqIHYqXDt6OVXZDYL0v8nTc+Ost0GE1qAvJocIGLOuN0oEanY8Cvp4bFMiDER
- t60SvWTtX5Bztkvn0AiDL8cMmJCzh8RzZa7/04op4JZ7BEtv1O2u/VoQLHYhfVnoiTLS
- HP1zX6SVthF5Ccp8HIiSAGRbA6Y4LpamcqIfXz+rXcXQjdhwYmDYnEI14QBUrfhrwBOE
- 70MDNAw7pYtGFaL7EJInkZLlSjbxA9jtM2IvkumcNRw54y7R9dg4kMoKy0WyDZ689/6u
- 1X5Xju1w24GRI5ZmVTpkvbeTCG+DpCbhy5xatuBjpiZsB+HBgjy5x/QMC3DpQCBW+qHC cA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37rvpmgvn9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Apr 2021 03:43:15 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1397Z3Af000582;
-        Fri, 9 Apr 2021 03:43:14 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37rvpmgvmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Apr 2021 03:43:14 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 1397bJ12005476;
-        Fri, 9 Apr 2021 07:43:12 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 37rvbwa8nn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Apr 2021 07:43:12 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1397h97h43974916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Apr 2021 07:43:10 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C368D4204F;
-        Fri,  9 Apr 2021 07:43:09 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9466642049;
-        Fri,  9 Apr 2021 07:43:07 +0000 (GMT)
-Received: from [9.85.88.88] (unknown [9.85.88.88])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Apr 2021 07:43:07 +0000 (GMT)
-Subject: Re: [RFC v3 0/2] CPU-Idle latency selftest framework
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
-References: <20210404083354.23060-1-psampat@linux.ibm.com>
- <CAAYoRsWaAmyuJU4FCb7gtK0y-ZprdDVvp0vMpy=ZohzoC7YX1Q@mail.gmail.com>
-From:   Pratik Sampat <psampat@linux.ibm.com>
-Message-ID: <0a4b32e0-426e-4886-ae37-6d0bdafdea7f@linux.ibm.com>
-Date:   Fri, 9 Apr 2021 13:13:06 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229751AbhDIHtg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Apr 2021 03:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhDIHtf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Apr 2021 03:49:35 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81728C061760
+        for <linux-pm@vger.kernel.org>; Fri,  9 Apr 2021 00:49:23 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id x16so5015217iob.1
+        for <linux-pm@vger.kernel.org>; Fri, 09 Apr 2021 00:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fs20/90d4KvJp0z8HthQIym10B4OMRw/ctzMO48tMMI=;
+        b=eqRBGL+wyyO4H/RvgKFON7TS/zeztjsv32Q4i2aCbGjFDaHfpIl+h4LyU7QB23A6G+
+         2R1/jyxhK5IStay2SIK2k04nVwBwkzYuC0NqqswRZPCWmg+wvrO8+G6XOPi+N5s2yOGs
+         WY+iOsL8plapw7N3FsSSY6c5yUysmBRgAnSMhxZhbPoNsbDEkj/h0WhLR3U8TPbiSrXk
+         Lv+5RpP6Lg04jX76c7+0QEP7vsvLaY7nepORWZpT93UhGsRyxNLAJbHOq19q/tLq9JBk
+         ugPs4traUwVLDBHTP1ZHbdfDbBzAp3GKBTEIlGPvR+9QeBdTijcBV9KQEqC/vNzxKksp
+         wt1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fs20/90d4KvJp0z8HthQIym10B4OMRw/ctzMO48tMMI=;
+        b=TDIZr1ZlgWrt6uKOPQZ9f0NlqJWvRRgMq6qpToAuRhIVZF/QE6EhVR11BoNSJyqwc/
+         ddxfNewCvIWcoF5VO/c5YKT1DU0XB3hxD92GpSJZo7uryw2EaUK7EOqGS00405i+3OXN
+         +6qR46lpBCkpcBolbhTZn4cTsCKfzLUECbzuaIaRw2q+xnAr8sjCGbmP9wqhHQqog953
+         cHzEh+q1ATEB+HYDMGLWKyWJk0o3zX7DoADLkRN8oSaN5SWiS2+qe7c8JUL1glZsiVAP
+         QsnmYxqHhDnlbUepxi1Jnn0QtSR3qJykL4eUowfZpkgKMgeefrNfuPqnIUmz8E2UeKUO
+         DCUA==
+X-Gm-Message-State: AOAM530qh1P6PObfc2IVFHk9sV7fcrbpNMMwcwXFdiUtoABop9A8GtwT
+        MNNpRF1ayoBNmSeAuWhjRCHrhvsY5QBbdhwhENshJg9apRI=
+X-Google-Smtp-Source: ABdhPJwb7I8L/pRldb9Tcv/mc+nkbg2shI3VOYYhWopYvbGqpIYExZQ2bsDNE8pCw7geIxL7Hx4ay51dCvH6XWtTlWc=
+X-Received: by 2002:a05:6602:1649:: with SMTP id y9mr10144480iow.209.1617954562834;
+ Fri, 09 Apr 2021 00:49:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAYoRsWaAmyuJU4FCb7gtK0y-ZprdDVvp0vMpy=ZohzoC7YX1Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: m_I7_nfha0zFllGSCP4Jkwuf7I4ug_C6
-X-Proofpoint-GUID: mK7HdC2km8f6KCAES3XRk4HSNS13m498
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-09_03:2021-04-08,2021-04-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2104090055
+References: <20210408114223.8471-1-pali@kernel.org>
+In-Reply-To: <20210408114223.8471-1-pali@kernel.org>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Fri, 9 Apr 2021 13:19:11 +0530
+Message-ID: <CAKohpomAv8GbEz88HVf8iftWyLC_wNLYgTJMq72MHXO_E1FgRA@mail.gmail.com>
+Subject: Re: [RESEND PATCH mvebu v3 00/10] Armada 37xx: Fix cpufreq changing
+ base CPU speed to 800 MHz from 1000 MHz
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Doug,
+On Thu, 8 Apr 2021 at 17:12, Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-On 09/04/21 10:53 am, Doug Smythies wrote:
-> Hi Pratik,
->
-> I tried V3 on a Intel i5-10600K processor with 6 cores and 12 CPUs.
-> The core to cpu mappings are:
-> core 0 has cpus 0 and 6
-> core 1 has cpus 1 and 7
-> core 2 has cpus 2 and 8
-> core 3 has cpus 3 and 9
-> core 4 has cpus 4 and 10
-> core 5 has cpus 5 and 11
->
-> By default, it will test CPUs 0,2,4,6,10 on cores 0,2,4,0,2,4.
-> wouldn't it make more sense to test each core once?
-
-Ideally it would be better to run on all the CPUs, however on larger systems
-that I'm testing on with hundreds of cores and a high a thread count, the
-execution time increases while not particularly bringing any additional
-information to the table.
-
-That is why it made sense only run on one of the threads of each core to make
-the experiment faster while preserving accuracy.
-
-To handle various thread topologies it maybe worthwhile if we parse
-/sys/devices/system/cpu/cpuX/topology/thread_siblings_list for each core and
-use this information to run only once per physical core, rather than
-assuming the topology.
-
-What are your thoughts on a mechanism like this?
-
-> With the source CPU always 0, I think the results from the results
-> from the destination CPUs 0 and 6, on core 0 bias the results, at
-> least in the deeper idle states. They don't make much difference in
-> the shallow states. Myself, I wouldn't include them in the results.
-
-I agree, CPU0->CPU0 same core interaction is causing a bias. I could omit that
-observation while computing the average.
-
-In the verbose mode I'll omit all the threads of CPU0 and in the default
-(quick) mode just CPU0's latency can be omitted while computing average.
-
-Thank you,
-Pratik
-
-> Example, where I used the -v option for all CPUs:
->
-> --IPI Latency Test---
-> --Baseline IPI Latency measurement: CPU Busy--
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> 0            0          101
-> 0            1          790
-> 0            2          609
-> 0            3          595
-> 0            4          737
-> 0            5          759
-> 0            6          780
-> 0            7          741
-> 0            8          574
-> 0            9          681
-> 0           10          527
-> 0           11          552
-> Baseline Avg IPI latency(ns): 620  <<<< suggest 656 here
-> ---Enabling state: 0---
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> 0            0           76
-> 0            1          471
-> 0            2          420
-> 0            3          462
-> 0            4          454
-> 0            5          468
-> 0            6          453
-> 0            7          473
-> 0            8          380
-> 0            9          483
-> 0           10          492
-> 0           11          454
-> Expected IPI latency(ns): 0
-> Observed Avg IPI latency(ns) - State 0: 423 <<<<< suggest 456 here
-> ---Enabling state: 1---
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> 0            0          112
-> 0            1          866
-> 0            2          663
-> 0            3          851
-> 0            4         1090
-> 0            5         1314
-> 0            6         1941
-> 0            7         1458
-> 0            8          687
-> 0            9          802
-> 0           10         1041
-> 0           11         1284
-> Expected IPI latency(ns): 1000
-> Observed Avg IPI latency(ns) - State 1: 1009 <<<< suggest 1006 here
-> ---Enabling state: 2---
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> 0            0           75
-> 0            1        16362
-> 0            2        16785
-> 0            3        19650
-> 0            4        17356
-> 0            5        17606
-> 0            6         2217
-> 0            7        17958
-> 0            8        17332
-> 0            9        16615
-> 0           10        17382
-> 0           11        17423
-> Expected IPI latency(ns): 120000
-> Observed Avg IPI latency(ns) - State 2: 14730 <<<< suggest 17447 here
-> ---Enabling state: 3---
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> 0            0          103
-> 0            1        17416
-> 0            2        17961
-> 0            3        16651
-> 0            4        17867
-> 0            5        17726
-> 0            6         2178
-> 0            7        16620
-> 0            8        20951
-> 0            9        16567
-> 0           10        17131
-> 0           11        17563
-> Expected IPI latency(ns): 1034000
-> Observed Avg IPI latency(ns) - State 3: 14894 <<<< suggest 17645 here
->
-> Hope this helps.
->
-> ... Doug
-
+You haven't sent patch 1/10 or something went wrong somewhere.
+Please send it in reply to the cover letter, so everything appears connecte=
+d.
