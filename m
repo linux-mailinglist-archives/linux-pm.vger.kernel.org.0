@@ -2,81 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590E935AAFD
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Apr 2021 07:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E4B35ACBC
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Apr 2021 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbhDJFKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Apr 2021 01:10:39 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:34962 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229472AbhDJFKj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Apr 2021 01:10:39 -0400
-X-UUID: 544246bfbeb94aa3950f88bc817ddb09-20210410
-X-UUID: 544246bfbeb94aa3950f88bc817ddb09-20210410
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1562490372; Sat, 10 Apr 2021 13:10:23 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 10 Apr 2021 13:10:21 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 10 Apr 2021 13:10:20 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Subject: [PATCH v2 5/5] usb: xhci-mtk: remove unused members
-Date:   Sat, 10 Apr 2021 13:10:06 +0800
-Message-ID: <1618031406-15347-5-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1618031406-15347-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1618031406-15347-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S234180AbhDJKl3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Apr 2021 06:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234091AbhDJKl2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Apr 2021 06:41:28 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E547C061762;
+        Sat, 10 Apr 2021 03:41:14 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id x7so7984829wrw.10;
+        Sat, 10 Apr 2021 03:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qb8YcwmVjCvWFlIO3GJpj9CyVTAbrtiPYaokYJsc6zU=;
+        b=uKxwHHfW6z6r9sCgf/UAbjP/xhWeWCW7x2+4FAWp74+p+3Dnow4c3GnlyMKReBLxtm
+         lLvIygdSSl+uhEvzFRtbi3qh+QZBE5qDtEFSK5juYuUfl3lN8ekfbelAWm7GIloq0MU9
+         5P0QS3fMgt2Rug/txjIaZhX9+OjTzTGTTjgq0pI7ZafDZGsFYJ1HUF3z16SiXLWq2S82
+         M/oaif8BnDbw2uhDFCNb0PrltAbKIQFArTFbRAqYJoJ0ani9ksaXeUc9dvZZk1R7DO4v
+         nwiTvWwcQoObPdrVsCfK/u5NdFKGDlvNw8X/NHKGQi36joph8dNoz9yW12dNMw37IEKD
+         18mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qb8YcwmVjCvWFlIO3GJpj9CyVTAbrtiPYaokYJsc6zU=;
+        b=RrktLmy6L2tkmRQP0HDLl2juQjqXZmzMoafCgMXLU1Jq5T5ZGfuUKEn+mjGRZkONvF
+         /oYL9j187PQuOzhFfs/iaotTgQayIVQWEcrxt2S58IfthnuhnwQZpRpc9ZOpCXb+twcr
+         OGqY/DukaN2MsQf9JTp575O9sb0rGI6kyHxeVMf8mmzxYivCn1fCWGL1+s1x5p9uJxkB
+         bQoCV7ig8N2PBvAwW9RNFKy24oOlekMnNX9r+rPEDke+14FaMQFAhSxMZiMrCzkBm9EM
+         s8lC0OHshUPCLTr+CLwfPfsPy4V6TyiUXSoy4Msc0c52VouwlTuEwD0blmSQobsZLHDb
+         tDWA==
+X-Gm-Message-State: AOAM533ux0IHLyWxuJt3AfGcBKS82Z/ju9vyT44Smkfm71ymWJ9EtCK8
+        lMxM0ME0qhy2Wg8IrGlAhq3Cp6IUll4=
+X-Google-Smtp-Source: ABdhPJygiTo6NoNb+c5+WZ8H7OctCHMmGFH3/02qw1dh179Y5Q5KGoFrUSnRcOmVYoHInCwvELfHxg==
+X-Received: by 2002:adf:ba87:: with SMTP id p7mr22362806wrg.298.1618051272682;
+        Sat, 10 Apr 2021 03:41:12 -0700 (PDT)
+Received: from [192.168.2.202] (pd9ea306d.dip0.t-ipconnect.de. [217.234.48.109])
+        by smtp.gmail.com with ESMTPSA id w22sm7433524wmc.13.2021.04.10.03.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Apr 2021 03:41:12 -0700 (PDT)
+Subject: Re: [PATCH -next] power: supply: Make some symbols static
+To:     Qiheng Lin <linqiheng@huawei.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+References: <20210410041246.12791-1-linqiheng@huawei.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+Message-ID: <3026d506-4755-4885-4d22-9f589a660221@gmail.com>
+Date:   Sat, 10 Apr 2021 12:41:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20210410041246.12791-1-linqiheng@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now some members about phys and wakeup are not used anymore,
-remove them.
+On 4/10/21 6:12 AM, Qiheng Lin wrote:
+> The sparse tool complains as follows:
+> 
+> drivers/power/supply/surface_battery.c:700:1: warning:
+>   symbol 'dev_attr_alarm' was not declared. Should it be static?
+> drivers/power/supply/surface_battery.c:805:1: warning:
+>   symbol 'surface_battery_pm_ops' was not declared. Should it be static?
+> 
+> This symbol is not used outside of surface_battery.c, so this
+> commit marks it static.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: no changes
----
- drivers/usb/host/xhci-mtk.h | 3 ---
- 1 file changed, 3 deletions(-)
+Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 11996edc1967..7940593a3445 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -145,9 +145,6 @@ struct xhci_hcd_mtk {
- 	struct regulator *vusb33;
- 	struct regulator *vbus;
- 	struct clk_bulk_data clks[BULK_CLKS_NUM];
--	struct regmap *pericfg;
--	struct phy **phys;
--	int num_phys;
- 	bool lpm_support;
- 	/* usb remote wakeup */
- 	bool uwk_en;
--- 
-2.18.0
-
+> ---
+>   drivers/power/supply/surface_battery.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
+> index 4116dd839ecd..7efa431a62b2 100644
+> --- a/drivers/power/supply/surface_battery.c
+> +++ b/drivers/power/supply/surface_battery.c
+> @@ -697,7 +697,7 @@ static ssize_t alarm_store(struct device *dev, struct device_attribute *attr, co
+>   	return count;
+>   }
+>   
+> -DEVICE_ATTR_RW(alarm);
+> +static DEVICE_ATTR_RW(alarm);
+>   
+>   static struct attribute *spwr_battery_attrs[] = {
+>   	&dev_attr_alarm.attr,
+> @@ -802,7 +802,7 @@ static int __maybe_unused surface_battery_resume(struct device *dev)
+>   {
+>   	return spwr_battery_recheck_full(dev_get_drvdata(dev));
+>   }
+> -SIMPLE_DEV_PM_OPS(surface_battery_pm_ops, NULL, surface_battery_resume);
+> +static SIMPLE_DEV_PM_OPS(surface_battery_pm_ops, NULL, surface_battery_resume);
+>   
+>   static int surface_battery_probe(struct ssam_device *sdev)
+>   {
+> 
