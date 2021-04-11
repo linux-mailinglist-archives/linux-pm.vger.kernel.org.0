@@ -2,183 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C213735B596
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Apr 2021 16:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7913235B5A0
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Apr 2021 16:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbhDKOKL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Apr 2021 10:10:11 -0400
-Received: from mga02.intel.com ([134.134.136.20]:47659 "EHLO mga02.intel.com"
+        id S235623AbhDKOP0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Apr 2021 10:15:26 -0400
+Received: from mga05.intel.com ([192.55.52.43]:51666 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235407AbhDKOKK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 11 Apr 2021 10:10:10 -0400
-IronPort-SDR: UwakNE6MAzXbKForf4pCxUlpH8zWnzIU9okdHvCCiMf2F/JgUOP90QxxLst/riEtTOG1ozzY4t
- YPmbeGn9KIvQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9951"; a="181160627"
+        id S235616AbhDKOP0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 11 Apr 2021 10:15:26 -0400
+IronPort-SDR: Ul0BMtDGjnDXrt1YZBQnghIRFY7RzYB/gdEd+TKIHKvszTLHL1Ambkw1X79rnXLeWWXLO/jF/2
+ sEbgwplPp35A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9951"; a="279328730"
 X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
-   d="scan'208";a="181160627"
+   d="scan'208";a="279328730"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2021 07:09:52 -0700
-IronPort-SDR: I7zlx+wuWsefyCXsX6iqeqy+4N13YuYt62IZ7TDa11ln4lSYYMbbPv9mWwWBhNDeIMKNE1Kc2Y
- BdlhdkwqVhDg==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2021 07:15:09 -0700
+IronPort-SDR: mfRIHIjR5bMmGGYkxe1BCpYhQUMs+QuyNqdKhH3bs4dcNqfEdwM9/hZZity3pnEGRM/mX5fxOu
+ TB1xxCa+9gvQ==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
-   d="scan'208";a="423440473"
-Received: from xumingcu-mobl.ccr.corp.intel.com ([10.249.169.220])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2021 07:09:50 -0700
-Message-ID: <51542423fbea44257e52cf3fdf879a891b53b951.camel@intel.com>
-Subject: Re: [PATCH] tools/power/x86/turbostat: Fix TCC offset bit mask
+   d="scan'208";a="423441349"
+Received: from power-sh.sh.intel.com ([10.239.48.130])
+  by orsmga008.jf.intel.com with ESMTP; 11 Apr 2021 07:15:08 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
-To:     Doug Smythies <dsmythies@telus.net>, Len Brown <lenb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Sun, 11 Apr 2021 22:09:47 +0800
-In-Reply-To: <CAAYoRsXX74eDQ_vCdLnyNQhMutwE4TWMZsB7HeW5tu4kxVEFJQ@mail.gmail.com>
-References: <20210116170725.5245-1-dsmythies@telus.net>
-         <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
-         <CAAYoRsVYejQRByDz78jbv5cMfd+ctT8N3YxfOBndW8FJiuk9MA@mail.gmail.com>
-         <CAJvTdKkpbFqDRL9BP3Ri0Yeb0VMXv79dr+C=ym2+GWMRZEEYpw@mail.gmail.com>
-         <CAAYoRsXX74eDQ_vCdLnyNQhMutwE4TWMZsB7HeW5tu4kxVEFJQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+To:     linux-pm@vger.kernel.org
+Cc:     daniel.lezcano@linaro.org, dsmythies@telus.net,
+        srinivas.pandruvada@linux.intel.com, rui.zhang@intel.com
+Subject: [PATCH V2] thermal: intel: introduce tcc cooling driver
+Date:   Sun, 11 Apr 2021 22:26:13 +0800
+Message-Id: <20210411142613.9584-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2021-03-13 at 07:16 -0800, Doug Smythies wrote:
-> On Fri, Mar 12, 2021 at 2:16 PM Len Brown <lenb@kernel.org> wrote:
-> > 
-> > Doug,
-> > The offset works for control.
-> > 
-> > However, it is erroneous to use it for reporting of the actual
-> > temperature, like I did in turbostat.
-> 
-> Agreed.
-> I have been running with a correction for that for a while,
-> and as discussed on Rui's thread.
-> But this bit mask correction patch is still needed isn't it?
-> for this:
-> cpu4: MSR_IA32_TEMPERATURE_TARGET: 0x1a64100d (90 C) (100 default -
-> 10 offset)
-> which should be this:
-> cpu4: MSR_IA32_TEMPERATURE_TARGET: 0x1a64100d (74 C) (100 default -
-> 26 offset)
-> 
-> But yes, I do now see the field size is only 4 bits for some parts.
+On Intel processors, the core frequency can be reduced below OS request,
+when the current temperature reaches the TCC (Thermal Control Circuit)
+activation temperature.
 
-As this is CPU specific, and we don't know which is which for all the
-CPUs, so it seems that we can have a white list for the ones that we
-care and have been verified.
+The default TCC activation temperature is specified by
+MSR_IA32_TEMPERATURE_TARGET. However, it can be adjusted by specifying an
+offset in degrees C, using the TCC Offset bits in the same MSR register.
 
-For the others, by default, we only show the raw value and default TCC
-activation temperature, like
+This patch introduces a cooling devices driver that utilizes the TCC
+Offset feature. The bigger the current cooling state is, the lower the
+effective TCC activation temperature is, so that the processors can be
+throttled earlier before system critical overheats.
 
-cpu4: MSR_IA32_TEMPERATURE_TARGET: 0x1a64100d (100 default )
+Note that, on different platforms, the behavior might be different on
+how fast the setting takes effect, and how much the CPU frequency is
+reduced.
 
-And this white list can be updated together with the one in the kernel
-tcc_offset_cooling driver.
+This patch has been tested on a KBL mobile platform.
 
-what do you think?
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+V2:
+  Add a note in both Kconfig description and changelog, to clarify that
+  the behavior might not be consistent cross platforms.
+---
+ drivers/thermal/intel/Kconfig             |  11 ++
+ drivers/thermal/intel/Makefile            |   1 +
+ drivers/thermal/intel/intel_tcc_cooling.c | 128 ++++++++++++++++++++++
+ 3 files changed, 140 insertions(+)
+ create mode 100644 drivers/thermal/intel/intel_tcc_cooling.c
 
-thanks,
-rui
-
-
-
-> 
-> ... Doug
-> 
-> > Thus, I'm going to revert the patch that added it's use in
-> > turbostat
-> > for the Temperature column.
-> > 
-> > thanks,
-> > -Len
-> > 
-> > On Fri, Mar 12, 2021 at 1:26 AM Doug Smythies <dsmythies@telus.net>
-> > wrote:
-> > > 
-> > > Hi Len,
-> > > 
-> > > 
-> > > thank you for your reply.
-> > > 
-> > > On Thu, Mar 11, 2021 at 3:19 PM Len Brown <lenb@kernel.org>
-> > > wrote:
-> > > > 
-> > > > Thanks for the close read, Doug.
-> > > > 
-> > > > This field size actually varies from system to system,
-> > > > but the reality is that the offset is never that big, and so
-> > > > the
-> > > > smaller mask is sufficient.
-> > > 
-> > > Disagree.
-> > > 
-> > > I want to use an offset of 26.
-> > > 
-> > > > Finally, this may all be moot, because there is discussion that
-> > > > using
-> > > > the offset this way is simply erroneous.
-> > > 
-> > > Disagree.
-> > > It works great.
-> > > As far as I know/recall I was the only person that responded to
-> > > Rui's thread
-> > > "thermal/intel: introduce tcc cooling driver" [1]
-> > > And, I spent quite a bit of time doing so.
-> > > However, I agree the response seems different between the two
-> > > systems
-> > > under test, Rui's and mine.
-> > > 
-> > > [1] https://marc.info/?l=linux-pm&m=161070345329806&w=2
-> > > 
-> > > >  stay tuned.
-> > > 
-> > > O.K.
-> > > 
-> > > ... Doug
-> > > > 
-> > > > -Len
-> > > > 
-> > > > 
-> > > > On Sat, Jan 16, 2021 at 12:07 PM Doug Smythies <
-> > > > doug.smythies@gmail.com> wrote:
-> > > > > 
-> > > > > The TCC offset mask is incorrect, resulting in
-> > > > > incorrect target temperature calculations, if
-> > > > > the offset is big enough to exceed the mask size.
-> > > > > 
-> > > > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > > > ---
-> > > > >  tools/power/x86/turbostat/turbostat.c | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/tools/power/x86/turbostat/turbostat.c
-> > > > > b/tools/power/x86/turbostat/turbostat.c
-> > > > > index 389ea5209a83..d7acdd4d16c4 100644
-> > > > > --- a/tools/power/x86/turbostat/turbostat.c
-> > > > > +++ b/tools/power/x86/turbostat/turbostat.c
-> > > > > @@ -4823,7 +4823,7 @@ int read_tcc_activation_temp()
-> > > > > 
-> > > > >         target_c = (msr >> 16) & 0xFF;
-> > > > > 
-> > > > > -       offset_c = (msr >> 24) & 0xF;
-> > > > > +       offset_c = (msr >> 24) & 0x3F;
-> > > > > 
-> > > > >         tcc = target_c - offset_c;
-> > > > > 
-> > > > > --
-> > > > > 2.25.1
-> > > > > 
-> > > > 
-> > > > 
-> > > > --
-> > > > Len Brown, Intel Open Source Technology Center
-> > 
-> > 
-> > 
-> > --
-> > Len Brown, Intel Open Source Technology Center
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index ce4f59213c7a..e4299ca3423c 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -79,3 +79,14 @@ config INTEL_PCH_THERMAL
+ 	  Enable this to support thermal reporting on certain intel PCHs.
+ 	  Thermal reporting device will provide temperature reading,
+ 	  programmable trip points and other information.
++
++config INTEL_TCC_COOLING
++	tristate "Intel TCC offset cooling Driver"
++	depends on X86
++	help
++	  Enable this to support system cooling by adjusting the effective TCC
++	  activation temperature via the TCC Offset register, which is widely
++	  supported on modern Intel platforms.
++	  Note that, on different platforms, the behavior might be different
++	  on how fast the setting takes effect, and how much the CPU frequency
++	  is reduced.
+diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
+index ff2ad30ef397..5ff2afa388f7 100644
+--- a/drivers/thermal/intel/Makefile
++++ b/drivers/thermal/intel/Makefile
+@@ -10,4 +10,5 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+= intel_quark_dts_thermal.o
+ obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
+ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
+ obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
++obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
+ obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+new file mode 100644
+index 000000000000..aa6bbb9ba898
+--- /dev/null
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * cooling device driver that activates the processor throttling by
++ * programming the TCC Offset register.
++ * Copyright (c) 2021, Intel Corporation.
++ */
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/thermal.h>
++#include <asm/cpu_device_id.h>
++
++#define TCC_SHIFT 24
++#define TCC_MASK	(0x3fULL<<24)
++#define TCC_PROGRAMMABLE	BIT(30)
++
++static struct thermal_cooling_device *tcc_cdev;
++
++static int tcc_get_max_state(struct thermal_cooling_device *cdev, unsigned long
++			     *state)
++{
++	*state = TCC_MASK >> TCC_SHIFT;
++	return 0;
++}
++
++static int tcc_offset_update(int tcc)
++{
++	u64 val;
++	int err;
++
++	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
++	if (err)
++		return err;
++
++	val &= ~TCC_MASK;
++	val |= tcc << TCC_SHIFT;
++
++	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int tcc_get_cur_state(struct thermal_cooling_device *cdev, unsigned long
++			     *state)
++{
++	u64 val;
++	int err;
++
++	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
++	if (err)
++		return err;
++
++	*state = (val & TCC_MASK) >> TCC_SHIFT;
++	return 0;
++}
++
++static int tcc_set_cur_state(struct thermal_cooling_device *cdev, unsigned long
++			     state)
++{
++	return tcc_offset_update(state);
++}
++
++static const struct thermal_cooling_device_ops tcc_cooling_ops = {
++	.get_max_state = tcc_get_max_state,
++	.get_cur_state = tcc_get_cur_state,
++	.set_cur_state = tcc_set_cur_state,
++};
++
++static const struct x86_cpu_id tcc_ids[] __initconst = {
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L, NULL),
++	{}
++};
++
++MODULE_DEVICE_TABLE(x86cpu, tcc_ids);
++
++static int __init tcc_cooling_init(void)
++{
++	int ret;
++	u64 val;
++	const struct x86_cpu_id *id;
++
++	int err;
++
++	id = x86_match_cpu(tcc_ids);
++	if (!id)
++		return -ENODEV;
++
++	err = rdmsrl_safe(MSR_PLATFORM_INFO, &val);
++	if (err)
++		return err;
++
++	if (!(val & TCC_PROGRAMMABLE))
++		return -ENODEV;
++
++	pr_info("Programmable TCC Offset detected\n");
++
++	tcc_cdev =
++	    thermal_cooling_device_register("TCC Offset", NULL,
++					    &tcc_cooling_ops);
++	if (IS_ERR(tcc_cdev)) {
++		ret = PTR_ERR(tcc_cdev);
++		return ret;
++	}
++	return 0;
++}
++
++module_init(tcc_cooling_init)
++
++static void __exit tcc_cooling_exit(void)
++{
++	thermal_cooling_device_unregister(tcc_cdev);
++}
++
++module_exit(tcc_cooling_exit)
++
++MODULE_DESCRIPTION("TCC offset cooling device Driver");
++MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
++MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
 
