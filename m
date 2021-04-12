@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 924DD35B9EC
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 07:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB4535B9F0
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 07:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhDLFsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 01:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S230263AbhDLFwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Apr 2021 01:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhDLFsx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 01:48:53 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE3FC061574
-        for <linux-pm@vger.kernel.org>; Sun, 11 Apr 2021 22:48:36 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id w10so8521791pgh.5
-        for <linux-pm@vger.kernel.org>; Sun, 11 Apr 2021 22:48:36 -0700 (PDT)
+        with ESMTP id S229482AbhDLFwj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 01:52:39 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040CEC061574
+        for <linux-pm@vger.kernel.org>; Sun, 11 Apr 2021 22:52:21 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so8217538pjb.0
+        for <linux-pm@vger.kernel.org>; Sun, 11 Apr 2021 22:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=1ZDEIPC4lhuF2vPy1dlt6jULZrDyKQoqH+8iH2kFXMg=;
-        b=k5+oaqSwmzCWbu88vLcy4s57eLb7ceeqUwDlKHLhfdChmfeumntBnSs8Gw3hvEPPkw
-         ymDngDszgPmlBSUhw3FhRhlzNNoJ36gYvB4RXJzGx0C/QDVMM+dYnycGcYo0BH+FE9AT
-         x3vDQRN2qJNsaxvWFEHvlH/APBdKlbM30jxffUN/mDdeKARvOHRLj35/56wygmnOlEC2
-         Ztm3HiEqjqJP4UVntI+wDJfnZLwsxNDZAeDaZgfXIHz41/QNk0Y8evNIpWJQj+Wh8z2d
-         Vagctr+Zg2iunIjpu61evgg/TqU1dWU77J1W1S9qQ2+MCmAxOAW7joeEbAWDic1lpRR1
-         85yQ==
+         :user-agent;
+        bh=s9oqpekg6UTvbtV36QgI+UPxeATfQeEORiRuOpyUmUw=;
+        b=pQxff+4k5v3NZDu087DhdnsF2QEX+LriwRszS3sRzsX7Eag5eUM9oxCnNze9iq6znT
+         940QNDiHu4h1ewM31BSx9eRAbUiXCgq6vg/oKtfCn8wFz0ogncZ8MUevJhp6/WkM0RCB
+         C8a5aq907djSKet6LXnqzexhLh6ZZrKSzCyANsqn7RazX/5i56QPLF5uTao3oOUrIK2b
+         hk1pTmhBINffq8sINYOWNiB/AJeAzLAiq/jtb6GN8ORdnliPUQq+55aTWJXn7CVjVX1c
+         HOSVsDUI9JcWgLmb0EW7qE5f9DUM9tJmK9Q/+LqGhxWlW4tmRUGv2ESDkW2XFmREWnA+
+         j4IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=1ZDEIPC4lhuF2vPy1dlt6jULZrDyKQoqH+8iH2kFXMg=;
-        b=S/FIhver9JtvDykSVOSsnXrKU28KQtZKqIGkfomSs+PMtBA9MQXa7Af3cRCbqLAUqu
-         DOKkrpqmRHhETlo5J8mh2X3j/PMScBW1LKNFFeA7RJDHcjchi4F8pSWYj6fijL1bB9vx
-         fcceN14tMuej3K7REyrByba9SOpZzViZPO/hP0qnmxyKnEF7wupo2tJqiGV7FwjgxXte
-         fBBsFGDT4NQjQ2YC1DyLZVFsjQjSrFMBaw++tmoR1wX3yt2xpBbAdelNPUOqKJm1jLEP
-         jC4Jqblj/jpcairMERedSDZp0zyBjfAja2RZaffOGXdqN5pOODVI/vddFSlRjq3R6vuy
-         Cw7A==
-X-Gm-Message-State: AOAM533VjtaHwjp3FWrBxBwFUwk58WBewQYFVZ41ZELjpegdlpcmEIYW
-        /nkC5KEqFLEwEVvkb1/UO8JYYJ+uuP3i+g==
-X-Google-Smtp-Source: ABdhPJx9fu7atMZain8PqcpwGLT1HCuMIbR681JL5/3MctfhyYMiZdpO58l+1nQpMKf7Gu86FY9Q/Q==
-X-Received: by 2002:a63:c741:: with SMTP id v1mr24722019pgg.207.1618206515602;
-        Sun, 11 Apr 2021 22:48:35 -0700 (PDT)
+         :content-disposition:user-agent;
+        bh=s9oqpekg6UTvbtV36QgI+UPxeATfQeEORiRuOpyUmUw=;
+        b=WkY+UxyXUdN3pmyNMz/TY4BKlNz3IbRK04sc35wlolfwY5JpWcRM3m9TvVYj+YODSV
+         5IDs/yJYyfY2Xe/70LKN4AQL/3PWQOkiMQwlb7PESdRxZTbPsfkQl8B8w23vjc+UvoGj
+         AGl198X4UrQvzZXbQps50HILdVXRRlteYKPQre3xxvb4CVw6i/g0P303o3zPJNvp7VSF
+         g/u5OHczp9Vpemy57qmbsVQRGh1F4k0R3zFvTsgGeHETMsWCVlO8GFcSzFxT0Q92gaKM
+         8mVjyhBIbLC2aHVWT7SPiOlYdEjHtgrmyD1xXs7owXGX/rhldtmE6iPb8GJs4NM5q4GC
+         twHg==
+X-Gm-Message-State: AOAM530v7qthKfZT74TYLncjbbPmtbmIN7jlxGCZs7KgX2/WSX+Htfw9
+        SlptW8c8qDRaP3Jc2qojY+QSpjxlok0iog==
+X-Google-Smtp-Source: ABdhPJz2yT731xWc3qjVQLiFJBX3p8RUupiRxDQtyxcWD2sA0d1GEAGhT1NchQyuyfu3PGw+3aMStw==
+X-Received: by 2002:a17:90b:228a:: with SMTP id kx10mr7111731pjb.105.1618206741479;
+        Sun, 11 Apr 2021 22:52:21 -0700 (PDT)
 Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id i17sm8644845pfd.84.2021.04.11.22.48.34
+        by smtp.gmail.com with ESMTPSA id p2sm9767093pgm.24.2021.04.11.22.52.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Apr 2021 22:48:35 -0700 (PDT)
-Date:   Mon, 12 Apr 2021 11:18:32 +0530
+        Sun, 11 Apr 2021 22:52:21 -0700 (PDT)
+Date:   Mon, 12 Apr 2021 11:22:19 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 5.13
-Message-ID: <20210412054832.6wxa7b5weu6upmxb@vireshk-i7>
+Subject: [GIT PULL] OPP updates for 5.13
+Message-ID: <20210412055219.zt47pkorhxbnsg5z@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -64,19 +63,8 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Rafael,
 
-This pull request contains:
-
-- Fix typos in s5pv210 cpufreq driver (Bhaskar Chowdhury).
-
-- Armada 37xx: Fix cpufreq changing base CPU speed to 800 MHz from 1000 MHz
-  (Pali Rohár and Marek Behún).
-
-- cpufreq-dt: Return -EPROBE_DEFER on failure to add table (Quanyang Wang).
-
-- Minor cleanup in cppc driver (Tom Saeger).
-
-- Add frequency invariance support for CPPC driver and generalize freq
-  invariance support arch-topology driver (Viresh Kumar).
+This pull request adds devm variants for OPP APIs, and updates few of the users
+as well (Yangtao Li and Dmitry Osipenko).
 
 Thanks.
 
@@ -85,60 +73,50 @@ Viresh
 
 -------------------------8<-------------------------
 
-The following changes since commit fbb31cb805fd3574d3be7defc06a7fd2fd9af7d2:
+The following changes since commit 606a5d4227e4610399c61086ac55c46068a90b03:
 
-  cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev (2021-03-08 16:20:07 +0530)
+  opp: Don't drop extra references to OPPs accidentally (2021-03-12 09:26:52 +0530)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
 
-for you to fetch changes up to dbbd49bade0548db87ceb1943951dea456af2e22:
+for you to fetch changes up to a8bb0e872bfb962de4653ce8f8723c0e1f712ce3:
 
-  cpufreq: armada-37xx: Fix module unloading (2021-04-09 15:17:33 +0530)
+  memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP API (2021-03-25 14:38:48 +0530)
 
 ----------------------------------------------------------------
-Bhaskar Chowdhury (1):
-      cpufreq: Rudimentary typos fix in the file s5pv210-cpufreq.c
+Dmitry Osipenko (2):
+      opp: Change return type of devm_pm_opp_register_set_opp_helper()
+      opp: Change return type of devm_pm_opp_attach_genpd()
 
-Marek Behún (2):
-      cpufreq: armada-37xx: Fix setting TBG parent for load levels
-      clk: mvebu: armada-37xx-periph: remove .set_parent method for CPU PM clock
+Yangtao Li (11):
+      opp: Add devres wrapper for dev_pm_opp_set_clkname
+      opp: Add devres wrapper for dev_pm_opp_set_regulators
+      opp: Add devres wrapper for dev_pm_opp_set_supported_hw
+      opp: Add devres wrapper for dev_pm_opp_of_add_table
+      serial: qcom_geni_serial: Convert to use resource-managed OPP API
+      spi: spi-geni-qcom: Convert to use resource-managed OPP API
+      spi: spi-qcom-qspi: Convert to use resource-managed OPP API
+      mmc: sdhci-msm: Convert to use resource-managed OPP API
+      drm/lima: Convert to use resource-managed OPP API
+      drm/panfrost: Convert to use resource-managed OPP API
+      memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP API
 
-Pali Rohár (7):
-      cpufreq: armada-37xx: Fix the AVS value for load L1
-      clk: mvebu: armada-37xx-periph: Fix switching CPU freq from 250 Mhz to 1 GHz
-      clk: mvebu: armada-37xx-periph: Fix workaround for switching from L1 to L0
-      cpufreq: armada-37xx: Fix driver cleanup when registration failed
-      cpufreq: armada-37xx: Fix determining base CPU frequency
-      cpufreq: armada-37xx: Remove cur_frequency variable
-      cpufreq: armada-37xx: Fix module unloading
-
-Quanyang Wang (1):
-      cpufreq: dt: dev_pm_opp_of_cpumask_add_table() may return -EPROBE_DEFER
-
-Tom Saeger (1):
-      cpufreq: cppc: simplify default delay_us setting
-
-Viresh Kumar (4):
-      arch_topology: Rename freq_scale as arch_freq_scale
-      arch_topology: Allow multiple entities to provide sched_freq_tick() callback
-      arch_topology: Export arch_freq_scale and helpers
-      cpufreq: CPPC: Add support for frequency invariance
-
- arch/arm64/include/asm/topology.h      |  10 +-
- arch/arm64/kernel/topology.c           | 109 ++++++--------
- drivers/base/arch_topology.c           |  89 ++++++++++-
- drivers/clk/mvebu/armada-37xx-periph.c |  83 ++++++-----
- drivers/cpufreq/Kconfig.arm            |  10 ++
- drivers/cpufreq/armada-37xx-cpufreq.c  | 111 +++++++++++---
- drivers/cpufreq/cppc_cpufreq.c         | 259 ++++++++++++++++++++++++++++++---
- drivers/cpufreq/cpufreq-dt.c           |   9 +-
- drivers/cpufreq/s5pv210-cpufreq.c      |  14 +-
- include/linux/arch_topology.h          |  19 ++-
- kernel/sched/core.c                    |   1 +
- 11 files changed, 534 insertions(+), 180 deletions(-)
-
+ drivers/gpu/drm/lima/lima_devfreq.c         |  47 +++--------
+ drivers/gpu/drm/lima/lima_devfreq.h         |   3 -
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |  37 ++-------
+ drivers/gpu/drm/panfrost/panfrost_devfreq.h |   2 -
+ drivers/memory/samsung/exynos5422-dmc.c     |  13 +--
+ drivers/mmc/host/sdhci-msm.c                |  19 ++---
+ drivers/opp/core.c                          | 122 ++++++++++++++++++++++------
+ drivers/opp/of.c                            |  36 ++++++++
+ drivers/spi/spi-geni-qcom.c                 |  16 ++--
+ drivers/spi/spi-qcom-qspi.c                 |  18 ++--
+ drivers/tty/serial/qcom_geni_serial.c       |  23 ++----
+ include/linux/pm_opp.h                      |  44 ++++++++--
+ include/linux/qcom-geni-se.h                |   2 -
+ 13 files changed, 217 insertions(+), 165 deletions(-)
 
 -- 
 viresh
