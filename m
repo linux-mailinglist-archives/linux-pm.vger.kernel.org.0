@@ -2,72 +2,240 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F2435C6BD
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 14:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4794735C6AD
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 14:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239439AbhDLMw1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 08:52:27 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:41484 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239364AbhDLMw1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 08:52:27 -0400
-Received: by mail-oi1-f173.google.com with SMTP id x77so3907204oix.8
-        for <linux-pm@vger.kernel.org>; Mon, 12 Apr 2021 05:52:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xpo3TckKaHNiDw3wSyXZBpsmO26WwZJti6++Tk062Es=;
-        b=YeV5Ngj+JiTxm13EDiiQU1Bk+1Ae89N8vmZ/Qks8NADGJcvVAvuEf76voB37LT53rS
-         +tzqZa+9V2rtAPpLFtbKophvj96ysALtRLg3hs46AHJ+Wt5PMqoNzZazetpknrMomETi
-         VXJDxt8yRx2eKmA8VhqujQiHt9uvDCP5kHdrjYRuJuNNX5/i/ebXW5/DSEcjScCT3vgW
-         IJvaJ6XMVvK6QNwFUxWw8udCZo/P+0QM0y3PUOZZ3y6zXJH+wCS7N222ESKIiYZzOTra
-         K0IKpo86gwGL12tEJ2DOxnDphzIyVQ8pwPgebjtEeK3kI9YzEneS2i2L2mm8d3wc6w24
-         xGYQ==
-X-Gm-Message-State: AOAM532gNkYbQJ5IellWX198Kc2v5T3Q+8lZwi8VmtT8aIAyiyqbItVl
-        wRgIDkONLkPw4qstHg5MNLcW12BjkVxp5ys+TM47dKH9
-X-Google-Smtp-Source: ABdhPJxy8gEausERpUaiSNXq/pRezPXMN4iBPaVku4nfse6EFUy+u4/yp1JuEy3gNbrlbr/bfgySAEnwrF7vo/lIen8=
-X-Received: by 2002:aca:5fc3:: with SMTP id t186mr18611491oib.69.1618231929033;
- Mon, 12 Apr 2021 05:52:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210412055219.zt47pkorhxbnsg5z@vireshk-i7>
-In-Reply-To: <20210412055219.zt47pkorhxbnsg5z@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Apr 2021 14:51:53 +0200
-Message-ID: <CAJZ5v0jcOVOfGN658q62uZ4AUgq74M9SrCO3iF+CrQkVBF-XuQ@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 5.13
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S241264AbhDLMsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Apr 2021 08:48:16 -0400
+Received: from mga14.intel.com ([192.55.52.115]:34966 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239855AbhDLMsQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Apr 2021 08:48:16 -0400
+IronPort-SDR: TeZv0cEV2pXOV1Jc/jUsoQZk4tZwJJYOUaziehI7VbEIAsBqrS5mBoY2cdmc0wwK6pbRu37DdN
+ XzM6fLRsOh6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9952"; a="193742708"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="193742708"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 05:47:58 -0700
+IronPort-SDR: guaWixRnuCGqUyn9V55NNNTWPGO9C3YIaaNcM+mJah5udakgkvc/BtyK9v0hJbzvzOI23+Dc2R
+ OouGUtDGOVhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="451442937"
+Received: from power-sh.sh.intel.com ([10.239.48.130])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2021 05:47:57 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     daniel.lezcano@linaro.org, dsmythies@telus.net,
+        srinivas.pandruvada@linux.intel.com, rui.zhang@intel.com
+Subject: [PATCH V3] thermal: intel: introduce tcc cooling driver
+Date:   Mon, 12 Apr 2021 20:59:01 +0800
+Message-Id: <20210412125901.12549-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 7:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request adds devm variants for OPP APIs, and updates few of the users
-> as well (Yangtao Li and Dmitry Osipenko).
->
-> Thanks.
->
-> --
-> Viresh
->
-> -------------------------8<-------------------------
->
-> The following changes since commit 606a5d4227e4610399c61086ac55c46068a90b03:
->
->   opp: Don't drop extra references to OPPs accidentally (2021-03-12 09:26:52 +0530)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to a8bb0e872bfb962de4653ce8f8723c0e1f712ce3:
->
->   memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP API (2021-03-25 14:38:48 +0530)
+On Intel processors, the core frequency can be reduced below OS request,
+when the current temperature reaches the TCC (Thermal Control Circuit)
+activation temperature.
 
-Pulled, thanks!
+The default TCC activation temperature is specified by
+MSR_IA32_TEMPERATURE_TARGET. However, it can be adjusted by specifying an
+offset in degrees C, using the TCC Offset bits in the same MSR register.
+
+This patch introduces a cooling devices driver that utilizes the TCC
+Offset feature. The bigger the current cooling state is, the lower the
+effective TCC activation temperature is, so that the processors can be
+throttled earlier before system critical overheats.
+
+Note that, on different platforms, the behavior might be different on
+how fast the setting takes effect, and how much the CPU frequency is
+reduced.
+
+This patch has been tested on a KabyLake mobile platform from me, and also
+on a CometLake platform from Doug.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Tested by: Doug Smythies <dsmythies@telus.net>
+---
+V3:
+  Add support for CometLake platform. Add Doug' Tested-by.
+V2:
+  Add a note in both Kconfig description and changelog, to clarify that
+  the behavior might not be consistent cross platforms.
+---
+ drivers/thermal/intel/Kconfig             |  11 ++
+ drivers/thermal/intel/Makefile            |   1 +
+ drivers/thermal/intel/intel_tcc_cooling.c | 129 ++++++++++++++++++++++
+ 3 files changed, 141 insertions(+)
+ create mode 100644 drivers/thermal/intel/intel_tcc_cooling.c
+
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index ce4f59213c7a..e4299ca3423c 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -79,3 +79,14 @@ config INTEL_PCH_THERMAL
+ 	  Enable this to support thermal reporting on certain intel PCHs.
+ 	  Thermal reporting device will provide temperature reading,
+ 	  programmable trip points and other information.
++
++config INTEL_TCC_COOLING
++	tristate "Intel TCC offset cooling Driver"
++	depends on X86
++	help
++	  Enable this to support system cooling by adjusting the effective TCC
++	  activation temperature via the TCC Offset register, which is widely
++	  supported on modern Intel platforms.
++	  Note that, on different platforms, the behavior might be different
++	  on how fast the setting takes effect, and how much the CPU frequency
++	  is reduced.
+diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
+index ff2ad30ef397..5ff2afa388f7 100644
+--- a/drivers/thermal/intel/Makefile
++++ b/drivers/thermal/intel/Makefile
+@@ -10,4 +10,5 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+= intel_quark_dts_thermal.o
+ obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
+ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
+ obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
++obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
+ obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+new file mode 100644
+index 000000000000..8ec10d55d421
+--- /dev/null
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * cooling device driver that activates the processor throttling by
++ * programming the TCC Offset register.
++ * Copyright (c) 2021, Intel Corporation.
++ */
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/thermal.h>
++#include <asm/cpu_device_id.h>
++
++#define TCC_SHIFT 24
++#define TCC_MASK	(0x3fULL<<24)
++#define TCC_PROGRAMMABLE	BIT(30)
++
++static struct thermal_cooling_device *tcc_cdev;
++
++static int tcc_get_max_state(struct thermal_cooling_device *cdev, unsigned long
++			     *state)
++{
++	*state = TCC_MASK >> TCC_SHIFT;
++	return 0;
++}
++
++static int tcc_offset_update(int tcc)
++{
++	u64 val;
++	int err;
++
++	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
++	if (err)
++		return err;
++
++	val &= ~TCC_MASK;
++	val |= tcc << TCC_SHIFT;
++
++	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int tcc_get_cur_state(struct thermal_cooling_device *cdev, unsigned long
++			     *state)
++{
++	u64 val;
++	int err;
++
++	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
++	if (err)
++		return err;
++
++	*state = (val & TCC_MASK) >> TCC_SHIFT;
++	return 0;
++}
++
++static int tcc_set_cur_state(struct thermal_cooling_device *cdev, unsigned long
++			     state)
++{
++	return tcc_offset_update(state);
++}
++
++static const struct thermal_cooling_device_ops tcc_cooling_ops = {
++	.get_max_state = tcc_get_max_state,
++	.get_cur_state = tcc_get_cur_state,
++	.set_cur_state = tcc_set_cur_state,
++};
++
++static const struct x86_cpu_id tcc_ids[] __initconst = {
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
++	{}
++};
++
++MODULE_DEVICE_TABLE(x86cpu, tcc_ids);
++
++static int __init tcc_cooling_init(void)
++{
++	int ret;
++	u64 val;
++	const struct x86_cpu_id *id;
++
++	int err;
++
++	id = x86_match_cpu(tcc_ids);
++	if (!id)
++		return -ENODEV;
++
++	err = rdmsrl_safe(MSR_PLATFORM_INFO, &val);
++	if (err)
++		return err;
++
++	if (!(val & TCC_PROGRAMMABLE))
++		return -ENODEV;
++
++	pr_info("Programmable TCC Offset detected\n");
++
++	tcc_cdev =
++	    thermal_cooling_device_register("TCC Offset", NULL,
++					    &tcc_cooling_ops);
++	if (IS_ERR(tcc_cdev)) {
++		ret = PTR_ERR(tcc_cdev);
++		return ret;
++	}
++	return 0;
++}
++
++module_init(tcc_cooling_init)
++
++static void __exit tcc_cooling_exit(void)
++{
++	thermal_cooling_device_unregister(tcc_cdev);
++}
++
++module_exit(tcc_cooling_exit)
++
++MODULE_DESCRIPTION("TCC offset cooling device Driver");
++MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
++MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
+
