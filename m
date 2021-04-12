@@ -2,240 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4794735C6AD
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 14:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B20D35C860
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Apr 2021 16:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241264AbhDLMsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 08:48:16 -0400
-Received: from mga14.intel.com ([192.55.52.115]:34966 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239855AbhDLMsQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Apr 2021 08:48:16 -0400
-IronPort-SDR: TeZv0cEV2pXOV1Jc/jUsoQZk4tZwJJYOUaziehI7VbEIAsBqrS5mBoY2cdmc0wwK6pbRu37DdN
- XzM6fLRsOh6A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9952"; a="193742708"
-X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="193742708"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 05:47:58 -0700
-IronPort-SDR: guaWixRnuCGqUyn9V55NNNTWPGO9C3YIaaNcM+mJah5udakgkvc/BtyK9v0hJbzvzOI23+Dc2R
- OouGUtDGOVhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="451442937"
-Received: from power-sh.sh.intel.com ([10.239.48.130])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2021 05:47:57 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, dsmythies@telus.net,
-        srinivas.pandruvada@linux.intel.com, rui.zhang@intel.com
-Subject: [PATCH V3] thermal: intel: introduce tcc cooling driver
-Date:   Mon, 12 Apr 2021 20:59:01 +0800
-Message-Id: <20210412125901.12549-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S241193AbhDLOKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Apr 2021 10:10:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38126 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240501AbhDLOJ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 10:09:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618236581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc; bh=SbIHlRt5xnwBUezOuapEzl2m40Nh7kvApwj+aK9cf3Y=;
+        b=C0V/I05iEUO6F+ZvymhBLsd8t68quj1Zo8j7TOQBVbSP7wzKvxDMH7w3JMbIpvUT4xskUo
+        Q/vErqFecQcub/8rsSzUcxno0SoE/lOEoYhGHmNwsqloUuugdWiTPznp+sRmrB49FOkS0F
+        Wc+INygTqvQmtGt70uskDRm+sd9hSns=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-338-FCLC3kK9N0uQ_opseESiCA-1; Mon, 12 Apr 2021 10:09:39 -0400
+X-MC-Unique: FCLC3kK9N0uQ_opseESiCA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8F1B3800D53;
+        Mon, 12 Apr 2021 14:09:37 +0000 (UTC)
+Received: from crecklin.bos.com (ovpn-113-158.rdu2.redhat.com [10.10.113.158])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 77B06100238C;
+        Mon, 12 Apr 2021 14:09:33 +0000 (UTC)
+From:   Chris von Recklinghausen <crecklin@redhat.com>
+To:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
+        decui@microsoft.com, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/1] use crc32 instead of md5 for hibernation e820 integrity check
+Date:   Mon, 12 Apr 2021 10:09:32 -0400
+Message-Id: <20210412140932.31162-1-crecklin@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Intel processors, the core frequency can be reduced below OS request,
-when the current temperature reaches the TCC (Thermal Control Circuit)
-activation temperature.
+Suspend fails on a system in fips mode because md5 is used for the e820
+integrity check and is not available. Use crc32 instead.
 
-The default TCC activation temperature is specified by
-MSR_IA32_TEMPERATURE_TARGET. However, it can be adjusted by specifying an
-offset in degrees C, using the TCC Offset bits in the same MSR register.
+This patch changes the integrity check algorithm from md5 to crc32.
 
-This patch introduces a cooling devices driver that utilizes the TCC
-Offset feature. The bigger the current cooling state is, the lower the
-effective TCC activation temperature is, so that the processors can be
-throttled earlier before system critical overheats.
+The purpose of the integrity check is to detect possible differences
+between the memory map used at the time when the hibernation image is
+about to be loaded into memory and the memory map used at the image
+creation time, because it is generally unsafe to load the image if the
+current memory map doesn't match the one used when it was created. so
+it is not intended as a cryptographic integrity check.
 
-Note that, on different platforms, the behavior might be different on
-how fast the setting takes effect, and how much the CPU frequency is
-reduced.
+Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
+       by md5 digest")
 
-This patch has been tested on a KabyLake mobile platform from me, and also
-on a CometLake platform from Doug.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Tested by: Doug Smythies <dsmythies@telus.net>
+Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
 ---
-V3:
-  Add support for CometLake platform. Add Doug' Tested-by.
-V2:
-  Add a note in both Kconfig description and changelog, to clarify that
-  the behavior might not be consistent cross platforms.
----
- drivers/thermal/intel/Kconfig             |  11 ++
- drivers/thermal/intel/Makefile            |   1 +
- drivers/thermal/intel/intel_tcc_cooling.c | 129 ++++++++++++++++++++++
- 3 files changed, 141 insertions(+)
- create mode 100644 drivers/thermal/intel/intel_tcc_cooling.c
+v1 -> v2
+   bump up RESTORE_MAGIC
+v2 -> v3
+   move embelishment from cover letter to commit comments (no code change)
+v3 -> v4
+   add note to comments that md5 isn't used for encryption here.
+v4 -> v5
+   reword comment per Simo's suggestion
+v5 -> v6
+   use wording from Eric Biggers, use crc32_le instead of crc32 from crypto
+	framework (crc32_le is in the core API and removes need for #defines)
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index ce4f59213c7a..e4299ca3423c 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -79,3 +79,14 @@ config INTEL_PCH_THERMAL
- 	  Enable this to support thermal reporting on certain intel PCHs.
- 	  Thermal reporting device will provide temperature reading,
- 	  programmable trip points and other information.
-+
-+config INTEL_TCC_COOLING
-+	tristate "Intel TCC offset cooling Driver"
-+	depends on X86
-+	help
-+	  Enable this to support system cooling by adjusting the effective TCC
-+	  activation temperature via the TCC Offset register, which is widely
-+	  supported on modern Intel platforms.
-+	  Note that, on different platforms, the behavior might be different
-+	  on how fast the setting takes effect, and how much the CPU frequency
-+	  is reduced.
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index ff2ad30ef397..5ff2afa388f7 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -10,4 +10,5 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+= intel_quark_dts_thermal.o
- obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
- obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
- obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
-+obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
- obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
-new file mode 100644
-index 000000000000..8ec10d55d421
---- /dev/null
-+++ b/drivers/thermal/intel/intel_tcc_cooling.c
-@@ -0,0 +1,129 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * cooling device driver that activates the processor throttling by
-+ * programming the TCC Offset register.
-+ * Copyright (c) 2021, Intel Corporation.
-+ */
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/thermal.h>
-+#include <asm/cpu_device_id.h>
-+
-+#define TCC_SHIFT 24
-+#define TCC_MASK	(0x3fULL<<24)
-+#define TCC_PROGRAMMABLE	BIT(30)
-+
-+static struct thermal_cooling_device *tcc_cdev;
-+
-+static int tcc_get_max_state(struct thermal_cooling_device *cdev, unsigned long
-+			     *state)
-+{
-+	*state = TCC_MASK >> TCC_SHIFT;
+ arch/x86/power/hibernate.c | 76 +++++++++++---------------------------
+ 1 file changed, 22 insertions(+), 54 deletions(-)
+
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index cd3914fc9f3d..f39e507e34ca 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -13,6 +13,8 @@
+ #include <linux/kdebug.h>
+ #include <linux/cpu.h>
+ #include <linux/pgtable.h>
++#include <linux/types.h>
++#include <linux/crc32.h>
+ 
+ #include <crypto/hash.h>
+ 
+@@ -55,94 +57,60 @@ int pfn_is_nosave(unsigned long pfn)
+ }
+ 
+ 
+-#define MD5_DIGEST_SIZE 16
++#define CRC32_DIGEST_SIZE (sizeof (u32))
+ 
+ struct restore_data_record {
+ 	unsigned long jump_address;
+ 	unsigned long jump_address_phys;
+ 	unsigned long cr3;
+ 	unsigned long magic;
+-	u8 e820_digest[MD5_DIGEST_SIZE];
++	u8 e820_digest[CRC32_DIGEST_SIZE];
+ };
+ 
+-#if IS_BUILTIN(CONFIG_CRYPTO_MD5)
+ /**
+- * get_e820_md5 - calculate md5 according to given e820 table
++ * get_e820_crc32 - calculate crc32 according to given e820 table
+  *
+  * @table: the e820 table to be calculated
+- * @buf: the md5 result to be stored to
++ * @buf: the crc32 result to be stored to
+  */
+-static int get_e820_md5(struct e820_table *table, void *buf)
++static int get_e820_crc32(struct e820_table *table, void *buf)
+ {
+-	struct crypto_shash *tfm;
+-	struct shash_desc *desc;
+-	int size;
+-	int ret = 0;
+-
+-	tfm = crypto_alloc_shash("md5", 0, 0);
+-	if (IS_ERR(tfm))
+-		return -ENOMEM;
+-
+-	desc = kmalloc(sizeof(struct shash_desc) + crypto_shash_descsize(tfm),
+-		       GFP_KERNEL);
+-	if (!desc) {
+-		ret = -ENOMEM;
+-		goto free_tfm;
+-	}
+-
+-	desc->tfm = tfm;
++	int size = offsetof(struct e820_table, entries) +
++                sizeof(struct e820_entry) * table->nr_entries;
++	u32 ret;
+ 
+-	size = offsetof(struct e820_table, entries) +
+-		sizeof(struct e820_entry) * table->nr_entries;
+-
+-	if (crypto_shash_digest(desc, (u8 *)table, size, buf))
+-		ret = -EINVAL;
+-
+-	kfree_sensitive(desc);
+-
+-free_tfm:
+-	crypto_free_shash(tfm);
+-	return ret;
++	ret = crc32_le(0, (unsigned char const *)table, size);
++	memset(buf, 0, CRC32_DIGEST_SIZE);
++	memcpy(buf, (char *)&ret, sizeof (ret));
 +	return 0;
-+}
-+
-+static int tcc_offset_update(int tcc)
-+{
-+	u64 val;
-+	int err;
-+
-+	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
-+	if (err)
-+		return err;
-+
-+	val &= ~TCC_MASK;
-+	val |= tcc << TCC_SHIFT;
-+
-+	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int tcc_get_cur_state(struct thermal_cooling_device *cdev, unsigned long
-+			     *state)
-+{
-+	u64 val;
-+	int err;
-+
-+	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
-+	if (err)
-+		return err;
-+
-+	*state = (val & TCC_MASK) >> TCC_SHIFT;
-+	return 0;
-+}
-+
-+static int tcc_set_cur_state(struct thermal_cooling_device *cdev, unsigned long
-+			     state)
-+{
-+	return tcc_offset_update(state);
-+}
-+
-+static const struct thermal_cooling_device_ops tcc_cooling_ops = {
-+	.get_max_state = tcc_get_max_state,
-+	.get_cur_state = tcc_get_cur_state,
-+	.set_cur_state = tcc_set_cur_state,
-+};
-+
-+static const struct x86_cpu_id tcc_ids[] __initconst = {
-+	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(x86cpu, tcc_ids);
-+
-+static int __init tcc_cooling_init(void)
-+{
-+	int ret;
-+	u64 val;
-+	const struct x86_cpu_id *id;
-+
-+	int err;
-+
-+	id = x86_match_cpu(tcc_ids);
-+	if (!id)
-+		return -ENODEV;
-+
-+	err = rdmsrl_safe(MSR_PLATFORM_INFO, &val);
-+	if (err)
-+		return err;
-+
-+	if (!(val & TCC_PROGRAMMABLE))
-+		return -ENODEV;
-+
-+	pr_info("Programmable TCC Offset detected\n");
-+
-+	tcc_cdev =
-+	    thermal_cooling_device_register("TCC Offset", NULL,
-+					    &tcc_cooling_ops);
-+	if (IS_ERR(tcc_cdev)) {
-+		ret = PTR_ERR(tcc_cdev);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+module_init(tcc_cooling_init)
-+
-+static void __exit tcc_cooling_exit(void)
-+{
-+	thermal_cooling_device_unregister(tcc_cdev);
-+}
-+
-+module_exit(tcc_cooling_exit)
-+
-+MODULE_DESCRIPTION("TCC offset cooling device Driver");
-+MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
-+MODULE_LICENSE("GPL v2");
+ }
+ 
+ static int hibernation_e820_save(void *buf)
+ {
+-	return get_e820_md5(e820_table_firmware, buf);
++	return get_e820_crc32(e820_table_firmware, buf);
+ }
+ 
+ static bool hibernation_e820_mismatch(void *buf)
+ {
+ 	int ret;
+-	u8 result[MD5_DIGEST_SIZE];
++	u8 result[CRC32_DIGEST_SIZE];
+ 
+-	memset(result, 0, MD5_DIGEST_SIZE);
++	memset(result, 0, CRC32_DIGEST_SIZE);
+ 	/* If there is no digest in suspend kernel, let it go. */
+-	if (!memcmp(result, buf, MD5_DIGEST_SIZE))
++	if (!memcmp(result, buf, CRC32_DIGEST_SIZE))
+ 		return false;
+ 
+-	ret = get_e820_md5(e820_table_firmware, result);
++	ret = get_e820_crc32(e820_table_firmware, result);
+ 	if (ret)
+ 		return true;
+ 
+-	return memcmp(result, buf, MD5_DIGEST_SIZE) ? true : false;
++	return memcmp(result, buf, CRC32_DIGEST_SIZE) ? true : false;
+ }
+-#else
+-static int hibernation_e820_save(void *buf)
+-{
+-	return 0;
+-}
+-
+-static bool hibernation_e820_mismatch(void *buf)
+-{
+-	/* If md5 is not builtin for restore kernel, let it go. */
+-	return false;
+-}
+-#endif
+ 
+ #ifdef CONFIG_X86_64
+-#define RESTORE_MAGIC	0x23456789ABCDEF01UL
++#define RESTORE_MAGIC	0x23456789ABCDEF02UL
+ #else
+-#define RESTORE_MAGIC	0x12345678UL
++#define RESTORE_MAGIC	0x12345679UL
+ #endif
+ 
+ /**
 -- 
-2.17.1
+2.27.0
 
