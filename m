@@ -2,20 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E93035D39F
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 01:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4475335D3A4
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 01:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244090AbhDLXDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 19:03:45 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48930 "EHLO
+        id S1343953AbhDLXDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Apr 2021 19:03:47 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48936 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243199AbhDLXDo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 19:03:44 -0400
+        with ESMTP id S244665AbhDLXDq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 19:03:46 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id CD2A71F453D0
+        with ESMTPSA id C06E61F453CB
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id E733F4800DC; Tue, 13 Apr 2021 01:03:21 +0200 (CEST)
+        id EA0D24800DD; Tue, 13 Apr 2021 01:03:21 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -25,9 +25,9 @@ Cc:     Lee Jones <lee.jones@linaro.org>,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH 4/6] dt-bindings: power: supply: charger-manager: Convert to DT schema format
-Date:   Tue, 13 Apr 2021 01:03:18 +0200
-Message-Id: <20210412230320.382885-5-sebastian.reichel@collabora.com>
+Subject: [PATCH 5/6] dt-bindings: power: mfd: max8925: Convert to DT schema format
+Date:   Tue, 13 Apr 2021 01:03:19 +0200
+Message-Id: <20210412230320.382885-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210412230320.382885-1-sebastian.reichel@collabora.com>
 References: <20210412230320.382885-1-sebastian.reichel@collabora.com>
@@ -39,337 +39,277 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Convert the binding to DT schema format.
 
-I slightly modified the binding by allowing regulator-[0-9] and cable-[0-9]
-instead of regulator@[0-9] and cable@[0-9], so that DT compiler does not
-complain about missing 'reg' property. The driver actually ignores the
-nodename and can handle both styles.
+The sub-functions of this MFD device do not have their own compatible
+string and are thus described directly in the MFD binding document
+after being converted to YAML.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../bindings/power/supply/charger-manager.txt |  91 --------
- .../power/supply/charger-manager.yaml         | 215 ++++++++++++++++++
- 2 files changed, 215 insertions(+), 91 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/supply/charger-manager.txt
- create mode 100644 Documentation/devicetree/bindings/power/supply/charger-manager.yaml
+ .../leds/backlight/max8925-backlight.txt      |  10 --
+ .../devicetree/bindings/mfd/max8925.txt       |  64 --------
+ .../bindings/mfd/maxim,max8925.yaml           | 139 ++++++++++++++++++
+ .../bindings/power/supply/max8925_battery.txt |  18 ---
+ 4 files changed, 139 insertions(+), 92 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/leds/backlight/max8925-backlight.txt
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max8925.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max8925.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/max8925_battery.txt
 
-diff --git a/Documentation/devicetree/bindings/power/supply/charger-manager.txt b/Documentation/devicetree/bindings/power/supply/charger-manager.txt
+diff --git a/Documentation/devicetree/bindings/leds/backlight/max8925-backlight.txt b/Documentation/devicetree/bindings/leds/backlight/max8925-backlight.txt
 deleted file mode 100644
-index b5ae9061b7a0..000000000000
---- a/Documentation/devicetree/bindings/power/supply/charger-manager.txt
+index b4cffdaa4137..000000000000
+--- a/Documentation/devicetree/bindings/leds/backlight/max8925-backlight.txt
 +++ /dev/null
-@@ -1,91 +0,0 @@
--charger-manager bindings
--~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -1,10 +0,0 @@
+-88pm860x-backlight bindings
 -
--Required properties :
-- - compatible : "charger-manager"
-- - <>-supply : for regulator consumer, named according to cm-regulator-name
-- - cm-chargers : name of chargers
-- - cm-fuel-gauge : name of battery fuel gauge
-- - subnode <regulator> :
--	- cm-regulator-name : name of charger regulator
--	- subnode <cable> :
--		- cm-cable-name : name of charger cable - one of USB, USB-HOST,
--			SDP, DCP, CDP, ACA, FAST-CHARGER, SLOW-CHARGER, WPT,
--			PD, DOCK, JIG, or MECHANICAL
--		- cm-cable-extcon : name of extcon dev
--(optional)	- cm-cable-min : minimum current of cable
--(optional)	- cm-cable-max : maximum current of cable
+-Optional properties:
+-  - maxim,max8925-dual-string: whether support dual string
 -
--Optional properties :
-- - cm-name : charger manager's name (default : "battery")
-- - cm-poll-mode : polling mode - 0 for disabled, 1 for always, 2 for when
--	external power is connected, or 3 for when charging.  If not present,
--	then polling is disabled
-- - cm-poll-interval : polling interval (in ms)
-- - cm-battery-stat : battery status - 0 for battery always present, 1 for no
--	battery, 2 to check presence via fuel gauge, or 3 to check presence
--	via charger
-- - cm-fullbatt-vchkdrop-volt : voltage drop (in uV) before restarting charging
-- - cm-fullbatt-voltage : voltage (in uV) of full battery
-- - cm-fullbatt-soc : state of charge to consider as full battery
-- - cm-fullbatt-capacity : capcity (in uAh) to consider as full battery
-- - cm-thermal-zone : name of external thermometer's thermal zone
-- - cm-battery-* : threshold battery temperature for charging
--	-cold : critical cold temperature of battery for charging
--	-cold-in-minus : flag that cold temperature is in minus degrees
--	-hot : critical hot temperature of battery for charging
--	-temp-diff : temperature difference to allow recharging
-- - cm-dis/charging-max = limits of charging duration
+-Example:
 -
--Deprecated properties:
-- - cm-num-chargers
-- - cm-fullbatt-vchkdrop-ms
--
--Example :
--	charger-manager@0 {
--		compatible = "charger-manager";
--		chg-reg-supply = <&charger_regulator>;
--
--		cm-name = "battery";
--		/* Always polling ON : 30s */
--		cm-poll-mode = <1>;
--		cm-poll-interval = <30000>;
--
--		cm-fullbatt-vchkdrop-volt = <150000>;
--		cm-fullbatt-soc = <100>;
--
--		cm-battery-stat = <3>;
--
--		cm-chargers = "charger0", "charger1", "charger2";
--
--		cm-fuel-gauge = "fuelgauge0";
--
--		cm-thermal-zone = "thermal_zone.1"
--		/* in deci centigrade */
--		cm-battery-cold = <50>;
--		cm-battery-cold-in-minus;
--		cm-battery-hot = <800>;
--		cm-battery-temp-diff = <100>;
--
--		/* Allow charging for 5hr */
--		cm-charging-max = <18000000>;
--		/* Allow discharging for 2hr */
--		cm-discharging-max = <7200000>;
--
--		regulator@0 {
--			cm-regulator-name = "chg-reg";
--			cable@0 {
--				cm-cable-name = "USB";
--				cm-cable-extcon = "extcon-dev.0";
--				cm-cable-min = <475000>;
--				cm-cable-max = <500000>;
--			};
--			cable@1 {
--				cm-cable-name = "SDP";
--				cm-cable-extcon = "extcon-dev.0";
--				cm-cable-min = <650000>;
--				cm-cable-max = <675000>;
--			};
--		};
--
+-	backlights {
+-		maxim,max8925-dual-string = <0>;
 -	};
-diff --git a/Documentation/devicetree/bindings/power/supply/charger-manager.yaml b/Documentation/devicetree/bindings/power/supply/charger-manager.yaml
+diff --git a/Documentation/devicetree/bindings/mfd/max8925.txt b/Documentation/devicetree/bindings/mfd/max8925.txt
+deleted file mode 100644
+index 4f0dc6638e5e..000000000000
+--- a/Documentation/devicetree/bindings/mfd/max8925.txt
++++ /dev/null
+@@ -1,64 +0,0 @@
+-* Maxim max8925 Power Management IC
+-
+-Required parent device properties:
+-- compatible : "maxim,max8925"
+-- reg : the I2C slave address for the max8925 chip
+-- interrupts : IRQ line for the max8925 chip
+-- interrupt-controller: describes the max8925 as an interrupt
+-  controller (has its own domain)
+-- #interrupt-cells : should be 1.
+-	- The cell is the max8925 local IRQ number
+-
+-Optional parent device properties:
+-- maxim,tsc-irq: there are 2 IRQ lines for max8925, one is indicated in
+-  interrupts property, the other is indicated here.
+-
+-max8925 consists of a large and varied group of sub-devices:
+-
+-Device			 Supply Names	 Description
+-------			 ------------	 -----------
+-max8925-onkey		:		: On key
+-max8925-rtc		:		: RTC
+-max8925-regulator	:		: Regulators
+-max8925-backlight	:		: Backlight
+-max8925-touch		:		: Touchscreen
+-max8925-power		:		: Charger
+-
+-Example:
+-
+-	pmic: max8925@3c {
+-		compatible = "maxim,max8925";
+-		reg = <0x3c>;
+-		interrupts = <1>;
+-		interrupt-parent = <&intcmux4>;
+-		interrupt-controller;
+-		#interrupt-cells = <1>;
+-		maxim,tsc-irq = <0>;
+-
+-		regulators {
+-			SDV1 {
+-				regulator-min-microvolt = <637500>;
+-				regulator-max-microvolt = <1425000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			LDO1 {
+-				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt = <3900000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-		};
+-		backlight {
+-			maxim,max8925-dual-string = <0>;
+-		};
+-		charger {
+-			batt-detect = <0>;
+-			topoff-threshold = <1>;
+-			fast-charge = <7>;
+-			no-temp-support = <0>;
+-			no-insert-detect = <0>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/mfd/maxim,max8925.yaml b/Documentation/devicetree/bindings/mfd/maxim,max8925.yaml
 new file mode 100644
-index 000000000000..c863cfa67865
+index 000000000000..45365c53bb46
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/charger-manager.yaml
-@@ -0,0 +1,215 @@
++++ b/Documentation/devicetree/bindings/mfd/maxim,max8925.yaml
+@@ -0,0 +1,139 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/power/supply/charger-manager.yaml#
++$id: http://devicetree.org/schemas/mfd/maxim,max8925.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Charger Manager
++title: MAX8925 PMIC from Maxim Integrated.
 +
 +maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description: |
-+  Binding for the legacy charger manager driver.
-+  Please do not use for new products.
++  - Lee Jones <lee.jones@linaro.org>
 +
 +properties:
 +  compatible:
-+    const: charger-manager
++    const: maxim,max8925
 +
-+  cm-chargers:
-+    description: name of chargers
-+    $ref: /schemas/types.yaml#/definitions/string-array
++  reg:
++    maxItems: 1
 +
-+  cm-num-chargers:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    deprecated: true
++  interrupts:
++    maxItems: 1
 +
-+  cm-fuel-gauge:
-+    description: name of battery fuel gauge
-+    $ref: /schemas/types.yaml#/definitions/string
++  interrupt-controller: true
 +
-+  cm-name:
-+    description: name of the charger manager
-+    default: battery
-+    $ref: /schemas/types.yaml#/definitions/string
++  "#interrupt-cells":
++    const: 1
++    description:
++      The cell is the IRQ number
 +
-+  cm-poll-mode:
-+    description: polling mode
-+    default: 0
-+    enum:
-+      - 0 # disabled
-+      - 1 # always
-+      - 2 # when external power is connected
-+      - 3 # when charging
-+
-+  cm-poll-interval:
-+    description: polling interval (in ms)
++  maxim,tsc-irq:
++    description: second interrupt from max8925
 +    $ref: /schemas/types.yaml#/definitions/uint32
 +
-+  cm-battery-stat:
-+    description: battery status
-+    enum:
-+      - 0 # battery always present
-+      - 1 # no battery
-+      - 2 # check presence via fuel gauge
-+      - 3 # check presence via charger
-+
-+  cm-fullbatt-vchkdrop-volt:
-+    description: voltage drop before restarting charging in uV
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-fullbatt-vchkdrop-ms:
-+    deprecated: true
-+
-+  cm-fullbatt-voltage:
-+    description: voltage of full battery in uV
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-fullbatt-soc:
-+    description: state of charge to consider as full battery in %
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-fullbatt-capacity:
-+    description: capcity to consider as full battery in uAh
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-thermal-zone:
-+    description: name of external thermometer's thermal zone
-+    $ref: /schemas/types.yaml#/definitions/string
-+
-+  cm-discharging-max:
-+    description: limits of discharging duration in ms
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-charging-max:
-+    description: limits of charging duration in ms
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-battery-cold:
-+    description: critical cold temperature of battery for charging in deci-degree celsius
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-battery-cold-in-minus:
-+    description: if set cm-battery-cold temperature is in minus degrees
-+    type: boolean
-+
-+  cm-battery-hot:
-+    description: critical hot temperature of battery for charging in deci-degree celsius
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  cm-battery-temp-diff:
-+    description: temperature difference to allow recharging in deci-degree celsius
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+patternProperties:
-+  "-supply$":
-+    description: regulator consumer, named according to cm-regulator-name
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  "^regulator[@-][0-9]$":
++  regulators:
 +    type: object
-+    properties:
-+      cm-regulator-name:
-+        description: name of charger regulator
-+        $ref: /schemas/types.yaml#/definitions/string
 +
-+    required:
-+      - cm-regulator-name
++    patternProperties:
++      "^SDV[1-3]$|^LDO[1-9]$|^LDO1[0-9]$|^LDO20$":
++        description: regulator configuration for SDV1-3 and LDO1-20
++        $ref: /schemas/regulator/regulator.yaml
 +
 +    additionalProperties: false
 +
-+    patternProperties:
-+      "^cable[@-][0-9]$":
-+        type: object
-+        properties:
-+          cm-cable-name:
-+            description: name of charger cable
-+            enum:
-+              - USB
-+              - USB-HOST
-+              - SDP
-+              - DCP
-+              - CDP
-+              - ACA
-+              - FAST-CHARGER
-+              - SLOW-CHARGER
-+              - WPT
-+              - PD
-+              - DOCK
-+              - JIG
-+              - MECHANICAL
++  backlight:
++    type: object
++    properties:
++      maxim,max8925-dual-string:
++        description: set to 1 to support dual string
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [0, 1]
++        default: 0
 +
-+          cm-cable-extcon:
-+            description: name of extcon dev
-+            $ref: /schemas/types.yaml#/definitions/string
++    additionalProperties: false
 +
-+          cm-cable-min:
-+            description: minimum current of cable in uA
-+            $ref: /schemas/types.yaml#/definitions/uint32
++  charger:
++    type: object
++    properties:
++      batt-detect:
++        description: set to 1 if battery detection via ID pin is supported
++        enum: [0, 1]
++        default: 0
 +
-+          cm-cable-max:
-+            description: maximum current of cable in uA
-+            $ref: /schemas/types.yaml#/definitions/uint32
++      topoff-threshold:
++        description: charging current in topoff mode, configures bits 5-6 in CHG_CNTL1
++        minimum: 0
++        maximum: 3
++        default: 0
 +
-+        required:
-+          - cm-cable-name
-+          - cm-cable-extcon
++      fast-charge:
++        description: set charging current in fast mode, configures bits 0-3 in CHG_CNTL1
++        minimum: 0
++        maximum: 7
++        default: 0
 +
-+        additionalProperties: false
++      no-temp-support:
++        description: set to 1 if temperature sensing is not supported
++        enum: [0, 1]
++        default: 0
++
++      no-insert-detect:
++        description: set to 1 if AC detection is not supported
++        enum: [0, 1]
++        default: 0
++
++    additionalProperties: false
 +
 +required:
 +  - compatible
-+  - cm-chargers
-+  - cm-fuel-gauge
++  - reg
++  - interrupts
++  - interrupt-controller
++  - "#interrupt-cells"
++  - regulators
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    charger-manager {
-+        compatible = "charger-manager";
-+        chg-reg-supply = <&charger_regulator>;
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
-+        cm-name = "battery";
-+        /* Always polling ON : 30s */
-+        cm-poll-mode = <1>;
-+        cm-poll-interval = <30000>;
++        max8925@3c {
++            compatible = "maxim,max8925";
++            reg = <0x3c>;
++            interrupts = <1>;
++            interrupt-parent = <&intcmux4>;
++            interrupt-controller;
++            #interrupt-cells = <1>;
++            maxim,tsc-irq = <0>;
 +
-+        cm-fullbatt-vchkdrop-volt = <150000>;
-+        cm-fullbatt-soc = <100>;
++            regulators {
++                SDV1 {
++                    regulator-min-microvolt = <637500>;
++                    regulator-max-microvolt = <1425000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
 +
-+        cm-battery-stat = <3>;
-+
-+        cm-chargers = "charger0", "charger1", "charger2";
-+
-+        cm-fuel-gauge = "fuelgauge0";
-+
-+        cm-thermal-zone = "thermal_zone.1";
-+        /* in deci centigrade */
-+        cm-battery-cold = <50>;
-+        cm-battery-cold-in-minus;
-+        cm-battery-hot = <800>;
-+        cm-battery-temp-diff = <100>;
-+
-+        /* Allow charging for 5hr */
-+        cm-charging-max = <18000000>;
-+        /* Allow discharging for 2hr */
-+        cm-discharging-max = <7200000>;
-+
-+        regulator-0 {
-+            cm-regulator-name = "chg-reg";
-+            cable-0 {
-+                cm-cable-name = "USB";
-+                cm-cable-extcon = "extcon-dev.0";
-+                cm-cable-min = <475000>;
-+                cm-cable-max = <500000>;
++                LDO1 {
++                    regulator-min-microvolt = <750000>;
++                    regulator-max-microvolt = <3900000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
 +            };
-+            cable-1 {
-+                cm-cable-name = "SDP";
-+                cm-cable-extcon = "extcon-dev.0";
-+                cm-cable-min = <650000>;
-+                cm-cable-max = <675000>;
++
++            backlight {
++                maxim,max8925-dual-string = <0>;
++            };
++
++            charger {
++                batt-detect = <0>;
++                topoff-threshold = <1>;
++                fast-charge = <7>;
++                no-temp-support = <0>;
++                no-insert-detect = <0>;
 +            };
 +        };
 +    };
+diff --git a/Documentation/devicetree/bindings/power/supply/max8925_battery.txt b/Documentation/devicetree/bindings/power/supply/max8925_battery.txt
+deleted file mode 100644
+index d7e3e0c0f71d..000000000000
+--- a/Documentation/devicetree/bindings/power/supply/max8925_battery.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-max8925-battery bindings
+-~~~~~~~~~~~~~~~~
+-
+-Optional properties :
+- - batt-detect: whether support battery detect
+- - topoff-threshold: set charging current in topoff mode
+- - fast-charge: set charging current in fast mode
+- - no-temp-support: whether support temperature protection detect
+- - no-insert-detect: whether support insert detect
+-
+-Example:
+-	charger {
+-		batt-detect = <0>;
+-		topoff-threshold = <1>;
+-		fast-charge = <7>;
+-		no-temp-support = <0>;
+-		no-insert-detect = <0>;
+-	};
 -- 
 2.30.2
 
