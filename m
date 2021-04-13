@@ -2,143 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F4035DD7D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361AF35E1DF
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 16:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243281AbhDMLLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Apr 2021 07:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S231319AbhDMOwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Apr 2021 10:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244634AbhDMLLj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Apr 2021 07:11:39 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD91C061574
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 04:11:18 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t22so11698289pgu.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 04:11:18 -0700 (PDT)
+        with ESMTP id S231165AbhDMOwl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Apr 2021 10:52:41 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D247C061574
+        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 07:52:22 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id x16so17363958iob.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 07:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=cZRb0dsYP+RERx6qvY1dGbHIqiObOCxPRFA4+sUaIwc=;
-        b=g7Z0QuR+azBBNeiUCGGfdFzFt5JRk3tBcFMtPq1VSisiSfijml2YvpDdLhLMw75SEd
-         uCvin3qJTUCwrEpq86ijXytCZ8BWe/yrJYWDSUtYe5JL5m8lbVtQz6xjA4ambdqqkWJi
-         OQGUfkROOPtzmi3t0Z0mmNgBtwn7ntn3KfmIU7JIUjbxKk3TM15luy7SZjjTb1rN2Wmi
-         bwgzffdUIr0RpfMC4lbUmEYnpd0RgUEMaTFpTLHXrEE6Ok9cGsI3GpcatFxKxIwVamPu
-         9WK0v4y/+i3Xei3IG4x7y7TvBPFLZKAu/OjcZf2yTYEHGxS9xB5yiQ5M/Ge6VJ5a4fqx
-         kGsA==
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CaG9SlK2TqX99hyj4X3DH5qQ2uV7HTsovkwb7Rge0m0=;
+        b=OLZX5pjB4+Qr6jM0mMsqBEBVXYfIiHD0F7lzBGhl3NJKceaJtqhcH7L6PIu3gGrw9y
+         OgGRhSeVFCyzHM+uawZvUpGuwpSIQNh0annQ3+zlcE1R16Tz7MuZofY6tF1tUnJKytHF
+         d+imtLuTxc81AIJMIFjTwkm1H09XGIXAmFp1OWqjOQqU4JxczaIPfuO/vWD5iEAiCXTf
+         8/ym8y8ofR3AYzveO5TSyIw3pC4g4YfI8zyAglmSRaAvBF5KJik4il01hbUjGgDBfkbL
+         fcbq1nxUQ7UVo1YKVgl6sMXqfn+sot1o0hXM9X4hXo38v+1WOSHvjSfbqWMKVTiWlCkR
+         N0eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=cZRb0dsYP+RERx6qvY1dGbHIqiObOCxPRFA4+sUaIwc=;
-        b=Z49CiGplDVCFP+kKBTOPRPMmYfZyRPHNYbjLjfkQ3LGYGzEyvpX3plfhAAftmqWME4
-         YSd4RgZCXKJlELXSZX1DDCwjawylxDU45nDjYA72aATf1aNtEDhNGETNIc7/I4eI39JO
-         +xfYHRoFxn40zU7r/vYx+YMRP37Kp9K0STpwokQxuYAtfic/dOVOlbiSwTLChIrIMjR6
-         6s3OKPeci+z7I3FHu7qBDyEivlWeFDyUAcYJytIHp67D0G6/b+pQ1XTNUg6rGuZ3RJMt
-         C2G21OOJ0HCzIjxB+wSIM6vgzSZm46ZJaoVmhVg5k6n34eD4ntcYpUWnX97kQcGSFrk4
-         Y+rw==
-X-Gm-Message-State: AOAM531cD6Rld6olC5C3+Tb/VSIbxXjBS+Hiol+jlgYAZ1vdfbxIyDuE
-        0qLWn48fJ7DOKjQxlbRIUJaGrnzpHihfTA1C
-X-Google-Smtp-Source: ABdhPJyP+6nw05EsvssrjrSfvQizRtd/Gc7s3gWirYuGM2Y0w95ZPs+FJhC73WKZXWcL3x6heysUeg==
-X-Received: by 2002:a65:6496:: with SMTP id e22mr32169095pgv.46.1618312277694;
-        Tue, 13 Apr 2021 04:11:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l1sm14131176pgt.29.2021.04.13.04.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 04:11:17 -0700 (PDT)
-Message-ID: <60757c55.1c69fb81.691fe.3205@mx.google.com>
-Date:   Tue, 13 Apr 2021 04:11:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CaG9SlK2TqX99hyj4X3DH5qQ2uV7HTsovkwb7Rge0m0=;
+        b=DN2itAHuX/5CDu9+oUPXy/xRmUGHXDgqlZx4mQ7KH10ERJ2Xp2Qd6IlgFFcOKLw65v
+         Rl1WehH/GTHNwHYYGcEyMOkEVOmISOmPdpmvL2BkgpY3facMYw5nRerGw+11ooFyFKMt
+         gh7GolV3GjSHSBKr35CRrSK/b+eifLOlDnEr7oFNLYy5DRs3He0NEiqS8GQ9rQ/fMUF6
+         N31zkOW1I8zgSUwMIcWcx+GXOOhL8eRhxkL/LVF5AIpJVnRdXj84cKXjBFUXAUvD/Yvd
+         J8qZIHq0QmL0Fiop6Cmc7Fa7fFSCQ1duGKE21rWIL8kYrWx/zN4Lvh0BBwqVBfTx6sSe
+         aMkg==
+X-Gm-Message-State: AOAM532EudeFJ+rFxfwo1R9c2VH/b/ofhNEbBmXYCPGgRSwe9L+ERSiZ
+        Hr1mcIwMYxkd1tbeebGAHBZ05tck4J9YsMHaBQ6iGK4E8aAnl+y6
+X-Google-Smtp-Source: ABdhPJw+jNjf7CuSQF9i/4XJn8Pnlv48cWwrH20lo7x6+MyPZRxg8ejfueCvWfkLpPOrcJQevhlU+PqzZPPCxfUxpgM=
+X-Received: by 2002:a05:6638:ecf:: with SMTP id q15mr3950964jas.129.1618325541042;
+ Tue, 13 Apr 2021 07:52:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.12-rc7-154-g3bf8ef9db350
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 1 warning (v5.12-rc7-154-g3bf8ef9db350)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20210412074309.38484-1-psampat@linux.ibm.com>
+In-Reply-To: <20210412074309.38484-1-psampat@linux.ibm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 13 Apr 2021 07:52:14 -0700
+Message-ID: <CAAYoRsVob1UBukdDAQBJrp6xV03u0V67SgfTVkWQ9bN1XhS8Jw@mail.gmail.com>
+Subject: Re: [RFC v4 0/2] CPU-Idle latency selftest framework
+To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (v5.12-rc7-154-g3=
-bf8ef9db350)
+Hi Pratik,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-12-rc7-154-g3bf8ef9db350/
+V4 seems fine. Thank you.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.12-rc7-154-g3bf8ef9db350
-Git Commit: 3bf8ef9db35001dd1aede362ee0cf26bdd11412b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+On Mon, Apr 12, 2021 at 12:43 AM Pratik Rajesh Sampat
+<psampat@linux.ibm.com> wrote:
+>
+> Changelog v3-->v4
+> Based on review comments by Doug Smythies,
+> 1. Parsing the thread_siblings_list for CPU topology information to
+>    correctly identify the cores the test should run on in
+>    default(quick) mode.
+> 2. The source CPU to source CPU interaction in the IPI test will always
+>    result in a lower latency and cause a bias in the average, hence
+>    avoid adding the latency to be averaged for same cpu IPIs. The
+>    latency will still be displayed in the detailed logs.
+>
+> RFC v3: https://lkml.org/lkml/2021/4/4/31
 
-Warnings Detected:
+Example output for an Intel i5-10600K, HWP active, performance mode.
+System very idle:
 
-arc:
+$ sudo ./cpuidle.sh -v -i
+Inserting /lib/modules/5.12.0-rc7-prs-v4/kernel/drivers/cpuidle/test-cpuidle_latency.ko
+module
 
-arm:
+--IPI Latency Test---
+Baseline Avg IPI latency(ns): 686
+Observed Avg IPI latency(ns) - State 0: 468
+Observed Avg IPI latency(ns) - State 1: 956
+Observed Avg IPI latency(ns) - State 2: 17936
+Observed Avg IPI latency(ns) - State 3: 17968
 
-i386:
+--Timeout Latency Test--
+Baseline Avg timeout diff(ns): 445
+Observed Avg timeout diff(ns) - State 0: 377
+Observed Avg timeout diff(ns) - State 1: 630
+Observed Avg timeout diff(ns) - State 2: 322812
+Observed Avg timeout diff(ns) - State 3: 306067
+Removing /lib/modules/5.12.0-rc7-prs-v4/kernel/drivers/cpuidle/test-cpuidle_latency.ko
+module
+Full Output logged at: cpuidle.log
 
-mips:
-    32r2el_defconfig (gcc-8): 1 warning
+$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/residency
+/sys/devices/system/cpu/cpu7/cpuidle/state0/residency:0
+/sys/devices/system/cpu/cpu7/cpuidle/state1/residency:1
+/sys/devices/system/cpu/cpu7/cpuidle/state2/residency:360
+/sys/devices/system/cpu/cpu7/cpuidle/state3/residency:3102
+$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/latency
+/sys/devices/system/cpu/cpu7/cpuidle/state0/latency:0
+/sys/devices/system/cpu/cpu7/cpuidle/state1/latency:1
+/sys/devices/system/cpu/cpu7/cpuidle/state2/latency:120
+/sys/devices/system/cpu/cpu7/cpuidle/state3/latency:1034
 
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
-mbol check will be entirely skipped.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
-check will be entirely skipped.
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+... Doug
