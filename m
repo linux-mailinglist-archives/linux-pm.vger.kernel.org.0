@@ -2,118 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 361AF35E1DF
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 16:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36F35E21D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 16:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbhDMOwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Apr 2021 10:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbhDMOwl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Apr 2021 10:52:41 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D247C061574
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 07:52:22 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id x16so17363958iob.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 07:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CaG9SlK2TqX99hyj4X3DH5qQ2uV7HTsovkwb7Rge0m0=;
-        b=OLZX5pjB4+Qr6jM0mMsqBEBVXYfIiHD0F7lzBGhl3NJKceaJtqhcH7L6PIu3gGrw9y
-         OgGRhSeVFCyzHM+uawZvUpGuwpSIQNh0annQ3+zlcE1R16Tz7MuZofY6tF1tUnJKytHF
-         d+imtLuTxc81AIJMIFjTwkm1H09XGIXAmFp1OWqjOQqU4JxczaIPfuO/vWD5iEAiCXTf
-         8/ym8y8ofR3AYzveO5TSyIw3pC4g4YfI8zyAglmSRaAvBF5KJik4il01hbUjGgDBfkbL
-         fcbq1nxUQ7UVo1YKVgl6sMXqfn+sot1o0hXM9X4hXo38v+1WOSHvjSfbqWMKVTiWlCkR
-         N0eg==
+        id S1346445AbhDMO6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Apr 2021 10:58:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:58496 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238981AbhDMO6u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Apr 2021 10:58:50 -0400
+Received: from mail-ej1-f72.google.com ([209.85.218.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lWKUn-0005E6-UA
+        for linux-pm@vger.kernel.org; Tue, 13 Apr 2021 14:58:30 +0000
+Received: by mail-ej1-f72.google.com with SMTP id d6so5142035ejd.15
+        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 07:58:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CaG9SlK2TqX99hyj4X3DH5qQ2uV7HTsovkwb7Rge0m0=;
-        b=DN2itAHuX/5CDu9+oUPXy/xRmUGHXDgqlZx4mQ7KH10ERJ2Xp2Qd6IlgFFcOKLw65v
-         Rl1WehH/GTHNwHYYGcEyMOkEVOmISOmPdpmvL2BkgpY3facMYw5nRerGw+11ooFyFKMt
-         gh7GolV3GjSHSBKr35CRrSK/b+eifLOlDnEr7oFNLYy5DRs3He0NEiqS8GQ9rQ/fMUF6
-         N31zkOW1I8zgSUwMIcWcx+GXOOhL8eRhxkL/LVF5AIpJVnRdXj84cKXjBFUXAUvD/Yvd
-         J8qZIHq0QmL0Fiop6Cmc7Fa7fFSCQ1duGKE21rWIL8kYrWx/zN4Lvh0BBwqVBfTx6sSe
-         aMkg==
-X-Gm-Message-State: AOAM532EudeFJ+rFxfwo1R9c2VH/b/ofhNEbBmXYCPGgRSwe9L+ERSiZ
-        Hr1mcIwMYxkd1tbeebGAHBZ05tck4J9YsMHaBQ6iGK4E8aAnl+y6
-X-Google-Smtp-Source: ABdhPJw+jNjf7CuSQF9i/4XJn8Pnlv48cWwrH20lo7x6+MyPZRxg8ejfueCvWfkLpPOrcJQevhlU+PqzZPPCxfUxpgM=
-X-Received: by 2002:a05:6638:ecf:: with SMTP id q15mr3950964jas.129.1618325541042;
- Tue, 13 Apr 2021 07:52:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KXFmnreZUFvpdeZOE3YRnkGXbB2aVTyeo59QFjsyW9I=;
+        b=cyrH8GKa34qRQP9MKPTcGtadVeVpd4BPKET+8bSXqmMdd814vpoLLS/D0ZjKCjN52+
+         2fY3oYJ6vVO0F6h2uU14eqCg64KSqsp4JqxI8pyQ9EQOt/4RkMYhng18V2NDcOHyjDT0
+         fUqC0o5RGNB+oHtZTFdU26PC3btY+TrJOkNk8nuZ7JCHuPQ6Ut8rfHILL3QW9a+v9IAL
+         yy4ERHVf7+1MVfF0tjU14VSIy9ounkwIYP3Yiizcr3l/IBp4KyD0SwqBY/1HbS5USTvh
+         fp+MT9UlrhCG+g+9/DqYkhj6H4ynpmCaaQ/fxExobiQn533kQi4wUwmIMqYvOVskGtsH
+         WEAw==
+X-Gm-Message-State: AOAM530H1C7IqgHi6GAr0xDD4W5jYrT8SSLQHn+dgapbPyiswul82jcj
+        wamikYUs4bFuaTonrNaCine6Zuon2u7o2GW5oDItN8Jg9+XzNiZPB1wNlqUfv6kMx5ftKayuE6s
+        LUzjEukWb2IQAVPqiEhVM75QAxBNO3kkJzOjV
+X-Received: by 2002:a17:906:4d17:: with SMTP id r23mr12011595eju.134.1618325909552;
+        Tue, 13 Apr 2021 07:58:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxu/pDogwwsc/dyeGnbfzo8QIv9u+6fKHlBwiNUQ2rfPdi8E5CISH90Pct1hqzIndiuUYdomw==
+X-Received: by 2002:a17:906:4d17:: with SMTP id r23mr12011590eju.134.1618325909449;
+        Tue, 13 Apr 2021 07:58:29 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id p3sm4395217ejd.65.2021.04.13.07.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Apr 2021 07:58:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: handle clk_set_parent() failure
+Date:   Tue, 13 Apr 2021 16:58:23 +0200
+Message-Id: <161832589345.71964.47710078429514068.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210407154535.70756-1-krzysztof.kozlowski@canonical.com>
+References: <20210407154535.70756-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <20210412074309.38484-1-psampat@linux.ibm.com>
-In-Reply-To: <20210412074309.38484-1-psampat@linux.ibm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Tue, 13 Apr 2021 07:52:14 -0700
-Message-ID: <CAAYoRsVob1UBukdDAQBJrp6xV03u0V67SgfTVkWQ9bN1XhS8Jw@mail.gmail.com>
-Subject: Re: [RFC v4 0/2] CPU-Idle latency selftest framework
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pratik,
+On Wed, 7 Apr 2021 17:45:35 +0200, Krzysztof Kozlowski wrote:
+> clk_set_parent() can fail and ignoring such case could lead to invalid
+> clock setup for given frequency.
 
-V4 seems fine. Thank you.
+Applied, thanks!
 
-On Mon, Apr 12, 2021 at 12:43 AM Pratik Rajesh Sampat
-<psampat@linux.ibm.com> wrote:
->
-> Changelog v3-->v4
-> Based on review comments by Doug Smythies,
-> 1. Parsing the thread_siblings_list for CPU topology information to
->    correctly identify the cores the test should run on in
->    default(quick) mode.
-> 2. The source CPU to source CPU interaction in the IPI test will always
->    result in a lower latency and cause a bias in the average, hence
->    avoid adding the latency to be averaged for same cpu IPIs. The
->    latency will still be displayed in the detailed logs.
->
-> RFC v3: https://lkml.org/lkml/2021/4/4/31
+[1/1] memory: samsung: exynos5422-dmc: handle clk_set_parent() failure
+      commit: 132c17c3ff878c7beaba51bdd275d5cc654c0e33
 
-Example output for an Intel i5-10600K, HWP active, performance mode.
-System very idle:
-
-$ sudo ./cpuidle.sh -v -i
-Inserting /lib/modules/5.12.0-rc7-prs-v4/kernel/drivers/cpuidle/test-cpuidle_latency.ko
-module
-
---IPI Latency Test---
-Baseline Avg IPI latency(ns): 686
-Observed Avg IPI latency(ns) - State 0: 468
-Observed Avg IPI latency(ns) - State 1: 956
-Observed Avg IPI latency(ns) - State 2: 17936
-Observed Avg IPI latency(ns) - State 3: 17968
-
---Timeout Latency Test--
-Baseline Avg timeout diff(ns): 445
-Observed Avg timeout diff(ns) - State 0: 377
-Observed Avg timeout diff(ns) - State 1: 630
-Observed Avg timeout diff(ns) - State 2: 322812
-Observed Avg timeout diff(ns) - State 3: 306067
-Removing /lib/modules/5.12.0-rc7-prs-v4/kernel/drivers/cpuidle/test-cpuidle_latency.ko
-module
-Full Output logged at: cpuidle.log
-
-$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/residency
-/sys/devices/system/cpu/cpu7/cpuidle/state0/residency:0
-/sys/devices/system/cpu/cpu7/cpuidle/state1/residency:1
-/sys/devices/system/cpu/cpu7/cpuidle/state2/residency:360
-/sys/devices/system/cpu/cpu7/cpuidle/state3/residency:3102
-$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/latency
-/sys/devices/system/cpu/cpu7/cpuidle/state0/latency:0
-/sys/devices/system/cpu/cpu7/cpuidle/state1/latency:1
-/sys/devices/system/cpu/cpu7/cpuidle/state2/latency:120
-/sys/devices/system/cpu/cpu7/cpuidle/state3/latency:1034
-
-... Doug
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
