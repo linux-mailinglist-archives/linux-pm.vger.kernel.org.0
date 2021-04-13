@@ -2,94 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BAB35D623
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 05:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CE135D7D1
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 08:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242844AbhDMDuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 23:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242851AbhDMDuF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 23:50:05 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68765C06175F
-        for <linux-pm@vger.kernel.org>; Mon, 12 Apr 2021 20:49:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id b8-20020a17090a5508b029014d0fbe9b64so9982860pji.5
-        for <linux-pm@vger.kernel.org>; Mon, 12 Apr 2021 20:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7V/tdtEdLmPbli0XX3xvnQgDstg+AJLvmbmneYvsBWU=;
-        b=t858tdoVNzFP1kDBf4lMQUIkLNizXIXUDFhEgAhjSyXCGdr2aCq8xfWuFEZo/tspg0
-         1Qk1bZaGWKdZT1FtS5vHh+dH61Oi9cvU3Z7pnkGxAN/ha96OqYvn5ZqDJDmsqiDERNY0
-         UX8C3SOEBe+MQcBDsSXvKek/DL6i1/+FQ6cua+wmP9/194MT5aTvER6KYUcwwS1xSJue
-         YRUwAtmW2xkuklr5PNw0bz7m5xFkW/AvEM5uXZ6q6UsVvDqH4PVEXKNjN0DtCJq2uaso
-         ZQsdG8kEjIbXPE65AnCZCaaTCQMTG+aC0ywdJnw3VDksP5c65O2a8M4QZAzlzZ+mJUdr
-         zLjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7V/tdtEdLmPbli0XX3xvnQgDstg+AJLvmbmneYvsBWU=;
-        b=dDX7g/kknluWOL9ZWNkwPy2+zK2bVphgRMu4ceHTtiDkZgzUpUqh1ZFYroTWg7LJub
-         jWRLEz8qH548j0T5P9MB0PcANNIaPAnSDaNgUpGcX7n3UfGzMwiKEPrSohnvzfTV0U6m
-         bHNEMEKzFYkGeBIlBJXInZ3j36djfltArydaArIUOmOVP2M7u4xfZlnGv/fY4KGCtL0s
-         Tx74ji6Kr0byavmweQFcMkG74lvdTOpy9nj173+x3BUA7Un6rldHjgAOcR14EHZXGcTM
-         MprM+DnLgYwsuYWFcyflltYGlzaWNc2IETWUta5f/8/GNvYYQIp8UolvyaM/kigl69fQ
-         kBMw==
-X-Gm-Message-State: AOAM530moa9ktZOW9lxPR0FIVSt5e3QdSMIg9sxrTp5Av4LzjLtPpOKH
-        beYw25kQ8EBe7qdZOieM7Qs3LiCeWYjv4w==
-X-Google-Smtp-Source: ABdhPJyasaQefVvJxnooEX1daBU7hrPpJeHb3Itbhq3BEDv4YtIV6jC+aqW5Nb7VmO0a/WuAonXXTQ==
-X-Received: by 2002:a17:90a:e293:: with SMTP id d19mr2699465pjz.118.1618285785686;
-        Mon, 12 Apr 2021 20:49:45 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id b2sm7605897pfo.110.2021.04.12.20.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 20:49:45 -0700 (PDT)
-Date:   Tue, 13 Apr 2021 09:19:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Taniya Das <tdas@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
-        rjw@rjwysocki.net, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com
-Subject: Re: [PATCH v4 5/7] cpufreq: qcom-hw: Implement CPRh aware OSM
- programming
-Message-ID: <20210413034940.o6uzjtnh2ylvikbf@vireshk-i7>
-References: <20210119174557.227318-1-angelogioacchino.delregno@somainline.org>
- <20210119174557.227318-6-angelogioacchino.delregno@somainline.org>
- <c35bfd76-0d7e-d7bc-79ab-041b1074c1af@codeaurora.org>
- <YAh+9/IgRhI8M3ov@builder.lan>
- <92e465e4-a0d9-43eb-84f7-69fa355097a9@codeaurora.org>
+        id S1344918AbhDMGOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Apr 2021 02:14:51 -0400
+Received: from mga07.intel.com ([134.134.136.100]:36986 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344906AbhDMGOj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Apr 2021 02:14:39 -0400
+IronPort-SDR: 5K+PvqH2I4pzEnBnAKccq8KJIDT9RDoRtcrPswdSNx1QW9ov+py8uP6lNsb4+mweHYRZK6til9
+ irvtl32pMU7A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="258323169"
+X-IronPort-AV: E=Sophos;i="5.82,218,1613462400"; 
+   d="scan'208";a="258323169"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 23:14:20 -0700
+IronPort-SDR: tH3IoRxzj6ECWJWOYsTDGO0VtHEnzq15e6xdZwYjvfqY2EMW9IcderjNwynrayWh3OhXbf5FqC
+ HeLkjat/rAdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,218,1613462400"; 
+   d="scan'208";a="450267853"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2021 23:14:18 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lWCJV-0000rS-Kr; Tue, 13 Apr 2021 06:14:17 +0000
+Date:   Tue, 13 Apr 2021 14:14:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ bca172fee41f4efa5357ea8e70e5d57f4191798c
+Message-ID: <607536b8.cRKpwrfMvcEGurIm%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92e465e4-a0d9-43eb-84f7-69fa355097a9@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-04-21, 15:01, Taniya Das wrote:
-> Technically the HW we are trying to program here differs in terms of
-> clocking, the LUT definitions and many more. It will definitely make
-> debugging much more troublesome if we try to accomodate multiple versions of
-> CPUFREQ-HW in the same code.
-> 
-> Thus to keep it simple, easy to read, debug, the suggestion is to keep it
-> with "v1" tag as the OSM version we are trying to put here is from OSM1.0.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bca172fee41f4efa5357ea8e70e5d57f4191798c  Merge branch 'acpi-scan' into bleeding-edge
 
-That is a valid point and is always a case with so many drivers. What
-I am concerned about is how much code is common across versions, if it
-is 5-70%, or more, then we should definitely share, arrange to have
-callbacks or ops per version and call them in a generic fashion instead
-of writing a new driver. This is what's done across
-drivers/frameworks, etc.
+elapsed time: 724m
 
--- 
-viresh
+configs tested: 99
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                         tb0219_defconfig
+mips                           mtx1_defconfig
+m68k                       m5249evb_defconfig
+mips                          malta_defconfig
+arm                          pxa168_defconfig
+arc                          axs103_defconfig
+arm                           sama5_defconfig
+sh                        edosk7760_defconfig
+sparc64                             defconfig
+powerpc                     tqm8548_defconfig
+powerpc                        cell_defconfig
+sh                          rsk7201_defconfig
+powerpc                     powernv_defconfig
+sh                          r7785rp_defconfig
+powerpc                      arches_defconfig
+powerpc                      makalu_defconfig
+powerpc                     mpc5200_defconfig
+arm                       mainstone_defconfig
+powerpc                     ep8248e_defconfig
+mips                        maltaup_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210412
+i386                 randconfig-a001-20210412
+i386                 randconfig-a006-20210412
+i386                 randconfig-a005-20210412
+i386                 randconfig-a004-20210412
+i386                 randconfig-a002-20210412
+x86_64               randconfig-a014-20210412
+x86_64               randconfig-a015-20210412
+x86_64               randconfig-a011-20210412
+x86_64               randconfig-a013-20210412
+x86_64               randconfig-a012-20210412
+x86_64               randconfig-a016-20210412
+i386                 randconfig-a015-20210412
+i386                 randconfig-a014-20210412
+i386                 randconfig-a013-20210412
+i386                 randconfig-a012-20210412
+i386                 randconfig-a016-20210412
+i386                 randconfig-a011-20210412
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a003-20210412
+x86_64               randconfig-a002-20210412
+x86_64               randconfig-a001-20210412
+x86_64               randconfig-a005-20210412
+x86_64               randconfig-a006-20210412
+x86_64               randconfig-a004-20210412
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
