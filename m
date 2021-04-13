@@ -2,278 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE1435D588
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 05:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B535D5FE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 05:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343665AbhDMDBV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Apr 2021 23:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243151AbhDMDBU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 23:01:20 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFFDC06138C
-        for <linux-pm@vger.kernel.org>; Mon, 12 Apr 2021 20:01:01 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id t17-20020a9d77510000b0290287a5143b41so3597682otl.11
-        for <linux-pm@vger.kernel.org>; Mon, 12 Apr 2021 20:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Dmc0hZXmCrSXdyT5/+BGkfJc60KHiV2RT1PtaXLe5Bw=;
-        b=T6q6GhuwqN7A3KdhOF5AVGdnpPx5ePtwoQwax4QGqKNPuqCnCzmWx7Xc2zvZNLA4zw
-         vaWVs++vP4Y53aCeGS59FgjYf6jwZi5+tAcH6e2KCfepjvaujEFByGLFXodeBCAHms15
-         n06Fyqmo51EYaXN2AMozzYPIv3u0gm5xk7Wrk/de4TUjLuYJVEQ1hRSebmqFC1PbcU2C
-         dpgg9KSCjBCjOOpgtSH3DCQvQnRmvvEPrnNXmVgDcFXtNKHJH5Hz60BoLhbpL3RMfTgr
-         UHPE8N/nPoGFHpjQDVhAg0SrmPqDCGNs9uWSJbLWykuqskkUoTsYsLin9g8VznANsrY9
-         wlMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dmc0hZXmCrSXdyT5/+BGkfJc60KHiV2RT1PtaXLe5Bw=;
-        b=uhdvp0qBYNOz2nq8tWsu3143vC+cQS1dWbisZNc0MskGCN+JUbL6bZ+jJvDA+i/67U
-         qLwhTh0tYcIVi0nT8miQ0jfBVPW1M8uFQVxV2fFPIk3uhje/mMGgOAzwDBZbcY+SWNBI
-         +PM1veIdTANAp9E4Q2RttWXUj2dYybrEskATOnr0nGHqzL0/tVuhi5MoEzIXSp0PM3Fs
-         KymQvVP/nSPyJ24Xsmes9QRhPG5bu+VlklYur+j3dXNjF9j98HaX98BkAN9nmaJO+EWS
-         4ViEjwd/ukGjfTd4O8IFdM4b78CjBr0KX2jPMYK8Isbk3Z/7m/IRY8uMYEZARG+cVraI
-         LOqw==
-X-Gm-Message-State: AOAM530bHTdaBhQTesdnkCEISKFVcBt6qduG9hIfmOOKtdnTbKWDkEC7
-        6COjvDUJAyu0j8o4aIbn0XAiVQ==
-X-Google-Smtp-Source: ABdhPJzLEu/ne59rxKLrYKwS39IEy24zduSSC5TNViBz5Wb5iDoKEYf/g3Cma7Q3wf5RooKPWOn1uw==
-X-Received: by 2002:a9d:1a1:: with SMTP id e30mr2371575ote.283.1618282860923;
-        Mon, 12 Apr 2021 20:01:00 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id h59sm3115213otb.29.2021.04.12.20.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 20:01:00 -0700 (PDT)
-Date:   Mon, 12 Apr 2021 22:00:58 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     satya priya <skakit@codeaurora.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V2 1/4] input: pm8941-pwrkey: add support for PMK8350
- PON_HLOS PMIC peripheral
-Message-ID: <20210413030058.GK1538589@yoga>
-References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
- <1617881469-31965-2-git-send-email-skakit@codeaurora.org>
+        id S240959AbhDMDgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Apr 2021 23:36:24 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:50610 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238980AbhDMDgX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Apr 2021 23:36:23 -0400
+X-UUID: 7f31d8aaacd04ee98be674d7466c8656-20210413
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=IG3yM/hhJgI4HS5wGt30gHoTh2N5TgYAPQd9CFSLGVU=;
+        b=i8XHIhZmfMskkSFm9k2AgslQZBZgOa32QS5qXZZbIvfe6lVKw7IyZ5f9zk8gV5sdQjI3iLdB1xpQICa8w7D1pcQn233o2PRZvRwvCqd5peRnPK6yWQ9k2C0rE1jnvZDTbWClSjZ8IGJFQXB2nHqodVBVPDaIeqa6eEHkev1ue7Q=;
+X-UUID: 7f31d8aaacd04ee98be674d7466c8656-20210413
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 652302494; Tue, 13 Apr 2021 11:36:00 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 13 Apr
+ 2021 11:35:56 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 13 Apr 2021 11:35:55 +0800
+Message-ID: <1618284955.25729.6.camel@mhfsdcap03>
+Subject: Re: [PATCH 4/6] usb: xhci-mtk: add support runtime PM
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Date:   Tue, 13 Apr 2021 11:35:55 +0800
+In-Reply-To: <CAATdQgCjNbUKsJYZjr5wHbXV5y-7ZZrN=URKccCv1d+S4zFiDA@mail.gmail.com>
+References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1617874514-12282-4-git-send-email-chunfeng.yun@mediatek.com>
+         <CAATdQgArnkdmbZefF4h7xp6=j-wHLgdQs1K0cDv06sP4eVdHmw@mail.gmail.com>
+         <1617958441.12105.39.camel@mhfsdcap03>
+         <CAATdQgCjNbUKsJYZjr5wHbXV5y-7ZZrN=URKccCv1d+S4zFiDA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1617881469-31965-2-git-send-email-skakit@codeaurora.org>
+X-TM-SNTS-SMTP: 0F74016DEA0EBF8425D7EB065E277E06D9AF29BCA93A4312D24DDEB9D2D3B32A2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 08 Apr 06:31 CDT 2021, satya priya wrote:
+T24gTW9uLCAyMDIxLTA0LTEyIGF0IDEzOjE0ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+T24gRnJpLCBBcHIgOSwgMjAyMSBhdCA0OjU0IFBNIENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVu
+QG1lZGlhdGVrLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBGcmksIDIwMjEtMDQtMDkgYXQgMTM6
+NDUgKzA4MDAsIElram9vbiBKYW5nIHdyb3RlOg0KPiA+ID4gT24gVGh1LCBBcHIgOCwgMjAyMSBh
+dCA1OjM1IFBNIENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4gd3JvdGU6
+DQo+ID4gPiA+DQo+ID4gPiA+IEEgZGVkaWNhdGVkIHdha2V1cCBpcnEgd2lsbCBiZSB1c2VkIHRv
+IGhhbmRsZSBydW50aW1lIHN1c3BlbmQvcmVzdW1lLA0KPiA+ID4gPiB3ZSB1c2UgZGV2X3BtX3Nl
+dF9kZWRpY2F0ZWRfd2FrZV9pcnEgQVBJIHRvIHRha2UgY2FyZSBvZiByZXF1ZXN0aW5nDQo+ID4g
+PiA+IGFuZCBhdHRhY2hpbmcgd2FrZXVwIGlycSwgdGhlbiB0aGUgc3VzcGVuZC9yZXN1bWUgZnJh
+bWV3b3JrIHdpbGwgaGVscA0KPiA+ID4gPiB0byBlbmFibGUvZGlzYWJsZSB3YWtldXAgaXJxLg0K
+PiA+ID4gPg0KPiA+ID4gPiBUaGUgcnVudGltZSBQTSBpcyBkZWZhdWx0IG9mZiBzaW5jZSBzb21l
+IHBsYXRmb3JtcyBtYXkgbm90IHN1cHBvcnQgaXQuDQo+ID4gPiA+IHVzZXJzIGNhbiBlbmFibGUg
+aXQgdmlhIHBvd2VyL2NvbnRyb2wgKHNldCAiYXV0byIpIGluIHN5c2ZzLg0KPiA+ID4gPg0KPiA+
+ID4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5j
+b20+DQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiAgZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jIHwg
+MTQwICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiA+ID4gPiAgMSBmaWxl
+IGNoYW5nZWQsIDEyNCBpbnNlcnRpb25zKCspLCAxNiBkZWxldGlvbnMoLSkNCj4gPiA+ID4NCj4g
+PiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYyBiL2RyaXZlcnMv
+dXNiL2hvc3QveGhjaS1tdGsuYw0KPiA+ID4gPiBpbmRleCBhNzQ3NjRhYjkxNGEuLjMwOTI3ZjQw
+NjRkNCAxMDA2NDQNCj4gPiA+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+
+ID4gPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KWy4uLl0NCj4gPiA+ID4N
+Cj4gPiA+ID4gK3N0YXRpYyBpbnQgY2hlY2tfcmh1Yl9zdGF0dXMoc3RydWN0IHhoY2lfaGNkICp4
+aGNpLCBzdHJ1Y3QgeGhjaV9odWIgKnJodWIpDQo+ID4gPiA+ICt7DQo+ID4gPiA+ICsgICAgICAg
+dTMyIHN1c3BlbmRlZF9wb3J0czsNCj4gPiA+ID4gKyAgICAgICB1MzIgc3RhdHVzOw0KPiA+ID4g
+PiArICAgICAgIGludCBudW1fcG9ydHM7DQo+ID4gPiA+ICsgICAgICAgaW50IGk7DQo+ID4gPiA+
+ICsNCj4gPiA+ID4gKyAgICAgICBudW1fcG9ydHMgPSByaHViLT5udW1fcG9ydHM7DQo+ID4gPiA+
+ICsgICAgICAgc3VzcGVuZGVkX3BvcnRzID0gcmh1Yi0+YnVzX3N0YXRlLnN1c3BlbmRlZF9wb3J0
+czsNCj4gPiA+ID4gKyAgICAgICBmb3IgKGkgPSAwOyBpIDwgbnVtX3BvcnRzOyBpKyspIHsNCj4g
+PiA+ID4gKyAgICAgICAgICAgICAgIGlmICghKHN1c3BlbmRlZF9wb3J0cyAmIEJJVChpKSkpIHsN
+Cj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gcmVhZGwocmh1Yi0+cG9y
+dHNbaV0tPmFkZHIpOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICBpZiAoc3RhdHVz
+ICYgUE9SVF9DT05ORUNUKQ0KPiA+ID4NCj4gPiA+IFNvIHRoaXMgcG1fcnVudGltZSBzdXBwb3J0
+IGlzIGFjdGl2YXRlZCBvbmx5IHdoZW4gdGhlcmUncyBubyBkZXZpY2VzDQo+ID4gPiBjb25uZWN0
+ZWQgYXQgYWxsPw0KPiA+IE5vLCBpZiB0aGUgY29ubmVjdGVkIGRldmljZXMgYWxzbyBzdXBwb3J0
+IHJ1bnRpbWUgc3VzcGVuZCwgaXQgd2lsbCBlbnRlcg0KPiA+IHN1c3BlbmQgbW9kZSB3aGVuIG5v
+IGRhdGEgdHJhbnNmZXIsIHRoZW4gdGhlIGNvbnRyb2xsZXIgY2FuIGVudGVyDQo+ID4gc3VzcGVu
+ZCB0b28NCj4gPiA+IEkgdGhpbmsgdGhpcyB3aWxsIGFsd2F5cyByZXR1cm4gLUVCVVNZIHdpdGgg
+bXkgYm9hcmQgaGF2aW5nIGFuIG9uLWJvYXJkIGh1Yg0KPiA+ID4gY29ubmVjdGVkIHRvIGJvdGgg
+cmh1YnMuDQo+ID4gdGhlIG9uLWJvYXJkIGh1YiBzdXBwb3J0cyBydW50aW1lIHN1c3BlbmQgYnkg
+ZGVmYXVsdCwgc28gaWYgbm8gZGV2aWNlcw0KPiA+IGNvbm5lY3RlZCwgaXQgd2lsbCBlbnRlciBz
+dXNwZW5kDQo+IA0KPiBTb3JyeSwgeW91J3JlIGNvcnJlY3QuIEkgd2FzIGNvbmZ1c2VkIHRoYXQg
+dGhlIGNvbmRpdGlvbiB3YXMNCj4gKHN1c3BlbmRlZCAmJiBjb25uZWN0KQ0KPiBNeSBvbi1ib2Fy
+ZCBodWIgY29ubmVjdGVkIHRvIHJodWIgaXMgYWx3YXlzIGluIGEgc3VzcGVuZGVkIHN0YXRlDQo+
+IHdoZW5ldmVyIGl0J3MgY2FsbGVkLg0KPiANCj4gSG93ZXZlciwgSSBkb24ndCB0aGluayB0aGlz
+IGNvdWxkIHJldHVybiAtRUJVU1kNCj4gcnBtX3N1c3BlbmQoKSBvbmx5IGJlIGNhbGxlZCB3aGVu
+IGFsbCB0aGUgZGVzY2VuZGFudHMgYXJlIGluIHNsZWVwIGFscmVhZHkuDQpZb3UgbWVhbiB3ZSBj
+YW4gZHJvcCB0aGUgYnVzIGNoZWNrPyANCklmIFBNIGFscmVhZHkgdGFrZXMgY2FyZSBvZiBjaGls
+ZHJlbiBjb3VudCwgSSB0aGluayBubyBuZWVkIGNoZWNrIGl0DQphbnltb3JlLg0KPiBEaWQgeW91
+IHNlZSBhbnkgY2FzZXMgb2YgdGhpcyBmdW5jdGlvbiByZXR1cm5pbmcgLUVCVVNZIG9yIGFueSBj
+b25jZXJucyBvbiBoZXJlPw0KTm8sIEkgZGlkbid0IHNlZSBpdCBiZWZvcmUuDQoNClRoYW5rcw0K
+DQo+IA0KPiANCj4gPg0KPiA+ID4NCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICByZXR1cm4gLUVCVVNZOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgfQ0KPiA+ID4gPiAr
+ICAgICAgIH0NCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgIHJldHVybiAwOw0KPiA+ID4gPiAr
+fQ0KPiA+ID4gPiArDQo+ID4gPiA+ICsvKg0KPiA+ID4gPiArICogY2hlY2sgdGhlIGJ1cyB3aGV0
+aGVyIGl0IGNvdWxkIHN1c3BlbmQgb3Igbm90DQo+ID4gPiA+ICsgKiB0aGUgYnVzIHdpbGwgc3Vz
+cGVuZCBpZiB0aGUgZG93bnN0cmVhbSBwb3J0cyBhcmUgYWxyZWFkeSBzdXNwZW5kZWQsDQo+ID4g
+PiA+ICsgKiBvciBubyBkZXZpY2VzIGNvbm5lY3RlZC4NCj4gPiA+ID4gKyAqLw0KPiA+ID4gPiAr
+c3RhdGljIGludCBjaGVja19idXNfc3RhdHVzKHN0cnVjdCB4aGNpX2hjZCAqeGhjaSkNCj4gPiA+
+ID4gK3sNCj4gPiA+ID4gKyAgICAgICBpbnQgcmV0Ow0KPiA+ID4gPiArDQo+ID4gPiA+ICsgICAg
+ICAgcmV0ID0gY2hlY2tfcmh1Yl9zdGF0dXMoeGhjaSwgJnhoY2ktPnVzYjNfcmh1Yik7DQo+ID4g
+PiA+ICsgICAgICAgaWYgKHJldCkNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiByZXQ7
+DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyAgICAgICByZXR1cm4gY2hlY2tfcmh1Yl9zdGF0dXMoeGhj
+aSwgJnhoY2ktPnVzYjJfcmh1Yik7DQo+ID4gPiA+ICt9DQo+ID4gPiA+ICsNCj4gPiA+ID4gK3N0
+YXRpYyBpbnQgX19tYXliZV91bnVzZWQgeGhjaV9tdGtfcnVudGltZV9zdXNwZW5kKHN0cnVjdCBk
+ZXZpY2UgKmRldikNCj4gPiA+ID4gK3sNCj4gPiA+ID4gKyAgICAgICBzdHJ1Y3QgeGhjaV9oY2Rf
+bXRrICAqbXRrID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gPiA+ICsgICAgICAgc3RydWN0
+IHhoY2lfaGNkICp4aGNpID0gaGNkX3RvX3hoY2kobXRrLT5oY2QpOw0KPiA+ID4gPiArICAgICAg
+IGludCByZXQgPSAwOw0KPiA+ID4gPiArDQo+ID4gPiA+ICsgICAgICAgaWYgKHhoY2ktPnhoY19z
+dGF0ZSkNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAtRVNIVVRET1dOOw0KPiA+ID4g
+PiArDQo+ID4gPiA+ICsgICAgICAgaWYgKGRldmljZV9tYXlfd2FrZXVwKGRldikpIHsNCj4gPiA+
+ID4gKyAgICAgICAgICAgICAgIHJldCA9IGNoZWNrX2J1c19zdGF0dXMoeGhjaSk7DQo+ID4gPiA+
+ICsgICAgICAgICAgICAgICBpZiAoIXJldCkNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgcmV0ID0geGhjaV9tdGtfc3VzcGVuZChkZXYpOw0KPiA+ID4gPiArICAgICAgIH0NCj4gPiA+
+ID4gKw0KPiA+ID4gPiArICAgICAgIC8qIC1FQlVTWTogbGV0IFBNIGF1dG9tYXRpY2FsbHkgcmVz
+Y2hlZHVsZSBhbm90aGVyIGF1dG9zdXNwZW5kICovDQo+ID4gPiA+ICsgICAgICAgcmV0dXJuIHJl
+dCA/IC1FQlVTWSA6IDA7DQo+ID4gPiA+ICt9DQo+ID4gPiA+ICsNCj4gPiA+ID4gK3N0YXRpYyBp
+bnQgX19tYXliZV91bnVzZWQgeGhjaV9tdGtfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmljZSAq
+ZGV2KQ0KPiA+ID4gPiArew0KPiA+ID4gPiArICAgICAgIHN0cnVjdCB4aGNpX2hjZF9tdGsgICpt
+dGsgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4gPiA+ID4gKyAgICAgICBzdHJ1Y3QgeGhjaV9o
+Y2QgKnhoY2kgPSBoY2RfdG9feGhjaShtdGstPmhjZCk7DQo+ID4gPiA+ICsgICAgICAgaW50IHJl
+dCA9IDA7DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyAgICAgICBpZiAoeGhjaS0+eGhjX3N0YXRlKQ0K
+PiA+ID4gPiArICAgICAgICAgICAgICAgcmV0dXJuIC1FU0hVVERPV047DQo+ID4gPiA+ICsNCj4g
+PiA+ID4gKyAgICAgICBpZiAoZGV2aWNlX21heV93YWtldXAoZGV2KSkNCj4gPiA+ID4gKyAgICAg
+ICAgICAgICAgIHJldCA9IHhoY2lfbXRrX3Jlc3VtZShkZXYpOw0KPiA+ID4gPiArDQo+ID4gPiA+
+ICsgICAgICAgcmV0dXJuIHJldDsNCj4gPiA+ID4gK30NCj4gPiA+ID4gKw0KPiA+ID4gPiAgc3Rh
+dGljIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIHhoY2lfbXRrX3BtX29wcyA9IHsNCj4gPiA+ID4g
+ICAgICAgICBTRVRfU1lTVEVNX1NMRUVQX1BNX09QUyh4aGNpX210a19zdXNwZW5kLCB4aGNpX210
+a19yZXN1bWUpDQo+ID4gPiA+ICsgICAgICAgU0VUX1JVTlRJTUVfUE1fT1BTKHhoY2lfbXRrX3J1
+bnRpbWVfc3VzcGVuZCwNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgeGhjaV9t
+dGtfcnVudGltZV9yZXN1bWUsIE5VTEwpDQo+ID4gPiA+ICB9Ow0KPiA+ID4gPiAtI2RlZmluZSBE
+RVZfUE1fT1BTIElTX0VOQUJMRUQoQ09ORklHX1BNKSA/ICZ4aGNpX210a19wbV9vcHMgOiBOVUxM
+DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyNkZWZpbmUgREVWX1BNX09QUyAoSVNfRU5BQkxFRChDT05G
+SUdfUE0pID8gJnhoY2lfbXRrX3BtX29wcyA6IE5VTEwpDQo+ID4gPiA+DQo+ID4gPiA+ICBzdGF0
+aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfeGhjaV9vZl9tYXRjaFtdID0gew0KPiA+
+ID4gPiAgICAgICAgIHsgLmNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTczLXhoY2kifSwNCj4g
+PiA+ID4gLS0NCj4gPiA+ID4gMi4xOC4wDQo+ID4gPiA+DQo+ID4NCg0K
 
-> From: David Collins <collinsd@codeaurora.org>
-> 
-> On Qualcomm Technologies, Inc. PMIC PMK8350, the PON peripheral
-> is split into two peripherals: PON_HLOS and PON_PBS.  The
-> application processor only has write access to PON_HLOS which
-> limits it to only receiving PON interrupts.
-> 
-> Add support for the PMK8350 PON_HLOS peripheral so that its
-> KPDPWR_N and RESIN_N interrupts can be used to detect key
-> presses.
-> 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> ---
-> Changes in V2:
->  - No change.
-> 
->  drivers/input/misc/pm8941-pwrkey.c | 103 ++++++++++++++++++++++++++-----------
->  1 file changed, 72 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
-> index cf81044..10e3fc0 100644
-> --- a/drivers/input/misc/pm8941-pwrkey.c
-> +++ b/drivers/input/misc/pm8941-pwrkey.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> + * Copyright (c) 2010-2011, 2020-2021, The Linux Foundation. All rights reserved.
->   * Copyright (c) 2014, Sony Mobile Communications Inc.
->   */
->  
-> @@ -22,6 +22,8 @@
->  #define PON_RT_STS			0x10
->  #define  PON_KPDPWR_N_SET		BIT(0)
->  #define  PON_RESIN_N_SET		BIT(1)
-> +#define  PON_GEN3_RESIN_N_SET		BIT(6)
-> +#define  PON_GEN3_KPDPWR_N_SET		BIT(7)
->  
->  #define PON_PS_HOLD_RST_CTL		0x5a
->  #define PON_PS_HOLD_RST_CTL2		0x5b
-> @@ -38,8 +40,12 @@
->  #define  PON_DBC_DELAY_MASK		0x7
->  
->  struct pm8941_data {
-> -	unsigned int pull_up_bit;
-> -	unsigned int status_bit;
-> +	unsigned int	pull_up_bit;
-> +	unsigned int	status_bit;
-> +	bool		supports_ps_hold_poff_config;
-> +	bool		supports_debounce_config;
-> +	const char	*name;
-> +	const char	*phys;
->  };
->  
->  struct pm8941_pwrkey {
-> @@ -231,34 +237,40 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
->  
->  	input_set_capability(pwrkey->input, EV_KEY, pwrkey->code);
->  
-> -	pwrkey->input->name = "pm8941_pwrkey";
-> -	pwrkey->input->phys = "pm8941_pwrkey/input0";
-> -
-> -	req_delay = (req_delay << 6) / USEC_PER_SEC;
-> -	req_delay = ilog2(req_delay);
-> -
-> -	error = regmap_update_bits(pwrkey->regmap,
-> -				   pwrkey->baseaddr + PON_DBC_CTL,
-> -				   PON_DBC_DELAY_MASK,
-> -				   req_delay);
-> -	if (error) {
-> -		dev_err(&pdev->dev, "failed to set debounce: %d\n", error);
-> -		return error;
-> +	pwrkey->input->name = pwrkey->data->name;
-> +	pwrkey->input->phys = pwrkey->data->phys;
-> +
-> +	if (pwrkey->data->supports_debounce_config) {
-> +		req_delay = (req_delay << 6) / USEC_PER_SEC;
-> +		req_delay = ilog2(req_delay);
-> +
-> +		error = regmap_update_bits(pwrkey->regmap,
-> +					   pwrkey->baseaddr + PON_DBC_CTL,
-> +					   PON_DBC_DELAY_MASK,
-> +					   req_delay);
-> +		if (error) {
-> +			dev_err(&pdev->dev, "failed to set debounce: %d\n",
-> +				error);
-> +			return error;
-> +		}
->  	}
->  
-> -	error = regmap_update_bits(pwrkey->regmap,
-> -				   pwrkey->baseaddr + PON_PULL_CTL,
-> -				   pwrkey->data->pull_up_bit,
-> -				   pull_up ? pwrkey->data->pull_up_bit : 0);
-> -	if (error) {
-> -		dev_err(&pdev->dev, "failed to set pull: %d\n", error);
-> -		return error;
-> +	if (pwrkey->data->pull_up_bit) {
-> +		error = regmap_update_bits(pwrkey->regmap,
-> +					   pwrkey->baseaddr + PON_PULL_CTL,
-> +					   pwrkey->data->pull_up_bit,
-> +					   pull_up ? pwrkey->data->pull_up_bit :
-> +						     0);
-> +		if (error) {
-> +			dev_err(&pdev->dev, "failed to set pull: %d\n", error);
-> +			return error;
-> +		}
->  	}
->  
->  	error = devm_request_threaded_irq(&pdev->dev, pwrkey->irq,
->  					  NULL, pm8941_pwrkey_irq,
->  					  IRQF_ONESHOT,
-> -					  "pm8941_pwrkey", pwrkey);
-> +					  pwrkey->data->name, pwrkey);
->  	if (error) {
->  		dev_err(&pdev->dev, "failed requesting IRQ: %d\n", error);
->  		return error;
-> @@ -271,12 +283,14 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
->  		return error;
->  	}
->  
-> -	pwrkey->reboot_notifier.notifier_call = pm8941_reboot_notify,
-> -	error = register_reboot_notifier(&pwrkey->reboot_notifier);
-> -	if (error) {
-> -		dev_err(&pdev->dev, "failed to register reboot notifier: %d\n",
-> -			error);
-> -		return error;
-> +	if (pwrkey->data->supports_ps_hold_poff_config) {
-> +		pwrkey->reboot_notifier.notifier_call = pm8941_reboot_notify,
-> +		error = register_reboot_notifier(&pwrkey->reboot_notifier);
-> +		if (error) {
-> +			dev_err(&pdev->dev, "failed to register reboot notifier: %d\n",
-> +				error);
-> +			return error;
-> +		}
->  	}
->  
->  	platform_set_drvdata(pdev, pwrkey);
-> @@ -289,7 +303,8 @@ static int pm8941_pwrkey_remove(struct platform_device *pdev)
->  {
->  	struct pm8941_pwrkey *pwrkey = platform_get_drvdata(pdev);
->  
-> -	unregister_reboot_notifier(&pwrkey->reboot_notifier);
-> +	if (pwrkey->data->supports_ps_hold_poff_config)
-> +		unregister_reboot_notifier(&pwrkey->reboot_notifier);
->  
->  	return 0;
->  }
-> @@ -297,16 +312,42 @@ static int pm8941_pwrkey_remove(struct platform_device *pdev)
->  static const struct pm8941_data pwrkey_data = {
->  	.pull_up_bit = PON_KPDPWR_PULL_UP,
->  	.status_bit = PON_KPDPWR_N_SET,
-> +	.name = "pm8941_pwrkey",
-> +	.phys = "pm8941_pwrkey/input0",
-> +	.supports_ps_hold_poff_config = true,
-> +	.supports_debounce_config = true,
->  };
->  
->  static const struct pm8941_data resin_data = {
->  	.pull_up_bit = PON_RESIN_PULL_UP,
->  	.status_bit = PON_RESIN_N_SET,
-> +	.name = "pm8941_resin",
-> +	.phys = "pm8941_resin/input0",
-> +	.supports_ps_hold_poff_config = true,
-> +	.supports_debounce_config = true,
-> +};
-> +
-> +static const struct pm8941_data pon_gen3_pwrkey_data = {
-> +	.status_bit = PON_GEN3_KPDPWR_N_SET,
-> +	.name = "pmic_pwrkey",
-> +	.phys = "pmic_pwrkey/input0",
-> +	.supports_ps_hold_poff_config = false,
-> +	.supports_debounce_config = false,
-> +};
-> +
-> +static const struct pm8941_data pon_gen3_resin_data = {
-> +	.status_bit = PON_GEN3_RESIN_N_SET,
-> +	.name = "pmic_resin",
-> +	.phys = "pmic_resin/input0",
-> +	.supports_ps_hold_poff_config = false,
-> +	.supports_debounce_config = false,
->  };
->  
->  static const struct of_device_id pm8941_pwr_key_id_table[] = {
->  	{ .compatible = "qcom,pm8941-pwrkey", .data = &pwrkey_data },
->  	{ .compatible = "qcom,pm8941-resin", .data = &resin_data },
-> +	{ .compatible = "qcom,pmk8350-pwrkey", .data = &pon_gen3_pwrkey_data },
-> +	{ .compatible = "qcom,pmk8350-resin", .data = &pon_gen3_resin_data },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, pm8941_pwr_key_id_table);
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
