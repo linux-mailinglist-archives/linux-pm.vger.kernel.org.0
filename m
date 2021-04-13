@@ -2,191 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E9035E6C1
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 21:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30F735E77B
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 22:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343540AbhDMTCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Apr 2021 15:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245722AbhDMTCC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Apr 2021 15:02:02 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D26BC061574
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 12:01:42 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id j7so3199570pgi.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Apr 2021 12:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2RaDHGnElvgSsGoT7VxfU/bz+iwzbiqt/1J4UN+LTag=;
-        b=Bjc0ayJlUV/orwGoBZbFbaneh+zBunj5RuRbfOg2vBZWL8FfmUZS9xr9cS7CGAqFtx
-         39K/D4n72o5aXaKCS/+Z6UESjFl+dygTOr4/wFWmsA4IfNfmV9XOCebctJfMtPbEQyru
-         F5BnqFxbGWgZIqtmY/90tQeebDRkxxUagGQoFxFaXTJCospVxUJl6LVpwYkmOw1isJR5
-         VkGRXqZYa/+2iSgXzO0Qqr0zw2sd0q4oAK9uKBaArtxZ0UGsa9TWrKf4jLWHZ7XFETuD
-         r4JKkLXAONLiOdyAl0il2I7a8Nqjrlj+UP6Mub8MvNKxgOnJKRCg6cpQlB9UDsLFA6jT
-         iLbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2RaDHGnElvgSsGoT7VxfU/bz+iwzbiqt/1J4UN+LTag=;
-        b=Q78cDKk1EBOAhH5VhMIavGf7G+64Q+Q6mKCv/1cuyoZDUi2RgZ2dqrdz6qR5ix+YPC
-         9ueyrRR2BV+hqwbqvGRjjbwnUmKk8UvrTMFKL32RcgCtslsJk67SkShCXVT77xC2cPKE
-         iU6VOz1dxVSUlnJzJMWwkby0Fj6E7GDhXtREZeCYNekavqg6G3Fzz+t0pw+RmgmFO8NV
-         kG7Usi4b+p0tZjioNanyyiHLRBny/VMs81SKFa6K+iR+0iTYzuOKQ0xGXgXAsfn8Jz/P
-         5lhWgabGneTWzDoql0JNxgObeanwI9DZmgDc6wopEB7kDsbqSXc/7PHK2z4daYneEeJ/
-         5RcQ==
-X-Gm-Message-State: AOAM533B28pVFxt2CTU/VTI/y6QSY15lxLO9rfqHnmQGmswt663XOWuN
-        Z6DW8Nr1XMs+ZJSQs8CtFKQRng==
-X-Google-Smtp-Source: ABdhPJz6BblngGDYFz7p2c2ripo98wIik31hsf02I+FgqtkMKb8TIUwlB6miwYeVOuI/xTRm5sl1Kw==
-X-Received: by 2002:a65:5088:: with SMTP id r8mr33085199pgp.434.1618340502228;
-        Tue, 13 Apr 2021 12:01:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ir3sm2920605pjb.42.2021.04.13.12.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 12:01:41 -0700 (PDT)
-Message-ID: <6075ea95.1c69fb81.d2c21.8107@mx.google.com>
-Date:   Tue, 13 Apr 2021 12:01:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S237765AbhDMUQN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Apr 2021 16:16:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47624 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229590AbhDMUQL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Apr 2021 16:16:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2921661206;
+        Tue, 13 Apr 2021 20:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618344951;
+        bh=7k0AMOZwiZ1cm8Txz5rxv/cB0NXxA/r/+Svrk6c3PTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VpfeGaFxLS60vw0qzf/2jzWhd29D+8AHd3+zO6OedGr2bXPVIkL3EjXlS45Xlvhuk
+         EBWDg82IbOh4hl05phzhISnql3Th5JkkDS4gTOujHAze8sBUarvgHVEIQ28HbTl5bL
+         8+ykT+pUL56sxg9EOjbELkqwtjmaJS/qyQ+8jqHDZKAb3PUf8gTM2eT5e3o5aRStXe
+         ulFNXx040tOK40Pw/V/5iZkg1AvOZk9zoPaG+z2nbIxlejIWXNvvjQRPkApUZ1jsoX
+         J56calxDj8/wWxbDADkxK0u/RlCqhnY9YvpTNVFMHoi6QSkScwk8xU3I7ppe9S3ihY
+         9hOlvWjTVNGbQ==
+Date:   Tue, 13 Apr 2021 13:15:49 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Chris von Recklinghausen <crecklin@redhat.com>
+Cc:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
+        decui@microsoft.com, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/1] use crc32 instead of md5 for hibernation e820
+ integrity check
+Message-ID: <YHX79XWnwaAGFtxq@sol.localdomain>
+References: <20210413161330.20024-1-crecklin@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.12-rc7-158-gf0ad2a845d869
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 4 runs, 5 regressions (v5.12-rc7-158-gf0ad2a845d869)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210413161330.20024-1-crecklin@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 5 regressions (v5.12-rc7-158-gf0ad2a845d869)
+On Tue, Apr 13, 2021 at 12:13:30PM -0400, Chris von Recklinghausen wrote:
+> +static inline void get_e820_crc32(struct e820_table *table, void *buf)
+>  {
 
-Regressions Summary
--------------------
+This should just return the CRC-32 value as a u32.  There's no need for the
+'void *buf' argument.
 
-platform            | arch  | lab           | compiler | defconfig         =
- | regressions
---------------------+-------+---------------+----------+-------------------=
--+------------
-mt8173-elm-hana     | arm64 | lab-collabora | gcc-8    | defconfig         =
- | 1          =
+Also like I said, compute_e820_crc32() would be a more logical name.
 
-rk3288-rock2-square | arm   | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 4          =
+> @@ -179,7 +133,8 @@ int arch_hibernation_header_save(void *addr, unsigned int max_size)
+>  	 */
+>  	rdr->cr3 = restore_cr3 & ~CR3_PCID_MASK;
+>  
+> -	return hibernation_e820_save(rdr->e820_digest);
+> +	hibernation_e820_save(&rdr->e820_digest);
+> +	return 0;
 
+Like I said, hibernation_e820_save() should just be inlined into here:
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
-7-158-gf0ad2a845d869/plan/sleep/
+	rdr->e820_digest = compute_e820_crc32(e820_table_firmware)
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.12-rc7-158-gf0ad2a845d869
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f0ad2a845d869594a16bab7da43c361f0cccce59 =
+Having the helper function doesn't add anything.
 
+>  /**
+> @@ -200,7 +155,7 @@ int arch_hibernation_header_restore(void *addr)
+>  	jump_address_phys = rdr->jump_address_phys;
+>  	restore_cr3 = rdr->cr3;
+>  
+> -	if (hibernation_e820_mismatch(rdr->e820_digest)) {
+> +	if (hibernation_e820_mismatch(&rdr->e820_digest)) {
 
+Likewise, this should be just
 
-Test Regressions
----------------- =
+	if (rdr->e820_digest != compute_e820_crc32(e820_table_firmware)) {
 
-
-
-platform            | arch  | lab           | compiler | defconfig         =
- | regressions
---------------------+-------+---------------+----------+-------------------=
--+------------
-mt8173-elm-hana     | arm64 | lab-collabora | gcc-8    | defconfig         =
- | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6075dc9dbc037c4741dac6c3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc7-158-gf0ad=
-2a845d869/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc7-158-gf0ad=
-2a845d869/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0412.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/6075dc9dbc037c4741dac6c4
-        failing since 236 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =
-
-
-
-platform            | arch  | lab           | compiler | defconfig         =
- | regressions
---------------------+-------+---------------+----------+-------------------=
--+------------
-rk3288-rock2-square | arm   | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 4          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6075dd16d9625fdb5ddac6d3
-
-  Results:     2 PASS, 14 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc7-158-gf0ad=
-2a845d869/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc7-158-gf0ad=
-2a845d869/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0412.0/armhf/rootfs.cpio.gz =
-
-
-
-  * sleep.rtcwake-mem-1: https://kernelci.org/test/case/id/6075dd16d9625fdb=
-5ddac6d6
-        new failure (last pass: v5.12-rc7-154-g3bf8ef9db350)
-
-    2021-04-13 18:03:55.249000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-04-13 18:03:55.292000+00:00  <4>[   19.520535] rtc-hym8563 0-0051:=
- no valid clock/calendar values available
-    2021-04-13 18:03:55.294000+00:00  rtcwake: assuming RTC uses UTC ...
-    2021-04-13 18:03:55.294000+00:00  rtcwake: read rtc time failed<4>[   1=
-9.535522] rtc-hym8563 0-0051: no valid clock/calendar values available
-    2021-04-13 18:03:55.295000+00:00  : Invalid argument   =
-
-
-  * sleep.rtcwake-mem-2: https://kernelci.org/test/case/id/6075dd16d9625fdb=
-5ddac6d7
-        new failure (last pass: v5.12-rc7-154-g3bf8ef9db350) =
-
-
-  * sleep.rtcwake-mem-3: https://kernelci.org/test/case/id/6075dd16d9625fdb=
-5ddac6d8
-        new failure (last pass: v5.12-rc7-154-g3bf8ef9db350) =
-
-
-  * sleep.rtcwake-mem-4: https://kernelci.org/test/case/id/6075dd16d9625fdb=
-5ddac6d9
-        new failure (last pass: v5.12-rc7-154-g3bf8ef9db350)
-
-    2021-04-13 18:03:55.296000+00:00  rtcwake: <4>[   19.557856] rtc-hym856=
-3 0-0051: no valid clock/calendar values available
-    2021-04-13 18:03:55.297000+00:00  read rtc time failed: Invalid argument
-    2021-04-13 18:03:55.341000+00:00  rtcwake: assuming RTC use<4>[   19.57=
-9342] rtc-hym8563 0-0051: no valid clock/calendar values available
-    2021-04-13 18:03:55.342000+00:00  s UTC ...
-    2021-04-13 18:03:55.342000+00:00  rtcwake: read rtc time failed: Invali=
-d argument   =
-
- =20
+- Eric
