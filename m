@@ -2,60 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9E035E798
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Apr 2021 22:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC55835EAC8
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Apr 2021 04:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348195AbhDMU23 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Apr 2021 16:28:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50518 "EHLO mail.kernel.org"
+        id S231475AbhDNCXf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Apr 2021 22:23:35 -0400
+Received: from mga12.intel.com ([192.55.52.136]:2427 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343728AbhDMU22 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Apr 2021 16:28:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A4A66008E;
-        Tue, 13 Apr 2021 20:28:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618345688;
-        bh=J1RFqFtZR6AmGTUYUPyMbANMBZs1FFCJbdvDg5+ZIT8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qXoPWf9wddL09+++wYo8mgSuINs2lPbsFFeRumddr9kIWMLEj1NV5YLA9RWzkV3N1
-         yFqxjCQnK0Y9wuwFcN3tPLxSI1W3JdwxJ8cLOfD1ax2d9+7JZSVdnFqToecAYVIpsC
-         kBvHsJa/obXWyvic6UyKIRUJSxitFOau084/sSo5Hsl0hKsxdWcLZilEJwJFO2lhcO
-         a7vKPfIMr9QpBS0ZjoZrJHpTPUfORqAjxJdBEpzDVzvVO4t9mzileUzOqSCU04TyMw
-         0jWOzw9WrYuzS+3Co85DOU68J7ZKWIR41SUrvGA2wDHzhH5WhVHYu7+z+tokiry4BG
-         H4DtCSfaU/nhQ==
-Date:   Tue, 13 Apr 2021 13:28:07 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Chris von Recklinghausen <crecklin@redhat.com>
-Cc:     ardb@kernel.org, simo@redhat.com, rafael@kernel.org,
-        decui@microsoft.com, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-Message-ID: <YHX+1/LgNWzAGzsY@sol.localdomain>
-References: <20210413161330.20024-1-crecklin@redhat.com>
+        id S231379AbhDNCXf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Apr 2021 22:23:35 -0400
+IronPort-SDR: GSHp0gTD+1wWsT6+OWov0dmedsQqUOqr4B8CDmZQgfeXFpi/ofsdRj9NSxBdFh6mzGXfBiABy2
+ xM5bDV2QXnJQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="174042178"
+X-IronPort-AV: E=Sophos;i="5.82,221,1613462400"; 
+   d="scan'208";a="174042178"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 19:23:08 -0700
+IronPort-SDR: 1v8147DzZkw4T645xmbzdmZbYm1LurRjgXHl8F6+Y3dE9A3nYU15Bw7Wu2b3HTiyVGTb3NvTVK
+ A9q5ZT3yWZ8g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,221,1613462400"; 
+   d="scan'208";a="532578680"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 Apr 2021 19:23:04 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lWVBH-0001TH-Mo; Wed, 14 Apr 2021 02:23:03 +0000
+Date:   Wed, 14 Apr 2021 10:22:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 04a799cddbf75e5202a44c2e4aefc0b608a45a1a
+Message-ID: <607651fd.8xjRy6NIQTeKvV0I%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210413161330.20024-1-crecklin@redhat.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 12:13:30PM -0400, Chris von Recklinghausen wrote:
-> Suspend fails on a system in fips mode because md5 is used for the e820
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 04a799cddbf75e5202a44c2e4aefc0b608a45a1a  Merge branch 'acpi-tables' into bleeding-edge
 
-Suspend to disk (hibernation), or any suspend?
+elapsed time: 723m
 
->  struct restore_data_record {
->  	unsigned long jump_address;
->  	unsigned long jump_address_phys;
->  	unsigned long cr3;
->  	unsigned long magic;
-> -	u8 e820_digest[MD5_DIGEST_SIZE];
-> +	unsigned long e820_digest;
->  };
+configs tested: 98
+configs skipped: 2
 
-This field should probably be renamed to 'e820_crc' or 'e820_checksum', since
-"digest" normally means a cryptographic digest.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-- Eric
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+x86_64                           allyesconfig
+s390                       zfcpdump_defconfig
+arm                  colibri_pxa300_defconfig
+nios2                            alldefconfig
+sh                          kfr2r09_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                      makalu_defconfig
+powerpc                    socrates_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                      bamboo_defconfig
+arm                            xcep_defconfig
+mips                        nlm_xlp_defconfig
+powerpc                  iss476-smp_defconfig
+sh                               j2_defconfig
+arm                            mmp2_defconfig
+powerpc                         wii_defconfig
+arm                          pxa3xx_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                     rainier_defconfig
+arm                          pxa168_defconfig
+mips                           ci20_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210413
+i386                 randconfig-a001-20210413
+i386                 randconfig-a006-20210413
+i386                 randconfig-a005-20210413
+i386                 randconfig-a004-20210413
+i386                 randconfig-a002-20210413
+i386                 randconfig-a015-20210413
+i386                 randconfig-a014-20210413
+i386                 randconfig-a013-20210413
+i386                 randconfig-a012-20210413
+i386                 randconfig-a016-20210413
+i386                 randconfig-a011-20210413
+x86_64               randconfig-a003-20210413
+x86_64               randconfig-a002-20210413
+x86_64               randconfig-a001-20210413
+x86_64               randconfig-a005-20210413
+x86_64               randconfig-a006-20210413
+x86_64               randconfig-a004-20210413
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a014-20210413
+x86_64               randconfig-a015-20210413
+x86_64               randconfig-a011-20210413
+x86_64               randconfig-a013-20210413
+x86_64               randconfig-a012-20210413
+x86_64               randconfig-a016-20210413
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
