@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C150F3608DB
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 14:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F623608DC
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbhDOME3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Apr 2021 08:04:29 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:59494 "EHLO
+        id S232774AbhDOMEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Apr 2021 08:04:30 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:59462 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbhDOME1 (ORCPT
+        with ESMTP id S232827AbhDOME1 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Apr 2021 08:04:27 -0400
 Date:   Thu, 15 Apr 2021 12:04:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1618488243;
+        s=2020; t=1618488244;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QPZ9iQQMA+4H0gwZaYtVSbj7b1aYOo0qGN0IRc0e2Co=;
-        b=sGHCRG4rSbKUSdOoQxJPo53xUsFBpUzMG6Oi6GwDUbqcIL6PLwlez0RXmTNWj2a2N8Hkc8
-        fMB9cF3j04EQqP9kLaq6y2q37m3uEaScs1bpOoKVoMlGjtI12/0BHpPVAo9BvVOS9/vhbf
-        gdmXAk5lw67T6SPPvkxOvcB/HwM6UijrkSzGToHIDp0CUfot1hwzn8DB0ftBjjIhcKnSeK
-        X8/nb8+dyzxGznREH0w524NXeA78PQGEs2l5ZnD3+a9hFSkv3fpd8z3eW86msz8OFhhAl7
-        CPAG8f/iGRCnyxFrphjGJSwqJYGmVDyJihzH5Jc62vivgX4KA/YaEkVmlcPgxA==
+        bh=eG8aglQ2X4cwEXZy+flpq3KniL0ec1Or7IAAM5XYrCE=;
+        b=oCN5u4gUSdt0OfYvCpFWWQYynNg2XlxrcNcbiu01e9A9uG12kEsJ+avyWxmZoAeXiijQBc
+        7lc19HQ7Ri7dJQAY+cT0A+1fGLhdszBgbg4zL6tQ6OF3f4uZUaATXnUhr0erRiVY9c3H+l
+        UIwmb/5e0xqSS/naZy53qoT/X62snecUEEZTm0Q9PuMoKlzOcjaD3wqAMRrH4B84A5xoQ3
+        KVu+HhziVlyshA4C2ESkFFTiRO6bgGHRCbVJXFNBibOlE1m9AdPZaYz7WN1n0OvYjQSTDy
+        Hkp3zM99Gto9nJtT4j4fAR+/REOy7Dw/cjMAboTrV7YBikpxLux78NaaeDJE1A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1618488243;
+        s=2020e; t=1618488244;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QPZ9iQQMA+4H0gwZaYtVSbj7b1aYOo0qGN0IRc0e2Co=;
-        b=xnCryY5sEFaao64gXYs3HGmIe39rNjHwYlaijvq5jI2VlHkngQZ0KrQn8mOgn2FMs6keok
-        3hC8gwtt+AIGoHCg==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+        bh=eG8aglQ2X4cwEXZy+flpq3KniL0ec1Or7IAAM5XYrCE=;
+        b=FSy7pJBAH6+8kHoSNHLvIclUjykweaRoGRbyYW/gObJirSXLfH8UbZXgQJXJjA1b/zX0H8
+        rKOI1NlNOZzMD6AA==
+From:   "thermal-bot for Thara Gopinath" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: Fix memory leak in the error path
-Cc:     kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+Subject: [thermal: thermal/next] MAINTAINERS: Add co-maintainer for Qualcomm
+ tsens thermal drivers
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210319202257.890848-1-daniel.lezcano@linaro.org>
-References: <20210319202257.890848-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20210319153711.2836652-1-thara.gopinath@linaro.org>
+References: <20210319153711.2836652-1-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-Message-ID: <161848824314.29796.15876356390545439449.tip-bot2@tip-bot2>
+Message-ID: <161848824350.29796.16177302339421659946.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,40 +58,34 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     d44616c6cc3e35eea03ecfe9040edfa2b486a059
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//d44616c6cc3e35eea03ecfe9040edfa2b486a059
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Fri, 19 Mar 2021 21:22:57 +01:00
+Commit-ID:     ef6e01af398acff63eb33c58e72839e50a3e1c4b
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//ef6e01af398acff63eb33c58e72839e50a3e1c4b
+Author:        Thara Gopinath <thara.gopinath@linaro.org>
+AuthorDate:    Fri, 19 Mar 2021 11:37:11 -04:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 15 Apr 2021 13:21:00 +02:00
+CommitterDate: Fri, 19 Mar 2021 16:52:57 +01:00
 
-thermal/core: Fix memory leak in the error path
+MAINTAINERS: Add co-maintainer for Qualcomm tsens thermal drivers
 
-Fix the following error:
+Add myself as the maintainer for Qualcomm tsens drivers so that I
+can help Daniel by taking care of/reviewing changes to these drivers.
 
- smatch warnings:
- drivers/thermal/thermal_core.c:1020 __thermal_cooling_device_register() warn: possible memory leak of 'cdev'
-
-by freeing the cdev when exiting the function in the error path.
-
-Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210319202257.890848-1-daniel.lezcano@linaro.org
+Link: https://lore.kernel.org/r/20210319153711.2836652-1-thara.gopinath@linaro.org
 ---
- drivers/thermal/thermal_core.c | 1 +
+ MAINTAINERS | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index c8d4010..3566fd2 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1017,6 +1017,7 @@ out_kfree_type:
- out_ida_remove:
- 	ida_simple_remove(&thermal_cdev_ida, cdev->id);
- out_kfree_cdev:
-+	kfree(cdev);
- 	return ERR_PTR(ret);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d92f85c..f919aa8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14891,6 +14891,7 @@ F:	include/linux/if_rmnet.h
  
+ QUALCOMM TSENS THERMAL DRIVER
+ M:	Amit Kucheria <amitk@kernel.org>
++M:	Thara Gopinath <thara.gopinath@linaro.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
