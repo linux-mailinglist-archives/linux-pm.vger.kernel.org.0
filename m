@@ -2,93 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B82360828
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 13:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A61B3608C7
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 14:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbhDOLV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Apr 2021 07:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
+        id S232769AbhDOMEX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Apr 2021 08:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbhDOLV4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Apr 2021 07:21:56 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF92C061574;
-        Thu, 15 Apr 2021 04:21:32 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id u4so26657237ljo.6;
-        Thu, 15 Apr 2021 04:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3KUMzHeNomWR2i0eeNj3li1B7DIkesg2mETLVTyl56s=;
-        b=PqzCWRGWCX/lM2BiYpaSGAHTaTq3rAjnGFKWQn1zPCLWNXKwwtLDj/wlRv/jBKISak
-         Mw2V5Ov7Xg2Gxip6PTjBGZSdMISLgmc4e+KD2lrCVb0HGHjjLQK2Dok8DRjtU9HOOcmZ
-         SpTlAvZmgXG0HCmFxnyF9nxs0wHkf1wfLN3uEb/yOWjV4Sn14rhy2z2aKKioOQCs73kh
-         gpz9dup8vGiPn9OQl/1F813I0GFMIVhu4pxoEnVqW8fCA+hkkU75Q0Et/QqmPydSNcVe
-         5JysurD6ovgTZOx6mB2/vGomoBjCDS2d2HOx7Vqy2X1QdU4gcnmoEGDSLA3rEvX4uL7c
-         OaPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3KUMzHeNomWR2i0eeNj3li1B7DIkesg2mETLVTyl56s=;
-        b=Jkr7o38/Ol2j0qV88N3WUOMbZX4qWEiwm+s0bPxmJ7da0EHLxma0o5Jf0aqVcWR+IC
-         rpAwNSLos3/igR2+E6MScDci7JZDS/qDQGWpnBGxCB7bCWxuGAhWvxIw68DJXR8/vWKm
-         Lhpi6NX82isACjLQhXSqQ1H9gmnVnLXhz1+rOUUp67CUPt4/8iz1lKts7gV4ri4wYDRP
-         UUhGwhLoIi/XtKi+kgz7GuPeclXDJ5NVpFjDCnJ/y/dZyJ4I4HRNCzd+29sST/kbKMMs
-         mWaVI7bqEbZiS560eOKvZa9LSXEH5Dnaaby52aEnBroBeNGBVuzXR9I44ZSgBHQLU/7R
-         FkVg==
-X-Gm-Message-State: AOAM531jwbG2nYyz2dBUPHB4mKyMTFUw2vW5sPb1HVq3H487durapiQy
-        d40JXV42AT8pncxsFD48yqI=
-X-Google-Smtp-Source: ABdhPJyFi2GItQDg7KS+2OJ65/tO40fcA2io8a4Hgrc8Kuw9hKQI6APJx6Orcqql1PwU8PGRLclcdQ==
-X-Received: by 2002:a2e:730c:: with SMTP id o12mr1515461ljc.459.1618485690884;
-        Thu, 15 Apr 2021 04:21:30 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id r6sm629870lfn.27.2021.04.15.04.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 04:21:30 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S232770AbhDOMEX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Apr 2021 08:04:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219F4C061760
+        for <linux-pm@vger.kernel.org>; Thu, 15 Apr 2021 05:04:00 -0700 (PDT)
+Date:   Thu, 15 Apr 2021 12:03:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1618488236;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Zoi7uAxQI7t3/pg/qB7tJq81RwtXNVqzKpwgjt4zOU=;
+        b=fCbdP+VfkSuxENzBXWWQvPTqUgQ0cjaG9gvAVZHMuKnozncTKy+z7ctHt7ZUJjeodk9uKi
+        zTRexhLIfBUKRtc9nN5RS6CheXaW5vn57YTH2fx/cJivZlz0IKutlIyG5xQ+W5imWcoq/I
+        q2Q4tvU9wpO2UciT75ffKOcdFtGt6KaM6AhhBWj3n72bbhqiY45kt/7CATGYSkhbeNe1Qq
+        Bbf2hBbsNK/5fW0+baKciTlYlRsxVc5pDdT4ILsWITAUwTwp7JKQEG0fGH2AYVAgTM/RBe
+        a5KVqDmk0zJDx2h0j5HWcoTpUPimE3c5MuKGLci0rIrYUQljAM652S9Op5sTTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1618488236;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Zoi7uAxQI7t3/pg/qB7tJq81RwtXNVqzKpwgjt4zOU=;
+        b=UU9IXggu8xUeViSD0uevL9lXwnO5/AEJcaOc04p9d9/SHxt0LX2QcnZljyoyP/rMeWTql1
+        7cdkej7tItejKJBg==
+From:   "thermal-bot for Ruiqi Gong" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/drivers/thermal_mmio: Remove
+ redundant dev_err call in thermal_mmio_probe()
+Cc:     Hulk Robot <hulkci@huawei.com>, Ruiqi Gong <gongruiqi1@huawei.com>,
+        Talel Shenhar <talel@amazon.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: thermal: thermal-sensor: require "#thermal-sensor-cells"
-Date:   Thu, 15 Apr 2021 13:21:21 +0200
-Message-Id: <20210415112121.4999-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20210408100144.7494-1-gongruiqi1@huawei.com>
+References: <20210408100144.7494-1-gongruiqi1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-ID: <161848823574.29796.18397657370026509312.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+The following commit has been merged into the thermal/next branch of thermal:
 
-This property is required for every thermal sensor as it's used when
-using phandles.
+Commit-ID:     c8671d70b29d72d590678eee59d5891eee8d9d2e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//c8671d70b29d72d590678eee59d5891eee8d9d2e
+Author:        Ruiqi Gong <gongruiqi1@huawei.com>
+AuthorDate:    Thu, 08 Apr 2021 06:01:44 -04:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Thu, 15 Apr 2021 13:21:43 +02:00
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+thermal/drivers/thermal_mmio: Remove redundant dev_err call in thermal_mmio_probe()
+
+There is a error message within devm_ioremap_resource already, so
+remove the dev_err call to avoid redundant error message.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Ruiqi Gong <gongruiqi1@huawei.com>
+Acked-by: Talel Shenhar <talel@amazon.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210408100144.7494-1-gongruiqi1@huawei.com
 ---
- Documentation/devicetree/bindings/thermal/thermal-sensor.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/thermal_mmio.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
-index 9f747921e851..4bd345c71eb8 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
-@@ -36,6 +36,9 @@ properties:
-       containing several internal sensors.
-     enum: [0, 1]
+diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
+index d0bdf1e..ded1dd0 100644
+--- a/drivers/thermal/thermal_mmio.c
++++ b/drivers/thermal/thermal_mmio.c
+@@ -54,11 +54,8 @@ static int thermal_mmio_probe(struct platform_device *pdev)
  
-+required:
-+  - "#thermal-sensor-cells"
-+
- additionalProperties: true
+ 	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	sensor->mmio_base = devm_ioremap_resource(&pdev->dev, resource);
+-	if (IS_ERR(sensor->mmio_base)) {
+-		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
+-			PTR_ERR(sensor->mmio_base));
++	if (IS_ERR(sensor->mmio_base))
+ 		return PTR_ERR(sensor->mmio_base);
+-	}
  
- examples:
--- 
-2.26.2
-
+ 	sensor_init_func = device_get_match_data(&pdev->dev);
+ 	if (sensor_init_func) {
