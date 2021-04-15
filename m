@@ -2,256 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 472EA35FFB8
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 03:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB20135FFCD
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 04:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229467AbhDOBs7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Apr 2021 21:48:59 -0400
-Received: from mga03.intel.com ([134.134.136.65]:49422 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229458AbhDOBs6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 14 Apr 2021 21:48:58 -0400
-IronPort-SDR: YQ0o1LqE5tXR5GSPsjYd2Ze9Ki8AxXfjNbN8gocLEitPGvBGWMuAVFYdi0dXhWXSG8YQytoQDb
- gbpxi9Uv+0JQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9954"; a="194796938"
-X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
-   d="scan'208";a="194796938"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 18:48:36 -0700
-IronPort-SDR: A6E8cr4GjLHdjpUAYN3q5tPxpKK+aPwgVJJsW7lrsaj32f3pehLI5Au4xU0mhe6PR7oMRXqEsJ
- H3h/Au+B944Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
-   d="scan'208";a="424991557"
-Received: from lkp-server02.sh.intel.com (HELO fa9c8fcc3464) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Apr 2021 18:48:34 -0700
-Received: from kbuild by fa9c8fcc3464 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lWr7P-0000Z3-Lq; Thu, 15 Apr 2021 01:48:31 +0000
-Date:   Thu, 15 Apr 2021 09:48:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- a5b1c231c4a84cae19849db076b8a56ffbc8a079
-Message-ID: <60779b60.kwysEistnLZUV/r6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229481AbhDOCFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Apr 2021 22:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbhDOCFu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Apr 2021 22:05:50 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF90C061756
+        for <linux-pm@vger.kernel.org>; Wed, 14 Apr 2021 19:05:27 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id i6so7455385qti.10
+        for <linux-pm@vger.kernel.org>; Wed, 14 Apr 2021 19:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kepstin.ca; s=google;
+        h=message-id:subject:from:to:cc:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=6xhuUVgjBAC1B6CSbTxZXzScfJ4bMKqw6vDHawJD1C4=;
+        b=Jqmm8OgSc88cnUqwazmpGrij1003UuKustveP2GDVtNaaRF13m12U88Ofd/giO5FZ8
+         dw4kD5RR/jEHCJXIH+ne0DgEG0vjBXIcfNFCeqHDHDEE/8XLYFGLU+dhzh4b/KGYc/g0
+         kIMqpnV0UT5//s2nswOY/Re/fAmt3WgocLbT8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=6xhuUVgjBAC1B6CSbTxZXzScfJ4bMKqw6vDHawJD1C4=;
+        b=CnXznqBb4r2R4Kg/oKjOIBbZaS5RGYduSwMuqH+oAtipXbIsYVL7mGRHC74L2/RQWN
+         1DVTWBM7z56oKsjISOPzoXhusttttzNwnezIoK1We7pPPsDgOvEoqWdAVMNL/LPBMaMX
+         VmoDerFpivp4LMgMVVW5+C3j8IYxWJtP9UiceSBwCxjNHTNZMmSeUETJQ3v6CnXRK0tj
+         OmidhZcSZH92yxp/bGlB7pW+Tt3BbIoTzdFdoXUMno5u+u7BrZ7IPR6zFGT6ZE7B/d32
+         Ngr8PL7PytG7WAqdHc6b2AsEZdJT2BQoyRBHCG/Q9aQbfN2bdCUHCAa3jEw4d1bf9CM+
+         TQtA==
+X-Gm-Message-State: AOAM533v2ziYSgUVkR41bva0WGe4UylyP+DHQcuy8UwUsPeddYjpVZi2
+        M8qD6YFSjV36F0+W+TdOuSF4IkY7ZbnJ2cY7
+X-Google-Smtp-Source: ABdhPJyFOL+4vGBXdOfpecXwAwZ83EwIJMAtJadyx0Rf90fufgsZ21AA3mETfYaoxkeAM+hhPvhxrw==
+X-Received: by 2002:ac8:45c6:: with SMTP id e6mr1017883qto.228.1618452326372;
+        Wed, 14 Apr 2021 19:05:26 -0700 (PDT)
+Received: from saya.kepstin.ca (dhcp-108-168-125-232.cable.user.start.ca. [108.168.125.232])
+        by smtp.gmail.com with ESMTPSA id f27sm925917qkh.118.2021.04.14.19.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 19:05:25 -0700 (PDT)
+Message-ID: <88d11c19e662f67ae492eb4b93e12e1b24e68c1d.camel@kepstin.ca>
+Subject: [PATCH] Fix turbostat exiting with an error when run on AMD CPUs
+From:   Calvin Walton <calvin.walton@kepstin.ca>
+To:     Linux PM list <linux-pm@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>, Chen Yu <yu.c.chen@intel.com>
+Date:   Wed, 14 Apr 2021 22:05:24 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: a5b1c231c4a84cae19849db076b8a56ffbc8a079  Merge branches 'acpi-scan' and 'acpi-utils' into linux-next
+The current version of turbostat exits immediately upon entering the
+main loop, with error code -13. This is a regression that was introducted
+in these commits:
 
-elapsed time: 723m
+9972d5d84d76 tools/power turbostat: Enable accumulate RAPL display
+87e15da95775 tools/power turbostat: Introduce functions to accumulate RAPL consumption
 
-configs tested: 193
-configs skipped: 3
+Which introduced a method to accumulate MSR values over long sampling
+durations.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The commits failed to account for the fact that AMD CPUs use a different
+(but confusingly similarly named) MSR for reading the package energy.
+I've added the AMD version of the MSR to the methods so that turbostat
+can be run again.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-mips                           ip28_defconfig
-arm                           corgi_defconfig
-powerpc                     asp8347_defconfig
-ia64                        generic_defconfig
-arm                       versatile_defconfig
-arc                     nsimosci_hs_defconfig
-m68k                          sun3x_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                     mpc83xx_defconfig
-ia64                         bigsur_defconfig
-arc                        vdk_hs38_defconfig
-sparc                            alldefconfig
-powerpc                 mpc8272_ads_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                      cm5200_defconfig
-mips                        maltaup_defconfig
-xtensa                    smp_lx200_defconfig
-mips                           rs90_defconfig
-powerpc                       maple_defconfig
-arm                          ep93xx_defconfig
-mips                            e55_defconfig
-ia64                      gensparse_defconfig
-mips                           gcw0_defconfig
-sh                           se7724_defconfig
-powerpc                      obs600_defconfig
-arm                            mmp2_defconfig
-arc                        nsim_700_defconfig
-sh                          urquell_defconfig
-arm                       cns3420vb_defconfig
-powerpc                          g5_defconfig
-arm                         palmz72_defconfig
-sh                          rsk7269_defconfig
-mips                        bcm47xx_defconfig
-sh                        sh7757lcr_defconfig
-powerpc                        icon_defconfig
-powerpc                 mpc8315_rdb_defconfig
-mips                         tb0287_defconfig
-arm                          pxa3xx_defconfig
-sh                           se7722_defconfig
-powerpc                     ep8248e_defconfig
-nds32                            alldefconfig
-arm                         socfpga_defconfig
-sparc64                             defconfig
-powerpc                        warp_defconfig
-mips                        nlm_xlr_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                       ebony_defconfig
-s390                             allyesconfig
-powerpc                      ppc6xx_defconfig
-mips                          rb532_defconfig
-sh                        sh7785lcr_defconfig
-sh                         ap325rxa_defconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-arm                         s3c2410_defconfig
-sh                          rsk7264_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                        spear6xx_defconfig
-mips                      bmips_stb_defconfig
-mips                          malta_defconfig
-arm                            zeus_defconfig
-mips                     cu1830-neo_defconfig
-arm                          gemini_defconfig
-microblaze                          defconfig
-riscv                          rv32_defconfig
-m68k                             allmodconfig
-arm                           h3600_defconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                              defconfig
-sh                   rts7751r2dplus_defconfig
-arm                      jornada720_defconfig
-mips                         bigsur_defconfig
-arm                         vf610m4_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                      ppc44x_defconfig
-alpha                            alldefconfig
-powerpc                   currituck_defconfig
-mips                          ath25_defconfig
-mips                            gpr_defconfig
-mips                           ci20_defconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                    sam440ep_defconfig
-sh                          rsk7203_defconfig
-sh                            hp6xx_defconfig
-arm                         s3c6400_defconfig
-arm                          pcm027_defconfig
-arm                            mps2_defconfig
-arm                          simpad_defconfig
-powerpc64                           defconfig
-powerpc                      arches_defconfig
-h8300                            alldefconfig
-powerpc                 mpc837x_rdb_defconfig
-arm                         axm55xx_defconfig
-m68k                       m5475evb_defconfig
-mips                     decstation_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                      ppc64e_defconfig
-arm                          badge4_defconfig
-arm                         at91_dt_defconfig
-arm                        realview_defconfig
-m68k                       m5275evb_defconfig
-arc                           tb10x_defconfig
-arc                          axs101_defconfig
-mips                           xway_defconfig
-sh                   secureedge5410_defconfig
-alpha                               defconfig
-powerpc                   motionpro_defconfig
-m68k                          hp300_defconfig
-sh                          landisk_defconfig
-mips                     loongson1b_defconfig
-powerpc                      acadia_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                            q40_defconfig
-m68k                       m5249evb_defconfig
-powerpc                     tqm8555_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                         ps3_defconfig
-powerpc                       eiger_defconfig
-powerpc                     mpc512x_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210414
-i386                 randconfig-a006-20210414
-i386                 randconfig-a001-20210414
-i386                 randconfig-a005-20210414
-i386                 randconfig-a004-20210414
-i386                 randconfig-a002-20210414
-x86_64               randconfig-a014-20210414
-x86_64               randconfig-a015-20210414
-x86_64               randconfig-a011-20210414
-x86_64               randconfig-a013-20210414
-x86_64               randconfig-a012-20210414
-x86_64               randconfig-a016-20210414
-i386                 randconfig-a015-20210414
-i386                 randconfig-a014-20210414
-i386                 randconfig-a013-20210414
-i386                 randconfig-a012-20210414
-i386                 randconfig-a016-20210414
-i386                 randconfig-a011-20210414
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+(If you run on a system with mixed Intel and AMD cpus, you might have
+problems, but I have been assured that this isn't likely in practice.)
 
-clang tested configs:
-x86_64               randconfig-a003-20210414
-x86_64               randconfig-a002-20210414
-x86_64               randconfig-a005-20210414
-x86_64               randconfig-a001-20210414
-x86_64               randconfig-a006-20210414
-x86_64               randconfig-a004-20210414
+The MSR offsets in the conversion functions have been switched to use
+type off_t, since the offsets of the AMD MSRs exceed the range of a
+signed 32-bit int.
 
+Note that since the framework introduced only handles per-cpu MSRs but not
+per-core MSRs, AMD "Core" energy is not currently accumulated over long
+sampling periods.
+
+Fixes: 9972d5d84d76982606806b2ce887f70c2f8ba60a
+Signed-off-by: Calvin Walton <calvin.walton@kepstin.ca>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ tools/power/x86/turbostat/turbostat.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index a7c4f0772e53..576e03d373c4 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -291,13 +291,16 @@ struct msr_sum_array {
+ /* The percpu MSR sum array.*/
+ struct msr_sum_array *per_cpu_msr_sum;
+ 
+-int idx_to_offset(int idx)
++off_t idx_to_offset(int idx)
+ {
+-	int offset;
++	off_t offset;
+ 
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		offset = MSR_PKG_ENERGY_STATUS;
++		if (do_rapl & RAPL_AMD_F17H)
++			offset = MSR_PKG_ENERGY_STAT;
++		else
++			offset = MSR_PKG_ENERGY_STATUS;
+ 		break;
+ 	case IDX_DRAM_ENERGY:
+ 		offset = MSR_DRAM_ENERGY_STATUS;
+@@ -320,11 +323,12 @@ int idx_to_offset(int idx)
+ 	return offset;
+ }
+ 
+-int offset_to_idx(int offset)
++int offset_to_idx(off_t offset)
+ {
+ 	int idx;
+ 
+ 	switch (offset) {
++	case MSR_PKG_ENERGY_STAT:
+ 	case MSR_PKG_ENERGY_STATUS:
+ 		idx = IDX_PKG_ENERGY;
+ 		break;
+@@ -353,7 +357,7 @@ int idx_valid(int idx)
+ {
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		return do_rapl & RAPL_PKG;
++		return do_rapl & (RAPL_PKG | RAPL_AMD_F17H);
+ 	case IDX_DRAM_ENERGY:
+ 		return do_rapl & RAPL_DRAM;
+ 	case IDX_PP0_ENERGY:
+-- 
+2.31.1
+
+
+
