@@ -2,280 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A933D3602EA
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 09:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFA93603EC
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 10:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbhDOHDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Apr 2021 03:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhDOHDX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Apr 2021 03:03:23 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A77C061574
-        for <linux-pm@vger.kernel.org>; Thu, 15 Apr 2021 00:02:59 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id e2so7225024plh.8
-        for <linux-pm@vger.kernel.org>; Thu, 15 Apr 2021 00:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=3h1oZj4WXJcD7rrU5t6VWEUyKsHQVqefREWaa7aXCeU=;
-        b=BQ+tErL5UkP+tV5fKgxs+GVDMlLOPM8MUQsJFM1zoC7nnMzTVtpVkEoPizFOEF1c7R
-         v/MqexDmeTHj2vXODoZctza0dWfPtp+mnRmB5T/qaNdec9H17Qs2zo3rnDUBM0e+VzlZ
-         spKXrJtsFJxQMbMG4wYRHQyEng4GQ+sHtvKcBZ3EIt+NAemYcOywrEKrEmzP9y3MNJO8
-         nPEu/938GftARk8MQu9xAUh/VjqVi+DNLDfR7hA+NpMQsggqGSPUUNZIRvjsMN2epWJb
-         T3C2eGN6H4/tvMYvBAJzdaM9fS/IPx2+Br0V9CZ+pirtWLHFiF4+6+pnKGo6bW9n5Mbm
-         Gk4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=3h1oZj4WXJcD7rrU5t6VWEUyKsHQVqefREWaa7aXCeU=;
-        b=KnHRk5LLGtgKCNBsbMWhH7P/cRdvf5yedXWAzJtQ8+aTIuKb5o/pWKvXSYGx6dalkn
-         +Lrg2eQ71h7t4LX/HzQaYtnb3ODR4yH+YBcUnwmU7EMpn/pM5lXVu6Z6HCbAhp7P1Tfs
-         njh5sWWaFJief46Qh0nejNIvtHXs+gjv4QokrmKnDXZWPCsoFU4OaGRqouOoCglIhFfT
-         QBj3P8uV2pa6+DtCgXlJJ9bknjbL5DyBmCyTzLQiupL07BVIna6uMnW/eN4Ks8Nnup5K
-         bOTbq0O7MV8O40JYyRZsXsH3scHFvayQ7XcOGZmJPheL4XZX8fG66ONQj5BjeQQpWiYd
-         QOdQ==
-X-Gm-Message-State: AOAM532FbcHO+aqOn1qIC5pIvSsOPf0QgC+zgCc8HwNBMG2I1GRQai6j
-        GgFlGQxM2NrsjBy2WjORqb4=
-X-Google-Smtp-Source: ABdhPJxPJW5pLuIx6BmQfyP+mpGL7yIoKMnF9rsm889Cyz3ojQjPuR2R6FJwwQhajAXYQVJRUadisw==
-X-Received: by 2002:a17:902:b117:b029:e6:81ed:8044 with SMTP id q23-20020a170902b117b02900e681ed8044mr2311986plr.13.1618470179101;
-        Thu, 15 Apr 2021 00:02:59 -0700 (PDT)
-Received: from MacBook-Pro.local ([122.10.101.142])
-        by smtp.gmail.com with ESMTPSA id z18sm1219851pfa.39.2021.04.15.00.02.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 00:02:58 -0700 (PDT)
-Subject: [PATCH v2 2/2] cpupower: fix amd cpu (family >= 0x17) active state
- issue
-From:   xufuhai <xufuhai1992@gmail.com>
-To:     Thomas Renninger <trenn@suse.com>, linux@dominikbrodowski.net,
-        sherry.hurwitz@amd.com, linux-pm@vger.kernel.org,
-        xufuhai <xufuhai@kuaishou.com>
-Cc:     lishujin@kuaishou.com
-References: <20210324082838.41462-1-xufuhai1992@gmail.com>
- <20210324082838.41462-2-xufuhai1992@gmail.com> <1717786.6COvnHc5Zm@c100>
- <20df509c-5a2d-3bfc-f08f-142b18c896ed@gmail.com>
- <6de2b9d1-435d-99a2-c733-4f49483f8f57@gmail.com>
-Message-ID: <79f26f6b-f9f8-36ac-6f43-6329935ba9e4@gmail.com>
-Date:   Thu, 15 Apr 2021 15:02:54 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.9.1
+        id S231482AbhDOIKN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Apr 2021 04:10:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231143AbhDOIKM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 15 Apr 2021 04:10:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F3D7D61158;
+        Thu, 15 Apr 2021 08:09:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618474190;
+        bh=437iNytFiVAZCufObGd8LNYwkwhJtKlWYmMmdO67tOk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BFmDMOPseKxr4oPbSPTx/qkc21GocG5z0CNwjMHzvLpMqklOGLR+ZQESWW+FLXIM7
+         ghLssycFh4dLoiXIo0ybqEc+U3imsvmsJaOrga5kGECXm83OjaJc0C2zsYNFocXIaR
+         oFdZieDGpJDk/PND1NbzAMe8hkgh9tpRDCEWm3dUbzTmFnbAtLF4iadzeY73kP2+rm
+         chAu5vjuYJoQ15rKpV61nuCKKFqZTpSzzN+jXzU8B8ssauMEcOFBM/DbSuFwJZTahU
+         PYYCwjCEkX2d1bM7oW8zZ0OV+3YFseSUPp0gE7gkTABDNicaDvHLBGG5CbPLtW3llX
+         1YRLeq/YBprVA==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org, Georgi Djakov <djakov@kernel.org>
+Subject: [GIT PULL] interconnect changes for 5.13
+Date:   Thu, 15 Apr 2021 11:09:48 +0300
+Message-Id: <20210415080948.17167-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <6de2b9d1-435d-99a2-c733-4f49483f8f57@gmail.com>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: xufuhai <xufuhai@kuaishou.com>
+Hello Greg,
 
-If the read_msr function is executed by a non-root user, the function returns 
--1, which means that there is no permission to access /dev/cpu/%d/msr, but 
-cpufreq_has_boost_support should also return -1 immediately, and should not
-follow the original logic to return 0, which will cause amd The cpupower tool
-returns the boost active state as 0.
+This is the pull request with the interconnect changes for the 5.13-rc1
+merge window. These include two new drivers.
 
-Reproduce procedure:
-        cpupower frequency-info
+Patches have been in linux-next without any reported issues. Please pull
+into char-misc-next.
 
-Signed-off-by: xufuhai <xufuhai@kuaishou.com>
-Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
-Signed-off-by: lishujin <lishujin@kuaishou.com>
-Reviewed-by: Thomas Renninger <trenn@suse.com>
----
- tools/power/cpupower/utils/helpers/misc.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Thanks,
+Georgi
 
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index fc6e34511721..565f8c414396 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -16,7 +16,7 @@
- int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
-                        int *states)
- {
--       int ret;
-+       int ret = 0;
-        unsigned long long val;
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-        *support = *active = *states = 0;
-@@ -30,18 +30,21 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
-                 */
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
-                if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
--                       if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
-+                       /*
-+                        * no permission to access /dev/cpu/%d/msr, return -1 immediately,
-+                        * and should not follow the original logic to return 0
-+                        */
-+                       ret = read_msr(cpu, MSR_AMD_HWCR, &val);
-+                       if (!ret) {
-                                if (!(val & CPUPOWER_AMD_CPBDIS))
-                                        *active = 1;
-                        }
-                } else {
-                        ret = amd_pci_get_num_boost_states(active, states);
--                       if (ret)
--                               return ret;
-                }
-        } else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
-                *support = *active = 1;
--       return 0;
-+       return ret;
- }
+are available in the Git repository at:
 
-在 2021/4/8 上午10:21, xufuhai 写道:
-> Any reply? Thomas
-> 
-> 在 2021/3/30 上午10:46, xufuhai 写道:
->> Thanks for your review, Thomas～
->> as you suggested, I have updated my patch as your advice.
->> Please help me review the patch again. thanks
->>
->>
->> ----------------------------------------------------------------------------------------------------
->>
->> From: xufuhai <xufuhai@kuaishou.com>
->>
->> If the read_msr function is executed by a non-root user, the function returns 
->> -1, which means that there is no permission to access /dev/cpu/%d/msr, but 
->> cpufreq_has_boost_support should also return -1 immediately, and should not
->> follow the original logic to return 0, which will cause amd The cpupower tool
->> returns the boost active state as 0.
->>
->> Reproduce procedure:
->>         cpupower frequency-info
->>
->> Signed-off-by: xufuhai <xufuhai@kuaishou.com>
->> Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
->> Signed-off-by: lishujin <lishujin@kuaishou.com>
->> Reviewed-by: Thomas Renninger <trenn@suse.com>
->> ---
->>  tools/power/cpupower/utils/helpers/misc.c | 13 ++++++++-----
->>  1 file changed, 8 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
->> index fc6e34511721..565f8c414396 100644
->> --- a/tools/power/cpupower/utils/helpers/misc.c
->> +++ b/tools/power/cpupower/utils/helpers/misc.c
->> @@ -16,7 +16,7 @@
->>  int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
->>                         int *states)
->>  {
->> -       int ret;
->> +       int ret = 0;
->>         unsigned long long val;
->>
->>         *support = *active = *states = 0;
->> @@ -30,18 +30,21 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
->>                  */
->>
->>                 if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
->> -                       if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
->> +                       /*
->> +                        * no permission to access /dev/cpu/%d/msr, return -1 immediately,
->> +                        * and should not follow the original logic to return 0
->> +                        */
->> +                       ret = read_msr(cpu, MSR_AMD_HWCR, &val);
->> +                       if (!ret) {
->>                                 if (!(val & CPUPOWER_AMD_CPBDIS))
->>                                         *active = 1;
->>                         }
->>                 } else {
->>                         ret = amd_pci_get_num_boost_states(active, states);
->> -                       if (ret)
->> -                               return ret;
->>                 }
->>         } else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
->>                 *support = *active = 1;
->> -       return 0;
->> +       return ret;
->>  }
->>
->>  int cpupower_intel_get_perf_bias(unsigned int cpu)
->> --
->> 2.24.3 (Apple Git-128)
->>
->> 在 2021/3/29 下午6:58, Thomas Renninger 写道:
->>> Hi,
->>>
->>> Am Mittwoch, 24. März 2021, 09:28:38 CEST schrieb xufuhai:
->>>> From: xufuhai <xufuhai@kuaishou.com>
->>>>
->>>> If the read_msr function is executed by a non-root user, the function
->>>> returns -1, which means that there is no permission to access
->>>> /dev/cpu/%d/msr, but cpufreq_has_boost_support should also return -1
->>>> immediately, and should not follow the original logic to return 0, which
->>>> will cause amd The cpupower tool returns the turbo active status as 0.
->>>
->>> Yes, this seem to be buggy.
->>> Can you clean this up a bit more, please:
->>>
->>>> Reproduce procedure:
->>>>         cpupower frequency-info
->>>>
->>>> Signed-off-by: xufuhai <xufuhai@kuaishou.com>
->>>> ---
->>>>  tools/power/cpupower/utils/helpers/misc.c | 9 +++++++--
->>>>  1 file changed, 7 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/tools/power/cpupower/utils/helpers/misc.c
->>>> b/tools/power/cpupower/utils/helpers/misc.c index
->>>> fc6e34511721..be96f9ce18eb 100644
->>>> --- a/tools/power/cpupower/utils/helpers/misc.c
->>>> +++ b/tools/power/cpupower/utils/helpers/misc.c
->>>> @@ -30,10 +30,15 @@ int cpufreq_has_boost_support(unsigned int cpu, int
->>>> *support, int *active, */
->>>>
->>>>  		if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
->>>> -			if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
->>>> +			ret = read_msr(cpu, MSR_AMD_HWCR, &val);
->>>> +			if (!ret) {
->>> ret should be initialized. I would initialize it with -1, but as Intel case
->>> is always "good"/zero, it may make sense here to set:
->>>
->>> ret = 0
->>> at the beginning of the func already.
->>> At the end of the func, unconditionally returning zero:
->>>         return 0;
->>> should be replace by:
->>>         return ret;
->>>
->>>>  				if (!(val & CPUPOWER_AMD_CPBDIS))
->>>>  					*active = 1;
->>>> -			}
->>>> +			} else
->>>> +				/* no permission to access /dev/cpu/%d/msr, return -1 immediately,
->>>> +				 * and should not follow the original logic to return 0
->>>> +				 */
->>>> +				return ret;
->>>
->>> Then this part is not needed anymore, right?
->>> Still the comment would be nice to show up, maybe slightly modified
->>> in the if condition?
->>> Afaik 100% correct comment would be:
->>> /* ... */
->>> for one line comment and:
->>> /*
->>> * ...
->>> * ...
->>> */
->>> for multiline comment (one more line..).
->>>
->>>>  		} else {
->>>>  			ret = amd_pci_get_num_boost_states(active, states);
->>>>  			if (ret)
->>> and these 2 lines can vanish as well at this point:
->>>                         if (ret)
->>>                                 return ret;
->>>
->>> What do you think?
->>>
->>> Thanks for spotting this,
->>>
->>>           Thomas
->>>
->>>
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.13-rc1
+
+for you to fetch changes up to c1de07884f2bafa11ad3780cf08b234c88c2cc9d:
+
+  Merge branch 'icc-sm8350' into icc-next (2021-04-02 13:12:37 +0300)
+
+----------------------------------------------------------------
+interconnect changes for 5.13
+
+These are the interconnect changes for the 5.13-rc1 merge window
+with the highlights being drivers for two new platforms.
+
+Driver changes:
+- New driver for SM8350 platforms.
+- New driver for SDM660 platforms.
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (2):
+      dt-bindings: interconnect: Add bindings for Qualcomm SDM660 NoC
+      interconnect: qcom: Add SDM660 interconnect provider driver
+
+Benjamin Li (1):
+      interconnect: qcom: icc-rpm: record slave RPM id in error log
+
+Georgi Djakov (5):
+      interconnect: qcom: sdm660: Fix kerneldoc warning
+      interconnect: qcom: sm8350: Use the correct ids
+      interconnect: qcom: sm8350: Add missing link between nodes
+      Merge branch 'icc-sdm660' into icc-next
+      Merge branch 'icc-sm8350' into icc-next
+
+Vinod Koul (3):
+      dt-bindings: interconnect: Add Qualcomm SM8350 DT bindings
+      interconnect: qcom: Add SM8350 interconnect provider driver
+      MAINTAINERS: icc: add interconnect tree
+
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml   |  10 +
+ Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml | 147 ++
+ MAINTAINERS                                                     |   1 +
+ drivers/interconnect/qcom/Kconfig                               |  18 +
+ drivers/interconnect/qcom/Makefile                              |   4 +
+ drivers/interconnect/qcom/icc-rpm.c                             |   4 +-
+ drivers/interconnect/qcom/sdm660.c                              | 923 ++++++++
+ drivers/interconnect/qcom/sm8350.c                              | 633 +++++
+ drivers/interconnect/qcom/sm8350.h                              | 168 ++
+ include/dt-bindings/interconnect/qcom,sdm660.h                  | 116 +
+ include/dt-bindings/interconnect/qcom,sm8350.h                  | 172 ++
+ 11 files changed, 2194 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
+ create mode 100644 drivers/interconnect/qcom/sdm660.c
+ create mode 100644 drivers/interconnect/qcom/sm8350.c
+ create mode 100644 drivers/interconnect/qcom/sm8350.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8350.h
