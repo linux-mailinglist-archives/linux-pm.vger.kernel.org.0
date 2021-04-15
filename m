@@ -2,117 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050D935F9B2
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Apr 2021 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B16235FF9E
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Apr 2021 03:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349746AbhDNRVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Apr 2021 13:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbhDNRVJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Apr 2021 13:21:09 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC64C061574
-        for <linux-pm@vger.kernel.org>; Wed, 14 Apr 2021 10:20:47 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x21-20020a17090a5315b029012c4a622e4aso11180071pjh.2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Apr 2021 10:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=jsIbiMjJp3r45sgR3gjEdgXtrDk2HmDm7F9QLXmWizE=;
-        b=PLc28h/0e1FlB1kEKZ47tPA/PBolk6Mw1jT/gQVRE5UR7Z8+nvx3q/fTlhdmldC4sg
-         8HXZ1UKpaygZ9csBI0AN1OnsZi8jy48DryRDIOGy+RBb85IxveRMFqNuwON7M+kZTMHj
-         p42Sb8+E6CL450EMfu57/izWaZnpmCyvXZcYvU7Wj2XKjs1FNhrO8O6WmYXZnSxLrENP
-         f/O9Tay3JMSpJG8Xgk7IkQX39PjpGGeMrlhfe256zO1pb5I3H8FnM6hWPaZS4J2VdUFq
-         JCn0bUVQfda6EI3YXwkW64pAlMqbraR7YhFGYXv8mxKRjGcAuYP3vuZ6rZwyKIjnxL7f
-         1FsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=jsIbiMjJp3r45sgR3gjEdgXtrDk2HmDm7F9QLXmWizE=;
-        b=RNkL8QtWuGXdwejz6XOQO0N8r9P/DpgedFxEzbH4lPR9x1w4dNlTuHccOb5uI4EPwU
-         a2Zg2DX5ZH7ovkkMgCHOtg9BCqPBLWFeRgWf1CXxdyW6KUTRDnmrN5Z4e7FbJKwyJ25L
-         EtJGDPYXqMDMppFOdyC3X5JYmo9T2w5hSR7g+h/98zvAa0fPwSw54o/OvwOfgln8mHop
-         2ynho6d81pQjwuMC9kUsypTN9OcdVT47rXVsUi9PfmgBjCih4eP5CMAy+fV8dJjRE0um
-         GikmU1ZAEjycCCd+d8xbV5KRykrIJbzgjLXGsXRUt3btM+efbpAwkQsh6yIu6BggrKFo
-         TBoQ==
-X-Gm-Message-State: AOAM532Dyq3BTZEwCvyL57QcWpppbxTg7RJXQZIWTWskUOhWDmuMR38Y
-        bG61xq30MASAaEnjLZ0j2ySZog==
-X-Google-Smtp-Source: ABdhPJwWHGvUwdFB6LdpvcSA9ZLLe2WjCBMys7ob1hNQvc41MfVtjHMB8AlbD9ff2Pjby+Gn9KRRAw==
-X-Received: by 2002:a17:90a:8b97:: with SMTP id z23mr4853736pjn.65.1618420847557;
-        Wed, 14 Apr 2021 10:20:47 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r10sm56856pjf.5.2021.04.14.10.20.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 10:20:47 -0700 (PDT)
-Message-ID: <6077246f.1c69fb81.a84de.03a7@mx.google.com>
-Date:   Wed, 14 Apr 2021 10:20:47 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S229637AbhDOBbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Apr 2021 21:31:45 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:28052 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229644AbhDOBbm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 14 Apr 2021 21:31:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1618450280; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=9gnP5pgYelSlV/Rgr0abTb2Kc3chY5fICOH5Ndmud5U=; b=q0J7J7puWBMCrH1OW1Q4Z5/H3O81G5ET5z0PiunIgOuqhWs0lPb628ppXOZiIkpIBClVLqUz
+ rXu2fjH21d7LJzfDBjIbVadaezarA7aNiW8iMoAG++KUJMXjyblJ73hTVUkmmS+cLvtSqrq8
+ iWa99DZoOsHrBkLsyYVElPqMUEE=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6077975f8166b7eff72d6a96 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 15 Apr 2021 01:31:11
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 017C3C43463; Thu, 15 Apr 2021 01:31:10 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.0.103] (unknown [49.204.182.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E0672C433C6;
+        Thu, 15 Apr 2021 01:31:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E0672C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v4 5/7] cpufreq: qcom-hw: Implement CPRh aware OSM
+ programming
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com
+References: <20210119174557.227318-1-angelogioacchino.delregno@somainline.org>
+ <20210119174557.227318-6-angelogioacchino.delregno@somainline.org>
+ <c35bfd76-0d7e-d7bc-79ab-041b1074c1af@codeaurora.org>
+ <YAh+9/IgRhI8M3ov@builder.lan>
+ <92e465e4-a0d9-43eb-84f7-69fa355097a9@codeaurora.org>
+ <20210413034940.o6uzjtnh2ylvikbf@vireshk-i7>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <150e19b9-9ecf-7cac-8aa3-c7c4d7a11468@codeaurora.org>
+Date:   Thu, 15 Apr 2021 07:01:03 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.12-rc7-162-ga5b1c231c4a84
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 6 runs, 1 regressions (v5.12-rc7-162-ga5b1c231c4a84)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20210413034940.o6uzjtnh2ylvikbf@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 1 regressions (v5.12-rc7-162-ga5b1c231c4a84)
 
-Regressions Summary
--------------------
+On 4/13/2021 9:19 AM, Viresh Kumar wrote:
+> On 12-04-21, 15:01, Taniya Das wrote:
+>> Technically the HW we are trying to program here differs in terms of
+>> clocking, the LUT definitions and many more. It will definitely make
+>> debugging much more troublesome if we try to accommodate multiple versions of
+>> CPUFREQ-HW in the same code.
+>>
+>> Thus to keep it simple, easy to read, debug, the suggestion is to keep it
+>> with "v1" tag as the OSM version we are trying to put here is from OSM1.0.
+> 
+> That is a valid point and is always a case with so many drivers. What
+> I am concerned about is how much code is common across versions, if it
+> is 5-70%, or more, then we should definitely share, arrange to have
+> callbacks or ops per version and call them in a generic fashion instead
+> of writing a new driver. This is what's done across
+> drivers/frameworks, etc.
+> 
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+The code sharing here between versions should be very minimal as most 
+portion of the code here in V1 would focus on programming to prepare the 
+LUT to be further read by the driver, the programming in itself is huge 
+for v1. I am okay if you move the v1 in a different file and invoke 
+based on version.
 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
-7-162-ga5b1c231c4a84/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.12-rc7-162-ga5b1c231c4a84
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a5b1c231c4a84cae19849db076b8a56ffbc8a079 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607717c1e04404bc71dac706
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc7-162-ga5b1=
-c231c4a84/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc7-162-ga5b1=
-c231c4a84/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0412.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/607717c1e04404bc71dac707
-        failing since 237 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+--
