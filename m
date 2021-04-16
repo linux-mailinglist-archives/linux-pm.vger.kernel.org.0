@@ -2,96 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B52A3615CD
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 01:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88E53616B7
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 02:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbhDOXH2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Apr 2021 19:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbhDOXH1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Apr 2021 19:07:27 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B97BC061574
-        for <linux-pm@vger.kernel.org>; Thu, 15 Apr 2021 16:07:04 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id a9so15050172ioc.8
-        for <linux-pm@vger.kernel.org>; Thu, 15 Apr 2021 16:07:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=izaFiMsEt23SotgUQxxfSHOT9lAkqU9T7HKgCzSRLFM=;
-        b=VlkwjZzexDUQUjA1V2HmIQKxpiefrUDW9d2ISLtxgb/xS5ZQ4bTBphSsmcr0mZTW7M
-         UUsE9V7sNyHt8SduRB23MBBoFrqOH1LbzI0hXeYPmft7SEOvqYSSEEgX3s4R70TUhzHs
-         bhuXI25mfaYwKzNgmjfOYSV+tw0N4qkqJRW4Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=izaFiMsEt23SotgUQxxfSHOT9lAkqU9T7HKgCzSRLFM=;
-        b=VgB5I8M+h191DWjMyd70zqPsZTNOdHXi6OwmNwWZ8aiN8iRCA/tt3ixO6YNbrU+niM
-         SY2+qw5uxtAvbKXOsMrVEZT380YcGIomwNqO4ibiJP1Gxa8SvQJOlPvPlIflZyhh6Mqx
-         KH2+GRpmC78SkYpJ2XnJ/DLm7+tX62qJ0N2+OGj1MeU426lJpbsEgc+krgutvj+FdfhF
-         ePZJOTo8maONva+Yj8OzUz2/LTuf2+y3cldFnSD0bN9QsGchjr1y2eulojhxvhNzp94g
-         3lmjcpQ7EcirI2NjiMgRQC71mnZCWFUDeQZ6WzIVDDfNuD0cY/13GiclsoECsmIchp06
-         Jn0Q==
-X-Gm-Message-State: AOAM530IFRYCNGhM3rphAGYVTv4jn0NLzY/UexHl9ebTm9xsKXmNTyN2
-        Uf8kgYCuQrOXNwRImiGI55brRQ==
-X-Google-Smtp-Source: ABdhPJzWGhgytT65jEtwqL5Rw1sfjyDOB7LurMk6BvhloiWslAehe8LkiHWT+rhqnkCX7EzKi6ZfTQ==
-X-Received: by 2002:a6b:fe13:: with SMTP id x19mr1219276ioh.73.1618528023785;
-        Thu, 15 Apr 2021 16:07:03 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s12sm1813820ild.71.2021.04.15.16.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 16:07:03 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] cpupower: fix amd cpu (family >= 0x17) active
- state issue
-To:     xufuhai <xufuhai1992@gmail.com>, Thomas Renninger <trenn@suse.com>,
-        linux@dominikbrodowski.net, sherry.hurwitz@amd.com,
-        linux-pm@vger.kernel.org, xufuhai <xufuhai@kuaishou.com>
-Cc:     lishujin@kuaishou.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20210324082838.41462-1-xufuhai1992@gmail.com>
- <20210324082838.41462-2-xufuhai1992@gmail.com> <1717786.6COvnHc5Zm@c100>
- <20df509c-5a2d-3bfc-f08f-142b18c896ed@gmail.com>
- <6de2b9d1-435d-99a2-c733-4f49483f8f57@gmail.com>
- <79f26f6b-f9f8-36ac-6f43-6329935ba9e4@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8e5195be-1ab7-60b7-d7c8-ed1cbc9ad986@linuxfoundation.org>
-Date:   Thu, 15 Apr 2021 17:07:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S234865AbhDPAUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Apr 2021 20:20:15 -0400
+Received: from mbox.abcom.al ([217.73.143.249]:51136 "EHLO mbox.abcom.al"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234764AbhDPAUP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 15 Apr 2021 20:20:15 -0400
+X-Greylist: delayed 25616 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Apr 2021 20:20:14 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id 41CFB3C63AD;
+        Fri, 16 Apr 2021 02:19:49 +0200 (CEST)
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ayIg89Vkp-ux; Fri, 16 Apr 2021 02:19:49 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id E48873CB89F;
+        Fri, 16 Apr 2021 02:19:48 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al E48873CB89F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
+        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618532389;
+        bh=VCOKpjxaLoatOvx+LSaT3i7u3saMYZrSANTtqEwi9j4=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=kb6R/CAKZvc8rpgaVJMDDoSOovjA7oqhcJsxI1PkqSTdxybjBCdZzNTOOIysweX4R
+         WnfY1OBQtq57bPah7XyYFLgpIZoxz/P/lm8kb+EQ79wiOCScVaGJfHKp9qet6YlbZ7
+         ZUrjDnUzmrsvgkirZcQVecSncsTo7pJIFNNFvdmo5WveeY8ojEgOYuXsJEIeNNVKHD
+         0G0uovH697DWKDciq/3VXrxB4y+zK5DHavVrz6E6y/45Q5ncSGPuzIBD8UC0Ox0GPw
+         W56Y9YpeQnh76dNzRuURd34Zlab6Bh99BNrMjd2Qqlqk2d4zckyVspb4cPtefhW4L4
+         SB+j3IZRppvzQ==
+X-Virus-Scanned: amavisd-new at mbox.abcom.al
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qJaBPSrCKpMU; Fri, 16 Apr 2021 02:19:48 +0200 (CEST)
+Received: from [10.41.71.107] (unknown [105.4.2.96])
+        by mbox.abcom.al (Postfix) with ESMTPSA id 0D2C43C63AD;
+        Fri, 16 Apr 2021 02:19:41 +0200 (CEST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <79f26f6b-f9f8-36ac-6f43-6329935ba9e4@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <mtodo@abcom.al>
+From:   "William Kruger" <mtodo@abcom.al>
+Date:   Thu, 15 Apr 2021 17:19:26 -0700
+Reply-To: robadamengineeringltd@gmail.com
+Message-Id: <20210416001942.0D2C43C63AD@mbox.abcom.al>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/15/21 1:02 AM, xufuhai wrote:
-> From: xufuhai <xufuhai@kuaishou.com>
-> 
-> If the read_msr function is executed by a non-root user, the function returns
-> -1, which means that there is no permission to access /dev/cpu/%d/msr, but
-> cpufreq_has_boost_support should also return -1 immediately, and should not
-> follow the original logic to return 0, which will cause amd The cpupower tool
-> returns the boost active state as 0.
-> 
-> Reproduce procedure:
->          cpupower frequency-info
-> 
-> Signed-off-by: xufuhai <xufuhai@kuaishou.com>
-> Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
-> Signed-off-by: lishujin <lishujin@kuaishou.com>
-> Reviewed-by: Thomas Renninger <trenn@suse.com>
-> ---
-
-As I mentioned on the previous version of this patch, please run
-get_maintainers script and include me in the To: list.
-
-The patch has to land in my Inbox for me to apply it.
-
-thanks,
--- Shuah
+Hallo Liebes, ich bin William Kruger aus Lantana im Palm Beach County, USA.=
+ Ich habe einen $ 168 Millionen Jackpot gewonnen, der einer der gr=C3=B6=C3=
+=9Ften Lotterie-Jackpots ist. Im Namen meiner Familie und aus gutem Willen =
+spenden wir Ihnen und Ihrer Familie einen Betrag von (=E2=82=AC 850,000.00 =
+EUR). Ich versuche, die gemeinn=C3=BCtzigen Waisenh=C3=A4user zu erreichen =
+und zur Armutsbek=C3=A4mpfung beizutragen und eine angemessene Gesundheitsv=
+ersorgung f=C3=BCr Einzelpersonen zu gew=C3=A4hrleisten, insbesondere w=C3=
+=A4hrend dieser Welt Pandemic Covid 19. Ich m=C3=B6chte auch, dass Sie eine=
+n Teil dieser Spende in die =C3=B6ffentliche Infrastruktur investieren, um =
+Arbeitslosen in Ihrem Land Arbeitspl=C3=A4tze zu bieten . Ich habe dich gew=
+=C3=A4hlt, weil ich an dich glaube. Ich brauche Ihre uneingeschr=C3=A4nkte =
+Mitarbeit in Bezug auf diese Spende. Hier ist Ihr ausgew=C3=A4hlter Geheimc=
+ode: [W5900Q2172021] und bitte teilen Sie den Code niemandem mit, wenn Sie =
+interessiert und bereit sind, mit mir zu arbeiten. Bitte kontaktieren Sie m=
+ich mit Ihrem Spenden- / Geheimcode [W5900Q2172021] und Ihren vollst=C3=A4n=
+digen Namen hier bei meiner privaten E-Mail: krugerwilliamhome@gmail.com
