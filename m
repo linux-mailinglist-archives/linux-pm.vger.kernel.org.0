@@ -2,95 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4478A361A3E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 09:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D961D361C9F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 11:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbhDPG7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Apr 2021 02:59:43 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:51355 "EHLO m43-7.mailgun.net"
+        id S238301AbhDPJA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Apr 2021 05:00:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239372AbhDPG7m (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Apr 2021 02:59:42 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1618556358; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=S5ewpSrxdAxv3YGMfwMxs+XCwqIbyFLJmhM/MZzzUK0=; b=tipIuIi8ErSgEfJbK9yQb1ghwmTz8rZoKOTbLa5sp/b90caxgeTNeZyiNKgCezPosVHAcD+g
- o+DKz5TI7E/UMVQWccoqqlN2FMYGxpxQGZXwseY3pVOtG+dl3AB/o2zfppTlzEMU+4yV6qBi
- SLXkmc6D0oYtgSdrHRzS5Sw/TTY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 607935c22cbba889805abdf7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Apr 2021 06:59:14
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id ADE10C433CA; Fri, 16 Apr 2021 06:59:13 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D3BE6C43461;
-        Fri, 16 Apr 2021 06:59:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D3BE6C43461
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
-        sibis@codeaurora.org, elder@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Subject: [3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-Date:   Fri, 16 Apr 2021 12:28:10 +0530
-Message-Id: <1618556290-28303-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
-References: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
+        id S235236AbhDPJA7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Apr 2021 05:00:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DAE926115B;
+        Fri, 16 Apr 2021 09:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618563634;
+        bh=7wmVpOqsaknh+P4FzEE06MYfMkAiP80y7LVM+GvJfiQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JZWecCC70vkjElc81yiZgJS8UklIydW4O8zpob6+1MRlysFahpgFt6KH2yeocZdzC
+         /9TYaCUP9KTo+AuSYEFxw9ye09DHRdqnun4SzfLJC3RnqEDAnsaOjCBTMZ3HWgQXc8
+         BtOxLUpokHw30chVeZrNMJS8cR/j7aWhltCLFYXpdzITDOk0o2SSPEGqtiZtQJX6Cw
+         or95tE1eQofV9Xr6FNKeRU+2nkfoBeQGcq7ejyTya8q4kRjCvr8OwdK54LMJ48UKkr
+         19rJDF6a10OdNCdSWuPzNNFOTGWm2ycBM0V62cgJq1n52fQ5qoSS+bNj/dMkkmZxTI
+         ZP7EBahpTzpNQ==
+Received: by mail-ed1-f46.google.com with SMTP id e7so31275949edu.10;
+        Fri, 16 Apr 2021 02:00:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532YvxZR7eSAn3wpSNKNkirZ/xjXZotDoWnLvuFASqS9U/JzAobw
+        wHNtlR3JGmvvHnA6w23E5lv244HKy0BsyeOfhUU=
+X-Google-Smtp-Source: ABdhPJyS0LWKxxT6wHKAww0y5cojiL8VJFRg4ktDZ0lY8VrMNI2SaQHOhE7kynmEUPwlzFWiNxKaMDM9HdJtbjYQm3k=
+X-Received: by 2002:a50:e607:: with SMTP id y7mr8957861edm.18.1618563633453;
+ Fri, 16 Apr 2021 02:00:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210404043219.11334-1-zhuguangqing83@gmail.com>
+In-Reply-To: <20210404043219.11334-1-zhuguangqing83@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 16 Apr 2021 11:00:21 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcCiMCNKmP5TCLk9-qCJ=c4qP59Jr3B1sBZfxTqe4FuAw@mail.gmail.com>
+Message-ID: <CAJKOXPcCiMCNKmP5TCLk9-qCJ=c4qP59Jr3B1sBZfxTqe4FuAw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/tsens: fix missing put_device error
+To:     zhuguangqing83@gmail.com
+Cc:     Amit Kucheria <amitk@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-SoCs.
+On Sun, 4 Apr 2021 at 06:34, <zhuguangqing83@gmail.com> wrote:
+>
+> From: Guangqing Zhu <zhuguangqing83@gmail.com>
+>
+> Fixes coccicheck error:
+>
+> drivers/thermal/qcom/tsens.c:759:4-10: ERROR: missing put_device; call
+> of_find_device_by_node on line 715, but without a corresponding object
+> release within this function.
+>
+> Fixes: a7ff82976122 ("drivers: thermal: tsens: Merge tsens-common.c into
+> tsens.c")
+>
+> Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
+> ---
+>  drivers/thermal/qcom/tsens.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index d8ce3a687b80..cc4c6a9853a4 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -755,9 +755,10 @@ int __init init_common(struct tsens_priv *priv)
+>                 for (i = VER_MAJOR; i <= VER_STEP; i++) {
+>                         priv->rf[i] = devm_regmap_field_alloc(dev, priv->srot_map,
+>                                                               priv->fields[i]);
+> -                       if (IS_ERR(priv->rf[i]))
+> -                               return PTR_ERR(priv->rf[i]);
+> -               }
+> +                       if (IS_ERR(priv->rf[i])) {
+> +                               ret = PTR_ERR(priv->rf[i]);
+> +                               goto err_put_device;
+> +                       }
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+As kbuild robot pointed out - this does not even compile. Please at
+least build all your patches before sending.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index ecb2a77..05567bb 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -603,6 +603,15 @@
- 			};
- 		};
- 
-+		epss_l3: interconnect@18590000 {
-+			compatible = "qcom,sc7280-epss-l3";
-+			reg = <0 0x18590000 0 1000>, <0 0x18591000 0 0x100>,
-+				<0 0x18592000 0 0x100>, <0 0x18593000 0 0x100>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+			#interconnect-cells = <1>;
-+		};
-+
- 		clk_virt: interconnect {
- 			compatible = "qcom,sc7280-clk-virt";
- 			#interconnect-cells = <2>;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Best regards,
+Krzysztof
