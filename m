@@ -2,156 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4749F361902
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 06:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B2A361A32
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 09:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbhDPEvy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Apr 2021 00:51:54 -0400
-Received: from mga01.intel.com ([192.55.52.88]:24141 "EHLO mga01.intel.com"
+        id S239299AbhDPG7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Apr 2021 02:59:24 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:44608 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229555AbhDPEvy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Apr 2021 00:51:54 -0400
-IronPort-SDR: tvcsLYvQjMcMTgRw1H3SaV1mvZlprIAGCJzzaEOr3tUqGU6yxrHncv7FGOrVp9rdhnS7++xd7o
- L4tlvBIWjx0A==
-X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="215514289"
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="215514289"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 21:51:29 -0700
-IronPort-SDR: 4JcHh6q6f3OsCIkeNk2UKSqOxONyvtmmMK6ZFC1E9FbjeJJ6HzmvPHPfxrj7/EL/7xgL4wSWN5
- y4PLN14wKFLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="384219241"
-Received: from lkp-server02.sh.intel.com (HELO fa9c8fcc3464) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2021 21:51:25 -0700
-Received: from kbuild by fa9c8fcc3464 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lXGRv-0001Eo-Ud; Fri, 16 Apr 2021 04:51:23 +0000
-Date:   Fri, 16 Apr 2021 12:50:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 82f100a3bced76c3a8a11f4c0e4e8104b95e3993
-Message-ID: <6079179b.NV955TL+SJlZI3s1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S239256AbhDPG7X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Apr 2021 02:59:23 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1618556338; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=mFahiqmBUzZJantEUUJofFLfR+1vSK+fgZDkIYbab78=; b=ZLgZ4ZG45F2ghReOHCRVZCe9byHeLYls+hODcufagR3y93ZhmZdkK9p/RbXDeCW2ioWKGNZ5
+ Gsf3wys4YhgNlsW0raQfoGBR6j1YK/xRvZhdbL1TkYgBwaFiOv5PeJNOi8SbwL+z/+8ViL1n
+ s2DFv9nMn8IYeX3DXgQAv/qHWYU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 607935b12cc44d3aea47c284 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Apr 2021 06:58:57
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9E252C43464; Fri, 16 Apr 2021 06:58:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 48661C433C6;
+        Fri, 16 Apr 2021 06:58:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 48661C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=okukatla@codeaurora.org
+From:   Odelu Kukatla <okukatla@codeaurora.org>
+To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        evgreen@google.com
+Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        sibis@codeaurora.org, elder@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>
+Subject: [0/3] Add L3 provider support for SC7280
+Date:   Fri, 16 Apr 2021 12:28:07 +0530
+Message-Id: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 82f100a3bced76c3a8a11f4c0e4e8104b95e3993  Merge branch 'pm-sleep' into bleeding-edge
+Add Epoch Subsystem (EPSS) L3 provider support on SM7280 SoCs.
 
-elapsed time: 724m
+Depends on: https://lore.kernel.org/patchwork/cover/1389010/
+Depends on: https://lore.kernel.org/patchwork/cover/1392102/
 
-configs tested: 93
-configs skipped: 2
+Odelu Kukatla (3):
+  dt-bindings: interconnect: Add EPSS L3 DT binding on SC7280
+  interconnect: qcom: Add EPSS L3 support on SC7280
+  arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ .../bindings/interconnect/qcom,osm-l3.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   9 ++
+ drivers/interconnect/qcom/osm-l3.c                 | 124 ++++++++++++++++-----
+ drivers/interconnect/qcom/sc7280.h                 |  10 ++
+ include/dt-bindings/interconnect/qcom,osm-l3.h     |  10 +-
+ 5 files changed, 124 insertions(+), 30 deletions(-)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-riscv                            allmodconfig
-arm                       aspeed_g4_defconfig
-xtensa                         virt_defconfig
-arm                          gemini_defconfig
-h8300                            alldefconfig
-arm                          pxa3xx_defconfig
-powerpc                       holly_defconfig
-um                               alldefconfig
-arm                          moxart_defconfig
-powerpc                     redwood_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                      arches_defconfig
-m68k                        m5272c3_defconfig
-i386                             alldefconfig
-powerpc                    mvme5100_defconfig
-sh                             shx3_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210415
-i386                 randconfig-a006-20210415
-i386                 randconfig-a001-20210415
-i386                 randconfig-a005-20210415
-i386                 randconfig-a004-20210415
-i386                 randconfig-a002-20210415
-i386                 randconfig-a015-20210415
-i386                 randconfig-a014-20210415
-i386                 randconfig-a013-20210415
-i386                 randconfig-a012-20210415
-i386                 randconfig-a016-20210415
-i386                 randconfig-a011-20210415
-x86_64               randconfig-a003-20210415
-x86_64               randconfig-a002-20210415
-x86_64               randconfig-a005-20210415
-x86_64               randconfig-a001-20210415
-x86_64               randconfig-a006-20210415
-x86_64               randconfig-a004-20210415
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-clang tested configs:
-x86_64               randconfig-a014-20210415
-x86_64               randconfig-a015-20210415
-x86_64               randconfig-a011-20210415
-x86_64               randconfig-a013-20210415
-x86_64               randconfig-a012-20210415
-x86_64               randconfig-a016-20210415
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
