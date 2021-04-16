@@ -2,248 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2261E3620AA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 15:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37606362326
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 16:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbhDPNR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Apr 2021 09:17:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32242 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235631AbhDPNR3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Apr 2021 09:17:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618579024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc; bh=zPYo1aiWptSZbQIMuyBU4NEQHLJgCFJFKFi4vRSHdZE=;
-        b=AS96COYtYFMpE8Ayw0dkeKHy7LpjK4N7NHc3ijPM2gBcyfY/OHKGdPCZfIa6JaQR+UTWsb
-        +wE5iAl6H1cwlCiBJgEBAcVKxpbCcit8j2W43IwnVR8m8nnS3rttHsGS7b/Mit5y2ObyPQ
-        /xvJK1XdSZ6+FondhYrAe+xMxIsuwQU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-444-bnlFUWuFPS2e_dOsGa9t0Q-1; Fri, 16 Apr 2021 09:17:02 -0400
-X-MC-Unique: bnlFUWuFPS2e_dOsGa9t0Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B01A107ACC7;
-        Fri, 16 Apr 2021 13:17:01 +0000 (UTC)
-Received: from crecklin.bos.com (unknown [10.10.115.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E6BAF19744;
-        Fri, 16 Apr 2021 13:16:56 +0000 (UTC)
-From:   Chris von Recklinghausen <crecklin@redhat.com>
-To:     ebiggers@kernel.org, ardb@kernel.org, simo@redhat.com,
-        rafael@kernel.org, decui@microsoft.com, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 v9] use crc32 instead of md5 for hibernation e820 integrity check
-Date:   Fri, 16 Apr 2021 09:16:55 -0400
-Message-Id: <20210416131655.22112-1-crecklin@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        id S235877AbhDPOvS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Apr 2021 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233916AbhDPOvS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Apr 2021 10:51:18 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4475CC061756
+        for <linux-pm@vger.kernel.org>; Fri, 16 Apr 2021 07:50:52 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id i6so11331364qti.10
+        for <linux-pm@vger.kernel.org>; Fri, 16 Apr 2021 07:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kepstin.ca; s=google;
+        h=message-id:subject:from:to:date:in-reply-to:references:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=F9UU+jQfSexw8hhu+M3eVO5mGHcQtJmjLJ/mzZBvj3w=;
+        b=T0vJs/lJAC0Ybn7Efy634+G7ZKmCufJ9QoDi698/qShOzuzBCeI5+4ldpRnyU+OK5P
+         QijOq7Xsc9jJMvEMV8FPzsJoNMBtS6w9PwwGt1SYFccVf8AxKNUYCGQ+7Qaq0E3159ls
+         IHKYMHD9pCbLNhsuAwqdBCExzdKTJXJZYo96A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=F9UU+jQfSexw8hhu+M3eVO5mGHcQtJmjLJ/mzZBvj3w=;
+        b=cmI9qEDULggXtGJb2CUw7UXI4WX9L3sk2cWYxb4oFY8CMQmqlGBDyPSICf61kPkfKP
+         Xq9e6BgKuJNqWY0pACdzq9luN6cwsYNAwE5FB7mm9Dbrgi3MC1k3M+aE0NlzC5sa6iym
+         8GoBJ8+SZh15jyOGfWtmzH4GqqFZ7EB1DbUP/EqR+E2wk0wTo5q3jgUvhLrMNnyR5Ner
+         vT5YoNBPypsdAh5PmNcwRaESNG33DMBH1y8HaC2IjThhtJ267n93Bewue3O30q3z9v9k
+         8k9X2CoUTwVsHNe4A6fRqpAMFFaE5ae/4u7iTHgtjs9x6rV0pWaEudyEVjL3jSg5N46w
+         5yCQ==
+X-Gm-Message-State: AOAM5322eLeTv0UVQTxx98yT/dUEs8tJxRvJZADpLtzyNIQnGJmLFi8K
+        9uGJoMSX79/E4FdT+YxH/wpBTw==
+X-Google-Smtp-Source: ABdhPJywamb1TLItL6hxBu1k1N+8qI7IzVo29e3lYbx9KXCvkTtePLSyJAjSMJnORNIIIibEMnqwIQ==
+X-Received: by 2002:a05:622a:1208:: with SMTP id y8mr8288221qtx.215.1618584651456;
+        Fri, 16 Apr 2021 07:50:51 -0700 (PDT)
+Received: from saya.kepstin.ca (dhcp-108-168-125-232.cable.user.start.ca. [108.168.125.232])
+        by smtp.gmail.com with ESMTPSA id k126sm4231654qkb.4.2021.04.16.07.50.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Apr 2021 07:50:50 -0700 (PDT)
+Message-ID: <65e556b53fad029474fd948afecf0e226aa01f87.camel@kepstin.ca>
+Subject: Re: [PATCH v4] tools/power turbostat: Fix RAPL summary collection
+ on AMD processors
+From:   Calvin Walton <calvin.walton@kepstin.ca>
+To:     Terry Bowman <terry.bowman@amd.com>, lenb@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 16 Apr 2021 10:50:48 -0400
+In-Reply-To: <68be4830-36ec-85ad-56ae-ee3cf9b9589c@amd.com>
+References: <20210330213825.77294-1-terry.bowman@amd.com>
+         <17d15837848eddd8445b206356531b9b5aae644b.camel@kepstin.ca>
+         <68be4830-36ec-85ad-56ae-ee3cf9b9589c@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hibernation fails on a system in fips mode because md5 is used for the e820
-integrity check and is not available. Use crc32 instead.
+On Fri, 2021-04-16 at 06:42 -0500, Terry Bowman wrote:
+> 
+> Hi Calvin,
+> 
+> Thanks for the feedback. I'll begin making the change and testing.
+> I'll 
+> respond with V2 patch in this thread.
+> 
+> Regards,
+> Terry
 
-The check is intended to detect whether the E820 memory map provided
-by the firmware after cold boot unexpectedly differs from the one that
-was in use when the hibernation image was created. In this case, the
-hibernation image cannot be restored, as it may cover memory regions
-that are no longer available to the OS.
+It looks like there might already be a patch in the pipeline for this
+issue; see Chen Yu's response to my patch here:
+https://lkml.org/lkml/2021/4/14/1322
+I'm hoping we get some clarification of the status soon.
 
-A non-cryptographic checksum such as CRC-32 is sufficient to detect such
-inadvertent deviations.
+While you're respinning your patch, there's one other issue that I
+noticed - all the idx/offset-related functions pass the offset value in
+a variable of type "int" (32bit signed integer), but the offset of the
+AMD MSR_CORE_ENERGY_STAT MSR is 0xC001029A, which exceeds INT_MAX. The
+offsets should all use "off_t" to get a 64bit type and avoid wrapping
+or sign extension issues.
 
-Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memory map
-       by md5 digest")
-
-Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
----
-v1 -> v2
-   bump up RESTORE_MAGIC
-v2 -> v3
-   move embelishment from cover letter to commit comments (no code change)
-v3 -> v4
-   add note to comments that md5 isn't used for encryption here.
-v4 -> v5
-   reword comment per Simo's suggestion
-v5 -> v6
-   use wording from Eric Biggers, use crc32_le instead of crc32 from crypto
-	framework (crc32_le is in the core API and removes need for #defines)
-v6 -> v7
-   reword with input from Eric/Ard/Simo, code changed per Eric's feedback
-v7 -> v8
-   More feedback per Eric -
-   change 'Suspend' to 'Hibernation' in commit comments, rename e820_digest to
-   e820_checksum and change it to an unsigned long. rename get_e820_md5 to
-   compute_e820_crc32 and have it return the checksum value instead of writing
-   it into a user supplied buffer, get rid of hibernation_e820_save in favor of
-   calling compute_e820_crc32 directly, likewise, get rid of
-   hibernation_e820_mismatch in favor of comparing e820_checksum to the return
-   value of compute_e820_crc32()
-v8 -> v9
-   Make comment for compute_e820_crc32 more kerneldoc friendly. Also update
-   comment about the e820 firmware table in arch/x86/kernel/e820.c since it
-   also referred to MD5 and hibernation.
-
- arch/x86/kernel/e820.c     |  4 +-
- arch/x86/power/hibernate.c | 89 ++++++--------------------------------
- 2 files changed, 16 insertions(+), 77 deletions(-)
-
-diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 22aad412f965..629c4994f165 100644
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@ -31,8 +31,8 @@
-  *       - inform the user about the firmware's notion of memory layout
-  *         via /sys/firmware/memmap
-  *
-- *       - the hibernation code uses it to generate a kernel-independent MD5
-- *         fingerprint of the physical memory layout of a system.
-+ *       - the hibernation code uses it to generate a kernel-independent CRC32
-+ *         checksum of the physical memory layout of a system.
-  *
-  * - 'e820_table_kexec': a slightly modified (by the kernel) firmware version
-  *   passed to us by the bootloader - the major difference between
-diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-index cd3914fc9f3d..e94e0050a583 100644
---- a/arch/x86/power/hibernate.c
-+++ b/arch/x86/power/hibernate.c
-@@ -13,8 +13,8 @@
- #include <linux/kdebug.h>
- #include <linux/cpu.h>
- #include <linux/pgtable.h>
--
--#include <crypto/hash.h>
-+#include <linux/types.h>
-+#include <linux/crc32.h>
- 
- #include <asm/e820/api.h>
- #include <asm/init.h>
-@@ -54,95 +54,33 @@ int pfn_is_nosave(unsigned long pfn)
- 	return pfn >= nosave_begin_pfn && pfn < nosave_end_pfn;
- }
- 
--
--#define MD5_DIGEST_SIZE 16
--
- struct restore_data_record {
- 	unsigned long jump_address;
- 	unsigned long jump_address_phys;
- 	unsigned long cr3;
- 	unsigned long magic;
--	u8 e820_digest[MD5_DIGEST_SIZE];
-+	unsigned long e820_checksum;
- };
- 
--#if IS_BUILTIN(CONFIG_CRYPTO_MD5)
- /**
-- * get_e820_md5 - calculate md5 according to given e820 table
-+ * compute_e820_crc32 - calculate crc32 of a given e820 table
-  *
-  * @table: the e820 table to be calculated
-- * @buf: the md5 result to be stored to
-+ *
-+ * Return: the resulting checksum
-  */
--static int get_e820_md5(struct e820_table *table, void *buf)
-+static inline u32 compute_e820_crc32(struct e820_table *table)
- {
--	struct crypto_shash *tfm;
--	struct shash_desc *desc;
--	int size;
--	int ret = 0;
--
--	tfm = crypto_alloc_shash("md5", 0, 0);
--	if (IS_ERR(tfm))
--		return -ENOMEM;
--
--	desc = kmalloc(sizeof(struct shash_desc) + crypto_shash_descsize(tfm),
--		       GFP_KERNEL);
--	if (!desc) {
--		ret = -ENOMEM;
--		goto free_tfm;
--	}
--
--	desc->tfm = tfm;
--
--	size = offsetof(struct e820_table, entries) +
-+	int size = offsetof(struct e820_table, entries) +
- 		sizeof(struct e820_entry) * table->nr_entries;
- 
--	if (crypto_shash_digest(desc, (u8 *)table, size, buf))
--		ret = -EINVAL;
--
--	kfree_sensitive(desc);
--
--free_tfm:
--	crypto_free_shash(tfm);
--	return ret;
--}
--
--static int hibernation_e820_save(void *buf)
--{
--	return get_e820_md5(e820_table_firmware, buf);
--}
--
--static bool hibernation_e820_mismatch(void *buf)
--{
--	int ret;
--	u8 result[MD5_DIGEST_SIZE];
--
--	memset(result, 0, MD5_DIGEST_SIZE);
--	/* If there is no digest in suspend kernel, let it go. */
--	if (!memcmp(result, buf, MD5_DIGEST_SIZE))
--		return false;
--
--	ret = get_e820_md5(e820_table_firmware, result);
--	if (ret)
--		return true;
--
--	return memcmp(result, buf, MD5_DIGEST_SIZE) ? true : false;
--}
--#else
--static int hibernation_e820_save(void *buf)
--{
--	return 0;
--}
--
--static bool hibernation_e820_mismatch(void *buf)
--{
--	/* If md5 is not builtin for restore kernel, let it go. */
--	return false;
-+	return ~crc32_le(~0, (unsigned char const *)table, size);
- }
--#endif
- 
- #ifdef CONFIG_X86_64
--#define RESTORE_MAGIC	0x23456789ABCDEF01UL
-+#define RESTORE_MAGIC	0x23456789ABCDEF02UL
- #else
--#define RESTORE_MAGIC	0x12345678UL
-+#define RESTORE_MAGIC	0x12345679UL
- #endif
- 
- /**
-@@ -179,7 +117,8 @@ int arch_hibernation_header_save(void *addr, unsigned int max_size)
- 	 */
- 	rdr->cr3 = restore_cr3 & ~CR3_PCID_MASK;
- 
--	return hibernation_e820_save(rdr->e820_digest);
-+	rdr->e820_checksum = compute_e820_crc32(e820_table_firmware);
-+	return 0;
- }
- 
- /**
-@@ -200,7 +139,7 @@ int arch_hibernation_header_restore(void *addr)
- 	jump_address_phys = rdr->jump_address_phys;
- 	restore_cr3 = rdr->cr3;
- 
--	if (hibernation_e820_mismatch(rdr->e820_digest)) {
-+	if (rdr->e820_checksum != compute_e820_crc32(e820_table_firmware)) {
- 		pr_crit("Hibernate inconsistent memory map detected!\n");
- 		return -ENODEV;
- 	}
 -- 
-2.18.1
+Calvin Walton <calvin.walton@kepstin.ca>
 
