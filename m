@@ -2,70 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88E53616B7
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 02:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4749F361902
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Apr 2021 06:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbhDPAUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Apr 2021 20:20:15 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:51136 "EHLO mbox.abcom.al"
+        id S235103AbhDPEvy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Apr 2021 00:51:54 -0400
+Received: from mga01.intel.com ([192.55.52.88]:24141 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234764AbhDPAUP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 15 Apr 2021 20:20:15 -0400
-X-Greylist: delayed 25616 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Apr 2021 20:20:14 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 41CFB3C63AD;
-        Fri, 16 Apr 2021 02:19:49 +0200 (CEST)
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ayIg89Vkp-ux; Fri, 16 Apr 2021 02:19:49 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id E48873CB89F;
-        Fri, 16 Apr 2021 02:19:48 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al E48873CB89F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618532389;
-        bh=VCOKpjxaLoatOvx+LSaT3i7u3saMYZrSANTtqEwi9j4=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=kb6R/CAKZvc8rpgaVJMDDoSOovjA7oqhcJsxI1PkqSTdxybjBCdZzNTOOIysweX4R
-         WnfY1OBQtq57bPah7XyYFLgpIZoxz/P/lm8kb+EQ79wiOCScVaGJfHKp9qet6YlbZ7
-         ZUrjDnUzmrsvgkirZcQVecSncsTo7pJIFNNFvdmo5WveeY8ojEgOYuXsJEIeNNVKHD
-         0G0uovH697DWKDciq/3VXrxB4y+zK5DHavVrz6E6y/45Q5ncSGPuzIBD8UC0Ox0GPw
-         W56Y9YpeQnh76dNzRuURd34Zlab6Bh99BNrMjd2Qqlqk2d4zckyVspb4cPtefhW4L4
-         SB+j3IZRppvzQ==
-X-Virus-Scanned: amavisd-new at mbox.abcom.al
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qJaBPSrCKpMU; Fri, 16 Apr 2021 02:19:48 +0200 (CEST)
-Received: from [10.41.71.107] (unknown [105.4.2.96])
-        by mbox.abcom.al (Postfix) with ESMTPSA id 0D2C43C63AD;
-        Fri, 16 Apr 2021 02:19:41 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        id S229555AbhDPEvy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Apr 2021 00:51:54 -0400
+IronPort-SDR: tvcsLYvQjMcMTgRw1H3SaV1mvZlprIAGCJzzaEOr3tUqGU6yxrHncv7FGOrVp9rdhnS7++xd7o
+ L4tlvBIWjx0A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="215514289"
+X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
+   d="scan'208";a="215514289"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 21:51:29 -0700
+IronPort-SDR: 4JcHh6q6f3OsCIkeNk2UKSqOxONyvtmmMK6ZFC1E9FbjeJJ6HzmvPHPfxrj7/EL/7xgL4wSWN5
+ y4PLN14wKFLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
+   d="scan'208";a="384219241"
+Received: from lkp-server02.sh.intel.com (HELO fa9c8fcc3464) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2021 21:51:25 -0700
+Received: from kbuild by fa9c8fcc3464 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lXGRv-0001Eo-Ud; Fri, 16 Apr 2021 04:51:23 +0000
+Date:   Fri, 16 Apr 2021 12:50:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 82f100a3bced76c3a8a11f4c0e4e8104b95e3993
+Message-ID: <6079179b.NV955TL+SJlZI3s1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Spende
-To:     Recipients <mtodo@abcom.al>
-From:   "William Kruger" <mtodo@abcom.al>
-Date:   Thu, 15 Apr 2021 17:19:26 -0700
-Reply-To: robadamengineeringltd@gmail.com
-Message-Id: <20210416001942.0D2C43C63AD@mbox.abcom.al>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hallo Liebes, ich bin William Kruger aus Lantana im Palm Beach County, USA.=
- Ich habe einen $ 168 Millionen Jackpot gewonnen, der einer der gr=C3=B6=C3=
-=9Ften Lotterie-Jackpots ist. Im Namen meiner Familie und aus gutem Willen =
-spenden wir Ihnen und Ihrer Familie einen Betrag von (=E2=82=AC 850,000.00 =
-EUR). Ich versuche, die gemeinn=C3=BCtzigen Waisenh=C3=A4user zu erreichen =
-und zur Armutsbek=C3=A4mpfung beizutragen und eine angemessene Gesundheitsv=
-ersorgung f=C3=BCr Einzelpersonen zu gew=C3=A4hrleisten, insbesondere w=C3=
-=A4hrend dieser Welt Pandemic Covid 19. Ich m=C3=B6chte auch, dass Sie eine=
-n Teil dieser Spende in die =C3=B6ffentliche Infrastruktur investieren, um =
-Arbeitslosen in Ihrem Land Arbeitspl=C3=A4tze zu bieten . Ich habe dich gew=
-=C3=A4hlt, weil ich an dich glaube. Ich brauche Ihre uneingeschr=C3=A4nkte =
-Mitarbeit in Bezug auf diese Spende. Hier ist Ihr ausgew=C3=A4hlter Geheimc=
-ode: [W5900Q2172021] und bitte teilen Sie den Code niemandem mit, wenn Sie =
-interessiert und bereit sind, mit mir zu arbeiten. Bitte kontaktieren Sie m=
-ich mit Ihrem Spenden- / Geheimcode [W5900Q2172021] und Ihren vollst=C3=A4n=
-digen Namen hier bei meiner privaten E-Mail: krugerwilliamhome@gmail.com
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 82f100a3bced76c3a8a11f4c0e4e8104b95e3993  Merge branch 'pm-sleep' into bleeding-edge
+
+elapsed time: 724m
+
+configs tested: 93
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+riscv                            allmodconfig
+arm                       aspeed_g4_defconfig
+xtensa                         virt_defconfig
+arm                          gemini_defconfig
+h8300                            alldefconfig
+arm                          pxa3xx_defconfig
+powerpc                       holly_defconfig
+um                               alldefconfig
+arm                          moxart_defconfig
+powerpc                     redwood_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                      arches_defconfig
+m68k                        m5272c3_defconfig
+i386                             alldefconfig
+powerpc                    mvme5100_defconfig
+sh                             shx3_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210415
+i386                 randconfig-a006-20210415
+i386                 randconfig-a001-20210415
+i386                 randconfig-a005-20210415
+i386                 randconfig-a004-20210415
+i386                 randconfig-a002-20210415
+i386                 randconfig-a015-20210415
+i386                 randconfig-a014-20210415
+i386                 randconfig-a013-20210415
+i386                 randconfig-a012-20210415
+i386                 randconfig-a016-20210415
+i386                 randconfig-a011-20210415
+x86_64               randconfig-a003-20210415
+x86_64               randconfig-a002-20210415
+x86_64               randconfig-a005-20210415
+x86_64               randconfig-a001-20210415
+x86_64               randconfig-a006-20210415
+x86_64               randconfig-a004-20210415
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a014-20210415
+x86_64               randconfig-a015-20210415
+x86_64               randconfig-a011-20210415
+x86_64               randconfig-a013-20210415
+x86_64               randconfig-a012-20210415
+x86_64               randconfig-a016-20210415
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
