@@ -2,128 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D08B363343
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 05:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602AC3633F4
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 08:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237216AbhDRDbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Apr 2021 23:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237212AbhDRDbK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Apr 2021 23:31:10 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65629C06174A;
-        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r13so12270597pjf.2;
-        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=b8hpyDKfB8kYMTlAMk33KCFRc04U8eD4yoRmXwd6/1k=;
-        b=QD9CvGDnpgRbWHneXST4f0L73kDAKrhp4XF44qas6zt/UnZrKPbSzqonZ8FAnE//RE
-         h3NtPhR2ozMriSrwaz8NzPEw52O0CSH2zQMETAV2Na7scbXV2z1+W2nnvfQL7Y+iimev
-         Zj7HnYlGYEQneF0qmxYiKrEaEtIUfcR41XhxcZt1g9LakIUuE4A8UKDvy47qWbMJ5l1q
-         TCHiofw7fJuy/Vxj6/hd8ZeIhSUczGAYrRn6X2DR4W0Wb4vflMHu+e/ouXO5Vtw0200L
-         69L942WvYdPzXzKSOX+0R48uFimIsCBFRGqR1ya3b25A5zKMZSb2DhQWr+tN1MBPv7+S
-         Zw8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=b8hpyDKfB8kYMTlAMk33KCFRc04U8eD4yoRmXwd6/1k=;
-        b=Z0piDkGHSfIHxGfbGW6+lRjq/0LglB1TYArHCzfGqCZlvtyJJUlnQSCyd2wwVisptD
-         ELpY14v/H7ixT1k9LAi+rNO60nlTS/7189VxPSCwVGrf0GUav7AO6BGUVjB7rxHXZ1Jv
-         XlSU7zg6nVni6/Kjd8relTiUhlIseUA5TNQKqYViUYcHbO+sVzF9sRDcbp6Y+pH9ql60
-         8ZZVJwHIwKeyXfuczC/rMNzl9Y/dGALqibew2nlLr+BLl2nV7pQzLOH6Knr/rN60nzUu
-         +yVDnhf+FXEnDTSV6SiuycinmQFnLsrHyMINJq6mAoKgtLeaC81HUYYMVb0uedr6y6Vw
-         1Ijw==
-X-Gm-Message-State: AOAM53186FCqrQFHRAExawIIslSRB6rOFKei+zP8kSE+8li/ekPa+OWT
-        OW6oMSXCCUXA7n9VrOpOe1bCBRrlnPFlGt6ANz0=
-X-Google-Smtp-Source: ABdhPJxVwmX7HDYx/7rgGE7WvOdjl595q58oeRIUlN4t0gD4eCaKlyLuuhwsjLOnNPEVKMVjCI2qTQ==
-X-Received: by 2002:a17:90b:302:: with SMTP id ay2mr17772293pjb.84.1618716643019;
-        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
-Received: from MacBook-Pro.local ([154.48.252.71])
-        by smtp.gmail.com with ESMTPSA id a26sm8803126pff.149.2021.04.17.20.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Apr 2021 20:30:42 -0700 (PDT)
-From:   =?UTF-8?B?5b6Q56aP5rW3?= <xufuhai1992@gmail.com>
-Subject: [PATCH v3 2/2] cpupower: Fix amd cpu (family >= 0x17) active state
- issue
-To:     shuah@kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Thomas Renninger <trenn@suse.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lishujin@kuaishou.com, xufuhai <xufuhai@kuaishou.com>
-Message-ID: <6e35df20-753a-6c9c-8786-3fc87cdd17ba@gmail.com>
-Date:   Sun, 18 Apr 2021 11:30:38 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.9.1
+        id S230041AbhDRGJr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Apr 2021 02:09:47 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:43351 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230036AbhDRGJr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Apr 2021 02:09:47 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id C785B2400FD
+        for <linux-pm@vger.kernel.org>; Sun, 18 Apr 2021 08:09:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1618726157; bh=Hys3wSiOeJhvOKQ7pSM10m47FDA0/U/l+4h/F03Ansc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MxRZRHV4YB1khdI5VX16TZJ4ERNpDkvS4Z3DzDJjycyhXvpfiShM0CNU7wVY7gT/Z
+         StB/ELij8ZCrB3oUIYSXwnHSP+EPFMM5fxkFMc/4SJP8NinrlutfWuXttFpWuAkzQU
+         xFh/roS/DQs0+DtdkSJCWeQqB6iV3zXmqN9htWFqGAm0+rWlL6GuLvOgnwWXIPMQRy
+         xJSsfs0iABs3fYRd7M2tOoUQzKYJK5yQ/1XhaKJ9C2KNEPnEksBcjtDX3yqFsTj/d8
+         CtHlcGIzqdC9qJC8WLPrYveQKT65qT/XRoHccINAYjFgC1vSoH0aUuSH2ZxlLyCv2K
+         fKWdMyOvLUI8g==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FNKK56xG8z6tmF;
+        Sun, 18 Apr 2021 08:09:13 +0200 (CEST)
+From:   Sebastian Fricke <sebastian.fricke@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Sebastian Fricke <sebastian.fricke@posteo.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] base: power: runtime.c: Remove a unnecessary space
+Date:   Sun, 18 Apr 2021 06:08:01 +0000
+Message-Id: <20210418060800.8833-1-sebastian.fricke@posteo.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: xufuhai <xufuhai@kuaishou.com>
+Remove a redundant space to improve the quality of the comment.
 
-If the read_msr function is executed by a non-root user, the function returns 
--1, which means that there is no permission to access /dev/cpu/%d/msr, but 
-cpufreq_has_boost_support should also return -1 immediately, and should not
-follow the original logic to return 0, which will cause amd The cpupower tool
-returns the boost active state as 0.
-
-Reproduce procedure:
-        cpupower frequency-info
-
-Reported-by: yangrui <yangrui@kuaishou.com>
-Signed-off-by: xufuhai <xufuhai@kuaishou.com>
-Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
-Signed-off-by: lishujin <lishujin@kuaishou.com>
-Reviewed-by: Thomas Renninger <trenn@suse.com>
+Signed-off-by: Sebastian Fricke <sebastian.fricke@posteo.net>
 ---
- tools/power/cpupower/utils/helpers/misc.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Side-note:
+I found this while reading the code, I don't believe it is important but
+I thought it doesn't hurt to fix it.
+---
+ drivers/base/power/runtime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index fc6e34511721..565f8c414396 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -16,7 +16,7 @@
- int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
-                        int *states)
- {
--       int ret;
-+       int ret = 0;
-        unsigned long long val;
-
-        *support = *active = *states = 0;
-@@ -30,18 +30,21 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
-                 */
-
-                if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
--                       if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
-+                       /*
-+                        * no permission to access /dev/cpu/%d/msr, return -1 immediately,
-+                        * and should not follow the original logic to return 0
-+                        */
-+                       ret = read_msr(cpu, MSR_AMD_HWCR, &val);
-+                       if (!ret) {
-                                if (!(val & CPUPOWER_AMD_CPBDIS))
-                                        *active = 1;
-                        }
-                } else {
-                        ret = amd_pci_get_num_boost_states(active, states);
--                       if (ret)
--                               return ret;
-                }
-        } else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
-                *support = *active = 1;
--       return 0;
-+       return ret;
- }
-
- int cpupower_intel_get_perf_bias(unsigned int cpu)
---
-2.24.3 (Apple Git-128)
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 18b82427d0cb..499434b84171 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -786,7 +786,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
+ 	}
+ 
+ 	/*
+-	 * See if we can skip waking up the parent.  This is safe only if
++	 * See if we can skip waking up the parent. This is safe only if
+ 	 * power.no_callbacks is set, because otherwise we don't know whether
+ 	 * the resume will actually succeed.
+ 	 */
+-- 
+2.25.1
 
