@@ -2,93 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C4436343A
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 09:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F70363462
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 11:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhDRH3T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Apr 2021 03:29:19 -0400
-Received: from smtprelay0040.hostedemail.com ([216.40.44.40]:52134 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229671AbhDRH3S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Apr 2021 03:29:18 -0400
-X-Greylist: delayed 1150 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Apr 2021 03:29:18 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id A7ACE1802E628
-        for <linux-pm@vger.kernel.org>; Sun, 18 Apr 2021 07:09:41 +0000 (UTC)
-Received: from omf04.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 6B112182CED34;
-        Sun, 18 Apr 2021 07:09:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 4405AD1514;
-        Sun, 18 Apr 2021 07:09:39 +0000 (UTC)
-Message-ID: <794c957472f826b0f2860aecd365376266e2253a.camel@perches.com>
-Subject: Re: [PATCH] base: power: runtime.c: Remove a unnecessary space
-From:   Joe Perches <joe@perches.com>
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>,
-        linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S230004AbhDRJMP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Apr 2021 05:12:15 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:44917 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229811AbhDRJMO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Apr 2021 05:12:14 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 6D0D52400E5
+        for <linux-pm@vger.kernel.org>; Sun, 18 Apr 2021 11:11:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1618737105; bh=WKRW0XXKC2fipPBs9zdITrBVtmnVHuSd55wYWDnZwxo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WM3XWGKtXKYrHGYNzvnlhUgABC6QSkTTOkdOaAAAymeby4Tgdzla/05eFd/B++32z
+         ZQkt6y4BCX2Vb3532nCFSlbZXw7PDoICdateI+jSzWSDDdKoK2FUoKWgDyKV6HBDVC
+         vL6wCanPDGodKMnJPRKTmV3wEl3SNQ7j9zaYC1a/WZzNoQ7hDwC+A6ZtiFB7efXIKm
+         NVf7Ij4aTN5w5gsupjHjfv2+XLr4paJxKwN0iNjqOxVl9px2EUMMXgrLqZHoSwhbdb
+         ptnSB2q14J8X/u0pftHINFBhv9gfizl13IQ1A+9w9uZhHfYS6VNAcokrOmEnWNgI9Y
+         lqo0e6DJIk+PQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FNPMh1d41z6tmG;
+        Sun, 18 Apr 2021 11:11:44 +0200 (CEST)
+Date:   Sun, 18 Apr 2021 09:11:43 +0000
+From:   Sebastian Fricke <sebastian.fricke@posteo.net>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-pm@vger.kernel.org
-Date:   Sun, 18 Apr 2021 00:09:38 -0700
-In-Reply-To: <20210418060800.8833-1-sebastian.fricke@posteo.net>
+Subject: Re: [PATCH] base: power: runtime.c: Remove a unnecessary space
+Message-ID: <20210418091143.6h466qqd52uf766z@basti-TUXEDO-Book-XA1510>
 References: <20210418060800.8833-1-sebastian.fricke@posteo.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+ <794c957472f826b0f2860aecd365376266e2253a.camel@perches.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.10
-X-Rspamd-Server: rspamout02
-X-Stat-Signature: ymyth7o477mhj7gn5zkxwmfs9wfah16y
-X-Rspamd-Queue-Id: 4405AD1514
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18DBgloPiuRQNLxqlT7w9xnq9BZgMJfYZ4=
-X-HE-Tag: 1618729779-916855
+In-Reply-To: <794c957472f826b0f2860aecd365376266e2253a.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2021-04-18 at 06:08 +0000, Sebastian Fricke wrote:
-> Remove a redundant space to improve the quality of the comment.
+Hey Joe,
 
-I think this patch is not useful.
+On 18.04.2021 00:09, Joe Perches wrote:
+>On Sun, 2021-04-18 at 06:08 +0000, Sebastian Fricke wrote:
+>> Remove a redundant space to improve the quality of the comment.
+>
+>I think this patch is not useful.
+>
+>It's not redundant.
 
-It's not redundant.
+Thank you, I actually found this pattern a few more times but I wanted
+to check first if this is a mistake or chosen consciously.
 
-Two spaces after a period is commonly used to separate sentences.
-It's especially common when used with fixed pitch fonts.
+Sorry for the noise.
 
-A trivial grep seems to show it's used about 50K times in comments.
-Though single space after period may be used about twice as often.
+>
+>Two spaces after a period is commonly used to separate sentences.
+>It's especially common when used with fixed pitch fonts.
+>
+>A trivial grep seems to show it's used about 50K times in comments.
+>Though single space after period may be used about twice as often.
+>
+>$ git grep '^\s*\*.*\.  [A-Z]' | wc -l
+>54439
+>$ git grep '^\s*\*.*\. [A-Z]' | wc -l
+>110003
+>
+>For drivers/base/power/runtime.c, that 2 space after period style is used
+>dozens of times and changing a single instance of it isn't very useful.
 
-$ git grep '^\s*\*.*\.  [A-Z]' | wc -l
-54439
-$ git grep '^\s*\*.*\. [A-Z]' | wc -l
-110003
+True and if I understand you correctly you would rather keep it as is
+right?
 
-For drivers/base/power/runtime.c, that 2 space after period style is used 
-dozens of times and changing a single instance of it isn't very useful.
+Greetings,
+Sebastian
 
-> ---
-> Side-note:
-> I found this while reading the code, I don't believe it is important but
-> I thought it doesn't hurt to fix it.
-> ---
->  drivers/base/power/runtime.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 18b82427d0cb..499434b84171 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -786,7 +786,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
->  	}
->  
-> 
->  	/*
-> -	 * See if we can skip waking up the parent.  This is safe only if
-> +	 * See if we can skip waking up the parent. This is safe only if
->  	 * power.no_callbacks is set, because otherwise we don't know whether
->  	 * the resume will actually succeed.
->  	 */
-
-
+>
+>> ---
+>> Side-note:
+>> I found this while reading the code, I don't believe it is important but
+>> I thought it doesn't hurt to fix it.
+>> ---
+>> Â drivers/base/power/runtime.c | 2 +-
+>> Â 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+>> index 18b82427d0cb..499434b84171 100644
+>> --- a/drivers/base/power/runtime.c
+>> +++ b/drivers/base/power/runtime.c
+>> @@ -786,7 +786,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
+>> Â 	}
+>> Â 
+>>
+>> Â 	/*
+>> -	 * See if we can skip waking up the parent.  This is safe only if
+>> +	 * See if we can skip waking up the parent. This is safe only if
+>> Â 	 * power.no_callbacks is set, because otherwise we don't know whether
+>> Â 	 * the resume will actually succeed.
+>> Â 	 */
+>
+>
