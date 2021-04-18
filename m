@@ -2,226 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F1D362EA1
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Apr 2021 10:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D08B363343
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 05:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbhDQIuH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Apr 2021 04:50:07 -0400
-Received: from mail-lj1-f171.google.com ([209.85.208.171]:46723 "EHLO
-        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbhDQIuH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Apr 2021 04:50:07 -0400
-Received: by mail-lj1-f171.google.com with SMTP id u20so33592211lja.13;
-        Sat, 17 Apr 2021 01:49:39 -0700 (PDT)
+        id S237216AbhDRDbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Apr 2021 23:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237212AbhDRDbK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Apr 2021 23:31:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65629C06174A;
+        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id r13so12270597pjf.2;
+        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=b8hpyDKfB8kYMTlAMk33KCFRc04U8eD4yoRmXwd6/1k=;
+        b=QD9CvGDnpgRbWHneXST4f0L73kDAKrhp4XF44qas6zt/UnZrKPbSzqonZ8FAnE//RE
+         h3NtPhR2ozMriSrwaz8NzPEw52O0CSH2zQMETAV2Na7scbXV2z1+W2nnvfQL7Y+iimev
+         Zj7HnYlGYEQneF0qmxYiKrEaEtIUfcR41XhxcZt1g9LakIUuE4A8UKDvy47qWbMJ5l1q
+         TCHiofw7fJuy/Vxj6/hd8ZeIhSUczGAYrRn6X2DR4W0Wb4vflMHu+e/ouXO5Vtw0200L
+         69L942WvYdPzXzKSOX+0R48uFimIsCBFRGqR1ya3b25A5zKMZSb2DhQWr+tN1MBPv7+S
+         Zw8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
-         :in-reply-to:references:mime-version:date:user-agent
-         :content-transfer-encoding;
-        bh=9Q8i358kUoVCgVrcMHeBfy2VnHJ+AKT+L+dEpF7HrO0=;
-        b=LE+Do5dr5+IwHWkfDjY5TdL/bYDeuYaC2ie3WJiyaFhdIFod/WLgUcicr25mDxCaim
-         XixpjrtYhp3uU1yzELV/YFMIP6Qw/FooXWNGb3sXT3uRSl1pljKKOFkHRMtgDW46nXgd
-         qSniydgG3Vt4YGxe/sy6NT3mZ3o2dggiF2f17Z+3ds0lNNE2Nig4Q42KQ5ltiZ5YJe8c
-         hk30LPCFdxpPfs+9XylEGSztDJeYghVCXDBiwNdTFH/pisdeRc38m5jZxHoudeopya3P
-         /X1tO2zDSSlk225tEhc0wz9HN6HZNxwt1Z/RiHZApLBw5gBOhUmGicArPnSy0GSujRoN
-         roxw==
-X-Gm-Message-State: AOAM53046QNl4ugNX6fs0P6Iw8fHUZ5lqT0GhkHA8oKw7qaRxfYYONqX
-        BARzZpU1nMzYu7tseBcO5EQO1JCktIav1Q==
-X-Google-Smtp-Source: ABdhPJxwyxi+pbhWVb+mB84S0MDuc/MbX60vLFRp3xgZ5N8SXQ8hv5/O6s1Z66VXMYZ6Y4JMpcdJjA==
-X-Received: by 2002:a05:651c:612:: with SMTP id k18mr1478809lje.445.1618649378453;
-        Sat, 17 Apr 2021 01:49:38 -0700 (PDT)
-Received: from dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id l18sm1171756ljj.55.2021.04.17.01.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Apr 2021 01:49:37 -0700 (PDT)
-Message-ID: <1aac32e16906c4e7def072698d9d3b32d8e32ca5.camel@fi.rohmeurope.com>
-Subject: Re: [PATCH v7 2/9] reboot: thermal: Export hardware protection
- shutdown
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reply-To: matti.vaittinen@fi.rohmeurope.com
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-pm@vger.kernel.org
-In-Reply-To: <ce0918d9-bedb-e48f-5779-c0ef47c6909d@linaro.org>
-References: <cover.1618377272.git.matti.vaittinen@fi.rohmeurope.com>
-         <adf417797006c996605a03c8bacfb4961e8f0b42.1618377272.git.matti.vaittinen@fi.rohmeurope.com>
-         <ce0918d9-bedb-e48f-5779-c0ef47c6909d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=b8hpyDKfB8kYMTlAMk33KCFRc04U8eD4yoRmXwd6/1k=;
+        b=Z0piDkGHSfIHxGfbGW6+lRjq/0LglB1TYArHCzfGqCZlvtyJJUlnQSCyd2wwVisptD
+         ELpY14v/H7ixT1k9LAi+rNO60nlTS/7189VxPSCwVGrf0GUav7AO6BGUVjB7rxHXZ1Jv
+         XlSU7zg6nVni6/Kjd8relTiUhlIseUA5TNQKqYViUYcHbO+sVzF9sRDcbp6Y+pH9ql60
+         8ZZVJwHIwKeyXfuczC/rMNzl9Y/dGALqibew2nlLr+BLl2nV7pQzLOH6Knr/rN60nzUu
+         +yVDnhf+FXEnDTSV6SiuycinmQFnLsrHyMINJq6mAoKgtLeaC81HUYYMVb0uedr6y6Vw
+         1Ijw==
+X-Gm-Message-State: AOAM53186FCqrQFHRAExawIIslSRB6rOFKei+zP8kSE+8li/ekPa+OWT
+        OW6oMSXCCUXA7n9VrOpOe1bCBRrlnPFlGt6ANz0=
+X-Google-Smtp-Source: ABdhPJxVwmX7HDYx/7rgGE7WvOdjl595q58oeRIUlN4t0gD4eCaKlyLuuhwsjLOnNPEVKMVjCI2qTQ==
+X-Received: by 2002:a17:90b:302:: with SMTP id ay2mr17772293pjb.84.1618716643019;
+        Sat, 17 Apr 2021 20:30:43 -0700 (PDT)
+Received: from MacBook-Pro.local ([154.48.252.71])
+        by smtp.gmail.com with ESMTPSA id a26sm8803126pff.149.2021.04.17.20.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Apr 2021 20:30:42 -0700 (PDT)
+From:   =?UTF-8?B?5b6Q56aP5rW3?= <xufuhai1992@gmail.com>
+Subject: [PATCH v3 2/2] cpupower: Fix amd cpu (family >= 0x17) active state
+ issue
+To:     shuah@kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Renninger <trenn@suse.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lishujin@kuaishou.com, xufuhai <xufuhai@kuaishou.com>
+Message-ID: <6e35df20-753a-6c9c-8786-3fc87cdd17ba@gmail.com>
+Date:   Sun, 18 Apr 2021 11:30:38 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.9.1
 MIME-Version: 1.0
-Date:   Sat, 17 Apr 2021 11:49:32 +0300
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+Content-Type: text/plain; charset=gbk
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+From: xufuhai <xufuhai@kuaishou.com>
 
-Thank you for the review. Much appreciated!
+If the read_msr function is executed by a non-root user, the function returns 
+-1, which means that there is no permission to access /dev/cpu/%d/msr, but 
+cpufreq_has_boost_support should also return -1 immediately, and should not
+follow the original logic to return 0, which will cause amd The cpupower tool
+returns the boost active state as 0.
 
-On Sat, 2021-04-17 at 07:32 +0200, Daniel Lezcano wrote:
-> On 14/04/2021 07:52, Matti Vaittinen wrote:
-> > Thermal core contains a logic for safety shutdown. System is
-> > attempted to
-> > be powered off if temperature exceeds safety limits.
-> > 
-> > Currently this can be also utilized by regulator subsystem as a
-> > final
-> > protection measure if PMICs report dangerous over-voltage, over-
-> > current or
-> > over-temperature and if per regulator counter measures fail or do
-> > not
-> > exist.
-> > 
-> > Move this logic to kernel/reboot.c and export the functionality for
-> > other
-> > subsystems to use. Also replace the mutex with a spinlock to allow
-> > using
-> > the function from any context.
-> > 
-> > Also the EMIF bus code has implemented a safety shut-down. EMIF
-> > does not
-> > attempt orderly_poweroff at all. Thus the EMIF code is not
-> > converted to use
-> > this new function.
-> > 
-> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > ---
-> > Changelog
-> >  v7:
-> >   - new patch
-> > 
-> > Please note - this patch has received only a minimal amount of
-> > testing.
-> > (The new API call was tested to shut-down my system at driver probe
-> > but
-> > no odd corner-cases have been tested).
-> > 
-> > Any testing for thermal shutdown is appreciated.
-> > ---
-> >  drivers/thermal/thermal_core.c | 63 ++-----------------------
-> >  include/linux/reboot.h         |  1 +
-> >  kernel/reboot.c                | 86
-> > ++++++++++++++++++++++++++++++++++
-> 
-> Please send a patch implementing the reboot/shutdown and then another
-> one replacing the thermal shutdown code by a call to the new API.
+Reproduce procedure:
+        cpupower frequency-info
 
-I guess your suggestion makes sense. That way if the change causes any
-problems in thermal-core it can be reverted without impacting other
-potential users of this API. My original thinking was that this was
-more of an move of functionality than adding an API. Having the move as
-one patch makes sense as it shows where the code came from.
+Reported-by: yangrui <yangrui@kuaishou.com>
+Signed-off-by: xufuhai <xufuhai@kuaishou.com>
+Signed-off-by: chenguanqiao <chenguanqiao@kuaishou.com>
+Signed-off-by: lishujin <lishujin@kuaishou.com>
+Reviewed-by: Thomas Renninger <trenn@suse.com>
+---
+ tools/power/cpupower/utils/helpers/misc.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-> 
-> >  3 files changed, 91 insertions(+), 59 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/thermal_core.c
-> > b/drivers/thermal/thermal_core.c
-> > index 996c038f83a4..b1444845af38 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -36,10 +36,8 @@ static LIST_HEAD(thermal_governor_list);
-> >  
-> > 
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index fc6e34511721..565f8c414396 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -16,7 +16,7 @@
+ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+                        int *states)
+ {
+-       int ret;
++       int ret = 0;
+        unsigned long long val;
 
-...
+        *support = *active = *states = 0;
+@@ -30,18 +30,21 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+                 */
 
-> > +static bool prot_power_off_triggered;
-> > +static DEFINE_SPINLOCK(poweroff_lock);
-> > +
-> > +/**
-> > + * hw_protection_shutdown - Trigger an emergency system poweroff
-> > + *
-> > + * @reason:		Reason of emergency shutdown to be
-> > printed.
-> > + * @ms_until_forced:	Time to wait for orderly shutdown
-> > before tiggering a
-> > + *			forced shudown. Negative value disables the
-> > forced
-> > + *			shutdown.
-> > + *
-> > + * Initiate an emergency system shutdown in order to protect
-> > hardware from
-> > + * further damage. Usage examples include a thermal protection or
-> > a voltage or
-> > + * current regulator failures.
-> > + * NOTE: The request is ignored if protection shutdown is already
-> > pending even
-> > + * if the previous request has given a large timeout for forced
-> > shutdown.
-> > + * Can be called from any context.
-> > + */
-> > +void hw_protection_shutdown(const char *reason, int
-> > ms_until_forced)
-> > +{
-> > +	unsigned long flags;
-> > +
-> > +	pr_emerg("HARDWARE PROTECTION shutdown (%s)\n", reason);
-> > +
-> > +	spin_lock_irqsave(&poweroff_lock, flags);
-> > +	if (prot_power_off_triggered) {
-> > +		spin_unlock(&poweroff_lock);
-> 
-> Why not spin_unlock_irqrestore() ?
-> 
+                if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
+-                       if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
++                       /*
++                        * no permission to access /dev/cpu/%d/msr, return -1 immediately,
++                        * and should not follow the original logic to return 0
++                        */
++                       ret = read_msr(cpu, MSR_AMD_HWCR, &val);
++                       if (!ret) {
+                                if (!(val & CPUPOWER_AMD_CPBDIS))
+                                        *active = 1;
+                        }
+                } else {
+                        ret = amd_pci_get_num_boost_states(active, states);
+-                       if (ret)
+-                               return ret;
+                }
+        } else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
+                *support = *active = 1;
+-       return 0;
++       return ret;
+ }
 
-Well spotted It for sure must be spin_unlock_irqrestore. My bad.
-
-> > +		return;
-> > +	}
-> > +	prot_power_off_triggered = true;
-> > +	spin_unlock_irqrestore(&poweroff_lock, flags);
-> 
-> Why not take the spin_lock definitively for all the procedure ?
-> 
-> eg.
-> 
-> {
-> 	...
-> 
-> 	pr_emerg( ... );
-> 
-> 	if (spin_trylock(&lock))
-> 		return;
-> 
-> 	hw_failure_emergency_poweroff(ms_until_forced);
-> 
-> 	orderly_poweroff(true);
-> }
-> 
-> No need of prot_power_off_triggered and the spin_lock can be declared
-> static inside the function.
-
-I think this makes perfect sense. My thinking just jammed to replacing
-the mutex thermal-core used with a spin-lock using similar logic. I
-guess this could even be just an atomic cmpxchg (or equivalent, I don't
-remember what atomic abstractions we have) just to return if function
-has been previously executed. Well, the spin_trylock() should work just
-fine as far as I can say. So - thanks.
-
-
-Best Regards
-	Matti Vaittinen
+ int cpupower_intel_get_perf_bias(unsigned int cpu)
+--
+2.24.3 (Apple Git-128)
 
