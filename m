@@ -2,96 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D66EA36346E
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 11:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7899A3634FA
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 14:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbhDRJXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Apr 2021 05:23:06 -0400
-Received: from smtprelay0142.hostedemail.com ([216.40.44.142]:34040 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229652AbhDRJXG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Apr 2021 05:23:06 -0400
-Received: from omf09.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id B6506837F24A;
-        Sun, 18 Apr 2021 09:22:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 7EF201E04D3;
-        Sun, 18 Apr 2021 09:22:36 +0000 (UTC)
-Message-ID: <3886b37dacd9fcf84d5211322807128e638a8222.camel@perches.com>
-Subject: Re: [PATCH] base: power: runtime.c: Remove a unnecessary space
-From:   Joe Perches <joe@perches.com>
-To:     Sebastian Fricke <sebastian.fricke@posteo.net>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Date:   Sun, 18 Apr 2021 02:22:35 -0700
-In-Reply-To: <20210418091143.6h466qqd52uf766z@basti-TUXEDO-Book-XA1510>
-References: <20210418060800.8833-1-sebastian.fricke@posteo.net>
-         <794c957472f826b0f2860aecd365376266e2253a.camel@perches.com>
-         <20210418091143.6h466qqd52uf766z@basti-TUXEDO-Book-XA1510>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S230441AbhDRMEm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Apr 2021 08:04:42 -0400
+Received: from mout.gmx.net ([212.227.17.21]:53899 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230273AbhDRMEl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Apr 2021 08:04:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1618747428;
+        bh=UJsT5aV+MxRbho8JhRzNBpNeMbZUN3ULqGnvmwYqqo8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=gtWAMLhVANHc5fa/MEW9QtadcRt6E3XfLkUMwhO75vFNJ9hSiCIcdBXyh19j4Glvx
+         xlP1dPLK+L+gfju2A+suqWIgK1cDu7nk/k+Hk8vya2JdjeXOowr3KojS5rMCxKfH0l
+         k494tuyFNJv4jIqxdj0i2T9ANWf8U/auoWtHGEaE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.75.88] ([80.245.75.88]) by web-mail.gmx.net
+ (3c-app-gmx-bap31.server.lan [172.19.172.101]) (via HTTP); Sun, 18 Apr 2021
+ 14:03:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.10
-X-Rspamd-Server: rspamout02
-X-Stat-Signature: jgsdes5bntddszuzbtw99cra7umjj1nx
-X-Rspamd-Queue-Id: 7EF201E04D3
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18SzM71Q7R3c8oA5j/PRmWppAoksvQ0KFY=
-X-HE-Tag: 1618737756-628855
+Message-ID: <trinity-93ab11dc-32c6-4e6b-8617-6bfff1a1b42d-1618747428085@3c-app-gmx-bap31>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Aw: [PATCH] thermal: mediatek: add sensors-support
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 18 Apr 2021 14:03:48 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20210320080646.49615-1-linux@fw-web.de>
+References: <20210320080646.49615-1-linux@fw-web.de>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:NpJG2XS0uVpmsDDBMEbodtzzfxpTnTBa8p1RkMykjqag/W3Gxr2tax05+zGq5AUWfZw8Y
+ UR2I0pxvM9MHe0r8VhdDWkgQGBL1SI+8mAdYtMqgypfgy6RLOSe0qt1nK7c6agDFY5PfxSqpyO4Z
+ wuBrnzufOyhYmZnoAymsyPyAXn2DXmF91+zeC+t21fCSauEkUxk78mx99SIl3IWAzCGwm7sT9tOV
+ qAI+rAIGkZY8+FqJkyyuAffLkkKWZ7AsT6wur+yubLVNmz8hfao5kD5mi04EgQYx2wDkuWpwzz5T
+ Is=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I5KzL9OLaQU=:3OPO7RKu+UrbJhyuN6QKpU
+ 4BFYTNIp75gm+rV0iVvIjAnrZ4rj3UrvsoLuay+pCtGrHP3kS1gyMDoKaExubD2BtRxmnDcFP
+ EXKFerqtjTB04wqUrO88LfpaXR73l0pGklAIgozu0o1JwZcj0Umk3S/bG6qd2vhka6gZH3jKh
+ qRu0q85YFDxkMoCR6UUPpVEPnVYXeqHPNTdFN37xLgMWQ6okybKiy8tUUE+bUyeT2ZSVPD1yk
+ 2at67rwVhXuVNRDnpguJsZvuCBq9MJa5fWUHc/BZ4u54VHhg5HH6Qir6G8J48GSr6ZgzVdfWF
+ p1FA/423VEpjXaXcAtA3tBTHaZAk59UAaiEn8hsDVE+UUwrb60yU3LAmxv8g0UrhJfDmYHsrh
+ Gl4F4Cn9dkJEs266ePIsPs5U8XZ8yIBRtVlm/DYT+Ge3FHzqx90mSDbru7P8Cb72TdhZb4stC
+ zb+HotaIeKhlrhZ7IbA57k62MuPtnAjeyawwjbZqzPnkb42UGomNLhwhjTnDyEFNvjezFFpfD
+ y5rD4nGv3MbX/iTa+hRpzw5YKZVeCdbli2KhM3KWeQ8GEP5WQaBF9Eruhdvw1L3CE2jyPSMCz
+ 7K8Icw0Cf8kRzGRPxjMNukY07zv3tUyfUnBba8wMSmmdn8CcArkicuPi0i8/5ZZu5jVyN6+K1
+ X+qLouCPOYByILOHs2fiFZVxcieOhdrk4fND/9bOBTRStLouXPo0aYprAGKXFpg2Yw7ZvHxDZ
+ xFsPCVLNJE6nY/vdcN3WQViWdSHZK4iqsfTkN1eZUHW0WF2ORC5TDQOELbuapp321t3PbRyYK
+ Bw3XYc3GqeMj2QKSR1+0lg4XQnhRLrXuuWUmN0DTw18tK/eZV4tCyn4MnqM9rUWjA178rfI81
+ oX9ZfsAH+dh6HQ+BoZgsyLstw8Wrc5NgE3NKpQkJv+j1dSkcAiZcwjlHyVnblA5CKZ7/vcTyt
+ VDaQZgQnZ+Q==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2021-04-18 at 09:11 +0000, Sebastian Fricke wrote:
-> Hey Joe,
+Hi,
 
-Hi Sebastian.
+any opinion (except typo)?
 
-> On 18.04.2021 00:09, Joe Perches wrote:
-> > On Sun, 2021-04-18 at 06:08 +0000, Sebastian Fricke wrote:
-> > > Remove a redundant space to improve the quality of the comment.
-> > I think this patch is not useful.
-> > It's not redundant.
-> 
-> Thank you, I actually found this pattern a few more times but I wanted
-> to check first if this is a mistake or chosen consciously.
-[]
-> > For drivers/base/power/runtime.c, that 2 space after period style is used
-> > dozens of times and changing a single instance of it isn't very useful.
+thermanl =3D> thermal
 
-Even in that single file it's not consistent.
-It's something like 3:1 for 2 spaces over 1 space after period.
+regards Frank
 
-I believe it's done more by habit and author age than anything.
-If you learned to type using a typewriter and not a keyboard, then
-you likely still use 2 spaces after a period.
 
-> True and if I understand you correctly you would rather keep it as is
-> right?
-
-Yes.  IMO: Whitespace in comments like this should not be changed
-unless there's some other significant benefit like better alignment.
-
-cheers, Joe
-
-> > > ---
-> > > Side-note:
-> > > I found this while reading the code, I don't believe it is important but
-> > > I thought it doesn't hurt to fix it.
-[]
-> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-[]
-> > > @@ -786,7 +786,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
-> > >  	}
-> > > 
-> > >  	/*
-> > > -	 * See if we can skip waking up the parent.  This is safe only if
-> > > +	 * See if we can skip waking up the parent. This is safe only if
-> > >  	 * power.no_callbacks is set, because otherwise we don't know whether
-> > >  	 * the resume will actually succeed.
-> > >  	 */
-
+> Gesendet: Samstag, 20=2E M=C3=A4rz 2021 um 10:06 Uhr
+> Von: "Frank Wunderlich" <linux@fw-web=2Ede>
+> add HWMON-support to mediateks thermanl driver to allow lm-sensors
+> userspace tools read soc temperature
 
