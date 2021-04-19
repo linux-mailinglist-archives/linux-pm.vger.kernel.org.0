@@ -2,143 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A84F5364EA6
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 01:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54F0364ED6
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 01:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbhDSXdw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 19:33:52 -0400
-Received: from mail-dm6nam10on2133.outbound.protection.outlook.com ([40.107.93.133]:27661
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229842AbhDSXdw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Apr 2021 19:33:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NG8zL8/VWUnvrbXrII2mAqMUDcUJ6v2WAPbBzTLeCPjNc+4GUJoSLttyhKz8j72qllZrIZi64x0Ga0WVhlm6qUju8NXRfnvA6Qgp7QS8/7rLvn5/APACWm48/16IsQB185eiMibFmXvqyjqONZfLtgwi/DfIY9tbkHGWVi1pv4o1Cf1qT+fPi83KhmgUnRbyLdGjxWFpmGCa/d1jI0Th+lO8GCjOWV7ezi6mOGcgonTsL8Xr9+x21TUvXS9UTOpe2iq3Xc6BZ8IgZKrhx9R9n1GBdV30B45ZmgqhD5JqxzNyi8GMX3F1opqMylmfPFGrIaVLaF2oLyFF9S4G9Vo6xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZnmgKgsUPF1TW5fBYw01D0Ln0dTFiC8e/DIYXuNWDg=;
- b=H+SDQYjGxsEz7VjolJX4FLcoIq1WeLpja1wpQQ6xyK8a1yPpzz2hlX+9KSJaf8LxCTriV+/CefnstDn5RXtxRifnrSjAD/CjDPI77EDr3glmIgI+NIway2fD37eNvtvnOMzo1vfO0OJh6SebJIhh9pwCqe7SGghuWBREtkfbTclikyCD4yYNwlk2Eysk5/3m4m+ajC5tKKyHIz7eFIdL+hWIuRjvU/lV9Tq+8gmGS6xIVmSv4M/fq/ylBSEvUCepVK1qu6qjKOWaC/Mi8Gt13Q3Ga+VJgChI5N/xVIGbG9Aec3XyVXmmBMibpupcKzDV3FY0wtvu3/0jQ6SQ6rjYcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZnmgKgsUPF1TW5fBYw01D0Ln0dTFiC8e/DIYXuNWDg=;
- b=bHvQwUWH2lxfyAnjpHiR8CPib11b4VsPBHkptl7OhMIklArC6wWBOWj9V2060QFkK275oW2YCuxwG9GaqHx0nhb7ZJ2JZIjfzalVmRz3CkRM4jPHBgQZOJGGSZDZ/l06QnaM2LSW7MNg8RVK55BodfXVeh1/g4ZcJVzbUtAgimw=
-Received: from MW2PR2101MB0892.namprd21.prod.outlook.com
- (2603:10b6:302:10::24) by MWHPR21MB0509.namprd21.prod.outlook.com
- (2603:10b6:300:df::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.3; Mon, 19 Apr
- 2021 23:33:20 +0000
-Received: from MW2PR2101MB0892.namprd21.prod.outlook.com
- ([fe80::5548:cbd8:43cd:aa3d]) by MW2PR2101MB0892.namprd21.prod.outlook.com
- ([fe80::5548:cbd8:43cd:aa3d%6]) with mapi id 15.20.4065.008; Mon, 19 Apr 2021
- 23:33:20 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Chris von Recklinghausen <crecklin@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "simo@redhat.com" <simo@redhat.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/1 v9] use crc32 instead of md5 for hibernation e820
- integrity check
-Thread-Topic: [PATCH 1/1 v9] use crc32 instead of md5 for hibernation e820
- integrity check
-Thread-Index: AQHXMsLQEFNBplk1gUCriYRgK68igaq8gdKQ
-Date:   Mon, 19 Apr 2021 23:33:20 +0000
-Message-ID: <MW2PR2101MB08921161444D6D2683660853BF499@MW2PR2101MB0892.namprd21.prod.outlook.com>
-References: <20210416131655.22112-1-crecklin@redhat.com>
-In-Reply-To: <20210416131655.22112-1-crecklin@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5f89ab86-89f9-4b34-a297-d2ab36fe37e3;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-04-19T23:28:15Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=microsoft.com;
-x-originating-ip: [2601:600:8b00:6b90:95e3:c5e8:10c:f48f]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 849bec70-243b-4039-062c-08d9038b842e
-x-ms-traffictypediagnostic: MWHPR21MB0509:
-x-microsoft-antispam-prvs: <MWHPR21MB05099FC9601C6C1645C3E9CABF499@MWHPR21MB0509.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R5vpvj+dH8bVaVYRM9jY2qqOYA5A8sKPOSNp73XnlJmb7YtgKUbNZDD0tcsgRe+omOU+DCG2OSSED8n7Enz5iyZiAVb4BeuU32duqzSn/SNY0xFSKzimWZq6mstXbhby1OgA44twnIXNxaaF+G6O4ompneR8frKLP5zrpKZGWlxUNnfQsX3aM93HPA0bqoqg7qGjxd2xn8UWE6EJTqBNoG4QC9VdjQOF7OQldF3DH+8AlIikY6k/btYsysrXjsfUSzhAGR36kN2+cMYUuv+qqaEmJJ4y+SvKEdYmVtKEU/jkihsOKHWL5Ukh6+g+DCTpTHfDvy6IUHeb+PWrbx3ulYbctvVpOWoWIJR59mYKrqI6/yiUwNQJ7IZ9J0WO5TaSGLryR6kr4+ZyvoYKa2lx2aQx4HblKYBTy396hs+y8B7D+BYM3WcTIYsM7uT+WjsrQR7H3yyXQ7T+8aXtK4Z0lSdApCg6QhaGbmvxrhgaosyQXUbiWpgbdYN1UP1mZeJB8zd8s4spWHP+m9HUJUXW0XlJZCqFbtAQMfwUZq9cryos9QI8DdhXIn2uZK3KaDHlRQ3+UHUhRhK89Qtmv5ECeE3Q0gSDBX1u1yKc4EBewPk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR2101MB0892.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(8676002)(55016002)(76116006)(316002)(64756008)(9686003)(478600001)(86362001)(66946007)(5660300002)(66446008)(52536014)(10290500003)(83380400001)(122000001)(110136005)(66476007)(66556008)(38100700002)(82960400001)(33656002)(82950400001)(8936002)(71200400001)(7696005)(8990500004)(6506007)(4744005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?sQ3K97TBSnPBUnz4WqZN6wf+6NVq5QzewUhj7pWrTUXNl41B3kFFH4Aqnz23?=
- =?us-ascii?Q?HYM0kvOFA04WR/TgdEYOWdQ488BRMPS0kx2z9JQdvpaBrRr6DzW92xnxoIRl?=
- =?us-ascii?Q?JWZO9Nt/OY+EnXDKJleStNHYrmSsuZ9axClG7vvlu6SyOKlqHotYig+F9TLb?=
- =?us-ascii?Q?rSn5fZ9ai/WPhmW8IRL8cy5A+cIDe4eZvb2DX14NenxYsSVS2YKz0Qso0rSn?=
- =?us-ascii?Q?aGgTK8wbTZoXZ/CsnuZr3L8rJL3XmTuN5rxk7Dl+Wn+jdEEYoG+gxXjgFt1G?=
- =?us-ascii?Q?w9tDekqvWTxybtnNNDwo9HSlQLMPlzK5H8oNhSfrzEDFKERwFIjZl/HJpSIC?=
- =?us-ascii?Q?P1PaRXy0ItbB69LZmGIoRX04WFKkAftnm7lJzyKQQjTbpCgYr4PxIDNHBcd6?=
- =?us-ascii?Q?WMtUPrbpqKqY+dvnIp1KnUaGHWKx+eJ1FZn7RAZhsQyzPnJL4dRd7S0RcXt1?=
- =?us-ascii?Q?Lk88mB34hBXmehNL+r5x8Cdb8WgpSxIUSHHdTHuzAVv9SrWHfS4yKExukfhB?=
- =?us-ascii?Q?jrEcyT4KU3qpNRnyz+1BOAxrJhRlnB29UTZ2UnopMwK5DL49rZQ8AHP9z47N?=
- =?us-ascii?Q?zMrJQQv4xcS9cvr3Y/6N9wdlbk/bnfeJuU0pD2UMdGdgrpPuv6K9d3VWmBAA?=
- =?us-ascii?Q?H7A7xOF9VovNe2SFDiiwosb/AFBhkSHpbCy1lOTAChlSVC6/SKGWvT9ZQu/q?=
- =?us-ascii?Q?L6fAVeh9ied5Pu+2dNMXZBkbt+pOnHUFGALfJYXM1o9EQJPFlz1GCMdFnt+M?=
- =?us-ascii?Q?FTfuTLNvAKPtC4ex204kg6+qKJYgJBHc6XoskS0wmTpjNjgRdaA6+vmqXYHj?=
- =?us-ascii?Q?qvXI9KhUjTTTlSmqddKELSFH5r2zCzmHv9xUfdPNQRKj88DARTpOjRPjEdeN?=
- =?us-ascii?Q?W14vz+mEc2aKBHGXo19nPqgRavcXYXOsQ1/eVOrDNJJ0FoGO1fc4vwNmTyKm?=
- =?us-ascii?Q?2uJcfwG12jw1BMgp+QoLfv1oUs5NRqAO2uLXQtdr+xzsxYaraUC2xEy/MpM2?=
- =?us-ascii?Q?KMgBkppp1OcVNMQ1Ca+ywnHDcReAgA2N3wnOQkZCOzn3HV2BczzEBzhOaOZ2?=
- =?us-ascii?Q?UV6Vd4gHL5a+oARqGDQkjcPRkDmiAaG5K2LuUzxAIedCAp+V4T1grD3lAfL0?=
- =?us-ascii?Q?Wt7PIWC5WB95iLElR//nmo83Fwo4+x1Hnv3siMVJEG9rY+I19o9XBVDyPEDs?=
- =?us-ascii?Q?oMGqRqitCbgzgg/DgrNEwddo1mEICzTU4WWmYk1MHGvToyGlT9Xs4Gzhqkpm?=
- =?us-ascii?Q?7nu+jR1pKqeMJjBdwVaHYihjj1vgQ+NA4D+S6L1H5q31nswkudxTfYs8Brmr?=
- =?us-ascii?Q?/JDO0J7Kr9mIrjNfvFXbGT+G7tFIBs5ebVo9GT862qVUke/YwPHNPB39tHWt?=
- =?us-ascii?Q?3TVrtxyKBma9171stRT4d5FL8d5e?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S232801AbhDSXny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 19:43:54 -0400
+Received: from gw.atmark-techno.com ([13.115.124.170]:42778 "EHLO
+        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232653AbhDSXnw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 19:43:52 -0400
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 70BD5804B9
+        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 08:43:09 +0900 (JST)
+Received: by mail-ot1-f70.google.com with SMTP id h11-20020a9d61cb0000b029028e9bba56d9so9098327otk.20
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 16:43:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YfTDNxUjME1kzwn4ONpBlmaWp5uEs0PGjlewRbiJ8O0=;
+        b=I1XP7cXCVmUJcT29giRPFbhIXlwFPXypPur5YpnKa3W5Dre2iINiZk6/g+y27uIsOD
+         6vd1gxCXgiQUBfsWjQw9RxXZisWXAKD7wQHa8tvyUqkD7gfHAraOj1+c9jaRupKjs+QC
+         rxW/cS5tHiIICMpfoLueletcaEVlJpE4VimfpVgQ3sF/cYWNDdlpG1J2N1L6ycQ72KU7
+         qy1+D4ZfbXmIyt/WBkh3BgLyCK58llFSniql2U6lw1yj0Ew1QiOjykp5oHpyq8+1eXjy
+         lgkE+kZ3KfF4UhAtPv3VVHspMiMHsM7AaHDUrmigsr2QY4/K8/Y8I2lG23l9SX3DrUrv
+         HTYQ==
+X-Gm-Message-State: AOAM533Jb+ev4IQf3lA9Kcj0GL+ku/9DgxxWjiS8XfBsW2Kmu17Hu6S9
+        Wlw5iPGQJGPTEs2U8cLvQx20hUzINoTJXm+brluPZsY+M9QikGL0xBaT2YO5DbN8CsjTxcgJ76A
+        G6Ijg6ZOVDsjXc2uIRSR6hxI=
+X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708176pjd.190.1618875776930;
+        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzRGNIqy2AO5m9iOwuC4N09BxordE8LmUXYTIIeyniOtbCQKfA0MKaQl391n1ZLV3YIJOra8w==
+X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708139pjd.190.1618875776711;
+        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
+Received: from pc-0115 (76.125.194.35.bc.googleusercontent.com. [35.194.125.76])
+        by smtp.gmail.com with ESMTPSA id r3sm8384971pgn.82.2021.04.19.16.42.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Apr 2021 16:42:55 -0700 (PDT)
+Received: from martinet by pc-0115 with local (Exim 4.94)
+        (envelope-from <martinet@pc-0115>)
+        id 1lYdXa-002mPj-58; Tue, 20 Apr 2021 08:42:54 +0900
+Date:   Tue, 20 Apr 2021 08:42:44 +0900
+From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        aymen.sghaier@nxp.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        peter.ujfalusi@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>, tomba@kernel.org,
+        jyri.sarha@iki.fi, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kishon <kishon@ti.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Roy Pledge <Roy.Pledge@nxp.com>, Leo Li <leoyang.li@nxp.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Felipe Balbi <balbi@kernel.org>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-staging@lists.linux.dev,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use
+ soc_device_match
+Message-ID: <YH4VdPNO9cdzc5MD@atmark-techno.com>
+References: <20210419042722.27554-1-alice.guo@oss.nxp.com>
+ <20210419042722.27554-4-alice.guo@oss.nxp.com>
+ <YH0O907dfGY9jQRZ@atmark-techno.com>
+ <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+ <YH1OeFy+SepIYYG0@atmark-techno.com>
+ <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR2101MB0892.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 849bec70-243b-4039-062c-08d9038b842e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2021 23:33:20.1202
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bldAepIy+5iBMp7dBNK0w113CD4mcDMqpQgUrCOmdrsLE42/6mWxPTeeepw60m7OmHLnDdyQfB+O0LepV4yUFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0509
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> From: Chris von Recklinghausen <crecklin@redhat.com>
-> Sent: Friday, April 16, 2021 6:17 AM
->  ...
-> Hibernation fails on a system in fips mode because md5 is used for the e8=
-20
-> integrity check and is not available. Use crc32 instead.
->=20
-> The check is intended to detect whether the E820 memory map provided
-> by the firmware after cold boot unexpectedly differs from the one that
-> was in use when the hibernation image was created. In this case, the
-> hibernation image cannot be restored, as it may cover memory regions
-> that are no longer available to the OS.
->=20
-> A non-cryptographic checksum such as CRC-32 is sufficient to detect such
-> inadvertent deviations.
->=20
-> Fixes: 62a03defeabd ("PM / hibernate: Verify the consistent of e820 memor=
-y
-> map
->        by md5 digest")
->=20
-> Signed-off-by: Chris von Recklinghausen <crecklin@redhat.com>
-> ---
+Arnd Bergmann wrote on Mon, Apr 19, 2021 at 02:16:36PM +0200:
+> In some cases, you can use the device_link infrastructure to deal
+> with dependencies between devices. Not sure if this would help
+> in your case, but have a look at device_link_add() etc in drivers/base/core.c
 
-Tested-by: Dexuan Cui <decui@microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
+I'll need to actually try to convince myself but if creating the link
+forces driver registration then it should be workable.
 
-Thanks Chris and all for the patch!
+> > In this particular case the problem is that since 7d981405d0fd ("soc:
+> > imx8m: change to use platform driver") the soc probe tries to use the
+> > nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
+> > So soc loading gets pushed back to the end of the list because it gets
+> > defered and other drivers relying on soc_device_match get confused
+> > because they wrongly think a device doesn't match a quirk when it
+> > actually does.
+> >
+> > If there is a way to ensure the nvmem driver gets loaded before the soc,
+> > that would also solve the problem nicely, and avoid the need to mess
+> > with all the ~50 drivers which use it.
+> >
+> > Is there a way to control in what order drivers get loaded? Something in
+> > the dtb perhaps?
+> 
+> For built-in drivers, load order depends on the initcall level and
+> link order (how things are lined listed in the Makefile hierarchy).
+> 
+> For loadable modules, this is up to user space in the end.
+> 
+> Which of the drivers in this scenario are loadable modules?
+
+All the drivers involved in my case are built-in (nvmem, soc and final
+soc_device_match consumer e.g. caam_jr that crashes the kernel if soc is
+not identified properly).
+
+I frankly don't like the idea of moving nvmem/ above soc/ in
+drivers/Makefile as a "solution" to this (especially as there is one
+that seems to care about what soc they run on...), so I'll have a look
+at links first, hopefully that will work out.
+
+
+Thanks,
+-- 
+Dominique
