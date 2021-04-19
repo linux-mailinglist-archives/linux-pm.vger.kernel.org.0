@@ -2,83 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7899A3634FA
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Apr 2021 14:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE37363903
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 03:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbhDRMEm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Apr 2021 08:04:42 -0400
-Received: from mout.gmx.net ([212.227.17.21]:53899 "EHLO mout.gmx.net"
+        id S236492AbhDSBRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Apr 2021 21:17:06 -0400
+Received: from mbox.abcom.al ([217.73.143.249]:33420 "EHLO mbox.abcom.al"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230273AbhDRMEl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 18 Apr 2021 08:04:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1618747428;
-        bh=UJsT5aV+MxRbho8JhRzNBpNeMbZUN3ULqGnvmwYqqo8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=gtWAMLhVANHc5fa/MEW9QtadcRt6E3XfLkUMwhO75vFNJ9hSiCIcdBXyh19j4Glvx
-         xlP1dPLK+L+gfju2A+suqWIgK1cDu7nk/k+Hk8vya2JdjeXOowr3KojS5rMCxKfH0l
-         k494tuyFNJv4jIqxdj0i2T9ANWf8U/auoWtHGEaE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.75.88] ([80.245.75.88]) by web-mail.gmx.net
- (3c-app-gmx-bap31.server.lan [172.19.172.101]) (via HTTP); Sun, 18 Apr 2021
- 14:03:48 +0200
+        id S233117AbhDSBRG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Apr 2021 21:17:06 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id D2A3A1239AEBD;
+        Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 19HW_82RDEQI; Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id 339B11239AEAA;
+        Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 339B11239AEAA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
+        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618792877;
+        bh=p2Sn/5BeV1TeOpE0g2OnXyVNOPHFXRN2kak+hb1GY3o=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=f6B9D0DINdEjAZV6mo3IDje+gdqh0bi8vsr7UHZ1KvtVLrVDenT78oWyGeFkABL5U
+         i3P0B9C0WyvPUWHsX8L7hECHUbGE5WOUX7N/rFCqN02gkTsRTCX74A05sQLPJ0wPDs
+         77VsMs49bbLx+0Yawa2KaaxJZ2Iuypt6tBAA1dbUKhK6goZcO1tN0uUxM8irGCVbM4
+         IRFdEj1Pzr2GzcS1yD+12BhjkF7QfSTya2Bkw9Hde7KLtoqRNfF17UKFWw4P708LQY
+         TAwMaFHeGL0SRvjYGFhq5GlUToqYN9CTo0Pv3aUnqzFS62v/O/51/Kwth8Ei0bverM
+         sQQzUya8STezA==
+X-Virus-Scanned: amavisd-new at mbox.abcom.al
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ya9vrabw6RUj; Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
+Received: from [192.168.43.60] (unknown [105.4.4.115])
+        by mbox.abcom.al (Postfix) with ESMTPSA id 4E3F611D8735E;
+        Mon, 19 Apr 2021 02:41:08 +0200 (CEST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Message-ID: <trinity-93ab11dc-32c6-4e6b-8617-6bfff1a1b42d-1618747428085@3c-app-gmx-bap31>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Aw: [PATCH] thermal: mediatek: add sensors-support
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 18 Apr 2021 14:03:48 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20210320080646.49615-1-linux@fw-web.de>
-References: <20210320080646.49615-1-linux@fw-web.de>
 Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:NpJG2XS0uVpmsDDBMEbodtzzfxpTnTBa8p1RkMykjqag/W3Gxr2tax05+zGq5AUWfZw8Y
- UR2I0pxvM9MHe0r8VhdDWkgQGBL1SI+8mAdYtMqgypfgy6RLOSe0qt1nK7c6agDFY5PfxSqpyO4Z
- wuBrnzufOyhYmZnoAymsyPyAXn2DXmF91+zeC+t21fCSauEkUxk78mx99SIl3IWAzCGwm7sT9tOV
- qAI+rAIGkZY8+FqJkyyuAffLkkKWZ7AsT6wur+yubLVNmz8hfao5kD5mi04EgQYx2wDkuWpwzz5T
- Is=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I5KzL9OLaQU=:3OPO7RKu+UrbJhyuN6QKpU
- 4BFYTNIp75gm+rV0iVvIjAnrZ4rj3UrvsoLuay+pCtGrHP3kS1gyMDoKaExubD2BtRxmnDcFP
- EXKFerqtjTB04wqUrO88LfpaXR73l0pGklAIgozu0o1JwZcj0Umk3S/bG6qd2vhka6gZH3jKh
- qRu0q85YFDxkMoCR6UUPpVEPnVYXeqHPNTdFN37xLgMWQ6okybKiy8tUUE+bUyeT2ZSVPD1yk
- 2at67rwVhXuVNRDnpguJsZvuCBq9MJa5fWUHc/BZ4u54VHhg5HH6Qir6G8J48GSr6ZgzVdfWF
- p1FA/423VEpjXaXcAtA3tBTHaZAk59UAaiEn8hsDVE+UUwrb60yU3LAmxv8g0UrhJfDmYHsrh
- Gl4F4Cn9dkJEs266ePIsPs5U8XZ8yIBRtVlm/DYT+Ge3FHzqx90mSDbru7P8Cb72TdhZb4stC
- zb+HotaIeKhlrhZ7IbA57k62MuPtnAjeyawwjbZqzPnkb42UGomNLhwhjTnDyEFNvjezFFpfD
- y5rD4nGv3MbX/iTa+hRpzw5YKZVeCdbli2KhM3KWeQ8GEP5WQaBF9Eruhdvw1L3CE2jyPSMCz
- 7K8Icw0Cf8kRzGRPxjMNukY07zv3tUyfUnBba8wMSmmdn8CcArkicuPi0i8/5ZZu5jVyN6+K1
- X+qLouCPOYByILOHs2fiFZVxcieOhdrk4fND/9bOBTRStLouXPo0aYprAGKXFpg2Yw7ZvHxDZ
- xFsPCVLNJE6nY/vdcN3WQViWdSHZK4iqsfTkN1eZUHW0WF2ORC5TDQOELbuapp321t3PbRyYK
- Bw3XYc3GqeMj2QKSR1+0lg4XQnhRLrXuuWUmN0DTw18tK/eZV4tCyn4MnqM9rUWjA178rfI81
- oX9ZfsAH+dh6HQ+BoZgsyLstw8Wrc5NgE3NKpQkJv+j1dSkcAiZcwjlHyVnblA5CKZ7/vcTyt
- VDaQZgQnZ+Q==
+Content-Description: Mail message body
+Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
+To:     Recipients <abashi@abcom.al>
+From:   <abashi@abcom.al>
+Date:   Mon, 19 Apr 2021 02:40:31 +0200
+Reply-To: billlawrencedonationorg@yahoo.com
+Message-Id: <20210419004108.4E3F611D8735E@mbox.abcom.al>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Sehr geehrter Herr / Frau
+Ich gr=C3=BC=C3=9Fe Sie im Namen des Herrn. Diese Nachricht wird Ihnen als =
+Benachrichtigung gesendet, dass Sie ausgew=C3=A4hlt wurden, um von meinem W=
+ohlt=C3=A4tigkeitsprojekt zu profitieren, das darauf abzielt, Leben zu ber=
+=C3=BChren und denen zu helfen, die ich auf der ganzen Welt kann, wie Gott =
+mich gesegnet hat.
+Ich habe die Powerball-Lotterie in H=C3=B6he von 150 Millionen USD am 16. D=
+ezember 2019 gewonnen und ich habe mich freiwillig entschlossen, Ihnen eine=
+n Betrag von (2.000.000,00 =E2=82=AC) als Wohlt=C3=A4tigkeitsorganisation z=
+u spenden. Ich versuche, zuf=C3=A4llige Menschen aus verschiedenen Quellen =
+und Moden zu erreichen, um das Leben aus verschiedenen Quellen zu ber=C3=BC=
+hren Winkel. Deshalb erhalten Sie hier die Nachricht.
+Sie wurden als einer der gl=C3=BCcklichen Empf=C3=A4nger registriert, die 2=
+ Millionen Euro erhalten haben. Diese Spende wird Ihnen gegeben, damit Sie =
+Ihre pers=C3=B6nlichen Probleme versch=C3=A4rfen und uns zum gro=C3=9Fen Te=
+il gro=C3=9Fz=C3=BCgig dabei helfen k=C3=B6nnen, die weniger gl=C3=BCcklich=
+en Waisen und gemeinn=C3=BCtzigen Organisationen in Ihrem Land zu unterst=
+=C3=BCtzen Nachbarschaftslokalit=C3=A4t
+Zur =C3=9Cberpr=C3=BCfung: //www.powerball.com/winner-story/150-million-pow=
+erball-ticket-claimed
 
-any opinion (except typo)?
+Kontaktieren Sie mich erneut, um Spenden zu erhalten. E-Mail: billlawrenced=
+onationorg@yahoo.com
 
-thermanl =3D> thermal
-
-regards Frank
-
-
-> Gesendet: Samstag, 20=2E M=C3=A4rz 2021 um 10:06 Uhr
-> Von: "Frank Wunderlich" <linux@fw-web=2Ede>
-> add HWMON-support to mediateks thermanl driver to allow lm-sensors
-> userspace tools read soc temperature
-
+Vielen Dank, Bill Lawrence
