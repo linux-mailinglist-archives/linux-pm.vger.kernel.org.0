@@ -2,91 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E3B3646F0
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 17:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87C3364848
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 18:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240908AbhDSPRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 11:17:34 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:34314 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbhDSPRd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 11:17:33 -0400
-Received: by mail-oi1-f173.google.com with SMTP id k18so30834238oik.1;
-        Mon, 19 Apr 2021 08:17:04 -0700 (PDT)
+        id S238910AbhDSQeM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 12:34:12 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38522 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbhDSQeM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 12:34:12 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lYWqC-00027f-VK
+        for linux-pm@vger.kernel.org; Mon, 19 Apr 2021 16:33:41 +0000
+Received: by mail-ej1-f69.google.com with SMTP id w2-20020a1709062f82b0290378745f26d5so3830385eji.6
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 09:33:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6QFU6W/Yv/iff9BYtQjDyNQVSjl+oi9h9IVTK+LWn9A=;
-        b=Ct746Jz/HL5B4idhWThfdFgElUvRuv/e8+F1aSeu5xdg7R+paFyMTgM2n28j+mmR/L
-         vgxl2T1erfyJUz/O8R4U+2gmsGIIF5MmR3MfJ8Vktkso6gtTaNf12pOCBdGdqhKcsh72
-         VYyIxJ3cSr/JOjn9d2CkMV98gr4AxiOxSE+XFmHPEmsttpY0smsTS9EuE0+E5M45MChX
-         DI+T3tPhhd9LlVLH9MRpyXZkSODgN1eS5s5NrSvg02v5TwEyrbARUnkdFI6+BZJYUt57
-         O9VG3943SRkzl10q3ad/9j9v0/e1JxY//QXg9gy2c/Thz3oEdNRWoLj5LbyvVruj/1JI
-         qeEw==
-X-Gm-Message-State: AOAM531+yxRr83RoOaUAB5jC7GlhnkgYD+kIRAv0fqL1nmJvWiZjFnMb
-        Kl72cLZfgIlFkwNoMXBS1Y1YVATIq+7hk/khErc=
-X-Google-Smtp-Source: ABdhPJxshSfiDj1WCzvK2Tr9dl53s6FXlT8y20rKxihqfzwfPfTf5vYUMLNzXPZIps9ZtwPKMFVqdAgLwljAF+IYa7A=
-X-Received: by 2002:aca:bc89:: with SMTP id m131mr7955057oif.71.1618845423618;
- Mon, 19 Apr 2021 08:17:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FQxWDozA0tVYdPvSIjWgb2svpfnzLps1lAqPUiFgCgM=;
+        b=t3+78P80OGkEpYEiMewTsnqgniY4N11Sp8B6v14KWHYnu5Dy9EBTg81vXaJQi6fD8J
+         jjbvYX7DQVn/ySjm6MbZ8/gcbieW99gZg3JqS1MdTatlJ9SO18zOnv8/QaobWdKQ3HN/
+         88P4KduKcY+SizFa0x+fRBVonLcRaikoNlp4bPep2dpBHJETvbXoMvSEscZLvNZ15RKL
+         reJtbo1CnHrFA4wBpfnYrqViy+Lq/ALdUFZ7UpoyozSY49TvlnW7a7gbY1CtRJvls6cA
+         tHNPMLk9FVCqPS0J/jqY6lO8l6F2Um8dMxP67g0PLVxt4Bs1v7GwzBBlCnAxAeZSKdA/
+         BSBQ==
+X-Gm-Message-State: AOAM531QDKFKCCuWHtg83CKQ2y5d6KhdNlFd7h7yIjXtBSXyaMZ4I7Nf
+        0i+pJ1w0wfiV3Mh/VDsuE4coGQeocS8Tm7kUA+7Ek6n+kDLmxHMyozYM2FHJ+8PLhjS/eqtiDNd
+        ExepNqu/sxXshbiSkTjl+vtZ/wMX3LWBwEgxV
+X-Received: by 2002:a17:906:747:: with SMTP id z7mr23437096ejb.192.1618850020677;
+        Mon, 19 Apr 2021 09:33:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwS/LNiUGt0EvGgoYA868p7AY80Rrv/sN3QJhQcSvtrE8Pou1sjnlbZEZD3aRmOBpMQwnAgzg==
+X-Received: by 2002:a17:906:747:: with SMTP id z7mr23437085ejb.192.1618850020537;
+        Mon, 19 Apr 2021 09:33:40 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-180-75.adslplus.ch. [188.155.180.75])
+        by smtp.gmail.com with ESMTPSA id d10sm10884257ejw.125.2021.04.19.09.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Apr 2021 09:33:40 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] power: supply: max14577: remove unneeded variable initialization
+Date:   Mon, 19 Apr 2021 18:33:32 +0200
+Message-Id: <20210419163336.64075-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210418060800.8833-1-sebastian.fricke@posteo.net>
- <794c957472f826b0f2860aecd365376266e2253a.camel@perches.com>
- <20210418091143.6h466qqd52uf766z@basti-TUXEDO-Book-XA1510> <3886b37dacd9fcf84d5211322807128e638a8222.camel@perches.com>
-In-Reply-To: <3886b37dacd9fcf84d5211322807128e638a8222.camel@perches.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Apr 2021 17:16:52 +0200
-Message-ID: <CAJZ5v0j0ZVqydWDhxWbvVrYW7cvc-bTWUdNwq5sZYyAbgJsTAg@mail.gmail.com>
-Subject: Re: [PATCH] base: power: runtime.c: Remove a unnecessary space
-To:     Joe Perches <joe@perches.com>,
-        Sebastian Fricke <sebastian.fricke@posteo.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 18, 2021 at 11:22 AM Joe Perches <joe@perches.com> wrote:
->
-> On Sun, 2021-04-18 at 09:11 +0000, Sebastian Fricke wrote:
-> > Hey Joe,
->
-> Hi Sebastian.
->
-> > On 18.04.2021 00:09, Joe Perches wrote:
-> > > On Sun, 2021-04-18 at 06:08 +0000, Sebastian Fricke wrote:
-> > > > Remove a redundant space to improve the quality of the comment.
-> > > I think this patch is not useful.
-> > > It's not redundant.
-> >
-> > Thank you, I actually found this pattern a few more times but I wanted
-> > to check first if this is a mistake or chosen consciously.
+The local 'current_bits' variable does not have to be initialized
+because all cases in following switch() either return or initialize it.
 
-I write a double space after a period ending a sentence as a rule and
-it is not a mistake.
+Addresses-Coverity: Unused value
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ drivers/power/supply/max14577_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> []
-> > > For drivers/base/power/runtime.c, that 2 space after period style is used
-> > > dozens of times and changing a single instance of it isn't very useful.
->
-> Even in that single file it's not consistent.
-> It's something like 3:1 for 2 spaces over 1 space after period.
->
-> I believe it's done more by habit and author age than anything.
-> If you learned to type using a typewriter and not a keyboard, then
-> you likely still use 2 spaces after a period.
+diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
+index dcedae18d7be..f244cd902eb9 100644
+--- a/drivers/power/supply/max14577_charger.c
++++ b/drivers/power/supply/max14577_charger.c
+@@ -261,7 +261,7 @@ static int max14577_init_constant_voltage(struct max14577_charger *chg,
+ static int max14577_init_eoc(struct max14577_charger *chg,
+ 		unsigned int uamp)
+ {
+-	unsigned int current_bits = 0xf;
++	unsigned int current_bits;
+ 	u8 reg_data;
+ 
+ 	switch (chg->max14577->dev_type) {
+-- 
+2.25.1
 
-By habit and because I prefer it this way (I find it somewhat easier
-to separate sentences from one another this way).
-
-> > True and if I understand you correctly you would rather keep it as is
-> > right?
->
-> Yes.  IMO: Whitespace in comments like this should not be changed
-> unless there's some other significant benefit like better alignment.
-
-Agreed.
