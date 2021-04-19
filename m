@@ -2,206 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D013640EF
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 13:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420B4364141
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 14:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238919AbhDSLuL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 07:50:11 -0400
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:42792 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238914AbhDSLuG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 07:50:06 -0400
-Received: by mail-lf1-f41.google.com with SMTP id z13so38422070lfd.9;
-        Mon, 19 Apr 2021 04:49:36 -0700 (PDT)
+        id S239027AbhDSMI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 08:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239028AbhDSMIx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 08:08:53 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00491C06174A
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 05:08:22 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id o5so5976909ljc.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 05:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VSjvKiMi1irhY6O/Y+tKt8XEB0nyJMwoKJqR1icsgsc=;
+        b=byhBv9E85/dEVMPgEEJYH+TxNAkSn9tds7mLrkNZFc7J7l1k8JjVnZuvdCleT/glaJ
+         hhDXxNkV+A3rCei4VXjintWFyOUp1grHUKm7JvgZKoPsIy+Cr/bPDRIUSxhdc1A+N0+n
+         2v4mBuYyUXEnKHzv2kH9rSFmyaEL7F/ZBesU1ru6MmyHPwrX7jLM/QoKII55h9+6HyCV
+         ui6vslmCR8+REPA548G7O/uq9GkoFhE2Rf7LpubH11rVN+JnAi4EqEhPPR1ATGnVY6uw
+         XOydT/Bau8WAavM6MTLyeyL6ap4iLPK4lEbnXCVJpjpQILMX2sbRmo2MA697eM+UKCma
+         M7UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jd8ZqQr7aA+TfxalG5Zpojil8sxWCY4+ctswmpE1Z1Q=;
-        b=jXQ8MSwq9PfcDQVqc90MHB1699FOt7j/4n5k7E5puQDEXqtVJ+wtwP/gzOV+M/d6wG
-         X+DaksaUIYRFd0hbORlDNfKgWdmHb710aLW7HD0g7ydCoZRpzIkYEEBd8YVYj4wAJLJK
-         7MbIc+KbXZmOAVP6W9hJW9Qv+Oi2pyx/H7JtwTOu9KAvq47JaXkZbM8Z9mGtc0pFDvr1
-         Qph1LPTIy1+dn+u4CRfJyMAUwkO7albZf6F44wzlE+oEk5bsiUeudeDlGvhk8E6L578f
-         bX/Y9TccTVgWzUNkFncvzviJMXH3A+oHwpX5miLtcYiDdIdZfB0vNLcejMMC9/nXtDiY
-         uO1A==
-X-Gm-Message-State: AOAM532P+qiQMvhg9yMRm9GEnZgMC/NDixl89/n9ukflZdQXpEehoaZ8
-        cilxWBHkDYATWkp2KbD/kxk=
-X-Google-Smtp-Source: ABdhPJyFuwzrHLSm7DTsZU0JJPCmu1/xXK1hF4dMaPRI7Zfs3r/1hX4dbdT0xNJVAkEIRjcPMdeP4A==
-X-Received: by 2002:ac2:5f1b:: with SMTP id 27mr11709672lfq.425.1618832975571;
-        Mon, 19 Apr 2021 04:49:35 -0700 (PDT)
-Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id j11sm1803022lfg.257.2021.04.19.04.49.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 04:49:35 -0700 (PDT)
-Date:   Mon, 19 Apr 2021 14:49:27 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v8 03/10] thermal: Use generic HW-protection shutdown API
-Message-ID: <3b62226e320ab412357e102baf6d628e354a0b61.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VSjvKiMi1irhY6O/Y+tKt8XEB0nyJMwoKJqR1icsgsc=;
+        b=mvetgITDYjhNfsRc3SzVKzxt6RgamzNrKkNNkgFVW9lYBcM8T9wGoN6Q3MA8KVH4Xf
+         Ia24djHB5Thq4O+kLT6nSA7xS3bVdvv0eXYe/6KfnxMcTryTmXLmE7jSWlMy5LkGaoPB
+         lf6n6eIzu355Ds1cUOZCnclGR/CtusSIWS+IhAkVyTBj6PLpa4i3yOAkE5VZIw6x8xPH
+         4Cr/DrsyDpFJvKU+YVXyQUCDeuGQaXX0I4YB7CJ8tlj9vpi0cOXW1k59dNJkVMscxS5G
+         y+0MWakwUeDBQ7eEQn895rOrdG212gHE7eYS7ypzxMymfPSSD+8cwtstCOZWT+9mozDW
+         uEEA==
+X-Gm-Message-State: AOAM533s8bvlPl69CGIMsfRhfUJYtpznIN2KynPhO7eGhHQQxvBkAMEd
+        Rvy423yRCqzwtghq+AfA/3Y0vKQeCM+LuE3vOt0=
+X-Google-Smtp-Source: ABdhPJxcZqdOsw7O7a29AYd+eShHhJ9+6r2HzxhLNT9gZWH3mJtUdnCG7GzIt+XgkvOtbl5ZIea9LBbB56dcP1VwnSs=
+X-Received: by 2002:a2e:6f10:: with SMTP id k16mr9456112ljc.26.1618834101310;
+ Mon, 19 Apr 2021 05:08:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
+References: <161848823868.29796.2378720492280917598.tip-bot2@tip-bot2>
+ <202104160110.kPF71m4S-lkp@intel.com> <CA+_ehUzAhPhqn62ivcxF+giMUy430eija7_sOSoNmC=291wq-g@mail.gmail.com>
+ <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
+In-Reply-To: <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+Date:   Mon, 19 Apr 2021 14:08:10 +0200
+Message-ID: <CA+_ehUziRf7Ls8PByz-9_L8SKB26+yRY-MrZK_26GqdycCkNhg@mail.gmail.com>
+Subject: Re: [thermal: thermal/next] thermal/drivers/tsens: Convert msm8960 to reg_field
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        thermal-bot for Ansuel Smith <tip-bot2@linutronix.de>,
+        "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
+        <linux-pm@vger.kernel.org>, kbuild-all@lists.01.org,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The hardware shutdown function was exported from kernel/reboot for
-other subsystems to use. Logic is copied from the thermal_core. The
-protection mutex is replaced by an atomic_t to allow calls also from
-an IRQ context.
+>
+> On 15/04/2021 20:52, Ansuel Smith wrote:
+> >>
+> >> Hi thermal-bot,
+> >>
+> >> Thank you for the patch! Yet something to improve:
+> >>
+> >> [auto build test ERROR on linus/master]
+> >> [also build test ERROR on v5.12-rc7]
+> >> [cannot apply to thermal/next next-20210415]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note=
+.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch]
+> >>
+> >> url:    https://github.com/0day-ci/linux/commits/thermal-bot-for-Ansue=
+l-Smith/thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
+> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux=
+.git 7f75285ca572eaabc028cf78c6ab5473d0d160be
+> >> config: arm-randconfig-r015-20210415 (attached as .config)
+> >> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
+> >> reproduce (this is a W=3D1 build):
+> >>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/=
+sbin/make.cross -O ~/bin/make.cross
+> >>         chmod +x ~/bin/make.cross
+> >>         # https://github.com/0day-ci/linux/commit/efea0f0570b6b581bdb2=
+fad978a35fd1a521385b
+> >>         git remote add linux-review https://github.com/0day-ci/linux
+> >>         git fetch --no-tags linux-review thermal-bot-for-Ansuel-Smith/=
+thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
+> >>         git checkout efea0f0570b6b581bdb2fad978a35fd1a521385b
+> >>         # save the attached .config to linux build tree
+> >>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.c=
+ross W=3D1 ARCH=3Darm
+> >>
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >>
+> >> All errors (new ones prefixed by >>):
+> >>
+> >>    drivers/thermal/qcom/tsens-8960.c: In function 'init_8960':
+> >>>> drivers/thermal/qcom/tsens-8960.c:193:29: error: 'S0_STATUS_ADDR' un=
+declared (first use in this function); did you mean 'INT_STATUS_ADDR'?
+> >>      193 |    priv->sensor[i].status =3D S0_STATUS_ADDR + 40;
+> >>          |                             ^~~~~~~~~~~~~~
+> >>          |                             INT_STATUS_ADDR
+> >>    drivers/thermal/qcom/tsens-8960.c:193:29: note: each undeclared ide=
+ntifier is reported only once for each function it appears in
+> >>    drivers/thermal/qcom/tsens-8960.c: At top level:
+> >>>> drivers/thermal/qcom/tsens-8960.c:284:15: error: 'VER_0' undeclared =
+here (not in a function); did you mean 'VER_0_1'?
+> >>      284 |  .ver_major =3D VER_0,
+> >>          |               ^~~~~
+> >>          |               VER_0_1
+> >>
+> >>
+> >> vim +193 drivers/thermal/qcom/tsens-8960.c
+>
+> [ ... ]
+>
+> > What happened here? This doesn't seem right.
+>
+> Yes, it is. It means the series is not git bisect safe.
+>
+> Please fix it.
+>
+>
 
-Use the exported API instead of implementing own just for the
-thermal_core.
+I'm a bit confused. Should I send just a patch to fix this or I
+need to send the series again rebased with the new changes?
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-
----
-Changelog:
-v8:
- - new patch (change added in v7, splitted in own patch at v8)
-
-Use the exported API instead
----
- drivers/thermal/thermal_core.c | 63 +++-------------------------------
- 1 file changed, 4 insertions(+), 59 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 996c038f83a4..b1444845af38 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -36,10 +36,8 @@ static LIST_HEAD(thermal_governor_list);
- 
- static DEFINE_MUTEX(thermal_list_lock);
- static DEFINE_MUTEX(thermal_governor_lock);
--static DEFINE_MUTEX(poweroff_lock);
- 
- static atomic_t in_suspend;
--static bool power_off_triggered;
- 
- static struct thermal_governor *def_governor;
- 
-@@ -327,70 +325,18 @@ static void handle_non_critical_trips(struct thermal_zone_device *tz, int trip)
- 		       def_governor->throttle(tz, trip);
- }
- 
--/**
-- * thermal_emergency_poweroff_func - emergency poweroff work after a known delay
-- * @work: work_struct associated with the emergency poweroff function
-- *
-- * This function is called in very critical situations to force
-- * a kernel poweroff after a configurable timeout value.
-- */
--static void thermal_emergency_poweroff_func(struct work_struct *work)
--{
--	/*
--	 * We have reached here after the emergency thermal shutdown
--	 * Waiting period has expired. This means orderly_poweroff has
--	 * not been able to shut off the system for some reason.
--	 * Try to shut down the system immediately using kernel_power_off
--	 * if populated
--	 */
--	WARN(1, "Attempting kernel_power_off: Temperature too high\n");
--	kernel_power_off();
--
--	/*
--	 * Worst of the worst case trigger emergency restart
--	 */
--	WARN(1, "Attempting emergency_restart: Temperature too high\n");
--	emergency_restart();
--}
--
--static DECLARE_DELAYED_WORK(thermal_emergency_poweroff_work,
--			    thermal_emergency_poweroff_func);
--
--/**
-- * thermal_emergency_poweroff - Trigger an emergency system poweroff
-- *
-- * This may be called from any critical situation to trigger a system shutdown
-- * after a known period of time. By default this is not scheduled.
-- */
--static void thermal_emergency_poweroff(void)
-+void thermal_zone_device_critical(struct thermal_zone_device *tz)
- {
--	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
- 	/*
- 	 * poweroff_delay_ms must be a carefully profiled positive value.
--	 * Its a must for thermal_emergency_poweroff_work to be scheduled
-+	 * Its a must for forced_emergency_poweroff_work to be scheduled.
- 	 */
--	if (poweroff_delay_ms <= 0)
--		return;
--	schedule_delayed_work(&thermal_emergency_poweroff_work,
--			      msecs_to_jiffies(poweroff_delay_ms));
--}
-+	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
- 
--void thermal_zone_device_critical(struct thermal_zone_device *tz)
--{
- 	dev_emerg(&tz->device, "%s: critical temperature reached, "
- 		  "shutting down\n", tz->type);
- 
--	mutex_lock(&poweroff_lock);
--	if (!power_off_triggered) {
--		/*
--		 * Queue a backup emergency shutdown in the event of
--		 * orderly_poweroff failure
--		 */
--		thermal_emergency_poweroff();
--		orderly_poweroff(true);
--		power_off_triggered = true;
--	}
--	mutex_unlock(&poweroff_lock);
-+	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-@@ -1549,7 +1495,6 @@ static int __init thermal_init(void)
- 	ida_destroy(&thermal_cdev_ida);
- 	mutex_destroy(&thermal_list_lock);
- 	mutex_destroy(&thermal_governor_lock);
--	mutex_destroy(&poweroff_lock);
- 	return result;
- }
- postcore_initcall(thermal_init);
--- 
-2.25.4
-
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
