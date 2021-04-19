@@ -2,146 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420B4364141
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 14:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EF9364169
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 14:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239027AbhDSMI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 08:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239028AbhDSMIx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 08:08:53 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00491C06174A
-        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 05:08:22 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id o5so5976909ljc.1
-        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 05:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VSjvKiMi1irhY6O/Y+tKt8XEB0nyJMwoKJqR1icsgsc=;
-        b=byhBv9E85/dEVMPgEEJYH+TxNAkSn9tds7mLrkNZFc7J7l1k8JjVnZuvdCleT/glaJ
-         hhDXxNkV+A3rCei4VXjintWFyOUp1grHUKm7JvgZKoPsIy+Cr/bPDRIUSxhdc1A+N0+n
-         2v4mBuYyUXEnKHzv2kH9rSFmyaEL7F/ZBesU1ru6MmyHPwrX7jLM/QoKII55h9+6HyCV
-         ui6vslmCR8+REPA548G7O/uq9GkoFhE2Rf7LpubH11rVN+JnAi4EqEhPPR1ATGnVY6uw
-         XOydT/Bau8WAavM6MTLyeyL6ap4iLPK4lEbnXCVJpjpQILMX2sbRmo2MA697eM+UKCma
-         M7UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VSjvKiMi1irhY6O/Y+tKt8XEB0nyJMwoKJqR1icsgsc=;
-        b=mvetgITDYjhNfsRc3SzVKzxt6RgamzNrKkNNkgFVW9lYBcM8T9wGoN6Q3MA8KVH4Xf
-         Ia24djHB5Thq4O+kLT6nSA7xS3bVdvv0eXYe/6KfnxMcTryTmXLmE7jSWlMy5LkGaoPB
-         lf6n6eIzu355Ds1cUOZCnclGR/CtusSIWS+IhAkVyTBj6PLpa4i3yOAkE5VZIw6x8xPH
-         4Cr/DrsyDpFJvKU+YVXyQUCDeuGQaXX0I4YB7CJ8tlj9vpi0cOXW1k59dNJkVMscxS5G
-         y+0MWakwUeDBQ7eEQn895rOrdG212gHE7eYS7ypzxMymfPSSD+8cwtstCOZWT+9mozDW
-         uEEA==
-X-Gm-Message-State: AOAM533s8bvlPl69CGIMsfRhfUJYtpznIN2KynPhO7eGhHQQxvBkAMEd
-        Rvy423yRCqzwtghq+AfA/3Y0vKQeCM+LuE3vOt0=
-X-Google-Smtp-Source: ABdhPJxcZqdOsw7O7a29AYd+eShHhJ9+6r2HzxhLNT9gZWH3mJtUdnCG7GzIt+XgkvOtbl5ZIea9LBbB56dcP1VwnSs=
-X-Received: by 2002:a2e:6f10:: with SMTP id k16mr9456112ljc.26.1618834101310;
- Mon, 19 Apr 2021 05:08:21 -0700 (PDT)
+        id S239108AbhDSMRj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 08:17:39 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:49693 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239056AbhDSMRg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 08:17:36 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1McIYO-1m4VGN1dSm-00cdhN; Mon, 19 Apr 2021 14:17:03 +0200
+Received: by mail-wr1-f45.google.com with SMTP id a4so33804401wrr.2;
+        Mon, 19 Apr 2021 05:17:03 -0700 (PDT)
+X-Gm-Message-State: AOAM530v/yBC/2XYq7ELiJsOKT38utH8V09hnr+DbReIt0QSUowLKCu9
+        qzJPWUNHn5H0Tj77oevy9M0tidTBIegyWgN+ZY8=
+X-Google-Smtp-Source: ABdhPJw4F20QerTwfst1rAMwc6NWiXDSUWeUkZ8E4j2sezaYrIv6atAni45jIwUzsYws7AyLO9D3pu8QFGIGztgXd7o=
+X-Received: by 2002:a05:6000:1843:: with SMTP id c3mr14679907wri.361.1618834612186;
+ Mon, 19 Apr 2021 05:16:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <161848823868.29796.2378720492280917598.tip-bot2@tip-bot2>
- <202104160110.kPF71m4S-lkp@intel.com> <CA+_ehUzAhPhqn62ivcxF+giMUy430eija7_sOSoNmC=291wq-g@mail.gmail.com>
- <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
-In-Reply-To: <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-Date:   Mon, 19 Apr 2021 14:08:10 +0200
-Message-ID: <CA+_ehUziRf7Ls8PByz-9_L8SKB26+yRY-MrZK_26GqdycCkNhg@mail.gmail.com>
-Subject: Re: [thermal: thermal/next] thermal/drivers/tsens: Convert msm8960 to reg_field
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        thermal-bot for Ansuel Smith <tip-bot2@linutronix.de>,
-        "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
-        <linux-pm@vger.kernel.org>, kbuild-all@lists.01.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
+References: <20210419042722.27554-1-alice.guo@oss.nxp.com> <20210419042722.27554-4-alice.guo@oss.nxp.com>
+ <YH0O907dfGY9jQRZ@atmark-techno.com> <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+ <YH1OeFy+SepIYYG0@atmark-techno.com>
+In-Reply-To: <YH1OeFy+SepIYYG0@atmark-techno.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 19 Apr 2021 14:16:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+Message-ID: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use soc_device_match
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+        aymen.sghaier@nxp.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        peter.ujfalusi@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>, tomba@kernel.org,
+        jyri.sarha@iki.fi, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kishon <kishon@ti.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Roy Pledge <Roy.Pledge@nxp.com>, Leo Li <leoyang.li@nxp.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Felipe Balbi <balbi@kernel.org>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-staging@lists.linux.dev,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P71GUur0c8Et4KTdfK062CelxJMlxDzHdi6foeZVMrh68Tz4kVO
+ xXC4vz+qe3LvNC/lTgY8q6jr08cIcxgzzrqqwLuy4gBjPze3CRaFI6Tn0ivsylYkqTjCGCd
+ UznPeEk90qstnxb0iWNZx7FG5N+vrUigS/VNsT3W/kFEpTHiyw396kNMzzFJBTjXO+naZJ+
+ Cfu35e3pJq/mHwP5LQM/Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Tj0dSv4OACg=:QLuHKXqc+6Lj41NGnufoGl
+ N+UnlZp25078q227oT0o/4kxbd0mQOAoQ/NCUKgnVsoYmGtmK6mEBskoottCNbYunStcV9NF4
+ wE8ToQWQ05B3nZv4Vjj9qNbaiSwQl2/EIEpHx8+6DQaiGM4h6uplPIOIDeaZjltt02tsjjmk7
+ kxpSU+zIeAbNwqmXYSk5Vm3CpYS1xMcDA6Eiv0+uZeBUE0kKjN4jwkU6+BKG/eaq+T9ufKwnD
+ crSJLI+V67wSaKUzbHccJ3EU1Sb6dMM2cPoEC3Av6tRhuAXiX84+lOxtkljO1IFE9iL1JBVn5
+ CjGxqnLONV0vManrkRS3zSk/dqMTqKx9iNczeHNAz+sKCK3kGK1HvvAI82zCriMShj36q2Yiu
+ latEFCHqqv6CzIpzD2Q+F98/Rh3nVZdyFAqvuM6r16X0t/3dzAs72dYw+jzCHok5qetil5Q2V
+ 5rdGScTR8+ZhGbwiKRQyQ6I2CQTnccKZ549zJci96NqNdfUe5jbzVwZOI0walCavZ7GVu0d2F
+ jvOU246bo6oNPkDzH9c2gJBnZtcrzAKb4pwtF9+3cOiLZPnCE0nY+1vjm75YQHDBCyxvLdR64
+ g4tTIuRlUg3P8XaXbJiPp80y/nkM8kt4yG+up76tnDKMDxMpP5a+pkpQ1YQ2I6y3uojN6bE8n
+ CFp8=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Apr 19, 2021 at 11:33 AM Dominique MARTINET
+<dominique.martinet@atmark-techno.com> wrote:
+> Geert Uytterhoeven wrote on Mon, Apr 19, 2021 at 11:03:24AM +0200:
 >
-> On 15/04/2021 20:52, Ansuel Smith wrote:
-> >>
-> >> Hi thermal-bot,
-> >>
-> >> Thank you for the patch! Yet something to improve:
-> >>
-> >> [auto build test ERROR on linus/master]
-> >> [also build test ERROR on v5.12-rc7]
-> >> [cannot apply to thermal/next next-20210415]
-> >> [If your patch is applied to the wrong git tree, kindly drop us a note=
-.
-> >> And when submitting patch, we suggest to use '--base' as documented in
-> >> https://git-scm.com/docs/git-format-patch]
-> >>
-> >> url:    https://github.com/0day-ci/linux/commits/thermal-bot-for-Ansue=
-l-Smith/thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
-> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux=
-.git 7f75285ca572eaabc028cf78c6ab5473d0d160be
-> >> config: arm-randconfig-r015-20210415 (attached as .config)
-> >> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
-> >> reproduce (this is a W=3D1 build):
-> >>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/=
-sbin/make.cross -O ~/bin/make.cross
-> >>         chmod +x ~/bin/make.cross
-> >>         # https://github.com/0day-ci/linux/commit/efea0f0570b6b581bdb2=
-fad978a35fd1a521385b
-> >>         git remote add linux-review https://github.com/0day-ci/linux
-> >>         git fetch --no-tags linux-review thermal-bot-for-Ansuel-Smith/=
-thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
-> >>         git checkout efea0f0570b6b581bdb2fad978a35fd1a521385b
-> >>         # save the attached .config to linux build tree
-> >>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.c=
-ross W=3D1 ARCH=3Darm
-> >>
-> >> If you fix the issue, kindly add following tag as appropriate
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >>
-> >> All errors (new ones prefixed by >>):
-> >>
-> >>    drivers/thermal/qcom/tsens-8960.c: In function 'init_8960':
-> >>>> drivers/thermal/qcom/tsens-8960.c:193:29: error: 'S0_STATUS_ADDR' un=
-declared (first use in this function); did you mean 'INT_STATUS_ADDR'?
-> >>      193 |    priv->sensor[i].status =3D S0_STATUS_ADDR + 40;
-> >>          |                             ^~~~~~~~~~~~~~
-> >>          |                             INT_STATUS_ADDR
-> >>    drivers/thermal/qcom/tsens-8960.c:193:29: note: each undeclared ide=
-ntifier is reported only once for each function it appears in
-> >>    drivers/thermal/qcom/tsens-8960.c: At top level:
-> >>>> drivers/thermal/qcom/tsens-8960.c:284:15: error: 'VER_0' undeclared =
-here (not in a function); did you mean 'VER_0_1'?
-> >>      284 |  .ver_major =3D VER_0,
-> >>          |               ^~~~~
-> >>          |               VER_0_1
-> >>
-> >>
-> >> vim +193 drivers/thermal/qcom/tsens-8960.c
+> > soc_device_match() should only be used as a last resort, to identify
+> > systems that cannot be identified otherwise.  Typically this is used for
+> > quirks, which should only be enabled on a very specific subset of
+> > systems.  IMHO such systems should make sure soc_device_match()
+> > is available early, by registering their SoC device early.
 >
-> [ ... ]
->
-> > What happened here? This doesn't seem right.
->
-> Yes, it is. It means the series is not git bisect safe.
->
-> Please fix it.
->
->
+> I definitely agree there, my suggestion to defer was only because I know
+> of no other way to influence the ordering of drivers loading reliably
+> and gave up on soc being init'd early.
 
-I'm a bit confused. Should I send just a patch to fix this or I
-need to send the series again rebased with the new changes?
+In some cases, you can use the device_link infrastructure to deal
+with dependencies between devices. Not sure if this would help
+in your case, but have a look at device_link_add() etc in drivers/base/core.c
 
+> In this particular case the problem is that since 7d981405d0fd ("soc:
+> imx8m: change to use platform driver") the soc probe tries to use the
+> nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
+> So soc loading gets pushed back to the end of the list because it gets
+> defered and other drivers relying on soc_device_match get confused
+> because they wrongly think a device doesn't match a quirk when it
+> actually does.
 >
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
+> If there is a way to ensure the nvmem driver gets loaded before the soc,
+> that would also solve the problem nicely, and avoid the need to mess
+> with all the ~50 drivers which use it.
 >
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> Is there a way to control in what order drivers get loaded? Something in
+> the dtb perhaps?
+
+For built-in drivers, load order depends on the initcall level and
+link order (how things are lined listed in the Makefile hierarchy).
+
+For loadable modules, this is up to user space in the end.
+
+Which of the drivers in this scenario are loadable modules?
+
+        Arnd
