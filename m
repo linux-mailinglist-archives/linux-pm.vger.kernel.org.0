@@ -2,78 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE37363903
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 03:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3D936391C
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 03:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbhDSBRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Apr 2021 21:17:06 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:33420 "EHLO mbox.abcom.al"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233117AbhDSBRG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 18 Apr 2021 21:17:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id D2A3A1239AEBD;
-        Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 19HW_82RDEQI; Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 339B11239AEAA;
-        Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 339B11239AEAA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618792877;
-        bh=p2Sn/5BeV1TeOpE0g2OnXyVNOPHFXRN2kak+hb1GY3o=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=f6B9D0DINdEjAZV6mo3IDje+gdqh0bi8vsr7UHZ1KvtVLrVDenT78oWyGeFkABL5U
-         i3P0B9C0WyvPUWHsX8L7hECHUbGE5WOUX7N/rFCqN02gkTsRTCX74A05sQLPJ0wPDs
-         77VsMs49bbLx+0Yawa2KaaxJZ2Iuypt6tBAA1dbUKhK6goZcO1tN0uUxM8irGCVbM4
-         IRFdEj1Pzr2GzcS1yD+12BhjkF7QfSTya2Bkw9Hde7KLtoqRNfF17UKFWw4P708LQY
-         TAwMaFHeGL0SRvjYGFhq5GlUToqYN9CTo0Pv3aUnqzFS62v/O/51/Kwth8Ei0bverM
-         sQQzUya8STezA==
-X-Virus-Scanned: amavisd-new at mbox.abcom.al
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ya9vrabw6RUj; Mon, 19 Apr 2021 02:41:17 +0200 (CEST)
-Received: from [192.168.43.60] (unknown [105.4.4.115])
-        by mbox.abcom.al (Postfix) with ESMTPSA id 4E3F611D8735E;
-        Mon, 19 Apr 2021 02:41:08 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        id S237054AbhDSBaZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Apr 2021 21:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232133AbhDSBaZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Apr 2021 21:30:25 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC53C06174A;
+        Sun, 18 Apr 2021 18:29:49 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id mh2so28801936ejb.8;
+        Sun, 18 Apr 2021 18:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vWDsiHjf+/A9AetBxgcblwtERScRVbbT/XAQkG0jnaI=;
+        b=BSqEGVrVWE5WRx2Qt4BNZyM9T157nDr2Hdsp+OwNLP3sqq+MaBjofQEsrXtyx+x6z7
+         bV+nGR7JC5DK13zj0LJ5wL5U0mn5wzbL4YSqHUrAfKvz+5dZNxmFOgYY/myl3YEO0WD/
+         CTTMCPzuzIY61RxtmdHAvrPdGgiG0w6mAfVJD0hjlLZMWUKxbbY4Hpl2BPWzXbhv3de6
+         rJ1P8AjG8vWK+UhU4GGGqoIbkuhs9IOSexx0tNvDA5AClqlgfGX2fNCQFZeQU2I8hHUi
+         QN/ZmcWIJTONUqwvi8EfBpgpSciQVxZXn8h8H2ycVoQEp6vzJS6AYm5xgwfADnBuhfZ/
+         h7CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vWDsiHjf+/A9AetBxgcblwtERScRVbbT/XAQkG0jnaI=;
+        b=Y9lMaARIZgWuBeBhARG3mKYM2xvwyXBV4Na5/7whTT/JSXg1K6DWOME+b2M1S/VUUH
+         cQ3lMz53vqDKCq7245kpcpc8hfrLqXRtW4Sj48b+CsxPRSpbegVNkZ6l1tBzCdGmc+ey
+         caP7WFtJOsxztBZrJ9SZy3BCNDD4OTMl49lo1OWqT5l9gkb5kTSPPzAFYfpte8QhgTJo
+         dGIvWm3idqedylHi3Y3yb+a82Ys6UQkBXaPG0MJcQw1Ztxa2PtEA5gqYg6OIZX9Y+NR/
+         FFuQxobd+fpuNavMH/a82LZjVSLV3wj9rw8oYZucdQ0gcKOiNk/lEE28SgBwN4HKzcYn
+         0qtA==
+X-Gm-Message-State: AOAM5308gNJVweUOelvxm82+xD2msi2L1odwE0XrD7rWTc+yrd2jbQmx
+        JciEQHCICgu3vOPupAbUhf48faufyD9F0w==
+X-Google-Smtp-Source: ABdhPJz6pki9l6EsU/sEor1DgG33Aa+K5XaasHVCuV6bnDsHWcno0+evodKoHT3WQdImdh/wxzBWSA==
+X-Received: by 2002:a17:906:3952:: with SMTP id g18mr19437001eje.104.1618795788617;
+        Sun, 18 Apr 2021 18:29:48 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-35-189-2.ip56.fastwebnet.it. [93.35.189.2])
+        by smtp.googlemail.com with ESMTPSA id mj3sm9083579ejb.3.2021.04.18.18.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Apr 2021 18:29:48 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [thermal-next PATCH 1/2] thermal: qcom: tsens: init debugfs only with successful probe
+Date:   Mon, 19 Apr 2021 03:29:29 +0200
+Message-Id: <20210419012930.7727-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
-To:     Recipients <abashi@abcom.al>
-From:   <abashi@abcom.al>
-Date:   Mon, 19 Apr 2021 02:40:31 +0200
-Reply-To: billlawrencedonationorg@yahoo.com
-Message-Id: <20210419004108.4E3F611D8735E@mbox.abcom.al>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sehr geehrter Herr / Frau
-Ich gr=C3=BC=C3=9Fe Sie im Namen des Herrn. Diese Nachricht wird Ihnen als =
-Benachrichtigung gesendet, dass Sie ausgew=C3=A4hlt wurden, um von meinem W=
-ohlt=C3=A4tigkeitsprojekt zu profitieren, das darauf abzielt, Leben zu ber=
-=C3=BChren und denen zu helfen, die ich auf der ganzen Welt kann, wie Gott =
-mich gesegnet hat.
-Ich habe die Powerball-Lotterie in H=C3=B6he von 150 Millionen USD am 16. D=
-ezember 2019 gewonnen und ich habe mich freiwillig entschlossen, Ihnen eine=
-n Betrag von (2.000.000,00 =E2=82=AC) als Wohlt=C3=A4tigkeitsorganisation z=
-u spenden. Ich versuche, zuf=C3=A4llige Menschen aus verschiedenen Quellen =
-und Moden zu erreichen, um das Leben aus verschiedenen Quellen zu ber=C3=BC=
-hren Winkel. Deshalb erhalten Sie hier die Nachricht.
-Sie wurden als einer der gl=C3=BCcklichen Empf=C3=A4nger registriert, die 2=
- Millionen Euro erhalten haben. Diese Spende wird Ihnen gegeben, damit Sie =
-Ihre pers=C3=B6nlichen Probleme versch=C3=A4rfen und uns zum gro=C3=9Fen Te=
-il gro=C3=9Fz=C3=BCgig dabei helfen k=C3=B6nnen, die weniger gl=C3=BCcklich=
-en Waisen und gemeinn=C3=BCtzigen Organisationen in Ihrem Land zu unterst=
-=C3=BCtzen Nachbarschaftslokalit=C3=A4t
-Zur =C3=9Cberpr=C3=BCfung: //www.powerball.com/winner-story/150-million-pow=
-erball-ticket-claimed
+calibrate and tsens_register can fail or PROBE_DEFER. This will cause a
+double or a wrong init of the debugfs information. Init debugfs only
+with successful probe fixing warning about directory already present.
 
-Kontaktieren Sie mich erneut, um Spenden zu erhalten. E-Mail: billlawrenced=
-onationorg@yahoo.com
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/thermal/qcom/tsens.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Vielen Dank, Bill Lawrence
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 4c7ebd1d3..f9d50a67e 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -918,8 +918,6 @@ int __init init_common(struct tsens_priv *priv)
+ 	if (tsens_version(priv) >= VER_0_1)
+ 		tsens_enable_irq(priv);
+ 
+-	tsens_debug_init(op);
+-
+ err_put_device:
+ 	put_device(&op->dev);
+ 	return ret;
+@@ -1158,7 +1156,12 @@ static int tsens_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	return tsens_register(priv);
++	ret = tsens_register(priv);
++
++	if (!ret)
++		tsens_debug_init(pdev);
++
++	return ret;
+ }
+ 
+ static int tsens_remove(struct platform_device *pdev)
+-- 
+2.30.2
+
