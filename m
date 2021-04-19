@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA96D3640C9
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 13:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762783640E6
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 13:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbhDSLq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 07:46:56 -0400
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:35762 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238415AbhDSLqz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 07:46:55 -0400
-Received: by mail-lf1-f41.google.com with SMTP id x19so25031242lfa.2;
-        Mon, 19 Apr 2021 04:46:23 -0700 (PDT)
+        id S238717AbhDSLtj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 07:49:39 -0400
+Received: from mail-lj1-f169.google.com ([209.85.208.169]:41968 "EHLO
+        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238730AbhDSLti (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 07:49:38 -0400
+Received: by mail-lj1-f169.google.com with SMTP id a36so28140549ljq.8;
+        Mon, 19 Apr 2021 04:49:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=csinPoTaCo7rcZR2SWzaW1hy6+ig+dzxAWVbcMRVY70=;
-        b=QfDez/UM/Erf14l+pzGDZ1S3Nk7evslDSKQOmU8jP4Ne/b2KzVjKGcBtS74bkCeXGM
-         8plrXTNq9eO2YWwZ0lPbCqPj4WqA1nBbsLG48PSivXxmESoqo3kjrK7HglBrxnAirD43
-         eutUNCiyvTSxqAzEzKrXKJVxcNz3vO3EEW19aprSHIpp++bMfybMcGowXiyG31znfVQp
-         nKSIScGcEinsArgqRneY38HJboshfkA/zeu/NJ+AutXlxAoA6PIYrJDQ2xiPaDb1Et0n
-         Qi9hpq4ajiiNLs0h+nEPPnXbZgFvTVAffgGaNnbY2eNQ8QhCaSu/pOsPrbwQI3t64xbi
-         lXtw==
-X-Gm-Message-State: AOAM532/8DeOZydiWz03fL6/9bkyWGIILioWAPs+F4vPpHVxOPpfwc4F
-        0zoRfojluwjpHmpbxywRPmI=
-X-Google-Smtp-Source: ABdhPJz0k1Io7JGCc9o9ZhxTQn2jxxu2zFe2Fb9aPz78WPzG18BWbcx/WqZDPVL2tO4SV4pl02Bo+A==
-X-Received: by 2002:a05:6512:358b:: with SMTP id m11mr7695146lfr.179.1618832783166;
-        Mon, 19 Apr 2021 04:46:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1y568k09qtcL9FbHc6AZ/jNHO50SGhDLwYirPpmIwsU=;
+        b=Y2TjJZ8UYyNPiyt5o+0GgNjastLMavb+BRq9xFQVVQgThsjpVIDCufnY8BFwiP7SOk
+         DGF5tIUM6PMh5UP4l2sVh15Ej6uxSubQVDa9Qru4CocSEwv1VkDqvfytxETrAQvtU4O8
+         LthlYBMza+kg9DTzCtYg/88uK2xYaXNBWKKue/wQhC858Kp/YqnVe/TOV6XdpNIeE9CN
+         v7vk81VMX4es+NV5vFMtxGt8KCD1XljC9mcXLFilwotiyLlsd63QZ7kMHTTxjhIbGwaA
+         UPS/zplZcY6eDXvaZcBLcJwLmqHjEXwipw2PrhcNCMXB6aaFzTjFhzVEJb/GMZPgdsvB
+         WcfQ==
+X-Gm-Message-State: AOAM531RWmBuavJFk2frsAvn42UgVO5Btjscj2FAM+QYv8Ixi4ImKU4T
+        3o3xe2wmEsLOyE3cU9roxyc=
+X-Google-Smtp-Source: ABdhPJz0+6sYh/9WvqRk29PhyZlnlhB58yYK7gD7vOFVu1WxhJxDyYTfQ5h62FTofyAoeJH2J2o+Dw==
+X-Received: by 2002:a2e:3209:: with SMTP id y9mr11421161ljy.146.1618832946239;
+        Mon, 19 Apr 2021 04:49:06 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id n2sm1806249lfu.24.2021.04.19.04.46.21
+        by smtp.gmail.com with ESMTPSA id a9sm1815963lfo.186.2021.04.19.04.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 04:46:22 -0700 (PDT)
-Date:   Mon, 19 Apr 2021 14:46:14 +0300
+        Mon, 19 Apr 2021 04:49:05 -0700 (PDT)
+Date:   Mon, 19 Apr 2021 14:48:57 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
@@ -61,174 +61,157 @@ Cc:     Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
         Josef Bacik <josef@toxicpanda.com>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v8 00/10] Extend regulator notification support
-Message-ID: <cover.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v8 02/10] reboot: Add hardware protection power-off
+Message-ID: <aae403d309b4f37be580f536d1ecd7d83b5a9523.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1618832466.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Extend regulator notification support
+There can be few cases when we need to shut-down the system in order to
+protect the hardware. Currently this is done at east by the thermal core
+when temperature raises over certain limit.
 
-This series extends the regulator notification and error flag support.
-Initial discussion on the topic can be found here:
-https://lore.kernel.org/lkml/6046836e22b8252983f08d5621c35ececb97820d.camel@fi.rohmeurope.com/
+Some PMICs can also generate interrupts for example for over-current or
+over-voltage, voltage drops, short-circuit, ... etc. On some systems
+these are a sign of hardware failure and only thing to do is try to
+protect the rest of the hardware by shutting down the system.
 
-This series is built on top of the BD9576MUF support patch series v9
-which is currently in MFD tree at immutable branch ib-mfd-watchdog-5.13
-https://lore.kernel.org/lkml/cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com/
-(The series should apply without those patches but there is compile time
-dependency to definitions brought in at the last patch of the BD9576
-series. This should be Ok though as there is a Kconfig dependency in
-BD9576 regulator driver)
+Add shut-down logic which can be used by all subsystems instead of
+implementing the shutdown in each subsystem. The logic is stolen from
+thermal_core with difference of using atomic_t instead of a mutex in
+order to allow calls directly from IRQ context.
 
-In a nutshell - the series adds:
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-1. WARNING level events/error flags. (Patch 3)
-  Current regulator 'ERROR' event notifications for over/under
-  voltage, over current and over temperature are used to indicate
-  condition where monitored entity is so badly "off" that it actually
-  indicates a hardware error which can not be recovered. The most
-  typical hanling for that is believed to be a (graceful)
-  system-shutdown. Here we add set of 'WARNING' level flags to allow
-  sending notifications to consumers before things are 'that badly off'
-  so that consumer drivers can implement recovery-actions.
-2. Device-tree properties for specifying limit values. (Patches 1, 5)
-  Add limits for above mentioned 'ERROR' and 'WARNING' levels (which
-  send notifications to consumers) and also for a 'PROTECTION' level
-  (which will be used to immediately shut-down the regulator(s) W/O
-  informing consumer drivers. Typically implemented by hardware).
-  Property parsing is implemented in regulator core which then calls
-  callback operations for limit setting from the IC drivers. A
-  warning is emitted if protection is requested by device tree but the
-  underlying IC does not support configuring requested protection.
-3. Helpers which can be registered by IC. (Patch 4)
-  Target is to avoid implementing IRQ handling and IRQ storm protection
-  in each IC driver. (Many of the ICs implementin these IRQs do not allow
-  masking or acking the IRQ but keep the IRQ asserted for the whole
-  duration of problem keeping the processor in IRQ handling loop).
-4. Emergency poweroff function (refactored out of the thermal_core to
-  kernel/reboot.c) which is called if IC fires error IRQs but IC reading
-  fails and given retry-count is exceeded. (Patches 2, 4)
-  Please note that the mutex in the emergency shutdown was replaced by a
-  simple atomic in order to allow call from any context.
+---
 
-The helper was attempted to be done so it could be used to implement
-roughly same logic as is used in qcom-labibb regulator. This means
-amongst other things a safety shut-down if IC registers are not readable.
-Using these shut-down retry counters are optional. The idea is that the
-helper could be also used by simpler ICs which do not provide status
-register(s) which can be used to check if error is still active.
+Changelog:
+v8: (changes suggested by Daniel Lezcano)
+ - replace a protection implemented by a flag + spin_lock_irqsave() with
+   simple atomic_dec_and_test().
+ - Split thermal-core changes and adding the new API to separate patches
+v7:
+ - New patch
+---
+ include/linux/reboot.h |  1 +
+ kernel/reboot.c        | 80 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 81 insertions(+)
 
-ICs which do not have such status register can simply omit the 'renable'
-callback (and retry-counts etc) - and helper assumes the situation is Ok
-and re-enables IRQ after given time period. If problem persists the
-handler is ran again and another notification is sent - but at least the
-delay allows processor to avoid IRQ loop.
-
-Patch 7 takes this notification support in use at BD9576MUF.
-Patch 8 is related to MFD change which is not really related to the RFC
-here. It was added to this series in order to avoid potential conflicts.
-Patch 9 adds a maintainers entry.
-
-Changelog v8:
-   - split shutdown API adding and thermal core taking it in use to
-     own patches.
-   - replace the spinlock with atomic when ensuring the emergency
-     shutdown is only called once.
-Changelog v7:
-  general:
-   - rebased on v5.12-rc7
-   - new patch for refactoring the hw-failure reboot logic out of
-     thermal_core.c for others to use.
-  notification helpers:
-   - fix regulator error_flags query
-   - grammar/typos
-   - do not BUG() but attempt to shut-down the system
-   - use BITS_PER_TYPE()
-
-Changelog v6:
-  Add MAINTAINERS entry
-  Changes to IRQ notifiers
-   - move devm functions to drivers/regulator/devres.c
-   - drop irq validity check
-   - use devm_add_action_or_reset()
-   - fix styling issues
-   - fix kerneldocs
-
-Changelog v5:
-   - Fix the badly formatted pr_emerg() call.
-
-Changelog v4:
-   - rebased on v5.12-rc6
-   - dropped RFC
-   - fix external FET DT-binding.
-   - improve prints for cases when expecting HW failure.
-   - styling and typos
-
-Changelog v3:
-  Regulator core:
-   - Fix dangling pointer access at regulator_irq_helper()
-  stpmic1_regulator:
-   - fix function prototype (compile error)
-  bd9576-regulator:
-   - Update over current limits to what was given in new data-sheet
-     (REV00K)
-   - Allow over-current monitoring without external FET. Set limits to
-     values given in data-sheet (REV00K).
-
-Changelog v2:
-  Generic:
-  - rebase on v5.12-rc2 + BD9576 series
-  - Split devm variant of delayed wq to own series
-  Regulator framework:
-  - Provide non devm variant of IRQ notification helpers
-  - shorten dt-property names as suggested by Rob
-  - unconditionally call map_event in IRQ handling and require it to be
-    populated
-  BD9576 regulators:
-  - change the FET resistance property to micro-ohms
-  - fix voltage computation in OC limit setting
-
---
-
-Matti Vaittinen (10):
-  dt_bindings: Add protection limit properties
-  reboot: Add hardware protection power-off
-  thermal: Use generic HW-protection shutdown API
-  regulator: add warning flags
-  regulator: IRQ based event/error notification helpers
-  regulator: add property parsing and callbacks to set protection limits
-  dt-bindings: regulator: bd9576 add FET ON-resistance for OCW
-  regulator: bd9576: Support error reporting
-  regulator: bd9576: Fix the driver name in id table
-  MAINTAINERS: Add reviewer for regulator irq_helpers
-
- .../bindings/regulator/regulator.yaml         |   82 ++
- .../regulator/rohm,bd9576-regulator.yaml      |    6 +
- MAINTAINERS                                   |    4 +
- drivers/regulator/Makefile                    |    2 +-
- drivers/regulator/bd9576-regulator.c          | 1060 +++++++++++++++--
- drivers/regulator/core.c                      |  151 ++-
- drivers/regulator/devres.c                    |   52 +
- drivers/regulator/irq_helpers.c               |  394 ++++++
- drivers/regulator/of_regulator.c              |   58 +
- drivers/regulator/qcom-labibb-regulator.c     |   10 +-
- drivers/regulator/qcom_spmi-regulator.c       |    6 +-
- drivers/regulator/stpmic1_regulator.c         |   20 +-
- drivers/thermal/thermal_core.c                |   63 +-
- include/linux/reboot.h                        |    1 +
- include/linux/regulator/consumer.h            |   14 +
- include/linux/regulator/driver.h              |  176 ++-
- include/linux/regulator/machine.h             |   26 +
- kernel/reboot.c                               |   80 ++
- 18 files changed, 2000 insertions(+), 205 deletions(-)
- create mode 100644 drivers/regulator/irq_helpers.c
-
-
-base-commit: d434405aaab7d0ebc516b68a8fc4100922d7f5ef
+diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+index 3734cd8f38a8..af907a3d68d1 100644
+--- a/include/linux/reboot.h
++++ b/include/linux/reboot.h
+@@ -79,6 +79,7 @@ extern char poweroff_cmd[POWEROFF_CMD_PATH_LEN];
+ 
+ extern void orderly_poweroff(bool force);
+ extern void orderly_reboot(void);
++void hw_protection_shutdown(const char *reason, int ms_until_forced);
+ 
+ /*
+  * Emergency restart, callable from an interrupt handler.
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index a6ad5eb2fa73..5da8c80a2647 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -7,6 +7,7 @@
+ 
+ #define pr_fmt(fmt)	"reboot: " fmt
+ 
++#include <linux/atomic.h>
+ #include <linux/ctype.h>
+ #include <linux/export.h>
+ #include <linux/kexec.h>
+@@ -518,6 +519,85 @@ void orderly_reboot(void)
+ }
+ EXPORT_SYMBOL_GPL(orderly_reboot);
+ 
++/**
++ * hw_failure_emergency_poweroff_func - emergency poweroff work after a known delay
++ * @work: work_struct associated with the emergency poweroff function
++ *
++ * This function is called in very critical situations to force
++ * a kernel poweroff after a configurable timeout value.
++ */
++static void hw_failure_emergency_poweroff_func(struct work_struct *work)
++{
++	/*
++	 * We have reached here after the emergency shutdown waiting period has
++	 * expired. This means orderly_poweroff has not been able to shut off
++	 * the system for some reason.
++	 *
++	 * Try to shut down the system immediately using kernel_power_off
++	 * if populated
++	 */
++	WARN(1, "Hardware protection timed-out. Trying forced poweroff\n");
++	kernel_power_off();
++
++	/*
++	 * Worst of the worst case trigger emergency restart
++	 */
++	WARN(1,
++	     "Hardware protection shutdown failed. Trying emergency restart\n");
++	emergency_restart();
++}
++
++static DECLARE_DELAYED_WORK(hw_failure_emergency_poweroff_work,
++			    hw_failure_emergency_poweroff_func);
++
++/**
++ * hw_failure_emergency_poweroff - Trigger an emergency system poweroff
++ *
++ * This may be called from any critical situation to trigger a system shutdown
++ * after a given period of time. If time is negative this is not scheduled.
++ */
++static void hw_failure_emergency_poweroff(int poweroff_delay_ms)
++{
++	if (poweroff_delay_ms <= 0)
++		return;
++	schedule_delayed_work(&hw_failure_emergency_poweroff_work,
++			      msecs_to_jiffies(poweroff_delay_ms));
++}
++
++/**
++ * hw_protection_shutdown - Trigger an emergency system poweroff
++ *
++ * @reason:		Reason of emergency shutdown to be printed.
++ * @ms_until_forced:	Time to wait for orderly shutdown before tiggering a
++ *			forced shudown. Negative value disables the forced
++ *			shutdown.
++ *
++ * Initiate an emergency system shutdown in order to protect hardware from
++ * further damage. Usage examples include a thermal protection or a voltage or
++ * current regulator failures.
++ * NOTE: The request is ignored if protection shutdown is already pending even
++ * if the previous request has given a large timeout for forced shutdown.
++ * Can be called from any context.
++ */
++void hw_protection_shutdown(const char *reason, int ms_until_forced)
++{
++	static atomic_t allow_proceed = ATOMIC_INIT(1);
++
++	pr_emerg("HARDWARE PROTECTION shutdown (%s)\n", reason);
++
++	/* Shutdown should be initiated only once. */
++	if (!atomic_dec_and_test(&allow_proceed))
++		return;
++
++	/*
++	 * Queue a backup emergency shutdown in the event of
++	 * orderly_poweroff failure
++	 */
++	hw_failure_emergency_poweroff(ms_until_forced);
++	orderly_poweroff(true);
++}
++EXPORT_SYMBOL_GPL(hw_protection_shutdown);
++
+ static int __init reboot_setup(char *str)
+ {
+ 	for (;;) {
 -- 
 2.25.4
 
