@@ -2,139 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51261363E13
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 10:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C77C363E2F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Apr 2021 11:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbhDSI6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 04:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbhDSI6d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 04:58:33 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13240C061760
-        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 01:58:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id q123-20020a1c43810000b029012c7d852459so7596135wma.0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 01:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=I0AjUlD7YkGhfW9VBmb7Q/nclm3RW7D/xFQEjGn/buc=;
-        b=asPZgo+sY/2a3egyF9LO99HHqBlxAGInb1uUB9mYZeFfXXcOLo2Z+1Z7uK5wI24yju
-         aHUxP7XNikvdhohHPdqlx/BPPPZxY7mJYQ9tXTNN9NtFbMyp17fcCiPMX0S8EZsWYL+g
-         7BBKx+weOPi6/iOoH0DuahUq1snxJhdqMqQxMeMGKV8wrxa1WdwPxObSsfy9hYwCiVBb
-         eO6rglmSoWRfmDXXkvIvcO0yiA/CIdrblT2yl0JepFTpUb18V6LyXIZDgq0pkD8aoC7g
-         7PGlY1CYGjD5G2owA8aDlhty5goW3iUSgw5I2rxVvlbBVFe/Y2z67qDlcdZzS6pg6Dc/
-         J/Ow==
+        id S238423AbhDSJEI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 05:04:08 -0400
+Received: from mail-vs1-f42.google.com ([209.85.217.42]:45817 "EHLO
+        mail-vs1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232023AbhDSJEH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 05:04:07 -0400
+Received: by mail-vs1-f42.google.com with SMTP id r18so11290945vso.12;
+        Mon, 19 Apr 2021 02:03:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=I0AjUlD7YkGhfW9VBmb7Q/nclm3RW7D/xFQEjGn/buc=;
-        b=OOAagZ7+WIKYJn1kpLikGID/pjULl/yQF+GM1CT4Rt7OT2E6sLe0sJuLdXgB2mSBjn
-         +yZTCbT2a+t7oRb/YkgR0mRjZ2aCZt5lozKK1oNEsfjGpawyFLwSNOOGP89PSWUAu7PO
-         5kFRnZOtBxGgRU6R0Ed9DzlggXzb5Feg0OBE1xnUMWjPLsa8KMxa6Xby+pHTarBP0maW
-         2F9ksIpL8AR1topVPXxXy4GpioAFgmqbdZEUE+Ct5WJ+1Kki6KG4kOdg7xOGCgo5t9BJ
-         PeaiF36cY+IMkUBf7Gfeu7Quh2HlGjg42QrQNbY7fhFIhGOrW8VRWxb3hPlSESGHhk83
-         he1w==
-X-Gm-Message-State: AOAM53195N+vEKo7TGZTV3wiDedKDOBuOThZgMDmyhNijpHQ0ofUS1Ux
-        1fpiK/dR0rrb5yFitzMdob54Lg==
-X-Google-Smtp-Source: ABdhPJxJvSCYeTOnL9g/LKcqkmeEjxTohFCaB3z3OMm4onjWr8aK+toRZz1tmejbwBUjouvM2tryfA==
-X-Received: by 2002:a05:600c:cc:: with SMTP id u12mr20353289wmm.110.1618822682638;
-        Mon, 19 Apr 2021 01:58:02 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:796f:a096:3809:6fc5? ([2a01:e34:ed2f:f020:796f:a096:3809:6fc5])
-        by smtp.googlemail.com with ESMTPSA id g13sm25049407wrr.9.2021.04.19.01.58.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Apr 2021 01:58:02 -0700 (PDT)
-Subject: Re: [thermal: thermal/next] thermal/drivers/tsens: Convert msm8960 to
- reg_field
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     thermal-bot for Ansuel Smith <tip-bot2@linutronix.de>,
-        "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
-        <linux-pm@vger.kernel.org>, kbuild-all@lists.01.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-References: <161848823868.29796.2378720492280917598.tip-bot2@tip-bot2>
- <202104160110.kPF71m4S-lkp@intel.com>
- <CA+_ehUzAhPhqn62ivcxF+giMUy430eija7_sOSoNmC=291wq-g@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
-Date:   Mon, 19 Apr 2021 10:58:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YToQwZXN38nw8LU8icFLB58IB4Z2bfPdJB1gmWWtNj8=;
+        b=A1Gpw+KFRJ5RhzhK+MGm++v8ObABj3dTeD508KFrtbc7QA6wHjlVZ2wNnWA24Wm9qH
+         ZKWLhV244NO6o89Q6GspL4KaDDCWQc/Rr0lI8uQM9BsphAET/ujIJWTHUA1h7jBEwzzW
+         gv/iCoYzQS4SvHHOcATnexFXSRoVMjraHKTV+/t85IwQkFQaED92dtBjnuALNFqwThKN
+         z8L5EyISOQt0QtbWAEW05YxhRnGFqVcyi1gd0L1BXkCfBRVhGOdz52vO39RafdkWMRmK
+         kzyLacR5FJFpb72oawG1qLHU0bX4NRH6I6iQwZyC7mGmdOg6y4SDXDXw5wjp8+K6il+R
+         G38A==
+X-Gm-Message-State: AOAM530na+Q6FqX6tSAED3u+1sIRzHBwXKGnEtFn2I1lwzoVJ8frs1J3
+        NlCcjGhqMeS3WvdliarIHFqAUxE0pVenbDkJUPc=
+X-Google-Smtp-Source: ABdhPJxHtnj/DXie9H0wxpzVZlSTyniokdUb/gsNNsMkANVtAtzr2mFBhczBYEoBurfSWsjRkBkPBhRAOOMrjVGBWsw=
+X-Received: by 2002:a67:7c8c:: with SMTP id x134mr13821818vsc.40.1618823016409;
+ Mon, 19 Apr 2021 02:03:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CA+_ehUzAhPhqn62ivcxF+giMUy430eija7_sOSoNmC=291wq-g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210419042722.27554-1-alice.guo@oss.nxp.com> <20210419042722.27554-4-alice.guo@oss.nxp.com>
+ <YH0O907dfGY9jQRZ@atmark-techno.com>
+In-Reply-To: <YH0O907dfGY9jQRZ@atmark-techno.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Apr 2021 11:03:24 +0200
+Message-ID: <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use soc_device_match
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
+Cc:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        horia.geanta@nxp.com, aymen.sghaier@nxp.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, tony@atomide.com,
+        geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+        vkoul@kernel.org, peter.ujfalusi@gmail.com, a.hajda@samsung.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org, airlied@linux.ie,
+        daniel@ffwll.ch, khilman@baylibre.com, tomba@kernel.org,
+        jyri.sarha@iki.fi, joro@8bytes.org, will@kernel.org,
+        mchehab@kernel.org, ulf.hansson@linaro.org,
+        adrian.hunter@intel.com, kishon@ti.com, kuba@kernel.org,
+        linus.walleij@linaro.org, Roy.Pledge@nxp.com, leoyang.li@nxp.com,
+        ssantosh@kernel.org, matthias.bgg@gmail.com, edubezval@gmail.com,
+        j-keerthy@ti.com, balbi@kernel.org, linux@prisktech.co.nz,
+        stern@rowland.harvard.edu, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-staging@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/04/2021 20:52, Ansuel Smith wrote:
->>
->> Hi thermal-bot,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on linus/master]
->> [also build test ERROR on v5.12-rc7]
->> [cannot apply to thermal/next next-20210415]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
->> url:    https://github.com/0day-ci/linux/commits/thermal-bot-for-Ansuel-Smith/thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7f75285ca572eaabc028cf78c6ab5473d0d160be
->> config: arm-randconfig-r015-20210415 (attached as .config)
->> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # https://github.com/0day-ci/linux/commit/efea0f0570b6b581bdb2fad978a35fd1a521385b
->>         git remote add linux-review https://github.com/0day-ci/linux
->>         git fetch --no-tags linux-review thermal-bot-for-Ansuel-Smith/thermal-drivers-tsens-Convert-msm8960-to-reg_field/20210415-200542
->>         git checkout efea0f0570b6b581bdb2fad978a35fd1a521385b
->>         # save the attached .config to linux build tree
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross W=1 ARCH=arm
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>    drivers/thermal/qcom/tsens-8960.c: In function 'init_8960':
->>>> drivers/thermal/qcom/tsens-8960.c:193:29: error: 'S0_STATUS_ADDR' undeclared (first use in this function); did you mean 'INT_STATUS_ADDR'?
->>      193 |    priv->sensor[i].status = S0_STATUS_ADDR + 40;
->>          |                             ^~~~~~~~~~~~~~
->>          |                             INT_STATUS_ADDR
->>    drivers/thermal/qcom/tsens-8960.c:193:29: note: each undeclared identifier is reported only once for each function it appears in
->>    drivers/thermal/qcom/tsens-8960.c: At top level:
->>>> drivers/thermal/qcom/tsens-8960.c:284:15: error: 'VER_0' undeclared here (not in a function); did you mean 'VER_0_1'?
->>      284 |  .ver_major = VER_0,
->>          |               ^~~~~
->>          |               VER_0_1
->>
->>
->> vim +193 drivers/thermal/qcom/tsens-8960.c
+Hi Dominique,
 
-[ ... ]
+CC Arnd (soc_device_match() author)
 
-> What happened here? This doesn't seem right.
+On Mon, Apr 19, 2021 at 7:03 AM Dominique MARTINET
+<dominique.martinet@atmark-techno.com> wrote:
+> Alice Guo (OSS) wrote on Mon, Apr 19, 2021 at 12:27:22PM +0800:
+> > From: Alice Guo <alice.guo@nxp.com>
+> > Update all the code that use soc_device_match
+>
+> A single patch might be difficult to accept for all components, a each
+> maintainer will probably want to have a say on their subsystem?
+>
+> I would suggest to split these for a non-RFC version; a this will really
+> need to be case-by-case handling.
+>
+> > because add support for soc_device_match returning -EPROBE_DEFER.
+>
+> (English does not parse here for me)
+>
+> I've only commented a couple of places in the code itself, but this
+> doesn't seem to add much support for errors, just sweep the problem
+> under the rug.
+>
+> > Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> > ---
+> >
+> > diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+> > index 5fae60f8c135..00c59aa217c1 100644
+> > --- a/drivers/bus/ti-sysc.c
+> > +++ b/drivers/bus/ti-sysc.c
+> > @@ -2909,7 +2909,7 @@ static int sysc_init_soc(struct sysc *ddata)
+> >       }
+> >
+> >       match = soc_device_match(sysc_soc_feat_match);
+> > -     if (!match)
+> > +     if (!match || IS_ERR(match))
+> >               return 0;
+>
+> This function handles errors, I would recommend returning the error as
+> is if soc_device_match returned one so the probe can be retried later.
 
-Yes, it is. It means the series is not git bisect safe.
+Depends...
 
-Please fix it.
+> > --- a/drivers/clk/renesas/r8a7795-cpg-mssr.c
+> > +++ b/drivers/clk/renesas/r8a7795-cpg-mssr.c
+> > @@ -439,6 +439,7 @@ static const unsigned int r8a7795es2_mod_nullify[] __initconst = {
+> >
+> >  static int __init r8a7795_cpg_mssr_init(struct device *dev)
+> >  {
+> > +     const struct soc_device_attribute *match;
+> >       const struct rcar_gen3_cpg_pll_config *cpg_pll_config;
+> >       u32 cpg_mode;
+> >       int error;
+> > @@ -453,7 +454,8 @@ static int __init r8a7795_cpg_mssr_init(struct device *dev)
+> >               return -EINVAL;
+> >       }
+> >
+> > -     if (soc_device_match(r8a7795es1)) {
+> > +     match = soc_device_match(r8a7795es1);
+> > +     if (!IS_ERR(match) && match) {
+>
+> Same, return the error.
+> Assuming an error means no match will just lead to hard to debug
+> problems because the driver potentially assumed the wrong device when
+> it's just not ready yet.
 
+When running on R-Car H3, there will always be a match device, as
+the SoC device is registered early.
 
+>
+> >               cpg_core_nullify_range(r8a7795_core_clks,
+> >                                      ARRAY_SIZE(r8a7795_core_clks),
+> >                                      R8A7795_CLK_S0D2, R8A7795_CLK_S0D12);
+> > [...]
+> > diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+> > index eaaec0a55cc6..13a06b613379 100644
+> > --- a/drivers/iommu/ipmmu-vmsa.c
+> > +++ b/drivers/iommu/ipmmu-vmsa.c
+> > @@ -757,17 +757,20 @@ static const char * const devices_allowlist[] = {
+> >
+> >  static bool ipmmu_device_is_allowed(struct device *dev)
+> >  {
+> > +     const struct soc_device_attribute *match1, *match2;
+> >       unsigned int i;
+> >
+> >       /*
+> >        * R-Car Gen3 and RZ/G2 use the allow list to opt-in devices.
+> >        * For Other SoCs, this returns true anyway.
+> >        */
+> > -     if (!soc_device_match(soc_needs_opt_in))
+> > +     match1 = soc_device_match(soc_needs_opt_in);
+> > +     if (!IS_ERR(match1) && !match1)
+>
+> I'm not sure what you intended to do, but !match1 already means there is
+> no error so the original code is identical.
+>
+> In this case ipmmu_device_is_allowed does not allow errors so this is
+> one of the "difficult" drivers that require slightly more thinking.
+> It is only called in ipmmu_of_xlate which does return errors properly,
+> so in this case the most straightforward approach would be to make
+> ipmmu_device_is_allowed return an int and forward errors as well.
+>
+> ...
+> This is going to need quite some more work to be acceptable, in my
+> opinion, but I think it should be possible.
+
+In general, this is very hard to do, IMHO. Some drivers may be used on
+multiple platforms, some of them registering an SoC device, some of
+them not registering an SoC device.  So there is no way to know the
+difference between "SoC device not registered, intentionally", and
+"SoC device not yet registered".
+
+soc_device_match() should only be used as a last resort, to identify
+systems that cannot be identified otherwise.  Typically this is used for
+quirks, which should only be enabled on a very specific subset of
+systems.  IMHO such systems should make sure soc_device_match()
+is available early, by registering their SoC device early.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
