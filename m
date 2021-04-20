@@ -2,243 +2,409 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA3A3653BA
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 10:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17D73653C3
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 10:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbhDTIKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 04:10:46 -0400
-Received: from mail-mw2nam10on2051.outbound.protection.outlook.com ([40.107.94.51]:26849
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229521AbhDTIKp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Apr 2021 04:10:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OzpFLNPras/Pbhgo4sLUmqjJdp63fB+eI5YcPp2aea96pUelCyp470vYVdbinaHThko8dzb8ZIcvokiqtk8iOTZWbC9KpqNI5SWDk6vX2J5X7y2Wt+c2FhO0XaPuTLd+cZCP/r5nxpoesWlq7IQdLRkVHk0RkJjLpEzTJASRgJTG9ReG1SvUPbXe93do0PguS+T1ImG6XInSaFnEdBXnz2DuP6AlOUxIby311hUvj9EttrcvSLFswL80MmQf1dPCoi6rp8uimSoMjzInECFaAaRTepZ1YNJdkNs1mOeg0A10QAH3SfhMyxUFZlbP+OKkrhNPrDFvadsN3pZVXeXNPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bb+YPNi/jLWg3XQ7EIvgsHgV0wC92vCOhyzDfuEiHP0=;
- b=FAfwrjSHnozHrnDpQGJIWGw2LjTBM87gl+AFcxFPgOcqhUWEpoAphTQ8AqvcGm3yCiuZfoWuQH+J9C5Q0FxvaSHW21mdxPNgLOhdjFjtnjIinPCNwodbVKbRdsT0hbvdcQH5k1kOX40r0LawkuEIvooHlL6tJAiQtHKO1NdflsE+G6L1zHLKbjw08xMPbdFY69GPdGEux4to37JBWeIxuzoV8j6hrfF+AcqXE/WGwTRVo1rGF2nFjRzT9D4V1MfAfbxE6IReBpEhB5tG7kUwKRGTWoZz5fca+kQm4rytjko9XipXi69Pz54CCjN8p2HeMVXrBgRn+OgqgRfGRejMag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bb+YPNi/jLWg3XQ7EIvgsHgV0wC92vCOhyzDfuEiHP0=;
- b=YTpk/wijGmj6FNlMcl8CuOfqEgbCoRsO75wjELqNacWwSRyUmDNxxqOPmH8hpmrxBmC8inOmt+hhc7Yks/YMKy1j/NEcxKZmHbZlewquRAKhzZMeNhzykYUMfWpjnAZlLam1/eir1NvJzQBzIN6Y5TamA70pG4qmRBJ06EMOLwQ=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from MWHPR12MB1248.namprd12.prod.outlook.com (2603:10b6:300:12::21)
- by MWHPR12MB1454.namprd12.prod.outlook.com (2603:10b6:301:11::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.19; Tue, 20 Apr
- 2021 08:10:12 +0000
-Received: from MWHPR12MB1248.namprd12.prod.outlook.com
- ([fe80::5094:3a69:806f:8a28]) by MWHPR12MB1248.namprd12.prod.outlook.com
- ([fe80::5094:3a69:806f:8a28%5]) with mapi id 15.20.4042.024; Tue, 20 Apr 2021
- 08:10:11 +0000
-From:   Huang Rui <ray.huang@amd.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: [PATCH] x86, sched: Fix the AMD CPPC maximum perf on some specific generations
-Date:   Tue, 20 Apr 2021 16:09:43 +0800
-Message-Id: <20210420080943.1045886-1-ray.huang@amd.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [58.247.170.245]
-X-ClientProxiedBy: HK2PR04CA0054.apcprd04.prod.outlook.com
- (2603:1096:202:14::22) To MWHPR12MB1248.namprd12.prod.outlook.com
- (2603:10b6:300:12::21)
+        id S230018AbhDTILw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 04:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230140AbhDTILu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 04:11:50 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95DC06138C
+        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 01:11:16 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id k4-20020a7bc4040000b02901331d89fb83so7312352wmi.5
+        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 01:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=aOgsxsyFkixaOEX4Ox5Or9kKZNDyZdWkucXEJ1ql0+o=;
+        b=a8bPGXcPIvg448ZNoLAgeZPKTkqmVeqEEmJQ9/hC6hTvZZIq2Hc9kuVGY27Uq9VWFh
+         98sw+D7bme/H+7IftmI+TSeP3JHQ72LiP2rY2HnjEySmdyVaR0MtPFoFVhWUEl8DEfK7
+         DmHmWwAxDhrGIfQkS4ryhQEg1WFdMLjqGvb3KVNPClvLqGYW7C9LF/E3pPIdcCfHT9m8
+         Yqb3m5pM9bMJHFj53vqpc7Mkrfgg+x4jfg8O8g+wntIdcrs0NpudEv1//qACKLC5V8BV
+         ecQDFblwklsyYrirN4vFuFne/msnNgtWXQ8nMz+ioUIixXMKB2jEzGDSlvdo9+WO4HXS
+         8Jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aOgsxsyFkixaOEX4Ox5Or9kKZNDyZdWkucXEJ1ql0+o=;
+        b=O8X8apqOYAtVt8ZHM5WOs4zQo54Im2rq6qlaNSRXNXjWo0r128P5Pec77pM/MajVM5
+         FXEGZ7bzmb8nqMPKPBqUaJHBg/J9ae8li33i97u480YjBLYsGIlOJocKU0v+ALQ5w5UK
+         4np74zEhegM7AeEA6IiEcyb+ChQqMzfVeIm85TJugJodzLi96oSP+TFkeGTOISc3XIrM
+         ONDAPW6eRuoG1zIzsKm+ZCjAEcvjwB38EmI1NtQXr9jCNuFZ2K0SE+9vZSL+WFEQDho6
+         A7vjj87/CFoGxh9aXZMMXArcmHRytR0AJwIfzS8IK/7NxEKJI4RlZpVBPbXY3mpX96OV
+         rNKQ==
+X-Gm-Message-State: AOAM533HDUirRVzFIXVGoq+InjCqItY6/rZNaRmZlpL0pBqfwJF15P5E
+        8zgf4dNFfQf/RQDV+OglKXv9o7QH4CNQhA==
+X-Google-Smtp-Source: ABdhPJzPdAc/n37zRPsv5fH0kCLXe32AuerB0HH0gRpic7zt91WdCVK+qchJhy5nXDIVkFExCIV8SA==
+X-Received: by 2002:a7b:c303:: with SMTP id k3mr3196252wmj.100.1618906275445;
+        Tue, 20 Apr 2021 01:11:15 -0700 (PDT)
+Received: from MacBook-Pro.local ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id 66sm2756529wmb.36.2021.04.20.01.11.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Apr 2021 01:11:14 -0700 (PDT)
+Subject: Re: [2/3] interconnect: qcom: Add EPSS L3 support on SC7280
+To:     Odelu Kukatla <okukatla@codeaurora.org>,
+        bjorn.andersson@linaro.org, evgreen@google.com,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        sibis@codeaurora.org, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+References: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
+ <1618556290-28303-3-git-send-email-okukatla@codeaurora.org>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Message-ID: <3a4460f3-3416-16f0-8e21-45e8b7a3a0ad@linaro.org>
+Date:   Tue, 20 Apr 2021 11:11:13 +0300
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hr-amd.amd.com (58.247.170.245) by HK2PR04CA0054.apcprd04.prod.outlook.com (2603:1096:202:14::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Tue, 20 Apr 2021 08:10:08 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7a0995a1-df69-4c66-752b-08d903d3b81f
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1454:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1454B05667667BC9923352B2EC489@MWHPR12MB1454.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xcXhrofAO86CzkV0MSYAH0c2WMcy/Awo+V4H+dR0lx8x2vQbAJaO0I88qCPF3o5qL46By0Ogc4+PA4BBXEK7UYaZi5UuLAQg2Iv/J+WkelZqohwnY3h6MqwIaEhgplDmm3wq6czCGveiLxA65/eBh7Le/JLMCsVaz2MsgJxOEGZgC1KuAGx/E8vUVAdvgqesfngirx2x6yeE/Y8nVNijWkZWdqAW8nPCMmjZlXzlOdnYPjWmQvoOWYgqVxgQgmC2TYbYJPWFNaGzni3fY7j8gw9hIodacj3OHnbix1oqrbRHBMbyM547e0TuDv+8VclGqyf4v0pO5YvbL+2idBy14rO1v3hPkph+tV6Cu2MbfnvCv3knJ5gUxD+rtVFLVRBBVbJwWFyCtwbDD+VMHLIn0+SkUwN0cOIiA0naz85KMP6cRmqBraiLgDAUBN4xeDwJS1ustaQlvORlIUiUzQiGl/HUCndJjrtyyEhr/CYxasmCQN5Easfo45FgclIXE/egYGX9d8gYAHI3RuE+lcan184/DYripzzXGzUyqF9oPJfhB1VtdgrjdgsLGPwXV45a8pMlH9IoPvsJwNCDMkTbBiuQNi81Iv46CfXrzvjMNC14zMYBT5a6wrXaHWGOmDo/1tHy5mjHmfkWpbR4uDcHQ53U8CCcSaQdUKqsaWxVz8g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1248.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(1076003)(8936002)(86362001)(316002)(38100700002)(6666004)(2906002)(54906003)(2616005)(26005)(66556008)(52116002)(956004)(16526019)(4326008)(186003)(38350700002)(6486002)(66476007)(8676002)(5660300002)(66946007)(36756003)(83380400001)(7696005)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?lwIspPblju9RKDquuvtoCoOif+lrgv/Yz2E+OqTFuJk8PpzDkvbzoei9wED/?=
- =?us-ascii?Q?plL22P2u/+D0ZQdlcfQ4KcwVaFCJq3ZbgFmB/i6nNlsXmOkZITzgxzp5iiXn?=
- =?us-ascii?Q?C2XesGKkiZoaqbVIbvamzZ1eqIPhzO+bxoZNnJDVLv11un6hOnVjDQ3vK469?=
- =?us-ascii?Q?d0oEc4Y4geMu2Vx4Q8P0Dcz/IQ0m8YqNHx303n1LSG/CJzbM4RpJroePHEHE?=
- =?us-ascii?Q?hTj0sBFge5wAhX57/pKtcHRVw1aK94Kuv0AvqhfRDlGysq6RTLfogyom2P9+?=
- =?us-ascii?Q?UiOUNx7erfXg6rhZXkdbMCc7w4RojTkNGyVDTvcmvcPf7a/c21c9bp/mG5Hz?=
- =?us-ascii?Q?95Jnq11XYRuubhjwYBLzYbUSYy3eGorsEEHQp/w1+s2p8pO7Jxi3ffeg8uR5?=
- =?us-ascii?Q?KmDOWMo98Fayock3psrXCgorkuahS2xJOyNpgV0Y18gOSn9HhFbO12d3Oh3L?=
- =?us-ascii?Q?vGzGlaa3QYdIGW0BK8cA/pR5eyti1rvmQxxE7F0RqvXjohRosbOVGx04o+S0?=
- =?us-ascii?Q?/x5kTMF8w+jOQ2VimR5IWRKZUbXyNbq+3FZNw3zjMaXxbWjPHEz6RB/At65q?=
- =?us-ascii?Q?PMtMECK9aTsjbLJm/lxOTthidPTXS5GUsPmRBhLW/IIsXz/izQ6SMaY27NhP?=
- =?us-ascii?Q?cgEmuacMaKzVmPQTTtXy9WNpkzigkWhmt7+EtIkkA8+Nh1PqJo8LmLlebjcI?=
- =?us-ascii?Q?rHadL2l8TrCFTpulTvyKkdnJD06NzvasNCJwiHpQrNFXuG7aRqcUUhpXsIeY?=
- =?us-ascii?Q?wk9N+piXHWzQpgQkipeZTFNQ3IqufcuEjmudL1gMGWkj6jokIwNenUJ6lJJw?=
- =?us-ascii?Q?MTYgbuosXRaiocblABCnGzsQIIKEz854CKZkM5LLhdstrYNYpZhOqUbWMWn/?=
- =?us-ascii?Q?ZjLPMLFgDuC7Z9wUbpEPZUAvineFvTX/z1IUKCdhJQk5MlagctTAxleghxOU?=
- =?us-ascii?Q?2L5UiDPSXDjj8k+nHXChAMNFd6EsyIldnOydkaan9sU5zGNpMvh7HFdIp+FL?=
- =?us-ascii?Q?vklQ9462klCcaEqh9qLVza58yfX8ORELD5bbXp+OlaRYcDlyQDU+ejgfyfNr?=
- =?us-ascii?Q?+XZgvpASLDzdT2fLkfndflZ77qtRtbBmkyjmkerZ8Q2KDENS7tf/XJ+gbenI?=
- =?us-ascii?Q?9Jn0l+lnzzwDtlrw8SuWWQ/qit66Gc1uV2r1FWLrjcL8E15DUs6X8udpEZw6?=
- =?us-ascii?Q?Bms66eMQFYRXsOIuq4ubkE9EzSawb3RGlYijDuCnXrdY8NuyAZp9sq8T5sF6?=
- =?us-ascii?Q?zxbQRUWa4Pi+b5Ggm7txsuSY2dscDVZPsGwN02vOTJ8ueV0SqQvLU6QyQQ60?=
- =?us-ascii?Q?FjMOUfJpksOxTp8ODPaUbyEj?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a0995a1-df69-4c66-752b-08d903d3b81f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR12MB1248.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2021 08:10:11.5366
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zxFN/vJQTbl/AdiCdUc+xWtsDOEHzKn6PHZr0/56nvvcEj/ykVoGENpZSXvQo7NTlY9DtJ3inkMS3EIk6M7ydA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1454
+In-Reply-To: <1618556290-28303-3-git-send-email-okukatla@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some AMD Ryzen generations has different calculation method on maximum
-perf. 255 is not for all asics, some specific generations used 166 as
-the maximum perf. This patch is to fix the different maximum perf value
-of AMD CPPC.
+Hi Odelu,
 
-Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+On 16.04.21 9:58, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
+> SC7280 SoCs.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>   drivers/interconnect/qcom/osm-l3.c             | 124 +++++++++++++++++++------
+>   drivers/interconnect/qcom/sc7280.h             |  10 ++
+>   include/dt-bindings/interconnect/qcom,osm-l3.h |  10 +-
+>   3 files changed, 114 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+> index 695f287..3403e09 100644
+> --- a/drivers/interconnect/qcom/osm-l3.c
+> +++ b/drivers/interconnect/qcom/osm-l3.c
+> @@ -15,6 +15,7 @@
+>   #include <dt-bindings/interconnect/qcom,osm-l3.h>
+>   
+>   #include "sc7180.h"
+> +#include "sc7280.h"
+>   #include "sdm845.h"
+>   #include "sm8150.h"
+>   #include "sm8250.h"
+> @@ -32,17 +33,24 @@
+>   
+>   /* EPSS Register offsets */
+>   #define EPSS_LUT_ROW_SIZE		4
+> +#define EPSS_REG_L3_VOTE		0x90
+>   #define EPSS_REG_FREQ_LUT		0x100
+>   #define EPSS_REG_PERF_STATE		0x320
+> +#define EPSS_CORE_OFFSET		0x4
+> +#define EPSS_L3_VOTE_REG(base, cpu)\
+> +			((base + EPSS_REG_L3_VOTE) +\
+> +			(cpu * EPSS_CORE_OFFSET))
 
-Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-Signed-off-by: Huang Rui <ray.huang@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Nathan Fontenot <nathan.fontenot@amd.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: x86@kernel.org
----
- arch/x86/kernel/smpboot.c      | 33 ++++++++++++++++++++++++++-
- drivers/cpufreq/acpi-cpufreq.c | 41 ++++++++++++++++++++++++++++++++++
- 2 files changed, 73 insertions(+), 1 deletion(-)
+Nit: Please add parenthesis around "base" and "cpu" to avoid
+any potential precedence issues.
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 02813a7f3a7c..705bc5ceb1ea 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -2033,6 +2033,37 @@ static bool intel_set_max_freq_ratio(void)
- }
- 
- #ifdef CONFIG_ACPI_CPPC_LIB
-+static u64 amd_get_highest_perf(void)
-+{
-+	u64 cppc_max_perf;
-+
-+	switch (boot_cpu_data.x86) {
-+	case 0x17:
-+		if ((boot_cpu_data.x86_model >= 0x30 &&
-+		     boot_cpu_data.x86_model < 0x40) ||
-+		    (boot_cpu_data.x86_model >= 0x70 &&
-+		     boot_cpu_data.x86_model < 0x80))
-+			cppc_max_perf = 166;
-+		else
-+			cppc_max_perf = 255;
-+		break;
-+	case 0x19:
-+		if ((boot_cpu_data.x86_model >= 0x20 &&
-+		     boot_cpu_data.x86_model < 0x30) ||
-+		    (boot_cpu_data.x86_model >= 0x40 &&
-+		     boot_cpu_data.x86_model < 0x70))
-+			cppc_max_perf = 166;
-+		else
-+			cppc_max_perf = 255;
-+		break;
-+	default:
-+		cppc_max_perf = 255;
-+		break;
-+	}
-+
-+	return cppc_max_perf;
-+}
-+
- static bool amd_set_max_freq_ratio(void)
- {
- 	struct cppc_perf_caps perf_caps;
-@@ -2046,8 +2077,8 @@ static bool amd_set_max_freq_ratio(void)
- 		return false;
- 	}
- 
--	highest_perf = perf_caps.highest_perf;
- 	nominal_perf = perf_caps.nominal_perf;
-+	highest_perf = amd_get_highest_perf();
- 
- 	if (!highest_perf || !nominal_perf) {
- 		pr_debug("Could not retrieve highest or nominal performance\n");
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index d1bbc16fba4b..e5c03360db20 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -630,6 +630,44 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
- #endif
- 
- #ifdef CONFIG_ACPI_CPPC_LIB
-+
-+static u64 get_amd_max_boost_ratio(unsigned int cpu, u64 nominal_perf)
-+{
-+	u64 boost_ratio, cppc_max_perf;
-+
-+	if (!nominal_perf)
-+		return 0;
-+
-+	switch (boot_cpu_data.x86) {
-+	case 0x17:
-+		if ((boot_cpu_data.x86_model >= 0x30 &&
-+		     boot_cpu_data.x86_model < 0x40) ||
-+		    (boot_cpu_data.x86_model >= 0x70 &&
-+		     boot_cpu_data.x86_model < 0x80))
-+			cppc_max_perf = 166;
-+		else
-+			cppc_max_perf = 255;
-+		break;
-+	case 0x19:
-+		if ((boot_cpu_data.x86_model >= 0x20 &&
-+		     boot_cpu_data.x86_model < 0x30) ||
-+		    (boot_cpu_data.x86_model >= 0x40 &&
-+		     boot_cpu_data.x86_model < 0x70))
-+			cppc_max_perf = 166;
-+		else
-+			cppc_max_perf = 255;
-+		break;
-+	default:
-+		cppc_max_perf = 255;
-+		break;
-+	}
-+
-+	boost_ratio = div_u64(cppc_max_perf << SCHED_CAPACITY_SHIFT,
-+			      nominal_perf);
-+
-+	return boost_ratio;
-+}
-+
- static u64 get_max_boost_ratio(unsigned int cpu)
- {
- 	struct cppc_perf_caps perf_caps;
-@@ -646,6 +684,9 @@ static u64 get_max_boost_ratio(unsigned int cpu)
- 		return 0;
- 	}
- 
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-+		return get_amd_max_boost_ratio(cpu, perf_caps.nominal_perf);
-+
- 	highest_perf = perf_caps.highest_perf;
- 	nominal_perf = perf_caps.nominal_perf;
- 
--- 
-2.25.1
+>   
+> -#define OSM_L3_MAX_LINKS		1
+> +#define L3_DOMAIN_CNT		4
+> +#define L3_MAX_LINKS		9
+>   
+>   #define to_qcom_provider(_provider) \
+>   	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
+>   
+>   struct qcom_osm_l3_icc_provider {
+> -	void __iomem *base;
+> +	void __iomem *domain_base[L3_DOMAIN_CNT];
+>   	unsigned int max_state;
+> +	bool per_core_dcvs;
+>   	unsigned int reg_perf_state;
+>   	unsigned long lut_tables[LUT_MAX_ENTRIES];
+>   	struct icc_provider provider;
+> @@ -58,31 +66,36 @@ struct qcom_osm_l3_icc_provider {
+>    */
+>   struct qcom_icc_node {
+>   	const char *name;
+> -	u16 links[OSM_L3_MAX_LINKS];
+> +	u16 links[L3_MAX_LINKS];
+>   	u16 id;
+>   	u16 num_links;
+>   	u16 buswidth;
+> +	u16 domain;
+> +	int cpu;
 
+Please describe these in the kerneldoc. Adding a kerneldoc for
+qcom_osm_l3_icc_provider would be also nice.
+
+>   };
+>   
+>   struct qcom_icc_desc {
+>   	const struct qcom_icc_node **nodes;
+>   	size_t num_nodes;
+> +	bool per_core_dcvs;
+>   	unsigned int lut_row_size;
+>   	unsigned int reg_freq_lut;
+>   	unsigned int reg_perf_state;
+>   };
+>   
+> -#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
+> -	static const struct qcom_icc_node _name = {			\
+> -		.name = #_name,						\
+> -		.id = _id,						\
+> -		.buswidth = _buswidth,					\
+> -		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
+> -		.links = { __VA_ARGS__ },				\
+> +#define DEFINE_QNODE(_name, _id, _buswidth, _domain, _cpu, ...)			\
+> +	static const struct qcom_icc_node _name = {				\
+> +		.name = #_name,							\
+> +		.id = _id,							\
+> +		.buswidth = _buswidth,						\
+> +		.domain = _domain,						\
+> +		.cpu = _cpu,						\
+> +		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),		\
+> +		.links = { __VA_ARGS__ },					\
+>   	}
+>   
+> -DEFINE_QNODE(sdm845_osm_apps_l3, SDM845_MASTER_OSM_L3_APPS, 16, SDM845_SLAVE_OSM_L3);
+> -DEFINE_QNODE(sdm845_osm_l3, SDM845_SLAVE_OSM_L3, 16);
+> +DEFINE_QNODE(sdm845_osm_apps_l3, SDM845_MASTER_OSM_L3_APPS, 16, 0, 0, SDM845_SLAVE_OSM_L3);
+> +DEFINE_QNODE(sdm845_osm_l3, SDM845_SLAVE_OSM_L3, 16, 0, 0);
+>   
+>   static const struct qcom_icc_node *sdm845_osm_l3_nodes[] = {
+>   	[MASTER_OSM_L3_APPS] = &sdm845_osm_apps_l3,
+> @@ -97,8 +110,8 @@ static const struct qcom_icc_desc sdm845_icc_osm_l3 = {
+>   	.reg_perf_state = OSM_REG_PERF_STATE,
+>   };
+>   
+> -DEFINE_QNODE(sc7180_osm_apps_l3, SC7180_MASTER_OSM_L3_APPS, 16, SC7180_SLAVE_OSM_L3);
+> -DEFINE_QNODE(sc7180_osm_l3, SC7180_SLAVE_OSM_L3, 16);
+> +DEFINE_QNODE(sc7180_osm_apps_l3, SC7180_MASTER_OSM_L3_APPS, 16, 0, 0, SC7180_SLAVE_OSM_L3);
+> +DEFINE_QNODE(sc7180_osm_l3, SC7180_SLAVE_OSM_L3, 16, 0, 0);
+>   
+>   static const struct qcom_icc_node *sc7180_osm_l3_nodes[] = {
+>   	[MASTER_OSM_L3_APPS] = &sc7180_osm_apps_l3,
+> @@ -113,8 +126,8 @@ static const struct qcom_icc_desc sc7180_icc_osm_l3 = {
+>   	.reg_perf_state = OSM_REG_PERF_STATE,
+>   };
+>   
+> -DEFINE_QNODE(sm8150_osm_apps_l3, SM8150_MASTER_OSM_L3_APPS, 32, SM8150_SLAVE_OSM_L3);
+> -DEFINE_QNODE(sm8150_osm_l3, SM8150_SLAVE_OSM_L3, 32);
+> +DEFINE_QNODE(sm8150_osm_apps_l3, SM8150_MASTER_OSM_L3_APPS, 32, 0, 0, SM8150_SLAVE_OSM_L3);
+> +DEFINE_QNODE(sm8150_osm_l3, SM8150_SLAVE_OSM_L3, 32, 0, 0);
+>   
+>   static const struct qcom_icc_node *sm8150_osm_l3_nodes[] = {
+>   	[MASTER_OSM_L3_APPS] = &sm8150_osm_apps_l3,
+> @@ -129,8 +142,8 @@ static const struct qcom_icc_desc sm8150_icc_osm_l3 = {
+>   	.reg_perf_state = OSM_REG_PERF_STATE,
+>   };
+>   
+> -DEFINE_QNODE(sm8250_epss_apps_l3, SM8250_MASTER_EPSS_L3_APPS, 32, SM8250_SLAVE_EPSS_L3);
+> -DEFINE_QNODE(sm8250_epss_l3, SM8250_SLAVE_EPSS_L3, 32);
+> +DEFINE_QNODE(sm8250_epss_apps_l3, SM8250_MASTER_EPSS_L3_APPS, 32, 0, 0, SM8250_SLAVE_EPSS_L3);
+> +DEFINE_QNODE(sm8250_epss_l3, SM8250_SLAVE_EPSS_L3, 32, 0, 0);
+>   
+>   static const struct qcom_icc_node *sm8250_epss_l3_nodes[] = {
+>   	[MASTER_EPSS_L3_APPS] = &sm8250_epss_apps_l3,
+> @@ -145,6 +158,39 @@ static const struct qcom_icc_desc sm8250_icc_epss_l3 = {
+>   	.reg_perf_state = EPSS_REG_PERF_STATE,
+>   };
+>   
+> +DEFINE_QNODE(sc7280_epss_apps_l3, SC7280_MASTER_EPSS_L3_APPS, 32, 0, 0, SC7280_SLAVE_EPSS_L3_SHARED, SC7280_SLAVE_EPSS_L3_CPU0, SC7280_SLAVE_EPSS_L3_CPU1, SC7280_SLAVE_EPSS_L3_CPU2, SC7280_SLAVE_EPSS_L3_CPU3, SC7280_SLAVE_EPSS_L3_CPU4, SC7280_SLAVE_EPSS_L3_CPU5, SC7280_SLAVE_EPSS_L3_CPU6, SC7280_SLAVE_EPSS_L3_CPU7);
+> +DEFINE_QNODE(sc7280_epss_l3_shared, SC7280_SLAVE_EPSS_L3_SHARED, 32, 0, 0);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu0, SC7280_SLAVE_EPSS_L3_CPU0, 32, 1, 0);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu1, SC7280_SLAVE_EPSS_L3_CPU1, 32, 1, 1);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu2, SC7280_SLAVE_EPSS_L3_CPU2, 32, 1, 2);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu3, SC7280_SLAVE_EPSS_L3_CPU3, 32, 1, 3);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu4, SC7280_SLAVE_EPSS_L3_CPU4, 32, 2, 0);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu5, SC7280_SLAVE_EPSS_L3_CPU5, 32, 2, 1);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu6, SC7280_SLAVE_EPSS_L3_CPU6, 32, 2, 2);
+> +DEFINE_QNODE(sc7280_epss_l3_cpu7, SC7280_SLAVE_EPSS_L3_CPU7, 32, 3, 0);
+> +
+> +static const struct qcom_icc_node *sc7280_epss_l3_nodes[] = {
+> +	[MASTER_EPSS_L3_APPS] = &sc7280_epss_apps_l3,
+> +	[SLAVE_EPSS_L3_SHARED] = &sc7280_epss_l3_shared,
+> +	[SLAVE_EPSS_L3_CPU0] = &sc7280_epss_l3_cpu0,
+> +	[SLAVE_EPSS_L3_CPU1] = &sc7280_epss_l3_cpu1,
+> +	[SLAVE_EPSS_L3_CPU2] = &sc7280_epss_l3_cpu2,
+> +	[SLAVE_EPSS_L3_CPU3] = &sc7280_epss_l3_cpu3,
+> +	[SLAVE_EPSS_L3_CPU4] = &sc7280_epss_l3_cpu4,
+> +	[SLAVE_EPSS_L3_CPU5] = &sc7280_epss_l3_cpu5,
+> +	[SLAVE_EPSS_L3_CPU6] = &sc7280_epss_l3_cpu6,
+> +	[SLAVE_EPSS_L3_CPU7] = &sc7280_epss_l3_cpu7,
+> +};
+> +
+> +static const struct qcom_icc_desc sc7280_icc_epss_l3 = {
+> +	.nodes = sc7280_epss_l3_nodes,
+> +	.num_nodes = ARRAY_SIZE(sc7280_epss_l3_nodes),
+> +	.per_core_dcvs = true,
+> +	.lut_row_size = EPSS_LUT_ROW_SIZE,
+> +	.reg_freq_lut = EPSS_REG_FREQ_LUT,
+> +	.reg_perf_state = EPSS_REG_PERF_STATE,
+> +};
+> +
+>   static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   {
+>   	struct qcom_osm_l3_icc_provider *qp;
+> @@ -156,13 +202,18 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   	u32 agg_avg = 0;
+>   	u64 rate;
+>   
+> -	qn = src->data;
+> +	qn = dst->data;
+>   	provider = src->provider;
+
+dst->provider? To keep it symmetric maybe? I am expecting that src
+and dst are the same provider?
+
+>   	qp = to_qcom_provider(provider);
+>   
+> -	list_for_each_entry(n, &provider->nodes, node_list)
+> -		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
+> -				    &agg_avg, &agg_peak);
+> +	/* Skip aggregation when per core l3 scaling is enabled */
+> +	if (qp->per_core_dcvs) {
+> +		agg_peak = dst->peak_bw;
+> +	} else {
+> +		list_for_each_entry(n, &provider->nodes, node_list)
+> +			provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
+> +						&agg_avg, &agg_peak);
+> +	}
+>   
+>   	rate = max(agg_avg, agg_peak);
+>   	rate = icc_units_to_bps(rate);
+> @@ -173,7 +224,10 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   			break;
+>   	}
+>   
+> -	writel_relaxed(index, qp->base + qp->reg_perf_state);
+> +	if (qp->per_core_dcvs)
+> +		writel_relaxed(index, EPSS_L3_VOTE_REG(qp->domain_base[qn->domain], qn->cpu));
+> +	else
+> +		writel_relaxed(index, qp->domain_base[qn->domain] + qp->reg_perf_state);
+>   
+>   	return 0;
+>   }
+> @@ -194,11 +248,12 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>   	const struct qcom_icc_desc *desc;
+>   	struct icc_onecell_data *data;
+>   	struct icc_provider *provider;
+> +	struct property *prop;
+>   	const struct qcom_icc_node **qnodes;
+>   	struct icc_node *node;
+>   	size_t num_nodes;
+>   	struct clk *clk;
+> -	int ret;
+> +	int ret, index, domain_count;
+>   
+>   	clk = clk_get(&pdev->dev, "xo");
+>   	if (IS_ERR(clk))
+> @@ -218,12 +273,21 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>   	if (!qp)
+>   		return -ENOMEM;
+>   
+> -	qp->base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(qp->base))
+> -		return PTR_ERR(qp->base);
+> +	prop = of_find_property(pdev->dev.of_node, "reg", NULL);
+> +	if (!prop)
+> +		return -EINVAL;
+> +	domain_count = prop->length / (4 * sizeof(prop->length));
+> +	if(!domain_count)
+
+Please add a space before opening the parenthesis.
+
+> +		return -EINVAL;
+> +
+> +	for (index = 0; index < domain_count ; index++) {
+> +		qp->domain_base[index] = devm_platform_ioremap_resource(pdev, index);
+> +		if (IS_ERR(qp->domain_base[index]))
+> +			return PTR_ERR(qp->domain_base[index]);
+> +	}
+>   
+>   	/* HW should be in enabled state to proceed */
+> -	if (!(readl_relaxed(qp->base + REG_ENABLE) & 0x1)) {
+> +	if (!(readl_relaxed(qp->domain_base[0] + REG_ENABLE) & 0x1)) {
+>   		dev_err(&pdev->dev, "error hardware not enabled\n");
+>   		return -ENODEV;
+>   	}
+> @@ -235,7 +299,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>   	qp->reg_perf_state = desc->reg_perf_state;
+>   
+>   	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
+> -		info = readl_relaxed(qp->base + desc->reg_freq_lut +
+> +		info = readl_relaxed(qp->domain_base[0] + desc->reg_freq_lut +
+>   				     i * desc->lut_row_size);
+>   		src = FIELD_GET(LUT_SRC, info);
+>   		lval = FIELD_GET(LUT_L_VAL, info);
+> @@ -254,6 +318,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>   		prev_freq = freq;
+>   	}
+>   	qp->max_state = i;
+> +	qp->per_core_dcvs = desc->per_core_dcvs;
+>   
+>   	qnodes = desc->nodes;
+>   	num_nodes = desc->num_nodes;
+> @@ -309,6 +374,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>   
+>   static const struct of_device_id osm_l3_of_match[] = {
+>   	{ .compatible = "qcom,sc7180-osm-l3", .data = &sc7180_icc_osm_l3 },
+> +	{ .compatible = "qcom,sc7280-epss-l3", .data = &sc7280_icc_epss_l3 },
+>   	{ .compatible = "qcom,sdm845-osm-l3", .data = &sdm845_icc_osm_l3 },
+>   	{ .compatible = "qcom,sm8150-osm-l3", .data = &sm8150_icc_osm_l3 },
+>   	{ .compatible = "qcom,sm8250-epss-l3", .data = &sm8250_icc_epss_l3 },
+> diff --git a/drivers/interconnect/qcom/sc7280.h b/drivers/interconnect/qcom/sc7280.h
+> index 66ac6ee..6d323ba 100644
+> --- a/drivers/interconnect/qcom/sc7280.h
+> +++ b/drivers/interconnect/qcom/sc7280.h
+> @@ -148,5 +148,15 @@
+>   #define SC7280_SLAVE_PCIE_1			137
+>   #define SC7280_SLAVE_QDSS_STM			138
+>   #define SC7280_SLAVE_TCU			139
+> +#define SC7280_MASTER_EPSS_L3_APPS			140
+> +#define SC7280_SLAVE_EPSS_L3_SHARED			141
+> +#define SC7280_SLAVE_EPSS_L3_CPU0			142
+> +#define SC7280_SLAVE_EPSS_L3_CPU1			143
+> +#define SC7280_SLAVE_EPSS_L3_CPU2			144
+> +#define SC7280_SLAVE_EPSS_L3_CPU3			145
+> +#define SC7280_SLAVE_EPSS_L3_CPU4			146
+> +#define SC7280_SLAVE_EPSS_L3_CPU5			147
+> +#define SC7280_SLAVE_EPSS_L3_CPU6			148
+> +#define SC7280_SLAVE_EPSS_L3_CPU7			149
+>   
+>   #endif
+> diff --git a/include/dt-bindings/interconnect/qcom,osm-l3.h b/include/dt-bindings/interconnect/qcom,osm-l3.h
+> index 61ef649..99534a5 100644
+> --- a/include/dt-bindings/interconnect/qcom,osm-l3.h
+> +++ b/include/dt-bindings/interconnect/qcom,osm-l3.h
+> @@ -1,6 +1,6 @@
+>   /* SPDX-License-Identifier: GPL-2.0 */
+>   /*
+> - * Copyright (C) 2019 The Linux Foundation. All rights reserved.
+> + * Copyright (C) 2019, 2021 The Linux Foundation. All rights reserved.
+>    */
+>   
+>   #ifndef __DT_BINDINGS_INTERCONNECT_QCOM_OSM_L3_H
+> @@ -11,5 +11,13 @@
+>   
+>   #define MASTER_EPSS_L3_APPS	0
+>   #define SLAVE_EPSS_L3_SHARED	1
+> +#define SLAVE_EPSS_L3_CPU0	2
+> +#define SLAVE_EPSS_L3_CPU1	3
+> +#define SLAVE_EPSS_L3_CPU2	4
+> +#define SLAVE_EPSS_L3_CPU3	5
+> +#define SLAVE_EPSS_L3_CPU4	6
+> +#define SLAVE_EPSS_L3_CPU5	7
+> +#define SLAVE_EPSS_L3_CPU6	8
+> +#define SLAVE_EPSS_L3_CPU7	9
+
+This hunk should be part of the dt-bindings patch.
+
+Thanks,
+Georgi
