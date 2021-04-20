@@ -2,98 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4DB36531F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 09:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBA13653B6
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 10:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhDTHV3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 03:21:29 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:50516 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbhDTHVY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 03:21:24 -0400
-Date:   Tue, 20 Apr 2021 07:20:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1618903252;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gJbS32oBSAsT2KJqAxvUHf6T8PNIMf5MpjTqmuKm6QU=;
-        b=D+jmXVfPjSYJ1YbWCGU/5M0ip24cwz+pNA3DVEUMRkcMlzXVBAIXx4hXuJnDL7TEnEub8a
-        PqVrm8LH4Wgp0JLVK5C7cB4TCg48FSvtSEzDXmJGZXJ+P24CMta6deKVZGAgdyoc4Y2V8D
-        izZwiYiyDm5S7kU0BZFtJya0pTFeyq1ld4Nu/uK4irYdMWRwIdyF6gT1GHWH6hcO2K6eO2
-        81ddxrk+b43w2g/MtWWGYZRj9CIaZf03rFF//5mkhzj4taD1GlCFWYrOGJ08mVu7ikXnhz
-        Rav+YKEAeG1316pv9yaCT83f0OxEH4aSrByDNoZeJCn77/rpO3N6dRmXtinYtA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1618903252;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gJbS32oBSAsT2KJqAxvUHf6T8PNIMf5MpjTqmuKm6QU=;
-        b=GnE27GYOPiTAF5EMP/MxobOh6tRxPzMBbcXUgPdpDrLGB7KgnNLloWAsNf+K88MPIkpP7e
-        eWpst7NQK4gfkZDw==
-From:   "thermal-bot for Ruiqi Gong" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/thermal_mmio: Remove
- redundant dev_err call in thermal_mmio_probe()
-Cc:     Hulk Robot <hulkci@huawei.com>, Ruiqi Gong <gongruiqi1@huawei.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210408100144.7494-1-gongruiqi1@huawei.com>
-References: <20210408100144.7494-1-gongruiqi1@huawei.com>
+        id S229954AbhDTIHh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 04:07:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56074 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229552AbhDTIHh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 20 Apr 2021 04:07:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 302DFB2D8;
+        Tue, 20 Apr 2021 08:07:05 +0000 (UTC)
+Date:   Tue, 20 Apr 2021 10:07:01 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Terry Bowman <terry.bowman@amd.com>, lenb@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        calvin.walton@kepstin.ca, wei.huang2@amd.com, aros@gmx.com
+Subject: Re: [PATCH v2] tools/power turbostat: Fix RAPL summary collection on
+ AMD processors
+Message-ID: <20210420080701.GA2326@zn.tnic>
+References: <20210419195812.147710-1-terry.bowman@amd.com>
+ <20210420020336.GA386151@chenyu-desktop>
 MIME-Version: 1.0
-Message-ID: <161890325221.29796.9260467038094585375.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210420020336.GA386151@chenyu-desktop>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Tue, Apr 20, 2021 at 10:03:36AM +0800, Chen Yu wrote:
+> On Mon, Apr 19, 2021 at 02:58:12PM -0500, Terry Bowman wrote:
+> > Turbostat fails to correctly collect and display RAPL summary information
+> > on Family 17h and 19h AMD processors. Running turbostat on these processors
+> > returns immediately. If turbostat is working correctly then RAPL summary
+> > data is displayed until the user provided command completes. If a command
+> > is not provided by the user then turbostat is designed to continuously
+> > display RAPL information until interrupted.
+> > 
+> > The issue is due to offset_to_idx() and idx_to_offset() missing support for
+> > AMD MSR addresses/offsets. offset_to_idx()'s switch statement is missing
+> > cases for AMD MSRs and idx_to_offset() does not include a path to return
+> > AMD MSR(s) for any idx.
+> > 
+> > The solution is add AMD MSR support to offset_to_idx() and idx_to_offset().
+> > These functions are split-out and renamed along architecture vendor lines
+> > for supporting both AMD and Intel MSRs.
+> > 
+> > Fixes: 9972d5d84d76 ("tools/power turbostat: Enable accumulate RAPL display")
+> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Thanks for fixing, Terry, and previously there was a patch for this from Bas Nieuwenhuizen:
+> https://lkml.org/lkml/2021/3/12/682
+> and it is expected to have been merged in Len's branch already.
 
-Commit-ID:     8cd7ab2a1a393f37f2e2f4b3ff595d98c245b854
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//8cd7ab2a1a393f37f2e2f4b3ff595d98c245b854
-Author:        Ruiqi Gong <gongruiqi1@huawei.com>
-AuthorDate:    Thu, 08 Apr 2021 06:01:44 -04:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 20 Apr 2021 08:58:47 +02:00
+Expected?
 
-thermal/drivers/thermal_mmio: Remove redundant dev_err call in thermal_mmio_probe()
+So is it or is it not?
 
-There is a error message within devm_ioremap_resource already, so
-remove the dev_err call to avoid redundant error message.
+And can you folks agree on a patch already and give it to Artem for
+testing (CCed) because he's triggering it too:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Ruiqi Gong <gongruiqi1@huawei.com>
-Acked-by: Talel Shenhar <talel@amazon.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210408100144.7494-1-gongruiqi1@huawei.com
----
- drivers/thermal/thermal_mmio.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+https://bugzilla.kernel.org/show_bug.cgi?id=212357
 
-diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
-index d0bdf1e..ded1dd0 100644
---- a/drivers/thermal/thermal_mmio.c
-+++ b/drivers/thermal/thermal_mmio.c
-@@ -54,11 +54,8 @@ static int thermal_mmio_probe(struct platform_device *pdev)
- 
- 	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	sensor->mmio_base = devm_ioremap_resource(&pdev->dev, resource);
--	if (IS_ERR(sensor->mmio_base)) {
--		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
--			PTR_ERR(sensor->mmio_base));
-+	if (IS_ERR(sensor->mmio_base))
- 		return PTR_ERR(sensor->mmio_base);
--	}
- 
- 	sensor_init_func = device_get_match_data(&pdev->dev);
- 	if (sensor_init_func) {
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
