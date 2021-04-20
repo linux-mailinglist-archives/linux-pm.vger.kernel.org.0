@@ -2,185 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B85736558D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 11:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B84365603
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 12:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbhDTJjg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 05:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbhDTJjf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 05:39:35 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B974BC06174A;
-        Tue, 20 Apr 2021 02:39:03 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a5so5785428ljk.0;
-        Tue, 20 Apr 2021 02:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0cgFeiaCJmuEwdxXqsfxCg9P2r8ydkzAaV1kqEK2h0w=;
-        b=gvB2Kjtuq3c6hDrfV3q09iYFnvk6b3RYxllwzrHlnk+X8nahI/9ZgjrPXry5x6L08J
-         ZqUJbyfgrU/17jihKD9RUFrWkKnPLnaOIz5SfrAgdH3V6GQqhJBsJvkRB5ags8nff6/g
-         3cv4VDvDqV2sSqUfb8205g5G7kjLsdASVbSOa0/k/nLxNeajkm1KtVIIys66vWeGWX+c
-         R9IfZtnbhr3czfjp/hluYCcP4dflvCu/ccDgljZf5znlxpNeSE4/7JXLhxawyn0f1SMK
-         6r42KR2eqy29tw7Neimeshqmq4hBcMWCqRWk5EiKSmXItxwa+o1xYehRrMSSHpcpkKnQ
-         slWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0cgFeiaCJmuEwdxXqsfxCg9P2r8ydkzAaV1kqEK2h0w=;
-        b=ZDyLVsvmS97vdLdIHk4HltbWTD7b7zNTv5Zv0eN2YlpxyPpgmErFv5kZu8skEq6pfh
-         vxq+1aU7NReOTmNoutWjs4XfTqwvTH3xkbbVBRfJIZJmdDIO8eAy4OzzydSGRHx2EKmi
-         YCxZohN5vmAuAHhdwG3sQihnF9/FpLz5SAmy9PRVEhD360VKL/zfOUzhAx5QDLXNc87a
-         9ybsBVfOZbIl03G6Eq328W7XZ7KS5ODOvs8lwti3F26LVWd9FmHCpM3iy0PDsS2Bg6xH
-         EV9ZaKPAs6WxNStDYBX/CPFnurowIFpHvg+lf5O6j35v8H7kOGR8KN4r+woc3lrLJAa9
-         MaUw==
-X-Gm-Message-State: AOAM533MPVJGV9S8bJbfOTifeiRiknGlJ/Pqt+FLZodPoLAIaJLX6Q5b
-        pyUfyQt8fzdBkHSm6ylFSFaH1cah+qHUdqvm
-X-Google-Smtp-Source: ABdhPJxU9OnhgUvmhfsaX0XQNxKFEPf1HsBVx73r0wgo9gbzwsyEGSVJJz6LhIbQa4C3GIRFxd4WnA==
-X-Received: by 2002:a2e:9f49:: with SMTP id v9mr14102607ljk.44.1618911541931;
-        Tue, 20 Apr 2021 02:39:01 -0700 (PDT)
-Received: from [10.0.0.42] (91-155-111-71.elisa-laajakaista.fi. [91.155.111.71])
-        by smtp.gmail.com with ESMTPSA id n22sm723197lfu.144.2021.04.20.02.38.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 02:39:01 -0700 (PDT)
-To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        horia.geanta@nxp.com, aymen.sghaier@nxp.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, tony@atomide.com,
-        geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        vkoul@kernel.org, a.hajda@samsung.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, airlied@linux.ie, daniel@ffwll.ch,
-        khilman@baylibre.com, tomba@kernel.org, jyri.sarha@iki.fi,
-        joro@8bytes.org, will@kernel.org, mchehab@kernel.org,
-        ulf.hansson@linaro.org, adrian.hunter@intel.com, kishon@ti.com,
-        kuba@kernel.org, linus.walleij@linaro.org, Roy.Pledge@nxp.com,
-        leoyang.li@nxp.com, ssantosh@kernel.org, matthias.bgg@gmail.com,
-        edubezval@gmail.com, j-keerthy@ti.com, balbi@kernel.org,
-        linux@prisktech.co.nz, stern@rowland.harvard.edu,
-        wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, dmaengine@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-staging@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20210419042722.27554-1-alice.guo@oss.nxp.com>
- <20210419042722.27554-4-alice.guo@oss.nxp.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use
- soc_device_match
-Message-ID: <2924b8af-d176-01b1-a221-5219c1128494@gmail.com>
-Date:   Tue, 20 Apr 2021 12:40:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        id S230408AbhDTKVL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 06:21:11 -0400
+Received: from mail-mw2nam10on2062.outbound.protection.outlook.com ([40.107.94.62]:49109
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230264AbhDTKVK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 20 Apr 2021 06:21:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nreLHs09Uyt+NQSIb6yY9rnPzIozZOKBgIgymMnJUOLGy2l45uZHM5ytlCbzZLBNynBBZtuk2OPfn3HoUfLWJgTpvRqT/xMI7pD3N4Nt+0vmo1t5jqOAWc39thns5A0WnmmmxKkl1+4fKf4K5ZJcx/mlHq52TbhccRXSmtELGHwN2AYtID2UZ47nmkRyzq1o/CfD7sHw5r3ReOsQ+Y1MUkYOpXpnRkDKFml0VNm+rl614/eTvAny5voOPityWNdcDyCJaOR56JMAjph6KtzVqOY3ktFtWeI3G91gBIMk3NtgsQ/2+giI8cpRxJOdd+eYPsgtVqUzaDxBc5DLrXk03Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KQUXm9+5GKZdOtDKVb8CyJmoOuu/VKRaTmPBqyf9AT4=;
+ b=bvUbOyuf1bSaKukpMm5Ja4gjVgNNOkK9CmcfUrqnhAQAfKxLbsPq9fLYmeAO4W9vuIcHCGY2MYOG1wxHOvLnVjpN+//610oEmNJ5qY+/WHn/TbdhxiUTrrisAL5gh7DMdPfkgDRyyVUihthmnHE7tue8grf7hnD4t5boHJ6ksAxypRZE1PyHtcAsmEu9TgSN0fSOctz0OkjuxZy/hUO3gZ7SMkyxjHbWSDq/xeuBYFLg2AyFeNjfm79BryMQic7/fCl78RcLkDWIIDomNcyLbFRivCTaJCy4XAchx6iU7NrlG7p68pLbGdHc73xy09wduXbhjzGL56sTBIKPZ090xQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KQUXm9+5GKZdOtDKVb8CyJmoOuu/VKRaTmPBqyf9AT4=;
+ b=0qVIkkZYemrLdu8E3ej9xmNxhTNd4gyAUgKTOTHI3LsKk303/9vJLnImtuZT+DCrXJ5SdhY3frKdZTSy2qGafLgeA+fMAtJetlg+eLgfkmziRW7xmbBhaL5oeckUORUWV6CXvoZFhmOuVIUUIVS0Hn0aSCe+7Kg+iapUA32HPkM=
+Authentication-Results: bugzilla.kernel.org; dkim=none (message not signed)
+ header.d=none;bugzilla.kernel.org; dmarc=none action=none
+ header.from=amd.com;
+Received: from MWHPR12MB1248.namprd12.prod.outlook.com (2603:10b6:300:12::21)
+ by MW2PR12MB2586.namprd12.prod.outlook.com (2603:10b6:907:11::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.19; Tue, 20 Apr
+ 2021 10:20:36 +0000
+Received: from MWHPR12MB1248.namprd12.prod.outlook.com
+ ([fe80::5094:3a69:806f:8a28]) by MWHPR12MB1248.namprd12.prod.outlook.com
+ ([fe80::5094:3a69:806f:8a28%5]) with mapi id 15.20.4042.024; Tue, 20 Apr 2021
+ 10:20:36 +0000
+Date:   Tue, 20 Apr 2021 18:20:27 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     bugzilla-daemon@bugzilla.kernel.org
+Cc:     linux-pm@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: Re: [Bug 211791] AMD CPU /proc/cpuinfo reported max potential boost
+ frequency instead of actual operating frequency
+Message-ID: <20210420102027.GA404763@hr-amd>
+References: <bug-211791-137361@https.bugzilla.kernel.org/>
+ <bug-211791-137361-FWoWFhjWLi@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-211791-137361-FWoWFhjWLi@https.bugzilla.kernel.org/>
+X-Originating-IP: [58.247.170.245]
+X-ClientProxiedBy: HK2P15301CA0012.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::22) To MWHPR12MB1248.namprd12.prod.outlook.com
+ (2603:10b6:300:12::21)
 MIME-Version: 1.0
-In-Reply-To: <20210419042722.27554-4-alice.guo@oss.nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from hr-amd (58.247.170.245) by HK2P15301CA0012.APCP153.PROD.OUTLOOK.COM (2603:1096:202:1::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.10 via Frontend Transport; Tue, 20 Apr 2021 10:20:34 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 11e9bc34-814b-44e6-08f7-08d903e5efbc
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2586:
+X-Microsoft-Antispam-PRVS: <MW2PR12MB2586D8313054A42D43DD307AEC489@MW2PR12MB2586.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HSZsz/3vgTnzS/cjGhE+xu0xG/lrZmdZeFDUrYZdcWLjtbjEeHB5RY1tp7J9RObeukMW2olGhQpnfMq0HblYoT5Pz5fp+Q3rc5dhpOoV+KmaKqvJH9De/CLOOZgnAgiavTVgmc/09wVn5LFAuNTPCD64HqneZu5rL9yPPg2voUt8KmgPBtFGQRd+e68Xar7dre63Gc1M2CDKPCCyCUcYAxZcKgpHrT7M81yjymn/dSas4ZWpaqDV7wwGDQ9ajjfiFbl4yp6o0FFPmgwr3zYfkOssyhsYz0FXUYiqSqlrXJx/rvLbgyp8yvtoiUJmb/K7D8HWgLSg1QhTxlSGXfQzWEjyccjdFEAa1sIxm8s/MZX8MkffNVqIfySqz6jTnMJiin102Jr1pMATjJjG+gByK+dY67xZMpc308DeGSzHCbnmgZ5wmmZW057R4zE18EjYtFu5JpN1+8zy1Tfvyatk7QfZsLHcH+RoaGd3B1/GEWCX//w6JLJ6ee+cyHrDtZAoYegYL58JxOs9Gr+KX0UfGgJjZr1U3UnJvqdkNRmSr6aDNYGep8ld3dEoX8BIijpD4pKXbcRHuDAR8qnuFPSXpp9+WFcPtk5CXiNTRaLhocXeNKfTpeLklI3OzJJMbW7x1i2R/qnKi5QtFXqK6fU9BoJ3aCPBDcHedFszokdNaYngm+F9pubNK6q+WKstDn0Q1b2sLHIUrIvpWt3dclkqWf+t6olPmp93PVOuGiUqhfI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1248.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(396003)(366004)(39860400002)(6916009)(66556008)(26005)(86362001)(66476007)(33716001)(33656002)(4326008)(45080400002)(8676002)(186003)(966005)(66946007)(16526019)(8936002)(6666004)(478600001)(9686003)(5660300002)(316002)(1076003)(52116002)(956004)(6496006)(2906002)(38350700002)(38100700002)(55016002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ueajZ8CeCXKWiEvkU+gppsWY/4z5wl62VzmLoiAGK4ko8/sj6ovjfycZ1UXB?=
+ =?us-ascii?Q?VZsBEIXsMnsqxHq6OuDYohEcLOJlwIxjo+eqEZk3YGC3W7k+/4yYbjzaCTwm?=
+ =?us-ascii?Q?PZ4NxYqc2nnE/wo4/POC0uzz2JP9qyReg0CdB8hatMZFOcPs/HsM362bsG6F?=
+ =?us-ascii?Q?fcADVFFrPIm5q2ZZ6qPx9hdDpJkDYx1aHkek3ulFQ+tq2wIPg+dQTHUVvCm3?=
+ =?us-ascii?Q?hyrRG2urrzYn3dDusMHoZ+LfPIea+xIHtP1ywQ3uFoWhPL7TDl+iF1RXj2aP?=
+ =?us-ascii?Q?yaoKok0X1n+RlrAu9xALGcFxdeGQ5lWEJYaqZHksq7B8sMhvyvZI8p1kb9Jb?=
+ =?us-ascii?Q?j1Lo6whocXh56z3svLO3zgB6iYpR+BdWoTwtpWVyVweMRedE/ad0SMaiS3on?=
+ =?us-ascii?Q?g/pfPfgwmW5WRaWPhE2Uh22CFvR+IADHBNf/zztiYPT1n6SMB8zH09/xR5Nk?=
+ =?us-ascii?Q?5BlNomhBlGIPlm9rlqXqEgoK51kq0QUGSHcaZlhyPVWX9M+f7EkNBhxXlFeJ?=
+ =?us-ascii?Q?vDS0PDt9mT60IlhyY/xI+P1Yt2NKgreodfjE6uCfSacTn/3tKX20fLSj9iU/?=
+ =?us-ascii?Q?M39WXLnmWLhg/C2Z/HFfPkKNy0Tuzf6A/5rCv7kucTDCSRnG9X31IbIRT1Ur?=
+ =?us-ascii?Q?mbzyV/UnKuQD/MplIsh1lPwgXHwcyJ9pZIHQZ+vdXYHGbE4OPs+tAmZZRp2u?=
+ =?us-ascii?Q?V9yIRaO+GSeoFIIFNbwYFWKDjRyYyugTH0usBaWirC+/CMfGbiPc5G4OUNpG?=
+ =?us-ascii?Q?+oRzrbrvDN5vRa8aQuuoI0ILwf2znVe5JX5lU5xJ5qpK63YntYBDGMFB6BVd?=
+ =?us-ascii?Q?cG6439fRJx3KWgLvBMmnsga7UZw9bJ81LU8hQY5c49FVU+shrmSkPRFvZotA?=
+ =?us-ascii?Q?Y7a7rfok1/zghgnSMVxUBTsgDXvPQpSV4r7EJ4N0+vTVmTey10VRI/b1Nlca?=
+ =?us-ascii?Q?yA2fQK/14bZmApBH6l5n9Z4JSrFuPc9i9reITQDe+ieui5HE7+kxVhUB8UVR?=
+ =?us-ascii?Q?udV47mzh7rl8aeVbh9SSiKcZesRPVI308OL3L3+LTn9iItN5GjrcjP7o7rAW?=
+ =?us-ascii?Q?80HY6k0vbguYRHZWnzgqpBK1mS0KMXmVXkMZmQ4NGywkW1dAWtshLBzaS2Vy?=
+ =?us-ascii?Q?F8Me4lFIJALm1hhvuf/lNcdAAgZtIQKjSiS31v/dutMcCWPfPlOOxz8KPmHz?=
+ =?us-ascii?Q?NU90uuoGen/h6YV6nqKexg4RAJ8oP9UtF56eEc3eVgIQp7isMiMlDYYjVwUT?=
+ =?us-ascii?Q?LEy8TFD7YjtAZY7+6NiI2suqBO6a9xJi6hB5u0ecOSXxzn3lbIUD8mo/wsdD?=
+ =?us-ascii?Q?ZZxaUc0H1IPYhpomavAu5UjQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11e9bc34-814b-44e6-08f7-08d903e5efbc
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR12MB1248.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2021 10:20:35.9275
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dD3jLt6FkNZyc9OEbZL39DI/8NqJKAStREVMlnjuJTDyMA95dknHX/oVTI0p2hVXRiEES/mONHgAUZiMUCNN1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2586
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Alice,
+Hi all,
 
-On 4/19/21 7:27 AM, Alice Guo (OSS) wrote:
-> From: Alice Guo <alice.guo@nxp.com>
+This patch should fix the issue:
+
+https://lore.kernel.org/r/20210420080943.1045886-1-ray.huang@amd.com
+
+Thanks,
+Ray
+
+On Tue, Apr 20, 2021 at 08:55:00AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D211791&amp;data=04%7C01%7Cray.huang%40amd.com%7Cc3e664b79fec434b1a2208d903d9fc2c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637545057044777992%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=eoZS70ZYQ7Rvh7XUNBL%2FPi4pxALBsbOyic6QnhOL2Xg%3D&amp;reserved=0
 > 
-> Update all the code that use soc_device_match because add support for
-> soc_device_match returning -EPROBE_DEFER.
+> Eugenia Campos (rizwanali.462371@gmail.com) changed:
 > 
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> ---
->  drivers/bus/ti-sysc.c                         |  2 +-
->  drivers/clk/renesas/r8a7795-cpg-mssr.c        |  4 +++-
->  drivers/clk/renesas/rcar-gen2-cpg.c           |  2 +-
->  drivers/clk/renesas/rcar-gen3-cpg.c           |  2 +-
->  drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.c       |  7 ++++++-
->  drivers/dma/ti/k3-psil.c                      |  3 +++
->  drivers/dma/ti/k3-udma.c                      |  2 +-
->  drivers/gpu/drm/bridge/nwl-dsi.c              |  2 +-
->  drivers/gpu/drm/meson/meson_drv.c             |  4 +++-
->  drivers/gpu/drm/omapdrm/dss/dispc.c           |  2 +-
->  drivers/gpu/drm/omapdrm/dss/dpi.c             |  4 +++-
->  drivers/gpu/drm/omapdrm/dss/dsi.c             |  3 +++
->  drivers/gpu/drm/omapdrm/dss/dss.c             |  3 +++
->  drivers/gpu/drm/omapdrm/dss/hdmi4_core.c      |  3 +++
->  drivers/gpu/drm/omapdrm/dss/venc.c            |  4 +++-
->  drivers/gpu/drm/omapdrm/omap_drv.c            |  3 +++
->  drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |  4 +++-
->  drivers/gpu/drm/rcar-du/rcar_lvds.c           |  2 +-
->  drivers/gpu/drm/tidss/tidss_dispc.c           |  4 +++-
->  drivers/iommu/ipmmu-vmsa.c                    |  7 +++++--
->  drivers/media/platform/rcar-vin/rcar-core.c   |  2 +-
->  drivers/media/platform/rcar-vin/rcar-csi2.c   |  2 +-
->  drivers/media/platform/vsp1/vsp1_uif.c        |  4 +++-
->  drivers/mmc/host/renesas_sdhi_core.c          |  2 +-
->  drivers/mmc/host/renesas_sdhi_internal_dmac.c |  2 +-
->  drivers/mmc/host/sdhci-of-esdhc.c             | 21 ++++++++++++++-----
->  drivers/mmc/host/sdhci-omap.c                 |  2 +-
->  drivers/mmc/host/sdhci_am654.c                |  2 +-
->  drivers/net/ethernet/renesas/ravb_main.c      |  4 +++-
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c      |  2 +-
->  drivers/net/ethernet/ti/cpsw.c                |  2 +-
->  drivers/net/ethernet/ti/cpsw_new.c            |  2 +-
->  drivers/phy/ti/phy-omap-usb2.c                |  4 +++-
->  drivers/pinctrl/renesas/core.c                |  2 +-
->  drivers/pinctrl/renesas/pfc-r8a7790.c         |  5 ++++-
->  drivers/pinctrl/renesas/pfc-r8a7794.c         |  5 ++++-
->  drivers/soc/fsl/dpio/dpio-driver.c            | 13 ++++++++----
->  drivers/soc/renesas/r8a774c0-sysc.c           |  5 ++++-
->  drivers/soc/renesas/r8a7795-sysc.c            |  2 +-
->  drivers/soc/renesas/r8a77990-sysc.c           |  5 ++++-
->  drivers/soc/ti/k3-ringacc.c                   |  2 +-
->  drivers/staging/mt7621-pci/pci-mt7621.c       |  2 +-
->  drivers/thermal/rcar_gen3_thermal.c           |  4 +++-
->  drivers/thermal/ti-soc-thermal/ti-bandgap.c   | 10 +++++++--
->  drivers/usb/gadget/udc/renesas_usb3.c         |  2 +-
->  drivers/usb/host/ehci-platform.c              |  4 +++-
->  drivers/usb/host/xhci-rcar.c                  |  2 +-
->  drivers/watchdog/renesas_wdt.c                |  2 +-
->  48 files changed, 131 insertions(+), 52 deletions(-)
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>                  CC|                            |rizwanali.462371@gmail.com
 > 
-
-...
-
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index 96ad21869ba7..50a4c8f0993d 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -5188,7 +5188,7 @@ static int udma_probe(struct platform_device *pdev)
->  	ud->match_data = match->data;
->  
->  	soc = soc_device_match(k3_soc_devices);
-> -	if (!soc) {
-> +	if (!IS_ERR(soc) && !soc) {
-
-this does not sound right...
-
-if (!soc || IS_ERR(soc))
-or
-if (IS_ERR_OR_NULL(soc))
-is even better.
-
->  		dev_err(dev, "No compatible SoC found\n");
->  		return -ENODEV;
-
-There might be a clever macro for it, but:
-
-return soc ? PTR_ERR(soc) : -ENODEV;
-
->  	}
-
--- 
-Péter
+> --- Comment #3 from Eugenia Campos (rizwanali.462371@gmail.com) ---
+> Maxilla and all joyful end is placed for the founding items for the citizens.
+> The show of the jump and https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.essaygeeks.co.uk%2Fwrite-my-essay%2F&amp;data=04%7C01%7Cray.huang%40amd.com%7Cc3e664b79fec434b1a2208d903d9fc2c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637545057044777992%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=NOvSMR08NNdIOik9fqcy2PE4IP8LDYQOB4SZfjx3Nlo%3D&amp;reserved=0 is
+> shifted for the takes. The mode is pushed for the hope of the shows for humans.
+> 
+> -- 
+> You may reply to this email to add a comment.
+> 
+> You are receiving this mail because:
+> You are the assignee for the bug.
