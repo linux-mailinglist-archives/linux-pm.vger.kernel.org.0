@@ -2,76 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E99365798
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 13:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB63365888
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 14:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbhDTLd3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 07:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S232070AbhDTMHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 08:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbhDTLd2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 07:33:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ABCC06174A
-        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 04:32:54 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id k26so20813794wrc.8
-        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 04:32:54 -0700 (PDT)
+        with ESMTP id S231929AbhDTMHv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 08:07:51 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531E8C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 05:07:20 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id e5so8685796wrg.7
+        for <linux-pm@vger.kernel.org>; Tue, 20 Apr 2021 05:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2pB+5dp9tOe3/dQfTfQajQflD5Wxu+BkUEq3uAg1PfQ=;
-        b=ph5SBtuyq81FoMcmjUEeWTKFwwnAlcefH5oEpymATxD8zX9ELEMr7M0PAz2JEc8466
-         i84A9Qgv80DO55uznNOlnLhI2Mc/dKGY7aRNdki4qreeio9TJn0RObTHM7ueCeBUUij6
-         CMGYR9BmQXsWhmzhlcn+8FWWOEAsJFRHniP9Ox9STMaOpYaUl/mMDOEJ4micwElgAKr4
-         ys44priunaBvffyn9dpWmNU8zoGhrCIeWB8ezcIt4tVE/B3iWrCEmuCm1nLU7rql6EhC
-         Nn/71eha/Smn8yGnxGakkZJLgEQ5bGt2WFWOA5+m2mZXKMO447NJkPKJhZCLvwwjxUnx
-         11Xw==
+        bh=fdjavbbnG38i/vDHVgTWk3tsDsi63+Qg6p2AfSLSokM=;
+        b=RWbQtV2xG8MQvtq5DQkUl4ClHY7MHwzMjFdlaJqjkzqrAzQwu0/vhsDJPHDqrWrzt5
+         yxeN4ErznjF7lzZ7E6ugBbEg0SJpEQIk82KoadIqfB/JmGZKj67z/BO2MzI9GKu7xfSV
+         KJkQtAf5s9TAz7ovZgbghlQKOn/zO8MjUjWXh9fG2YiGmYCYRFxclYfFKLXmB3xr4/Em
+         XsU7bkCfjSEAX0buiKDTgIv9ChpTTY2YpHcnisji9/5nbaNkKwqzj1UPQzFExpqZBrdM
+         Q2IgIZF1W3H4ZkQJsUhlXPG4zF7ly8p0rmCSMjkRm+gyz2ruVW8Ysz1BuNn2Uioz8mWg
+         0Odg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=2pB+5dp9tOe3/dQfTfQajQflD5Wxu+BkUEq3uAg1PfQ=;
-        b=SBsCUoRCJXeL9ZnaNQmi1JK2pbjsQ4K8laLf/i/TMOEF60c8ufU/FS/TuVNu5mU3ex
-         jdPDuJ5EtRsIpA8lSmBybLkXBw1qLF1L8zpWxmXqsqU2Y1AfNsQRbOkJPTMqTQKWclch
-         eMYVqryeJ49Sn5mnMpkxC6e9rfkYG/7Lh6IyDWoaBUakn7sj3QbAEvDdLo/MLaqwkmoO
-         PuitPgO3+ly7K38n2BQA1afBma2c4MbqUU/4oN5pKrDasnuNNIRRGIB2xgw7CFXkSU87
-         /Ap4dD0E0e6If7DOCW76VyiEODwLYsYL0yWwSSPywHvvFAlRVstJP1FxsiyhEV9CJqx7
-         Qv+g==
-X-Gm-Message-State: AOAM53334a/5b2+MjQIrCDgacT65NcwCQuPxp94YuZY3x5Uqe4O87TNV
-        p5RBu5k+VoGFIQWJTTr4T1ujNQ==
-X-Google-Smtp-Source: ABdhPJzHR+pXLyFtnHnqdzNOqKATo+m3eHymmTvVFNfNhvTk+j4hOP6tNW/jSyJBKhuXVh1l3v3fEg==
-X-Received: by 2002:a05:6000:1816:: with SMTP id m22mr20421266wrh.260.1618918372649;
-        Tue, 20 Apr 2021 04:32:52 -0700 (PDT)
+        bh=fdjavbbnG38i/vDHVgTWk3tsDsi63+Qg6p2AfSLSokM=;
+        b=W6+bB1P913bctoIssTAXfTDnxe24uJ8F10SQdl2IAb3yUqiYwx4SMPPEh99UEiXNcb
+         O9l5qiRGiPC8dxYh/vDIrt3mmri/Br3nF9OMrDNV3Z+lT648ZInSCTRer3sPxy9FzuhA
+         CosxhmvxeTQo9fnQT9Y5YYP1oLUsMWijDpJjr5ipgvDrXXk3y1yiAyQZ1lmoSNQzqgTE
+         hXItkrqEqUUhWCBeadoQGVQM98eM1Xoo4rk7psY/fcLzGKtXh4L+rQRtp1gPh8E1LMdX
+         yuQmiZZoqyP3OCoc6sqjXHJZ+iPlRf0sVd46TQCGzR3M6b7dxHMFHwyPVgXDo3s1WrrU
+         Adqg==
+X-Gm-Message-State: AOAM530tZQAz9nFmswkzAeJfZrAxQBOiMzEl+JbdNyS+O1EpYqwzqVBx
+        xhWtqFcyBfi1EVQZr03knPFrjg==
+X-Google-Smtp-Source: ABdhPJz9J06FgmbJBAc678ICMLMmla+1EpbzsDA86Wii4YsPgv6y7FvJ0jnuRN5ZORqgbcqEgWao9g==
+X-Received: by 2002:adf:dd51:: with SMTP id u17mr20088833wrm.32.1618920438781;
+        Tue, 20 Apr 2021 05:07:18 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:a079:f96:da87:2d00? ([2a01:e34:ed2f:f020:a079:f96:da87:2d00])
-        by smtp.googlemail.com with ESMTPSA id n18sm20815825wrw.11.2021.04.20.04.32.49
+        by smtp.googlemail.com with ESMTPSA id b12sm8989862wmj.1.2021.04.20.05.07.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 04:32:52 -0700 (PDT)
-Subject: Re: [thermal: thermal/next] thermal/drivers/tsens: Convert msm8960 to
- reg_field
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        thermal-bot for Ansuel Smith <tip-bot2@linutronix.de>,
-        "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
-        <linux-pm@vger.kernel.org>, kbuild-all@lists.01.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
+        Tue, 20 Apr 2021 05:07:18 -0700 (PDT)
+Subject: Re: [PATCH] thermal: mediatek: add sensors-support
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
         Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-References: <161848823868.29796.2378720492280917598.tip-bot2@tip-bot2>
- <202104160110.kPF71m4S-lkp@intel.com>
- <CA+_ehUzAhPhqn62ivcxF+giMUy430eija7_sOSoNmC=291wq-g@mail.gmail.com>
- <4187051b-4dcf-88e0-ac3d-fb47ff42e3ef@linaro.org>
- <CA+_ehUziRf7Ls8PByz-9_L8SKB26+yRY-MrZK_26GqdycCkNhg@mail.gmail.com>
- <7019d902-885f-d9ea-e24d-64ee8dd5aa0e@linaro.org>
- <CA+_ehUwzYLU5W0452Lvryb41w=-U_SgwGBePVhQA-3UBBZUOig@mail.gmail.com>
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20210320080646.49615-1-linux@fw-web.de>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <e92be9ae-1ce9-adf1-86b9-0193cce708ea@linaro.org>
-Date:   Tue, 20 Apr 2021 13:32:47 +0200
+Message-ID: <f4329b1a-02e0-aad5-55bd-82d30a38fc55@linaro.org>
+Date:   Tue, 20 Apr 2021 14:07:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CA+_ehUwzYLU5W0452Lvryb41w=-U_SgwGBePVhQA-3UBBZUOig@mail.gmail.com>
+In-Reply-To: <20210320080646.49615-1-linux@fw-web.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -79,45 +72,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/04/2021 13:04, Ansuel Smith wrote:
->>
->> On 19/04/2021 14:08, Ansuel Smith wrote:
->>
->> [ ... ]
->>
->>>>>> vim +193 drivers/thermal/qcom/tsens-8960.c
->>>>
->>>> [ ... ]
->>>>
->>>>> What happened here? This doesn't seem right.
->>>>
->>>> Yes, it is. It means the series is not git bisect safe.
->>>>
->>>> Please fix it.
->>>>
->>>>
->>>
->>> I'm a bit confused. Should I send just a patch to fix this or I
->>> need to send the series again rebased with the new changes?
->>
->> The latter, I've dropped your series from the thermal/next branch
->>
+On 20/03/2021 09:06, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Ok I will resend the series. I notice it has been applied to linux-next,
-> will that be a problem?
+> add HWMON-support to mediateks thermanl driver to allow lm-sensors
+> userspace tools read soc temperature
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  drivers/thermal/mtk_thermal.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 149c6d7fd5a0..e22d77d57458 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -23,6 +23,8 @@
+>  #include <linux/reset.h>
+>  #include <linux/types.h>
+>  
+> +#include "thermal_hwmon.h"
+> +
+>  /* AUXADC Registers */
+>  #define AUXADC_CON1_SET_V	0x008
+>  #define AUXADC_CON1_CLR_V	0x00c
+> @@ -983,6 +985,13 @@ static void mtk_thermal_release_periodic_ts(struct mtk_thermal *mt,
+>  	writel((tmp & (~0x10e)), mt->thermal_base + TEMP_MSRCTL1);
+>  }
+>  
+> +static void mtk_thermal_hwmon_action(void *data)
+> +{
+> +	struct thermal_zone_device *zone = data;
+> +
+> +	thermal_remove_hwmon_sysfs(zone);
+> +}
+> +
+>  static int mtk_thermal_probe(struct platform_device *pdev)
+>  {
+>  	int ret, i, ctrl_id;
+> @@ -1087,6 +1096,19 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>  		goto err_disable_clk_peri_therm;
+>  	}
+>  
+> +#ifdef CONFIG_THERMAL_HWMON
 
-No, it is fine. linux-next uses thermal/linux-next and it is allowed to
-rebase the branch.
+No #ifdef in C file.
 
-I've just updated it with your v14 series dropped.
+> +	tzdev->tzp->no_hwmon = false;
+> +	ret = thermal_add_hwmon_sysfs(tzdev);
+> +	if (ret)
+> +		dev_err(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+> +
+> +	ret = devm_add_action(&pdev->dev, mtk_thermal_hwmon_action, tzdev);
 
+devm_thermal_add_hwmon_sysfs() ?
 
->> --
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "error in devm_add_action");
+> +		mtk_thermal_hwmon_action(tzdev);
+> +	}
+> +#endif
+> +
+>  	return 0;
+>  
+>  err_disable_clk_peri_therm:
+> 
 
 
 -- 
