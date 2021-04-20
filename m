@@ -2,238 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38425364F67
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 02:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1D2364FBB
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 03:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbhDTAUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Apr 2021 20:20:09 -0400
-Received: from mga18.intel.com ([134.134.136.126]:31177 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230042AbhDTAUI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Apr 2021 20:20:08 -0400
-IronPort-SDR: NI0ii8vuNFTKM49JB/aQejlPDTSzU3z1Pw9dyz/txoyoMLE6Cjzkv6rGtxcndQs2XFmglOWTY+
- WGmF8WTN9TZA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9959"; a="182912756"
-X-IronPort-AV: E=Sophos;i="5.82,235,1613462400"; 
-   d="scan'208";a="182912756"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2021 17:19:37 -0700
-IronPort-SDR: dW+vUhBQ0V/1k9WbuJZlP/ArZtgsRjL/gwVVvsQUBLx7LAk/3qjsbT1RCgyxQs3pLqmjHMVg29
- +mVsC/OTaiKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,235,1613462400"; 
-   d="scan'208";a="445336525"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2021 17:19:34 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lYe74-0001zW-8O; Tue, 20 Apr 2021 00:19:34 +0000
-Date:   Tue, 20 Apr 2021 08:19:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 304bbea920d32fc73cdc144d3db268dba0b585df
-Message-ID: <607e1dfc.wOZoGnAp8ZS2fx85%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229999AbhDTBM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Apr 2021 21:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229994AbhDTBM5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Apr 2021 21:12:57 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A703C06174A
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 18:12:27 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id s20so2908633plr.13
+        for <linux-pm@vger.kernel.org>; Mon, 19 Apr 2021 18:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=8g0JzsK7cq8mWu+AkXO+6191wq3TcmAs3V7NDlrXdf0=;
+        b=WbzIQ0c2BgjwgtvFZFWdbKagDs/yZqiVQAgxNi2SEH/GQU0+nVC8s2skHNcsUyJGYj
+         S/cqPUc2jrQstoDPH9j1BaerGkLA9FeakeNkr6j9AJCOh8Dj2SRpvrrQECPABT8pmh+n
+         +TfEN3lZrXdTLW6o4tAUEpjBS60MUQNXT8+2o20IrsEiILtSsTIgkG1M3vNWmQZdAcxq
+         QMsC091xBnv7bVHfbswz3D22Il3SAKTh2zV4fHFrFrLrJIGdcKQjO0Wa1bCCBgvG2FZK
+         RVeoXT/XFoMx+IFSpatarUQH39kM9q+rBzew+rQbw4cacBArP8wGZFBkDs6jN7iDV1oi
+         GpPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=8g0JzsK7cq8mWu+AkXO+6191wq3TcmAs3V7NDlrXdf0=;
+        b=Oqe8kByvGJQKiTvcMlWHqVXkH8vf6DwLV/3IANBTsmIEHFGAYnxKFhU1mcA3jodgz4
+         /q16F0UHkpPy46UZmpvnKAp2MBnc69F1cffDUUev5pt9Xjj+HcoI+UJ7JzgKwm01837E
+         /0GFlNyxeuk3eSf9weJGgGZ7reSISf3LaXkaZhA5LSacmkFs7gYjWRoZRleVPcKyXR3v
+         lJ6CKmzN7YaQLQnLyd60pqUiuGc81UEH8QQzeVCkul4thQfjtsWydI7eX3Wf1bVZHJZD
+         3GQuoxQHERZ6bO/BBmxWrp1n0LS1O84LaiZjBnjcbv8/a28dKgee9P+oqh3MrcofYE5M
+         3dig==
+X-Gm-Message-State: AOAM530+UwTMxu3hn8cJPOvWeUbADKohuFWCJWuyDbXyn+FmWg+mL0Qj
+        ZD2RsHk6+K131bDkmCI/JoGn+w==
+X-Google-Smtp-Source: ABdhPJxuEby89ASRsgnsYTjXImcDK+Ckx+xnJ3Wr/GDFWr24D0RcVxKhR2fqs+bQ32ijjfGEwrbH9Q==
+X-Received: by 2002:a17:902:fe91:b029:eb:ad8:c5f with SMTP id x17-20020a170902fe91b02900eb0ad80c5fmr26293437plm.63.1618881147114;
+        Mon, 19 Apr 2021 18:12:27 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id b3sm557594pjo.37.2021.04.19.18.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Apr 2021 18:12:26 -0700 (PDT)
+Message-ID: <607e2a7a.1c69fb81.c0458.2d1c@mx.google.com>
+Date:   Mon, 19 Apr 2021 18:12:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.12-rc8-160-g304bbea920d32
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.12-rc8-160-g304bbea920d32)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 304bbea920d32fc73cdc144d3db268dba0b585df  Merge branch 'devprop' into linux-next
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.12-rc8-160-g3=
+04bbea920d32)
 
-elapsed time: 724m
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+12-rc8-160-g304bbea920d32/
 
-configs tested: 175
-configs skipped: 5
+Tree: pm
+Branch: testing
+Git Describe: v5.12-rc8-160-g304bbea920d32
+Git Commit: 304bbea920d32fc73cdc144d3db268dba0b585df
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Warnings Detected:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-powerpc                      chrp32_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                     mpc5200_defconfig
-m68k                          atari_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                     kmeter1_defconfig
-openrisc                 simple_smp_defconfig
-m68k                        mvme16x_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                           xway_defconfig
-sh                             espt_defconfig
-sparc64                          alldefconfig
-arm                        realview_defconfig
-powerpc                     pseries_defconfig
-arm                      pxa255-idp_defconfig
-arm                       versatile_defconfig
-arm                       multi_v4t_defconfig
-powerpc                   motionpro_defconfig
-sh                         ap325rxa_defconfig
-nds32                             allnoconfig
-mips                      pic32mzda_defconfig
-xtensa                           allyesconfig
-sh                          urquell_defconfig
-arc                     haps_hs_smp_defconfig
-sh                      rts7751r2d1_defconfig
-xtensa                         virt_defconfig
-arm                            mmp2_defconfig
-arm                           omap1_defconfig
-arm                        multi_v5_defconfig
-powerpc                     tqm8540_defconfig
-sh                                  defconfig
-powerpc                    adder875_defconfig
-powerpc                     sbc8548_defconfig
-arm                          ixp4xx_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                     davinci_all_defconfig
-h8300                     edosk2674_defconfig
-mips                          ath79_defconfig
-sh                         ecovec24_defconfig
-i386                             alldefconfig
-powerpc                     rainier_defconfig
-arm                         vf610m4_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                 mpc834x_itx_defconfig
-xtensa                    smp_lx200_defconfig
-arm                        mini2440_defconfig
-arm                        neponset_defconfig
-mips                        bcm63xx_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                         ps3_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sparc                       sparc64_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                            hp6xx_defconfig
-powerpc                 linkstation_defconfig
-sh                          sdk7786_defconfig
-s390                             allmodconfig
-arm                        vexpress_defconfig
-mips                           gcw0_defconfig
-arm                         assabet_defconfig
-alpha                            alldefconfig
-arm                            lart_defconfig
-powerpc                          g5_defconfig
-powerpc                      bamboo_defconfig
-mips                        nlm_xlr_defconfig
-nds32                               defconfig
-arm                           h3600_defconfig
-arm                         lubbock_defconfig
-arm                          ep93xx_defconfig
-powerpc                     kilauea_defconfig
-mips                      fuloong2e_defconfig
-parisc                generic-64bit_defconfig
-mips                        maltaup_defconfig
-arm                           h5000_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                         wii_defconfig
-mips                            e55_defconfig
-sparc                               defconfig
-mips                         tb0287_defconfig
-powerpc                     powernv_defconfig
-m68k                        m5407c3_defconfig
-powerpc                       ppc64_defconfig
-ia64                             allmodconfig
-powerpc                 xes_mpc85xx_defconfig
-ia64                                defconfig
-powerpc                      katmai_defconfig
-sh                          rsk7201_defconfig
-riscv                    nommu_virt_defconfig
-mips                      maltaaprp_defconfig
-arm                        spear3xx_defconfig
-powerpc                      pcm030_defconfig
-powerpc                    klondike_defconfig
-powerpc                      arches_defconfig
-m68k                         amcore_defconfig
-arc                              alldefconfig
-nios2                         3c120_defconfig
-sh                          landisk_defconfig
-arm                          pcm027_defconfig
-sparc                       sparc32_defconfig
-arm                          imote2_defconfig
-arm                          gemini_defconfig
-arm                          exynos_defconfig
-powerpc                 mpc834x_mds_defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210419
-x86_64               randconfig-a001-20210419
-x86_64               randconfig-a005-20210419
-x86_64               randconfig-a002-20210419
-x86_64               randconfig-a006-20210419
-x86_64               randconfig-a004-20210419
-i386                 randconfig-a003-20210419
-i386                 randconfig-a001-20210419
-i386                 randconfig-a006-20210419
-i386                 randconfig-a005-20210419
-i386                 randconfig-a004-20210419
-i386                 randconfig-a002-20210419
-i386                 randconfig-a015-20210419
-i386                 randconfig-a013-20210419
-i386                 randconfig-a014-20210419
-i386                 randconfig-a016-20210419
-i386                 randconfig-a012-20210419
-i386                 randconfig-a011-20210419
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+arc:
 
-clang tested configs:
-x86_64               randconfig-a014-20210419
-x86_64               randconfig-a015-20210419
-x86_64               randconfig-a013-20210419
-x86_64               randconfig-a011-20210419
-x86_64               randconfig-a012-20210419
-x86_64               randconfig-a016-20210419
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
+mbol check will be entirely skipped.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
+check will be entirely skipped.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For more info write to <info@kernelci.org>
