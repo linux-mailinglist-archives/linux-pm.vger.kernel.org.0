@@ -2,92 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1566365CC1
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 18:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03523365DBE
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Apr 2021 18:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbhDTQAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 12:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbhDTQAh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 12:00:37 -0400
-Received: from mxwww.masterlogin.de (mxwww.masterlogin.de [IPv6:2a03:2900:1:1::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA79BC06174A;
-        Tue, 20 Apr 2021 09:00:05 -0700 (PDT)
-Received: from mxout1.routing.net (unknown [192.168.10.81])
-        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id 34AC32C4D4;
-        Tue, 20 Apr 2021 15:54:22 +0000 (UTC)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout1.routing.net (Postfix) with ESMTP id 7B6583FE0A;
-        Tue, 20 Apr 2021 15:54:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1618934057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=kQYv4OtNr6e//YkMopHLbwWlrJMzWOHnE8M1UCzYfGU=;
-        b=NFmpEG8uJGS8FmvRAXIb9Ilqih45UNHL7PMvflMewmrdAAN+fveZC0qe0TIkbKNKjHreuX
-        uySf7rYOuumh3KADGmogaJ1lkRutiRxOE8XN8e3xbgWhNvGayANhpv1Hg/TpczHP778rGR
-        mqS+7i9INHrirEqcbbZOCS7aNyB/FKE=
-Received: from localhost.localdomain (fttx-pool-80.245.77.151.bambit.de [80.245.77.151])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 88927100396;
-        Tue, 20 Apr 2021 15:54:16 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        id S233286AbhDTQuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 12:50:32 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49813 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233266AbhDTQub (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 12:50:31 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lYtZW-0003WN-2v; Tue, 20 Apr 2021 16:49:58 +0000
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] thermal: mediatek: add sensors-support
-Date:   Tue, 20 Apr 2021 17:54:10 +0200
-Message-Id: <20210420155410.132141-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+From:   Colin Ian King <colin.king@canonical.com>
+Subject: incorrect mask/shift issue with qcom tsens thermal driver
+Message-ID: <aac16b20-12e7-5925-2c25-ee11b237a431@canonical.com>
+Date:   Tue, 20 Apr 2021 17:49:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: a26884df-a290-43e7-8bcd-1a1379261d7e
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Hi,
 
-add HWMON-support to mediateks thermal driver to allow lm-sensors
-userspace tools read soc temperature
+Static analysis on drivers/thermal/qcom/tsens-v0_1.c has found an issue
+in function calibrate_8974 with an incorrect mask value used when
+shifting a value. The analysis by Coverity is as follows:
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
----
- drivers/thermal/mtk_thermal.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 149c6d7fd5a0..32be8a715c7d 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -23,6 +23,8 @@
- #include <linux/reset.h>
- #include <linux/types.h>
- 
-+#include "thermal_hwmon.h"
-+
- /* AUXADC Registers */
- #define AUXADC_CON1_SET_V	0x008
- #define AUXADC_CON1_CLR_V	0x00c
-@@ -1087,6 +1089,11 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_peri_therm;
- 	}
- 
-+	tzdev->tzp->no_hwmon = false;
-+	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-+	if (ret)
-+		dev_err(&pdev->dev, "error in thermal_add_hwmon_sysfs");
-+
- 	return 0;
- 
- err_disable_clk_peri_therm:
--- 
-2.25.1
+400                        p1[5] = (bkp[1] & S5_P1_MASK) >> S5_P1_SHIFT;
+401                        p1[6] = (bkp[1] & S6_P1_MASK) >> S6_P1_SHIFT;
+402                        p1[7] = (bkp[1] & S7_P1_MASK) >> S7_P1_SHIFT;
 
+Operands don't affect result (CONSTANT_EXPRESSION_RESULT)
+result_independent_of_operands: (bkp[2] & 63) >> 24 is 0 regardless of
+the values of its operands. This occurs as the operand of assignment.
+
+403                        p1[8] = (bkp[2] & S8_P1_MASK_BKP) >> S8_P1_SHIFT;
+
+
+S8_P1_MASK_BKP is 0x3f
+S8_P1_SHIFT is 24
+
+so anything masked with 03f and right shifted 24 places will be zero, so
+this looks incorrect.  I suspect the mask should be 0x3f000000.
+
+My thinking is that this is a typo, and should be:
+
+	 p1[8] = (bkp[2] & S8_P1_MASK) >> S8_P1_SHIFT;
+
+since S8_P1_MASK is 0x3f000000. However, I'm not 100% sure as I don't
+have the EEPROM layout so it maybe that S8_P1_MASK_BKP is incorrectly
+#defined.
+
+Any thoughts?
+
+Colin
