@@ -2,101 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E36FD36718C
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 19:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AEB436718E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 19:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243206AbhDURld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Apr 2021 13:41:33 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51594 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243098AbhDURlc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Apr 2021 13:41:32 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
- id 31b07786e97dcc5f; Wed, 21 Apr 2021 19:40:57 +0200
-Received: from kreacher.localnet (89-64-80-44.dynamic.chello.pl [89.64.80.44])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A8DFF669387;
-        Wed, 21 Apr 2021 19:40:56 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: intel_pstate: Use HWP if enabled by platform firmware
-Date:   Wed, 21 Apr 2021 19:40:56 +0200
-Message-ID: <2602702.mvXUDI8C0e@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.64.80.44
-X-CLIENT-HOSTNAME: 89-64-80-44.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvddtkedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppeekledrieegrdektddrgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdeggedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+        id S243052AbhDURm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Apr 2021 13:42:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:38842 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236913AbhDURm2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 21 Apr 2021 13:42:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3508C11FB;
+        Wed, 21 Apr 2021 10:41:55 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.27.219])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A4C703F694;
+        Wed, 21 Apr 2021 10:41:53 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        lukasz.luba@arm.com
+Subject: [PATCH v3 0/3] Improve IPA mechanisms in low temperature state
+Date:   Wed, 21 Apr 2021 18:41:42 +0100
+Message-Id: <20210421174145.8213-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi all,
 
-It turns out that there are systems where HWP is enabled during
-initialization by the platform firmware (BIOS), but HWP EPP support
-is not advertised.
+This v3 patch set aims to address the issues present in IPA when the
+temperature is below the first trip point and cooling devices are not
+throttled.
+The first patch adds a basic check of cooling devices power to keep the
+internal statistics fresh. This allows to avoid issue when the statistics
+cover very long period, because they were not maintained.
+The second patch addresses an issue described in bugzilla [1], which is:
+unneccessary updating cooling devices when their state has not changed
+because they are not throttled. This update triggers sending an event,
+which should be avoided. Thus, patch 2/3 adds a tracking mechanism if
+the update was triggered and makes sure it will be done only once when
+the temperature continue to stay below first trip point.
+The last patch 3/3 is co-developed by Daniel, who presented the code
+during v2 review. I have created a helper function based on his idea,
+which can now be used inside IPA governor lock protected code. 
 
-After commit 7aa1031223bc ("cpufreq: intel_pstate: Avoid enabling HWP
-if EPP is not supported") intel_pstate refuses to use HWP on those
-systems, but the fallback PERF_CTL interface does not work on them
-either because of enabled HWP, and once enabled, HWP cannot be
-disabled.  Consequently, the users of those systems cannot control
-CPU performance scaling.
+changelog:
+v3:
+- new patch 3/3 co-developed with Daniel
+v2:
+- patch 2/2 uses now simple 'update' bool flag and information from
+  'tz->last_temperature'
+- patch 1/2 has small change in the comment
+- re-based on top of today's thermal/next branch
 
-Address this issue by making intel_pstate use HWP unconditionally if
-it is enabled already when the driver starts.
+Regards,
+Lukasz Luba
 
-Fixes: 7aa1031223bc ("cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
----
- drivers/cpufreq/intel_pstate.c |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=212501
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -3229,6 +3229,14 @@ static const struct x86_cpu_id hwp_suppo
- 	{}
- };
- 
-+static bool intel_pstate_hwp_is_enabled(void)
-+{
-+	u64 value;
-+
-+	rdmsrl(MSR_PM_ENABLE, value);
-+	return !!(value & 0x1);
-+}
-+
- static int __init intel_pstate_init(void)
- {
- 	const struct x86_cpu_id *id;
-@@ -3247,8 +3255,12 @@ static int __init intel_pstate_init(void
- 		 * Avoid enabling HWP for processors without EPP support,
- 		 * because that means incomplete HWP implementation which is a
- 		 * corner case and supporting it is generally problematic.
-+		 *
-+		 * If HWP is enabled already, though, there is no choice but to
-+		 * deal with it.
- 		 */
--		if (!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-+		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
-+		    intel_pstate_hwp_is_enabled()) {
- 			hwp_active++;
- 			hwp_mode_bdw = id->driver_data;
- 			intel_pstate.attr = hwp_cpufreq_attrs;
+Lukasz Luba (3):
+  thermal: power_allocator: maintain the device statistics from going
+    stale
+  thermal: power_allocator: update once cooling devices when temp is low
+  thermal: create a helper __thermal_cdev_update() without a lock
 
+ drivers/thermal/gov_power_allocator.c | 21 ++++++++++++++++----
+ drivers/thermal/thermal_core.h        |  1 +
+ drivers/thermal/thermal_helpers.c     | 28 +++++++++++++++++----------
+ 3 files changed, 36 insertions(+), 14 deletions(-)
 
+-- 
+2.17.1
 
