@@ -2,252 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADB33663C4
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 04:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37534366412
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 05:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbhDUCi5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Apr 2021 22:38:57 -0400
-Received: from mail-eopbgr760078.outbound.protection.outlook.com ([40.107.76.78]:38516
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234004AbhDUCi4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Apr 2021 22:38:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mXDLPrjjLnAbWYKd/oPdYsrFocDTK5zypBfCesc/QyohHe58JJgYHkxvIb5KgBFVOZjO1G9hIhoYpZ9ZzV/YfV602fzo9wMm2O1SifGmoKfJPIv9OE8ehtmoam5IL8ODB/VDRkqhtHCCP8Gqc1nEHOrU0SCjIofho3QCl3xLc1iZmp+MmR6BwkwXqZNA0qAV1XT+twt5flbL4kUfwA1mc00rRa6Y+MbujurHiELV8dVkTcfCa1nSYwTBdhWu6OjmpU+Ijofeb/iCbB67swhxebVKiwYxV/mbp++I15+GST4YC+as953qfz/faQUYrwJ2EcalqfhCbs+DrOh0V6wZ6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kOJEuwiCa0aZEKGIWBNfLSQkXqIfPkaOdeHSIxCn5zI=;
- b=ZBnmgH1CQ10E4lqr8aMc1+DUklebQzq3L68MeJrVtBIr8bGf68E9khMxo3iZGCo11h8BrAyZptJVjmaS7QQnk3n883Wkbx8vS8chX4R3fsh9wALqjfk8yWpdQi/Q0SrCu9WU3/J7RpWFDLTCp0YWQScZReHzumyutvgerhnVWepwV0OYLOxOTcKNeT0AmE63HxM6vSC2wMluQOaXF4hfRyeW38i3WmSodwCu6/s2ucaB+PqzFoWf/HXskbxXmgSnyd9HDDzHnCd1PgTpFYVoYFQuRPHKEk7zSV2VclHJmUxoLXwwvvGyO0L1cbC1cReDD3bHB7k6Bx8BEMN4rr3gZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kOJEuwiCa0aZEKGIWBNfLSQkXqIfPkaOdeHSIxCn5zI=;
- b=ttA2aA4OEtVSIfX9lzYoESj/64Bvc8QZXAMXWG5iyxc/Mua/QWQnVPQGx0f7Tr1ngLz5JkVdhy5Z/8gRp/UMBBsKpF6g7srhQHgC9H5VwTxlnZ8exFXlcc0b+IgSRw5lf4ZNZ/gY4CQP5jNqeW+8+uVK54vPMHW+btnbS8l7GEw=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from MWHPR12MB1248.namprd12.prod.outlook.com (2603:10b6:300:12::21)
- by MWHPR12MB1375.namprd12.prod.outlook.com (2603:10b6:300:10::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.18; Wed, 21 Apr
- 2021 02:38:22 +0000
-Received: from MWHPR12MB1248.namprd12.prod.outlook.com
- ([fe80::f07c:dc0f:e7e8:416c]) by MWHPR12MB1248.namprd12.prod.outlook.com
- ([fe80::f07c:dc0f:e7e8:416c%4]) with mapi id 15.20.4065.020; Wed, 21 Apr 2021
- 02:38:22 +0000
-From:   Huang Rui <ray.huang@amd.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] x86, sched: Fix the AMD CPPC maximum perf on some specific generations
-Date:   Wed, 21 Apr 2021 10:38:06 +0800
-Message-Id: <20210421023807.1540290-1-ray.huang@amd.com>
-X-Mailer: git-send-email 2.25.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [58.247.170.245]
-X-ClientProxiedBy: HK2PR04CA0046.apcprd04.prod.outlook.com
- (2603:1096:202:14::14) To MWHPR12MB1248.namprd12.prod.outlook.com
- (2603:10b6:300:12::21)
+        id S234734AbhDUD1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Apr 2021 23:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234730AbhDUD13 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Apr 2021 23:27:29 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F895C06174A;
+        Tue, 20 Apr 2021 20:26:56 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id v6so13318713oiv.3;
+        Tue, 20 Apr 2021 20:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MWK09kw+cZABiUewyDvRKqcNr5Wzfd1T9if6kGy1ACU=;
+        b=ptMZMIkRBfbvDMtNiL/47XyoIRY0/jim8ZQBu+A/J93zDBYnxub/u8Wbel9O2EDqqr
+         dzCKJktHtZRAgvf+KbqCaGkj8KW9htgeKKwN44cxgZULx+uwcY5O8oV8PymAASNdi4K5
+         +Q+gTTtJyAj/DTb0ZejoV+cOlaHyN2NEjYMGrvtJmyZMqZ+mn/kB0yEeN0Mk8gJz9QoX
+         L5RRXWtDo8jWyWJ49Ga+a+QYN4HitC+k0lifY0jU5unzcm/iSC8NzqMVbU5hBlvT4Mlb
+         JIRrdVCgX4OwZCb1eUibJodHdLt6b+I9KwRUO3OSI8k+dMl6zomSkhKoI4oefCcv7MEL
+         j8lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MWK09kw+cZABiUewyDvRKqcNr5Wzfd1T9if6kGy1ACU=;
+        b=c5OccDrmpypBLC+w6cniE05gHJC28sLBDu9ZK/QmREPjFCKJqaeLH7945ankRB4XhW
+         dv1N22bLMDTdRNn4X9OaFK9GvV7HMoWuF5ll69udwPLMkQVv/EUqi+tsC6O35b/+yKyg
+         L7ppj+9cmHn8XNDKVgxHHrYTRnYUajI/VfS8X4hExlduOkgbO+/w5z39AsJhRJf8SilS
+         wqPVpAF1F25T2ct9mAwXCBl+w7f5aeSkbICsds2zNhmI0AtncHLiT/NhsqgeZbJ3EORJ
+         7bfjd3iP5nXReByOVu6D7BR8nbDHvuOgrQZ8gcEMxHPs3WUK+TkvOGdvdjFi1mtzNKOO
+         ToaA==
+X-Gm-Message-State: AOAM5325JBBkWeAmc2H4IhDaLGGSK/gmEjtQI/EYM41i69bllaKAC3+z
+        apkTW4GiVUmq6cS5XF6mgmQ=
+X-Google-Smtp-Source: ABdhPJzBGPf2Jx0aPwkboV3X5V/3IZLEVS9eZVQ3647srnUE4TdLpLSWoZ0pSjT5NFquSXI0fjb7bA==
+X-Received: by 2002:aca:d90a:: with SMTP id q10mr5421443oig.63.1618975615856;
+        Tue, 20 Apr 2021 20:26:55 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d7sm245312oib.49.2021.04.20.20.26.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Apr 2021 20:26:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 20 Apr 2021 20:26:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, len.brown@intel.com,
+        lenb@kernel.org, pavel@ucw.cz, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        maz@kernel.org, tglx@linutronix.de, saravanak@google.com,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        m.szyprowski@samsung.com, geert@linux-m68k.org,
+        kernel-team@android.com
+Subject: Re: [PATCH] clk: Mark fwnodes when their clock provider is added
+Message-ID: <20210421032653.GA179924@roeck-us.net>
+References: <20210205222644.2357303-9-saravanak@google.com>
+ <20210210114435.122242-1-tudor.ambarus@microchip.com>
+ <20210210114435.122242-2-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hr-amd.amd.com (58.247.170.245) by HK2PR04CA0046.apcprd04.prod.outlook.com (2603:1096:202:14::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Wed, 21 Apr 2021 02:38:20 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2d41bd1d-a823-4974-098d-08d9046e8802
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1375:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR12MB13753E28339886EE024FB2E4EC479@MWHPR12MB1375.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:843;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h6qFUgVUw7ZNxZEkwvhXezKp4s1T2RVyCS3CHhnEX1Pkt99UG22G2U0KT+O90BII5q53CEeOp2Sq8yydJACj+/0LKOns5LVJVXyuG6UOztcUq0yVu5J1ZAYNyy6IjaNbnXv8Uqi6WHPTnRjTEthu0Q2BjRyZ6dwSKGjR/HzXYehJJzF/dNVoJ3qrwdG2M+J2Axc9ti/LrcIKYSl+s+LZClb2Kbs0VumnRqWe8RTRyoVQYDO3AvMmDh1BR9LZnI3pcGELSauAAXvFpI6xhGK7nzvHVuGHxFwDf+H/hT+/5H2IlaXw/l/EmiRyzwjQj8SG5kYR2lh7oSspsVcxPfrZ0q9bsw+KIh/FZLyWUYlBrIJvBjhhQhRShUXlDnbdTbte0fOZHe59x9Sp4ma9Y0IdW2oDjTVvZlC+z8fpg6GHAdc5UjZ1AOdPlQrzfFjFLigdBKRbqZfyBzxslAlR5Bd1jbWt3Mf1Y51G2oqVBHATU5y7Gupc+NtsE+PwzruBTrCQwCTpggosjjtlmD6c/bqUaLPBcgPmpouDK0DPt6iuOxt7qJme5sA3ksuF4QEqh5WuuemN05gVx/9m+WbwdtSZnn4+CF0lSPzrbzO5xZKth/aoaiZkWbfKkBkK4FWWYgaA3sLNbMQFLFf3lORWCCKFgaAY/cXbE+33rkfWUESC+RyfAUMJZIep4JO2yUJhB7b/wWl0Qcsyjs0dl6jKBX9yZsdTjEWKQxDcU5VEty4L6lxJOUgKIa73Yi2uKhoh2MS0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1248.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(54906003)(7696005)(956004)(83380400001)(186003)(38100700002)(16526019)(66476007)(316002)(8936002)(5660300002)(1076003)(66556008)(8676002)(86362001)(38350700002)(2906002)(2616005)(26005)(36756003)(478600001)(66946007)(6486002)(52116002)(4326008)(966005)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZDBYT0RpcG5UVVQwMWRMNzF6dURqenhyVk1IL0RjVm9iRkFuRHQ2U2dEdjRs?=
- =?utf-8?B?TEFBSmJnSzNkU0JwVHVSbE9wN0VvTDBlTEN0MWlJcExVdUsyeGZ4SVBNbURl?=
- =?utf-8?B?d3k2SXZsc0pIdll6aS9hMzZWa296Y1NaLzgvVDdUbGJaaFE3L2dHSGgyNTl0?=
- =?utf-8?B?NU5BQkxLS2dQSjZmV1pZRWxLVzVEOHZnUzN3bDlSM0t3b3BwK1lLWGxRWHlm?=
- =?utf-8?B?N3lLdXh5TUZxN0V3NGtFYitRcHRmYkhmRGQwN3JIUjE4dHRVcXdhNi90eU9T?=
- =?utf-8?B?N2RpQ3A1bmt4Y0kxZEp3NHpqY09xNCtHTFkzdnVmQitLM1dvWXd6ZTJoYnc5?=
- =?utf-8?B?cnJvTjZpcE9MVERLR0V4THR1eDBsMktWSU5SZ3dZeW51TGthMzc0SDlhZDNJ?=
- =?utf-8?B?ZHRHVHJqNzBTN04raitpRURTdXBwaVp2Sy8yUEhrakhrMnI2anNObDcxVys4?=
- =?utf-8?B?aXRYbXdWMVBCMEdGeUd4U2kzN2Nra3J2UDE4TTdlS2VoS0ViTUVSbWNLS1hy?=
- =?utf-8?B?TW1saXJQRFBJeDlNSWZ3cXlHOGtubmZ4TGU5djM5VWRQUWVMd0xHTEh1UXlx?=
- =?utf-8?B?QytzRnZDT1VUUE1abHRGVnNINzZRRURwb2llK3FpVUFwR1dFY09XN3lQSFFF?=
- =?utf-8?B?SHBZYndkRkZVc1F2T2cyNndXWlNCbDBWVFpOd3hWSk9KMUYxeDlWOTFYcGdS?=
- =?utf-8?B?YUFqVjNYSWV6U1FrcWNRaGFxaXlZRDNwTnlBR0xvR1oyKytlakNROFBMT3pq?=
- =?utf-8?B?OFpVa1lOMy85UVBFUTh1RkNsd0dwNjMrcDAwTG1EMVBnQXA2T1hPSnQxVlU0?=
- =?utf-8?B?RDlxMjQyVm9rSU5YTUJUWTZsMjUvNHFjSEN4UUxTdzlUSndIejJabWJjdFo5?=
- =?utf-8?B?UTVoNzIrbXhJMWZ1SjkySkg4YTVJbTlXSUthK1BsZSsrL1Z1MXZnVE9VejdT?=
- =?utf-8?B?cCtwZUc1a01Sc3MreFlzbzZJdjBxMXVCVkZKa1RBZVNzblVIRlU1MDdHSHB1?=
- =?utf-8?B?YVNFRFZraXl5bjBheVJSL0FsQ0hpakZTbmErOEFDS29pN3c3TnBQMGhJdi9R?=
- =?utf-8?B?N3doeStadUo5Ykx5SHdXSFFLb08yTE01UVJMa0syYTZFVnhOS0xRMTMzZ2tQ?=
- =?utf-8?B?OHljaUp0TXlhNm4rRURWWFpsQ29GaTZzNkROaEgrM1g2aWNuTjNwU1lnVmhk?=
- =?utf-8?B?endLM2s1UThlakFLWkdhR1JpbHQwM2JqanFWOEw1TTBFYktuNTRLVHJydUR6?=
- =?utf-8?B?eWNwc0dObDN1RXNlc1dFdFBiM0xSalpseXdDbmlRaVcvYjVZSmcrbzRJR2Nx?=
- =?utf-8?B?VU9jc1V0YVNheG5DVW9UdnVCZmJjN1V4Z24rRmNsdm9mMlQrM2xjKzNrTXJt?=
- =?utf-8?B?ZVJSWkNLNEphbWxWeUZCT0pwZnVCWU9HU0V0bHgxbWkyM2ZYWTJBZ3R1TmRi?=
- =?utf-8?B?OTdhMW9abHRsM2RMODFabzQ4R2dpTHJmR1NoMXRKWGlhVUFkZTM4MzAyOGty?=
- =?utf-8?B?VS80U1A2Zlk2K1lQU0NPamdCTjlscXgrbHdiSm1tVzlpa0NPSFpLWWM5SWVo?=
- =?utf-8?B?Mm9SR2FIUWMzb0hqbXNWY0JPdjJYVkhkZ3VUUlFrSWcvM3ozRXgvV0NkM2Ux?=
- =?utf-8?B?Z2FDbUZLenpHT0tsLy9xOUJNejJLWWJWcVhua01PRDc0cjhZME10eE5wSkNM?=
- =?utf-8?B?ZUlZdWtFUHRFckhaTmtNdVM3RGZUSTk0azFGT1ZRa2VsajNoTUxHTWhNTEdR?=
- =?utf-8?Q?AvMgbAm/xS7sdal9OLQnbDPIQW9bnz9UV7GSxWd?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d41bd1d-a823-4974-098d-08d9046e8802
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR12MB1248.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2021 02:38:22.6813
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RDN6usyJvtu/YCPH5KBo2kNYbolywknNBNMqKDSmlBKJYnnekeSpzyBuyB6e6tEfyl0BOqab3BLIlpwaeuhjnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1375
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210210114435.122242-2-tudor.ambarus@microchip.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some AMD Ryzen generations has different calculation method on maximum
-perf. 255 is not for all asics, some specific generations should use 166
-as the maximum perf. Otherwise, it will report incorrect frequency value
-like below:
+Hi,
 
-~ → lscpu | grep MHz
-CPU MHz:                         3400.000
-CPU max MHz:                     7228.3198
-CPU min MHz:                     2200.0000
+On Wed, Feb 10, 2021 at 01:44:35PM +0200, Tudor Ambarus wrote:
+> This is a follow-up for:
+> commit 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+> 
+> The above commit updated the deprecated of_clk_add_provider(),
+> but missed to update the preferred of_clk_add_hw_provider().
+> Update it now.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+This patch still causes a crash when booting a raspi2 image in linux-next.
 
-Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=211791
-Signed-off-by: Huang Rui <ray.huang@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Nathan Fontenot <nathan.fontenot@amd.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: x86@kernel.org
-Cc: stable@vger.kernel.org
+[   21.456500] Unable to handle kernel NULL pointer dereference at virtual address 00000028
+[   21.456750] pgd = (ptrval)
+[   21.456927] [00000028] *pgd=00000000
+[   21.457567] Internal error: Oops: 5 [#1] SMP ARM
+[   21.457882] Modules linked in:
+[   21.458077] CPU: 0 PID: 77 Comm: kworker/u8:10 Not tainted 5.12.0-rc8-next-20210420 #1
+[   21.458291] Hardware name: BCM2835
+[   21.458525] Workqueue: events_unbound deferred_probe_work_func
+[   21.458997] PC is at of_clk_add_hw_provider+0xbc/0xe8
+[   21.459176] LR is at of_clk_add_hw_provider+0xa8/0xe8
+...
+[   21.477603] [<c0a32aec>] (of_clk_add_hw_provider) from [<c0a32b60>] (devm_of_clk_add_hw_provider+0x48/0x80)
+[   21.477861] [<c0a32b60>] (devm_of_clk_add_hw_provider) from [<c0a471e4>] (raspberrypi_clk_probe+0x260/0x388)
+[   21.478087] [<c0a471e4>] (raspberrypi_clk_probe) from [<c0c1c4d0>] (platform_probe+0x5c/0xb8)
+[   21.478287] [<c0c1c4d0>] (platform_probe) from [<c0c19d84>] (really_probe+0xf0/0x39c)
+[   21.478471] [<c0c19d84>] (really_probe) from [<c0c1a098>] (driver_probe_device+0x68/0xc0)
+[   21.478659] [<c0c1a098>] (driver_probe_device) from [<c0c17f54>] (bus_for_each_drv+0x84/0xc8)
+[   21.478860] [<c0c17f54>] (bus_for_each_drv) from [<c0c19c20>] (__device_attach+0xec/0x158)
+[   21.479050] [<c0c19c20>] (__device_attach) from [<c0c18de8>] (bus_probe_device+0x88/0x90)
+[   21.479236] [<c0c18de8>] (bus_probe_device) from [<c0c16a68>] (device_add+0x398/0x8ac)
+[   21.479421] [<c0c16a68>] (device_add) from [<c0c1c1b4>] (platform_device_add+0xf0/0x200)
+[   21.479607] [<c0c1c1b4>] (platform_device_add) from [<c0c1ccc0>] (platform_device_register_full+0xd0/0x110)
+[   21.479836] [<c0c1ccc0>] (platform_device_register_full) from [<c104c130>] (rpi_firmware_probe+0x1a4/0x20c)
+[   21.480061] [<c104c130>] (rpi_firmware_probe) from [<c0c1c4d0>] (platform_probe+0x5c/0xb8)
+[   21.480255] [<c0c1c4d0>] (platform_probe) from [<c0c19d84>] (really_probe+0xf0/0x39c)
+[   21.480437] [<c0c19d84>] (really_probe) from [<c0c1a098>] (driver_probe_device+0x68/0xc0)
+[   21.480626] [<c0c1a098>] (driver_probe_device) from [<c0c17f54>] (bus_for_each_drv+0x84/0xc8)
+[   21.480829] [<c0c17f54>] (bus_for_each_drv) from [<c0c19c20>] (__device_attach+0xec/0x158)
+[   21.481018] [<c0c19c20>] (__device_attach) from [<c0c18de8>] (bus_probe_device+0x88/0x90)
+[   21.481205] [<c0c18de8>] (bus_probe_device) from [<c0c192bc>] (deferred_probe_work_func+0x8c/0xbc)
+[   21.481413] [<c0c192bc>] (deferred_probe_work_func) from [<c036802c>] (process_one_work+0x268/0x798)
+[   21.481624] [<c036802c>] (process_one_work) from [<c0368774>] (worker_thread+0x218/0x4f4)
+[   21.481822] [<c0368774>] (worker_thread) from [<c0370f28>] (kthread+0x140/0x174)
+[   21.481999] [<c0370f28>] (kthread) from [<c030017c>] (ret_from_fork+0x14/0x38)
+[   21.482185] Exception stack(0xc42b7fb0 to 0xc42b7ff8)
+
+Updated bisect log is attached.
+
+Guenter
+
 ---
-
-Changes from V1 -> V2:
-- Enhance the commit message.
-- Move amd_get_highest_perf() into amd.c.
-- Refine the implementation of switch-case.
-- Cc stable mail list.
-
----
- arch/x86/include/asm/processor.h |  2 ++
- arch/x86/kernel/cpu/amd.c        | 22 ++++++++++++++++++++++
- arch/x86/kernel/smpboot.c        |  2 +-
- drivers/cpufreq/acpi-cpufreq.c   | 19 +++++++++++++++++++
- 4 files changed, 44 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index f1b9ed5efaa9..908bcaea1361 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -804,8 +804,10 @@ DECLARE_PER_CPU(u64, msr_misc_features_shadow);
- 
- #ifdef CONFIG_CPU_SUP_AMD
- extern u32 amd_get_nodes_per_socket(void);
-+extern u32 amd_get_highest_perf(void);
- #else
- static inline u32 amd_get_nodes_per_socket(void)	{ return 0; }
-+static inline u32 amd_get_highest_perf(void)		{ return 0; }
- #endif
- 
- static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 347a956f71ca..aadb691d9357 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -1170,3 +1170,25 @@ void set_dr_addr_mask(unsigned long mask, int dr)
- 		break;
- 	}
- }
-+
-+u32 amd_get_highest_perf(void)
-+{
-+	struct cpuinfo_x86 *c = &boot_cpu_data;
-+	u32 cppc_max_perf = 225;
-+
-+	switch (c->x86) {
-+	case 0x17:
-+		if ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
-+		    (c->x86_model >= 0x70 && c->x86_model < 0x80))
-+			cppc_max_perf = 166;
-+		break;
-+	case 0x19:
-+		if ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
-+		    (c->x86_model >= 0x40 && c->x86_model < 0x70))
-+			cppc_max_perf = 166;
-+		break;
-+	}
-+
-+	return cppc_max_perf;
-+}
-+EXPORT_SYMBOL_GPL(amd_get_highest_perf);
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 02813a7f3a7c..7bec57d04a87 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -2046,7 +2046,7 @@ static bool amd_set_max_freq_ratio(void)
- 		return false;
- 	}
- 
--	highest_perf = perf_caps.highest_perf;
-+	highest_perf = amd_get_highest_perf();
- 	nominal_perf = perf_caps.nominal_perf;
- 
- 	if (!highest_perf || !nominal_perf) {
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index d1bbc16fba4b..3f0a19dd658c 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -630,6 +630,22 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
- #endif
- 
- #ifdef CONFIG_ACPI_CPPC_LIB
-+
-+static u64 get_amd_max_boost_ratio(unsigned int cpu, u64 nominal_perf)
-+{
-+	u64 boost_ratio, cppc_max_perf;
-+
-+	if (!nominal_perf)
-+		return 0;
-+
-+	cppc_max_perf = amd_get_highest_perf();
-+
-+	boost_ratio = div_u64(cppc_max_perf << SCHED_CAPACITY_SHIFT,
-+			      nominal_perf);
-+
-+	return boost_ratio;
-+}
-+
- static u64 get_max_boost_ratio(unsigned int cpu)
- {
- 	struct cppc_perf_caps perf_caps;
-@@ -646,6 +662,9 @@ static u64 get_max_boost_ratio(unsigned int cpu)
- 		return 0;
- 	}
- 
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-+		return get_amd_max_boost_ratio(cpu, perf_caps.nominal_perf);
-+
- 	highest_perf = perf_caps.highest_perf;
- 	nominal_perf = perf_caps.nominal_perf;
- 
--- 
-2.25.1
-
+# bad: [50b8b1d699ac313c0a07a3c185ffb23aecab8abb] Add linux-next specific files for 20210419
+# good: [bf05bf16c76bb44ab5156223e1e58e26dfe30a88] Linux 5.12-rc8
+git bisect start 'HEAD' 'v5.12-rc8'
+# good: [c4bb91fc07e59241cde97f913d7a2fbedc248f0d] Merge remote-tracking branch 'crypto/master'
+git bisect good c4bb91fc07e59241cde97f913d7a2fbedc248f0d
+# good: [f15bbf170b40b48a43ed7076ce9f8ac9380e5752] Merge remote-tracking branch 'edac/edac-for-next'
+git bisect good f15bbf170b40b48a43ed7076ce9f8ac9380e5752
+# bad: [550a78090dcc4061e191312a757a127f0b6e6323] Merge remote-tracking branch 'vfio/next'
+git bisect bad 550a78090dcc4061e191312a757a127f0b6e6323
+# bad: [9f074d2a7bf49b2c9e1609703757b18de7611aef] Merge remote-tracking branch 'usb/usb-next'
+git bisect bad 9f074d2a7bf49b2c9e1609703757b18de7611aef
+# good: [855b2fdb7c543c94e7623e6ad0b492f04a5317db] Merge remote-tracking branch 'percpu/for-next'
+git bisect good 855b2fdb7c543c94e7623e6ad0b492f04a5317db
+# good: [1d08ed588c6a85a35a24c82eb4cf0807ec2b366a] usbip: vudc: fix missing unlock on error in usbip_sockfd_store()
+git bisect good 1d08ed588c6a85a35a24c82eb4cf0807ec2b366a
+# good: [1b7ce8fab5fd0c406dbf165b12d44b301decf589] Merge remote-tracking branch 'ipmi/for-next'
+git bisect good 1b7ce8fab5fd0c406dbf165b12d44b301decf589
+# good: [fe8e488058c47e9a8a2c85321f7198a0a17b0131] dt-bindings: usb: mtk-xhci: add wakeup interrupt
+git bisect good fe8e488058c47e9a8a2c85321f7198a0a17b0131
+# bad: [3c652132ce9052e626bf509932fcacfebed1ccb4] platform-msi: fix kernel-doc warnings
+git bisect bad 3c652132ce9052e626bf509932fcacfebed1ccb4
+# bad: [7f2fac70b729d68a34e5eba8d1fb68eb69b05169] device property: Add test cases for fwnode_property_count_*() APIs
+git bisect bad 7f2fac70b729d68a34e5eba8d1fb68eb69b05169
+# good: [38f087de8947700d3b06d3d1594490e0f611c5d1] devtmpfs: fix placement of complete() call
+git bisect good 38f087de8947700d3b06d3d1594490e0f611c5d1
+# good: [b6f617df4fa936c1ab1831c2b23563f6c1add6c4] driver core: Update device link status properly for device_bind_driver()
+git bisect good b6f617df4fa936c1ab1831c2b23563f6c1add6c4
+# bad: [6579c8d97ad7fc5671ee60234f3b8388abee5f77] clk: Mark fwnodes when their clock provider is added
+git bisect bad 6579c8d97ad7fc5671ee60234f3b8388abee5f77
+# good: [ea718c699055c8566eb64432388a04974c43b2ea] Revert "Revert "driver core: Set fw_devlink=on by default""
+git bisect good ea718c699055c8566eb64432388a04974c43b2ea
+# first bad commit: [6579c8d97ad7fc5671ee60234f3b8388abee5f77] clk: Mark fwnodes when their clock provider is added
