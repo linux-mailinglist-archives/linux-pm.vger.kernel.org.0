@@ -2,100 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F18367166
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 19:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36FD36718C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Apr 2021 19:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241131AbhDURfX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Apr 2021 13:35:23 -0400
-Received: from sender11-of-o51.zoho.eu ([31.186.226.237]:21112 "EHLO
-        sender11-of-o51.zoho.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239822AbhDURfW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Apr 2021 13:35:22 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Apr 2021 13:35:22 EDT
-ARC-Seal: i=1; a=rsa-sha256; t=1619025575; cv=none; 
-        d=zohomail.eu; s=zohoarc; 
-        b=WmXre7ic130ZOYKn+d0nKVKDMIhYzL4dXCULW7ofz24R/FKdC6PdmTZpWJG04hkaGYFT822YkOq2eKN/S+zDe7vZswz2jgyWDPiiNzaO/EPdwtD9jxuN43iOAazDpX4/hIO33rs53rPWEgavBPzK6xEh7tJKsodtk+eLMSeuTOM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-        t=1619025575; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=obrCtbJ+KgZ6tsOyyDAx+m+OwfF0hUYR7eox/my8XBY=; 
-        b=Tu13UAm6jYWn1VVHyzUV8boM2z5SfT5CZMR/RdOCn6yTaXTd0v8MVQOpMNwQy9wvWRYBlMsRLn1Fu6zd2gBLUjG/UDkSSIqnIMFbcWNJjSlbVAsYi7/ogFaRbyELGDgJHxwugCxmncA3a5bdXOPgUtNGeUn6uxb/fvjAa4QLu8E=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-        spf=pass  smtp.mailfrom=philipp@uvos.xyz;
-        dmarc=pass header.from=<philipp@uvos.xyz> header.from=<philipp@uvos.xyz>
-Received: from UVOSLinux (ip-95-222-215-74.hsi15.unitymediagroup.de [95.222.215.74]) by mx.zoho.eu
-        with SMTPS id 1619025573833283.36820387667444; Wed, 21 Apr 2021 19:19:33 +0200 (CEST)
-Date:   Wed, 21 Apr 2021 19:19:33 +0200
-From:   Carl Philipp Klemm <philipp@uvos.xyz>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     zhuguangqing83@gmail.com, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: cpcap-battery: fix invalid usage of
- list cursor
-Message-Id: <20210421191933.6fa083e0b2496aedaef4957a@uvos.xyz>
-In-Reply-To: <YIBNDrHlwqn5hrl2@atomide.com>
-References: <20210421143650.16045-1-zhuguangqing83@gmail.com>
-        <YIBNDrHlwqn5hrl2@atomide.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+        id S243206AbhDURld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Apr 2021 13:41:33 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51594 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243098AbhDURlc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Apr 2021 13:41:32 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
+ id 31b07786e97dcc5f; Wed, 21 Apr 2021 19:40:57 +0200
+Received: from kreacher.localnet (89-64-80-44.dynamic.chello.pl [89.64.80.44])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A8DFF669387;
+        Wed, 21 Apr 2021 19:40:56 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: intel_pstate: Use HWP if enabled by platform firmware
+Date:   Wed, 21 Apr 2021 19:40:56 +0200
+Message-ID: <2602702.mvXUDI8C0e@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.80.44
+X-CLIENT-HOSTNAME: 89-64-80-44.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvddtkedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppeekledrieegrdektddrgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdeggedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Looks good to me, but dosent appear to solve the bootup bug.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-(this time reply all)
+It turns out that there are systems where HWP is enabled during
+initialization by the platform firmware (BIOS), but HWP EPP support
+is not advertised.
 
-Reviewed-by: Carl Philipp Klemm <philipp@uvos.xyz>
-Tested-by: Carl Philipp Klemm <philipp@uvos.xyz>
+After commit 7aa1031223bc ("cpufreq: intel_pstate: Avoid enabling HWP
+if EPP is not supported") intel_pstate refuses to use HWP on those
+systems, but the fallback PERF_CTL interface does not work on them
+either because of enabled HWP, and once enabled, HWP cannot be
+disabled.  Consequently, the users of those systems cannot control
+CPU performance scaling.
 
--- 
-Carl Philipp Klemm <philipp@uvos.xyz> <carl@uvos.xyz>
+Address this issue by making intel_pstate use HWP unconditionally if
+it is enabled already when the driver starts.
 
-On Wed, 21 Apr 2021 19:04:30 +0300
-Tony Lindgren <tony@atomide.com> wrote:
+Fixes: 7aa1031223bc ("cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
+---
+ drivers/cpufreq/intel_pstate.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-> Hi,
-> 
-> * zhuguangqing83@gmail.com <zhuguangqing83@gmail.com> [210421 14:38]:
-> > From: Guangqing Zhu <zhuguangqing83@gmail.com>
-> > 
-> > Fix invalid usage of a list_for_each_entry in cpcap_battery_irq_thread().
-> > Empty list or fully traversed list points to list head, which is not
-> > NULL (and before the first element containing real data).
-> > 
-> > Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
-> > ---
-> > v2:
-> >   - Modify commit message and code as suggested by Sebastian.
-> 
-> Thanks looks OK to me. Looks like there's no flag we need to set there when
-> the entry is found, so this should do for the check.
-> 
-> Hmm I wonder if this just might fix the issue where booting with a USB
-> charger connected can hang..
-> 
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> 
-> > ---
-> >  drivers/power/supply/cpcap-battery.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-> > index 6d5bcdb9f45d..a3fc0084cda0 100644
-> > --- a/drivers/power/supply/cpcap-battery.c
-> > +++ b/drivers/power/supply/cpcap-battery.c
-> > @@ -786,7 +786,7 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
-> >  			break;
-> >  	}
-> >  
-> > -	if (!d)
-> > +	if (list_entry_is_head(d, &ddata->irq_list, node))
-> >  		return IRQ_NONE;
-> >  
-> >  	latest = cpcap_battery_latest(ddata);
-> > -- 
-> > 2.17.1
-> > 
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -3229,6 +3229,14 @@ static const struct x86_cpu_id hwp_suppo
+ 	{}
+ };
+ 
++static bool intel_pstate_hwp_is_enabled(void)
++{
++	u64 value;
++
++	rdmsrl(MSR_PM_ENABLE, value);
++	return !!(value & 0x1);
++}
++
+ static int __init intel_pstate_init(void)
+ {
+ 	const struct x86_cpu_id *id;
+@@ -3247,8 +3255,12 @@ static int __init intel_pstate_init(void
+ 		 * Avoid enabling HWP for processors without EPP support,
+ 		 * because that means incomplete HWP implementation which is a
+ 		 * corner case and supporting it is generally problematic.
++		 *
++		 * If HWP is enabled already, though, there is no choice but to
++		 * deal with it.
+ 		 */
+-		if (!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) {
++		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
++		    intel_pstate_hwp_is_enabled()) {
+ 			hwp_active++;
+ 			hwp_mode_bdw = id->driver_data;
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+
+
+
