@@ -2,157 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 291AF367935
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 07:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880C6367936
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 07:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhDVFV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Apr 2021 01:21:57 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61579 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230120AbhDVFV4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Apr 2021 01:21:56 -0400
-IronPort-SDR: AGMJAJHmaROY5UL8l/pyuXuawZo3z/hNhKhZGDxkvi3xz4VasSTc5EoofDDJIna1QwbfBNSCRu
- IzAK+kR3TqoA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9961"; a="195939951"
-X-IronPort-AV: E=Sophos;i="5.82,241,1613462400"; 
-   d="scan'208";a="195939951"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2021 22:21:18 -0700
-IronPort-SDR: kOxTqND2s9eSNmCrhvfC7wwI3nM+89BHL7LjNUXM8dSas2Oxthtu/0ZCZ6JfKTHHWNapyUOmUb
- IzNkcvhwe3Hw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,241,1613462400"; 
-   d="scan'208";a="446156066"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2021 22:21:17 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lZRm8-0003zZ-NG; Thu, 22 Apr 2021 05:21:16 +0000
-Date:   Thu, 22 Apr 2021 13:20:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 6e7bc7ebb752591ddd10e8f935604885bdb9728b
-Message-ID: <608107bb.VJFb/zIzjmHTaoCT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230120AbhDVFXV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Apr 2021 01:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhDVFXV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 01:23:21 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EF0C06174A
+        for <linux-pm@vger.kernel.org>; Wed, 21 Apr 2021 22:22:47 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id h15so13197047pfv.2
+        for <linux-pm@vger.kernel.org>; Wed, 21 Apr 2021 22:22:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HgPSl6VSw3n8mZkypE21VxQIUk7XXvdMYqy75Pka0Ok=;
+        b=Q2+MUMYKxv6DX/kXTtayHKXsqM5vfBOif7ndvTUxBJn4rEB2KK4eB+fu30+Q3oKFx5
+         pwKPTle8yqIvfCDDTi+FwNVp57cRZiGekl7Lu0JDShEkIhG0UwAE0TJbvPHAsC/WPjhE
+         blNTt73qgdtKQu27fctvhND+iABMUyA7dQWF4rEWyQqxZhitECy0ZrOCcQfklgXZeVQz
+         Y96x0NmiG2OPC71SAnrW0JDXbjQJ5vbjbST5L6JU1aKBCqzOvAlBGlshxIPCemakyvnl
+         J1iZ5jHDW4jMp0G2qBQwVyiPhnP8CEMkLsw28AvtI0gvCMaTbwN9OmCDycKeZ/VLOqVC
+         h1nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HgPSl6VSw3n8mZkypE21VxQIUk7XXvdMYqy75Pka0Ok=;
+        b=iTSm6qB444s9WqnsHnTKR6DEd08bLJn3I483FpTyRngf87rAuHi2d+nA4bbEIipurX
+         iQ4iy8VhFRqqRRpa3fQ/L/UdbdpYqjW8codKPflmXbgLvE83/CdbNxTo5v/3Zmnm/uUm
+         KUELK2xfWEgG7GhWz4DFRWrBCLoCdc3KuFGz1j/1dTzF7fivYbtVG/K3VVw5vpjriWHu
+         CQt9fmwAFnpMXYjfV+eLPDqe0NLmNWQ+bk0f3TZfvqpi6pxxpuTZojiROI9CVF7OG8lp
+         +/kzDqUnm965QE94o8eallfk9wbzhKWpYI9S0pvo/kKAG40jJYlXCwvS1vQrLkn1sKwP
+         fekg==
+X-Gm-Message-State: AOAM532CE2HPgveSFkrc21m4JLeCcfIWSobTzW++2K6vxli8NOaLZ0u5
+        votJW+MT8zUuxo21LYquYMTq/TzH0L7Vhg==
+X-Google-Smtp-Source: ABdhPJwtaWjcolBXs0QEQrQ8bxFtqE2txt0i2kHgMdQPq8Td6YqQh1+8OZH6oN0E0XtStA7gn+0o3g==
+X-Received: by 2002:a63:4d5c:: with SMTP id n28mr1817749pgl.436.1619068966279;
+        Wed, 21 Apr 2021 22:22:46 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id l3sm3553277pju.44.2021.04.21.22.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Apr 2021 22:22:45 -0700 (PDT)
+Date:   Thu, 22 Apr 2021 10:52:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pankaj Vinodrao Joshi <Pankaj.VJ@exaleapsemi.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: cpu governor and cpufreq
+Message-ID: <20210422052243.6a3i6gwgys57pvuc@vireshk-i7>
+References: <BMXPR01MB287059E28B26332A636573ECEE479@BMXPR01MB2870.INDPRD01.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <BMXPR01MB287059E28B26332A636573ECEE479@BMXPR01MB2870.INDPRD01.PROD.OUTLOOK.COM>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 6e7bc7ebb752591ddd10e8f935604885bdb9728b  Merge branch 'pm-sleep' into bleeding-edge
+On 21-04-21, 12:03, Pankaj  Vinodrao Joshi wrote:
+> Hi,
+> 
+> i am trying to explore linux power management and was going through
+> cpu governor and freq scaling but i have following doubts can
+> someone help me to get it clarified
+> 
+> 1) i understood that there are different governors implemented in
+>    linux kernel like ondemand, userspace etc. and each policy can
+>    have different governor for each cpu ,
 
-elapsed time: 723m
+No. A governor controls an entire policy (policy is used to relate
+CPUs, normally all CPUs belonging to a policy are controlled by a
+single knob (a single bit in a register), and so they all run on the
+same frequency all the time). There is a driver flag
+(CPUFREQ_HAVE_GOVERNOR_PER_POLICY), which is required to allow a
+different governor for each policy, without it same governor will be
+used for all online CPUs.
 
-configs tested: 94
-configs skipped: 2
+>    but i want to understand
+>    how these policies are interlinked with drivers, how they will
+>    use governors ?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Policies are created (or provided by the drivers), they mainly
+provide a function to change frequency (only one of target(),
+target_index() or setpolicy()).
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-arm                       netwinder_defconfig
-mips                        bcm63xx_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                      walnut_defconfig
-mips                           mtx1_defconfig
-sparc64                             defconfig
-powerpc                      acadia_defconfig
-ia64                            zx1_defconfig
-mips                        maltaup_defconfig
-powerpc                     skiroot_defconfig
-mips                      maltaaprp_defconfig
-i386                             alldefconfig
-arc                      axs103_smp_defconfig
-m68k                         apollo_defconfig
-sh                           sh2007_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210421
-x86_64               randconfig-a002-20210421
-x86_64               randconfig-a001-20210421
-x86_64               randconfig-a005-20210421
-x86_64               randconfig-a006-20210421
-x86_64               randconfig-a003-20210421
-i386                 randconfig-a005-20210421
-i386                 randconfig-a002-20210421
-i386                 randconfig-a001-20210421
-i386                 randconfig-a006-20210421
-i386                 randconfig-a004-20210421
-i386                 randconfig-a003-20210421
-i386                 randconfig-a012-20210421
-i386                 randconfig-a014-20210421
-i386                 randconfig-a011-20210421
-i386                 randconfig-a013-20210421
-i386                 randconfig-a015-20210421
-i386                 randconfig-a016-20210421
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+A governor is not related to a driver at all, it just tells how and
+when we are going to change the frequency, and cpufreq core uses the
+above callback to make that change.
 
-clang tested configs:
-x86_64               randconfig-a015-20210421
-x86_64               randconfig-a016-20210421
-x86_64               randconfig-a011-20210421
-x86_64               randconfig-a014-20210421
-x86_64               randconfig-a013-20210421
-x86_64               randconfig-a012-20210421
+> 2) which governor to use is this written in the driver code ?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Again, governor doesn't have anything to do with the driver.
+
+> How i should verify which policy driver is using ?
+
+All the policies are used at the same time, as each CPU needs to be
+controlled by a policy..
+
+>    i was going through
+>    gpio-brcmstb.c and i was not able to see anything about cpufreq
+>    scaling.
+
+-- 
+viresh
