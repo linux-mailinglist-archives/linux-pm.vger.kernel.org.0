@@ -2,139 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC484368644
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 19:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE4836867E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 20:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbhDVR6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Apr 2021 13:58:10 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36262 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236659AbhDVR6J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 13:58:09 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13MHkC1o108848;
-        Thu, 22 Apr 2021 13:57:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=GfDPIACN+TCttSpk/qJulkS2QmvtdXvKz2PlMyrnU08=;
- b=iq6hqZOOQh/ocNlqwD26jhgjD99ZsRwn/qyr3fa8TtLtC5LlK3r/rU+1nkx6k5C4TIKq
- 2UpuM3Jx7Y/a0SN8GUjsLCe5alqEK+PYCpR0YoAnt+GwlOVtNPD156OGCx136Za7xisG
- ViLo5YbbOgxW2hs4WRxs2tLe9v4d482R18tU0ak2pPy8WgXbfggQZLW95/YJ8D1XRcan
- kCgizuUsbiFdrWz8D2ASvf1ENbvws1S+hP4igJMxYvkasgUPg/Ngsqc5XCqbAPLU7e5Y
- 3NwHHG+VT2MKEr7C6KKOb8J1E5/kjTe8q0JeVWYPsZIX+Z8CO9D7PdGRE+EwJrTv8mC0 bQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 383at7pufv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Apr 2021 13:57:22 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13MHvJwG002236;
-        Thu, 22 Apr 2021 17:57:19 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 37yqa89npg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Apr 2021 17:57:19 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13MHvGTJ24904036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Apr 2021 17:57:16 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16071A405B;
-        Thu, 22 Apr 2021 17:57:16 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30DD0A4054;
-        Thu, 22 Apr 2021 17:57:14 +0000 (GMT)
-Received: from drishya.in.ibm.com (unknown [9.85.93.19])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 22 Apr 2021 17:57:13 +0000 (GMT)
-Date:   Thu, 22 Apr 2021 23:27:11 +0530
-From:   Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-To:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org,
-        joedecke@de.ibm.com
-Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
- onwards
-Message-ID: <YIG49/JrwnymvBPA@drishya.in.ibm.com>
-Reply-To: svaidy@linux.ibm.com
-References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+        id S238429AbhDVSVm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Apr 2021 14:21:42 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:37636 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236773AbhDVSVl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Apr 2021 14:21:41 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1lZdwh-00021a-Lc; Thu, 22 Apr 2021 20:20:59 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Ezequiel Garcia <ezequiel@collabora.com>, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Johan Jonker <jbx6244@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
+Subject: Re: [PATCH 1/2] dt-bindings: rockchip-thermal: Support the RK3568 SoC compatible
+Date:   Thu, 22 Apr 2021 20:20:58 +0200
+Message-ID: <4689477.1oUyQt6lIG@diego>
+In-Reply-To: <31c2e531-96d0-a1c1-644c-28c60eb40cf4@gmail.com>
+References: <20210421200445.32977-1-ezequiel@collabora.com> <bf0771cec69e11bf4622421a3aa8f2092da42429.camel@collabora.com> <31c2e531-96d0-a1c1-644c-28c60eb40cf4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eNjEwf63sXkzH8padMet4pAJwdfKu_Fr
-X-Proofpoint-GUID: eNjEwf63sXkzH8padMet4pAJwdfKu_Fr
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-22_12:2021-04-22,2021-04-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- suspectscore=0 priorityscore=1501 adultscore=0 clxscore=1011 phishscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104220132
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Gautham R Shenoy <ego@linux.vnet.ibm.com> [2021-04-22 20:37:29]:
+Hi,
 
-> From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Am Donnerstag, 22. April 2021, 00:12:45 CEST schrieb Johan Jonker:
+> On 4/21/21 11:56 PM, Ezequiel Garcia wrote:
+> > On Wed, 2021-04-21 at 23:25 +0200, Johan Jonker wrote:
+> >> On 4/21/21 11:06 PM, Ezequiel Garcia wrote:
+> >>> On Wed, 2021-04-21 at 22:46 +0200, Johan Jonker wrote:
+> >>>> On 4/21/21 10:04 PM, Ezequiel Garcia wrote:
+> >>>>> Add a new compatible for the thermal sensor device on RK3568 SoCs.
+> >>>>>
+> >>>>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/thermal/rockchip-thermal.txt | 1 +
+> >>>>>  1 file changed, 1 insertion(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt b/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> >>>>> index 7f94669e9ebe..346e466c2006 100644
+> >>>>> --- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> >>>>> +++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> >>>>> @@ -9,6 +9,7 @@ Required properties:
+> >>>>>     "rockchip,rk3328-tsadc": found on RK3328 SoCs
+> >>>>>     "rockchip,rk3368-tsadc": found on RK3368 SoCs
+> >>>>>     "rockchip,rk3399-tsadc": found on RK3399 SoCs
+> >>>>
+> >>>>> +   "rockchip,rk3568-tsadc": found on RK3568 SoCs
+> >>>>
+> >>>> This is still a text document.
+> >>>> rob+dt has now scripts that check for undocumented compatibility
+> >>>> strings, so first convert rockchip-thermal.txt to YAML and then add this
+> >>>> in a separated patch.
+> >>>>
+> >>>
+> >>> Is it a showstopper to convert devicetree bindings to YAML for driver submission?
+> >>
+> >> You now that hardware best, so try to fix the documents as well.
+> > 
+> > Well, not really. I'm just forward porting the driver from downstream kernels,
+> > so we can support this new SoC. Not really a hardware _expert_ for all the
+> > devices I plan to be pushing.
+> > 
+> >> The new norm is YAML, so aim for that.
+> > 
+> > I am aware of that. In fact, at Collabora we encourage all the kernel
+> > developers to convert to YAML, if/when possible.
+> > 
+> >> Try to submit a complete package of YAML, driver (and dts nodes) for review.
+> > 
+> > The devicetree for RK3566 and RK3568 is under discussion, in fact it was submitted today.
+> > Rockhip is leading that, and doing a great job already :)
+> > 
+> > Meanwhile, I'd like to merge the small drivers (thermal, pmic, dwmac, io-domains and so on),
+> > so they are ready when the devicetree lands.
+> > 
 > 
-> Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> of the Extended CEDE states advertised by the platform
+> > Most if not all of these devices just need a new compatible string. It would really delay
+> > things if I aim to convert all those bindings docs to YAML first, so let's please avoid that...
+> > ... unless it's a new hard-rule that DT maintainers have agreed on.
 > 
-> On some of the POWER9 LPARs, the older firmwares advertise a very low
-> value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
-> measured value is 5us on an average. Due to the low advertised exit
-> latency, we are entering CEDE(0) more aggressively on such
-> platforms. While this helps achieve SMT folding faster, we pay the
-> penalty of having to send an IPI to wakeup the CPU when the target
-> residency is very short. This is showing up as a performance
-> regression on the newer kernels running on the LPARs with older
-> firmware.
-> 
-> Hence, set the exit latency of CEDE(0) based on the latency values
-> advertized by platform only from POWER10 onwards. The values
-> advertized on POWER10 platforms is more realistic and informed by the
-> latency measurements.
-> 
-> For platforms older than POWER10, retain the hardcoded value of exit
-> latency, which is 10us. Though this is higher than the measured
-> values, we would be erring on the side of caution.
-> 
-> Reported-by: Enrico Joedecke <joedecke@de.ibm.com>
-> Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> CEDE(0)")
-> Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+> Every driver group has it's own delay time, so better do it right in one
+> run.
+> Mostly people tend to 'forget' documentation and then someone else has
+> to clean up the mess. So I propose that the person that submits a new
+> driver also fixes the documentation. The norm is now YAML, so this serie
+> has more work then other, so be it. Others can help you with it if you ask.
 
-Reviewed-by: Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+personally I feel this approach being a bit too strict.
 
-> ---
->  drivers/cpuidle/cpuidle-pseries.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-> index a2b5c6f..7207467 100644
-> --- a/drivers/cpuidle/cpuidle-pseries.c
-> +++ b/drivers/cpuidle/cpuidle-pseries.c
-> @@ -419,7 +419,8 @@ static int pseries_idle_probe(void)
->  			cpuidle_state_table = shared_states;
->  			max_idle_state = ARRAY_SIZE(shared_states);
->  		} else {
-> -			fixup_cede0_latency();
-> +			if (pvr_version_is(PVR_POWER10))
-> +				fixup_cede0_latency();
->  			cpuidle_state_table = dedicated_states;
->  			max_idle_state = NR_DEDICATED_STATES;
->  		}
+While it is definitly cool to convert everything to a yaml base in a
+hopefully short time, being overly strict can also stiffle participation.
 
-Thanks for the fix.  We should have such safeguards or fallbacks while
-running on older platforms.  This fix is needed because of the
-unfortunate regression on some older platforms that we failed to
-notice while designing and testing the original feature.
+This is especially true if a series only adds a single compatible to an
+already existing binding. So depending on the time constraints of the
+contributor they might very well refrain from submitting another version.
 
---Vaidy
+In then end though, it's Rob's decision on how strict this conversion
+is to be taken.
+
+
+Heiko
+
+
 
