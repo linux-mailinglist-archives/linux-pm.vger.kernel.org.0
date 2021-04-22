@@ -2,114 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7E5367E9C
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 12:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA074367F2C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 13:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbhDVK1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Apr 2021 06:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S235782AbhDVLBo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Apr 2021 07:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235863AbhDVK0v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 06:26:51 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795B6C06138D
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 03:26:16 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id m9so31500949wrx.3
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 03:26:16 -0700 (PDT)
+        with ESMTP id S235634AbhDVLBn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 07:01:43 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB787C06174A
+        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 04:01:07 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so2514249pjb.1
+        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 04:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vLEMp8aF3tYBke1OWNpVeQPKV5uE710GQQXiqwBZMEk=;
-        b=XDsq1JSqsubc7Q0X8WPoswRGyaacKlZ55tdtNMTD9ehUzmluYy93XDlSk4sd9nirDM
-         xbe7f36m52VqCI4G2JH5MYcOCyngvmExTH72QqbbA+ChQE4Sha1jr30ic5uL1EJ9Nm6b
-         lzvbUFfYmZHr3JOe8aY4v/AUhS3A7fiSufUXsAZymcM/xRu7HPObOj/dULqedx//fEa4
-         wS4vLJDj2nZ2lbbxNj8OKc+zb9Idc+aQn65jRE2dQN+zNHI4AstJnGU8tJ4kXvlkuwYm
-         oZXuJIKFqvJEs+AodE2ZIXIxqVDZolktmFMRaT34NJLljmtlGJgsxwapPmkX3BJJv+qm
-         lvkQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=W4EbIdXWMDgjhWwKxrFIvhgTcjQEms7X5jvB0Ucl5Dg=;
+        b=d04XsJU/ljk5lNE/CwmgMVDZuM+BK0MlKxuS876qJV4YVbQIYpvyhTuyWulb8YB+77
+         pUYHOgRcKqMvDkhxh/vArz+jUThbOl6QyGQvN8APi9b9MA51CoLXM0N94c5pye8USEOg
+         GhXpiUQdrsM61vjy896IofW7id0cVsND7mT4Q2mah99G8i47dmP3B5OUrohyijS7wQjW
+         RDkWk4PEgqBBhWaH5UMmUOIlMGqfMLstgxr3P901fh60dUwcqCxU9s1/I3ZmLmkhhRvc
+         +TCh6IfyF769RZRzH+M8ZWnOVeNayI5di7KIKfPCKMbx/6uJSNqpB4MPVRwOuNmCBbb2
+         NK4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vLEMp8aF3tYBke1OWNpVeQPKV5uE710GQQXiqwBZMEk=;
-        b=Ny+YYfgFLHCl9ShyqULChyUijyaRO9Vz7t2SQyT286uKCYOEsF8q5rRzOOt8wkG6xF
-         TY0nXza7Pr3h77jMFvDav8lhsKB0kx+QcvjyTWhLOuiyV79U+75VOcHP4D0X5p0Ti3p3
-         ty2Kk17X3b+jLey/ga2EkuGI4hChYUaJLzFsUDVjKCKxbRUFkc/36bXRbkm05iJFPBkb
-         abwIabDC4TzNNlovOAAwxIaf8sCpcepwEw15j8xYslWSXeZ54SNsU4ZDXwgCMyaGKK1r
-         DC64eGskpHb/VqGx7JszuMVnx3Xuf3nRpcWz4kZhH5GaULPCpqCvGWkHtfSTFDa0KTCM
-         Stxw==
-X-Gm-Message-State: AOAM533zP9EbbYsjQmxavgDzF87HDdwQ84zqScNfgfkhR3RF6gKw2Pi5
-        Ddh6PPEBL20LgY89kVH+OKhtiA==
-X-Google-Smtp-Source: ABdhPJzqet+b3G/OqaI8TY71t835itdllLxYnmKuT8SeL9sDYPeuVHsklZpmIpg68EowvRePYoplYg==
-X-Received: by 2002:a5d:58fa:: with SMTP id f26mr3113044wrd.177.1619087175038;
-        Thu, 22 Apr 2021 03:26:15 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e88d:2580:c20:b786? ([2a01:e34:ed2f:f020:e88d:2580:c20:b786])
-        by smtp.googlemail.com with ESMTPSA id a72sm2584607wme.29.2021.04.22.03.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 03:26:14 -0700 (PDT)
-Subject: Re: [PATCH v3 3/3] thermal: create a helper __thermal_cdev_update()
- without a lock
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com
-References: <20210421174145.8213-1-lukasz.luba@arm.com>
- <20210421174145.8213-4-lukasz.luba@arm.com>
- <3d08d5cf-9e3b-ae26-cfd5-bf9a40d11643@linaro.org>
- <eafc2eb1-5b0f-61b9-b992-339a5a962fbd@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b6b27171-d43c-34d9-adac-20f4d7d21fc8@linaro.org>
-Date:   Thu, 22 Apr 2021 12:26:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=W4EbIdXWMDgjhWwKxrFIvhgTcjQEms7X5jvB0Ucl5Dg=;
+        b=DargvjxaLvfAH0QXUgJFP5C4vDmy1/4HofQlD/iQegbyiEF28AB+uiZ0i6wPaLZJWF
+         lgs93y/NFv48rMYPbosJ3xbQu3RKRpLcCLpi4EXbLeZ+fw7fpdPhzzrDiGCmDW7eWMTh
+         cf/IA1tnRN5940YPsVMqVtiyU6DK6has88jKkQmnXUR09fSuyrCNoxDCSqzSbhOQwVmS
+         dfZqNdugtMgYHgDkY2sAKI1NPaCXoqKYPamzHvQMYx8K1++CMX/qwcOhtneA2Cf9h5pQ
+         +EiowhzvrUOw8QrdNLCL9PoJm0nGThY4ggVpQ+Ci32KSJpXcIK8W9wra88tHAinCmUcK
+         JSXg==
+X-Gm-Message-State: AOAM5313faUDUxuBnyxqL/dxz/zQlseNqb3uoXGg0S7HaKaecfOEo6r9
+        wVGjOGYVCmshLdtk5N9+IoDlag==
+X-Google-Smtp-Source: ABdhPJx2X0lkyzoAVrOstwTGMJYDdcuNmuT+Kw3ZM28hhF6WJYtbAFQIbPOHyCO2wJEw4Fed9Mmhhw==
+X-Received: by 2002:a17:90a:352:: with SMTP id 18mr3231455pjf.223.1619089267299;
+        Thu, 22 Apr 2021 04:01:07 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u12sm5286310pji.45.2021.04.22.04.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Apr 2021 04:01:06 -0700 (PDT)
+Message-ID: <60815772.1c69fb81.61962.f3e1@mx.google.com>
+Date:   Thu, 22 Apr 2021 04:01:06 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <eafc2eb1-5b0f-61b9-b992-339a5a962fbd@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.12-rc8-166-ge5e331f4da127
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.12-rc8-166-ge5e331f4da127)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/04/2021 10:21, Lukasz Luba wrote:
-> 
-> 
-> On 4/22/21 8:58 AM, Daniel Lezcano wrote:
->> On 21/04/2021 19:41, Lukasz Luba wrote:
->>> There is a need to have a helper function which updates cooling device
->>> state from the governors code. With this change governor can use
->>> lock and unlock while calling helper function. This avoid unnecessary
->>> second time lock/unlock which was in previous solution present in
->>> governor implementation. This new helper function must be called
->>> with mutex 'cdev->lock' hold.
->>>
->>> The changed been discussed and part of code presented in thread:
->>> https://lore.kernel.org/linux-pm/20210419084536.25000-1-lukasz.luba@arm.com/
->>>
->>>
->>> Co-developed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>> ---
->>>   drivers/thermal/gov_power_allocator.c |  5 +----
->>>   drivers/thermal/thermal_core.h        |  1 +
->>>   drivers/thermal/thermal_helpers.c     | 28 +++++++++++++++++----------
->>
->> Why not add this patch first (without the ipa changes) and then replace
->> patch 2 by using the new function ? That will prevent to go back and
->> forth.
-> 
-> I thought that it would show also the motivation and usage in the
-> governor. I can had this patch as first in the set, but then I thought
-> about this example.
-> I can change it if you like in v4.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.12-rc8-166-ge=
+5e331f4da127)
 
-Yes, please. I think it is more logical.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+12-rc8-166-ge5e331f4da127/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.12-rc8-166-ge5e331f4da127
+Git Commit: e5e331f4da1273e7bdbc1afaf2a4fb5f7d98acf9
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Warnings summary:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
+mbol check will be entirely skipped.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
+check will be entirely skipped.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
