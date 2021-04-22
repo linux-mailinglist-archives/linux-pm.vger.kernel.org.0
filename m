@@ -2,196 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 679A43681D6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 15:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8A2368346
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 17:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbhDVNvE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Apr 2021 09:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbhDVNvD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 09:51:03 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD2C06138C
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 06:50:28 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id a4so44894341wrr.2
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 06:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oHHIrNwlKJzcfE+FQHO0ug1i1bvvW4iwkAqPABTWDx8=;
-        b=zM0XDyuSfWKqk8T2mOWATqJLBD9+YMYFOM50SXN/r8AChLMjV5otaPIEX3GoTpDd/6
-         /P8O3EyBFs3BnjevYogqHiA404amx6PnyXGOusV0IwoOyvBfVdt3cW3by0wyodERpQb9
-         0RYY0fhp3UYGR4mvofHhPyr9e9l9Wn+u7Ze9wzafF09BN0lLEH8WtALjQ6xF/mYvxHUG
-         zFXVyb91Ty7DC+k4Eo9Se025Zgbk23QACt58LWvRy/SR6Xr/2ej1v3Fr4QqfA19iaWuX
-         CAa2hgzpgaBFcOQ0gnPV9ZvNlV4COA0QiJOdeYks/HrT2Hd28JlAlLUhNv8sXkxI+v0n
-         bhvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oHHIrNwlKJzcfE+FQHO0ug1i1bvvW4iwkAqPABTWDx8=;
-        b=iYTsoI7S5l3JybhkOwTs9KHnNDYNrQa/1ZcBG1PhtcnuYH992BKBqkJKTawx0zLtwP
-         KFgQEvnJ5mfp9G5sFz8la/Zg2lzeoX2W1tt03GCiMPfTNmQwTpGb56dYhWBk81sqP9oE
-         F7qQ/s+F60beb5OmsnILWOP924R0vowRvHpC8GFJocadJWosdKoWaUteSIBrQ3j24Cci
-         iLxCFpo66sh1iKI6J15Su9T9vejxlOhFZ+BbST0thBgqYneRcsutsEw0I8AC2onfEzR+
-         D/XOAh0ShtaxYepJ9GtFU9nubJxYM07c5O9UTZyiG4k/Y/fB70WLOOrUM8jocbY31nr+
-         CqWQ==
-X-Gm-Message-State: AOAM530ElGEPWYh1B2KNqSM9Xn9UaoTsXYx6BR6mNvjol6irgufpOXW7
-        v2blbP4m5be2eNqDd4BQ4yO0KQ==
-X-Google-Smtp-Source: ABdhPJz25Rlr80wY378JDir9MgjKiQXY7Ns4Ol4LX7W8HILcAyeWDo+USHtF9Fp2Uoxukt/6AnIdNw==
-X-Received: by 2002:a5d:4251:: with SMTP id s17mr4298450wrr.174.1619099427307;
-        Thu, 22 Apr 2021 06:50:27 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e88d:2580:c20:b786? ([2a01:e34:ed2f:f020:e88d:2580:c20:b786])
-        by smtp.googlemail.com with ESMTPSA id h2sm3623846wmc.24.2021.04.22.06.50.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 06:50:26 -0700 (PDT)
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIIHYzXSB0aGVybWFsOiB0aS1zb2MtdGhl?=
- =?UTF-8?Q?rmal=3a_Remove_unused_variable_=27val=27?=
-To:     linruizhe <linruizhe@huawei.com>, Tony Lindgren <tony@atomide.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "j-keerthy@ti.com" <j-keerthy@ti.com>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "eballetbo@gmail.com" <eballetbo@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210421084256.57591-1-linruizhe@huawei.com>
- <YH/nK6xshH+lW7e0@kroah.com>
- <8e66040e-4330-d4f0-afbb-8cae62a5082e@linaro.org>
- <YH/yQ5Hd+30DH4p/@atomide.com>
- <3116672d-4ff3-a065-f76c-1ae820e1ff95@linaro.org>
- <7871516e6f824f35929c4ed87cbc08c4@huawei.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c7d67490-06cd-f15a-3972-3db4d5812a69@linaro.org>
-Date:   Thu, 22 Apr 2021 15:50:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <7871516e6f824f35929c4ed87cbc08c4@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S237441AbhDVP1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Apr 2021 11:27:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53628 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236459AbhDVP1N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 11:27:13 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13MFJKNZ074998;
+        Thu, 22 Apr 2021 11:26:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=yKJ2+PqDzOEUpqjEsmvdovopMFWQRYr3+kfeNLKRfk4=;
+ b=tqlDcIg1qcbjg0hii3S4pzMMc03SMnMRRDh2qx3ypkmPYoYowfKnJjA0o7pUHmKXdki5
+ xuvFupy8N2XMKNxbShrmUPjDOHGMU9Gcq/bCi3T4KTHWLN4TvOZCEHGbTnegimB1w+2+
+ eGe/CkSl2LZzmjj+fSNHDg11mNzhn2fBB8a2Ae24BRt3iqO2pm42DrGBtYEDVKvSJMPq
+ n57xyXqKk+CK7uYEPW6ue1gIsq6BPTpVJCB9mN4Kk4jupAckJ6po+moapYx42g2Xk45D
+ o1utkLRD+6+dSB3NSUqcBQATw9Tmuw35FjiFPjfoMlI5g5WTaDPO9ugd7YVT3BWkunN3 cg== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3838by02ep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Apr 2021 11:26:24 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13MF2eOB029908;
+        Thu, 22 Apr 2021 15:26:24 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04wdc.us.ibm.com with ESMTP id 3813tb3a0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Apr 2021 15:26:24 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13MFQNFm35455404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Apr 2021 15:26:23 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9FBC6AC05F;
+        Thu, 22 Apr 2021 15:26:23 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 458E1AC05B;
+        Thu, 22 Apr 2021 15:26:23 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.85.68.114])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Apr 2021 15:26:23 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 4805E2E2EE0; Thu, 22 Apr 2021 20:37:44 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org,
+        joedecke@de.ibm.com, "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Subject: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10 onwards
+Date:   Thu, 22 Apr 2021 20:37:29 +0530
+Message-Id: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WKU2eVXCss5iPN0ei4XY1NBuKM0NE3_s
+X-Proofpoint-ORIG-GUID: WKU2eVXCss5iPN0ei4XY1NBuKM0NE3_s
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-22_06:2021-04-22,2021-04-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1011 spamscore=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104220120
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-Hi Lin,
+Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+of the Extended CEDE states advertised by the platform
 
+On some of the POWER9 LPARs, the older firmwares advertise a very low
+value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+measured value is 5us on an average. Due to the low advertised exit
+latency, we are entering CEDE(0) more aggressively on such
+platforms. While this helps achieve SMT folding faster, we pay the
+penalty of having to send an IPI to wakeup the CPU when the target
+residency is very short. This is showing up as a performance
+regression on the newer kernels running on the LPARs with older
+firmware.
 
-On 22/04/2021 14:39, linruizhe wrote:
-> Hi Daniel,
-> 
-> Do I need to make more changes to this patch?
+Hence, set the exit latency of CEDE(0) based on the latency values
+advertized by platform only from POWER10 onwards. The values
+advertized on POWER10 platforms is more realistic and informed by the
+latency measurements.
 
-No, it is fine. I've applied it.
+For platforms older than POWER10, retain the hardcoded value of exit
+latency, which is 10us. Though this is higher than the measured
+values, we would be erring on the side of caution.
 
-Thanks
+Reported-by: Enrico Joedecke <joedecke@de.ibm.com>
+Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)")
+Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+---
+ drivers/cpuidle/cpuidle-pseries.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-  -- Daniel
-
-
-> Thanks
->  
->   -Lin Ruizhe
-> 
-> -----邮件原件-----
-> 发件人: Daniel Lezcano [mailto:daniel.lezcano@linaro.org] 
-> 发送时间: 2021年4月21日 19:37
-> 收件人: Tony Lindgren <tony@atomide.com>
-> 抄送: Greg KH <gregkh@linuxfoundation.org>; linruizhe <linruizhe@huawei.com>; rui.zhang@intel.com; edubezval@gmail.com; j-keerthy@ti.com; amitk@kernel.org; eballetbo@gmail.com; linux-pm@vger.kernel.org; linux-omap@vger.kernel.org; linux-kernel@vger.kernel.org
-> 主题: Re: [PATCH v3] thermal: ti-soc-thermal: Remove unused variable 'val'
-> 
-> 
-> Hi Tony,
-> 
-> thanks for testing
-> 
->   -- Daniel
-> 
-> On 21/04/2021 11:37, Tony Lindgren wrote:
->> * Daniel Lezcano <daniel.lezcano@linaro.org> [210421 09:07]:
->>> On 21/04/2021 10:49, Greg KH wrote:
->>>> On Wed, Apr 21, 2021 at 04:42:56PM +0800, Lin Ruizhe wrote:
->>>>> The variable 'val'in function ti_bandgap_restore_ctxt is the 
->>>>> register value of read bandgap registers. This function is to 
->>>>> restore the context. But there is no operation on the return value 
->>>>> of this register, so this block is redundant. Hulk robot scans this 
->>>>> warning.This commit remove the dead code.
->>>>>
->>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
->>>>> Fixes: b87ea759a4cc ("staging: omap-thermal: fix context restore 
->>>>> function")
->>>>> Signed-off-by: Lin Ruizhe <linruizhe@huawei.com>
->>>>> ---
->>>>> v3:
->>>>> -Add Fixes tag and more accurate commit message in this patch.
->>>>> v2:
->>>>> -As suggest remove the whole unuesed block in fuction  
->>>>> ti_bandgap_restore_ctxt
->>>>>
->>>>>  drivers/thermal/ti-soc-thermal/ti-bandgap.c | 4 ----
->>>>>  1 file changed, 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c 
->>>>> b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->>>>> index d81af89166d2..684ffb645aa9 100644
->>>>> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->>>>> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->>>>> @@ -1142,14 +1142,10 @@ static int ti_bandgap_restore_ctxt(struct ti_bandgap *bgp)
->>>>>  	for (i = 0; i < bgp->conf->sensor_count; i++) {
->>>>>  		struct temp_sensor_registers *tsr;
->>>>>  		struct temp_sensor_regval *rval;
->>>>> -		u32 val = 0;
->>>>>  
->>>>>  		rval = &bgp->regval[i];
->>>>>  		tsr = bgp->conf->sensors[i].registers;
->>>>>  
->>>>> -		if (TI_BANDGAP_HAS(bgp, COUNTER))
->>>>> -			val = ti_bandgap_readl(bgp, tsr->bgap_counter);
->>>>
->>>> Are you sure that this hardware does not require this read to happen 
->>>> in order for it to work properly?
->>>
->>> Yes, initially we had the same concern but we were unable to find 
->>> anything specific in the history. The commit mentioned above removed 
->>> the user of the 'val' code but without removing this block of code.
->>>
->>> When looking at the current code, it really looks like an oversight.
->>
->> Yes so it seems.
->>
->>> There is nothing in the commit's changelog referring to a need of 
->>> reading the counter register but perhaps I'm wrong because I'm not 
->>> sure to understand correctly the changelog.
->>>
->>>> Lots of hardware does need this, have you tested this?
->>
->> I just tested this on omap3 logicpd torpedo devkit that can do off 
->> during idle and reading /sys/class/thermal/thermal_zone0/temp works. 
->> So feel free to add:
->>
->> Reviewed-by: Tony Lindgren <tony@atomide.com>
->> Tested-by: Tony Lindgren <tony@atomide.com>
-> 
-> Thanks for testing
-> 
-> 
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook | <http://twitter.com/#!/linaroorg> Twitter | <http://www.linaro.org/linaro-blog/> Blog
-> 
-
-
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index a2b5c6f..7207467 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -419,7 +419,8 @@ static int pseries_idle_probe(void)
+ 			cpuidle_state_table = shared_states;
+ 			max_idle_state = ARRAY_SIZE(shared_states);
+ 		} else {
+-			fixup_cede0_latency();
++			if (pvr_version_is(PVR_POWER10))
++				fixup_cede0_latency();
+ 			cpuidle_state_table = dedicated_states;
+ 			max_idle_state = NR_DEDICATED_STATES;
+ 		}
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+1.9.4
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
