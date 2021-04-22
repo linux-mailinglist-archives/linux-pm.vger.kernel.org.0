@@ -2,79 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5096736862B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 19:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC484368644
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Apr 2021 19:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbhDVRpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Apr 2021 13:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbhDVRpo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 13:45:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47587C06138C
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 10:45:07 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id g16so7047554plq.3
-        for <linux-pm@vger.kernel.org>; Thu, 22 Apr 2021 10:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a/ccmlK2SC2bFrmvJC8izkh8L57aGgHSLoN7bzusakc=;
-        b=XBThIrflRQA3fgbEWX8gOjDQIuHreDNWe3wFiwgDIEWqE846XRJL+Amq1Wqsu+BUVP
-         dllJKnRrsSYGsSQR7TLehlrcw1PeqX73rVmr66wC7bXwXkuHP2SUfviOg4RisDHxPEUb
-         ffgqf7oc0PCVSEDXQ/BLKsfVlvnktjo1sMQJE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a/ccmlK2SC2bFrmvJC8izkh8L57aGgHSLoN7bzusakc=;
-        b=gQvAJOhJ5kGkntGZ3iD67fEcAgMxIczlxuLIze1ePjurNIl5qyw86DKMB73OEzNXB7
-         h5rmsVSkT7DBgeMNj9Xzw/t5eFggUIxW9noGeSvgaLYru6+fkgYAG+PS2MbGEOycROPT
-         Fix+a32C5JnWJeBDiWDagmZ9C1ndJ1pobCb7kg+G02EQ4tBW3ps1srCVUw9EZN1ALyqS
-         y0dwoWjrFgMb77R5Fw/x1ufluD1I7gxYzZ+LlG3lPiAFiTI8e2F1P79C83Q8gfXPEArj
-         Up+QdntahUeQLYkXjBcCdsG0FKF71wgbWXpyFc+G8TeEXEotPAuPVpDaIfI55MfuX2k7
-         ZGRA==
-X-Gm-Message-State: AOAM533r3AZUNkOfN2EQ/ao+hAappTW3mWwoT76f9ucLW8rCTG4sSodb
-        fD7goIADVkqZZCLFOh/IBKUftQ==
-X-Google-Smtp-Source: ABdhPJzBjWu8RWw2bEU+LvfjTh9NYw4eIo6vp5pvYVW7q6jfIzHVgRHbByOj8TQ64v427KWpqBDA6Q==
-X-Received: by 2002:a17:902:ce85:b029:eb:46e1:2da2 with SMTP id f5-20020a170902ce85b02900eb46e12da2mr2687plg.38.1619113506760;
-        Thu, 22 Apr 2021 10:45:06 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:acff:4f9f:d039:23ff])
-        by smtp.gmail.com with UTF8SMTPSA id i18sm2640082pfq.59.2021.04.22.10.45.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 10:45:06 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 10:45:05 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajeshwari <rkambl@codeaurora.org>
-Cc:     amitk@kernel.org, thara.gopinath@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sanm@codeaurora.org
-Subject: Re: [PATCH V1 2/2] dt-bindings: thermal: tsens: Add configuration in
- yaml
-Message-ID: <YIG2IckKRBHqzpu3@google.com>
-References: <1619005442-16485-1-git-send-email-rkambl@codeaurora.org>
- <1619005442-16485-3-git-send-email-rkambl@codeaurora.org>
+        id S236832AbhDVR6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Apr 2021 13:58:10 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36262 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236659AbhDVR6J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Apr 2021 13:58:09 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13MHkC1o108848;
+        Thu, 22 Apr 2021 13:57:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=GfDPIACN+TCttSpk/qJulkS2QmvtdXvKz2PlMyrnU08=;
+ b=iq6hqZOOQh/ocNlqwD26jhgjD99ZsRwn/qyr3fa8TtLtC5LlK3r/rU+1nkx6k5C4TIKq
+ 2UpuM3Jx7Y/a0SN8GUjsLCe5alqEK+PYCpR0YoAnt+GwlOVtNPD156OGCx136Za7xisG
+ ViLo5YbbOgxW2hs4WRxs2tLe9v4d482R18tU0ak2pPy8WgXbfggQZLW95/YJ8D1XRcan
+ kCgizuUsbiFdrWz8D2ASvf1ENbvws1S+hP4igJMxYvkasgUPg/Ngsqc5XCqbAPLU7e5Y
+ 3NwHHG+VT2MKEr7C6KKOb8J1E5/kjTe8q0JeVWYPsZIX+Z8CO9D7PdGRE+EwJrTv8mC0 bQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 383at7pufv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Apr 2021 13:57:22 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13MHvJwG002236;
+        Thu, 22 Apr 2021 17:57:19 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 37yqa89npg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Apr 2021 17:57:19 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13MHvGTJ24904036
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Apr 2021 17:57:16 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16071A405B;
+        Thu, 22 Apr 2021 17:57:16 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30DD0A4054;
+        Thu, 22 Apr 2021 17:57:14 +0000 (GMT)
+Received: from drishya.in.ibm.com (unknown [9.85.93.19])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 22 Apr 2021 17:57:13 +0000 (GMT)
+Date:   Thu, 22 Apr 2021 23:27:11 +0530
+From:   Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+To:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org,
+        joedecke@de.ibm.com
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <YIG49/JrwnymvBPA@drishya.in.ibm.com>
+Reply-To: svaidy@linux.ibm.com
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1619005442-16485-3-git-send-email-rkambl@codeaurora.org>
+In-Reply-To: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: eNjEwf63sXkzH8padMet4pAJwdfKu_Fr
+X-Proofpoint-GUID: eNjEwf63sXkzH8padMet4pAJwdfKu_Fr
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-22_12:2021-04-22,2021-04-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 adultscore=0 clxscore=1011 phishscore=0
+ spamscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104220132
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 21, 2021 at 05:14:02PM +0530, Rajeshwari wrote:
+* Gautham R Shenoy <ego@linux.vnet.ibm.com> [2021-04-22 20:37:29]:
 
-> Subject: dt-bindings: thermal: tsens: Add configuration in yaml
+> From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> 
+> Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> of the Extended CEDE states advertised by the platform
+> 
+> On some of the POWER9 LPARs, the older firmwares advertise a very low
+> value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+> measured value is 5us on an average. Due to the low advertised exit
+> latency, we are entering CEDE(0) more aggressively on such
+> platforms. While this helps achieve SMT folding faster, we pay the
+> penalty of having to send an IPI to wakeup the CPU when the target
+> residency is very short. This is showing up as a performance
+> regression on the newer kernels running on the LPARs with older
+> firmware.
+> 
+> Hence, set the exit latency of CEDE(0) based on the latency values
+> advertized by platform only from POWER10 onwards. The values
+> advertized on POWER10 platforms is more realistic and informed by the
+> latency measurements.
+> 
+> For platforms older than POWER10, retain the hardcoded value of exit
+> latency, which is 10us. Though this is higher than the measured
+> values, we would be erring on the side of caution.
+> 
+> Reported-by: Enrico Joedecke <joedecke@de.ibm.com>
+> Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> CEDE(0)")
+> Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
 
-This subject isn't really useful. The fact that the format of the
-binding is yaml is irrelevant here. What is important is that you
-are adding the compatible string for the SC7280 to the TSENS
-binding. This should be reflected in the subject.
+Reviewed-by: Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
 
-Also this is patch [2/2] and patch [1/2] adds DT entries with the new
-compatible string. The binding should be defined before adding new
-entries, hence the order of the patches should be inversed.
+> ---
+>  drivers/cpuidle/cpuidle-pseries.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+> index a2b5c6f..7207467 100644
+> --- a/drivers/cpuidle/cpuidle-pseries.c
+> +++ b/drivers/cpuidle/cpuidle-pseries.c
+> @@ -419,7 +419,8 @@ static int pseries_idle_probe(void)
+>  			cpuidle_state_table = shared_states;
+>  			max_idle_state = ARRAY_SIZE(shared_states);
+>  		} else {
+> -			fixup_cede0_latency();
+> +			if (pvr_version_is(PVR_POWER10))
+> +				fixup_cede0_latency();
+>  			cpuidle_state_table = dedicated_states;
+>  			max_idle_state = NR_DEDICATED_STATES;
+>  		}
+
+Thanks for the fix.  We should have such safeguards or fallbacks while
+running on older platforms.  This fix is needed because of the
+unfortunate regression on some older platforms that we failed to
+notice while designing and testing the original feature.
+
+--Vaidy
+
