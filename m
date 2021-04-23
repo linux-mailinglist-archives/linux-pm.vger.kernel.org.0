@@ -2,77 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E573698A0
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 19:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C749B369949
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 20:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbhDWRpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 13:45:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48372 "EHLO mx2.suse.de"
+        id S231728AbhDWSWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 14:22:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231400AbhDWRpp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Apr 2021 13:45:45 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F2562B19B;
-        Fri, 23 Apr 2021 17:45:07 +0000 (UTC)
-Date:   Fri, 23 Apr 2021 19:45:05 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
- onwards
-Message-ID: <20210423174505.GE6564@kitsune.suse.cz>
-References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
- <20210423073551.GZ6564@kitsune.suse.cz>
- <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+        id S243555AbhDWSWp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Apr 2021 14:22:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F90D6144D;
+        Fri, 23 Apr 2021 18:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619202128;
+        bh=WAdxlQGbugIz8yOmDLwAmcT5y8V9JXDkna8OjiDows4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qKD0GwbREW9E6GvZk+Hp9L5bLoqeLQx/MVgNcaoxEq6rfGcsrEFz3cwD4AE7M168m
+         Pyc/VZY9lqIa0+LTVtq4OKM/tKo7ZQhjlZbYzpLEGGJ4TUO6e1BLc2JeAhLJllKkMZ
+         nIJ0F601OVFCvC73tA89K0tVdjrFuYT0t8Y8s7SCqWowoe8Uk/b2z904QGxlA8ySJD
+         +a9OXZItKyciwLZTRIWOxxdBKkhyP0WAEf5vtJFNX8lY++aIBlbPXVF1coUiIn9F4c
+         eWG2vHZocJPuL04o9USW4zv5wRg7mQcsRzAZ+Nt24eH5i+l1TGMKYsZX2EFFTtLFVl
+         sfmAeg0WPBDBQ==
+Message-ID: <528ab89224ba27f6164135a8ac00a828e7113805.camel@kernel.org>
+Subject: Re: [PATCH 1/2] clk: Do not register provider with a NULL
+ dev->of_node
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Saravana Kannan <saravanak@google.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, maxime@cerno.tech,
+        gregkh@linuxfoundation.org, rafael@kernel.org, khilman@kernel.org,
+        ulf.hansson@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        robh+dt@kernel.org, frowand.list@gmail.com, maz@kernel.org,
+        tglx@linutronix.de, geert@linux-m68k.org, nsaenzjulienne@suse.de,
+        linux@roeck-us.net, guillaume.tucker@collabora.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, nicolas.ferre@microchip.com,
+        claudiu.beznea@microchip.com, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, kernel-team@android.com,
+        linux-rpi-kernel@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Date:   Fri, 23 Apr 2021 20:21:59 +0200
+In-Reply-To: <CAGETcx-81hPTW_EVexMWaxGSOknuK-zESqKdiuQvye=n3TaHkA@mail.gmail.com>
+References: <20210423171335.262316-1-tudor.ambarus@microchip.com>
+         <20210423171335.262316-2-tudor.ambarus@microchip.com>
+         <CAGETcx-81hPTW_EVexMWaxGSOknuK-zESqKdiuQvye=n3TaHkA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0 (3.40.0-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YILu6/GK+RwpskCc@drishya.in.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
-> * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
+Hi Saravana, Tudor,
+
+On Fri, 2021-04-23 at 10:24 -0700, Saravana Kannan wrote:
+> On Fri, Apr 23, 2021 at 10:14 AM Tudor Ambarus
+> <tudor.ambarus@microchip.com> wrote:
+> > 
+> > commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> > revealed that clk/bcm/clk-raspberrypi.c driver calls
+> > devm_of_clk_add_hw_provider(), with a NULL dev->of_node.
+> > 
+> > devm_of_clk_add_hw_provider() should not register the provider with
+> > a NULL dev->of_node, as there is no of_node. Apart of the NULL pointer
+> > dereference that will result when calling fwnode_dev_initialized() in
+> > of_clk_add_hw_provider(), another problem is that when two drivers calling
+> > of_clk_add_hw_provider() with np = NULL, their unregistration order is not
+> > guaranteed to be correct. Avoid all the problems and just return -ENODEV
+> > when the callers of devm_of_clk_add_hw_provider() use a NULL dev->of_node,
+> > which seems the natural way to do.
+> > 
+> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> > Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> > ---
+> >  drivers/clk/clk.c | 12 +++++++-----
+> >  1 file changed, 7 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > index e2ec1b745243..8b5077cc5e67 100644
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -4634,11 +4634,10 @@ static struct device_node *get_clk_provider_node(struct device *dev)
+> >   * @get: callback for decoding clk_hw
+> >   * @data: context pointer for @get callback
+> >   *
+> > - * Registers clock provider for given device's node. If the device has no DT
+> > - * node or if the device node lacks of clock provider information (#clock-cells)
+> > - * then the parent device's node is scanned for this information. If parent node
+> > - * has the #clock-cells then it is used in registration. Provider is
+> > - * automatically released at device exit.
+> > + * Registers clock provider for given device's node. If the device node lacks
+> > + * of clock provider information (#clock-cells) then the parent device's node is
+> > + * scanned for this information. If parent node has the #clock-cells then it is
+> > + * used in registration. Provider is automatically released at device exit.
+> >   *
+> >   * Return: 0 on success or an errno on failure.
+> >   */
+> > @@ -4650,6 +4649,9 @@ int devm_of_clk_add_hw_provider(struct device *dev,
+> >         struct device_node **ptr, *np;
+> >         int ret;
+> > 
+> > +       if (!dev->of_node)
+> > +               return -ENODEV;
+> > +
 > 
-> > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
-> > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> > > 
-> > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> > > of the Extended CEDE states advertised by the platform
-> > > 
-> > > On some of the POWER9 LPARs, the older firmwares advertise a very low
-> > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
-> > Can you be more specific about 'older firmwares'?
-> 
-> Hi Michal,
-> 
-> This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
-> key idea behind the original patch was to make the H_CEDE latency and
-> hence target residency come from firmware instead of being decided by
-> the kernel.  The advantage is such that, different type of systems in
-> POWER10 generation can adjust this value and have an optimal H_CEDE
-> entry criteria which balances good single thread performance and
-> wakeup latency.  Further we can have additional H_CEDE state to feed
-> into the cpuidle.  
+> Based on the other discussions, for now, just return 0. The error
+> might cause other issues in other drivers. We can clean this up later.
 
-So all POWER9 machines are affected by the firmware bug where firmware
-reports CEDE1 exit latency of 2us and the real latency is 5us which
-causes the kernel to prefer CEDE1 too much when relying on the values
-supplied by the firmware. It is not about 'older firmware'.
++1, Let's return 0 and do nothing skip the logic in the driver.
 
-I still think it would be preferrable to adjust the latency value
-reported by the firmware to match reality over a kernel workaround.
+Now, from what I read in devm_of_clk_add_hw_provider(), there is a use case for
+entering with '!dev->of_node'. See get_clk_provider_node()'s usage. So I think
+we should only bail if that function fails to provide a device_node.
 
-Thanks
+Regards,
+Nicolas
 
-Michal
+
