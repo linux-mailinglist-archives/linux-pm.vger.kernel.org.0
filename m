@@ -2,160 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FCA369692
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 18:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635F7369810
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 19:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243310AbhDWQAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 12:00:47 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40154 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243278AbhDWQAm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 12:00:42 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NFXiCf074326;
-        Fri, 23 Apr 2021 11:59:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=YN4MaMne+t2iBBy9ri4SqOYm8FYZRv3XIWLdKanHvXE=;
- b=TVK1sPzD5wYrfHET8Q16xqaLx+zgYuay8y4ZMxz19ScyLe4ZScPDMHV/UxYpYbyVHryQ
- xzcLW+QZnaNz1lSLqRvKK3MbyArsTtLhytN0Gc340oLIoVzm2ytVXeI3lIkuAfp+3sF9
- ZYXu/GBhEjUSvxKlvsoEmjKcnBQogRNVYn9fO8T6jhIEb/We07cOdfFA7idPsPRe4zwk
- hFc2Y0l3m9Pu82/8nHuQOfgcjaH+Pi6gatqQlCNN+eSa0WHSga+tR0nZXQMZ0MXOx04C
- 7oZ1DGAARsjN+NlNB3snMlbgyHr8Zh/2vOf6l5rVQBZapCjWDXH+iFZlC5L5/fo2Kbrm lA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 383yemc9ag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Apr 2021 11:59:48 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13NFrFLh030597;
-        Fri, 23 Apr 2021 15:59:46 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 37yqa89wyk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Apr 2021 15:59:46 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13NFxh7126607984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Apr 2021 15:59:43 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88368AE045;
-        Fri, 23 Apr 2021 15:59:43 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE9A0AE04D;
-        Fri, 23 Apr 2021 15:59:41 +0000 (GMT)
-Received: from drishya.in.ibm.com (unknown [9.199.57.164])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 23 Apr 2021 15:59:41 +0000 (GMT)
-Date:   Fri, 23 Apr 2021 21:29:39 +0530
-From:   Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-To:     Michal Such?nek <msuchanek@suse.de>
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
- onwards
-Message-ID: <YILu6/GK+RwpskCc@drishya.in.ibm.com>
-Reply-To: svaidy@linux.ibm.com
-References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
- <20210423073551.GZ6564@kitsune.suse.cz>
+        id S232057AbhDWROZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 13:14:25 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:11197 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhDWROY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 13:14:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1619198028; x=1650734028;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pboT/kDc5xJQjQGNQQF1NQ1YOHf2UntvUl8huRCydEo=;
+  b=qkzrAXItW9X8+wnjMZMmTxxi94hZ8HdU7kSsGQ+t99pwhLSN+GXxDE5e
+   3ArojBLJOP8pau9x/ogStLmhzCw6Mqj3Dc6cnhSEy/KNeXCg/AwEqIA5N
+   jSvzSi4u5r7ZeWXZbA0gxfG2yBPf+JkyAZgabqpF+y3qLDnWSr2i+P0fu
+   eBoacoXXIPtZ7Ij1E32CRdmwgD525QjPMdXH+91+9VSygCM1O52nKzotw
+   0ZoG87z9/y+0H9mW6CS+hSRWQzCcvDqslyXKqfgYn/rj55ChUqSMv1uJd
+   YMak+PKg7efzBWzgzYB0F5xfkPbzkQ2Kv52SfKDN4S29TzvrxvwMmu+Fx
+   g==;
+IronPort-SDR: QqzZ8qBGFZVNzXyKqIC9SolqTBwxHE8E3gmN07EDLb+TLUNsg/jDFszieIv4XL5DhA4rm3Ue9u
+ nKQuhXNtqZhQzt5bTJ0bKAgezs8kucDN/+HOSHxSoV2UFM1Az9m1ToVCnftynFaW3WW8QQMm9i
+ sB/NyrEW9N1o+xU+1slBupMXhu4Ru6KhXhGrsZ/6lGYOOCc2rcpG2nYl2tpE65N8zXSrH+6xs9
+ yCPdmFHDHQe2o4Xd1SdelwgJA8pVSq6xWY1SN6i42BlNQ8DSDAqv3bLfVioCV/IVIVxi9hZYQp
+ K9s=
+X-IronPort-AV: E=Sophos;i="5.82,246,1613458800"; 
+   d="scan'208";a="52301924"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Apr 2021 10:13:46 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 23 Apr 2021 10:13:44 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Fri, 23 Apr 2021 10:13:37 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <nsaenz@kernel.org>,
+        <maxime@cerno.tech>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <khilman@kernel.org>,
+        <ulf.hansson@linaro.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <robh+dt@kernel.org>, <frowand.list@gmail.com>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <saravanak@google.com>,
+        <geert@linux-m68k.org>, <nsaenzjulienne@suse.de>,
+        <linux@roeck-us.net>, <guillaume.tucker@collabora.com>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <corbet@lwn.net>, <nicolas.ferre@microchip.com>,
+        <claudiu.beznea@microchip.com>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <kernel-team@android.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH 0/2] clk: Do not register provider with a NULL dev->of_node 
+Date:   Fri, 23 Apr 2021 20:13:32 +0300
+Message-ID: <20210423171335.262316-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20210423073551.GZ6564@kitsune.suse.cz>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oATxFiE923wyNw6jy8w07RzUPHm1xTTp
-X-Proofpoint-GUID: oATxFiE923wyNw6jy8w07RzUPHm1xTTp
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- clxscore=1011 suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104230100
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
+This fixes a NULL pointer dereference that was revealed by
+commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
 
-> On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
-> > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> > 
-> > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> > of the Extended CEDE states advertised by the platform
-> > 
-> > On some of the POWER9 LPARs, the older firmwares advertise a very low
-> > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
-> Can you be more specific about 'older firmwares'?
+I chose to just return -ENODEV when a driver calls devm_of_clk_add_hw_provider()
+with a NULL dev->of_node, because it seems natural to return a failure when one
+asks for an _of_ function to do something, but by providing with a NULL of_node.
+Plus, it avoids some waste of memory, as the call to devres_alloc() will not
+take place.
 
-Hi Michal,
+The opinions on how to handle this NULL pointer dereference were split, either
+by returning an error when one calls devm_of_clk_add_hw_provider() with a NULL
+dev->of_node, as I did, or by 
+return 0 in of_clk_add_hw_provider() when np == NULL and
+return 0 in of_clk_del_provider() when np == NULL.
+Let me know if you prefer the second approach.
 
-This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
-key idea behind the original patch was to make the H_CEDE latency and
-hence target residency come from firmware instead of being decided by
-the kernel.  The advantage is such that, different type of systems in
-POWER10 generation can adjust this value and have an optimal H_CEDE
-entry criteria which balances good single thread performance and
-wakeup latency.  Further we can have additional H_CEDE state to feed
-into the cpuidle.  
+Compile tested only.
 
-> Also while this is a performance regression on such firmwares it
-> should be fixed by updating the firmware to current version.
-> 
-> Having sub-optimal performance on obsolete firmware should not require a
-> kernel workaround, should it?
+Tudor Ambarus (2):
+  clk: Do not register provider with a NULL dev->of_node
+  clk: bcm: rpi: Do not call devm_of_clk_add_hw_provider with a NULL
+    dev->of_node
 
-When we designed and tested this change on POWER9 and POWER10 systems
-the values that were set in F/w were working out fine with positive
-results in all our micro benchmarks and no regression in context
-switch tests.  These repeatable results gave us the confidence that we
-can go ahead and set the values from F/w and remove the kernel's value
-for all future Linux versions.
+ drivers/clk/bcm/clk-raspberrypi.c | 10 ++++++----
+ drivers/clk/clk.c                 | 12 +++++++-----
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
-But where we slipped is the fact that real world workload show
-variations in performance and regressions in specific case because we
-are favouring H_CEDE state more often than snooze loop.  The root
-cause is we have to send more IPIs to wakeup now because more cpus
-will be in H_CEDE state than before.
-
-This is a performance problem on POWER9 systems where we actually
-expected good benefit and also proved them with micro benchmarks, but
-later it turned out to have an impact for some workloads.  Further the
-challenge is not that regressions are severe, it is the fact that on
-exact same hardware and firmware end users expect similar or better
-performance for everything when updating to a newer kernel and no
-regressions.
-
-We have these setting adjusted for POWER10 in F/w and hence behaviour
-will be similar when we come from old kernel on P9 to a new kernel on
-P10.  We did test the reverse also like new kernel on P9 should show
-benefit.  But as explained, the benefit came at the cost of regressing
-in few cases which were discovered later.
-
-Hence this fix is to keep exact same behaviour for POWER9 and use this
-F/w driven heuristics only from POWER10.
-
-> It's not like the kernel would crash on the affected firmware.
-
-Correct. We do not have a functional issue, but only a performance
-regression observable on certain real workloads.
-
-This is a minor change in cpuidle's H_CEDE usage which will show up
-only in certain workload patterns where we need idle CPU threads to
-wakeup faster to get the job done as compared to keeping busy CPU
-threads in single thread mode to get more execution slices.
-
-This fix is primarily to ensure kernel update does not change H_CEDE
-behaviour on same hardware generation there by causing performance
-variation and also regression in some case.
-
-Thanks for the questions and comments, I hope this gives additional
-context for this fix.
-
---Vaidy
+-- 
+2.25.1
 
