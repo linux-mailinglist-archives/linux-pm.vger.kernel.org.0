@@ -2,184 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C874936960C
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 17:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FCA369692
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbhDWPV1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Apr 2021 11:21:27 -0400
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:33768 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbhDWPV0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 11:21:26 -0400
-Received: by mail-ot1-f48.google.com with SMTP id 92-20020a9d02e50000b029028fcc3d2c9eso23111512otl.0;
-        Fri, 23 Apr 2021 08:20:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dyHZi3N5pdxOcPpODlhqYNMD7hPjAeJEWciMcHpLV44=;
-        b=L6tstEP1CORk4EPGh7XhgdnzKdUMEqqHlScAoFgvBvNRXu4k31u57URo0BLrArPFft
-         0EvaECi0bt7IeStf/MAVD+DTNrNvaZkgGD4cAh1wZleePffvItHT1c61VVTDWpB8m70h
-         C75CGQhAv9HqIr/ENq/Z5dgM8tYE+3XRs3z0Uv0mRVf2KPIt6+uceGh6rYO0XSkJ37jx
-         y+xhSwf4pdHGdQoclMtKKcsJQRw7/YW6I2JEOvuRksiVFpwSIA+3MLSiMBZLpBkp9j6P
-         7XsfidC4n13jJsrs+ClCtlgFhG2S7GHm5T6fqI+DVlL0vhEHn9WDQfGoQ3M9dIwfVuPy
-         uy1A==
-X-Gm-Message-State: AOAM533vxT4R3rFVVpokgzSFalg+IdiDwKXxOzOYchLEqqOO11KOqeU1
-        704f/BeBFBT6H+RlsE43AgpYcGvoESnjv28fzM8=
-X-Google-Smtp-Source: ABdhPJyhi6GPBa0/pkBgbpLdeMlObjWTjJxHnIT6RwxNFOja+knnauWOh/g/i1Pa73OAykV7d9/9aVf6Lz/ZJuopB6k=
-X-Received: by 2002:a9d:5a7:: with SMTP id 36mr3874989otd.321.1619191248310;
- Fri, 23 Apr 2021 08:20:48 -0700 (PDT)
+        id S243310AbhDWQAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 12:00:47 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40154 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243278AbhDWQAm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 12:00:42 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NFXiCf074326;
+        Fri, 23 Apr 2021 11:59:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=YN4MaMne+t2iBBy9ri4SqOYm8FYZRv3XIWLdKanHvXE=;
+ b=TVK1sPzD5wYrfHET8Q16xqaLx+zgYuay8y4ZMxz19ScyLe4ZScPDMHV/UxYpYbyVHryQ
+ xzcLW+QZnaNz1lSLqRvKK3MbyArsTtLhytN0Gc340oLIoVzm2ytVXeI3lIkuAfp+3sF9
+ ZYXu/GBhEjUSvxKlvsoEmjKcnBQogRNVYn9fO8T6jhIEb/We07cOdfFA7idPsPRe4zwk
+ hFc2Y0l3m9Pu82/8nHuQOfgcjaH+Pi6gatqQlCNN+eSa0WHSga+tR0nZXQMZ0MXOx04C
+ 7oZ1DGAARsjN+NlNB3snMlbgyHr8Zh/2vOf6l5rVQBZapCjWDXH+iFZlC5L5/fo2Kbrm lA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 383yemc9ag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Apr 2021 11:59:48 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13NFrFLh030597;
+        Fri, 23 Apr 2021 15:59:46 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 37yqa89wyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Apr 2021 15:59:46 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13NFxh7126607984
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Apr 2021 15:59:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 88368AE045;
+        Fri, 23 Apr 2021 15:59:43 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE9A0AE04D;
+        Fri, 23 Apr 2021 15:59:41 +0000 (GMT)
+Received: from drishya.in.ibm.com (unknown [9.199.57.164])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 23 Apr 2021 15:59:41 +0000 (GMT)
+Date:   Fri, 23 Apr 2021 21:29:39 +0530
+From:   Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+To:     Michal Such?nek <msuchanek@suse.de>
+Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+Reply-To: svaidy@linux.ibm.com
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+ <20210423073551.GZ6564@kitsune.suse.cz>
 MIME-Version: 1.0
-References: <20210423023928.688767-1-ray.huang@amd.com> <CAJZ5v0iH0-YL-yVPSA2oJF7PGfQs5Tcv5ktH43xMLPAKysDXPw@mail.gmail.com>
- <20210423125208.GA688865@hr-amd> <CAJZ5v0i3QUbhRqBKDuNzYoxy254Kq-36G30cVWLazQo+uUhJTw@mail.gmail.com>
- <20210423150728.GB688865@hr-amd>
-In-Reply-To: <20210423150728.GB688865@hr-amd>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 23 Apr 2021 17:20:37 +0200
-Message-ID: <CAJZ5v0hqVSd=F+H3hf9d8cxiVS3UgebEdvxAG_ZYj9Dk8a-N2w@mail.gmail.com>
-Subject: Re: [PATCH v3] x86, sched: Fix the AMD CPPC maximum perf on some
- specific generations
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20210423073551.GZ6564@kitsune.suse.cz>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oATxFiE923wyNw6jy8w07RzUPHm1xTTp
+X-Proofpoint-GUID: oATxFiE923wyNw6jy8w07RzUPHm1xTTp
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1011 suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104230100
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 5:07 PM Huang Rui <ray.huang@amd.com> wrote:
->
-> On Fri, Apr 23, 2021 at 09:53:37PM +0800, Rafael J. Wysocki wrote:
-> > On Fri, Apr 23, 2021 at 2:52 PM Huang Rui <ray.huang@amd.com> wrote:
-> > >
-> > > On Fri, Apr 23, 2021 at 08:09:49PM +0800, Rafael J. Wysocki wrote:
-> > > > On Fri, Apr 23, 2021 at 4:40 AM Huang Rui <ray.huang@amd.com> wrote:
-> > > > >
-> > > > > Some AMD Ryzen generations has different calculation method on maximum
-> > > > > perf. 255 is not for all asics, some specific generations should use 166
-> > > > > as the maximum perf. Otherwise, it will report incorrect frequency value
-> > > > > like below:
-> > > > >
-> > > > > ~  $B"* (B lscpu | grep MHz
-> > > > > CPU MHz:                         3400.000
-> > > > > CPU max MHz:                     7228.3198
-> > > > > CPU min MHz:                     2200.0000
-> > > > >
-> > > > > Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-> > > > > Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
-> > > > >
-> > > > > Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-> > > > > Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-> > > > > Bugzilla: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D211791&amp;data=04%7C01%7Cray.huang%40amd.com%7C9c4d68e3c053401c4b4108d9065f38b7%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637547828334533410%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=AEMijLiBtz7Tf%2F8Uh1XEd4QUclZUfafyEy48yMf4JSw%3D&amp;reserved=0
-> > > > > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > > > > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > > > > Cc: Nathan Fontenot <nathan.fontenot@amd.com>
-> > > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > Cc: Borislav Petkov <bp@suse.de>
-> > > > > Cc: x86@kernel.org
-> > > > > Cc: stable@vger.kernel.org
-> > > > > ---
-> > > > >
-> > > > > Changes from V1 -> V2:
-> > > > > - Enhance the commit message.
-> > > > > - Move amd_get_highest_perf() into amd.c.
-> > > > > - Refine the implementation of switch-case.
-> > > > > - Cc stable mail list.
-> > > > >
-> > > > > Changes from V2 -> V3:
-> > > > > - Move the update into cppc_get_perf_caps() to correct the highest perf value in
-> > > > >   the API.
-> > > > >
-> > > > > ---
-> > > > >  arch/x86/include/asm/processor.h |  2 ++
-> > > > >  arch/x86/kernel/cpu/amd.c        | 22 ++++++++++++++++++++++
-> > > > >  drivers/acpi/cppc_acpi.c         |  8 ++++++--
-> > > > >  3 files changed, 30 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> > > > > index f1b9ed5efaa9..908bcaea1361 100644
-> > > > > --- a/arch/x86/include/asm/processor.h
-> > > > > +++ b/arch/x86/include/asm/processor.h
-> > > > > @@ -804,8 +804,10 @@ DECLARE_PER_CPU(u64, msr_misc_features_shadow);
-> > > > >
-> > > > >  #ifdef CONFIG_CPU_SUP_AMD
-> > > > >  extern u32 amd_get_nodes_per_socket(void);
-> > > > > +extern u32 amd_get_highest_perf(void);
-> > > > >  #else
-> > > > >  static inline u32 amd_get_nodes_per_socket(void)       { return 0; }
-> > > > > +static inline u32 amd_get_highest_perf(void)           { return 0; }
-> > > > >  #endif
-> > > > >
-> > > > >  static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
-> > > > > diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> > > > > index 347a956f71ca..aadb691d9357 100644
-> > > > > --- a/arch/x86/kernel/cpu/amd.c
-> > > > > +++ b/arch/x86/kernel/cpu/amd.c
-> > > > > @@ -1170,3 +1170,25 @@ void set_dr_addr_mask(unsigned long mask, int dr)
-> > > > >                 break;
-> > > > >         }
-> > > > >  }
-> > > > > +
-> > > > > +u32 amd_get_highest_perf(void)
-> > > > > +{
-> > > > > +       struct cpuinfo_x86 *c = &boot_cpu_data;
-> > > > > +       u32 cppc_max_perf = 225;
-> > > > > +
-> > > > > +       switch (c->x86) {
-> > > > > +       case 0x17:
-> > > > > +               if ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
-> > > > > +                   (c->x86_model >= 0x70 && c->x86_model < 0x80))
-> > > > > +                       cppc_max_perf = 166;
-> > > > > +               break;
-> > > > > +       case 0x19:
-> > > > > +               if ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
-> > > > > +                   (c->x86_model >= 0x40 && c->x86_model < 0x70))
-> > > > > +                       cppc_max_perf = 166;
-> > > > > +               break;
-> > > > > +       }
-> > > > > +
-> > > > > +       return cppc_max_perf;
-> > > > > +}
-> > > > > +EXPORT_SYMBOL_GPL(amd_get_highest_perf);
-> > > > > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > > > > index 69057fcd2c04..58e72b6e222f 100644
-> > > > > --- a/drivers/acpi/cppc_acpi.c
-> > > > > +++ b/drivers/acpi/cppc_acpi.c
-> > > > > @@ -1107,8 +1107,12 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-> > > > >                 }
-> > > > >         }
-> > > > >
-> > > > > -       cpc_read(cpunum, highest_reg, &high);
-> > > > > -       perf_caps->highest_perf = high;
-> > > > > +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
-> > > >
-> > > > This is a generic arch-independent file.
-> > > >
-> > > > Can we avoid adding the x86-specific check here?
-> > >
-> > > OK, I see, it will be used by ARM as well.
-> > >
-> > > Can I rollback to implementation of V2:
-> > >
-> > > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20210421023807.1540290-1-ray.huang%40amd.com&amp;data=04%7C01%7Cray.huang%40amd.com%7C9c4d68e3c053401c4b4108d9065f38b7%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637547828334533410%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=Pk0VKl7iSaKz%2FYQx7YfT5D1XP%2FZRfQTW6moE%2F5sS1c0%3D&amp;reserved=0
-> >
-> > This would work IMO, but it can be simplified somewhat AFAICS.
-> >
-> > The obvious drawback is that amd_get_highest_perf() would need to be
-> > called directly wherever the CPPC highest perf is needed and the
-> > vendor may be AMD.
->
-> Should I send V4 to continue review (fallback to V2 actually) or you can
-> comment it on V2 directly?
+* Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
 
-Done, thanks!
+> On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
+> > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> > 
+> > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> > of the Extended CEDE states advertised by the platform
+> > 
+> > On some of the POWER9 LPARs, the older firmwares advertise a very low
+> > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+> Can you be more specific about 'older firmwares'?
+
+Hi Michal,
+
+This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
+key idea behind the original patch was to make the H_CEDE latency and
+hence target residency come from firmware instead of being decided by
+the kernel.  The advantage is such that, different type of systems in
+POWER10 generation can adjust this value and have an optimal H_CEDE
+entry criteria which balances good single thread performance and
+wakeup latency.  Further we can have additional H_CEDE state to feed
+into the cpuidle.  
+
+> Also while this is a performance regression on such firmwares it
+> should be fixed by updating the firmware to current version.
+> 
+> Having sub-optimal performance on obsolete firmware should not require a
+> kernel workaround, should it?
+
+When we designed and tested this change on POWER9 and POWER10 systems
+the values that were set in F/w were working out fine with positive
+results in all our micro benchmarks and no regression in context
+switch tests.  These repeatable results gave us the confidence that we
+can go ahead and set the values from F/w and remove the kernel's value
+for all future Linux versions.
+
+But where we slipped is the fact that real world workload show
+variations in performance and regressions in specific case because we
+are favouring H_CEDE state more often than snooze loop.  The root
+cause is we have to send more IPIs to wakeup now because more cpus
+will be in H_CEDE state than before.
+
+This is a performance problem on POWER9 systems where we actually
+expected good benefit and also proved them with micro benchmarks, but
+later it turned out to have an impact for some workloads.  Further the
+challenge is not that regressions are severe, it is the fact that on
+exact same hardware and firmware end users expect similar or better
+performance for everything when updating to a newer kernel and no
+regressions.
+
+We have these setting adjusted for POWER10 in F/w and hence behaviour
+will be similar when we come from old kernel on P9 to a new kernel on
+P10.  We did test the reverse also like new kernel on P9 should show
+benefit.  But as explained, the benefit came at the cost of regressing
+in few cases which were discovered later.
+
+Hence this fix is to keep exact same behaviour for POWER9 and use this
+F/w driven heuristics only from POWER10.
+
+> It's not like the kernel would crash on the affected firmware.
+
+Correct. We do not have a functional issue, but only a performance
+regression observable on certain real workloads.
+
+This is a minor change in cpuidle's H_CEDE usage which will show up
+only in certain workload patterns where we need idle CPU threads to
+wakeup faster to get the job done as compared to keeping busy CPU
+threads in single thread mode to get more execution slices.
+
+This fix is primarily to ensure kernel update does not change H_CEDE
+behaviour on same hardware generation there by causing performance
+variation and also regression in some case.
+
+Thanks for the questions and comments, I hope this gives additional
+context for this fix.
+
+--Vaidy
+
