@@ -2,112 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 051B93699EE
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 20:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC9A369ACA
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 21:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243438AbhDWSm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 14:42:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39972 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243715AbhDWSm4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Apr 2021 14:42:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 80436AE1C;
-        Fri, 23 Apr 2021 18:42:18 +0000 (UTC)
-Date:   Fri, 23 Apr 2021 20:42:16 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
- onwards
-Message-ID: <20210423184216.GG6564@kitsune.suse.cz>
-References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
- <20210423073551.GZ6564@kitsune.suse.cz>
- <YILu6/GK+RwpskCc@drishya.in.ibm.com>
- <20210423174505.GE6564@kitsune.suse.cz>
- <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
+        id S243810AbhDWTNd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 15:13:33 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:38577 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243438AbhDWTNc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 15:13:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1619205175; x=1650741175;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jFuDhHYlk4Hbe7hxXEZVh5/8lcG8Pt1iwjMqBmOsjHo=;
+  b=EreihZ3F704GpceiQ0iv/9JadYDYUR/JhU5nmaFtxxxlEkMQzU60sdT+
+   W7U0KDjJyItQoQXA1h/SE+oGb4xGvqJcapLmT5+Y8VgiFt87xFi4baq1V
+   0SNkLScP0KjkJu4DlFCgahCfo70fv3W00YzMo2Vh83JkubAonn9uFMUb4
+   jU0Qm20SMns+cRenotTnNkWaTbIs8mcBhobQe4TbOQ2v/TWetNr5VFZuQ
+   BmcSxZ11FaVN6YOxFR/DJjmBh6W+gY30HrBxtOeBoaYztIGhDnb3/0ctI
+   FixIcDje7DDpxyoEXnE5398cjJ7pUIO+5g1X9kWjI1SY1axVVQvhQ4jXb
+   g==;
+IronPort-SDR: iswriVtSl3G3gGsMS8xI4euUYDVEiXMH63Y/UlX7oorC41kfc88e3tHpAcX2OzOPGD8yrdhwQf
+ AgOJsG4SCp64VeZ0pZy+SDtnZfLAA3aJlfSWMONdBfBt6uD6b7eAQPFOGAhjpIhlMeI+QPlrLi
+ AXjkenfK8RDewftHsZ4ChzC8ohe5/gJIOL+RkcCoJnqs09BYMNByFA9WktjuxSVUwxlah4JIBa
+ MRmDra2t1zjatZUjQ2FvFlGWQipNP8fNajlUKgQEGj+U/0Gi0s0E/hVpB44fmFjdNzFhZAWkPY
+ cPY=
+X-IronPort-AV: E=Sophos;i="5.82,246,1613458800"; 
+   d="scan'208";a="112001288"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Apr 2021 12:12:53 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 23 Apr 2021 12:12:46 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Fri, 23 Apr 2021 12:12:39 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <nsaenz@kernel.org>,
+        <maxime@cerno.tech>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <khilman@kernel.org>,
+        <ulf.hansson@linaro.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <robh+dt@kernel.org>, <frowand.list@gmail.com>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <saravanak@google.com>,
+        <geert@linux-m68k.org>, <nsaenzjulienne@suse.de>,
+        <linux@roeck-us.net>, <guillaume.tucker@collabora.com>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <corbet@lwn.net>, <nicolas.ferre@microchip.com>,
+        <claudiu.beznea@microchip.com>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <kernel-team@android.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH] clk: Skip clk provider registration when np is NULL
+Date:   Fri, 23 Apr 2021 22:12:36 +0300
+Message-ID: <20210423191236.265996-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210423171335.262316-1-tudor.ambarus@microchip.com>
+References: <20210423171335.262316-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 11:59:30PM +0530, Vaidyanathan Srinivasan wrote:
-> * Michal Such?nek <msuchanek@suse.de> [2021-04-23 19:45:05]:
-> 
-> > On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
-> > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
-> > > 
-> > > > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
-> > > > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> > > > > 
-> > > > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> > > > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> > > > > of the Extended CEDE states advertised by the platform
-> > > > > 
-> > > > > On some of the POWER9 LPARs, the older firmwares advertise a very low
-> > > > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
-> > > > Can you be more specific about 'older firmwares'?
-> > > 
-> > > Hi Michal,
-> > > 
-> > > This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
-> > > key idea behind the original patch was to make the H_CEDE latency and
-> > > hence target residency come from firmware instead of being decided by
-> > > the kernel.  The advantage is such that, different type of systems in
-> > > POWER10 generation can adjust this value and have an optimal H_CEDE
-> > > entry criteria which balances good single thread performance and
-> > > wakeup latency.  Further we can have additional H_CEDE state to feed
-> > > into the cpuidle.  
-> > 
-> > So all POWER9 machines are affected by the firmware bug where firmware
-> > reports CEDE1 exit latency of 2us and the real latency is 5us which
-> > causes the kernel to prefer CEDE1 too much when relying on the values
-> > supplied by the firmware. It is not about 'older firmware'.
-> 
-> Correct.  All POWER9 systems running Linux as guest LPARs will see
-> extra usage of CEDE idle state, but not baremetal (PowerNV).
-> 
-> The correct definition of the bug or miss-match in expectation is that
-> firmware reports wakeup latency from a core/thread wakeup timing, but
-> not end-to-end time from sending a wakeup event like an IPI using
-> H_calls and receiving the events on the target.  Practically there are
-> few extra micro-seconds needed after deciding to wakeup a target
-> core/thread to getting the target to start executing instructions
-> within the LPAR instance.
+commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+revealed that clk/bcm/clk-raspberrypi.c driver calls
+devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
+NULL pointer dereference in of_clk_add_provider() when calling
+fwnode_dev_initialized().
 
-Thanks for the detailed explanation.
+Returning 0 is reducing the if conditions in driver code and is being
+consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
+is disabled. The downside is that drivers will maybe register clkdev lookups
+when they don't need to and waste some memory.
 
-Maybe just adding a few microseconds to the reported time would be a
-more reasonable workaround than using a blanket fixed value then.
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+This would be the second approach, where we don't return an error when
+one calls devm_of_clk_add_hw_provider with a NULL of_node, but instead
+we just return 0 and skip the logic in the core and the drivers.
 
-> 
-> > I still think it would be preferrable to adjust the latency value
-> > reported by the firmware to match reality over a kernel workaround.
-> 
-> Right, practically we can fix for future releases and as such we
-> targeted this scheme from POWER10 but expected no harm on POWER9 which
-> proved to be wrong.
-> 
-> We can possibly change this FW value for POWER9, but it is too
-> expensive and not practical because many release streams exist for
-> different platforms and further customers are at different streams as
-> well.  We cannot force all of them to update because that blows up
-> co-dependency matrix.
+ drivers/clk/clk.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-From the user point of view only few firmware release streams exist but
-what is packaged in such binaries might be another story.
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index e2ec1b745243..5d10da3519ac 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4540,6 +4540,9 @@ int of_clk_add_provider(struct device_node *np,
+ 	struct of_clk_provider *cp;
+ 	int ret;
+ 
++	if (!np)
++		return 0;
++
+ 	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+ 	if (!cp)
+ 		return -ENOMEM;
+@@ -4579,6 +4582,9 @@ int of_clk_add_hw_provider(struct device_node *np,
+ 	struct of_clk_provider *cp;
+ 	int ret;
+ 
++	if (!np)
++		return 0;
++
+ 	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+ 	if (!cp)
+ 		return -ENOMEM;
+@@ -4676,6 +4682,9 @@ void of_clk_del_provider(struct device_node *np)
+ {
+ 	struct of_clk_provider *cp;
+ 
++	if (!np)
++		return 0;
++
+ 	mutex_lock(&of_clk_mutex);
+ 	list_for_each_entry(cp, &of_clk_providers, link) {
+ 		if (cp->node == np) {
+-- 
+2.25.1
 
-Thanks
-
-Michal
