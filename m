@@ -2,75 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC154368F34
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 11:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8674E3691C1
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 14:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241594AbhDWJJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 05:09:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43932 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229456AbhDWJJ6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Apr 2021 05:09:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEA8461422;
-        Fri, 23 Apr 2021 09:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619168962;
-        bh=92QnR4XOC2Ox/VZ3/+ThjkYwdNbdMZQj5ZUKFq4Cg7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hXyi4ngfEwOkhsfiO95ELRM1g2hSBHCHITn59/Ir3JQ7PY0UkQu6jVjjDVreQmimn
-         bnA+n2v5soHVunQ/ZsKX2ixjbC5PIFjAUKzEAAyoigD2GKruIkEvevADZEns2QKxGs
-         SB3zleS54TTWjUrqYMUZmJG8MTUIOy5Z3q5rXdFk=
-Date:   Fri, 23 Apr 2021 11:09:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     zhaoxiao <zhaoxiao@uniontech.com>
-Cc:     rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM: Use pm_pr_dbg() instead of pr_debug().
-Message-ID: <YIKOv3h0xFAttYlq@kroah.com>
-References: <20210423081223.26111-1-zhaoxiao@uniontech.com>
+        id S234439AbhDWMKk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Apr 2021 08:10:40 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:37500 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229479AbhDWMKk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 08:10:40 -0400
+Received: by mail-wr1-f50.google.com with SMTP id j5so47198125wrn.4;
+        Fri, 23 Apr 2021 05:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xDdTkEz3jYFi8dUXVTGarIUd1p+hB/XaUF8ZoHdzxKE=;
+        b=MEQ3EOr9cRHCbLPkOUIRAw7tg76gJEBgk1+qxqtkIxSpjRR5LoQfrKMnMLwZUrMSq0
+         14x/73SdFEFsPfUzeLX9BLMNnMvVVuEFP0SoLvigXADK478dHt9tUT4oI557Pc6p1kNj
+         ts5rsjpgwpYYkwvQhGLOjfS0QvtWqkZSSsKJZZT648XKK6+x89RBYmiM5OoqQPDpxXIV
+         WYewnY7hDOxffW0AB17EEsfZ5PdkFMEFXgihi6K8OLHNEXZY2zvirpR9yMd2ymhL/n/t
+         N3+q/+30PeoH2evI4sPU28psF2UhxlrKbLvawxjWwy7rBQ09kuhUcW4cUFzIAhLkjDcJ
+         ejdQ==
+X-Gm-Message-State: AOAM5338xnNMqSjG4cR2pl9tvEpouE1LtZNAsPQ4TXya5pBYnodmxO8Q
+        C7r3qqarmakHmS2wanjzaprPjEdIFEkKCtt4IMA=
+X-Google-Smtp-Source: ABdhPJz6Dsd6AmT5Ml2AN3hXNIf0bBPeLJMJ8jJ+HZwLeHyuVBpj92jgtzaurmQeTY9WijsB2pnBut47CZXK3N22T0k=
+X-Received: by 2002:adf:9d81:: with SMTP id p1mr4477670wre.247.1619179801674;
+ Fri, 23 Apr 2021 05:10:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210423081223.26111-1-zhaoxiao@uniontech.com>
+References: <20210423023928.688767-1-ray.huang@amd.com>
+In-Reply-To: <20210423023928.688767-1-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Apr 2021 14:09:49 +0200
+Message-ID: <CAJZ5v0iH0-YL-yVPSA2oJF7PGfQs5Tcv5ktH43xMLPAKysDXPw@mail.gmail.com>
+Subject: Re: [PATCH v3] x86, sched: Fix the AMD CPPC maximum perf on some
+ specific generations
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 04:12:23PM +0800, zhaoxiao wrote:
-> These prints are useful if we're doing PM suspend debugging. Having them
-> at pr_debug() level means that we need to either enable DEBUG in this
-> file, or compile the kernel with dynamic debug capabilities. Both of
-> these options have drawbacks like custom compilation or opting into all
-> debug statements being included into the kernel image. Given that we
-> already have infrastructure to collect PM debugging information with
-> CONFIG_PM_DEBUG and friends, let's change the pr_debug usage here to be
-> pm_pr_dbg() instead so we can collect the wakeup information in the
-> kernel logs.
-> 
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
-
-Please use a "full" name.  Unless one word really is how you sign legal
-documents?
-
+On Fri, Apr 23, 2021 at 4:40 AM Huang Rui <ray.huang@amd.com> wrote:
+>
+> Some AMD Ryzen generations has different calculation method on maximum
+> perf. 255 is not for all asics, some specific generations should use 166
+> as the maximum perf. Otherwise, it will report incorrect frequency value
+> like below:
+>
+> ~ → lscpu | grep MHz
+> CPU MHz:                         3400.000
+> CPU max MHz:                     7228.3198
+> CPU min MHz:                     2200.0000
+>
+> Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
+> Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+>
+> Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
+> Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=211791
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Nathan Fontenot <nathan.fontenot@amd.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: x86@kernel.org
+> Cc: stable@vger.kernel.org
 > ---
->  drivers/base/power/main.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index f893c3c5af07..6e64e3fff84c 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -133,7 +133,7 @@ void device_pm_add(struct device *dev)
->  	if (device_pm_not_required(dev))
->  		return;
->  
-> -	pr_debug("Adding info for %s:%s\n",
-> +	pm_pr_dbg("Adding info for %s:%s\n",
->  		 dev->bus ? dev->bus->name : "No Bus", dev_name(dev));
+>
+> Changes from V1 -> V2:
+> - Enhance the commit message.
+> - Move amd_get_highest_perf() into amd.c.
+> - Refine the implementation of switch-case.
+> - Cc stable mail list.
+>
+> Changes from V2 -> V3:
+> - Move the update into cppc_get_perf_caps() to correct the highest perf value in
+>   the API.
+>
+> ---
+>  arch/x86/include/asm/processor.h |  2 ++
+>  arch/x86/kernel/cpu/amd.c        | 22 ++++++++++++++++++++++
+>  drivers/acpi/cppc_acpi.c         |  8 ++++++--
+>  3 files changed, 30 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index f1b9ed5efaa9..908bcaea1361 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -804,8 +804,10 @@ DECLARE_PER_CPU(u64, msr_misc_features_shadow);
+>
+>  #ifdef CONFIG_CPU_SUP_AMD
+>  extern u32 amd_get_nodes_per_socket(void);
+> +extern u32 amd_get_highest_perf(void);
+>  #else
+>  static inline u32 amd_get_nodes_per_socket(void)       { return 0; }
+> +static inline u32 amd_get_highest_perf(void)           { return 0; }
+>  #endif
+>
+>  static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index 347a956f71ca..aadb691d9357 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -1170,3 +1170,25 @@ void set_dr_addr_mask(unsigned long mask, int dr)
+>                 break;
+>         }
+>  }
+> +
+> +u32 amd_get_highest_perf(void)
+> +{
+> +       struct cpuinfo_x86 *c = &boot_cpu_data;
+> +       u32 cppc_max_perf = 225;
+> +
+> +       switch (c->x86) {
+> +       case 0x17:
+> +               if ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
+> +                   (c->x86_model >= 0x70 && c->x86_model < 0x80))
+> +                       cppc_max_perf = 166;
+> +               break;
+> +       case 0x19:
+> +               if ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
+> +                   (c->x86_model >= 0x40 && c->x86_model < 0x70))
+> +                       cppc_max_perf = 166;
+> +               break;
+> +       }
+> +
+> +       return cppc_max_perf;
+> +}
+> +EXPORT_SYMBOL_GPL(amd_get_highest_perf);
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 69057fcd2c04..58e72b6e222f 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1107,8 +1107,12 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>                 }
+>         }
+>
+> -       cpc_read(cpunum, highest_reg, &high);
+> -       perf_caps->highest_perf = high;
+> +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
 
-Why are these all just not normal dev_dbg() calls?  That handles the "no
-bus" stuff automatically.
+This is a generic arch-independent file.
 
-thanks,
+Can we avoid adding the x86-specific check here?
 
-greg k-h
+> +               perf_caps->highest_perf = amd_get_highest_perf();
+> +       } else {
+> +               cpc_read(cpunum, highest_reg, &high);
+> +               perf_caps->highest_perf = high;
+> +       }
+>
+>         cpc_read(cpunum, lowest_reg, &low);
+>         perf_caps->lowest_perf = low;
+> --
+> 2.25.1
+>
