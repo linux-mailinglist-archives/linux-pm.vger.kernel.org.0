@@ -2,132 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A0136983D
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 19:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E573698A0
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 19:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbhDWR0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 13:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhDWR0H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 13:26:07 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46E4C061756
-        for <linux-pm@vger.kernel.org>; Fri, 23 Apr 2021 10:25:30 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id p202so12828817ybg.8
-        for <linux-pm@vger.kernel.org>; Fri, 23 Apr 2021 10:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n8hZDL1xA2e2FhQbADX4o3akbnImWISYvJ4gYV4hTDw=;
-        b=QE34o8j979cX1BIZ77fuSaJFJASbd86yY/WiIZf/hGm3zAIrulu11rCYPdXZCPXmJp
-         dw4Xfb99rfN8VIjOVxPvsDQvjqNyOah9xQTh0YB7Rhj9Um+Y31ErWk6WtIpAP/48tZxd
-         KqxWDkBAgxxGs1bIBFnJJ1N7G+96HTwvTX7AZpH1y/hk93dVzZ+J55Ws35QFdWD2dGeG
-         webPu3XuSDc6v0ErYT++1lSCc0+whj212QDZwdkbqFPuPOJKPRiofRQ/LbcZTLRb1Lli
-         CLSIusitAEqZxhsPHFSvAgDovo+HdOl9codXeFbW8mzmsmMP8Kfm2mcytt8DLw7H27DL
-         kAtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n8hZDL1xA2e2FhQbADX4o3akbnImWISYvJ4gYV4hTDw=;
-        b=e+qG3USLO8L57WuwNl/FjB7r34R5+PmtfL25WU6dgoWdjn3azXt9+9/+QtDA6wzvz0
-         Mfdg8MGL4fTmwSEAhZB7G5opCNc3Fm1lYGKkDWkVt+gnlPKe8wpDJYyr6YkPDYZRZysg
-         ONUx33PXBwaPMWB6rpAwd/mUBkrlhWU+ic9CdWh1mCD7VzjcKiEScxfdJFYs9MAbp1R5
-         arHDL6jXcLEVpRKRnS8EM1BeaW880GjlShy2CBQUUvp+mUmrV0VL+SltctF2ulILjZDW
-         9eUYxuIx8cjw0K2UHO54qd4amZEccwTaKO2XFLSC60KHE0YdEiDUWwKqAE8//cVKid6Q
-         sM5A==
-X-Gm-Message-State: AOAM533DSSFnY0cyreyBOS5diBlbCzOhgMzapJSA0XJTsZNBPPvyx98w
-        fX06lwqKfmVwZyiggulsXQCMDEgUJX+LkvmoDaIXxQ==
-X-Google-Smtp-Source: ABdhPJxFoVAvJGui3UN2oIAvxm+a7sAm6jmg01L2/sYpQx5YwJvUfenhyU0iY9IdZ6Rlj5GY+UENrXQypiXTNdleqKM=
-X-Received: by 2002:a5b:ed2:: with SMTP id a18mr7083028ybs.466.1619198729910;
- Fri, 23 Apr 2021 10:25:29 -0700 (PDT)
+        id S231522AbhDWRpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 13:45:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48372 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231400AbhDWRpp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Apr 2021 13:45:45 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id F2562B19B;
+        Fri, 23 Apr 2021 17:45:07 +0000 (UTC)
+Date:   Fri, 23 Apr 2021 19:45:05 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <20210423174505.GE6564@kitsune.suse.cz>
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+ <20210423073551.GZ6564@kitsune.suse.cz>
+ <YILu6/GK+RwpskCc@drishya.in.ibm.com>
 MIME-Version: 1.0
-References: <20210423171335.262316-1-tudor.ambarus@microchip.com> <20210423171335.262316-2-tudor.ambarus@microchip.com>
-In-Reply-To: <20210423171335.262316-2-tudor.ambarus@microchip.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 23 Apr 2021 10:24:54 -0700
-Message-ID: <CAGETcx-81hPTW_EVexMWaxGSOknuK-zESqKdiuQvye=n3TaHkA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clk: Do not register provider with a NULL dev->of_node
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, nsaenz@kernel.org,
-        maxime@cerno.tech, gregkh@linuxfoundation.org, rafael@kernel.org,
-        khilman@kernel.org, ulf.hansson@linaro.org, len.brown@intel.com,
-        pavel@ucw.cz, robh+dt@kernel.org, frowand.list@gmail.com,
-        maz@kernel.org, tglx@linutronix.de, geert@linux-m68k.org,
-        nsaenzjulienne@suse.de, linux@roeck-us.net,
-        guillaume.tucker@collabora.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        kernel-team@android.com, linux-rpi-kernel@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 10:14 AM Tudor Ambarus
-<tudor.ambarus@microchip.com> wrote:
->
-> commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
-> revealed that clk/bcm/clk-raspberrypi.c driver calls
-> devm_of_clk_add_hw_provider(), with a NULL dev->of_node.
->
-> devm_of_clk_add_hw_provider() should not register the provider with
-> a NULL dev->of_node, as there is no of_node. Apart of the NULL pointer
-> dereference that will result when calling fwnode_dev_initialized() in
-> of_clk_add_hw_provider(), another problem is that when two drivers calling
-> of_clk_add_hw_provider() with np = NULL, their unregistration order is not
-> guaranteed to be correct. Avoid all the problems and just return -ENODEV
-> when the callers of devm_of_clk_add_hw_provider() use a NULL dev->of_node,
-> which seems the natural way to do.
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  drivers/clk/clk.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index e2ec1b745243..8b5077cc5e67 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -4634,11 +4634,10 @@ static struct device_node *get_clk_provider_node(struct device *dev)
->   * @get: callback for decoding clk_hw
->   * @data: context pointer for @get callback
->   *
-> - * Registers clock provider for given device's node. If the device has no DT
-> - * node or if the device node lacks of clock provider information (#clock-cells)
-> - * then the parent device's node is scanned for this information. If parent node
-> - * has the #clock-cells then it is used in registration. Provider is
-> - * automatically released at device exit.
-> + * Registers clock provider for given device's node. If the device node lacks
-> + * of clock provider information (#clock-cells) then the parent device's node is
-> + * scanned for this information. If parent node has the #clock-cells then it is
-> + * used in registration. Provider is automatically released at device exit.
->   *
->   * Return: 0 on success or an errno on failure.
->   */
-> @@ -4650,6 +4649,9 @@ int devm_of_clk_add_hw_provider(struct device *dev,
->         struct device_node **ptr, *np;
->         int ret;
->
-> +       if (!dev->of_node)
-> +               return -ENODEV;
-> +
+On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
+> * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
+> 
+> > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
+> > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> > > 
+> > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> > > of the Extended CEDE states advertised by the platform
+> > > 
+> > > On some of the POWER9 LPARs, the older firmwares advertise a very low
+> > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+> > Can you be more specific about 'older firmwares'?
+> 
+> Hi Michal,
+> 
+> This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
+> key idea behind the original patch was to make the H_CEDE latency and
+> hence target residency come from firmware instead of being decided by
+> the kernel.  The advantage is such that, different type of systems in
+> POWER10 generation can adjust this value and have an optimal H_CEDE
+> entry criteria which balances good single thread performance and
+> wakeup latency.  Further we can have additional H_CEDE state to feed
+> into the cpuidle.  
 
-Based on the other discussions, for now, just return 0. The error
-might cause other issues in other drivers. We can clean this up later.
+So all POWER9 machines are affected by the firmware bug where firmware
+reports CEDE1 exit latency of 2us and the real latency is 5us which
+causes the kernel to prefer CEDE1 too much when relying on the values
+supplied by the firmware. It is not about 'older firmware'.
 
--Saravana
+I still think it would be preferrable to adjust the latency value
+reported by the firmware to match reality over a kernel workaround.
 
->         ptr = devres_alloc(devm_of_clk_release_provider, sizeof(*ptr),
->                            GFP_KERNEL);
->         if (!ptr)
-> --
-> 2.25.1
->
+Thanks
+
+Michal
