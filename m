@@ -2,170 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8674E3691C1
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 14:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501CC3691CC
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 14:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbhDWMKk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Apr 2021 08:10:40 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:37500 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbhDWMKk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 08:10:40 -0400
-Received: by mail-wr1-f50.google.com with SMTP id j5so47198125wrn.4;
-        Fri, 23 Apr 2021 05:10:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xDdTkEz3jYFi8dUXVTGarIUd1p+hB/XaUF8ZoHdzxKE=;
-        b=MEQ3EOr9cRHCbLPkOUIRAw7tg76gJEBgk1+qxqtkIxSpjRR5LoQfrKMnMLwZUrMSq0
-         14x/73SdFEFsPfUzeLX9BLMNnMvVVuEFP0SoLvigXADK478dHt9tUT4oI557Pc6p1kNj
-         ts5rsjpgwpYYkwvQhGLOjfS0QvtWqkZSSsKJZZT648XKK6+x89RBYmiM5OoqQPDpxXIV
-         WYewnY7hDOxffW0AB17EEsfZ5PdkFMEFXgihi6K8OLHNEXZY2zvirpR9yMd2ymhL/n/t
-         N3+q/+30PeoH2evI4sPU28psF2UhxlrKbLvawxjWwy7rBQ09kuhUcW4cUFzIAhLkjDcJ
-         ejdQ==
-X-Gm-Message-State: AOAM5338xnNMqSjG4cR2pl9tvEpouE1LtZNAsPQ4TXya5pBYnodmxO8Q
-        C7r3qqarmakHmS2wanjzaprPjEdIFEkKCtt4IMA=
-X-Google-Smtp-Source: ABdhPJz6Dsd6AmT5Ml2AN3hXNIf0bBPeLJMJ8jJ+HZwLeHyuVBpj92jgtzaurmQeTY9WijsB2pnBut47CZXK3N22T0k=
-X-Received: by 2002:adf:9d81:: with SMTP id p1mr4477670wre.247.1619179801674;
- Fri, 23 Apr 2021 05:10:01 -0700 (PDT)
+        id S242281AbhDWMM7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 08:12:59 -0400
+Received: from mga05.intel.com ([192.55.52.43]:43144 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230225AbhDWMM6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Apr 2021 08:12:58 -0400
+IronPort-SDR: jYYpHDndd0T/zufYQoveVcg2eml7WeqawpWmT3HjYxCd+kR/wwiJFbTzGzMIPny/d1AleYaq+E
+ lRR1vR1qB/pA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9962"; a="281386548"
+X-IronPort-AV: E=Sophos;i="5.82,245,1613462400"; 
+   d="scan'208";a="281386548"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 05:12:21 -0700
+IronPort-SDR: 0lMZZPTxBtDnzuDdNKXYuRNdnnRJQ2ddD09lZisxSkqMCkkgLb0FmxuFzZqGVrjrcDCrv68zNK
+ Bb+fWvx4e2cQ==
+X-IronPort-AV: E=Sophos;i="5.82,245,1613462400"; 
+   d="scan'208";a="428362453"
+Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.173])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 05:12:19 -0700
+Date:   Fri, 23 Apr 2021 20:16:07 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Calvin Walton <calvin.walton@kepstin.ca>
+Cc:     Borislav Petkov <bp@suse.de>, Terry Bowman <terry.bowman@amd.com>,
+        lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wei.huang2@amd.com, aros@gmx.com,
+        rui.zhang@intel.com
+Subject: Re: [PATCH v2] tools/power turbostat: Fix RAPL summary collection on
+ AMD processors
+Message-ID: <20210423121607.GA426003@chenyu-desktop>
+References: <20210419195812.147710-1-terry.bowman@amd.com>
+ <20210420020336.GA386151@chenyu-desktop>
+ <20210420080701.GA2326@zn.tnic>
+ <20210420131541.GA388877@chenyu-desktop>
+ <4cbb1eff77de1e843912267ade4686cfa1acd610.camel@kepstin.ca>
+ <20210420143754.GA390118@chenyu-desktop>
+ <5cf35f3742d1181421d955174b1aa9434d042c96.camel@kepstin.ca>
 MIME-Version: 1.0
-References: <20210423023928.688767-1-ray.huang@amd.com>
-In-Reply-To: <20210423023928.688767-1-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 23 Apr 2021 14:09:49 +0200
-Message-ID: <CAJZ5v0iH0-YL-yVPSA2oJF7PGfQs5Tcv5ktH43xMLPAKysDXPw@mail.gmail.com>
-Subject: Re: [PATCH v3] x86, sched: Fix the AMD CPPC maximum perf on some
- specific generations
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5cf35f3742d1181421d955174b1aa9434d042c96.camel@kepstin.ca>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 4:40 AM Huang Rui <ray.huang@amd.com> wrote:
+On Tue, Apr 20, 2021 at 10:42:09AM -0400, Calvin Walton wrote:
+> On Tue, 2021-04-20 at 22:37 +0800, Chen Yu wrote:
+> > On Tue, Apr 20, 2021 at 09:28:06AM -0400, Calvin Walton wrote:
+> > > This patch has the same issue I noticed with the initial revision
+> > > of
+> > > Terry's patch - the idx_to_offset function returns type int (32-bit
+> > > signed), but MSR_PKG_ENERGY_STAT is greater than INT_MAX (or
+> > > rather,
+> > > would be interpreted as a negative number)
+> > > 
+> > > The end result is, as far as I can tell, that it hits the if
+> > > (offset <
+> > > 0) check in update_msr_sum() resulting in the timer callback for
+> > > updating the stat in the background when long durations are used to
+> > > not
+> > > happen.
+> > > 
+> > > For short durations it still works fine since the background update
+> > > isn't used.
+> > > 
+> > Ah, got it, nice catch. How about an incremental patch based on Bas'
+> > one
+> > to fix this 'overflow' issue? Would converting offset_to_idx(),
+> > idx_to_offset() and
+> > update_msr_sum() to use off_t instead of int be enough? Do you or
+> > Terry have interest
+> > to cook that patch? For Terry's version, I'm not sure if spliting
+> > the code into different CPU vendor would benefit in the future,
+> > except
+> > that we would have plenty of new MSRs to be introduced in the future.
+> 
+> Yes, I believe updating the offset_to_idx(), idx_to_offset(), and
+> update_msr_sum() functions is sufficient. I can do the incremental
+> patch for that this evening if nobody beats me to it :)
 >
-> Some AMD Ryzen generations has different calculation method on maximum
-> perf. 255 is not for all asics, some specific generations should use 166
-> as the maximum perf. Otherwise, it will report incorrect frequency value
-> like below:
->
-> ~ → lscpu | grep MHz
-> CPU MHz:                         3400.000
-> CPU max MHz:                     7228.3198
-> CPU min MHz:                     2200.0000
->
-> Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-> Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
->
-> Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-> Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=211791
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: Nathan Fontenot <nathan.fontenot@amd.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: x86@kernel.org
-> Cc: stable@vger.kernel.org
-> ---
->
-> Changes from V1 -> V2:
-> - Enhance the commit message.
-> - Move amd_get_highest_perf() into amd.c.
-> - Refine the implementation of switch-case.
-> - Cc stable mail list.
->
-> Changes from V2 -> V3:
-> - Move the update into cppc_get_perf_caps() to correct the highest perf value in
->   the API.
->
-> ---
->  arch/x86/include/asm/processor.h |  2 ++
->  arch/x86/kernel/cpu/amd.c        | 22 ++++++++++++++++++++++
->  drivers/acpi/cppc_acpi.c         |  8 ++++++--
->  3 files changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index f1b9ed5efaa9..908bcaea1361 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -804,8 +804,10 @@ DECLARE_PER_CPU(u64, msr_misc_features_shadow);
->
->  #ifdef CONFIG_CPU_SUP_AMD
->  extern u32 amd_get_nodes_per_socket(void);
-> +extern u32 amd_get_highest_perf(void);
->  #else
->  static inline u32 amd_get_nodes_per_socket(void)       { return 0; }
-> +static inline u32 amd_get_highest_perf(void)           { return 0; }
->  #endif
->
->  static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index 347a956f71ca..aadb691d9357 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -1170,3 +1170,25 @@ void set_dr_addr_mask(unsigned long mask, int dr)
->                 break;
->         }
->  }
-> +
-> +u32 amd_get_highest_perf(void)
-> +{
-> +       struct cpuinfo_x86 *c = &boot_cpu_data;
-> +       u32 cppc_max_perf = 225;
-> +
-> +       switch (c->x86) {
-> +       case 0x17:
-> +               if ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
-> +                   (c->x86_model >= 0x70 && c->x86_model < 0x80))
-> +                       cppc_max_perf = 166;
-> +               break;
-> +       case 0x19:
-> +               if ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
-> +                   (c->x86_model >= 0x40 && c->x86_model < 0x70))
-> +                       cppc_max_perf = 166;
-> +               break;
-> +       }
-> +
-> +       return cppc_max_perf;
-> +}
-> +EXPORT_SYMBOL_GPL(amd_get_highest_perf);
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 69057fcd2c04..58e72b6e222f 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1107,8 +1107,12 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->                 }
->         }
->
-> -       cpc_read(cpunum, highest_reg, &high);
-> -       perf_caps->highest_perf = high;
-> +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+Calvin, could you please take a look at the following version if it is suitible?
 
-This is a generic arch-independent file.
+From b2e63fe4f02e17289414b4f61237da822df115fb Mon Sep 17 00:00:00 2001
+From: Calvin Walton <calvin.walton@kepstin.ca>
+Date: Fri, 23 Apr 2021 17:32:13 +0800
+Subject: [PATCH 3/5] tools/power turbostat: Fix offset overflow issue in index
+ converting
 
-Can we avoid adding the x86-specific check here?
+The idx_to_offset() function returns type int (32-bit signed), but
+MSR_PKG_ENERGY_STAT is greater than INT_MAX (or rather, would be
+interpreted as a negative number). The end result is that it hits
+the if (offset < 0) check in update_msr_sum() resulting in the timer
+callback for updating the stat in the background when long durations
+are used to not happen. The similar issue exists in offset_to_idx()
+and update_msr_sum().
 
-> +               perf_caps->highest_perf = amd_get_highest_perf();
-> +       } else {
-> +               cpc_read(cpunum, highest_reg, &high);
-> +               perf_caps->highest_perf = high;
-> +       }
->
->         cpc_read(cpunum, lowest_reg, &low);
->         perf_caps->lowest_perf = low;
-> --
-> 2.25.1
->
+This patch fixes this issue by converting the 'int' type to 'off_t'
+accordingly.
+
+Fixes: 9972d5d84d76 ("tools/power turbostat: Enable accumulate RAPL display")
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index a211264b57fd..77557122b292 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -296,9 +296,9 @@ struct msr_sum_array {
+ /* The percpu MSR sum array.*/
+ struct msr_sum_array *per_cpu_msr_sum;
+ 
+-int idx_to_offset(int idx)
++off_t idx_to_offset(int idx)
+ {
+-	int offset;
++	off_t offset;
+ 
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+@@ -328,7 +328,7 @@ int idx_to_offset(int idx)
+ 	return offset;
+ }
+ 
+-int offset_to_idx(int offset)
++int offset_to_idx(off_t offset)
+ {
+ 	int idx;
+ 
+@@ -3338,7 +3338,7 @@ static int update_msr_sum(struct thread_data *t, struct core_data *c, struct pkg
+ 
+ 	for (i = IDX_PKG_ENERGY; i < IDX_COUNT; i++) {
+ 		unsigned long long msr_cur, msr_last;
+-		int offset;
++		off_t offset;
+ 
+ 		if (!idx_valid(i))
+ 			continue;
+@@ -3347,7 +3347,7 @@ static int update_msr_sum(struct thread_data *t, struct core_data *c, struct pkg
+ 			continue;
+ 		ret = get_msr(cpu, offset, &msr_cur);
+ 		if (ret) {
+-			fprintf(outf, "Can not update msr(0x%x)\n", offset);
++			fprintf(outf, "Can not update msr(0x%llx)\n", (long long int)offset);
+ 			continue;
+ 		}
+
+thanks,
+Chenyu 
+-- 
+2.25.1
+
+ 
+> -- 
+> Calvin Walton <calvin.walton@kepstin.ca>
+> 
