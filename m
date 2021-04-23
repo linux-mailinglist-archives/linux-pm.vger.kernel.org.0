@@ -2,69 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1098E3694C6
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 16:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6410369589
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Apr 2021 17:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242540AbhDWOcm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 10:32:42 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46860 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229871AbhDWOck (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Apr 2021 10:32:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9B51DB133;
-        Fri, 23 Apr 2021 14:32:02 +0000 (UTC)
-Date:   Fri, 23 Apr 2021 16:32:05 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Calvin Walton <calvin.walton@kepstin.ca>,
-        Terry Bowman <terry.bowman@amd.com>, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wei.huang2@amd.com, aros@gmx.com, rui.zhang@intel.com
-Subject: Re: [PATCH v2] tools/power turbostat: Fix RAPL summary collection on
- AMD processors
-Message-ID: <YILaZTOG9EPaLnJ8@zn.tnic>
-References: <20210419195812.147710-1-terry.bowman@amd.com>
- <20210420020336.GA386151@chenyu-desktop>
- <20210420080701.GA2326@zn.tnic>
- <20210420131541.GA388877@chenyu-desktop>
- <4cbb1eff77de1e843912267ade4686cfa1acd610.camel@kepstin.ca>
- <20210420143754.GA390118@chenyu-desktop>
- <5cf35f3742d1181421d955174b1aa9434d042c96.camel@kepstin.ca>
- <20210423121607.GA426003@chenyu-desktop>
- <20210423121934.GC24710@zn.tnic>
- <20210423133430.GA426650@chenyu-desktop>
+        id S230330AbhDWPEW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 11:04:22 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:50429 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243167AbhDWPEI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Apr 2021 11:04:08 -0400
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lZxL8-0000Oy-VO
+        for linux-pm@vger.kernel.org; Fri, 23 Apr 2021 15:03:31 +0000
+Received: by mail-ed1-f69.google.com with SMTP id f9-20020a50fe090000b02903839889635cso16780463edt.14
+        for <linux-pm@vger.kernel.org>; Fri, 23 Apr 2021 08:03:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BnP33dKyOiWs5gTSp1Xp21cLfmehBUMSIZEClRM77mc=;
+        b=PaetFiTJRrI08LU7R4a9Ga5Bt/rq/UZY7Y7JRLplSTzP7x0sqDRKRX1laXlM8c2XNH
+         aY5+MbabPTSIF7Qc+QTHia8XjCi0hvgex7G5EFQfyQjPnfGssymlLWYHUZHEDNm4Dvwr
+         XeLFaUshTCvLdagc8HNJfxPq2br9TRJLzTBENtaQZirOx5Ma5U3dPYed1Y33ZjwznCxd
+         SNx995E3PgekuzKHSbciMOnY2xDppQUzbVFMCzdc/Ma5j8SJ4D725PK/zcCfhjJ7Iv3v
+         42CccnKqpb6PkZON8EK1CyfQZ4p0okkVA5gM9EFUtTuYmh/81MVePojY6eSS/VGoCIMg
+         a8qw==
+X-Gm-Message-State: AOAM532zT0YqRdzTfCmYq8mz95s20Zw8PwMsf253geQQ+NPv+Wx4WMMK
+        M1yzignJonUgPBZW+kQF5li2Ad6Nku64z1Gi0RssK1L3RHH116OrZEy7PvhJ1i+BVgrYpAwPld5
+        yvGYE0LUk/9Khct1dRMOe5jFoigBi7cenHZrM
+X-Received: by 2002:a05:6402:26ca:: with SMTP id x10mr5042809edd.386.1619190210642;
+        Fri, 23 Apr 2021 08:03:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxH/qcs80BvCxBEJB+SWn/ljk0PbwcWStmFW4iLrCx0OvXxbQsL+wVMKcNWhhBRigcCKa+P+w==
+X-Received: by 2002:a05:6402:26ca:: with SMTP id x10mr5042791edd.386.1619190210501;
+        Fri, 23 Apr 2021 08:03:30 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-180-75.adslplus.ch. [188.155.180.75])
+        by smtp.gmail.com with ESMTPSA id t7sm4207682ejo.120.2021.04.23.08.03.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Apr 2021 08:03:30 -0700 (PDT)
+Subject: Re: [PATCH] PM: runtime: document common mistake with
+ pm_runtime_get_sync()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20210422164606.68231-1-krzysztof.kozlowski@canonical.com>
+ <CAJZ5v0iUQBfrTtVmfrrDixZnnr1_THgaM1+mFu4TRT+OOYb2mw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <a56096c4-0b64-ca16-8d5c-d086e96a436d@canonical.com>
+Date:   Fri, 23 Apr 2021 17:03:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0iUQBfrTtVmfrrDixZnnr1_THgaM1+mFu4TRT+OOYb2mw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210423133430.GA426650@chenyu-desktop>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 09:34:30PM +0800, Chen Yu wrote:
-> I see, I'll add Calvin's SOB here. Previously I thought the 'From' field might
-> be enough to indicate the Author, but it seems to not be the case.
+On 23/04/2021 16:08, Rafael J. Wysocki wrote:
+> On Thu, Apr 22, 2021 at 6:46 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> pm_runtime_get_sync(), contradictory to intuition, does not drop the
+>> runtime PM usage counter on errors which lead to several wrong usages in
+>> drivers (missing the put).  pm_runtime_resume_and_get() was added as a
+>> better implementation so document the preference of using it, hoping it
+>> will stop bad patterns.
+>>
+>> Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  Documentation/power/runtime_pm.rst | 4 +++-
+>>  include/linux/pm_runtime.h         | 3 +++
+>>  2 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+>> index 18ae21bf7f92..478f08942811 100644
+>> --- a/Documentation/power/runtime_pm.rst
+>> +++ b/Documentation/power/runtime_pm.rst
+>> @@ -378,7 +378,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+>>
+>>    `int pm_runtime_get_sync(struct device *dev);`
+>>      - increment the device's usage counter, run pm_runtime_resume(dev) and
+>> -      return its result
+>> +      return its result;
+>> +      be aware that it does not drop the device's usage counter on errors so
+>> +      usage of pm_runtime_resume_and_get(dev) usually results in cleaner code
+> 
+> Whether or not it results in cleaner code depends on what that code does.
+> 
+> If the code is
+> 
+> pm_runtime_get_sync(dev);
+> 
+> <Do something that will fail if the device is in a low-power state,
+> but there is no way to handle the failure gracefully anyway>
+> 
+> pm_runtime_put(dev);
+> 
+> then having to use pm_runtime_resume_and_get() instead of the
+> pm_runtime_get_sync() would be a nuisance.
+> 
+> However, if the code wants to check the return value, that is:
+> 
+> error = pm_runtime_resume_and_get(dev);
+> if (error)
+>         return error;
+> 
+> <Do something that will crash and burn the system if the device is in
+> a low-power state>
+> 
+> pm_runtime_put(dev);
+> 
+> then obviously pm_runtime_resume_and_get() should be your choice.
+> 
+> The rule of thumb seems to be whether or not the return value is going
+> to be used.
 
-The From: field is used by git to take the author but that's not the
-problem. You need the author her/himself to sign off on the work - no
-one else can do that.
+Yes, you're right. What I wanted to point is that there is a pattern of
+missing put when using pm_runtime_get_sync() all over the kernel. It's
+quite common mistake because the interface is non-intuitive.
 
-You can refresh on that here:
+Therefore I find worth to warn users of the API: usually, for simple
+cases, one should use the pm_runtime_resume_and_get(). This only a hint,
+matching common cases, but not every case. I am not claiming that one is
+better than other, just that old interface mislead in the past.
 
-Documentation/process/submitting-patches.rst
+Maybe you wish to rephrase the comment to:
+"be aware that it does not drop the device's usage counter on errors so
+check if pm_runtime_resume_and_get(dev) would result in a cleaner code"
 
-> Got it. The off_t was derived from old code in this file from get_msr() and alike,
-> let me convert this return value to unsigned int.
 
-See my reply to Calvin - it needs to by off_t after all.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Best regards,
+Krzysztof
