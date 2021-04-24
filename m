@@ -2,95 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED8C369E5C
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Apr 2021 03:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AF8369E62
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Apr 2021 03:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236612AbhDXBSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Apr 2021 21:18:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46420 "EHLO mail.kernel.org"
+        id S231386AbhDXBbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Apr 2021 21:31:01 -0400
+Received: from mga01.intel.com ([192.55.52.88]:5544 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231386AbhDXBSU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Apr 2021 21:18:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 78CFF61207;
-        Sat, 24 Apr 2021 01:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619227063;
-        bh=By/NN3iKUDMMXc5KvREFSYtN3+1LHo46xXT/i+85luc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Z55so2ptj24WKgL+MBpW1ZrgDMQw+QeK3hSf4UTuSOuQ8hERuzwfYYJhBeveDYg8Q
-         RqJwuVSXGQm8knWyvYHOS5eFLGTo+xu+QCyVNM8/dJ25DGGPGUd5dR+B+EMuB28dy9
-         WQVrt+Qx3LYF8IVnrpEkOJmu0hSWguy/fDZw/tNf+qzpjqMrrYZVUQDjxdRst/IupS
-         1ymQbOeDbDsKpeGqxUNTOQhCo2RBXttoGOtzGTy4bHnrS3TW0tMWwFoS65jF31arnh
-         t/qK+tcL56qVXCMS3+x+mHJ7gHxn8nWewaSf922r9MxTtCEH9ubm27os5pFSzV2vLh
-         jtU+NkV0IRY7w==
-Content-Type: text/plain; charset="utf-8"
+        id S229957AbhDXBa6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Apr 2021 21:30:58 -0400
+IronPort-SDR: FKY4dnIo9Jz4Vd8Sj6gT2k/giu3lQDLf+b0TzwInp8Gg7cS6IeNf0kGNVCMyC7Qu3/vfC0QtuV
+ kJ0Vn9VWbmRQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9963"; a="216842661"
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="216842661"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 18:30:17 -0700
+IronPort-SDR: /s4x2t3D7mrvOz1DX7bj+Vybnle2r3lG7F47Skqr7EEa2MNQz4ncikTzleiTpCa3F+m6lAZhE7
+ JSlvi2WfQNmg==
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="464504518"
+Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.173])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 18:30:13 -0700
+Date:   Sat, 24 Apr 2021 09:34:01 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Calvin Walton <calvin.walton@kepstin.ca>
+Cc:     Borislav Petkov <bp@suse.de>, Terry Bowman <terry.bowman@amd.com>,
+        lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wei.huang2@amd.com, aros@gmx.com,
+        rui.zhang@intel.com
+Subject: Re: [PATCH v2] tools/power turbostat: Fix RAPL summary collection on
+ AMD processors
+Message-ID: <20210424013401.GA432412@chenyu-desktop>
+References: <20210419195812.147710-1-terry.bowman@amd.com>
+ <20210420020336.GA386151@chenyu-desktop>
+ <20210420080701.GA2326@zn.tnic>
+ <20210420131541.GA388877@chenyu-desktop>
+ <4cbb1eff77de1e843912267ade4686cfa1acd610.camel@kepstin.ca>
+ <20210420143754.GA390118@chenyu-desktop>
+ <5cf35f3742d1181421d955174b1aa9434d042c96.camel@kepstin.ca>
+ <20210423121607.GA426003@chenyu-desktop>
+ <20210423121934.GC24710@zn.tnic>
+ <23f75aaf3d37cbad6f8ed7bd970434e4a2dc388e.camel@kepstin.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210423191236.265996-1-tudor.ambarus@microchip.com>
-References: <20210423171335.262316-1-tudor.ambarus@microchip.com> <20210423191236.265996-1-tudor.ambarus@microchip.com>
-Subject: Re: [PATCH] clk: Skip clk provider registration when np is NULL
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, kernel-team@android.com,
-        linux-rpi-kernel@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        frowand.list@gmail.com, geert@linux-m68k.org,
-        gregkh@linuxfoundation.org, guillaume.tucker@collabora.com,
-        khilman@kernel.org, len.brown@intel.com, linux@roeck-us.net,
-        maxime@cerno.tech, maz@kernel.org, mturquette@baylibre.com,
-        nsaenz@kernel.org, nsaenzjulienne@suse.de, pavel@ucw.cz,
-        rafael@kernel.org, robh+dt@kernel.org, saravanak@google.com,
-        tglx@linutronix.de, ulf.hansson@linaro.org
-Date:   Fri, 23 Apr 2021 18:17:42 -0700
-Message-ID: <161922706225.4054253.6359310296431247310@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <23f75aaf3d37cbad6f8ed7bd970434e4a2dc388e.camel@kepstin.ca>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Tudor Ambarus (2021-04-23 12:12:36)
-> commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is adde=
-d")
-> revealed that clk/bcm/clk-raspberrypi.c driver calls
-> devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted i=
-n a
-> NULL pointer dereference in of_clk_add_provider() when calling
-> fwnode_dev_initialized().
->=20
-> Returning 0 is reducing the if conditions in driver code and is being
-> consistent with the CONFIG_OF=3Dn inline stub that returns 0 when CONFIG_=
-OF
-> is disabled. The downside is that drivers will maybe register clkdev look=
-ups
-> when they don't need to and waste some memory.
->=20
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is adde=
-d")
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
+On Fri, Apr 23, 2021 at 10:00:14AM -0400, Calvin Walton wrote:
+> On Fri, 2021-04-23 at 14:19 +0200, Borislav Petkov wrote:
+> > On Fri, Apr 23, 2021 at 08:16:07PM +0800, Chen Yu wrote:
+> > > From b2e63fe4f02e17289414b4f61237da822df115fb Mon Sep 17 00:00:00
+> > > 2001
+> > > From: Calvin Walton <calvin.walton@kepstin.ca>
+> > > Date: Fri, 23 Apr 2021 17:32:13 +0800
+> > > Subject: [PATCH 3/5] tools/power turbostat: Fix offset overflow
+> > > issue in index
+> > >  converting
+> > > 
+> > > The idx_to_offset() function returns type int (32-bit signed), but
+> > > MSR_PKG_ENERGY_STAT is greater than INT_MAX (or rather, would be
+> > > interpreted as a negative number). The end result is that it hits
+> > > the if (offset < 0) check in update_msr_sum() resulting in the
+> > > timer
+> > > callback for updating the stat in the background when long
+> > > durations
+> > > are used to not happen. The similar issue exists in offset_to_idx()
+> > > and update_msr_sum().
+> > > 
+> > > This patch fixes this issue by converting the 'int' type to 'off_t'
+> > > accordingly.
+> > > 
+> > > Fixes: 9972d5d84d76 ("tools/power turbostat: Enable accumulate RAPL
+> > > display")
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > 
+> > This patch's authorship is weird: it says From: Calvin but doesn't
+> > have
+> > his SOB here - only yours.
+> 
+> I think this patch is adapted from one of my earlier submissions? I
+> don't think I can really say that I wrote it, but I'll certainly review
+> it.
+> 
+> > 
+> > > ---
+> > >  tools/power/x86/turbostat/turbostat.c | 10 +++++-----
+> > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/tools/power/x86/turbostat/turbostat.c
+> > > b/tools/power/x86/turbostat/turbostat.c
+> > > index a211264b57fd..77557122b292 100644
+> > > --- a/tools/power/x86/turbostat/turbostat.c
+> > > +++ b/tools/power/x86/turbostat/turbostat.c
+> > > @@ -296,9 +296,9 @@ struct msr_sum_array {
+> > >  /* The percpu MSR sum array.*/
+> > >  struct msr_sum_array *per_cpu_msr_sum;
+> > >  
+> > > -int idx_to_offset(int idx)
+> > > +off_t idx_to_offset(int idx)
+> > 
+> > And this is silly. MSRs are unsigned int. Fullstop.
+> > 
+> > So that function should either return u32 or unsigned int or so.
+> 
+> So, there's two problems with that:
+>    1. This function needs to be able to return an error value that cannot be
+>       confused with a valid MSR. This is currently done by returning a
+>       negative number. If an unsigned value is used, a different way of
+>       indicating errors needs to be written.
+>    2. We are not using CPU instructions to access MSRs direction. Instead
+>       they are being read from /dev/msr. So the "offset" value is actually a
+>       seek into the /dev/msr file (using pread), and thus is of type off_t.
+>
+I see, I misunderstood it with kernel's rdmsr() and ... I'll use the original version.
 
-Please don't send patches as replies to previous threads. It makes it
-harder to find the patch at a glance of all threads.
-
-It also seems to be a
-
-Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/=
-removed")
-
-so can you please have both Fixes tags?
-
-> This would be the second approach, where we don't return an error when
-> one calls devm_of_clk_add_hw_provider with a NULL of_node, but instead
-> we just return 0 and skip the logic in the core and the drivers.
-
-With the Fixes tag updated please send To: gregkh@ to pick up as the
-problematic patch (6579c8d97ad7) is in the driver tree and not the clk
-tree, and add my tag
-
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+thanks,
+Chenyu
+> -- 
+> Calvin Walton <calvin.walton@kepstin.ca>
+> 
