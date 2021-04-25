@@ -2,192 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E6936A2B6
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Apr 2021 20:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38F836A43B
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Apr 2021 04:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbhDXS6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Apr 2021 14:58:33 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51686 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbhDXS6c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Apr 2021 14:58:32 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 260D11F4310A
-Message-ID: <7786c76ae276ee7bb5885592231a8089c9bfbdf9.camel@collabora.com>
-Subject: Re: [PATCH 2/2] thermal/rockchip: Support RK3568 SoCs in the
- thermal driver
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
-Date:   Sat, 24 Apr 2021 15:57:43 -0300
-In-Reply-To: <ef9140da-c996-512a-b459-53461bd8198e@linaro.org>
-References: <20210421200445.32977-1-ezequiel@collabora.com>
-         <20210421200445.32977-2-ezequiel@collabora.com>
-         <ef9140da-c996-512a-b459-53461bd8198e@linaro.org>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        id S229592AbhDYCml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Apr 2021 22:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229580AbhDYCmk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Apr 2021 22:42:40 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06615C061574;
+        Sat, 24 Apr 2021 19:42:01 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id u11so21419947pjr.0;
+        Sat, 24 Apr 2021 19:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=+SCTdclT0hokdrzYrWlRFY0qufMkTB7i1ku1nmB//ro=;
+        b=HUDxu27MuN3huR1BrhjumYWPiC/G95/QWWEFcF2t0vG6Shslkbp/O3gY2TvHKtwejy
+         zj7dvHggbast1op9n6+wCTNIlA1/2/OTIRypLY9JKAQtRYPp4Rf23WeR8w1QpHgI9xN3
+         FuZi00lg3Ftq8n+8nR1aQ1g8WCdaU3QWRcDheTZagQY2r13w4b7A8ZRFSdPNYu+U+5vF
+         py5Hx7DrEV0eO3FcFHmJ3kapaP4vrZ2t465Too1fauHymZuEa2VSi0S+BrFT4ZVd/1ut
+         DiijwNa2quFXq6olXoaVyvNuDig87qj0gJ6/Swn2q6TR9Vt7NTr+ZEC2wlKqeScfbqNo
+         ukuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=+SCTdclT0hokdrzYrWlRFY0qufMkTB7i1ku1nmB//ro=;
+        b=a0/0e/Bt1/E7ln31IH9xdBCe/4tES6cy/vFzEUliADwpUZCulBrlpag3mkJOw7sf5O
+         PbXPyWLE7A19y9d93MbT4nDnGmgdbVFixrxiKk6IzCM04kupk277tN791hSCQJm4j2Kp
+         h2XV0MGduIqpr5zhMC9sjMKpOWvG+OTBfn+rNLthosyICzArg2EPFxLZjE+9vfUfbN8x
+         otXYpiErX7ve278EMW1al/egYGP3/ZxbXPatF16MIqjqBTpIpSRHXhaAPCMOLYA9WswD
+         PbKpZS2EcJFG3gzI+1pZvmBBPrqiC46YT+61qc9SQvog0LI6mTFSoWY9qTtVNSuQfu5d
+         wtgw==
+X-Gm-Message-State: AOAM5332f8VeB/Nuv8IykGJq2m9+5skV++piUMcvxP2pEkzGGJBnZFER
+        8ZPyrgYRMMdQjYSqX76mguA=
+X-Google-Smtp-Source: ABdhPJxNNvBlAGs4C5zdDZSd9HX8tXl4eVujm64KPKFUFBzRn/4ZViNa9tDkrTVVCZKrmfA+nP6IlQ==
+X-Received: by 2002:a17:90a:6f45:: with SMTP id d63mr14256329pjk.39.1619318521481;
+        Sat, 24 Apr 2021 19:42:01 -0700 (PDT)
+Received: from MacBook-Pro.local ([122.10.101.135])
+        by smtp.gmail.com with ESMTPSA id f20sm8138627pgb.47.2021.04.24.19.41.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Apr 2021 19:42:00 -0700 (PDT)
+Subject: Re: [PATCH 1/2] cpupower: Fix amd cpu (family < 0x17) active state
+ issue
+To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
+        Thomas Renninger <trenn@suse.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lishujin@kuaishou.com, xufuhai <xufuhai@kuaishou.com>
+References: <bf312780-dda7-d08f-6098-1d8a7d4044e4@gmail.com>
+ <378e58d3-5300-1179-44bb-bc2b42a3beb0@gmail.com>
+ <87e43451-e7d3-877e-7081-92838ae699e6@linuxfoundation.org>
+From:   =?UTF-8?B?5b6Q56aP5rW3?= <xufuhai1992@gmail.com>
+Message-ID: <a7418aab-847f-3c06-ddc4-3c6aaea90b7c@gmail.com>
+Date:   Sun, 25 Apr 2021 10:41:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.9.1
 MIME-Version: 1.0
+In-Reply-To: <87e43451-e7d3-877e-7081-92838ae699e6@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+okay, I believe the two patches are for fixing defferent issue, I will update my patches as your mention
 
-Thanks for the review.
+THANKS
 
-On Sat, 2021-04-24 at 16:14 +0200, Daniel Lezcano wrote:
-> On 21/04/2021 22:04, Ezequiel Garcia wrote:
-> > From: Finley Xiao <finley.xiao@rock-chips.com>
-> > 
-> > The RK3568 SoCs have two Temperature Sensors, channel 0 is for CPU,
-> > channel 1 is for GPU.
-> > 
-> > Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > ---
-> >  drivers/thermal/rockchip_thermal.c | 107 +++++++++++++++++++++++++++++
-> >  1 file changed, 107 insertions(+)
-> > 
-> > diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> > index aa9e0e31ef98..8e26f2685003 100644
-> > --- a/drivers/thermal/rockchip_thermal.c
-> > +++ b/drivers/thermal/rockchip_thermal.c
-> > @@ -211,7 +211,11 @@ struct rockchip_thermal_data {
-> >  #define TSADCV3_AUTO_PERIOD_TIME               1875 /* 2.5ms */
-> >  #define TSADCV3_AUTO_PERIOD_HT_TIME            1875 /* 2.5ms */
-> >  
-> > +#define TSADCV5_AUTO_PERIOD_TIME               1622 /* 2.5ms */
-> > +#define TSADCV5_AUTO_PERIOD_HT_TIME            1622 /* 2.5ms */
-> > +
-> >  #define TSADCV2_USER_INTER_PD_SOC              0x340 /* 13 clocks */
-> > +#define TSADCV5_USER_INTER_PD_SOC              0xfc0 /* 97us, at least 90us */
-> >  
-> >  #define GRF_SARADC_TESTBIT                     0x0e644
-> >  #define GRF_TSADC_TESTBIT_L                    0x0e648
-> > @@ -219,6 +223,12 @@ struct rockchip_thermal_data {
-> >  
-> >  #define PX30_GRF_SOC_CON2                      0x0408
-> >  
-> > +#define RK3568_GRF_TSADC_CON                   0x0600
-> > +#define RK3568_GRF_TSADC_ANA_REG0              (0x10001 << 0)
-> > +#define RK3568_GRF_TSADC_ANA_REG1              (0x10001 << 1)
-> > +#define RK3568_GRF_TSADC_ANA_REG2              (0x10001 << 2)
-> > +#define RK3568_GRF_TSADC_TSEN                  (0x10001 << 8)
-> > +
-> >  #define GRF_SARADC_TESTBIT_ON                  (0x10001 << 2)
-> >  #define GRF_TSADC_TESTBIT_H_ON                 (0x10001 << 2)
-> >  #define GRF_TSADC_VCM_EN_L                     (0x10001 << 7)
-> > @@ -474,6 +484,45 @@ static const struct tsadc_table rk3399_code_table[] = {
-> >         {TSADCV3_DATA_MASK, 125000},
-> >  };
-> >  
-> > +static const struct tsadc_table rk3568_code_table[] = {
-> > +       {0, -40000},
-> > +       {1584, -40000},
-> > +       {1620, -35000},
-> > +       {1652, -30000},
-> > +       {1688, -25000},
-> > +       {1720, -20000},
-> > +       {1756, -15000},
-> > +       {1788, -10000},
-> > +       {1824, -5000},
-> > +       {1856, 0},
-> > +       {1892, 5000},
-> > +       {1924, 10000},
-> > +       {1956, 15000},
-> > +       {1992, 20000},
-> > +       {2024, 25000},
-> > +       {2060, 30000},
-> > +       {2092, 35000},
-> > +       {2128, 40000},
-> > +       {2160, 45000},
-> > +       {2196, 50000},
-> > +       {2228, 55000},
-> > +       {2264, 60000},
-> > +       {2300, 65000},
-> > +       {2332, 70000},
-> > +       {2368, 75000},
-> > +       {2400, 80000},
-> > +       {2436, 85000},
-> > +       {2468, 90000},
-> > +       {2500, 95000},
-> > +       {2536, 100000},
-> > +       {2572, 105000},
-> > +       {2604, 110000},
-> > +       {2636, 115000},
-> > +       {2672, 120000},
-> > +       {2704, 125000},
-> > +       {TSADCV2_DATA_MASK, 125000},
-> > +};
-> > +
-> >  static u32 rk_tsadcv2_temp_to_code(const struct chip_tsadc_table *table,
-> >                                    int temp)
-> >  {
-> > @@ -701,6 +750,35 @@ static void rk_tsadcv4_initialize(struct regmap *grf, void __iomem *regs,
-> >         regmap_write(grf, PX30_GRF_SOC_CON2, GRF_CON_TSADC_CH_INV);
-> >  }
-> >  
-> > +static void rk_tsadcv7_initialize(struct regmap *grf, void __iomem *regs,
-> > +                                 enum tshut_polarity tshut_polarity)
-> > +{
-> > +       writel_relaxed(TSADCV5_USER_INTER_PD_SOC, regs + TSADCV2_USER_CON);
-> > +       writel_relaxed(TSADCV5_AUTO_PERIOD_TIME, regs + TSADCV2_AUTO_PERIOD);
-> > +       writel_relaxed(TSADCV2_HIGHT_INT_DEBOUNCE_COUNT,
-> > +                      regs + TSADCV2_HIGHT_INT_DEBOUNCE);
-> > +       writel_relaxed(TSADCV5_AUTO_PERIOD_HT_TIME,
-> > +                      regs + TSADCV2_AUTO_PERIOD_HT);
-> > +       writel_relaxed(TSADCV2_HIGHT_TSHUT_DEBOUNCE_COUNT,
-> > +                      regs + TSADCV2_HIGHT_TSHUT_DEBOUNCE);
-> > +
-> > +       if (tshut_polarity == TSHUT_HIGH_ACTIVE)
-> > +               writel_relaxed(0U | TSADCV2_AUTO_TSHUT_POLARITY_HIGH,
-> > +                              regs + TSADCV2_AUTO_CON);
-> > +       else
-> > +               writel_relaxed(0U & ~TSADCV2_AUTO_TSHUT_POLARITY_HIGH,
-> > +                              regs + TSADCV2_AUTO_CON);
-> > +
-> > +       if (!IS_ERR(grf)) {
-> 
-> That is strange to do this check with a parameter. Is the sensor
-> functional if the regmap failed ?
-> 
-
-Indeed, it seems it's optional. The same check is in rk_tsadcv3_initialize,
-and also in rockchip_configure_from_dt():
-
-        /* The tsadc wont to handle the error in here since some SoCs didn't     
-         * need this property.                                                   
-         */                                                                      
-        thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");      
-        if (IS_ERR(thermal->grf))                                                
-                dev_warn(dev, "Missing rockchip,grf property\n"); 
-
-But I completely agree it looks strange without a comment,
-might be better to add one.
-
-> > +               regmap_write(grf, RK3568_GRF_TSADC_CON, RK3568_GRF_TSADC_TSEN);
-> > +               udelay(15);
-> > +               regmap_write(grf, RK3568_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG0);
-> > +               regmap_write(grf, RK3568_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG1);
-> > +               regmap_write(grf, RK3568_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG2);
-> > +               usleep_range(100, 200);
-> 
-> Is it possible to put a comment on why these delays are necessary (if
-> you have the info) ?
-> 
-
-Sure, I'll add a comment there. It is described in RK3568 Part1 TRM,
-section 18.5.2.
-
-Thanks,
-Ezequiel
-
+在 2021/4/24 上午6:26, Shuah Khan 写道:
+> On 4/19/21 8:27 PM, 徐福海 wrote:
+>> From: xufuhai<xufuhai@kuaishou.com>
+>>
+>> For the old  AMD processor (family < 0x17), cpupower will call the
+>> amd_pci_get_num_boost_states function, but for the non-root user
+>> pci_read_byte function (implementation comes from the psutil library),
+>> val will be set to 0xff, indicating that there is no read function
+>> callback. At this time, the original logic will set the cpupower turbo
+>> active state to yes. This is an obvious issue~
+>>
+>> Reproduce procedure:
+>>     cpupower frequency-info
+>>
+>> Reported-by: yangrui<yangrui@kuaishou.com>
+>> Signed-off-by: xufuhai<xufuhai@kuaishou.com>
+>
+> Also your Signed-off-by should match the from address.
+> There is a mismatch between the two.
+>
+>> Signed-off-by: chenguanqiao<chenguanqiao@kuaishou.com>
+>> Signed-off-by: lishujin<lishujin@kuaishou.com>
+>> Reviewed-by: Thomas Renninger<trenn@suse.com>
+>> ---
+>>   tools/power/cpupower/utils/helpers/amd.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
+>> index 97f2c857048e..6f9504906afa 100644
+>> --- a/tools/power/cpupower/utils/helpers/amd.c
+>> +++ b/tools/power/cpupower/utils/helpers/amd.c
+>> @@ -137,6 +137,13 @@ int amd_pci_get_num_boost_states(int *active, int *states)
+>>           return -ENODEV;
+>>         val = pci_read_byte(device, 0x15c);
+>> +
+>> +    /* If val is 0xff, meaning has no permisson to
+>> +     * get the boost states, return -1
+>> +     */
+>> +    if (val == 0xff)
+>> +        return -1;
+>> +
+>>       if (val & 3)
+>>           *active = 1;
+>>       else
+>> -- 
+>> 2.24.3 (Apple Git-128)
+>>
+>
+> I am seeing two patches with the same commit summary,
+> should these two be a singles patch?
+>
+> https://patchwork.kernel.org/project/linux-pm/patch/6e35df20-753a-6c9c-8786-3fc87cdd17ba@gmail.com/
+>
+> Please combine the two and send single patch if they fix the
+> same problem. If not, please change the commit log to reflect
+> the difference.
+>
+> thanks,
+> -- Shuah
+>
+>
