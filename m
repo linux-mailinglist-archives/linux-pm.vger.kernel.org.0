@@ -2,118 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF94436A8AA
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Apr 2021 19:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4028036A942
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Apr 2021 22:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbhDYRtT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Apr 2021 13:49:19 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:51450 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbhDYRtS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Apr 2021 13:49:18 -0400
-Received: from mail-ej1-f69.google.com ([209.85.218.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lais1-0005DR-Qs
-        for linux-pm@vger.kernel.org; Sun, 25 Apr 2021 17:48:37 +0000
-Received: by mail-ej1-f69.google.com with SMTP id q21-20020a170906a095b029038718807866so388588ejy.19
-        for <linux-pm@vger.kernel.org>; Sun, 25 Apr 2021 10:48:37 -0700 (PDT)
+        id S231292AbhDYUsD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Apr 2021 16:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230494AbhDYUsD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Apr 2021 16:48:03 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CB8C061761
+        for <linux-pm@vger.kernel.org>; Sun, 25 Apr 2021 13:47:21 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id z14so1467505ioc.12
+        for <linux-pm@vger.kernel.org>; Sun, 25 Apr 2021 13:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mf3PfXpISSLDZMwm9YZTjHVTAuZA/fvHBTlgaYQIzcI=;
+        b=X5AVotbEK6atQhNjrhtrKs3bygci5Hs9SdVKnTVbPJDpTIwFNEExX/mnZzzaIdYN56
+         We87O01mb+dinYzuDIkE/XV7X1vEDC4s4HdXwijqqdwtS7HAUrVy61RfAHMqoCuGCyo0
+         iXVBDvNwY6dcWBtMwEGuEjADsc3EnDeqpmfm5IkABz+d0gjFduOp8i+EaHSzTxCvrlwt
+         ooTjGMtdNMvWmGYsWaV6hnPZ/DCQkJBFckbUYsB9c5m9gRat1RJ1MjNwU2LYK+qcjiuv
+         jfeJiTcUhCgFaBjwR7/Yy/+1OUwpC3KXdnCJfaYrniNABJ5m94F47gR+DlhbLbzH8XNu
+         xCGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XPLSoZ/tcqePUCSPTFPBT43x+MShOvw/eATV++A32uY=;
-        b=THW7zRULnPOBRONUKBjyfENqK7jwtPwkuolokBQob156EaFfamU4iu80fNJRHarbJN
-         DAGSqPt2KGGIcOFuW5wqfzDJin7leLT3EwjEgDhdCBBOgd2v8dJ10PvUJsqNINnbO1gR
-         dG+f6Atm4DX4w/ryhKcxsSebno4KiaPuuGtmVTqSOvEetnoML2616F5NUlNkZTBUkrwY
-         1wx6q+y/S2cOhBLMuHxQPP2DRAjZb9m/i6uubPLJb+igomzSdeR44i/7Cn6ZiqkbOLRA
-         Wo9Kj97IpWKqg8WacF9A9xDAF2VPGVZsdNKpGPXgKPpYBdim1wxaMypUKJcLYfgPOSbN
-         780g==
-X-Gm-Message-State: AOAM531hP4TYt7CJltDGy75B+rSd7uoUqbpQF2GHCmDmnVER6Fd9/HHF
-        bqkJZtvd/fX96/ZUhz53hpm5F2A+qrNajoiYLROhc9JFm27NoVrD2BXWD1bijpgVTormdarXjuu
-        +RETpRjC3T0kRgGXSaAdFKexEBUv3IZzRgD4n
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr14535238ejc.283.1619372915988;
-        Sun, 25 Apr 2021 10:48:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxwDYTMcE/A1dbagzjZUokQ/3sexJzDoZwW2rVwFta8ofhbvG82emcgOUJvU4/jj3FwCYRVQw==
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr14535230ejc.283.1619372915860;
-        Sun, 25 Apr 2021 10:48:35 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-180-75.adslplus.ch. [188.155.180.75])
-        by smtp.gmail.com with ESMTPSA id c12sm10306849eja.12.2021.04.25.10.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Apr 2021 10:48:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 2/2] thermal: sprd: add missing of_node_put for loop iteration
-Date:   Sun, 25 Apr 2021 19:48:31 +0200
-Message-Id: <20210425174831.164332-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210425174831.164332-1-krzysztof.kozlowski@canonical.com>
-References: <20210425174831.164332-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mf3PfXpISSLDZMwm9YZTjHVTAuZA/fvHBTlgaYQIzcI=;
+        b=KTfSmHvp1Czj1dLh4LK3IWJ1XlLR1BYR2bA2Y1G32RqP2eMLiQEpINfZ0jit1j79AV
+         5UcAR/4mnS7QqUHSIxU3Z91wTY2KMyshVYg1EgFHaUU7PDHbNFcIyyPbZjaHG/gS2mg4
+         R8wOdLaoEtkIUIkDioR69yYg5rKjY9s8A2LmyFUje7SUvKz65Atte+1VrY0zPdamp35q
+         tnJelQHuf8Ze9plFhD/oansKAKbLV7elXLAvGIghgu6h4SKUB9ZVPXSQDY05d+SG+B6q
+         MNf+rwfg00fRZuQaLYihhwhtl1sG6TKHeLcDPPRhb72pmhcjkuH62H1lYINBYOTeFttb
+         vQ4Q==
+X-Gm-Message-State: AOAM530EKLPesHJL8/F2fj6l7XwahR9BiMXd2du5dVcUKNTY00R9g/xx
+        QOHTRudg+Ik4ThE2Y4hIQv/dI4rC/WGGn5SGpjjm0g==
+X-Google-Smtp-Source: ABdhPJygw52SbW2dXW+oPoyP50PRJ3SqpU5dALd4uwGiFSlA85XNU5GjOTBuXNctFj4gYs+N1Ax+fsUeXxWS12NU3Ec=
+X-Received: by 2002:a05:6638:2044:: with SMTP id t4mr13460135jaj.12.1619383640861;
+ Sun, 25 Apr 2021 13:47:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210412074309.38484-1-psampat@linux.ibm.com> <20210412074309.38484-2-psampat@linux.ibm.com>
+In-Reply-To: <20210412074309.38484-2-psampat@linux.ibm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Sun, 25 Apr 2021 13:47:10 -0700
+Message-ID: <CAAYoRsVcVnrBSNu=umdVWtRw3PyuD=c4uaCCcoGQpSWgq3AH=g@mail.gmail.com>
+Subject: Re: [RFC v4 1/2] cpuidle: Extract IPI based and timer based wakeup
+ latency from idle states
+To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Cc:     rjw@rjwysocki.net, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Early exits from for_each_available_child_of_node() should decrement the
-node reference counter.  Reported by Coccinelle:
+Hi Pratik,
 
-  drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
-    Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
+On Mon, Apr 12, 2021 at 12:43 AM Pratik Rajesh Sampat
+<psampat@linux.ibm.com> wrote:
+>
+> Introduce a mechanism to fire directed IPIs from a specified source CPU
+> to a specified target CPU and measure the difference in time incurred on
+> wakeup.
+>
+> Also, introduce a mechanism to queue a HR timer on a specified CPU and
+> subsequently measure the time taken to wakeup the CPU.
+>
+> Finally define a simple debugfs interface to control the knobs to fire
+> the IPI and Timer events on specified CPU and view their incurred idle
+> wakeup latencies.
+>
+> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/thermal/sprd_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index 3682edb2f466..2778971aaf03 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
- 		if (!sen) {
- 			ret = -ENOMEM;
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
-@@ -397,12 +398,14 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		ret = of_property_read_u32(sen_child, "reg", &sen->id);
- 		if (ret) {
- 			dev_err(&pdev->dev, "get sensor reg failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
- 		ret = sprd_thm_sensor_calibration(sen_child, thm, sen);
- 		if (ret) {
- 			dev_err(&pdev->dev, "efuse cal analysis failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
-@@ -416,6 +419,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev, "register thermal zone failed %d\n",
- 				sen->id);
- 			ret = PTR_ERR(sen->tzd);
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
--- 
-2.25.1
-
+Reviewed-by: Doug Smythies <dsmythies@telus.net>
