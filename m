@@ -2,127 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA0836AF71
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 10:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBC136AFD5
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 10:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbhDZII5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Apr 2021 04:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbhDZII4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Apr 2021 04:08:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F568C061574;
-        Mon, 26 Apr 2021 01:08:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id b19-20020a05600c06d3b029014258a636e8so399519wmn.2;
-        Mon, 26 Apr 2021 01:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1+C61a0Cr2rRxPc4Jjq3nyzAUzXq7Gn1BorjliFLXXY=;
-        b=fbkf+0kWc46up1wgYP3zVwbhQ6TUnWBsDrPW05UznNPUXZrStdK9KjE9UkEUETj24h
-         PsHHHd/E1uyZQDHU83CoxvztCSHG7p+n5+F27i4tPk5PJoGBOMhkaBqxnQdBGB3y+wLl
-         tn61++v0HFOfJh1BK/mDBQW/u/fGfxgvPq+CIN0k17iAq6nIf8aNXstKEibyacW4WTix
-         ilE5fhircoDFPskaNgS+f7rwDeszaYE4I5MUO8FzHQH1GcfphqUTirlNsaEqZGoSUPNd
-         0VcyADcNiR3QHJmW0p/POo8CbMQajwFg8pD7L6v7uawoVvApKYA7mR+JHI8DVQ5a16Ui
-         0ZUA==
+        id S232326AbhDZIlf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Apr 2021 04:41:35 -0400
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:40567 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232314AbhDZIle (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Apr 2021 04:41:34 -0400
+Received: by mail-lj1-f181.google.com with SMTP id u25so24778500ljg.7;
+        Mon, 26 Apr 2021 01:40:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1+C61a0Cr2rRxPc4Jjq3nyzAUzXq7Gn1BorjliFLXXY=;
-        b=PPi3QbxOp8WH3L9NrtS84otJdhAYttAIAIHMDFHFcCIFtpCcbyHW8Id/arYWGN6bHX
-         5DM34qHmHm+IkpJIsfmXeDO60pLIzMwUnFVQL1RJJPVUi70WnO0iPsPxXk7rESFECmlm
-         j0slODMK6Ezmmw8M083JhNj/JLs+ffVMauwnHz5PrdgxGIoSYgAhmiUDv006ihbTYuJ1
-         HNZIGxvqUcWc+4x8lu2ciSEyN41NONrChQZG1018avFzad+KbDdGV+MQRv3rP9GgKkMg
-         XhAXgc2+e7ZNJioGI6BTTIG9iRtjN/gEpFFBCbGbcOHL2nbrOPf/nHdsg5tT6hZTvDy0
-         oRsg==
-X-Gm-Message-State: AOAM533/uw3RUNGlS4jc9G6X8/KdT6edEhQsof7Bmp0mfKgXWs6Li3QQ
-        OtqiK2qgDj1oTjFaWkKwl54sDMeSoohpo3FuH6k=
-X-Google-Smtp-Source: ABdhPJwHtgPSexyg/UZJqnA/kGIyUYaBuKzQ5Pp/PyYnUYFBFEeX7XJpts5stNulHO3Uf3F7JlL3sDqHL/w/LtbquYA=
-X-Received: by 2002:a1c:1bd1:: with SMTP id b200mr7218681wmb.3.1619424491426;
- Mon, 26 Apr 2021 01:08:11 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=6gNVvOiR0ozmqw7vkwGL4qgwZk8wq86oyuvkoYSrXvU=;
+        b=UaGoRJ/5kr9iBP3Kfbi/16ivZgTh+CVe8jCNzO+zVvxQHpyL5/N0oU8Ylkf7yLDxwB
+         gsf2ipKEbCLr4a2y0JrX40YlwOUUBuC/ZS/b2ZR1c73bZ9zDwrkmx7WL47oZDVAPlgt4
+         2qTqUAZlScdCTtwebvMhdaS+zA/8UBFc32BgeLkO+nzOAAc/uDQU/xuk9P/0vhDxszj7
+         3deJKf6wY+nKQdwtLZOzbnRHByPah/0/4noeOaRsCptj2b0jlaVqZzqigFg5BK4XphZU
+         zl9AtkbcGxoLV81eLvp1/B/wjIiKmJ0XcE/zzqxM1j0214VAVHZywaZT9kTBFINnUO+G
+         qXhQ==
+X-Gm-Message-State: AOAM533ZDsN3LVkft4od/jTG6uwy3DbbH53yl5oSJvArXNZS1rcJTmgw
+        m1Z0PjNwHnvlr/FL35cXh6NUJUpueVxSoA==
+X-Google-Smtp-Source: ABdhPJztgLX4u8BWEczFJjAJocn97DL6/OoLug0rr3nRZ70W/CSjYIbipK1rsXJa4L7LXnv6mH1ySw==
+X-Received: by 2002:a2e:9d05:: with SMTP id t5mr12404958lji.352.1619426451775;
+        Mon, 26 Apr 2021 01:40:51 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id v11sm1445189ljp.63.2021.04.26.01.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Apr 2021 01:40:51 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 124so6020988lff.5;
+        Mon, 26 Apr 2021 01:40:51 -0700 (PDT)
+X-Received: by 2002:ac2:550a:: with SMTP id j10mr12313284lfk.618.1619426451227;
+ Mon, 26 Apr 2021 01:40:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210425174831.164332-1-krzysztof.kozlowski@canonical.com> <20210425174831.164332-2-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20210425174831.164332-2-krzysztof.kozlowski@canonical.com>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Mon, 26 Apr 2021 16:07:34 +0800
-Message-ID: <CAAfSe-tyAm1y-LV5LiiF_X6-ExFD3P9CxOwu+m2ZrLC5wdrnkQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: sprd: add missing of_node_put for loop iteration
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
+In-Reply-To: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
+Reply-To: wens@csie.org
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Mon, 26 Apr 2021 16:40:40 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+Message-ID: <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+Subject: Re: [RFC PATCH] axp209 PMIC: setting constant_charge_current to 0
+ disables battery charging
+To:     Hermann.Lauer@uni-heidelberg.de
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 26 Apr 2021 at 01:48, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Early exits from for_each_available_child_of_node() should decrement the
-> node reference counter.  Reported by Coccinelle:
->
->   drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
->     Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Hi,
 
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
+On Wed, Apr 21, 2021 at 5:05 PM <Hermann.Lauer@uni-heidelberg.de> wrote:
+>
+> Dear Maintainers,
 
-Thanks for fixing this.
+First of all, please format the subject line like other commits to the
+same file. So that would be:
 
-> ---
->  drivers/thermal/sprd_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-> index 3682edb2f466..2778971aaf03 100644
-> --- a/drivers/thermal/sprd_thermal.c
-> +++ b/drivers/thermal/sprd_thermal.c
-> @@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
->                 sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
->                 if (!sen) {
->                         ret = -ENOMEM;
-> +                       of_node_put(sen_child);
->                         goto disable_clk;
->                 }
->
-> @@ -397,12 +398,14 @@ static int sprd_thm_probe(struct platform_device *pdev)
->                 ret = of_property_read_u32(sen_child, "reg", &sen->id);
->                 if (ret) {
->                         dev_err(&pdev->dev, "get sensor reg failed");
-> +                       of_node_put(sen_child);
->                         goto disable_clk;
->                 }
->
->                 ret = sprd_thm_sensor_calibration(sen_child, thm, sen);
->                 if (ret) {
->                         dev_err(&pdev->dev, "efuse cal analysis failed");
-> +                       of_node_put(sen_child);
->                         goto disable_clk;
->                 }
->
-> @@ -416,6 +419,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
->                         dev_err(&pdev->dev, "register thermal zone failed %d\n",
->                                 sen->id);
->                         ret = PTR_ERR(sen->tzd);
-> +                       of_node_put(sen_child);
->                         goto disable_clk;
->                 }
->
-> --
-> 2.25.1
->
+    power: supply: axp20x_battery: <change>
+
+> this proposed patch allows setting constant_charge_current to 0 on axp209
+> PMIC to disable charging. constant_charge_current_max with a value of 0 makes
+> no sense and should still report the maximum allowed value, so the getter code
+> is unrolled for the POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT case.
+
+This is probably not the right way to do it.
+
+The sysfs ABI docs say that some chargers implement a writable "status" sysfs
+property to allow disabling the charger [1]. IMO this is the proper place to
+enable/disable the charger. POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT only
+refers to the "constant current" portion of the charge cycle, and should not
+be used to implement full control of the charger.
+
+
+Regards
+ChenYu
+
+[1] https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing/sysfs-class-power#L444
