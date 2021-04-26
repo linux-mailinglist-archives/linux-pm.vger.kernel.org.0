@@ -2,78 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80DA36A9C4
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 00:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB1636AC81
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 08:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbhDYWy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Apr 2021 18:54:27 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:59284 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbhDYWy1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Apr 2021 18:54:27 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 336471C0B77; Mon, 26 Apr 2021 00:53:46 +0200 (CEST)
-Date:   Mon, 26 Apr 2021 00:53:45 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S232079AbhDZG5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Apr 2021 02:57:12 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:23292 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231616AbhDZG5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Apr 2021 02:57:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1619420190; x=1650956190;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uhDMDx6U8lKJACDDMg5wJ1xGShyMkk8ZFuePWaxHS1A=;
+  b=I4NZFXczk40EQQ/Nhzl1I86VCKQr30BOqZ7Yd6HdL+tmHgFqi2S4iRg2
+   Jdd1ubPhMpCigXqHdGxDpi95Dt6UPX04yu6gw/7Du3wv0HGvfEbFQdaaW
+   J95xJALTAQD3GzuxkUJ2j42dAITlaXIVllyioECvofvpzIUbCl0tH8+c+
+   mFCBR/mopW+CTS+8a3sluYkQtDlqBeDoy1qHwUVxU7UUlgvS8FxgXpdgO
+   0shaefzdjS5nTI1O8PXVyPF0FTuGy5aNjSAyacu1QALLLqz5kywUMd36X
+   RzA6FcDQRJiZjV3E/8eqdLAcUKkqLfG1dH6DlnY+OugJsGRZ8KfQ4xvz5
+   w==;
+IronPort-SDR: eQx0XRS0qdgNtEscfcMgNylm24Yn6OdQCsMYQ/JM+r0a2OLPJWPoIAGuTJkX2E7JJ4azYberSY
+ pTbQTH3KHNSQBuPHfR3uiIZ0ECAkZsAOLTnDm1rUpmG16AOf/oXI1Cs3iuuhuXANXlgHO5C2LI
+ qGON2LKbum09IQQUT62FJeOo5mxoQKMiFq7fDViWaZXqT9uTgxAsu6vSJGOwb9Zm72sova0vMf
+ 5qecgKuyfyeYMMhpsZway34KiQkqBgdq2xm881kQvgLvvktY53qH52eq/Au5msKIZ0Q2KCbK5l
+ kCs=
+X-IronPort-AV: E=Sophos;i="5.82,251,1613458800"; 
+   d="scan'208";a="118343164"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Apr 2021 23:56:27 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Sun, 25 Apr 2021 23:56:27 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Sun, 25 Apr 2021 23:56:20 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <nsaenz@kernel.org>,
+        <maxime@cerno.tech>, <khilman@kernel.org>,
+        <ulf.hansson@linaro.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <robh+dt@kernel.org>, <frowand.list@gmail.com>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <saravanak@google.com>,
+        <geert@linux-m68k.org>, <nsaenzjulienne@suse.de>,
+        <linux@roeck-us.net>, <guillaume.tucker@collabora.com>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <corbet@lwn.net>, <nicolas.ferre@microchip.com>,
+        <claudiu.beznea@microchip.com>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <kernel-team@android.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH] PM: runtime: document common mistake with
- pm_runtime_get_sync()
-Message-ID: <20210425225345.GN10996@amd>
-References: <20210422164606.68231-1-krzysztof.kozlowski@canonical.com>
- <CAJZ5v0iUQBfrTtVmfrrDixZnnr1_THgaM1+mFu4TRT+OOYb2mw@mail.gmail.com>
+Subject: [PATCH v2] clk: Skip clk provider registration when np is NULL
+Date:   Mon, 26 Apr 2021 09:56:18 +0300
+Message-ID: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ggdAeHltlv4tpqCr"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iUQBfrTtVmfrrDixZnnr1_THgaM1+mFu4TRT+OOYb2mw@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+revealed that clk/bcm/clk-raspberrypi.c driver calls
+devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
+NULL pointer dereference in of_clk_add_hw_provider() when calling
+fwnode_dev_initialized().
 
---ggdAeHltlv4tpqCr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Returning 0 is reducing the if conditions in driver code and is being
+consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
+is disabled. The downside is that drivers will maybe register clkdev lookups
+when they don't need to and waste some memory.
 
-Hi!
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+---
+v2:
+- s/return 0;/return; in void of_clk_del_provider()
+- add second fixes tag and Stephen's R-b tag
+The opinions on whether to return an error or zero were split. Returning 0
+and skipping the logic was considered safer as we don't know for sure if
+other drivers are affected. See:
+https://lore.kernel.org/lkml/d24bebc5-0f78-021f-293f-e58defa32531@samsung.com/
+https://lore.kernel.org/lkml/20210423171335.262316-1-tudor.ambarus@microchip.com/
 
-> However, if the code wants to check the return value, that is:
->=20
-> error =3D pm_runtime_resume_and_get(dev);
-> if (error)
->         return error;
+ drivers/clk/clk.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Well, we mostly expect people to check error values, and the "continue
-on error" case seems to be pretty unusual and mostly result of
-oversight.
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index a3b30f7de2ef..b47460b40d14 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4552,6 +4552,9 @@ int of_clk_add_provider(struct device_node *np,
+ 	struct of_clk_provider *cp;
+ 	int ret;
+ 
++	if (!np)
++		return 0;
++
+ 	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+ 	if (!cp)
+ 		return -ENOMEM;
+@@ -4591,6 +4594,9 @@ int of_clk_add_hw_provider(struct device_node *np,
+ 	struct of_clk_provider *cp;
+ 	int ret;
+ 
++	if (!np)
++		return 0;
++
+ 	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+ 	if (!cp)
+ 		return -ENOMEM;
+@@ -4688,6 +4694,9 @@ void of_clk_del_provider(struct device_node *np)
+ {
+ 	struct of_clk_provider *cp;
+ 
++	if (!np)
++		return;
++
+ 	mutex_lock(&of_clk_mutex);
+ 	list_for_each_entry(cp, &of_clk_providers, link) {
+ 		if (cp->node == np) {
+-- 
+2.25.1
 
-Quite large percentage of -stable patches is fixes after people got
-confused with unusual interface...
-
-Best regards,
-								Pavel
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---ggdAeHltlv4tpqCr
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmCF8vgACgkQMOfwapXb+vJtVgCfUaLgQYF4oSk4oE+mS8CTACET
-a1UAoIvVgBFy1hFvUbJVrwoofZ1NEA0D
-=xDKw
------END PGP SIGNATURE-----
-
---ggdAeHltlv4tpqCr--
