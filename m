@@ -2,98 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ED036B535
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 16:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75A836B8C7
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Apr 2021 20:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbhDZOsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Apr 2021 10:48:50 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37236 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbhDZOsu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Apr 2021 10:48:50 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13QElv3V095385;
-        Mon, 26 Apr 2021 09:47:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1619448477;
-        bh=iDG5+O6QQERHsm2DMcoPa5ohDN2yRkbZKYFXFbTD0ZE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=JEt8IY9FNCjl+EvBlXk4wfV1Wzmt4bZOGC2AHcyrE5/oZkXkmR2w/Fg9NZeGPluC1
-         aPO8+Z8cq1URpAwBm8RgY7zd+XX1J9cC7ECgSUm/dLoWpc0J6ELM2w6Wk04PLH+ADE
-         GBtx7ragOzxNrFwswxA+QdQuM3JBlOy813gPbb+o=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13QElvkW026986
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 26 Apr 2021 09:47:57 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 26
- Apr 2021 09:47:08 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 26 Apr 2021 09:47:08 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13QEl8jI025844;
-        Mon, 26 Apr 2021 09:47:08 -0500
-Date:   Mon, 26 Apr 2021 09:47:08 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2] soc: ti: smartreflex after the relocation to maintain
- consistency
-Message-ID: <20210426144708.3r3h4csg6wywyude@italics>
-References: <1619090212-103038-1-git-send-email-yang.lee@linux.alibaba.com>
+        id S234257AbhDZSTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Apr 2021 14:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233842AbhDZSTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Apr 2021 14:19:05 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB203C061574
+        for <linux-pm@vger.kernel.org>; Mon, 26 Apr 2021 11:18:21 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id t94so12823652ybi.3
+        for <linux-pm@vger.kernel.org>; Mon, 26 Apr 2021 11:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oxk441iU0wp7QI5uSmMi84qyuJ4uphlRd2RFq20rb5g=;
+        b=fCCr/nw130U0++Z0Ivdh5cPqDkXHWeQsmeWFwQD9nz4NkxrycmLKiQUAFXKoMFlqZx
+         qDEMWDw0v/cbIc0a8goTHlmnrZB6Cn9RHhHgvTC4tYhqM+ZCvQ4MJFU+WNJCkJQnBEW9
+         bsWQ+775cYJ0vHY8ed/UTIu5IqAqc4WiYqbvI+KLqgY/FdIGxj1oiJVUGM10BKBchfnI
+         kyjf9HUzrbLvG6aI2ZJaPstOkNLsVtLlH7F5hzlfXPUJW3W0YFd8UpigyoHMjBIyaTqK
+         F6s2oJeL1xEhoTLvtbYuIMWxtd/vCEbmbEv7s8sR3KPU8q9xHajibhc49Ror8dMvpOl9
+         eRjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oxk441iU0wp7QI5uSmMi84qyuJ4uphlRd2RFq20rb5g=;
+        b=XHmwVhI48Fm0qjen4fikNmitI03LITWQ3Sz6Epyg4blEzO87jnYEAqHAgKyj+IHeh5
+         4yFbFOwpG1qQj/1PVQr6VfEMF260WnPOxktYZWVbHRg0J9olZFVN0YhkOBhqMWTlTlig
+         2Q2lSCpA55fK209VXVSPdaE1Ushawv4zLiCalJGr98PjD9AAUQ/zooOfj9oq4CYIkXrW
+         ExX3Ap1newSjWimhRpbVDmfQTdQCDBwDbmXTIihxukqz0A3Cb37/znLkuPDYYJlyFasQ
+         RUc/f2lpsu0RINhvyZSuxMnw8N5dviM1jHguJGyeXOe4bzp56khWpQ5khYqTxDG7FUr+
+         V1Uw==
+X-Gm-Message-State: AOAM532QyFUwN9vc2aJmUNvcOUNm2WEaIMtLr33ksckvsuGN2vsNrODC
+        mfjf+8vcyB4GrtaRP3st4gVVgPsQiGFwzPZAngRHgg==
+X-Google-Smtp-Source: ABdhPJxpKkzlxeFeOtzkL9KcfVeos0Z41kgtlmgxKrzK9GddPMejgPaMIQWIl+pLW3jEJCvWSVSH9ek3FFeVdL0Q7Q0=
+X-Received: by 2002:a25:e7c8:: with SMTP id e191mr24243893ybh.153.1619461100801;
+ Mon, 26 Apr 2021 11:18:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1619090212-103038-1-git-send-email-yang.lee@linux.alibaba.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+In-Reply-To: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 26 Apr 2021 11:17:44 -0700
+Message-ID: <CAGETcx9LgyX-D1E0bb-JW=G6TTvr-KC+1-733uWppzGZnYaoxg@mail.gmail.com>
+Subject: Re: [PATCH v2] clk: Skip clk provider registration when np is NULL
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, nsaenz@kernel.org,
+        maxime@cerno.tech, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        guillaume.tucker@collabora.com,
+        linux-clk <linux-clk@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetre
+        e@vger.kernel.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>, linux-rpi-kernel" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19:16-20210422, Yang Li wrote:
-> v2: According to Nishanth Menon's suggestion, the subject has been 
-> corrected.
-> https://lore.kernel.org/patchwork/patch/1383883/
-
-The above does'nt belong to commit message. it should probably be posted
-in diffstat section.
-
-will also be good to rebase once 5.13-rc1 is out.
-> 
-> Fix the following coccicheck warning:
-> ./drivers/soc/ti/smartreflex.c:820:0-23: WARNING: pm_sr_fops should be
-> defined with DEFINE_DEBUGFS_ATTRIBUTE
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> Reviewed-by: Nishanth Menon <nm@ti.com>
+On Sun, Apr 25, 2021 at 11:56 PM Tudor Ambarus
+<tudor.ambarus@microchip.com> wrote:
+>
+> commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> revealed that clk/bcm/clk-raspberrypi.c driver calls
+> devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
+> NULL pointer dereference in of_clk_add_hw_provider() when calling
+> fwnode_dev_initialized().
+>
+> Returning 0 is reducing the if conditions in driver code and is being
+> consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
+> is disabled. The downside is that drivers will maybe register clkdev lookups
+> when they don't need to and waste some memory.
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 > ---
->  drivers/soc/ti/smartreflex.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-> index 5376f3d..b3c7460 100644
-> --- a/drivers/soc/ti/smartreflex.c
-> +++ b/drivers/soc/ti/smartreflex.c
-> @@ -817,7 +817,7 @@ static int omap_sr_autocomp_store(void *data, u64 val)
->  	return 0;
->  }
->  
-> -DEFINE_SIMPLE_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
-> +DEFINE_DEBUGFS_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
->  			omap_sr_autocomp_store, "%llu\n");
->  
->  static int omap_sr_probe(struct platform_device *pdev)
-> -- 
-> 1.8.3.1
-> 
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+
+-Saravana
+
+> v2:
+> - s/return 0;/return; in void of_clk_del_provider()
+> - add second fixes tag and Stephen's R-b tag
+> The opinions on whether to return an error or zero were split. Returning 0
+> and skipping the logic was considered safer as we don't know for sure if
+> other drivers are affected. See:
+> https://lore.kernel.org/lkml/d24bebc5-0f78-021f-293f-e58defa32531@samsung.com/
+> https://lore.kernel.org/lkml/20210423171335.262316-1-tudor.ambarus@microchip.com/
+>
+>  drivers/clk/clk.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index a3b30f7de2ef..b47460b40d14 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -4552,6 +4552,9 @@ int of_clk_add_provider(struct device_node *np,
+>         struct of_clk_provider *cp;
+>         int ret;
+>
+> +       if (!np)
+> +               return 0;
+> +
+>         cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+>         if (!cp)
+>                 return -ENOMEM;
+> @@ -4591,6 +4594,9 @@ int of_clk_add_hw_provider(struct device_node *np,
+>         struct of_clk_provider *cp;
+>         int ret;
+>
+> +       if (!np)
+> +               return 0;
+> +
+>         cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+>         if (!cp)
+>                 return -ENOMEM;
+> @@ -4688,6 +4694,9 @@ void of_clk_del_provider(struct device_node *np)
+>  {
+>         struct of_clk_provider *cp;
+>
+> +       if (!np)
+> +               return;
+> +
+>         mutex_lock(&of_clk_mutex);
+>         list_for_each_entry(cp, &of_clk_providers, link) {
+>                 if (cp->node == np) {
+> --
+> 2.25.1
+>
