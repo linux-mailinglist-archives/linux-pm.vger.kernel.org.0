@@ -2,55 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AED836CBDB
+	by mail.lfdr.de (Postfix) with ESMTP id 42CC136CBDA
 	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbhD0TpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S238671AbhD0TpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 27 Apr 2021 15:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238838AbhD0TpJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FF4C06175F
-        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 12:44:25 -0700 (PDT)
-Date:   Tue, 27 Apr 2021 19:44:22 -0000
+Received: from Galois.linutronix.de ([193.142.43.55]:43094 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236287AbhD0TpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:08 -0400
+Date:   Tue, 27 Apr 2021 19:44:23 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1619552663;
+        s=2020; t=1619552664;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MfNPVXU7ie35VwgTuVUuND4oIEXYwgWGjLb0UYY5YtM=;
-        b=nOXz0ILLhLZAD3hQntXBt3uT/X0sGJTnvtC4YdNTMupCjquS/dliWACWgcMpCgZEK3KTSU
-        2K0IFGEeBeCVhUAAkiy9kar201eYEQP1L3fpC8DgHGaOH4yfhrDhpFwyaa61KNaHmOO7YF
-        LaZA+w/yBnphiSXj9TDjCBchmB5IKY4ZdUV27XFdr1TrEEWKVxqHGGb7XAstKjekqvEMz/
-        puvLESZ6/31JcczZuGARfYfFiYgjzDb4+t0pM7I5ppAgsDlHPyXnkuLokC0EzzTDQtW8tr
-        Dat6fi6bJQ4zwLyk1bi8jlCwPRgDWENrCgQB3RCbk+YQL/1hLmmo5KUngLXtCw==
+        bh=z3t543Wq7xZwddu9kC36y+cPJam7zaRbCDTvi/d6XCg=;
+        b=M4CCSbobB+beKAUVKcWPHq2yDY+H+JBbf8E51OnGMr8CEs95JZITVZ1WC01zgjdGwfEWuI
+        nez07JbmJXC1NkqQILvqemelNTfKkNMzF1/dTr3eMHShFY+v3Gr+rFsoraX/uwH1eqV1Dq
+        8iL2z8PGxxNksnL8j1feUwTzWW6e24BIqFt/TtZNxhTiWLSQ4OrdvngaFFTtyTmlDS7nmA
+        KoE9ZCR0GGSSSlDMoW5LS+hC894/S0WPeUVP87tUlanTWFKIYi8ve4lyiobEBKuG0R6mm1
+        AS2b4ztFJ7yhSCk5nnss8oGEHed8jfMLP2bj3v+rAvRqcECp1gYWsSaWrayWXQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1619552663;
+        s=2020e; t=1619552664;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MfNPVXU7ie35VwgTuVUuND4oIEXYwgWGjLb0UYY5YtM=;
-        b=APbIGy6d047SHHcvU3pGjfb0EevYyfEeK+LgaYwNtnQQtWSXjnI543h/cwM++QKTpB/HPW
-        QDprNap4uWEQhEDg==
-From:   "thermal-bot for Colin Ian King" <tip-bot2@linutronix.de>
+        bh=z3t543Wq7xZwddu9kC36y+cPJam7zaRbCDTvi/d6XCg=;
+        b=DbqXJc3Cf9QlNyKlpzLSdvifDkpqlq2B9xo54S8U9ytJPNkf9n0LMUJFdnVmDaoV8HEiQP
+        kmiSSKlCyiqaL0Bw==
+From:   "thermal-bot for Lukasz Luba" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/mtk_thermal: Remove redundant
- initializations of several variables
-Cc:     Colin Ian King <colin.king@canonical.com>,
+Subject: [thermal: thermal/next] thermal/core/fair share: Use the lockless
+ __thermal_cdev_update() function
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210422120412.246291-1-colin.king@canonical.com>
-References: <20210422120412.246291-1-colin.king@canonical.com>
+In-Reply-To: <20210422153624.6074-3-lukasz.luba@arm.com>
+References: <20210422153624.6074-3-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Message-ID: <161955266273.29796.17804080313828073962.tip-bot2@tip-bot2>
+Message-ID: <161955266363.29796.213784428248674373.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,47 +58,40 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     c310e546164d5cca4c12faf9582b75989b030b68
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//c310e546164d5cca4c12faf9582b75989b030b68
-Author:        Colin Ian King <colin.king@canonical.com>
-AuthorDate:    Thu, 22 Apr 2021 13:04:12 +01:00
+Commit-ID:     1a93369810660905f5e89b527cd709fa6832f7c8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//1a93369810660905f5e89b527cd709fa6832f7c8
+Author:        Lukasz Luba <lukasz.luba@arm.com>
+AuthorDate:    Thu, 22 Apr 2021 16:36:23 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 22 Apr 2021 23:51:32 +02:00
 
-thermal/drivers/mtk_thermal: Remove redundant initializations of several variables
+thermal/core/fair share: Use the lockless __thermal_cdev_update() function
 
-Several variables are being initialized with values that is never
-read and being updated later with a new value. The initializations
-are redundant and can be removed.
+Use the new helper function and avoid unnecessery second lock/unlock,
+which was present in old approach with thermal_cdev_update().
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210422120412.246291-1-colin.king@canonical.com
+Link: https://lore.kernel.org/r/20210422153624.6074-3-lukasz.luba@arm.com
 ---
- drivers/thermal/mtk_thermal.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/thermal/gov_fair_share.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 149c6d7..97e8678 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -573,12 +573,12 @@ static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
+diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
+index 645432c..1e5abf4 100644
+--- a/drivers/thermal/gov_fair_share.c
++++ b/drivers/thermal/gov_fair_share.c
+@@ -107,10 +107,9 @@ static int fair_share_throttle(struct thermal_zone_device *tz, int trip)
+ 		instance->target = get_target_state(tz, cdev, percentage,
+ 						    cur_trip_level);
  
- static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
- {
--	s32 format_1 = 0;
--	s32 format_2 = 0;
--	s32 g_oe = 1;
--	s32 g_gain = 1;
--	s32 g_x_roomt = 0;
--	s32 tmp = 0;
-+	s32 format_1;
-+	s32 format_2;
-+	s32 g_oe;
-+	s32 g_gain;
-+	s32 g_x_roomt;
-+	s32 tmp;
+-		mutex_lock(&instance->cdev->lock);
+-		instance->cdev->updated = false;
+-		mutex_unlock(&instance->cdev->lock);
+-		thermal_cdev_update(cdev);
++		mutex_lock(&cdev->lock);
++		__thermal_cdev_update(cdev);
++		mutex_unlock(&cdev->lock);
+ 	}
  
- 	if (raw == 0)
- 		return 0;
+ 	mutex_unlock(&tz->lock);
