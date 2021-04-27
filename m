@@ -2,52 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BB736CBE3
+	by mail.lfdr.de (Postfix) with ESMTP id CDD4A36CBE4
 	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbhD0TpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Apr 2021 15:45:12 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43146 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbhD0TpM (ORCPT
+        id S238923AbhD0TpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Apr 2021 15:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238943AbhD0TpM (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AE5C061574
+        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 12:44:29 -0700 (PDT)
 Date:   Tue, 27 Apr 2021 19:44:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1619552668;
+        s=2020; t=1619552667;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=64hkk+BdQbKjS64uOQGSpFV0aqdzOq8HuS5LWhL2Zio=;
-        b=W51Qhto7LzlQvTtAYCtyPCwR1GepTFBwX1qbFZWwjjCL0jyrN8Ohom+45wVREYsgOOjzNt
-        Fi1FgT4PqAndq2/sE4fbnoYLGox96NTPBpezqB3xpUylKcRouuA/RSB5DflAuJQB+N9gah
-        FgZJ2aDsfsuHiZW1cfoxTKTsU/C8OTUx9lI3tENPt+CYSsQ0j662pAZFMgolIfc9N0wxBh
-        ktR1ypc4CDiEVdw33NeUcB/qV70a11hTUoyJWVaydBOfxTktH6tELqK39OGAkaBl5aKKE9
-        MjZFAUi/lkcP95/QJrxpupSN1SGzAIgdPGofiajOikGJEYVnYxscKMckLX95jg==
+        bh=rDiSM8hZBs0z1tVXxpM9XmQmbQhbuDSwhmn/BVkTRVo=;
+        b=HCbmWXUxe054Dbd1HXb0toAl0cgN8UBLDyLzhMtTyZUjjhsmXBT+BBwvPjAZfjikqejM/1
+        X5mYwNtzzOHAwJxlkizDCiIj2WG2PlzQwRhT/fsDHv/eXMhZgAtJsjt8ZJGl2VFZQdBU0u
+        a9MDfd3AX4cVBYYuf1pXvk9/vRhdIfFFJjrpjgPsmI5N2ovst6fz2w0JhK2cg0hyGgBOzz
+        QEJlqyG26OTZSAL1r2Vz9MNZWGMshD41CqA1N0a7Nj8rc9CMttgNLrD8gU+4UsTv2k8RRT
+        SGUUKbZVvsqDrJYBDL4rgOn7pn1cKPDvT743OkIDDxI9rkmMDs2yh7kWv/IsqQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1619552668;
+        s=2020e; t=1619552667;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=64hkk+BdQbKjS64uOQGSpFV0aqdzOq8HuS5LWhL2Zio=;
-        b=vHE/fh9TA1E5zkTT7GWrv+nr7eLw1k4qcJGJcX09+6w3kH1zOEaswprJSHt1DSp+73kemk
-        t6vqCS78iQbwUcBA==
+        bh=rDiSM8hZBs0z1tVXxpM9XmQmbQhbuDSwhmn/BVkTRVo=;
+        b=tPLoP3/gIm3m+/yzlNVLMsBSXz7ZJ/mX5HU5wlvHieO0Lrq9PuiXjAuHTuJeuQs5xeCVl3
+        TEIKFqHRPg3VtBDQ==
 From:   "thermal-bot for Ansuel Smith" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/tsens: Use init_common for msm8960
+Subject: [thermal: thermal/next] thermal/drivers/tsens: Fix bug in sensor
+ enable for msm8960
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Thara Gopinath <thara.gopinath@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210420183343.2272-5-ansuelsmth@gmail.com>
-References: <20210420183343.2272-5-ansuelsmth@gmail.com>
+In-Reply-To: <20210420183343.2272-6-ansuelsmth@gmail.com>
+References: <20210420183343.2272-6-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Message-ID: <161955266769.29796.1431929500829979560.tip-bot2@tip-bot2>
+Message-ID: <161955266728.29796.16635306148146997440.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,92 +62,76 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     fdda131f8fbadee2dfc21f0787d11547b42a961e
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fdda131f8fbadee2dfc21f0787d11547b42a961e
+Commit-ID:     3d08f029fdbbd29c8b363ef4c8c4bfe3b8f79ad0
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//3d08f029fdbbd29c8b363ef4c8c4bfe3b8f79ad0
 Author:        Ansuel Smith <ansuelsmth@gmail.com>
-AuthorDate:    Tue, 20 Apr 2021 20:33:38 +02:00
+AuthorDate:    Tue, 20 Apr 2021 20:33:39 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 22 Apr 2021 14:09:23 +02:00
+CommitterDate: Thu, 22 Apr 2021 14:09:32 +02:00
 
-thermal/drivers/tsens: Use init_common for msm8960
+thermal/drivers/tsens: Fix bug in sensor enable for msm8960
 
-Use init_common and drop custom init for msm8960.
+Device based on tsens VER_0 contains a hardware bug that results in some
+problem with sensor enablement. Sensor id 6-11 can't be enabled
+selectively and all of them must be enabled in one step.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210420183343.2272-5-ansuelsmth@gmail.com
+Link: https://lore.kernel.org/r/20210420183343.2272-6-ansuelsmth@gmail.com
 ---
- drivers/thermal/qcom/tsens-8960.c | 52 +------------------------------
- 1 file changed, 1 insertion(+), 51 deletions(-)
+ drivers/thermal/qcom/tsens-8960.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-index 0dd15e8..83746ee 100644
+index 83746ee..a96d37c 100644
 --- a/drivers/thermal/qcom/tsens-8960.c
 +++ b/drivers/thermal/qcom/tsens-8960.c
-@@ -173,56 +173,6 @@ static void disable_8960(struct tsens_priv *priv)
- 	regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
- }
+@@ -27,9 +27,9 @@
+ #define EN			BIT(0)
+ #define SW_RST			BIT(1)
+ #define SENSOR0_EN		BIT(3)
++#define MEASURE_PERIOD		BIT(18)
+ #define SLP_CLK_ENA		BIT(26)
+ #define SLP_CLK_ENA_8660	BIT(24)
+-#define MEASURE_PERIOD		1
+ #define SENSOR0_SHIFT		3
  
--static int init_8960(struct tsens_priv *priv)
--{
--	int ret, i;
--	u32 reg_cntl;
--
--	priv->tm_map = dev_get_regmap(priv->dev, NULL);
--	if (!priv->tm_map)
--		return -ENODEV;
--
--	/*
--	 * The status registers for each sensor are discontiguous
--	 * because some SoCs have 5 sensors while others have more
--	 * but the control registers stay in the same place, i.e
--	 * directly after the first 5 status registers.
--	 */
--	for (i = 0; i < priv->num_sensors; i++) {
--		if (i >= 5)
--			priv->sensor[i].status = S0_STATUS_OFF + 40;
--		priv->sensor[i].status += i * 4;
--	}
--
--	reg_cntl = SW_RST;
--	ret = regmap_update_bits(priv->tm_map, CNTL_ADDR, SW_RST, reg_cntl);
--	if (ret)
--		return ret;
--
--	if (priv->num_sensors > 1) {
--		reg_cntl |= SLP_CLK_ENA | (MEASURE_PERIOD << 18);
--		reg_cntl &= ~SW_RST;
--		ret = regmap_update_bits(priv->tm_map, CONFIG_ADDR,
--					 CONFIG_MASK, CONFIG);
--	} else {
--		reg_cntl |= SLP_CLK_ENA_8660 | (MEASURE_PERIOD << 16);
--		reg_cntl &= ~CONFIG_MASK_8660;
--		reg_cntl |= CONFIG_8660 << CONFIG_SHIFT_8660;
--	}
--
--	reg_cntl |= GENMASK(priv->num_sensors - 1, 0) << SENSOR0_SHIFT;
--	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
--	if (ret)
--		return ret;
--
--	reg_cntl |= EN;
--	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
--	if (ret)
--		return ret;
--
--	return 0;
--}
--
- static int calibrate_8960(struct tsens_priv *priv)
+ /* INT_STATUS_ADDR bitmasks */
+@@ -126,17 +126,34 @@ static int resume_8960(struct tsens_priv *priv)
+ static int enable_8960(struct tsens_priv *priv, int id)
  {
- 	int i;
-@@ -338,7 +288,7 @@ static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
- };
+ 	int ret;
+-	u32 reg, mask;
++	u32 reg, mask = BIT(id);
  
- static const struct tsens_ops ops_8960 = {
--	.init		= init_8960,
-+	.init		= init_common,
- 	.calibrate	= calibrate_8960,
- 	.get_temp	= get_temp_8960,
- 	.enable		= enable_8960,
+ 	ret = regmap_read(priv->tm_map, CNTL_ADDR, &reg);
+ 	if (ret)
+ 		return ret;
+ 
+-	mask = BIT(id + SENSOR0_SHIFT);
++	/* HARDWARE BUG:
++	 * On platforms with more than 6 sensors, all remaining sensors
++	 * must be enabled together, otherwise undefined results are expected.
++	 * (Sensor 6-7 disabled, Sensor 3 disabled...) In the original driver,
++	 * all the sensors are enabled in one step hence this bug is not
++	 * triggered.
++	 */
++	if (id > 5)
++		mask = GENMASK(10, 6);
++
++	mask <<= SENSOR0_SHIFT;
++
++	/* Sensors already enabled. Skip. */
++	if ((reg & mask) == mask)
++		return 0;
++
+ 	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg | SW_RST);
+ 	if (ret)
+ 		return ret;
+ 
++	reg |= MEASURE_PERIOD;
++
+ 	if (priv->num_sensors > 1)
+ 		reg |= mask | SLP_CLK_ENA | EN;
+ 	else
