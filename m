@@ -2,157 +2,267 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CA336C15A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 10:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2E036C1DC
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 11:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbhD0I4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Apr 2021 04:56:22 -0400
-Received: from mail-eopbgr80057.outbound.protection.outlook.com ([40.107.8.57]:13191
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235062AbhD0I4V (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 27 Apr 2021 04:56:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HI8Q5ofkHJOuvPcMsD+ve18+w/gCqYG+WOrSeOv9vl1eUV7SegTzKX63tb7RU9buBztzN7Q/17SDhlviTt8TA/yeyvtEHHe/3ad/Q7CfSqrONAgDux5qhphaKdnwoMQ+PE+/R0infcBu+61ZZGHGIRQrtDzKYhZGGT9LM5QRy1B+VlaMiC1f4uRhCDWknBmtAXgz71gyMGXGtNDkDGGIDE+AbLB/QHbbamy2Mx9qrwA53znlpM5yIpMXiGELWb4Gl9Q6K+KqhWnISQ9aTHJ1dligITmxvs7Op6Wmly96ABjuPfju+caU2HQ1C0slxAdas4iDeSXRYFJCUPjySQZe3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hi79MxZSBauP2YUdAPnQBFwJcZinaATQkZfTD+FPbcg=;
- b=N/9V5Q79qCBtJteFMH0DioJ1R7g50JcQ4Hb85xNfPV9Ra47aN3pYgCq9qjoElu/yzrlIuHPIZ8AP/+tJD+yX0iwoNfP/+Oj63k5xx/jvoK5JfFVZr6f7A7JJYpXqbESHJ/rDvW8QoNblryqdxR1hWWUJ/vXJaMFsff/hBmLiFXivClmaRtyxIIAnJSES3r4wW7VvO5EbuYR+n2pwY08PUM9GMWz+N3bBfxF5pKUK2u8aZRRb8gdmOTzoW+YRQyQ3e3RqBRZmBPAh8R8acc2qfkLq7yqVpNk3AUcLu4jov9MYhXljNgtjkXCAzWQ/W3XREYEUdSjzW3S7dKEUzzZo9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hi79MxZSBauP2YUdAPnQBFwJcZinaATQkZfTD+FPbcg=;
- b=GkVlNyFu8VR9OABGk0qBHTLr9W2SPNShiEDz9MKnbK77mctuBxUUyyNEjjaTzat66/+zXJd8KWbvbBHhg1zFv+NZDM46zpkz+r9PPQtgRtiESpZqNGXU6OmTo0WDEpTusDuV+Cz+K3t0PzaNqIdEKxPfAmJUNnYKz+bw1zx50Qo=
-Received: from DBBPR04MB7930.eurprd04.prod.outlook.com (2603:10a6:10:1ea::12)
- by DB6PR0402MB2934.eurprd04.prod.outlook.com (2603:10a6:4:9b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.23; Tue, 27 Apr
- 2021 08:55:36 +0000
-Received: from DBBPR04MB7930.eurprd04.prod.outlook.com
- ([fe80::ddbd:8680:c613:2274]) by DBBPR04MB7930.eurprd04.prod.outlook.com
- ([fe80::ddbd:8680:c613:2274%5]) with mapi id 15.20.4065.027; Tue, 27 Apr 2021
- 08:55:36 +0000
-From:   Jacky Bai <ping.bai@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] thermal: imx_sc: add missing of_node_put for loop
- iteration
-Thread-Topic: [PATCH 1/2] thermal: imx_sc: add missing of_node_put for loop
- iteration
-Thread-Index: AQHXOfs4usZN6sm0pEq44rmzzqWam6rIEc0Q
-Date:   Tue, 27 Apr 2021 08:55:36 +0000
-Message-ID: <DBBPR04MB79307DF87746E3D5540910FD87419@DBBPR04MB7930.eurprd04.prod.outlook.com>
-References: <20210425174831.164332-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20210425174831.164332-1-krzysztof.kozlowski@canonical.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: canonical.com; dkim=none (message not signed)
- header.d=none;canonical.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 84abc281-b576-44db-5d7e-08d9095a397b
-x-ms-traffictypediagnostic: DB6PR0402MB2934:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR0402MB2934DDD55B103F7A9650FD5387419@DB6PR0402MB2934.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1079;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yyd8ZoPBIITPy6XZYcYcciTq6qq5wMAqHLx31f9tTr2gjT490fci/K7tk/YoY2i2GYvzVs5eDZ08Lj7C6VzdCT2Wk9p8ywTekvY8x0VqAGYi6hBPHSugAL7ZtrV9rPp5O8Q3daHtfKtqliK7de+BKTsvUkXC7xtlbASMvRi7XOMWJ/pRAQ1mBw1b438CvZHx17nb4qcetm/owyX+hCbYl24IaNHbu64KL2MjW0lT3g7cXK4O8oEeCvWH01jYwydcyOlrZF1MGR2ucCk3QNZ6dvZeYDyv9/e2Vl6zU2LtpajsMmaxyEYGG5Hg7JgNo3xs0IwCe6hXidarJE+Ng0kw+wO35XxayW60EXu2Og9Qa3N4Njgwh21XuZUAxqGNrY+IRn6spQ68kSe5SjQfCNkQLDGVW5OCARV0FuBHZdGgo/Hco9p4wU27uSD8UySZTuJw6Q24HuqIhFsWG3u0tQGOSc86PM32emhZTlhE5ZkT81+8sHIYGbcsoxZs46MPRbXWhx+u1WH4PPWJgTDRAkhitncsojlLO5BHx/MyY8GZNxNPKIhWBNF0q9eKNt98XMtXg58wdxnBpy+6nHp5Vhw3CusufL0qIiYOD4eJisqNodSA6Wuv98ppP2t83QWfMi2rK97JMxh3Tqm2wY5CUoUQZg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7930.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(498600001)(55016002)(6506007)(186003)(26005)(7696005)(7416002)(8676002)(8936002)(76116006)(2906002)(64756008)(66946007)(86362001)(122000001)(66476007)(38100700002)(52536014)(5660300002)(9686003)(33656002)(110136005)(921005)(83380400001)(66556008)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?OGRRY2d3L1k5ZTZTbDdmOGNSTVd3UnR2bXhPQm1JeExPK05HSm5oSkJuZzl5?=
- =?utf-8?B?aVZVTFg0OG9TcVhZQzE3ZndLN2FQbDk0TUh3Ty9SSHN6VS9RVS93STk3WFU4?=
- =?utf-8?B?UXR6c1c5Q0J6blgxak4xRE1jdFRvRW9RV2Q0R2ZzOHhhaEJ6SGdEbUNtMW01?=
- =?utf-8?B?Z1JxZGtOam81VFNQR2g2MUVpQXE0YW43eFdRdnh6amNyckRhQmNaZzMreE4v?=
- =?utf-8?B?M0ZNdDdmYTEzV0N1WU9MRTdXS2p1Q3pXTStoWFR1V3lUOEdJUzI1eTVkTWhv?=
- =?utf-8?B?QysranlJeHZkME5DbFdRMHhrUVEwdHFSMkF3YU1Nd21Ed2lvdUtaQmZrNGtX?=
- =?utf-8?B?U1FGdXNyYWRHY0VsY0s4Wm9GdW9Sbkp6M2xzVUJxMzZLRzdDKzJCT3EzanB2?=
- =?utf-8?B?RExJOXh1RzQ5dlcydlBjOVlnR0xuSTZtTnJMRUFyUllEVXhXTGtJalc4TzNw?=
- =?utf-8?B?L3F2OFpUQUdua0piNnlIV2pyS2M4RHRuOG1jWktUQmY5amVOcFJkNUNkVGpC?=
- =?utf-8?B?a0Z1ZkhVazNMUE1WZmJFS0dLKzhZbVVYcmtLcnZ2YkVnbWEwWTA1VlM2b2hH?=
- =?utf-8?B?VHRNa2tWc0Q4RGFiWFBmZzd4T21CTm1naGxoSlNRSVBMNUhwcGxhUS9hdXlP?=
- =?utf-8?B?NFVCMWh2eFZ4ZEtFSEVzZUZHdnU2aHNrdjkxT25oMHRybUt4U0RwNG9RTGJL?=
- =?utf-8?B?RWtrZzBWUFdDQ0Y0OVdoenp6aFlyL1VORWlVVzlEdFNOVnJXZTBueEplKzlt?=
- =?utf-8?B?Vko3VWpyeDhxYzY0SHFKaUEzMHFVL3hseC9FeUZaQkdCcUgwSTFFUmJZU2Zh?=
- =?utf-8?B?VmpsVDY0QWVMZklmRnB5UTJCM21ndGJublJtVXE0OU9FSHI5bHk3S3ZpWnNw?=
- =?utf-8?B?TVVBTUVpOGpkY0VZVWlkdmsyYmVUQkNGdTF5V0Nid09qdnYvMk54eS9jeElx?=
- =?utf-8?B?aVVCWlRMb0V5MGdjeGRZd3VIZHpEd2w4VE5nK0puM0ZQamh0Y1hYUnFPL2Ra?=
- =?utf-8?B?ZG9vM0ZLeEplMU1mQmtLUTU2anlFMENCQjdzV1B6eTRvbEhEUlhsamE1NzYw?=
- =?utf-8?B?YUxmc1ZubERNL3Bac2UzY2dsalBlS3NyS01NV203VDI1b2Jkd1NjWmlVTHN4?=
- =?utf-8?B?VTNFT1ZRRkRpTjZieTNYTWpYTlNqZEQ1UHc0dU4yS0ZHNUx1c0hKSDhyMXho?=
- =?utf-8?B?OUpyckl3ZzhsVFRzOTlVVGRVSDNFUC9PckZaMHFTOXZaWTJ2SE04U3VQa1pJ?=
- =?utf-8?B?bGRjbGF2WXhBOFhKMjJtRHdXY0l1bTZHZG8wOTg4Q0lPWlVSc2hGQUYyRVNB?=
- =?utf-8?B?eTRBSUZtNmc2V1BLN2w1dWR5YnhnY1Qva2Y2eFJsd0s4Z0hUUWQ4M3dJdXVZ?=
- =?utf-8?B?MWh2MUw3Tmh5VXJuRjFMSVZKU0RPYXhTSEtJeTVOT21lU2F4Qks0Um9ybU5W?=
- =?utf-8?B?ZGJXbEQ0SFlPUzI1b2EwdXJiNHhzcEFrQ0dmUW84MDNIUU4vVXI0TUpvQ3VH?=
- =?utf-8?B?cnA4VzN4b1hmdkhkQlJVUzJxTE1xR1lyZXJYOVp5RFFndi9FR2t2WEY3NE5r?=
- =?utf-8?B?elRmREFEeDJ1T2dncjkxZ1BlQ05iVWRwQTdlUVZWUmhIcGlHOEhxNm56bG94?=
- =?utf-8?B?ZHVmRHdKTm0vek8rbVRoVENwLzdvNEhaQ2l5K1gyZG4ra3o3QkhrZWt4ZlA3?=
- =?utf-8?B?TS9kZStWdUkyckZwM3lTZEdKanJEQ01ZQTFYYVhtTW54ak5uenQ0MG5jYTc0?=
- =?utf-8?Q?/EP82QuE+DRSAlHNspvMq2roMFHIB1BWxWkjDzC?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235225AbhD0Jio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Apr 2021 05:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231148AbhD0Jin (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 05:38:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85896C061756
+        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 02:37:59 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id c3so22193289pfo.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 02:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ySz9EGPIWcNR6VfOuBDwIZj3KzCMKoy3Eg2bpBKSCFs=;
+        b=KSGOQt2BBxqrba5pWgjcu5T9PACN1ph9VV9Ot1zJcG48mn4v8aVUGstrCId/8yFQiT
+         g0Y4RcteqoBbpxIVu5h3U+9ReFBrOdRkpFew/gCyU+1lfZ2UiJa/UxlrDLg0axO75S4D
+         iCdJng6W4mISA9fkMo5CYOlgvQBjJGRE2rjo8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ySz9EGPIWcNR6VfOuBDwIZj3KzCMKoy3Eg2bpBKSCFs=;
+        b=DteegRyzh934Jv3bRX37abQZ1sTHIiYNVD1zvojAc5WGaL2jrRVvkG7URozrKD447N
+         /sGt+zLbZdqXzRBiznS5qKtejMS2RHiLz7+zYu6s9h2ajZdscTmGNtK0bCxGnyWsEUyO
+         nbuCSxVi7RpLJ3WOy8jXwHV9d3ZBPV9iVDNHF/0RtRk7RnG28qAm63Bx0/kLlFLmRhSD
+         dPCpVgyseAnMUFaixdRRrLvty05A/WSEmpYtnYRbslp5atFkB3pebLIYs55QTZ0rO9BU
+         1d/o96gdI1ND3tqTNwYniD0cs6IfBFIsaNWhgl6MoDEKyjNx0TsD+Bfz2L1ru1puoll5
+         6EIg==
+X-Gm-Message-State: AOAM532KL3/ZP8dwccyPAfbqqq5JPpEzGnBFJ9or7/EwdTe0cHZSDbzR
+        Ce5EG4W5k0WfZplzFLRSU0qedWKRRDj12bjq
+X-Google-Smtp-Source: ABdhPJwi8yxAsWUpTwa5zsAuYIl4CwYDWGzArolifx9IwPmCQH1UXiGkYofBwOc7U/dUmkzLGIdy5Q==
+X-Received: by 2002:a63:ad42:: with SMTP id y2mr21043295pgo.187.1619516278774;
+        Tue, 27 Apr 2021 02:37:58 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:e57d:264c:f339:a6a7])
+        by smtp.gmail.com with ESMTPSA id c125sm2142070pfa.74.2021.04.27.02.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Apr 2021 02:37:58 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     linux-pm@vger.kernel.org
+Cc:     hsinyi@chromium.org, Ikjoon Jang <ikjn@chromium.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: sbs-battery: do not use global variables
+Date:   Tue, 27 Apr 2021 17:37:54 +0800
+Message-Id: <20210427093754.3000087-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7930.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84abc281-b576-44db-5d7e-08d9095a397b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2021 08:55:36.4046
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yfRoxNk8lIk5lb3O8YrzdjNiJAOVyNV+YX9K4ZE8CEw+yeh0XMnK90FkoZMEdrmbCKUdmaz4Fnl3RHhHpKkvaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0402MB2934
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBTdWJqZWN0OiBbUEFUQ0ggMS8yXSB0aGVybWFsOiBpbXhfc2M6IGFkZCBtaXNzaW5nIG9mX25v
-ZGVfcHV0IGZvciBsb29wDQo+IGl0ZXJhdGlvbg0KPiANCj4gRWFybHkgZXhpdHMgZnJvbSBmb3Jf
-ZWFjaF9hdmFpbGFibGVfY2hpbGRfb2Zfbm9kZSgpIHNob3VsZCBkZWNyZW1lbnQgdGhlDQo+IG5v
-ZGUgcmVmZXJlbmNlIGNvdW50ZXIuICBSZXBvcnRlZCBieSBDb2NjaW5lbGxlOg0KPiANCj4gICBk
-cml2ZXJzL3RoZXJtYWwvaW14X3NjX3RoZXJtYWwuYzo5MzoxLTMzOiBXQVJOSU5HOg0KPiAgICAg
-RnVuY3Rpb24gImZvcl9lYWNoX2F2YWlsYWJsZV9jaGlsZF9vZl9ub2RlIiBzaG91bGQgaGF2ZSBv
-Zl9ub2RlX3B1dCgpDQo+IGJlZm9yZSByZXR1cm4gYXJvdW5kIGxpbmUgOTcuDQo+IA0KDQpSZXZp
-ZXdlZC1ieTogSmFja3kgQmFpIDxwaW5nLmJhaUBueHAuY29tPg0KDQpCUg0KSmFja3kgQmFpDQoN
-Cj4gU2lnbmVkLW9mZi1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3Nr
-aUBjYW5vbmljYWwuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvdGhlcm1hbC9pbXhfc2NfdGhlcm1h
-bC5jIHwgMyArKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3RoZXJtYWwvaW14X3NjX3RoZXJtYWwuYw0KPiBiL2RyaXZlcnMv
-dGhlcm1hbC9pbXhfc2NfdGhlcm1hbC5jDQo+IGluZGV4IGIwMWQyOGVjYTdlZS4uOGQ3NmRiZmRl
-NmE5IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvaW14X3NjX3RoZXJtYWwuYw0KPiAr
-KysgYi9kcml2ZXJzL3RoZXJtYWwvaW14X3NjX3RoZXJtYWwuYw0KPiBAQCAtOTMsNiArOTMsNyBA
-QCBzdGF0aWMgaW50IGlteF9zY190aGVybWFsX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UN
-Cj4gKnBkZXYpDQo+ICAJZm9yX2VhY2hfYXZhaWxhYmxlX2NoaWxkX29mX25vZGUobnAsIGNoaWxk
-KSB7DQo+ICAJCXNlbnNvciA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKnNlbnNv
-ciksIEdGUF9LRVJORUwpOw0KPiAgCQlpZiAoIXNlbnNvcikgew0KPiArCQkJb2Zfbm9kZV9wdXQo
-Y2hpbGQpOw0KPiAgCQkJb2Zfbm9kZV9wdXQoc2Vuc29yX25wKTsNCj4gIAkJCXJldHVybiAtRU5P
-TUVNOw0KPiAgCQl9DQo+IEBAIC0xMDQsNiArMTA1LDcgQEAgc3RhdGljIGludCBpbXhfc2NfdGhl
-cm1hbF9wcm9iZShzdHJ1Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCQkJZGV2X2Vy
-cigmcGRldi0+ZGV2LA0KPiAgCQkJCSJmYWlsZWQgdG8gZ2V0IHZhbGlkIHNlbnNvciByZXNvdXJj
-ZSBpZDogJWRcbiIsDQo+ICAJCQkJcmV0KTsNCj4gKwkJCW9mX25vZGVfcHV0KGNoaWxkKTsNCj4g
-IAkJCWJyZWFrOw0KPiAgCQl9DQo+IA0KPiBAQCAtMTE0LDYgKzExNiw3IEBAIHN0YXRpYyBpbnQg
-aW14X3NjX3RoZXJtYWxfcHJvYmUoc3RydWN0DQo+IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4g
-IAkJaWYgKElTX0VSUihzZW5zb3ItPnR6ZCkpIHsNCj4gIAkJCWRldl9lcnIoJnBkZXYtPmRldiwg
-ImZhaWxlZCB0byByZWdpc3RlciB0aGVybWFsIHpvbmVcbiIpOw0KPiAgCQkJcmV0ID0gUFRSX0VS
-UihzZW5zb3ItPnR6ZCk7DQo+ICsJCQlvZl9ub2RlX3B1dChjaGlsZCk7DQo+ICAJCQlicmVhazsN
-Cj4gIAkJfQ0KPiANCj4gLS0NCj4gMi4yNS4xDQoNCg==
+Currently sbs-battery driver declares three string buffers as global
+variables for manufacturer, model_name, and chemistry. This patch
+moves them into struct sbs_info.
+
+Additionally, for 'chemistry' string property, suppress dev_warn() into
+dev_warn_once() for some ChromeOS devices exposing chemistry property
+as a non-standard string.
+
+Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+
+---
+
+ drivers/power/supply/sbs-battery.c | 118 ++++++++++++++++-------------
+ 1 file changed, 66 insertions(+), 52 deletions(-)
+
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index 4bf92831cb06..f51ff1d7b12f 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properties[] = {
+ /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
+ #define SBS_FLAGS_TI_BQ20ZX5		BIT(0)
+ 
++const enum power_supply_property string_properties[] = {
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_MANUFACTURER,
++	POWER_SUPPLY_PROP_MODEL_NAME,
++};
++
++#define NR_STRING_BUFFERS	ARRAY_SIZE(string_properties)
++
+ struct sbs_info {
+ 	struct i2c_client		*client;
+ 	struct power_supply		*power_supply;
+@@ -201,11 +209,21 @@ struct sbs_info {
+ 	struct delayed_work		work;
+ 	struct mutex			mode_lock;
+ 	u32				flags;
++	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+ };
+ 
+-static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+-static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+-static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
++static char *sbs_get_string_buf(struct sbs_info *chip,
++				enum power_supply_property psp)
++{
++	int i = 0;
++
++	for (i = 0; i < NR_STRING_BUFFERS; i++)
++		if (string_properties[i] == psp)
++			return chip->strings[i];
++
++	return ERR_PTR(-EINVAL);
++}
++
+ static bool force_load;
+ 
+ static int sbs_read_word_data(struct i2c_client *client, u8 address);
+@@ -639,17 +657,43 @@ static int sbs_get_battery_property(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int sbs_get_battery_string_property(struct i2c_client *client,
+-	int reg_offset, enum power_supply_property psp, char *val)
++static int sbs_get_property_index(struct i2c_client *client,
++	enum power_supply_property psp)
+ {
+-	s32 ret;
++	int count;
++
++	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
++		if (psp == sbs_data[count].psp)
++			return count;
++
++	dev_warn(&client->dev,
++		"%s: Invalid Property - %d\n", __func__, psp);
++
++	return -EINVAL;
++}
+ 
+-	ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
++static const char *sbs_get_battery_string_property(struct sbs_info *chip,
++			enum power_supply_property psp)
++{
++	int ret;
++	char *buf;
++	u8 addr;
+ 
++	ret = sbs_get_property_index(chip->client, psp);
+ 	if (ret < 0)
+-		return ret;
++		return ERR_PTR(ret);
+ 
+-	return 0;
++	addr = sbs_data[ret].addr;
++
++	buf = sbs_get_string_buf(chip, psp);
++	if (IS_ERR(buf))
++		return buf;
++
++	ret = sbs_read_string_data(chip->client, addr, buf);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	return buf;
+ }
+ 
+ static void  sbs_unit_adjustment(struct i2c_client *client,
+@@ -772,34 +816,14 @@ static int sbs_get_battery_serial_number(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int sbs_get_property_index(struct i2c_client *client,
+-	enum power_supply_property psp)
+-{
+-	int count;
+-	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+-		if (psp == sbs_data[count].psp)
+-			return count;
+-
+-	dev_warn(&client->dev,
+-		"%s: Invalid Property - %d\n", __func__, psp);
+-
+-	return -EINVAL;
+-}
+-
+-static int sbs_get_chemistry(struct i2c_client *client,
++static int sbs_get_chemistry(struct sbs_info *chip,
+ 		union power_supply_propval *val)
+ {
+-	enum power_supply_property psp = POWER_SUPPLY_PROP_TECHNOLOGY;
+-	int ret;
++	const char *chemistry = sbs_get_battery_string_property(chip,
++					POWER_SUPPLY_PROP_TECHNOLOGY);
+ 
+-	ret = sbs_get_property_index(client, psp);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = sbs_get_battery_string_property(client, ret, psp,
+-					      chemistry);
+-	if (ret < 0)
+-		return ret;
++	if (IS_ERR(chemistry))
++		return PTR_ERR(chemistry);
+ 
+ 	if (!strncasecmp(chemistry, "LION", 4))
+ 		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
+@@ -813,7 +837,7 @@ static int sbs_get_chemistry(struct i2c_client *client,
+ 		val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+ 
+ 	if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+-		dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
++		dev_warn_once(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
+ 
+ 	return 0;
+ }
+@@ -857,6 +881,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 	int ret = 0;
+ 	struct sbs_info *chip = power_supply_get_drvdata(psy);
+ 	struct i2c_client *client = chip->client;
++	const char *str;
+ 
+ 	if (chip->gpio_detect) {
+ 		ret = gpiod_get_value_cansleep(chip->gpio_detect);
+@@ -882,7 +907,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_TECHNOLOGY:
+-		ret = sbs_get_chemistry(client, val);
++		ret = sbs_get_chemistry(chip, val);
+ 		if (ret < 0)
+ 			break;
+ 
+@@ -934,23 +959,12 @@ static int sbs_get_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_MODEL_NAME:
+-		ret = sbs_get_property_index(client, psp);
+-		if (ret < 0)
+-			break;
+-
+-		ret = sbs_get_battery_string_property(client, ret, psp,
+-						      model_name);
+-		val->strval = model_name;
+-		break;
+-
+ 	case POWER_SUPPLY_PROP_MANUFACTURER:
+-		ret = sbs_get_property_index(client, psp);
+-		if (ret < 0)
+-			break;
+-
+-		ret = sbs_get_battery_string_property(client, ret, psp,
+-						      manufacturer);
+-		val->strval = manufacturer;
++		str = sbs_get_battery_string_property(chip, psp);
++		if (IS_ERR(str))
++			ret = PTR_ERR(str);
++		else
++			val->strval = str;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
+
