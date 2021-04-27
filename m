@@ -2,55 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0905736CBF0
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B028336CBEF
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238740AbhD0TpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S238967AbhD0TpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 27 Apr 2021 15:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238970AbhD0TpS (ORCPT
+Received: from Galois.linutronix.de ([193.142.43.55]:43160 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238952AbhD0TpS (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF09C061574
-        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 12:44:34 -0700 (PDT)
-Date:   Tue, 27 Apr 2021 19:44:32 -0000
+Date:   Tue, 27 Apr 2021 19:44:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1619552673;
+        s=2020; t=1619552674;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UuAQPj5lYvKDp3juv0H7KiQHS6joNDFqJ+4nCU1Nykw=;
-        b=L8uYylLh0DAYM+7Q6LtFH7Wlc2Lwgbho8kqjXL9OgLTkyY/JUgqnLE/BelTX501EhXw8Ms
-        Z3kDsqK1W4FMEvFreLQjrRiBedPAcVjVXTEXZE74WqEospuWQIkkg8c/FeVGNxJQAuQRRE
-        a2bufkYLWJoMlyEyM/t4QSoV8YnciwuyBIfBnI0xY++P1TGkILtkr0kryOlP4KiiX3QOQX
-        z2EA8AK4Oyx5u2mFlVvSahfnojrKJwLBGvbWWDZ3aVd5G7gyb5FAYNX7KAV5BnG5KB3U3a
-        6FwaGZ/grCMnxBj7Je89upCtWaSuGRNJrnbRKiWNhgatlEcW3jLchxUA9t7bQw==
+        bh=ahJHEyLsX2lTE/D7PvDCkyzY5fgthNOevel5nEBU8sU=;
+        b=Xk094gpLo4h6c+zhur5it+i117/uXQGkdsHaVOL8YiNWWiaSxLztil/6eFjs0mKQZclHND
+        abpvFLmiAqRGciuJny2jpXDRwQ9h0bEg/FHdatoijwZvRWaJVzF09nM2pwgdUSyEG7m23K
+        qvEvF/ZPta/KvtdjbjdBT+fto/zyPvjN30UctIqtFXHjYCjRZHp97flJLVx0UEkuRCQc7U
+        eFbvchdmWvqWFSuvwXJ8CM7PQs1P8T+GpxU4kKLebJ+h9ZahzC5tSVl/NqDjyhgoFPqiav
+        +4/RK9Bh7Ur7YXXd5AFCRNc3lUjK+LKzgsyOA9pnmzWVTF5bN++bi+RNwwl4NA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1619552673;
+        s=2020e; t=1619552674;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UuAQPj5lYvKDp3juv0H7KiQHS6joNDFqJ+4nCU1Nykw=;
-        b=HYpd8UO3D3MPGTcGBBDjtbAs3BUw4J1QThqG07gunB4lzmtSI+oTcvtX0Wk5INs8ka1r4l
-        H5scYU6AHh/horDQ==
-From:   "thermal-bot for Zhen Lei" <tip-bot2@linutronix.de>
+        bh=ahJHEyLsX2lTE/D7PvDCkyzY5fgthNOevel5nEBU8sU=;
+        b=Hxc8pzKDoVGRvmp3IEIppIRYsByVleYepIZYDJ8qGS4wnoYtlq0/eisDIcZMAN116W1Um1
+        i6Q/CJqfB7XrXLBg==
+From:   "thermal-bot for Ye Bin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/ti-soc-thermal/ti-bandgap:
- Rearrange all the included header files alphabetically
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>, Keerthy <j-keerthy@ti.com>,
+Subject: [thermal: thermal/next] thermal/drivers/hisi: Remove redundant
+ dev_err call in hisi_thermal_probe()
+Cc:     Hulk Robot <hulkci@huawei.com>, Ye Bin <yebin10@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210406091912.2583-2-thunder.leizhen@huawei.com>
-References: <20210406091912.2583-2-thunder.leizhen@huawei.com>
+In-Reply-To: <20210409075224.2109503-1-yebin10@huawei.com>
+References: <20210409075224.2109503-1-yebin10@huawei.com>
 MIME-Version: 1.0
-Message-ID: <161955267233.29796.1764788966833145464.tip-bot2@tip-bot2>
+Message-ID: <161955267329.29796.10846130053666149008.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,73 +58,40 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     5a4a8235fee69b5a31cf1c56a9fa14b0d21a930c
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//5a4a8235fee69b5a31cf1c56a9fa14b0d21a930c
-Author:        Zhen Lei <thunder.leizhen@huawei.com>
-AuthorDate:    Tue, 06 Apr 2021 17:19:12 +08:00
+Commit-ID:     beaa41029fdea9d3e01af3a1a800538542d30869
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//beaa41029fdea9d3e01af3a1a800538542d30869
+Author:        Ye Bin <yebin10@huawei.com>
+AuthorDate:    Fri, 09 Apr 2021 15:52:24 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 20 Apr 2021 19:02:16 +02:00
+CommitterDate: Tue, 20 Apr 2021 09:18:57 +02:00
 
-thermal/drivers/ti-soc-thermal/ti-bandgap: Rearrange all the included header files alphabetically
+thermal/drivers/hisi: Remove redundant dev_err call in hisi_thermal_probe()
 
-For the sake of lisibility, reorder the header files alphabetically.
+There is a error message within devm_ioremap_resource
+already, so remove the dev_err call to avoid redundant
+error message.
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Reviewed-by: Keerthy <j-keerthy@ti.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210406091912.2583-2-thunder.leizhen@huawei.com
+Link: https://lore.kernel.org/r/20210409075224.2109503-1-yebin10@huawei.com
 ---
- drivers/thermal/ti-soc-thermal/ti-bandgap.c | 34 ++++++++++----------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ drivers/thermal/hisi_thermal.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-index d81af89..008fbed 100644
---- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-@@ -9,29 +9,29 @@
-  *   Eduardo Valentin <eduardo.valentin@ti.com>
-  */
+diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
+index d902db9..9a21ac0 100644
+--- a/drivers/thermal/hisi_thermal.c
++++ b/drivers/thermal/hisi_thermal.c
+@@ -572,10 +572,8 @@ static int hisi_thermal_probe(struct platform_device *pdev)
  
--#include <linux/module.h>
-+#include <linux/clk.h>
-+#include <linux/cpu_pm.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
- #include <linux/export.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/init.h>
--#include <linux/kernel.h>
- #include <linux/interrupt.h>
--#include <linux/clk.h>
--#include <linux/gpio/consumer.h>
--#include <linux/platform_device.h>
--#include <linux/err.h>
--#include <linux/types.h>
--#include <linux/spinlock.h>
--#include <linux/sys_soc.h>
--#include <linux/reboot.h>
--#include <linux/of_device.h>
--#include <linux/of_platform.h>
--#include <linux/of_irq.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
--#include <linux/cpu_pm.h>
--#include <linux/device.h>
--#include <linux/pm_runtime.h>
--#include <linux/pm.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reboot.h>
-+#include <linux/spinlock.h>
-+#include <linux/sys_soc.h>
-+#include <linux/types.h>
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	data->regs = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(data->regs)) {
+-		dev_err(dev, "failed to get io address\n");
++	if (IS_ERR(data->regs))
+ 		return PTR_ERR(data->regs);
+-	}
  
- #include "ti-bandgap.h"
- 
+ 	ret = data->ops->probe(data);
+ 	if (ret)
