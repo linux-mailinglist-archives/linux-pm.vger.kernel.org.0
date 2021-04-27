@@ -2,53 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB4036CBEC
+	by mail.lfdr.de (Postfix) with ESMTP id 35FEC36CBED
 	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238962AbhD0TpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S238963AbhD0TpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 27 Apr 2021 15:45:17 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43160 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238930AbhD0TpP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:15 -0400
-Date:   Tue, 27 Apr 2021 19:44:30 -0000
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238946AbhD0TpR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E258BC061574
+        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 12:44:33 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 19:44:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1619552671;
+        s=2020; t=1619552672;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NSPSvl4s8y5p+yfLlW7jlTNJjnmAovQ5DqhkURonC3Q=;
-        b=cvoOew6uC/y+zG0Lab3lkFdlnXTtPtVWg+iYb+u9GHGtqGGfI7IrQZSjKDJdAlKW86+7fj
-        9uU3EDDoCfg4ezsyo0TEm1G/4L6xaGTTjUJp6czJrYA8Ujwco8sgAjkVcRGPs8eHzw8sAF
-        z5CCphoWfi9S0H0pJqshKEHnHsqwQuFPSevELuf6EqHFJ06ZHEQ3SAxarsxPAU/mV+KfWC
-        1vcSasoQ6M56MvgFmG7HRrnYW1o5wiUi9ydQ/rVbLb3ifFMSq48H+VoNbUzzM0AKND1Ql3
-        bxf4hi2sg2464ttwClCNFX4cUS4wKaHyUCEu0evxDPL0fX5rT8jSEr2j9RXiXw==
+        bh=8l2DTofWYvWRCnJBwEwXkx9o86ocwWBl+5MXNtQtvQ8=;
+        b=CaaS/t26pUZvPiubL45auk83w1ig4K0X07QLLAfoZBdW0lMI1ZqyucbOgHe1Th4LFJwnl5
+        pbBmZ11EaGVElgvqVj143PQqcZjvo9Jam5QznhYc9fvqnhU/VXn0w5A/8enGKQ4P/rhAC7
+        ZBApVUSd1dG+EXqK520MBnOf1ix16F+wGtXRLi2V9iD1lVHA7puHn4iqZzftcdrnJ2kr95
+        Z3my5HD+f6P4aNNG8XqvDehxo3WnBTrgdj6RigFG47Pi0mwoMerFO5XfLvdY2gPMbKotDq
+        XNr4pZ7X/V9hyL1g9E/+2KwFXEBcBliGtrUG3a+ofOKi3pmGDrjz2AGxA8m4xQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1619552671;
+        s=2020e; t=1619552672;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NSPSvl4s8y5p+yfLlW7jlTNJjnmAovQ5DqhkURonC3Q=;
-        b=/Kg8xQ6m2f89bhX9Ay/q6f0dw+hO+H/F1Z5MWk9GOoaSRmd/IbWqVfIo+WYTwV0M5HLnp4
-        Hf2uX8bqhGLJv9Cw==
+        bh=8l2DTofWYvWRCnJBwEwXkx9o86ocwWBl+5MXNtQtvQ8=;
+        b=9e8uQ3RzjmbH+weq28rZW6zQzLDefFjcNnNGuYs5ak5QdLrohewIzCrPkvfgL3MmLxE1n0
+        CLAYSMHjbACcpLDQ==
 From:   thermal-bot for =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= 
         <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: brcm,ns-thermal:
- Convert to the json-schema
+Subject: [thermal: thermal/next] dt-bindings: thermal: thermal-sensor: require
+ "#thermal-sensor-cells"
 Cc:     rafal@milecki.pl, Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210420210104.10555-1-zajec5@gmail.com>
-References: <20210420210104.10555-1-zajec5@gmail.com>
+In-Reply-To: <20210415112121.4999-1-zajec5@gmail.com>
+References: <20210415112121.4999-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Message-ID: <161955267091.29796.2618446813971655267.tip-bot2@tip-bot2>
+Message-ID: <161955267184.29796.4661105156582755515.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,139 +62,39 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     08e9fdfbb2248e93bbfaeb9cde284776085466cd
+Commit-ID:     bd5d553653e4151030ad2a94ef39a46b40c75a9b
 Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//08e9fdfbb2248e93bbfaeb9cde284776085466cd
+git//bd5d553653e4151030ad2a94ef39a46b40c75a9b
 Author:        Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-AuthorDate:    Tue, 20 Apr 2021 23:01:04 +02:00
+AuthorDate:    Thu, 15 Apr 2021 13:21:21 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Wed, 21 Apr 2021 20:42:48 +02:00
+CommitterDate: Tue, 20 Apr 2021 22:46:48 +02:00
 
-dt-bindings: thermal: brcm,ns-thermal: Convert to the json-schema
+dt-bindings: thermal: thermal-sensor: require "#thermal-sensor-cells"
 
-This helps validating DTS files.
+This property is required for every thermal sensor as it's used when
+using phandles.
 
 Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210420210104.10555-1-zajec5@gmail.com
+Link: https://lore.kernel.org/r/20210415112121.4999-1-zajec5@gmail.com
 ---
- Documentation/devicetree/bindings/thermal/brcm,ns-thermal.txt  | 37 +----
- Documentation/devicetree/bindings/thermal/brcm,ns-thermal.yaml | 60 +++++++-
- 2 files changed, 60 insertions(+), 37 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/brcm,ns-thermal=
-.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/brcm,ns-thermal=
-.yaml
+ Documentation/devicetree/bindings/thermal/thermal-sensor.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/brcm,ns-thermal.txt b/=
-Documentation/devicetree/bindings/thermal/brcm,ns-thermal.txt
-deleted file mode 100644
-index 68e0471..0000000
---- a/Documentation/devicetree/bindings/thermal/brcm,ns-thermal.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--* Broadcom Northstar Thermal
--
--This binding describes thermal sensor that is part of Northstar's DMU (Device
--Management Unit).
--
--Required properties:
--- compatible : Must be "brcm,ns-thermal"
--- reg : iomem address range of PVTMON registers
--- #thermal-sensor-cells : Should be <0>
--
--Example:
--
--thermal: thermal@1800c2c0 {
--	compatible =3D "brcm,ns-thermal";
--	reg =3D <0x1800c2c0 0x10>;
--	#thermal-sensor-cells =3D <0>;
--};
--
--thermal-zones {
--	cpu_thermal: cpu-thermal {
--		polling-delay-passive =3D <0>;
--		polling-delay =3D <1000>;
--		coefficients =3D <(-556) 418000>;
--		thermal-sensors =3D <&thermal>;
--
--		trips {
--			cpu-crit {
--				temperature	=3D <125000>;
--				hysteresis	=3D <0>;
--				type		=3D "critical";
--			};
--		};
--
--		cooling-maps {
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/thermal/brcm,ns-thermal.yaml b=
-/Documentation/devicetree/bindings/thermal/brcm,ns-thermal.yaml
-new file mode 100644
-index 0000000..fdeb333
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/brcm,ns-thermal.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/brcm,ns-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom Northstar Thermal
-+
-+maintainers:
-+  - Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-+
-+description:
-+  Thermal sensor that is part of Northstar's DMU (Device Management Unit).
-+
-+allOf:
-+  - $ref: thermal-sensor.yaml#
-+
-+properties:
-+  compatible:
-+    const: brcm,ns-thermal
-+
-+  reg:
-+    description: PVTMON registers range
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 0
-+
-+unevaluatedProperties: false
-+
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml b/=
+Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+index 9f74792..4bd345c 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+@@ -36,6 +36,9 @@ properties:
+       containing several internal sensors.
+     enum: [0, 1]
+=20
 +required:
-+  - reg
++  - "#thermal-sensor-cells"
 +
-+examples:
-+  - |
-+    thermal: thermal@1800c2c0 {
-+        compatible =3D "brcm,ns-thermal";
-+        reg =3D <0x1800c2c0 0x10>;
-+        #thermal-sensor-cells =3D <0>;
-+    };
-+
-+    thermal-zones {
-+        cpu-thermal {
-+            polling-delay-passive =3D <0>;
-+            polling-delay =3D <1000>;
-+            coefficients =3D <(-556) 418000>;
-+            thermal-sensors =3D <&thermal>;
-+
-+            trips {
-+                cpu-crit {
-+                    temperature =3D <125000>;
-+                    hysteresis =3D <0>;
-+                    type =3D "critical";
-+                };
-+            };
-+
-+            cooling-maps {
-+            };
-+        };
-+    };
+ additionalProperties: true
+=20
+ examples:
