@@ -2,62 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C317236C56E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 13:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA8D36C823
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 16:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbhD0LmB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Apr 2021 07:42:01 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:34402 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229972AbhD0LmB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 07:42:01 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UX-4FMn_1619523675;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UX-4FMn_1619523675)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 27 Apr 2021 19:41:16 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     ssantosh@kernel.org
-Cc:     nm@ti.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [Resend PATCH v2] soc: ti: smartreflex after the relocation to maintain 
-Date:   Tue, 27 Apr 2021 19:41:13 +0800
-Message-Id: <1619523673-120782-1-git-send-email-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S237473AbhD0O6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Apr 2021 10:58:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236173AbhD0O6X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 27 Apr 2021 10:58:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C49760FDB;
+        Tue, 27 Apr 2021 14:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619535459;
+        bh=IC/cBF67bAQkQJea+wXRX+PkxeJ9br/yn1UuwM/SBRQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=jmNiLztt2E/Vn/QBmGbMJbeK8FfWWYI438idwUCHKmX9ijedQvc9V4V0DVdXk8wQT
+         n890w17w8y2p+hwT6SDAv2S3ZQgvbS1SX4kPI5h5oOzw7FUgI0WjNd1zAA9FhPCjyB
+         U6wibuNGaypvDnXv4tOzlU+VO8yHUiWUyzUPTXgm8su0SbI6+5IjCJVfh8gpMdmPgl
+         0GSteCRoQnfSHqWyPvhTW35Z2RqngYPh9AvS7fdBr3h/JRsFHN4Oilj1u9fAOBDaem
+         wIqNygkCji+fROnI4BCiLFPI/VjKKMt/5n62Ub8+PsWPAAhihL1jD+leLlBEITVwtG
+         0V4Wpu1pEcwvA==
+Message-ID: <19c1c262382d73dbf3ec37b7651c5ab05253e0f9.camel@kernel.org>
+Subject: Re: [PATCH v2] clk: Skip clk provider registration when np is NULL
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, maxime@cerno.tech,
+        khilman@kernel.org, ulf.hansson@linaro.org, len.brown@intel.com,
+        pavel@ucw.cz, robh+dt@kernel.org, frowand.list@gmail.com,
+        maz@kernel.org, tglx@linutronix.de, saravanak@google.com,
+        geert@linux-m68k.org, nsaenzjulienne@suse.de, linux@roeck-us.net,
+        guillaume.tucker@collabora.com
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, nicolas.ferre@microchip.com,
+        claudiu.beznea@microchip.com, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, kernel-team@android.com,
+        linux-rpi-kernel@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Date:   Tue, 27 Apr 2021 16:57:30 +0200
+In-Reply-To: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+References: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0 (3.40.0-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix the following coccicheck warning:
-./drivers/soc/ti/smartreflex.c:820:0-23: WARNING: pm_sr_fops should be
-defined with DEFINE_DEBUGFS_ATTRIBUTE
+On Mon, 2021-04-26 at 09:56 +0300, Tudor Ambarus wrote:
+> commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> revealed that clk/bcm/clk-raspberrypi.c driver calls
+> devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
+> NULL pointer dereference in of_clk_add_hw_provider() when calling
+> fwnode_dev_initialized().
+> 
+> Returning 0 is reducing the if conditions in driver code and is being
+> consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
+> is disabled. The downside is that drivers will maybe register clkdev lookups
+> when they don't need to and waste some memory.
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Reviewed-by: Nishanth Menon <nm@ti.com>
----
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
 
-Change in v2:
---According to Nishanth Menon's suggestion, the subject has been 
-corrected.
-https://lore.kernel.org/patchwork/patch/1383883/
-
- drivers/soc/ti/smartreflex.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index 5376f3d..b3c7460 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -817,7 +817,7 @@ static int omap_sr_autocomp_store(void *data, u64 val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
-+DEFINE_DEBUGFS_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
- 			omap_sr_autocomp_store, "%llu\n");
- 
- static int omap_sr_probe(struct platform_device *pdev)
--- 
-1.8.3.1
+Regards,
+Nicolas
 
