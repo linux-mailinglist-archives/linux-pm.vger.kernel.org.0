@@ -2,15 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F9736CBEE
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0905736CBF0
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Apr 2021 21:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbhD0TpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Apr 2021 15:45:17 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43146 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238961AbhD0TpR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:17 -0400
+        id S238740AbhD0TpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Apr 2021 15:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238970AbhD0TpS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Apr 2021 15:45:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF09C061574
+        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 12:44:34 -0700 (PDT)
 Date:   Tue, 27 Apr 2021 19:44:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1619552673;
@@ -19,12 +22,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ekNZKg+fJEXdFLOhACjkf8HBEq87DtazlJh4c+QtmvI=;
-        b=tNWYKExFPnz6/luNe8GnAZnyGJLGMo5IyKE0YHBvsqPwMt3TuTcmfGLRd3/3d/QAmYpaRv
-        IFBjfSVVe5l4rAAIpTsr2h02KZOXg0xbjOGxNSPCgdIPHeoz7i0HYFTvkrFdqRFYP/2UuV
-        bpB8A60sEpGuPrFycdJJXGmd0TgDZ4EPNRGO3mvtpueLpVXJIo+fH5G+SPSyDce9Bn408B
-        jPm6Dl+7X9xvd4oGcGUo/gA5dUlAPro1rtN9FnkpRqvs0PwXOwy1uHC4NhVdvLbog4WPng
-        jxPZAcpBMDfhCiZvAlvInZG0k+mMW3IlMaOVUzlfpXIA+Ja0azXMe6FCYFWziw==
+        bh=UuAQPj5lYvKDp3juv0H7KiQHS6joNDFqJ+4nCU1Nykw=;
+        b=L8uYylLh0DAYM+7Q6LtFH7Wlc2Lwgbho8kqjXL9OgLTkyY/JUgqnLE/BelTX501EhXw8Ms
+        Z3kDsqK1W4FMEvFreLQjrRiBedPAcVjVXTEXZE74WqEospuWQIkkg8c/FeVGNxJQAuQRRE
+        a2bufkYLWJoMlyEyM/t4QSoV8YnciwuyBIfBnI0xY++P1TGkILtkr0kryOlP4KiiX3QOQX
+        z2EA8AK4Oyx5u2mFlVvSahfnojrKJwLBGvbWWDZ3aVd5G7gyb5FAYNX7KAV5BnG5KB3U3a
+        6FwaGZ/grCMnxBj7Je89upCtWaSuGRNJrnbRKiWNhgatlEcW3jLchxUA9t7bQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1619552673;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -32,22 +35,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ekNZKg+fJEXdFLOhACjkf8HBEq87DtazlJh4c+QtmvI=;
-        b=BfFYO/v0NJj/m8AUw7WQ2/t3Ydtun4tGv47ScGeL8LfkgzwHFI/V+81ezdkwlKZYi37GGk
-        JYuQr/qS26MQOaBA==
-From:   "thermal-bot for dingsenjie" <tip-bot2@linutronix.de>
+        bh=UuAQPj5lYvKDp3juv0H7KiQHS6joNDFqJ+4nCU1Nykw=;
+        b=HYpd8UO3D3MPGTcGBBDjtbAs3BUw4J1QThqG07gunB4lzmtSI+oTcvtX0Wk5INs8ka1r4l
+        H5scYU6AHh/horDQ==
+From:   "thermal-bot for Zhen Lei" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/tegra: Use
- devm_platform_ioremap_resource_byname
-Cc:     dingsenjie <dingsenjie@yulong.com>,
+Subject: [thermal: thermal/next] thermal/drivers/ti-soc-thermal/ti-bandgap:
+ Rearrange all the included header files alphabetically
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>, Keerthy <j-keerthy@ti.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210414063943.96244-1-dingsenjie@163.com>
-References: <20210414063943.96244-1-dingsenjie@163.com>
+In-Reply-To: <20210406091912.2583-2-thunder.leizhen@huawei.com>
+References: <20210406091912.2583-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Message-ID: <161955267276.29796.7874248666079758069.tip-bot2@tip-bot2>
+Message-ID: <161955267233.29796.1764788966833145464.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,65 +61,73 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     fc88f7ad763a8ef2a20f8904bd241930b7696f86
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fc88f7ad763a8ef2a20f8904bd241930b7696f86
-Author:        dingsenjie <dingsenjie@yulong.com>
-AuthorDate:    Wed, 14 Apr 2021 14:39:43 +08:00
+Commit-ID:     5a4a8235fee69b5a31cf1c56a9fa14b0d21a930c
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//5a4a8235fee69b5a31cf1c56a9fa14b0d21a930c
+Author:        Zhen Lei <thunder.leizhen@huawei.com>
+AuthorDate:    Tue, 06 Apr 2021 17:19:12 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 20 Apr 2021 09:18:58 +02:00
+CommitterDate: Tue, 20 Apr 2021 19:02:16 +02:00
 
-thermal/drivers/tegra: Use devm_platform_ioremap_resource_byname
+thermal/drivers/ti-soc-thermal/ti-bandgap: Rearrange all the included header files alphabetically
 
-Use the devm_platform_ioremap_resource_byname() helper instead of
-calling platform_get_resource_byname() and devm_ioremap_resource()
-separately.
+For the sake of lisibility, reorder the header files alphabetically.
 
-Signed-off-by: dingsenjie <dingsenjie@yulong.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Reviewed-by: Keerthy <j-keerthy@ti.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210414063943.96244-1-dingsenjie@163.com
+Link: https://lore.kernel.org/r/20210406091912.2583-2-thunder.leizhen@huawei.com
 ---
- drivers/thermal/tegra/soctherm.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c | 34 ++++++++++----------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index 8b8fbd4..8e303e9 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -2118,7 +2118,6 @@ static int tegra_soctherm_probe(struct platform_device *pdev)
- 	struct tegra_soctherm *tegra;
- 	struct thermal_zone_device *z;
- 	struct tsensor_shared_calib shared_calib;
--	struct resource *res;
- 	struct tegra_soctherm_soc *soc;
- 	unsigned int i;
- 	int err;
-@@ -2140,26 +2139,20 @@ static int tegra_soctherm_probe(struct platform_device *pdev)
+diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+index d81af89..008fbed 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
++++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+@@ -9,29 +9,29 @@
+  *   Eduardo Valentin <eduardo.valentin@ti.com>
+  */
  
- 	tegra->soc = soc;
+-#include <linux/module.h>
++#include <linux/clk.h>
++#include <linux/cpu_pm.h>
++#include <linux/device.h>
++#include <linux/err.h>
+ #include <linux/export.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/init.h>
+-#include <linux/kernel.h>
+ #include <linux/interrupt.h>
+-#include <linux/clk.h>
+-#include <linux/gpio/consumer.h>
+-#include <linux/platform_device.h>
+-#include <linux/err.h>
+-#include <linux/types.h>
+-#include <linux/spinlock.h>
+-#include <linux/sys_soc.h>
+-#include <linux/reboot.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+-#include <linux/of_irq.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+-#include <linux/cpu_pm.h>
+-#include <linux/device.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/pm.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/pm_runtime.h>
++#include <linux/reboot.h>
++#include <linux/spinlock.h>
++#include <linux/sys_soc.h>
++#include <linux/types.h>
  
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--					   "soctherm-reg");
--	tegra->regs = devm_ioremap_resource(&pdev->dev, res);
-+	tegra->regs = devm_platform_ioremap_resource_byname(pdev, "soctherm-reg");
- 	if (IS_ERR(tegra->regs)) {
- 		dev_err(&pdev->dev, "can't get soctherm registers");
- 		return PTR_ERR(tegra->regs);
- 	}
+ #include "ti-bandgap.h"
  
- 	if (!tegra->soc->use_ccroc) {
--		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--						   "car-reg");
--		tegra->clk_regs = devm_ioremap_resource(&pdev->dev, res);
-+		tegra->clk_regs = devm_platform_ioremap_resource_byname(pdev, "car-reg");
- 		if (IS_ERR(tegra->clk_regs)) {
- 			dev_err(&pdev->dev, "can't get car clk registers");
- 			return PTR_ERR(tegra->clk_regs);
- 		}
- 	} else {
--		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--						   "ccroc-reg");
--		tegra->ccroc_regs = devm_ioremap_resource(&pdev->dev, res);
-+		tegra->ccroc_regs = devm_platform_ioremap_resource_byname(pdev, "ccroc-reg");
- 		if (IS_ERR(tegra->ccroc_regs)) {
- 			dev_err(&pdev->dev, "can't get ccroc registers");
- 			return PTR_ERR(tegra->ccroc_regs);
