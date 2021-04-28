@@ -2,550 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4060136D33B
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 09:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8A036D39C
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 10:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbhD1Hek (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Apr 2021 03:34:40 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52890 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236800AbhD1Hek (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 03:34:40 -0400
-X-UUID: cca10a5813dd40b4a027922836817482-20210428
-X-UUID: cca10a5813dd40b4a027922836817482-20210428
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1257777433; Wed, 28 Apr 2021 14:54:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 28 Apr 2021 14:54:43 +0800
-Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Apr 2021 14:54:43 +0800
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v16 4/7] soc: mediatek: SVS: add debug commands
-Date:   Wed, 28 Apr 2021 14:54:37 +0800
-Message-ID: <20210428065440.3704-5-roger.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210428065440.3704-1-roger.lu@mediatek.com>
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
+        id S230456AbhD1IEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Apr 2021 04:04:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40778 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229643AbhD1IEN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 28 Apr 2021 04:04:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E23F8AF8C;
+        Wed, 28 Apr 2021 08:03:27 +0000 (UTC)
+Date:   Wed, 28 Apr 2021 10:03:26 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Gautham R Shenoy <ego@linux.vnet.ibm.com>
+Cc:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <20210428080326.GL6564@kitsune.suse.cz>
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+ <20210423073551.GZ6564@kitsune.suse.cz>
+ <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+ <20210423174505.GE6564@kitsune.suse.cz>
+ <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
+ <20210423184216.GG6564@kitsune.suse.cz>
+ <YIPKrIb+tY39taZv@drishya.in.ibm.com>
+ <20210425110714.GH6564@kitsune.suse.cz>
+ <20210428055848.GA6675@in.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210428055848.GA6675@in.ibm.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The purpose of SVS is to help find the suitable voltages
-for DVFS. Therefore, if SVS bank voltages are concerned
-to be wrong, we can adjust SVS bank voltages by this patch.
+On Wed, Apr 28, 2021 at 11:28:48AM +0530, Gautham R Shenoy wrote:
+> Hello Michal,
+> 
+> On Sun, Apr 25, 2021 at 01:07:14PM +0200, Michal Suchánek wrote:
+> > On Sat, Apr 24, 2021 at 01:07:16PM +0530, Vaidyanathan Srinivasan wrote:
+> > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 20:42:16]:
+> > > 
+> > > > On Fri, Apr 23, 2021 at 11:59:30PM +0530, Vaidyanathan Srinivasan wrote:
+> > > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 19:45:05]:
+> > > > > 
+> > > > > > On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
+> > > > > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
+> > > > > > > 
+> > > > > > > > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
+> > > > > > > > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> > > > > > > > > 
+> > > > > > > > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > > > > > > > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> > > > > > > > > of the Extended CEDE states advertised by the platform
+> > > > > > > > > 
+> > > > > > > > > On some of the POWER9 LPARs, the older firmwares advertise a very low
+> > > > > > > > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+> > > > > > > > Can you be more specific about 'older firmwares'?
+> > > > > > > 
+> > > > > > > Hi Michal,
+> > > > > > > 
+> > > > > > > This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
+> > > > > > > key idea behind the original patch was to make the H_CEDE latency and
+> > > > > > > hence target residency come from firmware instead of being decided by
+> > > > > > > the kernel.  The advantage is such that, different type of systems in
+> > > > > > > POWER10 generation can adjust this value and have an optimal H_CEDE
+> > > > > > > entry criteria which balances good single thread performance and
+> > > > > > > wakeup latency.  Further we can have additional H_CEDE state to feed
+> > > > > > > into the cpuidle.  
+> > > > > > 
+> > > > > > So all POWER9 machines are affected by the firmware bug where firmware
+> > > > > > reports CEDE1 exit latency of 2us and the real latency is 5us which
+> > > > > > causes the kernel to prefer CEDE1 too much when relying on the values
+> > > > > > supplied by the firmware. It is not about 'older firmware'.
+> > > > > 
+> > > > > Correct.  All POWER9 systems running Linux as guest LPARs will see
+> > > > > extra usage of CEDE idle state, but not baremetal (PowerNV).
+> > > > > 
+> > > > > The correct definition of the bug or miss-match in expectation is that
+> > > > > firmware reports wakeup latency from a core/thread wakeup timing, but
+> > > > > not end-to-end time from sending a wakeup event like an IPI using
+> > > > > H_calls and receiving the events on the target.  Practically there are
+> > > > > few extra micro-seconds needed after deciding to wakeup a target
+> > > > > core/thread to getting the target to start executing instructions
+> > > > > within the LPAR instance.
+> > > > 
+> > > > Thanks for the detailed explanation.
+> > > > 
+> > > > Maybe just adding a few microseconds to the reported time would be a
+> > > > more reasonable workaround than using a blanket fixed value then.
+> > > 
+> > > Yes, that is an option.  But that may only reduce the difference
+> > > between existing kernel and new kernel unless we make it the same
+> > > number.  Further we are fixing this in P10 and hence we will have to
+> > > add "if(P9) do the compensation" and otherwise take it as is.  That
+> > > would not be elegant.  Given that our goal for P9 platform is to not
+> > > introduce changes in H_CEDE entry behaviour, we arrived at this
+> > > approach (this small patch) and this also makes it easy to backport to
+> > > various distro products.
+> > 
+> > I don't see how this is more elegent.
+> > 
+> > The current patch is
+> > 
+> > if(p9)
+> > 	use fixed value
+> > 
+> > the suggested patch is
+> > 
+> > if(p9)
+> > 	apply compensation
+> 
+> 
+> We could do that, however, from the recent measurements the default
+> value is closer to the latency value measured using an IPI.
+> 
+> As Vaidy described earlier, on POWER9 and prior platforms, the wakeup
+> latency advertized by the PHYP hypervisor corresponds to the latency
+> required to wakeup from the underlying hardware idle state (Nap in
+> POWER8 and stop0/1/2 on POWER9) into the hypervisor. That's 2us on
+> POWER9.
+> 
+> We need to apply two kinds of compensation,
+> 
+> 1. Compensation for the time taken to transition the CPU from the
+>    Hypervisor into the LPAR post wakeup from platform idle state
+> 
+> 2. Compensation for the time taken to send the IPI from the source CPU
+>    (waker) to the idle target CPU (wakee).
+> 
+> 1. can be measured via timer idle test (I am using Pratik's
+> cpuidle self-test posted here
+> https://lore.kernel.org/lkml/20210412074309.38484-1-psampat@linux.ibm.com/)
+> 
+> We queue a timer, say for 1ms, and enter the CEDE state. When the
+> timer fires, in the timer handler we compute how much extra timer over
+> the expected 1ms have we consumed. This is what it looks like on
+> POWER9 LPAR
+> 
+> CEDE latency measured using a timer (numbers in ns)
+> ===================================================================
+> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+> 400     2601     5677     5668.74    5917    6413     9299   455.01
+> 
+> If we consider the avg and the 99th %ile values, it takes on an avg
+> about somewhere between 3.5-4.5 us to transition from the Hypervisor
+> to the guest VCPU after the CPU has woken up from the idle state. 
+> 
+> 1. and 2. combined can be determined by an IPI latency test (from the
+> same self-test linked above). We send an IPI to an idle CPU and in the
+> handler compute the time difference between when the IPI was sent and
+> when the handler ran. We see the following numbers on POWER9 LPAR.
+> 
+> CEDE latency measured using an IPI (numbers in us)
+> ==================================================
+> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+> 400     711      7564     7369.43   8559    9514      9698   1200.01
+> 
+> Thus considering the avg and the 99th percentile this compensation
+> would be 5.4-7.5us.
+> 
+> Suppose, we consider the compensation corresponding to the 99th
+> percentile latency value measured using the IPI, the compensation will
+> be 7.5us, which will take the total CEDE latency to 9.5us.
+> 
+> This is in the ballpark of the default value of 10us which we obtain
+> if we do
+> 
+> if (!p10)
+>    use default hardcoded value;
+> 
+That's a nice detailed explanation. Maybe you could summarize it in the
+commit message so that people looking at the patch in the future can
+tell where the value comes from.
 
-Signed-off-by: Roger Lu <roger.lu@mediatek.com>
----
- drivers/soc/mediatek/mtk-svs.c | 328 +++++++++++++++++++++++++++++++++
- 1 file changed, 328 insertions(+)
+Thanks
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 2d2153c92373..8794a2d87baa 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -6,6 +6,7 @@
- #include <linux/bits.h>
- #include <linux/clk.h>
- #include <linux/completion.h>
-+#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
-@@ -24,6 +25,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
-+#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/thermal.h>
-@@ -62,6 +64,39 @@
- #define SVSB_INTSTS_COMPLETE		0x1
- #define SVSB_INTSTS_CLEAN		0x00ffffff
- 
-+#define debug_fops_ro(name)						\
-+	static int svs_##name##_debug_open(struct inode *inode,		\
-+					   struct file *filp)		\
-+	{								\
-+		return single_open(filp, svs_##name##_debug_show,	\
-+				   inode->i_private);			\
-+	}								\
-+	static const struct file_operations svs_##name##_debug_fops = {	\
-+		.owner = THIS_MODULE,					\
-+		.open = svs_##name##_debug_open,			\
-+		.read = seq_read,					\
-+		.llseek = seq_lseek,					\
-+		.release = single_release,				\
-+	}
-+
-+#define debug_fops_rw(name)						\
-+	static int svs_##name##_debug_open(struct inode *inode,		\
-+					   struct file *filp)		\
-+	{								\
-+		return single_open(filp, svs_##name##_debug_show,	\
-+				   inode->i_private);			\
-+	}								\
-+	static const struct file_operations svs_##name##_debug_fops = {	\
-+		.owner = THIS_MODULE,					\
-+		.open = svs_##name##_debug_open,			\
-+		.read = seq_read,					\
-+		.write = svs_##name##_debug_write,			\
-+		.llseek = seq_lseek,					\
-+		.release = single_release,				\
-+	}
-+
-+#define svs_dentry(name)	{__stringify(name), &svs_##name##_debug_fops}
-+
- static DEFINE_SPINLOCK(mtk_svs_lock);
- 
- /*
-@@ -83,6 +118,7 @@ enum svsb_phase {
- 	SVSB_PHASE_INIT01,
- 	SVSB_PHASE_INIT02,
- 	SVSB_PHASE_MON,
-+	SVSB_PHASE_NUM,
- };
- 
- enum svs_reg_index {
-@@ -140,6 +176,7 @@ enum svs_reg_index {
- 	SPARE2,
- 	SPARE3,
- 	THSLPEVEB,
-+	SVS_REG_NUM,
- };
- 
- static const u32 svs_regs_v2[] = {
-@@ -284,6 +321,7 @@ struct svs_platform {
-  * @opp_volts: signed-off voltages from default opp table
-  * @freqs_pct: percent of "opp_freqs / freq_base" for bank init
-  * @volts: bank voltages
-+ * @reg_data: bank register data of each phase
-  * @freq_base: reference frequency for bank init
-  * @vboot: voltage request for bank init01 stage only
-  * @volt_step: bank voltage step
-@@ -302,6 +340,7 @@ struct svs_platform {
-  * @opp_count: bank opp count
-  * @int_st: bank interrupt identification
-  * @sw_id: bank software identification
-+ * @hw_id: bank hardware identification
-  * @ctl0: bank thermal sensor selection
-  * @cpu_id: cpu core id for SVS CPU only
-  *
-@@ -330,6 +369,7 @@ struct svs_bank {
- 	u32 opp_volts[16];
- 	u32 freqs_pct[16];
- 	u32 volts[16];
-+	u32 reg_data[SVSB_PHASE_NUM][SVS_REG_NUM];
- 	u32 freq_base;
- 	u32 vboot;
- 	u32 volt_step;
-@@ -367,6 +407,7 @@ struct svs_bank {
- 	u32 opp_count;
- 	u32 int_st;
- 	u32 sw_id;
-+	u32 hw_id;
- 	u32 ctl0;
- 	u32 cpu_id;
- };
-@@ -648,11 +689,15 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
- static inline void svs_init01_isr_handler(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb = svsp->pbank;
-+	enum svs_reg_index rg_i;
- 
- 	dev_info(svsb->dev, "%s: VDN74~30:0x%08x~0x%08x, DC:0x%08x\n",
- 		 __func__, svs_readl(svsp, VDESIGN74),
- 		 svs_readl(svsp, VDESIGN30), svs_readl(svsp, DCVALUES));
- 
-+	for (rg_i = DESCHAR; rg_i < SVS_REG_NUM; rg_i++)
-+		svsb->reg_data[SVSB_PHASE_INIT01][rg_i] = svs_readl(svsp, rg_i);
-+
- 	svsb->phase = SVSB_PHASE_INIT01;
- 	svsb->dc_voffset_in = ~(svs_readl(svsp, DCVALUES) & GENMASK(15, 0)) + 1;
- 	if (svsb->volt_flags & SVSB_INIT01_VOLT_IGNORE ||
-@@ -672,11 +717,15 @@ static inline void svs_init01_isr_handler(struct svs_platform *svsp)
- static inline void svs_init02_isr_handler(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb = svsp->pbank;
-+	enum svs_reg_index rg_i;
- 
- 	dev_info(svsb->dev, "%s: VOP74~30:0x%08x~0x%08x, DC:0x%08x\n",
- 		 __func__, svs_readl(svsp, VOP74), svs_readl(svsp, VOP30),
- 		 svs_readl(svsp, DCVALUES));
- 
-+	for (rg_i = DESCHAR; rg_i < SVS_REG_NUM; rg_i++)
-+		svsb->reg_data[SVSB_PHASE_INIT02][rg_i] = svs_readl(svsp, rg_i);
-+
- 	svsb->phase = SVSB_PHASE_INIT02;
- 	svsb->get_vops(svsp);
- 
-@@ -687,6 +736,10 @@ static inline void svs_init02_isr_handler(struct svs_platform *svsp)
- static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb = svsp->pbank;
-+	enum svs_reg_index rg_i;
-+
-+	for (rg_i = DESCHAR; rg_i < SVS_REG_NUM; rg_i++)
-+		svsb->reg_data[SVSB_PHASE_MON][rg_i] = svs_readl(svsp, rg_i);
- 
- 	svsb->phase = SVSB_PHASE_MON;
- 	svsb->temp = svs_readl(svsp, TEMP) & GENMASK(7, 0);
-@@ -698,6 +751,7 @@ static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
- static inline void svs_error_isr_handler(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb = svsp->pbank;
-+	enum svs_reg_index rg_i;
- 
- 	dev_err(svsb->dev, "%s: CORESEL = 0x%08x\n",
- 		__func__, svs_readl(svsp, CORESEL));
-@@ -707,6 +761,9 @@ static inline void svs_error_isr_handler(struct svs_platform *svsp)
- 		svs_readl(svsp, SMSTATE0), svs_readl(svsp, SMSTATE1));
- 	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl(svsp, TEMP));
- 
-+	for (rg_i = DESCHAR; rg_i < SVS_REG_NUM; rg_i++)
-+		svsb->reg_data[SVSB_PHASE_ERROR][rg_i] = svs_readl(svsp, rg_i);
-+
- 	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
- 	svsb->phase = SVSB_PHASE_ERROR;
- 
-@@ -1416,11 +1473,273 @@ static int svs_resume(struct device *dev)
- 	return 0;
- }
- 
-+/*
-+ * svs_dump_debug_show - dump svs/thermal efuse and svs banks' registers
-+ */
-+static int svs_dump_debug_show(struct seq_file *m, void *p)
-+{
-+	struct svs_platform *svsp = (struct svs_platform *)m->private;
-+	struct svs_bank *svsb;
-+	unsigned long svs_reg_addr;
-+	u32 idx, i, j;
-+
-+	for (i = 0; i < svsp->efuse_num; i++)
-+		if (svsp->efuse && svsp->efuse[i])
-+			seq_printf(m, "M_HW_RES%d = 0x%08x\n",
-+				   i, svsp->efuse[i]);
-+
-+	for (i = 0; i < svsp->tefuse_num; i++)
-+		if (svsp->tefuse)
-+			seq_printf(m, "THERMAL_EFUSE%d = 0x%08x\n",
-+				   i, svsp->tefuse[i]);
-+
-+	for (idx = 0; idx < svsp->bank_num; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		for (i = SVSB_PHASE_INIT01; i <= SVSB_PHASE_MON; i++) {
-+			seq_printf(m, "Bank_number = %u\n", svsb->hw_id);
-+
-+			if (i == SVSB_PHASE_INIT01 || i == SVSB_PHASE_INIT02)
-+				seq_printf(m, "mode = init%d\n", i);
-+			else if (i == SVSB_PHASE_MON)
-+				seq_puts(m, "mode = mon\n");
-+			else
-+				seq_puts(m, "mode = error\n");
-+
-+			for (j = DESCHAR; j < SVS_REG_NUM; j++) {
-+				svs_reg_addr = (unsigned long)(svsp->base +
-+							       svsp->regs[j]);
-+				seq_printf(m, "0x%08lx = 0x%08x\n",
-+					   svs_reg_addr, svsb->reg_data[i][j]);
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+debug_fops_ro(dump);
-+
-+/*
-+ * svs_enable_debug_show - show svs bank current enable phase
-+ */
-+static int svs_enable_debug_show(struct seq_file *m, void *v)
-+{
-+	struct svs_bank *svsb = (struct svs_bank *)m->private;
-+
-+	if (svsb->phase == SVSB_PHASE_INIT01)
-+		seq_puts(m, "init1\n");
-+	else if (svsb->phase == SVSB_PHASE_INIT02)
-+		seq_puts(m, "init2\n");
-+	else if (svsb->phase == SVSB_PHASE_MON)
-+		seq_puts(m, "mon mode\n");
-+	else if (svsb->phase == SVSB_PHASE_ERROR)
-+		seq_puts(m, "disabled\n");
-+	else
-+		seq_puts(m, "unknown\n");
-+
-+	return 0;
-+}
-+
-+/*
-+ * svs_enable_debug_write - we only support svs bank disable control
-+ */
-+static ssize_t svs_enable_debug_write(struct file *filp,
-+				      const char __user *buffer,
-+				      size_t count, loff_t *pos)
-+{
-+	struct svs_bank *svsb = file_inode(filp)->i_private;
-+	struct svs_platform *svsp = dev_get_drvdata(svsb->dev);
-+	unsigned long flags;
-+	int enabled, ret;
-+	char *buf = NULL;
-+
-+	if (count >= PAGE_SIZE)
-+		return -EINVAL;
-+
-+	buf = (char *)memdup_user_nul(buffer, count);
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	ret = kstrtoint(buf, 10, &enabled);
-+	if (ret)
-+		return ret;
-+
-+	if (!enabled) {
-+		spin_lock_irqsave(&mtk_svs_lock, flags);
-+		svsp->pbank = svsb;
-+		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
-+		svs_switch_bank(svsp);
-+		svs_writel(svsp, SVSB_EN_OFF, SVSEN);
-+		svs_writel(svsp, SVSB_INTSTS_CLEAN, INTSTS);
-+		spin_unlock_irqrestore(&mtk_svs_lock, flags);
-+
-+		svsb->phase = SVSB_PHASE_ERROR;
-+		svs_adjust_pm_opp_volts(svsb, true);
-+	}
-+
-+	kfree(buf);
-+
-+	return count;
-+}
-+
-+debug_fops_rw(enable);
-+
-+/*
-+ * svs_status_debug_show - show svs bank's tzone_temp/voltages/freqs_pct
-+ * and its corresponding opp-table's opp_freqs/opp_volts
-+ */
-+static int svs_status_debug_show(struct seq_file *m, void *v)
-+{
-+	struct svs_bank *svsb = (struct svs_bank *)m->private;
-+	struct dev_pm_opp *opp;
-+	int tzone_temp = 0, ret;
-+	u32 i;
-+
-+	ret = svs_get_bank_zone_temperature(svsb->tzone_name, &tzone_temp);
-+	if (ret)
-+		seq_printf(m, "%s: no \"%s\" zone?\n", svsb->name,
-+			   svsb->tzone_name);
-+	else
-+		seq_printf(m, "%s: temperature = %d\n", svsb->name, tzone_temp);
-+
-+	for (i = 0; i < svsb->opp_count; i++) {
-+		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
-+						 svsb->opp_freqs[i], true);
-+		if (IS_ERR(opp)) {
-+			seq_printf(m, "%s: cannot find freq = %u (%ld)\n",
-+				   svsb->name, svsb->opp_freqs[i],
-+				   PTR_ERR(opp));
-+			return PTR_ERR(opp);
-+		}
-+
-+		seq_printf(m, "opp_freqs[%02u]: %u, opp_volts[%02u]: %lu, ",
-+			   i, svsb->opp_freqs[i], i,
-+			   dev_pm_opp_get_voltage(opp));
-+		seq_printf(m, "svsb_volts[%02u]: 0x%x, freqs_pct[%02u]: %u\n",
-+			   i, svsb->volts[i], i, svsb->freqs_pct[i]);
-+		dev_pm_opp_put(opp);
-+	}
-+
-+	return 0;
-+}
-+
-+debug_fops_ro(status);
-+
-+/*
-+ * svs_volt_offset_debug_show - show svs bank's voltage offset
-+ */
-+static int svs_volt_offset_debug_show(struct seq_file *m, void *v)
-+{
-+	struct svs_bank *svsb = (struct svs_bank *)m->private;
-+
-+	seq_printf(m, "%d\n", svsb->volt_offset);
-+
-+	return 0;
-+}
-+
-+/*
-+ * svs_volt_offset_debug_write - write svs bank's voltage offset
-+ */
-+static ssize_t svs_volt_offset_debug_write(struct file *filp,
-+					   const char __user *buffer,
-+					   size_t count, loff_t *pos)
-+{
-+	struct svs_bank *svsb = file_inode(filp)->i_private;
-+	char *buf = NULL;
-+	s32 volt_offset;
-+
-+	if (count >= PAGE_SIZE)
-+		return -EINVAL;
-+
-+	buf = (char *)memdup_user_nul(buffer, count);
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	if (!kstrtoint(buf, 10, &volt_offset)) {
-+		svsb->volt_offset = volt_offset;
-+		svs_adjust_pm_opp_volts(svsb, true);
-+	}
-+
-+	kfree(buf);
-+
-+	return count;
-+}
-+
-+debug_fops_rw(volt_offset);
-+
-+static int svs_create_svs_debug_cmds(struct svs_platform *svsp)
-+{
-+	struct svs_bank *svsb;
-+	struct dentry *svs_dir, *svsb_dir, *file_entry;
-+	const char *d = "/sys/kernel/debug/svs";
-+	u32 i, idx;
-+
-+	struct svs_dentry {
-+		const char *name;
-+		const struct file_operations *fops;
-+	};
-+
-+	struct svs_dentry svs_entries[] = {
-+		svs_dentry(dump),
-+	};
-+
-+	struct svs_dentry svsb_entries[] = {
-+		svs_dentry(enable),
-+		svs_dentry(status),
-+		svs_dentry(volt_offset),
-+	};
-+
-+	svs_dir = debugfs_create_dir("svs", NULL);
-+	if (IS_ERR(svs_dir)) {
-+		dev_err(svsp->dev, "cannot create %s: %ld\n",
-+			d, PTR_ERR(svs_dir));
-+		return 0;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(svs_entries); i++) {
-+		file_entry = debugfs_create_file(svs_entries[i].name, 0664,
-+						 svs_dir, svsp,
-+						 svs_entries[i].fops);
-+		if (IS_ERR(file_entry)) {
-+			dev_err(svsp->dev, "cannot create %s/%s: %ld\n",
-+				d, svs_entries[i].name, PTR_ERR(file_entry));
-+			return PTR_ERR(file_entry);
-+		}
-+	}
-+
-+	for (idx = 0; idx < svsp->bank_num; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		svsb_dir = debugfs_create_dir(svsb->name, svs_dir);
-+		if (IS_ERR(svsb_dir)) {
-+			dev_err(svsp->dev, "cannot create %s/%s: %ld\n",
-+				d, svsb->name, PTR_ERR(svsb_dir));
-+			return PTR_ERR(svsb_dir);
-+		}
-+
-+		for (i = 0; i < ARRAY_SIZE(svsb_entries); i++) {
-+			file_entry = debugfs_create_file(svsb_entries[i].name,
-+							 0664, svsb_dir, svsb,
-+							 svsb_entries[i].fops);
-+			if (IS_ERR(file_entry)) {
-+				dev_err(svsp->dev, "no %s/%s/%s?: %ld\n",
-+					d, svsb->name, svsb_entries[i].name,
-+					PTR_ERR(file_entry));
-+				return PTR_ERR(file_entry);
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static struct svs_bank svs_mt8183_banks[] = {
- 	{
- 		.sw_id			= SVSB_CPU_LITTLE,
- 		.set_freqs_pct		= svs_set_freqs_pct_v2,
- 		.get_vops		= svs_get_vops_v2,
-+		.hw_id			= 0,
- 		.cpu_id			= 0,
- 		.tzone_name		= "tzts4",
- 		.buck_name		= "proc",
-@@ -1458,6 +1777,7 @@ static struct svs_bank svs_mt8183_banks[] = {
- 		.sw_id			= SVSB_CPU_BIG,
- 		.set_freqs_pct		= svs_set_freqs_pct_v2,
- 		.get_vops		= svs_get_vops_v2,
-+		.hw_id			= 1,
- 		.cpu_id			= 4,
- 		.tzone_name		= "tzts5",
- 		.buck_name		= "proc",
-@@ -1495,6 +1815,7 @@ static struct svs_bank svs_mt8183_banks[] = {
- 		.sw_id			= SVSB_CCI,
- 		.set_freqs_pct		= svs_set_freqs_pct_v2,
- 		.get_vops		= svs_get_vops_v2,
-+		.hw_id			= 2,
- 		.tzone_name		= "tzts4",
- 		.buck_name		= "proc",
- 		.pd_req			= false,
-@@ -1531,6 +1852,7 @@ static struct svs_bank svs_mt8183_banks[] = {
- 		.sw_id			= SVSB_GPU,
- 		.set_freqs_pct		= svs_set_freqs_pct_v2,
- 		.get_vops		= svs_get_vops_v2,
-+		.hw_id			= 3,
- 		.tzone_name		= "tzts2",
- 		.buck_name		= "mali",
- 		.pd_req			= true,
-@@ -1694,6 +2016,12 @@ static int svs_probe(struct platform_device *pdev)
- 		goto svs_probe_iounmap;
- 	}
- 
-+	ret = svs_create_svs_debug_cmds(svsp);
-+	if (ret) {
-+		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
-+		goto svs_probe_iounmap;
-+	}
-+
- 	return 0;
- 
- svs_probe_iounmap:
--- 
-2.18.0
-
+Michal
