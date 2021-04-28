@@ -2,302 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FAD636D113
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 06:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9AF36D1E4
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 07:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbhD1EIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Apr 2021 00:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbhD1EIz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 00:08:55 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B20AC06175F
-        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 21:08:11 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 10so294689pfl.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Apr 2021 21:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=49Tw5cUJuX6oeFz3PRwhMmj9KjPAeUSyIE1t+N81mMw=;
-        b=mezUmNSD/qK2Y7plx/lic4P4bFXVROSkMcyEz603lJAYpVY+GHgCiZiaExnV0yLT2t
-         KkVe+AkOJO7UAjvckTN9mg+kGPYDVAL3QvWnK4P7lqE2L1GCQnikA4p/VXNYY78ysh1R
-         Ake87yCYofQOsJvSNuGwk+RAwneOl8ZJcwUvs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=49Tw5cUJuX6oeFz3PRwhMmj9KjPAeUSyIE1t+N81mMw=;
-        b=WxtD1HUcvfdaNEju8e9jXUt6eUUV+0Fc494Y9oRej32P3sClyv5TrKvx9+ywriZgU3
-         2BllqqKQ1ttF8JWzpi4pzPHgazISw9RSbEKyEM+LKzgsgv8Q8BmjGZvK5Z9sX7KwFIzJ
-         L3ctyXu5yGWL/dDnE+8PMJ3NYnMvaKjzJP9sV583z8q+WHZ1BmQ1FXlneyb3BCKXFe/E
-         ZJnJrMGFzUuBa03YBpAHXObXWOUSgISKnAvO/kUbaEghnvtgkxC/FNa3v0zEPxIqL9c4
-         ATvdkXsRNYp50a77MtBoB4eG+3H8OuCc+1B4CNZa++TvMhAJvAdRGxNoMbaqDug/3Nty
-         M1UA==
-X-Gm-Message-State: AOAM530jjtRdWAcdsAe8A0rX5mGRKxcwtV4977Uly7HGmDOyJ7r6VGld
-        vQJeaHiqkA7b3nMptcdsbi3q1QEG8W7jrY7u
-X-Google-Smtp-Source: ABdhPJwsPXokv0v7xVnwkd4bBIwSyXspCw2a8jEgXWEBmznSz6rNWnrSxWbDyroy2mAe1pwaPpNsyw==
-X-Received: by 2002:a62:8f4a:0:b029:241:fc67:d425 with SMTP id n71-20020a628f4a0000b0290241fc67d425mr27207113pfd.21.1619582890582;
-        Tue, 27 Apr 2021 21:08:10 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:4cea:d9a4:e0be:d3f6])
-        by smtp.gmail.com with ESMTPSA id f1sm3456803pjt.50.2021.04.27.21.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Apr 2021 21:08:10 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
-Cc:     Hsinyi Wang <hsinyi@chromium.org>, Ikjoon Jang <ikjn@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] power: supply: sbs-battery: cache constant string properties
-Date:   Wed, 28 Apr 2021 12:08:02 +0800
-Message-Id: <20210428040802.3266187-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-In-Reply-To: <20210427093754.3000087-1-ikjn@chromium.org>
-References: <20210427093754.3000087-1-ikjn@chromium.org>
-MIME-Version: 1.0
+        id S235808AbhD1F7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Apr 2021 01:59:54 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4896 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229717AbhD1F7y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 01:59:54 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13S5Y57l019493;
+        Wed, 28 Apr 2021 01:58:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : content-type : in-reply-to
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=1epskh1yZhSPlXn2sWqxFpCL/rsmOoJWMRrmoNh9iZc=;
+ b=NIHNvoz/GtMuek8cgypHq5SakXHlxU7+ljhD2sfxIwtJROZy7P7XFN1yfEe1ZqJL8k0p
+ cBEhu3tiXIjQ2FGFUaJ+i+Ml2NTtVBg/KwnjM02UJAH2DQfQGOxYqcjFxfS1vpWhsaSl
+ zIuVjrkXPYfATmpar2QcJu6CdKMSGVsvyN4OP80st2G2BZU0JRuxAPWogArmfFnkvamp
+ 8GwojIRCA8pKTVo8YjHAvEYY5oUPdIsJl0SrmpGbfP0lTQezBOAxfJ3bizcRxBoIYdet
+ 5sZF58H0QzV8d/vzzXRibZbE5IzS4iZV3Ae6xXgtb66FliRSxO26mN0pTJSc57vX7ea2 vQ== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 386yn1k57k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Apr 2021 01:58:55 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13S5vL76019583;
+        Wed, 28 Apr 2021 05:58:55 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma05wdc.us.ibm.com with ESMTP id 384ay9jqtf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Apr 2021 05:58:54 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13S5wrPn28180988
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Apr 2021 05:58:53 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4570AC05E;
+        Wed, 28 Apr 2021 05:58:53 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1973BAC05F;
+        Wed, 28 Apr 2021 05:58:53 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.102.18.39])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Apr 2021 05:58:53 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 837802E2E70; Wed, 28 Apr 2021 11:28:48 +0530 (IST)
+Date:   Wed, 28 Apr 2021 11:28:48 +0530
+From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
+To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <20210428055848.GA6675@in.ibm.com>
+Reply-To: ego@linux.vnet.ibm.com
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+ <20210423073551.GZ6564@kitsune.suse.cz>
+ <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+ <20210423174505.GE6564@kitsune.suse.cz>
+ <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
+ <20210423184216.GG6564@kitsune.suse.cz>
+ <YIPKrIb+tY39taZv@drishya.in.ibm.com>
+ <20210425110714.GH6564@kitsune.suse.cz>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20210425110714.GH6564@kitsune.suse.cz>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: O8KGj_Dj5gIkPuFiCHLDSlw3jMSJCNKv
+X-Proofpoint-ORIG-GUID: O8KGj_Dj5gIkPuFiCHLDSlw3jMSJCNKv
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-28_03:2021-04-27,2021-04-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104280035
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently sbs-battery supports three string properties -
-manufacturer, model_name, and chemistry. Buffers for those
-properties are currently defined as global variables.
+Hello Michal,
 
-This patch moves those global variables into struct sbs_info
-and cache/reuse them as they are all constant values.
+On Sun, Apr 25, 2021 at 01:07:14PM +0200, Michal Suchánek wrote:
+> On Sat, Apr 24, 2021 at 01:07:16PM +0530, Vaidyanathan Srinivasan wrote:
+> > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 20:42:16]:
+> > 
+> > > On Fri, Apr 23, 2021 at 11:59:30PM +0530, Vaidyanathan Srinivasan wrote:
+> > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 19:45:05]:
+> > > > 
+> > > > > On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
+> > > > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
+> > > > > > 
+> > > > > > > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
+> > > > > > > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> > > > > > > > 
+> > > > > > > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > > > > > > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> > > > > > > > of the Extended CEDE states advertised by the platform
+> > > > > > > > 
+> > > > > > > > On some of the POWER9 LPARs, the older firmwares advertise a very low
+> > > > > > > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
+> > > > > > > Can you be more specific about 'older firmwares'?
+> > > > > > 
+> > > > > > Hi Michal,
+> > > > > > 
+> > > > > > This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
+> > > > > > key idea behind the original patch was to make the H_CEDE latency and
+> > > > > > hence target residency come from firmware instead of being decided by
+> > > > > > the kernel.  The advantage is such that, different type of systems in
+> > > > > > POWER10 generation can adjust this value and have an optimal H_CEDE
+> > > > > > entry criteria which balances good single thread performance and
+> > > > > > wakeup latency.  Further we can have additional H_CEDE state to feed
+> > > > > > into the cpuidle.  
+> > > > > 
+> > > > > So all POWER9 machines are affected by the firmware bug where firmware
+> > > > > reports CEDE1 exit latency of 2us and the real latency is 5us which
+> > > > > causes the kernel to prefer CEDE1 too much when relying on the values
+> > > > > supplied by the firmware. It is not about 'older firmware'.
+> > > > 
+> > > > Correct.  All POWER9 systems running Linux as guest LPARs will see
+> > > > extra usage of CEDE idle state, but not baremetal (PowerNV).
+> > > > 
+> > > > The correct definition of the bug or miss-match in expectation is that
+> > > > firmware reports wakeup latency from a core/thread wakeup timing, but
+> > > > not end-to-end time from sending a wakeup event like an IPI using
+> > > > H_calls and receiving the events on the target.  Practically there are
+> > > > few extra micro-seconds needed after deciding to wakeup a target
+> > > > core/thread to getting the target to start executing instructions
+> > > > within the LPAR instance.
+> > > 
+> > > Thanks for the detailed explanation.
+> > > 
+> > > Maybe just adding a few microseconds to the reported time would be a
+> > > more reasonable workaround than using a blanket fixed value then.
+> > 
+> > Yes, that is an option.  But that may only reduce the difference
+> > between existing kernel and new kernel unless we make it the same
+> > number.  Further we are fixing this in P10 and hence we will have to
+> > add "if(P9) do the compensation" and otherwise take it as is.  That
+> > would not be elegant.  Given that our goal for P9 platform is to not
+> > introduce changes in H_CEDE entry behaviour, we arrived at this
+> > approach (this small patch) and this also makes it easy to backport to
+> > various distro products.
+> 
+> I don't see how this is more elegent.
+> 
+> The current patch is
+> 
+> if(p9)
+> 	use fixed value
+> 
+> the suggested patch is
+> 
+> if(p9)
+> 	apply compensation
 
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 
----
+We could do that, however, from the recent measurements the default
+value is closer to the latency value measured using an IPI.
 
-Changes in v2:
-- change function name of sbs_get_battery_string_property()
-  to sbs_get_constant_string()
-- use cached string properties
-- use cached technology integer value in sbs_get_chemistry()
+As Vaidy described earlier, on POWER9 and prior platforms, the wakeup
+latency advertized by the PHYP hypervisor corresponds to the latency
+required to wakeup from the underlying hardware idle state (Nap in
+POWER8 and stop0/1/2 on POWER9) into the hypervisor. That's 2us on
+POWER9.
 
- drivers/power/supply/sbs-battery.c | 140 +++++++++++++++++------------
- 1 file changed, 82 insertions(+), 58 deletions(-)
+We need to apply two kinds of compensation,
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 4bf92831cb06..414de9bc47bf 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properties[] = {
- /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
- #define SBS_FLAGS_TI_BQ20ZX5		BIT(0)
- 
-+static const enum power_supply_property string_properties[] = {
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+};
-+
-+#define NR_STRING_BUFFERS	ARRAY_SIZE(string_properties)
-+
- struct sbs_info {
- 	struct i2c_client		*client;
- 	struct power_supply		*power_supply;
-@@ -201,11 +209,22 @@ struct sbs_info {
- 	struct delayed_work		work;
- 	struct mutex			mode_lock;
- 	u32				flags;
-+	int				technology;
-+	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
- };
- 
--static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
--static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
--static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
-+static char *sbs_get_string_buf(struct sbs_info *chip,
-+				enum power_supply_property psp)
-+{
-+	int i = 0;
-+
-+	for (i = 0; i < NR_STRING_BUFFERS; i++)
-+		if (string_properties[i] == psp)
-+			return chip->strings[i];
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
- static bool force_load;
- 
- static int sbs_read_word_data(struct i2c_client *client, u8 address);
-@@ -639,17 +658,45 @@ static int sbs_get_battery_property(struct i2c_client *client,
- 	return 0;
- }
- 
--static int sbs_get_battery_string_property(struct i2c_client *client,
--	int reg_offset, enum power_supply_property psp, char *val)
-+static int sbs_get_property_index(struct i2c_client *client,
-+	enum power_supply_property psp)
- {
--	s32 ret;
-+	int count;
-+
-+	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
-+		if (psp == sbs_data[count].psp)
-+			return count;
- 
--	ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
-+	dev_warn(&client->dev,
-+		"%s: Invalid Property - %d\n", __func__, psp);
- 
--	if (ret < 0)
--		return ret;
-+	return -EINVAL;
-+}
- 
--	return 0;
-+static const char *sbs_get_constant_string(struct sbs_info *chip,
-+			enum power_supply_property psp)
-+{
-+	int ret;
-+	char *buf;
-+	u8 addr;
-+
-+	buf = sbs_get_string_buf(chip, psp);
-+	if (IS_ERR(buf))
-+		return buf;
-+
-+	if (!buf[0]) {
-+		ret = sbs_get_property_index(chip->client, psp);
-+		if (ret < 0)
-+			return ERR_PTR(ret);
-+
-+		addr = sbs_data[ret].addr;
-+
-+		ret = sbs_read_string_data(chip->client, addr, buf);
-+		if (ret < 0)
-+			return ERR_PTR(ret);
-+	}
-+
-+	return buf;
- }
- 
- static void  sbs_unit_adjustment(struct i2c_client *client,
-@@ -772,48 +819,34 @@ static int sbs_get_battery_serial_number(struct i2c_client *client,
- 	return 0;
- }
- 
--static int sbs_get_property_index(struct i2c_client *client,
--	enum power_supply_property psp)
--{
--	int count;
--	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
--		if (psp == sbs_data[count].psp)
--			return count;
--
--	dev_warn(&client->dev,
--		"%s: Invalid Property - %d\n", __func__, psp);
--
--	return -EINVAL;
--}
--
--static int sbs_get_chemistry(struct i2c_client *client,
-+static int sbs_get_chemistry(struct sbs_info *chip,
- 		union power_supply_propval *val)
- {
--	enum power_supply_property psp = POWER_SUPPLY_PROP_TECHNOLOGY;
--	int ret;
-+	const char *chemistry;
- 
--	ret = sbs_get_property_index(client, psp);
--	if (ret < 0)
--		return ret;
-+	if (chip->technology >= POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
-+		return chip->technology;
- 
--	ret = sbs_get_battery_string_property(client, ret, psp,
--					      chemistry);
--	if (ret < 0)
--		return ret;
-+	chemistry = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_TECHNOLOGY);
-+
-+	if (IS_ERR(chemistry))
-+		return PTR_ERR(chemistry);
- 
- 	if (!strncasecmp(chemistry, "LION", 4))
--		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-+		chip->technology = POWER_SUPPLY_TECHNOLOGY_LION;
- 	else if (!strncasecmp(chemistry, "LiP", 3))
--		val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
-+		chip->technology = POWER_SUPPLY_TECHNOLOGY_LIPO;
- 	else if (!strncasecmp(chemistry, "NiCd", 4))
--		val->intval = POWER_SUPPLY_TECHNOLOGY_NiCd;
-+		chip->technology = POWER_SUPPLY_TECHNOLOGY_NiCd;
- 	else if (!strncasecmp(chemistry, "NiMH", 4))
--		val->intval = POWER_SUPPLY_TECHNOLOGY_NiMH;
-+		chip->technology = POWER_SUPPLY_TECHNOLOGY_NiMH;
- 	else
--		val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
-+		chip->technology = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
- 
--	if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
--		dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
-+	if (chip->technology == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
-+		dev_warn(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
-+
-+	val->intval = chip->technology;
- 
- 	return 0;
- }
-@@ -857,6 +890,7 @@ static int sbs_get_property(struct power_supply *psy,
- 	int ret = 0;
- 	struct sbs_info *chip = power_supply_get_drvdata(psy);
- 	struct i2c_client *client = chip->client;
-+	const char *str;
- 
- 	if (chip->gpio_detect) {
- 		ret = gpiod_get_value_cansleep(chip->gpio_detect);
-@@ -882,7 +916,7 @@ static int sbs_get_property(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_TECHNOLOGY:
--		ret = sbs_get_chemistry(client, val);
-+		ret = sbs_get_chemistry(chip, val);
- 		if (ret < 0)
- 			break;
- 
-@@ -934,23 +968,12 @@ static int sbs_get_property(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
--		ret = sbs_get_property_index(client, psp);
--		if (ret < 0)
--			break;
--
--		ret = sbs_get_battery_string_property(client, ret, psp,
--						      model_name);
--		val->strval = model_name;
--		break;
--
- 	case POWER_SUPPLY_PROP_MANUFACTURER:
--		ret = sbs_get_property_index(client, psp);
--		if (ret < 0)
--			break;
--
--		ret = sbs_get_battery_string_property(client, ret, psp,
--						      manufacturer);
--		val->strval = manufacturer;
-+		str = sbs_get_constant_string(chip, psp);
-+		if (IS_ERR(str))
-+			ret = PTR_ERR(str);
-+		else
-+			val->strval = str;
- 		break;
- 
- 	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-@@ -1097,6 +1120,7 @@ static int sbs_probe(struct i2c_client *client)
- 	psy_cfg.of_node = client->dev.of_node;
- 	psy_cfg.drv_data = chip;
- 	chip->last_state = POWER_SUPPLY_STATUS_UNKNOWN;
-+	chip->technology = -1;
- 	mutex_init(&chip->mode_lock);
- 
- 	/* use pdata if available, fall back to DT properties,
--- 
-2.31.1.498.g6c1eba8ee3d-goog
+1. Compensation for the time taken to transition the CPU from the
+   Hypervisor into the LPAR post wakeup from platform idle state
 
+2. Compensation for the time taken to send the IPI from the source CPU
+   (waker) to the idle target CPU (wakee).
+
+1. can be measured via timer idle test (I am using Pratik's
+cpuidle self-test posted here
+https://lore.kernel.org/lkml/20210412074309.38484-1-psampat@linux.ibm.com/)
+
+We queue a timer, say for 1ms, and enter the CEDE state. When the
+timer fires, in the timer handler we compute how much extra timer over
+the expected 1ms have we consumed. This is what it looks like on
+POWER9 LPAR
+
+CEDE latency measured using a timer (numbers in ns)
+===================================================================
+N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+400     2601     5677     5668.74    5917    6413     9299   455.01
+
+If we consider the avg and the 99th %ile values, it takes on an avg
+about somewhere between 3.5-4.5 us to transition from the Hypervisor
+to the guest VCPU after the CPU has woken up from the idle state. 
+
+1. and 2. combined can be determined by an IPI latency test (from the
+same self-test linked above). We send an IPI to an idle CPU and in the
+handler compute the time difference between when the IPI was sent and
+when the handler ran. We see the following numbers on POWER9 LPAR.
+
+CEDE latency measured using an IPI (numbers in us)
+==================================================
+N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+400     711      7564     7369.43   8559    9514      9698   1200.01
+
+Thus considering the avg and the 99th percentile this compensation
+would be 5.4-7.5us.
+
+Suppose, we consider the compensation corresponding to the 99th
+percentile latency value measured using the IPI, the compensation will
+be 7.5us, which will take the total CEDE latency to 9.5us.
+
+This is in the ballpark of the default value of 10us which we obtain
+if we do
+
+if (!p10)
+   use default hardcoded value;
+
+
+> 
+> That is either will add one branch for the affected platform.
+>
+
+Since POWER10 onwards, the latency value advertized by the hypervisor
+will be the latency as observed by the LPAR VCPU, any new code that we
+will be adding will only be applicable for POWER9. We can get the same
+effect by using the default value.
+
+Given this, if you feel that it might still be worth pursuing the
+compensation approach, I will send out a patch for that.
+
+> But I understand if you do not have confidence that the compensation is
+> the same in all cases and do not have the opportunity to measure it it
+> may be simpler to apply one very conservative adjustment.
+>
+
+
+
+> Thanks
+> 
+> Michal
+
+--
+Thanks and Regards
+gautham.
