@@ -2,191 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8A036D39C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 10:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35F936D46F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 11:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbhD1IEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Apr 2021 04:04:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40778 "EHLO mx2.suse.de"
+        id S230113AbhD1JFs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Apr 2021 05:05:48 -0400
+Received: from mga02.intel.com ([134.134.136.20]:1522 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229643AbhD1IEN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Apr 2021 04:04:13 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E23F8AF8C;
-        Wed, 28 Apr 2021 08:03:27 +0000 (UTC)
-Date:   Wed, 28 Apr 2021 10:03:26 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Gautham R Shenoy <ego@linux.vnet.ibm.com>
-Cc:     Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
- onwards
-Message-ID: <20210428080326.GL6564@kitsune.suse.cz>
-References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
- <20210423073551.GZ6564@kitsune.suse.cz>
- <YILu6/GK+RwpskCc@drishya.in.ibm.com>
- <20210423174505.GE6564@kitsune.suse.cz>
- <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
- <20210423184216.GG6564@kitsune.suse.cz>
- <YIPKrIb+tY39taZv@drishya.in.ibm.com>
- <20210425110714.GH6564@kitsune.suse.cz>
- <20210428055848.GA6675@in.ibm.com>
+        id S230307AbhD1JFs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 28 Apr 2021 05:05:48 -0400
+IronPort-SDR: aOcTg/IZvFCiaUr4wZWupa7l42GWuD3EIH9BbT6fYzQpQ62XIcL4DgH7A4+nPQNJjxkTpJHiLd
+ UEKNQUT5Hnvw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="183836813"
+X-IronPort-AV: E=Sophos;i="5.82,257,1613462400"; 
+   d="scan'208";a="183836813"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 02:05:02 -0700
+IronPort-SDR: 9nQBvUbQM2Uq3UQjVXNkkDOv+4LFTTC23729isTETMuSfYCkr0VGMMr9JRKmBsH7djpjGWoSY6
+ RR3QC5BOdusw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,257,1613462400"; 
+   d="scan'208";a="423437549"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.173])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Apr 2021 02:04:59 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     youling257 <youling257@gmail.com>, Kurt Garloff <kurt@garloff.de>,
+        Bingsong Si <owen.si@ucloud.cn>,
+        "Artem S . Tashkinov" <aros@gmx.com>
+Cc:     Terry Bowman <terry.bowman@amd.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Calvin Walton <calvin.walton@kepstin.ca>,
+        Borislav Petkov <bp@suse.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 0/2] tools/power/turbostat: Fix long time duration RAPL calculation
+Date:   Wed, 28 Apr 2021 17:08:45 +0800
+Message-Id: <cover.1619600637.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210428055848.GA6675@in.ibm.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 28, 2021 at 11:28:48AM +0530, Gautham R Shenoy wrote:
-> Hello Michal,
-> 
-> On Sun, Apr 25, 2021 at 01:07:14PM +0200, Michal Suchánek wrote:
-> > On Sat, Apr 24, 2021 at 01:07:16PM +0530, Vaidyanathan Srinivasan wrote:
-> > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 20:42:16]:
-> > > 
-> > > > On Fri, Apr 23, 2021 at 11:59:30PM +0530, Vaidyanathan Srinivasan wrote:
-> > > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 19:45:05]:
-> > > > > 
-> > > > > > On Fri, Apr 23, 2021 at 09:29:39PM +0530, Vaidyanathan Srinivasan wrote:
-> > > > > > > * Michal Such?nek <msuchanek@suse.de> [2021-04-23 09:35:51]:
-> > > > > > > 
-> > > > > > > > On Thu, Apr 22, 2021 at 08:37:29PM +0530, Gautham R. Shenoy wrote:
-> > > > > > > > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> > > > > > > > > 
-> > > > > > > > > Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> > > > > > > > > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> > > > > > > > > of the Extended CEDE states advertised by the platform
-> > > > > > > > > 
-> > > > > > > > > On some of the POWER9 LPARs, the older firmwares advertise a very low
-> > > > > > > > > value of 2us for CEDE1 exit latency on a Dedicated LPAR. However the
-> > > > > > > > Can you be more specific about 'older firmwares'?
-> > > > > > > 
-> > > > > > > Hi Michal,
-> > > > > > > 
-> > > > > > > This is POWER9 vs POWER10 difference, not really an obsolete FW.  The
-> > > > > > > key idea behind the original patch was to make the H_CEDE latency and
-> > > > > > > hence target residency come from firmware instead of being decided by
-> > > > > > > the kernel.  The advantage is such that, different type of systems in
-> > > > > > > POWER10 generation can adjust this value and have an optimal H_CEDE
-> > > > > > > entry criteria which balances good single thread performance and
-> > > > > > > wakeup latency.  Further we can have additional H_CEDE state to feed
-> > > > > > > into the cpuidle.  
-> > > > > > 
-> > > > > > So all POWER9 machines are affected by the firmware bug where firmware
-> > > > > > reports CEDE1 exit latency of 2us and the real latency is 5us which
-> > > > > > causes the kernel to prefer CEDE1 too much when relying on the values
-> > > > > > supplied by the firmware. It is not about 'older firmware'.
-> > > > > 
-> > > > > Correct.  All POWER9 systems running Linux as guest LPARs will see
-> > > > > extra usage of CEDE idle state, but not baremetal (PowerNV).
-> > > > > 
-> > > > > The correct definition of the bug or miss-match in expectation is that
-> > > > > firmware reports wakeup latency from a core/thread wakeup timing, but
-> > > > > not end-to-end time from sending a wakeup event like an IPI using
-> > > > > H_calls and receiving the events on the target.  Practically there are
-> > > > > few extra micro-seconds needed after deciding to wakeup a target
-> > > > > core/thread to getting the target to start executing instructions
-> > > > > within the LPAR instance.
-> > > > 
-> > > > Thanks for the detailed explanation.
-> > > > 
-> > > > Maybe just adding a few microseconds to the reported time would be a
-> > > > more reasonable workaround than using a blanket fixed value then.
-> > > 
-> > > Yes, that is an option.  But that may only reduce the difference
-> > > between existing kernel and new kernel unless we make it the same
-> > > number.  Further we are fixing this in P10 and hence we will have to
-> > > add "if(P9) do the compensation" and otherwise take it as is.  That
-> > > would not be elegant.  Given that our goal for P9 platform is to not
-> > > introduce changes in H_CEDE entry behaviour, we arrived at this
-> > > approach (this small patch) and this also makes it easy to backport to
-> > > various distro products.
-> > 
-> > I don't see how this is more elegent.
-> > 
-> > The current patch is
-> > 
-> > if(p9)
-> > 	use fixed value
-> > 
-> > the suggested patch is
-> > 
-> > if(p9)
-> > 	apply compensation
-> 
-> 
-> We could do that, however, from the recent measurements the default
-> value is closer to the latency value measured using an IPI.
-> 
-> As Vaidy described earlier, on POWER9 and prior platforms, the wakeup
-> latency advertized by the PHYP hypervisor corresponds to the latency
-> required to wakeup from the underlying hardware idle state (Nap in
-> POWER8 and stop0/1/2 on POWER9) into the hypervisor. That's 2us on
-> POWER9.
-> 
-> We need to apply two kinds of compensation,
-> 
-> 1. Compensation for the time taken to transition the CPU from the
->    Hypervisor into the LPAR post wakeup from platform idle state
-> 
-> 2. Compensation for the time taken to send the IPI from the source CPU
->    (waker) to the idle target CPU (wakee).
-> 
-> 1. can be measured via timer idle test (I am using Pratik's
-> cpuidle self-test posted here
-> https://lore.kernel.org/lkml/20210412074309.38484-1-psampat@linux.ibm.com/)
-> 
-> We queue a timer, say for 1ms, and enter the CEDE state. When the
-> timer fires, in the timer handler we compute how much extra timer over
-> the expected 1ms have we consumed. This is what it looks like on
-> POWER9 LPAR
-> 
-> CEDE latency measured using a timer (numbers in ns)
-> ===================================================================
-> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
-> 400     2601     5677     5668.74    5917    6413     9299   455.01
-> 
-> If we consider the avg and the 99th %ile values, it takes on an avg
-> about somewhere between 3.5-4.5 us to transition from the Hypervisor
-> to the guest VCPU after the CPU has woken up from the idle state. 
-> 
-> 1. and 2. combined can be determined by an IPI latency test (from the
-> same self-test linked above). We send an IPI to an idle CPU and in the
-> handler compute the time difference between when the IPI was sent and
-> when the handler ran. We see the following numbers on POWER9 LPAR.
-> 
-> CEDE latency measured using an IPI (numbers in us)
-> ==================================================
-> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
-> 400     711      7564     7369.43   8559    9514      9698   1200.01
-> 
-> Thus considering the avg and the 99th percentile this compensation
-> would be 5.4-7.5us.
-> 
-> Suppose, we consider the compensation corresponding to the 99th
-> percentile latency value measured using the IPI, the compensation will
-> be 7.5us, which will take the total CEDE latency to 9.5us.
-> 
-> This is in the ballpark of the default value of 10us which we obtain
-> if we do
-> 
-> if (!p10)
->    use default hardcoded value;
-> 
-That's a nice detailed explanation. Maybe you could summarize it in the
-commit message so that people looking at the patch in the future can
-tell where the value comes from.
+A combination of patch set to fix the recently introduced long time
+duration RAPL calculation issue found on AMD CPUs.
 
-Thanks
+Youling, Kurt, Bingsong, Artem, could you please confirm again
+if this patch set works for you on your platform?
 
-Michal
+Bas Nieuwenhuizen (1):
+  tools/power/turbostat: Fix turbostat for AMD Zen CPUs
+
+Calvin Walton (1):
+  tools/power turbostat: Fix offset overflow issue in index converting
+
+ tools/power/x86/turbostat/turbostat.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
