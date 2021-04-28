@@ -2,109 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4724C36D478
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 11:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A1636D694
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 13:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbhD1JGg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Apr 2021 05:06:36 -0400
-Received: from mga12.intel.com ([192.55.52.136]:37426 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237995AbhD1JGR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Apr 2021 05:06:17 -0400
-IronPort-SDR: YvRvMJjQP9sSqg3CASik2pSG8ZHHPyBVLJ/uag0x21Ktb5vqQ2Cnwxxc4gUgBbl6ogMZMhhxl6
- OzDuaC8BowwQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="176176420"
-X-IronPort-AV: E=Sophos;i="5.82,257,1613462400"; 
-   d="scan'208";a="176176420"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 02:05:32 -0700
-IronPort-SDR: PwIgUXmzgjn8bi3GeVIzjJ1gcB0DhsL8DJ8zLPSXYIL5SNVovySYeXVz/ejif7dW8aCXdtuP2E
- xbjoQr41t/bQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,257,1613462400"; 
-   d="scan'208";a="458084311"
-Received: from chenyu-desktop.sh.intel.com ([10.239.158.173])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Apr 2021 02:05:30 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     youling257 <youling257@gmail.com>, Kurt Garloff <kurt@garloff.de>,
-        Bingsong Si <owen.si@ucloud.cn>,
-        "Artem S . Tashkinov" <aros@gmx.com>
-Cc:     Terry Bowman <terry.bowman@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Calvin Walton <calvin.walton@kepstin.ca>,
-        Borislav Petkov <bp@suse.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] tools/power turbostat: Fix offset overflow issue in index converting
-Date:   Wed, 28 Apr 2021 17:09:16 +0800
-Message-Id: <8167875a1d688b92b0ec707b95855a604afacf01.1619600637.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1619600637.git.yu.c.chen@intel.com>
-References: <cover.1619600637.git.yu.c.chen@intel.com>
+        id S238878AbhD1Lfy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Apr 2021 07:35:54 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27848 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234158AbhD1Lfx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 07:35:53 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13SBXYC4091583;
+        Wed, 28 Apr 2021 07:34:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : content-transfer-encoding : in-reply-to; s=pp1;
+ bh=I55X0CdaUgMVHQCqOIgPqXXEVDROHQTqeezqdG5jalI=;
+ b=EjRpuqMTqVoHDLjtCvGF8hidyVLq4lzRKX9rqMAoSfSv74Qpsn+dvwjFq7O2IKD4kY+/
+ D+AhEoxhpBe9ve01c5ejArNyKbri0N1UACPQB7Riw2nRsPNYJjeI6UoFNgeDGSazl2Kg
+ iXBviXZgCFj3zRJZic1FNnS6N+IlkJGS1EG7Hqk10ahWU4HrMCrOqCVbMtppYYkvXdVq
+ Zvz0/WBvUz0OXF3qiHF1FdL8pHbFlbXSstG2wqM8s35c5ypInOvGu+d/WkL7lKNm4/oI
+ ZVIBsmbH1Ms80oKhHKrYY6c96S5tGvICsme+Q2NawYu/VtcjTnWAZRvOuMl7gSD8W+7p 0w== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3876n1ggtc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Apr 2021 07:34:53 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13SBXBtD016703;
+        Wed, 28 Apr 2021 11:34:52 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 384ay9ujun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Apr 2021 11:34:52 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13SBYpL927132196
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Apr 2021 11:34:52 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEE436A047;
+        Wed, 28 Apr 2021 11:34:51 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6717D6A057;
+        Wed, 28 Apr 2021 11:34:51 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.102.0.233])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Apr 2021 11:34:51 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 11D862E2E70; Wed, 28 Apr 2021 17:04:48 +0530 (IST)
+Date:   Wed, 28 Apr 2021 17:04:48 +0530
+From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
+To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc:     Gautham R Shenoy <ego@linux.vnet.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, joedecke@de.ibm.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle/pseries: Fixup CEDE0 latency only for POWER10
+ onwards
+Message-ID: <20210428113447.GA24644@in.ibm.com>
+Reply-To: ego@linux.vnet.ibm.com
+References: <1619104049-5118-1-git-send-email-ego@linux.vnet.ibm.com>
+ <20210423073551.GZ6564@kitsune.suse.cz>
+ <YILu6/GK+RwpskCc@drishya.in.ibm.com>
+ <20210423174505.GE6564@kitsune.suse.cz>
+ <YIMSCjTzcSwjQtRi@drishya.in.ibm.com>
+ <20210423184216.GG6564@kitsune.suse.cz>
+ <YIPKrIb+tY39taZv@drishya.in.ibm.com>
+ <20210425110714.GH6564@kitsune.suse.cz>
+ <20210428055848.GA6675@in.ibm.com>
+ <20210428080326.GL6564@kitsune.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210428080326.GL6564@kitsune.suse.cz>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X_gIJ3C2IQUDTPNjsxX-P-23rzK4OVFE
+X-Proofpoint-ORIG-GUID: X_gIJ3C2IQUDTPNjsxX-P-23rzK4OVFE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-28_05:2021-04-27,2021-04-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=780 priorityscore=1501 clxscore=1015 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104280077
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Calvin Walton <calvin.walton@kepstin.ca>
+Hello Michal,
 
-The idx_to_offset() function returns type int (32-bit signed), but
-MSR_PKG_ENERGY_STAT is u32 and would be interpreted as a negative number.
-The end result is that it hits the if (offset < 0) check in update_msr_sum()
-which prevents the timer callback from updating the stat in the background when
-long durations are used. The similar issue exists in offset_to_idx() and
-update_msr_sum(). Fix this issue by converting the 'int' to 'off_t' accordingly.
+On Wed, Apr 28, 2021 at 10:03:26AM +0200, Michal Suchánek wrote:
 
-Fixes: 9972d5d84d76 ("tools/power turbostat: Enable accumulate RAPL display")
-Signed-off-by: Calvin Walton <calvin.walton@kepstin.ca>
----
- tools/power/x86/turbostat/turbostat.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> That's a nice detailed explanation. Maybe you could summarize it in the
+> commit message so that people looking at the patch in the future can
+> tell where the value comes from.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 37759d6c463d..085057daef86 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -291,9 +291,9 @@ struct msr_sum_array {
- /* The percpu MSR sum array.*/
- struct msr_sum_array *per_cpu_msr_sum;
- 
--int idx_to_offset(int idx)
-+off_t idx_to_offset(int idx)
- {
--	int offset;
-+	off_t offset;
- 
- 	switch (idx) {
- 	case IDX_PKG_ENERGY:
-@@ -323,7 +323,7 @@ int idx_to_offset(int idx)
- 	return offset;
- }
- 
--int offset_to_idx(int offset)
-+int offset_to_idx(off_t offset)
- {
- 	int idx;
- 
-@@ -3276,7 +3276,7 @@ static int update_msr_sum(struct thread_data *t, struct core_data *c, struct pkg
- 
- 	for (i = IDX_PKG_ENERGY; i < IDX_COUNT; i++) {
- 		unsigned long long msr_cur, msr_last;
--		int offset;
-+		off_t offset;
- 
- 		if (!idx_valid(i))
- 			continue;
-@@ -3285,7 +3285,8 @@ static int update_msr_sum(struct thread_data *t, struct core_data *c, struct pkg
- 			continue;
- 		ret = get_msr(cpu, offset, &msr_cur);
- 		if (ret) {
--			fprintf(outf, "Can not update msr(0x%x)\n", offset);
-+			fprintf(outf, "Can not update msr(0x%llx)\n",
-+				(unsigned long long)offset);
- 			continue;
- 		}
- 
--- 
-2.25.1
+Sure, I will do that and send a v2 with the updated commit message.
 
+
+> 
+> Thanks
+> 
+> Michal
