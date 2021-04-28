@@ -2,142 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8965E36DD6E
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 18:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD5636DDE2
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Apr 2021 19:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241282AbhD1QsU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Apr 2021 12:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241263AbhD1QsT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 12:48:19 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4892C061573
-        for <linux-pm@vger.kernel.org>; Wed, 28 Apr 2021 09:47:32 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id i12so32661533qke.3
-        for <linux-pm@vger.kernel.org>; Wed, 28 Apr 2021 09:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=d5gcaLFkHTsHl3fSpK+mJvUIAigQB4OGxVY2NlUdHS4=;
-        b=lhlZvSJJsG9coISuaIljcJxg7ev6vBymOQm+7m1cfIRbaclhHHNe5Xsiy7TU7mtLAp
-         tW/EVQK+AWFdZ3fp9xF/i9t9OIV8pdGSqY4vdf04yp0O7L1Eq6sMAsNzDlfJVz6EQuwu
-         1ED2eQ8twnk4oJZuYdgJMyHRSBQFDUcY+SEZB2/vzN6wMzWBVymqA3MXJZTnvj+/fRTQ
-         d8sMzExvkZgLB2tYG/ObJTrvdo0BwXjcsOcARP5fcGuEZHztKPX2YvLd6D4T7WoZvCTi
-         FJmuDTwHwfE1tyPWk5d/9vNf3AaArOu/QZumDCCMs3ZutQ610xI998Lff5qzkZ3ET/4w
-         iH2Q==
+        id S232065AbhD1RJU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 28 Apr 2021 13:09:20 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:46880 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231916AbhD1RJR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Apr 2021 13:09:17 -0400
+Received: by mail-ot1-f41.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso57111414otb.13;
+        Wed, 28 Apr 2021 10:08:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d5gcaLFkHTsHl3fSpK+mJvUIAigQB4OGxVY2NlUdHS4=;
-        b=YNtmVIu95spb0+02+0POkeSZxlQVV3WAOX4jKcZnHdGfy9VvdszpUy+R6Fru72a+Fn
-         wLkTcJVkrgs0C1ug24k544BDIOKxfDed286xh+1M7XRq0gZ+Wn5YSqgM8nPTwUk8XUQD
-         khcMMc66rO0lvNL4Su4gFX/4XeWs8itANBZzhXPuNPuS6frt+xwIyl3a5bM78h4Ad8Yh
-         3hU4sBSL5I1gDMgW27rvelhaovUpdtAAhgMd/NE30UJUcG8SH1adHEjozJcizNnbxdV+
-         ftapB9uhkgAJ3kCa3hIYV2WPwugvjpeJOk+f/K4ZFHYKq1L4T3H67gMSrk3x1hiRdPbG
-         PVRA==
-X-Gm-Message-State: AOAM532LoGiW1ss/jUakqmizEkuPfaDM6oytfEZ041uGi+PH4MBpwddE
-        kGcnFCUbGq/3cN1jquUUWwghBw==
-X-Google-Smtp-Source: ABdhPJwrZ/ARz760EsoZkEI7kPgF2Hv5R9DjyVFzafhWupMWPoCp5/6i7qZtp8Tys4gJ+GayIAslKw==
-X-Received: by 2002:a05:620a:49c:: with SMTP id 28mr30266953qkr.39.1619628452055;
-        Wed, 28 Apr 2021 09:47:32 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id d2sm397426qtg.85.2021.04.28.09.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Apr 2021 09:47:31 -0700 (PDT)
-Subject: Re: [thermal-next PATCH 2/2] thermal: qcom: tsens: simplify debugfs
- init function
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210419012930.7727-1-ansuelsmth@gmail.com>
- <20210419012930.7727-2-ansuelsmth@gmail.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <8e679407-07e7-244a-48fa-0d4d451d744d@linaro.org>
-Date:   Wed, 28 Apr 2021 12:47:30 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XRDBCByww0vL9MgCGGo6Hdw4kgbPrxOtEdQ74IIaHH8=;
+        b=iLCs/WTr/G01D2BsEK4NM1CfH8DJbZZDUPWvidXa7opZlx99LkhhpQwQszK3wN7Eqe
+         W7hPqrOF7/ggrkEoxEhyHFPK7c++tGHNuhKLhmG4/6DbXhvIuS4myrcwXiOcr+5E+zEW
+         q4CPsh2+Gry0A0Ly9V1/BDtTu0lU+zndtYanbFkYOZ18eui/99bMtedctaurX8do7a6o
+         uv+VRjSEIL2OomTxP/c+Hll53mZGUyUTjBv2ceH5PY9ZDabpGyfUeAXcciJwc2Pf/ECm
+         D9xYWBy9ouRhnJzzVoreaSMiFiMLNTq65kmSxaqaC5B8reqJ67saz3zrTXah0MkGUH6j
+         GhCw==
+X-Gm-Message-State: AOAM533aZUfL+mP5Xnk8FD6xKiBs/NVka9FpYkKx4KL9GDRg4M5j0VhU
+        svuE5CtOmmHdPoYDdo4DP0UJPr3fK7Jb8ytmeIg=
+X-Google-Smtp-Source: ABdhPJxkpe8aspOAWAyRe4i/C7nB4bTKA765mdqggQVleH1NcvnBD8ol9cUcb+B6N/GYYMYob/gf6zQ7CJXyuIX7UVs=
+X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr24621043otb.260.1619629712268;
+ Wed, 28 Apr 2021 10:08:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210419012930.7727-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210425073451.2557394-1-ray.huang@amd.com>
+In-Reply-To: <20210425073451.2557394-1-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Apr 2021 19:08:20 +0200
+Message-ID: <CAJZ5v0ixmRzC4W0q5U+B+uHTYNNB2Wen=nzdGMOO+_Dpc3EujQ@mail.gmail.com>
+Subject: Re: [PATCH v4] x86, sched: Fix the AMD CPPC maximum perf on some
+ specific generations
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jason Bagavatsingham <jason.bagavatsingham@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-Please include a cover letter next time describing the patch series.
-
-On 4/18/21 9:29 PM, Ansuel Smith wrote:
-> Simplify debugfs init function.
-> - Drop useless variables
-> - Add check for existing dev directory.
-> - Fix wrong version in dbg_version_show (with version 0.0.0, 0.1.0 was
->    incorrectly reported)
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+On Sun, Apr 25, 2021 at 9:35 AM Huang Rui <ray.huang@amd.com> wrote:
+>
+> Some AMD Ryzen generations has different calculation method on maximum
+> perf. 255 is not for all asics, some specific generations should use 166
+> as the maximum perf. Otherwise, it will report incorrect frequency value
+> like below:
+>
+> ~ → lscpu | grep MHz
+> CPU MHz:                         3400.000
+> CPU max MHz:                     7228.3198
+> CPU min MHz:                     2200.0000
+>
+> Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
+> Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+>
+> Reported-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
+> Tested-by: Jason Bagavatsingham <jason.bagavatsingham@gmail.com>
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=211791
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Nathan Fontenot <nathan.fontenot@amd.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: x86@kernel.org
+> Cc: stable@vger.kernel.org
 > ---
->   drivers/thermal/qcom/tsens.c | 16 +++++++---------
->   1 file changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index f9d50a67e..b086d1496 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -692,7 +692,7 @@ static int dbg_version_show(struct seq_file *s, void *data)
->   			return ret;
->   		seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
->   	} else {
-> -		seq_puts(s, "0.1.0\n");
-> +		seq_printf(s, "0.%d.0\n", priv->feat->ver_major);
->   	}
->   
->   	return 0;
-> @@ -704,21 +704,19 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
->   static void tsens_debug_init(struct platform_device *pdev)
->   {
->   	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> -	struct dentry *root, *file;
->   
-> -	root = debugfs_lookup("tsens", NULL);
-> -	if (!root)
-> +	priv->debug_root = debugfs_lookup("tsens", NULL);
-> +	if (!priv->debug_root)
->   		priv->debug_root = debugfs_create_dir("tsens", NULL);
-> -	else
-> -		priv->debug_root = root;
->   
-> -	file = debugfs_lookup("version", priv->debug_root);
-> -	if (!file)
-> +	if (!debugfs_lookup("version", priv->debug_root))
->   		debugfs_create_file("version", 0444, priv->debug_root,
->   				    pdev, &dbg_version_fops);
->   
->   	/* A directory for each instance of the TSENS IP */
-> -	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
+>
+> Changes from V1 -> V2:
+> - Enhance the commit message.
+> - Move amd_get_highest_perf() into amd.c.
+> - Refine the implementation of switch-case.
+> - Cc stable mail list.
+>
+> Changes from V2 -> V3:
+> - Move the update into cppc_get_perf_caps() to correct the highest perf value in
+>   the API.
+>
+> Changes from V3 -> V4:
+> - Rollback to V2 implementation because acpi_cppc.c will be used by ARM as well.
+>   It's not good to add x86-specific calling there.
+> - Simplify the implementation of the functions.
 
-Unconditionally creating priv->debug here is correct. The below if 
-(!priv->debug) will never be true because as per your patch 1, we call 
-tsens_debug_init once per instance of tsens.
+All of my comments have been addressed, so:
 
-> +	priv->debug = debugfs_lookup(dev_name(&pdev->dev), priv->debug_root);
-> +	if (!priv->debug)
-> +		priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
->   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
->   }
->   #else
-> 
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
--- 
-Warm Regards
-Thara
+and I'm expecting the x86 maintainers to take care of this patch.
+
+> ---
+>  arch/x86/include/asm/processor.h |  2 ++
+>  arch/x86/kernel/cpu/amd.c        | 16 ++++++++++++++++
+>  arch/x86/kernel/smpboot.c        |  2 +-
+>  drivers/cpufreq/acpi-cpufreq.c   |  6 +++++-
+>  4 files changed, 24 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index f1b9ed5efaa9..908bcaea1361 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -804,8 +804,10 @@ DECLARE_PER_CPU(u64, msr_misc_features_shadow);
+>
+>  #ifdef CONFIG_CPU_SUP_AMD
+>  extern u32 amd_get_nodes_per_socket(void);
+> +extern u32 amd_get_highest_perf(void);
+>  #else
+>  static inline u32 amd_get_nodes_per_socket(void)       { return 0; }
+> +static inline u32 amd_get_highest_perf(void)           { return 0; }
+>  #endif
+>
+>  static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index 347a956f71ca..bc3496669def 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -1170,3 +1170,19 @@ void set_dr_addr_mask(unsigned long mask, int dr)
+>                 break;
+>         }
+>  }
+> +
+> +u32 amd_get_highest_perf(void)
+> +{
+> +       struct cpuinfo_x86 *c = &boot_cpu_data;
+> +
+> +       if (c->x86 == 0x17 && ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
+> +                              (c->x86_model >= 0x70 && c->x86_model < 0x80)))
+> +           return 166;
+> +
+> +       if (c->x86 == 0x19 && ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
+> +                              (c->x86_model >= 0x40 && c->x86_model < 0x70)))
+> +           return 166;
+> +
+> +       return 225;
+> +}
+> +EXPORT_SYMBOL_GPL(amd_get_highest_perf);
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 02813a7f3a7c..7bec57d04a87 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -2046,7 +2046,7 @@ static bool amd_set_max_freq_ratio(void)
+>                 return false;
+>         }
+>
+> -       highest_perf = perf_caps.highest_perf;
+> +       highest_perf = amd_get_highest_perf();
+>         nominal_perf = perf_caps.nominal_perf;
+>
+>         if (!highest_perf || !nominal_perf) {
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index d1bbc16fba4b..7e7450453714 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -646,7 +646,11 @@ static u64 get_max_boost_ratio(unsigned int cpu)
+>                 return 0;
+>         }
+>
+> -       highest_perf = perf_caps.highest_perf;
+> +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+> +               highest_perf = amd_get_highest_perf();
+> +       else
+> +               highest_perf = perf_caps.highest_perf;
+> +
+>         nominal_perf = perf_caps.nominal_perf;
+>
+>         if (!highest_perf || !nominal_perf) {
+> --
+> 2.25.1
+>
