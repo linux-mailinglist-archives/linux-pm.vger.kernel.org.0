@@ -2,154 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E8C36E645
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 09:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D626836E80D
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 11:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbhD2Hvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Apr 2021 03:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S237366AbhD2Jdz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Apr 2021 05:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbhD2Hvo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Apr 2021 03:51:44 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24D4C06138D
-        for <linux-pm@vger.kernel.org>; Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id lr7so16041840pjb.2
-        for <linux-pm@vger.kernel.org>; Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
+        with ESMTP id S236987AbhD2Jdz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Apr 2021 05:33:55 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8F6C06138B;
+        Thu, 29 Apr 2021 02:33:09 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id z16so5803145pga.1;
+        Thu, 29 Apr 2021 02:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XTx/thG4WPqLujG9OHbuc45ghslhD/DJHZfDs/oHSh0=;
-        b=oOKWpcEuBYKPRs26BuQsrMlUYswythWAXRWqRiEobuyNfwlILxiqnLBTq+qFKwQWPw
-         QzsAVsSnnSdNjPohWkmZns64Inbbl9ccZ2sLoWOnA6R5kUWZ08nwFdKt6uSuf4zOkOVc
-         oTTKkhNIEzcoFOPtIpVSYEb+e+EYgogDs+3ZNXCo6j9NFbkmGpTbrXW4z/oVeUVZb8BU
-         aEIIUfFTcjH6WBK4lPmBfTiaMdBRdy/oUxdY9MjkLWSSzH/MHRud5WK7fXwmhOhh+j1j
-         dsnlYTPdKgWKikICp0/5hOkDVFH7CuHzO0F/Iy2LPOTHJTs79t1IXwHqxb44Vkm4paNC
-         B2UA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=n5L2AIimKFLAUZfgpspVAt5w6ETv6xW2xRf+VprbPEI=;
+        b=rZ/qOYwIqMbJeNJP7b1oAUXx8u2Cep0qq1Ex6A4v+AlAg/rpmdZ7IOGF24S6DNfY6J
+         ZFRq1bZ/ZjnjGJvfHnkzDT8k8L0+ejFzvgIpDZqIPcAG18CJ4OrLiPUYnlV9lsBKxdWY
+         S50/yIR31xioZZ0V6U1QcdeMCA33NSZRRo8nkHGO34CJLJiqwx10VurZ+nLd7BKh5rG+
+         h11KBwstWrYdo0RVcOgKEa9LrQ0up3LBgXYPNcBQzZY0dbHVyQPSvmFzmm//FG2bH5Ap
+         4kgVtYXVGfmTiGw9EnUAomUOy2D7DlTRogS+ns/1UWzm1yFz0sWrOpeIdGF8FKu1SYA2
+         riew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XTx/thG4WPqLujG9OHbuc45ghslhD/DJHZfDs/oHSh0=;
-        b=oZ+1TF3zbpwQ43zb9e1RjYhpIIj7JaDZugcDxazCl6i4S/XDucriyFwJbveO8L3Iip
-         XfQ2Dj8duiQW8lr7X2Im2QGHdtAQSnxgF6Eul8TRSuBnm2EwD3AmJAuB16haTzY8zalp
-         Xona/eylaUH31ITFeKzBydfIm9OBYpHeRTMQwsuDmrwLFoazt3p46LCqxva7/cgg9IWF
-         qmovuNrIDXi7Gum8dsGuH+FU2JVGf/eTtRFitfaz4auA2oQFMGQDB3gNpWsPW2CE0k+r
-         nFeJuWdSRJiXKAxr4AqD71P+S/2IVuB4bLJ1vcHKXoMww9E/LUzmNYbJISKPIlUUMAPg
-         lw+g==
-X-Gm-Message-State: AOAM532SoDXbuLC5+22QVgz1T3aDnREXuG+1Q/NFcH/GaXhJEvUoqNvi
-        1XuuhI+H7wotLad+QmnuvRZspg==
-X-Google-Smtp-Source: ABdhPJwwXEANuKHmnnDxb+3Y+tQzhO7ngCIEXVVT6C6z7FzUdn0wjWg/fZcqn9oaBUazh/6FS8HUOg==
-X-Received: by 2002:a17:90a:448b:: with SMTP id t11mr36831576pjg.21.1619682657146;
-        Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id x2sm1653711pfu.77.2021.04.29.00.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 00:50:56 -0700 (PDT)
-Date:   Thu, 29 Apr 2021 13:20:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
- 'assigned-performance-states'
-Message-ID: <20210429075054.vrotcbldbaivfh2d@vireshk-i7>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-4-rojay@codeaurora.org>
- <YAGqKfDfB7EEuZVn@builder.lan>
- <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
- <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=n5L2AIimKFLAUZfgpspVAt5w6ETv6xW2xRf+VprbPEI=;
+        b=oowW4ju5QbMs+zSQyCyne8mPW2KEcCqEaw2mrBuBvqCPeUCqlO70OSttifzGLh6sDm
+         FhTUNlYZKSu1mJQwqkiYzkDza2btibgRjP1HdRUpsPC/JuQx2OSHB5o4q2qSYL5kNV6G
+         2YRvy27EfsNpbE9hGqVF53kNuyZqe+DdcC2pzNTGy55/RSrmzX4rFh4Fe7MMqcIQDOLw
+         YInYjNFVTYeaMAeN4hnTU5+3OwWndDYMgGH+ggAFfbh+RWe8IS/sxzQwo8EXXbAgcvSb
+         7JRCTQnclKfNeFF/LsywhGVsT12euGAozSAgE9v3wAczdRbJotGeE2zoKf7pTEs/sf7Y
+         vkrw==
+X-Gm-Message-State: AOAM5306xxzsOGQ/0UjJgsdgt6Q2puNA39NgB8tDZbggQodY+vKlReyF
+        pF8KrLB3a5vIUukSUMIAS05ow/vU8c6pyHOc
+X-Google-Smtp-Source: ABdhPJxxPm3ss49Y7LcvKCuK9DvuJcKTrXCFm4sRVhlW6MeChLs3GP9rc4KBPEbUiSbmxb8KUNyd4Q==
+X-Received: by 2002:a65:5a48:: with SMTP id z8mr30167905pgs.71.1619688788591;
+        Thu, 29 Apr 2021 02:33:08 -0700 (PDT)
+Received: from localhost ([157.45.42.16])
+        by smtp.gmail.com with ESMTPSA id 23sm2013225pgo.53.2021.04.29.02.33.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 29 Apr 2021 02:33:08 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 15:03:27 +0530
+From:   Shubhankar Kuranagatti <shubhankarvk@gmail.com>
+To:     jacob.jun.pan@linux.intel.com
+Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sanjanasrinidhi1810@gmail.com
+Subject: [PATCH] drivers: idle: intel_idle.c: Added a blank line after
+ declaration
+Message-ID: <20210429093327.2c7hfq3rycocb56t@kewl-virtual-machine>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sorry Roja for dragging this too long, unfortunately I didn't have a
-lot to add on. Lemme try start this thread again.
+Added a blank after struct declaration
+This is done to maintain code uniformity.
 
-On 19-01-21, 12:02, Ulf Hansson wrote:
-> On Mon, 18 Jan 2021 at 06:36, Rajendra Nayak <rnayak@codeaurora.org> wrote:
-> >
-> >
-> > On 1/15/2021 8:13 PM, Bjorn Andersson wrote:
-> > > On Thu 24 Dec 05:12 CST 2020, Roja Rani Yarubandi wrote:
-> > >
-> > >> @@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
-> > >>      struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
-> > >>
-> > >>      disable_irq(gi2c->irq);
-> > >> +
-> > >> +    /* Drop the assigned performance state */
-> > >> +    if (gi2c->assigned_pstate) {
-> > >> +            ret = dev_pm_genpd_set_performance_state(dev, 0);
-> > >> +            if (ret) {
-> > >> +                    dev_err(dev, "Failed to set performance state\n");
-> > >> +                    return ret;
-> > >> +            }
-> > >> +    }
-> > >> +
-> > >
-> > > Ulf, Viresh, I think we discussed this at the time of introducing the
-> > > performance states.
-> > >
-> > > The client's state does not affect if its performance_state should
-> > > be included in the calculation of the aggregated performance_state, so
-> > > each driver that needs to keep some minimum performance state needs to
-> > > have these two snippets.
-> > >
-> > > Would it not make sense to on enable/disable re-evaluate the
-> > > performance_state and potentially reconfigure the hardware
-> > > automatically?
-> >
-> > I agree, this will be repeated across multiple drivers which would
-> > need some minimal vote while they are active, handling this during
-> > genpd enable/disable in genpd core makes sense.
-> 
-> Initially that's what we tried out, but we realized that it was
-> difficult to deal with this internally in genpd, but more importantly
-> it also removed some flexibility from consumers and providers. See
-> commit 68de2fe57a8f ("PM / Domains: Make genpd performance states
-> orthogonal to the idlestates").
-> 
-> As a matter of fact this was quite recently discussed [1], which also
-> pointed out some issues when using the "required-opps" in combination,
-> but perhaps that got resolved? Viresh?
+Signed-off-by: Shubhankar Kuranagatti <shubhankarvk@gmail.com>
+---
+ drivers/idle/intel_idle.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-So I looked again at that thread in detail today. The basic idea was
-to enable/disable the genpd from within the OPP core and there were
-doubts on how to do that efficiently as there are cases where domains
-may be enabled for an OPP, but not for others.. etc. etc.
-
-I am not sure if I consider that thread as part of the discussion we
-are having here, they may be related, but that thread doesn't block
-anything to be done in the genpd core.
-
-> My concern is, if we would make this kind of change to the internals
-> of genpd, it would lead to the following limitation: A consumer driver
-> can no longer make its vote for its device to stick around, when the
-> device becomes runtime suspended - and how do we know that we never
-> need to support such a case?
-
-What about doing this just for the assigned-performance-state case as
-the clients don't want to play with it at all.
-
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 3273360f30f7..25023690625a 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1715,6 +1715,7 @@ static int __init intel_idle_init(void)
+ 	retval = cpuidle_register_driver(&intel_idle_driver);
+ 	if (retval) {
+ 		struct cpuidle_driver *drv = cpuidle_get_driver();
++
+ 		printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
+ 		       drv ? drv->name : "none");
+ 		goto init_driver_fail;
 -- 
-viresh
+2.17.1
+
