@@ -2,87 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D626836E80D
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 11:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1003136E83E
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 11:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbhD2Jdz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Apr 2021 05:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbhD2Jdz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Apr 2021 05:33:55 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8F6C06138B;
-        Thu, 29 Apr 2021 02:33:09 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id z16so5803145pga.1;
-        Thu, 29 Apr 2021 02:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=n5L2AIimKFLAUZfgpspVAt5w6ETv6xW2xRf+VprbPEI=;
-        b=rZ/qOYwIqMbJeNJP7b1oAUXx8u2Cep0qq1Ex6A4v+AlAg/rpmdZ7IOGF24S6DNfY6J
-         ZFRq1bZ/ZjnjGJvfHnkzDT8k8L0+ejFzvgIpDZqIPcAG18CJ4OrLiPUYnlV9lsBKxdWY
-         S50/yIR31xioZZ0V6U1QcdeMCA33NSZRRo8nkHGO34CJLJiqwx10VurZ+nLd7BKh5rG+
-         h11KBwstWrYdo0RVcOgKEa9LrQ0up3LBgXYPNcBQzZY0dbHVyQPSvmFzmm//FG2bH5Ap
-         4kgVtYXVGfmTiGw9EnUAomUOy2D7DlTRogS+ns/1UWzm1yFz0sWrOpeIdGF8FKu1SYA2
-         riew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=n5L2AIimKFLAUZfgpspVAt5w6ETv6xW2xRf+VprbPEI=;
-        b=oowW4ju5QbMs+zSQyCyne8mPW2KEcCqEaw2mrBuBvqCPeUCqlO70OSttifzGLh6sDm
-         FhTUNlYZKSu1mJQwqkiYzkDza2btibgRjP1HdRUpsPC/JuQx2OSHB5o4q2qSYL5kNV6G
-         2YRvy27EfsNpbE9hGqVF53kNuyZqe+DdcC2pzNTGy55/RSrmzX4rFh4Fe7MMqcIQDOLw
-         YInYjNFVTYeaMAeN4hnTU5+3OwWndDYMgGH+ggAFfbh+RWe8IS/sxzQwo8EXXbAgcvSb
-         7JRCTQnclKfNeFF/LsywhGVsT12euGAozSAgE9v3wAczdRbJotGeE2zoKf7pTEs/sf7Y
-         vkrw==
-X-Gm-Message-State: AOAM5306xxzsOGQ/0UjJgsdgt6Q2puNA39NgB8tDZbggQodY+vKlReyF
-        pF8KrLB3a5vIUukSUMIAS05ow/vU8c6pyHOc
-X-Google-Smtp-Source: ABdhPJxxPm3ss49Y7LcvKCuK9DvuJcKTrXCFm4sRVhlW6MeChLs3GP9rc4KBPEbUiSbmxb8KUNyd4Q==
-X-Received: by 2002:a65:5a48:: with SMTP id z8mr30167905pgs.71.1619688788591;
-        Thu, 29 Apr 2021 02:33:08 -0700 (PDT)
-Received: from localhost ([157.45.42.16])
-        by smtp.gmail.com with ESMTPSA id 23sm2013225pgo.53.2021.04.29.02.33.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 29 Apr 2021 02:33:08 -0700 (PDT)
-Date:   Thu, 29 Apr 2021 15:03:27 +0530
-From:   Shubhankar Kuranagatti <shubhankarvk@gmail.com>
-To:     jacob.jun.pan@linux.intel.com
-Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sanjanasrinidhi1810@gmail.com
-Subject: [PATCH] drivers: idle: intel_idle.c: Added a blank line after
- declaration
-Message-ID: <20210429093327.2c7hfq3rycocb56t@kewl-virtual-machine>
+        id S232258AbhD2J5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Apr 2021 05:57:16 -0400
+Received: from ozlabs.org ([203.11.71.1]:60527 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231543AbhD2J5P (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Apr 2021 05:57:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FW9rB5yF0z9sXM;
+        Thu, 29 Apr 2021 19:56:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1619690188;
+        bh=6PPQKIc7lD5HrR4bsQtHG16u/E9ccQvQAEcyj1Ns58Q=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Fv7Y9NWGEezzDYtM0nzzds6GD8Lh9f6ttsNHfLyJ2LXuYcS6CU8LCALX7oQT415jC
+         sdq0teQrSuPDfEl1r1+N5y1bHBMzwhDQgXNYvDQddh+OPoPaq61/hIz2LNg0rOEjk0
+         gHUFQNiEqBA3Zl+YXTAdY6lMnmH16DlusPvHq0iS4otS+9+QABzfqgyEvQdoEgBlXK
+         IvIFXecw3o1WPxl+/2t+QCGQVb1ifi1oTruuyTM0KU3pir2e95oJ6RKE3+ROn6fCVG
+         5QcDBMRIwJ3POG4yuZmvwiEmm19Fk8omu8oB8BKhLl9veQ9R6L3JvRYfaSlzBoER0p
+         PVXzWlFD6zypQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org,
+        joedecke@de.ibm.com, "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+Subject: Re: [PATCH v2] cpuidle/pseries: Fixup CEDE0 latency only for
+ POWER10 onwards
+In-Reply-To: <1619673517-10853-1-git-send-email-ego@linux.vnet.ibm.com>
+References: <1619673517-10853-1-git-send-email-ego@linux.vnet.ibm.com>
+Date:   Thu, 29 Apr 2021 19:56:25 +1000
+Message-ID: <87r1it9zxy.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Added a blank after struct declaration
-This is done to maintain code uniformity.
+"Gautham R. Shenoy" <ego@linux.vnet.ibm.com> writes:
+> From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+>
+> Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> of the Extended CEDE states advertised by the platform
+>
+> On POWER9 LPARs, the firmwares advertise a very low value of 2us for
+> CEDE1 exit latency on a Dedicated LPAR. The latency advertized by the
+> PHYP hypervisor corresponds to the latency required to wakeup from the
+> underlying hardware idle state. However the wakeup latency from the
+> LPAR perspective should include
+>
+> 1. The time taken to transition the CPU from the Hypervisor into the
+>    LPAR post wakeup from platform idle state
+>
+> 2. Time taken to send the IPI from the source CPU (waker) to the idle
+>    target CPU (wakee).
+>
+> 1. can be measured via timer idle test, where we queue a timer, say
+> for 1ms, and enter the CEDE state. When the timer fires, in the timer
+> handler we compute how much extra timer over the expected 1ms have we
+> consumed. On a a POWER9 LPAR the numbers are
+>
+> CEDE latency measured using a timer (numbers in ns)
+> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+> 400     2601     5677     5668.74    5917    6413     9299   455.01
+>
+> 1. and 2. combined can be determined by an IPI latency test where we
+> send an IPI to an idle CPU and in the handler compute the time
+> difference between when the IPI was sent and when the handler ran. We
+> see the following numbers on POWER9 LPAR.
+>
+> CEDE latency measured using an IPI (numbers in ns)
+> N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+> 400     711      7564     7369.43   8559    9514      9698   1200.01
+>
+> Suppose, we consider the 99th percentile latency value measured using
+> the IPI to be the wakeup latency, the value would be 9.5us This is in
+> the ballpark of the default value of 10us.
+>
+> Hence, use the exit latency of CEDE(0) based on the latency values
+> advertized by platform only from POWER10 onwards. The values
+                                           ^^^^^^^
+> advertized on POWER10 platforms is more realistic and informed by the
+> latency measurements. For earlier platforms stick to the default value
+> of 10us.
 
-Signed-off-by: Shubhankar Kuranagatti <shubhankarvk@gmail.com>
----
- drivers/idle/intel_idle.c | 1 +
- 1 file changed, 1 insertion(+)
+...
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 3273360f30f7..25023690625a 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1715,6 +1715,7 @@ static int __init intel_idle_init(void)
- 	retval = cpuidle_register_driver(&intel_idle_driver);
- 	if (retval) {
- 		struct cpuidle_driver *drv = cpuidle_get_driver();
-+
- 		printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
- 		       drv ? drv->name : "none");
- 		goto init_driver_fail;
--- 
-2.17.1
+> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+> index a2b5c6f..7207467 100644
+> --- a/drivers/cpuidle/cpuidle-pseries.c
+> +++ b/drivers/cpuidle/cpuidle-pseries.c
+> @@ -419,7 +419,8 @@ static int pseries_idle_probe(void)
+>  			cpuidle_state_table = shared_states;
+>  			max_idle_state = ARRAY_SIZE(shared_states);
+>  		} else {
+> -			fixup_cede0_latency();
+> +			if (pvr_version_is(PVR_POWER10))
+> +				fixup_cede0_latency();
 
+A PVR check like that tests for *only* Power10, not Power10 and onwards
+as you say in the change log.
+
+The other question is what should happen on a Power10 LPAR that's
+running in Power9 compat mode. I assume in that case we *do* want to use
+the firmware provided values, because they're tied to the underlying
+CPU, not the compat mode?
+
+In which case a check for !PVR_POWER9 would seem to achieve what we
+want?
+
+cheers
