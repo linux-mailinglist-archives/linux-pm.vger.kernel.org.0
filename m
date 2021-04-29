@@ -2,54 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC7236E574
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 09:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E8C36E645
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 09:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239698AbhD2HDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Apr 2021 03:03:06 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:18775 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239201AbhD2HDE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Apr 2021 03:03:04 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619679739; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=qpzpGKT4MyOa6zZRIZKS8uAlvV/UNPjibYLAdYfWu/8=;
- b=W6+0hd6jAcg+E3rJx0+MDhaYAc83EmWA7GVAGVNVddnD3wwd/ryseuSUyu+cGf0aka0+Wh3D
- BNrPlxX5+HJ06GrK+rh/bVuh/MyxxGiRlNju/afKz8tu8P3JPukA0qHEtTvttV439NLsWG4G
- ezC7I+pU2l4sVwnNDZls2Z8NrXk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 608a59f52cc44d3aeabc1cca (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Apr 2021 07:02:13
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E753BC4479C; Thu, 29 Apr 2021 07:02:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99B8AC43143;
-        Thu, 29 Apr 2021 07:02:11 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 29 Apr 2021 12:32:11 +0530
-From:   rojay@codeaurora.org
+        id S238725AbhD2Hvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Apr 2021 03:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232455AbhD2Hvo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Apr 2021 03:51:44 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24D4C06138D
+        for <linux-pm@vger.kernel.org>; Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id lr7so16041840pjb.2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XTx/thG4WPqLujG9OHbuc45ghslhD/DJHZfDs/oHSh0=;
+        b=oOKWpcEuBYKPRs26BuQsrMlUYswythWAXRWqRiEobuyNfwlILxiqnLBTq+qFKwQWPw
+         QzsAVsSnnSdNjPohWkmZns64Inbbl9ccZ2sLoWOnA6R5kUWZ08nwFdKt6uSuf4zOkOVc
+         oTTKkhNIEzcoFOPtIpVSYEb+e+EYgogDs+3ZNXCo6j9NFbkmGpTbrXW4z/oVeUVZb8BU
+         aEIIUfFTcjH6WBK4lPmBfTiaMdBRdy/oUxdY9MjkLWSSzH/MHRud5WK7fXwmhOhh+j1j
+         dsnlYTPdKgWKikICp0/5hOkDVFH7CuHzO0F/Iy2LPOTHJTs79t1IXwHqxb44Vkm4paNC
+         B2UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XTx/thG4WPqLujG9OHbuc45ghslhD/DJHZfDs/oHSh0=;
+        b=oZ+1TF3zbpwQ43zb9e1RjYhpIIj7JaDZugcDxazCl6i4S/XDucriyFwJbveO8L3Iip
+         XfQ2Dj8duiQW8lr7X2Im2QGHdtAQSnxgF6Eul8TRSuBnm2EwD3AmJAuB16haTzY8zalp
+         Xona/eylaUH31ITFeKzBydfIm9OBYpHeRTMQwsuDmrwLFoazt3p46LCqxva7/cgg9IWF
+         qmovuNrIDXi7Gum8dsGuH+FU2JVGf/eTtRFitfaz4auA2oQFMGQDB3gNpWsPW2CE0k+r
+         nFeJuWdSRJiXKAxr4AqD71P+S/2IVuB4bLJ1vcHKXoMww9E/LUzmNYbJISKPIlUUMAPg
+         lw+g==
+X-Gm-Message-State: AOAM532SoDXbuLC5+22QVgz1T3aDnREXuG+1Q/NFcH/GaXhJEvUoqNvi
+        1XuuhI+H7wotLad+QmnuvRZspg==
+X-Google-Smtp-Source: ABdhPJwwXEANuKHmnnDxb+3Y+tQzhO7ngCIEXVVT6C6z7FzUdn0wjWg/fZcqn9oaBUazh/6FS8HUOg==
+X-Received: by 2002:a17:90a:448b:: with SMTP id t11mr36831576pjg.21.1619682657146;
+        Thu, 29 Apr 2021 00:50:57 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id x2sm1653711pfu.77.2021.04.29.00.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Apr 2021 00:50:56 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 13:20:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
         Rob Herring <robh+dt@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
         Stephen Boyd <swboyd@chromium.org>,
@@ -64,55 +67,89 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
  'assigned-performance-states'
-In-Reply-To: <cfd90d2a05aa0411ee7a976a89a361af@codeaurora.org>
+Message-ID: <20210429075054.vrotcbldbaivfh2d@vireshk-i7>
 References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-4-rojay@codeaurora.org> <YAGqKfDfB7EEuZVn@builder.lan>
+ <20201224111210.1214-4-rojay@codeaurora.org>
+ <YAGqKfDfB7EEuZVn@builder.lan>
  <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
  <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
- <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
- <CAPDyKFogrWt=K3VtEZVH5bPL_fYt7rgdm5wGgq+QHtzX-n0z7g@mail.gmail.com>
- <29b30a2c0c4d7292747a073d23daaa70@codeaurora.org>
- <cfd90d2a05aa0411ee7a976a89a361af@codeaurora.org>
-Message-ID: <594e3849329abcacb69bef0901fef607@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-04-01 12:09, rojay@codeaurora.org wrote:
-> On 2021-02-12 14:51, rojay@codeaurora.org wrote:
->> On 2021-01-20 19:01, Ulf Hansson wrote:
->>> On Tue, 19 Jan 2021 at 12:05, Viresh Kumar <viresh.kumar@linaro.org> 
->>> wrote:
->>>> 
->>>> On 19-01-21, 12:02, Ulf Hansson wrote:
->>>> > As a matter of fact this was quite recently discussed [1], which also
->>>> > pointed out some issues when using the "required-opps" in combination,
->>>> > but perhaps that got resolved? Viresh?
->>>> 
->>>> Perhaps we never did anything there ..
->>> 
->>> Okay. Looks like we should pick up that discussion again, to conclude
->>> on how to move forward.
->>> 
->> 
->> Soft Reminder!
->> 
+Sorry Roja for dragging this too long, unfortunately I didn't have a
+lot to add on. Lemme try start this thread again.
+
+On 19-01-21, 12:02, Ulf Hansson wrote:
+> On Mon, 18 Jan 2021 at 06:36, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+> >
+> >
+> > On 1/15/2021 8:13 PM, Bjorn Andersson wrote:
+> > > On Thu 24 Dec 05:12 CST 2020, Roja Rani Yarubandi wrote:
+> > >
+> > >> @@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+> > >>      struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
+> > >>
+> > >>      disable_irq(gi2c->irq);
+> > >> +
+> > >> +    /* Drop the assigned performance state */
+> > >> +    if (gi2c->assigned_pstate) {
+> > >> +            ret = dev_pm_genpd_set_performance_state(dev, 0);
+> > >> +            if (ret) {
+> > >> +                    dev_err(dev, "Failed to set performance state\n");
+> > >> +                    return ret;
+> > >> +            }
+> > >> +    }
+> > >> +
+> > >
+> > > Ulf, Viresh, I think we discussed this at the time of introducing the
+> > > performance states.
+> > >
+> > > The client's state does not affect if its performance_state should
+> > > be included in the calculation of the aggregated performance_state, so
+> > > each driver that needs to keep some minimum performance state needs to
+> > > have these two snippets.
+> > >
+> > > Would it not make sense to on enable/disable re-evaluate the
+> > > performance_state and potentially reconfigure the hardware
+> > > automatically?
+> >
+> > I agree, this will be repeated across multiple drivers which would
+> > need some minimal vote while they are active, handling this during
+> > genpd enable/disable in genpd core makes sense.
 > 
-> Request Viresh, Uffe to discuss on the way forward.
+> Initially that's what we tried out, but we realized that it was
+> difficult to deal with this internally in genpd, but more importantly
+> it also removed some flexibility from consumers and providers. See
+> commit 68de2fe57a8f ("PM / Domains: Make genpd performance states
+> orthogonal to the idlestates").
 > 
+> As a matter of fact this was quite recently discussed [1], which also
+> pointed out some issues when using the "required-opps" in combination,
+> but perhaps that got resolved? Viresh?
 
-Hi Viresh, Uffe, looking forward for your discussion/updates.
+So I looked again at that thread in detail today. The basic idea was
+to enable/disable the genpd from within the OPP core and there were
+doubts on how to do that efficiently as there are cases where domains
+may be enabled for an OPP, but not for others.. etc. etc.
 
-Thanks,
-Roja
+I am not sure if I consider that thread as part of the discussion we
+are having here, they may be related, but that thread doesn't block
+anything to be done in the genpd core.
 
->>>> 
->>>> --
->>>> viresh
->>> 
->>> Kind regards
->>> Uffe
->> 
->> - Roja
+> My concern is, if we would make this kind of change to the internals
+> of genpd, it would lead to the following limitation: A consumer driver
+> can no longer make its vote for its device to stick around, when the
+> device becomes runtime suspended - and how do we know that we never
+> need to support such a case?
+
+What about doing this just for the assigned-performance-state case as
+the clients don't want to play with it at all.
+
+-- 
+viresh
