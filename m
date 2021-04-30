@@ -2,281 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC2736FC6C
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Apr 2021 16:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A04436FD75
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Apr 2021 17:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbhD3OaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Apr 2021 10:30:08 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:26061 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbhD3OaH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Apr 2021 10:30:07 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619792959; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=20c3ML6vrl5T3lJYsoAw4m9HFmCs3mg2UfqJ4XHx7ig=; b=FeyH+DBcgJwFYoEq2fMJHtgpJha5wmgCsC8OSB58YIlIcaqB+VD2RnO9G6/MT7+rkAe275NF
- LezsjTL4XvConSQy08lcXdMBUBjS0s34p+OO0Ffm8TrwSA599BItdjaxUnJrVY8xKgsIgdNc
- W5RkaX7y4nWKKefCKKvoZMB3bjw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 608c143774f773a6643d8077 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 30 Apr 2021 14:29:11
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AF331C4323A; Fri, 30 Apr 2021 14:29:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EF839C433F1;
-        Fri, 30 Apr 2021 14:29:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EF839C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org
-Cc:     viresh.kumar@linaro.org, swboyd@chromium.org, agross@kernel.org,
-        robh+dt@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sc7280: Add cpu OPP tables
-Date:   Fri, 30 Apr 2021 19:58:21 +0530
-Message-Id: <1619792901-32701-3-git-send-email-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1619792901-32701-1-git-send-email-sibis@codeaurora.org>
-References: <1619792901-32701-1-git-send-email-sibis@codeaurora.org>
+        id S229797AbhD3PPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Apr 2021 11:15:31 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:43740 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbhD3PPb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Apr 2021 11:15:31 -0400
+Received: by mail-ot1-f48.google.com with SMTP id g7-20020a9d5f870000b02902a5831ad705so1497433oti.10;
+        Fri, 30 Apr 2021 08:14:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bA+0wXYd5n62CVpjXh163QzxzPQitWk+KG3sz2AcuGk=;
+        b=d2/gMBmfDJYXC6dF6bgCO7cCFU9A2ps1Y9HULSHqOQYO77oJhqj8OzAZhPUD58cIbs
+         nNqAPL032bEZK6bD7HPwIAN0N4un1tJ7+2u4be85Tjs99mKnMQss9ussLVFwviaVwnsl
+         mACKEYnQ0xXDj3+mO8Lczm4nXVYTaRDLuMuRBb44lX4maJhGkRBn5Mbvn/XSo8CgXmw8
+         J3Dq8w8wAMnQi4Jb/hFNO42qkYddnZoTuq0CNQko5zP8IgxuJhs0Q2Ea1KAqx+7p5nq6
+         73NWYPnvCgSEMswtjQeJ5wLsCJnQBrPEpVMpuqp9V/pNpXaiPKEMRLstaGESTmrL/TCq
+         YVKw==
+X-Gm-Message-State: AOAM532weE/UvTV8YeBiXo3ibTeeW7ftabyYx01w8jpuL+juNVUze9OU
+        ZlzL1kqZTuPoWNs5cuqa9w==
+X-Google-Smtp-Source: ABdhPJz7mv+WLnYokc1iKTOjYu+Sps0+GW+VV4HnXfSL+BcYqE0Bmak8+kqq5/xMCkcLRGKywhN9FA==
+X-Received: by 2002:a9d:6007:: with SMTP id h7mr4179722otj.200.1619795682500;
+        Fri, 30 Apr 2021 08:14:42 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y11sm846063oiv.19.2021.04.30.08.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Apr 2021 08:14:41 -0700 (PDT)
+Received: (nullmailer pid 3337579 invoked by uid 1000);
+        Fri, 30 Apr 2021 15:14:40 -0000
+Date:   Fri, 30 Apr 2021 10:14:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
+Subject: Re: [PATCH 1/2] dt-bindings: rockchip-thermal: Support the RK3568
+ SoC compatible
+Message-ID: <20210430151440.GA3323801@robh.at.kernel.org>
+References: <20210421200445.32977-1-ezequiel@collabora.com>
+ <557ae27c-1d62-69e0-7ae6-921571059f9f@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <557ae27c-1d62-69e0-7ae6-921571059f9f@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add OPP tables required to scale DDR/L3 per freq-domain on SC7280 SoCs.
+On Wed, Apr 21, 2021 at 10:46:37PM +0200, Johan Jonker wrote:
+> On 4/21/21 10:04 PM, Ezequiel Garcia wrote:
+> > Add a new compatible for the thermal sensor device on RK3568 SoCs.
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> >  Documentation/devicetree/bindings/thermal/rockchip-thermal.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt b/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> > index 7f94669e9ebe..346e466c2006 100644
+> > --- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> > +++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
+> > @@ -9,6 +9,7 @@ Required properties:
+> >     "rockchip,rk3328-tsadc": found on RK3328 SoCs
+> >     "rockchip,rk3368-tsadc": found on RK3368 SoCs
+> >     "rockchip,rk3399-tsadc": found on RK3399 SoCs
+> 
+> > +   "rockchip,rk3568-tsadc": found on RK3568 SoCs
+> 
+> This is still a text document.
+> rob+dt has now scripts that check for undocumented compatibility
+> strings, so first convert rockchip-thermal.txt to YAML and then add this
+> in a separated patch.
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 135 +++++++++++++++++++++++++++++++++++
- 1 file changed, 135 insertions(+)
+Thanks for pushing on this, but for now at least, simple compatible 
+additions are fine. If changes would complicate the conversion to 
+schema, then we should convert it first. For example, if the new 
+compatible was accompanied with differing clocks, irqs, resets, etc., 
+then we should convert (or consider a separate schema).
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 0bb835aeae33..90220cecb368 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/clock/qcom,gcc-sc7280.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sc7280.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/mailbox/qcom-ipcc.h>
-@@ -71,6 +72,9 @@
- 					   &LITTLE_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_0: l2-cache {
- 				compatible = "cache";
-@@ -90,6 +94,9 @@
- 					   &LITTLE_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_100>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_100: l2-cache {
- 				compatible = "cache";
-@@ -106,6 +113,9 @@
- 					   &LITTLE_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_200>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_200: l2-cache {
- 				compatible = "cache";
-@@ -122,6 +132,9 @@
- 					   &LITTLE_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_300>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_300: l2-cache {
- 				compatible = "cache";
-@@ -138,6 +151,9 @@
- 					   &BIG_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_400>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			L2_400: l2-cache {
- 				compatible = "cache";
-@@ -154,6 +170,9 @@
- 					   &BIG_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_500>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			L2_500: l2-cache {
- 				compatible = "cache";
-@@ -170,6 +189,9 @@
- 					   &BIG_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_600>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			L2_600: l2-cache {
- 				compatible = "cache";
-@@ -186,6 +208,9 @@
- 					   &BIG_CPU_SLEEP_1
- 					   &CLUSTER_SLEEP_0>;
- 			next-level-cache = <&L2_700>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
- 			qcom,freq-domain = <&cpufreq_hw 2>;
- 			L2_700: l2-cache {
- 				compatible = "cache";
-@@ -248,6 +273,116 @@
- 		};
- 	};
- 
-+	cpu0_opp_table: cpu0_opp_table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu0_opp1: opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-peak-kBps = <800000 9600000>;
-+		};
-+
-+		cpu0_opp2: opp-691200000 {
-+			opp-hz = /bits/ 64 <691200000>;
-+			opp-peak-kBps = <800000 17817600>;
-+		};
-+
-+		cpu0_opp3: opp-806400000 {
-+			opp-hz = /bits/ 64 <806400000>;
-+			opp-peak-kBps = <800000 20889600>;
-+		};
-+
-+		cpu0_opp4: opp-940800000 {
-+			opp-hz = /bits/ 64 <940800000>;
-+			opp-peak-kBps = <1804000 24576000>;
-+		};
-+
-+		cpu0_opp5: opp-1152000000 {
-+			opp-hz = /bits/ 64 <1152000000>;
-+			opp-peak-kBps = <2188000 27033600>;
-+		};
-+
-+		cpu0_opp6: opp-1324800000 {
-+			opp-hz = /bits/ 64 <1324800000>;
-+			opp-peak-kBps = <2188000 33792000>;
-+		};
-+
-+		cpu0_opp7: opp-1516800000 {
-+			opp-hz = /bits/ 64 <1516800000>;
-+			opp-peak-kBps = <3072000 38092800>;
-+		};
-+
-+		cpu0_opp8: opp-1651200000 {
-+			opp-hz = /bits/ 64 <1651200000>;
-+			opp-peak-kBps = <3072000 41779200>;
-+		};
-+
-+		cpu0_opp9: opp-1804800000 {
-+			opp-hz = /bits/ 64 <1804800000>;
-+			opp-peak-kBps = <4068000 48537600>;
-+		};
-+
-+		cpu0_opp10: opp-1958400000 {
-+			opp-hz = /bits/ 64 <1958400000>;
-+			opp-peak-kBps = <4068000 48537600>;
-+		};
-+	};
-+
-+	cpu4_opp_table: cpu4_opp_table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu4_opp1: opp-691200000 {
-+			opp-hz = /bits/ 64 <691200000>;
-+			opp-peak-kBps = <1804000 9600000>;
-+		};
-+
-+		cpu4_opp2: opp-940800000 {
-+			opp-hz = /bits/ 64 <940800000>;
-+			opp-peak-kBps = <2188000 17817600>;
-+		};
-+
-+		cpu4_opp3: opp-1228800000 {
-+			opp-hz = /bits/ 64 <1228800000>;
-+			opp-peak-kBps = <4068000 24576000>;
-+		};
-+
-+		cpu4_opp4: opp-1344000000 {
-+			opp-hz = /bits/ 64 <1344000000>;
-+			opp-peak-kBps = <4068000 24576000>;
-+		};
-+
-+		cpu4_opp5: opp-1516800000 {
-+			opp-hz = /bits/ 64 <1516800000>;
-+			opp-peak-kBps = <4068000 24576000>;
-+		};
-+
-+		cpu4_opp6: opp-1651200000 {
-+			opp-hz = /bits/ 64 <1651200000>;
-+			opp-peak-kBps = <6220000 38092800>;
-+		};
-+
-+		cpu4_opp7: opp-1900800000 {
-+			opp-hz = /bits/ 64 <1900800000>;
-+			opp-peak-kBps = <6220000 44851200>;
-+		};
-+
-+		cpu4_opp8: opp-2054400000 {
-+			opp-hz = /bits/ 64 <2054400000>;
-+			opp-peak-kBps = <6220000 44851200>;
-+		};
-+
-+		cpu4_opp9: opp-2131200000 {
-+			opp-hz = /bits/ 64 <2131200000>;
-+			opp-peak-kBps = <6220000 44851200>;
-+		};
-+
-+		cpu4_opp10: opp-2400000000 {
-+			opp-hz = /bits/ 64 <2400000000>;
-+			opp-peak-kBps = <6832000 48537600>;
-+		};
-+	};
-+
- 	memory@80000000 {
- 		device_type = "memory";
- 		/* We expect the bootloader to fill in the size */
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+In parallel though, we do want to get platforms to 0 undocumented (by 
+schema) compatibles. And then 0 warnings after that...
 
+Rob
