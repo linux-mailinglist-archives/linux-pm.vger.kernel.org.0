@@ -2,102 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF25336F55D
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Apr 2021 07:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BB736F6C8
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Apr 2021 09:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbhD3FfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Apr 2021 01:35:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:21927 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbhD3FfL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Apr 2021 01:35:11 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619760864; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=WyIiMnFBS/zDlAuBJ6dVpP5Wm6YrC+/il7PmxfKg7BE=;
- b=leaXCiyMf9FbmJ4zYthyycpV0hO3z75sRlRExcPVWACoex88OjlPpN3PR5F7gajTGv0VuLZB
- 0854XEQGyAWDw0bY9H3py18nIYZAUzPVWZrfvdn3DCAiNsO3U/5W4b1qkKbGFQxC7D25WF7E
- 0/OeQyIZ6wL8FEsqhmkhZwME5KQ=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 608b96da853c0a2c46e310df (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 30 Apr 2021 05:34:18
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7778BC4323A; Fri, 30 Apr 2021 05:34:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AA03CC433F1;
-        Fri, 30 Apr 2021 05:34:16 +0000 (UTC)
+        id S229553AbhD3H7q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Apr 2021 03:59:46 -0400
+Received: from mga07.intel.com ([134.134.136.100]:34385 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229532AbhD3H7q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 30 Apr 2021 03:59:46 -0400
+IronPort-SDR: Pr8GFpUoe4HVWd76m5dq6uk94Pbp6bCkpbayPoxnyo8Qu7B5SLtEOm9jVNvlkUHrpI3DegGqJB
+ G/8pTtoGzp5w==
+X-IronPort-AV: E=McAfee;i="6200,9189,9969"; a="261169779"
+X-IronPort-AV: E=Sophos;i="5.82,262,1613462400"; 
+   d="scan'208";a="261169779"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2021 00:58:57 -0700
+IronPort-SDR: 9clr2pxJ0ZWxbKfNTkLkHvjS60rM72iieD0CB07obbjDz5lq2C8J/Jw16MrGj8Eseyo9HOxLkp
+ kJIjnLI5VuhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,262,1613462400"; 
+   d="scan'208";a="616783938"
+Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Apr 2021 00:58:56 -0700
+Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lcO35-00084l-Gu; Fri, 30 Apr 2021 07:58:55 +0000
+Date:   Fri, 30 Apr 2021 15:58:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ eebece9da63e0050345a10e89cb33d7312c9ec3c
+Message-ID: <608bb895.fsqfEdV2vXKjjV9I%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 30 Apr 2021 11:04:16 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Odelu Kukatla <okukatla@codeaurora.org>
-Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Andy Gross <agross@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
-        elder@linaro.org, linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on SC7280
-In-Reply-To: <1618556290-28303-2-git-send-email-okukatla@codeaurora.org>
-References: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
- <1618556290-28303-2-git-send-email-okukatla@codeaurora.org>
-Message-ID: <825aca2d853e5dd577d61396df49f44a@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Odelu,
-Thanks for the patch!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: eebece9da63e0050345a10e89cb33d7312c9ec3c  Merge branches 'acpi-misc' and 'acpi-docs' into linux-next
 
-On 2021-04-16 12:28, Odelu Kukatla wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
-> SoCs.
-> 
-> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> index d6a95c3..98223f8 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> @@ -18,6 +18,7 @@ properties:
->    compatible:
->      enum:
->        - qcom,sc7180-osm-l3
-> +      - qcom,sc7280-epss-l3
->        - qcom,sdm845-osm-l3
->        - qcom,sm8150-osm-l3
->        - qcom,sm8250-epss-l3
+elapsed time: 722m
 
-Based on the driver/dts changes the
-reg property maxItems will no longer
-be just 1.
+configs tested: 141
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+mips                     cu1830-neo_defconfig
+nios2                         3c120_defconfig
+sh                               j2_defconfig
+arm                            hisi_defconfig
+x86_64                              defconfig
+arm                          ixp4xx_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      tqm8xx_defconfig
+m68k                       m5249evb_defconfig
+arm64                            alldefconfig
+um                             i386_defconfig
+arc                        nsimosci_defconfig
+arm                         socfpga_defconfig
+mips                         db1xxx_defconfig
+sh                         microdev_defconfig
+m68k                       bvme6000_defconfig
+arm                           tegra_defconfig
+powerpc                        icon_defconfig
+powerpc                 mpc836x_rdk_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                       m5208evb_defconfig
+powerpc                 linkstation_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                    socrates_defconfig
+arm                        mini2440_defconfig
+arm                         lpc32xx_defconfig
+powerpc                   currituck_defconfig
+arm                           viper_defconfig
+i386                             alldefconfig
+arm                        spear6xx_defconfig
+powerpc                          g5_defconfig
+arm                           omap1_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                   bluestone_defconfig
+csky                                defconfig
+powerpc                     ksi8560_defconfig
+arm                          simpad_defconfig
+ia64                                defconfig
+arm                             mxs_defconfig
+arm                      pxa255-idp_defconfig
+sh                        edosk7705_defconfig
+powerpc                 mpc8540_ads_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                   lite5200b_defconfig
+arm                        neponset_defconfig
+arc                    vdk_hs38_smp_defconfig
+x86_64                           alldefconfig
+sh                             shx3_defconfig
+mips                        vocore2_defconfig
+m68k                            q40_defconfig
+arc                              alldefconfig
+m68k                        m5272c3_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                     ppa8548_defconfig
+arc                          axs103_defconfig
+powerpc                 mpc8272_ads_defconfig
+sh                        edosk7760_defconfig
+sh                   sh7770_generic_defconfig
+sh                            hp6xx_defconfig
+arm                          lpd270_defconfig
+openrisc                    or1ksim_defconfig
+mips                            ar7_defconfig
+arc                            hsdk_defconfig
+sh                            shmin_defconfig
+arm                         s3c2410_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20210429
+x86_64               randconfig-a002-20210429
+x86_64               randconfig-a005-20210429
+x86_64               randconfig-a006-20210429
+x86_64               randconfig-a001-20210429
+x86_64               randconfig-a003-20210429
+i386                 randconfig-a005-20210429
+i386                 randconfig-a002-20210429
+i386                 randconfig-a001-20210429
+i386                 randconfig-a006-20210429
+i386                 randconfig-a003-20210429
+i386                 randconfig-a004-20210429
+i386                 randconfig-a012-20210429
+i386                 randconfig-a014-20210429
+i386                 randconfig-a013-20210429
+i386                 randconfig-a011-20210429
+i386                 randconfig-a015-20210429
+i386                 randconfig-a016-20210429
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a015-20210429
+x86_64               randconfig-a016-20210429
+x86_64               randconfig-a011-20210429
+x86_64               randconfig-a014-20210429
+x86_64               randconfig-a013-20210429
+x86_64               randconfig-a012-20210429
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
