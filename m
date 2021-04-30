@@ -2,63 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3415A36F248
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Apr 2021 23:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF25336F55D
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Apr 2021 07:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbhD2VsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Apr 2021 17:48:21 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:40797 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbhD2VsV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Apr 2021 17:48:21 -0400
-Received: by mail-ot1-f51.google.com with SMTP id g4-20020a9d6b040000b029029debbbb3ecso29757033otp.7;
-        Thu, 29 Apr 2021 14:47:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iYZ5oLoZi7uuBa979InSeVYHoomOJVsY8rXA4rSMPA8=;
-        b=evbOQB5Z4XZEWjH0luau964eOdzT59Ei9Vd/GxMqro5KX4W5ONwR3kq4SXAe8y6frj
-         EoT1g/lC9nEJRQrEd7A4/OVn3to8AR5LR/++bqq5M7qfkmdw2/UvNk4CS3XnCQcoYDUp
-         sf5Iaf5YpvHCuESXiQZk/VxiLTeVmwVoP3zS7+74DQ95c8Zngr9nmRNQJVkC1gCAnZI3
-         xVJYCIwRNarcS4Gt0sel6VR3zIqcPSyK7un9zGGAjm5EtdsoPfLhdafcMJD7OjwX5BEb
-         pr85kxPcHcYMoYcqeP+/QDtwj24ALbe0gDVoPX5O24pDiQxg9dbtG8qgu3Ga/6kfgSbP
-         CBEg==
-X-Gm-Message-State: AOAM532dOhPT6UeJSzvEk92p2doK9z6In7JZ1oI+fY2XTh0VcOad3rjG
-        E1k0TM7xNH8DuWQNWX54qQ==
-X-Google-Smtp-Source: ABdhPJx4wCmWDLWm7Ngn2tC6FiabHokxGnCA74FpvlurPyQTesW0f/fL5N4VMAHmuTDCDVktu1v+sA==
-X-Received: by 2002:a9d:2de3:: with SMTP id g90mr1152246otb.274.1619732852477;
-        Thu, 29 Apr 2021 14:47:32 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j3sm265634oie.13.2021.04.29.14.47.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 14:47:31 -0700 (PDT)
-Received: (nullmailer pid 1835596 invoked by uid 1000);
-        Thu, 29 Apr 2021 21:47:30 -0000
-Date:   Thu, 29 Apr 2021 16:47:30 -0500
-From:   Rob Herring <robh@kernel.org>
+        id S230119AbhD3FfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Apr 2021 01:35:12 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:21927 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230135AbhD3FfL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Apr 2021 01:35:11 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619760864; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=WyIiMnFBS/zDlAuBJ6dVpP5Wm6YrC+/il7PmxfKg7BE=;
+ b=leaXCiyMf9FbmJ4zYthyycpV0hO3z75sRlRExcPVWACoex88OjlPpN3PR5F7gajTGv0VuLZB
+ 0854XEQGyAWDw0bY9H3py18nIYZAUzPVWZrfvdn3DCAiNsO3U/5W4b1qkKbGFQxC7D25WF7E
+ 0/OeQyIZ6wL8FEsqhmkhZwME5KQ=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 608b96da853c0a2c46e310df (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 30 Apr 2021 05:34:18
+ GMT
+Sender: sibis=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7778BC4323A; Fri, 30 Apr 2021 05:34:17 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AA03CC433F1;
+        Fri, 30 Apr 2021 05:34:16 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 30 Apr 2021 11:04:16 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
 To:     Odelu Kukatla <okukatla@codeaurora.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>, devicetree@vger.kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        seansw@qti.qualcomm.com, elder@linaro.org,
-        georgi.djakov@linaro.org, linux-arm-msm-owner@vger.kernel.org,
-        ilina@codeaurora.org, evgreen@google.com, sboyd@kernel.org
+Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        evgreen@google.com, Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-arm-msm-owner@vger.kernel.org
 Subject: Re: [1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on SC7280
-Message-ID: <20210429214730.GA1835549@robh.at.kernel.org>
+In-Reply-To: <1618556290-28303-2-git-send-email-okukatla@codeaurora.org>
 References: <1618556290-28303-1-git-send-email-okukatla@codeaurora.org>
  <1618556290-28303-2-git-send-email-okukatla@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1618556290-28303-2-git-send-email-okukatla@codeaurora.org>
+Message-ID: <825aca2d853e5dd577d61396df49f44a@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 16 Apr 2021 12:28:08 +0530, Odelu Kukatla wrote:
+Hey Odelu,
+Thanks for the patch!
+
+On 2021-04-16 12:28, Odelu Kukatla wrote:
 > Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
 > SoCs.
 > 
@@ -67,5 +78,26 @@ On Fri, 16 Apr 2021 12:28:08 +0530, Odelu Kukatla wrote:
 >  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
 >  1 file changed, 1 insertion(+)
 > 
+> diff --git
+> a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> index d6a95c3..98223f8 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> @@ -18,6 +18,7 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,sc7180-osm-l3
+> +      - qcom,sc7280-epss-l3
+>        - qcom,sdm845-osm-l3
+>        - qcom,sm8150-osm-l3
+>        - qcom,sm8250-epss-l3
 
-Acked-by: Rob Herring <robh@kernel.org>
+Based on the driver/dts changes the
+reg property maxItems will no longer
+be just 1.
+
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
