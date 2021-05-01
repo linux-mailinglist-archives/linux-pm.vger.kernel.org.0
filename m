@@ -2,205 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013643705E7
-	for <lists+linux-pm@lfdr.de>; Sat,  1 May 2021 08:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BBB3708E4
+	for <lists+linux-pm@lfdr.de>; Sat,  1 May 2021 22:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhEAGdj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 May 2021 02:33:39 -0400
-Received: from mga07.intel.com ([134.134.136.100]:46155 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229505AbhEAGdj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 1 May 2021 02:33:39 -0400
-IronPort-SDR: gcULoz8qdRbFIWm/8iojUfhEpNTOBIUzcyI4jgH5vvVqBX0/FzWq4zJNoUlxsknTSUHUL1rrC9
- r5kBy4F9tBiA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9970"; a="261379219"
-X-IronPort-AV: E=Sophos;i="5.82,264,1613462400"; 
-   d="scan'208";a="261379219"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2021 23:32:48 -0700
-IronPort-SDR: qt/YbPnbW/g8Grf9zf8scoQX9cSgEgXmMbFqil4N72+tZhl2JfwbeDweSA3HWoksgA1noQT9CU
- 18y5NqdghUhA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,264,1613462400"; 
-   d="scan'208";a="404869519"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 Apr 2021 23:32:46 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lcjBF-0008Sk-Ks; Sat, 01 May 2021 06:32:45 +0000
-Date:   Sat, 01 May 2021 14:31:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 1f348871f80e24c62f1119ceb3e97eafd3f57143
-Message-ID: <608cf5d8.5LMxTk79i8IxbmTn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231266AbhEAUUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 May 2021 16:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229912AbhEAUUQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 May 2021 16:20:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF163C06174A;
+        Sat,  1 May 2021 13:19:25 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id m12so2146590eja.2;
+        Sat, 01 May 2021 13:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iwRbqfsuZgS63ZFgVOdcZE7Z3XT4rd2RRq4WcdnJBfk=;
+        b=flJtQEkoMweFE7j9AjOHs1k4tMN+7xl51HhELMKL7JRf99bM8XMZrzdWTIqNWj1V2B
+         8wiXVD/xDO6KObfcEVGZQ1jIm1vA099b9Ad2130hw1sAwZITrEcB+NV3vdlc+LzSiSB0
+         eiV9XPuY7Q/h4HpvzOmgX1RpBPWe6IaguM4vT8tWuZcr74Kx5bn0FgdxexLH30BbsVIF
+         UwKByRe7qv+DXlxhqBzihlxWPdw+F/ny1CMW0F0HSwrF7apqgp3HGzmuujxSgu3dI4jd
+         y4fuMCJf6rtgNr73s/wzPKvA12ZaLLzm9uQ4nx9AioeXXOeVLA4nDuB+yY3uzfhWUEzH
+         9dWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iwRbqfsuZgS63ZFgVOdcZE7Z3XT4rd2RRq4WcdnJBfk=;
+        b=A43WXZRzaXvMsg+dYoWH0q4GZDkpOe7HC9LDmZJRI6pqwzFXxx2IS0p49P+4Rbzbp5
+         8SeVwzFvJDelN7uqvXkrFUNT2v5aknstEO+J2EdKhPPO4P/l1cR1PJn2eBWLgVOrJY/S
+         PCQ/wHoLp0/dMBysWCw+eYtREqFs8R3zPiLgN8m6eZWvZIG56CiHe8Ai/yQUEQvb0pJw
+         NyHw61ze2k3OI3Ga9ZVQ/kkEZ36XkLTbGsGLH1WNNOeoCZ4c3G3kt0MzldqwOGHV/Dwc
+         L5Ah0OocgHYcfQ3Fwbjz903msrFtp1O9g/B3YmH56e1qe1gMCVDbWyH5zykfhdDSXo3x
+         9mLA==
+X-Gm-Message-State: AOAM533EZU2YNUx7j7vkLkxQ1+SdbdVWr+nheBePf+PcnaHfs7tRCWjN
+        yJy2R9Xk6IQKvrJeFO2cOuohGRi07Jl1oc4xGQY=
+X-Google-Smtp-Source: ABdhPJw99VTLlaig2Q/0aFVgbswqt0kl75wjBBz/BJrxURBhkf3WEw96m3uc+tH0AgtJptSfzVjXVqTeHERqmWP8Qzk=
+X-Received: by 2002:a17:906:85c1:: with SMTP id i1mr10240242ejy.216.1619900364422;
+ Sat, 01 May 2021 13:19:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 1 May 2021 22:19:13 +0200
+Message-ID: <CAFBinCArYQ_fHL0f4Vv3rGfSB=cHx-d=JPc4GuoZLopAVuxb8g@mail.gmail.com>
+Subject: Re: [PATCH RFC] soc: amlogic: meson-ee-pwrc: Drop the .shutdown
+ callback from the driver
+To:     Neil Armstrong <narmstrong@baylibre.com>, khilman@baylibre.com,
+        linux-amlogic@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Stefan Agner <stefan@agner.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1f348871f80e24c62f1119ceb3e97eafd3f57143  Merge branch 'acpi-pm' into linux-next
+On Thu, Apr 29, 2021 at 10:37 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Stefan reports that rebooting his ODROID-N2+ (using a G12B SoC) results
+> in the board hanging. His kernel config uses:
+>   CONFIG_MESON_EE_PM_DOMAINS=y
+>   CONFIG_DRM_MESON=m
+>
+> He reports that his kernel config results in the DRM driver's .shutdown
+> callback to be executed after the power domain driver's .shutdown
+> callback. That's problematic because meson_ee_pwrc_shutdown disables the
+> clock which are used by the VPU IP. This causes the board to hang.
+>
+> Further he reports that changing from CONFIG_DRM_MESON=m to
+> CONFIG_DRM_MESON=y reverses the order in which the DRM and power domain
+> driver's shutdown functions are executed, making the reboot successful.
+>
+> The reason why we use meson_ee_pwrc_shutdown is because of the VPU power
+> domain (which is causing the problem described above). It can be left
+> enabled by u-boot. According to the original TOFIX comment in
+> meson_ee_pwrc_init_domain we need to be careful because disabling the
+> power domain could "cause system errors". As a workaround the clocks
+> are manually enabled in meson_ee_pwrc_init_domain and the power domain
+> is marked as GENPD_FLAG_ALWAYS_ON (so it can never be turned off).
+>
+> Experimenting has shown that the power domain itself can be disabled as
+> long as we keep the clocks enabled if u-boot enabled the power domain
+> but we don't have any driver enabled for the VPU (CONFIG_DRM_MESON=n).
+>
+> Keeping the clocks enabled is the responsibility of the CCF drivers, not
+> the power domain driver. Even better: this is already covered as all
+> gates in the VPU and VAPB tree on GX an G12 SoCs have the
+> CLK_IGNORE_UNUSED flag set, meaning: if the bootloader has previously
+> enabled the clock we're not touching it until a driver explicitly asks
+> to enable (and then disable) it. In case of CONFIG_DRM_MESON=n we're
+> never calling meson_ee_pwrc_on, meaning that we always keep the state of
+> the clocks as set by u-boot.
+>
+> The original TOFIX comment also mentioned that we need to make sure not
+> to mess up the clock's prepare/enable ref-counters. This is the only
+> requirement that's left for the meson-ee-pwrc driver that needs to be
+> managed for the VPU power domain.
+>
+> Three steps can improve this situation:
+> - Don't prepare and enable the clocks (just to fix the ref-counting) in
+>   meson_ee_pwrc_init_domain if u-boot left that power domain enabled.
+>   Instead, remember if the clocks are enabled in meson_ee_pwrc_{on,off}
+>   and only disable them if we have previously turned them on ourselves.
+> - Drop GENPD_FLAG_ALWAYS_ON as we can always manage the state of the VPU
+>   power domain if both the power domain controller and DRM driver are
+>   enabled (=m or =y). If the power domain driver is enabled but the DRM
+>   driver is disabled we can still use meson_ee_pwrc_off because it's not
+>   trying to disable the clocks anymore
+> - Drop meson_ee_pwrc_shutdown as it's the responsibility of the genpd
+>   framework to call meson_ee_pwrc_off when needed (either when a power
+>   domain is being disabled - regardless of whether it's was used by a
+>   driver before or not). Now there's also no more shutdown callback
+>   ordering dependency between the power domain driver and other drivers
+>   anymore.
+>
+> Fixes: eef3c2ba0a42a6 ("soc: amlogic: Add support for Everything-Else power domains controller")
+> Reported-by: Stefan Agner <stefan@agner.ch>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+unfortunately I need to add:
+Nacked-by: myself
 
-elapsed time: 721m
+it turns out that the genpd framework does not call .power_on when the
+power domain is already powered on during initialization
+(pm_genpd_init)
 
-configs tested: 142
-configs skipped: 2
+I wonder if we need to extend the genpd to handle this use-case.
+CCF (common clock framework) for example has CLK_IGNORE_UNUSED and a
+.disable_unused callback which can be used to specifically manage the
+"unused" use-case
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+my idea #1:
+- add a GENPD_FLAG_IGNORE_UNUSED flag
+- set it for the VPU power domain
+- skip "unused" power domains which have the GENPD_FLAG_IGNORE_UNUSED flag set
+- drop the GENPD_FLAG_ALWAYS_ON flag from the VPU power domain
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-mips                     loongson1b_defconfig
-powerpc                     rainier_defconfig
-mips                       capcella_defconfig
-arm                  colibri_pxa270_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                            lart_defconfig
-microblaze                      mmu_defconfig
-arm                       spear13xx_defconfig
-arm                        shmobile_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                     tqm8560_defconfig
-sh                           se7780_defconfig
-arc                              allyesconfig
-arm                            hisi_defconfig
-sh                           se7343_defconfig
-arc                        nsimosci_defconfig
-sh                           se7750_defconfig
-powerpc                    ge_imp3a_defconfig
-ia64                        generic_defconfig
-powerpc                      bamboo_defconfig
-arm                        oxnas_v6_defconfig
-mips                         rt305x_defconfig
-powerpc                      katmai_defconfig
-m68k                       m5275evb_defconfig
-h8300                            allyesconfig
-arm                      pxa255-idp_defconfig
-arm                        cerfcube_defconfig
-xtensa                       common_defconfig
-arm                          pxa910_defconfig
-m68k                          multi_defconfig
-arm                          imote2_defconfig
-powerpc                         ps3_defconfig
-powerpc                     tqm8541_defconfig
-arm                         axm55xx_defconfig
-mips                     decstation_defconfig
-arm                        trizeps4_defconfig
-ia64                          tiger_defconfig
-mips                        jmr3927_defconfig
-m68k                       bvme6000_defconfig
-ia64                         bigsur_defconfig
-mips                        vocore2_defconfig
-arm                         cm_x300_defconfig
-m68k                          hp300_defconfig
-xtensa                         virt_defconfig
-arm                           sunxi_defconfig
-parisc                              defconfig
-s390                             alldefconfig
-mips                          ath79_defconfig
-m68k                        stmark2_defconfig
-powerpc                     tqm5200_defconfig
-arm                             mxs_defconfig
-arm                             rpc_defconfig
-mips                          ath25_defconfig
-h8300                       h8s-sim_defconfig
-mips                           ip27_defconfig
-m68k                        m5407c3_defconfig
-sh                        edosk7760_defconfig
-sh                   secureedge5410_defconfig
-arm                         mv78xx0_defconfig
-openrisc                  or1klitex_defconfig
-mips                          rb532_defconfig
-mips                           gcw0_defconfig
-powerpc                   lite5200b_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                  storcenter_defconfig
-sparc                       sparc32_defconfig
-arm                          pxa168_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nds32                               defconfig
-csky                                defconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210430
-x86_64               randconfig-a004-20210430
-x86_64               randconfig-a002-20210430
-x86_64               randconfig-a006-20210430
-x86_64               randconfig-a001-20210430
-x86_64               randconfig-a005-20210430
-i386                 randconfig-a004-20210430
-i386                 randconfig-a001-20210430
-i386                 randconfig-a003-20210430
-i386                 randconfig-a002-20210430
-i386                 randconfig-a005-20210430
-i386                 randconfig-a006-20210430
-i386                 randconfig-a013-20210430
-i386                 randconfig-a011-20210430
-i386                 randconfig-a016-20210430
-i386                 randconfig-a015-20210430
-i386                 randconfig-a012-20210430
-i386                 randconfig-a014-20210430
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                             allnoconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+my idea #2:
+- a power_off_unused callback (with the same arguments as power_off)
+could be introduced
+- in pm_genpd_init we check if that callback is initialized, if not we
+assign the power_off callback
+- instead of using the power_off callback when disabling an unused
+power domain the new power_off_unused callback is used
+- for the meson-ee-pwrc we implement a special meson_ee_pwrc_power_off
+function that is a no-op
 
-clang tested configs:
-x86_64               randconfig-a011-20210430
-x86_64               randconfig-a016-20210430
-x86_64               randconfig-a013-20210430
-x86_64               randconfig-a014-20210430
-x86_64               randconfig-a012-20210430
-x86_64               randconfig-a015-20210430
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Martin
