@@ -2,155 +2,305 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BBB3708E4
-	for <lists+linux-pm@lfdr.de>; Sat,  1 May 2021 22:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B903371353
+	for <lists+linux-pm@lfdr.de>; Mon,  3 May 2021 12:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbhEAUUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 May 2021 16:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S233218AbhECKGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 May 2021 06:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhEAUUQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 May 2021 16:20:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF163C06174A;
-        Sat,  1 May 2021 13:19:25 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id m12so2146590eja.2;
-        Sat, 01 May 2021 13:19:25 -0700 (PDT)
+        with ESMTP id S233215AbhECKGI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 May 2021 06:06:08 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF6C061761
+        for <linux-pm@vger.kernel.org>; Mon,  3 May 2021 03:05:15 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e14so3289196ils.12
+        for <linux-pm@vger.kernel.org>; Mon, 03 May 2021 03:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iwRbqfsuZgS63ZFgVOdcZE7Z3XT4rd2RRq4WcdnJBfk=;
-        b=flJtQEkoMweFE7j9AjOHs1k4tMN+7xl51HhELMKL7JRf99bM8XMZrzdWTIqNWj1V2B
-         8wiXVD/xDO6KObfcEVGZQ1jIm1vA099b9Ad2130hw1sAwZITrEcB+NV3vdlc+LzSiSB0
-         eiV9XPuY7Q/h4HpvzOmgX1RpBPWe6IaguM4vT8tWuZcr74Kx5bn0FgdxexLH30BbsVIF
-         UwKByRe7qv+DXlxhqBzihlxWPdw+F/ny1CMW0F0HSwrF7apqgp3HGzmuujxSgu3dI4jd
-         y4fuMCJf6rtgNr73s/wzPKvA12ZaLLzm9uQ4nx9AioeXXOeVLA4nDuB+yY3uzfhWUEzH
-         9dWg==
+        bh=LQ6NNzHj7Vc4za1WZ78i9zJ6ObWAdGDaPeb41LFoT6U=;
+        b=RAnFiTa7ozjql3NUcwO4cwTMp+yfw3qYe2+1pz5mfR482zkr//ZRSGg2NXRSEesQ6R
+         1z1hA314Ct5JDoyEoTZ6uFr65UQfpdkSuGHti40SdMCJt1lFYlivCL88kYLqPBRvYsK3
+         uXjETB3K1wtgrzziydGXbnN8nQBMCKQbwhOAg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iwRbqfsuZgS63ZFgVOdcZE7Z3XT4rd2RRq4WcdnJBfk=;
-        b=A43WXZRzaXvMsg+dYoWH0q4GZDkpOe7HC9LDmZJRI6pqwzFXxx2IS0p49P+4Rbzbp5
-         8SeVwzFvJDelN7uqvXkrFUNT2v5aknstEO+J2EdKhPPO4P/l1cR1PJn2eBWLgVOrJY/S
-         PCQ/wHoLp0/dMBysWCw+eYtREqFs8R3zPiLgN8m6eZWvZIG56CiHe8Ai/yQUEQvb0pJw
-         NyHw61ze2k3OI3Ga9ZVQ/kkEZ36XkLTbGsGLH1WNNOeoCZ4c3G3kt0MzldqwOGHV/Dwc
-         L5Ah0OocgHYcfQ3Fwbjz903msrFtp1O9g/B3YmH56e1qe1gMCVDbWyH5zykfhdDSXo3x
-         9mLA==
-X-Gm-Message-State: AOAM533EZU2YNUx7j7vkLkxQ1+SdbdVWr+nheBePf+PcnaHfs7tRCWjN
-        yJy2R9Xk6IQKvrJeFO2cOuohGRi07Jl1oc4xGQY=
-X-Google-Smtp-Source: ABdhPJw99VTLlaig2Q/0aFVgbswqt0kl75wjBBz/BJrxURBhkf3WEw96m3uc+tH0AgtJptSfzVjXVqTeHERqmWP8Qzk=
-X-Received: by 2002:a17:906:85c1:: with SMTP id i1mr10240242ejy.216.1619900364422;
- Sat, 01 May 2021 13:19:24 -0700 (PDT)
+        bh=LQ6NNzHj7Vc4za1WZ78i9zJ6ObWAdGDaPeb41LFoT6U=;
+        b=Cij5m57PaWW6I8B40Ij8WXDVn86fZ6or48SFb0S7kCC91d3x5xGwMZKkaYldLBE7A4
+         oNX/fD5jdoatIcGdqTNaWZ1w18CfEeFJlL0yGSw7oeTeaILLlVMbLjBbtx6YKSWQ+OSH
+         JQwgtOobooU0BuKH16AKKL/ifNQHzirwuO7vfL/jNPNXSFjVYmGO0+EGu0cgnKkfDJWp
+         mvFkjm8fH6zyE1tvs7sYRbSfyKFJ2hYmwHRy3KRWkOiwzPlNrOo8Uqm+TC+Z2UEP/pbZ
+         iD0IL2c2Ab5tAzoDUeiVx7KUj1ndRHByO8DjkV8dcmIp9JFWIbLFwVUfs+fE98k5FmOA
+         27tA==
+X-Gm-Message-State: AOAM5338dEEK64Q+yGnKaMmJAHr3tATpK+jCOS9wlRLFkbBup8Q9un/V
+        aZ4n+7Cf4sfdb+iC07W1npdEwQkH50Z/IBCQyK40zw==
+X-Google-Smtp-Source: ABdhPJy0dvvDQT5HGwfHkvlscsJqa4mvkw49q4p+UsXXPdkkh4vPxvg/goOo7nH+7fXznivilpatkWYb531cVDQvdBw=
+X-Received: by 2002:a92:d684:: with SMTP id p4mr16000363iln.150.1620036314805;
+ Mon, 03 May 2021 03:05:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 1 May 2021 22:19:13 +0200
-Message-ID: <CAFBinCArYQ_fHL0f4Vv3rGfSB=cHx-d=JPc4GuoZLopAVuxb8g@mail.gmail.com>
-Subject: Re: [PATCH RFC] soc: amlogic: meson-ee-pwrc: Drop the .shutdown
- callback from the driver
-To:     Neil Armstrong <narmstrong@baylibre.com>, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Stefan Agner <stefan@agner.ch>
+References: <20210427093754.3000087-1-ikjn@chromium.org> <20210428040802.3266187-1-ikjn@chromium.org>
+In-Reply-To: <20210428040802.3266187-1-ikjn@chromium.org>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 3 May 2021 18:04:48 +0800
+Message-ID: <CAJMQK-gudmV9NWHKVccVMuAz1Nny5h686miRNVu4j7XowRr25Q@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: sbs-battery: cache constant string properties
+To:     Ikjoon Jang <ikjn@chromium.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 10:37 PM Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
+On Wed, Apr 28, 2021 at 12:08 PM Ikjoon Jang <ikjn@chromium.org> wrote:
 >
-> Stefan reports that rebooting his ODROID-N2+ (using a G12B SoC) results
-> in the board hanging. His kernel config uses:
->   CONFIG_MESON_EE_PM_DOMAINS=y
->   CONFIG_DRM_MESON=m
+> Currently sbs-battery supports three string properties -
+> manufacturer, model_name, and chemistry. Buffers for those
+> properties are currently defined as global variables.
 >
-> He reports that his kernel config results in the DRM driver's .shutdown
-> callback to be executed after the power domain driver's .shutdown
-> callback. That's problematic because meson_ee_pwrc_shutdown disables the
-> clock which are used by the VPU IP. This causes the board to hang.
+> This patch moves those global variables into struct sbs_info
+> and cache/reuse them as they are all constant values.
 >
-> Further he reports that changing from CONFIG_DRM_MESON=m to
-> CONFIG_DRM_MESON=y reverses the order in which the DRM and power domain
-> driver's shutdown functions are executed, making the reboot successful.
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 >
-> The reason why we use meson_ee_pwrc_shutdown is because of the VPU power
-> domain (which is causing the problem described above). It can be left
-> enabled by u-boot. According to the original TOFIX comment in
-> meson_ee_pwrc_init_domain we need to be careful because disabling the
-> power domain could "cause system errors". As a workaround the clocks
-> are manually enabled in meson_ee_pwrc_init_domain and the power domain
-> is marked as GENPD_FLAG_ALWAYS_ON (so it can never be turned off).
->
-> Experimenting has shown that the power domain itself can be disabled as
-> long as we keep the clocks enabled if u-boot enabled the power domain
-> but we don't have any driver enabled for the VPU (CONFIG_DRM_MESON=n).
->
-> Keeping the clocks enabled is the responsibility of the CCF drivers, not
-> the power domain driver. Even better: this is already covered as all
-> gates in the VPU and VAPB tree on GX an G12 SoCs have the
-> CLK_IGNORE_UNUSED flag set, meaning: if the bootloader has previously
-> enabled the clock we're not touching it until a driver explicitly asks
-> to enable (and then disable) it. In case of CONFIG_DRM_MESON=n we're
-> never calling meson_ee_pwrc_on, meaning that we always keep the state of
-> the clocks as set by u-boot.
->
-> The original TOFIX comment also mentioned that we need to make sure not
-> to mess up the clock's prepare/enable ref-counters. This is the only
-> requirement that's left for the meson-ee-pwrc driver that needs to be
-> managed for the VPU power domain.
->
-> Three steps can improve this situation:
-> - Don't prepare and enable the clocks (just to fix the ref-counting) in
->   meson_ee_pwrc_init_domain if u-boot left that power domain enabled.
->   Instead, remember if the clocks are enabled in meson_ee_pwrc_{on,off}
->   and only disable them if we have previously turned them on ourselves.
-> - Drop GENPD_FLAG_ALWAYS_ON as we can always manage the state of the VPU
->   power domain if both the power domain controller and DRM driver are
->   enabled (=m or =y). If the power domain driver is enabled but the DRM
->   driver is disabled we can still use meson_ee_pwrc_off because it's not
->   trying to disable the clocks anymore
-> - Drop meson_ee_pwrc_shutdown as it's the responsibility of the genpd
->   framework to call meson_ee_pwrc_off when needed (either when a power
->   domain is being disabled - regardless of whether it's was used by a
->   driver before or not). Now there's also no more shutdown callback
->   ordering dependency between the power domain driver and other drivers
->   anymore.
->
-> Fixes: eef3c2ba0a42a6 ("soc: amlogic: Add support for Everything-Else power domains controller")
-> Reported-by: Stefan Agner <stefan@agner.ch>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-unfortunately I need to add:
-Nacked-by: myself
 
-it turns out that the genpd framework does not call .power_on when the
-power domain is already powered on during initialization
-(pm_genpd_init)
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-I wonder if we need to extend the genpd to handle this use-case.
-CCF (common clock framework) for example has CLK_IGNORE_UNUSED and a
-.disable_unused callback which can be used to specifically manage the
-"unused" use-case
+Test on a mt8183 krane device which uses sbs battery.
 
-my idea #1:
-- add a GENPD_FLAG_IGNORE_UNUSED flag
-- set it for the VPU power domain
-- skip "unused" power domains which have the GENPD_FLAG_IGNORE_UNUSED flag set
-- drop the GENPD_FLAG_ALWAYS_ON flag from the VPU power domain
-
-my idea #2:
-- a power_off_unused callback (with the same arguments as power_off)
-could be introduced
-- in pm_genpd_init we check if that callback is initialized, if not we
-assign the power_off callback
-- instead of using the power_off callback when disabling an unused
-power domain the new power_off_unused callback is used
-- for the meson-ee-pwrc we implement a special meson_ee_pwrc_power_off
-function that is a no-op
-
-
-Best regards,
-Martin
+> ---
+>
+> Changes in v2:
+> - change function name of sbs_get_battery_string_property()
+>   to sbs_get_constant_string()
+> - use cached string properties
+> - use cached technology integer value in sbs_get_chemistry()
+>
+>  drivers/power/supply/sbs-battery.c | 140 +++++++++++++++++------------
+>  1 file changed, 82 insertions(+), 58 deletions(-)
+>
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+> index 4bf92831cb06..414de9bc47bf 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properties[] = {
+>  /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
+>  #define SBS_FLAGS_TI_BQ20ZX5           BIT(0)
+>
+> +static const enum power_supply_property string_properties[] = {
+> +       POWER_SUPPLY_PROP_TECHNOLOGY,
+> +       POWER_SUPPLY_PROP_MANUFACTURER,
+> +       POWER_SUPPLY_PROP_MODEL_NAME,
+> +};
+> +
+> +#define NR_STRING_BUFFERS      ARRAY_SIZE(string_properties)
+> +
+>  struct sbs_info {
+>         struct i2c_client               *client;
+>         struct power_supply             *power_supply;
+> @@ -201,11 +209,22 @@ struct sbs_info {
+>         struct delayed_work             work;
+>         struct mutex                    mode_lock;
+>         u32                             flags;
+> +       int                             technology;
+> +       char                            strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+>  };
+>
+> -static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+> -static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+> -static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
+> +static char *sbs_get_string_buf(struct sbs_info *chip,
+> +                               enum power_supply_property psp)
+> +{
+> +       int i = 0;
+> +
+> +       for (i = 0; i < NR_STRING_BUFFERS; i++)
+> +               if (string_properties[i] == psp)
+> +                       return chip->strings[i];
+> +
+> +       return ERR_PTR(-EINVAL);
+> +}
+> +
+>  static bool force_load;
+>
+>  static int sbs_read_word_data(struct i2c_client *client, u8 address);
+> @@ -639,17 +658,45 @@ static int sbs_get_battery_property(struct i2c_client *client,
+>         return 0;
+>  }
+>
+> -static int sbs_get_battery_string_property(struct i2c_client *client,
+> -       int reg_offset, enum power_supply_property psp, char *val)
+> +static int sbs_get_property_index(struct i2c_client *client,
+> +       enum power_supply_property psp)
+>  {
+> -       s32 ret;
+> +       int count;
+> +
+> +       for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+> +               if (psp == sbs_data[count].psp)
+> +                       return count;
+>
+> -       ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
+> +       dev_warn(&client->dev,
+> +               "%s: Invalid Property - %d\n", __func__, psp);
+>
+> -       if (ret < 0)
+> -               return ret;
+> +       return -EINVAL;
+> +}
+>
+> -       return 0;
+> +static const char *sbs_get_constant_string(struct sbs_info *chip,
+> +                       enum power_supply_property psp)
+> +{
+> +       int ret;
+> +       char *buf;
+> +       u8 addr;
+> +
+> +       buf = sbs_get_string_buf(chip, psp);
+> +       if (IS_ERR(buf))
+> +               return buf;
+> +
+> +       if (!buf[0]) {
+> +               ret = sbs_get_property_index(chip->client, psp);
+> +               if (ret < 0)
+> +                       return ERR_PTR(ret);
+> +
+> +               addr = sbs_data[ret].addr;
+> +
+> +               ret = sbs_read_string_data(chip->client, addr, buf);
+> +               if (ret < 0)
+> +                       return ERR_PTR(ret);
+> +       }
+> +
+> +       return buf;
+>  }
+>
+>  static void  sbs_unit_adjustment(struct i2c_client *client,
+> @@ -772,48 +819,34 @@ static int sbs_get_battery_serial_number(struct i2c_client *client,
+>         return 0;
+>  }
+>
+> -static int sbs_get_property_index(struct i2c_client *client,
+> -       enum power_supply_property psp)
+> -{
+> -       int count;
+> -       for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+> -               if (psp == sbs_data[count].psp)
+> -                       return count;
+> -
+> -       dev_warn(&client->dev,
+> -               "%s: Invalid Property - %d\n", __func__, psp);
+> -
+> -       return -EINVAL;
+> -}
+> -
+> -static int sbs_get_chemistry(struct i2c_client *client,
+> +static int sbs_get_chemistry(struct sbs_info *chip,
+>                 union power_supply_propval *val)
+>  {
+> -       enum power_supply_property psp = POWER_SUPPLY_PROP_TECHNOLOGY;
+> -       int ret;
+> +       const char *chemistry;
+>
+> -       ret = sbs_get_property_index(client, psp);
+> -       if (ret < 0)
+> -               return ret;
+> +       if (chip->technology >= POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> +               return chip->technology;
+>
+> -       ret = sbs_get_battery_string_property(client, ret, psp,
+> -                                             chemistry);
+> -       if (ret < 0)
+> -               return ret;
+> +       chemistry = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_TECHNOLOGY);
+> +
+> +       if (IS_ERR(chemistry))
+> +               return PTR_ERR(chemistry);
+>
+>         if (!strncasecmp(chemistry, "LION", 4))
+> -               val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
+> +               chip->technology = POWER_SUPPLY_TECHNOLOGY_LION;
+>         else if (!strncasecmp(chemistry, "LiP", 3))
+> -               val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
+> +               chip->technology = POWER_SUPPLY_TECHNOLOGY_LIPO;
+>         else if (!strncasecmp(chemistry, "NiCd", 4))
+> -               val->intval = POWER_SUPPLY_TECHNOLOGY_NiCd;
+> +               chip->technology = POWER_SUPPLY_TECHNOLOGY_NiCd;
+>         else if (!strncasecmp(chemistry, "NiMH", 4))
+> -               val->intval = POWER_SUPPLY_TECHNOLOGY_NiMH;
+> +               chip->technology = POWER_SUPPLY_TECHNOLOGY_NiMH;
+>         else
+> -               val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> +               chip->technology = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+>
+> -       if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> -               dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
+> +       if (chip->technology == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> +               dev_warn(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
+> +
+> +       val->intval = chip->technology;
+>
+>         return 0;
+>  }
+> @@ -857,6 +890,7 @@ static int sbs_get_property(struct power_supply *psy,
+>         int ret = 0;
+>         struct sbs_info *chip = power_supply_get_drvdata(psy);
+>         struct i2c_client *client = chip->client;
+> +       const char *str;
+>
+>         if (chip->gpio_detect) {
+>                 ret = gpiod_get_value_cansleep(chip->gpio_detect);
+> @@ -882,7 +916,7 @@ static int sbs_get_property(struct power_supply *psy,
+>                 break;
+>
+>         case POWER_SUPPLY_PROP_TECHNOLOGY:
+> -               ret = sbs_get_chemistry(client, val);
+> +               ret = sbs_get_chemistry(chip, val);
+>                 if (ret < 0)
+>                         break;
+>
+> @@ -934,23 +968,12 @@ static int sbs_get_property(struct power_supply *psy,
+>                 break;
+>
+>         case POWER_SUPPLY_PROP_MODEL_NAME:
+> -               ret = sbs_get_property_index(client, psp);
+> -               if (ret < 0)
+> -                       break;
+> -
+> -               ret = sbs_get_battery_string_property(client, ret, psp,
+> -                                                     model_name);
+> -               val->strval = model_name;
+> -               break;
+> -
+>         case POWER_SUPPLY_PROP_MANUFACTURER:
+> -               ret = sbs_get_property_index(client, psp);
+> -               if (ret < 0)
+> -                       break;
+> -
+> -               ret = sbs_get_battery_string_property(client, ret, psp,
+> -                                                     manufacturer);
+> -               val->strval = manufacturer;
+> +               str = sbs_get_constant_string(chip, psp);
+> +               if (IS_ERR(str))
+> +                       ret = PTR_ERR(str);
+> +               else
+> +                       val->strval = str;
+>                 break;
+>
+>         case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+> @@ -1097,6 +1120,7 @@ static int sbs_probe(struct i2c_client *client)
+>         psy_cfg.of_node = client->dev.of_node;
+>         psy_cfg.drv_data = chip;
+>         chip->last_state = POWER_SUPPLY_STATUS_UNKNOWN;
+> +       chip->technology = -1;
+>         mutex_init(&chip->mode_lock);
+>
+>         /* use pdata if available, fall back to DT properties,
+> --
+> 2.31.1.498.g6c1eba8ee3d-goog
+>
