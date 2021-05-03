@@ -2,79 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE9D371921
-	for <lists+linux-pm@lfdr.de>; Mon,  3 May 2021 18:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5713719ED
+	for <lists+linux-pm@lfdr.de>; Mon,  3 May 2021 18:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhECQVm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 May 2021 12:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbhECQVl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 May 2021 12:21:41 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FA2C061761
-        for <linux-pm@vger.kernel.org>; Mon,  3 May 2021 09:20:48 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h14-20020a17090aea8eb02901553e1cc649so6083806pjz.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 May 2021 09:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ky5VBISu+vykToqpdikhJHfiagjLwsfGTGizoIDmNDM=;
-        b=XenStAF6BtbZZ1YqYSKpAdhx/9CGmbxAG2diftYlvCMEKqNTW3lolZarsPx8Zhe8Q3
-         iOet87TsZRqxMA8DQ7eYxGkdhDJfuswGeup0nkM61FBYdKpoD/yaC7TMPYMc+RQljQ5N
-         B2rCPmO9TfnAjxPc6CakCDw4/yKudujwaI0Aw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ky5VBISu+vykToqpdikhJHfiagjLwsfGTGizoIDmNDM=;
-        b=cINzFyM+tXqMtkJHsbSVc/Wkpdu0XXaxFey1CvLrTUI6q1xns1POgzvVl+oOZkeh90
-         YL8zRLPR/qSx+yIK2GNgZdBGf6ENDpLksz/fDCDta4EK4MM2UDh6CZUG4kZw7frZMaO7
-         bQYpKrLxjxC03mwMj0g27eDiPMkOd5Io0vIIWppBc3mdAmR13k8qyuZm/Z1jQzXQ5dpE
-         gstPM0nn15WKrRG8++po16aIZA4TH5uvSX3DlLYRePDE3ZKHyEixW623yRtTbpwhl5mI
-         t80493Gwet5DLkp7isnyCI15vGnsFJNAHAxD5x860UjddTUEWm2C/en6xQTA3ftFN0Rr
-         YPWw==
-X-Gm-Message-State: AOAM531lVZNgI+CZ/KnXGlPCgyA5V6zlPmqbhpnQBL5S67XqhRI+qnC/
-        ER3Zfz3cEIV9MPSBF05bRpExXw==
-X-Google-Smtp-Source: ABdhPJzFqHJEruMYbvRurZFwgIixqV2VK2vmsewIn9wsezld2yIddak8fRRIlmccBRuOVw5rAh5wmQ==
-X-Received: by 2002:a17:90a:6c62:: with SMTP id x89mr13633031pjj.213.1620058847816;
-        Mon, 03 May 2021 09:20:47 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:8584:3fd:2adf:a655])
-        by smtp.gmail.com with UTF8SMTPSA id f3sm281160pjo.3.2021.05.03.09.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 09:20:47 -0700 (PDT)
-Date:   Mon, 3 May 2021 09:20:45 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     bjorn.andersson@linaro.org, viresh.kumar@linaro.org,
-        swboyd@chromium.org, agross@kernel.org, robh+dt@kernel.org,
-        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH 1/2] cpufreq: blacklist SC7280 in cpufreq-dt-platdev
-Message-ID: <YJAi3etO5bRlEA2p@google.com>
-References: <1619792901-32701-1-git-send-email-sibis@codeaurora.org>
- <1619792901-32701-2-git-send-email-sibis@codeaurora.org>
+        id S231869AbhECQiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 May 2021 12:38:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231636AbhECQhL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 May 2021 12:37:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E91C613CA;
+        Mon,  3 May 2021 16:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620059765;
+        bh=Z58Qe3sS0ROWOA3IfNvtnGQSH/oOyi+17HSOQyYyAeI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kpD6oDIJwRY0tosdYOu5wHppu84YW+UDOdW94AvMKYpsMH848qEiV5IsCUfeXZ3J9
+         R6mSz5Dh/p5TWHLIzjUbFytOTI8T/1pY7yjX/jnt92zaSozz1+w1Cg2HluTsssaKbG
+         NXVWkdxT6val1Fdhctf6OxVLb0tEyJ86Fu9AmxBWOuFgKWTN2RsyTw147kq1+xgNql
+         uP4OQa+7sIHiEE/AT5eAnHR6nrNCvElWPGuHk0jBYUlQ6J1iBELUZBT56uT3oE/a/A
+         jsvFWWS9leg3uMHkicpMvBsi/ALo9398xggWitxO2nt/Yq6eTRBL8EGpeXYJx/Mp2Q
+         ZhC/NIM0NmnwQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 033/134] power: supply: bq27xxx: fix power_avg for newer ICs
+Date:   Mon,  3 May 2021 12:33:32 -0400
+Message-Id: <20210503163513.2851510-33-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
+References: <20210503163513.2851510-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1619792901-32701-2-git-send-email-sibis@codeaurora.org>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 07:58:20PM +0530, Sibi Sankar wrote:
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-> Subject: cpufreq: blacklist SC7280 in cpufreq-dt-platdev
->
-> Add SC7280 to cpufreq-dt-platdev blacklist since the actual scaling is
-> handled by the 'qcom-cpufreq-hw' driver.
+[ Upstream commit c4d57c22ac65bd503716062a06fad55a01569cac ]
 
-The coding style recommends the use of "allowlist" or "passlist" of
-"blacklist":
+On all newer bq27xxx ICs, the AveragePower register contains a signed
+value; in addition to handling the raw value as unsigned, the driver
+code also didn't convert it to µW as expected.
 
-https://elixir.bootlin.com/linux/v5.12/source/Documentation/process/coding-style.rst#L338
+At least for the BQ28Z610, the reference manual incorrectly states that
+the value is in units of 1mW and not 10mW. I have no way of knowing
+whether the manuals of other supported ICs contain the same error, or if
+there are models that actually use 1mW. At least, the new code shouldn't
+be *less* correct than the old version for any device.
 
-It's existing code so you aren't necessarily expected to change it. But
-you could still use the recommended terminology in the commit message.
+power_avg is removed from the cache structure, se we don't have to
+extend it to store both a signed value and an error code. Always getting
+an up-to-date value may be desirable anyways, as it avoids inconsistent
+current and power readings when switching between charging and
+discharging.
+
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/bq27xxx_battery.c | 51 ++++++++++++++------------
+ include/linux/power/bq27xxx_battery.h  |  1 -
+ 2 files changed, 27 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 4c4a7b1c64c5..0262109ac285 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1661,27 +1661,6 @@ static int bq27xxx_battery_read_time(struct bq27xxx_device_info *di, u8 reg)
+ 	return tval * 60;
+ }
+ 
+-/*
+- * Read an average power register.
+- * Return < 0 if something fails.
+- */
+-static int bq27xxx_battery_read_pwr_avg(struct bq27xxx_device_info *di)
+-{
+-	int tval;
+-
+-	tval = bq27xxx_read(di, BQ27XXX_REG_AP, false);
+-	if (tval < 0) {
+-		dev_err(di->dev, "error reading average power register  %02x: %d\n",
+-			BQ27XXX_REG_AP, tval);
+-		return tval;
+-	}
+-
+-	if (di->opts & BQ27XXX_O_ZERO)
+-		return (tval * BQ27XXX_POWER_CONSTANT) / BQ27XXX_RS;
+-	else
+-		return tval;
+-}
+-
+ /*
+  * Returns true if a battery over temperature condition is detected
+  */
+@@ -1769,8 +1748,6 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+ 		}
+ 		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR)
+ 			cache.cycle_count = bq27xxx_battery_read_cyct(di);
+-		if (di->regs[BQ27XXX_REG_AP] != INVALID_REG_ADDR)
+-			cache.power_avg = bq27xxx_battery_read_pwr_avg(di);
+ 
+ 		/* We only have to read charge design full once */
+ 		if (di->charge_design_full <= 0)
+@@ -1833,6 +1810,32 @@ static int bq27xxx_battery_current(struct bq27xxx_device_info *di,
+ 	return 0;
+ }
+ 
++/*
++ * Get the average power in µW
++ * Return < 0 if something fails.
++ */
++static int bq27xxx_battery_pwr_avg(struct bq27xxx_device_info *di,
++				   union power_supply_propval *val)
++{
++	int power;
++
++	power = bq27xxx_read(di, BQ27XXX_REG_AP, false);
++	if (power < 0) {
++		dev_err(di->dev,
++			"error reading average power register %02x: %d\n",
++			BQ27XXX_REG_AP, power);
++		return power;
++	}
++
++	if (di->opts & BQ27XXX_O_ZERO)
++		val->intval = (power * BQ27XXX_POWER_CONSTANT) / BQ27XXX_RS;
++	else
++		/* Other gauges return a signed value in units of 10mW */
++		val->intval = (int)((s16)power) * 10000;
++
++	return 0;
++}
++
+ static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
+ 				  union power_supply_propval *val)
+ {
+@@ -2020,7 +2023,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 		ret = bq27xxx_simple_value(di->cache.energy, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_POWER_AVG:
+-		ret = bq27xxx_simple_value(di->cache.power_avg, val);
++		ret = bq27xxx_battery_pwr_avg(di, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_HEALTH:
+ 		ret = bq27xxx_simple_value(di->cache.health, val);
+diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
+index 111a40d0d3d5..8d5f4f40fb41 100644
+--- a/include/linux/power/bq27xxx_battery.h
++++ b/include/linux/power/bq27xxx_battery.h
+@@ -53,7 +53,6 @@ struct bq27xxx_reg_cache {
+ 	int capacity;
+ 	int energy;
+ 	int flags;
+-	int power_avg;
+ 	int health;
+ };
+ 
+-- 
+2.30.2
+
