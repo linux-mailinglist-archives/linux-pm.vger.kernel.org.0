@@ -2,188 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30247372FAE
-	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 20:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21DD372FEA
+	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 20:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbhEDS0X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 May 2021 14:26:23 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:50016 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230385AbhEDS0X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 May 2021 14:26:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620152728; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=AGxnYvOgR2pNLyl/9J+8rJW0dfDmPrj1VhzVa4Wrq/c=;
- b=nMLrn3oq1fYurXQcjTVIOG8wHj4rvfwqGfEMMvG+MQt5vA4/jmENTOMxSwkgwgYncLGcUeGI
- yJYZx0/FVlC+QG9u6v+1mym+g98Lny1gUdmVNIZ8MJZVyikzcpewiZ/UhCtYbFCZPHLvkipD
- UCEUJjEvLHcbo4O3/B188tSnUcc=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 60919188c39407c327cff0ad (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 04 May 2021 18:25:12
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 91604C433D3; Tue,  4 May 2021 18:25:11 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BF320C433F1;
-        Tue,  4 May 2021 18:25:10 +0000 (UTC)
+        id S231491AbhEDSti (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 May 2021 14:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231234AbhEDSti (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 May 2021 14:49:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEB7C061574;
+        Tue,  4 May 2021 11:48:42 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n84so6109029wma.0;
+        Tue, 04 May 2021 11:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PzlNEhJ1uZspc9o+iSF+f7KP6K9qPrHK+2KHSvJBLhk=;
+        b=Mziraub34Z3rH7N+20S9LqYW4EBqc3uozvRmCxaoZL5i7leqEpmIM8ynSfQ0HKoBQJ
+         gaDuuV0jPosshjx//yzfYN0S95KanupHsFDPsQczUGye167JOEYG7TmUoNWhJ0lfwW2W
+         6KnZp/MYrj1MJ+IDZU3/WEjrf5ZLoQMlhvnvOH/DXYzqZMqenvBTHmFoLTWz9O21i94W
+         Td7VTwP4SGQcWIsLOi8fqxcGOt6wzI3HrUSqOK+js1wKF3IeRLB7oCUbiEakKaX2rXup
+         vLkBwwJ2/LdYxVZkeBdBvo+1JDpfwU6zWeOIrT/XR+DohXjvLSe4xHUI8BRLdcs+kN2d
+         l3Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PzlNEhJ1uZspc9o+iSF+f7KP6K9qPrHK+2KHSvJBLhk=;
+        b=LISJpLwEkoQ32yy+RmUxNf+RRHEtdAZcGkr1Evzlf3kMJ9ZBTzijspAOEoIqnKbqRN
+         Lgu6gHl0ixoBlMKRQNYo8CY+kq5ETsuXi+CofGfsVWUfGlCqoIhGENhh5s2JfTfhnJJ5
+         ykTlgMy4ySa2V5y3H4HdYQgU6EXzl8U1Z1021P4yt/xsWGd881QjsXz4b6xjeyY1ZfD9
+         2DBlnsmmjTxsmRGml743Y84g612O4JPjYuvU1dqkpzyLztJKIwbG6VO//pY+6LAQmtDO
+         M022DcbLYMqOPzHEGbLuhusTNtGW5Om9lBzWE8MFetrUDdPwZHdf3WzyiJrkny10tTke
+         8GjQ==
+X-Gm-Message-State: AOAM53108RVX3Y3PnEZzi8YWR1CwI130BwQZ0YZFQorfEMXr49il299U
+        B9Qf3PMgeWhsSGJ4xEjnwkaV5HDqM9c=
+X-Google-Smtp-Source: ABdhPJzrnJB7AGpUZvD2iMKacBUq444P5XgYxl6tEaEFLfGsi/2Xc4fx7A8rkXvGmGf1/YEUu8/W8w==
+X-Received: by 2002:a1c:2786:: with SMTP id n128mr5823494wmn.82.1620154121489;
+        Tue, 04 May 2021 11:48:41 -0700 (PDT)
+Received: from xws.localdomain ([37.58.58.229])
+        by smtp.gmail.com with ESMTPSA id g11sm16611508wri.59.2021.05.04.11.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 May 2021 11:48:41 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: surface_battery: Fix battery event handling
+Date:   Tue,  4 May 2021 20:48:13 +0200
+Message-Id: <20210504184813.3414376-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 04 May 2021 23:55:10 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     bjorn.andersson@linaro.org, viresh.kumar@linaro.org,
-        swboyd@chromium.org, agross@kernel.org, robh+dt@kernel.org,
-        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7280: Add cpu OPP tables
-In-Reply-To: <20210504144215.svmrmmsy4jtoixzv@bogus>
-References: <1619792901-32701-1-git-send-email-sibis@codeaurora.org>
- <1619792901-32701-3-git-send-email-sibis@codeaurora.org>
- <20210504144215.svmrmmsy4jtoixzv@bogus>
-Message-ID: <1fc9fb8d9a94909ff9b7b76d598bd266@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Sudeep,
+The battery subsystem of the Surface Aggregator Module EC requires us to
+register the battery notifier with instance ID 0. However, battery
+events are actually sent with the instance ID corresponding to the
+device, which is nonzero. Thus, the strict-matching approach doesn't
+work here and will discard events that the driver is expected to handle.
 
-Thanks for the review!
+To fix this we have to fall back on notifier matching by target-category
+only and have to manually check the instance ID in the notifier
+callback.
 
-On 2021-05-04 20:12, Sudeep Holla wrote:
-> On Fri, Apr 30, 2021 at 07:58:21PM +0530, Sibi Sankar wrote:
->> Add OPP tables required to scale DDR/L3 per freq-domain on SC7280 
->> SoCs.
->> 
->> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 135 
->> +++++++++++++++++++++++++++++++++++
->>  1 file changed, 135 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
->> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 0bb835aeae33..90220cecb368 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> 
-> 
-> [...]
-> 
->> @@ -248,6 +273,116 @@
->>  		};
->>  	};
->> 
->> +	cpu0_opp_table: cpu0_opp_table {
->> +		compatible = "operating-points-v2";
->> +		opp-shared;
->> +
->> +		cpu0_opp1: opp-300000000 {
->> +			opp-hz = /bits/ 64 <300000000>;
->> +			opp-peak-kBps = <800000 9600000>;
->> +		};
->> +
->> +		cpu0_opp2: opp-691200000 {
->> +			opp-hz = /bits/ 64 <691200000>;
->> +			opp-peak-kBps = <800000 17817600>;
->> +		};
->> +
->> +		cpu0_opp3: opp-806400000 {
->> +			opp-hz = /bits/ 64 <806400000>;
->> +			opp-peak-kBps = <800000 20889600>;
->> +		};
->> +
->> +		cpu0_opp4: opp-940800000 {
->> +			opp-hz = /bits/ 64 <940800000>;
->> +			opp-peak-kBps = <1804000 24576000>;
->> +		};
->> +
->> +		cpu0_opp5: opp-1152000000 {
->> +			opp-hz = /bits/ 64 <1152000000>;
->> +			opp-peak-kBps = <2188000 27033600>;
->> +		};
->> +
->> +		cpu0_opp6: opp-1324800000 {
->> +			opp-hz = /bits/ 64 <1324800000>;
->> +			opp-peak-kBps = <2188000 33792000>;
->> +		};
->> +
->> +		cpu0_opp7: opp-1516800000 {
->> +			opp-hz = /bits/ 64 <1516800000>;
->> +			opp-peak-kBps = <3072000 38092800>;
->> +		};
->> +
->> +		cpu0_opp8: opp-1651200000 {
->> +			opp-hz = /bits/ 64 <1651200000>;
->> +			opp-peak-kBps = <3072000 41779200>;
->> +		};
->> +
->> +		cpu0_opp9: opp-1804800000 {
->> +			opp-hz = /bits/ 64 <1804800000>;
->> +			opp-peak-kBps = <4068000 48537600>;
->> +		};
->> +
->> +		cpu0_opp10: opp-1958400000 {
->> +			opp-hz = /bits/ 64 <1958400000>;
->> +			opp-peak-kBps = <4068000 48537600>;
->> +		};
->> +	};
->> +
-> 
-> NACK, this breaks if there is a mismatch from what is read from the 
-> hardware
-> and what is presented in this table above. Either add it from the some
-> bootloader or other boot code to this table reading from the 
-> hardware/firmware
-> or find a way to link them without this.
-> 
-> Sorry I had warned long back about this when such links were discussed 
-> as
-> part of interconnect binding.
+Fixes: 167f77f7d0b3 ("power: supply: Add battery driver for Surface Aggregator Module")
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/power/supply/surface_battery.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Not sure why this warrants a NACK,
-as this was consensus for mapping
-cpu freq to DDR/L3 bandwidth votes.
-(We use the same solution on SDM845
-and SC7180). The opp tables are
-optional and when specified puts in
-votes for DDR/L3. In the future the
-table can be safely dropped when more
-useful devfreq governors are upstreamed.
-
-cpufreq: qcom: Don't add frequencies without an OPP
-
-I guess your main concern for breakage
-is ^^ commit? The original design is
-to list a super set of frequencies
-supported by all variants of the SoC
-along with the required DDR/L3 bandwidth
-values. When we run into non-documented
-frequency we just wouldn't put in bw
-votes for it which should be fine since
-the entire opp_table is optional. If
-this is the reason for the NACK I can
-try get it reverted with Matthias's ack.
-
-
+diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
+index 7efa431a62b2..5ec2e6bb2465 100644
+--- a/drivers/power/supply/surface_battery.c
++++ b/drivers/power/supply/surface_battery.c
+@@ -345,6 +345,16 @@ static u32 spwr_notify_bat(struct ssam_event_notifier *nf, const struct ssam_eve
+ 	struct spwr_battery_device *bat = container_of(nf, struct spwr_battery_device, notif);
+ 	int status;
+ 
++	/*
++	 * We cannot use strict matching when registering the notifier as the
++	 * EC expects us to register it against instance ID 0. Strict matching
++	 * would thus drop events, as those may have non-zero instance IDs in
++	 * this subsystem. So we need to check the instance ID of the event
++	 * here manually.
++	 */
++	if (event->instance_id != bat->sdev->uid.instance)
++		return 0;
++
+ 	dev_dbg(&bat->sdev->dev, "power event (cid = %#04x, iid = %#04x, tid = %#04x)\n",
+ 		event->command_id, event->instance_id, event->target_id);
+ 
+@@ -720,8 +730,8 @@ static void spwr_battery_init(struct spwr_battery_device *bat, struct ssam_devic
+ 	bat->notif.base.fn = spwr_notify_bat;
+ 	bat->notif.event.reg = registry;
+ 	bat->notif.event.id.target_category = sdev->uid.category;
+-	bat->notif.event.id.instance = 0;
+-	bat->notif.event.mask = SSAM_EVENT_MASK_STRICT;
++	bat->notif.event.id.instance = 0;	/* need to register with instance 0 */
++	bat->notif.event.mask = SSAM_EVENT_MASK_TARGET;
+ 	bat->notif.event.flags = SSAM_EVENT_SEQUENCED;
+ 
+ 	bat->psy_desc.name = bat->name;
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+2.31.1
+
