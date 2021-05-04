@@ -2,89 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E173723BC
-	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 01:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847553725C6
+	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 08:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbhECX6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 May 2021 19:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S229786AbhEDGXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 May 2021 02:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbhECX6M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 May 2021 19:58:12 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF8BC061574
-        for <linux-pm@vger.kernel.org>; Mon,  3 May 2021 16:57:18 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p6-20020a05600c3586b029014131bbe5c7so241151wmq.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 May 2021 16:57:17 -0700 (PDT)
+        with ESMTP id S229773AbhEDGXn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 May 2021 02:23:43 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEF5C061574
+        for <linux-pm@vger.kernel.org>; Mon,  3 May 2021 23:22:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id q2so6387260pfh.13
+        for <linux-pm@vger.kernel.org>; Mon, 03 May 2021 23:22:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=RTrhwe5FlqMxAXLpGz6FP3pMNfP7DO0JlS/VtPEMG74=;
-        b=OY1GqMrdXwXrnAuXBTPr8YH2MPvErnn0sAltbHEyap7pDnJekaXQOqHbGBdfm0RmTC
-         6lrbrm1e8bB27RkTSrQwqflaQuijdIRWiTrYNSXGkdM5JCYyqZ4EcvpSTZlZQW/daRSE
-         kvncir60eNNRthz++TvIxP8bZjVdylGQlR8cDFxgIfe/kgIjzRjgNUZNiZW6ZecvgUAB
-         Q9fDdzkrWXVqblYfvjxyvNwuAiAWK/VqmVU2mInJer6EsufZ3Zj5yIMFZeMon7DiZvPh
-         smhmClp5QXg53UJHwbbucyPhi5mj2VxExty0pJqxLAXoKTsjfnlHbBr+fvnRKTg6RJAk
-         k20w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3YMOpCFwOQ5/oGp7LeUxJXSRhhzJtLuBZ+yX60UEizs=;
+        b=s8CZRVn5Ed8r5/QEOgDr4GY8yV//Vi0hk29hzKbvq0omwtbqMcR7+HZTVxzRVVAaER
+         TdQYTfiLFSrnUT7j03MJ0nBIVAIvCphiQsRdc4Sew8mplABwCm8/FtoZ9v1YUsiMXs/3
+         pQrzsZMSNJt6mZeVgkU8bV8ZFOiUXGh2s6cL4akwV5Hp3G7EcuUakOWgZpwDBt729hAB
+         M5jhTr5WsaDcbo7dghmTTrHJKPbQgMjtmJhcWJKHHL90osrxB0Jd7i/h90SwvyAiMNTl
+         G7VLYEixDeqPr39aVljR3iTAuppvsR6sZwddhoo235Eobx096b5fR9I3NEuRvXk7QoyK
+         VqMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=RTrhwe5FlqMxAXLpGz6FP3pMNfP7DO0JlS/VtPEMG74=;
-        b=SZ+LjCWEEAxwjgh6Ig8DhVrCHKLh3ko3unsVUp+lIN/SaAMxTY+FKoqeDcMKbaLaKM
-         t+02FnkT19jJ5IFPOHG39BUPzdp6nj2Dt83LrkL4YwwFPimtufSqCwi1ajWTQ5+0QPWl
-         Aaglvpih2AaAowzrfTLaW5pw8a1QDsyIHTTHWbiDkzzl/PKZ6H+U5E9xC7Jxmtq+m7NM
-         HKQjAbZcOz8EUL9FuWs/yx6AQYJ3kODyq57xmy2h4BwNiQ1Kl/tFAZSxO0l4wk4lH2/1
-         vLfg6n+UUxkdEh9FvnKEypCXIEYaS/7QgdpaFthqpnJlZUZHXPAP3Lr5XMcLx4Qv+nmf
-         lHIA==
-X-Gm-Message-State: AOAM532UXrIKjKPw3wZ0c2A4oNhqLysjMzlI2Soj3nZX7Scq+8Xw/llh
-        ym0NYZUBk3NwvRC2QzrfofZ/QA==
-X-Google-Smtp-Source: ABdhPJwOb2mcyPA4UP5yR/4VuPO7Gv/UDWC/a9zIVAp438kCOwtM4TxMYEhupEG0lyY2Us6CEfsRFg==
-X-Received: by 2002:a05:600c:3388:: with SMTP id o8mr1025054wmp.101.1620086235839;
-        Mon, 03 May 2021 16:57:15 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id l14sm14048582wrv.94.2021.05.03.16.57.14
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3YMOpCFwOQ5/oGp7LeUxJXSRhhzJtLuBZ+yX60UEizs=;
+        b=ltOWOLjDOgCgBCrFB4fwjj5aUPHPC4pwl/s4C0SbyxoK9E6qrlBL4xXWJsSEOtTZ6v
+         ibuyHxjFRB/EMCWKqreHJrnqlu55D9ygmJRDxCYIlA6WcRWhRKIVEiXY1Kz8kBsAjgB1
+         8BIa3vlgEKdvVfP4aAa1QUiUNdHReqJ5dlwPH+cTm/B/dqHk8V+nYV9HS7y4G3gUnfcA
+         9wsVUQ1o4r50EyRtbGAWr8kMmSRkFyZTj30OB3f92/d9cop/Rbv5LJAB3aeBisVdmv3J
+         R/2ML0FY7NsbwjyYbInEOs5yfp6bp9ai62vJhX7NcmDU4oGmXfL0v6gicQGkMM/fZLfO
+         wUKA==
+X-Gm-Message-State: AOAM5338aw/c0LljVbVaRaVxnmSXB7hoFU591ZdlqfRRrIA+d2RJaWl4
+        7oL0O5dsIOGxgWL4JtyUkdKHOA==
+X-Google-Smtp-Source: ABdhPJylRdzZ9avH5dzAfWy33bRGsia12Hqqrc5+RwkWrrh9MEX9sQ9ruwNrm+0A7fwVp/JqYHNEcQ==
+X-Received: by 2002:a17:90b:88b:: with SMTP id bj11mr26075603pjb.224.1620109368205;
+        Mon, 03 May 2021 23:22:48 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id c13sm11131455pfl.212.2021.05.03.23.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 16:57:15 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        narmstrong@baylibre.com, linux-amlogic@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Stefan Agner <stefan@agner.ch>
-Subject: Re: [PATCH RFC] soc: amlogic: meson-ee-pwrc: Drop the .shutdown
- callback from the driver
-In-Reply-To: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
-References: <20210429203723.1177082-1-martin.blumenstingl@googlemail.com>
-Date:   Mon, 03 May 2021 16:57:12 -0700
-Message-ID: <7h4kfjpe07.fsf@baylibre.com>
+        Mon, 03 May 2021 23:22:47 -0700 (PDT)
+Date:   Tue, 4 May 2021 11:52:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: sc520_freq: add 'fallthrough' to one case
+Message-ID: <20210504062245.hfn7n7ghm27oxehx@vireshk-i7>
+References: <20210503161840.26771-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210503161840.26771-1-rdunlap@infradead.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Martin Blumenstingl <martin.blumenstingl@googlemail.com> writes:
+On 03-05-21, 09:18, Randy Dunlap wrote:
+> Quieten an implicit-fallthrough warning in sc520_freq.c:
+> 
+> ../drivers/cpufreq/sc520_freq.c: In function 'sc520_freq_get_cpu_frequency':
+> ../include/linux/printk.h:343:2: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>   printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+> ../drivers/cpufreq/sc520_freq.c:43:3: note: in expansion of macro 'pr_err'
+>    pr_err("error: cpuctl register has unexpected value %02x\n",
+> ../drivers/cpufreq/sc520_freq.c:45:2: note: here
+>   case 0x01:
+> 
+> Fixes: bf6fc9fd2d848 ("[CPUFREQ] AMD Elan SC520 cpufreq driver.")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> ---
+> Found in linux-next but applies to mainline.
+> 
+>  drivers/cpufreq/sc520_freq.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- linux-next-20210503.orig/drivers/cpufreq/sc520_freq.c
+> +++ linux-next-20210503/drivers/cpufreq/sc520_freq.c
+> @@ -42,6 +42,7 @@ static unsigned int sc520_freq_get_cpu_f
+>  	default:
+>  		pr_err("error: cpuctl register has unexpected value %02x\n",
+>  		       clockspeed_reg);
+> +		fallthrough;
+>  	case 0x01:
+>  		return 100000;
+>  	case 0x02:
 
-> Stefan reports that rebooting his ODROID-N2+ (using a G12B SoC) results
-> in the board hanging. His kernel config uses:
->   CONFIG_MESON_EE_PM_DOMAINS=y
->   CONFIG_DRM_MESON=m
->
-> He reports that his kernel config results in the DRM driver's .shutdown
-> callback to be executed after the power domain driver's .shutdown
-> callback. That's problematic because meson_ee_pwrc_shutdown disables the
-> clock which are used by the VPU IP. This causes the board to hang.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I didn't dig deeply on this yet because this smells very much like an
-issue Art reported[1] and fixed.
-
-What kernel version are you using, and does it contain
-commit fa0c16caf3d7 (drm: meson_drv add shutdown function)
-
-Kevin
-
-[1] https://lore.kernel.org/dri-devel/20210302042202.3728113-1-art@khadas.com/
-
+-- 
+viresh
