@@ -2,105 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C38D373127
-	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 22:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D37373197
+	for <lists+linux-pm@lfdr.de>; Tue,  4 May 2021 22:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbhEDUDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 May 2021 16:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S231576AbhEDUro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 May 2021 16:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbhEDUDj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 May 2021 16:03:39 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390F9C061761
-        for <linux-pm@vger.kernel.org>; Tue,  4 May 2021 13:02:43 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id l19so79430qvu.8
-        for <linux-pm@vger.kernel.org>; Tue, 04 May 2021 13:02:43 -0700 (PDT)
+        with ESMTP id S229542AbhEDUro (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 May 2021 16:47:44 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320DAC061574
+        for <linux-pm@vger.kernel.org>; Tue,  4 May 2021 13:46:49 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id t4so5218205plc.6
+        for <linux-pm@vger.kernel.org>; Tue, 04 May 2021 13:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OQZCBZa+DL4hkqaW8G2In/CkuXl76YVF2oGiLQ+6dDI=;
-        b=Wpq5ejVrP9YM1gsTemrlmMP7Q2mn0VOB7h7YsWC+mn5e4Jr4jHi1ngCnhAIF1BYNNR
-         Zk+DJuuRFBwEGDQs1HwsXKWJVLDV6goV8+IRs7tBG6I2okLDGOHw+33AEGkaf8rEy3lM
-         NZIOE/q+miK4dIRqYiD5L0RLPiT3NDL1+4MKs=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2a6/ygkzqCiFjkJMxmFt1kL/6eCE5jLq9rBe6PegP00=;
+        b=dgMyecZDYvD3M4Hgvkv4Eu1S1UQfVURdbejOrJeu/cZwL/dwCUBxxdFaEWnf0U0vJZ
+         +HWphRk3stxZ1S89xn0/ClD1xNWSAVt0dTge88IvveKgMbVDEndWvtKGAz/jx6rAgrya
+         7yvvFTqcqsMBT13EEWc6PPYrXE7WorzwgUOds=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OQZCBZa+DL4hkqaW8G2In/CkuXl76YVF2oGiLQ+6dDI=;
-        b=Q128G5KK8XwwRPQGBI8m9026oi0SRr/CnAfzaEFPO6kBHxFI+V/ssqd/zWt7IABTCT
-         cav/8QRdmxbpVL1kevwOA6VTxX/wOdMzII6TglJozHssnKy8MUIBE8bcPUGGV/GSTcVi
-         wGVHv5oJ0VWgM82XDsCoBby1DNlZy0yG712JkHexjGpuCbPQK/S7EIPHMDGwbqGvUNUS
-         KCsFyzrSeG7CK7TVGu2f0ZlUtOPEHZLqeuEZOWEIrncBwPbkizuqHIkWOkvWDbQqqsgI
-         BuU7dpWz5n2AAb6KvMvinyuh2y/RC8n4PSs+i+OH5IXbFZ5Tio+gX7l8wFlBcqfAP/tP
-         yctQ==
-X-Gm-Message-State: AOAM533rQCVC2cr45I04qSfP25x9n25rMyMLLAz9Fc69oUO30YJG/kPZ
-        h9vAJEP64NTM/1Z/P/Be13MJR28kXzLZxQ==
-X-Google-Smtp-Source: ABdhPJyW/HohE+zJ+H1Zt1P39rHVUBRPHhqM1N6PgKDoQRrN3adBAmKpjt/OqoS+osvCBlCLxFXaWw==
-X-Received: by 2002:a05:6214:129:: with SMTP id w9mr11766220qvs.56.1620158561912;
-        Tue, 04 May 2021 13:02:41 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id s67sm7098599qkh.59.2021.05.04.13.02.40
-        for <linux-pm@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2a6/ygkzqCiFjkJMxmFt1kL/6eCE5jLq9rBe6PegP00=;
+        b=mjlGCxYdNGMyRxGmeFOXDUffuEh8wLEWHF+a24tmZhEOcHrqy7hv3qGUTRov2BRiZG
+         uYj9AA17PmjU+W7VvxLfoJ6Pd+0j9jJG1BaEp1+6NUm5AVtxZlIwDUKQrIVLOIFwaMjr
+         3FQalHzwd3TqpkCOaGos6FIdBJ6uCECmp36xcRKyQpWazvb4QCBCfEAGNU3cSkD9GlTJ
+         Kvlnsr6Js6in7RClAXo8dP6sRFXtV0aLKTeE+EZAUTcoXp+38khiKmnIJkcu38HxIRsC
+         XGxdYeXjsftHM9DNtQU3jfbnLr1km6wH9xHRNuwg59CSuvJtsEHxHH7/Ht6H4QVDgxtU
+         yrEA==
+X-Gm-Message-State: AOAM533uOOp3tj4hqzZOha7kXYCkt2AZFUtGl80PLpnlrinGSM5aijf2
+        8bx0r+QwFrJhncT2VDXh8xUCkA==
+X-Google-Smtp-Source: ABdhPJyfDVB4g3z0knD/LwR+gvIZ+Ero9hTSfnK7mpY7h82mp2xp8TGDseNPtwycdtUH1CxfgbvBYQ==
+X-Received: by 2002:a17:902:eac2:b029:ee:a909:4f9f with SMTP id p2-20020a170902eac2b02900eea9094f9fmr23875075pld.8.1620161208800;
+        Tue, 04 May 2021 13:46:48 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:4c2f:1f84:af45:6245])
+        by smtp.gmail.com with UTF8SMTPSA id w1sm4500412pgp.31.2021.05.04.13.46.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 May 2021 13:02:41 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id r8so13804742ybb.9
-        for <linux-pm@vger.kernel.org>; Tue, 04 May 2021 13:02:40 -0700 (PDT)
-X-Received: by 2002:a5b:54a:: with SMTP id r10mr34873607ybp.476.1620158560412;
- Tue, 04 May 2021 13:02:40 -0700 (PDT)
+        Tue, 04 May 2021 13:46:48 -0700 (PDT)
+Date:   Tue, 4 May 2021 13:46:47 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rajeshwari <rkambl@codeaurora.org>
+Cc:     amitk@kernel.org, thara.gopinath@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sanm@codeaurora.org, manafm@codeaurora.org
+Subject: Re: [PATCH V3 2/3] arm64: dts: qcom: SC7280:  Add device node
+ support for TSENS
+Message-ID: <YJGyt/OBBVVzdX2+@google.com>
+References: <1619778592-8112-1-git-send-email-rkambl@codeaurora.org>
+ <1619778592-8112-3-git-send-email-rkambl@codeaurora.org>
+ <YJAz1iDM+cNAAcCX@google.com>
 MIME-Version: 1.0
-References: <1620111510-31455-1-git-send-email-sibis@codeaurora.org> <1620111510-31455-3-git-send-email-sibis@codeaurora.org>
-In-Reply-To: <1620111510-31455-3-git-send-email-sibis@codeaurora.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 4 May 2021 13:02:28 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vng40b05F2_i7qqXC+yN=ZBgRXsio-86sBA+QdoMMGaw@mail.gmail.com>
-Message-ID: <CAD=FV=Vng40b05F2_i7qqXC+yN=ZBgRXsio-86sBA+QdoMMGaw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add cpu OPP tables
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YJAz1iDM+cNAAcCX@google.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Mon, May 03, 2021 at 10:33:10AM -0700, Matthias Kaehlcke wrote:
+> On Fri, Apr 30, 2021 at 03:59:51PM +0530, Rajeshwari wrote:
+> > Adding device node for TSENS controller and critical interrupt support in SC7280.
+> > 
+> > Signed-off-by: Rajeshwari <rkambl@codeaurora.org>
+> 
+> Please add tags from previous versions, like my 'Reviewed-by' from v2,
+> unless a patch underwent major changes.
+> 
+> Please also add a change log for v > 1, even if it just says 'no changes'
+> for some patches in the series.
 
-On Mon, May 3, 2021 at 11:59 PM Sibi Sankar <sibis@codeaurora.org> wrote:
->
-> +       cpu0_opp_table: cpu0_opp_table {
-> +               compatible = "operating-points-v2";
-> +               opp-shared;
-> +
-> +               cpu0_opp1: opp-300000000 {
+Forgot to re-add this:
 
-It seems like it might be nicer to give the node labels a less
-arbitrary name. How about?
-
-cpu0_opp_300mhz: opp-300000000
-
-That has advantes:
-
-* If, for some reason, you have to mess with some operating point in
-another dts it'll be less fragile.
-
-* It'll make diffing easier between SoCs.
-
-* If you end up putting a new operating point in the middle you don't
-need to rename everything below.
-
-Other than that, I can't say that I'm a huge expert on the
-interconnect stuff and whether those make sense, but I'm still OK
-with:
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
