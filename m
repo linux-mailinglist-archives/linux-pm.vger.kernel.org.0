@@ -2,74 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2259A3733D1
-	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 05:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25983733E0
+	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 05:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbhEEDFt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 May 2021 23:05:49 -0400
-Received: from mga03.intel.com ([134.134.136.65]:26123 "EHLO mga03.intel.com"
+        id S231182AbhEEDTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 May 2021 23:19:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230079AbhEEDFt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 May 2021 23:05:49 -0400
-IronPort-SDR: aWySfpvG6YLLVAOPfCQC2Pf6pX/7p2vLGkStJsrZPxvz5PJxx1YMYHICiLpzZfLlvV4Mi7PZjj
- lEflBLfhC4Ow==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="198179093"
-X-IronPort-AV: E=Sophos;i="5.82,273,1613462400"; 
-   d="scan'208";a="198179093"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 20:04:53 -0700
-IronPort-SDR: eSdL5a60wFebfgQRagO5d8RWIzv8Vwnad4eB1atg/rDzdRg3G5MIDQFf3xiAQ65knE8yIPg0le
- uc/W7OXpbZ9A==
-X-IronPort-AV: E=Sophos;i="5.82,273,1613462400"; 
-   d="scan'208";a="433593330"
-Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.173])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 20:04:51 -0700
-Date:   Wed, 5 May 2021 11:09:32 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Len Brown <lenb@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][RFC] tools/power turbostat: Fix ACPI CState format issue
-Message-ID: <20210505030932.GA116899@chenyu-desktop>
-References: <20201012100205.2750-1-yu.c.chen@intel.com>
- <CAJvTdK=wGHfNhOBuWFS5VmW+QqdyG+w7HdDrP-Vs1u84dkSiyw@mail.gmail.com>
+        id S229617AbhEEDTK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 May 2021 23:19:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD894610D2;
+        Wed,  5 May 2021 03:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620184695;
+        bh=Yghl4ypXK+j7lyqNCoh5WbRJtmqgHJ2laHlMxQtz0s8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVjAfnF/WXpH1TPEIGy/i/G3JAKA17KbBCzozV5KollxF0cZAfRdi7MMFXvx65yf0
+         dmEsRfgoaT1Q1UdQnzYqZT9eH8Y76PO90pXDfYx9xnIw+qRBKUL/Xp7ll9z15ug1QF
+         p0hxJX7KvDCxkbEhbPsEHr8tl9zSPg+rn40tANFVydFCK6AkLRC3A9dp8MS+iwG2ZJ
+         J15PDApPhfGgR6VXttCZe0zyWpORADkE+uizBc1IlpHk1LGlX+4dFsKdVJnt5kukNt
+         U8AAq63Bjd5znz3fQO38BqA+SoIM5Pd/ky8dSZLL43W1cJhbhcglSmb0ZESkfZJeHF
+         gG0vKfsKzXE6w==
+Date:   Wed, 5 May 2021 06:18:12 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
+        keyrings@vger.kernel.org, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net
+Subject: Re: [PATCH 0/9] Enable hibernation when Lockdown is enabled
+Message-ID: <YJIOdNdWTClIXYZz@kernel.org>
+References: <20210220013255.1083202-1-matthewgarrett@google.com>
+ <CAE=gft4HnQKP3RK1hOGpThccLPanQzWpssCsEyUQGLbTMpzrFw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJvTdK=wGHfNhOBuWFS5VmW+QqdyG+w7HdDrP-Vs1u84dkSiyw@mail.gmail.com>
+In-Reply-To: <CAE=gft4HnQKP3RK1hOGpThccLPanQzWpssCsEyUQGLbTMpzrFw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 04, 2021 at 06:56:00PM -0400, Len Brown wrote:
-> On Mon, Oct 12, 2020 at 6:00 AM Chen Yu <yu.c.chen@intel.com> wrote:
-> >
-> > Currently if the system boots with BIOS _CST Cstate information
-> > enabled, the turbostat output would have unaligned problems:
-> >
-> > C1_ACPI C2_ACPI C3_ACPI POLL%   C1_ACPI%        C2_ACPI%        C3_ACPI%        CPU%c1
-> > 5       37      138     0.00    0.02    1.30    98.51   0.38    0.00    0.00    99.43
-> >
-> > The C1_ACPI% is of 8 bytes, so extend the format accordingly if the field name
-> > equals to/longer than 8 bytes.
-> >
-> > After the patch applied:
-> >
-> > C1_ACPI C2_ACPI C3_ACPI POLL%   C1_ACPI%        C2_ACPI%        C3_ACPI%        CPU%c1
-> > 2       42      96      0.00    0.12            2.60            97.09           0.60
+On Tue, May 04, 2021 at 02:56:35PM -0700, Evan Green wrote:
+> Does anyone know if this series is abandoned, or is Matthew planning
+> to do another spin? Email to matthewgarrett@google.com bounces.
 > 
-> Let's shorten the header fields so that a single tab continues to work.
-> this is helpful for processing turbostat output in .TSV format.
->
-Okay. BTW it looks like the following patch has already fixed the _CST format issue
-and single tab still works:
-commit fecb3bc839df64761cc63c9ee9b45c1cad36aee8
-Author: David Arcari <darcari@redhat.com>
-Date:   Mon Aug 10 10:43:30 2020 -0400
+> -Evan
 
-    tools/power turbostat: Fix output formatting for ACPI CST enumeration
+Good question.
 
-thanks,
-Chenyu 
+It could be that because James' patches did not end up to 5.12, but 5.13
+instead, Matthew has just put this into hold for a while.
+
+I mean the review comments I gave, were relatively cosmetic.
+
+If I was the author, that's at least I might have done...
+
+/Jarkko
+
