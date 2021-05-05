@@ -2,99 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 431E63733F7
-	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 05:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3322A37348D
+	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 07:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbhEEDqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 May 2021 23:46:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230483AbhEEDqi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 May 2021 23:46:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AB7526112F;
-        Wed,  5 May 2021 03:45:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620186343;
-        bh=R/JyAKDyJKGKvvQXuafoRRyXBimPMKueTQ6KKgAKfww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lGmV119In9JTgyt66QPQey4xSOUN9ETJKt3aUfFPmf5mBZha78nVjwmOZSingGZha
-         bU9FPN1fKrFz7WemS0arBiEx3RZstPdpSLsnovX3p8CenjO+JKlwJT4VOne3Z6cyuS
-         axOUJqdK1vjQTWGEhIKgwJGoVo7xDssJoFIKQxM7bZK8O0oStov4B3foK/i1jBVcmh
-         hYVmmzXegpD3wTxNDkcYdfDE+C0kkOP3OnQDNg7QMU82FzsH5x14fHzcPAmvd2MIPr
-         c05BBd0xm9gzpeOd9VDOr7c0dyk4Dp+Y7QT5bbP+V502O7buNx++7zX55U8OyMyS88
-         urCvI/cSjB9lw==
-Date:   Tue, 4 May 2021 20:45:41 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chris von Recklinghausen <crecklin@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Simo Sorce <simo@redhat.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 1/1] use crc32 instead of md5 for hibernation e820
- integrity check
-Message-ID: <YJIU5fd5e2FwrEB/@gmail.com>
-References: <20210408131506.17941-1-crecklin@redhat.com>
- <CAJZ5v0ib+jmbsD9taGW0RujY5c9BCK8yLHv065u44mb0AwO9vQ@mail.gmail.com>
- <YG8gqZoZGutPmROz@sol.localdomain>
- <CAJZ5v0g65irXKmy7pdgD8-5KWrxdtwiWbJsBD2A=PKf1D3RVZg@mail.gmail.com>
- <20210429195944.GB1067@bug>
+        id S231678AbhEEFJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 May 2021 01:09:44 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:19274 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231494AbhEEFJo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 May 2021 01:09:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620191328; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ufbzClt2siENd3mar5OZbcbZXJ2ZidipGfMDOw2kcCA=;
+ b=NhIsXpCFN5ct3MHk4Xydgkx+yT55Y7HRQz3YTGS5+DNC0MRvdfyQtGMs/g4yCOOQzIPiOF4q
+ JnP7khUupqvqZbE8m4IXYgKyrDRTxRPILp+Y23URu8r+NRBHG21YcMLaTdz0Zl73B+g+G2Ex
+ zZhJc/uVmc/onBv4zt/0Y3NG59Q=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 6092286087ce1fbb565dfe82 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 05 May 2021 05:08:48
+ GMT
+Sender: skakit=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 66DECC433F1; Wed,  5 May 2021 05:08:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: skakit)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 689EDC4338A;
+        Wed,  5 May 2021 05:08:46 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210429195944.GB1067@bug>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 05 May 2021 10:38:46 +0530
+From:   skakit@codeaurora.org
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+In-Reply-To: <20210427083721.heavcdadeb4ajkk2@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+ <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
+ <322cbdbb022fec3f43c1cbe13c532dd3@codeaurora.org>
+ <20210427083721.heavcdadeb4ajkk2@earth.universe>
+Message-ID: <a190e414c53af3ea094548f5011c3a04@codeaurora.org>
+X-Sender: skakit@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 09:59:44PM +0200, Pavel Machek wrote:
-> Hi!
+On 2021-04-27 14:07, Sebastian Reichel wrote:
+> Hi,
 > 
-> > > > > Suspend fails on a system in fips mode because md5 is used for the e820
-> > > > > integrity check and is not available. Use crc32 instead.
-> > > > >
-> > > > > This patch changes the integrity check algorithm from md5 to
-> > > > > crc32. This integrity check is used only to verify accidental
-> > > > > corruption of the hybernation data
-> > > >
-> > > > It isn't used for that.
-> > > >
-> > > > In fact, it is used to detect differences between the memory map used
-> > > > before hibernation and the one made available by the BIOS during the
-> > > > subsequent resume.  And the check is there, because it is generally
-> > > > unsafe to load the hibernation image into memory if the current memory
-> > > > map doesn't match the one used when the image was created.
-> > >
-> > > So what types of "differences" are you trying to detect?  If you need to detect
-> > > differences caused by someone who maliciously made changes ("malicious" implies
-> > > they may try to avoid detection), then you need to use a cryptographic hash
-> > > function (or a cryptographic MAC if the hash value isn't stored separately).  If
-> > > you only need to detect non-malicious changes (normally these would be called
-> > > "accidental" changes, but sure, it could be changes that are "intentionally"
-> > > made provided that the other side can be trusted to not try to avoid
-> > > detection...)
-> > 
-> > That's the case here.
+> On Tue, Apr 27, 2021 at 11:45:44AM +0530, skakit@codeaurora.org wrote:
+>> Hi Sebastian,
+>> 
+>> On 2021-04-09 13:48, skakit@codeaurora.org wrote:
+>> > Hi Sebastian,
+>> >
+>> > On 2021-04-08 18:30, Sebastian Reichel wrote:
+>> > > Hi,
+>> > >
+>> > > On Thu, Apr 08, 2021 at 05:01:08PM +0530, satya priya wrote:
+>> > > > Convert qcom PON binding from .txt to .yaml format.
+>> > > >
+>> > > > Signed-off-by: satya priya <skakit@codeaurora.org>
+>> > > > ---
+>> > >
+>> > > Thanks for doing this.
+>> > >
+>> > > > Changes in V2:
+>> > > >  - As per Rob's comments, converted the main PON binding and
+>> > > > added in V2.
+>> > > >
+>> [...]
+>> > > > +  reg:
+>> > > > +    description: Specifies the physical address of the pon register
+>> > >
+>> > > That description is obvious and pointless. Instead add
+>> > >
+>> > > maxItems: 1
+>> > >
+>> >
+>> > Okay.
+>> >
+>> > > > +  pwrkey:
+>> > > > +    type: object
+>> > > > +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+>> > > > +
+>> > > > +  resin:
+>> > > > +    type: object
+>> > > > +    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+>> > > > +
+>> > > > +required:
+>> > > > +  - compatible
+>> > > > +  - reg
+>> > > > +
+>> > > > +additionalProperties: true
+>> > >
+>> > > Instead of allowing arbitrary properties, only valid modes
+>> > > should be allowed. So drop additionalProperties and do this
+>> > > instead:
+>> > >
+>> > > allOf:
+>> > >   - $ref: reboot-mode.yaml#
+>> > >
+>> > > unevaluatedProperties: false
+>> > >
+>> >
+>> > Okay.
+>> 
+>> I am not able to use 'allOf' to refer reboot-mode.yaml as some of the
+>> properties do not match with reboot-mode.yaml properties. Can we use 
+>> oneOf
+>> like below?
+>> 
+>> oneOf:
+>>   - $ref: "reboot-mode.yaml#"
+>>   - $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
 > 
-> md5 is fine for this purpose. crc32 may be too weak. I don't see why this needs changing.
+> That does not make sense.
 > 
-> Maybe fips should understand that md5 has other uses than crypto?
+> The reference to reboot-mode.yaml is needed because it adds valid
+> mode properties, so that you can set unevaluatedProperties to false.
+> You need it at the root of the PON binding. They are not added to
+> the required list, so it's fine if not all of them are used. Also
+> there can (and usually is) more than one mode, so using oneOf is not
+> ok.
 > 
-> Best regards,
-> 									Pavel
 
-This would be a good change even if FIPS didn't exist, because either you need a
-cryptographic digest or you don't.  Using MD5 is a big red flag as there isn't
-really any valid use case for it anymore.  We should be working to eliminate all
-uses of MD5 from the kernel, and likewise for other broken crypto algorithms
-like RC4.  Note that that includes not just upgrading crypto algorithms, but
-also eliminating cases where crypto was improperly used when it isn't needed.
+Okay, but I am getting errors like below during make dtbs_check.
 
-As far as non-cryptographic checksums go, CRC-32 has less than a 1 in 4 billion
-chance of a collision.  People seemed happy with that for this use case.  But if
-a stronger checksum is desired, then CRC-64 or xxHash64 would give a 1 in 2^64
-chance of collision instead.
+kernel/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dt.yaml: 
+pon@800: 'compatible', 'pwrkey', 'reg' do not match any of the regexes: 
+'^mode-.*$', 'pinctrl-[0-9]+'
 
-- Eric
+As suggested I have added
+
+allOf:
+  - $ref: reboot-mode.yaml#
+
+at the root of binding and also added unevaluatedProperties: false
+
+> Last but not least the pwrkey reference is needed to describe
+> specific nodes (resin, pwrkey) and should not appear at the root
+> of the PON binding.
+> 
+>> Also, If I drop additionalProperties I am getting below error.
+>> 
+>> kernel/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml:
+>> 'additionalProperties' is a required property
+> 
+> You need to add 'unevaluatedProperties: false'. It is basically
+> the same as 'additionalProperties: false', but also accepts
+> properties from the referenced bindings.
+> 
+> Thanks,
+> 
+> -- Sebastian
