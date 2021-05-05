@@ -2,123 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E37537394D
-	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 13:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCF7373991
+	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 13:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbhEELaB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 May 2021 07:30:01 -0400
-Received: from relay2.uni-heidelberg.de ([129.206.119.212]:45457 "EHLO
-        relay2.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhEELaA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 May 2021 07:30:00 -0400
-X-IPAS-Result: =?us-ascii?q?A2A8AACOgJJg/1BqzoFaGwEBAQEBAQEBBQEBARIBAQEDA?=
- =?us-ascii?q?wEBAUCBRgMBAQELAYMMa2uERK0MgXMBAQEBAQEBAQEJMQECBAEBhFCBfwIlN?=
- =?us-ascii?q?wYOAgQBAQEDAgMBAQEBAQYBAQEBAQYEgQSFXYZFBiMEUhAlAh8HAgIUKCETh?=
- =?us-ascii?q?XmpBX8zgQGIMoELI4EQKgGLOYJNgieBFYNgg38JHDuCejaCKwSCQAdZNb4zB?=
- =?us-ascii?q?6AxAg4nlEuQVwEtkimhJIVAgWqBfTM+gzhQGQ6OVo4YQi84AgYKAQEDCVkBA?=
- =?us-ascii?q?Yw0AQE?=
-IronPort-HdrOrdr: A9a23:+CXIA62CXSC8racTdty7aQqjBfd2eYIsi2QD101hICF9Wvez0+
- izgfUW0gL1gj4NWHcm3euNIrWEXGm0z+8W3aA4Bp3neAX9omOnIMVZ7YXkyyD9ACGWzJ8/6Y
- 5JSII7MtH5CDFB7frSyAOzH888hPyO9661jenTpk0dMz1CQadm8gt/F0K/Gkp5WAFJCfMCZe
- uhz+BAoCetfmlSU9SjChA+Lqn+jvDCiZ6OW299OzcJ8w+L5AnYj4LSMx/d5RsGViMK/LFKyx
- m7ryXY/aOliveh11vn+lS71f9rsf/A7vcGO8CWkMgSLVzX+0aVTaBsQaeLsjxwgMzH0idWrP
- D2rx0tP9t+5hrqFwnYznWNqmyQtAoG0HPsxUSVhnHuu6XCNU4HIvFMmJ5DdV/h41cg1esMip
- 5j5X6TtJZcEHr77V3AzuXITB1jmw6VpncvgIco/gdieLYec7NYoMgj+lpUGv47bVrHwb0ged
- Meav301bJ3alWcVnbDoy1G/7WXNEgbL1OjbGBHoNCf1zhNhnB+yCIjqfA3rzMlztYQWpNE7+
- PLPuBDj7dVVPIbaqp7GaMoXda3Inale2OODEuiZXDcUI0XMXPErJD6pJ8v4vuxRZAOxJwu3L
- zcTVJjs3IocU6GM7zN4LR7tjT2BEmtVzXkzc9To7JjvKfnebbtOSqfDHcjjtWnuPdaJsHAQf
- 68NNZ3DpbYXC7TMLcM+ze7d4hZKHEYXsFQkM08QUiyrsXCLZCvuffcdPrVObrxATcpUm7yGR
- I4LX/ODfQFynrudm7zgRDXVX+oUFf454hMHK/T+PVWyIVlDPwLjiElzXCCou2bIzxLtaI7OG
- FkJqn8r6+9rW6quWLB72BjPAtBHl9YiY+QCk9ilEsvCQfZYLwDs9KQdSR5x32cPCJySMvQDU
- pYvFR4+aW+KpSK3iA8A9e7MmaX5kFj4E6iftM5oOmu9M3lcpQ3AtINQ6pqDzjGEBRzhEJ3sm
- tZcRQFQUXeDzvqjq2ggPUvdbniXug5pD3uDd9fqHrZu0nZmNomQWEDWSWyFeSNhxw1ejZSjl
- pt0qMWjbaagwyzIW8njOlQCiwWVE2nRJZ9SCWMfsF9h63icgAYdxb7uRWqzzUIPlfM22pXrG
- r7NiGQcezMGTNmywNl+5ev1kh1eGWbd193cVZgv+RGZDj7k0c27MvOXI2P6S+qTmY6q9ttbQ
- 3taScOIw9o2tC83AOUnjHHDnk92pAyJIXmfcYeWqCW1XW3JIKSk6YaW/dS4ZZ+Ldjr9vQGSO
- SFZmauXX/FIvJs3wyevXA+PiZo7HEijPPzwRXghVLIlkIXEL7XIF58QascLMzZ52/4R+yQ2J
- E8id4up+O/PiHwbdGBoJunIgJrO1fWoWSsSfsvpo0RtaUutKFrF52eSCDWzhh8rVwDBdaxkF
- lbTLVw4bjHNIMqd8sOezhB9l5skNiUNkMkvgH/H+dWRyBjs1bLe9eSp7bYo7smBUOM4BH9Pl
- SS6CVR9fbIVSnr789QN4sgZWBNLEQs4nVr++2PM5DKAAKxbudZ4R60NGS+fLI1ctnKJZwA6h
- Jhp9eGkO+ce3CmhETevT5nLrlP9GjiS8WoGw6IEfNJ9dv/OVnkuNrc3OejyDPsDT28YAAEgI
- cAc0oaZMFKkCMjg406yTLacN2+nms1119FpSh6nVvs0JW86GjVHUtaIRTU668mKQV7IzyNl4
- DZ6uCW23T2/Shd1ZTCHElWeMtSG9J4dPmAEw5+bc4KvLCp+KIzgiNMJBc2ZlRM/QzA4w==
-X-IronPort-Anti-Spam-Filtered: true
-Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
-  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 May 2021 13:29:03 +0200
-Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
-        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
-        id 1leFiA-0001eS-H6; Wed, 05 May 2021 13:29:02 +0200
-Date:   Wed, 5 May 2021 13:29:02 +0200
-From:   Hermann.Lauer@uni-heidelberg.de
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: axp20x_battery: implement writeable status to
- enable/disable battery charging
-Message-ID: <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
-References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
- <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+        id S233126AbhEELi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 May 2021 07:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232937AbhEELiZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 May 2021 07:38:25 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15114C061574
+        for <linux-pm@vger.kernel.org>; Wed,  5 May 2021 04:37:27 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h11so1971696pfn.0
+        for <linux-pm@vger.kernel.org>; Wed, 05 May 2021 04:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jwzu12d+QscnqOFQLhy4vh097a70ZnMp+hWw5krWrIk=;
+        b=ZxbA1tfyfKPGdWBAOR+Y7RlXNKo0jtDwpuDRVr1usMxGZoBv82lY5nRNfltNjKO1hH
+         Q7y7FDb6LgIpvZMvCb7aqc+Xve+lVh9zkUaSTlQzCBPHlpwpwcZtrEnarO5Lc5WDNp0a
+         ug8JjqltbYlpsOLL2jMLtIfag5oYlt9qghVOy/7eC6FZhjz5YERIwOAuHHdzqHj7WESp
+         GHgXxzeLXt3pIm1ioOJenBBeRsDagR/fc+XiEzSImMUkgoAX1tbV5vPWKN21/w36v4bG
+         9WW1ksviqEZBHvq9FUbzJrqKeFQ0eOf9EDv5mYbjpmIryj4TESREdyKnD9I8QGacUcAQ
+         iTXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jwzu12d+QscnqOFQLhy4vh097a70ZnMp+hWw5krWrIk=;
+        b=OXm35ED0D4v6Ap7sAG7xBXm49mVQDylrj0afrdTLMwYjDaWDQQOG6TjosUo1CSyNRi
+         I7mXXfn2Vdp92WoNhKJv/NaH01NeTs8q4r0DQYk31xq+iBmWmVk9tA/Rw9mZ34/0szDX
+         UgiBVNsY3AUdH3LC8YXEylsZ4+rzAQvBDOarSivpFgxOxOGfRJ/jXJlwmRFTDcxY1Qsa
+         IRM6mJkCqh79/roJJw4iDIMfpq9gsk3eQcAkyvEydiWpZxVpEUyWhvJYGVzuBEocWZMR
+         1rHEhQKznJwqmv8rqNZTu3jC6fByuCmJ4Z07h58wOPoh9RD8bt7c9I0mwPLlCJiO2ICn
+         fMCg==
+X-Gm-Message-State: AOAM532UdE5YD47pEU9/6KgiFCfjHb7iWxx1yySg29ReYIVoJXzlRYv0
+        DRWeHefoxfjMhZ3+jjdGlOjjBw==
+X-Google-Smtp-Source: ABdhPJwCPq/LSEqazkj7mS6+zQB5ApPaTWOLcZzzlV2ZlvhakMrgpY4gelMW0KBKN7Xw7oLx2vKNbw==
+X-Received: by 2002:a62:5209:0:b029:278:648f:99b6 with SMTP id g9-20020a6252090000b0290278648f99b6mr28004842pfb.9.1620214646574;
+        Wed, 05 May 2021 04:37:26 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id a18sm14989138pfo.64.2021.05.05.04.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 May 2021 04:37:26 -0700 (PDT)
+Date:   Wed, 5 May 2021 17:07:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Sibi Sankar <sibis@codeaurora.org>, bjorn.andersson@linaro.org,
+        swboyd@chromium.org, agross@kernel.org, robh+dt@kernel.org,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7280: Add cpu OPP tables
+Message-ID: <20210505113724.fpzcizgytf55msfa@vireshk-i7>
+References: <1619792901-32701-1-git-send-email-sibis@codeaurora.org>
+ <1619792901-32701-3-git-send-email-sibis@codeaurora.org>
+ <20210504144215.svmrmmsy4jtoixzv@bogus>
+ <1fc9fb8d9a94909ff9b7b76d598bd266@codeaurora.org>
+ <20210505084908.3lynedmblmqagr72@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210505084908.3lynedmblmqagr72@bogus>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Maintainers,
+On 05-05-21, 09:49, Sudeep Holla wrote:
+> No my main concern is this platform uses "qcom-cpufreq-hw" driver and the
+> fact that the OPPs are retrieved from the hardware lookup table invalidates
+> whatever we have in DT.
 
-this patch allows enabling/disabling charging for the axp209 PMIC through a
-writeable status property.
+Not exactly.
 
-This works on the axp209 of Banana {Pi M1+,Pro}. I have no access to
-the other chips the driver deals with.
+It disables them all, and then call dev_pm_opp_adjust_voltage() and
+enable them again. This is how it started initially. Though the driver
+also works if the DT doesn't have the table, in that case it calls
+dev_pm_opp_add() for all the OPPs.
 
-Thanks to ChenYu for the idea and greetings
-  Hermann
+> In short it will be junk and becomes obsolete.
+> So what I suggested before is still valid. You simply can't have static
+> OPP tables in the DT for this platform. Do get some boot code to fetch the
+> same from the h/w LUT and patch to the DT or figure out any other way to
+> manage dynamically.
+> 
+> So NACK still stands for static addition of OPPs to the DT as in this patch.
 
-Signed-off-by: Hermann.Lauer@uni-heidelberg.de
----
- drivers/power/supply/axp20x_battery.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -40,6 +40,7 @@
- #define AXP209_FG_PERCENT		GENMASK(6, 0)
- #define AXP22X_FG_VALID			BIT(7)
- 
-+#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
- #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
- #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
- #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
-@@ -468,7 +469,17 @@
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
- 		return axp20x_set_max_constant_charge_current(axp20x_batt,
- 							      val->intval);
-+	case POWER_SUPPLY_PROP_STATUS:
-+		switch (val->intval) {
-+		case POWER_SUPPLY_STATUS_CHARGING:
-+			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-+				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
- 
-+		case POWER_SUPPLY_STATUS_DISCHARGING:
-+		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-+			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-+				AXP20X_CHRG_CTRL1_ENABLE, 0);
-+	}
- 	default:
- 		return -EINVAL;
- 	}
-@@ -491,7 +502,8 @@
- static int axp20x_battery_prop_writeable(struct power_supply *psy,
- 					 enum power_supply_property psp)
- {
--	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
-+	return psp == POWER_SUPPLY_PROP_STATUS ||
-+	       psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
- 	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
- 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
- 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
+-- 
+viresh
