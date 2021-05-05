@@ -2,80 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9E73749B2
-	for <lists+linux-pm@lfdr.de>; Wed,  5 May 2021 22:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF98374C2A
+	for <lists+linux-pm@lfdr.de>; Thu,  6 May 2021 02:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhEEUuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 May 2021 16:50:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59952 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230089AbhEEUu2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 May 2021 16:50:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5161361176;
-        Wed,  5 May 2021 20:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620247771;
-        bh=PzJFrmt9wogXp8aA0hx2iLum0KVL6EybLbueWzdfnQM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LUwHMqA3vh0wmdhodLVmEdNPLKnOH92S8o0/nlR6w3QxTYYn1eKdRUgYOS9J3rJjp
-         zO0OihpK1SLceeG2fSfUIvN0zIBCNIcvjaBNgEjCNmARxetUi9jApWX0PgRJdu13wo
-         zttexbwzQc5qu65pKaaDuEzVMF8VzA5ooA+x2tGXgrnBNl7NkDe/oWJ0BCztrBDHMr
-         2Ld/JQLoIROoMlZx3/PmCaP9Z1MwVxo8eyzFMRi5KW9MLdOtt/1aIE+Psw/v2CQOde
-         MZNpZVO43mkBACpHDpPHi09x1UySI9cTSZZC0HzIrp8pXiXDu3sxXg/iXCEkOXm4Ih
-         agxEB7AstwoIQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 472B2609E8;
-        Wed,  5 May 2021 20:49:31 +0000 (UTC)
-Subject: Re: [git pull] Thermal material for v5.13-rc
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <aaa1d843-a8fc-ed31-495d-45080a944558@linaro.org>
-References: <aaa1d843-a8fc-ed31-495d-45080a944558@linaro.org>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <aaa1d843-a8fc-ed31-495d-45080a944558@linaro.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.13-rc1
-X-PR-Tracked-Commit-Id: c310e546164d5cca4c12faf9582b75989b030b68
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 583f2bcf86a322dc0387f5a868026d2e2fe18261
-Message-Id: <162024777128.12235.11884678578593314250.pr-tracker-bot@kernel.org>
-Date:   Wed, 05 May 2021 20:49:31 +0000
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        unixbhaskar@gmail.com,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>, zhang.yunkai@zte.com.cn,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Colin King <colin.king@canonical.com>,
-        =?UTF-8?B?6auY5LqR6ZyEIChKZXNvbiBH?= =?UTF-8?B?YW8p?= 
-        <jeson.gao@unisoc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        brian-sy yang <brian-sy.yang@mediatek.com>,
-        David Collins <collinsd@codeaurora.org>,
-        Lukasz Luba <Lukasz.Luba@arm.com>,
-        zhuguangqing83 <zhuguangqing83@gmail.com>,
-        Robert Foss <robert.foss@linaro.org>, gongruiqi1@huawei.com,
-        yebin10@huawei.com, dingsenjie@yulong.com,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        rafal@milecki.pl, Lin Ruizhe <linruizhe@huawei.com>,
-        Ansuel Smith <ansuelsmth@gmail.com>
+        id S229646AbhEFAFm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 May 2021 20:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229465AbhEFAFm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 May 2021 20:05:42 -0400
+X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 May 2021 17:04:44 PDT
+Received: from forward106o.mail.yandex.net (forward106o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::609])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46CBC061574
+        for <linux-pm@vger.kernel.org>; Wed,  5 May 2021 17:04:44 -0700 (PDT)
+Received: from forward103q.mail.yandex.net (forward103q.mail.yandex.net [IPv6:2a02:6b8:c0e:50:0:640:b21c:d009])
+        by forward106o.mail.yandex.net (Yandex) with ESMTP id 70BC7506073D
+        for <linux-pm@vger.kernel.org>; Thu,  6 May 2021 02:59:18 +0300 (MSK)
+Received: from vla1-86dffdbd85ea.qloud-c.yandex.net (vla1-86dffdbd85ea.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:1787:0:640:86df:fdbd])
+        by forward103q.mail.yandex.net (Yandex) with ESMTP id 6C1A261E0002
+        for <linux-pm@vger.kernel.org>; Thu,  6 May 2021 02:59:18 +0300 (MSK)
+Received: from vla1-1bc5b51c612f.qloud-c.yandex.net (vla1-1bc5b51c612f.qloud-c.yandex.net [2a02:6b8:c0d:89c:0:640:1bc5:b51c])
+        by vla1-86dffdbd85ea.qloud-c.yandex.net (mxback/Yandex) with ESMTP id TG6afsXRTY-xIJ8MJo0;
+        Thu, 06 May 2021 02:59:18 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1620259158;
+        bh=3I4+tXrr4mB7zRa9n4Iy8H2JREFdJ0Qilg1WxCVZ5Y8=;
+        h=To:From:Subject:Message-ID:Date;
+        b=cjZWhi991m5UcA4EUatIgVnGKd0m7wH2jrY12o48blPQoIC9+7zaBX33kLy3QAQE7
+         UTSXZagCUaCq+LHhoBI0Klfew4qQAM4D0btRLuk9jh1Y8I2oP7BSQhma9wYGcEavQg
+         GbGsjvyNDw52bwmmloOyMMnmMftbnyElH6pDRJMA=
+Authentication-Results: vla1-86dffdbd85ea.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by vla1-1bc5b51c612f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id iBNjEPUJTe-xHL85GrK;
+        Thu, 06 May 2021 02:59:18 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Message-ID: <83426b2264f23a3a790aa6c1cc631669ede81e66.camel@yandex.ru>
+Subject: How to detect s2idle from a drivers/pci/quirks.c ?
+From:   Konstantin Kharlamov <hi-angel@yandex.ru>
+To:     linux-pm@vger.kernel.org
+Date:   Thu, 06 May 2021 02:59:18 +0300
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Wed, 5 May 2021 10:44:25 +0200:
+Hello! I'm solving a bug where s2idle (as opposed to a deeper `mem` suspend) results in external monitor no longer detected, and `dmesg` having PCI-related errors and a stack trace.¹
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.13-rc1
+I pinned down the problem to the fact that `quirk_apple_poweroff_thunderbolt()` should not be called upon s2idle.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/583f2bcf86a322dc0387f5a868026d2e2fe18261
+Now, the last bit is: how do I detect from within this function that the ongoing suspend-mode is the s2idle (aka freeze) ? That is, so I can return from the function early in this case, without powering down any hw. I studied code there and in suspend.c, to no avail so far.
 
-Thank you!
+1: https://bugzilla.kernel.org/show_bug.cgi?id=212767
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
