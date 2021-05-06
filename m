@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EF93759D6
-	for <lists+linux-pm@lfdr.de>; Thu,  6 May 2021 19:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA21375B70
+	for <lists+linux-pm@lfdr.de>; Thu,  6 May 2021 21:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236402AbhEFR61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 May 2021 13:58:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40238 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236338AbhEFR61 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 May 2021 13:58:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A676E61107;
-        Thu,  6 May 2021 17:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620323848;
-        bh=IPvO7dCuUjYWMyqUlLSXScbwv5j5I53rPPMwvXJHZkw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=chqOxWl7Cl3sXXN3TayfyWRc5M4uuLFIbXEOHkmTLgDrWcz36R7r68uufXAxGdZTJ
-         jm/HWuSSqQHoLvDk5EedZtT10sYCPkzCoitM+9l4ZyxIM37FdHFQMPHEtYe70fw5tj
-         Q0bZLnHpm5xcPqT4RKTg1c8sy+H/dp8m+OG2UAorXLqgqC/qPabslim1eeItWrAj6g
-         VfbhkTsF9FKW4HmmjkOqhgVb627jLaHRooYtnFdw+DPeCvSEzHsAEymeubhJRbw0Ou
-         Q2GIG67PFjBmv2x+6qkjIQwCEMzy81mAfwXPDfB9kFhADqYdP9D5i3INpW4LyBywze
-         QI41BSuU9WTfQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9F6B3609AC;
-        Thu,  6 May 2021 17:57:28 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fixes for v5.13-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hLfXuUNRw2B48S7mQK5bnsZFFKQfqf5mCncMnak6uXYw@mail.gmail.com>
-References: <CAJZ5v0hLfXuUNRw2B48S7mQK5bnsZFFKQfqf5mCncMnak6uXYw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hLfXuUNRw2B48S7mQK5bnsZFFKQfqf5mCncMnak6uXYw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.13-rc1-2
-X-PR-Tracked-Commit-Id: 3da53c754502acf74d4d9ba8ac23fc356e6c3d0f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 164e64adc246dd4239ab644dff86241d17cef218
-Message-Id: <162032384864.1989.1740026520389167319.pr-tracker-bot@kernel.org>
-Date:   Thu, 06 May 2021 17:57:28 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S234776AbhEFTKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 May 2021 15:10:51 -0400
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:33123 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234729AbhEFTKu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 May 2021 15:10:50 -0400
+Received: from localhost.localdomain ([86.243.172.93])
+        by mwinf5d05 with ME
+        id 1X9p2500F21Fzsu03X9qJq; Thu, 06 May 2021 21:09:50 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 06 May 2021 21:09:50 +0200
+X-ME-IP: 86.243.172.93
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     sudeep.holla@arm.com, cristian.marussi@arm.com, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, nicola.mazzucato@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] cpufreq: scmi: Fix an error message
+Date:   Thu,  6 May 2021 21:09:48 +0200
+Message-Id: <b0c09698216af60d97bfd30b55bad89dc0f70112.1620328067.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 6 May 2021 17:39:28 +0200:
+'ret' is known to be 0 here.
+The last error code is stored in 'nr_opp', so use it in the error message.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.13-rc1-2
+Fixes: 71a37cd6a59d ("scmi-cpufreq: Remove deferred probe")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/164e64adc246dd4239ab644dff86241d17cef218
-
-Thank you!
-
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index c8a4364ad3c2..ec9a87ca2dbb 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -174,7 +174,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 		nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
+ 		if (nr_opp <= 0) {
+ 			dev_err(cpu_dev, "%s: No OPPs for this device: %d\n",
+-				__func__, ret);
++				__func__, nr_opp);
+ 
+ 			ret = -ENODEV;
+ 			goto out_free_opp;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+
