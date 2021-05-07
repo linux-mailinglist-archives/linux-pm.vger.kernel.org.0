@@ -2,90 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D01337647E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 13:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4CD3764DE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 14:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbhEGLa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 May 2021 07:30:59 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52890 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbhEGLa7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 07:30:59 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 11BD61F43F80
-Received: by earth.universe (Postfix, from userid 1000)
-        id 44EFD3C0C96; Fri,  7 May 2021 13:29:56 +0200 (CEST)
-Date:   Fri, 7 May 2021 13:29:56 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     skakit@codeaurora.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
- PON binding to yaml
-Message-ID: <20210507112956.3ibzuinvzd6d5rku@earth.universe>
-References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
- <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
- <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
- <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
- <322cbdbb022fec3f43c1cbe13c532dd3@codeaurora.org>
- <20210427083721.heavcdadeb4ajkk2@earth.universe>
- <a190e414c53af3ea094548f5011c3a04@codeaurora.org>
- <be3573974d76d7e464048b34854416ad@codeaurora.org>
+        id S235922AbhEGMFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 May 2021 08:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235460AbhEGMFe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 08:05:34 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3FAC061574
+        for <linux-pm@vger.kernel.org>; Fri,  7 May 2021 05:04:34 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id 66so4540957vsk.9
+        for <linux-pm@vger.kernel.org>; Fri, 07 May 2021 05:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cQHsYCv/veghSWphtSoC5Y2vDR65oOelmQfRVgs2/nY=;
+        b=xWIa52Ewjy8iAbEUz1PZVMFV+vl9x6urA4NnFkUj04WJ8ccEyDY9POZgIcJQttEd9d
+         qGJXEoIxSz6WPMsRlGTW6nRKrnFMnfaZgHYcOdYKV3YscdLyoJQONjOk/w5Fmj4y2x2u
+         G+y3Eg+Vpd9/Tje2+QZ2IORMVtx2qrbbDeUYZI0FoQkxPCAyrMFlw18+NcAx7EzZY/tR
+         aKyxJRgkwkJXPWRmsw/u+TCSyLVJZ56IKlFkWVwJ7z1nBJ/vND9JfZr1wHvpt20cStiv
+         zUpisAXnBTPB3skH3Nj17yo6s88+2bfu7jSNCGk3NIA+UQIbm7r+LqqFmPAduoEypUZ1
+         hvOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cQHsYCv/veghSWphtSoC5Y2vDR65oOelmQfRVgs2/nY=;
+        b=jQt3YrQP1OuangCzgo+yOet7JcpBgnwIGtZaKJOpKUxQbvEu8XYyH2zjMOqpA9miJO
+         lZcJ9ErBStDyecrMLorL98GhB5uxbJuGawprqvjIvr21EEfq2rKhazy7iE5F9EpCDAcs
+         xXSyabulcJ+z7mw5iWaSLBV/NP4GdZ8uYLatl6zqjDp03SNbzMPOXs3N2TImkjZRhgpL
+         oWS5pK9FssiOJYWHHH/SIEV1dgmdnp+5Aw26WMs8uuh3My5uJovqm3xGwmRLM45MuTG2
+         xytwUFz8mIiDUQWgJKGcnPq3YsE4Ec/r4iz2wxw8R+QLqODy0wF1RirkgefHWyug/pS1
+         JPEw==
+X-Gm-Message-State: AOAM5309sFCXoK4t/Zm914eMeQoyoWSTQMDEal+DvEmkqhGBEWSI4Nhu
+        jWHmWkMUa5hstFzgd94bgvbmboWC0GAL5kaHyNDeew==
+X-Google-Smtp-Source: ABdhPJwM/BRpKmh0zWcpYmBXd8iYZX7X+0IZgY1frY8trVcEq+DpmrHdNypgNdSsBTfenafQZ0Hp2GJfD8IUw4d79r8=
+X-Received: by 2002:a67:64c5:: with SMTP id y188mr7319294vsb.19.1620389073750;
+ Fri, 07 May 2021 05:04:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ix4wlrl34amaeftv"
-Content-Disposition: inline
-In-Reply-To: <be3573974d76d7e464048b34854416ad@codeaurora.org>
+References: <20210505110915.6861-1-tony@atomide.com>
+In-Reply-To: <20210505110915.6861-1-tony@atomide.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 May 2021 14:03:57 +0200
+Message-ID: <CAPDyKFp36huF2Gu19T+KvUm90xSsd97VDCxst1KT+Qf0F5Vm5g@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Fix unpaired parent child_count for force_resume
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 5 May 2021 at 13:09, Tony Lindgren <tony@atomide.com> wrote:
+>
+> As pm_runtime_need_not_resume() relies also on usage_count, it can return
+> a different value in pm_runtime_force_suspend() compared to when called in
+> pm_runtime_force_resume(). Different return values can happen if anything
+> calls PM runtime functions in between, and causes the parent child_count
+> to increase on every resume.
+>
+> So far I've seen the issue only for omapdrm that does complicated things
+> with PM runtime calls during system suspend for legacy reasons:
+>
+> omap_atomic_commit_tail() for omapdrm.0
+>  dispc_runtime_get()
+>   wakes up 58000000.dss as it's the dispc parent
+>    dispc_runtime_resume()
+>     rpm_resume() increases parent child_count
+>  dispc_runtime_put() won't idle, PM runtime suspend blocked
+> pm_runtime_force_suspend() for 58000000.dss, !pm_runtime_need_not_resume()
+>  __update_runtime_status()
+> system suspended
+> pm_runtime_force_resume() for 58000000.dss, pm_runtime_need_not_resume()
+>  pm_runtime_enable() only called because of pm_runtime_need_not_resume()
+> omap_atomic_commit_tail() for omapdrm.0
+>  dispc_runtime_get()
+>   wakes up 58000000.dss as it's the dispc parent
+>    dispc_runtime_resume()
+>     rpm_resume() increases parent child_count
+>  dispc_runtime_put() won't idle, PM runtime suspend blocked
+> ...
+> rpm_suspend for 58000000.dss but parent child_count is now unbalanced
+>
+> Let's fix the issue by adding a flag for needs_force_resume and use it in
+> pm_runtime_force_resume() instead of pm_runtime_need_not_resume().
 
---ix4wlrl34amaeftv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for sharing the details, much appreciated.
 
-Hi,
+>
+> Additionally omapdrm system suspend could be simplified later on to avoid
+> lots of unnecessary PM runtime calls and the complexity it adds. The
+> driver can just use internal functions that are shared between the PM
+> runtime and system suspend related functions.
+>
+> Fixes: 4918e1f87c5f ("PM / runtime: Rework pm_runtime_force_suspend/resume()")
 
-On Fri, May 07, 2021 at 03:15:55PM +0530, skakit@codeaurora.org wrote:
-> Seems like I have to make 'additionalProperties' as true in reboot-mode.yaml
-> I have checked other yaml binding docs where allOf is used, and they have
-> 'additionalProperties' as true in the file which is being referred. Please
-> let me know if this is not correct way to do it.
+Actually, I think the problem has been there from the beginning
+(unless I am mistaken), when we introduced the functions. So maybe the
+fixes tag isn't entirely correct.
 
-Yes, reboot-mode.yaml should have additionalProperties = true. I
-think Rob missed, that the binding is a generic one when he added
-it in f84e2c5c528d.
+Although, I certainly think we should tag this for stable kernels.
 
--- Sebastian
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
 
---ix4wlrl34amaeftv
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
------BEGIN PGP SIGNATURE-----
+Kind regards
+Uffe
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmCVJKoACgkQ2O7X88g7
-+pqZqg//bAl15lpGbh5wgVjf5oRwoIJT0FsA2CjTDNeaNO9xiVJhMfQBPWzqmAhB
-hKN6XC4DSemLD7BKsPgIWYTsJvNyQi7wEZKLO6G3+R6Q+bEp4Ry30Cf/heTXw76y
-41udUW+UvPXY1p/v36Xyhidirt4gPfIHTTKEyQ9WEHlDI+J4TjPrH9CaU3a8FwAc
-a5/73gv5OZn4tSLEfbK/VLC7OOMkGrv4zzm+GZeDfeAhv51psVGXUTp1g2UtI70j
-1IlxeMNUus/dSNHqPVUmUndKWhFRAcm4xpjzz3ArGOGYcAXjG5uZzc7hdl5x3APf
-Fj56H//aEn/ERAt0zVJMY+tmenq/XA3hBFZZ7Y9qewz96ep7QUkOSeYe2m5xm8pr
-5ChL1RuwsXdVomwpLKx6q975+9RZi7d+HtM4GymzBQ0CJaWekE2nDPhZKnZL6aoF
-/BS0Il/mVhHLVzhHel9tUGOU0JiyqvcaoZI/nKTqs7mLAFk+J0v1ya3djKo5/yFT
-/VlW892Rie5Prj+c8PUpCgNDBLzrBhdlsrfQZDCob81OaC6sn5KJiNnsZGXuux3n
-ZzIVQXWvsoBSU8vCKwh3hIfmfnKQfR02WdAP6TDac0TB6dOKgzz05oQ56sQ8+CSM
-rCE6/07o9NePc9lvoYdS6IFWLnIwLoix125kXkmVLYfOgQX4c8E=
-=szSx
------END PGP SIGNATURE-----
-
---ix4wlrl34amaeftv--
+> ---
+>  drivers/base/power/runtime.c | 10 +++++++---
+>  include/linux/pm.h           |  1 +
+>  2 files changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1637,6 +1637,7 @@ void pm_runtime_init(struct device *dev)
+>         dev->power.request_pending = false;
+>         dev->power.request = RPM_REQ_NONE;
+>         dev->power.deferred_resume = false;
+> +       dev->power.needs_force_resume = 0;
+>         INIT_WORK(&dev->power.work, pm_runtime_work);
+>
+>         dev->power.timer_expires = 0;
+> @@ -1804,10 +1805,12 @@ int pm_runtime_force_suspend(struct device *dev)
+>          * its parent, but set its status to RPM_SUSPENDED anyway in case this
+>          * function will be called again for it in the meantime.
+>          */
+> -       if (pm_runtime_need_not_resume(dev))
+> +       if (pm_runtime_need_not_resume(dev)) {
+>                 pm_runtime_set_suspended(dev);
+> -       else
+> +       } else {
+>                 __update_runtime_status(dev, RPM_SUSPENDED);
+> +               dev->power.needs_force_resume = 1;
+> +       }
+>
+>         return 0;
+>
+> @@ -1834,7 +1837,7 @@ int pm_runtime_force_resume(struct device *dev)
+>         int (*callback)(struct device *);
+>         int ret = 0;
+>
+> -       if (!pm_runtime_status_suspended(dev) || pm_runtime_need_not_resume(dev))
+> +       if (!pm_runtime_status_suspended(dev) || !dev->power.needs_force_resume)
+>                 goto out;
+>
+>         /*
+> @@ -1853,6 +1856,7 @@ int pm_runtime_force_resume(struct device *dev)
+>
+>         pm_runtime_mark_last_busy(dev);
+>  out:
+> +       dev->power.needs_force_resume = 0;
+>         pm_runtime_enable(dev);
+>         return ret;
+>  }
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -602,6 +602,7 @@ struct dev_pm_info {
+>         unsigned int            idle_notification:1;
+>         unsigned int            request_pending:1;
+>         unsigned int            deferred_resume:1;
+> +       unsigned int            needs_force_resume:1;
+>         unsigned int            runtime_auto:1;
+>         bool                    ignore_children:1;
+>         unsigned int            no_callbacks:1;
+> --
+> 2.31.1
