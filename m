@@ -2,103 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB08E37631D
-	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 11:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC74376476
+	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 13:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbhEGJwb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 May 2021 05:52:31 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36805 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbhEGJwb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 05:52:31 -0400
-Received: by mail-ot1-f41.google.com with SMTP id n32-20020a9d1ea30000b02902a53d6ad4bdso7438757otn.3;
-        Fri, 07 May 2021 02:51:32 -0700 (PDT)
+        id S233562AbhEGLaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 May 2021 07:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234316AbhEGL3i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 07:29:38 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA79C061761
+        for <linux-pm@vger.kernel.org>; Fri,  7 May 2021 04:28:35 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id x17so190679vsc.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 May 2021 04:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oeCXuynOU5/nueZeAhSxiOqvtvTDZN1GezJx4N+SP5Y=;
+        b=Sc6Kx3Bq8NZR2LLjLN69C7kmPQwIg+Pw5FF2SI4xm0J/8FXustQJ0wswlmc5qhn2Rm
+         CtoPxRq+NR3NkdAe4uT2y84gEvatGzUT3OEAIQfW5RnBQcGHaOBKBB/ePsBduE+cq770
+         q8GbnkyfmQ63gnhf7i+0N8+s/r8vyab32+KU6r+Ug0n9vzZOA5jGF6H+Jt9pjdIHWZWN
+         CiSseKvJdfPsxRAjQn8CMLhYSMz+0dpDf3X5R1KD/GknyNX+CqyWqF55WT5DzUJERz0s
+         JhpA73elzjKL4dI+5N7VpXjEwuF+L95AnIT076J33cthIb+gbuVK604AWz2zMjRHbwZE
+         Uk4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PPQjQYzUmoFE08W4EXjrEIBArsoeb4wImA4z3QOLJK4=;
-        b=a8rRioHVL402rz3kp7WibCDnTRVMD8kWCgz/NbsB9GBvbfEwZ9PjXSYmbODRcKael6
-         IeaiyeRbaPl2kOjVcSDnOJhyxS4gaRX33ESfKZo+/l50+laM70k3D2SGqeaL3omuCd60
-         MzVecu8HoQWGAUgNHl3B2TVuUc2MEVg+3sovrt4KvBmQX+B4WfQcxBYDhmEOGW9PkMUT
-         /u+204zWUYcxYE28WMgZFIWdgFY1pdK4F2RsVe5JdZa+mIdFdYBSnpTqi/eTpApn8Izi
-         Ik8ndxRZkjM256b7pVtoD0c55XLYcwqclVhSUSFGb271dNZ55MUkW/lyhxQQzC0BfR89
-         nmJA==
-X-Gm-Message-State: AOAM532xIZClBuVFBs9idmAYdgCnnl+POEy4ZtAFVYY2ubXaXd8yqFJf
-        QW9AOsuT7f1LG482bCno5DTdEoTmOPEqIqtttDE=
-X-Google-Smtp-Source: ABdhPJww/5gpmoprCGqfcImztgA/YFJ/Fn+PdS1VXroC+v07U330yHEV6eizGFwWYJAY79T+mRD5ir7LpZGheLqjs3E=
-X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr7360464otb.260.1620381091931;
- Fri, 07 May 2021 02:51:31 -0700 (PDT)
+        bh=oeCXuynOU5/nueZeAhSxiOqvtvTDZN1GezJx4N+SP5Y=;
+        b=k3VZqAOiDaNX0+cVOXzlBYmzVrUDRZUOdkn9Ijky6v36BIv/gvdxgWM/P4rBp5VA+G
+         nVkBJuTM3kP4A7PPho1CFJAfnq3fWQBdc5prar2Mai9CJewdEaXGFMRN+iOHwR27ZSc8
+         Oqg/VF+kM6tXChI6qGbaQ6e+hC/msutYNtj1aDUnVTGYoiq7GRt9REDRSMYS+/+8tPLP
+         bfwcTOsLiSRKOR4lFSMlk1qz4BF6JCX6Fd1n8yPCkbdcEjYOQNvY0jkWQCAv5ItV+ovo
+         ojmdoaT7aFuazjTr2L+ylECeX2YNx34fVaPt9G7B6UQRHmSylh4R1UQ6/jpnU3KJsrUL
+         NJfA==
+X-Gm-Message-State: AOAM533ZHur3+IBmI/br5HdLy6TzrsV2bQnjIonXEWgl5YXI1ZXVlJF9
+        lsWZ0YcGedCJtTcYcbHTZ67o4Jea2O3IiVM+DTqANA==
+X-Google-Smtp-Source: ABdhPJyrRjbYfbEH+gitFsy/NzamJybijwKorLqRs4OhSdm/1MD6yw1F4Ca3Ien29T+xvHRZRTg2N9+IdpEys401Xf8=
+X-Received: by 2002:a67:2c03:: with SMTP id s3mr7864810vss.42.1620386915110;
+ Fri, 07 May 2021 04:28:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210506173820.21876-1-Hi-Angel@yandex.ru> <20210506214842.GA1436993@bjorn-Precision-5520>
- <20210506220738.GA2150@wunner.de>
-In-Reply-To: <20210506220738.GA2150@wunner.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 7 May 2021 11:51:20 +0200
-Message-ID: <CAJZ5v0hFEX3doAPbDDix3oGpfCbSkWLgjPzNdvNLXyNRN+uqzQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on s2idle
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20210421135723.3601743-1-arnd@kernel.org>
+In-Reply-To: <20210421135723.3601743-1-arnd@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 May 2021 13:27:58 +0200
+Message-ID: <CAPDyKFomx+B5MJqW46fKuq_vrV8tLtG5n91eu1pOpvDkcSJJag@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: qcom_scm: fix Kconfig dependencies again
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        He Ying <heying24@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 7, 2021 at 12:07 AM Lukas Wunner <lukas@wunner.de> wrote:
+On Wed, 21 Apr 2021 at 15:57, Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Thu, May 06, 2021 at 04:48:42PM -0500, Bjorn Helgaas wrote:
-> > On Thu, May 06, 2021 at 08:38:20PM +0300, Konstantin Kharlamov wrote:
-> > > On Macbook 2013 resuming from s2idle results in external monitor no
-> > > longer being detected, and dmesg having errors like:
-> > >
-> > >     pcieport 0000:06:00.0: can't change power state from D3hot to D0 (config space inaccessible)
-> > >
-> > > and a stacktrace. The reason turned out that the hw that the quirk
-> > > powers off does not get powered on back on resume.
-> >
-> > quirk_apple_poweroff_thunderbolt() was added in 2014 by 1df5172c5c25
-> > ("PCI: Suspend/resume quirks for Apple thunderbolt").  It claims
-> > "power is automatically restored before resume," so there must be
-> > something special about s2idle that prevents the power-on.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> With s2idle, the machine isn't suspended via ACPI, so the AML code
-> which powers the controller off isn't executed.  The dance to prepare
-> the controller for power-off consequently isn't necessary but rather
-> harmful.
+> The previous compile time fix was incomplete and still results in
+> warnings like:
 >
-> To get the same power savings as with ACPI suspend, the controller
-> needs to be powered off via runtime suspend.
+> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>
+> WARNING: unmet direct dependencies detected for QCOM_SCM
+>   Depends on [n]: (ARM [=y] || ARM64) && HAVE_ARM_SMCCC [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>
+> Use a dependency on ARCH_SUSPEND_POSSIBLE as a prerequisite for
+> selecting ARM_CPU_SUSPEND, and a dependency on HAVE_ARM_SMCCC
+> for QCOM_SCM.
+>
+> Fixes: 498ba2a8a275 ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I'm not quite sure why runtime PM needs to be involved.
+Looks like this isn't applied yet, feel free to add:
 
-The controller suspend can happen in the system-wide suspend code path directly.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> I posted patches for
-> that back in 2016.  I'm using them on my laptop, they need some
-> polishing and rebasing before I can repost them due to massive
-> changes that have happened in the thunderbolt driver in the meantime.
-> Without these patches, the controller sucks 1.5W of power in s2idle.
+Kind regards
+Uffe
+
+> ---
+>  drivers/cpuidle/Kconfig.arm | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> > Obviously the *hardware* hasn't changed since 1df5172c5c25.  Is s2idle
-> > something that wasn't tested back then, or is this problem connected
-> > to an s2idle change since then?  Can we identify a commit that
-> > introduced this problem?  That would help with backporting or stable
-> > tags.
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 334f83e56120..fc596494251c 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -107,7 +107,8 @@ config ARM_TEGRA_CPUIDLE
 >
-> Yes I believe the quirk predates the introduction of s2idle by a couple
-> of years.
+>  config ARM_QCOM_SPM_CPUIDLE
+>         bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+> -       depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
+> +       depends on ARCH_QCOM || (ARCH_SUSPEND_POSSIBLE && COMPILE_TEST)
+> +       depends on ARM && HAVE_ARM_SMCCC
+>         select ARM_CPU_SUSPEND
+>         select CPU_IDLE_MULTIPLE_DRIVERS
+>         select DT_IDLE_STATES
+> --
+> 2.29.2
 >
-> > > Signed-off-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
->
-> Reviewed-by: Lukas Wunner <lukas@wunner.de>
->
-> The patch looks fine to me.
->
-> Thanks,
->
-> Lukas
