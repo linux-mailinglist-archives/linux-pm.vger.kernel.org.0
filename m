@@ -2,117 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC74376476
-	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 13:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D01337647E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 13:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbhEGLaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 May 2021 07:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbhEGL3i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 07:29:38 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA79C061761
-        for <linux-pm@vger.kernel.org>; Fri,  7 May 2021 04:28:35 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id x17so190679vsc.0
-        for <linux-pm@vger.kernel.org>; Fri, 07 May 2021 04:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oeCXuynOU5/nueZeAhSxiOqvtvTDZN1GezJx4N+SP5Y=;
-        b=Sc6Kx3Bq8NZR2LLjLN69C7kmPQwIg+Pw5FF2SI4xm0J/8FXustQJ0wswlmc5qhn2Rm
-         CtoPxRq+NR3NkdAe4uT2y84gEvatGzUT3OEAIQfW5RnBQcGHaOBKBB/ePsBduE+cq770
-         q8GbnkyfmQ63gnhf7i+0N8+s/r8vyab32+KU6r+Ug0n9vzZOA5jGF6H+Jt9pjdIHWZWN
-         CiSseKvJdfPsxRAjQn8CMLhYSMz+0dpDf3X5R1KD/GknyNX+CqyWqF55WT5DzUJERz0s
-         JhpA73elzjKL4dI+5N7VpXjEwuF+L95AnIT076J33cthIb+gbuVK604AWz2zMjRHbwZE
-         Uk4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oeCXuynOU5/nueZeAhSxiOqvtvTDZN1GezJx4N+SP5Y=;
-        b=k3VZqAOiDaNX0+cVOXzlBYmzVrUDRZUOdkn9Ijky6v36BIv/gvdxgWM/P4rBp5VA+G
-         nVkBJuTM3kP4A7PPho1CFJAfnq3fWQBdc5prar2Mai9CJewdEaXGFMRN+iOHwR27ZSc8
-         Oqg/VF+kM6tXChI6qGbaQ6e+hC/msutYNtj1aDUnVTGYoiq7GRt9REDRSMYS+/+8tPLP
-         bfwcTOsLiSRKOR4lFSMlk1qz4BF6JCX6Fd1n8yPCkbdcEjYOQNvY0jkWQCAv5ItV+ovo
-         ojmdoaT7aFuazjTr2L+ylECeX2YNx34fVaPt9G7B6UQRHmSylh4R1UQ6/jpnU3KJsrUL
-         NJfA==
-X-Gm-Message-State: AOAM533ZHur3+IBmI/br5HdLy6TzrsV2bQnjIonXEWgl5YXI1ZXVlJF9
-        lsWZ0YcGedCJtTcYcbHTZ67o4Jea2O3IiVM+DTqANA==
-X-Google-Smtp-Source: ABdhPJyrRjbYfbEH+gitFsy/NzamJybijwKorLqRs4OhSdm/1MD6yw1F4Ca3Ien29T+xvHRZRTg2N9+IdpEys401Xf8=
-X-Received: by 2002:a67:2c03:: with SMTP id s3mr7864810vss.42.1620386915110;
- Fri, 07 May 2021 04:28:35 -0700 (PDT)
+        id S234344AbhEGLa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 May 2021 07:30:59 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52890 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhEGLa7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 07:30:59 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 11BD61F43F80
+Received: by earth.universe (Postfix, from userid 1000)
+        id 44EFD3C0C96; Fri,  7 May 2021 13:29:56 +0200 (CEST)
+Date:   Fri, 7 May 2021 13:29:56 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     skakit@codeaurora.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+Message-ID: <20210507112956.3ibzuinvzd6d5rku@earth.universe>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+ <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
+ <322cbdbb022fec3f43c1cbe13c532dd3@codeaurora.org>
+ <20210427083721.heavcdadeb4ajkk2@earth.universe>
+ <a190e414c53af3ea094548f5011c3a04@codeaurora.org>
+ <be3573974d76d7e464048b34854416ad@codeaurora.org>
 MIME-Version: 1.0
-References: <20210421135723.3601743-1-arnd@kernel.org>
-In-Reply-To: <20210421135723.3601743-1-arnd@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 May 2021 13:27:58 +0200
-Message-ID: <CAPDyKFomx+B5MJqW46fKuq_vrV8tLtG5n91eu1pOpvDkcSJJag@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: qcom_scm: fix Kconfig dependencies again
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        He Ying <heying24@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ix4wlrl34amaeftv"
+Content-Disposition: inline
+In-Reply-To: <be3573974d76d7e464048b34854416ad@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Apr 2021 at 15:57, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The previous compile time fix was incomplete and still results in
-> warnings like:
->
-> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
->   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
->
-> WARNING: unmet direct dependencies detected for QCOM_SCM
->   Depends on [n]: (ARM [=y] || ARM64) && HAVE_ARM_SMCCC [=n]
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
->
-> Use a dependency on ARCH_SUSPEND_POSSIBLE as a prerequisite for
-> selecting ARM_CPU_SUSPEND, and a dependency on HAVE_ARM_SMCCC
-> for QCOM_SCM.
->
-> Fixes: 498ba2a8a275 ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Looks like this isn't applied yet, feel free to add:
+--ix4wlrl34amaeftv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hi,
 
-Kind regards
-Uffe
+On Fri, May 07, 2021 at 03:15:55PM +0530, skakit@codeaurora.org wrote:
+> Seems like I have to make 'additionalProperties' as true in reboot-mode.yaml
+> I have checked other yaml binding docs where allOf is used, and they have
+> 'additionalProperties' as true in the file which is being referred. Please
+> let me know if this is not correct way to do it.
 
-> ---
->  drivers/cpuidle/Kconfig.arm | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-> index 334f83e56120..fc596494251c 100644
-> --- a/drivers/cpuidle/Kconfig.arm
-> +++ b/drivers/cpuidle/Kconfig.arm
-> @@ -107,7 +107,8 @@ config ARM_TEGRA_CPUIDLE
->
->  config ARM_QCOM_SPM_CPUIDLE
->         bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
-> -       depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
-> +       depends on ARCH_QCOM || (ARCH_SUSPEND_POSSIBLE && COMPILE_TEST)
-> +       depends on ARM && HAVE_ARM_SMCCC
->         select ARM_CPU_SUSPEND
->         select CPU_IDLE_MULTIPLE_DRIVERS
->         select DT_IDLE_STATES
-> --
-> 2.29.2
->
+Yes, reboot-mode.yaml should have additionalProperties = true. I
+think Rob missed, that the binding is a generic one when he added
+it in f84e2c5c528d.
+
+-- Sebastian
+
+--ix4wlrl34amaeftv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmCVJKoACgkQ2O7X88g7
++pqZqg//bAl15lpGbh5wgVjf5oRwoIJT0FsA2CjTDNeaNO9xiVJhMfQBPWzqmAhB
+hKN6XC4DSemLD7BKsPgIWYTsJvNyQi7wEZKLO6G3+R6Q+bEp4Ry30Cf/heTXw76y
+41udUW+UvPXY1p/v36Xyhidirt4gPfIHTTKEyQ9WEHlDI+J4TjPrH9CaU3a8FwAc
+a5/73gv5OZn4tSLEfbK/VLC7OOMkGrv4zzm+GZeDfeAhv51psVGXUTp1g2UtI70j
+1IlxeMNUus/dSNHqPVUmUndKWhFRAcm4xpjzz3ArGOGYcAXjG5uZzc7hdl5x3APf
+Fj56H//aEn/ERAt0zVJMY+tmenq/XA3hBFZZ7Y9qewz96ep7QUkOSeYe2m5xm8pr
+5ChL1RuwsXdVomwpLKx6q975+9RZi7d+HtM4GymzBQ0CJaWekE2nDPhZKnZL6aoF
+/BS0Il/mVhHLVzhHel9tUGOU0JiyqvcaoZI/nKTqs7mLAFk+J0v1ya3djKo5/yFT
+/VlW892Rie5Prj+c8PUpCgNDBLzrBhdlsrfQZDCob81OaC6sn5KJiNnsZGXuux3n
+ZzIVQXWvsoBSU8vCKwh3hIfmfnKQfR02WdAP6TDac0TB6dOKgzz05oQ56sQ8+CSM
+rCE6/07o9NePc9lvoYdS6IFWLnIwLoix125kXkmVLYfOgQX4c8E=
+=szSx
+-----END PGP SIGNATURE-----
+
+--ix4wlrl34amaeftv--
