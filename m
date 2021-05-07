@@ -2,72 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D819376BE4
-	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 23:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF558376CBA
+	for <lists+linux-pm@lfdr.de>; Sat,  8 May 2021 00:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhEGVpf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 May 2021 17:45:35 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:38676 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGVpe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 17:45:34 -0400
-Received: by mail-ot1-f44.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so9153770oth.5;
-        Fri, 07 May 2021 14:44:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hiITqmR3MkOf1yfwBYllv9mUhx0O2m9hc1IxfJCX5I0=;
-        b=fRTFT313Tu1N4FZAfGR7Jp4WyvBmkBA7PeGwW0ZgvXNNA7i2tdxuQ7pKGKTeKjRYGa
-         bo1tKW8bEzBrXtK6s8N6/dZ1zBAgaZV/QUSOuYlFwRTNHDzahLJf6Bpu0VGhbyhPCx9c
-         HzuX+L8iJdKaClhMxfF7V1y7l+7WG3qE3spv+r8DfHfaxUi8DQXBKY2RWNi2LN1+NnxV
-         qKrDLYIYeBiy7Y8wuY2RfsVjGd9xcjmIAYLhCIYZXDaHpnBRZuLjiNrsrfIC5g/dbvTx
-         OrqsE4pNRXNHFhPNr1eqLMk3aqoW5M46zZvOLi3Zvw/cpt4qDdj5kPOPCp0mmJC/LHR+
-         to3w==
-X-Gm-Message-State: AOAM531YVJLe34bv/SJkdA5YW8mbeqNeJoKbxhOrrYmX3FPpdAT/5u5k
-        /OPAirAAQL7AGXPlSNskeOe8MRBJpQ==
-X-Google-Smtp-Source: ABdhPJwocDZDc+NSwRU7v73INFImOWfRP0IFFfEgqXzZHnfl39v6PHwY49UNRM65+yeqFYJV/U6gBA==
-X-Received: by 2002:a05:6830:2117:: with SMTP id i23mr9655209otc.331.1620423873421;
-        Fri, 07 May 2021 14:44:33 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i18sm1320233oot.48.2021.05.07.14.44.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 May 2021 14:44:32 -0700 (PDT)
-Received: (nullmailer pid 2944565 invoked by uid 1000);
-        Fri, 07 May 2021 21:44:31 -0000
-Date:   Fri, 7 May 2021 16:44:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        kernel@collabora.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: thermal: convert rockchip-thermal to
- json-schema
-Message-ID: <20210507214431.GA2944513@robh.at.kernel.org>
-References: <20210506175514.168365-1-ezequiel@collabora.com>
- <20210506175514.168365-3-ezequiel@collabora.com>
+        id S230102AbhEGW1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 May 2021 18:27:40 -0400
+Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
+        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGW1h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 18:27:37 -0400
+X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
+Received: from bosmailscan09.eigbox.net ([10.20.15.9])
+        by bosmailout01.eigbox.net with esmtp (Exim)
+        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
+        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
+        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
+        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
+        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
+        2gI+xJSw==;
+Received: from [10.115.3.32] (helo=bosimpout12)
+        by bosmailscan09.eigbox.net with esmtp (Exim)
+        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
+Received: from boswebmail06.eigbox.net ([10.20.16.6])
+        by bosimpout12 with 
+        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
+X-EN-SP-DIR: OUT
+X-EN-SP-SQ: 1
+Received: from [127.0.0.1] (helo=homestead)
+        by boswebmail06.eigbox.net with esmtp (Exim)
+        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
+Received: from [197.239.81.229]
+ by emailmg.homestead.com
+ with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210506175514.168365-3-ezequiel@collabora.com>
+Date:   Fri, 07 May 2021 21:54:17 +0000
+From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
+To:     undisclosed-recipients:;
+Subject: URGENT REPLY NEEDED
+Reply-To: suzara2017malingwan@gmail.com
+Mail-Reply-To: suzara2017malingwan@gmail.com
+Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
+X-Sender: fast65@godsofu4.com
+User-Agent: Roundcube Webmail/1.3.14
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-EN-AuthUser: fast65@godsofu4.com
+Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 06 May 2021 14:55:12 -0300, Ezequiel Garcia wrote:
-> Convert Rockchip Thermal sensor dt-bindings to YAML.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  .../bindings/thermal/rockchip-thermal.txt     | 85 -----------------
->  .../bindings/thermal/rockchip-thermal.yaml    | 95 +++++++++++++++++++
->  2 files changed, 95 insertions(+), 85 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
+
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
+
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
+
+With kind regards
+Mrs Suzara Maling Wan
