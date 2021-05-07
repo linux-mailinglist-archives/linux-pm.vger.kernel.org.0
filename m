@@ -2,95 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 154393762E3
-	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 11:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D7D376305
+	for <lists+linux-pm@lfdr.de>; Fri,  7 May 2021 11:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbhEGJdZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 May 2021 05:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbhEGJdZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 May 2021 05:33:25 -0400
-Received: from forward101o.mail.yandex.net (forward101o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2D6C061574
-        for <linux-pm@vger.kernel.org>; Fri,  7 May 2021 02:32:25 -0700 (PDT)
-Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
-        by forward101o.mail.yandex.net (Yandex) with ESMTP id E0C7E3C01CF3;
-        Fri,  7 May 2021 12:32:21 +0300 (MSK)
-Received: from vla5-04352cd868be.qloud-c.yandex.net (vla5-04352cd868be.qloud-c.yandex.net [IPv6:2a02:6b8:c18:3411:0:640:435:2cd8])
-        by forward101q.mail.yandex.net (Yandex) with ESMTP id DC664CF40023;
-        Fri,  7 May 2021 12:32:21 +0300 (MSK)
-Received: from vla1-62318bfe5573.qloud-c.yandex.net (vla1-62318bfe5573.qloud-c.yandex.net [2a02:6b8:c0d:3819:0:640:6231:8bfe])
-        by vla5-04352cd868be.qloud-c.yandex.net (mxback/Yandex) with ESMTP id c3xWZ66Tmq-WLIep920;
-        Fri, 07 May 2021 12:32:21 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1620379941;
-        bh=cK6I76Yoos3rjd1DiTpMFrQ2xKCG7ieKKp7kVmltyzU=;
-        h=In-Reply-To:Cc:To:From:Subject:Message-ID:References:Date;
-        b=ifU95PoP1+SXeUtbz4MCszXgGcpc8wS4pH7WWx3DRRlOloffQgl+DP4cPbCdK2RyL
-         PmewvT1vFDLvoMnlI3N368cgY5OTPDZx0sTeZNS2/ynm8z/UyNnBjwXQ47q24Ae+M9
-         BBhOs42udbmhaduiHNO+UOzgneUjASqjGkvXec7I=
-Authentication-Results: vla5-04352cd868be.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by vla1-62318bfe5573.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ZzQpaJLAY4-WLLGC7X4;
-        Fri, 07 May 2021 12:32:21 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Message-ID: <eb09cf4f31ea2833b6f6cdc309f256f7ad105b26.camel@yandex.ru>
-Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
- s2idle
-From:   Konstantin Kharlamov <hi-angel@yandex.ru>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        linux-pm@vger.kernel.org
-Date:   Fri, 07 May 2021 12:32:20 +0300
-In-Reply-To: <20210506214842.GA1436993@bjorn-Precision-5520>
-References: <20210506214842.GA1436993@bjorn-Precision-5520>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0 
+        id S236802AbhEGJrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 May 2021 05:47:49 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:28712 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234506AbhEGJrs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 May 2021 05:47:48 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620380809; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=NDnAzeydRGMYjrqIWykUo4zSO+l0CqzR1v62gJWLZJQ=;
+ b=S/Urf+IWg8wimpOvG6jLPPHq+WCFGKNJ5JaYDRczFezoAlWVMhLHRMkI6Y2DFDiTKuOBZ0O+
+ UCHRdQxCO823p32s4kB89aszCAmrOSX3KGb9DiD4n8TYKtKeEqYU4BwJfKjtMnsjA3VBq4T2
+ Anv++Prc8BDlLUFt0x0PrSmYa1M=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 60950c5455b14811b4ef0400 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 09:45:56
+ GMT
+Sender: skakit=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 03C67C43147; Fri,  7 May 2021 09:45:56 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: skakit)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 48001C4338A;
+        Fri,  7 May 2021 09:45:55 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 07 May 2021 15:15:55 +0530
+From:   skakit@codeaurora.org
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V2 3/4] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+In-Reply-To: <a190e414c53af3ea094548f5011c3a04@codeaurora.org>
+References: <1617881469-31965-1-git-send-email-skakit@codeaurora.org>
+ <1617881469-31965-4-git-send-email-skakit@codeaurora.org>
+ <20210408130001.k3qbq3vvwkiyykzv@earth.universe>
+ <0cb9b3503000ac7206f4a3ef5fd16c17@codeaurora.org>
+ <322cbdbb022fec3f43c1cbe13c532dd3@codeaurora.org>
+ <20210427083721.heavcdadeb4ajkk2@earth.universe>
+ <a190e414c53af3ea094548f5011c3a04@codeaurora.org>
+Message-ID: <be3573974d76d7e464048b34854416ad@codeaurora.org>
+X-Sender: skakit@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-05-06 at 16:48 -0500, Bjorn Helgaas wrote:
-> [+cc Rafael, Andreas, linux-pm]
+Hi,
+[...]
+>>> > > > +
+>>> > > > +required:
+>>> > > > +  - compatible
+>>> > > > +  - reg
+>>> > > > +
+>>> > > > +additionalProperties: true
+>>> > >
+>>> > > Instead of allowing arbitrary properties, only valid modes
+>>> > > should be allowed. So drop additionalProperties and do this
+>>> > > instead:
+>>> > >
+>>> > > allOf:
+>>> > >   - $ref: reboot-mode.yaml#
+>>> > >
+>>> > > unevaluatedProperties: false
+>>> > >
+>>> >
+>>> > Okay.
+>>> 
+>>> I am not able to use 'allOf' to refer reboot-mode.yaml as some of the
+>>> properties do not match with reboot-mode.yaml properties. Can we use 
+>>> oneOf
+>>> like below?
+>>> 
+>>> oneOf:
+>>>   - $ref: "reboot-mode.yaml#"
+>>>   - $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
+>> 
+>> That does not make sense.
+>> 
+>> The reference to reboot-mode.yaml is needed because it adds valid
+>> mode properties, so that you can set unevaluatedProperties to false.
+>> You need it at the root of the PON binding. They are not added to
+>> the required list, so it's fine if not all of them are used. Also
+>> there can (and usually is) more than one mode, so using oneOf is not
+>> ok.
+>> 
 > 
-> On Thu, May 06, 2021 at 08:38:20PM +0300, Konstantin Kharlamov wrote:
-> > On Macbook 2013 resuming from s2idle results in external monitor no
-> > longer being detected, and dmesg having errors like:
-> > 
-> >     pcieport 0000:06:00.0: can't change power state from D3hot to D0 (config
-> > space inaccessible)
-> > 
-> > and a stacktrace. The reason turned out that the hw that the quirk
-> > powers off does not get powered on back on resume.
+> Okay, but I am getting errors like below during make dtbs_check.
 > 
-> quirk_apple_poweroff_thunderbolt() was added in 2014 by 1df5172c5c25
-> ("PCI: Suspend/resume quirks for Apple thunderbolt").  It claims
-> "power is automatically restored before resume," so there must be
-> something special about s2idle that prevents the power-on.
+> kernel/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dt.yaml:
+> pon@800: 'compatible', 'pwrkey', 'reg' do not match any of the
+> regexes: '^mode-.*$', 'pinctrl-[0-9]+'
 > 
-> IIUC this change will reduce the s2idle power savings.  I would feel
-> better about this if we understood what the difference was.  
-> 
-> > Thus, add a check for s2idle to the quirk, and do nothing if the suspend
-> > mode is s2idle.
-> 
-> Obviously the *hardware* hasn't changed since 1df5172c5c25.  Is s2idle
-> something that wasn't tested back then, or is this problem connected
-> to an s2idle change since then?  Can we identify a commit that
-> introduced this problem?  That would help with backporting or stable
-> tags.
-> 
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=212767
-> 
-> Thanks for this!  Would you mind attaching the output of
-> "sudo lspci -vvv"?  If you attach any other dmesg, could you
-> use "dmesg --color=never" so the log doesn't include all the
-> escape characters?
 
-Thank you! So, just to be clear: in lieu of Lukas Wunner's reply, do you still want `lspci` and `dmesg` outputs, or are you okay with the information Lukas provided?
+Seems like I have to make 'additionalProperties' as true in 
+reboot-mode.yaml
+I have checked other yaml binding docs where allOf is used, and they 
+have 'additionalProperties' as true in the file which is being referred. 
+Please let me know if this is not correct way to do it.
 
-And while on it, an unrelated question to you as a maintainer: I never contributed to the kernel before: in case you are okay with the patch, what happens now that I got R-b, should I resend a v2 of it with the R-b added?
+> As suggested I have added
+> 
+> allOf:
+>  - $ref: reboot-mode.yaml#
+> 
+> at the root of binding and also added unevaluatedProperties: false
+> 
+>> Last but not least the pwrkey reference is needed to describe
+>> specific nodes (resin, pwrkey) and should not appear at the root
+>> of the PON binding.
+>> 
+>>> Also, If I drop additionalProperties I am getting below error.
+>>> 
+>>> kernel/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml:
+>>> 'additionalProperties' is a required property
+>> 
+>> You need to add 'unevaluatedProperties: false'. It is basically
+>> the same as 'additionalProperties: false', but also accepts
+>> properties from the referenced bindings.
+>> 
+>> Thanks,
+>> 
+>> -- Sebastian
 
+Thanks,
+Satya Priya
