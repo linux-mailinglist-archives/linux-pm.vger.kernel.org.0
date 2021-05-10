@@ -2,175 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F05E37953A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 19:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB3E3797A8
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 21:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbhEJRRy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 13:17:54 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:43668 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbhEJRRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 13:17:50 -0400
-Received: by mail-ot1-f51.google.com with SMTP id u19-20020a0568302493b02902d61b0d29adso14315753ots.10;
-        Mon, 10 May 2021 10:16:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gG7hfB2vVZ7OG+xhLTqWlPKvaFrqE39DwlHQnd7uMKE=;
-        b=tgE5OsG7sYGgAIoYMtAXZIc2vxHeYAkmw5NASP8CRKzMotinaQry8VKZFGJEVOonIN
-         38lJY6LVyl7fdMDAoRhYYfPzgqL6UPyhEYrrQgLTFPcqbddCM7KLrHRjLgbQz2w/v8Hp
-         bPo5NoiLqpdn6ys9ltwiNlsZFGerYLWHIChIqGdGr8Osbna2+Vw/8CLNjb9eLjWWiG+k
-         4qR3BVG0AMtU8yjYqSfyTVfJ9HzDKakO5+P9hZi0so7X4X5+fn75NjHGRVUjiIu1OWdY
-         ClPviT0H/PB62TwksMZ4ToHyUXc3Uh8/cZlXTmc1V6APAqRq+7pwk+eSsxHIFHaxeSP0
-         glvg==
-X-Gm-Message-State: AOAM53298k/oICmZhFYQrWIP5c1gceujJf7lGdQBg42PbUCbbwi94B6f
-        DUZiW4sZiw44ppozFYhNxECP3RpJMYpDuCbl6YE=
-X-Google-Smtp-Source: ABdhPJxXneyvZQMnR5WHtv+KUUyxzk46bu7v4N3/i6X+qg6ArHynkUDqdjc1NCz5e66rCjf4SHPIjzY/tCJRD2elPlw=
-X-Received: by 2002:a05:6830:55b:: with SMTP id l27mr21982201otb.260.1620667004931;
- Mon, 10 May 2021 10:16:44 -0700 (PDT)
+        id S233319AbhEJTXy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 15:23:54 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47815 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233208AbhEJTXt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 15:23:49 -0400
+Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 14AJM3dI013584
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 May 2021 15:22:05 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id F267215C3CD9; Mon, 10 May 2021 15:22:02 -0400 (EDT)
+Date:   Mon, 10 May 2021 15:22:02 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJmH2irxoRsyNudb@mit.edu>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+ <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+ <20210510135518.305cc03d@coco.lan>
+ <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
 MIME-Version: 1.0
-References: <20210505110915.6861-1-tony@atomide.com> <CAPDyKFp36huF2Gu19T+KvUm90xSsd97VDCxst1KT+Qf0F5Vm5g@mail.gmail.com>
-In-Reply-To: <CAPDyKFp36huF2Gu19T+KvUm90xSsd97VDCxst1KT+Qf0F5Vm5g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 May 2021 19:16:33 +0200
-Message-ID: <CAJZ5v0iGZ+zk2MEzejGFz2sO07ywwZouP1W8O_C7nfiSTbGXuw@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Fix unpaired parent child_count for force_resume
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 7, 2021 at 2:04 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Wed, 5 May 2021 at 13:09, Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > As pm_runtime_need_not_resume() relies also on usage_count, it can return
-> > a different value in pm_runtime_force_suspend() compared to when called in
-> > pm_runtime_force_resume(). Different return values can happen if anything
-> > calls PM runtime functions in between, and causes the parent child_count
-> > to increase on every resume.
-> >
-> > So far I've seen the issue only for omapdrm that does complicated things
-> > with PM runtime calls during system suspend for legacy reasons:
-> >
-> > omap_atomic_commit_tail() for omapdrm.0
-> >  dispc_runtime_get()
-> >   wakes up 58000000.dss as it's the dispc parent
-> >    dispc_runtime_resume()
-> >     rpm_resume() increases parent child_count
-> >  dispc_runtime_put() won't idle, PM runtime suspend blocked
-> > pm_runtime_force_suspend() for 58000000.dss, !pm_runtime_need_not_resume()
-> >  __update_runtime_status()
-> > system suspended
-> > pm_runtime_force_resume() for 58000000.dss, pm_runtime_need_not_resume()
-> >  pm_runtime_enable() only called because of pm_runtime_need_not_resume()
-> > omap_atomic_commit_tail() for omapdrm.0
-> >  dispc_runtime_get()
-> >   wakes up 58000000.dss as it's the dispc parent
-> >    dispc_runtime_resume()
-> >     rpm_resume() increases parent child_count
-> >  dispc_runtime_put() won't idle, PM runtime suspend blocked
-> > ...
-> > rpm_suspend for 58000000.dss but parent child_count is now unbalanced
-> >
-> > Let's fix the issue by adding a flag for needs_force_resume and use it in
-> > pm_runtime_force_resume() instead of pm_runtime_need_not_resume().
->
-> Thanks for sharing the details, much appreciated.
->
-> >
-> > Additionally omapdrm system suspend could be simplified later on to avoid
-> > lots of unnecessary PM runtime calls and the complexity it adds. The
-> > driver can just use internal functions that are shared between the PM
-> > runtime and system suspend related functions.
-> >
-> > Fixes: 4918e1f87c5f ("PM / runtime: Rework pm_runtime_force_suspend/resume()")
->
-> Actually, I think the problem has been there from the beginning
-> (unless I am mistaken), when we introduced the functions. So maybe the
-> fixes tag isn't entirely correct.
+On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
+> On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote:
+> > This patch series is doing conversion only when using ASCII makes
+> > more sense than using UTF-8. 
+> > 
+> > See, a number of converted documents ended with weird characters
+> > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
+> > character doesn't do any good.
+> > 
+> > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
+> > someone tries to use grep[1].
+> 
+> Replacing those makes sense. But replacing emdashes — which are a
+> distinct character that has no direct replacement in ASCII and which
+> people do *deliberately* use instead of hyphen-minus — does not.
 
-It kind of make sense to point to the last commit that touched this
-code and didn't address the issue.
+I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
+automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
+hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
+hypens into my text editor of choice than trying to enter the UTF-8
+characters.  If we can make sphinx do this translation, maybe that's
+the best way of dealing with these two characters?
 
-> Although, I certainly think we should tag this for stable kernels.
->
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> > Signed-off-by: Tony Lindgren <tony@atomide.com>
->
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Cheers,
 
-Applied as 5.13-rc material, thanks!
-
-> > ---
-> >  drivers/base/power/runtime.c | 10 +++++++---
-> >  include/linux/pm.h           |  1 +
-> >  2 files changed, 8 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -1637,6 +1637,7 @@ void pm_runtime_init(struct device *dev)
-> >         dev->power.request_pending = false;
-> >         dev->power.request = RPM_REQ_NONE;
-> >         dev->power.deferred_resume = false;
-> > +       dev->power.needs_force_resume = 0;
-> >         INIT_WORK(&dev->power.work, pm_runtime_work);
-> >
-> >         dev->power.timer_expires = 0;
-> > @@ -1804,10 +1805,12 @@ int pm_runtime_force_suspend(struct device *dev)
-> >          * its parent, but set its status to RPM_SUSPENDED anyway in case this
-> >          * function will be called again for it in the meantime.
-> >          */
-> > -       if (pm_runtime_need_not_resume(dev))
-> > +       if (pm_runtime_need_not_resume(dev)) {
-> >                 pm_runtime_set_suspended(dev);
-> > -       else
-> > +       } else {
-> >                 __update_runtime_status(dev, RPM_SUSPENDED);
-> > +               dev->power.needs_force_resume = 1;
-> > +       }
-> >
-> >         return 0;
-> >
-> > @@ -1834,7 +1837,7 @@ int pm_runtime_force_resume(struct device *dev)
-> >         int (*callback)(struct device *);
-> >         int ret = 0;
-> >
-> > -       if (!pm_runtime_status_suspended(dev) || pm_runtime_need_not_resume(dev))
-> > +       if (!pm_runtime_status_suspended(dev) || !dev->power.needs_force_resume)
-> >                 goto out;
-> >
-> >         /*
-> > @@ -1853,6 +1856,7 @@ int pm_runtime_force_resume(struct device *dev)
-> >
-> >         pm_runtime_mark_last_busy(dev);
-> >  out:
-> > +       dev->power.needs_force_resume = 0;
-> >         pm_runtime_enable(dev);
-> >         return ret;
-> >  }
-> > diff --git a/include/linux/pm.h b/include/linux/pm.h
-> > --- a/include/linux/pm.h
-> > +++ b/include/linux/pm.h
-> > @@ -602,6 +602,7 @@ struct dev_pm_info {
-> >         unsigned int            idle_notification:1;
-> >         unsigned int            request_pending:1;
-> >         unsigned int            deferred_resume:1;
-> > +       unsigned int            needs_force_resume:1;
-> >         unsigned int            runtime_auto:1;
-> >         bool                    ignore_children:1;
-> >         unsigned int            no_callbacks:1;
-> > --
-> > 2.31.1
+					- Ted
