@@ -2,102 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB303799B9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 00:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7213379A31
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 00:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhEJWKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 18:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbhEJWKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 18:10:36 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD96C06175F;
-        Mon, 10 May 2021 15:09:30 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a2so4658222lfc.9;
-        Mon, 10 May 2021 15:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DL2m5cGSzenHZYyzVc1zRqz7veWJz1V6YDyNEMjnPOM=;
-        b=cMRTmTkFUEX5YA8DdYrOZj/TlrRyxftNaL1SShCZOjdJ91tmiy9kzLemzCocvv4eJa
-         0YltFrh5/dAdlkZD8wBHItu9hun9rwPQddWDLGJmsPTuMNKfrH4S05gLdhdQ24G8EZhr
-         moWEojgJobsi8IXm3Y29nVb3TAL8FCwZ2kWfy0Eh8shHBvwud+g+4Uu8MoKq107dTHRr
-         qT1tYDWiUrgdTG6YJfAv3WCCn/2flfvG+5isvzbRflrq6aeMfhXNXQlz8DlT38G17gbj
-         ud6PkhuclE1uayuWvgor6iDZTiOH4oQ8yQpco/N/o8368Qph1fIRBclzlC+9psPLC4HZ
-         bHQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DL2m5cGSzenHZYyzVc1zRqz7veWJz1V6YDyNEMjnPOM=;
-        b=eGwFvAZby1Q6m5XKaFhxKWJiBDPc65jQe4/lODLFt4cmHL3VWRaWCuwxE+Rbp3Vcty
-         xFCXmW4hB+SS8RnxF2G+eOHcIqqx4Yg5cf9Gy8Ns2XEDBsk2T2NDyo44n1Old2lNGp97
-         QKibT6rmq8q6Q/mfq8IqUG8nvmiuV5B2AHU/1w0HMLdqNHbLtq5GGKVXGug5cG1Ot+XS
-         mkkkh7rydvNMCsrgaFqDsfAWonnq5hDOh70ZqEo1s/bj8fftusqUGtre2CwZCadSlkEV
-         WZ//lfDIeCdPK8f2JCGSqDyNvqgpCYPSimbnwMtahyy7h82cQGKQ3OU2LyzqRFN+0wvE
-         m1iQ==
-X-Gm-Message-State: AOAM53193+Oa0SaQOE3MzlDgGEB/TDueSyGJvmYJagpo1nDhh/s6u02/
-        jyYp5NgvLygKW361k7oNbiJR7vO3dSY=
-X-Google-Smtp-Source: ABdhPJyTZq4wwg1BAFI5gRI5StWdqqAbGj2wkgv//edRaFerxIvNMzzO83a3y2DbUA5YG2MmdKDBLA==
-X-Received: by 2002:a05:6512:31c2:: with SMTP id j2mr10980517lfe.69.1620684568613;
-        Mon, 10 May 2021 15:09:28 -0700 (PDT)
-Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
-        by smtp.gmail.com with ESMTPSA id y5sm2381479lfa.148.2021.05.10.15.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 15:09:28 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        =?UTF-8?q?Nikola=20Milosavljevi=C4=87?= <mnidza@outlook.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] power: supply: sbs-battery: Fall back to Li-ion battery type for bq20z75
-Date:   Tue, 11 May 2021 01:08:27 +0300
-Message-Id: <20210510220827.11595-2-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210510220827.11595-1-digetx@gmail.com>
-References: <20210510220827.11595-1-digetx@gmail.com>
+        id S231343AbhEJWha (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 18:37:30 -0400
+Received: from tartarus.angband.pl ([51.83.246.204]:34704 "EHLO
+        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230271AbhEJWh2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 18:37:28 -0400
+X-Greylist: delayed 1784 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 18:37:20 EDT
+Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1lgDtp-00EKjz-Lm; Mon, 10 May 2021 23:57:13 +0200
+Date:   Mon, 10 May 2021 23:57:13 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJmsOYzPIsQ04Zxb@angband.pl>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
+X-Junkbait: aaron@angband.pl, zzyx@angband.pl
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: kilobyte@angband.pl
+X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The older bq20z75 controller doesn't support reporting the battery type
-and the type is Li-ion in this case.
+On Mon, May 10, 2021 at 12:26:12PM +0200, Mauro Carvalho Chehab wrote:
+> There are several UTF-8 characters at the Kernel's documentation.
+[...]
+> Other UTF-8 characters were added along the time, but they're easily
+> replaceable by ASCII chars.
+> 
+> As Linux developers are all around the globe, and not everybody has UTF-8
+> as their default charset
 
-Tested-by: Antoni Aloy Torrens <aaloytorrens@gmail.com> # TF101
-Tested-by: Nikola Milosavljević <mnidza@outlook.com> # TF101
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/power/supply/sbs-battery.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+I'm not aware of a distribution that still allows selecting a non-UTF-8
+charset in a normal flow in their installer.  And if they haven't purged
+support for ancient encodings, that support is thoroughly bitrotten.
+Thus, I disagree that this is a legitimate concern.
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index b71fbf543428..fec6c139d4ff 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -813,9 +813,17 @@ static int sbs_get_chemistry(struct i2c_client *client,
- 	else
- 		val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
- 
--	if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
-+	if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN) {
-+		struct sbs_info *chip = i2c_get_clientdata(client);
-+
- 		dev_warn_once(&client->dev, "Unknown chemistry: %s\n", chemistry);
- 
-+		if (chip->flags & SBS_FLAGS_TI_BQ20ZX5) {
-+			dev_warn_once(&client->dev, "Falling back to Li-ion\n");
-+			val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-+		}
-+	}
-+
- 	return 0;
- }
- 
+What _could_ be a legitimate reason is that someone is on a _terminal_
+that can't display a wide enough set of glyphs.  Such terminals are:
+ • Linux console (because of vgacon limitations; patchsets to improve
+   other cons haven't been mainlined)
+ • some Windows terminals (putty, old Windows console) that can't borrow
+   glyphs from other fonts like fontconfig can
+
+For the former, it's whatever your distribution ships in
+/usr/share/consolefonts/ or an equivalent, which is based on historic
+ISO-8859 and VT100 traditions.
+
+For the latter, the near-guaranteed character set is WGL4.
+
+
+Thus, at least two of your choices seem to disagree with the above:
+[dropped]
+> 	0xd7   => 'x',		# MULTIPLICATION SIGN
+[retained]
+> 	- U+2b0d ('⬍'): UP DOWN BLACK ARROW
+
+× is present in ISO-8859, V100, WGL4; I've found no font in
+/usr/share/consolefonts/ on my Debian unstable box that lacks this
+character.
+
+⬍ is not found in any of the above.  You might want to at least
+convert it to ↕ which is at least present in WGL4, and thus likely
+to be supported in fonts heeding Windows/Mac/OpenType recommendations.
+That still won't make it work on VT.
+
+
+Meow!
 -- 
-2.30.2
-
+⢀⣴⠾⠻⢶⣦⠀ .--[ Makefile ]
+⣾⠁⢠⠒⠀⣿⡁ # beware of races
+⢿⡄⠘⠷⠚⠋⠀ all: pillage burn
+⠈⠳⣄⠀⠀⠀⠀ `----
