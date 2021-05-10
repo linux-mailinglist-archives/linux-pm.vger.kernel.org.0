@@ -2,129 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 449D0378EA1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 15:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9EC378F71
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 15:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbhEJNXF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 09:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236863AbhEJNR0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 09:17:26 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3A6C06138C;
-        Mon, 10 May 2021 06:16:19 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 82-20020a1c01550000b0290142562ff7c9so8868251wmb.3;
-        Mon, 10 May 2021 06:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Sh4i9feljTPFrIfpR/IU/E8n0D3Fda88xyQfypmum7w=;
-        b=GfQpYA/u/ESXNzCwhJN35I1L0Sb2vRVeukRNG83W8xG2OMlDA6+i5W0OODo/+LWE9E
-         ivWW5//Dci3M+PXPgJnH/odM7KtTO7yjQKrEe7KAvh4E7fvrd/ZuLkJAZP62sWtsDMuB
-         AIqgCRqoTLZzj0iGC6/REa3QuGlmZjiRxifV0mZYrMLJSap8JjiujnvbMmFTzTlx+O95
-         x9XnwiLNDr5qqWcsdoyW+ETG1hWAlzA+FW12aKJEwh2j5DlnppfpjkE6ahf9DAyZ8V+v
-         c4HLN0tsaWZM2+zfMzrOFU3u/mXI98pyg6LlDYSgFBtDuHlk1DmX0lhge4HX1KOLhtwA
-         z+4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Sh4i9feljTPFrIfpR/IU/E8n0D3Fda88xyQfypmum7w=;
-        b=cYGoVbnuzC8qi/rSzJ+ExaPcPY6WDiRnoQYrUOJUW/LDLaupeK70YlIz31CC6DpEIO
-         YjQqqXw2K1KRvLE2EmkMqZgmSNaOqjLw3WgaQER7nKYN78smSnUQvql/Lq9C3BYIAbbS
-         A89hiMUo84LxHpIIH5PXWbH2rmZnREpJ+CAq/H0QPEPvY3481ifRRLSpOK8Cv3AHyzwB
-         Y9C4Y5kQCgYC6MsNt9LSL+mATP7JJWBNR9KZjed7REYhOTmkJTYOrQnd1aSrwgzazjvo
-         Ixtv6yd4OPdU4nF7WYCxOtY9Watsai28mxpDWeEFK5xhy198jgxuKAvRFJqigderRiYZ
-         zU/w==
-X-Gm-Message-State: AOAM5320WfRdSTq1VXESkXjcB7G2WrDl9rtLEDxZcnwiFr7WOtK+XUaU
-        ikYqT3CuD1N4pbhEXWdxDhI=
-X-Google-Smtp-Source: ABdhPJysoQ4YBpE1J87NsTC/Z24p8NQqGLKPSudpVCmtLwZFhM2Wy0R7/k0aKiXMKdpTI23nPdYVEw==
-X-Received: by 2002:a05:600c:47d7:: with SMTP id l23mr36980376wmo.95.1620652578722;
-        Mon, 10 May 2021 06:16:18 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159425-cmbg20-2-0-cust403.5-4.cable.virginm.net. [86.7.189.148])
-        by smtp.gmail.com with ESMTPSA id s1sm27945073wmj.8.2021.05.10.06.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 May 2021 06:16:17 -0700 (PDT)
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <df6b4567-030c-a480-c5a6-fe579830e8c0@gmail.com>
-Date:   Mon, 10 May 2021 14:16:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S238607AbhEJNnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 09:43:52 -0400
+Received: from relay.uni-heidelberg.de ([129.206.100.212]:17256 "EHLO
+        relay.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352615AbhEJN1C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 09:27:02 -0400
+X-Greylist: delayed 453 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 09:27:00 EDT
+X-IPAS-Result: =?us-ascii?q?A2BxBAAsMZlg/1BqzoFaHQEBAQEJARIBBQUBQIFXg3hrh?=
+ =?us-ascii?q?AFGkXqQC40EAQEBAQEBAQEBCTkBAgQBAYZVAiU4EwIEAQEBAQMCAwEBAQYBA?=
+ =?us-ascii?q?QYBAQEBAQYEgQSFXYZFBiMELCYQJQIfBwICFCghE4V5qTh/M4EBiDCBISOBE?=
+ =?us-ascii?q?CqOCBCBVUKBFYNgg38lgzWCYQSCQAc9HDWDILp0LAeBdoEhgSkLm3UCDieUU?=
+ =?us-ascii?q?pBaLZIqpm+Ba4F8MxokgzhQGQ6OVo4YQi84AgYKAQEDCVkBAYw0AQE?=
+IronPort-HdrOrdr: A9a23:1ZLeNK21pC4yD8Aq1sxgiAqjBJ8kLtp133Aq2lEZdPUCSL3+qy
+ nIpoV+6faUskd1ZJhEo7vrBEDuex/hHOFOkO8s1NuZMzUO2lHJEGgS1/qB/9SIIUSXygc678
+ ldmsNFeb7N5DZB7PrS0U2fFJIqxsWB+qztnuHD0nsoUAcCUcxdBg5Ce3+mLnE=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
+  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 May 2021 15:18:06 +0200
+Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
+        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
+        id 1lg5nR-0003Kr-35; Mon, 10 May 2021 15:18:05 +0200
+Date:   Mon, 10 May 2021 15:18:05 +0200
+From:   Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] power: supply: axp20x_battery: implement writeable status
+ to enable/disable battery charging
+Message-ID: <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
+References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+ <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210510135518.305cc03d@coco.lan>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/05/2021 12:55, Mauro Carvalho Chehab wrote:
-> The main point on this series is to replace just the occurrences
-> where ASCII represents the symbol equally well
+Allow disabling and reenabling battery charging of an axp209 PMIC through a
+writable status property. With the current driver code charging is always on.
 
-> 	- U+2014 ('—'): EM DASH
-Em dash is not the same thing as hyphen-minus, and the latter does not
- serve 'equally well'.  People use em dashes because — even in
- monospace fonts — they make text easier to read and comprehend, when
- used correctly.
-I accept that some of the other distinctions — like en dashes — are
- needlessly pedantic (though I don't doubt there is someone out there
- who will gladly defend them with the same fervour with which I argue
- for the em dash) and I wouldn't take the trouble to use them myself;
- but I think there is a reasonable assumption that when someone goes
- to the effort of using a Unicode punctuation mark that is semantic
- (rather than merely typographical), they probably had a reason for
- doing so.
+This works on the axp209 of Banana {Pi M1+,Pro} and should work on all AXP chips.
 
-> 	- U+2018 ('‘'): LEFT SINGLE QUOTATION MARK
-> 	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
-> 	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
-> 	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
-(These are purely typographic, I have no problem with dumping them.)
+Signed-off-by: Hermann.Lauer@uni-heidelberg.de
+---
+v2: add fallthrough and improve commit message (thanks to Maxime and ChenYu)
 
-> 	- U+00d7 ('×'): MULTIPLICATION SIGN
-Presumably this is appearing in mathematical formulae, in which case
- changing it to 'x' loses semantic information.
+Thanks to ChenYu for the idea and greetings
+  Hermann
 
-> Using the above symbols will just trick tools like grep for no good
-> reason.
-NBSP, sure.  That one's probably an artefact of some document format
- conversion somewhere along the line, anyway.
-But what kinds of things with × or — in are going to be grept for?
+ drivers/power/supply/axp20x_battery.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-If there are em dashes lying around that semantically _should_ be
- hyphen-minus (one of your patches I've seen, for instance, fixes an
- *en* dash moonlighting as the option character in an `ethtool`
- command line), then sure, convert them.
-But any time someone is using a Unicode character to *express
- semantics*, even if you happen to think the semantic distinction
- involved is a pedantic or unimportant one, I think you need an
- explicit grep case to justify ASCIIfying it.
-
--ed
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -40,6 +40,7 @@
+ #define AXP209_FG_PERCENT		GENMASK(6, 0)
+ #define AXP22X_FG_VALID			BIT(7)
+ 
++#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
+ #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
+ #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
+ #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
+@@ -468,7 +469,18 @@
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+ 		return axp20x_set_max_constant_charge_current(axp20x_batt,
+ 							      val->intval);
++	case POWER_SUPPLY_PROP_STATUS:
++		switch (val->intval) {
++		case POWER_SUPPLY_STATUS_CHARGING:
++			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
++				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
+ 
++		case POWER_SUPPLY_STATUS_DISCHARGING:
++		case POWER_SUPPLY_STATUS_NOT_CHARGING:
++			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
++				AXP20X_CHRG_CTRL1_ENABLE, 0);
++		fallthrough;
++	}
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -491,7 +503,8 @@
+ static int axp20x_battery_prop_writeable(struct power_supply *psy,
+ 					 enum power_supply_property psp)
+ {
+-	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
++	return psp == POWER_SUPPLY_PROP_STATUS ||
++	       psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
+ 	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
+ 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
+ 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
