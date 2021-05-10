@@ -2,100 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A97E73793AD
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5063793B3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbhEJQZy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 12:25:54 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:44748 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbhEJQZx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 12:25:53 -0400
-Received: by mail-ot1-f43.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so14931055otp.11;
-        Mon, 10 May 2021 09:24:47 -0700 (PDT)
+        id S230356AbhEJQ0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 12:26:14 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:38845 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbhEJQ0N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 12:26:13 -0400
+Received: by mail-ot1-f49.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so14952614oth.5;
+        Mon, 10 May 2021 09:25:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=U2QmA0kT5KGKtEEfgKEA5hMeDW03KIt9H3QxMG9piFw=;
-        b=mfI5MIfJitrBkxc2cE9N5WB2KyOsb2BogBytsga57U2I1uCwGihoQBd++pgC2NWQWB
-         osX6ANNbeo9cWISIiM3pNyga/HW31PCQFZNW9Pe/qDCprF8tWf3OKz2JQJemwL3iE0jy
-         Fw46bHU0zW8mVGnUQtFmhPQ8rPV6Yw+qcgDODIoyi0WL8fPCAf1+HFMzXPz6JCXjjEE7
-         hIMjAX3wCnWU6VQqAWxgYG8B+PRAs8oxozeji9jHqOUJAnEuGVdyZKPmAneI15gt4+QT
-         XoHBr33cwa5IS5gNdYfbczRZlK1DG4V2AuWpe3DU2u5GIoA2AH8tpKW7LSEQpOFiKp5L
-         B9mA==
-X-Gm-Message-State: AOAM53205l92AVEXKRVWp+y29+OeW7+/nXd+E5QMB0qBiFq2yGzJi8cw
-        6TvPUJjG+RstMzXhW/i8vA==
-X-Google-Smtp-Source: ABdhPJxcwWkV87qLFbePQOlAS7VuwdvHmnrsQjgiZIUEHijHWQCrqZrYHZKJAdgrHzjfGbvABhkWwg==
-X-Received: by 2002:a9d:2271:: with SMTP id o104mr21591456ota.201.1620663887279;
-        Mon, 10 May 2021 09:24:47 -0700 (PDT)
+        bh=2F9o9CXmQjIHf3vmeIvzaTvlAH8nG5XppEHKJCixyLg=;
+        b=NOpFePfHVsxwEyqSUOw6nch56+nImWARBEnJFhWx+JPcvyaAUpPaiefXo6BVrYTG+8
+         vzhGwRco3nvUZp0rc9j/bM2OUrCvYHqggaNWzbz1gtKXNL96ulFcw1WaBRr46auGL/f7
+         TEu+ZJ+tQg0FZvD2UDkNsGveycOhA6cEGAuv6hF3tbOIaqfPQKAmj0a8UJGGLU3W5Svd
+         Z+ZanzI23OTipUFmt+LWOR6iJNhq6CdhU+w0+VIAwP7iNgJolcSFTFxLKZmm8FjDGzua
+         66iMbphtBGX8XxJYJNI9ewwTA6dG9Sr+xaMqZ1a51023bOGf6sBVzJ+x4KG5meWKhVF5
+         QP8w==
+X-Gm-Message-State: AOAM531FgpwxX750TJ2xD7U2OxZhULfaSByI5b42PD3lFV/plj3FxlDO
+        ifrpohT7GnbDCKRN3VsnIQ==
+X-Google-Smtp-Source: ABdhPJw+aQ/EcFoJoRzYs5MDjvD6++YcmtpIF6H+/TjqKW7iUQD0lS6ROaMWhUoIF5dvFPIY/MGy1A==
+X-Received: by 2002:a9d:5f82:: with SMTP id g2mr21841675oti.4.1620663908320;
+        Mon, 10 May 2021 09:25:08 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b8sm736481ooo.42.2021.05.10.09.24.45
+        by smtp.gmail.com with ESMTPSA id u207sm2682382oie.56.2021.05.10.09.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 09:24:46 -0700 (PDT)
-Received: (nullmailer pid 233712 invoked by uid 1000);
-        Mon, 10 May 2021 16:24:45 -0000
-Date:   Mon, 10 May 2021 11:24:45 -0500
+        Mon, 10 May 2021 09:25:07 -0700 (PDT)
+Received: (nullmailer pid 234223 invoked by uid 1000);
+        Mon, 10 May 2021 16:25:06 -0000
+Date:   Mon, 10 May 2021 11:25:06 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     satya priya <skakit@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         David Collins <collinsd@codeaurora.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH V3 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941
- power key binding to yaml
-Message-ID: <20210510162445.GA230005@robh.at.kernel.org>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        kgunda@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, Andy Yan <andy.yan@rock-chips.com>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V3 5/5] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
+Message-ID: <20210510162506.GA234174@robh.at.kernel.org>
 References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
- <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
- <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
+ <1620630064-16354-6-git-send-email-skakit@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
+In-Reply-To: <1620630064-16354-6-git-send-email-skakit@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 10, 2021 at 09:01:39AM -0500, Rob Herring wrote:
-> On Mon, 10 May 2021 12:31:03 +0530, satya priya wrote:
-> > Convert qcom pm8941 power key binding from .txt to .yaml format.
-> > 
-> > Signed-off-by: satya priya <skakit@codeaurora.org>
-> > ---
-> > Changes in V2:
-> >  - Fixed bot errors, took reference from input.yaml for "linux,code"
-> >  - Added one complete example for powerkey and resin, and referenced it
-> >    in main PON binding.
-> >  - Moved this patch to the end of the series.
-> > 
-> > Changes in V3:
-> >  - Moved this patch before PON binding patch.
-> >  - As per Rob's comments, added allOf at the beginning of binding.
-> >    Added maxItems for interrupts.
-> >  - Added 'unevaluatedProperties' instead of 'additionalProperties' as
-> >    we are using allOf.
-> > 
-> >  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
-> >  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 87 ++++++++++++++++++++++
-> >  2 files changed, 87 insertions(+), 55 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
-> >  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
-> > 
+On Mon, 10 May 2021 12:31:04 +0530, satya priya wrote:
+> Convert qcom PON binding from .txt to .yaml format.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> The example has been removed in favour of full example being
+> available in the qcom,pm8941-pwrkey binding.
 > 
-> yamllint warnings/errors:
+> Signed-off-by: satya priya <skakit@codeaurora.org>
+> ---
+> Changes in V2:
+>  - As per Rob's comments, converted the main PON binding and added in V2.
 > 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.example.dt.yaml:0:0: /example-0/spmi@c440000/pmic@0/pon_hlos@1300: failed to match any schema with compatible: ['qcom,pm8998-pon']
+> Changes in V3:
+>  - As per Sebastian's comments, added allOf to refer reboot-mode.yaml and
+>    used unevaluatedProperties = false. Added maxItems for reg.
+> 
+>  .../devicetree/bindings/power/reset/qcom,pon.txt   | 49 ----------------------
+>  .../devicetree/bindings/power/reset/qcom,pon.yaml  | 44 +++++++++++++++++++
+>  2 files changed, 44 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pon.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> 
 
-You have the same example in patch 5, so drop the example here. That 
-will fix this circular dependency.
+Reviewed-by: Rob Herring <robh@kernel.org>
