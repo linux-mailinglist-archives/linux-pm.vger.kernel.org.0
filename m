@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC773798D6
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB753798D8
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhEJVM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 17:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        id S231414AbhEJVM7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 17:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbhEJVM4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:12:56 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E12C06175F;
+        with ESMTP id S231310AbhEJVM5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:12:57 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1685C061760;
         Mon, 10 May 2021 14:11:51 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2so25475060lft.4;
+Received: by mail-lf1-x129.google.com with SMTP id z9so25442999lfu.8;
         Mon, 10 May 2021 14:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a9iK163fq+2JSJvqMOtwOLKwobF36F5yzS2cbjuGjYA=;
-        b=cCU2cSOiIrhB+EKiDwvIRI8PvAMjNBVJBt2Eg6K8nOXI3q5Dz6clwdk5O1ldg082Cz
-         goOLkpUquBMpsyfx4CMedsJPbQ1xbr06Q0Fi0qS/ByOkrMcSShfhe/iNsYn0jH7XaXDc
-         W6jeo3+oo1O7QFysmS8DX+f8Now6cTWgQGshkG2KBBh8wfKTe3TKVht0ssVjuTJ2gs3R
-         k4bSquhf3Yw29Lv0kvG1NX/Kal6109UEumTesmYYX0j3oPLar/3D8Iky75cSJRaDevu+
-         HL/1JUhKcGTbB0si+20GMUvIRPe9MN2f/ND4NSjTlzvHRYBNJe75R0bXd14mk3Tdf+6T
-         4fOw==
+        bh=GQ2M+eZzU/1PiW9MJgPZXEsaqUdAgzr+AsgIN6calq4=;
+        b=sm7XPvsPLsYJeiLoXtm9K3yqLdoh6VaZWudqVtlltSgXnrD76N/kSrBlDkXhQPrVAL
+         R+xat50e7DU+o9cD1BAdVO/kWfyAvzGSRXNNXLdg/sDTGx5nsUCGRKryP72vCEyiAqTq
+         qxLtEE+uY6U75vM6XLuEN0cbEMQ/vS0FMHo/oPHbsvdYGyqxI228Wg/FIKM4w8U0BJka
+         bXPEc5VxjHg3rK415QFFbGGEkCoUjtLETuvKIrVTBalDh7FXRqic3JeqCxI8fmZ1U9Tj
+         CLx+ONReDI5c0+aC+bl06F+AnkOcekqo8uAiDFZr0tAW7T5odQTAhxaZgSXyTQDA0X/E
+         zFdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a9iK163fq+2JSJvqMOtwOLKwobF36F5yzS2cbjuGjYA=;
-        b=q9EHSxP5jX48ucGbzTB+TA/pm/6Hll8s3D4PY/W5QBYhDgTb7NFr2iKrCHRoJP7z6e
-         V+heokWddQN48vdjU1vozpaBDcGr132IfWlh+64PQsbZaNITYV9Dk5W59jKEvINs2Hca
-         E7yHDF/pLGOT+XuPfDBAjXvvh0+nqMJ/WlYziX3i6s86tZvB3CtzJ9OfQTJcmDru+PST
-         vgAalM2GGV2rUODYTZN6f9pdclxSDg6mLu9JA7pUWaE/cZBxIh+wg0pUHD466qrGB1Ry
-         OKWaZRHjhmZYYeku05AfHU+U1vr0Uoe+x85N0+FSUZCVPy3vmvT8fVPdToaJhGX/Ut9C
-         mv+w==
-X-Gm-Message-State: AOAM531BbjDAwf1QKfiGxGQD4Cmw1uQVT9JdztUz/B8SrroKkH4v/24s
-        CKSTJRcI3UzaL6wz6AiPtqM=
-X-Google-Smtp-Source: ABdhPJwcZdEZN1IinsTRa0g1x6zV4KMCiakmHwskkRj4UYHBpU1c3Bsa5kVMold8xXPu7F9MZZxwIA==
-X-Received: by 2002:a19:ca11:: with SMTP id a17mr17634572lfg.271.1620681109820;
-        Mon, 10 May 2021 14:11:49 -0700 (PDT)
+        bh=GQ2M+eZzU/1PiW9MJgPZXEsaqUdAgzr+AsgIN6calq4=;
+        b=kb/WLbDiyynytMDbIzjU/cFqV8CYRY5jun4qO+lB8H/cb9Qgp4NjnI+O5fpOWNWNUq
+         SoFayy5Mz/2lVeW0+JR5yjcm4UjhOP0bdPU9crF2Iz6diR/eSr+AVfhMmMKjTvVqOxGk
+         yeebPKc/C5iUKKpxmeCc5oeMYoThio75uywHLXfjbnLvYuC9E/jg77PX6Dt4/h6XGXtl
+         0OyktJ8SczS2++YGRDKyWHKUB7GuR7hPPyEFp1dUDuv8waBedRamFGcYhKD1mfxNhkRt
+         /5pEoykF+R1dVG4xzeoZBSFTpPjJdtVXei1UFggtNCytA4bNfVc7wFenciM2tTZcqGTs
+         vYEA==
+X-Gm-Message-State: AOAM532JGf+wauDAkQvYgfJDlXNxvhSoOwnU98U/79haPpQS0Rx0S53d
+        WyjfRe3RnCPtS7bKXPfCFiMrWdhNPgs=
+X-Google-Smtp-Source: ABdhPJxCstkRyjaQmTvbNIf/ZKsi8cw1NsrC4MQ/oXU3qzz5Gy2nkl6Y1UkWX0ajp2iMsMO/8IiYaA==
+X-Received: by 2002:ac2:5a4c:: with SMTP id r12mr12365304lfn.632.1620681110495;
+        Mon, 10 May 2021 14:11:50 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
         by smtp.gmail.com with ESMTPSA id x4sm2365339lfa.173.2021.05.10.14.11.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 14:11:49 -0700 (PDT)
+        Mon, 10 May 2021 14:11:50 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -58,9 +58,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v1 1/7] PM / devfreq: tegra30: Support thermal cooling
-Date:   Tue, 11 May 2021 00:10:02 +0300
-Message-Id: <20210510211008.30300-2-digetx@gmail.com>
+Subject: [PATCH v1 2/7] ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL
+Date:   Tue, 11 May 2021 00:10:03 +0300
+Message-Id: <20210510211008.30300-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210510211008.30300-1-digetx@gmail.com>
 References: <20210510211008.30300-1-digetx@gmail.com>
@@ -70,28 +70,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Expose ACTMON devfreq device as a cooling device in order to throttle
-memory freq on overheat. Throttling of memory freq has a significant
-cooling effect on NVIDIA Tegra SoCs since higher memory freqs require
-higher SoC core voltage which is one of the main causes of the heating.
+Memory-related Tegra devfreq devices now could be used as a cooling
+devices. Enable CONFIG_DEVFREQ_THERMAL by default since this option
+enables cooling functionality of the devfreq drivers.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 1 +
+ arch/arm/configs/tegra_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index ce83f883ca65..10661eb2aed8 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -688,6 +688,7 @@ static struct devfreq_dev_profile tegra_devfreq_profile = {
- 	.polling_ms	= ACTMON_SAMPLING_PERIOD,
- 	.target		= tegra_devfreq_target,
- 	.get_dev_status	= tegra_devfreq_get_dev_status,
-+	.is_cooling_device = true,
- };
- 
- static int tegra_governor_get_target(struct devfreq *devfreq,
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index 13ef3e4dcbb7..3d8d8af9524d 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -167,6 +167,7 @@ CONFIG_SENSORS_LM95245=y
+ CONFIG_THERMAL=y
+ CONFIG_THERMAL_STATISTICS=y
+ CONFIG_CPU_THERMAL=y
++CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_TEGRA_SOCTHERM=m
+ CONFIG_WATCHDOG=y
+ CONFIG_MAX77620_WATCHDOG=y
 -- 
 2.30.2
 
