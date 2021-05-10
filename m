@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9D33789CA
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 13:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7846F3789CD
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 13:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbhEJLbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 07:31:42 -0400
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:37753 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbhEJL3o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 07:29:44 -0400
-Received: by mail-lf1-f41.google.com with SMTP id 2so22822971lft.4;
-        Mon, 10 May 2021 04:28:38 -0700 (PDT)
+        id S236228AbhEJLbr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 07:31:47 -0400
+Received: from mail-lf1-f46.google.com ([209.85.167.46]:35591 "EHLO
+        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235819AbhEJLaP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 07:30:15 -0400
+Received: by mail-lf1-f46.google.com with SMTP id x19so22835214lfa.2;
+        Mon, 10 May 2021 04:29:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WSCIycZ4be1RayJUkUz89M7xayRC4UjtGgdTGNbT714=;
-        b=GadFIdurhR+i9GwByilTl0uP4wj/NF7C/lbUteXhXrg0VPIrwY+F6wKnZGL5T6BGP3
-         oXZNWAmRntHvmKQfGf3p8YJlX+h88QgW+EGgvr7bSQogOvvmUp/VITJbaxh/HFrkYA1D
-         O3xkAM3fUeM81bhJTYRwyOe3cKKcpds+kX9WB/XdOWskNt61lPjM7qkb+OQ+HoVc3zBF
-         IOCWNnV+BbQzlm2F+X6fw8AZL0B2FKuduNSuJmfb+NADAQdbValkWMWVS8xSxb2CC9tE
-         DKTtzdxxtXA44+SyWNwnJXRQJ5n8qDgW2rvwFFAzdB4s3dnIiiZw4qI7gdV06uq/tidu
-         VLiQ==
-X-Gm-Message-State: AOAM531F+gjaUPpXrNUFNK7RtxBfmtcGOH20bWCHYAbt/PbA1R4PXD6N
-        0p/u+ocqn2fZTiwroY/mpxE=
-X-Google-Smtp-Source: ABdhPJwXwsZbwZfge7a+eGifC1Frwq17v6o0DDFO/wLp57MfQoXVNyw30VYur7MPSB67ySrlZBrqkQ==
-X-Received: by 2002:a05:6512:5c5:: with SMTP id o5mr17262255lfo.168.1620646117822;
-        Mon, 10 May 2021 04:28:37 -0700 (PDT)
+        bh=lzQ+Nz9poSHpUxzvatLe0g2jmD0SGDmCH+kVxSHNzj4=;
+        b=PlxF0vGHlA21tt0/MbhAua1ZbbZIOchJ2XhyIz/pD6YnW5RRfVe+aM3lG4QexIm83H
+         W1oed0CffV3Kgal14OBnvtNPlCpyV+8my1Q2nq1gsGcWx9H1Orc3aIBT75T0++mNapQg
+         5pO42nrOtt8u71Ed8EfuIQudbYTifqZwkGqTkIB2cna5gVvy3+So9J05ml3eFaotK7h1
+         KFcDjkSX3gh3l2eUYDuszdeUaluSmfqJGu5cT+INv84twg2SSAqKGUGYQqb3mF613dke
+         JW8eDFHL/ocaqGEAqy4NtGi30bFn9Zu0hK70AHSROIwSmmw7iLbNabYaw6FJG8xu6KBK
+         UQyw==
+X-Gm-Message-State: AOAM531ek7YhT3jJKV7s9Bi/9x7XywEMw8vzLHOLnU0zILJ2Ss9yc23Q
+        5NzjYKOH+kDyau25MoN6qpY=
+X-Google-Smtp-Source: ABdhPJxLYmVjwd0wzFK+eB5KWLIx/wHnY9RaJa1SkL16OjlXf9O/zw2mnj1mO8wBoPth8Sfa3GYLrA==
+X-Received: by 2002:ac2:5f72:: with SMTP id c18mr16937012lfc.233.1620646148352;
+        Mon, 10 May 2021 04:29:08 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id 17sm2229864lfr.187.2021.05.10.04.28.36
+        by smtp.gmail.com with ESMTPSA id h32sm2192974lfv.251.2021.05.10.04.29.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 04:28:37 -0700 (PDT)
-Date:   Mon, 10 May 2021 14:28:30 +0300
+        Mon, 10 May 2021 04:29:07 -0700 (PDT)
+Date:   Mon, 10 May 2021 14:29:01 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
@@ -61,12 +61,12 @@ Cc:     Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
         Josef Bacik <josef@toxicpanda.com>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v9 02/10] reboot: Add hardware protection power-off
-Message-ID: <97260f8e150abb898a262fade25860609b460912.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v9 03/10] thermal: Use generic HW-protection shutdown API
+Message-ID: <85d0225cd0e287ec9a7b43709400794c5cf470d5.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gBBFr7Ir9EOA20Yy"
+        protocol="application/pgp-signature"; boundary="ZPt4rx8FFjLCG7dd"
 Content-Disposition: inline
 In-Reply-To: <cover.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
@@ -74,155 +74,172 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---gBBFr7Ir9EOA20Yy
+--ZPt4rx8FFjLCG7dd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-There can be few cases when we need to shut-down the system in order to
-protect the hardware. Currently this is done at east by the thermal core
-when temperature raises over certain limit.
+The hardware shutdown function was exported from kernel/reboot for
+other subsystems to use. Logic is copied from the thermal_core. The
+protection mutex is replaced by an atomic_t to allow calls also from
+an IRQ context.
 
-Some PMICs can also generate interrupts for example for over-current or
-over-voltage, voltage drops, short-circuit, ... etc. On some systems
-these are a sign of hardware failure and only thing to do is try to
-protect the rest of the hardware by shutting down the system.
-
-Add shut-down logic which can be used by all subsystems instead of
-implementing the shutdown in each subsystem. The logic is stolen from
-thermal_core with difference of using atomic_t instead of a mutex in
-order to allow calls directly from IRQ context.
+Use the exported API instead of implementing own just for the
+thermal_core.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
 ---
-
 Changelog:
-v8: (changes suggested by Daniel Lezcano)
- - replace a protection implemented by a flag + spin_lock_irqsave() with
-   simple atomic_dec_and_test().
- - Split thermal-core changes and adding the new API to separate patches
-v7:
- - New patch
----
- include/linux/reboot.h |  1 +
- kernel/reboot.c        | 80 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 81 insertions(+)
+v9:
+ - Update the thermal documentation
+v8:
+ - new patch (change added in v7, splitted in own patch at v8)
 
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index 3734cd8f38a8..af907a3d68d1 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -79,6 +79,7 @@ extern char poweroff_cmd[POWEROFF_CMD_PATH_LEN];
+Use the exported API instead
+---
+ .../driver-api/thermal/sysfs-api.rst          | 24 +++----
+ drivers/thermal/thermal_core.c                | 63 ++-----------------
+ 2 files changed, 13 insertions(+), 74 deletions(-)
+
+diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation=
+/driver-api/thermal/sysfs-api.rst
+index 4b638c14bc16..c93fa5e961a0 100644
+--- a/Documentation/driver-api/thermal/sysfs-api.rst
++++ b/Documentation/driver-api/thermal/sysfs-api.rst
+@@ -740,21 +740,15 @@ possible.
+ 5. thermal_emergency_poweroff
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 =20
- extern void orderly_poweroff(bool force);
- extern void orderly_reboot(void);
-+void hw_protection_shutdown(const char *reason, int ms_until_forced);
+-On an event of critical trip temperature crossing. Thermal framework
+-allows the system to shutdown gracefully by calling orderly_poweroff().
+-In the event of a failure of orderly_poweroff() to shut down the system
+-we are in danger of keeping the system alive at undesirably high
+-temperatures. To mitigate this high risk scenario we program a work
+-queue to fire after a pre-determined number of seconds to start
+-an emergency shutdown of the device using the kernel_power_off()
+-function. In case kernel_power_off() fails then finally
+-emergency_restart() is called in the worst case.
++On an event of critical trip temperature crossing the thermal framework
++shuts down the system by calling hw_protection_shutdown(). The
++hw_protection_shutdown() first attempts to perform an orderly shutdown
++but accepts a delay after which it proceeds doing a forced power-off
++or as last resort an emergency_restart.
 =20
- /*
-  * Emergency restart, callable from an interrupt handler.
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index a6ad5eb2fa73..5da8c80a2647 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -7,6 +7,7 @@
+ The delay should be carefully profiled so as to give adequate time for
+-orderly_poweroff(). In case of failure of an orderly_poweroff() the
+-emergency poweroff kicks in after the delay has elapsed and shuts down
+-the system.
++orderly poweroff.
 =20
- #define pr_fmt(fmt)	"reboot: " fmt
+-If set to 0 emergency poweroff will not be supported. So a carefully
+-profiled non-zero positive value is a must for emergency poweroff to be
+-triggered.
++If the delay is set to 0 emergency poweroff will not be supported. So a
++carefully profiled non-zero positive value is a must for emergency
++poweroff to be triggered.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index d20b25f40d19..10a2d8e1cacf 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -36,10 +36,8 @@ static LIST_HEAD(thermal_governor_list);
 =20
-+#include <linux/atomic.h>
- #include <linux/ctype.h>
- #include <linux/export.h>
- #include <linux/kexec.h>
-@@ -518,6 +519,85 @@ void orderly_reboot(void)
+ static DEFINE_MUTEX(thermal_list_lock);
+ static DEFINE_MUTEX(thermal_governor_lock);
+-static DEFINE_MUTEX(poweroff_lock);
+=20
+ static atomic_t in_suspend;
+-static bool power_off_triggered;
+=20
+ static struct thermal_governor *def_governor;
+=20
+@@ -327,70 +325,18 @@ static void handle_non_critical_trips(struct thermal_=
+zone_device *tz, int trip)
+ 		       def_governor->throttle(tz, trip);
  }
- EXPORT_SYMBOL_GPL(orderly_reboot);
 =20
-+/**
-+ * hw_failure_emergency_poweroff_func - emergency poweroff work after a kn=
-own delay
-+ * @work: work_struct associated with the emergency poweroff function
-+ *
-+ * This function is called in very critical situations to force
-+ * a kernel poweroff after a configurable timeout value.
-+ */
-+static void hw_failure_emergency_poweroff_func(struct work_struct *work)
-+{
-+	/*
-+	 * We have reached here after the emergency shutdown waiting period has
-+	 * expired. This means orderly_poweroff has not been able to shut off
-+	 * the system for some reason.
-+	 *
-+	 * Try to shut down the system immediately using kernel_power_off
-+	 * if populated
-+	 */
-+	WARN(1, "Hardware protection timed-out. Trying forced poweroff\n");
-+	kernel_power_off();
-+
-+	/*
-+	 * Worst of the worst case trigger emergency restart
-+	 */
-+	WARN(1,
-+	     "Hardware protection shutdown failed. Trying emergency restart\n");
-+	emergency_restart();
-+}
-+
-+static DECLARE_DELAYED_WORK(hw_failure_emergency_poweroff_work,
-+			    hw_failure_emergency_poweroff_func);
-+
-+/**
-+ * hw_failure_emergency_poweroff - Trigger an emergency system poweroff
-+ *
-+ * This may be called from any critical situation to trigger a system shut=
+-/**
+- * thermal_emergency_poweroff_func - emergency poweroff work after a known=
+ delay
+- * @work: work_struct associated with the emergency poweroff function
+- *
+- * This function is called in very critical situations to force
+- * a kernel poweroff after a configurable timeout value.
+- */
+-static void thermal_emergency_poweroff_func(struct work_struct *work)
+-{
+-	/*
+-	 * We have reached here after the emergency thermal shutdown
+-	 * Waiting period has expired. This means orderly_poweroff has
+-	 * not been able to shut off the system for some reason.
+-	 * Try to shut down the system immediately using kernel_power_off
+-	 * if populated
+-	 */
+-	WARN(1, "Attempting kernel_power_off: Temperature too high\n");
+-	kernel_power_off();
+-
+-	/*
+-	 * Worst of the worst case trigger emergency restart
+-	 */
+-	WARN(1, "Attempting emergency_restart: Temperature too high\n");
+-	emergency_restart();
+-}
+-
+-static DECLARE_DELAYED_WORK(thermal_emergency_poweroff_work,
+-			    thermal_emergency_poweroff_func);
+-
+-/**
+- * thermal_emergency_poweroff - Trigger an emergency system poweroff
+- *
+- * This may be called from any critical situation to trigger a system shut=
 down
-+ * after a given period of time. If time is negative this is not scheduled.
-+ */
-+static void hw_failure_emergency_poweroff(int poweroff_delay_ms)
-+{
-+	if (poweroff_delay_ms <=3D 0)
-+		return;
-+	schedule_delayed_work(&hw_failure_emergency_poweroff_work,
-+			      msecs_to_jiffies(poweroff_delay_ms));
-+}
-+
-+/**
-+ * hw_protection_shutdown - Trigger an emergency system poweroff
-+ *
-+ * @reason:		Reason of emergency shutdown to be printed.
-+ * @ms_until_forced:	Time to wait for orderly shutdown before tiggering a
-+ *			forced shudown. Negative value disables the forced
-+ *			shutdown.
-+ *
-+ * Initiate an emergency system shutdown in order to protect hardware from
-+ * further damage. Usage examples include a thermal protection or a voltag=
-e or
-+ * current regulator failures.
-+ * NOTE: The request is ignored if protection shutdown is already pending =
-even
-+ * if the previous request has given a large timeout for forced shutdown.
-+ * Can be called from any context.
-+ */
-+void hw_protection_shutdown(const char *reason, int ms_until_forced)
-+{
-+	static atomic_t allow_proceed =3D ATOMIC_INIT(1);
-+
-+	pr_emerg("HARDWARE PROTECTION shutdown (%s)\n", reason);
-+
-+	/* Shutdown should be initiated only once. */
-+	if (!atomic_dec_and_test(&allow_proceed))
-+		return;
-+
-+	/*
-+	 * Queue a backup emergency shutdown in the event of
-+	 * orderly_poweroff failure
-+	 */
-+	hw_failure_emergency_poweroff(ms_until_forced);
-+	orderly_poweroff(true);
-+}
-+EXPORT_SYMBOL_GPL(hw_protection_shutdown);
-+
- static int __init reboot_setup(char *str)
+- * after a known period of time. By default this is not scheduled.
+- */
+-static void thermal_emergency_poweroff(void)
++void thermal_zone_device_critical(struct thermal_zone_device *tz)
  {
- 	for (;;) {
+-	int poweroff_delay_ms =3D CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
+ 	/*
+ 	 * poweroff_delay_ms must be a carefully profiled positive value.
+-	 * Its a must for thermal_emergency_poweroff_work to be scheduled
++	 * Its a must for forced_emergency_poweroff_work to be scheduled.
+ 	 */
+-	if (poweroff_delay_ms <=3D 0)
+-		return;
+-	schedule_delayed_work(&thermal_emergency_poweroff_work,
+-			      msecs_to_jiffies(poweroff_delay_ms));
+-}
++	int poweroff_delay_ms =3D CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
+=20
+-void thermal_zone_device_critical(struct thermal_zone_device *tz)
+-{
+ 	dev_emerg(&tz->device, "%s: critical temperature reached, "
+ 		  "shutting down\n", tz->type);
+=20
+-	mutex_lock(&poweroff_lock);
+-	if (!power_off_triggered) {
+-		/*
+-		 * Queue a backup emergency shutdown in the event of
+-		 * orderly_poweroff failure
+-		 */
+-		thermal_emergency_poweroff();
+-		orderly_poweroff(true);
+-		power_off_triggered =3D true;
+-	}
+-	mutex_unlock(&poweroff_lock);
++	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
+ }
+ EXPORT_SYMBOL(thermal_zone_device_critical);
+=20
+@@ -1538,7 +1484,6 @@ static int __init thermal_init(void)
+ 	ida_destroy(&thermal_cdev_ida);
+ 	mutex_destroy(&thermal_list_lock);
+ 	mutex_destroy(&thermal_governor_lock);
+-	mutex_destroy(&poweroff_lock);
+ 	return result;
+ }
+ postcore_initcall(thermal_init);
 --=20
 2.25.4
 
@@ -239,19 +256,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---gBBFr7Ir9EOA20Yy
+--ZPt4rx8FFjLCG7dd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCZGN4ACgkQeFA3/03a
-ocVxkwf/V/uO6urS2v6z4nhTdR0gcwQvpoRWDZyJT1DjcCauRH42M77H7zVoCO57
-bh+dqZ73JaQmb+7X3l+xkz/IVvOsI1J2RMQavflcqdVYhc6Mw7kS6EXK/4PZv+0s
-ESl5vFLC9fh966uCBSMwh2Tu+oRxDvNTMMs8gtqzwhM1Ul8ivN4Rs6nWx7R+1g6B
-Iz+x2+ry59RgB7hv89ozLuvoSpU9KXw3FVoemm1ErCADbNcR1H3iapKAVuo2yLUv
-sAAinYOFnp91XEI4WpXbykpwiWuoizsGqVeTMhfDRrJR6aNqVgBl0B3B7GirIJ2c
-SK5eXUQ+dV0TaJisbdA4DzaqFFP5/g==
-=Ajf7
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCZGP0ACgkQeFA3/03a
+ocXzNgf/RReSMwzTrFY5G7gutoPa+m8huOMKWI7OwNA/JfTV4mGNjhxMBlvXZ6zO
+9LDGGDJNR//U7CRLvQ8hBd2STGAKYMAy0Ko87kw16fzII0Nwvv+VoQMbR7bvipnY
+WKgik8aiOwt+irLds5mLaPRpaXTvSGIkT5j2tvRd/ZXZBcEdbikAh0/XmLieKPVc
+ZqCEXC59eCq+CbD5vqYJt0F97yzBo4eVUC4p9/aGHiFAjRbCTCV0icWMZyhISYoX
+De67gSVFjoqNI0N5rIkLLqkRmZnKGRMA7/4U4p5W+TrB00evJvm5ALYVs0DJdhfK
+jvtN8p8P6hS6mXYAH6EdcWwQAzfvaA==
+=w/dz
 -----END PGP SIGNATURE-----
 
---gBBFr7Ir9EOA20Yy--
+--ZPt4rx8FFjLCG7dd--
