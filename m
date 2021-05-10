@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9943798DC
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C503798E2
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbhEJVNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 17:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S231901AbhEJVNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 17:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbhEJVM7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:12:59 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521F8C061574;
-        Mon, 10 May 2021 14:11:53 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id z13so25504308lft.1;
+        with ESMTP id S231727AbhEJVNA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:13:00 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1F0C061760;
+        Mon, 10 May 2021 14:11:54 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t11so25407029lfl.11;
         Mon, 10 May 2021 14:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LBAm2iOPFtBU1EQ3FoVf86OUQxRZHO3MtZ2jWbUEqLE=;
-        b=hKEct6kjw8GRNg4ylFQMwPa5APMX/VlM2FvBfZPZLdb0r3wPdV7I1R4dA0nv0FV6Vr
-         rDxMbGg3+8WpfW3b7cWJLtKMSjxJeuR51lQzc/GP4jJ5ykeyNE3Uapuns4NhSXWChNpD
-         k8vrfxBQzadlvXL/7Y99zT5YJXSg8tSS3bDdT7/QJGcXSSUgwSkJbsbBNczKqXq3fACu
-         LsWY6pixqUle394GeSTa0piyV8cJJAslmDrGR5+0rsEP2egunRStqv4EtEu+SOB0zNgr
-         Pjf9boV9vvEnIcuZwZRjTUSwdpWHf8Oe7FX/FJ+HbZqySl2qPjiU8uTKuDevuDgdRp9y
-         sy3g==
+        bh=ybiSyEHiHhpZwxGAHloT2ZV0d6LrcnSv5Cr6VIeCqOk=;
+        b=RZ3Hvofan3xeL4p404LLxQOKHcRwb2zlOMHaZ4BV0B24BSnb1o0ZdFLGILHIur4EWx
+         1oPMZ+zWa4QWB4CE2WgJlN5ok+Yg5ZyUvOgGgYif3KEukDSD8sBxqMJ+n/yTtR/yWcHP
+         z2uG2Ymcq5mma6NNssAV10sMpcTXCDpRVeL/qIQBUQBRlRffpV+pKIKX9QCBtWIrWhw4
+         tPWJZ7OjkKbWKVu2yErxtNCQsD2Z1ssKuq6Sywny39QyZ2EKM8PjK1IjdPohCsSCLPfk
+         oSrZvKiRU0IpSGkVa8qyKoo5PQN3vlAIMxy0fxFT31J44dMVyJIPRyZgFJJXyi/MlSCW
+         sSLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LBAm2iOPFtBU1EQ3FoVf86OUQxRZHO3MtZ2jWbUEqLE=;
-        b=UKsYTfdTX5rsKeWunmQttqT8fezsaoM0CNgEqVPymtTayTVr4KpoETPhZ7dBhVFH9g
-         aWMZTJcB4FejmgrrUWIWnGb5PWdmS0XqwAmoAsaMBAJZyl825QtNiq0juaHynKOOw4oz
-         1CYKunmGrjZifsQfxPDFFJHvY8Oi9kd2I65p8Ze5h3PHi9z6DaIpFh/pTcwGRsOqU6vb
-         NcQHiB20YULwQfBMetjsejJRr00v59nfzlpisxmxxiSHGNcq2rHCzKZp/3bcmNno2k+6
-         KW/r+OorhdmdrFg9eVN93Bp3BkKNnLWaJVufSUpjqSbCfDQ7LUQe3f9kfP167RoW5oAM
-         DCKQ==
-X-Gm-Message-State: AOAM532/0qdThYkBDzhPs/Hk2Ntfc4PcovOLJh7vtOS+4nup9Ahp0F+B
-        TVqs3UmYzCeO9q3a9ELYY/vYInRAi7g=
-X-Google-Smtp-Source: ABdhPJyV7zP366mGr6WNyz63P58fRyLeCqVhcXnVCcluMkzItlsjx+2rHBimuqY/7/mKCM2Lgnk5/g==
-X-Received: by 2002:a19:e21d:: with SMTP id z29mr18343711lfg.175.1620681111900;
-        Mon, 10 May 2021 14:11:51 -0700 (PDT)
+        bh=ybiSyEHiHhpZwxGAHloT2ZV0d6LrcnSv5Cr6VIeCqOk=;
+        b=gwrSaLW6RnCIGtMEXGHDU5LB6U0ewpHHuv47lJjikRfnqQEA7dUxrLSSBya9PSuRQr
+         +E4B0WlAi0CpKx+qIwyHb69BhMCkFL2KLMjrhJsFziMohKXH8PQuF7azskJR81wXuInt
+         KJJcTKjRK97oGJ40KSeD2KpCd+Fqw2OGK1RU7hNJ7++U442YtyL8iBBlIifjF+x0mCg/
+         szzvUEmXeH37LNggZpylGgglVEddn0VhWSb+VGT40ktRTmqPGmNAuz9xs6nlnSvUJLoM
+         pJDb0NtkOdcKyZQOlvTobAN0Rg5eQppIg80OqJQ3c2OjNF5a8iTAJ71hkX9HaHg5gKJp
+         TYPA==
+X-Gm-Message-State: AOAM532XVp1MrVOussOG/Gaxc+Dc6NdvLVymEqir35ZJewW9H5pjqw+6
+        foruus2pe84sNR9Wf939/Hg=
+X-Google-Smtp-Source: ABdhPJzY5bf7qKfAVZRtbjolWvcRElCM93yIIsmKgXySglYMaiJNFUAxOip8Axt0PYOkc2fZ71zf1g==
+X-Received: by 2002:a05:6512:2287:: with SMTP id f7mr17746341lfu.475.1620681112593;
+        Mon, 10 May 2021 14:11:52 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
         by smtp.gmail.com with ESMTPSA id x4sm2365339lfa.173.2021.05.10.14.11.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 14:11:51 -0700 (PDT)
+        Mon, 10 May 2021 14:11:52 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -58,9 +58,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v1 4/7] dt-bindings: devfreq: tegra30-actmon: Add cooling-cells
-Date:   Tue, 11 May 2021 00:10:05 +0300
-Message-Id: <20210510211008.30300-5-digetx@gmail.com>
+Subject: [PATCH v1 5/7] ARM: tegra: Add cooling cells to ACTMON device-tree node
+Date:   Tue, 11 May 2021 00:10:06 +0300
+Message-Id: <20210510211008.30300-6-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210510211008.30300-1-digetx@gmail.com>
 References: <20210510211008.30300-1-digetx@gmail.com>
@@ -70,44 +70,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ACTMON watches activity of memory clients. Decisions about a minimum
-required frequency are made based on the info from ACTMON. We can use
-ACTMON as a thermal cooling device by limiting the required frequency.
-Document new cooling-cells property of NVIDIA Tegra ACTMON hardware unit.
+The ACTMON module monitors activity of memory clients and decisions
+about a minimum required memory frequency are made based on info from
+ACTMON. Add cooling cells to ACTMON device-tree node in order to turn
+it into a cooling device that will throttle memory freq on overheat.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml   | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm/boot/dts/tegra124.dtsi | 3 ++-
+ arch/arm/boot/dts/tegra30.dtsi  | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
-index 2a940d5d7ab4..0aa9459b7751 100644
---- a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
-+++ b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
-@@ -63,6 +63,9 @@ properties:
-       Should contain freqs and voltages and opp-supported-hw property, which
-       is a bitfield indicating SoC speedo ID mask.
+diff --git a/arch/arm/boot/dts/tegra124.dtsi b/arch/arm/boot/dts/tegra124.dtsi
+index 0b678afb2a5c..8b38f123f554 100644
+--- a/arch/arm/boot/dts/tegra124.dtsi
++++ b/arch/arm/boot/dts/tegra124.dtsi
+@@ -283,7 +283,7 @@ flow-controller@60007000 {
+ 		reg = <0x0 0x60007000 0x0 0x1000>;
+ 	};
  
-+  "#cooling-cells":
-+    const: 2
-+
- required:
-   - compatible
-   - reg
-@@ -74,6 +77,7 @@ required:
-   - interconnects
-   - interconnect-names
-   - operating-points-v2
-+  - "#cooling-cells"
+-	actmon@6000c800 {
++	actmon: actmon@6000c800 {
+ 		compatible = "nvidia,tegra124-actmon";
+ 		reg = <0x0 0x6000c800 0x0 0x400>;
+ 		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+@@ -295,6 +295,7 @@ actmon@6000c800 {
+ 		operating-points-v2 = <&emc_bw_dfs_opp_table>;
+ 		interconnects = <&mc TEGRA124_MC_MPCORER &emc>;
+ 		interconnect-names = "cpu-read";
++		#cooling-cells = <2>;
+ 	};
  
- additionalProperties: false
+ 	gpio: gpio@6000d000 {
+diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
+index 44a6dbba7081..c577c191be4b 100644
+--- a/arch/arm/boot/dts/tegra30.dtsi
++++ b/arch/arm/boot/dts/tegra30.dtsi
+@@ -410,7 +410,7 @@ ahb: ahb@6000c000 {
+ 		reg = <0x6000c000 0x150>; /* AHB Arbitration + Gizmo Controller */
+ 	};
  
-@@ -118,4 +122,5 @@ examples:
-         operating-points-v2 = <&dvfs_opp_table>;
-         interconnects = <&mc TEGRA30_MC_MPCORER &emc>;
-         interconnect-names = "cpu-read";
-+        #cooling-cells = <2>;
-     };
+-	actmon@6000c800 {
++	actmon: actmon@6000c800 {
+ 		compatible = "nvidia,tegra30-actmon";
+ 		reg = <0x6000c800 0x400>;
+ 		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+@@ -422,6 +422,7 @@ actmon@6000c800 {
+ 		operating-points-v2 = <&emc_bw_dfs_opp_table>;
+ 		interconnects = <&mc TEGRA30_MC_MPCORER &emc>;
+ 		interconnect-names = "cpu-read";
++		#cooling-cells = <2>;
+ 	};
+ 
+ 	gpio: gpio@6000d000 {
 -- 
 2.30.2
 
