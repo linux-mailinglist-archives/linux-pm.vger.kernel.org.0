@@ -2,100 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FF6379025
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 16:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52290379028
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 16:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbhEJOIf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 10:08:35 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37919 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235412AbhEJOBt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 10:01:49 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 14AAD5807B2;
-        Mon, 10 May 2021 10:00:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 10 May 2021 10:00:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=fwXudyHn8IUNsmfHA12W5pUxFzr
-        IcUsJJs6niPOOwGc=; b=gQh6u0zhPsG//1fbjCgHH3SUq5OZEixVi+ckcNcOvNr
-        8f8S6u6OqczboxIeZQzxpdw3AUy1t45vyyuSQKDA1+yJJEqv0Na0yFB8YXQoxGQa
-        A5mz/uekXLKQlXSBVpDzZgWHaTwxLQ8cfd/84Seg6MJA86M+DwrG/rxkfmjHnsDx
-        Vsn+We4G3Oh5Yvv4HNwlluWEHPMQsGoYqOZqIpzyUGPfcSXaDfcxgaoBasafO20O
-        Nia4uZb9+lsHdBKwEogjjnykkTJJzKThWOeq3e2hyjT/F/nLvkiGpnFJ0uMYCJ5w
-        yhbph4b45d/9JdizeckN5aTq6WAACtGxOiZQK1Svtuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fwXudy
-        Hn8IUNsmfHA12W5pUxFzrIcUsJJs6niPOOwGc=; b=FkYLunR8+bNyojGntZzlTv
-        lNhoU5Ih8GFYdgqBiM9GEeBgkR7PC0rd49vKxgNK2oVHYiwvnJ0pFHee6wyNEefG
-        07iyoKlPp2/47lNX2/0a3w6XYC3Muan3VrHn9DIyh2AJDD/sq19lwcD+nClmgOGW
-        3kjTJut/WH9S1nO20R6vTeVSVeiFhLK/oh1ul5trEQZynTCu46HI2dcf9dXPVKk9
-        sOjDpOdiQFUH6B6gq1Emr8rDL+S3scV3gAHdetS1J2hIDO0dgu0hscWNc8fHxaey
-        25F3JvGPZJisNAQmAtq62YqH7TCAIzVvBqJwx8rI9Oyho2YDtxrFPxf1S0VsKOTA
-        ==
-X-ME-Sender: <xms:hDyZYCqZ48w__j-3J2DdcFFyCNO8Px1wZAdweI2vgyXQ5g_1A_avfw>
-    <xme:hDyZYAoPMp-2hhXE5dIuFZVKJLDFR-LeVjsu56BtdhTJGnUi8Md4Pqb1pnf9Vqqdn
-    t02Gw-Ku9S6gnwxX4I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegkedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegvnhcu
-    uehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrghtth
-    gvrhhnpeevffdtteetgfdttdekueefgedttddtueeugeekgeetffeuteffjeduieehhfek
-    tdenucfkphepvdegrdduieelrddvtddrvdehheenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:hDyZYHO7a0I2ObO3iNQCJFMynfyvzQSxH3x8A4ShPc13xjvG6wh63A>
-    <xmx:hDyZYB6OL9_iqJiCXEkFvw1uMnu0UHjkSyxn6Irx0qOidEFWAmkwbA>
-    <xmx:hDyZYB472gSq8MYTawlNh6oofIzwaZQvJxltEegElvbnNVF17UiCaA>
-    <xmx:hjyZYNFuZhUi4dOrdPamnliiTh3owe6Tf-ewK9C2k9SXGvHlGfVlTg>
-Received: from localhost (unknown [24.169.20.255])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 10 May 2021 10:00:35 -0400 (EDT)
-Date:   Mon, 10 May 2021 10:00:34 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-Message-ID: <YJk8gkMlk8dtaEsz@erythro.dev.benboeckel.internal>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210510135518.305cc03d@coco.lan>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+        id S238588AbhEJOIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 10:08:36 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:43769 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238363AbhEJOCw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 10:02:52 -0400
+Received: by mail-ot1-f53.google.com with SMTP id u19-20020a0568302493b02902d61b0d29adso13708549ots.10;
+        Mon, 10 May 2021 07:01:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=aMyd74V2xPR9HsHsdnpVhEpDDf6pkpJ1H3LsUAn7sbI=;
+        b=d/4ZY7ISqohEwb2d1Bdh83OedwbHW94d1A6Dfgq1IcCP1Q18XZQA0ulSJ19AKAbmHa
+         2Lzsdw9uRigyAzFlQ2T6GIAJfs3jcH2Y+PeGfJvwbjbwH49hup22tvWi9W7n2mhxrKF1
+         47+oLcTkImAA7sz/HrrDHZWPmng0YZ+dMDTmmjrg+Z+w4AcrP+ZmB5m0PI/QI6nestHG
+         J/dw+UisWRRwDOpFBCLtAylxoA/ONIw3VDHa5FQEIpWgUssJxwpF+vIKdNhwZ+mnxyma
+         oUKA3Sfcw3MVD8Fm0sA+m/sIqRj5ohBLcd8ay0YXTV+AU0Y5gBoOjW67eT7uArMzoPPA
+         jMPg==
+X-Gm-Message-State: AOAM533qusKFrwaEfH7YQdCxq+H6+1Ji/VMrtuWPUcTQUJv9ppWIVT4a
+        fjThkDNli3FrirnhzojlMpOYUnpsWw==
+X-Google-Smtp-Source: ABdhPJzSILUisRkF9ZkgKtKLtWcN1AIVtat4Sjmyowu6KWN3kbXqHOkZeDA9q9iEo8Fblx+U2ozBDw==
+X-Received: by 2002:a9d:70c1:: with SMTP id w1mr2290991otj.276.1620655306804;
+        Mon, 10 May 2021 07:01:46 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s6sm1167461otk.71.2021.05.10.07.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 07:01:45 -0700 (PDT)
+Received: (nullmailer pid 41439 invoked by uid 1000);
+        Mon, 10 May 2021 14:01:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     satya priya <skakit@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        David Collins <collinsd@codeaurora.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
+In-Reply-To: <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
+References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org> <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
+Subject: Re: [PATCH V3 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941 power key binding to yaml
+Date:   Mon, 10 May 2021 09:01:39 -0500
+Message-Id: <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 10, 2021 at 13:55:18 +0200, Mauro Carvalho Chehab wrote:
->     $ git grep "CPU 0 has been" Documentation/RCU/
->       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:| #. CPU 0 has been in dyntick-idle mode for quite some time. When it   |
->       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:|    notices that CPU 0 has been in dyntick idle mode, which qualifies  |
+On Mon, 10 May 2021 12:31:03 +0530, satya priya wrote:
+> Convert qcom pm8941 power key binding from .txt to .yaml format.
+> 
+> Signed-off-by: satya priya <skakit@codeaurora.org>
+> ---
+> Changes in V2:
+>  - Fixed bot errors, took reference from input.yaml for "linux,code"
+>  - Added one complete example for powerkey and resin, and referenced it
+>    in main PON binding.
+>  - Moved this patch to the end of the series.
+> 
+> Changes in V3:
+>  - Moved this patch before PON binding patch.
+>  - As per Rob's comments, added allOf at the beginning of binding.
+>    Added maxItems for interrupts.
+>  - Added 'unevaluatedProperties' instead of 'additionalProperties' as
+>    we are using allOf.
+> 
+>  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
+>  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 87 ++++++++++++++++++++++
+>  2 files changed, 87 insertions(+), 55 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
+>  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
+> 
 
-The kernel documentation uses hard line wraps, so such a naive grep is
-going to always fail unless such line wraps are taken into account. Not
-saying this isn't an improvement in and of itself, but smarter searching
-strategies are likely needed anyways.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
---Ben
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.example.dt.yaml:0:0: /example-0/spmi@c440000/pmic@0/pon_hlos@1300: failed to match any schema with compatible: ['qcom,pm8998-pon']
+
+See https://patchwork.ozlabs.org/patch/1476186
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
