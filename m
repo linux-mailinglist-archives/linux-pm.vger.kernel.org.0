@@ -2,175 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A53D377CC0
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 09:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2769378203
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 12:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhEJHDK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 03:03:10 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:2227 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbhEJHDJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 03:03:09 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 10 May 2021 00:02:02 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 May 2021 00:01:58 -0700
-X-QCInternal: smtphost
-Received: from c-skakit-linux.ap.qualcomm.com (HELO c-skakit-linux.qualcomm.com) ([10.242.51.242])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 10 May 2021 12:31:21 +0530
-Received: by c-skakit-linux.qualcomm.com (Postfix, from userid 2344709)
-        id 006094F2B; Mon, 10 May 2021 12:31:19 +0530 (IST)
-From:   satya priya <skakit@codeaurora.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        satya priya <skakit@codeaurora.org>
-Subject: [PATCH V3 5/5] dt-bindings: power: reset: qcom-pon: Convert qcom PON binding to yaml
-Date:   Mon, 10 May 2021 12:31:04 +0530
-Message-Id: <1620630064-16354-6-git-send-email-skakit@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
-References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
+        id S231773AbhEJKbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 06:31:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60168 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231807AbhEJKaF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 May 2021 06:30:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BB51C6186A;
+        Mon, 10 May 2021 10:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620642443;
+        bh=m8Om0d0gr6VAcd5Jczu3eLDDIMDn68u18OnEK7cqiXc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BGAaeysxa3iFzSZ1FfjZ5/y2eL3suXE253gMCE7F7vm8zA9OeZDiYnUB+LQW/5hRH
+         FnndwxxTEmQ2DJ3uv7HyZXdGu5z5eIuzuN85zhz93xn3PvYoTrI1MbO/ie7vK1kSR4
+         r9sZK7ntrIYeFN8ZNWHi2TbYdY9KQBFWBqSqXJsOoWApq/8HJ5UdmmjcOacrW9euWe
+         TuQrCnXzSf3JG0Wk08bKAi7oUlaz1DFeeiRzQUkIKOnMQYChOf4ytHJLKFxv/rqMKc
+         Cw9HOT9RG5dG6aqVcNFdt3JvTxwc092kb5bghisnH/RJtvOjZ9k8FcUUVuYyvLrlrP
+         OMGHhZJn5zWPQ==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lg38C-000UOy-QM; Mon, 10 May 2021 12:27:20 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 10/53] docs: admin-guide: pm: avoid using UTF-8 chars
+Date:   Mon, 10 May 2021 12:26:22 +0200
+Message-Id: <79d5dca9b4bd0cc3b128ece6ffa16c07b7178626.1620641727.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert qcom PON binding from .txt to .yaml format.
+While UTF-8 characters can be used at the Linux documentation,
+the best is to use them only when ASCII doesn't offer a good replacement.
+So, replace the occurences of the following UTF-8 characters:
 
-The example has been removed in favour of full example being
-available in the qcom,pm8941-pwrkey binding.
+	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
 
-Signed-off-by: satya priya <skakit@codeaurora.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-Changes in V2:
- - As per Rob's comments, converted the main PON binding and added in V2.
+ Documentation/admin-guide/pm/intel_idle.rst   | 4 ++--
+ Documentation/admin-guide/pm/intel_pstate.rst | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Changes in V3:
- - As per Sebastian's comments, added allOf to refer reboot-mode.yaml and
-   used unevaluatedProperties = false. Added maxItems for reg.
-
- .../devicetree/bindings/power/reset/qcom,pon.txt   | 49 ----------------------
- .../devicetree/bindings/power/reset/qcom,pon.yaml  | 44 +++++++++++++++++++
- 2 files changed, 44 insertions(+), 49 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pon.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-
-diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt b/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
-deleted file mode 100644
-index 0c0dc3a..0000000
---- a/Documentation/devicetree/bindings/power/reset/qcom,pon.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Qualcomm PON Device
--
--The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
--and resin along with the Android reboot-mode.
--
--This DT node has pwrkey and resin as sub nodes.
--
--Required Properties:
---compatible: Must be one of:
--	"qcom,pm8916-pon"
--	"qcom,pms405-pon"
--	"qcom,pm8998-pon"
--
---reg: Specifies the physical address of the pon register
--
--Optional subnode:
---pwrkey: Specifies the subnode pwrkey and should follow the
-- qcom,pm8941-pwrkey.txt description.
---resin: Specifies the subnode resin and should follow the
-- qcom,pm8xxx-pwrkey.txt description.
--
--The rest of the properties should follow the generic reboot-mode description
--found in reboot-mode.txt
--
--Example:
--
--	pon@800 {
--		compatible = "qcom,pm8916-pon";
--
--		reg = <0x800>;
--		mode-bootloader = <0x2>;
--		mode-recovery = <0x1>;
--
--		pwrkey {
--			compatible = "qcom,pm8941-pwrkey";
--			interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
--			debounce = <15625>;
--			bias-pull-up;
--			linux,code = <KEY_POWER>;
--		};
--
--		resin {
--			compatible = "qcom,pm8941-resin";
--			interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
--			debounce = <15625>;
--			bias-pull-up;
--			linux,code = <KEY_VOLUMEDOWN>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-new file mode 100644
-index 0000000..439f082
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/qcom,pon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PON Device
-+
-+maintainers:
-+  - Vinod Koul <vkoul@kernel.org>
-+
-+description: |
-+  The Power On device for Qualcomm PM8xxx is MFD supporting pwrkey
-+  and resin along with the Android reboot-mode.
-+
-+  This DT node has pwrkey and resin as sub nodes.
-+
-+allOf:
-+  - $ref: reboot-mode.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pm8916-pon
-+      - qcom,pms405-pon
-+      - qcom,pm8998-pon
-+
-+  reg:
-+    maxItems: 1
-+
-+  pwrkey:
-+    type: object
-+    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
-+
-+  resin:
-+    type: object
-+    $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+...
+diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
+index 89309e1b0e48..c3c4f5d4c806 100644
+--- a/Documentation/admin-guide/pm/intel_idle.rst
++++ b/Documentation/admin-guide/pm/intel_idle.rst
+@@ -28,7 +28,7 @@ logical CPU executing it is idle and so it may be possible to put some of the
+ processor's functional blocks into low-power states.  That instruction takes two
+ arguments (passed in the ``EAX`` and ``ECX`` registers of the target CPU), the
+ first of which, referred to as a *hint*, can be used by the processor to
+-determine what can be done (for details refer to Intel Software Developer’s
++determine what can be done (for details refer to Intel Software Developer's
+ Manual [1]_).  Accordingly, ``intel_idle`` refuses to work with processors in
+ which the support for the ``MWAIT`` instruction has been disabled (for example,
+ via the platform firmware configuration menu) or which do not support that
+@@ -261,7 +261,7 @@ restrict the range of permissible idle states to the ones with core-level only
+ References
+ ==========
+ 
+-.. [1] *Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 2B*,
++.. [1] *Intel® 64 and IA-32 Architectures Software Developer's Manual Volume 2B*,
+        https://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-vol-2b-manual.html
+ 
+ .. [2] *Advanced Configuration and Power Interface (ACPI) Specification*,
+diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
+index df29b4f1f219..d881a32acb6d 100644
+--- a/Documentation/admin-guide/pm/intel_pstate.rst
++++ b/Documentation/admin-guide/pm/intel_pstate.rst
+@@ -26,7 +26,7 @@ than just an operating frequency or an operating performance point (see the
+ LinuxCon Europe 2015 presentation by Kristen Accardi [1]_ for more
+ information about that).  For this reason, the representation of P-states used
+ by ``intel_pstate`` internally follows the hardware specification (for details
+-refer to Intel Software Developer’s Manual [2]_).  However, the ``CPUFreq`` core
++refer to Intel Software Developer's Manual [2]_).  However, the ``CPUFreq`` core
+ uses frequencies for identifying operating performance points of CPUs and
+ frequencies are involved in the user space interface exposed by it, so
+ ``intel_pstate`` maps its internal representation of P-states to frequencies too
+@@ -756,7 +756,7 @@ References
+ .. [1] Kristen Accardi, *Balancing Power and Performance in the Linux Kernel*,
+        https://events.static.linuxfound.org/sites/events/files/slides/LinuxConEurope_2015.pdf
+ 
+-.. [2] *Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 3: System Programming Guide*,
++.. [2] *Intel® 64 and IA-32 Architectures Software Developer's Manual Volume 3: System Programming Guide*,
+        https://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-system-programming-manual-325384.html
+ 
+ .. [3] *Advanced Configuration and Power Interface Specification*,
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+2.30.2
 
