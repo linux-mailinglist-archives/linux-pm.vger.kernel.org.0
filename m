@@ -2,71 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B197379363
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1B23793A2
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhEJQKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 12:10:24 -0400
-Received: from mga01.intel.com ([192.55.52.88]:32425 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230383AbhEJQKO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 May 2021 12:10:14 -0400
-IronPort-SDR: 8KTw4ojtUbfHysmRd6tXmp32aB4ZotoXvlMNqymdq6yfk58XX5Sl3WjW19hWDdhorsFQGInljv
- 1Gwl9SP5PK+Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="220176279"
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="220176279"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 09:07:29 -0700
-IronPort-SDR: 9/fyJTdb9+2VzB4z/Xe3vw+P+iVr/wA24JC3NDEyD1W4CBT9rNjYd26f9NyCfCfSklu1d2B8XU
- ppAmSt2rftgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="433873530"
-Received: from srpawnik-nuc8i7beh.iind.intel.com ([10.223.107.144])
-  by fmsmga008.fm.intel.com with ESMTP; 10 May 2021 09:07:27 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rjw@rjwysocki.net, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        sumeet.r.pawnikar@intel.com
-Subject: [PATCH] ACPI: DPTF: Add battery participant for Intel SoCs
-Date:   Mon, 10 May 2021 21:28:19 +0530
-Message-Id: <20210510155819.29595-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S231274AbhEJQV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 12:21:56 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:38764 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbhEJQV4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 12:21:56 -0400
+Received: by mail-ot1-f54.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so14939803oth.5;
+        Mon, 10 May 2021 09:20:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lK9/oyY3m8MgUruhYK2DPu5cjgnBxY2p95ZouQCulpI=;
+        b=Jv6wo+A7F3rZu4ZtPJJzJhJCIgqU8ccysDFnvPgDUFCh0KhGSliQo3yGciyQBLlJu1
+         xNo2KWft5HI4lL7iJMr9+pkGJtDTpl+/F+q38aFFTWO8LFQ0HTpNdylDE35P80ncIKSh
+         XSoZyqvGrjuJb7cGPycaUuL2h3K+xN/LD4sDLuEtFFoVKNRl+/p6wPsJzps9oTllfmK/
+         xa9TmuA0cG3M+NVOPfm7xoAl1Vq7w5+Gyp5NzaQrSqHuHywHasf5nslWliH5jb6HQZEh
+         gEXMadtkksgimMbBG6Ygl2SeFowTGZes+LffO897VcNJICNlGqo1Fz1e3GecgONPUHPy
+         eXsQ==
+X-Gm-Message-State: AOAM533F4ygwWEjxlR2RTobaJX13KetU1L39fQRnF0ggh49qZaj3YPxw
+        N4yk95IFYdPBP7lorEA9+uVQwhB7jw==
+X-Google-Smtp-Source: ABdhPJwjr2gIDHJ9GnOXJIxijY4RjHXEfNYDzfLT+l/6t2ZnFp61g/9gPgf7e1AUIuBUpMN+TIVnlA==
+X-Received: by 2002:a9d:73d7:: with SMTP id m23mr22219775otk.325.1620663649533;
+        Mon, 10 May 2021 09:20:49 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j18sm3192624ota.7.2021.05.10.09.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 09:20:48 -0700 (PDT)
+Received: (nullmailer pid 228437 invoked by uid 1000);
+        Mon, 10 May 2021 16:20:47 -0000
+Date:   Mon, 10 May 2021 11:20:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     satya priya <skakit@codeaurora.org>
+Cc:     linux-input@vger.kernel.org,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        David Collins <collinsd@codeaurora.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH V3 3/5] dt-bindings: power: reset: Change
+ 'additionalProperties' to true
+Message-ID: <20210510162047.GA228385@robh.at.kernel.org>
+References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
+ <1620630064-16354-4-git-send-email-skakit@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1620630064-16354-4-git-send-email-skakit@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add ACPI Device ID for DPTF battery participant for the Intel
-Jasper Lake (INT3532) and Tiger Lake (INTC1050) SoC based platforms.
+On Mon, 10 May 2021 12:31:02 +0530, satya priya wrote:
+> Change 'additionalProperties' to true as this is a generic binding.
+> 
+> Signed-off-by: satya priya <skakit@codeaurora.org>
+> ---
+> Changes in V3:
+>  - This is newly added in V3.
+> 
+>  Documentation/devicetree/bindings/power/reset/reboot-mode.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- drivers/acpi/dptf/int340x_thermal.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index d14025a85ce8..da5d5f0be2f2 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -24,6 +24,7 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INT3409"},
- 	{"INT340A"},
- 	{"INT340B"},
-+	{"INT3532"},
- 	{"INTC1040"},
- 	{"INTC1041"},
- 	{"INTC1043"},
-@@ -33,6 +34,7 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INTC1047"},
- 	{"INTC1048"},
- 	{"INTC1049"},
-+	{"INTC1050"},
- 	{"INTC1060"},
- 	{"INTC1061"},
- 	{""},
--- 
-2.17.1
-
+Acked-by: Rob Herring <robh@kernel.org>
