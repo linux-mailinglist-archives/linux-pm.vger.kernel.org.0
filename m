@@ -2,122 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB61379840
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 22:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F312537987C
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 22:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbhEJUV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 16:21:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229566AbhEJUVx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 May 2021 16:21:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 94A36613C4;
-        Mon, 10 May 2021 20:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620678048;
-        bh=NnI6Jar/M7IdxLtxsAWt4IwLrWaSY6o6+asG73lwypk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p2hJI9M83cDG45oqbIlVUmrDpuGSgTqB+rZgiTLQy5ADDbE7geoZmjUIYljGm50RU
-         9gd5JGSGKWBoSz8eqe/8nso7itp0CL1VLUdZVpFJbtUwUsRTRWMTfTYgZwfNxxllNc
-         StwmKEjeAsTcOFbJvKO0TQRH86N2tlNuoBX98XpgLV5KDfPYLIkssGqez7lQ/dLqn8
-         t4vUQ4KtvWWxucZOLo1aQfy+YnSFI8f0XUkPTGjnt4IwpYdznHXj9I2TWF7VUoLaNT
-         bFRwIZy6GyhzjWr8KCS63nd6m8DxWLwP9kJ2mbA7EkhKyFYVTD5Tso8Vb90VC/NTsi
-         9DANZXpaUwlDA==
-Date:   Mon, 10 May 2021 13:20:39 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, nsaenz@kernel.org,
-        maxime@cerno.tech, khilman@kernel.org, ulf.hansson@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, robh+dt@kernel.org,
-        frowand.list@gmail.com, maz@kernel.org, tglx@linutronix.de,
-        saravanak@google.com, geert@linux-m68k.org, nsaenzjulienne@suse.de,
-        linux@roeck-us.net, guillaume.tucker@collabora.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, kernel-team@android.com,
-        linux-rpi-kernel@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH v2] clk: Skip clk provider registration when np is NULL
-Message-ID: <YJmVlwu4swD1upym@archlinux-ax161>
-References: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+        id S231187AbhEJUmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 16:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229946AbhEJUmf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 16:42:35 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0BAC061574
+        for <linux-pm@vger.kernel.org>; Mon, 10 May 2021 13:41:30 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id h16so1698398pfk.0
+        for <linux-pm@vger.kernel.org>; Mon, 10 May 2021 13:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=UqmuBiqsgQ1VcFB4F+MDJu1qSs0KDVGzsLWn05BYyiE=;
+        b=xzG7z9Gcb4SZO7NG5ubHC5Yhza0g8W8MFnakmFhKbMMm0orA5niSVVu/iEy9qKNq9D
+         UC7zkFLAWYn4p2sdyWkRuYHislZ3u7+H71YyPRCWbagIT3kgX4AA9q7WTLBcVSrP/Mr2
+         N9snvhWuAzZHmNuFdyRdvlgWKzz1g/JTfVEGPE3iahdPsJPLP0Hx/1FQZAO9IJSUyK16
+         DOXbwfZUNyoNlk4OVwpqpHXsPuXoT844cXHZBog6ieNcBU1V/b2+/pjxoIE3gC7PCYWn
+         NN/lmN1UdpaVuNe6hpYHxYVJycL2/3LVE87QJ7eUqWzdAd7++SdgEhuYa1sfauVCGl4Z
+         +llA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=UqmuBiqsgQ1VcFB4F+MDJu1qSs0KDVGzsLWn05BYyiE=;
+        b=HE7mrbw/7QP7e3OQswBWI9s0OexBk7k6iyECln8bJD7RfjMEWhIYOmsgT0CXtwu9bX
+         BlFZLqjRsNk0UIDk0TQ3IM9iqQ4E3/ZqI4LU1WW7kVKgYTmUMKUH9UUEEE0clJgD98jN
+         qO6lxcE6RHslTK3tuxdRTCP+QWe4nNTCWKKukODOv3qzNf4QJl88l0AbeYFs0nxAigqR
+         aC1ueMtF4iptbu6JnubDp+BRm73piyJiFG4sjjJtFdTKBWsCQgvXPD8oknhaEQE31mdT
+         PbjIh5WlEUNiq1avL3G3r1ucN/PS+yOdoV1M2i1FvBWTSUV6YpC8Y74kB7wW7KLafgBv
+         /svA==
+X-Gm-Message-State: AOAM530v3qyDQOziRBvePpBSF76++/hcXc5KA8iJgbh1o0WgacRPQ+uX
+        AvKhR/YSNp/UIzgin07XkPkhmMr/0tLPzbkH
+X-Google-Smtp-Source: ABdhPJwELCoBixJZk4ZLkUgKEjamjSeCHVRLukF9OXJ3kKfS186PLvw5TJLfss2IFXFxUx42es+rBQ==
+X-Received: by 2002:a05:6a00:1c63:b029:2a8:b80a:1244 with SMTP id s35-20020a056a001c63b02902a8b80a1244mr19343039pfw.72.1620679290308;
+        Mon, 10 May 2021 13:41:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d12sm280160pfv.190.2021.05.10.13.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 13:41:30 -0700 (PDT)
+Message-ID: <60999a7a.1c69fb81.fecc8.1449@mx.google.com>
+Date:   Mon, 10 May 2021 13:41:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.13-rc1-4-gdc9d574fa82fc
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc1-4-gdc9d574fa82fc)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 09:56:18AM +0300, Tudor Ambarus wrote:
-> commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
-> revealed that clk/bcm/clk-raspberrypi.c driver calls
-> devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
-> NULL pointer dereference in of_clk_add_hw_provider() when calling
-> fwnode_dev_initialized().
-> 
-> Returning 0 is reducing the if conditions in driver code and is being
-> consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
-> is disabled. The downside is that drivers will maybe register clkdev lookups
-> when they don't need to and waste some memory.
-> 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
-> Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc1-4-gdc9d574fa82fc)
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc1-4-gdc9d574fa82fc/
 
-> ---
-> v2:
-> - s/return 0;/return; in void of_clk_del_provider()
-> - add second fixes tag and Stephen's R-b tag
-> The opinions on whether to return an error or zero were split. Returning 0
-> and skipping the logic was considered safer as we don't know for sure if
-> other drivers are affected. See:
-> https://lore.kernel.org/lkml/d24bebc5-0f78-021f-293f-e58defa32531@samsung.com/
-> https://lore.kernel.org/lkml/20210423171335.262316-1-tudor.ambarus@microchip.com/
-> 
->  drivers/clk/clk.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index a3b30f7de2ef..b47460b40d14 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -4552,6 +4552,9 @@ int of_clk_add_provider(struct device_node *np,
->  	struct of_clk_provider *cp;
->  	int ret;
->  
-> +	if (!np)
-> +		return 0;
-> +
->  	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
->  	if (!cp)
->  		return -ENOMEM;
-> @@ -4591,6 +4594,9 @@ int of_clk_add_hw_provider(struct device_node *np,
->  	struct of_clk_provider *cp;
->  	int ret;
->  
-> +	if (!np)
-> +		return 0;
-> +
->  	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
->  	if (!cp)
->  		return -ENOMEM;
-> @@ -4688,6 +4694,9 @@ void of_clk_del_provider(struct device_node *np)
->  {
->  	struct of_clk_provider *cp;
->  
-> +	if (!np)
-> +		return;
-> +
->  	mutex_lock(&of_clk_mutex);
->  	list_for_each_entry(cp, &of_clk_providers, link) {
->  		if (cp->node == np) {
-> -- 
-> 2.25.1
-> 
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc1-4-gdc9d574fa82fc
+Git Commit: dc9d574fa82fc39db81cb09a99c09c865d03f98b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
