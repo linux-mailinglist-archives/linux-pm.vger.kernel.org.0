@@ -2,77 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1B23793A2
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97E73793AD
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 18:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbhEJQV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 12:21:56 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:38764 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbhEJQV4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 12:21:56 -0400
-Received: by mail-ot1-f54.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so14939803oth.5;
-        Mon, 10 May 2021 09:20:49 -0700 (PDT)
+        id S231213AbhEJQZy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 12:25:54 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:44748 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbhEJQZx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 12:25:53 -0400
+Received: by mail-ot1-f43.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so14931055otp.11;
+        Mon, 10 May 2021 09:24:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lK9/oyY3m8MgUruhYK2DPu5cjgnBxY2p95ZouQCulpI=;
-        b=Jv6wo+A7F3rZu4ZtPJJzJhJCIgqU8ccysDFnvPgDUFCh0KhGSliQo3yGciyQBLlJu1
-         xNo2KWft5HI4lL7iJMr9+pkGJtDTpl+/F+q38aFFTWO8LFQ0HTpNdylDE35P80ncIKSh
-         XSoZyqvGrjuJb7cGPycaUuL2h3K+xN/LD4sDLuEtFFoVKNRl+/p6wPsJzps9oTllfmK/
-         xa9TmuA0cG3M+NVOPfm7xoAl1Vq7w5+Gyp5NzaQrSqHuHywHasf5nslWliH5jb6HQZEh
-         gEXMadtkksgimMbBG6Ygl2SeFowTGZes+LffO897VcNJICNlGqo1Fz1e3GecgONPUHPy
-         eXsQ==
-X-Gm-Message-State: AOAM533F4ygwWEjxlR2RTobaJX13KetU1L39fQRnF0ggh49qZaj3YPxw
-        N4yk95IFYdPBP7lorEA9+uVQwhB7jw==
-X-Google-Smtp-Source: ABdhPJwjr2gIDHJ9GnOXJIxijY4RjHXEfNYDzfLT+l/6t2ZnFp61g/9gPgf7e1AUIuBUpMN+TIVnlA==
-X-Received: by 2002:a9d:73d7:: with SMTP id m23mr22219775otk.325.1620663649533;
-        Mon, 10 May 2021 09:20:49 -0700 (PDT)
+        bh=U2QmA0kT5KGKtEEfgKEA5hMeDW03KIt9H3QxMG9piFw=;
+        b=mfI5MIfJitrBkxc2cE9N5WB2KyOsb2BogBytsga57U2I1uCwGihoQBd++pgC2NWQWB
+         osX6ANNbeo9cWISIiM3pNyga/HW31PCQFZNW9Pe/qDCprF8tWf3OKz2JQJemwL3iE0jy
+         Fw46bHU0zW8mVGnUQtFmhPQ8rPV6Yw+qcgDODIoyi0WL8fPCAf1+HFMzXPz6JCXjjEE7
+         hIMjAX3wCnWU6VQqAWxgYG8B+PRAs8oxozeji9jHqOUJAnEuGVdyZKPmAneI15gt4+QT
+         XoHBr33cwa5IS5gNdYfbczRZlK1DG4V2AuWpe3DU2u5GIoA2AH8tpKW7LSEQpOFiKp5L
+         B9mA==
+X-Gm-Message-State: AOAM53205l92AVEXKRVWp+y29+OeW7+/nXd+E5QMB0qBiFq2yGzJi8cw
+        6TvPUJjG+RstMzXhW/i8vA==
+X-Google-Smtp-Source: ABdhPJxcwWkV87qLFbePQOlAS7VuwdvHmnrsQjgiZIUEHijHWQCrqZrYHZKJAdgrHzjfGbvABhkWwg==
+X-Received: by 2002:a9d:2271:: with SMTP id o104mr21591456ota.201.1620663887279;
+        Mon, 10 May 2021 09:24:47 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j18sm3192624ota.7.2021.05.10.09.20.47
+        by smtp.gmail.com with ESMTPSA id b8sm736481ooo.42.2021.05.10.09.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 09:20:48 -0700 (PDT)
-Received: (nullmailer pid 228437 invoked by uid 1000);
-        Mon, 10 May 2021 16:20:47 -0000
-Date:   Mon, 10 May 2021 11:20:47 -0500
+        Mon, 10 May 2021 09:24:46 -0700 (PDT)
+Received: (nullmailer pid 233712 invoked by uid 1000);
+        Mon, 10 May 2021 16:24:45 -0000
+Date:   Mon, 10 May 2021 11:24:45 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     satya priya <skakit@codeaurora.org>
-Cc:     linux-input@vger.kernel.org,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         kgunda@codeaurora.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        David Collins <collinsd@codeaurora.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
+        linux-arm-msm@vger.kernel.org,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
         Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH V3 3/5] dt-bindings: power: reset: Change
- 'additionalProperties' to true
-Message-ID: <20210510162047.GA228385@robh.at.kernel.org>
+        David Collins <collinsd@codeaurora.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH V3 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941
+ power key binding to yaml
+Message-ID: <20210510162445.GA230005@robh.at.kernel.org>
 References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
- <1620630064-16354-4-git-send-email-skakit@codeaurora.org>
+ <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
+ <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620630064-16354-4-git-send-email-skakit@codeaurora.org>
+In-Reply-To: <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 May 2021 12:31:02 +0530, satya priya wrote:
-> Change 'additionalProperties' to true as this is a generic binding.
+On Mon, May 10, 2021 at 09:01:39AM -0500, Rob Herring wrote:
+> On Mon, 10 May 2021 12:31:03 +0530, satya priya wrote:
+> > Convert qcom pm8941 power key binding from .txt to .yaml format.
+> > 
+> > Signed-off-by: satya priya <skakit@codeaurora.org>
+> > ---
+> > Changes in V2:
+> >  - Fixed bot errors, took reference from input.yaml for "linux,code"
+> >  - Added one complete example for powerkey and resin, and referenced it
+> >    in main PON binding.
+> >  - Moved this patch to the end of the series.
+> > 
+> > Changes in V3:
+> >  - Moved this patch before PON binding patch.
+> >  - As per Rob's comments, added allOf at the beginning of binding.
+> >    Added maxItems for interrupts.
+> >  - Added 'unevaluatedProperties' instead of 'additionalProperties' as
+> >    we are using allOf.
+> > 
+> >  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
+> >  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 87 ++++++++++++++++++++++
+> >  2 files changed, 87 insertions(+), 55 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
+> >  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
+> > 
 > 
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> ---
-> Changes in V3:
->  - This is newly added in V3.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
->  Documentation/devicetree/bindings/power/reset/reboot-mode.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> yamllint warnings/errors:
 > 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.example.dt.yaml:0:0: /example-0/spmi@c440000/pmic@0/pon_hlos@1300: failed to match any schema with compatible: ['qcom,pm8998-pon']
 
-Acked-by: Rob Herring <robh@kernel.org>
+You have the same example in patch 5, so drop the example here. That 
+will fix this circular dependency.
