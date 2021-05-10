@@ -2,100 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D66003798E5
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE80937991E
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 23:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbhEJVNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 17:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S231414AbhEJV0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 17:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbhEJVNB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:13:01 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B8C061763;
-        Mon, 10 May 2021 14:11:55 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t11so25407116lfl.11;
-        Mon, 10 May 2021 14:11:55 -0700 (PDT)
+        with ESMTP id S230248AbhEJV0T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 17:26:19 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D365BC061574
+        for <linux-pm@vger.kernel.org>; Mon, 10 May 2021 14:25:13 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id u25so3667910pgl.9
+        for <linux-pm@vger.kernel.org>; Mon, 10 May 2021 14:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Z0mhM5VOJlBFrF5T1QvpTzNjyhRksc+ReJ2SbVVWnBM=;
-        b=uu/m7eQ/8JNpthgicesTvIUqFAGT/SESV51ET/Dy4Bj9UZB7Q2R/E0ZWR4NFEHvscm
-         hkOYZcjD454dtkvZDk8lobuHaMkSk7TWFYeOJ4pYPo2OnP7i2K/AhBrs0BZEN09Y2bRY
-         uV0V6MNzXWkhiecp1+7RGU4LiBSWZ9JfRt7qJmP7/GM+RLGOWo3IxaLibOd9Vr6jID9e
-         Vl79CpL6Iw6qP+UU86TOD8kk0ksmgCzNv5x7Tr20Jkgr8OEBZvYq2pxYa0t/EqYBUcdM
-         SKV3y58f8MFubjZPzXjM9zw/J3+/GXkNZjCWNFkeoBKtkm4Q+OB+Wr7GaGTya1XQZQaJ
-         BKuQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=FHrSpIuySdofcAgpbiq/eC8Zst0trgBPbUF0zJfMRg0=;
+        b=sSco2LzrWwVXvJzXUJlIeAZ+kQzA50SUr2MG5JLxP04iSWr85ja5Lc4ryRy4/4KNRs
+         Aeb3tnhDNsOnPvPFyvAEeexA6GQSQJDM+VcsWkMk5p6XwS1KjfpN8MhV2iJhp7PjtXQU
+         Iib8ieIGyDUhwyWdIj84lIIYiNzsTGi5JO2KDiNGEFF7u8MvJemtbBZd6kAE4PRclR29
+         TAZCN2pTXVEDXwYYb+3PaRlateNCqiaqQtShwzOMNhnZm0a605Ime7hprTkJE6ZcRBCp
+         b4Uk80QNTKwm7ud0xVU5tmacC79f8skAI8icC61PNwSljOv/Kvtvatt6SZGwocJfuQWY
+         GipA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Z0mhM5VOJlBFrF5T1QvpTzNjyhRksc+ReJ2SbVVWnBM=;
-        b=nZ4fNVBzcNAEObceXdUFDhdKYKVOb7mLYO8L9NDaEmhz2qXXSPMJ+HCJe9Sjp/mIL2
-         VL5DlsNsm4c7mRpgJ8Tuy/oLleAJMX6WMrMthZVqeIhevUVtJxpubN8qxR5BbVtXUgQ9
-         PB5jTJV+vc9oWB0BZ0u6TTEG8aaM5kWeJ+ADJvNxw4UcACSm5A4h0rEVcqU/ilgm5jH8
-         WLeSUI4Uq9sGlM0XYQyVur2UUhlrqO/PrvxwdYwTcIKcxJ+Uogz9ZejJsH+SW1kE6I9y
-         25hrPzRIOhqQGiJqny+5lueT9ebu+HI0NJsnCaSPD5MVWi4XcT5+xRMCQP+EPkGPtOdV
-         HY2Q==
-X-Gm-Message-State: AOAM532Tlr0ubhXiXuQDEevHzSsfRuEYg7URh8o7blvfmsA/QCrzu5zl
-        NhACewXj5zY8DcasDvfkxYgU1fuHqEM=
-X-Google-Smtp-Source: ABdhPJzoFW9yJUJkLUcroWPTsUHs9lhnndXvIXHe0YPdHuXYh4O1M3Wv0dtyF+aPxMPpzomIY6z/EA==
-X-Received: by 2002:a05:6512:b26:: with SMTP id w38mr18220313lfu.152.1620681114021;
-        Mon, 10 May 2021 14:11:54 -0700 (PDT)
-Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
-        by smtp.gmail.com with ESMTPSA id x4sm2365339lfa.173.2021.05.10.14.11.53
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=FHrSpIuySdofcAgpbiq/eC8Zst0trgBPbUF0zJfMRg0=;
+        b=J7Nc+KCXIHQ1aPIjscbaPV6bDI23W22w1e9IJNwBZGS/M5Ym4sti28vuzbGfC5qawL
+         x+yvN4zchOYcJJdFdqXoMaagxZ4kCloiH8PeemFxdxafpbxGhpsaQK5BOrM8ZQtPFCsE
+         vfpCQb9U9wyOdBBW2URgOhZ5bJiYjzNtSG8hp4zHSuEylegAcfm/1gpk+q57RAtqogIt
+         uv1/iO32ZIAwcwd+asA/GrHgjT0AdO6EUOmAuYlcYRA3xX8MBy4iXQnk+1r3k67/+7cO
+         +R33B/gyCS74E0KHV9WQ/4SjEa/NLm0TL1tNnCZqgpL6tD64I6JkSlGYrNk5YPoETyv2
+         ZNkQ==
+X-Gm-Message-State: AOAM533X8WcUwg5Qspg9r+Txbvw/UgczZq8MfeMvvf2JGK9OEyrJgX+g
+        yNXiirCQNWmwbiPOMbBWX/3BRg==
+X-Google-Smtp-Source: ABdhPJzZ7z6xfKukLaqAKOYIQjhn+puiGYlNMSU47MjTjfV5ob4dnsnpCB+ibAv1ihvbg3QZwW/SOA==
+X-Received: by 2002:a63:8c52:: with SMTP id q18mr24606002pgn.356.1620681913383;
+        Mon, 10 May 2021 14:25:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ca6sm323870pjb.48.2021.05.10.14.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 14:11:53 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Matt Merhar <mattmerhar@protonmail.com>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v1 7/7] ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON
-Date:   Tue, 11 May 2021 00:10:08 +0300
-Message-Id: <20210510211008.30300-8-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210510211008.30300-1-digetx@gmail.com>
-References: <20210510211008.30300-1-digetx@gmail.com>
+        Mon, 10 May 2021 14:25:13 -0700 (PDT)
+Message-ID: <6099a4b9.1c69fb81.bba13.1625@mx.google.com>
+Date:   Mon, 10 May 2021 14:25:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.13-rc1-4-gdc9d574fa82fc
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 97 runs,
+ 2 regressions (v5.13-rc1-4-gdc9d574fa82fc)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ACTMON module monitors activity of memory clients and then devfreq
-driver makes decisions about a required memory frequency based on info
-from ACTMON. Add ACTMON device to the thermal zone of Ouya in order to
-use it as a cooling device which throttles memory freq on overheat.
+pm/testing baseline: 97 runs, 2 regressions (v5.13-rc1-4-gdc9d574fa82fc)
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Matt Merhar <mattmerhar@protonmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra30-ouya.dts | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Regressions Summary
+-------------------
 
-diff --git a/arch/arm/boot/dts/tegra30-ouya.dts b/arch/arm/boot/dts/tegra30-ouya.dts
-index 9a10e0d69762..e767ac227a81 100644
---- a/arch/arm/boot/dts/tegra30-ouya.dts
-+++ b/arch/arm/boot/dts/tegra30-ouya.dts
-@@ -463,7 +463,8 @@ map1 {
- 					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
- 							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
- 							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&actmon THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
- 				};
- 			};
- 		};
--- 
-2.30.2
+platform        | arch  | lab          | compiler | defconfig | regressions
+----------------+-------+--------------+----------+-----------+------------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 2          =
 
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
+1-4-gdc9d574fa82fc/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.13-rc1-4-gdc9d574fa82fc
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      dc9d574fa82fc39db81cb09a99c09c865d03f98b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab          | compiler | defconfig | regressions
+----------------+-------+--------------+----------+-----------+------------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60999a73728f1e69276f5468
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc1-4-gdc9d57=
+4fa82fc/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc1-4-gdc9d57=
+4fa82fc/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-5-g2f114cc7102b/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/60999a73728f1e6=
+9276f546c
+        new failure (last pass: v5.12-rc8-168-g3c44d15e5ffdb)
+        11 lines
+
+    2021-05-10 20:41:01.687000+00:00  kern  :alert : Mem abort in[   21.694=
+513] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines=
+ MEASUREMENT=3D11>
+    2021-05-10 20:41:01.688000+00:00  fo:
+    2021-05-10 20:41:01.688000+00:00  kern  :alert :   ESR =3D 0x96000006
+    2021-05-10 20:41:01.689000+00:00  kern  :alert :   EC =3D 0x25: DABT (c=
+urrent EL), IL =3D 32 bits
+    2021-05-10 20:41:01.690000+00:00  kern  :alert :   SET =3D 0, FnV =3D 0=
+   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/60999a73728f1e6=
+9276f546d
+        new failure (last pass: v5.12-rc8-168-g3c44d15e5ffdb)
+        2 lines
+
+    2021-05-10 20:41:01.695000+00:00  kern  :alert : Data abort info:
+    2021-05-10 20:41:01.695000+00:00  kern  :alert :   ISV =3D 0, ISS =3D 0=
+x00000006
+    2021-05-10 20:41:01.738000+00:00  kern  :alert :   CM =3D 0, WnR =3D 0
+    2021-05-10 20:41:01.739000+00:00  kern  :alert : user pgtable: 4k pages=
+, 48-bit VAs, pgdp=3D000000003a9f9000
+    2021-05-10 20:41:01.741000+00:00  kern  :aler[   21.735433] <LAVA_SIGNA=
+L_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2=
+>   =
+
+ =20
