@@ -2,42 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 067ED37821D
-	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 12:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8987437828E
+	for <lists+linux-pm@lfdr.de>; Mon, 10 May 2021 12:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbhEJKcd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 06:32:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60844 "EHLO mail.kernel.org"
+        id S232243AbhEJKgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 May 2021 06:36:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231635AbhEJKah (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 May 2021 06:30:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC1936191A;
-        Mon, 10 May 2021 10:27:23 +0000 (UTC)
+        id S231338AbhEJKcc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 May 2021 06:32:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2596B6192F;
+        Mon, 10 May 2021 10:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620642443;
-        bh=EU2r5/qQuL1o99O82KhZSnDOsgNg5571ceroSUVJZiY=;
+        s=k20201202; t=1620642444;
+        bh=cLg46e9/YeifDGAuTIUxyVNGgRec++ObTANYcNmIf8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G9ltI7mA23iDZx3X4S7668m4sgK93aCcGX+u2aYe+Nh+zkBRX7EwPOxbNtLwkVgxe
-         o+F9aoYAOFQtHJPWJh233eFQkDxkghfAs/ycG6hp+JXUBkiGu6dw6qAsyydTmVzoUP
-         3i7eoqNQ5D/eJuE3zxR+yMs+b47Oy/2pAxj/X38R+/otw4DKmDdJBs++/0DHe77ci/
-         aYLa1biXpVj92c/oo+C2hQyVb0u3ETyBDNdJaTwq5AzQTcx5kZMlYUNkQ68LlUUk5g
-         nXB45cPS9y1h2gsf7shU+mw1T/UxdbuLcHs6fWogMJPUB3js9aSbRDSwM5c+A2qFXB
-         uxgKzabP0Z5OA==
+        b=S/5qN/rNEKpOPrWZtzAMnSnoOE1/5nLCxJdQqQkO6kDOLzegk1nZFbRKJd8sTni1W
+         xTq7QGHY5d6ZYz+Xievfcjk5iZlfoarvSddw2mCVy+D9/mRZQVb7nCcoSNsMinSsf3
+         m5j105wxHMCOOWZN2LQ/M1EQpatZNx9r7ENVU5iixD38GL76eOf872FigByhjVUVYq
+         Y3TN3OdN1INBTh/iaXM2N1O2s1RQde4f57z86TA4UVrP/vBoH86PNsfAhsZyt8uULn
+         LG56P/lXLoNfG8hf4pW++bzekO8vRUdmK5YxUhYGzUcEuKzbKL/mnkLk+mQu8ePQ5x
+         ks9Bque1rJQlQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lg38D-000UPI-29; Mon, 10 May 2021 12:27:21 +0200
+        id 1lg38E-000UQu-8r; Mon, 10 May 2021 12:27:22 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 15/53] docs: driver-api: thermal: avoid using UTF-8 chars
-Date:   Mon, 10 May 2021 12:26:27 +0200
-Message-Id: <211acd2166c5ede7b50ebb90225c11386a48cadf.1620641727.git.mchehab+huawei@kernel.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 40/53] docs: power: powercap: powercap.rst: avoid using UTF-8 chars
+Date:   Mon, 10 May 2021 12:26:52 +0200
+Message-Id: <3eac877511acf0d8f33af2177e831ebde1927be8.1620641727.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
@@ -53,99 +54,236 @@ While UTF-8 characters can be used at the Linux documentation,
 the best is to use them only when ASCII doesn't offer a good replacement.
 So, replace the occurences of the following UTF-8 characters:
 
-	- U+2018 ('‘'): LEFT SINGLE QUOTATION MARK
-	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
+	- U+00a0 (' '): NO-BREAK SPACE
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../driver-api/thermal/cpu-idle-cooling.rst        | 14 +++++++-------
- .../driver-api/thermal/intel_powerclamp.rst        |  6 +++---
- .../thermal/x86_pkg_temperature_thermal.rst        |  2 +-
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ Documentation/power/powercap/powercap.rst | 210 +++++++++++-----------
+ 1 file changed, 105 insertions(+), 105 deletions(-)
 
-diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-index c2a7ca676853..60934a518560 100644
---- a/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-+++ b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-@@ -49,7 +49,7 @@ belong to the same cluster, with a duration greater than the cluster
- idle state target residency, we lead to dropping the static and the
- dynamic leakage for this period (modulo the energy needed to enter
- this state). So the sustainable power with idle cycles has a linear
--relation with the OPP’s sustainable power and can be computed with a
-+relation with the OPP's sustainable power and can be computed with a
- coefficient similar to::
- 
- 	    Power(IdleCycle) = Coef x Power(OPP)
-@@ -134,7 +134,7 @@ The idle injection duration value must comply with the constraints:
-   user experience, reactivity vs performance trade off we want. This
-   value should be specified.
- 
--- It is greater than the idle state’s target residency we want to go
-+- It is greater than the idle state's target residency we want to go
-   for thermal mitigation, otherwise we end up consuming more energy.
- 
- Power considerations
-@@ -146,11 +146,11 @@ power for a specific temperature but at this time we consume::
-  Power = Capacitance x Voltage^2 x Frequency x Utilisation
- 
- ... which is more than the sustainable power (or there is something
--wrong in the system setup). The ‘Capacitance’ and ‘Utilisation’ are a
--fixed value, ‘Voltage’ and the ‘Frequency’ are fixed artificially
--because we don’t want to change the OPP. We can group the
--‘Capacitance’ and the ‘Utilisation’ into a single term which is the
--‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have::
-+wrong in the system setup). The 'Capacitance' and 'Utilisation' are a
-+fixed value, 'Voltage' and the 'Frequency' are fixed artificially
-+because we don't want to change the OPP. We can group the
-+'Capacitance' and the 'Utilisation' into a single term which is the
-+'Dynamic Power Coefficient (Cdyn)' Simplifying the above, we have::
- 
-  Pdyn = Cdyn x Voltage^2 x Frequency
- 
-diff --git a/Documentation/driver-api/thermal/intel_powerclamp.rst b/Documentation/driver-api/thermal/intel_powerclamp.rst
-index 3f6dfb0b3ea6..d349c1b64281 100644
---- a/Documentation/driver-api/thermal/intel_powerclamp.rst
-+++ b/Documentation/driver-api/thermal/intel_powerclamp.rst
-@@ -29,7 +29,7 @@ By:
- INTRODUCTION
- ============
- 
--Consider the situation where a system’s power consumption must be
-+Consider the situation where a system's power consumption must be
- reduced at runtime, due to power budget, thermal constraint, or noise
- level, and where active cooling is not preferred. Software managed
- passive power reduction must be performed to prevent the hardware
-@@ -39,7 +39,7 @@ Currently, P-states, T-states (clock modulation), and CPU offlining
- are used for CPU throttling.
- 
- On Intel CPUs, C-states provide effective power reduction, but so far
--they’re only used opportunistically, based on workload. With the
-+they're only used opportunistically, based on workload. With the
- development of intel_powerclamp driver, the method of synchronizing
- idle injection across all online CPU threads was introduced. The goal
- is to achieve forced and controllable C-state residency.
-@@ -264,7 +264,7 @@ CPUs).
- Usage and Interfaces
- ====================
- The powerclamp driver is registered to the generic thermal layer as a
--cooling device. Currently, it’s not bound to any thermal zones::
-+cooling device. Currently, it's not bound to any thermal zones::
- 
-   jacob@chromoly:/sys/class/thermal/cooling_device14$ grep . *
-   cur_state:0
-diff --git a/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst b/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-index 2ac42ccd236f..5b95af96e40f 100644
---- a/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-+++ b/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-@@ -13,7 +13,7 @@ Authors: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
- Reference
- ---------
- 
--Intel® 64 and IA-32 Architectures Software Developer’s Manual (Jan, 2013):
-+Intel® 64 and IA-32 Architectures Software Developer's Manual (Jan, 2013):
- Chapter 14.6: PACKAGE LEVEL THERMAL MANAGEMENT
- 
- Description
+diff --git a/Documentation/power/powercap/powercap.rst b/Documentation/power/powercap/powercap.rst
+index e75d12596dac..c99122e0a1c8 100644
+--- a/Documentation/power/powercap/powercap.rst
++++ b/Documentation/power/powercap/powercap.rst
+@@ -34,113 +34,113 @@ Example sysfs interface tree::
+   /sys/devices/virtual/powercap
+   └──intel-rapl
+       ├──intel-rapl:0
+-      │   ├──constraint_0_name
+-      │   ├──constraint_0_power_limit_uw
+-      │   ├──constraint_0_time_window_us
+-      │   ├──constraint_1_name
+-      │   ├──constraint_1_power_limit_uw
+-      │   ├──constraint_1_time_window_us
+-      │   ├──device -> ../../intel-rapl
+-      │   ├──energy_uj
+-      │   ├──intel-rapl:0:0
+-      │   │   ├──constraint_0_name
+-      │   │   ├──constraint_0_power_limit_uw
+-      │   │   ├──constraint_0_time_window_us
+-      │   │   ├──constraint_1_name
+-      │   │   ├──constraint_1_power_limit_uw
+-      │   │   ├──constraint_1_time_window_us
+-      │   │   ├──device -> ../../intel-rapl:0
+-      │   │   ├──energy_uj
+-      │   │   ├──max_energy_range_uj
+-      │   │   ├──name
+-      │   │   ├──enabled
+-      │   │   ├──power
+-      │   │   │   ├──async
+-      │   │   │   []
+-      │   │   ├──subsystem -> ../../../../../../class/power_cap
+-      │   │   └──uevent
+-      │   ├──intel-rapl:0:1
+-      │   │   ├──constraint_0_name
+-      │   │   ├──constraint_0_power_limit_uw
+-      │   │   ├──constraint_0_time_window_us
+-      │   │   ├──constraint_1_name
+-      │   │   ├──constraint_1_power_limit_uw
+-      │   │   ├──constraint_1_time_window_us
+-      │   │   ├──device -> ../../intel-rapl:0
+-      │   │   ├──energy_uj
+-      │   │   ├──max_energy_range_uj
+-      │   │   ├──name
+-      │   │   ├──enabled
+-      │   │   ├──power
+-      │   │   │   ├──async
+-      │   │   │   []
+-      │   │   ├──subsystem -> ../../../../../../class/power_cap
+-      │   │   └──uevent
+-      │   ├──max_energy_range_uj
+-      │   ├──max_power_range_uw
+-      │   ├──name
+-      │   ├──enabled
+-      │   ├──power
+-      │   │   ├──async
+-      │   │   []
+-      │   ├──subsystem -> ../../../../../class/power_cap
+-      │   ├──enabled
+-      │   ├──uevent
++      │   ├──constraint_0_name
++      │   ├──constraint_0_power_limit_uw
++      │   ├──constraint_0_time_window_us
++      │   ├──constraint_1_name
++      │   ├──constraint_1_power_limit_uw
++      │   ├──constraint_1_time_window_us
++      │   ├──device -> ../../intel-rapl
++      │   ├──energy_uj
++      │   ├──intel-rapl:0:0
++      │   │   ├──constraint_0_name
++      │   │   ├──constraint_0_power_limit_uw
++      │   │   ├──constraint_0_time_window_us
++      │   │   ├──constraint_1_name
++      │   │   ├──constraint_1_power_limit_uw
++      │   │   ├──constraint_1_time_window_us
++      │   │   ├──device -> ../../intel-rapl:0
++      │   │   ├──energy_uj
++      │   │   ├──max_energy_range_uj
++      │   │   ├──name
++      │   │   ├──enabled
++      │   │   ├──power
++      │   │   │   ├──async
++      │   │   │   []
++      │   │   ├──subsystem -> ../../../../../../class/power_cap
++      │   │   └──uevent
++      │   ├──intel-rapl:0:1
++      │   │   ├──constraint_0_name
++      │   │   ├──constraint_0_power_limit_uw
++      │   │   ├──constraint_0_time_window_us
++      │   │   ├──constraint_1_name
++      │   │   ├──constraint_1_power_limit_uw
++      │   │   ├──constraint_1_time_window_us
++      │   │   ├──device -> ../../intel-rapl:0
++      │   │   ├──energy_uj
++      │   │   ├──max_energy_range_uj
++      │   │   ├──name
++      │   │   ├──enabled
++      │   │   ├──power
++      │   │   │   ├──async
++      │   │   │   []
++      │   │   ├──subsystem -> ../../../../../../class/power_cap
++      │   │   └──uevent
++      │   ├──max_energy_range_uj
++      │   ├──max_power_range_uw
++      │   ├──name
++      │   ├──enabled
++      │   ├──power
++      │   │   ├──async
++      │   │   []
++      │   ├──subsystem -> ../../../../../class/power_cap
++      │   ├──enabled
++      │   ├──uevent
+       ├──intel-rapl:1
+-      │   ├──constraint_0_name
+-      │   ├──constraint_0_power_limit_uw
+-      │   ├──constraint_0_time_window_us
+-      │   ├──constraint_1_name
+-      │   ├──constraint_1_power_limit_uw
+-      │   ├──constraint_1_time_window_us
+-      │   ├──device -> ../../intel-rapl
+-      │   ├──energy_uj
+-      │   ├──intel-rapl:1:0
+-      │   │   ├──constraint_0_name
+-      │   │   ├──constraint_0_power_limit_uw
+-      │   │   ├──constraint_0_time_window_us
+-      │   │   ├──constraint_1_name
+-      │   │   ├──constraint_1_power_limit_uw
+-      │   │   ├──constraint_1_time_window_us
+-      │   │   ├──device -> ../../intel-rapl:1
+-      │   │   ├──energy_uj
+-      │   │   ├──max_energy_range_uj
+-      │   │   ├──name
+-      │   │   ├──enabled
+-      │   │   ├──power
+-      │   │   │   ├──async
+-      │   │   │   []
+-      │   │   ├──subsystem -> ../../../../../../class/power_cap
+-      │   │   └──uevent
+-      │   ├──intel-rapl:1:1
+-      │   │   ├──constraint_0_name
+-      │   │   ├──constraint_0_power_limit_uw
+-      │   │   ├──constraint_0_time_window_us
+-      │   │   ├──constraint_1_name
+-      │   │   ├──constraint_1_power_limit_uw
+-      │   │   ├──constraint_1_time_window_us
+-      │   │   ├──device -> ../../intel-rapl:1
+-      │   │   ├──energy_uj
+-      │   │   ├──max_energy_range_uj
+-      │   │   ├──name
+-      │   │   ├──enabled
+-      │   │   ├──power
+-      │   │   │   ├──async
+-      │   │   │   []
+-      │   │   ├──subsystem -> ../../../../../../class/power_cap
+-      │   │   └──uevent
+-      │   ├──max_energy_range_uj
+-      │   ├──max_power_range_uw
+-      │   ├──name
+-      │   ├──enabled
+-      │   ├──power
+-      │   │   ├──async
+-      │   │   []
+-      │   ├──subsystem -> ../../../../../class/power_cap
+-      │   ├──uevent
++      │   ├──constraint_0_name
++      │   ├──constraint_0_power_limit_uw
++      │   ├──constraint_0_time_window_us
++      │   ├──constraint_1_name
++      │   ├──constraint_1_power_limit_uw
++      │   ├──constraint_1_time_window_us
++      │   ├──device -> ../../intel-rapl
++      │   ├──energy_uj
++      │   ├──intel-rapl:1:0
++      │   │   ├──constraint_0_name
++      │   │   ├──constraint_0_power_limit_uw
++      │   │   ├──constraint_0_time_window_us
++      │   │   ├──constraint_1_name
++      │   │   ├──constraint_1_power_limit_uw
++      │   │   ├──constraint_1_time_window_us
++      │   │   ├──device -> ../../intel-rapl:1
++      │   │   ├──energy_uj
++      │   │   ├──max_energy_range_uj
++      │   │   ├──name
++      │   │   ├──enabled
++      │   │   ├──power
++      │   │   │   ├──async
++      │   │   │   []
++      │   │   ├──subsystem -> ../../../../../../class/power_cap
++      │   │   └──uevent
++      │   ├──intel-rapl:1:1
++      │   │   ├──constraint_0_name
++      │   │   ├──constraint_0_power_limit_uw
++      │   │   ├──constraint_0_time_window_us
++      │   │   ├──constraint_1_name
++      │   │   ├──constraint_1_power_limit_uw
++      │   │   ├──constraint_1_time_window_us
++      │   │   ├──device -> ../../intel-rapl:1
++      │   │   ├──energy_uj
++      │   │   ├──max_energy_range_uj
++      │   │   ├──name
++      │   │   ├──enabled
++      │   │   ├──power
++      │   │   │   ├──async
++      │   │   │   []
++      │   │   ├──subsystem -> ../../../../../../class/power_cap
++      │   │   └──uevent
++      │   ├──max_energy_range_uj
++      │   ├──max_power_range_uw
++      │   ├──name
++      │   ├──enabled
++      │   ├──power
++      │   │   ├──async
++      │   │   []
++      │   ├──subsystem -> ../../../../../class/power_cap
++      │   ├──uevent
+       ├──power
+-      │   ├──async
+-      │   []
++      │   ├──async
++      │   []
+       ├──subsystem -> ../../../../class/power_cap
+       ├──enabled
+       └──uevent
 -- 
 2.30.2
 
