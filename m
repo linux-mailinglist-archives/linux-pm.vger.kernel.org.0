@@ -2,60 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0BD379F74
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 08:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEF137A067
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 09:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbhEKGB1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 May 2021 02:01:27 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2617 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhEKGBZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 02:01:25 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FfRyJ6788zPvqh;
-        Tue, 11 May 2021 13:56:56 +0800 (CST)
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 11 May 2021 14:00:11 +0800
-From:   Zou Wei <zou_wei@huawei.com>
-To:     <sre@kernel.org>, <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
-        <zhang.lyra@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zou Wei <zou_wei@huawei.com>
-Subject: [PATCH -next] power: supply: sc2731_charger: Add missing MODULE_DEVICE_TABLE
-Date:   Tue, 11 May 2021 14:17:12 +0800
-Message-ID: <1620713832-106431-1-git-send-email-zou_wei@huawei.com>
-X-Mailer: git-send-email 2.6.2
+        id S230428AbhEKHMM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 03:12:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229945AbhEKHML (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 May 2021 03:12:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C7EF261926;
+        Tue, 11 May 2021 07:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1620717065;
+        bh=djMw+MkHqXSDFMuuNAj5hXKn0ROWz969fz0NJXZ2+Oo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yzr6qHAPC4C2gAz9uxv2B3lxa6Hv0XWXup4Ed9z38Ulr70tmmu3RRYB0UtXg0wyOY
+         CCmomC1i4VIPn8HdQulkOj4jrgzm+fj4JCtDVDx0qYy0rC5u8akRKGbkDvLzYRJ+mp
+         GUpWxXJw7e6yYDuxnQBjpybVUUUbFlqQPe7Khp+k=
+Date:   Tue, 11 May 2021 09:11:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>, rafael@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, nsaenz@kernel.org,
+        maxime@cerno.tech, khilman@kernel.org, ulf.hansson@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, robh+dt@kernel.org,
+        frowand.list@gmail.com, maz@kernel.org, tglx@linutronix.de,
+        saravanak@google.com, geert@linux-m68k.org, nsaenzjulienne@suse.de,
+        guillaume.tucker@collabora.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        kernel-team@android.com, linux-rpi-kernel@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v2] clk: Skip clk provider registration when np is NULL
+Message-ID: <YJouB/ZUOcadrokW@kroah.com>
+References: <20210426065618.588144-1-tudor.ambarus@microchip.com>
+ <20210510193645.GA3920948@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210510193645.GA3920948@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds missing MODULE_DEVICE_TABLE definition which generates
-correct modalias for automatic loading of this driver when it is built
-as an external module.
+On Mon, May 10, 2021 at 12:36:45PM -0700, Guenter Roeck wrote:
+> On Mon, Apr 26, 2021 at 09:56:18AM +0300, Tudor Ambarus wrote:
+> > commit 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> > revealed that clk/bcm/clk-raspberrypi.c driver calls
+> > devm_of_clk_add_hw_provider(), with a NULL dev->of_node, which resulted in a
+> > NULL pointer dereference in of_clk_add_hw_provider() when calling
+> > fwnode_dev_initialized().
+> > 
+> > Returning 0 is reducing the if conditions in driver code and is being
+> > consistent with the CONFIG_OF=n inline stub that returns 0 when CONFIG_OF
+> > is disabled. The downside is that drivers will maybe register clkdev lookups
+> > when they don't need to and waste some memory.
+> > 
+> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Fixes: 6579c8d97ad7 ("clk: Mark fwnodes when their clock provider is added")
+> > Fixes: 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
+> > Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> 
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
----
- drivers/power/supply/sc2731_charger.c | 1 +
- 1 file changed, 1 insertion(+)
+Now applied to my tree, thanks and sorry for the delay, I thought this
+was going through the clk tree.
 
-diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-index 335cb85..288b798 100644
---- a/drivers/power/supply/sc2731_charger.c
-+++ b/drivers/power/supply/sc2731_charger.c
-@@ -524,6 +524,7 @@ static const struct of_device_id sc2731_charger_of_match[] = {
- 	{ .compatible = "sprd,sc2731-charger", },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, sc2731_charger_of_match);
- 
- static struct platform_driver sc2731_charger_driver = {
- 	.driver = {
--- 
-2.6.2
-
+greg k-h
