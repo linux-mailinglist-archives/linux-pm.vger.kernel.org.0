@@ -2,74 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBF8379F2B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 07:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D75379F3F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 07:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbhEKFar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 May 2021 01:30:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60450 "EHLO mail.kernel.org"
+        id S230224AbhEKFls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 01:41:48 -0400
+Received: from mga12.intel.com ([192.55.52.136]:30162 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229885AbhEKFaq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 May 2021 01:30:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 24396616EA;
-        Tue, 11 May 2021 05:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620710980;
-        bh=8ETFwSjmDt2Y1j+GkOW9Fsflzw10+NNdF0YzCalfN2M=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eHO11uYVnlwsFWdw+jd1OuHjTY/Cy8ovEf32Z9e5fCtEWNOCTuMwPegXjA4/0+TuR
-         GgaOlIEKAOaymZ8/jaGDJG+TOJNx9+w5YMp0tuXZltgNDmMIslQwERqkDj1vYrTPgm
-         DHXnkbjU7O6aeeTYEc36sZWQuShZ9y90CDQx6dxgHHTPyLCynuO5MMiaHfVTp8SAGY
-         UCHerWaHHQy/6LwLfYhHLJN6jlEPM4EBS534USL4AP/MJvZy0PBGQ0TdxSjYjcX0bq
-         ZZ0pVbbD8w4Xbr9gtZhs/mmpL0dZ9EfgKn3TB8Dn48R3Fl7S056Y7bwwQnrvXGAOBD
-         pJ29ACdd5vXEA==
-Subject: Re: [PATCH] dt-bindings: More removals of type references on common
- properties
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20210510204524.617390-1-robh@kernel.org>
-From:   Georgi Djakov <djakov@kernel.org>
-Message-ID: <be0c7cef-ed94-1178-8b06-ac57175fc638@kernel.org>
-Date:   Tue, 11 May 2021 08:29:36 +0300
+        id S230019AbhEKFls (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 May 2021 01:41:48 -0400
+IronPort-SDR: fxcG8sXJBMvPn06WLp3bIvVthN8J08QUt9OEMexEqZPvy1Ad5PzVd1Un9a4Qdifwilj282pS5K
+ tQw7whb5vMBQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="178952868"
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="178952868"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 22:40:41 -0700
+IronPort-SDR: +CoLBPVtjh8bldqb2TzAItfLmxwGG9DeL5tRFWF0GvlBxM83aBghotrT5Dg2rE985tAA6hSwg4
+ a/P2QJ8RrZfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="624536160"
+Received: from lkp-server01.sh.intel.com (HELO f375d57c4ed4) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 May 2021 22:40:40 -0700
+Received: from kbuild by f375d57c4ed4 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lgL8H-0000ZS-PL; Tue, 11 May 2021 05:40:37 +0000
+Date:   Tue, 11 May 2021 13:40:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 0978c6eb278c71655ec1919e034584bd095b3b5b
+Message-ID: <609a18b5.kbsTDYqzMJY8Z6YG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210510204524.617390-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/10/21 23:45, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. A few new ones slipped in and
-> *-names was missed in the last clean-up pass. Drop all the unnecessary
-> type references in the tree.
-> 
-> A meta-schema update to catch these is pending.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 0978c6eb278c71655ec1919e034584bd095b3b5b  Merge branch 'pm-core' into bleeding-edge
 
-Acked-by: Georgi Djakov <djakov@kernel.org>
+elapsed time: 720m
+
+configs tested: 95
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+arm                       aspeed_g4_defconfig
+mips                        workpad_defconfig
+arm                       aspeed_g5_defconfig
+arm                           u8500_defconfig
+arm                          iop32x_defconfig
+mips                          ath25_defconfig
+arm                             mxs_defconfig
+parisc                generic-64bit_defconfig
+arm                          simpad_defconfig
+arc                          axs101_defconfig
+sh                      rts7751r2d1_defconfig
+sh                   secureedge5410_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                         cm_x300_defconfig
+nios2                            alldefconfig
+arm                       imx_v6_v7_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210510
+x86_64               randconfig-a004-20210510
+x86_64               randconfig-a001-20210510
+x86_64               randconfig-a005-20210510
+x86_64               randconfig-a002-20210510
+x86_64               randconfig-a006-20210510
+i386                 randconfig-a003-20210510
+i386                 randconfig-a001-20210510
+i386                 randconfig-a005-20210510
+i386                 randconfig-a004-20210510
+i386                 randconfig-a002-20210510
+i386                 randconfig-a006-20210510
+i386                 randconfig-a016-20210510
+i386                 randconfig-a014-20210510
+i386                 randconfig-a011-20210510
+i386                 randconfig-a015-20210510
+i386                 randconfig-a012-20210510
+i386                 randconfig-a013-20210510
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a015-20210510
+x86_64               randconfig-a012-20210510
+x86_64               randconfig-a011-20210510
+x86_64               randconfig-a013-20210510
+x86_64               randconfig-a016-20210510
+x86_64               randconfig-a014-20210510
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
