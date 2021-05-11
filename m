@@ -2,108 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C3937B024
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 22:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD43637B2BC
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 01:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhEKUiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 May 2021 16:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S229784AbhEKXoe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 19:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbhEKUiV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 16:38:21 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982FC061574;
-        Tue, 11 May 2021 13:37:15 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id d25-20020a0568300459b02902f886f7dd43so5224477otc.6;
-        Tue, 11 May 2021 13:37:15 -0700 (PDT)
+        with ESMTP id S229637AbhEKXoe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 19:44:34 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEE3C061574
+        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 16:43:27 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id b21so10129899pft.10
+        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 16:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+1ZHtd+lPI4rsXdxkd6hfQFi/UAS7WL7S9/KvHCS20A=;
-        b=AEuaaAZdU0hWx7AVW/+6SLmKMmIhl/OzXwZrSguL9Xmqa3ztiYjzP69B912u6tDOAU
-         OXHJUvcKEvmU9JlpKTOB9juycvwQLGyQvQO10TbBVP3YWd6NaSr+hEHLMRHe57Qo1ybs
-         +wBHvsEITNo/OF5B12GY0jYfusKectjaPD0wIJ1oqEQOHQjz3WmVHX8tz6PxRRckRwzJ
-         FhNlTCVNz8cJ7KdQ+zVTssluzJT+PxQeb1vSjRLewshpJbTVUDP2C+9sKaIJ8Z5+eKlO
-         CCVbLpAYRXWSryUzfNahTFLxJACedvxrgUMm72oYalfRKlvvgzEDqmu5DlmS0CsMHAnz
-         2DQg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=8cbWmhiEWpaqyzm/Kw94+CqKTR1Rag7aFlN1yqX25RE=;
+        b=aU4ySMolwD0VTM7lPT7Vc5OL8oHfOkJ68Pl/I7hei7Z00YgsFsrF9SCuUjIsVvrI3j
+         Mu8eIc6MqIKiw4m5lx6uV0HhF1tj+SDhdUBds8LfmMSE7uPaXmAy5JmapUEpm1Z3Tr/S
+         Lt8AL9mwjNjC+P84OAfmJufbj+aI+7wXuZC/vJ4Kb0CnAZzWDkMUJlWXzwLlz+HP/ARL
+         Idu4DNxxFVnl/pmzJxR5UfgeeFvVDVtMTOywFnPrEH8Uap2QOqbshgNFE8nUwLOXCgVS
+         0q9EAgeOZ8t7zVE2b3ZOhFSuLY62O4ZHAqAJzJWETX3bLr2QwOzMiqfV0lNPtTV8EGlg
+         efiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=+1ZHtd+lPI4rsXdxkd6hfQFi/UAS7WL7S9/KvHCS20A=;
-        b=ZgyF0bpYsKeicXlElH8/FJPm+PR20xqCC49VbdgKPV6uAv4LCKmDu3Fzgea/N3QN01
-         1AbIxHBOvVls0mDQJUrMyUCxr7iCxVxfBSIayjJ/SqWBBpvfKxqHDZXLE18DK/iAZIh7
-         t3xHV4+M2Ag+lAIHhikARXWSySzsBfMXUlqcB8JZGJfHA/vLH4eGqtQ56N1dt1Vm5vDW
-         WDKTlf9C5YA/L3PjZOHm/IqBsFx6DRb/vc+obS2IzGezsNJ88E6j1UchYy3bSGdulZ+B
-         xRvSm1KXDa/mATCUJb5VTpaidSh14jLGo85k8I2IkVkNBoIvwsU6BTd9EheVHPFn8s7z
-         ceNw==
-X-Gm-Message-State: AOAM530VeJ0/9pWY80v6kxoFtKThm5ZufWhiKefydC+xXWoFztb03v3L
-        vD9RPaQymgEHxd8Gh6hqLf8=
-X-Google-Smtp-Source: ABdhPJzIsc9mtnzXHYZAOU+N3D3CkxhZB6+aYo10ov63X3MK+gkaclj0qwyDhG3X+hiZu9UEdWtbBg==
-X-Received: by 2002:a05:6830:1657:: with SMTP id h23mr665958otr.136.1620765434476;
-        Tue, 11 May 2021 13:37:14 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u27sm3144188oof.38.2021.05.11.13.37.12
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=8cbWmhiEWpaqyzm/Kw94+CqKTR1Rag7aFlN1yqX25RE=;
+        b=Tf5Is4QCnWazZWy2jTDZATqBABsAAgHlXsajgMUSxM3JEok/VUUYqBa7yIkg0ziM1Z
+         NjJfo/OWG3dMn/DGNE1WCTYN6uTWa+ah4cA9dn7NwwyIv0Qr6Z3ClYL0JULsalnZGsUi
+         IK83FiZaCkR4eWsEBCg25otBDT8Xvoa+Dh+6H+NePVrAkg/Pe3cdNZHYgzOjhetwuSUJ
+         WjwIEzrWllU81P22yVSI8bY+aQAtVmcm+MNV+ggsHQ7c0wm1wxB/clwuoIfmh/IA3EQD
+         F/ViDqM84L/gLAfrFpiqIaYYv/Vt1Hni4hRSmakNTHgo/mCP5SudFup6Rqge09lGwhcu
+         AOtg==
+X-Gm-Message-State: AOAM533EZLKH21tbQ3MLAcHJ5Q3KCuO/3sgk1C+/i70crhJc8x5w5SkK
+        wh7mhKE5M4CuZnmN8yGbI62ogg==
+X-Google-Smtp-Source: ABdhPJytLiPTvWCeFBHiJXvsFZjjoqzPelKQk/V4ujhHd1OIc23CnoRT1CwjTRKDIzAu9NvvBDYYyg==
+X-Received: by 2002:a63:4b43:: with SMTP id k3mr32674494pgl.450.1620776606782;
+        Tue, 11 May 2021 16:43:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id hi8sm14372243pjb.34.2021.05.11.16.43.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 13:37:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] power: supply: ab8500: Drop unnecessary NULL check after container_of
-Date:   Tue, 11 May 2021 13:37:11 -0700
-Message-Id: <20210511203711.1673001-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 May 2021 16:43:26 -0700 (PDT)
+Message-ID: <609b169e.1c69fb81.24919.ca7b@mx.google.com>
+Date:   Tue, 11 May 2021 16:43:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.13-rc1-9-gcb7accda3e01f
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc1-9-gcb7accda3e01f)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The result of container_of() operations is never NULL unless the element
-is the first element of the embedded structure, which is not the case here.
-The NULL check is therefore unnecessary and misleading. Remove it.
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc1-9-gcb7accda3e01f)
 
-This change was made automatically with the following Coccinelle script.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc1-9-gcb7accda3e01f/
 
-@@
-type t;
-identifier v;
-statement s;
-@@
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc1-9-gcb7accda3e01f
+Git Commit: cb7accda3e01f71abfb7a987f8733e8c2d2d911d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-<+...
-(
-  t v = container_of(...);
-|
-  v = container_of(...);
-)
-  ...
-  when != v
-- if (\( !v \| v == NULL \) ) s
-...+>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
- drivers/power/supply/ab8500_charger.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index a9be10eb2c22..f407cec49aa3 100644
---- a/drivers/power/supply/ab8500_charger.c
-+++ b/drivers/power/supply/ab8500_charger.c
-@@ -3171,9 +3171,6 @@ static int ab8500_charger_usb_notifier_call(struct notifier_block *nb,
- 	enum ab8500_usb_state bm_usb_state;
- 	unsigned mA = *((unsigned *)power);
- 
--	if (!di)
--		return NOTIFY_DONE;
--
- 	if (event != USB_EVENT_VBUS) {
- 		dev_dbg(di->dev, "not a standard host, returning\n");
- 		return NOTIFY_DONE;
--- 
-2.25.1
-
+For more info write to <info@kernelci.org>
