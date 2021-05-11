@@ -2,60 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4174D379DC1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 05:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBF8379F2B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 07:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbhEKD26 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 May 2021 23:28:58 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2766 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhEKD2z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 May 2021 23:28:55 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FfNZB4klSzmg6j;
-        Tue, 11 May 2021 11:24:18 +0800 (CST)
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 11 May 2021 11:27:31 +0800
-From:   Zou Wei <zou_wei@huawei.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <djakov@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Zou Wei <zou_wei@huawei.com>
-Subject: [PATCH -next] interconnect: qcom: Add missing MODULE_DEVICE_TABLE
-Date:   Tue, 11 May 2021 11:44:33 +0800
-Message-ID: <1620704673-104205-1-git-send-email-zou_wei@huawei.com>
-X-Mailer: git-send-email 2.6.2
+        id S230265AbhEKFar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 01:30:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229885AbhEKFaq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 May 2021 01:30:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 24396616EA;
+        Tue, 11 May 2021 05:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620710980;
+        bh=8ETFwSjmDt2Y1j+GkOW9Fsflzw10+NNdF0YzCalfN2M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=eHO11uYVnlwsFWdw+jd1OuHjTY/Cy8ovEf32Z9e5fCtEWNOCTuMwPegXjA4/0+TuR
+         GgaOlIEKAOaymZ8/jaGDJG+TOJNx9+w5YMp0tuXZltgNDmMIslQwERqkDj1vYrTPgm
+         DHXnkbjU7O6aeeTYEc36sZWQuShZ9y90CDQx6dxgHHTPyLCynuO5MMiaHfVTp8SAGY
+         UCHerWaHHQy/6LwLfYhHLJN6jlEPM4EBS534USL4AP/MJvZy0PBGQ0TdxSjYjcX0bq
+         ZZ0pVbbD8w4Xbr9gtZhs/mmpL0dZ9EfgKn3TB8Dn48R3Fl7S056Y7bwwQnrvXGAOBD
+         pJ29ACdd5vXEA==
+Subject: Re: [PATCH] dt-bindings: More removals of type references on common
+ properties
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20210510204524.617390-1-robh@kernel.org>
+From:   Georgi Djakov <djakov@kernel.org>
+Message-ID: <be0c7cef-ed94-1178-8b06-ac57175fc638@kernel.org>
+Date:   Tue, 11 May 2021 08:29:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210510204524.617390-1-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds missing MODULE_DEVICE_TABLE definition which generates
-correct modalias for automatic loading of this driver when it is built
-as an external module.
+On 5/10/21 23:45, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. A few new ones slipped in and
+> *-names was missed in the last clean-up pass. Drop all the unnecessary
+> type references in the tree.
+> 
+> A meta-schema update to catch these is pending.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
----
- drivers/interconnect/qcom/bcm-voter.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
-index d1591a2..154710d 100644
---- a/drivers/interconnect/qcom/bcm-voter.c
-+++ b/drivers/interconnect/qcom/bcm-voter.c
-@@ -362,6 +362,7 @@ static const struct of_device_id bcm_voter_of_match[] = {
- 	{ .compatible = "qcom,bcm-voter" },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, bcm_voter_of_match);
- 
- static struct platform_driver qcom_icc_bcm_voter_driver = {
- 	.probe = qcom_icc_bcm_voter_probe,
--- 
-2.6.2
-
+Acked-by: Georgi Djakov <djakov@kernel.org>
