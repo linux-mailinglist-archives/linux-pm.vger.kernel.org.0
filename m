@@ -2,88 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAFA37A379
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 11:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5822C37A388
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 11:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbhEKJ0A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 May 2021 05:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbhEKJ0A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 05:26:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89E4C061574;
-        Tue, 11 May 2021 02:24:53 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l14so19391519wrx.5;
-        Tue, 11 May 2021 02:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0AnzXgxK5+cy961so+pTR7J0BblhwCS+zVpCGXvjqdo=;
-        b=ieJPlSPQaOPMpkp1QEnOTFySECTBfclW4E6F8a/7lJ9uiyLsCTeMDRdtOlM2UeNKGl
-         TqYUVG0Lch2kLgk/9QCiZxGvPrx9tAwpwIh0gDfnJHKZ6wbIwQ3TIe8Y/4pXEqA+cUIs
-         KHE4Ky7nGtgSpXHCAOil0Y8S5yqKbx7jpwrRGOMIOsF4avBY5en0wTiUHGgTEDSVd5HL
-         nndO3aJ+XtuayCbMYhLSjPE/ekmvDbQIYeL4EANurxakWmZoUgUGPpy0fUi/YXQplWjI
-         E7OvHLm0aQFfdzU00VrvIEiPUv2jvd3eNDpfbuWxXZE7wgSRgjnfkVy9oQTJouwcGFLI
-         VXEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0AnzXgxK5+cy961so+pTR7J0BblhwCS+zVpCGXvjqdo=;
-        b=PcbAWZJIV9P2YculFIejsi+Hzy97b6u4lKGXQgLy80ULl0XG6HcZaiR+AmKLDI+ZgR
-         eY5RRa+z274berj+OzumLjRu5TPuHkinzHHBaFdlRp32XqRWEAtAPXVFwb8um8x5eUh7
-         l8MCYMgjhwNMwNdDyPbMZa69HDQJuZaV8Nu7IHsFqCbVqfD6CKy9QGRmyPTi+ifU2Gm4
-         QZn/LX/m67RGrweSPtck9ZSZz5y3cVKhdKasF/ILISDucE0DJZygq/4JR6xyh3d82lXx
-         C9/HVq4Saz2X+82uc3ZMr359bBkjFxcIRE1vxtYmUFC5dKrIuSiPT394aDuTIoHRrhf6
-         IU2g==
-X-Gm-Message-State: AOAM5330ai2YQcTS2SnXTHnrBn3U85L7Vno/WC+pEIafBtkOruvK4Wh4
-        13lzCfdIWr0qQZ8vsJ8L9i4=
-X-Google-Smtp-Source: ABdhPJyMRsl8JTK7CTbJ+SmjbzjXRAnZiZ/bn+ZsTGOjiniALMJALvbAqVvMMCik+eIXIU3EIREY7g==
-X-Received: by 2002:adf:f750:: with SMTP id z16mr36378020wrp.10.1620725092679;
-        Tue, 11 May 2021 02:24:52 -0700 (PDT)
-Received: from xws.localdomain (p5487be9d.dip0.t-ipconnect.de. [84.135.190.157])
-        by smtp.gmail.com with ESMTPSA id z9sm23100614wmi.17.2021.05.11.02.24.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 02:24:52 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH] power: supply: surface-charger: Fix type of integer variable
-Date:   Tue, 11 May 2021 11:24:21 +0200
-Message-Id: <20210511092421.1928586-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        id S231375AbhEKJ03 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 05:26:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42700 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230427AbhEKJ00 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 May 2021 05:26:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BAA5561469;
+        Tue, 11 May 2021 09:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620725119;
+        bh=SxEDkhQ4NDmmQJU/qD2f8WKt2ZN30zjdTiLd/JmT63A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qYIzsO6/tiOl8TGJ6a2eiShRAv5ZaMzH0UMz1Okj8KRt9xtY+LR/anIcVUrTbZiX4
+         89BZ53+EXyXMYuHsL+U06kiuxNXt/5HwXMQCdDP/VjD4quHGFE+7gbD3gJVXax5DaY
+         uPQ39ZXYcixN6FyJ12+nOvdmqwpol10wPiVFzbtkGhu9sXEQXyPXQcHwYGaPn1WAFe
+         4EHVQRoUTs78Ah0GJIhGex565u4aOD5+o97KCk6BlvJCrZe2QVlJEyby3BUR9BJh2D
+         ihJkCCdqkHc4Kaa3576AZpMqo1MX3GKHjJMVLdhoGH+hccpOnzojw8qINBpykxkRxP
+         IMzqRB+GVylEA==
+Date:   Tue, 11 May 2021 11:25:08 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
+ ASCII
+Message-ID: <20210511112508.4547bca8@coco.lan>
+In-Reply-To: <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+        <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+        <20210510135518.305cc03d@coco.lan>
+        <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ac->state field is __le32, not u32. So change the variable we're
-temporarily storing it in to __le32 as well.
+Em Mon, 10 May 2021 14:49:44 +0100
+David Woodhouse <dwmw2@infradead.org> escreveu:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e61ffb344591 ("power: supply: Add AC driver for Surface Aggregator Module")
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- drivers/power/supply/surface_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote:
+> > This patch series is doing conversion only when using ASCII makes
+> > more sense than using UTF-8.=20
+> >=20
+> > See, a number of converted documents ended with weird characters
+> > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
+> > character doesn't do any good.
+> >=20
+> > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
+> > someone tries to use grep[1]. =20
+>=20
+> Replacing those makes sense. But replacing emdashes =E2=80=94 which are a
+> distinct character that has no direct replacement in ASCII and which
+> people do *deliberately* use instead of hyphen-minus =E2=80=94 does not.
+>=20
+> Perhaps stick to those two, and any cases where an emdash or endash has
+> been used where U+002D HYPHEN-MINUS *should* have been used.
 
-diff --git a/drivers/power/supply/surface_charger.c b/drivers/power/supply/surface_charger.c
-index 81a5b79822c9..a060c36c7766 100644
---- a/drivers/power/supply/surface_charger.c
-+++ b/drivers/power/supply/surface_charger.c
-@@ -66,7 +66,7 @@ struct spwr_ac_device {
- 
- static int spwr_ac_update_unlocked(struct spwr_ac_device *ac)
- {
--	u32 old = ac->state;
-+	__le32 old = ac->state;
- 	int status;
- 
- 	lockdep_assert_held(&ac->lock);
--- 
-2.31.1
+Ok. I'll rework the series excluding EM/EN DASH chars from it.
+I'll then apply manually the changes for EM/EN DASH chars=20
+(probably on a separate series) where it seems to fit. That should
+make easier to discuss such replacements.
 
+> And please fix your cover letter which made no reference to 'grep', and
+> only presented a completely bogus argument for the change instead.
+
+OK!
+
+Regards,
+Mauro
