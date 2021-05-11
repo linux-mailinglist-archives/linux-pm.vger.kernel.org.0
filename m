@@ -2,77 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D03E537AFAD
-	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 21:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C3937B024
+	for <lists+linux-pm@lfdr.de>; Tue, 11 May 2021 22:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbhEKTxe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 May 2021 15:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
+        id S229637AbhEKUiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 May 2021 16:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbhEKTxQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 15:53:16 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE62C061760
-        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 12:52:08 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id a5so9806982pfa.11
-        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 12:52:08 -0700 (PDT)
+        with ESMTP id S230011AbhEKUiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 May 2021 16:38:21 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982FC061574;
+        Tue, 11 May 2021 13:37:15 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id d25-20020a0568300459b02902f886f7dd43so5224477otc.6;
+        Tue, 11 May 2021 13:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a1nPWrBOuBAg2EyL45vQ76j5xYClZ1CRM9qwjrLW/ic=;
-        b=Cl3EcGblA/5ey63pSyMGX5tgM/8WlEQuFWDYN32DOOoVMSt+aTqUur1mFBsKU4BOHG
-         agJJsq46+bfqn7l14BhJJWpe9JSlsLqooK6SZTYPH1vNVxk6R8X7RLTT2gz5CFJu1lDU
-         EOrdmilnyJjJ5q5iShroha1hwIEEIv1sg/oOY=
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+1ZHtd+lPI4rsXdxkd6hfQFi/UAS7WL7S9/KvHCS20A=;
+        b=AEuaaAZdU0hWx7AVW/+6SLmKMmIhl/OzXwZrSguL9Xmqa3ztiYjzP69B912u6tDOAU
+         OXHJUvcKEvmU9JlpKTOB9juycvwQLGyQvQO10TbBVP3YWd6NaSr+hEHLMRHe57Qo1ybs
+         +wBHvsEITNo/OF5B12GY0jYfusKectjaPD0wIJ1oqEQOHQjz3WmVHX8tz6PxRRckRwzJ
+         FhNlTCVNz8cJ7KdQ+zVTssluzJT+PxQeb1vSjRLewshpJbTVUDP2C+9sKaIJ8Z5+eKlO
+         CCVbLpAYRXWSryUzfNahTFLxJACedvxrgUMm72oYalfRKlvvgzEDqmu5DlmS0CsMHAnz
+         2DQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a1nPWrBOuBAg2EyL45vQ76j5xYClZ1CRM9qwjrLW/ic=;
-        b=VfZanC4ZE0vbFeMX9UJDRuFidj4F1x039rawozxw/dxmGas5tXoADj+izC+lhxYgFH
-         w5QFLjH9T6oW7urfV3UfX3faohHpeIFjdqQZSMjURiRBQHK0Tm/yFxvjHbMl1O059tW/
-         VvAR3gKaPDl70oYKC7FeaJ2mnGOrgMP+po2BgYocKrKx1bwIKHJ9CizdPx1jNPZdqZu2
-         xVJ5xWw1jBYHbiP7xKZrLKxxheBRIToEgrQFDfRph7NDWZ0Fv0qjAcvlm1Yabv1j35vr
-         yVqVXoSR+bmMow2lYd9ax/92+5i33OS0xVdW3HJbWEkpt+s/ZTWxnwpXZy8l2zrVcjjC
-         SG1w==
-X-Gm-Message-State: AOAM532EPAfeZc/GE4UlOJNqHAJTlXlJ4b0pBvVYaInpHHjRfE4TYQoh
-        hBq71LVa0oKYD0dwsh3yV2Sarg==
-X-Google-Smtp-Source: ABdhPJxzHQuxXJOty2KKur3HxOyL11SN7VPm15QXw+NQLk0z6HJrsVX4ZR92Pt6ZtLHiTARTWk4nnA==
-X-Received: by 2002:a62:2a14:0:b029:263:20c5:6d8c with SMTP id q20-20020a622a140000b029026320c56d8cmr32334338pfq.23.1620762727844;
-        Tue, 11 May 2021 12:52:07 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:f1d7:673a:456e:c653])
-        by smtp.gmail.com with UTF8SMTPSA id v130sm14248452pfc.25.2021.05.11.12.51.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 12:52:03 -0700 (PDT)
-Date:   Tue, 11 May 2021 12:51:57 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajeshwari Ravindra Kamble <rkambl@codeaurora.org>
-Cc:     amitk@kernel.org, thara.gopinath@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sanm@codeaurora.org, manafm@codeaurora.org
-Subject: Re: [PATCH V4 3/3] arm64: dts: qcom: SC7280: Add thermal zone support
-Message-ID: <YJrgXQdKuvpm4KAz@google.com>
-References: <1620367641-23383-1-git-send-email-rkambl@codeaurora.org>
- <1620367641-23383-4-git-send-email-rkambl@codeaurora.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=+1ZHtd+lPI4rsXdxkd6hfQFi/UAS7WL7S9/KvHCS20A=;
+        b=ZgyF0bpYsKeicXlElH8/FJPm+PR20xqCC49VbdgKPV6uAv4LCKmDu3Fzgea/N3QN01
+         1AbIxHBOvVls0mDQJUrMyUCxr7iCxVxfBSIayjJ/SqWBBpvfKxqHDZXLE18DK/iAZIh7
+         t3xHV4+M2Ag+lAIHhikARXWSySzsBfMXUlqcB8JZGJfHA/vLH4eGqtQ56N1dt1Vm5vDW
+         WDKTlf9C5YA/L3PjZOHm/IqBsFx6DRb/vc+obS2IzGezsNJ88E6j1UchYy3bSGdulZ+B
+         xRvSm1KXDa/mATCUJb5VTpaidSh14jLGo85k8I2IkVkNBoIvwsU6BTd9EheVHPFn8s7z
+         ceNw==
+X-Gm-Message-State: AOAM530VeJ0/9pWY80v6kxoFtKThm5ZufWhiKefydC+xXWoFztb03v3L
+        vD9RPaQymgEHxd8Gh6hqLf8=
+X-Google-Smtp-Source: ABdhPJzIsc9mtnzXHYZAOU+N3D3CkxhZB6+aYo10ov63X3MK+gkaclj0qwyDhG3X+hiZu9UEdWtbBg==
+X-Received: by 2002:a05:6830:1657:: with SMTP id h23mr665958otr.136.1620765434476;
+        Tue, 11 May 2021 13:37:14 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u27sm3144188oof.38.2021.05.11.13.37.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 13:37:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] power: supply: ab8500: Drop unnecessary NULL check after container_of
+Date:   Tue, 11 May 2021 13:37:11 -0700
+Message-Id: <20210511203711.1673001-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1620367641-23383-4-git-send-email-rkambl@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 07, 2021 at 11:37:21AM +0530, Rajeshwari Ravindra Kamble wrote:
-> Adding thermal zone and cooling maps support in SC7280.
-> 
-> Signed-off-by: Rajeshwari Ravindra Kamble <rkambl@codeaurora.org>
+The result of container_of() operations is never NULL unless the element
+is the first element of the embedded structure, which is not the case here.
+The NULL check is therefore unnecessary and misleading. Remove it.
 
-As requested earlier, you should add reviewers of earlier versions to
-cc: and provide a change log for each patch. Please don't ignore these
-types of request, or potential reviewers might decide to stop reviewing
-your patches (or just not see the new version(s)).
+This change was made automatically with the following Coccinelle script.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+@@
+type t;
+identifier v;
+statement s;
+@@
+
+<+...
+(
+  t v = container_of(...);
+|
+  v = container_of(...);
+)
+  ...
+  when != v
+- if (\( !v \| v == NULL \) ) s
+...+>
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/power/supply/ab8500_charger.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index a9be10eb2c22..f407cec49aa3 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -3171,9 +3171,6 @@ static int ab8500_charger_usb_notifier_call(struct notifier_block *nb,
+ 	enum ab8500_usb_state bm_usb_state;
+ 	unsigned mA = *((unsigned *)power);
+ 
+-	if (!di)
+-		return NOTIFY_DONE;
+-
+ 	if (event != USB_EVENT_VBUS) {
+ 		dev_dbg(di->dev, "not a standard host, returning\n");
+ 		return NOTIFY_DONE;
+-- 
+2.25.1
+
