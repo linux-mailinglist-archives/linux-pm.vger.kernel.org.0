@@ -2,117 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 383A837B526
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 06:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CA237B585
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 07:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhELExp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 00:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S229654AbhELFhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 01:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhELExn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 00:53:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE372C06174A
-        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 21:52:35 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lggrA-0000v7-TQ; Wed, 12 May 2021 06:52:24 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lggr8-0000Sr-Fo; Wed, 12 May 2021 06:52:22 +0200
-Date:   Wed, 12 May 2021 06:52:22 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
-Message-ID: <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
-References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
+        with ESMTP id S229626AbhELFhx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 01:37:53 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4105CC06174A
+        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 22:36:46 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id i190so17660601pfc.12
+        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 22:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Ifo9croMydmJDq8tVTBmjMUam90Lc+s7rOdOzubXklE=;
+        b=agHLsJAoym4mAxL5ZbgKFvYlFEOR4OOQAOYhJ5XL6zGFdXJTNW4ILyNtIcpp9yBgWu
+         WGiFqBgjT8jdwWMZEEBeaCuxu3R9F6JWpU5mTBExX2j8kfB6AE+viouqAsO+RaLKOja2
+         aWMHOrhc3nlqUO/fB8z+BAMqBkXNeQ8TMjUP1rPfYwO3iJxQcwGHpuSEjRoVkWbL0hZ5
+         ED7JTdff4rrrkT4GaOq/oAtxwhrZnduoyKXKextYZlUE3OfryuNdWAEqB77tz6ppExO9
+         z0X9ADhSj6j1JxyAJBcryBF1+7fbqoS/I3hgAi1UyrDTQGtLFGPeSJFFEDd+d4qN4C5O
+         veVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ifo9croMydmJDq8tVTBmjMUam90Lc+s7rOdOzubXklE=;
+        b=DKxg5XaEAm8FpucsVb40arrLs5k26uv/v9l37JBIINhHLKZL6QNq0obxc7u7aMR9ih
+         rvQSHuTJMfuvcTucD46KY/xBweImonkzewvQ2jWKaigIKypFMfltHRxrSIEjxw4L8Hw3
+         KXZJ+GJXLTm8wXY22s82ZnrzwYIhJPmvN4Sx6Wc3z+sJglRt3OWGDPOyp6Gl2ignL05R
+         JhuEzKafCBsvLrAuX6+qJMooXG88sp2Ml2mn4sLoY9YYA0OdWOlrrXc1Xd2Zrx3I5ITg
+         /VpEplrwFeG5XS9U7sCpS6R6U4X/4jHzyORnOA/KHzr/lhsBidvanbckrd8zgkWPGcjE
+         3Aag==
+X-Gm-Message-State: AOAM532N9OHwrmlNb+nIMAXITWt67ahuUC1pVLv7wqTJUmaVA+h2Zzm9
+        gDdWimkhXdzg1/L8W+/83w49fcNgNtWBxg==
+X-Google-Smtp-Source: ABdhPJxG5HFk1BVt87iNZIgnUiokph6k9IgeqiusOSQfY+cfYd6jn7ckZgLDJf5/yFz2AyFt27T+0w==
+X-Received: by 2002:a63:eb47:: with SMTP id b7mr7593796pgk.227.1620797805698;
+        Tue, 11 May 2021 22:36:45 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id m2sm14853917pgv.87.2021.05.11.22.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 22:36:44 -0700 (PDT)
+Date:   Wed, 12 May 2021 11:06:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rjw@rjwysocki.net
+Subject: Re: [PATCH -next] cpufreq: cppc: Remove unnecessary INIT_LIST_HEAD()
+Message-ID: <20210512053642.74so7tkzsjbthybf@vireshk-i7>
+References: <20210511114703.3790524-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="imgrom7jqz4bbh57"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <20210511114703.3790524-1-yangyingliang@huawei.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---imgrom7jqz4bbh57
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
-> pm_runtime_get_sync will increment pm usage counter even it failed.
-> Forgetting to putting operation will result in reference leak here.
-> Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-> counter balanced.
->=20
+On 11-05-21, 19:47, Yang Yingliang wrote:
+> The list_head cpu_data_list is initialized statically.
+> It is unnecessary to initialize by INIT_LIST_HEAD().
+> 
 > Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
->  drivers/pwm/pwm-img.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
-> index cc37054..11b16ec 100644
-> --- a/drivers/pwm/pwm-img.c
-> +++ b/drivers/pwm/pwm-img.c
-> @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip, stru=
-ct pwm_device *pwm)
->  	struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
->  	int ret;
-> =20
-> -	ret =3D pm_runtime_get_sync(chip->dev);
-> +	ret =3D pm_runtime_resume_and_get(chip->dev);
->  	if (ret < 0)
->  		return ret;
+>  drivers/cpufreq/cppc_cpufreq.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 3848b4c222e1..b312fa210a39 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -723,8 +723,6 @@ static int __init cppc_cpufreq_init(void)
+>  	if ((acpi_disabled) || !acpi_cpc_valid())
+>  		return -ENODEV;
+>  
+> -	INIT_LIST_HEAD(&cpu_data_list);
+> -
+>  	cppc_check_hisi_workaround();
+>  
+>  	ret = cpufreq_register_driver(&cppc_cpufreq_driver);
 
-This patch looks right with my limited understanding of pm_runtime. A
-similar issue in this driver was fixed in commit
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-	ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_get_sync() fa=
-iled case")
-
-where (even though the commit log talks about pm_runtime_put()) a call
-to pm_runtime_put_autosuspend() was added in the error path.
-
-I added the PM guys to Cc, maybe they can advise about the right thing
-to do here. Does it make sense to use the same idiom in both
-img_pwm_enable() and img_pwm_config()?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---imgrom7jqz4bbh57
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCbXwEACgkQwfwUeK3K
-7AlCPwgAkM9Sh0ifE0Y5Eu35Z8CC/bngNLYdoDyE+ULVT9SN/bbSKOP8eYYNEy8D
-yo+SqECIwLflbocvxUkWb1s3cdFgn+zeOJ3uEtXT7NwQ6Fv0ke/nGh3iNjDAKkUI
-pPhhizrOwzC3ODTpUIN6CN+MH1wlK9ArPipN/RyEeJbUVv7R5AaI7i5u7N8N3iFh
-HBGw+9Ir0zIgxb2mvxobd/If4jeXHvQaubKrNcf5mRuE+0cWib5VpGz5jIsYEnyo
-vozif4bqSYUHEo83z6aNz1kNFjKR/iqI+wkw16466GzpJzFHZfCDorWALMvlVBjT
-uSjVEW901G1gZOhRU4LjDypcdYVLQw==
-=RcVx
------END PGP SIGNATURE-----
-
---imgrom7jqz4bbh57--
+-- 
+viresh
