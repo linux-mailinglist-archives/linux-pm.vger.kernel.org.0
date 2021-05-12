@@ -2,105 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6570537BB61
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 12:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB47437BBE3
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 13:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbhELLAG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 07:00:06 -0400
-Received: from relay.uni-heidelberg.de ([129.206.100.212]:26941 "EHLO
-        relay.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbhELLAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 07:00:06 -0400
-X-IPAS-Result: =?us-ascii?q?A2B8BACts5tg/1BqzoFaHQEBAQEJARIBBQUBQIFXgw1ra?=
- =?us-ascii?q?4RHkgGQDo0GAQEBAQEBAQEBCTkBAgQBAYZFAiU4EwIEAQEBAQMCAwEBAQYBA?=
- =?us-ascii?q?QYBAQEBAQYEgQSFXYZFBiMELCYQJQIfBwICFCghE4V5qQ1/M4EBiD2BISOBE?=
- =?us-ascii?q?CqOChCBVUSBFYNghAAlgzU2gi0EgkAHPRw1gyC7ACwHgXaBIoEpC5t8Ag4ol?=
- =?us-ascii?q?FaQXi2SLKZ6gWuBfDMaJIM4UBkOjlaOGEIvOAIGCgEBAwlZAQGMNQEB?=
-IronPort-HdrOrdr: A9a23:N765kqltNrvazo/zr13/f58lw7TpDfIj3DAbv31ZSRFFG/Fw9v
- rAoB1173/JYVoqMk3I+urvBEDjewK+yXcd2+B4VotKOjOGhILBFvAB0WKI+VDd8kPFmtK0gs
- xbAsxD4YrLfD1HZYKQ2njeL+od
-X-IronPort-Anti-Spam-Filtered: true
-Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
-  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 May 2021 12:58:57 +0200
-Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
-        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
-        id 1lgmZs-000465-HE; Wed, 12 May 2021 12:58:56 +0200
-Date:   Wed, 12 May 2021 12:58:56 +0200
-From:   Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] power: supply: axp20x_battery: implement writeable status
- to enable/disable battery charging
-Message-ID: <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
-References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
- <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
- <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
- <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
- <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
+        id S230037AbhELLg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 07:36:26 -0400
+Received: from h4.fbrelay.privateemail.com ([131.153.2.45]:34549 "EHLO
+        h4.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230114AbhELLgZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 07:36:25 -0400
+Received: from MTA-07-4.privateemail.com (mta-07.privateemail.com [198.54.127.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by h3.fbrelay.privateemail.com (Postfix) with ESMTPS id 0FDCB8081D;
+        Wed, 12 May 2021 07:27:48 -0400 (EDT)
+Received: from MTA-07.privateemail.com (localhost [127.0.0.1])
+        by MTA-07.privateemail.com (Postfix) with ESMTP id 177A26004D;
+        Wed, 12 May 2021 07:27:47 -0400 (EDT)
+Received: from hal-station.. (unknown [10.20.151.208])
+        by MTA-07.privateemail.com (Postfix) with ESMTPA id 6551960051;
+        Wed, 12 May 2021 07:27:46 -0400 (EDT)
+From:   Hamza Mahfooz <someguy@effective-light.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Hamza Mahfooz <someguy@effective-light.com>,
+        Janakarajan Natarajan <Janakarajan.Natarajan@amd.com>
+Subject: [PATCH 1/2] cpupower: implement the multi-cpu monitoring of programs
+Date:   Wed, 12 May 2021 07:26:57 -0400
+Message-Id: <20210512112658.89965-1-someguy@effective-light.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow disabling and reenabling battery charging of an axp209 PMIC through a
-writable status property. With the current driver code charging is always on.
+If we look inside cpupower/ToDo, the current 6th point makes mention of
+a method to implement multi-cpu monitoring without introducing noise to
+the tested program itself.
 
-This works on the axp209 of Banana {Pi M1+,Pro} and should work on all AXP chips.
-
-Signed-off-by: Hermann.Lauer@uni-heidelberg.de
+Suggested-by: Janakarajan Natarajan <Janakarajan.Natarajan@amd.com>
+Signed-off-by: Hamza Mahfooz <someguy@effective-light.com>
 ---
-v2: add fallthrough and improve commit message (thanks to Maxime and ChenYu)
-v3: fix fallthrough usage
+ .../utils/idle_monitor/cpupower-monitor.c     | 28 +++++++++++++------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-Thanks to ChenYu for the idea and greetings
-  Hermann
-
- drivers/power/supply/axp20x_battery.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -40,6 +40,7 @@
- #define AXP209_FG_PERCENT		GENMASK(6, 0)
- #define AXP22X_FG_VALID			BIT(7)
- 
-+#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
- #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
- #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
- #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
-@@ -468,7 +469,18 @@
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
- 		return axp20x_set_max_constant_charge_current(axp20x_batt,
- 							      val->intval);
-+	case POWER_SUPPLY_PROP_STATUS:
-+		switch (val->intval) {
-+		case POWER_SUPPLY_STATUS_CHARGING:
-+			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-+				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
- 
-+		case POWER_SUPPLY_STATUS_DISCHARGING:
-+		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-+			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-+				AXP20X_CHRG_CTRL1_ENABLE, 0);
-+		}
-+		fallthrough;
- 	default:
- 		return -EINVAL;
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+index 7c77045fef52..5fc9b38be4e5 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+@@ -278,7 +278,7 @@ void list_monitors(void)
  	}
-@@ -491,7 +503,8 @@
- static int axp20x_battery_prop_writeable(struct power_supply *psy,
- 					 enum power_supply_property psp)
+ }
+ 
+-int fork_it(char **argv)
++int fork_it(int cpu, char **argv)
  {
--	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
-+	return psp == POWER_SUPPLY_PROP_STATUS ||
-+	       psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
- 	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
- 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
- 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
+ 	int status;
+ 	unsigned int num;
+@@ -315,9 +315,9 @@ int fork_it(char **argv)
+ 
+ 	timediff = timespec_diff_us(start, end);
+ 	if (WIFEXITED(status))
+-		printf(_("%s took %.5f seconds and exited with status %d\n"),
+-			argv[0], timediff / (1000.0 * 1000),
+-			WEXITSTATUS(status));
++		printf(_("cpu %d: %s took %.5f seconds and exited with status %d\n"),
++			cpu, argv[0],
++			timediff / (1000.0 * 1000), WEXITSTATUS(status));
+ 	return 0;
+ }
+ 
+@@ -388,7 +388,8 @@ int cmd_monitor(int argc, char **argv)
+ {
+ 	unsigned int num;
+ 	struct cpuidle_monitor *test_mon;
+-	int cpu;
++	int cpu, status;
++	pid_t child_pid;
+ 
+ 	cmdline(argc, argv);
+ 	cpu_count = get_cpu_topology(&cpu_top);
+@@ -440,10 +441,21 @@ int cmd_monitor(int argc, char **argv)
+ 	/*
+ 	 * if any params left, it must be a command to fork
+ 	 */
+-	if (argc - optind)
+-		fork_it(argv + optind);
+-	else
++	if (argc - optind) {
++		for (cpu = 0; cpu < cpu_count; cpu++) {
++			child_pid = fork();
++			if (!child_pid) {
++				bind_cpu(cpu);
++				fork_it(cpu, argv + optind);
++				exit(EXIT_SUCCESS);
++			} else if (waitpid(child_pid, &status, 0) == -1) {
++				perror("waitpid");
++				exit(EXIT_FAILURE);
++			}
++		}
++	} else {
+ 		do_interval_measure(interval);
++	}
+ 
+ 	/* ToDo: Topology parsing needs fixing first to do
+ 	   this more generically */
+-- 
+2.31.1
+
