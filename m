@@ -2,82 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FE337C08E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 16:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59C237C685
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 17:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhELOq7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 10:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbhELOq6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 10:46:58 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A20C061574
-        for <linux-pm@vger.kernel.org>; Wed, 12 May 2021 07:45:50 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id w13so8212160ilv.11
-        for <linux-pm@vger.kernel.org>; Wed, 12 May 2021 07:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BK2qpALR1fioksJYR4iyV0Xbl3Hw607tt9qwlb5LLEE=;
-        b=LbSvU/mLRgwwFZ8vODjogufJ3cXBQEYTIDnEM1nNx6UaL3hP03m7qzkNttkrRK9NRV
-         CDOxtnoyrIFNCXUzVksvEHWFQiHTKfq3Gb6GZlX47TkgLwPAFs5F1hccxk+FpZPMRnOO
-         BzG6oj9hjYx6kjkG/x1uYbYV4w903ix1MVqc4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BK2qpALR1fioksJYR4iyV0Xbl3Hw607tt9qwlb5LLEE=;
-        b=a77F3HDyif6hqYSiYH9f0al/+cGb2tC1OxXtmeyYEsOA6DEHWbn7yU51r/YDWp/HGM
-         e9OT60P0T0XYU1K0AdU26BuYa1D45Qb9dOjum7jSVNgobBCy7kkdcU/33C9fylHeZ4Hq
-         qKZF6m/qZs0RfRdSt8+DzBUTILyvUKJONL959kp+XWxPRFoBpVnuXu0PO75ya5yl+XfJ
-         AjUzScCVuqmZUgqDmwtrVd/8WbeJzlhaSiYgGmWEjkh1+T1OFEU4HyCqpOKIUqXq8laZ
-         wCS9QhBABQ6GhRmOom/BLn3oZQ7aBYI/8FhZ35MqDEGLzYvFnXW/FSTyC1fEo0k99Ucs
-         CSXA==
-X-Gm-Message-State: AOAM530qaZbk6AL4xP9R0Y/h2FXAAN07DUvyxWx6/+/feRPpEHWh/7qO
-        CDpsG1tUNzCuJMOsApsSn+Zm8A==
-X-Google-Smtp-Source: ABdhPJyEsoGBh/1CwWJ///88HZIkkV1QwAZK9hxhH5rxGow7K/NOTE5O3GykDe6YI0U4s0FZl//wPQ==
-X-Received: by 2002:a92:dc0c:: with SMTP id t12mr17590218iln.290.1620830750194;
-        Wed, 12 May 2021 07:45:50 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id p10sm17043ios.2.2021.05.12.07.45.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 07:45:49 -0700 (PDT)
-Subject: Re: [PATCH 2/2] cpupower: removed a completed task from the list
-To:     Hamza Mahfooz <someguy@effective-light.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20210512112658.89965-1-someguy@effective-light.com>
- <20210512112658.89965-2-someguy@effective-light.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c92f8273-9a93-1441-2866-89e94e2aef5d@linuxfoundation.org>
-Date:   Wed, 12 May 2021 08:45:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234154AbhELPwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 11:52:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235091AbhELPfS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 May 2021 11:35:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 455F961C3E;
+        Wed, 12 May 2021 15:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620832672;
+        bh=zB2G4t5ozyJ72g68BGRplKf2lQRTS6CtRvJ7FVX3NWE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DBjrvZcbfODq6o/u3ovhcKp34o3mQ/2g2kqOKbw7rqi0UbJcuDmNkgLMMy0M05dFs
+         mwfV7fdqIvkaHvs5FkFIxP3pQ5mW2wuelKsM0Zg1XI928MZ1g6hDtwlC/lZ6mTYtDn
+         L0yXyxJPdKzjgMXD6Vs/vdQOXuvQV+DBBKSwRDhM/LlZ9x9/DV6Qnq7MjBym4Ue3He
+         LklNFflnfSaW1SCikrvqRJriPDliUiNhIaGm2pb/3nXItDzT/4/obeOPpO0NPN/v0m
+         Pwish5sD0axq4vDEIuCSUJZyKrnPcy3P6Nd30IKN+fHXybC5E+QSyK+xdLgaNeWw/l
+         +EUyGcBOd8VUw==
+Date:   Wed, 12 May 2021 17:17:41 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+Message-ID: <20210512171741.2870bcbc@coco.lan>
+In-Reply-To: <YJvi1L2ss5Tfi+My@mit.edu>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        <YJvi1L2ss5Tfi+My@mit.edu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20210512112658.89965-2-someguy@effective-light.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/12/21 5:26 AM, Hamza Mahfooz wrote:
-> Since this task has been completed, cpupower/ToDo should be updated so
-> that others know not to attempt this task as well.
-> 
-> Signed-off-by: Hamza Mahfooz <someguy@effective-light.com>
+Em Wed, 12 May 2021 10:14:44 -0400
+"Theodore Ts'o" <tytso@mit.edu> escreveu:
 
+> On Wed, May 12, 2021 at 02:50:04PM +0200, Mauro Carvalho Chehab wrote:
+> > v2:
+> > - removed EM/EN DASH conversion from this patchset; =20
+>=20
+> Are you still thinking about doing the
+>=20
+> EN DASH --> "--"
+> EM DASH --> "---"
+>=20
+> conversion? =20
 
-You have to use real name/address in you signed-off-by. Is this how
-you sign your legal documents?
+Yes, but I intend to submit it on a separate patch series, probably after
+having this one merged. Let's first cleanup the large part of the=20
+conversion-generated UTF-8 char noise ;-)
 
-Please refer to:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+> That's not going to change what the documentation will
+> look like in the HTML and PDF output forms, and I think it would make
+> life easier for people are reading and editing the Documentation/*
+> files in text form.
 
-thanks,
--- Shuah
+Agreed. I'm also considering to add a couple of cases of this char:
+
+	- U+2026 ('=E2=80=A6'): HORIZONTAL ELLIPSIS
+
+As Sphinx also replaces "..." into HORIZONTAL ELLIPSIS.
+
+-
+
+Anyway, I'm opting to submitting those in separate because it seems
+that at least some maintainers added EM/EN DASH intentionally.
+
+So, it may generate case-per-case discussions.
+
+Also, IMO, at least a couple of EN/EM DASH cases would be better served=20
+with a single hyphen.
+
+Thanks,
+Mauro
