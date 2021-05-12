@@ -2,116 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F40537B520
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 06:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383A837B526
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 06:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhELEs4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 00:48:56 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:40180 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbhELEsy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 00:48:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620794867; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=IWt2toohdxLCE2CFRRMmRw4/HdGmAbB02mam/jKAH7k=;
- b=HzzcoXco4iIesdQKssSW9gNy4s+fGmjQn9QZzP/fEYCbjOC8xbQIWJOkHZNfp7VYPr0JdDoC
- mQJCRltW6shsyrDfDz9kx5BEUppt4wh9d6NFtfMugztj1Kus34eAL1afpH/NwkFPdDSXtpEh
- s8dhUhl/kskb2s26eP8YcUU/a9I=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 609b5df04ab9954eb8c8f4e2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 May 2021 04:47:44
- GMT
-Sender: skakit=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 72312C4323A; Wed, 12 May 2021 04:47:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: skakit)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AB931C433D3;
-        Wed, 12 May 2021 04:47:43 +0000 (UTC)
+        id S229702AbhELExp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 00:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229627AbhELExn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 00:53:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE372C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 11 May 2021 21:52:35 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lggrA-0000v7-TQ; Wed, 12 May 2021 06:52:24 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lggr8-0000Sr-Fo; Wed, 12 May 2021 06:52:22 +0200
+Date:   Wed, 12 May 2021 06:52:22 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Zou Wei <zou_wei@huawei.com>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
+Message-ID: <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
+References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 12 May 2021 10:17:43 +0530
-From:   skakit@codeaurora.org
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Courtney Cavin <courtney.cavin@sonymobile.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        David Collins <collinsd@codeaurora.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH V3 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941
- power key binding to yaml
-In-Reply-To: <20210510162445.GA230005@robh.at.kernel.org>
-References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
- <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
- <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
- <20210510162445.GA230005@robh.at.kernel.org>
-Message-ID: <c4e286ae6bd621a9d84184d5d014d060@codeaurora.org>
-X-Sender: skakit@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="imgrom7jqz4bbh57"
+Content-Disposition: inline
+In-Reply-To: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-05-10 21:54, Rob Herring wrote:
-> On Mon, May 10, 2021 at 09:01:39AM -0500, Rob Herring wrote:
->> On Mon, 10 May 2021 12:31:03 +0530, satya priya wrote:
->> > Convert qcom pm8941 power key binding from .txt to .yaml format.
->> >
->> > Signed-off-by: satya priya <skakit@codeaurora.org>
->> > ---
->> > Changes in V2:
->> >  - Fixed bot errors, took reference from input.yaml for "linux,code"
->> >  - Added one complete example for powerkey and resin, and referenced it
->> >    in main PON binding.
->> >  - Moved this patch to the end of the series.
->> >
->> > Changes in V3:
->> >  - Moved this patch before PON binding patch.
->> >  - As per Rob's comments, added allOf at the beginning of binding.
->> >    Added maxItems for interrupts.
->> >  - Added 'unevaluatedProperties' instead of 'additionalProperties' as
->> >    we are using allOf.
->> >
->> >  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
->> >  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 87 ++++++++++++++++++++++
->> >  2 files changed, 87 insertions(+), 55 deletions(-)
->> >  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
->> >  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
->> >
->> 
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m 
->> dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->> 
->> yamllint warnings/errors:
->> 
->> dtschema/dtc warnings/errors:
->> Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.example.dt.yaml:0:0: 
->> /example-0/spmi@c440000/pmic@0/pon_hlos@1300: failed to match any 
->> schema with compatible: ['qcom,pm8998-pon']
-> 
-> You have the same example in patch 5, so drop the example here. That
-> will fix this circular dependency.
 
-Earlier I have dropped example from qcom-pon.yaml. Now, I will add the 
-example there and drop here.
+--imgrom7jqz4bbh57
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
+> pm_runtime_get_sync will increment pm usage counter even it failed.
+> Forgetting to putting operation will result in reference leak here.
+> Fix it by replacing it with pm_runtime_resume_and_get to keep usage
+> counter balanced.
+>=20
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> ---
+>  drivers/pwm/pwm-img.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
+> index cc37054..11b16ec 100644
+> --- a/drivers/pwm/pwm-img.c
+> +++ b/drivers/pwm/pwm-img.c
+> @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip, stru=
+ct pwm_device *pwm)
+>  	struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
+>  	int ret;
+> =20
+> -	ret =3D pm_runtime_get_sync(chip->dev);
+> +	ret =3D pm_runtime_resume_and_get(chip->dev);
+>  	if (ret < 0)
+>  		return ret;
+
+This patch looks right with my limited understanding of pm_runtime. A
+similar issue in this driver was fixed in commit
+
+	ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_get_sync() fa=
+iled case")
+
+where (even though the commit log talks about pm_runtime_put()) a call
+to pm_runtime_put_autosuspend() was added in the error path.
+
+I added the PM guys to Cc, maybe they can advise about the right thing
+to do here. Does it make sense to use the same idiom in both
+img_pwm_enable() and img_pwm_config()?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--imgrom7jqz4bbh57
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCbXwEACgkQwfwUeK3K
+7AlCPwgAkM9Sh0ifE0Y5Eu35Z8CC/bngNLYdoDyE+ULVT9SN/bbSKOP8eYYNEy8D
+yo+SqECIwLflbocvxUkWb1s3cdFgn+zeOJ3uEtXT7NwQ6Fv0ke/nGh3iNjDAKkUI
+pPhhizrOwzC3ODTpUIN6CN+MH1wlK9ArPipN/RyEeJbUVv7R5AaI7i5u7N8N3iFh
+HBGw+9Ir0zIgxb2mvxobd/If4jeXHvQaubKrNcf5mRuE+0cWib5VpGz5jIsYEnyo
+vozif4bqSYUHEo83z6aNz1kNFjKR/iqI+wkw16466GzpJzFHZfCDorWALMvlVBjT
+uSjVEW901G1gZOhRU4LjDypcdYVLQw==
+=RcVx
+-----END PGP SIGNATURE-----
+
+--imgrom7jqz4bbh57--
