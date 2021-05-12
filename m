@@ -2,216 +2,341 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBE37CF94
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 19:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FDD37EE39
+	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 00:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbhELRO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 13:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S240038AbhELVNX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 17:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346525AbhELRNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 13:13:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B123C061574;
-        Wed, 12 May 2021 10:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Mime-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Bbe/giLRixNHZfVxrsBWK3QD/DvA2E8vNtncCgEH6tY=; b=GMyx8yNb1WU+k0lf4hnLOgZHBr
-        6DFDVEZXTOLWMsR8c+DFSqytTjIYYEdjxaixq5vRe3+3JWR59MOXd/W8EDHvUxuOfMniJtjC7qemY
-        xjWsT8/erX8vmk23Ssat6lHd6OnEvhlJOV+WAGGL+AqjSi5Z1HY6veeTfwqvgf2BCwXLFjuBqRLmy
-        eChY1b3iu2fMKuB2WLM6NbgnMZ0AfKtp9a670pjykiwtv49KoHHXLZ9qKXnB8cceJrdyUmpGpk0vm
-        FOwCw9zzsVV5nAOzGYvVHRudpwMhKlH1f9Y9YLfhCUnOYbYtyvlEGDEZRwcjLejXp+2r18iytiQ9m
-        ICcU8TEw==;
-Received: from 54-240-197-236.amazon.com ([54.240.197.236] helo=u3832b3a9db3152.ant.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lgsPT-00AdJd-Be; Wed, 12 May 2021 17:12:35 +0000
-Message-ID: <cca519da5a3af70297bf1b75b9dbcb0c98ed3eaf.camel@infradead.org>
-Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
- symbols
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org
-Date:   Wed, 12 May 2021 18:12:27 +0100
-In-Reply-To: <20210512171741.2870bcbc@coco.lan>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
-         <YJvi1L2ss5Tfi+My@mit.edu> <20210512171741.2870bcbc@coco.lan>
-Content-Type: multipart/signed; micalg="sha-256";
-        protocol="application/x-pkcs7-signature";
-        boundary="=-hWc+xAn5S+EFrraSjweQ"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        with ESMTP id S1377943AbhELTJs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 15:09:48 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F202C061288
+        for <linux-pm@vger.kernel.org>; Wed, 12 May 2021 12:05:45 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id m9so32067552ybm.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 May 2021 12:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/t6C991YEpCJg7yb08JKknk8hM8glqnvNP2TBCIwnrg=;
+        b=qYN6Ec5g/QLERkoenpzJMku8QDzrBKMXMzp+at1CxAxdt2n49RZxy05s/ObPmSnDv/
+         wZAikOLIZuiwiApi4lsfuuUnXDGoHrIfkzmmMjqmAM7wIeczj0GhSHsa97ziWqA48KSF
+         sMieiSe1iRDmkE5HHj364IBRzvok/MNV+/D3Yr5CkedBffHNAsYCcg9iDzfzxLqmXI0k
+         ooe4ZlX8biRGqZoSaCeCmZA/lYAOtSRleucxvy8kGtksY49QefaC28SrJcRehbSUMgUD
+         kpIdBLVFjA5SVsI2uhcXiYB+3cSSO3ZCmWVbiPgIWlM2hhzp53CaCBpr3kG3mH8U7TjV
+         k0LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/t6C991YEpCJg7yb08JKknk8hM8glqnvNP2TBCIwnrg=;
+        b=HGNgJUd1xLEdYnDf4PlflvAlD2rCZB3KuEd9lh0h2vUkvuiHtwZv0bj5NeVjVHAan5
+         TgBTBnZwgWvmn29AHsVdaADD3D7qvHZXVSLvJSwqxfJbunZvegOeH/VmdBQOD0iuVmQj
+         1M8ourhSONFV4v5y0BohNDzoyQZ/G6noFa5/r37/0bKEA1NZy4WmeuvuhnIIqHzgVr7I
+         IS5m78a9FUSG/lz/mD5guNLsRNl/SLNigd31gH7pPKideMa9MSS4HIiKb0RKBEDEDXr8
+         KpszkIJWr1gPCJYcLeub3x2cL9T/JSUoWrv7ukRASbimN+tozfC2XAxw0mMCVrvM+pGs
+         6Skw==
+X-Gm-Message-State: AOAM531c4smqytCSjZCyJu06uCASl6fQe57zBdmWfqucRjykeZeEZlJ5
+        waCs9Qn9asLFP1q42yOL2BNPQqJlUVKwzOiC8FTkZA==
+X-Google-Smtp-Source: ABdhPJyX5xjLUHTMo13Ck2r000u3cDyPpP/JLHuwv0mahv7iA4U8f8fcsJkps8aN1jOKOuzUtPgQM25yO400rfL545w=
+X-Received: by 2002:a25:5:: with SMTP id 5mr5715896yba.96.1620846344510; Wed,
+ 12 May 2021 12:05:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <3c88cf35-6725-1bfa-9e1e-8e9d69147e3b@hisilicon.com>
+ <2149723.iZASKD2KPV@kreacher> <1c1cd889-7e6f-79f7-2650-cd181abc56b2@hisilicon.com>
+ <11764789.O9o76ZdvQC@kreacher>
+In-Reply-To: <11764789.O9o76ZdvQC@kreacher>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 12 May 2021 12:05:08 -0700
+Message-ID: <CAGETcx8=VuwW0-GXDEbyt7qGrZJvUw=eyVXXJQxzOn9KszxhMQ@mail.gmail.com>
+Subject: Re: Qestion about device link
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "chenxiang (M)" <chenxiang66@hisilicon.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        John Garry <john.garry@huawei.com>, linuxarm@huawei.com,
+        linux-scsi@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, May 12, 2021 at 7:04 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote=
+:
+>
+> On Wednesday, May 12, 2021 5:24:53 AM CEST chenxiang (M) wrote:
+> > Hi Rafael,
+> >
+> >
+> > =E5=9C=A8 2021/5/12 3:16, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > > On Tuesday, May 11, 2021 4:39:31 PM CEST Rafael J. Wysocki wrote:
+> > >> On 5/11/2021 5:59 AM, chenxiang (M) wrote:
+> > >>> Hi Rafael and other guys,
+> > >>>
+> > >>> I am trying to add a device link between scsi_host->shost_gendev an=
+d
+> > >>> hisi_hba->dev to support runtime PM for hisi_hba driver
+> > >>>
+> > >>> (as it supports runtime PM for scsi host in some scenarios such as
+> > >>> error handler etc, we can avoid to do them again if adding a
+> > >>>
+> > >>> device link between scsi_host->shost_gendev and hisi_hba->dev) as
+> > >>> follows (hisi_sas driver is under directory drivers/scsi/hisi_sas):
+> > >>>
+> > >>> device_link_add(&shost->shost_gendev, hisi_hba->dev,
+> > >>> DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE)
+> > >>>
+> > >>> We have a full test on it, and it works well except when rmmod the
+> > >>> driver, some call trace occurs as follows:
+> > >>>
+> > >>> [root@localhost ~]# rmmod hisi_sas_v3_hw
+> > >>> [  105.377944] BUG: scheduling while atomic: kworker/113:1/811/0x00=
+000201
+> > >>> [  105.384469] Modules linked in: bluetooth rfkill ib_isert
+> > >>> iscsi_target_mod ib_ipoib ib_umad iptable_filter vfio_iommu_type1
+> > >>> vfio_pci vfio_virqfd vfio rpcrdma ib_is                         er
+> > >>> libiscsi scsi_transport_iscsi crct10dif_ce sbsa_gwdt hns_roce_hw_v2
+> > >>> hisi_sec2 hisi_hpre hisi_zip hisi_qm uacce spi_hisi_sfc_v3xx
+> > >>> hisi_trng_v2 rng_core hisi_uncore                         _hha_pmu
+> > >>> hisi_uncore_ddrc_pmu hisi_uncore_l3c_pmu spi_dw_mmio hisi_uncore_pm=
+u
+> > >>> hns3 hclge hnae3 hisi_sas_v3_hw(-) hisi_sas_main libsas
+> > >>> [  105.424841] CPU: 113 PID: 811 Comm: kworker/113:1 Kdump: loaded
+> > >>> Tainted: G        W         5.12.0-rc1+ #1
+> > >>> [  105.434454] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS
+> > >>> 2280-V2 CS V5.B143.01 04/22/2021
+> > >>> [  105.443287] Workqueue: rcu_gp srcu_invoke_callbacks
+> > >>> [  105.448154] Call trace:
+> > >>> [  105.450593]  dump_backtrace+0x0/0x1a4
+> > >>> [  105.454245]  show_stack+0x24/0x40
+> > >>> [  105.457548]  dump_stack+0xc8/0x104
+> > >>> [  105.460939]  __schedule_bug+0x68/0x80
+> > >>> [  105.464590]  __schedule+0x73c/0x77c
+> > >>> [  105.465700] BUG: scheduling while atomic: kworker/96:1/791/0x000=
+00201
+> > >>> [  105.468066]  schedule+0x7c/0x110
+> > >>> [  105.468068]  schedule_timeout+0x194/0x1d4
+> > >>> [  105.474490] Modules linked in:
+> > >>> [  105.477692]  wait_for_completion+0x8c/0x12c
+> > >>> [  105.477695]  rcu_barrier+0x1e0/0x2fc
+> > >>> [  105.477697]  scsi_host_dev_release+0x50/0xf0
+> > >>> [  105.477701]  device_release+0x40/0xa0
+> > >>> [  105.477704]  kobject_put+0xac/0x100
+> > >>> [  105.477707]  __device_link_free_srcu+0x50/0x74
+> > >>> [  105.477709]  srcu_invoke_callbacks+0x108/0x1a4
+> > >>> [  105.484743]  process_one_work+0x1dc/0x48c
+> > >>> [  105.492468]  worker_thread+0x7c/0x464
+> > >>> [  105.492471]  kthread+0x168/0x16c
+> > >>> [  105.492473]  ret_from_fork+0x10/0x18
+> > >>> ...
+> > >>>
+> > >>> After analyse the process, we find that it will
+> > >>> device_del(&shost->gendev) in function scsi_remove_host() and then
+> > >>>
+> > >>> put_device(&shost->shost_gendev) in function scsi_host_put() when
+> > >>> removing the driver, if there is a link between shost and hisi_hba-=
+>dev,
+> > >>>
+> > >>> it will try to delete the link in device_del(), and also will
+> > >>> call_srcu(__device_link_free_srcu) to put_device() link->consumer a=
+nd
+> > >>> supplier.
+> > >>>
+> > >>> But if put device() for shost_gendev in device_link_free() is later
+> > >>> than in scsi_host_put(), it will call scsi_host_dev_release() in
+> > >>>
+> > >>> srcu_invoke_callbacks() while it is atomic and there are scheduling=
+ in
+> > >>> scsi_host_dev_release(),
+> > >>>
+> > >>> so it reports the BUG "scheduling while atomic:...".
+> > >>>
+> > >>> thread 1                                                   thread2
+> > >>> hisi_sas_v3_remove
+> > >>>      ...
+> > >>>      sas_remove_host()
+> > >>>          ...
+> > >>>          scsi_remove_host()
+> > >>>              ...
+> > >>>              device_del(&shost->shost_gendev)
+> > >>>                  ...
+> > >>>                  device_link_purge()
+> > >>>                      __device_link_del()
+> > >>>                          device_unregister(&link->link_dev)
+> > >>>                              devlink_dev_release
+> > >>> call_srcu(__device_link_free_srcu)    ----------->
+> > >>> srcu_invoke_callbacks  (atomic)
+> > >>>          __device_link_free_srcu
+> > >>>      ...
+> > >>>      scsi_host_put()
+> > >>>          put_device(&shost->shost_gendev) (ref =3D 1)
+> > >>>                  device_link_free()
+> > >>>                                put_device(link->consumer)
+> > >>> //shost->gendev ref =3D 0
+> > >>>                                            ...
+> > >>>                                            scsi_host_dev_release
+> > >>>                                                        ...
+> > >>> rcu_barrier
+> > >>> kthread_stop()
+> > >>>
+> > >>>
+> > >>> We can check kref of shost->shost_gendev to make sure scsi_host_put=
+()
+> > >>> to release scsi host device in LLDD driver to avoid the issue,
+> > >>>
+> > >>> but it seems be a common issue:  function __device_link_free_srcu
+> > >>> calls put_device() for consumer and supplier,
+> > >>>
+> > >>> but if it's ref =3D0 at that time and there are scheduling or sleep=
+ in
+> > >>> dev_release, it may have the issue.
+> > >>>
+> > >>> Do you have any idea about the issue?
+> > >>>
+> > >> Yes, this is a general issue.
+> > >>
+> > >> If I'm not mistaken, it can be addressed by further deferring the
+> > >> device_link_free() invocation through a workqueue.
+> > >>
+> > >> Let me cut a patch doing this.
+> > > Please test the patch below and let me know if it works for you.
+> >
+> > I have a test on the patch, and it solves my issue.
+>
+> Great, thanks!
+>
+> Please also test the patch appended below (it uses a slightly different a=
+pproach).
+>
+> ---
+>  drivers/base/core.c    |   37 +++++++++++++++++++++++--------------
+>  include/linux/device.h |    6 ++----
+>  2 files changed, 25 insertions(+), 18 deletions(-)
+>
+> Index: linux-pm/drivers/base/core.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/base/core.c
+> +++ linux-pm/drivers/base/core.c
+> @@ -193,6 +193,11 @@ int device_links_read_lock_held(void)
+>  {
+>         return srcu_read_lock_held(&device_links_srcu);
+>  }
+> +
+> +void device_link_synchronize_removal(void)
+> +{
+> +       synchronize_srcu(&device_links_srcu);
+> +}
+>  #else /* !CONFIG_SRCU */
+>  static DECLARE_RWSEM(device_links_lock);
+>
+> @@ -223,6 +228,10 @@ int device_links_read_lock_held(void)
+>         return lockdep_is_held(&device_links_lock);
+>  }
+>  #endif
+> +
+> +static inline void device_link_synchronize_removal(void)
+> +{
+> +}
+>  #endif /* !CONFIG_SRCU */
+>
+>  static bool device_is_ancestor(struct device *dev, struct device *target=
+)
+> @@ -444,8 +453,13 @@ static struct attribute *devlink_attrs[]
+>  };
+>  ATTRIBUTE_GROUPS(devlink);
+>
+> -static void device_link_free(struct device_link *link)
+> +static void device_link_release_fn(struct work_struct *work)
+>  {
+> +       struct device_link *link =3D container_of(work, struct device_lin=
+k, rm_work);
+> +
+> +       /* Ensure that all references to the link object have been droppe=
+d. */
+> +       device_link_synchronize_removal();
+> +
+>         while (refcount_dec_not_one(&link->rpm_active))
+>                 pm_runtime_put(link->supplier);
+>
+> @@ -454,24 +468,19 @@ static void device_link_free(struct devi
+>         kfree(link);
+>  }
+>
+> -#ifdef CONFIG_SRCU
+> -static void __device_link_free_srcu(struct rcu_head *rhead)
+> -{
+> -       device_link_free(container_of(rhead, struct device_link, rcu_head=
+));
+> -}
+> -
+>  static void devlink_dev_release(struct device *dev)
+>  {
+>         struct device_link *link =3D to_devlink(dev);
+>
+> -       call_srcu(&device_links_srcu, &link->rcu_head, __device_link_free=
+_srcu);
+> -}
+> -#else
+> -static void devlink_dev_release(struct device *dev)
+> -{
+> -       device_link_free(to_devlink(dev));
+> +       INIT_WORK(&link->rm_work, device_link_release_fn);
+> +       /*
+> +        * It may take a while to complete this work because of the SRCU
+> +        * synchronization in device_link_release_fn() and if the consume=
+r or
+> +        * supplier devices get deleted when it runs, so put it into the =
+"long"
+> +        * workqueue.
+> +        */
+> +       queue_work(system_long_wq, &link->rm_work);
 
---=-hWc+xAn5S+EFrraSjweQ
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Not too strong of an opinion, but this seems like an unnecessary work
+queue when SRCUs aren't enabled. We could just leave this part as is
+and limit your changes to the SRCU implementation?
 
-On Wed, 2021-05-12 at 17:17 +0200, Mauro Carvalho Chehab wrote:
-> Em Wed, 12 May 2021 10:14:44 -0400
-> "Theodore Ts'o" <tytso@mit.edu> escreveu:
->=20
-> > On Wed, May 12, 2021 at 02:50:04PM +0200, Mauro Carvalho Chehab wrote:
-> > > v2:
-> > > - removed EM/EN DASH conversion from this patchset; =20
-> >=20
-> > Are you still thinking about doing the
-> >=20
-> > EN DASH --> "--"
-> > EM DASH --> "---"
-> >=20
-> > conversion? =20
->=20
-> Yes, but I intend to submit it on a separate patch series, probably after
-> having this one merged. Let's first cleanup the large part of the=20
-> conversion-generated UTF-8 char noise ;-)
->=20
-> > That's not going to change what the documentation will
-> > look like in the HTML and PDF output forms, and I think it would make
-> > life easier for people are reading and editing the Documentation/*
-> > files in text form.
->=20
-> Agreed. I'm also considering to add a couple of cases of this char:
->=20
-> 	- U+2026 ('=E2=80=A6'): HORIZONTAL ELLIPSIS
->=20
-> As Sphinx also replaces "..." into HORIZONTAL ELLIPSIS.
+For the SRCU implementation, yes, this is a lot cleaner/nicer than
+kicking off another work from the SRCU callback.
 
-Er, what?
+-Saravana
 
-The *only* part of this whole enterprise that actually seemed to make
-even a tiny bit of sense =E2=80=94 rather than seeming like a thinly veiled
-retrospective excuse for dragging us back in time by 30 years =E2=80=94 was=
- the
-bit about making it easier to grep.
-
-But if I understand you correctly, you're talking about using something
-like C trigraphs to represent the perfectly reasonable text emdash
-character ("=E2=80=94") as two hyphen-minuses ("--") in the source code of =
-the
-documentation? Isn't that going to achieve precisely the *opposite*? If
-I select some text in the HTML output of the docs and then search for
-it in the source code, that's going to *stop* it matching my search?
-
-
---=-hWc+xAn5S+EFrraSjweQ
-Content-Type: application/x-pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEw
-NTEyMTcxMjI3WjAvBgkqhkiG9w0BCQQxIgQg3XpAgHXtlhpeOzv/dEVijB6FV2B1P1ORW7ixkdff
-lPowgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAF05KQACeazolZqXWhE2RG343uRTkhj6gM65QVXqz6/sGDDgTvqLiikBTTMAeiUZ
-EpaD3Gbwmez7WY6axWZ3pR3lnqhyBH+tr5O1DSTEWA0WyUJJ4jtz5ait1Im4CexPphbaiJB+KveN
-61GcukywzZhUNMJL/rN0hUglCtGjGJHeTIJ0bSU6WI2KOGYEmR/yH1sEwbZhEjbIwduWC6SL+r6H
-jPI99OwT+Q3uxRwTqA4ljPDZhihqihDFDwX0GNYMl3vGQAhG/XSQjPEzKaoPf03i8dfF/I4u2aWW
-rWNeVL4q2Zvu+0N4+t6bkchYY+agiEPi5RrkSAmkYVfVuiYBwHUAAAAAAAA=
-
-
---=-hWc+xAn5S+EFrraSjweQ--
-
+>  }
+> -#endif
+>
+>  static struct class devlink_class =3D {
+>         .name =3D "devlink",
+> Index: linux-pm/include/linux/device.h
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/include/linux/device.h
+> +++ linux-pm/include/linux/device.h
+> @@ -570,7 +570,7 @@ struct device {
+>   * @flags: Link flags.
+>   * @rpm_active: Whether or not the consumer device is runtime-PM-active.
+>   * @kref: Count repeated addition of the same link.
+> - * @rcu_head: An RCU head to use for deferred execution of SRCU callback=
+s.
+> + * @rm_work: Work structure used for removing the link.
+>   * @supplier_preactivated: Supplier has been made active before consumer=
+ probe.
+>   */
+>  struct device_link {
+> @@ -583,9 +583,7 @@ struct device_link {
+>         u32 flags;
+>         refcount_t rpm_active;
+>         struct kref kref;
+> -#ifdef CONFIG_SRCU
+> -       struct rcu_head rcu_head;
+> -#endif
+> +       struct work_struct rm_work;
+>         bool supplier_preactivated; /* Owned by consumer probe. */
+>  };
+>
