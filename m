@@ -2,130 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2534937B7BA
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 10:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBAD37B7CE
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 10:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbhELIV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 04:21:26 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50322 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229968AbhELIV0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 May 2021 04:21:26 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1620807617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vza9DD+KUbiRtLfI0mIL3ImF5EprHsvwKgA+ti787LI=;
-        b=SEUCFz0zu0Zp1BQ9xz1mNFPtDYhbTNwQhQo77/WPTDUSYSs9YYUUH3rHkmMfCEgx7RVIJp
-        dwIeahyOWnteniGqdd3VuYtW/CarKwLYLktS4+AtvvPlDD3WewhKIPFriqz5n56j3P2hbq
-        S4D13UGTFc3ksE8v03AOtcpvvI1r4nc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 28C1BAF2C;
-        Wed, 12 May 2021 08:20:17 +0000 (UTC)
-Date:   Wed, 12 May 2021 10:20:16 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v9 02/10] reboot: Add hardware protection power-off
-Message-ID: <YJuPwAZroVZ/w633@alley>
-References: <cover.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
- <97260f8e150abb898a262fade25860609b460912.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
+        id S230213AbhELIYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 04:24:43 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52726 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhELIYn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 04:24:43 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id ACE381F425F6
+Received: by earth.universe (Postfix, from userid 1000)
+        id 77A653C0C95; Wed, 12 May 2021 10:23:30 +0200 (CEST)
+Date:   Wed, 12 May 2021 10:23:30 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     satya priya <skakit@codeaurora.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>
+Subject: Re: [PATCH V4 3/5] dt-bindings: power: reset: Change
+ 'additionalProperties' to true
+Message-ID: <20210512082330.shbrs2mcfdl2ybdb@earth.universe>
+References: <1620800053-26405-1-git-send-email-skakit@codeaurora.org>
+ <1620800053-26405-4-git-send-email-skakit@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97260f8e150abb898a262fade25860609b460912.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <1620800053-26405-4-git-send-email-skakit@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon 2021-05-10 14:28:30, Matti Vaittinen wrote:
-> There can be few cases when we need to shut-down the system in order to
-> protect the hardware. Currently this is done at east by the thermal core
-> when temperature raises over certain limit.
+Hi,
+
+On Wed, May 12, 2021 at 11:44:11AM +0530, satya priya wrote:
+> Change 'additionalProperties' to true as this is a generic binding.
 > 
-> Some PMICs can also generate interrupts for example for over-current or
-> over-voltage, voltage drops, short-circuit, ... etc. On some systems
-> these are a sign of hardware failure and only thing to do is try to
-> protect the rest of the hardware by shutting down the system.
+> Signed-off-by: satya priya <skakit@codeaurora.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+> Changes in V3:
+>  - This is newly added in V3.
 > 
-> Add shut-down logic which can be used by all subsystems instead of
-> implementing the shutdown in each subsystem. The logic is stolen from
-> thermal_core with difference of using atomic_t instead of a mutex in
-> order to allow calls directly from IRQ context.
+> Changes in V4:
+>  - No Changes.
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+>  Documentation/devicetree/bindings/power/reset/reboot-mode.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index a6ad5eb2fa73..5da8c80a2647 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -518,6 +519,85 @@ void orderly_reboot(void)
->  }
->  EXPORT_SYMBOL_GPL(orderly_reboot);
+> diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> index 9c6fda6..ad0a0b9 100644
+> --- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> @@ -36,7 +36,7 @@ patternProperties:
+>    "^mode-.*$":
+>      $ref: /schemas/types.yaml#/definitions/uint32
 >  
-> +/**
-> + * hw_failure_emergency_poweroff_func - emergency poweroff work after a known delay
-> + * @work: work_struct associated with the emergency poweroff function
-> + *
-> + * This function is called in very critical situations to force
-> + * a kernel poweroff after a configurable timeout value.
-> + */
-> +static void hw_failure_emergency_poweroff_func(struct work_struct *work)
-> +{
-> +	/*
-> +	 * We have reached here after the emergency shutdown waiting period has
-> +	 * expired. This means orderly_poweroff has not been able to shut off
-> +	 * the system for some reason.
-> +	 *
-> +	 * Try to shut down the system immediately using kernel_power_off
-> +	 * if populated
-> +	 */
-> +	WARN(1, "Hardware protection timed-out. Trying forced poweroff\n");
-> +	kernel_power_off();
-
-WARN() look like an overkill here. It prints many lines that are not
-much useful in this case. The function is called from well-known
-context (workqueue worker).
-
-Also be aware that "panic_on_warn" commandline option will trigger
-panic() here.
-
-
-> +	/*
-> +	 * Worst of the worst case trigger emergency restart
-> +	 */
-> +	WARN(1,
-> +	     "Hardware protection shutdown failed. Trying emergency restart\n");
-> +	emergency_restart();
-
-Two consecutive WARN() calls are even less useful. They are eye
-catching but it is hard to find the only useful line with
-the custom message.
-
-Best Regards,
-Petr
+> -additionalProperties: false
+> +additionalProperties: true
+>  
+>  examples:
+>    - |
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
