@@ -2,91 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5912C37B95E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6570537BB61
+	for <lists+linux-pm@lfdr.de>; Wed, 12 May 2021 12:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbhELJj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 May 2021 05:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbhELJj1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 05:39:27 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802CFC061574;
-        Wed, 12 May 2021 02:38:19 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id na14-20020a17090b4c0eb029015cbbd5f028so104296pjb.1;
-        Wed, 12 May 2021 02:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eyLjfwsAS8cJTCqeOUuFuNCBDqhlaYy7krVsSe/n+GY=;
-        b=YJCj5pbEbEZyB+a+1xQ0TklvrTa1Lfpf0Cnf0x0opW71AKtrJlhNd9tGYqs/kp6Bo4
-         7rzGQkw7OeqcyKILQiGlE/sI9TiqkNIG3Vc362+/t0Y32hGRGDFnnB1qvzEaaJig6cYd
-         0E9xaaydcwn1xJ8RWXIphKKNPB/hW4xP5lT9zhTbnN37+F92xDL2NrUqrKpfCv1s48YF
-         flHopZ9B/6KYAbeDcjLv3ulwTK36Zrp46WsN87sVD1t+W9lAel1Obi3sBUueiLyGbQAK
-         dqpt5B9VCf/olnL910YS3azWoAyVUGEF6Isme1phEYgT+uXr2uemzRwB/ZJ1lRB4tsQ1
-         g1ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eyLjfwsAS8cJTCqeOUuFuNCBDqhlaYy7krVsSe/n+GY=;
-        b=qeDTLSKSaWYDSthh0zTUpWijB2k+jbRyTbPXA7lGjRA8uYE9986XjmiD4dzx9OtEWJ
-         DgGrNYGKYnR/Wina9Yi5838bDB7wRkl/hP1+0ZGirSW7IhHgrMLWIsHk3x/WN9dzwjqW
-         9PGoptTPuaCRYCGuSQyd6aUcJ2N4B37aD0Uz2ZqdcLFJigK6DJFkbEW9xqYXrBHPzLjE
-         ynvB3kX7CCvEEviYE/Y7iL+3ew4Eha4TrKawEmTCDB3DMLgxtdg464rUCNnXL8D5sIsr
-         zrLTi0PctjATKejw1m+idp+V1CVBomsvmHdLhfORAeMy6N2+E6scjIUsdN+6APSE/gwR
-         OY2Q==
-X-Gm-Message-State: AOAM531NZQeikzeMzDjN0zzGOA3JkXXOWPLux/M77N/EZX/DiWeJMDTc
-        FjFW0k3I8Y9zKLf66p5lZbuOHEt0h1M=
-X-Google-Smtp-Source: ABdhPJw0vugVvS9YPQpAaV93L7ItPcBA/pG55aTiX/YlQB+X3MHgWeHIfR5GOZAvdiuCkF3O7I8CJA==
-X-Received: by 2002:a17:90a:d18b:: with SMTP id fu11mr38797138pjb.129.1620812299201;
-        Wed, 12 May 2021 02:38:19 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id w123sm15109330pfb.109.2021.05.12.02.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 02:38:18 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
-        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Subject: [PATCH] thermal: sprd: Add missing MODULE_DEVICE_TABLE
-Date:   Wed, 12 May 2021 17:37:52 +0800
-Message-Id: <20210512093752.243168-1-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S230102AbhELLAG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 May 2021 07:00:06 -0400
+Received: from relay.uni-heidelberg.de ([129.206.100.212]:26941 "EHLO
+        relay.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230096AbhELLAG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 May 2021 07:00:06 -0400
+X-IPAS-Result: =?us-ascii?q?A2B8BACts5tg/1BqzoFaHQEBAQEJARIBBQUBQIFXgw1ra?=
+ =?us-ascii?q?4RHkgGQDo0GAQEBAQEBAQEBCTkBAgQBAYZFAiU4EwIEAQEBAQMCAwEBAQYBA?=
+ =?us-ascii?q?QYBAQEBAQYEgQSFXYZFBiMELCYQJQIfBwICFCghE4V5qQ1/M4EBiD2BISOBE?=
+ =?us-ascii?q?CqOChCBVUSBFYNghAAlgzU2gi0EgkAHPRw1gyC7ACwHgXaBIoEpC5t8Ag4ol?=
+ =?us-ascii?q?FaQXi2SLKZ6gWuBfDMaJIM4UBkOjlaOGEIvOAIGCgEBAwlZAQGMNQEB?=
+IronPort-HdrOrdr: A9a23:N765kqltNrvazo/zr13/f58lw7TpDfIj3DAbv31ZSRFFG/Fw9v
+ rAoB1173/JYVoqMk3I+urvBEDjewK+yXcd2+B4VotKOjOGhILBFvAB0WKI+VDd8kPFmtK0gs
+ xbAsxD4YrLfD1HZYKQ2njeL+od
+X-IronPort-Anti-Spam-Filtered: true
+Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
+  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 May 2021 12:58:57 +0200
+Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
+        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
+        id 1lgmZs-000465-HE; Wed, 12 May 2021 12:58:56 +0200
+Date:   Wed, 12 May 2021 12:58:56 +0200
+From:   Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] power: supply: axp20x_battery: implement writeable status
+ to enable/disable battery charging
+Message-ID: <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
+References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+ <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
+ <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Allow disabling and reenabling battery charging of an axp209 PMIC through a
+writable status property. With the current driver code charging is always on.
 
-MODULE_DEVICE_TABLE is used to extract the device information out of the
-driver and builds a table when being compiled. If using this macro,
-kernel can find the driver if available when the device is plugged in,
-and then loads that driver and initializes the device.
+This works on the axp209 of Banana {Pi M1+,Pro} and should work on all AXP chips.
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Signed-off-by: Hermann.Lauer@uni-heidelberg.de
 ---
- drivers/thermal/sprd_thermal.c | 1 +
- 1 file changed, 1 insertion(+)
+v2: add fallthrough and improve commit message (thanks to Maxime and ChenYu)
+v3: fix fallthrough usage
 
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index 3682edb2f466..fe06cccf14b3 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -532,6 +532,7 @@ static const struct of_device_id sprd_thermal_of_match[] = {
- 	{ .compatible = "sprd,ums512-thermal", .data = &ums512_data },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, sprd_thermal_of_match);
+Thanks to ChenYu for the idea and greetings
+  Hermann
+
+ drivers/power/supply/axp20x_battery.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -40,6 +40,7 @@
+ #define AXP209_FG_PERCENT		GENMASK(6, 0)
+ #define AXP22X_FG_VALID			BIT(7)
  
- static const struct dev_pm_ops sprd_thermal_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(sprd_thm_suspend, sprd_thm_resume)
--- 
-2.25.1
-
++#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
+ #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
+ #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
+ #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
+@@ -468,7 +469,18 @@
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+ 		return axp20x_set_max_constant_charge_current(axp20x_batt,
+ 							      val->intval);
++	case POWER_SUPPLY_PROP_STATUS:
++		switch (val->intval) {
++		case POWER_SUPPLY_STATUS_CHARGING:
++			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
++				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
+ 
++		case POWER_SUPPLY_STATUS_DISCHARGING:
++		case POWER_SUPPLY_STATUS_NOT_CHARGING:
++			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
++				AXP20X_CHRG_CTRL1_ENABLE, 0);
++		}
++		fallthrough;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -491,7 +503,8 @@
+ static int axp20x_battery_prop_writeable(struct power_supply *psy,
+ 					 enum power_supply_property psp)
+ {
+-	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
++	return psp == POWER_SUPPLY_PROP_STATUS ||
++	       psp == POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
+ 	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
+ 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
+ 	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
