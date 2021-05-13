@@ -2,128 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9396E37F67E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 13:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BF037F794
+	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 14:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbhEMLMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 May 2021 07:12:32 -0400
-Received: from mga04.intel.com ([192.55.52.120]:20311 "EHLO mga04.intel.com"
+        id S233725AbhEMMNP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 May 2021 08:13:15 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35436 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233231AbhEMLMa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 May 2021 07:12:30 -0400
-IronPort-SDR: yg50JiI+zFKFdJaMQ4sjCpIIOb01aAJ+Pl/KyxkJDxH3/B1qkDnkGVChPcUGVNVJ/HF0GmK35k
- bdmDeCSRk8Wg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="197954170"
-X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="197954170"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2021 04:11:19 -0700
-IronPort-SDR: JWHF/MYfY5cUJpF4NGgN7H+0mEQtLOxDNOsSU+bf0ejclwyD0ETM4zF7zHz53eoPPMYCIqkwo9
- 0nP4HHj+UXGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="471679295"
-Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 May 2021 04:11:18 -0700
-Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lh9FN-0000Cr-Be; Thu, 13 May 2021 11:11:17 +0000
-Date:   Thu, 13 May 2021 19:10:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 63ab1d0f590ff7fe3234589aa977b5777661d091
-Message-ID: <609d0933.In58xE9iaHXYBtos%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233782AbhEMMLZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 May 2021 08:11:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 23ACEB02C;
+        Thu, 13 May 2021 12:10:12 +0000 (UTC)
+Message-ID: <d150564ba71180cad5cf68e7b4c2821dcf5982aa.camel@suse.cz>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Force intel_pstate to load when
+ HWP disabled in firmware
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 13 May 2021 14:10:11 +0200
+In-Reply-To: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
+References: <20210513075930.22657-1-ggherdovich@suse.cz>
+         <3fdc70c267d40561bed10fc722a8223a0b161200.camel@linux.intel.com>
+         <bb90b6cac2f4adcc6c80b7fddf54dbe0a6b8ff66.camel@suse.cz>
+         <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 63ab1d0f590ff7fe3234589aa977b5777661d091  Merge branch 'acpi-dptf' into bleeding-edge
+On Thu, 2021-05-13 at 04:03 -0700, Srinivas Pandruvada wrote:
+> On Thu, 2021-05-13 at 12:10 +0200, Giovanni Gherdovich wrote:
+> > [...]
+> > An alternative approach to register intel_pstate in the case I'm
+> > describing
+> > would be to add ICELAKE_X (and every CPU model after that, forever?)
+> > to the
+> > list intel_pstate_cpu_ids.
+>
+> This is not nice, but unlike client server CPUs don't get released
+> often. There is couple of years in between.
 
-elapsed time: 1272m
+True.
 
-configs tested: 67
-configs skipped: 2
+> > [...]
+> > The wording "hwp_broken_firmware" deliberately has a negative
+> > connotation (the
+> > intended meaning is: "firmware is broken, regarding HWP"), carrying
+> > the
+> > not-so-subtle message "OEM folks, please don't do this". My
+> > understanding is
+> > that the preferred way to disable HWP is with intel_pstate=no_hwp,
+> > the
+> > firmware should stay out of it.
+>
+> For me "broken" means that Intel has some bug, which is not the case,
+> even if the intention is to carry message to OEM.
+> 
+> no_hwp is for disabling HWP even if the HWP is supported.
+> 
+> The problem is that if we override the supported CPU list using some
+> kernel command line, some users may crash the system running on some
+> old hardware where some of the MSRs we rely are not present. We don't
+> read MSR in failsafe mode, so they will fault. We are checking some
+> MSRs but not all.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fair enough.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210512
-i386                 randconfig-a001-20210512
-i386                 randconfig-a005-20210512
-i386                 randconfig-a004-20210512
-i386                 randconfig-a002-20210512
-i386                 randconfig-a006-20210512
-i386                 randconfig-a016-20210512
-i386                 randconfig-a014-20210512
-i386                 randconfig-a011-20210512
-i386                 randconfig-a015-20210512
-i386                 randconfig-a012-20210512
-i386                 randconfig-a013-20210512
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+> Also what will be default
+> (struct pstate_funcs *)id->driver_data if the cpu model doesn't match.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Whoops... You're totally right, the patch I sent is broken! "id" must be a
+valid pstate_funcs* pointer, or some other default methods must be provided.
+
+And besides...
+
+> I think better to add CPU model instead. We did that for SKX on user
+> requests.
+
+... I agree. Let's just add ICX to the list of explicitly supported CPUs.
+I'll send a new patch doing that, please discard this one.
+
+
+Giovanni
+
