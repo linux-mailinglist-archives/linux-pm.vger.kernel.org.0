@@ -2,72 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DB537FB2A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 18:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E841B37FB6D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 18:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbhEMQCv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 May 2021 12:02:51 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:60314 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbhEMQCu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 May 2021 12:02:50 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 262901C0B87; Thu, 13 May 2021 18:01:38 +0200 (CEST)
-Date:   Thu, 13 May 2021 18:01:37 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/acpi: Switch to pr_xxx log functions
-Message-ID: <20210513160137.GB19588@duo.ucw.cz>
-References: <8436da08-4812-d383-8f2a-1c07181ebfb8@gmail.com>
+        id S235080AbhEMQZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 May 2021 12:25:47 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42126 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235110AbhEMQZr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 May 2021 12:25:47 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id B0DF51F42DEC
+Received: by earth.universe (Postfix, from userid 1000)
+        id C8CA43C0C95; Thu, 13 May 2021 18:24:33 +0200 (CEST)
+Date:   Thu, 13 May 2021 18:24:33 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: power: supply: use Krzysztof Kozlowski's
+ Canonical address
+Message-ID: <20210513162433.7dnf5mesqgetp6lp@earth.universe>
+References: <20210504121437.13424-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="H+4ONPRPur6+Ovig"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y5uu6cbm5tlibfv6"
 Content-Disposition: inline
-In-Reply-To: <8436da08-4812-d383-8f2a-1c07181ebfb8@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210504121437.13424-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---H+4ONPRPur6+Ovig
+--y5uu6cbm5tlibfv6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Hi,
 
-> Switching to pr_debug et al has two benefits:
-> - We don't have to add PREFIX to each log statement
-> - Debug output is suppressed except DEBUG is defined or dynamic
->   debugging is enabled for the respective code piece.
+On Tue, May 04, 2021 at 08:14:37AM -0400, Krzysztof Kozlowski wrote:
+> Switch to Canonical address in S3C power supply driver, just like in
+> other entries.
 >=20
-> In addition ensure that longer messages aren't split to multiple lines
-> in source code, checkpatch complains otherwise.
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1783372a608a..ccb9823fb77f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16021,7 +16021,7 @@ W:	http://www.ibm.com/developerworks/linux/linux3=
+90/
+>  F:	drivers/s390/scsi/zfcp_*
+> =20
+>  S3C ADC BATTERY DRIVER
+> -M:	Krzysztof Kozlowski <krzk@kernel.org>
+> +M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>  L:	linux-samsung-soc@vger.kernel.org
+>  S:	Odd Fixes
+>  F:	drivers/power/supply/s3c_adc_battery.c
+> --=20
+> 2.25.1
+>=20
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
-								Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---H+4ONPRPur6+Ovig
+--y5uu6cbm5tlibfv6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYJ1NYQAKCRAw5/Bqldv6
-8jjoAKDCAf0bfCosCwpNYAfYM7ExTZ8KbwCfbqGkEyPdJ/bmJka4HFw+tSoVM44=
-=lc0P
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmCdUsEACgkQ2O7X88g7
++pqrmBAAmxItoc7gAdBW1fS5FmGhlJiJmNtKSRZSnHQt25JcBoh9n83j87IvAHb4
+4dwiv16ayl8VkK/WPv7aaH8VSF9W9MtpluKwm12cispyrEXtcAwsq/idpDsuVt/I
+DR3ituJuufnvyyF88euFTL96bl1iGUdjDpl4NCyzV15XuZXC281mr9ET3H7FvPO1
+1ViZJX8EKaawXJnNiHGGTrbP76wNbUOK2Oi/7Ed/LOiocjGmlalolwFEAkUAMR+R
+sw3IxZm9RSuNW/kj9fYxS7AzX/YGpSdpwk1xGmZPOax0Ip46E3HRnB/AlE2oeRkq
+jK5Mnw3XVX9NjN0RkyaUrKpwPaGGhHYG3N5siz3jIKyn/W1dlK9YAnG7Wv1T2sQK
+P1aq59kGjRFRQ09OpGISVC/a0WYi2LmCYnNAv4MmOc27KQGSFpQ49GrCcCZT3MU5
+AjEsQh9ntEadijvoIY2oaa1npx+Eh9ToWZXKwsw+R23iUU2p7EIi1kuF0Unq8Zfm
+6gAtXU4yI74j9vhO36CIe/JHisUmKWZH6P3vUKxI2mys0tz6EoSNgsOiQLS66VQv
+BnQZ2F03erC9hC+5FS9s9G3mrY3vIUAWDWxv6pFds4DnWkBVJMZhP71QrbZhCxcU
+L7AxugZ7hjlSK6agDcJtoy/xSNemAAG9rI6bnltP8PuYCsSbg0E=
+=rLNg
 -----END PGP SIGNATURE-----
 
---H+4ONPRPur6+Ovig--
+--y5uu6cbm5tlibfv6--
