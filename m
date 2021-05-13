@@ -2,117 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DB837FA32
-	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 17:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A829437FA4F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 17:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbhEMPDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 May 2021 11:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S233003AbhEMPMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 May 2021 11:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234721AbhEMPDp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 May 2021 11:03:45 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7DC0613ED
-        for <linux-pm@vger.kernel.org>; Thu, 13 May 2021 08:02:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id n25so31345552edr.5
-        for <linux-pm@vger.kernel.org>; Thu, 13 May 2021 08:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snejp.pl; s=gmail;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NCUUgkUDoigdypu4L5Fgp97vMcmPfYAXz+o8swnREuo=;
-        b=KqREekiXMct59LPrsk4vsoTkoyjUWPhR5tEtKf3KuCFsAHyUfZOc29R5/rd/cFltO/
-         r0PBjtuJ6Oa7Ve5ZDNwQ/PAEV3Kko08T1Ouz/XckbEnyIbZfZhM6pek1qjFKQhXSSJyL
-         XUSNRPCUYRRVgg2KikHN40HSS8kTGUUt1imiNqLKZyCHH3IA8fKuSmmEWx/tHNSDWYz1
-         OW1jAMEfKlwt3mq2BXUIAGmHaHhg2BJvv/w1AKDy+BsEyPNSCSEdXbRSqHyRipDO0E+r
-         CVxbej7J/K9PN9ApLmxvnrucWHqMK2aiKQNKBXJqVw4wcgwq13MGhGthGqQXSukrgBp4
-         2x/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NCUUgkUDoigdypu4L5Fgp97vMcmPfYAXz+o8swnREuo=;
-        b=kFkS+C101lHmkLHVpD6HAqvCnuYDb/qoU6qNIP8ZH/I7pfyfnPve42odeNyynfxDjd
-         k7HmIMWINP3oXxIWvvWv7nHkNjGb3XlV21I8ZRp0J0H38O74x4tuJKd7ukmZxemw8QhW
-         8pS8HZ7kaY1mvkkOPtvy+OecHYVl1GBoAbZKwlKax2frHlUjERys6jzTdG5YZumB+brD
-         yx8RHW/BVsxa8OqY3BD6qHSNv1xrtbyH4C+nydILG7CZRNdRnCD/rVc77Ye96rk3ArVx
-         alPJ19OQ/wBijPq9fdafHs0w04N2LrCH+GP1soukKTuoPwWY9DstvbbItTeU2FiFgbF2
-         fKgQ==
-X-Gm-Message-State: AOAM531m3N6L/UQL5JWz2yyhv8ENOSuxs54PDJq1S++XOYx4CMpu9+e4
-        TkGl1WmloEJH6XHnWh4BhJeEt0+04nsF9A3o
-X-Google-Smtp-Source: ABdhPJwPFoR0Ucye6Pat2/zDqu/V7/gfCjqwoXuQRQLFaUTyeOzRo/CiBrLTvZTgu0xrXjGMdMEOag==
-X-Received: by 2002:aa7:cf07:: with SMTP id a7mr50814123edy.261.1620918153993;
-        Thu, 13 May 2021 08:02:33 -0700 (PDT)
-Received: from PackardBell (192038133011.mbb.telenor.dk. [192.38.133.11])
-        by smtp.googlemail.com with ESMTPSA id u8sm2411125edo.71.2021.05.13.08.02.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 May 2021 08:02:33 -0700 (PDT)
-Received: from localhost (PackardBell [local])
-        by PackardBell (OpenSMTPD) with ESMTPA id 35f5b0b5;
-        Thu, 13 May 2021 15:02:17 +0000 (UTC)
-From:   Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        David Sterba <dsterba@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-Subject: [PATCH 2/2] cpuidle: qcom: Add SPM register data for APQ8026 and MSM8226
-Date:   Thu, 13 May 2021 17:01:50 +0200
-Message-Id: <20210513150150.51464-2-bartosz.dudziak@snejp.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210513150150.51464-1-bartosz.dudziak@snejp.pl>
-References: <20210513150150.51464-1-bartosz.dudziak@snejp.pl>
+        with ESMTP id S230401AbhEMPMR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 May 2021 11:12:17 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8B6C061574;
+        Thu, 13 May 2021 08:11:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id C43321F42C58
+Received: by earth.universe (Postfix, from userid 1000)
+        id 20E0D3C0C95; Thu, 13 May 2021 17:11:03 +0200 (CEST)
+Date:   Thu, 13 May 2021 17:11:03 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola =?utf-8?Q?Milosavljevi=C4=87?= <mnidza@outlook.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] power: supply: sbs-battery: Silence warning about
+ unknown chemistry
+Message-ID: <20210513151103.hihvxg7kvych4nwr@earth.universe>
+References: <20210510220827.11595-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lyzvqae6qiq3zjju"
+Content-Disposition: inline
+In-Reply-To: <20210510220827.11595-1-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add APQ8026 and MSM8226 SoCs register data to SPM AVS Wrapper 2 (SAW2)
-power controller driver.
 
-Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
----
- drivers/cpuidle/cpuidle-qcom-spm.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+--lyzvqae6qiq3zjju
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index adf91a6e4d..9711a98d68 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -87,6 +87,18 @@ static const struct spm_reg_data spm_reg_8974_8084_cpu  = {
- 	.start_index[PM_SLEEP_MODE_SPC] = 3,
- };
- 
-+/* SPM register data for 8026, 8226 */
-+static const struct spm_reg_data spm_reg_8x26_cpu  = {
-+	.reg_offset = spm_reg_offset_v2_1,
-+	.spm_cfg = 0x0,
-+	.spm_dly = 0x3C102800,
-+	.seq = { 0x60, 0x03, 0x60, 0x0B, 0x0F, 0x20, 0x10, 0x80, 0x30, 0x90,
-+		0x5B, 0x60, 0x03, 0x60, 0x3B, 0x76, 0x76, 0x0B, 0x94, 0x5B,
-+		0x80, 0x10, 0x26, 0x30, 0x0F },
-+	.start_index[PM_SLEEP_MODE_STBY] = 0,
-+	.start_index[PM_SLEEP_MODE_SPC] = 5,
-+};
-+
- static const u8 spm_reg_offset_v1_1[SPM_REG_NR] = {
- 	[SPM_REG_CFG]		= 0x08,
- 	[SPM_REG_SPM_CTL]	= 0x20,
-@@ -259,6 +271,10 @@ static struct spm_driver_data *spm_get_drv(struct platform_device *pdev,
- }
- 
- static const struct of_device_id spm_match_table[] = {
-+	{ .compatible = "qcom,apq8026-saw2-v2.1-cpu",
-+	  .data = &spm_reg_8x26_cpu },
-+	{ .compatible = "qcom,msm8226-saw2-v2.1-cpu",
-+	  .data = &spm_reg_8x26_cpu },
- 	{ .compatible = "qcom,msm8974-saw2-v2.1-cpu",
- 	  .data = &spm_reg_8974_8084_cpu },
- 	{ .compatible = "qcom,apq8084-saw2-v2.1-cpu",
--- 
-2.25.1
+Hi,
 
+On Tue, May 11, 2021 at 01:08:26AM +0300, Dmitry Osipenko wrote:
+> Older variants of controller don't support reporting type of the battery.
+> Make warning message about unknown chemistry to be printed only once in
+> order to stop flooding kernel log with the message on each request of the
+> property. This patch fixes the noisy messages on Asus Transformer TF101.
+>=20
+> Tested-by: Antoni Aloy Torrens <aaloytorrens@gmail.com> # TF101
+> Tested-by: Nikola Milosavljevi=C4=87 <mnidza@outlook.com> # TF101
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+
+I believe the problem should be fixed as side-effect of the
+following patch:
+
+https://lore.kernel.org/linux-pm/20210513020308.4011440-1-ikjn@chromium.org/
+
+With my suggested change the message is printed once for each
+battery plug, so probably only once per boot for most users.
+
+-- Sebastian
+
+>  drivers/power/supply/sbs-battery.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
+s-battery.c
+> index 8d7a10730e43..b71fbf543428 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -814,7 +814,7 @@ static int sbs_get_chemistry(struct i2c_client *clien=
+t,
+>  		val->intval =3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> =20
+>  	if (val->intval =3D=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> -		dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
+> +		dev_warn_once(&client->dev, "Unknown chemistry: %s\n", chemistry);
+> =20
+>  	return 0;
+>  }
+> --=20
+> 2.30.2
+>=20
+
+--lyzvqae6qiq3zjju
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmCdQYEACgkQ2O7X88g7
++pqVwg//cYFlMccwaqLE2aR3E40lWPQM14FlZYq8FCJLeuCYXnE6NRcZDMZkH1A8
+DcskPOxpNUNPvhKjCZMMzYCZU4vPv8ZqdUTrsxC6H0B4xAa3zgMWVvgdrDWtu5+1
+wBZ9rHeIs7ko/vTcn3TNbj9EaRuuFYvUbjVzVHp7N2S7NFNOtSHu4r/FSksuCWEN
+qcd2YtvkZECN6i7FESQ1PxDN8gR2VzDSDF0fkEBzLkkVXcZ90se74Kq8wfmc4uMC
+XMM/9MDhJpZxaXfHE/xMhhF1SntAfGJ5pjpPhhRxbNh71K80OxMcGM2V3rhrrt5a
+4kostmwHoEoVb1d/fQ/nxTSusUO9ujhE2Qrda2qfTIzp7wahMrPQTdp70tzf/rEI
+Udr85I7c5dC3OTZkGossB/e1Za6XdllWu7KpoQkiLsPL444EaMKuMaCveC617X0a
+5rPQxIKmc3QKxvC2TKsr9mbd0akZ5xhDVnE/+JJ4EoEwd2rpaa9Mbu5MSdO18B1W
+RchfbmRFsaXtSvBzGRZCWMLdNOJSJnm+5n7aGc6nKsyRRHs6z/uzHDn8WHXrVt6v
+bOOxmjb/1WQlhybnA0UC6pkzJNMsPOlZtwpTG4C9Tlh3rbaJ9yKMFnbkO313RyRa
+UI3UM+L5ruL4FiplM0K6nW9gK+lSc69NUQmcTsxhumkg3yqcYg4=
+=hYys
+-----END PGP SIGNATURE-----
+
+--lyzvqae6qiq3zjju--
