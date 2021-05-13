@@ -2,137 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4764C37F64D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 13:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9396E37F67E
+	for <lists+linux-pm@lfdr.de>; Thu, 13 May 2021 13:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbhEMLFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 May 2021 07:05:08 -0400
-Received: from mga14.intel.com ([192.55.52.115]:46125 "EHLO mga14.intel.com"
+        id S233237AbhEMLMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 May 2021 07:12:32 -0400
+Received: from mga04.intel.com ([192.55.52.120]:20311 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233141AbhEMLEU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 May 2021 07:04:20 -0400
-IronPort-SDR: VWZHYe/Mby7l9kYCgwMNb5LXK7kcpliPZRPMmi6UDGQ+N65iqCHict60jQX86NxKdviwv5Mrjc
- JN2CzJ8FGC0Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="199604403"
+        id S233231AbhEMLMa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 May 2021 07:12:30 -0400
+IronPort-SDR: yg50JiI+zFKFdJaMQ4sjCpIIOb01aAJ+Pl/KyxkJDxH3/B1qkDnkGVChPcUGVNVJ/HF0GmK35k
+ bdmDeCSRk8Wg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="197954170"
 X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="199604403"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2021 04:03:10 -0700
-IronPort-SDR: 5ZvYE7JmNv7POUpBdNaWg80CNzrqnSkCAqnpGBTkv91x4ckpoG9eFBH3cnV4eXYRSLNvF1xQJk
- 47fpWqJRm5aA==
+   d="scan'208";a="197954170"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2021 04:11:19 -0700
+IronPort-SDR: JWHF/MYfY5cUJpF4NGgN7H+0mEQtLOxDNOsSU+bf0ejclwyD0ETM4zF7zHz53eoPPMYCIqkwo9
+ 0nP4HHj+UXGw==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="623583353"
-Received: from adithyav-mobl.amr.corp.intel.com ([10.212.100.160])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2021 04:03:06 -0700
-Message-ID: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Force intel_pstate to load when
- HWP disabled in firmware
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 13 May 2021 04:03:02 -0700
-In-Reply-To: <bb90b6cac2f4adcc6c80b7fddf54dbe0a6b8ff66.camel@suse.cz>
-References: <20210513075930.22657-1-ggherdovich@suse.cz>
-         <3fdc70c267d40561bed10fc722a8223a0b161200.camel@linux.intel.com>
-         <bb90b6cac2f4adcc6c80b7fddf54dbe0a6b8ff66.camel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.1-1 
+   d="scan'208";a="471679295"
+Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 May 2021 04:11:18 -0700
+Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lh9FN-0000Cr-Be; Thu, 13 May 2021 11:11:17 +0000
+Date:   Thu, 13 May 2021 19:10:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 63ab1d0f590ff7fe3234589aa977b5777661d091
+Message-ID: <609d0933.In58xE9iaHXYBtos%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-05-13 at 12:10 +0200, Giovanni Gherdovich wrote:
-> On Thu, 2021-05-13 at 02:24 -0700, Srinivas Pandruvada wrote:
-> > On Thu, 2021-05-13 at 09:59 +0200, Giovanni Gherdovich wrote:
-> > > On CPUs succeeding SKX, eg. ICELAKE_X, intel_pstate doesn't load
-> > > unless
-> > > CPUID advertises support for the HWP feature. Some OEMs, however,
-> > > may
-> > > offer
-> > > users the possibility to disable HWP from the BIOS config utility
-> > > by
-> > > altering the output of CPUID.
-> > 
-> > Is someone providing a utility? What is the case for broken HWP?
-> 
-> Yes, I know of at least one server manufacturer that ships a BIOS
-> config
-> utility where the user can disable HWP.
-> 
-> On such server machine, which has an ICELAKE_X CPU, if the user
-> unchecks HWP
-> via BIOS then intel_pstate will refuse to load saying:
-> 
->     intel_pstate: CPU model not supported
-> 
-> because ICELAKE_X is not in the list intel_pstate_cpu_ids (defined in
-> intel_pstate.c) of CPUs that intel_pstate supports when HWP is absent
-> from
-> CPUID; that list ends at SKYLAKE_X.
-> 
-> An alternative approach to register intel_pstate in the case I'm
-> describing
-> would be to add ICELAKE_X (and every CPU model after that, forever?)
-> to the
-> list intel_pstate_cpu_ids.
-This is not nice, but unlike client server CPUs don't get released
-often. There is couple of years in between.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 63ab1d0f590ff7fe3234589aa977b5777661d091  Merge branch 'acpi-dptf' into bleeding-edge
 
-> 
-> > It is possible that some user don't want to use HWP, because there
-> > workloads works better without HWP. But that doesn't mean HWP is
-> > broken.
-> 
-> That's true, a user may legitimate want to disable HWP, and we have
-> the
-> intel_pstate=no_hwp option for that. But for that option to work
-> CPUID must
-> still show that the CPU is HWP-capable; when disablement happens in
-> BIOS, it's
-> not the case.
-Correct.
+elapsed time: 1272m
 
-> 
-> The wording "hwp_broken_firmware" deliberately has a negative
-> connotation (the
-> intended meaning is: "firmware is broken, regarding HWP"), carrying
-> the
-> not-so-subtle message "OEM folks, please don't do this". My
-> understanding is
-> that the preferred way to disable HWP is with intel_pstate=no_hwp,
-> the
-> firmware should stay out of it.
-For me "broken" means that Intel has some bug, which is not the case,
-even if the intention is to carry message to OEM.
+configs tested: 67
+configs skipped: 2
 
-no_hwp is for disabling HWP even if the HWP is supported.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The problem is that if we override the supported CPU list using some
-kernel command line, some users may crash the system running on some
-old hardware where some of the MSRs we rely are not present. We don't
-read MSR in failsafe mode, so they will fault. We are checking some
-MSRs but not all. Also what will be default struct pstate_funcs *)id-
->driver_data if the cpu model doesn't match.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+x86_64                            allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210512
+i386                 randconfig-a001-20210512
+i386                 randconfig-a005-20210512
+i386                 randconfig-a004-20210512
+i386                 randconfig-a002-20210512
+i386                 randconfig-a006-20210512
+i386                 randconfig-a016-20210512
+i386                 randconfig-a014-20210512
+i386                 randconfig-a011-20210512
+i386                 randconfig-a015-20210512
+i386                 randconfig-a012-20210512
+i386                 randconfig-a013-20210512
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-I think better to add CPU model instead. We did that for SKX on user
-requests.
-
-Thanks,
-Srinivas
-
-> 
-> I hope this clarifies the problem (there is an ICELAKE_X somewhere
-> out there
-> that can't load intel_pstate, which is not nice) and the intention
-> (discouraging disablement of HWP via firmware).
-> 
-> 
-> Giovanni
-> 
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
