@@ -2,55 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF3C380286
-	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 05:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C89938037C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 07:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbhENDed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 May 2021 23:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhENDeb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 May 2021 23:34:31 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02416C061574;
-        Thu, 13 May 2021 20:33:20 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id o27so27599470qkj.9;
-        Thu, 13 May 2021 20:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dikOEtKsjpSnaSM6EeOCvys/XjUwuAHcvPk4ndAPdHw=;
-        b=R8a18YS6HJp3phFIY2QEf9KyEjYwVhdcNOeUaJyfG0KGADoFZ5pz9/xsXV9JlkcuEs
-         /Nr0nnynrNh/3r0YE2lk/n1yar78j+m8Z2Fe60fVaF/IL2JasnaR4TpZP7qVqtPyiMD+
-         8nMAOWDYFkaIjXgBX5cPZ8IKen5SRatdTarJKG4FSt7C3Q/awJUmaAspZj3d4TfnWkug
-         WFvLhAcEgpZsbKJOy2ZwNPmZl+iLnq+IB+jxGYBbqIYRehNUsXBePAuMvu0G7CDGNRow
-         0sueRRVqGIZddz3s0UOPYjXcJR29p7CKBdb2rUKNyZ5NB7oEoCyZMF0b2RO/NviwU6AK
-         9V8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dikOEtKsjpSnaSM6EeOCvys/XjUwuAHcvPk4ndAPdHw=;
-        b=AtMkunXrErGth9XOLYtTCP3f9yTjMPKEWzYo3PIzgD9gQfMxRzq8+hXsrpItJyFX+w
-         CePoYTIGV6653rP7hvWvno74WWUp/6YkM8wB9/8JKezCJC5oXw6jV+H7V2bbVT5lbujY
-         s/05+wkw13DSCJ5ZknzPd4a682YSyHBqdnll03dCkFIHyq14c/BcSsOC/+GN7X/piieT
-         JuAagjgALmvoamhc1XiQmPD078gWEZkpeEHMDAYNMMOx0pqFQL7KLf1AKuaSUUl5RXHU
-         OaRhxtNAUtqmIu/wiw4W5X3/3NaXG9NFmtjIMYx6wfiYAWCCJUXNAN3PydsOb/hNfJVp
-         +Dow==
-X-Gm-Message-State: AOAM530bhk7G/sVhY+49UVr9aYXQe1pGRP/BB7kuRAlO0FK2+eWY+oSo
-        qXpqdGSfkW9aITtEpKivGFA=
-X-Google-Smtp-Source: ABdhPJxKUhy1wkjiDM88Lx/kWnHYTq+k4qyZ1TgnfXEQA/btpVvWYWl1NPYV9wQnb2DoFgGXCNAICg==
-X-Received: by 2002:a05:620a:753:: with SMTP id i19mr27343988qki.320.1620963199268;
-        Thu, 13 May 2021 20:33:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v22sm3738581qtq.77.2021.05.13.20.33.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 May 2021 20:33:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        id S230410AbhENF7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 May 2021 01:59:24 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55366 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230125AbhENF7X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 May 2021 01:59:23 -0400
+X-UUID: 71e3dd490d024436a468134afbbef05c-20210514
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=uBkJYOBF3nBuM67e9q6aIA3FhUXGTxHk9W7aWmr1taQ=;
+        b=CRURKEIoQyjN2BTuA3xHiF8nn9FvZRudLmqJgCz8VIgX4alhwy9yWgjJi9+3l66aYOpmPLvuwcL+mQ0PMEVrtvjSYVlWeMmKDyh6qR1w8H21O+AZoJhW4QX7FgR9bBVzju7LLTmql+UMw0XpVpeXVZspvmq4jUcMHYpNEROLrKs=;
+X-UUID: 71e3dd490d024436a468134afbbef05c-20210514
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 945269689; Fri, 14 May 2021 13:58:02 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 14 May 2021 13:58:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 14 May 2021 13:58:01 +0800
+Message-ID: <f64f2419217c0c8e0e269db0b480abb08040adb4.camel@mediatek.com>
+Subject: Re: [PATCH v16 3/7] soc: mediatek: SVS: introduce MTK SVS engine
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
         Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -61,91 +41,84 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         HenryC Chen <HenryC.Chen@mediatek.com>,
         YT Lee <yt.lee@mediatek.com>,
         Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
+        "Charles Yang" <Charles.Yang@mediatek.com>,
         Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        "Mark Rutland" <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 14 May 2021 13:58:01 +0800
+In-Reply-To: <ec5f064f-41f1-f8f9-9a6d-fdf02c43cb8d@roeck-us.net>
 References: <20210428065440.3704-1-roger.lu@mediatek.com>
- <20210428065440.3704-4-roger.lu@mediatek.com>
- <20210506045115.GA767398@roeck-us.net>
- <7a7a07adedf5d3f430fecf81aed35c6321e5b634.camel@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v16 3/7] soc: mediatek: SVS: introduce MTK SVS engine
-Message-ID: <ec5f064f-41f1-f8f9-9a6d-fdf02c43cb8d@roeck-us.net>
-Date:   Thu, 13 May 2021 20:33:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+         <20210428065440.3704-4-roger.lu@mediatek.com>
+         <20210506045115.GA767398@roeck-us.net>
+         <7a7a07adedf5d3f430fecf81aed35c6321e5b634.camel@mediatek.com>
+         <ec5f064f-41f1-f8f9-9a6d-fdf02c43cb8d@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <7a7a07adedf5d3f430fecf81aed35c6321e5b634.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/13/21 8:10 PM, Roger Lu wrote:
-> Hi Guenter,
-> 
-> Sorry for the late reply and thanks for the notice.
-> 
-> On Wed, 2021-05-05 at 21:51 -0700, Guenter Roeck wrote:
->> On Wed, Apr 28, 2021 at 02:54:36PM +0800, Roger Lu wrote:
->>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->>> which calculates suitable SVS bank voltages to OPP voltage table.
->>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->>>
->>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
->>> ---
->>>   drivers/soc/mediatek/Kconfig   |   10 +
->>>   drivers/soc/mediatek/Makefile  |    1 +
->>>   drivers/soc/mediatek/mtk-svs.c | 1723
->>> ++++++++++++++++++++++++++++++++
->>>   3 files changed, 1734 insertions(+)
->>>   create mode 100644 drivers/soc/mediatek/mtk-svs.c
->>>
->>
->> [ ... ]
->>
->>> +
->>> +	svsp_irq = irq_of_parse_and_map(svsp->dev->of_node, 0);
->>> +	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL,
->>> svs_isr,
->>> +					svsp->irqflags, svsp->name,
->>> svsp);
->>
->> 0-day reports:
->>
->> drivers/soc/mediatek/mtk-svs.c:1663:7-32: ERROR:
->> 	Threaded IRQ with no primary handler requested without
->> IRQF_ONESHOT
->>
->> I would be a bit concerned about this. There is no primary (hard)
->> interrupt handler, meaning the hard interrupt may be re-enabled after
->> the default hard interrupt handler runs. This might result in endless
->> interrupts.
-> 
-> Oh, we add IRQF_ONESHOT in "svs_get_svs_mt8183_platform_data()" for
-> threaded irq. So, please kindly let us know if we need to set more
-> flags or any other potential risks we should be aware. Thanks in
-> advance.
-> 
+T24gVGh1LCAyMDIxLTA1LTEzIGF0IDIwOjMzIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
+PiBPbiA1LzEzLzIxIDg6MTAgUE0sIFJvZ2VyIEx1IHdyb3RlOg0KPiA+IEhpIEd1ZW50ZXIsDQo+
+ID4gDQo+ID4gU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5IGFuZCB0aGFua3MgZm9yIHRoZSBub3Rp
+Y2UuDQo+ID4gDQo+ID4gT24gV2VkLCAyMDIxLTA1LTA1IGF0IDIxOjUxIC0wNzAwLCBHdWVudGVy
+IFJvZWNrIHdyb3RlOg0KPiA+ID4gT24gV2VkLCBBcHIgMjgsIDIwMjEgYXQgMDI6NTQ6MzZQTSAr
+MDgwMCwgUm9nZXIgTHUgd3JvdGU6DQo+ID4gPiA+IFRoZSBTbWFydCBWb2x0YWdlIFNjYWxpbmco
+U1ZTKSBlbmdpbmUgaXMgYSBwaWVjZSBvZiBoYXJkd2FyZQ0KPiA+ID4gPiB3aGljaCBjYWxjdWxh
+dGVzIHN1aXRhYmxlIFNWUyBiYW5rIHZvbHRhZ2VzIHRvIE9QUCB2b2x0YWdlDQo+ID4gPiA+IHRh
+YmxlLg0KPiA+ID4gPiBUaGVuLCBEVkZTIGRyaXZlciBjb3VsZCBhcHBseSB0aG9zZSBTVlMgYmFu
+ayB2b2x0YWdlcyB0bw0KPiA+ID4gPiBQTUlDL0J1Y2sNCj4gPiA+ID4gd2hlbiByZWNlaXZpbmcg
+T1BQX0VWRU5UX0FESlVTVF9WT0xUQUdFLg0KPiA+ID4gPiANCj4gPiA+ID4gU2lnbmVkLW9mZi1i
+eTogUm9nZXIgTHUgPHJvZ2VyLmx1QG1lZGlhdGVrLmNvbT4NCj4gPiA+ID4gLS0tDQo+ID4gPiA+
+ICAgZHJpdmVycy9zb2MvbWVkaWF0ZWsvS2NvbmZpZyAgIHwgICAxMCArDQo+ID4gPiA+ICAgZHJp
+dmVycy9zb2MvbWVkaWF0ZWsvTWFrZWZpbGUgIHwgICAgMSArDQo+ID4gPiA+ICAgZHJpdmVycy9z
+b2MvbWVkaWF0ZWsvbXRrLXN2cy5jIHwgMTcyMw0KPiA+ID4gPiArKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKw0KPiA+ID4gPiAgIDMgZmlsZXMgY2hhbmdlZCwgMTczNCBpbnNlcnRpb25z
+KCspDQo+ID4gPiA+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvc29jL21lZGlhdGVrL210
+ay1zdnMuYw0KPiA+ID4gPiANCj4gPiA+IA0KPiA+ID4gWyAuLi4gXQ0KPiA+ID4gDQo+ID4gPiA+
+ICsNCj4gPiA+ID4gKwlzdnNwX2lycSA9IGlycV9vZl9wYXJzZV9hbmRfbWFwKHN2c3AtPmRldi0+
+b2Zfbm9kZSwgMCk7DQo+ID4gPiA+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycShz
+dnNwLT5kZXYsIHN2c3BfaXJxLA0KPiA+ID4gPiBOVUxMLA0KPiA+ID4gPiBzdnNfaXNyLA0KPiA+
+ID4gPiArCQkJCQlzdnNwLT5pcnFmbGFncywgc3ZzcC0NCj4gPiA+ID4gPm5hbWUsDQo+ID4gPiA+
+IHN2c3ApOw0KPiA+ID4gDQo+ID4gPiAwLWRheSByZXBvcnRzOg0KPiA+ID4gDQo+ID4gPiBkcml2
+ZXJzL3NvYy9tZWRpYXRlay9tdGstc3ZzLmM6MTY2Mzo3LTMyOiBFUlJPUjoNCj4gPiA+IAlUaHJl
+YWRlZCBJUlEgd2l0aCBubyBwcmltYXJ5IGhhbmRsZXIgcmVxdWVzdGVkIHdpdGhvdXQNCj4gPiA+
+IElSUUZfT05FU0hPVA0KPiA+ID4gDQo+ID4gPiBJIHdvdWxkIGJlIGEgYml0IGNvbmNlcm5lZCBh
+Ym91dCB0aGlzLiBUaGVyZSBpcyBubyBwcmltYXJ5IChoYXJkKQ0KPiA+ID4gaW50ZXJydXB0IGhh
+bmRsZXIsIG1lYW5pbmcgdGhlIGhhcmQgaW50ZXJydXB0IG1heSBiZSByZS1lbmFibGVkDQo+ID4g
+PiBhZnRlcg0KPiA+ID4gdGhlIGRlZmF1bHQgaGFyZCBpbnRlcnJ1cHQgaGFuZGxlciBydW5zLiBU
+aGlzIG1pZ2h0IHJlc3VsdCBpbg0KPiA+ID4gZW5kbGVzcw0KPiA+ID4gaW50ZXJydXB0cy4NCj4g
+PiANCj4gPiBPaCwgd2UgYWRkIElSUUZfT05FU0hPVCBpbiAic3ZzX2dldF9zdnNfbXQ4MTgzX3Bs
+YXRmb3JtX2RhdGEoKSIgZm9yDQo+ID4gdGhyZWFkZWQgaXJxLiBTbywgcGxlYXNlIGtpbmRseSBs
+ZXQgdXMga25vdyBpZiB3ZSBuZWVkIHRvIHNldCBtb3JlDQo+ID4gZmxhZ3Mgb3IgYW55IG90aGVy
+IHBvdGVudGlhbCByaXNrcyB3ZSBzaG91bGQgYmUgYXdhcmUuIFRoYW5rcyBpbg0KPiA+IGFkdmFu
+Y2UuDQo+ID4gDQo+IA0KPiBBZnRlciByZXZpZXdpbmcgdGhlIGNvZGUsIEkgdGhpbmsgdGhpcyB3
+YXMgYWN0dWFsbHkgYSBmYWxzZSBhbGFybSwNCj4gYXQgbGVhc3QgaWYgc3ZzcC0+aXJxZmxhZ3Mg
+YWx3YXlzIGluY2x1ZGVzIElSUUZfT05FU0hPVC4NCj4gVGhlIGNvZGUgaXMga2luZCBvZiB1bnVz
+dWFsLCB0aG91Z2guIFVubGVzcyBJIGFtIG1pc3Npbmcgc29tZXRoaW5nLA0KPiBzdnNwLT5pcnFm
+bGFncyBpcyBvbmx5IHNldCBpbiBvbmUgcGxhY2UgYW5kIGl0IGlzIGFsd2F5cyBzZXQNCj4gdG8g
+SVJRRl9UUklHR0VSX0xPVyB8IElSUUZfT05FU0hPVC4gSWYgdGhlcmUgaXMgYSByZW1vdGUgY2hh
+bmNlDQo+IHRoYXQgdGhlIGZsYWcgaXMgZXZlciBkaWZmZXJlbnQsIGl0IHdvdWxkIGhhdmUgYmVl
+biBiZXR0ZXIgKGFuZCBsZXNzDQo+IGNvbmZ1c2luZykgdG8gc3BlY2lmeSBJUlFGX09ORVNIT1Qg
+ZGlyZWN0bHkgd2hlbiByZXF1ZXN0aW5nIHRoZQ0KPiBpbnRlcnJ1cHQgKGJlY2F1c2UgaXQgaXMg
+YWx3YXlzIG5lZWRlZCwgbm8gbWF0dGVyIHdoaWNoIFNPQykuDQo+IElmIHRoZSBmbGFncyBhcmUg
+YWx3YXlzIHRoZSBzYW1lLCB0aGVyZSBpcyBubyByZWFzb24gZm9yIGhhdmluZw0KPiB0aGUgc3Zz
+cC0+aXJxZmxhZ3MgdmFyaWFibGUgaW4gdGhlIGZpcnN0IHBsYWNlLg0KDQpUaGFua3MgZm9yIHRo
+ZSBhZHZpY2UuIFdlIHN0aWxsIG5lZWQgc3ZzcC0+aXJxZmxhZ3MgZm9yIGN1c3RvbWl6aW5nDQpk
+aWZmZXJlbnQgU29DIHJlcXVpcmVtZW50IGFzIFsxXSBhbmQgSSdsbCBzcGVjaWZ5IElSUUZfT05F
+U0hPVCBkaXJlY3RseQ0KYXMgWzJdIGluIHRoZSBuZXh0IHZlcnNpb24uDQoNClsxXQ0KbXQ4MTgz
+IHNldHRpbmc6IHN2c3AtPmlycWZsYWdzID0gSVJRRl9UUklHR0VSX0xPVyB8IElSUUZfT05FU0hP
+VDsNCm10ODE5MiBzZXR0aW5nOiBzdnNwLT5pcnFmbGFncyA9IElSUUZfVFJJR0dFUl9ISUdIIHwg
+SVJRRl9PTkVTSE9UOw0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzE0
+MTkzMDkvIChtdDgxOTIpDQoNClsyXQ0KcmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycShz
+dnNwLT5kZXYsIHN2c3BfaXJxLCBOVUxMLCBzdnNfaXNyLA0KCQkJCXN2c3AtPmlycWZsYWdzIHwg
+SVJRRl9PTkVTSE9ULA0KCQkJCXN2c3AtPm5hbWUsIHN2c3ApOw0KPiANCj4gVGhhbmtzLA0KPiBH
+dWVudGVyDQo=
 
-After reviewing the code, I think this was actually a false alarm,
-at least if svsp->irqflags always includes IRQF_ONESHOT.
-The code is kind of unusual, though. Unless I am missing something,
-svsp->irqflags is only set in one place and it is always set
-to IRQF_TRIGGER_LOW | IRQF_ONESHOT. If there is a remote chance
-that the flag is ever different, it would have been better (and less
-confusing) to specify IRQF_ONESHOT directly when requesting the
-interrupt (because it is always needed, no matter which SOC).
-If the flags are always the same, there is no reason for having
-the svsp->irqflags variable in the first place.
-
-Thanks,
-Guenter
