@@ -2,113 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B02380A41
-	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 15:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED25B380B9C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 16:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbhENNRq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 May 2021 09:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbhENNRq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 May 2021 09:17:46 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9802C061574;
-        Fri, 14 May 2021 06:16:33 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id a2so22025698lfc.9;
-        Fri, 14 May 2021 06:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4TXN1aP2OtPYFWNRZZgEicguo9V9B76iGcfEYyYScQk=;
-        b=vScf2eNYTfRrw0u2cylCVtUG8GoW+pklgsevEe1IVg4Ac5Wtf9/2wbbgWphSfzznBo
-         oiFDiH4VW6cbnt4CmVk+ygZAskCfGrvwVTa9YQpMYDif61fo1fecNDei5GP7H4mTBT3r
-         gNbYA2DAiZ/JMfwz19jSxDEexKZY4VMXXv67jRBwTcgZTuQRRJ/HvBNUsP507QRqWI/0
-         cGy/HdiMerUqCEY7rV9dbVZxXv7Be0GLPGk0wDl3CpUGqCQLOuRXZS1sqsFwFxrJ9g4b
-         YFxwJfv0Lf85ylHkWCYA/FaXvvdB/wvEoJ1EZ7dYSSMDjeb7Q61CJZCYVHeWoPZo+zZo
-         Us2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4TXN1aP2OtPYFWNRZZgEicguo9V9B76iGcfEYyYScQk=;
-        b=JIL/602nuN1vZrJG9pwU2IU8jHtQ1saGii1OU9xYVpWYfJe/4nE3buGTdhRbewpaX9
-         sm57nMMxK4KG8L97FNiaA93Sep/x/yLJX8nixOFcaGWiZsjSYxEoVrOktTUFKfxbI8ri
-         ze1RUhc8/XOD0tTg7v3g6LQ6Qb+d9GLk2+ADUnWOq5w2bZyT8dTMWk98V9eYnPsiSC0Y
-         8i6aabkHu48Sb37++k1jwUmGVJTqLnlMgo7AjqflykL9xbQcj3l4zuKbF0GzNg2JnyrC
-         YIRAlamj7fovbuufX/4pxehihud7F0Bh8777NCbDD2fWBjtVN4ITYzgTaumb3iYYo25Y
-         386A==
-X-Gm-Message-State: AOAM530iAhMYXUrh+r+djiRncZjCGyNU7hBF5av1BizK2J1J/tz9H2mq
-        W9IDhALpVI39PcMC96XJxPcnASgx7iY=
-X-Google-Smtp-Source: ABdhPJx6/NsKPPbhS5G3Qsi20vEoqvEUN3Qei6rmWYoxj6g9tTS4jF8tNCzPblvUeRhMFN1kHXZqKw==
-X-Received: by 2002:a19:6d1b:: with SMTP id i27mr380374lfc.596.1620998192232;
-        Fri, 14 May 2021 06:16:32 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
-        by smtp.googlemail.com with ESMTPSA id f4sm1100897ljn.38.2021.05.14.06.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 May 2021 06:16:31 -0700 (PDT)
-Subject: Re: [PATCH v1 2/2] power: supply: sbs-battery: Fall back to Li-ion
- battery type for bq20z75
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210510220827.11595-1-digetx@gmail.com>
- <20210510220827.11595-2-digetx@gmail.com>
- <20210513153136.76rr3ngjhuqy7b7q@earth.universe>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <aebfc4c1-1b4e-c34f-62d9-e8c53e825834@gmail.com>
-Date:   Fri, 14 May 2021 16:16:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234284AbhENOTv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 May 2021 10:19:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230097AbhENOTu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 May 2021 10:19:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C73C61408;
+        Fri, 14 May 2021 14:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621001918;
+        bh=c7dfcDSUedN/VQoQv/XM8fRZG2HhOOW57vq4i3XI37w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OQ+w8jq41p/pK8QPzt383K43rnWDvG9IebEZzoZj7WKu0EgpEM3a4OB9pZnDV5/lC
+         MxVWpkmQpp2inFtKTGn6bM1fAR+gA+04aBXFsHrR34k+VM9wQUFTEenWCHNxw8mV5S
+         Rr3kzMIGVT+KJ8CgQJfj5jt0KJvZQg0gfBfD7ImGjDrz6TXEWqjpD0nn1NC8t6bBSV
+         Y2m7PBzQCXheFvsYF9jZqx3chr66nJXcElBiHfvACPcxjY0VNJoiSeft4M6sPjRp9i
+         /15Ta8qfh6z3LjSIBpnNeZl0hFKEsFjvWWGKfF/qxDT0jcgdTLCyifuXI2D1S1QhIL
+         whK9i7cORQs2g==
+Date:   Fri, 14 May 2021 16:18:25 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Edward Cree <ecree.xilinx@gmail.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+Message-ID: <20210514161825.4e4c0d3e@coco.lan>
+In-Reply-To: <8b8bc929-2f07-049d-f24c-cb1f1d85bbaa@gmail.com>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+        <20210514102118.1b71bec3@coco.lan>
+        <61c286b7afd6c4acf71418feee4eecca2e6c80c8.camel@infradead.org>
+        <8b8bc929-2f07-049d-f24c-cb1f1d85bbaa@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20210513153136.76rr3ngjhuqy7b7q@earth.universe>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-13.05.2021 18:31, Sebastian Reichel пишет:
-> Hi,
-> 
-> On Tue, May 11, 2021 at 01:08:27AM +0300, Dmitry Osipenko wrote:
->> The older bq20z75 controller doesn't support reporting the battery type
->> and the type is Li-ion in this case.
->>
->> Tested-by: Antoni Aloy Torrens <aaloytorrens@gmail.com> # TF101
->> Tested-by: Nikola Milosavljević <mnidza@outlook.com> # TF101
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
-> 
-> If it does not support reporting the battery type you should get an
-> error from sbs_get_battery_string_property. Obviously a string has
-> been returned, or you would not end up that far in the code. What
-> string do you see?
+Em Fri, 14 May 2021 12:08:36 +0100
+Edward Cree <ecree.xilinx@gmail.com> escreveu:
 
-There is no visible error. Where the error condition should be set?
+> For anyone who doesn't know about it: X has this wonderful thing called
+>  the Compose key[1].  For instance, type =E2=8E=84--- to get =E2=80=94, o=
+r =E2=8E=84<" for =E2=80=9C.
+> Much more mnemonic than Unicode codepoints; and you can extend it with
+>  user-defined sequences in your ~/.XCompose file.
 
-The returned string is:
+Good tip. I haven't use composite for years, as US-intl with dead keys is
+enough for 99.999% of my needs.=20
 
-sbs-battery 5-000b: Unknown chemistry: OAI0
+Btw, at least on Fedora with Mate, Composite is disabled by default. It has
+to be enabled first using the same tool that allows changing the Keyboard
+layout[1].
 
-> Considering BQ20Z65 and BQ20Z75 also support Li-Po I don't think
-> it's a good idea to fall back to Li-Ion. Kernel should never lie
-> about this, since I know some people use userspace based charging
-> setup and the charge limits are different for Li-Ion and Li-Po. When
-> reaching this place we do not know 100%, that it is a Li-ion, so
-> returning UNKNOWN is the safe option.
-> 
-> If you know, that your device (TF101) only supports Li-Ion
-> batteries, we can add a device specific override. But is this worth
-> the added maintenance burden? What is your plan for using this
-> information?
+Yet, typing an EN DASH for example, would be "<composite>--.", with is 4
+keystrokes instead of just two ('--'). It means twice the effort ;-)
 
-There is no plan of using that information. Previously battery type was
-reported properly by userspace, then it regressed. There are other older
-device-trees in upstream which should have seen the same regression,
-apparently nobody noticed or cared about it. Yours variant of solution
-will take more effort, in this case it should be better to leave the
-regression as-is for now.
+[1] KDE, GNome, Mate, ... have different ways to enable it and to=20
+    select what key would be considered <composite>:
+
+	https://dry.sailingissues.com/us-international-keyboard-layout.html
+	https://help.ubuntu.com/community/ComposeKey
+
+Thanks,
+Mauro
