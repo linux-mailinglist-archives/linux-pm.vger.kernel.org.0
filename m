@@ -2,192 +2,333 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E113938050F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 10:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3F53805A4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 10:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbhENIWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 May 2021 04:22:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233416AbhENIWk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 May 2021 04:22:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C728061408;
-        Fri, 14 May 2021 08:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620980488;
-        bh=gH2wh+Hc0GOhQOIRbo/h4JAX62sDUeKs2tmsR+5ILos=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e4qbUbfx0hxY+yj5rwe10X7fv77kQb6ZtXwJRT57564V2F/AP6l30KEqmfnQ8Z9/m
-         GbE6KTSFaLVgK/IALz8lgNCCJI09Wv6ypJxw7X8+NYsSH+qLTaA3rBVUJFbnXj6RkO
-         OLP+toeaBJ59mDypgIfhUX1EfHY2OFa2Ex63sriWaBCbSg8WSO+y0qdrgc5mMfEUKi
-         zoIKuKJCbIWchz7V1P1kNvQQPYr/hVEIXMXwl9v4IpEIdTp9mOKu3ZsGi5lbDjocf7
-         LN9AhGRwhMXdDuYb3SF+qI1QUoGfgKM56pIxwAOv5jsDOpM5r9sAA4fr4BFVLy6RmQ
-         IhAi7M7Jw2dRw==
-Date:   Fri, 14 May 2021 10:21:18 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
- symbols
-Message-ID: <20210514102118.1b71bec3@coco.lan>
-In-Reply-To: <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
-        <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S230176AbhENI5x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 May 2021 04:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230168AbhENI5x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 May 2021 04:57:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FCAC06174A
+        for <linux-pm@vger.kernel.org>; Fri, 14 May 2021 01:56:41 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id n3so3741880plf.7
+        for <linux-pm@vger.kernel.org>; Fri, 14 May 2021 01:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/4IU+cIjO072ANjiPhOXacPYOuvXpydGpm2dpjUQcws=;
+        b=PujwjuYSsw1K7oz/Baa46fTUrvXyBOk+g6hieRKjmG+f7YeqW0uHprPn9d3rMotYkZ
+         5gvgz5FP/KAyphMmLXWAOzG42xbdoeCUWs9a/ghrpYKQP/7Uf1DcYZG8ojeE2HKzZamE
+         gfQPom7u6TpEJS/mTlzFmrwD5g6DeAObdKJfI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/4IU+cIjO072ANjiPhOXacPYOuvXpydGpm2dpjUQcws=;
+        b=HhGxxE1diNVf4s17U6AIkg2qotDRqIUEPVCRUpxqffFpLIKIJmSZSrVsLJ8HD9nuXf
+         PFKuJaCQyTRcq5ERnrqihdyYC/fKOpVIOW62iC8Ga12olGo40TKZKw9dIz6Btot9OCTS
+         /EkeU9kDuHl+Oa9Rt8YwRzDKNIy2hFxsehjY6Onbz7V4mGSqDYgPhw4K3jS6kNDhWCQk
+         pkNskQyoGS2RzrxZsyKslh7StKlSYLffbXWWOi8oPubBd9FkaVXBdWt+qBc+HuP03dP9
+         Xc6sjwCptpBw3vpYA7c8bWBajzsqOXF8aHr9PrQMy+8G+sL4hKsfnghj8qAmivFW3FqP
+         TjhA==
+X-Gm-Message-State: AOAM532hZ4D0PI3uJzG56Y2acZJgQqegk9rs7imt+BB+RTmD/ZKM+0nG
+        bn049nVxLJtngnVJtFBj/J5vfEJ/G6OVNXG2xkcAtQ==
+X-Google-Smtp-Source: ABdhPJwVJ9ZJjOxv1erPjtCTW6Kynzb4CnV+W80WAiAEKwNLnLMPn0ZApCQ/CcDyflbYiMi78pFiOflohG/cYOuWuSY=
+X-Received: by 2002:a17:90a:be10:: with SMTP id a16mr9578779pjs.112.1620982600675;
+ Fri, 14 May 2021 01:56:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20210513020308.4011440-1-ikjn@chromium.org> <20210513110045.5yrootk4bv6u6lya@earth.universe>
+In-Reply-To: <20210513110045.5yrootk4bv6u6lya@earth.universe>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 14 May 2021 16:56:29 +0800
+Message-ID: <CAATdQgAPW4hq1R7WA3wSFS7L3jas5-CPSaEgRWL+gzx7Lokdeg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v2] power: supply: sbs-battery: cache constant
+ string properties
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, Hsinyi Wang <hsinyi@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Em Wed, 12 May 2021 18:07:04 +0100
-David Woodhouse <dwmw2@infradead.org> escreveu:
+Hi,
+Thanks for the review!
 
-> On Wed, 2021-05-12 at 14:50 +0200, Mauro Carvalho Chehab wrote:
-> > Such conversion tools - plus some text editor like LibreOffice  or simi=
-lar  - have
-> > a set of rules that turns some typed ASCII characters into UTF-8 altern=
-atives,
-> > for instance converting commas into curly commas and adding non-breakab=
-le
-> > spaces. All of those are meant to produce better results when the text =
-is
-> > displayed in HTML or PDF formats. =20
->=20
-> And don't we render our documentation into HTML or PDF formats?=20
+On Thu, May 13, 2021 at 7:00 PM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Thu, May 13, 2021 at 10:03:08AM +0800, Ikjoon Jang wrote:
+> > Currently sbs-battery supports three string properties -
+> > manufacturer, model_name, and chemistry. Buffers for those
+> > properties are currently defined as global variables.
+> >
+> > This patch moves those global variables into struct sbs_info
+> > and cache/reuse them as they are all constant values.
+>
+> Thanks, that's a nice cleanup. I have a two comments, though.
+> Please find them inline.
+>
+> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> >
+> > ---
+> > Resend v2: Adds Tested-by, escape from v1 mail thread.
+> >
+> > Changes in v2:
+> > - change function name of sbs_get_battery_string_property()
+> >   to sbs_get_constant_string()
+> > - use cached string properties
+> > - use cached technology value in sbs_get_chemistry()
+> >
+> >  drivers/power/supply/sbs-battery.c | 140 +++++++++++++++++------------
+> >  1 file changed, 82 insertions(+), 58 deletions(-)
+> >
+> > diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+> > index 4bf92831cb06..414de9bc47bf 100644
+> > --- a/drivers/power/supply/sbs-battery.c
+> > +++ b/drivers/power/supply/sbs-battery.c
+> > @@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properties[] = {
+> >  /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
+> >  #define SBS_FLAGS_TI_BQ20ZX5         BIT(0)
+> >
+> > +static const enum power_supply_property string_properties[] = {
+> > +     POWER_SUPPLY_PROP_TECHNOLOGY,
+> > +     POWER_SUPPLY_PROP_MANUFACTURER,
+> > +     POWER_SUPPLY_PROP_MODEL_NAME,
+> > +};
+> > +
+> > +#define NR_STRING_BUFFERS    ARRAY_SIZE(string_properties)
+> > +
+> >  struct sbs_info {
+> >       struct i2c_client               *client;
+> >       struct power_supply             *power_supply;
+> > @@ -201,11 +209,22 @@ struct sbs_info {
+> >       struct delayed_work             work;
+> >       struct mutex                    mode_lock;
+> >       u32                             flags;
+> > +     int                             technology;
+> > +     char                            strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+> >  };
+> >
+> > -static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+> > -static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+> > -static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
+> > +static char *sbs_get_string_buf(struct sbs_info *chip,
+> > +                             enum power_supply_property psp)
+> > +{
+> > +     int i = 0;
+> > +
+> > +     for (i = 0; i < NR_STRING_BUFFERS; i++)
+> > +             if (string_properties[i] == psp)
+> > +                     return chip->strings[i];
+> > +
+> > +     return ERR_PTR(-EINVAL);
+> > +}
+> > +
+> >  static bool force_load;
+> >
+> >  static int sbs_read_word_data(struct i2c_client *client, u8 address);
+> > @@ -639,17 +658,45 @@ static int sbs_get_battery_property(struct i2c_client *client,
+> >       return 0;
+> >  }
+> >
+> > -static int sbs_get_battery_string_property(struct i2c_client *client,
+> > -     int reg_offset, enum power_supply_property psp, char *val)
+> > +static int sbs_get_property_index(struct i2c_client *client,
+> > +     enum power_supply_property psp)
+> >  {
+> > -     s32 ret;
+> > +     int count;
+> > +
+> > +     for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+> > +             if (psp == sbs_data[count].psp)
+> > +                     return count;
+> >
+> > -     ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
+> > +     dev_warn(&client->dev,
+> > +             "%s: Invalid Property - %d\n", __func__, psp);
+> >
+> > -     if (ret < 0)
+> > -             return ret;
+> > +     return -EINVAL;
+> > +}
+> >
+> > -     return 0;
+> > +static const char *sbs_get_constant_string(struct sbs_info *chip,
+> > +                     enum power_supply_property psp)
+> > +{
+> > +     int ret;
+> > +     char *buf;
+> > +     u8 addr;
+> > +
+> > +     buf = sbs_get_string_buf(chip, psp);
+> > +     if (IS_ERR(buf))
+> > +             return buf;
+> > +
+> > +     if (!buf[0]) {
+> > +             ret = sbs_get_property_index(chip->client, psp);
+> > +             if (ret < 0)
+> > +                     return ERR_PTR(ret);
+> > +
+> > +             addr = sbs_data[ret].addr;
+> > +
+> > +             ret = sbs_read_string_data(chip->client, addr, buf);
+> > +             if (ret < 0)
+> > +                     return ERR_PTR(ret);
+> > +     }
+> > +
+> > +     return buf;
+> >  }
+> >
+> >  static void  sbs_unit_adjustment(struct i2c_client *client,
+> > @@ -772,48 +819,34 @@ static int sbs_get_battery_serial_number(struct i2c_client *client,
+> >       return 0;
+> >  }
+> >
+> > -static int sbs_get_property_index(struct i2c_client *client,
+> > -     enum power_supply_property psp)
+> > -{
+> > -     int count;
+> > -     for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+> > -             if (psp == sbs_data[count].psp)
+> > -                     return count;
+> > -
+> > -     dev_warn(&client->dev,
+> > -             "%s: Invalid Property - %d\n", __func__, psp);
+> > -
+> > -     return -EINVAL;
+> > -}
+> > -
+> > -static int sbs_get_chemistry(struct i2c_client *client,
+> > +static int sbs_get_chemistry(struct sbs_info *chip,
+> >               union power_supply_propval *val)
+> >  {
+> > -     enum power_supply_property psp = POWER_SUPPLY_PROP_TECHNOLOGY;
+> > -     int ret;
+> > +     const char *chemistry;
+> >
+> > -     ret = sbs_get_property_index(client, psp);
+> > -     if (ret < 0)
+> > -             return ret;
+> > +     if (chip->technology >= POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> > +             return chip->technology;
+>
+> This obviously must look like this:
+>
+> val->intval = chip->technology;
+> return 0;
+>
+> With your code you should only see correct technology for the
+> first read of the technology property. How did you test your
+> changes?
 
-Yes.
+yeah, you're right. That's really a problem
+and easily noticeable before sending ;-(
+Let me test battery properties manually this time.
 
-> Are
-> some of those non-breaking spaces not actually *useful* for their
-> intended purpose?
+>
+> > -     ret = sbs_get_battery_string_property(client, ret, psp,
+> > -                                           chemistry);
+> > -     if (ret < 0)
+> > -             return ret;
+> > +     chemistry = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_TECHNOLOGY);
+> > +
+> > +     if (IS_ERR(chemistry))
+> > +             return PTR_ERR(chemistry);
+> >
+> >       if (!strncasecmp(chemistry, "LION", 4))
+> > -             val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
+> > +             chip->technology = POWER_SUPPLY_TECHNOLOGY_LION;
+> >       else if (!strncasecmp(chemistry, "LiP", 3))
+> > -             val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
+> > +             chip->technology = POWER_SUPPLY_TECHNOLOGY_LIPO;
+> >       else if (!strncasecmp(chemistry, "NiCd", 4))
+> > -             val->intval = POWER_SUPPLY_TECHNOLOGY_NiCd;
+> > +             chip->technology = POWER_SUPPLY_TECHNOLOGY_NiCd;
+> >       else if (!strncasecmp(chemistry, "NiMH", 4))
+> > -             val->intval = POWER_SUPPLY_TECHNOLOGY_NiMH;
+> > +             chip->technology = POWER_SUPPLY_TECHNOLOGY_NiMH;
+> >       else
+> > -             val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> > +             chip->technology = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> >
+> > -     if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> > -             dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
+> > +     if (chip->technology == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> > +             dev_warn(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
+> > +
+> > +     val->intval = chip->technology;
+> >
+> >       return 0;
+> >  }
+> > @@ -857,6 +890,7 @@ static int sbs_get_property(struct power_supply *psy,
+> >       int ret = 0;
+> >       struct sbs_info *chip = power_supply_get_drvdata(psy);
+> >       struct i2c_client *client = chip->client;
+> > +     const char *str;
+> >
+> >       if (chip->gpio_detect) {
+> >               ret = gpiod_get_value_cansleep(chip->gpio_detect);
+> > @@ -882,7 +916,7 @@ static int sbs_get_property(struct power_supply *psy,
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_TECHNOLOGY:
+> > -             ret = sbs_get_chemistry(client, val);
+> > +             ret = sbs_get_chemistry(chip, val);
+> >               if (ret < 0)
+> >                       break;
+> >
+> > @@ -934,23 +968,12 @@ static int sbs_get_property(struct power_supply *psy,
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_MODEL_NAME:
+> > -             ret = sbs_get_property_index(client, psp);
+> > -             if (ret < 0)
+> > -                     break;
+> > -
+> > -             ret = sbs_get_battery_string_property(client, ret, psp,
+> > -                                                   model_name);
+> > -             val->strval = model_name;
+> > -             break;
+> > -
+> >       case POWER_SUPPLY_PROP_MANUFACTURER:
+> > -             ret = sbs_get_property_index(client, psp);
+> > -             if (ret < 0)
+> > -                     break;
+> > -
+> > -             ret = sbs_get_battery_string_property(client, ret, psp,
+> > -                                                   manufacturer);
+> > -             val->strval = manufacturer;
+> > +             str = sbs_get_constant_string(chip, psp);
+> > +             if (IS_ERR(str))
+> > +                     ret = PTR_ERR(str);
+> > +             else
+> > +                     val->strval = str;
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+> > @@ -1097,6 +1120,7 @@ static int sbs_probe(struct i2c_client *client)
+> >       psy_cfg.of_node = client->dev.of_node;
+> >       psy_cfg.drv_data = chip;
+> >       chip->last_state = POWER_SUPPLY_STATUS_UNKNOWN;
+> > +     chip->technology = -1;
+> >       mutex_init(&chip->mode_lock);
+> >
+> >       /* use pdata if available, fall back to DT properties,
+>
+> You need to invalidate the cached values when battery is unplugged,
+> since a different battery may be attached afterwards.
 
-No.
+Yes, correct,
+I'll add the codes in sbs_update_presence() when !(is_present)
+in v3, thanks again.
 
-The thing is: non-breaking space can cause a lot of problems.
-
-We even had to disable Sphinx usage of non-breaking space for
-PDF outputs, as this was causing bad LaTeX/PDF outputs.
-
-See, commit: 3b4c963243b1 ("docs: conf.py: adjust the LaTeX document output=
-")
-
-The afore mentioned patch disables Sphinx default behavior of
-using NON-BREAKABLE SPACE on literal blocks and strings, using this
-special setting: "parsedliteralwraps=3Dtrue".
-
-When NON-BREAKABLE SPACE were used on PDF outputs, several parts of=20
-the media uAPI docs were violating the document margins by far,
-causing texts to be truncated.
-
-So, please **don't add NON-BREAKABLE SPACE**, unless you test
-(and keep testing it from time to time) if outputs on all
-formats are properly supporting it on different Sphinx versions.
-
--
-
-Also, most of those came from conversion tools, together with other
-eccentricities, like the usage of U+FEFF (BOM) character at the
-start of some documents. The remaining ones seem to came from=20
-cut-and-paste.
-
-For instance,  bibliographic references (there are a couple of
-those on media) sometimes have NON-BREAKABLE SPACE. I'm pretty
-sure that those came from cut-and-pasting the document titles
-from their names at the original PDF documents or web pages that
-are referenced.
-
-> > While it is perfectly fine to use UTF-8 characters in Linux, and specia=
-lly at
-> > the documentation,  it is better to  stick to the ASCII subset  on such
-> > particular case,  due to a couple of reasons:
-> >=20
-> > 1. it makes life easier for tools like grep; =20
->=20
-> Barely, as noted, because of things like line feeds.
-
-You can use grep with "-z" to seek for multi-line strings(*), Like:
-
-	$ grep -Pzl 'grace period started,\s*then' $(find Documentation/ -type f)
-	Documentation/RCU/Design/Data-Structures/Data-Structures.rst
-
-(*) Unfortunately, while "git grep" also has a "-z" flag, it
-    seems that this is (currently?) broken with regards of handling multili=
-nes:
-
-	$ git grep -Pzl 'grace period started,\s*then'
-	$
-
-> > 2. they easier to edit with the some commonly used text/source
-> >    code editors. =20
->=20
-> That is nonsense. Any but the most broken and/or anachronistic
-> environments and editors will be just fine.
-
-Not really.
-
-I do use a lot of UTF-8 here, as I type texts in Portuguese, but I rely
-on the US-intl keyboard settings, that allow me to type as "'a" for =C3=A1.
-However, there's no shortcut for non-Latin UTF-codes, as far as I know.
-
-So, if would need to type a curly comma on the text editors I normally=20
-use for development (vim, nano, kate), I would need to cut-and-paste
-it from somewhere[1].
-
-[1] If I have a table with UTF-8 codes handy, I could type the UTF-8=20
-    number manually... However, it seems that this is currently broken=20
-    at least on Fedora 33 (with Mate Desktop and US intl keyboard with=20
-    dead keys).
-
-    Here, <CTRL><SHIFT>U is not working. No idea why. I haven't=20
-    test it for *years*, as I din't see any reason why I would
-    need to type UTF-8 characters by numbers until we started
-    this thread.
-=20
-In practice, on the very rare cases where I needed to write
-non-Latin utf-8 chars (maybe once in a year or so, Like when I
-would need to use a Greek letter or some weird symbol), there changes
-are high that I wouldn't remember its UTF-8 code.
-
-So, If I need to spend time to seek for an specific symbol, after
-finding it, I just cut-and-paste it.
-
-But even in the best case scenario where I know the UTF-8 and
-<CTRL><SHIFT>U works, if I wanted to use, for instance, a curly
-comma, the keystroke sequence would be:
-
-	<CTRL><SHIFT>U201csome string<CTRL><SHIFT>U201d
-
-That's a lot harder than typing and has a higher chances of
-mistakenly add a wrong symbol than just typing:
-
-	"some string"
-
-Knowing that both will produce *exactly* the same output, why
-should I bother doing it the hard way?
-
--
-
-Now, I'm not arguing that you can't use whatever UTF-8 symbol you
-want on your docs. I'm just saying that, now that the conversion=20
-is over and a lot of documents ended getting some UTF-8 characters
-by accident, it is time for a cleanup.
-
-Thanks,
-Mauro
+>
+> -- Sebastian
