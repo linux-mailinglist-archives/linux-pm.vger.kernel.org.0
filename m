@@ -2,91 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DF73803FF
-	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 09:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E113938050F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 May 2021 10:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbhENHIl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 May 2021 03:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbhENHIl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 May 2021 03:08:41 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2879EC061574;
-        Fri, 14 May 2021 00:07:30 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t3so1116298edc.7;
-        Fri, 14 May 2021 00:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kAz87Mlx4WSb3cL27SNEkL0I2UewaZV6o5vYLNdlON4=;
-        b=UuXtFRUP0O+sV7ASRFo0cUu1obDqwq9kWCVBEGqWbIE1/oq3zJkToBPnlcQR3LxSNh
-         iw1Q8hDqukIyY8MIeNUvcGHc0vH0kOOYqlnBlYq5qdkK0IN55ZaMWtsjbcvQaKf5xtIc
-         PbIrB7LuKBzklzoyB8+wkMkUiCcDxGXFePOj9BLPY/hcU/tOjiNg20FHu55zXq2WEeBV
-         ehEeHFT1FbPxFaLrasK0zLM9eaBWGeeNNPnWr2yOI20x6de2n8w7PYwuEq9fg8ZqBVfL
-         CjuVNDZJ9b9rukAyI8bdd9jY1Q3VwBH+ECBtals1Mj7QuqpxX7ejGBYQLs42m10+cjXw
-         1XuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kAz87Mlx4WSb3cL27SNEkL0I2UewaZV6o5vYLNdlON4=;
-        b=YNeUeZVbfaX2vbUzquA3ZN0z6kDuSbgglZek4cgE496lsP7yGzGgod+tg/N/jjFAmH
-         SK1kapUDlUYhdidvuQXwjubvlzQKL3ZFVukEWAM7lkSus3m1Xfe2/zQUQBxVonROpZUn
-         TAeGr5lAYcG/uZ9h1mhnFfRqoQKKsYbYO+qkvNBeeh+YU2L3mfoJUSg/KAElcx3A+Y9C
-         UUIqU2oiwaq0qW+St6XaCImBMrq/V9xIlKWo52n6q+LtUUAvwa8Cij4sqb9VjqrlcBN3
-         wxx3LkI8597pJPh4q9ZkX25B6SCX3D4zRMEaMSiWvEgz7qyL/+jhKddR5qahcp0FhGs4
-         /b8g==
-X-Gm-Message-State: AOAM532Um71ZGrDVv7RdCfePdkNlUe51/wrH9T5+IQDmnV6TWPy9+I/b
-        6M84tiEPyCWeTwD11RDpNZU=
-X-Google-Smtp-Source: ABdhPJzkToVSfe5UqgCC/8i7ain6D8alwEi8DJsz9F+jFa7GnmwdmmP0iB7MB/ckXKhbeysd+y/aSQ==
-X-Received: by 2002:aa7:d6c6:: with SMTP id x6mr53451578edr.193.1620976048967;
-        Fri, 14 May 2021 00:07:28 -0700 (PDT)
-Received: from gmail.com (0526E777.dsl.pool.telekom.hu. [5.38.231.119])
-        by smtp.gmail.com with ESMTPSA id k9sm4067820edv.69.2021.05.14.00.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 00:07:28 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 14 May 2021 09:07:26 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/acpi: Switch to pr_xxx log functions
-Message-ID: <YJ4hrrUkKRkKsUtf@gmail.com>
-References: <8436da08-4812-d383-8f2a-1c07181ebfb8@gmail.com>
+        id S233491AbhENIWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 May 2021 04:22:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233416AbhENIWk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 May 2021 04:22:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C728061408;
+        Fri, 14 May 2021 08:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620980488;
+        bh=gH2wh+Hc0GOhQOIRbo/h4JAX62sDUeKs2tmsR+5ILos=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e4qbUbfx0hxY+yj5rwe10X7fv77kQb6ZtXwJRT57564V2F/AP6l30KEqmfnQ8Z9/m
+         GbE6KTSFaLVgK/IALz8lgNCCJI09Wv6ypJxw7X8+NYsSH+qLTaA3rBVUJFbnXj6RkO
+         OLP+toeaBJ59mDypgIfhUX1EfHY2OFa2Ex63sriWaBCbSg8WSO+y0qdrgc5mMfEUKi
+         zoIKuKJCbIWchz7V1P1kNvQQPYr/hVEIXMXwl9v4IpEIdTp9mOKu3ZsGi5lbDjocf7
+         LN9AhGRwhMXdDuYb3SF+qI1QUoGfgKM56pIxwAOv5jsDOpM5r9sAA4fr4BFVLy6RmQ
+         IhAi7M7Jw2dRw==
+Date:   Fri, 14 May 2021 10:21:18 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+Message-ID: <20210514102118.1b71bec3@coco.lan>
+In-Reply-To: <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8436da08-4812-d383-8f2a-1c07181ebfb8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Em Wed, 12 May 2021 18:07:04 +0100
+David Woodhouse <dwmw2@infradead.org> escreveu:
 
-* Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> On Wed, 2021-05-12 at 14:50 +0200, Mauro Carvalho Chehab wrote:
+> > Such conversion tools - plus some text editor like LibreOffice  or simi=
+lar  - have
+> > a set of rules that turns some typed ASCII characters into UTF-8 altern=
+atives,
+> > for instance converting commas into curly commas and adding non-breakab=
+le
+> > spaces. All of those are meant to produce better results when the text =
+is
+> > displayed in HTML or PDF formats. =20
+>=20
+> And don't we render our documentation into HTML or PDF formats?=20
 
-> Switching to pr_debug et al has two benefits:
-> - We don't have to add PREFIX to each log statement
-> - Debug output is suppressed except DEBUG is defined or dynamic
->   debugging is enabled for the respective code piece.
-> 
-> In addition ensure that longer messages aren't split to multiple lines
-> in source code, checkpatch complains otherwise.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  arch/x86/kernel/acpi/boot.c | 118 ++++++++++++++----------------------
->  1 file changed, 47 insertions(+), 71 deletions(-)
+Yes.
 
-Reviewed-by: Ingo Molnar <mingo@kernel.org>
+> Are
+> some of those non-breaking spaces not actually *useful* for their
+> intended purpose?
+
+No.
+
+The thing is: non-breaking space can cause a lot of problems.
+
+We even had to disable Sphinx usage of non-breaking space for
+PDF outputs, as this was causing bad LaTeX/PDF outputs.
+
+See, commit: 3b4c963243b1 ("docs: conf.py: adjust the LaTeX document output=
+")
+
+The afore mentioned patch disables Sphinx default behavior of
+using NON-BREAKABLE SPACE on literal blocks and strings, using this
+special setting: "parsedliteralwraps=3Dtrue".
+
+When NON-BREAKABLE SPACE were used on PDF outputs, several parts of=20
+the media uAPI docs were violating the document margins by far,
+causing texts to be truncated.
+
+So, please **don't add NON-BREAKABLE SPACE**, unless you test
+(and keep testing it from time to time) if outputs on all
+formats are properly supporting it on different Sphinx versions.
+
+-
+
+Also, most of those came from conversion tools, together with other
+eccentricities, like the usage of U+FEFF (BOM) character at the
+start of some documents. The remaining ones seem to came from=20
+cut-and-paste.
+
+For instance,  bibliographic references (there are a couple of
+those on media) sometimes have NON-BREAKABLE SPACE. I'm pretty
+sure that those came from cut-and-pasting the document titles
+from their names at the original PDF documents or web pages that
+are referenced.
+
+> > While it is perfectly fine to use UTF-8 characters in Linux, and specia=
+lly at
+> > the documentation,  it is better to  stick to the ASCII subset  on such
+> > particular case,  due to a couple of reasons:
+> >=20
+> > 1. it makes life easier for tools like grep; =20
+>=20
+> Barely, as noted, because of things like line feeds.
+
+You can use grep with "-z" to seek for multi-line strings(*), Like:
+
+	$ grep -Pzl 'grace period started,\s*then' $(find Documentation/ -type f)
+	Documentation/RCU/Design/Data-Structures/Data-Structures.rst
+
+(*) Unfortunately, while "git grep" also has a "-z" flag, it
+    seems that this is (currently?) broken with regards of handling multili=
+nes:
+
+	$ git grep -Pzl 'grace period started,\s*then'
+	$
+
+> > 2. they easier to edit with the some commonly used text/source
+> >    code editors. =20
+>=20
+> That is nonsense. Any but the most broken and/or anachronistic
+> environments and editors will be just fine.
+
+Not really.
+
+I do use a lot of UTF-8 here, as I type texts in Portuguese, but I rely
+on the US-intl keyboard settings, that allow me to type as "'a" for =C3=A1.
+However, there's no shortcut for non-Latin UTF-codes, as far as I know.
+
+So, if would need to type a curly comma on the text editors I normally=20
+use for development (vim, nano, kate), I would need to cut-and-paste
+it from somewhere[1].
+
+[1] If I have a table with UTF-8 codes handy, I could type the UTF-8=20
+    number manually... However, it seems that this is currently broken=20
+    at least on Fedora 33 (with Mate Desktop and US intl keyboard with=20
+    dead keys).
+
+    Here, <CTRL><SHIFT>U is not working. No idea why. I haven't=20
+    test it for *years*, as I din't see any reason why I would
+    need to type UTF-8 characters by numbers until we started
+    this thread.
+=20
+In practice, on the very rare cases where I needed to write
+non-Latin utf-8 chars (maybe once in a year or so, Like when I
+would need to use a Greek letter or some weird symbol), there changes
+are high that I wouldn't remember its UTF-8 code.
+
+So, If I need to spend time to seek for an specific symbol, after
+finding it, I just cut-and-paste it.
+
+But even in the best case scenario where I know the UTF-8 and
+<CTRL><SHIFT>U works, if I wanted to use, for instance, a curly
+comma, the keystroke sequence would be:
+
+	<CTRL><SHIFT>U201csome string<CTRL><SHIFT>U201d
+
+That's a lot harder than typing and has a higher chances of
+mistakenly add a wrong symbol than just typing:
+
+	"some string"
+
+Knowing that both will produce *exactly* the same output, why
+should I bother doing it the hard way?
+
+-
+
+Now, I'm not arguing that you can't use whatever UTF-8 symbol you
+want on your docs. I'm just saying that, now that the conversion=20
+is over and a lot of documents ended getting some UTF-8 characters
+by accident, it is time for a cleanup.
 
 Thanks,
-
-	Ingo
+Mauro
