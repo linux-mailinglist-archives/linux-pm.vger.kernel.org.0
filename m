@@ -2,66 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0758E3823A6
-	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 07:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0B6382435
+	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 08:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbhEQFJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 01:09:24 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2984 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbhEQFJY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 01:09:24 -0400
-Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Fk6WB6PtxzQpL1;
-        Mon, 17 May 2021 13:04:38 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 17 May 2021 13:08:06 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 17 May
- 2021 13:08:06 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <amitk@kernel.org>, <daniel.lezcano@linaro.org>
-Subject: [PATCH -next] thermal/core: Correct function name thermal_zone_device_unregister()
-Date:   Mon, 17 May 2021 13:10:20 +0800
-Message-ID: <20210517051020.3463536-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S231587AbhEQGYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 02:24:10 -0400
+Received: from mga11.intel.com ([192.55.52.93]:34734 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233540AbhEQGYJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 17 May 2021 02:24:09 -0400
+IronPort-SDR: cxLLQrqFjaMgdlyFYOHV9VYArK0+xaOB4rj4o8AMlhJatW2fzuoxm2aP6VvURYOh/fNgIIq0ZP
+ MzjQxOS939vA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="197306271"
+X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
+   d="scan'208";a="197306271"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2021 23:22:54 -0700
+IronPort-SDR: Tq/eMG+cvuP9MQ4aGrf3PrbxaCboIg3gN/rQgFOwX8Yshmi7IfPDhFysjbuHZtxTki1lfmMznC
+ oDU90IU8Fraw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
+   d="scan'208";a="393388424"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by orsmga003.jf.intel.com with ESMTP; 16 May 2021 23:22:53 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 0/2] thermal: int340x: processor_thermal: Add additional
+Date:   Sun, 16 May 2021 23:14:39 -0700
+Message-Id: <20210517061441.1921901-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix the following make W=1 kernel build warning:
+Add additional attributes to RFIM, which use mailbox commands. 
 
-  drivers/thermal/thermal_core.c:1376: warning: expecting prototype for thermal_device_unregister(). Prototype was for thermal_zone_device_unregister() instead
+Srinivas Pandruvada (2):
+  thermal: int340x: processor_thermal: Export mailbox interface
+  thermal: int340x: processor_thermal: Export additional attributes
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/thermal/thermal_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../processor_thermal_device.h                |  2 +
+ .../int340x_thermal/processor_thermal_mbox.c  | 12 +++-
+ .../int340x_thermal/processor_thermal_rfim.c  | 55 +++++++++++++++++++
+ 3 files changed, 66 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index d20b25f40d19..142dcf5e4a18 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1369,7 +1369,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
- EXPORT_SYMBOL_GPL(thermal_zone_device_register);
- 
- /**
-- * thermal_device_unregister - removes the registered thermal zone device
-+ * thermal_zone_device_unregister - removes the registered thermal zone device
-  * @tz: the thermal zone device to remove
-  */
- void thermal_zone_device_unregister(struct thermal_zone_device *tz)
 -- 
-2.25.1
+2.27.0
 
