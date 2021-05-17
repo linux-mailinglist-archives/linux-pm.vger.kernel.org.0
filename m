@@ -2,183 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC4338220E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 01:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E37382399
+	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 06:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbhEPXUF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 16 May 2021 19:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbhEPXUD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 May 2021 19:20:03 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C1BC06174A;
-        Sun, 16 May 2021 16:18:48 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id f12so5037342ljp.2;
-        Sun, 16 May 2021 16:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7MoZWTsxYKP8N9EirOoHEansF2VtNbae2U8YrYCZA4c=;
-        b=iaoYRhSTpxSkFjdqgqwLNNzNFHGKoKXx/73uarAltaBJMtCNuST+Waboo/iU28Kj98
-         eo8M42CfHM4wXT5yZokau30HK2iGLHjqrg74zuKxmIawjslauvYvnSgigYQjqfZJHhm7
-         chH6mj+Duju2Co2YsNzVQAd00dWzchjU53Vr9m95aVNEc5QN+wK5AeRDU8SS/fjkRd4G
-         Y3oPXdj2izpEIlFvYiwANXFFOhxBNjtLq8nlkNhs6TYz736rEk5NtS+st7i0ETFSzPlg
-         xfVq+lUR4ZNc1+2sEzN1m9e0d4q262ZjRg26yTpH3sd0z821EnlSMN4rcxeQunzhzx0H
-         93HQ==
+        id S233540AbhEQE6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 00:58:39 -0400
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:46894 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229625AbhEQE6j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 00:58:39 -0400
+Received: by mail-lf1-f43.google.com with SMTP id i9so6759350lfe.13;
+        Sun, 16 May 2021 21:57:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7MoZWTsxYKP8N9EirOoHEansF2VtNbae2U8YrYCZA4c=;
-        b=fjcXhmKIIda+VZ01bh4SLaW4Q22GNHECdwqJjnONTwYksymcIXJLxvcZF/UclYFXop
-         r0wPv2zMRS9DxtRTHm7SfdLSzxnSZpx+7evg1DQE2f5gb2QwX/salpdamjzUwrELtn7F
-         ce/qef7qHPh6ElDCBIq9J8RYTQuyF0yJ16WFFeB+EBU2QSg+2l6jX7TBgekoSzua4BF5
-         lxo0pIg/7zKCwAAq50V5ttmTjDsaelz9zK2Lv6IHiYo6uXKoRZsDt649Qd+oaImMRcaB
-         UyToJYpawv4PmcNsfQ/BZWpllUC5iRDPyry3IfR6h3d4mQiJXsPTEn0KDdlXL1gRP0VR
-         UJdA==
-X-Gm-Message-State: AOAM530OnG3qXHCQGnKIp0e6qU/DyL71wC8hkOYEurIF2WdeLmiva7fy
-        DDorZUt+gDTRef9fV657rGA=
-X-Google-Smtp-Source: ABdhPJylT9tSaccxDKrhswPj+S60woA/EpQSkV77Ut1zJhJKZnG3lbyFYNmoGj4+Ha5S7cufQU8OzQ==
-X-Received: by 2002:a2e:8708:: with SMTP id m8mr12229869lji.383.1621207126849;
-        Sun, 16 May 2021 16:18:46 -0700 (PDT)
-Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
-        by smtp.gmail.com with ESMTPSA id p6sm406478lfr.163.2021.05.16.16.18.46
+        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
+         :in-reply-to:references:mime-version:date:user-agent
+         :content-transfer-encoding;
+        bh=ZlBxGhYLZ60uGDaPOSr/zz7izf5PGo7iYr82/TiNDOQ=;
+        b=E+zP2LSMSbK65WxXy9THvknp5RylijQ7mfAxj5iwLuA63uOVbTCjdSsNakY2CFRo3w
+         LOnsYBxw4rOJEBDxwkyHOhU8e3PhrV3jhAQEcg8v2PGCJA+bI6NQcBeUAvYHdZwsiiIo
+         ORJg3fGAzaAf0EQH0cJAE4MsmWLVI3XlqFH9/Vm3w88MPoz9bY6vH1hSOZ4T73d46E4G
+         3BBNsMlzByFJb+O4NTJFY4gVg/V6ycwj/H0goTNZrGlmbrLiGbRW1KEiuaHWyzl8boEj
+         6uOrAtWE6cnAAJ2JZCYo4G4VycAS94EsWbjjBuqDdZlSHZkHwllHup3jUZ0QME1yOKNH
+         FSSA==
+X-Gm-Message-State: AOAM531qw2B2rIgSesCMiMuLiYHI9jX9yZ3DTIqvI5Gc66Tq2hiYlbOa
+        /4/FE+fdz+l3t4Q5Ox08GS4=
+X-Google-Smtp-Source: ABdhPJz6XlOoLFS1OExcL4aOBvUwCPGZFB6U6VqCJpuJZQYA/MBhFsa1h3+611hseFVm2x5fKxip8Q==
+X-Received: by 2002:ac2:54ba:: with SMTP id w26mr41231726lfk.78.1621227440658;
+        Sun, 16 May 2021 21:57:20 -0700 (PDT)
+Received: from dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
+        by smtp.gmail.com with ESMTPSA id g28sm2775163ljn.134.2021.05.16.21.57.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 May 2021 16:18:46 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v5 3/3] soc/tegra: regulators: Support Core domain state syncing
-Date:   Mon, 17 May 2021 02:17:55 +0300
-Message-Id: <20210516231755.24193-4-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210516231755.24193-1-digetx@gmail.com>
-References: <20210516231755.24193-1-digetx@gmail.com>
+        Sun, 16 May 2021 21:57:19 -0700 (PDT)
+Message-ID: <fefd2daff66123d5a812ad41466095e56e699bf2.camel@fi.rohmeurope.com>
+Subject: Re: [PATCH v9 02/10] reboot: Add hardware protection power-off
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Reply-To: matti.vaittinen@fi.rohmeurope.com
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "mcroce@microsoft.com" <mcroce@microsoft.com>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        rostedt@goodmis.org, Geert Uytterhoeven <geert@linux-m68k.org>
+In-Reply-To: <YJzkq+NPW4ZMB8AF@alley>
+References: <cover.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
+         <97260f8e150abb898a262fade25860609b460912.1620645507.git.matti.vaittinen@fi.rohmeurope.com>
+         <YJuPwAZroVZ/w633@alley>
+         <2149df3f542d25ce15d049e81d6188bb7198478c.camel@fi.rohmeurope.com>
+         <YJzkq+NPW4ZMB8AF@alley>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Mon, 17 May 2021 07:57:11 +0300
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The core voltage shall not drop until state of Core domain is synced,
-i.e. all device drivers that use Core domain are loaded and ready.
 
-Support Core domain state syncing. The Core domain driver invokes the
-core-regulator voltage syncing once the state of domain is synced, at
-this point the Core voltage is allowed to go lower than the level left
-after bootloader.
+On Thu, 2021-05-13 at 10:34 +0200, Petr Mladek wrote:
+> On Wed 2021-05-12 12:00:46, Vaittinen, Matti wrote:
+> > On Wed, 2021-05-12 at 10:20 +0200, Petr Mladek wrote:
+> > > On Mon 2021-05-10 14:28:30, Matti Vaittinen wrote:
+> > > > There can be few cases when we need to shut-down the system in
+> > > > order to
+> > > > protect the hardware. Currently this is done at east by the
+> > > > thermal
+> > > > core
+> > > > when temperature raises over certain limit.
+> > > > 
+> > > > Some PMICs can also generate interrupts for example for over-
+> > > > current or
+> > > > over-voltage, voltage drops, short-circuit, ... etc. On some
+> > > > systems
+> > > > these are a sign of hardware failure and only thing to do is
+> > > > try to
+> > > > protect the rest of the hardware by shutting down the system.
+> > > > 
+> > > > Add shut-down logic which can be used by all subsystems instead
+> > > > of
+> > > > implementing the shutdown in each subsystem. The logic is
+> > > > stolen
+> > > > from
+> > > > thermal_core with difference of using atomic_t instead of a
+> > > > mutex
+> > > > in
+> > > > order to allow calls directly from IRQ context.
+> > > > 
+> > > > Signed-off-by: Matti Vaittinen <
+> > > > matti.vaittinen@fi.rohmeurope.com>
+> > > > 
+> > > > diff --git a/kernel/reboot.c b/kernel/reboot.c
+> > > > index a6ad5eb2fa73..5da8c80a2647 100644
+> > > > --- a/kernel/reboot.c
+> > > > +++ b/kernel/reboot.c
+> > > > @@ -518,6 +519,85 @@ void orderly_reboot(void)
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(orderly_reboot);
+> > > >  
+> > > > +/**
+> > > > + * hw_failure_emergency_poweroff_func - emergency poweroff
+> > > > work
+> > > > after a known delay
+> > > > + * @work: work_struct associated with the emergency poweroff
+> > > > function
+> > > > + *
+> > > > + * This function is called in very critical situations to
+> > > > force
+> > > > + * a kernel poweroff after a configurable timeout value.
+> > > > + */
+> > > > +static void hw_failure_emergency_poweroff_func(struct
+> > > > work_struct
+> > > > *work)
+> > > > +{
+> > > > +	/*
+> > > > +	 * We have reached here after the emergency shutdown
+> > > > waiting
+> > > > period has
+> > > > +	 * expired. This means orderly_poweroff has not been
+> > > > able to
+> > > > shut off
+> > > > +	 * the system for some reason.
+> > > > +	 *
+> > > > +	 * Try to shut down the system immediately using
+> > > > kernel_power_off
+> > > > +	 * if populated
+> > > > +	 */
+> > > > +	WARN(1, "Hardware protection timed-out. Trying forced
+> > > > poweroff\n");
+> > > > +	kernel_power_off();
+> > > 
+> > > WARN() look like an overkill here. It prints many lines that are
+> > > not
+> > > much useful in this case. The function is called from well-known
+> > > context (workqueue worker).
+> > 
+> > This was the existing code which I stole from the thermal_core. I
+> > kind
+> > of think that eye-catching WARN is actually a good choice here.
+> > Doing
+> > autonomous power-off without a WARNing does not sound good to me :)
+> > 
+> > > Also be aware that "panic_on_warn" commandline option will
+> > > trigger
+> > > panic() here.
+> > 
+> > Hmm.. If panic() hangs the system that might indeed be a problem.
+> > Now
+> > we are (again) on a territory which I don't know well. I'd
+> > appreciate
+> > any input from thermal folks and Mark. I don't like the idea of
+> > making
+> > extreme things like power-off w/o well visible log-trace. Thus I
+> > would
+> > like to have WARN()-like eye-catcher, even if the call-trace was
+> > not
+> > too varying. It will at least point to this worker. Any better
+> > suggestions than WARN()?
+> 
+> Heh, it might make sense to create a system wide API for these. I am
+> sure that WARN() is mis-used this way on many other locations.
+> 
+> There already are two locations that use another eye-catching text.
+> A common API might help to avoid duplication of the common parts,
+> see
+> https://lore.kernel.org/lkml/20210305194206.3165917-2-elver@google.com/
+> 
+> Well, it might be out of scope for this patchset.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/soc/tegra/regulators-tegra20.c | 19 ++++++++++++++++++-
- drivers/soc/tegra/regulators-tegra30.c | 18 +++++++++++++++++-
- 2 files changed, 35 insertions(+), 2 deletions(-)
+I just had a very brief "chat" with Geert (3 IRC messages, posted
+during 4 or 5 days :]) - and Geert pointed me to this:
 
-diff --git a/drivers/soc/tegra/regulators-tegra20.c b/drivers/soc/tegra/regulators-tegra20.c
-index 3479be5ee494..81787ae3d03e 100644
---- a/drivers/soc/tegra/regulators-tegra20.c
-+++ b/drivers/soc/tegra/regulators-tegra20.c
-@@ -17,6 +17,8 @@
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- 
-+#include <soc/tegra/common.h>
-+
- struct tegra_regulator_coupler {
- 	struct regulator_coupler coupler;
- 	struct regulator_dev *core_rdev;
-@@ -42,6 +44,21 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra20 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_soc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
-+
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
- 
-@@ -62,7 +79,7 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
- }
-diff --git a/drivers/soc/tegra/regulators-tegra30.c b/drivers/soc/tegra/regulators-tegra30.c
-index 6e4f3d9e7be1..e0203f78b396 100644
---- a/drivers/soc/tegra/regulators-tegra30.c
-+++ b/drivers/soc/tegra/regulators-tegra30.c
-@@ -17,6 +17,7 @@
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- 
-+#include <soc/tegra/common.h>
- #include <soc/tegra/fuse.h>
- 
- struct tegra_regulator_coupler {
-@@ -43,6 +44,21 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra30 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_soc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
-+
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
- 
-@@ -63,7 +79,7 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
- }
--- 
-2.30.2
+https://lore.kernel.org/linux-iommu/20210331093104.383705-4-geert+renesas@glider.be/
+
+So, maybe I'll just go with simple pr_emerg() and trust that the
+emerg() print should catch attention as such level print probably
+should. I'll respin the patch series (probably tomorrow) - let's see
+what thermal and regulator folks say :)
+
+Thanks for all the help this far!
+
+Best Regards
+	Matti Vaittinen
 
