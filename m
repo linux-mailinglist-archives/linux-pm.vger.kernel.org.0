@@ -2,135 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF85B382437
-	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 08:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F89B382A08
+	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 12:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235068AbhEQGYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 02:24:10 -0400
-Received: from mga11.intel.com ([192.55.52.93]:34734 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235059AbhEQGYK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 17 May 2021 02:24:10 -0400
-IronPort-SDR: 7qJUwtA9Uaz5RAzBb2aImJUBNLXn44+KHWVi5VGY2sT7xHWlNhtGN3xmRpZ94sZOEw26+gXrqs
- 0gdnHx0GLIwA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="197306273"
-X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
-   d="scan'208";a="197306273"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2021 23:22:54 -0700
-IronPort-SDR: S/3PXjdjnMfHkaMCBcTuZpdrVDUa60Qwuw+4IH4WQBnCWf4UdfvFW/Ppx79wW4Z7aZOLsn3yhF
- mzzIZbTTZznQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
-   d="scan'208";a="393388427"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga003.jf.intel.com with ESMTP; 16 May 2021 23:22:53 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH 2/2] thermal: int340x: processor_thermal: Export additional attributes
-Date:   Sun, 16 May 2021 23:14:41 -0700
-Message-Id: <20210517061441.1921901-3-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210517061441.1921901-1-srinivas.pandruvada@linux.intel.com>
-References: <20210517061441.1921901-1-srinivas.pandruvada@linux.intel.com>
+        id S236319AbhEQKmd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 06:42:33 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:27289 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236273AbhEQKmc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 06:42:32 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1621247894; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=N3J6s6zrMN+loV5cQFaAP6JLxzJmQxPNN7Dh+VpN/Pp3BTRcEmR4O132WDjg0PlkVZ
+    bNt5NHxYBshOzdo6CiPdPTPg5ZVS17Qu7lGGmXO0qiwjQNBR9mRxmyUFVXfOKLNrPCL7
+    7pndFISsYkjxwrBy+LZMrekY1HtIA2JxVBP5gH1SoNIvhGhngpo0OLbuUnDWkLHiY2w+
+    +a+ZT6H+z6veQbohSGwIjwilrFVftljsmiDrpGy5426ZC+3CiL4O+oO6+NdPh3B67f+9
+    Gm6UQtNfYPyfIx9DLnz71sUelepbbm3MfD8vPs2G224b1/5th/k7MWwBcfCg7szJoYJK
+    O6gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1621247894;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=v32wUkqLcAoYLrAdRMAH9OgsbN4EMWWzzWzMugcjqZY=;
+    b=bzf5UrepomYjIheHR5NZH7CZx9SJkX3lqw4ucDR76JDeWWiD90yGrjFFQNQ30zKSfe
+    TpuZ8ivlQoRGYVJPF+lojEDdtbRZ+5Lu2TEyJH1Y4QZz7DRnGNf1+kZUQUfkiykp3p5Y
+    mgLKanwnbPfxmDMw05ZPX46ko/JbsZSI7D2aaWLFfYjlfNS7NvOHn6QvTeKPxicKF4Yx
+    Q1IsZK4N+IfIH243W7qZi5abXvcKOGAUpzq4CWDdO/yRDEx940Z7bL+FnExjptFSTzwW
+    9iHg8TrndAkAKf8ffN8BVC1n5OJxNd9RIcMOWoVy+ZVjVmRrprUGeal5yVwbqb5kmm3r
+    WcLQ==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1621247894;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=v32wUkqLcAoYLrAdRMAH9OgsbN4EMWWzzWzMugcjqZY=;
+    b=RbYAiHNfU+WOG4UzdWhTF/Xsc8ZWtf35mLVJLeW4yhrxKftGTz5z2lGlqMz9an/9jq
+    xp2RUR9qrUwPgms7vyKPIEVYKRzGj6YlBD9riW5VrVb655z8KgBXwLefUal3HGHLNxcu
+    aPiBZETWx9hzf01vhdQ/NT9v75MpGOO/saMsm94CQlIjoCPoKWozfa4rlxI/dZJ0EH7s
+    K5jreoRz3v7AisPQAXsQN7B8AHUyEXdkXz+Vn+mseopeFFoZPeEtYW+7zI2pZZYjwOjR
+    NXvg5SyzAdMfHUoTWjHXdKDeCvQA+miTL4qR5gV1h7uTX+HFz+witviEfCrwy4KVgL/P
+    5r3w==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB526NcMiO"
+X-RZG-CLASS-ID: mo00
+Received: from droid..
+    by smtp.strato.de (RZmta 47.26.0 DYNA|AUTH)
+    with ESMTPSA id 50be75x4HAcD1PR
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 17 May 2021 12:38:13 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 0/3] Fix RT5033 battery device tree probing
+Date:   Mon, 17 May 2021 12:35:51 +0200
+Message-Id: <20210517103554.168159-1-stephan@gerhold.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Export additional attributes:
+At the moment, the RT5033 MFD and battery driver suggest that the
+battery driver should probe as a sub-device of the MFD driver. However,
+this does not make any sense since the fuel gauge part of RT5033 has its
+own I2C device and interrupt line.
 
-ddr_data_rate (RO) : Show current DDR (Double Data Rate) data rate.
-rfi_restriction (RW) : Show or set current state for RFI (Radio
-			Frequency Interference) protection.
+It was also documented as separate I2C device in the original device
+tree bindings [1] (that were never finished up and merged) but for some
+reason the code does not match the documentation (and reality). :/
 
-These attributes use mailbox commands to get/set information. Here
-command codes are:
-0x0007: Read RFI restriction
-0x0107: Read DDR data rate
-0x0008: Write RFI restriction
+Given other fairly critical mistakes like setting the wrong bits
+in the regulator driver (see [2]), unfortunately I get the feeling
+that none of the RT5033 drivers were ever tested properly. :(
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../int340x_thermal/processor_thermal_rfim.c  | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+This patch sets adds a proper of_match_table to rt5033-battery
+and removes the rt5033-battery sub-device from the MFD driver.
+There is no compile/runtime dependency of the power supply / MFD patch
+so they can just be applied separately through the power supply / MFD tree.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index aef993a813e2..2b8a3235d518 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -190,6 +190,59 @@ static DEVICE_ATTR_RO(ddr_data_rate_point_2);
- static DEVICE_ATTR_RO(ddr_data_rate_point_3);
- static DEVICE_ATTR_RW(rfi_disable);
- 
-+static ssize_t rfi_restriction_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	u16 cmd_id = 0x0008;
-+	u32 cmd_resp;
-+	u32 input;
-+	int ret;
-+
-+	ret = kstrtou32(buf, 10, &input);
-+	if (ret)
-+		return ret;
-+
-+	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, input, &cmd_resp);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t rfi_restriction_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	u16 cmd_id = 0x0007;
-+	u32 cmd_resp;
-+	int ret;
-+
-+	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%u\n", cmd_resp);
-+}
-+
-+static ssize_t ddr_data_rate_show(struct device *dev,
-+				  struct device_attribute *attr,
-+				  char *buf)
-+{
-+	u16 cmd_id = 0x0107;
-+	u32 cmd_resp;
-+	int ret;
-+
-+	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%u\n", cmd_resp);
-+}
-+
-+static DEVICE_ATTR_RW(rfi_restriction);
-+static DEVICE_ATTR_RO(ddr_data_rate);
-+
- static struct attribute *dvfs_attrs[] = {
- 	&dev_attr_rfi_restriction_run_busy.attr,
- 	&dev_attr_rfi_restriction_err_code.attr,
-@@ -199,6 +252,8 @@ static struct attribute *dvfs_attrs[] = {
- 	&dev_attr_ddr_data_rate_point_2.attr,
- 	&dev_attr_ddr_data_rate_point_3.attr,
- 	&dev_attr_rfi_disable.attr,
-+	&dev_attr_ddr_data_rate.attr,
-+	&dev_attr_rfi_restriction.attr,
- 	NULL
- };
- 
+With these changes, rt5033-battery seems to work fine on the
+Samsung Galaxy A5 (2015) at least (it reports a reasonable
+battery percentage).
+
+[1]: https://lore.kernel.org/linux-pm/1425864191-4121-3-git-send-email-beomho.seo@samsung.com/
+[2]: https://lore.kernel.org/lkml/20201110130047.8097-1-michael.srba@seznam.cz/
+
+Stephan Gerhold (3):
+  dt-bindings: power: supply: Add DT schema for richtek,rt5033-battery
+  power: supply: rt5033_battery: Fix device tree enumeration
+  mfd: rt5033: Drop rt5033-battery sub-device
+
+ .../power/supply/richtek,rt5033-battery.yaml  | 54 +++++++++++++++++++
+ drivers/mfd/rt5033.c                          |  3 --
+ drivers/power/supply/Kconfig                  |  3 +-
+ drivers/power/supply/rt5033_battery.c         |  7 +++
+ 4 files changed, 63 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml
+
 -- 
-2.27.0
+2.31.1
 
