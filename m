@@ -2,125 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2120386C2D
-	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 23:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEDB386C4F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 23:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244888AbhEQVWD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 17:22:03 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:44571 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238105AbhEQVWC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 17:22:02 -0400
-Received: by mail-ot1-f41.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so6801804otp.11;
-        Mon, 17 May 2021 14:20:45 -0700 (PDT)
+        id S237703AbhEQVf1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 17:35:27 -0400
+Received: from mail-oo1-f52.google.com ([209.85.161.52]:42717 "EHLO
+        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232924AbhEQVf1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 17:35:27 -0400
+Received: by mail-oo1-f52.google.com with SMTP id v13-20020a4ac00d0000b029020b43b918eeso1779730oop.9;
+        Mon, 17 May 2021 14:34:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YcPVqnyxUoQRqLqrcd+xwOvSykAyUXn6XXyXXfewed8=;
-        b=mtIO+EMTrhG0OFp22u7lFtRl2KcrfioE8we6bdl6QaDdVzWKkrjHzr5NSSAzjEfEK3
-         +uC0PnHiL6yYpt1AU4vERZqQmbpY0DjPYBf1fbnyA7YiQA1MCdMW9mLCjiwlTmMU+N4/
-         C3WYlQy0Khqzn9C37V4N0EUpchIEmyJbqV3Sj2eFj3omkuG/OLNte89KxujUC53b9WbV
-         pD1ynqWGamMaXuxblqlVsvvRx/ohfMs+gCoq51AmF7iU2TijaEvRJsCunU9XHG5tmkAD
-         1VBX4N6KZsa5IL6TSd/8fmHaS93FpVilsALOrBrjAHcb8eNild+zKygDTLrOgE5q+bsg
-         in9w==
-X-Gm-Message-State: AOAM533tbhNUmyfK3yNKFx8XdslE0i57ER21Ol71btaIivjk1+1+c3m9
-        dldr3jWbHRl0fXuhG+Cxvg==
-X-Google-Smtp-Source: ABdhPJyETxg9k9XJAKSPDZnyLWwwIHaYxzn+ovOlDY4J+ItNb3j1tMU05rQr9vzb7eu8lf00QgA4Rw==
-X-Received: by 2002:a9d:5a1a:: with SMTP id v26mr1334412oth.50.1621286444548;
-        Mon, 17 May 2021 14:20:44 -0700 (PDT)
+        bh=TKp+muVvsBkqS/qhnBayv/73fVMC26k+zPLDWmz7RV8=;
+        b=EBlgOn7fBeJDJxn7X5rx5rUG+lZ7TBN04TtY9Mjaa8ctWLvrQzhR+AnfOjzkVvNr4d
+         KfnNuKGYRp+rPAy+wab9yoTY/xC5KrBWwJsjZYEWXVCFinha1HuxgGeixX0hjroMFpXP
+         Nzeslp7xW2FdvOvUKf3NRRE+swi2kXFa+Kxg/79b+x4B+iHrImXEMm/HK9RIlDUTa1JA
+         0Br53TxlQkEIaxz50iamVjnQo4j6cjZDkuUoAj5sW+sheQTyVmvrUJkS1NiAGOWfa4bs
+         tsvIe/g5oCeJbwF2y7DIsTbflYBv2VyUYB3Ra4C9zN+/nnFD8NLczM0B4GEvb9TXvc6O
+         Qzdw==
+X-Gm-Message-State: AOAM532rD/ujmABaUCKEgmR4eackPDAy0FPC1WIoCSS8BoqNu8lniCBQ
+        yj+RiC91yT4/YLUQJNmNHw==
+X-Google-Smtp-Source: ABdhPJxA8YJ7lKQY1vATWDpJUgI+ViSERFasviwQiA8BYwLUzdekBWVYpVLjIuwD6PwR3V0/Zot7kQ==
+X-Received: by 2002:a4a:a58f:: with SMTP id d15mr1514128oom.32.1621287250015;
+        Mon, 17 May 2021 14:34:10 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y191sm2998370oia.50.2021.05.17.14.19.23
+        by smtp.gmail.com with ESMTPSA id x141sm2986306oif.13.2021.05.17.14.34.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 14:19:33 -0700 (PDT)
-Received: (nullmailer pid 3215069 invoked by uid 1000);
-        Mon, 17 May 2021 21:18:28 -0000
-Date:   Mon, 17 May 2021 16:18:28 -0500
+        Mon, 17 May 2021 14:34:09 -0700 (PDT)
+Received: (nullmailer pid 3239403 invoked by uid 1000);
+        Mon, 17 May 2021 21:34:08 -0000
+Date:   Mon, 17 May 2021 16:34:08 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>, alsa-devel@alsa-project.org,
-        Georgi Djakov <djakov@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, Alex Elder <elder@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        devicetree@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        linux-input@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <jic23@kernel.org>, netdev@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>
-Subject: Re: [PATCH] dt-bindings: More removals of type references on common
- properties
-Message-ID: <20210517211828.GA3214995@robh.at.kernel.org>
-References: <20210510204524.617390-1-robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v1 3/7] dt-bindings: devfreq: tegra30-actmon: Convert to
+ schema
+Message-ID: <20210517213408.GA3239373@robh.at.kernel.org>
+References: <20210510211008.30300-1-digetx@gmail.com>
+ <20210510211008.30300-4-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210510204524.617390-1-robh@kernel.org>
+In-Reply-To: <20210510211008.30300-4-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 May 2021 15:45:24 -0500, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. A few new ones slipped in and
-> *-names was missed in the last clean-up pass. Drop all the unnecessary
-> type references in the tree.
+On Tue, 11 May 2021 00:10:04 +0300, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra ACTMON binding to schema.
 > 
-> A meta-schema update to catch these is pending.
-> 
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
-> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Orson Zhai <orsonzhai@gmail.com>
-> Cc: Baolin Wang <baolin.wang7@gmail.com>
-> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Fabrice Gasnier <fabrice.gasnier@st.com>
-> Cc: Odelu Kukatla <okukatla@codeaurora.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Shengjiu Wang <shengjiu.wang@nxp.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  Documentation/devicetree/bindings/clock/idt,versaclock5.yaml    | 2 --
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml         | 1 -
->  Documentation/devicetree/bindings/input/input.yaml              | 1 -
->  Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml   | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml             | 1 -
->  .../devicetree/bindings/power/supply/sc2731-charger.yaml        | 2 +-
->  Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml          | 2 +-
->  7 files changed, 2 insertions(+), 8 deletions(-)
+>  .../arm/tegra/nvidia,tegra30-actmon.txt       |  57 ---------
+>  .../devfreq/nvidia,tegra30-actmon.yaml        | 121 ++++++++++++++++++
+>  2 files changed, 121 insertions(+), 57 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
 > 
 
-Applied, thanks!
+Reviewed-by: Rob Herring <robh@kernel.org>
