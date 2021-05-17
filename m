@@ -2,59 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DCF383647
-	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 17:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E5B3836B9
+	for <lists+linux-pm@lfdr.de>; Mon, 17 May 2021 17:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243735AbhEQPbL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 11:31:11 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:43951 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244294AbhEQP2K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 11:28:10 -0400
-Received: by mail-ot1-f43.google.com with SMTP id u19-20020a0568302493b02902d61b0d29adso5857159ots.10;
-        Mon, 17 May 2021 08:26:53 -0700 (PDT)
+        id S243360AbhEQPf0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 11:35:26 -0400
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:35496 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244990AbhEQPd2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 11:33:28 -0400
+Received: by mail-ot1-f42.google.com with SMTP id 69-20020a9d0a4b0000b02902ed42f141e1so5896917otg.2;
+        Mon, 17 May 2021 08:32:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CZchp1Yf1GVmWnCUsrOiK0XjGAYstQKHWudIigD+jL8=;
-        b=BTrKa0//DFRPpeyzD824lCvX84JX/ZLtrEkIlMxAPqV0Gk+ZNTulALfQnV+mP9/7Qf
-         lXXhXjLyVkliD0owm71H7GEvV9eBKI62Xc+3yTvsW4FkGpsW7HbYqPm65EaYV+MXVcw6
-         dBrk1IQohco5kM4tr3aEzJrzpbjA1uqIT853G0mkS+C3+6cdNY07Y5qhsBLX+t0w6Jka
-         Lwti5u27+T+mYqESI34jvD9StxlNJE3sJDVjgsSnVIJQBc7YN11Xbd0rT38rRN2poMDS
-         mEjIFgKaZYR1GenXaRbHoupMicfT7xwwVhkXeNZU7vtUzk8/usqd813z5RgHbUiclqrw
-         7M6A==
-X-Gm-Message-State: AOAM531wsBvU4MZ4rjWXtUymq3+12qowpbKnBX6smzaWF8iSHM54jxS9
-        igFrU/bhl3u2Q45/XzmcaalVZzy1MBm+OkUT3Ao=
-X-Google-Smtp-Source: ABdhPJwyVUsmk+27ZZTxl+ZL5cYi68KOh4QXyIRpDYJSmFILWYFE4IBTh35Xy83JjG8y+8U+SN6qDGbK9WZ+I+JnX6o=
-X-Received: by 2002:a9d:1e1:: with SMTP id e88mr121644ote.260.1621265213424;
- Mon, 17 May 2021 08:26:53 -0700 (PDT)
+        bh=qLabWeFWWUTFvcwZHvdf6d9/NKDpE7SLOGHOguQ8yP0=;
+        b=Rt4gTDxAbTpYvZzySezezBQfpHXfPqz9mHJvkBhwm0HPBIjIGGQCVvOjwx94JEIPc6
+         q9Dqh6qhDDqXqDh11PVH0FIkoSTwRtfBfSwGSeYcb6TXpDyOpnYPYq+hKY9aHWqe3/c9
+         hhhuMzTmSBQuM9uzz7X2z7c6X3UT39riNzOac4xcgn5jydN/TjZCCEEUJRXTDhWaVzqS
+         pcPAoH3tyRE6BPtFm8pScfKKee8nB7Xh8Ybkqx4SlqrJWMBETOg6g3YMH8xZQ/W46UdO
+         XnAitpCItgDNOictpmAKzbuRqACnnLTllZ9jwbd08ayQxEEcYyNncTBiv2P/0OunCqsE
+         35Hw==
+X-Gm-Message-State: AOAM5302jCm//YKof3/U5zBkHj8sQIcM/UXk3h12QXz6MNokEpP1+Oue
+        EXOZyickEC0wBVjKrOqyiHe8pS1MNwnLOXW1bjU=
+X-Google-Smtp-Source: ABdhPJz8EaCRfO+89bvTzzIpwv9fxsJQPwePYnpt5jdL657j8M4bnnBiEHAfUXlkhLZIIb+awOW8EVF4DZefr8M3qcA=
+X-Received: by 2002:a9d:1e1:: with SMTP id e88mr141134ote.260.1621265530975;
+ Mon, 17 May 2021 08:32:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
- <20210513132051.31465-1-ggherdovich@suse.cz> <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
-In-Reply-To: <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
+References: <8436da08-4812-d383-8f2a-1c07181ebfb8@gmail.com>
+ <YJ4hrrUkKRkKsUtf@gmail.com> <CAJZ5v0h0Z3pfwpL2SsJ53=SfqE2d+7PrG+nt0PXjYrqeAkc27g@mail.gmail.com>
+ <YJ5O5gytKMDOCnFz@gmail.com>
+In-Reply-To: <YJ5O5gytKMDOCnFz@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 May 2021 17:26:42 +0200
-Message-ID: <CAJZ5v0g5_BY3DCi=VxqkRh+TYPS5nkJ-J96EzPVrc975uiWf3Q@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Add Icelake servers support in
- no-HWP mode
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
+Date:   Mon, 17 May 2021 17:31:59 +0200
+Message-ID: <CAJZ5v0gE4GC6R=FW39Xp_xiLzc0RgPGu0VJygz4gN-OOBr4YCg@mail.gmail.com>
+Subject: Re: [PATCH] x86/acpi: Switch to pr_xxx log functions
+To:     Ingo Molnar <mingo@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 14, 2021 at 5:31 PM Doug Smythies <dsmythies@telus.net> wrote:
+On Fri, May 14, 2021 at 12:20 PM Ingo Molnar <mingo@kernel.org> wrote:
 >
-> Hi All,
 >
-> Can I on-board to this patch or do you want me to submit another?
+> * Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> > On Fri, May 14, 2021 at 9:07 AM Ingo Molnar <mingo@kernel.org> wrote:
+> > >
+> > >
+> > > * Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> > >
+> > > > Switching to pr_debug et al has two benefits:
+> > > > - We don't have to add PREFIX to each log statement
+> > > > - Debug output is suppressed except DEBUG is defined or dynamic
+> > > >   debugging is enabled for the respective code piece.
+> > > >
+> > > > In addition ensure that longer messages aren't split to multiple lines
+> > > > in source code, checkpatch complains otherwise.
+> > > >
+> > > > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> > > > ---
+> > > >  arch/x86/kernel/acpi/boot.c | 118 ++++++++++++++----------------------
+> > > >  1 file changed, 47 insertions(+), 71 deletions(-)
+> > >
+> > > Reviewed-by: Ingo Molnar <mingo@kernel.org>
+> >
+> > So I'm going to take this through the ACPI tree if that's OK.
+>
+> Sure!
 
-Please send another one.
+So applied as 5.14 material, thanks!
