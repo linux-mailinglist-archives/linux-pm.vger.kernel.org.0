@@ -2,70 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759FA386EE4
-	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 03:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2F386FF4
+	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 04:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345584AbhERBLp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 21:11:45 -0400
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:43930 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345592AbhERBL0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 21:11:26 -0400
-Received: by mail-oi1-f170.google.com with SMTP id j75so8205574oih.10;
-        Mon, 17 May 2021 18:10:09 -0700 (PDT)
+        id S237460AbhERCh4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 22:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230228AbhERCh4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 22:37:56 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CB9C061573
+        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 19:36:38 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d16so6299537pfn.12
+        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 19:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=nKa84xb+3/AF1nIoA1hmwNH8sSGPzz754RqGpwfKmyE=;
+        b=tvYajf/aCFjIP/Stq2Rsat+VvXOtkYE3TNa/EogdhjiYYKIQVefr/x/KO2QFmxsNln
+         YmLFzmzrX1buTc0X1pHUAFnbv8ThKu6RE5mZNlGvUe7VJGdZl8R3AU9JYRlXCH26aXWj
+         dxXFKH7L9cjW3DxXE8tbbjEg0T02jiCAI2tbmu7fyU7+uFlopsbbFJ5Iu25sHKNm6EoU
+         Xn+YaXc+aT26up2Fn94wZoc9uH6FYbE3ROrEQDAp8nU/ycKli8Sa4bjqRCBhd2nD+EhZ
+         v3+gF3W1UMWBsbCviQ6J/ZJWrbv2s2oYK8Je0yzxYbxOrSJNKhTFQgJt1qGy+ufuZGHg
+         hwpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7VRx1KOGTd/mlN9tivtVrwdAcsGI2VRzEg2JPb/ZPK4=;
-        b=mU3Dq29JGDKOMCkjlmPmkp5wm7QI329MKXp+DDQhFNXHMRqI1ys4+xRsAm+cX8EMjb
-         Qynu5rR4xDR6lBfyZDrlOwERPjL2Ou7hG+atW2LpcgO2oGzuIawv1z69Kp4yC959uoi4
-         ZvMDfAjV4eNIK4+vOBH6X8LBMJS1NB/OPDUfM2tlnjcyHgEhxjCxtYWIY4hMjb1mMZwg
-         qZ+TCnoB7kIlIh+Z5Yh3BkYH/FGzviJGWrkgbqYHQs7X8G+jNC2Ws4qnQPPCkGjjWdDR
-         JxofuQjVunr82spCHemvHb2xEtJGl7XwVAlSEn1iV7jiQxNOVBB6RoQGFtyC2DcPEFLo
-         86bQ==
-X-Gm-Message-State: AOAM531wGvdgUBe029vdpwJHgqj8yVipTno6Kj8u6tcXbgfYmZMGM3rI
-        iaHR1PwUooM++Eez8DUd4g==
-X-Google-Smtp-Source: ABdhPJxJwaQqKnuSbG53ylbD2hOPzHyziLLftz7JZWGc73yw7BNscf0h/pFLTwqkn/9oQux8MjpoLw==
-X-Received: by 2002:aca:da8b:: with SMTP id r133mr1949783oig.36.1621300208883;
-        Mon, 17 May 2021 18:10:08 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id z4sm1046825oib.40.2021.05.17.18.10.07
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=nKa84xb+3/AF1nIoA1hmwNH8sSGPzz754RqGpwfKmyE=;
+        b=LzWnInEpu2Zka9n/79Mcn/sciw30/QgLKSxP6aZsGv10pzKL/NSKUnXYkit8Z5HUuN
+         3teLybTm12Qhd21+xxFPEukMNUGbysHJql1UbC4yWArUeuxzxvPHUvG71IvJvjQHmtsP
+         wxz1pB3DpEQlW6Z5vWFoHZsBDS5YcIwmteF4DqeCWAgB+am3CxxbXQsRVFn4Cw98X4Ii
+         nC6Q6gO9sYocnnabzrPPZq/2idkpm1ykXf7GktDPq/ut18p+7s1uFNirb0bSSsJm6sBC
+         rbljUceGJYBPZY6KiBWkCdU5LgP2u0YrwtpahKrGQLTmubZ8eUMTfTIjXdecLz7n2cg/
+         vh7Q==
+X-Gm-Message-State: AOAM531tUhVJVFKKItlJu2guAIltYrqf73TqVfOMUZvhV8BfsVV09H8H
+        C7Rs9dWuMiGh4ZKprs+QWfLFPw==
+X-Google-Smtp-Source: ABdhPJzxTY+AULrfyktTIfsYF3EGJa7i4Hh37nmKpi9xl/fx4Uuo9ymiYYnS1T1lDxFACZ8pyXpX0g==
+X-Received: by 2002:a63:9d43:: with SMTP id i64mr2629345pgd.205.1621305398455;
+        Mon, 17 May 2021 19:36:38 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x133sm11132448pfc.19.2021.05.17.19.36.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 18:10:08 -0700 (PDT)
-Received: (nullmailer pid 3571898 invoked by uid 1000);
-        Tue, 18 May 2021 01:10:07 -0000
-Date:   Mon, 17 May 2021 20:10:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        David Sterba <dsterba@suse.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: msm: Add SAW2 for APQ8026 and
- MSM8226
-Message-ID: <20210518011007.GA3571838@robh.at.kernel.org>
-References: <20210513150150.51464-1-bartosz.dudziak@snejp.pl>
+        Mon, 17 May 2021 19:36:38 -0700 (PDT)
+Message-ID: <60a32836.1c69fb81.f274f.646b@mx.google.com>
+Date:   Mon, 17 May 2021 19:36:38 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210513150150.51464-1-bartosz.dudziak@snejp.pl>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.13-rc2-4-g3da05329d571
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc2-4-g3da05329d571)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 13 May 2021 17:01:49 +0200, Bartosz Dudziak wrote:
-> Add the dt-binding compatible in the SPM AVS Wrapper 2 (SAW2) for the
-> APQ8026 and MSM8226 SoC platforms.
-> 
-> Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-> ---
->  Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc2-4-g3da05329d571)
 
-Acked-by: Rob Herring <robh@kernel.org>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc2-4-g3da05329d571/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc2-4-g3da05329d571
+Git Commit: 3da05329d57186b0e0d4e510ac5f38bd12c4f70c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
