@@ -2,65 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4DB3878DE
-	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 14:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F9A387994
+	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 15:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343517AbhERMgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 May 2021 08:36:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36562 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245556AbhERMgB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 May 2021 08:36:01 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 06714B06A;
-        Tue, 18 May 2021 12:34:42 +0000 (UTC)
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH v3 2/2] cpufreq: intel_pstate: Add Cometlake support in no-HWP mode
-Date:   Tue, 18 May 2021 14:34:13 +0200
-Message-Id: <20210518123413.20670-2-ggherdovich@suse.cz>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210518123413.20670-1-ggherdovich@suse.cz>
-References: <CAJZ5v0g5_BY3DCi=VxqkRh+TYPS5nkJ-J96EzPVrc975uiWf3Q@mail.gmail.com>
- <20210518123413.20670-1-ggherdovich@suse.cz>
+        id S1343649AbhERNNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 May 2021 09:13:16 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:3022 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231490AbhERNNP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 09:13:15 -0400
+Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FkxDN6CN2zlgJp;
+        Tue, 18 May 2021 21:09:40 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 18 May 2021 21:11:56 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 18 May
+ 2021 21:11:55 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <amitk@kernel.org>, <daniel.lezcano@linaro.org>
+Subject: [PATCH -next] thermal: thermal_of: Correct struct name __thermal_bind_params
+Date:   Tue, 18 May 2021 21:14:08 +0800
+Message-ID: <20210518131408.1310057-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Users may disable HWP in firmware, in which case intel_pstate wouldn't load
-unless the CPU model is explicitly supported.
+Fix the following make W=1 kernel build warning:
 
-See also commit d8de7a44e11f ("cpufreq: intel_pstate: Add Skylake servers
-support").
+   drivers/thermal/thermal_of.c:50: warning: expecting prototype for struct __thermal_bind_param. Prototype was for struct __thermal_bind_params instead
 
-Suggested-by: Doug Smythies <dsmythies@telus.net>
-Tested-by: Doug Smythies <dsmythies@telus.net>
-Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/cpufreq/intel_pstate.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 9a93603acd3f..a6d8e56c8e27 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2087,6 +2087,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
- 	X86_MATCH(ATOM_GOLDMONT,	core_funcs),
- 	X86_MATCH(ATOM_GOLDMONT_PLUS,	core_funcs),
- 	X86_MATCH(SKYLAKE_X,		core_funcs),
-+	X86_MATCH(COMETLAKE,		core_funcs),
- 	X86_MATCH(ICELAKE_X,		core_funcs),
- 	{}
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 5b76f9a1280d..e86389fa1431 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -35,7 +35,7 @@ struct __thermal_cooling_bind_param {
  };
+ 
+ /**
+- * struct __thermal_bind_param - a match between trip and cooling device
++ * struct __thermal_bind_params - a match between trip and cooling device
+  * @tcbp: a pointer to an array of cooling devices
+  * @count: number of elements in array
+  * @trip_id: the trip point index
 -- 
-2.26.2
+2.25.1
 
