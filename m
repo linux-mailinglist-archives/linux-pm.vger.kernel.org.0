@@ -2,93 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B74F3882D0
-	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 00:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E082388342
+	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 01:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbhERWkh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 May 2021 18:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S235382AbhERXod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 May 2021 19:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhERWkh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 18:40:37 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54A5C06175F
-        for <linux-pm@vger.kernel.org>; Tue, 18 May 2021 15:39:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h16so13066450edr.6
-        for <linux-pm@vger.kernel.org>; Tue, 18 May 2021 15:39:18 -0700 (PDT)
+        with ESMTP id S230114AbhERXod (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 19:44:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CD4C061573;
+        Tue, 18 May 2021 16:43:14 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id lg14so17197251ejb.9;
+        Tue, 18 May 2021 16:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tEHzbSc3kHz/DuDcJaL+S6VOx+u35xoPcv8IKY7KC+A=;
-        b=TaGtnXLRQlBbi4wI+FG9hnkn1p/+dOa7BxgKCDfqLNXSHMo14MsLMi/yvAqLjI1sLJ
-         RX6SFlCXqLRtBoGLfrXqDun0xLvJ697IZ7TepKlthK/rURyH4w1C2fngDQQ6TN68gqax
-         ztsJPWir5AQA43X/QzxA25u0Sot+qKsjEZ6JI=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x6BN/PyTHg0vWjClj6KF7Z9rFUMiX9eq6dsc19wtdr4=;
+        b=n6wyx8OsDzlIlED4O93DtiZhz6eERcfdK3k6vpm3EXg5zXa+1oUGm01Phbrrpzs5E5
+         qQ3tdtBZEEq8WSlUxVi2s6/MX6K+dRSVOMGlPGRcbCYXmOZ98RF7KLngTJLuRvkRM2bZ
+         DXUJtqfYPDb7zHt8Kyxccd5hrAG/hjvmfISMkpLyhd7prJ5RoLlvljk37X/Sa3VoK94d
+         9zpcJJs5+jU7YZfoLm7PPZLZt1ZjlfzqMnOl2EFg+vb9QDqLxZdp570J0cascxregwnP
+         ArFOogQv4PVTn1HGagK12A7ksXTgk1dCRcYDClJtElglk+t436DyUbYSrRI0dyEWIq8g
+         eMcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tEHzbSc3kHz/DuDcJaL+S6VOx+u35xoPcv8IKY7KC+A=;
-        b=KpEvsY67qY7/A/fq7NAzDFsh+kG5ewO75aw3tbdsD3evepS8baPF+vTIljwL+IJ//f
-         gOeyLrZtPUyGWyH/TgxEvFc7VGQmROe+8EGuYboYU1fnQMdFEvBaH1jPxdT7pwl+Keec
-         GHTDOpp6lHNwwbqo0rcr1UhCWWRb0WuN5241XvdS+TeSixGmxE0rXVaVt4nUKpegfp4Z
-         ej31Kj3LX692NMZuxWfGtHy2Pm0iL7c3NEQBvMVEEZSZekKDUchOWdBuop0FxSut76Ck
-         rpD7cJQWyitGX9vgdRXtfYqvXftbntZv/pUPggqM4m8ezd8Y3wzk01J4InLyrNWBMLMC
-         l01w==
-X-Gm-Message-State: AOAM530zNK0J+znDAHCB1NkAYhmM2q/e/Q1W7bWQhiB9jVPfYqwX1YpJ
-        8uePB+MIkOoQTpjtSp7ThZjcgjUwf8dLWw==
-X-Google-Smtp-Source: ABdhPJwt7/9jZrdNANklsrJ3txm1plDMDTtrJxPnWFYJj+k8GpTh+Db/rR7PKZ+zRJUbQhrps2hoDA==
-X-Received: by 2002:a05:6402:268c:: with SMTP id w12mr10124877edd.234.1621377556720;
-        Tue, 18 May 2021 15:39:16 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id a22sm10357647ejs.84.2021.05.18.15.39.15
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 May 2021 15:39:16 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id t15so13059924edr.11
-        for <linux-pm@vger.kernel.org>; Tue, 18 May 2021 15:39:15 -0700 (PDT)
-X-Received: by 2002:aa7:cd8b:: with SMTP id x11mr9740944edv.87.1621377555474;
- Tue, 18 May 2021 15:39:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x6BN/PyTHg0vWjClj6KF7Z9rFUMiX9eq6dsc19wtdr4=;
+        b=OS+eSAbOyDTWXeTOziUkrVex3I0qXPQPajvq9JP8RlqutYtb8ZAt4OTLx3e9WJXClt
+         xdVFnZ6XK65AqrEz5Zf1fyZsu3GcnbV9sagM22QUTzC9cZKescUF55oYkcCxV3+6DmYm
+         H6ZdwF84QdiHO7WslXQl+2w3dxFDi3SF6y2Y90hObEAXmMAqwj4CQLYvC3EGFrIw8UFn
+         E9c5SnNWr4Ueykpj71l6cUPVa96EE8YfvwzAVvuQPcMA+X0EsdXSyU2PtT5e4/u2AvJ6
+         jBvKnSV2kzqNO/w1KbWqw9Q7tW7FUoycAg0qiBOU7OKFhpdbscDOVoRtg6mYYH8kNDW6
+         uLJQ==
+X-Gm-Message-State: AOAM532Sz6+r/efZcgrBOG1LppOWk6Oc0mLZ3II6jAtx+RHSyPGXim6F
+        +SX8y8TuNVnwrQ2HMegID30=
+X-Google-Smtp-Source: ABdhPJyx4g0eF9jK3jR9GNaW4zcqF2TMglN8q9DN3A6CTzKP9unCmlTL3ltDAQYjzDHsTxzjwkO/DQ==
+X-Received: by 2002:a17:906:640c:: with SMTP id d12mr8429650ejm.70.1621381392638;
+        Tue, 18 May 2021 16:43:12 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-35-189-2.ip56.fastwebnet.it. [93.35.189.2])
+        by smtp.googlemail.com with ESMTPSA id bm13sm11220567ejb.75.2021.05.18.16.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 May 2021 16:43:12 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] drivers: thermal: tsens: add timeout to get_tem_tsens_valid
+Date:   Wed, 19 May 2021 01:43:06 +0200
+Message-Id: <20210518234309.29014-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210518161842.1.Ifec9c629767197bbd80312ebea93ec8bbfafbf06@changeid>
- <ccfe34ca-9487-1f6c-6ac2-18b8ac7cf57d@amd.com>
-In-Reply-To: <ccfe34ca-9487-1f6c-6ac2-18b8ac7cf57d@amd.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Tue, 18 May 2021 16:39:04 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30DS2LYrUBFgdyH5nRPhjyH9CGGWvY7dgCU=oQetaRf8oA@mail.gmail.com>
-Message-ID: <CAHQZ30DS2LYrUBFgdyH5nRPhjyH9CGGWvY7dgCU=oQetaRf8oA@mail.gmail.com>
-Subject: Re: [PATCH] powercap/intel_rapl: Add AMD Fam19h RAPL support
-To:     Kim Phillips <kim.phillips@amd.com>
-Cc:     linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Victor Ding <victording@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ah I should have tried rebasing on ToT.
+The function can loop and lock the system if for whatever reason the bit
+for the target sensor is NEVER valid. This is the case if a sensor is
+disabled by the factory and the valid bit is never reported as actually
+valid. Add a timeout check and exit if a timeout occurs. As this is
+a very rare condition, handle the timeout only if the first read fails.
 
-Thanks!
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/thermal/qcom/tsens.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-On Tue, May 18, 2021 at 4:28 PM Kim Phillips <kim.phillips@amd.com> wrote:
->
-> On 5/18/21 5:18 PM, Raul E Rangel wrote:
-> > Commit a77259bdcb62 ("perf/x86/rapl: Add AMD Fam19h RAPL support") added
-> > RAPL support for Fam 19h. This CL adds the missing powercap support.
-> >
-> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > ---
->
-> ?  This change is already upstream:
->
-> commit 8a9d881f22d7a0e06a46a326d0880fb45a06d3b5
-> Author: Kim Phillips <kim.phillips@amd.com>
-> Date:   Tue Oct 27 07:23:57 2020 +0000
->
->     powercap: RAPL: Add AMD Fam19h RAPL support
->
-> Thanks,
->
-> Kim
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index b1162e566a70..38afde1a599f 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -599,6 +599,7 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+ 	int hw_id = s->hw_id;
+ 	u32 temp_idx = LAST_TEMP_0 + hw_id;
+ 	u32 valid_idx = VALID_0 + hw_id;
++	unsigned long timeout;
+ 	u32 valid;
+ 	int ret;
+ 
+@@ -607,13 +608,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+ 		ret = regmap_field_read(priv->rf[valid_idx], &valid);
+ 		if (ret)
+ 			return ret;
+-		while (!valid) {
+-			/* Valid bit is 0 for 6 AHB clock cycles.
+-			 * At 19.2MHz, 1 AHB clock is ~60ns.
+-			 * We should enter this loop very, very rarely.
+-			 */
+-			ndelay(400);
+-			ret = regmap_field_read(priv->rf[valid_idx], &valid);
++
++		if (!valid) {
++			timeout = jiffies + msecs_to_jiffies(20);
++
++			do {
++				/* Valid bit is 0 for 6 AHB clock cycles.
++				 * At 19.2MHz, 1 AHB clock is ~60ns.
++				 * We should enter this loop very, very rarely.
++				 */
++				ndelay(400);
++				ret = regmap_field_read(priv->rf[valid_idx], &valid);
++				if (valid || ret)
++					break;
++			} while (!(ret = time_after_eq(jiffies, timeout)));
++
+ 			if (ret)
+ 				return ret;
+ 		}
+-- 
+2.30.2
+
