@@ -2,95 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28090387E88
-	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 19:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946273882A4
+	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 00:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351232AbhERRgM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 May 2021 13:36:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:26115 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351230AbhERRfz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 13:35:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1621359277; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=ZgFIvI40y7otmHzklIMUNhMtm0MlsP2bGGKHOKWsOXI=; b=uQSqmo73fYiY5CU/XzwfPzLa+qaMx6t0jxhs/hY4zhduunJ0mLYakuv3nsqn/QoUd5w6fKUl
- nLW8MuJ8v3kAQXCabsgetG7xbh6Tw4pACsMiPWAb9x76A+XQHM+oE6OMd8G7215thlAvqMfu
- nx5Fb5NIKff8WCO8NoSVI3lebZA=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 60a3faabb15734c8f9ca67ff (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 18 May 2021 17:34:35
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B6734C43217; Tue, 18 May 2021 17:34:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C307FC43217;
-        Tue, 18 May 2021 17:34:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C307FC43217
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, sibis@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        id S236687AbhERWUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 May 2021 18:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236372AbhERWUR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 18:20:17 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DBEC06175F
+        for <linux-pm@vger.kernel.org>; Tue, 18 May 2021 15:18:58 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s19so11275983oic.7
+        for <linux-pm@vger.kernel.org>; Tue, 18 May 2021 15:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yazsg80d5R8pUukq3uU44JSO6L/ec0vuHN2nnYiZnDw=;
+        b=eNHA+60Y70M5AFCs5uRynQCs5aRQ+8RuK/nuh09ecH15Heuxs+6AbybFWwB9+e6D4L
+         r30NcwBr3FK1CHmVd1MBIVJBmrI8YQNxIwTG9TKaADff3Rj4p4cvI46t5MbkT0M3sMAW
+         /IrRaQC3lHCvS1G0jhfZ8oZHqdBX/uSKJpuxk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yazsg80d5R8pUukq3uU44JSO6L/ec0vuHN2nnYiZnDw=;
+        b=AGHZn/nGemohsTZ3kk8MMQkkU8+SFLCEzF2RTHaleH4+/A6MrxrtrjFHsKw4smV7nZ
+         T9bscdJFAS8ZVB/7avr1K1gGoGGMXV6RVC1dtcWVn4cpyjzPD2JKB1FDxiRA7VblQE+w
+         UHrObjhZDhp22tU8NafiECYuv9xgU6jKcejbuD6wYB1Pxr4fbkmUPi1hOQI+kdrB7Cag
+         vTIJ1Kbwse1y24KKsFg000kt8mc9sx+xrtY4BxSDTsktzA0kXWLDQZAMk1b76mzUDyaG
+         ARw/98RpcYeq+ohl2RWiZKhREgnX0vC+3wijeMQEuUUKyZvNpmQAxtHTH8k9jSVNo5F5
+         OSFw==
+X-Gm-Message-State: AOAM5325LmmKbpLH+SrzE3/ARZzfUDzKEIPqmzM3S3ry7KIHbjIBgiJ1
+        4MwDpIPfYCnBgUy5BSDiCaPXnNIu8gmOGQ==
+X-Google-Smtp-Source: ABdhPJy89URKoTpM78+NFQ1y4H8rpy5QjDbTENsxB3lAViQQ7zii9kuf3/Fvcr17DQbdi8c7ycmQkw==
+X-Received: by 2002:a05:6808:1142:: with SMTP id u2mr5021288oiu.101.1621376338105;
+        Tue, 18 May 2021 15:18:58 -0700 (PDT)
+Received: from rrangel920.bld.corp.google.com (h184-60-195-141.arvdco.broadband.dynamic.tds.net. [184.60.195.141])
+        by smtp.gmail.com with ESMTPSA id j18sm4069667ota.7.2021.05.18.15.18.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 May 2021 15:18:57 -0700 (PDT)
+From:   Raul E Rangel <rrangel@chromium.org>
+To:     linux-pm@vger.kernel.org
+Cc:     kim.phillips@amd.com, peterz@infradead.org,
+        Raul E Rangel <rrangel@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Subject: [V2 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-Date:   Tue, 18 May 2021 23:04:02 +0530
-Message-Id: <1621359242-18641-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1621359242-18641-1-git-send-email-okukatla@codeaurora.org>
-References: <1621359242-18641-1-git-send-email-okukatla@codeaurora.org>
+Subject: [PATCH] powercap/intel_rapl: Add AMD Fam19h RAPL support
+Date:   Tue, 18 May 2021 16:18:53 -0600
+Message-Id: <20210518161842.1.Ifec9c629767197bbd80312ebea93ec8bbfafbf06@changeid>
+X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-SoCs.
+Commit a77259bdcb62 ("perf/x86/rapl: Add AMD Fam19h RAPL support") added
+RAPL support for Fam 19h. This CL adds the missing powercap support.
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 6b22021..5aec586 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1122,6 +1122,15 @@
- 			};
- 		};
+ drivers/powercap/intel_rapl_common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index b9d9eadadbb0..f0799837c2dd 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1068,6 +1068,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&rapl_defaults_hsw_server),
  
-+		epss_l3: interconnect@18590000 {
-+			compatible = "qcom,sc7280-epss-l3";
-+			reg = <0 0x18590000 0 1000>, <0 0x18591000 0 0x100>,
-+				<0 0x18592000 0 0x100>, <0 0x18593000 0 0x100>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+			#interconnect-cells = <1>;
-+		};
-+
- 		clk_virt: interconnect {
- 			compatible = "qcom,sc7280-clk-virt";
- 			#interconnect-cells = <2>;
+ 	X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
++	X86_MATCH_VENDOR_FAM(AMD, 0x19, &rapl_defaults_amd),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.31.1.751.gd2f1c929bd-goog
 
