@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45F2386E1C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 02:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EB0386E30
+	for <lists+linux-pm@lfdr.de>; Tue, 18 May 2021 02:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239504AbhERAMv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 May 2021 20:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S1344843AbhERAQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 May 2021 20:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237162AbhERAMv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 20:12:51 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19995C061573
-        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 17:11:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id z13so11386681lft.1
-        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 17:11:34 -0700 (PDT)
+        with ESMTP id S1344876AbhERAQr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 May 2021 20:16:47 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC6AC06175F
+        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 17:15:29 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id x19so11400955lfa.2
+        for <linux-pm@vger.kernel.org>; Mon, 17 May 2021 17:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TyiwtTG2N+/Hrh4d1d7mHndEUMG7Hm1al5+B6ohKt8I=;
-        b=wcWqgiH2lShH7P5gkQbdZ9WuITdhB3Wb3H9tyLh/TwxK4CGtgsHZMOB85MhG4mGdNe
-         vEvv2otEumUyFJIuivZVENY5p8MKfijv56mV7dwb5SWQF/OBqTPpOn0RwIhupmbvRYBC
-         WaK7i27s/Y0GJl1zJ3dAKjS0jRZ3WavARxzxqe8tU2TCTUsHUApXccMZJ+cWcKqWbRdR
-         VaTOdpPaUVtWk4iTjtck6qP5lqIj41Xbx8utsk1HCEK/ZXN0pZd8EirUWtYh1en2y13e
-         T0oBeYz+ypPBd7Vv+6CNANgfIuazidbvw4TISOFxN3Mt8SalnDHaDLPwr7ictNgVidUs
-         rT6Q==
+        bh=qgg2j889/fnQxfXmN+eFv5gIjFubNQa/eAl3dDOh+ds=;
+        b=Bp9VYB6PwxuhIJzOCUSrybM0FKwQ8JUxWCIF/avC1m4QrdTpFTWCdytz2eHp8t8m1s
+         gC2wypRqOHqNXR/mkO0+AFPjyQ5I+BEWaeT4AhPxrSSdE5w3YX6jYxFWfdPrE2iW4UMK
+         IUe1aHEl4hZjvfepXrDFHELldTfNd0JclGmqaDSJHrO9lke0LjIMTGssuNLj9LkE8Tmu
+         ScgSRAxpftGnFVwAw09wy7NEtglZSHsGLSMGEAC9OBz9YapNlOA19bp4ZeZD1ZpcVzVp
+         Fjsxwua7Iqplp4fWhzLto0Nqhb76UMzSdkijURLg22WAbkynMmXL6FecFAJZKAUdivVO
+         pHSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TyiwtTG2N+/Hrh4d1d7mHndEUMG7Hm1al5+B6ohKt8I=;
-        b=ZnhCFolL03lSkwsp42njp7BE3s9RNFvE2SL2bFo1yzcLXbIlFAtkoGxLyGdeNZig+M
-         /Wvx6zqOKz1nA+U3pcZOd1ff+IYCpZc5Nwx+sxaQVVJO52vMXP9w+7/aJFhxgYP9M5Io
-         6yXSJTpPy9HFPuL4JJRTRk0GYYSXGLWYd7/SZLiKdzXhyn7euliHhadaSqQQZEFkb+Qk
-         1Mg499cwBv1FFZf6JydwB6Wil/y84jxejjYvTsBsqdEz4SrB/eKgOL4rVonvdc6xkTju
-         WZQQ0DWlnQz5XJqfT/S4IklN/Fk92NXGlWExoZJuY5q2xLEUFt701SjnNpCTwklC53pE
-         TILA==
-X-Gm-Message-State: AOAM53228BVrIlpxvgbhSftX6jQbaRWuoJMSbQvsnFDx1CIhd9LkXBHM
-        CHxOjePzgviUmy9LwHTZMPHHdTJWrmbdPd2NZB+MVA==
-X-Google-Smtp-Source: ABdhPJzxdpfAJaVPPSlL2ev1Kfw/zmf4ZxSm/rtn6rYv7BBQHOmbJWgGVKf+T8AgzObhV+SBN3nShVbctvVvvqHsy5I=
-X-Received: by 2002:a05:6512:11ea:: with SMTP id p10mr1792893lfs.157.1621296692645;
- Mon, 17 May 2021 17:11:32 -0700 (PDT)
+        bh=qgg2j889/fnQxfXmN+eFv5gIjFubNQa/eAl3dDOh+ds=;
+        b=q8bCg1bCdS9tiRvuItRblU+IXGveb/a2rlkyFCyxnEJfdEmjRfBgkLIzBHvG1OkBje
+         yFwLinXZ1Som/h/3KRIR6JOzezk1I+4ueHx5LUuPvR5xuKBIKmcpCKeWvpyRoq3JTKAX
+         B6JInz84iJQTg4UbTKadDqMSB4cmnqcpItDJgJYtpW+pjZ4a0XdueJ82clCueejwfx8g
+         PrekxqcstCLZmSue3TXJgPbOnoorGPBNgiLsuWdry/Uw6VwPKL5MtuZabip5EN15UCB+
+         pw7e/8E05VOCbQ1J/4/+UG0iRC8/8xkyZB4dJUbxmh54YkzXMWSu8tA8VMIkrCgC2ILv
+         +bVA==
+X-Gm-Message-State: AOAM530ADl/ZIuhgUi5imXujwQ9zR2uVhMOUrHJX46a0ZfUNoT7lYTtU
+        wJGxQHjCIQCKTNnxyJGArQv4MsoPVGiHxX02dMFYHA==
+X-Google-Smtp-Source: ABdhPJwwHCxFUtvOlL30GYF5vmaju3im/FNIdvGILw4NTZ3a5EXdIs7CMHgX5t5LVL9V9nn61+GgPorVK5PQ0z/vtt0=
+X-Received: by 2002:a19:b0b:: with SMTP id 11mr1863131lfl.291.1621296928140;
+ Mon, 17 May 2021 17:15:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210412230320.382885-1-sebastian.reichel@collabora.com> <20210412230320.382885-3-sebastian.reichel@collabora.com>
-In-Reply-To: <20210412230320.382885-3-sebastian.reichel@collabora.com>
+References: <20210412230320.382885-1-sebastian.reichel@collabora.com> <20210412230320.382885-4-sebastian.reichel@collabora.com>
+In-Reply-To: <20210412230320.382885-4-sebastian.reichel@collabora.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 18 May 2021 02:11:21 +0200
-Message-ID: <CACRpkdZxOTE7dRXaopqeybYtOx2D3k98VC_JT-VCoiK14oCQ+g@mail.gmail.com>
-Subject: Re: [PATCH 2/6] ARM: dts: ux500: Fix interrupt cells
+Date:   Tue, 18 May 2021 02:15:17 +0200
+Message-ID: <CACRpkdYFQxzPYjmeZ_wZ-79fsR6tgY9OCcPHiyRO-kiJwd0TuA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] ARM: dts: ux500: Rename gpio-controller node
 To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -67,12 +67,14 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Tue, Apr 13, 2021 at 1:03 AM Sebastian Reichel
 <sebastian.reichel@collabora.com> wrote:
 
-> Fix interrupt cells in DT AB8500/AB8505 source files. The
-> compiled DTB files will stay the same.
+> Rename the AB8500 gpio controller node from ab8500-gpio to
+> ab8500-gpiocontroller, since -gpio is a common suffix for
+> gpio consumers.
 >
 > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Patch applied to the Ux500 tree, sorry for the delay.
+Reluctantly applied, this is unorthodox but with the prefix I see
+the syntactic problem.
 
 Yours,
 Linus Walleij
