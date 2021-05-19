@@ -2,106 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A2D388345
-	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 01:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DAF3884ED
+	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 04:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbhERXog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 May 2021 19:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbhERXof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 19:44:35 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78E4C06175F;
-        Tue, 18 May 2021 16:43:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id et19so10136779ejc.4;
-        Tue, 18 May 2021 16:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=U5mKTMQmxEVFJG8UOfkeKjZ+h743hA9emYKF3Ch8SzM=;
-        b=XIpq0m+V4Kvo9Ej7/M6YyR98UcXaTrp/mTf8JNnAN+EGZwNNulqKY6fo8XLO66l0VP
-         gvTJLz1KmoKzjAEk9TXjtlGrCV4HMiomWhFsWZJIdg/yqAEzyeWw8bSV6bEeV6Ph1hCb
-         sf4WrA6g4Sbl+2QyxosI80l9oPiW8r4IM3P4F30fv77JLXWTJlbU+eqGhdcszuxD+mb3
-         s16ni4x2KSH6JYogXmm+SEcvOY9zZLxQ1H3r+xohtR9pmQ9tPi8XkapXWid2ThJ/w99F
-         yQTBZwXCDmsEkzsdnn5Ak6UgRd4n0yNdvu5sUNfmRNN42mSZNru4+31217jsn1dqTBt/
-         VWGQ==
+        id S237471AbhESCte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 May 2021 22:49:34 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:38650 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237274AbhESCtd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 May 2021 22:49:33 -0400
+Received: by mail-ot1-f49.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so10502951oth.5;
+        Tue, 18 May 2021 19:48:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=U5mKTMQmxEVFJG8UOfkeKjZ+h743hA9emYKF3Ch8SzM=;
-        b=rX2Fvp/IMPCPrBTd2xIGT6NV5bSsFnWTBWo0wBt0UvndNJ64p8q56Ygs4IpPD00wJW
-         2YeRl9zCQV6gwF5cI0aqLG/CICznWsfeZDFt6Oxt28n1HUPlGWpXTmVa0M6tv2pV+9uh
-         y/DfEpY5iPkLL8tJg27aYahloSOe42kbtUDTtTCuKH+8OR/O671sMHi8/cPHaK5+LbMq
-         ziKrGixm9vhXG4k3op5XCvXPp52JciEpXVMigiPq+MxrMdnzF97ouoMVia7mPaWXMdXN
-         l8tvHEDEB6pnSUb7/OliSWHjLbNRE1DupnF6fRbn4qJhlOmeyT8hz2k79NL5vEahhWit
-         y8Cw==
-X-Gm-Message-State: AOAM532Th2Twf3U9XHhbDfK5lidKHpy7vFSoUK24Wz5NFb6CVSjZXsWb
-        uzaKBJTfxhF63rsens+zcIk=
-X-Google-Smtp-Source: ABdhPJwLjEeb02TK5+29ocCxmFtlOrcQuMOqbIE3NW9M9jU2buYnEUOgFH8TjPLadgSpKXAnA2QzDQ==
-X-Received: by 2002:a17:906:f283:: with SMTP id gu3mr8545634ejb.91.1621381395319;
-        Tue, 18 May 2021 16:43:15 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-35-189-2.ip56.fastwebnet.it. [93.35.189.2])
-        by smtp.googlemail.com with ESMTPSA id bm13sm11220567ejb.75.2021.05.18.16.43.14
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Q4LcyG7TR1wlU65C0tMqAS7GQ9Qzklf/Ua5vm6bP0dY=;
+        b=kBf1wdaFlurEs4ItIqW4b39n51OaGMkHtLJMebu0IxJq7Ut57VErSsUG2ImAr0/LkL
+         6oJ7HtYP0dU4rCub5rs/M5BZeycN3Tpzh/yciz5eOModxUNQy1Fl6d/QTFtI0frRoq6O
+         5NMPnUEutkw9rAQlr33955Qx4VKC4hPEuS5OGFA8kvobCVYuTgg8PMPGBZKSf7G5VBLe
+         E79XFtV26uMb2VS6R4Yn/Rfs8gfdZv9dTa66gmsxmqNcvew9aWAckwWYXLXgKfSjGHHp
+         Wxxhs2beVxG36oT6QQ9qCjPrbITriVuHuukEfB89wqAacMQwdCOIAo0tmfCTi9ZOtjOX
+         ODew==
+X-Gm-Message-State: AOAM532ozCSL+wHJ73O5OSfVQa6neqrUXXiWP47mpGA10axUxDnhUB69
+        gDzTddJKsmRmHoW3z88y1A==
+X-Google-Smtp-Source: ABdhPJx3BlvLuylgzd5eRpyEpXh47BO/eHtxDBU1//TMyqLZFNXTI3iRXR5JOdrQYhqAlyt6R2LmPw==
+X-Received: by 2002:a9d:62d0:: with SMTP id z16mr559268otk.180.1621392493120;
+        Tue, 18 May 2021 19:48:13 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x14sm3853076oic.3.2021.05.18.19.48.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 16:43:14 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] drivers: thermal: tsens: fix wrong check for tzd in irq handlers
-Date:   Wed, 19 May 2021 01:43:08 +0200
-Message-Id: <20210518234309.29014-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210518234309.29014-1-ansuelsmth@gmail.com>
-References: <20210518234309.29014-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 18 May 2021 19:48:12 -0700 (PDT)
+Received: (nullmailer pid 1905258 invoked by uid 1000);
+        Wed, 19 May 2021 02:48:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     elder@linaro.org, bjorn.andersson@linaro.org,
+        seansw@qti.qualcomm.com, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org, devicetree@vger.kernel.org,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
+        sibis@codeaurora.org, Andy Gross <agross@kernel.org>,
+        evgreen@google.com, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm-owner@vger.kernel.org, linux-pm@vger.kernel.org
+In-Reply-To: <1621359242-18641-2-git-send-email-okukatla@codeaurora.org>
+References: <1621359242-18641-1-git-send-email-okukatla@codeaurora.org> <1621359242-18641-2-git-send-email-okukatla@codeaurora.org>
+Subject: Re: [V2 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on SC7280
+Date:   Tue, 18 May 2021 21:48:11 -0500
+Message-Id: <1621392491.220233.1905257.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some device can have some thermal sensor disabled from the factory. The
-current 2 irq handler functions check all the sensor by default and the
-check if the sensor was actually registered is wrong. The tzd is
-actually never set if the registration fail hence the IS_ERR check is
-wrong.
+On Tue, 18 May 2021 23:04:00 +0530, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+> SoCs.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  3 ++-
+>  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 +++++++++-
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/thermal/qcom/tsens.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 4c7ebd1d3f9c..b1162e566a70 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -417,7 +417,7 @@ static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
- 		const struct tsens_sensor *s = &priv->sensor[i];
- 		u32 hw_id = s->hw_id;
- 
--		if (IS_ERR(s->tzd))
-+		if (!s->tzd)
- 			continue;
- 		if (!tsens_threshold_violated(priv, hw_id, &d))
- 			continue;
-@@ -467,7 +467,7 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
- 		const struct tsens_sensor *s = &priv->sensor[i];
- 		u32 hw_id = s->hw_id;
- 
--		if (IS_ERR(s->tzd))
-+		if (!s->tzd)
- 			continue;
- 		if (!tsens_threshold_violated(priv, hw_id, &d))
- 			continue;
--- 
-2.30.2
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dt.yaml: interconnect@17d41000: reg: [[399773696, 5120]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+
+See https://patchwork.ozlabs.org/patch/1480367
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
