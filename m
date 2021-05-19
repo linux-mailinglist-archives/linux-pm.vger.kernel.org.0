@@ -2,191 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F1C3896FC
-	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 21:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554283898A4
+	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 23:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbhESTuP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 May 2021 15:50:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41334 "EHLO mail.kernel.org"
+        id S229854AbhESVfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 May 2021 17:35:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232212AbhESTuO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 May 2021 15:50:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 634816105A;
-        Wed, 19 May 2021 19:48:54 +0000 (UTC)
+        id S229808AbhESVfV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 May 2021 17:35:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EC8D061074;
+        Wed, 19 May 2021 21:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621453734;
-        bh=Y9sdR/iBulqew++j1BJGenCkdrSIVi/CNnA4Tq6k3nU=;
+        s=k20201202; t=1621460041;
+        bh=P4pBbb+gpfVC0LaXhR2HVFGTt4ylPWLlXS4sxpNN6/4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RdHY9HdtbqN68gbw5hrrtfhE0GSNK1n5H7Eh3ym8IiDHn4et7fiLiDf80GVVcz8Np
-         roe6nOAcsmF7dzeeIEFFwXUj+3Eevn7XadZif5zxq4SvdKqAvll/on5bt8jzjKS6Lr
-         cn5JKhCWhdegT7O95ddHXAlOkFiI2b9U9k4nIcM+5xDWHRHWM4fPG8YfvlVeSzsKCd
-         Il5P0kwB8gSxqsQPhFtvyfQlQyC7WNCeVbLbfDznbmWCFSkIKRq+Nps0lSZq0V8/m0
-         pZhrATpHY9W8F0B2CYWmpPosNIlXZ4UrZq7ktjJGLWk27RinRbxzHqsitVI99BrJJk
-         dD2Dd5AbHEUTw==
-Date:   Wed, 19 May 2021 14:48:53 -0500
+        b=pDctJk6zxPhASM4cufXgw00O0lh5OH4gCGCZiBDQbLlk9kurV3jpn+J/CAfwJv9yO
+         DR34pZ3hhPPdiikP0zSP66uVuPqp89zCyMI18IIZOOXKFx61AzJqDoGPXtkyz4X4km
+         5YfWBSfXOKytwRKJM87Nw7J7I6dYzDeIcXNv5PYP6CzZyaVm3P2RGodD1Gdyd6zzEj
+         M+QRTWuORa1yKAcBW8chBJX83pFGbC1sEMF8NQ85ENKkHF3Nzii5oRdh2W+c8/05Rh
+         DvNLYZ+iGsqinFVGBfZ8AqaoH3X4PHjvYG/BL2Up+aP46o9NMFdELMWxaOVxvtelTB
+         B1eLXR6HLxCBg==
+Date:   Wed, 19 May 2021 16:33:59 -0500
 From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Konstantin Kharlamov <hi-angel@yandex.ru>,
-        Lukas Wunner <lukas@wunner.de>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
- s2idle
-Message-ID: <20210519194853.GA249712@bjorn-Precision-5520>
+To:     Prike Liang <Prike.Liang@amd.com>
+Cc:     linux-pci@vger.kernel.org, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de, sagi@grimberg.me, linux-nvme@lists.infradead.org,
+        Alexander.Deucher@amd.com, stable@vger.kernel.org,
+        Shyam-sundar.S-k@amd.com,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] PCI: add AMD PCIe quirk for nvme shutdown opt
+Message-ID: <20210519213359.GA256663@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0ijqL0ZpdwBvwY=Y9Ubuvd-Kr2s-NfUOKX_Ev3GB+pHww@mail.gmail.com>
+In-Reply-To: <1621304675-17874-2-git-send-email-Prike.Liang@amd.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 19, 2021 at 09:12:26PM +0200, Rafael J. Wysocki wrote:
-> On Wed, May 19, 2021 at 7:28 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, May 07, 2021 at 05:08:42PM +0300, Konstantin Kharlamov wrote:
-> > > On Fri, 2021-05-07 at 08:30 -0500, Bjorn Helgaas wrote:
-> > > > On Fri, May 07, 2021 at 12:07:38AM +0200, Lukas Wunner wrote:
-> > > > > On Thu, May 06, 2021 at 04:48:42PM -0500, Bjorn Helgaas wrote:
-> > > > > > On Thu, May 06, 2021 at 08:38:20PM +0300, Konstantin Kharlamov wrote:
-> > > > > > > On Macbook 2013 resuming from s2idle results in external monitor no
-> > > > > > > longer being detected, and dmesg having errors like:
-> > > > > > >
-> > > > > > >     pcieport 0000:06:00.0: can't change power state from D3hot to D0
-> > > > > > > (config space inaccessible)
-> > > > > > >
-> > > > > > > and a stacktrace. The reason turned out that the hw that the quirk
-> > > > > > > powers off does not get powered on back on resume.
-> >
-> > > > For example, "With s2idle, the machine isn't suspended via ACPI, so
-> > > > the AML code which powers the controller off isn't executed."  AFAICT
-> > > > that isn't actually a required, documented property of s2idle, but
-> > > > rather it reaches into the internal implementation.
-> >
-> > > > The code comment "If suspend mode is s2idle, power won't get restored
-> > > > on resume" is similar.  !pm_suspend_via_firmware() tells us that
-> > > > platform firmware won't be invoked.  But the connection between *that*
-> > > > and "power won't get restored" is unexplained.
-> > >
-> > > Sorry, I can't comment anything regarding AML and power management
-> > > in general since I am really new to all of this. However, regarding
-> > > the usage of the `pm_suspend_via_firmware()`: yeah, I also think it
-> > > is unclear what this does, and I was thinking about adding a wrapper
-> > > function something like `is_s2idle()` to the suspend.h, which would
-> > > simply call `pm_suspend_via_firmware` internally.
-> >
-> > No, that's not my point at all.  I don't really care whether the
-> > interface is called pm_suspend_via_firmware() or is_s2idle().
-> >
-> > What I don't like about this is that it's all just unexplained magic,
-> > as was the original quirk.
-> >
-> > IIUC, the quirk is applied by pci_pm_suspend_noirq() *after* it puts
-> > the device in a low-power state.  Here's my uninformed speculation
-> > about what happens:
-> >
-> >   - On suspend, pci_pm_suspend_noirq() puts device in low-power state.
-> 
-> Right.
-> 
-> >     My *guess* is this means D0 or D3hot for s2idle, and D3cold for
-> >     everything else.
-> 
-> This really depends on the ACPI methods involved, but as a rule (and
-> I'm not aware of any exceptions) the target power state of the device
-> for s2idle and "everything else" is the same.  If D3cold is possible,
-> it will be D3cold.  If not, that will be D3hot etc.
-> 
-> The only difference (from the individual device perspective) is that
-> in the ACPI S3 (or S4 if this matters here) case the platform firmware
-> (and that's not AML but something like SMM) may cut power off from it
-> later.
-> 
-> >  [Do we have sufficient debug to find out what these states are?]
-> 
-> I'm not sure what you mean.  What states are supported or something else?
+[+cc Rafael (probably nothing of interest to you), linux-pm]
 
-I was curious about what states we actually put this device in for
-s2idle/standby/s2ram/std because I was hoping we could decide based
-on what state s2idle used.  But if they all use the same target state,
-that idea won't work.
+On Tue, May 18, 2021 at 10:24:34AM +0800, Prike Liang wrote:
+> In the NVMe controller default suspend-resume seems only save/restore the
+> NVMe link state by APST opt and the NVMe remains in D0 during this time.
+> Then the NVMe device will be shutdown by SMU firmware in the s2idle entry
+> and then will lost the NVMe power context during s2idle resume.Finally,
+> the NVMe command queue request will be processed abnormally and result
+> in access timeout.This issue can be settled by using PCIe power set with
+> simple suspend-resume process path instead of APST get/set opt.
 
-> >   - pci_pm_suspend_noirq() does pci_fixup_suspend_late fixups,
-> >     including quirk_apple_poweroff_thunderbolt().
-> >
-> >   - quirk_apple_poweroff_thunderbolt() runs the magic SXIO/SXFP/SXLF
-> >     methods, which apparently turn off more power.
-> >
-> >   - On resume, pci_pm_resume_noirq() brings the device back to D0.
-> >
-> >     If we're resuming from standby, S2RAM, or STD, I speculate the
-> >     device is in D3cold, so this involves running AML that seems to
-> >     undo whatever SXIO/SXFP/SXLF did.
-> 
-> The standby, S2RAM and STD cases are actually different in that respect.
-> 
-> In the STD case we get the device from the restore kernel and it most
-> likely has been enumerated by it, so it is in whatever power state the
-> restore kernel puts it into.
-> 
-> For standby that most likely is the state in which the device was left
-> during suspend.
-> 
-> For S2RAM, it most likely will be something like D0-uninitialized,
-> because the platform firmware initiating the resume transition (which
-> is not AML, but again something like SMM) restores power to the
-> platform (including the majority of devices), but doesn't initialize
-> them as a rule.
-> 
-> The STD and S2RAM resume will undo the "magic", standby resume may not.
-> 
-> >     If we're resuming from s2idle, I speculate the device is in D0 or
-> >     D3hot, and we run different AML (or maybe no AML at all), and we
-> 
-> It is in whatever power state it was left in during suspend and we run
-> the same AML as in the other cases, modulo the possible power state
-> difference (with respect to the other cases).
-> 
-> >     *don't* undo the effects of SXIO/SXFP/SXLF, so the device doesn't
-> >     work.
-> 
-> This is correct.
-> 
-> > If the above is anything like what's happening, we should be able to
-> > skip SXIO/SXFP/SXLF based on the current power state of the device.
-> 
-> Not really.
-> 
-> > E.g., if the device is in D0 or D3hot, we should not use
-> > SXIO/SXFP/SXLF to yank power.
-> >
-> > That would seem more connected to the observable state of the device
-> > than using pm_suspend_via_firmware(), which relies on the connection
-> > between s2idle and PM_SUSPEND_FLAG_FW_SUSPEND (which is not at all
-> > obvious) and the power state of the device while in s2idle (also not
-> > obvious).
-> 
-> The problem is related to the fact that in s2idle the platform
-> firmware does not finalize the suspend transition and, consequently,
-> it doesn't initiate the resume transition.  Therefore whatever power
-> state the device was left in during suspend must be dealt with during
-> the subsequent resume.  Hence, if whatever is done by SXIO/SXFP/SXLF
-> in the suspend path cannot be reversed in the resume path by the
-> kernel (because there is no known method to do that), they should not
-> be invoked.  And that's exactly because the platform firmware will not
-> finalize the suspend transition which is indicated by
-> PM_SUSPEND_FLAG_FW_SUSPEND being unset.
+I can't parse the paragraph above, sorry.  I'm sure this means
+something to NVMe developers, but since you're adding this to the PCI
+core, not the NVMe core, it needs to be intelligible to ordinary PCI
+folks.
 
-How can we connect "if (!pm_suspend_via_firmware())" in this patch
-with the fact that firmware doesn't finalize suspend (and consequently
-does not reverse things in resume)?
+For example, since you only use this flag in the NVMe driver, you
+should explain why the PCI core needs to keep track of the flag for
+you.  Normally I would assume the driver could figure this out in its
+.probe() function.
 
-I don't see any use of pm_suspend_via_firmware() or
-PM_SUSPEND_FLAG_FW_SUSPEND that looks relevant.  That makes it really
-hard to figure out how this patch works and how to avoid breaking it
-in the future.
+Quirks are usually used to work around a defect in a device.  What's
+the defect in this case?  Ideally we can point to a section of the
+PCIe spec with a requirement that the device violates.
 
-Thanks for your patience in explaining all this!
+What does "opt" mean?
 
-Bjorn
+What is SMU firmware?  Why is it relevant?
+
+Is this a problem only with s2idle?  Why or why not?
+
+The quirk applies to [1022:1630].  An lspci I found on the web says
+this is a "00:00.0 Host bridge: AMD Renoir Root Complex" device.  So
+it looks like this will result in PCI_BUS_FLAGS_DISABLE_ON_S2I being
+set for every PCI bus in the entire system.  But the description talks
+about an issue specifically with NVMe.
+
+Is there a defect in this AMD PCIe controller that affects all
+devices?
+
+> In this patch prepare a PCIe RC bus flag to identify the platform whether
+> need the quirk.
+> 
+> Cc: <stable@vger.kernel.org> # 5.10+
+> Signed-off-by: Prike Liang <Prike.Liang@amd.com>
+> Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+> [ck: split patches for nvme and pcie]
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> Suggested-by: Keith Busch <kbusch@kernel.org>
+> Acked-by: Keith Busch <kbusch@kernel.org>
+> ---
+> Changes in v2:
+> Fix the patch format and check chip root complex DID instead of PCIe RP
+> to avoid the storage device plugged in internal PCIe RP by USB adaptor.
+> 
+> Changes in v3:
+> According to Christoph Hellwig do NVME PCIe related identify opt better in
+> PCIe quirk driver rather than in NVME module.
+> 
+> Changes in v4:
+> Split the fix to PCIe and NVMe part and then call the pci_dev_put() put
+> the device reference count and finally refine the commit info.
+> 
+> Changes in v5:
+> According to Christoph Hellwig and Keith Busch better use a passthrough device(bus)
+> gloable flag to identify the NVMe shutdown opt rather than look up the device BDF.
+> ---
+>  drivers/pci/probe.c  | 5 ++++-
+>  drivers/pci/quirks.c | 7 +++++++
+>  include/linux/pci.h  | 2 ++
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 953f15a..34ba691e 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -558,10 +558,13 @@ static struct pci_bus *pci_alloc_bus(struct pci_bus *parent)
+>  	INIT_LIST_HEAD(&b->resources);
+>  	b->max_bus_speed = PCI_SPEED_UNKNOWN;
+>  	b->cur_bus_speed = PCI_SPEED_UNKNOWN;
+> +	if (parent) {
+>  #ifdef CONFIG_PCI_DOMAINS_GENERIC
+> -	if (parent)
+>  		b->domain_nr = parent->domain_nr;
+>  #endif
+> +		if (parent->bus_flags & PCI_BUS_FLAGS_DISABLE_ON_S2I)
+> +			b->bus_flags |= PCI_BUS_FLAGS_DISABLE_ON_S2I;
+> +	}
+>  	return b;
+>  }
+>  
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 653660e3..7c4bb8e 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -312,6 +312,13 @@ static void quirk_nopciamd(struct pci_dev *dev)
+>  }
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD,	PCI_DEVICE_ID_AMD_8151_0,	quirk_nopciamd);
+>  
+> +static void quirk_amd_s2i_fixup(struct pci_dev *dev)
+> +{
+> +	dev->bus->bus_flags |= PCI_BUS_FLAGS_DISABLE_ON_S2I;
+> +	pci_info(dev, "AMD simple suspend opt enabled\n");
+> +}
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_AMD, 0x1630, quirk_amd_s2i_fixup);
+> +
+>  /* Triton requires workarounds to be used by the drivers */
+>  static void quirk_triton(struct pci_dev *dev)
+>  {
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 53f4904..dc65219 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -240,6 +240,8 @@ enum pci_bus_flags {
+>  	PCI_BUS_FLAGS_NO_MMRBC	= (__force pci_bus_flags_t) 2,
+>  	PCI_BUS_FLAGS_NO_AERSID	= (__force pci_bus_flags_t) 4,
+>  	PCI_BUS_FLAGS_NO_EXTCFG	= (__force pci_bus_flags_t) 8,
+> +	/* Driver must pci_disable_device() for suspend-to-idle */
+> +	PCI_BUS_FLAGS_DISABLE_ON_S2I	= (__force pci_bus_flags_t) 16,
+>  };
+>  
+>  /* Values from Link Status register, PCIe r3.1, sec 7.8.8 */
+> -- 
+> 2.7.4
+> 
