@@ -2,102 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E55B33893AD
-	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 18:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584763894A1
+	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 19:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355318AbhESQ1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 May 2021 12:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355315AbhESQ1O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 May 2021 12:27:14 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB99C061763
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 09:25:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id c14so12882084wrx.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 09:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h9ACoFyscr2mGx2hv7BWBvdkBNtd8ng9Fu2si46cdq4=;
-        b=byisdwD/i5u3WtSKYw+sYWGk0u8xFD4aI4NdDxMw+ffgIcjDqEhv7ahv61jA6USQgk
-         jm9vALBRIHhaWHsrnl4alI9tjghWi/KDqej7GJsI+Kh4+CiH0JVQT0LCLcEZJlSVxSxX
-         jj3JoW++94xEI/00y2L7l5sdQNlHQsyE9iBR37drGXa3B+/DmIvmUTXJqrKzGH3GoeOw
-         XAMQ1MECR83nnQKSRbgV7bTxboQM9oo/dUiqmRqnU1zBiQl1kBpBniegFK6NnaUyMYJs
-         dGv3epgWNZMUAMRxznt6TtyULLsjNPeZZZZRIBCFCcBlAEE6+cO/T9jXmsp2Z9ceZfa7
-         EZ7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h9ACoFyscr2mGx2hv7BWBvdkBNtd8ng9Fu2si46cdq4=;
-        b=fjf7fDtkH8KhpJYdR1YDaX03v2HWUidI+sJMMcRhDhd4SE0HRoyaP8fFbZT1qu+usE
-         gpULftDSLaXD/QdBLp7jJuyHmaeuxdlm955OdJP92xG3E9wFFNE55Jhlzahi7zdS16E1
-         ucJ8oZi9+GaMj3K3F6nUkL7ebeDx51aOQpKduNrTERWpwst7IE6bTTy6QkOZuXMuZl7h
-         N5Mzr0XIxEgFvpknTqbCQRG0M01fzx+toYu8WYRutoo0cL/evZ5m6CBUy5cQ3DaICGzd
-         qKLJYnydLRBw4rUXd+kvSpAEOLbX8z6PDZ2wNj8YHm1T4VbjYDOHLzKJJX5y5QhUnUgm
-         zEjQ==
-X-Gm-Message-State: AOAM531NuZnK9x1o1BcKY4X0lXUfZGR0vRKR0wiZnfJhicYITwgGPcUU
-        +fIB7QpdaVaQFdZ/C8pVzWN3wg==
-X-Google-Smtp-Source: ABdhPJwr3K6AGuoWpHTQgaEA3SUgfH1bxgCXJJ3IVhKq00yPr1NJM+0gcq90Ro1URVdiivdA8wZX8A==
-X-Received: by 2002:adf:e411:: with SMTP id g17mr15445759wrm.402.1621441553089;
-        Wed, 19 May 2021 09:25:53 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id k205sm5827724wmf.13.2021.05.19.09.25.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 09:25:52 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     mkorpershoek@baylibre.com, Fabien Parent <fparent@baylibre.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] cpufreq: mediatek: add support for mt8365
-Date:   Wed, 19 May 2021 18:25:50 +0200
-Message-Id: <20210519162550.3757832-1-fparent@baylibre.com>
-X-Mailer: git-send-email 2.31.1
+        id S1347664AbhESR3k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 May 2021 13:29:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53236 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242522AbhESR3k (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 May 2021 13:29:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 91299610A2;
+        Wed, 19 May 2021 17:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621445299;
+        bh=bA4Stah1HCjZh88A5SXnso641+/xsmALqMYhpYKD3qM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WeXbmHC18+7nhK1KF+FWohkdeV4cRRsBClb+aYV2QfPVRzyhcCIGYK0wsSVezAe2B
+         T0rOj2xydvj9fkaIHYquiKq+4XgBlwIMHedZ3rlPg2Xi4jIUFCVYoq+WXsXO7u4k/E
+         6JhO9ePxCl7odsL5b9m6+4hcoKWQx+AGbfm5e6RHVSsRuaz3u0Ixgb/UssovjKpaFA
+         dT9fXhZByvi4NxhpVczoZpl/8ILumjsoVBqvcQMk0In+9uvHoYTiK0hRErc86tYGVM
+         wMzR6APU+TZ8j3lGlUWVQgCmt1qb44UO2cDPWOhyLasPy/6N0dpfdm8oHXg6TukC9/
+         nyfNQU0x8ebXg==
+Date:   Wed, 19 May 2021 12:28:18 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Konstantin Kharlamov <hi-angel@yandex.ru>
+Cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
+ s2idle
+Message-ID: <20210519172818.GA46184@bjorn-Precision-5520>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ddea02fc6d37f7c444a1e90c9f03d7656ffe957.camel@yandex.ru>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add compatible stirng for MediaTek MT8365 SoC. Add also the
-compatible in the blacklist of the cpufreq-dt-platdev driver.
+On Fri, May 07, 2021 at 05:08:42PM +0300, Konstantin Kharlamov wrote:
+> On Fri, 2021-05-07 at 08:30 -0500, Bjorn Helgaas wrote:
+> > On Fri, May 07, 2021 at 12:07:38AM +0200, Lukas Wunner wrote:
+> > > On Thu, May 06, 2021 at 04:48:42PM -0500, Bjorn Helgaas wrote:
+> > > > On Thu, May 06, 2021 at 08:38:20PM +0300, Konstantin Kharlamov wrote:
+> > > > > On Macbook 2013 resuming from s2idle results in external monitor no
+> > > > > longer being detected, and dmesg having errors like:
+> > > > > 
+> > > > >     pcieport 0000:06:00.0: can't change power state from D3hot to D0
+> > > > > (config space inaccessible)
+> > > > > 
+> > > > > and a stacktrace. The reason turned out that the hw that the quirk
+> > > > > powers off does not get powered on back on resume.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
- drivers/cpufreq/mediatek-cpufreq.c   | 1 +
- 2 files changed, 2 insertions(+)
+> > For example, "With s2idle, the machine isn't suspended via ACPI, so
+> > the AML code which powers the controller off isn't executed."  AFAICT
+> > that isn't actually a required, documented property of s2idle, but
+> > rather it reaches into the internal implementation.
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 5e07065ec22f..d6fd821e3f5a 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -126,6 +126,7 @@ static const struct of_device_id blacklist[] __initconst = {
- 	{ .compatible = "mediatek,mt8173", },
- 	{ .compatible = "mediatek,mt8176", },
- 	{ .compatible = "mediatek,mt8183", },
-+	{ .compatible = "mediatek,mt8365", },
- 	{ .compatible = "mediatek,mt8516", },
- 
- 	{ .compatible = "nvidia,tegra20", },
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index f2e491b25b07..87019d5a9547 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -537,6 +537,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
- 	{ .compatible = "mediatek,mt8173", },
- 	{ .compatible = "mediatek,mt8176", },
- 	{ .compatible = "mediatek,mt8183", },
-+	{ .compatible = "mediatek,mt8365", },
- 	{ .compatible = "mediatek,mt8516", },
- 
- 	{ }
--- 
-2.31.1
+> > The code comment "If suspend mode is s2idle, power won't get restored
+> > on resume" is similar.  !pm_suspend_via_firmware() tells us that
+> > platform firmware won't be invoked.  But the connection between *that*
+> > and "power won't get restored" is unexplained.
+> 
+> Sorry, I can't comment anything regarding AML and power management
+> in general since I am really new to all of this. However, regarding
+> the usage of the `pm_suspend_via_firmware()`: yeah, I also think it
+> is unclear what this does, and I was thinking about adding a wrapper
+> function something like `is_s2idle()` to the suspend.h, which would
+> simply call `pm_suspend_via_firmware` internally.
 
+No, that's not my point at all.  I don't really care whether the
+interface is called pm_suspend_via_firmware() or is_s2idle().
+
+What I don't like about this is that it's all just unexplained magic,
+as was the original quirk.
+
+IIUC, the quirk is applied by pci_pm_suspend_noirq() *after* it puts
+the device in a low-power state.  Here's my uninformed speculation
+about what happens:
+
+  - On suspend, pci_pm_suspend_noirq() puts device in low-power state.
+    My *guess* is this means D0 or D3hot for s2idle, and D3cold for
+    everything else.  [Do we have sufficient debug to find out what
+    these states are?]
+
+  - pci_pm_suspend_noirq() does pci_fixup_suspend_late fixups,
+    including quirk_apple_poweroff_thunderbolt().
+
+  - quirk_apple_poweroff_thunderbolt() runs the magic SXIO/SXFP/SXLF
+    methods, which apparently turn off more power.
+
+  - On resume, pci_pm_resume_noirq() brings the device back to D0.
+
+    If we're resuming from standby, S2RAM, or STD, I speculate the
+    device is in D3cold, so this involves running AML that seems to
+    undo whatever SXIO/SXFP/SXLF did.
+
+    If we're resuming from s2idle, I speculate the device is in D0 or
+    D3hot, and we run different AML (or maybe no AML at all), and we
+    *don't* undo the effects of SXIO/SXFP/SXLF, so the device doesn't
+    work.
+
+If the above is anything like what's happening, we should be able to
+skip SXIO/SXFP/SXLF based on the current power state of the device.
+E.g., if the device is in D0 or D3hot, we should not use
+SXIO/SXFP/SXLF to yank power.
+
+That would seem more connected to the observable state of the device
+than using pm_suspend_via_firmware(), which relies on the connection
+between s2idle and PM_SUSPEND_FLAG_FW_SUSPEND (which is not at all
+obvious) and the power state of the device while in s2idle (also not
+obvious).
+
+Bjorn
