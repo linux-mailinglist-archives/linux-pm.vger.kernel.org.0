@@ -2,193 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4EF38B879
-	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 22:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93BA38BA06
+	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 01:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239059AbhETUfc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 May 2021 16:35:32 -0400
-Received: from mail-mw2nam08on2043.outbound.protection.outlook.com ([40.107.101.43]:22817
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235224AbhETUfa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 May 2021 16:35:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=khy0Rd7P9xjEqyII/3vcoFGnucIP2VuOKCZVti6QKtdS/NJkq8P1csmylzoE1pOe8hNuuSBTeT4X5cGGKBoYiKtrLHAK9ys3gBkw2+6jZSMgaxSi/OSEBQ99E9RKtIY5cOVVkGvif16wRTcUihH7uhlCu+hU9bmyxHJSuBqy/chA/bd3m3rwOlcYkPzJwmOKSQyyM0eeg2ZpILa680sqcwfmvWgps4lWLDkL9PR4WayYHp1jDr9wo9b51/rKlHq1bJxgvV1CVGvfseaCDbJY3pAychWk7FSy7jKMIDsOSnoJ/dYhnYRmrC8efDNkZ0vPDJ1LV/1dfkYL2JvQ0tqonQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29+dH5vWpg7JPm450Ln+BbapOUo/n5vfAqTjQ97FLeE=;
- b=AmGcoR3c8jGj97g/dnxHZ8Kr3p6Yp9FpSFXos9pzVXrjCRX0pi5UWFrLH9KsTOdg+zsQl0GgmxSgKpeWZf/ef0ZtHYSTOjc2z3MXnr6VgAzTiBsHjs94wkcRTmB0AeTqZnjKeIgKI/CQjzW9v5que+bFcP8Lo0amszkxKpy2MpfXMS1IpxW3/dxw+GV0p3PNfwpbbfDVqedbCjVcsNpxWFl4spyEEUFHIgiTukDAWnFvhWbLoHspoMppYEOQH4jQ0y6cTJQwNXAB/iEoJ0Ch7pEzFaeQpx0mCDgmnasiSymFutFvmaxmGmjERU/cgWvuSj2pXFXNnVDHGqS6gqM9WQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29+dH5vWpg7JPm450Ln+BbapOUo/n5vfAqTjQ97FLeE=;
- b=2Ivjpo6rXgk8/k21Q1J+sADJty2Fb6lOwVp6E+chppftinidtoRqOsHD2NiOxk4TuqGR3ITJCRl8tFIhPEqCRaiwPURt1o30368M/MQicZCts47cYHEZwrb3rVsxjvpd7AYFndm5SYQj9vR3Llr2dzIBThbG3W8QL8CdnycXTT4=
-Received: from BYAPR12MB2693.namprd12.prod.outlook.com (2603:10b6:a03:6a::33)
- by BYAPR12MB2614.namprd12.prod.outlook.com (2603:10b6:a03:6b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.28; Thu, 20 May
- 2021 20:34:07 +0000
-Received: from BYAPR12MB2693.namprd12.prod.outlook.com
- ([fe80::c0c3:7247:a767:f5b6]) by BYAPR12MB2693.namprd12.prod.outlook.com
- ([fe80::c0c3:7247:a767:f5b6%3]) with mapi id 15.20.4129.033; Thu, 20 May 2021
- 20:34:07 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        Keith Busch <kbusch@kernel.org>
-CC:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Liang, Prike" <Prike.Liang@amd.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v5 1/2] PCI: add AMD PCIe quirk for nvme shutdown opt
-Thread-Topic: [PATCH v5 1/2] PCI: add AMD PCIe quirk for nvme shutdown opt
-Thread-Index: AQHXS40NYCAeCNVqrkmuKdHrguQgGqrrVkGAgACdf4CAAKfzAIAABtkwgAALSoCAAAbUsIAAHwKw
-Date:   Thu, 20 May 2021 20:34:06 +0000
-Message-ID: <BYAPR12MB26934FF6403A77E9A0F15C1CE22A9@BYAPR12MB2693.namprd12.prod.outlook.com>
-References: <BYAPR12MB3238055D4B08CC91D9ABFD39FB2A9@BYAPR12MB3238.namprd12.prod.outlook.com>
- <20210520165848.GA324094@bjorn-Precision-5520>
- <MN2PR12MB4488F16CE50BFD4E1F453CFAF72A9@MN2PR12MB4488.namprd12.prod.outlook.com>
- <20210520180343.GA3783@C02WT3WMHTD6>
- <MN2PR12MB4488F011F9B018C9B52A862CF72A9@MN2PR12MB4488.namprd12.prod.outlook.com>
-In-Reply-To: <MN2PR12MB4488F011F9B018C9B52A862CF72A9@MN2PR12MB4488.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Enabled=true;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_SetDate=2021-05-20T20:34:05Z;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Method=Privileged;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Name=Public_0;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_ActionId=46886c5d-354d-46d5-a86f-5cde5ed65eaa;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_ContentBits=1
-authentication-results: amd.com; dkim=none (message not signed)
- header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
-x-originating-ip: [2600:1700:70:f700:d078:904a:dfc0:e7fd]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c43f9b88-3782-4017-9ba4-08d91bce9da1
-x-ms-traffictypediagnostic: BYAPR12MB2614:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB2614AC6943B2219AAF0278AAE22A9@BYAPR12MB2614.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U6cvSC3Ox9xaL3WA9dH/INKJSbnIG6segYJtrqzQWB8ve85I4wx5pKpX2uEbrg7UGWYPo/YXvLZultZSsLqg2Bbn2K52qef+iL44AwipFbkOy9+EUnGt7KWNAbxhnl8Ooag9vSNnpOoUuTVx9xhzBr2IQ/P+uYcGQ2xZ880+whBXryhE+sku9mjQcd/Hu13J1J5tplJZYSnytzT6d8ORaVhRF3TN2jk3h1sTWOl6WqaYTZqhdme65zVt0zjtlWJ4q5iLa8a7+Vdbh2piQuoiZtUAwJAiq29A31SZwdFHuOmJTfWdkmMZ5D9IKnEoYT1IAc6X2fcwismE4vuwIGwBnh4DVH3Vk8PnIUFJ7ZZuvNW8wzy6IsyiNNfDoabWDX2ZIQxevpujRTrIdzwxkn7kUeYuD8TnlRqBlnzEeRe5QdsI4WRcT+8RFu13K8wbNv8AdomwCY/xtNFGccRu9HiK7OdIxk11+TzX+Zil3Cpzdy1XbosP6toVb4CmFWpHDl8ztJEOwWbo6TRMgq9TcD5UscAk3tZv9U0H4qlQgqUYnbP5hDRymkaMIa/FcJ8AIXHxzH+NZF5qnYRkwIBrlDB4YjoLAq7+u4VgG6qd0teW3o0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2693.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(346002)(39860400002)(376002)(136003)(186003)(5660300002)(4326008)(7416002)(71200400001)(86362001)(52536014)(478600001)(7696005)(53546011)(6506007)(33656002)(122000001)(54906003)(110136005)(55016002)(64756008)(8676002)(83380400001)(9686003)(38100700002)(66946007)(8936002)(2906002)(66556008)(66476007)(316002)(76116006)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?FOzIutc59FjoZlIU+kI87kl1IF3OxZQnn55obFc2OaNwBc8B+PyoDevXL3ek?=
- =?us-ascii?Q?PBeOPmr3jKojVOWDMvtnYYPuKsOsc4xbRTWm6y1/J7OA7oWromfunyW8ZB2q?=
- =?us-ascii?Q?5pX1Kf4vNhP3GdFGxWU7AeYmV/WyBuJtiK4dwBmrT7K+zKRJfCD8oHmeSUeO?=
- =?us-ascii?Q?HnD5JhQpn9bvXovvgDy0FJOFVDMNcfTO2vmYSeuj2ZGTBTulCW0cHIzHXTcN?=
- =?us-ascii?Q?BW/kZuz9EEmPuVgjaoloErFKdUmYsAUyHRm1iibiDNbzHgVq/oS3sGlsYSn0?=
- =?us-ascii?Q?qrsv/vyyBidTPNh+25rXMy6+0BWJjNWPJaZeWD1tK1BF8FYi5HHHaR7N0DVt?=
- =?us-ascii?Q?LMPQ3UHQzVHEOCPfw+hIsK/7ctZexQYQdMuHt80fXWh9TYPoE1HqliNM6DGT?=
- =?us-ascii?Q?ZCAkDSDYZtw1k9y688XkfvKIrnhcwyBP2khTE3uzpi5Iurx/JalvM7SaUw+7?=
- =?us-ascii?Q?BiPQLYRkm4qu/GZ5f6sbBW36WfuqkrIBkNM1e6aZB0i0g2RNLfp/iP+hxJLB?=
- =?us-ascii?Q?DAfwYLa1a7TKEOELwLi4wJ1onU99WmjgepZPwndWip1W4hbIZ12hHJG5jT4g?=
- =?us-ascii?Q?Po1Ojw8I62qGzyOiP26gHRnrtXT1sizSeTN/e9c0Mvmr32GaMc/uRTbzzsIS?=
- =?us-ascii?Q?Z4ACzA20yxvdlNB2DTLlYS6VAhtT2MKUuLBEV0qiqvGczYH0eeuSLQGPOnkH?=
- =?us-ascii?Q?6hnp7mOAPlz8NVqLfz63YLwRXQYEVTa1bCHqZnk6wwqJ0dF6JNUlwpIpjTlY?=
- =?us-ascii?Q?oYhNmjNe5F3eW5F97pFbjHpunz4AC3hGwSIFLZTjvPkFoty94angcckTzqEU?=
- =?us-ascii?Q?m3HLXEmGv7DETcSQn4/js5GLNTRjI9s+pqMMbz5LMv+5/H3Xcwy5UXBbiB9J?=
- =?us-ascii?Q?NsmDtmP/ZeSu+3jOa9ElZy9EPGnc4uEyVOAx1kiSc4ao3US/PXY3iwj5EArF?=
- =?us-ascii?Q?60rA19m7Zcp0FLAdv7c6QMJgRBPAMvuMOEvOg7KN1VEGLJAs28Ex//scjY3p?=
- =?us-ascii?Q?17DN5hA5corDL8I8f69QLVpjaAkw7OC1wMLhyPkCsSwEbkEnFkOOwTX35ec6?=
- =?us-ascii?Q?petYOoHe1Gt+vPUsNU6IT+2yfcsuGzFWj6x7tTZJI10SWuiV+2RkZGWid0c3?=
- =?us-ascii?Q?Xy9egzhCnekExalxnrxoSY7dJdMcnO4QsO36Rc1rflan+VznK9JcH8AmUFSO?=
- =?us-ascii?Q?HiwjVf1h7B5+9Dj1ld99y3m9gTluptJFSnPHls+BpXH4oLHYCyA1JW9e5ApF?=
- =?us-ascii?Q?HWDZE+BjLiQLCxsup8/ZMgNZCESkAsGxmb4zRjM+wF8Pss58+1uNls3a8uvB?=
- =?us-ascii?Q?PbUZe+HbAxEtndIv1Tdncz+7wrXfhrvRCpWPFzRPqEjRdk8AWgYcOL5m/VUb?=
- =?us-ascii?Q?wgHWu0rgVakZFCg4hGFn0fY1r81K?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S233060AbhETXKD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 May 2021 19:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231967AbhETXKC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 19:10:02 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6619AC061574;
+        Thu, 20 May 2021 16:08:39 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id i22so26749669lfl.10;
+        Thu, 20 May 2021 16:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LrrcU9jLz61VdzpobjeyvSAGoanum5pEXO2oYz7aogA=;
+        b=Cnaxqwhie0dabWkl4lN4j4TwTg4AWhS84yz7kkWBXvWXtoORpvvt4evf9/YdQg13Od
+         vIIk7PQ7mss8ByzJdeB8DaY59/39CaYyKRwUbY3m0nZse/N7Su4RNUzkEcCO6dnW0cgj
+         OwwM08Y2MgmWKq+OzZSsL/9C8db5uWFaXiZntsqcHHBCYrW3dgCDVzDHQ9NNRf5SUeoc
+         pfLnmlihSm1H0yUmMU/9OBVogw1aStoWOzI4sJgZTsGJ7cUO55AxGE5FUyBg6Bgujfzx
+         dc6ASguFf7jSL3iI8DDgahANjxEF2AiZ3Q4Y8rJ9Ndczqi6ZJ+Pi2YZF425NPB4tE86J
+         lEZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LrrcU9jLz61VdzpobjeyvSAGoanum5pEXO2oYz7aogA=;
+        b=bo1Ewn+pwmI5GSMn3hDOU1fZeShvLJXnUKActY2oOQ0U20x6p5tMcHQ/aK00Me4MTJ
+         OmCnjpie1NWx+HoS6h0wbiD5mY3yW4CxNNILrUelghOUKrU324LaUM6AEDYK6RlGEs+f
+         KFbL/1z5oWigj5f7AS9rM7XqDCe+X0vOaR/6QLWdlaeVc+2LWZ/ciU4Gg2zZk32TixON
+         zqaJFqAMvhThyg8Kdnq1rELsGezoKeoNlfmbC2T3XR1LiWSH6kg+oGW4Yum0XUYHuuPn
+         HMTNliUhoqKFGLHHtvunQAwaLQA01kmM0HvmDkgmchk9wM+7LZeI8tfRtFY06TGB11+e
+         iMwQ==
+X-Gm-Message-State: AOAM531G/Bf1qOwJvPfZm3bZKNkSnt+2CdHF1faT2E9ZXAe5Ko/6NI3/
+        RugChy9tG1G2IQB4SCNxQOg=
+X-Google-Smtp-Source: ABdhPJxXpXS/MrO7jLaz8Zth6Grt4rS+JNTDqz4PO2r6RwWJI0PsSiKjZGrKSetDPrRb1VCp/xic3A==
+X-Received: by 2002:a19:7e8f:: with SMTP id z137mr4680277lfc.466.1621552117781;
+        Thu, 20 May 2021 16:08:37 -0700 (PDT)
+Received: from localhost.localdomain (109-252-193-76.dynamic.spd-mgts.ru. [109.252.193.76])
+        by smtp.gmail.com with ESMTPSA id 4sm427821lfr.175.2021.05.20.16.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 16:08:37 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?q?Nikola=20Milosavljevi=C4=87?= <mnidza@outlook.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v1 00/13] NVIDIA Tegra memory and power management changes for 5.14
+Date:   Fri, 21 May 2021 02:07:38 +0300
+Message-Id: <20210520230751.26848-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2693.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c43f9b88-3782-4017-9ba4-08d91bce9da1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2021 20:34:06.9294
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3IGtdnbKoHhmdaLFmUXdc6KDk7EPo+oOyQyVuzACvDKkQkRx2Ft7XQGTqLYSx4mXKc5QoRiofLF9IaVmicOaGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2614
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[AMD Public Use]
+This series is a continuation of the previous patches that I previously
+tried to separate into smaller subsets, but all these patches are actually
+very dependent on each other and I was messing up the dependencies because
+there are too many of them and it's too difficult to keep them all in sync.
+So I merged the patches into a single series again.
 
-> > -----Original Message-----
-> > From: Keith Busch <kbusch@kernel.org>
-> > Sent: Thursday, May 20, 2021 2:04 PM
-> > To: Deucher, Alexander <Alexander.Deucher@amd.com>
-> > Cc: Bjorn Helgaas <helgaas@kernel.org>; Liang, Prike
-> > <Prike.Liang@amd.com>; linux-pci@vger.kernel.org; axboe@fb.com;
-> > hch@lst.de; sagi@grimberg.me; linux-nvme@lists.infradead.org;
-> > stable@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-
-> k@amd.com>;
-> > Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>; Rafael J. Wysocki
-> > <rjw@rjwysocki.net>; linux-pm@vger.kernel.org
-> > Subject: Re: [PATCH v5 1/2] PCI: add AMD PCIe quirk for nvme shutdown
-> opt
-> >
-> > On Thu, May 20, 2021 at 05:40:54PM +0000, Deucher, Alexander wrote:
-> > > It doesn't really have anything to do with PCI.  The PCI link is just
-> > > a proxy for specific AMD platforms.  It's platform firmware behavior
-> > > we are catering to.  This was originally posted as an nvme quirk, but
-> > > during the review it was recommended to move the quirk into PCI
-> > > because the quirk is not specific a particular NVMe device, but rathe=
-r
-> > > a set of AMD platforms.  Lots of other platforms seems to do similar
-> > > things in the nvme driver based on ACPI or DMI flags, etc.  On our
-> > > hardware this nvme flag is required for all cezanne and renoir platfo=
-rms.
-> >
-> > The quirk was initially presented as specific to the pci root. Does it =
-make
-> > more sense for nvme to recognize the limitation from querying a differe=
-nt
-> > platform component instead of the pci bus?
->=20
-> Maybe.  I'm not sure what the best way to tie this to a specific platform=
- is.
-> @Limonciello, Mario?
->=20
+This series:
 
-I'll just remind folks that Prike mentioned this is a problem specific to t=
-he
-Renoir and Cezanne ASICs.  These were the first ones that S2idle was used.
-"Future" designs the problems that cause the need for this change should be=
- fixed.
+  1. Adds CPU/core voltage bump before system is rebooted.
+  2. Adds new devm_tegra_core_dev_init_opp_table() helper and switches
+     Tegra memory drivers to use it.
+  3. Adds compile-testing support to the Tegra memory drivers.
+  4. Adds Tegra SoC core power domain support.
 
-With that in mind, I can see the argument from Bjorn to not over-engineer i=
-t and
-claim a PCI quirk that applies to all the downstream PCIe devices when this=
- is just
-needed for NVME devices.  The PCI device id selected (0x1630) is the root c=
-omplex associated
-specifically to these ASICs. =20
+I'll send the GPU/clk/video-dec/OPP-tables patches that will update
+power management of the corresponding drivers and enable core voltage
+scaling on T20/30 once this series will be merged.
 
-Since these are mobile platforms that don't contain any way to connect othe=
-r external
-PCIe devices I think another way to safely do it could be an if #ifdef CONF=
-IG_X86 and then
-check if set for doing s2i and if so do a x86_cpu_match() to the model and =
-families
-matching the CPUs.
+Changelog:
 
-To me this seems like a fine compromise given there is a precedent for dmi_=
-match on
-OEM platforms and enumerating "all" of the OEM platforms that contain CZN/R=
-N and enable
-S2I may be an exercise in futility.
+v1: - Merged previous patches into this single series.
+
+    - Added ack from Rob Herring to the core domain DT binding patch.
+
+    - Implemented suggestions that were given by Krzysztof Kozlowski:
+
+        - Factored out soc_is_tegra() stub into standalone patch.
+        - Updated tags of the "Fix compilation warnings on 64bit platforms"
+          patch, added reported-by from lkp robot and removed suggested-by
+          from Nathan Chancellor.
+        - Switched to use use BIT() macro.
+
+    - Added r-b from Krzysztof Kozlowski to "Enable compile testing for
+      all drivers" patch.
+
+    - Added r-b from Nathan Chancellor.
+
+    - Dropped voltage floor/ceiling from devm_tegra_core_dev_init_opp_table()
+      since only memory drivers now need to initialize voltage vote and they
+      don't need floor/ceil. This was suggested by Viresh Kumar.
+
+Dmitry Osipenko (13):
+  regulator: core: Add regulator_sync_voltage_rdev()
+  soc/tegra: regulators: Bump voltages on system reboot
+  soc/tegra: Add stub for soc_is_tegra()
+  soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+  soc/tegra: fuse: Add stubs needed for compile-testing
+  clk: tegra: Add stubs needed for compile-testing
+  memory: tegra: Fix compilation warnings on 64bit platforms
+  memory: tegra: Enable compile testing for all drivers
+  memory: tegra20-emc: Use devm_tegra_core_dev_init_opp_table()
+  memory: tegra30-emc: Use devm_tegra_core_dev_init_opp_table()
+  dt-bindings: soc: tegra-pmc: Document core power domain
+  soc/tegra: pmc: Add core power domain
+  soc/tegra: regulators: Support core domain state syncing
+
+ .../arm/tegra/nvidia,tegra20-pmc.yaml         |  35 +++++
+ drivers/memory/tegra/Kconfig                  |  16 +-
+ drivers/memory/tegra/tegra124-emc.c           |   4 +-
+ drivers/memory/tegra/tegra20-emc.c            |  48 +-----
+ drivers/memory/tegra/tegra30-emc.c            |  52 +------
+ drivers/regulator/core.c                      |  23 +++
+ drivers/soc/tegra/Kconfig                     |  14 ++
+ drivers/soc/tegra/common.c                    |  97 ++++++++++++
+ drivers/soc/tegra/pmc.c                       | 143 ++++++++++++++++++
+ drivers/soc/tegra/regulators-tegra20.c        |  94 +++++++++++-
+ drivers/soc/tegra/regulators-tegra30.c        |  96 +++++++++++-
+ include/linux/clk/tegra.h                     |  28 +++-
+ include/linux/regulator/driver.h              |   1 +
+ include/soc/tegra/common.h                    |  38 +++++
+ include/soc/tegra/fuse.h                      |  20 ++-
+ 15 files changed, 600 insertions(+), 109 deletions(-)
+
+-- 
+2.30.2
+
