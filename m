@@ -2,93 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE2F389C40
-	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 05:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BBE389C48
+	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 06:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhETEAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 May 2021 00:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
+        id S230008AbhETEFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 May 2021 00:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhETEAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 00:00:25 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63EDC061574
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 20:59:03 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id k5so8427692pjj.1
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 20:59:03 -0700 (PDT)
+        with ESMTP id S229436AbhETEFC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 00:05:02 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB69C061574
+        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:03:40 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g24so8412116pji.4
+        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5DmWgtEYdg1BAX4a133sojX2RWqI9f92J1In5aRH3J8=;
-        b=iip6VP1d4MIfMedHTbkAptHJxqrSUnAIqGC7dGRCcrjrQbELrYHIkDluAkK0MQ5cEr
-         zRPLkqHFZOLSGVoszfPe67PrUStgZmwxxWOHVNZmgo51kUXAYNSnjQ4BomzZh69gclI5
-         bZa1Rk/WkUhtMliRyFxtH+KIGlO8iRoVUc3STrBVAGHTu88l5WadziY3a4feqg3p5zZp
-         GMTZwnKqO6Asrc3LCLB3EVQ379KWWGBxna0uiXV1qUfOHV/wMkBivJJC0SgkDcg4jhC/
-         zNJ3UA1nrqyWbUCtwrDSEkDp1hmOEdjrU1iXJQenDrC0PB7DbTmVRhmGQxh/TFrWpqzd
-         tijQ==
+        bh=G2plJT1XiULDHpwMBzOhMAgpJs8GM8boE9+4LAq43YQ=;
+        b=uZD7ZMWKjDklh9fS9fiGJFg3u5Nrut0SaIKSJej67+5MslWmJ+BtpfimXuIj6UFcZi
+         gu109e76aoAtw5VTXwkTLtTMQtsNAJEZ/8ffkk+01CYWKh16MJQGbJ3WzETzmaZC40ZY
+         qtBKyrMYTyilfz/c0FnouapjiN+hWS7rlXXfI6inm3Bc32NwbR4RkKUnAA7azsN8BjAV
+         Q/dB+i4MKY5L6A4jj1CGWh7Ln2ZY+XbcReE243nI+nwwBFs5kvL3KzUTfYeKlZ/W/v59
+         ntPH5Hp/pC+Em/Gy0u2SK3pIULSXgDyAobs/Z9dVJwi9l2NoqAhJMpSUa280fFMfVLBY
+         7GaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5DmWgtEYdg1BAX4a133sojX2RWqI9f92J1In5aRH3J8=;
-        b=prbqUHXB1d0N0og6YlwtTvDEEFJ9sGBmWBKiBD7BpirY+NWRtNsGA4E0vP31rktDpV
-         8tePOPEB7bOWWlPrYnqWyoKcZZQCS0oU3XYcC21WPNcrHmVHgW79y3KzOQcEV8Pe3grc
-         e5a5Z5DSsvoDUQv2hXXT0ShS9616dxSRIL4B5giZqHuNoyrxPRAzrXxtPNLn/fm0PPg7
-         OSh5bBuG3hvaK0xSHMt6gn4a3apzvfWaQHc8Pz7KA/B7cpxUlv6Zvb4PfTNeUgfk0tSO
-         UFwaD/rQ/u1GPOiGexX9O8QD+F5YpKknnNZU7rxoJ6m6yGxM3vzrXe9vL5KvQ5izc4XD
-         SMBA==
-X-Gm-Message-State: AOAM532HHf9x9DFBCnyH0I9uWDvgwJNpKNRlgd3t1E3dtfmxcQ+8M/ut
-        xqXkW7yQ6U1/cE/vRUsl54GSsA==
-X-Google-Smtp-Source: ABdhPJxDTwiOE6aXEMN09zlHVIX7YBPQdiLP9p/7O69S1nDvlDo4fbGKFAaHpPR1dF1D6nwZjtiGMA==
-X-Received: by 2002:a17:90a:1588:: with SMTP id m8mr3008221pja.226.1621483143208;
-        Wed, 19 May 2021 20:59:03 -0700 (PDT)
+        bh=G2plJT1XiULDHpwMBzOhMAgpJs8GM8boE9+4LAq43YQ=;
+        b=kIAGc/1RRq/VvFf232LFkLyPMsJ4eeF6H2TTF4jgJ7gp7QQE0Rxp6hOcPrp5Vim3xB
+         DBWJcVN45KJhJT7gUUXXQL5TtDT6azHfm0HBGdxB/YXu9+7k2iKRuuVxoXmxBrpqXtX9
+         eal3jK0gBw1rFcLTgzTRYgWQ1EVLvNDDZHFl7Y06FM84vJb4aaQyDIb5FnnIqD/qYtPW
+         LgjU2Uy0R145MfR1L2giovnzlgPtEZxnp3Bzbs5NdHaJTMasPa0P1ONdhcYuLhmeHgLE
+         K5Gb8PlVPoKb3wru9XEeTFSdbJDjeGJbKVh+xwDJkIgfWGhs5EQOZa1z8BHqCIFhrVFR
+         9ndQ==
+X-Gm-Message-State: AOAM533IAOcb30qt9g18RrY6Xz4VfIg155mwLPNRe7L7HRVCiuvKaFZf
+        v4D6yrWvjRr2iOIT0OewbDx3eQ==
+X-Google-Smtp-Source: ABdhPJwY/uIVOZ5D7U0Z5xDFpV9+y9ry8sxg34z+ApagG38ZdmDoTIt36nb73X60pF6yNYcpEftPYg==
+X-Received: by 2002:a17:902:a5ca:b029:ef:ac0a:f00f with SMTP id t10-20020a170902a5cab02900efac0af00fmr3326798plq.22.1621483419827;
+        Wed, 19 May 2021 21:03:39 -0700 (PDT)
 Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id l20sm731069pjq.38.2021.05.19.20.59.02
+        by smtp.gmail.com with ESMTPSA id c3sm685370pfi.213.2021.05.19.21.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 20:59:02 -0700 (PDT)
-Date:   Thu, 20 May 2021 09:29:00 +0530
+        Wed, 19 May 2021 21:03:39 -0700 (PDT)
+Date:   Thu, 20 May 2021 09:33:37 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     sudeep.holla@arm.com, cristian.marussi@arm.com, rjw@rjwysocki.net,
-        nicola.mazzucato@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: scmi: Fix an error message
-Message-ID: <20210520035900.5agxp6r6lwpdvl5i@vireshk-i7>
-References: <b0c09698216af60d97bfd30b55bad89dc0f70112.1620328067.git.christophe.jaillet@wanadoo.fr>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org
+Subject: Re: [PATCH -next] opp: use list_del_init instead of
+ list_del/INIT_LIST_HEAD
+Message-ID: <20210520040337.k47l2fxstfs2l2q3@vireshk-i7>
+References: <20210518044910.608878-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b0c09698216af60d97bfd30b55bad89dc0f70112.1620328067.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20210518044910.608878-1-yangyingliang@huawei.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06-05-21, 21:09, Christophe JAILLET wrote:
-> 'ret' is known to be 0 here.
-> The last error code is stored in 'nr_opp', so use it in the error message.
+On 18-05-21, 12:49, Yang Yingliang wrote:
+> Using list_del_init() instead of list_del() + INIT_LIST_HEAD()
+> to simpify the code.
 > 
-> Fixes: 71a37cd6a59d ("scmi-cpufreq: Remove deferred probe")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
->  drivers/cpufreq/scmi-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/opp/of.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index c8a4364ad3c2..ec9a87ca2dbb 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -174,7 +174,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  		nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
->  		if (nr_opp <= 0) {
->  			dev_err(cpu_dev, "%s: No OPPs for this device: %d\n",
-> -				__func__, ret);
-> +				__func__, nr_opp);
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index c582a9ca397b..aa75a1caf08a 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -433,8 +433,7 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
 >  
->  			ret = -ENODEV;
->  			goto out_free_opp;
+>  		/* All required opp-tables found, remove from lazy list */
+>  		if (!lazy) {
+> -			list_del(&opp_table->lazy);
+> -			INIT_LIST_HEAD(&opp_table->lazy);
+> +			list_del_init(&opp_table->lazy);
+>  
+>  			list_for_each_entry(opp, &opp_table->opp_list, node)
+>  				_required_opps_available(opp, opp_table->required_opp_count);
 
 Applied. Thanks.
 
