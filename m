@@ -2,168 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 554283898A4
-	for <lists+linux-pm@lfdr.de>; Wed, 19 May 2021 23:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BF1389B6C
+	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 04:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbhESVfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 May 2021 17:35:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49858 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229808AbhESVfV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 May 2021 17:35:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EC8D061074;
-        Wed, 19 May 2021 21:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621460041;
-        bh=P4pBbb+gpfVC0LaXhR2HVFGTt4ylPWLlXS4sxpNN6/4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pDctJk6zxPhASM4cufXgw00O0lh5OH4gCGCZiBDQbLlk9kurV3jpn+J/CAfwJv9yO
-         DR34pZ3hhPPdiikP0zSP66uVuPqp89zCyMI18IIZOOXKFx61AzJqDoGPXtkyz4X4km
-         5YfWBSfXOKytwRKJM87Nw7J7I6dYzDeIcXNv5PYP6CzZyaVm3P2RGodD1Gdyd6zzEj
-         M+QRTWuORa1yKAcBW8chBJX83pFGbC1sEMF8NQ85ENKkHF3Nzii5oRdh2W+c8/05Rh
-         DvNLYZ+iGsqinFVGBfZ8AqaoH3X4PHjvYG/BL2Up+aP46o9NMFdELMWxaOVxvtelTB
-         B1eLXR6HLxCBg==
-Date:   Wed, 19 May 2021 16:33:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Prike Liang <Prike.Liang@amd.com>
-Cc:     linux-pci@vger.kernel.org, kbusch@kernel.org, axboe@fb.com,
-        hch@lst.de, sagi@grimberg.me, linux-nvme@lists.infradead.org,
-        Alexander.Deucher@amd.com, stable@vger.kernel.org,
-        Shyam-sundar.S-k@amd.com,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] PCI: add AMD PCIe quirk for nvme shutdown opt
-Message-ID: <20210519213359.GA256663@bjorn-Precision-5520>
+        id S230253AbhETCec (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 May 2021 22:34:32 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:22674 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230246AbhETCe1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 May 2021 22:34:27 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210520023121epoutp013e454159a827a1a4084081ad708db975~ApYq9dmVu3058330583epoutp01_
+        for <linux-pm@vger.kernel.org>; Thu, 20 May 2021 02:31:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210520023121epoutp013e454159a827a1a4084081ad708db975~ApYq9dmVu3058330583epoutp01_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1621477881;
+        bh=MWWWd3rHx9oezvHvsD2UL1Okt3P32180D99blxhLM74=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=lQJeoGZdyH/ObTzsEk8x1udZwGCuQfpH4+DkEevgYybzMGZhvMYmskyAVBwQ37uxl
+         4/PNaCEJw0uHtGtifXjUSwIgCiNFjecppS9vXsJ86Ep3dEF/XReYhNG8n+oSCHEJ0U
+         ikYa4IhZFblcPIWiQ/wuBKMHWeHy+ic1TX3r+CCQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20210520023116epcas1p3588f100133f3aed9bdebd6462dc87b60~ApYm1uryI2253322533epcas1p3b;
+        Thu, 20 May 2021 02:31:16 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Fltyn4S25z4x9QH; Thu, 20 May
+        2021 02:31:13 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6D.D6.09824.0F9C5A06; Thu, 20 May 2021 11:31:12 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20210520023100epcas1p4528846a7b21d98f1b107e103662d5eb7~ApYXj1VgD2925329253epcas1p4H;
+        Thu, 20 May 2021 02:31:00 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210520023100epsmtrp1ccff1ba6b7f934758eac6d190eff46cc~ApYXi9ktu0437504375epsmtrp1O;
+        Thu, 20 May 2021 02:31:00 +0000 (GMT)
+X-AuditID: b6c32a37-061ff70000002660-98-60a5c9f0b7b4
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6A.A5.08637.4E9C5A06; Thu, 20 May 2021 11:31:00 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210520023100epsmtip2e8eeb589aba09ce267825e7e1c5d8d26~ApYXU2IJI2547525475epsmtip2g;
+        Thu, 20 May 2021 02:31:00 +0000 (GMT)
+Subject: Re: [PATCH v1 4/7] dt-bindings: devfreq: tegra30-actmon: Add
+ cooling-cells
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <8dbb9a97-8358-0a2c-bbfc-738f7efa931f@samsung.com>
+Date:   Thu, 20 May 2021 11:49:29 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1621304675-17874-2-git-send-email-Prike.Liang@amd.com>
+In-Reply-To: <20210510211008.30300-5-digetx@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmru6Hk0sTDO4sEbCYf+Qcq8Xqj48Z
+        LVpmLWKxONv0ht3i8q45bBafe48wWnR+mcVmca9lL6vF7cYVbBZnn3lbtO49wm7xc9c8Fgce
+        j52z7rJ7bFrVyebR2/yOzaOnbROTR9+WVYwenzfJBbBFZdtkpCampBYppOYl56dk5qXbKnkH
+        xzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAN2opFCWmFMKFApILC5W0rezKcovLUlVyMgv
+        LrFVSi1IySmwLNArTswtLs1L10vOz7UyNDAwMgUqTMjOmN7UxlLQwFtx4MUHxgbGjVxdjJwc
+        EgImEp2fD7J0MXJxCAnsYJR4tf4MO4TziVHiyvRGqMw3RolV09YxwrTcmbyJFSKxl1Hi3+xf
+        UFXvGSW+3bzNDlIlLBAq0bNxElhCROAQk8T8CU1A7RwczAKlErs32IDUsAloSex/cYMNxOYX
+        UJS4+uMxWAmvgJ1E79V4kDCLgKrE4kOTmUBsUYEwiZPbWsCO4BUQlDg58wkLiM0pYCYxb8t7
+        sLXMAuISt57MZ4Kw5SW2v53DDHKChMAJDok7W2YwQ3zgIvH70FJ2CFtY4tXxLVC2lMTL/jYo
+        u1pi5ckjbBDNHYwSW/ZfYIVIGEvsXwpyEcgvmhLrd+lDhBUldv6eywixmE/i3dceVpASCQFe
+        iY42IYgSZYnLD+4yQdiSEovbO9kmMCrNQvLOLCQvzELywiyEZQsYWVYxiqUWFOempxYbFhgj
+        x/YmRnD61TLfwTjt7Qe9Q4xMHIyHGCU4mJVEeLd7L04Q4k1JrKxKLcqPLyrNSS0+xGgKDOCJ
+        zFKiyfnADJBXEm9oamRsbGxhYmhmamioJM6b7lydICSQnliSmp2aWpBaBNPHxMEp1cDEd1m2
+        UEz54y1294/X69K4KiX513ybsXbTpapX1i2TI93mrrnmpl2qxfRYnu9OO5cuz9myA4eX9Uum
+        SIjfMo5s4Dj/QsNHqzmM98ztXZujo7/bX66JWaIc4PbwkYe768cTi7cx5YjoWS7jPeD1zGPf
+        t/rjom4pb17N6db5LM2vsltIYH47a+LnU3oRmY+M2n/kbPff+cNL+Kx005xjr+qTvrSXN1x5
+        GXa6/ZSE2qF9S1e/vPa1dd36mtV6/8Kcl93VdRRtmZxqcUw50SXL+9skscV7Lz98sdbCdM6O
+        lnvTGp98CPDusPZOUpPX2OGfKXH0qQHjf+3vz0uCGK/PFY2bEpRiYnfo+fe7hw6e3bBCiaU4
+        I9FQi7moOBEAUKLhOUgEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsWy7bCSvO6Tk0sTDC7e5rWYf+Qcq8Xqj48Z
+        LVpmLWKxONv0ht3i8q45bBafe48wWnR+mcVmca9lL6vF7cYVbBZnn3lbtO49wm7xc9c8Fgce
+        j52z7rJ7bFrVyebR2/yOzaOnbROTR9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGVMb2pjKWjg
+        rTjw4gNjA+NGri5GTg4JAROJO5M3sXYxcnEICexmlLjf/44ZIiEpMe3iUSCbA8gWljh8uBii
+        5i2jxMvHfxlBaoQFQiV6Nk5iAbFFBI4wSXzr8QOxmQVKJZ5tbGeEaNjKKPH59HomkASbgJbE
+        /hc32EBsfgFFias/HjOCLOAVsJPovRoPEmYRUJVYfGgyWLmoQJjEziWPwWxeAUGJkzOfgO3i
+        FDCTmLflPTvELnWJP/MuMUPY4hK3nsxngrDlJba/ncM8gVF4FpL2WUhaZiFpmYWkZQEjyypG
+        ydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOA41NLcwbh91Qe9Q4xMHIyHGCU4mJVEeLd7
+        L04Q4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoRTJaJg1OqgalcyVhW
+        eHHUySyP1ErLC2/Cji6wXxu1TttGSTf1e8wG1Za8kxIdWR+2HNrj/v/F1Q95rrulxJz+Juz9
+        1rujcEJR5aEt4ntirBet2OYobi3+KfOaBlPIDr6F0b4TOcQaKl+8j1FI+BjTEJI2W3z9a8W9
+        5iU+6eeNVA0DA2+Gb7hwQ0Co5b/bv6eOav8KY6t8JyfWF+VN8csNFc/bsPfmi/vBJbI3Dn9e
+        yuZ5aGb82mlroradXbbVzKurJuBhT/+P8rTPfreFHWsuHhU+NV/wMsc19d2/OiMdU0Rn7517
+        TNp6wfRZf3Nb+Wbccvz3/W337x51uQa+iazLN5Vmpi5sn2ppwGu+ylPkzE3/0ye2aSmxFGck
+        GmoxFxUnAgAJ9a2TMgMAAA==
+X-CMS-MailID: 20210520023100epcas1p4528846a7b21d98f1b107e103662d5eb7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210510211159epcas1p119ee938888c0cb5fe966bfe5f4df823a
+References: <20210510211008.30300-1-digetx@gmail.com>
+        <CGME20210510211159epcas1p119ee938888c0cb5fe966bfe5f4df823a@epcas1p1.samsung.com>
+        <20210510211008.30300-5-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael (probably nothing of interest to you), linux-pm]
-
-On Tue, May 18, 2021 at 10:24:34AM +0800, Prike Liang wrote:
-> In the NVMe controller default suspend-resume seems only save/restore the
-> NVMe link state by APST opt and the NVMe remains in D0 during this time.
-> Then the NVMe device will be shutdown by SMU firmware in the s2idle entry
-> and then will lost the NVMe power context during s2idle resume.Finally,
-> the NVMe command queue request will be processed abnormally and result
-> in access timeout.This issue can be settled by using PCIe power set with
-> simple suspend-resume process path instead of APST get/set opt.
-
-I can't parse the paragraph above, sorry.  I'm sure this means
-something to NVMe developers, but since you're adding this to the PCI
-core, not the NVMe core, it needs to be intelligible to ordinary PCI
-folks.
-
-For example, since you only use this flag in the NVMe driver, you
-should explain why the PCI core needs to keep track of the flag for
-you.  Normally I would assume the driver could figure this out in its
-.probe() function.
-
-Quirks are usually used to work around a defect in a device.  What's
-the defect in this case?  Ideally we can point to a section of the
-PCIe spec with a requirement that the device violates.
-
-What does "opt" mean?
-
-What is SMU firmware?  Why is it relevant?
-
-Is this a problem only with s2idle?  Why or why not?
-
-The quirk applies to [1022:1630].  An lspci I found on the web says
-this is a "00:00.0 Host bridge: AMD Renoir Root Complex" device.  So
-it looks like this will result in PCI_BUS_FLAGS_DISABLE_ON_S2I being
-set for every PCI bus in the entire system.  But the description talks
-about an issue specifically with NVMe.
-
-Is there a defect in this AMD PCIe controller that affects all
-devices?
-
-> In this patch prepare a PCIe RC bus flag to identify the platform whether
-> need the quirk.
+On 5/11/21 6:10 AM, Dmitry Osipenko wrote:
+> The ACTMON watches activity of memory clients. Decisions about a minimum
+> required frequency are made based on the info from ACTMON. We can use
+> ACTMON as a thermal cooling device by limiting the required frequency.
+> Document new cooling-cells property of NVIDIA Tegra ACTMON hardware unit.
 > 
-> Cc: <stable@vger.kernel.org> # 5.10+
-> Signed-off-by: Prike Liang <Prike.Liang@amd.com>
-> Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-> [ck: split patches for nvme and pcie]
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-> Suggested-by: Keith Busch <kbusch@kernel.org>
-> Acked-by: Keith Busch <kbusch@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
-> Changes in v2:
-> Fix the patch format and check chip root complex DID instead of PCIe RP
-> to avoid the storage device plugged in internal PCIe RP by USB adaptor.
+>  .../devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml   | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Changes in v3:
-> According to Christoph Hellwig do NVME PCIe related identify opt better in
-> PCIe quirk driver rather than in NVME module.
-> 
-> Changes in v4:
-> Split the fix to PCIe and NVMe part and then call the pci_dev_put() put
-> the device reference count and finally refine the commit info.
-> 
-> Changes in v5:
-> According to Christoph Hellwig and Keith Busch better use a passthrough device(bus)
-> gloable flag to identify the NVMe shutdown opt rather than look up the device BDF.
-> ---
->  drivers/pci/probe.c  | 5 ++++-
->  drivers/pci/quirks.c | 7 +++++++
->  include/linux/pci.h  | 2 ++
->  3 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 953f15a..34ba691e 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -558,10 +558,13 @@ static struct pci_bus *pci_alloc_bus(struct pci_bus *parent)
->  	INIT_LIST_HEAD(&b->resources);
->  	b->max_bus_speed = PCI_SPEED_UNKNOWN;
->  	b->cur_bus_speed = PCI_SPEED_UNKNOWN;
-> +	if (parent) {
->  #ifdef CONFIG_PCI_DOMAINS_GENERIC
-> -	if (parent)
->  		b->domain_nr = parent->domain_nr;
->  #endif
-> +		if (parent->bus_flags & PCI_BUS_FLAGS_DISABLE_ON_S2I)
-> +			b->bus_flags |= PCI_BUS_FLAGS_DISABLE_ON_S2I;
-> +	}
->  	return b;
->  }
+> diff --git a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+> index 2a940d5d7ab4..0aa9459b7751 100644
+> --- a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+> +++ b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+> @@ -63,6 +63,9 @@ properties:
+>        Should contain freqs and voltages and opp-supported-hw property, which
+>        is a bitfield indicating SoC speedo ID mask.
 >  
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 653660e3..7c4bb8e 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -312,6 +312,13 @@ static void quirk_nopciamd(struct pci_dev *dev)
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD,	PCI_DEVICE_ID_AMD_8151_0,	quirk_nopciamd);
->  
-> +static void quirk_amd_s2i_fixup(struct pci_dev *dev)
-> +{
-> +	dev->bus->bus_flags |= PCI_BUS_FLAGS_DISABLE_ON_S2I;
-> +	pci_info(dev, "AMD simple suspend opt enabled\n");
-> +}
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_AMD, 0x1630, quirk_amd_s2i_fixup);
+> +  "#cooling-cells":
+> +    const: 2
 > +
->  /* Triton requires workarounds to be used by the drivers */
->  static void quirk_triton(struct pci_dev *dev)
->  {
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 53f4904..dc65219 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -240,6 +240,8 @@ enum pci_bus_flags {
->  	PCI_BUS_FLAGS_NO_MMRBC	= (__force pci_bus_flags_t) 2,
->  	PCI_BUS_FLAGS_NO_AERSID	= (__force pci_bus_flags_t) 4,
->  	PCI_BUS_FLAGS_NO_EXTCFG	= (__force pci_bus_flags_t) 8,
-> +	/* Driver must pci_disable_device() for suspend-to-idle */
-> +	PCI_BUS_FLAGS_DISABLE_ON_S2I	= (__force pci_bus_flags_t) 16,
->  };
+>  required:
+>    - compatible
+>    - reg
+> @@ -74,6 +77,7 @@ required:
+>    - interconnects
+>    - interconnect-names
+>    - operating-points-v2
+> +  - "#cooling-cells"
 >  
->  /* Values from Link Status register, PCIe r3.1, sec 7.8.8 */
-> -- 
-> 2.7.4
+>  additionalProperties: false
+>  
+> @@ -118,4 +122,5 @@ examples:
+>          operating-points-v2 = <&dvfs_opp_table>;
+>          interconnects = <&mc TEGRA30_MC_MPCORER &emc>;
+>          interconnect-names = "cpu-read";
+> +        #cooling-cells = <2>;
+>      };
 > 
+
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
