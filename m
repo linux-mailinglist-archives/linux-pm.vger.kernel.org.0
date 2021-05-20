@@ -2,94 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BBE389C48
-	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 06:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEE1389CC3
+	for <lists+linux-pm@lfdr.de>; Thu, 20 May 2021 06:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhETEFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 May 2021 00:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S229458AbhETEmy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 May 2021 00:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhETEFC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 00:05:02 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB69C061574
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:03:40 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g24so8412116pji.4
-        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:03:40 -0700 (PDT)
+        with ESMTP id S229449AbhETEmy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 00:42:54 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E9C06175F
+        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:41:33 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e15so1658643plh.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 May 2021 21:41:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=G2plJT1XiULDHpwMBzOhMAgpJs8GM8boE9+4LAq43YQ=;
-        b=uZD7ZMWKjDklh9fS9fiGJFg3u5Nrut0SaIKSJej67+5MslWmJ+BtpfimXuIj6UFcZi
-         gu109e76aoAtw5VTXwkTLtTMQtsNAJEZ/8ffkk+01CYWKh16MJQGbJ3WzETzmaZC40ZY
-         qtBKyrMYTyilfz/c0FnouapjiN+hWS7rlXXfI6inm3Bc32NwbR4RkKUnAA7azsN8BjAV
-         Q/dB+i4MKY5L6A4jj1CGWh7Ln2ZY+XbcReE243nI+nwwBFs5kvL3KzUTfYeKlZ/W/v59
-         ntPH5Hp/pC+Em/Gy0u2SK3pIULSXgDyAobs/Z9dVJwi9l2NoqAhJMpSUa280fFMfVLBY
-         7GaA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nekcyqt8slKf0il2RVdbXCValEx/1aJ6m5AGD2qejqc=;
+        b=S59sn/IdnGlOHJ+pk7c/Vc1FAGzbIRCuqBZ+5tVlRsEKCRucH6zw8WcnFhDqEq8n9E
+         Eq8UXNTlgHYX0Y/p7X+nTRard8TUK2d9FatfoOAyPG5NPU22DN2qsWmiSUTcHbaOkYHK
+         mm2SZVBezhrdhZkUkva3XHLtM1ZJbV2fS9RYNphViMzxqKt/+lT1sBP1xhxs4ClO9Tt9
+         a+VmbWG8m61BDFA/CZDvy7JlUxBBmR81OuqzxmsEf8fQfVuvezuGAMTv4Q8i7NUIoI/u
+         6K+AekbwRfLzJya0ld66603RqcDlnWRcmAY/5fO2Xx/FS/jhpZx6f0FKgv2wGM0X9U7u
+         IybQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=G2plJT1XiULDHpwMBzOhMAgpJs8GM8boE9+4LAq43YQ=;
-        b=kIAGc/1RRq/VvFf232LFkLyPMsJ4eeF6H2TTF4jgJ7gp7QQE0Rxp6hOcPrp5Vim3xB
-         DBWJcVN45KJhJT7gUUXXQL5TtDT6azHfm0HBGdxB/YXu9+7k2iKRuuVxoXmxBrpqXtX9
-         eal3jK0gBw1rFcLTgzTRYgWQ1EVLvNDDZHFl7Y06FM84vJb4aaQyDIb5FnnIqD/qYtPW
-         LgjU2Uy0R145MfR1L2giovnzlgPtEZxnp3Bzbs5NdHaJTMasPa0P1ONdhcYuLhmeHgLE
-         K5Gb8PlVPoKb3wru9XEeTFSdbJDjeGJbKVh+xwDJkIgfWGhs5EQOZa1z8BHqCIFhrVFR
-         9ndQ==
-X-Gm-Message-State: AOAM533IAOcb30qt9g18RrY6Xz4VfIg155mwLPNRe7L7HRVCiuvKaFZf
-        v4D6yrWvjRr2iOIT0OewbDx3eQ==
-X-Google-Smtp-Source: ABdhPJwY/uIVOZ5D7U0Z5xDFpV9+y9ry8sxg34z+ApagG38ZdmDoTIt36nb73X60pF6yNYcpEftPYg==
-X-Received: by 2002:a17:902:a5ca:b029:ef:ac0a:f00f with SMTP id t10-20020a170902a5cab02900efac0af00fmr3326798plq.22.1621483419827;
-        Wed, 19 May 2021 21:03:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nekcyqt8slKf0il2RVdbXCValEx/1aJ6m5AGD2qejqc=;
+        b=fEGom6f2bdKyNd3alYhQSL6LJLcDYHw3fO/Fywa1cbHiGMsjOv/XCBNdyi32uJA8Sm
+         cY2JMKLKfFJpJFZsa7CqDTmNQwbl8uD9dRJeXSqBWYr8byYW5rH++lUPtNmcqSNT9+2v
+         dcRK7+iU+Olr372B0/cZPltu4uE7DeApKPrJ4T27PwqbxL0CRRRUGjzj96hn7OWQ56zC
+         XkuSjZhgroyl2d2VrjZjTYxlyq/SGTL3NGV1vrYH2G9Ru0Pc0h9aBEjadjHiH+ztI71F
+         kwR45TqsIhwT1uG2lvvFR3YeXbt9fUnKGZMq3uGgaWvqKOG2jkfPvmMyNq3kpxXB9rdg
+         GxMw==
+X-Gm-Message-State: AOAM533Qn7KFmGmQGKLqeSIH7ZDmjGvvk8HG2Iv1iNzCTw3yn2HouThr
+        l0PBkLkg0uaMtTaCgKwdQOok/g==
+X-Google-Smtp-Source: ABdhPJzPcQMpepM6NfQu5R+VN+7n4BOFRcVd6kuxVtxCoqphEG4YGKIqou6wpC+PjXEzCPklFrP2zA==
+X-Received: by 2002:a17:902:7847:b029:ef:4421:6a2e with SMTP id e7-20020a1709027847b02900ef44216a2emr3564340pln.44.1621485693039;
+        Wed, 19 May 2021 21:41:33 -0700 (PDT)
 Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id c3sm685370pfi.213.2021.05.19.21.03.38
+        by smtp.gmail.com with ESMTPSA id n11sm842295pff.96.2021.05.19.21.41.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 21:03:39 -0700 (PDT)
-Date:   Thu, 20 May 2021 09:33:37 +0530
+        Wed, 19 May 2021 21:41:32 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org
-Subject: Re: [PATCH -next] opp: use list_del_init instead of
- list_del/INIT_LIST_HEAD
-Message-ID: <20210520040337.k47l2fxstfs2l2q3@vireshk-i7>
-References: <20210518044910.608878-1-yangyingliang@huawei.com>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: dt: Rename black/white-lists
+Date:   Thu, 20 May 2021 10:11:28 +0530
+Message-Id: <3741541ed1162033394663894de2f8d8554334f1.1621485236.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210518044910.608878-1-yangyingliang@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-05-21, 12:49, Yang Yingliang wrote:
-> Using list_del_init() instead of list_del() + INIT_LIST_HEAD()
-> to simpify the code.
-> 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/opp/of.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index c582a9ca397b..aa75a1caf08a 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -433,8 +433,7 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
->  
->  		/* All required opp-tables found, remove from lazy list */
->  		if (!lazy) {
-> -			list_del(&opp_table->lazy);
-> -			INIT_LIST_HEAD(&opp_table->lazy);
-> +			list_del_init(&opp_table->lazy);
->  
->  			list_for_each_entry(opp, &opp_table->opp_list, node)
->  				_required_opps_available(opp, opp_table->required_opp_count);
+Rename them in accordance with the coding guidelines.
 
-Applied. Thanks.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 0bb10402f02c..bef7528aecd3 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -15,7 +15,7 @@
+  * Machines for which the cpufreq device is *always* created, mostly used for
+  * platforms using "operating-points" (V1) property.
+  */
+-static const struct of_device_id whitelist[] __initconst = {
++static const struct of_device_id allowlist[] __initconst = {
+ 	{ .compatible = "allwinner,sun4i-a10", },
+ 	{ .compatible = "allwinner,sun5i-a10s", },
+ 	{ .compatible = "allwinner,sun5i-a13", },
+@@ -100,7 +100,7 @@ static const struct of_device_id whitelist[] __initconst = {
+  * Machines for which the cpufreq device is *not* created, mostly used for
+  * platforms using "operating-points-v2" property.
+  */
+-static const struct of_device_id blacklist[] __initconst = {
++static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "allwinner,sun50i-h6", },
+ 
+ 	{ .compatible = "arm,vexpress", },
+@@ -179,13 +179,13 @@ static int __init cpufreq_dt_platdev_init(void)
+ 	if (!np)
+ 		return -ENODEV;
+ 
+-	match = of_match_node(whitelist, np);
++	match = of_match_node(allowlist, np);
+ 	if (match) {
+ 		data = match->data;
+ 		goto create_pdev;
+ 	}
+ 
+-	if (cpu0_node_has_opp_v2_prop() && !of_match_node(blacklist, np))
++	if (cpu0_node_has_opp_v2_prop() && !of_match_node(blocklist, np))
+ 		goto create_pdev;
+ 
+ 	of_node_put(np);
 -- 
-viresh
+2.31.1.272.g89b43f80a514
+
