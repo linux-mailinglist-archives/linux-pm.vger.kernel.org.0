@@ -2,189 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D0038BA41
-	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 01:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7BF38BA62
+	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 01:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbhETXKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 May 2021 19:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S233032AbhETX35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 May 2021 19:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbhETXKQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 19:10:16 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8ACC061763;
-        Thu, 20 May 2021 16:08:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id w15so21770755ljo.10;
-        Thu, 20 May 2021 16:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=r18WGOYqB7cDcwIrdUZr3c1RtFay90XOWzRkXpzbpZ0=;
-        b=kReZqq3TXkPaKnKM975AvfpkDJnQj1GfYVVP52VSnlgykMU5AgD7hicNxaX6UTHj5I
-         IOjZ8/7jDCaBCiT5pD5uc7+5ulqJs020y5drqrAy9qHGsxcDi5dJYc6mU/lPAMrb1Aq2
-         /1cLGWC+jVL6AQTy0hP3UGUscy55xVmQH9EJMPaNDbPvL5ktcEYJtQGm+YtB31o2ZRPm
-         kRra+eghLCI2Fw91fAC6GnuTk+8bVGOF56YtYFFzoSR4vs0Ot6sPl9Mmdhqd+Oqq3mee
-         cOr7G7Zdoqoqbg48x1s3MqD/Ocv8qT53nedF94XCHdEsE6hfNzXE6sMT2lw6AmoNnkne
-         8TVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=r18WGOYqB7cDcwIrdUZr3c1RtFay90XOWzRkXpzbpZ0=;
-        b=FEfOGLAKbNpHOmSdLK/7Xb7aNx07EZ/7ndB+zzSaUdtBKFbSTFK3obcsbUGvr+SE35
-         Asd1kgOImH3A9bCqCIvRTPllGsqvnSkFg+yISIClZFIIl/wQhXS7IFsrsJeBwfe3/ppE
-         5zvomG0LtcSs+wdMYabawAIuAWULs1uAUe/XWsI9Q9WrTutpST3yzM/peNK5UgtXk4z5
-         4316qy0KL0523anh9GNyZdtGMd7ukKJCFZmbQoKpEm2VaBU3ysknGVad++Lr9LyiXg4P
-         4f73o5ju/UfeOmSApaDEHVdq5scB/oKaBwtoq1crl7GbVsCNQVV75fbTXHHaXseqGIso
-         Rprg==
-X-Gm-Message-State: AOAM533kOK+p/8PCkms9IWQIfpGq1yGXsnj02S45WFcGNav+9BtGaM1b
-        IjGNLEpFWh7HrfmoXtALxH4=
-X-Google-Smtp-Source: ABdhPJy/cKgMCrnCONNJ8Nkz6EEFUfKHyuZjMVBO2ev1m+omQ/33+E6Mrpgkq9iflL3pXTCSb6m4Cw==
-X-Received: by 2002:a2e:2d11:: with SMTP id t17mr4582035ljt.56.1621552132132;
-        Thu, 20 May 2021 16:08:52 -0700 (PDT)
-Received: from localhost.localdomain (109-252-193-76.dynamic.spd-mgts.ru. [109.252.193.76])
-        by smtp.gmail.com with ESMTPSA id 4sm427821lfr.175.2021.05.20.16.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 16:08:51 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?q?Nikola=20Milosavljevi=C4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v1 13/13] soc/tegra: regulators: Support core domain state syncing
-Date:   Fri, 21 May 2021 02:07:51 +0300
-Message-Id: <20210520230751.26848-14-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210520230751.26848-1-digetx@gmail.com>
-References: <20210520230751.26848-1-digetx@gmail.com>
+        with ESMTP id S232547AbhETX34 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 19:29:56 -0400
+Received: from forward100j.mail.yandex.net (forward100j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625DFC061574;
+        Thu, 20 May 2021 16:28:33 -0700 (PDT)
+Received: from iva6-26d3dbc69e48.qloud-c.yandex.net (iva6-26d3dbc69e48.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:912f:0:640:26d3:dbc6])
+        by forward100j.mail.yandex.net (Yandex) with ESMTP id D621F50E1B88;
+        Fri, 21 May 2021 02:28:29 +0300 (MSK)
+Received: from iva8-174eb672ffa9.qloud-c.yandex.net (iva8-174eb672ffa9.qloud-c.yandex.net [2a02:6b8:c0c:b995:0:640:174e:b672])
+        by iva6-26d3dbc69e48.qloud-c.yandex.net (mxback/Yandex) with ESMTP id ImeQqByjNU-STJ4wFYl;
+        Fri, 21 May 2021 02:28:29 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1621553309;
+        bh=WrHAGz3ro9Ohp4J6cItIIGrnoXuDOvp2fj40gFEhLsA=;
+        h=In-Reply-To:Cc:To:From:Subject:Message-ID:References:Date;
+        b=jtqJbmT+XyAz1z8YIkYUeJy5exYZjF35as1lVHGKAkfSNGLEXZyD9LBe8A3CI/W6E
+         iPVzVYFtsZN8SHm+lkWMiwUqPatPp2K+wVcrgNvEZ5tDfBSxRdJTOQIw91EuyhDdQy
+         G4cMk0bUkK7lM7/seaCc+bN7wxDcz6e3oWKufUFA=
+Authentication-Results: iva6-26d3dbc69e48.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by iva8-174eb672ffa9.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id TlB44JqxL1-SSLefwCw;
+        Fri, 21 May 2021 02:28:29 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Message-ID: <15121b9c3ad1683f0d81ebd44ace60509a9a9e82.camel@yandex.ru>
+Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
+ s2idle
+From:   Konstantin Kharlamov <hi-angel@yandex.ru>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Fri, 21 May 2021 02:28:28 +0300
+In-Reply-To: <20210520194935.GA348608@bjorn-Precision-5520>
+References: <20210520194935.GA348608@bjorn-Precision-5520>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The core voltage shall not drop until state of core domain is synced,
-i.e. all device drivers that use core domain are loaded and ready.
+Thank you very much. Well send then a v2 with the comment in a minute.
 
-Support core domain state syncing. The core domain driver invokes the
-core-regulator voltage syncing once the state of domain is synced, at
-this point the core voltage is allowed to go lower than the level left
-after bootloader.
+On Thu, 2021-05-20 at 14:49 -0500, Bjorn Helgaas wrote:
+> On Thu, May 20, 2021 at 01:54:05PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, May 20, 2021 at 1:27 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > On Wed, May 19, 2021 at 9:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Wed, May 19, 2021 at 09:12:26PM +0200, Rafael J. Wysocki wrote:
+> 
+> > > > > The problem is related to the fact that in s2idle the platform
+> > > > > firmware does not finalize the suspend transition and, consequently,
+> > > > > it doesn't initiate the resume transition.  Therefore whatever power
+> > > > > state the device was left in during suspend must be dealt with during
+> > > > > the subsequent resume.  Hence, if whatever is done by SXIO/SXFP/SXLF
+> > > > > in the suspend path cannot be reversed in the resume path by the
+> > > > > kernel (because there is no known method to do that), they should not
+> > > > > be invoked.  And that's exactly because the platform firmware will not
+> > > > > finalize the suspend transition which is indicated by
+> > > > > PM_SUSPEND_FLAG_FW_SUSPEND being unset.
+> > > > 
+> > > > How can we connect "if (!pm_suspend_via_firmware())" in this patch
+> > > > with the fact that firmware doesn't finalize suspend (and consequently
+> > > > does not reverse things in resume)?
+> > > > 
+> > > > I don't see any use of pm_suspend_via_firmware() or
+> > > > PM_SUSPEND_FLAG_FW_SUSPEND that looks relevant.
+> > > 
+> > > First of all, there is a kerneldoc comment next to
+> > > pm_suspend_via_firmware() which is relevant.  Especially the last
+> > > paragraph of that comment applies directly to the case at hand IMV.
+> 
+> I do read kerneldoc, but I *rely* on the code, and it's nice when I
+> can match up the kerneldoc with what the code is doing :)
+> 
+> Part of my confusion is that "passing control to platform firmware"
+> isn't particularly useful in itself because it doesn't give a clue
+> about what firmware is *doing*.  Without knowing what it does, we
+> can't reason about how kernel's actions interact with firmware's
+> actions.
+> 
+> > BTW, the problem at hand is not that s2idle in particular needs to be
+> > treated in a special way (this appears to be the source of all
+> > confusion here).  The problem is that the kernel cannot undo the
+> > SXIO/SXFP/SXLF magic without passing control to the platform firmware.
+> 
+> I assume this is really a case of "the kernel doesn't know *what* to
+> do, but platform firmware does," so in principle the kernel *could*
+> undo the SXIO/SXFP/SXLF magic if it knew what to do.  
+> 
+> > And "passing control to the platform firmware" doesn't mean "executing
+> > some AML" here, because control remains in the kernel when AML is
+> > executed.  "Passing control to the platform firmware" means letting
+> > some native firmware code (like SMM code) run which happens at the end
+> > of S2/S3/S4 suspend transitions and it does not happen during S1
+> > (standby) and s2idle suspend transitions.
+> > 
+> > That's why using SXIO/SXFP/SXLF is only valid during S2/S3/S4 suspend
+> > transitions and it is not valid during s2idle and S1 suspend
+> > transitions (and yes, S1 is also affected, so s2idle is not special in
+> > that respect at all).
+> > 
+> > IMO the changelog of the patch needs to be rewritten, but the code
+> > change made by it is reasonable.
+> 
+> So IIUC the comment should say something like:
+> 
+>   SXIO/SXFP/SXLF turns off power to the Thunderbolt controller.  We
+>   don't know how to turn it back on again, but firmware does, so we
+>   can only use SXIO/SXFP/SXLF if we're suspending via firmware.
+> 
+> Actually, it sounds like the important thing is that we rely on the
+> firmware *resume* path to turn on the power again.
+> 
+> pm_resume_via_firmware() *sounds* like it would be appropriate, but
+> the kerneldoc says that's for use after resume, and it tells us
+> whether firmware has *already* handled the wakeup event.  And
+> PM_SUSPEND_FLAG_FW_RESUME isn't set until after we've run these
+> suspend_late fixups, so it wouldn't work here.
+> 
+> Bjorn
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/soc/tegra/regulators-tegra20.c | 19 ++++++++++++++++++-
- drivers/soc/tegra/regulators-tegra30.c | 18 +++++++++++++++++-
- 2 files changed, 35 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/tegra/regulators-tegra20.c b/drivers/soc/tegra/regulators-tegra20.c
-index 3479be5ee494..81787ae3d03e 100644
---- a/drivers/soc/tegra/regulators-tegra20.c
-+++ b/drivers/soc/tegra/regulators-tegra20.c
-@@ -17,6 +17,8 @@
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- 
-+#include <soc/tegra/common.h>
-+
- struct tegra_regulator_coupler {
- 	struct regulator_coupler coupler;
- 	struct regulator_dev *core_rdev;
-@@ -42,6 +44,21 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra20 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_soc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
-+
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
- 
-@@ -62,7 +79,7 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
- }
-diff --git a/drivers/soc/tegra/regulators-tegra30.c b/drivers/soc/tegra/regulators-tegra30.c
-index 6e4f3d9e7be1..e0203f78b396 100644
---- a/drivers/soc/tegra/regulators-tegra30.c
-+++ b/drivers/soc/tegra/regulators-tegra30.c
-@@ -17,6 +17,7 @@
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- 
-+#include <soc/tegra/common.h>
- #include <soc/tegra/fuse.h>
- 
- struct tegra_regulator_coupler {
-@@ -43,6 +44,21 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra30 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_soc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
-+
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
- 
-@@ -63,7 +79,7 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
- }
--- 
-2.30.2
 
