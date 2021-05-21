@@ -2,134 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8E138BCE9
-	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 05:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C2D38BD14
+	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 05:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238864AbhEUDTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 May 2021 23:19:04 -0400
-Received: from mail-eopbgr10042.outbound.protection.outlook.com ([40.107.1.42]:17774
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233224AbhEUDTE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 May 2021 23:19:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TbpzXf5LJ72YJCN38okICoSCcytMguVAKpdSbguEmmkAEGUSTCWh0iUBEEqaRKsMjjyV/iHlnrdqODuxKi6wwWvl0X2kwauA88SfQJyiupJ9jWl4w5utHTkl64gyYmm2JoDz8hx/PsmwZ07JmvBr3GBgvCCWkAaOI7Vqm6H7Z2lmDdeL8KvIQePrglXGynNtNQeyfEiHBMsp3TiODO4dSipR+vGZhNRWdGJiKJM+yNWXNPyfWlqt2tOXl6OWOkxFSRu8Ah/NaF/hv8/l/qUNIYzLJXJ83TXqIMMj2PZC5faN/mAQVH06IeAAk74RcpcPkuh7Qp4TfkL7YYdbpoXHcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m6PkU3KrosVopXVSVsRTeRean6LYvuhj6rn976TSf8Y=;
- b=h4p4f28AWOhW2suZgQ0BFPpn8pYZTUfDtdJl0B9l+Su5HyW9z6TQKr5xZJCVI02mkNA4Rk76DDIaKRPF0DlgwdVS9nqQVz1a1yum69Ywj+nbv8RHDD1TN/avn8K8f+kdsUmJtPcYKHrTs10qPzfwwdrMc/44MWnHlOZyBNdffHlDNIqzNwjE41AXMaavrj3o1k1vMfepdbMu8o7kmoEQu8jIfIp7nrqHvBEP8/fuFnj+pbopnXL1WerP2TdeBBTOqaqFLgCPl2CUfWXwtmhrUf8kiOnZ36T4YsJiYCHuUBBAvk6qFYjaaa9/ah93sYXvLljs9YlbiiEHMrzpXKA36w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m6PkU3KrosVopXVSVsRTeRean6LYvuhj6rn976TSf8Y=;
- b=CHqUd0PYhFrmMbSdtWfoqgQ6vJ5+6lmnXTYvG8LRXIGZujgdVOBXpsNfXTa9vTtV2wAbfjlRN2ND9KPdRvW3sSXlXSJRWPVsgFmno25kLRw9rBy+Q3dgnlsNY59Rh4jTWz3aWptBbWGISzfnPpoKtth6w6PwYvdjWR529seOiI8=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB4326.eurprd04.prod.outlook.com (2603:10a6:209:4d::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.25; Fri, 21 May
- 2021 03:17:40 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::b10a:ad0:a6f5:db9b]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::b10a:ad0:a6f5:db9b%2]) with mapi id 15.20.4129.034; Fri, 21 May 2021
- 03:17:40 +0000
-From:   Dong Aisheng <aisheng.dong@nxp.com>
-To:     linux-pm@vger.kernel.org
+        id S238965AbhEUD6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 May 2021 23:58:24 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:30404 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233879AbhEUD6X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 May 2021 23:58:23 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210521035659epoutp030870fc3c81cc90124e9418277f97d377~A_MuoKF-M2578325783epoutp03Y
+        for <linux-pm@vger.kernel.org>; Fri, 21 May 2021 03:56:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210521035659epoutp030870fc3c81cc90124e9418277f97d377~A_MuoKF-M2578325783epoutp03Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1621569419;
+        bh=BTNkets0/BhE0imIWW//VHKC1l1wIVjQ1Na7P/zFRE4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=F4cg0tMREwp91is3gANgt6SSPbU0i1lhPFUkuxkJMLC+S2hOZKc4Ki0UJ4iB5j0Uz
+         b+Z8DiTUpAmR5mwXLVQ10vCekrQS40ebfyxOq3bMMyD1avm0KtBSQH2/Dridky4KC0
+         ea10zKNphIt7NcbS+RZgLWnJCOwfxdWQquI3IYxs=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210521035658epcas1p2c5e2c28b5ba4f329ac1293abdb09a714~A_MtcCH062946229462epcas1p2R;
+        Fri, 21 May 2021 03:56:58 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4FmXqB5PZ9z4x9QB; Fri, 21 May
+        2021 03:56:54 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8B.1C.09824.38F27A06; Fri, 21 May 2021 12:56:51 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20210521035650epcas1p46221bc6351c16061961846f20a57d748~A_MmSn94m3231732317epcas1p4n;
+        Fri, 21 May 2021 03:56:50 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210521035650epsmtrp2c6d27de61e7a073fd94271fe543bd55b~A_MmRY2HV3055230552epsmtrp28;
+        Fri, 21 May 2021 03:56:50 +0000 (GMT)
+X-AuditID: b6c32a37-061ff70000002660-57-60a72f83b2cf
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C5.2C.08637.28F27A06; Fri, 21 May 2021 12:56:50 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210521035650epsmtip10784020d1786a34f9600cd20a2ae845b~A_MmCXttd0130401304epsmtip1v;
+        Fri, 21 May 2021 03:56:50 +0000 (GMT)
+Subject: Re: [PATCH V2 1/1] PM / devfreq: imx8m-ddrc: Remove
+ DEVFREQ_GOV_SIMPLE_ONDEMAND dependency
+To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-pm@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, dongas86@gmail.com,
-        linux-imx@nxp.com, cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        linux-imx@nxp.com, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, shawnguo@kernel.org,
-        kernel@pengutronix.de, abel.vesa@nxp.com,
-        Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH V2 1/1] PM / devfreq: imx8m-ddrc: Remove DEVFREQ_GOV_SIMPLE_ONDEMAND dependency
-Date:   Fri, 21 May 2021 11:16:39 +0800
-Message-Id: <20210521031639.2767156-1-aisheng.dong@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR0302CA0022.apcprd03.prod.outlook.com
- (2603:1096:3:2::32) To AM6PR04MB4966.eurprd04.prod.outlook.com
- (2603:10a6:20b:2::14)
+        kernel@pengutronix.de, abel.vesa@nxp.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <1e29beb5-d12d-e0ee-aebf-cd7610f49875@samsung.com>
+Date:   Fri, 21 May 2021 13:15:18 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR0302CA0022.apcprd03.prod.outlook.com (2603:1096:3:2::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.12 via Frontend Transport; Fri, 21 May 2021 03:17:36 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c201c7b3-6a87-483b-f89d-08d91c06fd65
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4326:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB43260A947F80ED415B53EBB080299@AM6PR04MB4326.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:331;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6v+p+QNO/pSzYSh6fBL8BYqURNnXEvm78SFjaQ24/2DFj2AwBqePIiOSw1OotjlHTi6zWJpxR1+WYkXIokMm/f32cRNPXrfOQbxKrRVNaIjFUN0YGDVpXVZ+hRiTbPK2bQK449Hy4MHboq+jinJRZ25GS7r0X3nt/B4EVo+H10l1mRE0RsLNmWv8WEshMh2FKqT8mCGVSqYjZihsuIPMWgPH9gT5XKLkS6SUqdEE5BV5ASstSpR5GE/I2GJU8Az6a9oZiHy1D51Bxbu9W7uNNUqWA/iuj0CWbyHbTtIw1I9g4QF4cICFpjKq1DHWTbT228FVl/TwkSPmACz/NSKZvbpayYIPWLrfnx6xNhtxnA/lbeyRxpLWmoTdM2E29RZBI+RUWoERXITw2uvOmH8CxoJ7gZiztVovUOjdUAKcTdY5/Wo+onpkiMT8xVRJQZgdWleGzF2QlWtAAe1umFD312LRfO8VRSV5/AwxP/soychlHrQoAOA/Mpss3XZ5H9ceg8Jmp2S8e1aIFGvUiCGNcLOZx19+7nFQVZxK0CyDl5v699ypVnEWNxrJTcUbALHwpc0SgW5Rxiq7d/10g74qHsKg2XOso256AXooerbyBR4e2R3do4cv0uRdKSxYEuC8xNYphRGi/SGtoNb/gCxt3SADjQzTkT/vrUmjZ7sJi8yiLfBzSXGhYIwkb2KvW7ogLl6ugwQsBFSt6zECKWj49w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(66556008)(8936002)(66946007)(478600001)(86362001)(52116002)(6916009)(83380400001)(36756003)(4326008)(66476007)(8676002)(38350700002)(26005)(2616005)(4744005)(2906002)(956004)(6486002)(16526019)(1076003)(186003)(5660300002)(6506007)(316002)(6512007)(38100700002)(69590400013)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Qk8g/xfVbgZR18E3UfoCdNrES6oDk8j7UplZdPBeWgXFXWNae3y/iguoupHp?=
- =?us-ascii?Q?VE3anJVGvTa8Lf11Yq4s1yifqiw0OZQug5ItEFReRR/puKMbqDfkHQ23fFf0?=
- =?us-ascii?Q?Hm5LqewvF1Ocf1Vool3oaFJSKzVaIZFagSM1ZAi0fLTinK/n/kHyVtjWCqUt?=
- =?us-ascii?Q?p5koA5ZB+rRZp6OyfLa2iTZpeBXhwowc0rTTuVPBGI4YRbkfdB6YAkYWZXLE?=
- =?us-ascii?Q?LHiUQfvp6BeR9Q0ZpyYCewuHjNieJTP9jGV9yX5yUoIbli3dTEAp/3076tZO?=
- =?us-ascii?Q?ssU8GLRw2eF6ORURPtDyUrQWEFmcReWP5sGclm7Ow0U3Ps7O0eN1HdgNgIPK?=
- =?us-ascii?Q?KuO2hPrO7l3lsBJaJxgE4f3xqgmljwxqdWiZyI5MmyHkFGSbSQzwDl4869uc?=
- =?us-ascii?Q?ItYgD3zRiFOC6D8jLdEEcIi0zTEzJTwM14O0GaeYGEghKetH74T3MMiZ6Rzx?=
- =?us-ascii?Q?SfUz+pZHHdgLApO5uSXkVnLD/IOF2WiJ/1CKjBYJRfNQ5v3nQYF2pXY+TIgr?=
- =?us-ascii?Q?ZpKlQRvm0AfzMoA0MGEEISaQluteU2Nhu7WpmACvUwJv9qDfaoL80QPmjY4Y?=
- =?us-ascii?Q?mwi8g5wBLA45+zaPaxWcr3axaee0oXgqo0Y8HFE/qr+n9p4WcqBTgxMJbjqz?=
- =?us-ascii?Q?N65TrGXvAQHY/GIuseTZEhEReJiD9AtaEY6CCOR57PqHmoGJ/z7p//oaoFEF?=
- =?us-ascii?Q?IgAFOHc0udd35dCGoki6o6B1PAfdcE7qvJuQSm+aJ7mw5VEG/V0TgCnuNqkC?=
- =?us-ascii?Q?QJkJqPZVDC91DbQO6ycv4HIUM20FJFcTMrwNqyS861n+ZmUNMWCwO2upopTg?=
- =?us-ascii?Q?FlIOY8/YsvYOSOwdBfTRaCv1pT381i+twbkauBVt49dH71ZrjrAyfyLmEVfc?=
- =?us-ascii?Q?siDD3RgGrCeq3wOPvSZDuP5sIDbL/FZgrpJFEq3nrEMJobprPDpBG4SGihxN?=
- =?us-ascii?Q?cplpGQuXAiZQPE/z5kygSAZE21kNoffs2fPC0FdmTybgBeIELkNRiQrKNGk7?=
- =?us-ascii?Q?EXkt7T/2nqbdceJ+k2TzfRpYVTojPmN7DXDF08T6zKgPcoMBJwF3U2EUDTEy?=
- =?us-ascii?Q?m2I2+M+oFdEMizIzmh1q189gs4Z2+LH3q5MwgAlby8sbh+6/JU2l36ayez+b?=
- =?us-ascii?Q?B7OORD5t+jPAVsor6dR23do7LlIjRP3/2JX+djOcvXOQktDH9xiUyO3wxglI?=
- =?us-ascii?Q?TJsVCGc+1sNHJT8Xq3jckn/iMd3xpyKRe/aQt7a+5tE1uTJo2/JnH0LcIQgf?=
- =?us-ascii?Q?fRRvrfp37uzwiTd6q58v3en6IOTcpS+oLCgawGUvynTBlSQrsM4oeL2VaFwG?=
- =?us-ascii?Q?9ZBWEcMj7NShbcMB8tfOOF4K?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c201c7b3-6a87-483b-f89d-08d91c06fd65
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2021 03:17:39.9324
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KnkiEhX+5w/jG96uN6v8Uge+DjCvVH0UfrEUe5dVFOVBuMBpfgMGS/HulmgV/mRwwDkx0KA8ybdiIIALBF8YXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4326
+In-Reply-To: <20210521031639.2767156-1-aisheng.dong@nxp.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLJsWRmVeSWpSXmKPExsWy7bCmnm6z/vIEgzWdbBbLLh1ltPgydRez
+        xd/N09ksVk3dyWJxtukNu8Wmx9dYLbp+rWS2+Nx7hNHiduMKNosXW8QduDx2zrrL7rFpVSeb
+        x+Yl9R4b3+1g8uj/a+DRt2UVo8fnTXIB7FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaG
+        uoaWFuZKCnmJuam2Si4+AbpumTlAxykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1Jy
+        CiwL9IoTc4tL89L1kvNzrQwNDIxMgQoTsjO+rV3NUnCbveL3pV72Bsb5bF2MnBwSAiYSLa3P
+        mLsYuTiEBHYwSrzb+okdwvnEKLHyznIo5xujxLIlZ9lhWn51L2AEsYUE9jJKdHSLQRS9Z5Ro
+        2bsNaBYHh7BAqkTno2yQGhEBR4n1j4+ygtQwCxxnlDi0q5sJJMEmoCWx/8UNsDv4BRQlrv54
+        DDaUV8BO4v3zLjaQOSwCqhLzZoSAhEUFwiRObmuBKhGUODnzCQuIzSlgI7Hz0xpWEJtZQFzi
+        1pP5TBC2vMT2t3PAXpMQOMIh8e/XelaIB1wkGr4/hXpGWOLV8S1QtpTE53d7oeFSLbHy5BE2
+        iOYORokt+y9ANRtL7F86mQnkOGYBTYn1u/QhwooSO3/PZYRYzCfx7msPK0iJhACvREebEESJ
+        ssTlB3eZIGxJicXtnWwTGJVmIXlnFpIXZiF5YRbCsgWMLKsYxVILinPTU4sNC4yRI3sTIzjd
+        apnvYJz29oPeIUYmDsZDjBIczEoivNu9FycI8aYkVlalFuXHF5XmpBYfYjQFhu9EZinR5Hxg
+        ws8riTc0NTI2NrYwMTQzNTRUEudNd65OEBJITyxJzU5NLUgtgulj4uCUamAKWRs9P55Lymj3
+        CoV3z+IaX+UaJwsa34633rZL2VLz0qd7ivdW1V49+ll7doOh31Vf66c2Z0SsxbT5f09c/c6v
+        67pqzrPut5Mfrt3uWf9xxTeBxjlxhbsY2Safj8vbPlmpzuWJ+Zn/dyS4YxbNa3ryzOjBQcdD
+        b22derKWmi8pWGG3ScjPsTKoMfDgvZBTBdf+Xpnt3/jB7N+U7Nh1ajPr/eWun3u/zvBjmUXo
+        wklGVeqS8XsMzq0OfXja7uufl3yvC5l+PT4cEOm1OunAvrfrKoXCJoYLBt/yC9d95KJ/JF7z
+        wiqeovaWDNXs3anKxX9dZ3oUO6wq7dld2Fw3n3HlOp/8cKd9fh+1hPVNS/WVWIozEg21mIuK
+        EwFXE0RdQAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsWy7bCSnG6T/vIEg2OdohbLLh1ltPgydRez
+        xd/N09ksVk3dyWJxtukNu8Wmx9dYLbp+rWS2+Nx7hNHiduMKNosXW8QduDx2zrrL7rFpVSeb
+        x+Yl9R4b3+1g8uj/a+DRt2UVo8fnTXIB7FFcNimpOZllqUX6dglcGd/WrmYpuM1e8ftSL3sD
+        43y2LkZODgkBE4lf3QsYuxi5OIQEdjNKfL68iBkiISkx7eJRIJsDyBaWOHy4GCQsJPCWUWLT
+        Fn6QsLBAqkTno2yQsIiAo8T6x0dZQcYwCxxnlLi+ZB47xMx+RomVWzaCzWQT0JLY/+IG2GJ+
+        AUWJqz8eM4LYvAJ2Eu+fd7GBDGURUJWYNyMEJCwqECaxc8ljJogSQYmTM5+wgNicAjYSOz+t
+        YQWxmQXUJf7Mu8QMYYtL3HoynwnClpfY/nYO8wRG4VlI2mchaZmFpGUWkpYFjCyrGCVTC4pz
+        03OLDQsM81LL9YoTc4tL89L1kvNzNzGC405Lcwfj9lUf9A4xMnEwHmKU4GBWEuHd7r04QYg3
+        JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQam1f//21e0LVWs
+        9njz0KP7u61Y8AT+yVdeO+88v/JXw46PobVVSjnHyvS2ulz6GN8U5aprJcsgUtR9JuTtswiJ
+        q7P85G6fF1n160dbWrn9mnNrTlZ8j25zmz7946ZTVplHOG9yLWqqf3/7b9BMxQk3LeYLfDf7
+        ZHviqtzZOzOXx89LvxzqxL2hm62+mqWhvPDqJi3JvZ3VQkGcW7rP7588deWSWx8naf985bTJ
+        882VpbLnmlJuvXh6ZWa++J2958N1T81jPMv6InN3R0FObL5Cl8eG1U8nbFRc7Dezrv3/qlPp
+        efITHmoGfXhd6dlqdlXx/1WplQ3r67XYJ3Q6vQpr3WR209j+n2KKx/rJ/589CVNiKc5INNRi
+        LipOBAD3mycDKgMAAA==
+X-CMS-MailID: 20210521035650epcas1p46221bc6351c16061961846f20a57d748
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210521031744epcas1p4513da01d2bc9fa59f955fdec20d7c026
+References: <CGME20210521031744epcas1p4513da01d2bc9fa59f955fdec20d7c026@epcas1p4.samsung.com>
+        <20210521031639.2767156-1-aisheng.dong@nxp.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver can't support simple ondemand governor due to missing
-.get_dev_status() capability.
+On 5/21/21 12:16 PM, Dong Aisheng wrote:
+> The driver can't support simple ondemand governor due to missing
+> .get_dev_status() capability.
+> 
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> ---
+> ChangeLog:
+> v1->v2:
+>  * update commit title
+> ---
+>  drivers/devfreq/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index 20373a893b44..e87d01c0b76a 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -103,7 +103,6 @@ config ARM_IMX8M_DDRC_DEVFREQ
+>  	tristate "i.MX8M DDRC DEVFREQ Driver"
+>  	depends on (ARCH_MXC && HAVE_ARM_SMCCC) || \
+>  		(COMPILE_TEST && HAVE_ARM_SMCCC)
+> -	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+>  	select DEVFREQ_GOV_USERSPACE
+>  	help
+>  	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allows
+> 
 
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
----
-ChangeLog:
-v1->v2:
- * update commit title
----
- drivers/devfreq/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+Applied it. Thanks.
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 20373a893b44..e87d01c0b76a 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -103,7 +103,6 @@ config ARM_IMX8M_DDRC_DEVFREQ
- 	tristate "i.MX8M DDRC DEVFREQ Driver"
- 	depends on (ARCH_MXC && HAVE_ARM_SMCCC) || \
- 		(COMPILE_TEST && HAVE_ARM_SMCCC)
--	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select DEVFREQ_GOV_USERSPACE
- 	help
- 	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allows
 -- 
-2.25.1
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
