@@ -2,198 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C13F38BD20
-	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 06:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405AC38BDDF
+	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 07:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbhEUED7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 May 2021 00:03:59 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57824 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbhEUED7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 May 2021 00:03:59 -0400
-Received: from mail-oo1-f72.google.com ([209.85.161.72])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <chris.chiu@canonical.com>)
-        id 1ljwMt-0002lM-G1
-        for linux-pm@vger.kernel.org; Fri, 21 May 2021 04:02:35 +0000
-Received: by mail-oo1-f72.google.com with SMTP id 126-20020a4a17840000b02901e5e0ccc28aso12471942ooe.13
-        for <linux-pm@vger.kernel.org>; Thu, 20 May 2021 21:02:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BkxUPctLlMYTanG/NbpSu5XniOih0RSQFTbMnTWQYJM=;
-        b=MGWTtEIsIBb6efgVB1rJPmZnMFYCNixTW3zbysi/6Hj/2KDsls/Ko2w1o1qZnjFs9l
-         bhqZpZIiUDFLJNIYiRKWJ8DDS+4Lf6f655ck0CgMFF8pMz1TZbdEF/Z0z6TnxT1skBv2
-         pbcZ5I7vuLy6Sw9UhKbC7HhlxmrhHwBtDmevoXFtjKBIAPNtKUzrcif+ZESFpuLx3z+X
-         uoaXIXr5HnmGj1FuwdMhh5l05SonhaaMwl0ar9camtA8O6Y1xKn14aRDfgUQmVw2Pjct
-         hyAGC1JBkr+rzBjAfC/9XxxCrIJccp0P2qbjOOvzXQ7uzDXymItr2xGtHaNJo1aBJC5N
-         uTcA==
-X-Gm-Message-State: AOAM5304JoIZwes6PO3WCwcZRLas6Gs7pyxIi7tfCyWbgX6lbx4f4Y4w
-        a5fjZFmCAc1eGUxMOKhesuAIk5PDei0f9u/apM2BWu15tjNhYhcskSGgs7eBsb/ajgpt+7+IAR5
-        q+FbeH69K1j1pFcgd9pZ+3fVRqwBGn0vcKMbftIMUy+dGmYVN72Fg
-X-Received: by 2002:a4a:c1:: with SMTP id 184mr6397281ooh.25.1621569753983;
-        Thu, 20 May 2021 21:02:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzN8oKjol1achG45QUkmKxb4AL9fVw2ETq9jSXQdBZuFnWj3B3G19NBSti3JEmAoGlQnBW6NHSRu31xIqEnv1U=
-X-Received: by 2002:a4a:c1:: with SMTP id 184mr6397260ooh.25.1621569753749;
- Thu, 20 May 2021 21:02:33 -0700 (PDT)
+        id S230168AbhEUF2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 May 2021 01:28:40 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:33314 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhEUF2i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 May 2021 01:28:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1621574836; x=1653110836;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=kDiMVanU/J46MBpWtTAkHD58jSy5mLoyYAH1XvH7tTU=;
+  b=cGJtZxMCkCe4MQXsKizox2Im7O10DMSFVoBd7YGsYz6hcX5x4m8ZcFZG
+   vD/BchT9PugvZB0vANu9JdsrHYv+95DrKxmK1M5dYfgC3wuiu2TqT83bM
+   Wjy4QoWucejVmxe8U+ixOoxwm7sHbhL8kREZnQTaa1qbUmPruhO45DraG
+   k=;
+X-IronPort-AV: E=Sophos;i="5.82,313,1613433600"; 
+   d="scan'208";a="2533323"
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1a-e34f1ddc.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 21 May 2021 05:27:14 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1a-e34f1ddc.us-east-1.amazon.com (Postfix) with ESMTPS id 84D9AA1E62;
+        Fri, 21 May 2021 05:27:07 +0000 (UTC)
+Received: from EX13D07UWA004.ant.amazon.com (10.43.160.32) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Fri, 21 May 2021 05:26:51 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D07UWA004.ant.amazon.com (10.43.160.32) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Fri, 21 May 2021 05:26:51 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.18 via Frontend Transport; Fri, 21 May 2021 05:26:51
+ +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id F1AC340124; Fri, 21 May 2021 05:26:50 +0000 (UTC)
+Date:   Fri, 21 May 2021 05:26:50 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <boris.ostrovsky@oracle.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>,
+        David <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        <anchalag@amazon.com>, <aams@amazon.com>
+Message-ID: <20210521052650.GA19056@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
+ <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
+ <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
+ <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
+ <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
 MIME-Version: 1.0
-References: <CABTNMG0Y5iAD4E8XFkOwrNTBHNDcNKRt=+BLPHs4tw5O2eVBDA@mail.gmail.com>
- <CAJZ5v0hqU4xc8oCWXPBYhdGdG__=15+M67QWVSfFeUR3DN4Evw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hqU4xc8oCWXPBYhdGdG__=15+M67QWVSfFeUR3DN4Evw@mail.gmail.com>
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Fri, 21 May 2021 12:02:23 +0800
-Message-ID: <CABTNMG12A5qJ5ygtFTa7Sk-5W=fmMxt0L90=04H5qRDD4vWGRQ@mail.gmail.com>
-Subject: Re: NVIDIA GPU fallen off the bus after exiting s2idle
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, intel-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 6, 2021 at 5:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, May 4, 2021 at 10:08 AM Chris Chiu <chris.chiu@canonical.com> wrote:
-> >
-> > Hi,
-> >     We have some Intel laptops (11th generation CPU) with NVIDIA GPU
-> > suffering the same GPU falling off the bus problem while exiting
-> > s2idle with external display connected. These laptops connect the
-> > external display via the HDMI/DisplayPort on a USB Type-C interfaced
-> > dock. If we enter and exit s2idle with the dock connected, the NVIDIA
-> > GPU (confirmed on 10de:24b6 and 10de:25b8) and the PCIe port can come
-> > back to D0 w/o problem. If we enter the s2idle, disconnect the dock,
-> > then exit the s2idle, both external display and the panel will remain
-> > with no output. The dmesg as follows shows the "nvidia 0000:01:00.0:
-> > can't change power state from D3cold to D0 (config space
-> > inaccessible)" due to the following ACPI error
-> > [ 154.446781]
-> > [ 154.446783]
-> > [ 154.446783] Initialized Local Variables for Method [IPCS]:
-> > [ 154.446784] Local0: 000000009863e365 <Obj> Integer 00000000000009C5
-> > [ 154.446790]
-> > [ 154.446791] Initialized Arguments for Method [IPCS]: (7 arguments
-> > defined for method invocation)
-> > [ 154.446792] Arg0: 0000000025568fbd <Obj> Integer 00000000000000AC
-> > [ 154.446795] Arg1: 000000009ef30e76 <Obj> Integer 0000000000000000
-> > [ 154.446798] Arg2: 00000000fdf820f0 <Obj> Integer 0000000000000010
-> > [ 154.446801] Arg3: 000000009fc2a088 <Obj> Integer 0000000000000001
-> > [ 154.446804] Arg4: 000000003a3418f7 <Obj> Integer 0000000000000001
-> > [ 154.446807] Arg5: 0000000020c4b87c <Obj> Integer 0000000000000000
-> > [ 154.446810] Arg6: 000000008b965a8a <Obj> Integer 0000000000000000
-> > [ 154.446813]
-> > [ 154.446815] ACPI Error: Aborting method \IPCS due to previous error
-> > (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446824] ACPI Error: Aborting method \MCUI due to previous error
-> > (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446829] ACPI Error: Aborting method \SPCX due to previous error
-> > (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446835] ACPI Error: Aborting method \_SB.PC00.PGSC due to
-> > previous error (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446841] ACPI Error: Aborting method \_SB.PC00.PGON due to
-> > previous error (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446846] ACPI Error: Aborting method \_SB.PC00.PEG1.NPON due to
-> > previous error (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446852] ACPI Error: Aborting method \_SB.PC00.PEG1.PG01._ON due
-> > to previous error (AE_AML_LOOP_TIMEOUT) (20200925/psparse-529)
-> > [ 154.446860] acpi device:02: Failed to change power state to D0
-> > [ 154.690760] video LNXVIDEO:00: Cannot transition to power state D0
-> > for parent in (unknown)
->
-> If I were to guess, I would say that AML tries to access memory that
-> is not accessible while suspended, probably PCI config space.
->
-> > The IPCS is the last function called from \_SB.PC00.PEG1.PG01._ON
-> > which we expect it to prepare everything before bringing back the
-> > NVIDIA GPU but it's stuck in the infinite loop as described below.
-> > Please refer to
-> > https://gist.github.com/mschiu77/fa4f5a97297749d0d66fe60c1d421c44 for
-> > the full DSDT.dsl.
->
-> The DSDT alone may not be sufficient.
->
-> Can you please create a bug entry at bugzilla.kernel.org for this
-> issue and attach the full output of acpidump from one of the affected
-> machines to it?  And please let me know the number of the bug.
->
-> Also please attach the output of dmesg including a suspend-resume
-> cycle including dock disconnection while suspended and the ACPI
-> messages quoted below.
->
-> >            While (One)
-> >             {
-> >                 If ((!IBSY || (IERR == One)))
-> >                 {
-> >                     Break
-> >                 }
-> >
-> >                 If ((Local0 > TMOV))
-> >                 {
-> >                     RPKG [Zero] = 0x03
-> >                     Return (RPKG) /* \IPCS.RPKG */
-> >                 }
-> >
-> >                 Sleep (One)
-> >                 Local0++
-> >             }
-> >
-> > And the upstream PCIe port of NVIDIA seems to become inaccessible due
-> > to the messages as follows.
-> > [ 292.746508] pcieport 0000:00:01.0: waiting 100 ms for downstream
-> > link, after activation
-> > [ 292.882296] pci 0000:01:00.0: waiting additional 100 ms to become accessible
-> > [ 316.876997] pci 0000:01:00.0: can't change power state from D3cold
-> > to D0 (config space inaccessible)
-> >
-> > Since the IPCS is the Intel Reference Code and we don't really know
-> > why the never-end loop happens just because we unplug the dock while
-> > the system still stays in s2idle. Can anyone from Intel suggest what
-> > happens here?
->
-> This list is not the right channel for inquiries related to Intel
-> support, we can only help you as Linux kernel developers in this
-> venue.
->
-> > And one thing also worth mentioning, if we unplug the display cable
-> > from the dock before entering the s2idle, NVIDIA GPU can come back w/o
-> > problem even if we disconnect the dock before exiting s2idle. Here's
-> > the lspci information
-> > https://gist.github.com/mschiu77/0bfc439d15d52d20de0129b1b2a86dc4 and
-> > the dmesg log with ACPI trace_state enabled and dynamic debug on for
-> > drivers/pci/pci.c, drivers/acpi/device_pm.c for the whole s2idle
-> > enter/exit with IPCS timeout.
-> >
-> > Any suggestion would be appreciated. Thanks.
->
-> First, please use proper Intel support channels for BIOS-related inquiries.
->
-> Second, please open a bug as suggested above and let's use it for
-> further communication regarding this issue as far as Linux is
-> concerned.
->
-> Thanks!
+On Thu, Oct 01, 2020 at 08:43:58AM -0400, boris.ostrovsky@oracle.com wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> >>>>>>> Also, wrt KASLR stuff, that issue is still seen sometimes but I haven't had
+> >>>>>>> bandwidth to dive deep into the issue and fix it.
+> >>>> So what's the plan there? You first mentioned this issue early this year and judged by your response it is not clear whether you will ever spend time looking at it.
+> >>>>
+> >>> I do want to fix it and did do some debugging earlier this year just haven't
+> >>> gotten back to it. Also, wanted to understand if the issue is a blocker to this
+> >>> series?
+> >>
+> >> Integrating code with known bugs is less than ideal.
+> >>
+> > So for this series to be accepted, KASLR needs to be fixed along with other
+> > comments of course?
+> 
+> 
+> Yes, please.
+> 
+> 
+> 
+> >>> I had some theories when debugging around this like if the random base address picked by kaslr for the
+> >>> resuming kernel mismatches the suspended kernel and just jogging my memory, I didn't find that as the case.
+> >>> Another hunch was if physical address of registered vcpu info at boot is different from what suspended kernel
+> >>> has and that can cause CPU's to get stuck when coming online.
+> >>
+> >> I'd think if this were the case you'd have 100% failure rate. And we are also re-registering vcpu info on xen restore and I am not aware of any failures due to KASLR.
+> >>
+> > What I meant there wrt VCPU info was that VCPU info is not unregistered during hibernation,
+> > so Xen still remembers the old physical addresses for the VCPU information, created by the
+> > booting kernel. But since the hibernation kernel may have different physical
+> > addresses for VCPU info and if mismatch happens, it may cause issues with resume.
+> > During hibernation, the VCPU info register hypercall is not invoked again.
+> 
+> 
+> I still don't think that's the cause but it's certainly worth having a look.
+> 
+Hi Boris,
+Apologies for picking this up after last year. 
+I did some dive deep on the above statement and that is indeed the case that's happening. 
+I did some debugging around KASLR and hibernation using reboot mode.
+I observed in my debug prints that whenever vcpu_info* address for secondary vcpu assigned 
+in xen_vcpu_setup at boot is different than what is in the image, resume gets stuck for that vcpu
+in bringup_cpu(). That means we have different addresses for &per_cpu(xen_vcpu_info, cpu) at boot and after
+control jumps into the image. 
 
-Thanks for the suggestion. I opened
-https://bugzilla.kernel.org/show_bug.cgi?id=212951 and have a new
-finding in https://bugzilla.kernel.org/show_bug.cgi?id=212951#c13. It
-seems that maybe we could do something in the i915 driver during
-resume to handle the hpd (because we unplug the dock/dongle when
-suspended) at the very beginning. Since it involves HPD, PMC and the
-BIOS, I don't know which way I should go to fix this since Windows
-won't hit this problem.
+I failed to get any prints after it got stuck in bringup_cpu() and
+I do not have an option to send a sysrq signal to the guest or rather get a kdump.
+This change is not observed in every hibernate-resume cycle. I am not sure if this is a bug or an 
+expected behavior. 
+Also, I am contemplating the idea that it may be a bug in xen code getting triggered only when
+KASLR is enabled but I do not have substantial data to prove that.
+Is this a coincidence that this always happens for 1st vcpu?
+Moreover, since hypervisor is not aware that guest is hibernated and it looks like a regular shutdown to dom0 during reboot mode,
+will re-registering vcpu_info for secondary vcpu's even plausible? I could definitely use some advice to debug this further.
 
-Please let me know if there's any information missing in the
-bugzilla.kernel ticket. Any suggestions would be appreciated. Thanks
+ 
+Some printk's from my debugging:
 
-Chris
+At Boot:
+
+xen_vcpu_setup: xen_have_vcpu_info_placement=1 cpu=1, vcpup=0xffff9e548fa560e0, info.mfn=3996246 info.offset=224,
+
+Image Loads:
+It ends up in the condition:
+ xen_vcpu_setup()
+ {
+ ...
+ if (xen_hvm_domain()) {
+        if (per_cpu(xen_vcpu, cpu) == &per_cpu(xen_vcpu_info, cpu))
+                return 0; 
+ }
+ ...
+ }
+
+xen_vcpu_setup: checking mfn on resume cpu=1, info.mfn=3934806 info.offset=224, &per_cpu(xen_vcpu_info, cpu)=0xffff9d7240a560e0
+
+This is tested on c4.2xlarge [8vcpu 15GB mem] instance with 5.10 kernel running
+in the guest.
+
+Thanks,
+Anchal.
+> 
+> -boris
+> 
+> 
