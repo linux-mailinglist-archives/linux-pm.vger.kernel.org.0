@@ -2,162 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9AC38C3BE
-	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 11:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C6738C790
+	for <lists+linux-pm@lfdr.de>; Fri, 21 May 2021 15:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhEUJtC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 May 2021 05:49:02 -0400
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:34404 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbhEUJtB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 May 2021 05:49:01 -0400
-Received: by mail-oo1-f49.google.com with SMTP id i8-20020a4aa1080000b0290201edd785e7so4442134ool.1;
-        Fri, 21 May 2021 02:47:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8F85ALMx/ALzOG6W8AbyB4WWD6UFDnaExkKp/IYQypY=;
-        b=JTJIrHHFbwysGoM4u1F0OxLZiEwBX1TZty4owzfkK9IsnMou1SU2zbVSdz0otmqusf
-         iA3/iSveng6QsDMoxmrbxawY1SxewLFnVt4HjDlerqbany+f1b4EYeyEeQqWEXbcgxro
-         H0MQzTLVeQmDXsQprPEKjcbX6AI1y31ARc9y3wqLjrnt7fSdmyp6BE3v8pX/jygnqfuo
-         6ZbFDlJEFfr4uP0ZqnanDVKMSwAlxGvk+NvP+h4FldoL+2yPec+G4h90KT7aBT6B06aZ
-         Ct7YGsARoEBeHYzMcgD/Xwnoss/Qk0qM6YJq46X48PK3BEyKyNHzFWmqCNOg+UQwOcNv
-         rrpQ==
-X-Gm-Message-State: AOAM533UJwjYUW17O5ZKmwmmU0gqmdik6AYVXjDTqwGttox0ZT4OXqad
-        Jx4qBiveOLN3GLOiolOjDYgcTZrYdJKK5SQRH+w=
-X-Google-Smtp-Source: ABdhPJxr7RxX1a8zQ2BlIgKJcvRVZs+Ys46A7SBQePR3Lay2jAJyLUycP9sL1K2dOnaqoWGJQRAnZQRCVg1KJvANc+c=
-X-Received: by 2002:a4a:e5d5:: with SMTP id r21mr7574729oov.1.1621590457234;
- Fri, 21 May 2021 02:47:37 -0700 (PDT)
+        id S230408AbhEUNOk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 May 2021 09:14:40 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51834 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233232AbhEUNOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 May 2021 09:14:38 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
+ id ac0a1602abfabcef; Fri, 21 May 2021 15:13:13 +0200
+Received: from kreacher.localnet (89-64-82-20.dynamic.chello.pl [89.64.82.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 97A9E6696CA;
+        Fri, 21 May 2021 15:13:12 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dave Olsthoorn <dave@bewaar.me>,
+        Shujun Wang <wsj20369@163.com>,
+        David Box <david.e.box@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH] ACPI: power: Refine turning off unused power resources
+Date:   Fri, 21 May 2021 15:13:11 +0200
+Message-ID: <11762320.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-References: <CAJZ5v0hLkEDgPstGkigMztUpiDyPzgjraaqtYs=SPzg8JWgVow@mail.gmail.com>
- <20210520194935.GA348608@bjorn-Precision-5520>
-In-Reply-To: <20210520194935.GA348608@bjorn-Precision-5520>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 21 May 2021 11:47:25 +0200
-Message-ID: <CAJZ5v0jr459rYezo6qmU+AnwT2ZWLbR0GGoM=NCTiznvpPSfzg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on s2idle
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        Lukas Wunner <lukas@wunner.de>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.82.20
+X-CLIENT-HOSTNAME: 89-64-82-20.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvdejfedgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeeiffduheeigfeufeektefgueffheejvddvveehuedtueetgefhteeigfffleegteenucffohhmrghinhepuhgvfhhirdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepkeelrdeigedrkedvrddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdekvddrvddtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdp
+ rhgtphhtthhopegurghvvgessggvfigrrghrrdhmvgdprhgtphhtthhopeifshhjvddtfeeileesudeifedrtghomhdprhgtphhtthhopegurghvihgurdgvrdgsohigsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 20, 2021 at 9:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Thu, May 20, 2021 at 01:54:05PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, May 20, 2021 at 1:27 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Wed, May 19, 2021 at 9:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Wed, May 19, 2021 at 09:12:26PM +0200, Rafael J. Wysocki wrote:
->
-> > > > > The problem is related to the fact that in s2idle the platform
-> > > > > firmware does not finalize the suspend transition and, consequently,
-> > > > > it doesn't initiate the resume transition.  Therefore whatever power
-> > > > > state the device was left in during suspend must be dealt with during
-> > > > > the subsequent resume.  Hence, if whatever is done by SXIO/SXFP/SXLF
-> > > > > in the suspend path cannot be reversed in the resume path by the
-> > > > > kernel (because there is no known method to do that), they should not
-> > > > > be invoked.  And that's exactly because the platform firmware will not
-> > > > > finalize the suspend transition which is indicated by
-> > > > > PM_SUSPEND_FLAG_FW_SUSPEND being unset.
-> > > >
-> > > > How can we connect "if (!pm_suspend_via_firmware())" in this patch
-> > > > with the fact that firmware doesn't finalize suspend (and consequently
-> > > > does not reverse things in resume)?
-> > > >
-> > > > I don't see any use of pm_suspend_via_firmware() or
-> > > > PM_SUSPEND_FLAG_FW_SUSPEND that looks relevant.
-> > >
-> > > First of all, there is a kerneldoc comment next to
-> > > pm_suspend_via_firmware() which is relevant.  Especially the last
-> > > paragraph of that comment applies directly to the case at hand IMV.
->
-> I do read kerneldoc, but I *rely* on the code, and it's nice when I
-> can match up the kerneldoc with what the code is doing :)
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Fair enough.
+Commit 7e4fdeafa61f ("ACPI: power: Turn off unused power resources
+unconditionally") dropped the power resource state check from
+acpi_turn_off_unused_power_resources(), because according to the
+ACPI specification (e.g. ACPI 6.4, Section 7.2.2) the OS "may run
+the _OFF method repeatedly, even if the resource is already off".
 
-> Part of my confusion is that "passing control to platform firmware"
-> isn't particularly useful in itself because it doesn't give a clue
-> about what firmware is *doing*.  Without knowing what it does, we
-> can't reason about how kernel's actions interact with firmware's
-> actions.
+However, it turns out that some systems do not follow the
+specification in this particular respect and that commit introduced
+boot issues on them, so refine acpi_turn_off_unused_power_resources()
+to only turn off power resources without any users after device
+enumeration and restore its previous behavior in the system-wide
+resume path.
 
-While we don't know exactly what happens when the platform firmware is
-running, we can reasonably expect that devices will get reset as a
-result of that.
+Fixes: 7e4fdeafa61f ("ACPI: power: Turn off unused power resources unconditionally")
+Link: https://uefi.org/specs/ACPI/6.4/07_Power_and_Performance_Mgmt/declaring-a-power-resource-object.html#off
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=213019
+Reported-by: Zhang Rui <rui.zhang@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Reported-by: Dave Olsthoorn <dave@bewaar.me>
+Tested-by: Dave Olsthoorn <dave@bewaar.me>
+Reported-by: Shujun Wang <wsj20369@163.com>
+Tested-by: Shujun Wang <wsj20369@163.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/internal.h |    4 +--
+ drivers/acpi/power.c    |   59 +++++++++++++++++++++++++++++++++++++-----------
+ drivers/acpi/scan.c     |    2 -
+ drivers/acpi/sleep.c    |    2 -
+ 4 files changed, 50 insertions(+), 17 deletions(-)
 
-It's kind of like heating up things in a microwave oven: you don't
-need to know exactly what happens when it is working, but nevertheless
-you can predict with quite high confidence what the outcome of that
-will be.
+Index: linux-pm/drivers/acpi/power.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/power.c
++++ linux-pm/drivers/acpi/power.c
+@@ -52,6 +52,7 @@ struct acpi_power_resource {
+ 	u32 system_level;
+ 	u32 order;
+ 	unsigned int ref_count;
++	unsigned int users;
+ 	bool wakeup_enabled;
+ 	struct mutex resource_lock;
+ 	struct list_head dependents;
+@@ -147,6 +148,7 @@ int acpi_extract_power_resources(union a
+ 
+ 	for (i = start; i < package->package.count; i++) {
+ 		union acpi_object *element = &package->package.elements[i];
++		struct acpi_device *rdev;
+ 		acpi_handle rhandle;
+ 
+ 		if (element->type != ACPI_TYPE_LOCAL_REFERENCE) {
+@@ -163,13 +165,16 @@ int acpi_extract_power_resources(union a
+ 		if (acpi_power_resource_is_dup(package, start, i))
+ 			continue;
+ 
+-		err = acpi_add_power_resource(rhandle);
+-		if (err)
++		rdev = acpi_add_power_resource(rhandle);
++		if (!rdev) {
++			err = -ENODEV;
+ 			break;
+-
++		}
+ 		err = acpi_power_resources_list_add(rhandle, list);
+ 		if (err)
+ 			break;
++
++		to_power_resource(rdev)->users++;
+ 	}
+ 	if (err)
+ 		acpi_power_resources_list_free(list);
+@@ -907,7 +912,7 @@ static void acpi_power_add_resource_to_l
+ 	mutex_unlock(&power_resource_list_lock);
+ }
+ 
+-int acpi_add_power_resource(acpi_handle handle)
++struct acpi_device *acpi_add_power_resource(acpi_handle handle)
+ {
+ 	struct acpi_power_resource *resource;
+ 	struct acpi_device *device = NULL;
+@@ -918,11 +923,11 @@ int acpi_add_power_resource(acpi_handle
+ 
+ 	acpi_bus_get_device(handle, &device);
+ 	if (device)
+-		return 0;
++		return device;
+ 
+ 	resource = kzalloc(sizeof(*resource), GFP_KERNEL);
+ 	if (!resource)
+-		return -ENOMEM;
++		return NULL;
+ 
+ 	device = &resource->device;
+ 	acpi_init_device_object(device, handle, ACPI_BUS_TYPE_POWER);
+@@ -959,11 +964,11 @@ int acpi_add_power_resource(acpi_handle
+ 
+ 	acpi_power_add_resource_to_list(resource);
+ 	acpi_device_add_finalize(device);
+-	return 0;
++	return device;
+ 
+  err:
+ 	acpi_release_power_resource(&device->dev);
+-	return result;
++	return NULL;
+ }
+ 
+ #ifdef CONFIG_ACPI_SLEEP
+@@ -997,7 +1002,38 @@ void acpi_resume_power_resources(void)
+ }
+ #endif
+ 
+-void acpi_turn_off_unused_power_resources(void)
++static void acpi_power_turn_off_if_unused(struct acpi_power_resource *resource,
++				       bool init)
++{
++	if (resource->ref_count > 0)
++		return;
++
++	if (init) {
++		if (resource->users > 0)
++			return;
++	} else {
++		int result, state;
++
++		result = acpi_power_get_state(resource->device.handle, &state);
++		if (result || state == ACPI_POWER_RESOURCE_STATE_OFF)
++			return;
++	}
++
++	dev_info(&resource->device.dev, "Turning OFF\n");
++	__acpi_power_off(resource);
++}
++
++/**
++ * acpi_turn_off_unused_power_resources - Turn off power resources not in use.
++ * @init: Control switch.
++ *
++ * If @ainit is set, unconditionally turn off all of the ACPI power resources
++ * without any users.
++ *
++ * Otherwise, turn off all ACPI power resources without active references (that
++ * is, the ones that should be "off" at the moment) that are "on".
++ */
++void acpi_turn_off_unused_power_resources(bool init)
+ {
+ 	struct acpi_power_resource *resource;
+ 
+@@ -1006,10 +1042,7 @@ void acpi_turn_off_unused_power_resource
+ 	list_for_each_entry_reverse(resource, &acpi_power_resource_list, list_node) {
+ 		mutex_lock(&resource->resource_lock);
+ 
+-		if (!resource->ref_count) {
+-			dev_info(&resource->device.dev, "Turning OFF\n");
+-			__acpi_power_off(resource);
+-		}
++		acpi_power_turn_off_if_unused(resource, init);
+ 
+ 		mutex_unlock(&resource->resource_lock);
+ 	}
+Index: linux-pm/drivers/acpi/internal.h
+===================================================================
+--- linux-pm.orig/drivers/acpi/internal.h
++++ linux-pm/drivers/acpi/internal.h
+@@ -134,7 +134,7 @@ int acpi_power_init(void);
+ void acpi_power_resources_list_free(struct list_head *list);
+ int acpi_extract_power_resources(union acpi_object *package, unsigned int start,
+ 				 struct list_head *list);
+-int acpi_add_power_resource(acpi_handle handle);
++struct acpi_device *acpi_add_power_resource(acpi_handle handle);
+ void acpi_power_add_remove_device(struct acpi_device *adev, bool add);
+ int acpi_power_wakeup_list_init(struct list_head *list, int *system_level);
+ int acpi_device_sleep_wake(struct acpi_device *dev,
+@@ -142,7 +142,7 @@ int acpi_device_sleep_wake(struct acpi_d
+ int acpi_power_get_inferred_state(struct acpi_device *device, int *state);
+ int acpi_power_on_resources(struct acpi_device *device, int state);
+ int acpi_power_transition(struct acpi_device *device, int state);
+-void acpi_turn_off_unused_power_resources(void);
++void acpi_turn_off_unused_power_resources(bool init);
+ 
+ /* --------------------------------------------------------------------------
+                               Device Power Management
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -504,7 +504,7 @@ static void acpi_pm_start(u32 acpi_state
+  */
+ static void acpi_pm_end(void)
+ {
+-	acpi_turn_off_unused_power_resources();
++	acpi_turn_off_unused_power_resources(false);
+ 	acpi_scan_lock_release();
+ 	/*
+ 	 * This is necessary in case acpi_pm_finish() is not called during a
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -2356,7 +2356,7 @@ int __init acpi_scan_init(void)
+ 		}
+ 	}
+ 
+-	acpi_turn_off_unused_power_resources();
++	acpi_turn_off_unused_power_resources(true);
+ 
+ 	acpi_scan_initialized = true;
+ 
 
-> > BTW, the problem at hand is not that s2idle in particular needs to be
-> > treated in a special way (this appears to be the source of all
-> > confusion here).  The problem is that the kernel cannot undo the
-> > SXIO/SXFP/SXLF magic without passing control to the platform firmware.
->
-> I assume this is really a case of "the kernel doesn't know *what* to
-> do, but platform firmware does," so in principle the kernel *could*
-> undo the SXIO/SXFP/SXLF magic if it knew what to do.
 
-In general, that may or may not be the case.
 
-I guess it is the case here, because Lukas seems to know how to make
-this work, but the AML in question might be prepared with the
-assumption that the firmware code finalizing the transition will run
-after it.
-
-> > And "passing control to the platform firmware" doesn't mean "executing
-> > some AML" here, because control remains in the kernel when AML is
-> > executed.  "Passing control to the platform firmware" means letting
-> > some native firmware code (like SMM code) run which happens at the end
-> > of S2/S3/S4 suspend transitions and it does not happen during S1
-> > (standby) and s2idle suspend transitions.
-> >
-> > That's why using SXIO/SXFP/SXLF is only valid during S2/S3/S4 suspend
-> > transitions and it is not valid during s2idle and S1 suspend
-> > transitions (and yes, S1 is also affected, so s2idle is not special in
-> > that respect at all).
-> >
-> > IMO the changelog of the patch needs to be rewritten, but the code
-> > change made by it is reasonable.
->
-> So IIUC the comment should say something like:
->
->   SXIO/SXFP/SXLF turns off power to the Thunderbolt controller.  We
->   don't know how to turn it back on again, but firmware does, so we
->   can only use SXIO/SXFP/SXLF if we're suspending via firmware.
->
-> Actually, it sounds like the important thing is that we rely on the
-> firmware *resume* path to turn on the power again.
-
-Actually both the suspend and resume paths in it together, but the
-important piece is that if the firmware runs at the end of suspend, it
-will also run at the beginning of resume.
-
-> pm_resume_via_firmware() *sounds* like it would be appropriate, but
-> the kerneldoc says that's for use after resume,
-
-That's right.
-
-The rule of thumb is to use pm_suspend_via_firmware() in the
-system-wide suspend code paths and pm_resume_via_firmware() in the
-resume ones.  They are simply complementary.
-
-And because in this particular case a decision needs to be made
-whether or not to do something in a suspend path, the former is the
-right one to use.
-
-> and it tells us whether firmware has *already* handled the wakeup event.  And
-> PM_SUSPEND_FLAG_FW_RESUME isn't set until after we've run these
-> suspend_late fixups, so it wouldn't work here.
-
-Right.
