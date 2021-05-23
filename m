@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F347A38DDB9
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 01:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F59238DDBB
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 01:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbhEWXPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 May 2021 19:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S232090AbhEWXPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 May 2021 19:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbhEWXPR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 May 2021 19:15:17 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A6EC061756;
-        Sun, 23 May 2021 16:13:49 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id t17so14421390ljd.9;
-        Sun, 23 May 2021 16:13:49 -0700 (PDT)
+        with ESMTP id S232073AbhEWXPS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 May 2021 19:15:18 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D88C06138A;
+        Sun, 23 May 2021 16:13:50 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w15so31118734ljo.10;
+        Sun, 23 May 2021 16:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zKZDR8p/L3oeefldCNHrdGkondf8D1T4dxfFGeyIb9I=;
-        b=AYz1xpraxuHlBHwB1fwAmN0IJ7D9lIrClee1X+wrO59ED4FhsJy8kcrLm+903R2Luv
-         9d+nOIDE2UvsTwREjNxVsGHw9WmsICYRIQ96ZnkduncB/ggI5aYe3S1Igiwpnpe1TWy8
-         08AaegW4pTyaKs5P2kYds/XLrwPX79BYarNcR+ESoQHIaGhAeC3UoezFZ0OYxJv8Oa8w
-         uhwom68wfFVnjGTcFPYWQ7iUDtxa7iq0I/j95ux/unrbA0V3UECWIGqh7cUWwHWCqAgb
-         99qxTO4V0BbyWO6wyx4OpiLvbgIKw5u+mjMQYyIprUU9Zk1A4VHtBIlG7qxlBnorkEZK
-         NRkw==
+        bh=a/aL8Sm3/Y2q9Z8s81GaMkRCnQV+teKP5pmpLN0OX18=;
+        b=NzBR2N9MPw17OtdJKukPiyKNoBqj/h83QN2kpZBFXYHglqia0YSJ7inySZpLop7JNr
+         PrrOpeezNxp4uhBdsR3Ef4lSVNHHSBhHJKpt7MWEBDpxmxfD06P9xXz2gTsvMB3Rafa8
+         ec9kZpQ8n+T/viQXE9S6WgKzNhVXwL1HZHrT2044JNFC/eYbrnCZmWXDmzi0uom/titR
+         zSqzcks9lv0tAe7OP8ij62xvLXJAuyLtD6TGNqI85W+JkOlA3F5q8jnbcRJlm83IXOy1
+         O9v6RscIuTUqjQAGMub5XJoraNj3s6PD6GFEEZxRnIA9+EEPbtvyb4YuqnpQ+e15XwEt
+         06og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zKZDR8p/L3oeefldCNHrdGkondf8D1T4dxfFGeyIb9I=;
-        b=czCqRBho+2cUBjK4Z6yLuJOlr4cpyhZlDw9c+/M0x380wpv3GDueYkOMGozDy4lXHX
-         +ipENuZEwD0vGJ+v/El9O6wrJKg6nDTcGcgECEP0eZYn2FGSTrmJaNIkHdyZtLtiYpMW
-         EIgqO9glhqtnB69TML2XLdtLw8bisHCfSGXBjGzbJ2UwaqVrYYbniM0ki///KV5/kQmP
-         l/eZc0LfnbFVVUKA192HgvB85t9C95/dLpm7xtrnOSrpyOQjE6wLXnDq95dUIwyKlMyQ
-         XhP5HncSRDLNqu7najIkBuZiVZngNyp5dklrkT8paRSvpBatT1qJKksMf119j0ZhLUsK
-         iSjA==
-X-Gm-Message-State: AOAM5317AwnDPV/ah4N5PsW9RzrZP4RtxiyrCes3gBdKH9ebxqNMBHga
-        fYxRGYUoO1AAkfSjb41/bdM=
-X-Google-Smtp-Source: ABdhPJw2cbS8t/c8qHkJXlNWQjtHj+XqeXDpW6K4Nl90eeBk+5BT+lF27wjByqQEbDdkyGrMdcTz/w==
-X-Received: by 2002:a2e:9116:: with SMTP id m22mr14329538ljg.176.1621811627667;
-        Sun, 23 May 2021 16:13:47 -0700 (PDT)
+        bh=a/aL8Sm3/Y2q9Z8s81GaMkRCnQV+teKP5pmpLN0OX18=;
+        b=BID44itmfrGUsoLDQJApV7d/IqmUbideusZS8uWa5FhHqkz0a3n+i/1FT5YoUMvu1M
+         Yr8YetRxdRtzpNGOPcv5Fm+7ozh+AMDx/bnGOZ10VXGTShR/0m8Un2U19hlDzCRcCeBi
+         mxAS0zXm4vm70zB8RIKqdJu48Ry1vqOoukxtFL9Yt8TErE5+hpZiqJCJtZWrDpligG7N
+         XAobSa2EwOooULjzqHcM76vAoR9uI1fRP2MDsqAZlg1EpKlgGTwBvbRV2hH/GU6I1yG7
+         SbzJqldBT9xXMW84fZfcuBP72yNjfRRf/GdVftdxqe+4Qoev+Hiowmb3Htgc8Fc6GGoy
+         5Fhg==
+X-Gm-Message-State: AOAM533r9edwnMsMH82PRsS5750YpQjar09xK7JthZfvJk9yyqwdHoz7
+        g1EoLgyXOFu2ivPZEDtj4UQ=
+X-Google-Smtp-Source: ABdhPJxcQcXnrlsglLBKj41EHLLupEHEEwL/Kjet+9tvFXeabty9X+/oxKscvz/r5ulV6i8ByLpwdw==
+X-Received: by 2002:a2e:9d47:: with SMTP id y7mr14481109ljj.293.1621811628543;
+        Sun, 23 May 2021 16:13:48 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
-        by smtp.gmail.com with ESMTPSA id p7sm1268619lfr.184.2021.05.23.16.13.46
+        by smtp.gmail.com with ESMTPSA id p7sm1268619lfr.184.2021.05.23.16.13.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 16:13:47 -0700 (PDT)
+        Sun, 23 May 2021 16:13:48 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 01/14] regulator: core: Add regulator_sync_voltage_rdev()
-Date:   Mon, 24 May 2021 02:13:22 +0300
-Message-Id: <20210523231335.8238-2-digetx@gmail.com>
+Subject: [PATCH v2 02/14] regulator: core: Detach coupled regulator before coupling count is dropped
+Date:   Mon, 24 May 2021 02:13:23 +0300
+Message-Id: <20210523231335.8238-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210523231335.8238-1-digetx@gmail.com>
 References: <20210523231335.8238-1-digetx@gmail.com>
@@ -79,65 +79,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some NVIDIA Tegra devices use a CPU soft-reset method for the reboot and
-in this case we need to restore the coupled voltages to the state that is
-suitable for hardware during boot. Add new regulator_sync_voltage_rdev()
-helper which is needed by regulator drivers in order to sync voltage of
-a coupled regulators.
+Detach coupled regulator before dropping coupling count in order to allow
+detaching callback to balance voltage of regulators. This is needed by
+NVIDIA Tegra regulator couplers in order to bring back voltage to a value
+that is safe for reboot once regulators are decoupled.
 
-Acked-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/regulator/core.c         | 23 +++++++++++++++++++++++
- include/linux/regulator/driver.h |  1 +
- 2 files changed, 24 insertions(+)
+ drivers/regulator/core.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index e20e77e4c159..aae978c0c148 100644
+index aae978c0c148..83571f83af04 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -4111,6 +4111,29 @@ int regulator_set_voltage_time_sel(struct regulator_dev *rdev,
- }
- EXPORT_SYMBOL_GPL(regulator_set_voltage_time_sel);
+@@ -5084,6 +5084,13 @@ static void regulator_remove_coupling(struct regulator_dev *rdev)
  
-+int regulator_sync_voltage_rdev(struct regulator_dev *rdev)
-+{
-+	int ret;
-+
-+	regulator_lock(rdev);
-+
-+	if (!rdev->desc->ops->set_voltage &&
-+	    !rdev->desc->ops->set_voltage_sel) {
-+		ret = -EINVAL;
-+		goto out;
+ 	n_coupled = c_desc->n_coupled;
+ 
++	if (coupler && coupler->detach_regulator) {
++		err = coupler->detach_regulator(coupler, rdev);
++		if (err)
++			rdev_err(rdev, "failed to detach from coupler: %pe\n",
++				 ERR_PTR(err));
 +	}
 +
-+	/* balance only, if regulator is coupled */
-+	if (rdev->coupling_desc.n_coupled > 1)
-+		ret = regulator_balance_voltage(rdev, PM_SUSPEND_ON);
-+	else
-+		ret = -EOPNOTSUPP;
-+
-+out:
-+	regulator_unlock(rdev);
-+	return ret;
-+}
-+
- /**
-  * regulator_sync_voltage - re-apply last regulator output voltage
-  * @regulator: regulator source
-diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
-index 4ea520c248e9..35e5a611db81 100644
---- a/include/linux/regulator/driver.h
-+++ b/include/linux/regulator/driver.h
-@@ -540,6 +540,7 @@ int regulator_set_current_limit_regmap(struct regulator_dev *rdev,
- int regulator_get_current_limit_regmap(struct regulator_dev *rdev);
- void *regulator_get_init_drvdata(struct regulator_init_data *reg_init_data);
- int regulator_set_ramp_delay_regmap(struct regulator_dev *rdev, int ramp_delay);
-+int regulator_sync_voltage_rdev(struct regulator_dev *rdev);
+ 	for (i = 1; i < n_coupled; i++) {
+ 		c_rdev = c_desc->coupled_rdevs[i];
  
- /*
-  * Helper functions intended to be used by regulator drivers prior registering
+@@ -5111,13 +5118,6 @@ static void regulator_remove_coupling(struct regulator_dev *rdev)
+ 		c_desc->n_resolved--;
+ 	}
+ 
+-	if (coupler && coupler->detach_regulator) {
+-		err = coupler->detach_regulator(coupler, rdev);
+-		if (err)
+-			rdev_err(rdev, "failed to detach from coupler: %pe\n",
+-				 ERR_PTR(err));
+-	}
+-
+ 	kfree(rdev->coupling_desc.coupled_rdevs);
+ 	rdev->coupling_desc.coupled_rdevs = NULL;
+ }
 -- 
 2.30.2
 
