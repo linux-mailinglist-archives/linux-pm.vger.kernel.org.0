@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B96CC38DDCC
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 01:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658CE38DDCE
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 01:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbhEWXPZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 May 2021 19:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S232050AbhEWXP0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 May 2021 19:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbhEWXPU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 May 2021 19:15:20 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9616C061574;
-        Sun, 23 May 2021 16:13:52 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id q3so7839215lfu.2;
-        Sun, 23 May 2021 16:13:52 -0700 (PDT)
+        with ESMTP id S232109AbhEWXPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 May 2021 19:15:21 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD78BC06138A;
+        Sun, 23 May 2021 16:13:53 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id q7so36646498lfr.6;
+        Sun, 23 May 2021 16:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+ru1Y5AhCOlhA7q2BKIbg+3l43tX1d5MlWRnc4jqFnM=;
-        b=nPlsHSDymjxJgypQV6mJ2FK3NLufEUZ92Q3+Vq71x9j29KPZ74j/f2mLxyTMnHD8Pq
-         80+2iECQb5ufjnh/nhm2nPlKrjjL1ztVz80jFONU6JWWhTMpH1sdqbqox9JLEpORze2s
-         zQDMqlU+3t2iJdhEfH1BkGEDNP/b7dNZxEc4fV0iRWLbsqd08mTDFyWJaJghcuZklkbh
-         e+GGMQ/+UWuwfKSuKcBtYuDfQKD4TCX0enO05UY+od3+2CXTAk7luxuc0L6JklqA+72z
-         naT4Cw+fVgvmrjJcfW92mlnsmGAFrerK5sRwGyNKcvZC89ZEKjHRFkXLneWH5T7V1u7U
-         nO1w==
+        bh=HXT+IvjVluiKH3yhs5geuypz9CaKXis2aNZdKmGa0hs=;
+        b=CF37b7D1aqlYUSaBfq5pHb3uZ16z9XHH9PNfK51EeV8fyDfCZO3HksWbM8HZGP59gg
+         rMKbxcRAM89QPqrHOsKfL7Z9OJL2L2uYgb7VR4AvEJHDpmBIz74iWudxbX+hMpmA+8Z5
+         c3iVyepbvV6GdpS5RPG3XCH1b7Vw+/JUO+GBnCrmfG9KbVkDm7D5i3Ovy2f+y6osVoCl
+         Vgt9ljFJxwgbnXF17GEdDZQsKNEIEiqSrlCcxn6drMhyVyxoapEWVfqRy3zsAOlK3NZC
+         TMa4NtuBLq14GuS1jw+8xpkjKVdDkxqBRVxa0Pp7JaKdN9A69KHTRbQHwKvD2VvLcqOS
+         g9yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+ru1Y5AhCOlhA7q2BKIbg+3l43tX1d5MlWRnc4jqFnM=;
-        b=ntLM/LE6NkzU/KFpU+zmO9sQoQisRk5DNSU7xDqvPVGKLDyqd0vNq/JOk0dHKNgAw0
-         BN/Gk4un1z2FbnwhaGdWInHZvvqgd+8MaP+Qe1NKo3h9MAhwd9gqti0xkAhL7tgvDse+
-         gliCmuBaUDdL+LJeGS8cQBc19xfARVVDqt6Y45HLjniPpZ2nVo7mq3csRKl7kUw7Zqex
-         22Tjhx8Sy7GS36aSscdfMfGDW6F9GCfIvFZ76TmOAln9+1XGlq7Ja9O8IwdwsCi2PtqJ
-         Il4CcvLSeHQEO4jBaw14USoFIpmG9R2MjHE9UrCKxaFTcHiBKj9G/tBgNl9WGcASWocI
-         aqPA==
-X-Gm-Message-State: AOAM5319306G3NI3O5rRxswN6cnpkv9Vc0k4Rp7WLjLqBHdGjSH46UHB
-        NF5dAmPpCVuWWGQFO052GkI=
-X-Google-Smtp-Source: ABdhPJyskMv4fo5wnl+usn9s5leV2QruFCKRg2TK1iGOfo4kV7tb3tnA8t7XXOR6EHQePiKLynt7Cw==
-X-Received: by 2002:a05:6512:2e3:: with SMTP id m3mr8883504lfq.30.1621811631351;
-        Sun, 23 May 2021 16:13:51 -0700 (PDT)
+        bh=HXT+IvjVluiKH3yhs5geuypz9CaKXis2aNZdKmGa0hs=;
+        b=IUswOQQUsvrOwJyu6jaJVrggyGzrDXr3vSfiHFJjmLEk/e5nGSgKZRKAGgJ3GnBcAD
+         m0OL20GUStXMgRVCzo9rK8kPnUVEZj3fYjvUm6bS0DiKzfplqyfUP5df1TCpZOt/v67i
+         KEJxTmqbCMau6ChtUNqG71xsf84EeCxYQZobwm8ORfRhwFCHT6FfUD49G2fHQvZm2D7B
+         1CVNZr8E628xh/4UaxuYc1BkWNBEo2RydrWHD6sAVPu56m7Ds3zwPAGwXh4msWMeb+jb
+         9dzBd5bRtO0TI1dQIU2OqxrDljyZjeVDbzrFgd7gqF830kk1kr/R3IfLYDn8as3PiWcT
+         sQRA==
+X-Gm-Message-State: AOAM530ehRVEGUAadxpO6AYa+/XwMQ/DxJDzpnvyNGhLor3StcQt9sul
+        vItu+iXpICWRwCDd1g+5880=
+X-Google-Smtp-Source: ABdhPJwJQsTanQYSjUwanuyy0AlMicehi5msnfCaCUyeZxLZhtapG+Iug+8a/zeIaoNZQJObQb8Wyg==
+X-Received: by 2002:a19:7607:: with SMTP id c7mr8478184lff.58.1621811632217;
+        Sun, 23 May 2021 16:13:52 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
-        by smtp.gmail.com with ESMTPSA id p7sm1268619lfr.184.2021.05.23.16.13.50
+        by smtp.gmail.com with ESMTPSA id p7sm1268619lfr.184.2021.05.23.16.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 16:13:51 -0700 (PDT)
+        Sun, 23 May 2021 16:13:52 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 05/14] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-Date:   Mon, 24 May 2021 02:13:26 +0300
-Message-Id: <20210523231335.8238-6-digetx@gmail.com>
+Subject: [PATCH v2 06/14] soc/tegra: fuse: Add stubs needed for compile-testing
+Date:   Mon, 24 May 2021 02:13:27 +0300
+Message-Id: <20210523231335.8238-7-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210523231335.8238-1-digetx@gmail.com>
 References: <20210523231335.8238-1-digetx@gmail.com>
@@ -79,175 +79,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add common helper which initializes OPP table for Tegra SoC core devices.
+Add missing stubs that will allow Tegra memory driver to be compile-tested
+by kernel build bots.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/common.c | 97 ++++++++++++++++++++++++++++++++++++++
- include/soc/tegra/common.h | 22 +++++++++
- 2 files changed, 119 insertions(+)
+ include/soc/tegra/fuse.h | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-index 3dc54f59cafe..cd33e99249c3 100644
---- a/drivers/soc/tegra/common.c
-+++ b/drivers/soc/tegra/common.c
-@@ -3,9 +3,16 @@
-  * Copyright (C) 2014 NVIDIA CORPORATION.  All rights reserved.
-  */
+diff --git a/include/soc/tegra/fuse.h b/include/soc/tegra/fuse.h
+index 78cbc787a4dc..990701f788bc 100644
+--- a/include/soc/tegra/fuse.h
++++ b/include/soc/tegra/fuse.h
+@@ -52,14 +52,28 @@ struct tegra_sku_info {
+ 	enum tegra_revision revision;
+ };
  
-+#define dev_fmt(fmt)	"tegra-soc: " fmt
-+
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/export.h>
- #include <linux/of.h>
-+#include <linux/pm_opp.h>
- 
- #include <soc/tegra/common.h>
-+#include <soc/tegra/fuse.h>
- 
- static const struct of_device_id tegra_machine_match[] = {
- 	{ .compatible = "nvidia,tegra20", },
-@@ -31,3 +38,93 @@ bool soc_is_tegra(void)
- 
- 	return match != NULL;
- }
-+
-+static int tegra_core_dev_init_opp_state(struct device *dev)
-+{
-+	unsigned long rate;
-+	struct clk *clk;
-+	int err;
-+
-+	clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(clk)) {
-+		dev_err(dev, "failed to get clk: %pe\n", clk);
-+		return PTR_ERR(clk);
-+	}
-+
-+	rate = clk_get_rate(clk);
-+	if (!rate) {
-+		dev_err(dev, "failed to get clk rate\n");
-+		return -EINVAL;
-+	}
-+
-+	/* first dummy rate-setting initializes voltage vote */
-+	err = dev_pm_opp_set_rate(dev, rate);
-+	if (err) {
-+		dev_err(dev, "failed to initialize OPP clock: %d\n", err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * devm_tegra_core_dev_init_opp_table() - initialize OPP table
-+ * @dev: device for which OPP table is initialized
-+ * @params: pointer to the OPP table configuration
-+ *
-+ * This function will initialize OPP table and sync OPP state of a Tegra SoC
-+ * core device.
-+ *
-+ * Return: 0 on success or errorno.
-+ */
-+int devm_tegra_core_dev_init_opp_table(struct device *dev,
-+				       struct tegra_core_opp_params *params)
-+{
-+	u32 hw_version;
-+	int err;
-+
-+	err = devm_pm_opp_set_clkname(dev, NULL);
-+	if (err) {
-+		dev_err(dev, "failed to set OPP clk: %d\n", err);
-+		return err;
-+	}
-+
-+	/* Tegra114+ doesn't support OPP yet */
-+	if (!of_machine_is_compatible("nvidia,tegra20") &&
-+	    !of_machine_is_compatible("nvidia,tegra30"))
-+		return -ENODEV;
-+
-+	if (of_machine_is_compatible("nvidia,tegra20"))
-+		hw_version = BIT(tegra_sku_info.soc_process_id);
-+	else
-+		hw_version = BIT(tegra_sku_info.soc_speedo_id);
-+
-+	err = devm_pm_opp_set_supported_hw(dev, &hw_version, 1);
-+	if (err) {
-+		dev_err(dev, "failed to set OPP supported HW: %d\n", err);
-+		return err;
-+	}
-+
-+	/*
-+	 * Older device-trees have an empty OPP table, we will get
-+	 * -ENODEV from devm_pm_opp_of_add_table() in this case.
-+	 */
-+	err = devm_pm_opp_of_add_table(dev);
-+	if (err) {
-+		if (err == -ENODEV)
-+			dev_err_once(dev, "OPP table not found, please update device-tree\n");
-+		else
-+			dev_err(dev, "failed to add OPP table: %d\n", err);
-+
-+		return err;
-+	}
-+
-+	if (params->init_state) {
-+		err = tegra_core_dev_init_opp_state(dev);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(devm_tegra_core_dev_init_opp_table);
-diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
-index 744280ecab5f..af41ad80ec21 100644
---- a/include/soc/tegra/common.h
-+++ b/include/soc/tegra/common.h
-@@ -6,15 +6,37 @@
- #ifndef __SOC_TEGRA_COMMON_H__
- #define __SOC_TEGRA_COMMON_H__
- 
-+#include <linux/errno.h>
- #include <linux/types.h>
- 
-+struct device;
-+
-+/**
-+ * Tegra SoC core device OPP table configuration
-+ *
-+ * @init_state: pre-initialize OPP state of a device
-+ */
-+struct tegra_core_opp_params {
-+	bool init_state;
-+};
-+
- #ifdef CONFIG_ARCH_TEGRA
- bool soc_is_tegra(void);
-+
-+int devm_tegra_core_dev_init_opp_table(struct device *dev,
-+				       struct tegra_core_opp_params *params);
++#ifdef CONFIG_ARCH_TEGRA
++extern struct tegra_sku_info tegra_sku_info;
+ u32 tegra_read_straps(void);
+ u32 tegra_read_ram_code(void);
+ int tegra_fuse_readl(unsigned long offset, u32 *value);
+-
+-#ifdef CONFIG_ARCH_TEGRA
+-extern struct tegra_sku_info tegra_sku_info;
  #else
- static inline bool soc_is_tegra(void)
- {
- 	return false;
- }
+ static struct tegra_sku_info tegra_sku_info __maybe_unused;
 +
-+static inline int
-+devm_tegra_core_dev_init_opp_table(struct device *dev,
-+				   struct tegra_core_opp_params *params)
++static inline u32 tegra_read_straps(void)
++{
++	return 0;
++}
++
++static inline u32 tegra_read_ram_code(void)
++{
++	return 0;
++}
++
++static inline int tegra_fuse_readl(unsigned long offset, u32 *value)
 +{
 +	return -ENODEV;
 +}
  #endif
  
- #endif /* __SOC_TEGRA_COMMON_H__ */
+ struct device *tegra_soc_device_register(void);
 -- 
 2.30.2
 
