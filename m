@@ -2,210 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA2738ECF5
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 17:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A73438F1F0
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 19:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbhEXPa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 May 2021 11:30:59 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61668 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbhEXP3F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 11:29:05 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
- id a097bffec5af0e03; Mon, 24 May 2021 17:27:35 +0200
-Received: from kreacher.localnet (89-64-80-49.dynamic.chello.pl [89.64.80.49])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 97B8266971F;
-        Mon, 24 May 2021 17:27:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        David Box <david.e.box@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dave Olsthoorn <dave@bewaar.me>, Shujun Wang <wsj20369@163.com>
-Subject: [PATCH v1 3/3] ACPI: power: Rework turning off unused power resources
-Date:   Mon, 24 May 2021 17:26:16 +0200
-Message-ID: <9903404.nUPlyArG6x@kreacher>
-In-Reply-To: <2074778.irdbgypaU6@kreacher>
-References: <2074778.irdbgypaU6@kreacher>
+        id S233327AbhEXRFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 May 2021 13:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233288AbhEXRFD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 13:05:03 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7A4C06138A
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 10:03:35 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id f11so14604686vst.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 10:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MrqSOYj5g/obDVKIYAxmyXoOnQCVk6QwshkTvwsi7m4=;
+        b=XyizKqOVbO1O1kqzeiPXF8NjsBV2U9Z+KYkApDRPMhoQY9Wd7aF4XJyesh+GK1YVA5
+         Ub6EukTa0vgpcTPIyPKsHpKh8SRsQbQFCcP+++VNYz1YXYz2lXhoZ9bBghOFurhlwHUk
+         ntb6/JFWmPTTq0gQYS4pNRcJkazgXeDtfbxp9tzTP5JJPQigo4i7WjDXP7dQV6MLvvtw
+         Qq5CbguJpgjiczI1re747pjjYIB5h37C9+mXIwbmORKayNQgqiFyUkiDzDaCY3IBenHt
+         FoTmh0hk4Y2MQQcmxH9KYKLxjMIIAayyNq0B4tqy1nc2mlsNk7avsezzUrjOaV2gKEQJ
+         ohfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MrqSOYj5g/obDVKIYAxmyXoOnQCVk6QwshkTvwsi7m4=;
+        b=hfTBL78kLViKWUqLErvgG64DVYemiuI5fxJ+hrkp9IcqYagmkwu4OFsXWIHXbp2OEA
+         cvhoSk4h06EODeZMcUYSGQ2dq8ZThq4c7EWUgZYK2HHQdJlhkh6JIme7d2uEDotpKc9P
+         BLYyX0ziDjdNovCA+xYGQWbwxDtu8qScPrrwlnT4QYgrh+zBigZlOWDjVYRlRLqxELKk
+         Wq70GBKrzepBoiWVVHVZoEf6S/fvPePtRewGrXGN08xVbqc9z652kkBkthAbhV60dwTz
+         LGOaa8Rz+RCnqeaKxeXfjmPGKI0/4kmuYqEARAPrGCu5dEFN6sGeX1gTZAHdmN+MzO0Q
+         NXPg==
+X-Gm-Message-State: AOAM532A6qtFH2TcYxkKpLvWcqX9i8nY4rGOdaGut0okM8lbfJYInAIR
+        5mUfx8BvytYA7Ic7gzetsUD8V7AfdzMzUePriBcSpg==
+X-Google-Smtp-Source: ABdhPJwH7kYxWSa0u/62FyAK1s59dR0TfrwpFa2o7rML8WoewkAZu/jGtDNEsxL3yqDKybD0PBSBisVCRwo/3Ef5YLg=
+X-Received: by 2002:a05:6102:7b4:: with SMTP id x20mr23350062vsg.48.1621875814897;
+ Mon, 24 May 2021 10:03:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20210523231335.8238-1-digetx@gmail.com> <20210523231335.8238-13-digetx@gmail.com>
+In-Reply-To: <20210523231335.8238-13-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 24 May 2021 19:02:58 +0200
+Message-ID: <CAPDyKFqp1TN1JUa9R3c2VZ3tyD+FRVhYEVc1rw76Uq5r8n9dWw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/14] dt-bindings: soc: tegra-pmc: Document core power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?Q?Nikola_Milosavljevi=C4=87?= <mnidza@outlook.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.64.80.49
-X-CLIENT-HOSTNAME: 89-64-80-49.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvdejledgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdeigedrkedtrdegleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrgeelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegurghvihgurdgvrdgsohigsehlihhnuhigrdhi
- nhhtvghlrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvgessggvfigrrghrrdhmvgdprhgtphhtthhopeifshhjvddtfeeileesudeifedrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, 24 May 2021 at 01:13, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> All NVIDIA Tegra SoCs have a core power domain where majority of hardware
+> blocks reside. Document the new core power domain properties.
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Make turning off unused power resources (after the enumeration of
-devices and during system-wide resume from S3) more straightforward
-by using the observation that the power resource state stored in
-struct acpi_power_resource can be used to determine whether or not
-the give power resource has any users.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Namely, when the state of the power resource is unknown, its _STA
-method has never been evaluated (or the evaluation of it has failed)
-and its _ON and _OFF methods have never been executed (or they have
-failed to execute), so for all practical purposes it can be assumed
-to have no users (or to be unusable).  Therefore, instead of checking
-the number of power resource users, it is sufficient to check if its
-state is known.
-
-Moreover, if the last known state of a given power resource is "off",
-it is not necessary to turn it off, because it has been used to
-initialize the power state or the wakeup power resources list of at
-least one device and either its _STA method has returned 0 ("off"),
-or its _OFF method has been successfully executed already.
-
-Accordingly, modify acpi_turn_off_unused_power_resources() to do the
-above checks (which are suitable for both uses of it) instead of
-using the number of power resource users or evaluating its _STA
-method, drop its argument (which is not useful any more) and update
-its callers.
-
-Also drop the users field from struct acpi_power_resource as it is
-not useful any more.
-
-Tested-by: Dave Olsthoorn <dave@bewaar.me>
-Tested-by: Shujun Wang <wsj20369@163.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/internal.h |    2 +-
- drivers/acpi/power.c    |   45 +++++++++++----------------------------------
- drivers/acpi/scan.c     |    2 +-
- drivers/acpi/sleep.c    |    2 +-
- 4 files changed, 14 insertions(+), 37 deletions(-)
-
-Index: linux-pm/drivers/acpi/power.c
-===================================================================
---- linux-pm.orig/drivers/acpi/power.c
-+++ linux-pm/drivers/acpi/power.c
-@@ -52,7 +52,6 @@ struct acpi_power_resource {
- 	u32 system_level;
- 	u32 order;
- 	unsigned int ref_count;
--	unsigned int users;
- 	u8 state;
- 	bool wakeup_enabled;
- 	struct mutex resource_lock;
-@@ -174,8 +173,6 @@ int acpi_extract_power_resources(union a
- 		err = acpi_power_resources_list_add(rhandle, list);
- 		if (err)
- 			break;
--
--		to_power_resource(rdev)->users++;
- 	}
- 	if (err)
- 		acpi_power_resources_list_free(list);
-@@ -1018,39 +1015,10 @@ void acpi_resume_power_resources(void)
- }
- #endif
- 
--static void acpi_power_turn_off_if_unused(struct acpi_power_resource *resource,
--				       bool init)
--{
--	if (resource->ref_count > 0)
--		return;
--
--	if (init) {
--		if (resource->users > 0)
--			return;
--	} else {
--		int result;
--		u8 state;
--
--		result = acpi_power_get_state(resource->device.handle, &state);
--		if (result || state == ACPI_POWER_RESOURCE_STATE_OFF)
--			return;
--	}
--
--	dev_info(&resource->device.dev, "Turning OFF\n");
--	__acpi_power_off(resource);
--}
--
- /**
-  * acpi_turn_off_unused_power_resources - Turn off power resources not in use.
-- * @init: Control switch.
-- *
-- * If @ainit is set, unconditionally turn off all of the ACPI power resources
-- * without any users.
-- *
-- * Otherwise, turn off all ACPI power resources without active references (that
-- * is, the ones that should be "off" at the moment) that are "on".
-  */
--void acpi_turn_off_unused_power_resources(bool init)
-+void acpi_turn_off_unused_power_resources(void)
- {
- 	struct acpi_power_resource *resource;
- 
-@@ -1059,7 +1027,16 @@ void acpi_turn_off_unused_power_resource
- 	list_for_each_entry_reverse(resource, &acpi_power_resource_list, list_node) {
- 		mutex_lock(&resource->resource_lock);
- 
--		acpi_power_turn_off_if_unused(resource, init);
-+		/*
-+		 * Turn off power resources in an unknown state too, because the
-+		 * platform firmware on some system expects the OS to turn off
-+		 * power resources without any users unconditionally.
-+		 */
-+		if (!resource->ref_count &&
-+		    resource->state != ACPI_POWER_RESOURCE_STATE_OFF) {
-+			dev_info(&resource->device.dev, "Turning OFF\n");
-+			__acpi_power_off(resource);
-+		}
- 
- 		mutex_unlock(&resource->resource_lock);
- 	}
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -142,7 +142,7 @@ int acpi_device_sleep_wake(struct acpi_d
- int acpi_power_get_inferred_state(struct acpi_device *device, int *state);
- int acpi_power_on_resources(struct acpi_device *device, int state);
- int acpi_power_transition(struct acpi_device *device, int state);
--void acpi_turn_off_unused_power_resources(bool init);
-+void acpi_turn_off_unused_power_resources(void);
- 
- /* --------------------------------------------------------------------------
-                               Device Power Management
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -2356,7 +2356,7 @@ int __init acpi_scan_init(void)
- 		}
- 	}
- 
--	acpi_turn_off_unused_power_resources(true);
-+	acpi_turn_off_unused_power_resources();
- 
- 	acpi_scan_initialized = true;
- 
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -504,7 +504,7 @@ static void acpi_pm_start(u32 acpi_state
-  */
- static void acpi_pm_end(void)
- {
--	acpi_turn_off_unused_power_resources(false);
-+	acpi_turn_off_unused_power_resources();
- 	acpi_scan_lock_release();
- 	/*
- 	 * This is necessary in case acpi_pm_finish() is not called during a
+Kind regards
+Uffe
 
 
-
+> ---
+>  .../arm/tegra/nvidia,tegra20-pmc.yaml         | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+> index 43fd2f8927d0..0afec83cc723 100644
+> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+> @@ -301,6 +301,33 @@ patternProperties:
+>
+>      additionalProperties: false
+>
+> +  core-domain:
+> +    type: object
+> +    description: |
+> +      The vast majority of hardware blocks of Tegra SoC belong to a
+> +      Core power domain, which has a dedicated voltage rail that powers
+> +      the blocks.
+> +
+> +    properties:
+> +      operating-points-v2:
+> +        description:
+> +          Should contain level, voltages and opp-supported-hw property.
+> +          The supported-hw is a bitfield indicating SoC speedo or process
+> +          ID mask.
+> +
+> +      "#power-domain-cells":
+> +        const: 0
+> +
+> +    required:
+> +      - operating-points-v2
+> +      - "#power-domain-cells"
+> +
+> +    additionalProperties: false
+> +
+> +  core-supply:
+> +    description:
+> +      Phandle to voltage regulator connected to the SoC Core power rail.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -325,6 +352,7 @@ examples:
+>      tegra_pmc: pmc@7000e400 {
+>                compatible = "nvidia,tegra210-pmc";
+>                reg = <0x7000e400 0x400>;
+> +              core-supply = <&regulator>;
+>                clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+>                clock-names = "pclk", "clk32k_in";
+>                #clock-cells = <1>;
+> @@ -338,17 +366,24 @@ examples:
+>                nvidia,core-power-req-active-high;
+>                nvidia,sys-clock-req-active-high;
+>
+> +              pd_core: core-domain {
+> +                      operating-points-v2 = <&core_opp_table>;
+> +                      #power-domain-cells = <0>;
+> +              };
+> +
+>                powergates {
+>                      pd_audio: aud {
+>                              clocks = <&tegra_car TEGRA210_CLK_APE>,
+>                                       <&tegra_car TEGRA210_CLK_APB2APE>;
+>                              resets = <&tegra_car 198>;
+> +                            power-domains = <&pd_core>;
+>                              #power-domain-cells = <0>;
+>                      };
+>
+>                      pd_xusbss: xusba {
+>                              clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+>                              resets = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+> +                            power-domains = <&pd_core>;
+>                              #power-domain-cells = <0>;
+>                      };
+>                };
+> --
+> 2.30.2
+>
