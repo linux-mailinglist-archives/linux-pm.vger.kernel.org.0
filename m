@@ -2,112 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF49738E35D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 11:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F98238E3DE
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 12:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbhEXJbv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 May 2021 05:31:51 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5674 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbhEXJbv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 05:31:51 -0400
-Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FpX1H3C9Bz1BR7R;
-        Mon, 24 May 2021 17:27:31 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 24 May 2021 17:30:20 +0800
-Received: from thunder-town.china.huawei.com (10.174.177.72) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 24 May 2021 17:30:20 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm <linux-pm@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] PM: fix spelling mistakes
-Date:   Mon, 24 May 2021 17:30:10 +0800
-Message-ID: <20210524093010.8839-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        id S232547AbhEXKWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 May 2021 06:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232422AbhEXKWQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 06:22:16 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AD6C061574;
+        Mon, 24 May 2021 03:20:47 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j6so37244815lfr.11;
+        Mon, 24 May 2021 03:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+yxfVj7jKw45QrlrhnP2dyoysNu/SHiHa0fZjF/qcQ0=;
+        b=TEuKP8ZT44wcv2P28T7veECGsfNWN5/tjRGeEbBLT9ckwElAo2/G7M3YS9/I5AfcX0
+         cQCItZCZyHhWSMqPRUyFfm8o3StpIsWSKCAxVUfzQvdDVs0Ss6xQB6JuSIIuBkR0QHEP
+         J2hadytj6P1ujmmzrzxjJ06aGPk8/svT/F1KDFjrim78oH/jpmwBQ+z3VSP6f3x6tl4L
+         145LaqeDDrG8QIj0CHX+ppwjCUqM24O5oipjgzRrZiWSKIawOX3klSrNc+fl6w2xGkNP
+         vNZgNmdNod2Hij0o//7QA/KxfBLQ4ob6cU3PZFumy+JGMaIuMn7VPmlgARnn1iu867Nv
+         88Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+yxfVj7jKw45QrlrhnP2dyoysNu/SHiHa0fZjF/qcQ0=;
+        b=pRBH/3Uaeo00/1KcV1pyXd+UMmZPkGvp7gQvhulAB5ugY9T+V0Mcr1b8cA9Wnij7PG
+         iF4ackqyCtS0PZzHanAby7SCTUwTvJcA6e0wHnqVbVNGtDpKhk6y8LO4Kv2Q64TSVKtW
+         pK33XKtoVKMBpGPyWTtjzD1JTAR7tDucwowy3Jce7SoGss9NFNKiLMbcq14cP3Ppp8oG
+         JdOff4VMmqmBzBHew7Pt/6qM8Yf+omWfiBSyPokLwAb+0RZk04TBuMaoZXjupjyDUEI2
+         FTt/nTVkgVqQIvJkwPrj/QVLMqLzWJwF0sTybXHlLXMCAnnSpRUnqya4bhUMducBGLg/
+         hY5A==
+X-Gm-Message-State: AOAM532mhHNZwOeftPt7X4IShvErq+Hew2C8F83BVpwJcflwMiEGagPr
+        4+RJ7wcE+3iwmG5OVnNzwQvpZ5pyWTY=
+X-Google-Smtp-Source: ABdhPJyple+XJHadP4SOsxTYxSH8E8EyGwgFHnwIzBn43eRvrU5XxLQIOX++TAMI6HQeat+eU1BY7Q==
+X-Received: by 2002:ac2:50c2:: with SMTP id h2mr9709116lfm.499.1621851645960;
+        Mon, 24 May 2021 03:20:45 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
+        by smtp.googlemail.com with ESMTPSA id q6sm1391573lfn.11.2021.05.24.03.20.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 May 2021 03:20:45 -0700 (PDT)
+Subject: Re: [PATCH v2 02/14] regulator: core: Detach coupled regulator before
+ coupling count is dropped
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk@vger.kernel.org
+References: <20210523231335.8238-1-digetx@gmail.com>
+ <20210523231335.8238-3-digetx@gmail.com>
+Message-ID: <b5329801-ef0b-0c8d-aced-75c44f076f29@gmail.com>
+Date:   Mon, 24 May 2021 13:20:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210523231335.8238-3-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix some spelling mistakes in comments:
-corresonds ==> corresponds
-alocated ==> allocated
-unitialized ==> uninitialized
-Deompression ==> Decompression
+24.05.2021 02:13, Dmitry Osipenko пишет:
+> Detach coupled regulator before dropping coupling count in order to allow
+> detaching callback to balance voltage of regulators. This is needed by
+> NVIDIA Tegra regulator couplers in order to bring back voltage to a value
+> that is safe for reboot once regulators are decoupled.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/regulator/core.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+> index aae978c0c148..83571f83af04 100644
+> --- a/drivers/regulator/core.c
+> +++ b/drivers/regulator/core.c
+> @@ -5084,6 +5084,13 @@ static void regulator_remove_coupling(struct regulator_dev *rdev)
+>  
+>  	n_coupled = c_desc->n_coupled;
+>  
+> +	if (coupler && coupler->detach_regulator) {
+> +		err = coupler->detach_regulator(coupler, rdev);
+> +		if (err)
+> +			rdev_err(rdev, "failed to detach from coupler: %pe\n",
+> +				 ERR_PTR(err));
+> +	}
+> +
+>  	for (i = 1; i < n_coupled; i++) {
+>  		c_rdev = c_desc->coupled_rdevs[i];
+>  
+> @@ -5111,13 +5118,6 @@ static void regulator_remove_coupling(struct regulator_dev *rdev)
+>  		c_desc->n_resolved--;
+>  	}
+>  
+> -	if (coupler && coupler->detach_regulator) {
+> -		err = coupler->detach_regulator(coupler, rdev);
+> -		if (err)
+> -			rdev_err(rdev, "failed to detach from coupler: %pe\n",
+> -				 ERR_PTR(err));
+> -	}
+> -
+>  	kfree(rdev->coupling_desc.coupled_rdevs);
+>  	rdev->coupling_desc.coupled_rdevs = NULL;
+>  }
+> 
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/power/snapshot.c | 8 ++++----
- kernel/power/swap.c     | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 1a221dcb3c01..af507c8c895b 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -331,7 +331,7 @@ static void *chain_alloc(struct chain_allocator *ca, unsigned int size)
-  *
-  * Memory bitmap is a structure consisting of many linked lists of
-  * objects.  The main list's elements are of type struct zone_bitmap
-- * and each of them corresonds to one zone.  For each zone bitmap
-+ * and each of them corresponds to one zone.  For each zone bitmap
-  * object there is a list of objects of type struct bm_block that
-  * represent each blocks of bitmap in which information is stored.
-  *
-@@ -1500,7 +1500,7 @@ static struct memory_bitmap copy_bm;
- /**
-  * swsusp_free - Free pages allocated for hibernation image.
-  *
-- * Image pages are alocated before snapshot creation, so they need to be
-+ * Image pages are allocated before snapshot creation, so they need to be
-  * released after resume.
-  */
- void swsusp_free(void)
-@@ -2326,7 +2326,7 @@ static struct memory_bitmap *safe_highmem_bm;
-  * (@nr_highmem_p points to the variable containing the number of highmem image
-  * pages).  The pages that are "safe" (ie. will not be overwritten when the
-  * hibernation image is restored entirely) have the corresponding bits set in
-- * @bm (it must be unitialized).
-+ * @bm (it must be uninitialized).
-  *
-  * NOTE: This function should not be called if there are no highmem image pages.
-  */
-@@ -2483,7 +2483,7 @@ static inline void free_highmem_data(void) {}
- 
- /**
-  * prepare_image - Make room for loading hibernation image.
-- * @new_bm: Unitialized memory bitmap structure.
-+ * @new_bm: Uninitialized memory bitmap structure.
-  * @bm: Memory bitmap with unsafe pages marked.
-  *
-  * Use @bm to mark the pages that will be overwritten in the process of
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index bea3cb8afa11..3cb89baebc79 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1125,7 +1125,7 @@ struct dec_data {
- };
- 
- /**
-- * Deompression function that runs in its own thread.
-+ * Decompression function that runs in its own thread.
-  */
- static int lzo_decompress_threadfn(void *data)
- {
--- 
-2.25.1
-
-
+I now realized that this is a bit too fragile approach. I'll drop this
+patch in v3, there are better options of how to manage balancing on
+detaching and this is not critical feature for now anyways.
