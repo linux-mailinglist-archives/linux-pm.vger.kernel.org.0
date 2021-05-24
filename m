@@ -2,91 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B31C38ECB4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 17:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEF538ECEF
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 17:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbhEXPWX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 May 2021 11:22:23 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:54042 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbhEXPRb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 11:17:31 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14OFFrGa041504;
-        Mon, 24 May 2021 10:15:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1621869353;
-        bh=GboA2Om6dWr6qVDBT1Ckg/PVdLDQm9AAnrekIIVfbC4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ezxz44WojYw81t7cpvqj9sVTor/6Nt3SS+z2gMEgyX+ijRNxI7/ljJP4TlP+YB19C
-         1OIdg9qgMKnbRN+oVdMOyaNGMZ0GGnOOSMe+vN94M+lh5pbxkIoW09groq6bMFamFh
-         JeLJh3J21Hf9L7J4UbCpnzFtDgauuSwUz879qIxk=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14OFFrqk107878
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 May 2021 10:15:53 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 24
- May 2021 10:15:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 24 May 2021 10:15:52 -0500
-Received: from [10.250.35.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14OFFqY7115517;
-        Mon, 24 May 2021 10:15:52 -0500
-Subject: Re: [PATCH] thermal: ti-soc-thermal: Fix kernel-doc
-To:     Yang Li <yang.lee@linux.alibaba.com>, <edubezval@gmail.com>
-CC:     <j-keerthy@ti.com>, <rui.zhang@intel.com>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1621851963-36548-1-git-send-email-yang.lee@linux.alibaba.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <011fb94c-7775-6c3f-2215-bf9cb505d6d1@ti.com>
-Date:   Mon, 24 May 2021 10:15:52 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S233119AbhEXPaA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 May 2021 11:30:00 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:59546 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233468AbhEXP3J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 11:29:09 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
+ id 71b85afe052eaf1c; Mon, 24 May 2021 17:27:40 +0200
+Received: from kreacher.localnet (89-64-80-49.dynamic.chello.pl [89.64.80.49])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3203C66971F;
+        Mon, 24 May 2021 17:27:39 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        David Box <david.e.box@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1 0/3] ACPI: power: Keep track of power resource states
+Date:   Mon, 24 May 2021 17:23:17 +0200
+Message-ID: <2074778.irdbgypaU6@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <1621851963-36548-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.80.49
+X-CLIENT-HOSTNAME: 89-64-80-49.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvdejledgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdektddrgeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdegledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggr
+ vhhiugdrvgdrsghogieslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/24/21 5:26 AM, Yang Li wrote:
-> Fix function name in ti-bandgap.c kernel-doc comment
-> to remove a warning.
-> 
-> drivers/thermal/ti-soc-thermal/ti-bandgap.c:787: warning: expecting
-> prototype for ti_bandgap_alert_init(). Prototype was for
-> ti_bandgap_talert_init() instead.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Hi All,
 
-Acked-by: Suman Anna <s-anna@ti.com>
+This series changes the handling of ACPI power resources so as to
+track the state of each power resource in the kernel in addition to
+using reference counting instead of relying on the values returned by
+the _STA objects of power resources.
 
-> ---
->  drivers/thermal/ti-soc-thermal/ti-bandgap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> index ebe7cb7..ea0603b 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-> @@ -770,7 +770,7 @@ static int ti_bandgap_tshut_init(struct ti_bandgap *bgp,
->  }
->  
->  /**
-> - * ti_bandgap_alert_init() - setup and initialize talert handling
-> + * ti_bandgap_talert_init() - setup and initialize talert handling
->   * @bgp: pointer to struct ti_bandgap
->   * @pdev: pointer to device struct platform_device
->   *
-> 
+The underlying issue is that on some systems the _STA always returns
+the same value for certain power resources even after changing their
+state with _ON or _OFF, so it is not reliable in general.
+
+Patch [1/3] changes the data type used for representing the state of
+an ACPI power resources to u8 (cosmetics).
+
+Patch [2/3] introduces the power resource state tracking (refer to the
+changelog for details).
+
+Patch [3/3] simplifies turning off the unused power resources with the
+help of the state tracking mechanism (refer to the changelog for
+details).
+
+The series is not top of the patch at
+
+https://patchwork.kernel.org/project/linux-acpi/patch/11762320.O9o76ZdvQC@kreacher/
+
+which is going to be pushed as a fix for 5.13-rc.
+
+Thanks!
+
+
 
