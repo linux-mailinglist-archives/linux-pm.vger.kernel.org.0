@@ -2,153 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBE938E140
-	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 08:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6078138E326
+	for <lists+linux-pm@lfdr.de>; Mon, 24 May 2021 11:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbhEXHAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 May 2021 03:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S232313AbhEXJUS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 May 2021 05:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbhEXHAg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 03:00:36 -0400
-Received: from forward103j.mail.yandex.net (forward103j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92204C061574;
-        Sun, 23 May 2021 23:59:08 -0700 (PDT)
-Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
-        by forward103j.mail.yandex.net (Yandex) with ESMTP id 247B6674176D;
-        Mon, 24 May 2021 09:59:05 +0300 (MSK)
-Received: from vla5-fcb6daabdc9a.qloud-c.yandex.net (vla5-fcb6daabdc9a.qloud-c.yandex.net [IPv6:2a02:6b8:c18:3521:0:640:fcb6:daab])
-        by forward100q.mail.yandex.net (Yandex) with ESMTP id 1EBD3708000A;
-        Mon, 24 May 2021 09:59:05 +0300 (MSK)
-Received: from vla5-3832771863b8.qloud-c.yandex.net (vla5-3832771863b8.qloud-c.yandex.net [2a02:6b8:c18:3417:0:640:3832:7718])
-        by vla5-fcb6daabdc9a.qloud-c.yandex.net (mxback/Yandex) with ESMTP id mVoIHMI1XR-x4JCIHHC;
-        Mon, 24 May 2021 09:59:05 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1621839545;
-        bh=GeX7MbASwVmRQF/6cg6/8VzJI+hPsGVhRXfV3rlutDc=;
-        h=In-Reply-To:Cc:To:From:Subject:Message-ID:References:Date;
-        b=MPSZ4arVgGZA+Fijh+uSq+PcjVZCXRgGZ61BRSmK8Z0Li9Y9nZ/igXf0nAOR3nufS
-         SKQF6HaGSp5BoAQWQOp/LlufyJSVQDoHuKXV7y1L6txYcuOgA60iRY89VdzFJhSq+Y
-         pdVFECZE22MWjiKcUP//sAVLO7W7XuH3JCr5Nl74=
-Authentication-Results: vla5-fcb6daabdc9a.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by vla5-3832771863b8.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id tXTFGdnQFQ-x4Lqr9mf;
-        Mon, 24 May 2021 09:59:04 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Message-ID: <0ea9febfe707c1bdb7bdac1d918209afb7d2c8a8.camel@yandex.ru>
-Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
- s2idle
-From:   Konstantin Kharlamov <hi-angel@yandex.ru>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+        with ESMTP id S232477AbhEXJUR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 May 2021 05:20:17 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1296C06138A
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 02:18:48 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id m124so19635891pgm.13
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 02:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0c5Qxjp+4tL19l2WuaML9jbCExKjLNfzcff3PqhK+VE=;
+        b=h6aeeuYGuMndMeWE+tDnkHaFLWogpyi0c/FjQoc8wSMIdgESd1urJM9QEg454F/5qA
+         nsK+XL02e94ks6Ow+C3qCU1cWazB1c/RcK0eL7zt0ZG7THaIUM+tII/H6fGBmKVIxzA5
+         ze6RcWJrILiN3M0ZBwYrxZ9N6gMBkmTtwaSYTIKk9wpW24qmqR6gUmQSwLfKktktNO/k
+         1Kpa1iQnqx7w0JEOSJ4UY/A+OyqY+hFMUGAGIN8XUHQ7wg+a6tXpFTUyhsOWijG+v/i4
+         CJyeIlRdWYUHHfZATciNR2WziCr3Zw1l/vOQvzR6zegUblt31P5bNzTFUa7sIgw1wxQd
+         MSqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0c5Qxjp+4tL19l2WuaML9jbCExKjLNfzcff3PqhK+VE=;
+        b=rebqHkX+ea5O1GNKTPvV+a7cVm8LCLKm1WhhqiwJYlufz6kpBHQR5fx8D7y4kDXIli
+         PyLwH9tX40gTJgZcFFoaQ9TnShDcQqMMVkkmdXGxygX4agkmD9QeyybSKECtagl2DFK8
+         l1SYXEMjCC2XzHMODIIYGYqaCT7681Ki6kPSngHmDNJDF80t+6+sxGvVNN5KctzNQ/Mj
+         Yx7fAx6vHKRglaq+XFopCSW9thZGIuu7PkQNZ1GODg+rEEizRQaBODNI29sOXHM1kllY
+         cbjmfFu00pOoCsgOWzZuzspYkQ8U/2GIcx8wFBuFCcwQtg5VRISIah68wxtWDAa3jkMa
+         lhVw==
+X-Gm-Message-State: AOAM5334kOw3qXUvQCc3m3TYG+WhiGK6aHXRc1iPbi4niS0uFzznDK+p
+        TGx6aEirR331T1Q8nhCVeOnGPw==
+X-Google-Smtp-Source: ABdhPJzP2RUqZymnC2lnFHYSor1AieszJZmgrX4DEQ4so867X8K+jZMC2gm2x7if1QXdo4oFdo6teQ==
+X-Received: by 2002:a63:8f15:: with SMTP id n21mr12327462pgd.366.1621847928173;
+        Mon, 24 May 2021 02:18:48 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id p8sm10169150pfw.165.2021.05.24.02.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 May 2021 02:18:47 -0700 (PDT)
+Date:   Mon, 24 May 2021 14:48:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Mon, 24 May 2021 09:59:03 +0300
-In-Reply-To: <15121b9c3ad1683f0d81ebd44ace60509a9a9e82.camel@yandex.ru>
-References: <20210520194935.GA348608@bjorn-Precision-5520>
-         <15121b9c3ad1683f0d81ebd44ace60509a9a9e82.camel@yandex.ru>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.1 
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com
+Subject: Re: [PATCH v10] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+Message-ID: <20210524091845.wlikxun3x2qou7zs@vireshk-i7>
+References: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-FTR, the patch is on `linux-pci` with all the CCs except `linux-pm`. I changed
-the title a bit based on the discussions here, it is:
-
-	[PATCH v2] PCI: don't call firmware hooks on suspend unless it's fw-
-controlled
-
-On Fri, 2021-05-21 at 02:28 +0300, Konstantin Kharlamov wrote:
-> Thank you very much. Well send then a v2 with the comment in a minute.
+On 29-12-20, 14:17, Hector Yuan wrote:
+> The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
+> The driver implements the cpufreq driver interface for this hardware engine. 
+> This patch depends on MT6779 DTS patchset[1] submitted by Hanks Chen.
 > 
-> On Thu, 2021-05-20 at 14:49 -0500, Bjorn Helgaas wrote:
-> > On Thu, May 20, 2021 at 01:54:05PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, May 20, 2021 at 1:27 PM Rafael J. Wysocki <rafael@kernel.org>
-> > > wrote:
-> > > > On Wed, May 19, 2021 at 9:48 PM Bjorn Helgaas <helgaas@kernel.org>
-> > > > wrote:
-> > > > > On Wed, May 19, 2021 at 09:12:26PM +0200, Rafael J. Wysocki wrote:
-> > 
-> > > > > > The problem is related to the fact that in s2idle the platform
-> > > > > > firmware does not finalize the suspend transition and, consequently,
-> > > > > > it doesn't initiate the resume transition.  Therefore whatever power
-> > > > > > state the device was left in during suspend must be dealt with
-> > > > > > during
-> > > > > > the subsequent resume.  Hence, if whatever is done by SXIO/SXFP/SXLF
-> > > > > > in the suspend path cannot be reversed in the resume path by the
-> > > > > > kernel (because there is no known method to do that), they should
-> > > > > > not
-> > > > > > be invoked.  And that's exactly because the platform firmware will
-> > > > > > not
-> > > > > > finalize the suspend transition which is indicated by
-> > > > > > PM_SUSPEND_FLAG_FW_SUSPEND being unset.
-> > > > > 
-> > > > > How can we connect "if (!pm_suspend_via_firmware())" in this patch
-> > > > > with the fact that firmware doesn't finalize suspend (and consequently
-> > > > > does not reverse things in resume)?
-> > > > > 
-> > > > > I don't see any use of pm_suspend_via_firmware() or
-> > > > > PM_SUSPEND_FLAG_FW_SUSPEND that looks relevant.
-> > > > 
-> > > > First of all, there is a kerneldoc comment next to
-> > > > pm_suspend_via_firmware() which is relevant.  Especially the last
-> > > > paragraph of that comment applies directly to the case at hand IMV.
-> > 
-> > I do read kerneldoc, but I *rely* on the code, and it's nice when I
-> > can match up the kerneldoc with what the code is doing :)
-> > 
-> > Part of my confusion is that "passing control to platform firmware"
-> > isn't particularly useful in itself because it doesn't give a clue
-> > about what firmware is *doing*.  Without knowing what it does, we
-> > can't reason about how kernel's actions interact with firmware's
-> > actions.
-> > 
-> > > BTW, the problem at hand is not that s2idle in particular needs to be
-> > > treated in a special way (this appears to be the source of all
-> > > confusion here).  The problem is that the kernel cannot undo the
-> > > SXIO/SXFP/SXLF magic without passing control to the platform firmware.
-> > 
-> > I assume this is really a case of "the kernel doesn't know *what* to
-> > do, but platform firmware does," so in principle the kernel *could*
-> > undo the SXIO/SXFP/SXLF magic if it knew what to do.  
-> > 
-> > > And "passing control to the platform firmware" doesn't mean "executing
-> > > some AML" here, because control remains in the kernel when AML is
-> > > executed.  "Passing control to the platform firmware" means letting
-> > > some native firmware code (like SMM code) run which happens at the end
-> > > of S2/S3/S4 suspend transitions and it does not happen during S1
-> > > (standby) and s2idle suspend transitions.
-> > > 
-> > > That's why using SXIO/SXFP/SXLF is only valid during S2/S3/S4 suspend
-> > > transitions and it is not valid during s2idle and S1 suspend
-> > > transitions (and yes, S1 is also affected, so s2idle is not special in
-> > > that respect at all).
-> > > 
-> > > IMO the changelog of the patch needs to be rewritten, but the code
-> > > change made by it is reasonable.
-> > 
-> > So IIUC the comment should say something like:
-> > 
-> >   SXIO/SXFP/SXLF turns off power to the Thunderbolt controller.  We
-> >   don't know how to turn it back on again, but firmware does, so we
-> >   can only use SXIO/SXFP/SXLF if we're suspending via firmware.
-> > 
-> > Actually, it sounds like the important thing is that we rely on the
-> > firmware *resume* path to turn on the power again.
-> > 
-> > pm_resume_via_firmware() *sounds* like it would be appropriate, but
-> > the kerneldoc says that's for use after resume, and it tells us
-> > whether firmware has *already* handled the wakeup event.  And
-> > PM_SUSPEND_FLAG_FW_RESUME isn't set until after we've run these
-> > suspend_late fixups, so it wouldn't work here.
-> > 
-> > Bjorn
-> 
-> 
+> >From v8 to v9, there are three more modifications.
+> 1. Based on patchset[2], align binding with scmi for performance domain.
+> 2. Add the CPUFREQ fast switch function support and define DVFS latency.
+> 3. Based on patchser[3], add energy model API parameter for mW.
 
+Hi Hector,
 
+You can refresh this series based on the patch from Sudeep:
+
+https://lore.kernel.org/linux-devicetree/20210517155458.1016707-1-sudeep.holla@arm.com/
+
+-- 
+viresh
