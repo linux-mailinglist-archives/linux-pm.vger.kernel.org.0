@@ -2,117 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF763908F7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 20:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12621390951
+	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 20:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbhEYSaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 May 2021 14:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S232475AbhEYTAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 May 2021 15:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbhEYSaO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 14:30:14 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4610C061574
-        for <linux-pm@vger.kernel.org>; Tue, 25 May 2021 11:28:43 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v14so20708302pgi.6
-        for <linux-pm@vger.kernel.org>; Tue, 25 May 2021 11:28:43 -0700 (PDT)
+        with ESMTP id S232157AbhEYTA3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 15:00:29 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256AEC06138A
+        for <linux-pm@vger.kernel.org>; Tue, 25 May 2021 11:58:58 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id o127so17325859wmo.4
+        for <linux-pm@vger.kernel.org>; Tue, 25 May 2021 11:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=v8Vd/5uBP8UC1R4ke6EFDCxZMVk7ZFWjXagSa0T9dOU=;
-        b=m394s7xEQ2hwVsRK9VMQiaJCc34ZN3OF2g9VcwIp2GTYQJOSo5TswoGjbCdOfcdm5A
-         adsv+IarZBsNA2EuRV+rPJsuAKqnyHP1Cfvj4KmH7bNDXLqNcr3INUCGvwp7Tjz4YpWx
-         xKibaEgwvSKxVszBjrutwaIVncxW2aCimfbAEzhC5P+y7I/ECc3AJzqwRjjjq9IfpyXu
-         lVz9QBc1A001kKskUGaGOzAKojX2wC/X+E1GvoS2K78La7KiLdlLfEU5rlf6ir5Zs04d
-         52mBTOzw+RaP00nY/S3E94cG0v+1UhmlrcO1oLXJB9hNtK9Vs7piDnCNugd7mPwcDbnL
-         AoZg==
+        d=snejp.pl; s=gmail;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8mM61n6haCOPYKT0uk3Vaaoz2Rq5OIS/VFjKZ/8DiPo=;
+        b=iYtIELMuHyUMHy71jvmpu8UrBEnOgFz5Tcl7WRo598rq3axDQ7ix08JCuxYBX4LfAi
+         EJGhBl9JjHkTRMFT8PJmOPM7hdf783D/s8WBgP/qlPmyPh+5NvndnmfPTsd2ocHhW9IC
+         6r8EwICYb9kPpMniZd7Jzzwt1Qdm8Y2S89DfjriIDubn/mUPStVza2ALmKlCey2KAY9f
+         Wm6ncZ6I7AR7wv8kn3qCVIUTtSrBwnopcRs3M6S97lXf3am0uLgJeW7U3gnGY6M41YOU
+         mYnxhXdX5ALUxDLj9uoo6MqvlwZjzkDi7BGjPNZOwUiC/JbChQLOGXhknd/T9ECz9gf9
+         Wqrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=v8Vd/5uBP8UC1R4ke6EFDCxZMVk7ZFWjXagSa0T9dOU=;
-        b=kV7mbNOfITJUAhwDiJQpkYRsmLJ4c10qJbsLQ3TzfHJW88UwBG++E7tIp8A+MnYyX5
-         YdeF8tBSBF81Xe/PHJJkQETvzRXsRX6TYQB6DGbF0ZCUX7klt/Wd9RbLWnftAqjautkN
-         aHszk/IJzvnJIEepIsKEijPrfp2myFYzG0BWF1Sex8pIDUDz5EopJoMwg/3sO+vb0CQT
-         V8uOF4ntOUerImQDvDKS6jYZ+btUtPFGkFlEi/cWxuOi9TxhREPLJRQtYGZ4X6g1Zx2m
-         5+9TZJ1tqBlQAQjOlhTT4k5wLqgQNrF+DsWwSJMHMiVaWqBmVmRVEcemkkL2kZlt72yv
-         OSog==
-X-Gm-Message-State: AOAM531PkLivVG+ZohZ1lgkMX4Kzi8g2WbFQw4Mqli/Y/ZdZSYPbe010
-        ZxFTEPtq6lzdmLY4PZWJUBkBEpBVWykayF4U
-X-Google-Smtp-Source: ABdhPJyZMy1VfFTRE2ZJ93JdATLapyBiagLx/ky1pqZW1rB5q3Qknzx3YfzyLASlJYqoynWl4mY2Ug==
-X-Received: by 2002:a63:d245:: with SMTP id t5mr20215499pgi.172.1621967323205;
-        Tue, 25 May 2021 11:28:43 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t22sm13799322pfl.50.2021.05.25.11.28.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8mM61n6haCOPYKT0uk3Vaaoz2Rq5OIS/VFjKZ/8DiPo=;
+        b=Nyo5y0oQwLmkKkBifd3j3oW4Y1PCA2H5ypBOA6Ek54IYtdmKj9oM4Zpi78O2YjaWXM
+         q/a6YsVjClfUXf3VXZjhR5zzMj63jTiPrxIBAdk9OEa+Xwc3egmhLFYseCyxjeYLECxS
+         F4I+nYxf5rk38hYkl//K1VHsiNMJ9zVrpCucP+Uh+CwC06wt3ucY4d7px0rMrYgshf9p
+         MN/oySf81ax+pxTwPgAG/ZiAkOTxwyZBUY+BL7GdPXS1LOwwvYtTQ4bl+gc6QyZrAqq+
+         K2vACwkfpkbZKH0rV9D1p6L+ExmnxBPJR9FZfsH7SlQxkj8fuSwm7OF/zNcfb0fHEOEM
+         O03A==
+X-Gm-Message-State: AOAM533n0UaXgEr1O8qKfmnzngZlCinzVBDqMrBICFamY5f0Dja9Ttyf
+        xKlcmOrN7OAoHJMqRG7+GwO6Vg==
+X-Google-Smtp-Source: ABdhPJxbeuikEsL5QQeCEG36XpcOAFH9+FD27Wr7VKH2eWH0g1Ume27Xzfb9jOffpBAmqEy+ERKTCQ==
+X-Received: by 2002:a1c:2645:: with SMTP id m66mr5090134wmm.145.1621969136487;
+        Tue, 25 May 2021 11:58:56 -0700 (PDT)
+Received: from PackardBell (public-gprs171801.centertel.pl. [46.134.10.90])
+        by smtp.googlemail.com with ESMTPSA id v18sm20350733wro.18.2021.05.25.11.58.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 May 2021 11:28:42 -0700 (PDT)
-Message-ID: <60ad41da.1c69fb81.b18f4.d3b9@mx.google.com>
-Date:   Tue, 25 May 2021 11:28:42 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 25 May 2021 11:58:56 -0700 (PDT)
+Received: from localhost (PackardBell [local])
+        by PackardBell (OpenSMTPD) with ESMTPA id e44e7e8f;
+        Tue, 25 May 2021 18:58:52 +0000 (UTC)
+Date:   Tue, 25 May 2021 20:58:52 +0200
+From:   Bartosz Dudziak <bartosz.dudziak@snejp.pl>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        David Sterba <dsterba@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpuidle: qcom: Add SPM register data for APQ8026 and
+ MSM8226
+Message-ID: <20210525185852.GA2416@PackardBell>
+References: <20210513150150.51464-1-bartosz.dudziak@snejp.pl>
+ <20210513150150.51464-2-bartosz.dudziak@snejp.pl>
+ <YJ1u3syIquKRyuv2@gerhold.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.13-rc3-37-gbf15f94bdcd8
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 2 runs, 1 regressions (v5.13-rc3-37-gbf15f94bdcd8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJ1u3syIquKRyuv2@gerhold.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 2 runs, 1 regressions (v5.13-rc3-37-gbf15f94bdcd8)
+Hi,
 
-Regressions Summary
--------------------
+On Thu, May 13, 2021 at 08:24:30PM +0200, Stephan Gerhold wrote:
+> Hi,
+> 
+> On Thu, May 13, 2021 at 05:01:50PM +0200, Bartosz Dudziak wrote:
+> > Add APQ8026 and MSM8226 SoCs register data to SPM AVS Wrapper 2 (SAW2)
+> > power controller driver.
+> > 
+> > Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
+> > ---
+> >  drivers/cpuidle/cpuidle-qcom-spm.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+> > index adf91a6e4d..9711a98d68 100644
+> > --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+> > +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> > @@ -87,6 +87,18 @@ static const struct spm_reg_data spm_reg_8974_8084_cpu  = {
+> >  	.start_index[PM_SLEEP_MODE_SPC] = 3,
+> >  };
+> >  
+> > +/* SPM register data for 8026, 8226 */
+> > +static const struct spm_reg_data spm_reg_8x26_cpu  = {
+> > +	.reg_offset = spm_reg_offset_v2_1,
+> > +	.spm_cfg = 0x0,
+> > +	.spm_dly = 0x3C102800,
+> > +	.seq = { 0x60, 0x03, 0x60, 0x0B, 0x0F, 0x20, 0x10, 0x80, 0x30, 0x90,
+> > +		0x5B, 0x60, 0x03, 0x60, 0x3B, 0x76, 0x76, 0x0B, 0x94, 0x5B,
+> > +		0x80, 0x10, 0x26, 0x30, 0x0F },
+> > +	.start_index[PM_SLEEP_MODE_STBY] = 0,
+> > +	.start_index[PM_SLEEP_MODE_SPC] = 5,
+> > +};
+> > +
+> >  static const u8 spm_reg_offset_v1_1[SPM_REG_NR] = {
+> >  	[SPM_REG_CFG]		= 0x08,
+> >  	[SPM_REG_SPM_CTL]	= 0x20,
+> > @@ -259,6 +271,10 @@ static struct spm_driver_data *spm_get_drv(struct platform_device *pdev,
+> >  }
+> >  
+> >  static const struct of_device_id spm_match_table[] = {
+> > +	{ .compatible = "qcom,apq8026-saw2-v2.1-cpu",
+> > +	  .data = &spm_reg_8x26_cpu },
+> > +	{ .compatible = "qcom,msm8226-saw2-v2.1-cpu",
+> > +	  .data = &spm_reg_8x26_cpu },
+> 
+> What is the reason for having a separate compatible for APQ8026?
+> 
+> If the difference between MSM8226 and APQ8026 is similar to other qcom
+> SoCs (just lack of modem), both will end up using the same device tree
+> include anyway. Then it's easier to have both use qcom,msm8226-saw2-v2.1-cpu.
+> 
+> Thanks,
+> Stephan
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+You are right. There is no reason to have a seperate APQ8026 compatible because
+it will share the MSM8226 device tree. I will send later a v2 patch with only
+"qcom,msm8226-saw2-v2.1-cpu" option.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
-3-37-gbf15f94bdcd8/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.13-rc3-37-gbf15f94bdcd8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      bf15f94bdcd8d77957c0649a2ea7e39705b699a1 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60ad2dff13e27fcdf6b3afc2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc3-37-gbf15f=
-94bdcd8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc3-37-gbf15f=
-94bdcd8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0503.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/60ad2dff13e27fcdf6b3afc3
-        failing since 278 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+Thanks,
+Bartosz 
