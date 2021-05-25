@@ -2,192 +2,331 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3F638F928
-	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 06:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701D438F9FF
+	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 07:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbhEYECA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 May 2021 00:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S230508AbhEYFlC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 May 2021 01:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbhEYEBx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 00:01:53 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AE2C061574
-        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 21:00:24 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id z3so29057520oib.5
-        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 21:00:24 -0700 (PDT)
+        with ESMTP id S230412AbhEYFlB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 01:41:01 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49442C061756
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 22:39:30 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z17so30737145wrq.7
+        for <linux-pm@vger.kernel.org>; Mon, 24 May 2021 22:39:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oh710QQejYAa/mMoSLfvFL7EfG7/Je5p6f7tFmEhnw4=;
-        b=Lj/p6gTvFjWagEJ3E2jFBMnF33As6gsxt+ZZqvFVYAm906xXsobeCfECstnZNQWfBv
-         I92wK2Ih3cCKZQa5cLrZT1qA7oYlxOZrSBXPCoEimWSuan4v72vGo7f0hVFfC1Hn8eVh
-         pzfqJvybomagpib2pVXJzfNGpBwpnuIg2MO97Clg5PTFZSOpGpHjCo4vnx1o2MqqHpyc
-         vHFqtG8sfNL3SqprePO0YeQOJOokXUiSCF/8Xnlih0kcW9K3UIBgFOCZk+DEArHlpKhY
-         QI2xUPNdLlZfTL2cK80k6zrYKEnV6ZWy+w38TNWauON2WOKa8x+bh+W2QBgF8oKzB1X5
-         1wrQ==
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XQiX/rQDAoKlbFuUGF3PSR+oQN5hRwJFo9Bkf8URLIk=;
+        b=swljZTkozfJKaBoih9exTUXxqih582ijHRewXuKt1qmE88o78KJZkY/zGuFg1US/Nh
+         2MDTrSf79z5K9N2imkJbnhVC9R8ecG6t/8fh6rMeLKQPBjL9xtgE/BDfsywU2AIvfOn2
+         Gmk1ifact4m3P0F1HVhGvqwDgAPBgFNC1W5moBzZEDfd3encZX5qXuyYQtRjvcZaVCV+
+         CnHxE4banq8ZoelswFk9YQDt6IcEJrYqO51A8x6iY///aJ4+9MGEGpBZWRRsrHz+koGX
+         fS7OzkNLHe3hvMgUn68DQ+dfdPTzfSZQe/eJ2pLVJqvI7aGuR46dXp0njZkZ+pAC/S91
+         cDKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oh710QQejYAa/mMoSLfvFL7EfG7/Je5p6f7tFmEhnw4=;
-        b=jxctQHKxUnrPnHmz7GAgHuxxZnKlMX+LCmDqaueXmc2OwpTRWW+AztIuNFYfoRkIPS
-         F7UPPg+DSOqrEsyQBrhdMshbcrvpn2CR76QjLjMaSN562rjUm4y3LYGgwi9i2Fubom6H
-         nFq29Ywv7duohUvX5S2TuUtjXvHNaFvOj0tt9LH9/PThhVcIbsQzhQw6jWVVceYW1Sjp
-         v99JfgqbNWdEsR/nlSnyS9+Hbhfig+GtZ6y/TLE8WlQ8OyYsBBmiy2nmu/tMdZNYi1bc
-         OcHOhb0cIad/NQFf91E2dy4MSTKbLuTvWl5UZlDzBHcIkmnVQI/1/uGrdA2PQ1ECdp8v
-         VBWA==
-X-Gm-Message-State: AOAM530PHwkbACqcER5KKFMdq8Rl+Ewwl1gBHznyTxBHIaQvLWbaMY+/
-        3KQuWqTQqBr21kYkjWzk2TzIsw==
-X-Google-Smtp-Source: ABdhPJzI7cE9gO2RAm4cn+ip07Ogo8f5FMCJmRBeiwUM2vJFPJiH3r3h8BzxlP/VGkMzSJypkkVgWw==
-X-Received: by 2002:aca:f207:: with SMTP id q7mr1526806oih.24.1621915224285;
-        Mon, 24 May 2021 21:00:24 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e83sm2967141oia.40.2021.05.24.21.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 May 2021 21:00:23 -0700 (PDT)
-Date:   Mon, 24 May 2021 23:00:20 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Niklas Cassel <nks@flawful.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] PM: AVS: qcom-cpr: Use
- nvmem_cell_read_variable_le_u32()
-Message-ID: <YKx2VGxuPg3EPSMA@yoga>
-References: <20210521134437.v2.1.Id1c70158722750aec0673d60c12e46a9c66bbfed@changeid>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XQiX/rQDAoKlbFuUGF3PSR+oQN5hRwJFo9Bkf8URLIk=;
+        b=DGKjHpliydO05E+2nRxNSKZVvYgKtRNszzcTI9GT/BJKLDGVjS9xtmz56PYnZwuJA3
+         ko86QN2exj36ZUmoVAJCGts+qHuBEUhH53lcz7AIAxAdGHmwR3jMdIG3GliKMDQeAHU4
+         f/w6ZswuVQE+cGafA651cZP1J5SQldnw4jqqIxZjY/wY9TjtWSdymIxHb4JmuIgylI/S
+         CTbx+IbmnEVaOUE8hosdiBTevaxkpL2oxQf/KIoxfpUUMbUWPo6tcK9OKOXMcXhVplcX
+         l3FCHCG1cQBbm+4ay8AZ7uGFmV3VpcPi9n7MpYeadw5zqsbFVq3z1tFKwkq/2nes/2y2
+         cKig==
+X-Gm-Message-State: AOAM5325bG40oTXX9GnQveXKuBuo02hktmmEyKYKje/JzCQzpZSTkCFe
+        22OMRPYKOulEISPgsjD+U7BJXb8i5WQ+ojrDYHQMFA==
+X-Google-Smtp-Source: ABdhPJyBgMoZRcFrFb6b8bdZS6V3TxmteE0u5AEexQOZc501tkOujoVNGZfR3Vqd+MuBm9VOvVL5cVaBBDZE1wmDGLw=
+X-Received: by 2002:adf:e38c:: with SMTP id e12mr24819885wrm.128.1621921168743;
+ Mon, 24 May 2021 22:39:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210521134437.v2.1.Id1c70158722750aec0673d60c12e46a9c66bbfed@changeid>
+References: <20210517130823.796963-1-anup.patel@wdc.com> <20210517130823.796963-6-anup.patel@wdc.com>
+ <CAPDyKFpxx-jBbL4o_iJCcivFL2ei5a7PcWVfUaBmLu-q89Mkjg@mail.gmail.com>
+In-Reply-To: <CAPDyKFpxx-jBbL4o_iJCcivFL2ei5a7PcWVfUaBmLu-q89Mkjg@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 25 May 2021 11:09:17 +0530
+Message-ID: <CAAhSdy1quHePY_HM875LHQgXGKrjm24SzeD5yFJUnqunpcHd8g@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 5/8] cpuidle: Factor-out power domain related code
+ from PSCI domain driver
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Anup Patel <anup.patel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 21 May 15:44 CDT 2021, Douglas Anderson wrote:
+On Mon, May 24, 2021 at 11:31 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Mon, 17 May 2021 at 15:10, Anup Patel <anup.patel@wdc.com> wrote:
+> >
+> > The generic power domain related code in PSCI domain driver is largely
+> > independent of PSCI and can be shared with RISC-V SBI domain driver
+> > hence we factor-out this code into dt_idle_genpd.c and dt_idle_genpd.h.
+> >
+> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
+>
+> This is clearly a big step in the right direction. Just a couple minor
+> things, see more below.
+>
+> Note that, I have a couple of patches in the pipe for the
+> cpuidle-psci-domain driver (not ready to be posted). I need a couple
+> of more days to confirm this restructuring still makes sense beyond
+> these potential new changes. I will let you know as soon as I can with
+> the outcome.
 
-> Let's delete the private function cpr_read_efuse() since it does the
-> basically the same thing as the new API call
-> nvmem_cell_read_variable_le_u32().
-> 
-> Differences between the new API call and the old private function:
-> * less error printing (I assume this is OK).
-> * will give an error if the value doesn't fit in 32-bits (the old code
->   would have truncated silently).
-> 
+Sure, I will wait for more comments from you. I was thinking of sending
+next revision of patches sometime next week with the renaming of
+function names which you suggested.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+> [...]
+>
+> > diff --git a/drivers/cpuidle/dt_idle_genpd.c b/drivers/cpuidle/dt_idle_genpd.c
+>
+> I think it would be a good idea to add a new section for this to the
+> MAINTAINERS file. Perhaps a "DT IDLE DOMAIN" section? Or perhaps you
+> have another idea?
+>
+> In any case, I am happy to continue with maintenance of this code,
+> even in the new restructured form.
+
+Yes, a separate "DT IDLE DOMAIN" section in MAINTAINERS file
+sounds good to me.
+
+Anyway the dt_idle_genpd is factored-out code from cpuidle-psci-domain.c
+so I suggest you to maintain dt_idle_genpd as well.
+
+Do you want me to add a "DT IDLE DOMAIN" section in the
+MAINTAINERS file as part of this patch ??
+
+>
+> > new file mode 100644
+> > index 000000000000..5a901773db60
+> > --- /dev/null
+> > +++ b/drivers/cpuidle/dt_idle_genpd.c
+> > @@ -0,0 +1,182 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * PM domains for CPUs via genpd.
+> > + *
+> > + * Copyright (C) 2019 Linaro Ltd.
+> > + * Author: Ulf Hansson <ulf.hansson@linaro.org>
+> > + *
+> > + * Copyright (c) 2021 Western Digital Corporation or its affiliates.
+> > + */
+> > +
+> > +#define pr_fmt(fmt) "dt-idle-genpd: " fmt
+> > +
+> > +#include <linux/cpu.h>
+> > +#include <linux/device.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/pm_domain.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/string.h>
+> > +
+> > +#include "dt_idle_genpd.h"
+> > +
+> > +static int dt_pd_parse_state_nodes(
+> > +                       int (*parse_state)(struct device_node *, u32 *),
+> > +                       struct genpd_power_state *states, int state_count)
+> > +{
+> > +       int i, ret;
+> > +       u32 state, *state_buf;
+> > +
+> > +       for (i = 0; i < state_count; i++) {
+> > +               ret = parse_state(to_of_node(states[i].fwnode), &state);
+> > +               if (ret)
+> > +                       goto free_state;
+> > +
+> > +               state_buf = kmalloc(sizeof(u32), GFP_KERNEL);
+> > +               if (!state_buf) {
+> > +                       ret = -ENOMEM;
+> > +                       goto free_state;
+> > +               }
+> > +               *state_buf = state;
+> > +               states[i].data = state_buf;
+> > +       }
+> > +
+> > +       return 0;
+> > +
+> > +free_state:
+> > +       i--;
+> > +       for (; i >= 0; i--)
+> > +               kfree(states[i].data);
+> > +       return ret;
+> > +}
+> > +
+> > +static int dt_pd_parse_states(struct device_node *np,
+> > +                       int (*parse_state)(struct device_node *, u32 *),
+> > +                       struct genpd_power_state **states,
+> > +                       int *state_count)
+> > +{
+> > +       int ret;
+> > +
+> > +       /* Parse the domain idle states. */
+> > +       ret = of_genpd_parse_idle_states(np, states, state_count);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /* Fill out the dt specifics for each found state. */
+> > +       ret = dt_pd_parse_state_nodes(parse_state, *states, *state_count);
+> > +       if (ret)
+> > +               kfree(*states);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void dt_pd_free_states(struct genpd_power_state *states,
+> > +                             unsigned int state_count)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i = 0; i < state_count; i++)
+> > +               kfree(states[i].data);
+> > +       kfree(states);
+> > +}
+> > +
+> > +void dt_pd_free(struct generic_pm_domain *pd)
+> > +{
+> > +       dt_pd_free_states(pd->states, pd->state_count);
+> > +       kfree(pd->name);
+> > +       kfree(pd);
+> > +}
+> > +EXPORT_SYMBOL_GPL(dt_pd_free);
+> > +
+> > +struct generic_pm_domain *dt_pd_alloc(struct device_node *np,
+> > +                       int (*parse_state)(struct device_node *, u32 *))
+> > +{
+> > +       struct generic_pm_domain *pd;
+> > +       struct genpd_power_state *states = NULL;
+> > +       int ret, state_count = 0;
+> > +
+> > +       pd = kzalloc(sizeof(*pd), GFP_KERNEL);
+> > +       if (!pd)
+> > +               goto out;
+> > +
+> > +       pd->name = kasprintf(GFP_KERNEL, "%pOF", np);
+> > +       if (!pd->name)
+> > +               goto free_pd;
+> > +
+> > +       /*
+> > +        * Parse the domain idle states and let genpd manage the state selection
+> > +        * for those being compatible with "domain-idle-state".
+> > +        */
+> > +       ret = dt_pd_parse_states(np, parse_state, &states, &state_count);
+> > +       if (ret)
+> > +               goto free_name;
+> > +
+> > +       pd->free_states = dt_pd_free_states;
+> > +       pd->name = kbasename(pd->name);
+> > +       pd->states = states;
+> > +       pd->state_count = state_count;
+> > +
+> > +       pr_debug("alloc PM domain %s\n", pd->name);
+> > +       return pd;
+> > +
+> > +free_name:
+> > +       kfree(pd->name);
+> > +free_pd:
+> > +       kfree(pd);
+> > +out:
+> > +       pr_err("failed to alloc PM domain %pOF\n", np);
+> > +       return NULL;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dt_pd_alloc);
+> > +
+> > +int dt_pd_init_topology(struct device_node *np)
+> > +{
+> > +       struct device_node *node;
+> > +       struct of_phandle_args child, parent;
+> > +       int ret;
+> > +
+> > +       for_each_child_of_node(np, node) {
+> > +               if (of_parse_phandle_with_args(node, "power-domains",
+> > +                                       "#power-domain-cells", 0, &parent))
+> > +                       continue;
+> > +
+> > +               child.np = node;
+> > +               child.args_count = 0;
+> > +               ret = of_genpd_add_subdomain(&parent, &child);
+> > +               of_node_put(parent.np);
+> > +               if (ret) {
+> > +                       of_node_put(node);
+> > +                       return ret;
+> > +               }
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dt_pd_init_topology);
+>
+> May I suggest that we stick to dt_idle_* as the prefix for all of the
+> exported functions in this file. Static functions can just skip the
+> prefix altogether.
+
+Sure, I will update the function names like you suggested in next
+patch revision.
+
+>
+> > +
+> > +struct device *dt_idle_genpd_attach_cpu(int cpu, const char *name)
+> > +{
+> > +       struct device *dev;
+> > +
+> > +       dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), name);
+> > +       if (IS_ERR_OR_NULL(dev))
+> > +               return dev;
+> > +
+> > +       pm_runtime_irq_safe(dev);
+> > +       if (cpu_online(cpu))
+> > +               pm_runtime_get_sync(dev);
+> > +
+> > +       dev_pm_syscore_device(dev, true);
+> > +
+> > +       return dev;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dt_idle_genpd_attach_cpu);
+> > +
+> > +void dt_idle_genpd_detach_cpu(struct device *dev)
+> > +{
+> > +       if (IS_ERR_OR_NULL(dev))
+> > +               return;
+> > +
+> > +       dev_pm_domain_detach(dev, false);
+> > +}
+> > +EXPORT_SYMBOL_GPL(dt_idle_genpd_detach_cpu);
+>
+> Again, a minor comment on the naming of the functions. How about
+> skipping "genpd" in the prefix, thus just dt_idle_attach|detach_cpu()?
+
+Sure, I will update.
+
+>
+> [...]
+>
+> Kind regards
+> Uffe
 
 Regards,
-Bjorn
-
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> I haven't done any more than compile-test this. Mostly I'm just
-> writing this patch because it helped provide inspiration for the
-> general API function.
-> 
-> Changes in v2:
-> - Resending v1 as a singleton patch; dependency is merged in mainline.
-> 
->  drivers/soc/qcom/cpr.c | 43 +++++-------------------------------------
->  1 file changed, 5 insertions(+), 38 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
-> index b24cc77d1889..4ce8e816154f 100644
-> --- a/drivers/soc/qcom/cpr.c
-> +++ b/drivers/soc/qcom/cpr.c
-> @@ -801,38 +801,6 @@ static int cpr_set_performance_state(struct generic_pm_domain *domain,
->  	return ret;
->  }
->  
-> -static int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
-> -{
-> -	struct nvmem_cell *cell;
-> -	ssize_t len;
-> -	char *ret;
-> -	int i;
-> -
-> -	*data = 0;
-> -
-> -	cell = nvmem_cell_get(dev, cname);
-> -	if (IS_ERR(cell)) {
-> -		if (PTR_ERR(cell) != -EPROBE_DEFER)
-> -			dev_err(dev, "undefined cell %s\n", cname);
-> -		return PTR_ERR(cell);
-> -	}
-> -
-> -	ret = nvmem_cell_read(cell, &len);
-> -	nvmem_cell_put(cell);
-> -	if (IS_ERR(ret)) {
-> -		dev_err(dev, "can't read cell %s\n", cname);
-> -		return PTR_ERR(ret);
-> -	}
-> -
-> -	for (i = 0; i < len; i++)
-> -		*data |= ret[i] << (8 * i);
-> -
-> -	kfree(ret);
-> -	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
-> -
-> -	return 0;
-> -}
-> -
->  static int
->  cpr_populate_ring_osc_idx(struct cpr_drv *drv)
->  {
-> @@ -843,8 +811,7 @@ cpr_populate_ring_osc_idx(struct cpr_drv *drv)
->  	int ret;
->  
->  	for (; fuse < end; fuse++, fuses++) {
-> -		ret = cpr_read_efuse(drv->dev, fuses->ring_osc,
-> -				     &data);
-> +		ret = nvmem_cell_read_variable_le_u32(drv->dev, fuses->ring_osc, &data);
->  		if (ret)
->  			return ret;
->  		fuse->ring_osc_idx = data;
-> @@ -863,7 +830,7 @@ static int cpr_read_fuse_uV(const struct cpr_desc *desc,
->  	u32 bits = 0;
->  	int ret;
->  
-> -	ret = cpr_read_efuse(drv->dev, init_v_efuse, &bits);
-> +	ret = nvmem_cell_read_variable_le_u32(drv->dev, init_v_efuse, &bits);
->  	if (ret)
->  		return ret;
->  
-> @@ -932,7 +899,7 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
->  		}
->  
->  		/* Populate target quotient by scaling */
-> -		ret = cpr_read_efuse(drv->dev, fuses->quotient, &fuse->quot);
-> +		ret = nvmem_cell_read_variable_le_u32(drv->dev, fuses->quotient, &fuse->quot);
->  		if (ret)
->  			return ret;
->  
-> @@ -1001,7 +968,7 @@ static int cpr_calculate_scaling(const char *quot_offset,
->  	prev_fuse = fuse - 1;
->  
->  	if (quot_offset) {
-> -		ret = cpr_read_efuse(drv->dev, quot_offset, &quot_diff);
-> +		ret = nvmem_cell_read_variable_le_u32(drv->dev, quot_offset, &quot_diff);
->  		if (ret)
->  			return ret;
->  
-> @@ -1701,7 +1668,7 @@ static int cpr_probe(struct platform_device *pdev)
->  	 * initialized after attaching to the power domain,
->  	 * since it depends on the CPU's OPP table.
->  	 */
-> -	ret = cpr_read_efuse(dev, "cpr_fuse_revision", &cpr_rev);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, "cpr_fuse_revision", &cpr_rev);
->  	if (ret)
->  		return ret;
->  
-> -- 
-> 2.31.1.818.g46aad6cb9e-goog
-> 
+Anup
