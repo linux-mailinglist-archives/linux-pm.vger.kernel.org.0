@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D791038FEB7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 12:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E897E38FEBC
+	for <lists+linux-pm@lfdr.de>; Tue, 25 May 2021 12:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbhEYKQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 May 2021 06:16:14 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:37431 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbhEYKQL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 06:16:11 -0400
-Received: by mail-lj1-f177.google.com with SMTP id e2so31044725ljk.4;
-        Tue, 25 May 2021 03:14:39 -0700 (PDT)
+        id S230409AbhEYKQc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 May 2021 06:16:32 -0400
+Received: from mail-lj1-f171.google.com ([209.85.208.171]:37480 "EHLO
+        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229663AbhEYKQa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 06:16:30 -0400
+Received: by mail-lj1-f171.google.com with SMTP id e2so31045896ljk.4;
+        Tue, 25 May 2021 03:14:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Pvp1EMD3cM23xbQomRI++cJ+h3aHyG7yPxE9BDdxJsY=;
-        b=Fp3RgKe+7TzDT5kZaApI6rYDr1O8aSfMCv43MncTNuLWd/FKFFZx103oQnY31VVLdc
-         7SBeruR1AIqXcgRJ0eqd0D7ae/6LQlqIUG1qcs8kPgjDtzTrEswuZ9tqprVhqSnfmmwU
-         +1SvkcLXIsOFVWJFnu13Z0Qi4ZtFyMyE1VNEi9B1iX+ZjGVPN/m0L27NOV3F+AgoH1HO
-         1IQO0K1HFw6uraRj1VEP3TDKpKROQilQmUZN2gDAIH9/JdQygNv4MHlHUczWcxvfkSB2
-         BfBf5rg2IxmbUqrvQPD78VIVs58VBN8nAgbTE6gljiexHSLUyagCgTjzBsvLD5UFXc4c
-         xLhA==
-X-Gm-Message-State: AOAM533tem9sozn6fLAeqFKoFh5GGmslOc4QsUkmFntII3+rHu7H3emg
-        cAq5kSH/nnx2TB1lq2QRtOA=
-X-Google-Smtp-Source: ABdhPJyZtB1U9VstuKQw189kN6xAez8rRLU49AAmOIgZ8AAiwefOUs5Uwyv1kiWj9MUdcu+IrolEWA==
-X-Received: by 2002:a2e:a58d:: with SMTP id m13mr20087921ljp.252.1621937678916;
-        Tue, 25 May 2021 03:14:38 -0700 (PDT)
+        bh=X3Flqbk9N3dsqYLyk7c8Z+BERCBUoCwwVjTZG6SrE5g=;
+        b=knJ8AzM7va+2emGjrsf9F3lhgdH74bmDkAIatQQDR3uTpzfkcsYli3U5MmvOSpfcjt
+         AHUpkyVpxoclEcwn+KjjyHWdYvnLO1UfUBsnDCXrn+xdmtoeumusQzx7ZBOQht0gyth1
+         xD9mRjZg1sQcpKAVMrBF6+DOkqXyaBRBRc95/FS+wwgdVSf5QS9leoxyZNI9ogzyqeXm
+         5d9IKROM7z0/Dw+3U6quQgU///uPbsVK3778u9q1qaCP1x/1CKgc/4e+96vUFeRaZKhA
+         BOOqSrnx5mzOuNBqSX4kmwqs8IFdT9o1xrEx7STgzd00GK3JqAGZzFiD3H7qPFKILBBu
+         qhHA==
+X-Gm-Message-State: AOAM531u4c4QyWtWx+iQEJnjl0TpW1sKG6PiEVLs+0QrkU5uCt+4UmF2
+        MCN4VhPxFV9/sxRp859k1eY=
+X-Google-Smtp-Source: ABdhPJxClozAvfEvrjZBBBjFLXf3qSGrm14mTl1CaV3bTbYFSHrbE+uh8KjlfDkPmRC53djnV0f4OQ==
+X-Received: by 2002:a2e:9708:: with SMTP id r8mr20085753lji.126.1621937698514;
+        Tue, 25 May 2021 03:14:58 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id z13sm2036939lji.115.2021.05.25.03.14.37
+        by smtp.gmail.com with ESMTPSA id b6sm1690762lfb.114.2021.05.25.03.14.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 May 2021 03:14:38 -0700 (PDT)
-Date:   Tue, 25 May 2021 13:14:31 +0300
+        Tue, 25 May 2021 03:14:57 -0700 (PDT)
+Date:   Tue, 25 May 2021 13:14:51 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
@@ -54,12 +54,12 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH 3/9] watchdog: bd70528 drop bd70528 support
-Message-ID: <994d2e374262c3f59f4465c03ef23d3116120778.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH 4/9] regulator: bd70528: Drop BD70528 support
+Message-ID: <6b1668099cde29bc6fa958773a1a311df54ab236.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bp/iNruPH9dso1Pn"
+        protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
 Content-Disposition: inline
 In-Reply-To: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
@@ -67,7 +67,7 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bp/iNruPH9dso1Pn
+--mP3DRpeJDSE+ciuQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -83,345 +83,337 @@ Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
 Please let me know if some of you think the driver is needed.
 ---
- drivers/watchdog/Kconfig       |  12 --
- drivers/watchdog/Makefile      |   1 -
- drivers/watchdog/bd70528_wdt.c | 291 ---------------------------------
- 3 files changed, 304 deletions(-)
- delete mode 100644 drivers/watchdog/bd70528_wdt.c
+ drivers/regulator/Kconfig             |  11 -
+ drivers/regulator/Makefile            |   1 -
+ drivers/regulator/bd70528-regulator.c | 283 --------------------------
+ 3 files changed, 295 deletions(-)
+ delete mode 100644 drivers/regulator/bd70528-regulator.c
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 355100dad60a..26824ac6c5bc 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -160,18 +160,6 @@ config SOFT_WATCHDOG_PRETIMEOUT
- 	  watchdog. Be aware that governors might affect the watchdog because it
- 	  is purely software, e.g. the panic governor will stall it!
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index 9d84d9245490..ebbd9e6207df 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -193,17 +193,6 @@ config REGULATOR_BCM590XX
+ 	  BCM590xx PMUs. This will enable support for the software
+ 	  controllable LDO/Switching regulators.
 =20
--config BD70528_WATCHDOG
--	tristate "ROHM BD70528 PMIC Watchdog"
+-config REGULATOR_BD70528
+-	tristate "ROHM BD70528 Power Regulator"
 -	depends on MFD_ROHM_BD70528
--	select WATCHDOG_CORE
 -	help
--	  Support for the watchdog in the ROHM BD70528 PMIC. Watchdog trigger
--	  cause system reset.
+-	  This driver supports voltage regulators on ROHM BD70528 PMIC.
+-	  This will enable support for the software controllable buck
+-	  and LDO regulators.
 -
--	  Say Y here to include support for the ROHM BD70528 watchdog.
--	  Alternatively say M to compile the driver as a module,
--	  which will be called bd70528_wdt.
+-	  This driver can also be built as a module. If so, the module
+-	  will be called bd70528-regulator.
 -
- config BD957XMUF_WATCHDOG
- 	tristate "ROHM BD9576MUF and BD9573MUF PMIC Watchdog"
- 	depends on MFD_ROHM_BD957XMUF
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index a7eade8b4d45..1838df3ed650 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -203,7 +203,6 @@ obj-$(CONFIG_WATCHDOG_SUN4V)		+=3D sun4v_wdt.o
- obj-$(CONFIG_XEN_WDT) +=3D xen_wdt.o
-=20
- # Architecture Independent
--obj-$(CONFIG_BD70528_WATCHDOG) +=3D bd70528_wdt.o
- obj-$(CONFIG_BD957XMUF_WATCHDOG) +=3D bd9576_wdt.o
- obj-$(CONFIG_DA9052_WATCHDOG) +=3D da9052_wdt.o
- obj-$(CONFIG_DA9055_WATCHDOG) +=3D da9055_wdt.o
-diff --git a/drivers/watchdog/bd70528_wdt.c b/drivers/watchdog/bd70528_wdt.c
+ config REGULATOR_BD71815
+ 	tristate "ROHM BD71815 Power Regulator"
+ 	depends on MFD_ROHM_BD71828
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 580b015296ea..6a5d55e209d3 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -29,7 +29,6 @@ obj-$(CONFIG_REGULATOR_AS3722) +=3D as3722-regulator.o
+ obj-$(CONFIG_REGULATOR_ATC260X) +=3D atc260x-regulator.o
+ obj-$(CONFIG_REGULATOR_AXP20X) +=3D axp20x-regulator.o
+ obj-$(CONFIG_REGULATOR_BCM590XX) +=3D bcm590xx-regulator.o
+-obj-$(CONFIG_REGULATOR_BD70528) +=3D bd70528-regulator.o
+ obj-$(CONFIG_REGULATOR_BD71815)	+=3D bd71815-regulator.o
+ obj-$(CONFIG_REGULATOR_BD71828) +=3D bd71828-regulator.o
+ obj-$(CONFIG_REGULATOR_BD718XX) +=3D bd718x7-regulator.o
+diff --git a/drivers/regulator/bd70528-regulator.c b/drivers/regulator/bd70=
+528-regulator.c
 deleted file mode 100644
-index 0170b37e6674..000000000000
---- a/drivers/watchdog/bd70528_wdt.c
+index 1f5f9482b209..000000000000
+--- a/drivers/regulator/bd70528-regulator.c
 +++ /dev/null
-@@ -1,291 +0,0 @@
+@@ -1,283 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
 -// Copyright (C) 2018 ROHM Semiconductors
--// ROHM BD70528MWV watchdog driver
+-// bd70528-regulator.c ROHM BD70528MWV regulator driver
 -
--#include <linux/bcd.h>
+-#include <linux/delay.h>
+-#include <linux/err.h>
+-#include <linux/interrupt.h>
 -#include <linux/kernel.h>
 -#include <linux/mfd/rohm-bd70528.h>
 -#include <linux/module.h>
 -#include <linux/of.h>
 -#include <linux/platform_device.h>
 -#include <linux/regmap.h>
--#include <linux/watchdog.h>
+-#include <linux/regulator/driver.h>
+-#include <linux/regulator/machine.h>
+-#include <linux/regulator/of_regulator.h>
+-#include <linux/slab.h>
 -
--/*
-- * Max time we can set is 1 hour, 59 minutes and 59 seconds
-- * and Minimum time is 1 second
-- */
--#define WDT_MAX_MS	((2 * 60 * 60 - 1) * 1000)
--#define WDT_MIN_MS	1000
--#define DEFAULT_TIMEOUT	60
+-#define BUCK_RAMPRATE_250MV 0
+-#define BUCK_RAMPRATE_125MV 1
+-#define BUCK_RAMP_MAX 250
 -
--#define WD_CTRL_MAGIC1 0x55
--#define WD_CTRL_MAGIC2 0xAA
--
--struct wdtbd70528 {
--	struct device *dev;
--	struct regmap *regmap;
--	struct rohm_regmap_dev *mfd;
--	struct watchdog_device wdt;
+-static const struct linear_range bd70528_buck1_volts[] =3D {
+-	REGULATOR_LINEAR_RANGE(1200000, 0x00, 0x1, 600000),
+-	REGULATOR_LINEAR_RANGE(2750000, 0x2, 0xf, 50000),
+-};
+-static const struct linear_range bd70528_buck2_volts[] =3D {
+-	REGULATOR_LINEAR_RANGE(1200000, 0x00, 0x1, 300000),
+-	REGULATOR_LINEAR_RANGE(1550000, 0x2, 0xd, 50000),
+-	REGULATOR_LINEAR_RANGE(3000000, 0xe, 0xf, 300000),
+-};
+-static const struct linear_range bd70528_buck3_volts[] =3D {
+-	REGULATOR_LINEAR_RANGE(800000, 0x00, 0xd, 50000),
+-	REGULATOR_LINEAR_RANGE(1800000, 0xe, 0xf, 0),
 -};
 -
--/**
-- * bd70528_wdt_set - arm or disarm watchdog timer
-- *
-- * @data:	device data for the PMIC instance we want to operate on
-- * @enable:	new state of WDT. zero to disable, non zero to enable
-- * @old_state:	previous state of WDT will be filled here
-- *
-- * Arm or disarm WDT on BD70528 PMIC. Expected to be called only by
-- * BD70528 RTC and BD70528 WDT drivers. The rtc_timer_lock must be taken
-- * by calling bd70528_wdt_lock before calling bd70528_wdt_set.
-- */
--int bd70528_wdt_set(struct rohm_regmap_dev *data, int enable, int *old_sta=
-te)
+-/* All LDOs have same voltage ranges */
+-static const struct linear_range bd70528_ldo_volts[] =3D {
+-	REGULATOR_LINEAR_RANGE(1650000, 0x0, 0x07, 50000),
+-	REGULATOR_LINEAR_RANGE(2100000, 0x8, 0x0f, 100000),
+-	REGULATOR_LINEAR_RANGE(2850000, 0x10, 0x19, 50000),
+-	REGULATOR_LINEAR_RANGE(3300000, 0x19, 0x1f, 0),
+-};
+-
+-/* Also both LEDs support same voltages */
+-static const unsigned int led_volts[] =3D {
+-	20000, 30000
+-};
+-
+-static int bd70528_set_ramp_delay(struct regulator_dev *rdev, int ramp_del=
+ay)
 -{
--	int ret, i;
--	unsigned int tmp;
--	struct bd70528_data *bd70528 =3D container_of(data, struct bd70528_data,
--						 chip);
--	u8 wd_ctrl_arr[3] =3D { WD_CTRL_MAGIC1, WD_CTRL_MAGIC2, 0 };
--	u8 *wd_ctrl =3D &wd_ctrl_arr[2];
+-	if (ramp_delay > 0 && ramp_delay <=3D BUCK_RAMP_MAX) {
+-		unsigned int ramp_value =3D BUCK_RAMPRATE_250MV;
 -
--	ret =3D regmap_read(bd70528->chip.regmap, BD70528_REG_WDT_CTRL, &tmp);
--	if (ret)
--		return ret;
+-		if (ramp_delay <=3D 125)
+-			ramp_value =3D BUCK_RAMPRATE_125MV;
 -
--	*wd_ctrl =3D (u8)tmp;
--
--	if (old_state) {
--		if (*wd_ctrl & BD70528_MASK_WDT_EN)
--			*old_state |=3D BD70528_WDT_STATE_BIT;
--		else
--			*old_state &=3D ~BD70528_WDT_STATE_BIT;
--		if ((!enable) =3D=3D (!(*old_state & BD70528_WDT_STATE_BIT)))
--			return 0;
+-		return regmap_update_bits(rdev->regmap, rdev->desc->vsel_reg,
+-				  BD70528_MASK_BUCK_RAMP,
+-				  ramp_value << BD70528_SIFT_BUCK_RAMP);
 -	}
--
--	if (enable) {
--		if (*wd_ctrl & BD70528_MASK_WDT_EN)
--			return 0;
--		*wd_ctrl |=3D BD70528_MASK_WDT_EN;
--	} else {
--		if (*wd_ctrl & BD70528_MASK_WDT_EN)
--			*wd_ctrl &=3D ~BD70528_MASK_WDT_EN;
--		else
--			return 0;
--	}
--
--	for (i =3D 0; i < 3; i++) {
--		ret =3D regmap_write(bd70528->chip.regmap, BD70528_REG_WDT_CTRL,
--				   wd_ctrl_arr[i]);
--		if (ret)
--			return ret;
--	}
--
--	ret =3D regmap_read(bd70528->chip.regmap, BD70528_REG_WDT_CTRL, &tmp);
--	if ((tmp & BD70528_MASK_WDT_EN) !=3D (*wd_ctrl & BD70528_MASK_WDT_EN)) {
--		dev_err(bd70528->chip.dev,
--			"Watchdog ctrl mismatch (hw) 0x%x (set) 0x%x\n",
--			tmp, *wd_ctrl);
--		ret =3D -EIO;
--	}
--
--	return ret;
--}
--EXPORT_SYMBOL(bd70528_wdt_set);
--
--/**
-- * bd70528_wdt_lock - take WDT lock
-- *
-- * @data:	device data for the PMIC instance we want to operate on
-- *
-- * Lock WDT for arming/disarming in order to avoid race condition caused
-- * by WDT state changes initiated by WDT and RTC drivers.
-- */
--void bd70528_wdt_lock(struct rohm_regmap_dev *data)
--{
--	struct bd70528_data *bd70528 =3D container_of(data, struct bd70528_data,
--						 chip);
--
--	mutex_lock(&bd70528->rtc_timer_lock);
--}
--EXPORT_SYMBOL(bd70528_wdt_lock);
--
--/**
-- * bd70528_wdt_unlock - unlock WDT lock
-- *
-- * @data:	device data for the PMIC instance we want to operate on
-- *
-- * Unlock WDT lock which has previously been taken by call to
-- * bd70528_wdt_lock.
-- */
--void bd70528_wdt_unlock(struct rohm_regmap_dev *data)
--{
--	struct bd70528_data *bd70528 =3D container_of(data, struct bd70528_data,
--						 chip);
--
--	mutex_unlock(&bd70528->rtc_timer_lock);
--}
--EXPORT_SYMBOL(bd70528_wdt_unlock);
--
--static int bd70528_wdt_set_locked(struct wdtbd70528 *w, int enable)
--{
--	return bd70528_wdt_set(w->mfd, enable, NULL);
+-	dev_err(&rdev->dev, "%s: ramp_delay: %d not supported\n",
+-		rdev->desc->name, ramp_delay);
+-	return -EINVAL;
 -}
 -
--static int bd70528_wdt_change(struct wdtbd70528 *w, int enable)
+-static int bd70528_led_set_voltage_sel(struct regulator_dev *rdev,
+-				       unsigned int sel)
 -{
 -	int ret;
 -
--	bd70528_wdt_lock(w->mfd);
--	ret =3D bd70528_wdt_set_locked(w, enable);
--	bd70528_wdt_unlock(w->mfd);
--
--	return ret;
--}
--
--static int bd70528_wdt_start(struct watchdog_device *wdt)
--{
--	struct wdtbd70528 *w =3D watchdog_get_drvdata(wdt);
--
--	dev_dbg(w->dev, "WDT ping...\n");
--	return bd70528_wdt_change(w, 1);
--}
--
--static int bd70528_wdt_stop(struct watchdog_device *wdt)
--{
--	struct wdtbd70528 *w =3D watchdog_get_drvdata(wdt);
--
--	dev_dbg(w->dev, "WDT stopping...\n");
--	return bd70528_wdt_change(w, 0);
--}
--
--static int bd70528_wdt_set_timeout(struct watchdog_device *wdt,
--				   unsigned int timeout)
--{
--	unsigned int hours;
--	unsigned int minutes;
--	unsigned int seconds;
--	int ret;
--	struct wdtbd70528 *w =3D watchdog_get_drvdata(wdt);
--
--	seconds =3D timeout;
--	hours =3D timeout / (60 * 60);
--	/* Maximum timeout is 1h 59m 59s =3D> hours is 1 or 0 */
--	if (hours)
--		seconds -=3D (60 * 60);
--	minutes =3D seconds / 60;
--	seconds =3D seconds % 60;
--
--	bd70528_wdt_lock(w->mfd);
--
--	ret =3D bd70528_wdt_set_locked(w, 0);
--	if (ret)
--		goto out_unlock;
--
--	ret =3D regmap_update_bits(w->regmap, BD70528_REG_WDT_HOUR,
--				 BD70528_MASK_WDT_HOUR, hours);
--	if (ret) {
--		dev_err(w->dev, "Failed to set WDT hours\n");
--		goto out_en_unlock;
--	}
--	ret =3D regmap_update_bits(w->regmap, BD70528_REG_WDT_MINUTE,
--				 BD70528_MASK_WDT_MINUTE, bin2bcd(minutes));
--	if (ret) {
--		dev_err(w->dev, "Failed to set WDT minutes\n");
--		goto out_en_unlock;
--	}
--	ret =3D regmap_update_bits(w->regmap, BD70528_REG_WDT_SEC,
--				 BD70528_MASK_WDT_SEC, bin2bcd(seconds));
--	if (ret)
--		dev_err(w->dev, "Failed to set WDT seconds\n");
--	else
--		dev_dbg(w->dev, "WDT tmo set to %u\n", timeout);
--
--out_en_unlock:
--	ret =3D bd70528_wdt_set_locked(w, 1);
--out_unlock:
--	bd70528_wdt_unlock(w->mfd);
--
--	return ret;
--}
--
--static const struct watchdog_info bd70528_wdt_info =3D {
--	.identity =3D "bd70528-wdt",
--	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
--};
--
--static const struct watchdog_ops bd70528_wdt_ops =3D {
--	.start		=3D bd70528_wdt_start,
--	.stop		=3D bd70528_wdt_stop,
--	.set_timeout	=3D bd70528_wdt_set_timeout,
--};
--
--static int bd70528_wdt_probe(struct platform_device *pdev)
--{
--	struct rohm_regmap_dev *bd70528;
--	struct wdtbd70528 *w;
--	int ret;
--	unsigned int reg;
--
--	bd70528 =3D dev_get_drvdata(pdev->dev.parent);
--	if (!bd70528) {
--		dev_err(&pdev->dev, "No MFD driver data\n");
--		return -EINVAL;
--	}
--	w =3D devm_kzalloc(&pdev->dev, sizeof(*w), GFP_KERNEL);
--	if (!w)
--		return -ENOMEM;
--
--	w->regmap =3D bd70528->regmap;
--	w->mfd =3D bd70528;
--	w->dev =3D &pdev->dev;
--
--	w->wdt.info =3D &bd70528_wdt_info;
--	w->wdt.ops =3D  &bd70528_wdt_ops;
--	w->wdt.min_hw_heartbeat_ms =3D WDT_MIN_MS;
--	w->wdt.max_hw_heartbeat_ms =3D WDT_MAX_MS;
--	w->wdt.parent =3D pdev->dev.parent;
--	w->wdt.timeout =3D DEFAULT_TIMEOUT;
--	watchdog_set_drvdata(&w->wdt, w);
--	watchdog_init_timeout(&w->wdt, 0, pdev->dev.parent);
--
--	ret =3D bd70528_wdt_set_timeout(&w->wdt, w->wdt.timeout);
--	if (ret) {
--		dev_err(&pdev->dev, "Failed to set the watchdog timeout\n");
--		return ret;
--	}
--
--	bd70528_wdt_lock(w->mfd);
--	ret =3D regmap_read(w->regmap, BD70528_REG_WDT_CTRL, &reg);
--	bd70528_wdt_unlock(w->mfd);
--
--	if (ret) {
--		dev_err(&pdev->dev, "Failed to get the watchdog state\n");
--		return ret;
--	}
--	if (reg & BD70528_MASK_WDT_EN) {
--		dev_dbg(&pdev->dev, "watchdog was running during probe\n");
--		set_bit(WDOG_HW_RUNNING, &w->wdt.status);
--	}
--
--	ret =3D devm_watchdog_register_device(&pdev->dev, &w->wdt);
+-	ret =3D regulator_is_enabled_regmap(rdev);
 -	if (ret < 0)
--		dev_err(&pdev->dev, "watchdog registration failed: %d\n", ret);
+-		return ret;
 -
--	return ret;
+-	if (ret =3D=3D 0)
+-		return regulator_set_voltage_sel_regmap(rdev, sel);
+-
+-	dev_err(&rdev->dev,
+-		"LED voltage change not allowed when led is enabled\n");
+-
+-	return -EBUSY;
 -}
 -
--static struct platform_driver bd70528_wdt =3D {
--	.driver =3D {
--		.name =3D "bd70528-wdt"
--	},
--	.probe =3D bd70528_wdt_probe,
+-static const struct regulator_ops bd70528_buck_ops =3D {
+-	.enable =3D regulator_enable_regmap,
+-	.disable =3D regulator_disable_regmap,
+-	.is_enabled =3D regulator_is_enabled_regmap,
+-	.list_voltage =3D regulator_list_voltage_linear_range,
+-	.set_voltage_sel =3D regulator_set_voltage_sel_regmap,
+-	.get_voltage_sel =3D regulator_get_voltage_sel_regmap,
+-	.set_voltage_time_sel =3D regulator_set_voltage_time_sel,
+-	.set_ramp_delay =3D bd70528_set_ramp_delay,
 -};
 -
--module_platform_driver(bd70528_wdt);
+-static const struct regulator_ops bd70528_ldo_ops =3D {
+-	.enable =3D regulator_enable_regmap,
+-	.disable =3D regulator_disable_regmap,
+-	.is_enabled =3D regulator_is_enabled_regmap,
+-	.list_voltage =3D regulator_list_voltage_linear_range,
+-	.set_voltage_sel =3D regulator_set_voltage_sel_regmap,
+-	.get_voltage_sel =3D regulator_get_voltage_sel_regmap,
+-	.set_voltage_time_sel =3D regulator_set_voltage_time_sel,
+-};
+-
+-static const struct regulator_ops bd70528_led_ops =3D {
+-	.enable =3D regulator_enable_regmap,
+-	.disable =3D regulator_disable_regmap,
+-	.is_enabled =3D regulator_is_enabled_regmap,
+-	.list_voltage =3D regulator_list_voltage_table,
+-	.set_voltage_sel =3D bd70528_led_set_voltage_sel,
+-	.get_voltage_sel =3D regulator_get_voltage_sel_regmap,
+-};
+-
+-static const struct regulator_desc bd70528_desc[] =3D {
+-	{
+-		.name =3D "buck1",
+-		.of_match =3D of_match_ptr("BUCK1"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_BUCK1,
+-		.ops =3D &bd70528_buck_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_buck1_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_buck1_volts),
+-		.n_voltages =3D BD70528_BUCK_VOLTS,
+-		.enable_reg =3D BD70528_REG_BUCK1_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_BUCK1_VOLT,
+-		.vsel_mask =3D BD70528_MASK_BUCK_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "buck2",
+-		.of_match =3D of_match_ptr("BUCK2"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_BUCK2,
+-		.ops =3D &bd70528_buck_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_buck2_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_buck2_volts),
+-		.n_voltages =3D BD70528_BUCK_VOLTS,
+-		.enable_reg =3D BD70528_REG_BUCK2_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_BUCK2_VOLT,
+-		.vsel_mask =3D BD70528_MASK_BUCK_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "buck3",
+-		.of_match =3D of_match_ptr("BUCK3"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_BUCK3,
+-		.ops =3D &bd70528_buck_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_buck3_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_buck3_volts),
+-		.n_voltages =3D BD70528_BUCK_VOLTS,
+-		.enable_reg =3D BD70528_REG_BUCK3_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_BUCK3_VOLT,
+-		.vsel_mask =3D BD70528_MASK_BUCK_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "ldo1",
+-		.of_match =3D of_match_ptr("LDO1"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_LDO1,
+-		.ops =3D &bd70528_ldo_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_ldo_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_ldo_volts),
+-		.n_voltages =3D BD70528_LDO_VOLTS,
+-		.enable_reg =3D BD70528_REG_LDO1_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_LDO1_VOLT,
+-		.vsel_mask =3D BD70528_MASK_LDO_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "ldo2",
+-		.of_match =3D of_match_ptr("LDO2"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_LDO2,
+-		.ops =3D &bd70528_ldo_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_ldo_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_ldo_volts),
+-		.n_voltages =3D BD70528_LDO_VOLTS,
+-		.enable_reg =3D BD70528_REG_LDO2_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_LDO2_VOLT,
+-		.vsel_mask =3D BD70528_MASK_LDO_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "ldo3",
+-		.of_match =3D of_match_ptr("LDO3"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_LDO3,
+-		.ops =3D &bd70528_ldo_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.linear_ranges =3D bd70528_ldo_volts,
+-		.n_linear_ranges =3D ARRAY_SIZE(bd70528_ldo_volts),
+-		.n_voltages =3D BD70528_LDO_VOLTS,
+-		.enable_reg =3D BD70528_REG_LDO3_EN,
+-		.enable_mask =3D BD70528_MASK_RUN_EN,
+-		.vsel_reg =3D BD70528_REG_LDO3_VOLT,
+-		.vsel_mask =3D BD70528_MASK_LDO_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "ldo_led1",
+-		.of_match =3D of_match_ptr("LDO_LED1"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_LED1,
+-		.ops =3D &bd70528_led_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.volt_table =3D &led_volts[0],
+-		.n_voltages =3D ARRAY_SIZE(led_volts),
+-		.enable_reg =3D BD70528_REG_LED_EN,
+-		.enable_mask =3D BD70528_MASK_LED1_EN,
+-		.vsel_reg =3D BD70528_REG_LED_VOLT,
+-		.vsel_mask =3D BD70528_MASK_LED1_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-	{
+-		.name =3D "ldo_led2",
+-		.of_match =3D of_match_ptr("LDO_LED2"),
+-		.regulators_node =3D of_match_ptr("regulators"),
+-		.id =3D BD70528_LED2,
+-		.ops =3D &bd70528_led_ops,
+-		.type =3D REGULATOR_VOLTAGE,
+-		.volt_table =3D &led_volts[0],
+-		.n_voltages =3D ARRAY_SIZE(led_volts),
+-		.enable_reg =3D BD70528_REG_LED_EN,
+-		.enable_mask =3D BD70528_MASK_LED2_EN,
+-		.vsel_reg =3D BD70528_REG_LED_VOLT,
+-		.vsel_mask =3D BD70528_MASK_LED2_VOLT,
+-		.owner =3D THIS_MODULE,
+-	},
+-
+-};
+-
+-static int bd70528_probe(struct platform_device *pdev)
+-{
+-	int i;
+-	struct regulator_config config =3D {
+-		.dev =3D pdev->dev.parent,
+-	};
+-
+-	config.regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+-	if (!config.regmap)
+-		return -ENODEV;
+-
+-	for (i =3D 0; i < ARRAY_SIZE(bd70528_desc); i++) {
+-		struct regulator_dev *rdev;
+-
+-		rdev =3D devm_regulator_register(&pdev->dev, &bd70528_desc[i],
+-					       &config);
+-		if (IS_ERR(rdev)) {
+-			dev_err(&pdev->dev,
+-				"failed to register %s regulator\n",
+-				bd70528_desc[i].name);
+-			return PTR_ERR(rdev);
+-		}
+-	}
+-	return 0;
+-}
+-
+-static struct platform_driver bd70528_regulator =3D {
+-	.driver =3D {
+-		.name =3D "bd70528-pmic"
+-	},
+-	.probe =3D bd70528_probe,
+-};
+-
+-module_platform_driver(bd70528_regulator);
 -
 -MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
--MODULE_DESCRIPTION("BD70528 watchdog driver");
+-MODULE_DESCRIPTION("BD70528 voltage regulator driver");
 -MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:bd70528-wdt");
+-MODULE_ALIAS("platform:bd70528-pmic");
 --=20
 2.25.4
 
@@ -438,19 +430,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---bp/iNruPH9dso1Pn
+--mP3DRpeJDSE+ciuQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCszgcACgkQeFA3/03a
-ocUDlwgAxT279/4gGh+1Yb+Js2iek1PUafUN1mlIVFqSKkj9eV35bVfhAL3aikej
-MzEkdSZaMnviDH+iC9trDTfKauS9fzA5AotUHIFNm7/6AynEInCYcdCLND/8TUVz
-2PkBuNiuZRzg5OtshqVr6e0DrEcAJ+cbqSZS92ZbsC2v8Is8Wh8m6USb+vIvSZWJ
-Q1+3o8/0AvjWOwuOW4RobJ3mFoSZ0rwsK8vYwt/X8tJs28zp22ObiTwx31vxGUId
-t1QUFlpNIROkxzcFmxFjdcaEkQNM+ThIRtvXQGf4QUY6igRQKG0pXVggN6t17WLh
-EovrqunrEyNT97vm7R2nBzHEOwaEsQ==
-=FJDH
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCszhsACgkQeFA3/03a
+ocXkUQf+JIw46Hi7fPEjIHJMMJ7+btFycYzQ9fNQLl3X7LKhbJsgJRyZWRhwwQoE
+VVw8knnTy+RXY8XrTsW8ZowdrIe3RQLSo9jIkx1XQZvMMA3OF4B3g5h1sPIh8dgZ
+SJyTdvOaxLXqI5YovXtQ7NVV1JelY0DoQylOLZ7b9LtCCRUOPzB/RKAV4vD6aQtB
+aRlsLEEE978+2E+uLJhm8IwEcVSf/5v4Ox5KJrtxnTFkzoQEQxKkTB5dLKdY2zta
+Vuvl8y0fM9UYdNJ7ixwaXD/Q4AC9zXX1on7KXA/jGr9RiEaRER29odsVPHnmm5FF
+BVdZzWsl1y6gz+gleWvnixP4eKtG3g==
+=AEYx
 -----END PGP SIGNATURE-----
 
---bp/iNruPH9dso1Pn--
+--mP3DRpeJDSE+ciuQ--
