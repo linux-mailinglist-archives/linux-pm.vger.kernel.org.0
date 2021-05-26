@@ -2,255 +2,249 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37002390C23
-	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 00:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72054390E82
+	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 04:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbhEYW0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 May 2021 18:26:12 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:46240 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbhEYW0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 18:26:11 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14PMACHV127272;
-        Tue, 25 May 2021 22:23:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=J8Tz9xArRZ/Kbo65Z1kBBvQ1yqDyan8L6k8VI6YD/XQ=;
- b=nT6AwjEud8byQRdb2QlfzVMPej7rHVTlcLEsyzm4MOpmjnld1X2O8P8tN1S7z7BfvQ2f
- FyvhXX/gS+X3V0sf6RSbkDn3928xYCNCh1Awpzf4Efw8QvxF9Dv3CAOrVCwUFdv1rmmr
- A27bL2VVh9Zo1vOFqndBHFn1swZ5v+516+44WQVKrY84jbqtT/DByjAqMVp1kpKSe5S7
- XQM/UDqc1lJYdX7FtLsee44dRqqSo6RTXAVLfMUyuxcEHCR807Pkip20q6cE9klzarHC
- CskkfB3s9+CbJQCug96h9A2rS1a4x+0AyZTY/c/lUaf44z0OaAUZwI3R7OY3pTjvq0GA GA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 38rne4306q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 May 2021 22:23:44 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14PMA4nW154683;
-        Tue, 25 May 2021 22:23:44 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-        by aserp3030.oracle.com with ESMTP id 38pr0c67b2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 May 2021 22:23:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jxtDnDzY+GDYoJb6r912+uAniYtBKA2DRlYQ0Xcw3BRVnKo8SsqV22UvUwaoMHf+ozei/3dX/8pa1BxZQiAQmn0Shnte2rOiDXNpV4fjyX3z6hZ+YYXDmb8kd4jBta9kzxospbOM64+Ft1Ku/IB2YJATcqQdwdEuda2hpMm8EG1jUJX9DTHJmnSLn+YTXMHJoRbyASDiisyxc3JDNpPi1rR3kCdoo17OoJg0rJhx3T0vVrAJLyw35H9vI8CP1MesWgnYg49va3+y2NCunjwn7KDAEhL/6xxi4gr8wiF1hQ33sHFM1AUeFzb7/aiCRtuU0R9lGQ8gU2KMcjPXT8RTGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J8Tz9xArRZ/Kbo65Z1kBBvQ1yqDyan8L6k8VI6YD/XQ=;
- b=iS2opyuI0vQT+fgSrVAxbEWmUyJ3gUURVolc50Q0KwGnD7TjogYO/xZRrqUu0M9WuSPfsf9Ysyy/qF7m/NLtZ1Pf+aIXnGAloERiNzLbStw4zNJbg9jebuRFk6VIMRok8Yc+353sC20uwbt5/BeKuDsV1zRuvyhu726bSTe+o79Pd8l29KBU7KJLpYxWgbnUu+8htODpvSxWml7raq6XrRZE/z+vQ0XUAdy22iR48QogrYNUzvUarhpqTxQdJktyT0mbj6/yydeusqouImRdqcz+dGvp4R/x1u/r0cT0eRxAY22gMohhth7omE8vz64Yu+IO3BllO7+zaoOS1l5aag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J8Tz9xArRZ/Kbo65Z1kBBvQ1yqDyan8L6k8VI6YD/XQ=;
- b=S2JPFhKEQ7TkKjw7A5QNf8dVcAPtANEG2X75Cx9R/E99ndCaX1NqxFOPf1UqgKq2z6n7pjLaSdKLd5R9K9qdGn6BYHmcW/t8D0DL392NLwn+l2qoyVo1zC8/4J+IjclhXZotbqwkYHPiUTugqtQqcjEJLLYnyx7p46a0fpGYez8=
-Authentication-Results: amazon.com; dkim=none (message not signed)
- header.d=none;amazon.com; dmarc=none action=none header.from=oracle.com;
-Received: from CH0PR10MB5020.namprd10.prod.outlook.com (2603:10b6:610:c0::22)
- by CH0PR10MB5147.namprd10.prod.outlook.com (2603:10b6:610:c2::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.25; Tue, 25 May
- 2021 22:23:42 +0000
-Received: from CH0PR10MB5020.namprd10.prod.outlook.com
- ([fe80::6cb6:faf9:b596:3b9a]) by CH0PR10MB5020.namprd10.prod.outlook.com
- ([fe80::6cb6:faf9:b596:3b9a%7]) with mapi id 15.20.4150.027; Tue, 25 May 2021
- 22:23:42 +0000
-Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
- mode
-To:     Anchal Agarwal <anchalag@amazon.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com,
-        David <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        aams@amazon.com
-References: <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
- <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
- <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
- <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
- <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
- <20210521052650.GA19056@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Message-ID: <0b1f0772-d1b1-0e59-8e99-368e54d40fbf@oracle.com>
-Date:   Tue, 25 May 2021 18:23:35 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
-In-Reply-To: <20210521052650.GA19056@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [138.3.201.24]
-X-ClientProxiedBy: SN4PR0801CA0016.namprd08.prod.outlook.com
- (2603:10b6:803:29::26) To CH0PR10MB5020.namprd10.prod.outlook.com
- (2603:10b6:610:c0::22)
+        id S230505AbhEZCv6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 May 2021 22:51:58 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:40188 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231185AbhEZCv5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 May 2021 22:51:57 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210526025024epoutp02baecd34024714476c74548c81b8a41f1~CfhBkcoMX0867208672epoutp02-
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 02:50:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210526025024epoutp02baecd34024714476c74548c81b8a41f1~CfhBkcoMX0867208672epoutp02-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1621997424;
+        bh=tyBZ7OFuRi9bEQ8p2rvrGW0NFjmKK4W+w9n1YR0iE+Y=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=RtEMFS6qmpLDpTg3LAZYp87Jh4mu3R8UjhyydBxR663opS8xPuWtZ/qzagH0PEvhA
+         6vt+uqBFihSbE9i1Fy8StmYtFM/msW4o4zYezjDW3eJ3Epg00yk8SYAAlocWU1LtLY
+         x+o0ee3fBp/YyIsUoqUBB+GkG82huqb3OBBwl00c=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20210526025023epcas1p3dac4849351c6d4f49c42e87e5ab1a357~CfhAmXhWv2533925339epcas1p3t;
+        Wed, 26 May 2021 02:50:23 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Fqb652NFKz4x9Q1; Wed, 26 May
+        2021 02:50:21 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7F.0B.09701.D67BDA06; Wed, 26 May 2021 11:50:21 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20210526025019epcas1p48e8136bc939e4fd65cbbf56db4ccb239~Cfg8phb6f2104521045epcas1p4E;
+        Wed, 26 May 2021 02:50:19 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210526025019epsmtrp2330a7961f7312d554b36506126411e20~Cfg8oiu5q2922929229epsmtrp2x;
+        Wed, 26 May 2021 02:50:19 +0000 (GMT)
+X-AuditID: b6c32a36-631ff700000025e5-9d-60adb76d7f63
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        13.27.08163.B67BDA06; Wed, 26 May 2021 11:50:19 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210526025019epsmtip2eebbc2657eb498ec01613c5d68bafcd4~Cfg8Xg2nC3137531375epsmtip2J;
+        Wed, 26 May 2021 02:50:19 +0000 (GMT)
+Subject: Re: [PATCH V8 1/8] PM / devfreq: Add cpu based scaling support to
+ passive_governor
+To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com, Sibi Sankar <sibis@codeaurora.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <dd58c29a-35b1-b853-bc4a-3225b21b082a@samsung.com>
+Date:   Wed, 26 May 2021 12:08:43 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.74.96.88] (138.3.201.24) by SN4PR0801CA0016.namprd08.prod.outlook.com (2603:10b6:803:29::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Tue, 25 May 2021 22:23:37 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a0e154d-1c51-485b-99b0-08d91fcbc079
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5147:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH0PR10MB5147C266742B68A582A728FC8A259@CH0PR10MB5147.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rowv2lsYuAeV2l5mN3E2pAgnk8lpIaPIxUozimH9ekGa5GctrUJS+QDPZfkQFuxtmOFtOtVP0bP7ZsI8hoVMyDVDnL3++o5z3zyu2pB2HwnV99OQCMLV8j1IQDxdV8qERwWH2wQ6lf28dm5WsJ/Rih5MKtRw0GrH+VLB0Tm8g67yva9GNyk9x1onCxoTIoT4XcFQubtU4J4doCHuJhywbhQofyc3YoHft5MAXs/dzzG5E+Jr9rjxLGAe/pntk54AgiVgfumm130VIKe6t0TH4oNhjT1VxQsSabRcJ+9yYSFvx8Y/owoxHOGBEYwtzzK418c5sczZ8a+kSsNgtyaWGJinKps3fa1IMiFYKgT1MF47eW6F8Lx3Fkpq3ao8LmZpDHNGKgrcimpPUZMbujDzP81lAgqsFqUTKv5mBRFCTmQOdNPeNg4u/GENWjjF4Usx/d4CilPehhzWsgc/W6eIAG3UySPWTMMtRvvybRs6QocFAOhnhkkMtY9egA+nvl4qbXpqCSwvz0eVyXbb3Q7RmoMutG23KCCMF4GKkA2JQuJgxHiaJFeDNKI/WpEGVdWBQ6MjC3XXo61MsAyQaLzU8KchHABBU29s450KXaJsWNr+m/XJWTeXS04FqHU3doY7/+bWqPuluy/K1xKLocWRQH7bm8LvixmA8VNfS4foYL/3+qkrzdhNN70veeusmCh9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5020.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(136003)(366004)(376002)(346002)(36756003)(66476007)(8936002)(86362001)(66946007)(478600001)(38100700002)(6916009)(8676002)(6486002)(66556008)(7416002)(44832011)(54906003)(956004)(316002)(2906002)(186003)(2616005)(5660300002)(31696002)(16526019)(31686004)(16576012)(4326008)(53546011)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?dWxKdUtRdGNQcElqWEJOWXZQSzVWL1d6aVV4YjI4enZLYUxla2ZiVW9qdnhI?=
- =?utf-8?B?bzNWaWJSSG0xa2owdkZLVUV0Ykx5SHhCOWxUOTdZWDZqZU5kN1o2UDdtZWlx?=
- =?utf-8?B?RFRqWTdsaVZsWldyWlhTS0dIbzRJZDZEb29Zck5mSDV6aU5TeHBzYjJTMWgx?=
- =?utf-8?B?cVVRSEhtZEo1dHIvcXduMDcxdTlkR3N2RHdqdmJIeU1WOERCNmJxWHdhVWVB?=
- =?utf-8?B?cWlwRkZXdWpSWmVoMWV5QXFESUdFR20xZjN0WmkwSW1UajIwbGs4WU81ZE8z?=
- =?utf-8?B?WUhHTmR5aVVXaGVzcUhHN0RGRFI0bFdmYnJlTnpBYkVsMGF2VlVSa0ROQ3pH?=
- =?utf-8?B?ZjdnY0N4RkhHWFpyWFdsako3dDQzNkx6dVlveGVnOWlrdVNoc2h0OGdrTWh6?=
- =?utf-8?B?YUhIQllGS0ZJMUYvaDNhY2ZWcUV5T1R2RUwzbi9keE51cUVJMUg0RUJQWTJM?=
- =?utf-8?B?RUNVMXNoVUoxN1BnZXIza293cHI3TkxHd2NNQXNBQzIxZFZETFlNVW5sYjNm?=
- =?utf-8?B?QkdXaEN0QUs4d3hnczFSbGpML1cvb0RWdFI1K0RMNjhuMk9jQ0N6UDNaVHJB?=
- =?utf-8?B?bjdwOEtLSmQ2alRlR0liZ2VWVFNLTVMwK1Q4ek9scTExNGRGVXRFNFZOQkZO?=
- =?utf-8?B?Vmd4aFBtYUxrMnFzWWJLWmh2TTV6Z1ZoREtxaDBzbTZtTGMrZzRYcFBJR1NC?=
- =?utf-8?B?Mld3ZXhBb2lTSlRLUUdsTEUzNGg4c243TFFHTkk0Rzc0c1E1Q3RQaStBaEMr?=
- =?utf-8?B?QUlNOG5mVi9ZS2FRZ1c5UUhhZFlqa2l1Tk5JK0FGcndWblgxcDJiZE5vaE1y?=
- =?utf-8?B?Yll3a1l2VVQ4RHI3NHdYc3dFME9DZityWEw4aUV2ZlhBdldWREIvcDZhUjNU?=
- =?utf-8?B?Y0syM1VQVUF4ejBZNTBWQjZmZHduYi8wTjA4WE9ZbjBXZWRqZTdyT0RHZzFh?=
- =?utf-8?B?SmdaRzRJNnZpODNXQUxzVmoxbDlNZkZYd2FPSnd3MmZBaWRDK090bk1KejA0?=
- =?utf-8?B?RzlGQ0l3VUJnL0FCVnNHZkRlWHlrcldWdUJEWmZVWFAwV0NGa0tPNkRLUW5l?=
- =?utf-8?B?czJTNFkxcU15Z2JzNTlMSlNQVjIwcExzeml5K1hRUkJ6Q1EwRmw5YkNUazNO?=
- =?utf-8?B?UkkvRkN4WmR5Qi9hc3BYZGg1L2hHMElOYmRUUDZMajVjZUtOUU04R2V4cUk0?=
- =?utf-8?B?ZWVLSm1sd1FwLzNMa1Q4L2ZwOFg0Q3JhK0ZvdHBGODdsa01ONVJ4Qm41Q0hO?=
- =?utf-8?B?ZzRyK3YrTGgzTWRNTWthTXNHV1FnZWxrN0pLZUtuaS9zU2UyZlRKVkFSeDV4?=
- =?utf-8?B?cVI5eDA4ZktPdE8zcG15ckNxUmNxcUZLdFV3cnB4NHNoSTkvc2I4aTBhSEpQ?=
- =?utf-8?B?aXR5eEp3YmdxandnbnE4ekk1ZTJGS2xBR2MrQXNaeSsyUVhxSUM0RjBYR0NN?=
- =?utf-8?B?RnZFQ1ppeXRzZi9Nc2ZlZklUZlJCbEJSMzlhK0IzZk1XclVxOEVqR2lrQWdz?=
- =?utf-8?B?aE51eUtXZmFpdk45VUdjNjVFZUxhZm5CY1UxMHRrNUdWbi9XeHhFd1hId2Y5?=
- =?utf-8?B?a2V3S1NZaUxtbHVFYUs4alJCRW8yNXZUMUZXNGxjTDgvYWxjczZLa3JQcEJY?=
- =?utf-8?B?K2FzaUlic0p2NWJjQkN1Z0VpaDJ2eHBCQkpkeE9lcWlFQkRhZElpNUQ4WTVJ?=
- =?utf-8?B?YjJhcXc1cFFSN0dQNXFnMHVwZ2x2aFBPVCt0TitXVGlXeW5sN1M3NkhVWnJw?=
- =?utf-8?Q?iif8hnq/OiPu4QKdDPyr52oefA4heszcH9bLw2u?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a0e154d-1c51-485b-99b0-08d91fcbc079
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5020.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2021 22:23:42.2361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qmp8vwhJ1y5mlyw+9XHyzQDwFwynlVwqLAZMtFdQH/j1OHaP2ejPPiIKyBcNvUkcjF7pB87IPnz2UdhVo2ouyQpfuFkoUWo9taFx/W8O8yI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5147
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9995 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105250138
-X-Proofpoint-ORIG-GUID: TiUw2lT5LCPLgo7aW3qi6VWKkVOaj727
-X-Proofpoint-GUID: TiUw2lT5LCPLgo7aW3qi6VWKkVOaj727
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9995 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 adultscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105250138
+In-Reply-To: <1621995727.29827.1.camel@mtksdaap41>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPJsWRmVeSWpSXmKPExsWy7bCmnm7u9rUJBi9/cFpsX/+C1WLqwyds
+        FvOPnGO1ONv0ht3i25UOJotNj6+xWlzeNYfN4nLzRUaLz71HGC2WXr/IZNHUYmxxu3EFm8Wb
+        H2eZLM6cvsRq0br3CLvFv2sbWSyuLXzPajH9rpDFxq8eDsIea+atYfS43NfL5LFz1l12j02r
+        Otk87lzbw+axeUm9R8vJ/SweW662s3j0bVnF6HH8xnYmj8+b5AK4o7JtMlITU1KLFFLzkvNT
+        MvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4CeU1IoS8wpBQoFJBYXK+nb2RTl
+        l5akKmTkF5fYKqUWpOQUWBboFSfmFpfmpesl5+daGRoYGJkCFSZkZ+zrbGQpmK5esfzvUfYG
+        xqmKXYycHBICJhKN3/8wdTFycQgJ7GCUWHHnLSuE84lRYsKsqewQzmdGiTvzP7LDtDR8WMEC
+        kdjFKDF5byszhPOeUWLtmo2sIFXCArESv87fYwGxRYA6dsyczQhiMwv0skrMPAS2nE1AS2L/
+        ixtsIDa/gKLE1R+PwWp4Bewkvmx8BBZnEVCVWDC7nRnEFhUIkzi5rQWqRlDi5MwnYPM5BYwk
+        Pt/oYYOYLy5x68l8JghbXmL72zlgx0kIzOaU2DrvKyvECy4SN04vYIGwhSVeHd8C9ZqUxOd3
+        e9kg7GqJlSePsEE0dzBKbNl/AarZWGL/0slAGziANmhKrN+lDxFWlNj5ey7Uk3wS7772sIKU
+        SAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ3ZiF5YRaSF2YhLFvAyLKKUSy1oDg3PbXY
+        sMAIObo3MYJTvpbZDsZJbz/oHWJk4mA8xCjBwawkwnuweW2CEG9KYmVValF+fFFpTmrxIUZT
+        YABPZJYSTc4HZp28knhDUyNjY2MLE0MzU0NDJXHedOfqBCGB9MSS1OzU1ILUIpg+Jg5OqQam
+        VsdrGYWBKY0OO7b89ebU9eX/f79PrV8hzuH5lpq1CYve960LX5Ry6LGxtPaVudWBDq/1/qf3
+        r9OqM55yg9E/XYPpmgJD6lNj089d0vaJfAeWTI6L3LKmyr2Ny5xzm5xr2LHdW44wHJLy4rCa
+        dXD+13oJ2yo12ZPPprIYiP2eMn3rZ603iWa/X807Jsu7c3dx/Gyzb7GXHKa/zvnmuH+CNqNX
+        rOfTXK/8/apRPpXFH+Z2fFl6dxKfobu8xDpdp31X/7/+yT5R0qCEN07utLtfG9fiB5tFy6/e
+        s9w2bY/s/KhbR94Yhq/pfb/OqENz8tTLlxuNm/Mfdj9gfb1qqdaVm+fsuk+l/LPdv4hnfmy6
+        EktxRqKhFnNRcSIAVRKMlYIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7bCSvG729rUJBh8+CVpsX/+C1WLqwyds
+        FvOPnGO1ONv0ht3i25UOJotNj6+xWlzeNYfN4nLzRUaLz71HGC2WXr/IZNHUYmxxu3EFm8Wb
+        H2eZLM6cvsRq0br3CLvFv2sbWSyuLXzPajH9rpDFxq8eDsIea+atYfS43NfL5LFz1l12j02r
+        Otk87lzbw+axeUm9R8vJ/SweW662s3j0bVnF6HH8xnYmj8+b5AK4o7hsUlJzMstSi/TtErgy
+        9nU2shRMV69Y/vcoewPjVMUuRk4OCQETiYYPK1hAbCGBHYwS736UQsQlJaZdPMrcxcgBZAtL
+        HD5cDFHyllGi4RkbiC0sECvx6/w9sFYRoDE7Zs5m7GLk4mAW6GeVePmjiwnEERJ4xCJxZ8Ia
+        VpAqNgEtif0vboB18wsoSlz98ZgRxOYVsJP4svERWJxFQFViwex2ZhBbVCBMYueSx0wQNYIS
+        J2c+AdvGKWAk8flGD1g9s4C6xJ95l5ghbHGJW0/mM0HY8hLb385hnsAoPAtJ+ywkLbOQtMxC
+        0rKAkWUVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZw5Gtp7WDcs+qD3iFGJg7GQ4wS
+        HMxKIrwHm9cmCPGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp
+        1cBkONe+d7mOhl9xqrrl7+X3f8nP5hHcHG+4w/njzI0/FDQr12kXlkj22q44eZK3vDzo2ubl
+        telPlOdcSJcwuLohWPbR9fNlDL7HFdOy3Qu7H9yRaN2273AE9+fvqu3ru7P2aS59WNtQ0vYw
+        5m7i4855U0RfripwrdmWs/zZ7Bn3jFVuJf1TiBQJvvKywKcykun/zPvlPROvW7xxerBPS3zb
+        w39OF40+6ghMuiD6U2OFbrq3Ttq5r80vGP8mz8nJabC80b7Wqu3335ZXxvx8u2clHTPxurFN
+        znh90LlbqkVBKRWXS24u2jfPttmRsbTxmcal1xfuhPP8OZW1pFxFNd16kvCCaO+pZ0XYb/V7
+        cTIqsRRnJBpqMRcVJwIAHz+jaGsDAAA=
+X-CMS-MailID: 20210526025019epcas1p48e8136bc939e4fd65cbbf56db4ccb239
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210323113411epcas1p3b4367563007ca91c30201d7fc225bb67
+References: <1616499241-4906-1-git-send-email-andrew-sh.cheng@mediatek.com>
+        <CGME20210323113411epcas1p3b4367563007ca91c30201d7fc225bb67@epcas1p3.samsung.com>
+        <1616499241-4906-2-git-send-email-andrew-sh.cheng@mediatek.com>
+        <233a3bd6-7ab1-5da2-9184-a745eb253d86@samsung.com>
+        <1617177820.15067.1.camel@mtksdaap41>
+        <2ae8604d-0da6-4243-1b92-81b3917d7d48@samsung.com>
+        <cad52436-b291-05bf-236f-7b7cb1fdbbff@samsung.com>
+        <1617195800.18432.3.camel@mtksdaap41>
+        <fbb6c44b-eb77-14ce-9175-3f06030e6e0c@samsung.com>
+        <cfdd3973-e4a7-8c09-8a7e-57118a7a3b9b@samsung.com>
+        <1621995727.29827.1.camel@mtksdaap41>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 5/21/21 1:26 AM, Anchal Agarwal wrote:
->>> What I meant there wrt VCPU info was that VCPU info is not unregistered during hibernation,
->>> so Xen still remembers the old physical addresses for the VCPU information, created by the
->>> booting kernel. But since the hibernation kernel may have different physical
->>> addresses for VCPU info and if mismatch happens, it may cause issues with resume.
->>> During hibernation, the VCPU info register hypercall is not invoked again.
+Hi,
+On 5/26/21 11:22 AM, andrew-sh.cheng wrote:
+> On Thu, 2021-04-08 at 11:47 +0900, Chanwoo Choi wrote:
+>> On 4/1/21 9:16 AM, Chanwoo Choi wrote:
+>>> On 3/31/21 10:03 PM, andrew-sh.cheng wrote:
+>>>> On Wed, 2021-03-31 at 17:35 +0900, Chanwoo Choi wrote:
+>>>>> On 3/31/21 5:27 PM, Chanwoo Choi wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 3/31/21 5:03 PM, andrew-sh.cheng wrote:
+>>>>>>> On Thu, 2021-03-25 at 17:14 +0900, Chanwoo Choi wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> You are missing to add these patches to linux-pm mailing list.
+>>>>>>>> Need to send them to linu-pm ML.
+>>>>>>>>
+>>>>>>>> Also, before received this series, I tried to clean-up these patches
+>>>>>>>> on testing branch[1]. So that I add my comment with my clean-up case.
+>>>>>>>> [1] https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!zIrzeDp9vPnm1_SDzVPuzqdHn3zWie9DnfBXaA-j9-CSrVc6aR9_rJQQiw81_CgAPh9XRRs$ 
+>>>>>>>>
+>>>>>>>> And 'Saravana Kannan <skannan@codeaurora.org>' is wrong email address.
+>>>>>>>> Please update the email or drop this email.
+>>>>>>>
+>>>>>>> Hi Chanwoo,
+>>>>>>>
+>>>>>>> Thank you for the advices.
+>>>>>>> I will resend patch v9 (add to linux-pm ML), remove this patch, and note
+>>>>>>> that my patch set base on
+>>>>>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJ8WFhg_g$ 
+>>>>>>
+>>>>>> I has not yet test this patch[1] on devfreq-testing-passive-gov branch.
+>>>>>> So that if possible, I'd like you to test your patches with this patch[1] 
+>>>>>> and then if there is no problem, could you send the next patches with patch[1]?
+>>>>>>
+>>>>>> [1]https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing-passive-gov&id=39c80d11a8f42dd63ecea1e0df595a0ceb83b454__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJR2cQqZs$ 
+>>>>>
+>>>>>
+>>>>> Sorry for the confusion. I make the devfreq-testing-passive-gov[1]
+>>>>> branch based on latest devfreq-next branch.
+>>>>> [1] https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJ8WFhg_g$ 
+>>>>>
+>>>>> First of all, if possible, I want to test them[1] with your patches in this series.
+>>>>> And then if there are no any problem, please let me know. After confirmed from you,
+>>>>> I'll send the patches of devfreq-testing-passive-gov[1] branch.
+>>>>> How about that?
+>>>>>
+>>>> Hi Chanwoo~
+>>>>
+>>>> We will use this on Google Chrome project.
+>>>> Google Hsin-Yi has test your patch + my patch set v8 [2~8]
+>>>>
+>>>>     make sure cci devfreqs runs with cpufreq.
+>>>>     suspend resume
+>>>>     speedometer2 benchmark
+>>>> It is okay.
+>>>>
+>>>> Please send the patches of devfreq-testing-passive-gov[1] branch.
+>>>>
+>>>> I will send patch v9 base on yours latter.
+>>>
+>>> Thanks for your test. I'll send the patches today.
 >>
->> I still don't think that's the cause but it's certainly worth having a look.
+>> I'm sorry for delay because when I tested the patches
+>> for devfreq parent type on Odroid-xu3, there are some problem
+>> related to lazy linking of OPP. So I'm trying to analyze them.
+>> Unfortunately, we need to postpone these patches to next linux
+>> version.
 >>
-> Hi Boris,
-> Apologies for picking this up after last year. 
-> I did some dive deep on the above statement and that is indeed the case that's happening. 
-> I did some debugging around KASLR and hibernation using reboot mode.
-> I observed in my debug prints that whenever vcpu_info* address for secondary vcpu assigned 
-> in xen_vcpu_setup at boot is different than what is in the image, resume gets stuck for that vcpu
-> in bringup_cpu(). That means we have different addresses for &per_cpu(xen_vcpu_info, cpu) at boot and after
-> control jumps into the image. 
->
-> I failed to get any prints after it got stuck in bringup_cpu() and
-> I do not have an option to send a sysrq signal to the guest or rather get a kdump.
+> Hi Chanwoo Choi~
+> 
+> It is said that you are busy on another task recently.
+> May I know your plan on this patch?
+> Thank you.
+
+Sorry for late work. I have a question.
+When I tested exynos-bus.c with adding the 'required-opp' property
+on odroid-xu3 board. I got some fail about 
+
+When calling _set_required_opps(), always _set_required_opp() returns
+-EBUSY error because of following lazy linking case[1].
+
+[1] https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/opp/core.c#L896
+
+/* required-opps not fully initialized yet */
+if (lazy_linking_pending(opp_table))
+	return -EBUSY;  
 
 
-xenctx and xen-hvmctx might be helpful.
+For calling dev_pm_opp_of_add_table(), lazy_link_required_opp_table() function
+will be called. But, there is constraint[2]. If is_genpd of opp_table is false,
+driver/opp/of.c cannot resolve the lazy linking issue.
 
+[2]  https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/opp/of.c#L386
 
-> This change is not observed in every hibernate-resume cycle. I am not sure if this is a bug or an 
-> expected behavior. 
-> Also, I am contemplating the idea that it may be a bug in xen code getting triggered only when
-> KASLR is enabled but I do not have substantial data to prove that.
-> Is this a coincidence that this always happens for 1st vcpu?
-> Moreover, since hypervisor is not aware that guest is hibernated and it looks like a regular shutdown to dom0 during reboot mode,
-> will re-registering vcpu_info for secondary vcpu's even plausible?
+/* Link required OPPs for all OPPs of the newly added OPP table */
+static void lazy_link_required_opp_table(struct opp_table *new_table)
+{
+	struct opp_table *opp_table, *temp, **required_opp_tables;
+	struct device_node *required_np, *opp_np, *required_table_np;
+	struct dev_pm_opp *opp;
+	int i, ret;
 
+	/*
+	 * We only support genpd's OPPs in the "required-opps" for now,
+	 * as we don't know much about other cases.
+	 */
+	if (!new_table->is_genpd)
+		return;
 
-I think I am missing how this is supposed to work (maybe we've talked about this but it's been many months since then). You hibernate the guest and it writes the state to swap. The guest is then shut down? And what's next? How do you wake it up?
+Even if this case, there are no problem on your test case?
 
-
--boris
-
-
-
->  I could definitely use some advice to debug this further.
->
->  
-> Some printk's from my debugging:
->
-> At Boot:
->
-> xen_vcpu_setup: xen_have_vcpu_info_placement=1 cpu=1, vcpup=0xffff9e548fa560e0, info.mfn=3996246 info.offset=224,
->
-> Image Loads:
-> It ends up in the condition:
->  xen_vcpu_setup()
->  {
->  ...
->  if (xen_hvm_domain()) {
->         if (per_cpu(xen_vcpu, cpu) == &per_cpu(xen_vcpu_info, cpu))
->                 return 0; 
->  }
->  ...
->  }
->
-> xen_vcpu_setup: checking mfn on resume cpu=1, info.mfn=3934806 info.offset=224, &per_cpu(xen_vcpu_info, cpu)=0xffff9d7240a560e0
->
-> This is tested on c4.2xlarge [8vcpu 15GB mem] instance with 5.10 kernel running
-> in the guest.
->
-> Thanks,
-> Anchal.
->> -boris
->>
->>
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
