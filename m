@@ -2,122 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A0B391CC6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 18:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5451391CF7
+	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 18:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhEZQQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 May 2021 12:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbhEZQQb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 12:16:31 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CF6C061574
-        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 09:15:00 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f22so1341121pgb.9
-        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 09:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9Q6+tqYbQ6hbaAPica85mInL8pGjWpM9S4X767/mRLs=;
-        b=aOFlCkzeaLLf2VX0TgbXqqRTASWzxVOlVXz1a+E/lY4i10ZQDwhUgCMLHb0xu/p26v
-         HmmsVVt8x/LOPUk+MLzBTyKmZxPuzB6VyKRhBv+qQpdV8mnJ+vdD6HJrfdcoFCrSWMWf
-         eTk3TqNy2qsOIj9TlL8+9R23NhEMo+XPPLunwhJmoybVcGQhk/AahpYG1ZJ1aIxk8uf8
-         Bnas3ghsLRkyA46SEfjM2gTW4fNNgxrZrYRLNBg/leJvgiK5PvT7eovf/XuWllwLnPvT
-         yenBbMJsAe5P2o0uUGMSFOZCmXq9hOkqFUu3MkftDfiMhC3SKiTEfqS14iJRHMpVxcqT
-         3gXw==
+        id S233212AbhEZQZE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 May 2021 12:25:04 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35265 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232363AbhEZQZD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 12:25:03 -0400
+Received: from mail-vs1-f70.google.com ([209.85.217.70])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1llwJf-0008D6-Jz
+        for linux-pm@vger.kernel.org; Wed, 26 May 2021 16:23:31 +0000
+Received: by mail-vs1-f70.google.com with SMTP id z5-20020a67d2850000b029023673cc643bso468118vsi.7
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 09:23:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9Q6+tqYbQ6hbaAPica85mInL8pGjWpM9S4X767/mRLs=;
-        b=FRO37jilQlcEW42Zyc0mENv5/AJkY8TWJY1tIOdQ2UjCxbue6LQds3pK31nquPf52c
-         tMrCIcNPmHuzcaG4atIc828KRxnrZ/lxFeWilvE3fSd7BHXg3QEGfo5nzcvZdtEyhwyR
-         JMadIJNGLAoenb82naBlAyzwKKU2d9KhRLPvkThWYbgfmGd9ABZ+tWWCQSqOvYO0QPVh
-         YWJDzhw7JoMAjU9z/P248skaY1DOTsjdwI9XOWV6bWdzgGQUsQkSmrBUgMNuIXRwX+tS
-         e30QL1frStVONCMaT8l0lMin5q/60/j4rnBzwUKdmoc1I5Zdn0tOM6RAIVWOaJn17POH
-         92ug==
-X-Gm-Message-State: AOAM531P0cZT8QXGej1KIj5lDaAqCfIFgsKmWBha4JbFGpCXtHhCobA5
-        dijscN/6aBkrTle3rM+6CSa19twgQ7xlBZzS
-X-Google-Smtp-Source: ABdhPJx0SQlGY3l1Iex/uIOj+s7306BKiBjXpe7TNPZYQ93AikBWi2sBD2e0mytRMla9cWtSiQir5g==
-X-Received: by 2002:a65:5305:: with SMTP id m5mr25790034pgq.155.1622045699660;
-        Wed, 26 May 2021 09:14:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s80sm16458532pfs.59.2021.05.26.09.14.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6NwA8NmUwiZmbFBWUe/+uyLFAYgt93yKUAUW2ekHfg4=;
+        b=gi/ToTx1KgbQU5wKO6yXrQ0o4tsCmKZUMN4+L5K08l+VJrx0pzp1NPdgJNVXPLi7yh
+         K/Axv99Z6o2W9otZdu+RhgA8iVAL014LTY9iu//WibyvcR+SqVcpWTp8cOEWP0G4LH24
+         a8fYAb6m4f9jeFUeycmttgExAcNOQMF0lNr1Qv326M52dPRT7aCnsJphl08Rpb00O9v2
+         xuOnRGH5Ba1UHyt1MpUDmYZRmT9tvSkZ+OdpywGQlDFIKuxBZRlmvRYGA5fkz8NvB5XZ
+         ppdAIkSQvpuOZqQn44MPV7qgYWYlNi5J2Zj983zrjtZ2TbQxs2CeRpKbO/VXZ1JQU0mf
+         wrvg==
+X-Gm-Message-State: AOAM530WcR0aqv71Tfzk9n3wn8UbG9UNmitdkV8VHDWY+zDb6rOCC2Ir
+        SqvsPU0dnaKEcDAniu6UU87y0V4LtTYg5GpixdkoMSq+pwe05+xKSdG6I6VXP2RM3KN41ifJwf5
+        JgQlYMTd6ae+LbaNwSs+iBphKN0pd/PYhqsjt
+X-Received: by 2002:ab0:2b15:: with SMTP id e21mr34132869uar.102.1622046208937;
+        Wed, 26 May 2021 09:23:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwq+aNeLdtNs2xkhZJ1UzALGUp4kKfuJC0kkp93ok5ZySBg2n0E8vSWq5sGiiq8LBThjDFJMQ==
+X-Received: by 2002:ab0:2b15:: with SMTP id e21mr34132748uar.102.1622046207995;
+        Wed, 26 May 2021 09:23:27 -0700 (PDT)
+Received: from localhost.localdomain ([45.237.48.4])
+        by smtp.gmail.com with ESMTPSA id t16sm574459uao.0.2021.05.26.09.23.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 09:14:59 -0700 (PDT)
-Message-ID: <60ae7403.1c69fb81.94680.5115@mx.google.com>
-Date:   Wed, 26 May 2021 09:14:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 26 May 2021 09:23:27 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH v2] PM: runtime: document common mistake with pm_runtime_get_sync()
+Date:   Wed, 26 May 2021 12:22:51 -0400
+Message-Id: <20210526162251.125600-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.13-rc3-39-gb4a1c81b7736
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (v5.13-rc3-39-gb4a1c81b7736)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc3-39-gb4a1c81b7736)
+pm_runtime_get_sync(), contradictory to intuition, does not drop the
+runtime PM usage counter on errors which lead to several wrong usages in
+drivers (missing the put).  pm_runtime_resume_and_get() was added as a
+better implementation so document the preference of using it, hoping it
+will stop bad patterns.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-13-rc3-39-gb4a1c81b7736/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.13-rc3-39-gb4a1c81b7736
-Git Commit: b4a1c81b77364a4a4a03bdd47304a74d95ca4d3b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 ---
-For more info write to <info@kernelci.org>
+
+Changes since v1:
+1. Reword after comments from Rafael.
+---
+ Documentation/power/runtime_pm.rst | 6 +++++-
+ include/linux/pm_runtime.h         | 3 +++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+index 18ae21bf7f92..33619bf83f69 100644
+--- a/Documentation/power/runtime_pm.rst
++++ b/Documentation/power/runtime_pm.rst
+@@ -378,7 +378,11 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+ 
+   `int pm_runtime_get_sync(struct device *dev);`
+     - increment the device's usage counter, run pm_runtime_resume(dev) and
+-      return its result
++      return its result;
++      be aware that it does not drop the device's usage counter on errors so
++      so consider using pm_runtime_resume_and_get() instead of it, especially
++      if its return value is checked by the caller, as this is likely to result
++      in cleaner code.
+ 
+   `int pm_runtime_get_if_in_use(struct device *dev);`
+     - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 6c08a085367b..aab8b35e9f8a 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -380,6 +380,9 @@ static inline int pm_runtime_get(struct device *dev)
+  * The possible return values of this function are the same as for
+  * pm_runtime_resume() and the runtime PM usage counter of @dev remains
+  * incremented in all cases, even if it returns an error code.
++ * Consider using pm_runtime_resume_and_get() instead of it, especially
++ * if its return value is checked by the caller, as this is likely to result
++ * in cleaner code.
+  */
+ static inline int pm_runtime_get_sync(struct device *dev)
+ {
+-- 
+2.27.0
+
