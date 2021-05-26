@@ -2,511 +2,328 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BB33913E2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 11:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9720C3915C8
+	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 13:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbhEZJlt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 May 2021 05:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S234271AbhEZLRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 May 2021 07:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbhEZJlt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 05:41:49 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313BC061574;
-        Wed, 26 May 2021 02:40:18 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id z3so895699oib.5;
-        Wed, 26 May 2021 02:40:18 -0700 (PDT)
+        with ESMTP id S234267AbhEZLRj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 07:17:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878EEC061756
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 04:16:08 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id a7so445080plh.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 04:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GabZeTtpZL3JqUUthscu+MLUoyWKNc+vu/IuoGbuKUA=;
-        b=c7/m3uK35FyMES8a73FeV8aW+CDP2g5wKHjWIrKSGELMgXsCh7q6qW+LWImNge+fJn
-         mIp/mBADbXRv6QzIa31T+hpvb8Byc8BPtmf3nnY6MQsCOBnQg95gWTY+F1aJHfDzD+zO
-         xCbRPzdoimShFce9YEOMA5IaAqgHEFUuLKegK/L08dslej3fZ7lJtNc1Pi8TwXmR4xi5
-         VbRQwBidTLhkKGWemclfL0xhppBLRjTX9ofuLBeu6xRDsQvGzj9iCLwEO+IXV52xO095
-         3yic0FAmaXe8jdXdzHoA/RIt/QJW893DpRogHM6aFZ+bhepZsOi18fbAkwgfdtkHKgqD
-         E1mw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PzgzBohWrJMIpaalYi9wVNZWYy1JIhwVUerboOtOB4k=;
+        b=CEt5v+SorJdfAraGqPb7yeOlNlcL3Vxj6rfFOO/zd8M4DjQhOQC/smBIqUEvb07VHJ
+         h2R/tb0tWyY+eIybisTBXZdds1M6hyW9GQNYB6VkV4mXsqdb8hDQeZOde64ybjNEpBOX
+         VwEQDCHRXzL9NMABlqC2QppDKJFXv/MPwE9Ho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GabZeTtpZL3JqUUthscu+MLUoyWKNc+vu/IuoGbuKUA=;
-        b=KsrwlUxLI4JM7u65B0jcMgY5fOqNdEQnrnD8c7d2LiE9WZwwU0CPRHxbEfGBjWtfxo
-         1mPzunXOdgqSAMqOiTzPCExs3Zene7dSSNr6hdMAlOcFphKh7+bWUl08BVe7rZXiT8eX
-         gYedwB4vz4zgIQXYzgh5HEqFz5Da8k2/UbAFBilwQEMo7yP2rjadJeD4kWzO9Lbd7b77
-         X297FhWivqBS+Z2mp9vFq9xGeOUmMaXbE70kqlPCnIiOCGCnCYs6J9q+OJQsMyT5VmRk
-         ZPie3etc3fKQ95tkTENZEw1W+KjUP6OTBwLyd39//KqQu9fi/tkHN4NTN6e9INc7Js+Y
-         TyJg==
-X-Gm-Message-State: AOAM532h4YkE1B/tAQw7Ek2ptFTV5XZAwwKjOY+FFgGXj3qJpLnjOITR
-        VTAodnvGELDS6dZm9V75OeAkw41E//kUWBdCWQE=
-X-Google-Smtp-Source: ABdhPJwFd4ppBY0ln/41ZlQXkpC9PACNFr6moUswHFrSYjSboftQjIl0ply9Mg5pHsW1H5gkL52MO3Ho4FTPZYN9eEY=
-X-Received: by 2002:aca:3197:: with SMTP id x145mr1206670oix.23.1622022017421;
- Wed, 26 May 2021 02:40:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PzgzBohWrJMIpaalYi9wVNZWYy1JIhwVUerboOtOB4k=;
+        b=PmYgJ5tOEVKF+a/P7ULsINGwcX3ZzPlzoGBbktpKgc4Od7Wx6p0f7dR3zkaCQrtnMu
+         mYgWWwqmqenPqM+xerfrSEyL0qf4PonyIuqSpt/qsxN+eNbm71mOdy6+8jLH0KdnNvkX
+         uLg7Ryp1lrLfKMckz4H3I5JL3tde41Y/lzEL6pcrXQtTFONQBxII3Tl4BJ5qWdUz+YJk
+         LoaHiFUz0t0/Qt8nFTR9yOL2ZI/zEY5Hs9bDfcUtZbqeAGv050VuEGFFE07kaU1xsvpT
+         3WBK4uUw99MBln1/vaIeVZMyjl6FrQ8YC9tTPBgioj0sq0BxWKPOcJeDhMSBPkLmnNQw
+         kB2w==
+X-Gm-Message-State: AOAM533Y6ccDhzbGt0XhyR8/0q6YF+CzPyKagJHBPuucSbeh3Tqile6c
+        +QWnKYyeaob0/mAT0A9x4W/2BZfQm+QRWw==
+X-Google-Smtp-Source: ABdhPJyvdqD5ohTkONc85sToaubCGGQ9T5nt6Zvm+gr08l+qhMki364te3f9RlxGeN0dbrs/qGe2Jw==
+X-Received: by 2002:a17:90a:1d0c:: with SMTP id c12mr16865372pjd.122.1622027767733;
+        Wed, 26 May 2021 04:16:07 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:37d6:8e9f:c791:4d9])
+        by smtp.gmail.com with ESMTPSA id v2sm15398362pfm.134.2021.05.26.04.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 May 2021 04:16:07 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
+Cc:     Hsinyi Wang <hsinyi@chromium.org>, Ikjoon Jang <ikjn@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] power: supply: sbs-battery: cache constant string properties
+Date:   Wed, 26 May 2021 19:16:04 +0800
+Message-Id: <20210526191600.v4.1.I446881dabe094fff375847593be87ec2624f587f@changeid>
+X-Mailer: git-send-email 2.31.1.818.g46aad6cb9e-goog
 MIME-Version: 1.0
-References: <1610973703-676-1-git-send-email-gene.chen.richtek@gmail.com>
- <1610973703-676-3-git-send-email-gene.chen.richtek@gmail.com> <771c7da0584cf37da6ba370207a89a7401a20c33.camel@fi.rohmeurope.com>
-In-Reply-To: <771c7da0584cf37da6ba370207a89a7401a20c33.camel@fi.rohmeurope.com>
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-Date:   Wed, 26 May 2021 17:40:06 +0800
-Message-ID: <CAE+NS35BOC6rr4U9rtBkNph8mZCVV=5MGbh0VQXBvhLRkBaAvQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] power: supply: mt6360_charger: add MT6360 charger support
-To:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
-Cc:     sre@kernel.org, Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gene Chen <gene_chen@richtek.com>, Wilma.Wu@mediatek.com,
-        shufan_lee@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
-        benjamin.chao@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com> =E6=96=BC 2021=E5=B9=B4=
-3=E6=9C=8830=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=887:48=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
->
-> On Mon, 2021-01-18 at 20:41 +0800, Gene Chen wrote:
-> > From: Gene Chen <gene_chen@richtek.com>
-> >
-> > Add basic support for the battery charger for MT6360 PMIC
-> >
-> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> > ---
-> >  drivers/power/supply/Kconfig          |  10 +
-> >  drivers/power/supply/Makefile         |   1 +
-> >  drivers/power/supply/mt6360_charger.c | 914
-> > ++++++++++++++++++++++++++++++++++
-> >  3 files changed, 925 insertions(+)
-> >  create mode 100644 drivers/power/supply/mt6360_charger.c
-> >
->
-> Thanks for the contribution :)
->
-> Few comments which I am not demanding to be 'fixed' - but which might
-> be good to be checked. Eg, please consider my comments as 'nit's.
->
-> ...
->
-> > +static unsigned int mt6360_map_reg_sel(u32 data, u32 min, u32 max,
-> > u32 step)
-> > +{
-> > +     u32 target =3D 0, max_sel;
-> > +
-> > +     if (data >=3D min) {
-> > +             target =3D (data - min) / step;
-> > +             max_sel =3D (max - min) / step;
-> > +             if (target > max_sel)
-> > +                     target =3D max_sel;
-> > +     }
-> > +     return target;
-> > +}
->
-> lib/linear_ranges.c might already implement this ...
->
+Currently sbs-battery supports three string properties -
+manufacturer, model_name, and chemistry. Buffers for those
+properties are currently defined as global variables.
 
-I found we are neither linear_range_get_selector_high or
-linear_range_get_selector_low.
-When value lower than min_value, choose min_sel. If higher than
-max_value, choose max_sel.
-Should I create linear_range_get_selector() for this?
+This patch moves those global variables into struct sbs_info
+and cache/reuse them as they are all constant values.
 
-> > +
-> > +static u32 mt6360_map_real_val(u32 sel, u32 min, u32 max, u32 step)
-> > +{
-> > +     u32 target =3D 0;
-> > +
-> > +     target =3D min + (sel * step);
-> > +     if (target > max)
-> > +             target =3D max;
-> > +     return target;
-> > +}
->
-> ...and this.
->
+Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-ACK, We can use "linear_range_get_value", but maybe wait for reply
-about "mt6360_map_reg_sel"
+---
 
-> > +static int mt6360_charger_get_ichg(struct mt6360_chg_info *mci,
-> > +                                union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL7, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_ICHG_MASK) >> MT6360_ICHG_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_ICHG_MIN,
-> > +                                       MT6360_ICHG_MAX,
-> > +                                       MT6360_ICHG_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_max_ichg(struct mt6360_chg_info *mci,
-> > +                                    union power_supply_propval *val)
-> > +{
-> > +     val->intval =3D MT6360_ICHG_MAX;
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_cv(struct mt6360_chg_info *mci,
-> > +                              union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL4, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_VOREG_MASK) >> MT6360_VOREG_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_VOREG_MIN,
-> > +                                       MT6360_VOREG_MAX,
-> > +                                       MT6360_VOREG_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_max_cv(struct mt6360_chg_info *mci,
-> > +                                  union power_supply_propval *val)
-> > +{
-> > +     val->intval =3D MT6360_VOREG_MAX;
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_aicr(struct mt6360_chg_info *mci,
-> > +                                union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL3, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_IAICR_MASK) >> MT6360_IAICR_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_AICR_MIN,
-> > +                                       MT6360_AICR_MAX,
-> > +                                       MT6360_AICR_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_mivr(struct mt6360_chg_info *mci,
-> > +                                union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL6, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_VMIVR_MASK) >> MT6360_VMIVR_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_VMIVR_MIN,
-> > +                                       MT6360_VMIVR_MAX,
-> > +                                       MT6360_VMIVR_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_iprechg(struct mt6360_chg_info *mci,
-> > +                                   union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL8, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_IPREC_MASK) >> MT6360_IPREC_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_IPREC_MIN,
-> > +                                       MT6360_IPREC_MAX,
-> > +                                       MT6360_IPREC_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_get_ieoc(struct mt6360_chg_info *mci,
-> > +                                union power_supply_propval *val)
-> > +{
-> > +     int ret;
-> > +     unsigned int regval;
-> > +
-> > +     ret =3D regmap_read(mci->regmap, MT6360_PMU_CHG_CTRL9, &regval);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     regval =3D (regval & MT6360_IEOC_MASK) >> MT6360_IEOC_SHFT;
-> > +     val->intval =3D mt6360_map_real_val(regval,
-> > +                                       MT6360_IEOC_MIN,
-> > +                                       MT6360_IEOC_MAX,
-> > +                                       MT6360_IEOC_STEP);
->
-> linear_ranges?
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6360_charger_set_online(struct mt6360_chg_info *mci,
-> > +                                  const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 force_sleep =3D val->intval ? 0 : 1;
-> > +
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL1,
-> > +                               MT6360_FSLP_MASK,
-> > +                               force_sleep << MT6360_FSLP_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_ichg(struct mt6360_chg_info *mci,
-> > +                                const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_ICHG_MIN,
-> > +                              MT6360_ICHG_MAX,
-> > +                              MT6360_ICHG_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL7,
-> > +                               MT6360_ICHG_MASK,
-> > +                               sel << MT6360_ICHG_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_cv(struct mt6360_chg_info *mci,
-> > +                              const union power_supply_propval *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_VOREG_MIN,
-> > +                              MT6360_VOREG_MAX,
-> > +                              MT6360_VOREG_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL4,
-> > +                               MT6360_VOREG_MASK,
-> > +                               sel << MT6360_VOREG_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_aicr(struct mt6360_chg_info *mci,
-> > +                                const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_AICR_MIN,
-> > +                              MT6360_AICR_MAX,
-> > +                              MT6360_AICR_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL3,
-> > +                               MT6360_IAICR_MASK,
-> > +                               sel << MT6360_IAICR_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_mivr(struct mt6360_chg_info *mci,
-> > +                                const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_VMIVR_MIN,
-> > +                              MT6360_VMIVR_MAX,
-> > +                              MT6360_VMIVR_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL3,
-> > +                               MT6360_VMIVR_MASK,
-> > +                               sel << MT6360_VMIVR_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_iprechg(struct mt6360_chg_info *mci,
-> > +                                   const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_IPREC_MIN,
-> > +                              MT6360_IPREC_MAX,
-> > +                              MT6360_IPREC_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL8,
-> > +                               MT6360_IPREC_MASK,
-> > +                               sel << MT6360_IPREC_SHFT);
-> > +}
-> > +
-> > +static int mt6360_charger_set_ieoc(struct mt6360_chg_info *mci,
-> > +                                const union power_supply_propval
-> > *val)
-> > +{
-> > +     u8 sel;
-> > +
-> > +     sel =3D mt6360_map_reg_sel(val->intval,
-> > +                              MT6360_IEOC_MIN,
-> > +                              MT6360_IEOC_MAX,
-> > +                              MT6360_IEOC_STEP);
->
-> linear_ranges?
->
-> > +     return regmap_update_bits(mci->regmap,
-> > +                               MT6360_PMU_CHG_CTRL9,
-> > +                               MT6360_IEOC_MASK,
-> > +                               sel << MT6360_IEOC_SHFT);
-> > +}
-> > +
-> > +
->
->
->
-> > +static const struct regulator_ops mt6360_chg_otg_ops =3D {
-> > +     .list_voltage =3D regulator_list_voltage_linear,
-> > +     .enable =3D regulator_enable_regmap,
-> > +     .disable =3D regulator_disable_regmap,
-> > +     .is_enabled =3D regulator_is_enabled_regmap,
-> > +     .set_voltage_sel =3D regulator_set_voltage_sel_regmap,
-> > +     .get_voltage_sel =3D regulator_get_voltage_sel_regmap,
-> > +};
-> > +
-> > +static const struct regulator_desc mt6360_otg_rdesc =3D {
-> > +     .of_match =3D "usb-otg-vbus",
-> > +     .name =3D "usb-otg-vbus",
-> > +     .ops =3D &mt6360_chg_otg_ops,
-> > +     .owner =3D THIS_MODULE,
-> > +     .type =3D REGULATOR_VOLTAGE,
-> > +     .min_uV =3D 4425000,
-> > +     .uV_step =3D 25000,
-> > +     .n_voltages =3D 57,
-> > +     .vsel_reg =3D MT6360_PMU_CHG_CTRL5,
-> > +     .vsel_mask =3D MT6360_VOBST_MASK,
-> > +     .enable_reg =3D MT6360_PMU_CHG_CTRL1,
-> > +     .enable_mask =3D MT6360_OPA_MODE_MASK,
-> > +};
->
-> Any particular reason why these are here and not in a regulator driver?
->
+Changes in v4:
+- Fix a build error from patch manipulation
 
-MT6360 charger is a switching charger which can charging or boost OTG VBUS.
+Changes in v3:
+- Invalidate cached properties upon update_presence(!present)
+- Fix a bug in reading chemistry
 
-> ...
->
-> > +static int mt6360_charger_probe(struct platform_device *pdev)
-> > +{
-> > +     struct mt6360_chg_info *mci;
-> > +     struct power_supply_config charger_cfg =3D {};
-> > +     struct regulator_config config =3D { };
-> > +     int ret;
-> > +
-> > +     mci =3D devm_kzalloc(&pdev->dev, sizeof(*mci), GFP_KERNEL);
-> > +     if (!mci)
-> > +             return -ENOMEM;
-> > +
-> > +     ret =3D mt6360_parse_dt(pdev);
-> > +     if (ret)
-> > +             return dev_err_probe(&pdev->dev, ret, "Failed to parse
-> > dt\n");
-> > +
-> > +     mci->dev =3D &pdev->dev;
-> > +     mci->vinovp =3D 6500000;
-> > +     mutex_init(&mci->chgdet_lock);
-> > +     platform_set_drvdata(pdev, mci);
-> > +     INIT_WORK(&mci->chrdet_work, &mt6360_chrdet_work);
-> > +
-> > +     mci->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
-> > +     if (!mci->regmap)
-> > +             return dev_err_probe(&pdev->dev, -ENODEV, "Failed to
-> > get parent regmap\n");
-> > +
-> > +     ret =3D mt6360_apply_dt(pdev);
-> > +     if (ret)
-> > +             return dev_err_probe(&pdev->dev, ret, "Failed to apply
-> > dt\n");
-> > +
-> > +     memcpy(&mci->psy_desc, &mt6360_charger_desc, sizeof(mci-
-> > >psy_desc));
-> > +     mci->psy_desc.name =3D dev_name(&pdev->dev);
-> > +     charger_cfg.drv_data =3D mci;
-> > +     charger_cfg.of_node =3D pdev->dev.of_node;
-> > +     mci->psy =3D devm_power_supply_register(&pdev->dev,
-> > +                                           &mci->psy_desc,
-> > &charger_cfg);
-> > +     if (IS_ERR(mci->psy))
-> > +             return dev_err_probe(&pdev->dev, PTR_ERR(mci->psy),
-> > +                                  "Failed to register power supply
-> > dev\n");
-> > +
-> > +     ret =3D mt6360_chg_init_setting(mci);
-> > +     if (ret)
-> > +             return dev_err_probe(&pdev->dev, ret, "Failed to
-> > initial setting\n");
-> > +
-> > +     schedule_work(&mci->chrdet_work);
->
-> Is this work scheduled anywhere else? If not - why doing this in wq
-> context? If yes - does this wq need cancellation upon exit?
->
+Changes in v2:
+- change function name of sbs_get_battery_string_property()
+  to sbs_get_constant_string()
+- use cached string properties
+- use cached technology value in sbs_get_chemistry()
 
-MT6360 MFD driver probe will clear all interrupts then add charger device.
-We need to schedule work for handling boot-up vbus is always exist,
-because irq is already cleared.
+ drivers/power/supply/sbs-battery.c | 153 ++++++++++++++++++-----------
+ 1 file changed, 95 insertions(+), 58 deletions(-)
 
-> > +
-> > +     ret =3D mt6360_chg_irq_register(pdev);
-> > +     if (ret)
-> > +             return dev_err_probe(&pdev->dev, ret, "Failed to
-> > register irqs\n");
-> > +
-> > +     config.dev =3D &pdev->dev;
-> > +     config.regmap =3D mci->regmap;
-> > +     mci->otg_rdev =3D devm_regulator_register(&pdev->dev,
-> > &mt6360_otg_rdesc,
-> > +                                             &config);
-> > +     if (IS_ERR(mci->otg_rdev))
-> > +             return PTR_ERR(mci->otg_rdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
->
-> Best Regards
->         Matti Vaittinen
->
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index b6a538ebb378..b6ee3a14576f 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properties[] = {
+ /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
+ #define SBS_FLAGS_TI_BQ20ZX5		BIT(0)
+ 
++static const enum power_supply_property string_properties[] = {
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_MANUFACTURER,
++	POWER_SUPPLY_PROP_MODEL_NAME,
++};
++
++#define NR_STRING_BUFFERS	ARRAY_SIZE(string_properties)
++
+ struct sbs_info {
+ 	struct i2c_client		*client;
+ 	struct power_supply		*power_supply;
+@@ -201,11 +209,32 @@ struct sbs_info {
+ 	struct delayed_work		work;
+ 	struct mutex			mode_lock;
+ 	u32				flags;
++	int				technology;
++	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+ };
+ 
+-static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+-static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+-static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
++static char *sbs_get_string_buf(struct sbs_info *chip,
++				enum power_supply_property psp)
++{
++	int i = 0;
++
++	for (i = 0; i < NR_STRING_BUFFERS; i++)
++		if (string_properties[i] == psp)
++			return chip->strings[i];
++
++	return ERR_PTR(-EINVAL);
++}
++
++static void sbs_invalidate_cached_props(struct sbs_info *chip)
++{
++	int i = 0;
++
++	chip->technology = -1;
++
++	for (i = 0; i < NR_STRING_BUFFERS; i++)
++		chip->strings[i][0] = 0;
++}
++
+ static bool force_load;
+ 
+ static int sbs_read_word_data(struct i2c_client *client, u8 address);
+@@ -243,6 +272,7 @@ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
+ 		chip->is_present = false;
+ 		/* Disable PEC when no device is present */
+ 		client->flags &= ~I2C_CLIENT_PEC;
++		sbs_invalidate_cached_props(chip);
+ 		return 0;
+ 	}
+ 
+@@ -639,17 +669,45 @@ static int sbs_get_battery_property(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int sbs_get_battery_string_property(struct i2c_client *client,
+-	int reg_offset, enum power_supply_property psp, char *val)
++static int sbs_get_property_index(struct i2c_client *client,
++	enum power_supply_property psp)
+ {
+-	s32 ret;
++	int count;
+ 
+-	ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
++	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
++		if (psp == sbs_data[count].psp)
++			return count;
+ 
+-	if (ret < 0)
+-		return ret;
++	dev_warn(&client->dev,
++		"%s: Invalid Property - %d\n", __func__, psp);
+ 
+-	return 0;
++	return -EINVAL;
++}
++
++static const char *sbs_get_constant_string(struct sbs_info *chip,
++			enum power_supply_property psp)
++{
++	int ret;
++	char *buf;
++	u8 addr;
++
++	buf = sbs_get_string_buf(chip, psp);
++	if (IS_ERR(buf))
++		return buf;
++
++	if (!buf[0]) {
++		ret = sbs_get_property_index(chip->client, psp);
++		if (ret < 0)
++			return ERR_PTR(ret);
++
++		addr = sbs_data[ret].addr;
++
++		ret = sbs_read_string_data(chip->client, addr, buf);
++		if (ret < 0)
++			return ERR_PTR(ret);
++	}
++
++	return buf;
+ }
+ 
+ static void  sbs_unit_adjustment(struct i2c_client *client,
+@@ -772,48 +830,36 @@ static int sbs_get_battery_serial_number(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int sbs_get_property_index(struct i2c_client *client,
+-	enum power_supply_property psp)
+-{
+-	int count;
+-	for (count = 0; count < ARRAY_SIZE(sbs_data); count++)
+-		if (psp == sbs_data[count].psp)
+-			return count;
+-
+-	dev_warn(&client->dev,
+-		"%s: Invalid Property - %d\n", __func__, psp);
+-
+-	return -EINVAL;
+-}
+-
+-static int sbs_get_chemistry(struct i2c_client *client,
++static int sbs_get_chemistry(struct sbs_info *chip,
+ 		union power_supply_propval *val)
+ {
+-	enum power_supply_property psp = POWER_SUPPLY_PROP_TECHNOLOGY;
+-	int ret;
++	const char *chemistry;
+ 
+-	ret = sbs_get_property_index(client, psp);
+-	if (ret < 0)
+-		return ret;
++	if (chip->technology != -1) {
++		val->intval = chip->technology;
++		return 0;
++	}
+ 
+-	ret = sbs_get_battery_string_property(client, ret, psp,
+-					      chemistry);
+-	if (ret < 0)
+-		return ret;
++	chemistry = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_TECHNOLOGY);
++
++	if (IS_ERR(chemistry))
++		return PTR_ERR(chemistry);
+ 
+ 	if (!strncasecmp(chemistry, "LION", 4))
+-		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
++		chip->technology = POWER_SUPPLY_TECHNOLOGY_LION;
+ 	else if (!strncasecmp(chemistry, "LiP", 3))
+-		val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
++		chip->technology = POWER_SUPPLY_TECHNOLOGY_LIPO;
+ 	else if (!strncasecmp(chemistry, "NiCd", 4))
+-		val->intval = POWER_SUPPLY_TECHNOLOGY_NiCd;
++		chip->technology = POWER_SUPPLY_TECHNOLOGY_NiCd;
+ 	else if (!strncasecmp(chemistry, "NiMH", 4))
+-		val->intval = POWER_SUPPLY_TECHNOLOGY_NiMH;
++		chip->technology = POWER_SUPPLY_TECHNOLOGY_NiMH;
+ 	else
+-		val->intval = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
++		chip->technology = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
++
++	if (chip->technology == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
++		dev_warn(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
+ 
+-	if (val->intval == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+-		dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
++	val->intval = chip->technology;
+ 
+ 	return 0;
+ }
+@@ -857,6 +903,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 	int ret = 0;
+ 	struct sbs_info *chip = power_supply_get_drvdata(psy);
+ 	struct i2c_client *client = chip->client;
++	const char *str;
+ 
+ 	if (chip->gpio_detect) {
+ 		ret = gpiod_get_value_cansleep(chip->gpio_detect);
+@@ -882,7 +929,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_TECHNOLOGY:
+-		ret = sbs_get_chemistry(client, val);
++		ret = sbs_get_chemistry(chip, val);
+ 		if (ret < 0)
+ 			break;
+ 
+@@ -934,23 +981,12 @@ static int sbs_get_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_MODEL_NAME:
+-		ret = sbs_get_property_index(client, psp);
+-		if (ret < 0)
+-			break;
+-
+-		ret = sbs_get_battery_string_property(client, ret, psp,
+-						      model_name);
+-		val->strval = model_name;
+-		break;
+-
+ 	case POWER_SUPPLY_PROP_MANUFACTURER:
+-		ret = sbs_get_property_index(client, psp);
+-		if (ret < 0)
+-			break;
+-
+-		ret = sbs_get_battery_string_property(client, ret, psp,
+-						      manufacturer);
+-		val->strval = manufacturer;
++		str = sbs_get_constant_string(chip, psp);
++		if (IS_ERR(str))
++			ret = PTR_ERR(str);
++		else
++			val->strval = str;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+@@ -1097,6 +1133,7 @@ static int sbs_probe(struct i2c_client *client)
+ 	psy_cfg.of_node = client->dev.of_node;
+ 	psy_cfg.drv_data = chip;
+ 	chip->last_state = POWER_SUPPLY_STATUS_UNKNOWN;
++	sbs_invalidate_cached_props(chip);
+ 	mutex_init(&chip->mode_lock);
+ 
+ 	/* use pdata if available, fall back to DT properties,
+-- 
+2.31.1.818.g46aad6cb9e-goog
+
