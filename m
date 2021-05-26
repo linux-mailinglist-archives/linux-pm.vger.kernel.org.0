@@ -2,228 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8925391CB6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 18:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A0B391CC6
+	for <lists+linux-pm@lfdr.de>; Wed, 26 May 2021 18:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbhEZQMI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 May 2021 12:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S232198AbhEZQQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 May 2021 12:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbhEZQMI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 12:12:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08D2C061574;
-        Wed, 26 May 2021 09:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=6mUbRP+k/ElQT2NSLhhkCbG5TRmWL7xyAE+qYjqwqUI=; b=vboce95T2IrWbEooOATvKq7aYl
-        h7/8w2txIo/eztoCCL+NWWyqpztCL7qv5Rc2yvRYpP7eI34EPsTN0WFPT9pjyuQ4lNuk3KxhUeHXy
-        lo+GWFUu+AaOOMzPQ83AHGWdYk7ccRMxvGk0lVwg7NElFtEXYNtb0CRCLhN0zzWwQcHwKEuo8t3gX
-        mMpd4q3/wWMOLudD8d/14OuWG3zT2OWRzxbp8Y2VVNXG4egHge/4zTN8xF+0wnh4d59Yz7F74SUQg
-        YIreOYBnTSqnI9R/iYbbwT/RTJK9FOFEfQ3PYQMPhvw6vXVhE1/1gTohvecqurQPpXJ4GIkCK0umn
-        sHfaLpaw==;
-Received: from [2601:1c0:6280:3f0::ce7d]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1llw71-00Fcq9-RQ; Wed, 26 May 2021 16:10:27 +0000
-Subject: Re: [PATCH] cpufreq: intel_pstate: hybrid: Fix build with CONFIG_ACPI
- unset
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>
-References: <4337451.LvFx2qVVIh@kreacher>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4f0f3e94-d42a-a0fd-ced6-bd1edd6d471b@infradead.org>
-Date:   Wed, 26 May 2021 09:10:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        with ESMTP id S232193AbhEZQQb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 May 2021 12:16:31 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CF6C061574
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 09:15:00 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f22so1341121pgb.9
+        for <linux-pm@vger.kernel.org>; Wed, 26 May 2021 09:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=9Q6+tqYbQ6hbaAPica85mInL8pGjWpM9S4X767/mRLs=;
+        b=aOFlCkzeaLLf2VX0TgbXqqRTASWzxVOlVXz1a+E/lY4i10ZQDwhUgCMLHb0xu/p26v
+         HmmsVVt8x/LOPUk+MLzBTyKmZxPuzB6VyKRhBv+qQpdV8mnJ+vdD6HJrfdcoFCrSWMWf
+         eTk3TqNy2qsOIj9TlL8+9R23NhEMo+XPPLunwhJmoybVcGQhk/AahpYG1ZJ1aIxk8uf8
+         Bnas3ghsLRkyA46SEfjM2gTW4fNNgxrZrYRLNBg/leJvgiK5PvT7eovf/XuWllwLnPvT
+         yenBbMJsAe5P2o0uUGMSFOZCmXq9hOkqFUu3MkftDfiMhC3SKiTEfqS14iJRHMpVxcqT
+         3gXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=9Q6+tqYbQ6hbaAPica85mInL8pGjWpM9S4X767/mRLs=;
+        b=FRO37jilQlcEW42Zyc0mENv5/AJkY8TWJY1tIOdQ2UjCxbue6LQds3pK31nquPf52c
+         tMrCIcNPmHuzcaG4atIc828KRxnrZ/lxFeWilvE3fSd7BHXg3QEGfo5nzcvZdtEyhwyR
+         JMadIJNGLAoenb82naBlAyzwKKU2d9KhRLPvkThWYbgfmGd9ABZ+tWWCQSqOvYO0QPVh
+         YWJDzhw7JoMAjU9z/P248skaY1DOTsjdwI9XOWV6bWdzgGQUsQkSmrBUgMNuIXRwX+tS
+         e30QL1frStVONCMaT8l0lMin5q/60/j4rnBzwUKdmoc1I5Zdn0tOM6RAIVWOaJn17POH
+         92ug==
+X-Gm-Message-State: AOAM531P0cZT8QXGej1KIj5lDaAqCfIFgsKmWBha4JbFGpCXtHhCobA5
+        dijscN/6aBkrTle3rM+6CSa19twgQ7xlBZzS
+X-Google-Smtp-Source: ABdhPJx0SQlGY3l1Iex/uIOj+s7306BKiBjXpe7TNPZYQ93AikBWi2sBD2e0mytRMla9cWtSiQir5g==
+X-Received: by 2002:a65:5305:: with SMTP id m5mr25790034pgq.155.1622045699660;
+        Wed, 26 May 2021 09:14:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s80sm16458532pfs.59.2021.05.26.09.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 May 2021 09:14:59 -0700 (PDT)
+Message-ID: <60ae7403.1c69fb81.94680.5115@mx.google.com>
+Date:   Wed, 26 May 2021 09:14:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <4337451.LvFx2qVVIh@kreacher>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.13-rc3-39-gb4a1c81b7736
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc3-39-gb4a1c81b7736)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/26/21 8:01 AM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> One of the previous commits introducing hybrid processor support to
-> intel_pstate broke build with CONFIG_ACPI unset.
-> 
-> Fix that and while at it fix up empty stubs of two functions related
-> to ACPI CPPC.
-> 
-> Fixes: eb3693f0521e ("cpufreq: intel_pstate: hybrid: CPU-specific scaling factor")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc3-39-gb4a1c81b7736)
 
-Hi Rafael,
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc3-39-gb4a1c81b7736/
 
-I still have this build error:
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc3-39-gb4a1c81b7736
+Git Commit: b4a1c81b77364a4a4a03bdd47304a74d95ca4d3b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-../drivers/cpufreq/intel_pstate.c: In function ‘show_base_frequency’:
-../drivers/cpufreq/intel_pstate.c:950:10: error: implicit declaration of function ‘intel_pstate_get_cppc_guranteed’; did you mean ‘intel_pstate_get_epp’? [-Werror=implicit-function-declaration]
-  ratio = intel_pstate_get_cppc_guranteed(policy->cpu);
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
-BTW: s/guranteed/guaranteed/g
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-Thanks.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-> ---
->  drivers/cpufreq/intel_pstate.c |   97 +++++++++++++++++++++--------------------
->  1 file changed, 50 insertions(+), 47 deletions(-)
-> 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -385,9 +385,14 @@ static int intel_pstate_get_cppc_gurante
->  }
->  
->  #else /* CONFIG_ACPI_CPPC_LIB */
-> -static void intel_pstate_set_itmt_prio(int cpu)
-> +static inline void intel_pstate_set_itmt_prio(int cpu)
->  {
->  }
-> +
-> +static inline int intel_pstate_get_cppc_guranteed(int cpu)
-> +{
-> +	return -ENOTSUPP;
-> +}
->  #endif /* CONFIG_ACPI_CPPC_LIB */
->  
->  static void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
-> @@ -470,27 +475,6 @@ static void intel_pstate_exit_perf_limit
->  
->  	acpi_processor_unregister_performance(policy->cpu);
->  }
-> -#else /* CONFIG_ACPI */
-> -static inline void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
-> -{
-> -}
-> -
-> -static inline void intel_pstate_exit_perf_limits(struct cpufreq_policy *policy)
-> -{
-> -}
-> -
-> -static inline bool intel_pstate_acpi_pm_profile_server(void)
-> -{
-> -	return false;
-> -}
-> -#endif /* CONFIG_ACPI */
-> -
-> -#ifndef CONFIG_ACPI_CPPC_LIB
-> -static int intel_pstate_get_cppc_guranteed(int cpu)
-> -{
-> -	return -ENOTSUPP;
-> -}
-> -#endif /* CONFIG_ACPI_CPPC_LIB */
->  
->  static bool intel_pstate_cppc_perf_valid(u32 perf, struct cppc_perf_caps *caps)
->  {
-> @@ -505,6 +489,20 @@ static bool intel_pstate_cppc_perf_caps(
->  
->  	return caps->highest_perf && caps->lowest_perf <= caps->highest_perf;
->  }
-> +#else /* CONFIG_ACPI */
-> +static inline void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
-> +{
-> +}
-> +
-> +static inline void intel_pstate_exit_perf_limits(struct cpufreq_policy *policy)
-> +{
-> +}
-> +
-> +static inline bool intel_pstate_acpi_pm_profile_server(void)
-> +{
-> +	return false;
-> +}
-> +#endif /* CONFIG_ACPI */
->  
->  static void intel_pstate_hybrid_hwp_perf_ctl_parity(struct cpudata *cpu)
->  {
-> @@ -530,7 +528,6 @@ static void intel_pstate_hybrid_hwp_perf
->   */
->  static void intel_pstate_hybrid_hwp_calibrate(struct cpudata *cpu)
->  {
-> -	struct cppc_perf_caps caps;
->  	int perf_ctl_max_phys = cpu->pstate.max_pstate_physical;
->  	int perf_ctl_scaling = cpu->pstate.perf_ctl_scaling;
->  	int perf_ctl_turbo = pstate_funcs.get_turbo();
-> @@ -548,33 +545,39 @@ static void intel_pstate_hybrid_hwp_cali
->  	pr_debug("CPU%d: HWP_CAP guaranteed = %d\n", cpu->cpu, cpu->pstate.max_pstate);
->  	pr_debug("CPU%d: HWP_CAP highest = %d\n", cpu->cpu, cpu->pstate.turbo_pstate);
->  
-> -	if (intel_pstate_cppc_perf_caps(cpu, &caps)) {
-> -		if (intel_pstate_cppc_perf_valid(caps.nominal_perf, &caps)) {
-> -			pr_debug("CPU%d: Using CPPC nominal\n", cpu->cpu);
-> -
-> -			/*
-> -			 * If the CPPC nominal performance is valid, it can be
-> -			 * assumed to correspond to cpu_khz.
-> -			 */
-> -			if (caps.nominal_perf == perf_ctl_max_phys) {
-> -				intel_pstate_hybrid_hwp_perf_ctl_parity(cpu);
-> -				return;
-> -			}
-> -			scaling = DIV_ROUND_UP(cpu_khz, caps.nominal_perf);
-> -		} else if (intel_pstate_cppc_perf_valid(caps.guaranteed_perf, &caps)) {
-> -			pr_debug("CPU%d: Using CPPC guaranteed\n", cpu->cpu);
-> -
-> -			/*
-> -			 * If the CPPC guaranteed performance is valid, it can
-> -			 * be assumed to correspond to max_freq.
-> -			 */
-> -			if (caps.guaranteed_perf == perf_ctl_max) {
-> -				intel_pstate_hybrid_hwp_perf_ctl_parity(cpu);
-> -				return;
-> +#ifdef CONFIG_ACPI
-> +	if (IS_ENABLED(CONFIG_ACPI_CPPC_LIB)) {
-> +		struct cppc_perf_caps caps;
-> +
-> +		if (intel_pstate_cppc_perf_caps(cpu, &caps)) {
-> +			if (intel_pstate_cppc_perf_valid(caps.nominal_perf, &caps)) {
-> +				pr_debug("CPU%d: Using CPPC nominal\n", cpu->cpu);
-> +
-> +				/*
-> +				 * If the CPPC nominal performance is valid, it
-> +				 * can be assumed to correspond to cpu_khz.
-> +				 */
-> +				if (caps.nominal_perf == perf_ctl_max_phys) {
-> +					intel_pstate_hybrid_hwp_perf_ctl_parity(cpu);
-> +					return;
-> +				}
-> +				scaling = DIV_ROUND_UP(cpu_khz, caps.nominal_perf);
-> +			} else if (intel_pstate_cppc_perf_valid(caps.guaranteed_perf, &caps)) {
-> +				pr_debug("CPU%d: Using CPPC guaranteed\n", cpu->cpu);
-> +
-> +				/*
-> +				 * If the CPPC guaranteed performance is valid,
-> +				 * it can be assumed to correspond to max_freq.
-> +				 */
-> +				if (caps.guaranteed_perf == perf_ctl_max) {
-> +					intel_pstate_hybrid_hwp_perf_ctl_parity(cpu);
-> +					return;
-> +				}
-> +				scaling = DIV_ROUND_UP(max_freq, caps.guaranteed_perf);
->  			}
-> -			scaling = DIV_ROUND_UP(max_freq, caps.guaranteed_perf);
->  		}
->  	}
-> +#endif
->  	/*
->  	 * If using the CPPC data to compute the HWP-to-frequency scaling factor
->  	 * doesn't work, use the HWP_CAP gauranteed perf for this purpose with
-> 
-> 
-> 
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
--- 
-~Randy
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
