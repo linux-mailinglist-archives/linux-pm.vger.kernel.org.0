@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C95E393751
-	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 22:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4023F393755
+	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 22:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbhE0Uta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 16:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S235956AbhE0Utd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 16:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235754AbhE0Ut3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 16:49:29 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB0BC061574;
-        Thu, 27 May 2021 13:47:55 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id b12so2595582ljp.1;
-        Thu, 27 May 2021 13:47:55 -0700 (PDT)
+        with ESMTP id S235886AbhE0Utb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 16:49:31 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9D8C061574;
+        Thu, 27 May 2021 13:47:56 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id q1so2064699lfo.3;
+        Thu, 27 May 2021 13:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z6XYLh1xsU0IYTP+MRwPK4s+JoJz/GD/n26DAwUG3/U=;
-        b=G1G+vfJswwk+rozkW+WEdxgpHHU+plUQ4ORzfZGu1PMRR+/UAk7MaetTvxldQDVWEs
-         Fi+7+bGDMXoPhK1s6hDjnHZ3unpdNk48ANdLdPXAsCncuTaX+L+6Q/0zZcFCPyiZjBC1
-         q33MF77CJ+hemLwh+8wviihF6Zqz+PcyEkySt8mWX9b4i7Vs4vCFDwHWYnkndXSwbMqL
-         g1NyZIegndBbaJrz4x3buRGgmkMIMgyJbAQjnBxo52GUFX0orGU81qtlwxoXp6+G220P
-         YEpU/yc8f8iCI8p/jxUHnzaR7DmEX6UHaMn3HsbnjQ3Jdub4T2MYIXVVC7DMQCmZ6vpY
-         pkhQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zKZDR8p/L3oeefldCNHrdGkondf8D1T4dxfFGeyIb9I=;
+        b=lOrHxsMBCXvtAApqy+a2EsgUPsb8nIhuq4mVt4TY1wxkvZsiwg71//YZVhUKC1EtbF
+         voh8HmMDlmVeCi/lttDteIN14Es2VuhFqk53KIiyvBHWyLNhKDuS4deiEUyZwjaK3dv5
+         Tda9h4CX0O18RnjD+202C6myy6m1AhGE1Gwat92l7eYZiwRCbnACV+OpsMeK80zEJsYR
+         LEc1XvmPenMUkrtYcK+lA/G/LJHCB9lJDblGZkYTVoanWHR+586PrvFOrgpshaVm8nSD
+         vQUiv886DngYHk58dm3hayhTPK0wOJanYgAQgmi72U5Ov4Hm1sMMrGNIaNhwv949tlSE
+         4LRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z6XYLh1xsU0IYTP+MRwPK4s+JoJz/GD/n26DAwUG3/U=;
-        b=bRGvTDhb+0zuIeqwxy+cOQIstQw2oysDNOb7vhuh0q2mk5keuYrQbsp0CrBq/Kaa+d
-         GikcV5/6bQCjjN00jqifylDCqSq9Oja1DYK8BqD5vv2uCrunJEh/XDjdX2LLJ/ei1Enn
-         bStu0kr1ZeZUpxUTTbmPnai6KQyq7pWPdqUfZkqe4WeXgfASs9uySOxgvje53QPjTGmN
-         Hh733HZmPBhGjSUmk9pQWpSQ3E3NEmFgsrd4q+wsgHLyyAeItxZIZg9gwwn6zF1qBoyP
-         OjkiWusbQEf+3GHFVwq5w0hFTsohMssbq7M5054mRLSrsuYfcy3luX4mCLZNNfd/Qd7t
-         q4OA==
-X-Gm-Message-State: AOAM530251JzjjwCjfB39Jte9RM96DIaGxGfUzGUxwLbyECVusJtvwej
-        pGIUAvM31cZJb1TI11wXawo=
-X-Google-Smtp-Source: ABdhPJyi8sS76DRNiEIxSXwhc7gTO6BgdB5Vso6aUr4xGW+Yej3cyCZC1Oh3l2969uWldtr1vJA7CQ==
-X-Received: by 2002:a2e:a41c:: with SMTP id p28mr4041248ljn.427.1622148473873;
-        Thu, 27 May 2021 13:47:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zKZDR8p/L3oeefldCNHrdGkondf8D1T4dxfFGeyIb9I=;
+        b=e4dsJ8HRQaHjiI7S8COMZKeMnkz2f72Jt8U6S6uKgGo7LhTGnif6l7n/ifXj7mV7Ne
+         Gy9W8CvzMkJbmaI1XgR2TNsnnx0M2oPAcoFzRMspTurxcsABx/klyNOmYTYDt4BVH0ce
+         zdn0UqXmp4QNjbeFRkyJwTpkC+uflOP9IsSMV8Uol4OwKv0xgpcDJRQIraWm9JLER2p3
+         706uMNkjBeu4XKjvzUWlA+CNbh2PASJh58PhaUTewD2e3/Czyc8c4M7gbOwMyZbkWFUQ
+         e5Ulug2PJ8g4Rfv2TiOyaZ82wPqolaWXJi7IEieyHl40SmmlBedhRvNflBK3By1wZfjW
+         Vk0A==
+X-Gm-Message-State: AOAM53249nA5bAdwWnp/VM9+zzlxxAq655UaNMbt3sRIPKZoUmnpwHIj
+        tAc2fyyOjV86kEadt3UlLBg=
+X-Google-Smtp-Source: ABdhPJwCXmOj2kjtKVeyRWvf5R+DM9y7dbzhevgKqcpNUmWjgDj/6z/q7XvxR+MQCwAG+3plWs1dqA==
+X-Received: by 2002:ac2:5a45:: with SMTP id r5mr3747975lfn.342.1622148475251;
+        Thu, 27 May 2021 13:47:55 -0700 (PDT)
 Received: from localhost.localdomain (46-138-12-55.dynamic.spd-mgts.ru. [46.138.12.55])
-        by smtp.gmail.com with ESMTPSA id 10sm347297ljq.39.2021.05.27.13.47.52
+        by smtp.gmail.com with ESMTPSA id 10sm347297ljq.39.2021.05.27.13.47.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 13:47:53 -0700 (PDT)
+        Thu, 27 May 2021 13:47:54 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,120 +67,77 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v3 00/14] NVIDIA Tegra memory and power management changes for 5.14
-Date:   Thu, 27 May 2021 23:47:28 +0300
-Message-Id: <20210527204742.10379-1-digetx@gmail.com>
+Subject: [PATCH v3 01/14] regulator: core: Add regulator_sync_voltage_rdev()
+Date:   Thu, 27 May 2021 23:47:29 +0300
+Message-Id: <20210527204742.10379-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210527204742.10379-1-digetx@gmail.com>
+References: <20210527204742.10379-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series:
+Some NVIDIA Tegra devices use a CPU soft-reset method for the reboot and
+in this case we need to restore the coupled voltages to the state that is
+suitable for hardware during boot. Add new regulator_sync_voltage_rdev()
+helper which is needed by regulator drivers in order to sync voltage of
+a coupled regulators.
 
-  1. Adds CPU/core voltage bump before system is rebooted.
-  2. Adds new devm_tegra_core_dev_init_opp_table() helper and switches
-     Tegra memory drivers to use it.
-  3. Adds compile-testing support to the Tegra memory drivers.
-  4. Adds Tegra SoC core power domain support.
+Acked-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/regulator/core.c         | 23 +++++++++++++++++++++++
+ include/linux/regulator/driver.h |  1 +
+ 2 files changed, 24 insertions(+)
 
-Changelog:
-
-v3: - Dropped "Detach coupled regulator before coupling count is dropped"
-      patch that was added in v2 since it missed regulator locking and
-      it should be more reasonable to add a new generic hook for syncing
-      before detaching. For now it's optional to sync Tegra SoC regulators
-      before detaching since it's not something that happens in practice,
-      hence it's more optimal to simply drop that feature.
-
-    - Added more stubs for T210 clk driver which should fix compile-testing
-      problem reported for v2 by kernel robot.
-
-    - Added COMMON_CLK for COMPILE_TEST of memory drivers since for
-      today the problem of compile-testing of legacy platforms that use
-      HAVE_LEGACY_CLK isn't solved, we will be able to remove it after
-      fixing the legacy platforms.
-
-    - Factored out new PMC driver state syncing feature into a separate
-      patch "pmc: Add driver state syncing", which was requested by
-      Ulf Hansson in a review comment to v2.
-
-    - Added r-b from Ulf Hansson to the PMC binding-update patch that he
-      gave to v2.
-
-v2: - Added more clk stubs that should fix build error reported by the
-      kernel bot to v1 for the T210 memory driver.
-
-    - Added r-b from Krzysztof Kozlowski to the memory patches.
-
-    - Added back voltage restore on detaching of coupled regulators to
-      the T20 regulator coupler which previously got missed by accident.
-
-    - Added new patch:
-
-        regulator: core: Detach coupled regulator before coupling count is dropped
-
-      It fixes skipped voltage balancing on detaching of regulators which I
-      happened to notice due to the recent regression of the MAX77620 driver
-      that made driver to re-probe and detach coupled regulators.
-
-v1: - Merged previous patches into this single series.
-
-    - Added ack from Rob Herring to the core domain DT binding patch.
-
-    - Implemented suggestions that were given by Krzysztof Kozlowski:
-
-        - Factored out soc_is_tegra() stub into standalone patch.
-        - Updated tags of the "Fix compilation warnings on 64bit platforms"
-          patch, added reported-by from lkp robot and removed suggested-by
-          from Nathan Chancellor.
-        - Switched to use use BIT() macro.
-
-    - Added r-b from Krzysztof Kozlowski to "Enable compile testing for
-      all drivers" patch.
-
-    - Added r-b from Nathan Chancellor.
-
-    - Dropped voltage floor/ceiling from devm_tegra_core_dev_init_opp_table()
-      since only memory drivers now need to initialize voltage vote and they
-      don't need floor/ceil. This was suggested by Viresh Kumar.
-
-Dmitry Osipenko (14):
-  regulator: core: Add regulator_sync_voltage_rdev()
-  soc/tegra: regulators: Bump voltages on system reboot
-  soc/tegra: Add stub for soc_is_tegra()
-  soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-  soc/tegra: fuse: Add stubs needed for compile-testing
-  clk: tegra: Add stubs needed for compile-testing
-  memory: tegra: Fix compilation warnings on 64bit platforms
-  memory: tegra: Enable compile testing for all drivers
-  memory: tegra20-emc: Use devm_tegra_core_dev_init_opp_table()
-  memory: tegra30-emc: Use devm_tegra_core_dev_init_opp_table()
-  dt-bindings: soc: tegra-pmc: Document core power domain
-  soc/tegra: pmc: Add core power domain
-  soc/tegra: pmc: Add driver state syncing
-  soc/tegra: regulators: Support core domain state syncing
-
- .../arm/tegra/nvidia,tegra20-pmc.yaml         |  35 +++++
- drivers/memory/tegra/Kconfig                  |  16 +-
- drivers/memory/tegra/tegra124-emc.c           |   4 +-
- drivers/memory/tegra/tegra20-emc.c            |  48 +-----
- drivers/memory/tegra/tegra30-emc.c            |  52 +------
- drivers/regulator/core.c                      |  23 +++
- drivers/soc/tegra/Kconfig                     |  14 ++
- drivers/soc/tegra/common.c                    |  97 ++++++++++++
- drivers/soc/tegra/pmc.c                       | 143 ++++++++++++++++++
- drivers/soc/tegra/regulators-tegra20.c        |  94 +++++++++++-
- drivers/soc/tegra/regulators-tegra30.c        |  93 +++++++++++-
- include/linux/clk/tegra.h                     |  96 +++++++++---
- include/linux/regulator/driver.h              |   1 +
- include/soc/tegra/common.h                    |  31 ++++
- include/soc/tegra/fuse.h                      |  20 ++-
- include/soc/tegra/pmc.h                       |   6 +
- 16 files changed, 647 insertions(+), 126 deletions(-)
-
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index e20e77e4c159..aae978c0c148 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -4111,6 +4111,29 @@ int regulator_set_voltage_time_sel(struct regulator_dev *rdev,
+ }
+ EXPORT_SYMBOL_GPL(regulator_set_voltage_time_sel);
+ 
++int regulator_sync_voltage_rdev(struct regulator_dev *rdev)
++{
++	int ret;
++
++	regulator_lock(rdev);
++
++	if (!rdev->desc->ops->set_voltage &&
++	    !rdev->desc->ops->set_voltage_sel) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* balance only, if regulator is coupled */
++	if (rdev->coupling_desc.n_coupled > 1)
++		ret = regulator_balance_voltage(rdev, PM_SUSPEND_ON);
++	else
++		ret = -EOPNOTSUPP;
++
++out:
++	regulator_unlock(rdev);
++	return ret;
++}
++
+ /**
+  * regulator_sync_voltage - re-apply last regulator output voltage
+  * @regulator: regulator source
+diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
+index 4ea520c248e9..35e5a611db81 100644
+--- a/include/linux/regulator/driver.h
++++ b/include/linux/regulator/driver.h
+@@ -540,6 +540,7 @@ int regulator_set_current_limit_regmap(struct regulator_dev *rdev,
+ int regulator_get_current_limit_regmap(struct regulator_dev *rdev);
+ void *regulator_get_init_drvdata(struct regulator_init_data *reg_init_data);
+ int regulator_set_ramp_delay_regmap(struct regulator_dev *rdev, int ramp_delay);
++int regulator_sync_voltage_rdev(struct regulator_dev *rdev);
+ 
+ /*
+  * Helper functions intended to be used by regulator drivers prior registering
 -- 
 2.30.2
 
