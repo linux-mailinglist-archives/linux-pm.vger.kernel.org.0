@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D91DE39399D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 01:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227373939A5
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 01:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbhE0X4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 19:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S236867AbhE0X4U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 19:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236679AbhE0X4F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 19:56:05 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D401C061763;
-        Thu, 27 May 2021 16:54:27 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id w33so2629225lfu.7;
-        Thu, 27 May 2021 16:54:27 -0700 (PDT)
+        with ESMTP id S236787AbhE0X4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 19:56:11 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC22C06138D;
+        Thu, 27 May 2021 16:54:28 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j6so2596558lfr.11;
+        Thu, 27 May 2021 16:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XRjE9GrdNwqNM0RZjj5ET9YAbdAVTqOUbODt0FYhk9w=;
-        b=rX/ZIVZQLHYVTCjrOngMSK7RGxplAjzMzM+fgVD+VULrFO+lN/uVrNB82/toq+PihP
-         XRIA8TF0SLBTDSpm9m3T9hrtRiz643DSYh6ePj3HFbm5LBTEj+dNUL6XL9y9pUt6NGuJ
-         57avwh/8G24pxsUVQSTfHWrMjgrdihCwlsBW7tXc4/Y/lf95fMmrSXhD9IwzqtgFT67T
-         H9bzUmWJ2HsxQDJoR2Ul0UyNxHceN8TX4O/cpvLZBUMJGq2gir0DtjDJZ6KJgs68xoZn
-         zbHnjdmpMtJ/kxVIHEAT3l3akUPTtWsFfA1HqgACIbnVI9Du7nZNXccfXm6iJO8bLeZ4
-         9aNA==
+        bh=iV9WsCaJBCveviAJl/4FdlzG92k3/7giwze1EtuzJCY=;
+        b=mlBaTchmczkO86cPCWswNjE+0YBLmGEk9pDAqo3qdvqxjzYX90jjNBtqt9r/HcsN3U
+         nrlCugLsV7XFxcvqZGS+Vsg7mhGVKhVfmHyfg8yQTpWhCbmz6VBVbEK5y8pQNy4jaRe6
+         hcTcOu3K/nyDcbA8ZFde8KHkrT1bZfFodoS68Hd77amM1TvzgT9yb7WB8ssl7c9FC0KL
+         10NWmHcc2+RcDRLeHrwEPg7nF10FkPMbnWYHCtFhqtLjMUlNLlEgt5E+4m/RyEVFB+iD
+         PkVH/7+XhXg+SDDT9v/0HV3eTcy7n4X+Qbo/irl2S7M4fOhF2huF7JwmFLcsOIJi14kJ
+         n2Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XRjE9GrdNwqNM0RZjj5ET9YAbdAVTqOUbODt0FYhk9w=;
-        b=HkKGDOwLa91wPNpDuxBTXxixINnYnqHHfoMOcaapFp/GTRPHRex58hC7V5hxaQ2XEE
-         2XdpP0cJYDRQTDXyODJOnLkdvxAVhskgrOA4FmfDqi+3f98GiQ32ztuCAK6zzBFJVPNw
-         Dl9FF9Lq9vYPOjO8UCX3xJ7JsJyqHyV2Uy7F/IQEy4ltreY89hgv2tCynofm/lxRZJsR
-         jEjLx+ISquw7Iwnvx7SZ6HSXruqc+ygZUIdHz2P0h8Iy+1tcwOs4H+nsImvvsPv6qxg+
-         xwSFn88CxpVWFsaJFUoij9vobAs17rMTOtnLTbN+X63bdgm+wZLGVHK5Y/0qJFnxKygH
-         mmAQ==
-X-Gm-Message-State: AOAM53111X4CMWNlP51w2lK+GQ+xcjpQ7mCMcNGvEtfxmB4QCvteEw6O
-        JTkixgoqQxcPQRO/xmsuIys=
-X-Google-Smtp-Source: ABdhPJxt/NwASdmX7EoYFUuibNqXixobhVLRwb7XjQWy8U3Ed60sHLL/pctvLWu/qW/9A6Hn/GD3aQ==
-X-Received: by 2002:ac2:5edb:: with SMTP id d27mr3990935lfq.181.1622159665695;
-        Thu, 27 May 2021 16:54:25 -0700 (PDT)
+        bh=iV9WsCaJBCveviAJl/4FdlzG92k3/7giwze1EtuzJCY=;
+        b=OfpBKsFvlh8ty+xNcYbXjNQKO3/ie6LRM3gn+pFTAvNILQAfY+hJ74dODsZO8fG0iG
+         IJiq1nOjOR3JGEO5LTDMHSj3mEhAmg+H29OG+vlz+LjdukoruxQAQZ6RPgO677m+ya1P
+         QSIOLerYbN+DFTlQxovcLPwE+lpKsgWz26WFSOa/cyM1uSGaytpbBO9Zv4KY+KbJ7uYy
+         ICN7sEDN2HE6xcycK+z1khbysBjuDVa3bPEhY3QP4aGLTyDG5dqFQZaWLNEE2pTgY0Ff
+         VKhbsFsUdT4jn9qNEGaUcDozd1hcA8z1Ono3398VKfz8uYINvvOeQ58sD/ql/I2+6FNB
+         qa7A==
+X-Gm-Message-State: AOAM531Ec82Hw83Komo8gFPAzkHo+6L1v8AiDHyKPd33l8GvPGN0hquy
+        GTc6OSREUIyRNfrr8exdp0k=
+X-Google-Smtp-Source: ABdhPJz+8wPb16tDTjZ7gnj7tv+SmtlVkCg255eLfHTGnc9wMfQZ1s55UFCxqpiDEWwzhmSVQ6RaJQ==
+X-Received: by 2002:ac2:4dba:: with SMTP id h26mr3934850lfe.182.1622159666646;
+        Thu, 27 May 2021 16:54:26 -0700 (PDT)
 Received: from localhost.localdomain (46-138-12-55.dynamic.spd-mgts.ru. [46.138.12.55])
-        by smtp.gmail.com with ESMTPSA id t129sm319000lff.109.2021.05.27.16.54.24
+        by smtp.gmail.com with ESMTPSA id t129sm319000lff.109.2021.05.27.16.54.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 16:54:25 -0700 (PDT)
+        Thu, 27 May 2021 16:54:26 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v5 08/14] memory: tegra: Enable compile testing for all drivers
-Date:   Fri, 28 May 2021 02:54:07 +0300
-Message-Id: <20210527235413.23120-9-digetx@gmail.com>
+Subject: [PATCH v5 09/14] memory: tegra20-emc: Use devm_tegra_core_dev_init_opp_table()
+Date:   Fri, 28 May 2021 02:54:08 +0300
+Message-Id: <20210527235413.23120-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210527235413.23120-1-digetx@gmail.com>
 References: <20210527235413.23120-1-digetx@gmail.com>
@@ -79,73 +79,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable compile testing for all Tegra memory drivers.
+Use common devm_tegra_core_dev_init_opp_table() helper for the OPP table
+initialization.
 
+Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/memory/tegra/Kconfig | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/memory/tegra/tegra20-emc.c | 48 +++---------------------------
+ 1 file changed, 4 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
-index a70967a56e52..71bba2345bce 100644
---- a/drivers/memory/tegra/Kconfig
-+++ b/drivers/memory/tegra/Kconfig
-@@ -2,16 +2,18 @@
- config TEGRA_MC
- 	bool "NVIDIA Tegra Memory Controller support"
- 	default y
--	depends on ARCH_TEGRA
-+	depends on ARCH_TEGRA || (COMPILE_TEST && COMMON_CLK)
- 	select INTERCONNECT
- 	help
- 	  This driver supports the Memory Controller (MC) hardware found on
- 	  NVIDIA Tegra SoCs.
+diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
+index da8a0da8da79..a534197a5fb2 100644
+--- a/drivers/memory/tegra/tegra20-emc.c
++++ b/drivers/memory/tegra/tegra20-emc.c
+@@ -908,49 +908,6 @@ static int tegra_emc_interconnect_init(struct tegra_emc *emc)
+ 	return err;
+ }
  
-+if TEGRA_MC
-+
- config TEGRA20_EMC
- 	tristate "NVIDIA Tegra20 External Memory Controller driver"
- 	default y
--	depends on TEGRA_MC && ARCH_TEGRA_2x_SOC
-+	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select PM_DEVFREQ
- 	help
-@@ -23,7 +25,7 @@ config TEGRA20_EMC
- config TEGRA30_EMC
- 	tristate "NVIDIA Tegra30 External Memory Controller driver"
- 	default y
--	depends on TEGRA_MC && ARCH_TEGRA_3x_SOC
-+	depends on ARCH_TEGRA_3x_SOC || COMPILE_TEST
- 	select PM_OPP
- 	help
- 	  This driver is for the External Memory Controller (EMC) found on
-@@ -34,8 +36,8 @@ config TEGRA30_EMC
- config TEGRA124_EMC
- 	tristate "NVIDIA Tegra124 External Memory Controller driver"
- 	default y
--	depends on TEGRA_MC && ARCH_TEGRA_124_SOC
--	select TEGRA124_CLK_EMC
-+	depends on ARCH_TEGRA_124_SOC || COMPILE_TEST
-+	select TEGRA124_CLK_EMC if ARCH_TEGRA
- 	select PM_OPP
- 	help
- 	  This driver is for the External Memory Controller (EMC) found on
-@@ -49,10 +51,12 @@ config TEGRA210_EMC_TABLE
+-static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+-{
+-	u32 hw_version = BIT(tegra_sku_info.soc_process_id);
+-	struct opp_table *hw_opp_table;
+-	int err;
+-
+-	hw_opp_table = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
+-	err = PTR_ERR_OR_ZERO(hw_opp_table);
+-	if (err) {
+-		dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
+-		return err;
+-	}
+-
+-	err = dev_pm_opp_of_add_table(emc->dev);
+-	if (err) {
+-		if (err == -ENODEV)
+-			dev_err(emc->dev, "OPP table not found, please update your device tree\n");
+-		else
+-			dev_err(emc->dev, "failed to add OPP table: %d\n", err);
+-
+-		goto put_hw_table;
+-	}
+-
+-	dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
+-		      hw_version, clk_get_rate(emc->clk) / 1000000);
+-
+-	/* first dummy rate-set initializes voltage state */
+-	err = dev_pm_opp_set_rate(emc->dev, clk_get_rate(emc->clk));
+-	if (err) {
+-		dev_err(emc->dev, "failed to initialize OPP clock: %d\n", err);
+-		goto remove_table;
+-	}
+-
+-	return 0;
+-
+-remove_table:
+-	dev_pm_opp_of_remove_table(emc->dev);
+-put_hw_table:
+-	dev_pm_opp_put_supported_hw(hw_opp_table);
+-
+-	return err;
+-}
+-
+ static void devm_tegra_emc_unset_callback(void *data)
+ {
+ 	tegra20_clk_set_emc_round_callback(NULL, NULL);
+@@ -1077,6 +1034,7 @@ static int tegra_emc_devfreq_init(struct tegra_emc *emc)
  
- config TEGRA210_EMC
- 	tristate "NVIDIA Tegra210 External Memory Controller driver"
--	depends on TEGRA_MC && ARCH_TEGRA_210_SOC
-+	depends on ARCH_TEGRA_210_SOC || COMPILE_TEST
- 	select TEGRA210_EMC_TABLE
- 	help
- 	  This driver is for the External Memory Controller (EMC) found on
- 	  Tegra210 chips. The EMC controls the external DRAM on the board.
- 	  This driver is required to change memory timings / clock rate for
- 	  external memory.
+ static int tegra_emc_probe(struct platform_device *pdev)
+ {
++	struct tegra_core_opp_params opp_params = {};
+ 	struct device_node *np;
+ 	struct tegra_emc *emc;
+ 	int irq, err;
+@@ -1122,7 +1080,9 @@ static int tegra_emc_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return err;
+ 
+-	err = tegra_emc_opp_table_init(emc);
++	opp_params.init_state = true;
 +
-+endif
++	err = devm_tegra_core_dev_init_opp_table(&pdev->dev, &opp_params);
+ 	if (err)
+ 		return err;
+ 
 -- 
 2.30.2
 
