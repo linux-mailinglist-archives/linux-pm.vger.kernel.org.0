@@ -2,104 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D3239274C
-	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 08:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9EE3927A6
+	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 08:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbhE0GXV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 02:23:21 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:64220 "EHLO m43-7.mailgun.net"
+        id S229635AbhE0GdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 02:33:09 -0400
+Received: from mga07.intel.com ([134.134.136.100]:8529 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229611AbhE0GXU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 May 2021 02:23:20 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622096507; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=ZsOoxzJB/hW7m7oMPe7Q/pMXsno0+4bu4SJySzTXZPo=; b=S3kiFDutb16/0CJEgygJezug3R3y0ElMa7iKJUpT9nITLqpR1pxQcaPo8o91D0CtQBiPmqxb
- hTJ2pGz/zihuOmgSZNjqj0xTFn0lC1oqGLD0PooBXmOxXysQpz9QwCmWkklieBc8knn11oTS
- Hax3gP639bwGH/Je/3iF9KVD3Wg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 60af3a6c063320cd13854115 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 May 2021 06:21:32
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2C9F3C433D3; Thu, 27 May 2021 06:21:32 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.50.22.147] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 373FAC433D3;
-        Thu, 27 May 2021 06:21:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 373FAC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce
- 'assigned-performance-states' property
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
-        rojay@codeaurora.org
-References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org>
- <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
- <20210527061603.cuy5q2jo3pfom7vf@vireshk-i7>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <79465de8-5704-0f58-c2e7-8fb6f6fc9b5d@codeaurora.org>
-Date:   Thu, 27 May 2021 11:51:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S229740AbhE0GdH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 May 2021 02:33:07 -0400
+IronPort-SDR: 2VEHxTv/xFz7Tcz0kMlywJoMuX2epjy+5G5PKDLqfkPrnKln4ewxLk4gjqmqt4u6yDwjrjJGEg
+ y6V1/DZRdK3g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9996"; a="266552002"
+X-IronPort-AV: E=Sophos;i="5.82,334,1613462400"; 
+   d="scan'208";a="266552002"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 23:31:32 -0700
+IronPort-SDR: X238zpK0wHrC9HweNTPfAMRhI04GfUrzQQmMKhEiLxBu3rIu3TD4xvn9X4p5Eap4aGm0AMQNMA
+ eiypcEar/VUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,334,1613462400"; 
+   d="scan'208";a="547557085"
+Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 26 May 2021 23:31:30 -0700
+Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lm9YH-0002bk-Vd; Thu, 27 May 2021 06:31:29 +0000
+Date:   Thu, 27 May 2021 14:31:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ b2864f8ca01d373c62bbfe71fa01695b039edbbf
+Message-ID: <60af3ca7.Oyc3dIv/Nv1FFwF5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210527061603.cuy5q2jo3pfom7vf@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: b2864f8ca01d373c62bbfe71fa01695b039edbbf  Merge branch 'pm-cpufreq' into linux-next
 
+elapsed time: 725m
 
-On 5/27/2021 11:46 AM, Viresh Kumar wrote:
-> On 27-05-21, 11:42, Rajendra Nayak wrote:
->> While most devices within power-domains which support performance states,
->> scale the performance state dynamically, some devices might want to
->> set a static/default performance state while the device is active.
->> These devices typically would also run off a fixed clock and not support
->> dynamically scaling the device's performance, also known as DVFS techniques.
->> Add a property 'assigned-performance-states' which client devices can
->> use to set this default performance state on their power-domains.
->>
->> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
->> ---
->>   .../devicetree/bindings/power/power-domain.yaml    | 50 ++++++++++++++++++++++
->>   1 file changed, 50 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
->> index aed51e9..88cebf2 100644
->> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
->> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
->> @@ -66,6 +66,19 @@ properties:
->>         by the given provider should be subdomains of the domain specified
->>         by this binding.
->>   
->> +  assigned-performance-states:
-> 
-> Why is this named assigned and not "default"? Just curious :)
+configs tested: 154
+configs skipped: 2
 
-I took the cue from assigned-clock-rates/assigned-clock-parents but i am perfectly
-fine calling it default-performance-states as well :)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                         amcore_defconfig
+mips                        jmr3927_defconfig
+powerpc                      ppc44x_defconfig
+mips                        nlm_xlp_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                  mpc866_ads_defconfig
+xtensa                         virt_defconfig
+arm                          ep93xx_defconfig
+s390                                defconfig
+sh                           se7705_defconfig
+powerpc                       maple_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                             ezx_defconfig
+arm                              alldefconfig
+powerpc                    sam440ep_defconfig
+sh                        edosk7760_defconfig
+arm                          iop32x_defconfig
+arm                         lpc32xx_defconfig
+arm                          ixp4xx_defconfig
+sh                          lboxre2_defconfig
+sh                          sdk7780_defconfig
+mips                      malta_kvm_defconfig
+arm                         palmz72_defconfig
+mips                       bmips_be_defconfig
+arm                           sunxi_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                     skiroot_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arc                     nsimosci_hs_defconfig
+mips                         tb0287_defconfig
+arm64                            alldefconfig
+mips                        bcm47xx_defconfig
+h8300                               defconfig
+sh                     sh7710voipgw_defconfig
+mips                           ip22_defconfig
+powerpc                    amigaone_defconfig
+mips                    maltaup_xpa_defconfig
+mips                        maltaup_defconfig
+arm                        realview_defconfig
+mips                         mpc30x_defconfig
+arm                          collie_defconfig
+m68k                        stmark2_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                     tqm8548_defconfig
+arm                        multi_v5_defconfig
+mips                            e55_defconfig
+mips                        omega2p_defconfig
+arm                        mini2440_defconfig
+arm                          badge4_defconfig
+ia64                             alldefconfig
+powerpc                 mpc836x_mds_defconfig
+arm                      jornada720_defconfig
+powerpc                      mgcoge_defconfig
+openrisc                            defconfig
+mips                     loongson1c_defconfig
+m68k                             allmodconfig
+nios2                         3c120_defconfig
+sh                          kfr2r09_defconfig
+arc                      axs103_smp_defconfig
+arm                        cerfcube_defconfig
+mips                           ci20_defconfig
+xtensa                  cadence_csp_defconfig
+arm                       omap2plus_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                     mpc83xx_defconfig
+microblaze                          defconfig
+arm                            qcom_defconfig
+arm                       cns3420vb_defconfig
+arc                        nsim_700_defconfig
+mips                        nlm_xlr_defconfig
+mips                         rt305x_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                      bamboo_defconfig
+sparc64                          alldefconfig
+mips                      maltaaprp_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20210526
+x86_64               randconfig-a001-20210526
+x86_64               randconfig-a006-20210526
+x86_64               randconfig-a003-20210526
+x86_64               randconfig-a004-20210526
+x86_64               randconfig-a002-20210526
+i386                 randconfig-a001-20210526
+i386                 randconfig-a002-20210526
+i386                 randconfig-a005-20210526
+i386                 randconfig-a004-20210526
+i386                 randconfig-a003-20210526
+i386                 randconfig-a006-20210526
+i386                 randconfig-a011-20210526
+i386                 randconfig-a016-20210526
+i386                 randconfig-a015-20210526
+i386                 randconfig-a012-20210526
+i386                 randconfig-a014-20210526
+i386                 randconfig-a013-20210526
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allyesconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210526
+x86_64               randconfig-a013-20210526
+x86_64               randconfig-a012-20210526
+x86_64               randconfig-a014-20210526
+x86_64               randconfig-a016-20210526
+x86_64               randconfig-a015-20210526
+x86_64               randconfig-a011-20210526
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
