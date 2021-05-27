@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE39539376A
-	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 22:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092C539376E
+	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 22:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbhE0Utl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 16:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S236325AbhE0Utm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 16:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbhE0Uth (ORCPT
+        with ESMTP id S236045AbhE0Uth (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 16:49:37 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C31C061760;
-        Thu, 27 May 2021 13:48:02 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id w7so2564724lji.6;
-        Thu, 27 May 2021 13:48:02 -0700 (PDT)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DB8C061763;
+        Thu, 27 May 2021 13:48:03 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id e2so2578575ljk.4;
+        Thu, 27 May 2021 13:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Hh0E0lNRUm1mrVubbzi0uRUQqD90YPh9J/68C68CTo4=;
-        b=K+SZRhJvmrFYEcoQ7qH4v/W+bWF3fdWIkY1tjIdM6r8sxF5qMwM50I/pJdQNxPj2Hz
-         JPTAT2IvOf88TI7F1uheLfbw2dKNT8QtvDTH5fnm1Y+FJg0X5XRTRb4Rr7fnHdXBeMQW
-         vL+m+UQOSxFXDAbmtZFIHQw2/0lhbplUelvIsw2l40cO5sWfeAfjQsmTGHQYNsm/fFvL
-         2bJl6BpWYPig+6qenh+ZtgkwweKA+LUcuMyEhXgmJvjYRpm61M3x4+hEsIOdzHzE6E6q
-         oc6gS9sPLkd6YcXjNvOAZmuxRJW91hEB5EgGchHsxA8iQPj8dg8FUoqQD44aV3axX34G
-         QE8A==
+        bh=PnHT/nk8CJodgkwuBSRTekimstD88D/By8a3gAk3kxw=;
+        b=palSs2ovhpm3GLHjVJgVWfSUR62+snPsfg9/z1qkuvycX5RDA2cwyHqNof6zKW31dJ
+         lTZD6Fs5nchkWmLqfsSQb8V01eNqMu9DpDRSZ5Zu8KE+oQo/eQbonRtl8W8AURSOUwQ1
+         kWcV4CE5csd0TwlReDGs7cDXi8XJIJ2PM3sL36rJLtemEwjj3JNygyvXEZ9jh4hBvY8E
+         8viVgsd+QrLWM3UdUYZ+Bg9ATx/x3/fAqGGk/RTfONCHqTs0m3arSF+2oEX6A/DWNh+E
+         wGz7kklaZkEGys/IjFKNxb6kkjjmXIdBe8+GnoLoLOpXeXXpafP5e9eSPRRxBPDZhyoE
+         z3LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Hh0E0lNRUm1mrVubbzi0uRUQqD90YPh9J/68C68CTo4=;
-        b=ikAB0gDvobl1vQRVXimS4V9MUWsOq/4BKA0R8AdoLVg59cqgMJREIa1D1DwIg6851+
-         sU9Rjut0ozDb7d+fgapUKJOX69Zc2aSpSFU2L4nfyUOtZyhrFUt8AlEH9dyxzdwV0xCa
-         AlqtuHWHHCiAv4Q0v2uGR1Z73b+DK3Efqvqyk57NQDdNyvcTn0bZIWyVSU9TLomRcSvs
-         rLxUt6TjICfVVZgOYxQBTAvUMpeF36CZQ4uv9hzt6MH/ECRCtpofoPikU5nD4KqLvbm+
-         d6oXVHMH0gO4Ezbj3XZ/AAlRONKA6mFH3sYCAKjmkNcWMpru39IfxHF1H47w3cJuKPMn
-         wkAA==
-X-Gm-Message-State: AOAM5314UTWUx82bixzwGsYc9H3qMEbhzXIPY/B8pjVV7v16KKcVWc+9
-        q0DXoWCPEYh5qAoF5HL2JWM=
-X-Google-Smtp-Source: ABdhPJw8zFp4MTPGT8xbzVVgCj8sNyzKGTPxHysbj/43ISJH0KtpgLb58hcr5socKchaufBL9l1ZqQ==
-X-Received: by 2002:a05:651c:106a:: with SMTP id y10mr4122729ljm.470.1622148480721;
-        Thu, 27 May 2021 13:48:00 -0700 (PDT)
+        bh=PnHT/nk8CJodgkwuBSRTekimstD88D/By8a3gAk3kxw=;
+        b=jyudNKJbzLGe9018QWoTjBDTFAPxf2fC13wsbP4laCeZ9Y+5jjz55/UhvtpegHUTgA
+         ViND61/Xkm6v5tsfVP5uGvdoAygwYhlF9C+kXsuhbnfxKSeeAoLg/ZRuWiqubTTwIihe
+         z8VUIlABp+dWKuL82HUHLluGeFX+8prAYl1m865BUBAj9evLzAGEG2L3Zz53I15IA4qA
+         z1ivdAHq63C0hQfAXG/vdju7hu6ZRt4IMqMNDoncl0fG1S+TlIYv/L8JBcbzLLp9CblH
+         1tcEtlxELY9XjxQTG8vjs05+tYJkQMhAtseYPOMloSpKr9ekHKN2rbRmm8qWxmNfXqg+
+         KIIg==
+X-Gm-Message-State: AOAM533X4pn4Q9pHtwjyvSWiLdcsqIuHbp9plianeIHhu9KwmVOpxXCa
+        EgDKCSdF675aDvHa0R9RCzo=
+X-Google-Smtp-Source: ABdhPJxuPNZQAb9teMzr4D3kebJBEENLfmjh1BWjGyq2oaeaq3k83MSvnXYyWiHHUlqxdrMenFgD+Q==
+X-Received: by 2002:a2e:bc23:: with SMTP id b35mr4023105ljf.378.1622148481836;
+        Thu, 27 May 2021 13:48:01 -0700 (PDT)
 Received: from localhost.localdomain (46-138-12-55.dynamic.spd-mgts.ru. [46.138.12.55])
-        by smtp.gmail.com with ESMTPSA id 10sm347297ljq.39.2021.05.27.13.47.59
+        by smtp.gmail.com with ESMTPSA id 10sm347297ljq.39.2021.05.27.13.48.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 13:48:00 -0700 (PDT)
+        Thu, 27 May 2021 13:48:01 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v3 06/14] clk: tegra: Add stubs needed for compile-testing
-Date:   Thu, 27 May 2021 23:47:34 +0300
-Message-Id: <20210527204742.10379-7-digetx@gmail.com>
+Subject: [PATCH v3 07/14] memory: tegra: Fix compilation warnings on 64bit platforms
+Date:   Thu, 27 May 2021 23:47:35 +0300
+Message-Id: <20210527204742.10379-8-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210527204742.10379-1-digetx@gmail.com>
 References: <20210527204742.10379-1-digetx@gmail.com>
@@ -79,140 +79,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add stubs needed for compile-testing of Tegra memory drivers.
+Fix compilation warning on 64bit platforms caused by implicit promotion
+of 32bit signed integer to a 64bit unsigned value which happens after
+enabling compile-testing of the EMC drivers.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- include/linux/clk/tegra.h | 96 ++++++++++++++++++++++++++++++---------
- 1 file changed, 75 insertions(+), 21 deletions(-)
+ drivers/memory/tegra/tegra124-emc.c | 4 ++--
+ drivers/memory/tegra/tegra30-emc.c  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
-index f7ff722a03dd..5667fe7a979c 100644
---- a/include/linux/clk/tegra.h
-+++ b/include/linux/clk/tegra.h
-@@ -123,20 +123,6 @@ static inline void tegra_cpu_clock_resume(void)
- }
- #endif
+diff --git a/drivers/memory/tegra/tegra124-emc.c b/drivers/memory/tegra/tegra124-emc.c
+index 5699d909abc2..a21ca8e0841a 100644
+--- a/drivers/memory/tegra/tegra124-emc.c
++++ b/drivers/memory/tegra/tegra124-emc.c
+@@ -272,8 +272,8 @@
+ #define EMC_PUTERM_ADJ				0x574
  
--extern int tegra210_plle_hw_sequence_start(void);
--extern bool tegra210_plle_hw_sequence_is_enabled(void);
--extern void tegra210_xusb_pll_hw_control_enable(void);
--extern void tegra210_xusb_pll_hw_sequence_start(void);
--extern void tegra210_sata_pll_hw_control_enable(void);
--extern void tegra210_sata_pll_hw_sequence_start(void);
--extern void tegra210_set_sata_pll_seq_sw(bool state);
--extern void tegra210_put_utmipll_in_iddq(void);
--extern void tegra210_put_utmipll_out_iddq(void);
--extern int tegra210_clk_handle_mbist_war(unsigned int id);
--extern void tegra210_clk_emc_dll_enable(bool flag);
--extern void tegra210_clk_emc_dll_update_setting(u32 emc_dll_src_value);
--extern void tegra210_clk_emc_update_setting(u32 emc_src_value);
--
- struct clk;
- struct tegra_emc;
+ #define DRAM_DEV_SEL_ALL			0
+-#define DRAM_DEV_SEL_0				(2 << 30)
+-#define DRAM_DEV_SEL_1				(1 << 30)
++#define DRAM_DEV_SEL_0				BIT(31)
++#define DRAM_DEV_SEL_1				BIT(30)
  
-@@ -144,17 +130,10 @@ typedef long (tegra20_clk_emc_round_cb)(unsigned long rate,
- 					unsigned long min_rate,
- 					unsigned long max_rate,
- 					void *arg);
--
--void tegra20_clk_set_emc_round_callback(tegra20_clk_emc_round_cb *round_cb,
--					void *cb_arg);
--int tegra20_clk_prepare_emc_mc_same_freq(struct clk *emc_clk, bool same);
--
- typedef int (tegra124_emc_prepare_timing_change_cb)(struct tegra_emc *emc,
- 						    unsigned long rate);
- typedef void (tegra124_emc_complete_timing_change_cb)(struct tegra_emc *emc,
- 						      unsigned long rate);
--void tegra124_clk_set_emc_callbacks(tegra124_emc_prepare_timing_change_cb *prep_cb,
--				    tegra124_emc_complete_timing_change_cb *complete_cb);
+ #define EMC_CFG_POWER_FEATURES_MASK		\
+ 	(EMC_CFG_DYN_SREF | EMC_CFG_DRAM_ACPD | EMC_CFG_DRAM_CLKSTOP_SR | \
+diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
+index 829f6d673c96..a2f2738ccb94 100644
+--- a/drivers/memory/tegra/tegra30-emc.c
++++ b/drivers/memory/tegra/tegra30-emc.c
+@@ -150,8 +150,8 @@
+ #define EMC_SELF_REF_CMD_ENABLED		BIT(0)
  
- struct tegra210_clk_emc_config {
- 	unsigned long rate;
-@@ -176,8 +155,83 @@ struct tegra210_clk_emc_provider {
- 			const struct tegra210_clk_emc_config *config);
- };
+ #define DRAM_DEV_SEL_ALL			(0 << 30)
+-#define DRAM_DEV_SEL_0				(2 << 30)
+-#define DRAM_DEV_SEL_1				(1 << 30)
++#define DRAM_DEV_SEL_0				BIT(31)
++#define DRAM_DEV_SEL_1				BIT(30)
+ #define DRAM_BROADCAST(num) \
+ 	((num) > 1 ? DRAM_DEV_SEL_ALL : DRAM_DEV_SEL_0)
  
-+#ifdef CONFIG_ARCH_TEGRA
-+void tegra20_clk_set_emc_round_callback(tegra20_clk_emc_round_cb *round_cb,
-+					void *cb_arg);
-+int tegra20_clk_prepare_emc_mc_same_freq(struct clk *emc_clk, bool same);
-+
-+void tegra124_clk_set_emc_callbacks(tegra124_emc_prepare_timing_change_cb *prep_cb,
-+				    tegra124_emc_complete_timing_change_cb *complete_cb);
-+
-+int tegra210_plle_hw_sequence_start(void);
-+bool tegra210_plle_hw_sequence_is_enabled(void);
-+void tegra210_xusb_pll_hw_control_enable(void);
-+void tegra210_xusb_pll_hw_sequence_start(void);
-+void tegra210_sata_pll_hw_control_enable(void);
-+void tegra210_sata_pll_hw_sequence_start(void);
-+void tegra210_set_sata_pll_seq_sw(bool state);
-+void tegra210_put_utmipll_in_iddq(void);
-+void tegra210_put_utmipll_out_iddq(void);
-+int tegra210_clk_handle_mbist_war(unsigned int id);
-+void tegra210_clk_emc_dll_enable(bool flag);
-+void tegra210_clk_emc_dll_update_setting(u32 emc_dll_src_value);
-+void tegra210_clk_emc_update_setting(u32 emc_src_value);
-+
- int tegra210_clk_emc_attach(struct clk *clk,
- 			    struct tegra210_clk_emc_provider *provider);
- void tegra210_clk_emc_detach(struct clk *clk);
-+#else
-+static inline void
-+tegra20_clk_set_emc_round_callback(tegra20_clk_emc_round_cb *round_cb,
-+				   void *cb_arg)
-+{
-+}
-+
-+static inline int
-+tegra20_clk_prepare_emc_mc_same_freq(struct clk *emc_clk, bool same)
-+{
-+	return 0;
-+}
-+
-+static inline void
-+tegra124_clk_set_emc_callbacks(tegra124_emc_prepare_timing_change_cb *prep_cb,
-+			       tegra124_emc_complete_timing_change_cb *complete_cb)
-+{
-+}
-+
-+static inline int tegra210_plle_hw_sequence_start(void)
-+{
-+	return 0;
-+}
-+
-+static inline bool tegra210_plle_hw_sequence_is_enabled(void)
-+{
-+	return false;
-+}
-+
-+static inline int tegra210_clk_handle_mbist_war(unsigned int id)
-+{
-+	return 0;
-+}
-+
-+static inline int
-+tegra210_clk_emc_attach(struct clk *clk,
-+			struct tegra210_clk_emc_provider *provider);
-+{
-+	return 0;
-+}
-+
-+static inline void tegra210_xusb_pll_hw_control_enable(void) {}
-+static inline void tegra210_xusb_pll_hw_sequence_start(void) {}
-+static inline void tegra210_sata_pll_hw_control_enable(void) {}
-+static inline void tegra210_sata_pll_hw_sequence_start(void) {}
-+static inline void tegra210_set_sata_pll_seq_sw(bool state) {}
-+static inline void tegra210_put_utmipll_in_iddq(void) {}
-+static inline void tegra210_put_utmipll_out_iddq(void) {}
-+static inline void tegra210_clk_emc_dll_enable(bool flag) {}
-+static inline void tegra210_clk_emc_dll_update_setting(u32 emc_dll_src_value) {}
-+static inline void tegra210_clk_emc_update_setting(u32 emc_src_value) {}
-+static inline void tegra210_clk_emc_detach(struct clk *clk) {}
-+#endif
- 
- #endif /* __LINUX_CLK_TEGRA_H_ */
 -- 
 2.30.2
 
