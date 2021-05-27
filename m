@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D95C3939B3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 01:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637833939A9
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 01:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbhE0X40 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 19:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S236880AbhE0X4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 19:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbhE0X4M (ORCPT
+        with ESMTP id S236758AbhE0X4M (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 19:56:12 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404C2C061760;
-        Thu, 27 May 2021 16:54:29 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id i9so2580040lfe.13;
-        Thu, 27 May 2021 16:54:29 -0700 (PDT)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBEFC061343;
+        Thu, 27 May 2021 16:54:30 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id i9so2580076lfe.13;
+        Thu, 27 May 2021 16:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eUIhc9uggXHCPJQoAO/4UpzdPZReard7z2PxwHsBSd8=;
-        b=ZkUNlkRCNg1UxRRsKKjbTCNNNKlGRFnRDXmuClpyxGjTi4XEpUlH7CR1knVnSpsU+a
-         qStONKACLVaxk4VIijGy3gYkl10h/9xrDeGLxEuNdz5DwGnBq5Nw4JAg66xXLPpbkPx6
-         YH6NaHBPRlql0t2n3XHYteCE6IG6bdwfAaX12oxVSuZq/4YQndwrF4gBNGb9N1f8H2kG
-         eFdlSo3RiYPY7jaQMhJbgruRM9dz0rUA1ZT1kU1Df0lDCoY59MWRUswXy2j0aCYMxXYn
-         n6kFVsSThpSQ5rRs2GsHwdz/57cloK00X252jxSPD2FJh/c84iGaEpmwFmf8BsYNVYS/
-         aIhg==
+        bh=NrCxAlPUucoEt+gGLLTmwPl8GAwFzF+H/pcyQba15ag=;
+        b=jn8q6M74Aum7oOl5gO6NuflqDNTgVvEfxsU/MPXrBns79VMVx2shzWP08sdWAKBcb0
+         tMAS2cYdK7C7gxs8ebar7Cx+SWHHK1IZiqG1jnFF7B6moOUATpvB9LN8BE5Ab0BmRnW3
+         gMrXDm4CWVOtHjzQ+4jWv69KjNcw/zjbxqWRk5VnJUD3TWafFDFXqWQreBY1DSMTnzuW
+         SiDOTLqqxGhITmNxf/ptBnH9FjsL/2dMz9LAy+ptoEQd/vjenOXwQTFO0HX9VlxQywlT
+         xWymIe84+TE5OCT2xmJl6nwWbAjv7klcKt+oj6ol219MMMkFayMJoXKXJ/iw4U5bk7Ql
+         lYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eUIhc9uggXHCPJQoAO/4UpzdPZReard7z2PxwHsBSd8=;
-        b=qUHGUcFEJWjMr1pFr8kEVfdkWnpCrYbvrsWXyPs2YBF3KgiQDnuTv34btLgTP1ClPW
-         F59SdjJzSTjljiZbJh4G+flaJDLmUf8T4ArnuCkqWJ2YKqxNi2Nigw175RJ3Oj9RccVc
-         jbLgd/7GMGvVViaJAnvEqi8k+BmAtJdKkxhk30d6dB2ynlU+La8i7OWa9d/fNseh5ujm
-         3f8wFCsqAcx36n1/CQlhC1Sm2zXkTFxKyTtYyzNEh/d1oCc6SAwXLcz4QvnaXq0hcqNQ
-         gjEFCO6/gSr6R0omGo1Mcf1L86V6Kd+RQm1UBUyfD2M1qIExx7B7iu2QAQQEPv2chF9L
-         92iA==
-X-Gm-Message-State: AOAM533UfNOcE9JZ+ZRNRxUbCZQO1C7G8qY+5HChTwiP6QUSm4ol8zK/
-        +KAUuw7SxBWFlUayqhNZFcE=
-X-Google-Smtp-Source: ABdhPJxBqgnT+BeJbblk9OXbf/bKMfxUxoejfGv5zFApYb7M3k4pATvKTUMijJKns4Avew24k2eNXw==
-X-Received: by 2002:a05:6512:31ce:: with SMTP id j14mr3946956lfe.150.1622159667623;
-        Thu, 27 May 2021 16:54:27 -0700 (PDT)
+        bh=NrCxAlPUucoEt+gGLLTmwPl8GAwFzF+H/pcyQba15ag=;
+        b=GKxTRFGmdUWqexrF07hm7cNFzW+6ze7X6h7ou1wrCfbnms5csKmEHwLeDORtLUu/RB
+         745IWd46F/GPQwS9DCHU1OIJP8/zY+UxNmEURh3GfwDSJ/tgvhXkHhK+jqGsCngXAblq
+         5h4+af2+oFqYDSgBA+iiHQx89UKiPxedii7W3i6v3pUgpjEqeJSigcipCtd1N4y5woSs
+         G5P7H37zWWRuLx1yvgM1eguH6CggbyDfY59mZjyCVY+rsDCSs490uw1IR9KNV/EbaP15
+         XEVEL04PFT+vnSNTbR4bsbfwRswZRUWZ6SVxhajfJdykRRw7DY9Myf0CjFww/NLVZj3s
+         t1tA==
+X-Gm-Message-State: AOAM533EJuhZWT+81qoI1uA2UYkOJE1RzbUMbHcLyoEyp+XI0UFFtOJP
+        aq4a5mDOB34/kOne9pzyPRQ=
+X-Google-Smtp-Source: ABdhPJyQE8q4cgpfVKMvIKWpEjH6pj+T8w4vBUPMWPUwUWrrYhb6b8TI5pR36dPs7JttCDS9WE/XSg==
+X-Received: by 2002:a19:8609:: with SMTP id i9mr3957774lfd.72.1622159668572;
+        Thu, 27 May 2021 16:54:28 -0700 (PDT)
 Received: from localhost.localdomain (46-138-12-55.dynamic.spd-mgts.ru. [46.138.12.55])
-        by smtp.gmail.com with ESMTPSA id t129sm319000lff.109.2021.05.27.16.54.26
+        by smtp.gmail.com with ESMTPSA id t129sm319000lff.109.2021.05.27.16.54.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 16:54:27 -0700 (PDT)
+        Thu, 27 May 2021 16:54:28 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v5 10/14] memory: tegra30-emc: Use devm_tegra_core_dev_init_opp_table()
-Date:   Fri, 28 May 2021 02:54:09 +0300
-Message-Id: <20210527235413.23120-11-digetx@gmail.com>
+Subject: [PATCH v5 11/14] dt-bindings: soc: tegra-pmc: Document core power domain
+Date:   Fri, 28 May 2021 02:54:10 +0300
+Message-Id: <20210527235413.23120-12-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210527235413.23120-1-digetx@gmail.com>
 References: <20210527235413.23120-1-digetx@gmail.com>
@@ -79,90 +79,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use common devm_tegra_core_dev_init_opp_table() helper for the OPP table
-initialization.
+All NVIDIA Tegra SoCs have a core power domain where majority of hardware
+blocks reside. Document the new core power domain properties.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/memory/tegra/tegra30-emc.c | 48 +++---------------------------
- 1 file changed, 4 insertions(+), 44 deletions(-)
+ .../arm/tegra/nvidia,tegra20-pmc.yaml         | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
-index a2f2738ccb94..63e1983f8a0d 100644
---- a/drivers/memory/tegra/tegra30-emc.c
-+++ b/drivers/memory/tegra/tegra30-emc.c
-@@ -1480,49 +1480,6 @@ static int tegra_emc_interconnect_init(struct tegra_emc *emc)
- 	return err;
- }
+diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+index 43fd2f8927d0..0afec83cc723 100644
+--- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
++++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+@@ -301,6 +301,33 @@ patternProperties:
  
--static int tegra_emc_opp_table_init(struct tegra_emc *emc)
--{
--	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
--	struct opp_table *hw_opp_table;
--	int err;
--
--	hw_opp_table = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
--	err = PTR_ERR_OR_ZERO(hw_opp_table);
--	if (err) {
--		dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
--		return err;
--	}
--
--	err = dev_pm_opp_of_add_table(emc->dev);
--	if (err) {
--		if (err == -ENODEV)
--			dev_err(emc->dev, "OPP table not found, please update your device tree\n");
--		else
--			dev_err(emc->dev, "failed to add OPP table: %d\n", err);
--
--		goto put_hw_table;
--	}
--
--	dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
--		      hw_version, clk_get_rate(emc->clk) / 1000000);
--
--	/* first dummy rate-set initializes voltage state */
--	err = dev_pm_opp_set_rate(emc->dev, clk_get_rate(emc->clk));
--	if (err) {
--		dev_err(emc->dev, "failed to initialize OPP clock: %d\n", err);
--		goto remove_table;
--	}
--
--	return 0;
--
--remove_table:
--	dev_pm_opp_of_remove_table(emc->dev);
--put_hw_table:
--	dev_pm_opp_put_supported_hw(hw_opp_table);
--
--	return err;
--}
--
- static void devm_tegra_emc_unset_callback(void *data)
- {
- 	tegra20_clk_set_emc_round_callback(NULL, NULL);
-@@ -1568,6 +1525,7 @@ static int tegra_emc_init_clk(struct tegra_emc *emc)
+     additionalProperties: false
  
- static int tegra_emc_probe(struct platform_device *pdev)
- {
-+	struct tegra_core_opp_params opp_params = {};
- 	struct device_node *np;
- 	struct tegra_emc *emc;
- 	int err;
-@@ -1617,7 +1575,9 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
--	err = tegra_emc_opp_table_init(emc);
-+	opp_params.init_state = true;
++  core-domain:
++    type: object
++    description: |
++      The vast majority of hardware blocks of Tegra SoC belong to a
++      Core power domain, which has a dedicated voltage rail that powers
++      the blocks.
 +
-+	err = devm_tegra_core_dev_init_opp_table(&pdev->dev, &opp_params);
- 	if (err)
- 		return err;
++    properties:
++      operating-points-v2:
++        description:
++          Should contain level, voltages and opp-supported-hw property.
++          The supported-hw is a bitfield indicating SoC speedo or process
++          ID mask.
++
++      "#power-domain-cells":
++        const: 0
++
++    required:
++      - operating-points-v2
++      - "#power-domain-cells"
++
++    additionalProperties: false
++
++  core-supply:
++    description:
++      Phandle to voltage regulator connected to the SoC Core power rail.
++
+ required:
+   - compatible
+   - reg
+@@ -325,6 +352,7 @@ examples:
+     tegra_pmc: pmc@7000e400 {
+               compatible = "nvidia,tegra210-pmc";
+               reg = <0x7000e400 0x400>;
++              core-supply = <&regulator>;
+               clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+               clock-names = "pclk", "clk32k_in";
+               #clock-cells = <1>;
+@@ -338,17 +366,24 @@ examples:
+               nvidia,core-power-req-active-high;
+               nvidia,sys-clock-req-active-high;
  
++              pd_core: core-domain {
++                      operating-points-v2 = <&core_opp_table>;
++                      #power-domain-cells = <0>;
++              };
++
+               powergates {
+                     pd_audio: aud {
+                             clocks = <&tegra_car TEGRA210_CLK_APE>,
+                                      <&tegra_car TEGRA210_CLK_APB2APE>;
+                             resets = <&tegra_car 198>;
++                            power-domains = <&pd_core>;
+                             #power-domain-cells = <0>;
+                     };
+ 
+                     pd_xusbss: xusba {
+                             clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+                             resets = <&tegra_car TEGRA210_CLK_XUSB_SS>;
++                            power-domains = <&pd_core>;
+                             #power-domain-cells = <0>;
+                     };
+               };
 -- 
 2.30.2
 
