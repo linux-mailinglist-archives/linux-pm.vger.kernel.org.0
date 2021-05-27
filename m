@@ -2,153 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB282392696
-	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 06:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CED039272A
+	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 08:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbhE0Ex3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 00:53:29 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57901 "EHLO mga14.intel.com"
+        id S229706AbhE0GOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 02:14:38 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:19766 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229579AbhE0Ex3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 May 2021 00:53:29 -0400
-IronPort-SDR: L87SDuFUovS5MHTtqVESlsIKTHif70Hx0Ljw2ouMIv6W95yNANJPlKLNKXmzs0D/AqsyFEEh6w
- TdP94saI5aPg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9996"; a="202411548"
-X-IronPort-AV: E=Sophos;i="5.82,333,1613462400"; 
-   d="scan'208";a="202411548"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 21:51:52 -0700
-IronPort-SDR: Bl8poXRU2Tsbv09kdrjwMS83I7WZaiBIchUlDudPk4f+Q/QkJb8ny3jZEYC7VmooKpsxfIpBKY
- Wpwgb6ZFrzVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,333,1613462400"; 
-   d="scan'208";a="477321703"
-Received: from unknown (HELO chenyu-desktop.sh.intel.com) ([10.239.158.131])
-  by orsmga001.jf.intel.com with ESMTP; 26 May 2021 21:51:49 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH] intel_idle: Adjust the SKX C6 latency and residency if PC6 is disabled
-Date:   Thu, 27 May 2021 12:56:47 +0800
-Message-Id: <20210527045647.3599-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229619AbhE0GOh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 May 2021 02:14:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1622095985; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=aeDa3X9qCUqCdqikvcq0CFihZ9uyr2R7mEqIHkiwHUQ=; b=jpb+MD124T1pTeKlLgn5XuxHGPhOwW5OJKiSagbScLpbCAxvXxAEoTEoY058zoQJEefr6EBK
+ +rPcemeUL1Gw/Fmw0wZMJ8Z6Grb/wuPaSvcRfR1KfiXUi2hoHBpum2HdZcJddX+y90/+jcht
+ k483m9gv4lYjcLMg4nMetzOEPtI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 60af3869c229adfeff8321bb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 May 2021 06:12:57
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B8032C4360C; Thu, 27 May 2021 06:12:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 113E7C433D3;
+        Thu, 27 May 2021 06:12:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 113E7C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH v2 0/3] PM / Domains: Add support for assigned-performance-states
+Date:   Thu, 27 May 2021 11:42:26 +0530
+Message-Id: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently cpuidle assumes worst-case C-state parameters, and so C6
-is described with PC6 parameters, which is worst case for requesting
-CC6. When PC6 is enabled, this is appropriate. But if PC6 is disabled
-in BIOS, the exit latency and target_residency should be adjusted
-accordingly.
+This is a re-spin of the series that was posted a while back [1]
+with no major changes except for some review feedback from Stephen
+addressed.
 
-Exit latency:
-The C6 exit latency is measured when woken up from CC6/PC6. In the past,
-if PC6 is disabled, CPU would be demoted to CC6/PC3, which is close to
-the latency from CC6/PC6 and there is no need to update the C6 exit latency.
-However on newer platform there is no CC3/PC3 anymore, then the C6 exit
-latency with PC6 disabled should be CC6/PC0.
+Back when this was posted, we thought its a good idea if client
+drivers handle this instead of genpd core handling it [2]
+So that lead to another series which handled this in the i2c 
+driver [3], but then it looked like it would be duplication
+of code across drivers and perhaps it should be done some place
+centrally.
 
-Target residency:
-With PC6 disabled and C3/PC3 supported, the OS requests C3 if idle
-duration is within [CC6, PC6) target_residency. On new CPU generations
-with C3/PC3 deprecated, the OS would request C1E. This would cause
-low energy-efficiency. In summary, the question is, should we lower
-the bar to request C6 when PC6 is disabled? The answer is yes.
+The way forward seems like
+1. Get the bindings reviewed from DT folks
+2. Once the bindings are finalized, figure out how to handle this
+centrally without duplication. While this series does it with everything
+handled in genpd core, there are perhaps other ways to do it with genpd
+core exporting some helpers and genpd providers handling some of it with
+callbacks.
 
-To fill this gap, check if PC6 is disabled in the BIOS in the
-MSR_PKG_CST_CONFIG_CONTROL(0xe2). If so, use CC6/PC0 parameters as the
-new exit latency. Meanwhile, update target_residency to 3 times of the new
-exit latency. This is consistent with how intel_idle driver uses _CST to
-calculate the target_residency. The consequence is that, the OS would
-be more offen to choose C6 over C1E when PC6 is disabled. The new exit
-latency of CC6/PC0 was from wult[1] result, which was measured via NIC
-wakeup from 99.99th latency.
+----
+Some devices within power-domains with performance states do not
+support DVFS, but still need to vote on a default/static state
+while they are active. Add support for a new device tree property
+which the clients can use to specify this and add support in
+kernel to parse this value and vote.
 
-Before the change:
-PC6 enabled        Y          N           N
-has C3/PC3         N          N           Y
-idle duration      [CC6,PC6)  [CC6,PC6)   [CC6,PC6)
-CPU request        C1E        C1E         C3
+[1] https://lore.kernel.org/patchwork/patch/1284040/
+[2] https://lore.kernel.org/patchwork/patch/1284042/
+[3] https://lore.kernel.org/patchwork/patch/1356618/
 
-After the change:
-PC6 enabled        Y          N           N
-has C3/PC3         N          N           Y
-idle duration      [CC6,PC6)  [CC6,PC6)   [CC6,PC6)
-CPU request        C1E        *C6*        C3
+Rajendra Nayak (3):
+  dt-bindings: power: Introduce 'assigned-performance-states' property
+  PM / Domains: Add support for 'assigned-performance-states'
+  arm64: dts: sc7180: Add assigned-performance-states for i2c
 
-*C6* rather than C1E is chosen.
+ .../devicetree/bindings/power/power-domain.yaml    | 50 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 24 +++++++++++
+ drivers/base/power/domain.c                        | 27 ++++++++++++
+ include/linux/pm_domain.h                          |  1 +
+ 4 files changed, 102 insertions(+)
 
-There is concern that if we should introduce a more generic solution
-rather than optimizing on each platforms. However consider the
-code complexity and different PC6 bit interpretation on different
-platforms, tune the code per platform seems to be an acceptable trade-off.
-
-[1] https://intel.github.io/wult/
-
-Suggested-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- drivers/idle/intel_idle.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index ec1b9d306ba6..e6c543b5ee1d 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1484,6 +1484,36 @@ static void __init sklh_idle_state_table_update(void)
- 	skl_cstates[6].flags |= CPUIDLE_FLAG_UNUSABLE;	/* C9-SKL */
- }
- 
-+/**
-+ * skx_idle_state_table_update - Adjust the Sky Lake/Cascade Lake
-+ * idle states table.
-+ */
-+static void __init skx_idle_state_table_update(void)
-+{
-+	unsigned long long msr;
-+
-+	rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr);
-+
-+	/*
-+	 * 000b: C0/C1 (no package C-state support)
-+	 * 001b: C2
-+	 * 010b: C6 (non-retention)
-+	 * 011b: C6 (retention)
-+	 * 111b: No Package C state limits.
-+	 */
-+	if ((msr & 0x7) < 2) {
-+		/*
-+		 * Uses the CC6 + PC0 latency and 3 times of
-+		 * latency for target_residency if the PC6
-+		 * is disabled in BIOS. This is consistent
-+		 * with how intel_idle driver uses _CST
-+		 * to set the target_residency.
-+		 */
-+		skx_cstates[2].exit_latency = 92;
-+		skx_cstates[2].target_residency = 276;
-+	}
-+}
-+
- static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
- {
- 	unsigned int mwait_cstate = MWAIT_HINT2CSTATE(mwait_hint) + 1;
-@@ -1515,6 +1545,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 	case INTEL_FAM6_SKYLAKE:
- 		sklh_idle_state_table_update();
- 		break;
-+	case INTEL_FAM6_SKYLAKE_X:
-+		skx_idle_state_table_update();
-+		break;
- 	}
- 
- 	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
 -- 
-2.25.1
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
