@@ -2,86 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC0D3930DE
-	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 16:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1FD393573
+	for <lists+linux-pm@lfdr.de>; Thu, 27 May 2021 20:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236354AbhE0O2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 10:28:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235718AbhE0O2g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 May 2021 10:28:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F45C60233;
-        Thu, 27 May 2021 14:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622125623;
-        bh=3RGwy0E3qD8kP02c4nF4XtwJ1weDmH+8h4KkQG5Oo8o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WMdj6HrMf649FtKIqCVaBrVDc+Akxu3KzaNihhwtsc5VpR4Z/5qMpx1++DhxVeUVp
-         IOqwzflymg2Y4BYpOkRDygunHe3YfXLaFYIYJs/xcoLlccweZOhdsj10Li7zouyTN2
-         jA+79PQ2LqEJBxTLirbVksBzstP2lz+Ps9N9/IWaepaDVlMG+GuFsaFTZ2QoxZiUZe
-         O83s7hW8O2jy9JQ7FZIJDdeaE/ER/5hF/fhTsksD1OBUKMGW58IHxs0JGxM/9GaFVh
-         P0sczttuwpF8yDKhN1ka0AQ6SF+M8pfr5299pVm5lvdTHNIKCW7+hXpZNXzQaVvtd9
-         r4GIyHeic2mIw==
-Received: by mail-ed1-f44.google.com with SMTP id df21so1097690edb.3;
-        Thu, 27 May 2021 07:27:03 -0700 (PDT)
-X-Gm-Message-State: AOAM533OMIGNM8iDYlOiN9QUAob58XTMICfWXbWzbD9nES/HuhT1LQ8p
-        XTEhWSgooDcYbBxnGSwqkedL1NIOsTHfJ9SeIQ==
-X-Google-Smtp-Source: ABdhPJxaOyI+oliVAThCvN+GoGSj+B43dsXcsxc3Cm8bHclqkC/jYDPYrAZghoDHcvcVhqrOSoMC0HsXCEn2gm+RbSY=
-X-Received: by 2002:aa7:cb19:: with SMTP id s25mr4510289edt.194.1622125622043;
- Thu, 27 May 2021 07:27:02 -0700 (PDT)
+        id S235696AbhE0SeD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 14:34:03 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:39643 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234155AbhE0SeC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 14:34:02 -0400
+Received: by mail-oi1-f180.google.com with SMTP id y76so1699924oia.6;
+        Thu, 27 May 2021 11:32:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=XILEL23RkvJSsCguY3HUKgkJIH3PmBjKaO6LkzDCX+g=;
+        b=rZ2+Zl3/4Jud7bVzunV4Bn5k09kDhls+rC0Ohfg3xgpZ25PA1WNqDL/5m2+ZMXsq62
+         vD62/zLwEIhia5j8xy4A4qBcsEsymVxhFmB3t6RI3umf/zLmqPJ4Nqid5eXg3BzZfbd8
+         HC4xCIKL9TIoULSBH3tz3oZekgeaWtd0Krf4nVzqIKiiRRcafhgoaMDFFjEklwnGnccz
+         XEbiYSRG7wtXjCNmp45324J0G19ZBmsrDpfIRKUKGcSYdTQYfA/DFDx4yGHpWupYAZS2
+         df9iOu+AID8i9GzWqZ+jHJF2vTHENIgFscFaUXxMsuHzSUDhHtz2erjPXqRqQFmtj0wd
+         K4kA==
+X-Gm-Message-State: AOAM5317xykz7XbflVLmMovl5QZcZjjWEJ+vLvjIqB5a0nevCERhRA6d
+        AhPx43PInDtL05qiqHbU1Utx1fXWBOCHC15pCupSEiLMqdk=
+X-Google-Smtp-Source: ABdhPJy4jW7Dha2Uw4yWvXIYUysnXekRh6Asy8UcXLwOTFnAPXZuCPmBwh2qYicHDWiBgIode1zciR7FQtW3ugC6jqA=
+X-Received: by 2002:aca:1910:: with SMTP id l16mr3175684oii.69.1622140347829;
+ Thu, 27 May 2021 11:32:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org>
- <1622095949-2014-2-git-send-email-rnayak@codeaurora.org> <1622125407.790558.731791.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1622125407.790558.731791.nullmailer@robh.at.kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 27 May 2021 09:26:50 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL=Vppsxi1yERmd4HAXkUfBkP3pFkTct0CMOeO109U-aA@mail.gmail.com>
-Message-ID: <CAL_JsqL=Vppsxi1yERmd4HAXkUfBkP3pFkTct0CMOeO109U-aA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce 'assigned-performance-states'
- property
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 May 2021 20:32:16 +0200
+Message-ID: <CAJZ5v0i1WebaCZL3q-6rQOexMnYXacD6KTnO1ONcxN1Li01LSg@mail.gmail.com>
+Subject: [GIT PULL] ACPI fix for v5.13-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 27, 2021 at 9:23 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, 27 May 2021 11:42:27 +0530, Rajendra Nayak wrote:
-> > While most devices within power-domains which support performance states,
-> > scale the performance state dynamically, some devices might want to
-> > set a static/default performance state while the device is active.
-> > These devices typically would also run off a fixed clock and not support
-> > dynamically scaling the device's performance, also known as DVFS techniques.
-> > Add a property 'assigned-performance-states' which client devices can
-> > use to set this default performance state on their power-domains.
-> >
-> > Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> > ---
-> >  .../devicetree/bindings/power/power-domain.yaml    | 50 ++++++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/power/power-domain.yaml:72:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
->
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/power/power-domain.example.dt.yaml:0:0: /example-3/power-controller@43210000/opp-table: failed to match any schema with compatible: ['operating-points-v2']
+Hi Linus,
 
-You don't really need to worry about this one as it is already a
-warning (but patches welcome if someone wants to convert the OPP
-binding).
+Please pull from the tag
 
-Rob
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.13-rc4
+
+with top-most commit 9b7ff25d129df7c4f61e08382993e1988d56f6a7
+
+ ACPI: power: Refine turning off unused power resources
+
+on top of commit c4681547bcce777daf576925a966ffa824edd09d
+
+ Linux 5.13-rc3
+
+to receive an ACPI fix for 5.13-rc4.
+
+This fixes a recent ACPI power management regression causing
+boot issues to occur on some systems due to attempts to turn
+off ACPI power resources that are already off (which should
+work according to the ACPI specification).
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (1):
+      ACPI: power: Refine turning off unused power resources
+
+---------------
+
+ drivers/acpi/internal.h |  4 ++--
+ drivers/acpi/power.c    | 59 ++++++++++++++++++++++++++++++++++++++-----------
+ drivers/acpi/scan.c     |  2 +-
+ drivers/acpi/sleep.c    |  2 +-
+ 4 files changed, 50 insertions(+), 17 deletions(-)
