@@ -2,69 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88058393DE1
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 09:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE8C393EEA
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 10:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbhE1H33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 May 2021 03:29:29 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:41276 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234447AbhE1H32 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 03:29:28 -0400
-X-UUID: a094207799114c37b48487d48039c306-20210528
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hJ6JezNIvj6ABl5W9WM2O4yJyn7QGyEyRh0VxX9iS/8=;
-        b=g1IcgBnmu1v01thJMJw3AyaDS0owuq7AH8HdyhNMA8/r0sgSTdDWPMidFpqfU7AzJJ3LQNB+inw9UX0A9m/JwinVn+h1VptvMTUXi7HxYaCd3RDk6p5ahbuvY24zzNn7fSSKmqEx+9GekVspTVUd4PdP7wBvIHz8FZJi0ooMBI8=;
-X-UUID: a094207799114c37b48487d48039c306-20210528
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 364549102; Fri, 28 May 2021 15:27:50 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 28 May 2021 15:27:49 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 28 May 2021 15:27:49 +0800
-Message-ID: <1622186869.1958.0.camel@mtkswgap22>
-Subject: Re: [PATCH v10] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
-Date:   Fri, 28 May 2021 15:27:49 +0800
-In-Reply-To: <20210524091845.wlikxun3x2qou7zs@vireshk-i7>
-References: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
-         <20210524091845.wlikxun3x2qou7zs@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S232310AbhE1Ipw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 May 2021 04:45:52 -0400
+Received: from [110.188.70.11] ([110.188.70.11]:27328 "EHLO spam1.hygon.cn"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229950AbhE1Ipu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 May 2021 04:45:50 -0400
+X-Greylist: delayed 1687 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 May 2021 04:45:49 EDT
+Received: from spam1.hygon.cn (localhost [127.0.0.2] (may be forged))
+        by spam1.hygon.cn with ESMTP id 14S8G8a5031124
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 16:16:08 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from MK-FE.hygon.cn ([172.23.18.61])
+        by spam1.hygon.cn with ESMTP id 14S8F1qJ030977;
+        Fri, 28 May 2021 16:15:01 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-FE.hygon.cn with ESMTP id 14S8EwBr007965;
+        Fri, 28 May 2021 16:14:59 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from ubuntu1604-2.higon.com (172.23.18.44) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Fri, 28 May
+ 2021 16:14:59 +0800
+From:   Pu Wen <puwen@hygon.cn>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <rjw@rjwysocki.net>, <rafael@kernel.org>, <len.brown@intel.com>,
+        <pavel@ucw.cz>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@suse.de>, <hpa@zytor.com>, <puwen@hygon.cn>, <x86@kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH] x86/cstate: Allow ACPI C1 FFH MWAIT use on Hygon systems
+Date:   Fri, 28 May 2021 16:14:17 +0800
+Message-ID: <20210528081417.31474-1-puwen@hygon.cn>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.23.18.44]
+X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
+ (172.23.18.10)
+X-MAIL: spam1.hygon.cn 14S8G8a5031124
+X-DNSRBL: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTA1LTI0IGF0IDE0OjQ4ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
-IE9uIDI5LTEyLTIwLCAxNDoxNywgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gVGhlIENQVWZyZXEg
-SFcgcHJlc2VudCBpbiBzb21lIE1lZGlhdGVrIGNoaXBzZXRzIG9mZmxvYWRzIHRoZSBzdGVwcyBu
-ZWNlc3NhcnkgZm9yIGNoYW5naW5nIHRoZSBmcmVxdWVuY3kgb2YgQ1BVcy4gDQo+ID4gVGhlIGRy
-aXZlciBpbXBsZW1lbnRzIHRoZSBjcHVmcmVxIGRyaXZlciBpbnRlcmZhY2UgZm9yIHRoaXMgaGFy
-ZHdhcmUgZW5naW5lLiANCj4gPiBUaGlzIHBhdGNoIGRlcGVuZHMgb24gTVQ2Nzc5IERUUyBwYXRj
-aHNldFsxXSBzdWJtaXR0ZWQgYnkgSGFua3MgQ2hlbi4NCj4gPiANCj4gPiA+RnJvbSB2OCB0byB2
-OSwgdGhlcmUgYXJlIHRocmVlIG1vcmUgbW9kaWZpY2F0aW9ucy4NCj4gPiAxLiBCYXNlZCBvbiBw
-YXRjaHNldFsyXSwgYWxpZ24gYmluZGluZyB3aXRoIHNjbWkgZm9yIHBlcmZvcm1hbmNlIGRvbWFp
-bi4NCj4gPiAyLiBBZGQgdGhlIENQVUZSRVEgZmFzdCBzd2l0Y2ggZnVuY3Rpb24gc3VwcG9ydCBh
-bmQgZGVmaW5lIERWRlMgbGF0ZW5jeS4NCj4gPiAzLiBCYXNlZCBvbiBwYXRjaHNlclszXSwgYWRk
-IGVuZXJneSBtb2RlbCBBUEkgcGFyYW1ldGVyIGZvciBtVy4NCj4gDQo+IEhpIEhlY3RvciwNCj4g
-DQo+IFlvdSBjYW4gcmVmcmVzaCB0aGlzIHNlcmllcyBiYXNlZCBvbiB0aGUgcGF0Y2ggZnJvbSBT
-dWRlZXA6DQo+IA0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1kZXZpY2V0cmVlLzIw
-MjEwNTE3MTU1NDU4LjEwMTY3MDctMS1zdWRlZXAuaG9sbGFAYXJtLmNvbS8NCj4gDQpPSywgd2ls
-bCBiYXNlZCBvbiBsYXRlc3Qga2VybmVsIGFuZCByZXNlbmQgcGF0Y2hlcyBpbiB0aGVzZSBkYXlz
-Lg0KVGhhbmtzIQ0K
+Hygon systems support the Monitor/Mwait instructions and these can be used
+for ACPI C1 in the same way as on AMD and Intel systems.
+
+The BIOS declares a C1 state in _CST to use FFH and CPUID_Fn00000005_EDX
+is non-zero on Hygon systems.
+
+Allow ffh_cstate_init() to succeed on Hygon systems to default using FFH
+MWAIT instead of HALT for ACPI C1.
+
+Tested successfully on Hygon Fam18h systems.
+
+Signed-off-by: Pu Wen <puwen@hygon.cn>
+---
+ arch/x86/kernel/acpi/cstate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index 49ae4e1ac9cd..7de599eba7f0 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -197,7 +197,8 @@ static int __init ffh_cstate_init(void)
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
+ 
+ 	if (c->x86_vendor != X86_VENDOR_INTEL &&
+-	    c->x86_vendor != X86_VENDOR_AMD)
++	    c->x86_vendor != X86_VENDOR_AMD &&
++	    c->x86_vendor != X86_VENDOR_HYGON)
+ 		return -1;
+ 
+ 	cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+-- 
+2.23.0
 
