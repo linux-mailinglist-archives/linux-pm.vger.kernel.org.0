@@ -2,119 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16173393F9B
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 11:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9284A393FED
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 11:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235430AbhE1JNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 May 2021 05:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
+        id S235951AbhE1J2f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 May 2021 05:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbhE1JNm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 05:13:42 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0028C06174A
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:12:07 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w33so4295904lfu.7
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:12:07 -0700 (PDT)
+        with ESMTP id S235437AbhE1J2a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 05:28:30 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835EC061760
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:26:55 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id f9so1836290vsp.6
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZB800bOhKFCGK6d7wDa9t/A1lZSI4wYj4YKflJqW4BE=;
-        b=KlhgpHI6b5tTvVjNUp85mgiuuWggqNBSOcObUyi0mrUDSuH0/J9coPaxoqyBwaw9qK
-         RDGeCgR8eODiassfVCSNeLmOyRUMFeid8Yd2LyGwWto6lydEIzcSGgSgXTe4/2PRJW71
-         CXBY4DZpHotaNtp7TMg/f57+OpBhzFCZDWicDleIh8Ijdey1ym7VFXViRzwojlW0gUjK
-         sdcY27oD7qneN++kxIT1Atlis8+pgDdeeXS+VfZ7hQdqJO8PfLg1lx8vBtbIm1afRH0E
-         QOQ+2yycLqX3/9bcWZUU5wNBncEx0hCGD9LiKoGKFadmS0jwTc39Ei8JtuQlxzhpWZOS
-         dELQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lSrNJA8L2mfz3nzO0xWuQ7uzakK2R6vwdeEdePCtnq0=;
+        b=vbGvnUB2ee8gN6kCb1QtHqgW5zdRB/De+4KKFZ3odYzssoqcORAziKqW3t/dl5074O
+         MU02ZAwhTEUhcC5GUqskXZmCEId1/j/GxI7mGj/gxuVqU58+5iq4Y2yDNbcYUTl26J3N
+         tbXjR0gcPStSOp+5QLfk9jCopcLRrqm5guRDC9vvuQFHJtwfckd9Ppz9E1l1wm616a2T
+         ZcZLfN6Qm0Rv2NNVDqP1+Hatk0Lg2TWStZE5z3nPwyCjU0KcgkQIHgBPgHBpFdIUtOgr
+         S30CVnx1+6dBR9MmULejbnwv+VnAT0/VQj2bym9pbKn1rthEPbbuloD9QHkEY4WO8vNo
+         uUZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZB800bOhKFCGK6d7wDa9t/A1lZSI4wYj4YKflJqW4BE=;
-        b=bs1MZxQDeFfTJ6s42E4h+aP8qRJdio8dnmy92Pn7K53a2AzPlz5FeN1isrbb/PyumE
-         uOAAuFqiJJmDRkllC3Mnn3G8GxtXKA+s0/6pFntM2uAYYTY+IOncYZyULCa9JhTAf4SC
-         eWoe5G2uba2RMMcZtCIMSzonDDYGpMV2MJ3eE+CwEernYMuSHTqL8sNNX1PSZrWNeS8K
-         74xZ/YQlSBy12hYtDbVt2LRh6pBaXqrCIWNV78ov6R2FqCCf3eqnqlPHnKP/kE1FEf03
-         jRr7xWFyYr4IA26WC5O+tGPKYcCvhId3zIsZ4V+7ciAqLY85oboJJLIaIEzcRduwIgxD
-         Us5A==
-X-Gm-Message-State: AOAM531nWJ137SbxWdCUoEF1EboO/LMeGZT6RkPNSWOQVNtYeRbdB5q3
-        edEkU79qSDOxYyeLUEsU8leBaQ==
-X-Google-Smtp-Source: ABdhPJw3cbp9c36WWL8oxcRJGQCUpv15fo/C/Ij+mnr+wRpiMSsA1kh7obLCs9cz7vWnAxlGRhBbrQ==
-X-Received: by 2002:ac2:598e:: with SMTP id w14mr5037682lfn.558.1622193126115;
-        Fri, 28 May 2021 02:12:06 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
-        by smtp.gmail.com with ESMTPSA id m4sm537061ljp.9.2021.05.28.02.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 02:12:05 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] PM: runtime: Allow unassigned ->runtime_suspend|resume callbacks
-Date:   Fri, 28 May 2021 11:12:02 +0200
-Message-Id: <20210528091202.11603-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lSrNJA8L2mfz3nzO0xWuQ7uzakK2R6vwdeEdePCtnq0=;
+        b=X4sFLyxZkP3kl7zWSByh8FEiWk7dRBhj7gYw1GP6lg0t6dkqQmZs5WIFW8LyulCbDt
+         bIWu5NpZf6LPAmeuXb28UJLGMZxqOFmY2CFvRaKLRohxDtgJlNRWypvoJqnQ+f3SerMH
+         dd2UUHQbnslJ347uRG3ejBwLRZ4jXNEglacbSPBVrVsSZv8akvauGzD5CVKmkOxcdw/Y
+         H5Hibn8Wp6mGre61RATCv05hYnseMpTNylNyhG3ibepHcDfE3r8YnezquTIHgY4JTxGQ
+         EERK+2D77HUA6SRJaY2LOz/Qfj0f51DiMseq+JQKz2NzMxFkj/c5xYmPXyjfUgv3Thmy
+         aCeg==
+X-Gm-Message-State: AOAM533l/lgo1Qk/wrjC4ZZulhnNp6YpkMbKm8uaEO3/c4zsECEWPZFF
+        8/Su7r3Di0EhJgMLy+A5TpUVb+iQzpl0Y/5Ay/Jncg==
+X-Google-Smtp-Source: ABdhPJxnrT+9YO8VN0qWp0ACEUIbWnM1BEz+8iWMoAfJeIBYb9C3q1nJUf5ntroetINW8lgpgRY3na9se5SJiT9rv6Q=
+X-Received: by 2002:a05:6102:7b4:: with SMTP id x20mr6125121vsg.48.1622194014560;
+ Fri, 28 May 2021 02:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210517130823.796963-1-anup.patel@wdc.com> <20210517130823.796963-6-anup.patel@wdc.com>
+ <CAPDyKFpxx-jBbL4o_iJCcivFL2ei5a7PcWVfUaBmLu-q89Mkjg@mail.gmail.com>
+ <CAAhSdy1quHePY_HM875LHQgXGKrjm24SzeD5yFJUnqunpcHd8g@mail.gmail.com> <CAPDyKFo9ZjiMBKFwe+F9-s_sReCneO42z8ppsBdkf3=jnarJ5A@mail.gmail.com>
+In-Reply-To: <CAPDyKFo9ZjiMBKFwe+F9-s_sReCneO42z8ppsBdkf3=jnarJ5A@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 28 May 2021 11:26:18 +0200
+Message-ID: <CAPDyKFr9zM1eeXw+ekDsm3ZUZZRnhv_ibBvj2S-Mk9VcVJ3TTA@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 5/8] cpuidle: Factor-out power domain related code
+ from PSCI domain driver
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <anup.patel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We are currently allowing ->rpm_idle() callbacks to be unassigned without
-returning an error code from rpm_idle(). This has been useful to avoid
-boilerplate code in drivers. Let's take this approach a step further, by
-allowing unassigned ->runtime_suspend|resume() callbacks as well.
+On Tue, 25 May 2021 at 11:05, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Tue, 25 May 2021 at 07:39, Anup Patel <anup@brainfault.org> wrote:
+> >
+> > On Mon, May 24, 2021 at 11:31 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Mon, 17 May 2021 at 15:10, Anup Patel <anup.patel@wdc.com> wrote:
+> > > >
+> > > > The generic power domain related code in PSCI domain driver is largely
+> > > > independent of PSCI and can be shared with RISC-V SBI domain driver
+> > > > hence we factor-out this code into dt_idle_genpd.c and dt_idle_genpd.h.
+> > > >
+> > > > Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> > >
+> > > This is clearly a big step in the right direction. Just a couple minor
+> > > things, see more below.
+> > >
+> > > Note that, I have a couple of patches in the pipe for the
+> > > cpuidle-psci-domain driver (not ready to be posted). I need a couple
+> > > of more days to confirm this restructuring still makes sense beyond
+> > > these potential new changes. I will let you know as soon as I can with
+> > > the outcome.
+> >
+> > Sure, I will wait for more comments from you. I was thinking of sending
+> > next revision of patches sometime next week with the renaming of
+> > function names which you suggested.
+>
+> Sounds good, that allows me a few more days this week.
 
-In this way, a consumer/supplier device link can be used to let a consumer
-device be power managed through its supplier device, without requiring
-assigned ->runtime_suspend|resume() callbacks for the consumer device, for
-example.
+I don't have any further comments at this point. It looks good to me,
+but let me have a quick review on the next version before I provide my
+ack.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/runtime.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+[...]
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 68bebbf81347..8a66eaf731e4 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -345,7 +345,7 @@ static void rpm_suspend_suppliers(struct device *dev)
- static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 	__releases(&dev->power.lock) __acquires(&dev->power.lock)
- {
--	int retval, idx;
-+	int retval = 0, idx;
- 	bool use_links = dev->power.links_count > 0;
- 
- 	if (dev->power.irq_safe) {
-@@ -373,7 +373,8 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 		}
- 	}
- 
--	retval = cb(dev);
-+	if (cb)
-+		retval = cb(dev);
- 
- 	if (dev->power.irq_safe) {
- 		spin_lock(&dev->power.lock);
-@@ -484,9 +485,6 @@ static int rpm_callback(int (*cb)(struct device *), struct device *dev)
- {
- 	int retval;
- 
--	if (!cb)
--		return -ENOSYS;
--
- 	if (dev->power.memalloc_noio) {
- 		unsigned int noio_flag;
- 
--- 
-2.25.1
-
+Kind regards
+Uffe
