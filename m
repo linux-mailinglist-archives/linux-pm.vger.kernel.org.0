@@ -2,114 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9284A393FED
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 11:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD11239422D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 13:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbhE1J2f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 May 2021 05:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbhE1J2a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 05:28:30 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835EC061760
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:26:55 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id f9so1836290vsp.6
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 02:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lSrNJA8L2mfz3nzO0xWuQ7uzakK2R6vwdeEdePCtnq0=;
-        b=vbGvnUB2ee8gN6kCb1QtHqgW5zdRB/De+4KKFZ3odYzssoqcORAziKqW3t/dl5074O
-         MU02ZAwhTEUhcC5GUqskXZmCEId1/j/GxI7mGj/gxuVqU58+5iq4Y2yDNbcYUTl26J3N
-         tbXjR0gcPStSOp+5QLfk9jCopcLRrqm5guRDC9vvuQFHJtwfckd9Ppz9E1l1wm616a2T
-         ZcZLfN6Qm0Rv2NNVDqP1+Hatk0Lg2TWStZE5z3nPwyCjU0KcgkQIHgBPgHBpFdIUtOgr
-         S30CVnx1+6dBR9MmULejbnwv+VnAT0/VQj2bym9pbKn1rthEPbbuloD9QHkEY4WO8vNo
-         uUZw==
+        id S235730AbhE1Lw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 May 2021 07:52:56 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41007 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233429AbhE1Lwz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 07:52:55 -0400
+Received: from mail-ua1-f70.google.com ([209.85.222.70])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lmb1L-0003yy-0I
+        for linux-pm@vger.kernel.org; Fri, 28 May 2021 11:51:19 +0000
+Received: by mail-ua1-f70.google.com with SMTP id z43-20020a9f372e0000b029020dcb32d820so1804114uad.2
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 04:51:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lSrNJA8L2mfz3nzO0xWuQ7uzakK2R6vwdeEdePCtnq0=;
-        b=X4sFLyxZkP3kl7zWSByh8FEiWk7dRBhj7gYw1GP6lg0t6dkqQmZs5WIFW8LyulCbDt
-         bIWu5NpZf6LPAmeuXb28UJLGMZxqOFmY2CFvRaKLRohxDtgJlNRWypvoJqnQ+f3SerMH
-         dd2UUHQbnslJ347uRG3ejBwLRZ4jXNEglacbSPBVrVsSZv8akvauGzD5CVKmkOxcdw/Y
-         H5Hibn8Wp6mGre61RATCv05hYnseMpTNylNyhG3ibepHcDfE3r8YnezquTIHgY4JTxGQ
-         EERK+2D77HUA6SRJaY2LOz/Qfj0f51DiMseq+JQKz2NzMxFkj/c5xYmPXyjfUgv3Thmy
-         aCeg==
-X-Gm-Message-State: AOAM533l/lgo1Qk/wrjC4ZZulhnNp6YpkMbKm8uaEO3/c4zsECEWPZFF
-        8/Su7r3Di0EhJgMLy+A5TpUVb+iQzpl0Y/5Ay/Jncg==
-X-Google-Smtp-Source: ABdhPJxnrT+9YO8VN0qWp0ACEUIbWnM1BEz+8iWMoAfJeIBYb9C3q1nJUf5ntroetINW8lgpgRY3na9se5SJiT9rv6Q=
-X-Received: by 2002:a05:6102:7b4:: with SMTP id x20mr6125121vsg.48.1622194014560;
- Fri, 28 May 2021 02:26:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210517130823.796963-1-anup.patel@wdc.com> <20210517130823.796963-6-anup.patel@wdc.com>
- <CAPDyKFpxx-jBbL4o_iJCcivFL2ei5a7PcWVfUaBmLu-q89Mkjg@mail.gmail.com>
- <CAAhSdy1quHePY_HM875LHQgXGKrjm24SzeD5yFJUnqunpcHd8g@mail.gmail.com> <CAPDyKFo9ZjiMBKFwe+F9-s_sReCneO42z8ppsBdkf3=jnarJ5A@mail.gmail.com>
-In-Reply-To: <CAPDyKFo9ZjiMBKFwe+F9-s_sReCneO42z8ppsBdkf3=jnarJ5A@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 28 May 2021 11:26:18 +0200
-Message-ID: <CAPDyKFr9zM1eeXw+ekDsm3ZUZZRnhv_ibBvj2S-Mk9VcVJ3TTA@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 5/8] cpuidle: Factor-out power domain related code
- from PSCI domain driver
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wxELusyIBpP+fcpz/UatIhkxqx6ZEHw/DrcqLu/q/aE=;
+        b=lguwOczczSbMdYLvrtPcnJLR5M1OYvwYMtAZ+EgRzFPP0CyJgI1CsmOgsGi/9quI5N
+         CKit82YYNJcmKmLNK3X4Qf1OE3wjVdxR01LCCRd5I6U9NJb6vThrIN5ZNNMbAChsSStC
+         jG4KzqxS9gTm65e8wTCaX81P0r5YdnGFivsVHj3zDGHEDz7MnA1cCH+6gCwpsGBBgZoF
+         1hkH8wqlyEQtty6An1MNKz4C2wN2qMQjMI2O9P/hGQ1uzovlFDhHluNyRkLW7bRBBXB4
+         z/ArAYG3U9Zuy5k0yt3qHJ03wRlbFvVct5pVtE2lYojebrN98fVb/zw+UDQHOh9pv5r7
+         VzTA==
+X-Gm-Message-State: AOAM530EC0JBqGND4rnHQcyAjJIo5b9n9N9PGeg1SYZX1mAGDMZlGE4A
+        Uku/JukcUDCnSBz6gi2Q1Zh2df6Sj63uaLRpH+rfJ+ZiGc2PpfuqBFv4riDsDYeQEGMvfhr1A38
+        Yz0rJjKYhZNcynP/IkwKoc0YlYJLzKxDuN7ef
+X-Received: by 2002:a05:6102:31b7:: with SMTP id d23mr6244278vsh.56.1622202678192;
+        Fri, 28 May 2021 04:51:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwHV9HC0ax8TsVv9E9U2CrKXRWFKJ3kwO0G5xeZeFJCvWLuvkFRNODMIQwC/X1QAj1earJCHQ==
+X-Received: by 2002:a05:6102:31b7:: with SMTP id d23mr6244268vsh.56.1622202677969;
+        Fri, 28 May 2021 04:51:17 -0700 (PDT)
+Received: from localhost.localdomain ([45.237.48.5])
+        by smtp.gmail.com with ESMTPSA id 189sm669831vkz.51.2021.05.28.04.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 May 2021 04:51:17 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jacky Bai <ping.bai@nxp.com>
+Subject: [RESEND PATCH 1/2] thermal: imx_sc: add missing of_node_put for loop iteration
+Date:   Fri, 28 May 2021 07:50:35 -0400
+Message-Id: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 25 May 2021 at 11:05, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Tue, 25 May 2021 at 07:39, Anup Patel <anup@brainfault.org> wrote:
-> >
-> > On Mon, May 24, 2021 at 11:31 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Mon, 17 May 2021 at 15:10, Anup Patel <anup.patel@wdc.com> wrote:
-> > > >
-> > > > The generic power domain related code in PSCI domain driver is largely
-> > > > independent of PSCI and can be shared with RISC-V SBI domain driver
-> > > > hence we factor-out this code into dt_idle_genpd.c and dt_idle_genpd.h.
-> > > >
-> > > > Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> > >
-> > > This is clearly a big step in the right direction. Just a couple minor
-> > > things, see more below.
-> > >
-> > > Note that, I have a couple of patches in the pipe for the
-> > > cpuidle-psci-domain driver (not ready to be posted). I need a couple
-> > > of more days to confirm this restructuring still makes sense beyond
-> > > these potential new changes. I will let you know as soon as I can with
-> > > the outcome.
-> >
-> > Sure, I will wait for more comments from you. I was thinking of sending
-> > next revision of patches sometime next week with the renaming of
-> > function names which you suggested.
->
-> Sounds good, that allows me a few more days this week.
+Early exits from for_each_available_child_of_node() should decrement the
+node reference counter.  Reported by Coccinelle:
 
-I don't have any further comments at this point. It looks good to me,
-but let me have a quick review on the next version before I provide my
-ack.
+  drivers/thermal/imx_sc_thermal.c:93:1-33: WARNING:
+    Function "for_each_available_child_of_node" should have of_node_put() before return around line 97.
 
-[...]
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+---
+ drivers/thermal/imx_sc_thermal.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Kind regards
-Uffe
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index b01d28eca7ee..8d76dbfde6a9 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -93,6 +93,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 	for_each_available_child_of_node(np, child) {
+ 		sensor = devm_kzalloc(&pdev->dev, sizeof(*sensor), GFP_KERNEL);
+ 		if (!sensor) {
++			of_node_put(child);
+ 			of_node_put(sensor_np);
+ 			return -ENOMEM;
+ 		}
+@@ -104,6 +105,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"failed to get valid sensor resource id: %d\n",
+ 				ret);
++			of_node_put(child);
+ 			break;
+ 		}
+ 
+@@ -114,6 +116,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 		if (IS_ERR(sensor->tzd)) {
+ 			dev_err(&pdev->dev, "failed to register thermal zone\n");
+ 			ret = PTR_ERR(sensor->tzd);
++			of_node_put(child);
+ 			break;
+ 		}
+ 
+-- 
+2.27.0
+
