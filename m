@@ -2,189 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E50D3939C0
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 01:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0D6393BD5
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 05:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237013AbhE0X4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 May 2021 19:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236850AbhE0X4T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 May 2021 19:56:19 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D1BC06134B;
-        Thu, 27 May 2021 16:54:33 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id j10so2586856lfb.12;
-        Thu, 27 May 2021 16:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ifCod93ETyGPmmfLtl3IBeFp9blcjqCRjZs9HqcoCbk=;
-        b=pgFyoNE1WYSeqE7ADCYsMnp+NnKcH9AKaGBAAom5WwFyyhiCjlFACT6wYJtVXD5Jvj
-         FnZrn9g5T/ZGcf0Egy0ZyqupoojZnsPNQ6ozwDqTjz2hEs+tbXjA+c21Fl2httGQ+QbC
-         40bYXfWZYH+88aWNhkwNI0MRRzqTXoufjRo2EvN+6M0D3rfuu4kZj9PXpaKZ+FtYIHbA
-         bwOtN18uRwHoOI4tEiHcjpfP439227LPqtmEL78pOr6Eie7jf7RvNP4YaJs6PeUMTa3u
-         gTLdHdyzQmiSqtH9LyTQKTLODClUGRu6dKwD3HJEoX+i+0d7WXtc0KzfxjLqmY5S5ijb
-         4qXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ifCod93ETyGPmmfLtl3IBeFp9blcjqCRjZs9HqcoCbk=;
-        b=LuvtO9rU38q4ZBzPHvnzkEjpMNZuKk59QfPNCdsx0syj5D7yTl0CUCAfstHjCGyY34
-         X/E6x0ebjAozR9D+DJtlZCXM87A+NEj5KfjEcn/fmZHelnXHbq861w3AOJ+5a3elNspr
-         XgYLf2UjjANZnHamTJqFI4pZe3uDkIu93JBm0L4bLAlWGWXo/eEhQgwheKua9v4pIMLz
-         HmTPpTPVgiiJa5LWjFrVQ/EhI0v98OtT9PBinb/c/SFdYzM9JEptwzsVE4VqrVm1UP9b
-         p43+HYIZVahBIymXK3gPPjOt/+QgyjH/ztt58OU9Jh7EAGh0HnaZ1x6ESoVHIK4qirv8
-         YQWg==
-X-Gm-Message-State: AOAM530shZJxad9n2TbFS4Eb4d+QYbGEilmX7Quzr38CMPdfakTJoXtF
-        zaQI9L1N48GLdPo5l4hAvM1bBYKXeqA=
-X-Google-Smtp-Source: ABdhPJxs8C+O+vfEMywmf/8ZLpCFz9xYLjJCuToxfF5Z0tOwDAYApBBsGcRj2u+VW4GRfm2CcPeAQQ==
-X-Received: by 2002:a19:f717:: with SMTP id z23mr3819731lfe.267.1622159671485;
-        Thu, 27 May 2021 16:54:31 -0700 (PDT)
-Received: from localhost.localdomain (46-138-12-55.dynamic.spd-mgts.ru. [46.138.12.55])
-        by smtp.gmail.com with ESMTPSA id t129sm319000lff.109.2021.05.27.16.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 16:54:31 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?q?Nikola=20Milosavljevi=C4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v5 14/14] soc/tegra: regulators: Support core domain state syncing
-Date:   Fri, 28 May 2021 02:54:13 +0300
-Message-Id: <20210527235413.23120-15-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210527235413.23120-1-digetx@gmail.com>
-References: <20210527235413.23120-1-digetx@gmail.com>
+        id S236290AbhE1DRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 May 2021 23:17:38 -0400
+Received: from mga03.intel.com ([134.134.136.65]:17457 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236023AbhE1DRh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 May 2021 23:17:37 -0400
+IronPort-SDR: 1uJ5F7lVWGag/1RLKtoapE8wfXrusWc2xGJPTO79sjWmgXgAWtwfSry9vPJ6YXqu1o66uvRVR4
+ dQDXIIY/ZuAg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9997"; a="202919618"
+X-IronPort-AV: E=Sophos;i="5.83,228,1616482800"; 
+   d="scan'208";a="202919618"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2021 20:16:02 -0700
+IronPort-SDR: k6k4oW7BOPAJL29GdrGA0ZY1pJfaCwU0lhxI3HU5CnHbksoAbL/i9IVjxtV7O6vwH9Q1eRDj2N
+ p/Rzc6PdANBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,228,1616482800"; 
+   d="scan'208";a="415155080"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.131])
+  by orsmga002.jf.intel.com with ESMTP; 27 May 2021 20:15:56 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH][v2] intel_idle: Adjust the SKX C6 latency and residency if PC6 is disabled
+Date:   Fri, 28 May 2021 11:20:54 +0800
+Message-Id: <20210528032054.7572-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The core voltage shall not drop until state of core domain is synced,
-i.e. all device drivers that use core domain are loaded and ready.
+Currently cpuidle assumes worst-case C-state parameters, and so C6
+is described with PC6 parameters, which is worst case for requesting
+CC6. When PC6 is enabled, this is appropriate. But if PC6 is disabled
+in BIOS, the exit latency and target_residency should be adjusted
+accordingly.
 
-Support core domain state syncing. The core domain driver invokes the
-core-regulator voltage syncing once the state of domain is synced, at
-this point the core voltage is allowed to go lower than the level left
-after bootloader.
+Exit latency:
+Previously the C6 exit latency was measured when woken up from CC6/PC6.
+With PC6 disabled, the C6 exit latency should be CC6/PC0.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Target residency:
+With PC6 disabled, idle duration within [CC6, PC6) would make the
+idle governor choose C1E over C6. This would cause low energy-efficiency.
+We should lower the bar to request C6 when PC6 is disabled.
+
+To fill this gap, check if PC6 is disabled in the BIOS in the
+MSR_PKG_CST_CONFIG_CONTROL(0xe2). If so, use CC6/PC0 parameters as the
+new exit latency. Meanwhile, update target_residency to 3 times of the new
+exit latency. This is consistent with how intel_idle driver uses _CST to
+calculate the target_residency. The consequence is that, the OS would
+be more offen to choose C6 over C1E when PC6 is disabled. This is reasonable
+because if the user is using C6, it implies that the user cares about energy,
+so choosing C6 more frequently is in accordance with user requirement.
+
+The new exit latency of CC6/PC0 92us was from wult[1] result on SKX, which was
+measured via NIC wakeup from 99.99th latency. Besides SKX, the CLX and CPX
+both have the same CPU model number. And since they have similar CC6 exit latency
+to SKX, 96us and 89us respectively, reuse the value of SKX.
+
+There is concern that if we should introduce a more generic solution
+rather than optimizing on each platforms. However consider the
+code complexity and different PC6 bit interpretation on different
+platforms, tune the code per platform seems to be an acceptable trade-off.
+
+[1] https://intel.github.io/wult/
+
+Suggested-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- drivers/soc/tegra/regulators-tegra20.c | 19 ++++++++++++++++++-
- drivers/soc/tegra/regulators-tegra30.c | 18 +++++++++++++++++-
- 2 files changed, 35 insertions(+), 2 deletions(-)
+v2: Simplify the commit log to not mention C3/PC3. (Artem)
+    Confirm the exit latency on CLX and CPX.(Artem)
+---
+ drivers/idle/intel_idle.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/soc/tegra/regulators-tegra20.c b/drivers/soc/tegra/regulators-tegra20.c
-index 3479be5ee494..b8ce9fd0650d 100644
---- a/drivers/soc/tegra/regulators-tegra20.c
-+++ b/drivers/soc/tegra/regulators-tegra20.c
-@@ -17,6 +17,8 @@
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- 
-+#include <soc/tegra/pmc.h>
-+
- struct tegra_regulator_coupler {
- 	struct regulator_coupler coupler;
- 	struct regulator_dev *core_rdev;
-@@ -42,6 +44,21 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra20 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_pmc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
-+
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
- 
-@@ -62,7 +79,7 @@ static int tegra20_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index ec1b9d306ba6..e6c543b5ee1d 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1484,6 +1484,36 @@ static void __init sklh_idle_state_table_update(void)
+ 	skl_cstates[6].flags |= CPUIDLE_FLAG_UNUSABLE;	/* C9-SKL */
  }
-diff --git a/drivers/soc/tegra/regulators-tegra30.c b/drivers/soc/tegra/regulators-tegra30.c
-index 18fe53d0a870..e74bbc9c7859 100644
---- a/drivers/soc/tegra/regulators-tegra30.c
-+++ b/drivers/soc/tegra/regulators-tegra30.c
-@@ -18,6 +18,7 @@
- #include <linux/regulator/machine.h>
  
- #include <soc/tegra/fuse.h>
-+#include <soc/tegra/pmc.h>
- 
- struct tegra_regulator_coupler {
- 	struct regulator_coupler coupler;
-@@ -43,6 +44,21 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	int core_cur_uV;
- 	int err;
- 
-+	/*
-+	 * Tegra30 SoC has critical DVFS-capable devices that are
-+	 * permanently-active or active at a boot time, like EMC
-+	 * (DRAM controller) or Display controller for example.
-+	 *
-+	 * The voltage of a CORE SoC power domain shall not be dropped below
-+	 * a minimum level, which is determined by device's clock rate.
-+	 * This means that we can't fully allow CORE voltage scaling until
-+	 * the state of all DVFS-critical CORE devices is synced.
-+	 */
-+	if (tegra_pmc_core_domain_state_synced() && !tegra->sys_reboot_mode) {
-+		pr_info_once("voltage state synced\n");
-+		return 0;
-+	}
++/**
++ * skx_idle_state_table_update - Adjust the Sky Lake/Cascade Lake
++ * idle states table.
++ */
++static void __init skx_idle_state_table_update(void)
++{
++	unsigned long long msr;
 +
- 	if (tegra->core_min_uV > 0)
- 		return tegra->core_min_uV;
++	rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr);
++
++	/*
++	 * 000b: C0/C1 (no package C-state support)
++	 * 001b: C2
++	 * 010b: C6 (non-retention)
++	 * 011b: C6 (retention)
++	 * 111b: No Package C state limits.
++	 */
++	if ((msr & 0x7) < 2) {
++		/*
++		 * Uses the CC6 + PC0 latency and 3 times of
++		 * latency for target_residency if the PC6
++		 * is disabled in BIOS. This is consistent
++		 * with how intel_idle driver uses _CST
++		 * to set the target_residency.
++		 */
++		skx_cstates[2].exit_latency = 92;
++		skx_cstates[2].target_residency = 276;
++	}
++}
++
+ static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
+ {
+ 	unsigned int mwait_cstate = MWAIT_HINT2CSTATE(mwait_hint) + 1;
+@@ -1515,6 +1545,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 	case INTEL_FAM6_SKYLAKE:
+ 		sklh_idle_state_table_update();
+ 		break;
++	case INTEL_FAM6_SKYLAKE_X:
++		skx_idle_state_table_update();
++		break;
+ 	}
  
-@@ -63,7 +79,7 @@ static int tegra30_core_limit(struct tegra_regulator_coupler *tegra,
- 	 */
- 	tegra->core_min_uV = core_max_uV;
- 
--	pr_info("core minimum voltage limited to %duV\n", tegra->core_min_uV);
-+	pr_info("core voltage initialized to %duV\n", tegra->core_min_uV);
- 
- 	return tegra->core_min_uV;
- }
+ 	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
 -- 
-2.30.2
+2.25.1
 
