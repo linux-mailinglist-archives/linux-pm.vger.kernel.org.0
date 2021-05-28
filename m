@@ -2,119 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD3F39422F
-	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 13:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837D3394422
+	for <lists+linux-pm@lfdr.de>; Fri, 28 May 2021 16:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236125AbhE1LxC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 May 2021 07:53:02 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:41038 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbhE1LxA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 07:53:00 -0400
-Received: from mail-ua1-f69.google.com ([209.85.222.69])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lmb1R-00041O-Kb
-        for linux-pm@vger.kernel.org; Fri, 28 May 2021 11:51:25 +0000
-Received: by mail-ua1-f69.google.com with SMTP id j17-20020ab018510000b029020db76022bbso1781488uag.12
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 04:51:25 -0700 (PDT)
+        id S235361AbhE1OYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 May 2021 10:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235309AbhE1OYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 10:24:49 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C62C061761
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 07:23:13 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id i4so5774294ybe.2
+        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 07:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=syysfoCLQhlZX4I15Hdgek+czZDdAMbqNxcJPk1EsOQ=;
+        b=Bi4g/rtry3daF+gwc3vRtRNefr36ib+72ReLa3GeeD9O3ybgsW5H+StLvG598fcTA2
+         MxJCazJmuhXChu6NvwkTut4KABCZtDklevvhSdJrjzkGSFpjSB9y1qKrfSy/NJ2F9zqa
+         SZ1tZs0U6q14X/bQF2A24cWdOm+OoG6tGIOcgxXj07e6xNBC4d2gkVJuryB4N0qhMpSv
+         vjosCTpmqAA7DzXW5J9O4/xo9afKZ9gPBnxKBSRuGMrT6i6aZSDO3XwKpRv4Txh494Db
+         xnpj5063UpPa68aZM8xfll+N3FUZukP1ajAbSd7u4yzb1znukr81z6bLt4hdid2Qss8i
+         6bRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+A7NmETeNVsWXQhhgLVcq4I2U3ly5GO/4a+00+Ltec0=;
-        b=EoF6G2fXPBrVTsuvx2tzmGzqo8w7FsWMP1apMJ5OIR18VgrefADCaUxO1Rwe+K49eD
-         ZUVUSeah+uOh2rid73T7xl5scZH4aEgwBiQhBRyxGRxOmOrjxFARqivj91ZF1h01zUDJ
-         rUdJJ35NahImMZ+epqHCCyF8c84r4siEHcVKIffVKcaoJRrHXsaA3hODlyDAxImV3ZNS
-         2l8KNKPZnUAQ6SiQX4TwwqY0ioq/m3u8L8kdZ5Ni/GU2tz9uBYGIN7/N/gNiA2UTwAoC
-         92qyrnzIC3ziTpavvTzxxTnC4YqfSZdSp5AgXN2LSopiuqke9vlaKbYYI+U09pX4NGTC
-         SKLw==
-X-Gm-Message-State: AOAM532hqIEDCXB1rryDplSp2xNwHGvYdnujuSvHGGTQALcXPqNyFMtr
-        Ip2UtT1wLVkJiEgoOBaGbtzFJJHTy/LX7uQvZhM+wFjXoZ7uiynWr1joXVSenfYR7w2ppUNKosq
-        ivX2H69R5chx31t6JFI79HkvcOZ08SZxt1vxV
-X-Received: by 2002:a67:6a02:: with SMTP id f2mr6264731vsc.49.1622202680526;
-        Fri, 28 May 2021 04:51:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8wp965ZXdOS/URJI0BlvrioKqZR1rbzc1/KfnNkSONQtzH+C+OVVa8fj46i7Np0GVLTF3wQ==
-X-Received: by 2002:a67:6a02:: with SMTP id f2mr6264723vsc.49.1622202680342;
-        Fri, 28 May 2021 04:51:20 -0700 (PDT)
-Received: from localhost.localdomain ([45.237.48.5])
-        by smtp.gmail.com with ESMTPSA id 189sm669831vkz.51.2021.05.28.04.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 04:51:19 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [RESEND PATCH 2/2] thermal: sprd: add missing of_node_put for loop iteration
-Date:   Fri, 28 May 2021 07:50:36 -0400
-Message-Id: <20210528115036.18222-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
-References: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=syysfoCLQhlZX4I15Hdgek+czZDdAMbqNxcJPk1EsOQ=;
+        b=NWR/UvkM6uxWi0TAdzCshXIpOmDKUTscnerQ+ZSWGryYFIfs64h6xuga2PEsZ51zeb
+         BvLcpz7f2fdDa4jlUvXK3SyY1LH9AwOLK80BFJruKBsqjuU6+v/9RNln+An3dJlTOgON
+         yMtJUzq96Z77jzL+T6/reHbOFULdreVJlN/ZRRjlhDbidwhDu5lg1HQqCblTQM8hvtfK
+         IEwDsvZDYtCv2AVzibVg8pYIz04cXwInpe/Wbmqpswv4qiKvonTAyte9x/oeOWB572uj
+         rnUc8ncsNbRYe/7b5xPPpqdT2q7pkg7Ii0C44RGCZPaWnPjwlXG4GdXYSUxmwAcE2ydL
+         dQlQ==
+X-Gm-Message-State: AOAM530LIVNc1px3dJzQ6Zye6bilwXBf1Up6wUNdzouKrjvG+9+f8+UU
+        N+4z3dKxu1GivjryVG26NxzvPeJXr/0J3xbWXUGMig==
+X-Google-Smtp-Source: ABdhPJx8mHtOAu17ADz6J7AwfAXA/YIRldt+oDMdzuZLRNE9q/0fTWnkdiCMlbQ3GUS+scmZ1tLW01HbzK50dqSraow=
+X-Received: by 2002:a25:420c:: with SMTP id p12mr9823321yba.25.1622211792670;
+ Fri, 28 May 2021 07:23:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com> <dba3927a575645e5bf1ff35edea5ad74ea86885e.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <dba3927a575645e5bf1ff35edea5ad74ea86885e.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 28 May 2021 16:23:02 +0200
+Message-ID: <CAMpxmJU8GY568LwEyKnxiN3vPgOreyCYYJF_sD2dFKuMOm6A4A@mail.gmail.com>
+Subject: Re: [PATCH 6/9] gpio: bd70528 Drop BD70528 support
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Early exits from for_each_available_child_of_node() should decrement the
-node reference counter.  Reported by Coccinelle:
+On Tue, May 25, 2021 at 12:15 PM Matti Vaittinen
+<matti.vaittinen@fi.rohmeurope.com> wrote:
+>
+> The only known BD70528 use-cases are such that the PMIC is controlled
+> from separate MCU which is not running Linux. I am not aware of
+> any Linux driver users. Furthermore, it seems there is no demand for
+> this IC. Let's ease the maintenance burden and drop the driver. We can
+> always add it back if there is sudden need for it.
+>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+>
+> ---
 
-  drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
-    Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
----
- drivers/thermal/sprd_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index 3682edb2f466..2778971aaf03 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
- 		if (!sen) {
- 			ret = -ENOMEM;
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
-@@ -397,12 +398,14 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		ret = of_property_read_u32(sen_child, "reg", &sen->id);
- 		if (ret) {
- 			dev_err(&pdev->dev, "get sensor reg failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
- 		ret = sprd_thm_sensor_calibration(sen_child, thm, sen);
- 		if (ret) {
- 			dev_err(&pdev->dev, "efuse cal analysis failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
-@@ -416,6 +419,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev, "register thermal zone failed %d\n",
- 				sen->id);
- 			ret = PTR_ERR(sen->tzd);
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
- 
--- 
-2.27.0
-
+Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
