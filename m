@@ -2,88 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EAA394979
-	for <lists+linux-pm@lfdr.de>; Sat, 29 May 2021 02:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5298394A0D
+	for <lists+linux-pm@lfdr.de>; Sat, 29 May 2021 05:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbhE2AWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 May 2021 20:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S229560AbhE2DRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 May 2021 23:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhE2AWl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 20:22:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568BBC061574
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 17:21:06 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a5so7808609lfm.0
-        for <linux-pm@vger.kernel.org>; Fri, 28 May 2021 17:21:06 -0700 (PDT)
+        with ESMTP id S229547AbhE2DRF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 May 2021 23:17:05 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E6EC061574;
+        Fri, 28 May 2021 20:15:29 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id v14so3957116pgi.6;
+        Fri, 28 May 2021 20:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=62sqQhJj4rtXpoeH7WRautHOiasts0X3E3m2jlp8miA=;
-        b=sBPxkkBvofnyGzsT4dsXEu74sgnAf9iFFxU2f0T4BxIMod9J7Y1gq5lQzWqnefvvPq
-         LYsmQRy4AxXs2Zy4LoEFi0/T9wFAJbDwIPWh7M3EbzsPijszH4LD+YqLKIgwb1Ye0AEi
-         NIrhyxv2a3wNQK7+qAw61huk0t66nJvJfMkzuRjwtUtU0GieS+ojm8XV3Cg5euieXNnr
-         gjmzhETk8aUMhqWyX4eKYOUQn8VxDsKIRNIeruflKFx+0oFhXfMqg4jsl9LAM7JUDeBu
-         YFDvFxP+u0gqVKFXQngKGOOsbOXpn2TXpPwk6c19JX+MDEkVKN37hL1Di+3QgFx4frAR
-         +YZA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jp5nKXTIBtXqgIz/1SOQD4aLhfftEztbDVVZdGOZUAw=;
+        b=mc0hrr6GivTHWWrV1D5Uca0yz36xmMdqsIo4B8dxUH/ZljLdWyehRIKYUp/7YmhSon
+         hBWQhUDn3d+FTTsR4H+R/+29zWiTlDRkRqgmuyyXolTyTflaupADzotCessAxjNQvDiT
+         JX598UlpmEMYefy++qZPEQS7ZxkSn6+pyK9s1N6F4/Pf2Oq0xmRg7+ke9WcLWeJ5XHZD
+         0UW87l+ysrAsSegKxHPgEKjtStQLnRY3XN7B46PIjScT90AoN3F042nrdgttxREaUnFY
+         rkqdI3XWZio4alr8ScHihZENGxNQByGUPAZ4dtmLiHfCc8xtlkPRLBaz8ZEAEUKl/P0h
+         EdSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=62sqQhJj4rtXpoeH7WRautHOiasts0X3E3m2jlp8miA=;
-        b=NhQ/ogZrh84Cu8yfQ3MtNjA68kRVFGPHdAXvtbvANVVZPytw/6ZxBCijrGKgXiPquN
-         goTvOMBsxLN5hvCDn5FPB7xG7smEfdHx+6/DOivIFuFcBc7b+grZk6ZScJ7rQso7KSwJ
-         tviuGrnygwxD4zqqgRv1Yc9Yi2Zaug+htdajhB1lBEZ/zGif3cLoZXBGDFLEoXyp/cbG
-         djsb0k4/ilqagd+dpBGQYHoxCDkb+noYzm9W9tJoiqlcmmZnC1+UIl8zjZGyIEysFUmK
-         Js3JMgoTvYTSwo1yGC4m0m5TymYlCA8y51yirs75KZ4vcCgLkm/6uma4UU5tZ3NDx4Aj
-         3+0w==
-X-Gm-Message-State: AOAM530/qq956iTLFe3ILZwZMcNK9MtlUMTlPn0JiiwVXUjjkx3KmSN9
-        s13gbYWt7IicnAcFlmJm5/a2gA==
-X-Google-Smtp-Source: ABdhPJzMRdW564CPg8PWo4CBqDaHrS/FtRjmsUFowuP2jq+gaX8aqNEJJZPXD21PuM0s5tKUm0L9Xw==
-X-Received: by 2002:a05:6512:3b93:: with SMTP id g19mr7613899lfv.548.1622247664622;
-        Fri, 28 May 2021 17:21:04 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id j27sm590898lfm.296.2021.05.28.17.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 17:21:04 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: [PATCH] power: supply: smb347-charger: Drop unused include
-Date:   Sat, 29 May 2021 02:19:02 +0200
-Message-Id: <20210529001902.468060-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        bh=jp5nKXTIBtXqgIz/1SOQD4aLhfftEztbDVVZdGOZUAw=;
+        b=ouennrqi95iEXTLmDGTSqDxIc6yIE1aBThy/Fme1c9wwSBoEjdviBFGBAdtFBQ94Bu
+         65okCVJNnDA7FEq7ex4eBdVs1/5BcnKWvMrHqSZkWPaxkRBkgc94py0+A9Ny7y7dcXs+
+         urId+YEhaNyD4kP5uHZ/BptUVUo7plzgZHsru8CqwFgQCbvnp+hLkVz3y/Nohkzv7FmL
+         rzXQXOUbdfXtjxHm04D858YCsCAlEu4Qsiwo//M57hn29UJPUEyocHUgISuQShUWTXal
+         AqH5ctH2gBph1onYd745viDOrq0YZGgCD2PGK27Q/vD4EfQaQJN1nC/1x+vaM2Ycf9yM
+         Cs8Q==
+X-Gm-Message-State: AOAM533Dx0oNXmBzIGxWm/nIOg87U+yox6VrU+dD3VfY7uA9j+B9rdQB
+        3xsfDhp7WSFxQF+CTaZLWU8XBBIX8No=
+X-Google-Smtp-Source: ABdhPJwWiRXcljUpa+9dWzGuAKoSRgDgp8du/q+kZJ/DYW6Rrh46TsBIkBmeiA16iEDj1sE+J4L7og==
+X-Received: by 2002:a63:5a19:: with SMTP id o25mr11885214pgb.122.1622258128416;
+        Fri, 28 May 2021 20:15:28 -0700 (PDT)
+Received: from [172.30.1.14] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id k13sm5363988pfg.31.2021.05.28.20.15.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 May 2021 20:15:27 -0700 (PDT)
+Subject: Re: [PATCH -next] PM / devfreq: governor: use DEVICE_ATTR_RW macro
+To:     YueHaibing <yuehaibing@huawei.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210524021158.21236-1-yuehaibing@huawei.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <d607250d-e01f-367a-8739-a093fe0e88e7@gmail.com>
+Date:   Sat, 29 May 2021 12:15:23 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210524021158.21236-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This driver is including the legacy GPIO header <linux/gpio.h>
-but not using any symbols from it. Delete the include.
+On 21. 5. 24. 오전 11:11, YueHaibing wrote:
+> Use DEVICE_ATTR_RW helper instead of plain DEVICE_ATTR,
+> which makes the code a bit shorter and easier to read.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>   drivers/devfreq/governor_userspace.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+> index 0fd6c4851071..ab9db7adb3ad 100644
+> --- a/drivers/devfreq/governor_userspace.c
+> +++ b/drivers/devfreq/governor_userspace.c
+> @@ -31,8 +31,8 @@ static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+>   	return 0;
+>   }
+>   
+> -static ssize_t store_freq(struct device *dev, struct device_attribute *attr,
+> -			  const char *buf, size_t count)
+> +static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
+> +			      const char *buf, size_t count)
+>   {
+>   	struct devfreq *devfreq = to_devfreq(dev);
+>   	struct userspace_data *data;
+> @@ -52,8 +52,8 @@ static ssize_t store_freq(struct device *dev, struct device_attribute *attr,
+>   	return err;
+>   }
+>   
+> -static ssize_t show_freq(struct device *dev, struct device_attribute *attr,
+> -			 char *buf)
+> +static ssize_t set_freq_show(struct device *dev,
+> +			     struct device_attribute *attr, char *buf)
+>   {
+>   	struct devfreq *devfreq = to_devfreq(dev);
+>   	struct userspace_data *data;
+> @@ -70,7 +70,7 @@ static ssize_t show_freq(struct device *dev, struct device_attribute *attr,
+>   	return err;
+>   }
+>   
+> -static DEVICE_ATTR(set_freq, 0644, show_freq, store_freq);
+> +static DEVICE_ATTR_RW(set_freq);
+>   static struct attribute *dev_entries[] = {
+>   	&dev_attr_set_freq.attr,
+>   	NULL,
+> 
 
-Cc: David Heidelberg <david@ixit.cz>
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/power/supply/smb347-charger.c | 1 -
- 1 file changed, 1 deletion(-)
+Applied it. Thanks.
 
-diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index 3376f42d46c3..df240420f2de 100644
---- a/drivers/power/supply/smb347-charger.c
-+++ b/drivers/power/supply/smb347-charger.c
-@@ -10,7 +10,6 @@
- 
- #include <linux/delay.h>
- #include <linux/err.h>
--#include <linux/gpio.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/init.h>
 -- 
-2.31.1
-
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
