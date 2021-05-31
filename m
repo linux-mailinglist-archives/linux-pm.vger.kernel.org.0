@@ -2,357 +2,266 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBD0395688
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 09:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E27395822
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 11:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbhEaH4u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 03:56:50 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:31187 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbhEaH4t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 03:56:49 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210531075508epoutp015b4a69fc34d916e5adb1024978df442a~EF5gu0Og40787807878epoutp01g
-        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 07:55:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210531075508epoutp015b4a69fc34d916e5adb1024978df442a~EF5gu0Og40787807878epoutp01g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1622447708;
-        bh=Vj8hRqbR1C1cKwt8NAB/INFdikKtaqmGX/SzMeC8K/0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=OoSYxIZKd8s48BwOFKVK971rtGuZA0Huo/zrKqDePiTvyFFGEqJCVRs3YiBmhQbNJ
-         tqa5RY1QaaG27uGCiTjm9RD+WWDLqnWz5koO0hTuA0XDeHfIBpCCqJCmvfo/O1wqIB
-         LDW/22Y2//P35BSoCLnq6ANMzakrzfj4ovkFRRfY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20210531075506epcas1p433b2a501642967f044d73170f644e646~EF5fh_Vuz3217532175epcas1p4q;
-        Mon, 31 May 2021 07:55:06 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4FtndN5XyYz4x9Q7; Mon, 31 May
-        2021 07:55:04 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A4.F1.09701.55694B06; Mon, 31 May 2021 16:55:01 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210531075500epcas1p250d5252aa5ecd54c0c5ca4e6874ef1e4~EF5Z_Eylk0159601596epcas1p2t;
-        Mon, 31 May 2021 07:55:00 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210531075500epsmtrp12d2729c5a0dec68d9fb942244482e2ce~EF5Z8_w9-1539815398epsmtrp1F;
-        Mon, 31 May 2021 07:55:00 +0000 (GMT)
-X-AuditID: b6c32a36-631ff700000025e5-46-60b496557c0d
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F5.74.08163.45694B06; Mon, 31 May 2021 16:55:00 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20210531075500epsmtip1b6bbf16c135572726a2aa444e9f6450f~EF5ZiCMYe3070730707epsmtip1K;
-        Mon, 31 May 2021 07:55:00 +0000 (GMT)
-Subject: Re: [PATCH V8 1/8] PM / devfreq: Add cpu based scaling support to
- passive_governor
-To:     Hsin-Yi Wang <hsinyi@google.com>
-Cc:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>,
+        id S231162AbhEaJgk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 05:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230479AbhEaJgj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 05:36:39 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCE5C061574;
+        Mon, 31 May 2021 02:34:58 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id z137-20020a1c7e8f0000b02901774f2a7dc4so9226229wmc.0;
+        Mon, 31 May 2021 02:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2W2a29UkYdWIPCQ3C6EBVixN1OZ2VkToAWAecp/EpX8=;
+        b=YVJdRT0FnbiCRcP0ITT5KkT/t+E8K8/w4NnJRZkIQIyhd58oOHJ2XWdcxFdxpdsIqP
+         G18orNJvNB5VjQ4ML31ZhhJaOk4tgDD04PhKJ3JlJM9mow6IhP+IM4LF2+c9cgVgOu76
+         0tyDm8cMwlHOlnKnP0TT6ALG5H5c4WdoEdIURiFnFw8YYTMblEYlHCBAp2Yt2GEfNLei
+         sNY9asUby+eX9aG25FkcVWYIlIsvx3hxtqqWyMWCW8NMQOnUFo4sANL0Qp3ZPkq0mIg4
+         KDkXsyMH+jo6zjbvh8FSdEweKAz74Y6ILKWk66h01Uswgt0FFFs7tY2LYo49na79msx8
+         N5IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2W2a29UkYdWIPCQ3C6EBVixN1OZ2VkToAWAecp/EpX8=;
+        b=I0qO1cKzV1rBQbcGY9Oo1Wc1FcPy6wvWlbUE3UIN1Z5yHRXKIO2ciMHem3H6WC0o4H
+         clzPeg2KZ+MMwQCxrsvjbJDfPJm/Kh34oHcPuQrEhPheyT5vyLSts9TtdpG5GZGbsfE+
+         RqcD7jddTcy4pm+YjmXghuofEVJVxsNA+sfwtXdMyvPxxutsBS4sKeit/c78xL4HGuSf
+         1ryRDfEelYNkTgivWaQyI/aKjmiuYuN0Q7wjFF1kIO+ftmgma2o26brBgXqZz9JnG6Xb
+         0UKCq5lQiuNsNJTyTRTgZrz8Xyp0OD2faJIKmAdnZ8D/a0mBBp+gR/1YzMYHl0TA/v8+
+         KF7A==
+X-Gm-Message-State: AOAM5323RwdE34H50FBh6lS8zPzIVD1AAbH2eM43kW3KweDHtkqLMrDG
+        3wyJffogWehbjDclYzGiGBhxooLNwHQ=
+X-Google-Smtp-Source: ABdhPJz2JWoIFrUNYbYz5RqG9kJ2dw/Du7UKX0Tv2ZUaY/vqFKp+DHXVzAnz69oF6ZH9I0nAjMu2ww==
+X-Received: by 2002:a7b:c002:: with SMTP id c2mr20356102wmb.118.1622453697212;
+        Mon, 31 May 2021 02:34:57 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id f18sm691284wmj.13.2021.05.31.02.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 02:34:56 -0700 (PDT)
+Date:   Mon, 31 May 2021 11:36:29 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com, Sibi Sankar <sibis@codeaurora.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <16412023-9c28-f47b-7719-7d836319b6da@samsung.com>
-Date:   Mon, 31 May 2021 17:13:47 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 3/7] dt-bindings: devfreq: tegra30-actmon: Convert to
+ schema
+Message-ID: <YLSuHejkyPg+DJ0Y@orome.fritz.box>
+References: <20210510211008.30300-1-digetx@gmail.com>
+ <20210510211008.30300-4-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CACb=7PUkpMkDOJ6dDHXhJ5ep4e9u8ZVYM8M2iC-iwHXn13t3DQ@mail.gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc27b2xaH3FWQM8wcXJ2JbDxKKRwQzBaZXMfCMG5kL1IauCuP
-        0tZeuiE4h4KCDTJQ1NAKqDxE6GboCmg3RLGK1SJDhOEcywyPIfNBQEwDzq2lNeO/7+93Pr98
-        z/ec/HgsgR3342Uqcmm1QioncQ92x5WNwUEfHzOlhv7U/jbqPDfFQUfvj+OoznKLg7rMIyzU
-        t+8hFz27U4oh49gwBw2aT+BosGgAoLlDFoAafx3A0L5iEbq3txlHD+19GLLdvM1B+7ssXPRi
-        uI2Nhk894aDjowLUNk+9400Zag2AGiw/hFEXdKNc6qRRQxlbDuLU78M/49SPDd9SxdZuNmUa
-        KmFT5aYWQPWOdGLUnHFt0iufZcdk0NJ0Wu1PK9KU6ZkKWSyZsEOyRSKOCBUGCaNQJOmvkObQ
-        sWTcB0lBWzPljpSk/1dSucbRSpIyDBmyOUat1OTS/hlKJjeWpFXpclWUKpiR5jAahSw4TZkT
-        LQwNDRM7wNTsjLY7ZRzV9cS8vZf72YVgJFoL+DxIhMPTlyY4WuDBExDnAXxa/QK4ilkA79a0
-        slzFHICTU/dYL0ee1VS5KTOAD/4ucRdPADSfesR1UquIFLjQ/wfbqb2J9bCpq5PrhFhENwcW
-        Lt5dgnAiEHZPjeBO7UUEwCH7GHBqT2IznO60Yk7NJt6ER6cWlhgfIhlaO4rdzKvQWj3uMODx
-        +MR2aG/Oc7ZZhC/8bbwOc+k3YFG7fikCJFr5sPTMRcwVIQ4eH7jmjrMKTveauC7tBx98d8Ct
-        C+BZqwV3DZcCaOr+heM6EMHuxiOY05hFbITnzCGudgC8sFgDXMYr4eP5Mo4TgYQnLD0gcCHr
-        4OCfo+4rvAbrSw7iFYDULUujWxZBtyyC7n+zk4DdAlbTKiZHRjNCVdjy7zaCpRUIjDgPDj+a
-        Ce4BGA/0AMhjkd6etry2VIFnunRXPq1WStQaOc30ALHjfStZfj5pSscOKXIlQnGYSCRC4cII
-        sVBI+nrKthSkCgiZNJfOpmkVrX45h/H4foXY94mLR3z16jOBvlrTikbbzJo9ya+3xOWlpuzI
-        s637K8qrprLj5ie9RfVNfTEBOnlTo0wkLKjdsKeg9xLWpf33va/D36L+ObZTYl+5s3/T0xse
-        q7FOQUj8/c/zt22/zPsmvqOnVfTc53FCxYmUrMQvJc3brFM5G37IzicZfNrQMJFoC5udfN/n
-        +uQunca4Ij2L4cv3G+wVhWsYqDl8O2JMuztEW4vy115trT7Ni68kAy8WhZrFGT3JxtmP6n0s
-        A1kzs2Ucfljkwu40lkH/RVVklX7iGgOC8m3tz4e8JryvGBLW+0d76D9tjtgUUHtWV4fhA/ra
-        2Fs3rjaUvyvdKp5P+JBkMxlSYSBLzUj/AzBwD1SLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0iTURiAOd/Nz9Hoa648KikOwxCyXDNOknZR4euPFF1+BKkjPy/ldGxp
-        2sXU2cWhKzSTVjozKzNpuVzT0i5eUsvysjS7CbkVIlpaWV5q1TYC/z287/Nwzo+XxgUjhCed
-        lHKQU6RIk0UUj7jbKvJetfN8fewalWYVMulHSVTywUohXdsLEjXfG8LR89xxF/Tj5WkMGSyD
-        JDLfu0Qhs6oPoG+FbQBdfdWHody8tehtTjWFxmeeY6j7WT+JTjS3uSDbYB2BBi9/IVHpewGq
-        m2Y3Cdna8lrAmjWFGNuofe/CVhjSWENNPsW+G2yi2DtVx9m8rocEWz9wimA19TWA7RgyYew3
-        g/e2RXt4G+K45KR0TrE6LJaXWPeygJR3RmXkPO4hssFQiBq40pCRwB9l54Aa8GgB0wBgnspG
-        ORce8HxfO64G9D92g62tSqczAeBYezlhd9yYvXCuZ9jBQsYPXms2udglnGkloa72FOks7lPw
-        0qwe2C2KCYAPR4ccLyxmfOHAjMUx5zNhcMzUhdmZYFbAktE5h7OU2Q0bqyyY01kCuy5YCfuP
-        XJntcKY6wz7GGX/4q7wfd7I7fGPVYU72gSrjRfwscNMuqLULEu2CRLsgqQBEDfDg5EpZgkwZ
-        JBencIcClVKZMi0lIXBfqswAHGcQENAAmmomA1sARoMWAGlcJOR3Z9TFCvhx0szDnCI1RpGW
-        zClbgBdNiNz5vequGAGTID3IHeA4Oaf4v8VoV89srCBuXZZ/cVlZ0Xe/iY3mrFn68tHtc73L
-        mm75PhXl+A/w18vnr0gmK59KtlpXtKhOuo/4xcuqIyaiu73ISostsZMTR2ae2ZdkrChnP4q1
-        obk+keH9tzcE2uJ7L7bPl4ampgdPBxU1bvEyPObCu2OGh91ro/ebxU82Ga9Pzo9ZEpPn9dGK
-        9D/WBz4XpvRxD0KNFSPFo9T1T8sLo7G8KJn3/mOmSN6Tn7teU8PbZjMfmWxkQuViv5X3cXnY
-        i5IdVOlnS/zp/OnM2R36Q0ckms7G8bCbnpUdxWrVFGYN7xCGmLNXy4uEX29s/h0iJpuqJMYb
-        Ok18UESUruOTR85k8HSDiFAmSoMCcIVS+hfzDc3QdQMAAA==
-X-CMS-MailID: 20210531075500epcas1p250d5252aa5ecd54c0c5ca4e6874ef1e4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210323113411epcas1p3b4367563007ca91c30201d7fc225bb67
-References: <1616499241-4906-1-git-send-email-andrew-sh.cheng@mediatek.com>
-        <CGME20210323113411epcas1p3b4367563007ca91c30201d7fc225bb67@epcas1p3.samsung.com>
-        <1616499241-4906-2-git-send-email-andrew-sh.cheng@mediatek.com>
-        <233a3bd6-7ab1-5da2-9184-a745eb253d86@samsung.com>
-        <1617177820.15067.1.camel@mtksdaap41>
-        <2ae8604d-0da6-4243-1b92-81b3917d7d48@samsung.com>
-        <cad52436-b291-05bf-236f-7b7cb1fdbbff@samsung.com>
-        <1617195800.18432.3.camel@mtksdaap41>
-        <fbb6c44b-eb77-14ce-9175-3f06030e6e0c@samsung.com>
-        <cfdd3973-e4a7-8c09-8a7e-57118a7a3b9b@samsung.com>
-        <1621995727.29827.1.camel@mtksdaap41>
-        <dd58c29a-35b1-b853-bc4a-3225b21b082a@samsung.com>
-        <1622431376.14423.5.camel@mtksdaap41>
-        <316af76d-fc63-eeff-7419-cb4b44ee62fe@samsung.com>
-        <CACb=7PUkpMkDOJ6dDHXhJ5ep4e9u8ZVYM8M2iC-iwHXn13t3DQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lw9R1wTkEeyLOXza"
+Content-Disposition: inline
+In-Reply-To: <20210510211008.30300-4-digetx@gmail.com>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/31/21 4:42 PM, Hsin-Yi Wang wrote:
-> 
-> 
-> On Mon, May 31, 2021 at 3:37 PM Chanwoo Choi <cw00.choi@samsung.com <mailto:cw00.choi@samsung.com>> wrote:
-> 
->     Hi,
-> 
->     On 5/31/21 12:22 PM, andrew-sh.cheng wrote:
->     > On Wed, 2021-05-26 at 12:08 +0900, Chanwoo Choi wrote:
->     >> Hi,
->     >> On 5/26/21 11:22 AM, andrew-sh.cheng wrote:
->     >>> On Thu, 2021-04-08 at 11:47 +0900, Chanwoo Choi wrote:
->     >>>> On 4/1/21 9:16 AM, Chanwoo Choi wrote:
->     >>>>> On 3/31/21 10:03 PM, andrew-sh.cheng wrote:
->     >>>>>> On Wed, 2021-03-31 at 17:35 +0900, Chanwoo Choi wrote:
->     >>>>>>> On 3/31/21 5:27 PM, Chanwoo Choi wrote:
->     >>>>>>>> Hi,
->     >>>>>>>>
->     >>>>>>>> On 3/31/21 5:03 PM, andrew-sh.cheng wrote:
->     >>>>>>>>> On Thu, 2021-03-25 at 17:14 +0900, Chanwoo Choi wrote:
->     >>>>>>>>>> Hi,
->     >>>>>>>>>>
->     >>>>>>>>>> You are missing to add these patches to linux-pm mailing list.
->     >>>>>>>>>> Need to send them to linu-pm ML.
->     >>>>>>>>>>
->     >>>>>>>>>> Also, before received this series, I tried to clean-up these patches
->     >>>>>>>>>> on testing branch[1]. So that I add my comment with my clean-up case.
->     >>>>>>>>>> [1] https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!zIrzeDp9vPnm1_SDzVPuzqdHn3zWie9DnfBXaA-j9-CSrVc6aR9_rJQQiw81_CgAPh9XRRs$
->     >>>>>>>>>>
->     >>>>>>>>>> And 'Saravana Kannan <skannan@codeaurora.org <mailto:skannan@codeaurora.org>>' is wrong email address.
->     >>>>>>>>>> Please update the email or drop this email.
->     >>>>>>>>>
->     >>>>>>>>> Hi Chanwoo,
->     >>>>>>>>>
->     >>>>>>>>> Thank you for the advices.
->     >>>>>>>>> I will resend patch v9 (add to linux-pm ML), remove this patch, and note
->     >>>>>>>>> that my patch set base on
->     >>>>>>>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJ8WFhg_g$
->     >>>>>>>>
->     >>>>>>>> I has not yet test this patch[1] on devfreq-testing-passive-gov branch.
->     >>>>>>>> So that if possible, I'd like you to test your patches with this patch[1]
->     >>>>>>>> and then if there is no problem, could you send the next patches with patch[1]?
->     >>>>>>>>
->     >>>>>>>> [1]https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing-passive-gov&id=39c80d11a8f42dd63ecea1e0df595a0ceb83b454__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJR2cQqZs$
->     >>>>>>>
->     >>>>>>>
->     >>>>>>> Sorry for the confusion. I make the devfreq-testing-passive-gov[1]
->     >>>>>>> branch based on latest devfreq-next branch.
->     >>>>>>> [1] https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing-passive-gov__;!!CTRNKA9wMg0ARbw!yUlsuxrL5PcbF7o6A9DlCfvoA6w8V8VXKjYIybYyiJg3D0HM-lI2xRuxLUV6b3UJ8WFhg_g$
->     >>>>>>>
->     >>>>>>> First of all, if possible, I want to test them[1] with your patches in this series.
->     >>>>>>> And then if there are no any problem, please let me know. After confirmed from you,
->     >>>>>>> I'll send the patches of devfreq-testing-passive-gov[1] branch.
->     >>>>>>> How about that?
->     >>>>>>>
->     >>>>>> Hi Chanwoo~
->     >>>>>>
->     >>>>>> We will use this on Google Chrome project.
->     >>>>>> Google Hsin-Yi has test your patch + my patch set v8 [2~8]
->     >>>>>>
->     >>>>>>     make sure cci devfreqs runs with cpufreq.
->     >>>>>>     suspend resume
->     >>>>>>     speedometer2 benchmark
->     >>>>>> It is okay.
->     >>>>>>
->     >>>>>> Please send the patches of devfreq-testing-passive-gov[1] branch.
->     >>>>>>
->     >>>>>> I will send patch v9 base on yours latter.
->     >>>>>
->     >>>>> Thanks for your test. I'll send the patches today.
->     >>>>
->     >>>> I'm sorry for delay because when I tested the patches
->     >>>> for devfreq parent type on Odroid-xu3, there are some problem
->     >>>> related to lazy linking of OPP. So I'm trying to analyze them.
->     >>>> Unfortunately, we need to postpone these patches to next linux
->     >>>> version.
->     >>>>
->     >>> Hi Chanwoo Choi~
->     >>>
->     >>> It is said that you are busy on another task recently.
->     >>> May I know your plan on this patch?
->     >>> Thank you.
->     >>
->     >> Sorry for late work. I have a question.
->     >> When I tested exynos-bus.c with adding the 'required-opp' property
->     >> on odroid-xu3 board. I got some fail about
->     >>
->     >> When calling _set_required_opps(), always _set_required_opp() returns
->     >> -EBUSY error because of following lazy linking case[1].
->     >>
->     >> [1] https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/opp/core.c*L896__;Iw!!CTRNKA9wMg0ARbw!3eNxwDZRy-Ev5BHGxT-BxCz4qrNy0NZohQuBGW36krkwOkl_WX8yBmxlqSk9hxp_kxspMJI$
->     >>
->     >> /* required-opps not fully initialized yet */
->     >> if (lazy_linking_pending(opp_table))
->     >>      return -EBUSY; 
->     >>
->     >>
->     >> For calling dev_pm_opp_of_add_table(), lazy_link_required_opp_table() function
->     >> will be called. But, there is constraint[2]. If is_genpd of opp_table is false,
->     >> driver/opp/of.c cannot resolve the lazy linking issue.
->     >>
->     >> [2]  https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/opp/of.c*L386__;Iw!!CTRNKA9wMg0ARbw!3eNxwDZRy-Ev5BHGxT-BxCz4qrNy0NZohQuBGW36krkwOkl_WX8yBmxlqSk9hxp_QFUVY9E$
->     >>
->     >> /* Link required OPPs for all OPPs of the newly added OPP table */
->     >> static void lazy_link_required_opp_table(struct opp_table *new_table)
->     >> {
->     >>      struct opp_table *opp_table, *temp, **required_opp_tables;
->     >>      struct device_node *required_np, *opp_np, *required_table_np;
->     >>      struct dev_pm_opp *opp;
->     >>      int i, ret;
->     >>
->     >>      /*
->     >>       * We only support genpd's OPPs in the "required-opps" for now,
->     >>       * as we don't know much about other cases.
->     >>       */
->     >>      if (!new_table->is_genpd)
->     >>              return;
->     >>
->     >> Even if this case, there are no problem on your test case?
->     >>
->     >
->     > Hi Chanwoo~
->     > Sorry for late reply.
->     > Yes, we meet similar issue.
->     > Google member Hsin-Yi had helped deal with this issue on Chrome project.
->     >
->     > Patch segment:
->     > @ /drivers/opp/of.c
->     >
->     > /* Link required OPPs for all OPPs of the newly added OPP table */
->     > static void lazy_link_required_opp_table(struct opp_table *new_table)
->     > {
->     >       struct opp_table *opp_table, *temp, **required_opp_tables;
->     >       struct device_node *required_np, *opp_np, *required_table_np;
->     >       struct dev_pm_opp *opp;
->     >       int i, ret;
->     >
->     > +     /*
->     > +      * We only support genpd's OPPs in the "required-opps" for now,
->     > +      * as we don't know much about other cases.
->     > +      */
->     > +     if (!new_table->is_genpd)
->     > +             return;
->     >
->     >
->     > Hsin-Yi replied this issue in the discussion list in the original lazy
->     > link thread:
->     > https://patchwork.kernel.org/project/linux-pm/patch/20190717222340.137578-4-saravanak@google.com/#23932203
->     >
->     > Loop Hsin-YI here.
->     > You can discuss with her if needing more detail.
->     >
->     > Thank you both.
->     >
-> 
->     Thanks. First of all, we need to resolve and discuss this issue.
-> 
-> 
-> Hi Chanwoo, 
-> 
-> We think removing the genpd check is sufficient for our use case since we only use the lazy link for opp table translation.
 
-Hi Hsin-Yi,
+--lw9R1wTkEeyLOXza
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-IMHO, I think 'is_genpd' checking should be removed for devices except for genpd
-like as following:
+On Tue, May 11, 2021 at 12:10:04AM +0300, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra ACTMON binding to schema.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../arm/tegra/nvidia,tegra30-actmon.txt       |  57 ---------
+>  .../devfreq/nvidia,tegra30-actmon.yaml        | 121 ++++++++++++++++++
+>  2 files changed, 121 insertions(+), 57 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,te=
+gra30-actmon.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegr=
+a30-actmon.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-a=
+ctmon.txt b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actm=
+on.txt
+> deleted file mode 100644
+> index 897eedfa2bc8..000000000000
+> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.t=
+xt
+> +++ /dev/null
+> @@ -1,57 +0,0 @@
+> -NVIDIA Tegra Activity Monitor
+> -
+> -The activity monitor block collects statistics about the behaviour of ot=
+her
+> -components in the system. This information can be used to derive the rat=
+e at
+> -which the external memory needs to be clocked in order to serve all requ=
+ests
+> -from the monitored clients.
+> -
+> -Required properties:
+> -- compatible: should be "nvidia,tegra<chip>-actmon"
+> -- reg: offset and length of the register set for the device
+> -- interrupts: standard interrupt property
+> -- clocks: Must contain a phandle and clock specifier pair for each entry=
+ in
+> -clock-names. See ../../clock/clock-bindings.txt for details.
+> -- clock-names: Must include the following entries:
+> -  - actmon
+> -  - emc
+> -- resets: Must contain an entry for each entry in reset-names. See
+> -../../reset/reset.txt for details.
+> -- reset-names: Must include the following entries:
+> -  - actmon
+> -- operating-points-v2: See ../bindings/opp/opp.txt for details.
+> -- interconnects: Should contain entries for memory clients sitting on
+> -                 MC->EMC memory interconnect path.
+> -- interconnect-names: Should include name of the interconnect path for e=
+ach
+> -                      interconnect entry. Consult TRM documentation for
+> -                      information about available memory clients, see ME=
+MORY
+> -                      CONTROLLER section.
+> -
+> -For each opp entry in 'operating-points-v2' table:
+> -- opp-supported-hw: bitfield indicating SoC speedo ID mask
+> -- opp-peak-kBps: peak bandwidth of the memory channel
+> -
+> -Example:
+> -	dfs_opp_table: opp-table {
+> -		compatible =3D "operating-points-v2";
+> -
+> -		opp@12750000 {
+> -			opp-hz =3D /bits/ 64 <12750000>;
+> -			opp-supported-hw =3D <0x000F>;
+> -			opp-peak-kBps =3D <51000>;
+> -		};
+> -		...
+> -	};
+> -
+> -	actmon@6000c800 {
+> -		compatible =3D "nvidia,tegra124-actmon";
+> -		reg =3D <0x0 0x6000c800 0x0 0x400>;
+> -		interrupts =3D <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+> -		clocks =3D <&tegra_car TEGRA124_CLK_ACTMON>,
+> -			 <&tegra_car TEGRA124_CLK_EMC>;
+> -		clock-names =3D "actmon", "emc";
+> -		resets =3D <&tegra_car 119>;
+> -		reset-names =3D "actmon";
+> -		operating-points-v2 =3D <&dfs_opp_table>;
+> -		interconnects =3D <&mc TEGRA124_MC_MPCORER &emc>;
+> -		interconnect-names =3D "cpu";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-act=
+mon.yaml b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.=
+yaml
+> new file mode 100644
+> index 000000000000..2a940d5d7ab4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+> @@ -0,0 +1,121 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/nvidia,tegra30-actmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NVIDIA Tegra30 Activity Monitor
+> +
+> +maintainers:
+> +  - Dmitry Osipenko <digetx@gmail.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +description: |
+> +  The activity monitor block collects statistics about the behaviour of =
+other
+> +  components in the system. This information can be used to derive the r=
+ate at
+> +  which the external memory needs to be clocked in order to serve all re=
+quests
+> +  from the monitored clients.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra30-actmon
+> +      - nvidia,tegra114-actmon
+> +      - nvidia,tegra124-actmon
+> +      - nvidia,tegra210-actmon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: actmon
+> +      - const: emc
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: actmon
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interconnects:
+> +    minItems: 1
+> +    maxItems: 12
+> +
+> +  interconnect-names:
+> +    minItems: 1
+> +    maxItems: 12
+> +    description:
+> +      Should include name of the interconnect path for each interconnect
+> +      entry. Consult TRM documentation for information about available
+> +      memory clients, see ACTIVITY MONITOR section.
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index c582a9ca397b..b54d3a985515 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -201,17 +201,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
-                        lazy = true;
-                        continue;
-                }
--
--               /*
--                * We only support genpd's OPPs in the "required-opps" for now,
--                * as we don't know how much about other cases. Error out if the
--                * required OPP doesn't belong to a genpd.
--                */
--               if (!required_opp_tables[i]->is_genpd) {
--                       dev_err(dev, "required-opp doesn't belong to genpd: %pOF\n",
--                               required_np);
--                       goto free_required_tables;
--               }
-        }
- 
-        /* Let's do the linking later on */
-@@ -379,13 +368,6 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
-        struct dev_pm_opp *opp;
-        int i, ret;
- 
--       /*
--        * We only support genpd's OPPs in the "required-opps" for now,
--        * as we don't know much about other cases.
--        */
--       if (!new_table->is_genpd)
--               return;
--
-        mutex_lock(&opp_table_lock);
- 
-        list_for_each_entry_safe(opp_table, temp, &lazy_opp_tables, lazy) {
-@@ -874,7 +856,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
-                return ERR_PTR(-ENOMEM);
- 
-        ret = _read_opp_key(new_opp, opp_table, np, &rate_not_available);
--       if (ret < 0 && !opp_table->is_genpd) {
-+       if (ret < 0) {
-                dev_err(dev, "%s: opp key field not found\n", __func__);
-                goto free_opp;
-        }
+This used to be "see MEMORY CONTROLLER section", so I looked at the TRM
+to see if this was perhaps a fix for an earlier typo, but looking at the
+TRM (v3) I can't find a section named "ACTIVITY MONITOR".
 
+Should this be changed back to "MEMORY CONTROLLER"?
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Thierry
+
+--lw9R1wTkEeyLOXza
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC0rhsACgkQ3SOs138+
+s6Fm0A//XhaGu3HM5/zN6jACSzME1rL9Z3YBxmJ+qMYp0VZUp2dQW9PmFReGsR45
+A3Ytplk/jkEawjdVzTss3CSjRl3veASJ/zwzU9D/xjuXdj2tdQZCYoo4pI3jt/Yj
+kn4AwSBdL86vs0B/B1Dp8bpzsXKTOofBr+JsDnAhchAWjYUi94BqUlfAR7JHhPkS
+3BO2bhbSHrWidNwpXsh8uyai/Ep91uU9ETZUGQrqqbZpDwPRLvOeQhP9A9kfclyu
+9blxwK24jhEqN2i10ns/cJg8r4E0eb1tx5G/8INPrtEzxirg+U7nzGSQRWLQSPCC
+MSP9jc8q+AgVnqx4gZG0aMCdTP5u9IlJHEaAf2NdDnJSbhnRGwae1KIANQTI7Ez2
+GSGvLIhw4uvLhz1hRewbTuBAb3jfmJcPjiCAMuXCc/fjFxaD2ACnHkx6H8w25aV+
++8UrVW6cqWL2xPbR76IlbDHhNdNspfoNVtBvSuVMHneZDwOCc6Uowj7JsUpls7qm
+6ty5VAxT+dj2MgILsVkADRJpZsz2FPDnyHLv6PDvQc8hjVDc2sx7t6gwVOw3A/XP
+U+MxatjR9oeo+4WlWoFVw5fQjHpNWhCu1IWG8glwJDaWDQDgR30ibNwD+45oHqrY
+oICaYIdKcIOng+A9o8K6HQGNEu4o+wyOaBLgnY+XIhHlTNqwC0U=
+=lC/s
+-----END PGP SIGNATURE-----
+
+--lw9R1wTkEeyLOXza--
