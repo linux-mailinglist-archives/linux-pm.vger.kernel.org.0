@@ -2,71 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B23553967DA
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 20:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484139684E
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 21:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbhEaS17 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 14:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S231201AbhEaTXZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 15:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbhEaS1r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 14:27:47 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F08C061574;
-        Mon, 31 May 2021 11:26:02 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id w33so17957379lfu.7;
-        Mon, 31 May 2021 11:26:02 -0700 (PDT)
+        with ESMTP id S230308AbhEaTXY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 15:23:24 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A73C061574;
+        Mon, 31 May 2021 12:21:43 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id e11so16151372ljn.13;
+        Mon, 31 May 2021 12:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7TI7fQuGaEfrByk2jtW55koqbA8DqlXxD77ZaJA6t1A=;
-        b=BkqV3rt98TP8hqluqk7VN+9VjYOs4gN36fKstt5LLa66Bu7ISUjjVmcQy9TiOopU1F
-         dkgnNj4jAXIwqh4wTq317S097l2dsU64IghALR1A6U0mb84x07ThGdFvMURGAMxs6+5y
-         +5H0RZdUqKWvfaPArMVk99wHUWIDOH22UY5dC7b0jvdFFwi4vxtMf7NWiyHxbRAdMc17
-         v13KHXE/Fv+btg6OgaFJ3sPyIwoSVPuUeZSU+0COxXRci8fq5rhI0H/biQ/ZE1WSnhmI
-         c7zEsHr2dQmSoh9RkgmAhEA2YDeU0B4X13ijZx3O6HwV7jVkuW8kkMFD0x+N8cpnonCu
-         fvOg==
+        bh=11twWy/ybOBSLZU1GcEMi3/TJsry3p9YUZOb/UBo0SU=;
+        b=FimFuoyvHklH+idplyPIxFbedZS0CGARUdeUAptgg6W+bBA3domtm+elGksLYcJnA7
+         +QGSeKeTyrcx7HaO4vFOLplb2k/8+HDBO1KnTx4I9et9hdwqVEUkv+5MzYJIaKOz+/DG
+         84AR4KRupVSGTonPGKeJ7+Dzs558CZ6HLWqzt5aVoRAIcGh7F0pmcVduA8RKirguS6yz
+         Ios+T0OXt7GNT0SluEWNiQZjBYWd/Y8IEy/PMMcJcdxw+9yyEEw6iNuuYRxctDg6vC0k
+         lloasmwsi8Z1XCQnxggGgYLw+jL7yKBBW8a2l29CitWECtEBiKV2RIN7s1e32qe5Elzx
+         aHGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7TI7fQuGaEfrByk2jtW55koqbA8DqlXxD77ZaJA6t1A=;
-        b=Lb9QYn2dZxOD8rRrNI4jS0UrXbtT9ntCg/uivcHMHzfzcAwdsIkU1D4uHNmiDJLYaW
-         FR5mw7sMTaccxNbV5SspdnOCU12+IzbubwM4LBhphRvisbjE/frBtgECeVWNcCDAHsm3
-         B4viJxheFndMnVk/oz2/27eRomtOeNId7Az3G05Ap8DqUo/fW+0Fde5WrsivaYVaKl2T
-         yVeMTnUtYF3+K5j4L/dtO8vHZ3ruXiv6vyJlDud/sNwbXxwY6zYBntNGorTFjE2xzLd8
-         g8EPuaNctVCToV6qwJVverBWGBnsFixlE9VL7FtsSav6+RjZdd7Ulq2Xymy/Xf6/0k3p
-         1WQA==
-X-Gm-Message-State: AOAM533qm4EA+eHLz9Swb2a2CpLpOrDIgu/qFMiW6QcY4Vg37ouJV6kb
-        seKYGjKcFN0D68dMQuN9XAk=
-X-Google-Smtp-Source: ABdhPJzDaLCMVaI7SnJjyJWhEBHUkGbEWE2LJwZQCfXoFut+QRa+E1/YyAwrYwqCaa4eqtQBY/9Qiw==
-X-Received: by 2002:ac2:455b:: with SMTP id j27mr15219533lfm.587.1622485560717;
-        Mon, 31 May 2021 11:26:00 -0700 (PDT)
+        bh=11twWy/ybOBSLZU1GcEMi3/TJsry3p9YUZOb/UBo0SU=;
+        b=PaOf7VvDyauTMCq6IcVAL2Rb4nhh4bF8Q93C5444H02cJ0H7lU3DOnC4L9/1fH4vuy
+         cV2yvFJBdnVxQBl1bXQYoa5nAvYd9JTXJ6zWzvWj3i2+CweA0v04+PtPs4bu04umv1np
+         hPCwrXPN7dfeV5cq5oEImwYNNm20CC/4+m1dzk+LWYTL4pnLd2iNtKa6nn8Oawg2zSnt
+         KTY3MFYbOU07Kq5HDX51nXVesBWHtcLQUoDCT3pXlNmk3dxOjjcoMkaVM2/fW1NCRwNj
+         jff5JzuL7azogPJSiZRhJDC4UCBfqFV4VBWbvXGH8vy8xaAb2xlH7OGAFz64NQyKxUUC
+         22ug==
+X-Gm-Message-State: AOAM532wVwTt1KvlgnEwUVp5IzT3PNrtLQO96XleUMWm/IDWQPBI9rY4
+        ePgdEOIpa4LMumgVqwI6bc+zhgRWiHk=
+X-Google-Smtp-Source: ABdhPJx/kRxSCpofr/cAMAeaupRusSxI0/KdU/jxoRKesHzPj5YkZKWvP41jSRq/xL5vRFLSWEwM2Q==
+X-Received: by 2002:a2e:9c4a:: with SMTP id t10mr18329864ljj.307.1622488901523;
+        Mon, 31 May 2021 12:21:41 -0700 (PDT)
 Received: from [192.168.2.145] (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
-        by smtp.googlemail.com with ESMTPSA id r17sm1424817lfr.18.2021.05.31.11.25.59
+        by smtp.googlemail.com with ESMTPSA id j4sm58945lfm.217.2021.05.31.12.21.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 May 2021 11:26:00 -0700 (PDT)
-Subject: Re: [PATCH v17 1/2] drm/tegra: dc: Support memory bandwidth
- management
+        Mon, 31 May 2021 12:21:41 -0700 (PDT)
+Subject: Re: [PATCH v1 3/7] dt-bindings: devfreq: tegra30-actmon: Convert to
+ schema
 To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Matt Merhar <mattmerhar@protonmail.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20210510232709.1349-1-digetx@gmail.com>
- <20210510232709.1349-2-digetx@gmail.com> <YLTvAVvWY0KcOx8s@orome.fritz.box>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210510211008.30300-1-digetx@gmail.com>
+ <20210510211008.30300-4-digetx@gmail.com> <YLSuHejkyPg+DJ0Y@orome.fritz.box>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <97bfce90-46d9-0ab0-e437-ce1e43b01b52@gmail.com>
-Date:   Mon, 31 May 2021 21:25:59 +0300
+Message-ID: <0a447f47-4e8b-120b-8fc5-22764740eb8d@gmail.com>
+Date:   Mon, 31 May 2021 22:21:40 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YLTvAVvWY0KcOx8s@orome.fritz.box>
+In-Reply-To: <YLSuHejkyPg+DJ0Y@orome.fritz.box>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -74,125 +76,153 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-31.05.2021 17:13, Thierry Reding пишет:
-> On Tue, May 11, 2021 at 02:27:08AM +0300, Dmitry Osipenko wrote:
->> Display controller (DC) performs isochronous memory transfers, and thus,
->> has a requirement for a minimum memory bandwidth that shall be fulfilled,
->> otherwise framebuffer data can't be fetched fast enough and this results
->> in a DC's data-FIFO underflow that follows by a visual corruption.
+31.05.2021 12:36, Thierry Reding пишет:
+> On Tue, May 11, 2021 at 12:10:04AM +0300, Dmitry Osipenko wrote:
+>> Convert NVIDIA Tegra ACTMON binding to schema.
 >>
->> The Memory Controller drivers provide facility for memory bandwidth
->> management via interconnect API. Let's wire up the interconnect API
->> support to the DC driver in order to fix the distorted display output
->> on T30 Ouya, T124 TK1 and other Tegra devices.
->>
->> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
->> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
->> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
 >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 >> ---
->>  drivers/gpu/drm/tegra/Kconfig |   1 +
->>  drivers/gpu/drm/tegra/dc.c    | 352 ++++++++++++++++++++++++++++++++++
->>  drivers/gpu/drm/tegra/dc.h    |  14 ++
->>  drivers/gpu/drm/tegra/drm.c   |  14 ++
->>  drivers/gpu/drm/tegra/hub.c   |   3 +
->>  drivers/gpu/drm/tegra/plane.c | 116 +++++++++++
->>  drivers/gpu/drm/tegra/plane.h |  15 ++
->>  7 files changed, 515 insertions(+)
+>>  .../arm/tegra/nvidia,tegra30-actmon.txt       |  57 ---------
+>>  .../devfreq/nvidia,tegra30-actmon.yaml        | 121 ++++++++++++++++++
+>>  2 files changed, 121 insertions(+), 57 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
+>>  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
 >>
-> [...]
->> diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
-> [...]
->> @@ -2011,7 +2143,215 @@ static void tegra_crtc_atomic_flush(struct drm_crtc *crtc,
->>  	value = tegra_dc_readl(dc, DC_CMD_STATE_CONTROL);
->>  }
->>  
->> +static bool tegra_plane_is_cursor(const struct drm_plane_state *state)
->> +{
->> +	const struct tegra_dc_soc_info *soc = to_tegra_dc(state->crtc)->soc;
->> +	const struct drm_format_info *fmt = state->fb->format;
->> +	unsigned int src_w = drm_rect_width(&state->src) >> 16;
->> +	unsigned int dst_w = drm_rect_width(&state->dst);
+>> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
+>> deleted file mode 100644
+>> index 897eedfa2bc8..000000000000
+>> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
+>> +++ /dev/null
+>> @@ -1,57 +0,0 @@
+>> -NVIDIA Tegra Activity Monitor
+>> -
+>> -The activity monitor block collects statistics about the behaviour of other
+>> -components in the system. This information can be used to derive the rate at
+>> -which the external memory needs to be clocked in order to serve all requests
+>> -from the monitored clients.
+>> -
+>> -Required properties:
+>> -- compatible: should be "nvidia,tegra<chip>-actmon"
+>> -- reg: offset and length of the register set for the device
+>> -- interrupts: standard interrupt property
+>> -- clocks: Must contain a phandle and clock specifier pair for each entry in
+>> -clock-names. See ../../clock/clock-bindings.txt for details.
+>> -- clock-names: Must include the following entries:
+>> -  - actmon
+>> -  - emc
+>> -- resets: Must contain an entry for each entry in reset-names. See
+>> -../../reset/reset.txt for details.
+>> -- reset-names: Must include the following entries:
+>> -  - actmon
+>> -- operating-points-v2: See ../bindings/opp/opp.txt for details.
+>> -- interconnects: Should contain entries for memory clients sitting on
+>> -                 MC->EMC memory interconnect path.
+>> -- interconnect-names: Should include name of the interconnect path for each
+>> -                      interconnect entry. Consult TRM documentation for
+>> -                      information about available memory clients, see MEMORY
+>> -                      CONTROLLER section.
+>> -
+>> -For each opp entry in 'operating-points-v2' table:
+>> -- opp-supported-hw: bitfield indicating SoC speedo ID mask
+>> -- opp-peak-kBps: peak bandwidth of the memory channel
+>> -
+>> -Example:
+>> -	dfs_opp_table: opp-table {
+>> -		compatible = "operating-points-v2";
+>> -
+>> -		opp@12750000 {
+>> -			opp-hz = /bits/ 64 <12750000>;
+>> -			opp-supported-hw = <0x000F>;
+>> -			opp-peak-kBps = <51000>;
+>> -		};
+>> -		...
+>> -	};
+>> -
+>> -	actmon@6000c800 {
+>> -		compatible = "nvidia,tegra124-actmon";
+>> -		reg = <0x0 0x6000c800 0x0 0x400>;
+>> -		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+>> -		clocks = <&tegra_car TEGRA124_CLK_ACTMON>,
+>> -			 <&tegra_car TEGRA124_CLK_EMC>;
+>> -		clock-names = "actmon", "emc";
+>> -		resets = <&tegra_car 119>;
+>> -		reset-names = "actmon";
+>> -		operating-points-v2 = <&dfs_opp_table>;
+>> -		interconnects = <&mc TEGRA124_MC_MPCORER &emc>;
+>> -		interconnect-names = "cpu";
+>> -	};
+>> diff --git a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+>> new file mode 100644
+>> index 000000000000..2a940d5d7ab4
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+>> @@ -0,0 +1,121 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/devfreq/nvidia,tegra30-actmon.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +	if (state->plane->type != DRM_PLANE_TYPE_CURSOR)
->> +		return false;
+>> +title: NVIDIA Tegra30 Activity Monitor
 >> +
->> +	if (soc->supports_cursor)
->> +		return true;
+>> +maintainers:
+>> +  - Dmitry Osipenko <digetx@gmail.com>
+>> +  - Jon Hunter <jonathanh@nvidia.com>
+>> +  - Thierry Reding <thierry.reding@gmail.com>
 >> +
->> +	if (src_w != dst_w || fmt->num_planes != 1 || src_w * fmt->cpp[0] > 256)
->> +		return false;
+>> +description: |
+>> +  The activity monitor block collects statistics about the behaviour of other
+>> +  components in the system. This information can be used to derive the rate at
+>> +  which the external memory needs to be clocked in order to serve all requests
+>> +  from the monitored clients.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - nvidia,tegra30-actmon
+>> +      - nvidia,tegra114-actmon
+>> +      - nvidia,tegra124-actmon
+>> +      - nvidia,tegra210-actmon
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 2
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: actmon
+>> +      - const: emc
+>> +
+>> +  resets:
+>> +    maxItems: 1
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: actmon
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interconnects:
+>> +    minItems: 1
+>> +    maxItems: 12
+>> +
+>> +  interconnect-names:
+>> +    minItems: 1
+>> +    maxItems: 12
+>> +    description:
+>> +      Should include name of the interconnect path for each interconnect
+>> +      entry. Consult TRM documentation for information about available
+>> +      memory clients, see ACTIVITY MONITOR section.
 > 
-> Technically there could be some random overlay window that matches these
-> conditions and is erroneously detected as being a cursor.
-
-The "random overlay window" with the DRM_PLANE_TYPE_CURSOR could happen
-only for the oldest Tegras. It's not a problem at all since everything
-will work properly anyways because we skip only the small sized plane
-that doesn't contribute to the BW requirement.
-
-> I wonder if we
-> should add a field to a plane that marks it as being used as cursor for
-> the cases where we don't support a hardware cursor.
-
-I don't think that we have information about how plane is used in the
-driver. DRM core should know this, tegra-drm not.
-
-It's unpractical to worry about this case, hence I think it's better to
-leave this part as-is for now, if you don't mind.
-
-> [...]
->> diff --git a/drivers/gpu/drm/tegra/dc.h b/drivers/gpu/drm/tegra/dc.h
->> index 29f19c3c6149..db10af097033 100644
->> --- a/drivers/gpu/drm/tegra/dc.h
->> +++ b/drivers/gpu/drm/tegra/dc.h
->> @@ -15,6 +15,8 @@
->>  
->>  struct tegra_output;
->>  
->> +#define TEGRA_DC_LEGACY_PLANES_NUM	7
->> +
->>  struct tegra_dc_state {
->>  	struct drm_crtc_state base;
->>  
->> @@ -23,6 +25,8 @@ struct tegra_dc_state {
->>  	unsigned int div;
->>  
->>  	u32 planes;
->> +
->> +	unsigned long plane_peak_bw[TEGRA_DC_LEGACY_PLANES_NUM];
+> This used to be "see MEMORY CONTROLLER section", so I looked at the TRM
+> to see if this was perhaps a fix for an earlier typo, but looking at the
+> TRM (v3) I can't find a section named "ACTIVITY MONITOR".
 > 
-> Why can we not store this peak bandwidth value within the plane state? I
-> know that this isn't exactly per-plane data because it depends on the
-> state of other planes, but that doesn't really prevent the value to live
-> within the plane state. The plane state is, after all, part of the
-> global state, and hence any such state needs to be considered within the
-> context of that global atomic state.
-> 
-> I suppose that might make it a little bit more difficult to get at the
-> data, but I think the end result would be less confusing than having an
-> array here with potentially unused fields. It would also get rid of the
-> need to look up planes by their per-CRTC index.
+> Should this be changed back to "MEMORY CONTROLLER"?
 
-The reason I stored the peak_bw in CRTC state is because it feels more
-natural to me somehow. It shouldn't be a problem to move it to the
-planes state. I'll prepare the new version shortly.
-
-...
->>  static const struct drm_mode_config_helper_funcs
->> diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
->> index bfae8a02f55b..f1bbc5991854 100644
->> --- a/drivers/gpu/drm/tegra/hub.c
->> +++ b/drivers/gpu/drm/tegra/hub.c
->> @@ -358,6 +358,9 @@ static int tegra_shared_plane_atomic_check(struct drm_plane *plane,
->>  	struct tegra_dc *dc = to_tegra_dc(new_plane_state->crtc);
->>  	int err;
->>  
->> +	plane_state->peak_memory_bandwidth = 0;
->> +	plane_state->avg_memory_bandwidth = 0;
->> +
-> 
-> Since ICC isn't supported yet on Tegra186 and later, does it even make
-> sense to initialize these?
-
-I added it for consistency, right now it's not needed for Tegra186+.
+The "ACTIVITY MONITOR" is documented only in the T124/210 TRMs, the h/w
+modules supported by ACTMON are enumerated there. Both "ACTIVITY
+MONITOR" and "MEMORY CONTROLLER" could be mentioned for completeness.
