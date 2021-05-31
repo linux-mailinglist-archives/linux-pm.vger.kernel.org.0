@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D164E39583D
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 11:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8125839584C
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 11:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbhEaJlT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 05:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S230521AbhEaJns (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 05:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbhEaJlT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 05:41:19 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95426C061574;
-        Mon, 31 May 2021 02:39:38 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id y184-20020a1ce1c10000b02901769b409001so6185599wmg.3;
-        Mon, 31 May 2021 02:39:38 -0700 (PDT)
+        with ESMTP id S230500AbhEaJnr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 05:43:47 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303B2C061574;
+        Mon, 31 May 2021 02:42:06 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id f11so10268809wrq.1;
+        Mon, 31 May 2021 02:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XOdtubDeLRT1SrX2gFQVLOjtwn9P5J3Qqsp7QIgnNKc=;
-        b=cL1+zzThP0W0FjGLwbSVvWX0wV063i3E4qLkqvZmdey0LaM4uOVJxD8T9DjIIS3Ige
-         g1LvykpMaaY4crSdni0/UCzqMe4mTq/AIzBoAgacfrgwlHWST2rzqIlmQl1gVt+eYrX9
-         ukdEhhrNgz5BIjyaPKqB2sdWGZGJljjD3EgbfkPIJOlJccL0Zx7msXFqCweIp9SX1j4o
-         t0q7vKDCfmQCxDVIx4LpwXlEYe6BT7ZluRtg8bYojLi+tzOQLLbr4Hfl5fNr8SSbJWyb
-         eh1lv92CGJ9tX2TBwkpS/IMeRc1DvcO7eu3GifCO5/74OjYkquO4pcqTDPTjKC4696ls
-         UDUg==
+        bh=0KB6HDqWDbYDQ3sbClq8V7awx6D1mSiWbRZJ+zsNykI=;
+        b=fgsSueAhu6KoC/Pu1gQM1Bxx2cxGcTOgfXbUGqvqY8st5jQkRU7IHgd78qM+STqh5T
+         0X2joDl28chJoC8c/ISkimTLXFUfF93vgyf+E8O/UNqSNyi9+/1irrGkucUb7bs5IdFS
+         w0GGMFSpVpE/0h/fAED/p9dkmmGRiceFq01p/qqtngxS2BIhSV9SgzdJI7le6XO8jM7x
+         AD5+Np+5K8jLcd8jNFjw1Bqx1c7BqaJ0eou/dNRLf2TtS1N0h0zPN9T8LUNFrPHh7kgL
+         aaQ0XUFX9QTna1+I5m8bSQwkhIV0+sMGVFKjT72ls6D2qZ6ovgITA69bJR56Lz909+S5
+         53dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XOdtubDeLRT1SrX2gFQVLOjtwn9P5J3Qqsp7QIgnNKc=;
-        b=MrzhholQv5SdH4g81/MzfXJU+QhwAlRGLTixvqhgHCAfnC7TvpIgHUV/fZa+uW+fzq
-         MulzMw+Ihttp3z9LP+8M/5RiJmh2p8+YvgZOk82ety51nXuJ8oonFZy4dBBhegLGr/Qy
-         FvoZk9kHm0UZMMo8k1VbAolCvaF3ob83jzuYmUGqPCSl4rnGVPyWAJin9t6cRb0UTXYc
-         lWF4M1eSdtNZdVz058rsL/3JE0qJ2mDRXAtqxkAinln1tQC1Oqo12UjxvL1Q7e+Lbvwu
-         RItxMe5MTvi1yrIPCzZs46rr/jLlzmljSBm3xUixnqagS4bpCvna2kDH9ZNENxBStc+3
-         69JQ==
-X-Gm-Message-State: AOAM533l1Xm0qyZUGL/kK7nLGRs5JjojgOKxHVWFXtyB4E6CeNcutmOD
-        hJcY8RKHsvPP+fHydQSp72U=
-X-Google-Smtp-Source: ABdhPJyAbtYrUJpxvsoMa5GK7/e4cJq00idAbWgY+IHVTJzakOl9MwHB9FJOhMfnHApbhyTzmnP4vw==
-X-Received: by 2002:a05:600c:4a29:: with SMTP id c41mr7063544wmp.17.1622453977205;
-        Mon, 31 May 2021 02:39:37 -0700 (PDT)
+        bh=0KB6HDqWDbYDQ3sbClq8V7awx6D1mSiWbRZJ+zsNykI=;
+        b=RH3JVCIFCD/NSZ+V1GRsp1lPIaCYuOORPy5YDi3ttF6bnEVN9bpK48NftEVMXzABN3
+         FZ/3Q3YA2aDuDnxWrUO5rMrcp5ERMdXavAL7aK/mokxTjN5O8aR+1xCm2gTY8cJ5ZD+u
+         v6PBTNInEPR1BFWOQ+VtQKuQR3pvEiZwvz+ruSlXYi76ohc4PHvt+uK49y6myTqpOxzg
+         g+owGVLd/g5J9Ep6WF4Xeq+jBFrdi7P5VuIbAyqUL+w8YsXgoDSlJNexwCuYRL++ia4O
+         mYpG+nwhmiTity3p42q4OiYxJQ5DUwoQb+uYiDfbbJiAoP81TPK0rcEuPoOgogzDp6rM
+         BpLQ==
+X-Gm-Message-State: AOAM532xfhqQGFQbHoa4C7ZKvT0Tb4daf8wqQyOuWe0rRuE6Ez4EnhyQ
+        hp7kGpSapCZt1g3anGJ+uCI=
+X-Google-Smtp-Source: ABdhPJxkGDatOBDkp5cyeEg5yG9Ad7cqsNOcsKFfs/OBHjY58aDE22wAhNXwGnjGvGlf86YQCr3dtw==
+X-Received: by 2002:adf:e3c1:: with SMTP id k1mr13850403wrm.305.1622454124818;
+        Mon, 31 May 2021 02:42:04 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id n2sm18020000wmb.32.2021.05.31.02.39.36
+        by smtp.gmail.com with ESMTPSA id l10sm3848039wrm.2.2021.05.31.02.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 02:39:36 -0700 (PDT)
+        Mon, 31 May 2021 02:42:03 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: (subset) [PATCH v1 0/7] Add thermal cooling support to NVIDIA Tegra devfreq
-Date:   Mon, 31 May 2021 11:41:10 +0200
-Message-Id: <162245404837.55562.8775409412946252680.b4-ty@nvidia.com>
+Date:   Mon, 31 May 2021 11:43:38 +0200
+Message-Id: <162245420727.56105.5565762567088320366.b4-ty@nvidia.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210510211008.30300-1-digetx@gmail.com>
 References: <20210510211008.30300-1-digetx@gmail.com>
@@ -86,12 +86,8 @@ On Tue, 11 May 2021 00:10:01 +0300, Dmitry Osipenko wrote:
 
 Applied, thanks!
 
-[5/7] ARM: tegra: Add cooling cells to ACTMON device-tree node
-      commit: 592b74b1f0ebfe49d2e66b2b4bd95ff3678c5696
-[6/7] ARM: tegra: nexus7: Enable memory frequency thermal throttling using ACTMON
-      commit: fe7482b88590635939c4bb786e1cd3bbd9ea1682
-[7/7] ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON
-      commit: 4c101a4466983abe7798493ef17279cc3f8eb028
+[2/7] ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL
+      commit: 4302331fdf4440b96dba583384a0e2b759cb13bd
 
 Best regards,
 -- 
