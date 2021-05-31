@@ -2,132 +2,341 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30292395AE7
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 14:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEB6395B98
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 15:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbhEaMvy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 08:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S232138AbhEaNW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 09:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhEaMvx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 08:51:53 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4F5C061574;
-        Mon, 31 May 2021 05:50:12 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n2so10875793wrm.0;
-        Mon, 31 May 2021 05:50:12 -0700 (PDT)
+        with ESMTP id S232157AbhEaNUX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 09:20:23 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7802C061345
+        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 06:18:02 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id l12so900631uai.0
+        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 06:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9YDySThKVV8UwnHyQVkaDaNxnxUaN/PzESp5d7RpUy4=;
-        b=doFYDKPrEtfJrvYp6ATC2RMU3jwujsQvl3FKjWH7wCgE2NrBSkw+kS1d1jq5Icx7jP
-         MlL2oRtpl9vGw0Fu3iY1txVMhPRPupbnS7WP1v4lciJUa4eZRma68jCPBeB10O7P42P1
-         9/CbL2do+qes34GNQaZZXjuPLBk9FEs3hrMq+QsR2XqOsObCH/fhSrVK9QHVnaPp1D5U
-         UcLa5uikB8MwTWRbGDSce+IcaIXE/JG/Hqs2dtwJ/nFjMF66HXFHinTLfpBYkv2r5BiM
-         1lC957Jsby0jJfWlHcLe19gaOgsM38KTcBIF1Id6SOlGKmwY/EliT+plI3TYN/cVNXuh
-         zyCQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0kiA/djYgopisCEoPEc1VVGK9NnlXuTuQN3cSOOv10c=;
+        b=RIk3MqIZGL/1MRmCsFcbvDOrePvzah8anu2l4fHgBF58z/s8i9OoyuW0xERsPeYa/y
+         lqrHzYs4vq3ErYIn6yrMtmPmWv1yl2Z3t5TqTA8LuaTEccf6G5+7mNdceQWSut5AKyVJ
+         ImIB3TiAe67HuAhO7jE7J8okBwmfrNQ16kATPC1uiIlqzndhIrMFc6PyBW56jeCQfSqg
+         TK2i2f29Onu+ZwqqS8OA7+3sQqB9sOqcXd4T5Tl6QqsBCdD9w6+BLdfdGFNvNtSUyMeu
+         6YM18nDk6GYkyIFuqPcgZSYmINrOxh8ABZZwfq/nnL4epY2/a9RX6Yv21R5eFdE5RvRp
+         1ojg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9YDySThKVV8UwnHyQVkaDaNxnxUaN/PzESp5d7RpUy4=;
-        b=JdBx6LY0c3lQsepE13ATSztM/U97FNxKdnmrPWK+BMaIBVeyNujUAmv1zULNu1Y8A8
-         tRsJVvPAWH+ogPznCh82qoIueDlRoiCMhCru39r0kFRlkyKVdt7sFpG2oLWNuWzmldsN
-         mqhv6+1Fjs32pxvwpOJFnWGJ/PYblERy4F85R0MsXzsW9T82Usnmgo1l9YR9vjQ2dSCJ
-         pYhN811Q/0vRFUqqG+wMWuvcerEDQLfiu+SbWhRHsQUEtlSF10q7OVjMfBjXD2m3KkUL
-         nnlCEI8IA+Ij0Kt6GgMGFJXlYySKzHzKeGGadF3nY/KFrMzn22hRqvjy2mYSZ9jnk5vt
-         UCaA==
-X-Gm-Message-State: AOAM531kesAWlHEQB7nvIhyBwNv2bbyllN0lHkui8r/NaApbyOLxsED7
-        BWB1owjemlow1uSzW7mTWaA=
-X-Google-Smtp-Source: ABdhPJzGCfHhTTs/45g7ekCkQRXgyGBaTh81GeyB8pBe4M4AeqoLBc+vc+tDTmiL2utiCf9r6xE6oQ==
-X-Received: by 2002:a05:6000:154e:: with SMTP id 14mr21972604wry.271.1622465411230;
-        Mon, 31 May 2021 05:50:11 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id u8sm21483881wmq.29.2021.05.31.05.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 05:50:09 -0700 (PDT)
-Date:   Mon, 31 May 2021 14:51:44 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Ion Agorria <ion@agorria.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 4/7] thermal/drivers/tegra: Add driver for Tegra30
- thermal sensor
-Message-ID: <YLTb4LUK55Oj4yAt@orome.fritz.box>
-References: <20210529170955.32574-1-digetx@gmail.com>
- <20210529170955.32574-5-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0kiA/djYgopisCEoPEc1VVGK9NnlXuTuQN3cSOOv10c=;
+        b=jsqetpZIcJPxqLz4lCUtPQ1o8FVH+4OoexubVIRDeEbAW0sWtRarWAaa/xKOW2seFb
+         hMqYa5qTvB/C+R3xtm750FsfM2YmnZinNwFUC4g41hvE9b0qO2OO+brDznqdjgXmVJTB
+         QbWqSZGQc/KhbMfk14vV0OBX6K1X2WxGmZLL2Yn5f9Tp4X2A6DlzMuCdrD2jonxLIlKH
+         U7pMSeLzJeKduQOfjVsuuloUGo5mG5PVmF6xpeQv/ChIK+nH8d6kmcr+067QSrNm8oln
+         7HnL074Gm8VGchHO2j+IFgQaxWmErxjn58XGTccf4qtFonEhmt57yXDTIBHtjTNn6bJ5
+         QN4w==
+X-Gm-Message-State: AOAM532O1vG8rNhdDncN4g2YiJEsY6MZbswOFQlJEmGe0SHquowAep97
+        zO4zxWmYWnFyTXas3/yKh0TOpUzJE20X5ddV9fgynQ==
+X-Google-Smtp-Source: ABdhPJz3VoCnoUITku1d1/D6mME6LnMWJm0weinsXpBYkReFh3ZzqEgOyNPQLyQngZTRHChx8vt7LbJX27dzO0mb5Js=
+X-Received: by 2002:ab0:12a:: with SMTP id 39mr9889704uak.19.1622467081738;
+ Mon, 31 May 2021 06:18:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ckQWfJgw/VZRiwBs"
-Content-Disposition: inline
-In-Reply-To: <20210529170955.32574-5-digetx@gmail.com>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
+References: <20210523231335.8238-1-digetx@gmail.com> <20210523231335.8238-14-digetx@gmail.com>
+ <CAPDyKFrto2cosX3Ben_QWCYVqgeoF1Yv=8gEx4Y86WNyjeHvdg@mail.gmail.com> <f0b1bea7-0752-5584-8bcc-d8b602f22c13@gmail.com>
+In-Reply-To: <f0b1bea7-0752-5584-8bcc-d8b602f22c13@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 31 May 2021 15:17:24 +0200
+Message-ID: <CAPDyKFq0EpVjUg9RV7qR3_qywUQHKqStPNSFY==6AFBNC6m3KQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/14] soc/tegra: pmc: Add core power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?Q?Nikola_Milosavljevi=C4=87?= <mnidza@outlook.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 24 May 2021 at 22:23, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 24.05.2021 20:04, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Mon, 24 May 2021 at 01:13, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> NVIDIA Tegra SoCs have multiple power domains, each domain corresponds
+> >> to an external SoC power rail. Core power domain covers vast majority =
+of
+> >> hardware blocks within a Tegra SoC. The voltage of a power domain shou=
+ld
+> >> be set to a level which satisfies all devices within the power domain.
+> >> Add support for the core power domain which controls voltage state of =
+the
+> >> domain. This allows us to support system-wide DVFS on Tegra20-210 SoCs=
+.
+> >> The PMC powergate domains now are sub-domains of the core domain, this
+> >> requires device-tree updating, older DTBs are unaffected.
+> >>
+> >> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> >> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+> >> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T12=
+4
+> >> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >
+> > [...]
+> >
+> >> +
+> >> +static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device=
+_node *np)
+> >> +{
+> >> +       static struct lock_class_key tegra_core_domain_lock_class;
+> >> +       struct generic_pm_domain *genpd;
+> >> +       const char *rname =3D "core";
+> >> +       int err;
+> >> +
+> >> +       genpd =3D devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
+> >> +       if (!genpd)
+> >> +               return -ENOMEM;
+> >> +
+> >> +       genpd->name =3D np->name;
+> >> +       genpd->set_performance_state =3D tegra_pmc_core_pd_set_perform=
+ance_state;
+> >> +       genpd->opp_to_performance_state =3D tegra_pmc_core_pd_opp_to_p=
+erformance_state;
+> >> +
+> >> +       err =3D devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
+> >> +       if (err)
+> >> +               return dev_err_probe(pmc->dev, err,
+> >> +                                    "failed to set core OPP regulator=
+\n");
+> >> +
+> >> +       err =3D pm_genpd_init(genpd, NULL, false);
+> >> +       if (err) {
+> >> +               dev_err(pmc->dev, "failed to init core genpd: %d\n", e=
+rr);
+> >> +               return err;
+> >> +       }
+> >> +
+> >> +       /*
+> >> +        * We have a "PMC pwrgate -> Core" hierarchy of the power doma=
+ins
+> >> +        * where PMC needs to resume and change performance (voltage) =
+of the
+> >> +        * Core domain from the PMC GENPD on/off callbacks, hence we n=
+eed
+> >> +        * to annotate the lock in order to remove confusion from the
+> >> +        * lockdep checker when a nested access happens.
+> >> +        */
+> >
+> > Can you elaborate a bit more on this?
+> >
+> > Are you saying that when the child domain (PMC pwrgate) gets powered
+> > off, you want to drop its aggregated votes it may hold for the
+> > performance state, as otherwise it may affect the parent domain (core
+> > domain)?
+>
+> Yes, in particular we want to remove/add the performance vote when clk is=
+ disabled/enabled, see tegra_clock_runtime_resume/suspend() of the clk-runt=
+imePM driver [1]. I'll send that clk patch separately once this series and =
+some other tegra-clk patches will be merged, otherwise there are too many d=
+ependencies and it's too difficult to review.
 
---ckQWfJgw/VZRiwBs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You are likely correct from the merging point of view, but for
+completeness I would prefer to look at the whole series. Would you
+mind folding in some of these changes too?
 
-On Sat, May 29, 2021 at 08:09:52PM +0300, Dmitry Osipenko wrote:
-> All NVIDIA Tegra30 SoCs have a two-channel on-chip sensor unit which
-> monitors temperature and voltage of the SoC. Sensors control CPU frequency
-> throttling, which is activated by hardware once preprogrammed temperature
-> level is breached, they also send signal to Power Management controller to
-> perform emergency shutdown on a critical overheat of the SoC die. Add
-> driver for the Tegra30 TSENSOR module, exposing it as a thermal sensor
-> and a cooling device.
->=20
-> Tested-by: Andreas Westman Dorcsak <hedmoo@yahoo.com> # Asus TF700T
-> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
-> Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # Asus TF201T
-> Tested-by: Ihor Didenko <tailormoon@rambler.ru> # Asus TF300T
-> Tested-by: Ion Agorria <ion@agorria.com> # Asus TF201T
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/thermal/tegra/Kconfig           |   7 +
->  drivers/thermal/tegra/Makefile          |   1 +
->  drivers/thermal/tegra/tegra30-tsensor.c | 736 ++++++++++++++++++++++++
->  3 files changed, 744 insertions(+)
->  create mode 100644 drivers/thermal/tegra/tegra30-tsensor.c
+>
+> [1] https://patchwork.ozlabs.org/project/linux-tegra/patch/20201217180638=
+.22748-33-digetx@gmail.com/
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Hmm. In general, the new changes to genpd and the opp library with
+"performance states" for DVFS, should help to avoid using clock rate
+notifications.
 
---ckQWfJgw/VZRiwBs
-Content-Type: application/pgp-signature; name="signature.asc"
+Instead of updating the performance votes from the clock provider
+driver, the more proper thing would be to let the clock consumer
+driver (various drivers) to call dev_pm_opp_set_rate() when it needs
+to move to a new OPP. This also means calling dev_pm_opp_set_rate(dev,
+0) when the votes for an OPP can be dropped.
 
------BEGIN PGP SIGNATURE-----
+In this way, the opp library will call genpd to update the performance
+state vote for the corresponding device.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC0294ACgkQ3SOs138+
-s6G9MQ//bnkil2zXowpCSG7HaLo9NcOXtx3wXjSmpy7WGER7nmLPCdLFAfBTaSxI
-ROvELNMVHmHnyl8ZqDIj3o3rlVP3Le0tpE59eH+1lPSy0WKpjFAjX3g7ziw8mIWz
-nxuQfSM6h5YJET5tK3Z3LWeg06OWLN62gF34Zi0nj2kcB6H0lgxxmmGB0ODmu+Vt
-Tx+2fnt1q254lqfMV1Qph12iNt9vaq9k+/h/7c07b0KRM63zjY2vQjt4U+c/C9v6
-up/oOsVGq7tD0NRNgTm5TtuaoUJ73aAbcMqUzYELh+QCcT2QxtnQukvT0IgAb1xV
-CDXb3J5pfUaPqrwl+v74ybopypCajIcjHIT79HtyTWww+77/bC/l3fP9/2BYRDsj
-qBeFUEc+BHHQaDA2bnVUkYh7IV5dv/1yV61y2uXXKf8/S/A4xxIgs4mHyZB0hoZY
-xyHSzDEvW6f9CykmwwloiobRP+euRWyq7keTtrt4x+4kQaXm9PnkfQjDr4OMctWZ
-/yfD8+XMxoUVM/SnPQFqRqT6gRtzfEcMzO0CPDDkwQqqh6HLPI/kvTfJ+PQNcbYD
-1dw6pEogk+DtgbbaH8ud52J6q44cPTFFcz9RwjJJcD+URDYYqwVPmXHeW1FSOTMt
-jLwVisXsErDH5fkcXe1mvmCHPDizAcWXOsaxLnmhFAaDQhJGABI=
-=/bda
------END PGP SIGNATURE-----
+>
+> Please see the example lockdep trace in the end of the email that is fixe=
+d by the mutex annotation. What we have there is the tegra-host1x device dr=
+iver that resumes PMC powergate domain on Tegra30, the PMC driver enables c=
+lock from the genpd.power_on callback of the powergate domain and this prop=
+agates to the clock's RPM callback which sets the performance vote of the c=
+ore domain. Hence core domain vote is set from within of the powergate doma=
+in.
 
---ckQWfJgw/VZRiwBs--
+Right, this sounds like a fragile looking path. Are you sure it can't
+lead into deadlock situations?
+
+In any case, we designed dev_pm_opp_set_rate() (and its friends in
+genpd) with these locking issues in mind.
+
+>
+> > I guess this would be a valid scenario to optimize for, especially if
+> > you have more than one child domain of the core power domain, right?
+> >
+> > If you have only one child domain, would it be sufficient to assign
+> > ->power_on|off() callbacks for the core domain and deal with the
+> > performance stare votes from there instead?
+>
+> The core domain is the parent domain of the PMC domains + some devices di=
+rectly belong to the core domain. The GENPD core aggregates the performance=
+ votes from the children domains and from devices of the parent core, this =
+all works great already.
+>
+> It sounds to me that you're suggesting to reinvent the aggregation logic =
+within the PMC driver and create a fake hierarchy that doesn't match hardwa=
+re. It won't help the lockdep warning anyways.
+>
+> I actually don't quite understand what problem you're trying to solve, co=
+uld you please explain? The lockdep warning is harmless, we just need to an=
+notate the mutex lock class.
+>
+> If you don't feel comfortable with the usage of lockdep_set_class() in th=
+e driver, then maybe it should be possible to make it a part of the pm_genp=
+d_init(). For example like we did that for tegra-host1x driver recently [2]=
+.
+
+I was not trying to solve a problem, but was just curious and wanted
+to ask about the reasons for the lockdep_set_class(), as it simply
+caught my attention while reviewing.
+
+Looks like there may be something fishy going on, but let's see, I may be w=
+rong.
+
+>
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?id=3Da24f98176d1efae2c37d3438c57a624d530d9c33
+>
+>
+>  LOCKDEP
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  WARNING: possible recursive locking detected
+>  5.13.0-rc3-next-20210524-00202-g80a288f17147-dirty #7935 Tainted: G     =
+   W
+>  --------------------------------------------
+>  kworker/u8:2/96 is trying to acquire lock:
+>  c202e494 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95/0x17=
+4
+>
+>                but task is already holding lock:
+>  c35d9454 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95/0x17=
+4
+>
+>                other info that might help us debug this:
+>   Possible unsafe locking scenario:
+>
+>         CPU0
+>         ----
+>    lock(&genpd->mlock);
+>    lock(&genpd->mlock);
+>
+>                 *** DEADLOCK ***
+>
+>   May be due to missing lock nesting notation
+>
+>  5 locks held by kworker/u8:2/96:
+>   #0: c2024ea8 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_o=
+ne_work+0x15a/0x600
+>   #1: c2a31f20 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x=
+15a/0x600
+>   #2: c35f04d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x29/0xdc
+>   #3: c35d9454 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95=
+/0x174
+>   #4: c13fbbcc (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x17/0xac
+>
+>                stack backtrace:
+>  CPU: 0 PID: 96 Comm: kworker/u8:2 Tainted: G        W         5.13.0-rc3=
+-next-20210524-00202-g80a288f17147-dirty #7935
+>  Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+>  Workqueue: events_unbound deferred_probe_work_func
+>  [<c010d1cd>] (unwind_backtrace) from [<c0109639>] (show_stack+0x11/0x14)
+>  [<c0109639>] (show_stack) from [<c0ba6dab>] (dump_stack_lvl+0x97/0xb0)
+>  [<c0ba6dab>] (dump_stack_lvl) from [<c017b24f>] (__lock_acquire+0x7fb/0x=
+2534)
+>  [<c017b24f>] (__lock_acquire) from [<c017d75b>] (lock_acquire+0xf3/0x424=
+)
+>  [<c017d75b>] (lock_acquire) from [<c0bb0daf>] (__mutex_lock+0x87/0x7f4)
+>  [<c0bb0daf>] (__mutex_lock) from [<c0bb1535>] (mutex_lock_nested+0x19/0x=
+20)
+>  [<c0bb1535>] (mutex_lock_nested) from [<c0669ced>] (genpd_runtime_resume=
++0x95/0x174)
+>  [<c0669ced>] (genpd_runtime_resume) from [<c0660167>] (__rpm_callback+0x=
+7b/0xc8)
+>  [<c0660167>] (__rpm_callback) from [<c06601cd>] (rpm_callback+0x19/0x60)
+>  [<c06601cd>] (rpm_callback) from [<c065fde3>] (rpm_resume+0x47f/0x65c)
+>  [<c065fde3>] (rpm_resume) from [<c066000f>] (__pm_runtime_resume+0x4f/0x=
+78)
+>  [<c066000f>] (__pm_runtime_resume) from [<c05857f7>] (clk_pm_runtime_get=
+.part.0+0x13/0x54)
+>  [<c05857f7>] (clk_pm_runtime_get.part.0) from [<c05881e9>] (clk_core_set=
+_rate_nolock+0x81/0x1cc)
+>  [<c05881e9>] (clk_core_set_rate_nolock) from [<c0588353>] (clk_set_rate+=
+0x1f/0x44)
+>  [<c0588353>] (clk_set_rate) from [<c0597cd3>] (tegra_powergate_prepare_c=
+locks+0x2f/0x94)
+>  [<c0597cd3>] (tegra_powergate_prepare_clocks) from [<c059a4d1>] (tegra_p=
+owergate_power_up+0x45/0xec)
+>  [<c059a4d1>] (tegra_powergate_power_up) from [<c0ba7211>] (tegra_genpd_p=
+ower_on+0x2b/0x50)
+>  [<c0ba7211>] (tegra_genpd_power_on) from [<c0667231>] (_genpd_power_on+0=
+x6d/0xb8)
+>  [<c0667231>] (_genpd_power_on) from [<c066999d>] (genpd_power_on.part.0+=
+0x85/0xf0)
+>  [<c066999d>] (genpd_power_on.part.0) from [<c0669cfb>] (genpd_runtime_re=
+sume+0xa3/0x174)
+>  [<c0669cfb>] (genpd_runtime_resume) from [<c0660167>] (__rpm_callback+0x=
+7b/0xc8)
+>  [<c0660167>] (__rpm_callback) from [<c06601cd>] (rpm_callback+0x19/0x60)
+>  [<c06601cd>] (rpm_callback) from [<c065fde3>] (rpm_resume+0x47f/0x65c)
+>  [<c065fde3>] (rpm_resume) from [<c066000f>] (__pm_runtime_resume+0x4f/0x=
+78)
+>  [<c066000f>] (__pm_runtime_resume) from [<c065675f>] (__device_attach+0x=
+83/0xdc)
+>  [<c065675f>] (__device_attach) from [<c0655d55>] (bus_probe_device+0x5d/=
+0x64)
+>  [<c0655d55>] (bus_probe_device) from [<c06560b7>] (deferred_probe_work_f=
+unc+0x63/0x88)
+>  [<c06560b7>] (deferred_probe_work_func) from [<c0139993>] (process_one_w=
+ork+0x1eb/0x600)
+>  [<c0139993>] (process_one_work) from [<c0139fcf>] (worker_thread+0x227/0=
+x3bc)
+>  [<c0139fcf>] (worker_thread) from [<c0140ab3>] (kthread+0x13f/0x15c)
+>  [<c0140ab3>] (kthread) from [<c0100159>] (ret_from_fork+0x11/0x38)
+>  Exception stack(0xc2a31fb0 to 0xc2a31ff8)
+
+Thanks for sharing the log.
+
+Could you perhaps point me to the corresponding DTS files. I would
+like to understand more about the PM domain hierarchy and where the
+clock controller may be located.
+
+Kind regards
+Uffe
