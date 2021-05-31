@@ -2,341 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEB6395B98
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 15:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3087C396387
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 17:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbhEaNW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 09:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S234577AbhEaPUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 11:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbhEaNUX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 09:20:23 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7802C061345
-        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 06:18:02 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id l12so900631uai.0
-        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 06:18:02 -0700 (PDT)
+        with ESMTP id S233329AbhEaPRV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 11:17:21 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DEC035433;
+        Mon, 31 May 2021 07:11:49 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id g17so11012799wrs.13;
+        Mon, 31 May 2021 07:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0kiA/djYgopisCEoPEc1VVGK9NnlXuTuQN3cSOOv10c=;
-        b=RIk3MqIZGL/1MRmCsFcbvDOrePvzah8anu2l4fHgBF58z/s8i9OoyuW0xERsPeYa/y
-         lqrHzYs4vq3ErYIn6yrMtmPmWv1yl2Z3t5TqTA8LuaTEccf6G5+7mNdceQWSut5AKyVJ
-         ImIB3TiAe67HuAhO7jE7J8okBwmfrNQ16kATPC1uiIlqzndhIrMFc6PyBW56jeCQfSqg
-         TK2i2f29Onu+ZwqqS8OA7+3sQqB9sOqcXd4T5Tl6QqsBCdD9w6+BLdfdGFNvNtSUyMeu
-         6YM18nDk6GYkyIFuqPcgZSYmINrOxh8ABZZwfq/nnL4epY2/a9RX6Yv21R5eFdE5RvRp
-         1ojg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=AIjiXQgx7FWz0JkATZyG5fSCXhacRqcixlM/KFusILo=;
+        b=gR4eIVe6z1B1V7G8FlLeEfNs7u6igycqfpCxQ75B9VubkFodmpUkOaoMCXQ4Zb9Ddx
+         AR1APh8kdpq/ubV/6jpsIV6G7ZtlhbuFUdVqCgXGDoYRmFClNwlm18gTZBU9jnDs8kIG
+         w2on7dDZx+1pazEnxVAvVpSRiDDxex9nUyKgeE93E64a/GfG8EUKa+K78BoLnNBzeP49
+         kxnVqPE3N4uxt0EegLGqBswS4L21oVXyKqqITC+Su/GsORZViOtOzYCAk8Ivzob+Pmyz
+         BxRKFuafOdL/IiI0zDyzhmSdb9M1XuXEL0kJUeti4WycJmJx8H0z6BHSAjiFKE/m3DG+
+         uvAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0kiA/djYgopisCEoPEc1VVGK9NnlXuTuQN3cSOOv10c=;
-        b=jsqetpZIcJPxqLz4lCUtPQ1o8FVH+4OoexubVIRDeEbAW0sWtRarWAaa/xKOW2seFb
-         hMqYa5qTvB/C+R3xtm750FsfM2YmnZinNwFUC4g41hvE9b0qO2OO+brDznqdjgXmVJTB
-         QbWqSZGQc/KhbMfk14vV0OBX6K1X2WxGmZLL2Yn5f9Tp4X2A6DlzMuCdrD2jonxLIlKH
-         U7pMSeLzJeKduQOfjVsuuloUGo5mG5PVmF6xpeQv/ChIK+nH8d6kmcr+067QSrNm8oln
-         7HnL074Gm8VGchHO2j+IFgQaxWmErxjn58XGTccf4qtFonEhmt57yXDTIBHtjTNn6bJ5
-         QN4w==
-X-Gm-Message-State: AOAM532O1vG8rNhdDncN4g2YiJEsY6MZbswOFQlJEmGe0SHquowAep97
-        zO4zxWmYWnFyTXas3/yKh0TOpUzJE20X5ddV9fgynQ==
-X-Google-Smtp-Source: ABdhPJz3VoCnoUITku1d1/D6mME6LnMWJm0weinsXpBYkReFh3ZzqEgOyNPQLyQngZTRHChx8vt7LbJX27dzO0mb5Js=
-X-Received: by 2002:ab0:12a:: with SMTP id 39mr9889704uak.19.1622467081738;
- Mon, 31 May 2021 06:18:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210523231335.8238-1-digetx@gmail.com> <20210523231335.8238-14-digetx@gmail.com>
- <CAPDyKFrto2cosX3Ben_QWCYVqgeoF1Yv=8gEx4Y86WNyjeHvdg@mail.gmail.com> <f0b1bea7-0752-5584-8bcc-d8b602f22c13@gmail.com>
-In-Reply-To: <f0b1bea7-0752-5584-8bcc-d8b602f22c13@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 31 May 2021 15:17:24 +0200
-Message-ID: <CAPDyKFq0EpVjUg9RV7qR3_qywUQHKqStPNSFY==6AFBNC6m3KQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/14] soc/tegra: pmc: Add core power domain
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AIjiXQgx7FWz0JkATZyG5fSCXhacRqcixlM/KFusILo=;
+        b=XE0maH0rTw7Oe3IPRqWCEpS1JgYYuG/4i6ZS2MLmMAkkkMqHBT+hnchs4Pgi+hJevV
+         acKG9usIupaj9G2gvb+QAI/IUiR35ldZrlT2UfnuauQU2F0NB9SlLOkCkqJbqs2mXUhd
+         saE4MDDbCu6fegls/mgzW//lYU2Yp/9Kns6lcCuEvTo9Uy0FOcwtB6R7pDBxVgG5W/ei
+         8VqlM+OQUPr7RnQCreMS/1OF4etv7TCfSM9xW9ASw1V8TdNfc6iaww5qmQ3cIcM+bXyC
+         UneJ/G4g3o1fvXuhTiqBnXtOu7GT2QZn5SLNyY0UbjNnjIKFvEtuHuN2lf8q5kfZQ/8K
+         ORdA==
+X-Gm-Message-State: AOAM532liEPh7N/F9q2ZQtLbui7dNjWCOAURGFRKdhUT5Epr7hyeJnFl
+        2fLzhrb/lqLL4NB1uJ0EFd8=
+X-Google-Smtp-Source: ABdhPJww9rCZ42lw+eUK5RSQAl0WzIrrsMfuz3xlNuebFpWzqMStHtaShdjJ1FOdW+v7tWxIXOFYFA==
+X-Received: by 2002:a5d:4287:: with SMTP id k7mr9213415wrq.98.1622470307828;
+        Mon, 31 May 2021 07:11:47 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id o6sm7328692wre.73.2021.05.31.07.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 07:11:46 -0700 (PDT)
+Date:   Mon, 31 May 2021 16:13:21 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?Q?Nikola_Milosavljevi=C4=87?= <mnidza@outlook.com>,
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
         Peter Geis <pgwipeout@gmail.com>,
         Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v17 1/2] drm/tegra: dc: Support memory bandwidth
+ management
+Message-ID: <YLTvAVvWY0KcOx8s@orome.fritz.box>
+References: <20210510232709.1349-1-digetx@gmail.com>
+ <20210510232709.1349-2-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qCPCAX+azklwClYR"
+Content-Disposition: inline
+In-Reply-To: <20210510232709.1349-2-digetx@gmail.com>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 24 May 2021 at 22:23, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 24.05.2021 20:04, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, 24 May 2021 at 01:13, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> NVIDIA Tegra SoCs have multiple power domains, each domain corresponds
-> >> to an external SoC power rail. Core power domain covers vast majority =
-of
-> >> hardware blocks within a Tegra SoC. The voltage of a power domain shou=
-ld
-> >> be set to a level which satisfies all devices within the power domain.
-> >> Add support for the core power domain which controls voltage state of =
-the
-> >> domain. This allows us to support system-wide DVFS on Tegra20-210 SoCs=
-.
-> >> The PMC powergate domains now are sub-domains of the core domain, this
-> >> requires device-tree updating, older DTBs are unaffected.
-> >>
-> >> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> >> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> >> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T12=
-4
-> >> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >
-> > [...]
-> >
-> >> +
-> >> +static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device=
-_node *np)
-> >> +{
-> >> +       static struct lock_class_key tegra_core_domain_lock_class;
-> >> +       struct generic_pm_domain *genpd;
-> >> +       const char *rname =3D "core";
-> >> +       int err;
-> >> +
-> >> +       genpd =3D devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
-> >> +       if (!genpd)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       genpd->name =3D np->name;
-> >> +       genpd->set_performance_state =3D tegra_pmc_core_pd_set_perform=
-ance_state;
-> >> +       genpd->opp_to_performance_state =3D tegra_pmc_core_pd_opp_to_p=
-erformance_state;
-> >> +
-> >> +       err =3D devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
-> >> +       if (err)
-> >> +               return dev_err_probe(pmc->dev, err,
-> >> +                                    "failed to set core OPP regulator=
-\n");
-> >> +
-> >> +       err =3D pm_genpd_init(genpd, NULL, false);
-> >> +       if (err) {
-> >> +               dev_err(pmc->dev, "failed to init core genpd: %d\n", e=
-rr);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       /*
-> >> +        * We have a "PMC pwrgate -> Core" hierarchy of the power doma=
-ins
-> >> +        * where PMC needs to resume and change performance (voltage) =
-of the
-> >> +        * Core domain from the PMC GENPD on/off callbacks, hence we n=
-eed
-> >> +        * to annotate the lock in order to remove confusion from the
-> >> +        * lockdep checker when a nested access happens.
-> >> +        */
-> >
-> > Can you elaborate a bit more on this?
-> >
-> > Are you saying that when the child domain (PMC pwrgate) gets powered
-> > off, you want to drop its aggregated votes it may hold for the
-> > performance state, as otherwise it may affect the parent domain (core
-> > domain)?
->
-> Yes, in particular we want to remove/add the performance vote when clk is=
- disabled/enabled, see tegra_clock_runtime_resume/suspend() of the clk-runt=
-imePM driver [1]. I'll send that clk patch separately once this series and =
-some other tegra-clk patches will be merged, otherwise there are too many d=
-ependencies and it's too difficult to review.
 
-You are likely correct from the merging point of view, but for
-completeness I would prefer to look at the whole series. Would you
-mind folding in some of these changes too?
+--qCPCAX+azklwClYR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> [1] https://patchwork.ozlabs.org/project/linux-tegra/patch/20201217180638=
-.22748-33-digetx@gmail.com/
+On Tue, May 11, 2021 at 02:27:08AM +0300, Dmitry Osipenko wrote:
+> Display controller (DC) performs isochronous memory transfers, and thus,
+> has a requirement for a minimum memory bandwidth that shall be fulfilled,
+> otherwise framebuffer data can't be fetched fast enough and this results
+> in a DC's data-FIFO underflow that follows by a visual corruption.
+>=20
+> The Memory Controller drivers provide facility for memory bandwidth
+> management via interconnect API. Let's wire up the interconnect API
+> support to the DC driver in order to fix the distorted display output
+> on T30 Ouya, T124 TK1 and other Tegra devices.
+>=20
+> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/gpu/drm/tegra/Kconfig |   1 +
+>  drivers/gpu/drm/tegra/dc.c    | 352 ++++++++++++++++++++++++++++++++++
+>  drivers/gpu/drm/tegra/dc.h    |  14 ++
+>  drivers/gpu/drm/tegra/drm.c   |  14 ++
+>  drivers/gpu/drm/tegra/hub.c   |   3 +
+>  drivers/gpu/drm/tegra/plane.c | 116 +++++++++++
+>  drivers/gpu/drm/tegra/plane.h |  15 ++
+>  7 files changed, 515 insertions(+)
+>=20
+[...]
+> diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
+[...]
+> @@ -2011,7 +2143,215 @@ static void tegra_crtc_atomic_flush(struct drm_cr=
+tc *crtc,
+>  	value =3D tegra_dc_readl(dc, DC_CMD_STATE_CONTROL);
+>  }
+> =20
+> +static bool tegra_plane_is_cursor(const struct drm_plane_state *state)
+> +{
+> +	const struct tegra_dc_soc_info *soc =3D to_tegra_dc(state->crtc)->soc;
+> +	const struct drm_format_info *fmt =3D state->fb->format;
+> +	unsigned int src_w =3D drm_rect_width(&state->src) >> 16;
+> +	unsigned int dst_w =3D drm_rect_width(&state->dst);
+> +
+> +	if (state->plane->type !=3D DRM_PLANE_TYPE_CURSOR)
+> +		return false;
+> +
+> +	if (soc->supports_cursor)
+> +		return true;
+> +
+> +	if (src_w !=3D dst_w || fmt->num_planes !=3D 1 || src_w * fmt->cpp[0] >=
+ 256)
+> +		return false;
 
-Hmm. In general, the new changes to genpd and the opp library with
-"performance states" for DVFS, should help to avoid using clock rate
-notifications.
+Technically there could be some random overlay window that matches these
+conditions and is erroneously detected as being a cursor. I wonder if we
+should add a field to a plane that marks it as being used as cursor for
+the cases where we don't support a hardware cursor.
 
-Instead of updating the performance votes from the clock provider
-driver, the more proper thing would be to let the clock consumer
-driver (various drivers) to call dev_pm_opp_set_rate() when it needs
-to move to a new OPP. This also means calling dev_pm_opp_set_rate(dev,
-0) when the votes for an OPP can be dropped.
+[...]
+> diff --git a/drivers/gpu/drm/tegra/dc.h b/drivers/gpu/drm/tegra/dc.h
+> index 29f19c3c6149..db10af097033 100644
+> --- a/drivers/gpu/drm/tegra/dc.h
+> +++ b/drivers/gpu/drm/tegra/dc.h
+> @@ -15,6 +15,8 @@
+> =20
+>  struct tegra_output;
+> =20
+> +#define TEGRA_DC_LEGACY_PLANES_NUM	7
+> +
+>  struct tegra_dc_state {
+>  	struct drm_crtc_state base;
+> =20
+> @@ -23,6 +25,8 @@ struct tegra_dc_state {
+>  	unsigned int div;
+> =20
+>  	u32 planes;
+> +
+> +	unsigned long plane_peak_bw[TEGRA_DC_LEGACY_PLANES_NUM];
 
-In this way, the opp library will call genpd to update the performance
-state vote for the corresponding device.
+Why can we not store this peak bandwidth value within the plane state? I
+know that this isn't exactly per-plane data because it depends on the
+state of other planes, but that doesn't really prevent the value to live
+within the plane state. The plane state is, after all, part of the
+global state, and hence any such state needs to be considered within the
+context of that global atomic state.
 
->
-> Please see the example lockdep trace in the end of the email that is fixe=
-d by the mutex annotation. What we have there is the tegra-host1x device dr=
-iver that resumes PMC powergate domain on Tegra30, the PMC driver enables c=
-lock from the genpd.power_on callback of the powergate domain and this prop=
-agates to the clock's RPM callback which sets the performance vote of the c=
-ore domain. Hence core domain vote is set from within of the powergate doma=
-in.
+I suppose that might make it a little bit more difficult to get at the
+data, but I think the end result would be less confusing than having an
+array here with potentially unused fields. It would also get rid of the
+need to look up planes by their per-CRTC index.
 
-Right, this sounds like a fragile looking path. Are you sure it can't
-lead into deadlock situations?
+>  };
+> =20
+>  static inline struct tegra_dc_state *to_dc_state(struct drm_crtc_state *=
+state)
+> @@ -33,6 +37,12 @@ static inline struct tegra_dc_state *to_dc_state(struc=
+t drm_crtc_state *state)
+>  	return NULL;
+>  }
+> =20
+> +static inline const struct tegra_dc_state *
+> +to_const_dc_state(const struct drm_crtc_state *state)
+> +{
+> +	return to_dc_state((struct drm_crtc_state *)state);
+> +}
+> +
+>  struct tegra_dc_stats {
+>  	unsigned long frames;
+>  	unsigned long vblank;
+> @@ -66,7 +76,9 @@ struct tegra_dc_soc_info {
+>  	unsigned int num_overlay_formats;
+>  	const u64 *modifiers;
+>  	bool has_win_a_without_filters;
+> +	bool has_win_b_vfilter_mem_client;
+>  	bool has_win_c_without_vert_filter;
+> +	bool plane_tiled_memory_bandwidth_x2;
+>  };
+> =20
+>  struct tegra_dc {
+> @@ -152,6 +164,8 @@ int tegra_dc_state_setup_clock(struct tegra_dc *dc,
+>  			       struct drm_crtc_state *crtc_state,
+>  			       struct clk *clk, unsigned long pclk,
+>  			       unsigned int div);
+> +void tegra_crtc_atomic_post_commit(struct drm_crtc *crtc,
+> +				   struct drm_atomic_state *state);
+> =20
+>  /* from rgb.c */
+>  int tegra_dc_rgb_probe(struct tegra_dc *dc);
+> diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
+> index d76bcb6c5622..a10513d7f2e0 100644
+> --- a/drivers/gpu/drm/tegra/drm.c
+> +++ b/drivers/gpu/drm/tegra/drm.c
+> @@ -24,6 +24,7 @@
+>  #include <asm/dma-iommu.h>
+>  #endif
+> =20
+> +#include "dc.h"
+>  #include "drm.h"
+>  #include "gem.h"
+> =20
+> @@ -63,6 +64,17 @@ static const struct drm_mode_config_funcs tegra_drm_mo=
+de_config_funcs =3D {
+>  	.atomic_commit =3D drm_atomic_helper_commit,
+>  };
+> =20
+> +static void tegra_atomic_post_commit(struct drm_device *drm,
+> +				     struct drm_atomic_state *old_state)
+> +{
+> +	struct drm_crtc_state *old_crtc_state __maybe_unused;
+> +	struct drm_crtc *crtc;
+> +	unsigned int i;
+> +
+> +	for_each_old_crtc_in_state(old_state, crtc, old_crtc_state, i)
+> +		tegra_crtc_atomic_post_commit(crtc, old_state);
+> +}
+> +
+>  static void tegra_atomic_commit_tail(struct drm_atomic_state *old_state)
+>  {
+>  	struct drm_device *drm =3D old_state->dev;
+> @@ -82,6 +94,8 @@ static void tegra_atomic_commit_tail(struct drm_atomic_=
+state *old_state)
+>  	} else {
+>  		drm_atomic_helper_commit_tail_rpm(old_state);
+>  	}
+> +
+> +	tegra_atomic_post_commit(drm, old_state);
+>  }
+> =20
+>  static const struct drm_mode_config_helper_funcs
+> diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
+> index bfae8a02f55b..f1bbc5991854 100644
+> --- a/drivers/gpu/drm/tegra/hub.c
+> +++ b/drivers/gpu/drm/tegra/hub.c
+> @@ -358,6 +358,9 @@ static int tegra_shared_plane_atomic_check(struct drm=
+_plane *plane,
+>  	struct tegra_dc *dc =3D to_tegra_dc(new_plane_state->crtc);
+>  	int err;
+> =20
+> +	plane_state->peak_memory_bandwidth =3D 0;
+> +	plane_state->avg_memory_bandwidth =3D 0;
+> +
 
-In any case, we designed dev_pm_opp_set_rate() (and its friends in
-genpd) with these locking issues in mind.
+Since ICC isn't supported yet on Tegra186 and later, does it even make
+sense to initialize these?
 
->
-> > I guess this would be a valid scenario to optimize for, especially if
-> > you have more than one child domain of the core power domain, right?
-> >
-> > If you have only one child domain, would it be sufficient to assign
-> > ->power_on|off() callbacks for the core domain and deal with the
-> > performance stare votes from there instead?
->
-> The core domain is the parent domain of the PMC domains + some devices di=
-rectly belong to the core domain. The GENPD core aggregates the performance=
- votes from the children domains and from devices of the parent core, this =
-all works great already.
->
-> It sounds to me that you're suggesting to reinvent the aggregation logic =
-within the PMC driver and create a fake hierarchy that doesn't match hardwa=
-re. It won't help the lockdep warning anyways.
->
-> I actually don't quite understand what problem you're trying to solve, co=
-uld you please explain? The lockdep warning is harmless, we just need to an=
-notate the mutex lock class.
->
-> If you don't feel comfortable with the usage of lockdep_set_class() in th=
-e driver, then maybe it should be possible to make it a part of the pm_genp=
-d_init(). For example like we did that for tegra-host1x driver recently [2]=
-.
+Thierry
 
-I was not trying to solve a problem, but was just curious and wanted
-to ask about the reasons for the lockdep_set_class(), as it simply
-caught my attention while reviewing.
+--qCPCAX+azklwClYR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Looks like there may be something fishy going on, but let's see, I may be w=
-rong.
+-----BEGIN PGP SIGNATURE-----
 
->
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/?id=3Da24f98176d1efae2c37d3438c57a624d530d9c33
->
->
->  LOCKDEP
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  WARNING: possible recursive locking detected
->  5.13.0-rc3-next-20210524-00202-g80a288f17147-dirty #7935 Tainted: G     =
-   W
->  --------------------------------------------
->  kworker/u8:2/96 is trying to acquire lock:
->  c202e494 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95/0x17=
-4
->
->                but task is already holding lock:
->  c35d9454 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95/0x17=
-4
->
->                other info that might help us debug this:
->   Possible unsafe locking scenario:
->
->         CPU0
->         ----
->    lock(&genpd->mlock);
->    lock(&genpd->mlock);
->
->                 *** DEADLOCK ***
->
->   May be due to missing lock nesting notation
->
->  5 locks held by kworker/u8:2/96:
->   #0: c2024ea8 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_o=
-ne_work+0x15a/0x600
->   #1: c2a31f20 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x=
-15a/0x600
->   #2: c35f04d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x29/0xdc
->   #3: c35d9454 (&genpd->mlock){+.+.}-{3:3}, at: genpd_runtime_resume+0x95=
-/0x174
->   #4: c13fbbcc (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x17/0xac
->
->                stack backtrace:
->  CPU: 0 PID: 96 Comm: kworker/u8:2 Tainted: G        W         5.13.0-rc3=
--next-20210524-00202-g80a288f17147-dirty #7935
->  Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
->  Workqueue: events_unbound deferred_probe_work_func
->  [<c010d1cd>] (unwind_backtrace) from [<c0109639>] (show_stack+0x11/0x14)
->  [<c0109639>] (show_stack) from [<c0ba6dab>] (dump_stack_lvl+0x97/0xb0)
->  [<c0ba6dab>] (dump_stack_lvl) from [<c017b24f>] (__lock_acquire+0x7fb/0x=
-2534)
->  [<c017b24f>] (__lock_acquire) from [<c017d75b>] (lock_acquire+0xf3/0x424=
-)
->  [<c017d75b>] (lock_acquire) from [<c0bb0daf>] (__mutex_lock+0x87/0x7f4)
->  [<c0bb0daf>] (__mutex_lock) from [<c0bb1535>] (mutex_lock_nested+0x19/0x=
-20)
->  [<c0bb1535>] (mutex_lock_nested) from [<c0669ced>] (genpd_runtime_resume=
-+0x95/0x174)
->  [<c0669ced>] (genpd_runtime_resume) from [<c0660167>] (__rpm_callback+0x=
-7b/0xc8)
->  [<c0660167>] (__rpm_callback) from [<c06601cd>] (rpm_callback+0x19/0x60)
->  [<c06601cd>] (rpm_callback) from [<c065fde3>] (rpm_resume+0x47f/0x65c)
->  [<c065fde3>] (rpm_resume) from [<c066000f>] (__pm_runtime_resume+0x4f/0x=
-78)
->  [<c066000f>] (__pm_runtime_resume) from [<c05857f7>] (clk_pm_runtime_get=
-.part.0+0x13/0x54)
->  [<c05857f7>] (clk_pm_runtime_get.part.0) from [<c05881e9>] (clk_core_set=
-_rate_nolock+0x81/0x1cc)
->  [<c05881e9>] (clk_core_set_rate_nolock) from [<c0588353>] (clk_set_rate+=
-0x1f/0x44)
->  [<c0588353>] (clk_set_rate) from [<c0597cd3>] (tegra_powergate_prepare_c=
-locks+0x2f/0x94)
->  [<c0597cd3>] (tegra_powergate_prepare_clocks) from [<c059a4d1>] (tegra_p=
-owergate_power_up+0x45/0xec)
->  [<c059a4d1>] (tegra_powergate_power_up) from [<c0ba7211>] (tegra_genpd_p=
-ower_on+0x2b/0x50)
->  [<c0ba7211>] (tegra_genpd_power_on) from [<c0667231>] (_genpd_power_on+0=
-x6d/0xb8)
->  [<c0667231>] (_genpd_power_on) from [<c066999d>] (genpd_power_on.part.0+=
-0x85/0xf0)
->  [<c066999d>] (genpd_power_on.part.0) from [<c0669cfb>] (genpd_runtime_re=
-sume+0xa3/0x174)
->  [<c0669cfb>] (genpd_runtime_resume) from [<c0660167>] (__rpm_callback+0x=
-7b/0xc8)
->  [<c0660167>] (__rpm_callback) from [<c06601cd>] (rpm_callback+0x19/0x60)
->  [<c06601cd>] (rpm_callback) from [<c065fde3>] (rpm_resume+0x47f/0x65c)
->  [<c065fde3>] (rpm_resume) from [<c066000f>] (__pm_runtime_resume+0x4f/0x=
-78)
->  [<c066000f>] (__pm_runtime_resume) from [<c065675f>] (__device_attach+0x=
-83/0xdc)
->  [<c065675f>] (__device_attach) from [<c0655d55>] (bus_probe_device+0x5d/=
-0x64)
->  [<c0655d55>] (bus_probe_device) from [<c06560b7>] (deferred_probe_work_f=
-unc+0x63/0x88)
->  [<c06560b7>] (deferred_probe_work_func) from [<c0139993>] (process_one_w=
-ork+0x1eb/0x600)
->  [<c0139993>] (process_one_work) from [<c0139fcf>] (worker_thread+0x227/0=
-x3bc)
->  [<c0139fcf>] (worker_thread) from [<c0140ab3>] (kthread+0x13f/0x15c)
->  [<c0140ab3>] (kthread) from [<c0100159>] (ret_from_fork+0x11/0x38)
->  Exception stack(0xc2a31fb0 to 0xc2a31ff8)
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC07v4ACgkQ3SOs138+
+s6GGjhAAiGZK4l8fizM/LuWEruaWYR+N8fhxskHevsfd7OHuXkzxKyfl+pJ9MoSS
+RkVGhtbDqq/wEUm0kZRKRqQl7EZxUCBWZwx0TRi0sJI5FR29hLlgW6UCGEbL8mn3
+7wWXDeUbHavliTd+3KABmnzCLM/q60bgSAKPS33HWQeoIox7yxElTaNJEh1yJOaN
+WDl+eZdAbgLEY5L2h3b/SwaIRZ2ar/rtMc3Ix2yv8SzTMRiHdqeY7aHl/IgjVpT8
+7f8tf0a4hBteixEPKCSUe0fUCuhjdXuoI17vvGBJxEkP9hOwI9GkoLjFa4/WZiC9
+n3N5NyaR7HK1XkT6NgOJ8XZEZkOtrrKgVgsiyUrT7mlnhlsl14/bRmpovOip/XwU
+1Nqzuml0bHVWar2F/2eBHBca0SyKSisTMsUoSIGjJ4PTysccD36TiuOtfBo87LeS
+UU1RXEIAmp+7TNmAJ7XudfwWk4afsWkPwxIacehXL6BSSGSM8a214nvTvY80WZiD
+XVpQeMFYxUVp3JLiACwycwTwqZRg5ST2vArNjMhcaaiq19eyTzUwoh0GuPIkc5ne
+ChrgnFLEf89h+64mk4BHCviULdaUvwFfgI7iwZ9Wp07ebe4zqm2zdN2EbMNy23aB
+1AorQ09Z+QAFYVq0k84NDzWWWRCvFvYNP3gnT8brEt5NVK85sP0=
+=Zq3i
+-----END PGP SIGNATURE-----
 
-Thanks for sharing the log.
-
-Could you perhaps point me to the corresponding DTS files. I would
-like to understand more about the PM domain hierarchy and where the
-clock controller may be located.
-
-Kind regards
-Uffe
+--qCPCAX+azklwClYR--
