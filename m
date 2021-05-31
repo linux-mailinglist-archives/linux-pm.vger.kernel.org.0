@@ -2,142 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFF93955C1
-	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 09:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985443955E1
+	for <lists+linux-pm@lfdr.de>; Mon, 31 May 2021 09:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbhEaHK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 03:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhEaHK0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 03:10:26 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FA0C061574
-        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 00:08:45 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id q10so5223015uam.3
-        for <linux-pm@vger.kernel.org>; Mon, 31 May 2021 00:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1vUcOLOLJFvqTx0Q1+alN5ka8ZC+o11y2paCA+C3hD8=;
-        b=S2UNFqxEhgyn5voEcAQ5yYLEXfKVM2XwBNQgOUuhiwcTjPFzIfdtCZ4Yvj7mDRJSeG
-         GDGUB0fLTUyYVPw25QdBjMlLftuN8zV0eLOH+bRziHVmayRjeAwUy9YTYl+QBGJ0taUg
-         VMerwRBPrcWxjU2kKN2y2litigUU+LidXGKJfcGdTHpU7bal0AR64t8iq17b8g1KHJkE
-         GAMQU1+BnASUYJbx317ew5z8+0Hd/DU2+g+0UczzK4+AssS9z1mOzBw0zwT0ADvKazdg
-         W6uFCvdLj5ZywyQ+nPT2cDTjKM7XLcZjF2B0uDxzeNQHqbT3KGFoCJcCT1d9IfyUZQrR
-         y5ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1vUcOLOLJFvqTx0Q1+alN5ka8ZC+o11y2paCA+C3hD8=;
-        b=QHkTOMQ8/bb6QWqTFKnrbAqhRESYBA/h5b3oSw5P77JubVxVEiBL6AqddY5DyrRm/7
-         0KkwhT6LZa7xP1z1UVOz8JMgqBUxZ/WbXvMnAkZJ31cltC0NK9gGj6a0LmoZ7vy83DsF
-         wjGm1/Wrzhwaj+oItp7zJDrQaVHcjE6GBZw0NWkHecAPnjsyysQCZs2SOUjkxWU0Jc1Q
-         CsxejVGURyHjYZxm24ywEf22JTGBTlAOwx4JeeCnf0ET1/CNNn+Fk30CRhFkUu5yf4/S
-         cC31SSo1P0aveMSpx7rbcFcGi56Uss6DwRp4kXC3yBkCKU5zW5tJmzjj5yFvrhDrUP5i
-         fqRw==
-X-Gm-Message-State: AOAM532OdtditTtrtfhxJhruCMMKJIySsDU6A5x51HC19j3VVhZWe/3H
-        qdv03lneHyPjY39mKQ5vEpvT+idMo0xPf1+0E8BkbA==
-X-Google-Smtp-Source: ABdhPJzdcPknYIKY/HoFuBEvjeUrSBKGHjI3+ZdgXz4b7AY9qOCV+Wcz1GkCQofBeEC/XrGOEZA5hdhnC18QdgQMdNw=
-X-Received: by 2002:ab0:100f:: with SMTP id f15mr9827076uab.100.1622444924930;
- Mon, 31 May 2021 00:08:44 -0700 (PDT)
+        id S230235AbhEaHTy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 03:19:54 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:3302 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230150AbhEaHTy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 03:19:54 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4FtmjS2wj1z1BGrB;
+        Mon, 31 May 2021 15:13:32 +0800 (CST)
+Received: from dggpeml500023.china.huawei.com (7.185.36.114) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 31 May 2021 15:18:12 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 31 May 2021 15:18:12 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+To:     <linux-pm@vger.kernel.org>
+CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH v2] cpufreq: stats: Clean up local variable of cpufreq_stats_create_table
+Date:   Mon, 31 May 2021 15:16:07 +0800
+Message-ID: <1622445367-37754-1-git-send-email-zhangshaokun@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20210528091202.11603-1-ulf.hansson@linaro.org> <20210528152719.GA1473569@rowland.harvard.edu>
-In-Reply-To: <20210528152719.GA1473569@rowland.harvard.edu>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 31 May 2021 09:08:08 +0200
-Message-ID: <CAPDyKFp14pnSsaV3bnbW2FVTbtqTb5z39nZ0+NQM0YRv00W4JQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: runtime: Allow unassigned ->runtime_suspend|resume
- callbacks
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 28 May 2021 at 17:27, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, May 28, 2021 at 11:12:02AM +0200, Ulf Hansson wrote:
-> > We are currently allowing ->rpm_idle() callbacks to be unassigned without
-> > returning an error code from rpm_idle(). This has been useful to avoid
-> > boilerplate code in drivers. Let's take this approach a step further, by
-> > allowing unassigned ->runtime_suspend|resume() callbacks as well.
-> >
-> > In this way, a consumer/supplier device link can be used to let a consumer
-> > device be power managed through its supplier device, without requiring
-> > assigned ->runtime_suspend|resume() callbacks for the consumer device, for
-> > example.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/base/power/runtime.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index 68bebbf81347..8a66eaf731e4 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -345,7 +345,7 @@ static void rpm_suspend_suppliers(struct device *dev)
-> >  static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
-> >       __releases(&dev->power.lock) __acquires(&dev->power.lock)
-> >  {
-> > -     int retval, idx;
-> > +     int retval = 0, idx;
-> >       bool use_links = dev->power.links_count > 0;
-> >
-> >       if (dev->power.irq_safe) {
-> > @@ -373,7 +373,8 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
-> >               }
-> >       }
-> >
-> > -     retval = cb(dev);
-> > +     if (cb)
-> > +             retval = cb(dev);
-> >
-> >       if (dev->power.irq_safe) {
-> >               spin_lock(&dev->power.lock);
-> > @@ -484,9 +485,6 @@ static int rpm_callback(int (*cb)(struct device *), struct device *dev)
-> >  {
-> >       int retval;
-> >
-> > -     if (!cb)
-> > -             return -ENOSYS;
->
-> This is a change in behavior, right?  What about drivers or subsystems
-> that don't support runtime PM and consequently don't have any RPM
-> callbacks assigned?
+Local variable 'count' will be initialized and 'ret' also is not required,
+so remove the redundant initialization and get rid of 'ret'.
 
-Yes, you are right.
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+---
+ChangeLog:
+v1-->v2:
+    1. Address Viresh's comment, get rid of 'ret'
 
-However, drivers/subsystems that support runtime PM should also call
-pm_runtime_enable() and if they don't, the rpm_callback() should not
-get called for them.
+ drivers/cpufreq/cpufreq_stats.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Then, at least to me, I think it would be quite odd that a
-subsystem/driver that calls pm_runtime_enable(), would be checking
-return values from pm_runtime_get|put_*() for -ENOSYS? I mean, why
-bother calling pm_runtime_enable() in the first place?
+diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+index da717f7cd9a9..1570d6f3e75d 100644
+--- a/drivers/cpufreq/cpufreq_stats.c
++++ b/drivers/cpufreq/cpufreq_stats.c
+@@ -211,7 +211,7 @@ void cpufreq_stats_free_table(struct cpufreq_policy *policy)
+ 
+ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
+ {
+-	unsigned int i = 0, count = 0, ret = -ENOMEM;
++	unsigned int i = 0, count;
+ 	struct cpufreq_stats *stats;
+ 	unsigned int alloc_size;
+ 	struct cpufreq_frequency_table *pos;
+@@ -253,8 +253,7 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
+ 	stats->last_index = freq_table_get_index(stats, policy->cur);
+ 
+ 	policy->stats = stats;
+-	ret = sysfs_create_group(&policy->kobj, &stats_attr_group);
+-	if (!ret)
++	if (!sysfs_create_group(&policy->kobj, &stats_attr_group))
+ 		return;
+ 
+ 	/* We failed, release resources */
+-- 
+2.7.4
 
->
-> Also, assuming Rafael accepts this change, don't you also need to update
-> the runtime-PM documentation?
-
-Good point, thanks! Let me add a patch updating the docs.
-
->
-> Alan Stern
->
-
-Kind regards
-Uffe
