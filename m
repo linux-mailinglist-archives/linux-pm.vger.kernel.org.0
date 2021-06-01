@@ -2,72 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D00397187
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 12:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7F7397226
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 13:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbhFAKfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Jun 2021 06:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbhFAKft (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 06:35:49 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F56C06175F
-        for <linux-pm@vger.kernel.org>; Tue,  1 Jun 2021 03:34:08 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id l25so1526354vsb.9
-        for <linux-pm@vger.kernel.org>; Tue, 01 Jun 2021 03:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K57YqakeMlmXTnxAf+W2Ub8EZWhnyq1GipQeukL/j9Q=;
-        b=SIWk7sKq05dNmHj0cBNp9EnrSZc9XaiEDsHvkAFhIs4Oyo7JCVHa+imw1r+2fwmLUm
-         pPOdcNj+OeHdi3RSEN/nypmZcjYWO0XC7t+Y3Yc7jRh/DlkD7kecoGfbwW6iq+IXvQqh
-         0gNJN5nW7JnuKCcz+Qq4QJsZYvUhEtpZpj1TMCjEK3Spt167Rph4TWfsdj17RSCJrmm3
-         bSXLGkgrWxz15BPbfPl0yXqvE0iLnWZbk3Nyrck59H0Qx/pVuh7sHd0dmaK9lRb7/LAG
-         +T1aozxFesbAeQniL8zB/YkvbVbUGZeZV5TDnl50t2kq4+9eKlqUZ7dCG4KlRbBMIo7V
-         r+RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K57YqakeMlmXTnxAf+W2Ub8EZWhnyq1GipQeukL/j9Q=;
-        b=PHESws677YCYJMLoD1wYzqALE3cZCyBRcaXm2TY/3fbcrsaMRWacyDyEVEfUqX++ON
-         afuwTDdzF9R43DJkxYCDYQX/mQjGyi9ihPrVtlR26FOhUqWdxHAN81wMz1C8PDpXemEm
-         cIrCrXl1n5c/nNVayW07gJ2szUGbm9vSkuwnA+whwLDRMVfOi6aLEKZh1/uoh5sM1NcT
-         IBCCrxiuZyIRi8VJn6TF/ANAOAOrIx0TaOCPAUMwirQG/P3PQuYyiVs3OqIUVn4nbTLK
-         zvGC6+LC0vZCz4bEBKIUNc8/iBLVSbC/8/9qwxj7ag4s1JxC/Ca3HIm8TEoeyiDYc2QW
-         2RYg==
-X-Gm-Message-State: AOAM531zXsHc+ANY59THJeBhxq+n2pVP7SM6T4MAcMHSOTSYbzuKqlyy
-        V94Z/FoQc4x/i2J/crNiR791ip23RUz+xHmpBf1tU108qBMEPoHH
-X-Google-Smtp-Source: ABdhPJxNQUczDFy7+X9laWNw8HAiSAl8diMPy3LtKv4U3uWIE7CFniKpvhHwll3xsreB7iQhBeAQ/hOY8lGcQt4mIz4=
-X-Received: by 2002:a67:e915:: with SMTP id c21mr6805876vso.19.1622543647735;
- Tue, 01 Jun 2021 03:34:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org> <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
-In-Reply-To: <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Jun 2021 12:33:31 +0200
-Message-ID: <CAPDyKFprcA3DJW4bxef88oekpB5cNCkgy73_=mr40YWjNphvOw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce 'assigned-performance-states'
- property
+        id S231219AbhFALOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Jun 2021 07:14:38 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:31859 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233064AbhFALOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 07:14:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1622545970; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=H7I2JnaqYF6CL/wEO6LRuQa0sZewm5UzwCJdW49EwRT4tLTI4/jguwjQNLz87eHb70
+    OFEdWfpudWeruM1TybWpYrcLR93EKwerRBEDxcMMN/8WZKtfhvGlMK1Wsfv0Gbk5B7FG
+    UvX/SeNjjmtF7IVzgx0NksKAmWD46UYh1rXonYJEsNv5uDaCwW1YrzvmV5DsOCw29NTS
+    AyOaajLVT/nPt+3f+nwgbUh4YKKL4PPweOIXoYahZiG6dbMbVWsDG+tDaha19du4LEf0
+    x13TM4yCS3FETcw8PSoXNogz+77KC9RKkNvJsis5oH+P5tIJS8Qm0jVLMs9k3VKkzb3k
+    BCfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1622545970;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=2Y0syN6BFgNmVAtqwzsN/LcxcMKopqBO9nUiq1/4tlI=;
+    b=AHyvsdtdvI45knouM6OjQk8rmLTb1MUai6GTJPTDu60nDuwAZZMz+UAmrKF/KmVQhH
+    yLK+lKUzGfZCnANsuZqrSwBfzPQOW4nEG0LbVSG0wqKEn7CjxLQdPzJ6kY5ZCJOWzF1M
+    SZHS5TjkUqVXDEyq4dx8OJYGAAkcH0LWbOE0BWhP4G+GsJnoOfE0IakcPoyY6pdURtL6
+    aS2tjWdUL3k3HpZBeJvxZTJofihBP5yTmb9L3iCcp8DjQA+BcnC6Ez7LPypVMF2CVqpL
+    2w4m4HEVmnLutSTV2eWkunrPLtyKtR1FFmvbreWvMjLtRETI95LUzv05aRMmzztYa0bQ
+    faAA==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1622545970;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=2Y0syN6BFgNmVAtqwzsN/LcxcMKopqBO9nUiq1/4tlI=;
+    b=JAFNbJbyRgRPd2xlUS0DVhqbBSUm0nUZ4v0v4CIs2LQgtoUzCteQlPtJScC768CbxJ
+    R7KhVEB+tfsM7mcaHX5JWQeF79GXJeDs8TYAlWothyr/OngVM2lHcq8bbqleCl50pJ3t
+    vozEwIdv+rkpD1fJ+ce5y7W50fix8izaTXQAA+5Z1weZZSiD+1FhkEKUd6BHlRbS2xEK
+    UO+NFSuNwR4JP/1i91+DyWImOENHkkZOa0sVhRV28QUx0P76IumbR0SW/VtXxlHYL6mK
+    qiGT5m0cJRW68KymPByS4jTa1BIW/0ZBiadkzIbHKP6c2Y8wzdYi63Kp0x0y1evYT64o
+    3e1A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/MaIo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.26.3 DYNA|AUTH)
+    with ESMTPSA id U0b2c9x51BCoSLb
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 1 Jun 2021 13:12:50 +0200 (CEST)
+Date:   Tue, 1 Jun 2021 13:12:45 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce
+ 'assigned-performance-states' property
+Message-ID: <YLYV3ov/iBffZMg4@gerhold.net>
+References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org>
+ <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 27 May 2021 at 08:13, Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
+Hi,
+
+On Thu, May 27, 2021 at 11:42:27AM +0530, Rajendra Nayak wrote:
 > While most devices within power-domains which support performance states,
 > scale the performance state dynamically, some devices might want to
 > set a static/default performance state while the device is active.
@@ -75,23 +84,12 @@ On Thu, 27 May 2021 at 08:13, Rajendra Nayak <rnayak@codeaurora.org> wrote:
 > dynamically scaling the device's performance, also known as DVFS techniques.
 > Add a property 'assigned-performance-states' which client devices can
 > use to set this default performance state on their power-domains.
->
+> 
 > Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-
-I don't have a strong opinion about using "default-performance-state"
-or "assigned-performance-state". Although, perhaps people can relate
-to the existing "assigned-clock-rates" DT binding?
-In any case, please add:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
 > ---
 >  .../devicetree/bindings/power/power-domain.yaml    | 50 ++++++++++++++++++++++
 >  1 file changed, 50 insertions(+)
->
+> 
 > diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
 > index aed51e9..88cebf2 100644
 > --- a/Documentation/devicetree/bindings/power/power-domain.yaml
@@ -99,7 +97,7 @@ Uffe
 > @@ -66,6 +66,19 @@ properties:
 >        by the given provider should be subdomains of the domain specified
 >        by this binding.
->
+>  
 > +  assigned-performance-states:
 > +    $ref: /schemas/types.yaml#/definitions/uint32-array
 > +    description:
@@ -113,9 +111,17 @@ Uffe
 > +       requirement. In case the power-domains have OPP tables associated, the values
 > +       here would typically match with one of the entries in the OPP table.
 > +
+
+Is it just me or is this actually in the wrong place here?
+Given that #power-domain-cells is required this looks like the bindings
+for power domain providers, not consumers. :)
+
+It looks like the consumer bindings are still in
+Documentation/devicetree/bindings/power/power_domain.txt
+
 >  required:
 >    - "#power-domain-cells"
->
+>  
 > @@ -131,3 +144,40 @@ examples:
 >              min-residency-us = <7000>;
 >          };
@@ -157,7 +163,36 @@ Uffe
 > +        power-domains = <&parent4>, <&parent5>;
 > +        assigned-performance-states = <0>, <256>;
 > +    };
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
+
+Bjorn already asked this in v1 [1]:
+
+> May I ask how this is different from saying something like:
 >
+> 	required-opps = <&??>, <&rpmpd_opp_svs>;
+
+and maybe this was already discussed further elsewhere. But I think at
+the very least we need some clarification in the commit message + the
+binding documentation how your new property relates to the existing
+"required-opps" binding.
+
+Because even if it might not be implemented at the moment,
+Documentation/devicetree/bindings/power/power_domain.txt actually also
+specifies "required-opps" for device nodes e.g. with the following example:
+
+	leaky-device0@12350000 {
+		compatible = "foo,i-leak-current";
+		reg = <0x12350000 0x1000>;
+		power-domains = <&power 0>;
+		required-opps = <&domain0_opp_0>;
+	};
+
+It looks like Viresh added that in commit e856f078bcf1
+("OPP: Introduce "required-opp" property").
+
+And in general I think it's a bit inconsistent that we usually refer to
+performance states with phandles into the OPP table, but the
+assigned-performance-states suddenly use "raw numbers".
+
+Stephan
+
+[1]: https://lore.kernel.org/linux-arm-msm/YAG%2FpNXQOS+C2zLr@builder.lan/
