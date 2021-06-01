@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CCD396B4E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 04:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FF5396B53
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 04:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbhFACfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 May 2021 22:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S232726AbhFACf1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 May 2021 22:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbhFACfS (ORCPT
+        with ESMTP id S232897AbhFACfS (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 31 May 2021 22:35:18 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E510C06138E;
-        Mon, 31 May 2021 19:33:37 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id x38so19336645lfa.10;
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B540C061763;
+        Mon, 31 May 2021 19:33:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s25so17146033ljo.11;
         Mon, 31 May 2021 19:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f8l3mwXhMPwYllO/ePBsiZtTrpb1R/1Eeya2pQTcbHw=;
-        b=nTq1Mf8MXeEPcKa+ddwEs4UC+XGNJ03ymKxywiZyKHxa2Zcm/mCuig9ATq9aZWeMsN
-         RGYpPpkvfAzU/QzcqoViBrT3E368VnG0+DM5vYLKjDKslX0Ax/ksATOKUhJELR6Sl+0/
-         uhhyzCutLc001FuZQ/TKsZFs2fNPbZ+JHekvkwRJMBxEt9BuHJhXhMsNBpiFfetKlF5d
-         bURsdtggKPe3P7qlxO79aN11uI2v5yu41bq1jZ69xdyu935fHNtR2Z+zTlgO2nGSql12
-         EmF6RZc0RWcFsLYUPg0tjwXenHf49g7JV/HJ4KouUia1383exzF6Ti1lh3T8nfkxogZ1
-         DmLA==
+        bh=ewFLW/MzKxFtpSzZGRbhqT8/VbyB9Nt0WEtAAwMoHIw=;
+        b=OOEbrRgUSgeljaM0Uef0s8S7HbxDGwZKXS1SdD7meM5odr0WIuSJKvv7IUE2bu6eaz
+         p5wtFAZu8NI+uHuJVPlkujwneYuBBs8/CIFW+sFN5C0Tq8h1B4h8CLNaQ+wv0qlJDji0
+         UTsRNRth1Be+Sv7/6T+ddKDSBJoMArwtcedaMAlL9/TnxhhnPUoVEsbymgpZR2Om8orc
+         GwwMoL1NrEKthI4bKpybwhvR5DIT6IcgZjLEMCX126HQ6enRRXXGsMUWCHicEgblYpP6
+         vr7hLlTzQ1zeVOvT79fXAg84qM8B+z16HSXzzrmbw50H4aBjr2GYDY4dvRZ3PABxC5Tz
+         EOZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f8l3mwXhMPwYllO/ePBsiZtTrpb1R/1Eeya2pQTcbHw=;
-        b=nuOwHPOGynHuV44ZaJTtDgDxbvKEXtjru9qM5WQKjgcqmIimht7WpGw5/EDfC/6/Qh
-         xM2/lV1jgysLUV501QUH1MbewzsGJyqZyJr3uoyjoxxeMMPddhpfRlH0i7SfPJFPpzlo
-         9Mw59BgttO0SS23p51G87+S9+ybaZvbV8z6/ksIPR6G1dWNW5+gzv4NOwFTwS2XiPvCU
-         oX0vNvGn9mxykZ+rKl2IBYrG1YHIpQwHqJGaTtnkEfDTsr7Rj6wmeyzFHOtIE7qTdCOl
-         IL3jGxFyBupREYXwDkrJjZuM52e8A9u6jnH5Eoeh0LgP2cyITIeRuxDmDDVn/pA2eDrM
-         7o8g==
-X-Gm-Message-State: AOAM532pEqDnNNU1S8CGOJAPGrywIiz/rxOproEOS1T2wmEz+TaIzjjd
-        2pu7LEHhExiHQcc0GCXJLmM=
-X-Google-Smtp-Source: ABdhPJwEzV6kKqyTqj6H6mb2alwpj8MuzXez2Y5pGK+nVAvVRM0ok5Geo00v/TjMrbZOhp1U+C9EhA==
-X-Received: by 2002:ac2:43ae:: with SMTP id t14mr15424844lfl.289.1622514815484;
-        Mon, 31 May 2021 19:33:35 -0700 (PDT)
+        bh=ewFLW/MzKxFtpSzZGRbhqT8/VbyB9Nt0WEtAAwMoHIw=;
+        b=VFOIbtAJw1hRsZfD+KnK+uez9ywaMfJrdUEC4LBSupTE78ydNGkUwQOtcdC0qcir76
+         D5hOCj3uKbQaV/nj5T4FHffUVnE5jwi5uvVh3KC81G3J08Li3IuzDQnW9lQ9h7zaFI7n
+         1XQ8uLQBuT3b+VNxs5G+nwkFKNyvq1u9KOScHAk99i2nKVZeV2BcNqrCD2tjzhC3na0n
+         xjV3mQQ6tkGUhpmdK8E/kZhSb0MhapouKnmRBu2XD2JL390cOZpozVVOKK9+IKolJnIu
+         FkkQkvodquWBq+X8V1IC3vP8LHBLrtO8hJdDX81vAV53wu8U6bKqK5QTbeolmWx7dRSA
+         4L3g==
+X-Gm-Message-State: AOAM5325J/MXIo9hOe9Og9PfVEkVjx3NYs30F2r4DhnqQ2fVvpTU2FSq
+        gIniiBtUnLSZ0tBGoHk1YZQ=
+X-Google-Smtp-Source: ABdhPJy0FSGR9as+UOokBVZTg9t8KVxt7u8YU/TZg8joMbuXdJBlU+5IjL4UsDO0mAi4/rQ8qVrZMg==
+X-Received: by 2002:a2e:97ca:: with SMTP id m10mr18637546ljj.205.1622514816466;
+        Mon, 31 May 2021 19:33:36 -0700 (PDT)
 Received: from localhost.localdomain (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
-        by smtp.gmail.com with ESMTPSA id l21sm107848lfc.28.2021.05.31.19.33.34
+        by smtp.gmail.com with ESMTPSA id l21sm107848lfc.28.2021.05.31.19.33.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 19:33:35 -0700 (PDT)
+        Mon, 31 May 2021 19:33:36 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
-Subject: [PATCH v6 12/14] soc/tegra: pmc: Add core power domain
-Date:   Tue,  1 Jun 2021 05:31:17 +0300
-Message-Id: <20210601023119.22044-13-digetx@gmail.com>
+Subject: [PATCH v6 13/14] soc/tegra: pmc: Add driver state syncing
+Date:   Tue,  1 Jun 2021 05:31:18 +0300
+Message-Id: <20210601023119.22044-14-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210601023119.22044-1-digetx@gmail.com>
 References: <20210601023119.22044-1-digetx@gmail.com>
@@ -79,197 +79,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-NVIDIA Tegra SoCs have multiple power domains, each domain corresponds
-to an external SoC power rail. Core power domain covers vast majority of
-hardware blocks within a Tegra SoC. The voltage of a power domain should
-be set to a level which satisfies all devices within the power domain.
-Add support for the core power domain which controls voltage state of the
-domain. This allows us to support system-wide DVFS on Tegra20-210 SoCs.
-The PMC powergate domains now are sub-domains of the core domain, this
-requires device-tree updating, older DTBs are unaffected and will continue
-to work as before.
+Add driver state syncing that is invoked once all PMC consumers are
+attached and ready. The consumers are the power domain clients.
+The synchronization callback is invoked once all client drivers are
+probed, the driver core handles this for us. This callback informs
+PMC driver that all voltage votes are initialized by each PD client
+and it's safe to begin voltage scaling of the core power domain.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/Kconfig |   2 +
- drivers/soc/tegra/pmc.c   | 120 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
+ drivers/soc/tegra/pmc.c | 23 +++++++++++++++++++++++
+ include/soc/tegra/pmc.h |  7 +++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
-index 976dee036470..20ace654553a 100644
---- a/drivers/soc/tegra/Kconfig
-+++ b/drivers/soc/tegra/Kconfig
-@@ -144,6 +144,8 @@ config SOC_TEGRA_FLOWCTRL
- config SOC_TEGRA_PMC
- 	bool
- 	select GENERIC_PINCONF
-+	select PM_OPP
-+	select PM_GENERIC_DOMAINS
- 
- config SOC_TEGRA_POWERGATE_BPMP
- 	def_bool y
 diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 4a582eae82ef..7e07910b9b88 100644
+index 7e07910b9b88..d8eee285fd58 100644
 --- a/drivers/soc/tegra/pmc.c
 +++ b/drivers/soc/tegra/pmc.c
-@@ -38,6 +38,7 @@
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
- #include <linux/reboot.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-@@ -1297,12 +1298,110 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
+@@ -429,6 +429,8 @@ struct tegra_pmc {
+ 	struct irq_chip irq;
+ 
+ 	struct notifier_block clk_nb;
++
++	bool core_domain_state_synced;
+ };
+ 
+ static struct tegra_pmc *pmc = &(struct tegra_pmc) {
+@@ -1298,6 +1300,11 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
  	return err;
  }
  
-+static int
-+tegra_pmc_core_pd_set_performance_state(struct generic_pm_domain *genpd,
-+					unsigned int level)
++bool tegra_pmc_core_domain_state_synced(void)
 +{
-+	struct dev_pm_opp *opp;
++	return pmc->core_domain_state_synced;
++}
++
+ static int
+ tegra_pmc_core_pd_set_performance_state(struct generic_pm_domain *genpd,
+ 					unsigned int level)
+@@ -3787,6 +3794,21 @@ static const struct of_device_id tegra_pmc_match[] = {
+ 	{ }
+ };
+ 
++static void tegra_pmc_sync_state(struct device *dev)
++{
 +	int err;
 +
-+	opp = dev_pm_opp_find_level_ceil(&genpd->dev, &level);
-+	if (IS_ERR(opp)) {
-+		dev_err(&genpd->dev, "failed to find OPP for level %u: %pe\n",
-+			level, opp);
-+		return PTR_ERR(opp);
-+	}
++	pmc->core_domain_state_synced = true;
 +
++	/* this is a no-op if core regulator isn't used */
 +	mutex_lock(&pmc->powergates_lock);
-+	err = dev_pm_opp_set_opp(pmc->dev, opp);
++	err = dev_pm_opp_sync_regulators(dev);
 +	mutex_unlock(&pmc->powergates_lock);
 +
-+	dev_pm_opp_put(opp);
-+
-+	if (err) {
-+		dev_err(&genpd->dev, "failed to set voltage to %duV: %d\n",
-+			level, err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static unsigned int
-+tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
-+					   struct dev_pm_opp *opp)
-+{
-+	return dev_pm_opp_get_level(opp);
-+}
-+
-+static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
-+{
-+	static struct lock_class_key tegra_core_domain_lock_class;
-+	struct generic_pm_domain *genpd;
-+	const char *rname = "core";
-+	int err;
-+
-+	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
-+	if (!genpd)
-+		return -ENOMEM;
-+
-+	genpd->name = np->name;
-+	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
-+	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
-+
-+	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
 +	if (err)
-+		return dev_err_probe(pmc->dev, err,
-+				     "failed to set core OPP regulator\n");
-+
-+	err = pm_genpd_init(genpd, NULL, false);
-+	if (err) {
-+		dev_err(pmc->dev, "failed to init core genpd: %d\n", err);
-+		return err;
-+	}
-+
-+	/*
-+	 * We have a "PMC pwrgate -> Core" hierarchy of the power domains
-+	 * where PMC needs to resume and change performance (voltage) of the
-+	 * Core domain from the PMC GENPD on/off callbacks, hence we need
-+	 * to annotate the lock in order to remove confusion from the
-+	 * lockdep checker when a nested access happens.
-+	 */
-+	lockdep_set_class(&genpd->mlock, &tegra_core_domain_lock_class);
-+
-+	err = of_genpd_add_provider_simple(np, genpd);
-+	if (err) {
-+		dev_err(pmc->dev, "failed to add core genpd: %d\n", err);
-+		goto remove_genpd;
-+	}
-+
-+	return 0;
-+
-+remove_genpd:
-+	pm_genpd_remove(genpd);
-+
-+	return err;
++		dev_err(dev, "failed to sync regulators: %d\n", err);
 +}
 +
- static int tegra_powergate_init(struct tegra_pmc *pmc,
- 				struct device_node *parent)
+ static struct platform_driver tegra_pmc_driver = {
+ 	.driver = {
+ 		.name = "tegra-pmc",
+@@ -3795,6 +3817,7 @@ static struct platform_driver tegra_pmc_driver = {
+ #if defined(CONFIG_PM_SLEEP) && defined(CONFIG_ARM)
+ 		.pm = &tegra_pmc_pm_ops,
+ #endif
++		.sync_state = tegra_pmc_sync_state,
+ 	},
+ 	.probe = tegra_pmc_probe,
+ };
+diff --git a/include/soc/tegra/pmc.h b/include/soc/tegra/pmc.h
+index 361cb64246f7..d186bccd125d 100644
+--- a/include/soc/tegra/pmc.h
++++ b/include/soc/tegra/pmc.h
+@@ -171,6 +171,8 @@ int tegra_io_rail_power_off(unsigned int id);
+ void tegra_pmc_set_suspend_mode(enum tegra_suspend_mode mode);
+ void tegra_pmc_enter_suspend_mode(enum tegra_suspend_mode mode);
+ 
++bool tegra_pmc_core_domain_state_synced(void);
++
+ #else
+ static inline int tegra_powergate_power_on(unsigned int id)
  {
-+	struct of_phandle_args child_args, parent_args;
- 	struct device_node *np, *child;
- 	int err = 0;
- 
-+	/*
-+	 * Core power domain is the parent of powergate domains, hence it
-+	 * should be registered first.
-+	 */
-+	np = of_get_child_by_name(parent, "core-domain");
-+	if (np) {
-+		err = tegra_pmc_core_pd_add(pmc, np);
-+		of_node_put(np);
-+		if (err)
-+			return err;
-+	}
-+
- 	np = of_get_child_by_name(parent, "powergates");
- 	if (!np)
- 		return 0;
-@@ -1313,6 +1412,21 @@ static int tegra_powergate_init(struct tegra_pmc *pmc,
- 			of_node_put(child);
- 			break;
- 		}
-+
-+		if (of_parse_phandle_with_args(child, "power-domains",
-+					       "#power-domain-cells",
-+					       0, &parent_args))
-+			continue;
-+
-+		child_args.np = child;
-+		child_args.args_count = 0;
-+
-+		err = of_genpd_add_subdomain(&parent_args, &child_args);
-+		of_node_put(parent_args.np);
-+		if (err) {
-+			of_node_put(child);
-+			break;
-+		}
- 	}
- 
- 	of_node_put(np);
-@@ -1356,6 +1470,12 @@ static void tegra_powergate_remove_all(struct device_node *parent)
- 	}
- 
- 	of_node_put(np);
-+
-+	np = of_get_child_by_name(parent, "core-domain");
-+	if (np) {
-+		of_genpd_del_provider(np);
-+		of_genpd_remove_last(np);
-+	}
+@@ -227,6 +229,11 @@ static inline void tegra_pmc_enter_suspend_mode(enum tegra_suspend_mode mode)
+ {
  }
  
- static const struct tegra_io_pad_soc *
++static inline bool tegra_pmc_core_domain_state_synced(void)
++{
++	return false;
++}
++
+ #endif /* CONFIG_SOC_TEGRA_PMC */
+ 
+ #if defined(CONFIG_SOC_TEGRA_PMC) && defined(CONFIG_PM_SLEEP)
 -- 
 2.30.2
 
