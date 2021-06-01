@@ -2,129 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D50139724C
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 13:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7338397252
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 13:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbhFAL2I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Jun 2021 07:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S233584AbhFAL24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Jun 2021 07:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhFAL2H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 07:28:07 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE1AC061574;
-        Tue,  1 Jun 2021 04:26:25 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id c3so13875981wrp.8;
-        Tue, 01 Jun 2021 04:26:25 -0700 (PDT)
+        with ESMTP id S231726AbhFAL24 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 07:28:56 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F0BC061574;
+        Tue,  1 Jun 2021 04:27:13 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id s5-20020a7bc0c50000b0290147d0c21c51so1685394wmh.4;
+        Tue, 01 Jun 2021 04:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Bbmxczt86n0ZwIeh1oB7JRebdsVVoIdB9E1KItxrw4s=;
-        b=DPfEsUAHlnHg4WJ7JnUtE9C6esdr8UrSGmf8qN4BP4UyRAs/p8/i/8xs1oQ3j+0J94
-         n1O/kn+/Is2Fvt52OLksJif9sCL898o1rmIDnhwuxT2zX0CdtCezKHiBLFRxAoK+r2JV
-         ToEaU8ES+sjkZPbts5aLWPL0jN6EaiaddCQN0xMrVeM0wA15Osran1Sw6NpIyyxbr757
-         Gr6MGZN4jo9IsDMLbqz2grbZi0UjqSyCnHm5ubO8+a5mO4yJO9DBlKf7zZ9tEL3bA2Ny
-         9y3o314HD/iNZeSe9CVJNZC8l60jNZoaCBSnLrNAZ9wAZV5MwK3Jmpg+KsZyOfh/Hpyw
-         +khw==
+        bh=qWpmyIqtIiEUNSYz2jvtQ/oVSnnO93CuP3bxTaEEH8I=;
+        b=r+kkXsYq3sSGQafJpKn6sgxGQLTlUDBebSrbgmbhJitf7gvLWz+0ZjyGCe176QU6Sh
+         uSrjn6Dzs78XGXw3TdpLZ6VhQrIIEsOR6jSx+i2pUd2JXSrZ39txZ3VGYismfaVlNFIL
+         5ubSJFe9ULHRj4Niq6Suo/TUp+a24ijAfHTzOFARjlTfc39znKtGxAxneZ/oGAphWrbo
+         ywRr2ZHMsVr2ibmVRMmA1H9qCe2jq1V3v5KMEMNWZdjICqLtfsylmys3zPDfjP/1isaO
+         dPYJFCXJ/Odo80HoKNHvJEMsnvZoR2ggpuqvO9V5LIaQI+jxUETpimQJwl5Q2Cx+OlBo
+         W48w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Bbmxczt86n0ZwIeh1oB7JRebdsVVoIdB9E1KItxrw4s=;
-        b=mPOytGcAnjc9dSZd2+8CPwmMDqsf1vPIMLGpkl1FhOjnhViczsdrWCClUHhJZelOOU
-         IEy/GL1mnE3EX6iFi5oLi/Rg8DcGQwaGdJb9JYEERt6CgX3SpKPj60mcqq8fj7rJtYTX
-         934Vfz85X8wSieZEwT3nAIqQgX4PIVx2RJV6zJka193IwZg0mQfEnmRoYh8gBIOJ7xgH
-         efiPP/47nkKRqyW4A36ZTm56jJ0qCfSahQXf340Jx0smM0IoBGviEZZXTaBde4eXJmST
-         K10Ki+oy69M5CM6sj8gOWPWRKgtO9BVJNOwhEXNl48zqxTcnf+beZl2x3elsmoJRGMWL
-         3n8A==
-X-Gm-Message-State: AOAM531H4kd9rKNpT6PVmaX0b7jrjC1PPWw/j6IkBWk0Zek/6NMN0mzl
-        Gh5LLqTjle1mdtnRCM4jPIo=
-X-Google-Smtp-Source: ABdhPJzhKoFglUVq4+ZSesu4iSZ4DfjnhebLMTYDt/o3mF+bM+jx9ZpiAcxZ8VziMIAyv3M2ey4F1A==
-X-Received: by 2002:a5d:538c:: with SMTP id d12mr849200wrv.116.1622546783198;
-        Tue, 01 Jun 2021 04:26:23 -0700 (PDT)
+        bh=qWpmyIqtIiEUNSYz2jvtQ/oVSnnO93CuP3bxTaEEH8I=;
+        b=NB0UNKQ/tvcVKycVRjy9mddY+mwf1ufCEVxSC06k73mHs8hRcC6nhDfXGWW8ZCc1cb
+         WKMTrE9a+F3wqorr5ZaGrrShdEOVV46HWLCPwRwhFzSOTIKeHdaqXJOIMgaThXO7btwm
+         kQogOVTuwJLoFt9VAnEIL74eE8YB/JltbdIy23Os8eadhTA5wHECnwHDQ5MCok4c/yjC
+         k+c/M8+sCKwV+p7O7A51LUq8nRUgMNkL3A01KXN+hsLrOn5zKjssDsdxVHfUlOgbD+gq
+         FqN4PBJ05eCTVqXG0Mg9PBiSPRpE86ca2k59d9DQYRIkSp0WYG4YgYUlvAf/2UVZnFA0
+         qaDw==
+X-Gm-Message-State: AOAM5314YLqI5dcU5TYORnXG4pgOM3q6Wt3b03PfCExCs70CoJDYw2oa
+        6Ji4BtD8OfM9PAn5kKSKWTY=
+X-Google-Smtp-Source: ABdhPJxvQ8WhehZVdy3tmkC1NX1tpqvNgKfauz5YL2BWLrZ5cejOZ7TFVHM3a/I6nIzbe5ep1PnUZQ==
+X-Received: by 2002:a1c:acc5:: with SMTP id v188mr25576027wme.60.1622546831842;
+        Tue, 01 Jun 2021 04:27:11 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id 6sm9208524wmg.17.2021.06.01.04.26.20
+        by smtp.gmail.com with ESMTPSA id m65sm7292051wmm.19.2021.06.01.04.27.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 04:26:20 -0700 (PDT)
-Date:   Tue, 1 Jun 2021 13:27:56 +0200
+        Tue, 01 Jun 2021 04:27:10 -0700 (PDT)
+Date:   Tue, 1 Jun 2021 13:28:46 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nikola =?utf-8?Q?Milosavljevi=C4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
         Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v6 00/14] NVIDIA Tegra memory and power management
- changes for 5.14
-Message-ID: <YLYZvFPyJFJgxI56@orome.fritz.box>
-References: <20210601023119.22044-1-digetx@gmail.com>
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: devfreq: tegra30-actmon: Convert to
+ schema
+Message-ID: <YLYZ7qgBP1ZNnM3w@orome.fritz.box>
+References: <20210601022319.17938-1-digetx@gmail.com>
+ <20210601022319.17938-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jQ9XooBwh3CMbl+E"
+        protocol="application/pgp-signature"; boundary="JH7CJL7a1vXi50s7"
 Content-Disposition: inline
-In-Reply-To: <20210601023119.22044-1-digetx@gmail.com>
+In-Reply-To: <20210601022319.17938-2-digetx@gmail.com>
 User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---jQ9XooBwh3CMbl+E
+--JH7CJL7a1vXi50s7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 01, 2021 at 05:31:05AM +0300, Dmitry Osipenko wrote:
-> This series:
+On Tue, Jun 01, 2021 at 05:23:18AM +0300, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra ACTMON binding to schema.
 >=20
->   1. Adds CPU/core voltage bump before system is rebooted.
->   2. Adds new devm_tegra_core_dev_init_opp_table() helper and switches
->      Tegra memory drivers to use it.
->   3. Adds compile-testing support to the Tegra memory drivers.
->   4. Adds Tegra SoC core power domain support.
->=20
-> Changelog:
->=20
-> v6: - Fixed another compile-test trouble reported for v5. I double checked
->       the clk stubs this time and compiled them locally.
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../arm/tegra/nvidia,tegra30-actmon.txt       |  57 ---------
+>  .../devfreq/nvidia,tegra30-actmon.yaml        | 121 ++++++++++++++++++
+>  2 files changed, 121 insertions(+), 57 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,te=
+gra30-actmon.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegr=
+a30-actmon.yaml
 
-Heh... I just fixed those locally on top of your v5. Let me see if I can
-roll back the changes and apply this new set instead.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Thierry
-
---jQ9XooBwh3CMbl+E
+--JH7CJL7a1vXi50s7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC2GbwACgkQ3SOs138+
-s6GZcxAAwAW383JhE5y+j756zxk2eJtP2L4sR43pP2ukgez2S3EWAgQJTCKqLxtM
-5WyvDsokxqCwFPxruVTCvVS71wM8m0elkiAcXmchDtCjUinqg9SinaExAewJYekB
-5nTnylFaw5jnjTX8xkSndSfnfoyChNHIvg+xewCdQY72XMHEgc/jpCZ9xBU5vB0t
-24FZvU95JzNFkhFbVvBiTbCfYhH26aZpnH0WO2ZqfCwKpkf9EPiB9icriPt6Lz9u
-jUdbydwS2kHNndXpGk7MJVjm6BxIo2gdLmYHOg4S59ijjHqaho39Zd+yl6z/yD+W
-5MrRluQCTD4yJZKj3JspXJiOhRRowXLKcGpdh3ZpTghmfgx7+Z5IjClPHgrOrt7I
-ZhEf7OqIPvrh6jEj8RYRfBWjFr3w5bvUTYAKJ7Hpu6bvL0YnRZB0jiTWSsFbqomQ
-5bLre67BJSYS9kpACvl6D/CD1B1+oMqgHaMQF13IjNzWWPYyakakkQNx3uNdeY0Q
-V3Hnu8axNrp3J8c/xNv5VN5PxFyQA7ESO2mQMWs5YBCP2mqbLljn7KPVp283BiVe
-r/GiUxBNrJCnK3zH5kmWKRPJZ+9YtN7cJCmD1d9w/E88EjyZm3zoxmt1cMEx5DXC
-uvkKktKhav1ObzX2MUC/mTr2NWaDKh/+kgi2HkJ6PKhUHrnQLj0=
-=D53B
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC2Ge4ACgkQ3SOs138+
+s6HKuA/6An4z1SGtqnbFCDWDEs+HOPnz4oY3MoRvz3aNdGVM7ihxEoWg60fZU0I1
+FO0qOk79VGjonY94IwCyP2hX5iuupnQvI0S/2stHYkh03Ieq57NNLCpZ0Kj9Dm0L
+gcaUo6VWiUeD6zKrS3VCO5baBbTFgJeUE1ht4CA5ASyf/L6jJNCeiwzrIBDt0l3D
+d97Wp8Xkmrh0enXikio2RuTKS7geTjmnNIbnQP+Jc5z6GYAfv/e48Fpow22Ngy62
+695rySSp0s1fm2SPUX+8Yk9y/bsXWaaTgi5yzq3gLARKpIjQxAF1hWG0Ay2++qMj
+xFqGhHIZCnn+1AXVo3G7lzR+ZBM99DxZlLf0lGVJbeYaqACGdzorK+6rfjGC9i3e
+GPAFi2jz7/lXfQnndDxmdmIlmLy+zMWDdkNWql6vSxW7G8I+u8o+i3KLrYV4YM4v
+2sFfoLtDRo/wIW6ASRWiusSJ2yAOStvRKtp7yBjBi75VDff/1j2csaZ/v9c0UBBD
+hYuVyqqKuaBiEbHFmJj4eXZP9Teaq8gb8eqGh08xNLJ7EBM97SxvqEb0FAtQ4H+X
+r660+OMNujiXzYVXcG6shyLUpDuaqAYSamFeN05jn+OwR+gzRpO3B545qLnT46hl
+YzT8y6SldNThhutN91iVHH/ounRJ7R4TXz+4OebA4oCqtdcQ87o=
+=zgu9
 -----END PGP SIGNATURE-----
 
---jQ9XooBwh3CMbl+E--
+--JH7CJL7a1vXi50s7--
