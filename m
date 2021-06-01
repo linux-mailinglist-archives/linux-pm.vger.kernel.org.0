@@ -2,154 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987EF396C11
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 06:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED941396C5D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 06:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbhFAEXE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Jun 2021 00:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S231375AbhFAEeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Jun 2021 00:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbhFAEXD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 00:23:03 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE62C061756;
-        Mon, 31 May 2021 21:21:20 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id f30so19727062lfj.1;
-        Mon, 31 May 2021 21:21:20 -0700 (PDT)
+        with ESMTP id S229460AbhFAEeE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 00:34:04 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CDAC061574;
+        Mon, 31 May 2021 21:32:22 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id i10so7649918lfj.2;
+        Mon, 31 May 2021 21:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WcZrwLvNGthpdEMZsdsYJnWu6LlV6UEvtCLvpde2CIU=;
-        b=mcB9i5jSHhqC/GtCYTTfHDPNJKJUIzWoJpEKe8UI2xLjhXPy4RrtrMOhmvX6OTrgnu
-         G2s5zONt5zIepkBTLa1e+UnzBTiA/Zp/9xXmKNtwWojFOffUwDpouBwyuF8ELcKLYfwE
-         lVixaK8Kah2k2ha8kSbovwwLgqEdA9py5IkE4gJg5sklfgDy6wRxQrKSytTysL0EJKy/
-         cDLtqZy5JuajzTfWILLCVr1five9gkKL4087JDOyLw0Za/8AXHRBxxbmvgJpCzym3NI+
-         CjY1jJM9IJ6BaFJZGiLVOzPeZNTXirSY91xO6zw8RvTmeGXm2bngOFWFR7gJD8vciQKB
-         CYMg==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8fLKhrUqwIxQ2xXGCIpsy1nQkq4X8BC2dI8dF7Ysll4=;
+        b=U9OHcCu4V/wDY1tsGXV2eshRLrjRfPice5eoIjlRPyQ1MCuMgW0y6imnF6TZ+1nvSr
+         lkpoVD8uNcNSQfKLY9zPs+yuGoRuKax65LSSwF0dsHbk167AAj6H+9He+dcLSbZnPZ3u
+         mGR0gTS7a8X9jSlJWbWmMtZJVGWLSUdkYegAmiGb1dzsBvqNXzyY3SquYuVBe35/Te42
+         T/QxVpQPwLz6Iww+ko+SM1L+bBP1cJMy03ZWqBVAr7QCW9dmb2ooIbXGhhpprZYrqCqq
+         85U5Dfw/uzeLxbQFwOeZs/8JPQSgpqG40aI817t9p3yZM7zQvxAObf4M7UX7XrKDXHZR
+         9nBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WcZrwLvNGthpdEMZsdsYJnWu6LlV6UEvtCLvpde2CIU=;
-        b=tzZYl+OZ+aNLIJhbzUCOrVVygJVl6P8YOdECeRD+KTwSfVRkmmXyN/6Fd6bwCocIG9
-         xrbraFFnUtcjdKA947RSXW3bBuKITz7RVE210y37EHq7gzAanU5F7Dws/Cy7zyp4zoOj
-         6AtMwwd08yblwp/lIqHPRd3NTApmJMIFLl1qKtGc8kpWcAsDYVUsK6Y9wgqSEaYHWSNU
-         3yITnPtTeAJqvDWce26rDwO+Ge2llUIeepweZ6ipHvWWtF+ytovGQaYyIiVd7xzO5aSj
-         KF5hfk5FhJp//+HC9H0Xa2+/uUuIS5yo75KD8Pnb3x0wSA8uswEyvzp7lkYpFRhhTW83
-         s6Yg==
-X-Gm-Message-State: AOAM532cGh+i7Wx/PFONe5uESByHTRQr4wQJlNJLMb/eCAHFUlqlfW/R
-        GpNquWPNPQq0/Uj2qcWOPHg=
-X-Google-Smtp-Source: ABdhPJy7zQ/jxMDe+PoPfXpzjCf7fFzoGCi8nggVzZpymadTblEykyA8LUavoIX4czVKAMtpqwRiVw==
-X-Received: by 2002:a19:4c85:: with SMTP id z127mr17231923lfa.336.1622521279399;
-        Mon, 31 May 2021 21:21:19 -0700 (PDT)
-Received: from localhost.localdomain (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
-        by smtp.gmail.com with ESMTPSA id d9sm931627lfv.47.2021.05.31.21.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 21:21:19 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8fLKhrUqwIxQ2xXGCIpsy1nQkq4X8BC2dI8dF7Ysll4=;
+        b=QqK3d2pZKBd0XiyeRLl7QjQYbOwQPTNR/NggrXbgypXsEhWwBw83VB8rVNvQDPwjoc
+         ZSapAjmX8tBvIyDO9ZQjkqbqRlzt6x/vhYNqcF6NHwiz1FLJ8RkJHgLdA7AnvIG7vqGp
+         R1QxbsK98vnRt7eLxNvi5p2QFE21cmiZshV9hLcEkF0ztt0BuWDNzG2/oRXJDLJUybUM
+         xYPu8BDUpOeBil3Wy1WMpJbnYbjdpSn1lmiszB3bjW5vcWQ4dil5sMX5XHU2aQz8QRvq
+         Fih44GzTA4nl/9kdNlAL9hP/m7sl2C7YZt2YxbpU/rDpugX10i3ymPnR/YgPwWA3Vgda
+         zZrw==
+X-Gm-Message-State: AOAM532j0byPs3ksOXO/krrU/IFaTKBjWhDuVYa+Es55xddPZQ11sXcl
+        1rqbAPIjgIBQvpAovHGgQZMJn5SqIvo=
+X-Google-Smtp-Source: ABdhPJyZOoyMjsAEgJ5QqpWftZq0zpRUdysZh/BbpsknOcK9B1P0zg1rXr1TwghT/iHKyC0PpYI6ZA==
+X-Received: by 2002:a05:6512:1194:: with SMTP id g20mr17786786lfr.407.1622521940654;
+        Mon, 31 May 2021 21:32:20 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
+        by smtp.googlemail.com with ESMTPSA id x26sm1863322ljj.46.2021.05.31.21.32.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 May 2021 21:32:20 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] dt-bindings: devfreq: tegra30-actmon: Add
+ cooling-cells
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+        Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v18 2/2] drm/tegra: dc: Extend debug stats with total number of events
-Date:   Tue,  1 Jun 2021 07:21:08 +0300
-Message-Id: <20210601042108.1942-3-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210601042108.1942-1-digetx@gmail.com>
-References: <20210601042108.1942-1-digetx@gmail.com>
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20210601022319.17938-1-digetx@gmail.com>
+ <20210601022319.17938-3-digetx@gmail.com>
+Message-ID: <bda7233e-a9e0-7a3d-f6b5-084a49d705ed@gmail.com>
+Date:   Tue, 1 Jun 2021 07:32:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210601022319.17938-3-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's useful to know the total number of underflow events and currently
-the debug stats are getting reset each time CRTC is being disabled. Let's
-account the overall number of events that doesn't get a reset.
+01.06.2021 05:23, Dmitry Osipenko пишет:
+> The ACTMON watches activity of memory clients. Decisions about a minimum
+> required frequency are made based on the info from ACTMON. We can use
+> ACTMON as a thermal cooling device by limiting the required frequency.
+> Document new cooling-cells property of NVIDIA Tegra ACTMON hardware unit.
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
 
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/gpu/drm/tegra/dc.c | 10 ++++++++++
- drivers/gpu/drm/tegra/dc.h |  5 +++++
- 2 files changed, 15 insertions(+)
+I missed to add Rob's r-b to this patch that he gave to v1:
 
-diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
-index 7dfe3250761f..173304f3467d 100644
---- a/drivers/gpu/drm/tegra/dc.c
-+++ b/drivers/gpu/drm/tegra/dc.c
-@@ -1602,6 +1602,11 @@ static int tegra_dc_show_stats(struct seq_file *s, void *data)
- 	seq_printf(s, "underflow: %lu\n", dc->stats.underflow);
- 	seq_printf(s, "overflow: %lu\n", dc->stats.overflow);
- 
-+	seq_printf(s, "frames total: %lu\n", dc->stats.frames_total);
-+	seq_printf(s, "vblank total: %lu\n", dc->stats.vblank_total);
-+	seq_printf(s, "underflow total: %lu\n", dc->stats.underflow_total);
-+	seq_printf(s, "overflow total: %lu\n", dc->stats.overflow_total);
-+
- 	return 0;
- }
- 
-@@ -2368,6 +2373,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): frame end\n", __func__);
- 		*/
-+		dc->stats.frames_total++;
- 		dc->stats.frames++;
- 	}
- 
-@@ -2376,6 +2382,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		dev_dbg(dc->dev, "%s(): vertical blank\n", __func__);
- 		*/
- 		drm_crtc_handle_vblank(&dc->base);
-+		dc->stats.vblank_total++;
- 		dc->stats.vblank++;
- 	}
- 
-@@ -2383,6 +2390,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): underflow\n", __func__);
- 		*/
-+		dc->stats.underflow_total++;
- 		dc->stats.underflow++;
- 	}
- 
-@@ -2390,11 +2398,13 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): overflow\n", __func__);
- 		*/
-+		dc->stats.overflow_total++;
- 		dc->stats.overflow++;
- 	}
- 
- 	if (status & HEAD_UF_INT) {
- 		dev_dbg_ratelimited(dc->dev, "%s(): head underflow\n", __func__);
-+		dc->stats.underflow_total++;
- 		dc->stats.underflow++;
- 	}
- 
-diff --git a/drivers/gpu/drm/tegra/dc.h b/drivers/gpu/drm/tegra/dc.h
-index 581263c7614a..dd171daace9e 100644
---- a/drivers/gpu/drm/tegra/dc.h
-+++ b/drivers/gpu/drm/tegra/dc.h
-@@ -46,6 +46,11 @@ struct tegra_dc_stats {
- 	unsigned long vblank;
- 	unsigned long underflow;
- 	unsigned long overflow;
-+
-+	unsigned long frames_total;
-+	unsigned long vblank_total;
-+	unsigned long underflow_total;
-+	unsigned long overflow_total;
- };
- 
- struct tegra_windowgroup_soc {
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
