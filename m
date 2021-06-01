@@ -2,119 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7338397252
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 13:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83D33972AC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jun 2021 13:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbhFAL24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Jun 2021 07:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S233409AbhFALqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Jun 2021 07:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbhFAL24 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 07:28:56 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F0BC061574;
-        Tue,  1 Jun 2021 04:27:13 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id s5-20020a7bc0c50000b0290147d0c21c51so1685394wmh.4;
-        Tue, 01 Jun 2021 04:27:13 -0700 (PDT)
+        with ESMTP id S231201AbhFALqL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Jun 2021 07:46:11 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310B8C06175F
+        for <linux-pm@vger.kernel.org>; Tue,  1 Jun 2021 04:44:29 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id e22so10460198pgv.10
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jun 2021 04:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=qWpmyIqtIiEUNSYz2jvtQ/oVSnnO93CuP3bxTaEEH8I=;
-        b=r+kkXsYq3sSGQafJpKn6sgxGQLTlUDBebSrbgmbhJitf7gvLWz+0ZjyGCe176QU6Sh
-         uSrjn6Dzs78XGXw3TdpLZ6VhQrIIEsOR6jSx+i2pUd2JXSrZ39txZ3VGYismfaVlNFIL
-         5ubSJFe9ULHRj4Niq6Suo/TUp+a24ijAfHTzOFARjlTfc39znKtGxAxneZ/oGAphWrbo
-         ywRr2ZHMsVr2ibmVRMmA1H9qCe2jq1V3v5KMEMNWZdjICqLtfsylmys3zPDfjP/1isaO
-         dPYJFCXJ/Odo80HoKNHvJEMsnvZoR2ggpuqvO9V5LIaQI+jxUETpimQJwl5Q2Cx+OlBo
-         W48w==
+        bh=zUuBlevDml1RsQmUcJ3i0Xl7Pbt1BMQJv/H4BpeTbs4=;
+        b=wJB/xCUiFi4akZMhxo2B7DlgwZfFQIEYn4N/AW59AMcymGly3G9+wq3KBOcIh0jyEg
+         jaw119dClX+VlreibdlDHU998M2zPLm4P3UkG4FYFoR7Gs6ZTxkdstOjQO81WEO3/66E
+         D43hTf1Zv1DWu39wy8e+HIOPYxfcIKBr95dtcQIbxbkN40GSzZjVc+7djlK3PK+BNJTP
+         yhgq9oRRkDTosR33WVGAzemSjkYhcQYvmZDm1oEBHqta/Jw5FjPebpxkHFTlxDAdbFx8
+         Mjx5ms/A18kQyTzW3AJD2Y5d2D47s1chlk/iwX7Uz5+YcSbfiWSBSB7Qu+Hrs5dsnsDC
+         tNKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qWpmyIqtIiEUNSYz2jvtQ/oVSnnO93CuP3bxTaEEH8I=;
-        b=NB0UNKQ/tvcVKycVRjy9mddY+mwf1ufCEVxSC06k73mHs8hRcC6nhDfXGWW8ZCc1cb
-         WKMTrE9a+F3wqorr5ZaGrrShdEOVV46HWLCPwRwhFzSOTIKeHdaqXJOIMgaThXO7btwm
-         kQogOVTuwJLoFt9VAnEIL74eE8YB/JltbdIy23Os8eadhTA5wHECnwHDQ5MCok4c/yjC
-         k+c/M8+sCKwV+p7O7A51LUq8nRUgMNkL3A01KXN+hsLrOn5zKjssDsdxVHfUlOgbD+gq
-         FqN4PBJ05eCTVqXG0Mg9PBiSPRpE86ca2k59d9DQYRIkSp0WYG4YgYUlvAf/2UVZnFA0
-         qaDw==
-X-Gm-Message-State: AOAM5314YLqI5dcU5TYORnXG4pgOM3q6Wt3b03PfCExCs70CoJDYw2oa
-        6Ji4BtD8OfM9PAn5kKSKWTY=
-X-Google-Smtp-Source: ABdhPJxvQ8WhehZVdy3tmkC1NX1tpqvNgKfauz5YL2BWLrZ5cejOZ7TFVHM3a/I6nIzbe5ep1PnUZQ==
-X-Received: by 2002:a1c:acc5:: with SMTP id v188mr25576027wme.60.1622546831842;
-        Tue, 01 Jun 2021 04:27:11 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id m65sm7292051wmm.19.2021.06.01.04.27.10
+        bh=zUuBlevDml1RsQmUcJ3i0Xl7Pbt1BMQJv/H4BpeTbs4=;
+        b=jh5/440ewnrwFZccbUIuEE0zryq9ymXRFvKwbQxyuvXD29Flac7Zt6yI3LPKsKlXKR
+         qOlIRx0cjhtqXXSRWC9HQZPjFeZFDErHdUnmF+NmbO3Fy8T8kHRm5kJpPhtGb9V74ZrG
+         5B9Cx3A58tMOVewNccWIO0SmXa0Tpi6zs1X5LayVpu4XuJYU9hwjlX2Th5FL/dRXxsc0
+         aZSNDFvu37g3wPBLwJUYsrxl/55Nipk5nXaSRxHRt3SyHFY/kCk9Kz5vNd+2gQy5+KdF
+         NVJRB5oGpH+mS/0UmOwpjlcypzskt0isGcILW+22QbRXlJ97MnpMQQ6yUdm9IwpS3Y9L
+         i1Ow==
+X-Gm-Message-State: AOAM530rB7UbRteRvZqHDqGGSD1OL7CkYgpgTe+Ui4qk7ZKFgWXbwjNK
+        ouNO45zhvaB+gZFVtiUtk2RU+w==
+X-Google-Smtp-Source: ABdhPJzGgQOKQeJuHCotgvJ/qS4B4/iYGR2HD+vCofFVAcj+a5E+3QEYwRq58t171wWXWNbFZ49CGw==
+X-Received: by 2002:a63:5c4e:: with SMTP id n14mr27752883pgm.192.1622547868703;
+        Tue, 01 Jun 2021 04:44:28 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id s123sm13088954pfb.78.2021.06.01.04.44.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 04:27:10 -0700 (PDT)
-Date:   Tue, 1 Jun 2021 13:28:46 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: devfreq: tegra30-actmon: Convert to
- schema
-Message-ID: <YLYZ7qgBP1ZNnM3w@orome.fritz.box>
-References: <20210601022319.17938-1-digetx@gmail.com>
- <20210601022319.17938-2-digetx@gmail.com>
+        Tue, 01 Jun 2021 04:44:28 -0700 (PDT)
+Date:   Tue, 1 Jun 2021 17:14:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>, ulf.hansson@linaro.org,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce
+ 'assigned-performance-states' property
+Message-ID: <20210601114426.3vhh2twocqx254b6@vireshk-i7>
+References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org>
+ <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
+ <YLYV3ov/iBffZMg4@gerhold.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JH7CJL7a1vXi50s7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210601022319.17938-2-digetx@gmail.com>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
+In-Reply-To: <YLYV3ov/iBffZMg4@gerhold.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 01-06-21, 13:12, Stephan Gerhold wrote:
+> > +    child4: consumer@12341000 {
+> > +        compatible = "foo,consumer";
+> > +        reg = <0x12341000 0x1000>;
+> > +        power-domains = <&parent4>, <&parent5>;
+> > +        assigned-performance-states = <0>, <256>;
+> > +    };
+> 
+> Bjorn already asked this in v1 [1]:
+> 
+> > May I ask how this is different from saying something like:
+> >
+> > 	required-opps = <&??>, <&rpmpd_opp_svs>;
+> 
+> and maybe this was already discussed further elsewhere. But I think at
+> the very least we need some clarification in the commit message + the
+> binding documentation how your new property relates to the existing
+> "required-opps" binding.
+> 
+> Because even if it might not be implemented at the moment,
+> Documentation/devicetree/bindings/power/power_domain.txt actually also
+> specifies "required-opps" for device nodes e.g. with the following example:
+> 
+> 	leaky-device0@12350000 {
+> 		compatible = "foo,i-leak-current";
+> 		reg = <0x12350000 0x1000>;
+> 		power-domains = <&power 0>;
+> 		required-opps = <&domain0_opp_0>;
+> 	};
+> 
+> It looks like Viresh added that in commit e856f078bcf1
+> ("OPP: Introduce "required-opp" property").
+> 
+> And in general I think it's a bit inconsistent that we usually refer to
+> performance states with phandles into the OPP table, but the
+> assigned-performance-states suddenly use "raw numbers".
 
---JH7CJL7a1vXi50s7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I must have missed that discussion, sorry about that.
 
-On Tue, Jun 01, 2021 at 05:23:18AM +0300, Dmitry Osipenko wrote:
-> Convert NVIDIA Tegra ACTMON binding to schema.
->=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../arm/tegra/nvidia,tegra30-actmon.txt       |  57 ---------
->  .../devfreq/nvidia,tegra30-actmon.yaml        | 121 ++++++++++++++++++
->  2 files changed, 121 insertions(+), 57 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,te=
-gra30-actmon.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegr=
-a30-actmon.yaml
+The required-opps property, when present in device's node directly, is about the
+(default) OPPs to choose for that device's normal functioning as they may not do
+DVFS.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Good point Stephan.
 
---JH7CJL7a1vXi50s7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC2Ge4ACgkQ3SOs138+
-s6HKuA/6An4z1SGtqnbFCDWDEs+HOPnz4oY3MoRvz3aNdGVM7ihxEoWg60fZU0I1
-FO0qOk79VGjonY94IwCyP2hX5iuupnQvI0S/2stHYkh03Ieq57NNLCpZ0Kj9Dm0L
-gcaUo6VWiUeD6zKrS3VCO5baBbTFgJeUE1ht4CA5ASyf/L6jJNCeiwzrIBDt0l3D
-d97Wp8Xkmrh0enXikio2RuTKS7geTjmnNIbnQP+Jc5z6GYAfv/e48Fpow22Ngy62
-695rySSp0s1fm2SPUX+8Yk9y/bsXWaaTgi5yzq3gLARKpIjQxAF1hWG0Ay2++qMj
-xFqGhHIZCnn+1AXVo3G7lzR+ZBM99DxZlLf0lGVJbeYaqACGdzorK+6rfjGC9i3e
-GPAFi2jz7/lXfQnndDxmdmIlmLy+zMWDdkNWql6vSxW7G8I+u8o+i3KLrYV4YM4v
-2sFfoLtDRo/wIW6ASRWiusSJ2yAOStvRKtp7yBjBi75VDff/1j2csaZ/v9c0UBBD
-hYuVyqqKuaBiEbHFmJj4eXZP9Teaq8gb8eqGh08xNLJ7EBM97SxvqEb0FAtQ4H+X
-r660+OMNujiXzYVXcG6shyLUpDuaqAYSamFeN05jn+OwR+gzRpO3B545qLnT46hl
-YzT8y6SldNThhutN91iVHH/ounRJ7R4TXz+4OebA4oCqtdcQ87o=
-=zgu9
------END PGP SIGNATURE-----
-
---JH7CJL7a1vXi50s7--
+-- 
+viresh
