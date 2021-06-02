@@ -2,90 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD00F398066
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 06:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D8039806C
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 06:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhFBEiZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 00:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S229744AbhFBEjS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 00:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbhFBEiY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 00:38:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5AFC061574;
-        Tue,  1 Jun 2021 21:36:42 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id v12so445540plo.10;
-        Tue, 01 Jun 2021 21:36:42 -0700 (PDT)
+        with ESMTP id S229516AbhFBEjR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 00:39:17 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E24CC061574;
+        Tue,  1 Jun 2021 21:37:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 133so1238017pgf.2;
+        Tue, 01 Jun 2021 21:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=KTf2Z6MKvY8sheO1d8MEddPyrsTpIrIEJxqzm3TzrA4=;
-        b=uR6J2dSEP1OKp5UxswuSHcxR0MWh824sc/eaO0h38A8FJXcY2LNW1Sxh31Xx4gqtnG
-         syptW6UKkNBqbFfiBYUcqvw0A+G7SPI/h0I+HWeRjeNrTVpLj8ExgHZL4RSqDRlH5+oa
-         dXh3aUhwbnMzMVM28P9wGI47mKjW8YS2q8XVA+dsXcdB3Qj6tRzvlo2GlpPSqhh6vZXL
-         dM161TM5rabaCclhHpw16+nZctAKOyDk7RPyiZgX+2xBU+YiGbTHom8v5FwfbarDvSZt
-         nzhJl1ClazXJ/A2INO5XRqYdtwcJOSR3niAk/rlb/M8Ya92qF4rMzqAyu67LeKUpzM+F
-         Cpmg==
+        bh=s61OiZYKOsW6cE8ZfHpspLBA2T60D0x91MluTCnVBZQ=;
+        b=T15fJd1v4MPRbbyLv1Haelr/MaxNAhdly0rDRvzUldQYrCpUL3D3S5COwbsUPvyZT0
+         bQ18k51URaWmzSYry9/7qjGfHs+wkDNbpyVKeEuKRzOlH5nhgEgCt6XkCIHAVW9yGlOk
+         8xsiYLoKtI8Mr/U3ExDiBwogXBlsRw7hqR42/Os7bTk1+FLBjdfDopQcWmgzIX0pbWLo
+         vuzdEY0kLZ65t8isloVGiiQ17Q7Zw/bjP5fCt5BJKh3ZB9nJ7Qidb9D8h4IxdwWiWEY0
+         uu5U9ZhV+N6HyEHEAH+xy9XlQs2LP1unxFMsHhOS8/c+CBwJeduir2OGhppOmQOUgbps
+         bJJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KTf2Z6MKvY8sheO1d8MEddPyrsTpIrIEJxqzm3TzrA4=;
-        b=ZhPotWn8z88KtU/dL+AqGT0GSB5N1Fp9DfUg3a+NcZXZDDKoehX33RxdMFc00V9hD1
-         ehMQZQlOnFx0BysQ4NPwDBcLRFQuiblMaKoCs+gyDAmNioJcR9ZxAMPWeb4OIpX5/1Vn
-         LhheycVNo9b7EnS2CR37+ppbVGi3JckVJ7Jx9XjwCIUJcQFZOwy/eknnYJ3RDBBui3hq
-         xKypDolCQhxJD2OSuZQmaMKjPn+GLvnAkcMH26R2oidMCFEBGwZZmAZZXUckpAaGv1Yc
-         nKDKmtEYVn9iX8AVmAeZikckxZ1cW7CqMZhEFwQ1YHFk+fvYSWzeWBmKHr18hS+qTIRr
-         nRjg==
-X-Gm-Message-State: AOAM530Xx6DqBQwmeGETo6JPrIx5maor3xdEMzQge2leI+bvQ2Ok5els
-        i/HE07DQB1I6LOrqFT/hpZI=
-X-Google-Smtp-Source: ABdhPJxrMPYyqzW1DClbrvN9pPlagr9x09huXer5s+LsC8rOinkkaZV4vikyVUL8843z6isIah4zUQ==
-X-Received: by 2002:a17:90a:9511:: with SMTP id t17mr28971813pjo.108.1622608602298;
-        Tue, 01 Jun 2021 21:36:42 -0700 (PDT)
+        bh=s61OiZYKOsW6cE8ZfHpspLBA2T60D0x91MluTCnVBZQ=;
+        b=uSBCKYR4vhf5kgpRXFI5+xPnQZSjvboCcz6WPbzR9cAKkFKwyJOWOMS0sHSeoxIke5
+         iv9hGTCND/vORnDYTbjOW096qW+Lgtvts2Dq2zk29wO+P4vabVggNvNNUqFj/xtWC9UK
+         xkUPr9i4smqdr1CFr7pa67Y/EhfxpYewKHShApsRsOUCj890sFcimRb60MxfVDNoN/AF
+         U8BD1xwF/1VpfzAzfi9J5L4+wAvt0OEkFCgvCSScgRQXgct+2O9Q/E0jo9MDXOHZb+my
+         zlqgH/bPHcmKTUx10iZJe+UVBiwg2JrfDv/W2uDBeFCJ7cD8m8rSRmnW1ao8HdOmsiwZ
+         e4Mw==
+X-Gm-Message-State: AOAM531h89nD5z0CCXs8Ddyekub+DpueRpH0dC2BvKlAZFfuM9rl09M3
+        MTjIl5luZbUMJcgejWYt6x4=
+X-Google-Smtp-Source: ABdhPJziwfj1W0ruMVUYRYigH/z/tGV6kelJMEGVgv5M4xsXm04WArSn1+WMMI6YpGXghv4Pu8B1cw==
+X-Received: by 2002:a65:4042:: with SMTP id h2mr31570795pgp.380.1622608653977;
+        Tue, 01 Jun 2021 21:37:33 -0700 (PDT)
 Received: from google.com ([2620:15c:202:201:a596:b3cb:1a6:1ee4])
-        by smtp.gmail.com with ESMTPSA id f3sm14007054pfd.21.2021.06.01.21.36.38
+        by smtp.gmail.com with ESMTPSA id d15sm3365543pjr.47.2021.06.01.21.37.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 21:36:38 -0700 (PDT)
-Date:   Tue, 1 Jun 2021 21:36:36 -0700
+        Tue, 01 Jun 2021 21:37:32 -0700 (PDT)
+Date:   Tue, 1 Jun 2021 21:37:30 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     satya priya <skakit@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+To:     skakit@codeaurora.org
+Cc:     Rob Herring <robh@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Collins <collinsd@codeaurora.org>, kgunda@codeaurora.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         Courtney Cavin <courtney.cavin@sonymobile.com>,
         Vinod Koul <vkoul@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>
-Subject: Re: [PATCH V3 2/5] dt-bindings: input: pm8941-pwrkey: add pmk8350
- compatible strings
-Message-ID: <YLcK1P2/3v01XCHb@google.com>
+        Sebastian Reichel <sre@kernel.org>,
+        David Collins <collinsd@codeaurora.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH V3 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941
+ power key binding to yaml
+Message-ID: <YLcLCmxNOYqj0SN3@google.com>
 References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
- <1620630064-16354-3-git-send-email-skakit@codeaurora.org>
+ <1620630064-16354-5-git-send-email-skakit@codeaurora.org>
+ <1620655299.793818.41438.nullmailer@robh.at.kernel.org>
+ <20210510162445.GA230005@robh.at.kernel.org>
+ <c4e286ae6bd621a9d84184d5d014d060@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620630064-16354-3-git-send-email-skakit@codeaurora.org>
+In-Reply-To: <c4e286ae6bd621a9d84184d5d014d060@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 10, 2021 at 12:31:01PM +0530, satya priya wrote:
-> From: David Collins <collinsd@codeaurora.org>
+On Wed, May 12, 2021 at 10:17:43AM +0530, skakit@codeaurora.org wrote:
+> On 2021-05-10 21:54, Rob Herring wrote:
+> > On Mon, May 10, 2021 at 09:01:39AM -0500, Rob Herring wrote:
+> > > On Mon, 10 May 2021 12:31:03 +0530, satya priya wrote:
+> > > > Convert qcom pm8941 power key binding from .txt to .yaml format.
+> > > >
+> > > > Signed-off-by: satya priya <skakit@codeaurora.org>
+> > > > ---
+> > > > Changes in V2:
+> > > >  - Fixed bot errors, took reference from input.yaml for "linux,code"
+> > > >  - Added one complete example for powerkey and resin, and referenced it
+> > > >    in main PON binding.
+> > > >  - Moved this patch to the end of the series.
+> > > >
+> > > > Changes in V3:
+> > > >  - Moved this patch before PON binding patch.
+> > > >  - As per Rob's comments, added allOf at the beginning of binding.
+> > > >    Added maxItems for interrupts.
+> > > >  - Added 'unevaluatedProperties' instead of 'additionalProperties' as
+> > > >    we are using allOf.
+> > > >
+> > > >  .../bindings/input/qcom,pm8941-pwrkey.txt          | 55 --------------
+> > > >  .../bindings/input/qcom,pm8941-pwrkey.yaml         | 87 ++++++++++++++++++++++
+> > > >  2 files changed, 87 insertions(+), 55 deletions(-)
+> > > >  delete mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.txt
+> > > >  create mode 100644 Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.yaml
+> > > >
+> > > 
+> > > My bot found errors running 'make DT_CHECKER_FLAGS=-m
+> > > dt_binding_check'
+> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > > 
+> > > yamllint warnings/errors:
+> > > 
+> > > dtschema/dtc warnings/errors:
+> > > Documentation/devicetree/bindings/input/qcom,pm8941-pwrkey.example.dt.yaml:0:0:
+> > > /example-0/spmi@c440000/pmic@0/pon_hlos@1300: failed to match any
+> > > schema with compatible: ['qcom,pm8998-pon']
+> > 
+> > You have the same example in patch 5, so drop the example here. That
+> > will fix this circular dependency.
 > 
-> Add power key and resin compatible strings for the PMK8350 PMIC.
-> These are needed to distinguish key PON_HLOS register differences
-> between PMK8350 and previous PMIC PON modules.
-> 
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> Earlier I have dropped example from qcom-pon.yaml. Now, I will add the
+> example there and drop here.
 
-Applied, thank you.
+It sounds to me you want to combine patches 4 and 5 since they depend on
+each other.
+
+Thanks.
 
 -- 
 Dmitry
