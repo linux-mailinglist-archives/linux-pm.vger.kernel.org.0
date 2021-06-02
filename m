@@ -2,98 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6597C398A4A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 15:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AACB398AA8
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 15:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbhFBNUg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 09:20:36 -0400
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:44865 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbhFBNUf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 09:20:35 -0400
-Received: by mail-ua1-f42.google.com with SMTP id 68so1247990uao.11
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jun 2021 06:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uH5yxU+BzRF90wWQwBO4VM5milL3akGJBti5j4uOIZE=;
-        b=s6OLJzCVfowSoFK+Kn+Dhlq9dbdZvw299TRcMkIdw5Yuw3QzvKXt83rm00ZYmdAzHh
-         /1dzY+TZZYI7BxQvrF0FDyUZF9EMiKzASt4L13dLl6SCkUavqGGqBrk3O90KyRB0h+lE
-         5vqtpcRDiNuA4hyi2GEWpaPREnpTT8jFXAL3Ypr8EXcRsTLjM2LEkV+hLkRG4wNmfK+c
-         hawPsG2yo23cDzABvRJQmn8X+GmEu9mJER+1cYC3lQAxQ/foh9xbWloSO7ggqM4k6Djv
-         ehNToKgNW35e/8OEm0Hun2TjV2n0awAldfNx1NCqo7S6PU2Wlxzae8ooaKznyMLri193
-         rSiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uH5yxU+BzRF90wWQwBO4VM5milL3akGJBti5j4uOIZE=;
-        b=ajSAw43O5Yjbhyh1qWG4Yfy/efV4Ozr12oAVo+XcHQB2Obt5dZl99bitDSRwsJTGqZ
-         TH66bpdNxtKoeToKFZHESlr2QH7cEkyHMcCrbAoBTypRth82jZ7LBwMuDxLZIaB4VGJh
-         94rw+jsXV2UbFaVXy+2iwuBC0Unm55Bbt5ZbkiJcGXACxp+SgtGUs7//mT8TpeT52il0
-         3Sou3bcBbpW65+5KMd6kcj15q7n20bSQ9kMAu96TLGWk0/orQN4QAz9LxG1WfZhh2NyS
-         pCB8crJJWr2oLJDlCPp9qsrgsw1/RJjW8/GofXSr6wpxFDkSf3wI9pkP4JhuEWW4bY9p
-         P+Xg==
-X-Gm-Message-State: AOAM533OqNTr0i4jIHNG1dzv3YujHt4Idl0KTF5KRppe7gcMzAOu6/sF
-        6uzoHubcdCAV7gy2GsgAaWHr3jqznJgxYEaG1E/WDA==
-X-Google-Smtp-Source: ABdhPJyvipLZfILhu87oS/az2/HBFVuElK4GQ6Srx/B1cgHvOyXaym3QLEigUlS/OUkA08r+m8+miEhdsQUfZ9i5/94=
-X-Received: by 2002:ab0:100f:: with SMTP id f15mr21456136uab.100.1622639870335;
- Wed, 02 Jun 2021 06:17:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210602112321.2241566-1-anup.patel@wdc.com> <20210602112321.2241566-6-anup.patel@wdc.com>
-In-Reply-To: <20210602112321.2241566-6-anup.patel@wdc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 2 Jun 2021 15:17:13 +0200
-Message-ID: <CAPDyKFq2tvvAD=2RiePZzce=+OsDaxLWqz+90pTKjTTzqVqcHQ@mail.gmail.com>
-Subject: Re: [PATCH v5 5/8] cpuidle: Factor-out power domain related code from
- PSCI domain driver
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S230203AbhFBNdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 09:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230114AbhFBNdG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 09:33:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D10CC061761;
+        Wed,  2 Jun 2021 06:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=+0GJIyUeezLFp/ym4/vP+fC11EDSc+9M3QstIcNFnoM=; b=HwUP711Hi7fk/GRlHwhhfYuQB5
+        K5vYCOeQPuOhkpRqo74FjxBE7Qmwx8Wj6GWtoLKoGosJHAwdRgo9jNLQy1TmIkJWwpfsGoVcLemhp
+        yE/DBMFhvtilIfo4dv1JJaSo/mfYt/uX/LfisWcd+3wnlJLAvfkdTdiO1+HtsYKFPZ/tV6bjzqFeK
+        4bo4vY52aoMqPrC7we688zYhvu7+dOw4A1kcJpeVTuCoCOtBGxbR88VN+otXu+yI9l3xV+f66r/TA
+        vzFWO4ght7JIQB07yN0JwJ0Lzx83FvV5EUgJ9xU0ODmz2KYDDLO3n44qTW1zqH17jqyBTMXum4Ngk
+        tEM+eMIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1loQxe-00B8nb-51; Wed, 02 Jun 2021 13:31:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B184A300299;
+        Wed,  2 Jun 2021 15:31:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 90C662C08A5B8; Wed,  2 Jun 2021 15:31:04 +0200 (CEST)
+Message-ID: <20210602131225.336600299@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 02 Jun 2021 15:12:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+Subject: [PATCH 0/6] sched: Cleanup task_struct::state
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2 Jun 2021 at 13:24, Anup Patel <anup.patel@wdc.com> wrote:
->
-> The generic power domain related code in PSCI domain driver is largely
-> independent of PSCI and can be shared with RISC-V SBI domain driver
-> hence we factor-out this code into dt_idle_genpd.c and dt_idle_genpd.h.
->
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+Hi!
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+The task_struct::state variable is a bit odd in a number of ways:
 
-A small nitpick below.
+ - it's declared 'volatile' (against current practises);
+ - it's 'unsigned long' which is a weird size;
+ - it's type is inconsistent when used for function arguments.
 
-[...]
+These patches clean that up by making it consistently 'unsigned int', and
+replace (almost) all accesses with READ_ONCE()/WRITE_ONCE(). In order to not
+miss any, the variable is renamed, ensuring a missed conversion results in a
+compile error.
 
-> +EXPORT_SYMBOL_GPL(dt_idle_pd_free);
+The first few patches fix a number of pre-existing errors and introduce a few
+helpers to make the final conversion less painful.
 
-Do we really need to export this symbol? Looks like there are only
-built-in cpuidle drivers that are going to use it. At least for now.
 
-As a matter of fact, the same comment applies to all cases of
-EXPORT_SYMBOL_GPL from $subject patch. Can we drop all of them?
-
-[...]
-
-Kind regards
-Uffe
