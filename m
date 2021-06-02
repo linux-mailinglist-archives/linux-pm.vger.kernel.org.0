@@ -2,126 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AA93993AB
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 21:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7F73993B1
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 21:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbhFBTji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 15:39:38 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:11381 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbhFBTji (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 15:39:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1622662675; x=1654198675;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=Oo1yVpiLpXAxmPuTnGP3FETyige1IcwNMzEh/RjZTOE=;
-  b=pWoHpVQKA+5JMjVkQoR/4AV5YbA3674jGIMH+eN5M6CSeM5uG4jHCX+t
-   e6lkoA3rutBjSTW4lRaePjd/pDt7L7VVPVwU86jiaJuB26+gMNKBJrk5V
-   B2Szj+0WfawXi0IZylJdWbECTCtnNDrFpLOZfy7T89zgyquy8ULd0m/GF
-   U=;
-X-IronPort-AV: E=Sophos;i="5.83,242,1616457600"; 
-   d="scan'208";a="128919057"
-Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 02 Jun 2021 19:37:53 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id 977FCA1C5C;
-        Wed,  2 Jun 2021 19:37:46 +0000 (UTC)
-Received: from EX13D07UWA002.ant.amazon.com (10.43.160.77) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Wed, 2 Jun 2021 19:37:44 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D07UWA002.ant.amazon.com (10.43.160.77) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Wed, 2 Jun 2021 19:37:44 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.18 via Frontend Transport; Wed, 2 Jun 2021 19:37:44 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 5C62340124; Wed,  2 Jun 2021 19:37:43 +0000 (UTC)
-Date:   Wed, 2 Jun 2021 19:37:43 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "anchalag@amazon.com" <anchalag@amazon.com>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>
-Message-ID: <20210602193743.GA28861@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
- <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
- <20210521052650.GA19056@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <0b1f0772-d1b1-0e59-8e99-368e54d40fbf@oracle.com>
- <20210526044038.GA16226@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <33380567-f86c-5d85-a79e-c1cd889f8ec2@oracle.com>
- <20210528215008.GA19622@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <1ff91b30-3963-728e-aefb-57944197bdde@oracle.com>
+        id S229774AbhFBTk1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 15:40:27 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:42845 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229467AbhFBTkZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 15:40:25 -0400
+Received: by mail-oi1-f180.google.com with SMTP id v142so3366995oie.9;
+        Wed, 02 Jun 2021 12:38:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fsB+ST/iazXJkQ9lE/pAHAOafyvDLSMdQ8YyC9gyU5Q=;
+        b=mG61549mGPZSwNRFw26sX7BHV2ubMcQAZzWjtmM2Y3TYe59QXuONZQH0+qREzrUiNf
+         48KSj50TSa/PaICXPEJsjjRFepURlpCg2KbIXaiT6PzdWhv3CYmGvPDWUOrOmkaEloNL
+         +HpuFE/Ga2ssC2autmm5SUM8hDqMl7RHE7uwi7IKuePic2Oh86t3H8WsLryz4G8wSKj5
+         8PhukFj9kGCIz2XpwPCytWzSCT9s6hHh8zgrPhECVtiXMpqqNEUDfFsuZoUrLKWcnSVN
+         pSOQ7u+e4JVC767x+9UCHYlZ/AusSJfM9c6kuAyfsmIC9rUQ25OqRPDkwdzFeHqUQ41R
+         uk+Q==
+X-Gm-Message-State: AOAM530SlxYqaeczdM3wtzeZA5mKc2DgGNVJL14np/VrHuWX7M6N1wIf
+        3GFy+DKnzv4odnjjtisIhA==
+X-Google-Smtp-Source: ABdhPJxRxVf88PEQSy92kFJ8Cj0asYkkLIWfeFcqxMjcnpGu6ebwcLWdTsIVx6A51WKmuc630b+ZHw==
+X-Received: by 2002:a05:6808:d47:: with SMTP id w7mr22953199oik.104.1622662706270;
+        Wed, 02 Jun 2021 12:38:26 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l19sm192385otk.65.2021.06.02.12.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 12:38:25 -0700 (PDT)
+Received: (nullmailer pid 3850628 invoked by uid 1000);
+        Wed, 02 Jun 2021 19:38:24 -0000
+Date:   Wed, 2 Jun 2021 14:38:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        evgreen@google.com, Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [V3 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
+ SC7280
+Message-ID: <20210602193824.GA3848885@robh.at.kernel.org>
+References: <1622646894-7833-1-git-send-email-okukatla@codeaurora.org>
+ <1622646894-7833-2-git-send-email-okukatla@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ff91b30-3963-728e-aefb-57944197bdde@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <1622646894-7833-2-git-send-email-okukatla@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 01, 2021 at 10:18:36AM -0400, Boris Ostrovsky wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+On Wed, Jun 02, 2021 at 08:44:51PM +0530, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+> SoCs.
 > 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  4 +++-
+>  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 +++++++++-
+>  2 files changed, 12 insertions(+), 2 deletions(-)
 > 
-> 
-> On 5/28/21 5:50 PM, Anchal Agarwal wrote:
-> 
-> > That only fails during boot but not after the control jumps into the image. The
-> > non boot cpus are brought offline(freeze_secondary_cpus) and then online via cpu hotplug path. In that case xen_vcpu_setup doesn't invokes the hypercall again.
-> 
-> 
-> OK, that makes sense --- by that time VCPUs have already been registered. What I don't understand though is why resume doesn't fail every time --- xen_vcpu and xen_vcpu_info should be different practically always, shouldn't they? Do you observe successful resumes when the hypercall fails?
-> 
-> 
-The resume won't fail because in the image the xen_vcpu and xen_vcpu_info are
-same. These are the same values that got in there during saving of the
-hibernation image. So whatever xen_vcpu got as a value during boot time registration on resume is
-essentially lost once the jump into the saved kernel image happens. Interesting
-part is if KASLR is not enabled boot time vcpup mfn is same as in the image.
-Once you enable KASLR this value changes sometimes and whenever that happens
-resume gets stuck. Does that make sense?
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> index d6a95c3..61e9a35 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> @@ -18,12 +18,14 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,sc7180-osm-l3
+> +      - qcom,sc7280-epss-l3
+>        - qcom,sdm845-osm-l3
+>        - qcom,sm8150-osm-l3
+>        - qcom,sm8250-epss-l3
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 4
 
-No it does not resume successfully if hypercall fails because I was trying to
-explicitly reset vcpu and invoke hypercall.
-I am just wondering why does restore logic fails to work here or probably I am
-missing a critical piece here.
-> >
-> > Another line of thought is something what kexec does to come around this problem
-> > is to abuse soft_reset and issue it during syscore_resume or may be before the image get loaded.
-> > I haven't experimented with that yet as I am assuming there has to be a way to re-register vcpus during resume.
-> 
-> 
-> Right, that sounds like it should work.
-> 
-You mean soft reset or re-register vcpu?
+If there is more than 1 entry, you have to define what each entry is.
 
--Anchal
-> 
-> -boris
-> 
-> 
+>  
+>    clocks:
+>      items:
+> diff --git a/include/dt-bindings/interconnect/qcom,osm-l3.h b/include/dt-bindings/interconnect/qcom,osm-l3.h
+> index 61ef649..99534a5 100644
+> --- a/include/dt-bindings/interconnect/qcom,osm-l3.h
+> +++ b/include/dt-bindings/interconnect/qcom,osm-l3.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+> - * Copyright (C) 2019 The Linux Foundation. All rights reserved.
+> + * Copyright (C) 2019, 2021 The Linux Foundation. All rights reserved.
+>   */
+>  
+>  #ifndef __DT_BINDINGS_INTERCONNECT_QCOM_OSM_L3_H
+> @@ -11,5 +11,13 @@
+>  
+>  #define MASTER_EPSS_L3_APPS	0
+>  #define SLAVE_EPSS_L3_SHARED	1
+> +#define SLAVE_EPSS_L3_CPU0	2
+> +#define SLAVE_EPSS_L3_CPU1	3
+> +#define SLAVE_EPSS_L3_CPU2	4
+> +#define SLAVE_EPSS_L3_CPU3	5
+> +#define SLAVE_EPSS_L3_CPU4	6
+> +#define SLAVE_EPSS_L3_CPU5	7
+> +#define SLAVE_EPSS_L3_CPU6	8
+> +#define SLAVE_EPSS_L3_CPU7	9
+>  
+>  #endif
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
