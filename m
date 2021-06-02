@@ -2,87 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E2F3985CA
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 12:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB34F398603
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 12:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbhFBKCf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 06:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S231983AbhFBKOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 06:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbhFBKCf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 06:02:35 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86154C06174A
-        for <linux-pm@vger.kernel.org>; Wed,  2 Jun 2021 03:00:52 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id f1so956695uaj.10
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jun 2021 03:00:52 -0700 (PDT)
+        with ESMTP id S230383AbhFBKOO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 06:14:14 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FC0C061574
+        for <linux-pm@vger.kernel.org>; Wed,  2 Jun 2021 03:12:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w15so1867001ljo.10
+        for <linux-pm@vger.kernel.org>; Wed, 02 Jun 2021 03:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kYQ8JYBEy7lvKWQDIggyE7Q8g8ZfvSMvIgvFNwg3PWA=;
-        b=E7Y13F9E1P6m6uPrdeFtPtTyYgp71GUHcDG9b9SG8pVTvWIHYbMnx/rfh4IhUwekXb
-         kgTN/r9RzgHk0eTXxUfuovQCmUIyHmpwSR5akNx2dGwSuRMgIkLlQ9PRoG2X7j7Tr/87
-         U/oT823NKr5UYBcq/D8JtV4dVXpXHAPfb1FWslbbRW5msN9zrWv8K7ELqb6ILqKpN2s4
-         ViMW9C02GJ53Ojoc4SlzfIMuldlbTQ7gqqUmeEnyScTop1AJMBRpdAoY5QBn0OqjyQp5
-         9sKPPbvXSrlKMxZvV/V/13nUFxAVVYBxNvLW3+gTus1I4ECirhL2p2o/2tM2DLSKhkMR
-         Rbew==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=slzS5YZjZxl565Kd+2lXyghUenj3OYVJLEop1Uqbr+w=;
+        b=oMkbusaI+atgT4iQ2MrSJwQ489dT1MD7I9rbptbNlBVQ4o7cpLIC8AbaY03ZmzXVn5
+         zjzJe0XDnJrD3JD1soMrauHuOgjOiGXCY4DT2AxDWW7u9QhPXPi+G1P6g32mv0uB4yxV
+         JudFNjxWyxpJp/1dXd7E/4a4RvAkyNMNQUgDLbRpSJqcf9U86YcxmFqK32cUAKGdzSLn
+         Mx0UabYcvmpB3DtRjLuKWkUUoTddVzZrSaRxoGowFvqbUyGGta99sltyMw5A99aA+Yib
+         kdaoJI5ffUZiPSvuacnfrl0d0sC2kzzWe11Qxmew+60F8dWNurpM3UbISlpdrbWV4HyX
+         KAHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kYQ8JYBEy7lvKWQDIggyE7Q8g8ZfvSMvIgvFNwg3PWA=;
-        b=X7KMRNV//pM8hqbw+fcMfL22Jf3Lw03PvPqJxKYCqqvm5yeG3hFnIXL7ensCm0NO9g
-         ywSOzywn1SS2tidO6QWH0stss07ffR+CRXXcSSRUt5njOkg2jYMFB0zsPHkFjm6vM8SE
-         I6PXeJrIQHkGYK4WvzE+HkKAR3bgwwMIwpScQTxZ1IcAmw73R7Dblit0uocCImoyttus
-         1/sjarZUUv8owH5pYcYe96Zxlh3ZQSwXUeG+pLfg7vOwhkoIcW79VcxOxWx27pEyLZpg
-         ccvl4iAGryOiBETR/rDGsnkN/ifW3S9A0b2s3mBmV7ae3qNTpcqF2hu4aH4eUJRf1Q1w
-         fxbw==
-X-Gm-Message-State: AOAM531K5z4atjUbS5lzVpsjZowS6qKCLN58L5WmN+Vgza6OYBNI0PTg
-        RKy6NLNs0xAxsgvVrW8e4T+/g0rozwoDzk7FvuOK+F6aau/5rw==
-X-Google-Smtp-Source: ABdhPJz+fWUP1yrioI1DOXyLCqHIl9Xjim3WV7PVlH8e8dZ1YoqCIkdxvp3qv5nY5bNL/sVkprcAt/yj67IgR33BiIA=
-X-Received: by 2002:a9f:35b3:: with SMTP id t48mr20019416uad.129.1622628051636;
- Wed, 02 Jun 2021 03:00:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210601231003.9845-1-digetx@gmail.com> <YLdK6jp0Ybtzdstv@orome.fritz.box>
-In-Reply-To: <YLdK6jp0Ybtzdstv@orome.fritz.box>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=slzS5YZjZxl565Kd+2lXyghUenj3OYVJLEop1Uqbr+w=;
+        b=uTNfQ9tARySllSr5gOy4S9+gd/eZTFx5DcbiALsexlOVqhfxnZbxYHuWlts3vl1uJN
+         8HankwZcx27FTmoXpLWS/m6RPyNQ6g9meD2gRF+lBLJNsz7R8aNVHB4hNp9XFJXNhK8B
+         KlUHV8NJSuPLO55PWc9fuvC4qauHRew9TKqIWObpBACx9eqYlRM4XYDEalAidCImAkSy
+         czarDi3VQgCHuU3OvlRd2ryrEteIm35H/ktNk8DDYL5jLhcod5T97kpV0JW1rPx3+V3p
+         vivw+xbpRXyj1mRch0esPQo9zwSRVFAEcGzH7CQIr4lJ5kQdBAfJb4Vf2D/aMS9qccMK
+         46lw==
+X-Gm-Message-State: AOAM532hUJENvOVw0cjx5qsd6URqiMhqrQIfsIi0YSpyN9IkQ2ovf7Bu
+        B0hnJMnOMbIoFiI4NGgHAENnN4Nsqq6S5Wfm
+X-Google-Smtp-Source: ABdhPJyLUiGKrkXuEIpXMj03EEh0a0syVDYqqtQUysi0GWfDCtQYSve4ntEt1YwOshobDqSD8KBEug==
+X-Received: by 2002:a2e:b0e4:: with SMTP id h4mr13970498ljl.463.1622628749599;
+        Wed, 02 Jun 2021 03:12:29 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
+        by smtp.gmail.com with ESMTPSA id y35sm1948938lfa.122.2021.06.02.03.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 03:12:28 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 2 Jun 2021 12:00:15 +0200
-Message-ID: <CAPDyKFogXwT_C+hP8mW4EdoXnsiXCuF2m3cjURO6ijuUsV0sXQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] NVIDIA Tegra core power domain follow up
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] PM: domains: Avoid boilerplate code for DVFS in subsystem/drivers
+Date:   Wed,  2 Jun 2021 12:12:12 +0200
+Message-Id: <20210602101215.78094-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2 Jun 2021 at 11:08, Thierry Reding <thierry.reding@gmail.com> wrote:
->
-> On Wed, Jun 02, 2021 at 02:10:01AM +0300, Dmitry Osipenko wrote:
-> > Remove the lockdep_set_class(), which Ulf Hansson asked for. And
-> > prevent core domain syncing if domain node is missing in device-tree,
-> > which I accidentally missed to add after squashing the standalone
-> > domain driver into the PMC driver.
-> >
-> > Dmitry Osipenko (2):
-> >   soc/tegra: pmc: Don't sync core domain if it's missing in device-tree
-> >   soc/tegra: pmc: Remove usage of lockdep_set_class()
-> >
-> >  drivers/soc/tegra/pmc.c | 21 +++++++++++----------
-> >  1 file changed, 11 insertions(+), 10 deletions(-)
->
-> I've squashed these into the corresponding patches of you v6 series and
-> added Ulf's reviewed-by to them.
->
-> Ulf, let me know if I misinterpreted the discussion and your reviewed-by
-> didn't extend to the original patches.
+Various discussions on LKML have pointed out that many subsystem/drivers for
+devices that may be attached to a genpd and which manages DVFS/OPP though the
+genpd performance states, would need very similar updates.
 
-Nope, looks good to me! Thanks!
+More precisely, they would likely have to call dev_pm_opp_set_rate|opp() to
+drop and restore OPPs (which propagates upwards into performance states votes
+in genpd), every time their devices should enter/exit a low power state, via
+their device PM callbacks.
+
+Rather than having to add the boilerplate code for these things into the
+subsystems/drivers, this series implements the logic internally into genpd.
+
+Concerns have been raised about this approach, mostly by myself, around that it
+limits flexibility. On the other hand, it starts to look like more and more
+people are requesting this to be manged internally in genpd, for good reasons.
+So, I think it's worth to give this a try.
+
+In the long run, if it turns out that the flexibility was indeed needed, we can
+always deal with that as special cases on top.
+
+Test and reviews are of course greatly appreciated!
 
 Kind regards
-Uffe
+Ulf Hansson
+
+Ulf Hansson (3):
+  PM: domains: Split code in dev_pm_genpd_set_performance_state()
+  PM: domains: Drop/restore performance state votes for devices at
+    runtime PM
+  PM: domains: Drop/restore performance state votes for devices at
+    system PM
+
+ drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++--------
+ include/linux/pm_domain.h   |  2 ++
+ 2 files changed, 54 insertions(+), 14 deletions(-)
+
+-- 
+2.25.1
+
