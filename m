@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E74539925F
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 20:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC0539925C
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 20:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbhFBSUi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 14:20:38 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49270 "EHLO
+        id S229491AbhFBSUe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 14:20:34 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53266 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229467AbhFBSUg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 14:20:36 -0400
+        with ESMTP id S229467AbhFBSUe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 14:20:34 -0400
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
- id fdbbbdf489298b23; Wed, 2 Jun 2021 20:18:51 +0200
+ id a230bfc6cfa75d23; Wed, 2 Jun 2021 20:18:49 +0200
 Received: from kreacher.localnet (89-64-80-45.dynamic.chello.pl [89.64.80.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9963A6697FA;
-        Wed,  2 Jun 2021 20:18:50 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D03CD6697FA;
+        Wed,  2 Jun 2021 20:18:48 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 4/5] cpuidle: teo: Rework most recent idle duration values treatment
-Date:   Wed, 02 Jun 2021 20:17:18 +0200
-Message-ID: <1702889.VLH7GnMWUR@kreacher>
+Subject: [PATCH v1 5/5] cpuidle: teo: Use kerneldoc documentation in admin-guide
+Date:   Wed, 02 Jun 2021 20:18:02 +0200
+Message-ID: <1886763.usQuhbGJ8B@kreacher>
 In-Reply-To: <1867445.PYKUYFuaPT@kreacher>
 References: <1867445.PYKUYFuaPT@kreacher>
 MIME-Version: 1.0
@@ -42,339 +42,152 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-The TEO (Timer Events Oriented) cpuidle governor uses several most
-recent idle duration values for a given CPU to refine the idle state
-selection in case the previous long-term trends have not been
-followed recently and a new trend appears to be forming.  That is
-done by computing the average of the most recent idle duration
-values falling below the time till the next timer event ("sleep
-length"), provided that they are the majority of the most recent
-idle duration values taken into account, and using it as the new
-expected idle duration value.
+There are two descriptions of the TEO (Timer Events Oriented) cpuidle
+governor in the kernel source tree, one in the C file containing its
+code and one in cpuidle.rst which is part of admin-guide.
 
-However, idle state selection based on that value may not be optimal,
-because the average does not really indicate which of the idle states
-with target residencies less than or equal to it is likely to be the
-best fit.
-
-Thus, instead of computing the average, make the governor carry out
-computations based on the distribution of the most recent idle
-duration values among the bins corresponding to different idle
-states.  Namely, if the majority of the most recent idle duration
-values taken into consideration are less than the current sleep
-length (which means that the CPU is likely to wake up early), find
-the idle state closest to the "candidate" one "matching" the sleep
-length whose target residency is less than or equal to the majority
-of the most recent idle duration values that have fallen below the
-current sleep length (which means that it is likely to be "shallow
-enough" this time).
+Instead of trying to keep them both in sync and in order to reduce
+text duplication, include the governor description from the C file
+directly into cpuidle.rst.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |  157 ++++++++++++++++++----------------------
- 1 file changed, 72 insertions(+), 85 deletions(-)
+ Documentation/admin-guide/pm/cpuidle.rst |   77 -------------------------------
+ drivers/cpuidle/governors/teo.c          |   12 +++-
+ 2 files changed, 10 insertions(+), 79 deletions(-)
 
+Index: linux-pm/Documentation/admin-guide/pm/cpuidle.rst
+===================================================================
+--- linux-pm.orig/Documentation/admin-guide/pm/cpuidle.rst
++++ linux-pm/Documentation/admin-guide/pm/cpuidle.rst
+@@ -347,81 +347,8 @@ for tickless systems.  It follows the sa
+ <menu-gov_>`_: it always tries to find the deepest idle state suitable for the
+ given conditions.  However, it applies a different approach to that problem.
+ 
+-First, it does not use sleep length correction factors, but instead it attempts
+-to correlate the observed idle duration values with the available idle states
+-and use that information to pick up the idle state that is most likely to
+-"match" the upcoming CPU idle interval.   Second, it does not take the tasks
+-that were running on the given CPU in the past and are waiting on some I/O
+-operations to complete now at all (there is no guarantee that they will run on
+-the same CPU when they become runnable again) and the pattern detection code in
+-it avoids taking timer wakeups into account.  It also only uses idle duration
+-values less than the current time till the closest timer (with the scheduler
+-tick excluded) for that purpose.
+-
+-Like in the ``menu`` governor `case <menu-gov_>`_, the first step is to obtain
+-the *sleep length*, which is the time until the closest timer event with the
+-assumption that the scheduler tick will be stopped (that also is the upper bound
+-on the time until the next CPU wakeup).  That value is then used to preselect an
+-idle state on the basis of three metrics maintained for each idle state provided
+-by the ``CPUIdle`` driver: ``hits``, ``misses`` and ``early_hits``.
+-
+-The ``hits`` and ``misses`` metrics measure the likelihood that a given idle
+-state will "match" the observed (post-wakeup) idle duration if it "matches" the
+-sleep length.  They both are subject to decay (after a CPU wakeup) every time
+-the target residency of the idle state corresponding to them is less than or
+-equal to the sleep length and the target residency of the next idle state is
+-greater than the sleep length (that is, when the idle state corresponding to
+-them "matches" the sleep length).  The ``hits`` metric is increased if the
+-former condition is satisfied and the target residency of the given idle state
+-is less than or equal to the observed idle duration and the target residency of
+-the next idle state is greater than the observed idle duration at the same time
+-(that is, it is increased when the given idle state "matches" both the sleep
+-length and the observed idle duration).  In turn, the ``misses`` metric is
+-increased when the given idle state "matches" the sleep length only and the
+-observed idle duration is too short for its target residency.
+-
+-The ``early_hits`` metric measures the likelihood that a given idle state will
+-"match" the observed (post-wakeup) idle duration if it does not "match" the
+-sleep length.  It is subject to decay on every CPU wakeup and it is increased
+-when the idle state corresponding to it "matches" the observed (post-wakeup)
+-idle duration and the target residency of the next idle state is less than or
+-equal to the sleep length (i.e. the idle state "matching" the sleep length is
+-deeper than the given one).
+-
+-The governor walks the list of idle states provided by the ``CPUIdle`` driver
+-and finds the last (deepest) one with the target residency less than or equal
+-to the sleep length.  Then, the ``hits`` and ``misses`` metrics of that idle
+-state are compared with each other and it is preselected if the ``hits`` one is
+-greater (which means that that idle state is likely to "match" the observed idle
+-duration after CPU wakeup).  If the ``misses`` one is greater, the governor
+-preselects the shallower idle state with the maximum ``early_hits`` metric
+-(or if there are multiple shallower idle states with equal ``early_hits``
+-metric which also is the maximum, the shallowest of them will be preselected).
+-[If there is a wakeup latency constraint coming from the `PM QoS framework
+-<cpu-pm-qos_>`_ which is hit before reaching the deepest idle state with the
+-target residency within the sleep length, the deepest idle state with the exit
+-latency within the constraint is preselected without consulting the ``hits``,
+-``misses`` and ``early_hits`` metrics.]
+-
+-Next, the governor takes several idle duration values observed most recently
+-into consideration and if at least a half of them are greater than or equal to
+-the target residency of the preselected idle state, that idle state becomes the
+-final candidate to ask for.  Otherwise, the average of the most recent idle
+-duration values below the target residency of the preselected idle state is
+-computed and the governor walks the idle states shallower than the preselected
+-one and finds the deepest of them with the target residency within that average.
+-That idle state is then taken as the final candidate to ask for.
+-
+-Still, at this point the governor may need to refine the idle state selection if
+-it has not decided to `stop the scheduler tick <idle-cpus-and-tick_>`_.  That
+-generally happens if the target residency of the idle state selected so far is
+-less than the tick period and the tick has not been stopped already (in a
+-previous iteration of the idle loop).  Then, like in the ``menu`` governor
+-`case <menu-gov_>`_, the sleep length used in the previous computations may not
+-reflect the real time until the closest timer event and if it really is greater
+-than that time, a shallower state with a suitable target residency may need to
+-be selected.
+-
++.. kernel-doc:: drivers/cpuidle/governors/teo.c
++   :doc: teo-description
+ 
+ .. _idle-states-representation:
+ 
 Index: linux-pm/drivers/cpuidle/governors/teo.c
 ===================================================================
 --- linux-pm.orig/drivers/cpuidle/governors/teo.c
 +++ linux-pm/drivers/cpuidle/governors/teo.c
-@@ -47,15 +47,20 @@
-  * length).  In turn, the "intercepts" metric reflects the relative frequency of
-  * situations in which the measured idle duration is so much shorter than the
-  * sleep length that the bin it falls into corresponds to an idle state
-- * shallower than the one whose bin is fallen into by the sleep length.
-+ * shallower than the one whose bin is fallen into by the sleep length (these
-+ * situations are referred to as "intercepts" below).
-+ *
-+ * In addition to the metrics described above, the governor counts recent
-+ * intercepts (that is, intercepts that have occurred during the last NR_RECENT
-+ * invocations of it for the given CPU) for each bin.
+@@ -4,6 +4,10 @@
+  *
+  * Copyright (C) 2018 - 2021 Intel Corporation
+  * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++ */
++
++/**
++ * DOC: teo-description
+  *
+  * The idea of this governor is based on the observation that on many systems
+  * timer events are two or more orders of magnitude more frequent than any
+@@ -28,7 +32,7 @@
+  *
+  * The computations carried out by this governor are based on using bins whose
+  * boundaries are aligned with the target residency parameter values of the CPU
+- * idle states provided by the cpuidle driver in the ascending order.  That is,
++ * idle states provided by the %CPUIdle driver in the ascending order.  That is,
+  * the first bin spans from 0 up to, but not including, the target residency of
+  * the second idle state (idle state 1), the second bin spans from the target
+  * residency of idle state 1 up to, but not including, the target residency of
+@@ -51,8 +55,8 @@
+  * situations are referred to as "intercepts" below).
+  *
+  * In addition to the metrics described above, the governor counts recent
+- * intercepts (that is, intercepts that have occurred during the last NR_RECENT
+- * invocations of it for the given CPU) for each bin.
++ * intercepts (that is, intercepts that have occurred during the last
++ * %NR_RECENT invocations of it for the given CPU) for each bin.
   *
   * In order to select an idle state for a CPU, the governor takes the following
   * steps (modulo the possible latency constraint that must be taken into account
-  * too):
+@@ -76,7 +80,7 @@
+  *      shallower than the candidate one.
   *
-  * 1. Find the deepest CPU idle state whose target residency does not exceed
-- *    the current sleep length (the candidate idle state) and compute two sums
-- *    as follows:
-+ *    the current sleep length (the candidate idle state) and compute 3 sums as
-+ *    follows:
-  *
-  *    - The sum of the "hits" and "intercepts" metrics for the candidate state
-  *      and all of the deeper idle states (it represents the cases in which the
-@@ -67,25 +72,29 @@
-  *      idle long enough to avoid being intercepted if the sleep length had been
-  *      equal to the current one).
-  *
-- * 2. If the second sum is greater than the first one, look for an alternative
-- *    idle state to select.
-+ *    - The sum of the numbers of recent intercepts for all of the idle states
-+ *      shallower than the candidate one.
-+ *
-+ * 2. If the second sum is greater than the first one or the third sum is
-+ *    greater than NR_RECENT / 2, the CPU is likely to wake up early, so look
-+ *    for an alternative idle state to select.
+  * 2. If the second sum is greater than the first one or the third sum is
+- *    greater than NR_RECENT / 2, the CPU is likely to wake up early, so look
++ *    greater than %NR_RECENT / 2, the CPU is likely to wake up early, so look
+  *    for an alternative idle state to select.
   *
   *    - Traverse the idle states shallower than the candidate one in the
-  *      descending order.
-  *
-- *    - For each of them compute the sum of the "intercepts" metrics over all of
-- *      the idle  states between it and the candidate one (including the former
-- *      and excluding the latter).
-- *
-- *    - If that sum is greater than a half of the second sum computed in step 1
-- *      (which means that the target residency of the state in question had not
-- *      exceeded the idle duration in over a half of the relevant cases), select
-- *      the given idle state instead of the candidate one.
-- *
-- * 3. If the majority of the most recent idle duration values are below the
-- *    current anticipated idle duration, use those values to compute the new
-- *    expected idle duration and find an idle state matching it (which has to
-- *    be shallower than the current candidate one).
-+ *    - For each of them compute the sum of the "intercepts" metrics and the sum
-+ *      of the numbers of recent intercepts over all of the idle states between
-+ *      it and the candidate one (including the former and excluding the
-+ *      latter).
-+ *
-+ *    - If each of these sums that needs to be taken into account (because the
-+ *      check related to it has indicated that the CPU is likely to wake up
-+ *      early) is greater than a half of the corresponding sum computed in step
-+ *      1 (which means that the target residency of the state in question had
-+ *      not exceeded the idle duration in over a half of the relevant cases),
-+ *      select the given idle state instead of the candidate one.
-+ *
-+ * 3. By default, select the candidate state.
-  */
- 
- #include <linux/cpuidle.h>
-@@ -103,18 +112,20 @@
- 
- /*
-  * Number of the most recent idle duration values to take into consideration for
-- * the detection of wakeup patterns.
-+ * the detection of recent early wakeup patterns.
-  */
--#define INTERVALS	8
-+#define NR_RECENT	9
- 
- /**
-  * struct teo_bin - Metrics used by the TEO cpuidle governor.
-  * @intercepts: The "intercepts" metric.
-  * @hits: The "hits" metric.
-+ * @recent: The number of recent "intercepts".
-  */
- struct teo_bin {
- 	unsigned int intercepts;
- 	unsigned int hits;
-+	unsigned int recent;
- };
- 
- /**
-@@ -123,16 +134,16 @@ struct teo_bin {
-  * @sleep_length_ns: Time till the closest timer event (at the selection time).
-  * @state_bins: Idle state data bins for this CPU.
-  * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
-- * @interval_idx: Index of the most recent saved idle interval.
-- * @intervals: Saved idle duration values.
-+ * @next_recent_idx: Index of the next @recent_idx entry to update.
-+ * @recent_idx: Indices of bins corresponding to recent "intercepts".
-  */
- struct teo_cpu {
- 	s64 time_span_ns;
- 	s64 sleep_length_ns;
- 	struct teo_bin state_bins[CPUIDLE_STATE_MAX];
- 	unsigned int total;
--	int interval_idx;
--	u64 intervals[INTERVALS];
-+	int next_recent_idx;
-+	int recent_idx[NR_RECENT];
- };
- 
- static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
-@@ -201,26 +212,29 @@ static void teo_update(struct cpuidle_dr
- 		}
- 	}
- 
-+	i = cpu_data->next_recent_idx++;
-+	if (cpu_data->next_recent_idx >= NR_RECENT)
-+		cpu_data->next_recent_idx = 0;
-+
-+	if (cpu_data->recent_idx[i] >= 0)
-+		cpu_data->state_bins[cpu_data->recent_idx[i]].recent--;
-+
- 	/*
- 	 * If the measured idle duration falls into the same bin as the sleep
- 	 * length, this is a "hit", so update the "hits" metric for that bin.
- 	 * Otherwise, update the "intercepts" metric for the bin fallen into by
- 	 * the measured idle duration.
- 	 */
--	if (idx_timer == idx_duration)
-+	if (idx_timer == idx_duration) {
- 		cpu_data->state_bins[idx_timer].hits += PULSE;
--	else
-+		cpu_data->recent_idx[i] = -1;
-+	} else {
- 		cpu_data->state_bins[idx_duration].intercepts += PULSE;
-+		cpu_data->state_bins[idx_duration].recent++;
-+		cpu_data->recent_idx[i] = idx_duration;
-+	}
- 
- 	cpu_data->total += PULSE;
--
--	/*
--	 * Save idle duration values corresponding to non-timer wakeups for
--	 * pattern detection.
--	 */
--	cpu_data->intervals[cpu_data->interval_idx++] = measured_ns;
--	if (cpu_data->interval_idx >= INTERVALS)
--		cpu_data->interval_idx = 0;
- }
- 
- static bool teo_time_ok(u64 interval_ns)
-@@ -271,10 +285,13 @@ static int teo_select(struct cpuidle_dri
- 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
- 	unsigned int idx_intercept_sum = 0;
- 	unsigned int intercept_sum = 0;
-+	unsigned int idx_recent_sum = 0;
-+	unsigned int recent_sum = 0;
- 	unsigned int idx_hit_sum = 0;
- 	unsigned int hit_sum = 0;
- 	int constraint_idx = 0;
- 	int idx0 = 0, idx = -1;
-+	bool alt_intercepts, alt_recent;
- 	ktime_t delta_tick;
- 	s64 duration_ns;
- 	int i;
-@@ -317,6 +334,7 @@ static int teo_select(struct cpuidle_dri
- 		 */
- 		intercept_sum += prev_bin->intercepts;
- 		hit_sum += prev_bin->hits;
-+		recent_sum += prev_bin->recent;
- 
- 		if (dev->states_usage[i].disable)
- 			continue;
-@@ -336,6 +354,7 @@ static int teo_select(struct cpuidle_dri
- 
- 		idx_intercept_sum = intercept_sum;
- 		idx_hit_sum = hit_sum;
-+		idx_recent_sum = recent_sum;
- 	}
- 
- 	/* Avoid unnecessary overhead. */
-@@ -350,27 +369,36 @@ static int teo_select(struct cpuidle_dri
- 	 * If the sum of the intercepts metric for all of the idle states
- 	 * shallower than the current candidate one (idx) is greater than the
- 	 * sum of the intercepts and hits metrics for the candidate state and
--	 * all of the deeper states, the CPU is likely to wake up early, so find
--	 * an alternative idle state to select.
-+	 * all of the deeper states, or the sum of the numbers of recent
-+	 * intercepts over all of the states shallower than the candidate one
-+	 * is greater than a half of the number of recent events taken into
-+	 * account, the CPU is likely to wake up early, so find an alternative
-+	 * idle state to select.
- 	 */
--	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
-+	alt_intercepts = 2 * idx_intercept_sum > cpu_data->total - idx_hit_sum;
-+	alt_recent = idx_recent_sum > NR_RECENT / 2;
-+	if (alt_recent || alt_intercepts) {
- 		s64 last_enabled_span_ns = duration_ns;
- 		int last_enabled_idx = idx;
- 
- 		/*
- 		 * Look for the deepest idle state whose target residency had
- 		 * not exceeded the idle duration in over a half of the relevant
--		 * cases in the past.
-+		 * cases (both with respect to intercepts overall and with
-+		 * respect to the recent intercepts only) in the past.
- 		 *
- 		 * Take the possible latency constraint and duration limitation
- 		 * present if the tick has been stopped already into account.
- 		 */
- 		intercept_sum = 0;
-+		recent_sum = 0;
- 
- 		for (i = idx - 1; i >= idx0; i--) {
-+			struct teo_bin *bin = &cpu_data->state_bins[i];
- 			s64 span_ns;
- 
--			intercept_sum += cpu_data->state_bins[i].intercepts;
-+			intercept_sum += bin->intercepts;
-+			recent_sum += bin->recent;
- 
- 			if (dev->states_usage[i].disable)
- 				continue;
-@@ -386,7 +414,9 @@ static int teo_select(struct cpuidle_dri
- 				break;
- 			}
- 
--			if (2 * intercept_sum > idx_intercept_sum) {
-+			if ((!alt_recent || 2 * recent_sum > idx_recent_sum) &&
-+			    (!alt_intercepts ||
-+			     2 * intercept_sum > idx_intercept_sum)) {
- 				idx = i;
- 				duration_ns = span_ns;
- 				break;
-@@ -404,49 +434,6 @@ static int teo_select(struct cpuidle_dri
- 	if (idx > constraint_idx)
- 		idx = constraint_idx;
- 
--	if (idx > idx0) {
--		unsigned int count = 0;
--		u64 sum = 0;
--
--		/*
--		 * The target residencies of at least two different enabled idle
--		 * states are less than or equal to the current expected idle
--		 * duration.  Try to refine the selection using the most recent
--		 * measured idle duration values.
--		 *
--		 * Count and sum the most recent idle duration values less than
--		 * the current expected idle duration value.
--		 */
--		for (i = 0; i < INTERVALS; i++) {
--			u64 val = cpu_data->intervals[i];
--
--			if (val >= duration_ns)
--				continue;
--
--			count++;
--			sum += val;
--		}
--
--		/*
--		 * Give up unless the majority of the most recent idle duration
--		 * values are in the interesting range.
--		 */
--		if (count > INTERVALS / 2) {
--			u64 avg_ns = div64_u64(sum, count);
--
--			/*
--			 * Avoid spending too much time in an idle state that
--			 * would be too shallow.
--			 */
--			if (teo_time_ok(avg_ns)) {
--				duration_ns = avg_ns;
--				if (drv->states[idx].target_residency_ns > avg_ns)
--					idx = teo_find_shallower_state(drv, dev,
--								       idx, avg_ns);
--			}
--		}
--	}
--
- end:
- 	/*
- 	 * Don't stop the tick if the selected state is a polling one or if the
-@@ -507,8 +494,8 @@ static int teo_enable_device(struct cpui
- 
- 	memset(cpu_data, 0, sizeof(*cpu_data));
- 
--	for (i = 0; i < INTERVALS; i++)
--		cpu_data->intervals[i] = U64_MAX;
-+	for (i = 0; i < NR_RECENT; i++)
-+		cpu_data->recent_idx[i] = -1;
- 
- 	return 0;
- }
 
 
 
