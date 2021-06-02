@@ -2,120 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F0F399361
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 21:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AA93993AB
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 21:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbhFBTSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 15:18:01 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:54206 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhFBTSB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 15:18:01 -0400
-Received: by mail-pj1-f41.google.com with SMTP id ei4so2197344pjb.3
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jun 2021 12:16:17 -0700 (PDT)
+        id S229541AbhFBTji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 15:39:38 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:11381 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229587AbhFBTji (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 15:39:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=pi4C5WtnKoCT0uKkj96EhmRGcZjNEHS9ddtNkNKCxnQ=;
-        b=04rX9b4IswVwbc/swVJAlKvluGRYV2jSYFfnrIvsvLJ8BGLnO51d1SCG0z/SatFCrd
-         U+X6/lWrUbTXIow9TWXJz9guH4yrjZC0PBA6vwSbaOTvWF9L7bvnbQXq4t6XE4am2R+e
-         O+U7XIOjgUx9TuuzhKxr+/tmAhbxuO+ARNpLBKbJcP1PXbwHD3ZwLvINDp2ZiLEKbXKx
-         lsvkrP3n94XQztLHAK/C6XhQVe7D3Qa3xciemG4pv04d3BWVTOqo6RBSK44O8+Y1MH1n
-         Noa6c3mg6lpoI4lHdJaNzpnPJyRe1wpsHmlZmq8+eIIgPrIbRgG0k1ZpYoGdz1Ug8X51
-         c2hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=pi4C5WtnKoCT0uKkj96EhmRGcZjNEHS9ddtNkNKCxnQ=;
-        b=iRgVkdKQAVcV+XvfIODVKE0nVEq7vMn0ts47jXY7d9pRpURNQd+WPbViUD8eq57UNM
-         Yz3HENPGLku72seTRrl3s5KM7wWCaHVyrWPFziD+7C6IJ9WmCaWwg40lF6AJthhQ1tli
-         ydJ0MQpAIfzLIMY0TxhAd9Gk1PWtNDZ/VMZRNxmBO7A6/OpA9MOXCID8DU3JiLKZLvbO
-         U7ZOosHPxlyGE2WXiOjQGhnHnf2MJT/cNtVP5V+REcfTQo/UCB261JjcSLcbWRxzZckb
-         kg9xGF0MW+Y8XQJ83Nm9u8/QF4bMyZR2diko96dFH1mdlbUVtCSPPhFbtZ7v50kBkX7c
-         dtuQ==
-X-Gm-Message-State: AOAM532cvj5JhgRutJS0sqNruIuIozxfbk7KLzgng34CpH+FTAYX45N5
-        EbQ/tbhICzBX4729dzEMMp835w==
-X-Google-Smtp-Source: ABdhPJzQILbcOFmjr6Ma/lysZ2FCFoy59SFjJGn8CHuNkaB5dqAlSy/Hxyy2veATzVaHBjV5aV3krQ==
-X-Received: by 2002:a17:90a:7c4b:: with SMTP id e11mr7230678pjl.73.1622661317641;
-        Wed, 02 Jun 2021 12:15:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i21sm314433pfd.219.2021.06.02.12.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 12:15:17 -0700 (PDT)
-Message-ID: <60b7d8c5.1c69fb81.ac188.1397@mx.google.com>
-Date:   Wed, 02 Jun 2021 12:15:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1622662675; x=1654198675;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=Oo1yVpiLpXAxmPuTnGP3FETyige1IcwNMzEh/RjZTOE=;
+  b=pWoHpVQKA+5JMjVkQoR/4AV5YbA3674jGIMH+eN5M6CSeM5uG4jHCX+t
+   e6lkoA3rutBjSTW4lRaePjd/pDt7L7VVPVwU86jiaJuB26+gMNKBJrk5V
+   B2Szj+0WfawXi0IZylJdWbECTCtnNDrFpLOZfy7T89zgyquy8ULd0m/GF
+   U=;
+X-IronPort-AV: E=Sophos;i="5.83,242,1616457600"; 
+   d="scan'208";a="128919057"
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 02 Jun 2021 19:37:53 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id 977FCA1C5C;
+        Wed,  2 Jun 2021 19:37:46 +0000 (UTC)
+Received: from EX13D07UWA002.ant.amazon.com (10.43.160.77) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Wed, 2 Jun 2021 19:37:44 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D07UWA002.ant.amazon.com (10.43.160.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Wed, 2 Jun 2021 19:37:44 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.18 via Frontend Transport; Wed, 2 Jun 2021 19:37:44 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 5C62340124; Wed,  2 Jun 2021 19:37:43 +0000 (UTC)
+Date:   Wed, 2 Jun 2021 19:37:43 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "anchalag@amazon.com" <anchalag@amazon.com>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>
+Message-ID: <20210602193743.GA28861@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
+ <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
+ <20210521052650.GA19056@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <0b1f0772-d1b1-0e59-8e99-368e54d40fbf@oracle.com>
+ <20210526044038.GA16226@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <33380567-f86c-5d85-a79e-c1cd889f8ec2@oracle.com>
+ <20210528215008.GA19622@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <1ff91b30-3963-728e-aefb-57944197bdde@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: acpi-5.13-rc5-42-ga25ea0c642c2
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (acpi-5.13-rc5-42-ga25ea0c642c2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1ff91b30-3963-728e-aefb-57944197bdde@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (acpi-5.13-rc5-42-ga25ea0c64=
-2c2)
+On Tue, Jun 01, 2021 at 10:18:36AM -0400, Boris Ostrovsky wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 5/28/21 5:50 PM, Anchal Agarwal wrote:
+> 
+> > That only fails during boot but not after the control jumps into the image. The
+> > non boot cpus are brought offline(freeze_secondary_cpus) and then online via cpu hotplug path. In that case xen_vcpu_setup doesn't invokes the hypercall again.
+> 
+> 
+> OK, that makes sense --- by that time VCPUs have already been registered. What I don't understand though is why resume doesn't fail every time --- xen_vcpu and xen_vcpu_info should be different practically always, shouldn't they? Do you observe successful resumes when the hypercall fails?
+> 
+> 
+The resume won't fail because in the image the xen_vcpu and xen_vcpu_info are
+same. These are the same values that got in there during saving of the
+hibernation image. So whatever xen_vcpu got as a value during boot time registration on resume is
+essentially lost once the jump into the saved kernel image happens. Interesting
+part is if KASLR is not enabled boot time vcpup mfn is same as in the image.
+Once you enable KASLR this value changes sometimes and whenever that happens
+resume gets stuck. Does that make sense?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.13-rc5-42-ga25ea0c642c2/
+No it does not resume successfully if hypercall fails because I was trying to
+explicitly reset vcpu and invoke hypercall.
+I am just wondering why does restore logic fails to work here or probably I am
+missing a critical piece here.
+> >
+> > Another line of thought is something what kexec does to come around this problem
+> > is to abuse soft_reset and issue it during syscore_resume or may be before the image get loaded.
+> > I haven't experimented with that yet as I am assuming there has to be a way to re-register vcpus during resume.
+> 
+> 
+> Right, that sounds like it should work.
+> 
+You mean soft reset or re-register vcpu?
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.13-rc5-42-ga25ea0c642c2
-Git Commit: a25ea0c642c2fa68ced9d7e9cfc85ed4ea470deb
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+-Anchal
+> 
+> -boris
+> 
+> 
