@@ -2,157 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A123990FE
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 18:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E23399265
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 20:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhFBRAY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 13:00:24 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:39681 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbhFBRAY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 13:00:24 -0400
-Received: by mail-ot1-f44.google.com with SMTP id 5-20020a9d01050000b02903c700c45721so1986452otu.6;
-        Wed, 02 Jun 2021 09:58:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zf5qRUfCpeGGvJMUCSGIUbY/+04iGlClb4uduIjNhR0=;
-        b=aY7HMGXfOa45vXYD49C0wM9/kcwaL6u99FhGGydlkiaD+1VJZGhpFfjHg7CbOGNJ8O
-         +cvBflvJn+2sClkeQAOQmxJX7TbHOQuNoJwbi4pdnMTIVrjzZtAKdQzHjs54ckIzlDQr
-         JjppIu2aVsamXHo5zFL9jrPjRJ066hvB1wcUGBfXWsmCwvobTGzhQ+OtRc6v5R6dyLJv
-         MCOueBfyJ+Zj4yBS6OAG8oMkv9S//HaDty3yizWjVvRDaeqrP+IUzhPxDeGxmc7aKnqA
-         Fe0YGCZDmrcr8MaPdICPTgL5dUMDWKKOBo0qOKO8Htse8Y33WEkc6nmalTUzpH6ZK7h1
-         K8ow==
-X-Gm-Message-State: AOAM532NVaDtaWLyC5XODzKlT4GV2y55tmu8XBJfxUOS05faUu7C35MY
-        cCCd4ONd2U8FpRdnHmGucBGXuTeEBg==
-X-Google-Smtp-Source: ABdhPJx1wdxS3bAZXIYWDE40ru5uXYnHiXfbK4Phi9RGSYCkcilqMyYnar4EpNED8xQ5RgHOGXF/TQ==
-X-Received: by 2002:a9d:1d21:: with SMTP id m30mr27563140otm.145.1622653109495;
-        Wed, 02 Jun 2021 09:58:29 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l128sm90445oif.16.2021.06.02.09.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 09:58:28 -0700 (PDT)
-Received: (nullmailer pid 3566137 invoked by uid 1000);
-        Wed, 02 Jun 2021 16:58:27 -0000
-Date:   Wed, 2 Jun 2021 11:58:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v12 2/2] dt-bindings: cpufreq: add bindings for MediaTek
- cpufreq HW
-Message-ID: <20210602165827.GA3558170@robh.at.kernel.org>
-References: <1622307153-3639-1-git-send-email-hector.yuan@mediatek.com>
- <1622307153-3639-3-git-send-email-hector.yuan@mediatek.com>
+        id S229778AbhFBSUl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 14:20:41 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57236 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229746AbhFBSUl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 14:20:41 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.5)
+ id baf13a8a00fe7707; Wed, 2 Jun 2021 20:18:56 +0200
+Received: from kreacher.localnet (89-64-80-45.dynamic.chello.pl [89.64.80.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id B0CDD6697FA;
+        Wed,  2 Jun 2021 20:18:55 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
+Date:   Wed, 02 Jun 2021 20:14:20 +0200
+Message-ID: <1867445.PYKUYFuaPT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1622307153-3639-3-git-send-email-hector.yuan@mediatek.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.80.45
+X-CLIENT-HOSTNAME: 89-64-80-45.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrvdeljedguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppeekledrieegrdektddrgeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdeghedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=2 Fuz1=2 Fuz2=2
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 30, 2021 at 12:52:33AM +0800, Hector Yuan wrote:
-> From: "Hector.Yuan" <hector.yuan@mediatek.com>
-> 
-> Add devicetree bindings for MediaTek HW driver.
-> 
-> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
-> ---
->  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |   71 ++++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> new file mode 100644
-> index 0000000..1aa4d54
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-mediatek-hw.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek's CPUFREQ Bindings
-> +
-> +maintainers:
-> +  - Hector Yuan <hector.yuan@mediatek.com>
-> +
-> +description:
-> +  CPUFREQ HW is a hardware engine used by MediaTek
-> +  SoCs to manage frequency in hardware. It is capable of controlling frequency
-> +  for multiple clusters.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,cpufreq-hw
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      Addresses and sizes for the memory of the
-> +      HW bases in each frequency domain.
-> +
-> +  "#performance-domain-cells":
-> +    description:
-> +      Number of cells in a performance domain specifier. Typically 0 for nodes
-> +      representing a single performance domain and 1 for nodes providing
-> +      multiple performance domains (e.g. performance controllers), but can be
-> +      any value as specified by device tree binding documentation of particular
-> +      provider.
-> +    enum: [ 0, 1 ]
+Hi All,
 
-Can't you restrict this to be 1 for Mediatek h/w? Even if you sometimes 
-have a single domain, it's probably more simple for the driver if this 
-is fixed.
+This series of patches addresses some theoretical shortcoming in the
+TEO (Timer Events Oriented) cpuidle governor by reworking its idle
+state selection logic to some extent.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#performance-domain-cells"
-> +
-> +additionalProperties: true
+Patches [1-2/5] are introductory cleanups and the substantial changes are
+made in patches [3-4/5] (please refer to the changelogs of these two
+patches for details).  The last patch only deals with documentation.
 
-Should be false.
+Even though this work is mostly based on theoretical considerations, it
+shows a measurable reduction of the number of cases in which the shallowest
+idle state is selected while it would be more beneficial to select a deeper
+one or the deepest idle state is selected while it would be more beneficial to
+select a shallower one, which should be a noticeable improvement.
 
-> +
-> +examples:
-> +  - |
-> +    cpus {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            cpu0: cpu@0 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x000>;
-> +            };
-> +    };
-> +
-> +    /* ... */
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        performance: performance-controller@11bc00 {
-> +            compatible = "mediatek,cpufreq-hw";
-> +            reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
-> +
-> +            #performance-domain-cells = <1>;
-> +        };
-> +    };
-> -- 
-> 1.7.9.5
+Thanks!
+
+
+
