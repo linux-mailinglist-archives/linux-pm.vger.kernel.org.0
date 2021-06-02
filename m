@@ -2,105 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D75398DBE
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 17:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E99398DDF
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jun 2021 17:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbhFBPEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 11:04:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36236 "EHLO mail.kernel.org"
+        id S232146AbhFBPH2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Jun 2021 11:07:28 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:50297 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232054AbhFBPEH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Jun 2021 11:04:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 407C1613BF;
-        Wed,  2 Jun 2021 15:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622646144;
-        bh=iqy0WVYDEpl3OEqiwYR2vHlixZDZNAuGOuMgnWDXeR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+pqG+GrEcw9WVS8/OW/fQfSxSijYrBV2XZxysaVScijAUnd0cVcWSF4nom6VYF7/
-         Xyj4yQuXkrrTuHJnUpufQZyClixRruRrV6dddsrZRqOQc+UgpG4vsSCBUy91HBwhfj
-         S4qt9rHniezYWqyJmpYVr3rEugD00r4pGxG9asyrSW0y4cnvEcyeHwtxVwtOD0WKZZ
-         CxVeWNbOBJkHO0H7W+0s6rOxAZoTcR6qnwXcmM/nQ5icf4zBj8IsluJAeqSZ9roUcx
-         S4+extTRu1FhJzpL0fTK8fMnTglu0lQMSa9EV3Tq/LcFiaa96LORrcAJlT/uJ7FgCX
-         ZTIEp+h3YHIzg==
-Date:   Wed, 2 Jun 2021 16:02:11 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 4/6] sched: Add get_current_state()
-Message-ID: <20210602150211.GC31179@willie-the-truck>
-References: <20210602131225.336600299@infradead.org>
- <20210602133040.461908001@infradead.org>
+        id S232027AbhFBPH1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Jun 2021 11:07:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1622646344; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=b58AXVipv2czeTZD7vN1C4eQotA0VCcV+WTBefkUG/M=;
+ b=oeR47NnF59XTdihDlQNZjLaGibNX6xzi3umvSWKgrBi829CQsX9cyJ5O8wvcSegxJ9RI539X
+ 2tqiqUMTqHRcgZY1B6F5vZfSgRZEwE5tpejRJqiSNVZhWKNxuviD0DZdpJS0myBDdJWGk98h
+ Ejb+Mp6Ax0JDMHLqxXYkCYksebE=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 60b79e36e570c05619dc46bf (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Jun 2021 15:05:26
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id F3041C4338A; Wed,  2 Jun 2021 15:05:25 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 52809C433F1;
+        Wed,  2 Jun 2021 15:05:23 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210602133040.461908001@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 02 Jun 2021 20:35:23 +0530
+From:   okukatla@codeaurora.org
+To:     Rob Herring <robh@kernel.org>
+Cc:     elder@linaro.org, bjorn.andersson@linaro.org,
+        seansw@qti.qualcomm.com, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org, devicetree@vger.kernel.org,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
+        sibis@codeaurora.org, Andy Gross <agross@kernel.org>,
+        evgreen@google.com, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm-owner@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [V2 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
+ SC7280
+In-Reply-To: <1621392491.220233.1905257.nullmailer@robh.at.kernel.org>
+References: <1621359242-18641-1-git-send-email-okukatla@codeaurora.org>
+ <1621359242-18641-2-git-send-email-okukatla@codeaurora.org>
+ <1621392491.220233.1905257.nullmailer@robh.at.kernel.org>
+Message-ID: <115d8e912d8c986c5a9689c080dfbe3d@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 03:12:29PM +0200, Peter Zijlstra wrote:
-> Remove yet another few p->state accesses.
+On 2021-05-19 08:18, Rob Herring wrote:
+> On Tue, 18 May 2021 23:04:00 +0530, Odelu Kukatla wrote:
+>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+>> SoCs.
+>> 
+>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+>> ---
+>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  3 
+>> ++-
+>>  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 
+>> +++++++++-
+>>  2 files changed, 11 insertions(+), 2 deletions(-)
+>> 
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  block/blk-mq.c        |    2 +-
->  include/linux/sched.h |    2 ++
->  kernel/freezer.c      |    2 +-
->  kernel/sched/core.c   |    6 +++---
->  4 files changed, 7 insertions(+), 5 deletions(-)
-
-I think you can include kernel/kcsan/report.c here too.
-
-With that:
-
-Acked-by: Will Deacon <will@kernel.org>
-
-Will
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dt.yaml:
+> interconnect@17d41000: reg: [[399773696, 5120]] is too short
+> 	From schema:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> 
+> See https://patchwork.ozlabs.org/patch/1480367
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+Thanks Rob!.
+I will address this in next revision.
