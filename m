@@ -2,163 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA4B399E34
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 11:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0156F399EDE
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 12:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhFCJ61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 05:58:27 -0400
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:45798 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhFCJ61 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 05:58:27 -0400
-Received: by mail-pl1-f173.google.com with SMTP id 11so2592703plk.12
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 02:56:42 -0700 (PDT)
+        id S229617AbhFCKYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 06:24:18 -0400
+Received: from mail-vs1-f41.google.com ([209.85.217.41]:37656 "EHLO
+        mail-vs1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbhFCKYS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 06:24:18 -0400
+Received: by mail-vs1-f41.google.com with SMTP id f21so980306vsl.4
+        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 03:22:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bWwoATch/is17syekXXf9OKGsFoEOq9WgVsQ4YbeVPM=;
-        b=Mrt+g2TUakUnIZvvo7w0SLH+4c0hsL9MVUWE5Uk4/S4rItImANhOsDyN/6LfOUvGSf
-         RevmCO3ibS6kHKic7/BYGFgRL69mUV7BMnkv792C2VRYdRND6XJ7XrK8fbMFeXO1PT2o
-         8EAamCaTMNcaPalI2QOcgXqcW9dpHT5bTLVhtqod/JqC36rS6Z9+LeWK3mpFUArZscRE
-         vTY6iDzA3Luk5r2WBf23oNvMmNLRXHIkEofkRkIwBz11KcYe41v7ZUEUhMV3Em9MTMcd
-         4TAKp7OxhbQbXEwvQlDpvzzncGQxVQUKL7CSzRexC78ySQFIt5UtG6Xum/nW7SxqNxW+
-         6ynA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HZj1YmDHRFHyGui3V46aHOAvyRG6PWn5p5QSq+t/Sxs=;
+        b=c3AseZS4j09a0iY+eIx2G1yCBM3n1YMIM2Su5OIsiSTN/0Hu9a25eSDguueFqMp+6n
+         sffvvezMqhSeESoF/q+i2yR2CykLWdfAxzEsrKupN0jm/5+GYUHXNhItE/PQ7vC5O7Nk
+         B6Nqk2MGk3zLt7omFEeNu1+n+cmBAK1aUYJ+gnuOz0ihKecx8GXTyMY9/s8LkGpXD9kr
+         mbp4YQEC1PJzfONt1ftc/tvAT4lDTaNt34sZu/rguamSDBNXctivBMIWEweUrbVBxRw/
+         yW1km3okWALCOWh9o3lWvR2A/fs1mEx+DKFJPThu0Yz6RdyzYSEfUUnxve9OJpfROCUU
+         wh6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bWwoATch/is17syekXXf9OKGsFoEOq9WgVsQ4YbeVPM=;
-        b=GG5LrBym/DgREI5gnf+EQrHcX1ttUP+cdTpuq4sLzoZekbqjUOKEl+x+cdOlTjY637
-         lcV1Opgy3ZCFI7Gjvq6LbCZfTv46beGhSOiw+lb5sAiZRMPWdPQgUUJW1Q6xN/NmHEe0
-         Ro1vYq6E5Iq/LAZ2Q2J/9SkzKLf1ifUYpLk5kZMCWY47Zj+06DbmwdxV9gTDCgm9SHAI
-         6lc8Lfads6EsiTBQiAVWacq+JLlVcLm+i5E7qpjQ4xiYJLaI9A+6m3j6GG4FBe3DvpaQ
-         J/v+xSIdrdZAGyTj6hI0db5qtkQw10iX3ALTWSqSAnLzGfNTXaEx/bIYjc4al4BaN7c4
-         NWnA==
-X-Gm-Message-State: AOAM532+53DG2Ep5Il2NUJ2iky0Eokj5sl2TDQq/nNvCTqYaRO0LOcuJ
-        gbYu1MjnjwLRw9SppnfvKr5b+A==
-X-Google-Smtp-Source: ABdhPJy3ETi8TG18LS356HnFPyHJW0fzt2AaED/39O4jlOV5io9iaCRsz7cUFRiTiZhleQ5DTb9OoQ==
-X-Received: by 2002:a17:902:b594:b029:f8:fb4f:f8d3 with SMTP id a20-20020a170902b594b02900f8fb4ff8d3mr34898636pls.25.1622714142521;
-        Thu, 03 Jun 2021 02:55:42 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id t12sm2049594pfc.133.2021.06.03.02.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 02:55:40 -0700 (PDT)
-Date:   Thu, 3 Jun 2021 15:25:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HZj1YmDHRFHyGui3V46aHOAvyRG6PWn5p5QSq+t/Sxs=;
+        b=g5NTRjAuLu0YCw4bCTK1WfpAMU7gG0YL9Cj2Hg+CuxKQj2ON87Nw8yKy8ntBDqhXUA
+         UDFr5e+vPTdK+TL5nvHH8aFPSz/qcFv2yCUoruiccbQRdxWy8n/ONYmPvsg9R0Sn0sbB
+         RnOSOlylBBNGejxEE+oS7d/i0/C+/vah1vob0bBq8NE3su+jGKpHOjntNkNhfGk/CYQm
+         0HhulUJIAyc9I/gwj6+x6tGSCc5v4CSrsQgorLZQTWSShVe2wIlvC5UkHnhFemStO35W
+         csFLofSC9VsIDxnFJLlqxF5K5eLPmOGw2nmvv0/uRp9p36B6U+Vs61Fq8eRUek8/EwsE
+         StaA==
+X-Gm-Message-State: AOAM532huAfjwjepuQDXKeoIvJ70xf/8V3V+F3hneiPiFSnRLCyuyYW1
+        VvAEFuZchVjp94p8rEpLNjgMdKF7oB0KQi7ak35NTw==
+X-Google-Smtp-Source: ABdhPJydQXTBpcslYdtvzVJQ9UsvRObyMknbITcawugdhN5RTjLW/IJHgRmQSeLQmbwpOFwL8TJ2+ewYjVKMJ8wuLJI=
+X-Received: by 2002:a67:e359:: with SMTP id s25mr2076383vsm.55.1622715693804;
+ Thu, 03 Jun 2021 03:21:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210603093438.138705-1-ulf.hansson@linaro.org> <20210603093438.138705-5-ulf.hansson@linaro.org>
+In-Reply-To: <20210603093438.138705-5-ulf.hansson@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 3 Jun 2021 12:20:57 +0200
+Message-ID: <CAPDyKFp2dKFQpLMgazXumCxf=FHQ9bdadXUkGsjiAwniF8p2dw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] PM: domains: Drop/restore performance state votes
+ for devices at system PM
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
         Roja Rani Yarubandi <rojay@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] PM: domains: Drop/restore performance state votes
- for devices at runtime PM
-Message-ID: <20210603095538.b2t3cq25tq7v7kih@vireshk-i7>
-References: <20210603093438.138705-1-ulf.hansson@linaro.org>
- <20210603093438.138705-4-ulf.hansson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210603093438.138705-4-ulf.hansson@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-06-21, 11:34, Ulf Hansson wrote:
-> A subsystem/driver that need to manage OPPs for its device, should
-> typically drop its vote for the OPP when the device becomes runtime
-> suspended. In this way, the corresponding aggregation of the performance
-> state votes that is managed in genpd for the attached PM domain, may find
-> that the aggregated vote can be decreased. Hence, it may allow genpd to set
-> the lower performance state for the PM domain, thus avoiding to waste
-> energy.
-> 
-> To accomplish this, typically a subsystem/driver would need to call
-> dev_pm_opp_set_rate|opp() for its device from its ->runtime_suspend()
-> callback, to drop the vote for the OPP. Accordingly, it needs another call
-> to dev_pm_opp_set_rate|opp() to restore the vote for the OPP from its
-> ->runtime_resume() callback.
-> 
-> To avoid boilerplate code in subsystems/driver to deal with these things,
-> let's instead manage this internally in genpd.
-> 
++ Mark Brown, Dmitry Baryshkov
+
+On Thu, 3 Jun 2021 at 11:34, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> Recent changes in genpd drops and restore performance state votes for
+> devices during runtime PM.
+>
+> For the similar reasons, but to avoid the same kind of boilerplate code in
+> device PM callbacks for system sleep in subsystems/drivers, let's drop and
+> restore performance states votes in genpd for the attached devices during
+> system sleep.
+>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+After a second thought, it looks like we maybe should defer to apply
+this final patch of the series. At least until we figured out how to
+address the below issue:
+
+So, I noticed that we have things like "regulator-fixed-domain", that
+uses "required-opps" to enable/disable a regulator through the
+dev_pm_set_performance_state() interface. We likely don't want to drop
+the performance state internally in genpd when genpd_suspend_noirq()
+gets called, for the corresponding struct device for the regulator.
+
+I guess if genpd should drop performance states like $subject patch
+suggest, we need some kind of additional coordination, that allows a
+subsystem/driver to inform genpd when it should avoid it. Or something
+along those lines.
+
+Kind regards
+Uffe
+
 > ---
-> 
+>
 > Changes in v2:
-> 	- Rebased.
-> 	- A few minor cosmetic changes.
-> 	- Deal with the error path in genpd_runtime_resume().
-> 
+>         - Rebased.
+>         - A few cosmetic changes.
+>
 > ---
->  drivers/base/power/domain.c | 27 +++++++++++++++++++++++++--
->  include/linux/pm_domain.h   |  1 +
->  2 files changed, 26 insertions(+), 2 deletions(-)
-> 
+>  drivers/base/power/domain.c | 9 +++++++++
+>  include/linux/pm_domain.h   | 1 +
+>  2 files changed, 10 insertions(+)
+>
 > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index ef25a5b18587..e5d97174c254 100644
+> index e5d97174c254..a33e5b341f3f 100644
 > --- a/drivers/base/power/domain.c
 > +++ b/drivers/base/power/domain.c
-> @@ -400,6 +400,23 @@ static int genpd_set_performance_state(struct device *dev, unsigned int state)
->  	return ret;
->  }
->  
-> +static int genpd_drop_performance_state(struct device *dev)
-
-What about passing the state pointer here? that will simplify the
-callers to just a call.
-
-> +{
-> +	unsigned int prev_state = dev_gpd_data(dev)->performance_state;
-> +
-> +	if (!genpd_set_performance_state(dev, 0))
-> +		return prev_state;
-> +
-> +	return 0;
-> +}
-> +
-> +static void genpd_restore_performance_state(struct device *dev,
-> +					    unsigned int state)
-> +{
-> +	if (state)
-
-I will skip this check, as we are checking it in
-genpd_set_performance_state() anyway ?
-
-> +		genpd_set_performance_state(dev, state);
-> +}
-> +
->  /**
->   * dev_pm_genpd_set_performance_state- Set performance state of device's power
->   * domain.
-> @@ -842,7 +859,8 @@ static int genpd_runtime_suspend(struct device *dev)
+> @@ -1171,6 +1171,7 @@ static int genpd_prepare(struct device *dev)
+>   */
+>  static int genpd_finish_suspend(struct device *dev, bool poweroff)
 >  {
->  	struct generic_pm_domain *genpd;
->  	bool (*suspend_ok)(struct device *__dev);
-> -	struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
-> +	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
-> +	struct gpd_timing_data *td = &gpd_data->td;
->  	bool runtime_pm = pm_runtime_enabled(dev);
->  	ktime_t time_start;
->  	s64 elapsed_ns;
-> @@ -899,6 +917,7 @@ static int genpd_runtime_suspend(struct device *dev)
->  		return 0;
->  
->  	genpd_lock(genpd);
-> +	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-
-So this will become:
-
-	genpd_drop_performance_state(dev, &gpd_data->rpm_pstate);
-
-and it can have return type of void.
-
--- 
-viresh
+> +       struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
+>         struct generic_pm_domain *genpd;
+>         int ret = 0;
+>
+> @@ -1201,6 +1202,7 @@ static int genpd_finish_suspend(struct device *dev, bool poweroff)
+>         }
+>
+>         genpd_lock(genpd);
+> +       gpd_data->pm_pstate = genpd_drop_performance_state(dev);
+>         genpd->suspended_count++;
+>         genpd_sync_power_off(genpd, true, 0);
+>         genpd_unlock(genpd);
+> @@ -1245,6 +1247,7 @@ static int genpd_resume_noirq(struct device *dev)
+>         genpd_lock(genpd);
+>         genpd_sync_power_on(genpd, true, 0);
+>         genpd->suspended_count--;
+> +       genpd_restore_performance_state(dev, dev_gpd_data(dev)->pm_pstate);
+>         genpd_unlock(genpd);
+>
+>         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> @@ -1364,6 +1367,7 @@ static int genpd_restore_noirq(struct device *dev)
+>         }
+>
+>         genpd_sync_power_on(genpd, true, 0);
+> +       genpd_restore_performance_state(dev, dev_gpd_data(dev)->pm_pstate);
+>         genpd_unlock(genpd);
+>
+>         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> @@ -1409,23 +1413,28 @@ static void genpd_complete(struct device *dev)
+>  static void genpd_switch_state(struct device *dev, bool suspend)
+>  {
+>         struct generic_pm_domain *genpd;
+> +       struct generic_pm_domain_data *gpd_data;
+>         bool use_lock;
+>
+>         genpd = dev_to_genpd_safe(dev);
+>         if (!genpd)
+>                 return;
+>
+> +       gpd_data = dev_gpd_data(dev);
+> +
+>         use_lock = genpd_is_irq_safe(genpd);
+>
+>         if (use_lock)
+>                 genpd_lock(genpd);
+>
+>         if (suspend) {
+> +               gpd_data->pm_pstate = genpd_drop_performance_state(dev);
+>                 genpd->suspended_count++;
+>                 genpd_sync_power_off(genpd, use_lock, 0);
+>         } else {
+>                 genpd_sync_power_on(genpd, use_lock, 0);
+>                 genpd->suspended_count--;
+> +               genpd_restore_performance_state(dev, gpd_data->pm_pstate);
+>         }
+>
+>         if (use_lock)
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 21a0577305ef..f6e9dc28621c 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -199,6 +199,7 @@ struct generic_pm_domain_data {
+>         int cpu;
+>         unsigned int performance_state;
+>         unsigned int rpm_pstate;
+> +       unsigned int pm_pstate;
+>         ktime_t next_wakeup;
+>         void *data;
+>  };
+> --
+> 2.25.1
+>
