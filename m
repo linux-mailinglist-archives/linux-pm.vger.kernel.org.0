@@ -2,159 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1716639A48C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 17:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CED39A621
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 18:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbhFCP3z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 11:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbhFCP3z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 11:29:55 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A26BC06174A
-        for <linux-pm@vger.kernel.org>; Thu,  3 Jun 2021 08:28:10 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id s14so3215932vsk.1
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 08:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ns65Mhi2wf9tAfNPWwjzKe4odHUU9dQ6kXHd7I+WvxA=;
-        b=LJ9HakICARzX4lf3jPKScGDIzI9RJS4PpOxXsCXsXqq+PjaGdEPF/ONw0Vqi1HIyMF
-         I/U6fNvbLaCo/EL4bdWW72dzRyL/5DPezuWwYVRjJGVQBSWBx1eZvWxbZhPE4JsZgLli
-         tGGyLX6g4Tf0b6TlYRkYC6k5fVRCervX9bOXImWgA2MvhCDKZvYAp67w+Rm4AH2yxK7L
-         qg5+CfxJuTB5AqVVM4wun84JwVzCSNn+OXF5VGn933jJDc4jw79FjY8IMHmUjxbJPJCs
-         4/YT8VUihkabdbzLOJzM/QjF6SEnmh6JwqX42jTlmNA3fI0OgI7QwibSCcT+Sz/w2+bo
-         FSmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ns65Mhi2wf9tAfNPWwjzKe4odHUU9dQ6kXHd7I+WvxA=;
-        b=n/x1QK3HKUj8Tsunzg225RLdbvn3DfEA/T+f1CHG0QXEhMiNiynrowtEBQ7r6YFqDS
-         BRLTOzmNpXlSiW69tpNmaeBTeU372Z0qHAGTIZzvr8o5bgG+sRofm9vAEy9fOOQrnZ7X
-         ceYsR5Qmlqm8mZzQ1bQIhBFnwgGy4raXLlS54j/zm3O3UDk0ev8S2cEvWuSyTxwc7ClC
-         MPsTWuEtMPZDl5mndFhxtGu+/3i3nJ/qUT6KDndjXn+bEvW7lRZ92sz+V9xEnGfzDUl+
-         l40iqUmVAODUfRv9Z7HkeR47kywK24qCnXSNTzC5dtw75AQQT+k20hg5UOqe5L0MLZ4l
-         jjHA==
-X-Gm-Message-State: AOAM532jCO0JBy46VtbWeiz8WlIBTHTNvFjiPTZ8RXJ+afS+uTopsBFD
-        s7kd1rq+v7TaMQV2FA+82sD4wYG1G3ceSBTnmoomJXkpHGUQa2Hc
-X-Google-Smtp-Source: ABdhPJySoaiRR0LkYEntFO25rA5JhuPTrugKjV+stU36B7F2Mhss1YKncr6iytmrFK5BUgI1dYXryhxzOiVvQQLtt0M=
-X-Received: by 2002:a05:6102:7c1:: with SMTP id y1mr222885vsg.34.1622734087041;
- Thu, 03 Jun 2021 08:28:07 -0700 (PDT)
+        id S229885AbhFCQro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 12:47:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35804 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229719AbhFCQrn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Jun 2021 12:47:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D33E06024A;
+        Thu,  3 Jun 2021 16:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622738759;
+        bh=/vcPDePIs8jPgy2Q/Mn4unl4wif5aBA72gTUiuDOZZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KNu2iVApWy/sBwOJ2lSUVCyPjsgpnX0WrGW0I2SIw9DfxEAR2fKVbGEq0ID5Vlley
+         wdzvjMWEgnMDhNN06mXEQkFZfPjyxu1U+DTU6wzKdKcRm2ubafCl53aXa6MlVNmdEc
+         ZVxeNkvmtQ5/odISi7p1SxazYC7To8WIweDZ7VrW8G9uWrKHAgpWIt1RxJni2hZAnD
+         /MQExUPtJLEMQ2MoP5K68ggCwTHNLRxHkGlebg8VyrgpQIigu4jcKwc+3p8vIw+GhP
+         72wxNqYLpGssudAkCuvuZRA1+pUEIz+90My5vKCc3x14WWyr9ZRFPOgtG8WCpD/gUH
+         Ie5urpsTxYn3g==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 0BF0A3C0C95; Thu,  3 Jun 2021 18:45:57 +0200 (CEST)
+Date:   Thu, 3 Jun 2021 18:45:57 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Jian Xin <xinjian34324@163.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jian Xin <xinjian@yulong.com>
+Subject: Re: [PATCH] power: supply: ab8500_fg: Fix typo
+Message-ID: <20210603164557.q22aruv72r2aic7o@earth.universe>
+References: <20210603094718.229553-1-xinjian34324@163.com>
 MIME-Version: 1.0
-References: <20210603093438.138705-1-ulf.hansson@linaro.org> <YLi5N06Qs+gYHgYg@gerhold.net>
-In-Reply-To: <YLi5N06Qs+gYHgYg@gerhold.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 3 Jun 2021 17:27:30 +0200
-Message-ID: <CAPDyKFqQ==zPwXjBxKAX9m38YfxFViqLTz8autnZc1suT5cayg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] PM: domains: Avoid boilerplate code for DVFS in subsystem/drivers
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5rm6l5fm57j2jnln"
+Content-Disposition: inline
+In-Reply-To: <20210603094718.229553-1-xinjian34324@163.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 3 Jun 2021 at 13:13, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> On Thu, Jun 03, 2021 at 11:34:34AM +0200, Ulf Hansson wrote:
-> > Various discussions on LKML have pointed out that many subsystem/drivers for
-> > devices that may be attached to a genpd and which manages DVFS/OPP though the
-> > genpd performance states, would need very similar updates.
-> >
-> > More precisely, they would likely have to call dev_pm_opp_set_rate|opp() to
-> > drop and restore OPPs (which propagates upwards into performance states votes
-> > in genpd), every time their devices should enter/exit a low power state, via
-> > their device PM callbacks.
-> >
-> > Rather than having to add the boilerplate code for these things into the
-> > subsystems/drivers, this series implements the logic internally into genpd.
-> >
-> > Concerns have been raised about this approach, mostly by myself, around that it
-> > limits flexibility. On the other hand, it starts to look like more and more
-> > people are requesting this to be manged internally in genpd, for good reasons.
-> > So, I think it's worth to give this a try.
-> >
-> > In the long run, if it turns out that the flexibility was indeed needed, we can
-> > always deal with that as special cases on top.
-> >
->
-> Do I understand your patch set correctly that you basically make the
-> performance state votes conditional to the "power-on" vote of the device
-> (which is automatically toggled during runtime/system PM)?
 
-The series can be considered as a step in that direction, but no, this
-series doesn't change that behaviour.
+--5rm6l5fm57j2jnln
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Users of dev_pm_genpd_set_performance_state() are still free to set a
-performance state, orthogonally to whether the PM domain is powered on
-or off.
+Hi,
 
->
-> If yes, I think that's a good thing. It was always really confusing to me
-> that a device can make performance state votes if it doesn't actually
-> want the power domain to be powered on.
+On Thu, Jun 03, 2021 at 05:47:18PM +0800, Jian Xin wrote:
+> From: Jian Xin <xinjian@yulong.com>
+>=20
+> fix misspelled 'interrupts'
+>=20
+> Signed-off-by: Jian Xin <xinjian@yulong.com>
+> ---
 
-I share your view, it's a bit confusing.
+Thanks, queued.
 
-Just adding the condition internally to genpd to prevent the caller of
-dev_pm_genpd_set_performance() from succeeding to set a new state,
-unless the genpd is powered on, should be a rather simple thing to
-add.
+-- Sebastian
 
-However, to change this, we first need to double check that all the
-callers are making sure they have turned on the PM domain (typically
-via runtime PM).
+>  drivers/power/supply/ab8500_fg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
+00_fg.c
+> index 06ff42c71f24..64c6037cb0bc 100644
+> --- a/drivers/power/supply/ab8500_fg.c
+> +++ b/drivers/power/supply/ab8500_fg.c
+> @@ -58,7 +58,7 @@
+>  	((y1) + ((((y2) - (y1)) * ((x) - (x1))) / ((x2) - (x1))));
+> =20
+>  /**
+> - * struct ab8500_fg_interrupts - ab8500 fg interupts
+> + * struct ab8500_fg_interrupts - ab8500 fg interrupts
+>   * @name:	name of the interrupt
+>   * @isr		function pointer to the isr
+>   */
+> --=20
+> 2.25.1
+>=20
 
->
-> What happens if a driver calls dev_pm_genpd_set_performance_state(...)
-> while the device is suspended? Will that mess up the performance state
-> when the device resumes?
+--5rm6l5fm57j2jnln
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Good question. The idea is:
+-----BEGIN PGP SIGNATURE-----
 
-If genpd in genpd_runtime_suspend() are able to drop an existing vote
-for a performance state, it should restore the vote in
-genpd_runtime_resume(). This also means, if there is no vote to drop
-in genpd_runtime_suspend(), genpd should just leave the vote as is in
-genpd_runtime_resume().
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC5BzwACgkQ2O7X88g7
++ppxPg//R/YeC6FDQHCew2C1A8lDT6r0yYRlrpgnY9lndbvw0MyJrbDPq5vqpTBY
+KNPVn9cZoTxARkbAL6ynaIDNXtok3rtKqlVoI6vEwnUoJOYdkNL9j/XEaQci/BNn
+ueEllSSx3yVkts3/pWYvGy7flyijk8qZ252GDa4OCiURys7ltK/pXJ/bBCRxaGHG
+e3Zy8b5ZJcX0OnP/dXYOmr7r6pVBJTZNDj5+zzvoX8Ri3lZv+eFZiQIaI45m1RTu
+ewX/pRQ0GM8keeGkglCCHBNQp/YwRwXZacoGxWJHAOxE6APFRto0veY/DMAs+gLZ
+1eaCgPkBCrTL6kEAyKY7TUFy8mU+lGi829zirQFHO/MaUTeoFWZ5iGhBVDnRP+N1
+/iducg2yZaPlPz7ED1nJXqYkF2pz316WEIIeUY/f4vsdwYbAtJSZ2zUfPX2nvOEM
+3ZTFgk17H6O19yWg7FpPmyoAZj1+1Gmh738LzqZwgF+QCmPMQMhW0pp/nqzruyck
+7XJzPn+KqBnhE1wWd1arHqvRKzTOVpjpGrBLYwOu2PUNrkAC9GMM/chD/Ba1djb7
+Shxt5KIvwbsf+CijdF5H8T7eNePV+ddZ0z4Ya52BZYuT30Z3uary2Bdvs0vJxMTZ
+gTRKn8G+RLTaFztNVVDae4fd8mD5gXgRjsROID1FIvKwm4gyv5s=
+=G00h
+-----END PGP SIGNATURE-----
 
-When it comes to the system suspend/resume path, being implemented in
-patch4, we should probably defer that patch from being merged. It
-turned out that we probably need to think more about that approach.
-
->
-> I think this might also go into the direction of my problem with the OPP
-> core for CPU DVFS [1] since the OPP core currently does not "power-on"
-> the power domains, it just sets a performance state. I got kind of stuck
-> with all the complexity of power domains in Linux so I think we never
-> solved that.
-
-Hmm, that issue is in a way related.
-
-Although, if I understand correctly, that was rather about at what
-layer it makes best sense to activate the device (from runtime PM
-point of view). And this was needed due to the fact that the
-corresponding genpd provider, requires the PM domain to be power on to
-allow changing a performance state for it. Did I get that correct?
-
->
-> Stephan
->
-> [1]: https://lore.kernel.org/linux-pm/20200826093328.88268-1-stephan@gerhold.net/
-
-Kind regards
-Uffe
+--5rm6l5fm57j2jnln--
