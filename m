@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C61C399C61
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 10:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89ABE399C5D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 10:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbhFCIUE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 04:20:04 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35181 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229894AbhFCIUC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 04:20:02 -0400
-X-UUID: 3a5ec0d73e4d4b58b8499da34681341a-20210603
-X-UUID: 3a5ec0d73e4d4b58b8499da34681341a-20210603
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        id S229885AbhFCIUA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 04:20:00 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:38597 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229864AbhFCIT7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 04:19:59 -0400
+X-UUID: 31fe052967f849fea42f0d978d2505e8-20210603
+X-UUID: 31fe052967f849fea42f0d978d2505e8-20210603
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <ben.tseng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 761356979; Thu, 03 Jun 2021 16:18:09 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1796575374; Thu, 03 Jun 2021 16:18:10 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Thu, 3 Jun 2021 16:18:08 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Jun 2021 16:18:07 +0800
+ Transport; Thu, 3 Jun 2021 16:18:08 +0800
 From:   Ben Tseng <ben.tseng@mediatek.com>
 To:     Fan Chen <fan.chen@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -37,10 +37,11 @@ CC:     Eduardo Valentin <edubezval@gmail.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Michael Kao <michael.kao@mediatek.com>,
+        Yu-Chia Chang <ethan.chang@mediatek.com>,
         Ben Tseng <ben.tseng@mediatek.com>
-Subject: [PATCH v4 1/3] thermal: mediatek: Relocate driver to mediatek folder
-Date:   Thu, 3 Jun 2021 16:18:04 +0800
-Message-ID: <20210603081806.21154-2-ben.tseng@mediatek.com>
+Subject: [PATCH v4 2/3] thermal: mediatek: Add LVTS drivers for SoC theraml zones
+Date:   Thu, 3 Jun 2021 16:18:05 +0800
+Message-ID: <20210603081806.21154-3-ben.tseng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210603081806.21154-1-ben.tseng@mediatek.com>
 References: <20210603081806.21154-1-ben.tseng@mediatek.com>
@@ -53,2365 +54,1659 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Michael Kao <michael.kao@mediatek.com>
 
-Add Mediatek proprietary folder to upstream more thermal zone and cooler
-drivers. Relocate the original thermal controller driver to it and rename
-as soc_temp.c to show its purpose more clearly.
+Add a LVTS (Low voltage thermal sensor) driver to report junction
+temperatures in Mediatek SoC and register the maximum temperature
+of sensors and each sensor as a thermal zone.
 
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+Signed-off-by: Yu-Chia Chang <ethan.chang@mediatek.com>
 Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
 ---
- drivers/thermal/Kconfig             |   14 +-
- drivers/thermal/Makefile            |    2 +-
- drivers/thermal/mediatek/Kconfig    |   23 +
- drivers/thermal/mediatek/Makefile   |    1 +
- drivers/thermal/mediatek/soc_temp.c | 1127 +++++++++++++++++++++++++++++++++++
- drivers/thermal/mtk_thermal.c       | 1127 -----------------------------------
- 6 files changed, 1156 insertions(+), 1138 deletions(-)
- create mode 100644 drivers/thermal/mediatek/Kconfig
- create mode 100644 drivers/thermal/mediatek/Makefile
- create mode 100644 drivers/thermal/mediatek/soc_temp.c
- delete mode 100644 drivers/thermal/mtk_thermal.c
+ drivers/thermal/mediatek/Kconfig         |   10 +
+ drivers/thermal/mediatek/Makefile        |    1 +
+ drivers/thermal/mediatek/soc_temp_lvts.c | 1287 ++++++++++++++++++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.h |  312 ++++++++
+ 4 files changed, 1610 insertions(+)
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index d7f44de..7a4ba50 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -401,16 +401,10 @@ config DA9062_THERMAL
- 	  zone.
- 	  Compatible with the DA9062 and DA9061 PMICs.
- 
--config MTK_THERMAL
--	tristate "Temperature sensor driver for mediatek SoCs"
--	depends on ARCH_MEDIATEK || COMPILE_TEST
--	depends on HAS_IOMEM
--	depends on NVMEM || NVMEM=n
--	depends on RESET_CONTROLLER
--	default y
--	help
--	  Enable this option if you want to have support for thermal management
--	  controller present in Mediatek SoCs
-+menu "Mediatek thermal drivers"
-+depends on ARCH_MEDIATEK || COMPILE_TEST
-+source "drivers/thermal/mediatek/Kconfig"
-+endmenu
- 
- config AMLOGIC_THERMAL
- 	tristate "Amlogic Thermal Support"
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 82fc3e6..9729a2b 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -54,7 +54,7 @@ obj-y				+= st/
- obj-$(CONFIG_QCOM_TSENS)	+= qcom/
- obj-y				+= tegra/
- obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
--obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-+obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
- obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
- obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
 diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-new file mode 100644
-index 0000000..0351e73
---- /dev/null
+index 0351e73..d716d03 100644
+--- a/drivers/thermal/mediatek/Kconfig
 +++ b/drivers/thermal/mediatek/Kconfig
-@@ -0,0 +1,23 @@
-+config MTK_THERMAL
-+	tristate "Mediatek thermal drivers"
-+	depends on THERMAL_OF
-+	help
-+	  This is the option for Mediatek thermal software
-+	  solutions. Please enable corresponding options to
-+	  get temperature information from thermal sensors or
-+	  turn on throttle mechaisms for thermal mitigation.
-+
-+if MTK_THERMAL
-+
-+config MTK_SOC_THERMAL
-+	tristate "Temperature sensor driver for mediatek SoCs"
-+	depends on HAS_IOMEM
-+	depends on NVMEM
-+	depends on RESET_CONTROLLER
-+	help
-+	  Enable this option if you want to get SoC temperature
-+	  information for Mediatek platforms. This driver
-+	  configures thermal controllers to collect temperature
-+	  via AUXADC interface.
-+
-+endif
+@@ -20,4 +20,14 @@ config MTK_SOC_THERMAL
+ 	  configures thermal controllers to collect temperature
+ 	  via AUXADC interface.
+ 
++config MTK_SOC_THERMAL_LVTS
++        tristate "LVTS (Low voltage thermal sensor) driver for Mediatek SoCs"
++        depends on HAS_IOMEM
++        depends on NVMEM
++        depends on RESET_TI_SYSCON
++        help
++          Enable this option if you want to get SoC temperature
++          information for Mediatek platforms. This driver
++          configures LVTS thermal controllers to collect temperatures
++          via Analog Serial Interface(ASIF).
+ endif
 diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
-new file mode 100644
-index 0000000..f75313d
---- /dev/null
+index f75313d..16ce166 100644
+--- a/drivers/thermal/mediatek/Makefile
 +++ b/drivers/thermal/mediatek/Makefile
-@@ -0,0 +1 @@
-+obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
-diff --git a/drivers/thermal/mediatek/soc_temp.c b/drivers/thermal/mediatek/soc_temp.c
+@@ -1 +1,2 @@
+ obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
++obj-$(CONFIG_MTK_SOC_THERMAL_LVTS)	+= soc_temp_lvts.o
+diff --git a/drivers/thermal/mediatek/soc_temp_lvts.c b/drivers/thermal/mediatek/soc_temp_lvts.c
 new file mode 100644
-index 0000000..97e8678
+index 0000000..8153eda
 --- /dev/null
-+++ b/drivers/thermal/mediatek/soc_temp.c
-@@ -0,0 +1,1127 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/drivers/thermal/mediatek/soc_temp_lvts.c
+@@ -0,0 +1,1287 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (c) 2015 MediaTek Inc.
-+ * Author: Hanyi Wu <hanyi.wu@mediatek.com>
-+ *         Sascha Hauer <s.hauer@pengutronix.de>
-+ *         Dawei Chien <dawei.chien@mediatek.com>
-+ *         Louis Yu <louis.yu@mediatek.com>
++ * Copyright (c) 2020 MediaTek Inc.
 + */
 +
++#include <linux/bits.h>
 +#include <linux/clk.h>
 +#include <linux/delay.h>
 +#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
 +#include <linux/nvmem-consumer.h>
 +#include <linux/of.h>
 +#include <linux/of_address.h>
 +#include <linux/of_device.h>
++#include <linux/of_irq.h>
 +#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/io.h>
-+#include <linux/thermal.h>
 +#include <linux/reset.h>
-+#include <linux/types.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/thermal.h>
++#include "soc_temp_lvts.h"
 +
-+/* AUXADC Registers */
-+#define AUXADC_CON1_SET_V	0x008
-+#define AUXADC_CON1_CLR_V	0x00c
-+#define AUXADC_CON2_V		0x010
-+#define AUXADC_DATA(channel)	(0x14 + (channel) * 4)
-+
-+#define APMIXED_SYS_TS_CON1	0x604
-+
-+/* Thermal Controller Registers */
-+#define TEMP_MONCTL0		0x000
-+#define TEMP_MONCTL1		0x004
-+#define TEMP_MONCTL2		0x008
-+#define TEMP_MONIDET0		0x014
-+#define TEMP_MONIDET1		0x018
-+#define TEMP_MSRCTL0		0x038
-+#define TEMP_MSRCTL1		0x03c
-+#define TEMP_AHBPOLL		0x040
-+#define TEMP_AHBTO		0x044
-+#define TEMP_ADCPNP0		0x048
-+#define TEMP_ADCPNP1		0x04c
-+#define TEMP_ADCPNP2		0x050
-+#define TEMP_ADCPNP3		0x0b4
-+
-+#define TEMP_ADCMUX		0x054
-+#define TEMP_ADCEN		0x060
-+#define TEMP_PNPMUXADDR		0x064
-+#define TEMP_ADCMUXADDR		0x068
-+#define TEMP_ADCENADDR		0x074
-+#define TEMP_ADCVALIDADDR	0x078
-+#define TEMP_ADCVOLTADDR	0x07c
-+#define TEMP_RDCTRL		0x080
-+#define TEMP_ADCVALIDMASK	0x084
-+#define TEMP_ADCVOLTAGESHIFT	0x088
-+#define TEMP_ADCWRITECTRL	0x08c
-+#define TEMP_MSR0		0x090
-+#define TEMP_MSR1		0x094
-+#define TEMP_MSR2		0x098
-+#define TEMP_MSR3		0x0B8
-+
-+#define TEMP_SPARE0		0x0f0
-+
-+#define TEMP_ADCPNP0_1          0x148
-+#define TEMP_ADCPNP1_1          0x14c
-+#define TEMP_ADCPNP2_1          0x150
-+#define TEMP_MSR0_1             0x190
-+#define TEMP_MSR1_1             0x194
-+#define TEMP_MSR2_1             0x198
-+#define TEMP_ADCPNP3_1          0x1b4
-+#define TEMP_MSR3_1             0x1B8
-+
-+#define PTPCORESEL		0x400
-+
-+#define TEMP_MONCTL1_PERIOD_UNIT(x)	((x) & 0x3ff)
-+
-+#define TEMP_MONCTL2_FILTER_INTERVAL(x)	(((x) & 0x3ff) << 16)
-+#define TEMP_MONCTL2_SENSOR_INTERVAL(x)	((x) & 0x3ff)
-+
-+#define TEMP_AHBPOLL_ADC_POLL_INTERVAL(x)	(x)
-+
-+#define TEMP_ADCWRITECTRL_ADC_PNP_WRITE		BIT(0)
-+#define TEMP_ADCWRITECTRL_ADC_MUX_WRITE		BIT(1)
-+
-+#define TEMP_ADCVALIDMASK_VALID_HIGH		BIT(5)
-+#define TEMP_ADCVALIDMASK_VALID_POS(bit)	(bit)
-+
-+/* MT8173 thermal sensors */
-+#define MT8173_TS1	0
-+#define MT8173_TS2	1
-+#define MT8173_TS3	2
-+#define MT8173_TS4	3
-+#define MT8173_TSABB	4
-+
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT8173_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT8173 */
-+#define MT8173_NUM_SENSORS		5
-+
-+/* The number of banks in the MT8173 */
-+#define MT8173_NUM_ZONES		4
-+
-+/* The number of sensing points per bank */
-+#define MT8173_NUM_SENSORS_PER_ZONE	4
-+
-+/* The number of controller in the MT8173 */
-+#define MT8173_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT8173_CALIBRATION	165
-+
-+/*
-+ * Layout of the fuses providing the calibration data
-+ * These macros could be used for MT8183, MT8173, MT2701, and MT2712.
-+ * MT8183 has 6 sensors and needs 6 VTS calibration data.
-+ * MT8173 has 5 sensors and needs 5 VTS calibration data.
-+ * MT2701 has 3 sensors and needs 3 VTS calibration data.
-+ * MT2712 has 4 sensors and needs 4 VTS calibration data.
++/*==================================================
++ * Definition or macro function
++ *==================================================
 + */
-+#define CALIB_BUF0_VALID_V1		BIT(0)
-+#define CALIB_BUF1_ADC_GE_V1(x)		(((x) >> 22) & 0x3ff)
-+#define CALIB_BUF0_VTS_TS1_V1(x)	(((x) >> 17) & 0x1ff)
-+#define CALIB_BUF0_VTS_TS2_V1(x)	(((x) >> 8) & 0x1ff)
-+#define CALIB_BUF1_VTS_TS3_V1(x)	(((x) >> 0) & 0x1ff)
-+#define CALIB_BUF2_VTS_TS4_V1(x)	(((x) >> 23) & 0x1ff)
-+#define CALIB_BUF2_VTS_TS5_V1(x)	(((x) >> 5) & 0x1ff)
-+#define CALIB_BUF2_VTS_TSABB_V1(x)	(((x) >> 14) & 0x1ff)
-+#define CALIB_BUF0_DEGC_CALI_V1(x)	(((x) >> 1) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_V1(x)	(((x) >> 26) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_SIGN_V1(x)	(((x) >> 7) & 0x1)
-+#define CALIB_BUF1_ID_V1(x)		(((x) >> 9) & 0x1)
-+
-+/*
-+ * Layout of the fuses providing the calibration data
-+ * These macros could be used for MT7622.
-+ */
-+#define CALIB_BUF0_ADC_OE_V2(x)		(((x) >> 22) & 0x3ff)
-+#define CALIB_BUF0_ADC_GE_V2(x)		(((x) >> 12) & 0x3ff)
-+#define CALIB_BUF0_DEGC_CALI_V2(x)	(((x) >> 6) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_V2(x)	(((x) >> 0) & 0x3f)
-+#define CALIB_BUF1_VTS_TS1_V2(x)	(((x) >> 23) & 0x1ff)
-+#define CALIB_BUF1_VTS_TS2_V2(x)	(((x) >> 14) & 0x1ff)
-+#define CALIB_BUF1_VTS_TSABB_V2(x)	(((x) >> 5) & 0x1ff)
-+#define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
-+#define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
-+
-+enum {
-+	VTS1,
-+	VTS2,
-+	VTS3,
-+	VTS4,
-+	VTS5,
-+	VTSABB,
-+	MAX_NUM_VTS,
-+};
-+
-+enum mtk_thermal_version {
-+	MTK_THERMAL_V1 = 1,
-+	MTK_THERMAL_V2,
-+};
-+
-+/* MT2701 thermal sensors */
-+#define MT2701_TS1	0
-+#define MT2701_TS2	1
-+#define MT2701_TSABB	2
-+
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT2701_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT2701 */
-+#define MT2701_NUM_SENSORS	3
-+
-+/* The number of sensing points per bank */
-+#define MT2701_NUM_SENSORS_PER_ZONE	3
-+
-+/* The number of controller in the MT2701 */
-+#define MT2701_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT2701_CALIBRATION	165
-+
-+/* MT2712 thermal sensors */
-+#define MT2712_TS1	0
-+#define MT2712_TS2	1
-+#define MT2712_TS3	2
-+#define MT2712_TS4	3
-+
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT2712_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT2712 */
-+#define MT2712_NUM_SENSORS	4
-+
-+/* The number of sensing points per bank */
-+#define MT2712_NUM_SENSORS_PER_ZONE	4
-+
-+/* The number of controller in the MT2712 */
-+#define MT2712_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT2712_CALIBRATION	165
-+
-+#define MT7622_TEMP_AUXADC_CHANNEL	11
-+#define MT7622_NUM_SENSORS		1
-+#define MT7622_NUM_ZONES		1
-+#define MT7622_NUM_SENSORS_PER_ZONE	1
-+#define MT7622_TS1	0
-+#define MT7622_NUM_CONTROLLER		1
-+
-+/* The maximum number of banks */
-+#define MAX_NUM_ZONES		8
-+
-+/* The calibration coefficient of sensor  */
-+#define MT7622_CALIBRATION	165
-+
-+/* MT8183 thermal sensors */
-+#define MT8183_TS1	0
-+#define MT8183_TS2	1
-+#define MT8183_TS3	2
-+#define MT8183_TS4	3
-+#define MT8183_TS5	4
-+#define MT8183_TSABB	5
-+
-+/* AUXADC channel  is used for the temperature sensors */
-+#define MT8183_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT8183 */
-+#define MT8183_NUM_SENSORS	6
-+
-+/* The number of banks in the MT8183 */
-+#define MT8183_NUM_ZONES               1
-+
-+/* The number of sensing points per bank */
-+#define MT8183_NUM_SENSORS_PER_ZONE	 6
-+
-+/* The number of controller in the MT8183 */
-+#define MT8183_NUM_CONTROLLER		2
-+
-+/* The calibration coefficient of sensor  */
-+#define MT8183_CALIBRATION	153
-+
-+struct mtk_thermal;
-+
-+struct thermal_bank_cfg {
-+	unsigned int num_sensors;
-+	const int *sensors;
-+};
-+
-+struct mtk_thermal_bank {
-+	struct mtk_thermal *mt;
-+	int id;
-+};
-+
-+struct mtk_thermal_data {
-+	s32 num_banks;
-+	s32 num_sensors;
-+	s32 auxadc_channel;
-+	const int *vts_index;
-+	const int *sensor_mux_values;
-+	const int *msr;
-+	const int *adcpnp;
-+	const int cali_val;
-+	const int num_controller;
-+	const int *controller_offset;
-+	bool need_switch_bank;
-+	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
-+	enum mtk_thermal_version version;
-+};
-+
-+struct mtk_thermal {
-+	struct device *dev;
-+	void __iomem *thermal_base;
-+
-+	struct clk *clk_peri_therm;
-+	struct clk *clk_auxadc;
-+	/* lock: for getting and putting banks */
-+	struct mutex lock;
-+
-+	/* Calibration values */
-+	s32 adc_ge;
-+	s32 adc_oe;
-+	s32 degc_cali;
-+	s32 o_slope;
-+	s32 o_slope_sign;
-+	s32 vts[MAX_NUM_VTS];
-+
-+	const struct mtk_thermal_data *conf;
-+	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-+};
-+
-+/* MT8183 thermal sensor data */
-+static const int mt8183_bank_data[MT8183_NUM_SENSORS] = {
-+	MT8183_TS1, MT8183_TS2, MT8183_TS3, MT8183_TS4, MT8183_TS5, MT8183_TSABB
-+};
-+
-+static const int mt8183_msr[MT8183_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_MSR0_1, TEMP_MSR1_1, TEMP_MSR2_1, TEMP_MSR1, TEMP_MSR0, TEMP_MSR3_1
-+};
-+
-+static const int mt8183_adcpnp[MT8183_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_ADCPNP0_1, TEMP_ADCPNP1_1, TEMP_ADCPNP2_1,
-+	TEMP_ADCPNP1, TEMP_ADCPNP0, TEMP_ADCPNP3_1
-+};
-+
-+static const int mt8183_mux_values[MT8183_NUM_SENSORS] = { 0, 1, 2, 3, 4, 0 };
-+static const int mt8183_tc_offset[MT8183_NUM_CONTROLLER] = {0x0, 0x100};
-+
-+static const int mt8183_vts_index[MT8183_NUM_SENSORS] = {
-+	VTS1, VTS2, VTS3, VTS4, VTS5, VTSABB
-+};
-+
-+/* MT8173 thermal sensor data */
-+static const int mt8173_bank_data[MT8173_NUM_ZONES][3] = {
-+	{ MT8173_TS2, MT8173_TS3 },
-+	{ MT8173_TS2, MT8173_TS4 },
-+	{ MT8173_TS1, MT8173_TS2, MT8173_TSABB },
-+	{ MT8173_TS2 },
-+};
-+
-+static const int mt8173_msr[MT8173_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2, TEMP_MSR3
-+};
-+
-+static const int mt8173_adcpnp[MT8173_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2, TEMP_ADCPNP3
-+};
-+
-+static const int mt8173_mux_values[MT8173_NUM_SENSORS] = { 0, 1, 2, 3, 16 };
-+static const int mt8173_tc_offset[MT8173_NUM_CONTROLLER] = { 0x0, };
-+
-+static const int mt8173_vts_index[MT8173_NUM_SENSORS] = {
-+	VTS1, VTS2, VTS3, VTS4, VTSABB
-+};
-+
-+/* MT2701 thermal sensor data */
-+static const int mt2701_bank_data[MT2701_NUM_SENSORS] = {
-+	MT2701_TS1, MT2701_TS2, MT2701_TSABB
-+};
-+
-+static const int mt2701_msr[MT2701_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2
-+};
-+
-+static const int mt2701_adcpnp[MT2701_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2
-+};
-+
-+static const int mt2701_mux_values[MT2701_NUM_SENSORS] = { 0, 1, 16 };
-+static const int mt2701_tc_offset[MT2701_NUM_CONTROLLER] = { 0x0, };
-+
-+static const int mt2701_vts_index[MT2701_NUM_SENSORS] = {
-+	VTS1, VTS2, VTS3
-+};
-+
-+/* MT2712 thermal sensor data */
-+static const int mt2712_bank_data[MT2712_NUM_SENSORS] = {
-+	MT2712_TS1, MT2712_TS2, MT2712_TS3, MT2712_TS4
-+};
-+
-+static const int mt2712_msr[MT2712_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2, TEMP_MSR3
-+};
-+
-+static const int mt2712_adcpnp[MT2712_NUM_SENSORS_PER_ZONE] = {
-+	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2, TEMP_ADCPNP3
-+};
-+
-+static const int mt2712_mux_values[MT2712_NUM_SENSORS] = { 0, 1, 2, 3 };
-+static const int mt2712_tc_offset[MT2712_NUM_CONTROLLER] = { 0x0, };
-+
-+static const int mt2712_vts_index[MT2712_NUM_SENSORS] = {
-+	VTS1, VTS2, VTS3, VTS4
-+};
-+
-+/* MT7622 thermal sensor data */
-+static const int mt7622_bank_data[MT7622_NUM_SENSORS] = { MT7622_TS1, };
-+static const int mt7622_msr[MT7622_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
-+static const int mt7622_adcpnp[MT7622_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
-+static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
-+static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
-+static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
-+
-+/*
-+ * The MT8173 thermal controller has four banks. Each bank can read up to
-+ * four temperature sensors simultaneously. The MT8173 has a total of 5
-+ * temperature sensors. We use each bank to measure a certain area of the
-+ * SoC. Since TS2 is located centrally in the SoC it is influenced by multiple
-+ * areas, hence is used in different banks.
-+ *
-+ * The thermal core only gets the maximum temperature of all banks, so
-+ * the bank concept wouldn't be necessary here. However, the SVS (Smart
-+ * Voltage Scaling) unit makes its decisions based on the same bank
-+ * data, and this indeed needs the temperatures of the individual banks
-+ * for making better decisions.
-+ */
-+static const struct mtk_thermal_data mt8173_thermal_data = {
-+	.auxadc_channel = MT8173_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT8173_NUM_ZONES,
-+	.num_sensors = MT8173_NUM_SENSORS,
-+	.vts_index = mt8173_vts_index,
-+	.cali_val = MT8173_CALIBRATION,
-+	.num_controller = MT8173_NUM_CONTROLLER,
-+	.controller_offset = mt8173_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 2,
-+			.sensors = mt8173_bank_data[0],
-+		}, {
-+			.num_sensors = 2,
-+			.sensors = mt8173_bank_data[1],
-+		}, {
-+			.num_sensors = 3,
-+			.sensors = mt8173_bank_data[2],
-+		}, {
-+			.num_sensors = 1,
-+			.sensors = mt8173_bank_data[3],
-+		},
-+	},
-+	.msr = mt8173_msr,
-+	.adcpnp = mt8173_adcpnp,
-+	.sensor_mux_values = mt8173_mux_values,
-+	.version = MTK_THERMAL_V1,
-+};
-+
-+/*
-+ * The MT2701 thermal controller has one bank, which can read up to
-+ * three temperature sensors simultaneously. The MT2701 has a total of 3
-+ * temperature sensors.
-+ *
-+ * The thermal core only gets the maximum temperature of this one bank,
-+ * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-+ * Voltage Scaling) unit makes its decisions based on the same bank
-+ * data.
-+ */
-+static const struct mtk_thermal_data mt2701_thermal_data = {
-+	.auxadc_channel = MT2701_TEMP_AUXADC_CHANNEL,
-+	.num_banks = 1,
-+	.num_sensors = MT2701_NUM_SENSORS,
-+	.vts_index = mt2701_vts_index,
-+	.cali_val = MT2701_CALIBRATION,
-+	.num_controller = MT2701_NUM_CONTROLLER,
-+	.controller_offset = mt2701_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 3,
-+			.sensors = mt2701_bank_data,
-+		},
-+	},
-+	.msr = mt2701_msr,
-+	.adcpnp = mt2701_adcpnp,
-+	.sensor_mux_values = mt2701_mux_values,
-+	.version = MTK_THERMAL_V1,
-+};
-+
-+/*
-+ * The MT2712 thermal controller has one bank, which can read up to
-+ * four temperature sensors simultaneously. The MT2712 has a total of 4
-+ * temperature sensors.
-+ *
-+ * The thermal core only gets the maximum temperature of this one bank,
-+ * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-+ * Voltage Scaling) unit makes its decisions based on the same bank
-+ * data.
-+ */
-+static const struct mtk_thermal_data mt2712_thermal_data = {
-+	.auxadc_channel = MT2712_TEMP_AUXADC_CHANNEL,
-+	.num_banks = 1,
-+	.num_sensors = MT2712_NUM_SENSORS,
-+	.vts_index = mt2712_vts_index,
-+	.cali_val = MT2712_CALIBRATION,
-+	.num_controller = MT2712_NUM_CONTROLLER,
-+	.controller_offset = mt2712_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 4,
-+			.sensors = mt2712_bank_data,
-+		},
-+	},
-+	.msr = mt2712_msr,
-+	.adcpnp = mt2712_adcpnp,
-+	.sensor_mux_values = mt2712_mux_values,
-+	.version = MTK_THERMAL_V1,
-+};
-+
-+/*
-+ * MT7622 have only one sensing point which uses AUXADC Channel 11 for raw data
-+ * access.
-+ */
-+static const struct mtk_thermal_data mt7622_thermal_data = {
-+	.auxadc_channel = MT7622_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT7622_NUM_ZONES,
-+	.num_sensors = MT7622_NUM_SENSORS,
-+	.vts_index = mt7622_vts_index,
-+	.cali_val = MT7622_CALIBRATION,
-+	.num_controller = MT7622_NUM_CONTROLLER,
-+	.controller_offset = mt7622_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt7622_bank_data,
-+		},
-+	},
-+	.msr = mt7622_msr,
-+	.adcpnp = mt7622_adcpnp,
-+	.sensor_mux_values = mt7622_mux_values,
-+	.version = MTK_THERMAL_V2,
-+};
-+
-+/*
-+ * The MT8183 thermal controller has one bank for the current SW framework.
-+ * The MT8183 has a total of 6 temperature sensors.
-+ * There are two thermal controller to control the six sensor.
-+ * The first one bind 2 sensor, and the other bind 4 sensors.
-+ * The thermal core only gets the maximum temperature of all sensor, so
-+ * the bank concept wouldn't be necessary here. However, the SVS (Smart
-+ * Voltage Scaling) unit makes its decisions based on the same bank
-+ * data, and this indeed needs the temperatures of the individual banks
-+ * for making better decisions.
-+ */
-+static const struct mtk_thermal_data mt8183_thermal_data = {
-+	.auxadc_channel = MT8183_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT8183_NUM_ZONES,
-+	.num_sensors = MT8183_NUM_SENSORS,
-+	.vts_index = mt8183_vts_index,
-+	.cali_val = MT8183_CALIBRATION,
-+	.num_controller = MT8183_NUM_CONTROLLER,
-+	.controller_offset = mt8183_tc_offset,
-+	.need_switch_bank = false,
-+	.bank_data = {
-+		{
-+			.num_sensors = 6,
-+			.sensors = mt8183_bank_data,
-+		},
-+	},
-+
-+	.msr = mt8183_msr,
-+	.adcpnp = mt8183_adcpnp,
-+	.sensor_mux_values = mt8183_mux_values,
-+	.version = MTK_THERMAL_V1,
-+};
-+
-+/**
-+ * raw_to_mcelsius - convert a raw ADC value to mcelsius
-+ * @mt:	The thermal controller
-+ * @sensno:	sensor number
-+ * @raw:	raw ADC value
-+ *
-+ * This converts the raw ADC value to mcelsius using the SoC specific
-+ * calibration constants
-+ */
-+static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
-+{
-+	s32 tmp;
-+
-+	raw &= 0xfff;
-+
-+	tmp = 203450520 << 3;
-+	tmp /= mt->conf->cali_val + mt->o_slope;
-+	tmp /= 10000 + mt->adc_ge;
-+	tmp *= raw - mt->vts[sensno] - 3350;
-+	tmp >>= 3;
-+
-+	return mt->degc_cali * 500 - tmp;
-+}
-+
-+static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
-+{
-+	s32 format_1;
-+	s32 format_2;
-+	s32 g_oe;
-+	s32 g_gain;
-+	s32 g_x_roomt;
-+	s32 tmp;
-+
-+	if (raw == 0)
-+		return 0;
-+
-+	raw &= 0xfff;
-+	g_gain = 10000 + (((mt->adc_ge - 512) * 10000) >> 12);
-+	g_oe = mt->adc_oe - 512;
-+	format_1 = mt->vts[VTS2] + 3105 - g_oe;
-+	format_2 = (mt->degc_cali * 10) >> 1;
-+	g_x_roomt = (((format_1 * 10000) >> 12) * 10000) / g_gain;
-+
-+	tmp = (((((raw - g_oe) * 10000) >> 12) * 10000) / g_gain) - g_x_roomt;
-+	tmp = tmp * 10 * 100 / 11;
-+
-+	if (mt->o_slope_sign == 0)
-+		tmp = tmp / (165 - mt->o_slope);
-+	else
-+		tmp = tmp / (165 + mt->o_slope);
-+
-+	return (format_2 - tmp) * 100;
-+}
-+
-+/**
-+ * mtk_thermal_get_bank - get bank
-+ * @bank:	The bank
-+ *
-+ * The bank registers are banked, we have to select a bank in the
-+ * PTPCORESEL register to access it.
-+ */
-+static void mtk_thermal_get_bank(struct mtk_thermal_bank *bank)
-+{
-+	struct mtk_thermal *mt = bank->mt;
-+	u32 val;
-+
-+	if (mt->conf->need_switch_bank) {
-+		mutex_lock(&mt->lock);
-+
-+		val = readl(mt->thermal_base + PTPCORESEL);
-+		val &= ~0xf;
-+		val |= bank->id;
-+		writel(val, mt->thermal_base + PTPCORESEL);
-+	}
-+}
-+
-+/**
-+ * mtk_thermal_put_bank - release bank
-+ * @bank:	The bank
-+ *
-+ * release a bank previously taken with mtk_thermal_get_bank,
-+ */
-+static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
-+{
-+	struct mtk_thermal *mt = bank->mt;
-+
-+	if (mt->conf->need_switch_bank)
-+		mutex_unlock(&mt->lock);
-+}
-+
-+/**
-+ * mtk_thermal_bank_temperature - get the temperature of a bank
-+ * @bank:	The bank
-+ *
-+ * The temperature of a bank is considered the maximum temperature of
-+ * the sensors associated to the bank.
-+ */
-+static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
-+{
-+	struct mtk_thermal *mt = bank->mt;
-+	const struct mtk_thermal_data *conf = mt->conf;
-+	int i, temp = INT_MIN, max = INT_MIN;
-+	u32 raw;
-+
-+	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-+		raw = readl(mt->thermal_base + conf->msr[i]);
-+
-+		if (mt->conf->version == MTK_THERMAL_V1) {
-+			temp = raw_to_mcelsius_v1(
-+				mt, conf->bank_data[bank->id].sensors[i], raw);
-+		} else {
-+			temp = raw_to_mcelsius_v2(
-+				mt, conf->bank_data[bank->id].sensors[i], raw);
-+		}
-+
-+		/*
-+		 * The first read of a sensor often contains very high bogus
-+		 * temperature value. Filter these out so that the system does
-+		 * not immediately shut down.
-+		 */
-+		if (temp > 200000)
-+			temp = 0;
-+
-+		if (temp > max)
-+			max = temp;
++#define STOP_COUNTING_V4 (DEVICE_WRITE | RG_TSFM_CTRL_0 << 8 | 0x00)
++#define SET_RG_TSFM_LPDLY_V4 (DEVICE_WRITE | RG_TSFM_CTRL_4 << 8 | 0xA6)
++#define SET_COUNTING_WINDOW_20US1_V4 (DEVICE_WRITE | RG_TSFM_CTRL_2 << 8 | 0x00)
++#define SET_COUNTING_WINDOW_20US2_V4 (DEVICE_WRITE | RG_TSFM_CTRL_1 << 8 | 0x20)
++#define TSV2F_CHOP_CKSEL_AND_TSV2F_EN_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_2 << 8 | 0x84)
++#define TSBG_DEM_CKSEL_X_TSBG_CHOP_EN_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_4 << 8 | 0x7C)
++#define SET_TS_RSV_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_1 << 8 | 0x8D)
++#define SET_TS_EN_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_0 << 8 | 0xF4)
++#define TOGGLE_RG_TSV2F_VCO_RST1_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_0 << 8 | 0xFC)
++#define TOGGLE_RG_TSV2F_VCO_RST2_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_0 << 8 | 0xF4)
++
++#define SET_LVTS_AUTO_RCK_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_6 << 8 | 0x01)
++#define SELECT_SENSOR_RCK_V4(id) (DEVICE_WRITE | RG_TSV2F_CTRL_5 << 8 | (id))
++#define SET_DEVICE_SINGLE_MODE_V4 (DEVICE_WRITE | RG_TSFM_CTRL_3 << 8 | 0x78)
++#define KICK_OFF_RCK_COUNTING_V4 (DEVICE_WRITE | RG_TSFM_CTRL_0 << 8 | 0x02)
++#define SET_SENSOR_NO_RCK_V4 (DEVICE_WRITE | RG_TSV2F_CTRL_5 << 8 | 0x10)
++#define SET_DEVICE_LOW_POWER_SINGLE_MODE_V4 (DEVICE_WRITE | RG_TSFM_CTRL_3 << 8	| 0xB8)
++
++#define ENABLE_FEATURE(feature)		(lvts_data->feature_bitmap |= (feature))
++#define DISABLE_FEATURE(feature)	(lvts_data->feature_bitmap &= (~(feature)))
++#define IS_ENABLE(feature)		(lvts_data->feature_bitmap & (feature))
++
++#define DISABLE_THERMAL_HW_REBOOT (-274000)
++
++#define CLOCK_26MHZ_CYCLE_NS	(38)
++#define BUS_ACCESS_US		(2)
++
++#define FEATURE_DEVICE_AUTO_RCK	(BIT(0))
++#define FEATURE_CK26M_ACTIVE	(BIT(1))
++#define CK26M_ACTIVE   (((lvts_data->feature_bitmap & FEATURE_CK26M_ACTIVE)    \
++			? 1 : 0) << 30)
++#define GET_BASE_ADDR(tc_id)	\
++	(lvts_data->domain[lvts_data->tc[tc_id].domain_index].base	\
++	+ lvts_data->tc[tc_id].addr_offset)
++
++#define SET_TC_SPEED_IN_US(pu, gd, fd, sd) \
++	{	\
++		.period_unit = (((pu) * 1000) / (256 * CLOCK_26MHZ_CYCLE_NS)),	\
++		.group_interval_delay = ((gd) / (pu)),	\
++		.filter_interval_delay = ((fd) / (pu)),	\
++		.sensor_interval_delay = ((sd) / (pu)),	\
 +	}
 +
-+	return max;
++#define GET_CAL_DATA_BITMASK(index, h, l)	\
++	(((index) < lvts_data->num_efuse_addr)	\
++	? ((lvts_data->efuse[(index)] & GENMASK(h, l)) >> l)	\
++	: 0)
++
++#define GET_CAL_DATA_BIT(index, bit)	\
++	(((index) < lvts_data->num_efuse_addr)	\
++	? ((lvts_data->efuse[index] & BIT(bit)) >> (bit))	\
++	: 0)
++
++#define GET_TC_SENSOR_NUM(tc_id)	\
++	(lvts_data->tc[tc_id].num_sensor)
++
++#define ONE_SAMPLE (lvts_data->counting_window_us + 2 * BUS_ACCESS_US)
++
++#define NUM_OF_SAMPLE(tc_id)	\
++	((lvts_data->tc[tc_id].hw_filter < LVTS_FILTER_2) ? 1 :	\
++	((lvts_data->tc[tc_id].hw_filter > LVTS_FILTER_16_OF_18) ? 1 :	\
++	((lvts_data->tc[tc_id].hw_filter == LVTS_FILTER_16_OF_18) ? 18 :\
++	((lvts_data->tc[tc_id].hw_filter == LVTS_FILTER_8_OF_10) ? 10 :	\
++	(lvts_data->tc[tc_id].hw_filter * 2)))))
++
++#define PERIOD_UNIT_US(tc_id)	\
++	((lvts_data->tc[tc_id].tc_speed.period_unit * 256 *	\
++	CLOCK_26MHZ_CYCLE_NS) / 1000)
++#define FILTER_INT_US(tc_id)	\
++	(lvts_data->tc[tc_id].tc_speed.filter_interval_delay	\
++	* PERIOD_UNIT_US(tc_id))
++#define SENSOR_INT_US(tc_id)	\
++	(lvts_data->tc[tc_id].tc_speed.sensor_interval_delay	\
++	* PERIOD_UNIT_US(tc_id))
++#define GROUP_INT_US(tc_id)	\
++	(lvts_data->tc[tc_id].tc_speed.group_interval_delay	\
++	* PERIOD_UNIT_US(tc_id))
++
++#define SENSOR_LATENCY_US(tc_id) \
++	((NUM_OF_SAMPLE(tc_id) - 1) * FILTER_INT_US(tc_id)	\
++	+ NUM_OF_SAMPLE(tc_id) * ONE_SAMPLE)
++
++#define GROUP_LATENCY_US(tc_id)	\
++	(GET_TC_SENSOR_NUM(tc_id) * SENSOR_LATENCY_US(tc_id)	\
++	+ (GET_TC_SENSOR_NUM(tc_id) - 1) * SENSOR_INT_US(tc_id)	\
++	+ GROUP_INT_US(tc_id))
++
++/*==================================================
++ * LVTS local common code
++ *==================================================
++ */
++static int lvts_raw_to_temp(struct formula_coeff *co, unsigned int msr_raw)
++{
++	/* This function returns degree mC */
++
++	int temp;
++
++	temp = (co->a * ((unsigned long long)msr_raw)) >> 14;
++	temp = temp + co->golden_temp * 500 + co->b;
++
++	return temp;
 +}
 +
-+static int mtk_read_temp(void *data, int *temperature)
++static unsigned int lvts_temp_to_raw(struct formula_coeff *co, int temp)
 +{
-+	struct mtk_thermal *mt = data;
-+	int i;
-+	int tempmax = INT_MIN;
++	unsigned int msr_raw;
 +
-+	for (i = 0; i < mt->conf->num_banks; i++) {
-+		struct mtk_thermal_bank *bank = &mt->banks[i];
++	msr_raw = div_s64((s64)((co->golden_temp * 500 + co->b - temp)) << 14,
++			 (-1 * co->a));
 +
-+		mtk_thermal_get_bank(bank);
-+
-+		tempmax = max(tempmax, mtk_thermal_bank_temperature(bank));
-+
-+		mtk_thermal_put_bank(bank);
-+	}
-+
-+	*temperature = tempmax;
-+
-+	return 0;
++	return msr_raw;
 +}
 +
-+static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
-+	.get_temp = mtk_read_temp,
-+};
-+
-+static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
-+				  u32 apmixed_phys_base, u32 auxadc_phys_base,
-+				  int ctrl_id)
++static int lvts_read_all_tc_temperature(struct lvts_data *lvts_data)
 +{
-+	struct mtk_thermal_bank *bank = &mt->banks[num];
-+	const struct mtk_thermal_data *conf = mt->conf;
-+	int i;
++	struct tc_settings *tc = lvts_data->tc;
++	unsigned int i, j, s_index, msr_raw;
++	int max_temp = 0, current_temp;
++	void __iomem *base;
 +
-+	int offset = mt->conf->controller_offset[ctrl_id];
-+	void __iomem *controller_base = mt->thermal_base + offset;
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++		for (j = 0; j < tc[i].num_sensor; j++) {
++			s_index = tc[i].sensor_map[j];
 +
-+	bank->id = num;
-+	bank->mt = mt;
++			msr_raw = readl(LVTSMSR0_0 + base + 0x4 * j) & MRS_RAW_MASK;
++			current_temp = lvts_raw_to_temp(&lvts_data->coeff, msr_raw);
 +
-+	mtk_thermal_get_bank(bank);
++			if (msr_raw == 0)
++				current_temp = THERMAL_TEMP_INVALID;
 +
-+	/* bus clock 66M counting unit is 12 * 15.15ns * 256 = 46.540us */
-+	writel(TEMP_MONCTL1_PERIOD_UNIT(12), controller_base + TEMP_MONCTL1);
++			max_temp = max(max_temp, current_temp);
 +
-+	/*
-+	 * filt interval is 1 * 46.540us = 46.54us,
-+	 * sen interval is 429 * 46.540us = 19.96ms
-+	 */
-+	writel(TEMP_MONCTL2_FILTER_INTERVAL(1) |
-+			TEMP_MONCTL2_SENSOR_INTERVAL(429),
-+			controller_base + TEMP_MONCTL2);
-+
-+	/* poll is set to 10u */
-+	writel(TEMP_AHBPOLL_ADC_POLL_INTERVAL(768),
-+	       controller_base + TEMP_AHBPOLL);
-+
-+	/* temperature sampling control, 1 sample */
-+	writel(0x0, controller_base + TEMP_MSRCTL0);
-+
-+	/* exceed this polling time, IRQ would be inserted */
-+	writel(0xffffffff, controller_base + TEMP_AHBTO);
-+
-+	/* number of interrupts per event, 1 is enough */
-+	writel(0x0, controller_base + TEMP_MONIDET0);
-+	writel(0x0, controller_base + TEMP_MONIDET1);
-+
-+	/*
-+	 * The MT8173 thermal controller does not have its own ADC. Instead it
-+	 * uses AHB bus accesses to control the AUXADC. To do this the thermal
-+	 * controller has to be programmed with the physical addresses of the
-+	 * AUXADC registers and with the various bit positions in the AUXADC.
-+	 * Also the thermal controller controls a mux in the APMIXEDSYS register
-+	 * space.
-+	 */
-+
-+	/*
-+	 * this value will be stored to TEMP_PNPMUXADDR (TEMP_SPARE0)
-+	 * automatically by hw
-+	 */
-+	writel(BIT(conf->auxadc_channel), controller_base + TEMP_ADCMUX);
-+
-+	/* AHB address for auxadc mux selection */
-+	writel(auxadc_phys_base + AUXADC_CON1_CLR_V,
-+	       controller_base + TEMP_ADCMUXADDR);
-+
-+	if (mt->conf->version == MTK_THERMAL_V1) {
-+		/* AHB address for pnp sensor mux selection */
-+		writel(apmixed_phys_base + APMIXED_SYS_TS_CON1,
-+		       controller_base + TEMP_PNPMUXADDR);
-+	}
-+
-+	/* AHB value for auxadc enable */
-+	writel(BIT(conf->auxadc_channel), controller_base + TEMP_ADCEN);
-+
-+	/* AHB address for auxadc enable (channel 0 immediate mode selected) */
-+	writel(auxadc_phys_base + AUXADC_CON1_SET_V,
-+	       controller_base + TEMP_ADCENADDR);
-+
-+	/* AHB address for auxadc valid bit */
-+	writel(auxadc_phys_base + AUXADC_DATA(conf->auxadc_channel),
-+	       controller_base + TEMP_ADCVALIDADDR);
-+
-+	/* AHB address for auxadc voltage output */
-+	writel(auxadc_phys_base + AUXADC_DATA(conf->auxadc_channel),
-+	       controller_base + TEMP_ADCVOLTADDR);
-+
-+	/* read valid & voltage are at the same register */
-+	writel(0x0, controller_base + TEMP_RDCTRL);
-+
-+	/* indicate where the valid bit is */
-+	writel(TEMP_ADCVALIDMASK_VALID_HIGH | TEMP_ADCVALIDMASK_VALID_POS(12),
-+	       controller_base + TEMP_ADCVALIDMASK);
-+
-+	/* no shift */
-+	writel(0x0, controller_base + TEMP_ADCVOLTAGESHIFT);
-+
-+	/* enable auxadc mux write transaction */
-+	writel(TEMP_ADCWRITECTRL_ADC_MUX_WRITE,
-+		controller_base + TEMP_ADCWRITECTRL);
-+
-+	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
-+		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
-+		       mt->thermal_base + conf->adcpnp[i]);
-+
-+	writel((1 << conf->bank_data[num].num_sensors) - 1,
-+	       controller_base + TEMP_MONCTL0);
-+
-+	writel(TEMP_ADCWRITECTRL_ADC_PNP_WRITE |
-+	       TEMP_ADCWRITECTRL_ADC_MUX_WRITE,
-+	       controller_base + TEMP_ADCWRITECTRL);
-+
-+	mtk_thermal_put_bank(bank);
-+}
-+
-+static u64 of_get_phys_base(struct device_node *np)
-+{
-+	u64 size64;
-+	const __be32 *regaddr_p;
-+
-+	regaddr_p = of_get_address(np, 0, &size64, NULL);
-+	if (!regaddr_p)
-+		return OF_BAD_ADDR;
-+
-+	return of_translate_address(np, regaddr_p);
-+}
-+
-+static int mtk_thermal_extract_efuse_v1(struct mtk_thermal *mt, u32 *buf)
-+{
-+	int i;
-+
-+	if (!(buf[0] & CALIB_BUF0_VALID_V1))
-+		return -EINVAL;
-+
-+	mt->adc_ge = CALIB_BUF1_ADC_GE_V1(buf[1]);
-+
-+	for (i = 0; i < mt->conf->num_sensors; i++) {
-+		switch (mt->conf->vts_index[i]) {
-+		case VTS1:
-+			mt->vts[VTS1] = CALIB_BUF0_VTS_TS1_V1(buf[0]);
-+			break;
-+		case VTS2:
-+			mt->vts[VTS2] = CALIB_BUF0_VTS_TS2_V1(buf[0]);
-+			break;
-+		case VTS3:
-+			mt->vts[VTS3] = CALIB_BUF1_VTS_TS3_V1(buf[1]);
-+			break;
-+		case VTS4:
-+			mt->vts[VTS4] = CALIB_BUF2_VTS_TS4_V1(buf[2]);
-+			break;
-+		case VTS5:
-+			mt->vts[VTS5] = CALIB_BUF2_VTS_TS5_V1(buf[2]);
-+			break;
-+		case VTSABB:
-+			mt->vts[VTSABB] =
-+				CALIB_BUF2_VTS_TSABB_V1(buf[2]);
-+			break;
-+		default:
-+			break;
++			lvts_data->sen_data[s_index].msr_raw = msr_raw;
++			lvts_data->sen_data[s_index].temp = current_temp;
 +		}
 +	}
 +
-+	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V1(buf[0]);
-+	if (CALIB_BUF1_ID_V1(buf[1]) &
-+	    CALIB_BUF0_O_SLOPE_SIGN_V1(buf[0]))
-+		mt->o_slope = -CALIB_BUF0_O_SLOPE_V1(buf[0]);
-+	else
-+		mt->o_slope = CALIB_BUF0_O_SLOPE_V1(buf[0]);
-+
-+	return 0;
++	return max_temp;
 +}
 +
-+static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
++static int soc_temp_lvts_read_temp(void *data, int *temperature)
 +{
-+	if (!CALIB_BUF1_VALID_V2(buf[1]))
++	struct soc_temp_tz *lvts_tz = (struct soc_temp_tz *)data;
++	struct lvts_data *lvts_data = lvts_tz->lvts_data;
++
++	if (lvts_tz->id == 0)
++		*temperature = lvts_read_all_tc_temperature(lvts_data);
++	else if (lvts_tz->id - 1 < lvts_data->num_sensor)
++		*temperature = lvts_data->sen_data[lvts_tz->id - 1].temp;
++	else
 +		return -EINVAL;
 +
-+	mt->adc_oe = CALIB_BUF0_ADC_OE_V2(buf[0]);
-+	mt->adc_ge = CALIB_BUF0_ADC_GE_V2(buf[0]);
-+	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V2(buf[0]);
-+	mt->o_slope = CALIB_BUF0_O_SLOPE_V2(buf[0]);
-+	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V2(buf[1]);
-+	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V2(buf[1]);
-+	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V2(buf[1]);
-+	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V2(buf[1]);
++	return 0;
++}
++
++static const struct thermal_zone_of_device_ops soc_temp_lvts_ops = {
++	.get_temp = soc_temp_lvts_read_temp,
++};
++
++static void lvts_write_device(struct lvts_data *lvts_data, unsigned int data,
++			      int tc_id)
++{
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++
++	writel(data, LVTS_CONFIG_0 + base);
++
++	usleep_range(5, 15);
++}
++
++static unsigned int lvts_read_device(struct lvts_data *lvts_data,
++				     unsigned int reg_idx, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	void __iomem *base;
++	unsigned int data;
++	int ret;
++
++	base = GET_BASE_ADDR(tc_id);
++	writel(READ_DEVICE_REG(reg_idx), LVTS_CONFIG_0 + base);
++
++	ret = readl_poll_timeout(LVTS_CONFIG_0 + base, data,
++				 !(data & DEVICE_ACCESS_STARTUS),
++				 2, 200);
++	if (ret)
++		dev_err(dev,
++			"Error: LVTS %d DEVICE_ACCESS_START didn't ready\n", tc_id);
++
++	data = readl(LVTSRDATA0_0 + base);
++
++	return data;
++}
++
++static void wait_all_tc_sensing_point_idle(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int mask, error_code, is_error;
++	void __iomem *base;
++	int i, cnt, ret;
++
++	mask = BIT(10) | BIT(7) | BIT(0);
++
++	for (cnt = 0; cnt < 2; cnt++) {
++		is_error = 0;
++		for (i = 0; i < lvts_data->num_tc; i++) {
++			base = GET_BASE_ADDR(i);
++			ret = readl_poll_timeout(LVTSMSRCTL1_0 + base, error_code,
++						 !(error_code & mask), 2, 200);
++			/*
++			 * Error code
++			 * 000: IDLE
++			 * 001: Write transaction
++			 * 010: Waiting for read after Write
++			 * 011: Disable Continue fetching on Device
++			 * 100: Read transaction
++			 * 101: Set Device special Register for Voltage threshold
++			 * 111: Set TSMCU number for Fetch
++			 */
++			error_code = ((error_code & BIT(10)) >> 8) +
++				((error_code & BIT(7)) >> 6) +
++				(error_code & BIT(0));
++
++			if (ret)
++				dev_err(dev,
++					"Error LVTS %d sensing points aren't idle, error_code %d\n",
++					i, error_code);
++
++			if (error_code != 0)
++				is_error = 1;
++		}
++
++		if (is_error == 0)
++			break;
++	}
++}
++
++static void lvts_reset(struct lvts_data *lvts_data)
++{
++	int i;
++
++	for (i = 0; i < lvts_data->num_domain; i++) {
++		if (lvts_data->domain[i].reset)
++			reset_control_assert(lvts_data->domain[i].reset);
++
++		if (lvts_data->domain[i].reset)
++			reset_control_deassert(lvts_data->domain[i].reset);
++	}
++}
++
++static void device_identification(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int i, data;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++
++		writel(ENABLE_LVTS_CTRL_CLK, LVTSCLKEN_0 + base);
++
++		lvts_write_device(lvts_data, RESET_ALL_DEVICES, i);
++
++		lvts_write_device(lvts_data, READ_BACK_DEVICE_ID, i);
++
++		/* Check LVTS device ID */
++		data = (readl(LVTS_ID_0 + base) & GENMASK(7, 0));
++		if (data != (0x81 + i))
++			dev_err(dev, "LVTS_TC_%d, Device ID should be 0x%x, but 0x%x\n",
++				i, (0x81 + i), data);
++	}
++}
++
++static void disable_all_sensing_points(struct lvts_data *lvts_data)
++{
++	unsigned int i;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++		writel(DISABLE_SENSING_POINT, LVTSMONCTL0_0 + base);
++	}
++}
++
++static void enable_all_sensing_points(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	unsigned int i, num;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++		num = tc[i].num_sensor;
++
++		if (num > ALL_SENSING_POINTS) {
++			dev_err(dev,
++				"%s, LVTS%d, illegal number of sensors: %d\n",
++				__func__, i, tc[i].num_sensor);
++			continue;
++		}
++
++		writel(ENABLE_SENSING_POINT(num), LVTSMONCTL0_0 + base);
++	}
++}
++
++static void set_polling_speed(struct lvts_data *lvts_data, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	unsigned int lvts_mon_ctl_1, lvts_mon_ctl_2;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++
++	lvts_mon_ctl_1 = ((tc[tc_id].tc_speed.group_interval_delay << 20) & GENMASK(29, 20)) |
++			(tc[tc_id].tc_speed.period_unit & GENMASK(9, 0));
++	lvts_mon_ctl_2 = ((tc[tc_id].tc_speed.filter_interval_delay << 16) & GENMASK(25, 16)) |
++			(tc[tc_id].tc_speed.sensor_interval_delay & GENMASK(9, 0));
++	/*
++	 * Clock source of LVTS thermal controller is 26MHz.
++	 * Period unit is a base for all interval delays
++	 * All interval delays must multiply it to convert a setting to time.
++	 * Filter interval delay is a delay between two samples of the same sensor
++	 * Sensor interval delay is a delay between two samples of differnet sensors
++	 * Group interval delay is a delay between different rounds.
++	 * For example:
++	 *     If Period unit = C, filter delay = 1, sensor delay = 2, group delay = 1,
++	 *     and two sensors, TS1 and TS2, are in a LVTS thermal controller
++	 *     and then
++	 *     Period unit = C * 1/26M * 256 = 12 * 38.46ns * 256 = 118.149us
++	 *     Filter interval delay = 1 * Period unit = 118.149us
++	 *     Sensor interval delay = 2 * Period unit = 236.298us
++	 *     Group interval delay = 1 * Period unit = 118.149us
++	 *
++	 *     TS1    TS1 ... TS1    TS2    TS2 ... TS2    TS1...
++	 *        <--> Filter interval delay
++	 *                       <--> Sensor interval delay
++	 *                                             <--> Group interval delay
++	 */
++	writel(lvts_mon_ctl_1, LVTSMONCTL1_0 + base);
++	writel(lvts_mon_ctl_2, LVTSMONCTL2_0 + base);
++
++	dev_info(dev, "%s %d, LVTSMONCTL1_0= 0x%x,LVTSMONCTL2_0= 0x%x\n",
++		 __func__, tc_id, readl(LVTSMONCTL1_0 + base),
++		 readl(LVTSMONCTL2_0 + base));
++}
++
++static void set_hw_filter(struct lvts_data *lvts_data, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	unsigned int option;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++	option = tc[tc_id].hw_filter & 0x7;
++	/* hw filter
++	 * 000: Get one sample
++	 * 001: Get 2 samples and average them
++	 * 010: Get 4 samples, drop max and min, then average the rest of 2 samples
++	 * 011: Get 6 samples, drop max and min, then average the rest of 4 samples
++	 * 100: Get 10 samples, drop max and min, then average the rest of 8 samples
++	 * 101: Get 18 samples, drop max and min, then average the rest of 16 samples
++	 */
++	option = (option << 9) | (option << 6) | (option << 3) | option;
++
++	writel(option, LVTSMSRCTL0_0 + base);
++	dev_info(dev, "%s %d, LVTSMSRCTL0_0= 0x%x\n",
++		 __func__, tc_id, readl(LVTSMSRCTL0_0 + base));
++}
++
++static int get_dominator_index(struct lvts_data *lvts_data, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	int d_index;
++
++	if (tc[tc_id].dominator_sensing_point == ALL_SENSING_POINTS) {
++		d_index = ALL_SENSING_POINTS;
++	} else if (tc[tc_id].dominator_sensing_point <
++		tc[tc_id].num_sensor){
++		d_index = tc[tc_id].dominator_sensing_point;
++	} else {
++		dev_err(dev,
++			"Error: LVTS%d, dominator_sensing_point= %d should smaller than num_sensor= %d\n",
++			tc_id, tc[tc_id].dominator_sensing_point,
++			tc[tc_id].num_sensor);
++
++		dev_err(dev, "Use the sensing point 0 as the dominated sensor\n");
++		d_index = SENSING_POINT0;
++	}
++
++	return d_index;
++}
++
++static void disable_hw_reboot_interrupt(struct lvts_data *lvts_data, int tc_id)
++{
++	unsigned int temp;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++
++	/* LVTS thermal controller has two interrupts for thermal HW reboot
++	 * One is for AP SW and the other is for RGU
++	 * The interrupt of AP SW can turn off by a bit of a register, but
++	 * the other for RGU cannot.
++	 * To prevent rebooting device accidentally, we are going to add
++	 * a huge offset to LVTS and make LVTS always report extremely low
++	 * temperature.
++	 */
++
++	/* After adding the huge offset 0x3FFF, LVTS alawys adds the
++	 * offset to MSR_RAW.
++	 * When MSR_RAW is larger, SW will convert lower temperature/
++	 */
++	temp = readl(LVTSPROTCTL_0 + base);
++	writel(temp | 0x3FFF, LVTSPROTCTL_0 + base);
++
++	/* Disable the interrupt of AP SW */
++	temp = readl(LVTSMONINT_0 + base);
++	writel(temp & ~(STAGE3_INT_EN), LVTSMONINT_0 + base);
++}
++
++static void enable_hw_reboot_interrupt(struct lvts_data *lvts_data, int tc_id)
++{
++	unsigned int temp;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++
++	/* Enable the interrupt of AP SW */
++	temp = readl(LVTSMONINT_0 + base);
++	writel(temp | STAGE3_INT_EN, LVTSMONINT_0 + base);
++	/* Clear the offset */
++	temp = readl(LVTSPROTCTL_0 + base);
++	writel(temp & ~PROTOFFSET, LVTSPROTCTL_0 + base);
++}
++
++static void set_tc_hw_reboot_threshold(struct lvts_data *lvts_data,
++				       int trip_point, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int msr_raw, temp, config, d_index;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++	d_index = get_dominator_index(lvts_data, tc_id);
++
++	dev_info(dev, "%s: LVTS%d, the dominator sensing point= %d\n",
++		 __func__, tc_id, d_index);
++
++	disable_hw_reboot_interrupt(lvts_data, tc_id);
++
++	temp = readl(LVTSPROTCTL_0 + base);
++	if (d_index == ALL_SENSING_POINTS) {
++		/* Maximum of 4 sensing points */
++		config = (0x1 << 16);
++		writel(config | temp, LVTSPROTCTL_0 + base);
++	} else {
++		/* Select protection sensor */
++		config = ((d_index << 2) + 0x2) << 16;
++		writel(config | temp, LVTSPROTCTL_0 + base);
++	}
++
++	msr_raw = lvts_temp_to_raw(&lvts_data->coeff, trip_point);
++	writel(msr_raw, LVTSPROTTC_0 + base);
++
++	enable_hw_reboot_interrupt(lvts_data, tc_id);
++}
++
++static void set_all_tc_hw_reboot(struct lvts_data *lvts_data)
++{
++	struct tc_settings *tc = lvts_data->tc;
++	int i, trip_point;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		trip_point = tc[i].hw_reboot_trip_point;
++
++		if (tc[i].num_sensor == 0)
++			continue;
++
++		if (trip_point == DISABLE_THERMAL_HW_REBOOT)
++			continue;
++
++		set_tc_hw_reboot_threshold(lvts_data, trip_point, i);
++	}
++}
++
++static int lvts_init(struct lvts_data *lvts_data)
++{
++	struct platform_ops *ops = &lvts_data->ops;
++	struct device *dev = lvts_data->dev;
++	int ret;
++
++	ret = clk_prepare_enable(lvts_data->clk);
++	if (ret) {
++		dev_err(dev,
++			"Error: Failed to enable lvts controller clock: %d\n",
++			ret);
++		return ret;
++	}
++
++	lvts_reset(lvts_data);
++
++	device_identification(lvts_data);
++	if (ops->device_enable_and_init)
++		ops->device_enable_and_init(lvts_data);
++
++	if (IS_ENABLE(FEATURE_DEVICE_AUTO_RCK)) {
++		if (ops->device_enable_auto_rck)
++			ops->device_enable_auto_rck(lvts_data);
++	} else {
++		if (ops->device_read_count_rc_n)
++			ops->device_read_count_rc_n(lvts_data);
++	}
++
++	if (ops->set_cal_data)
++		ops->set_cal_data(lvts_data);
++
++	disable_all_sensing_points(lvts_data);
++	wait_all_tc_sensing_point_idle(lvts_data);
++	if (ops->init_controller)
++		ops->init_controller(lvts_data);
++	enable_all_sensing_points(lvts_data);
++
++	set_all_tc_hw_reboot(lvts_data);
 +
 +	return 0;
 +}
 +
-+static int mtk_thermal_get_calibration_data(struct device *dev,
-+					    struct mtk_thermal *mt)
++static int prepare_calibration_data(struct lvts_data *lvts_data)
 +{
++	struct device *dev = lvts_data->dev;
++	struct sensor_cal_data *cal_data = &lvts_data->cal_data;
++	struct platform_ops *ops = &lvts_data->ops;
++	int i, offset, size;
++	char buffer[512];
++
++	cal_data->count_r = devm_kcalloc(dev, lvts_data->num_sensor,
++					 sizeof(*cal_data->count_r), GFP_KERNEL);
++	if (!cal_data->count_r)
++		return -ENOMEM;
++
++	cal_data->count_rc = devm_kcalloc(dev, lvts_data->num_sensor,
++					  sizeof(*cal_data->count_rc), GFP_KERNEL);
++	if (!cal_data->count_rc)
++		return -ENOMEM;
++
++	if (ops->efuse_to_cal_data)
++		ops->efuse_to_cal_data(lvts_data);
++
++	cal_data->use_fake_efuse = 1;
++	if (cal_data->golden_temp != 0) {
++		cal_data->use_fake_efuse = 0;
++	} else {
++		for (i = 0; i < lvts_data->num_sensor; i++) {
++			if (cal_data->count_r[i] != 0 ||
++			    cal_data->count_rc[i] != 0) {
++				cal_data->use_fake_efuse = 0;
++				break;
++			}
++		}
++	}
++
++	if (cal_data->use_fake_efuse) {
++		/* It means all efuse data are equal to 0 */
++		dev_err(dev,
++			"[lvts_cal] This sample is not calibrated, fake !!\n");
++
++		cal_data->golden_temp = cal_data->default_golden_temp;
++		for (i = 0; i < lvts_data->num_sensor; i++) {
++			cal_data->count_r[i] = cal_data->default_count_r;
++			cal_data->count_rc[i] = cal_data->default_count_rc;
++		}
++	}
++
++	lvts_data->coeff.golden_temp = cal_data->golden_temp;
++
++	dev_info(dev, "[lvts_cal] golden_temp = %d\n", cal_data->golden_temp);
++
++	size = sizeof(buffer);
++	offset = snprintf(buffer, size, "[lvts_cal] num:g_count:g_count_rc ");
++	for (i = 0; i < lvts_data->num_sensor; i++)
++		offset += snprintf(buffer + offset, size - offset, "%d:%d:%d ",
++				   i, cal_data->count_r[i], cal_data->count_rc[i]);
++
++	buffer[offset] = '\0';
++	dev_info(dev, "%s\n", buffer);
++
++	return 0;
++}
++
++static int get_calibration_data(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	char cell_name[8];
 +	struct nvmem_cell *cell;
 +	u32 *buf;
 +	size_t len;
-+	int i, ret = 0;
++	int i, j, index = 0, ret;
 +
-+	/* Start with default values */
-+	mt->adc_ge = 512;
-+	for (i = 0; i < mt->conf->num_sensors; i++)
-+		mt->vts[i] = 260;
-+	mt->degc_cali = 40;
-+	mt->o_slope = 0;
-+
-+	cell = nvmem_cell_get(dev, "calibration-data");
-+	if (IS_ERR(cell)) {
-+		if (PTR_ERR(cell) == -EPROBE_DEFER)
-+			return PTR_ERR(cell);
-+		return 0;
-+	}
-+
-+	buf = (u32 *)nvmem_cell_read(cell, &len);
-+
-+	nvmem_cell_put(cell);
-+
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	if (len < 3 * sizeof(u32)) {
-+		dev_warn(dev, "invalid calibration data\n");
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	if (mt->conf->version == MTK_THERMAL_V1)
-+		ret = mtk_thermal_extract_efuse_v1(mt, buf);
-+	else
-+		ret = mtk_thermal_extract_efuse_v2(mt, buf);
-+
-+	if (ret) {
-+		dev_info(dev, "Device not calibrated, using default calibration values\n");
-+		ret = 0;
-+	}
-+
-+out:
-+	kfree(buf);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id mtk_thermal_of_match[] = {
-+	{
-+		.compatible = "mediatek,mt8173-thermal",
-+		.data = (void *)&mt8173_thermal_data,
-+	},
-+	{
-+		.compatible = "mediatek,mt2701-thermal",
-+		.data = (void *)&mt2701_thermal_data,
-+	},
-+	{
-+		.compatible = "mediatek,mt2712-thermal",
-+		.data = (void *)&mt2712_thermal_data,
-+	},
-+	{
-+		.compatible = "mediatek,mt7622-thermal",
-+		.data = (void *)&mt7622_thermal_data,
-+	},
-+	{
-+		.compatible = "mediatek,mt8183-thermal",
-+		.data = (void *)&mt8183_thermal_data,
-+	}, {
-+	},
-+};
-+MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
-+
-+static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
-+{
-+	int tmp;
-+
-+	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
-+	tmp &= ~(0x37);
-+	tmp |= 0x1;
-+	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
-+	udelay(200);
-+}
-+
-+static void mtk_thermal_release_periodic_ts(struct mtk_thermal *mt,
-+					    void __iomem *auxadc_base)
-+{
-+	int tmp;
-+
-+	writel(0x800, auxadc_base + AUXADC_CON1_SET_V);
-+	writel(0x1, mt->thermal_base + TEMP_MONCTL0);
-+	tmp = readl(mt->thermal_base + TEMP_MSRCTL1);
-+	writel((tmp & (~0x10e)), mt->thermal_base + TEMP_MSRCTL1);
-+}
-+
-+static int mtk_thermal_probe(struct platform_device *pdev)
-+{
-+	int ret, i, ctrl_id;
-+	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
-+	struct mtk_thermal *mt;
-+	struct resource *res;
-+	u64 auxadc_phys_base, apmixed_phys_base;
-+	struct thermal_zone_device *tzdev;
-+	void __iomem *apmixed_base, *auxadc_base;
-+
-+	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
-+	if (!mt)
++	lvts_data->efuse = devm_kcalloc(dev, lvts_data->num_efuse_addr,
++					sizeof(*lvts_data->efuse), GFP_KERNEL);
++	if (!lvts_data->efuse)
 +		return -ENOMEM;
 +
-+	mt->conf = of_device_get_match_data(&pdev->dev);
++	for (i = 0; i < lvts_data->num_efuse_block; i++) {
++		snprintf(cell_name, sizeof(cell_name), "e_data%d", i + 1);
++		cell = nvmem_cell_get(dev, cell_name);
++		if (IS_ERR(cell)) {
++			dev_err(dev, "Error: Failed to get nvmem cell %s\n", cell_name);
++			return PTR_ERR(cell);
++		}
 +
-+	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
-+	if (IS_ERR(mt->clk_peri_therm))
-+		return PTR_ERR(mt->clk_peri_therm);
++		buf = (u32 *)nvmem_cell_read(cell, &len);
++		nvmem_cell_put(cell);
 +
-+	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
-+	if (IS_ERR(mt->clk_auxadc))
-+		return PTR_ERR(mt->clk_auxadc);
++		if (IS_ERR(buf))
++			return PTR_ERR(buf);
 +
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	mt->thermal_base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(mt->thermal_base))
-+		return PTR_ERR(mt->thermal_base);
++		for (j = 0; j < (len / sizeof(u32)); j++) {
++			if (index >= lvts_data->num_efuse_addr) {
++				dev_err(dev, "Array efuse is going to overflow");
++				kfree(buf);
++				return -EINVAL;
++			}
 +
-+	ret = mtk_thermal_get_calibration_data(&pdev->dev, mt);
-+	if (ret)
-+		return ret;
++			lvts_data->efuse[index] = buf[j];
++			index++;
++		}
 +
-+	mutex_init(&mt->lock);
-+
-+	mt->dev = &pdev->dev;
-+
-+	auxadc = of_parse_phandle(np, "mediatek,auxadc", 0);
-+	if (!auxadc) {
-+		dev_err(&pdev->dev, "missing auxadc node\n");
-+		return -ENODEV;
++		kfree(buf);
 +	}
 +
-+	auxadc_base = of_iomap(auxadc, 0);
-+	auxadc_phys_base = of_get_phys_base(auxadc);
-+
-+	of_node_put(auxadc);
-+
-+	if (auxadc_phys_base == OF_BAD_ADDR) {
-+		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
-+		return -EINVAL;
-+	}
-+
-+	apmixedsys = of_parse_phandle(np, "mediatek,apmixedsys", 0);
-+	if (!apmixedsys) {
-+		dev_err(&pdev->dev, "missing apmixedsys node\n");
-+		return -ENODEV;
-+	}
-+
-+	apmixed_base = of_iomap(apmixedsys, 0);
-+	apmixed_phys_base = of_get_phys_base(apmixedsys);
-+
-+	of_node_put(apmixedsys);
-+
-+	if (apmixed_phys_base == OF_BAD_ADDR) {
-+		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = device_reset_optional(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(mt->clk_auxadc);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(mt->clk_peri_therm);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
-+		goto err_disable_clk_auxadc;
-+	}
-+
-+	if (mt->conf->version == MTK_THERMAL_V2) {
-+		mtk_thermal_turn_on_buffer(apmixed_base);
-+		mtk_thermal_release_periodic_ts(mt, auxadc_base);
-+	}
-+
-+	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
-+		for (i = 0; i < mt->conf->num_banks; i++)
-+			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
-+					      auxadc_phys_base, ctrl_id);
-+
-+	platform_set_drvdata(pdev, mt);
-+
-+	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
-+						     &mtk_thermal_ops);
-+	if (IS_ERR(tzdev)) {
-+		ret = PTR_ERR(tzdev);
-+		goto err_disable_clk_peri_therm;
-+	}
-+
-+	return 0;
-+
-+err_disable_clk_peri_therm:
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+err_disable_clk_auxadc:
-+	clk_disable_unprepare(mt->clk_auxadc);
++	ret = prepare_calibration_data(lvts_data);
 +
 +	return ret;
 +}
 +
-+static int mtk_thermal_remove(struct platform_device *pdev)
++static int of_update_lvts_data(struct lvts_data *lvts_data,
++			       struct platform_device *pdev)
 +{
-+	struct mtk_thermal *mt = platform_get_drvdata(pdev);
++	struct device *dev = lvts_data->dev;
++	struct power_domain *domain;
++	struct resource *res;
++	unsigned int i;
++	int ret;
 +
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+	clk_disable_unprepare(mt->clk_auxadc);
++	lvts_data->clk = devm_clk_get(dev, "lvts_clk");
++	if (IS_ERR(lvts_data->clk))
++		return PTR_ERR(lvts_data->clk);
++
++	domain = devm_kcalloc(dev, lvts_data->num_domain, sizeof(*domain), GFP_KERNEL);
++	if (!domain)
++		return -ENOMEM;
++
++	for (i = 0; i < lvts_data->num_domain; i++) {
++		/* Get base address */
++		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
++		if (!res) {
++			dev_err(dev, "No IO resource, index %d\n", i);
++			return -ENXIO;
++		}
++
++		domain[i].base = devm_ioremap_resource(dev, res);
++		if (IS_ERR(domain[i].base)) {
++			dev_err(dev, "Failed to remap io, index %d\n", i);
++			return PTR_ERR(domain[i].base);
++		}
++
++		/* Get interrupt number */
++		res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
++		if (!res) {
++			dev_err(dev, "No irq resource, index %d\n", i);
++			return -EINVAL;
++		}
++		domain[i].irq_num = res->start;
++
++		/* Get reset control */
++		domain[i].reset = devm_reset_control_get_by_index(dev, i);
++		if (IS_ERR(domain[i].reset)) {
++			dev_err(dev, "Failed to get, index %d\n", i);
++			return PTR_ERR(domain[i].reset);
++		}
++	}
++
++	lvts_data->domain = domain;
++
++	lvts_data->sen_data = devm_kcalloc(dev, lvts_data->num_sensor,
++					   sizeof(*lvts_data->sen_data), GFP_KERNEL);
++	if (!lvts_data->sen_data)
++		return -ENOMEM;
++
++	ret = get_calibration_data(lvts_data);
++	if (ret)
++		return ret;
 +
 +	return 0;
 +}
 +
-+static struct platform_driver mtk_thermal_driver = {
-+	.probe = mtk_thermal_probe,
-+	.remove = mtk_thermal_remove,
-+	.driver = {
-+		.name = "mtk-thermal",
-+		.of_match_table = mtk_thermal_of_match,
++static void lvts_device_close(struct lvts_data *lvts_data)
++{
++	unsigned int i;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++		lvts_write_device(lvts_data, RESET_ALL_DEVICES, i);
++		writel(DISABLE_LVTS_CTRL_CLK, LVTSCLKEN_0 + base);
++	}
++}
++
++static void lvts_close(struct lvts_data *lvts_data)
++{
++	disable_all_sensing_points(lvts_data);
++	wait_all_tc_sensing_point_idle(lvts_data);
++	lvts_device_close(lvts_data);
++	clk_disable_unprepare(lvts_data->clk);
++}
++
++static void tc_irq_handler(struct lvts_data *lvts_data, int tc_id)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int ret = 0;
++	void __iomem *base;
++
++	base = GET_BASE_ADDR(tc_id);
++
++	ret = readl(LVTSMONINTSTS_0 + base);
++	/* Write back to clear interrupt status */
++	writel(ret, LVTSMONINTSTS_0 + base);
++
++	dev_info(dev, "[Thermal IRQ] LVTS thermal controller %d, LVTSMONINTSTS=0x%08x\n",
++		 tc_id, ret);
++
++	if (ret & THERMAL_PROTECTION_STAGE_3)
++		dev_info(dev,
++			 "[Thermal IRQ]: Thermal protection stage 3 interrupt triggered\n");
++}
++
++static irqreturn_t irq_handler(int irq, void *dev_id)
++{
++	struct lvts_data *lvts_data = (struct lvts_data *)dev_id;
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	unsigned int i, *irq_bitmap;
++	void __iomem *base;
++
++	irq_bitmap = kcalloc(lvts_data->num_domain, sizeof(*irq_bitmap), GFP_ATOMIC);
++
++	if (!irq_bitmap)
++		return IRQ_NONE;
++
++	for (i = 0; i < lvts_data->num_domain; i++) {
++		base = lvts_data->domain[i].base;
++		irq_bitmap[i] = readl(THERMINTST + base);
++		dev_info(dev, "%s : THERMINTST = 0x%x\n", __func__, irq_bitmap[i]);
++	}
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		if ((irq_bitmap[tc[i].domain_index] & tc[i].irq_bit) == 0)
++			tc_irq_handler(lvts_data, i);
++	}
++
++	kfree(irq_bitmap);
++
++	return IRQ_HANDLED;
++}
++
++static int lvts_register_irq_handler(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int i;
++	int ret;
++
++	for (i = 0; i < lvts_data->num_domain; i++) {
++		ret = devm_request_irq(dev, lvts_data->domain[i].irq_num, irq_handler,
++				       IRQF_TRIGGER_HIGH, "mtk_lvts", lvts_data);
++
++		if (ret) {
++			dev_err(dev, "Failed to register LVTS IRQ, ret %d, domain %d irq_num %d\n",
++				ret, i, lvts_data->domain[i].irq_num);
++			lvts_close(lvts_data);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int lvts_register_thermal_zones(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	struct thermal_zone_device *tzdev;
++	struct soc_temp_tz *lvts_tz;
++	int i, ret;
++
++	for (i = 0; i < lvts_data->num_sensor + 1; i++) {
++		lvts_tz = devm_kzalloc(dev, sizeof(*lvts_tz), GFP_KERNEL);
++		if (!lvts_tz) {
++			lvts_close(lvts_data);
++			return -ENOMEM;
++		}
++
++		lvts_tz->id = i;
++		lvts_tz->lvts_data = lvts_data;
++
++		tzdev = devm_thermal_zone_of_sensor_register(dev, lvts_tz->id,
++							     lvts_tz, &soc_temp_lvts_ops);
++
++		if (IS_ERR(tzdev)) {
++			if (lvts_tz->id != 0)
++				return 0;
++
++			ret = PTR_ERR(tzdev);
++			dev_err(dev, "Error: Failed to register lvts tz %d, ret = %d\n",
++				lvts_tz->id, ret);
++			lvts_close(lvts_data);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int lvts_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct lvts_data *lvts_data;
++	int ret;
++
++	lvts_data = (struct lvts_data *)of_device_get_match_data(dev);
++
++	if (!lvts_data)	{
++		dev_err(dev, "Error: Failed to get lvts platform data\n");
++		return -ENODATA;
++	}
++
++	lvts_data->dev = &pdev->dev;
++
++	ret = of_update_lvts_data(lvts_data, pdev);
++	if (ret)
++		return ret;
++
++	platform_set_drvdata(pdev, lvts_data);
++
++	ret = lvts_init(lvts_data);
++	if (ret)
++		return ret;
++
++	ret = lvts_register_irq_handler(lvts_data);
++	if (ret)
++		return ret;
++
++	ret = lvts_register_thermal_zones(lvts_data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int lvts_remove(struct platform_device *pdev)
++{
++	struct lvts_data *lvts_data;
++
++	lvts_data = (struct lvts_data *)platform_get_drvdata(pdev);
++
++	lvts_close(lvts_data);
++
++	return 0;
++}
++
++static int lvts_suspend(struct platform_device *pdev, pm_message_t state)
++{
++	struct lvts_data *lvts_data;
++
++	lvts_data = (struct lvts_data *)platform_get_drvdata(pdev);
++
++	lvts_close(lvts_data);
++
++	return 0;
++}
++
++static int lvts_resume(struct platform_device *pdev)
++{
++	int ret;
++	struct lvts_data *lvts_data;
++
++	lvts_data = (struct lvts_data *)platform_get_drvdata(pdev);
++
++	ret = lvts_init(lvts_data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++/*==================================================
++ * LVTS v4 common code
++ *==================================================
++ */
++static void device_enable_and_init_v4(struct lvts_data *lvts_data)
++{
++	unsigned int i;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		lvts_write_device(lvts_data, STOP_COUNTING_V4, i);
++		lvts_write_device(lvts_data, SET_RG_TSFM_LPDLY_V4, i);
++		lvts_write_device(lvts_data, SET_COUNTING_WINDOW_20US1_V4, i);
++		lvts_write_device(lvts_data, SET_COUNTING_WINDOW_20US2_V4, i);
++		lvts_write_device(lvts_data, TSV2F_CHOP_CKSEL_AND_TSV2F_EN_V4, i);
++		lvts_write_device(lvts_data, TSBG_DEM_CKSEL_X_TSBG_CHOP_EN_V4, i);
++		lvts_write_device(lvts_data, SET_TS_RSV_V4, i);
++		lvts_write_device(lvts_data, SET_TS_EN_V4, i);
++		lvts_write_device(lvts_data, TOGGLE_RG_TSV2F_VCO_RST1_V4, i);
++		lvts_write_device(lvts_data, TOGGLE_RG_TSV2F_VCO_RST2_V4, i);
++	}
++
++	lvts_data->counting_window_us = 20;
++}
++
++static void device_enable_auto_rck_v4(struct lvts_data *lvts_data)
++{
++	unsigned int i;
++
++	for (i = 0; i < lvts_data->num_tc; i++)
++		lvts_write_device(lvts_data, SET_LVTS_AUTO_RCK_V4, i);
++}
++
++static int device_read_count_rc_n_v4(struct lvts_data *lvts_data)
++{
++	/* Resistor-Capacitor Calibration */
++	/* count_RC_N: count RC now */
++	struct device *dev = lvts_data->dev;
++	struct tc_settings *tc = lvts_data->tc;
++	struct sensor_cal_data *cal_data = &lvts_data->cal_data;
++	unsigned int offset, size, s_index, data;
++	void __iomem *base;
++	int ret, i, j;
++	char buffer[512];
++
++	cal_data->count_rc_now = devm_kcalloc(dev, lvts_data->num_sensor,
++					      sizeof(*cal_data->count_rc_now), GFP_KERNEL);
++	if (!cal_data->count_rc_now)
++		return -ENOMEM;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++		for (j = 0; j < tc[i].num_sensor; j++) {
++			s_index = tc[i].sensor_map[j];
++
++			lvts_write_device(lvts_data, SELECT_SENSOR_RCK_V4(j), i);
++			lvts_write_device(lvts_data, SET_DEVICE_SINGLE_MODE_V4, i);
++			usleep_range(10, 20);
++
++			lvts_write_device(lvts_data, KICK_OFF_RCK_COUNTING_V4, i);
++			usleep_range(30, 40);
++
++			ret = readl_poll_timeout(LVTS_CONFIG_0 + base, data,
++						 !(data & DEVICE_SENSING_STATUS), 2, 200);
++			if (ret)
++				dev_err(dev,
++					"Error: LVTS %d DEVICE_SENSING_STATUS didn't ready\n", i);
++
++			data = lvts_read_device(lvts_data, 0x00, i);
++
++			cal_data->count_rc_now[s_index] = (data & GENMASK(23, 0));
++		}
++
++		/* Recover Setting for Normal Access on
++		 * temperature fetch
++		 */
++		lvts_write_device(lvts_data, SET_SENSOR_NO_RCK_V4, i);
++		lvts_write_device(lvts_data, SET_DEVICE_LOW_POWER_SINGLE_MODE_V4, i);
++	}
++
++	size = sizeof(buffer);
++	offset = snprintf(buffer, size, "[COUNT_RC_NOW] ");
++	for (i = 0; i < lvts_data->num_sensor; i++)
++		offset += snprintf(buffer + offset, size - offset, "%d:%d ",
++				   i, cal_data->count_rc_now[i]);
++
++	buffer[offset] = '\0';
++	dev_info(dev, "%s\n", buffer);
++
++	return 0;
++}
++
++static void set_calibration_data_v4(struct lvts_data *lvts_data)
++{
++	struct tc_settings *tc = lvts_data->tc;
++	struct sensor_cal_data *cal_data = &lvts_data->cal_data;
++	unsigned int i, j, s_index, e_data;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++
++		for (j = 0; j < tc[i].num_sensor; j++) {
++			s_index = tc[i].sensor_map[j];
++			if (IS_ENABLE(FEATURE_DEVICE_AUTO_RCK))
++				e_data = cal_data->count_r[s_index];
++			else
++				e_data = (((unsigned long long)
++					cal_data->count_rc_now[s_index]) *
++					cal_data->count_r[s_index]) >> 14;
++
++			writel(e_data, LVTSEDATA00_0 + base + 0x4 * j);
++		}
++	}
++}
++
++static void init_controller_v4(struct lvts_data *lvts_data)
++{
++	struct device *dev = lvts_data->dev;
++	unsigned int i;
++	void __iomem *base;
++
++	for (i = 0; i < lvts_data->num_tc; i++) {
++		base = GET_BASE_ADDR(i);
++
++		lvts_write_device(lvts_data, SET_DEVICE_LOW_POWER_SINGLE_MODE_V4, i);
++
++		writel(SET_SENSOR_INDEX, LVTSTSSEL_0 + base);
++		writel(SET_CALC_SCALE_RULES, LVTSCALSCALE_0 + base);
++
++		set_polling_speed(lvts_data, i);
++		set_hw_filter(lvts_data, i);
++
++		dev_info(dev, "lvts%d: read all %d sensors in %d us, one in %d us\n",
++			 i, GET_TC_SENSOR_NUM(i), GROUP_LATENCY_US(i), SENSOR_LATENCY_US(i));
++	}
++}
++
++/*==================================================
++ * LVTS MT6873
++ *==================================================
++ */
++
++#define MT6873_NUM_LVTS (ARRAY_SIZE(mt6873_tc_settings))
++
++enum mt6873_lvts_domain {
++	MT6873_AP_DOMAIN,
++	MT6873_MCU_DOMAIN,
++	MT6873_NUM_DOMAIN
++};
++
++enum mt6873_lvts_sensor_enum {
++	MT6873_TS1_0,
++	MT6873_TS1_1,
++	MT6873_TS2_0,
++	MT6873_TS2_1,
++	MT6873_TS3_0,
++	MT6873_TS3_1,
++	MT6873_TS3_2,
++	MT6873_TS3_3,
++	MT6873_TS4_0,
++	MT6873_TS4_1,
++	MT6873_TS5_0,
++	MT6873_TS5_1,
++	MT6873_TS6_0,
++	MT6873_TS6_1,
++	MT6873_TS7_0,
++	MT6873_TS7_1,
++	MT6873_TS7_2,
++	MT6873_NUM_TS
++};
++
++static void mt6873_efuse_to_cal_data(struct lvts_data *lvts_data)
++{
++	struct sensor_cal_data *cal_data = &lvts_data->cal_data;
++
++	cal_data->golden_temp = GET_CAL_DATA_BITMASK(0, 31, 24);
++	cal_data->count_r[MT6873_TS1_0] = GET_CAL_DATA_BITMASK(1, 23, 0);
++	cal_data->count_r[MT6873_TS1_1] = GET_CAL_DATA_BITMASK(2, 23, 0);
++	cal_data->count_r[MT6873_TS2_0] = GET_CAL_DATA_BITMASK(3, 23, 0);
++	cal_data->count_r[MT6873_TS2_1] = GET_CAL_DATA_BITMASK(4, 23, 0);
++	cal_data->count_r[MT6873_TS3_0] = GET_CAL_DATA_BITMASK(5, 23, 0);
++	cal_data->count_r[MT6873_TS3_1] = GET_CAL_DATA_BITMASK(6, 23, 0);
++	cal_data->count_r[MT6873_TS3_2] = GET_CAL_DATA_BITMASK(7, 23, 0);
++	cal_data->count_r[MT6873_TS3_3] = GET_CAL_DATA_BITMASK(8, 23, 0);
++	cal_data->count_r[MT6873_TS4_0] = GET_CAL_DATA_BITMASK(9, 23, 0);
++	cal_data->count_r[MT6873_TS4_1] = GET_CAL_DATA_BITMASK(10, 23, 0);
++	cal_data->count_r[MT6873_TS5_0] = GET_CAL_DATA_BITMASK(11, 23, 0);
++	cal_data->count_r[MT6873_TS5_1] = GET_CAL_DATA_BITMASK(12, 23, 0);
++	cal_data->count_r[MT6873_TS6_0] = GET_CAL_DATA_BITMASK(13, 23, 0);
++	cal_data->count_r[MT6873_TS6_1] = GET_CAL_DATA_BITMASK(14, 23, 0);
++	cal_data->count_r[MT6873_TS7_0] = GET_CAL_DATA_BITMASK(15, 23, 0);
++	cal_data->count_r[MT6873_TS7_1] = GET_CAL_DATA_BITMASK(16, 23, 0);
++	cal_data->count_r[MT6873_TS7_2] = GET_CAL_DATA_BITMASK(17, 23, 0);
++
++	cal_data->count_rc[MT6873_TS1_0] = GET_CAL_DATA_BITMASK(21, 23, 0);
++
++	cal_data->count_rc[MT6873_TS2_0] = (GET_CAL_DATA_BITMASK(1, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(2, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(3, 31, 24);
++
++	cal_data->count_rc[MT6873_TS3_0] = (GET_CAL_DATA_BITMASK(4, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(5, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(6, 31, 24);
++
++	cal_data->count_rc[MT6873_TS4_0] = (GET_CAL_DATA_BITMASK(7, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(8, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(9, 31, 24);
++
++	cal_data->count_rc[MT6873_TS5_0] = (GET_CAL_DATA_BITMASK(10, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(11, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(12, 31, 24);
++
++	cal_data->count_rc[MT6873_TS6_0] = (GET_CAL_DATA_BITMASK(13, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(14, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(15, 31, 24);
++
++	cal_data->count_rc[MT6873_TS7_0] = (GET_CAL_DATA_BITMASK(16, 31, 24) << 16) +
++					   (GET_CAL_DATA_BITMASK(17, 31, 24) << 8) +
++					    GET_CAL_DATA_BITMASK(18, 31, 24);
++}
++
++static struct tc_settings mt6873_tc_settings[] = {
++	[0] = {
++		.domain_index = MT6873_MCU_DOMAIN,
++		.addr_offset = 0x0,
++		.num_sensor = 2,
++		.sensor_map = {MT6873_TS1_0, MT6873_TS1_1},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT1,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(3),
++	},
++	[1] = {
++		.domain_index = MT6873_MCU_DOMAIN,
++		.addr_offset = 0x100,
++		.num_sensor = 2,
++		.sensor_map = {MT6873_TS2_0, MT6873_TS2_1},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT0,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(4),
++	},
++	[2] = {
++		.domain_index = MT6873_MCU_DOMAIN,
++		.addr_offset = 0x200,
++		.num_sensor = 4,
++		.sensor_map = {MT6873_TS3_0, MT6873_TS3_1, MT6873_TS3_2, MT6873_TS3_3},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT0,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(5),
++	},
++	[3] = {
++		.domain_index = MT6873_AP_DOMAIN,
++		.addr_offset = 0x0,
++		.num_sensor = 2,
++		.sensor_map = {MT6873_TS4_0, MT6873_TS4_1},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT0,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(3),
++	},
++	[4] = {
++		.domain_index = MT6873_AP_DOMAIN,
++		.addr_offset = 0x100,
++		.num_sensor = 2,
++		.sensor_map = {MT6873_TS5_0, MT6873_TS5_1},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT1,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(4),
++	},
++	[5] = {
++		.domain_index = MT6873_AP_DOMAIN,
++		.addr_offset = 0x200,
++		.num_sensor = 2,
++		.sensor_map = {MT6873_TS6_0, MT6873_TS6_1},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT1,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(5),
++	},
++	[6] = {
++		.domain_index = MT6873_AP_DOMAIN,
++		.addr_offset = 0x300,
++		.num_sensor = 3,
++		.sensor_map = {MT6873_TS7_0, MT6873_TS7_1, MT6873_TS7_2},
++		.tc_speed = SET_TC_SPEED_IN_US(118, 118, 118, 118),
++		.hw_filter = LVTS_FILTER_2_OF_4,
++		.dominator_sensing_point = SENSING_POINT2,
++		.hw_reboot_trip_point = 117000,
++		.irq_bit = BIT(6),
++	}
++};
++
++static struct lvts_data mt6873_lvts_data = {
++	.num_domain = MT6873_NUM_DOMAIN,
++	.num_tc = MT6873_NUM_LVTS,
++	.tc = mt6873_tc_settings,
++	.num_sensor = MT6873_NUM_TS,
++	.ops = {
++		.efuse_to_cal_data = mt6873_efuse_to_cal_data,
++		.device_enable_and_init = device_enable_and_init_v4,
++		.device_enable_auto_rck = device_enable_auto_rck_v4,
++		.device_read_count_rc_n = device_read_count_rc_n_v4,
++		.set_cal_data = set_calibration_data_v4,
++		.init_controller = init_controller_v4,
++	},
++	.feature_bitmap = FEATURE_DEVICE_AUTO_RCK,
++	.num_efuse_addr = 22,
++	.num_efuse_block = 1,
++	.cal_data = {
++		.default_golden_temp = 50,
++		.default_count_r = 35000,
++		.default_count_rc = 2750,
++	},
++	.coeff = {
++		.a = -250460,
++		.b = 250460,
 +	},
 +};
 +
-+module_platform_driver(mtk_thermal_driver);
++/*==================================================
++ *==================================================
++ * Support chips
++ *==================================================
++ */
++static const struct of_device_id lvts_of_match[] = {
++	{
++		.compatible = "mediatek,mt6873-lvts",
++		.data = (void *)&mt6873_lvts_data,
++	},
++	{
++	},
++};
++MODULE_DEVICE_TABLE(of, lvts_of_match);
++/*==================================================*/
++static struct platform_driver soc_temp_lvts = {
++	.probe = lvts_probe,
++	.remove = lvts_remove,
++	.suspend = lvts_suspend,
++	.resume = lvts_resume,
++	.driver = {
++		.name = "mtk-soc-temp-lvts",
++		.of_match_table = lvts_of_match,
++	},
++};
 +
++module_platform_driver(soc_temp_lvts);
++MODULE_AUTHOR("Yu-Chia Chang <ethan.chang@mediatek.com>");
 +MODULE_AUTHOR("Michael Kao <michael.kao@mediatek.com>");
-+MODULE_AUTHOR("Louis Yu <louis.yu@mediatek.com>");
-+MODULE_AUTHOR("Dawei Chien <dawei.chien@mediatek.com>");
-+MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de>");
-+MODULE_AUTHOR("Hanyi Wu <hanyi.wu@mediatek.com>");
-+MODULE_DESCRIPTION("Mediatek thermal driver");
++MODULE_DESCRIPTION("Mediatek soc temperature driver");
 +MODULE_LICENSE("GPL v2");
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-deleted file mode 100644
-index 97e8678..0000000
---- a/drivers/thermal/mtk_thermal.c
-+++ /dev/null
-@@ -1,1127 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (c) 2015 MediaTek Inc.
-- * Author: Hanyi Wu <hanyi.wu@mediatek.com>
-- *         Sascha Hauer <s.hauer@pengutronix.de>
-- *         Dawei Chien <dawei.chien@mediatek.com>
-- *         Louis Yu <louis.yu@mediatek.com>
-- */
--
--#include <linux/clk.h>
--#include <linux/delay.h>
--#include <linux/interrupt.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/nvmem-consumer.h>
--#include <linux/of.h>
--#include <linux/of_address.h>
--#include <linux/of_device.h>
--#include <linux/platform_device.h>
--#include <linux/slab.h>
--#include <linux/io.h>
--#include <linux/thermal.h>
--#include <linux/reset.h>
--#include <linux/types.h>
--
--/* AUXADC Registers */
--#define AUXADC_CON1_SET_V	0x008
--#define AUXADC_CON1_CLR_V	0x00c
--#define AUXADC_CON2_V		0x010
--#define AUXADC_DATA(channel)	(0x14 + (channel) * 4)
--
--#define APMIXED_SYS_TS_CON1	0x604
--
--/* Thermal Controller Registers */
--#define TEMP_MONCTL0		0x000
--#define TEMP_MONCTL1		0x004
--#define TEMP_MONCTL2		0x008
--#define TEMP_MONIDET0		0x014
--#define TEMP_MONIDET1		0x018
--#define TEMP_MSRCTL0		0x038
--#define TEMP_MSRCTL1		0x03c
--#define TEMP_AHBPOLL		0x040
--#define TEMP_AHBTO		0x044
--#define TEMP_ADCPNP0		0x048
--#define TEMP_ADCPNP1		0x04c
--#define TEMP_ADCPNP2		0x050
--#define TEMP_ADCPNP3		0x0b4
--
--#define TEMP_ADCMUX		0x054
--#define TEMP_ADCEN		0x060
--#define TEMP_PNPMUXADDR		0x064
--#define TEMP_ADCMUXADDR		0x068
--#define TEMP_ADCENADDR		0x074
--#define TEMP_ADCVALIDADDR	0x078
--#define TEMP_ADCVOLTADDR	0x07c
--#define TEMP_RDCTRL		0x080
--#define TEMP_ADCVALIDMASK	0x084
--#define TEMP_ADCVOLTAGESHIFT	0x088
--#define TEMP_ADCWRITECTRL	0x08c
--#define TEMP_MSR0		0x090
--#define TEMP_MSR1		0x094
--#define TEMP_MSR2		0x098
--#define TEMP_MSR3		0x0B8
--
--#define TEMP_SPARE0		0x0f0
--
--#define TEMP_ADCPNP0_1          0x148
--#define TEMP_ADCPNP1_1          0x14c
--#define TEMP_ADCPNP2_1          0x150
--#define TEMP_MSR0_1             0x190
--#define TEMP_MSR1_1             0x194
--#define TEMP_MSR2_1             0x198
--#define TEMP_ADCPNP3_1          0x1b4
--#define TEMP_MSR3_1             0x1B8
--
--#define PTPCORESEL		0x400
--
--#define TEMP_MONCTL1_PERIOD_UNIT(x)	((x) & 0x3ff)
--
--#define TEMP_MONCTL2_FILTER_INTERVAL(x)	(((x) & 0x3ff) << 16)
--#define TEMP_MONCTL2_SENSOR_INTERVAL(x)	((x) & 0x3ff)
--
--#define TEMP_AHBPOLL_ADC_POLL_INTERVAL(x)	(x)
--
--#define TEMP_ADCWRITECTRL_ADC_PNP_WRITE		BIT(0)
--#define TEMP_ADCWRITECTRL_ADC_MUX_WRITE		BIT(1)
--
--#define TEMP_ADCVALIDMASK_VALID_HIGH		BIT(5)
--#define TEMP_ADCVALIDMASK_VALID_POS(bit)	(bit)
--
--/* MT8173 thermal sensors */
--#define MT8173_TS1	0
--#define MT8173_TS2	1
--#define MT8173_TS3	2
--#define MT8173_TS4	3
--#define MT8173_TSABB	4
--
--/* AUXADC channel 11 is used for the temperature sensors */
--#define MT8173_TEMP_AUXADC_CHANNEL	11
--
--/* The total number of temperature sensors in the MT8173 */
--#define MT8173_NUM_SENSORS		5
--
--/* The number of banks in the MT8173 */
--#define MT8173_NUM_ZONES		4
--
--/* The number of sensing points per bank */
--#define MT8173_NUM_SENSORS_PER_ZONE	4
--
--/* The number of controller in the MT8173 */
--#define MT8173_NUM_CONTROLLER		1
--
--/* The calibration coefficient of sensor  */
--#define MT8173_CALIBRATION	165
--
--/*
-- * Layout of the fuses providing the calibration data
-- * These macros could be used for MT8183, MT8173, MT2701, and MT2712.
-- * MT8183 has 6 sensors and needs 6 VTS calibration data.
-- * MT8173 has 5 sensors and needs 5 VTS calibration data.
-- * MT2701 has 3 sensors and needs 3 VTS calibration data.
-- * MT2712 has 4 sensors and needs 4 VTS calibration data.
-- */
--#define CALIB_BUF0_VALID_V1		BIT(0)
--#define CALIB_BUF1_ADC_GE_V1(x)		(((x) >> 22) & 0x3ff)
--#define CALIB_BUF0_VTS_TS1_V1(x)	(((x) >> 17) & 0x1ff)
--#define CALIB_BUF0_VTS_TS2_V1(x)	(((x) >> 8) & 0x1ff)
--#define CALIB_BUF1_VTS_TS3_V1(x)	(((x) >> 0) & 0x1ff)
--#define CALIB_BUF2_VTS_TS4_V1(x)	(((x) >> 23) & 0x1ff)
--#define CALIB_BUF2_VTS_TS5_V1(x)	(((x) >> 5) & 0x1ff)
--#define CALIB_BUF2_VTS_TSABB_V1(x)	(((x) >> 14) & 0x1ff)
--#define CALIB_BUF0_DEGC_CALI_V1(x)	(((x) >> 1) & 0x3f)
--#define CALIB_BUF0_O_SLOPE_V1(x)	(((x) >> 26) & 0x3f)
--#define CALIB_BUF0_O_SLOPE_SIGN_V1(x)	(((x) >> 7) & 0x1)
--#define CALIB_BUF1_ID_V1(x)		(((x) >> 9) & 0x1)
--
--/*
-- * Layout of the fuses providing the calibration data
-- * These macros could be used for MT7622.
-- */
--#define CALIB_BUF0_ADC_OE_V2(x)		(((x) >> 22) & 0x3ff)
--#define CALIB_BUF0_ADC_GE_V2(x)		(((x) >> 12) & 0x3ff)
--#define CALIB_BUF0_DEGC_CALI_V2(x)	(((x) >> 6) & 0x3f)
--#define CALIB_BUF0_O_SLOPE_V2(x)	(((x) >> 0) & 0x3f)
--#define CALIB_BUF1_VTS_TS1_V2(x)	(((x) >> 23) & 0x1ff)
--#define CALIB_BUF1_VTS_TS2_V2(x)	(((x) >> 14) & 0x1ff)
--#define CALIB_BUF1_VTS_TSABB_V2(x)	(((x) >> 5) & 0x1ff)
--#define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
--#define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
--
--enum {
--	VTS1,
--	VTS2,
--	VTS3,
--	VTS4,
--	VTS5,
--	VTSABB,
--	MAX_NUM_VTS,
--};
--
--enum mtk_thermal_version {
--	MTK_THERMAL_V1 = 1,
--	MTK_THERMAL_V2,
--};
--
--/* MT2701 thermal sensors */
--#define MT2701_TS1	0
--#define MT2701_TS2	1
--#define MT2701_TSABB	2
--
--/* AUXADC channel 11 is used for the temperature sensors */
--#define MT2701_TEMP_AUXADC_CHANNEL	11
--
--/* The total number of temperature sensors in the MT2701 */
--#define MT2701_NUM_SENSORS	3
--
--/* The number of sensing points per bank */
--#define MT2701_NUM_SENSORS_PER_ZONE	3
--
--/* The number of controller in the MT2701 */
--#define MT2701_NUM_CONTROLLER		1
--
--/* The calibration coefficient of sensor  */
--#define MT2701_CALIBRATION	165
--
--/* MT2712 thermal sensors */
--#define MT2712_TS1	0
--#define MT2712_TS2	1
--#define MT2712_TS3	2
--#define MT2712_TS4	3
--
--/* AUXADC channel 11 is used for the temperature sensors */
--#define MT2712_TEMP_AUXADC_CHANNEL	11
--
--/* The total number of temperature sensors in the MT2712 */
--#define MT2712_NUM_SENSORS	4
--
--/* The number of sensing points per bank */
--#define MT2712_NUM_SENSORS_PER_ZONE	4
--
--/* The number of controller in the MT2712 */
--#define MT2712_NUM_CONTROLLER		1
--
--/* The calibration coefficient of sensor  */
--#define MT2712_CALIBRATION	165
--
--#define MT7622_TEMP_AUXADC_CHANNEL	11
--#define MT7622_NUM_SENSORS		1
--#define MT7622_NUM_ZONES		1
--#define MT7622_NUM_SENSORS_PER_ZONE	1
--#define MT7622_TS1	0
--#define MT7622_NUM_CONTROLLER		1
--
--/* The maximum number of banks */
--#define MAX_NUM_ZONES		8
--
--/* The calibration coefficient of sensor  */
--#define MT7622_CALIBRATION	165
--
--/* MT8183 thermal sensors */
--#define MT8183_TS1	0
--#define MT8183_TS2	1
--#define MT8183_TS3	2
--#define MT8183_TS4	3
--#define MT8183_TS5	4
--#define MT8183_TSABB	5
--
--/* AUXADC channel  is used for the temperature sensors */
--#define MT8183_TEMP_AUXADC_CHANNEL	11
--
--/* The total number of temperature sensors in the MT8183 */
--#define MT8183_NUM_SENSORS	6
--
--/* The number of banks in the MT8183 */
--#define MT8183_NUM_ZONES               1
--
--/* The number of sensing points per bank */
--#define MT8183_NUM_SENSORS_PER_ZONE	 6
--
--/* The number of controller in the MT8183 */
--#define MT8183_NUM_CONTROLLER		2
--
--/* The calibration coefficient of sensor  */
--#define MT8183_CALIBRATION	153
--
--struct mtk_thermal;
--
--struct thermal_bank_cfg {
--	unsigned int num_sensors;
--	const int *sensors;
--};
--
--struct mtk_thermal_bank {
--	struct mtk_thermal *mt;
--	int id;
--};
--
--struct mtk_thermal_data {
--	s32 num_banks;
--	s32 num_sensors;
--	s32 auxadc_channel;
--	const int *vts_index;
--	const int *sensor_mux_values;
--	const int *msr;
--	const int *adcpnp;
--	const int cali_val;
--	const int num_controller;
--	const int *controller_offset;
--	bool need_switch_bank;
--	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
--	enum mtk_thermal_version version;
--};
--
--struct mtk_thermal {
--	struct device *dev;
--	void __iomem *thermal_base;
--
--	struct clk *clk_peri_therm;
--	struct clk *clk_auxadc;
--	/* lock: for getting and putting banks */
--	struct mutex lock;
--
--	/* Calibration values */
--	s32 adc_ge;
--	s32 adc_oe;
--	s32 degc_cali;
--	s32 o_slope;
--	s32 o_slope_sign;
--	s32 vts[MAX_NUM_VTS];
--
--	const struct mtk_thermal_data *conf;
--	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
--};
--
--/* MT8183 thermal sensor data */
--static const int mt8183_bank_data[MT8183_NUM_SENSORS] = {
--	MT8183_TS1, MT8183_TS2, MT8183_TS3, MT8183_TS4, MT8183_TS5, MT8183_TSABB
--};
--
--static const int mt8183_msr[MT8183_NUM_SENSORS_PER_ZONE] = {
--	TEMP_MSR0_1, TEMP_MSR1_1, TEMP_MSR2_1, TEMP_MSR1, TEMP_MSR0, TEMP_MSR3_1
--};
--
--static const int mt8183_adcpnp[MT8183_NUM_SENSORS_PER_ZONE] = {
--	TEMP_ADCPNP0_1, TEMP_ADCPNP1_1, TEMP_ADCPNP2_1,
--	TEMP_ADCPNP1, TEMP_ADCPNP0, TEMP_ADCPNP3_1
--};
--
--static const int mt8183_mux_values[MT8183_NUM_SENSORS] = { 0, 1, 2, 3, 4, 0 };
--static const int mt8183_tc_offset[MT8183_NUM_CONTROLLER] = {0x0, 0x100};
--
--static const int mt8183_vts_index[MT8183_NUM_SENSORS] = {
--	VTS1, VTS2, VTS3, VTS4, VTS5, VTSABB
--};
--
--/* MT8173 thermal sensor data */
--static const int mt8173_bank_data[MT8173_NUM_ZONES][3] = {
--	{ MT8173_TS2, MT8173_TS3 },
--	{ MT8173_TS2, MT8173_TS4 },
--	{ MT8173_TS1, MT8173_TS2, MT8173_TSABB },
--	{ MT8173_TS2 },
--};
--
--static const int mt8173_msr[MT8173_NUM_SENSORS_PER_ZONE] = {
--	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2, TEMP_MSR3
--};
--
--static const int mt8173_adcpnp[MT8173_NUM_SENSORS_PER_ZONE] = {
--	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2, TEMP_ADCPNP3
--};
--
--static const int mt8173_mux_values[MT8173_NUM_SENSORS] = { 0, 1, 2, 3, 16 };
--static const int mt8173_tc_offset[MT8173_NUM_CONTROLLER] = { 0x0, };
--
--static const int mt8173_vts_index[MT8173_NUM_SENSORS] = {
--	VTS1, VTS2, VTS3, VTS4, VTSABB
--};
--
--/* MT2701 thermal sensor data */
--static const int mt2701_bank_data[MT2701_NUM_SENSORS] = {
--	MT2701_TS1, MT2701_TS2, MT2701_TSABB
--};
--
--static const int mt2701_msr[MT2701_NUM_SENSORS_PER_ZONE] = {
--	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2
--};
--
--static const int mt2701_adcpnp[MT2701_NUM_SENSORS_PER_ZONE] = {
--	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2
--};
--
--static const int mt2701_mux_values[MT2701_NUM_SENSORS] = { 0, 1, 16 };
--static const int mt2701_tc_offset[MT2701_NUM_CONTROLLER] = { 0x0, };
--
--static const int mt2701_vts_index[MT2701_NUM_SENSORS] = {
--	VTS1, VTS2, VTS3
--};
--
--/* MT2712 thermal sensor data */
--static const int mt2712_bank_data[MT2712_NUM_SENSORS] = {
--	MT2712_TS1, MT2712_TS2, MT2712_TS3, MT2712_TS4
--};
--
--static const int mt2712_msr[MT2712_NUM_SENSORS_PER_ZONE] = {
--	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2, TEMP_MSR3
--};
--
--static const int mt2712_adcpnp[MT2712_NUM_SENSORS_PER_ZONE] = {
--	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2, TEMP_ADCPNP3
--};
--
--static const int mt2712_mux_values[MT2712_NUM_SENSORS] = { 0, 1, 2, 3 };
--static const int mt2712_tc_offset[MT2712_NUM_CONTROLLER] = { 0x0, };
--
--static const int mt2712_vts_index[MT2712_NUM_SENSORS] = {
--	VTS1, VTS2, VTS3, VTS4
--};
--
--/* MT7622 thermal sensor data */
--static const int mt7622_bank_data[MT7622_NUM_SENSORS] = { MT7622_TS1, };
--static const int mt7622_msr[MT7622_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
--static const int mt7622_adcpnp[MT7622_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
--static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
--static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
--static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
--
--/*
-- * The MT8173 thermal controller has four banks. Each bank can read up to
-- * four temperature sensors simultaneously. The MT8173 has a total of 5
-- * temperature sensors. We use each bank to measure a certain area of the
-- * SoC. Since TS2 is located centrally in the SoC it is influenced by multiple
-- * areas, hence is used in different banks.
-- *
-- * The thermal core only gets the maximum temperature of all banks, so
-- * the bank concept wouldn't be necessary here. However, the SVS (Smart
-- * Voltage Scaling) unit makes its decisions based on the same bank
-- * data, and this indeed needs the temperatures of the individual banks
-- * for making better decisions.
-- */
--static const struct mtk_thermal_data mt8173_thermal_data = {
--	.auxadc_channel = MT8173_TEMP_AUXADC_CHANNEL,
--	.num_banks = MT8173_NUM_ZONES,
--	.num_sensors = MT8173_NUM_SENSORS,
--	.vts_index = mt8173_vts_index,
--	.cali_val = MT8173_CALIBRATION,
--	.num_controller = MT8173_NUM_CONTROLLER,
--	.controller_offset = mt8173_tc_offset,
--	.need_switch_bank = true,
--	.bank_data = {
--		{
--			.num_sensors = 2,
--			.sensors = mt8173_bank_data[0],
--		}, {
--			.num_sensors = 2,
--			.sensors = mt8173_bank_data[1],
--		}, {
--			.num_sensors = 3,
--			.sensors = mt8173_bank_data[2],
--		}, {
--			.num_sensors = 1,
--			.sensors = mt8173_bank_data[3],
--		},
--	},
--	.msr = mt8173_msr,
--	.adcpnp = mt8173_adcpnp,
--	.sensor_mux_values = mt8173_mux_values,
--	.version = MTK_THERMAL_V1,
--};
--
--/*
-- * The MT2701 thermal controller has one bank, which can read up to
-- * three temperature sensors simultaneously. The MT2701 has a total of 3
-- * temperature sensors.
-- *
-- * The thermal core only gets the maximum temperature of this one bank,
-- * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-- * Voltage Scaling) unit makes its decisions based on the same bank
-- * data.
-- */
--static const struct mtk_thermal_data mt2701_thermal_data = {
--	.auxadc_channel = MT2701_TEMP_AUXADC_CHANNEL,
--	.num_banks = 1,
--	.num_sensors = MT2701_NUM_SENSORS,
--	.vts_index = mt2701_vts_index,
--	.cali_val = MT2701_CALIBRATION,
--	.num_controller = MT2701_NUM_CONTROLLER,
--	.controller_offset = mt2701_tc_offset,
--	.need_switch_bank = true,
--	.bank_data = {
--		{
--			.num_sensors = 3,
--			.sensors = mt2701_bank_data,
--		},
--	},
--	.msr = mt2701_msr,
--	.adcpnp = mt2701_adcpnp,
--	.sensor_mux_values = mt2701_mux_values,
--	.version = MTK_THERMAL_V1,
--};
--
--/*
-- * The MT2712 thermal controller has one bank, which can read up to
-- * four temperature sensors simultaneously. The MT2712 has a total of 4
-- * temperature sensors.
-- *
-- * The thermal core only gets the maximum temperature of this one bank,
-- * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-- * Voltage Scaling) unit makes its decisions based on the same bank
-- * data.
-- */
--static const struct mtk_thermal_data mt2712_thermal_data = {
--	.auxadc_channel = MT2712_TEMP_AUXADC_CHANNEL,
--	.num_banks = 1,
--	.num_sensors = MT2712_NUM_SENSORS,
--	.vts_index = mt2712_vts_index,
--	.cali_val = MT2712_CALIBRATION,
--	.num_controller = MT2712_NUM_CONTROLLER,
--	.controller_offset = mt2712_tc_offset,
--	.need_switch_bank = true,
--	.bank_data = {
--		{
--			.num_sensors = 4,
--			.sensors = mt2712_bank_data,
--		},
--	},
--	.msr = mt2712_msr,
--	.adcpnp = mt2712_adcpnp,
--	.sensor_mux_values = mt2712_mux_values,
--	.version = MTK_THERMAL_V1,
--};
--
--/*
-- * MT7622 have only one sensing point which uses AUXADC Channel 11 for raw data
-- * access.
-- */
--static const struct mtk_thermal_data mt7622_thermal_data = {
--	.auxadc_channel = MT7622_TEMP_AUXADC_CHANNEL,
--	.num_banks = MT7622_NUM_ZONES,
--	.num_sensors = MT7622_NUM_SENSORS,
--	.vts_index = mt7622_vts_index,
--	.cali_val = MT7622_CALIBRATION,
--	.num_controller = MT7622_NUM_CONTROLLER,
--	.controller_offset = mt7622_tc_offset,
--	.need_switch_bank = true,
--	.bank_data = {
--		{
--			.num_sensors = 1,
--			.sensors = mt7622_bank_data,
--		},
--	},
--	.msr = mt7622_msr,
--	.adcpnp = mt7622_adcpnp,
--	.sensor_mux_values = mt7622_mux_values,
--	.version = MTK_THERMAL_V2,
--};
--
--/*
-- * The MT8183 thermal controller has one bank for the current SW framework.
-- * The MT8183 has a total of 6 temperature sensors.
-- * There are two thermal controller to control the six sensor.
-- * The first one bind 2 sensor, and the other bind 4 sensors.
-- * The thermal core only gets the maximum temperature of all sensor, so
-- * the bank concept wouldn't be necessary here. However, the SVS (Smart
-- * Voltage Scaling) unit makes its decisions based on the same bank
-- * data, and this indeed needs the temperatures of the individual banks
-- * for making better decisions.
-- */
--static const struct mtk_thermal_data mt8183_thermal_data = {
--	.auxadc_channel = MT8183_TEMP_AUXADC_CHANNEL,
--	.num_banks = MT8183_NUM_ZONES,
--	.num_sensors = MT8183_NUM_SENSORS,
--	.vts_index = mt8183_vts_index,
--	.cali_val = MT8183_CALIBRATION,
--	.num_controller = MT8183_NUM_CONTROLLER,
--	.controller_offset = mt8183_tc_offset,
--	.need_switch_bank = false,
--	.bank_data = {
--		{
--			.num_sensors = 6,
--			.sensors = mt8183_bank_data,
--		},
--	},
--
--	.msr = mt8183_msr,
--	.adcpnp = mt8183_adcpnp,
--	.sensor_mux_values = mt8183_mux_values,
--	.version = MTK_THERMAL_V1,
--};
--
--/**
-- * raw_to_mcelsius - convert a raw ADC value to mcelsius
-- * @mt:	The thermal controller
-- * @sensno:	sensor number
-- * @raw:	raw ADC value
-- *
-- * This converts the raw ADC value to mcelsius using the SoC specific
-- * calibration constants
-- */
--static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
--{
--	s32 tmp;
--
--	raw &= 0xfff;
--
--	tmp = 203450520 << 3;
--	tmp /= mt->conf->cali_val + mt->o_slope;
--	tmp /= 10000 + mt->adc_ge;
--	tmp *= raw - mt->vts[sensno] - 3350;
--	tmp >>= 3;
--
--	return mt->degc_cali * 500 - tmp;
--}
--
--static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
--{
--	s32 format_1;
--	s32 format_2;
--	s32 g_oe;
--	s32 g_gain;
--	s32 g_x_roomt;
--	s32 tmp;
--
--	if (raw == 0)
--		return 0;
--
--	raw &= 0xfff;
--	g_gain = 10000 + (((mt->adc_ge - 512) * 10000) >> 12);
--	g_oe = mt->adc_oe - 512;
--	format_1 = mt->vts[VTS2] + 3105 - g_oe;
--	format_2 = (mt->degc_cali * 10) >> 1;
--	g_x_roomt = (((format_1 * 10000) >> 12) * 10000) / g_gain;
--
--	tmp = (((((raw - g_oe) * 10000) >> 12) * 10000) / g_gain) - g_x_roomt;
--	tmp = tmp * 10 * 100 / 11;
--
--	if (mt->o_slope_sign == 0)
--		tmp = tmp / (165 - mt->o_slope);
--	else
--		tmp = tmp / (165 + mt->o_slope);
--
--	return (format_2 - tmp) * 100;
--}
--
--/**
-- * mtk_thermal_get_bank - get bank
-- * @bank:	The bank
-- *
-- * The bank registers are banked, we have to select a bank in the
-- * PTPCORESEL register to access it.
-- */
--static void mtk_thermal_get_bank(struct mtk_thermal_bank *bank)
--{
--	struct mtk_thermal *mt = bank->mt;
--	u32 val;
--
--	if (mt->conf->need_switch_bank) {
--		mutex_lock(&mt->lock);
--
--		val = readl(mt->thermal_base + PTPCORESEL);
--		val &= ~0xf;
--		val |= bank->id;
--		writel(val, mt->thermal_base + PTPCORESEL);
--	}
--}
--
--/**
-- * mtk_thermal_put_bank - release bank
-- * @bank:	The bank
-- *
-- * release a bank previously taken with mtk_thermal_get_bank,
-- */
--static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
--{
--	struct mtk_thermal *mt = bank->mt;
--
--	if (mt->conf->need_switch_bank)
--		mutex_unlock(&mt->lock);
--}
--
--/**
-- * mtk_thermal_bank_temperature - get the temperature of a bank
-- * @bank:	The bank
-- *
-- * The temperature of a bank is considered the maximum temperature of
-- * the sensors associated to the bank.
-- */
--static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
--{
--	struct mtk_thermal *mt = bank->mt;
--	const struct mtk_thermal_data *conf = mt->conf;
--	int i, temp = INT_MIN, max = INT_MIN;
--	u32 raw;
--
--	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
--
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
--
--		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
--		 */
--		if (temp > 200000)
--			temp = 0;
--
--		if (temp > max)
--			max = temp;
--	}
--
--	return max;
--}
--
--static int mtk_read_temp(void *data, int *temperature)
--{
--	struct mtk_thermal *mt = data;
--	int i;
--	int tempmax = INT_MIN;
--
--	for (i = 0; i < mt->conf->num_banks; i++) {
--		struct mtk_thermal_bank *bank = &mt->banks[i];
--
--		mtk_thermal_get_bank(bank);
--
--		tempmax = max(tempmax, mtk_thermal_bank_temperature(bank));
--
--		mtk_thermal_put_bank(bank);
--	}
--
--	*temperature = tempmax;
--
--	return 0;
--}
--
--static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
--	.get_temp = mtk_read_temp,
--};
--
--static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
--				  u32 apmixed_phys_base, u32 auxadc_phys_base,
--				  int ctrl_id)
--{
--	struct mtk_thermal_bank *bank = &mt->banks[num];
--	const struct mtk_thermal_data *conf = mt->conf;
--	int i;
--
--	int offset = mt->conf->controller_offset[ctrl_id];
--	void __iomem *controller_base = mt->thermal_base + offset;
--
--	bank->id = num;
--	bank->mt = mt;
--
--	mtk_thermal_get_bank(bank);
--
--	/* bus clock 66M counting unit is 12 * 15.15ns * 256 = 46.540us */
--	writel(TEMP_MONCTL1_PERIOD_UNIT(12), controller_base + TEMP_MONCTL1);
--
--	/*
--	 * filt interval is 1 * 46.540us = 46.54us,
--	 * sen interval is 429 * 46.540us = 19.96ms
--	 */
--	writel(TEMP_MONCTL2_FILTER_INTERVAL(1) |
--			TEMP_MONCTL2_SENSOR_INTERVAL(429),
--			controller_base + TEMP_MONCTL2);
--
--	/* poll is set to 10u */
--	writel(TEMP_AHBPOLL_ADC_POLL_INTERVAL(768),
--	       controller_base + TEMP_AHBPOLL);
--
--	/* temperature sampling control, 1 sample */
--	writel(0x0, controller_base + TEMP_MSRCTL0);
--
--	/* exceed this polling time, IRQ would be inserted */
--	writel(0xffffffff, controller_base + TEMP_AHBTO);
--
--	/* number of interrupts per event, 1 is enough */
--	writel(0x0, controller_base + TEMP_MONIDET0);
--	writel(0x0, controller_base + TEMP_MONIDET1);
--
--	/*
--	 * The MT8173 thermal controller does not have its own ADC. Instead it
--	 * uses AHB bus accesses to control the AUXADC. To do this the thermal
--	 * controller has to be programmed with the physical addresses of the
--	 * AUXADC registers and with the various bit positions in the AUXADC.
--	 * Also the thermal controller controls a mux in the APMIXEDSYS register
--	 * space.
--	 */
--
--	/*
--	 * this value will be stored to TEMP_PNPMUXADDR (TEMP_SPARE0)
--	 * automatically by hw
--	 */
--	writel(BIT(conf->auxadc_channel), controller_base + TEMP_ADCMUX);
--
--	/* AHB address for auxadc mux selection */
--	writel(auxadc_phys_base + AUXADC_CON1_CLR_V,
--	       controller_base + TEMP_ADCMUXADDR);
--
--	if (mt->conf->version == MTK_THERMAL_V1) {
--		/* AHB address for pnp sensor mux selection */
--		writel(apmixed_phys_base + APMIXED_SYS_TS_CON1,
--		       controller_base + TEMP_PNPMUXADDR);
--	}
--
--	/* AHB value for auxadc enable */
--	writel(BIT(conf->auxadc_channel), controller_base + TEMP_ADCEN);
--
--	/* AHB address for auxadc enable (channel 0 immediate mode selected) */
--	writel(auxadc_phys_base + AUXADC_CON1_SET_V,
--	       controller_base + TEMP_ADCENADDR);
--
--	/* AHB address for auxadc valid bit */
--	writel(auxadc_phys_base + AUXADC_DATA(conf->auxadc_channel),
--	       controller_base + TEMP_ADCVALIDADDR);
--
--	/* AHB address for auxadc voltage output */
--	writel(auxadc_phys_base + AUXADC_DATA(conf->auxadc_channel),
--	       controller_base + TEMP_ADCVOLTADDR);
--
--	/* read valid & voltage are at the same register */
--	writel(0x0, controller_base + TEMP_RDCTRL);
--
--	/* indicate where the valid bit is */
--	writel(TEMP_ADCVALIDMASK_VALID_HIGH | TEMP_ADCVALIDMASK_VALID_POS(12),
--	       controller_base + TEMP_ADCVALIDMASK);
--
--	/* no shift */
--	writel(0x0, controller_base + TEMP_ADCVOLTAGESHIFT);
--
--	/* enable auxadc mux write transaction */
--	writel(TEMP_ADCWRITECTRL_ADC_MUX_WRITE,
--		controller_base + TEMP_ADCWRITECTRL);
--
--	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
--		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
--		       mt->thermal_base + conf->adcpnp[i]);
--
--	writel((1 << conf->bank_data[num].num_sensors) - 1,
--	       controller_base + TEMP_MONCTL0);
--
--	writel(TEMP_ADCWRITECTRL_ADC_PNP_WRITE |
--	       TEMP_ADCWRITECTRL_ADC_MUX_WRITE,
--	       controller_base + TEMP_ADCWRITECTRL);
--
--	mtk_thermal_put_bank(bank);
--}
--
--static u64 of_get_phys_base(struct device_node *np)
--{
--	u64 size64;
--	const __be32 *regaddr_p;
--
--	regaddr_p = of_get_address(np, 0, &size64, NULL);
--	if (!regaddr_p)
--		return OF_BAD_ADDR;
--
--	return of_translate_address(np, regaddr_p);
--}
--
--static int mtk_thermal_extract_efuse_v1(struct mtk_thermal *mt, u32 *buf)
--{
--	int i;
--
--	if (!(buf[0] & CALIB_BUF0_VALID_V1))
--		return -EINVAL;
--
--	mt->adc_ge = CALIB_BUF1_ADC_GE_V1(buf[1]);
--
--	for (i = 0; i < mt->conf->num_sensors; i++) {
--		switch (mt->conf->vts_index[i]) {
--		case VTS1:
--			mt->vts[VTS1] = CALIB_BUF0_VTS_TS1_V1(buf[0]);
--			break;
--		case VTS2:
--			mt->vts[VTS2] = CALIB_BUF0_VTS_TS2_V1(buf[0]);
--			break;
--		case VTS3:
--			mt->vts[VTS3] = CALIB_BUF1_VTS_TS3_V1(buf[1]);
--			break;
--		case VTS4:
--			mt->vts[VTS4] = CALIB_BUF2_VTS_TS4_V1(buf[2]);
--			break;
--		case VTS5:
--			mt->vts[VTS5] = CALIB_BUF2_VTS_TS5_V1(buf[2]);
--			break;
--		case VTSABB:
--			mt->vts[VTSABB] =
--				CALIB_BUF2_VTS_TSABB_V1(buf[2]);
--			break;
--		default:
--			break;
--		}
--	}
--
--	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V1(buf[0]);
--	if (CALIB_BUF1_ID_V1(buf[1]) &
--	    CALIB_BUF0_O_SLOPE_SIGN_V1(buf[0]))
--		mt->o_slope = -CALIB_BUF0_O_SLOPE_V1(buf[0]);
--	else
--		mt->o_slope = CALIB_BUF0_O_SLOPE_V1(buf[0]);
--
--	return 0;
--}
--
--static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
--{
--	if (!CALIB_BUF1_VALID_V2(buf[1]))
--		return -EINVAL;
--
--	mt->adc_oe = CALIB_BUF0_ADC_OE_V2(buf[0]);
--	mt->adc_ge = CALIB_BUF0_ADC_GE_V2(buf[0]);
--	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V2(buf[0]);
--	mt->o_slope = CALIB_BUF0_O_SLOPE_V2(buf[0]);
--	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V2(buf[1]);
--	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V2(buf[1]);
--	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V2(buf[1]);
--	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V2(buf[1]);
--
--	return 0;
--}
--
--static int mtk_thermal_get_calibration_data(struct device *dev,
--					    struct mtk_thermal *mt)
--{
--	struct nvmem_cell *cell;
--	u32 *buf;
--	size_t len;
--	int i, ret = 0;
--
--	/* Start with default values */
--	mt->adc_ge = 512;
--	for (i = 0; i < mt->conf->num_sensors; i++)
--		mt->vts[i] = 260;
--	mt->degc_cali = 40;
--	mt->o_slope = 0;
--
--	cell = nvmem_cell_get(dev, "calibration-data");
--	if (IS_ERR(cell)) {
--		if (PTR_ERR(cell) == -EPROBE_DEFER)
--			return PTR_ERR(cell);
--		return 0;
--	}
--
--	buf = (u32 *)nvmem_cell_read(cell, &len);
--
--	nvmem_cell_put(cell);
--
--	if (IS_ERR(buf))
--		return PTR_ERR(buf);
--
--	if (len < 3 * sizeof(u32)) {
--		dev_warn(dev, "invalid calibration data\n");
--		ret = -EINVAL;
--		goto out;
--	}
--
--	if (mt->conf->version == MTK_THERMAL_V1)
--		ret = mtk_thermal_extract_efuse_v1(mt, buf);
--	else
--		ret = mtk_thermal_extract_efuse_v2(mt, buf);
--
--	if (ret) {
--		dev_info(dev, "Device not calibrated, using default calibration values\n");
--		ret = 0;
--	}
--
--out:
--	kfree(buf);
--
--	return ret;
--}
--
--static const struct of_device_id mtk_thermal_of_match[] = {
--	{
--		.compatible = "mediatek,mt8173-thermal",
--		.data = (void *)&mt8173_thermal_data,
--	},
--	{
--		.compatible = "mediatek,mt2701-thermal",
--		.data = (void *)&mt2701_thermal_data,
--	},
--	{
--		.compatible = "mediatek,mt2712-thermal",
--		.data = (void *)&mt2712_thermal_data,
--	},
--	{
--		.compatible = "mediatek,mt7622-thermal",
--		.data = (void *)&mt7622_thermal_data,
--	},
--	{
--		.compatible = "mediatek,mt8183-thermal",
--		.data = (void *)&mt8183_thermal_data,
--	}, {
--	},
--};
--MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
--
--static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
--{
--	int tmp;
--
--	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
--	tmp &= ~(0x37);
--	tmp |= 0x1;
--	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
--	udelay(200);
--}
--
--static void mtk_thermal_release_periodic_ts(struct mtk_thermal *mt,
--					    void __iomem *auxadc_base)
--{
--	int tmp;
--
--	writel(0x800, auxadc_base + AUXADC_CON1_SET_V);
--	writel(0x1, mt->thermal_base + TEMP_MONCTL0);
--	tmp = readl(mt->thermal_base + TEMP_MSRCTL1);
--	writel((tmp & (~0x10e)), mt->thermal_base + TEMP_MSRCTL1);
--}
--
--static int mtk_thermal_probe(struct platform_device *pdev)
--{
--	int ret, i, ctrl_id;
--	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
--	struct mtk_thermal *mt;
--	struct resource *res;
--	u64 auxadc_phys_base, apmixed_phys_base;
--	struct thermal_zone_device *tzdev;
--	void __iomem *apmixed_base, *auxadc_base;
--
--	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
--	if (!mt)
--		return -ENOMEM;
--
--	mt->conf = of_device_get_match_data(&pdev->dev);
--
--	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
--	if (IS_ERR(mt->clk_peri_therm))
--		return PTR_ERR(mt->clk_peri_therm);
--
--	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
--	if (IS_ERR(mt->clk_auxadc))
--		return PTR_ERR(mt->clk_auxadc);
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	mt->thermal_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(mt->thermal_base))
--		return PTR_ERR(mt->thermal_base);
--
--	ret = mtk_thermal_get_calibration_data(&pdev->dev, mt);
--	if (ret)
--		return ret;
--
--	mutex_init(&mt->lock);
--
--	mt->dev = &pdev->dev;
--
--	auxadc = of_parse_phandle(np, "mediatek,auxadc", 0);
--	if (!auxadc) {
--		dev_err(&pdev->dev, "missing auxadc node\n");
--		return -ENODEV;
--	}
--
--	auxadc_base = of_iomap(auxadc, 0);
--	auxadc_phys_base = of_get_phys_base(auxadc);
--
--	of_node_put(auxadc);
--
--	if (auxadc_phys_base == OF_BAD_ADDR) {
--		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
--	}
--
--	apmixedsys = of_parse_phandle(np, "mediatek,apmixedsys", 0);
--	if (!apmixedsys) {
--		dev_err(&pdev->dev, "missing apmixedsys node\n");
--		return -ENODEV;
--	}
--
--	apmixed_base = of_iomap(apmixedsys, 0);
--	apmixed_phys_base = of_get_phys_base(apmixedsys);
--
--	of_node_put(apmixedsys);
--
--	if (apmixed_phys_base == OF_BAD_ADDR) {
--		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
--	}
--
--	ret = device_reset_optional(&pdev->dev);
--	if (ret)
--		return ret;
--
--	ret = clk_prepare_enable(mt->clk_auxadc);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
--	}
--
--	ret = clk_prepare_enable(mt->clk_peri_therm);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
--		goto err_disable_clk_auxadc;
--	}
--
--	if (mt->conf->version == MTK_THERMAL_V2) {
--		mtk_thermal_turn_on_buffer(apmixed_base);
--		mtk_thermal_release_periodic_ts(mt, auxadc_base);
--	}
--
--	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
--		for (i = 0; i < mt->conf->num_banks; i++)
--			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
--					      auxadc_phys_base, ctrl_id);
--
--	platform_set_drvdata(pdev, mt);
--
--	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
--						     &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
--	}
--
--	return 0;
--
--err_disable_clk_peri_therm:
--	clk_disable_unprepare(mt->clk_peri_therm);
--err_disable_clk_auxadc:
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return ret;
--}
--
--static int mtk_thermal_remove(struct platform_device *pdev)
--{
--	struct mtk_thermal *mt = platform_get_drvdata(pdev);
--
--	clk_disable_unprepare(mt->clk_peri_therm);
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return 0;
--}
--
--static struct platform_driver mtk_thermal_driver = {
--	.probe = mtk_thermal_probe,
--	.remove = mtk_thermal_remove,
--	.driver = {
--		.name = "mtk-thermal",
--		.of_match_table = mtk_thermal_of_match,
--	},
--};
--
--module_platform_driver(mtk_thermal_driver);
--
--MODULE_AUTHOR("Michael Kao <michael.kao@mediatek.com>");
--MODULE_AUTHOR("Louis Yu <louis.yu@mediatek.com>");
--MODULE_AUTHOR("Dawei Chien <dawei.chien@mediatek.com>");
--MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de>");
--MODULE_AUTHOR("Hanyi Wu <hanyi.wu@mediatek.com>");
--MODULE_DESCRIPTION("Mediatek thermal driver");
--MODULE_LICENSE("GPL v2");
+diff --git a/drivers/thermal/mediatek/soc_temp_lvts.h b/drivers/thermal/mediatek/soc_temp_lvts.h
+new file mode 100644
+index 0000000..1d90bde
+--- /dev/null
++++ b/drivers/thermal/mediatek/soc_temp_lvts.h
+@@ -0,0 +1,312 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ */
++
++#ifndef __MTK_SOC_TEMP_LVTS_H__
++#define __MTK_SOC_TEMP_LVTS_H__
++
++/* LVTS HW filter settings
++ * 000: Get one sample
++ * 001: Get 2 samples and average them
++ * 010: Get 4 samples, drop max and min, then average the rest of 2 samples
++ * 011: Get 6 samples, drop max and min, then average the rest of 4 samples
++ * 100: Get 10 samples, drop max and min, then average the rest of 8 samples
++ * 101: Get 18 samples, drop max and min, then average the rest of 16 samples
++ */
++enum lvts_hw_filter {
++	LVTS_FILTER_1,
++	LVTS_FILTER_2,
++	LVTS_FILTER_2_OF_4,
++	LVTS_FILTER_4_OF_6,
++	LVTS_FILTER_8_OF_10,
++	LVTS_FILTER_16_OF_18
++};
++
++enum lvts_sensing_point {
++	SENSING_POINT0,
++	SENSING_POINT1,
++	SENSING_POINT2,
++	SENSING_POINT3,
++	ALL_SENSING_POINTS
++};
++
++/*==================================================
++ * Data structure
++ *==================================================
++ */
++struct lvts_data;
++
++struct speed_settings {
++	unsigned int period_unit;
++	unsigned int group_interval_delay;
++	unsigned int filter_interval_delay;
++	unsigned int sensor_interval_delay;
++};
++
++struct tc_settings {
++	unsigned int domain_index;
++	unsigned int addr_offset;
++	unsigned int num_sensor;
++	unsigned int sensor_map[ALL_SENSING_POINTS]; /* In sensor ID */
++	struct speed_settings tc_speed;
++	/* HW filter setting
++	 * 000: Get one sample
++	 * 001: Get 2 samples and average them
++	 * 010: Get 4 samples, drop max and min, then average the rest of 2 samples
++	 * 011: Get 6 samples, drop max and min, then average the rest of 4 samples
++	 * 100: Get 10 samples, drop max and min, then average the rest of 8 samples
++	 * 101: Get 18 samples, drop max and min, then average the rest of 16 samples
++	 */
++	unsigned int hw_filter;
++	/* Dominator_sensing point is used to select a sensing point
++	 * and reference its temperature to trigger Thermal HW Reboot
++	 * When it is ALL_SENSING_POINTS, it will select all sensing points
++	 */
++	int dominator_sensing_point;
++	int hw_reboot_trip_point; /* -274000: Disable HW reboot */
++	unsigned int irq_bit;
++};
++
++struct formula_coeff {
++	int a;
++	int b;
++	unsigned int golden_temp;
++};
++
++struct sensor_cal_data {
++	int use_fake_efuse;	/* 1: Use fake efuse, 0: Use real efuse */
++	unsigned int golden_temp;
++	unsigned int *count_r;
++	unsigned int *count_rc;
++	unsigned int *count_rc_now;
++
++	unsigned int default_golden_temp;
++	unsigned int default_count_r;
++	unsigned int default_count_rc;
++};
++
++struct platform_ops {
++	void (*efuse_to_cal_data)(struct lvts_data *lvts_data);
++	void (*device_enable_and_init)(struct lvts_data *lvts_data);
++	void (*device_enable_auto_rck)(struct lvts_data *lvts_data);
++	int (*device_read_count_rc_n)(struct lvts_data *lvts_data);
++	void (*set_cal_data)(struct lvts_data *lvts_data);
++	void (*init_controller)(struct lvts_data *lvts_data);
++};
++
++struct power_domain {
++	void __iomem *base;	/* LVTS base addresses */
++	unsigned int irq_num;	/* LVTS interrupt numbers */
++	struct reset_control *reset;
++};
++
++struct sensor_data {
++	int temp;		/* Current temperature */
++	unsigned int msr_raw;	/* MSR raw data from LVTS */
++};
++
++struct lvts_data {
++	struct device *dev;
++	struct clk *clk;
++	unsigned int num_domain;
++	struct power_domain *domain;
++
++	int num_tc;			/* Number of LVTS thermal controllers */
++	struct tc_settings *tc;
++	int counting_window_us;		/* LVTS device counting window */
++
++	int num_sensor;			/* Number of sensors in this platform */
++	struct sensor_data *sen_data;
++
++	struct platform_ops ops;
++	int feature_bitmap;		/* Show what features are enabled */
++
++	unsigned int num_efuse_addr;
++	unsigned int *efuse;
++	unsigned int num_efuse_block;	/* Number of contiguous efuse indexes */
++	struct sensor_cal_data cal_data;
++	struct formula_coeff coeff;
++};
++
++struct soc_temp_tz {
++	unsigned int id; /* if id is 0, get max temperature of all sensors */
++	struct lvts_data *lvts_data;
++};
++
++struct match_entry {
++	char	chip[32];
++	struct lvts_data *lvts_data;
++};
++
++struct lvts_match_data {
++	unsigned int hw_version;
++	struct match_entry *table;
++	void (*set_up_common_callbacks)(struct lvts_data *lvts_data);
++	struct list_head node;
++};
++
++struct lvts_id {
++	unsigned int hw_version;
++	char	chip[32];
++};
++
++/*==================================================
++ * LVTS device register
++ *==================================================
++ */
++#define RG_TSFM_DATA_0	0x00
++#define RG_TSFM_DATA_1	0x01
++#define RG_TSFM_DATA_2	0x02
++#define RG_TSFM_CTRL_0	0x03
++#define RG_TSFM_CTRL_1	0x04
++#define RG_TSFM_CTRL_2	0x05
++#define RG_TSFM_CTRL_3	0x06
++#define RG_TSFM_CTRL_4	0x07
++#define RG_TSV2F_CTRL_0	0x08
++#define RG_TSV2F_CTRL_1	0x09
++#define RG_TSV2F_CTRL_2	0x0A
++#define RG_TSV2F_CTRL_3	0x0B
++#define RG_TSV2F_CTRL_4	0x0C
++#define RG_TSV2F_CTRL_5	0x0D
++#define RG_TSV2F_CTRL_6	0x0E
++#define RG_TEMP_DATA_0	0x10
++#define RG_TEMP_DATA_1	0x11
++#define RG_TEMP_DATA_2	0x12
++#define RG_TEMP_DATA_3	0x13
++#define RG_RC_DATA_0	0x14
++#define RG_RC_DATA_1	0x15
++#define RG_RC_DATA_2	0x16
++#define RG_RC_DATA_3	0x17
++#define RG_DIV_DATA_0	0x18
++#define RG_DIV_DATA_1	0x19
++#define RG_DIV_DATA_2	0x1A
++#define RG_DIV_DATA_3	0x1B
++#define RG_TST_DATA_0	0x70
++#define RG_TST_DATA_1	0x71
++#define RG_TST_DATA_2	0x72
++#define RG_TST_CTRL	0x73
++#define RG_DBG_FQMTR	0xF0
++#define RG_DBG_LPSEQ	0xF1
++#define RG_DBG_STATE	0xF2
++#define RG_DBG_CHKSUM	0xF3
++#define RG_DID_LVTS	0xFC
++#define RG_DID_REV	0xFD
++#define RG_TSFM_RST	0xFF
++/*==================================================
++ * LVTS controller register
++ *==================================================
++ */
++#define LVTSMONCTL0_0	0x000
++#define LVTS_SINGLE_SENSE	BIT(9)
++#define ENABLE_SENSING_POINT(num)	(LVTS_SINGLE_SENSE | GENMASK(((num) - 1), 0))
++#define DISABLE_SENSING_POINT	(LVTS_SINGLE_SENSE | 0x0)
++#define LVTSMONCTL1_0	0x004
++#define LVTSMONCTL2_0	0x008
++#define LVTSMONINT_0	0x00C
++#define STAGE3_INT_EN	BIT(31)
++#define LVTSMONINTSTS_0	0x010
++#define LVTSMONIDET0_0	0x014
++#define LVTSMONIDET1_0	0x018
++#define LVTSMONIDET2_0	0x01C
++#define LVTSMONIDET3_0	0x020
++#define LVTSH2NTHRE_0	0x024
++#define LVTSHTHRE_0	0x028
++#define LVTSCTHRE_0	0x02C
++#define LVTSOFFSETH_0	0x030
++#define LVTSOFFSETL_0	0x034
++#define LVTSMSRCTL0_0	0x038
++#define LVTSMSRCTL1_0	0x03C
++#define LVTSTSSEL_0	0x040
++#define SET_SENSOR_INDEX	0x13121110
++#define LVTSDEVICETO_0	0x044
++#define LVTSCALSCALE_0	0x048
++#define SET_CALC_SCALE_RULES	0x00000300
++#define LVTS_ID_0	0x04C
++#define LVTS_CONFIG_0	0x050
++
++#define BROADCAST_ID_UPDATE	BIT(26)
++#define DEVICE_SENSING_STATUS	BIT(25)
++#define DEVICE_ACCESS_STARTUS	BIT(24)
++#define WRITE_ACCESS		BIT(16)
++#define DEVICE_WRITE		(BIT(31) | CK26M_ACTIVE | DEVICE_ACCESS_STARTUS \
++				| BIT(17) | WRITE_ACCESS)
++#define DEVICE_READ		(BIT(31) | CK26M_ACTIVE | DEVICE_ACCESS_STARTUS \
++				| 1 << 17)
++#define RESET_ALL_DEVICES	(DEVICE_WRITE | RG_TSFM_RST << 8 | 0xFF)
++#define READ_BACK_DEVICE_ID	(BIT(31) | CK26M_ACTIVE | BROADCAST_ID_UPDATE	\
++				| DEVICE_ACCESS_STARTUS | BIT(17)	\
++				| RG_DID_LVTS << 8)
++#define READ_DEVICE_REG(reg_idx)	(DEVICE_READ | (reg_idx) << 8 | 0x00)
++#define LVTSEDATA00_0	0x054
++#define LVTSEDATA01_0	0x058
++#define LVTSEDATA02_0	0x05C
++#define LVTSEDATA03_0	0x060
++#define LVTSMSR0_0	0x090
++#define MRS_RAW_MASK		GENMASK(15, 0)
++#define MRS_RAW_VALID_BIT	BIT(16)
++#define LVTSMSR1_0	0x094
++#define LVTSMSR2_0	0x098
++#define LVTSMSR3_0	0x09C
++#define LVTSIMMD0_0	0x0A0
++#define LVTSIMMD1_0	0x0A4
++#define LVTSIMMD2_0	0x0A8
++#define LVTSIMMD3_0	0x0AC
++#define LVTSRDATA0_0	0x0B0
++#define LVTSRDATA1_0	0x0B4
++#define LVTSRDATA2_0	0x0B8
++#define LVTSRDATA3_0	0x0BC
++#define LVTSPROTCTL_0	0x0C0
++#define PROTOFFSET	GENMASK(15, 0)
++#define LVTSPROTTA_0	0x0C4
++#define LVTSPROTTB_0	0x0C8
++#define LVTSPROTTC_0	0x0CC
++#define LVTSCLKEN_0	0x0E4
++#define ENABLE_LVTS_CTRL_CLK	(1)
++#define DISABLE_LVTS_CTRL_CLK	(0)
++#define LVTSDBGSEL_0	0x0E8
++#define LVTSDBGSIG_0	0x0EC
++#define LVTSSPARE0_0	0x0F0
++#define LVTSSPARE1_0	0x0F4
++#define LVTSSPARE2_0	0x0F8
++#define LVTSSPARE3_0	0x0FC
++
++#define THERMINTST	0xF04
++/*==================================================
++ * LVTS register mask
++ *==================================================
++ */
++#define THERMAL_COLD_INTERRUPT_0		0x00000001
++#define THERMAL_HOT_INTERRUPT_0			0x00000002
++#define THERMAL_LOW_OFFSET_INTERRUPT_0		0x00000004
++#define THERMAL_HIGH_OFFSET_INTERRUPT_0		0x00000008
++#define THERMAL_HOT2NORMAL_INTERRUPT_0		0x00000010
++#define THERMAL_COLD_INTERRUPT_1		0x00000020
++#define THERMAL_HOT_INTERRUPT_1			0x00000040
++#define THERMAL_LOW_OFFSET_INTERRUPT_1		0x00000080
++#define THERMAL_HIGH_OFFSET_INTERRUPT_1		0x00000100
++#define THERMAL_HOT2NORMAL_INTERRUPT_1		0x00000200
++#define THERMAL_COLD_INTERRUPT_2		0x00000400
++#define THERMAL_HOT_INTERRUPT_2			0x00000800
++#define THERMAL_LOW_OFFSET_INTERRUPT_2		0x00001000
++#define THERMAL_HIGH_OFFSET_INTERRUPT_2		0x00002000
++#define THERMAL_HOT2NORMAL_INTERRUPT_2		0x00004000
++#define THERMAL_AHB_TIMEOUT_INTERRUPT		0x00008000
++#define THERMAL_DEVICE_TIMEOUT_INTERRUPT	0x00008000
++#define THERMAL_IMMEDIATE_INTERRUPT_0		0x00010000
++#define THERMAL_IMMEDIATE_INTERRUPT_1		0x00020000
++#define THERMAL_IMMEDIATE_INTERRUPT_2		0x00040000
++#define THERMAL_FILTER_INTERRUPT_0		0x00080000
++#define THERMAL_FILTER_INTERRUPT_1		0x00100000
++#define THERMAL_FILTER_INTERRUPT_2		0x00200000
++#define THERMAL_COLD_INTERRUPT_3		0x00400000
++#define THERMAL_HOT_INTERRUPT_3			0x00800000
++#define THERMAL_LOW_OFFSET_INTERRUPT_3		0x01000000
++#define THERMAL_HIGH_OFFSET_INTERRUPT_3		0x02000000
++#define THERMAL_HOT2NORMAL_INTERRUPT_3		0x04000000
++#define THERMAL_IMMEDIATE_INTERRUPT_3		0x08000000
++#define THERMAL_FILTER_INTERRUPT_3		0x10000000
++#define THERMAL_PROTECTION_STAGE_1		0x20000000
++#define THERMAL_PROTECTION_STAGE_2		0x40000000
++#define THERMAL_PROTECTION_STAGE_3		0x80000000
++#endif /* __MTK_SOC_TEMP_LVTS_H__ */
 -- 
 1.8.1.1.dirty
 
