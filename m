@@ -2,306 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B7B399F66
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 13:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAA0399F99
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 13:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhFCLCd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 07:02:33 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45548 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229625AbhFCLCd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 07:02:33 -0400
-X-UUID: 756f127bd5264c6680840a70be22a90e-20210603
-X-UUID: 756f127bd5264c6680840a70be22a90e-20210603
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <ben.tseng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1646270463; Thu, 03 Jun 2021 19:00:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Jun 2021 19:00:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Jun 2021 19:00:43 +0800
-From:   Ben Tseng <ben.tseng@mediatek.com>
-To:     Fan Chen <fan.chen@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Ben Tseng <ben.tseng@mediatek.com>
-Subject: [PATCH v8] thermal: mediatek: add another get_temp ops for thermal sensors
-Date:   Thu, 3 Jun 2021 19:00:42 +0800
-Message-ID: <20210603110042.21688-1-ben.tseng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S229610AbhFCLO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 07:14:56 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:15870 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229885AbhFCLO4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 07:14:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1622718781; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=GSIWIrf7ywppJJEjkvvgmI/loYH+nKK5DHzj6GSDzZq57+PvtWDDls/YivsbUswtXd
+    oAsyBWduYB/L8WPpVgEB1d8H5velnvnHVwZymvkPtQYFgL+DCDUcISzN7JpM3xAk2RS6
+    0A/4LgtOnGqdvLomLIzg4FTeLvNd5xWo/nqVYHop/lPKA1nhhNM206PtDzdnR++ElJCg
+    oGW3ywxfnU3/FfIYY15pbaHf0o8MqAdBbtKzBCPmXj1WLDlG0SA/IlgpZfN/WWM6E/OE
+    Vf5lIC5UyBa1CkAfSfPFv4nR9WJb5+IYx5BkmWyJpSnuAHHP+sapCcIW/51GskUElo91
+    4URw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1622718781;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ue0OX8ADzmc6O49R/68CxDuotQxVkzYCVDwMD9Zjyew=;
+    b=m571De8fYbcy6PGk8anztXMe9D1WXZvtyg+mpfYhlq408PplGM927k7LsZnUHITyUx
+    6Jirf/3SiU0U9d7HGKNcpWkIwlNW4jNCV0IEb1UWX35AKjrgNIKkQktLvlDzZHDQQKWB
+    MEaHVZR8poLVTQ+hnTgL5FweJYigRFOZi+TPionhS63QQiWeFMEFw0qsi7WVB+Sa4jVF
+    cpfTNLPMd4ViX0tlx5xmCLqeJ1r9Z6XLNEfAIr96/ejX1Tx55kWMo+5lmmp+8MJKScdz
+    86w46m16i2WISyqWOkkRwXBEW065zGylPsiNY2/xwyRrVl82LNaBo8381XhMXXUoXIXr
+    d+9g==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1622718781;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ue0OX8ADzmc6O49R/68CxDuotQxVkzYCVDwMD9Zjyew=;
+    b=QXJL6SKEzt4kO+MHcbuIQgzf3ZLGLJ0bH7rva7kaInFdkuQqZBV+WaeGLWcZjkvAZL
+    +9SXnNgZysGAs0ZuBtB6y9JydoSKFcQRGhuxPYdv8bqlYvvYuhRUWva9dmizURn1oTlU
+    vFE06Cde3nMPdHjhKGDxWpfNGekyUQp/b1ck5zUm7qhFhHVmAigBSMm2+ZMQWm75T25A
+    V2c0hGl1MIfps76jXfBtXDbXmH8VLCPgfYI9cDzPZzkMgrJen3453OVMZFHvgG2jkujt
+    ZfQedUU2FoT71ks4VwuX4wJP6NhYzcWIawgfb92DRXx17RUKgtT5ME3tk8z2NI8oDlFL
+    I2zw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j6IczEbIo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.27.2 DYNA|AUTH)
+    with ESMTPSA id y01375x53BD06ws
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 3 Jun 2021 13:13:00 +0200 (CEST)
+Date:   Thu, 3 Jun 2021 13:12:55 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] PM: domains: Avoid boilerplate code for DVFS in
+ subsystem/drivers
+Message-ID: <YLi5N06Qs+gYHgYg@gerhold.net>
+References: <20210603093438.138705-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210603093438.138705-1-ulf.hansson@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+On Thu, Jun 03, 2021 at 11:34:34AM +0200, Ulf Hansson wrote:
+> Various discussions on LKML have pointed out that many subsystem/drivers for
+> devices that may be attached to a genpd and which manages DVFS/OPP though the
+> genpd performance states, would need very similar updates.
+> 
+> More precisely, they would likely have to call dev_pm_opp_set_rate|opp() to
+> drop and restore OPPs (which propagates upwards into performance states votes
+> in genpd), every time their devices should enter/exit a low power state, via
+> their device PM callbacks.
+> 
+> Rather than having to add the boilerplate code for these things into the
+> subsystems/drivers, this series implements the logic internally into genpd.
+> 
+> Concerns have been raised about this approach, mostly by myself, around that it
+> limits flexibility. On the other hand, it starts to look like more and more
+> people are requesting this to be manged internally in genpd, for good reasons.
+> So, I think it's worth to give this a try.
+> 
+> In the long run, if it turns out that the flexibility was indeed needed, we can
+> always deal with that as special cases on top.
+> 
 
-Provide thermal zone to read thermal sensor
-in the SoC. We can read all the thermal sensors
-value in the SoC by the node /sys/class/thermal/
+Do I understand your patch set correctly that you basically make the
+performance state votes conditional to the "power-on" vote of the device
+(which is automatically toggled during runtime/system PM)?
 
-In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-on the first read of sensor that often are bogus values.
-This can avoid following warning on boot:
+If yes, I think that's a good thing. It was always really confusing to me
+that a device can make performance state votes if it doesn't actually
+want the power domain to be powered on.
 
-  thermal thermal_zone6: failed to read out thermal zone (-13)
+What happens if a driver calls dev_pm_genpd_set_performance_state(...)
+while the device is suspended? Will that mess up the performance state
+when the device resumes?
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+I think this might also go into the direction of my problem with the OPP
+core for CPU DVFS [1] since the OPP core currently does not "power-on"
+the power domains, it just sets a performance state. I got kind of stuck
+with all the complexity of power domains in Linux so I think we never
+solved that.
 
----
+Stephan
 
-This patchset supports for MT8183 chip to mtk_thermal.c.
-Add thermal zone of all the thermal sensor in SoC for
-another get temperatrue. They don't need to thermal throttle.
-And we bind coolers for thermal zone nodes of cpu_thermal.
-
-Changes in V8:
-    - Rebase to kernel-v5.13-rc1
-    - Resend
-
-Changes in v7:
-    - Fix build error in v6.
-
-Changes in v6:
-    - Rebase to kernel-5.11-rc1.
-    - [1/3]
-        - add interrupts property.
-    - [2/3]
-        - add the Tested-by in the commit message.
-    - [3/3]
-        - use the mt->conf->msr[id] instead of conf->msr[id] in the
-          _get_sensor_temp and mtk_thermal_bank_temperature.
-        - remove the redundant space in _get_sensor_temp and
-          mtk_read_sensor_temp.
-        - change kmalloc to dev_kmalloc in mtk_thermal_probe.
-
-Changes in v5:
-    - Rebase to kernel-5.9-rc1.
-    - Revise the title of cover letter.
-    - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCORESEL"
-    - [2/2]
-        -  Add the judgement to the version of raw_to_mcelsius.
-
-Changes in v4:
-    - Rebase to kernel-5.6-rc1.
-    - [1/7]
-        - Squash thermal zone settings in the dtsi from [v3,5/8]
-          arm64: dts: mt8183: Increase polling frequency for CPU thermal zone.
-        - Remove the property of interrupts and mediatek,hw-reset-temp.
-    - [2/7]
-        - Correct commit message.
-    - [4/7]
-        - Change the target temperature to the 80C and change the commit message.
-    - [6/7]
-        - Adjust newline alignment.
-        - Fix the judgement on the return value of registering thermal zone.
-
-Changes in v3:
-    - Rebase to kernel-5.5-rc1.
-    - [1/8]
-        - Update sustainable power of cpu, tzts1~5 and tztsABB.
-    - [7/8]
-        - Bypass the failure that non cpu_thermal sensor is not find in thermal-zones
-          in dts, which is normal for mt8173, so prompt a warning here instead of
-          failing.
-
-	Return -EAGAIN instead of -EACCESS on the first read of sensor that
-        often are bogus values. This can avoid following warning on boot:
-
-          thermal thermal_zone6: failed to read out thermal zone (-13)
-
-Changes in v2:
-    - [1/8]
-        - Add the sustainable-power,trips,cooling-maps to the tzts1~tztsABB.
-    - [4/8]
-        - Add the min opp of cpu throttle.
-
-Matthias Kaehlcke (1):
-  arm64: dts: mt8183: Configure CPU cooling
-
-Michael Kao (2):
-  thermal: mediatek: add another get_temp ops for thermal sensors
-  arm64: dts: mt8183: add thermal zone node
----
- drivers/thermal/mtk_thermal.c | 100 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 75 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 97e8678..b6bee451 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -245,6 +245,11 @@ enum mtk_thermal_version {
- 
- struct mtk_thermal;
- 
-+struct mtk_thermal_zone {
-+	struct mtk_thermal *mt;
-+	int id;
-+};
-+
- struct thermal_bank_cfg {
- 	unsigned int num_sensors;
- 	const int *sensors;
-@@ -637,6 +642,30 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
- 		mutex_unlock(&mt->lock);
- }
- 
-+static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
-+{
-+	u32 raw;
-+	int temp;
-+
-+	raw = readl(mt->thermal_base + mt->conf->msr[id]);
-+
-+	if (mt->conf->version == MTK_THERMAL_V1)
-+		temp = raw_to_mcelsius_v1(mt, id, raw);
-+	else
-+		temp = raw_to_mcelsius_v2(mt, id, raw);
-+
-+	/*
-+	 * The first read of a sensor often contains very high bogus
-+	 * temperature value. Filter these out so that the system does
-+	 * not immediately shut down.
-+	 */
-+
-+	if (temp > 200000)
-+		return -EAGAIN;
-+	else
-+		return temp;
-+}
-+
- /**
-  * mtk_thermal_bank_temperature - get the temperature of a bank
-  * @bank:	The bank
-@@ -647,28 +676,11 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
- static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- {
- 	struct mtk_thermal *mt = bank->mt;
--	const struct mtk_thermal_data *conf = mt->conf;
- 	int i, temp = INT_MIN, max = INT_MIN;
--	u32 raw;
--
--	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
- 
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
-+	for (i = 0; i < mt->conf->bank_data[bank->id].num_sensors; i++) {
- 
--		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
--		 */
--		if (temp > 200000)
--			temp = 0;
-+		temp = _get_sensor_temp(mt, i);
- 
- 		if (temp > max)
- 			max = temp;
-@@ -679,7 +691,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 
- static int mtk_read_temp(void *data, int *temperature)
- {
--	struct mtk_thermal *mt = data;
-+	struct mtk_thermal_zone *tz = data;
-+	struct mtk_thermal *mt = tz->mt;
- 	int i;
- 	int tempmax = INT_MIN;
- 
-@@ -698,10 +711,28 @@ static int mtk_read_temp(void *data, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_sensor_temp(void *data, int *temperature)
-+{
-+	struct mtk_thermal_zone *tz = data;
-+	struct mtk_thermal *mt = tz->mt;
-+	int id = tz->id - 1;
-+
-+	if (id < 0)
-+		return -EACCES;
-+
-+	*temperature = _get_sensor_temp(mt, id);
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
-+	.get_temp = mtk_read_sensor_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -992,6 +1023,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-+	struct mtk_thermal_zone *tz;
- 
- 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
- 	if (!mt)
-@@ -1080,11 +1112,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, mt);
- 
--	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
--						     &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
-+	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-+		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-+		if (!tz)
-+			return -ENOMEM;
-+
-+		tz->mt = mt;
-+		tz->id = i;
-+
-+		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
-+							     &mtk_thermal_ops :
-+							     &mtk_thermal_sensor_ops);
-+
-+		if (IS_ERR(tzdev)) {
-+			if (PTR_ERR(tzdev) == -ENODEV) {
-+				dev_warn(&pdev->dev,
-+					 "sensor %d not registered in thermal zone in dt\n", i);
-+				continue;
-+			}
-+			if (PTR_ERR(tzdev) == -EACCES) {
-+				ret = PTR_ERR(tzdev);
-+				goto err_disable_clk_peri_therm;
-+			}
-+		}
- 	}
- 
- 	return 0;
--- 
-1.8.1.1.dirty
-
+[1]: https://lore.kernel.org/linux-pm/20200826093328.88268-1-stephan@gerhold.net/
