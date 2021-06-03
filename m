@@ -2,158 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40D8399C58
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 10:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF5E399D8C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 11:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbhFCIT5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 04:19:57 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:38566 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229822AbhFCIT5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 04:19:57 -0400
-X-UUID: 71995b59110a4742b933384800cfff5d-20210603
-X-UUID: 71995b59110a4742b933384800cfff5d-20210603
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <ben.tseng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1126083495; Thu, 03 Jun 2021 16:18:10 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Jun 2021 16:18:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Jun 2021 16:18:08 +0800
-From:   Ben Tseng <ben.tseng@mediatek.com>
-To:     Fan Chen <fan.chen@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Ben Tseng <ben.tseng@mediatek.com>
-Subject: [PATCH v4 3/3] dt-bindings: thermal: Add binding document for mt6873 thermal controller
-Date:   Thu, 3 Jun 2021 16:18:06 +0800
-Message-ID: <20210603081806.21154-4-ben.tseng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210603081806.21154-1-ben.tseng@mediatek.com>
-References: <20210603081806.21154-1-ben.tseng@mediatek.com>
+        id S229629AbhFCJTi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 05:19:38 -0400
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:46628 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbhFCJTh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 05:19:37 -0400
+Received: by mail-ua1-f47.google.com with SMTP id p1so2916898uam.13
+        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 02:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6dTsXISl94OKXQiNoraYlCr7F3D9osS4PfAtIlsvQCY=;
+        b=TsJrCQh0Ty5laTUo2X79hNJZ7E/ERDw2mtPJmpB73+O7IyCJVQ8tEMPy/xQyRCu9yf
+         htl4Ta8mkTiQz2/3owzr+0rv4jVSzoczfKA6OLmiFH2bZ+VHCsurzZ27VQdX11ItUg7g
+         pHstUNccNXDSZYx5X53X6TO4QzWmRHEGkqsUQcn1m1kt4R6sforOTPV0NV0ZCupC4ria
+         fJMd0G8eXvdzAEFuG9LME5glr212h6q41hguvhEaX5gw0DFkYmBeKraAdaj7TVPwR3Nd
+         Q6t+lCZTwK4qoZCavTgTsdcU60zFYd88Zm/pwnyPJ30fwQOvshdP39wIK2shBXBwT74h
+         q93g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6dTsXISl94OKXQiNoraYlCr7F3D9osS4PfAtIlsvQCY=;
+        b=sjsa/WN0UnCyH83hepq3oLrot1VxujHDzH6yi6Rl8pglWBtuWgpRdVZs0VH9+1SOlz
+         PiONHHb9ea7dxkGHVNcDToV5JZW7a9y/Qdr8V/uDXTbGnPUfaqw+i8/bimhj8gdm3TjV
+         vlaXygdwq/BTkNixacBtf8ulUbaSLxnZ7jl0TOgHcThUnzppVMUFhTCjIAAWMO89wa0q
+         t0HP10qNhUDeRZ/rW8AU03t8JkE6wa+Re/TxF+bKJDNrOfgVsAkBLPBli3gu4iTQ8UMN
+         O2XoNWETKCpUNCgoxqInC+Ry1CWcTyIb90IGEHIensacrzd1jluJHzODkL9UgixEkW9M
+         /6CQ==
+X-Gm-Message-State: AOAM530BxqEcwBF4KeWOEMtfRkdYX0VwF6NRPxeU39XQH6a5ZqrUi489
+        2DEOxMzG0oM8gcp7kawszJvpSrt1dVToUIeUdfjc4Q==
+X-Google-Smtp-Source: ABdhPJxbxQsf3fPK8vf6FZnE0rJEGeJ8dP0iA/UQlXh2UcoMHUxnpm06yFtz1QJsoMioNp/BeQ8Oi+tx3AYnB6b5lX8=
+X-Received: by 2002:a05:6122:995:: with SMTP id g21mr20710892vkd.7.1622711813164;
+ Thu, 03 Jun 2021 02:16:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20210602101215.78094-1-ulf.hansson@linaro.org>
+ <20210602101215.78094-3-ulf.hansson@linaro.org> <20210603023441.bs47nwtmskrdz2el@vireshk-i7>
+ <20210603023739.mds4eir4i6olaiwz@vireshk-i7>
+In-Reply-To: <20210603023739.mds4eir4i6olaiwz@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 3 Jun 2021 11:16:16 +0200
+Message-ID: <CAPDyKFoodEvWCm17=+4NV3snHpSP4qbOzz4+PFyjc=UHvQysOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] PM: domains: Drop/restore performance state votes for
+ devices at runtime PM
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+On Thu, 3 Jun 2021 at 04:37, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 03-06-21, 08:04, Viresh Kumar wrote:
+> > On 02-06-21, 12:12, Ulf Hansson wrote:
+> > > A subsystem/driver that need to manage OPPs for its device, should
+> > > typically drop its vote for the OPP when the device becomes runtime
+> > > suspended. In this way, the corresponding aggregation of the performance
+> > > state votes that is managed in genpd for the attached PM domain, may find
+> > > that the aggregated vote can be decreased. Hence, it may allow genpd to set
+> > > the lower performance state for the PM domain, thus avoiding to waste
+> > > energy.
+> > >
+> > > To accomplish this, typically a subsystem/driver would need to call
+> > > dev_pm_opp_set_rate|opp() for its device from its ->runtime_suspend()
+> > > callback, to drop the vote for the OPP. Accordingly, it needs another call
+> > > to dev_pm_opp_set_rate|opp() to restore the vote for the OPP from its
+> > > ->runtime_resume() callback.
+> > >
+> > > To avoid boilerplate code in subsystems/driver to deal with these things,
+> > > let's instead manage this internally in genpd.
+> > >
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  drivers/base/power/domain.c | 21 +++++++++++++++++++--
+> > >  include/linux/pm_domain.h   |  1 +
+> > >  2 files changed, 20 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > index a3b6e751f366..81b9d4652b90 100644
+> > > --- a/drivers/base/power/domain.c
+> > > +++ b/drivers/base/power/domain.c
+> > > @@ -397,6 +397,18 @@ static int genpd_set_performance_state(struct device *dev, unsigned int state)
+> > >     return ret;
+> > >  }
+> > >
+> > > +static int genpd_drop_performance_state(struct device *dev)
+> > > +{
+> > > +   struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
+> > > +   unsigned int prev_state;
+> > > +
+> > > +   prev_state = gpd_data->performance_state;
+> > > +   if (prev_state && !genpd_set_performance_state(dev, 0))
+> >
+> > What about adding this prev_state check in
+> > genpd_set_performance_state() itself ? We already have one for the
+> > genpd in _genpd_set_performance_state(), why not one for the device ?
+> >
+> > > +           return prev_state;
+> > > +
+> > > +   return 0;
+> >
+> > Hmm, we will return 0 in case genpd_set_performance_state() fails,
+> > which will make us set the state to 0 again on resume. Maybe add a
+> > comment for this somewhere ?
+>
+> No, we won't as you check for rpm_saved_pstate there, so the device
+> will stay disabled.
+>
+> Again adding the check into genpd_set_performance_state() may help
+> reducing similar checks elsewhere.
 
-This patch adds binding document for mt6873 thermal controller.
+Yes, at closer look, I think it makes sense to me as well.
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-This patch depends on [1].
+Although, as it means a change in behaviour, I decided to make it a
+separate patch. Let me respin the series to fold it in.
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20210524122053.17155-7-chun-jie.chen@mediatek.com/
----
- .../bindings/thermal/mediatek-thermal-lvts.yaml    | 81 ++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+[...]
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-new file mode 100644
-index 0000000..69ffe7b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek SoC LVTS thermal controller (DTS) binding
-+
-+maintainers:
-+  - Yu-Chia Chang <ethan.chang@mediatek.com>
-+  - Ben Tseng <ben.tseng@mediatek.com>
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt6873-lvts
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: lvts_clk
-+
-+  "#thermal-sensor-cells":
-+    const: 0
-+
-+required:
-+  - "#thermal-sensor-cells"
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/thermal/thermal.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt8192-clk.h>
-+    dts: lvts@1100b000 {
-+        compatible = "mediatek,mt6873-lvts";
-+        reg = <0x1100b000 0x1000>;
-+        clocks = <&infracfg CLK_INFRA_THERM>;
-+        clock-names = "lvts_clk";
-+        #thermal-sensor-cells = <0>;
-+        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+
-+    thermal-zones {
-+        cpu_thermal: cpu-thermal {
-+            polling-delay-passive = <0>;
-+            polling-delay = <0>;
-+
-+            thermal-sensors = <&dts>;
-+            trips {
-+                cpu_alert1: cpu-alert1 {
-+                    temperature = <85000>;
-+                    hysteresis = <0>;
-+                    type = "passive";
-+                };
-+
-+                cpu_crit: cpu-crit {
-+                    temperature = <120000>;
-+                    hysteresis = <0>;
-+                    type = "critical";
-+                };
-+            };
-+
-+            cooling-maps {
-+            };
-+        };
-+    };
-+...
--- 
-1.8.1.1.dirty
+Thanks for reviewing!
 
+Kind regards
+Uffe
