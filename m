@@ -2,148 +2,351 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBC339A978
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 19:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E31639A9B3
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 20:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbhFCRsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 13:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
+        id S230328AbhFCSFf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 14:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbhFCRsK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 13:48:10 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA3DC06174A;
-        Thu,  3 Jun 2021 10:46:11 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id n4so6718799wrw.3;
-        Thu, 03 Jun 2021 10:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TNHNoyIPc56JzvVDn+fQoTPRGO3k2WWty4qeqb/AesU=;
-        b=B9hDeW0WbnAZidcvhpT+0xu5iLMKTSrBjYuow6ssTqM/0K4FTi7irW5EO/NwypOe32
-         LbHTvarsy0ZS6pebaKI7+nQI8hHp2WDYb6++qq7r3lSQ/tL0wcXsSK/9vQdintAjN6Kp
-         0DvCugCBQ/LRUHndP7LQe8+49fEk2Pt7nwvTCVRj7Myu1Azvc5SdQjAwHDF2QHZNzlJy
-         z3M6aqFbePyN0CF7Yqk03G6hhizbWnoRff26KK8rRTxPZNOUQMM+40O67j9kU8bEo1EZ
-         YDQ8CWfHAdDTaJ7/aA8/EIumC+9iBa0EU98va53s/VN9m9dJTedBft0tRlF6/Za/tVy1
-         fxzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TNHNoyIPc56JzvVDn+fQoTPRGO3k2WWty4qeqb/AesU=;
-        b=cKOOErThMimKcxR24n6XXr22HAXnKtl6Mfp9ARmDKOU+JeFgYxZn1k7sofmRcdCjPH
-         n1F2GaBuXC8qyQEyMcaG7ilrx1ol17+ZIUHpDENmqn/Z7DZUcfaqMzPxIZif0zomZnQO
-         7aR4kaaMkG8NEc2fA8s6DcZHReLaNe2v4SDNprgxbX3dn4YgtOGGOLGB/l3iJ88MCF11
-         XyMFWokQXxyGNZmpTg/afrzij4iCu3NDZOMDt2jfvT/lOYs6iMEs4GCgwPCDitwX5B/t
-         sq8Lwch2VGGEAhM7d0IgcKtTVmOsDEKAXBk2aaJbAQeOZHfI/Zud5Db5JFCRKXr0Yvrn
-         joWw==
-X-Gm-Message-State: AOAM530FDqufKJ8UcTlW1nPBskag5tKhKceVIOvdnaERExGdP3Mboxhe
-        q/M5WM95pG4xEvLQHrd5jg8=
-X-Google-Smtp-Source: ABdhPJzmelXmMojIaThGJLerEKR3ZHv8GnmRuap9Pmzthk93MEz3Msq9ANIri+xeybPllvt47KtDmw==
-X-Received: by 2002:adf:a503:: with SMTP id i3mr166016wrb.334.1622742370252;
-        Thu, 03 Jun 2021 10:46:10 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id h1sm7458431wmq.0.2021.06.03.10.46.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Jun 2021 10:46:09 -0700 (PDT)
-Subject: Re: [PATCH v2] arm64: dts: mt8183-kukui: Enable thermal Tboard
-To:     Ben Tseng <ben.tseng@mediatek.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20210603105901.21552-1-ben.tseng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <b8c4023e-498c-c30e-e4cd-35fbadaf6b5d@gmail.com>
-Date:   Thu, 3 Jun 2021 19:46:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        with ESMTP id S229906AbhFCSFf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 14:05:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B86C06174A;
+        Thu,  3 Jun 2021 11:03:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 25D441F43475
+Received: by earth.universe (Postfix, from userid 1000)
+        id CA0133C0C95; Thu,  3 Jun 2021 20:03:46 +0200 (CEST)
+Date:   Thu, 3 Jun 2021 20:03:46 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+Cc:     linux-pm@vger.kernel.org, Hsinyi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] power: supply: sbs-battery: cache constant string
+ properties
+Message-ID: <20210603180346.omjexgprlejga34n@earth.universe>
+References: <20210526191600.v4.1.I446881dabe094fff375847593be87ec2624f587f@changeid>
 MIME-Version: 1.0
-In-Reply-To: <20210603105901.21552-1-ben.tseng@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ay5jp6hivwzdl3yk"
+Content-Disposition: inline
+In-Reply-To: <20210526191600.v4.1.I446881dabe094fff375847593be87ec2624f587f@changeid>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--ay5jp6hivwzdl3yk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 03/06/2021 12:59, Ben Tseng wrote:
-> From: Michael Kao <michael.kao@mediatek.com>
-> 
-> Add Tboard thermal sensor settings.
-> 
-> pull-up voltage: 1800 mv
-> pull-up resistor: 75K
-> 
-> Vsense = pull-up voltage * Rntc / ( pull-up resistor + Rntc )
-> AuxIn = Vsense * 4096 / 1500
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+Hi,
+
+On Wed, May 26, 2021 at 07:16:04PM +0800, Ikjoon Jang wrote:
+> Currently sbs-battery supports three string properties -
+> manufacturer, model_name, and chemistry. Buffers for those
+> properties are currently defined as global variables.
+>=20
+> This patch moves those global variables into struct sbs_info
+> and cache/reuse them as they are all constant values.
+>=20
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>=20
 > ---
-> Change in v2:
->         - Rebase to kernel-v5.13-rc1
->         - Resend
-> ---
->  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 14 ++++++++++++++
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi       |  2 +-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index ff56bcf..65768ab 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -847,6 +847,20 @@
->  	status = "okay";
->  };
->  
-> +&thermal_zones {
-> +	Tboard1 {
 
-Lower-case please. It would be also good to know what tboard1 and 2 stands for.
+Thanks, queued.
 
-Regards,
-Matthias
+-- Sebastian
 
-> +		polling-delay = <1000>; /* milliseconds */
-> +		polling-delay-passive = <0>; /* milliseconds */
-> +		thermal-sensors = <&tboard_thermistor1>;
-> +	};
-> +
-> +	Tboard2 {
-> +		polling-delay = <1000>; /* milliseconds */
-> +		polling-delay-passive = <0>; /* milliseconds */
-> +		thermal-sensors = <&tboard_thermistor2>;
-> +	};
+>=20
+> Changes in v4:
+> - Fix a build error from patch manipulation
+>=20
+> Changes in v3:
+> - Invalidate cached properties upon update_presence(!present)
+> - Fix a bug in reading chemistry
+>=20
+> Changes in v2:
+> - change function name of sbs_get_battery_string_property()
+>   to sbs_get_constant_string()
+> - use cached string properties
+> - use cached technology value in sbs_get_chemistry()
+>=20
+>  drivers/power/supply/sbs-battery.c | 153 ++++++++++++++++++-----------
+>  1 file changed, 95 insertions(+), 58 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
+s-battery.c
+> index b6a538ebb378..b6ee3a14576f 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -188,6 +188,14 @@ static const enum power_supply_property sbs_properti=
+es[] =3D {
+>  /* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC=
+=2E */
+>  #define SBS_FLAGS_TI_BQ20ZX5		BIT(0)
+> =20
+> +static const enum power_supply_property string_properties[] =3D {
+> +	POWER_SUPPLY_PROP_TECHNOLOGY,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
 > +};
 > +
->  &u3phy {
->  	status = "okay";
+> +#define NR_STRING_BUFFERS	ARRAY_SIZE(string_properties)
+> +
+>  struct sbs_info {
+>  	struct i2c_client		*client;
+>  	struct power_supply		*power_supply;
+> @@ -201,11 +209,32 @@ struct sbs_info {
+>  	struct delayed_work		work;
+>  	struct mutex			mode_lock;
+>  	u32				flags;
+> +	int				technology;
+> +	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
 >  };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index c5e822b..4173a5d 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -673,7 +673,7 @@
->  			nvmem-cell-names = "calibration-data";
->  		};
->  
-> -		thermal-zones {
-> +		thermal_zones: thermal-zones {
->  			cpu_thermal: cpu_thermal {
->  				polling-delay-passive = <100>;
->  				polling-delay = <500>;
-> 
+> =20
+> -static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+> -static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+> -static char chemistry[I2C_SMBUS_BLOCK_MAX + 1];
+> +static char *sbs_get_string_buf(struct sbs_info *chip,
+> +				enum power_supply_property psp)
+> +{
+> +	int i =3D 0;
+> +
+> +	for (i =3D 0; i < NR_STRING_BUFFERS; i++)
+> +		if (string_properties[i] =3D=3D psp)
+> +			return chip->strings[i];
+> +
+> +	return ERR_PTR(-EINVAL);
+> +}
+> +
+> +static void sbs_invalidate_cached_props(struct sbs_info *chip)
+> +{
+> +	int i =3D 0;
+> +
+> +	chip->technology =3D -1;
+> +
+> +	for (i =3D 0; i < NR_STRING_BUFFERS; i++)
+> +		chip->strings[i][0] =3D 0;
+> +}
+> +
+>  static bool force_load;
+> =20
+>  static int sbs_read_word_data(struct i2c_client *client, u8 address);
+> @@ -243,6 +272,7 @@ static int sbs_update_presence(struct sbs_info *chip,=
+ bool is_present)
+>  		chip->is_present =3D false;
+>  		/* Disable PEC when no device is present */
+>  		client->flags &=3D ~I2C_CLIENT_PEC;
+> +		sbs_invalidate_cached_props(chip);
+>  		return 0;
+>  	}
+> =20
+> @@ -639,17 +669,45 @@ static int sbs_get_battery_property(struct i2c_clie=
+nt *client,
+>  	return 0;
+>  }
+> =20
+> -static int sbs_get_battery_string_property(struct i2c_client *client,
+> -	int reg_offset, enum power_supply_property psp, char *val)
+> +static int sbs_get_property_index(struct i2c_client *client,
+> +	enum power_supply_property psp)
+>  {
+> -	s32 ret;
+> +	int count;
+> =20
+> -	ret =3D sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
+> +	for (count =3D 0; count < ARRAY_SIZE(sbs_data); count++)
+> +		if (psp =3D=3D sbs_data[count].psp)
+> +			return count;
+> =20
+> -	if (ret < 0)
+> -		return ret;
+> +	dev_warn(&client->dev,
+> +		"%s: Invalid Property - %d\n", __func__, psp);
+> =20
+> -	return 0;
+> +	return -EINVAL;
+> +}
+> +
+> +static const char *sbs_get_constant_string(struct sbs_info *chip,
+> +			enum power_supply_property psp)
+> +{
+> +	int ret;
+> +	char *buf;
+> +	u8 addr;
+> +
+> +	buf =3D sbs_get_string_buf(chip, psp);
+> +	if (IS_ERR(buf))
+> +		return buf;
+> +
+> +	if (!buf[0]) {
+> +		ret =3D sbs_get_property_index(chip->client, psp);
+> +		if (ret < 0)
+> +			return ERR_PTR(ret);
+> +
+> +		addr =3D sbs_data[ret].addr;
+> +
+> +		ret =3D sbs_read_string_data(chip->client, addr, buf);
+> +		if (ret < 0)
+> +			return ERR_PTR(ret);
+> +	}
+> +
+> +	return buf;
+>  }
+> =20
+>  static void  sbs_unit_adjustment(struct i2c_client *client,
+> @@ -772,48 +830,36 @@ static int sbs_get_battery_serial_number(struct i2c=
+_client *client,
+>  	return 0;
+>  }
+> =20
+> -static int sbs_get_property_index(struct i2c_client *client,
+> -	enum power_supply_property psp)
+> -{
+> -	int count;
+> -	for (count =3D 0; count < ARRAY_SIZE(sbs_data); count++)
+> -		if (psp =3D=3D sbs_data[count].psp)
+> -			return count;
+> -
+> -	dev_warn(&client->dev,
+> -		"%s: Invalid Property - %d\n", __func__, psp);
+> -
+> -	return -EINVAL;
+> -}
+> -
+> -static int sbs_get_chemistry(struct i2c_client *client,
+> +static int sbs_get_chemistry(struct sbs_info *chip,
+>  		union power_supply_propval *val)
+>  {
+> -	enum power_supply_property psp =3D POWER_SUPPLY_PROP_TECHNOLOGY;
+> -	int ret;
+> +	const char *chemistry;
+> =20
+> -	ret =3D sbs_get_property_index(client, psp);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (chip->technology !=3D -1) {
+> +		val->intval =3D chip->technology;
+> +		return 0;
+> +	}
+> =20
+> -	ret =3D sbs_get_battery_string_property(client, ret, psp,
+> -					      chemistry);
+> -	if (ret < 0)
+> -		return ret;
+> +	chemistry =3D sbs_get_constant_string(chip, POWER_SUPPLY_PROP_TECHNOLOG=
+Y);
+> +
+> +	if (IS_ERR(chemistry))
+> +		return PTR_ERR(chemistry);
+> =20
+>  	if (!strncasecmp(chemistry, "LION", 4))
+> -		val->intval =3D POWER_SUPPLY_TECHNOLOGY_LION;
+> +		chip->technology =3D POWER_SUPPLY_TECHNOLOGY_LION;
+>  	else if (!strncasecmp(chemistry, "LiP", 3))
+> -		val->intval =3D POWER_SUPPLY_TECHNOLOGY_LIPO;
+> +		chip->technology =3D POWER_SUPPLY_TECHNOLOGY_LIPO;
+>  	else if (!strncasecmp(chemistry, "NiCd", 4))
+> -		val->intval =3D POWER_SUPPLY_TECHNOLOGY_NiCd;
+> +		chip->technology =3D POWER_SUPPLY_TECHNOLOGY_NiCd;
+>  	else if (!strncasecmp(chemistry, "NiMH", 4))
+> -		val->intval =3D POWER_SUPPLY_TECHNOLOGY_NiMH;
+> +		chip->technology =3D POWER_SUPPLY_TECHNOLOGY_NiMH;
+>  	else
+> -		val->intval =3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> +		chip->technology =3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> +
+> +	if (chip->technology =3D=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> +		dev_warn(&chip->client->dev, "Unknown chemistry: %s\n", chemistry);
+> =20
+> -	if (val->intval =3D=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN)
+> -		dev_warn(&client->dev, "Unknown chemistry: %s\n", chemistry);
+> +	val->intval =3D chip->technology;
+> =20
+>  	return 0;
+>  }
+> @@ -857,6 +903,7 @@ static int sbs_get_property(struct power_supply *psy,
+>  	int ret =3D 0;
+>  	struct sbs_info *chip =3D power_supply_get_drvdata(psy);
+>  	struct i2c_client *client =3D chip->client;
+> +	const char *str;
+> =20
+>  	if (chip->gpio_detect) {
+>  		ret =3D gpiod_get_value_cansleep(chip->gpio_detect);
+> @@ -882,7 +929,7 @@ static int sbs_get_property(struct power_supply *psy,
+>  		break;
+> =20
+>  	case POWER_SUPPLY_PROP_TECHNOLOGY:
+> -		ret =3D sbs_get_chemistry(client, val);
+> +		ret =3D sbs_get_chemistry(chip, val);
+>  		if (ret < 0)
+>  			break;
+> =20
+> @@ -934,23 +981,12 @@ static int sbs_get_property(struct power_supply *ps=
+y,
+>  		break;
+> =20
+>  	case POWER_SUPPLY_PROP_MODEL_NAME:
+> -		ret =3D sbs_get_property_index(client, psp);
+> -		if (ret < 0)
+> -			break;
+> -
+> -		ret =3D sbs_get_battery_string_property(client, ret, psp,
+> -						      model_name);
+> -		val->strval =3D model_name;
+> -		break;
+> -
+>  	case POWER_SUPPLY_PROP_MANUFACTURER:
+> -		ret =3D sbs_get_property_index(client, psp);
+> -		if (ret < 0)
+> -			break;
+> -
+> -		ret =3D sbs_get_battery_string_property(client, ret, psp,
+> -						      manufacturer);
+> -		val->strval =3D manufacturer;
+> +		str =3D sbs_get_constant_string(chip, psp);
+> +		if (IS_ERR(str))
+> +			ret =3D PTR_ERR(str);
+> +		else
+> +			val->strval =3D str;
+>  		break;
+> =20
+>  	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+> @@ -1097,6 +1133,7 @@ static int sbs_probe(struct i2c_client *client)
+>  	psy_cfg.of_node =3D client->dev.of_node;
+>  	psy_cfg.drv_data =3D chip;
+>  	chip->last_state =3D POWER_SUPPLY_STATUS_UNKNOWN;
+> +	sbs_invalidate_cached_props(chip);
+>  	mutex_init(&chip->mode_lock);
+> =20
+>  	/* use pdata if available, fall back to DT properties,
+> --=20
+> 2.31.1.818.g46aad6cb9e-goog
+>=20
+
+--ay5jp6hivwzdl3yk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC5GX0ACgkQ2O7X88g7
++pr4vQ//dvSIqkq9BfbTARyzgULjqVfzN1SL1fT+MFd/DaWCnVhuluehEg5nhpns
+oce9ZQwdYj6z7KGFw/gBSMfiEzGs1OampOUA4lOE7q0j+VV7bEKquWBkvN/AfZWR
+a/US7WpMPn4k0axjCPbFJYGgQ57scHapiDDPahxts1ZuoiKBLclC43jqdRWeqtKV
+Xj8IliR0k3qKxrKv2XRWSw7VqWLl2ZK0U3MvH1MaBM0tMXdFqn8FI9roGEHaYC2Q
+Uh0m9G4eMEe/rUj0W8Y7HeTSJxPNcQygR/vwEM1XxOULkAfqO9fRvpeb8Lo4U2r1
+u7hT3z+rxN3ZqBPIgmZXdRW0PEk7bIpCFpLyqR0KE4mGrh1tXU5aTYMgMq5PR26L
+oDDQpGR1kQxP6q69EXKX1D5Qavv+HAHnrSWbqJnEAcGkiFGjVhXdu3Ainmi+4kBn
+CVIhhFHSb6Zz3h5fOG3fjnz+bVDRuj4ttP+UOFCG6EDwfTB8FyxyqLwoVFCHgVDg
+jwXbxtoqRRJsdMwfO7EnXt/GIsjZh8A5twLo+DPxSmslqsDyxw8dhm/tbCHRNmfw
+V3vnv0h5/fTgespMoUfl8ZgJICV7p5dv9n5hj78djEwla+qcMeP5uXl4EJwF7uXN
+qEGlfPpW3mm1/vlVy9SJumDIJFo7d6e2TldQbYBj05ap4TESOJI=
+=RzpA
+-----END PGP SIGNATURE-----
+
+--ay5jp6hivwzdl3yk--
