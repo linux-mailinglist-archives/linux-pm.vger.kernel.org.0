@@ -2,159 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775FE399FA4
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 13:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8BE39A27F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 15:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbhFCLTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 07:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbhFCLTj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 07:19:39 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0678FC06174A
-        for <linux-pm@vger.kernel.org>; Thu,  3 Jun 2021 04:17:55 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id i29so2763922vsr.11
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 04:17:54 -0700 (PDT)
+        id S230428AbhFCNvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 09:51:44 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:33706 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230099AbhFCNvo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 09:51:44 -0400
+Received: by mail-ua1-f51.google.com with SMTP id l12so3360759uai.0
+        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 06:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=J4ObDIp6BcuLfbXjzjA+gyGEMD4dFtav2yXYyJcMRtQ=;
-        b=UA0/7uockS4ysIkv6KrOoSyHbe66enVPJ+TPG+u5e9lopkcEFg5aFQZcZBJwy4UqXA
-         QJy9pk2CTMDVX5RuIjC//eUktpneTYvzkiDegW7kqAOsITRsJymo5KhZbhhShF9TGPzV
-         e4gKZOoKBQeoCs0tnF10/hh7lsWGaBgH4SsjhOkQE7ap8r+tE9q6OodvFhoTIniodAlO
-         glAvhw4x11uXQxPKqeL2LdtZ/04/uZERRY5O/08s842rYD0oo388E9tXKfqB4UwJJp8V
-         NzE0pog6T3jx5o9+Bpeby2qAt0lfeNst3qGbFxjEx3Mbty5EyGSiIkLI/MkDq5RksAmr
-         0Jng==
+        bh=2UjUIW9zbfUZ4RwOyiLkvVO/eF05W329MyzzFPGAFB4=;
+        b=c44tayuwS2u8SQTEybCZAoA5xeWfvrXFKtD564C4jJwGB3LaCJpSsEtBNEMceN0G4x
+         jW5niwBZvJjlupvPzD8zRa7VTqtAk4psSC0Iu/YBoZqCi42lxExp+oxniv/hRb+xOv6z
+         76JcqI57DEpdlB7LFMgJxEL7ybPXqISHaBGY+O26Skt2Xl+JwpmpK+qS+lV1uGP4RiZg
+         u5jdnki9BSJ/j5U/4yfaL/rHRzDRgubs68Simzrh2pytp5kDf4iGMfnT4R7rW3oSdDJJ
+         dBWUIiZLJVJ+JX1Ea5OTd4EBt8on4u3QjLovQmzeroAkGOMKD7+yHceXHBN6cEgc8kzl
+         Tx3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=J4ObDIp6BcuLfbXjzjA+gyGEMD4dFtav2yXYyJcMRtQ=;
-        b=UcDILylGdoB6o1Z3fgmfuF08tWzHvWtb755B0HFFzWO3/h1MsifvQWwf7wSUGpxNF6
-         p0LK+cuqKBOkJas3vZQqufnCcRU2s8Ggtn5KHMFAqU5EKlCMKfT74OCBTjBcVcqERRJa
-         YJPG1TFJlEakDdhFsoBMyq8TvNytt9whaC8iPSAwqW3qiH2xmJLngZTwxX0ygVFiVqOi
-         d9kiZPP40i+BRIjecbUoGPoWc9zDiH3xsyjqBR+Z0VDFqWRUjlvwG5jKym8FL8d8eCYY
-         TkMJpW/MzRnYeeHcANS7cLYOp3nx/oeyvSviyvbPrPjmIq1pZc3GHqnCMbeZQQyIHHtY
-         szaw==
-X-Gm-Message-State: AOAM5327sl1iwQTPsRVC96ybusW1K7vEv8+2q5iVqsqZ9kxZcmtDbo+7
-        0OW3ZHK5XeDn5JvvEgjmBfsd6vkUIgc3FVV5taGptw==
-X-Google-Smtp-Source: ABdhPJyttrR1f0i6p93DW3UL+QBi7kipiNBNI1S0EoDnYGaGmoeAD7V4no8SOj3dUlgXTgT4pA/0US3xSn86y0NvYBQ=
-X-Received: by 2002:a67:e359:: with SMTP id s25mr2203007vsm.55.1622719074185;
- Thu, 03 Jun 2021 04:17:54 -0700 (PDT)
+        bh=2UjUIW9zbfUZ4RwOyiLkvVO/eF05W329MyzzFPGAFB4=;
+        b=aXAZl199N/DLTMwu0mTxctBdB7UiulUulvj5EVk94Ipk2/FAADlkdhBtujMiMaUdk+
+         FFt23qe3Z2YdAkvEvULzyTFqS7SnQj18hg3jKSwhHlZpAqTItYNKl2k6qTI/mS0njwwX
+         YmxIGXvqQ5dyLSCNPHQfRjbiD7txc/ORKsrO/wFEyPqFB5IlpwcY2aWPyDFDdfp0p+43
+         JmV1MIEboH3C05r/HAew4MVc3rKxq1ImJsDQ7C5TrHOWWFEueNvtcuFT7r8ye4fnlmvA
+         tyIvE59qoXbi5UWsxTRjVPqrPJBNmTOdfXHKZqvcIiSd/a+TJgKVPqs3IozKklmbCn1w
+         BpHw==
+X-Gm-Message-State: AOAM531Ub/N+5TKhg+TypomQCNl9Po87K4l5vyWVooe7P6fGacDIeue3
+        P9bm9h9Lu3FzosJcQXSRVqjWCbf5jXrwUVOZu+SnHnWnc/R0xw==
+X-Google-Smtp-Source: ABdhPJwXOmWBpw9TxY14OndWy9w9S1xWe5445oPP85ttLd+bbAgHrOOP7FzQCKwlHmMSuw2tXjl+JGJ8Kk8oe8fUYoc=
+X-Received: by 2002:ab0:d8f:: with SMTP id i15mr24663046uak.104.1622728126477;
+ Thu, 03 Jun 2021 06:48:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210603093438.138705-1-ulf.hansson@linaro.org>
- <20210603093438.138705-4-ulf.hansson@linaro.org> <20210603095538.b2t3cq25tq7v7kih@vireshk-i7>
- <CAPDyKFqNNeeMo6+gKgaPtPvgC_NuMxxYKkr+TzyP3vjYoHoDOw@mail.gmail.com>
-In-Reply-To: <CAPDyKFqNNeeMo6+gKgaPtPvgC_NuMxxYKkr+TzyP3vjYoHoDOw@mail.gmail.com>
+ <20210603093438.138705-5-ulf.hansson@linaro.org> <CAPDyKFp2dKFQpLMgazXumCxf=FHQ9bdadXUkGsjiAwniF8p2dw@mail.gmail.com>
+ <20210603111529.GB4257@sirena.org.uk>
+In-Reply-To: <20210603111529.GB4257@sirena.org.uk>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 3 Jun 2021 13:17:18 +0200
-Message-ID: <CAPDyKFofsuY_RAMGsRLtKo=JxJ11DgGqOijZEEf1HEANCvomzg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] PM: domains: Drop/restore performance state votes
- for devices at runtime PM
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Thu, 3 Jun 2021 15:48:10 +0200
+Message-ID: <CAPDyKFouMZeQ96XSV=-dfNKNtgxhMG=xGqPCNBV9bvzuXYJQtw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] PM: domains: Drop/restore performance state votes
+ for devices at system PM
+To:     Mark Brown <broonie@kernel.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
         Roja Rani Yarubandi <rojay@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Stephan Gerhold <stephan@gerhold.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 3 Jun 2021 at 12:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Thu, 3 Jun 2021 at 13:15, Mark Brown <broonie@kernel.org> wrote:
 >
-> On Thu, 3 Jun 2021 at 11:55, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 03-06-21, 11:34, Ulf Hansson wrote:
-> > > A subsystem/driver that need to manage OPPs for its device, should
-> > > typically drop its vote for the OPP when the device becomes runtime
-> > > suspended. In this way, the corresponding aggregation of the performance
-> > > state votes that is managed in genpd for the attached PM domain, may find
-> > > that the aggregated vote can be decreased. Hence, it may allow genpd to set
-> > > the lower performance state for the PM domain, thus avoiding to waste
-> > > energy.
-> > >
-> > > To accomplish this, typically a subsystem/driver would need to call
-> > > dev_pm_opp_set_rate|opp() for its device from its ->runtime_suspend()
-> > > callback, to drop the vote for the OPP. Accordingly, it needs another call
-> > > to dev_pm_opp_set_rate|opp() to restore the vote for the OPP from its
-> > > ->runtime_resume() callback.
-> > >
-> > > To avoid boilerplate code in subsystems/driver to deal with these things,
-> > > let's instead manage this internally in genpd.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >       - Rebased.
-> > >       - A few minor cosmetic changes.
-> > >       - Deal with the error path in genpd_runtime_resume().
-> > >
-> > > ---
-> > >  drivers/base/power/domain.c | 27 +++++++++++++++++++++++++--
-> > >  include/linux/pm_domain.h   |  1 +
-> > >  2 files changed, 26 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > index ef25a5b18587..e5d97174c254 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -400,6 +400,23 @@ static int genpd_set_performance_state(struct device *dev, unsigned int state)
-> > >       return ret;
-> > >  }
-> > >
-> > > +static int genpd_drop_performance_state(struct device *dev)
-> >
-> > What about passing the state pointer here? that will simplify the
-> > callers to just a call.
+> On Thu, Jun 03, 2021 at 12:20:57PM +0200, Ulf Hansson wrote:
+> > On Thu, 3 Jun 2021 at 11:34, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Not sure I get that. Can you elaborate a bit more?
+> > > Recent changes in genpd drops and restore performance state votes for
+> > > devices during runtime PM.
 >
-> >
-> > > +{
-> > > +     unsigned int prev_state = dev_gpd_data(dev)->performance_state;
-> > > +
-> > > +     if (!genpd_set_performance_state(dev, 0))
-> > > +             return prev_state;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static void genpd_restore_performance_state(struct device *dev,
-> > > +                                         unsigned int state)
-> > > +{
-> > > +     if (state)
-> >
-> > I will skip this check, as we are checking it in
-> > genpd_set_performance_state() anyway ?
+> > After a second thought, it looks like we maybe should defer to apply
+> > this final patch of the series. At least until we figured out how to
+> > address the below issue:
 >
-> I don't want us to override OPP votes made by the subsystem/driver
-> level runtime PM callbacks. For example, if the drivers manage this
-> thing themselves, that should be preserved.
+> > So, I noticed that we have things like "regulator-fixed-domain", that
+> > uses "required-opps" to enable/disable a regulator through the
+> > dev_pm_set_performance_state() interface. We likely don't want to drop
+> > the performance state internally in genpd when genpd_suspend_noirq()
+> > gets called, for the corresponding struct device for the regulator.
 >
-> That said, by the check above I want to avoid setting the state to
-> zero internally by genpd, if the driver level ->runtime_resume()
-> callback has already restored the state.
+> > I guess if genpd should drop performance states like $subject patch
+> > suggest, we need some kind of additional coordination, that allows a
+> > subsystem/driver to inform genpd when it should avoid it. Or something
+> > along those lines.
+>
+> I'm not sure what you're looking for from me here - was there a concrete
+> question or somehing?
 
-Ehh, forget about what I said about the ->runtime_resume() callback.
+Nope, not really, sorry if that was not clear.
 
-I am mostly trying to avoid restoring a state that is zero, just to be
-sure nobody else on some different level outside gendp, have decided
-to set a new OPP in-between our calls to
-genpd_drop|restore_performance state.
-
-[...]
+I just wanted to loop you in, as to make sure that we don't change
+something at the PM domain level, which may not fit well with the
+regulator implementation.
 
 Kind regards
 Uffe
