@@ -2,175 +2,287 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABF339981A
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 04:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB41E399A13
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jun 2021 07:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbhFCCkk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Jun 2021 22:40:40 -0400
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:34652 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbhFCCkk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Jun 2021 22:40:40 -0400
-Received: by mail-pj1-f54.google.com with SMTP id g6-20020a17090adac6b029015d1a9a6f1aso2587577pjx.1
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jun 2021 19:38:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xbfOBa4V4NfcCRLvjCYR6j0+uuKti8SF2SJo2woyW5k=;
-        b=ceDw3cpkamXUfVJ1HR6HD28oQSpaJbLTLqOnymfgzJlu+4IctogqB3VOppxeVEot8q
-         lNi6Yf2RnJCsjJUN/wAalfOoObiZs4C4hYyjftsLmyEqBEQYVzboF2j/ysZJztDg1AtL
-         GAV681ZM8z3q01aXojfylxQzLp2KI8R+qMdsOkVI0J1p8FqQ0M2+gDuQhF6c+lLVOZ1X
-         3Okh3+q5sVG00D1BrTUtuT/2RKyKRxp7kvMNQ0Abh4F5V06hWnJMvgOAoMeZV1LDj94k
-         QXc2oR0IuZ6JM2vozHFPGw6bT27yMfp+n+sVyL/dI0/An/QVTA6mncucRyw8UBxUgzjh
-         b8mg==
+        id S229754AbhFCFmB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 01:42:01 -0400
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:35414 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbhFCFmA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 01:42:00 -0400
+Received: by mail-lf1-f43.google.com with SMTP id i10so7033929lfj.2;
+        Wed, 02 Jun 2021 22:40:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xbfOBa4V4NfcCRLvjCYR6j0+uuKti8SF2SJo2woyW5k=;
-        b=e+sDzJ3IPzFR9yjY/PQE5WRTX0jzLHQ/FEc2ri3ONVVET4VWomxSeQWKMmnsVdo7iv
-         sVJaDwZWjLMGBxJlnZNiRIlLI9mr/+LrH6HBg+pzr3Tc+KmX1ATIVVs5lnqYYTITuv4P
-         hEWF70jLiWVoUmiMot82UePFKJd0hPhN8d+0s9CCjP7UWuijipYM50xVLSXOuTFPTuJv
-         KXNNsF42KsbjnsuR5L4NUVOJbjAVq7sqT/X8KFWoJStiZKuRWKnbK9gy2DAHp+oGlkN5
-         UJzOz1UcZge1HTN2dpX9Tcng4drp7YWCl11q5plF4cf96zY5Ap6cHABKOp8JcjasBYaM
-         1cxg==
-X-Gm-Message-State: AOAM5327sovYXLp5nsGgwOMlkapdVOYs7na4wcfs6ERpF696BneLioTQ
-        4kkTKf3AbkVTX29RKawv1uCNVw==
-X-Google-Smtp-Source: ABdhPJwNjVsy9G2E0nDNUrLhwAEvQ/PJG4VNWAnP8MGjn/84SwkXjIInnYsKhYwPONr1jI8ldsblQg==
-X-Received: by 2002:a17:90b:3584:: with SMTP id mm4mr8704483pjb.171.1622687861987;
-        Wed, 02 Jun 2021 19:37:41 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id r5sm633056pjd.2.2021.06.02.19.37.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=kAmYDA9B8u4qXmIFEnv8TZqko/i/6FI+mhj+YOHtFuY=;
+        b=etABsJ1nXqV5x0B3hDqbsqokGKs9nibwtmyy7ntcUhQ9epA1VTCaeULppGxr3ISLi0
+         b9elsA+gooSIJMKEhfhxg1C7D2mCuqOwHNOPC2W8LRAlEFSNeD661n7+AQE27sbjv4S2
+         lhQ6qczFll5uLIk/9OfDyOa8SoSTt5UENIm1lHfuLvet8pcNTyhrhrMWfNLoaCZ5XeZE
+         VdpZpQ7Etas7YXtCb9Oj34aJq7E1vwi2L4tVEF2lHTlSjprweEsEDuBG2fHNC644odlg
+         zuolmIp0FKTrv5cAlktvD4rmxm3XnL9CGgHSvZZC3JerEJmrxwnGmbFn91rCiYwOnUBy
+         M3Pg==
+X-Gm-Message-State: AOAM531oHEgvNOEk6tFA0kZd5qlYmb5wJzCqI0jCNGYuoIwhBpl6YVY5
+        2QnbqerHty5E8o4lKhekJDNRj6lwtFQ=
+X-Google-Smtp-Source: ABdhPJwQA6WrayRbpewqWYwVujVgqYbwqwhJ5kVcLBaERrtC2E5bbWGIUPW337S8wPpwcFroA7Ze7g==
+X-Received: by 2002:a05:6512:ba7:: with SMTP id b39mr2539006lfv.424.1622698814865;
+        Wed, 02 Jun 2021 22:40:14 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id w21sm237292ljo.41.2021.06.02.22.40.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 19:37:41 -0700 (PDT)
-Date:   Thu, 3 Jun 2021 08:07:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] PM: domains: Drop/restore performance state votes
- for devices at runtime PM
-Message-ID: <20210603023739.mds4eir4i6olaiwz@vireshk-i7>
-References: <20210602101215.78094-1-ulf.hansson@linaro.org>
- <20210602101215.78094-3-ulf.hansson@linaro.org>
- <20210603023441.bs47nwtmskrdz2el@vireshk-i7>
+        Wed, 02 Jun 2021 22:40:14 -0700 (PDT)
+Date:   Thu, 3 Jun 2021 08:40:07 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH RESEND v10 00/11] Extend regulator notification support
+Message-ID: <cover.1622628333.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
 Content-Disposition: inline
-In-Reply-To: <20210603023441.bs47nwtmskrdz2el@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-06-21, 08:04, Viresh Kumar wrote:
-> On 02-06-21, 12:12, Ulf Hansson wrote:
-> > A subsystem/driver that need to manage OPPs for its device, should
-> > typically drop its vote for the OPP when the device becomes runtime
-> > suspended. In this way, the corresponding aggregation of the performance
-> > state votes that is managed in genpd for the attached PM domain, may find
-> > that the aggregated vote can be decreased. Hence, it may allow genpd to set
-> > the lower performance state for the PM domain, thus avoiding to waste
-> > energy.
-> > 
-> > To accomplish this, typically a subsystem/driver would need to call
-> > dev_pm_opp_set_rate|opp() for its device from its ->runtime_suspend()
-> > callback, to drop the vote for the OPP. Accordingly, it needs another call
-> > to dev_pm_opp_set_rate|opp() to restore the vote for the OPP from its
-> > ->runtime_resume() callback.
-> > 
-> > To avoid boilerplate code in subsystems/driver to deal with these things,
-> > let's instead manage this internally in genpd.
-> > 
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/base/power/domain.c | 21 +++++++++++++++++++--
-> >  include/linux/pm_domain.h   |  1 +
-> >  2 files changed, 20 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index a3b6e751f366..81b9d4652b90 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -397,6 +397,18 @@ static int genpd_set_performance_state(struct device *dev, unsigned int state)
-> >  	return ret;
-> >  }
-> >  
-> > +static int genpd_drop_performance_state(struct device *dev)
-> > +{
-> > +	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
-> > +	unsigned int prev_state;
-> > +
-> > +	prev_state = gpd_data->performance_state;
-> > +	if (prev_state && !genpd_set_performance_state(dev, 0))
-> 
-> What about adding this prev_state check in
-> genpd_set_performance_state() itself ? We already have one for the
-> genpd in _genpd_set_performance_state(), why not one for the device ?
-> 
-> > +		return prev_state;
-> > +
-> > +	return 0;
-> 
-> Hmm, we will return 0 in case genpd_set_performance_state() fails,
-> which will make us set the state to 0 again on resume. Maybe add a
-> comment for this somewhere ?
 
-No, we won't as you check for rpm_saved_pstate there, so the device
-will stay disabled.
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Again adding the check into genpd_set_performance_state() may help
-reducing similar checks elsewhere.
+Extend regulator notification support
 
-> > +}
-> > +
-> >  /**
-> >   * dev_pm_genpd_set_performance_state- Set performance state of device's power
-> >   * domain.
-> > @@ -839,7 +851,8 @@ static int genpd_runtime_suspend(struct device *dev)
-> >  {
-> >  	struct generic_pm_domain *genpd;
-> >  	bool (*suspend_ok)(struct device *__dev);
-> > -	struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
-> > +	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
-> > +	struct gpd_timing_data *td = &gpd_data->td;
-> >  	bool runtime_pm = pm_runtime_enabled(dev);
-> >  	ktime_t time_start;
-> >  	s64 elapsed_ns;
-> > @@ -896,6 +909,7 @@ static int genpd_runtime_suspend(struct device *dev)
-> >  		return 0;
-> >  
-> >  	genpd_lock(genpd);
-> > +	gpd_data->rpm_saved_pstate = genpd_drop_performance_state(dev);
-> >  	genpd_power_off(genpd, true, 0);
-> >  	genpd_unlock(genpd);
-> >  
-> > @@ -913,7 +927,8 @@ static int genpd_runtime_suspend(struct device *dev)
-> >  static int genpd_runtime_resume(struct device *dev)
-> >  {
-> >  	struct generic_pm_domain *genpd;
-> > -	struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
-> > +	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
-> > +	struct gpd_timing_data *td = &gpd_data->td;
-> >  	bool runtime_pm = pm_runtime_enabled(dev);
-> >  	ktime_t time_start;
-> >  	s64 elapsed_ns;
-> > @@ -937,6 +952,8 @@ static int genpd_runtime_resume(struct device *dev)
-> >  
-> >  	genpd_lock(genpd);
-> >  	ret = genpd_power_on(genpd, 0);
-> > +	if (!ret && gpd_data->rpm_saved_pstate)
-> > +		genpd_set_performance_state(dev, gpd_data->rpm_saved_pstate);
-> >  	genpd_unlock(genpd);
+This series extends the regulator notification and error flag support.
+Initial discussion on the topic can be found here:
+https://lore.kernel.org/lkml/6046836e22b8252983f08d5621c35ececb97820d.camel=
+@fi.rohmeurope.com/
 
--- 
-viresh
+In a nutshell - the series adds:
+
+1. WARNING level events/error flags. (Patch 3)
+  Current regulator 'ERROR' event notifications for over/under
+  voltage, over current and over temperature are used to indicate
+  condition where monitored entity is so badly "off" that it actually
+  indicates a hardware error which can not be recovered. The most
+  typical hanling for that is believed to be a (graceful)
+  system-shutdown. Here we add set of 'WARNING' level flags to allow
+  sending notifications to consumers before things are 'that badly off'
+  so that consumer drivers can implement recovery-actions.
+2. Device-tree properties for specifying limit values. (Patches 1, 5)
+  Add limits for above mentioned 'ERROR' and 'WARNING' levels (which
+  send notifications to consumers) and also for a 'PROTECTION' level
+  (which will be used to immediately shut-down the regulator(s) W/O
+  informing consumer drivers. Typically implemented by hardware).
+  Property parsing is implemented in regulator core which then calls
+  callback operations for limit setting from the IC drivers. A
+  warning is emitted if protection is requested by device tree but the
+  underlying IC does not support configuring requested protection.
+3. Helpers which can be registered by IC. (Patch 4)
+  Target is to avoid implementing IRQ handling and IRQ storm protection
+  in each IC driver. (Many of the ICs implementin these IRQs do not allow
+  masking or acking the IRQ but keep the IRQ asserted for the whole
+  duration of problem keeping the processor in IRQ handling loop).
+4. Emergency poweroff function (refactored out of the thermal_core to
+  kernel/reboot.c) which is called if IC fires error IRQs but IC reading
+  fails and given retry-count is exceeded. (Patches 2, 4)
+  Please note that the mutex in the emergency shutdown was replaced by a
+  simple atomic in order to allow call from any context.
+
+The helper was attempted to be done so it could be used to implement
+roughly same logic as is used in qcom-labibb regulator. This means
+amongst other things a safety shut-down if IC registers are not readable.
+Using these shut-down retry counters are optional. The idea is that the
+helper could be also used by simpler ICs which do not provide status
+register(s) which can be used to check if error is still active.
+
+ICs which do not have such status register can simply omit the 'renable'
+callback (and retry-counts etc) - and helper assumes the situation is Ok
+and re-enables IRQ after given time period. If problem persists the
+handler is ran again and another notification is sent - but at least the
+delay allows processor to avoid IRQ loop.
+
+Patch 7 takes this notification support in use at BD9576MUF.
+Patch 8 is related to MFD change which is not really related to the RFC
+here. It was added to this series in order to avoid potential conflicts.
+Patch 9 adds a maintainers entry.
+
+Changelog v10-RESEND:
+   - rebased on v5.13-rc4
+Changelog v10:
+   - rebased on v5.13-rc2
+   - Move rdev_*() print macros to the internal.h and use rdev_dbg()
+     from irq_helpers.c
+   - Export rdev_get_name() and move it from coupler.h to driver.h for
+     others to use. (It was already in coupler.h but not exported -
+     usage was limited and coupler.h does not sound like optimal place
+     as rdev_name is not only used by coupled regulators)
+   - Send all regulator notifications from irq_helpers.c at one OR'd
+     event for the sake of simplicity. For BD9576 this does not matter
+     as it has own IRQ for each event case. Header defining events says
+     they may be OR'd.
+   - Change WARN() at protection shutdown to pr_emerg as suggested by
+     Petr.
+Changelog v9:
+   - rebases on v5.13-rc1
+   - Update thermal documentation
+   - Fix regulator notification event number
+Changelog v8:
+   - split shutdown API adding and thermal core taking it in use to
+     own patches.
+   - replace the spinlock with atomic when ensuring the emergency
+     shutdown is only called once.
+Changelog v7:
+  general:
+   - rebased on v5.12-rc7
+   - new patch for refactoring the hw-failure reboot logic out of
+     thermal_core.c for others to use.
+  notification helpers:
+   - fix regulator error_flags query
+   - grammar/typos
+   - do not BUG() but attempt to shut-down the system
+   - use BITS_PER_TYPE()
+
+Changelog v6:
+  Add MAINTAINERS entry
+  Changes to IRQ notifiers
+   - move devm functions to drivers/regulator/devres.c
+   - drop irq validity check
+   - use devm_add_action_or_reset()
+   - fix styling issues
+   - fix kerneldocs
+
+Changelog v5:
+   - Fix the badly formatted pr_emerg() call.
+
+Changelog v4:
+   - rebased on v5.12-rc6
+   - dropped RFC
+   - fix external FET DT-binding.
+   - improve prints for cases when expecting HW failure.
+   - styling and typos
+
+Changelog v3:
+  Regulator core:
+   - Fix dangling pointer access at regulator_irq_helper()
+  stpmic1_regulator:
+   - fix function prototype (compile error)
+  bd9576-regulator:
+   - Update over current limits to what was given in new data-sheet
+     (REV00K)
+   - Allow over-current monitoring without external FET. Set limits to
+     values given in data-sheet (REV00K).
+
+Changelog v2:
+  Generic:
+  - rebase on v5.12-rc2 + BD9576 series
+  - Split devm variant of delayed wq to own series
+  Regulator framework:
+  - Provide non devm variant of IRQ notification helpers
+  - shorten dt-property names as suggested by Rob
+  - unconditionally call map_event in IRQ handling and require it to be
+    populated
+  BD9576 regulators:
+  - change the FET resistance property to micro-ohms
+  - fix voltage computation in OC limit setting
+
+--
+
+
+Matti Vaittinen (11):
+  dt_bindings: Add protection limit properties
+  reboot: Add hardware protection power-off
+  thermal: Use generic HW-protection shutdown API
+  regulator: add warning flags
+  regulator: move rdev_print helpers to internal.h
+  regulator: IRQ based event/error notification helpers
+  regulator: add property parsing and callbacks to set protection limits
+  dt-bindings: regulator: bd9576 add FET ON-resistance for OCW
+  regulator: bd9576: Support error reporting
+  regulator: bd9576: Fix the driver name in id table
+  MAINTAINERS: Add reviewer for regulator irq_helpers
+
+ .../bindings/regulator/regulator.yaml         |   82 ++
+ .../regulator/rohm,bd9576-regulator.yaml      |    6 +
+ .../driver-api/thermal/sysfs-api.rst          |   24 +-
+ MAINTAINERS                                   |    4 +
+ drivers/regulator/Makefile                    |    2 +-
+ drivers/regulator/bd9576-regulator.c          | 1054 +++++++++++++++--
+ drivers/regulator/core.c                      |  163 ++-
+ drivers/regulator/devres.c                    |   52 +
+ drivers/regulator/internal.h                  |   11 +
+ drivers/regulator/irq_helpers.c               |  397 +++++++
+ drivers/regulator/of_regulator.c              |   58 +
+ drivers/regulator/qcom-labibb-regulator.c     |   10 +-
+ drivers/regulator/qcom_spmi-regulator.c       |    6 +-
+ drivers/regulator/stpmic1_regulator.c         |   20 +-
+ drivers/thermal/thermal_core.c                |   63 +-
+ include/linux/reboot.h                        |    1 +
+ include/linux/regulator/consumer.h            |   14 +
+ include/linux/regulator/coupler.h             |    5 -
+ include/linux/regulator/driver.h              |  186 ++-
+ include/linux/regulator/machine.h             |   26 +
+ kernel/reboot.c                               |   79 ++
+ 21 files changed, 2030 insertions(+), 233 deletions(-)
+ create mode 100644 drivers/regulator/irq_helpers.c
+
+
+base-commit: 8124c8a6b35386f73523d27eacb71b5364a68c4c
+--=20
+2.25.4
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmC4ay0ACgkQeFA3/03a
+ocXytQgAnZt7tJPjcieQAqsZD2bmAYFW+i1585kA000I7CT4opj93BNKVYTGnFKB
+U6kofFHwY/sXcbbiyyivy7L3YMM6NCfCWehxnVDoUWaOIvmEPvKnt5p6oNyramFE
+PUVvtentZEC4dhWVMH32C6JbrREtGemWzvcOxKgyavNbmMfZ2pXa6ENGX30tWWhg
+162zXC3G782e8NEep2ErXT31aJ9zbprnDdmLljoaV15lmF8BEhsyglG1ORK2YdXq
+wQ+/p5syL8nY841CuCFjHARxWkRHk6kKDZyKdma6GwK5R1GrtjIKcB0m3QG85cHt
+CuEaDt3KdcbrUGRvb1lbfmo3ZnPPJg==
+=g2sS
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
