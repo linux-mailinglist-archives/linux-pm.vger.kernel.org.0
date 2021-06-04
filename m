@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA52339B691
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 12:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C78E39B68D
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 12:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhFDKFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 06:05:34 -0400
+        id S229982AbhFDKFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 06:05:32 -0400
 Received: from mailgw01.mediatek.com ([210.61.82.183]:55623 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229718AbhFDKFd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 06:05:33 -0400
-X-UUID: 4ff1925a3cb04bb596a90d6b48f4589a-20210604
-X-UUID: 4ff1925a3cb04bb596a90d6b48f4589a-20210604
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        with ESMTP id S230036AbhFDKFa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 06:05:30 -0400
+X-UUID: c84a1a86690246588e4a0b5a20a00b7e-20210604
+X-UUID: c84a1a86690246588e4a0b5a20a00b7e-20210604
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <dawei.chien@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 335905132; Fri, 04 Jun 2021 18:02:23 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 912070988; Fri, 04 Jun 2021 18:02:24 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Fri, 4 Jun 2021 18:02:22 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -39,9 +39,9 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         Arvin Wang <arvin.wang@mediatek.com>,
         James Liao <jamesjj.liao@mediatek.com>,
         Henry Chen <henryc.chen@mediatek.com>
-Subject: [PATCH V10 01/12] dt-bindings: soc: Add dvfsrc driver bindings
-Date:   Fri, 4 Jun 2021 18:02:07 +0800
-Message-ID: <20210604100218.13613-2-dawei.chien@mediatek.com>
+Subject: [PATCH V10 02/12] soc: mediatek: add header for mediatek SIP interface
+Date:   Fri, 4 Jun 2021 18:02:08 +0800
+Message-ID: <20210604100218.13613-3-dawei.chien@mediatek.com>
 X-Mailer: git-send-email 2.14.1
 In-Reply-To: <20210604100218.13613-1-dawei.chien@mediatek.com>
 References: <20210604100218.13613-1-dawei.chien@mediatek.com>
@@ -54,117 +54,30 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Henry Chen <henryc.chen@mediatek.com>
 
-Document the binding for enabling dvfsrc on MediaTek SoC.
+Add a header to collect SIPs and add one SIP call to initialize power
+management hardware for the SIP interface defined to access the SPM
+handling vcore voltage and ddr rate changes on mt8183 (and most likely
+later socs).
 
 Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Arvin Wang <arvin.wang@mediatek.com>
 ---
- .../devicetree/bindings/soc/mediatek/dvfsrc.yaml   | 67 ++++++++++++++++++++++
- include/dt-bindings/interconnect/mtk,mt8183-emi.h  | 21 +++++++
- 2 files changed, 88 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
- create mode 100644 include/dt-bindings/interconnect/mtk,mt8183-emi.h
+ include/linux/soc/mediatek/mtk_sip_svc.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml b/Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
-new file mode 100644
-index 000000000000..f2b67b99921b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
-@@ -0,0 +1,67 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/soc/mediatek/dvfsrc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/include/linux/soc/mediatek/mtk_sip_svc.h b/include/linux/soc/mediatek/mtk_sip_svc.h
+index 082398e0cfb1..079bbcb361ba 100644
+--- a/include/linux/soc/mediatek/mtk_sip_svc.h
++++ b/include/linux/soc/mediatek/mtk_sip_svc.h
+@@ -22,4 +22,8 @@
+ 	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, MTK_SIP_SMC_CONVENTION, \
+ 			   ARM_SMCCC_OWNER_SIP, fn_id)
+ 
++/* VCOREFS */
++#define MTK_SIP_VCOREFS_CONTROL \
++	MTK_SIP_SMC_CMD(0x506)
 +
-+title: MediaTek dynamic voltage and frequency scaling resource collector (DVFSRC)
-+
-+description: |
-+  The Dynamic Voltage and Frequency Scaling Resource Collector (DVFSRC) is a
-+  HW module which is used to collect all the requests from both software and
-+  hardware and turn into the decision of minimum operating voltage and minimum
-+  DRAM frequency to fulfill those requests.
-+
-+maintainers:
-+  - henryc.chen <henryc.chen@mediatek.com>
-+
-+properties:
-+  reg:
-+    maxItems: 1
-+    description: DVFSRC common register address and length.
-+
-+  compatible:
-+    enum:
-+      - mediatek,mt6873-dvfsrc
-+      - mediatek,mt8183-dvfsrc
-+      - mediatek,mt8192-dvfsrc
-+
-+  '#interconnect-cells':
-+    const: 1
-+
-+  dvfsrc-vcore:
-+    type: object
-+    description:
-+      The DVFSRC regulator is modelled as a subdevice of the DVFSRC.
-+      Because DVFSRC can request power directly via register read/write, likes
-+      vcore which is a core power of mt8183. As such, the DVFSRC regulator
-+      requires that DVFSRC nodes be present.
-+    $ref: /schemas/regulator/regulator.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#interconnect-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interconnect/mtk,mt8183-emi.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        dvfsrc@10012000 {
-+            compatible = "mediatek,mt8183-dvfsrc";
-+            reg = <0 0x10012000 0 0x1000>;
-+            #interconnect-cells = <1>;
-+            dvfsrc_vcore: dvfsrc-vcore {
-+                    regulator-name = "dvfsrc-vcore";
-+                    regulator-min-microvolt = <725000>;
-+                    regulator-max-microvolt = <800000>;
-+                    regulator-always-on;
-+            };
-+        };
-+    };
-diff --git a/include/dt-bindings/interconnect/mtk,mt8183-emi.h b/include/dt-bindings/interconnect/mtk,mt8183-emi.h
-new file mode 100644
-index 000000000000..dfd143f87885
---- /dev/null
-+++ b/include/dt-bindings/interconnect/mtk,mt8183-emi.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0
-+ *
-+ * Copyright (c) 2021 MediaTek Inc.
-+ */
-+
-+#ifndef __DT_BINDINGS_INTERCONNECT_MTK_MT8183_EMI_H
-+#define __DT_BINDINGS_INTERCONNECT_MTK_MT8183_EMI_H
-+
-+#define MT8183_SLAVE_DDR_EMI			0
-+#define MT8183_MASTER_MCUSYS			1
-+#define MT8183_MASTER_GPU			2
-+#define MT8183_MASTER_MMSYS			3
-+#define MT8183_MASTER_MM_VPU			4
-+#define MT8183_MASTER_MM_DISP			5
-+#define MT8183_MASTER_MM_VDEC			6
-+#define MT8183_MASTER_MM_VENC			7
-+#define MT8183_MASTER_MM_CAM			8
-+#define MT8183_MASTER_MM_IMG			9
-+#define MT8183_MASTER_MM_MDP			10
-+
-+#endif
+ #endif
 -- 
 2.14.1
 
