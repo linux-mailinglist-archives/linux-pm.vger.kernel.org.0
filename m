@@ -2,137 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624BA39B8E7
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 14:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CE639B918
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 14:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhFDMWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 08:22:35 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34804 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbhFDMWe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 08:22:34 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 4940B1F415FC
-Received: by earth.universe (Postfix, from userid 1000)
-        id 4A8433C0C95; Fri,  4 Jun 2021 14:20:45 +0200 (CEST)
-Date:   Fri, 4 Jun 2021 14:20:45 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] power: supply: axp20x_battery: implement writeable
- status to enable/disable battery charging
-Message-ID: <20210604122045.itugfiivy5il5bkz@earth.universe>
-References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
- <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
- <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
- <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
- <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
- <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
+        id S230258AbhFDMgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 08:36:03 -0400
+Received: from gateway22.websitewelcome.com ([192.185.47.144]:16218 "EHLO
+        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230262AbhFDMgC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 08:36:02 -0400
+X-Greylist: delayed 1248 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Jun 2021 08:36:02 EDT
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id EA1FE7635
+        for <linux-pm@vger.kernel.org>; Fri,  4 Jun 2021 07:13:25 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id p8hZlHU0f1iQOp8hZlbhFJ; Fri, 04 Jun 2021 07:13:25 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eqKhXZsa1Dsfpezqh/4ReBH1SK5a/dlNfmODaKhMUVg=; b=RWKEzlcv4womW/oDY1tsgTCu7e
+        moWq0Gdva6L/qTmMYSJAkkfAiBzDDne1pFuFvJhhOB1+waAY9H9MjIdwpbj1DrlwS9xH9TAVnt+/U
+        DHgPv6/emXqeVxyzecDLVZ8DMSgTGBNXd56cRwOb/MM7F2HVYE72cHgzXGhPvk5okwnIrSkukI1q+
+        RafHk+QewETN/ntSNKis9c1kcjby4MQ6dGvnMWb7R83vU2die7gXx/NY+bOA3dDug0F5yr+T+LSp4
+        7O0VYP14FKZGEnHHTqiMOP4vh2iHvyQoztxsvnObYEyxgFFL4JSocqN3WMnWhurVan5bH4gjS2cQk
+        Q+RyX5WA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:38194 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1lp8hX-001vay-IM; Fri, 04 Jun 2021 07:13:23 -0500
+Subject: Re: [PATCH] power: supply: oplc_battery: Use fallthrough
+ pseudo-keyword
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+References: <20210507124724.10825-1-jj251510319013@gmail.com>
+ <20210604115424.3jjkrdd4ysbuamka@earth.universe>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <a1593ef1-3a5b-b036-7744-b724be5a9629@embeddedor.com>
+Date:   Fri, 4 Jun 2021 07:14:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fwpzoq2jvtqjw6gp"
-Content-Disposition: inline
-In-Reply-To: <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
+In-Reply-To: <20210604115424.3jjkrdd4ysbuamka@earth.universe>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1lp8hX-001vay-IM
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:38194
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---fwpzoq2jvtqjw6gp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 6/4/21 06:54, Sebastian Reichel wrote:
+> [+cc Kees and Gustavo]
+> 
+> Hi,
+> 
+> On Fri, May 07, 2021 at 08:47:24PM +0800, Wei Ming Chen wrote:
+>> Add pseudo-keyword macro fallthrough[1]
+>>
+>> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+>>
+>> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+>> ---
+> 
+> I suppose completely empty case branch is also ok and just not
+> documented? I mean it does not hurt much in this case, but quite
 
-On Wed, May 12, 2021 at 12:58:56PM +0200, Hermann Lauer wrote:
-> Allow disabling and reenabling battery charging of an axp209 PMIC through=
- a
-> writable status property. With the current driver code charging is always=
- on.
->=20
-> This works on the axp209 of Banana {Pi M1+,Pro} and should work on all AX=
-P chips.
->=20
-> Signed-off-by: Hermann.Lauer@uni-heidelberg.de
-> ---
+Exactly; it's not documented because it doesn't need to be marked
+with fallthrough; :)
 
-Thanks, queued.
+Not sure what was the motivation for this patch.
 
--- Sebastian
+--
+Gustavo
 
-> v2: add fallthrough and improve commit message (thanks to Maxime and Chen=
-Yu)
-> v3: fix fallthrough usage
->=20
-> Thanks to ChenYu for the idea and greetings
->   Hermann
->=20
->  drivers/power/supply/axp20x_battery.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply=
-/axp20x_battery.c
-> --- a/drivers/power/supply/axp20x_battery.c
-> +++ b/drivers/power/supply/axp20x_battery.c
-> @@ -40,6 +40,7 @@
->  #define AXP209_FG_PERCENT		GENMASK(6, 0)
->  #define AXP22X_FG_VALID			BIT(7)
-> =20
-> +#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
->  #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
->  #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
->  #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
-> @@ -468,7 +469,18 @@
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
->  		return axp20x_set_max_constant_charge_current(axp20x_batt,
->  							      val->intval);
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		switch (val->intval) {
-> +		case POWER_SUPPLY_STATUS_CHARGING:
-> +			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-> +				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
-> =20
-> +		case POWER_SUPPLY_STATUS_DISCHARGING:
-> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-> +			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
-> +				AXP20X_CHRG_CTRL1_ENABLE, 0);
-> +		}
-> +		fallthrough;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -491,7 +503,8 @@
->  static int axp20x_battery_prop_writeable(struct power_supply *psy,
->  					 enum power_supply_property psp)
->  {
-> -	return psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
-> +	return psp =3D=3D POWER_SUPPLY_PROP_STATUS ||
-> +	       psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
->  	       psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
->  	       psp =3D=3D POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
->  	       psp =3D=3D POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
-
---fwpzoq2jvtqjw6gp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6GpQACgkQ2O7X88g7
-+prBhBAAj2NlkEeOOAOh6GLN3xrV4Sx2+H5w/kwXzxSghPjMIq0WyICTLoORnuPw
-iwTSVWg7sCOgKKCE10LDwyhKkkuhVBz/Y8NyWnv9MitmIDk0eXwquBvswjtL+pqv
-yceOGUEA0+FwV2YVkZjQa+TasIdBKo9Zk2sbiHZ/3QFi1H/9k5RXjrYTxOxrSZsr
-zNMckIN5ZaUnxmwwAZWMCa6urjsMM0+5XsjOiAGbCwgZwsnSeOeBLwaQFqWXrIKS
-g0Jg1uEyb0C62FZhtbBEIj2GMF8nTg/hFQiLRHC+xSnxV+v5m/2OGMyySfGiCN4M
-nj1ZzMtYozFYYdEVB3lht+w633WDmmZw4tLxvt80hF9x4RdFYcqxk8fJxwjvKLnq
-eRq1WLgwQTQFK3fSJceLt6gtnCijo2F95Cob8Ene1EnSHrrez9szZTobn5FHw/oA
-x4lvXqLa+InfCDLlK0KQC4DJo32mfho27P+r0RJL1fExdsvV8CJTxNNMeKxIjEQo
-evbAOiSZOd5P91wWPna11/5cHybdnFIVRC7SdAVt2TddDfddTeaUX0ZLTmd/Z8vP
-DvjUmR2ZoGnkooURBJ1q4c5C5L1LDyuK6fTJbSZecDnVKu9sWhIPbQbtFwqHPGbo
-MzU2IeigOgWMsttKwYsL2R1FuuTAdGfviVnRL2Kev+x076bZEY4=
-=Ffeg
------END PGP SIGNATURE-----
-
---fwpzoq2jvtqjw6gp--
+> a few power-supply drivers have something like this and it would
+> IMHO reduce readability to add fallthrough; to all of them.
+> 
+> property_is_writable(dev, prop) {
+>     switch (prop) {
+>         case A:
+>         case C:
+>         case E:
+>             return true;
+>         default:
+>             return false;
+>     }
+> }
+> 
+> Thanks,
+> 
+> -- Sebastian
+> 
+>>  drivers/power/supply/olpc_battery.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/power/supply/olpc_battery.c b/drivers/power/supply/olpc_battery.c
+>> index e0476ec06601..743b7f1cf9ea 100644
+>> --- a/drivers/power/supply/olpc_battery.c
+>> +++ b/drivers/power/supply/olpc_battery.c
+>> @@ -238,6 +238,7 @@ static int olpc_bat_get_charge_full_design(union power_supply_propval *val)
+>>  	case POWER_SUPPLY_TECHNOLOGY_LiFe:
+>>  		switch (mfr) {
+>>  		case 1: /* Gold Peak, fall through */
+>> +			fallthrough;
+>>  		case 2: /* BYD */
+>>  			val->intval = 2800000;
+>>  			break;
+>> -- 
+>> 2.25.1
+>>
