@@ -2,99 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EE939B949
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 14:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B5239BE13
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 19:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhFDNAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 09:00:25 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35190 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbhFDNAY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 09:00:24 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 0585B1F439C8
-Received: by earth.universe (Postfix, from userid 1000)
-        id 408F63C0C95; Fri,  4 Jun 2021 14:58:36 +0200 (CEST)
-Date:   Fri, 4 Jun 2021 14:58:36 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] power: supply: surface-charger: Fix type of integer
- variable
-Message-ID: <20210604125836.ew4y27ofa4bwi6uk@earth.universe>
-References: <20210511092421.1928586-1-luzmaximilian@gmail.com>
- <55aafbea-96d4-29f2-8d8b-68f8ac970c6b@gmail.com>
+        id S229961AbhFDRIy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 13:08:54 -0400
+Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:19242 "EHLO
+        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229913AbhFDRIy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 13:08:54 -0400
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 154H3Jrg011940;
+        Fri, 4 Jun 2021 17:07:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=mnNbrv4LQindqcnO6qrDsMhC8Xmo4j6W8U9Irnc7OVc=;
+ b=NuRh9c2fOv8qOHotoPQUaS01gCDZyhuoOPRAWtSeKE4UgQV+zoqMkGh3Bp27Co3LAHA9
+ eJo+v2PamOicjZVgc4wZ2+Rttc3SCJVnqZVmS5MTKpD9Jncv2tiA6vwBaAqD1Gr1sEW1
+ qPKxZiJakD4SNAQx7ZjU/VnmZgngtI8EGZxWcvHbXfC2f/zMuVsLqeIGOYteA8M9h6I0
+ 4AEmQUuEdBzOSHzdZ/Seys/Sz6L0wrysD3cTPS6+QPfS0gNRacNKPkQ/7CyX1/fMteIy
+ qWduEaeFV5ucPb8AH7rXfH9a+CvJJGHfxE+6O4E9D9hM3fPGvCuJvXR6S8pidamcXG/J 9A== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+        by mx0b-002e3701.pphosted.com with ESMTP id 38y7kx7f6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Jun 2021 17:07:01 +0000
+Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
+        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 8EE025C;
+        Fri,  4 Jun 2021 17:07:00 +0000 (UTC)
+Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 57E9D45;
+        Fri,  4 Jun 2021 17:07:00 +0000 (UTC)
+Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 48777)
+        id 0507F302F481D; Fri,  4 Jun 2021 12:07:00 -0500 (CDT)
+From:   kyle.meyer@hpe.com
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Kyle Meyer <kyle.meyer@hpe.com>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH] acpi-cpufreq: Skip cleanup if initialization didn't occur
+Date:   Fri,  4 Jun 2021 12:05:00 -0500
+Message-Id: <20210604170500.46875-1-kyle.meyer@hpe.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ckokow4kmkwkjq7n"
-Content-Disposition: inline
-In-Reply-To: <55aafbea-96d4-29f2-8d8b-68f8ac970c6b@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: UbYehIXeRah83Elgj5o-H-uadL58mjfJ
+X-Proofpoint-ORIG-GUID: UbYehIXeRah83Elgj5o-H-uadL58mjfJ
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-04_11:2021-06-04,2021-06-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011 mlxscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 impostorscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106040123
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Kyle Meyer <kyle.meyer@hpe.com>
 
---ckokow4kmkwkjq7n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+acpi-cpufreq is loaded without performing initialization when a cpufreq
+driver exists.
 
-Hi,
+If initialization didn't occur then skip cleanup in acpi_cpufreq_exit().
+This prevents unnecessary freeing and unregistering when the module is
+unloaded.
 
-On Thu, Jun 03, 2021 at 08:37:13PM +0200, Maximilian Luz wrote:
-> On 5/11/21 11:24 AM, Maximilian Luz wrote:
-> > The ac->state field is __le32, not u32. So change the variable we're
-> > temporarily storing it in to __le32 as well.
-> >=20
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Fixes: e61ffb344591 ("power: supply: Add AC driver for Surface Aggregat=
-or Module")
-> > Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
->=20
-> Friendly ping :)
+Reported-by: Takashi Iwai <tiwai@suse.com>
+Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Thanks, this has now been queued to my fixes branch.
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index 7e7450453714..8d425f14c267 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -1042,8 +1042,19 @@ static int __init acpi_cpufreq_init(void)
+ 
+ static void __exit acpi_cpufreq_exit(void)
+ {
++	const char *current_driver;
++
+ 	pr_debug("%s\n", __func__);
+ 
++	/*
++	 * If another cpufreq_driver was loaded, preventing acpi-cpufreq from
++	 * registering, there's no need to unregister it.
++	 */
++	current_driver = cpufreq_get_current_driver();
++	if (!current_driver ||
++	    strncmp(current_driver, acpi_cpufreq_driver.name, strlen(acpi_cpufreq_driver.name)))
++		return;
++
+ 	acpi_cpufreq_boost_exit();
+ 
+ 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
+-- 
+2.25.1
 
--- Sebastian
-
-> > ---
-> >   drivers/power/supply/surface_charger.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/surface_charger.c b/drivers/power/sup=
-ply/surface_charger.c
-> > index 81a5b79822c9..a060c36c7766 100644
-> > --- a/drivers/power/supply/surface_charger.c
-> > +++ b/drivers/power/supply/surface_charger.c
-> > @@ -66,7 +66,7 @@ struct spwr_ac_device {
-> >   static int spwr_ac_update_unlocked(struct spwr_ac_device *ac)
-> >   {
-> > -	u32 old =3D ac->state;
-> > +	__le32 old =3D ac->state;
-> >   	int status;
-> >   	lockdep_assert_held(&ac->lock);
-> >=20
-
---ckokow4kmkwkjq7n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6I3wACgkQ2O7X88g7
-+prCqg/+Jkw7uZPPHwkCon2Kk6TYJ9v/9HR1NZ20D9VFpB7WtKZ3oHyv8/Zav2RK
-FWfqVNkagbabyKjOx3WZHwCgCYG45/dPY2OOLCgJ3ml3/x9omHH+6BEtT1nNPIrH
-/4azgeufGGqXbu4zTTESOQ1iT8T5pzEC/nuKT0L7ZEUDrDXavGc+3U+xNGKC1SX+
-LZ0Od8VOP8F4izdCLXar/NUIQFCb9tVW5auvjL2lffnXyu1kYqAawknXPB91uikZ
-FOoLWC5j5rcDlcBZiRquH5ig+ftofnPNmA8EJsRI4YjMcSiiG09q344mBRLsi61H
-ZyJe756aTjpi1cHeCAyY+IjqtapperZ0YEbw5yTzjJD2OpwJ4zSsQtdGR9+rEmpv
-ga8zYnaeRCYiAeHsYYGP0GTBEngIDVNVlZ+RDSDrgspIJt+0xy92v2TlzJ5fiFdQ
-gV5FeNPg+w12zv61h2EDwWzUb34vo7WuBG7bSg4osDcPdkDTBd+RmkYNs1i1x/Wm
-S8fHFgPcWvDcWByyzAFLD5Ertj01L6CJicbHqJXwDmUC7cd5nZQWzaQ2iTGBXBoc
-hCfBAYg1I9l4YNBT/d32g8cPQDCH+8n2pXP/JC+1N93nTlXNrIt+MreamVlAy+2U
-ztc6HMTezOSiTwrRbsSHlALbJVZx/cssM8DJl+g8iyLTzBYmI3c=
-=na9I
------END PGP SIGNATURE-----
-
---ckokow4kmkwkjq7n--
