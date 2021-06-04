@@ -2,102 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B5239BE13
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 19:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6370639BF52
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 20:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbhFDRIy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 13:08:54 -0400
-Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:19242 "EHLO
-        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229913AbhFDRIy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 13:08:54 -0400
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 154H3Jrg011940;
-        Fri, 4 Jun 2021 17:07:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=mnNbrv4LQindqcnO6qrDsMhC8Xmo4j6W8U9Irnc7OVc=;
- b=NuRh9c2fOv8qOHotoPQUaS01gCDZyhuoOPRAWtSeKE4UgQV+zoqMkGh3Bp27Co3LAHA9
- eJo+v2PamOicjZVgc4wZ2+Rttc3SCJVnqZVmS5MTKpD9Jncv2tiA6vwBaAqD1Gr1sEW1
- qPKxZiJakD4SNAQx7ZjU/VnmZgngtI8EGZxWcvHbXfC2f/zMuVsLqeIGOYteA8M9h6I0
- 4AEmQUuEdBzOSHzdZ/Seys/Sz6L0wrysD3cTPS6+QPfS0gNRacNKPkQ/7CyX1/fMteIy
- qWduEaeFV5ucPb8AH7rXfH9a+CvJJGHfxE+6O4E9D9hM3fPGvCuJvXR6S8pidamcXG/J 9A== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0b-002e3701.pphosted.com with ESMTP id 38y7kx7f6b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Jun 2021 17:07:01 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 8EE025C;
-        Fri,  4 Jun 2021 17:07:00 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 57E9D45;
-        Fri,  4 Jun 2021 17:07:00 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 48777)
-        id 0507F302F481D; Fri,  4 Jun 2021 12:07:00 -0500 (CDT)
-From:   kyle.meyer@hpe.com
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Kyle Meyer <kyle.meyer@hpe.com>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH] acpi-cpufreq: Skip cleanup if initialization didn't occur
-Date:   Fri,  4 Jun 2021 12:05:00 -0500
-Message-Id: <20210604170500.46875-1-kyle.meyer@hpe.com>
-X-Mailer: git-send-email 2.26.2
+        id S229769AbhFDSLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 14:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229726AbhFDSLJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 14:11:09 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE351C061766
+        for <linux-pm@vger.kernel.org>; Fri,  4 Jun 2021 11:09:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g24so5976704pji.4
+        for <linux-pm@vger.kernel.org>; Fri, 04 Jun 2021 11:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kLu3vjQlGZ6KdZHPZTDgU5PEXuxsb5EjFBe3ivrW8O0=;
+        b=GXeWp5ki+scamiEKISCtgg/4/C5hJF0A86vMkYZn72ituqqCUbvWWK8XtTZuvjde8K
+         jl8RTgStdoBvVbR3VuUe3/ZhKDqyyQlE3zHNLnHAhzJ0IRizMX/YlVQzhBLAHsBd+dFt
+         UMpxeGfrjen2Js3rC8f1tsu6NPEtK910P12Lo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kLu3vjQlGZ6KdZHPZTDgU5PEXuxsb5EjFBe3ivrW8O0=;
+        b=rjbSgHqHUYjVPVCgJ8HhCnLcUxUCv6iF0JVKZ0tTd7QABLh/Rq4dC2+6g2mEWQH3J1
+         E/HcX5hrqz7e2P+/k3PX0neV2mhGN8mPNN4iFeXk37fTZ46+Eeou2SgDMGQWHevE/7ZC
+         pbS2vOxF/0O5GWtgZ345DTkuBOGz6UqlwoaRJvJKO77/h/GvkKbaHteVaoWXkh02k1Z4
+         Yp1ytXabDCj/uNYMiO5eK7Qwot4zDkxEq19hu4G2s+agXIziJtnLDNE3XNAPFwpveoYA
+         RsqtFtAXYaF9Iaw8t4F3Vs8Si6ByzNlJIYwDxaKRzNWaA+vwWaYeuZcQDmBnJTZHyXN7
+         AH7w==
+X-Gm-Message-State: AOAM53348/U+BILgV/9/yE0YwjRKZM6sVFwMxe6WejUnfAfM8PgBpKrH
+        6LWZ7u2m8eqkqOdIq3Fxy2KiGQ==
+X-Google-Smtp-Source: ABdhPJwC3nr++/6pPm11hFW26AJIwlhyYlH6xxZH1jzYYJKio8f/hGAkLe9G7ll0/2wuCp3duIy2mw==
+X-Received: by 2002:a17:90a:1688:: with SMTP id o8mr6158627pja.92.1622830162357;
+        Fri, 04 Jun 2021 11:09:22 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:1cfa:4a0b:c513:8c09])
+        by smtp.gmail.com with UTF8SMTPSA id d22sm2354712pfn.147.2021.06.04.11.09.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Jun 2021 11:09:22 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 11:09:20 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com,
+        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com
+Subject: Re: [PATCH v3 1/6] PM / EM: Fix inefficient states detection
+Message-ID: <YLpsUKwHNn0RgyKb@google.com>
+References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
+ <1622804761-126737-2-git-send-email-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: UbYehIXeRah83Elgj5o-H-uadL58mjfJ
-X-Proofpoint-ORIG-GUID: UbYehIXeRah83Elgj5o-H-uadL58mjfJ
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-04_11:2021-06-04,2021-06-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011 mlxscore=0
- malwarescore=0 suspectscore=0 adultscore=0 impostorscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106040123
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1622804761-126737-2-git-send-email-vincent.donnefort@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Kyle Meyer <kyle.meyer@hpe.com>
+On Fri, Jun 04, 2021 at 12:05:56PM +0100, Vincent Donnefort wrote:
+> Currently, a debug message is printed if an inefficient state is detected
+> in the Energy Model. Unfortunately, it won't detect if the first state is
+> inefficient or if two successive states are. Fix this behavior.
+> 
+> Fixes: 27871f7a (PM: Introduce an Energy Model management framework)
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> Reviewed-by: Quentin Perret <qperret@google.com>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 0c620eb..c4871a8 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -107,8 +107,7 @@ static void em_debug_remove_pd(struct device *dev) {}
+>  static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>  				int nr_states, struct em_data_callback *cb)
+>  {
+> -	unsigned long opp_eff, prev_opp_eff = ULONG_MAX;
+> -	unsigned long power, freq, prev_freq = 0;
+> +	unsigned long power, freq, prev_freq = 0, prev_cost = ULONG_MAX;
+>  	struct em_perf_state *table;
+>  	int i, ret;
+>  	u64 fmax;
+> @@ -153,25 +152,19 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>  
+>  		table[i].power = power;
+>  		table[i].frequency = prev_freq = freq;
+> -
+> -		/*
+> -		 * The hertz/watts efficiency ratio should decrease as the
+> -		 * frequency grows on sane platforms. But this isn't always
+> -		 * true in practice so warn the user if a higher OPP is more
+> -		 * power efficient than a lower one.
+> -		 */
+> -		opp_eff = freq / power;
+> -		if (opp_eff >= prev_opp_eff)
+> -			dev_dbg(dev, "EM: hertz/watts ratio non-monotonically decreasing: em_perf_state %d >= em_perf_state%d\n",
+> -					i, i - 1);
+> -		prev_opp_eff = opp_eff;
+>  	}
+>  
+>  	/* Compute the cost of each performance state. */
+>  	fmax = (u64) table[nr_states - 1].frequency;
+> -	for (i = 0; i < nr_states; i++) {
+> +	for (i = nr_states - 1; i >= 0; i--) {
+>  		table[i].cost = div64_u64(fmax * table[i].power,
+>  					  table[i].frequency);
+> +		if (table[i].cost >= prev_cost) {
+> +			dev_dbg(dev, "EM: OPP:%lu is inefficient\n",
+> +				table[i].frequency);
+> +		} else {
+> +			prev_cost = table[i].cost;
+> +		}
 
-acpi-cpufreq is loaded without performing initialization when a cpufreq
-driver exists.
+nit: curly braces aren't needed, especially if you change the 'dev_dbg'
+statement to be a single line.
 
-If initialization didn't occur then skip cleanup in acpi_cpufreq_exit().
-This prevents unnecessary freeing and unregistering when the module is
-unloaded.
-
-Reported-by: Takashi Iwai <tiwai@suse.com>
-Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
----
- drivers/cpufreq/acpi-cpufreq.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 7e7450453714..8d425f14c267 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -1042,8 +1042,19 @@ static int __init acpi_cpufreq_init(void)
- 
- static void __exit acpi_cpufreq_exit(void)
- {
-+	const char *current_driver;
-+
- 	pr_debug("%s\n", __func__);
- 
-+	/*
-+	 * If another cpufreq_driver was loaded, preventing acpi-cpufreq from
-+	 * registering, there's no need to unregister it.
-+	 */
-+	current_driver = cpufreq_get_current_driver();
-+	if (!current_driver ||
-+	    strncmp(current_driver, acpi_cpufreq_driver.name, strlen(acpi_cpufreq_driver.name)))
-+		return;
-+
- 	acpi_cpufreq_boost_exit();
- 
- 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
--- 
-2.25.1
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
