@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775F839B690
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 12:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179D039B6A4
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 12:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbhFDKFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 06:05:34 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:55775 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230321AbhFDKFc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 06:05:32 -0400
-X-UUID: b6dfb27ac575413a905bced22ab0c820-20210604
-X-UUID: b6dfb27ac575413a905bced22ab0c820-20210604
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        id S230465AbhFDKFp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 06:05:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:34165 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230443AbhFDKFp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 06:05:45 -0400
+X-UUID: 0a0282bb4f63473cba498e2bd85ba6d0-20210604
+X-UUID: 0a0282bb4f63473cba498e2bd85ba6d0-20210604
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <dawei.chien@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1002846354; Fri, 04 Jun 2021 18:02:27 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 829457132; Fri, 04 Jun 2021 18:02:26 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 4 Jun 2021 18:02:25 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 4 Jun 2021 18:02:26 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 4 Jun 2021 18:02:25 +0800
@@ -38,11 +38,10 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         Fan Chen <fan.chen@mediatek.com>,
         Arvin Wang <arvin.wang@mediatek.com>,
         James Liao <jamesjj.liao@mediatek.com>,
-        Henry Chen <henryc.chen@mediatek.com>,
-        Dawei Chien <dawei.chien@mediatek.com>
-Subject: [PATCH V10 06/12] arm64: dts: mt8192: add dvfsrc related nodes
-Date:   Fri, 4 Jun 2021 18:02:12 +0800
-Message-ID: <20210604100218.13613-7-dawei.chien@mediatek.com>
+        Henry Chen <henryc.chen@mediatek.com>
+Subject: [PATCH V10 07/12] dt-bindings: interconnect: add MT6873 interconnect dt-bindings
+Date:   Fri, 4 Jun 2021 18:02:13 +0800
+Message-ID: <20210604100218.13613-8-dawei.chien@mediatek.com>
 X-Mailer: git-send-email 2.14.1
 In-Reply-To: <20210604100218.13613-1-dawei.chien@mediatek.com>
 References: <20210604100218.13613-1-dawei.chien@mediatek.com>
@@ -55,31 +54,62 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Henry Chen <henryc.chen@mediatek.com>
 
-Enable dvfsrc on mt8192 platform.
+Add interconnect provider dt-bindings for MT6873.
 
 Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
-Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/dt-bindings/interconnect/mtk,mt6873-emi.h | 41 +++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 include/dt-bindings/interconnect/mtk,mt6873-emi.h
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 9757138a8bbd..c70a3bf744fa 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -282,6 +282,12 @@
- 			#interrupt-cells = <2>;
- 		};
- 
-+		ddr_emi: dvfsrc@10012000 {
-+			compatible = "mediatek,mt8192-dvfsrc",
-+				     "mediatek,mt6873-dvfsrc";
-+			reg = <0 0x10012000 0 0x1000>;
-+		};
+diff --git a/include/dt-bindings/interconnect/mtk,mt6873-emi.h b/include/dt-bindings/interconnect/mtk,mt6873-emi.h
+new file mode 100644
+index 000000000000..0b20011df010
+--- /dev/null
++++ b/include/dt-bindings/interconnect/mtk,mt6873-emi.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0
++ *
++ * Copyright (c) 2021 MediaTek Inc.
++ */
 +
- 		systimer: timer@10017000 {
- 			compatible = "mediatek,mt8192-timer",
- 				     "mediatek,mt6765-timer";
++#ifndef __DT_BINDINGS_INTERCONNECT_MTK_MT6873_EMI_H
++#define __DT_BINDINGS_INTERCONNECT_MTK_MT6873_EMI_H
++
++#define MT6873_SLAVE_DDR_EMI		0
++#define MT6873_MASTER_MCUSYS		1
++#define MT6873_MASTER_GPUSYS		2
++#define MT6873_MASTER_MMSYS		3
++#define MT6873_MASTER_MM_VPU		4
++#define MT6873_MASTER_MM_DISP		5
++#define MT6873_MASTER_MM_VDEC		6
++#define MT6873_MASTER_MM_VENC		7
++#define MT6873_MASTER_MM_CAM		8
++#define MT6873_MASTER_MM_IMG		9
++#define MT6873_MASTER_MM_MDP		10
++#define MT6873_MASTER_VPUSYS		11
++#define MT6873_MASTER_VPU_0		12
++#define MT6873_MASTER_VPU_1		13
++#define MT6873_MASTER_MDLASYS		14
++#define MT6873_MASTER_MDLA_0		15
++#define MT6873_MASTER_UFS		16
++#define MT6873_MASTER_PCIE		17
++#define MT6873_MASTER_USB		18
++#define MT6873_MASTER_DBGIF		19
++#define MT6873_SLAVE_HRT_DDR_EMI	20
++#define MT6873_MASTER_HRT_MMSYS		21
++#define MT6873_MASTER_HRT_MM_DISP	22
++#define MT6873_MASTER_HRT_MM_VDEC	23
++#define MT6873_MASTER_HRT_MM_VENC	24
++#define MT6873_MASTER_HRT_MM_CAM	25
++#define MT6873_MASTER_HRT_MM_IMG	26
++#define MT6873_MASTER_HRT_MM_MDP	27
++#define MT6873_MASTER_HRT_DBGIF		28
++#define MT6873_MASTER_WIFI		29
++#define MT6873_MASTER_BT		30
++#define MT6873_MASTER_NETSYS		31
++#endif
 -- 
 2.14.1
 
