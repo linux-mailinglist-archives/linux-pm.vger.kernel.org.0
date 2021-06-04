@@ -2,91 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D3039B11E
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 05:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E0E39B123
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 05:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhFDDuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Jun 2021 23:50:13 -0400
-Received: from mail-pf1-f182.google.com ([209.85.210.182]:37849 "EHLO
-        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbhFDDuM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 23:50:12 -0400
-Received: by mail-pf1-f182.google.com with SMTP id y15so6487853pfl.4
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 20:48:14 -0700 (PDT)
+        id S229769AbhFDDzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Jun 2021 23:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229704AbhFDDzS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Jun 2021 23:55:18 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D01DC06174A
+        for <linux-pm@vger.kernel.org>; Thu,  3 Jun 2021 20:53:18 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id t28so6487702pfg.10
+        for <linux-pm@vger.kernel.org>; Thu, 03 Jun 2021 20:53:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=pIq+JVIVR9DjAt6LSJSdRSoXJZoMpMbdkGfBUXWctS8=;
-        b=MLa6uHvz/HBRNKFlje+iv6q7NwcrPZZLfLn72Auow2MiBy9pXci6zDSsVtz093uJAQ
-         tI2l7rOo5uSkQTM3OLvDb71ZAStKA4kYtUGedUNpqGfacmpPpQbBtiDOfjyVKaEdlDG9
-         05yUJ5lAHQVrD94AKI0UneZBLVGoIcr+bX5to7eO7yq0PYK7EhlL1b6Ye5MaO/ENje7Q
-         UFfa0CXyEclTLRcfL6hvzL3FFLN9XPQ+5DNPc/lkeEJnZnXZFIWoj/1hnTpM4Jle0jJw
-         q/NxexA90JJcPCe+2pIQ2U1mqW1wKQZQkofCHOuIJDTZTwfHlZRSIdWWi9PdWMfgdrWu
-         MBvA==
+        bh=3ijm9mI6kBOXP+oPrDMGDyY4lUqBqK/+hLm4ytshoSI=;
+        b=wNBJ+FLB2/mjtgOQap7hj9qwv9U6UjZ/cLGFE9sobg2lhJffSNWkMQJWZUBMxu+SOa
+         bhX+FcOsLHi3KiiJky5zwxikYdgVGwipU1suOOAK6z4IxgWAVkPjGCVUC+4C6NanulAc
+         rSACEnaG3xQFxqO5vkVncYJKvOBKGFUntlZjFyAHKDMAqFntitqLmKIKpJvNsI69JHL3
+         dDBC8sEs8vEetDIzT/jCTqv7JL9tUXclCGaM14xjjffRAYlgnTEu8dEULw9bSEuvXSEe
+         nYGGDelcTo/ezyK0w8sHTy5dWyCOYWWhWEZH0ha9uJjXrfUE1343a2hxwtvi3rCCF0Cw
+         xqXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pIq+JVIVR9DjAt6LSJSdRSoXJZoMpMbdkGfBUXWctS8=;
-        b=MDDr53qFYofbVQ+fMG/bG8a5hwv4pnoSkch+O+ZyODvh2dkKkALGYqPOTZ3ep92WtX
-         4TBo9kM46ha0HVhY1uqR1dMtcKn6dbflePNcJF5oKVggxdv0MN17dd3Fv0GofbAnV0X7
-         p7Ct1IWp4DSWQ96CvpFkuqeN2d8HxyaxxsI3tnaLpkg/daHjFfZSDmUGgTRW6k/1lDMe
-         2FH8BuA3SbKY+hkgSFhDMMW2qAE1AKaCBLSff1VCSRTRItzIAZoOYIpbwlUgbNoM93TR
-         B8QWVYu38FCTDCn2zUmcOO+WYHHqiRs+tcU3Q7RzMM68P3reNPmZI6pKkSOhbLldYbn1
-         xOJA==
-X-Gm-Message-State: AOAM531+rQfkabfUlwPnyA0765KNYTH3gNzjoSztss1W9QjmpYn9GBaQ
-        /ibzeA83RyTLFaLX/xEgrSWQ6Q==
-X-Google-Smtp-Source: ABdhPJxPYL3u14YlbpACeDySBpftc5/sS7Ra4HGar7+d8+9245hYpnWmvs5a96W4jbVQ38b28AS5mg==
-X-Received: by 2002:a63:af46:: with SMTP id s6mr2802591pgo.446.1622778434301;
-        Thu, 03 Jun 2021 20:47:14 -0700 (PDT)
+        bh=3ijm9mI6kBOXP+oPrDMGDyY4lUqBqK/+hLm4ytshoSI=;
+        b=D5HXB1ePfE0Jj6DPEs07EtwGTh73DbKKY8KFnqbr+M0UC3sfKiYyC1uNaNiXoTp4cT
+         fr1aArmBlS8V3ixe8HDuKo35svME257yvnnIbS9m3n9mxr7a7AdPqRPwCH/zxkRAsHCl
+         N1Khosfgc+7iVD9mt6ORrmFb9ZI2xOi5o16US4rVttzfIiINdfb3EL4KsSOAHVnvTY3W
+         ZsZS24qMjF9ZMlX0Swv+Mm4a98oQ1de9ls02JZ0IjfXa9uJVgqD0QHpYxhiHhVf7PfrH
+         vmeMxeUD8/kQm+w7iDMCx7XYkMNwntOajoHMatfCLqKS70/zr2ACEjkhtcOzLJhQH7rT
+         76Mg==
+X-Gm-Message-State: AOAM532NquHHCZvdRhJoBE55KU6+f22pnl+aq3DdpFg3TkY0bOj5c+fO
+        r+ecZmxlioICpjdsHSsBY0QzSQZCoviXmQ==
+X-Google-Smtp-Source: ABdhPJzFuScCZHrJLAasevbcPUgUk0ahyaDro5v+732wEn71LPtujZoeCD44R3GjCbJdBJGjGK4VlA==
+X-Received: by 2002:a63:b243:: with SMTP id t3mr2786567pgo.253.1622778797706;
+        Thu, 03 Jun 2021 20:53:17 -0700 (PDT)
 Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id t1sm488715pgl.40.2021.06.03.20.47.13
+        by smtp.gmail.com with ESMTPSA id f4sm3299976pjs.1.2021.06.03.20.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 20:47:13 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 09:17:09 +0530
+        Thu, 03 Jun 2021 20:53:16 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 09:23:12 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Hailong Liu <liuhailongg6@163.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hailong Liu <liu.hailong6@zte.com.cn>
-Subject: Re: [PATCH] CPUFREQ: loongson2: Remove unused linux/sched.h headers
-Message-ID: <20210604034709.kxqy6vcfvtxf5rje@vireshk-i7>
-References: <20210603135752.30162-1-liuhailongg6@163.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] PM: domains: Drop/restore performance state votes
+ for devices at runtime PM
+Message-ID: <20210604035312.jp2gshfigsodwvcg@vireshk-i7>
+References: <20210603093438.138705-1-ulf.hansson@linaro.org>
+ <20210603093438.138705-4-ulf.hansson@linaro.org>
+ <20210603095538.b2t3cq25tq7v7kih@vireshk-i7>
+ <CAPDyKFqNNeeMo6+gKgaPtPvgC_NuMxxYKkr+TzyP3vjYoHoDOw@mail.gmail.com>
+ <CAPDyKFofsuY_RAMGsRLtKo=JxJ11DgGqOijZEEf1HEANCvomzg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210603135752.30162-1-liuhailongg6@163.com>
+In-Reply-To: <CAPDyKFofsuY_RAMGsRLtKo=JxJ11DgGqOijZEEf1HEANCvomzg@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-06-21, 21:57, Hailong Liu wrote:
-> From: Hailong Liu <liu.hailong6@zte.com.cn>
+On 03-06-21, 13:17, Ulf Hansson wrote:
+> On Thu, 3 Jun 2021 at 12:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > +static int genpd_drop_performance_state(struct device *dev)
+> > > > +{
+> > > > +     unsigned int prev_state = dev_gpd_data(dev)->performance_state;
+> > > > +
+> > > > +     if (!genpd_set_performance_state(dev, 0))
+> > > > +             return prev_state;
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +static void genpd_restore_performance_state(struct device *dev,
+> > > > +                                         unsigned int state)
+> > > > +{
+> > > > +     if (state)
+> > >
+> > > I will skip this check, as we are checking it in
+> > > genpd_set_performance_state() anyway ?
+> >
+> > I don't want us to override OPP votes made by the subsystem/driver
+> > level runtime PM callbacks. For example, if the drivers manage this
+> > thing themselves, that should be preserved.
+> >
+> > That said, by the check above I want to avoid setting the state to
+> > zero internally by genpd, if the driver level ->runtime_resume()
+> > callback has already restored the state.
 > 
-> Since commit 759f534e93ac(CPUFREQ: Loongson2: drop set_cpus_allowed_ptr()),
-> the header <linux/sched.h> is useless in oongson2_cpufreq.c, so remove it.
+> Ehh, forget about what I said about the ->runtime_resume() callback.
 > 
-> Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
-> ---
->  drivers/cpufreq/loongson2_cpufreq.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-> index d05e761d9572..afc59b292153 100644
-> --- a/drivers/cpufreq/loongson2_cpufreq.c
-> +++ b/drivers/cpufreq/loongson2_cpufreq.c
-> @@ -16,7 +16,6 @@
->  #include <linux/cpufreq.h>
->  #include <linux/module.h>
->  #include <linux/err.h>
-> -#include <linux/sched.h>	/* set_cpus_allowed() */
->  #include <linux/delay.h>
->  #include <linux/platform_device.h>
+> I am mostly trying to avoid restoring a state that is zero, just to be
+> sure nobody else on some different level outside gendp, have decided
+> to set a new OPP in-between our calls to
+> genpd_drop|restore_performance state.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+What stops the core to call genpd_drop_performance_state() in the
+first place here, if the driver was doing its own thing ? If that gets
+called, then restore should be without any checks IMO. The state
+should already be 0 at this point of time, I don't know why this will
+get called again with state 0, but it will have no effect.
+
+Can you give some sort of flow sequence where I can see the problem a
+bit more clearly ?
 
 -- 
 viresh
