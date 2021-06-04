@@ -2,120 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A603339B616
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 11:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A81539B65B
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 12:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbhFDJjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 05:39:49 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:33583 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229958AbhFDJjt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 05:39:49 -0400
-X-UUID: 1bf122514b5f44b7978def4c9c1c9907-20210604
-X-UUID: 1bf122514b5f44b7978def4c9c1c9907-20210604
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <ben.tseng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1884620166; Fri, 04 Jun 2021 17:37:58 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 4 Jun 2021 17:37:56 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Jun 2021 17:37:56 +0800
-From:   Ben Tseng <ben.tseng@mediatek.com>
-To:     Fan Chen <fan.chen@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
+        id S229754AbhFDKCu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 06:02:50 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33140 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhFDKCt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 06:02:49 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id C6E8C1F43856
+Received: by earth.universe (Postfix, from userid 1000)
+        id 59E813C0C95; Fri,  4 Jun 2021 12:00:59 +0200 (CEST)
+Date:   Fri, 4 Jun 2021 12:00:59 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Ben Tseng <ben.tseng@mediatek.com>
-Subject: [PATCH v3] arm64: dts: mt8183-kukui: Add tboard thermal zones
-Date:   Fri, 4 Jun 2021 17:37:55 +0800
-Message-ID: <20210604093755.13288-1-ben.tseng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 6/7] power: supply: max17042: Do not enforce
+ (incorrect) interrupt trigger type
+Message-ID: <20210604100059.sr57dlwkqbbs6e7g@earth.universe>
+References: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com>
+ <20210526172036.183223-7-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d2r2o6cqzhpl36fi"
+Content-Disposition: inline
+In-Reply-To: <20210526172036.183223-7-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
 
-Add tboard thermal zones.
-The tboard thermal sensors are a kind of NTC sensors which are located
-on PCB board to correlate the temperature of the case (Tskin).
+--d2r2o6cqzhpl36fi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-pull-up voltage: 1800 mv
-pull-up resistor: 75K
+Hi,
 
-Vsense = pull-up voltage * Rntc / ( pull-up resistor + Rntc )
-AuxIn = Vsense * 4096 / 1500
+On Wed, May 26, 2021 at 01:20:35PM -0400, Krzysztof Kozlowski wrote:
+> From: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+> Interrupt line can be configured on different hardware in different way,
+> even inverted.  Therefore driver should not enforce specific trigger
+> type - edge falling - but instead rely on Devicetree to configure it.
+>=20
+> The Maxim 17047/77693 datasheets describe the interrupt line as active
+> low with a requirement of acknowledge from the CPU therefore the edge
+> falling is not correct.
+>=20
+> The interrupt line is shared between PMIC and RTC driver, so using level
+> sensitive interrupt is here especially important to avoid races.  With
+> an edge configuration in case if first PMIC signals interrupt followed
+> shortly after by the RTC, the interrupt might not be yet cleared/acked
+> thus the second one would not be noticed.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+> ---
+>=20
+> Changes since v1:
+> 1. None
+> ---
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Thanks, queued.
 
----
-Change in v3:
-        - Modify Tboard to tbaord in mt8183-kukui.dtsi
-        - Add more description about tboard thermal sensor
+-- Sebastian
 
-Change in v2:
-        - Rebase to kernel-v5.13-rc1
-        - Resend
----
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 14 ++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi       |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+>  drivers/power/supply/max17042_battery.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supp=
+ly/max17042_battery.c
+> index 1d7326cd8fc6..ce2041b30a06 100644
+> --- a/drivers/power/supply/max17042_battery.c
+> +++ b/drivers/power/supply/max17042_battery.c
+> @@ -1104,7 +1104,7 @@ static int max17042_probe(struct i2c_client *client,
+>  	}
+> =20
+>  	if (client->irq) {
+> -		unsigned int flags =3D IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
+> +		unsigned int flags =3D IRQF_ONESHOT;
+> =20
+>  		/*
+>  		 * On ACPI systems the IRQ may be handled by ACPI-event code,
+> --=20
+> 2.27.0
+>=20
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index ff56bcf..601f866 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -847,6 +847,20 @@
- 	status = "okay";
- };
- 
-+&thermal_zones {
-+	tboard1 {
-+		polling-delay = <1000>; /* milliseconds */
-+		polling-delay-passive = <0>; /* milliseconds */
-+		thermal-sensors = <&tboard_thermistor1>;
-+	};
-+
-+	tboard2 {
-+		polling-delay = <1000>; /* milliseconds */
-+		polling-delay-passive = <0>; /* milliseconds */
-+		thermal-sensors = <&tboard_thermistor2>;
-+	};
-+};
-+
- &u3phy {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index c5e822b..4173a5d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -673,7 +673,7 @@
- 			nvmem-cell-names = "calibration-data";
- 		};
- 
--		thermal-zones {
-+		thermal_zones: thermal-zones {
- 			cpu_thermal: cpu_thermal {
- 				polling-delay-passive = <100>;
- 				polling-delay = <500>;
--- 
-1.8.1.1.dirty
+--d2r2o6cqzhpl36fi
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC5+dAACgkQ2O7X88g7
++po1ig//VaFs/KxqHBD1C5z6LZwKfFsk1SDk9Zwmbr/nxSwQxq2y2+IWvleg2ojZ
+Mau48PcpAf+BA3HlRgR7heA4ce44RzGmbKgMhW456tlmcHYzsLzqek6DU5ARI20S
+/K3zAb62QLV8++7IFXZQllpMtdqrXtlJJkJ7fhc6B7s39IsMQtEwhzs4PEYqrJNI
+lUdbtZkI+lDQpmg9N95aMVMY5AR9HUeNkabquNEUQ2Oj5+xmKloApTPug0r/q/hG
+yNp1edRhHCXWvfMUHtydKP0CDLDEZG6I41wHbgzXD/kiUQwnnrWqZMPsityuHHYd
+//5U3ZELdFWuUmeC76K4skmc+v4IjcO2lmwHUvVgRTZjvcuj/MMynfurIYlWpkTe
+H1E5iwWwgPPbrZLsUX2R+wxotKcAoOeWCAkpLyKx2zxMUfm57PVqDQak+lVkonJ1
+Nu3XQN94hgBdsZEhpISB/m2s1wZLSDfmJBd0Zn3Tp9fevRfNe0u9lJFapZoyJjv+
+EAImy1cWkBceKj6Hc02liMpoxRmqzLn2MdlilUEsdiG1FfjaYueM7ObrXhHHVPN5
+RZVhbWj0+jTbF8WUr/DyzWuSKQBx5iPySRgqWQ36lAbG3Lu6lTYusylRvCUqw//M
+y9RW10u+JZKJz/qKeq5sVyF+h14oX8nMfNKNVySRei3SXpjfvN8=
+=dSKy
+-----END PGP SIGNATURE-----
+
+--d2r2o6cqzhpl36fi--
