@@ -2,161 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAE239B774
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 13:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D6E39B788
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 13:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhFDLEK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 07:04:10 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33904 "EHLO
+        id S230073AbhFDLHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 07:07:33 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33944 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbhFDLEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 07:04:10 -0400
+        with ESMTP id S229692AbhFDLHc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 07:07:32 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 9289B1F437F6
+        with ESMTPSA id CC5DC1F438C5
 Received: by earth.universe (Postfix, from userid 1000)
-        id 5E02B3C0C95; Fri,  4 Jun 2021 13:02:21 +0200 (CEST)
-Date:   Fri, 4 Jun 2021 13:02:21 +0200
+        id 2F3FF3C0C95; Fri,  4 Jun 2021 13:05:43 +0200 (CEST)
+Date:   Fri, 4 Jun 2021 13:05:43 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] power: reset/supply: add missing
- MODULE_DEVICE_TABLE
-Message-ID: <20210604110221.ykclr6yxlw3nflug@earth.universe>
-References: <1620896701-53542-1-git-send-email-zou_wei@huawei.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/1] power: reset: at91-sama5d2_shdwc: Remove redundant
+ error printing in at91_shdwc_probe()
+Message-ID: <20210604110543.26za5xwuwbkufk2u@earth.universe>
+References: <20210511094919.4885-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kzwyopa6voscrg7y"
+        protocol="application/pgp-signature"; boundary="lrngh3i7mnsnhmgy"
 Content-Disposition: inline
-In-Reply-To: <1620896701-53542-1-git-send-email-zou_wei@huawei.com>
+In-Reply-To: <20210511094919.4885-1-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---kzwyopa6voscrg7y
+--lrngh3i7mnsnhmgy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, May 13, 2021 at 05:05:01PM +0800, Zou Wei wrote:
-> This patch adds missing MODULE_DEVICE_TABLE definition which generates
-> correct modalias for automatic loading of this driver when it is built
-> as an external module.
+On Tue, May 11, 2021 at 05:49:19PM +0800, Zhen Lei wrote:
+> When devm_ioremap_resource() fails, a clear enough error message will be
+> printed by its subfunction __devm_ioremap_resource(). The error
+> information contains the device name, failure cause, and possibly resource
+> information.
+>=20
+> Therefore, remove the error printing here to simplify code and reduce the
+> binary size.
 >=20
 > Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > ---
 
-Does not apply anymore. Also please split this into three patches,
-one for regulator-poweroff, one for ab8500 and one for
-charger-manager.
-
-Thanks,
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/reset/regulator-poweroff.c | 1 +
->  drivers/power/supply/ab8500_btemp.c      | 1 +
->  drivers/power/supply/ab8500_charger.c    | 1 +
->  drivers/power/supply/ab8500_fg.c         | 1 +
->  drivers/power/supply/charger-manager.c   | 1 +
->  5 files changed, 5 insertions(+)
+>  drivers/power/reset/at91-sama5d2_shdwc.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >=20
-> diff --git a/drivers/power/reset/regulator-poweroff.c b/drivers/power/res=
-et/regulator-poweroff.c
-> index f697088..2070120 100644
-> --- a/drivers/power/reset/regulator-poweroff.c
-> +++ b/drivers/power/reset/regulator-poweroff.c
-> @@ -64,6 +64,7 @@ static const struct of_device_id of_regulator_poweroff_=
-match[] =3D {
->  	{ .compatible =3D "regulator-poweroff", },
->  	{},
->  };
-> +MODULE_DEVICE_TABLE(of, of_regulator_poweroff_match);
+> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/res=
+et/at91-sama5d2_shdwc.c
+> index 125e592af445e32..d8ecffe72f165cb 100644
+> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -351,10 +351,8 @@ static int __init at91_shdwc_probe(struct platform_d=
+evice *pdev)
 > =20
->  static struct platform_driver regulator_poweroff_driver =3D {
->  	.probe =3D regulator_poweroff_probe,
-> diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/a=
-b8500_btemp.c
-> index fdfcd59..db1adc1 100644
-> --- a/drivers/power/supply/ab8500_btemp.c
-> +++ b/drivers/power/supply/ab8500_btemp.c
-> @@ -1106,6 +1106,7 @@ static const struct of_device_id ab8500_btemp_match=
-[] =3D {
->  	{ .compatible =3D "stericsson,ab8500-btemp", },
->  	{ },
->  };
-> +MODULE_DEVICE_TABLE(of, ab8500_btemp_match);
+>  	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	at91_shdwc->shdwc_base =3D devm_ioremap_resource(&pdev->dev, res);
+> -	if (IS_ERR(at91_shdwc->shdwc_base)) {
+> -		dev_err(&pdev->dev, "Could not map reset controller address\n");
+> +	if (IS_ERR(at91_shdwc->shdwc_base))
+>  		return PTR_ERR(at91_shdwc->shdwc_base);
+> -	}
 > =20
->  static struct platform_driver ab8500_btemp_driver =3D {
->  	.probe =3D ab8500_btemp_probe,
-> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
-/ab8500_charger.c
-> index a9be10e..94da73e 100644
-> --- a/drivers/power/supply/ab8500_charger.c
-> +++ b/drivers/power/supply/ab8500_charger.c
-> @@ -3644,6 +3644,7 @@ static const struct of_device_id ab8500_charger_mat=
-ch[] =3D {
->  	{ .compatible =3D "stericsson,ab8500-charger", },
->  	{ },
->  };
-> +MODULE_DEVICE_TABLE(of, ab8500_charger_match);
-> =20
->  static struct platform_driver ab8500_charger_driver =3D {
->  	.probe =3D ab8500_charger_probe,
-> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
-00_fg.c
-> index 0c7c01a..5a86afd 100644
-> --- a/drivers/power/supply/ab8500_fg.c
-> +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -3212,6 +3212,7 @@ static const struct of_device_id ab8500_fg_match[] =
-=3D {
->  	{ .compatible =3D "stericsson,ab8500-fg", },
->  	{ },
->  };
-> +MODULE_DEVICE_TABLE(of, ab8500_fg_match);
-> =20
->  static struct platform_driver ab8500_fg_driver =3D {
->  	.probe =3D ab8500_fg_probe,
-> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/suppl=
-y/charger-manager.c
-> index 45da870..d67edb7 100644
-> --- a/drivers/power/supply/charger-manager.c
-> +++ b/drivers/power/supply/charger-manager.c
-> @@ -1279,6 +1279,7 @@ static const struct of_device_id charger_manager_ma=
-tch[] =3D {
->  	},
->  	{},
->  };
-> +MODULE_DEVICE_TABLE(of, charger_manager_match);
-> =20
->  static struct charger_desc *of_cm_parse_desc(struct device *dev)
->  {
+>  	match =3D of_match_node(at91_shdwc_of_match, pdev->dev.of_node);
+>  	at91_shdwc->rcfg =3D match->data;
 > --=20
-> 2.6.2
+> 2.26.0.106.g9fadedd
+>=20
 >=20
 
---kzwyopa6voscrg7y
+--lrngh3i7mnsnhmgy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6CD0ACgkQ2O7X88g7
-+pod4xAAkIpz2bUPTtLApmiYEziQwZf5Z5meSAdR521hxMC9A5Kdx6qk5FcCRZbK
-Y3561Mye0/TwQSFMI360DX5RWDbeGEo1hjqYPZiQpdQjXWnTC2/HEWFGPknZBkY7
-N9EB2E/H1TxMvYoEGQYNLCX+MsmQvOzLiQucmXwdUAssOltjZqXANouXzflBfoh9
-lW+QmHLVv7nn0HnlzgDCnsytjouqc9cP0My5ekhhMQNrxwzsi0WnW1NC5RDZf1u9
-ukRWvXlqHkHCb3q3GLj+tH0BtT33ohHJPQeEGVmj6XD7ibXgU4w1ECiw7pyct6F0
-NjFjzry+RNA6As9PuZOcrvBXEnNRYqQfx6fkDhazyvylsiibDT7qtyGlDIT5E9vc
-tJAbJEEBROMpOxjl77UX688eDYCBIWc6OWdUidvZ91Ndz2B3vJofEECtvw7QIGyx
-eQEW9tdfoSTwYOyB4JWI8OC4IdYWp/xYik8YVr5cDHGSR29SVN1DnwX3apqjOE0K
-ogVbqqwUoFxsti3WgXZNQ2fPS2M+/VDId0s5NZjrWUErdcRAX60S/a9MwMdlKxVY
-XW7LKgP8SB+zx8n//mK0sUJhRJvx9h2U7JPto7zPT5okFdH9yyEVcaOADU8LGyux
-pdQ+/AV32b2gekmovFezhPtLZawPe7o7QHK6TBdY0hapvqJRY2o=
-=qOaK
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6CQcACgkQ2O7X88g7
++ppvSA/+MGkYvO6jhWDe8+nVnCCEa4cz8c/8BzP9+56cWpMci+PHLKbDoPw0wBRA
+aKFKOzyrM0t6N8D+ZDAC0R871kw4TGMg/9HiXyEV8ZXW27xVB6WRZdlJRH3hkiFY
+jLVjJlXwlrw6U05VA4UwnZYdXNYcP1/9RCtWq0OGbgHdjpheFqQ2JmPillMLmBfI
+H/1nnvo6EXc8lEUoGeEVwspT0BoSiGndH6pPILflKajqAMPRT5ZiI8xko1K1T88u
+89JRipnQ6tTZITYNawR/7U0TvuIAYp+LbiJCwa2OwWYayHS+eOOjG1I7F07seAyh
+NopGLKfhonoUGD7yyLAMqmEeIaAxTgqM1H1W1fLXafXP7Ff/2+lfk6UzCAbCFPq6
+57vNN935fFSVttmYkPeeb4MUfM95N7BffPlJztR8fREsLSrFnkJDTYO9USQ1pV9f
+cCwe2pT3KrHL+y8pIVjbsCSKqQrije+nK4I2PWrwOrKhgZjv1Vws8GKzHKaFZb1R
+PeaZmlkeMXGCibrgErNO/HfUr7f0FouR5rabbpbB+2x9jEwvVwcYHw7dlWV6oSPg
+UXdAqg+jpkaDkNNmue11vR3Ibimzmk1aIiA3HoAegFiXzDmaB6Ewm8P+nnVdbrYa
+MGehF91zEqCaywIW7XXQi7ifsyPBEUwsm1DkbIaacxdBzqHbmrM=
+=K2JN
 -----END PGP SIGNATURE-----
 
---kzwyopa6voscrg7y--
+--lrngh3i7mnsnhmgy--
