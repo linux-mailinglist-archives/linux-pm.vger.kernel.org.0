@@ -2,106 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA87339B791
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 13:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0407D39B795
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 13:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbhFDLIT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 07:08:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:36234 "EHLO foss.arm.com"
+        id S230016AbhFDLKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 07:10:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230142AbhFDLIS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Jun 2021 07:08:18 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98C8A147A;
-        Fri,  4 Jun 2021 04:06:32 -0700 (PDT)
-Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 448C03F73D;
-        Fri,  4 Jun 2021 04:06:31 -0700 (PDT)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        vincent.guittot@linaro.org, qperret@google.com
-Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v3 6/6] PM / EM: Skip inefficient states
-Date:   Fri,  4 Jun 2021 12:06:01 +0100
-Message-Id: <1622804761-126737-7-git-send-email-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
-References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
+        id S229740AbhFDLKm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 4 Jun 2021 07:10:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2FFD61412;
+        Fri,  4 Jun 2021 11:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622804936;
+        bh=iwBwbt7wIWhIr085qcXizQ5aues5uWdHTOBFESM33kE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fIqXQlp74u1ZPfFJtxNGqcLSKBsMV3w03xctfdujEY3FRhyErjEkraAi80re7BmyF
+         5vCx0CaDi2hTo43P9nx1aY+1h8dkhVsMVKWE7pQsd+8CbFzDe7ApHgc1rkvX7RPivV
+         ZgZSCYUxcUz7Th+MRRtAgvRbfegGlNTnqe0nDQEiuznYklRqzJ1I0C6lzHMXy5yFLd
+         J72mZkiWr8WLXxwDNGsy8OjYnNCny5+qdMhhAAKMWQ3zONxveacWHU/0untCOLREba
+         egxlkoSMz7HgL94OOOKFcJZSbP28n2r3gMnxo1t906NS8AFwvIh1jZjc0/6eLMIFel
+         dhVEPCm0+bWAA==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 2DA053C0C95; Fri,  4 Jun 2021 13:08:54 +0200 (CEST)
+Date:   Fri, 4 Jun 2021 13:08:54 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     satya priya <skakit@codeaurora.org>, linux-input@vger.kernel.org,
+        Courtney Cavin <courtney.cavin@sonymobile.com>,
+        kgunda@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        David Collins <collinsd@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH V3 3/5] dt-bindings: power: reset: Change
+ 'additionalProperties' to true
+Message-ID: <20210604110854.6zgxe2rbqnigdtid@earth.universe>
+References: <1620630064-16354-1-git-send-email-skakit@codeaurora.org>
+ <1620630064-16354-4-git-send-email-skakit@codeaurora.org>
+ <20210510162047.GA228385@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zeta74hijobubqw2"
+Content-Disposition: inline
+In-Reply-To: <20210510162047.GA228385@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that Schedutil can leverage the inefficiency identification from the
-Energy Model, we can skip inefficient states when estimating the energy
-consumption.
 
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+--zeta74hijobubqw2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 2531325..d20f6afe 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -98,6 +98,36 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
- void em_dev_unregister_perf_domain(struct device *dev);
- 
- /**
-+ * em_pd_get_efficient_state() - Get an efficient performance state from the EM
-+ * @pd   : Performance domain for which we want an efficient frequency
-+ * @freq : Frequency to map with the EM
-+ *
-+ * It is called from the scheduler code quite frequently and as a consequence
-+ * doesn't implement any check.
-+ *
-+ * Return: An efficient performance state, high enough to meet @freq
-+ * requirement.
-+ */
-+static inline
-+struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
-+						unsigned long freq)
-+{
-+	struct em_perf_state *ps;
-+	int i;
-+
-+	for (i = 0; i < pd->nr_perf_states; i++) {
-+		ps = &pd->table[i];
-+		if (ps->frequency >= freq) {
-+			if (ps->flags & EM_PERF_STATE_INEFFICIENT)
-+				continue;
-+			break;
-+		}
-+	}
-+
-+	return ps;
-+}
-+
-+/**
-  * em_cpu_energy() - Estimates the energy consumed by the CPUs of a
- 		performance domain
-  * @pd		: performance domain for which energy has to be estimated
-@@ -116,7 +146,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- {
- 	unsigned long freq, scale_cpu;
- 	struct em_perf_state *ps;
--	int i, cpu;
-+	int cpu;
- 
- 	if (!sum_util)
- 		return 0;
-@@ -135,11 +165,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 	 * Find the lowest performance state of the Energy Model above the
- 	 * requested frequency.
- 	 */
--	for (i = 0; i < pd->nr_perf_states; i++) {
--		ps = &pd->table[i];
--		if (ps->frequency >= freq)
--			break;
--	}
-+	ps = em_pd_get_efficient_state(pd, freq);
- 
- 	/*
- 	 * The capacity of a CPU in the domain at the performance state (ps)
--- 
-2.7.4
+Hi,
 
+On Mon, May 10, 2021 at 11:20:47AM -0500, Rob Herring wrote:
+> On Mon, 10 May 2021 12:31:02 +0530, satya priya wrote:
+> > Change 'additionalProperties' to true as this is a generic binding.
+> >=20
+> > Signed-off-by: satya priya <skakit@codeaurora.org>
+> > ---
+> > Changes in V3:
+> >  - This is newly added in V3.
+> >=20
+> >  Documentation/devicetree/bindings/power/reset/reboot-mode.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+>=20
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Sebastian Reichel <sre@kernel.org>
+
+-- Sebastian
+
+--zeta74hijobubqw2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6CcUACgkQ2O7X88g7
++pql0RAAjGMGXrdsvasJs6QxGP5afvhDfYSgt9UrzZwC7SRvhDORoWc4o6YoucZY
+xjr/brpzKRwZYxFlioigY5KP220UZIbP4S05N8kB2GjTe2rqxz7nT9x81ahr8d36
+QSNUFkhCBLvQWFQeaRfBwoKWydW10GKax2PdPqwaIwlhIZdRijnQVpsWkmAZfjYW
+Yf0HIbP3meRQ38LlzGV0nHeZPCQarfImi2ZQ7CORoWaa4lTRlrujKkWqTNT1bZZ3
+Ma8HJRBJyK053m+awuvg36GQRjuHt3wDF3RFM9yL2oavkOh/rnZ14CV4IRM3v4Lw
+TJ+ygl/x/oTMpbKPzeBuL+Q+2yBY5AhMCO96KwlERk+MAZ/VWuFWlGVGlLTIbqrx
+82yjdS4b7XN10K51eKaTeogEYr0YIYz8Esy98JH3DHwZanVOmvGOVIfligN6/iWZ
+9zqZ/L8TBQ1OweadQSCMYwpiI7sxNC3v2bi0hPcNQKyTLPiqEZJRg9nIDP91luxY
+7BP7rriPdSXcSZe2+P5Rto495FMQKsuOqmIgD7Gsxn2YrCymylQ7mBaK4l/DKygw
+MFW1S7bSXqmoGqfqxVkE3PswUVFOykPn5/qlRF/GwcHLY+snx//W2sVI3HFQlwNA
+1w1hDaHzZHa213qdXdgnAJ4rreEZhKoch+zziWMvGnaIATaCyRk=
+=V2SN
+-----END PGP SIGNATURE-----
+
+--zeta74hijobubqw2--
