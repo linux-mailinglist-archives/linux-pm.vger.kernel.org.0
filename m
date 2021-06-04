@@ -2,181 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD2339B8A1
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 14:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624BA39B8E7
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jun 2021 14:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbhFDMDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Jun 2021 08:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbhFDMDq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 08:03:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B7C06174A;
-        Fri,  4 Jun 2021 05:02:00 -0700 (PDT)
+        id S230030AbhFDMWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Jun 2021 08:22:35 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34804 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229999AbhFDMWe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Jun 2021 08:22:34 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 0ED591F43977
+        with ESMTPSA id 4940B1F415FC
 Received: by earth.universe (Postfix, from userid 1000)
-        id 5D6253C0C95; Fri,  4 Jun 2021 14:01:56 +0200 (CEST)
-Date:   Fri, 4 Jun 2021 14:01:56 +0200
+        id 4A8433C0C95; Fri,  4 Jun 2021 14:20:45 +0200 (CEST)
+Date:   Fri, 4 Jun 2021 14:20:45 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [RFT PATCH 1/3] power: supply: max17040: remove non-working
- POWER_SUPPLY_PROP_STATUS
-Message-ID: <20210604120156.l2nglxbh5mayciri@earth.universe>
-References: <20210507161927.105862-1-krzysztof.kozlowski@canonical.com>
+To:     Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] power: supply: axp20x_battery: implement writeable
+ status to enable/disable battery charging
+Message-ID: <20210604122045.itugfiivy5il5bkz@earth.universe>
+References: <20210421090354.GF19953@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64U3vMew8LUU776Mx7jYj3eVb4FXQdXMZ0aJNBPUh2D2A@mail.gmail.com>
+ <20210505112902.GC5302@lemon.iwr.uni-heidelberg.de>
+ <CAGb2v64UN6=26QiQLqSWmNJPo49bPOQ3Q-Oz=LsbZz3JcszU0Q@mail.gmail.com>
+ <20210510131804.GP11983@lemon.iwr.uni-heidelberg.de>
+ <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f3bvyjsnlrfsxl4t"
+        protocol="application/pgp-signature"; boundary="fwpzoq2jvtqjw6gp"
 Content-Disposition: inline
-In-Reply-To: <20210507161927.105862-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210512105856.GA15727@lemon.iwr.uni-heidelberg.de>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---f3bvyjsnlrfsxl4t
+--fwpzoq2jvtqjw6gp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, May 07, 2021 at 12:19:25PM -0400, Krzysztof Kozlowski wrote:
-> The driver was reporting POWER_SUPPLY_PROP_STATUS via platform data
-> functions.  Without platform data, the max17040_get_status() functions
-> returns early with POWER_SUPPLY_STATUS_UNKNOWN.  Since there are no
-> platforms using the driver with platform data (no board files with the
-> driver), the status property was always unknown.
+On Wed, May 12, 2021 at 12:58:56PM +0200, Hermann Lauer wrote:
+> Allow disabling and reenabling battery charging of an axp209 PMIC through=
+ a
+> writable status property. With the current driver code charging is always=
+ on.
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> This works on the axp209 of Banana {Pi M1+,Pro} and should work on all AX=
+P chips.
+>=20
+> Signed-off-by: Hermann.Lauer@uni-heidelberg.de
 > ---
 
-Thanks, I queued the series.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/max17040_battery.c | 32 +++----------------------
->  1 file changed, 3 insertions(+), 29 deletions(-)
+> v2: add fallthrough and improve commit message (thanks to Maxime and Chen=
+Yu)
+> v3: fix fallthrough usage
 >=20
-> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supp=
-ly/max17040_battery.c
-> index 1aab868adabf..12854c87df53 100644
-> --- a/drivers/power/supply/max17040_battery.c
-> +++ b/drivers/power/supply/max17040_battery.c
-> @@ -147,8 +147,6 @@ struct max17040_chip {
-> =20
->  	/* battery capacity */
->  	int soc;
-> -	/* State Of Charge */
-> -	int status;
->  	/* Low alert threshold from 32% to 1% of the State of Charge */
->  	u32 low_soc_alert;
->  	/* some devices return twice the capacity */
-> @@ -225,24 +223,6 @@ static int max17040_get_online(struct max17040_chip =
-*chip)
->  		chip->pdata->battery_online() : 1;
->  }
-> =20
-> -static int max17040_get_status(struct max17040_chip *chip)
-> -{
-> -	if (!chip->pdata || !chip->pdata->charger_online
-> -			|| !chip->pdata->charger_enable)
-> -		return POWER_SUPPLY_STATUS_UNKNOWN;
-> -
-> -	if (max17040_get_soc(chip) > MAX17040_BATTERY_FULL)
-> -		return POWER_SUPPLY_STATUS_FULL;
-> -
-> -	if (chip->pdata->charger_online())
-> -		if (chip->pdata->charger_enable())
-> -			return POWER_SUPPLY_STATUS_CHARGING;
-> -		else
-> -			return POWER_SUPPLY_STATUS_NOT_CHARGING;
-> -	else
-> -		return POWER_SUPPLY_STATUS_DISCHARGING;
-> -}
-> -
->  static int max17040_get_of_data(struct max17040_chip *chip)
->  {
->  	struct device *dev =3D &chip->client->dev;
-> @@ -283,7 +263,6 @@ static int max17040_get_of_data(struct max17040_chip =
-*chip)
->  static void max17040_check_changes(struct max17040_chip *chip)
->  {
->  	chip->soc =3D max17040_get_soc(chip);
-> -	chip->status =3D max17040_get_status(chip);
->  }
-> =20
->  static void max17040_queue_work(struct max17040_chip *chip)
-> @@ -302,17 +281,16 @@ static void max17040_stop_work(void *data)
->  static void max17040_work(struct work_struct *work)
->  {
->  	struct max17040_chip *chip;
-> -	int last_soc, last_status;
-> +	int last_soc;
-> =20
->  	chip =3D container_of(work, struct max17040_chip, work.work);
-> =20
-> -	/* store SOC and status to check changes */
-> +	/* store SOC to check changes */
->  	last_soc =3D chip->soc;
-> -	last_status =3D chip->status;
->  	max17040_check_changes(chip);
-> =20
->  	/* check changes and send uevent */
-> -	if (last_soc !=3D chip->soc || last_status !=3D chip->status)
-> +	if (last_soc !=3D chip->soc)
->  		power_supply_changed(chip->battery);
-> =20
->  	max17040_queue_work(chip);
-> @@ -415,9 +393,6 @@ static int max17040_get_property(struct power_supply =
-*psy,
->  	struct max17040_chip *chip =3D power_supply_get_drvdata(psy);
-> =20
->  	switch (psp) {
-> -	case POWER_SUPPLY_PROP_STATUS:
-> -		val->intval =3D max17040_get_status(chip);
-> -		break;
->  	case POWER_SUPPLY_PROP_ONLINE:
->  		val->intval =3D max17040_get_online(chip);
->  		break;
-> @@ -444,7 +419,6 @@ static const struct regmap_config max17040_regmap =3D=
- {
->  };
-> =20
->  static enum power_supply_property max17040_battery_props[] =3D {
-> -	POWER_SUPPLY_PROP_STATUS,
->  	POWER_SUPPLY_PROP_ONLINE,
->  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
->  	POWER_SUPPLY_PROP_CAPACITY,
-> --=20
-> 2.25.1
+> Thanks to ChenYu for the idea and greetings
+>   Hermann
 >=20
+>  drivers/power/supply/axp20x_battery.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply=
+/axp20x_battery.c
+> --- a/drivers/power/supply/axp20x_battery.c
+> +++ b/drivers/power/supply/axp20x_battery.c
+> @@ -40,6 +40,7 @@
+>  #define AXP209_FG_PERCENT		GENMASK(6, 0)
+>  #define AXP22X_FG_VALID			BIT(7)
+> =20
+> +#define AXP20X_CHRG_CTRL1_ENABLE	BIT(7)
+>  #define AXP20X_CHRG_CTRL1_TGT_VOLT	GENMASK(6, 5)
+>  #define AXP20X_CHRG_CTRL1_TGT_4_1V	(0 << 5)
+>  #define AXP20X_CHRG_CTRL1_TGT_4_15V	(1 << 5)
+> @@ -468,7 +469,18 @@
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+>  		return axp20x_set_max_constant_charge_current(axp20x_batt,
+>  							      val->intval);
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		switch (val->intval) {
+> +		case POWER_SUPPLY_STATUS_CHARGING:
+> +			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
+> +				AXP20X_CHRG_CTRL1_ENABLE, AXP20X_CHRG_CTRL1_ENABLE);
+> =20
+> +		case POWER_SUPPLY_STATUS_DISCHARGING:
+> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
+> +			return regmap_update_bits(axp20x_batt->regmap, AXP20X_CHRG_CTRL1,
+> +				AXP20X_CHRG_CTRL1_ENABLE, 0);
+> +		}
+> +		fallthrough;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -491,7 +503,8 @@
+>  static int axp20x_battery_prop_writeable(struct power_supply *psy,
+>  					 enum power_supply_property psp)
+>  {
+> -	return psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
+> +	return psp =3D=3D POWER_SUPPLY_PROP_STATUS ||
+> +	       psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN ||
+>  	       psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
+>  	       psp =3D=3D POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
+>  	       psp =3D=3D POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
 
---f3bvyjsnlrfsxl4t
+--fwpzoq2jvtqjw6gp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6FjQACgkQ2O7X88g7
-+pqwbQ//ZwSSeTLVKSkB64kWjXCnweTMNLWruq5Ggbb6ug4KFqsS2pb91fSQraES
-aEQchk/0DqJa0HDqHhGgfukuFycYUQJaax5ZUkuDk294e8Pev872m4S5fY9UpknE
-4oFKyYD+0z5/S1iZ9Htlt3kesrHjJKG1nGNe53+nVlFB1syC/jKE3b7KTG6yAdcS
-K4Ugsc2wI0LfxdYPTtKrUxLBGod0ufVv/W6K8MW9/gedHoSVbvqmtKrLZwdTJDEI
-4qgvWzAO6CsMbM6IY3Sie/f4yyWuV8V0CIeFzK/PDGhF5F2PgqkeEJjf1YATQRBE
-W4ybZ7bBvcLPoLgNIid9PwkC4nmv0ItekmOmESbEopqf+lHH99IocQeuxmw3RDf0
-x2Oiu8GfLXZHrazrsSHmoMc1son9VMEBB3cg336oqSbEeUGMWzzkRPFBGaaoYzO2
-EoAkFPuRacu1Ixhp9rysgqO2QHx1bX7NgPPU3iGTZMPWU9CWnEfAne+yV8Qjknua
-b2FjXzeBzLHFag0PvCOFSnJ5fTYXPOVw3jUrcvTaw1sdJyrzYhLW5yXblfjg0CxE
-MjL8pf/xzKxt6U9gwD5XO7jPBXWFLO8gRQ+5SU7KUcrY2vhu5HwUnkxBrr+76Gx6
-D+KNqTIx3OwqXPdwEXy6Yob8gYgPDo8X5bt/DurA9iIF8UoTEE4=
-=6ejI
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmC6GpQACgkQ2O7X88g7
++prBhBAAj2NlkEeOOAOh6GLN3xrV4Sx2+H5w/kwXzxSghPjMIq0WyICTLoORnuPw
+iwTSVWg7sCOgKKCE10LDwyhKkkuhVBz/Y8NyWnv9MitmIDk0eXwquBvswjtL+pqv
+yceOGUEA0+FwV2YVkZjQa+TasIdBKo9Zk2sbiHZ/3QFi1H/9k5RXjrYTxOxrSZsr
+zNMckIN5ZaUnxmwwAZWMCa6urjsMM0+5XsjOiAGbCwgZwsnSeOeBLwaQFqWXrIKS
+g0Jg1uEyb0C62FZhtbBEIj2GMF8nTg/hFQiLRHC+xSnxV+v5m/2OGMyySfGiCN4M
+nj1ZzMtYozFYYdEVB3lht+w633WDmmZw4tLxvt80hF9x4RdFYcqxk8fJxwjvKLnq
+eRq1WLgwQTQFK3fSJceLt6gtnCijo2F95Cob8Ene1EnSHrrez9szZTobn5FHw/oA
+x4lvXqLa+InfCDLlK0KQC4DJo32mfho27P+r0RJL1fExdsvV8CJTxNNMeKxIjEQo
+evbAOiSZOd5P91wWPna11/5cHybdnFIVRC7SdAVt2TddDfddTeaUX0ZLTmd/Z8vP
+DvjUmR2ZoGnkooURBJ1q4c5C5L1LDyuK6fTJbSZecDnVKu9sWhIPbQbtFwqHPGbo
+MzU2IeigOgWMsttKwYsL2R1FuuTAdGfviVnRL2Kev+x076bZEY4=
+=Ffeg
 -----END PGP SIGNATURE-----
 
---f3bvyjsnlrfsxl4t--
+--fwpzoq2jvtqjw6gp--
