@@ -2,83 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B131E39C800
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 13:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C4739C87A
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 15:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhFEL7q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Jun 2021 07:59:46 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:4489 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbhFEL7p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Jun 2021 07:59:45 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Fxyk52FwZzYn8p;
-        Sat,  5 Jun 2021 19:55:09 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 5 Jun 2021 19:57:56 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Sat, 5 Jun 2021
- 19:57:55 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <rui.zhang@intel.com>, <daniel.lezcano@linaro.org>,
-        <amitk@kernel.org>
-Subject: [PATCH net-next v2] thermal: st: Use devm_platform_get_and_ioremap_resource()
-Date:   Sat, 5 Jun 2021 20:02:05 +0800
-Message-ID: <20210605120205.2459578-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S230265AbhFENUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Jun 2021 09:20:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230050AbhFENU0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 5 Jun 2021 09:20:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B7676140C;
+        Sat,  5 Jun 2021 13:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622899117;
+        bh=oJLjhT+Bdkuogp9lcH0/DqQMHssScmlrFluWHGdXmSs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KfRX9ZYH+GSgzlTzpxjctPEmvJkfTKXl+Y+RucBzSz4WBnbvAWthrJ/curB8ax41d
+         0RamzCUbuHW+hNvsvxFRNLKpwhOj6yb5j+G4AvESC4L/Ra8OFvHySvf0In/pjnoYho
+         eY0513uUzhTlAd81LYiZhM6d2eqjTpr7yOp0/3DCmJ+GuyAF6WqO8Qm1KuhLNbxF9b
+         yJTI8f1KZmiDb5cy+VNqUfelbe5X2IHFBMjmYFqyjzC6dFH+JcvuqE43jlUMhFuRed
+         3tc3s4M5VtPfikIOxkkQLqaG0CgwsjLGBqPIdOsXSEfmrN3+1RgsbpsRRxwHBsB0s5
+         0vEzE1EocfgEA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lpWCB-008GEU-71; Sat, 05 Jun 2021 15:18:35 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "Jonathan Corbet" <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Date:   Sat,  5 Jun 2021 15:17:59 +0200
+Message-Id: <cover.1622898327.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use devm_platform_get_and_ioremap_resource() to simplify
-code and remove error message which within
-devm_platform_get_and_ioremap_resource() already.
+As discussed at:
+	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v2:
- remove 'res'
----
- drivers/thermal/st/st_thermal_memmap.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+automarkup.py extension should handle it automatically, on most cases.
 
-diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
-index a0114452d11f..d68596c40be9 100644
---- a/drivers/thermal/st/st_thermal_memmap.c
-+++ b/drivers/thermal/st/st_thermal_memmap.c
-@@ -119,19 +119,10 @@ static int st_mmap_regmap_init(struct st_thermal_sensor *sensor)
- {
- 	struct device *dev = sensor->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	struct resource *res;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(dev, "no memory resources defined\n");
--		return -ENODEV;
--	}
--
--	sensor->mmio_base = devm_ioremap_resource(dev, res);
--	if (IS_ERR(sensor->mmio_base)) {
--		dev_err(dev, "failed to remap IO\n");
-+	sensor->mmio_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-+	if (IS_ERR(sensor->mmio_base))
- 		return PTR_ERR(sensor->mmio_base);
--	}
- 
- 	sensor->regmap = devm_regmap_init_mmio(dev, sensor->mmio_base,
- 				&st_416mpe_regmap_config);
+There are a couple of exceptions to this rule:
+
+1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+
+It should also be noticed that automarkup.py has currently an issue:
+if one use a markup like:
+
+	Documentation/dev-tools/kunit/api/test.rst
+	  - documents all of the standard testing API excluding mocking
+	    or mocking related features.
+
+or, even:
+
+	Documentation/dev-tools/kunit/api/test.rst
+	    documents all of the standard testing API excluding mocking
+	    or mocking related features.
+	
+The automarkup.py will simply ignore it. Not sure why. This patch series
+avoid the above patterns (which is present only on 4 files), but it would be
+nice to have a followup patch fixing the issue at automarkup.py.
+
+On this series:
+
+Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+as there it uses :file:`foo` to refer to some Documentation/ files;
+
+Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+into a list, carefully avoiding the 
+
+Patch 3 converts the cross-references at the media documentation, also
+avoiding the automarkup.py bug;
+
+Patches 4-34 convert the other occurrences via a replace script. They were
+manually edited, in order to honour 80-columns where possible.
+
+I did a diff between the Sphinx 2.4.4 output before and after this patch
+series in order to double-check that all converted Documentation/ 
+references will produce <a href=<foo>.rst>foo title</a> tags.
+
+Mauro Carvalho Chehab (34):
+  docs: devices.rst: better reference documentation docs
+  docs: dev-tools: kunit: don't use a table for docs name
+  media: docs: */media/index.rst: don't use ReST doc:`foo`
+  media: userspace-api: avoid using ReST :doc:`foo` markup
+  media: driver-api: drivers: avoid using ReST :doc:`foo` markup
+  media: admin-guide: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
+  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+  docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
+  docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
+  docs: core-api: avoid using ReSt :doc:`foo` markup
+  docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+  docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
+    :doc:`foo` markup
+  docs: doc-guide: avoid using ReSt :doc:`foo` markup
+  docs: driver-api: avoid using ReSt :doc:`foo` markup
+  docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
+    markup
+  docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
+  docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
+  docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
+  docs: i2c: avoid using ReSt :doc:`foo` markup
+  docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
+  docs: networking: devlink: avoid using ReSt :doc:`foo` markup
+  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
+  docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
+  docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
+  docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
+  docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
+  docs: x86: avoid using ReSt :doc:`foo` markup
+
+ .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+ Documentation/PCI/pci.rst                     |  6 +--
+ .../special-register-buffer-data-sampling.rst |  3 +-
+ Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
+ Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
+ Documentation/admin-guide/media/index.rst     | 12 +++---
+ Documentation/admin-guide/media/saa7134.rst   |  3 +-
+ Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+ Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+ Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+ Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+ Documentation/block/biodoc.rst                |  2 +-
+ Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+ .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+ Documentation/core-api/dma-api.rst            |  5 ++-
+ Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+ Documentation/core-api/index.rst              |  4 +-
+ Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+ Documentation/dev-tools/kunit/faq.rst         |  2 +-
+ Documentation/dev-tools/kunit/index.rst       | 14 +++----
+ Documentation/dev-tools/kunit/start.rst       |  6 +--
+ Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+ Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+ Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+ .../bindings/submitting-patches.rst           | 11 +++---
+ Documentation/doc-guide/contributing.rst      |  8 ++--
+ Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+ Documentation/driver-api/ioctl.rst            |  2 +-
+ .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
+ Documentation/driver-api/media/index.rst      | 10 +++--
+ Documentation/driver-api/pm/devices.rst       |  8 ++--
+ .../surface_aggregator/clients/index.rst      |  3 +-
+ .../surface_aggregator/internal.rst           | 15 ++++----
+ .../surface_aggregator/overview.rst           |  6 ++-
+ Documentation/driver-api/usb/dma.rst          |  6 +--
+ .../acpi/dsd/data-node-references.rst         |  3 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+ .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+ Documentation/hwmon/adm1177.rst               |  3 +-
+ Documentation/i2c/instantiating-devices.rst   |  2 +-
+ Documentation/i2c/old-module-parameters.rst   |  3 +-
+ Documentation/i2c/smbus-protocol.rst          |  4 +-
+ Documentation/kernel-hacking/hacking.rst      |  4 +-
+ .../networking/devlink/devlink-region.rst     |  2 +-
+ .../networking/devlink/devlink-trap.rst       |  4 +-
+ Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+ Documentation/security/landlock.rst           |  3 +-
+ Documentation/trace/coresight/coresight.rst   |  8 ++--
+ Documentation/trace/ftrace.rst                |  2 +-
+ Documentation/userspace-api/landlock.rst      | 11 +++---
+ .../userspace-api/media/glossary.rst          |  2 +-
+ Documentation/userspace-api/media/index.rst   | 12 +++---
+ Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+ Documentation/x86/boot.rst                    |  4 +-
+ Documentation/x86/mtrr.rst                    |  2 +-
+ 55 files changed, 217 insertions(+), 183 deletions(-)
+
 -- 
-2.25.1
+2.31.1
+
 
