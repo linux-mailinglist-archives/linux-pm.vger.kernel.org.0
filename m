@@ -2,141 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8768439C8AE
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 15:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262A739C8DE
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 15:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbhFENU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Jun 2021 09:20:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34954 "EHLO mail.kernel.org"
+        id S230049AbhFENi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Jun 2021 09:38:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229964AbhFENUZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 5 Jun 2021 09:20:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7868D61406;
-        Sat,  5 Jun 2021 13:18:37 +0000 (UTC)
+        id S229931AbhFENi5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 5 Jun 2021 09:38:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C23286135F;
+        Sat,  5 Jun 2021 13:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622899117;
-        bh=pFz1r1h81+i/mGF2uSwI/JWJDbJHTjv4eb/e5YOT/x0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pQxK4XdEDHJQGeiboJ2g6mZ7vs+PsXACokEa4SvwWCPZjIFf3KXNCFGYdb+jks5tz
-         gPosWFuCYwipga33qKhV213sUEjR72eTxPCOiY7z6EptQ72f5kjSsONf7G7BaCW5j4
-         7zWKEMtsU3woFei5RmXtHvDB4CfBlQCQ1U0IQmASMkNSnYr7RUYEByenkBiTKVNdI0
-         qQbR3/PM8ZZQUjjsseP3UrLrw2X3SLxybnKEDVbfCPsroJlTO+asdujng/M8prZSPs
-         WNftfLV18nSeajxhQOV+muQ6+obPwW1fZnZl2lrfRSfzq0Z/BmybhhKZiIcdlVj0ao
-         1h9/Zo5DClsIg==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lpWCB-008GEv-IU; Sat, 05 Jun 2021 15:18:35 +0200
+        s=k20201202; t=1622900229;
+        bh=vVFuxJcc2zxGSbB7UdD22Ei/qbdSpSclZeHlTn/3YhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YvYT6g2uMiGoR+6sy8adxF2RKOKdLfZwZM1lQ2XSeGEmVRPfj+lL9GfMuDZZyN5sW
+         owde4vG3yj7p7pLXeq7cT8Quzu5K2oje+SVTkxIFZzcqSZ8hnMEW22eBk76FE287fo
+         4UO5rHWF2ckQlxw3LXeqP9dl2lb4h/WYP8nTAjJYJK6XJoYk/G411kYe/F/2iQJhoD
+         xXRTDbDCKLXwoKXPmi6Vr+WyuZ3ew8qcXU3FezEQ7yPGxTwls2XhX7YcBJMW4KIq4h
+         iQEMQ7FEZy5AfH5qZZbVs3RolIS66jPxDTIm3nQXafdQE5dr92NhDgnKsUXTMjPJ2E
+         9HOoolYpwluWw==
+Date:   Sat, 5 Jun 2021 15:37:01 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     "Jonathan Corbet" <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 07/34] docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
-Date:   Sat,  5 Jun 2021 15:18:06 +0200
-Message-Id: <447890cd6772ec55e2100ff6f53fffef38674d6b.1622898327.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210605153701.56a8e2d8@coco.lan>
 In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
 References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The :doc:`foo` tag is auto-generated via automarkup.py.
-So, use the filename at the sources, instead of :doc:`foo`.
+Em Sat,  5 Jun 2021 15:17:59 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/admin-guide/pm/intel_idle.rst   | 16 ++++++++++------
- Documentation/admin-guide/pm/intel_pstate.rst |  9 +++++----
- 2 files changed, 15 insertions(+), 10 deletions(-)
+> As discussed at:
+> 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> 
+> It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+> automarkup.py extension should handle it automatically, on most cases.
 
-diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
-index 89309e1b0e48..b799a43da62e 100644
---- a/Documentation/admin-guide/pm/intel_idle.rst
-+++ b/Documentation/admin-guide/pm/intel_idle.rst
-@@ -20,8 +20,8 @@ Nehalem and later generations of Intel processors, but the level of support for
- a particular processor model in it depends on whether or not it recognizes that
- processor model and may also depend on information coming from the platform
- firmware.  [To understand ``intel_idle`` it is necessary to know how ``CPUIdle``
--works in general, so this is the time to get familiar with :doc:`cpuidle` if you
--have not done that yet.]
-+works in general, so this is the time to get familiar with
-+Documentation/admin-guide/pm/cpuidle.rst if you have not done that yet.]
- 
- ``intel_idle`` uses the ``MWAIT`` instruction to inform the processor that the
- logical CPU executing it is idle and so it may be possible to put some of the
-@@ -53,7 +53,8 @@ processor) corresponding to them depends on the processor model and it may also
- depend on the configuration of the platform.
- 
- In order to create a list of available idle states required by the ``CPUIdle``
--subsystem (see :ref:`idle-states-representation` in :doc:`cpuidle`),
-+subsystem (see :ref:`idle-states-representation` in
-+Documentation/admin-guide/pm/cpuidle.rst),
- ``intel_idle`` can use two sources of information: static tables of idle states
- for different processor models included in the driver itself and the ACPI tables
- of the system.  The former are always used if the processor model at hand is
-@@ -98,7 +99,8 @@ states may not be enabled by default if there are no matching entries in the
- preliminary list of idle states coming from the ACPI tables.  In that case user
- space still can enable them later (on a per-CPU basis) with the help of
- the ``disable`` idle state attribute in ``sysfs`` (see
--:ref:`idle-states-representation` in :doc:`cpuidle`).  This basically means that
-+:ref:`idle-states-representation` in
-+Documentation/admin-guide/pm/cpuidle.rst).  This basically means that
- the idle states "known" to the driver may not be enabled by default if they have
- not been exposed by the platform firmware (through the ACPI tables).
- 
-@@ -186,7 +188,8 @@ be desirable.  In practice, it is only really necessary to do that if the idle
- states in question cannot be enabled during system startup, because in the
- working state of the system the CPU power management quality of service (PM
- QoS) feature can be used to prevent ``CPUIdle`` from touching those idle states
--even if they have been enumerated (see :ref:`cpu-pm-qos` in :doc:`cpuidle`).
-+even if they have been enumerated (see :ref:`cpu-pm-qos` in
-+Documentation/admin-guide/pm/cpuidle.rst).
- Setting ``max_cstate`` to 0 causes the ``intel_idle`` initialization to fail.
- 
- The ``no_acpi`` and ``use_acpi`` module parameters (recognized by ``intel_idle``
-@@ -202,7 +205,8 @@ Namely, the positions of the bits that are set in the ``states_off`` value are
- the indices of idle states to be disabled by default (as reflected by the names
- of the corresponding idle state directories in ``sysfs``, :file:`state0`,
- :file:`state1` ... :file:`state<i>` ..., where ``<i>`` is the index of the given
--idle state; see :ref:`idle-states-representation` in :doc:`cpuidle`).
-+idle state; see :ref:`idle-states-representation` in
-+Documentation/admin-guide/pm/cpuidle.rst).
- 
- For example, if ``states_off`` is equal to 3, the driver will disable idle
- states 0 and 1 by default, and if it is equal to 8, idle state 3 will be
-diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
-index df29b4f1f219..7a7d4b041eac 100644
---- a/Documentation/admin-guide/pm/intel_pstate.rst
-+++ b/Documentation/admin-guide/pm/intel_pstate.rst
-@@ -18,8 +18,8 @@ General Information
- (``CPUFreq``).  It is a scaling driver for the Sandy Bridge and later
- generations of Intel processors.  Note, however, that some of those processors
- may not be supported.  [To understand ``intel_pstate`` it is necessary to know
--how ``CPUFreq`` works in general, so this is the time to read :doc:`cpufreq` if
--you have not done that yet.]
-+how ``CPUFreq`` works in general, so this is the time to read
-+Documentation/admin-guide/pm/cpufreq.rst if you have not done that yet.]
- 
- For the processors supported by ``intel_pstate``, the P-state concept is broader
- than just an operating frequency or an operating performance point (see the
-@@ -445,8 +445,9 @@ Interpretation of Policy Attributes
- -----------------------------------
- 
- The interpretation of some ``CPUFreq`` policy attributes described in
--:doc:`cpufreq` is special with ``intel_pstate`` as the current scaling driver
--and it generally depends on the driver's `operation mode <Operation Modes_>`_.
-+Documentation/admin-guide/pm/cpufreq.rst is special with ``intel_pstate``
-+as the current scaling driver and it generally depends on the driver's
-+`operation mode <Operation Modes_>`_.
- 
- First of all, the values of the ``cpuinfo_max_freq``, ``cpuinfo_min_freq`` and
- ``scaling_cur_freq`` attributes are produced by applying a processor-specific
--- 
-2.31.1
+Forgot to mention:
 
+1. this series is against docs-next branch;
+2. maintainers bcc, as otherwise the e-mail would be rejected,
+   due to the number of c/c. I opted to keep c/c the mailing
+   lists.
+
+Regards,
+Mauro
+
+> 
+> There are a couple of exceptions to this rule:
+> 
+> 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> 
+> It should also be noticed that automarkup.py has currently an issue:
+> if one use a markup like:
+> 
+> 	Documentation/dev-tools/kunit/api/test.rst
+> 	  - documents all of the standard testing API excluding mocking
+> 	    or mocking related features.
+> 
+> or, even:
+> 
+> 	Documentation/dev-tools/kunit/api/test.rst
+> 	    documents all of the standard testing API excluding mocking
+> 	    or mocking related features.
+> 	
+> The automarkup.py will simply ignore it. Not sure why. This patch series
+> avoid the above patterns (which is present only on 4 files), but it would be
+> nice to have a followup patch fixing the issue at automarkup.py.
+> 
+> On this series:
+> 
+> Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+> as there it uses :file:`foo` to refer to some Documentation/ files;
+> 
+> Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+> into a list, carefully avoiding the 
+> 
+> Patch 3 converts the cross-references at the media documentation, also
+> avoiding the automarkup.py bug;
+> 
+> Patches 4-34 convert the other occurrences via a replace script. They were
+> manually edited, in order to honour 80-columns where possible.
+> 
+> I did a diff between the Sphinx 2.4.4 output before and after this patch
+> series in order to double-check that all converted Documentation/ 
+> references will produce <a href=<foo>.rst>foo title</a> tags.
+> 
+> Mauro Carvalho Chehab (34):
+>   docs: devices.rst: better reference documentation docs
+>   docs: dev-tools: kunit: don't use a table for docs name
+>   media: docs: */media/index.rst: don't use ReST doc:`foo`
+>   media: userspace-api: avoid using ReST :doc:`foo` markup
+>   media: driver-api: drivers: avoid using ReST :doc:`foo` markup
+>   media: admin-guide: avoid using ReST :doc:`foo` markup
+>   docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
+>   docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+>   docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+>   docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
+>   docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
+>   docs: core-api: avoid using ReSt :doc:`foo` markup
+>   docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+>   docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
+>     :doc:`foo` markup
+>   docs: doc-guide: avoid using ReSt :doc:`foo` markup
+>   docs: driver-api: avoid using ReSt :doc:`foo` markup
+>   docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
+>   docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
+>   docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
+>   docs: i2c: avoid using ReSt :doc:`foo` markup
+>   docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
+>   docs: networking: devlink: avoid using ReSt :doc:`foo` markup
+>   docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
+>   docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
+>   docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
+>     markup
+>   docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
+>   docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
+>   docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
+>   docs: x86: avoid using ReSt :doc:`foo` markup
+> 
+>  .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+>  Documentation/PCI/pci.rst                     |  6 +--
+>  .../special-register-buffer-data-sampling.rst |  3 +-
+>  Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
+>  Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
+>  Documentation/admin-guide/media/index.rst     | 12 +++---
+>  Documentation/admin-guide/media/saa7134.rst   |  3 +-
+>  Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+>  Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+>  Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+>  Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+>  Documentation/block/biodoc.rst                |  2 +-
+>  Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+>  .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+>  Documentation/core-api/dma-api.rst            |  5 ++-
+>  Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+>  Documentation/core-api/index.rst              |  4 +-
+>  Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+>  Documentation/dev-tools/kunit/faq.rst         |  2 +-
+>  Documentation/dev-tools/kunit/index.rst       | 14 +++----
+>  Documentation/dev-tools/kunit/start.rst       |  6 +--
+>  Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+>  Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+>  Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+>  .../bindings/submitting-patches.rst           | 11 +++---
+>  Documentation/doc-guide/contributing.rst      |  8 ++--
+>  Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+>  Documentation/driver-api/ioctl.rst            |  2 +-
+>  .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
+>  Documentation/driver-api/media/index.rst      | 10 +++--
+>  Documentation/driver-api/pm/devices.rst       |  8 ++--
+>  .../surface_aggregator/clients/index.rst      |  3 +-
+>  .../surface_aggregator/internal.rst           | 15 ++++----
+>  .../surface_aggregator/overview.rst           |  6 ++-
+>  Documentation/driver-api/usb/dma.rst          |  6 +--
+>  .../acpi/dsd/data-node-references.rst         |  3 +-
+>  .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+>  .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+>  Documentation/hwmon/adm1177.rst               |  3 +-
+>  Documentation/i2c/instantiating-devices.rst   |  2 +-
+>  Documentation/i2c/old-module-parameters.rst   |  3 +-
+>  Documentation/i2c/smbus-protocol.rst          |  4 +-
+>  Documentation/kernel-hacking/hacking.rst      |  4 +-
+>  .../networking/devlink/devlink-region.rst     |  2 +-
+>  .../networking/devlink/devlink-trap.rst       |  4 +-
+>  Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+>  Documentation/security/landlock.rst           |  3 +-
+>  Documentation/trace/coresight/coresight.rst   |  8 ++--
+>  Documentation/trace/ftrace.rst                |  2 +-
+>  Documentation/userspace-api/landlock.rst      | 11 +++---
+>  .../userspace-api/media/glossary.rst          |  2 +-
+>  Documentation/userspace-api/media/index.rst   | 12 +++---
+>  Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+>  Documentation/x86/boot.rst                    |  4 +-
+>  Documentation/x86/mtrr.rst                    |  2 +-
+>  55 files changed, 217 insertions(+), 183 deletions(-)
+> 
+
+
+
+Thanks,
+Mauro
