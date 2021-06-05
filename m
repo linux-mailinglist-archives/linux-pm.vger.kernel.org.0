@@ -2,76 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E4639C64B
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 08:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06E939C6C4
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jun 2021 10:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFEGcQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Jun 2021 02:32:16 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:7110 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhFEGcQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Jun 2021 02:32:16 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FxqSD0Dz4zYqKX;
-        Sat,  5 Jun 2021 14:27:40 +0800 (CST)
-Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
+        id S230078AbhFEI3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Jun 2021 04:29:45 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:4365 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230029AbhFEI3p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Jun 2021 04:29:45 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Fxt2c0pDrz5sk7;
+        Sat,  5 Jun 2021 16:24:08 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
  dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 5 Jun 2021 14:30:26 +0800
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2176.2; Sat, 5 Jun 2021 16:27:55 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Sat, 5 Jun 2021
- 14:30:26 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <yangjihong1@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>
-Subject: [PATCH -next] PM/sleep: fix doc warnings in main.c
-Date:   Sat, 5 Jun 2021 14:39:34 +0800
-Message-ID: <20210605063934.688763-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+ 16:27:55 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <rui.zhang@intel.com>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>
+Subject: [PATCH -next] thermal: st: Use devm_platform_get_and_ioremap_resource()
+Date:   Sat, 5 Jun 2021 16:32:12 +0800
+Message-ID: <20210605083212.2069195-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500020.china.huawei.com (7.185.36.88)
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add description for `state_show` to fix the W=1 warnings:
+Use devm_platform_get_and_ioremap_resource() to simplify
+code and remove error message which within
+devm_platform_get_and_ioremap_resource() already.
 
-kernel/power/main.c:593: warning:
- Function parameter or member 'kobj' not described in 'state_show'
-kernel/power/main.c:593: warning:
- Function parameter or member 'attr' not described in 'state_show'
-kernel/power/main.c:593: warning:
- Function parameter or member 'buf' not described in 'state_show'
-
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- kernel/power/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/thermal/st/st_thermal_memmap.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 12c7e1bb442f..d508c8c582e0 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -579,7 +579,9 @@ struct kobject *power_kobj;
+diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
+index a0114452d11f..35e904da7582 100644
+--- a/drivers/thermal/st/st_thermal_memmap.c
++++ b/drivers/thermal/st/st_thermal_memmap.c
+@@ -121,17 +121,9 @@ static int st_mmap_regmap_init(struct st_thermal_sensor *sensor)
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct resource *res;
  
- /**
-  * state - control system sleep states.
-- *
-+ * @kobj: Pointer to the kernel object.
-+ * @attr: Pointer to the kernel object attribute.
-+ * @buf: buffer.
-  * show() returns available sleep state labels, which may be "mem", "standby",
-  * "freeze" and "disk" (hibernation).
-  * See Documentation/admin-guide/pm/sleep-states.rst for a description of
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		dev_err(dev, "no memory resources defined\n");
+-		return -ENODEV;
+-	}
+-
+-	sensor->mmio_base = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(sensor->mmio_base)) {
+-		dev_err(dev, "failed to remap IO\n");
++	sensor->mmio_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
++	if (IS_ERR(sensor->mmio_base))
+ 		return PTR_ERR(sensor->mmio_base);
+-	}
+ 
+ 	sensor->regmap = devm_regmap_init_mmio(dev, sensor->mmio_base,
+ 				&st_416mpe_regmap_config);
 -- 
-2.31.1
+2.25.1
 
