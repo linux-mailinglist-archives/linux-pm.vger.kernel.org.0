@@ -2,44 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD3E39E127
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400D739E12B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbhFGPtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 11:49:18 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:38477 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbhFGPtS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 11:49:18 -0400
-Received: by mail-ot1-f51.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so3559170otk.5;
-        Mon, 07 Jun 2021 08:47:26 -0700 (PDT)
+        id S230291AbhFGPuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 11:50:20 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:34459 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230226AbhFGPuU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 11:50:20 -0400
+Received: by mail-oi1-f178.google.com with SMTP id u11so18518258oiv.1;
+        Mon, 07 Jun 2021 08:48:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HVJhd+u7GmSPZQlKGUKfiKFOtV7NI/wtWT9eN5SSaGI=;
-        b=LaR5N/dYn60sbowkQFIRRaS9XpOggHTdVtA3bsHjNFqbT21UX9k6mHsdESty0/N7Zv
-         Tw7R0AeFzdx0HZLiMfgtBSi+/Alvdbm2asMo6ul8IBC4tAXUYyWlG1MwYw8F7aczcczk
-         2mGon7Riuj109naMkbh2PM3lVDNQ3CdkluYP810Wnd/JnA6wNvJylZ4MhJvLDchVW2Eg
-         4zQqb9Ek37lUUUQ02axiKR/9NAIbm/1yvYxni78dSUHPoLomEaEF1JQ2M2V75pLcipju
-         J98YncfJN+po9do/UP7G2SQTi/4IA1WvTE73jUMA5bxhSs73CI1le/vANmVlUviiF0ak
-         a2dQ==
-X-Gm-Message-State: AOAM531fQh0G/OM2DdVKsnzFXxW66n4RMihbaoJCa77W9MAwQr8Cn2vT
-        0zuZv+p8NJ43kVhPQs6eKBWpOYxlWeHefCeQJe5Q86sF
-X-Google-Smtp-Source: ABdhPJzzxMbMUs+hYRb9oWPT+tkkivNnJEMnG+1ac2FghMDYJe7smOyj2wbrwyRFPYv7cEZz923eTvTboHHm6v4O+Ww=
-X-Received: by 2002:a9d:63cd:: with SMTP id e13mr14859434otl.206.1623080846492;
- Mon, 07 Jun 2021 08:47:26 -0700 (PDT)
+        bh=GPvwNDXxveM7WvcIICOfOWncBvlog3gstf62jTYMMds=;
+        b=jeF5Ma6BQ5C7npYESN0TWwnoLR4CXxiYmvbqUxEihZ3z7NIi44qRp4iC0rjdj3ItPd
+         M642fzX5xjznfZduL3GkgtQ0APAc6IcnG6PPBgAGoxwi2KlkEeaGPTjF+0zqFDJBpe+4
+         qmKDmrBRdDyOi7b4P4kOMECoMK5tvQJUNxQG150eYPfFP8r0JaNTR2JiCURnVwwNd4wH
+         ZAlF5fTA/ggopX5glMOpVZ13cSrMAHk8fBfjO0fegi9Cr3ONFRGOAJSfOwqnKh/TrFJj
+         UUZ3flQ1VqCahZ6fJRwrCqHlGJ3/kk8WvNP3d5PApS3NKMnFiNbYgc1RDuYitLvGEVTx
+         pyDw==
+X-Gm-Message-State: AOAM530h3PA+Y9w0ToDpef48D8R7gYMU2/6IpQ6wFIle4Ls+Cm5pPtNQ
+        iW5Ai57GYM0xr6aUKAaqKvIM7S9MZ7ZeLWqvZRc=
+X-Google-Smtp-Source: ABdhPJxP16Qu0fj4N3ExB40QCYrAreA9thdjxDCBWKRQdvwtM+7ghjwsMC2iFuaRODH9D8ePpEZkxHB7o+tA4bkXwJs=
+X-Received: by 2002:aca:b406:: with SMTP id d6mr11781753oif.71.1623080897693;
+ Mon, 07 Jun 2021 08:48:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210606115828.27020-1-liuhailongg6@163.com> <20210607032726.rolhnshkctluepw2@vireshk-i7>
-In-Reply-To: <20210607032726.rolhnshkctluepw2@vireshk-i7>
+References: <20210603135752.30162-1-liuhailongg6@163.com> <20210604034709.kxqy6vcfvtxf5rje@vireshk-i7>
+In-Reply-To: <20210604034709.kxqy6vcfvtxf5rje@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Jun 2021 17:47:15 +0200
-Message-ID: <CAJZ5v0itSWZQX4dVYGDq2pg6S+eeOYwh8U+3B2D1fq5qUqrZHQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: sh: Remove unused linux/sched.h headers
+Date:   Mon, 7 Jun 2021 17:48:06 +0200
+Message-ID: <CAJZ5v0he09ttX-EnXukHcqk4okdp1ag7dEH3BQQ_AsPOMMOBpg@mail.gmail.com>
+Subject: Re: [PATCH] CPUFREQ: loongson2: Remove unused linux/sched.h headers
 To:     Viresh Kumar <viresh.kumar@linaro.org>,
         Hailong Liu <liuhailongg6@163.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        linux-mips@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Hailong Liu <liu.hailong6@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
@@ -47,31 +48,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 7, 2021 at 5:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, Jun 4, 2021 at 5:48 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 06-06-21, 19:58, Hailong Liu wrote:
+> On 03-06-21, 21:57, Hailong Liu wrote:
 > > From: Hailong Liu <liu.hailong6@zte.com.cn>
 > >
-> > Since commit '205dcc1ecbc5(cpufreq/sh: Replace racy task affinity logic)'
-> > the header <linux/sched.h> is useless in sh-cpufreq.c, so remove it.
+> > Since commit 759f534e93ac(CPUFREQ: Loongson2: drop set_cpus_allowed_ptr()),
+> > the header <linux/sched.h> is useless in oongson2_cpufreq.c, so remove it.
 > >
 > > Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
 > > ---
-> >  drivers/cpufreq/sh-cpufreq.c | 1 -
+> >  drivers/cpufreq/loongson2_cpufreq.c | 1 -
 > >  1 file changed, 1 deletion(-)
 > >
-> > diff --git a/drivers/cpufreq/sh-cpufreq.c b/drivers/cpufreq/sh-cpufreq.c
-> > index 0ac265d47ef0..1a251e635ebd 100644
-> > --- a/drivers/cpufreq/sh-cpufreq.c
-> > +++ b/drivers/cpufreq/sh-cpufreq.c
-> > @@ -23,7 +23,6 @@
-> >  #include <linux/cpumask.h>
-> >  #include <linux/cpu.h>
-> >  #include <linux/smp.h>
+> > diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
+> > index d05e761d9572..afc59b292153 100644
+> > --- a/drivers/cpufreq/loongson2_cpufreq.c
+> > +++ b/drivers/cpufreq/loongson2_cpufreq.c
+> > @@ -16,7 +16,6 @@
+> >  #include <linux/cpufreq.h>
+> >  #include <linux/module.h>
+> >  #include <linux/err.h>
 > > -#include <linux/sched.h>     /* set_cpus_allowed() */
-> >  #include <linux/clk.h>
-> >  #include <linux/percpu.h>
-> >  #include <linux/sh_clk.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/platform_device.h>
 >
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
