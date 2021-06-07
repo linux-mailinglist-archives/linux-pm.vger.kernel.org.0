@@ -2,112 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDED639E56C
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 19:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E28739E6BA
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 20:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhFGRce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 13:32:34 -0400
-Received: from mga02.intel.com ([134.134.136.20]:61742 "EHLO mga02.intel.com"
+        id S230330AbhFGSgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 14:36:43 -0400
+Received: from mout.gmx.net ([212.227.17.20]:33103 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230266AbhFGRce (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Jun 2021 13:32:34 -0400
-IronPort-SDR: ZAZM8Xqh3GcRawNmstUShO7qRyg6kY7yiQJd2/ZwCxt8CjnQg8UoBUPAuG63dcjZcBPP0F3fYD
- qE/cIheAjyiA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="191778267"
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="191778267"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 10:30:41 -0700
-IronPort-SDR: deirWvcCsgtdXm90yHp0Uzo2d9GpC2TweX2Cmw0E55DhCmB2kxSVjbhDMQXjthAHCKFtCmE0hY
- MB6b1F0LqgUA==
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="447563923"
-Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.139.144]) ([10.249.139.144])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 10:30:38 -0700
-Subject: Re: [PATCH] cpuidle: ARM_QCOM_SPM_CPUIDLE should depend on
- HAVE_ARM_SMCCC
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, He Ying <heying24@huawei.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20210606190048.689-1-rdunlap@infradead.org>
- <YL4Is1LNzBuViF3/@gerhold.net>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-Message-ID: <7a207351-43e1-d439-9d86-bb28b6935fa2@intel.com>
-Date:   Mon, 7 Jun 2021 19:30:36 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S230289AbhFGSgn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Jun 2021 14:36:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1623090873;
+        bh=veiWrZ68/aRMVKyuCZcb9fLCipe0nVzpbd5nvowzwto=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TiHYVZPBlxYwHuVwDkOkLhNiD+oSkKmlFe9Rub6y82Im0FhEu5jpsZckZF7yM96dD
+         VVUhOxPtUEOVn+m1zPR6t8Tzbgr15rPEFyx+aC+sCy8BJ860x9DGBNb2hUriuXARpq
+         91/RROpwDpUgsfZtTVD+K4pfHepexquY1OPPN/4Q=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.152.109] ([217.61.152.109]) by web-mail.gmx.net
+ (3c-app-gmx-bs17.server.lan [172.19.170.69]) (via HTTP); Mon, 7 Jun 2021
+ 20:34:33 +0200
 MIME-Version: 1.0
-In-Reply-To: <YL4Is1LNzBuViF3/@gerhold.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Message-ID: <trinity-663afc91-2433-4785-af9b-3ca5d4744037-1623090872989@3c-app-gmx-bs17>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Aw: [PATCH v3] thermal: mediatek: add sensors-support
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 7 Jun 2021 20:34:33 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20210420172308.134685-1-linux@fw-web.de>
+References: <20210420172308.134685-1-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:ip0nyvLzh2YX44Uhf9v4yvoEe2mw7J7QthU4ZFFsIRct1zSudRF6b8ECYw5mNaEH7okJ/
+ z6Aw7K+oSZKQJ395RKhHpgLBd+9eGpE57z8+vzav1WvG0oLC1uIeFL9yXzoi3uKJOwhh08K5qdgg
+ fv68On+lnP15Sg83+pVQW/B6V90n4c45x76Uj2s3JUpv8GUgv60GXEtWtW+vEtkfRWZwUpjfXKtR
+ 6X6jE7uIlR8vUUWuyFh28oitByaAHEwCbACBsWZnCrCz8a5bC8onxKMvejxpLPeLzaShU4k5TxX9
+ sM=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:le5utTWPOeM=:0ESx69M38a2u70tlVpp4p3
+ cPC0x2W3F2PeIim3TIOx7NXpKt0FouzXxFLZP/apENdqQC0e05iMty/O0LcqPFcxBmvmjWrHI
+ xzLgYIUU0n9OB1PeaPuucDEpnSjsmBJkKEl1Fpcrcfk6Ps1tuWWo7bTJ9iHbAfgtgMpszWJcx
+ 4IOqlDq4/1DE4Ia6Gem2oaC4Lsu3baJDXw6vNr9enB/daksBvprPLb6UN/srjIR2/4GrzlGJn
+ Ptmev0EWGNwqE7CngUgovjsUSLeUUtL9g1ARPqMeuS/iHjjtq1CyCm9rp6l9n0gkJ+SwAFMSN
+ rn9SgnSTu2j3clYGEGx292yM3U1suyqSMKaxIvL5J0/Vnv5HJ3fWlJ54AHCpRPrtp6uM0Cjwp
+ OkqvxTYwJ+Jpx0l8aied93NLgG7ZmzQIOnmrfjqjtjw01XgvI96OHZBWklloVppWZVOeSWt1p
+ TuOIREVCe+JzJ7tK6/qRbqhoVJqQnAFoPrREt5bgaGxIrmNAysaIyBTbs/6AWvv26hwZBBWaU
+ ei79NFnD/ZbOutVKXt8yKkWuTLLRajEewG1ThAG2BtUbNA+qfbK92tW1BxVdBN+LTNMXgNGbo
+ q3OVMIIWINyHemDUpKgHh4M7YLRJ7kt5bU/y3Tr3Dv546vliTkhwfRHPabAJlEFiFOgbctLHZ
+ am+L5usw8ZDwun/VjOoIPBs/4+WVpEUVEEMlbYO4xdtvJKtmioe7G0TMdXuWuO2ge6KytcyR4
+ MxuNn7WGLYHX2y/78ORbb5yY9cia5GbcNDTPwwlrJZ3woHzcy7HguyWNHyqTLyWHrReli9ouf
+ ykAlyTuFoNA+PGNYdB5/5r7EDRW6FStavENNM7gFpyeCVV7UAc=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/7/2021 1:53 PM, Stephan Gerhold wrote:
-> Hi!
+Hi,
+
+just a gentle ping ;)
+
+regards Frank
+
+
+> Gesendet: Dienstag, 20. April 2021 um 19:23 Uhr
+> Von: "Frank Wunderlich" <linux@fw-web.de>
+> An: linux-mediatek@lists.infradead.org
+> Cc: "Frank Wunderlich" <frank-w@public-files.de>, "Daniel Lezcano" <dani=
+el.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Matthias Brug=
+ger" <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org, linux-arm-kernel@=
+lists.infradead.org, linux-kernel@vger.kernel.org
+> Betreff: [PATCH v3] thermal: mediatek: add sensors-support
 >
-> On Sun, Jun 06, 2021 at 12:00:48PM -0700, Randy Dunlap wrote:
->> QCOM_SCM depends on HAVE_ARM_SMCCC, so ARM_QCOM_SPM_CPUIDLE should
->> also depend on HAVE_ARM_SMCCC since 'select' does not follow any
->> dependency chains.
->>
->> This fixes a kconfig warning and subsequent build errors:
->>
->> WARNING: unmet direct dependencies detected for QCOM_SCM
->>    Depends on [n]: (ARM [=y] || ARM64) && HAVE_ARM_SMCCC [=n]
->>    Selected by [y]:
->>    - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
->>
->> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
->> qcom_scm-smc.c:(.text+0x5c): undefined reference to `__arm_smccc_smc'
->> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
->> qcom_scm-legacy.c:(.text+0x140): undefined reference to `__arm_smccc_smc'
->> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
->> qcom_scm-legacy.c:(.text+0x364): undefined reference to `__arm_smccc_smc'
->>
->> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Stephan Gerhold <stephan@gerhold.net>
->> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Cc: Andy Gross <agross@kernel.org>
->> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Cc: linux-arm-msm@vger.kernel.org
->> Cc: He Ying <heying24@huawei.com>
-> There was a similar patch from Arnd a while ago (which fixes another
-> warning for ARM_CPU_SUSPEND?):
+> From: Frank Wunderlich <frank-w@public-files.de>
 >
-> https://lore.kernel.org/linux-pm/20210421135723.3601743-1-arnd@kernel.org/
+> add HWMON-support to mediateks thermal driver to allow lm-sensors
+> userspace tools read soc temperature
 >
-> I'm not sure who is supposed to pick it up. :)
-
-ARM cpuidle drivers are maintained by Daniel Lezcano.
-
-Also, please CC power management material to linux-pm@vger.kernel.org.
-
-
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v3: drop no_hwmon - now really, sorry
+> v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
+> ---
+>  drivers/thermal/mtk_thermal.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
->> ---
->>   drivers/cpuidle/Kconfig.arm |    1 +
->>   1 file changed, 1 insertion(+)
->>
->> --- linux-next-20210604.orig/drivers/cpuidle/Kconfig.arm
->> +++ linux-next-20210604/drivers/cpuidle/Kconfig.arm
->> @@ -108,6 +108,7 @@ config ARM_TEGRA_CPUIDLE
->>   config ARM_QCOM_SPM_CPUIDLE
->>   	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
->>   	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
->> +	depends on HAVE_ARM_SMCCC
->>   	select ARM_CPU_SUSPEND
->>   	select CPU_IDLE_MULTIPLE_DRIVERS
->>   	select DT_IDLE_STATES
-
-
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal=
+.c
+> index 149c6d7fd5a0..85964988684b 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -23,6 +23,8 @@
+>  #include <linux/reset.h>
+>  #include <linux/types.h>
+>
+> +#include "thermal_hwmon.h"
+> +
+>  /* AUXADC Registers */
+>  #define AUXADC_CON1_SET_V	0x008
+>  #define AUXADC_CON1_CLR_V	0x00c
+> @@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_devi=
+ce *pdev)
+>  		goto err_disable_clk_peri_therm;
+>  	}
+>
+> +	ret =3D devm_thermal_add_hwmon_sysfs(tzdev);
+> +	if (ret)
+> +		dev_err(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+> +
+>  	return 0;
+>
+>  err_disable_clk_peri_therm:
+> --
+> 2.25.1
+>
+>
