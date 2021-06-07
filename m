@@ -2,125 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E28739E6BA
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 20:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C92239E9FC
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 01:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbhFGSgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 14:36:43 -0400
-Received: from mout.gmx.net ([212.227.17.20]:33103 "EHLO mout.gmx.net"
+        id S230254AbhFGXTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 19:19:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230289AbhFGSgn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Jun 2021 14:36:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1623090873;
-        bh=veiWrZ68/aRMVKyuCZcb9fLCipe0nVzpbd5nvowzwto=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=TiHYVZPBlxYwHuVwDkOkLhNiD+oSkKmlFe9Rub6y82Im0FhEu5jpsZckZF7yM96dD
-         VVUhOxPtUEOVn+m1zPR6t8Tzbgr15rPEFyx+aC+sCy8BJ860x9DGBNb2hUriuXARpq
-         91/RROpwDpUgsfZtTVD+K4pfHepexquY1OPPN/4Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.152.109] ([217.61.152.109]) by web-mail.gmx.net
- (3c-app-gmx-bs17.server.lan [172.19.170.69]) (via HTTP); Mon, 7 Jun 2021
- 20:34:33 +0200
+        id S230269AbhFGXTD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Jun 2021 19:19:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8212610E5;
+        Mon,  7 Jun 2021 23:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623107832;
+        bh=5YBJ3ZGmylsFEQqB7/z0jRfb00GGp7AJqiDfJuVstXk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=j+fHvT9Fw3GihSK/FrJ/ocFxJQ9lQ5NGMeWS7aHEBTqipqnFw222U5D54BIJ9fahO
+         iitNL3KqhcPqSErvqty+lmcJnTmOcpG3/5WXTL755vc3tz3faXUxKCNa85ZZYhuv1+
+         F6r4fJ7l++wEMN8Gdb75WpfJ4PalMfdzI+X4x6o5Jiwud2Q1J8VQG/Vmfi8Wc1rfyZ
+         G3hUEuQRsh+jz3Klme2yw5LC4nUTWCefpIlBawCGo+9+21/pK98v7l2DebMN8vKftD
+         bcACHADAqVztggjvuI7KtLUHajfg3+JKRq4E5m0jBlDybMyguw3/ODNNwWa/txyXL5
+         rPWb3fMoDcqYA==
+Date:   Mon, 7 Jun 2021 18:17:10 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Cc:     linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PCI: don't power-off apple thunderbolt controller on
+ s2idle
+Message-ID: <20210607231710.GA2539577@bjorn-Precision-5520>
 MIME-Version: 1.0
-Message-ID: <trinity-663afc91-2433-4785-af9b-3ca5d4744037-1623090872989@3c-app-gmx-bs17>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Aw: [PATCH v3] thermal: mediatek: add sensors-support
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 7 Jun 2021 20:34:33 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20210420172308.134685-1-linux@fw-web.de>
-References: <20210420172308.134685-1-linux@fw-web.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:ip0nyvLzh2YX44Uhf9v4yvoEe2mw7J7QthU4ZFFsIRct1zSudRF6b8ECYw5mNaEH7okJ/
- z6Aw7K+oSZKQJ395RKhHpgLBd+9eGpE57z8+vzav1WvG0oLC1uIeFL9yXzoi3uKJOwhh08K5qdgg
- fv68On+lnP15Sg83+pVQW/B6V90n4c45x76Uj2s3JUpv8GUgv60GXEtWtW+vEtkfRWZwUpjfXKtR
- 6X6jE7uIlR8vUUWuyFh28oitByaAHEwCbACBsWZnCrCz8a5bC8onxKMvejxpLPeLzaShU4k5TxX9
- sM=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:le5utTWPOeM=:0ESx69M38a2u70tlVpp4p3
- cPC0x2W3F2PeIim3TIOx7NXpKt0FouzXxFLZP/apENdqQC0e05iMty/O0LcqPFcxBmvmjWrHI
- xzLgYIUU0n9OB1PeaPuucDEpnSjsmBJkKEl1Fpcrcfk6Ps1tuWWo7bTJ9iHbAfgtgMpszWJcx
- 4IOqlDq4/1DE4Ia6Gem2oaC4Lsu3baJDXw6vNr9enB/daksBvprPLb6UN/srjIR2/4GrzlGJn
- Ptmev0EWGNwqE7CngUgovjsUSLeUUtL9g1ARPqMeuS/iHjjtq1CyCm9rp6l9n0gkJ+SwAFMSN
- rn9SgnSTu2j3clYGEGx292yM3U1suyqSMKaxIvL5J0/Vnv5HJ3fWlJ54AHCpRPrtp6uM0Cjwp
- OkqvxTYwJ+Jpx0l8aied93NLgG7ZmzQIOnmrfjqjtjw01XgvI96OHZBWklloVppWZVOeSWt1p
- TuOIREVCe+JzJ7tK6/qRbqhoVJqQnAFoPrREt5bgaGxIrmNAysaIyBTbs/6AWvv26hwZBBWaU
- ei79NFnD/ZbOutVKXt8yKkWuTLLRajEewG1ThAG2BtUbNA+qfbK92tW1BxVdBN+LTNMXgNGbo
- q3OVMIIWINyHemDUpKgHh4M7YLRJ7kt5bU/y3Tr3Dv546vliTkhwfRHPabAJlEFiFOgbctLHZ
- am+L5usw8ZDwun/VjOoIPBs/4+WVpEUVEEMlbYO4xdtvJKtmioe7G0TMdXuWuO2ge6KytcyR4
- MxuNn7WGLYHX2y/78ORbb5yY9cia5GbcNDTPwwlrJZ3woHzcy7HguyWNHyqTLyWHrReli9ouf
- ykAlyTuFoNA+PGNYdB5/5r7EDRW6FStavENNM7gFpyeCVV7UAc=
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210506173820.21876-1-Hi-Angel@yandex.ru>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+[+cc Lukas, Rafael, Andreas, linux-pm]
 
-just a gentle ping ;)
+On Thu, May 06, 2021 at 08:38:20PM +0300, Konstantin Kharlamov wrote:
+> On Macbook 2013 resuming from s2idle results in external monitor no
+> longer being detected, and dmesg having errors like:
+> 
+>     pcieport 0000:06:00.0: can't change power state from D3hot to D0 (config space inaccessible)
+> 
+> and a stacktrace. The reason turned out that the hw that the quirk
+> powers off does not get powered on back on resume.
+> 
+> Thus, add a check for s2idle to the quirk, and do nothing if the suspend
+> mode is s2idle.
+> 
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=212767
+> Signed-off-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
 
-regards Frank
+Applied as below to pci/pm for v5.14, thanks!
 
-
-> Gesendet: Dienstag, 20. April 2021 um 19:23 Uhr
-> Von: "Frank Wunderlich" <linux@fw-web.de>
-> An: linux-mediatek@lists.infradead.org
-> Cc: "Frank Wunderlich" <frank-w@public-files.de>, "Daniel Lezcano" <dani=
-el.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Matthias Brug=
-ger" <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org, linux-arm-kernel@=
-lists.infradead.org, linux-kernel@vger.kernel.org
-> Betreff: [PATCH v3] thermal: mediatek: add sensors-support
->
-> From: Frank Wunderlich <frank-w@public-files.de>
->
-> add HWMON-support to mediateks thermal driver to allow lm-sensors
-> userspace tools read soc temperature
->
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
-> v3: drop no_hwmon - now really, sorry
-> v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
-> ---
->  drivers/thermal/mtk_thermal.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal=
-.c
-> index 149c6d7fd5a0..85964988684b 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -23,6 +23,8 @@
->  #include <linux/reset.h>
->  #include <linux/types.h>
->
-> +#include "thermal_hwmon.h"
+>  drivers/pci/quirks.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 653660e3ba9e..86fedcec37e2 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/nvme.h>
+>  #include <linux/platform_data/x86/apple.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/suspend.h>
+>  #include <linux/switchtec.h>
+>  #include <asm/dma.h>	/* isa_dma_bridge_buggy */
+>  #include "pci.h"
+> @@ -3646,6 +3647,13 @@ static void quirk_apple_poweroff_thunderbolt(struct pci_dev *dev)
+>  		return;
+>  	if (pci_pcie_type(dev) != PCI_EXP_TYPE_UPSTREAM)
+>  		return;
 > +
->  /* AUXADC Registers */
->  #define AUXADC_CON1_SET_V	0x008
->  #define AUXADC_CON1_CLR_V	0x00c
-> @@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_devi=
-ce *pdev)
->  		goto err_disable_clk_peri_therm;
->  	}
->
-> +	ret =3D devm_thermal_add_hwmon_sysfs(tzdev);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+> +	/*
+> +	 * If suspend mode is s2idle, power won't get restored on resume.
+> +	 */
+> +	if (!pm_suspend_via_firmware())
+> +		return;
 > +
->  	return 0;
->
->  err_disable_clk_peri_therm:
-> --
-> 2.25.1
->
->
+>  	bridge = ACPI_HANDLE(&dev->dev);
+>  	if (!bridge)
+>  		return;
+> 
+
+commit 4694ae373dc2 ("PCI: Leave Apple Thunderbolt controllers on for s2idle or standby")
+Author: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Date:   Fri May 21 02:55:01 2021 +0300
+
+    PCI: Leave Apple Thunderbolt controllers on for s2idle or standby
+    
+    On Macbook 2013, resuming from suspend-to-idle or standby resulted in the
+    external monitor no longer being detected, a stacktrace, and errors like
+    this in dmesg:
+    
+      pcieport 0000:06:00.0: can't change power state from D3hot to D0 (config space inaccessible)
+    
+    The reason is that we know how to turn power to the Thunderbolt controller
+    *off* via the SXIO/SXFP/SXLF methods, but we don't know how to turn power
+    back on.  We have to rely on firmware to turn the power back on.
+    
+    When going to the "suspend-to-idle" or "standby" system sleep states,
+    firmware is not involved either on the suspend side or the resume side, so
+    we can't use SXIO/SXFP/SXLF to turn the power off.
+    
+    Skip SXIO/SXFP/SXLF when firmware isn't involved in suspend, e.g., when
+    we're going to the "suspend-to-idle" or "standby" system sleep states.
+    
+    Fixes: 1df5172c5c25 ("PCI: Suspend/resume quirks for Apple thunderbolt")
+    Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=212767
+    Link: https://lore.kernel.org/r/20210520235501.917397-1-Hi-Angel@yandex.ru
+    Signed-off-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Reviewed-by: Lukas Wunner <lukas@wunner.de>
+    Cc: stable@vger.kernel.org
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index dcb229de1acb..0dde9c5259f2 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -27,6 +27,7 @@
+ #include <linux/nvme.h>
+ #include <linux/platform_data/x86/apple.h>
+ #include <linux/pm_runtime.h>
++#include <linux/suspend.h>
+ #include <linux/switchtec.h>
+ #include <asm/dma.h>	/* isa_dma_bridge_buggy */
+ #include "pci.h"
+@@ -3634,6 +3635,16 @@ static void quirk_apple_poweroff_thunderbolt(struct pci_dev *dev)
+ 		return;
+ 	if (pci_pcie_type(dev) != PCI_EXP_TYPE_UPSTREAM)
+ 		return;
++
++	/*
++	 * SXIO/SXFP/SXLF turns off power to the Thunderbolt controller.
++	 * We don't know how to turn it back on again, but firmware does,
++	 * so we can only use SXIO/SXFP/SXLF if we're suspending via
++	 * firmware.
++	 */
++	if (!pm_suspend_via_firmware())
++		return;
++
+ 	bridge = ACPI_HANDLE(&dev->dev);
+ 	if (!bridge)
+ 		return;
