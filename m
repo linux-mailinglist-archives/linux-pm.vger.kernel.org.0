@@ -2,152 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D2539DACC
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 13:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DA739DAEA
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 13:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbhFGLMq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 07:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbhFGLMq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 07:12:46 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60354C061766;
-        Mon,  7 Jun 2021 04:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NLj4NYDQW6SbenCIcbS9QrwkO4aohp/HPEuCGPuaREs=; b=cPnEKquwt970ZOfmptV8ZPqMgA
-        nDKIN3sS9ih9nuu8IzgPQnkE+3vwyvAnDc2ZrMU9wmERzTb3IGMYGi4WE6+4lUgqF2JtL/lM/I5kJ
-        eiHF9IMB2d+Y9lTFFFVOwPJJI9S76oa/nkFLOGjGCPqHZTpDXHEuTaeqYbLfHC8bQodhRsFoh+Qy8
-        dTHV3vTaUZfqdQXrfYxuM6d63mJeyrNKoQ2Zm8n4XPuwlvYtbjKQlZwLanaf8FCczQxwMbK2aY9KZ
-        5ZBbcHBMtWS/MR3PhHmCJk3dhHVW0UT+bEq4donFnJVNzTVZUBUUF9jUBREUKuzW6aCVhr/V5xCxL
-        LVjMXPEw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lqD9Y-004Mvp-0K; Mon, 07 Jun 2021 11:10:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C9BD33002A6;
-        Mon,  7 Jun 2021 13:10:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A8BB82CF3852B; Mon,  7 Jun 2021 13:10:49 +0200 (CEST)
-Date:   Mon, 7 Jun 2021 13:10:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+        id S230194AbhFGLRK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 07:17:10 -0400
+Received: from mail-pf1-f181.google.com ([209.85.210.181]:40731 "EHLO
+        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230139AbhFGLRJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 07:17:09 -0400
+Received: by mail-pf1-f181.google.com with SMTP id q25so12818378pfh.7
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 04:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vwjre3Nx9lcRecu/sCNmfW6cdOf4/1XBy78rgnv3N58=;
+        b=dJKs0tSXYz21mjLf2r6ZCQGfcth9EOOi7Zgro3A0+xi6jU+RTwp5dR0m2r5lV2nLkh
+         hwDsk8SXPdmgZUbnTBq6PsKmVuRXUAMHl7UsgkYZrgQSaiHdB2qXiNbPQU+Oy86v8Lgy
+         6WPZDR/hXfqDZOrcrzldhuDaanvM2Em5iSZCTiEZh0FcVAWZW06KlvxxXbJ8GsGiYup9
+         aWtK1Ng8hy5X+5+u5npj017k+ldlKg+S/jgeZxBICoTMk2qfMmzzT7agTIwfnDB9vHjM
+         MpzPW2Jw+uu/i9BlGm9Ew67bBJY+cwpuN5Xb7BuMaUZNnIpjgdyr6k26+9SkQZQC6utc
+         9cWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vwjre3Nx9lcRecu/sCNmfW6cdOf4/1XBy78rgnv3N58=;
+        b=cxXyYGwgfRfRaSuO1/8e/vItQ+i/A3N7rQ3kzt5A0WMEUKvbtddnr0kF09voH4sWM1
+         8sBvEux9LV8fx0ScBLX4SLRMqJBMlSqssQTOVfLDpGUSBJmjMwgTctS00+CW2RCwVCds
+         Rf1Pt8oKSGj537itEByeH0IwyrIWnhQi7PIpIdpNZPLrD635Q9ZZO5Namhj7QRkUUJsD
+         rpKwRux6zHldqZ7eU8knPgHW9kAJkHlVJnHDbOQ1R2iCENvqzKV+cwj/9CFsKTq7cgUT
+         KpO44cRY7V2Yg/y/XLG+CGFJkXiJ9mm399VZJjkcZS7CA4TWYZEn/68gXR6Y5+R2hvaV
+         lSQw==
+X-Gm-Message-State: AOAM532KxGT4XQRoWxu0vXjI6DI7EjdOUTgIXe4gTC0vqyysLYhsCnUJ
+        /kulQniW9wtO9Q8nLgRYJKLXnw==
+X-Google-Smtp-Source: ABdhPJwjFUpttbtgrWv/2I6/RzLLimhb4EWubzaYS1RqaNe7dXSyFxKKJiO9ae01utbqixPySVZD2g==
+X-Received: by 2002:a05:6a00:82:b029:2e9:c6db:e16d with SMTP id c2-20020a056a000082b02902e9c6dbe16dmr16150380pfj.78.1623064457954;
+        Mon, 07 Jun 2021 04:14:17 -0700 (PDT)
+Received: from localhost ([136.185.169.128])
+        by smtp.gmail.com with ESMTPSA id i22sm8110693pfq.6.2021.06.07.04.14.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 04:14:17 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 16:44:15 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Kyle Meyer <kyle.meyer@hpe.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 6/6] sched: Change task_struct::state
-Message-ID: <YL3+ucpG/LOcO35G@hirez.programming.kicks-ass.net>
-References: <20210602131225.336600299@infradead.org>
- <20210602133040.587042016@infradead.org>
- <20210607104500.sopvslejuoxwzhrs@maple.lan>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-acpi@vegr.kernel.org
+Subject: Re: [PATCH] acpi-cpufreq: Skip initialization if a cpufreq driver
+ exists
+Message-ID: <20210607111415.ede2s5ay7255x5pm@vireshk-i7>
+References: <20210521221906.199436-1-kyle.meyer@hpe.com>
+ <CAJZ5v0iJUhUyucYEDHXKqXrsy6=3dGUz0uy1pDpx+kKOi_NB2w@mail.gmail.com>
+ <CAOh2x==tXk2Lt_f14_azHNYG2mZzMb9-1b2YUVj=+i=-JLemdg@mail.gmail.com>
+ <CAJZ5v0g-NMLa1UVYKpF2ehgk=6dJkKRonUY0AGw6HyRCDaQMmw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607104500.sopvslejuoxwzhrs@maple.lan>
+In-Reply-To: <CAJZ5v0g-NMLa1UVYKpF2ehgk=6dJkKRonUY0AGw6HyRCDaQMmw@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 11:45:00AM +0100, Daniel Thompson wrote:
-> On Wed, Jun 02, 2021 at 03:12:31PM +0200, Peter Zijlstra wrote:
-> > Change the type and name of task_struct::state. Drop the volatile and
-> > shrink it to an 'unsigned int'. Rename it in order to find all uses
-> > such that we can use READ_ONCE/WRITE_ONCE as appropriate.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  ...
-> >  kernel/debug/kdb/kdb_support.c |   18 +++++++------
-> >  ...
-> > --- a/kernel/debug/kdb/kdb_support.c
-> > +++ b/kernel/debug/kdb/kdb_support.c
-> > @@ -609,23 +609,25 @@ unsigned long kdb_task_state_string(cons
-> >   */
-> >  char kdb_task_state_char (const struct task_struct *p)
-> >  {
-> > -	int cpu;
-> > -	char state;
-> > +	unsigned int p_state;
-> >  	unsigned long tmp;
-> > +	char state;
-> > +	int cpu;
-> >  
-> >  	if (!p ||
-> >  	    copy_from_kernel_nofault(&tmp, (char *)p, sizeof(unsigned long)))
-> >  		return 'E';
-> >  
-> >  	cpu = kdb_process_cpu(p);
-> > -	state = (p->state == 0) ? 'R' :
-> > -		(p->state < 0) ? 'U' :
-> > -		(p->state & TASK_UNINTERRUPTIBLE) ? 'D' :
-> > -		(p->state & TASK_STOPPED) ? 'T' :
-> > -		(p->state & TASK_TRACED) ? 'C' :
-> > +	p_state = READ_ONCE(p->__state);
-> > +	state = (p_state == 0) ? 'R' :
-> > +		(p_state < 0) ? 'U' :
+On 07-06-21, 13:02, Rafael J. Wysocki wrote:
+> On Mon, Jun 7, 2021 at 9:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > I am not sure how this is supposed to work. If we return 0 from
+> > acpi_cpufreq_init(),
+> > then the driver will never be used, since it's acpi_cpufreq_init()
+> > will never get
+> > called again later.
 > 
-> Looks like the U here stands for Unreachable since this patch makes it
-> more obvious that this clause is (and previously was) exactly that!
+> Unless the module is unloaded and loaded again, that is.
+
+Right.
+
+> > cpufreq drivers don't follow the generic device/driver model where a driver gets
+> > probed again if a device appears and so this is broken.
 > 
-> Dropping the U state would be good since I guess this will show up as a
-> "new" warning in some tools. However it was a preexisting problem so with
-> or without this cleaned up:
-> Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
+> It is broken anyway as per the changelog of this patch.
+> 
+> On systems with several hundred logical CPUs this really can be troublesome.
 
-Thanks!
+Hmm, I agree.
 
-Note that there's a second instance of this exact code in
-arch/powerpc/xmon/xmon.c, with the same 'U' issue.
+> > Please revert this patch.
+> 
+> Well, you can argue that the problem at hand is outside the kernel and
+> so it's not a kernel's business to address it.
 
-I'll repost this soon, as it seems I've fixed all robot failout (fingers
-crossed).
+Exactly, what we did here is add a band-aid to make a userspace tool
+happy, the kernel was doing the right thing earlier.
+
+> After all, systemd-udevd could learn to avoid attempting to load the
+> module again if it fails with -EEXIST,
+
+That is one way, right.
+
+> but I'm not sure how different
+> that really would be from what this patch does, in practice.
+
+The very first difference is we won't be adding an incorrect hack in
+the kernel to solve this userspace problem. Else in order to make
+acpi-cpufreq driver work, after a user unloads intel-pstate, user
+would be required to unload the acpi-cpufreq and load it again, which
+will surely look confusing to the user. Why unload to load it again ?
+
+Leaving a module inserted in an unusable state is not the right
+solution to fix a problem IMHO.
+
+-- 
+viresh
