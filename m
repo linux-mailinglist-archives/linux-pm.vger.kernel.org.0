@@ -2,81 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D42F839D967
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 12:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B1839D9F1
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 12:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhFGKQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 06:16:50 -0400
-Received: from foss.arm.com ([217.140.110.172]:57194 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230178AbhFGKQu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Jun 2021 06:16:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A8AC1063;
-        Mon,  7 Jun 2021 03:14:59 -0700 (PDT)
-Received: from [192.168.43.77] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 668363F73D;
-        Mon,  7 Jun 2021 03:14:56 -0700 (PDT)
-Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
- frequencies
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, rjw@rjwysocki.net,
-        vincent.guittot@linaro.org, qperret@google.com,
-        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-        dietmar.eggemann@arm.com
-References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
- <1622804761-126737-4-git-send-email-vincent.donnefort@arm.com>
- <20210607050208.3annn3dtmfrfxpzo@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <db121d81-8397-cbdd-77dc-b70c27230dbc@arm.com>
-Date:   Mon, 7 Jun 2021 11:14:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230389AbhFGKq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 06:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230178AbhFGKq4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 06:46:56 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F575C061789
+        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 03:45:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id l2so17060662wrw.6
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 03:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aqlB3nweefXMBd+1n3TfVg5Imk7mqG7GGko5Cn1Ypjk=;
+        b=fokBrG+2G1fkq/XmZlW8Qn8gNsGVee/kxIBq16SYHHcihUEHhxAiLiYioDzjZCKPWV
+         9QEZOxcXx7fkFSqzCPab9ejYwiSWHFrBFKIvS4T83XVPbmSdXZpWw/7QLttpVgGupn7M
+         FoWs2xbakjWUMbWyKY9toPvBiRJY2NSMoomhdLwJgft1TVJGXI1KGV/tNqHpK+0t4K/c
+         ssThtjIQ5Gd6U2Vgt07NOm/v5UajEDZu6QDpCKD4dz0UaryRPm6OwVwk+zBYdDwhZepP
+         9jCgvqxA0rUhD0TtVGl/Sk+NMb0qRwm6JS3LOkQ+swNNoK5wt0XeTzNUgGulkw29L99w
+         ZQaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aqlB3nweefXMBd+1n3TfVg5Imk7mqG7GGko5Cn1Ypjk=;
+        b=eBBr6Jy74+rtZmYYkLBcr1Wb4h3dWcBE7qp7V22F8gAg5O7hMIA9lVjoqaCvu7pxBF
+         zigC2KdEk3or0/gycCjuLG7C1DF3trrpxwdY8zgMhRBmbE6esUZpleyaOfjhLGLYhkp+
+         zKbNy/27b2boLDk111NskSy2RyQ+DMjPsy1mRjGJ84r2GnquB6UHthb+TXxiXThm1HCo
+         Dfbj2gDdkUgaATAuQiAYd3H4sk/Ea+9lAIXzXy2UtHdI+hvkLgm12lzARczs2nv5jMGQ
+         miKA7Cs72pnsuNrrDJqi3CyGi0oMMFlzD284SmbkmaXaJDV8FWfL9/2s1V/rnUnQqjnx
+         tAdA==
+X-Gm-Message-State: AOAM530fHviE/3goV7tbzs4dEoF5miKjJ6UAfNOKqSKdGC3c+ILSZnA7
+        otuAfH4HFnSdUNxmxk00mSs9Jg==
+X-Google-Smtp-Source: ABdhPJwqNBSGH0k0cJir/i3kAe7gRK7bFBO/b5hmcAfd7Z+SvyV8tZwYe+ey/npaVItqY9949tYt3w==
+X-Received: by 2002:a05:6000:1563:: with SMTP id 3mr16068224wrz.59.1623062703694;
+        Mon, 07 Jun 2021 03:45:03 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id p16sm16000678wrs.52.2021.06.07.03.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 03:45:03 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 11:45:00 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 6/6] sched: Change task_struct::state
+Message-ID: <20210607104500.sopvslejuoxwzhrs@maple.lan>
+References: <20210602131225.336600299@infradead.org>
+ <20210602133040.587042016@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20210607050208.3annn3dtmfrfxpzo@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210602133040.587042016@infradead.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jun 02, 2021 at 03:12:31PM +0200, Peter Zijlstra wrote:
+> Change the type and name of task_struct::state. Drop the volatile and
+> shrink it to an 'unsigned int'. Rename it in order to find all uses
+> such that we can use READ_ONCE/WRITE_ONCE as appropriate.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  ...
+>  kernel/debug/kdb/kdb_support.c |   18 +++++++------
+>  ...
+> --- a/kernel/debug/kdb/kdb_support.c
+> +++ b/kernel/debug/kdb/kdb_support.c
+> @@ -609,23 +609,25 @@ unsigned long kdb_task_state_string(cons
+>   */
+>  char kdb_task_state_char (const struct task_struct *p)
+>  {
+> -	int cpu;
+> -	char state;
+> +	unsigned int p_state;
+>  	unsigned long tmp;
+> +	char state;
+> +	int cpu;
+>  
+>  	if (!p ||
+>  	    copy_from_kernel_nofault(&tmp, (char *)p, sizeof(unsigned long)))
+>  		return 'E';
+>  
+>  	cpu = kdb_process_cpu(p);
+> -	state = (p->state == 0) ? 'R' :
+> -		(p->state < 0) ? 'U' :
+> -		(p->state & TASK_UNINTERRUPTIBLE) ? 'D' :
+> -		(p->state & TASK_STOPPED) ? 'T' :
+> -		(p->state & TASK_TRACED) ? 'C' :
+> +	p_state = READ_ONCE(p->__state);
+> +	state = (p_state == 0) ? 'R' :
+> +		(p_state < 0) ? 'U' :
+
+Looks like the U here stands for Unreachable since this patch makes it
+more obvious that this clause is (and previously was) exactly that!
+
+Dropping the U state would be good since I guess this will show up as a
+"new" warning in some tools. However it was a preexisting problem so with
+or without this cleaned up:
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-On 6/7/21 6:02 AM, Viresh Kumar wrote:
-> On 04-06-21, 12:05, Vincent Donnefort wrote:
->> Some SoCs such as the sd855 have OPPs within the same policy whose cost is
->> higher than others with a higher frequency. Those OPPs are inefficients and
->> it might be interesting for a governor to not use them.
->>
->> Adding a flag, CPUFREQ_INEFFICIENT_FREQ, to mark such OPPs into the
->> frequency table, as well as a new cpufreq_frequency_table member
->> "efficient". This new member will allow a governor to quickly resolve an
->> inefficient frequency to an efficient one.
->>
->> Efficient OPPs point to themselves. Governors must also ensure that the
->> efficiency resolution does not break the policy maximum.
->>
->> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-> 
-> I was thinking about a different approach when I suggested it.
-> 
-> - The cpufreq table instead of an index, will have "efficient" as bool.
-> 
-> - EM will set an OPP as efficient or inefficient, based on the OPP
->    table, there will be a flag for this in the OPP table.
-> 
-> - The cpufreq table is then created from OPP table and this
->    information is automatically retrieved.
-> 
+Daniel.
 
-There are some issues with your proposed approach:
-The EM doesn't depend on OPP framework (even no header from opp.h)
-and we don't want to add this dependency in EM.
-
-The Vincent's proposed implementation doesn't introduce this
-dependency.
-
-Regards,
-Lukasz
+> +		(p_state & TASK_UNINTERRUPTIBLE) ? 'D' :
+> +		(p_state & TASK_STOPPED) ? 'T' :
+> +		(p_state & TASK_TRACED) ? 'C' :
+>  		(p->exit_state & EXIT_ZOMBIE) ? 'Z' :
+>  		(p->exit_state & EXIT_DEAD) ? 'E' :
+> -		(p->state & TASK_INTERRUPTIBLE) ? 'S' : '?';
+> +		(p_state & TASK_INTERRUPTIBLE) ? 'S' : '?';
+>  	if (is_idle_task(p)) {
+>  		/* Idle task.  Is it really idle, apart from the kdb
+>  		 * interrupt? */
