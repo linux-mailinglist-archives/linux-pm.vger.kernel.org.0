@@ -2,226 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D1139DF06
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 16:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02B539E107
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhFGOqE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 10:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbhFGOqE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 10:46:04 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C3AC061766
-        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 07:44:12 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so12101287pjz.3
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=QaDS257JpbPHkKULCNNA3b5SU06T5kBCV3p9aYDTqac=;
-        b=fp0mc3Xpza84TC8rdsWJBTsJdsOft6lOooYzC/v/pNVTLmWr60jU9otNBlgbnktLZ4
-         wWXSAa5PxWnvJezOEKmvEYjFyH3BwKHCA73MPXhAiEzFdYR7RAtTHtdkjq3X+cyH+Boa
-         UXSm2F6zkbEi3d4Y3J2dScbc0UBJZmxjM1MPMg1uW3ibASGN9GGmJE66GUtFHs2f976n
-         HyrDGbFDpMqziUAXYJkF7wZzxGBn/bI8pV3SUbAlF2IWipzuMKXEhW4owJBU3/jKCHor
-         3FziuTMk1rn4KyVQa+AkR42abWhLAJMNwshRe8CevLRZF4y0lbMFTd7RJCZYhb2zM2SJ
-         K++A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=QaDS257JpbPHkKULCNNA3b5SU06T5kBCV3p9aYDTqac=;
-        b=hJYP4zI98U2FPrHu7+Ev8Vs/Bv6uzd5ll9FSt0VYQZDQRXA3h7OP0BKIjdcx5JQ2ot
-         R6Kug7PEJYfXqYAH6z5zlE6jUjb0KOCFy7cKFjANoMj88DHu+6va8SCWpkpn2Cmb4p3B
-         2wFTksJ9NM7HD3GPebLOsj4WKqWPLnEugNQ0SdtQv9u50wkthZ0gM7tvx91pz/EOHNFn
-         5djMpGJuSz8lqVVv19vn7oMLBM4dxSVqbGtXAnOtlkJqe8RnmltWoNNbdfYNWC18MzxO
-         wHnfIH18YSI5YvM3Ed9p9tZPtrydOCfIuC/gzfgq5D5rsVuJ0eLUXIVE5SEKYwKm4bwG
-         qMbw==
-X-Gm-Message-State: AOAM532HGea/sbuIs4X6WPV56PjazARzRqx4e8q4Fz9xlIH3yJc7cZzs
-        1BEuh8+Ws0Es4+Kz6VEtMgir8IhfMU1VP3+i
-X-Google-Smtp-Source: ABdhPJy4GP1wCihKOEsZF8R9rTlLoZNkyggVr82XpYB12IR+6U0sZYl8a6pXRBj5Az/45HyNCdLLcA==
-X-Received: by 2002:a17:90b:120d:: with SMTP id gl13mr20805789pjb.72.1623077052468;
-        Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x19sm8706640pgj.66.2021.06.07.07.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
-Message-ID: <60be30bc.1c69fb81.ad406.a808@mx.google.com>
-Date:   Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S230381AbhFGPnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 11:43:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231488AbhFGPna (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Jun 2021 11:43:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A90F6100B;
+        Mon,  7 Jun 2021 15:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623080499;
+        bh=HirXEOeTJC8OXEqZozB9U77eq3qf8a0FWCrZd8Q9AKs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fSXmWgzO2Hz+MaCRW7VyB3tXJvC8q0DCRoxX3R3pVkT4vRriI8Gpqx1BRVrwy0ugZ
+         c8DbQxy+7rA73hfTW0eOyglludJJ/t4nTXl0HQEgEEsuvgXq4Na9X5H9yeGCzQhSL/
+         NEEvsS0ePGGJE5ji3inhIuBWuANVQInniQuSyCIxpUtC2Nr0uH3M8PUhj600cu4VvO
+         ioBRU5iARgl5gmsSNXtdT9qjow2WacDVAmuyZ+gdX3fnbA6B4EHKfSvyTLGfSaKVUl
+         FLgb/esdyWdZgi6onIytKB4UF8oOmN6WZJgzf8p0Pl4zZbSDU0fG0eieqJhqFjBaZz
+         u3P1AazMZbncg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F37D65C0395; Mon,  7 Jun 2021 08:41:38 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 08:41:38 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with
+ rcu_read_lock/unlock()
+Message-ID: <20210607154138.GU4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210607065743.1596-1-qiang.zhang@windriver.com>
+ <CAJZ5v0iYtNP54mUFs5VbmHxuXYjTBMrbCZ5CqfaHShnGdd+3Jg@mail.gmail.com>
+ <DM6PR11MB42027F9DA1B3E9B6BDFA5194FF389@DM6PR11MB4202.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.13-rc5-37-gfcbef3bdf3a8
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 6 runs, 11 regressions (v5.13-rc5-37-gfcbef3bdf3a8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB42027F9DA1B3E9B6BDFA5194FF389@DM6PR11MB4202.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 11 regressions (v5.13-rc5-37-gfcbef3bdf3a8)
+On Mon, Jun 07, 2021 at 02:11:37PM +0000, Zhang, Qiang wrote:
+> ________________________________________
+> From: Rafael J. Wysocki <rafael@kernel.org>
+> Sent: Monday, 7 June 2021 19:45
+> To: Zhang, Qiang
+> Cc: Rafael Wysocki; Len Brown; Pavel Machek; Paul E. McKenney; Linux PM; Linux Kernel Mailing List
+> Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with rcu_read_lock/unlock()
+> 
+> [Please note: This e-mail is from an EXTERNAL e-mail address]
+> 
+> On Mon, Jun 7, 2021 at 8:57 AM <qiang.zhang@windriver.com> wrote:
+> >
+> > From: Zqiang <qiang.zhang@windriver.com>
+> >
+> > Using rcu_read_lock/unlock() instead of read_lock/unlock(tasklist_lock),
+> > the task list can be traversed in parallel to any list additions or
+> > removals, improve concurrency.
+> >
+> > Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+> 
+> >This changes the reader side only AFAICS, but what about the >writer side?
+> 
+> Hello  rafael
+> 
+> In the case of holding read_lock(tasklist_lock) 
+> if there are a lot of tasks in the system that need to be frozen,
+> the read_lock(tasklist_lock)  has not been released for a short time,
+> when clone task,  we will acquire write_lock(tasklist_lock) and insert task to list, if  Ifcan't get the write lock all the time.  the hung task
+> may be trigger and report warning.
+> 
+> for example:
+> 
+> copy_process()
+> {........
+> write_lock_irq(&tasklist_lock);
+> ........
+> list_add_tail_rcu(&p->tasks, &init_task.tasks);
+> }
+> 
+> >
+> >What exactly is there to ensure that the updates of the list will
+> >remain safe after this change?
+> 
+> The RCU  can guarantee that the list can be traversed and added at the same time,  and in the read critical area, it is guaranteed that the task structure will not be released.
+> 
+> In  ./Documentation/RCU/listRCU.rst , it is also explained.
+> 
+>  Maybe we can ask  Paul E,  Paul E what's your opinion ?
 
-Regressions Summary
--------------------
+Although RCU does guarantee that the task structures are not freed while
+an RCU reader references them, that is only one of the questions that
+must be answered.
 
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
-          =
+Changing from read_lock(&tasklist_lock) to rcu_read_lock() also allows
+all of the code currently under write_lock(&tasklist_lock) to execute
+concurrently with these newly created RCU readers.  Is that safe?
+If it is safe, why?
 
-odroid-xu3      | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
-0         =
+For example, the first pair of hunks in the diff -might- be safe because
+"todo" is updated while read-holding tasklist_lock, and then that value
+is used after releasing that lock.  But I do not know this code well,
+and it is quite possible that something else is going on.
 
+						Thanx, Paul
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
-5-37-gfcbef3bdf3a8/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.13-rc5-37-gfcbef3bdf3a8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      fcbef3bdf3a80dfe325261a837f0abd0b2a1b3f0 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60be23e7a27cbd1b320c0df5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
-3bdf3a8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
-3bdf3a8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0520.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/60be23e7a27cbd1b320c0df6
-        failing since 291 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-odroid-xu3      | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
-0         =
-
-
-  Details:     https://kernelci.org/test/plan/id/60be2f220fdcf84dee0c0e00
-
-  Results:     3 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
-3bdf3a8/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-odroid-xu3.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
-3bdf3a8/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-odroid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0520.0/armhf/rootfs.cpio.gz =
-
-
-
-  * sleep.rtcwake-mem-9: https://kernelci.org/test/case/id/60be2f220fdcf84d=
-ee0c0e0c
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.195000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-06-07 14:37:18.212000+00:00  rtcwake: assuming RTC uses UTC ...   =
-
-
-  * sleep.rtcwake-freeze-2: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e0f
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.254000+00:00  rtcwake: read rtc time failed: Invali=
-d argument   =
-
-
-  * sleep.rtcwake-freeze-3: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e10
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.274000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-06-07 14:37:18.292000+00:00  rtcwake: assuming RTC uses UTC ...   =
-
-
-  * sleep.rtcwake-freeze-4: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e11
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2) =
-
-
-  * sleep.rtcwake-freeze-5: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e12
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.317000+00:00  rtcwake: read rtc time failed: Invali=
-d argument   =
-
-
-  * sleep.rtcwake-freeze-6: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e13
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.338000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-06-07 14:37:18.356000+00:00  rtcwake: assuming RTC uses UTC ...   =
-
-
-  * sleep.rtcwake-freeze-7: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e14
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.382000+00:00  rtcwake: assuming RTC uses UTC ...   =
-
-
-  * sleep.rtcwake-freeze-8: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e15
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.403000+00:00  rtcwake: assuming RTC uses UTC ...   =
-
-
-  * sleep.rtcwake-freeze-9: https://kernelci.org/test/case/id/60be2f220fdcf=
-84dee0c0e16
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2) =
-
-
-  * sleep.rtcwake-freeze-10: https://kernelci.org/test/case/id/60be2f220fdc=
-f84dee0c0e17
-        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
-
-    2021-06-07 14:37:18.429000+00:00  rtcwake: read rtc time failed: Invali=
-d argument   =
-
- =20
+> Thanks
+> Qiang
+> 
+> > ---
+> >  kernel/power/process.c | 16 ++++++++--------
+> >  1 file changed, 8 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/kernel/power/process.c b/kernel/power/process.c
+> > index 50cc63534486..0f8dee9ee097 100644
+> > --- a/kernel/power/process.c
+> > +++ b/kernel/power/process.c
+> > @@ -48,7 +48,7 @@ static int try_to_freeze_tasks(bool user_only)
+> >
+> >         while (true) {
+> >                 todo = 0;
+> > -               read_lock(&tasklist_lock);
+> > +               rcu_read_lock();
+> >                 for_each_process_thread(g, p) {
+> >                         if (p == current || !freeze_task(p))
+> >                                 continue;
+> > @@ -56,7 +56,7 @@ static int try_to_freeze_tasks(bool user_only)
+> >                         if (!freezer_should_skip(p))
+> >                                 todo++;
+> >                 }
+> > -               read_unlock(&tasklist_lock);
+> > +               rcu_read_unlock();
+> >
+> >                 if (!user_only) {
+> >                         wq_busy = freeze_workqueues_busy();
+> > @@ -97,13 +97,13 @@ static int try_to_freeze_tasks(bool user_only)
+> >                         show_workqueue_state();
+> >
+> >                 if (!wakeup || pm_debug_messages_on) {
+> > -                       read_lock(&tasklist_lock);
+> > +                       rcu_read_lock();
+> >                         for_each_process_thread(g, p) {
+> >                                 if (p != current && !freezer_should_skip(p)
+> >                                     && freezing(p) && !frozen(p))
+> >                                         sched_show_task(p);
+> >                         }
+> > -                       read_unlock(&tasklist_lock);
+> > +                       rcu_read_unlock();
+> >                 }
+> >         } else {
+> >                 pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
+> > @@ -206,13 +206,13 @@ void thaw_processes(void)
+> >
+> >         cpuset_wait_for_hotplug();
+> >
+> > -       read_lock(&tasklist_lock);
+> > +       rcu_read_lock();
+> >         for_each_process_thread(g, p) {
+> >                 /* No other threads should have PF_SUSPEND_TASK set */
+> >                 WARN_ON((p != curr) && (p->flags & PF_SUSPEND_TASK));
+> >                 __thaw_task(p);
+> >         }
+> > -       read_unlock(&tasklist_lock);
+> > +       rcu_read_unlock();
+> >
+> >         WARN_ON(!(curr->flags & PF_SUSPEND_TASK));
+> >         curr->flags &= ~PF_SUSPEND_TASK;
+> > @@ -233,12 +233,12 @@ void thaw_kernel_threads(void)
+> >
+> >         thaw_workqueues();
+> >
+> > -       read_lock(&tasklist_lock);
+> > +       rcu_read_lock();
+> >         for_each_process_thread(g, p) {
+> >                 if (p->flags & PF_KTHREAD)
+> >                         __thaw_task(p);
+> >         }
+> > -       read_unlock(&tasklist_lock);
+> > +       rcu_read_unlock();
+> >
+> >         schedule();
+> >         pr_cont("done.\n");
+> > --
+> > 2.17.1
+> >
