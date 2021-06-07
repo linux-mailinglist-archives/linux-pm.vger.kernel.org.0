@@ -2,115 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E319439D49D
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 08:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E6839D520
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 08:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbhFGGDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 02:03:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35016 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbhFGGDW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 02:03:22 -0400
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lq8KI-000131-Vg
-        for linux-pm@vger.kernel.org; Mon, 07 Jun 2021 06:01:31 +0000
-Received: by mail-wr1-f69.google.com with SMTP id s8-20020adff8080000b0290114e1eeb8c6so7378451wrp.23
-        for <linux-pm@vger.kernel.org>; Sun, 06 Jun 2021 23:01:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qAtq8fZxJa+xoWcGAlXfKDVfTmmln1jGGwqwLzPVz5w=;
-        b=Y1DM23GFn4dt5xEUMHMcVOwf2RaulAsigkQSzcSnZYTqAWu1+2RoHfzv25Z+F9oSyt
-         X3ItHHetuRMO1Q98NXnfqfDvSGkrrMP6XuHC5l2SRBlBQEB2zE2HjZEGNbgV+7q4MxxD
-         3CBtg/3SYbkRlZ538qb0kTjiUtyEoxPazyUDKs9jNTjJ7Ohv4nO5Tb8tZyKvScKUBGxx
-         CyExtND+aUyKY3cSt6jO6cwU0SXXsRv76ZMQPXFD/r/V7mXXVnpTH24F/3gJdL98gBXy
-         dsApAiprPQ3smLBgVnzac6HMdF07VEM72xnInGPDa5odMh0gDCxkSOh/pB53GHN4WwDT
-         4gnw==
-X-Gm-Message-State: AOAM531flPC3+zDu+9qI3urmjQLiMG3HlzYWBTwBY+0TE8/0OE5qHLQr
-        jT3Xm7npf+0Y1lTY6rI3FKASALsvk+HQXC/Wxab2bHX8bMJkLIqAyDIxKbdIldXRPG2khEYmhig
-        zj/kiHbeEv9I4AfgH8sNTNOPmkvWBz3j8B8OM
-X-Received: by 2002:a1c:740b:: with SMTP id p11mr14833135wmc.94.1623045690465;
-        Sun, 06 Jun 2021 23:01:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpu7m3EIJUyOBKcObfXEeEge07GsVcQb9YzJG8QvObto+R5NJsN0+hGkmIqmu4dspK7YMSzw==
-X-Received: by 2002:a1c:740b:: with SMTP id p11mr14833107wmc.94.1623045690239;
-        Sun, 06 Jun 2021 23:01:30 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-185-9.adslplus.ch. [188.155.185.9])
-        by smtp.gmail.com with ESMTPSA id q20sm18398437wrf.45.2021.06.06.23.01.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Jun 2021 23:01:29 -0700 (PDT)
-Subject: Re: [PATCH v6 08/14] memory: tegra: Enable compile testing for all
- drivers
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-References: <20210601023119.22044-1-digetx@gmail.com>
- <20210601023119.22044-9-digetx@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <41899ef4-bb16-6c3a-035c-1e840a993bec@canonical.com>
-Date:   Mon, 7 Jun 2021 08:01:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210601023119.22044-9-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S229498AbhFGGmc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 02:42:32 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25178 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229545AbhFGGmc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 02:42:32 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1576ar5c085279;
+        Mon, 7 Jun 2021 02:40:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=ylMHy/A9w+QIDTFOJaoNbCLo7Ejb5ndHlc/ZCtdkuLU=;
+ b=tjvM2JJdVymA22Z7h/XFCY3/DvWr4ncVUX1u0Jq9jlrbKaFIUNGnfulGOkEJdPQBxayZ
+ AtycobBhuVU55DKIbIVek3h+w6Kxgcr0huCo5UKuJLB76vigrrKoF068C5v0PtPO6DIU
+ p5Wsenvtd0gtDVf/k1b1wChmeMkHWeup1P9+tu/qqJoDxw0qDK9fBY4wfwMk10UmHRP2
+ s97wQamBelfXZxs6Eibfa/JVe6oAzJbefkCVB/B54wul1u0wYx/9TSb0Qqknd9dtG/Ao
+ 8OLV3rNAxpVBUXRF+rRgII4vZnFpIRi8gB8zSArcQ15TfDBKXTMn9UkJMwkqTyTW3BCL dw== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 391cpft97k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Jun 2021 02:40:29 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1576bTm7031134;
+        Mon, 7 Jun 2021 06:40:28 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04dal.us.ibm.com with ESMTP id 3900w90207-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Jun 2021 06:40:28 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1576eSbM35127692
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Jun 2021 06:40:28 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0AFDAAC05B;
+        Mon,  7 Jun 2021 06:40:28 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B21AAC060;
+        Mon,  7 Jun 2021 06:40:27 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.199.33.79])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Jun 2021 06:40:27 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 0D52F2E2E70; Mon,  7 Jun 2021 12:10:21 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linux-pm@vger.kernel.org, joedecke@de.ibm.com,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+Subject: [PATCH v4] cpuidle/pseries: Fixup CEDE0 latency only for POWER10 onwards
+Date:   Mon,  7 Jun 2021 12:10:14 +0530
+Message-Id: <1623048014-16451-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hmfTVJQGVyDQdTpPfrTlWNvpVyXXj2Y0
+X-Proofpoint-ORIG-GUID: hmfTVJQGVyDQdTpPfrTlWNvpVyXXj2Y0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-07_06:2021-06-04,2021-06-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106070051
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/06/2021 04:31, Dmitry Osipenko wrote:
-> Enable compile testing for all Tegra memory drivers.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/Kconfig | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
-> 
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-Hi Dmitry,
+Commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+of the Extended CEDE states advertised by the platform
 
-This fails on x86_64 and i386:
-https://krzk.eu/#/builders/38/builds/260
-https://krzk.eu/#/builders/40/builds/261
+On POWER9 LPARs, the firmwares advertise a very low value of 2us for
+CEDE1 exit latency on a Dedicated LPAR. The latency advertized by the
+PHYP hypervisor corresponds to the latency required to wakeup from the
+underlying hardware idle state. However the wakeup latency from the
+LPAR perspective should include
 
-/bin/ld: warning: orphan section `__reservedmem_of_table' from `drivers/memory/tegra/tegra210-emc-table.o' being placed in section `__reservedmem_of_table'
-/bin/ld: drivers/memory/tegra/mc.o: in function `tegra_mc_probe':
-mc.c:(.text+0x87a): undefined reference to `reset_controller_register'
-make[1]: *** [/home/buildbot/worker/builddir/build/Makefile:1191: vmlinux] Error 1
+1. The time taken to transition the CPU from the Hypervisor into the
+   LPAR post wakeup from platform idle state
 
-It's a defconfig with:
-scripts/config --file out/.config -e COMPILE_TEST -e OF -e SRAM -e
-MEMORY -e PM_DEVFREQ -e ARM_PL172_MPMC -e ATMEL_SDRAMC -e ATMEL_EBI -e
-BRCMSTB_DPFE -e BT1_L2_CTL -e TI_AEMIF -e TI_EMIF -e OMAP_GPMC -e
-TI_EMIF_SRAM -e MVEBU_DEVBUS -e FSL_CORENET_CF -e FSL_IFC -e JZ4780_NEMC
--e MTK_SMI -e DA8XX_DDRCTL -e PL353_SMC -e RENESAS_RPCIF -e
-STM32_FMC2_EBI -e SAMSUNG_MC -e EXYNOS5422_DMC -e EXYNOS_SROM -e
-TEGRA_MC -e TEGRA20_EMC -e TEGRA30_EMC -e TEGRA124_EMC -e
-TEGRA210_EMC_TABLE -e TEGRA210_EMC
+2. Time taken to send the IPI from the source CPU (waker) to the idle
+   target CPU (wakee).
 
+1. can be measured via timer idle test, where we queue a timer, say
+for 1ms, and enter the CEDE state. When the timer fires, in the timer
+handler we compute how much extra timer over the expected 1ms have we
+consumed. On a a POWER9 LPAR the numbers are
 
-Best regards,
-Krzysztof
+CEDE latency measured using a timer (numbers in ns)
+N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+400     2601     5677     5668.74    5917    6413     9299   455.01
+
+1. and 2. combined can be determined by an IPI latency test where we
+send an IPI to an idle CPU and in the handler compute the time
+difference between when the IPI was sent and when the handler ran. We
+see the following numbers on POWER9 LPAR.
+
+CEDE latency measured using an IPI (numbers in ns)
+N       Min      Median   Avg       90%ile  99%ile    Max    Stddev
+400     711      7564     7369.43   8559    9514      9698   1200.01
+
+Suppose, we consider the 99th percentile latency value measured using
+the IPI to be the wakeup latency, the value would be 9.5us This is in
+the ballpark of the default value of 10us.
+
+Hence, use the exit latency of CEDE(0) based on the latency values
+advertized by platform only from POWER10 onwards. The values
+advertized on POWER10 platforms is more realistic and informed by the
+latency measurements. For earlier platforms stick to the default value
+of 10us. The fix was suggested by Michael Ellerman.
+
+Reported-by: Enrico Joedecke <joedecke@de.ibm.com>
+Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)")
+Cc: Michal Suchanek <msuchanek@suse.de>
+Cc: Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
+Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+---
+v3 --> v4 : Added the check inside pseries_idle_probe() instead of
+            in fixup_cede0_latency() since the positive form of the check
+	    is easier to read than the negative form in v3. Also rewrote
+	    the comment to reflect the fact that the firmware provided values
+	    can be used on any of the previous compat-modes running on POWER10,
+	    not just the POWER9 compat mode.
+
+	
+ drivers/cpuidle/cpuidle-pseries.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index a2b5c6f..e592280d 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -419,7 +419,21 @@ static int pseries_idle_probe(void)
+ 			cpuidle_state_table = shared_states;
+ 			max_idle_state = ARRAY_SIZE(shared_states);
+ 		} else {
+-			fixup_cede0_latency();
++			/*
++			 * Use firmware provided latency values
++			 * starting with POWER10 platforms. In the
++			 * case that we are running on a POWER10
++			 * platform but in an earlier compat mode, we
++			 * can still use the firmware provided values.
++			 *
++			 * However, on platforms prior to POWER10, we
++			 * cannot rely on the accuracy of the firmware
++			 * provided latency values. On such platforms,
++			 * go with the conservative default estimate
++			 * of 10us.
++			 */
++			if (cpu_has_feature(CPU_FTR_ARCH_31) || pvr_version_is(PVR_POWER10))
++				fixup_cede0_latency();
+ 			cpuidle_state_table = dedicated_states;
+ 			max_idle_state = NR_DEDICATED_STATES;
+ 		}
+-- 
+1.9.4
+
