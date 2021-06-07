@@ -2,124 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D25439E447
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 18:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDED639E56C
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 19:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhFGQqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 12:46:54 -0400
-Received: from mail-lf1-f53.google.com ([209.85.167.53]:35792 "EHLO
-        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbhFGQqx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 12:46:53 -0400
-Received: by mail-lf1-f53.google.com with SMTP id i10so27369701lfj.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 09:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UCH4XuaXVFrfpcxb9bP1cFx2Gud3zEeTHMEmvlTBNjM=;
-        b=OAsW2C/iXlAf0hbA45vWWDyy2q2a6JsIe3/CrYGLmR2gVSlsQ/CpVtX9WpHnTzKq7O
-         6cwHbFgb7HIyajOBDaEtsbsGHSPhFPaxSSPUZa6Az7JHs9NhTA9JJg6AefN0lOOqtijI
-         gi0xe+YMCcPlpj2FvN2No0M//9QEzAFiFQydpyE/pso9XbfXHJK+/4IsJCe87UcMUGTu
-         hU7XcwIXxhZEZSSESykxrzQdOPUQPM/vqfYbSlONrpGVx3vgQJuCn0phafqJUg8rcyjH
-         uRW2+kIXxgci4HsxzTO92A8KiRr1t29b0u3z4wg8s5h7xHBYILSbmb/+/XPWd16YylR5
-         g6UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UCH4XuaXVFrfpcxb9bP1cFx2Gud3zEeTHMEmvlTBNjM=;
-        b=M6q2mcCS117pXlTwE58Bns89ozJ7J8NPmDRd5Kvx5i9T99TpQYpnpFSdG09tkDeKgV
-         hH+OGaLwmjVJENCD93Jei3/rDVQkYs+gk0TOiY5s6PDdb9svO75jucxq70WbMjF4t52o
-         4IHC2iygF0sbu7iv6g7o4x+BjLc95JCWyVBbqbub+D0SwhbGJgTJ29U371ttGF3F9P+p
-         vfXfq/Oax8v5DGf0nx0AWclhInyx9DlnYrBKY0X15/YvoIccvHnSh0ANOgPR6kDjVhxH
-         W+BxK4SuoNWPRmKDQqFw64MbsbJ/8SvUN1txhL8CKsIXOkMYmg4BbrYsqmSGBihBpqff
-         Xr0A==
-X-Gm-Message-State: AOAM532ORso5mytthflJG1Cfr25dbJz9wTKduXh3gwDDL6gDZAV0ondN
-        jf90DklToq/POP8L/WBvGCdw+Qrzdc59uQ==
-X-Google-Smtp-Source: ABdhPJxS3h81wx9WQ5tifbrrisgQHLS6vkOP3cf7NIh97cc+tRpRfHJ+1Wv9dWLUtFfUfzFmGcTZYg==
-X-Received: by 2002:a19:c749:: with SMTP id x70mr12996580lff.77.1623084240705;
-        Mon, 07 Jun 2021 09:44:00 -0700 (PDT)
-Received: from localhost (h-62-63-236-217.A463.priv.bahnhof.se. [62.63.236.217])
-        by smtp.gmail.com with ESMTPSA id p28sm1548743lfa.74.2021.06.07.09.43.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 09:44:00 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 18:43:59 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
+        id S230291AbhFGRce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 13:32:34 -0400
+Received: from mga02.intel.com ([134.134.136.20]:61742 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230266AbhFGRce (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Jun 2021 13:32:34 -0400
+IronPort-SDR: ZAZM8Xqh3GcRawNmstUShO7qRyg6kY7yiQJd2/ZwCxt8CjnQg8UoBUPAuG63dcjZcBPP0F3fYD
+ qE/cIheAjyiA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="191778267"
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="191778267"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 10:30:41 -0700
+IronPort-SDR: deirWvcCsgtdXm90yHp0Uzo2d9GpC2TweX2Cmw0E55DhCmB2kxSVjbhDMQXjthAHCKFtCmE0hY
+ MB6b1F0LqgUA==
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="447563923"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.139.144]) ([10.249.139.144])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 10:30:38 -0700
+Subject: Re: [PATCH] cpuidle: ARM_QCOM_SPM_CPUIDLE should depend on
+ HAVE_ARM_SMCCC
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, He Ying <heying24@huawei.com>,
+        Arnd Bergmann <arnd@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Do not shadow
- rcar_gen3_ths_tj_1
-Message-ID: <YL5Mz3F/pHkMmZCS@oden.dyn.berto.se>
-References: <9ea7e65d0331daba96f9a7925cb3d12d2170efb1.1623076804.git.geert+renesas@glider.be>
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20210606190048.689-1-rdunlap@infradead.org>
+ <YL4Is1LNzBuViF3/@gerhold.net>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <7a207351-43e1-d439-9d86-bb28b6935fa2@intel.com>
+Date:   Mon, 7 Jun 2021 19:30:36 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ea7e65d0331daba96f9a7925cb3d12d2170efb1.1623076804.git.geert+renesas@glider.be>
+In-Reply-To: <YL4Is1LNzBuViF3/@gerhold.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Geert,
+On 6/7/2021 1:53 PM, Stephan Gerhold wrote:
+> Hi!
+>
+> On Sun, Jun 06, 2021 at 12:00:48PM -0700, Randy Dunlap wrote:
+>> QCOM_SCM depends on HAVE_ARM_SMCCC, so ARM_QCOM_SPM_CPUIDLE should
+>> also depend on HAVE_ARM_SMCCC since 'select' does not follow any
+>> dependency chains.
+>>
+>> This fixes a kconfig warning and subsequent build errors:
+>>
+>> WARNING: unmet direct dependencies detected for QCOM_SCM
+>>    Depends on [n]: (ARM [=y] || ARM64) && HAVE_ARM_SMCCC [=n]
+>>    Selected by [y]:
+>>    - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>>
+>> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
+>> qcom_scm-smc.c:(.text+0x5c): undefined reference to `__arm_smccc_smc'
+>> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
+>> qcom_scm-legacy.c:(.text+0x140): undefined reference to `__arm_smccc_smc'
+>> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
+>> qcom_scm-legacy.c:(.text+0x364): undefined reference to `__arm_smccc_smc'
+>>
+>> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Stephan Gerhold <stephan@gerhold.net>
+>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Cc: Andy Gross <agross@kernel.org>
+>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Cc: linux-arm-msm@vger.kernel.org
+>> Cc: He Ying <heying24@huawei.com>
+> There was a similar patch from Arnd a while ago (which fixes another
+> warning for ARM_CPU_SUSPEND?):
+>
+> https://lore.kernel.org/linux-pm/20210421135723.3601743-1-arnd@kernel.org/
+>
+> I'm not sure who is supposed to pick it up. :)
 
-Thanks for your work.
+ARM cpuidle drivers are maintained by Daniel Lezcano.
 
-On 2021-06-07 16:41:20 +0200, Geert Uytterhoeven wrote:
-> With -Wshadow:
-> 
->     drivers/thermal/rcar_gen3_thermal.c: In function ‘rcar_gen3_thermal_probe’:
->     drivers/thermal/rcar_gen3_thermal.c:310:13: warning: declaration of ‘rcar_gen3_ths_tj_1’ shadows a global declaration [-Wshadow]
->       310 |  const int *rcar_gen3_ths_tj_1 = of_device_get_match_data(dev);
-> 	  |             ^~~~~~~~~~~~~~~~~~
->     drivers/thermal/rcar_gen3_thermal.c:246:18: note: shadowed declaration is here
->       246 | static const int rcar_gen3_ths_tj_1 = 126;
-> 	  |                  ^~~~~~~~~~~~~~~~~~
-> 
-> To add to the confusion, the local variable has a different type.
-> 
-> Fix the shadowing by renaming the local variable to ths_tj_1.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Also, please CC power management material to linux-pm@vger.kernel.org.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index e1e412348076b2ff..42c079ba0d51e4b3 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -307,7 +307,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  {
->  	struct rcar_gen3_thermal_priv *priv;
->  	struct device *dev = &pdev->dev;
-> -	const int *rcar_gen3_ths_tj_1 = of_device_get_match_data(dev);
-> +	const int *ths_tj_1 = of_device_get_match_data(dev);
->  	struct resource *res;
->  	struct thermal_zone_device *zone;
->  	int ret, i;
-> @@ -352,8 +352,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  		priv->tscs[i] = tsc;
->  
->  		priv->thermal_init(tsc);
-> -		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i],
-> -					     *rcar_gen3_ths_tj_1);
-> +		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i], *ths_tj_1);
->  
->  		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
->  							    &rcar_gen3_tz_of_ops);
-> -- 
-> 2.25.1
-> 
+>
+>> ---
+>>   drivers/cpuidle/Kconfig.arm |    1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> --- linux-next-20210604.orig/drivers/cpuidle/Kconfig.arm
+>> +++ linux-next-20210604/drivers/cpuidle/Kconfig.arm
+>> @@ -108,6 +108,7 @@ config ARM_TEGRA_CPUIDLE
+>>   config ARM_QCOM_SPM_CPUIDLE
+>>   	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+>>   	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
+>> +	depends on HAVE_ARM_SMCCC
+>>   	select ARM_CPU_SUSPEND
+>>   	select CPU_IDLE_MULTIPLE_DRIVERS
+>>   	select DT_IDLE_STATES
 
--- 
-Regards,
-Niklas Söderlund
+
