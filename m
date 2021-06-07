@@ -2,90 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CF939E10B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD3E39E127
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbhFGPoc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 11:44:32 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:45030 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbhFGPoc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 11:44:32 -0400
-Received: by mail-oi1-f173.google.com with SMTP id d21so18472242oic.11;
-        Mon, 07 Jun 2021 08:42:25 -0700 (PDT)
+        id S231469AbhFGPtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 11:49:18 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:38477 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231183AbhFGPtS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 11:49:18 -0400
+Received: by mail-ot1-f51.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so3559170otk.5;
+        Mon, 07 Jun 2021 08:47:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c2v/PS6KigiW/mbDGu/R+ZGoP0WYsTOzVw7Gji4PkqQ=;
-        b=NxdPzrD+h00jKr/tpBrZpJgrAylsmvx+VlMlj5r8pF1XMAU32QX+e3XDWsMJ1Drnzu
-         Wb9yGYpPMOxv5MP85oVkbgsew9bUXZE8a92Kl4iHama5BG7E/1nxMxVWWixZXxrd/cop
-         soweBmaIt4woDjwiBZeIpgqBzWDT4myXL50zqx/3lxUwXK41/F40Y6129OQjEJPE6HvA
-         9xOIh4xrx3it65Eke+J+gTksEWGZZvcSAleAY6BDPyLeQELchDL7Q+LS6SN0eXVBNmJg
-         NzpeUuJpj18vNYvZfbTSgg5j8IO1Hqe+tYoNxAi5zcK8fZfP78dTlVhKbsvaY8cZVtI0
-         9aAA==
-X-Gm-Message-State: AOAM531qHXmks0xKzbcr3v4uW3fTX5Uz6IPOO/KapMoyiaZeqHNZGLKM
-        4WKrrnqs17gTnxnkEJzk1stSvOqcP25tb1mk5m4=
-X-Google-Smtp-Source: ABdhPJxJIGgSJtzZADcWfEDSP+s7UDkDGWq7rB+YtEc2xtQS0yaQ8GBgNG7H/FpjruURK14aNIkN+f5S205LNM7pcTA=
-X-Received: by 2002:aca:1910:: with SMTP id l16mr11149097oii.69.1623080545606;
- Mon, 07 Jun 2021 08:42:25 -0700 (PDT)
+        bh=HVJhd+u7GmSPZQlKGUKfiKFOtV7NI/wtWT9eN5SSaGI=;
+        b=LaR5N/dYn60sbowkQFIRRaS9XpOggHTdVtA3bsHjNFqbT21UX9k6mHsdESty0/N7Zv
+         Tw7R0AeFzdx0HZLiMfgtBSi+/Alvdbm2asMo6ul8IBC4tAXUYyWlG1MwYw8F7aczcczk
+         2mGon7Riuj109naMkbh2PM3lVDNQ3CdkluYP810Wnd/JnA6wNvJylZ4MhJvLDchVW2Eg
+         4zQqb9Ek37lUUUQ02axiKR/9NAIbm/1yvYxni78dSUHPoLomEaEF1JQ2M2V75pLcipju
+         J98YncfJN+po9do/UP7G2SQTi/4IA1WvTE73jUMA5bxhSs73CI1le/vANmVlUviiF0ak
+         a2dQ==
+X-Gm-Message-State: AOAM531fQh0G/OM2DdVKsnzFXxW66n4RMihbaoJCa77W9MAwQr8Cn2vT
+        0zuZv+p8NJ43kVhPQs6eKBWpOYxlWeHefCeQJe5Q86sF
+X-Google-Smtp-Source: ABdhPJzzxMbMUs+hYRb9oWPT+tkkivNnJEMnG+1ac2FghMDYJe7smOyj2wbrwyRFPYv7cEZz923eTvTboHHm6v4O+Ww=
+X-Received: by 2002:a9d:63cd:: with SMTP id e13mr14859434otl.206.1623080846492;
+ Mon, 07 Jun 2021 08:47:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210605063934.688763-1-libaokun1@huawei.com>
-In-Reply-To: <20210605063934.688763-1-libaokun1@huawei.com>
+References: <20210606115828.27020-1-liuhailongg6@163.com> <20210607032726.rolhnshkctluepw2@vireshk-i7>
+In-Reply-To: <20210607032726.rolhnshkctluepw2@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Jun 2021 17:42:14 +0200
-Message-ID: <CAJZ5v0izpTc-cMWxQ0f0mSNQQZUz855ceKFUC0_Z6kd1eNMaEw@mail.gmail.com>
-Subject: Re: [PATCH -next] PM/sleep: fix doc warnings in main.c
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+Date:   Mon, 7 Jun 2021 17:47:15 +0200
+Message-ID: <CAJZ5v0itSWZQX4dVYGDq2pg6S+eeOYwh8U+3B2D1fq5qUqrZHQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: sh: Remove unused linux/sched.h headers
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Hailong Liu <liuhailongg6@163.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yue Haibing <yuehaibing@huawei.com>, yangjihong1@huawei.com,
-        yu kuai <yukuai3@huawei.com>
+        Hailong Liu <liu.hailong6@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 5, 2021 at 8:30 AM Baokun Li <libaokun1@huawei.com> wrote:
+On Mon, Jun 7, 2021 at 5:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Add description for `state_show` to fix the W=1 warnings:
+> On 06-06-21, 19:58, Hailong Liu wrote:
+> > From: Hailong Liu <liu.hailong6@zte.com.cn>
+> >
+> > Since commit '205dcc1ecbc5(cpufreq/sh: Replace racy task affinity logic)'
+> > the header <linux/sched.h> is useless in sh-cpufreq.c, so remove it.
+> >
+> > Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
+> > ---
+> >  drivers/cpufreq/sh-cpufreq.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/sh-cpufreq.c b/drivers/cpufreq/sh-cpufreq.c
+> > index 0ac265d47ef0..1a251e635ebd 100644
+> > --- a/drivers/cpufreq/sh-cpufreq.c
+> > +++ b/drivers/cpufreq/sh-cpufreq.c
+> > @@ -23,7 +23,6 @@
+> >  #include <linux/cpumask.h>
+> >  #include <linux/cpu.h>
+> >  #include <linux/smp.h>
+> > -#include <linux/sched.h>     /* set_cpus_allowed() */
+> >  #include <linux/clk.h>
+> >  #include <linux/percpu.h>
+> >  #include <linux/sh_clk.h>
 >
-> kernel/power/main.c:593: warning:
->  Function parameter or member 'kobj' not described in 'state_show'
-> kernel/power/main.c:593: warning:
->  Function parameter or member 'attr' not described in 'state_show'
-> kernel/power/main.c:593: warning:
->  Function parameter or member 'buf' not described in 'state_show'
->
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
->  kernel/power/main.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 12c7e1bb442f..d508c8c582e0 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -579,7 +579,9 @@ struct kobject *power_kobj;
->
->  /**
->   * state - control system sleep states.
-> - *
-> + * @kobj: Pointer to the kernel object.
-> + * @attr: Pointer to the kernel object attribute.
-> + * @buf: buffer.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Please fix this properly or don't touch it.
-
-This is not a kerneldoc comment of a function and so adding argument
-descriptions to it is pointless.
-
->   * show() returns available sleep state labels, which may be "mem", "standby",
->   * "freeze" and "disk" (hibernation).
->   * See Documentation/admin-guide/pm/sleep-states.rst for a description of
-> --
-> 2.31.1
->
+Applied as 5.14 material, thanks!
