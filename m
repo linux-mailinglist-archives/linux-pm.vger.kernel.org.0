@@ -2,122 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3E439DEFC
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 16:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D1139DF06
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 16:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhFGOog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 10:44:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:52873 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbhFGOof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 10:44:35 -0400
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lqGSh-0000pK-8g
-        for linux-pm@vger.kernel.org; Mon, 07 Jun 2021 14:42:43 +0000
-Received: by mail-wr1-f69.google.com with SMTP id n2-20020adfb7420000b029010e47b59f31so7873185wre.9
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 07:42:43 -0700 (PDT)
+        id S230299AbhFGOqE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 10:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230254AbhFGOqE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 10:46:04 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C3AC061766
+        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 07:44:12 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so12101287pjz.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=QaDS257JpbPHkKULCNNA3b5SU06T5kBCV3p9aYDTqac=;
+        b=fp0mc3Xpza84TC8rdsWJBTsJdsOft6lOooYzC/v/pNVTLmWr60jU9otNBlgbnktLZ4
+         wWXSAa5PxWnvJezOEKmvEYjFyH3BwKHCA73MPXhAiEzFdYR7RAtTHtdkjq3X+cyH+Boa
+         UXSm2F6zkbEi3d4Y3J2dScbc0UBJZmxjM1MPMg1uW3ibASGN9GGmJE66GUtFHs2f976n
+         HyrDGbFDpMqziUAXYJkF7wZzxGBn/bI8pV3SUbAlF2IWipzuMKXEhW4owJBU3/jKCHor
+         3FziuTMk1rn4KyVQa+AkR42abWhLAJMNwshRe8CevLRZF4y0lbMFTd7RJCZYhb2zM2SJ
+         K++A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LZouowOMeDZ6EndWSO8l3IpGbZlNHlcW3YYdxdPf/aY=;
-        b=tgxoIgXBPiFW25PyJ3wDIBW73a70ZsOANCwXonVq6C2b72qoy0HW3HfWnyuiUB5AnL
-         4OVmNXPIAJfBFU+0EHO5IQupJmwKMIKQlcVzHGQ+qnauakeyipw49w2lOsFueFTwD44q
-         bdzbOAg5ysIKD5qQ/CEVQtXHC1z1JKLPaxVjFyECbi8JIFQz542R7crLcMvN5VzLLlTs
-         oZRfXl4zM+ekrbopElTcZJi1PTjMoXYNDZnZYsMiJlaUQDb+vJBeo6NbeHv1aMCsodsB
-         Qp1FfpZQD1ypwyg6CXKK3EIeRgIO4HAwalgPo87SYeeDiV61stwdAp3OJmRWhgG2yOym
-         qTUg==
-X-Gm-Message-State: AOAM533tbylwCKtsQYZAIAlJQpK1X586fPhuAoastEcBUNjTw9baDbs5
-        QOObeye8j9pqrmtXc3SKEURIijA8yTeZOn0V9cDBYxDttllwv0xe9ApA7kIsqjMi/w4WXLX6Ypg
-        UPht+m7PW5mAvfgr6KDNHVMuKLmrdXReouPwY
-X-Received: by 2002:a05:6000:18ad:: with SMTP id b13mr17120994wri.134.1623076962916;
-        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyCR/qOJ2HOoz8Yaxcz1xb5SQF3ouTzcrIeE2rRHBxNtJtXVZtVdkLJ/2+fUMEntjBQHi/CIw==
-X-Received: by 2002:a05:6000:18ad:: with SMTP id b13mr17120979wri.134.1623076962784;
-        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-185-9.adslplus.ch. [188.155.185.9])
-        by smtp.gmail.com with ESMTPSA id l9sm14332397wme.21.2021.06.07.07.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
-Subject: Re: [PATCH v6 08/14] memory: tegra: Enable compile testing for all
- drivers
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-References: <20210601023119.22044-1-digetx@gmail.com>
- <20210601023119.22044-9-digetx@gmail.com>
- <41899ef4-bb16-6c3a-035c-1e840a993bec@canonical.com>
- <YL4gwxWopKT7LomG@orome.fritz.box>
- <a1f20257-f041-966e-c37e-5c81c4cf94d9@gmail.com>
- <YL4rBYkWHpeit66m@orome.fritz.box>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
-Date:   Mon, 7 Jun 2021 16:42:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=QaDS257JpbPHkKULCNNA3b5SU06T5kBCV3p9aYDTqac=;
+        b=hJYP4zI98U2FPrHu7+Ev8Vs/Bv6uzd5ll9FSt0VYQZDQRXA3h7OP0BKIjdcx5JQ2ot
+         R6Kug7PEJYfXqYAH6z5zlE6jUjb0KOCFy7cKFjANoMj88DHu+6va8SCWpkpn2Cmb4p3B
+         2wFTksJ9NM7HD3GPebLOsj4WKqWPLnEugNQ0SdtQv9u50wkthZ0gM7tvx91pz/EOHNFn
+         5djMpGJuSz8lqVVv19vn7oMLBM4dxSVqbGtXAnOtlkJqe8RnmltWoNNbdfYNWC18MzxO
+         wHnfIH18YSI5YvM3Ed9p9tZPtrydOCfIuC/gzfgq5D5rsVuJ0eLUXIVE5SEKYwKm4bwG
+         qMbw==
+X-Gm-Message-State: AOAM532HGea/sbuIs4X6WPV56PjazARzRqx4e8q4Fz9xlIH3yJc7cZzs
+        1BEuh8+Ws0Es4+Kz6VEtMgir8IhfMU1VP3+i
+X-Google-Smtp-Source: ABdhPJy4GP1wCihKOEsZF8R9rTlLoZNkyggVr82XpYB12IR+6U0sZYl8a6pXRBj5Az/45HyNCdLLcA==
+X-Received: by 2002:a17:90b:120d:: with SMTP id gl13mr20805789pjb.72.1623077052468;
+        Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x19sm8706640pgj.66.2021.06.07.07.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
+Message-ID: <60be30bc.1c69fb81.ad406.a808@mx.google.com>
+Date:   Mon, 07 Jun 2021 07:44:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <YL4rBYkWHpeit66m@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.13-rc5-37-gfcbef3bdf3a8
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing sleep: 6 runs, 11 regressions (v5.13-rc5-37-gfcbef3bdf3a8)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/06/2021 16:19, Thierry Reding wrote:
-> On Mon, Jun 07, 2021 at 05:01:02PM +0300, Dmitry Osipenko wrote:
->> 07.06.2021 16:36, Thierry Reding пишет:
->>>> /bin/ld: warning: orphan section `__reservedmem_of_table' from `drivers/memory/tegra/tegra210-emc-table.o' being placed in section `__reservedmem_of_table'
->>>> /bin/ld: drivers/memory/tegra/mc.o: in function `tegra_mc_probe':
->>>> mc.c:(.text+0x87a): undefined reference to `reset_controller_register'
->>>> make[1]: *** [/home/buildbot/worker/builddir/build/Makefile:1191: vmlinux] Error 1
->> ...
->>
->>> Not sure what to do about that orphaned __reservedmem_of_table section.
->>> Maybe all we need to do is to select OF_RESERVED_MEM from
->>> TEGRA210_EMC_TABLE?
->>
->> Select won't work easily, but the dependency for TEGRA210_EMC should.
-> 
-> Select works if I also select OF_EARLY_FLATTREE. That's slightly odd
-> because typically that's something that the platform would select, but
-> there's precedent for doing this in drivers/clk/x86/Kconfig, so I think
-> it'd be fine.
-> 
-> The attached patch resolves both of the above issues for me.
-> 
-> Krzysztof: do you want to squash that into the problematic patch or do
-> you want me to send this as a follow-up patch for you to apply? I guess
-> the latter since you've already sent out the PR for Will and ARM SoC?
+pm/testing sleep: 6 runs, 11 regressions (v5.13-rc5-37-gfcbef3bdf3a8)
 
-Follow up, please, but I am not sure about selecting reset controller.
-From the tegra/mc.c code I see it can be optional - if "reset_ops" is
-provided. Therefore I think:
-1. Reset controller should provide proper stubs. This will fix building
-of mc.c when reset controller is not chosen (regardless of point #2 below).
+Regressions Summary
+-------------------
 
-2. Specific drivers should depend on it. Selecting user-visible symbols
-is rather discourage because might lead to circular dependencies.
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
+          =
 
-Best regards,
-Krzysztof
+odroid-xu3      | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
+0         =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
+5-37-gfcbef3bdf3a8/plan/sleep/
+
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.13-rc5-37-gfcbef3bdf3a8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      fcbef3bdf3a80dfe325261a837f0abd0b2a1b3f0 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
+          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60be23e7a27cbd1b320c0df5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
+3bdf3a8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
+3bdf3a8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
+0520.0/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/60be23e7a27cbd1b320c0df6
+        failing since 291 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
+il: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+odroid-xu3      | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
+0         =
+
+
+  Details:     https://kernelci.org/test/plan/id/60be2f220fdcf84dee0c0e00
+
+  Results:     3 PASS, 20 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
+3bdf3a8/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-odroid-xu3.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc5-37-gfcbef=
+3bdf3a8/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-odroid-xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
+0520.0/armhf/rootfs.cpio.gz =
+
+
+
+  * sleep.rtcwake-mem-9: https://kernelci.org/test/case/id/60be2f220fdcf84d=
+ee0c0e0c
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.195000+00:00  rtcwake: read rtc time failed: Invali=
+d argument
+    2021-06-07 14:37:18.212000+00:00  rtcwake: assuming RTC uses UTC ...   =
+
+
+  * sleep.rtcwake-freeze-2: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e0f
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.254000+00:00  rtcwake: read rtc time failed: Invali=
+d argument   =
+
+
+  * sleep.rtcwake-freeze-3: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e10
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.274000+00:00  rtcwake: read rtc time failed: Invali=
+d argument
+    2021-06-07 14:37:18.292000+00:00  rtcwake: assuming RTC uses UTC ...   =
+
+
+  * sleep.rtcwake-freeze-4: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e11
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2) =
+
+
+  * sleep.rtcwake-freeze-5: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e12
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.317000+00:00  rtcwake: read rtc time failed: Invali=
+d argument   =
+
+
+  * sleep.rtcwake-freeze-6: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e13
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.338000+00:00  rtcwake: read rtc time failed: Invali=
+d argument
+    2021-06-07 14:37:18.356000+00:00  rtcwake: assuming RTC uses UTC ...   =
+
+
+  * sleep.rtcwake-freeze-7: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e14
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.382000+00:00  rtcwake: assuming RTC uses UTC ...   =
+
+
+  * sleep.rtcwake-freeze-8: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e15
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.403000+00:00  rtcwake: assuming RTC uses UTC ...   =
+
+
+  * sleep.rtcwake-freeze-9: https://kernelci.org/test/case/id/60be2f220fdcf=
+84dee0c0e16
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2) =
+
+
+  * sleep.rtcwake-freeze-10: https://kernelci.org/test/case/id/60be2f220fdc=
+f84dee0c0e17
+        new failure (last pass: acpi-5.13-rc5-42-ga25ea0c642c2)
+
+    2021-06-07 14:37:18.429000+00:00  rtcwake: read rtc time failed: Invali=
+d argument   =
+
+ =20
