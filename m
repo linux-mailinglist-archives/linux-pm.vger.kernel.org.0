@@ -2,168 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B1839D9F1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 12:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B376239DA8D
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 13:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhFGKq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 06:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbhFGKq4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 06:46:56 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F575C061789
-        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 03:45:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id l2so17060662wrw.6
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 03:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aqlB3nweefXMBd+1n3TfVg5Imk7mqG7GGko5Cn1Ypjk=;
-        b=fokBrG+2G1fkq/XmZlW8Qn8gNsGVee/kxIBq16SYHHcihUEHhxAiLiYioDzjZCKPWV
-         9QEZOxcXx7fkFSqzCPab9ejYwiSWHFrBFKIvS4T83XVPbmSdXZpWw/7QLttpVgGupn7M
-         FoWs2xbakjWUMbWyKY9toPvBiRJY2NSMoomhdLwJgft1TVJGXI1KGV/tNqHpK+0t4K/c
-         ssThtjIQ5Gd6U2Vgt07NOm/v5UajEDZu6QDpCKD4dz0UaryRPm6OwVwk+zBYdDwhZepP
-         9jCgvqxA0rUhD0TtVGl/Sk+NMb0qRwm6JS3LOkQ+swNNoK5wt0XeTzNUgGulkw29L99w
-         ZQaw==
+        id S230479AbhFGLE4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 07:04:56 -0400
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:45783 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230131AbhFGLEz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 07:04:55 -0400
+Received: by mail-ot1-f42.google.com with SMTP id 6-20020a9d07860000b02903e83bf8f8fcso3252867oto.12;
+        Mon, 07 Jun 2021 04:03:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aqlB3nweefXMBd+1n3TfVg5Imk7mqG7GGko5Cn1Ypjk=;
-        b=eBBr6Jy74+rtZmYYkLBcr1Wb4h3dWcBE7qp7V22F8gAg5O7hMIA9lVjoqaCvu7pxBF
-         zigC2KdEk3or0/gycCjuLG7C1DF3trrpxwdY8zgMhRBmbE6esUZpleyaOfjhLGLYhkp+
-         zKbNy/27b2boLDk111NskSy2RyQ+DMjPsy1mRjGJ84r2GnquB6UHthb+TXxiXThm1HCo
-         Dfbj2gDdkUgaATAuQiAYd3H4sk/Ea+9lAIXzXy2UtHdI+hvkLgm12lzARczs2nv5jMGQ
-         miKA7Cs72pnsuNrrDJqi3CyGi0oMMFlzD284SmbkmaXaJDV8FWfL9/2s1V/rnUnQqjnx
-         tAdA==
-X-Gm-Message-State: AOAM530fHviE/3goV7tbzs4dEoF5miKjJ6UAfNOKqSKdGC3c+ILSZnA7
-        otuAfH4HFnSdUNxmxk00mSs9Jg==
-X-Google-Smtp-Source: ABdhPJwqNBSGH0k0cJir/i3kAe7gRK7bFBO/b5hmcAfd7Z+SvyV8tZwYe+ey/npaVItqY9949tYt3w==
-X-Received: by 2002:a05:6000:1563:: with SMTP id 3mr16068224wrz.59.1623062703694;
-        Mon, 07 Jun 2021 03:45:03 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id p16sm16000678wrs.52.2021.06.07.03.45.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 03:45:03 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 11:45:00 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 6/6] sched: Change task_struct::state
-Message-ID: <20210607104500.sopvslejuoxwzhrs@maple.lan>
-References: <20210602131225.336600299@infradead.org>
- <20210602133040.587042016@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4PwEOhhSgqcDZBccS2qEUl6w+mHR3TrhOJ8GYWHqr8k=;
+        b=Vv72F61pOdy43bSOAo02JOdeatweILpN5RDVKHy7/ksKYe9Jq/aJPTFEVPFc7AqriL
+         9NN9UT57a0jh6kRQYal0O3aI75uDxnP63+bhjccMvGaXOJa+fByvuSAelIkflQvFkglA
+         UDpUSwSDbvRTJxSrwnfQx9N4v8giZ802knd1+5FPy38jD+KsK0t9qw/qv2Mos1DVP3yu
+         XZu3BIJHd5BC1pDuomf+rBcaprGyM6Yw/ru02clb9OOAnuKfzK1e99kq//Ts8AUF1v/l
+         DypFulHpImlXinTjP57E7kAXLCvj4L38uhCXafqZMoNZhOKnmJ5koj7PEmAaEg5G94pz
+         F2MA==
+X-Gm-Message-State: AOAM5330M0tkGqO2agunF26PZMy8DWACPfr/7undCHyH+D1pLRm04kv1
+        D4eBYIFqmlpigGCfgTzknNJNmmwHWbbZrj5CWY0=
+X-Google-Smtp-Source: ABdhPJx0vTAAkAXC/7vq4L1/cquuDBIgdiJwnp5HSGhecElAafjL4hrPr0xNCKmZpnyVm6ZpLmVLwsU8YMuo22bWtro=
+X-Received: by 2002:a9d:6c4d:: with SMTP id g13mr10038001otq.321.1623063784342;
+ Mon, 07 Jun 2021 04:03:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210602133040.587042016@infradead.org>
+References: <20210521221906.199436-1-kyle.meyer@hpe.com> <CAJZ5v0iJUhUyucYEDHXKqXrsy6=3dGUz0uy1pDpx+kKOi_NB2w@mail.gmail.com>
+ <CAOh2x==tXk2Lt_f14_azHNYG2mZzMb9-1b2YUVj=+i=-JLemdg@mail.gmail.com>
+In-Reply-To: <CAOh2x==tXk2Lt_f14_azHNYG2mZzMb9-1b2YUVj=+i=-JLemdg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 7 Jun 2021 13:02:46 +0200
+Message-ID: <CAJZ5v0g-NMLa1UVYKpF2ehgk=6dJkKRonUY0AGw6HyRCDaQMmw@mail.gmail.com>
+Subject: Re: [PATCH] acpi-cpufreq: Skip initialization if a cpufreq driver exists
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Takashi Iwai <tiwai@suse.de>, Kyle Meyer <kyle.meyer@hpe.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-acpi@vegr.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 03:12:31PM +0200, Peter Zijlstra wrote:
-> Change the type and name of task_struct::state. Drop the volatile and
-> shrink it to an 'unsigned int'. Rename it in order to find all uses
-> such that we can use READ_ONCE/WRITE_ONCE as appropriate.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  ...
->  kernel/debug/kdb/kdb_support.c |   18 +++++++------
->  ...
-> --- a/kernel/debug/kdb/kdb_support.c
-> +++ b/kernel/debug/kdb/kdb_support.c
-> @@ -609,23 +609,25 @@ unsigned long kdb_task_state_string(cons
->   */
->  char kdb_task_state_char (const struct task_struct *p)
->  {
-> -	int cpu;
-> -	char state;
-> +	unsigned int p_state;
->  	unsigned long tmp;
-> +	char state;
-> +	int cpu;
->  
->  	if (!p ||
->  	    copy_from_kernel_nofault(&tmp, (char *)p, sizeof(unsigned long)))
->  		return 'E';
->  
->  	cpu = kdb_process_cpu(p);
-> -	state = (p->state == 0) ? 'R' :
-> -		(p->state < 0) ? 'U' :
-> -		(p->state & TASK_UNINTERRUPTIBLE) ? 'D' :
-> -		(p->state & TASK_STOPPED) ? 'T' :
-> -		(p->state & TASK_TRACED) ? 'C' :
-> +	p_state = READ_ONCE(p->__state);
-> +	state = (p_state == 0) ? 'R' :
-> +		(p_state < 0) ? 'U' :
+On Mon, Jun 7, 2021 at 9:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> On Mon, May 24, 2021 at 7:47 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Sat, May 22, 2021 at 12:19 AM Kyle Meyer <kyle.meyer@hpe.com> wrote:
+>
+> > > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> > > index 7e7450453714..e79a945369d1 100644
+> > > --- a/drivers/cpufreq/acpi-cpufreq.c
+> > > +++ b/drivers/cpufreq/acpi-cpufreq.c
+> > > @@ -1003,7 +1003,7 @@ static int __init acpi_cpufreq_init(void)
+> > >
+> > >         /* don't keep reloading if cpufreq_driver exists */
+> > >         if (cpufreq_get_current_driver())
+> > > -               return -EEXIST;
+> > > +               return 0;
+> > >
+> > >         pr_debug("%s\n", __func__);
+> > >
+> > > --
+> >
+> > Applied as 5.14 material with some edits in the subject and changelog, thanks!
+>
+> I am not sure how this is supposed to work. If we return 0 from
+> acpi_cpufreq_init(),
+> then the driver will never be used, since it's acpi_cpufreq_init()
+> will never get
+> called again later.
 
-Looks like the U here stands for Unreachable since this patch makes it
-more obvious that this clause is (and previously was) exactly that!
+Unless the module is unloaded and loaded again, that is.
 
-Dropping the U state would be good since I guess this will show up as a
-"new" warning in some tools. However it was a preexisting problem so with
-or without this cleaned up:
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
+> cpufreq drivers don't follow the generic device/driver model where a driver gets
+> probed again if a device appears and so this is broken.
 
+It is broken anyway as per the changelog of this patch.
 
-Daniel.
+On systems with several hundred logical CPUs this really can be troublesome.
 
-> +		(p_state & TASK_UNINTERRUPTIBLE) ? 'D' :
-> +		(p_state & TASK_STOPPED) ? 'T' :
-> +		(p_state & TASK_TRACED) ? 'C' :
->  		(p->exit_state & EXIT_ZOMBIE) ? 'Z' :
->  		(p->exit_state & EXIT_DEAD) ? 'E' :
-> -		(p->state & TASK_INTERRUPTIBLE) ? 'S' : '?';
-> +		(p_state & TASK_INTERRUPTIBLE) ? 'S' : '?';
->  	if (is_idle_task(p)) {
->  		/* Idle task.  Is it really idle, apart from the kdb
->  		 * interrupt? */
+> Please revert this patch.
+
+Well, you can argue that the problem at hand is outside the kernel and
+so it's not a kernel's business to address it.
+
+After all, systemd-udevd could learn to avoid attempting to load the
+module again if it fails with -EEXIST, but I'm not sure how different
+that really would be from what this patch does, in practice.
