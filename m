@@ -2,193 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C02B539E107
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CF939E10B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 17:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbhFGPnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 11:43:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50952 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231488AbhFGPna (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:43:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A90F6100B;
-        Mon,  7 Jun 2021 15:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623080499;
-        bh=HirXEOeTJC8OXEqZozB9U77eq3qf8a0FWCrZd8Q9AKs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fSXmWgzO2Hz+MaCRW7VyB3tXJvC8q0DCRoxX3R3pVkT4vRriI8Gpqx1BRVrwy0ugZ
-         c8DbQxy+7rA73hfTW0eOyglludJJ/t4nTXl0HQEgEEsuvgXq4Na9X5H9yeGCzQhSL/
-         NEEvsS0ePGGJE5ji3inhIuBWuANVQInniQuSyCIxpUtC2Nr0uH3M8PUhj600cu4VvO
-         ioBRU5iARgl5gmsSNXtdT9qjow2WacDVAmuyZ+gdX3fnbA6B4EHKfSvyTLGfSaKVUl
-         FLgb/esdyWdZgi6onIytKB4UF8oOmN6WZJgzf8p0Pl4zZbSDU0fG0eieqJhqFjBaZz
-         u3P1AazMZbncg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F37D65C0395; Mon,  7 Jun 2021 08:41:38 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 08:41:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        id S230323AbhFGPoc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 11:44:32 -0400
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:45030 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230306AbhFGPoc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 11:44:32 -0400
+Received: by mail-oi1-f173.google.com with SMTP id d21so18472242oic.11;
+        Mon, 07 Jun 2021 08:42:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c2v/PS6KigiW/mbDGu/R+ZGoP0WYsTOzVw7Gji4PkqQ=;
+        b=NxdPzrD+h00jKr/tpBrZpJgrAylsmvx+VlMlj5r8pF1XMAU32QX+e3XDWsMJ1Drnzu
+         Wb9yGYpPMOxv5MP85oVkbgsew9bUXZE8a92Kl4iHama5BG7E/1nxMxVWWixZXxrd/cop
+         soweBmaIt4woDjwiBZeIpgqBzWDT4myXL50zqx/3lxUwXK41/F40Y6129OQjEJPE6HvA
+         9xOIh4xrx3it65Eke+J+gTksEWGZZvcSAleAY6BDPyLeQELchDL7Q+LS6SN0eXVBNmJg
+         NzpeUuJpj18vNYvZfbTSgg5j8IO1Hqe+tYoNxAi5zcK8fZfP78dTlVhKbsvaY8cZVtI0
+         9aAA==
+X-Gm-Message-State: AOAM531qHXmks0xKzbcr3v4uW3fTX5Uz6IPOO/KapMoyiaZeqHNZGLKM
+        4WKrrnqs17gTnxnkEJzk1stSvOqcP25tb1mk5m4=
+X-Google-Smtp-Source: ABdhPJxJIGgSJtzZADcWfEDSP+s7UDkDGWq7rB+YtEc2xtQS0yaQ8GBgNG7H/FpjruURK14aNIkN+f5S205LNM7pcTA=
+X-Received: by 2002:aca:1910:: with SMTP id l16mr11149097oii.69.1623080545606;
+ Mon, 07 Jun 2021 08:42:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210605063934.688763-1-libaokun1@huawei.com>
+In-Reply-To: <20210605063934.688763-1-libaokun1@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 7 Jun 2021 17:42:14 +0200
+Message-ID: <CAJZ5v0izpTc-cMWxQ0f0mSNQQZUz855ceKFUC0_Z6kd1eNMaEw@mail.gmail.com>
+Subject: Re: [PATCH -next] PM/sleep: fix doc warnings in main.c
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with
- rcu_read_lock/unlock()
-Message-ID: <20210607154138.GU4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210607065743.1596-1-qiang.zhang@windriver.com>
- <CAJZ5v0iYtNP54mUFs5VbmHxuXYjTBMrbCZ5CqfaHShnGdd+3Jg@mail.gmail.com>
- <DM6PR11MB42027F9DA1B3E9B6BDFA5194FF389@DM6PR11MB4202.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB42027F9DA1B3E9B6BDFA5194FF389@DM6PR11MB4202.namprd11.prod.outlook.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yue Haibing <yuehaibing@huawei.com>, yangjihong1@huawei.com,
+        yu kuai <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 02:11:37PM +0000, Zhang, Qiang wrote:
-> ________________________________________
-> From: Rafael J. Wysocki <rafael@kernel.org>
-> Sent: Monday, 7 June 2021 19:45
-> To: Zhang, Qiang
-> Cc: Rafael Wysocki; Len Brown; Pavel Machek; Paul E. McKenney; Linux PM; Linux Kernel Mailing List
-> Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with rcu_read_lock/unlock()
-> 
-> [Please note: This e-mail is from an EXTERNAL e-mail address]
-> 
-> On Mon, Jun 7, 2021 at 8:57 AM <qiang.zhang@windriver.com> wrote:
-> >
-> > From: Zqiang <qiang.zhang@windriver.com>
-> >
-> > Using rcu_read_lock/unlock() instead of read_lock/unlock(tasklist_lock),
-> > the task list can be traversed in parallel to any list additions or
-> > removals, improve concurrency.
-> >
-> > Signed-off-by: Zqiang <qiang.zhang@windriver.com>
-> 
-> >This changes the reader side only AFAICS, but what about the >writer side?
-> 
-> Hello  rafael
-> 
-> In the case of holding read_lock(tasklist_lock) 
-> if there are a lot of tasks in the system that need to be frozen,
-> the read_lock(tasklist_lock)  has not been released for a short time,
-> when clone task,  we will acquire write_lock(tasklist_lock) and insert task to list, if  Ifcan't get the write lock all the time.  the hung task
-> may be trigger and report warning.
-> 
-> for example:
-> 
-> copy_process()
-> {........
-> write_lock_irq(&tasklist_lock);
-> ........
-> list_add_tail_rcu(&p->tasks, &init_task.tasks);
-> }
-> 
-> >
-> >What exactly is there to ensure that the updates of the list will
-> >remain safe after this change?
-> 
-> The RCU  can guarantee that the list can be traversed and added at the same time,  and in the read critical area, it is guaranteed that the task structure will not be released.
-> 
-> In  ./Documentation/RCU/listRCU.rst , it is also explained.
-> 
->  Maybe we can ask  Paul E,  Paul E what's your opinion ?
+On Sat, Jun 5, 2021 at 8:30 AM Baokun Li <libaokun1@huawei.com> wrote:
+>
+> Add description for `state_show` to fix the W=1 warnings:
+>
+> kernel/power/main.c:593: warning:
+>  Function parameter or member 'kobj' not described in 'state_show'
+> kernel/power/main.c:593: warning:
+>  Function parameter or member 'attr' not described in 'state_show'
+> kernel/power/main.c:593: warning:
+>  Function parameter or member 'buf' not described in 'state_show'
+>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  kernel/power/main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 12c7e1bb442f..d508c8c582e0 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -579,7 +579,9 @@ struct kobject *power_kobj;
+>
+>  /**
+>   * state - control system sleep states.
+> - *
+> + * @kobj: Pointer to the kernel object.
+> + * @attr: Pointer to the kernel object attribute.
+> + * @buf: buffer.
 
-Although RCU does guarantee that the task structures are not freed while
-an RCU reader references them, that is only one of the questions that
-must be answered.
+Please fix this properly or don't touch it.
 
-Changing from read_lock(&tasklist_lock) to rcu_read_lock() also allows
-all of the code currently under write_lock(&tasklist_lock) to execute
-concurrently with these newly created RCU readers.  Is that safe?
-If it is safe, why?
+This is not a kerneldoc comment of a function and so adding argument
+descriptions to it is pointless.
 
-For example, the first pair of hunks in the diff -might- be safe because
-"todo" is updated while read-holding tasklist_lock, and then that value
-is used after releasing that lock.  But I do not know this code well,
-and it is quite possible that something else is going on.
-
-						Thanx, Paul
-
-> Thanks
-> Qiang
-> 
-> > ---
-> >  kernel/power/process.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/kernel/power/process.c b/kernel/power/process.c
-> > index 50cc63534486..0f8dee9ee097 100644
-> > --- a/kernel/power/process.c
-> > +++ b/kernel/power/process.c
-> > @@ -48,7 +48,7 @@ static int try_to_freeze_tasks(bool user_only)
-> >
-> >         while (true) {
-> >                 todo = 0;
-> > -               read_lock(&tasklist_lock);
-> > +               rcu_read_lock();
-> >                 for_each_process_thread(g, p) {
-> >                         if (p == current || !freeze_task(p))
-> >                                 continue;
-> > @@ -56,7 +56,7 @@ static int try_to_freeze_tasks(bool user_only)
-> >                         if (!freezer_should_skip(p))
-> >                                 todo++;
-> >                 }
-> > -               read_unlock(&tasklist_lock);
-> > +               rcu_read_unlock();
-> >
-> >                 if (!user_only) {
-> >                         wq_busy = freeze_workqueues_busy();
-> > @@ -97,13 +97,13 @@ static int try_to_freeze_tasks(bool user_only)
-> >                         show_workqueue_state();
-> >
-> >                 if (!wakeup || pm_debug_messages_on) {
-> > -                       read_lock(&tasklist_lock);
-> > +                       rcu_read_lock();
-> >                         for_each_process_thread(g, p) {
-> >                                 if (p != current && !freezer_should_skip(p)
-> >                                     && freezing(p) && !frozen(p))
-> >                                         sched_show_task(p);
-> >                         }
-> > -                       read_unlock(&tasklist_lock);
-> > +                       rcu_read_unlock();
-> >                 }
-> >         } else {
-> >                 pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
-> > @@ -206,13 +206,13 @@ void thaw_processes(void)
-> >
-> >         cpuset_wait_for_hotplug();
-> >
-> > -       read_lock(&tasklist_lock);
-> > +       rcu_read_lock();
-> >         for_each_process_thread(g, p) {
-> >                 /* No other threads should have PF_SUSPEND_TASK set */
-> >                 WARN_ON((p != curr) && (p->flags & PF_SUSPEND_TASK));
-> >                 __thaw_task(p);
-> >         }
-> > -       read_unlock(&tasklist_lock);
-> > +       rcu_read_unlock();
-> >
-> >         WARN_ON(!(curr->flags & PF_SUSPEND_TASK));
-> >         curr->flags &= ~PF_SUSPEND_TASK;
-> > @@ -233,12 +233,12 @@ void thaw_kernel_threads(void)
-> >
-> >         thaw_workqueues();
-> >
-> > -       read_lock(&tasklist_lock);
-> > +       rcu_read_lock();
-> >         for_each_process_thread(g, p) {
-> >                 if (p->flags & PF_KTHREAD)
-> >                         __thaw_task(p);
-> >         }
-> > -       read_unlock(&tasklist_lock);
-> > +       rcu_read_unlock();
-> >
-> >         schedule();
-> >         pr_cont("done.\n");
-> > --
-> > 2.17.1
-> >
+>   * show() returns available sleep state labels, which may be "mem", "standby",
+>   * "freeze" and "disk" (hibernation).
+>   * See Documentation/admin-guide/pm/sleep-states.rst for a description of
+> --
+> 2.31.1
+>
