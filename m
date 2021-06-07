@@ -2,94 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0522D39D5F8
+	by mail.lfdr.de (Postfix) with ESMTP id BCF9C39D5FA
 	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 09:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbhFGH2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 03:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S230097AbhFGH2p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 03:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhFGH2Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 03:28:24 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7B4C061766;
-        Mon,  7 Jun 2021 00:26:13 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id b9so23511337ybg.10;
-        Mon, 07 Jun 2021 00:26:13 -0700 (PDT)
+        with ESMTP id S229923AbhFGH2n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 03:28:43 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B115C061766
+        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 00:26:40 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id ei4so9251011pjb.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 00:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FtnNJSzY+wqJlsXGkdIUlXSH9MwewKVdh4spUDitCmk=;
-        b=aEusFMGJcNWdM07Zh75rwjOJL6wkhZ7RwpJX/eB1p1u5ErRdWG3VlaDoO/B4vf0Fjj
-         ff3r3hmDiintB1aF025M9rc8WkyxykeOqR1az+RPjQN2sMapnNJzJLagbBBPjYfPJ6Na
-         fiNtFwqD/29Ts9MaiwsImL9EDzlvBF7cmrz5XHyNHuA6mRyOTRKA1P5iknCT1i05dl83
-         ryWQHcW1dJ07pj0dU6oYksQtPbS5d7XTz9z3O2kr8rq/6hMhDyd34/0R9Q9OhmE/sI3r
-         32qE5F/B1KDoSuvZEAyjXOkdR2XODDXkNCEX2aZaMynPAZ3HLVEd432OTdRH/TYLdom2
-         uNtA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UH4ITteZ0Gxnyn4y+x9sWM2vqjBorgoraSHazduYHes=;
+        b=Vi/O2uI3D/XIoi5FEulXYwE/WTB9L4hz/zxp5mTrNXmZKWthsYzk5+EggOkpfIwUkb
+         LvT5G/82KCA32xeDgvcYcF5gYVt3mkGsrKZIHuh62jfWHLKAXl4bNCeA2evK97k2Ksh1
+         AZiicUW4KjpxhA43L8fvpKdHQELjJA/HX2nchQU43pDuNU2oB5Mhc/FbxXgvLm9tpkHh
+         3eR9T5EXf5MXaJSCREAMSmg7BZPIy3k1XgqG8onvgWz1gi3kw2b8dSmt5L5cnREIdH/W
+         RPWgHqoxy8jjho9di0z7p/fSqemE/zRn8D5Amjg/De6BgRQxZlIg7YFC86FtuI+FJ9q9
+         kJLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FtnNJSzY+wqJlsXGkdIUlXSH9MwewKVdh4spUDitCmk=;
-        b=TTtk/4Qh3LLWUaMMIEFVhzZsqaU+J3Hj9wiE335b/9fD2PD+FUkwQMJ4fR4f+pV8+u
-         KGdddh00HXHdeHyJUv5I+nOiKcd9bKIe2euOo1rJd3OZJvMB8Ab+hR7gdftQznR3SLEY
-         m34UN0fJ5ts30UR8XQruq9jeTxArpNrItUv3i4KN/RI9WJGdmYhAUh1c9DZXmexpgpvy
-         /hECwmzKssdyZUTWy6VOrqHsZVC3OJPduDJN1dwFaGBrTKrFzP+OGDGvoDD5eOLFVw1P
-         q6gr3LyJx9dE8lmvGWsJKBz5ScFZu5lWumhmR1Z07QBcG8wIxEnS1dMMXwbuXkKJPvhK
-         vxHA==
-X-Gm-Message-State: AOAM532P6Z89QbNi9pX3j6WbHYIZCBlaRXE30UB40MhWJDCLE1f8BywK
-        IB1CQssTGHywF8n8vqgmA5JLMQxTqp8Bi7lS0BmT/KfOcxg=
-X-Google-Smtp-Source: ABdhPJzacQKwVdIH8Y73h3Tb6mT0mXkPI9AA7BsfstY8LWHKA0asYRQVLTb2yQwhcPiAZxPfC1lhtCCH11N0RQ5GOXk=
-X-Received: by 2002:a25:8093:: with SMTP id n19mr22738419ybk.414.1623050769285;
- Mon, 07 Jun 2021 00:26:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210521221906.199436-1-kyle.meyer@hpe.com> <CAJZ5v0iJUhUyucYEDHXKqXrsy6=3dGUz0uy1pDpx+kKOi_NB2w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iJUhUyucYEDHXKqXrsy6=3dGUz0uy1pDpx+kKOi_NB2w@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UH4ITteZ0Gxnyn4y+x9sWM2vqjBorgoraSHazduYHes=;
+        b=EWp3t/B4dLDwLL144rdtXNqgaEmTVHBy6WWWjIACqHn8i4DKPbKvf8dJL7855T1HFm
+         wssgzkhfFpG92wPUl9ahl3lI71Iu4Bty5oYzRBPqI4TtrPG6oZQRqj27Cadz5xUK2zd7
+         vahVeSCjGbPbaIKh5ZGVriXZw0kCZ/dWlNqcUOO+6cYWbXoUM9S5GHkHSBaE9eCWhh6e
+         JQa40XabtveY/pwVdw3uVXhLm3ux0S5CIbzSY5yOh0FdGcrHdZ1nurbixFcRQ1MP3Ief
+         2iMXgrsbVHdsNIvPxVrornuhN8c16iShqdL1uHrbjaWj9Om7NYT3yJWtUhmoma4fX7F3
+         5yzg==
+X-Gm-Message-State: AOAM531WTxE+jQtJMJ6hlLbWyVDA6INGfhps+xFbTjz/uGRchY1SW5Q3
+        /J/7/HBFmSxHxjIpGbqULQNTuA==
+X-Google-Smtp-Source: ABdhPJzTMrIyipw4qtNzpiN3xMLwN8qa1zPVA0HvJmlnl+IqGFBhPPAzSA1q7Fgs3WmypBcMsKzgOA==
+X-Received: by 2002:a17:902:b482:b029:10f:39f1:67de with SMTP id y2-20020a170902b482b029010f39f167demr15552688plr.19.1623050799941;
+        Mon, 07 Jun 2021 00:26:39 -0700 (PDT)
+Received: from localhost ([136.185.169.128])
+        by smtp.gmail.com with ESMTPSA id k25sm7396690pfk.33.2021.06.07.00.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 00:26:39 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 12:56:37 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Mon, 7 Jun 2021 12:55:58 +0530
-Message-ID: <CAOh2x==tXk2Lt_f14_azHNYG2mZzMb9-1b2YUVj=+i=-JLemdg@mail.gmail.com>
-Subject: Re: [PATCH] acpi-cpufreq: Skip initialization if a cpufreq driver exists
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     Kyle Meyer <kyle.meyer@hpe.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-acpi@vegr.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     kyle.meyer@hpe.com, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH] acpi-cpufreq: Skip cleanup if initialization didn't occur
+Message-ID: <20210607072637.b5mwcalab7y2vikx@vireshk-i7>
+References: <20210604170500.46875-1-kyle.meyer@hpe.com>
+ <20210607032550.qdnl2sxnny42rtwa@vireshk-i7>
+ <s5h35tuf8qd.wl-tiwai@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5h35tuf8qd.wl-tiwai@suse.de>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On 07-06-21, 09:13, Takashi Iwai wrote:
+> The missing key information is that it's a fix for the recent change
+> for 5.14, i.e. 
+> Fixes: c1d6d2fd2f64 ("cpufreq: acpi-cpufreq: Skip initialization if cpufreq driver is present")
+> 
+> The change made the module left even if it exits before registering
+> the cpufreq driver object.
 
-On Mon, May 24, 2021 at 7:47 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Sat, May 22, 2021 at 12:19 AM Kyle Meyer <kyle.meyer@hpe.com> wrote:
+The original patch looks buggy to me, I was never able to review it :(
 
-> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> > index 7e7450453714..e79a945369d1 100644
-> > --- a/drivers/cpufreq/acpi-cpufreq.c
-> > +++ b/drivers/cpufreq/acpi-cpufreq.c
-> > @@ -1003,7 +1003,7 @@ static int __init acpi_cpufreq_init(void)
-> >
-> >         /* don't keep reloading if cpufreq_driver exists */
-> >         if (cpufreq_get_current_driver())
-> > -               return -EEXIST;
-> > +               return 0;
-> >
-> >         pr_debug("%s\n", __func__);
-> >
-> > --
->
-> Applied as 5.14 material with some edits in the subject and changelog, thanks!
+I have replied on the original thread instead.
 
-I am not sure how this is supposed to work. If we return 0 from
-acpi_cpufreq_init(),
-then the driver will never be used, since it's acpi_cpufreq_init()
-will never get
-called again later.
-
-cpufreq drivers don't follow the generic device/driver model where a driver gets
-probed again if a device appears and so this is broken.
-
-Please revert this patch.
+-- 
+viresh
