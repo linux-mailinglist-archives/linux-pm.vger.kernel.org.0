@@ -2,71 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC2339D840
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 11:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42F839D967
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 12:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhFGJHg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Jun 2021 05:07:36 -0400
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:40739 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhFGJHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 05:07:36 -0400
-Received: by mail-ua1-f48.google.com with SMTP id e12so6623728ual.7;
-        Mon, 07 Jun 2021 02:05:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ree0VoIKO+hfXYOXZMiZs8kc6gzeIIbI23nwOl/Ctlw=;
-        b=OwLpYpB20VEKdcK+3A7QTSkFm4OeSDhXNUQ8UKEUiRTFnDzLmkX2fGYPP67Yj7FGNw
-         NjwXCQHZTGi74HRZ7yTzGAseBUW4EuCI2xSPO+onptw/kwe+E+WLuhXKru4SRsOP86vg
-         C1KKy6nlyjqhY3UC2VTs2DPvGReW+isv0ujZ3pbs4sNm7Umrbh5X/2ZGOCMhNfcJ679L
-         cHZDtyWHM2phmlTQafF6tWtrnNu0Cu7bCylfpEAHKXNMWazQDajWKhGOGRD2GJmrUoau
-         ZwnKxpWSW7JCOc3witjJIP4xMJPs3xw4wzJ55bbHgNQ+4SPXx7USqy24jP86irhylB0Y
-         MiVQ==
-X-Gm-Message-State: AOAM531BnIfrghcBQBgbPY+qiHLITXjalLBcAEgdT986L6UM9fpwP3ae
-        7FkbNKsZdmZe6cnCs2gya7ACsHcVGSDRmQoDVdGQMfSwUQs=
-X-Google-Smtp-Source: ABdhPJxlFlvt6daPf9//UgmsAUZAtfipIdo56Po1nepptsF4Fr0WlNU+kCAcwlJ4F2qADZu5ObrDYhOGKGG2a/P3VNM=
-X-Received: by 2002:ab0:2a4e:: with SMTP id p14mr755064uar.2.1623056729044;
- Mon, 07 Jun 2021 02:05:29 -0700 (PDT)
+        id S230127AbhFGKQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 06:16:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:57194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230178AbhFGKQu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Jun 2021 06:16:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A8AC1063;
+        Mon,  7 Jun 2021 03:14:59 -0700 (PDT)
+Received: from [192.168.43.77] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 668363F73D;
+        Mon,  7 Jun 2021 03:14:56 -0700 (PDT)
+Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
+ frequencies
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        peterz@infradead.org, rjw@rjwysocki.net,
+        vincent.guittot@linaro.org, qperret@google.com,
+        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        dietmar.eggemann@arm.com
+References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
+ <1622804761-126737-4-git-send-email-vincent.donnefort@arm.com>
+ <20210607050208.3annn3dtmfrfxpzo@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <db121d81-8397-cbdd-77dc-b70c27230dbc@arm.com>
+Date:   Mon, 7 Jun 2021 11:14:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20210605085211.564909-1-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20210605085211.564909-1-niklas.soderlund+renesas@ragnatech.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Jun 2021 11:05:17 +0200
-Message-ID: <CAMuHMdW_PPst6VzXmzyHW5R7PzEX1zVqFzs80MV8564Wd+rQjQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Fix coefficient calculations
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210607050208.3annn3dtmfrfxpzo@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 5, 2021 at 10:53 AM Niklas Söderlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> The fixed value of 157 used in the calculations are only correct for
-> M3-W, on other Gen3 SoC it should be 167. The constant can be derived
-> correctly from the static TJ_3 constant and the SoC specific TJ_1 value.
-> Update the calculation be correct on all Gen3 SoCs.
->
-> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Gr{oetje,eeting}s,
+On 6/7/21 6:02 AM, Viresh Kumar wrote:
+> On 04-06-21, 12:05, Vincent Donnefort wrote:
+>> Some SoCs such as the sd855 have OPPs within the same policy whose cost is
+>> higher than others with a higher frequency. Those OPPs are inefficients and
+>> it might be interesting for a governor to not use them.
+>>
+>> Adding a flag, CPUFREQ_INEFFICIENT_FREQ, to mark such OPPs into the
+>> frequency table, as well as a new cpufreq_frequency_table member
+>> "efficient". This new member will allow a governor to quickly resolve an
+>> inefficient frequency to an efficient one.
+>>
+>> Efficient OPPs point to themselves. Governors must also ensure that the
+>> efficiency resolution does not break the policy maximum.
+>>
+>> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> 
+> I was thinking about a different approach when I suggested it.
+> 
+> - The cpufreq table instead of an index, will have "efficient" as bool.
+> 
+> - EM will set an OPP as efficient or inefficient, based on the OPP
+>    table, there will be a flag for this in the OPP table.
+> 
+> - The cpufreq table is then created from OPP table and this
+>    information is automatically retrieved.
+> 
 
-                        Geert
+There are some issues with your proposed approach:
+The EM doesn't depend on OPP framework (even no header from opp.h)
+and we don't want to add this dependency in EM.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+The Vincent's proposed implementation doesn't introduce this
+dependency.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Lukasz
