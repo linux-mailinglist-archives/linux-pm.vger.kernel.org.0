@@ -2,89 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B8839DEF8
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 16:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3E439DEFC
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jun 2021 16:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhFGOn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Jun 2021 10:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbhFGOnZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 10:43:25 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D13EC061766
-        for <linux-pm@vger.kernel.org>; Mon,  7 Jun 2021 07:41:34 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2826:1cc7:8a57:d8e9])
-        by michel.telenet-ops.be with bizsmtp
-        id EEhP250012r2Z3l06EhPyK; Mon, 07 Jun 2021 16:41:23 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id S230226AbhFGOog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Jun 2021 10:44:36 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52873 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230193AbhFGOof (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Jun 2021 10:44:35 -0400
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lqGRO-00E2qq-I5; Mon, 07 Jun 2021 16:41:22 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lqGRN-006xAR-RH; Mon, 07 Jun 2021 16:41:21 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] thermal: rcar_gen3_thermal: Do not shadow rcar_gen3_ths_tj_1
-Date:   Mon,  7 Jun 2021 16:41:20 +0200
-Message-Id: <9ea7e65d0331daba96f9a7925cb3d12d2170efb1.1623076804.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lqGSh-0000pK-8g
+        for linux-pm@vger.kernel.org; Mon, 07 Jun 2021 14:42:43 +0000
+Received: by mail-wr1-f69.google.com with SMTP id n2-20020adfb7420000b029010e47b59f31so7873185wre.9
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jun 2021 07:42:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LZouowOMeDZ6EndWSO8l3IpGbZlNHlcW3YYdxdPf/aY=;
+        b=tgxoIgXBPiFW25PyJ3wDIBW73a70ZsOANCwXonVq6C2b72qoy0HW3HfWnyuiUB5AnL
+         4OVmNXPIAJfBFU+0EHO5IQupJmwKMIKQlcVzHGQ+qnauakeyipw49w2lOsFueFTwD44q
+         bdzbOAg5ysIKD5qQ/CEVQtXHC1z1JKLPaxVjFyECbi8JIFQz542R7crLcMvN5VzLLlTs
+         oZRfXl4zM+ekrbopElTcZJi1PTjMoXYNDZnZYsMiJlaUQDb+vJBeo6NbeHv1aMCsodsB
+         Qp1FfpZQD1ypwyg6CXKK3EIeRgIO4HAwalgPo87SYeeDiV61stwdAp3OJmRWhgG2yOym
+         qTUg==
+X-Gm-Message-State: AOAM533tbylwCKtsQYZAIAlJQpK1X586fPhuAoastEcBUNjTw9baDbs5
+        QOObeye8j9pqrmtXc3SKEURIijA8yTeZOn0V9cDBYxDttllwv0xe9ApA7kIsqjMi/w4WXLX6Ypg
+        UPht+m7PW5mAvfgr6KDNHVMuKLmrdXReouPwY
+X-Received: by 2002:a05:6000:18ad:: with SMTP id b13mr17120994wri.134.1623076962916;
+        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCR/qOJ2HOoz8Yaxcz1xb5SQF3ouTzcrIeE2rRHBxNtJtXVZtVdkLJ/2+fUMEntjBQHi/CIw==
+X-Received: by 2002:a05:6000:18ad:: with SMTP id b13mr17120979wri.134.1623076962784;
+        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-185-9.adslplus.ch. [188.155.185.9])
+        by smtp.gmail.com with ESMTPSA id l9sm14332397wme.21.2021.06.07.07.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Jun 2021 07:42:42 -0700 (PDT)
+Subject: Re: [PATCH v6 08/14] memory: tegra: Enable compile testing for all
+ drivers
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk@vger.kernel.org
+References: <20210601023119.22044-1-digetx@gmail.com>
+ <20210601023119.22044-9-digetx@gmail.com>
+ <41899ef4-bb16-6c3a-035c-1e840a993bec@canonical.com>
+ <YL4gwxWopKT7LomG@orome.fritz.box>
+ <a1f20257-f041-966e-c37e-5c81c4cf94d9@gmail.com>
+ <YL4rBYkWHpeit66m@orome.fritz.box>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
+Date:   Mon, 7 Jun 2021 16:42:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YL4rBYkWHpeit66m@orome.fritz.box>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With -Wshadow:
+On 07/06/2021 16:19, Thierry Reding wrote:
+> On Mon, Jun 07, 2021 at 05:01:02PM +0300, Dmitry Osipenko wrote:
+>> 07.06.2021 16:36, Thierry Reding пишет:
+>>>> /bin/ld: warning: orphan section `__reservedmem_of_table' from `drivers/memory/tegra/tegra210-emc-table.o' being placed in section `__reservedmem_of_table'
+>>>> /bin/ld: drivers/memory/tegra/mc.o: in function `tegra_mc_probe':
+>>>> mc.c:(.text+0x87a): undefined reference to `reset_controller_register'
+>>>> make[1]: *** [/home/buildbot/worker/builddir/build/Makefile:1191: vmlinux] Error 1
+>> ...
+>>
+>>> Not sure what to do about that orphaned __reservedmem_of_table section.
+>>> Maybe all we need to do is to select OF_RESERVED_MEM from
+>>> TEGRA210_EMC_TABLE?
+>>
+>> Select won't work easily, but the dependency for TEGRA210_EMC should.
+> 
+> Select works if I also select OF_EARLY_FLATTREE. That's slightly odd
+> because typically that's something that the platform would select, but
+> there's precedent for doing this in drivers/clk/x86/Kconfig, so I think
+> it'd be fine.
+> 
+> The attached patch resolves both of the above issues for me.
+> 
+> Krzysztof: do you want to squash that into the problematic patch or do
+> you want me to send this as a follow-up patch for you to apply? I guess
+> the latter since you've already sent out the PR for Will and ARM SoC?
 
-    drivers/thermal/rcar_gen3_thermal.c: In function ‘rcar_gen3_thermal_probe’:
-    drivers/thermal/rcar_gen3_thermal.c:310:13: warning: declaration of ‘rcar_gen3_ths_tj_1’ shadows a global declaration [-Wshadow]
-      310 |  const int *rcar_gen3_ths_tj_1 = of_device_get_match_data(dev);
-	  |             ^~~~~~~~~~~~~~~~~~
-    drivers/thermal/rcar_gen3_thermal.c:246:18: note: shadowed declaration is here
-      246 | static const int rcar_gen3_ths_tj_1 = 126;
-	  |                  ^~~~~~~~~~~~~~~~~~
+Follow up, please, but I am not sure about selecting reset controller.
+From the tegra/mc.c code I see it can be optional - if "reset_ops" is
+provided. Therefore I think:
+1. Reset controller should provide proper stubs. This will fix building
+of mc.c when reset controller is not chosen (regardless of point #2 below).
 
-To add to the confusion, the local variable has a different type.
+2. Specific drivers should depend on it. Selecting user-visible symbols
+is rather discourage because might lead to circular dependencies.
 
-Fix the shadowing by renaming the local variable to ths_tj_1.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/thermal/rcar_gen3_thermal.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index e1e412348076b2ff..42c079ba0d51e4b3 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -307,7 +307,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- {
- 	struct rcar_gen3_thermal_priv *priv;
- 	struct device *dev = &pdev->dev;
--	const int *rcar_gen3_ths_tj_1 = of_device_get_match_data(dev);
-+	const int *ths_tj_1 = of_device_get_match_data(dev);
- 	struct resource *res;
- 	struct thermal_zone_device *zone;
- 	int ret, i;
-@@ -352,8 +352,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		priv->tscs[i] = tsc;
- 
- 		priv->thermal_init(tsc);
--		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i],
--					     *rcar_gen3_ths_tj_1);
-+		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i], *ths_tj_1);
- 
- 		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
- 							    &rcar_gen3_tz_of_ops);
--- 
-2.25.1
-
+Best regards,
+Krzysztof
