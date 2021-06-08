@@ -2,94 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D0039FB7D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 18:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E8B39FEC3
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 20:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbhFHQCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 12:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S233682AbhFHSR0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 14:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233318AbhFHQB4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 12:01:56 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Jun 2021 09:00:03 PDT
-Received: from mxwww.masterlogin.de (mxwww.masterlogin.de [IPv6:2a03:2900:1:1::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4EEC061574;
-        Tue,  8 Jun 2021 09:00:03 -0700 (PDT)
-Received: from mxout4.routing.net (unknown [192.168.10.112])
-        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id 37DED2C52D;
-        Tue,  8 Jun 2021 15:45:55 +0000 (UTC)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout4.routing.net (Postfix) with ESMTP id 619DA10081F;
-        Tue,  8 Jun 2021 15:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1623167148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=98Qit1hMtPHZc/TS5dL5TLvDSnXeL0iSq1KTlz2Fj4Y=;
-        b=Iuhw/LqB8uiWEGDmraAJxW1QmzpUpi9yQ86fUmAiLQUYrSGgN4y3cP6HCt6VbhsVuZriB4
-        JmcWW72XI53HVnl+QAB2sqy9KFdUuPMx5Whv0Mu+fyuAq3mVQQPjx+oKgHgcYmnQF6r7Dd
-        fuq4cYG7k3Z18G1o0qLI1U7pTEGpmEo=
-Received: from localhost.localdomain (fttx-pool-217.61.145.142.bambit.de [217.61.145.142])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id AA073804E7;
-        Tue,  8 Jun 2021 15:45:47 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] thermal: mediatek: add sensors-support
-Date:   Tue,  8 Jun 2021 17:45:30 +0200
-Message-Id: <20210608154530.70074-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230100AbhFHSRZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 14:17:25 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09B1C061574
+        for <linux-pm@vger.kernel.org>; Tue,  8 Jun 2021 11:15:30 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id m7so3415042pfa.10
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 11:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=u+K7LdbdThKCg+E48LtoqwJG5Is1Qqw3DLz00Vk8hqA=;
+        b=DruLSHwTmAhqQUJ/1HicOUhRBkFHf96ajZd2zY94K16nlMefTuDHVhjxNnB7wIzPIR
+         wLe3xGFLgKaGjhfrENOynIoDUYuoj9uJREqi5blYc4HN6qBhlq0et4T3dKdTmMgFzIUp
+         AJHMOV4LwoWex38UL1m3hLW908S/mkhb5grDOzkvAi3GgoSPWQVkYcku4xZUtLz2oU++
+         3OQ7ASeKfGUF418jAa6pqgVtcYbo/alX0sEGzUfXxaSWIC20beOF27wQ7nxzCDbcVOGx
+         KnslOqVJIWhQ73wyIm66J3laJkWbH4oiNo+Darl9jrcAvpd1+t+Si1X9/RBOPybSz4Bl
+         Pekg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=u+K7LdbdThKCg+E48LtoqwJG5Is1Qqw3DLz00Vk8hqA=;
+        b=a7EsUW2q2m+Jo4W8SHqKW2xYDv4/KZ3PPeKYq0LuuAR6XqRGSGbKLhjnmgTQ7lC5GF
+         elw9bz+NvEOeIVzwLcdnRwF5XrY5zFzedoCaqB9vmb3grLFlPEgdsBKAv7+3uehIqhQm
+         nqN8z1LqZgvSc9HXAczj6lp4oohAy3/Zp7aekM9crbIMjdRB+5Wa+bF0bL3lTjsoq4of
+         fi5wvLhTQ5/pAT0fo+rdexTJishebT9icTfq1sEuX/DjtMav1DKRMfQi9Bl7d/DC5Q77
+         qfqLguJFMzRV6sVSbS9oBTwrRNi1q2k3UZMWJFmOhLNU2OHehOXbMMgaEV+UwiuDpnby
+         TISw==
+X-Gm-Message-State: AOAM530DDU5ioSdDhrf1GtdPmzQi0DmlNhvGb5dQRiegsEKw00boZUzE
+        EWxXTuOtsrwLKGp88XU3mmnbcQ==
+X-Google-Smtp-Source: ABdhPJzJ5OS/2UT/iWQsZEytwqHnrYYajtNWhHRXV0qQjLsKSOVsdffzXISmnnRmAdgFTgSBu0fOpw==
+X-Received: by 2002:aa7:952b:0:b029:2e9:eef1:8e17 with SMTP id c11-20020aa7952b0000b02902e9eef18e17mr1146493pfp.70.1623176130535;
+        Tue, 08 Jun 2021 11:15:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e17sm11278406pfi.131.2021.06.08.11.15.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 11:15:30 -0700 (PDT)
+Message-ID: <60bfb3c2.1c69fb81.97200.2aae@mx.google.com>
+Date:   Tue, 08 Jun 2021 11:15:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 8400b1d9-070e-406d-af5d-86a2ada1c8ff
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.13-rc5-93-g5a32725a7531
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc5-93-g5a32725a7531)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc5-93-g5a32725a7531)
 
-add HWMON-support to mediateks thermal driver to allow lm-sensors
-userspace tools read soc temperature
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc5-93-g5a32725a7531/
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc5-93-g5a32725a7531
+Git Commit: 5a32725a7531b9d4ecec3acb3d13458f10b71690
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
-v4: change message to dev_warn as suggested by matthias
-v3: drop no_hwmon
-v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
----
- drivers/thermal/mtk_thermal.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 97e8678ccf0e..ede94eadddda 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -23,6 +23,8 @@
- #include <linux/reset.h>
- #include <linux/types.h>
- 
-+#include "thermal_hwmon.h"
-+
- /* AUXADC Registers */
- #define AUXADC_CON1_SET_V	0x008
- #define AUXADC_CON1_CLR_V	0x00c
-@@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_peri_therm;
- 	}
- 
-+	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-+	if (ret)
-+		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
-+
- 	return 0;
- 
- err_disable_clk_peri_therm:
--- 
-2.25.1
-
+For more info write to <info@kernelci.org>
