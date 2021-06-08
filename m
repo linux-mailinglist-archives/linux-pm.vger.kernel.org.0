@@ -2,130 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 667DE3A01F3
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 21:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E003A050C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 22:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236051AbhFHS6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 14:58:18 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:35675 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbhFHS4P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 14:56:15 -0400
-Received: by mail-lf1-f46.google.com with SMTP id i10so33749939lfj.2
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 11:54:20 -0700 (PDT)
+        id S235152AbhFHUT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 16:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235060AbhFHUTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 16:19:22 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0291FC061574
+        for <linux-pm@vger.kernel.org>; Tue,  8 Jun 2021 13:17:27 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so7878624otl.0
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 13:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XH/3SBzhXEZinQRmZMjAfIGu0JUbJo2MQXLpr1qwFmk=;
-        b=CbTtmukjRPYewEoWFqp1sRz6oSiH0zZb4mGBHEa4nRRWAU8+EcBzOal+ROP5WBXR5x
-         JrRd3XFOeNYJdFs7j4wwrN51j3iRzmFxuYz5Y1baQLAEhXVcCPWQX8Rh+QNU1CfWheAo
-         jkbZ93/skrcSmMajQAsvfoqbVACDfCPcQk525e/YOT9S5Dm+wlyEKqB1/TCSh1y8id4u
-         tqTKYJOT5FYnUJfvbq+NQ0qgjjIg6x8rATA+9dLGjJRXbyDKWLEobCF7i6okmarHEaWV
-         Y9PRz9VRzMiZPhldY+dBeeogHR4wuISY4reP4T++0Az0qZX/04658c1wUFIQ6+8wys8k
-         O1Sg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=So38bth6mBWT6iiBoQOuRXazg1ugN3YaIyiAe68Qh/M=;
+        b=VuAfbKtmWgPabI31uDdBl82sfzFiBGAm7/ciGwvTc403GGwWNAu7XSAEQE7qzl7LqM
+         N03Wuy8VsfReMphaXsGXviECqa8CAs97t5wmQceiymT64kFWwbQktu76g1uXD+cNNe48
+         4y7dFklcmE96wx+sROdmiU22Ci8e42dUFLbe1ab5kX/+4q2S96thIisu6o3o+sHSYnTW
+         TWJdpK9zvoQfjsgmkM81C1LeYKJY5Nu4lxQIX6roMvh27WhmoLQQ2NQPgbtiCnw0qIfS
+         15IdAj+kGvDGFl8eUJoTeM6BaorRfm4rU832X9gPZCQPQzk61LjM5lWD0r3uJ+4b7us0
+         6hQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XH/3SBzhXEZinQRmZMjAfIGu0JUbJo2MQXLpr1qwFmk=;
-        b=JGvYfMBoox04InOOS/mA4OLNe6zO4sBhDUZIubBIjpF2jRbyOy5MqxVMgJZ3BQS3xt
-         wZIipUuSYTaBWweKOAv37jMOL+9VUNFqQNKbZHDrWDH2JGj3PujKUI7nvZIa3b6Smr1f
-         bo4YlA1+IfKbY2yyrjsnZ23Hi/HMWhSuELg97imFatCIJtlmWhVrjxDGCEcT+PU9kWn+
-         /Dr7zEEQ9xkKRm0e94YS+I6TFRUh6RBEeMfVsT+BepLvgd1OFifW7xwEkLusAIpSbjew
-         4H6PqpsPbp/4OKkLqR5CdMWPOgkZ9F4ZcoiEomaBG9TEt0clzOxpWYu6WE9xoYYP1/Jh
-         620w==
-X-Gm-Message-State: AOAM532A942H7cPgGTjaEwTWiE3zMlnyshL4S7/8zhEzXV0JxZCwTf1Q
-        SNUZVY69AeXMmQg8tluAHjMNhBoTQH+pXf0PRQNo8A==
-X-Google-Smtp-Source: ABdhPJwWbRzEQbfxYswo9wdvvhXIaN36rmEXPktIvShQZ1REoqLGro/C4yPvO7BE/TlBKdYNXLz9J+72h5tMkyhMTF8=
-X-Received: by 2002:ac2:5cd6:: with SMTP id f22mr17251433lfq.73.1623178399858;
- Tue, 08 Jun 2021 11:53:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <1623145562-111662-1-git-send-email-yang.lee@linux.alibaba.com>
- <CAKwvOdmyXV09ZxcDqQ6x43f+Eze4h40W2AoKcCmUhGM2gUWsnQ@mail.gmail.com> <6335deba-9e94-61e0-89a1-8905be0e35a1@kernel.org>
-In-Reply-To: <6335deba-9e94-61e0-89a1-8905be0e35a1@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 8 Jun 2021 11:53:09 -0700
-Message-ID: <CAKwvOdmOOvOBzZ+fNaOxMSDVonkTETmowtD5-4FTFGniNjbObQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: devfreq_cooling: Fix kernel-doc
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=So38bth6mBWT6iiBoQOuRXazg1ugN3YaIyiAe68Qh/M=;
+        b=fSlT0dQh9vI4ei4p1d5mO8CZcO6S7qCpNd6ANA0OOOWi8DGs8+vvXQc5DytYhn3JIQ
+         oN/HJnsB29tF/Y5m4+/ajq4GErQg35/6boEM4r470+vO18ZoZB4t0F9qmakq8qZ94d2Y
+         ie1B2ZhE67wW/S3r5gVrP7sximwtf3Ar3AopA14InB1UABn6vUTdGg0HLXNeNoXULmT4
+         rXbNIoF3YKw1qlPGEqUb0aBU2XgJ2FBsDH8l+skn4WP8jZk/dBjQD8jZqA6lsKE2ANYd
+         QoLTKRX/icvsm0k26B8o4sgq0QTsxHb3JLHlVFOOYkx09G8NQJZm/E8vuEzXLtUt7j6/
+         Bk9Q==
+X-Gm-Message-State: AOAM5326k233dN+cYflO+ok6xJ6SrJ+NWUUuAHjm3paX6hOx7RpPfnqW
+        5dRUcGQmgqUHSNIwSNZ9fHIX2g==
+X-Google-Smtp-Source: ABdhPJyZKF1RWsMB7ZjmDMdJI+FRLFEI6UQz8/ft8bojNZcuIrpkXRyQZtuoeYQ4ehCHpYpQBAK+fw==
+X-Received: by 2002:a05:6830:161a:: with SMTP id g26mr12529361otr.62.1623183446592;
+        Tue, 08 Jun 2021 13:17:26 -0700 (PDT)
+Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id i4sm3263231oth.38.2021.06.08.13.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 13:17:26 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
-        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: thermal: tsens: Add sc8180x compatible
+Date:   Tue,  8 Jun 2021 13:16:38 -0700
+Message-Id: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 8, 2021 at 11:49 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On 6/8/2021 11:39 AM, Nick Desaulniers wrote:
-> > On Tue, Jun 8, 2021 at 2:46 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
-> >>
-> >> Fix function name in devfreq_cooling.c kernel-doc comment
-> >> to remove a warning found by clang(make W=1 LLVM=1).
+The Qualcomm sc8180x platform has the usual tsens blocks, add compatible
+for this.
 
-Ah, good find. In that case I'd be happy to sign off on a V2 that
-replaced s/clang(make W=1 LLVM=1)/kernel-doc/.
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> >>
-> >> drivers/thermal/devfreq_cooling.c:479: warning: expecting prototype for
-> >> devfreq_cooling_em_register_power(). Prototype was for
-> >> devfreq_cooling_em_register() instead.
-> >>
-> >> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> >> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> >
-> > That compiler warning doesn't come from kernel-doc.  Your diff looks
-> > good (the comment was wrong), but the commit message is curious.
->
-> No, this is indeed kernel-doc complaining. Clang should not even be
-> mentioned in the commit message:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/kernel-doc?h=v5.13-rc5#n1228
->
-> The warning could probably be improved to say "definition" instead of
-> "prototype" in certain cases but *shrugs*.
->
-> This warning is similar to -Wmissing-prototypes from clang but refers to
-> the fact that the comment claims it is documenting one function but it
-> is really documenting another.
->
-> Cheers,
-> Nathan
->
-> > Usually that warning is from when the function prototype does not
-> > exist for a function with extern linkage.  It looks like that's always
-> > provided though in include/linux/devfreq_cooling.h.  Can you share a
-> > link to the original report?
-> >
-> >> ---
-> >>   drivers/thermal/devfreq_cooling.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> >> index 3a788ac..5a86cff 100644
-> >> --- a/drivers/thermal/devfreq_cooling.c
-> >> +++ b/drivers/thermal/devfreq_cooling.c
-> >> @@ -458,7 +458,7 @@ struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df)
-> >>   EXPORT_SYMBOL_GPL(devfreq_cooling_register);
-> >>
-> >>   /**
-> >> - * devfreq_cooling_em_register_power() - Register devfreq cooling device with
-> >> + * devfreq_cooling_em_register() - Register devfreq cooling device with
-> >>    *             power information and automatically register Energy Model (EM)
-> >>    * @df:                Pointer to devfreq device.
-> >>    * @dfc_power: Pointer to devfreq_cooling_power.
-> >> --
-> >> 1.8.3.1
-> >>
-> >
-> >
-
-
-
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 0242fd91b622..fdd7c361104f 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -46,6 +46,7 @@ properties:
+               - qcom,msm8996-tsens
+               - qcom,msm8998-tsens
+               - qcom,sc7180-tsens
++              - qcom,sc8180x-tsens
+               - qcom,sdm845-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
 -- 
-Thanks,
-~Nick Desaulniers
+2.29.2
+
