@@ -2,91 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E003A050C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 22:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8D53A06DA
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 00:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235152AbhFHUT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 16:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbhFHUTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 16:19:22 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0291FC061574
-        for <linux-pm@vger.kernel.org>; Tue,  8 Jun 2021 13:17:27 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so7878624otl.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 13:17:27 -0700 (PDT)
+        id S234643AbhFHWcg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 18:32:36 -0400
+Received: from mail-qt1-f179.google.com ([209.85.160.179]:46078 "EHLO
+        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234613AbhFHWcg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 18:32:36 -0400
+Received: by mail-qt1-f179.google.com with SMTP id l17so12395708qtq.12
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 15:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=So38bth6mBWT6iiBoQOuRXazg1ugN3YaIyiAe68Qh/M=;
-        b=VuAfbKtmWgPabI31uDdBl82sfzFiBGAm7/ciGwvTc403GGwWNAu7XSAEQE7qzl7LqM
-         N03Wuy8VsfReMphaXsGXviECqa8CAs97t5wmQceiymT64kFWwbQktu76g1uXD+cNNe48
-         4y7dFklcmE96wx+sROdmiU22Ci8e42dUFLbe1ab5kX/+4q2S96thIisu6o3o+sHSYnTW
-         TWJdpK9zvoQfjsgmkM81C1LeYKJY5Nu4lxQIX6roMvh27WhmoLQQ2NQPgbtiCnw0qIfS
-         15IdAj+kGvDGFl8eUJoTeM6BaorRfm4rU832X9gPZCQPQzk61LjM5lWD0r3uJ+4b7us0
-         6hQQ==
+        bh=tzGX9fCwBa/GCHza5uoWn4deXxt6OaL//ssg+qUDOEo=;
+        b=D7PNmOWjCmF8+3mFiGGTqNTIUWlfHeFkDtHsNekzwL+AYtd5b2C2igUsryUEAOK1uz
+         /JkNiwMvs0RT/HznC/08bGC4/0QWrjnzDZtaT1wceonkgDm25xnmPduKvzo9PMrqa1sA
+         tVt2H1hyEYltb+45GCQlcp7hWTOz3iunBd7RTBRUemLpLzsA4HmiNalUeBXkPtzZ4DsP
+         NQ43JWRhW1CPoLF79KpXhoYgKqevlKoBLYB1noUAyH16aeVs2QlLeL08Hcu/HIM8+q+W
+         ACtgWEfXJb97oOkVdO2SxfQTX8U1qBZ1/2XF6rzvUaohMLSXrD91LcALk8HgNnNPS4eD
+         Oz5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=So38bth6mBWT6iiBoQOuRXazg1ugN3YaIyiAe68Qh/M=;
-        b=fSlT0dQh9vI4ei4p1d5mO8CZcO6S7qCpNd6ANA0OOOWi8DGs8+vvXQc5DytYhn3JIQ
-         oN/HJnsB29tF/Y5m4+/ajq4GErQg35/6boEM4r470+vO18ZoZB4t0F9qmakq8qZ94d2Y
-         ie1B2ZhE67wW/S3r5gVrP7sximwtf3Ar3AopA14InB1UABn6vUTdGg0HLXNeNoXULmT4
-         rXbNIoF3YKw1qlPGEqUb0aBU2XgJ2FBsDH8l+skn4WP8jZk/dBjQD8jZqA6lsKE2ANYd
-         QoLTKRX/icvsm0k26B8o4sgq0QTsxHb3JLHlVFOOYkx09G8NQJZm/E8vuEzXLtUt7j6/
-         Bk9Q==
-X-Gm-Message-State: AOAM5326k233dN+cYflO+ok6xJ6SrJ+NWUUuAHjm3paX6hOx7RpPfnqW
-        5dRUcGQmgqUHSNIwSNZ9fHIX2g==
-X-Google-Smtp-Source: ABdhPJyZKF1RWsMB7ZjmDMdJI+FRLFEI6UQz8/ft8bojNZcuIrpkXRyQZtuoeYQ4ehCHpYpQBAK+fw==
-X-Received: by 2002:a05:6830:161a:: with SMTP id g26mr12529361otr.62.1623183446592;
-        Tue, 08 Jun 2021 13:17:26 -0700 (PDT)
-Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i4sm3263231oth.38.2021.06.08.13.17.25
+        bh=tzGX9fCwBa/GCHza5uoWn4deXxt6OaL//ssg+qUDOEo=;
+        b=XUai01PKXpOKAuIrStQcyjS7LnQuckHbBEtLfXi8/kKxrpJeaRrXG5oQuyx8WxMHXB
+         nIMW7khJjgV4AO56UPwvbio7/x+iaDAKyjFdg4HxkV9ACaokuQRUkRBK7NdCEqxO7S0C
+         rpnVEveT+OQ7QTfNbusn/wn211vY67z3qzs0488SJjCMkic4ai9r6JRsSS+oVJ0YPFEH
+         R5yJrN+xqsH25ch0xmDJBQtjp1YywIvbGdlaS8Mgp+hhKm0GZkPcfbDx59l+DB5l0lj/
+         fpysyK3nvKQzmAQkWQ8dhcewQ1XcqbAIKa7m/Swu4pPhR0CccNjaI0PthCrUJ4F9f7EW
+         mSrw==
+X-Gm-Message-State: AOAM532T8ai9Vk6D5imZ5Vk58TDlaj+L3rCsH7UVGL8kiDuDfyigJ62U
+        vYVKBm4itwFK06bq1+iZdEK4jQ==
+X-Google-Smtp-Source: ABdhPJxbwnFt1DfjxCZC3qMn+TbSldnacV1TMWu10I0frpYsRYfLipKNMEXkMuMjDsR8xulCl6pjxg==
+X-Received: by 2002:ac8:1286:: with SMTP id y6mr4073535qti.58.1623191367897;
+        Tue, 08 Jun 2021 15:29:27 -0700 (PDT)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id h19sm10450736qtq.5.2021.06.08.15.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 13:17:26 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: thermal: tsens: Add sc8180x compatible
-Date:   Tue,  8 Jun 2021 13:16:38 -0700
-Message-Id: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.29.2
+        Tue, 08 Jun 2021 15:29:27 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/5] Introduce LMh driver for Qualcomm SoCs
+Date:   Tue,  8 Jun 2021 18:29:21 -0400
+Message-Id: <20210608222926.2707768-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Qualcomm sc8180x platform has the usual tsens blocks, add compatible
-for this.
+Limits Management Hardware(LMh) is a hardware infrastructure on some
+Qualcomm SoCs that can enforce temperature and current limits as programmed
+by software for certain IPs like CPU. On many newer SoCs LMh is configured
+by firmware/TZ and no programming is needed from the kernel side. But on
+certain SoCs like sdm845 the firmware does not do a complete programming of
+the h/w block. On such SoCs kernel software has to explicitly set up the
+temperature limits and turn on various monitoring and enforcing algorithms
+on the hardware.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Introduce support for enabling and programming various limit settings and
+monitoring capabilities of Limits Management Hardware(LMh) associated with
+cpu clusters. Also introduce support in cpufreq hardware driver to monitor
+the interrupt associated with cpu frequency throttling so that this
+information can be conveyed to the schdeuler via thermal pressure
+interface.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 0242fd91b622..fdd7c361104f 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -46,6 +46,7 @@ properties:
-               - qcom,msm8996-tsens
-               - qcom,msm8998-tsens
-               - qcom,sc7180-tsens
-+              - qcom,sc8180x-tsens
-               - qcom,sdm845-tsens
-               - qcom,sm8150-tsens
-               - qcom,sm8250-tsens
+With this patch series following cpu performance improvement(30-70%) is
+observed on sdm845. The reasoning here is that without LMh being programmed
+properly from the kernel, the default settings were enabling thermal
+mitigation for CPUs at too low a temperature (around 70-75 degree C).  This
+in turn meant that many a time CPUs were never actually allowed to hit the
+maximum possible/required frequencies.
+
+UnixBench whets and dhry (./Run whets dhry)
+System Benchmarks Index Score
+
+		Without LMh Support		With LMh Support
+1 copy test	1353.7				1773.2
+
+8 copy tests	4473.6				7402.3
+
+Sysbench cpu 
+sysbench cpu --threads=8 --time=60 --cpu-max-prime=100000 run
+
+		Without LMh Support		With LMh Support
+Events per
+second			355				614
+
+Avg Latency(ms)		21.84				13.02
+
+Thara Gopinath (5):
+  firmware: qcom_scm: Introduce SCM calls to access LMh
+  thermal: qcom: Add support for LMh driver
+  cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
+  arm64: boot: dts: sdm45: Add support for LMh node
+  arm64: boot: dts: qcom: sdm845: Remove passive trip points for thermal
+    zones 0-7
+
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 246 +++------------------------
+ drivers/cpufreq/qcom-cpufreq-hw.c    | 100 +++++++++++
+ drivers/firmware/qcom_scm.c          |  47 +++++
+ drivers/firmware/qcom_scm.h          |   4 +
+ drivers/thermal/qcom/Kconfig         |  10 ++
+ drivers/thermal/qcom/Makefile        |   1 +
+ drivers/thermal/qcom/lmh.c           | 244 ++++++++++++++++++++++++++
+ include/linux/qcom_scm.h             |  13 ++
+ 8 files changed, 440 insertions(+), 225 deletions(-)
+ create mode 100644 drivers/thermal/qcom/lmh.c
+
 -- 
-2.29.2
+2.25.1
 
