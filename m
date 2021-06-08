@@ -2,110 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B6939F987
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 16:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB14C39FA33
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 17:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbhFHOu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 10:50:58 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:35263 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233505AbhFHOu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 10:50:58 -0400
-Received: (qmail 1806040 invoked by uid 1000); 8 Jun 2021 10:49:05 -0400
-Date:   Tue, 8 Jun 2021 10:49:05 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] PM: runtime: Clarify documentation when callbacks
- are unassigned
-Message-ID: <20210608144905.GE1804083@rowland.harvard.edu>
-References: <20210608090250.85256-1-ulf.hansson@linaro.org>
- <20210608090250.85256-4-ulf.hansson@linaro.org>
- <20210608142325.GC1804083@rowland.harvard.edu>
- <CAPDyKFrwP+w4grUEHQb6B4gTBMoDPx+nEt8hJEnkM3prZuYfPQ@mail.gmail.com>
+        id S230259AbhFHPVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 11:21:30 -0400
+Received: from mail-lf1-f48.google.com ([209.85.167.48]:33595 "EHLO
+        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229942AbhFHPV3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 11:21:29 -0400
+Received: by mail-lf1-f48.google.com with SMTP id t7so25567274lff.0;
+        Tue, 08 Jun 2021 08:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+ZQdXFWpJEUYm2HPd1TCaErdT12gtevimcDp8YdzDY4=;
+        b=DFEB8wDt/p44yutjfofgv6kWLwjFVGzDUweIAXNcva3bPS4NzmE3CrMUhi5gdBtN3j
+         M8+EORdTcFHID9lHno6kDtRRPjom9BEIFrwRbiyo8RDXD8xRIc4/hWfSssq4M9PY3B7K
+         B8FSh8mmeLeNzt2Su9FXOGsJYtimo9pR9J8d3Z4lqeKkgOe/B4LGIaVwjE8AXjevjrBU
+         08r9Gcb7ELphDeJsGUaS0l0Qw6/Y/tZLXMsvWnkG3sjJqxxradOvmyAdJQbKd4HFWVnS
+         16UHLPE1ww6IrNjcr3EfLfL0QRNeGDgxX3/6sU18Aoo/KYe3G3kyZNLXgDALk8fPYzn8
+         k58g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+ZQdXFWpJEUYm2HPd1TCaErdT12gtevimcDp8YdzDY4=;
+        b=X8UbsM5WaVfUq31w4EEnHYdajBTiGFiVSLyn0oYtAZMJEICputgUg/v0pEmRmXhXn2
+         DKzXyDEZnV/ONWMmTYfJOPHHu/p/tI8hYEG6QNfuE7WmNGOVn0kfTwqacGE/0IR8bO72
+         3SLoV5pswqqCIe04lnYY1F4XViSksf1bfrn6JhMW5x9oBGkJsldR+0ElYfl9Bps1BEHc
+         uravlSy8BhUV5K7Pjp4n6mAWPkloasqiVIwnuIUZ/rvOl25QfMd6MO0hOsZWSsZa71Bt
+         HduQ20nfKwP4cmj+ow3NWq+fjs4UJwSHoFP6++M68E9+395BWsPbh25jlngGwsyK9ywb
+         LHKQ==
+X-Gm-Message-State: AOAM530Y+A7q+stmjaTVS1tBeqwf3VleoGYHwRwQ9RPUOnfo4Hqy75O4
+        R9KhgE+zGD098z7EAmQW3Yg2Qu17HfY=
+X-Google-Smtp-Source: ABdhPJw43kpao7o3/u2SJFT6tQ9eJmDDDd6oDB9e5wQ933ARQOu4BWLkd7hkFiT6ABEfEQVidYDxqA==
+X-Received: by 2002:a05:6512:310d:: with SMTP id n13mr15804450lfb.165.1623165514306;
+        Tue, 08 Jun 2021 08:18:34 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-21-60.dynamic.spd-mgts.ru. [94.29.21.60])
+        by smtp.googlemail.com with ESMTPSA id h24sm2107455lfp.60.2021.06.08.08.18.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 08:18:33 -0700 (PDT)
+Subject: Re: [PATCH v6 08/14] memory: tegra: Enable compile testing for all
+ drivers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-clk@vger.kernel.org
+References: <20210601023119.22044-1-digetx@gmail.com>
+ <20210601023119.22044-9-digetx@gmail.com>
+ <41899ef4-bb16-6c3a-035c-1e840a993bec@canonical.com>
+ <YL4gwxWopKT7LomG@orome.fritz.box>
+ <a1f20257-f041-966e-c37e-5c81c4cf94d9@gmail.com>
+ <YL4rBYkWHpeit66m@orome.fritz.box>
+ <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7595e6f2-327e-b80c-5e64-ccdec4700ddf@gmail.com>
+Date:   Tue, 8 Jun 2021 18:18:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrwP+w4grUEHQb6B4gTBMoDPx+nEt8hJEnkM3prZuYfPQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 04:30:48PM +0200, Ulf Hansson wrote:
-> On Tue, 8 Jun 2021 at 16:23, Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Tue, Jun 08, 2021 at 11:02:50AM +0200, Ulf Hansson wrote:
-> > > Recent changes to the PM core allows ->runtime_suspend|resume callbacks to
-> > > be unassigned.
-> > >
-> > > In the earlier behaviour the PM core would return -ENOSYS, when trying to
-> > > runtime resume a device, for example. Let's update the documentation to
-> > > clarify this.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >       - Added a new patch for the updating the docs, as pointed out by Alan.
-> > >
-> > > ---
-> > >  Documentation/power/runtime_pm.rst | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-> > > index 18ae21bf7f92..3d09c9fd450d 100644
-> > > --- a/Documentation/power/runtime_pm.rst
-> > > +++ b/Documentation/power/runtime_pm.rst
-> > > @@ -827,6 +827,14 @@ or driver about runtime power changes.  Instead, the driver for the device's
-> > >  parent must take responsibility for telling the device's driver when the
-> > >  parent's power state changes.
-> > >
-> > > +Note that, in some cases it may not be desirable for subsystems/drivers to call
-
-More than 80 chars.
-
-> > > +pm_runtime_no_callbacks() for their devices. This could be because a subset of
-
-More than 80 chars.
-
-> > > +the runtime PM callbacks needs to be implemented, a platform dependent PM
-> > > +domain could get attached to the device or that the device is power manged
-
-s/manged/managed/
-
-> > > +through a supplier device link. For these reasons and to avoid boilerplate code
-
-More than 80 chars.
-
-> > > +in subsystems/drivers, the PM core allows runtime PM callbacks to be
-> > > +unassigned.
-> > > +
-> >
-> > You should also mention that if a callback pointer is NULL, the
-> > runtime PM core will act as though there was a callback and it
-> > returned 0.  That's an important consideration.
+07.06.2021 17:42, Krzysztof Kozlowski пишет:
+> On 07/06/2021 16:19, Thierry Reding wrote:
+>> On Mon, Jun 07, 2021 at 05:01:02PM +0300, Dmitry Osipenko wrote:
+>>> 07.06.2021 16:36, Thierry Reding пишет:
+>>>>> /bin/ld: warning: orphan section `__reservedmem_of_table' from `drivers/memory/tegra/tegra210-emc-table.o' being placed in section `__reservedmem_of_table'
+>>>>> /bin/ld: drivers/memory/tegra/mc.o: in function `tegra_mc_probe':
+>>>>> mc.c:(.text+0x87a): undefined reference to `reset_controller_register'
+>>>>> make[1]: *** [/home/buildbot/worker/builddir/build/Makefile:1191: vmlinux] Error 1
+>>> ...
+>>>
+>>>> Not sure what to do about that orphaned __reservedmem_of_table section.
+>>>> Maybe all we need to do is to select OF_RESERVED_MEM from
+>>>> TEGRA210_EMC_TABLE?
+>>>
+>>> Select won't work easily, but the dependency for TEGRA210_EMC should.
+>>
+>> Select works if I also select OF_EARLY_FLATTREE. That's slightly odd
+>> because typically that's something that the platform would select, but
+>> there's precedent for doing this in drivers/clk/x86/Kconfig, so I think
+>> it'd be fine.
+>>
+>> The attached patch resolves both of the above issues for me.
+>>
+>> Krzysztof: do you want to squash that into the problematic patch or do
+>> you want me to send this as a follow-up patch for you to apply? I guess
+>> the latter since you've already sent out the PR for Will and ARM SoC?
 > 
-> Good point, let me add it.
+> Follow up, please, but I am not sure about selecting reset controller.
+> From the tegra/mc.c code I see it can be optional - if "reset_ops" is
+> provided. Therefore I think:
+> 1. Reset controller should provide proper stubs. This will fix building
+> of mc.c when reset controller is not chosen (regardless of point #2 below).
 > 
-> I send a new version of $subject patch, unless Rafael is happy to do
-> the amending when/if applying?
-> 
-> >
-> > Also, notice that this file was carefully edited to make sure that
-> > none of the lines exceed 80 characters.  Your new addition should
-> > be the same.
-> 
-> Absolutely, but it should be okay already, no?
+> 2. Specific drivers should depend on it. Selecting user-visible symbols
+> is rather discourage because might lead to circular dependencies.
 
-See above.
+Thierry, should I send the patches or you're willing to do it?
 
-Alan
