@@ -2,224 +2,268 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE8D39EDE0
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 06:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5999E39EF8D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 09:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhFHE6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 00:58:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50370 "EHLO mail.kernel.org"
+        id S230366AbhFHHa0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 03:30:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229797AbhFHE6Q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Jun 2021 00:58:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A7E8E6124C;
-        Tue,  8 Jun 2021 04:56:24 +0000 (UTC)
+        id S229518AbhFHHaU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Jun 2021 03:30:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3D5C61073;
+        Tue,  8 Jun 2021 07:28:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623128184;
-        bh=6XVSYO53rouXTNC0JGmYmDWKE20TC2eAhh4ZbpoGbcI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=lvjM+bXY7YAf2FxeomNjPYezK+TKb3jxP8S9yKihYjVF1GotNDtPAUMTqw5joM/PF
-         Ohxhk6l/T63uitoZLn8VRSrG89I5vdJ9o9yamHBIElm9fIOTRHFZoJudw0Kf+gz5rd
-         lh6wB+Ki+5RuVwE/luzZ9qCgP0forEtYAKfCQzxUJwE+Y7nxM/LGSo+MqhfkgijpyQ
-         ESsSSEIJWakxFl5WXdV+neyIDh8yFg+cCmPPIIUc4RwyuZkhVQGOxZLR2tzHLpin3w
-         DCoZVa9LPpduvuwf5CZp2I4HvqSam2JRUbPaMPy79RRBQ3CIZg7zbUJnxUEbh84y1L
-         YiN0FOR+kdj1A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7D88F5C08B9; Mon,  7 Jun 2021 21:56:24 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 21:56:24 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with
- rcu_read_lock/unlock()
-Message-ID: <20210608045624.GY4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210607065743.1596-1-qiang.zhang@windriver.com>
- <CAJZ5v0iYtNP54mUFs5VbmHxuXYjTBMrbCZ5CqfaHShnGdd+3Jg@mail.gmail.com>
- <DM6PR11MB42027F9DA1B3E9B6BDFA5194FF389@DM6PR11MB4202.namprd11.prod.outlook.com>
- <20210607154138.GU4397@paulmck-ThinkPad-P17-Gen-1>
- <DM6PR11MB42025552629034A22B8E5BC6FF379@DM6PR11MB4202.namprd11.prod.outlook.com>
+        s=k20201202; t=1623137307;
+        bh=O/zMXaiejHSPpLDrpWoLj5vApKw6co+rXXxeAdTs0fQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nLlyZlZD273F402k83SpAE2/yTCnSoxOmIHbl9CNTcXkiOIJIwbU4EIxQMSt2a4ml
+         qYAZ7+GRyFby1j7J/b6Qdg0ngb9aWUorA3LUTEzB/o7nAxtpl99tYE56SX6c/L7cnq
+         JkQNkQc+kckZEP6v8MtI7gBXthqAyHNA2ro1bRHL944hNLYqFQNYNtkG14YdEsbCz8
+         WiPAfikei2ZlyE9DmtO+G5LcsEimR8Zt3bf/sh+4dSJxaQew1IHT6LAPnPOy5G3d1V
+         9RKb6ljsgqP02St+w9CxWqyTHfLgCquU2TvIEjFpSrPZM71r6hel2yJmUWm39106ZP
+         ITZzuhEQ/FbwA==
+Date:   Tue, 8 Jun 2021 09:28:19 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210608092819.3f4191b3@coco.lan>
+In-Reply-To: <20210608003458.kwhbn6mraekcutlt@notapiano>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+        <20210605151109.axm3wzbcstsyxczp@notapiano>
+        <20210605210836.540577d4@coco.lan>
+        <20210606225225.fz4dsyz6im4bqena@notapiano>
+        <20210607093422.0a369909@coco.lan>
+        <20210608003458.kwhbn6mraekcutlt@notapiano>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB42025552629034A22B8E5BC6FF379@DM6PR11MB4202.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 02:50:26AM +0000, Zhang, Qiang wrote:
-> 
-> 
-> ________________________________________
-> From: Paul E. McKenney <paulmck@kernel.org>
-> Sent: Monday, 7 June 2021 23:41
-> To: Zhang, Qiang
-> Cc: Rafael J. Wysocki; Rafael Wysocki; Len Brown; Pavel Machek; Linux PM; Linux Kernel Mailing List
-> Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with rcu_read_lock/unlock()
-> 
-> [Please note: This e-mail is from an EXTERNAL e-mail address]
-> 
-> On Mon, Jun 07, 2021 at 02:11:37PM +0000, Zhang, Qiang wrote:
-> > ________________________________________
-> > From: Rafael J. Wysocki <rafael@kernel.org>
-> > Sent: Monday, 7 June 2021 19:45
-> > To: Zhang, Qiang
-> > Cc: Rafael Wysocki; Len Brown; Pavel Machek; Paul E. McKenney; Linux PM; Linux Kernel Mailing List
-> > Subject: Re: [PATCH] PM: sleep: Replace read_lock/unlock(tasklist_lock) with rcu_read_lock/unlock()
-> >
-> > [Please note: This e-mail is from an EXTERNAL e-mail address]
-> >
-> > On Mon, Jun 7, 2021 at 8:57 AM <qiang.zhang@windriver.com> wrote:
-> > >
-> > > From: Zqiang <qiang.zhang@windriver.com>
-> > >
-> > > Using rcu_read_lock/unlock() instead of read_lock/unlock(tasklist_lock),
-> > > the task list can be traversed in parallel to any list additions or
-> > > removals, improve concurrency.
-> > >
-> > > Signed-off-by: Zqiang <qiang.zhang@windriver.com>
-> >
-> > >This changes the reader side only AFAICS, but what about the >writer side?
-> >
-> > Hello  rafael
-> >
-> > In the case of holding read_lock(tasklist_lock)
-> > if there are a lot of tasks in the system that need to be frozen,
-> > the read_lock(tasklist_lock)  has not been released for a short time,
-> > when clone task,  we will acquire write_lock(tasklist_lock) and insert task to list, if  Ifcan't get the write lock all the time.  the hung task
-> > may be trigger and report warning.
-> >
-> > for example:
-> >
-> > copy_process()
-> > {........
-> > write_lock_irq(&tasklist_lock);
-> > ........
-> > list_add_tail_rcu(&p->tasks, &init_task.tasks);
-> > }
-> >
-> > >
-> > >What exactly is there to ensure that the updates of the list will
-> > >remain safe after this change?
-> >
-> > The RCU  can guarantee that the list can be traversed and added at the same time,  and in the read critical area, it is guaranteed that the task structure will not be released.
-> >
-> > In  ./Documentation/RCU/listRCU.rst , it is also explained.
-> >
-> >  Maybe we can ask  Paul E,  Paul E what's your opinion ?
-> 
-> >Although RCU does guarantee that the task structures are not freed while
-> >an RCU reader references them, that is only one of the questions that
-> >must be answered.
-> >
-> >Changing from read_lock(&tasklist_lock) to rcu_read_lock() also allows
-> >all of the code currently under write_lock(&tasklist_lock) to execute
-> >concurrently with these newly created RCU readers.  Is that safe?
-> >If it is safe, why?
-> >
-> >For example, the first pair of hunks in the diff -might- be safe because
-> >"todo" is updated while read-holding tasklist_lock, and then that value
-> >is used after releasing that lock.  But I do not know this code well,
-> >and it is quite possible that something else is going on.
-> 
-> Thanks Pual E
-> 
-> you mean is the rcu ensures that the task_struct is not released  but it does not guarantee that some members of the task_struct object are valid.
-> There may be the following scenarios:
-> In rcu read critical area,  when accessing some members of task_struct object , it may have been released, when the task exiting.
-> 
-> Is my understanding correct? 
+Em Mon, 7 Jun 2021 21:34:58 -0300
+N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
 
-Yes, that is a concern.  The freezer code would need to be checked
-carefully to see whether or not the transformation from read_lock()
-to rcu_read_lock() was safe.
+> Hi Mauro,
+>=20
+> On Mon, Jun 07, 2021 at 09:34:22AM +0200, Mauro Carvalho Chehab wrote:
+> > Em Sun, 6 Jun 2021 19:52:25 -0300
+> > N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+> >  =20
+> > > On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote=
+: =20
+> > > > Em Sat, 5 Jun 2021 12:11:09 -0300
+> > > > N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+> > > >    =20
+> > > > > Hi Mauro,
+> > > > >=20
+> > > > > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab w=
+rote:   =20
+> > > > > > As discussed at:
+> > > > > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> > > > > >=20
+> > > > > > It is better to avoid using :doc:`foo` to refer to Documentatio=
+n/foo.rst, as the
+> > > > > > automarkup.py extension should handle it automatically, on most=
+ cases.
+> > > > > >=20
+> > > > > > There are a couple of exceptions to this rule:
+> > > > > >=20
+> > > > > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> > > > > > 2. when it is used with a named tag, e. g. :doc:`some name <foo=
+>`;
+> > > > > >=20
+> > > > > > It should also be noticed that automarkup.py has currently an i=
+ssue:
+> > > > > > if one use a markup like:
+> > > > > >=20
+> > > > > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > > > > 	  - documents all of the standard testing API excluding mocking
+> > > > > > 	    or mocking related features.
+> > > > > >=20
+> > > > > > or, even:
+> > > > > >=20
+> > > > > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > > > > 	    documents all of the standard testing API excluding mocking
+> > > > > > 	    or mocking related features.
+> > > > > > =09
+> > > > > > The automarkup.py will simply ignore it. Not sure why. This pat=
+ch series
+> > > > > > avoid the above patterns (which is present only on 4 files), bu=
+t it would be
+> > > > > > nice to have a followup patch fixing the issue at automarkup.py=
+.     =20
+> > > > >=20
+> > > > > What I think is happening here is that we're using rST's syntax f=
+or definition
+> > > > > lists [1]. automarkup.py ignores literal nodes, and perhaps a def=
+inition is
+> > > > > considered a literal by Sphinx. Adding a blank line after the Doc=
+umentation/...
+> > > > > or removing the additional indentation makes it work, like you di=
+d in your
+> > > > > 2nd and 3rd patch, since then it's not a definition anymore, alth=
+ough then the
+> > > > > visual output is different as well.   =20
+> > > >=20
+> > > > A literal has a different output. I think that this is not the case=
+, but I=20
+> > > > didn't check the python code from docutils/Sphinx.   =20
+> > >=20
+> > > Okay, I went in deeper to understand the issue and indeed it wasn't w=
+hat I
+> > > thought. The reason definitions are ignored by automarkup.py is becau=
+se the main
+> > > loop iterates only over nodes that are of type paragraph:
+> > >=20
+> > >     for para in doctree.traverse(nodes.paragraph):
+> > >         for node in para.traverse(nodes.Text):
+> > >             if not isinstance(node.parent, nodes.literal):
+> > >                 node.parent.replace(node, markup_refs(name, app, node=
+))
+> > >=20
+> > > And inspecting the HTML output from your example, the definition name=
+ is inside
+> > > a <dt> tag, and it doesn't have a <p> inside. So in summary, automark=
+up.py will
+> > > only work on elements which are inside a <p> in the output. =20
+> >=20
+> >=20
+> > Yeah, that's what I was suspecting, based on the comments.
+> >=20
+> > Maybe something similar to the above could be done also for some
+> > non-paragraph data. By looking at:
+> >=20
+> > 	https://docutils.sourceforge.io/docs/ref/doctree.html
+> >=20
+> > It says that the body elements are:
+> >=20
+> > 	admonition, attention, block_quote, bullet_list, caution, citation,=20
+> > 	comment, compound, container, danger, definition_list, doctest_block,=
+=20
+> > 	enumerated_list, error, field_list, figure, footnote, hint, image,=20
+> > 	important, line_block, literal_block, note, option_list, paragraph,=20
+> > 	pending, raw, rubric, substitution_definition, system_message,=20
+> > 	table, target, tip, warning =20
+>=20
+> Ok, I went through each one by searching the term on [1] and inspecting t=
+he
+> element to see if it contained a <p> or not. The vast majority did. These=
+ are
+> the ones I didn't find there or didn't make sense:
+>=20
+> 	comment
+> 	container
+> 	image
+> 	pending
+> 	raw
+> 	substitution_definition
+> 	system_message
+> 	target
+>=20
+> We can safely ignore them. And these are the ones that matter and don't h=
+ave
+> paragraphs:
+>=20
+> 	1. literal_block
+> 	2. doctest_block
+> 	3. definition_list
+> 	4. field_list
+> 	5. option_list
+> 	6. line_block
+>=20
+> 1 and 2 are literals, so we don't care about them.
+>=20
+> 3 is the one you noticed the issue with. It's worth mentioning that the
+> definition term doesn't have a paragraph, but its definition does (as can=
+ be
+> checked by inspecting [2]).
+>=20
+> 4 is basically the same as 3, the rst syntax is different but the output =
+is the
+> same. That said, I believe we only use those to set options at the top of=
+ the
+> file, like in translations, and I can't see automarkup being useful in th=
+ere.
+>=20
+> 5 is similar to 3 and 4, but the term is formatted using <kbd>, so it's l=
+ike a
+> literal and therefore not relevant.
+>=20
+> 6 is useful just to preserve indentation, and I'm pretty sure we don't us=
+e it in
+> the docs.
+>=20
+> So in the end, I think the only contenders to be added to automarkup are
+> definition lists, and even then I still think we should just substitute t=
+hose
+> definition lists with alternatives like you did in your patches. Personal=
+ly I
+> don't see much gain in using definitions instead of a simple paragraph. B=
+ut if
+> you really think it's an improvement in some way, it could probably be ad=
+ded to
+> automarkup in the way you described.
 
-							Thanx, Paul
+Thank you for checking this!
 
-> Qiang
-> 
-> >
-> >                                                Thanx, Paul
-> 
-> > Thanks
-> > Qiang
-> >
-> > > ---
-> > >  kernel/power/process.c | 16 ++++++++--------
-> > >  1 file changed, 8 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/kernel/power/process.c b/kernel/power/process.c
-> > > index 50cc63534486..0f8dee9ee097 100644
-> > > --- a/kernel/power/process.c
-> > > +++ b/kernel/power/process.c
-> > > @@ -48,7 +48,7 @@ static int try_to_freeze_tasks(bool user_only)
-> > >
-> > >         while (true) {
-> > >                 todo = 0;
-> > > -               read_lock(&tasklist_lock);
-> > > +               rcu_read_lock();
-> > >                 for_each_process_thread(g, p) {
-> > >                         if (p == current || !freeze_task(p))
-> > >                                 continue;
-> > > @@ -56,7 +56,7 @@ static int try_to_freeze_tasks(bool user_only)
-> > >                         if (!freezer_should_skip(p))
-> > >                                 todo++;
-> > >                 }
-> > > -               read_unlock(&tasklist_lock);
-> > > +               rcu_read_unlock();
-> > >
-> > >                 if (!user_only) {
-> > >                         wq_busy = freeze_workqueues_busy();
-> > > @@ -97,13 +97,13 @@ static int try_to_freeze_tasks(bool user_only)
-> > >                         show_workqueue_state();
-> > >
-> > >                 if (!wakeup || pm_debug_messages_on) {
-> > > -                       read_lock(&tasklist_lock);
-> > > +                       rcu_read_lock();
-> > >                         for_each_process_thread(g, p) {
-> > >                                 if (p != current && !freezer_should_skip(p)
-> > >                                     && freezing(p) && !frozen(p))
-> > >                                         sched_show_task(p);
-> > >                         }
-> > > -                       read_unlock(&tasklist_lock);
-> > > +                       rcu_read_unlock();
-> > >                 }
-> > >         } else {
-> > >                 pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
-> > > @@ -206,13 +206,13 @@ void thaw_processes(void)
-> > >
-> > >         cpuset_wait_for_hotplug();
-> > >
-> > > -       read_lock(&tasklist_lock);
-> > > +       rcu_read_lock();
-> > >         for_each_process_thread(g, p) {
-> > >                 /* No other threads should have PF_SUSPEND_TASK set */
-> > >                 WARN_ON((p != curr) && (p->flags & PF_SUSPEND_TASK));
-> > >                 __thaw_task(p);
-> > >         }
-> > > -       read_unlock(&tasklist_lock);
-> > > +       rcu_read_unlock();
-> > >
-> > >         WARN_ON(!(curr->flags & PF_SUSPEND_TASK));
-> > >         curr->flags &= ~PF_SUSPEND_TASK;
-> > > @@ -233,12 +233,12 @@ void thaw_kernel_threads(void)
-> > >
-> > >         thaw_workqueues();
-> > >
-> > > -       read_lock(&tasklist_lock);
-> > > +       rcu_read_lock();
-> > >         for_each_process_thread(g, p) {
-> > >                 if (p->flags & PF_KTHREAD)
-> > >                         __thaw_task(p);
-> > >         }
-> > > -       read_unlock(&tasklist_lock);
-> > > +       rcu_read_unlock();
-> > >
-> > >         schedule();
-> > >         pr_cont("done.\n");
-> > > --
-> > > 2.17.1
-> > >
+Kernel docs use a lot definition lists. At the initial versions, it was
+equivalent to:
+
+	**Something to be written with emphasis**
+
+	  Some description
+
+Sphinx later changed the look-and-feel for the term, on html output, but
+the thing is that:
+
+	Something to be written with emphasis
+	   Some description
+
+looks a lot better when read as a text file.
+
+Also, on some cases, the first notation doesn't work. The definition-list
+was the only way I know that would allow to apply an emphasis to a literal
+block.
+
+We can avoid using Documentation/foo on description lists: the current 4=20
+cases where doc:`foo` are already addressed in this series, and the output
+is acceptable.
+
+Yet, I have a couple of concerns:
+
+1. It might have some unknown places where a description list is used
+   for Documentation/foo;
+2. It is not trivial to identify if someone add Documentation/foo in
+   the future;
+3. I suspect that there are several places where functions and structs
+   appear at the definition lists.
+
+(1) can probably be checked with a multi-line grep. So, not a big
+    problem;
+
+(2) is something that would require someone to verify from time to
+    time;
+
+but (3) are harder to check and seems to be a valid use-case.
+
+Due to (3), I think we should let automarkup to parse non-literal
+terms on description lists. At very least it should emit a warning when
+it won't be doing auto-conversions for known patterns at definition
+lists (if doing that would generate false-positives).
+
+Thanks,
+Mauro
