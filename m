@@ -2,115 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C1339F89F
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 16:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1435D39F8E1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jun 2021 16:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbhFHOOW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 10:14:22 -0400
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:39818 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbhFHOOV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 10:14:21 -0400
-Received: by mail-wr1-f52.google.com with SMTP id l2so21780027wrw.6;
-        Tue, 08 Jun 2021 07:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QN+EdKzoWLP2CkjUZ6p50v7bzf6RSbEoChR/qB42S2M=;
-        b=Y0ElOsfMlfn3oQVhrjMka5+BB71sz0UqnqGojDryyCKaNV4tvyv5lXEUdW7+Ve0p0j
-         gyJ6YSW1nZ05z0+pdsY3GTSyHNaSSdN4/Ab1N+6+5P7P1NcT0Zh2VyIwxSxDybZRrs7x
-         +Nr/NCN4a5ekwZ9xtNRJm9PwJHQHSu3/xMZLPbZRU7KTGaocWIqOHRtA5Q2pmRx0Q5e1
-         MJE348wtJ/nYwf1z/OFORnPQcks3uvNX18SKP3cW87D5hAMWsK6Xp+3zgaU1a0cw09Xv
-         BThBW7Ufue7YQlpHodp/24H0cK6dEi1pnNFOfUt3Rgcbk4nAJtqGCrmq3RweXnsDM/r9
-         n/XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QN+EdKzoWLP2CkjUZ6p50v7bzf6RSbEoChR/qB42S2M=;
-        b=ptSSSYfkRbR+Mx9UP2rRb+mQAVZHi8uO/7R36ItHmLmcTvAMIoFeF+ux4ZP4BlixtV
-         IN1f4j2n2CAPqx0rpm6HS7JyY349SRL9/zIHfMzcESmSGCzKRbS3mPiRLipYN/BEe4zX
-         CH8jUnRDcVNUNKsgC8MrkFl+96HwL/+59rY1zAYA2QQz/wkk4CmkMwIF2cdof/6KewfA
-         MTFUmpX1jL9+aG7L9+IkOW7aXIR/mOSdHtB6XrDf1QiQhzo5EslAIa8G89Gggg559dEx
-         cXKbOA0cvS82ndh9/0OwtOJZQ8zpzwvF011j8NRDOLMngbd+zeOP8GixMEN6AZQasbhS
-         ePsA==
-X-Gm-Message-State: AOAM532TpsDTXYsofJyZrz0yjTAg8bS4AyfZdib4vxZzhDrCew6bEcJj
-        g7LxXurA8JHNlkfG3RMCv+cw0a5lWWBmIw==
-X-Google-Smtp-Source: ABdhPJwqR8NMrIwZzkzg1wJTkhrSFvimCcaJhT2bLhkbvZckf6DyzC3fxY9/pwgERvcsc68jdjXVkQ==
-X-Received: by 2002:a05:6000:2a3:: with SMTP id l3mr23222967wry.395.1623161472462;
-        Tue, 08 Jun 2021 07:11:12 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id n9sm18534552wmc.20.2021.06.08.07.11.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jun 2021 07:11:12 -0700 (PDT)
-Subject: Re: [PATCH v3] thermal: mediatek: add sensors-support
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210420172308.134685-1-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <e164df94-ef34-8560-ab8f-f0519d632b22@gmail.com>
-Date:   Tue, 8 Jun 2021 16:11:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S233213AbhFHOW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 10:22:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48936 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233171AbhFHOW1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Jun 2021 10:22:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D36B660FE9;
+        Tue,  8 Jun 2021 14:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623162034;
+        bh=HIjfdYmy1mTiOKJ3G+Wb1ajuH0CxVdj2NhvkjfwnlVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QHufanTg9UstcH6XnmIY5hfMbAyyjEWCcYNeq6ejN46KO2ixz/O3roSV/N8B5ved3
+         Jk1NcZjY74jq4e3PpHKbSLLqaJ3qmBoARv/3fwNPCZ39j7ONyOkqi8gkC9Xaj2mbY4
+         OTooSz8XU/nit0Sb82mKxXYPSLBUtjqZadIhQadXjgkdYwF1G/AT1GOQKCPOQlWKXH
+         XNBvOas/pnUUYtUvz+czv5golUSRz/f9XqB6+GzhRs0JJ1dEDvSV7w7pJ+4GDHqaIU
+         0RY8NCctwSxOFcWsl18VWkQROP82cwR6ZHvPhRxnGKn0N5FxOgFfFuGKMG86zJ7jjv
+         3W1tSFNkQr0qg==
+Date:   Tue, 8 Jun 2021 15:20:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Subject: Re: [PATCH v2 4/4] PM: domains: Drop/restore performance state votes
+ for devices at system PM
+Message-ID: <20210608142019.GG4200@sirena.org.uk>
+References: <20210603093438.138705-1-ulf.hansson@linaro.org>
+ <20210603093438.138705-5-ulf.hansson@linaro.org>
+ <CAPDyKFp2dKFQpLMgazXumCxf=FHQ9bdadXUkGsjiAwniF8p2dw@mail.gmail.com>
+ <YL9oMVqox7GVASen@gerhold.net>
+ <CAPDyKFrvrikCZLX1EvmLZumeCnfAxUUssO2OWc130TG8oey=qw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210420172308.134685-1-linux@fw-web.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KIzF6Cje4W/osXrF"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrvrikCZLX1EvmLZumeCnfAxUUssO2OWc130TG8oey=qw@mail.gmail.com>
+X-Cookie: Auction:
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--KIzF6Cje4W/osXrF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 20/04/2021 19:23, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> add HWMON-support to mediateks thermal driver to allow lm-sensors
-> userspace tools read soc temperature
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> v3: drop no_hwmon - now really, sorry
-> v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
-> ---
->  drivers/thermal/mtk_thermal.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 149c6d7fd5a0..85964988684b 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -23,6 +23,8 @@
->  #include <linux/reset.h>
->  #include <linux/types.h>
->  
-> +#include "thermal_hwmon.h"
-> +
->  /* AUXADC Registers */
->  #define AUXADC_CON1_SET_V	0x008
->  #define AUXADC_CON1_CLR_V	0x00c
-> @@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  		goto err_disable_clk_peri_therm;
->  	}
->  
-> +	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+On Tue, Jun 08, 2021 at 04:08:55PM +0200, Ulf Hansson wrote:
 
-I think dev_warn() is more appropriate here.
+> Honestly, I am not sure about what the regulator-fixed-domain intends
+> to model, but I assume it's something that fits well to be modelled as
+> a plain regulator, to start with.
 
-Regards,
-Matthias
+> Perhaps Mark can chime in and spread some light over this?
 
-> +
->  	return 0;
->  
->  err_disable_clk_peri_therm:
-> 
+IIRC it's for situations where there's a device that's normally built as
+a separate chip that got built into a bigger SoC and wants to rear end
+something onto a power domain, I guess especially if the power domain
+doesn't cover the whole of a Linux device.
+
+--KIzF6Cje4W/osXrF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC/fKIACgkQJNaLcl1U
+h9CDbwf9Ett6A9yT6kCMwKY16CHTSdgFwOxfrV/bgjoSyph+f3tT31mZLbM3DHol
+7D4nq6EAVR/AGYB7OAsZoHgr9yur2RvWWwA1hKlLTle8H+kL0HuK3kZuUqeyqSpU
+s8FrLDH88MCUgjLc9pU0j0hINcD3e1qANqflGK/3cXB8+G2WAjSh0719iRYdbw1Z
+k+nvcrw5UC8yBm7aoaeNUL81gCcEvanLnjvKg6ht9/lxRi9+KfOjiib3vW9hTk64
+NCOJXBGsi/+83s2x+WZXi+B/2SwjhmCqODilMwj61QP6kihLxXmb26iCJK5imt2q
+/bNYGkW36TdNg5hA4/Cvj5ANJCOpTw==
+=R/90
+-----END PGP SIGNATURE-----
+
+--KIzF6Cje4W/osXrF--
