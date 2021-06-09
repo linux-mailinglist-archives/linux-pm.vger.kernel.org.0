@@ -2,420 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 502DB3A06D3
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 00:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5826F3A08FE
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 03:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbhFHWbx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 18:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbhFHWbx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 18:31:53 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C23C06124A
-        for <linux-pm@vger.kernel.org>; Tue,  8 Jun 2021 15:29:33 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id t9so10070076qtw.7
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jun 2021 15:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RXQwC0BxKtU1s8TMqbyaoC7WGbiYRb3bfBqLDk1X5Xw=;
-        b=KBGxJY9/qalPiFHxdXmCVPz07LcLV+DX509uMy8IwF2qVeevug5QimVy/JqrlmVQSr
-         XvdxbDCF47j/iDanx5G70fxYQI3tExwFlLeE41lF3fFxbInvQWecWROjuPi1u6e3htIX
-         zaZjmtdrqbpBWFtg6Bq2v+J4+k6r1S2/adq8di3OC+NthejHdA4LVv3v8hX1D56sb+Xu
-         FjghF555FhdZ+WxvPPhwcUhIXOcptggPlQ30I21hNFFIRge4YyngohwTZeGdhtmZO/mp
-         4y1+g6IT/cXT4zAq8w2XlmtAnJB3yZGetsHDmg0CTYPmSgtGx15bcGpF1zmqIobXTQhq
-         y+pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RXQwC0BxKtU1s8TMqbyaoC7WGbiYRb3bfBqLDk1X5Xw=;
-        b=mnhXHKCFKJXFmATuw9t25U0DwG6ZZgt5PGcFdi1eD9FXqFcfzWnYlGjlqhQ/Olttxb
-         HfeVmGFwlKcWpM8p9IAmYOeLz2A0iU06iHsIJAGQsxGukj3DbjkffjnZ6lIprDF+NkIe
-         fiZcY3OttDHqmvqjYNSdEaDKSmzL55Wx5UBUOpb9xbBaBx8aUmXmG2tr5bBfhFbvPcYp
-         wk/Yh4XL3ruysOXN5PQzT+VTOHML9Eupj5JN0PY4RA4lFiYP0s4HmetwtRgrBfq7qQ61
-         tfQcGtvSG0Tcufu8IQimwD49mCsyTM33IX93Ibb9izOkCZFHqjM6/ZXNj/t+YQfYhxKb
-         FHpg==
-X-Gm-Message-State: AOAM5317R7VPpN8BgM3uCrHgw4iG/MsrlcHKnLLfWnR9K0TwHe8M4oXP
-        uifoAmiPBoTu6yN7OiyA1oHgUw==
-X-Google-Smtp-Source: ABdhPJxrcR7SBV5yEHVvDUzG5Jhd2bbA+Kyiahd3XFxGXxHZ+bSwIpJNlO48TBHSEefsiUP62U4+xA==
-X-Received: by 2002:ac8:4d50:: with SMTP id x16mr23489442qtv.271.1623191372683;
-        Tue, 08 Jun 2021 15:29:32 -0700 (PDT)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id h19sm10450736qtq.5.2021.06.08.15.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 15:29:32 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 5/5] arm64: boot: dts: qcom: sdm845: Remove passive trip points for thermal zones 0-7
-Date:   Tue,  8 Jun 2021 18:29:26 -0400
-Message-Id: <20210608222926.2707768-6-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210608222926.2707768-1-thara.gopinath@linaro.org>
-References: <20210608222926.2707768-1-thara.gopinath@linaro.org>
+        id S235241AbhFIB2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 21:28:17 -0400
+Received: from mga03.intel.com ([134.134.136.65]:38019 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230303AbhFIB2R (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Jun 2021 21:28:17 -0400
+IronPort-SDR: bCzxLoUPqfksCfprB0W8VeNkTLrwv/Et0DAsNlbuehWCGYb+mkyVR+sw5WzSuN3YliQFmJXyok
+ Ghsz8z/X+CHw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="205006626"
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="205006626"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 18:26:22 -0700
+IronPort-SDR: nWPMKqjlSxvZl1FxEs3IIHo+WSwvNCK3k2ySe2g2UQbRIDh8Ck1NI0yLqkKRDG7ugwMz0QOvMl
+ E4fYUiVaay1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="402273090"
+Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2021 18:26:20 -0700
+Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lqmz5-0009Iy-Sk; Wed, 09 Jun 2021 01:26:19 +0000
+Date:   Wed, 09 Jun 2021 09:25:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 5a32725a7531b9d4ecec3acb3d13458f10b71690
+Message-ID: <60c01882.2Dba3vo0xLFz1L7C%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that Limits h/w is enabled to monitor thermal events around cpus and
-throttle the cpu frequencies, remove the s/w montoring of the same which
-was happening via tsens. We keep critical trip points for these zones so
-that system shutdown can be initiated if the temperature exceeds critical
-trip.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 5a32725a7531b9d4ecec3acb3d13458f10b71690  Merge branch 'pm-cpufreq' into linux-next
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+elapsed time: 730m
+
+configs tested: 214
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+mips                         rt305x_defconfig
+mips                      malta_kvm_defconfig
+powerpc                     asp8347_defconfig
+arm                           spitz_defconfig
+sparc                       sparc32_defconfig
+nios2                            allyesconfig
+sh                          rsk7203_defconfig
+mips                    maltaup_xpa_defconfig
+openrisc                 simple_smp_defconfig
+mips                      maltasmvp_defconfig
+arm                         orion5x_defconfig
+h8300                       h8s-sim_defconfig
+arm                   milbeaut_m10v_defconfig
+xtensa                           alldefconfig
+mips                          ath79_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                           se7722_defconfig
+sh                           se7724_defconfig
+sh                          sdk7786_defconfig
+arc                          axs103_defconfig
+nios2                         3c120_defconfig
+ia64                                defconfig
+arc                              alldefconfig
+xtensa                       common_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                     loongson2k_defconfig
+powerpc                     taishan_defconfig
+xtensa                          iss_defconfig
+powerpc                     pseries_defconfig
+parisc                generic-32bit_defconfig
+h8300                    h8300h-sim_defconfig
+mips                      loongson3_defconfig
+ia64                      gensparse_defconfig
+m68k                            q40_defconfig
+openrisc                            defconfig
+mips                     cu1000-neo_defconfig
+arc                        nsim_700_defconfig
+arm                       versatile_defconfig
+sh                         microdev_defconfig
+sh                             espt_defconfig
+powerpc                 mpc837x_rdb_defconfig
+h8300                            allyesconfig
+powerpc                      ep88xc_defconfig
+m68k                          atari_defconfig
+powerpc                      cm5200_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                       eiger_defconfig
+powerpc                     tqm8560_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                      pic32mzda_defconfig
+sh                          sdk7780_defconfig
+mips                      fuloong2e_defconfig
+xtensa                  audio_kc705_defconfig
+arm                         lpc32xx_defconfig
+sh                           se7343_defconfig
+mips                         tb0226_defconfig
+arm                      integrator_defconfig
+arm                         cm_x300_defconfig
+arm                         bcm2835_defconfig
+mips                            ar7_defconfig
+arm64                            alldefconfig
+arm                           tegra_defconfig
+nds32                            alldefconfig
+mips                         tb0219_defconfig
+powerpc                 mpc832x_rdb_defconfig
+nios2                         10m50_defconfig
+arm                          ixp4xx_defconfig
+sh                           se7206_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                 linkstation_defconfig
+mips                  cavium_octeon_defconfig
+arm                             mxs_defconfig
+mips                       rbtx49xx_defconfig
+mips                             allmodconfig
+arc                         haps_hs_defconfig
+powerpc                         wii_defconfig
+arm                         s3c2410_defconfig
+mips                       lemote2f_defconfig
+arm                       aspeed_g4_defconfig
+mips                           ip27_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         s5pv210_defconfig
+arm                         shannon_defconfig
+m68k                          amiga_defconfig
+s390                             allyesconfig
+powerpc                     tqm8555_defconfig
+powerpc                    mvme5100_defconfig
+csky                                defconfig
+arm                        cerfcube_defconfig
+mips                      maltaaprp_defconfig
+sh                          landisk_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                      mgcoge_defconfig
+arm                        mvebu_v5_defconfig
+m68k                        mvme147_defconfig
+um                           x86_64_defconfig
+powerpc                    gamecube_defconfig
+powerpc                       ebony_defconfig
+arm                         mv78xx0_defconfig
+ia64                         bigsur_defconfig
+m68k                           sun3_defconfig
+powerpc                      pmac32_defconfig
+arm                          simpad_defconfig
+arm                          pxa3xx_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                       aspeed_g5_defconfig
+arm                        magician_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                           se7619_defconfig
+xtensa                         virt_defconfig
+arm                       imx_v6_v7_defconfig
+arm                       netwinder_defconfig
+um                             i386_defconfig
+powerpc                     tqm5200_defconfig
+sh                   secureedge5410_defconfig
+powerpc                      bamboo_defconfig
+powerpc                  mpc866_ads_defconfig
+mips                        workpad_defconfig
+powerpc                     mpc83xx_defconfig
+arm                      jornada720_defconfig
+nds32                             allnoconfig
+arc                           tb10x_defconfig
+microblaze                          defconfig
+powerpc                     kilauea_defconfig
+arc                      axs103_smp_defconfig
+powerpc                      walnut_defconfig
+arm                         nhk8815_defconfig
+sh                        edosk7760_defconfig
+sh                   sh7770_generic_defconfig
+arm                     am200epdkit_defconfig
+mips                      bmips_stb_defconfig
+um                               alldefconfig
+arm                          pxa168_defconfig
+arm                        spear6xx_defconfig
+arm                            pleb_defconfig
+powerpc                 mpc832x_mds_defconfig
+sh                           se7721_defconfig
+h8300                               defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20210608
+x86_64               randconfig-a002-20210608
+x86_64               randconfig-a003-20210608
+x86_64               randconfig-a006-20210608
+x86_64               randconfig-a005-20210608
+x86_64               randconfig-a001-20210608
+i386                 randconfig-a003-20210608
+i386                 randconfig-a006-20210608
+i386                 randconfig-a004-20210608
+i386                 randconfig-a001-20210608
+i386                 randconfig-a005-20210608
+i386                 randconfig-a002-20210608
+i386                 randconfig-a015-20210608
+i386                 randconfig-a013-20210608
+i386                 randconfig-a016-20210608
+i386                 randconfig-a011-20210608
+i386                 randconfig-a012-20210608
+i386                 randconfig-a014-20210608
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a002-20210607
+x86_64               randconfig-a004-20210607
+x86_64               randconfig-a003-20210607
+x86_64               randconfig-a006-20210607
+x86_64               randconfig-a005-20210607
+x86_64               randconfig-a001-20210607
+x86_64               randconfig-a015-20210608
+x86_64               randconfig-a012-20210608
+x86_64               randconfig-a014-20210608
+x86_64               randconfig-a011-20210608
+x86_64               randconfig-a016-20210608
+x86_64               randconfig-a013-20210608
+
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 225 ---------------------------
- 1 file changed, 225 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index fdd8d816f728..9a494a1b7a09 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -4971,18 +4971,6 @@ cpu0-thermal {
- 			thermal-sensors = <&tsens0 1>;
- 
- 			trips {
--				cpu0_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu0_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu0_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -4990,22 +4978,6 @@ cpu0_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu0_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu0_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu1-thermal {
-@@ -5015,18 +4987,6 @@ cpu1-thermal {
- 			thermal-sensors = <&tsens0 2>;
- 
- 			trips {
--				cpu1_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu1_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu1_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5034,22 +4994,6 @@ cpu1_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu1_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu1_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu2-thermal {
-@@ -5059,18 +5003,6 @@ cpu2-thermal {
- 			thermal-sensors = <&tsens0 3>;
- 
- 			trips {
--				cpu2_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu2_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu2_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5078,22 +5010,6 @@ cpu2_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu2_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu2_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu3-thermal {
-@@ -5103,41 +5019,12 @@ cpu3-thermal {
- 			thermal-sensors = <&tsens0 4>;
- 
- 			trips {
--				cpu3_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu3_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu3_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu3_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu3_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu4-thermal {
-@@ -5147,18 +5034,6 @@ cpu4-thermal {
- 			thermal-sensors = <&tsens0 7>;
- 
- 			trips {
--				cpu4_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu4_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu4_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5166,22 +5041,6 @@ cpu4_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu4_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu4_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu5-thermal {
-@@ -5191,18 +5050,6 @@ cpu5-thermal {
- 			thermal-sensors = <&tsens0 8>;
- 
- 			trips {
--				cpu5_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu5_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu5_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5210,22 +5057,6 @@ cpu5_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu5_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu5_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu6-thermal {
-@@ -5235,18 +5066,6 @@ cpu6-thermal {
- 			thermal-sensors = <&tsens0 9>;
- 
- 			trips {
--				cpu6_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu6_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu6_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5254,22 +5073,6 @@ cpu6_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu6_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu6_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu7-thermal {
-@@ -5279,18 +5082,6 @@ cpu7-thermal {
- 			thermal-sensors = <&tsens0 10>;
- 
- 			trips {
--				cpu7_alert0: trip-point0 {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				cpu7_alert1: trip-point1 {
--					temperature = <95000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
- 				cpu7_crit: cpu_crit {
- 					temperature = <110000>;
- 					hysteresis = <1000>;
-@@ -5298,22 +5089,6 @@ cpu7_crit: cpu_crit {
- 				};
- 			};
- 
--			cooling-maps {
--				map0 {
--					trip = <&cpu7_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu7_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		aoss0-thermal {
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
