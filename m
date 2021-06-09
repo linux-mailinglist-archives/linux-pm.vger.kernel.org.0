@@ -2,92 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 815A63A1BFD
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 19:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6D73A1C72
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 20:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbhFIRmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Jun 2021 13:42:00 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:34384 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbhFIRl7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Jun 2021 13:41:59 -0400
-Received: by mail-ot1-f44.google.com with SMTP id v27-20020a056830091bb02903cd67d40070so21654440ott.1;
-        Wed, 09 Jun 2021 10:40:04 -0700 (PDT)
+        id S230148AbhFISEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Jun 2021 14:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231996AbhFISE3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Jun 2021 14:04:29 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522B2C06175F
+        for <linux-pm@vger.kernel.org>; Wed,  9 Jun 2021 11:02:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bp38so3839341lfb.0
+        for <linux-pm@vger.kernel.org>; Wed, 09 Jun 2021 11:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sjr2x+avzINzu41z2ipzcr/zElxxwTl5mt/86GvuO78=;
+        b=i+6g1jQB4G2I8N1Psk2Uguv/3DnsRkHyH2COQDi8WIm5rw3QqbG1t7f91qnPIrJ61k
+         8d4uJ/OVBoVJakaavCDeca+COmudX04UoRSTX8G9aic3eLRTffz7K8k/SsBEjftOq/b8
+         9Nc/+g6yI/TvZgkE/HQ8st3ZJB+uqKl9jhHdce9X19w5VECIV2P8Hg4cqkMrUAnbIdz9
+         XMiIhhKaQJYHk6QVX8WPUirAntUxkSktHCFzyV61HOt9cCtuIYq5T90PzOpTMBwytRIV
+         VXjdmRm5Q4fIUbft6zRPNE1kZ41sir2rpclsgdLZIWtfVjgEc95oY6IPEOI0pp/1Pwcb
+         7ZPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lqEr4btZ0y6qNjAmzXVmjI6B8oa6KV1R095KTeHz4wU=;
-        b=dqKjyVxBF5Zvk8VaS+Hb+aQy48wEYv7UhWW5HAY88GiFq08rp1R72rMaGirUkYqH0L
-         zsVYCAv6YMpuNa6ugz+B0TwAKjtYpjVC/9x9WsOI/WqIdwrNPVOnIPvvY44YHrt5PvRU
-         EZzVgSDZLHci24FMNWB0OkuOyNgkIHbNzxGKOq7/gZPIBX2vTFYQ2MtGWhJhwPSbMask
-         kUklAtChkSSwW0SdUkO3BcBuJvhseDTHq845/G+BKo2ssnIk7TMsi9tpnk/g5KHCZI7S
-         RwmowaDUZjGh9mlr8l0XcY6Xpl6qCL8hVN6j6Elaej10dZafERecs+2lXEfMkJeboEri
-         59IQ==
-X-Gm-Message-State: AOAM532HHAfdrc4cm3R/rU7xNiKFXpQ/+ZY5YVRPzmxWkAGRJ/LR+GN0
-        LuRByG6k7QVDBN90YyPMrX10ovEJutEC5hdXYjQ=
-X-Google-Smtp-Source: ABdhPJy80Gx8Kl/o2Q3+1lAB1Cg9ZjUPswb7lfBXpV0wqFJMy/jFPLJvodwxqqr0HnAnscxyMtWZDKKOWwfg0Fi18+Y=
-X-Received: by 2002:a05:6830:1bf7:: with SMTP id k23mr491737otb.206.1623260404502;
- Wed, 09 Jun 2021 10:40:04 -0700 (PDT)
+        bh=Sjr2x+avzINzu41z2ipzcr/zElxxwTl5mt/86GvuO78=;
+        b=WJsoywFBAWNIzF5t+ZR8bEO9Dvp461PGUWYO4enwou+3IZmqq7/EFw7hKUTs+Y7CH4
+         zxM85p1fXNmuIV6t5X6kUjU00i4Vujpdla2x0BLuCMTtv0sFQwsFobBjZFbR4amh6Xur
+         gUasb4vOQ1uAqWZtOtnaNzxM4paWdh4EhjDasTtxjSSf10KQgwk+lgR2aQ5BNxT48ERR
+         je10qxzRk0W6IEAg6gFWnRehNlwLUJTFEnz3G+AYqWU+4/tvvKH2lgPoem+ixDjDXtOU
+         VlxaDZdSVG33+rUFZfOMreoTNVC2a3wEuvZkvmZ0ZNSf/VHZhBv4wFYsG2OjKC8sicau
+         F01w==
+X-Gm-Message-State: AOAM531JfhOStl7XTGIJdcOuz0SUJlxYpOKbfrSWrCkFGvTxGWgzsNRG
+        XkAG7rNsT7BRV6wZQkWFI3xCKrioyDDF7aOUglpMRQ==
+X-Google-Smtp-Source: ABdhPJySrcjcAUzZkp1/bIfsjno1M0a1RGJL9KK+8///E7oqYecOg/XM5cnysq07ieE+gaXp1D7RbznYFzRjzVTqGYc=
+X-Received: by 2002:a05:6512:51c:: with SMTP id o28mr424530lfb.297.1623261736345;
+ Wed, 09 Jun 2021 11:02:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210528081417.31474-1-puwen@hygon.cn> <CAJZ5v0j-9zZvuSyKtRYePHE6aSr824SZz=E6VS_Ysv3cByGZyQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j-9zZvuSyKtRYePHE6aSr824SZz=E6VS_Ysv3cByGZyQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Jun 2021 19:39:53 +0200
-Message-ID: <CAJZ5v0gF47KEAsC4fQzsBMLM=p70K5dWvb2dvjQMkZkZ-jtdSw@mail.gmail.com>
-Subject: Re: [PATCH] x86/cstate: Allow ACPI C1 FFH MWAIT use on Hygon systems
-To:     Pu Wen <puwen@hygon.cn>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <1623223350-128104-1-git-send-email-yang.lee@linux.alibaba.com>
+In-Reply-To: <1623223350-128104-1-git-send-email-yang.lee@linux.alibaba.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 9 Jun 2021 11:02:05 -0700
+Message-ID: <CAKwvOdmBmsvmkm3LNXgvkaa=u1WYkJMvcALMAuhFFFNbfov3YA@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: Fix kernel-doc
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 9, 2021 at 7:30 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Wed, Jun 9, 2021 at 12:22 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
 >
-> On Fri, May 28, 2021 at 10:44 AM Pu Wen <puwen@hygon.cn> wrote:
-> >
-> > Hygon systems support the Monitor/Mwait instructions and these can be used
-> > for ACPI C1 in the same way as on AMD and Intel systems.
-> >
-> > The BIOS declares a C1 state in _CST to use FFH and CPUID_Fn00000005_EDX
-> > is non-zero on Hygon systems.
-> >
-> > Allow ffh_cstate_init() to succeed on Hygon systems to default using FFH
-> > MWAIT instead of HALT for ACPI C1.
-> >
-> > Tested successfully on Hygon Fam18h systems.
-> >
-> > Signed-off-by: Pu Wen <puwen@hygon.cn>
-> > ---
-> >  arch/x86/kernel/acpi/cstate.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-> > index 49ae4e1ac9cd..7de599eba7f0 100644
-> > --- a/arch/x86/kernel/acpi/cstate.c
-> > +++ b/arch/x86/kernel/acpi/cstate.c
-> > @@ -197,7 +197,8 @@ static int __init ffh_cstate_init(void)
-> >         struct cpuinfo_x86 *c = &boot_cpu_data;
-> >
-> >         if (c->x86_vendor != X86_VENDOR_INTEL &&
-> > -           c->x86_vendor != X86_VENDOR_AMD)
-> > +           c->x86_vendor != X86_VENDOR_AMD &&
-> > +           c->x86_vendor != X86_VENDOR_HYGON)
-> >                 return -1;
-> >
-> >         cpu_cstate_entry = alloc_percpu(struct cstate_entry);
-> > --
+> Fix function name in devfreq_cooling.c comment to remove a
+> warning found by kernel-doc.
 >
-> Applied as 5.14 material, thanks!
+> drivers/thermal/devfreq_cooling.c:479: warning: expecting prototype for
+> devfreq_cooling_em_register_power(). Prototype was for
+> devfreq_cooling_em_register() instead.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-And dropped, because it has been applied already by Boris:
-https://git.kernel.org/tip/280b68a3b3b96b027fcdeb5a3916a8e2aaf84d03
+I'm ok with leaving my reviewed by on _this_ patch because it's so simple but...
+
+In general, when sending a follow up version of a patch, it's _not_ ok
+to add a reviewed by tag when a reviewer has not explicitly responded
+with "Reviewed-by: ...".  That provides a false sense that a patch has
+been thoroughly reviewed.  Responding to a patch does not constitute a
+"Reviewed-by:" tag.
+
+And I might be fine with _this_ patch, but that says nothing about
+Nathan, whom you've also falsely attributed a reviewed by tag here.
+
+For such a trivial patch, it's not a big deal, but in the future
+please do not do that again.  It's ok to send v2, v3, etc, but wait
+for reviewers to explicitly state such reviewed by tag. The maintainer
+will collect those responses (and can be done so in an automated
+fashion via a tool like b4 (https://pypi.org/project/b4/)) when
+applying patches.
+
+> ---
+>
+> Change in v2:
+> --replaced s/clang(make W=1 LLVM=1)/kernel-doc/ in commit.
+> https://lore.kernel.org/patchwork/patch/1442639/
+>
+>  drivers/thermal/devfreq_cooling.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+> index 3a788ac..5a86cff 100644
+> --- a/drivers/thermal/devfreq_cooling.c
+> +++ b/drivers/thermal/devfreq_cooling.c
+> @@ -458,7 +458,7 @@ struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df)
+>  EXPORT_SYMBOL_GPL(devfreq_cooling_register);
+>
+>  /**
+> - * devfreq_cooling_em_register_power() - Register devfreq cooling device with
+> + * devfreq_cooling_em_register() - Register devfreq cooling device with
+>   *             power information and automatically register Energy Model (EM)
+>   * @df:                Pointer to devfreq device.
+>   * @dfc_power: Pointer to devfreq_cooling_power.
+> --
+> 1.8.3.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
