@@ -2,277 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5826F3A08FE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 03:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92793A0A05
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 04:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbhFIB2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Jun 2021 21:28:17 -0400
-Received: from mga03.intel.com ([134.134.136.65]:38019 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230303AbhFIB2R (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Jun 2021 21:28:17 -0400
-IronPort-SDR: bCzxLoUPqfksCfprB0W8VeNkTLrwv/Et0DAsNlbuehWCGYb+mkyVR+sw5WzSuN3YliQFmJXyok
- Ghsz8z/X+CHw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="205006626"
-X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
-   d="scan'208";a="205006626"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 18:26:22 -0700
-IronPort-SDR: nWPMKqjlSxvZl1FxEs3IIHo+WSwvNCK3k2ySe2g2UQbRIDh8Ck1NI0yLqkKRDG7ugwMz0QOvMl
- E4fYUiVaay1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
-   d="scan'208";a="402273090"
-Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2021 18:26:20 -0700
-Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lqmz5-0009Iy-Sk; Wed, 09 Jun 2021 01:26:19 +0000
-Date:   Wed, 09 Jun 2021 09:25:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 5a32725a7531b9d4ecec3acb3d13458f10b71690
-Message-ID: <60c01882.2Dba3vo0xLFz1L7C%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230382AbhFIC1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Jun 2021 22:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230259AbhFIC1e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Jun 2021 22:27:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8ABC061574;
+        Tue,  8 Jun 2021 19:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=NVOiE3q6n5OsUVCkyojOeuEAHuYE4AwOawABwQR+Mqc=; b=lx6V32UvTTqvxs+P5oCSs2xW8s
+        tnPptJ9ZrYpGEQkBvFb8fFRB3LBjWYXW5YovxpLIHyv36eVRmmRe8YqCAgrsyoDpnY/0zcAPh5wFJ
+        HtpsfoFDz7OE8N88GRvtkVUQ+kVFnz49IXpZbaRI3/132fkrGu+EXzSGQJMC+4xJPW7stFn7xa9N4
+        aDZCO7AoQo6zYpbxSvEOh3mFRhsDIMGTiMPC6k9SdaSczATbB9XElUeDXt5JqeVlMl5w6ZmKFck7r
+        Atnq0j/h7AUMFOeiT9CoXOX1mqoeginATA/+cgVnM2IV9uQ5DNcC+8aLZZwlm32pqA7oBFJ1VdSx+
+        xgk5NFuw==;
+Received: from [2601:1c0:6280:3f0::bd57]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lqnuV-00BQno-UV; Wed, 09 Jun 2021 02:25:40 +0000
+Subject: Re: [PATCH 2/5] thermal: qcom: Add support for LMh driver
+To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210608222926.2707768-1-thara.gopinath@linaro.org>
+ <20210608222926.2707768-3-thara.gopinath@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <531fae77-f037-5e4a-be1e-ce21618fbd9d@infradead.org>
+Date:   Tue, 8 Jun 2021 19:25:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20210608222926.2707768-3-thara.gopinath@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 5a32725a7531b9d4ecec3acb3d13458f10b71690  Merge branch 'pm-cpufreq' into linux-next
+On 6/8/21 3:29 PM, Thara Gopinath wrote:
+> Driver enabling various pieces of Limits Management Hardware(LMh) for cpu
+> cluster0 and cpu cluster1 namely kick starting monitoring of temperature,
+> current, battery current violations, enabling reliability algorithm and
+> setting up various temperature limits.
+> 
+> The following has been explained in the cover letter. I am including this
+> here so that this remains in the commit message as well.
+> 
+> LMh is a hardware infrastructure on some Qualcomm SoCs that can enforce
+> temperature and current limits as programmed by software for certain IPs
+> like CPU. On many newer SoCs LMh is configured by firmware/TZ and no
+> programming is needed from the kernel side. But on certain SoCs like sdm845
+> the firmware does not do a complete programming of the h/w. On such SoCs
+> kernel software has to explicitly set up the temperature limits and turn on
+> various monitoring and enforcing algorithms on the hardware.
+> 
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  drivers/thermal/qcom/Kconfig  |  10 ++
+>  drivers/thermal/qcom/Makefile |   1 +
+>  drivers/thermal/qcom/lmh.c    | 244 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 255 insertions(+)
+>  create mode 100644 drivers/thermal/qcom/lmh.c
+> 
+> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+> index 8d5ac2df26dc..c95b95e254d7 100644
+> --- a/drivers/thermal/qcom/Kconfig
+> +++ b/drivers/thermal/qcom/Kconfig
+> @@ -31,3 +31,13 @@ config QCOM_SPMI_TEMP_ALARM
+>  	  trip points. The temperature reported by the thermal sensor reflects the
+>  	  real time die temperature if an ADC is present or an estimate of the
+>  	  temperature based upon the over temperature stage value.
+> +
+> +config QCOM_LMH
+> +	tristate "Qualcomm Limits Management Hardware"
+> +	depends on ARCH_QCOM
+> +	help
+> +	  This enables initialization of Qualcomm limits management
+> +	  hardware(LMh). LMh allows for h/w enforced mitigation for cpus based on
 
-elapsed time: 730m
+	                                hardware-enforced           CPUs
 
-configs tested: 214
-configs skipped: 3
+> +	  input from temperature and current sensors.  On many newer Qualcomm SoCs
+> +	  LMH is configure in the firmware and this feature need not be enabled.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+	  LMh
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-mips                         rt305x_defconfig
-mips                      malta_kvm_defconfig
-powerpc                     asp8347_defconfig
-arm                           spitz_defconfig
-sparc                       sparc32_defconfig
-nios2                            allyesconfig
-sh                          rsk7203_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                 simple_smp_defconfig
-mips                      maltasmvp_defconfig
-arm                         orion5x_defconfig
-h8300                       h8s-sim_defconfig
-arm                   milbeaut_m10v_defconfig
-xtensa                           alldefconfig
-mips                          ath79_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                           se7722_defconfig
-sh                           se7724_defconfig
-sh                          sdk7786_defconfig
-arc                          axs103_defconfig
-nios2                         3c120_defconfig
-ia64                                defconfig
-arc                              alldefconfig
-xtensa                       common_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                     loongson2k_defconfig
-powerpc                     taishan_defconfig
-xtensa                          iss_defconfig
-powerpc                     pseries_defconfig
-parisc                generic-32bit_defconfig
-h8300                    h8300h-sim_defconfig
-mips                      loongson3_defconfig
-ia64                      gensparse_defconfig
-m68k                            q40_defconfig
-openrisc                            defconfig
-mips                     cu1000-neo_defconfig
-arc                        nsim_700_defconfig
-arm                       versatile_defconfig
-sh                         microdev_defconfig
-sh                             espt_defconfig
-powerpc                 mpc837x_rdb_defconfig
-h8300                            allyesconfig
-powerpc                      ep88xc_defconfig
-m68k                          atari_defconfig
-powerpc                      cm5200_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                       eiger_defconfig
-powerpc                     tqm8560_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                      pic32mzda_defconfig
-sh                          sdk7780_defconfig
-mips                      fuloong2e_defconfig
-xtensa                  audio_kc705_defconfig
-arm                         lpc32xx_defconfig
-sh                           se7343_defconfig
-mips                         tb0226_defconfig
-arm                      integrator_defconfig
-arm                         cm_x300_defconfig
-arm                         bcm2835_defconfig
-mips                            ar7_defconfig
-arm64                            alldefconfig
-arm                           tegra_defconfig
-nds32                            alldefconfig
-mips                         tb0219_defconfig
-powerpc                 mpc832x_rdb_defconfig
-nios2                         10m50_defconfig
-arm                          ixp4xx_defconfig
-sh                           se7206_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                 linkstation_defconfig
-mips                  cavium_octeon_defconfig
-arm                             mxs_defconfig
-mips                       rbtx49xx_defconfig
-mips                             allmodconfig
-arc                         haps_hs_defconfig
-powerpc                         wii_defconfig
-arm                         s3c2410_defconfig
-mips                       lemote2f_defconfig
-arm                       aspeed_g4_defconfig
-mips                           ip27_defconfig
-powerpc                      ppc6xx_defconfig
-arm                         s5pv210_defconfig
-arm                         shannon_defconfig
-m68k                          amiga_defconfig
-s390                             allyesconfig
-powerpc                     tqm8555_defconfig
-powerpc                    mvme5100_defconfig
-csky                                defconfig
-arm                        cerfcube_defconfig
-mips                      maltaaprp_defconfig
-sh                          landisk_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                      mgcoge_defconfig
-arm                        mvebu_v5_defconfig
-m68k                        mvme147_defconfig
-um                           x86_64_defconfig
-powerpc                    gamecube_defconfig
-powerpc                       ebony_defconfig
-arm                         mv78xx0_defconfig
-ia64                         bigsur_defconfig
-m68k                           sun3_defconfig
-powerpc                      pmac32_defconfig
-arm                          simpad_defconfig
-arm                          pxa3xx_defconfig
-powerpc                 xes_mpc85xx_defconfig
-arm                       aspeed_g5_defconfig
-arm                        magician_defconfig
-arc                 nsimosci_hs_smp_defconfig
-sh                           se7619_defconfig
-xtensa                         virt_defconfig
-arm                       imx_v6_v7_defconfig
-arm                       netwinder_defconfig
-um                             i386_defconfig
-powerpc                     tqm5200_defconfig
-sh                   secureedge5410_defconfig
-powerpc                      bamboo_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                        workpad_defconfig
-powerpc                     mpc83xx_defconfig
-arm                      jornada720_defconfig
-nds32                             allnoconfig
-arc                           tb10x_defconfig
-microblaze                          defconfig
-powerpc                     kilauea_defconfig
-arc                      axs103_smp_defconfig
-powerpc                      walnut_defconfig
-arm                         nhk8815_defconfig
-sh                        edosk7760_defconfig
-sh                   sh7770_generic_defconfig
-arm                     am200epdkit_defconfig
-mips                      bmips_stb_defconfig
-um                               alldefconfig
-arm                          pxa168_defconfig
-arm                        spear6xx_defconfig
-arm                            pleb_defconfig
-powerpc                 mpc832x_mds_defconfig
-sh                           se7721_defconfig
-h8300                               defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210608
-x86_64               randconfig-a002-20210608
-x86_64               randconfig-a003-20210608
-x86_64               randconfig-a006-20210608
-x86_64               randconfig-a005-20210608
-x86_64               randconfig-a001-20210608
-i386                 randconfig-a003-20210608
-i386                 randconfig-a006-20210608
-i386                 randconfig-a004-20210608
-i386                 randconfig-a001-20210608
-i386                 randconfig-a005-20210608
-i386                 randconfig-a002-20210608
-i386                 randconfig-a015-20210608
-i386                 randconfig-a013-20210608
-i386                 randconfig-a016-20210608
-i386                 randconfig-a011-20210608
-i386                 randconfig-a012-20210608
-i386                 randconfig-a014-20210608
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+> +	  However, on certain SoCs like sdm845 LMH has to be configured from HLOS.
 
-clang tested configs:
-x86_64               randconfig-a002-20210607
-x86_64               randconfig-a004-20210607
-x86_64               randconfig-a003-20210607
-x86_64               randconfig-a006-20210607
-x86_64               randconfig-a005-20210607
-x86_64               randconfig-a001-20210607
-x86_64               randconfig-a015-20210608
-x86_64               randconfig-a012-20210608
-x86_64               randconfig-a014-20210608
-x86_64               randconfig-a011-20210608
-x86_64               randconfig-a016-20210608
-x86_64               randconfig-a013-20210608
+	                                       LMh
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+What is HLOS?
+
+
+> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+> new file mode 100644
+> index 000000000000..8741a36cb674
+> --- /dev/null
+> +++ b/drivers/thermal/qcom/lmh.c
+> @@ -0,0 +1,244 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Copyright (C) 2021, Linaro Limited. All rights reserved.
+> + */
+
+[snip]
+
+> +static int lmh_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev;
+> +	struct device_node *np;
+> +	struct lmh_hw_data *lmh_data;
+> +	u32 node_id;
+> +	int ret;
+> +
+> +	dev = &pdev->dev;
+> +	np = dev->of_node;
+> +	if (!np)
+> +		return -EINVAL;
+> +
+> +	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
+> +	if (!lmh_data)
+> +		return -ENOMEM;
+> +
+> +	lmh_data->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(lmh_data->base))
+> +		return PTR_ERR(lmh_data->base);
+> +
+> +	ret = of_property_read_u32(np, "qcom,lmh-cpu-id", &lmh_data->cpu_id);
+> +	if (ret)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * Only sdm845 has lmh hardware currently enabled from hlos. If this is needed
+> +	 * for other platforms, revisit this to check if the <cpu-id, node-id> should be part
+> +	 * of a dt match table.
+> +	 */
+> +	if (lmh_data->cpu_id == 0) {
+> +		node_id = LMH_CLUSTER0_NODE_ID;
+> +	} else if (lmh_data->cpu_id == 4) {
+> +		node_id = LMH_CLUSTER1_NODE_ID;
+> +	} else {
+> +		dev_err(dev, "Wrong cpu id associated with lmh node\n");
+
+		                    CPU                    LMh
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Payload size is five bytes for now */
+> +	lmh_data->payload_size = 5 * sizeof(u32);
+> +
+> +	platform_set_drvdata(pdev, lmh_data);
+> +
+> +	if (!qcom_scm_lmh_dcvsh_available())
+> +		return -EINVAL;
+> +
+> +	/* Enable Thermal Algorithm */
+> +	update_payload(lmh_data, LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Enable Current Sensing Algorithm */
+> +	update_payload(lmh_data, LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d enabling current subfunction\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Enable Reliability Algorithm */
+> +	update_payload(lmh_data, LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Enable BCL Algorithm */
+> +	update_payload(lmh_data, LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+
+What is BCL?
+
+> +		return ret;
+> +	}
+> +
+> +	ret = qcom_scm_lmh_profile_change(0x1);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d changing profile\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Set default thermal trips */
+> +	update_payload(lmh_data, LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, LMH_TH_ARM_TEMP);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error setting thermal ARM thershold%d\n", ret);
+
+		                                        threshold
+
+> +		return ret;
+> +	}
+> +
+> +	update_payload(lmh_data, LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, LMH_TH_HI_TEMP);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error setting thermal HI thershold%d\n", ret);
+
+		                                       threshold
+
+> +		return ret;
+> +	}
+> +	update_payload(lmh_data, LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, LMH_TH_LOW_TEMP);
+> +	ret = qcom_scm_lmh_dcvsh(lmh_data->payload, lmh_data->payload_size,
+> +				 LMH_NODE_DCVS, node_id, 0);
+> +	if (ret) {
+> +		dev_err(dev, "Error setting thermal ARM thershold%d\n", ret);
+
+		                                        threshold
+
+> +		return ret;
+> +	}
+> +
+> +	lmh_data->irq = platform_get_irq(pdev, 0);
+> +	lmh_data->domain = irq_domain_add_linear(np, 1, &lmh_irq_ops, lmh_data);
+> +	if (!lmh_data->domain) {
+> +		dev_err(dev, "Error adding irq_domain\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = devm_request_irq(dev, lmh_data->irq, lmh_handle_irq,
+> +			       IRQF_TRIGGER_HIGH | IRQF_ONESHOT | IRQF_NO_SUSPEND,
+> +			       "lmh-irq", lmh_data);
+> +	if (ret) {
+> +		dev_err(dev, "Error %d registering irq %x\n", ret, lmh_data->irq);
+> +		irq_domain_remove(lmh_data->domain);
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id lmh_table[] = {
+> +	{ .compatible = "qcom,msm-hw-limits", },
+> +	{},
+> +};
+> +
+> +static struct platform_driver lmh_driver = {
+> +	.probe = lmh_probe,
+> +	.driver = {
+> +		.name = "qcom-lmh",
+> +		.of_match_table = lmh_table,
+> +	},
+> +};
+> +module_platform_driver(lmh_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("QCOM LMH driver");
+
+                            LMh
+
+
+thanks.
+-- 
+~Randy
+
