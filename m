@@ -2,109 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7A33A10D6
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 12:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675C83A1130
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jun 2021 12:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbhFIKIN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Jun 2021 06:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234217AbhFIKIM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Jun 2021 06:08:12 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E1FC06175F
-        for <linux-pm@vger.kernel.org>; Wed,  9 Jun 2021 03:06:18 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a1so27378447lfr.12
-        for <linux-pm@vger.kernel.org>; Wed, 09 Jun 2021 03:06:18 -0700 (PDT)
+        id S238923AbhFIKfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Jun 2021 06:35:52 -0400
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:56130 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238868AbhFIKft (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Jun 2021 06:35:49 -0400
+Received: by mail-wm1-f43.google.com with SMTP id g204so3680140wmf.5;
+        Wed, 09 Jun 2021 03:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kziI9SCt0c63nrukquSSDGhvQsklkwm80pK2jCkKV/8=;
-        b=ocAQ/4+bpUOUubmy0uU8rzGkEcreB5FA8DJQDdC+qjuGWhw5aunQ5NGgkRjkWMQmrS
-         ZPkmgqCIy7BQt934bRcyJXeojgGvACSQecdfuhspGw+IHhl4dH0Tndk70mE+WUPhwk/h
-         fzd99G0iK1QAAGArcBXPMp0CzMbmaK5h7saGzD/089u7NTMvI9ou7jvtlPn8v37tBxHy
-         ONC7IItbCe0GKsL68GQ5ylKowtkGn5LC9KfwaSKYBYA5bVSzLlssptqwJxn13WRqsj6y
-         EeGLF3fmtLVHXMmFNybGofjBwZiPN1StkB20aD+hzMSRJtbfxUE2LF6zKNZKqCduqiFV
-         wf0Q==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=P4cgH8oFymIFjZTH3CHg2wo7SV8NvJbv1pufBgRVFXk=;
+        b=fJrCJoyOKHZjU+dTpb3gNSifhKoIxDOiat0mP189Biw6SHXXSHnkSbHA0/aafJSl59
+         9w5U0oafwcr+uR9MeWt7CiPuNdVYiH0I85nNmjWKlUiu64KDZ6PSfOEACtBR5r7XQoBN
+         nBmZH3sP6AbX8wMgehYY9ouM433woTDi/X3mdV4AaEHtB2fbg1h6KUDJbbd79Z4uw4oS
+         bu8h2khsp1Efg3G8nBk8OBv7+EnSyD16CgsQnzqENZDLFv/dY9ZcbxRi/ptpPWktuSu4
+         sVrISSUR4qtLtMXiNT1QqTrOqz+Iy29Kf/h7FNPToi/GUDxOP9B5Pn3ZDko6TeNr2WXT
+         ZYhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=kziI9SCt0c63nrukquSSDGhvQsklkwm80pK2jCkKV/8=;
-        b=YsFiZV9PiDe4Ds/FJaNj6UTi7+ampseglaeK3LCgSlryoKBCKGRE89uqfbyBgDbkx1
-         9rh3QVLFAtAQiiNN1WS1ESO5c3rx3xtUG5qk5r3dw5Pz9qy0XmzmvpZnw0IOLnd9nCGz
-         tU6gw4rno5SeV2Y3z5wzJF7lsXn0qtZKSWilJ3K58wYtdh2sKjtnRcMqA6W8bkIdTao0
-         el7vJMOXTt1hR72bjEvUvToPCPWhOujHvLdGiUm4Fb1+9RPiiAKTinXbE26lD3F9QkcA
-         lumYUl+UlZskkUlYKo46dRixY2rtcSem2X3VV+nXsNfVNMDopyeLxFjI5Wta0mNyUpve
-         OPEg==
-X-Gm-Message-State: AOAM5334gLJsJmSufuvJu2ItV1j2EmkznZXN63k2newHUh055S2YbNu1
-        9cfsDLMA0/yWnm3eWyxWGRmT1Q==
-X-Google-Smtp-Source: ABdhPJy3vLoeOu5r0E1JMWc+45Y9k4iikqrd7OlIr7swkKp5Gezd4tXOsSa6ac2rXxjOp9Hlx3QnrQ==
-X-Received: by 2002:a05:6512:31cd:: with SMTP id j13mr18401644lfe.445.1623233176628;
-        Wed, 09 Jun 2021 03:06:16 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
-        by smtp.gmail.com with ESMTPSA id f11sm304406lfk.9.2021.06.09.03.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 03:06:14 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] PM: runtime: Clarify documentation when callbacks are unassigned
-Date:   Wed,  9 Jun 2021 12:06:10 +0200
-Message-Id: <20210609100610.97830-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        bh=P4cgH8oFymIFjZTH3CHg2wo7SV8NvJbv1pufBgRVFXk=;
+        b=hoJ4tsrMVWyaVcAbjmMULjelf1jUIPpjc/BxP39IFDdYJ8GADKZiOF5Gd9RXPcnHrv
+         juvi8Mu5zOzU2+NJ22LRTXQoe1tPrTKC1YFnY+WBAIDNuWkkL3wsvs1GtTU5Zszq1as8
+         si656C1rHkh6iD8ALIkkIkatKPH3TERxO205mkGZ/fLYY5wPMtvxnS60p16OEeYePceY
+         1b6qCXHOG6bB60YLGEH8Drdmvn2aWhmQb5/oHOUb4G+ugG5eerJm80AvB9zZUyuitRto
+         pZ+ezfRGnkXBcmp+00Zf/hFtaaqUEzTt3NmH4VnN6+K8FEUoCHQT48ytq5Gug3teJbcr
+         PdLA==
+X-Gm-Message-State: AOAM530qRaD7iP82RGOi3cbwelSWOk3C1hsm4JETcSmP6/CfNZ6XIAdV
+        gOrs56/VPNcUvMKOnqZ5p7k=
+X-Google-Smtp-Source: ABdhPJzOGsdifqwK0g5kUKqGwEkkGQ19ZrnAjS9qtb3yoDxuCUA0eZInD75LQ43k8MwVMcPRw/d9Zw==
+X-Received: by 2002:a1c:9a84:: with SMTP id c126mr26723738wme.160.1623234761358;
+        Wed, 09 Jun 2021 03:32:41 -0700 (PDT)
+Received: from ziggy.stardust (81.172.61.185.dyn.user.ono.com. [81.172.61.185])
+        by smtp.gmail.com with ESMTPSA id e17sm26176307wre.79.2021.06.09.03.32.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Jun 2021 03:32:40 -0700 (PDT)
+Subject: Re: [PATCH v4 1/3] thermal: mediatek: Relocate driver to mediatek
+ folder
+To:     Ben Tseng <ben.tseng@mediatek.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Michael Kao <michael.kao@mediatek.com>
+References: <20210603081806.21154-1-ben.tseng@mediatek.com>
+ <20210603081806.21154-2-ben.tseng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <1157f945-f0c8-5ac6-1512-71adc72b514d@gmail.com>
+Date:   Wed, 9 Jun 2021 12:32:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210603081806.21154-2-ben.tseng@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Recent changes to the PM core allows ->runtime_suspend|resume callbacks to
-be unassigned.
 
-In the earlier behaviour the PM core would return -ENOSYS, when trying to
-runtime resume a device, for example. Let's update the documentation to
-clarify this.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+On 03/06/2021 10:18, Ben Tseng wrote:
+> From: Michael Kao <michael.kao@mediatek.com>
+> 
+> Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> drivers. Relocate the original thermal controller driver to it and rename
+> as soc_temp.c to show its purpose more clearly.
+> 
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+>  drivers/thermal/Kconfig             |   14 +-
+>  drivers/thermal/Makefile            |    2 +-
+>  drivers/thermal/mediatek/Kconfig    |   23 +
+>  drivers/thermal/mediatek/Makefile   |    1 +
+>  drivers/thermal/mediatek/soc_temp.c | 1127 +++++++++++++++++++++++++++++++++++
+>  drivers/thermal/mtk_thermal.c       | 1127 -----------------------------------
 
-Changes in v4:
-        - This time, really, fix spelling and further clarified the behaviour,
-	according to comments from Alan.
+I suppose that there is no functional change. Then better put that in the commit
+message or use "git mv" to get a better readable diff.
 
----
- Documentation/power/runtime_pm.rst | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 18ae21bf7f92..8a0a43811e3a 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -827,6 +827,15 @@ or driver about runtime power changes.  Instead, the driver for the device's
- parent must take responsibility for telling the device's driver when the
- parent's power state changes.
- 
-+Note that, in some cases it may not be desirable for subsystems/drivers to call
-+pm_runtime_no_callbacks() for their devices. This could be because a subset of
-+the runtime PM callbacks needs to be implemented, a platform dependent PM
-+domain could get attached to the device or that the device is power managed
-+through a supplier device link. For these reasons and to avoid boilerplate code
-+in subsystems/drivers, the PM core allows runtime PM callbacks to be
-+unassigned. More precisely, if a callback pointer is NULL, the PM core will act
-+as though there was a callback and it returned 0.
-+
- 9. Autosuspend, or automatically-delayed suspends
- =================================================
- 
--- 
-2.25.1
-
+Regards,
+Matthias
