@@ -2,60 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC87C3A26EC
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B369D3A26E4
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhFJI1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 04:27:20 -0400
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:39550 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbhFJI1R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:27:17 -0400
-Received: by mail-pj1-f53.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so3281865pjp.4
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:25:21 -0700 (PDT)
+        id S230287AbhFJI0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 04:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230251AbhFJI0a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:26:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53069C0617AD
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:24:24 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id mp5-20020a17090b1905b029016dd057935fso3284756pjb.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:24:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CWh1Aokcvj2UQLotNOEP1WcKgv5ApFMcJuxcuwZzDnY=;
-        b=yfdQVopR5TI3meR02dYmXSyInvDr/3fhuuTS2PsKDcsKLC6x8NTEx3quKD6H2xTcyr
-         hXwuuTiL2kCbiS5eVHWLzGnZEc3Ks6Q9Fa08m2lXkTLq1ygZ1WmoqMyyEWR+BX2eBHbe
-         WX7pdOLNlu2PT45ePAJlWjm2y8tido3FmiO+ZknmtSDKH5fJbtc37Mnrx2IFMvCJTLVq
-         bb+dnqC9aHYa3n3L9GqoKHCTPCmU25TD2GEwd5xUbqdV2hetEL+edqptR8vQWLscui2W
-         lX2APi+adydBdmwI3t9qFgYUSXyzCHb91KzFb4+/dffecVL2MjhHgOvg39lq6UXspvqO
-         W2nQ==
+        bh=ts2ApCK9xnJQUj3HLY0ucjPpblWOxwdFx65VhUgZ2Z4=;
+        b=m3DlcIj/aVptNqUHKX8oUUf+lJ5m3vlVM9aXVU8bLDIOpm2rSnifUHo0xvKS1bmSPP
+         Z9+3xTMFL33TbexfAYLt9ByLW2mLUUFgDeg9JNE178xurzULxbZQuRFaevMs/qUGzubm
+         V8EJzeBp0z+kYLjMIV0xRtqaHvkD220uIBG5erXbcRCk5kYbTBiKwTncOz0krO75n9rw
+         7Q0opG0COPQHi6Bj+2EKSvUBEZi7OezH8KXfzvc5zAtSjsUF/1h0dIDQ4A7aK34cq+Xm
+         EEtDq/BiUaFJks4VJbbiTYfeb96gHqa+odSnqwWnZbcL/Q/G/D+BmaUyfDmatGU+xeTY
+         BdZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CWh1Aokcvj2UQLotNOEP1WcKgv5ApFMcJuxcuwZzDnY=;
-        b=fbLBGKmGzKReg2Apzu2Iah0HdFv0b9D4XgV90jBL+kLoUs8j/Xq+aJNUK86kV04C9g
-         zSqLDMWYbFygeFj1K5Gwmtb/3I8q91C1Gz8/IO4p8X1PCCMGCIWdRNi3oXqH07Zt2CqD
-         xfZT9eKjOIXP9rdfIyfIPfeCAJ/BxEZr2r4N2Co6qJyOOsG5jNXgfLPmpPI5BWe/75AP
-         tFp1w/joPgiguwpO/KtKWO+eHOOihDDwGRk7de8fSVAH5vkDti/D/BBsPPK1URB+t/7z
-         CboRz8qlwADrk2GNAkhgNEOgRagljEfa6f9mXvt+yT4dPrJynOkFRy6EJqsl/tMNBVXi
-         VgLA==
-X-Gm-Message-State: AOAM531VbnllTa2fIhLD21vk2RXgq9aLHhLtY+ompa+IuO3DfhnmmvRB
-        4c8v/G//wT7pyZPeCIGRvTg/wQ==
-X-Google-Smtp-Source: ABdhPJyaaDXr8g7kkcXGZv4NNDc5gQjlEQI1ewN+YWmwgslYfZxiziQFr5nDp23V0bWGIf5Xfv9FDA==
-X-Received: by 2002:a17:902:a3c3:b029:f0:b297:7778 with SMTP id q3-20020a170902a3c3b02900f0b2977778mr3939702plb.16.1623313460999;
-        Thu, 10 Jun 2021 01:24:20 -0700 (PDT)
+        bh=ts2ApCK9xnJQUj3HLY0ucjPpblWOxwdFx65VhUgZ2Z4=;
+        b=tiBD5ncfYZPIHJf+uq3lyOn6PlbzjPwJLtQGwC4W0HQnN/3Z+xIpHVGSLq6F3ztNg8
+         99dgovTT6WM7yZx9b7hNYmwvSf2hVQaB0XKTLRBx7YaRNT9Fzaatn/gbhtvYc4oqnAPg
+         foB6giHuqG1Q9ztxwHtCUdPddgQUDvCUl/xCJy43eb/yFgGLUHhxHW9cIm4BqW25pMLI
+         y/HLoNzjyXvPTdwwfDRtSYaUsItIjf6iBL1Dr1lb8+0LQVUQBpKl1P05dlR/xi8JiA3S
+         8ky25h2F2x5WTEnLuV5xdg7C5OnEf/60kQcEQqYKT6UC2ntLJ7fG++H1ymXE7fWnLzGr
+         kc6w==
+X-Gm-Message-State: AOAM532ExRm33SlkasFATvQ1CevvbhI+LnjtGpWvh3Q6LT8NM3mNKBEs
+        B8kAQd/bs6ssmnc0GeYMlBukug==
+X-Google-Smtp-Source: ABdhPJxGEKh8lQGqm26xlut8Bs9isUrJehy0qehJJ01+aGGtE8p7elJr0nyDrya29eyQXQ9z2gQ3XQ==
+X-Received: by 2002:a17:902:9a8c:b029:113:d891:2eaf with SMTP id w12-20020a1709029a8cb0290113d8912eafmr3878715plp.61.1623313463895;
+        Thu, 10 Jun 2021 01:24:23 -0700 (PDT)
 Received: from localhost ([136.185.169.128])
-        by smtp.gmail.com with ESMTPSA id s3sm2120419pgs.62.2021.06.10.01.24.20
+        by smtp.gmail.com with ESMTPSA id z8sm2081118pgi.94.2021.06.10.01.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 01:24:20 -0700 (PDT)
+        Thu, 10 Jun 2021 01:24:23 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Qian Cai <quic_qiancai@quicinc.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>
+        Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Ionela Voinescu <ionela.voinescu@arm.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] cpufreq: Add start_cpu() and stop_cpu() callbacks
-Date:   Thu, 10 Jun 2021 13:54:00 +0530
-Message-Id: <1d1c3ee64c0a5a701c8d7c66440fd2781512432c.1623313323.git.viresh.kumar@linaro.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] cpufreq: cppc: Fix suspend/resume specific races with the FIE code
+Date:   Thu, 10 Jun 2021 13:54:01 +0530
+Message-Id: <1256ee94a515216ab58553181de175cc74f396bd.1623313323.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1623313323.git.viresh.kumar@linaro.org>
 References: <cover.1623313323.git.viresh.kumar@linaro.org>
@@ -65,90 +67,242 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On CPU hotplug, the cpufreq core doesn't call any driver specific
-callback unless all the CPUs of a policy went away.
+The CPPC driver currently stops the frequency invariance related
+kthread_work and irq_work from cppc_freq_invariance_exit() which is only
+called during driver's removal.
 
-There is need for a callback to be called in such cases (for the CPPC
-cpufreq driver) now. Reuse the existing stop_cpu() callback and add a
-new one for start_cpu().
+This is not sufficient as the CPUs can get hot-plugged out while the
+driver is in use, the same also happens during system suspend/resume.
 
+In such a cases we can reach a state where the CPU is removed by the
+kernel but its kthread_work or irq_work aren't stopped.
+
+Fix this by implementing the start_cpu() and stop_cpu() callbacks of the
+cpufreq core, which will be called for each CPU's addition/removal.
+
+The FIE feature was marked BROKEN earlier, revert that.
+
+Reported-by: Qian Cai <quic_qiancai@quicinc.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- Documentation/cpu-freq/cpu-drivers.rst |  7 +++++--
- drivers/cpufreq/cpufreq.c              | 11 ++++++++---
- include/linux/cpufreq.h                |  5 ++++-
- 3 files changed, 17 insertions(+), 6 deletions(-)
+ drivers/cpufreq/Kconfig.arm    |   1 -
+ drivers/cpufreq/cppc_cpufreq.c | 117 +++++++++++++++++++--------------
+ 2 files changed, 68 insertions(+), 50 deletions(-)
 
-diff --git a/Documentation/cpu-freq/cpu-drivers.rst b/Documentation/cpu-freq/cpu-drivers.rst
-index a697278ce190..15cfe42b4075 100644
---- a/Documentation/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/cpu-freq/cpu-drivers.rst
-@@ -71,8 +71,11 @@ And optionally
-  .exit - A pointer to a per-policy cleanup function called during
-  CPU_POST_DEAD phase of cpu hotplug process.
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 614c34350f41..a5c5f70acfc9 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -22,7 +22,6 @@ config ACPI_CPPC_CPUFREQ
+ config ACPI_CPPC_CPUFREQ_FIE
+ 	bool "Frequency Invariance support for CPPC cpufreq driver"
+ 	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
+-	depends on BROKEN
+ 	default y
+ 	help
+ 	  This extends frequency invariance support in the CPPC cpufreq driver,
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 30a861538784..82167c657098 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -74,7 +74,6 @@ struct cppc_freq_invariance {
  
-- .stop_cpu - A pointer to a per-policy stop function called during
-- CPU_DOWN_PREPARE phase of cpu hotplug process.
-+ .start_cpu - A pointer to a per-policy per-cpu start function called
-+ during CPU online phase.
+ static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+ static struct kthread_worker *kworker_fie;
+-static bool fie_disabled;
+ 
+ static struct cpufreq_driver cppc_cpufreq_driver;
+ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
+@@ -151,35 +150,64 @@ static struct scale_freq_data cppc_sftd = {
+ 	.set_freq_scale = cppc_scale_freq_tick,
+ };
+ 
+-static void cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
+-					     struct cppc_cpudata *cpu_data)
++static void cppc_cpufreq_start_cpu(struct cpufreq_policy *policy,
++				   unsigned int cpu)
+ {
++	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+ 	struct cppc_perf_fb_ctrs fb_ctrs = {0};
+-	struct cppc_freq_invariance *cppc_fi;
+-	int i, ret;
++	int ret;
+ 
+-	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+-		return;
++	cppc_fi->cpu = cpu;
++	cppc_fi->cpu_data = policy->driver_data;
++	kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
++	init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+ 
+-	if (fie_disabled)
++	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs);
++	if (ret) {
++		pr_warn("%s: failed to read perf counters: %d\n",
++				__func__, ret);
+ 		return;
++	} else {
++		cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
++	}
+ 
+-	for_each_cpu(i, policy->cpus) {
+-		cppc_fi = &per_cpu(cppc_freq_inv, i);
+-		cppc_fi->cpu = i;
+-		cppc_fi->cpu_data = cpu_data;
+-		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+-		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
++	/* Register for freq-invariance */
++	topology_set_scale_freq_source(&cppc_sftd, cpumask_of(cpu));
++}
+ 
+-		ret = cppc_get_perf_ctrs(i, &fb_ctrs);
+-		if (ret) {
+-			pr_warn("%s: failed to read perf counters: %d\n",
+-				__func__, ret);
+-			fie_disabled = true;
+-		} else {
+-			cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+-		}
+-	}
++static void cppc_cpufreq_stop_cpu(struct cpufreq_policy *policy,
++				  unsigned int cpu)
++{
++	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, cpu);
 +
-+ .stop_cpu - A pointer to a per-policy per-cpu stop function called
-+ during CPU offline phase.
- 
-  .suspend - A pointer to a per-policy suspend function which is called
-  with interrupts disabled and _after_ the governor is stopped for the
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 802abc925b2a..fac2522be5c3 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1119,6 +1119,10 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
- 
- 	cpumask_set_cpu(cpu, policy->cpus);
- 
-+	/* Do CPU specific initialization if required */
-+	if (cpufreq_driver->start_cpu)
-+		cpufreq_driver->start_cpu(policy, cpu);
++	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpumask_of(cpu));
 +
- 	if (has_target()) {
- 		ret = cpufreq_start_governor(policy);
- 		if (ret)
-@@ -1581,6 +1585,10 @@ static int cpufreq_offline(unsigned int cpu)
- 		policy->cpu = cpumask_any(policy->cpus);
- 	}
- 
-+	/* Do CPU specific de-initialization if required */
-+	if (cpufreq_driver->stop_cpu)
-+		cpufreq_driver->stop_cpu(policy, cpu);
++	irq_work_sync(&cppc_fi->irq_work);
++	kthread_cancel_work_sync(&cppc_fi->work);
++}
 +
- 	/* Start governor again for active policy */
- 	if (!policy_is_inactive(policy)) {
- 		if (has_target()) {
-@@ -1597,9 +1605,6 @@ static int cpufreq_offline(unsigned int cpu)
- 		policy->cdev = NULL;
- 	}
++static int cppc_freq_invariance_policy_init(struct cpufreq_policy *policy)
++{
++	int cpu;
++
++	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
++		return 0;
++
++	for_each_cpu(cpu, policy->cpus)
++		cppc_cpufreq_start_cpu(policy, cpu);
++
++	return 0;
++}
++
++static void cppc_freq_invariance_policy_exit(struct cpufreq_policy *policy)
++{
++	int cpu;
++
++	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
++		return;
++
++	for_each_cpu(cpu, policy->cpus)
++		cppc_cpufreq_stop_cpu(policy, cpu);
+ }
  
--	if (cpufreq_driver->stop_cpu)
--		cpufreq_driver->stop_cpu(policy);
+ static void __init cppc_freq_invariance_init(void)
+@@ -202,9 +230,6 @@ static void __init cppc_freq_invariance_init(void)
+ 	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+ 		return;
+ 
+-	if (fie_disabled)
+-		return;
 -
- 	if (has_target())
- 		cpufreq_exit_governor(policy);
+ 	kworker_fie = kthread_create_worker(0, "cppc_fie");
+ 	if (IS_ERR(kworker_fie))
+ 		return;
+@@ -217,36 +242,28 @@ static void __init cppc_freq_invariance_init(void)
+ 		return;
+ 	}
  
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 353969c7acd3..c281b3df4e2f 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -371,7 +371,10 @@ struct cpufreq_driver {
- 	int		(*online)(struct cpufreq_policy *policy);
- 	int		(*offline)(struct cpufreq_policy *policy);
- 	int		(*exit)(struct cpufreq_policy *policy);
--	void		(*stop_cpu)(struct cpufreq_policy *policy);
+-	/* Register for freq-invariance */
+-	topology_set_scale_freq_source(&cppc_sftd, cpu_present_mask);
++	cppc_cpufreq_driver.start_cpu = cppc_cpufreq_start_cpu;
++	cppc_cpufreq_driver.stop_cpu = cppc_cpufreq_stop_cpu;
+ }
+ 
+ static void cppc_freq_invariance_exit(void)
+ {
+-	struct cppc_freq_invariance *cppc_fi;
+-	int i;
+-
+ 	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+ 		return;
+ 
+-	if (fie_disabled)
+-		return;
+-
+-	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
+-
+-	for_each_possible_cpu(i) {
+-		cppc_fi = &per_cpu(cppc_freq_inv, i);
+-		irq_work_sync(&cppc_fi->irq_work);
+-	}
+-
+ 	kthread_destroy_worker(kworker_fie);
+ 	kworker_fie = NULL;
+ }
+ 
+ #else
++static inline int
++cppc_freq_invariance_policy_init(struct cpufreq_policy *polic)
++{
++	return 0;
++}
 +
-+	/* CPU specific start/stop */
-+	void		(*start_cpu)(struct cpufreq_policy *policy, unsigned int cpu);
-+	void		(*stop_cpu)(struct cpufreq_policy *policy, unsigned int cpu);
- 	int		(*suspend)(struct cpufreq_policy *policy);
- 	int		(*resume)(struct cpufreq_policy *policy);
+ static inline void
+-cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
+-				 struct cppc_cpudata *cpu_data)
++cppc_freq_invariance_policy_exit(struct cpufreq_policy *policy)
+ {
+ }
  
+@@ -529,11 +546,10 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	if (ret) {
+ 		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+ 			 caps->highest_perf, cpu, ret);
+-	} else {
+-		cppc_freq_invariance_policy_init(policy, cpu_data);
++		return ret;
+ 	}
+ 
+-	return ret;
++	return cppc_freq_invariance_policy_init(policy);
+ }
+ 
+ static int cppc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+@@ -543,6 +559,8 @@ static int cppc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+ 	unsigned int cpu = policy->cpu;
+ 	int ret;
+ 
++	cppc_freq_invariance_policy_exit(policy);
++
+ 	cpu_data->perf_ctrls.desired_perf = caps->lowest_perf;
+ 
+ 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+@@ -728,10 +746,11 @@ static int __init cppc_cpufreq_init(void)
+ 	INIT_LIST_HEAD(&cpu_data_list);
+ 
+ 	cppc_check_hisi_workaround();
++	cppc_freq_invariance_init();
+ 
+ 	ret = cpufreq_register_driver(&cppc_cpufreq_driver);
+-	if (!ret)
+-		cppc_freq_invariance_init();
++	if (ret)
++		cppc_freq_invariance_exit();
+ 
+ 	return ret;
+ }
+@@ -750,8 +769,8 @@ static inline void free_cpu_data(void)
+ 
+ static void __exit cppc_cpufreq_exit(void)
+ {
+-	cppc_freq_invariance_exit();
+ 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
++	cppc_freq_invariance_exit();
+ 
+ 	free_cpu_data();
+ }
 -- 
 2.31.1.272.g89b43f80a514
 
