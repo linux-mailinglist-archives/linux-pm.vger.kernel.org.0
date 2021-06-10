@@ -2,67 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A388E3A2A0E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 13:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0893A2A10
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 13:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbhFJLT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 07:19:58 -0400
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:43594 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhFJLT5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 07:19:57 -0400
-Received: by mail-pl1-f172.google.com with SMTP id v12so824125plo.10
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 04:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=3U6rlyNtxPQz92GUs4rz4ehZSNzQgLyX56mesQS0nOc=;
-        b=Dn+BCCmzzZByt6LGLOGyXVXPRcgVqfh2zmd/UMp9O8u+D9vWCuIPfPQNzfUN+IDVy+
-         OSAkc2rIQsRsx5VMP4y5McNyMr1lvkcStrAa4A1mcyKcgrHew2Oz8g+LgPfMF/+B4C4M
-         iNRETa1onf/ZtkBVFpiSFAnvWRZFmIyknetkc3Z/vhLLjKPIEN4adz401MhZbHYk1TZV
-         HLIcYglWVp84YJlchOLpCoPYYYVLahFMxORYaQBC4D4mBB10v76sQRnyXO27VT42/SRP
-         Y0r6pBXq7fgzqi4uZgv5fiOtm/k0MXQ2lTOSjN6XDJUo9Bjtu6nAS9PcG0IjBfh7dpw9
-         IH2Q==
+        id S230001AbhFJLVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 07:21:25 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:39450 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229935AbhFJLVY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 07:21:24 -0400
+Received: by mail-oi1-f172.google.com with SMTP id m137so1714995oig.6;
+        Thu, 10 Jun 2021 04:19:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=3U6rlyNtxPQz92GUs4rz4ehZSNzQgLyX56mesQS0nOc=;
-        b=KQF79Cls8FXi6bP2x3p4Pl4sGW28n1RxfsJwoHwbI/ZoPAoet4yZQukHzrc4VJxJiV
-         ywcpTBTyf/4x1/QgJ8CFBs4Fnm2b4vxGAT7V/NsDvu9nUSUoFck8dCX9hNXPrOIr0Gr7
-         lsnfH+VcNbQJMefovpNQJYOVNvBSiNH5+lVIS1dsYqo0wO+fF9rA0yX1/gFBrrE5bL4X
-         fALsGYL7/MfJM35fM2MdGmYVKCriFBARP6Rd5Hq2QhUpvO2zJEzCfeaxqG2VntzYgJ/W
-         A5i2etO2Qv+EdFNjAJDQYcApOmlakQYEnPohpUEaoM6r86ouIZaP3Xl9PjFy3iEVb0So
-         TdRA==
-X-Gm-Message-State: AOAM530QJ9OPtWuaU9TUfwwPNbrpmPi/QgMCXLvLgf7NC5qAi9R1/1LC
-        04YYJbua9uE70Y7NLf/GJUBsjcRuRB3nz+bUq1w=
-X-Google-Smtp-Source: ABdhPJzg+EdtIHtO/oSywxKvnUeYdIUl+kSoJBumT9e+OKi3fcptZ8y9MflJ4INgvymhKkQQOuQ0HfpNe1D4Ol7WZa4=
-X-Received: by 2002:a17:90a:db04:: with SMTP id g4mr2856901pjv.81.1623323821796;
- Thu, 10 Jun 2021 04:17:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NR2n9RcVFmQNpFqcuPDMiWFTscN6MglKWG5i9DzogFk=;
+        b=J6t+BVMli32xwPqSkNPqGpX0LhLPSjohaNd/MS26X58utkflJ5i9XIjng9Fo7Z3Cv/
+         U7PYn59Opg6gP+ECn6lsK7O0HmrVAD0OinciJhWFbLtzoBupQpRh1X0voLAZOFCfqCr0
+         5SqzKqjb832PucxCL+2672SAtQA0Mz4nd+b40+K61M8sdSlMbnJrrRzCOwg64cM8f9ub
+         4jU33k4w3+vIQcgiK1SF5P3OrKxFDjUkY2C9BS/1Zl1GlwjRwtkI1rmQuWvw4EmXBqnu
+         vRwgJLFRuvir9s5ZGKgV+3ansfjat7orBK/ksdQm0AnmRV+3ejMsaB5RRmb/nVlOUwwQ
+         DZ7w==
+X-Gm-Message-State: AOAM533UsiBk+cOO3enyPTE1fNuPyuysM/wemIQdPWrJ91xdRki5TSqO
+        B2dv5PL5JjidMKfOUIH1I/wmLCtbQ3N+WxLk3bY=
+X-Google-Smtp-Source: ABdhPJwm1+jKBtIqcbWHpbjqmp/Q2AtWoRgZ2lUwyomvCIlokusgZIMsVa6DZMO3D1lYpdl4wsd6KISgT+xkQex5hg0=
+X-Received: by 2002:a05:6808:f08:: with SMTP id m8mr13731oiw.69.1623323956491;
+ Thu, 10 Jun 2021 04:19:16 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:4fe2:0:0:0:0 with HTTP; Thu, 10 Jun 2021 04:17:01
- -0700 (PDT)
-Reply-To: nicolaskabore200@gmail.com
-From:   Nicolas Kabore <mohamedmustafi2019@gmail.com>
-Date:   Thu, 10 Jun 2021 12:17:01 +0100
-Message-ID: <CALHuH_h4gR-bpGnuTGr38KLwRxV_nJiPCp0G9e-TYO603Lg1wg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <28308fc0d38f252baf90e6ffb31fd2f8660be273.1623311808.git.viresh.kumar@linaro.org>
+In-Reply-To: <28308fc0d38f252baf90e6ffb31fd2f8660be273.1623311808.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Jun 2021 13:19:05 +0200
+Message-ID: <CAJZ5v0i+GvobLS=cM9kc9Cj4BhLcEmTzRoBsRvDqQjLO-o7yGA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: cppc: Mark frequency invariance broken
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Thu, Jun 10, 2021 at 9:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> There are few races in the frequency invariance support for CPPC driver,
+> namely the driver doesn't stop the kthread_work and irq_work on policy
+> exit during suspend/resume or CPU hotplug.
+>
+> A proper fix won't be possible for the 5.13-rc, as it requires a lot of
+> changes. Instead of reverting the patch, mark this feature BROKEN for
+> now.
+>
+> Fixes: 4c38f2df71c8 ("cpufreq: CPPC: Add support for frequency invariance")
+> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
- I apologize if this email comes as a surprise to you. I have a
-business proposal that will be of
+Well, why don't we revert 4c38f2df71c8 instead?
 
-great benefit to both of us. If you are willing to discuss further on
-this matter, I expect you
+Is there any particular reason for retaining it?
 
-reply. promptly so that I will give you further details.
-
- Best Regards,
-
-Nicolas Kabore
+> ---
+> Rafael, please apply this for v5.13-rc if it looks fine to you.
+>
+>  drivers/cpufreq/Kconfig.arm | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index a5c5f70acfc9..614c34350f41 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -22,6 +22,7 @@ config ACPI_CPPC_CPUFREQ
+>  config ACPI_CPPC_CPUFREQ_FIE
+>         bool "Frequency Invariance support for CPPC cpufreq driver"
+>         depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
+> +       depends on BROKEN
+>         default y
+>         help
+>           This extends frequency invariance support in the CPPC cpufreq driver,
+> --
+> 2.31.1.272.g89b43f80a514
+>
