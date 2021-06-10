@@ -2,44 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE9A3A289A
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 11:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A1A3A28A2
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 11:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbhFJJpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 05:45:00 -0400
-Received: from mail-lj1-f176.google.com ([209.85.208.176]:45796 "EHLO
-        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhFJJo7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 05:44:59 -0400
-Received: by mail-lj1-f176.google.com with SMTP id a19so784754ljq.12
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 02:42:46 -0700 (PDT)
+        id S229895AbhFJJrT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 05:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229778AbhFJJrT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 05:47:19 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B6C061760
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 02:45:14 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id m21so2191712lfg.13
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 02:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IFMZ6hn0kBDDsWPrF5liecdZCHWos+7s4vNp0cU0WbY=;
-        b=nnbRmysLjM19RlYoarApxmIzyRFKTDudbr4x0aDJ/3oPZmwfDLOTi6tcrYVAXic6p8
-         QLUckwThgZy43B/xWRvybVeDrFIPDOv+wPR8iDYuDl12STDIi1h/SnJXESCaFCZIxqqf
-         koTjxzSqfhWjxKfWI7wk+Xd6v1QywOnFJgBUREU2kZq6qOSsocdU2EzjmvS8N2FcqyEz
-         7a94BH6azYi1YWLCj6fqw7p1/FOdYf5bPQ+NuSCHLFXf+svgvm6P3siLi8GD07ng/ftV
-         tarwBZJZ0wm5SWK/+sc4jY+cZWb8cZbgAGF1f0j73nwhKfWmq3ZUpBgnXD1BNG47tJx6
-         cQOA==
+        bh=gM3UcJPTrjoyJ/3bbIZ5GW9fDf24Q/ItJx+WrrjC9IQ=;
+        b=heoi6mxmEBqhWrlDhMrvH6O3fXZ/YJ5SbtfhGjdzNiLXqg7aqvdCht7zC3L4fa9xWu
+         lDDg/bSCOPXLxd8WNefLjvO9V8dwZcjym6BeG3EmytKXmxiliBNP8kmUkNS6sw5Qf3Ym
+         QSE8kqBHxdxp1pIDP/Wo47qnX35kVAwzRihBH37jphK8ji/bDLpVS8VvHN+A8+D4XmgI
+         t3OCgyKgTyDAGc9TbX3FSqkR/atzyQibCqgn2kroY534Hw6johZaqKorH66Jlap5y7nq
+         ZldJ5kLcoKbFTab00vwoABQmXu8+eZky3l3DoK5kviMZSTsPyqR7gYnrWHzi5OfD6+0A
+         kEbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IFMZ6hn0kBDDsWPrF5liecdZCHWos+7s4vNp0cU0WbY=;
-        b=c8rSEcO56ApiKja+Xcvx+6eas98oNwF4FIbLvj0IKHoC8tRUjbm3RAGLYQjLjzvFSS
-         Fw1l1f6DX3rR/ovxt/zwZ3L/gjNGecJD0MePwij3zWKk3q+pY0qho7qHO3kaEgdraDkW
-         ifB2Rx+aczAyrKzk7vvbnMTPXme6tDQYTUwPT2JKkda4RoySovg9InbfJAYshcekCZQ9
-         lIcfO1d/nnc38DOv82AhpCysOfrygELs3gOhdoTAygT/jCeQwUy1JB6hTWW5XQsFRsmG
-         IcEsHyR18jd/ChCurNmX9Wjt4F2xFrSJCgPN9fHxYpcJI4nryhJy+XICDh49YpFhaShU
-         GrpA==
-X-Gm-Message-State: AOAM5333aRCxAFJd32ZbU17g9ku/Cl1htG3EiIEsC08gRcX0e/8cVH/9
-        UJ4ATYeyP3Mp0jgYnhO/xweQghctCxy5+9NeoBACjA==
-X-Google-Smtp-Source: ABdhPJwFSXfqZYGxfXQ63mnzlge8gM8A+eCSch5sM4plDBY0DX/qgHy+3OFFLPXofCxHlFLkmbA4FPIq10uiTZSboZU=
-X-Received: by 2002:a2e:b5b0:: with SMTP id f16mr1493765ljn.221.1623318106290;
- Thu, 10 Jun 2021 02:41:46 -0700 (PDT)
+        bh=gM3UcJPTrjoyJ/3bbIZ5GW9fDf24Q/ItJx+WrrjC9IQ=;
+        b=QKHv4IqDwCNituZrLyd2D8XzeZit6+fIA22LDajPtDYu4EKbpohZvKqS0ES3gSFJsh
+         u9uQqQYITOztF8nIikd9I59pXPaitSmTEsFnsqKbn0wJOYmaWnW7OnVd0LM29aVc8PDl
+         et+NoMwx0zOyXOYfcoymQ12RWzRWWEsClj949oMWj9+rAqKse96zkRWVcQQr7Uqt95Jp
+         wRpK/aHWJtNnT+aAXAg5twAKmZujZTjZcazjbX4g7JqViAkz0KTCTAWuQRUTBMfVaqq2
+         /YSq9z5UoQqZ9vCukQFEKCPuKdnJQYBEUwDnVOv6yH0nZRBQBUDK4gk4TSxaxGVEDH36
+         sTbA==
+X-Gm-Message-State: AOAM530K2+5Ryy1FEGYetV1igWm6s1NtMQT94VKvv9HMSLqQpDJmeGLC
+        MwgdCgcBAbScFL0wTIfi7N4eRadzpUVBPmXCvvJQog==
+X-Google-Smtp-Source: ABdhPJwgJpmFny5Z9wNB/Y/0vyZeETI0Uc/U0J06O6kFNG99hxN7LavI+kQxaJXtXpKCMl25o47easBcxIRhWkstbRY=
+X-Received: by 2002:a05:6512:3483:: with SMTP id v3mr1420859lfr.154.1623318312275;
+ Thu, 10 Jun 2021 02:45:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210604080954.13915-1-lukasz.luba@arm.com> <20210604080954.13915-2-lukasz.luba@arm.com>
  <CAKfTPtA0j-hgXC2_LUcbRcWLkLsAB6H_EYewEHJJW+3dVu_hLQ@mail.gmail.com>
@@ -47,8 +50,8 @@ References: <20210604080954.13915-1-lukasz.luba@arm.com> <20210604080954.13915-2
  <8f4156a7-46ca-361d-bcb7-1cbdc860ef37@arm.com>
 In-Reply-To: <8f4156a7-46ca-361d-bcb7-1cbdc860ef37@arm.com>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 10 Jun 2021 11:41:35 +0200
-Message-ID: <CAKfTPtACEmidJgzU2JqCSG_D9KNkMicnYiV7+GUL+f6u+2o8Bw@mail.gmail.com>
+Date:   Thu, 10 Jun 2021 11:45:00 +0200
+Message-ID: <CAKfTPtD7peDT2Rd4nsuiyKTGeNhbFgspMu9uKyUOAGJ+tTUHUg@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] sched/fair: Take thermal pressure into account
  while estimating energy
 To:     Lukasz Luba <lukasz.luba@arm.com>
@@ -164,16 +167,13 @@ On Thu, 10 Jun 2021 at 11:36, Lukasz Luba <lukasz.luba@arm.com> wrote:
 > True, but in the experiments for idle CPUs I haven't
 > observed that they still have some big util (bigger than _cpu_cap).
 > It decayed already, so it's not a problem for idle CPUs.
-
-But it's a problem because there is a random behavior : some idle cpu
-will use original capacity whereas others will use the capped value
-set by non idle CPUs. You must have consistent behavior across all
-idle cpus.
-
-Then, if it's not a problem why adding the if (!idle_cpu(cpu))
-
 >
 > Although, it might be my test case which didn't trigger something.
 > Is it worth to add the loop above this one, to be 100% sure and
 > get a thermal pressure signal from some running CPU?
 > Then apply the same value always inside the 2nd loop?
+
+Either it's a problem and you must make sure to use the same capacity
+for all cpus of a PD
+
+Or it's not but in this case you don't need  if (!idle_cpu(cpu))
