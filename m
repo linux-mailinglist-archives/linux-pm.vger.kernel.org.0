@@ -2,62 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54A13A26F2
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC87C3A26EC
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbhFJI1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 04:27:32 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:34515 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbhFJI12 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:27:28 -0400
-Received: by mail-pl1-f177.google.com with SMTP id h1so601372plt.1
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:25:17 -0700 (PDT)
+        id S229823AbhFJI1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 04:27:20 -0400
+Received: from mail-pj1-f53.google.com ([209.85.216.53]:39550 "EHLO
+        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230303AbhFJI1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:27:17 -0400
+Received: by mail-pj1-f53.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so3281865pjp.4
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9brGsoPBB+d+RHY31m7cZqh3sPnjdxBD51bqiyGsmoM=;
-        b=z4oi+QtsZIOkUCFtJ2RSljkQbvtIlKWhvmfPM3nkaTcx/SmP2SwZ/OG+gHmMtcJIVI
-         Jz+fY/OSo8O9+ELcqVoo7u7WxCuKuZVq4HIvbp2fEaka2FusUdVtB2CaOnVDFdakQq1s
-         WgD8eKYVt4xY7SKlklJT0+vTQaaOeIygjrFnC3E8n2TxgASfZSLqW6emrP4ePhogpd3p
-         LCP0wfYPCSPY2fDENITlznVP5uwLlXyfFtXxpZyog9xudcUFU5hLh2OauKt2jpqkE710
-         p8BQ3NdkFzKdUP8qDnJ5S4CR/6RqEXkcXwAaVGtyWxW6VDOUnL24T7ElbtkSHdIK+Xas
-         nWQw==
+        bh=CWh1Aokcvj2UQLotNOEP1WcKgv5ApFMcJuxcuwZzDnY=;
+        b=yfdQVopR5TI3meR02dYmXSyInvDr/3fhuuTS2PsKDcsKLC6x8NTEx3quKD6H2xTcyr
+         hXwuuTiL2kCbiS5eVHWLzGnZEc3Ks6Q9Fa08m2lXkTLq1ygZ1WmoqMyyEWR+BX2eBHbe
+         WX7pdOLNlu2PT45ePAJlWjm2y8tido3FmiO+ZknmtSDKH5fJbtc37Mnrx2IFMvCJTLVq
+         bb+dnqC9aHYa3n3L9GqoKHCTPCmU25TD2GEwd5xUbqdV2hetEL+edqptR8vQWLscui2W
+         lX2APi+adydBdmwI3t9qFgYUSXyzCHb91KzFb4+/dffecVL2MjhHgOvg39lq6UXspvqO
+         W2nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9brGsoPBB+d+RHY31m7cZqh3sPnjdxBD51bqiyGsmoM=;
-        b=IwNCkSYc3MRXL/KYPCHyiTb1CVkJz/xAg+eOikJwJPXu52wzp/hKFDjHRGXjo0p+Ii
-         yz66HwoaERO/2VjlzrfauWoFeCGEb8FgW+Iu4vxiaFWvR1M+/1o4tldNzcVIYtq0KCBK
-         3vfu7iSZjmwgSHCh1cBV1NXX/gFYG2uAtCFJzvSY+i37Vtnn7CVnSTbi2Pxrxi/VwKLB
-         gYTnGkj+1t9gh21JtEP+Vwq4Y7eJlAT2kS3fPUNe6rI1OXlR8+EuQSdfXLvzfaHlcv92
-         wBsJzuYBurCmKAnnaUtNS6rX1Vfx1dHZV0h8Zkjq9v4Gz/9PLEYhi6LpW815s4ZN380o
-         nTIg==
-X-Gm-Message-State: AOAM530B3el0lLt9DKJEsxBjf2Ua1ajciBWNp13CtD4rLJr7/bMtLkTv
-        FM1l7E1NUnPTgY5PDBUgilmlgw==
-X-Google-Smtp-Source: ABdhPJyL6nxvcvsq34evJFOy65fc9gysLq/3WyEfD7vvQ+tDWp1jEmZFdtmAB1e5fkCXviRh9tP+3g==
-X-Received: by 2002:a17:90a:1141:: with SMTP id d1mr2224862pje.56.1623313457758;
-        Thu, 10 Jun 2021 01:24:17 -0700 (PDT)
+        bh=CWh1Aokcvj2UQLotNOEP1WcKgv5ApFMcJuxcuwZzDnY=;
+        b=fbLBGKmGzKReg2Apzu2Iah0HdFv0b9D4XgV90jBL+kLoUs8j/Xq+aJNUK86kV04C9g
+         zSqLDMWYbFygeFj1K5Gwmtb/3I8q91C1Gz8/IO4p8X1PCCMGCIWdRNi3oXqH07Zt2CqD
+         xfZT9eKjOIXP9rdfIyfIPfeCAJ/BxEZr2r4N2Co6qJyOOsG5jNXgfLPmpPI5BWe/75AP
+         tFp1w/joPgiguwpO/KtKWO+eHOOihDDwGRk7de8fSVAH5vkDti/D/BBsPPK1URB+t/7z
+         CboRz8qlwADrk2GNAkhgNEOgRagljEfa6f9mXvt+yT4dPrJynOkFRy6EJqsl/tMNBVXi
+         VgLA==
+X-Gm-Message-State: AOAM531VbnllTa2fIhLD21vk2RXgq9aLHhLtY+ompa+IuO3DfhnmmvRB
+        4c8v/G//wT7pyZPeCIGRvTg/wQ==
+X-Google-Smtp-Source: ABdhPJyaaDXr8g7kkcXGZv4NNDc5gQjlEQI1ewN+YWmwgslYfZxiziQFr5nDp23V0bWGIf5Xfv9FDA==
+X-Received: by 2002:a17:902:a3c3:b029:f0:b297:7778 with SMTP id q3-20020a170902a3c3b02900f0b2977778mr3939702plb.16.1623313460999;
+        Thu, 10 Jun 2021 01:24:20 -0700 (PDT)
 Received: from localhost ([136.185.169.128])
-        by smtp.gmail.com with ESMTPSA id q13sm1741649pff.13.2021.06.10.01.24.16
+        by smtp.gmail.com with ESMTPSA id s3sm2120419pgs.62.2021.06.10.01.24.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 01:24:17 -0700 (PDT)
+        Thu, 10 Jun 2021 01:24:20 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Qian Cai <quic_qiancai@quicinc.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
+        Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Ionela Voinescu <ionela.voinescu@arm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] cpufreq: powerenv: Migrate to ->exit() callback instead of ->stop_cpu()
-Date:   Thu, 10 Jun 2021 13:53:59 +0530
-Message-Id: <0990172cba066ec7747e479f8f0a2069ae368339.1623313323.git.viresh.kumar@linaro.org>
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/5] cpufreq: Add start_cpu() and stop_cpu() callbacks
+Date:   Thu, 10 Jun 2021 13:54:00 +0530
+Message-Id: <1d1c3ee64c0a5a701c8d7c66440fd2781512432c.1623313323.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1623313323.git.viresh.kumar@linaro.org>
 References: <cover.1623313323.git.viresh.kumar@linaro.org>
@@ -67,75 +65,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-commit 367dc4aa932b ("cpufreq: Add stop CPU callback to cpufreq_driver
-interface") added the stop_cpu() callback to allow the drivers to do
-clean up before the CPU is completely down and its state cannot be
-modified.
+On CPU hotplug, the cpufreq core doesn't call any driver specific
+callback unless all the CPUs of a policy went away.
 
-At that time the CPU hotplug framework used to call the cpufreq core's
-registered notifier for different events like CPU_DOWN_PREPARE and
-CPU_POST_DEAD. The stop_cpu() callback was called during the
-CPU_DOWN_PREPARE event.
-
-This is no longer the case, cpuhp_cpufreq_offline() is called only once
-by the CPU hotplug core now and we don't really need two separate
-callbacks for cpufreq drivers, i.e. stop_cpu() and exit(), as everything
-can be done from the exit() callback itself.
-
-Migrate to using the exit() callback instead of stop_cpu().
+There is need for a callback to be called in such cases (for the CPPC
+cpufreq driver) now. Reuse the existing stop_cpu() callback and add a
+new one for start_cpu().
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/powernv-cpufreq.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+ Documentation/cpu-freq/cpu-drivers.rst |  7 +++++--
+ drivers/cpufreq/cpufreq.c              | 11 ++++++++---
+ include/linux/cpufreq.h                |  5 ++++-
+ 3 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index e439b43c19eb..005600cef273 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -875,7 +875,15 @@ static int powernv_cpufreq_cpu_init(struct cpufreq_policy *policy)
+diff --git a/Documentation/cpu-freq/cpu-drivers.rst b/Documentation/cpu-freq/cpu-drivers.rst
+index a697278ce190..15cfe42b4075 100644
+--- a/Documentation/cpu-freq/cpu-drivers.rst
++++ b/Documentation/cpu-freq/cpu-drivers.rst
+@@ -71,8 +71,11 @@ And optionally
+  .exit - A pointer to a per-policy cleanup function called during
+  CPU_POST_DEAD phase of cpu hotplug process.
  
- static int powernv_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- {
--	/* timer is deleted in cpufreq_cpu_stop() */
-+	struct powernv_smp_call_data freq_data;
-+	struct global_pstate_info *gpstates = policy->driver_data;
+- .stop_cpu - A pointer to a per-policy stop function called during
+- CPU_DOWN_PREPARE phase of cpu hotplug process.
++ .start_cpu - A pointer to a per-policy per-cpu start function called
++ during CPU online phase.
 +
-+	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
-+	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
-+	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
-+	if (gpstates)
-+		del_timer_sync(&gpstates->timer);
++ .stop_cpu - A pointer to a per-policy per-cpu stop function called
++ during CPU offline phase.
+ 
+  .suspend - A pointer to a per-policy suspend function which is called
+  with interrupts disabled and _after_ the governor is stopped for the
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 802abc925b2a..fac2522be5c3 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1119,6 +1119,10 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
+ 
+ 	cpumask_set_cpu(cpu, policy->cpus);
+ 
++	/* Do CPU specific initialization if required */
++	if (cpufreq_driver->start_cpu)
++		cpufreq_driver->start_cpu(policy, cpu);
 +
- 	kfree(policy->driver_data);
+ 	if (has_target()) {
+ 		ret = cpufreq_start_governor(policy);
+ 		if (ret)
+@@ -1581,6 +1585,10 @@ static int cpufreq_offline(unsigned int cpu)
+ 		policy->cpu = cpumask_any(policy->cpus);
+ 	}
  
- 	return 0;
-@@ -1007,18 +1015,6 @@ static struct notifier_block powernv_cpufreq_opal_nb = {
- 	.priority	= 0,
- };
++	/* Do CPU specific de-initialization if required */
++	if (cpufreq_driver->stop_cpu)
++		cpufreq_driver->stop_cpu(policy, cpu);
++
+ 	/* Start governor again for active policy */
+ 	if (!policy_is_inactive(policy)) {
+ 		if (has_target()) {
+@@ -1597,9 +1605,6 @@ static int cpufreq_offline(unsigned int cpu)
+ 		policy->cdev = NULL;
+ 	}
  
--static void powernv_cpufreq_stop_cpu(struct cpufreq_policy *policy)
--{
--	struct powernv_smp_call_data freq_data;
--	struct global_pstate_info *gpstates = policy->driver_data;
+-	if (cpufreq_driver->stop_cpu)
+-		cpufreq_driver->stop_cpu(policy);
 -
--	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
--	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
--	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
--	if (gpstates)
--		del_timer_sync(&gpstates->timer);
--}
--
- static unsigned int powernv_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq)
- {
-@@ -1042,7 +1038,6 @@ static struct cpufreq_driver powernv_cpufreq_driver = {
- 	.target_index	= powernv_cpufreq_target_index,
- 	.fast_switch	= powernv_fast_switch,
- 	.get		= powernv_cpufreq_get,
--	.stop_cpu	= powernv_cpufreq_stop_cpu,
- 	.attr		= powernv_cpu_freq_attr,
- };
+ 	if (has_target())
+ 		cpufreq_exit_governor(policy);
+ 
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 353969c7acd3..c281b3df4e2f 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -371,7 +371,10 @@ struct cpufreq_driver {
+ 	int		(*online)(struct cpufreq_policy *policy);
+ 	int		(*offline)(struct cpufreq_policy *policy);
+ 	int		(*exit)(struct cpufreq_policy *policy);
+-	void		(*stop_cpu)(struct cpufreq_policy *policy);
++
++	/* CPU specific start/stop */
++	void		(*start_cpu)(struct cpufreq_policy *policy, unsigned int cpu);
++	void		(*stop_cpu)(struct cpufreq_policy *policy, unsigned int cpu);
+ 	int		(*suspend)(struct cpufreq_policy *policy);
+ 	int		(*resume)(struct cpufreq_policy *policy);
  
 -- 
 2.31.1.272.g89b43f80a514
