@@ -2,65 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1330B3A26DE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54A13A26F2
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbhFJI0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 04:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbhFJI0K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:26:10 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4098FC0617A6
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:24:15 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id e20so10050453pgg.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:24:15 -0700 (PDT)
+        id S230373AbhFJI1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 04:27:32 -0400
+Received: from mail-pl1-f177.google.com ([209.85.214.177]:34515 "EHLO
+        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230161AbhFJI12 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:27:28 -0400
+Received: by mail-pl1-f177.google.com with SMTP id h1so601372plt.1
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e7B2ZK+wpxF4j3+qmLEZ4xXUKjyuONFX7C0C6Hmnb+s=;
-        b=SvT3rRWlPJYK+5pRZfIdOS69PuLDlN+vLemcMKfxfEvZPAvgBg0a+oLjqkS0ZNb4XW
-         /Tt2KQcPvnAsKzk5qOBYPfBNvR1ujyESsRd1uXJcSZe0hbF4DpgGYlS1EDIMUakxPvFL
-         dXwaR1ygCUrSG9n0HfokdqT3TU6sNjot3TjJQmr4biXPxAL1PxHFtYU+SNED5ThZejmn
-         Hc/UqMk/oju36bDipalENDyOQr504hK1fcQ6hruwr8P0hIb6/rPvDHzoeCVxKMXz1607
-         W70h2N4N/qRObY9w9kdB4xLgLEYF7eoUAjx9g2Utl6h8SUf01655cTr2peUgp0I8g0D3
-         CtOA==
+        bh=9brGsoPBB+d+RHY31m7cZqh3sPnjdxBD51bqiyGsmoM=;
+        b=z4oi+QtsZIOkUCFtJ2RSljkQbvtIlKWhvmfPM3nkaTcx/SmP2SwZ/OG+gHmMtcJIVI
+         Jz+fY/OSo8O9+ELcqVoo7u7WxCuKuZVq4HIvbp2fEaka2FusUdVtB2CaOnVDFdakQq1s
+         WgD8eKYVt4xY7SKlklJT0+vTQaaOeIygjrFnC3E8n2TxgASfZSLqW6emrP4ePhogpd3p
+         LCP0wfYPCSPY2fDENITlznVP5uwLlXyfFtXxpZyog9xudcUFU5hLh2OauKt2jpqkE710
+         p8BQ3NdkFzKdUP8qDnJ5S4CR/6RqEXkcXwAaVGtyWxW6VDOUnL24T7ElbtkSHdIK+Xas
+         nWQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e7B2ZK+wpxF4j3+qmLEZ4xXUKjyuONFX7C0C6Hmnb+s=;
-        b=jamDZvaAYK56Ker/DYZpz9njKdvFjm27Sfs4btLGdm9WHdHjjLzDpJmofw+kL2mMOq
-         iqGPwkP9mlVQnwmsSrsDSQ2jwz1gUDujm8qJAR6AfbWn+OO1B69M/tpNiZD0PyNlIMc6
-         +VGGXdF8u7hti8iqflrf6owqhspRRYNSDTmeAAmAfNcELkyLjAYCj0Np82v7YXivXHb1
-         b+HUT3OCjuMX82saopJ/Ccwm2Gs5UcUnrC170acZPHhVpAg/0YsP1s7S8174WhaGt/Fg
-         DrxnmXKdh6Adze8OUpr0+OJFjYEluhcCd6lAdMxxgcDu0Oj3obqmsPhAi7lCvjHR5ugC
-         W+Ug==
-X-Gm-Message-State: AOAM530erWDlHFmcOpdVTW/H6MF7Y32DLhsvjGyyrfXvmThB4qvgwXA8
-        mmn4fzPimkKCLY0Cw++l0QV7Sg==
-X-Google-Smtp-Source: ABdhPJzKh6+W053F1SeGZVSKhG/Yk7QkfyteBY515xdU6z0An8lnFQKYZdkfj8hrGzdGcn/EnZI+iQ==
-X-Received: by 2002:a62:804b:0:b029:2e9:c897:aa7c with SMTP id j72-20020a62804b0000b02902e9c897aa7cmr1904664pfd.12.1623313454836;
-        Thu, 10 Jun 2021 01:24:14 -0700 (PDT)
+        bh=9brGsoPBB+d+RHY31m7cZqh3sPnjdxBD51bqiyGsmoM=;
+        b=IwNCkSYc3MRXL/KYPCHyiTb1CVkJz/xAg+eOikJwJPXu52wzp/hKFDjHRGXjo0p+Ii
+         yz66HwoaERO/2VjlzrfauWoFeCGEb8FgW+Iu4vxiaFWvR1M+/1o4tldNzcVIYtq0KCBK
+         3vfu7iSZjmwgSHCh1cBV1NXX/gFYG2uAtCFJzvSY+i37Vtnn7CVnSTbi2Pxrxi/VwKLB
+         gYTnGkj+1t9gh21JtEP+Vwq4Y7eJlAT2kS3fPUNe6rI1OXlR8+EuQSdfXLvzfaHlcv92
+         wBsJzuYBurCmKAnnaUtNS6rX1Vfx1dHZV0h8Zkjq9v4Gz/9PLEYhi6LpW815s4ZN380o
+         nTIg==
+X-Gm-Message-State: AOAM530B3el0lLt9DKJEsxBjf2Ua1ajciBWNp13CtD4rLJr7/bMtLkTv
+        FM1l7E1NUnPTgY5PDBUgilmlgw==
+X-Google-Smtp-Source: ABdhPJyL6nxvcvsq34evJFOy65fc9gysLq/3WyEfD7vvQ+tDWp1jEmZFdtmAB1e5fkCXviRh9tP+3g==
+X-Received: by 2002:a17:90a:1141:: with SMTP id d1mr2224862pje.56.1623313457758;
+        Thu, 10 Jun 2021 01:24:17 -0700 (PDT)
 Received: from localhost ([136.185.169.128])
-        by smtp.gmail.com with ESMTPSA id m1sm1863638pfb.14.2021.06.10.01.24.14
+        by smtp.gmail.com with ESMTPSA id q13sm1741649pff.13.2021.06.10.01.24.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 01:24:14 -0700 (PDT)
+        Thu, 10 Jun 2021 01:24:17 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Qian Cai <quic_qiancai@quicinc.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
 Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dirk Brandewie <dirk.j.brandewie@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] cpufreq: intel_pstate: Migrate to ->exit() callback instead of ->stop_cpu()
-Date:   Thu, 10 Jun 2021 13:53:58 +0530
-Message-Id: <eb57f99bcd87ab4cb5971060fff57c3ee19ffbc3.1623313323.git.viresh.kumar@linaro.org>
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/5] cpufreq: powerenv: Migrate to ->exit() callback instead of ->stop_cpu()
+Date:   Thu, 10 Jun 2021 13:53:59 +0530
+Message-Id: <0990172cba066ec7747e479f8f0a2069ae368339.1623313323.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1623313323.git.viresh.kumar@linaro.org>
 References: <cover.1623313323.git.viresh.kumar@linaro.org>
@@ -87,43 +84,59 @@ can be done from the exit() callback itself.
 
 Migrate to using the exit() callback instead of stop_cpu().
 
-Cc: Dirk Brandewie <dirk.j.brandewie@intel.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/intel_pstate.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/cpufreq/powernv-cpufreq.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index f0401064d7aa..9d3191663925 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2374,17 +2374,11 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
- 	return 0;
- }
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+index e439b43c19eb..005600cef273 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -875,7 +875,15 @@ static int powernv_cpufreq_cpu_init(struct cpufreq_policy *policy)
  
--static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+ static int powernv_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+ {
+-	/* timer is deleted in cpufreq_cpu_stop() */
++	struct powernv_smp_call_data freq_data;
++	struct global_pstate_info *gpstates = policy->driver_data;
++
++	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
++	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
++	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
++	if (gpstates)
++		del_timer_sync(&gpstates->timer);
++
+ 	kfree(policy->driver_data);
+ 
+ 	return 0;
+@@ -1007,18 +1015,6 @@ static struct notifier_block powernv_cpufreq_opal_nb = {
+ 	.priority	= 0,
+ };
+ 
+-static void powernv_cpufreq_stop_cpu(struct cpufreq_policy *policy)
 -{
--	pr_debug("CPU %d stopping\n", policy->cpu);
+-	struct powernv_smp_call_data freq_data;
+-	struct global_pstate_info *gpstates = policy->driver_data;
 -
--	intel_pstate_clear_update_util_hook(policy->cpu);
+-	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
+-	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
+-	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
+-	if (gpstates)
+-		del_timer_sync(&gpstates->timer);
 -}
 -
- static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+ static unsigned int powernv_fast_switch(struct cpufreq_policy *policy,
+ 					unsigned int target_freq)
  {
- 	pr_debug("CPU %d exiting\n", policy->cpu);
+@@ -1042,7 +1038,6 @@ static struct cpufreq_driver powernv_cpufreq_driver = {
+ 	.target_index	= powernv_cpufreq_target_index,
+ 	.fast_switch	= powernv_fast_switch,
+ 	.get		= powernv_cpufreq_get,
+-	.stop_cpu	= powernv_cpufreq_stop_cpu,
+ 	.attr		= powernv_cpu_freq_attr,
+ };
  
-+	intel_pstate_clear_update_util_hook(policy->cpu);
- 	policy->fast_switch_possible = false;
- 
- 	return 0;
-@@ -2451,7 +2445,6 @@ static struct cpufreq_driver intel_pstate = {
- 	.resume		= intel_pstate_resume,
- 	.init		= intel_pstate_cpu_init,
- 	.exit		= intel_pstate_cpu_exit,
--	.stop_cpu	= intel_pstate_stop_cpu,
- 	.offline	= intel_pstate_cpu_offline,
- 	.online		= intel_pstate_cpu_online,
- 	.update_limits	= intel_pstate_update_limits,
 -- 
 2.31.1.272.g89b43f80a514
 
