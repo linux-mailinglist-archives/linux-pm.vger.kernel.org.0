@@ -2,154 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9CE3A276E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 10:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD19E3A27B1
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 11:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbhFJIx2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 04:53:28 -0400
-Received: from mail-vs1-f49.google.com ([209.85.217.49]:39525 "EHLO
-        mail-vs1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhFJIx1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Jun 2021 04:53:27 -0400
-Received: by mail-vs1-f49.google.com with SMTP id 68so1446810vsu.6
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jun 2021 01:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0n9dDqvP+lODnMQ5qHqWheaeGBbbZs8YgGz8kfCeEwE=;
-        b=JkDxdgQpwfa+eXaZCKAJkqqIgDJlXievjNrXMtpoIJp6+zIC1G25BQDrEvuVDpGRm0
-         plRQJtPmIF08MTR5knKoO2iTXQX9rfFxoUYK1L+9CoJGzLBgyyBwx9A2KiEzcstXgM1O
-         jdozPW1VC/HCG1J4vEN2akMEAhUCrSxjOBZKfqP+rAojYe3Z9JLddsVNkYmJ2gh1CnWH
-         H2iBlL5JptW+Ca+jEt9McBKUWVHQ4zVe6tUMJOlycNhGzY+g7kxeNsy/9gds+usgQgKI
-         3ZGc7l9fLcMiQgxSYGqeVPDXXHBBD17aSUmo81BIx5vk4U1jhPWmyNdlowhYaUs0ZTQz
-         iiQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0n9dDqvP+lODnMQ5qHqWheaeGBbbZs8YgGz8kfCeEwE=;
-        b=mBgkkXR+45wYSvXMrj2UQU+UmzUDVZ5daF6LNUPkTn1kOnrL1Mmlv7onZLiiFbC+/k
-         vcK6lkf8w58PSCVz5n5AaWz8LiDsJfrsKgJr1Ymgp/1S9qfN1pyCMlnuYP0FS3ypFRpM
-         XewZ9Y+kw431TQFJ92XBqTq3zkkTed4ttRtlcp6yVNqtT85JQv+psezK49oqf7y3u9ki
-         lRpMtrwdft5E2xymue7yetX0NIFIhDLB/SrmAmOWVpD+r/yNZL8vF6Xbgwd3DSTrkTPI
-         fmPeioJ2FfvQkOtEq0t/6pCgXXzJYFQnkE5KbOl0OhyzvrgHoi4TjsbOs7Mh2QE82u3z
-         xD7Q==
-X-Gm-Message-State: AOAM533uCP6f+DWroHgi/z1RA8uf9yU4Zm0iIRI3nN4l/Z2BO48KReFV
-        JK1WCL66RJz/JKnsdVh+X70vdmK092VMzt2u4x2IkQ==
-X-Google-Smtp-Source: ABdhPJzstZsJ7BuqoMSAVvMFwNv9YXy7kEZbmqM17vT0c7zJLt83fqECmPBoDLcuzViZxiKRyf+OKJntCcPl3ZSYZx0=
-X-Received: by 2002:a67:19c2:: with SMTP id 185mr521314vsz.34.1623315031276;
- Thu, 10 Jun 2021 01:50:31 -0700 (PDT)
+        id S229778AbhFJJGx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 05:06:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:54336 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229715AbhFJJGw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Jun 2021 05:06:52 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5CADD6E;
+        Thu, 10 Jun 2021 02:04:56 -0700 (PDT)
+Received: from [10.57.4.220] (unknown [10.57.4.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 046B43F719;
+        Thu, 10 Jun 2021 02:04:53 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] sched/fair: Take thermal pressure into account
+ while estimating energy
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com,
+        vincent.donnefort@arm.com, Beata.Michalska@arm.com,
+        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
+        segall@google.com, mgorman@suse.de, bristot@redhat.com
+References: <20210604080954.13915-1-lukasz.luba@arm.com>
+ <20210604080954.13915-2-lukasz.luba@arm.com>
+ <2f2fc758-92c6-5023-4fcb-f9558bf3369e@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <905f1d29-50f9-32be-4199-fc17eab79d04@arm.com>
+Date:   Thu, 10 Jun 2021 10:04:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20210602192758.38735-1-alcooperx@gmail.com> <20210602192758.38735-2-alcooperx@gmail.com>
- <CAPDyKFrynST66yA_T3iroiJsfmNuBOEiiBnb=vNoyP6QpvZ7aQ@mail.gmail.com>
- <fe956941-bb39-413e-f051-d9f353f64eda@gmail.com> <CAPDyKFpEtvjS1mWC68gRBWD64dq2M1LO84UWE5uDLTzbGz1g8Q@mail.gmail.com>
- <6acd480a-8928-89bb-0f40-d278294973a1@gmail.com>
-In-Reply-To: <6acd480a-8928-89bb-0f40-d278294973a1@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Jun 2021 10:49:55 +0200
-Message-ID: <CAPDyKFqk23xg5R2k9GwQrnamwWYbMkmrbWYsHPF9VBQTAbvQHw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mmc: sdhci-iproc: Add support for the legacy sdhci
- controller on the BCM7211
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Scott Branden <sbranden@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <2f2fc758-92c6-5023-4fcb-f9558bf3369e@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 10 Jun 2021 at 01:59, Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 6/9/2021 2:22 AM, Ulf Hansson wrote:
-> > On Wed, 9 Jun 2021 at 05:07, Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >>
-> >>
-> >>
-> >> On 6/8/2021 5:40 AM, Ulf Hansson wrote:
-> >>> On Wed, 2 Jun 2021 at 21:28, Al Cooper <alcooperx@gmail.com> wrote:
-> >>>>
-> >>>> Add support for the legacy Arasan sdhci controller on the BCM7211 and
-> >>>> related SoC's. This includes adding a .shutdown callback to increase
-> >>>> the power savings during S5.
-> >>>
-> >>> Please split this into two separate changes.
-> >>>
-> >>> May I also ask about the ->shutdown() callback and in relation to S5.
-> >>> What makes the ->shutdown callback only being invoked for S5?
-> >>
-> >> It is not only called for S5 (entered via poweroff on a prompt) but also
-> >> during kexec or reboot. The poweroff path is via:
-> >>
-> >> kernel_power_off() -> kernel_shutdown_prepare() -> device_shutdown() ->
-> >> .shutdown()
-> >>
-> >> For kexec or reboot we do not really care about power savings since we
-> >> are about to load a new image anyway, however for S5/poweroff we do care
-> >> about quiescing the eMMC controller in a way that its clocks and the
-> >> eMMC device can be put into low power mode since we will stay in that
-> >> mode for seconds/hours/days until someone presses a button on their
-> >> remote (or other wake-up sources).
-> >
-> > Hmm, I am not sure I understand correctly. At shutdown we don't care
-> > about wake-up sources from the kernel point of view, instead we treat
-> > everything as if it will be powered off.
->
-> The same .shutdown() path is used whether you kexec, reboot or poweroff,
-> but for poweroff we do care about allowing specific wake-up sources
-> configured as such to wake-up the system at a later time, like GPIOs,
-> RTC, etc.
 
-That's true, but using the ->shutdown() callbacks in this way would
-certainly be a new use case.
 
-Most subsystems/drivers don't care about power management in those
-callbacks, but rather just about managing a graceful shutdown.
+On 6/10/21 9:42 AM, Dietmar Eggemann wrote:
 
-It sounds to me like you should have a look at the hibernation
-path/callbacks instead - or perhaps even the system suspend
-path/callback. Normally, that's where we care about power management.
+[snip]
 
-I have looped in Rafael, to allow him to share his opinion on this.
+> 
+> So essentially what you want to do is:
+> 
+> Make EAS aware of the frequency clamping schedutil can be faced with:
+> 
+>    get_next_freq() -> cpufreq_driver_resolve_freq() ->
+> clamp_val(target_freq, policy->min, policy->max) (1)
+> 
+> by subtracting CPU's Thermal Pressure (ThPr) signal from the original
+> CPU capacity `arch_scale_cpu_capacity()` (2).
+> 
+> ---
+> 
+> Isn't there a conceptional flaw in this design? Let's say we have a
+> big.Little system with two cpufreq cooling devices and a thermal zone
+> (something like Hikey 960). To create a ThPr scenario we have to run
+> stuff on the CPUs (e.g. hackbench (3)).
+> Eventually cpufreq_set_cur_state() [drivers/thermal/cpufreq_cooling.c]
+> will set thermal_pressure to `(2) - (2)*freq/policy->cpuinfo.max_freq`
+> and PELT will provide the ThPr signal via thermal_load_avg().
+> But to create this scenario, the system will become overutilized
+> (system-wide data, if one CPU is overutilized, the whole system is) so
+> EAS is disabled (i.e. find_energy_efficient_cpu() and compute_emergy()
+> are not executed).
 
->
-> >
-> > We put devices into low power state at system suspend and potentially
-> > also during some of the hibernation phases.
-> >
-> > Graceful shutdown of the eMMC is also managed by the mmc core.
->
-> AFAICT that calls mmc_blk_shutdown() but that is pretty much it, the
-> SDHCI platform_driver still needs to do something in order to conserve
-> power including disabling host->clk, otherwise we would not have done
-> that for sdhci-brcmstb.c.
+Not always, it depends on thermal governor decision, workload and
+'power actors' (in IPA naming convention). Then it depends when and how
+hard you clamp the CPUs. They (CPUs) don't have to be always
+overutilized, they might be even 50-70% utilized but the GPU reduced
+power budget by 2 Watts, so CPUs left with only 1W. Which is still OK
+for the CPUs, since they are only 'feeding' the GPU with new 'jobs'.
 
-That's not entirely correct. When mmc_bus_shutdown() is called for the
-struct device* that belongs to an eMMC card, two actions are taken.
+> 
+> I can see that there are episodes in which EAS is running and
+> thermal_load_avg() != 0 but those have to be when (3) has stopped and
+> you see the ThPr signal just decaying (no accruing of new ThPr). The
+> cpufreq cooling device can still issue cpufreq_set_cur_state() but only
+> with decreasing states.
 
-*) We call mmc_blk_shutdown(), to suspend the block device queue from
-receiving new I/O requests.
-**) We call host->bus_ops->shutdown(), which is an eMMC specific
-callback set to mmc_shutdown(). In this step, we do a graceful
-shutdown/power-off of the eMMC card.
+It is true for some CPU heavy workloads, when no other SoC components
+are involved like: GPU, DSP, ISP, encoders, etc. For other workloads
+when CPUs don't have to do a lot, but thermal pressure might be seen on
+them, this patch help.
 
-When it comes to controller specific resources, like clocks and PM
-domains, for example, those may very well stay turned on. Do deal with
-these, then yes, you would need to implement the ->shutdown()
-callback. But as I said above, I am not sure it's the right thing to
-do.
+> 
+> ---
+> 
+> IMHO, a precise description of how you envision the system setup,
+> incorporating all participating subsystems, would be helpful here.
 
-Kind regards
-Uffe
+True, I hope this description above would help to understand the
+scenario.
+
+> 
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   kernel/sched/fair.c | 17 ++++++++++++++---
+>>   1 file changed, 14 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 161b92aa1c79..1aeddecabc20 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -6527,6 +6527,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>>   	struct cpumask *pd_mask = perf_domain_span(pd);
+>>   	unsigned long cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
+>>   	unsigned long max_util = 0, sum_util = 0;
+>> +	unsigned long _cpu_cap = cpu_cap;
+>>   	int cpu;
+>>   
+>>   	/*
+>> @@ -6558,14 +6559,24 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>>   				cpu_util_next(cpu, p, -1) + task_util_est(p);
+>>   		}
+>>   
+>> +		/*
+>> +		 * Take the thermal pressure from non-idle CPUs. They have
+>> +		 * most up-to-date information. For idle CPUs thermal pressure
+>> +		 * signal is not updated so often.
+>> +		 */
+>> +		if (!idle_cpu(cpu))
+>> +			_cpu_cap = cpu_cap - thermal_load_avg(cpu_rq(cpu));
+>> +
+> 
+> This one is probably the result of the fact that cpufreq cooling device
+> sets the ThPr for all CPUs of the policy (Frequency Domain (FD) or
+> Performance Domain (PD)) but PELT updates are happening per-CPU. And
+> only !idle CPUs get the update in scheduler_tick().
+> 
+> Looks like thermal_pressure [per_cpu(thermal_pressure, cpu),
+> drivers/base/arch_topology.c] set by cpufreq_set_cur_state() is always
+> in sync with policy->max/cpuinfo_max_freq).
+> So for your use case this instantaneous `signal` is better than the PELT
+> one. It's precise (no decaying when frequency clamping is already gone)
+> and you avoid the per-cpu update issue.
+
+Yes, this code implementation tries to address those issues.
