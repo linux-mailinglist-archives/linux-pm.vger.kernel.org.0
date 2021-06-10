@@ -2,82 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC69D3A2C07
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 14:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E4C3A2EF1
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jun 2021 17:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbhFJMzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Jun 2021 08:55:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:59212 "EHLO foss.arm.com"
+        id S230445AbhFJPFd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Jun 2021 11:05:33 -0400
+Received: from foss.arm.com ([217.140.110.172]:33946 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229937AbhFJMzS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:55:18 -0400
+        id S230410AbhFJPFc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Jun 2021 11:05:32 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B68F106F;
-        Thu, 10 Jun 2021 05:53:20 -0700 (PDT)
-Received: from [10.57.4.220] (unknown [10.57.4.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C24F3F73D;
-        Thu, 10 Jun 2021 05:53:17 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] sched/fair: Take thermal pressure into account
- while estimating energy
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Beata Michalska <Beata.Michalska@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-References: <20210604080954.13915-1-lukasz.luba@arm.com>
- <20210604080954.13915-2-lukasz.luba@arm.com>
- <2f2fc758-92c6-5023-4fcb-f9558bf3369e@arm.com>
- <905f1d29-50f9-32be-4199-fc17eab79d04@arm.com>
- <3cfa5690-644b-ba80-3fc3-7c5a3f292e70@arm.com>
- <c77d00b9-d7a3-0e8a-a528-ab0c1773496f@arm.com>
- <CAKfTPtAc62gyjxSiSY2vD_qr-WjqbC91_GF-LXgNXh8T0Xx-yw@mail.gmail.com>
- <d4383b7a-a5e7-18ca-14ed-c533b4d43f62@arm.com>
- <CAKfTPtBD2qa3qwpoLuLNuF-hZAGpDvsahx6Tx_enLT2DAs4fiQ@mail.gmail.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CC2D106F;
+        Thu, 10 Jun 2021 08:03:36 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.4.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 80C2B3F719;
+        Thu, 10 Jun 2021 08:03:32 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <80283949-8a07-5aed-1e56-0a1094ba3ba0@arm.com>
-Date:   Thu, 10 Jun 2021 13:53:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAKfTPtBD2qa3qwpoLuLNuF-hZAGpDvsahx6Tx_enLT2DAs4fiQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
+        qperret@google.com, dietmar.eggemann@arm.com,
+        vincent.donnefort@arm.com, lukasz.luba@arm.com,
+        Beata.Michalska@arm.com, mingo@redhat.com, juri.lelli@redhat.com,
+        rostedt@goodmis.org, segall@google.com, mgorman@suse.de,
+        bristot@redhat.com, thara.gopinath@linaro.org,
+        amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org
+Subject: [PATCH v3 0/3] Add allowed CPU capacity knowledge to EAS
+Date:   Thu, 10 Jun 2021 16:03:21 +0100
+Message-Id: <20210610150324.22919-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all,
 
+The patch set v3 aims to add knowledge about reduced CPU capacity
+into the Energy Model (EM) and Energy Aware Scheduler (EAS). Currently the
+issue is that SchedUtil CPU frequency and EM frequency are not aligned,
+when there is a CPU thermal capping. This causes an estimation error.
+This patch set provides the information about allowed CPU capacity
+into the EM (thanks to thermal pressure information). This improves the
+energy estimation. More info about this mechanism can be found in the
+patches comments.
 
-On 6/10/21 1:40 PM, Vincent Guittot wrote:
-> On Thu, 10 Jun 2021 at 14:30, Lukasz Luba <lukasz.luba@arm.com> wrote:
+There is a new patch 1/3 in this v3, addressing an issue triggered for
+hotplugged out CPU. The offline CPUs don't have proper value stored by
+thermal framework in their per-cpu thermal_pressure. Thus, the thermal
+pressure geometric series machinery reads 'stale' value when the CPU
+is back online. The patch fixes it, so all mechanisms like
+load balance, not only EAS, would have more accurate CPU capacity
+information for those 'returning online' CPUs. I've added also related
+cpu cooling maintainers to the CC of this patch set.
 
-[snip]
-
->>
->> So for this scenario, where we want to just align EAS with SchedUtil
->> frequency decision, which is instantaneous and has 'raw' value
->> of capping from policy->max, shouldn't we use:
->>
->> thermal_pressure = arch_scale_thermal_pressure(cpu_id)
-> 
-> Yes you should probably use arch_scale_thermal_pressure(cpu) instead
-> of thermal_load_avg(rq) in this case
-> 
-
-Thank you Vincent for valuable opinions!
-I will rewrite it and experiment with a new approach,
-then send a v3.
+Changelog:
+v3:
+- switched to 'raw' per-cpu thermal pressure instead of thermal pressure
+  geometric series signal, since it more suited for purpose of
+  this use case: predicting SchedUtil frequency (Vincent, Dietmar)
+- added more comment in the patch 2/3 header for use case when thermal
+  capping might be applied even the CPUs are not over-utilized
+  (Dietmar)
+- added ACK tag from Rafael for SchedUtil part
+- added a fix patch for offline CPUs in cpufreq_cooling and per-cpu
+  thermal_pressure missing update
+v2 [2]:
+- clamp the returned value from effective_cpu_util() and avoid irq
+  util scaling issues (Quentin)
+v1 is available at [1]
 
 Regards,
 Lukasz
+
+[1] https://lore.kernel.org/linux-pm/20210602135609.10867-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/lkml/20210604080954.13915-1-lukasz.luba@arm.com/
+
+Lukasz Luba (3):
+  thermal: cpufreq_cooling: Update also offline CPUs per-cpu
+    thermal_pressure
+  sched/fair: Take thermal pressure into account while estimating energy
+  sched/cpufreq: Consider reduced CPU capacity in energy calculation
+
+ drivers/thermal/cpufreq_cooling.c |  2 +-
+ include/linux/energy_model.h      | 16 +++++++++++++---
+ include/linux/sched/cpufreq.h     |  2 +-
+ kernel/sched/cpufreq_schedutil.c  |  1 +
+ kernel/sched/fair.c               | 14 ++++++++++----
+ 5 files changed, 26 insertions(+), 9 deletions(-)
+
+-- 
+2.17.1
+
