@@ -2,42 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B853A3D56
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 09:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE613A3D5F
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 09:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbhFKHkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Jun 2021 03:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhFKHka (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 03:40:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9AEC061574;
-        Fri, 11 Jun 2021 00:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d+ZiczX7/nBR1jMhSfL1TaMj90+rVYq9+YaMIRDOsZE=; b=DpbRdQxX7AHqEpiFo8nq82GbOM
-        PGuW69uCPEf2CcxctkEUO4jHZbgI8RbIj18OvWnpt3qJllBw/BMnliIALO+iIPy2Rp9w8f6mriOm2
-        rY5nGTB3D2j8cd6PniRszOoXdM1kW6ZsFpXAeEojncXy+KDHRmkxJnK1grdoM8DKk8IT3V88EDsle
-        Xoc9mjCC6IxNA7P0UVPO8Ko0+rGn8XbaIvi/sfWbfCgXFXursU1RFH5+oSRKLeHVS7vO9cLGhLJfu
-        t84+dGJB2ZcrIfIfKNlStbY+ds+wGccjqiKGp4w9BZXA8wUyleuSK0HrbkkMulUV/5HjIRlz/KkB/
-        y+mOEOiA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lrbjN-002Vyn-67; Fri, 11 Jun 2021 07:37:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9B8CC30008D;
-        Fri, 11 Jun 2021 09:37:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 546502BCF392F; Fri, 11 Jun 2021 09:37:27 +0200 (CEST)
-Date:   Fri, 11 Jun 2021 09:37:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S231260AbhFKHnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Jun 2021 03:43:24 -0400
+Received: from mail-pj1-f46.google.com ([209.85.216.46]:50897 "EHLO
+        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230251AbhFKHnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 03:43:23 -0400
+Received: by mail-pj1-f46.google.com with SMTP id g4so5250898pjk.0
+        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 00:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ALGu6qp/vYdKI4RdFgdTsZIAua5DO5/Dcw3j60S5Kk4=;
+        b=weGxOLIxqUpNwnJXF9C4mxeuwdFZ84OTo4hkGlph9sIsK3lkNEOFvBXbNAVl/RTkIs
+         fbQIdycDt4CQXxKGCrtdZlm0v7PcQJH9d6lyA67WaYFqQItqsm/I+sbNOq9L76TO0mzN
+         x0yRjooPkpJRw6+vHonuaf/T/MDbmOk59Q1oNsQQ/PXGrNs323BsLvw1KT3JXtHINSUU
+         hErAgVeWGD/jt7rxalaW97fDsy1ssoWkhrIG96w9ayqV9CZub8Qtp6+5VXYwMXn20VBi
+         fiAS3CgvqRwkDbt5PgFyh9N8bUu8Y9e3R4+5BVTmly2JPw6F2jjcUOAGEj17Fqz79A0o
+         FYDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ALGu6qp/vYdKI4RdFgdTsZIAua5DO5/Dcw3j60S5Kk4=;
+        b=t3MqVhasRt01BxZv3TpxbBLZGDRDvnhwnjksLiRUHp3eT62ZYT2srZLH24h2dKQtNL
+         A+yrUbU5frZWcmmDH+WKOhurbFLPrG1Zilm+447utLt8NNBvbyYscu9jeTNKzjrUN2yC
+         eSLUJ4jsKfdPdWLvqcXfPBDCWV7yuXr4ALAmxoi8Na44CQHdRTAdblHiPKI3gBtVbZQH
+         yPkiAyFiSJyY9zg5TRO5oTE8hYT6GzxXIhOx09HAmivruXxP6RormJ/zJW6dclt3bMot
+         a8IAn+1RIWezYeGrnRIxJY9KR00DwdUw5e6A5skUlWwqaapyxSpSkq9xOgV5YLTztBAY
+         usQg==
+X-Gm-Message-State: AOAM530+Lix5wBa1jPh6JenybSGeYwpQ9bIAX5G3yOnqBoGQtMKxIgS8
+        w41Qqnqk4td8ixfBHU3MlhEEXA==
+X-Google-Smtp-Source: ABdhPJzi4uRCgH01KvkL1AEA7ev2vuESs4W0mv2gXjLog4wlOwhOS8XdQG0qTjqKN/JVL6XSNfAr5A==
+X-Received: by 2002:a17:90b:941:: with SMTP id dw1mr7586553pjb.115.1623397210888;
+        Fri, 11 Jun 2021 00:40:10 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id n23sm4566293pgv.76.2021.06.11.00.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 00:40:10 -0700 (PDT)
+Date:   Fri, 11 Jun 2021 13:10:08 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Qian Cai <quic_qiancai@quicinc.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
@@ -53,55 +62,24 @@ Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V2] Revert "cpufreq: CPPC: Add support for frequency
  invariance"
-Message-ID: <YMMSt65aj0KKHy1A@hirez.programming.kicks-ass.net>
+Message-ID: <20210611074008.57u27wtyqv4ossde@vireshk-i7>
 References: <a71c48fb0150f505680da68a82b4e4fca9a18439.1623381430.git.viresh.kumar@linaro.org>
+ <YMMSt65aj0KKHy1A@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a71c48fb0150f505680da68a82b4e4fca9a18439.1623381430.git.viresh.kumar@linaro.org>
+In-Reply-To: <YMMSt65aj0KKHy1A@hirez.programming.kicks-ass.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 08:48:02AM +0530, Viresh Kumar wrote:
-> This reverts commit 4c38f2df71c8e33c0b64865992d693f5022eeaad.
-> 
-> There are few races in the frequency invariance support for CPPC driver,
-> namely the driver doesn't stop the kthread_work and irq_work on policy
-> exit during suspend/resume or CPU hotplug.
-> 
-> A proper fix won't be possible for the 5.13-rc, as it requires a lot of
-> changes. Lets revert the patch instead for now.
-> 
-> Fixes: 4c38f2df71c8 ("cpufreq: CPPC: Add support for frequency invariance")
-> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V2: Revert the original patch instead of marking it broken.
-> 
->  drivers/cpufreq/Kconfig.arm    |  10 --
->  drivers/cpufreq/cppc_cpufreq.c | 245 ++-------------------------------
->  include/linux/arch_topology.h  |   1 -
->  kernel/sched/core.c            |   1 -
->  4 files changed, 12 insertions(+), 245 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index a5c5f70acfc9..e65e0a43be64 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -19,16 +19,6 @@ config ACPI_CPPC_CPUFREQ
->  
->  	  If in doubt, say N.
->  
-> -config ACPI_CPPC_CPUFREQ_FIE
-> -	bool "Frequency Invariance support for CPPC cpufreq driver"
-> -	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
-> -	default y
-> -	help
-> -	  This extends frequency invariance support in the CPPC cpufreq driver,
-> -	  by using CPPC delivered and reference performance counters.
-> -
-> -	  If in doubt, say N.
-> -
+On 11-06-21, 09:37, Peter Zijlstra wrote:
+> Alternatively: "depends on BROKEN" ?
 
-Alternatively: "depends on BROKEN" ?
+This is what I wanted to do, but Rafael didn't like it :)
+
+https://lore.kernel.org/linux-pm/28308fc0d38f252baf90e6ffb31fd2f8660be273.1623311808.git.viresh.kumar@linaro.org/
+
+-- 
+viresh
