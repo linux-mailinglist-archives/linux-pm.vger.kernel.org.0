@@ -2,109 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348F63A3F1F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 11:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8B93A3F76
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 11:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhFKJgV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Jun 2021 05:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S231210AbhFKJtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Jun 2021 05:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbhFKJgS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 05:36:18 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D174C0617AF
-        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 02:34:20 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id h22-20020a05600c3516b02901a826f84095so8088645wmq.5
-        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 02:34:20 -0700 (PDT)
+        with ESMTP id S230356AbhFKJtf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 05:49:35 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538ADC0613A2
+        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 02:47:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w21so36327002edv.3
+        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 02:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A8TIz1cDlej9+ZUNsR4O5xhIVt925U9+N5LJUNgO/fQ=;
-        b=CVaNBmMn5NZaDL8wN6U1Sq99oo2mhoYCZqF9PKZHXIgvVAkYkNOr+KV+1jYNPlzrq+
-         aCUcQR1v9BxZzj0x4czDI08Ae4WEkHlyyJlXAEtQpdc77gA63wM0QlbzPPuKmC9gCd9K
-         r+D/abexRY/D0eXRTYT6Tk9YInO4eRGuznpIxV46cKzr6gXl7R71peun9wCrgCO7C+0l
-         bPCTf8lOCXanzrGmoN5/GeIrAFDNh8FDVVVTlHwwKmiwhQ9FKt9ocbKXDjm2LRbYvKOv
-         ABmSsj5wdgpz67bVIy439wV1me3kp+y92MVxej4Vu8iZXKoJJGBSpL/G2F2RUdkEJ1Rm
-         SobA==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=PNkaCI+EACWPpByPyDAelMUBtTBs7A/1pH5LZ7kcEOk=;
+        b=C9QQhGko/LRVuh/g0f4IIYVHp52RqIJBOS+9Exkg93Mw6IQniJsjELLC2DDFuhiulo
+         AJ5JuA6e8sXcnkHSLakcKy60XsjjQuSIQJ6b0vo9btLDV30jkU2+kAVydrN2b4yxLO7W
+         k3+Qu7wMPcuaG3IQP9yw4erjdpEkTiDpgrrvBgAC0IXOaYcLvzU7+af0NO3RpUqMNJ3B
+         HmCIagSqb9+g8+j1StBbUqcdOdHJS5laMORRDCr7Hg8EmsSJ4tUMeVql/raj/S42zQzF
+         hrs8fo0LnXJOaYYHQysf5piyDU9Y0LhqD8AOUN77yA15lx51Sxl133eBC7uvMBkHcZvA
+         AweQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A8TIz1cDlej9+ZUNsR4O5xhIVt925U9+N5LJUNgO/fQ=;
-        b=ToP2JWY8rmnGBlSHk27bneFzLm9un3fC1iuksywrCoAbSoov8qJZoyerEDNoZZl+UP
-         xLDnTQ6fw/Wkh0ly23iHXMsILKGV0rHg7c8Fu2k6H2tiwiJUkFRwugXSbeSQ5XkF0sob
-         5bmXEhomlcaWXiOKNEQSPpUQfamfjceFxZN+Ws0tENOZQ32lBtGFhQDBOMEYXCGyMP9J
-         9F5S/Zn+60CEaBah1sGC1XLTsu5znsbwNX+tZKjwmiMZNBIVPJxRG9I4ZpLBqG4HUtaR
-         iDlS1GCFWY2fBS0NGZTVXM+7PnDArE1rwVQ4HmUGx5nq3A0ULddOYP5jvq5lTYDDVyjv
-         /hoQ==
-X-Gm-Message-State: AOAM532O9DCuA632tpWzvb4lkuWh4wVxpmrk8mdJzT8QMg+RTGWUMKHc
-        ROJG8hzVsWlvNttDxpdNpMxhCA==
-X-Google-Smtp-Source: ABdhPJzKJJFONGN/6bSPuZcs8dM9cVLYpIrC7eLXiCIro9zRisQdbkwTqpXI+Nz3xKNyUwdvbHkpOg==
-X-Received: by 2002:a05:600c:2284:: with SMTP id 4mr3033049wmf.146.1623404058646;
-        Fri, 11 Jun 2021 02:34:18 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e537:d458:d3c4:18e1? ([2a01:e34:ed2f:f020:e537:d458:d3c4:18e1])
-        by smtp.googlemail.com with ESMTPSA id g10sm6489552wrq.12.2021.06.11.02.34.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Jun 2021 02:34:18 -0700 (PDT)
-Subject: Re: [PATCH] thermal: sprd: Add missing MODULE_DEVICE_TABLE
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
-        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-References: <20210512093752.243168-1-zhang.lyra@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <cfe9b793-47a6-b6ad-74f0-3342e5ed4d4b@linaro.org>
-Date:   Fri, 11 Jun 2021 11:34:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=PNkaCI+EACWPpByPyDAelMUBtTBs7A/1pH5LZ7kcEOk=;
+        b=SC4vJrx2pTdUoEPD1i2SfmKaIYE+UTewwo4FrGSIm+Qfb603Cbis7bCTgeCVj6XSJF
+         OxdgtkZ9nzbDXlG4MjB+rUFqok0R4a3VV0GKdQxKRciBCjvA8JmsD7qJZq2kuh82sOyi
+         ERmZhBqJ2yblLjMrBvYhi7mkpvDXgfDSewqVbEXLIkj4P+mU12JjUOuvI4XYGWU6teXY
+         QYDi6dKNpundehSiD2GKXzFLc6f20bJRpeNatanqq964FD5haICYuSUUWWMwGV8iKcML
+         PzkbJsYHdU8UXoXjCvMLQUyS0y/rcLUlfYM6e24sEhENh+nks8Fl7KH2a94/+bdj6FMX
+         raBQ==
+X-Gm-Message-State: AOAM533jF69f2DrXcHY9RX8+b+oG24w/ccOpUu0dAln4jWjNpNo5JYPU
+        AWMjzFiAmPYp8tsoSujOUiNRtY+FcHFPKqqEZMc=
+X-Google-Smtp-Source: ABdhPJzGF6oYN6dEm4387vRmI5qk5A1l8HDBPlmxbkJrX4wfGsrHvOYc3TDQwysdARHcPuUe3MJ8Sz8sFB8cEsjBuy4=
+X-Received: by 2002:a05:6402:702:: with SMTP id w2mr2775486edx.189.1623404839519;
+ Fri, 11 Jun 2021 02:47:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210512093752.243168-1-zhang.lyra@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a54:2b11:0:0:0:0:0 with HTTP; Fri, 11 Jun 2021 02:47:19
+ -0700 (PDT)
+From:   "Flora D. Darpino" <fddarpino271@gmail.com>
+Date:   Fri, 11 Jun 2021 10:47:19 +0100
+Message-ID: <CAOj27p9D-ZNg1Eye-QOKbHTqKcjg1fNYqEHZGCg0TO1purdCSw@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2021 11:37, Chunyan Zhang wrote:
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> 
-> MODULE_DEVICE_TABLE is used to extract the device information out of the
-> driver and builds a table when being compiled. If using this macro,
-> kernel can find the driver if available when the device is plugged in,
-> and then loads that driver and initializes the device.
-> 
-> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-
-Applied, and added the Fixes tag:
-
-Fixes: 554fdbaf19b18 ("thermal: sprd: Add Spreadtrum thermal driver
-support")
-
-> ---
->  drivers/thermal/sprd_thermal.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-> index 3682edb2f466..fe06cccf14b3 100644
-> --- a/drivers/thermal/sprd_thermal.c
-> +++ b/drivers/thermal/sprd_thermal.c
-> @@ -532,6 +532,7 @@ static const struct of_device_id sprd_thermal_of_match[] = {
->  	{ .compatible = "sprd,ums512-thermal", .data = &ums512_data },
->  	{ },
->  };
-> +MODULE_DEVICE_TABLE(of, sprd_thermal_of_match);
->  
->  static const struct dev_pm_ops sprd_thermal_pm_ops = {
->  	SET_SYSTEM_SLEEP_PM_OPS(sprd_thm_suspend, sprd_thm_resume)
-> 
-
-
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Hello sir,
+I have a transaction that involves transfer of $4.8million for foreign
+investment, if you're interested kindly reply for more specific
+details to: adamsbrown2015@gmail.com
+Thanks
