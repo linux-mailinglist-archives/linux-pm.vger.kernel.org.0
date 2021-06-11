@@ -2,95 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B053A4450
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 16:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221503A4670
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 18:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbhFKOsm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Jun 2021 10:48:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:60260 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231555AbhFKOsl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Jun 2021 10:48:41 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFD621FB;
-        Fri, 11 Jun 2021 07:46:43 -0700 (PDT)
-Received: from [10.57.4.16] (unknown [10.57.4.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43B1C3F73D;
-        Fri, 11 Jun 2021 07:46:42 -0700 (PDT)
-Subject: Re: [PATCH v2] thermal: devfreq_cooling: Fix kernel-doc
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1623223350-128104-1-git-send-email-yang.lee@linux.alibaba.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <bce89c6a-487d-e7b6-86ac-4e946924ec71@arm.com>
-Date:   Fri, 11 Jun 2021 15:46:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231179AbhFKQ0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Jun 2021 12:26:03 -0400
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:36572 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230026AbhFKQ0D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 12:26:03 -0400
+Received: by mail-oi1-f169.google.com with SMTP id r16so6016110oiw.3;
+        Fri, 11 Jun 2021 09:23:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=CacLDdx3nbX3wtm4voe7QDCSyxk6h74a9LHL7GYdR2U=;
+        b=ZYf3udpjQPkcCJLOfPIGmGpkYsJVeZWXbTgOrc27tzwhkaLg951wabMs4JNuf6oOlp
+         wAd5BBqhCDElIMHFCoDa3YXCec9cSqBTHB8H8NcJMpll/gfH3Xe8bn+KzlSPQaej2Aff
+         Fs8sbc+wLS4TCGpp2/bbJpFoI1+wVg0q8xBDpUNGKaFQr1qHpWoFwvzlrFVB7Vy8zXxJ
+         56/gZccMFuGpzwM2XnZOTTJP6/eYml3vemxc0vWaEllzPP/b+4Z3ZA9ZQfE7+NtzzNe+
+         2XxD9wgbRLu0wksiDraDHXtTb5GjQkfFnUKv/K3UlJd+PrnEwguwH2J3Sbe5edQn96Ko
+         BwQA==
+X-Gm-Message-State: AOAM532GdM0j+uqjo0c2VhJZqt4CUverWl/6NFtDPAH03FXaL6ygebEJ
+        TUt1vNoD8TewDjxHnBvRKKKNXI+i5W+3QxLMFGkCkX00xi4=
+X-Google-Smtp-Source: ABdhPJwMS72N0PKIYNlzv/5ofVU8NQSp6/IVUBlqVGTGFaBFOSdU5cUKZ1jvKCHE5pbMTLTNsh3OJ7uZdz0g2tPyvNQ=
+X-Received: by 2002:aca:49c7:: with SMTP id w190mr888372oia.157.1623428630663;
+ Fri, 11 Jun 2021 09:23:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1623223350-128104-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Jun 2021 18:23:39 +0200
+Message-ID: <CAJZ5v0h=mwaux6QuyjTF09HZ4Q6AjOhr+fBwHdQBoNXVvURiSQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v5.13-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.13-rc6
+
+with top-most commit bc8865ab32bb8d71b607cf73a8367ceebda88767
+
+ Merge branch 'acpi-bus'
+
+on top of commit 614124bea77e452aa6df7a8714e8bc820b489922
+
+ Linux 5.13-rc5
+
+to receive ACPI fixes for 5.13-rc6.
+
+These revert a problematic recent commit and fix a regression
+introduced during the 5.12 development cycle.
+
+Specifics:
+
+ - Revert recent commit that attempted to fix the FACS table
+   reference counting but introduced a problem with accessing
+   the hardware signature after hibernation (Zhang Rui).
+
+ - Fix regression in the _OSC handling that broke the loading
+   of ACPI tables on some systems (Mika Westerberg).
+
+Thanks!
 
 
-On 6/9/21 8:22 AM, Yang Li wrote:
-> Fix function name in devfreq_cooling.c comment to remove a
-> warning found by kernel-doc.
-> 
-> drivers/thermal/devfreq_cooling.c:479: warning: expecting prototype for
-> devfreq_cooling_em_register_power(). Prototype was for
-> devfreq_cooling_em_register() instead.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+---------------
 
-Everything was said regarding these Reviewed-by tags
-and you got them in this thread, so should be OK
-Thank you Nathan and Nick for explaining this and sorting
-out.
+Mika Westerberg (1):
+      ACPI: Pass the same capabilities to the _OSC regardless of the query flag
 
-Small hint for next time, the Signed-off-by should be at the bottom of
-that list.
+Zhang Rui (1):
+      Revert "ACPI: sleep: Put the FACS table after using it"
 
+---------------
 
-> ---
-> 
-> Change in v2:
-> --replaced s/clang(make W=1 LLVM=1)/kernel-doc/ in commit.
-> https://lore.kernel.org/patchwork/patch/1442639/
-> 
->   drivers/thermal/devfreq_cooling.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> index 3a788ac..5a86cff 100644
-> --- a/drivers/thermal/devfreq_cooling.c
-> +++ b/drivers/thermal/devfreq_cooling.c
-> @@ -458,7 +458,7 @@ struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df)
->   EXPORT_SYMBOL_GPL(devfreq_cooling_register);
->   
->   /**
-> - * devfreq_cooling_em_register_power() - Register devfreq cooling device with
-> + * devfreq_cooling_em_register() - Register devfreq cooling device with
->    *		power information and automatically register Energy Model (EM)
->    * @df:		Pointer to devfreq device.
->    * @dfc_power:	Pointer to devfreq_cooling_power.
-> 
-
-Apart from that, the change itself is OK. I forgot about this comment
-function name in some iteration... my apologies for that.
-
-LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz Luba
+ drivers/acpi/bus.c   | 27 ++++++++-------------------
+ drivers/acpi/sleep.c |  4 +---
+ 2 files changed, 9 insertions(+), 22 deletions(-)
