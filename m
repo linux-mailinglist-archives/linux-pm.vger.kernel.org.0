@@ -2,114 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A11743A49C1
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jun 2021 22:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AA63A4D11
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jun 2021 08:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhFKUDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Jun 2021 16:03:32 -0400
-Received: from mail-pg1-f180.google.com ([209.85.215.180]:45922 "EHLO
-        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbhFKUDa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Jun 2021 16:03:30 -0400
-Received: by mail-pg1-f180.google.com with SMTP id q15so3284423pgg.12
-        for <linux-pm@vger.kernel.org>; Fri, 11 Jun 2021 13:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=f35T/APy5uvNlXS5kiawBYoOeEmqze0QHHJzbO5ElhI=;
-        b=BoqapoaPIjRaR5KDbxmpb4Hy7ypKEinlreMRoIzcCs4XvcR+xoPFYTtPhg4cB5avyR
-         r9JkjiRCvEqNFZL8k72I5MIsxg4HTi8BsjfHOpcIrXj84db4FgN6ycVSySIprkRmCDm8
-         x/tZ2o1VcKJk6ve3zTwVwp9cxVGWYdtJu7naT5+rDRhNBI3mqIFQ+ANuEZORF48+EEjy
-         CZ9S4yI1JA5DKvbEGSxedOU4vR7+KPT8b7C7j0Ofa0kFY17teMaJ3aVovdTUEgc5e+b/
-         Uslwy58vdh7XYH0NbAip6pNRjUiIwm+p/cxs/f7RUaeL951ZbWMShxKYJqUxMY8iUNGq
-         vgrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=f35T/APy5uvNlXS5kiawBYoOeEmqze0QHHJzbO5ElhI=;
-        b=g3v89W8zpF2j6p5iAleCoqSBHckGI99JJ9J+eXSw8YiSokUlKoTb1eHWagLpGmGj9Y
-         +B5/iSqFaBaHHySjw/Tru9OI/eeTulaCA+/cu5Adr+6FGzoxGJcB9hY8eE9wh+96vfSQ
-         VaKI8xK3gABYTVPz7V1Ccyw2S5BSTnLcjCdHouIaTAS4SzzLVZ1ZkSwlcGYpaMOGEQgr
-         YAchKWJxuN0eTj1SHzDkGpMPuh1VavNnC2fN6lP+LAkctzu4Iwmti03UrliC21lFQTuB
-         L01xeWimQO58uWqCCrFaHRMgs3oe+Rw0S+l2twdTJPuW6n6TquVPiYVSvwo0dtD2xQ4l
-         T72Q==
-X-Gm-Message-State: AOAM533c4BsopRyxjiiTbs1x9fkObjeQp04+IBMxJKJQlYTZZ/0KVOBh
-        8w5bQRxfa34XlpFQpH+PmVnNgw==
-X-Google-Smtp-Source: ABdhPJz3cSdjehJ5xL/efYJiEXIVATHOWN4Wzi1Ft8IQZvTQcb7oGTDi1FZC2YD9tD1MYfHABMJIog==
-X-Received: by 2002:a05:6a00:10:b029:2f5:9339:1e8c with SMTP id h16-20020a056a000010b02902f593391e8cmr9076259pfk.42.1623441619728;
-        Fri, 11 Jun 2021 13:00:19 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id p37sm5688053pfw.166.2021.06.11.13.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 13:00:19 -0700 (PDT)
-Message-ID: <60c3c0d3.1c69fb81.1f66d.1b14@mx.google.com>
-Date:   Fri, 11 Jun 2021 13:00:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S229532AbhFLGJm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Jun 2021 02:09:42 -0400
+Received: from mga14.intel.com ([192.55.52.115]:48765 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229446AbhFLGJm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 12 Jun 2021 02:09:42 -0400
+IronPort-SDR: setgfYPhZZMxMV9AAQ5YgFTrzbMXzPRlqRBDQNGwjF6Rl9gJKxlx/nF2AdjwtUDkHMVlBpb8uf
+ hGgaVbgRtyrw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="205464033"
+X-IronPort-AV: E=Sophos;i="5.83,268,1616482800"; 
+   d="scan'208";a="205464033"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 23:07:42 -0700
+IronPort-SDR: pSN8dmRFGJiKQX5eqDiiXWw+tl8m+YMMU5uzqT3970zUdu/I5gWJ9D3yiTY2RXyWLNzvWcXGVU
+ XKvK2MwUNO/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,268,1616482800"; 
+   d="scan'208";a="449329385"
+Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 11 Jun 2021 23:07:41 -0700
+Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lrwo1-0000qP-Bw; Sat, 12 Jun 2021 06:07:41 +0000
+Date:   Sat, 12 Jun 2021 14:07:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 2be4aa8aed4de696f2741f8aef751b0da3292184
+Message-ID: <60c44f14.t3H+iJZK/X31Hjjq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.13-rc5-112-gfce7d470d0dd
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.13-rc5-112-gfce7d470d0dd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.13-rc5-112-gfce7d470d0dd)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 2be4aa8aed4de696f2741f8aef751b0da3292184  Merge branch 'pm-core' into bleeding-edge
 
-Regressions Summary
--------------------
+elapsed time: 727m
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+configs tested: 97
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
-5-112-gfce7d470d0dd/plan/sleep/
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                          rsk7264_defconfig
+mips                         bigsur_defconfig
+sh                              ul2_defconfig
+arm                          pxa910_defconfig
+sh                          lboxre2_defconfig
+powerpc                     sequoia_defconfig
+powerpc                      acadia_defconfig
+arm                      jornada720_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                      loongson3_defconfig
+powerpc                     kmeter1_defconfig
+mips                           ci20_defconfig
+arc                          axs103_defconfig
+arm                  colibri_pxa300_defconfig
+m68k                       m5249evb_defconfig
+powerpc                          g5_defconfig
+mips                           rs90_defconfig
+arm                            mps2_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210611
+i386                 randconfig-a006-20210611
+i386                 randconfig-a004-20210611
+i386                 randconfig-a001-20210611
+i386                 randconfig-a005-20210611
+i386                 randconfig-a003-20210611
+x86_64               randconfig-a002-20210611
+x86_64               randconfig-a001-20210611
+x86_64               randconfig-a004-20210611
+x86_64               randconfig-a003-20210611
+x86_64               randconfig-a006-20210611
+x86_64               randconfig-a005-20210611
+i386                 randconfig-a015-20210611
+i386                 randconfig-a013-20210611
+i386                 randconfig-a016-20210611
+i386                 randconfig-a014-20210611
+i386                 randconfig-a012-20210611
+i386                 randconfig-a011-20210611
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.13-rc5-112-gfce7d470d0dd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      fce7d470d0dd8960fb8fff2c6adcdea7646a85a9 =
+clang tested configs:
+x86_64               randconfig-a015-20210611
+x86_64               randconfig-a011-20210611
+x86_64               randconfig-a012-20210611
+x86_64               randconfig-a014-20210611
+x86_64               randconfig-a016-20210611
+x86_64               randconfig-a013-20210611
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c3b3a3d9c5ac50c90c0dfa
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc5-112-gfce7=
-d470d0dd/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc5-112-gfce7=
-d470d0dd/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0520.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/60c3b3a3d9c5ac50c90c0dfb
-        failing since 296 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
