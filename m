@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB233A6E99
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2ED23A6E9D
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbhFNTOD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 15:14:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:44244 "EHLO foss.arm.com"
+        id S233312AbhFNTOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 15:14:52 -0400
+Received: from foss.arm.com ([217.140.110.172]:44282 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233048AbhFNTOD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Jun 2021 15:14:03 -0400
+        id S233048AbhFNTOw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Jun 2021 15:14:52 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1F96113E;
-        Mon, 14 Jun 2021 12:11:59 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEE86113E;
+        Mon, 14 Jun 2021 12:12:48 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.5.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1D1A13F694;
-        Mon, 14 Jun 2021 12:11:55 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2A8F43F694;
+        Mon, 14 Jun 2021 12:12:45 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
@@ -28,9 +28,9 @@ Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
         bristot@redhat.com, thara.gopinath@linaro.org,
         amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
         daniel.lezcano@linaro.org
-Subject: [PATCH v4 2/3] sched/fair: Take thermal pressure into account while estimating energy
-Date:   Mon, 14 Jun 2021 20:11:28 +0100
-Message-Id: <20210614191128.22735-1-lukasz.luba@arm.com>
+Subject: [PATCH v4 3/3] sched/cpufreq: Consider reduced CPU capacity in energy calculation
+Date:   Mon, 14 Jun 2021 20:12:38 +0100
+Message-Id: <20210614191238.23224-1-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210614185815.15136-1-lukasz.luba@arm.com>
 References: <20210614185815.15136-1-lukasz.luba@arm.com>
@@ -38,82 +38,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Energy Aware Scheduling (EAS) needs to be able to predict the frequency
-requests made by the SchedUtil governor to properly estimate energy used
-in the future. It has to take into account CPUs utilization and forecast
-Performance Domain (PD) frequency. There is a corner case when the max
-allowed frequency might be reduced due to thermal. SchedUtil is aware of
-that reduced frequency, so it should be taken into account also in EAS
-estimations.
+Energy Aware Scheduling (EAS) needs to predict the decisions made by
+SchedUtil. The map_util_freq() exists to do that.
 
-SchedUtil, as a CPUFreq governor, knows the maximum allowed frequency of
-a CPU, thanks to cpufreq_driver_resolve_freq() and internal clamping
-to 'policy::max'. SchedUtil is responsible to respect that upper limit
-while setting the frequency through CPUFreq drivers. This effective
-frequency is stored internally in 'sugov_policy::next_freq' and EAS has
-to predict that value.
+There are corner cases where the max allowed frequency might be reduced
+(due to thermal). SchedUtil as a CPUFreq governor, is aware of that
+but EAS is not. This patch aims to address it.
 
-In the existing code the raw value of arch_scale_cpu_capacity() is used
-for clamping the returned CPU utilization from effective_cpu_util().
-This patch fixes issue with too big single CPU utilization, by introducing
-clamping to the allowed CPU capacity. The allowed CPU capacity is a CPU
-capacity reduced by thermal pressure raw value.
+SchedUtil stores the maximum allowed frequency in
+'sugov_policy::next_freq' field. EAS has to predict that value, which is
+the real used frequency. That value is made after a call to
+cpufreq_driver_resolve_freq() which clamps to the CPUFreq policy limits.
+In the existing code EAS is not able to predict that real frequency.
+This leads to energy estimation errors.
 
-Thanks to knowledge about allowed CPU capacity, we don't get too big value
-for a single CPU utilization, which is then added to the util sum. The
-util sum is used as a source of information for estimating whole PD energy.
-To avoid wrong energy estimation in EAS (due to capped frequency), make
-sure that the calculation of util sum is aware of allowed CPU capacity.
+To avoid wrong energy estimation in EAS (due to frequency miss prediction)
+make sure that the step which calculates Performance Domain frequency,
+is also aware of the allowed CPU capacity.
 
-This thermal pressure might be visible in scenarios where the CPUs are not
-heavily loaded, but some other component (like GPU) drastically reduced
-available power budget and increased the SoC temperature. Thus, we still
-use EAS for task placement and CPUs are not over-utilized.
+Furthermore, modify map_util_freq() to not extend the frequency value.
+Instead, use map_util_perf() to extend the util value in both places:
+SchedUtil and EAS, but for EAS clamp it to max allowed CPU capacity.
+In the end, we achieve the same desirable behavior for both subsystems
+and alignment in regards to the real CPU frequency.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> (For the schedutil part)
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- kernel/sched/fair.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ include/linux/energy_model.h     | 16 +++++++++++++---
+ include/linux/sched/cpufreq.h    |  2 +-
+ kernel/sched/cpufreq_schedutil.c |  1 +
+ kernel/sched/fair.c              |  2 +-
+ 4 files changed, 16 insertions(+), 5 deletions(-)
 
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index 757fc60658fa..3f221dbf5f95 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -91,6 +91,8 @@ void em_dev_unregister_perf_domain(struct device *dev);
+  * @pd		: performance domain for which energy has to be estimated
+  * @max_util	: highest utilization among CPUs of the domain
+  * @sum_util	: sum of the utilization of all CPUs in the domain
++ * @allowed_cpu_cap	: maximum allowed CPU capacity for the @pd, which
++			  might reflect reduced frequency (due to thermal)
+  *
+  * This function must be used only for CPU devices. There is no validation,
+  * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
+@@ -100,7 +102,8 @@ void em_dev_unregister_perf_domain(struct device *dev);
+  * a capacity state satisfying the max utilization of the domain.
+  */
+ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+-				unsigned long max_util, unsigned long sum_util)
++				unsigned long max_util, unsigned long sum_util,
++				unsigned long allowed_cpu_cap)
+ {
+ 	unsigned long freq, scale_cpu;
+ 	struct em_perf_state *ps;
+@@ -112,11 +115,17 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+ 	/*
+ 	 * In order to predict the performance state, map the utilization of
+ 	 * the most utilized CPU of the performance domain to a requested
+-	 * frequency, like schedutil.
++	 * frequency, like schedutil. Take also into account that the real
++	 * frequency might be set lower (due to thermal capping). Thus, clamp
++	 * max utilization to the allowed CPU capacity before calculating
++	 * effective frequency.
+ 	 */
+ 	cpu = cpumask_first(to_cpumask(pd->cpus));
+ 	scale_cpu = arch_scale_cpu_capacity(cpu);
+ 	ps = &pd->table[pd->nr_perf_states - 1];
++
++	max_util = map_util_perf(max_util);
++	max_util = min(max_util, allowed_cpu_cap);
+ 	freq = map_util_freq(max_util, ps->frequency, scale_cpu);
+ 
+ 	/*
+@@ -209,7 +218,8 @@ static inline struct em_perf_domain *em_pd_get(struct device *dev)
+ 	return NULL;
+ }
+ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+-			unsigned long max_util, unsigned long sum_util)
++			unsigned long max_util, unsigned long sum_util,
++			unsigned long allowed_cpu_cap)
+ {
+ 	return 0;
+ }
+diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+index 6205578ab6ee..bdd31ab93bc5 100644
+--- a/include/linux/sched/cpufreq.h
++++ b/include/linux/sched/cpufreq.h
+@@ -26,7 +26,7 @@ bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy);
+ static inline unsigned long map_util_freq(unsigned long util,
+ 					unsigned long freq, unsigned long cap)
+ {
+-	return (freq + (freq >> 2)) * util / cap;
++	return freq * util / cap;
+ }
+ 
+ static inline unsigned long map_util_perf(unsigned long util)
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 4f09afd2f321..57124614363d 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -151,6 +151,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 	unsigned int freq = arch_scale_freq_invariant() ?
+ 				policy->cpuinfo.max_freq : policy->cur;
+ 
++	util = map_util_perf(util);
+ 	freq = map_util_freq(util, freq, max);
+ 
+ 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 161b92aa1c79..3634e077051d 100644
+index 3634e077051d..75e082964250 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6527,8 +6527,11 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 	struct cpumask *pd_mask = perf_domain_span(pd);
- 	unsigned long cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
- 	unsigned long max_util = 0, sum_util = 0;
-+	unsigned long _cpu_cap = cpu_cap;
- 	int cpu;
- 
-+	_cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-+
- 	/*
- 	 * The capacity state of CPUs of the current rd can be driven by CPUs
- 	 * of another rd if they belong to the same pd. So, account for the
-@@ -6564,8 +6567,10 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 		 * is already enough to scale the EM reported power
- 		 * consumption at the (eventually clamped) cpu_capacity.
- 		 */
--		sum_util += effective_cpu_util(cpu, util_running, cpu_cap,
--					       ENERGY_UTIL, NULL);
-+		cpu_util = effective_cpu_util(cpu, util_running, cpu_cap,
-+					      ENERGY_UTIL, NULL);
-+
-+		sum_util += min(cpu_util, _cpu_cap);
- 
- 		/*
- 		 * Performance domain frequency: utilization clamping
-@@ -6576,7 +6581,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 		 */
- 		cpu_util = effective_cpu_util(cpu, util_freq, cpu_cap,
- 					      FREQUENCY_UTIL, tsk);
--		max_util = max(max_util, cpu_util);
-+		max_util = max(max_util, min(cpu_util, _cpu_cap));
+@@ -6584,7 +6584,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+ 		max_util = max(max_util, min(cpu_util, _cpu_cap));
  	}
  
- 	return em_cpu_energy(pd->em_pd, max_util, sum_util);
+-	return em_cpu_energy(pd->em_pd, max_util, sum_util);
++	return em_cpu_energy(pd->em_pd, max_util, sum_util, _cpu_cap);
+ }
+ 
+ /*
 -- 
 2.17.1
 
