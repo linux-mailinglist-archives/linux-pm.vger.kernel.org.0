@@ -2,165 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ED23A6E9D
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106743A6EB1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbhFNTOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 15:14:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:44282 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233048AbhFNTOw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Jun 2021 15:14:52 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEE86113E;
-        Mon, 14 Jun 2021 12:12:48 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.5.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2A8F43F694;
-        Mon, 14 Jun 2021 12:12:45 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
-        qperret@google.com, dietmar.eggemann@arm.com,
-        vincent.donnefort@arm.com, lukasz.luba@arm.com,
-        Beata.Michalska@arm.com, mingo@redhat.com, juri.lelli@redhat.com,
-        rostedt@goodmis.org, segall@google.com, mgorman@suse.de,
-        bristot@redhat.com, thara.gopinath@linaro.org,
-        amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org
-Subject: [PATCH v4 3/3] sched/cpufreq: Consider reduced CPU capacity in energy calculation
-Date:   Mon, 14 Jun 2021 20:12:38 +0100
-Message-Id: <20210614191238.23224-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210614185815.15136-1-lukasz.luba@arm.com>
-References: <20210614185815.15136-1-lukasz.luba@arm.com>
+        id S233997AbhFNTSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 15:18:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34912 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233983AbhFNTSV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 15:18:21 -0400
+Received: from mail-ed1-f71.google.com ([209.85.208.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lss4H-0007Q5-58
+        for linux-pm@vger.kernel.org; Mon, 14 Jun 2021 19:16:17 +0000
+Received: by mail-ed1-f71.google.com with SMTP id p24-20020aa7c8980000b0290393c37fdcb8so9643255eds.6
+        for <linux-pm@vger.kernel.org>; Mon, 14 Jun 2021 12:16:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TUzkmOme0TmCtd3RoNGL+uA/YnlcaGPBaNMGhiut9mY=;
+        b=ewUTd4bItb3n91pEH0Oiac6jEQX+vLWq84Xzy+JnckOBB+Jp4Ju0+bffpgbZKcxPC6
+         IKOsUWctf6Pq5/XTYY0GxA7DIL7IB9rNpF8xJv40AOWszNnlqZ1m1B0hMFvp2ZrrYrDn
+         bpIDEM3WVnK1TmUlZDHFGwX76g8+KNs4K+4ovMOmpLrOWZQa+BpGswxaEsNSCVcUxJe+
+         tINBx+/BW03a3rzoUVNEGM9YVZM9V/qIKVhMQcmeEdEh8daAvrBOuzOa15Zgw/I02bXN
+         0S6psWQ46E7I6GFkSIbjqF5pVcFk5yHMd8myDy1kuLJWQvxGUlg+IdUU/YRM44NBY6ht
+         Yw6g==
+X-Gm-Message-State: AOAM530S3R5WxAGlAjxc7NcKDKoEO0TOKe4zEq0nFZAOVA0SBIuk3B4n
+        V9R3AiiCH4UArDqwzLuoq1tCVld3b9xz2Gi3v/3fy+M/w4+s+CrTZkHll6b7D0KznyDlbu3+kaf
+        pns9VAfKzOY9S15r5cxcyxtCW+Xg2SVjcp2MD
+X-Received: by 2002:a17:906:9615:: with SMTP id s21mr10253104ejx.505.1623698176646;
+        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxo0/zvVAJ2MFxa5ky6KH956YgBy4z5Av7KsVRKr654YOAXxqBt+BY0ViGLcsNCBwMHq6Eszw==
+X-Received: by 2002:a17:906:9615:: with SMTP id s21mr10253086ejx.505.1623698176515;
+        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id gz5sm7937332ejb.113.2021.06.14.12.16.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
+Subject: Re: [RESEND PATCH 2/2] thermal: sprd: add missing of_node_put for
+ loop iteration
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
+ <20210528115036.18222-2-krzysztof.kozlowski@canonical.com>
+ <9d4b9827-74fb-43ea-bcc0-5c780296e6c0@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <f7213eb3-5b34-7a66-2a71-615e97a5c3a4@canonical.com>
+Date:   Mon, 14 Jun 2021 21:16:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <9d4b9827-74fb-43ea-bcc0-5c780296e6c0@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Energy Aware Scheduling (EAS) needs to predict the decisions made by
-SchedUtil. The map_util_freq() exists to do that.
+On 14/06/2021 19:28, Daniel Lezcano wrote:
+> On 28/05/2021 13:50, Krzysztof Kozlowski wrote:
+>> Early exits from for_each_available_child_of_node() should decrement the
+>> node reference counter.  Reported by Coccinelle:
+>>
+>>   drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
+>>     Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
+>> ---
+>>  drivers/thermal/sprd_thermal.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+>> index 3682edb2f466..2778971aaf03 100644
+>> --- a/drivers/thermal/sprd_thermal.c
+>> +++ b/drivers/thermal/sprd_thermal.c
+>> @@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
+>>  		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
+>>  		if (!sen) {
+>>  			ret = -ENOMEM;
+>> +			of_node_put(sen_child);
+> 
+> Why not a new label for the rollback routine?
+> 
+> eg. goto out_of_node_put;
 
-There are corner cases where the max allowed frequency might be reduced
-(due to thermal). SchedUtil as a CPUFreq governor, is aware of that
-but EAS is not. This patch aims to address it.
+Indeed, this should work. When loops end, the sen_child is set to NULL
+so of_node_putting it should be fine.
 
-SchedUtil stores the maximum allowed frequency in
-'sugov_policy::next_freq' field. EAS has to predict that value, which is
-the real used frequency. That value is made after a call to
-cpufreq_driver_resolve_freq() which clamps to the CPUFreq policy limits.
-In the existing code EAS is not able to predict that real frequency.
-This leads to energy estimation errors.
+> 
+> Or a new function devm_for_each_available_child_of_node() ?
 
-To avoid wrong energy estimation in EAS (due to frequency miss prediction)
-make sure that the step which calculates Performance Domain frequency,
-is also aware of the allowed CPU capacity.
+Since there are multiple flavors of this for_each_loop, that might be
+too much...
 
-Furthermore, modify map_util_freq() to not extend the frequency value.
-Instead, use map_util_perf() to extend the util value in both places:
-SchedUtil and EAS, but for EAS clamp it to max allowed CPU capacity.
-In the end, we achieve the same desirable behavior for both subsystems
-and alignment in regards to the real CPU frequency.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> (For the schedutil part)
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- include/linux/energy_model.h     | 16 +++++++++++++---
- include/linux/sched/cpufreq.h    |  2 +-
- kernel/sched/cpufreq_schedutil.c |  1 +
- kernel/sched/fair.c              |  2 +-
- 4 files changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 757fc60658fa..3f221dbf5f95 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -91,6 +91,8 @@ void em_dev_unregister_perf_domain(struct device *dev);
-  * @pd		: performance domain for which energy has to be estimated
-  * @max_util	: highest utilization among CPUs of the domain
-  * @sum_util	: sum of the utilization of all CPUs in the domain
-+ * @allowed_cpu_cap	: maximum allowed CPU capacity for the @pd, which
-+			  might reflect reduced frequency (due to thermal)
-  *
-  * This function must be used only for CPU devices. There is no validation,
-  * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
-@@ -100,7 +102,8 @@ void em_dev_unregister_perf_domain(struct device *dev);
-  * a capacity state satisfying the max utilization of the domain.
-  */
- static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
--				unsigned long max_util, unsigned long sum_util)
-+				unsigned long max_util, unsigned long sum_util,
-+				unsigned long allowed_cpu_cap)
- {
- 	unsigned long freq, scale_cpu;
- 	struct em_perf_state *ps;
-@@ -112,11 +115,17 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 	/*
- 	 * In order to predict the performance state, map the utilization of
- 	 * the most utilized CPU of the performance domain to a requested
--	 * frequency, like schedutil.
-+	 * frequency, like schedutil. Take also into account that the real
-+	 * frequency might be set lower (due to thermal capping). Thus, clamp
-+	 * max utilization to the allowed CPU capacity before calculating
-+	 * effective frequency.
- 	 */
- 	cpu = cpumask_first(to_cpumask(pd->cpus));
- 	scale_cpu = arch_scale_cpu_capacity(cpu);
- 	ps = &pd->table[pd->nr_perf_states - 1];
-+
-+	max_util = map_util_perf(max_util);
-+	max_util = min(max_util, allowed_cpu_cap);
- 	freq = map_util_freq(max_util, ps->frequency, scale_cpu);
- 
- 	/*
-@@ -209,7 +218,8 @@ static inline struct em_perf_domain *em_pd_get(struct device *dev)
- 	return NULL;
- }
- static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
--			unsigned long max_util, unsigned long sum_util)
-+			unsigned long max_util, unsigned long sum_util,
-+			unsigned long allowed_cpu_cap)
- {
- 	return 0;
- }
-diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
-index 6205578ab6ee..bdd31ab93bc5 100644
---- a/include/linux/sched/cpufreq.h
-+++ b/include/linux/sched/cpufreq.h
-@@ -26,7 +26,7 @@ bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy);
- static inline unsigned long map_util_freq(unsigned long util,
- 					unsigned long freq, unsigned long cap)
- {
--	return (freq + (freq >> 2)) * util / cap;
-+	return freq * util / cap;
- }
- 
- static inline unsigned long map_util_perf(unsigned long util)
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 4f09afd2f321..57124614363d 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -151,6 +151,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
- 	unsigned int freq = arch_scale_freq_invariant() ?
- 				policy->cpuinfo.max_freq : policy->cur;
- 
-+	util = map_util_perf(util);
- 	freq = map_util_freq(util, freq, max);
- 
- 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 3634e077051d..75e082964250 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6584,7 +6584,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 		max_util = max(max_util, min(cpu_util, _cpu_cap));
- 	}
- 
--	return em_cpu_energy(pd->em_pd, max_util, sum_util);
-+	return em_cpu_energy(pd->em_pd, max_util, sum_util, _cpu_cap);
- }
- 
- /*
--- 
-2.17.1
-
+Best regards,
+Krzysztof
