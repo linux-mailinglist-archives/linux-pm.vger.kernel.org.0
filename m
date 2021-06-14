@@ -2,75 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AB43A6E48
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 20:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5415D3A6E76
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 20:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbhFNSk4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 14:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbhFNSkz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 14:40:55 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E5C061574;
-        Mon, 14 Jun 2021 11:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4tHLuqmgdgsWH9+Oan4cN/C2KwNR0UqEdUEL10Y7OWA=; b=A/q5A9ocg4uEv/akQNc9poVyAA
-        WAdjFOB5BQpqVtcMB6RyDLgtzXUGv2kiTvL6im0d//2rt3l1dpdtfrWVbkb/mJHxHOiqWShhxSc37
-        6rthibJdTvbUr1jd4BDnHYe7etM+DnqfEKRVE3wv59djWu3wJ0i+c4Ul62fqDQSH4+z32alAbNkZa
-        wd6+ZiIDGTjdkSgR/uxukUHtW3QcXn6BFC0+7BXZz6nFWJTrHq4klMPSAcf6GNLD5PHne8hu5iTWh
-        w8+kMUTRZJHOduBp35oBVBLYqNdUbBeNsj2wPeCFnCiU/y/xJ5VaQbdioReqkyLwnfVnw+vg3RnAx
-        126qNDqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lsrTI-005ij6-6b; Mon, 14 Jun 2021 18:38:12 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C0DEB982D9F; Mon, 14 Jun 2021 20:38:01 +0200 (CEST)
-Date:   Mon, 14 Jun 2021 20:38:01 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] freezer,sched: Rewrite core freezer logic
-Message-ID: <20210614183801.GE68749@worktop.programming.kicks-ass.net>
-References: <YMMijNqaLDbS3sIv@hirez.programming.kicks-ass.net>
- <20210614154246.GB13677@redhat.com>
- <20210614161221.GC68749@worktop.programming.kicks-ass.net>
- <20210614165422.GC13677@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210614165422.GC13677@redhat.com>
+        id S232864AbhFNTAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 15:00:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:43950 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232745AbhFNTAe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Jun 2021 15:00:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03C4C113E;
+        Mon, 14 Jun 2021 11:58:31 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.5.127])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 430943F694;
+        Mon, 14 Jun 2021 11:58:27 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
+        qperret@google.com, dietmar.eggemann@arm.com,
+        vincent.donnefort@arm.com, lukasz.luba@arm.com,
+        Beata.Michalska@arm.com, mingo@redhat.com, juri.lelli@redhat.com,
+        rostedt@goodmis.org, segall@google.com, mgorman@suse.de,
+        bristot@redhat.com, thara.gopinath@linaro.org,
+        amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org
+Subject: [PATCH v4 0/3] Add allowed CPU capacity knowledge to EAS
+Date:   Mon, 14 Jun 2021 19:58:12 +0100
+Message-Id: <20210614185815.15136-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 06:54:23PM +0200, Oleg Nesterov wrote:
-> On 06/14, Peter Zijlstra wrote:
+Hi all,
 
-> > > I guess you do this to avoid freezable_schedule() in ptrace/signal_stop,
-> > > and we can't use TASK_STOPPED|TASK_FREEZABLE, it should not run after
-> > > thaw()... But see above, we can't rely on __frozen(parent).
-> >
-> > I do this because freezing puts a task in TASK_FROZEN, and that cannot
-> > preserve TAKS_STOPPED or TASK_TRACED without being subject to wakups
-> 
-> Yes, yes, this is what I tried to say.
+The patch set v4 aims to add knowledge about reduced CPU capacity
+into the Energy Model (EM) and Energy Aware Scheduler (EAS). Currently the
+issue is that SchedUtil CPU frequency and EM frequency are not aligned,
+when there is a CPU thermal capping. This causes an estimation error.
+This patch set provides the information about allowed CPU capacity
+into the EM (thanks to thermal pressure information). This improves the
+energy estimation. More info about this mechanism can be found in the
+patches description.
 
-OK, thanks for all that. Clearly I need to stare at this code longer and
-harder.
+Changelog:
+v4:
+- removed local variable and improved description in patch 2/3
+- added Reviewed-by from Vincent for patch 2/3
+- added Acked-by from Viresh for patch 1/3
+v3 [3]:
+- switched to 'raw' per-cpu thermal pressure instead of thermal pressure
+  geometric series signal, since it more suited for purpose of
+  this use case: predicting SchedUtil frequency (Vincent, Dietmar)
+- added more comment in the patch 2/3 header for use case when thermal
+  capping might be applied even the CPUs are not over-utilized
+  (Dietmar)
+- added ACK tag from Rafael for SchedUtil part
+- added a fix patch for offline CPUs in cpufreq_cooling and per-cpu
+  thermal_pressure missing update
+v2 [2]:
+- clamp the returned value from effective_cpu_util() and avoid irq
+  util scaling issues (Quentin)
+v1 is available at [1]
 
-One more thing; if I add additional state bits to preserve
-__TASK_{TRACED,STOPPED}, then I need to figure out at thaw time if we've
-missed a wakeup or not.
+Regards,
+Lukasz
 
-Do we have sufficient state for that? If so, don't we then also not have
-sufficient state to tell if a task should've been TRACED/STOPPED in the
-first place?
+[1] https://lore.kernel.org/linux-pm/20210602135609.10867-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/lkml/20210604080954.13915-1-lukasz.luba@arm.com/
+[3] https://lore.kernel.org/lkml/20210610150324.22919-1-lukasz.luba@arm.com/
 
-If not, I probably should add this... I'll go dig.
+Lukasz Luba (3):
+  thermal: cpufreq_cooling: Update also offline CPUs per-cpu
+    thermal_pressure
+  sched/fair: Take thermal pressure into account while estimating energy
+  sched/cpufreq: Consider reduced CPU capacity in energy calculation
+
+ drivers/thermal/cpufreq_cooling.c |  2 +-
+ include/linux/energy_model.h      | 16 +++++++++++++---
+ include/linux/sched/cpufreq.h     |  2 +-
+ kernel/sched/cpufreq_schedutil.c  |  1 +
+ kernel/sched/fair.c               | 13 +++++++++----
+ 5 files changed, 25 insertions(+), 9 deletions(-)
+
+-- 
+2.17.1
+
