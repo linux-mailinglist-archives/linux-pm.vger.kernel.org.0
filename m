@@ -2,140 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7707D3A6D32
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 19:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CFB3A6E26
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 20:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbhFNRcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 13:32:17 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:37443 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbhFNRcQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 13:32:16 -0400
-Received: by mail-wm1-f53.google.com with SMTP id f16-20020a05600c1550b02901b00c1be4abso13644445wmg.2
-        for <linux-pm@vger.kernel.org>; Mon, 14 Jun 2021 10:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=0HZoKw5adrZfJ9skcd1RFBbDTV0dwPz1XUywXf4yuGQ=;
-        b=KH4afTS4+SGTi1cTqbnj17kLVaHyIIdrXkw76mYjnBhCBVmacQqZWF8psAl99FXcj8
-         9vsXwwDyVyha/0K+hYWfiLoYMJM9EsCXOwoj6fDk5ppvq3/Bw8tOMLUYzNWSqBnVUg9e
-         NvuWRy5+SERZMK8cDJV/oc8y9m+1fgZ0zxJ0CxUcVZptEqewDbUTQbcm4Zpeu/MBS+kR
-         Ko4KBytCQC/dZr+WN0k8YFRUSG0CDYADE6/GjXvwaYeLOm98MVitNzm6QO+z5Ka7EOeP
-         OoXa/Ch27iS3FxCneanLpPVBzcCOjYqu2fvlN+bxTvr5VIrAxCJIVPzRy/UVaHHJXRQI
-         5fBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0HZoKw5adrZfJ9skcd1RFBbDTV0dwPz1XUywXf4yuGQ=;
-        b=fJ1x5EhRIPIVlHevwH8VtICVkHUrIjHYCHYzXz1JRpuwZmLLudxl980Qv39haycP9j
-         PHqaweh5MqtCU1Zk2NyCyJ2ppUJBGafwp7OyESElOr0gW031OoZj26r2NN53X5V5awqd
-         eEwhIJ0T4dli3UmDypLNVCaiXwaff7m22QEcPAqLocrB23JmL0LdDBMUJB5K3HDm++Kk
-         09Sa5ijex7DF53TVukQeGwPKUpKEs2GZ+VTwX1WzH9Ppt0QkznyASlfqY3OtCnc3K1Gc
-         QJ7hAQQBhu1q473Q6HWeeaevO2ThJLbJbTgExnI/Be2mOkw/wIRPwLhQCm/lzpCcCfs4
-         McXw==
-X-Gm-Message-State: AOAM5300VYglspE/ggQgz8RLhMv7kymH99TjuqAbzpabGasarAUK6PCY
-        RW7mPDhTElvXaggAJM/QF5W19g==
-X-Google-Smtp-Source: ABdhPJxF41GfivsXMDQfqC1DXXz60qhvtndPKA1Nj3+m/4k5rkP2AyYYalAZGfzGFq0SCDm8Zu6iug==
-X-Received: by 2002:a1c:9a8e:: with SMTP id c136mr184845wme.103.1623691736129;
-        Mon, 14 Jun 2021 10:28:56 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9d56:9c35:8a63:312c? ([2a01:e34:ed2f:f020:9d56:9c35:8a63:312c])
-        by smtp.googlemail.com with ESMTPSA id z10sm11106879wmp.39.2021.06.14.10.28.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jun 2021 10:28:55 -0700 (PDT)
-Subject: Re: [RESEND PATCH 2/2] thermal: sprd: add missing of_node_put for
- loop iteration
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        id S233848AbhFNSYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 14:24:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:43392 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235298AbhFNSYL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Jun 2021 14:24:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DE3D113E;
+        Mon, 14 Jun 2021 11:22:07 -0700 (PDT)
+Received: from [10.57.5.127] (unknown [10.57.5.127])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE6433F694;
+        Mon, 14 Jun 2021 11:22:03 -0700 (PDT)
+Subject: Re: [PATCH v3 2/3] sched/fair: Take thermal pressure into account
+ while estimating energy
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Beata Michalska <Beata.Michalska@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Amit Kachhap <amit.kachhap@gmail.com>, amitk@kernel.org,
         Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
- <20210528115036.18222-2-krzysztof.kozlowski@canonical.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <9d4b9827-74fb-43ea-bcc0-5c780296e6c0@linaro.org>
-Date:   Mon, 14 Jun 2021 19:28:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20210610150324.22919-1-lukasz.luba@arm.com>
+ <20210610150324.22919-3-lukasz.luba@arm.com>
+ <CAKfTPtAq5Hn7iQ-USO5La4B_jkYXzSvFSFrCDq47gjXDGghyTQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <2fa70564-e02a-06d5-2742-24dedccddea2@arm.com>
+Date:   Mon, 14 Jun 2021 19:22:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20210528115036.18222-2-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <CAKfTPtAq5Hn7iQ-USO5La4B_jkYXzSvFSFrCDq47gjXDGghyTQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/05/2021 13:50, Krzysztof Kozlowski wrote:
-> Early exits from for_each_available_child_of_node() should decrement the
-> node reference counter.  Reported by Coccinelle:
+
+
+On 6/14/21 5:03 PM, Vincent Guittot wrote:
+> On Thu, 10 Jun 2021 at 17:03, Lukasz Luba <lukasz.luba@arm.com> wrote:
+
+[snip]
+
+>> In the existing code the raw value of arch_scale_cpu_capacity() is used
+>> for clamping the returned CPU utilization from effective_cpu_util().
+>> This patch fixes issue with too big single CPU utilization, by introducing
+>> clamping to the allowed CPU capacity. The allowed CPU capacity is a CPU
+>> capacity reduced by thermal pressure signal. We rely on this load avg
 > 
->   drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
->     Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
+> you don't rely on load avg value but on raw thermal pressure value now
+
+Good catch, I'll change that description.
+
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
-> ---
->  drivers/thermal/sprd_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>> geometric series in similar way as other mechanisms in the scheduler.
+>>
+
+[snip]
+
+>>
+>> +       thermal_pressure = arch_scale_thermal_pressure(cpumask_first(pd_mask));
 > 
-> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-> index 3682edb2f466..2778971aaf03 100644
-> --- a/drivers/thermal/sprd_thermal.c
-> +++ b/drivers/thermal/sprd_thermal.c
-> @@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
->  		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
->  		if (!sen) {
->  			ret = -ENOMEM;
-> +			of_node_put(sen_child);
+> Do you really need to use this intermediate variable thermal_pressure
+> ? Seems to be used only below
 
-Why not a new label for the rollback routine?
+True, it's used only here. I'll remove this variable in the v4.
 
-eg. goto out_of_node_put;
-
-Or a new function devm_for_each_available_child_of_node() ?
-
->  			goto disable_clk;
->  		}
->  
-> @@ -397,12 +398,14 @@ static int sprd_thm_probe(struct platform_device *pdev)
->  		ret = of_property_read_u32(sen_child, "reg", &sen->id);
->  		if (ret) {
->  			dev_err(&pdev->dev, "get sensor reg failed");
-> +			of_node_put(sen_child);
->  			goto disable_clk;
->  		}
->  
->  		ret = sprd_thm_sensor_calibration(sen_child, thm, sen);
->  		if (ret) {
->  			dev_err(&pdev->dev, "efuse cal analysis failed");
-> +			of_node_put(sen_child);
->  			goto disable_clk;
->  		}
->  
-> @@ -416,6 +419,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
->  			dev_err(&pdev->dev, "register thermal zone failed %d\n",
->  				sen->id);
->  			ret = PTR_ERR(sen->tzd);
-> +			of_node_put(sen_child);
->  			goto disable_clk;
->  		}
->  
 > 
+> With these 2 comments above fixed,
+> 
+> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
+Thank you for the review!
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Lukasz
