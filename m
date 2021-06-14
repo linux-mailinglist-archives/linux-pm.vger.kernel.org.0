@@ -2,96 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CFB3A6E26
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 20:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AB43A6E48
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 20:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233848AbhFNSYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 14:24:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:43392 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235298AbhFNSYL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Jun 2021 14:24:11 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DE3D113E;
-        Mon, 14 Jun 2021 11:22:07 -0700 (PDT)
-Received: from [10.57.5.127] (unknown [10.57.5.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE6433F694;
-        Mon, 14 Jun 2021 11:22:03 -0700 (PDT)
-Subject: Re: [PATCH v3 2/3] sched/fair: Take thermal pressure into account
- while estimating energy
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Beata Michalska <Beata.Michalska@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Amit Kachhap <amit.kachhap@gmail.com>, amitk@kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20210610150324.22919-1-lukasz.luba@arm.com>
- <20210610150324.22919-3-lukasz.luba@arm.com>
- <CAKfTPtAq5Hn7iQ-USO5La4B_jkYXzSvFSFrCDq47gjXDGghyTQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <2fa70564-e02a-06d5-2742-24dedccddea2@arm.com>
-Date:   Mon, 14 Jun 2021 19:22:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S233041AbhFNSk4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 14:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232802AbhFNSkz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 14:40:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E5C061574;
+        Mon, 14 Jun 2021 11:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4tHLuqmgdgsWH9+Oan4cN/C2KwNR0UqEdUEL10Y7OWA=; b=A/q5A9ocg4uEv/akQNc9poVyAA
+        WAdjFOB5BQpqVtcMB6RyDLgtzXUGv2kiTvL6im0d//2rt3l1dpdtfrWVbkb/mJHxHOiqWShhxSc37
+        6rthibJdTvbUr1jd4BDnHYe7etM+DnqfEKRVE3wv59djWu3wJ0i+c4Ul62fqDQSH4+z32alAbNkZa
+        wd6+ZiIDGTjdkSgR/uxukUHtW3QcXn6BFC0+7BXZz6nFWJTrHq4klMPSAcf6GNLD5PHne8hu5iTWh
+        w8+kMUTRZJHOduBp35oBVBLYqNdUbBeNsj2wPeCFnCiU/y/xJ5VaQbdioReqkyLwnfVnw+vg3RnAx
+        126qNDqQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lsrTI-005ij6-6b; Mon, 14 Jun 2021 18:38:12 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C0DEB982D9F; Mon, 14 Jun 2021 20:38:01 +0200 (CEST)
+Date:   Mon, 14 Jun 2021 20:38:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] freezer,sched: Rewrite core freezer logic
+Message-ID: <20210614183801.GE68749@worktop.programming.kicks-ass.net>
+References: <YMMijNqaLDbS3sIv@hirez.programming.kicks-ass.net>
+ <20210614154246.GB13677@redhat.com>
+ <20210614161221.GC68749@worktop.programming.kicks-ass.net>
+ <20210614165422.GC13677@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKfTPtAq5Hn7iQ-USO5La4B_jkYXzSvFSFrCDq47gjXDGghyTQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210614165422.GC13677@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jun 14, 2021 at 06:54:23PM +0200, Oleg Nesterov wrote:
+> On 06/14, Peter Zijlstra wrote:
 
-
-On 6/14/21 5:03 PM, Vincent Guittot wrote:
-> On Thu, 10 Jun 2021 at 17:03, Lukasz Luba <lukasz.luba@arm.com> wrote:
-
-[snip]
-
->> In the existing code the raw value of arch_scale_cpu_capacity() is used
->> for clamping the returned CPU utilization from effective_cpu_util().
->> This patch fixes issue with too big single CPU utilization, by introducing
->> clamping to the allowed CPU capacity. The allowed CPU capacity is a CPU
->> capacity reduced by thermal pressure signal. We rely on this load avg
+> > > I guess you do this to avoid freezable_schedule() in ptrace/signal_stop,
+> > > and we can't use TASK_STOPPED|TASK_FREEZABLE, it should not run after
+> > > thaw()... But see above, we can't rely on __frozen(parent).
+> >
+> > I do this because freezing puts a task in TASK_FROZEN, and that cannot
+> > preserve TAKS_STOPPED or TASK_TRACED without being subject to wakups
 > 
-> you don't rely on load avg value but on raw thermal pressure value now
+> Yes, yes, this is what I tried to say.
 
-Good catch, I'll change that description.
+OK, thanks for all that. Clearly I need to stare at this code longer and
+harder.
 
-> 
->> geometric series in similar way as other mechanisms in the scheduler.
->>
+One more thing; if I add additional state bits to preserve
+__TASK_{TRACED,STOPPED}, then I need to figure out at thaw time if we've
+missed a wakeup or not.
 
-[snip]
+Do we have sufficient state for that? If so, don't we then also not have
+sufficient state to tell if a task should've been TRACED/STOPPED in the
+first place?
 
->>
->> +       thermal_pressure = arch_scale_thermal_pressure(cpumask_first(pd_mask));
-> 
-> Do you really need to use this intermediate variable thermal_pressure
-> ? Seems to be used only below
-
-True, it's used only here. I'll remove this variable in the v4.
-
-> 
-> With these 2 comments above fixed,
-> 
-> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-
-Thank you for the review!
-
-Regards,
-Lukasz
+If not, I probably should add this... I'll go dig.
