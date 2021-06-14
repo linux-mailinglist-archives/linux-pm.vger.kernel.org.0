@@ -2,113 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C02363A6B61
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 18:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381A13A6C5B
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbhFNQPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 12:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbhFNQPX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 12:15:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5666C061574;
-        Mon, 14 Jun 2021 09:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=i0UaLutP0pg/vUIZxWE/ltq43kwiXqxNum5X8NZGTo8=; b=U8Xwjjw6zrH3Oo18gWDo7ilt9p
-        upiw+9VDQglmP39R9+HNWCk7Sqn7eO5XapCgeXWrdgUR9RZ7rMLT9sXYv92lkl4BNM9rYNb4Dy5lW
-        THftCVWv6HOLtRgimjqkSiMw4oh0rpPMQ4Qh6NHr+67Di+rBJGWyk7zAJxge1UsYbMmeemy8ywDrH
-        mpm10YJRQA/lVwl63ZkhVEa3X2FaTuwRM461jqfzvo4CYXPXe9vZnx9pSu7275MR2vrKiyKN8COiQ
-        vW8UC/vEqhczEdN/94MrjoOxmkngWizKEfRJsbZwR/at5SAxogX7Ilu9qnB1/gpUW4wX9XCpaYyv3
-        mNRhgoLQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lspCI-005bOz-2a; Mon, 14 Jun 2021 16:12:25 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18DAB9831CA; Mon, 14 Jun 2021 18:12:21 +0200 (CEST)
-Date:   Mon, 14 Jun 2021 18:12:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] freezer,sched: Rewrite core freezer logic
-Message-ID: <20210614161221.GC68749@worktop.programming.kicks-ass.net>
-References: <YMMijNqaLDbS3sIv@hirez.programming.kicks-ass.net>
- <20210614154246.GB13677@redhat.com>
+        id S234894AbhFNQt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 12:49:56 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:34393 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235036AbhFNQt4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 12:49:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1623689266; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=E7v5tLD8tTSzc2/HQ4QNd8hHzdzpM6lmFxSvkK+l23umHNu6NfXW2GvSiTLw48YK3E
+    YNyPHJxiqDm8WK7CF33en4aLpLTP5MNpfsvF08tg8BEcc9X/wm6N/zG7qS9mhbbaEd6r
+    N3q646ytMkovJvzO7+Y9E3C9R6wHzAzz9LMx+QgEJ9ucyBrsGIikcidBaMkfU4kxtypz
+    o45h/Xc+V02SrXSUvKtuFOPNbg2OQPjFyYHfcFYFbWjJ4wFPAEP99N3BI1EBUxBM4tYE
+    I0JZoCIZ4sLObSZ24toB1EgfrJkVPlLc14k6/4U7DfVo6nOrHO1prQfuAtRS/Frp8T37
+    6suA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1623689266;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ZqBYr0Nz6mA2wcJ+xak+eC4fMLx4N6rwt5mXZEANWlo=;
+    b=taah575yq9kXzF9VlRjVB1hTwdAtLCaeFHRe6HY+1DzEvcIBXdYnjhBAROv8cIDe3/
+    cblo4ciJQg+VKCXQdmOn3oD80t32Ue19b31QsvNHNFFSuaBl4i5yvWKNBN3EDbRHHSF7
+    ZhaDgcbai9Z7kr6R3TTKhZJP8a7Clqx+WC3jP875h+oyBojqvGUU+KYb6ibsBSnkmPbm
+    sjhu7R46CxFfr+rH0UAbVr6+75HRtOHi3yfLCZ3o9V2qev+B21kKAyZIu3vBbiICvjAG
+    y0w9inUui9p0Z5inSmijA+IP+hP3JQZ7rRRxPRwF8pUxp+sZ4BkTGHec0bRqV705TtRO
+    17ow==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1623689266;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ZqBYr0Nz6mA2wcJ+xak+eC4fMLx4N6rwt5mXZEANWlo=;
+    b=eikwn35OimVKNDcgiGvtW4NwGD45w5K15ibPdPTQWhnHiXCA6s53TCDqGqWbR2+csd
+    FN5KTaEDjitg1bKXR5SBjj+1/ZtvQvzLW7JhH1wxk0zSN8dUVZJ4PVyxHgusA4nTiw76
+    uITy9neRabxTgp/OsX0EQJY5MHRj9gzFQ2ZLm1+itBgyzXIz7epwMBautnOkIz1vD1He
+    VeVZuIQ8dBlfuu0E2qcZGUIC5vkno8V94Is9APDr+984IZvgewFLvGi4Ex8TqYQJc6wn
+    nsazYIYD+ZmnmK6omfveDR/bL/XAM964E60stOu6Evuod4SAe6CxbYH0nErt4HvfXFnJ
+    Kl0A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8nwIc/BaYo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.27.2 DYNA|AUTH)
+    with ESMTPSA id y01375x5EGljJ8q
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 14 Jun 2021 18:47:45 +0200 (CEST)
+Date:   Mon, 14 Jun 2021 18:47:40 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v2 3/3] mfd: rt5033: Drop rt5033-battery sub-device
+Message-ID: <YMeILEnjOCCzo61q@gerhold.net>
+References: <20210517105113.240379-1-stephan@gerhold.net>
+ <20210517105113.240379-4-stephan@gerhold.net>
+ <20210519144630.GC2549456@dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210614154246.GB13677@redhat.com>
+In-Reply-To: <20210519144630.GC2549456@dell>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 05:42:47PM +0200, Oleg Nesterov wrote:
-> Hi Peter, sorry for delay,
+Hi Lee,
+
+On Wed, May 19, 2021 at 03:46:30PM +0100, Lee Jones wrote:
+> On Mon, 17 May 2021, Stephan Gerhold wrote:
 > 
-> On 06/11, Peter Zijlstra wrote:
-> >
-> > +/* Recursion relies on tail-call optimization to not blow away the stack */
-> > +static bool __frozen(struct task_struct *p)
-> > +{
-> > +	if (p->state == TASK_FROZEN)
-> > +		return true;
-> > +
-> > +	/*
-> > +	 * If stuck in TRACED, and the ptracer is FROZEN, we're frozen too.
-> > +	 */
-> > +	if (task_is_traced(p))
-> > +		return frozen(rcu_dereference(p->parent));
+> > The fuel gauge in the RT5033 PMIC (rt5033-battery) has its own I2C bus
+> > and interrupt lines. Therefore, it is not part of the MFD device
+> > and needs to be specified separately in the device tree.
+> > 
+> > Cc: Beomho Seo <beomho.seo@samsung.com>
+> > Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> > Fixes: 0b271258544b ("mfd: rt5033: Add Richtek RT5033 driver core.")
+> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> > ---
+> >  drivers/mfd/rt5033.c | 3 ---
+> >  1 file changed, 3 deletions(-)
 > 
-> Why does it use frozen(), not __frozen() ?
-
-(because I'm an idiot :/)
-
-> This looks racy, p->parent can resume this task and then enter
-> __refrigerator().
-
-But this is about the child, we won't report it frozen, unless the
-parent is also frozen. If the parent is frozen, it cannot resume the
-task.
-
-The other way around, if the parent resumes the task and then gets
-frozen, then we'll wait until the task gets frozen.
-
-That is, I don't see the race. Maybe it's been too warm, but could you
-spell it out?
-
-> Plus this task can be SIGKILL'ed even if it is traced.
-
-Hurmm.. *that* is a problem.
-
-> > +	/*
-> > +	 * If stuck in STOPPED and the parent is FROZEN, we're frozen too.
-> > +	 */
-> > +	if (task_is_stopped(p))
-> > +		return frozen(rcu_dereference(p->real_parent));
+> Acked-by: Lee Jones <lee.jones@linaro.org>
 > 
-> (you could use ->parent in this case too and unify this check with the
-> "traced" case above)
 
-Are you sure? The way I read the code ptrace_attach() will change
-->parent, but STOPPED is controlled by the jobctl.
+Since I mentioned in the cover letter that the MFD and power supply
+changes can be applied independently, Sebastian only queued patch 1 and 2.
 
-> I don't understand. How this connects to ->parent or ->real_parent?
-> SIGCONT can come from anywhere and wake this stopped task up?
+Can you queue this one through the MFD tree?
 
-Could be me who's not understanding, I thought only the real parent
-could do that.
-
-> I guess you do this to avoid freezable_schedule() in ptrace/signal_stop,
-> and we can't use TASK_STOPPED|TASK_FREEZABLE, it should not run after
-> thaw()... But see above, we can't rely on __frozen(parent).
-
-I do this because freezing puts a task in TASK_FROZEN, and that cannot
-preserve TAKS_STOPPED or TASK_TRACED without being subject to wakups
-from those bits. I suppose I can add TASK_FROZEN_STOPPED and
-TASK_FROZEN_TRACED bits. Let me try that... (tomorrow, brain is cooked).
+Thanks!
+Stephan
