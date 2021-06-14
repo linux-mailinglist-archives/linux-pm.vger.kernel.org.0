@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106743A6EB1
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6A83A6ED7
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jun 2021 21:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbhFNTSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Jun 2021 15:18:21 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34912 "EHLO
+        id S234546AbhFNTYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Jun 2021 15:24:38 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35076 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbhFNTSV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 15:18:21 -0400
-Received: from mail-ed1-f71.google.com ([209.85.208.71])
+        with ESMTP id S234150AbhFNTYi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Jun 2021 15:24:38 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
         by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lss4H-0007Q5-58
-        for linux-pm@vger.kernel.org; Mon, 14 Jun 2021 19:16:17 +0000
-Received: by mail-ed1-f71.google.com with SMTP id p24-20020aa7c8980000b0290393c37fdcb8so9643255eds.6
-        for <linux-pm@vger.kernel.org>; Mon, 14 Jun 2021 12:16:17 -0700 (PDT)
+        id 1lssAL-0007tu-Pg
+        for linux-pm@vger.kernel.org; Mon, 14 Jun 2021 19:22:33 +0000
+Received: by mail-ej1-f69.google.com with SMTP id e11-20020a170906080bb02903f9c27ad9f5so3438221ejd.6
+        for <linux-pm@vger.kernel.org>; Mon, 14 Jun 2021 12:22:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TUzkmOme0TmCtd3RoNGL+uA/YnlcaGPBaNMGhiut9mY=;
-        b=ewUTd4bItb3n91pEH0Oiac6jEQX+vLWq84Xzy+JnckOBB+Jp4Ju0+bffpgbZKcxPC6
-         IKOsUWctf6Pq5/XTYY0GxA7DIL7IB9rNpF8xJv40AOWszNnlqZ1m1B0hMFvp2ZrrYrDn
-         bpIDEM3WVnK1TmUlZDHFGwX76g8+KNs4K+4ovMOmpLrOWZQa+BpGswxaEsNSCVcUxJe+
-         tINBx+/BW03a3rzoUVNEGM9YVZM9V/qIKVhMQcmeEdEh8daAvrBOuzOa15Zgw/I02bXN
-         0S6psWQ46E7I6GFkSIbjqF5pVcFk5yHMd8myDy1kuLJWQvxGUlg+IdUU/YRM44NBY6ht
-         Yw6g==
-X-Gm-Message-State: AOAM530S3R5WxAGlAjxc7NcKDKoEO0TOKe4zEq0nFZAOVA0SBIuk3B4n
-        V9R3AiiCH4UArDqwzLuoq1tCVld3b9xz2Gi3v/3fy+M/w4+s+CrTZkHll6b7D0KznyDlbu3+kaf
-        pns9VAfKzOY9S15r5cxcyxtCW+Xg2SVjcp2MD
-X-Received: by 2002:a17:906:9615:: with SMTP id s21mr10253104ejx.505.1623698176646;
-        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxo0/zvVAJ2MFxa5ky6KH956YgBy4z5Av7KsVRKr654YOAXxqBt+BY0ViGLcsNCBwMHq6Eszw==
-X-Received: by 2002:a17:906:9615:: with SMTP id s21mr10253086ejx.505.1623698176515;
-        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
-        by smtp.gmail.com with ESMTPSA id gz5sm7937332ejb.113.2021.06.14.12.16.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jun 2021 12:16:16 -0700 (PDT)
-Subject: Re: [RESEND PATCH 2/2] thermal: sprd: add missing of_node_put for
- loop iteration
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        bh=rFGGgn0LeG2Atp7rG87b+h6mzwgKd/t0DiWuNT+ZsKs=;
+        b=K4KuL0UhTQnmOpDRFmkNRfvAS2QVy13KE6yx+KmyOxQFwD0Zcm+pPaVUKzeiwRnWHw
+         UkaV4IWz0e2KRhEF3vOHdiubQEyQY8lAzYX1SgP9De4oin4lRB4R+UNlLosZtPAyTcT6
+         deakSBgSPCOmRNmfiraGlZNJg/h2IVZ9hQ7/HNSkanB6zEldvLHnB5mU2+mIYk7uQkEH
+         selBBO9FgOoIFVU+DukaHr/aZv4WXPvBy+5VtmWbfRFIAmuiA3YbzvRxeJBWk9a1ZWqW
+         AZEup5tQTUnXs/o3olXTOc7rqgGAXuZKlsg1ji9z5JQRwlx3PCyElbQ8xpnMWs16mNBw
+         Utww==
+X-Gm-Message-State: AOAM532wBbsvd9A0HpkY9s4Fm2a17M+opmVUqfDC0KlLNZ7GEfQDTsXm
+        cMIPF4XBUrK3BLwdBemIQmcH35cgOgcKP5nfPYgjRjyWE4DaB24/hrMpCR8+UV6V2tY5plzJDoA
+        FvBYK1Ay+1p70cB00OaSMhEGseX7pDWkUJ2Ah
+X-Received: by 2002:a05:6402:1d0c:: with SMTP id dg12mr18717258edb.155.1623698553422;
+        Mon, 14 Jun 2021 12:22:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzMsv3DkP07aHqMhlbxy+wuR9SIRdpNR3T1Bs7YyzWUWFtxizGr+EqxJyt9kJ0TE/aqW6tjsg==
+X-Received: by 2002:a05:6402:1d0c:: with SMTP id dg12mr18717250edb.155.1623698553308;
+        Mon, 14 Jun 2021 12:22:33 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id n23sm9071365edr.46.2021.06.14.12.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 12:22:32 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -57,60 +55,63 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Baolin Wang <baolin.wang7@gmail.com>,
         Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210528115036.18222-1-krzysztof.kozlowski@canonical.com>
- <20210528115036.18222-2-krzysztof.kozlowski@canonical.com>
- <9d4b9827-74fb-43ea-bcc0-5c780296e6c0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <f7213eb3-5b34-7a66-2a71-615e97a5c3a4@canonical.com>
-Date:   Mon, 14 Jun 2021 21:16:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jacky Bai <ping.bai@nxp.com>
+Subject: [PATCH v2 1/2] thermal: imx_sc: add missing of_node_put for loop iteration
+Date:   Mon, 14 Jun 2021 21:22:29 +0200
+Message-Id: <20210614192230.19248-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <9d4b9827-74fb-43ea-bcc0-5c780296e6c0@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/06/2021 19:28, Daniel Lezcano wrote:
-> On 28/05/2021 13:50, Krzysztof Kozlowski wrote:
->> Early exits from for_each_available_child_of_node() should decrement the
->> node reference counter.  Reported by Coccinelle:
->>
->>   drivers/thermal/sprd_thermal.c:387:1-23: WARNING:
->>     Function "for_each_child_of_node" should have of_node_put() before goto around lines 391.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
->> ---
->>  drivers/thermal/sprd_thermal.c | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
->> index 3682edb2f466..2778971aaf03 100644
->> --- a/drivers/thermal/sprd_thermal.c
->> +++ b/drivers/thermal/sprd_thermal.c
->> @@ -388,6 +388,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
->>  		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
->>  		if (!sen) {
->>  			ret = -ENOMEM;
->> +			of_node_put(sen_child);
-> 
-> Why not a new label for the rollback routine?
-> 
-> eg. goto out_of_node_put;
+Early exits from for_each_available_child_of_node() should decrement the
+node reference counter.  Reported by Coccinelle:
 
-Indeed, this should work. When loops end, the sen_child is set to NULL
-so of_node_putting it should be fine.
+  drivers/thermal/imx_sc_thermal.c:93:1-33: WARNING:
+    Function "for_each_available_child_of_node" should have of_node_put() before return around line 97.
 
-> 
-> Or a new function devm_for_each_available_child_of_node() ?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Jacky Bai <ping.bai@nxp.com>
 
-Since there are multiple flavors of this for_each_loop, that might be
-too much...
+---
 
+Changes since v1:
+1. None.
+---
+ drivers/thermal/imx_sc_thermal.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index b01d28eca7ee..8d76dbfde6a9 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -93,6 +93,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 	for_each_available_child_of_node(np, child) {
+ 		sensor = devm_kzalloc(&pdev->dev, sizeof(*sensor), GFP_KERNEL);
+ 		if (!sensor) {
++			of_node_put(child);
+ 			of_node_put(sensor_np);
+ 			return -ENOMEM;
+ 		}
+@@ -104,6 +105,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"failed to get valid sensor resource id: %d\n",
+ 				ret);
++			of_node_put(child);
+ 			break;
+ 		}
+ 
+@@ -114,6 +116,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 		if (IS_ERR(sensor->tzd)) {
+ 			dev_err(&pdev->dev, "failed to register thermal zone\n");
+ 			ret = PTR_ERR(sensor->tzd);
++			of_node_put(child);
+ 			break;
+ 		}
+ 
+-- 
+2.27.0
+
