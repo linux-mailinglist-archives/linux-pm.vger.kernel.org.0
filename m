@@ -2,164 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6D53A8404
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F1F3A8418
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbhFOPdy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 11:33:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:38476 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230267AbhFOPdy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:33:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1B8713A1;
-        Tue, 15 Jun 2021 08:31:49 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B8203F70D;
-        Tue, 15 Jun 2021 08:31:46 -0700 (PDT)
-Subject: Re: [PATCH v4 2/3] sched/fair: Take thermal pressure into account
- while estimating energy
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
-        qperret@google.com, vincent.donnefort@arm.com,
-        Beata.Michalska@arm.com, mingo@redhat.com, juri.lelli@redhat.com,
-        rostedt@goodmis.org, segall@google.com, mgorman@suse.de,
-        bristot@redhat.com, thara.gopinath@linaro.org,
-        amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org
-References: <20210614185815.15136-1-lukasz.luba@arm.com>
- <20210614191128.22735-1-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <237ef538-c8ca-a103-b2cc-240fc70298fe@arm.com>
-Date:   Tue, 15 Jun 2021 17:31:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231659AbhFOPho (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 11:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230410AbhFOPho (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 11:37:44 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0905EC06175F
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:35:39 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id l7so5024196vkk.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=12lusgJKqZ+mFXJMQojBCjBzeRiohhHShT1Rj6cPMlA=;
+        b=KdTeL4xhOG1Ni08Mf6x0ZpT6rt9j9qQv+4GuFufpy9Ao2aplllacUO3i6KB3Pr9Rgk
+         cjToMFZjWR8QRk/rF8v8/zAq0KQUiUUIut6Il99rIFXXsL0A6iRURQpQwmP7JLNU9dGV
+         16lYhsXZqzVIHA6Nd1LZ3FHGpIGSUOztR2O2pGXx+032trMRf7rBFhneKGe4kPt95zFV
+         R5FllI9cUcq7JTYkk0/oNUCDgZZyvZOQzcsEvNMaJTtmrS27nJcDGWbx0svynNj/g3zd
+         0znOSVeB+ZGyrQQqpqmr5qg1dHMHomeu919bunVoA21KJ2U2g4qqzTFVRE0g/iSNt6nA
+         khZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=12lusgJKqZ+mFXJMQojBCjBzeRiohhHShT1Rj6cPMlA=;
+        b=fuv60hCh15NukvjD4f1B/9u3UKMPP7pYaOoNsiBTTBquTRuBpsDsf1hWx7HsukRrip
+         oTEIfwmKWVo1RSlDgy1mX5s3Oa5Zi2+4YTg6Y0ni8Rum096IodP+qaQjQN+bcWOrAJGD
+         +el5W9H/4nfQKkjhUhIuwwpPwgT5E2tMRiIm4J2u2qsYVUANnmDWOZ7VrGJV4sUKbIGJ
+         3aKXxVkSKkYR2eFJqWR63as4H3F8AOln4c8vvaSyRt6/kSAFmaGqrW7D7BvccWgbQN68
+         nQiMhvUtbLCeypzpjrQ/KTGT+54BT8K5gNHkNeh8h3akLBT+PXybByJlSY9yvrHvTq35
+         pSIA==
+X-Gm-Message-State: AOAM531ITzwUQKtIEXKDIZMgS2wWkrzNwLPBxZfl8Gv5mcB4Ela0L2B7
+        s8dzX930pVczycByX4bHppsoAaqM9IS/HPfU+u2XFA==
+X-Google-Smtp-Source: ABdhPJyEAEOe6I6qtvLHO5Hm3e/awBYGqKLv+Jhmw2CzujYFMTLYGKPub/BltgkGnQPNw58/mXrSs/TP1Z6+jggvyRM=
+X-Received: by 2002:a1f:3dd8:: with SMTP id k207mr4287282vka.7.1623771338193;
+ Tue, 15 Jun 2021 08:35:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210614191128.22735-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
+ <20210611101540.3379937-3-dmitry.baryshkov@linaro.org> <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
+ <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
+ <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
+ <20210615111012.GA5149@sirena.org.uk> <CAPDyKFreV-RPzweG8SqFQtvZMOyFbaG2+tMFKc2JkbEj+erb=g@mail.gmail.com>
+ <20210615152620.GH5149@sirena.org.uk>
+In-Reply-To: <20210615152620.GH5149@sirena.org.uk>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Jun 2021 17:35:01 +0200
+Message-ID: <CAPDyKFrthc_6rXt1UscKTQnctFXw0XjReEF5bqCGot2n=ChKaA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/06/2021 21:11, Lukasz Luba wrote:
-> Energy Aware Scheduling (EAS) needs to be able to predict the frequency
-> requests made by the SchedUtil governor to properly estimate energy used
-> in the future. It has to take into account CPUs utilization and forecast
-> Performance Domain (PD) frequency. There is a corner case when the max
-> allowed frequency might be reduced due to thermal. SchedUtil is aware of
-> that reduced frequency, so it should be taken into account also in EAS
-> estimations.
+On Tue, 15 Jun 2021 at 17:26, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Jun 15, 2021 at 04:55:24PM +0200, Ulf Hansson wrote:
+> > On Tue, 15 Jun 2021 at 13:10, Mark Brown <broonie@kernel.org> wrote:
+> > > On Tue, Jun 15, 2021 at 12:17:20PM +0200, Ulf Hansson wrote:
+>
+> > > > Beyond this, perhaps we should consider removing the
+> > > > "regulator-fixed-domain" DT property, as to avoid similar problems
+> > > > from cropping up?
+>
+> > > > Mark, what do you think?
+>
+> > > We need to maintain compatibility for existing users...
+>
+> > Normally, yes, I would agree.
+>
+> > In this case, it looks like there is only one user, which is somewhat
+> > broken in regards to this, so what's the point of keeping this around?
+>
+> Only one user in mainline and you were just suggesting removing the
+> property (you mean binding I think?) - at the very least we'd need to
+> transition that upstream user away to something else before doing
+> anything.
 
-It's important to highlight that this will only fix this issue between
-schedutil and EAS when it's due to `thermal pressure` (today only via
-CPU cooling). There are other places which could restrict policy->max
-via freq_qos_update_request() and EAS will be unaware of it.
+Yes, I am referring to the binding.
 
-> SchedUtil, as a CPUFreq governor, knows the maximum allowed frequency of
-> a CPU, thanks to cpufreq_driver_resolve_freq() and internal clamping
-> to 'policy::max'. SchedUtil is responsible to respect that upper limit
-> while setting the frequency through CPUFreq drivers. This effective
-> frequency is stored internally in 'sugov_policy::next_freq' and EAS has
-> to predict that value.
-> 
-> In the existing code the raw value of arch_scale_cpu_capacity() is used
-> for clamping the returned CPU utilization from effective_cpu_util().
-> This patch fixes issue with too big single CPU utilization, by introducing
-> clamping to the allowed CPU capacity. The allowed CPU capacity is a CPU
-> capacity reduced by thermal pressure raw value.
-> 
-> Thanks to knowledge about allowed CPU capacity, we don't get too big value
-> for a single CPU utilization, which is then added to the util sum. The
-> util sum is used as a source of information for estimating whole PD energy.
-> To avoid wrong energy estimation in EAS (due to capped frequency), make
-> sure that the calculation of util sum is aware of allowed CPU capacity.
-> 
-> This thermal pressure might be visible in scenarios where the CPUs are not
-> heavily loaded, but some other component (like GPU) drastically reduced
-> available power budget and increased the SoC temperature. Thus, we still
-> use EAS for task placement and CPUs are not over-utilized.
+Let's see where we end up with this. My concern at this point is that
+it could spread to more users, which would make it even more difficult
+to remove.
 
-IMHO, this means that this is catered for the IPA governor then. I'm not
-sure if this would be beneficial when another thermal governor is used?
-
-The mechanical side of the code would allow for such benefits, I just
-don't know if their CPU cooling device + thermal zone setups would cater
-for this?
-
-> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  kernel/sched/fair.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 161b92aa1c79..3634e077051d 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6527,8 +6527,11 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->  	struct cpumask *pd_mask = perf_domain_span(pd);
->  	unsigned long cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
->  	unsigned long max_util = 0, sum_util = 0;
-> +	unsigned long _cpu_cap = cpu_cap;
->  	int cpu;
->  
-> +	_cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-> +
-
-Maybe shorter?
-
-        struct cpumask *pd_mask = perf_domain_span(pd);
--       unsigned long cpu_cap =
-arch_scale_cpu_capacity(cpumask_first(pd_mask));
-+       int cpu = cpumask_first(pd_mask);
-+       unsigned long cpu_cap = arch_scale_cpu_capacity(cpu);
-+       unsigned long _cpu_cap = cpu_cap - arch_scale_thermal_pressure(cpu);
-        unsigned long max_util = 0, sum_util = 0;
--       unsigned long _cpu_cap = cpu_cap;
--       int cpu;
--
--       _cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-
->  	/*
->  	 * The capacity state of CPUs of the current rd can be driven by CPUs
->  	 * of another rd if they belong to the same pd. So, account for the
-> @@ -6564,8 +6567,10 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->  		 * is already enough to scale the EM reported power
->  		 * consumption at the (eventually clamped) cpu_capacity.
->  		 */
-> -		sum_util += effective_cpu_util(cpu, util_running, cpu_cap,
-> -					       ENERGY_UTIL, NULL);
-> +		cpu_util = effective_cpu_util(cpu, util_running, cpu_cap,
-> +					      ENERGY_UTIL, NULL);
-> +
-> +		sum_util += min(cpu_util, _cpu_cap);
->  
->  		/*
->  		 * Performance domain frequency: utilization clamping
-> @@ -6576,7 +6581,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->  		 */
->  		cpu_util = effective_cpu_util(cpu, util_freq, cpu_cap,
->  					      FREQUENCY_UTIL, tsk);
-> -		max_util = max(max_util, cpu_util);
-> +		max_util = max(max_util, min(cpu_util, _cpu_cap));
->  	}
->  
->  	return em_cpu_energy(pd->em_pd, max_util, sum_util);
-
-There is IPA specific code in cpufreq_set_cur_state() ->
-get_state_freq() which accesses the EM:
-
-    ...
-    return cpufreq_cdev->em->table[idx].frequency;
-    ...
-
-Has it been discussed that the `per-PD max (allowed) CPU capacity` (1)
-could be stored in the EM from there so that code like the EAS wakeup
-code (compute_energy()) could retrieve this information from the EM?
-And there wouldn't be any need to pass (1) into the EM (like now via
-em_cpu_energy()).
-This would be signalling within the EM compared to external signalling
-via `CPU cooling -> thermal pressure <- EAS wakeup -> EM`.
+Kind regards
+Uffe
