@@ -2,164 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7B53A83A1
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3443A83EE
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbhFOPIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 11:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbhFOPIb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 11:08:31 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD38C061767
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:06:26 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id d18so6782689ual.7
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g6ccgATn5J7iu5AD+WjcCm3W6RvKZU4zwOSyY17Ugqo=;
-        b=VMgwN6I5rM2ZzwlseZMckLT3Mq6mCu2sqjyLreObQwBJl2xO1JFJ3KrSGgtV8elyMX
-         e33Mq0nMBfJo+VWoDsuWJ/OQhPo/6hCjkU3PUcv86c6bh3WsCwyTLW779KqqeJxNs2N1
-         bcVS5CG3eY+iSWhjr5uoTKFRAL2QvE41iULH9uhbTJI+33T5vZZQdjTN0T76I2ijXnJ3
-         mA9SHp+3dF2Htwd9o6p/2E8J7Tlv3NUNPxFdFaXQIvmPbcpjUvX5x/RXCgIdwJZFVe3v
-         OMQwMaPWMBL4rOzueRuy7ZbtwoQTLkXvNrLjXq5sYiPDjhgVnSS8QzNVxcElkoRSH6Z+
-         mY3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g6ccgATn5J7iu5AD+WjcCm3W6RvKZU4zwOSyY17Ugqo=;
-        b=oQSd2M56cMNNYzjQPTGxM7dvErHpgTRjfGhxNU7BtEzlUo3GFdZNLum+Tai4j6Lp1h
-         2hL81AYfYTHQOI3RyjefsFpr/T3x/pTkz7flmPxo12Up5XiIPeMjij/tINPmeCfhqAJ0
-         xKqJH8ty+HHfBqCzexOx241nMbsgcjrgp5wnNLgy64CfeYhhL+0WlTve0edVcQvXdRlX
-         cMqYby+tXXJhTTjTQ+q4ESKBH26SspIg+vUtjJkeBsWZUvCm220gOAe8/ofs+h+3dgzA
-         TGFBpWKTdJ/ZlbTnnaRFW2ho3SfrPqQzBiRbnRQ/DPfMeBj36y2uMwoWQpCGYt+8WOP0
-         iAUQ==
-X-Gm-Message-State: AOAM531Pn47sZyg1RQdW6QPZEEV938dKsJ1V75jBRisANxtlIDez7tpA
-        Q1sRezHmrMPqDs5t+N19i5dvxGi8q2lSk4/rsZBkqg==
-X-Google-Smtp-Source: ABdhPJwifxZlIC2ycNIdNlntzCYwWlEJJuNQ0hwJz82zBzFvKR5y27inbr8Cfln1EGIPgiyx/G2yZ93oXa16qSAzWsc=
-X-Received: by 2002:ab0:4d49:: with SMTP id k9mr3219610uag.129.1623769585148;
- Tue, 15 Jun 2021 08:06:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <1622095949-2014-1-git-send-email-rnayak@codeaurora.org> <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
-In-Reply-To: <1622095949-2014-2-git-send-email-rnayak@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 15 Jun 2021 17:05:48 +0200
-Message-ID: <CAPDyKFpc2Kh8y-=2F6kBmw74wReVP5QcYOfu1y9AguOvzTQtPg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: Introduce 'assigned-performance-states'
- property
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        id S231181AbhFOP2p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 11:28:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36372 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230463AbhFOP2o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:28:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A36760FF0;
+        Tue, 15 Jun 2021 15:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623770800;
+        bh=RQMXiudVPSpH6wfIxq+VUPwtlfDu0HxJtDbShI6iF/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UgnMbCLwuzChYeurrAtDkmj0Wb0+3OS+IGq5iU90jNn45JfJol/dIArN7LmFX4CPD
+         ADHjDDHRK34Js0/3wosKOUSnpUEsEsJQ2nljwicWm+T1VVcaKOpWhh0qhHMKU93e1A
+         57cz56FXz35zVcHA+ROCi1GuuiTNYeGtOt/RgDuknq7h5RyDANKTPf3mfc2kNTwlXI
+         jm5JROMMuM7VLrE3puAu6OPxiFB8qM22nD3LtWY40tmZa7iPRYoZ3iUvkaJPiGQJw7
+         GoLXz0wQgHGe5A79utFI7tPJlSRcxdNbYk6SWb2r8DKYC7dONy5eAV9X1G+KFIkBFI
+         SKACX0gd44kAg==
+Date:   Tue, 15 Jun 2021 16:26:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
+Message-ID: <20210615152620.GH5149@sirena.org.uk>
+References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
+ <20210611101540.3379937-3-dmitry.baryshkov@linaro.org>
+ <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
+ <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
+ <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
+ <20210615111012.GA5149@sirena.org.uk>
+ <CAPDyKFreV-RPzweG8SqFQtvZMOyFbaG2+tMFKc2JkbEj+erb=g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AqCDj3hiknadvR6t"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFreV-RPzweG8SqFQtvZMOyFbaG2+tMFKc2JkbEj+erb=g@mail.gmail.com>
+X-Cookie: See store for details.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 27 May 2021 at 08:13, Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
-> While most devices within power-domains which support performance states,
-> scale the performance state dynamically, some devices might want to
-> set a static/default performance state while the device is active.
-> These devices typically would also run off a fixed clock and not support
-> dynamically scaling the device's performance, also known as DVFS techniques.
-> Add a property 'assigned-performance-states' which client devices can
-> use to set this default performance state on their power-domains.
->
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 
-Rajendra, I think this is ready to be re-spinned on top of the latest
-changes for genpd that Rafael recently queued [1].
+--AqCDj3hiknadvR6t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If you would prefer me to do it, then please let me know. Otherwise I
-will be awaiting a new version from you.
+On Tue, Jun 15, 2021 at 04:55:24PM +0200, Ulf Hansson wrote:
+> On Tue, 15 Jun 2021 at 13:10, Mark Brown <broonie@kernel.org> wrote:
+> > On Tue, Jun 15, 2021 at 12:17:20PM +0200, Ulf Hansson wrote:
 
-Kind regards
-Uffe
+> > > Beyond this, perhaps we should consider removing the
+> > > "regulator-fixed-domain" DT property, as to avoid similar problems
+> > > from cropping up?
 
-[1]
-https://lore.kernel.org/linux-pm/CAJZ5v0i0FD-F7tN=AJNEY5HVVTCNuciLT4hCqdoS5bgF5WdmaA@mail.gmail.com/
+> > > Mark, what do you think?
 
-> ---
->  .../devicetree/bindings/power/power-domain.yaml    | 50 ++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-> index aed51e9..88cebf2 100644
-> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
-> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-> @@ -66,6 +66,19 @@ properties:
->        by the given provider should be subdomains of the domain specified
->        by this binding.
->
-> +  assigned-performance-states:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +       Some devices might need to configure their power domains in a default
-> +       performance state while the device is active. These devices typically
-> +       would also run off a fixed clock and not support dynamically scaling the
-> +       device's performance, also known as DVFS techniques. The list of performance
-> +       state values should correspond to the list of power domains specified as part
-> +       of the power-domains property. Each cell corresponds to one power-domain.
-> +       A value of 0 can be used for power-domains with no performance state
-> +       requirement. In case the power-domains have OPP tables associated, the values
-> +       here would typically match with one of the entries in the OPP table.
-> +
->  required:
->    - "#power-domain-cells"
->
-> @@ -131,3 +144,40 @@ examples:
->              min-residency-us = <7000>;
->          };
->      };
-> +
-> +  - |
-> +    parent4: power-controller@12340000 {
-> +        compatible = "foo,power-controller";
-> +        reg = <0x12340000 0x1000>;
-> +        #power-domain-cells = <0>;
-> +    };
-> +
-> +    parent5: power-controller@43210000 {
-> +        compatible = "foo,power-controller";
-> +        reg = <0x43210000 0x1000>;
-> +        #power-domain-cells = <0>;
-> +        operating-points-v2 = <&power_opp_table>;
-> +
-> +        power_opp_table: opp-table {
-> +            compatible = "operating-points-v2";
-> +
-> +            power_opp_low: opp1 {
-> +                opp-level = <16>;
-> +            };
-> +
-> +            rpmpd_opp_ret: opp2 {
-> +                opp-level = <64>;
-> +            };
-> +
-> +            rpmpd_opp_svs: opp3 {
-> +                opp-level = <256>;
-> +            };
-> +        };
-> +    };
-> +
-> +    child4: consumer@12341000 {
-> +        compatible = "foo,consumer";
-> +        reg = <0x12341000 0x1000>;
-> +        power-domains = <&parent4>, <&parent5>;
-> +        assigned-performance-states = <0>, <256>;
-> +    };
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
->
+> > We need to maintain compatibility for existing users...
+
+> Normally, yes, I would agree.
+
+> In this case, it looks like there is only one user, which is somewhat
+> broken in regards to this, so what's the point of keeping this around?
+
+Only one user in mainline and you were just suggesting removing the
+property (you mean binding I think?) - at the very least we'd need to
+transition that upstream user away to something else before doing
+anything.
+
+--AqCDj3hiknadvR6t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDIxpwACgkQJNaLcl1U
+h9CjvQf/ZtO5g8Vauy1TwetzYXVFnoVsisCUiyhX/D5CXU0hLQIKFPPAxx5gqOCd
+UAkVyyCPtCZS6a81dpQou5nrlB/xxa+fafbbHmszxCHMnlYLHe48KsbOUtCeTCVW
+a0KaDBH26WeNQc9YJ5BEANBdi5ddUYog95M6tBhUuf8588jwNM+SVklhepZEcKGe
+jdoUSOXdx5rh2+r0uaM3DsTP4Wq9gwrNZaMHQjSG8EoGWum0siwdxX6qUtwTezol
+OXLYHMdC6fkYTLDd/W6jr0qxBuQEQP6nQnV7aBkWqklxtNbYxq2ep9OA5mY5DFbN
+NLIIzxhA+NDD327u2oo/xTAn2TAMZA==
+=Wq07
+-----END PGP SIGNATURE-----
+
+--AqCDj3hiknadvR6t--
