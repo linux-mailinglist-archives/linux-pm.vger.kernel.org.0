@@ -2,159 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C60EA3A85C7
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C017D3A85E6
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 18:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbhFOQAT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 12:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S232267AbhFOQCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 12:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbhFOP7a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 11:59:30 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2BC061D7C;
-        Tue, 15 Jun 2021 08:51:38 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id t9so11810816pgn.4;
-        Tue, 15 Jun 2021 08:51:38 -0700 (PDT)
+        with ESMTP id S231136AbhFOQCn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 12:02:43 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01125C08ECA6
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:55:24 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so14777164otk.5
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 08:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k2dNOWTNlbIdh5i+8Nsx9KpD00S4Gm6luTuaXTJKuvA=;
-        b=ChZgBAMq1DPAkCXl3o9ThacQ8Rn81K9UwoROidAaA54sYtZ8SM0GPS9Tnm9zH2xNpq
-         C8oeufkZzN7UGlvaq8W0w//ODCeHnzdzCEdXWAlbrsoKfjPM2cQ8mFBBojKuw82QMs3K
-         EYctZLOzMqS4QJel5Al5+H0jc8AWYDnl4Ch7CgkuQbrR6EQbAwsg2hNKzdDSbkoPLUuT
-         ohrGaEoIapADit3oW3Y2OlIgcwPGab3JDsMeGCqnVe+AGCcwhq7vZVbLkLIOM9rmzAad
-         43B1O1cUuacPjpsWlnJDpczV0tN28HgiuUd6rRNTUdOEFU89xtDN5SPDxx4GACuBtAdg
-         +tDQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4U+6VOy8piCwCU/wIp1TdfkeFmWvFkSF3Yw0z+6ssNY=;
+        b=rZ8XT/Mbjssq3qvk1c7DJgzCNYSZVT8cM1/23nmDx7S8hQCtYEJRcOlhP1KOUGZTiU
+         5OlqWvsx8NVzTOlERqA0jAYfW86CaTaZE3NlKvKMg8Kld0htJvLWj0Be5KyOSMmzXVJ0
+         LAB1tCcZVpKh2Fn5OVlD8A33hwOLtBsk+9wPtJHv4F6peoR9Y6bRXTyRDS4mZreXt3AF
+         dGLXw+8/0H3p2I9b3y/BOwcWY1qlVVrA6g1vxnFzA53vgjizZcrSXKst8vl70LR2HdIv
+         Gqnfq9nMa87z6J3eCDiYsaUwc61LqjLEBtVFZ1/SpFkM3Sj13Hg2kxGG0Khsj4qyGmbK
+         kypQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=k2dNOWTNlbIdh5i+8Nsx9KpD00S4Gm6luTuaXTJKuvA=;
-        b=RFjImuFurH6xs1CxdnsImGccgREm/HBuZSq5WuSDCyzqSUC14Ftj17WArx/JfkSRIq
-         xaqeplr+5lvn8Qqj0xiUxgbpBUw4vg7NGOcqwKD9jK5iOveFedRSvabBeqZMa6aYhZEx
-         X7f/p/ht53D3skKiExzXTsTbfuuJFALdB2dNQFzNf+GoZupy6g+Q4ZTEVXodPPkusq8C
-         WUDzdF4D5mLc/z9eefu5EiWBUbOhU118i5kiBS4fCCn5J5OYWU2+QTZvQGTnZ9DGx8kL
-         NQxqHTlfaS4l/9h9/y7C9KgDvGdTeay/j6pPLBtLYOmwmP0esCxWjuho5D94ssZSiZUG
-         OCGQ==
-X-Gm-Message-State: AOAM532cdm5unLRWKSppIRg1ijVudacz7WmIulzEL8bsNfuiw3t7l3g2
-        mQiY20/intwXyZ8JxCZJCVA=
-X-Google-Smtp-Source: ABdhPJzxd+19YUuuC7dp7PSqpG6zMz1GjqbkKB8x0UgFg+bpPlGxhB5l+HFRsBM/nFelIuD3dWFT/w==
-X-Received: by 2002:a63:5c4e:: with SMTP id n14mr196153pgm.192.1623772297831;
-        Tue, 15 Jun 2021 08:51:37 -0700 (PDT)
-Received: from [10.230.29.202] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k18sm3013838pff.63.2021.06.15.08.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jun 2021 08:51:36 -0700 (PDT)
-Subject: Re: [PATCH 2/2] mmc: sdhci-iproc: Add support for the legacy sdhci
- controller on the BCM7211
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4U+6VOy8piCwCU/wIp1TdfkeFmWvFkSF3Yw0z+6ssNY=;
+        b=rrSgXdgiu8gBsVLdXcluWbotZMTHgf7THVnylZE5FHMcjrr6czS1FYB/J5xsqI+1AN
+         Y6Vck4uKQYoSSbGbOWBYz6O/kQY+TpVXp+BZ3LPTuTt1wcZoQ/sMzl20s+4aeYyhD3J+
+         qSO7XmUpCqUBvDsiGxvjIoFPo5NYiWMG3ywYCS6xqbdp3jSyEr3IFb5XNWFHc4T2EB4b
+         JCp/EYPLg7fGo6FCo+ePQ6Po0hA1zXBBqIowJ01UjmaEBz2hpp+UOOHwEwtsPnnWx4Lq
+         U7QaDmOVmeHPuYpQ2As5RSEM3JIiBmQ7wpcFcF5KrUYxYK2St9WPW/iR92AA+bdJ6UFV
+         f6lw==
+X-Gm-Message-State: AOAM533PuQcjRYDqDCluMUzedAhDiRsH3YxzS7xpu/A5DonVKizi4cu/
+        3jUu4d0+JOysitcUtBsJjfYPxg==
+X-Google-Smtp-Source: ABdhPJxciL6DQT0drKUzihKqgUqRMmOS1IktJGswoChLHQmL4ghHUOyNLEGlGfKxbK0HaVmVGxr0Mw==
+X-Received: by 2002:a9d:147:: with SMTP id 65mr9178671otu.315.1623772523083;
+        Tue, 15 Jun 2021 08:55:23 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t39sm3892138ooi.42.2021.06.15.08.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jun 2021 08:55:22 -0700 (PDT)
+Date:   Tue, 15 Jun 2021 10:55:20 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Al Cooper <alcooperx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Scott Branden <sbranden@broadcom.com>
-References: <20210602192758.38735-1-alcooperx@gmail.com>
- <20210602192758.38735-2-alcooperx@gmail.com>
- <CAPDyKFrynST66yA_T3iroiJsfmNuBOEiiBnb=vNoyP6QpvZ7aQ@mail.gmail.com>
- <fe956941-bb39-413e-f051-d9f353f64eda@gmail.com>
- <CAPDyKFpEtvjS1mWC68gRBWD64dq2M1LO84UWE5uDLTzbGz1g8Q@mail.gmail.com>
- <6acd480a-8928-89bb-0f40-d278294973a1@gmail.com>
- <CAPDyKFqk23xg5R2k9GwQrnamwWYbMkmrbWYsHPF9VBQTAbvQHw@mail.gmail.com>
- <a1199e99-eb29-125b-2bac-f0abb4803c9b@gmail.com>
- <CAPDyKFq-rofbCyAhcQGt2xZykip6Le+CUDXgDwAisVOj=Tt-uA@mail.gmail.com>
- <b4c36944-8f41-1f30-10b4-b3efe0aade01@gmail.com>
- <CAPDyKFpR1GZcqCO5=-h7jvG0TysPLfJOP6rDJBagHvg9HFxnSQ@mail.gmail.com>
- <e25164b4-fa0c-b1c1-e40b-0f0c71641976@gmail.com>
- <CAPDyKFq92mp4CXj8-QHw=DEQ8bcAjtrmLyowrGKSJL2Fch1cJQ@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c356986f-08de-e8d5-5d1e-f4e13c77648f@gmail.com>
-Date:   Tue, 15 Jun 2021 08:51:26 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.10.2
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
+Message-ID: <YMjNaM0z+OzhAeO/@yoga>
+References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
+ <20210611101540.3379937-3-dmitry.baryshkov@linaro.org>
+ <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
+ <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
+ <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFq92mp4CXj8-QHw=DEQ8bcAjtrmLyowrGKSJL2Fch1cJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue 15 Jun 05:17 CDT 2021, Ulf Hansson wrote:
+
+> + Mark
+> 
+> On Fri, 11 Jun 2021 at 16:34, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > Added Stephen to Cc list
+> >
+> > On Fri, 11 Jun 2021 at 16:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Fri, 11 Jun 2021 at 12:15, Dmitry Baryshkov
+> > > <dmitry.baryshkov@linaro.org> wrote:
+> > > >
+> > > > In case of nested genpds it is easy to get the following warning from
+> > > > lockdep, because all genpd's mutexes share same locking class. Use the
+> > > > per-genpd locking class to stop lockdep from warning about possible
+> > > > deadlocks. It is not possible to directly use genpd nested locking, as
+> > > > it is not the genpd code calling genpd. There are interim calls to
+> > > > regulator core.
+> > > >
+> > > > [    3.030219] ============================================
+> > > > [    3.030220] WARNING: possible recursive locking detected
+> > > > [    3.030221] 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480 Not tainted
+> > > > [    3.030222] --------------------------------------------
+> > > > [    3.030223] kworker/u16:0/7 is trying to acquire lock:
+> > > > [    3.030224] ffffde0eabd29aa0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> > > > [    3.030236]
+> > > > [    3.030236] but task is already holding lock:
+> > > > [    3.030236] ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> > > > [    3.030240]
+> > > > [    3.030240] other info that might help us debug this:
+> > > > [    3.030240]  Possible unsafe locking scenario:
+> > > > [    3.030240]
+> > > > [    3.030241]        CPU0
+> > > > [    3.030241]        ----
+> > > > [    3.030242]   lock(&genpd->mlock);
+> > > > [    3.030243]   lock(&genpd->mlock);
+> > > > [    3.030244]
+> > > > [    3.030244]  *** DEADLOCK ***
+> > > > [    3.030244]
+> > > > [    3.030244]  May be due to missing lock nesting notation
+> > > > [    3.030244]
+> > > > [    3.030245] 6 locks held by kworker/u16:0/7:
+> > > > [    3.030246]  #0: ffff6cca00010938 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
+> > > > [    3.030252]  #1: ffff8000100c3db0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
+> > > > [    3.030255]  #2: ffff6cca00ce3188 (&dev->mutex){....}-{3:3}, at: __device_attach+0x3c/0x184
+> > > > [    3.030260]  #3: ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> > > > [    3.030264]  #4: ffff8000100c3968 (regulator_ww_class_acquire){+.+.}-{0:0}, at: regulator_lock_dependent+0x6c/0x1b0
+> > > > [    3.030270]  #5: ffff6cca00a59158 (regulator_ww_class_mutex){+.+.}-{3:3}, at: regulator_lock_recursive+0x94/0x1d0
+> > > > [    3.030273]
+> > > > [    3.030273] stack backtrace:
+> > > > [    3.030275] CPU: 6 PID: 7 Comm: kworker/u16:0 Not tainted 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480
+> > > > [    3.030276] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+> > > > [    3.030278] Workqueue: events_unbound deferred_probe_work_func
+> > > > [    3.030280] Call trace:
+> > > > [    3.030281]  dump_backtrace+0x0/0x1a0
+> > > > [    3.030284]  show_stack+0x18/0x24
+> > > > [    3.030286]  dump_stack+0x108/0x188
+> > > > [    3.030289]  __lock_acquire+0xa20/0x1e0c
+> > > > [    3.030292]  lock_acquire.part.0+0xc8/0x320
+> > > > [    3.030294]  lock_acquire+0x68/0x84
+> > > > [    3.030296]  __mutex_lock+0xa0/0x4f0
+> > > > [    3.030299]  mutex_lock_nested+0x40/0x50
+> > > > [    3.030301]  genpd_lock_mtx+0x18/0x2c
+> > > > [    3.030303]  dev_pm_genpd_set_performance_state+0x94/0x1a0
+> > > > [    3.030305]  reg_domain_enable+0x28/0x4c
+> > > > [    3.030308]  _regulator_do_enable+0x420/0x6b0
+> > > > [    3.030310]  _regulator_enable+0x178/0x1f0
+> > > > [    3.030312]  regulator_enable+0x3c/0x80
+> > >
+> > > At a closer look, I am pretty sure that it's the wrong code design
+> > > that triggers this problem, rather than that we have a real problem in
+> > > genpd. To put it simply, the code in genpd isn't designed to work like
+> > > this. We will end up in circular looking paths, leading to deadlocks,
+> > > sooner or later if we allow the above code path.
+> > >
+> > > To fix it, the regulator here needs to be converted to a proper PM
+> > > domain. This PM domain should be assigned as the parent to the one
+> > > that is requested to be powered on.
+> >
+> > This more or less resembles original design, replaced per review
+> > request to use separate regulator
+> > (https://lore.kernel.org/linux-arm-msm/160269659638.884498.4031967462806977493@swboyd.mtv.corp.google.com/,
+> > https://lore.kernel.org/linux-arm-msm/20201023131925.334864-1-dmitry.baryshkov@linaro.org/).
+> 
+> Thanks for the pointers. In hindsight, it looks like the
+> "regulator-fixed-domain" DT binding wasn't the right thing.
+> 
+> Fortunately, it looks like the problem can be quite easily fixed, by
+> moving to a correct model of the domain hierarchy.
+> 
+
+Can you give some pointers to how we actually fix this?
+
+The problem that lead us down this path is that drivers/clk/qcom/gdsc.c
+describes power domains, which are parented by domains provided by
+drivers/soc/qcom/rpmhpd.c.
+
+But I am unable to find a way for the gdsc driver to get hold of the
+struct generic_pm_domain of the resources exposed by the rpmhpd driver.
 
 
-On 6/15/2021 8:30 AM, Ulf Hansson wrote:
+The second thing that Dmitry's regulator driver does is to cast the
+appropriate performance state vote on the rpmhpd resource, but I _think_
+we can do that using OPP tables in the gdsc client's node...
+
+> Beyond this, perhaps we should consider removing the
+> "regulator-fixed-domain" DT property, as to avoid similar problems
+> from cropping up?
+> 
+
+Currently there's a single user upstream, but we have the exact same
+problem in at least 3-4 platforms with patches in the pipeline.
+
+In order to avoid breakage with existing DT I would prefer to see
+regulator-fixed-domain to live for at least one kernel release beyond
+the introduction of the other model.
+
+Regards,
+Bjorn
+
+> Mark, what do you think?
+> 
+> >
+> > Stephen, would it be fine to you to convert the mmcx regulator into
+> > the PM domain?
+> >
+> > > > [    3.030314]  gdsc_toggle_logic+0x30/0x124
+> > > > [    3.030317]  gdsc_enable+0x60/0x290
+> > > > [    3.030318]  _genpd_power_on+0xc0/0x134
+> > > > [    3.030320]  genpd_power_on.part.0+0xa4/0x1f0
+> > > > [    3.030322]  __genpd_dev_pm_attach+0xf4/0x1b0
+> > > > [    3.030324]  genpd_dev_pm_attach+0x60/0x70
+> > > > [    3.030326]  dev_pm_domain_attach+0x54/0x5c
+> > > > [    3.030329]  platform_probe+0x50/0xe0
+> > > > [    3.030330]  really_probe+0xe4/0x510
+> > > > [    3.030332]  driver_probe_device+0x64/0xcc
+> > > > [    3.030333]  __device_attach_driver+0xb8/0x114
+> > > > [    3.030334]  bus_for_each_drv+0x78/0xd0
+> > > > [    3.030337]  __device_attach+0xdc/0x184
+> > > > [    3.030338]  device_initial_probe+0x14/0x20
+> > > > [    3.030339]  bus_probe_device+0x9c/0xa4
+> > > > [    3.030340]  deferred_probe_work_func+0x88/0xc4
+> > > > [    3.030342]  process_one_work+0x298/0x730
+> > > > [    3.030343]  worker_thread+0x74/0x470
+> > > > [    3.030344]  kthread+0x168/0x170
+> > > > [    3.030346]  ret_from_fork+0x10/0x34
+> > > >
+> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
 > [...]
 > 
->>>
->>>>
->>>> In all honesty, I am a bit surprised that the Linux device driver model
->>>> does not try to default the absence of a ->shutdown() to a ->suspend()
->>>> call since in most cases they are functionally equivalent, or should be,
->>>> in that they need to save power and quiesce the hardware, or leave
->>>> enough running to support a wake-up event.
->>>
->>> Well, the generall assumption is that the platform is going to be
->>> entirely powered off, thus moving things into a low power state would
->>> just be a waste of execution cycles. Of course, that's not the case
->>> for your platform.
->>
->> That assumption may hold true for ACPI-enabled machines but power off is
->> offered as a general function towards other more flexible and snowflaky
->> systems (read embedded) as well.
->>
->>>
->>> As I have stated earlier, to me it looks a bit questionable to use the
->>> kernel_power_off() path to support the use case you describe. On the
->>> other hand, we may not have a better option at this point.
->>
->> Correct, there is not really anything better and I am not sure what the
->> semantics of something better could be anyway.
->>
->>>
->>> Just a few things, from the top of my head, that we certainly are
->>> missing to support your use case through kernel_power_off() path
->>> (there are certainly more):
->>> 1. In general, subsystems/drivers don't care about moving things into
->>> lower power modes from their ->shutdown() callbacks.
->>> 2. System wakeups and devices being affected in the wakeup path, needs
->>> to be respected properly. Additionally, userspace should be able to
->>> decide if system wakeups should be enabled or not.
->>> 3. PM domains don't have ->shutdown() callbacks, thus it's likely that
->>> they remain powered on.
->>> 4. Etc...
->>
->> For the particular eMMC driver being discussed here this is a no-brainer
->  > because  it is not a wake-up source, therefore there is no reason not to
->> power if off if we can. It also seems proper to have it done by the
->> kernel as opposed to firmware.
-> 
-> Okay, I have applied the $subject patch onto my next branch, along
-> with patch 1/2 (the DT doc change).
-> 
-> However, I still think we should look for a proper long term solution,
-> because the kernel_power_off() path does not currently support your
-> use case, with system wakeups etc.
-
-Not really, it does work fine, some drivers like gpio-keys.c or
-gpio-brcmstb.c will ensure that the GPIOs that are enabled as wake-up
-interrupts are configured that way during kernel_power_off() and the
-various interrupt controllers like irq-brcmstb-l2.c will make sure they
-don't mask wake-up interrupts.
-
-> 
-> I guess it could be a topic that is easier to bring up at the Linux
-> Plumbers Conf, for example.
-
-OK, not sure if I will be able to attend, but would definitively try to.
--- 
-Florian
+> Kind regards
+> Uffe
