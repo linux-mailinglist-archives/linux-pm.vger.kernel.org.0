@@ -2,87 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3843A8426
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D84A3A8448
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 17:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbhFOPlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 11:41:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41776 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230352AbhFOPlA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:41:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DB176148E;
-        Tue, 15 Jun 2021 15:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623771536;
-        bh=rgNd9ro+iBH4rkbur/bO3RZ1IPlfddRdvzaAQ0tXikI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bwaiRsjbWTGMIssNvtI9JLxTpQHjMn2x0fKMGqUyKPhjfPnFMsKkSFoECeoh4urJT
-         tjeKB6mrgDHxo6SSsM+z9my6O2ndRYHrPX4CJMfWlJGlt8lBSkzmlzuDSOO9AFNQQL
-         ywt8bbZI06OUCKTa3rQLjpBLJrf8lz4w0bTrm6019yLrmY1tI54JgzPb5963tOyT2N
-         xBlsaCHaw+dsws0vA8W9hW/QbwEkrmO2CIg+R4ijTFDYGw9vbeTx9KPZdEUiTmzcBC
-         Q/rhLf9k1tue4WXGQ8dToIG/bC5+trFyINrvAFFAwagOPff0IOA4nE3o9fnq1BFMRt
-         AcKlcCZ3HF+Bw==
-Date:   Tue, 15 Jun 2021 16:38:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
-Message-ID: <20210615153837.GL5149@sirena.org.uk>
-References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
- <20210611101540.3379937-3-dmitry.baryshkov@linaro.org>
- <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
- <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
- <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
- <20210615111012.GA5149@sirena.org.uk>
- <CAPDyKFreV-RPzweG8SqFQtvZMOyFbaG2+tMFKc2JkbEj+erb=g@mail.gmail.com>
- <20210615152620.GH5149@sirena.org.uk>
- <CAPDyKFrthc_6rXt1UscKTQnctFXw0XjReEF5bqCGot2n=ChKaA@mail.gmail.com>
+        id S231345AbhFOPry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 11:47:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56811 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231718AbhFOPry (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 11:47:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623771949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rwmXEsTbN240xGcOS39WntWwEOMy1r0XQYbSoFpZcHw=;
+        b=B5oX3RZj0P5N15UZjt7DdEXDtu6jGfurzY5xAHjdWSVRmdGeQjn+GoQf5OaUHebGvWUaN3
+        PzMbdIv+/N22eVUcggWVjqjWPoxHZSM9tr5MQKMnBIUBxFpREF9rKzh7R4US9UHBJsNDWo
+        dpEermf8JT0zhjPsGEeS+QnsG5pxezs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-239-tQAQoeIWMwisaHstoUOl7w-1; Tue, 15 Jun 2021 11:45:45 -0400
+X-MC-Unique: tQAQoeIWMwisaHstoUOl7w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B0D18015DB;
+        Tue, 15 Jun 2021 15:45:43 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.212])
+        by smtp.corp.redhat.com (Postfix) with SMTP id E6FFA1007606;
+        Tue, 15 Jun 2021 15:45:40 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue, 15 Jun 2021 17:45:43 +0200 (CEST)
+Date:   Tue, 15 Jun 2021 17:45:39 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] freezer,sched: Rewrite core freezer logic
+Message-ID: <20210615154539.GA30333@redhat.com>
+References: <YMMijNqaLDbS3sIv@hirez.programming.kicks-ass.net>
+ <20210614154246.GB13677@redhat.com>
+ <20210614161221.GC68749@worktop.programming.kicks-ass.net>
+ <20210614165422.GC13677@redhat.com>
+ <20210614183801.GE68749@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bzq2cJcN05fcPrs+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFrthc_6rXt1UscKTQnctFXw0XjReEF5bqCGot2n=ChKaA@mail.gmail.com>
-X-Cookie: See store for details.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210614183801.GE68749@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 06/14, Peter Zijlstra wrote:
+>
+> One more thing; if I add additional state bits to preserve
+> __TASK_{TRACED,STOPPED}, then I need to figure out at thaw time if we've
+> missed a wakeup or not.
+>
+> Do we have sufficient state for that? If so, don't we then also not have
+> sufficient state to tell if a task should've been TRACED/STOPPED in the
+> first place?
 
---Bzq2cJcN05fcPrs+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Not sure I understand you, probably not, but I think the answer is "no" ;)
 
-On Tue, Jun 15, 2021 at 05:35:01PM +0200, Ulf Hansson wrote:
+But this reminds me... can't we implement selective wakeups? So that if a
+task T sleeps in state = STOPPED | FROZEN, then ttwu(T, FROZEN) won't wake
+it up, it will only clear FROZEN from T->state. Similarly, ttwu(T, STOPPED)
+will leave this task with state == FROZEN.
 
-> Let's see where we end up with this. My concern at this point is that
-> it could spread to more users, which would make it even more difficult
-> to remove.
+See also
 
-Perhaps mark it as deprecated while people figure out how to fix the
-existing user?
+	https://lore.kernel.org/lkml/20131112162136.GA29065@redhat.com/
+	https://lore.kernel.org/lkml/20131113170724.GA17739@redhat.com/
 
---Bzq2cJcN05fcPrs+
-Content-Type: application/pgp-signature; name="signature.asc"
+just to remind you that we already discussed TASK_FROZEN a little bit almost
+10 years ago ;)
 
------BEGIN PGP SIGNATURE-----
+What has been shall be, and what has been done is what will be done, and
+there is nothing new under the sun.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDIyXwACgkQJNaLcl1U
-h9APSAf+Lh/u48cE9uongDESh5JQD2/iXrn4MOo798Ceppgqi1iB0LraDdA4iuAW
-0MBMsG8o/GnMWLrXu7BOpJWY9lwFYITVBCkkU4dbgDU7fQszhmf/VQFcpjg1t5YQ
-N4lynsK7DMT93LDEYQN1y6uboeaxQcHVxeIGSPBe1NfGmRmrL1HB+oaEu6nmZ3of
-eA0heoYUKz0Cn/Jxzychpn0AzqridSm0KlyMcCNIuOf4BU7yDhPQNFqerQEqnf8J
-1JipyDj+xfJ2Ufss+cUHwduRG/Il9lbyy8CuL+y0iNtm1f65EZ0AL+caM6R2M4BR
-2refhB9vPMwyBtrY1fZgaM5ttZm/qQ==
-=gCbi
------END PGP SIGNATURE-----
+Oleg.
 
---Bzq2cJcN05fcPrs+--
