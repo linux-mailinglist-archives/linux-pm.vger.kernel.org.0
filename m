@@ -2,202 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6747F3A8616
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 18:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0123A8637
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 18:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhFOQLp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 12:11:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:39784 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229488AbhFOQLo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Jun 2021 12:11:44 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE91113A1;
-        Tue, 15 Jun 2021 09:09:39 -0700 (PDT)
-Received: from [10.57.9.214] (unknown [10.57.9.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 30FE93F694;
-        Tue, 15 Jun 2021 09:09:36 -0700 (PDT)
-Subject: Re: [PATCH v4 2/3] sched/fair: Take thermal pressure into account
- while estimating energy
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        vincent.guittot@linaro.org, qperret@google.com,
-        vincent.donnefort@arm.com, Beata.Michalska@arm.com,
-        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
-        segall@google.com, mgorman@suse.de, bristot@redhat.com,
-        thara.gopinath@linaro.org, amit.kachhap@gmail.com,
-        amitk@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-References: <20210614185815.15136-1-lukasz.luba@arm.com>
- <20210614191128.22735-1-lukasz.luba@arm.com>
- <237ef538-c8ca-a103-b2cc-240fc70298fe@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d214db57-879c-cf3f-caa8-76c2cd369e0d@arm.com>
-Date:   Tue, 15 Jun 2021 17:09:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S229937AbhFOQUa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 12:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229659AbhFOQU3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 12:20:29 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3931FC061574
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 09:18:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id c9so18978734wrt.5
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 09:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1ZQF286KDf3vsAW/1vOHKbnKaEK4bPamrOWEdser+to=;
+        b=R8NtmSj/KkG3mZwDtMueKosy4Ydw4GrSJwNmFCP/2GAiGlPKGRrYuCH4M9tj1lzpdZ
+         TOQzAmKvUS8t+X/VHs3BmDJH2G11gZymuYsJjEzOuae3PctlCZBbm7TXTiH4qCAeA8XM
+         zbObW0fr3fxlVZDjAwR4LRTLCj9/G4Hd4L/cm4/59omnvLGiL4ScAwHoupztlmqyhwz8
+         iU8eLBA0ppEdUc9vlzOpFeefz+fLv9yeZQSajgNS89mmGX/EmOteYaGcFLuDSkj382Fv
+         Q2eaNToG4DnSQXV49vCehLHK3qjJ8EpC8gu3diPhxsFpv6ZpTCN3/txAmxqE2wRyNJvO
+         Vi7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1ZQF286KDf3vsAW/1vOHKbnKaEK4bPamrOWEdser+to=;
+        b=ldeOb6BL4TjXXGzn7civyeiI+cZWWWErimXVd5vxEN7NSZO/wE5zNNToEJLDMOFLvm
+         6MoTYxxAHsestsq8Q1vj94sWzDx/jIAHM+v64FNe33L9g1uc2l7DUr2SV3nw6FVFqaeO
+         +dFFncqHjNOlT/wRLLQgNNeD7GXHkhSGomwVx2e3U1dShPyQJ34Z8rySub030sxV77Sx
+         3JXTil9tOujyPBfJQWNh12kbTEBkx3/Q8BBJJ44fSrbhI/abOQXFqrTjoCI9dsgbK3C2
+         7p78Jm/Kchj6RhABdFA9yb+XwxtoGK8bCBuT7bTuSYQniqqWTeiSsHA+QO+5akPahkGq
+         8DGQ==
+X-Gm-Message-State: AOAM533Y4ggxgkfH9SZZ3NCZ1igj6WCjMhgcfdebLVsg4CMv8dtp3NKV
+        42cO0uZH58rV42KVJOqm3e/F9BvebTuJCStb
+X-Google-Smtp-Source: ABdhPJyDj5Em8ISoY6sbUQhzWQmsq+vp6ZTuVD0IHEcxEiux87fcQosE1ZHaKf/7wRcEOUNSE00SIg==
+X-Received: by 2002:adf:c393:: with SMTP id p19mr26505314wrf.92.1623773903610;
+        Tue, 15 Jun 2021 09:18:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:613a:6939:5f7f:dceb? ([2a01:e34:ed2f:f020:613a:6939:5f7f:dceb])
+        by smtp.googlemail.com with ESMTPSA id n6sm2473026wme.21.2021.06.15.09.18.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 09:18:23 -0700 (PDT)
+Subject: Re: [PATCH v3 4/7] thermal/drivers/tegra: Add driver for Tegra30
+ thermal sensor
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210529170955.32574-1-digetx@gmail.com>
+ <20210529170955.32574-5-digetx@gmail.com>
+ <6f2b6290-095a-bd39-c160-1616a0ff89b1@linaro.org>
+ <20210615102626.dja3agclwzxv2sj4@vireshk-i7>
+ <595f5e53-b872-bcc6-e886-ed225e26e9fe@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <fbdc3b56-4465-6d3e-74db-1d5082813b9c@linaro.org>
+Date:   Tue, 15 Jun 2021 18:18:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <237ef538-c8ca-a103-b2cc-240fc70298fe@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <595f5e53-b872-bcc6-e886-ed225e26e9fe@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 6/15/21 4:31 PM, Dietmar Eggemann wrote:
-> On 14/06/2021 21:11, Lukasz Luba wrote:
->> Energy Aware Scheduling (EAS) needs to be able to predict the frequency
->> requests made by the SchedUtil governor to properly estimate energy used
->> in the future. It has to take into account CPUs utilization and forecast
->> Performance Domain (PD) frequency. There is a corner case when the max
->> allowed frequency might be reduced due to thermal. SchedUtil is aware of
->> that reduced frequency, so it should be taken into account also in EAS
->> estimations.
+On 15/06/2021 15:01, Dmitry Osipenko wrote:
+> 15.06.2021 13:26, Viresh Kumar пишет:
+>> On 15-06-21, 12:03, Daniel Lezcano wrote:
+>>>
+>>> [Cc Viresh]
+>>>
+>>> On 29/05/2021 19:09, Dmitry Osipenko wrote:
+>>>> All NVIDIA Tegra30 SoCs have a two-channel on-chip sensor unit which
+>>>> monitors temperature and voltage of the SoC. Sensors control CPU frequency
+>>>> throttling, which is activated by hardware once preprogrammed temperature
+>>>> level is breached, they also send signal to Power Management controller to
+>>>> perform emergency shutdown on a critical overheat of the SoC die. Add
+>>>> driver for the Tegra30 TSENSOR module, exposing it as a thermal sensor
+>>>> and a cooling device.
+>>>
+>>> IMO it does not make sense to expose the hardware throttling mechanism
+>>> as a cooling device because it is not usable anywhere from the thermal
+>>> framework.
+>>>
+>>> Moreover, that will collide with the thermal / cpufreq framework
+>>> mitigation (hardware sets the frequency but the software thinks the freq
+>>> is different), right ?
 > 
-> It's important to highlight that this will only fix this issue between
-> schedutil and EAS when it's due to `thermal pressure` (today only via
-> CPU cooling). There are other places which could restrict policy->max
-> via freq_qos_update_request() and EAS will be unaware of it.
-
-True, but for this I have some other plans.
-
+> H/w mitigation is additional and should be transparent to the software
+> mitigation. The software mitigation is much more flexible, but it has
+> latency. Software also could crash and hang.
 > 
->> SchedUtil, as a CPUFreq governor, knows the maximum allowed frequency of
->> a CPU, thanks to cpufreq_driver_resolve_freq() and internal clamping
->> to 'policy::max'. SchedUtil is responsible to respect that upper limit
->> while setting the frequency through CPUFreq drivers. This effective
->> frequency is stored internally in 'sugov_policy::next_freq' and EAS has
->> to predict that value.
+> Hardware mitigation doesn't have latency and it will continue to work
+> regardless of the software state.
+
+Yes, I agree. Both solutions have their pros and cons. However, I don't
+think they can co-exist sanely.
+
+> The CCF driver is aware about the h/w cooling status [1], hence software
+> sees the actual frequency.
+>
+> [1]
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit?id=344d5df34f5abd468267daa98f041abf90b2f660
+
+Ah interesting, thanks for the pointer.
+
+What I'm worried about is the consistency with cpufreq.
+
+Probably cpufreq_update_limits() should be called from the interrupt
+handler.
+
+>> I am not even sure what the cooling device is doing here:
 >>
->> In the existing code the raw value of arch_scale_cpu_capacity() is used
->> for clamping the returned CPU utilization from effective_cpu_util().
->> This patch fixes issue with too big single CPU utilization, by introducing
->> clamping to the allowed CPU capacity. The allowed CPU capacity is a CPU
->> capacity reduced by thermal pressure raw value.
+>> tegra_tsensor_set_cur_state() is not implemented and it says hardware
+>> changed it by itself. What is the benefit you are getting out of the
+>> cooling device here ?
+> 
+> It allows userspace to check whether hardware cooling is active via the
+> cooling_device sysfs. Otherwise we don't have ability to check whether
+> h/w cooling is active, I think it's a useful information. It's also
+> interesting to see the cooling_device stats, showing how many times h/w
+> mitigation was active.
+
+Actually the stats are for software mitigation. For the driver, create a
+debugfs entry like what do the other drivers or a module parameter with
+the stats.
+
+>>> The hardware limiter should let know the cpufreq framework about the
+>>> frequency change.
+>>>
+>>> 	https://lkml.org/lkml/2021/6/8/1792
+>>>
+>>> May be post the sensor without the hw limiter for now and address that
+>>> in a separate series ?
 >>
->> Thanks to knowledge about allowed CPU capacity, we don't get too big value
->> for a single CPU utilization, which is then added to the util sum. The
->> util sum is used as a source of information for estimating whole PD energy.
->> To avoid wrong energy estimation in EAS (due to capped frequency), make
->> sure that the calculation of util sum is aware of allowed CPU capacity.
->>
->> This thermal pressure might be visible in scenarios where the CPUs are not
->> heavily loaded, but some other component (like GPU) drastically reduced
->> available power budget and increased the SoC temperature. Thus, we still
->> use EAS for task placement and CPUs are not over-utilized.
 > 
-> IMHO, this means that this is catered for the IPA governor then. I'm not
-> sure if this would be beneficial when another thermal governor is used?
-
-Yes, it will be, the cpufreq_set_cur_state() is called by
-thermal exported function:
-thermal_cdev_update()
-   __thermal_cdev_update()
-     thermal_cdev_set_cur_state()
-       cdev->ops->set_cur_state(cdev, target)
-
-So it can be called not only by IPA. All governors call it, because
-that's the default mechanism.
-
+> I wasn't aware about existence of the thermal pressure, thank you for
+> pointing at it. At a quick glance it should be possible to benefit from
+> the information about the additional pressure.
 > 
-> The mechanical side of the code would allow for such benefits, I just
-> don't know if their CPU cooling device + thermal zone setups would cater
-> for this?
+> Seems the current thermal pressure API assumes that there is only one
+> user of the API. So it's impossible to aggregate the pressure from
+> different sources, like software cpufreq pressure + h/w freq pressure.
+> Correct? If yes, then please let me know yours thoughts about the best
+> approach of supporting the aggregation.
 
-Yes, it's possible. Even for custom vendor governors (modified clones
-of IPA)
+That is a good question. IMO, first step would be to call
+cpufreq_update_limits().
 
-> 
->> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   kernel/sched/fair.c | 11 ++++++++---
->>   1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 161b92aa1c79..3634e077051d 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -6527,8 +6527,11 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->>   	struct cpumask *pd_mask = perf_domain_span(pd);
->>   	unsigned long cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
->>   	unsigned long max_util = 0, sum_util = 0;
->> +	unsigned long _cpu_cap = cpu_cap;
->>   	int cpu;
->>   
->> +	_cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
->> +
-> 
-> Maybe shorter?
-> 
->          struct cpumask *pd_mask = perf_domain_span(pd);
-> -       unsigned long cpu_cap =
-> arch_scale_cpu_capacity(cpumask_first(pd_mask));
-> +       int cpu = cpumask_first(pd_mask);
-> +       unsigned long cpu_cap = arch_scale_cpu_capacity(cpu);
-> +       unsigned long _cpu_cap = cpu_cap - arch_scale_thermal_pressure(cpu);
->          unsigned long max_util = 0, sum_util = 0;
-> -       unsigned long _cpu_cap = cpu_cap;
-> -       int cpu;
-> -
-> -       _cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
+[ Cc Thara who implemented the thermal pressure ]
 
-Could be, but still, the definitions should be sorted from longest on
-top, to shortest at the bottom. I wanted to avoid modifying too many
-lines with this simple patch.
+May be Thara has an idea about how to aggregate both? There is another
+series floating around with hardware limiter [1] and the same problematic.
 
-> 
->>   	/*
->>   	 * The capacity state of CPUs of the current rd can be driven by CPUs
->>   	 * of another rd if they belong to the same pd. So, account for the
->> @@ -6564,8 +6567,10 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->>   		 * is already enough to scale the EM reported power
->>   		 * consumption at the (eventually clamped) cpu_capacity.
->>   		 */
->> -		sum_util += effective_cpu_util(cpu, util_running, cpu_cap,
->> -					       ENERGY_UTIL, NULL);
->> +		cpu_util = effective_cpu_util(cpu, util_running, cpu_cap,
->> +					      ENERGY_UTIL, NULL);
->> +
->> +		sum_util += min(cpu_util, _cpu_cap);
->>   
->>   		/*
->>   		 * Performance domain frequency: utilization clamping
->> @@ -6576,7 +6581,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->>   		 */
->>   		cpu_util = effective_cpu_util(cpu, util_freq, cpu_cap,
->>   					      FREQUENCY_UTIL, tsk);
->> -		max_util = max(max_util, cpu_util);
->> +		max_util = max(max_util, min(cpu_util, _cpu_cap));
->>   	}
->>   
->>   	return em_cpu_energy(pd->em_pd, max_util, sum_util);
-> 
-> There is IPA specific code in cpufreq_set_cur_state() ->
-> get_state_freq() which accesses the EM:
-> 
->      ...
->      return cpufreq_cdev->em->table[idx].frequency;
->      ...
-> 
-> Has it been discussed that the `per-PD max (allowed) CPU capacity` (1)
-> could be stored in the EM from there so that code like the EAS wakeup
-> code (compute_energy()) could retrieve this information from the EM?
+ [1] https://lkml.org/lkml/2021/6/8/1791
 
-No, we haven't think about this approach in these patch sets.
-The EM structure given to the cpufreq_cooling device and stored in:
-cpufreq_cdev->em should not be modified. There are a few places which
-receive the EM, but they all should not touch it. For those clients
-it's a read-only data structure.
+> I'll factor out the h/w limiter from this patchset and prepare the v4.
+> Thank you all for taking a look at the patches.
 
-> And there wouldn't be any need to pass (1) into the EM (like now via
-> em_cpu_energy()).
-> This would be signalling within the EM compared to external signalling
-> via `CPU cooling -> thermal pressure <- EAS wakeup -> EM`.
-> 
 
-I see what you mean, but this might cause some issues in the design
-(per-cpu scmi cpu perf control). Let's use this EM pointer gently ;)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
