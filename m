@@ -2,146 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5B53A97DD
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 12:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7F23A9810
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 12:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbhFPKoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 06:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S232223AbhFPKtt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 06:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbhFPKoA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 06:44:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55DC06175F
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 03:41:53 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ltSzN-0004RX-MH; Wed, 16 Jun 2021 12:41:41 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27:4a54:dbae:b593])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9048463D23F;
-        Wed, 16 Jun 2021 10:41:36 +0000 (UTC)
-Date:   Wed, 16 Jun 2021 12:41:35 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S231922AbhFPKts (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 06:49:48 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E34C061574;
+        Wed, 16 Jun 2021 03:47:41 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id j2so3556874lfg.9;
+        Wed, 16 Jun 2021 03:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=M8RbiCOq83IbnSA8G848uSB8CbMVC8ioIh0DaNZa9vc=;
+        b=m0+aLL36GaHNEjSSDDcmlxsML6+AeRiAhb+BmyBDrsanZORVU7IFdQvyNNWt34OjYQ
+         fRxAL1xbVx4pgLFlZqB8eGKklb3XqNxPR5YzyM7HG245bP2FtgV0yewdFAdf1aIte+j4
+         dmTxJp1AyWCUvbdmw5+r/kybXHdgxI0P57XNIzpxzWaP3BGEfcdmOQ8MC5niEfrRb+Vn
+         Etq4qmod4kKq1J3lwgiqGmtH6MpccArW0XGbg3rMNKK5Q1u6hFqKU4fRwClS3/Ealn6I
+         2VRkkpRpuqiDIFFJrNWBt+rJcoDL8/g3gRVi9rNLlRGzuluvRFfPZeoxZuL08TKE/u/1
+         XceA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=M8RbiCOq83IbnSA8G848uSB8CbMVC8ioIh0DaNZa9vc=;
+        b=fKhtepC2msJ36HIIfEfxaCSBgMpUJcOIZP0ZncCGOhWXttctYBbiPkYH/cprUgPoYL
+         EeimqvqNBxA+WV7AjACem/PSARjkMIZDRC5xmJsfbttiG1tF5nB0B10QLYnoJNPQPPvb
+         6AUyUptdMWDCnRffzHy7kPUIdRB86Qffr3FuSsW296OG3qsO3FJjzCjFCNDmYQRt0kBp
+         +9/yDWgJkq4hiASX8sN8iKQHANh+anoPH3YNhWxTThsaaGqfeu/fAoPtkYY3D/SCMBXp
+         tQ0Vrq/351k7Ue0DvdY9jkRSfIWt6cQWGNj9gdkDPT5a+V/OP8FJIbT2h/Zw5BSnwUFW
+         B82Q==
+X-Gm-Message-State: AOAM533XXBgSSiSUYSvJif9qyDJ45KpcArFqGvsnFFTthlhwInNdYqwy
+        1UEu8yQjB4Nwp6f7zsJwlHGEWyQj5LY=
+X-Google-Smtp-Source: ABdhPJz+0Zz9WG1zeE/j95jNz5K1F/ytl7qbFbKxW4oVKx0aC5XmOSp9HDSQN0heEC/zEiU0hkhcrg==
+X-Received: by 2002:ac2:4a6b:: with SMTP id q11mr3292061lfp.321.1623840460086;
+        Wed, 16 Jun 2021 03:47:40 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
+        by smtp.googlemail.com with ESMTPSA id h4sm209060lft.184.2021.06.16.03.47.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jun 2021 03:47:39 -0700 (PDT)
+Subject: Re: [PATCH v3 4/7] thermal/drivers/tegra: Add driver for Tegra30
+ thermal sensor
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <20210616104135.z5bjalhan4ui2ibz@pengutronix.de>
-References: <20210615191543.1043414-1-robh@kernel.org>
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210529170955.32574-1-digetx@gmail.com>
+ <20210529170955.32574-5-digetx@gmail.com>
+ <6f2b6290-095a-bd39-c160-1616a0ff89b1@linaro.org>
+ <20210615102626.dja3agclwzxv2sj4@vireshk-i7>
+ <595f5e53-b872-bcc6-e886-ed225e26e9fe@gmail.com>
+ <fbdc3b56-4465-6d3e-74db-1d5082813b9c@linaro.org>
+ <4c7b23c4-cf6a-0942-5250-63515be4a219@gmail.com>
+ <545974aa-bb0f-169b-6f31-6e8c2461343f@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <f06370e0-bfde-87d0-03b4-93c667f81817@gmail.com>
+Date:   Wed, 16 Jun 2021 13:47:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="agvztsrh6izyn335"
-Content-Disposition: inline
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <545974aa-bb0f-169b-6f31-6e8c2461343f@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+16.06.2021 05:50, Thara Gopinath пишет:
+...
+> 
+> Hi,
+> 
+> Thermal pressure is letting scheduler know that the max capacity
+> available for a cpu to schedule tasks is reduced due to a thermal event.
+> So you cannot have a h/w thermal pressure and s/w thermal pressure.
+> There is eventually only one capping applied at h/w level and the
+> frequency corresponding to this capping should be used for thermal
+> pressure.
+> 
+> Ideally you should not be having both s/w and h/w trying to throttle at
+> the same time. Why is this a scenario and what prevents you from
+> disabling s/w throttling when h/w throttling is enabled. Now if there
+> has to a aggregation for whatever reason this should be done at the
+> thermal driver level and passed to scheduler.
 
---agvztsrh6izyn335
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-On 15.06.2021 13:15:43, Rob Herring wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
-he
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooli=
-ng
-> will fixup the final schema adding any unspecified minItems/maxItems.
->=20
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-[...]
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+The h/w mitigation is much more reactive than software, in the same time
+it's much less flexible than software. It should provide additional
+protection in a cases where software isn't doing a good job. Ideally h/w
+mitigation should stay inactive all the time, nevertheless it should be
+modeled properly by the driver.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>>>
+>>> That is a good question. IMO, first step would be to call
+>>> cpufreq_update_limits().
+>>
+>> Right
+>>
+>>> [ Cc Thara who implemented the thermal pressure ]
+>>>
+>>> May be Thara has an idea about how to aggregate both? There is another
+>>> series floating around with hardware limiter [1] and the same
+>>> problematic.
+>>>
+>>>   [1] https://lkml.org/lkml/2021/6/8/1791
+>>
+>> Thanks, it indeed looks similar.
+>>
+>> I guess the common thermal pressure update code could be moved out into
+>> a new special cpufreq thermal QoS handler (policy->thermal_constraints),
+>> where handler will select the frequency constraint and set up the
+>> pressure accordingly. So there won't be any races in the code.
+>>
+> It was a conscious decision to keep thermal pressure update out of qos
+> max freq update because there are platforms that don't use the qos
+> framework. For eg acpi uses cpufreq_update_policy.
+> But you are right. We have two platforms now applying h/w throttling and
+> cpufreq_cooling applying s/w throttling. So it does make sense to have
+> one api doing all the computation to update thermal pressure. I am not
+> sure how exactly/where exactly this will reside.
 
-regards,
-Marc
+The generic cpufreq_cooling already uses QoS for limiting the CPU
+frequency. It could be okay to use QoS for the OF drivers, this needs a
+closer look.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+We have the case where CPU frequency is changed by the thermal event and
+the thermal pressure equation is the same for both s/w cpufreq_cooling
+and h/w thermal driver. The pressure is calculated based on the QoS
+cpufreq constraint that is already aggregated.
 
---agvztsrh6izyn335
-Content-Type: application/pgp-signature; name="signature.asc"
+Hence what we may need to do on the thermal event is:
 
------BEGIN PGP SIGNATURE-----
+1. Update the QoS request
+2. Update the thermal pressure
+3. Ensure that updates are not racing
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDJ1V0ACgkQqclaivrt
-76nTUAf+NueTtFpURzEcaqcVzU9on1r9+EA8Cl4Mxhgg3Nw3TGp6enDeBSGPVR5B
-MaJtsub8PAEbECezUQxWPaNPa5uvS7dCW5eygZ2z3lDMGZGhYjtv67LVAJgCDq3q
-BWNuKMkKu25Ccsxl33ItHRrAmrlcwBcZMfzN+E9OgZ60GySlRv+AxcLR2XiwST9t
-kWlEW417Mj0P+cvwFo/3Ms4zRddEiw92YruesAK73pkxrB2u2xqaSy9BqNHZCG/J
-F9Q0VsjhTwLAI/7VQohXgcrL2yHsMRJt0M1+XMaxNncf1amrPNo8eWjyNDNbbIIi
-s6uvO8FoLgDLRqbX7Q14cLQ+uQmadw==
-=ZOig
------END PGP SIGNATURE-----
+> So for starters, I think you should replicate the update of thermal
+> pressure in your h/w driver when you know that h/w is
+> throttling/throttled the frequency. You can refer to cpufreq_cooling.c
+> to see how it is done.
+> 
+> Moving to a common api can be done as a separate patch series.
+> 
 
---agvztsrh6izyn335--
+Thank you for the clarification and suggestion.
