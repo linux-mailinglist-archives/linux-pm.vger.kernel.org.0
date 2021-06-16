@@ -2,67 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435263AA3F3
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 21:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109F23AA41F
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 21:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbhFPTLT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 15:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S232450AbhFPTTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 15:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbhFPTLJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 15:11:09 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E6EC061574
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 12:09:02 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id a11so3823829wrt.13
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 12:09:02 -0700 (PDT)
+        with ESMTP id S232191AbhFPTTc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 15:19:32 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08DEC06175F;
+        Wed, 16 Jun 2021 12:17:24 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m21so6032676lfg.13;
+        Wed, 16 Jun 2021 12:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nLVDBTWNz5n+zUU4LbtZG+43+EwMaSV4mGSFCqMWcW4=;
-        b=eJArqBVqGlkVZSf51Xd5+P0dv0rFGd3fSD4c7jRFUklxI8l/wxb0cYb6R9G+e9YlbB
-         5bPfWKs6kzOVskWksNC6qwHLiAV1uMPf/Z9Z8jkt3gYsXhdvi8UbNETrjzyeLW3/qzo1
-         ns04iePMwxa6bx1zIO0CLxPpK+xFK/eT4KhJGYTToNYhDnyjbQf+LgHN87ha0SxYtKEE
-         9MsXYtsaOgVfP4pbXBvK0nfyKQkewjCBISzdvalGQa45HDCbLLEla6XVETkYz1KyADO5
-         fObIpenozSTfvS3X0oBAjEgtSWcitMMPmNTNGJ9/9FFgm2PEuQnmIQUp0P9h9s7V7/p9
-         LmAg==
+        bh=vt3aTEsK9tpfVjQasrsyiVEB11qyTSKtUnV6R1cyy/0=;
+        b=uy5rt2L3pyx0BlpVOqOuTlWs5j8fErl+ZQTmL+etCQdXt/p53EdAHaNERjU55YV1ls
+         Y11SJkJCLhZxqQn51arh6PGkLxwvAqONQ+05/AWWJ6UTb1TkrTBLFpMVXLc2/lMP6TQl
+         j2Nx8DIFto/3xvOVdfe2129qyy2Nz/b0SA2pllf785mqs7yIo94j1idjvvhJPhCLkkGF
+         W2cPNIsbFc3cvG7a1eYUfnCo0IsQkoDdVyRyiAMyDshemLhtbcvb0C/rhGmBQZxb4ZND
+         W8iENqOl+ivLq3E3qrDfNsRRTqk4QYboUs9hdBcl1Ge49Idz2kE228q7TCXabQCXLOKF
+         88HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nLVDBTWNz5n+zUU4LbtZG+43+EwMaSV4mGSFCqMWcW4=;
-        b=m7TJtKEkddUTjbmC2v9anPPBnPpXAibTNwEgUtrnwOj8IHXKlvBv8W8YSzgTHzHXRz
-         GLRsII4HrlCsK+9WbrMTLWm/kDLyL5d9AeH2IGb/I7lQMEDtW9rbBfDArI0yOspcIx58
-         ROfg3NFaX7EnKcH1povP8IhgkrLBc7DbW7p4ucGhUg33Ene6Qhksm9cY5WTRC/+/5ux1
-         P57GMHz3GDGp8AsedvAagYmkTrESWm+ar1o647YZskQr+RVxSF9lxujFVh1rncxBrAY2
-         53ew4ixXmC68d7Xs4Z/lPL+ECMYwCWywU8/n/ZjL1FNVimC7Yf/moCOwh3lVf+whibfZ
-         UsGg==
-X-Gm-Message-State: AOAM532U8poa8rtwNtd+TaX8BwtmgXnNJ/DFgIXQ2zZa2JZZ1AmLck6j
-        l8/7dOxsH6U2wRZrgMd9k/1qmw==
-X-Google-Smtp-Source: ABdhPJwaeWVE2xcq6puggeiJuqIA+QoPr7qU71EqextGBQIa1TdaDFxClpwauH1vz5rFBuw9lNccyw==
-X-Received: by 2002:adf:f942:: with SMTP id q2mr630838wrr.427.1623870540977;
-        Wed, 16 Jun 2021 12:09:00 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:60a0:f51c:af6:2dab? ([2a01:e34:ed2f:f020:60a0:f51c:af6:2dab])
-        by smtp.googlemail.com with ESMTPSA id z5sm2949798wrp.92.2021.06.16.12.08.59
+        bh=vt3aTEsK9tpfVjQasrsyiVEB11qyTSKtUnV6R1cyy/0=;
+        b=I+v4um/tGvyQECH6g1P1CY73L3JxzoX8RlZGg90qEuJr8FUl6/iGANe2yLXqmgDHuH
+         8OWrIca6KT8BN9vsWjRM3Ce9oy/Muegv/TMo1Cx82l9WJAxS+xDENLhaZBAk7rOH6Lux
+         gef6p57taVMLOBOuypOJE9Ih4iC5wUevMlLakIJKP7yhDAzsK9jrYK4Viw6K7hLT1hYa
+         gMp5CowKk3KQ0/l0robQMKYyqy+z1pScL50TM7q7lEOogkUMI5re0KY7Dm5WKf31HOpi
+         tJHJl8ARs5PrBFjxsuKzCdpqMfXoJXcy6aj6j9LWV6fOt65JBoWhtAU7R79q9oca0KHK
+         P/uQ==
+X-Gm-Message-State: AOAM530J6n5ABQPW/kDPWo1I70+Wd1xT1q2gANFmvWyToEAqR0dxee/W
+        s1xSdthD97ka/sDhw1QDyiuHvz/A6Hg=
+X-Google-Smtp-Source: ABdhPJyEWQqWdgtnCvxSFTY/TxvQw8tFKfzGAKGhmmu7M1GBM7zQyl+IGpE8zyGWt4GEAw0Tz4ODFQ==
+X-Received: by 2002:a19:7d82:: with SMTP id y124mr926404lfc.76.1623871042930;
+        Wed, 16 Jun 2021 12:17:22 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
+        by smtp.googlemail.com with ESMTPSA id u8sm409284lje.99.2021.06.16.12.17.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jun 2021 12:09:00 -0700 (PDT)
-Subject: Re: [PATCH v1 4/5] clk: tegra: Add stubs needed for compile testing
-To:     Dmitry Osipenko <digetx@gmail.com>,
+        Wed, 16 Jun 2021 12:17:22 -0700 (PDT)
+Subject: Re: [PATCH v1 2/5] soc/tegra: irq: Add stubs needed for compile
+ testing
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
 References: <20210606222817.12388-1-digetx@gmail.com>
- <20210606222817.12388-5-digetx@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <d74be172-1ef5-48f7-e1a1-de63a05f64ba@linaro.org>
-Date:   Wed, 16 Jun 2021 21:08:59 +0200
+ <20210606222817.12388-3-digetx@gmail.com>
+ <92b521c6-f3fd-4f2c-de4f-3363e0384f55@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <cb9d8a40-a64f-e37f-1487-272b2c4ac9ea@gmail.com>
+Date:   Wed, 16 Jun 2021 22:17:21 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210606222817.12388-5-digetx@gmail.com>
+In-Reply-To: <92b521c6-f3fd-4f2c-de4f-3363e0384f55@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,38 +72,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/06/2021 00:28, Dmitry Osipenko wrote:
-> Add stubs needed for compile-testing of tegra-cpuidle driver.
+16.06.2021 22:06, Daniel Lezcano пишет:
+> On 07/06/2021 00:28, Dmitry Osipenko wrote:
+>> Add stubs needed for compile-testing of tegra-cpuidle driver.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  include/soc/tegra/irq.h | 9 ++++++++-
+>>  1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/soc/tegra/irq.h b/include/soc/tegra/irq.h
+>> index 8eb11a7109e4..94539551c8c1 100644
+>> --- a/include/soc/tegra/irq.h
+>> +++ b/include/soc/tegra/irq.h
+>> @@ -6,8 +6,15 @@
+>>  #ifndef __SOC_TEGRA_IRQ_H
+>>  #define __SOC_TEGRA_IRQ_H
+>>  
+>> -#if defined(CONFIG_ARM)
+>> +#include <linux/types.h>
+>> +
+>> +#if defined(CONFIG_ARM) && defined(CONFIG_ARCH_TEGRA)
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  include/linux/clk/tegra.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> Does not CONFIG_ARCH_TEGRA depends on CONFIG_ARM ?
 > 
-> diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
-> index d128ad1570aa..9bd06d8a5436 100644
-> --- a/include/linux/clk/tegra.h
-> +++ b/include/linux/clk/tegra.h
-> @@ -42,7 +42,11 @@ struct tegra_cpu_car_ops {
->  #endif
->  };
->  
-> +#ifdef CONFIG_ARCH_TEGRA
->  extern struct tegra_cpu_car_ops *tegra_cpu_car_ops;
-> +#else
-> +static struct tegra_cpu_car_ops *tegra_cpu_car_ops __maybe_unused;
-> +#endif
+>>  bool tegra_pending_sgi(void);
 
-Why not just have __may_be_unused without the #ifdef ?
+ARM and ARM64, only ARM32 variant builds tegra_pending_sgi().
 
->  static inline void tegra_wait_cpu_in_reset(u32 cpu)
->  {
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
