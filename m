@@ -2,147 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595B73A9AEF
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 14:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8393B3A9C0A
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 15:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbhFPMuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 08:50:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:36376 "EHLO foss.arm.com"
+        id S232704AbhFPNfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 09:35:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:37476 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232403AbhFPMuO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Jun 2021 08:50:14 -0400
+        id S230197AbhFPNfS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Jun 2021 09:35:18 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 895321042;
-        Wed, 16 Jun 2021 05:48:08 -0700 (PDT)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 296883F719;
-        Wed, 16 Jun 2021 05:48:08 -0700 (PDT)
-Date:   Wed, 16 Jun 2021 13:48:06 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/3] cpufreq: CPPC: Add support for frequency
- invariance
-Message-ID: <20210616124806.GA6495@arm.com>
-References: <cover.1623825725.git.viresh.kumar@linaro.org>
- <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F400F31B;
+        Wed, 16 Jun 2021 06:33:11 -0700 (PDT)
+Received: from [10.57.9.31] (unknown [10.57.9.31])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 790243F719;
+        Wed, 16 Jun 2021 06:33:08 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] Add allowed CPU capacity knowledge to EAS
+To:     peterz@infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com,
+        dietmar.eggemann@arm.com, vincent.donnefort@arm.com,
+        Beata.Michalska@arm.com, mingo@redhat.com, juri.lelli@redhat.com,
+        rostedt@goodmis.org, segall@google.com, mgorman@suse.de,
+        bristot@redhat.com, thara.gopinath@linaro.org,
+        amit.kachhap@gmail.com, amitk@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org
+References: <20210614185815.15136-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <9e8a2c92-161d-e1f3-efd9-ac0fa4d62fd5@arm.com>
+Date:   Wed, 16 Jun 2021 14:33:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210614185815.15136-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Peter,
 
-I was looking forward to the complete removal of stop_cpu() :).
 
-On Wednesday 16 Jun 2021 at 12:18:09 (+0530), Viresh Kumar wrote:
-> The Frequency Invariance Engine (FIE) is providing a frequency scaling
-> correction factor that helps achieve more accurate load-tracking.
+On 6/14/21 7:58 PM, Lukasz Luba wrote:
+> Hi all,
 > 
-> Normally, this scaling factor can be obtained directly with the help of
-> the cpufreq drivers as they know the exact frequency the hardware is
-> running at. But that isn't the case for CPPC cpufreq driver.
+> The patch set v4 aims to add knowledge about reduced CPU capacity
+> into the Energy Model (EM) and Energy Aware Scheduler (EAS). Currently the
+> issue is that SchedUtil CPU frequency and EM frequency are not aligned,
+> when there is a CPU thermal capping. This causes an estimation error.
+> This patch set provides the information about allowed CPU capacity
+> into the EM (thanks to thermal pressure information). This improves the
+> energy estimation. More info about this mechanism can be found in the
+> patches description.
 > 
-> Another way of obtaining that is using the arch specific counter
-> support, which is already present in kernel, but that hardware is
-> optional for platforms.
+> Changelog:
+> v4:
+> - removed local variable and improved description in patch 2/3
+> - added Reviewed-by from Vincent for patch 2/3
+> - added Acked-by from Viresh for patch 1/3
+> v3 [3]:
+> - switched to 'raw' per-cpu thermal pressure instead of thermal pressure
+>    geometric series signal, since it more suited for purpose of
+>    this use case: predicting SchedUtil frequency (Vincent, Dietmar)
+> - added more comment in the patch 2/3 header for use case when thermal
+>    capping might be applied even the CPUs are not over-utilized
+>    (Dietmar)
+> - added ACK tag from Rafael for SchedUtil part
+> - added a fix patch for offline CPUs in cpufreq_cooling and per-cpu
+>    thermal_pressure missing update
+> v2 [2]:
+> - clamp the returned value from effective_cpu_util() and avoid irq
+>    util scaling issues (Quentin)
+> v1 is available at [1]
 > 
-> This patch updates the CPPC driver to register itself with the topology
-> core to provide its own implementation (cppc_scale_freq_tick()) of
-> topology_scale_freq_tick() which gets called by the scheduler on every
-> tick. Note that the arch specific counters have higher priority than
-> CPPC counters, if available, though the CPPC driver doesn't need to have
-> any special handling for that.
+> Regards,
+> Lukasz
 > 
-> On an invocation of cppc_scale_freq_tick(), we schedule an irq work
-> (since we reach here from hard-irq context), which then schedules a
-> normal work item and cppc_scale_freq_workfn() updates the per_cpu
-> arch_freq_scale variable based on the counter updates since the last
-> tick.
+> [1] https://lore.kernel.org/linux-pm/20210602135609.10867-1-lukasz.luba@arm.com/
+> [2] https://lore.kernel.org/lkml/20210604080954.13915-1-lukasz.luba@arm.com/
+> [3] https://lore.kernel.org/lkml/20210610150324.22919-1-lukasz.luba@arm.com/
 > 
-> To allow platforms to disable this CPPC counter-based frequency
-> invariance support, this is all done under CONFIG_ACPI_CPPC_CPUFREQ_FIE,
-> which is enabled by default.
+> Lukasz Luba (3):
+>    thermal: cpufreq_cooling: Update also offline CPUs per-cpu
+>      thermal_pressure
+>    sched/fair: Take thermal pressure into account while estimating energy
+>    sched/cpufreq: Consider reduced CPU capacity in energy calculation
 > 
-> This also exports sched_setattr_nocheck() as the CPPC driver can be
-> built as a module.
+>   drivers/thermal/cpufreq_cooling.c |  2 +-
+>   include/linux/energy_model.h      | 16 +++++++++++++---
+>   include/linux/sched/cpufreq.h     |  2 +-
+>   kernel/sched/cpufreq_schedutil.c  |  1 +
+>   kernel/sched/fair.c               | 13 +++++++++----
+>   5 files changed, 25 insertions(+), 9 deletions(-)
 > 
-> Cc: linux-acpi@vger.kernel.org
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/Kconfig.arm    |  10 ++
->  drivers/cpufreq/cppc_cpufreq.c | 232 ++++++++++++++++++++++++++++++---
->  include/linux/arch_topology.h  |   1 +
->  kernel/sched/core.c            |   1 +
->  4 files changed, 227 insertions(+), 17 deletions(-)
-> 
-[..]
-> +static void cppc_cpufreq_start_cpu(struct cpufreq_policy *policy,
-> +				   unsigned int cpu)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, cpu);
-> +	int ret;
-> +
-> +	cppc_fi->cpu = cpu;
-> +	cppc_fi->cpu_data = policy->driver_data;
-> +	kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-> +	init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-> +
-> +	ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
-> +	if (ret) {
-> +		pr_warn("%s: failed to read perf counters: %d\n", __func__,
-> +			ret);
-> +		return;
-> +	}
-> +
-> +	/* Register for freq-invariance */
-> +	topology_set_scale_freq_source(&cppc_sftd, cpumask_of(cpu));
-> +}
-> +
-> +static void cppc_cpufreq_stop_cpu(struct cpufreq_policy *policy,
-> +				  unsigned int cpu)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, cpu);
-> +
-> +	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpumask_of(cpu));
-> +
-> +	irq_work_sync(&cppc_fi->irq_work);
-> +	kthread_cancel_work_sync(&cppc_fi->work);
-> +}
 
-I'll only comment on this for now as I should know the rest.
+Could you take these 3 patches via your tree, please?
+I'm asking you because the fair.c has most changes
+(apart from energy_model.h) and the patches got
+ACKs from Rafael and Viresh. The patch which touches
+fair.c got Reviewed-by Vincent Guittot. I have address
+all the comment, thus, IMHO it could fly now.
 
-Let's assume we don't have these, what happens now is the following:
+Please let me know if you like me to re-base on top
+of some of your branches.
 
-1. We hotplug out the last CPU in a policy, we call the
-   .stop_cpu()/exit() function which will free the cppc_cpudata structure.
-
-   The only vulnerability is if we have a last tick on that last CPU,
-   after the above callback was called.
-
-2. When the CPU at 1. gets hotplugged back in, the cppc_fi->cpu_data is
-   stale.
-
-We do not have a problem when removing the CPPC cpufreq module as we're
-doing cppc_freq_invariance_exit() before unregistering the driver and
-freeing the data.
-
-Are 1. and 2 the only problems we have, or have I missed any?
-
-Thanks,
-Ionela.
+Regards,
+Lukasz
