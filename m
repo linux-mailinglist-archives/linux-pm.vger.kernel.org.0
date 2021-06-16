@@ -2,134 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CBD3A957D
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 11:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EC63A9593
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbhFPJFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 05:05:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:59388 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232108AbhFPJFi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Jun 2021 05:05:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F042831B;
-        Wed, 16 Jun 2021 02:03:25 -0700 (PDT)
-Received: from [10.57.9.31] (unknown [10.57.9.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6327F3F70D;
-        Wed, 16 Jun 2021 02:03:24 -0700 (PDT)
-Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
- frequencies
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     peterz@infradead.org, rjw@rjwysocki.net,
-        vincent.guittot@linaro.org, qperret@google.com,
-        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-        dietmar.eggemann@arm.com
-References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
- <1622804761-126737-4-git-send-email-vincent.donnefort@arm.com>
- <20210614072835.z2tjoaffcflry7pk@vireshk-i7>
- <20210614133522.GA34061@e120877-lin.cambridge.arm.com>
- <20210615050211.5gpx4faha6heytad@vireshk-i7>
- <20210615084418.GA167242@e120877-lin.cambridge.arm.com>
- <20210615101706.mabloqrmakeiwcf5@vireshk-i7>
- <20210615171530.GA277695@e120877-lin.cambridge.arm.com>
- <20210616073500.b5wazdssoa5djp5o@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <a4971ab0-87d7-4457-49ec-ce20106be358@arm.com>
-Date:   Wed, 16 Jun 2021 10:03:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231354AbhFPJL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 05:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231335AbhFPJLy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 05:11:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC52C06175F
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 02:09:49 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id h12so798530plf.4
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 02:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9w7ZTV6yWNrNwxmRQy6ya4uTIZcLI/zS8kXrTBt5qy8=;
+        b=iU9mcGeWG87d6JdabVeozGFoOixe9OQ1VFaqtBc++lbKGlit5i8G4ws+FP3uEVrAxF
+         d5BZrzQjVupNBRIgGX0IpWAdeLhWOcCXVgZSYVcMFQi8wD8jYfkAlSFhUawkOFAc5/7/
+         ayl2Bfa4Ot5/viPkVcFVJQcMYRWNuuG7500/EHEsP3zrM14x3/4q1Phbp5AxWIWroIy0
+         wG0lrEor9+aZSsLGgya3bnDcnhLZlqg2fpoupq5xBYTOs0dXM0Y5rHBWeLPE78C4UcBv
+         eXoMqWs8xDbQ2vjE4u805AdO8eaycDDPcjykltUeDemer2iAnWPKc4FNij+rLjPgCEWH
+         i24Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9w7ZTV6yWNrNwxmRQy6ya4uTIZcLI/zS8kXrTBt5qy8=;
+        b=FwtQe/WqpRA7umMpIQnxEVzbNORu64lAnpsGR4D2SouP/wks73f3pNGGTWEwRq4DpI
+         k8H57qEmawE/j7LmB9tA9TV+zvmLNGBPwa84lzD/3qN88QC3RAhY24lAp30/aCLuxpbK
+         xtY5Q+D5GJnJYaVe1AI4tPAi/iyk2pz6CEQRkeJK/9fF/gpl2m6c7CDuwDpaI2KEojiy
+         ui4K6NZba0Lh1Nepywljh4wXOD5UU6/ha/6vR8w0ay/xybVMKTmLTfY+PLEGfhcYRa2A
+         LXyPSKfXfolASCMhAJYFGkk9/fXACNjTeBYIpW2Y9q2gTnlamRFjkKcPx1rkEUR0Q5Vl
+         TqVQ==
+X-Gm-Message-State: AOAM531+TE2SR2wU5+8OUu5SUwRaiFuO7vnVEUBthMISDB9FuwvlZVrB
+        uCvUPKFw7FuCD10LUvFzL6QqZQ==
+X-Google-Smtp-Source: ABdhPJx8IpTTM9/g3RBknCrFkgQwBJweYVmgUVzgS9lAIGT+MWnmv8D6zokZuH9KY+LB4TYOS1hj2Q==
+X-Received: by 2002:a17:90b:18d:: with SMTP id t13mr9864460pjs.191.1623834588000;
+        Wed, 16 Jun 2021 02:09:48 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id n9sm1586855pfu.121.2021.06.16.02.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 02:09:47 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 14:39:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Viresh Kumar )" <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "andrew-sh . cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH] opp: of: Allow lazy-linking of required-opps to non genpd
+Message-ID: <20210616090945.sn337tftdcp7y7y6@vireshk-i7>
+References: <20210616053335.4181780-1-hsinyi@chromium.org>
+ <CGME20210616075555epcas1p136129544501878b4bedaf8e46f9a43dc@epcas1p1.samsung.com>
+ <20210616075548.ghp3lmjf4y6pyxoy@vireshk-i7>
+ <b9310754-2105-2a93-ecbf-513d9a80a91a@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20210616073500.b5wazdssoa5djp5o@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9310754-2105-2a93-ecbf-513d9a80a91a@samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 6/16/21 8:35 AM, Viresh Kumar wrote:
-> On 15-06-21, 18:15, Vincent Donnefort wrote:
->> On Tue, Jun 15, 2021 at 03:47:06PM +0530, Viresh Kumar wrote:
->>> The point is that I don't want cpufreq to carry this for users, we
->>> have EM today, tomorrow we may want to mark a frequency as inefficient
->>> from somewhere else. The call need to initiate from EM core.
->>
->> In the current version of this patchset, any driver can mark inefficiencies
->> without relying on the EM, just by adding the flag CPUFREQ_INEFFICIENT_FREQ in
->> cpufreq_frequency_table.
+On 16-06-21, 17:47, Chanwoo Choi wrote:
+> On 6/16/21 4:55 PM, Viresh Kumar wrote:
+> > On 16-06-21, 13:33, Hsin-Yi Wang wrote:
+> >> Don't limit required_opp_table to genpd only. One possible use case is
+> >> cpufreq based devfreq governor, which can use required-opps property to
+> >> derive devfreq from cpufreq.
+> >>
+> >> Suggested-by: Chanwoo Choi <cw00.choi@samsung.com>
+> >> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> >> ---
+> >> This is tested with the non genpd case mt8183-cci with passive
+> >> governor[1].
+> >> [1] https://patchwork.kernel.org/project/linux-mediatek/patch/1616499241-4906-2-git-send-email-andrew-sh.cheng@mediatek.com/
+> >> ---
+> >>  drivers/opp/of.c | 20 +-------------------
+> >>  1 file changed, 1 insertion(+), 19 deletions(-)
+> >>
+> >> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> >> index aa75a1caf08a3..9573facce53a5 100644
+> >> --- a/drivers/opp/of.c
+> >> +++ b/drivers/opp/of.c
+> >> @@ -201,17 +201,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+> >>  			lazy = true;
+> >>  			continue;
+> >>  		}
+> >> -
+> >> -		/*
+> >> -		 * We only support genpd's OPPs in the "required-opps" for now,
+> >> -		 * as we don't know how much about other cases. Error out if the
+> >> -		 * required OPP doesn't belong to a genpd.
+> >> -		 */
+> >> -		if (!required_opp_tables[i]->is_genpd) {
+> >> -			dev_err(dev, "required-opp doesn't belong to genpd: %pOF\n",
+> >> -				required_np);
+> >> -			goto free_required_tables;
+> >> -		}
+> >>  	}
+> >>  
+> >>  	/* Let's do the linking later on */
+> >> @@ -379,13 +368,6 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
+> >>  	struct dev_pm_opp *opp;
+> >>  	int i, ret;
+> >>  
+> >> -	/*
+> >> -	 * We only support genpd's OPPs in the "required-opps" for now,
+> >> -	 * as we don't know much about other cases.
+> >> -	 */
+> >> -	if (!new_table->is_genpd)
+> >> -		return;
+> >> -
+> >>  	mutex_lock(&opp_table_lock);
+> >>  
+> >>  	list_for_each_entry_safe(opp_table, temp, &lazy_opp_tables, lazy) {
+> >> @@ -873,7 +855,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+> >>  		return ERR_PTR(-ENOMEM);
+> >>  
+> >>  	ret = _read_opp_key(new_opp, opp_table, np, &rate_not_available);
+> >> -	if (ret < 0 && !opp_table->is_genpd) {
+> >> +	if (ret < 0) {
+> >>  		dev_err(dev, "%s: opp key field not found\n", __func__);
+> >>  		goto free_opp;
+> >>  	}
+> > 
+> > Plus this and few changes to commit log.
+> > 
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > index e366218d6736..b335c077f215 100644
+> > --- a/drivers/opp/core.c
+> > +++ b/drivers/opp/core.c
+> > @@ -893,6 +893,16 @@ static int _set_required_opps(struct device *dev,
+> >         if (!required_opp_tables)
+> >                 return 0;
+> >  
+> > +       /*
+> > +        * We only support genpd's OPPs in the "required-opps" for now, as we
+> > +        * don't know much about other use cases. Error out if the required OPP
+> > +        * doesn't belong to a genpd.
+> > +        */
+> > +       if (unlikely(!required_opp_tables[0]->is_genpd)) {
+> > +               dev_err(dev, "required-opps don't belong to a genpd\n");
+> > +               return -ENOENT;
+> > +       }
+> > +
 > 
-> Yeah, I wasn't really talking about cpufreq drivers but external
-> entities, like EM.
-> 
->> Populating cpufreq_frequency_table from the EM in cpufreq was just an attempt to
->> a less intrusive set of changes.
->   
->>> And this isn't a cpufreq only thing, but is going to be generic along
->>> with other device types.
->>>
->>> This is exactly why I asked you earlier to play with OPP core for
->>> this. That is the central place for data for all such users.
->>>
->>> If this information is present at the OPP table (somehow), then we can
->>> just fix dev_pm_opp_init_cpufreq_table() to set this for cpufreq core
->>> as well.
->>>
->>> This is the sequence that is followed in cpufreq drivers today:
->>>
->>> dev_pm_opp_of_cpumask_add_table();
->>> dev_pm_opp_init_cpufreq_table();
->>> dev_pm_opp_of_register_em();
->>>
->>> What about changing this to:
->>>
->>> dev_pm_opp_of_cpumask_add_table();
->>>
->>> /* Mark OPPs are inefficient here */
->>> dev_pm_opp_of_register_em();
->>>
->>> /* This should automatically pick the right set */
->>> dev_pm_opp_init_cpufreq_table();
->>>
->>> Will this break anything ?
->>
->> Probably not, but with this approach I'll have to modify all the cpufreq drivers
->> that are registering the EM, which I tried to avoid as much as possible so far.
-> 
-> Hmm. You are right as well, but I just want to get the right API in
-> place which lives a longer life :)
-> 
->> But if we sum-up:
->>
->> 1. em_dev_register_perf_domain() find inefficiencies
->>
->> 2. dev_pm_opp_of_register_em() apply EM inefficiencies into the OPP structures
-> 
-> I was looking to add a new API to the OPP core
-> (dev_pm_opp_mark_inefficient()) to mark an OPP inefficient. And then
-> get it called from em_create_perf_table().
-> 
-> But I now see that EM core rather has callbacks to call into and with
+> If you add this checking statement, I think that 
+> when using dev_pm_opp_set_rate with required-opp property, it will be failed.
 
-Exactly, that's what I was trying to stress.
+Yes, that is exactly what I am trying to do here. Hsin already
+confirmed that you guys won't use this API, isn't ?
 
-> that I think you should rather add another callback
-> (.mark_inefficient()) in struct em_data_callback, to set inefficient
-> frequencies.
+The point here is that the _set_required_opps() function only updates
+the performance state of genpds today. So it won't work for you guys
+anyway.
 
-I disagree. That's why I prefer Vincent's approach in this patch set.
-This proposal would cause more mess.
-
-Vincent proposed a small and clean modification. This modification
-can be done easily in this cpufreq place because we have EM in
-device cpu struct.
-
-Let's don't over-engineering. The inefficient information is only valid
-for schedutil, thus IMHO it can live like this patch set made - in the
-cpufreq table.
-
-Compare the v1 (I still don't understand why it was blocked), this v3
-and your proposal.
-
+-- 
+viresh
