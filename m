@@ -2,160 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 538903A9237
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 08:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC643A9250
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 08:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbhFPG2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 02:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbhFPG2X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 02:28:23 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD6EC061574
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:26:17 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i17so1355142ilj.11
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5xLP1A2Y8bJVbnozl56zTBiPTdrZwPIJB0fz7axLbRs=;
-        b=XBzVx1c1DLb6ZOHvOj4si5MZ9wDSKBbbO3iW9lLx3RU72t6g0mNJFWOjhv/j8/ARKv
-         NPeMHHhMA082I3PS03WSAbNp8MfSElP3XEmycpm2qaSJPz9zcKS9G4eJ3KrdRThMDu4R
-         lYIiRQw6BRGRn4FPkmUAcdlpAYkn1J9gn5kxQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5xLP1A2Y8bJVbnozl56zTBiPTdrZwPIJB0fz7axLbRs=;
-        b=QxzmE98s2Yua5URcLL9/H1J6tbgL8NpudFHt5j4DGSHwiu0VoSrAEzR5FfMi+veYFn
-         2vnuKoEgJhnbYe0bMlWrj6Bf2qFRykMURA6XPwSuL+/35rarOQinOLWca4TPw9+a2ZRg
-         ES9FCMQiAau/r5XuN+NFzukHaqjmpflJuKQGnfAzjkxqH8lZwQAgNe2TawZDzbBupO3P
-         KJd50PQMLatxuAQQ6IlFitCKcZD9Z/Ni0LDgAkq+7f7nBDMH7MroOcoxJoleQARAISDn
-         i4jPyXG0BkhVPVz5/S1YhfvktF3VCf9y18pkY/h5hHQooFpKYwNwI84DJZzmPTwXFyFj
-         fwnA==
-X-Gm-Message-State: AOAM5323vvKE68h33LammG/2G/oP6kA5UO2ld35wrlQ/BxVfhAX1VRBI
-        Rchmbtx30d3xSyWbarELhjQ3lHzuvDEbLQ7umPs4vg==
-X-Google-Smtp-Source: ABdhPJxsx/vchpXbeOAmUGWL8dNLaRCEg6HhvuuT5yRGw7Ge6UBtGB2ucC62AXaNaXjHKLy3wLbTxs2UUi788nCxeKI=
-X-Received: by 2002:a92:7b07:: with SMTP id w7mr2444984ilc.308.1623824776960;
- Tue, 15 Jun 2021 23:26:16 -0700 (PDT)
+        id S231716AbhFPG35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 02:29:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231391AbhFPG3x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:29:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE9C5613BF;
+        Wed, 16 Jun 2021 06:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623824867;
+        bh=HFXY5XjspzH1kzu2GrbFUWzI5z4ecY6jF7OZRuh585A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i8M85VxHQbZ50V8fMJseWf0vWBO55h7qx/5DDF1AEmTSMWhUjzMvzzmjKrtF8AKcR
+         jwPUkMGj6skaSwKc3Nb/ClX/mf9rqCBl4EoOzg6hiQVc5LWnY4qtyfrSEJ7VphRRWH
+         KduL0CAw/YrDU6ESOYozK0J7Mwh6gXRMtkihQq/zF3LS+B2iz9xXROxs8p6G/3birc
+         rMWLHc4+eJCtsbE9xfUQ8QL3jC1cqZQSUtH6lpM1ZAmA6n8MNE4ItYkhgEns7gOcfF
+         tDqXX7qE2sdpEWYSQWyUHfCyD8Rd8Zrw4MW3EN7CUxyupE2Yrivwa8Z0A4F/HN3xgi
+         IJ4MvA1+etqjg==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1ltP1d-004kIJ-Rv; Wed, 16 Jun 2021 08:27:45 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v2 00/29] docs: avoid using ReST :doc:`foo` tag
+Date:   Wed, 16 Jun 2021 08:27:15 +0200
+Message-Id: <cover.1623824363.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210616053335.4181780-1-hsinyi@chromium.org> <20210616055841.4m7y6nxnxbgw5rzi@vireshk-i7>
-In-Reply-To: <20210616055841.4m7y6nxnxbgw5rzi@vireshk-i7>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 16 Jun 2021 14:25:51 +0800
-Message-ID: <CAJMQK-h2R5s6rWWjr1YHO1jqZdtBkT3LYjcVg4QNMUuXJSiMTg@mail.gmail.com>
-Subject: Re: [PATCH] opp: of: Allow lazy-linking of required-opps to non genpd
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Viresh Kumar )" <vireshk@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "andrew-sh . cheng" <andrew-sh.cheng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 1:58 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 16-06-21, 13:33, Hsin-Yi Wang wrote:
-> > Don't limit required_opp_table to genpd only. One possible use case is
-> > cpufreq based devfreq governor, which can use required-opps property to
-> > derive devfreq from cpufreq.
-> >
-> > Suggested-by: Chanwoo Choi <cw00.choi@samsung.com>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > ---
-> > This is tested with the non genpd case mt8183-cci with passive
-> > governor[1].
-> > [1] https://patchwork.kernel.org/project/linux-mediatek/patch/1616499241-4906-2-git-send-email-andrew-sh.cheng@mediatek.com/
-> > ---
-> >  drivers/opp/of.c | 20 +-------------------
-> >  1 file changed, 1 insertion(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> > index aa75a1caf08a3..9573facce53a5 100644
-> > --- a/drivers/opp/of.c
-> > +++ b/drivers/opp/of.c
-> > @@ -201,17 +201,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
-> >                       lazy = true;
-> >                       continue;
-> >               }
-> > -
-> > -             /*
-> > -              * We only support genpd's OPPs in the "required-opps" for now,
-> > -              * as we don't know how much about other cases. Error out if the
-> > -              * required OPP doesn't belong to a genpd.
-> > -              */
-> > -             if (!required_opp_tables[i]->is_genpd) {
-> > -                     dev_err(dev, "required-opp doesn't belong to genpd: %pOF\n",
-> > -                             required_np);
-> > -                     goto free_required_tables;
-> > -             }
-> >       }
-> >
-> >       /* Let's do the linking later on */
-> > @@ -379,13 +368,6 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
-> >       struct dev_pm_opp *opp;
-> >       int i, ret;
-> >
-> > -     /*
-> > -      * We only support genpd's OPPs in the "required-opps" for now,
-> > -      * as we don't know much about other cases.
-> > -      */
-> > -     if (!new_table->is_genpd)
-> > -             return;
-> > -
-> >       mutex_lock(&opp_table_lock);
-> >
-> >       list_for_each_entry_safe(opp_table, temp, &lazy_opp_tables, lazy) {
-> > @@ -873,7 +855,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
-> >               return ERR_PTR(-ENOMEM);
-> >
-> >       ret = _read_opp_key(new_opp, opp_table, np, &rate_not_available);
-> > -     if (ret < 0 && !opp_table->is_genpd) {
-> > +     if (ret < 0) {
-> >               dev_err(dev, "%s: opp key field not found\n", __func__);
-> >               goto free_opp;
-> >       }
->
-> How are you setting the required OPPs ? I mean when someone tries to
-> change frequency of a device which has some required-opps, who is
-> configuring those required OPPs ?
->
-When cpufreq changes, the (cpufreq based) passive governor will
-calculate a target devfreq based on that, and the device governor
-(mt8183-cci-devfreq) will change the actual opp of the device.
+(Maintainers bcc, to avoid too many recipient troubles)
 
-The required-opp is set in the cpufreq table:
+As discussed at:
+	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
 
-cpufreq_opp_table: opp_table0 {
-    compatible = "operating-points-v2";
-    opp-shared;
-    ...
-    opp0_01 {
-        opp-hz = /bits/ 64 <910000000>;
-        opp-microvolt = <687500>;
-        required-opps = <&opp2_01>;
-    };
-    ...
-};
+It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+automarkup.py extension should handle it automatically, on most cases.
 
-devfreq_opp_table: opp_table2 {
-    compatible = "operating-points-v2";
-    opp-shared;
-    ...
-    opp2_01: opp-338000000 {
-        opp-hz = /bits/ 64 <338000000>;
-        opp-microvolt = <687500>;
-    };
-    ...
-};
+There are a couple of exceptions to this rule:
+
+1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+
+On this series:
+
+Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+as there it uses :file:`foo` to refer to some Documentation/ files;
+
+Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+into a list, carefully avoiding the 
+
+The remaining patches convert the other occurrences via a replace script.
+They were manually edited, in order to honour 80-columns where possible.
+
+This series based on docs-next branch. In order to avoid merge conflicts,
+I rebased it internally against yesterday's linux-next, dropping a patch
+and a hunk that would have caused conflicts there.
+
+I'll re-send the remaining patch (plus another patch) with conflicting
+changes, together with any other doc:`filename` reference that might
+still be upstream by 5.14-rc1.
+
+---
+
+v2:
+   - dropped media patches (as I merged via my own tree);
+   - removed one patch that would conflict at linux-next (adm1177.rst);
+   - removed one hunk fron kunit patch that would also conflict at
+     linux-next.
+
+Mauro Carvalho Chehab (29):
+  docs: devices.rst: better reference documentation docs
+  docs: dev-tools: kunit: don't use a table for docs name
+  docs: admin-guide: pm: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+  docs: block: biodoc.rst: avoid using ReST :doc:`foo` markup
+  docs: bpf: bpf_lsm.rst: avoid using ReST :doc:`foo` markup
+  docs: core-api: avoid using ReST :doc:`foo` markup
+  docs: dev-tools: testing-overview.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+  docs: devicetree: bindings: submitting-patches.rst: avoid using ReST
+    :doc:`foo` markup
+  docs: doc-guide: avoid using ReST :doc:`foo` markup
+  docs: driver-api: avoid using ReST :doc:`foo` markup
+  docs: driver-api: gpio: using-gpio.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: driver-api: surface_aggregator: avoid using ReST :doc:`foo`
+    markup
+  docs: driver-api: usb: avoid using ReST :doc:`foo` markup
+  docs: firmware-guide: acpi: avoid using ReST :doc:`foo` markup
+  docs: i2c: avoid using ReST :doc:`foo` markup
+  docs: kernel-hacking: hacking.rst: avoid using ReST :doc:`foo` markup
+  docs: networking: devlink: avoid using ReST :doc:`foo` markup
+  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: PCI: pci.rst: avoid using ReST :doc:`foo` markup
+  docs: process: submitting-patches.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: security: landlock.rst: avoid using ReST :doc:`foo` markup
+  docs: trace: coresight: coresight.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: trace: ftrace.rst: avoid using ReST :doc:`foo` markup
+  docs: userspace-api: landlock.rst: avoid using ReST :doc:`foo` markup
+  docs: virt: kvm: s390-pv-boot.rst: avoid using ReST :doc:`foo` markup
+  docs: x86: avoid using ReST :doc:`foo` markup
+
+ .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+ Documentation/PCI/pci.rst                     |  6 +--
+ .../special-register-buffer-data-sampling.rst |  3 +-
+ Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+ Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+ Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+ Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+ Documentation/block/biodoc.rst                |  2 +-
+ Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+ .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+ Documentation/core-api/dma-api.rst            |  5 ++-
+ Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+ Documentation/core-api/index.rst              |  4 +-
+ Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+ Documentation/dev-tools/kunit/faq.rst         |  2 +-
+ Documentation/dev-tools/kunit/index.rst       | 14 +++----
+ Documentation/dev-tools/kunit/start.rst       |  4 +-
+ Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+ Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+ Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+ .../bindings/submitting-patches.rst           | 11 +++---
+ Documentation/doc-guide/contributing.rst      |  8 ++--
+ Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+ Documentation/driver-api/ioctl.rst            |  2 +-
+ Documentation/driver-api/pm/devices.rst       |  8 ++--
+ .../surface_aggregator/clients/index.rst      |  3 +-
+ .../surface_aggregator/internal.rst           | 15 ++++----
+ .../surface_aggregator/overview.rst           |  6 ++-
+ Documentation/driver-api/usb/dma.rst          |  6 +--
+ .../acpi/dsd/data-node-references.rst         |  3 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+ .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+ Documentation/i2c/instantiating-devices.rst   |  2 +-
+ Documentation/i2c/old-module-parameters.rst   |  3 +-
+ Documentation/i2c/smbus-protocol.rst          |  4 +-
+ Documentation/kernel-hacking/hacking.rst      |  4 +-
+ .../networking/devlink/devlink-region.rst     |  2 +-
+ .../networking/devlink/devlink-trap.rst       |  4 +-
+ Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+ Documentation/security/landlock.rst           |  3 +-
+ Documentation/trace/coresight/coresight.rst   |  8 ++--
+ Documentation/trace/ftrace.rst                |  2 +-
+ Documentation/userspace-api/landlock.rst      | 11 +++---
+ Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+ Documentation/x86/boot.rst                    |  4 +-
+ Documentation/x86/mtrr.rst                    |  2 +-
+ 46 files changed, 171 insertions(+), 147 deletions(-)
+
+-- 
+2.31.1
 
 
-
-> --
-> viresh
