@@ -2,237 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB463A8B66
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jun 2021 23:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC793A8F09
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 04:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbhFOVxS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Jun 2021 17:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S231494AbhFPCwy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Jun 2021 22:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbhFOVxR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 17:53:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51961C061574;
-        Tue, 15 Jun 2021 14:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=N7GqmOX/LrLVjhMA+EGbHb8euLArRMk+/0HSOfKlkms=; b=EYhLqcYbLbuGDX2J4p1lfl4xus
-        1R6WpuzXS1jERG1BFYXYI6Cshp6bERYc2+/1DMJj7EnEM1aKRkI1NwyGU/MKV5GqW8UgMQiuCX2vH
-        e1vjwiuAeWmGEzFIROLjnTUNFjvQSJ3N/E4s9pxSaOe8+Sfu7i8TX1WR7gqNcWbIznRZ/rLSngjUC
-        E1R2CHViHRzY5y3DvRWMK8WE26Dnx+yDC2kVSWW3geZ+Q8HFKCFykqtI4/ps+yBuXR9BCo93VavXc
-        NSMnG/ridpr9iiIfUJrS9wQ/seTzpN3wYakA+z4MnFn5uGyx88mCHUcyI4WAm7RgRVkbeP5eZb/1n
-        dkYOVQ1A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ltGwh-007Hsf-5C; Tue, 15 Jun 2021 21:50:11 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 385F3982227; Tue, 15 Jun 2021 23:50:05 +0200 (CEST)
-Date:   Tue, 15 Jun 2021 23:50:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] freezer,sched: Rewrite core freezer logic
-Message-ID: <20210615215005.GD4272@worktop.programming.kicks-ass.net>
-References: <YMMijNqaLDbS3sIv@hirez.programming.kicks-ass.net>
- <20210614154246.GB13677@redhat.com>
- <20210614161221.GC68749@worktop.programming.kicks-ass.net>
- <20210614165422.GC13677@redhat.com>
- <20210614183801.GE68749@worktop.programming.kicks-ass.net>
- <20210615154539.GA30333@redhat.com>
+        with ESMTP id S231967AbhFPCwx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Jun 2021 22:52:53 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E9EC061767
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 19:50:47 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id r19so846638qvw.5
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 19:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4WFQbb2V5zS4ZcwvanZqqRP8ujMtDAGcUorwM6R/paU=;
+        b=aU7UShi7TZ4Wge/ZEmrVVSVUpctNK7g7onlswiQ9Aaj1TwwPi0tz/Kv4Bg6o/if6I7
+         VNr1rRD/syrBM2rNBEEaRrivvt3MLYXt0KpJfuUChLp8qsUpR55/dGDTJ7C0eLl6ywBd
+         6BDzuzNRV67kPH2tZ+7Q4RpIj9SqR9hXvtq+SnaWO8hrTXHcUUW+RooMRLC6cXO86arA
+         CqGG1ggddJMrMUhYCRCPxc+owtOTLckbozQVR8ABQYd7Zv9Q/eXpmYnjV7d7thNHkXpo
+         b+4mx2HOz63z3kORwTJcTL0U7fVk+Vl/vFTRWIQxGAZHzlW4mLE7/Ju2VbTFmuqgB/CE
+         0sfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4WFQbb2V5zS4ZcwvanZqqRP8ujMtDAGcUorwM6R/paU=;
+        b=lgLRmZk6tedUsG3jkG/x3cuG7msBBJ/3fd8H0HyTXSk4dxq6ZjfKmm4beZII3m7bdD
+         P0LXI+s8EQ6SQd7SVJS8hdd59k16QY2eM1ILicylkiV3xq1UA3fTfncJ2og/CVz5E6u7
+         JtCmn6MgDH71f7Ex/BNashzGVOtdJdb9dDr73n9MOIv7fhtTCgs+/hiv/txOJKSDlceg
+         J1Gk3FE7J4/nNBYTSV28NxQ+e4zugMfQNNPfqZdUqpa/jz52+g9NiGy0HVfXaz8/gPpp
+         sYiEJe+mh7jCgj3JYbTRItZ08zzSG8Y/eg6NYXBO+hoy1I2xCMOhT4KYJtBL+KFMhncP
+         Rntg==
+X-Gm-Message-State: AOAM5309bcd0fPL2sB6XGriiIAYjgmmxtpBKGlKNzg/YycqePudN7pNp
+        Vphl0rdonnnucE2xhkxHZ/lQe/GrKmAPag==
+X-Google-Smtp-Source: ABdhPJyiOd7uoGzh4fh4IdSnwRsPHSc4NAugWSCIf4tijB028PyutbM7mt4Fdgv05raplBUDkMGemQ==
+X-Received: by 2002:a05:6214:8f1:: with SMTP id dr17mr8597926qvb.42.1623811845774;
+        Tue, 15 Jun 2021 19:50:45 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id w2sm710034qkf.88.2021.06.15.19.50.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 19:50:45 -0700 (PDT)
+Subject: Re: [PATCH v3 4/7] thermal/drivers/tegra: Add driver for Tegra30
+ thermal sensor
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210529170955.32574-1-digetx@gmail.com>
+ <20210529170955.32574-5-digetx@gmail.com>
+ <6f2b6290-095a-bd39-c160-1616a0ff89b1@linaro.org>
+ <20210615102626.dja3agclwzxv2sj4@vireshk-i7>
+ <595f5e53-b872-bcc6-e886-ed225e26e9fe@gmail.com>
+ <fbdc3b56-4465-6d3e-74db-1d5082813b9c@linaro.org>
+ <4c7b23c4-cf6a-0942-5250-63515be4a219@gmail.com>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <545974aa-bb0f-169b-6f31-6e8c2461343f@linaro.org>
+Date:   Tue, 15 Jun 2021 22:50:43 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210615154539.GA30333@redhat.com>
+In-Reply-To: <4c7b23c4-cf6a-0942-5250-63515be4a219@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 05:45:39PM +0200, Oleg Nesterov wrote:
-> On 06/14, Peter Zijlstra wrote:
-> >
-> > One more thing; if I add additional state bits to preserve
-> > __TASK_{TRACED,STOPPED}, then I need to figure out at thaw time if we've
-> > missed a wakeup or not.
-> >
-> > Do we have sufficient state for that? If so, don't we then also not have
-> > sufficient state to tell if a task should've been TRACED/STOPPED in the
-> > first place?
+
+
+On 6/15/21 3:32 PM, Dmitry Osipenko wrote:
+> 15.06.2021 19:18, Daniel Lezcano пишет:
+>> On 15/06/2021 15:01, Dmitry Osipenko wrote:
+>>> 15.06.2021 13:26, Viresh Kumar пишет:
+>>>> On 15-06-21, 12:03, Daniel Lezcano wrote:
+>>>>>
+>>>>> [Cc Viresh]
+>>>>>
+>>>>> On 29/05/2021 19:09, Dmitry Osipenko wrote:
+>>>>>> All NVIDIA Tegra30 SoCs have a two-channel on-chip sensor unit which
+>>>>>> monitors temperature and voltage of the SoC. Sensors control CPU frequency
+>>>>>> throttling, which is activated by hardware once preprogrammed temperature
+>>>>>> level is breached, they also send signal to Power Management controller to
+>>>>>> perform emergency shutdown on a critical overheat of the SoC die. Add
+>>>>>> driver for the Tegra30 TSENSOR module, exposing it as a thermal sensor
+>>>>>> and a cooling device.
+>>>>>
+>>>>> IMO it does not make sense to expose the hardware throttling mechanism
+>>>>> as a cooling device because it is not usable anywhere from the thermal
+>>>>> framework.
+>>>>>
+>>>>> Moreover, that will collide with the thermal / cpufreq framework
+>>>>> mitigation (hardware sets the frequency but the software thinks the freq
+>>>>> is different), right ?
+>>>
+>>> H/w mitigation is additional and should be transparent to the software
+>>> mitigation. The software mitigation is much more flexible, but it has
+>>> latency. Software also could crash and hang.
+>>>
+>>> Hardware mitigation doesn't have latency and it will continue to work
+>>> regardless of the software state.
+>>
+>> Yes, I agree. Both solutions have their pros and cons. However, I don't
+>> think they can co-exist sanely.
+>>
+>>> The CCF driver is aware about the h/w cooling status [1], hence software
+>>> sees the actual frequency.
+>>>
+>>> [1]
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit?id=344d5df34f5abd468267daa98f041abf90b2f660
+>>
+>> Ah interesting, thanks for the pointer.
+>>
+>> What I'm worried about is the consistency with cpufreq.
+>>
+>> Probably cpufreq_update_limits() should be called from the interrupt
+>> handler.
 > 
-> Not sure I understand you, probably not, but I think the answer is "no" ;)
+> IIUC, the cpufreq already should be prepared for the case where firmware
+> may override frequency. Viresh, could you please clarify what are the
+> possible implications of the frequency overriding?
+> 
+>>>> I am not even sure what the cooling device is doing here:
+>>>>
+>>>> tegra_tsensor_set_cur_state() is not implemented and it says hardware
+>>>> changed it by itself. What is the benefit you are getting out of the
+>>>> cooling device here ?
+>>>
+>>> It allows userspace to check whether hardware cooling is active via the
+>>> cooling_device sysfs. Otherwise we don't have ability to check whether
+>>> h/w cooling is active, I think it's a useful information. It's also
+>>> interesting to see the cooling_device stats, showing how many times h/w
+>>> mitigation was active.
+>>
+>> Actually the stats are for software mitigation. For the driver, create a
+>> debugfs entry like what do the other drivers or a module parameter with
+>> the stats.
+> 
+> Okay
+> 
+>>>>> The hardware limiter should let know the cpufreq framework about the
+>>>>> frequency change.
+>>>>>
+>>>>> 	https://lkml.org/lkml/2021/6/8/1792
+>>>>>
+>>>>> May be post the sensor without the hw limiter for now and address that
+>>>>> in a separate series ?
+>>>>
+>>>
+>>> I wasn't aware about existence of the thermal pressure, thank you for
+>>> pointing at it. At a quick glance it should be possible to benefit from
+>>> the information about the additional pressure.
+>>>
+>>> Seems the current thermal pressure API assumes that there is only one
+>>> user of the API. So it's impossible to aggregate the pressure from
+>>> different sources, like software cpufreq pressure + h/w freq pressure.
+>>> Correct? If yes, then please let me know yours thoughts about the best
+>>> approach of supporting the aggregation.
 
-I was thinking something like the below, such that we can then write
-something like:
+Hi,
 
-void __thaw_special(struct task_struct *p)
-{
-	spin_lock(&t->sighand->siglock);
+Thermal pressure is letting scheduler know that the max capacity 
+available for a cpu to schedule tasks is reduced due to a thermal event.
+So you cannot have a h/w thermal pressure and s/w thermal pressure. 
+There is eventually only one capping applied at h/w level and the 
+frequency corresponding to this capping should be used for thermal pressure.
 
-	if (p->ptrace) {
-		unsigned int state = __TASK_TRACED;
+Ideally you should not be having both s/w and h/w trying to throttle at 
+the same time. Why is this a scenario and what prevents you from 
+disabling s/w throttling when h/w throttling is enabled. Now if there 
+has to a aggregation for whatever reason this should be done at the 
+thermal driver level and passed to scheduler.
 
-		if (!(p->ptrace & PT_STOPPED))
-			goto unlock;
+>>
+>> That is a good question. IMO, first step would be to call
+>> cpufreq_update_limits().
+> 
+> Right
+> 
+>> [ Cc Thara who implemented the thermal pressure ]
+>>
+>> May be Thara has an idea about how to aggregate both? There is another
+>> series floating around with hardware limiter [1] and the same problematic.
+>>
+>>   [1] https://lkml.org/lkml/2021/6/8/1791
+> 
+> Thanks, it indeed looks similar.
+> 
+> I guess the common thermal pressure update code could be moved out into
+> a new special cpufreq thermal QoS handler (policy->thermal_constraints),
+> where handler will select the frequency constraint and set up the
+> pressure accordingly. So there won't be any races in the code.
+> 
+It was a conscious decision to keep thermal pressure update out of qos 
+max freq update because there are platforms that don't use the qos 
+framework. For eg acpi uses cpufreq_update_policy.
+But you are right. We have two platforms now applying h/w throttling and 
+cpufreq_cooling applying s/w throttling. So it does make sense to have 
+one api doing all the computation to update thermal pressure. I am not 
+sure how exactly/where exactly this will reside.
 
-		if (p->ptrace & PT_STOPPED_FATAL) {
-			state |= TASK_WAKEKILL;
-			if (__fatal_signal_pending(p))
-				goto unlock;
-		}
+So for starters, I think you should replicate the update of thermal 
+pressure in your h/w driver when you know that h/w is 
+throttling/throttled the frequency. You can refer to cpufreq_cooling.c 
+to see how it is done.
 
-		set_special_state(state);
+Moving to a common api can be done as a separate patch series.
 
-	} else if ((p->jobctl & JOBCTL_STOP_PENDING) &&
-		   !__fatal_signal_pending(p)) {
-
-		set_special_state(TASK_STOPPED);
-	}
-
-unlock:
-	spin_unlock(&t->sighand->siglock);
-}
-
-
-
----
-diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
-index b5ebf6c01292..2123d6543125 100644
---- a/include/linux/ptrace.h
-+++ b/include/linux/ptrace.h
-@@ -28,30 +28,36 @@ extern int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
-  * flags.  When the a task is stopped the ptracer owns task->ptrace.
-  */
- 
--#define PT_SEIZED	0x00010000	/* SEIZE used, enable new behavior */
--#define PT_PTRACED	0x00000001
--#define PT_DTRACE	0x00000002	/* delayed trace (used on m68k, i386) */
-+#define PT_PTRACED	0x00000001						// 0x00000001
-+#define PT_DTRACE	0x00000002 /* delayed trace (used on m68k, i386) */	// 0x00000002
- 
- #define PT_OPT_FLAG_SHIFT	3
- /* PT_TRACE_* event enable flags */
- #define PT_EVENT_FLAG(event)	(1 << (PT_OPT_FLAG_SHIFT + (event)))
--#define PT_TRACESYSGOOD		PT_EVENT_FLAG(0)
--#define PT_TRACE_FORK		PT_EVENT_FLAG(PTRACE_EVENT_FORK)
--#define PT_TRACE_VFORK		PT_EVENT_FLAG(PTRACE_EVENT_VFORK)
--#define PT_TRACE_CLONE		PT_EVENT_FLAG(PTRACE_EVENT_CLONE)
--#define PT_TRACE_EXEC		PT_EVENT_FLAG(PTRACE_EVENT_EXEC)
--#define PT_TRACE_VFORK_DONE	PT_EVENT_FLAG(PTRACE_EVENT_VFORK_DONE)
--#define PT_TRACE_EXIT		PT_EVENT_FLAG(PTRACE_EVENT_EXIT)
--#define PT_TRACE_SECCOMP	PT_EVENT_FLAG(PTRACE_EVENT_SECCOMP)
--
--#define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
--#define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
-+
-+#define PT_TRACESYSGOOD		PT_EVENT_FLAG(0)			        // 0x00000008
-+#define PT_TRACE_FORK		PT_EVENT_FLAG(PTRACE_EVENT_FORK)	        // 0x00000010
-+#define PT_TRACE_VFORK		PT_EVENT_FLAG(PTRACE_EVENT_VFORK)	        // 0x00000020
-+#define PT_TRACE_CLONE		PT_EVENT_FLAG(PTRACE_EVENT_CLONE)	        // 0x00000040
-+#define PT_TRACE_EXEC		PT_EVENT_FLAG(PTRACE_EVENT_EXEC)	        // 0x00000080
-+#define PT_TRACE_VFORK_DONE	PT_EVENT_FLAG(PTRACE_EVENT_VFORK_DONE)	        // 0x00000100
-+#define PT_TRACE_EXIT		PT_EVENT_FLAG(PTRACE_EVENT_EXIT)	        // 0x00000200
-+#define PT_TRACE_SECCOMP	PT_EVENT_FLAG(PTRACE_EVENT_SECCOMP)	        // 0x00000400
-+
-+#define PT_SEIZED		0x00010000 /* SEIZE used, enable new behavior */// 0x00010000
-+#define PT_STOPPED		0x00020000					// 0x00020000
-+#define PT_STOPPED_FATAL	0x00040000					// 0x00040000
-+
-+#define PT_STOPPED_MASK		(PT_STOPPED|PT_STOPPED_FATAL)
-+
-+#define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)	// 0x00800000
-+#define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT) // 0x01000000
- 
- /* single stepping state bits (used on ARM and PA-RISC) */
- #define PT_SINGLESTEP_BIT	31
--#define PT_SINGLESTEP		(1<<PT_SINGLESTEP_BIT)
-+#define PT_SINGLESTEP		(1<<PT_SINGLESTEP_BIT)				// 0x80000000
- #define PT_BLOCKSTEP_BIT	30
--#define PT_BLOCKSTEP		(1<<PT_BLOCKSTEP_BIT)
-+#define PT_BLOCKSTEP		(1<<PT_BLOCKSTEP_BIT)				// 0x40000000
- 
- extern long arch_ptrace(struct task_struct *child, long request,
- 			unsigned long addr, unsigned long data);
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 0d7fec79d28f..0cf806030bfd 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -424,6 +424,8 @@ static inline void signal_wake_up(struct task_struct *t, bool resume)
- }
- static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
- {
-+	if (resume)
-+		t->ptrace &= ~PT_STOPPED_MASK;
- 	signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
- }
- 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 2997ca600d18..4fc4e1f91ecd 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -197,6 +197,8 @@ static bool ptrace_freeze_traced(struct task_struct *task)
- 	spin_lock_irq(&task->sighand->siglock);
- 	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
- 	    !__fatal_signal_pending(task)) {
-+		task->ptrace &= ~PT_STOPPED_MASK;
-+		task->ptrace |= PT_STOPPED;
- 		task->state = __TASK_TRACED;
- 		ret = true;
- 	}
-@@ -218,10 +220,13 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
- 	 */
- 	spin_lock_irq(&task->sighand->siglock);
- 	if (task->state == __TASK_TRACED) {
--		if (__fatal_signal_pending(task))
-+		if (__fatal_signal_pending(task)) {
-+			task->ptrace &= ~PT_STOPPED_MASK;
- 			wake_up_state(task, __TASK_TRACED);
--		else
-+		} else {
-+			task->ptrace |= PT_STOPPED_MASK;
- 			task->state = TASK_TRACED;
-+		}
- 	}
- 	spin_unlock_irq(&task->sighand->siglock);
- }
-@@ -835,8 +840,6 @@ static long ptrace_get_rseq_configuration(struct task_struct *task,
- static int ptrace_resume(struct task_struct *child, long request,
- 			 unsigned long data)
- {
--	bool need_siglock;
--
- 	if (!valid_signal(data))
- 		return -EIO;
- 
-@@ -877,13 +880,11 @@ static int ptrace_resume(struct task_struct *child, long request,
- 	 * status and clears the code too; this can't race with the tracee, it
- 	 * takes siglock after resume.
- 	 */
--	need_siglock = data && !thread_group_empty(current);
--	if (need_siglock)
--		spin_lock_irq(&child->sighand->siglock);
-+	spin_lock_irq(&child->sighand->siglock);
- 	child->exit_code = data;
-+	child->ptrace &= ~PT_STOPPED_MASK;
- 	wake_up_state(child, __TASK_TRACED);
--	if (need_siglock)
--		spin_unlock_irq(&child->sighand->siglock);
-+	spin_unlock_irq(&child->sighand->siglock);
- 
- 	return 0;
- }
-diff --git a/kernel/signal.c b/kernel/signal.c
-index f7c6ffcbd044..35cdb92b7f1d 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2195,6 +2195,7 @@ static void ptrace_stop(int exit_code, int why, int clear_code, kernel_siginfo_t
- 			return;
- 	}
- 
-+	current->ptrace |= PT_STOPPED_MASK;
- 	set_special_state(TASK_TRACED);
- 
- 	/*
+-- 
+Warm Regards
+Thara (She/Her/Hers)
