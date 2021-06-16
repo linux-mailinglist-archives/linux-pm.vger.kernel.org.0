@@ -2,142 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 000B03A92EA
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 08:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898613A9303
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 08:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbhFPGnX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 02:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S231344AbhFPGuW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 02:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbhFPGnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 02:43:15 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BDAC061147
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:40:43 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id i34so1145290pgl.9
-        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:40:43 -0700 (PDT)
+        with ESMTP id S230482AbhFPGuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 02:50:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80971C061574
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:48:15 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s17-20020a17090a8811b029016e89654f93so3380624pjn.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jun 2021 23:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6a7/7P/WOJQ+/PmIgspG1zB1PV41tmG6f1/nfdy7CoM=;
-        b=iaSacDYcEtxx/MsUryuoNYhVhvHu4/YAkds2/zlwCB5k3q0y2bYgm4bQ+SkVbx9+6M
-         sL+eo2HDNGjujx3quAQKcufA7TPDTnmQ34Zm2uRuUZQ7EVEg6pRInFALPcFJDi/G4FeU
-         JM+8EF3W3lK3P0olWSBysQvMYp5H1p/T1UHp4EwL9eQra+NRK3mWgqSB10pa6Xm0h6mD
-         Mtavp70tvXNUNPU0w0yhJAvLA9TN2AN66SDTsI1FKMNlUs76adVIbz6RafNE+/xiteUJ
-         k1R4bKmJKLpa2zg5qEmGb0RpLC2SvthSi/zripD16l53LCfCBQ4Cgu8nhWWTxoBznDjc
-         MFZw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pGeux1k9JWdeLuVQiCjnsXhyQPPrJGOsEZqXQl3yO0U=;
+        b=C5NAcwkC7mA1qeppXu2tkTAkN7Jy2MTgN4kTAeYpf+aPPjiofwWPc/Zen9dH10DK9V
+         6jXvGF/h1ZATOw9SeR1C7Tx2GNtiD1WXbuLL0OmjuErWPNdPy1V4lUzHlOm44m45mxhl
+         KIOXN8nSFwgX4g6ztaeKjzyvLd5+qN0qZ00DSYdmWjSz01xXoRMwnQm0dEXk8RG+nJhu
+         ikNPloTrQEgHmsd0HVbuetcSPjbihvHfewN5fDSOrtd0H5lo0o3Ng2oAMv3ekAyGprDv
+         4EEZ4SXI/07UVoQ/B+WJu+EawA/rY0eOg30vHev6mco1uKydZbGOCjfDjoQYRHtLgWkm
+         zQmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6a7/7P/WOJQ+/PmIgspG1zB1PV41tmG6f1/nfdy7CoM=;
-        b=RGSQ3rkt8QoryoMbNyjhQDlQczfHt1HJaHhCsEbF5u6S9k7gxNIncqEpSE4uHTfhQm
-         vVW6giXkbDLpR/3VVWOaF8CoBYBDIFhztd+FybHeBo082D9Ji6rEWCCfZg/ttlsk4Mr2
-         P5beGodJcTec0UQD3wC8T5UuFzH2O54QRHspWWQWUN5rxWki6s5HpO5csStCe2Rni91n
-         e+Kxn1/vjTuaDRVTTYQywQLTlTbfzs2Uan4Rs2xQs4V1Z+Svxcvf2wMdcWVDn+4mkXXN
-         LK/lnTHRQaWLYe55iKEke87lWKL0v1qeyotvtAD9e5q6+Vo9WwqOZHEeKIPSW2TPM6dV
-         WpMA==
-X-Gm-Message-State: AOAM531ltV3iuPrRgvClrqzBlPprr7DgT+69tnhYPfo/Ww7k1nPoyUMJ
-        PAfB89clGr+9u/nrh3v0jUogbIjNQq+pHA==
-X-Google-Smtp-Source: ABdhPJxuBDHSvp2jU3VUgo8rb7U+TO6siVyHDNIEpnu25aTr+0eg3ip1eS8kfvE7DLdzHMxtXtjgBA==
-X-Received: by 2002:aa7:949d:0:b029:2ef:d1ca:ddd3 with SMTP id z29-20020aa7949d0000b02902efd1caddd3mr8026579pfk.39.1623825642747;
-        Tue, 15 Jun 2021 23:40:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pGeux1k9JWdeLuVQiCjnsXhyQPPrJGOsEZqXQl3yO0U=;
+        b=MMfR6LOoJ9aljSJV40VuwoNEysmndlEwuPLh3UtIzIPgyeK8Cyng9q6vGLhQ8sL+3I
+         EA0SO9DJ1AH/pvg5Z3vrirubXfB/2O/Q+gVwZnPbt/foh5zTyMWF6nEJUJM6C3uDyZtK
+         AMH0RkuUNUD/VyuhkzCOSi7WCfIVy62jeE2VdEXWJ9ZANdqfUTXMYxjTBZ3WD4516Llq
+         GaHr/lD5zVOXTNBhwxRSn20+ZyOqnRGH8uc+fYpMffraCWtPs5GniN7zdo7pk6DqM72h
+         MvO6G3UzQuzPyyimeV8nD7r0ecE9EBbUEL3A6BIz4z8eS8rvehZNk+sOKF6EfzOQ03EA
+         nAKA==
+X-Gm-Message-State: AOAM533Ne24MYVbZ0SpGbs7wMbXSIL/R9P7NSe3B8MAyOOR9HufT2qZ6
+        UvLeZX6KMhJPukFLUff2+oN1qg==
+X-Google-Smtp-Source: ABdhPJxyy8SzyZMJWv8Peo5J64qiBMxpXojyyPNFDjOw/oZUudqWKkHh3X4bGVEIbT9V/VeVa7bnoQ==
+X-Received: by 2002:a17:903:3053:b029:110:d36:af61 with SMTP id u19-20020a1709033053b02901100d36af61mr7798331pla.5.1623826095004;
+        Tue, 15 Jun 2021 23:48:15 -0700 (PDT)
 Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id s21sm1167876pgo.42.2021.06.15.23.40.41
+        by smtp.gmail.com with ESMTPSA id x36sm1096314pfu.39.2021.06.15.23.48.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jun 2021 23:40:42 -0700 (PDT)
+        Tue, 15 Jun 2021 23:48:14 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-pm@vger.kernel.org,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 3/3] cpufreq: powerenv: Migrate to ->exit() callback instead of ->stop_cpu()
-Date:   Wed, 16 Jun 2021 12:10:28 +0530
-Message-Id: <c1dac4fd3b87d16895acbef6b4894a2d2b38dc83.1623825358.git.viresh.kumar@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH V2 0/3] cpufreq: cppc: Add support for frequency invariance
+Date:   Wed, 16 Jun 2021 12:18:06 +0530
+Message-Id: <cover.1623825725.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1623825358.git.viresh.kumar@linaro.org>
-References: <cover.1623825358.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-commit 367dc4aa932b ("cpufreq: Add stop CPU callback to cpufreq_driver
-interface") added the stop_cpu() callback to allow the drivers to do
-clean up before the CPU is completely down and its state can't be
-modified.
+Hello,
 
-At that time the CPU hotplug framework used to call the cpufreq core's
-registered notifier for different events like CPU_DOWN_PREPARE and
-CPU_POST_DEAD. The stop_cpu() callback was called during the
-CPU_DOWN_PREPARE event.
+Changes since V1:
 
-This is no longer the case, cpuhp_cpufreq_offline() is called only once
-by the CPU hotplug core now and we don't really need two separate
-callbacks for cpufreq drivers, i.e. stop_cpu() and exit(), as everything
-can be done from the exit() callback itself.
+- Few of the patches migrating users to ->exit() callback are posted separately.
 
-Migrate to using the exit() callback instead of stop_cpu().
+- The CPPC patch was completely reverted and so the support for FIE is again
+  added here from scratch.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/powernv-cpufreq.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+- The start_cpu() and stop_cpu() interface is reworked a little so stop_cpu() is
+  only ever called for a CPU if start_cpu() was called for it earlier.
 
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index e439b43c19eb..005600cef273 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -875,7 +875,15 @@ static int powernv_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 
- static int powernv_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- {
--	/* timer is deleted in cpufreq_cpu_stop() */
-+	struct powernv_smp_call_data freq_data;
-+	struct global_pstate_info *gpstates = policy->driver_data;
-+
-+	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
-+	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
-+	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
-+	if (gpstates)
-+		del_timer_sync(&gpstates->timer);
-+
- 	kfree(policy->driver_data);
- 
- 	return 0;
-@@ -1007,18 +1015,6 @@ static struct notifier_block powernv_cpufreq_opal_nb = {
- 	.priority	= 0,
- };
- 
--static void powernv_cpufreq_stop_cpu(struct cpufreq_policy *policy)
--{
--	struct powernv_smp_call_data freq_data;
--	struct global_pstate_info *gpstates = policy->driver_data;
--
--	freq_data.pstate_id = idx_to_pstate(powernv_pstate_info.min);
--	freq_data.gpstate_id = idx_to_pstate(powernv_pstate_info.min);
--	smp_call_function_single(policy->cpu, set_pstate, &freq_data, 1);
--	if (gpstates)
--		del_timer_sync(&gpstates->timer);
--}
--
- static unsigned int powernv_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq)
- {
-@@ -1042,7 +1038,6 @@ static struct cpufreq_driver powernv_cpufreq_driver = {
- 	.target_index	= powernv_cpufreq_target_index,
- 	.fast_switch	= powernv_fast_switch,
- 	.get		= powernv_cpufreq_get,
--	.stop_cpu	= powernv_cpufreq_stop_cpu,
- 	.attr		= powernv_cpu_freq_attr,
- };
- 
+- A new patch to implement RCU locking in arch_topology core to avoid some
+  races.
+
+- Some cleanup and very clear/separate paths for FIE in cppc driver now.
+
+
+-------------------------8<-------------------------
+
+CPPC cpufreq driver is used for ARM servers and this patch series tries to
+provide counter-based frequency invariance support for them in the absence for
+architecture specific counters (like AMUs).
+
+This was reverted earlier for the 5.13 kernel after Qian Cai reported kernel
+oops during suspend/resume.
+
+This is based of pm/linux-next + a cleanup patchset:
+
+https://lore.kernel.org/linux-pm/cover.1623825358.git.viresh.kumar@linaro.org/
+
+All the patches are pushed here together for people to run.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/log/?h=cpufreq/cppc
+
+This is tested on my Hikey platform (without the actual read/write to
+performance counters), with this script for over an hour:
+
+while true; do
+    for i in `seq 1 7`;
+    do
+        echo 0 > /sys/devices/system/cpu/cpu$i/online;
+    done;
+
+    for i in `seq 1 7`;
+    do
+        echo 1 > /sys/devices/system/cpu/cpu$i/online;
+    done;
+done
+
+
+Vincent will be giving this patchset a try on ThunderX2.
+
+Meanwhile it is up for review. Ideally I would like to get this merged for 5.14,
+but lets see how it goes.
+
+Thanks.
+
+--
+Viresh
+
+Viresh Kumar (3):
+  cpufreq: Add start_cpu() and stop_cpu() callbacks
+  arch_topology: Avoid use-after-free for scale_freq_data
+  cpufreq: CPPC: Add support for frequency invariance
+
+ Documentation/cpu-freq/cpu-drivers.rst |   7 +-
+ drivers/base/arch_topology.c           |  27 ++-
+ drivers/cpufreq/Kconfig.arm            |  10 ++
+ drivers/cpufreq/cppc_cpufreq.c         | 232 +++++++++++++++++++++++--
+ drivers/cpufreq/cpufreq.c              |  19 +-
+ include/linux/arch_topology.h          |   1 +
+ include/linux/cpufreq.h                |   5 +-
+ kernel/sched/core.c                    |   1 +
+ 8 files changed, 272 insertions(+), 30 deletions(-)
+
 -- 
 2.31.1.272.g89b43f80a514
 
