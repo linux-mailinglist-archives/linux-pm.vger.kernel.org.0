@@ -2,172 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9203A9779
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 12:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786503A978F
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 12:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbhFPKge (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 06:36:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:33328 "EHLO foss.arm.com"
+        id S232523AbhFPKhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 06:37:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232602AbhFPKfr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Jun 2021 06:35:47 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E81801042;
-        Wed, 16 Jun 2021 03:33:41 -0700 (PDT)
-Received: from [10.57.9.31] (unknown [10.57.9.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 563FF3F70D;
-        Wed, 16 Jun 2021 03:33:40 -0700 (PDT)
-Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
- frequencies
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, rjw@rjwysocki.net,
-        vincent.guittot@linaro.org, qperret@google.com,
-        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-        dietmar.eggemann@arm.com
-References: <1622804761-126737-1-git-send-email-vincent.donnefort@arm.com>
- <1622804761-126737-4-git-send-email-vincent.donnefort@arm.com>
- <20210614072835.z2tjoaffcflry7pk@vireshk-i7>
- <20210614133522.GA34061@e120877-lin.cambridge.arm.com>
- <20210615050211.5gpx4faha6heytad@vireshk-i7>
- <20210615084418.GA167242@e120877-lin.cambridge.arm.com>
- <20210615101706.mabloqrmakeiwcf5@vireshk-i7>
- <20210615171530.GA277695@e120877-lin.cambridge.arm.com>
- <20210616073500.b5wazdssoa5djp5o@vireshk-i7>
- <a4971ab0-87d7-4457-49ec-ce20106be358@arm.com>
- <20210616093127.lfpi4rje56b3dhwx@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <ff9a9daa-7d25-ea08-2cd9-fc56f778acde@arm.com>
-Date:   Wed, 16 Jun 2021 11:33:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232370AbhFPKhA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Jun 2021 06:37:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 998E661107;
+        Wed, 16 Jun 2021 10:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623839691;
+        bh=uJEv3OvJMqswalWvG2rx1DCmioR+VtUOrO7CZGR2Ajw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6wsFevRhS9CeafwlT529v2rV3Gm9GGwn4GGkmYDghQBgvSltNdLhA2d1VwUgm9YV
+         V+BZ/Z7dkVuRC9jA+aF8uUIN4oppwPSoc0YE3UC/NPxsGiCugwhXT7XZEbbeh2pmB/
+         M4rdDOJ4s0X9LmiRn4axjJlxF+T4B+Wd1HYLAz0MgEG64RvZ+ZZaXxAxnqcCDwPJej
+         pW3zx7fe6lsVprl/vQScwg/OlH7/cEN61iAlussljsV2mRmi/pOkb0n3FbRiUdCHAK
+         H6X3SZGPBKP1nePHfXCLHq/6yaW3vQZyt5NRvZBipljaN3xhgyRVkvGP83STRQZ1Xh
+         jhhQBOeaewbeQ==
+Date:   Wed, 16 Jun 2021 16:04:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <YMnTx4GqTWu75o2n@vkoul-mobl>
+References: <20210615191543.1043414-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210616093127.lfpi4rje56b3dhwx@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 6/16/21 10:31 AM, Viresh Kumar wrote:
-> On 16-06-21, 10:03, Lukasz Luba wrote:
->> On 6/16/21 8:35 AM, Viresh Kumar wrote:
->>> On 15-06-21, 18:15, Vincent Donnefort wrote:
->>>> But if we sum-up:
->>>>
->>>> 1. em_dev_register_perf_domain() find inefficiencies
->>>>
->>>> 2. dev_pm_opp_of_register_em() apply EM inefficiencies into the OPP structures
->>>
->>> I was looking to add a new API to the OPP core
->>> (dev_pm_opp_mark_inefficient()) to mark an OPP inefficient. And then
->>> get it called from em_create_perf_table().
->>>
->>> But I now see that EM core rather has callbacks to call into and with
->>
->> Exactly, that's what I was trying to stress.
->>
->>> that I think you should rather add another callback
->>> (.mark_inefficient()) in struct em_data_callback, to set inefficient
->>> frequencies.
->>
->> I disagree. That's why I prefer Vincent's approach in this patch set.
->> This proposal would cause more mess.
->>
->> Vincent proposed a small and clean modification. This modification
->> can be done easily in this cpufreq place because we have EM in
->> device cpu struct.
+On 15-06-21, 13:15, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
 > 
-> This may look clean to you, but not to me, sorry about that.
-> 
-> Clean is not lesser number of lines for me, but rather having the
-> right ownership of such things.
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
 
-Some developers do like patches which removes more lines then adds ;)
+>  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
 
-> 
-> For example this patch:
-> 
-> https://lore.kernel.org/linux-pm/1622804761-126737-6-git-send-email-vincent.donnefort@arm.com/
-> 
-> tries to add EM stuff in cpufreq core. Cpufreq core doesn't care about
-> EM and it shouldn't. And this piece of code doesn't belong here.
-> 
-> Would you guys like to add a cpufreq specific call into the EM core? I
-> won't, that's not a place for cpufreq stuff. It is the EM core. I was
-> fine with not including OPP core into this, and I gave up that
-> argument earlier, but then we realized that the cpufreq core isn't
-> ready at the time we register with EM core.
-> 
-> Honestly, OPP core looks to be a better place holder for such stuff.
-> This is exactly the purpose of the OPP core. Moreover, we can apply
-> the same logic to devfreq or other devices later, with or without EM
-> core. Again, OPP core fits better.
-> 
-> The cpufreq core already has the relevant APIs in place to the OPP
-> core and this won't require a new API there.
+>  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
 
-I don't see an API function in the OPP framework or a field in the
-OPP struct which gives information that this freq is inefficient.
-Thus, it will require new API changes: cpufreq --> OPP.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-> 
->> Let's don't over-engineering. The inefficient information is only valid
->> for schedutil, thus IMHO it can live like this patch set made - in the
->> cpufreq table.
-> 
-> For now, yes. There is no guarantee though that we won't have more in
-> future.
-
-And there won't be in near future. We don't build massive interfaces
-because there *might* be potential *oneday*.
-Even for this idea, it was a massive work to do the research and prove
-it that this is worth to put mainline so all vendors will get it.
-
-The GPUs are slightly different beasts and they have different
-workloads (not util + SchedUtil driven AFAIK).
-
-> 
->> Compare the v1 (I still don't understand why it was blocked),
-> 
-> IIRC, it required more work to be done in the hotpath, i.e. traversing
-> the freq list twice.
-
-In v1 there was LUT. IMHO we have too easily gave and said:
-'Remove the Look-up table as the numbers weren't strong enough to 
-justify the implementation.'
-But it had other benefits, which are now pointed.
-
-There was different issue, which we could fix now.
-With this patch set [1] EAS could have the freq_max limit, which
-SchedUtil has in the hotpath.
-
-What could be the modified v1 [2]:
-- LUT which holds two IDs: efficient, inefficient, take one
-   according to the clamp f_max
-- add new argument 'policy->max' to em_pd_get_efficient_freq()
-
-freq = em_pd_get_efficient_freq(em_cpu_get(policy->cpu), freq, policy->max);
-
-The problem was that EAS couldn't know the clamp freq_max,
-which shouldn't be the blocker now.
-
-> 
->> this v3 and your proposal.
-> 
-> IMHO, adding such callbacks to the EM core, like .mark_efficient(),
-> will only make this easier to handle for all different frameworks, and
-> not otherwise. The code will look much cleaner everywhere..
-> 
-
-What about coming back to the slightly modified v1 idea?
-That was really self-contained modification for this
-inefficient opps heuristic.
-
-
-[1] https://lore.kernel.org/lkml/20210614185815.15136-1-lukasz.luba@arm.com/
-[2] 
-https://lore.kernel.org/lkml/1617901829-381963-2-git-send-email-vincent.donnefort@arm.com/
+-- 
+~Vinod
