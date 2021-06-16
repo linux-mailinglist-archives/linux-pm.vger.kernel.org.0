@@ -2,233 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3864C3A9EE1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9563A9F95
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 17:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbhFPPYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 11:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbhFPPYh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 11:24:37 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE6AC061574
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 08:22:31 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c11so4387988ljd.6
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 08:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1ukyOAmpzQWdmpmUsMzfBm79YkK27laiGKotM430XzI=;
-        b=EkMIOR/PiXLp54WcwHksaJA9STCAGH6XFItpd/u6uetS/tFJbAkSo5TUW9dDdAPUwm
-         qdw4wP6RH//rcPEqpzsG5At1Yc6a3AltYSGYhmB0Z9Vl2omGzB1LAIrBhr4nf6c1xJnZ
-         UEusPQ7BHmCzGvMnCnEINXLmBfjz+GQ2ARt0A1lCXjEdeHbhsOsEr1mhRxWioafCDueu
-         FL383FSjLuSaeIkB6XLtV1ZzbVV04pzn7s7RzzYm4+C513U0UdqtT6GjHULiLkjL8pYd
-         9nhz0KFPqD6MMMnIyrcCDAVMudnWicQT16jHrcXc0NKX00dJ+AR03w+/i8Q1L/pF8bj6
-         x8XA==
+        id S235204AbhFPPjI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 11:39:08 -0400
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:44842 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234662AbhFPPiH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 11:38:07 -0400
+Received: by mail-ot1-f50.google.com with SMTP id q5-20020a9d66450000b02903f18d65089fso2873413otm.11;
+        Wed, 16 Jun 2021 08:36:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1ukyOAmpzQWdmpmUsMzfBm79YkK27laiGKotM430XzI=;
-        b=YxCo0YPDG9A8EA6aDj94oPGEcEjCiW/5nNfKcrobkt69Vba8J/qXaMQ9IDwYcELAeq
-         QkAhdsMr4bLHXeeG2UpnyfIaDUpbJIaQBUhuNb4Ok4seUWH9+l1ceTCMfCpyaq9Dx29m
-         eDBHPSAruH0M/4+sFmtpVcX2upesz5MKwAnLFQvUBajZa/BsVPR2pSoNjBJwpuCYkfjX
-         EfsnNno9RjoszbJZjRbJt51jfjHkU4Pcb7C47BbotL+D+Dvw9N3p1UWv72qlUwmZUU2Z
-         YfzJ0FF6f0qk4sGhjug/9unMZ22cg7uh5Tfp7ZHLeGmiSRWzvNkQaFyTAquNeRROvGqj
-         NGlg==
-X-Gm-Message-State: AOAM532zuOOriSbTW5AkdcMeEX18QZuSGF8LvLsDzrzFiahdqzA3Qddv
-        RGvuriyIq+QV+28BCec7gclSldjzTWPxr6lwrWYwUQ==
-X-Google-Smtp-Source: ABdhPJw84LuQUqmTdWOdf0vTCuN4kM/khUBiuNSfgQsV9GgaawL246DIVJT4/L60uE2YPOylDsN6BhSj2t9R0rZ/V7I=
-X-Received: by 2002:a2e:9b07:: with SMTP id u7mr307435lji.209.1623856949636;
- Wed, 16 Jun 2021 08:22:29 -0700 (PDT)
+        bh=Kq0Mgj/nXTP84vbXdLt+SyaloACjRWUyqTU5m1Ay7SM=;
+        b=XbXGzcm9maThflgLuRjpSAhdqSg9B1hxK53CuVuEuoPOKSBuYqSvnYFWg/RdGxUf0A
+         YNsNWA2Fq5F6UA1Ku8P/ojMQ4FBfv156TzXgpX4eg9s5kIR/3nwOYndHcTybIm5fcGUo
+         KxLj+EgOKqs3mfjnbIxFiAp0zgg/JM+eKC2qnRdbeLszb9d/A7wSUteSGV6+a413mFXY
+         0Gz+rI6IZOwgzn9RzKSpvJ1QLegFEiP5nDfhpv08xp4x2gcOoxRQNaZQv7ttckxor1ys
+         JKsHiMb8UGBAHVfuktH0raqBz7CVRxZdFgcNXxYv99poz4ygrPk8mdJ0S3zDGGwrDaGn
+         P4Hw==
+X-Gm-Message-State: AOAM530QJUIayEW/SLilZsA2iNqwFF8foGGphX0eMbqS2PGcmn4YAvMz
+        42EwdrTFxXYOCLIk8X6QiX2NVjBzFjOXpp5EUOM=
+X-Google-Smtp-Source: ABdhPJxrezPka4VHcMTbbJslYERooDHeLsnPTpUXZDPM9BAo1yE3sqDEm1PcQklVrshN5f7KkZn4JddErSwhPY/nYdw=
+X-Received: by 2002:a05:6830:1bf7:: with SMTP id k23mr448098otb.206.1623857759550;
+ Wed, 16 Jun 2021 08:35:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <1623855954-6970-1-git-send-email-yt.chang@mediatek.com>
-In-Reply-To: <1623855954-6970-1-git-send-email-yt.chang@mediatek.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 16 Jun 2021 17:22:18 +0200
-Message-ID: <CAKfTPtBZi60fmCGkOYoRmJ4YVE4523VQfeTgnbUGzaTEk9aq=g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] sched: Add tunable capacity margin for fis_capacity
-To:     YT Chang <yt.chang@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paul Turner <pjt@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fs <linux-fsdevel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com
+References: <20210616150516.28242-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210616150516.28242-1-mika.westerberg@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Jun 2021 17:35:48 +0200
+Message-ID: <CAJZ5v0gt-4qPcMjjjGP_8t1CaDp6Qi3wUg2Tn-buB+gytoViBA@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] PCI/PM: Target PM state is D3hot if device can
+ only generate PME from D3cold
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
+        Koba Ko <koba.ko@canonical.com>,
+        Rajat Jain <rajatja@google.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Jun 2021 at 17:06, YT Chang <yt.chang@mediatek.com> wrote:
+On Wed, Jun 16, 2021 at 5:05 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
 >
-> Currently, the margin of cpu frequency raising and cpu overutilized are
-> hard-coded as 25% (1280/1024). Make the margin tunable
-
-cpu_overutilized is 20% not 25%. Even if they light looks similar
-these 2 margins are differents
-
-> to control the aggressive for placement and frequency control. Such as
-> for power tuning framework could adjust smaller margin to slow down
-> frequency raising speed and let task stay in smaller cpu.
+> Some PCIe devices only support PME (Power Management Event) from D3cold.
+> One example is ASMedia xHCI controller:
 >
-> For light loading scenarios, like beach buggy blitz and messaging apps,
-> the app threads are moved big core with 25% margin and causing
-> unnecessary power.
-> With 0% capacity margin (1024/1024), the app threads could be kept in
-> little core and deliver better power results without any fps drop.
+> 11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
+>   ...
+>   Capabilities: [78] Power Management version 3
+>           Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
+>           Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
 >
-> capacity margin        0%          10%          20%          30%
->                      current        current       current      current
->                   Fps  (mA)    Fps    (mA)   Fps   (mA)    Fps  (mA)
-> Beach buggy blitz  60 198.164  60   203.211  60   209.984  60  213.374
-> Yahoo browser      60 232.301 59.97 237.52  59.95 248.213  60  262.809
-
-Would be good to know the impact of each part:
- Changing the +25% in cpufreq governor
- Changing the 20% margin to detect overloaded CPU
-
-Also, IIUC your description, the current values are ok with some UCs
-but not with others like the 2 aboves. Have you evaluated whether it
-was not your power model that was not accurate ?
-
+> With such devices, if it has wake enabled, the kernel selects lowest
+> possible power state to be D0 in pci_target_state(). This is problematic
+> because it prevents the root port it is connected to enter low power
+> state too which makes the system consume more energy than necessary.
 >
-> Change-Id: Iba48c556ed1b73c9a2699e9e809bc7d9333dc004
-> Signed-off-by: YT Chang <yt.chang@mediatek.com>
+> The problem in pci_target_state() is that it only accounts the "current"
+> device state, so when the bridge above it (a root port for instance) is
+> transitioned into D3hot the device transitions into D3cold. This is
+> because when the root port is first transitioned into D3hot then the
+> ACPI power resource is turned off which puts the PCIe link to L2/L3 (and
+> the root port and the device are in D3cold). If the root port is kept in
+> D3hot it still means that the device below it is still effectively in
+> D3cold as no configuration messages pass through. Furthermore the
+> implementation note of PCIe 5.0 sec 5.3.1.4 says that the device should
+> expect to be transitioned into D3cold soon after its link transitions
+> into L2/L3 Ready state.
+>
+> Taking the above into consideration, instead of forcing the device stay
+> in D0 we modify pci_target_state() to return D3hot in this special case
+> and make __pci_enable_wake() to enable PME too in this case.
+>
+> Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
+> Reported-by: Koba Ko <koba.ko@canonical.com>
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Thanks for following my suggestion!
+
+One nit below.
+
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > ---
->  include/linux/sched/cpufreq.h | 19 +++++++++++++++++++
->  include/linux/sched/sysctl.h  |  1 +
->  include/linux/sysctl.h        |  1 +
->  kernel/sched/fair.c           |  4 +++-
->  kernel/sysctl.c               | 15 +++++++++++++++
->  5 files changed, 39 insertions(+), 1 deletion(-)
+> Hi all,
 >
-> diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
-> index 6205578..8a6c23a1 100644
-> --- a/include/linux/sched/cpufreq.h
-> +++ b/include/linux/sched/cpufreq.h
-> @@ -23,6 +23,23 @@ void cpufreq_add_update_util_hook(int cpu, struct update_util_data *data,
->  void cpufreq_remove_update_util_hook(int cpu);
->  bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy);
+> This is third version of the patch. I changed this according to what Rafael
+> suggested, so that the pci_target_state() returns D3hot for these devices
+> and pci_enable_wake() then enables PME from D3cold. This solves the problem
+> in my test system.
 >
-> +#ifdef CONFIG_SMP
-> +extern unsigned int sysctl_sched_capacity_margin;
+> @Utkarsh, @Koba, I appreciate if you could try this one too.
+>
+> I also dropped the Tested-by tag from Koba Ko and Acked-by from Kai-Heng
+> Feng as this is not the same patch anymore.
+>
+> The previous version can be seen here:
+>
+> https://lore.kernel.org/linux-pci/20210531133435.53259-1-mika.westerberg@linux.intel.com/
+>
+> Resending with linux-pm list included.
+>
+>  drivers/pci/pci.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index b717680377a9..6605f85a1d63 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2485,7 +2485,13 @@ static int __pci_enable_wake(struct pci_dev *dev, pci_power_t state, bool enable
+>         if (enable) {
+>                 int error;
+>
+> -               if (pci_pme_capable(dev, state))
+> +               /*
+> +                * Enable PME if device is capable from given state.
+> +                * Special case is device that can only generate PME
+> +                * from D3cold then we enable PME too.
+> +                */
+> +               if (pci_pme_capable(dev, state) ||
+> +                   (state == PCI_D3hot && pci_pme_capable(dev, PCI_D3cold)))
+>                         pci_pme_active(dev, true);
+>                 else
+>                         ret = 1;
+> @@ -2595,6 +2601,16 @@ static pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup)
+>                  * PME#.
+>                  */
+>                 if (dev->pme_support) {
+> +                       /*
+> +                        * Special case if device supports only PME from
+> +                        * D3cold but not from D3hot we still return
+> +                        * D3hot.
+> +                        */
+> +                       if (target_state == PCI_D3hot &&
+> +                               !(dev->pme_support & (1 << PCI_D3hot)) &&
+
+The test above is redundant, because if the device does support wakeup
+from D3hot and D3hot is the target state, it will be returned anyway.
+
+> +                               (dev->pme_support & (1 << PCI_D3cold)))
+> +                               return target_state;
 > +
-> +static inline unsigned long map_util_freq(unsigned long util,
-> +                                         unsigned long freq, unsigned long cap)
-> +{
-> +       freq = freq * util / cap;
-> +       freq = freq * sysctl_sched_capacity_margin / SCHED_CAPACITY_SCALE;
-> +
-> +       return freq;
-> +}
-> +
-> +static inline unsigned long map_util_perf(unsigned long util)
-> +{
-> +       return util * sysctl_sched_capacity_margin / SCHED_CAPACITY_SCALE;
-> +}
-> +#else
->  static inline unsigned long map_util_freq(unsigned long util,
->                                         unsigned long freq, unsigned long cap)
->  {
-> @@ -33,6 +50,8 @@ static inline unsigned long map_util_perf(unsigned long util)
->  {
->         return util + (util >> 2);
->  }
-> +#endif
-> +
->  #endif /* CONFIG_CPU_FREQ */
->
->  #endif /* _LINUX_SCHED_CPUFREQ_H */
-> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-> index db2c0f3..5dee024 100644
-> --- a/include/linux/sched/sysctl.h
-> +++ b/include/linux/sched/sysctl.h
-> @@ -10,6 +10,7 @@
->
->  #ifdef CONFIG_SMP
->  extern unsigned int sysctl_hung_task_all_cpu_backtrace;
-> +extern unsigned int sysctl_sched_capacity_margin;
->  #else
->  #define sysctl_hung_task_all_cpu_backtrace 0
->  #endif /* CONFIG_SMP */
-> diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
-> index d99ca99..af6d70f 100644
-> --- a/include/linux/sysctl.h
-> +++ b/include/linux/sysctl.h
-> @@ -41,6 +41,7 @@
->  #define SYSCTL_ZERO    ((void *)&sysctl_vals[0])
->  #define SYSCTL_ONE     ((void *)&sysctl_vals[1])
->  #define SYSCTL_INT_MAX ((void *)&sysctl_vals[2])
-> +#define SCHED_CAPACITY_MARGIN_MIN   1024
->
->  extern const int sysctl_vals[];
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 20aa234..609b431 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -111,7 +111,9 @@ int __weak arch_asym_cpu_priority(int cpu)
->   *
->   * (default: ~20%)
->   */
-> -#define fits_capacity(cap, max)        ((cap) * 1280 < (max) * 1024)
-> +unsigned int sysctl_sched_capacity_margin = 1280;
-> +EXPORT_SYMBOL_GPL(sysctl_sched_capacity_margin);
-> +#define fits_capacity(cap, max)        ((cap) * sysctl_sched_capacity_margin < (max) * 1024)
->
->  /*
->   * The margin used when comparing CPU capacities.
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 14edf84..d6d2b84 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -127,6 +127,11 @@
->  static int six_hundred_forty_kb = 640 * 1024;
->  #endif
->
-> +/* this is needed for the proc of sysctl_sched_capacity_margin */
-> +#ifdef CONFIG_SMP
-> +static int min_sched_capacity_margin = 1024;
-> +#endif /* CONFIG_SMP */
-> +
->  /* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
->  static unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
->
-> @@ -1716,6 +1721,16 @@ int proc_do_static_key(struct ctl_table *table, int write,
->                 .mode           = 0644,
->                 .proc_handler   = proc_dointvec,
->         },
-> +#ifdef CONFIG_SMP
-> +       {
-> +               .procname       = "sched_capcity_margin",
-> +               .data           = &sysctl_sched_capacity_margin,
-> +               .maxlen         = sizeof(unsigned int),
-> +               .mode           = 0644,
-> +               .proc_handler   = proc_dointvec_minmax,
-> +               .extra1         = &min_sched_capacity_margin,
-> +       },
-> +#endif
->  #ifdef CONFIG_SCHEDSTATS
->         {
->                 .procname       = "sched_schedstats",
+>                         while (target_state
+>                               && !(dev->pme_support & (1 << target_state)))
+>                                 target_state--;
 > --
-> 1.9.1
->
