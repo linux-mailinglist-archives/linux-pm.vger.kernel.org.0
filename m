@@ -2,138 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0423A9486
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 09:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358033A94AC
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jun 2021 10:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhFPH7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 03:59:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231890AbhFPH7Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Jun 2021 03:59:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF29B61159;
-        Wed, 16 Jun 2021 07:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623830240;
-        bh=IKaUw9gSf4Il/h/kz8Yn/wyMKOq1jlj5yum4ygVdJhI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uiR/GCMbARWDgoFV/dp6DkQhN9wwcUyTLQ187nNdjOoQiHbnQBIMYYNJ7pPEctPD0
-         AKTEW6Z7Ui+bzvaGm/omyBvyON0hib4lzCR4A2QiH491aeIJUW588zxSBveHAOIs//
-         j/XQhFgnilqdqijEMcQ4XZTreVEaOlOcMxcbPj2w=
-Date:   Wed, 16 Jun 2021 09:57:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/3] arch_topology: Avoid use-after-free for
- scale_freq_data
-Message-ID: <YMmu3bS3Q6avUfEW@kroah.com>
-References: <cover.1623825725.git.viresh.kumar@linaro.org>
- <9dba462b4d09a1a8a9fbb75740b74bf91a09a3e1.1623825725.git.viresh.kumar@linaro.org>
+        id S232090AbhFPIFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 04:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232123AbhFPIFU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 04:05:20 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2917BC061760
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 01:03:14 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v12so706832plo.10
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 01:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xuN/YJTMYw5vaqPc7yE/QiPRSqEUYMaVwGgpZl3CTtQ=;
+        b=AUDmRnDUuYxGz2OMkEcohAlCZTcCUxJVnE8fhYJqlQp5vBSh1t0R3GgjrJsgJoqnax
+         M4R9X3S0Oc/CXY8x8bDg66ab+OEHMpeKg/4T7PcEFi2C10lkAhH4NoTbr90ae6tDJAPD
+         qp5EQJFGvvEjWvPyocWzlqPEDMN+gJy3J50IwgFeVcZLDXv561Dq6hNqc5raHRVszust
+         VwswgIHXmfPADlk9Mxy5y000dLziiZ4ykvbxSbf0ysukYe/fXeKcTvJ8HwjU4ese/qxE
+         tAWoa4MbrWDu9FieraFFA27za5TPVKCzFkkdHhjTdixaJX9XdoaZrvMESRhsB2m7o6K9
+         D2KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xuN/YJTMYw5vaqPc7yE/QiPRSqEUYMaVwGgpZl3CTtQ=;
+        b=BgnMIv6q2oEIKxyJZ/prpRkOfyVKVvQN1Q1Hnl9XMdusdcyk6XISaupKdQRm3DDTwP
+         /ymogxs9Pv4IX6LlQoaRj7NbYWZuIPzIRxMwH9oQXwzuKUCqHGIV0iKqSWj7AozL0AFn
+         l28UzVKPPSUA16/TSixLaSJ419jPZ6VrIR13gJzBNz2CQUrORPpzzgKVn4iDcaglaEHZ
+         vOJoJTUTWnUn0PXPQlITg5aFSSvuTldf0+mNQl9XfMfqniK2pcw5hpha/w21fEfx7lun
+         tRe8OLyOPDvFwQ51sNf1rIEHNsMUCZ4CVt8niRpQLFjHIV7Q1uR9zrbW5OyYgb8Iy7R6
+         FuVw==
+X-Gm-Message-State: AOAM533Vo2PvKaVllQbVxYhuBHLTVot9rZTT6/o3urOj3r7Sur8yV2ld
+        pgPYnYvLGG/WL7y/4emgZyvGdQ==
+X-Google-Smtp-Source: ABdhPJx0zeACYKM4/NZ4UymjXASnbHW6zJkS/rS1t/RuEJh3jSW0q4HPJyO7m+AEFVWXKPnYyEdlTw==
+X-Received: by 2002:a17:902:e9cb:b029:101:cebc:b8d with SMTP id 11-20020a170902e9cbb0290101cebc0b8dmr7708060plk.5.1623830593685;
+        Wed, 16 Jun 2021 01:03:13 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id b3sm1514124pjz.49.2021.06.16.01.03.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 01:03:12 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 13:33:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        vincent.guittot@linaro.org,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] thermal/drivers/tegra: Add driver for Tegra30
+ thermal sensor
+Message-ID: <20210616080310.vhvauvo5y6m2sekz@vireshk-i7>
+References: <20210529170955.32574-1-digetx@gmail.com>
+ <20210529170955.32574-5-digetx@gmail.com>
+ <6f2b6290-095a-bd39-c160-1616a0ff89b1@linaro.org>
+ <20210615102626.dja3agclwzxv2sj4@vireshk-i7>
+ <595f5e53-b872-bcc6-e886-ed225e26e9fe@gmail.com>
+ <fbdc3b56-4465-6d3e-74db-1d5082813b9c@linaro.org>
+ <4c7b23c4-cf6a-0942-5250-63515be4a219@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9dba462b4d09a1a8a9fbb75740b74bf91a09a3e1.1623825725.git.viresh.kumar@linaro.org>
+In-Reply-To: <4c7b23c4-cf6a-0942-5250-63515be4a219@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 12:18:08PM +0530, Viresh Kumar wrote:
-> Currently topology_scale_freq_tick() may end up using a pointer to
-> struct scale_freq_data, which was previously cleared by
-> topology_clear_scale_freq_source(), as there is no protection in place
-> here. The users of topology_clear_scale_freq_source() though needs a
-> guarantee that the previous scale_freq_data isn't used anymore.
-> 
-> Since topology_scale_freq_tick() is called from scheduler tick, we don't
-> want to add locking in there. Use the RCU update mechanism instead
-> (which is already used by the scheduler's utilization update path) to
-> guarantee race free updates here.
-> 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
++Vincent.
 
-So this is a bugfix for problems in the current codebase?  What commit
-does this fix?  Should it go to the stable kernels?
+On 15-06-21, 22:32, Dmitry Osipenko wrote:
+> IIUC, the cpufreq already should be prepared for the case where firmware
+> may override frequency. Viresh, could you please clarify what are the
+> possible implications of the frequency overriding?
 
-> ---
->  drivers/base/arch_topology.c | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index c1179edc0f3b..921312a8d957 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -18,10 +18,11 @@
->  #include <linux/cpumask.h>
->  #include <linux/init.h>
->  #include <linux/percpu.h>
-> +#include <linux/rcupdate.h>
->  #include <linux/sched.h>
->  #include <linux/smp.h>
->  
-> -static DEFINE_PER_CPU(struct scale_freq_data *, sft_data);
-> +static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
->  static struct cpumask scale_freq_counters_mask;
->  static bool scale_freq_invariant;
->  
-> @@ -66,16 +67,20 @@ void topology_set_scale_freq_source(struct scale_freq_data *data,
->  	if (cpumask_empty(&scale_freq_counters_mask))
->  		scale_freq_invariant = topology_scale_freq_invariant();
->  
-> +	rcu_read_lock();
-> +
->  	for_each_cpu(cpu, cpus) {
-> -		sfd = per_cpu(sft_data, cpu);
-> +		sfd = rcu_dereference(*per_cpu_ptr(&sft_data, cpu));
->  
->  		/* Use ARCH provided counters whenever possible */
->  		if (!sfd || sfd->source != SCALE_FREQ_SOURCE_ARCH) {
-> -			per_cpu(sft_data, cpu) = data;
-> +			rcu_assign_pointer(per_cpu(sft_data, cpu), data);
->  			cpumask_set_cpu(cpu, &scale_freq_counters_mask);
->  		}
->  	}
->  
-> +	rcu_read_unlock();
-> +
->  	update_scale_freq_invariant(true);
->  }
->  EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
-> @@ -86,22 +91,32 @@ void topology_clear_scale_freq_source(enum scale_freq_source source,
->  	struct scale_freq_data *sfd;
->  	int cpu;
->  
-> +	rcu_read_lock();
-> +
->  	for_each_cpu(cpu, cpus) {
-> -		sfd = per_cpu(sft_data, cpu);
-> +		sfd = rcu_dereference(*per_cpu_ptr(&sft_data, cpu));
->  
->  		if (sfd && sfd->source == source) {
-> -			per_cpu(sft_data, cpu) = NULL;
-> +			rcu_assign_pointer(per_cpu(sft_data, cpu), NULL);
->  			cpumask_clear_cpu(cpu, &scale_freq_counters_mask);
->  		}
->  	}
->  
-> +	rcu_read_unlock();
-> +
-> +	/*
-> +	 * Make sure all references to previous sft_data are dropped to avoid
-> +	 * use-after-free races.
-> +	 */
-> +	synchronize_rcu();
+The only implication is software would think hardware is running at
+some other frequency, while it is not. Not sure if something may break
+as a result of this.
 
-What race is happening?  How could the current code race?  Only when a
-cpu is removed?
+The scheduler's view of CPUs will not be same though, i.e. scheduler
+will see capacity as X, while in reality it has changed to Y.
 
-thanks,
-
-greg k-h
+-- 
+viresh
