@@ -2,122 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 533433AA96D
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F163AA98F
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbhFQDQC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 23:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S230242AbhFQD0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 23:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbhFQDQC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:16:02 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614F9C061574
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:13:55 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id e1so2163227plh.8
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:13:55 -0700 (PDT)
+        with ESMTP id S230280AbhFQD00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:26:26 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474E9C06175F
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:24:19 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u18so3828373pfk.11
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=1UkZIjrVFVA+7wFZqS424S7XJLGg8Ir1lMWkJx0j3Es=;
-        b=K1mAgGmonL9zlxmZv6dotKXjAzWeztUVJqu5zcRiDOgy+3dpOjDqI2Dp0wNSL0TswI
-         7XLoSUXFBAI9FRTs7GJDFqWGjRqJ3P1T1z4zHIt1r/yR9j0vnpGpSzUNevzrTp/WBWGk
-         WvXlVPHys4gX2AFEoIcGeV+QpcQK9CepDgtynv3rb0H0ddm58xUvUMCf6RKh2vF9BNwm
-         C0naYS3w5cGh9RL05r2X13weaF44tOY4AAZdBIg1DsC+1AaaHstNpmIXRkLrejJgocOw
-         Azgub74NPvuNbYyR1YnrVuUGrg9F482FApqE7N8/HooxuPkM6erpVs1MhSHKQv6P1sso
-         wQ6Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vQ1H5KpmR6igc6vGa3WgsWAZHbvCNMb9RNa0+vWcC+c=;
+        b=pntVkEhpVrje7UZgQbd5ogPor9DVKmZh+o6VM42V9+9qGmWQTuQzsaHU4FnqosSDmb
+         u17goz6U6MbKUWtgPZ2z/kEYiWnj2LdJPSeaTUKddqGqX1hljiGnYSuqgO3xnbuA/rGW
+         mowV5PmjPrGCx4rh/iIiUR21ylReC92w4TwqUIOIepfFOgD8YR7MOcBEi5XbrSDbfD5Z
+         GtKkRctOBp9uRnUhtDWJFWtFXaCh70/wvTRZoiRC20upA5jumdFMJIXMa7R4WxRwBIbP
+         IKFLPW3Bze94fMiXlrw1bSLFK23kQ1KVGMhB7dQQddbF3zIDvW0un1963cTibr45SyPp
+         lqgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=1UkZIjrVFVA+7wFZqS424S7XJLGg8Ir1lMWkJx0j3Es=;
-        b=uTmGY1DGzm2DxkdaZXM7eMzG9/iMDDS/bJH/iJT8yNqVAj0lrv4gJ0tEEAXa7MERfv
-         /bP94kWJfnLO3pU6pJ9Lh6nEVAio4Ofner1b8+VxQWt1hPa9d0KBGvcTMCBRLyX8z2Nj
-         NAIDXkZQqn0z8quuA6HEvyNYAaqnhMystdX438wz4q0IC1xLB14f2h3SK8BZZJX08b+8
-         pvDmK8QZPO5eG6nuKB8YvPdYU046vm6LjAVR0eC4MIuKa2O2ac0WYCOBsicVXSvmqRZC
-         zenci1+fWkyZCwQsYnCgCbpK8kXAvTWvcept7BZnmch047+yU5QkiKWSdX48vrzen6uU
-         Di+A==
-X-Gm-Message-State: AOAM532S/y9r9EAR257FxE35pkC1JkNCBpDSOKPaqGJLkkjAWtNeV2SQ
-        ItuGKZ/JxfZ/TEda9G7PzulM/A==
-X-Google-Smtp-Source: ABdhPJzW78qS6DUiMOUwBcWyFm6dRgnv3TqbuiU51xpXiglb5cCFys3eJB2zaGo1tbysOc5nqPgMUg==
-X-Received: by 2002:a17:90a:5b0a:: with SMTP id o10mr14322338pji.143.1623899634979;
-        Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d3sm3514418pfn.141.2021.06.16.20.13.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vQ1H5KpmR6igc6vGa3WgsWAZHbvCNMb9RNa0+vWcC+c=;
+        b=oi8Mr/HzE/2CT/7XTsBPGhdLsSSxHWNDVqupk7AULqHKMWlfcVDp1kwdZo8irkBBro
+         mwJW3p+xAMF4VtKBGwwbwMP83FM8qvfSmpnVgrHS3XpJZgktag61pWyrZwrJGMUJUpTR
+         HZSYninkCM0VRMPJsXFA3YGqURGesUVPB/00hn3/5lzysBoaIQg2JU+5bjn0pukVklMf
+         rF/Te2SornVbTsEuKO2Y+jEPann0zCfiQGzIj1oD0dr8QHDQHqejluJhUw/V/1zLVH/g
+         T+DApPxKD+SnkK6njrmCf8LuX+cxFNY/ofmgJgF+yQXHCgoB42lHfxMlFIZg0xvsty9/
+         Gwfw==
+X-Gm-Message-State: AOAM531uC9n7nfZHLWLgnnodWJKQQj6h7CKXk/mNcQMtd59ElK8RuvXC
+        N4PhADMGrJN2DdLoXawHme+f/Q==
+X-Google-Smtp-Source: ABdhPJx+WjlyD29L4tT+M6GTV9f9nyqfrcFUEahFhzIAo+O28+IHwvB1LDeBisMZcWKceUhx2vCJYw==
+X-Received: by 2002:a05:6a00:1794:b029:2ee:c59c:56bf with SMTP id s20-20020a056a001794b02902eec59c56bfmr3071994pfg.2.1623900258819;
+        Wed, 16 Jun 2021 20:24:18 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id n14sm3306910pfa.138.2021.06.16.20.24.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
-Message-ID: <60cabdf2.1c69fb81.59b9.ae0a@mx.google.com>
-Date:   Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Jun 2021 20:24:18 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 08:54:16 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 3/3] cpufreq: CPPC: Add support for frequency
+ invariance
+Message-ID: <20210617032416.r2gfp25xxvhc5t4x@vireshk-i7>
+References: <cover.1623825725.git.viresh.kumar@linaro.org>
+ <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
+ <20210616124806.GA6495@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.13-rc6-122-gb7fd255fd200
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 6 builds: 0 failed,
- 6 passed (v5.13-rc6-122-gb7fd255fd200)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210616124806.GA6495@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed (v5.13-rc6-122-gb7fd255fd200)
+On 16-06-21, 13:48, Ionela Voinescu wrote:
+> I was looking forward to the complete removal of stop_cpu() :).
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-13-rc6-122-gb7fd255fd200/
+No one wants to remove more code than I do :)
 
-Tree: pm
-Branch: testing
-Git Describe: v5.13-rc6-122-gb7fd255fd200
-Git Commit: b7fd255fd2005d382ea1e26d3a6cd98028802541
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+> I'll only comment on this for now as I should know the rest.
+> 
+> Let's assume we don't have these, what happens now is the following:
+> 
+> 1. We hotplug out the last CPU in a policy, we call the
+>    .stop_cpu()/exit() function which will free the cppc_cpudata structure.
+> 
+>    The only vulnerability is if we have a last tick on that last CPU,
+>    after the above callback was called.
+> 
+> 2. When the CPU at 1. gets hotplugged back in, the cppc_fi->cpu_data is
+>    stale.
+> 
+> We do not have a problem when removing the CPPC cpufreq module as we're
+> doing cppc_freq_invariance_exit() before unregistering the driver and
+> freeing the data.
+> 
+> Are 1. and 2 the only problems we have, or have I missed any?
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+There is more to it. For simplicity, lets assume a quad-core setup,
+with all 4 CPUs sharing the cpufreq policy. And here is what happens
+without the new changes:
 
-Detailed per-defconfig build reports:
+- On CPPC cpufreq driver insertion, we start 4 kthreads/irq-works (1
+  for each CPU as it fires from tick) from the ->init() callback.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+- Now lets say we offline CPU3. The CPPC cpufreq driver isn't notified
+  by anyone and it hasn't registered itself to hotplug notifier as
+  well. So, the irq-work/kthread isn't stopped. This results in the
+  issue reported by Qian earlier.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+  The very same thing happens with schedutil governor too, which uses
+  very similar mechanisms, and the cpufreq core takes care of it there
+  by stopping the governor before removing the CPU from policy->cpus
+  and starting it again. So there we stop irq-work/kthread for all 4
+  CPUs, then start them only for remaining 3.
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+  I thought about that approach as well, but it was too heavy to stop
+  everyone and start again in this case. And so I invented start_cpu()
+  and stop_cpu() callbacks.
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+- In this case, because the CPU is going away, we need to make sure we
+  don't queue any more irq-work or kthread to it and this is one of
+  the main reasons for adding synchronization in the topology core,
+  because we need a hard guarantee here that irq-work won't fire
+  again, as the CPU won't be there or will not be in a sane state.
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+- The same sequence of events is true for the case where the last CPU
+  of a policy goes away (not in this example, but lets say quad-core
+  setup with separate policies for each CPU).
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+- Not just the policy, but the CPU may be going away as well.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+I hope I was able to clarify a bit here.
 
----
-For more info write to <info@kernelci.org>
+-- 
+viresh
