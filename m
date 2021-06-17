@@ -2,246 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AEE3ABA9B
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 19:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A993ABAAA
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 19:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbhFQR3u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Jun 2021 13:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbhFQR3t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 13:29:49 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99836C06175F
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 10:27:41 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id w22-20020a0568304116b02904060c6415c7so6938219ott.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 10:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+ZJ+y6rDUHKiUZHa41ggyo56j9VFDaR2HjEFSWzMuIQ=;
-        b=pM9flxdNof14UnfKdF2p41XmPl0NOaK+BF/VpOe+qf3gFBY/8aoyK+rMtyOLnM6m0P
-         fqyWYg1JzHFq0lUTBJsYti17vKlsXW+kVq/eNA9Z7fGv4D7XN/hYtnnQRMYzIfYkng12
-         PQcWSgNBwWTs1fkveSDaOZP5sI50SrwIJS0Y8pHzbLL7mDduRXEZnUMYL5qscAYtwPM0
-         YZdz8VvjA+1YImPQAaPwf6mL6kbhkJtsH4B3dgChFpnNU/ecwKR17tNWY4rAy5Id2sUj
-         fjAnyMl3VBmU2U2/IfRwylyhwWAayvWqjBIs3Dw3jFb8vY4Y/TX3OVz4J3mdyqly2UOr
-         AaGQ==
+        id S232072AbhFQRen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Jun 2021 13:34:43 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:42510 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231785AbhFQRen (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 13:34:43 -0400
+Received: by mail-ot1-f45.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so6896479oth.9;
+        Thu, 17 Jun 2021 10:32:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+ZJ+y6rDUHKiUZHa41ggyo56j9VFDaR2HjEFSWzMuIQ=;
-        b=HkA72COwbjJJ1+Vv7N/x5aaHqH5USRJTt5q5c43jzPoqO1dI+94ujM/ZEfsPRhTmgA
-         Q3redaisgzowYPbR7/dpRHdTAeBngKXO0zOS7TKKdstmXZ2ZF3Tk6s/99eEZAZuLxY6Z
-         +n5FNxxT3BUWvceILTfkMLiRjdM/lm/Wh9PU8fuuKMRWvv/9HwBKIq0ECr0NVymb2zMj
-         htGY1djW3gV6pWmtEHc+eIgdka5Cd1ST4k9cTt3K//wbRsjpds45zKO1U+vFaSZvR9hi
-         NpV45J0dRw9b9+RS8PJ3OW6csUUuQBbR9XgHc5l+BN2zaCrARA3hkX/4DVuT6vywLdHt
-         rRDg==
-X-Gm-Message-State: AOAM532yZ7aSSPO7wNOBDsgvxuOe5kiyFO9O81OxiLJBzVOHa8aMXzoh
-        Y69vlgLlZYuDYP6fTcIOz6I37A==
-X-Google-Smtp-Source: ABdhPJynok1s++q9mYKs5kebbtVJnTurBADvxSpRD8r3WnDSOT51HiHRmyRWlQhBivJ3IR3N7e/GnQ==
-X-Received: by 2002:a05:6830:2467:: with SMTP id x39mr5520805otr.192.1623950860790;
-        Thu, 17 Jun 2021 10:27:40 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 35sm1342255oth.49.2021.06.17.10.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 10:27:40 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 12:27:38 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Mike Tipton <mdtipton@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=81Ce+c7gQdmhNFYfxwHdHAzT80ECkLbi7pk1F5wt6Z0=;
+        b=Z1YiSHnM9uAUEeYNJz+TUI8ULXcNZ3soPhSOJsKhuua/22KXCJXyYzBbiH9xZK557N
+         s1TlS1pA9t/QesWJ9uHtgtBKXHOPEaNt7E5DOkuN2m3u6S+qTGPXX0mQ93FqRngCfIpb
+         JJZTJYOOEnLmrgPj/IndhLRAUqpjU92BRuwRXyhMkS1kZDJh1YkTBwdBdK+6eJk2ysZi
+         QCGcOVhjSt/gR+XTVe7RcgrWiSSKeqj2BXWCRKiVJaH6JV31BdExS6q5cPlLzbtoNmz2
+         aJszRDHbpiOWqHxYPR0CNdadPkRuozZSdNyCRffRhEuMppt9waEF2IMcMWdpHiZKT9PD
+         vU7A==
+X-Gm-Message-State: AOAM532zNeHDqs9+ItT3r8ajWVlRcFgpnXelMnM20eidWsgXRox+Ojpl
+        mMdf57Imx8Mjxbu9G/ib6+keKsK+TUjEzTyFrLM=
+X-Google-Smtp-Source: ABdhPJz8swif365bH7WMe3PTZET/PN/Ow7UReQCrmLIY3gnTPr3g/iKUgGO7wsZIv698+1701xq5nOoLJZFirxKPsh4=
+X-Received: by 2002:a05:6830:1bf7:: with SMTP id k23mr5836663otb.206.1623951155517;
+ Thu, 17 Jun 2021 10:32:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210615033535.2907295-1-libaokun1@huawei.com> <CAJZ5v0iajoHXbJO-HgOMZkDo1GfRNEgDoNaSmFcOpeJGhgrYdA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iajoHXbJO-HgOMZkDo1GfRNEgDoNaSmFcOpeJGhgrYdA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Jun 2021 19:32:24 +0200
+Message-ID: <CAJZ5v0g2+far_FMgBSV9OdobJU6kKD6BR3pg5VabavQVYC-uQQ@mail.gmail.com>
+Subject: Re: [PATCH -next v2] x86/power: fix doc warnings in cpu.c
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
-Message-ID: <YMuGCjg2H3eHVe8K@yoga>
-References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
- <20210611101540.3379937-3-dmitry.baryshkov@linaro.org>
- <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
- <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
- <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
- <YMjNaM0z+OzhAeO/@yoga>
- <CAPDyKFo_eNwEx5rryg3bHt_-pxBeeYfVrUZuTOHoL-x94LBwDA@mail.gmail.com>
- <9136597d-f30b-bf75-77c3-b42533d822fa@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9136597d-f30b-bf75-77c3-b42533d822fa@linaro.org>
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yue Haibing <yuehaibing@huawei.com>, yangjihong1@huawei.com,
+        yu kuai <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 17 Jun 11:19 CDT 2021, Dmitry Baryshkov wrote:
+On Thu, Jun 17, 2021 at 2:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Jun 15, 2021 at 5:26 AM Baokun Li <libaokun1@huawei.com> wrote:
+> >
+> > Fixes the following W=1 kernel build warning(s):
+> >
+> >  arch/x86/power/cpu.c:76: warning: Function parameter or
+> >   member 'ctxt' not described in '__save_processor_state'
+> >  arch/x86/power/cpu.c:192: warning: Function parameter or
+> >   member 'ctxt' not described in '__restore_processor_state'
+> >
+> > Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> > ---
+> > V1->V2:
+> >         Fix the formatting of this kerneldoc comment
+> >
+> >  arch/x86/power/cpu.c | 31 ++++++++++++++++---------------
+> >  1 file changed, 16 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+> > index 3a070e7cdb8b..54b530db5ed0 100644
+> > --- a/arch/x86/power/cpu.c
+> > +++ b/arch/x86/power/cpu.c
+> > @@ -58,19 +58,20 @@ static void msr_restore_context(struct saved_context *ctxt)
+> >  }
+> >
+> >  /**
+> > - *     __save_processor_state - save CPU registers before creating a
+> > - *             hibernation image and before restoring the memory state from it
+> > - *     @ctxt - structure to store the registers contents in
+> > + * __save_processor_statei() - Save CPU registers before creating a
+> > + *                             hibernation image and before restoring
+> > + *                             the memory state from it
+> > + * @ctxt: Structure to store the registers contents in.
+> >   *
+> > - *     NOTE: If there is a CPU register the modification of which by the
+> > - *     boot kernel (ie. the kernel used for loading the hibernation image)
+> > - *     might affect the operations of the restored target kernel (ie. the one
+> > - *     saved in the hibernation image), then its contents must be saved by this
+> > - *     function.  In other words, if kernel A is hibernated and different
+> > - *     kernel B is used for loading the hibernation image into memory, the
+> > - *     kernel A's __save_processor_state() function must save all registers
+> > - *     needed by kernel A, so that it can operate correctly after the resume
+> > - *     regardless of what kernel B does in the meantime.
+> > + * NOTE: If there is a CPU register the modification of which by the
+> > + * boot kernel (ie. the kernel used for loading the hibernation image)
+> > + * might affect the operations of the restored target kernel (ie. the one
+> > + * saved in the hibernation image), then its contents must be saved by this
+> > + * function.  In other words, if kernel A is hibernated and different
+> > + * kernel B is used for loading the hibernation image into memory, the
+> > + * kernel A's __save_processor_state() function must save all registers
+> > + * needed by kernel A, so that it can operate correctly after the resume
+> > + * regardless of what kernel B does in the meantime.
+> >   */
+> >  static void __save_processor_state(struct saved_context *ctxt)
+> >  {
+> > @@ -181,9 +182,9 @@ static void fix_processor_context(void)
+> >  }
+> >
+> >  /**
+> > - * __restore_processor_state - restore the contents of CPU registers saved
+> > - *                             by __save_processor_state()
+> > - * @ctxt - structure to load the registers contents from
+> > + * __restore_processor_state() - Restore the contents of CPU registers saved
+> > + *                               by __save_processor_state()
+> > + * @ctxt: Structure to load the registers contents from.
+> >   *
+> >   * The asm code that gets us here will have restored a usable GDT, although
+> >   * it will be pointing to the wrong alias.
+> > --
+>
+> Applied as 5.14 material, thanks!
 
-> On 17/06/2021 12:07, Ulf Hansson wrote:
-> > + Rajendra
-> > 
-> > On Tue, 15 Jun 2021 at 17:55, Bjorn Andersson
-> > <bjorn.andersson@linaro.org> wrote:
-> > > 
-> > > On Tue 15 Jun 05:17 CDT 2021, Ulf Hansson wrote:
-> > > 
-> > > > + Mark
-> > > > 
-> > > > On Fri, 11 Jun 2021 at 16:34, Dmitry Baryshkov
-> > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > 
-> > > > > Added Stephen to Cc list
-> > > > > 
-> > > > > On Fri, 11 Jun 2021 at 16:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > > > 
-> > > > > > On Fri, 11 Jun 2021 at 12:15, Dmitry Baryshkov
-> > > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > > > 
-> > > > > > > In case of nested genpds it is easy to get the following warning from
-> > > > > > > lockdep, because all genpd's mutexes share same locking class. Use the
-> > > > > > > per-genpd locking class to stop lockdep from warning about possible
-> > > > > > > deadlocks. It is not possible to directly use genpd nested locking, as
-> > > > > > > it is not the genpd code calling genpd. There are interim calls to
-> > > > > > > regulator core.
-> > > > > > > 
-> > > > > > > [    3.030219] ============================================
-> > > > > > > [    3.030220] WARNING: possible recursive locking detected
-> > > > > > > [    3.030221] 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480 Not tainted
-> > > > > > > [    3.030222] --------------------------------------------
-> > > > > > > [    3.030223] kworker/u16:0/7 is trying to acquire lock:
-> > > > > > > [    3.030224] ffffde0eabd29aa0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
-> > > > > > > [    3.030236]
-> > > > > > > [    3.030236] but task is already holding lock:
-> > > > > > > [    3.030236] ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
-> > > > > > > [    3.030240]
-> > > > > > > [    3.030240] other info that might help us debug this:
-> > > > > > > [    3.030240]  Possible unsafe locking scenario:
-> > > > > > > [    3.030240]
-> > > > > > > [    3.030241]        CPU0
-> > > > > > > [    3.030241]        ----
-> > > > > > > [    3.030242]   lock(&genpd->mlock);
-> > > > > > > [    3.030243]   lock(&genpd->mlock);
-> > > > > > > [    3.030244]
-> > > > > > > [    3.030244]  *** DEADLOCK ***
-> > > > > > > [    3.030244]
-> > > > > > > [    3.030244]  May be due to missing lock nesting notation
-> > > > > > > [    3.030244]
-> > > > > > > [    3.030245] 6 locks held by kworker/u16:0/7:
-> > > > > > > [    3.030246]  #0: ffff6cca00010938 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
-> > > > > > > [    3.030252]  #1: ffff8000100c3db0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
-> > > > > > > [    3.030255]  #2: ffff6cca00ce3188 (&dev->mutex){....}-{3:3}, at: __device_attach+0x3c/0x184
-> > > > > > > [    3.030260]  #3: ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
-> > > > > > > [    3.030264]  #4: ffff8000100c3968 (regulator_ww_class_acquire){+.+.}-{0:0}, at: regulator_lock_dependent+0x6c/0x1b0
-> > > > > > > [    3.030270]  #5: ffff6cca00a59158 (regulator_ww_class_mutex){+.+.}-{3:3}, at: regulator_lock_recursive+0x94/0x1d0
-> > > > > > > [    3.030273]
-> > > > > > > [    3.030273] stack backtrace:
-> > > > > > > [    3.030275] CPU: 6 PID: 7 Comm: kworker/u16:0 Not tainted 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480
-> > > > > > > [    3.030276] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-> > > > > > > [    3.030278] Workqueue: events_unbound deferred_probe_work_func
-> > > > > > > [    3.030280] Call trace:
-> > > > > > > [    3.030281]  dump_backtrace+0x0/0x1a0
-> > > > > > > [    3.030284]  show_stack+0x18/0x24
-> > > > > > > [    3.030286]  dump_stack+0x108/0x188
-> > > > > > > [    3.030289]  __lock_acquire+0xa20/0x1e0c
-> > > > > > > [    3.030292]  lock_acquire.part.0+0xc8/0x320
-> > > > > > > [    3.030294]  lock_acquire+0x68/0x84
-> > > > > > > [    3.030296]  __mutex_lock+0xa0/0x4f0
-> > > > > > > [    3.030299]  mutex_lock_nested+0x40/0x50
-> > > > > > > [    3.030301]  genpd_lock_mtx+0x18/0x2c
-> > > > > > > [    3.030303]  dev_pm_genpd_set_performance_state+0x94/0x1a0
-> > > > > > > [    3.030305]  reg_domain_enable+0x28/0x4c
-> > > > > > > [    3.030308]  _regulator_do_enable+0x420/0x6b0
-> > > > > > > [    3.030310]  _regulator_enable+0x178/0x1f0
-> > > > > > > [    3.030312]  regulator_enable+0x3c/0x80
-> > > > > > 
-> > > > > > At a closer look, I am pretty sure that it's the wrong code design
-> > > > > > that triggers this problem, rather than that we have a real problem in
-> > > > > > genpd. To put it simply, the code in genpd isn't designed to work like
-> > > > > > this. We will end up in circular looking paths, leading to deadlocks,
-> > > > > > sooner or later if we allow the above code path.
-> > > > > > 
-> > > > > > To fix it, the regulator here needs to be converted to a proper PM
-> > > > > > domain. This PM domain should be assigned as the parent to the one
-> > > > > > that is requested to be powered on.
-> > > > > 
-> > > > > This more or less resembles original design, replaced per review
-> > > > > request to use separate regulator
-> > > > > (https://lore.kernel.org/linux-arm-msm/160269659638.884498.4031967462806977493@swboyd.mtv.corp.google.com/,
-> > > > > https://lore.kernel.org/linux-arm-msm/20201023131925.334864-1-dmitry.baryshkov@linaro.org/).
-> > > > 
-> > > > Thanks for the pointers. In hindsight, it looks like the
-> > > > "regulator-fixed-domain" DT binding wasn't the right thing.
-> > > > 
-> > > > Fortunately, it looks like the problem can be quite easily fixed, by
-> > > > moving to a correct model of the domain hierarchy.
-> > > > 
-> > > 
-> > > Can you give some pointers to how we actually fix this?
-> > > 
-> > > The problem that lead us down this path is that drivers/clk/qcom/gdsc.c
-> > > describes power domains, which are parented by domains provided by
-> > > drivers/soc/qcom/rpmhpd.c.
-> > > 
-> > > But I am unable to find a way for the gdsc driver to get hold of the
-> > > struct generic_pm_domain of the resources exposed by the rpmhpd driver.
-> > 
-> > You don't need a handle to the struct generic_pm_domain, to assign a
-> > parent/child domain. Instead you can use of_genpd_add_subdomain(),
-> > which takes two "struct of_phandle_args*" corresponding to the
-> > parent/child device nodes of the genpd providers and then let genpd
-> > internally do the look up.
-> > 
-> > As an example, you may have a look at how the PM domain topology in
-> > drivers/cpuidle/cpuidle-psci-domain.c are being created.
-> > 
-> > > 
-> > > 
-> > > The second thing that Dmitry's regulator driver does is to cast the
-> > > appropriate performance state vote on the rpmhpd resource, but I _think_
-> > > we can do that using OPP tables in the gdsc client's node...
-> > 
-> > Yes, it looks like using an OPP table and to specify a
-> > "required-opps", at some device node is the right thing to do.
-> > 
-> > In this case, I wonder if the "required-opps" belongs to the genpd
-> > provider node of the new power-domain (as it seems like it only
-> > supports one fixed performance state when it's powered on). On the
-> > other hand, specifying this at the consumer node should work as well,
-> > I think.
-> > 
-> > Actually, this relates to the changes [1] that Rajendra is working on
-> > with "assigned-performance-state" (that we agreed to move to
-> > OPP/required-opps) for genpd.
-> 
-> What about the following dts snippet?
-> I do not want to add power-domains directly to the dispcc node (as it's not
-> a device's power domain, just gdsc's parent power domain).
-> 
-> 
-> dispcc: clock-controller@af00000 {
-> 	compatible = "qcom,sm8250-dispcc";
-> 	[....]
-> 	#power-domain-cells = <1>;
-> 
-> 	mmss_gdsc {
-> 		power-domains = <&rpmhpd SM8250_MMCX>;
->                 required-opps = <&rpmhpd_opp_low_svs>;
-> 	};
-> };
-
-According to the documentation dispcc actually sits in MMCX (I thought
-it sat in CX...). So it seems appropriate to just specify that as the
-one and only power-domain for &dispcc and use that as the parent for
-MDSS_GDSC.
-
-That said, I do think we have other GDSCs in the system where the
-controller sits in one power-domain and the parent power-domain is a
-different one. I presume the right path here is to list all the
-power-domains in DT and then use some name based matching?
-
-Regards,
-Bjorn
+And dropped, because it introduced a build issue.
