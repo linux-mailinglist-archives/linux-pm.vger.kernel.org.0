@@ -2,128 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A993ABAAA
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 19:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D942D3ABB5B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 20:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbhFQRen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Jun 2021 13:34:43 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:42510 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbhFQRen (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 13:34:43 -0400
-Received: by mail-ot1-f45.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so6896479oth.9;
-        Thu, 17 Jun 2021 10:32:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=81Ce+c7gQdmhNFYfxwHdHAzT80ECkLbi7pk1F5wt6Z0=;
-        b=Z1YiSHnM9uAUEeYNJz+TUI8ULXcNZ3soPhSOJsKhuua/22KXCJXyYzBbiH9xZK557N
-         s1TlS1pA9t/QesWJ9uHtgtBKXHOPEaNt7E5DOkuN2m3u6S+qTGPXX0mQ93FqRngCfIpb
-         JJZTJYOOEnLmrgPj/IndhLRAUqpjU92BRuwRXyhMkS1kZDJh1YkTBwdBdK+6eJk2ysZi
-         QCGcOVhjSt/gR+XTVe7RcgrWiSSKeqj2BXWCRKiVJaH6JV31BdExS6q5cPlLzbtoNmz2
-         aJszRDHbpiOWqHxYPR0CNdadPkRuozZSdNyCRffRhEuMppt9waEF2IMcMWdpHiZKT9PD
-         vU7A==
-X-Gm-Message-State: AOAM532zNeHDqs9+ItT3r8ajWVlRcFgpnXelMnM20eidWsgXRox+Ojpl
-        mMdf57Imx8Mjxbu9G/ib6+keKsK+TUjEzTyFrLM=
-X-Google-Smtp-Source: ABdhPJz8swif365bH7WMe3PTZET/PN/Ow7UReQCrmLIY3gnTPr3g/iKUgGO7wsZIv698+1701xq5nOoLJZFirxKPsh4=
-X-Received: by 2002:a05:6830:1bf7:: with SMTP id k23mr5836663otb.206.1623951155517;
- Thu, 17 Jun 2021 10:32:35 -0700 (PDT)
+        id S231967AbhFQSZG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Jun 2021 14:25:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:6645 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231193AbhFQSZG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Jun 2021 14:25:06 -0400
+IronPort-SDR: a5dJkqjWnYtxqve8cct/8R++WMhBEkcQ1qKLOPl1FEaSb8Qp7GyxoM4Q0ZNeipIHJpxvB+nx8Z
+ 57MRInAfEd6A==
+X-IronPort-AV: E=McAfee;i="6200,9189,10018"; a="193741151"
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="193741151"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 11:22:52 -0700
+IronPort-SDR: tZ7JsTrA3+H4qLRsBwtwz21bprP5B7L6wHAn+2TArLopF2g7qOzdpVee/GFn/YDBWqGOjZEz0d
+ eI0Gs4MiKniA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="452868339"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2021 11:22:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E7B73262; Thu, 17 Jun 2021 21:23:14 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] power: supply: bq24190_charger: drop of_match_ptr() from device ID table
+Date:   Thu, 17 Jun 2021 21:23:10 +0300
+Message-Id: <20210617182310.60503-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210615033535.2907295-1-libaokun1@huawei.com> <CAJZ5v0iajoHXbJO-HgOMZkDo1GfRNEgDoNaSmFcOpeJGhgrYdA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iajoHXbJO-HgOMZkDo1GfRNEgDoNaSmFcOpeJGhgrYdA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Jun 2021 19:32:24 +0200
-Message-ID: <CAJZ5v0g2+far_FMgBSV9OdobJU6kKD6BR3pg5VabavQVYC-uQQ@mail.gmail.com>
-Subject: Re: [PATCH -next v2] x86/power: fix doc warnings in cpu.c
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yue Haibing <yuehaibing@huawei.com>, yangjihong1@huawei.com,
-        yu kuai <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 2:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Jun 15, 2021 at 5:26 AM Baokun Li <libaokun1@huawei.com> wrote:
-> >
-> > Fixes the following W=1 kernel build warning(s):
-> >
-> >  arch/x86/power/cpu.c:76: warning: Function parameter or
-> >   member 'ctxt' not described in '__save_processor_state'
-> >  arch/x86/power/cpu.c:192: warning: Function parameter or
-> >   member 'ctxt' not described in '__restore_processor_state'
-> >
-> > Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> > ---
-> > V1->V2:
-> >         Fix the formatting of this kerneldoc comment
-> >
-> >  arch/x86/power/cpu.c | 31 ++++++++++++++++---------------
-> >  1 file changed, 16 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> > index 3a070e7cdb8b..54b530db5ed0 100644
-> > --- a/arch/x86/power/cpu.c
-> > +++ b/arch/x86/power/cpu.c
-> > @@ -58,19 +58,20 @@ static void msr_restore_context(struct saved_context *ctxt)
-> >  }
-> >
-> >  /**
-> > - *     __save_processor_state - save CPU registers before creating a
-> > - *             hibernation image and before restoring the memory state from it
-> > - *     @ctxt - structure to store the registers contents in
-> > + * __save_processor_statei() - Save CPU registers before creating a
-> > + *                             hibernation image and before restoring
-> > + *                             the memory state from it
-> > + * @ctxt: Structure to store the registers contents in.
-> >   *
-> > - *     NOTE: If there is a CPU register the modification of which by the
-> > - *     boot kernel (ie. the kernel used for loading the hibernation image)
-> > - *     might affect the operations of the restored target kernel (ie. the one
-> > - *     saved in the hibernation image), then its contents must be saved by this
-> > - *     function.  In other words, if kernel A is hibernated and different
-> > - *     kernel B is used for loading the hibernation image into memory, the
-> > - *     kernel A's __save_processor_state() function must save all registers
-> > - *     needed by kernel A, so that it can operate correctly after the resume
-> > - *     regardless of what kernel B does in the meantime.
-> > + * NOTE: If there is a CPU register the modification of which by the
-> > + * boot kernel (ie. the kernel used for loading the hibernation image)
-> > + * might affect the operations of the restored target kernel (ie. the one
-> > + * saved in the hibernation image), then its contents must be saved by this
-> > + * function.  In other words, if kernel A is hibernated and different
-> > + * kernel B is used for loading the hibernation image into memory, the
-> > + * kernel A's __save_processor_state() function must save all registers
-> > + * needed by kernel A, so that it can operate correctly after the resume
-> > + * regardless of what kernel B does in the meantime.
-> >   */
-> >  static void __save_processor_state(struct saved_context *ctxt)
-> >  {
-> > @@ -181,9 +182,9 @@ static void fix_processor_context(void)
-> >  }
-> >
-> >  /**
-> > - * __restore_processor_state - restore the contents of CPU registers saved
-> > - *                             by __save_processor_state()
-> > - * @ctxt - structure to load the registers contents from
-> > + * __restore_processor_state() - Restore the contents of CPU registers saved
-> > + *                               by __save_processor_state()
-> > + * @ctxt: Structure to load the registers contents from.
-> >   *
-> >   * The asm code that gets us here will have restored a usable GDT, although
-> >   * it will be pointing to the wrong alias.
-> > --
->
-> Applied as 5.14 material, thanks!
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr() does not have any sense (this also allows ACPI
+matching via PRP0001, even though it might be not relevant here). This
+fixes compile warning (!CONFIG_OF):
 
-And dropped, because it introduced a build issue.
+  drivers/power/supply/bq24190_charger.c:1972:34: warning: ‘bq24190_of_match’ defined but not used [-Wunused-const-variable=]
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/power/supply/bq24190_charger.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index 852e86bfe2fb..35ff0c8fe96f 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -5,11 +5,10 @@
+  * Author: Mark A. Greer <mgreer@animalcreek.com>
+  */
+ 
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/interrupt.h>
+ #include <linux/delay.h>
+-#include <linux/of_irq.h>
+-#include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/power_supply.h>
+ #include <linux/power/bq24190_charger.h>
+@@ -1959,7 +1958,6 @@ static const struct i2c_device_id bq24190_i2c_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, bq24190_i2c_ids);
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id bq24190_of_match[] = {
+ 	{ .compatible = "ti,bq24190", },
+ 	{ .compatible = "ti,bq24192", },
+@@ -1968,11 +1966,6 @@ static const struct of_device_id bq24190_of_match[] = {
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bq24190_of_match);
+-#else
+-static const struct of_device_id bq24190_of_match[] = {
+-	{ },
+-};
+-#endif
+ 
+ static struct i2c_driver bq24190_driver = {
+ 	.probe		= bq24190_probe,
+@@ -1981,7 +1974,7 @@ static struct i2c_driver bq24190_driver = {
+ 	.driver = {
+ 		.name		= "bq24190-charger",
+ 		.pm		= &bq24190_pm_ops,
+-		.of_match_table	= of_match_ptr(bq24190_of_match),
++		.of_match_table	= bq24190_of_match,
+ 	},
+ };
+ module_i2c_driver(bq24190_driver);
+-- 
+2.30.2
+
