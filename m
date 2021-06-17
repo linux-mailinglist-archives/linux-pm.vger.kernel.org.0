@@ -2,138 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3AF3AB25E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 13:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3083AB2F3
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 13:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbhFQLVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Jun 2021 07:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhFQLVr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 07:21:47 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0FDC061760
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x16so4722268pfa.13
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Np/lQVozeidMH5d/F8qOsmZ9gxCf0/IInqaWOQ/30j4=;
-        b=L7dHSltwk04Vk547K8izfarGGRCbF4ISWk6Fb0R1ubDfVGBnc2sFCI9UVohrf3z8hM
-         bfHXvQH6gcaLZHZArDnbvRp9HvDkJnyrua/eizeIjvKJHpLMJusIHhjNATDE7h6TErC5
-         7CZz6Ul0kbXdmlmjXzNHbpmCZxZ/4AiIkQ0CxGMY2QcMDrzN4s/c3O73uMvTPD7Wxb6C
-         MwCRLlkrqHRt8Pcv/UF1TmBMAudCnqRwKjwGjUF8EZYf/MOud9ege9kPmavrzYcEkjSx
-         Furj36cWPM+oRKegQtePu4ABTLDiHiuTjbnzmNQETeUYIDjPgNzrEffPnFNsGlVDOIUv
-         a6Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Np/lQVozeidMH5d/F8qOsmZ9gxCf0/IInqaWOQ/30j4=;
-        b=tObenMPfhtBlCfnmM4kv0bxv21fHQ4trSHyUZ+JzyLtts4hIKfVo05j6KASK4PGShD
-         A04a7n3FAx/iFyGHAJeuXqe2eVRrQlm/ClfDoQZKI/MsBwPWlf5KGkIQpHZk0TUadvcJ
-         0ma1Nh7teTHWBmVc5adItVvy3x1FWqhZZ0DWpYvgOOYh9wPj1QJJ8+mml78L1WabrEAM
-         WnQg/eQSDE90Spepry5ceiYQ6UjlqoXhasmqa9/j+HPBWqf7TyTJyjWnxcQoYllhZsq5
-         lGdTuCsV8+KhbGCBt0GtUcq10jYCIBFlV3jr8iFSGj5Oh7vB2T275LBFOHrBIXtNQkL5
-         muvw==
-X-Gm-Message-State: AOAM533M9lDWFl+3uq1dDHTGULGn6OZKvMH4oy2YULOmjQ8a3yXa3vCR
-        BF/GhFJoF+larKl0O4M+2VQqaA==
-X-Google-Smtp-Source: ABdhPJxBREtkjK9RmmpOaSHHRyEaKsZymNNG87E3Vgz5LObhwmg1rfNrxRVlX8yXxTFnGAN0vI7hpQ==
-X-Received: by 2002:aa7:8f28:0:b029:2f4:9245:4ed with SMTP id y8-20020aa78f280000b02902f4924504edmr4735299pfr.24.1623928779088;
-        Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id v15sm4886439pfm.216.2021.06.17.04.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 04:19:38 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 16:49:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/3] cpufreq: CPPC: Add support for frequency
- invariance
-Message-ID: <20210617111936.cfjzoh6g5zvolaf5@vireshk-i7>
-References: <cover.1623825725.git.viresh.kumar@linaro.org>
- <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
- <20210616124806.GA6495@arm.com>
- <20210617032416.r2gfp25xxvhc5t4x@vireshk-i7>
- <20210617103415.GA29877@arm.com>
+        id S232602AbhFQLtb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Jun 2021 07:49:31 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41416 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232347AbhFQLtY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 07:49:24 -0400
+X-UUID: eed78c9a1b1b4085a4303789cbcd9d5b-20210617
+X-UUID: eed78c9a1b1b4085a4303789cbcd9d5b-20210617
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ben.tseng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 466327335; Thu, 17 Jun 2021 19:47:10 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 17 Jun 2021 19:47:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Jun 2021 19:47:09 +0800
+From:   Ben Tseng <ben.tseng@mediatek.com>
+To:     Fan Chen <fan.chen@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Ben Tseng <ben.tseng@mediatek.com>
+Subject: [PATCH v5 0/3] thermal: mediatek: Add LVTS architecture thermal controller
+Date:   Thu, 17 Jun 2021 19:47:04 +0800
+Message-ID: <20210617114707.10618-1-ben.tseng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210617103415.GA29877@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-06-21, 11:34, Ionela Voinescu wrote:
-> I might be missing something, but when you offline a single CPU in a
-> policy, the worse that can happen is that a last call to
-> cppc_scale_freq_tick() would have sneaked in before irqs and the tick
-> are disabled. But even if we have a last call to
-> cppc_scale_freq_workfn(), the counter read methods would know how to
-> cope with hotplug, and the cppc_cpudata structure would still be
-> allocated and have valid desired_perf and highest_perf values.
+This patch move thermal files related to Mediatek to the mediatek folder.
+And introduce the new architecture LVTS (low pressure thermal sensor) driver to report
+the highest temperature in the SoC and record the highest temperature sensor,
+each sensor as a hot zone.
+The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+can connect up to 7 TSMCUs.
 
-Okay, I somehow assumed that cppc_scale_freq_workfn() needs to run on the local
-CPU, while it can actually land anywhere. My fault.
+The architecture will be the first to be used on mt6873 and mt8192.
 
-But the irq-work being queued here is per-cpu and it will get queued on the
-local CPU where the tick occurred.
+Change in v5:
+        - Use 'git mv' for the relocated file.
 
-Now I am not sure of what will happen to this irq-work in that case. I tried to
-look now and I see that these irq-work items are processed first on tick and
-then the tick handler of scheduler is called, so that will again queue the cppc
-irq-work.
+Change in v4:
+        - Rebase to kernel-v5.13-rc1
+        - Resend
 
-What happens if this happens along with CPU hotplug ? I am not sure I understand
-that. There may or may not be any side effects of this. Lets assume the work
-item is left in the queue as is and no tick happens after that as the CPU is
-offlined. We are good.
+Change in v3:
+        - [2/3]
+          - change the expression in the lvts_temp_to_raw to dev_s64.
 
-Now if we unload the cpufreq driver at this moment, the driver will call
-irq_work_sync(), which may end up in a while loop ? There is no
-irq-work-cancel() API.
+Change in v2:
+        - Rebase to kernel-5.11-rc1.
+        - [2/3]
+          - sort headers
+          - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+          - disconstruct the api of lvts_read_tc_msr_raw.
+          - add the initial value max_temp = 0 and compare e.q.
+            in the lvts_read_all_tc_temperature.
+          - add the return with invalid number in the lvts_init.
 
-Peter: Can you help here on this ? Lemme try to explain a bit here:
+This patch depends on [1].
 
-We are starting an irq-work (in cppc cpufreq driver) from
-scheduler_tick()->arch_scale_freq_tick(). What will happen if the driver doesn't
-take care of CPU hotplug explicitly and make sure this work isn't queued again
-from the next tick.
+[1]https://patchwork.kernel.org/project/linux-mediatek/patch/20210524122053.17155-7-chun-jie.chen@mediatek.com/
 
-Is it important for user to make sure it gets rid of the irq-work during hotplug
-here ?
+Michael Kao (3):
+  thermal: mediatek: Relocate driver to mediatek folder
+  thermal: mediatek: Add LVTS drivers for SoC theraml zones
+  dt-bindings: thermal: Add binding document for mt6873 thermal
+    controller
 
-> Worse case, the last scale factor set for the CPU will be meaningless,
-> but it's already meaningless as the CPU is going down.
-> 
-> When you are referring to the issue reported by Qian I suppose you are
-> referring to this [1]. I think this is the case where you hotplug the
-> last CPU in a policy and free cppc_cpudata.
-> 
-> [1] https://lore.kernel.org/linux-pm/41f5195e-0e5f-fdfe-ba37-34e1fd8e4064@quicinc.com/
-
-Yes, I was talking about this report only, I am not sure now if I understand
-what actually happened here :)
-
-Ionela: I have skipped replying to rest of your email, will get back to that
-once we have clarification on the above first.
-
-Thanks a lot for your reviews, always on time :)
+ .../thermal/mediatek-thermal-lvts.yaml        |   81 ++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   33 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../{mtk_thermal.c => mediatek/soc_temp.c}    |    0
+ drivers/thermal/mediatek/soc_temp_lvts.c      | 1287 +++++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.h      |  312 ++++
+ 8 files changed, 1720 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
 
 -- 
-viresh
+2.18.0
+
