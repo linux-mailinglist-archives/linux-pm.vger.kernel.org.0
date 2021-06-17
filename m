@@ -2,24 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A883AB16F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 12:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3AF3AB25E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 13:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbhFQKg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Jun 2021 06:36:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:51508 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231882AbhFQKgZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Jun 2021 06:36:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DD5031B;
-        Thu, 17 Jun 2021 03:34:17 -0700 (PDT)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DE7E3F694;
-        Thu, 17 Jun 2021 03:34:17 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 11:34:15 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S232455AbhFQLVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Jun 2021 07:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhFQLVr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Jun 2021 07:21:47 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0FDC061760
+        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id x16so4722268pfa.13
+        for <linux-pm@vger.kernel.org>; Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Np/lQVozeidMH5d/F8qOsmZ9gxCf0/IInqaWOQ/30j4=;
+        b=L7dHSltwk04Vk547K8izfarGGRCbF4ISWk6Fb0R1ubDfVGBnc2sFCI9UVohrf3z8hM
+         bfHXvQH6gcaLZHZArDnbvRp9HvDkJnyrua/eizeIjvKJHpLMJusIHhjNATDE7h6TErC5
+         7CZz6Ul0kbXdmlmjXzNHbpmCZxZ/4AiIkQ0CxGMY2QcMDrzN4s/c3O73uMvTPD7Wxb6C
+         MwCRLlkrqHRt8Pcv/UF1TmBMAudCnqRwKjwGjUF8EZYf/MOud9ege9kPmavrzYcEkjSx
+         Furj36cWPM+oRKegQtePu4ABTLDiHiuTjbnzmNQETeUYIDjPgNzrEffPnFNsGlVDOIUv
+         a6Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Np/lQVozeidMH5d/F8qOsmZ9gxCf0/IInqaWOQ/30j4=;
+        b=tObenMPfhtBlCfnmM4kv0bxv21fHQ4trSHyUZ+JzyLtts4hIKfVo05j6KASK4PGShD
+         A04a7n3FAx/iFyGHAJeuXqe2eVRrQlm/ClfDoQZKI/MsBwPWlf5KGkIQpHZk0TUadvcJ
+         0ma1Nh7teTHWBmVc5adItVvy3x1FWqhZZ0DWpYvgOOYh9wPj1QJJ8+mml78L1WabrEAM
+         WnQg/eQSDE90Spepry5ceiYQ6UjlqoXhasmqa9/j+HPBWqf7TyTJyjWnxcQoYllhZsq5
+         lGdTuCsV8+KhbGCBt0GtUcq10jYCIBFlV3jr8iFSGj5Oh7vB2T275LBFOHrBIXtNQkL5
+         muvw==
+X-Gm-Message-State: AOAM533M9lDWFl+3uq1dDHTGULGn6OZKvMH4oy2YULOmjQ8a3yXa3vCR
+        BF/GhFJoF+larKl0O4M+2VQqaA==
+X-Google-Smtp-Source: ABdhPJxBREtkjK9RmmpOaSHHRyEaKsZymNNG87E3Vgz5LObhwmg1rfNrxRVlX8yXxTFnGAN0vI7hpQ==
+X-Received: by 2002:aa7:8f28:0:b029:2f4:9245:4ed with SMTP id y8-20020aa78f280000b02902f4924504edmr4735299pfr.24.1623928779088;
+        Thu, 17 Jun 2021 04:19:39 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id v15sm4886439pfm.216.2021.06.17.04.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jun 2021 04:19:38 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 16:49:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Sudeep Holla <sudeep.holla@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
@@ -34,134 +64,76 @@ Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V2 3/3] cpufreq: CPPC: Add support for frequency
  invariance
-Message-ID: <20210617103415.GA29877@arm.com>
+Message-ID: <20210617111936.cfjzoh6g5zvolaf5@vireshk-i7>
 References: <cover.1623825725.git.viresh.kumar@linaro.org>
  <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
  <20210616124806.GA6495@arm.com>
  <20210617032416.r2gfp25xxvhc5t4x@vireshk-i7>
+ <20210617103415.GA29877@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210617032416.r2gfp25xxvhc5t4x@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210617103415.GA29877@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Many thanks for the details!
+On 17-06-21, 11:34, Ionela Voinescu wrote:
+> I might be missing something, but when you offline a single CPU in a
+> policy, the worse that can happen is that a last call to
+> cppc_scale_freq_tick() would have sneaked in before irqs and the tick
+> are disabled. But even if we have a last call to
+> cppc_scale_freq_workfn(), the counter read methods would know how to
+> cope with hotplug, and the cppc_cpudata structure would still be
+> allocated and have valid desired_perf and highest_perf values.
 
-On Thursday 17 Jun 2021 at 08:54:16 (+0530), Viresh Kumar wrote:
-> On 16-06-21, 13:48, Ionela Voinescu wrote:
-> > I was looking forward to the complete removal of stop_cpu() :).
+Okay, I somehow assumed that cppc_scale_freq_workfn() needs to run on the local
+CPU, while it can actually land anywhere. My fault.
+
+But the irq-work being queued here is per-cpu and it will get queued on the
+local CPU where the tick occurred.
+
+Now I am not sure of what will happen to this irq-work in that case. I tried to
+look now and I see that these irq-work items are processed first on tick and
+then the tick handler of scheduler is called, so that will again queue the cppc
+irq-work.
+
+What happens if this happens along with CPU hotplug ? I am not sure I understand
+that. There may or may not be any side effects of this. Lets assume the work
+item is left in the queue as is and no tick happens after that as the CPU is
+offlined. We are good.
+
+Now if we unload the cpufreq driver at this moment, the driver will call
+irq_work_sync(), which may end up in a while loop ? There is no
+irq-work-cancel() API.
+
+Peter: Can you help here on this ? Lemme try to explain a bit here:
+
+We are starting an irq-work (in cppc cpufreq driver) from
+scheduler_tick()->arch_scale_freq_tick(). What will happen if the driver doesn't
+take care of CPU hotplug explicitly and make sure this work isn't queued again
+from the next tick.
+
+Is it important for user to make sure it gets rid of the irq-work during hotplug
+here ?
+
+> Worse case, the last scale factor set for the CPU will be meaningless,
+> but it's already meaningless as the CPU is going down.
 > 
-> No one wants to remove more code than I do :)
+> When you are referring to the issue reported by Qian I suppose you are
+> referring to this [1]. I think this is the case where you hotplug the
+> last CPU in a policy and free cppc_cpudata.
 > 
-> > I'll only comment on this for now as I should know the rest.
-> > 
-> > Let's assume we don't have these, what happens now is the following:
-> > 
-> > 1. We hotplug out the last CPU in a policy, we call the
-> >    .stop_cpu()/exit() function which will free the cppc_cpudata structure.
-> > 
-> >    The only vulnerability is if we have a last tick on that last CPU,
-> >    after the above callback was called.
-> > 
-> > 2. When the CPU at 1. gets hotplugged back in, the cppc_fi->cpu_data is
-> >    stale.
-> > 
-> > We do not have a problem when removing the CPPC cpufreq module as we're
-> > doing cppc_freq_invariance_exit() before unregistering the driver and
-> > freeing the data.
-> > 
-> > Are 1. and 2 the only problems we have, or have I missed any?
-> 
-> There is more to it. For simplicity, lets assume a quad-core setup,
-> with all 4 CPUs sharing the cpufreq policy. And here is what happens
-> without the new changes:
-> 
-> - On CPPC cpufreq driver insertion, we start 4 kthreads/irq-works (1
->   for each CPU as it fires from tick) from the ->init() callback.
-> 
-> - Now lets say we offline CPU3. The CPPC cpufreq driver isn't notified
->   by anyone and it hasn't registered itself to hotplug notifier as
->   well. So, the irq-work/kthread isn't stopped. This results in the
->   issue reported by Qian earlier.
-> 
+> [1] https://lore.kernel.org/linux-pm/41f5195e-0e5f-fdfe-ba37-34e1fd8e4064@quicinc.com/
 
-I might be missing something, but when you offline a single CPU in a
-policy, the worse that can happen is that a last call to
-cppc_scale_freq_tick() would have sneaked in before irqs and the tick
-are disabled. But even if we have a last call to
-cppc_scale_freq_workfn(), the counter read methods would know how to
-cope with hotplug, and the cppc_cpudata structure would still be
-allocated and have valid desired_perf and highest_perf values.
+Yes, I was talking about this report only, I am not sure now if I understand
+what actually happened here :)
 
-Worse case, the last scale factor set for the CPU will be meaningless,
-but it's already meaningless as the CPU is going down.
+Ionela: I have skipped replying to rest of your email, will get back to that
+once we have clarification on the above first.
 
-When you are referring to the issue reported by Qian I suppose you are
-referring to this [1]. I think this is the case where you hotplug the
-last CPU in a policy and free cppc_cpudata.
+Thanks a lot for your reviews, always on time :)
 
-[1] https://lore.kernel.org/linux-pm/41f5195e-0e5f-fdfe-ba37-34e1fd8e4064@quicinc.com/
-
->   The very same thing happens with schedutil governor too, which uses
->   very similar mechanisms, and the cpufreq core takes care of it there
->   by stopping the governor before removing the CPU from policy->cpus
->   and starting it again. So there we stop irq-work/kthread for all 4
->   CPUs, then start them only for remaining 3.
-> 
-
-Things are different for sugov: you have to stop the governor when one
-CPU in the policy goes down, and it's normal for sugov not to allow its
-hooks to be called while the governor is down so it has to do a full
-cleanup when going down and a full bringup when going back up.
-
-The difference for CPPC invariance is that only a CPU can trigger the
-work to update its own scale factor, through the tick. No other CPU x
-can trigger a scale factor update for CPU y, but x can carry out the
-work for CPU y (x can run the cppc_scale_freq_workfn(y)).
-
-So when y goes down, it won't have a tick to queue any irq or kthread
-work any longer until it's brought back up. So I believe that the only
-cleanup that needs to be done when a CPU goes offline, is to ensure
-that the work triggered by that last tick is done safely.
-
->   I thought about that approach as well, but it was too heavy to stop
->   everyone and start again in this case. And so I invented start_cpu()
->   and stop_cpu() callbacks.
-> 
-
-> - In this case, because the CPU is going away, we need to make sure we
->   don't queue any more irq-work or kthread to it and this is one of
->   the main reasons for adding synchronization in the topology core,
->   because we need a hard guarantee here that irq-work won't fire
->   again, as the CPU won't be there or will not be in a sane state.
-> 
-
-We can't queue any more work for it as there's no tick for the offline
-CPU.
-
-> - The same sequence of events is true for the case where the last CPU
->   of a policy goes away (not in this example, but lets say quad-core
->   setup with separate policies for each CPU).
-> 
-> - Not just the policy, but the CPU may be going away as well.
-> 
-> I hope I was able to clarify a bit here.
-> 
-
-Thanks! I do agree it is better to be cautious, but I initially wanted to
-understand we don't see the problem bigger than it actually is.
-
-Thanks,
-Ionela.
-
-P.S. I'll give more thought to the rcu use in the arch_topology driver.
-I'm the boring kind that likes to err on the side of caution, so I tend
-to agree that it might be good to have even if the current problem could
-be solved in this driver.
-
-
-> -- 
-> viresh
+-- 
+viresh
