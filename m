@@ -2,127 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B053AA958
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533433AA96D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbhFQDIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 23:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S230284AbhFQDQC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 23:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhFQDIX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:08:23 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ACFC061574
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:06:16 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q15so3719465pgg.12
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:06:16 -0700 (PDT)
+        with ESMTP id S230052AbhFQDQC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:16:02 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614F9C061574
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:13:55 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e1so2163227plh.8
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4WB1jB6nT0GNnkzEivbgMBJeFx8gT0oJK+hi8Kq4WRE=;
-        b=iAC/lcEidMUL1pgEoRjyMcGeyXnDOa+uxS/umBrfkwR6yOKHrkNuZno2a+GxRLlnFO
-         XGBMYrQeOR/pyBbykQqFUCP+xjHLC+YLGs+N2CFiKnZxtCDCdFDYuJOiVu6vJ5xY6f01
-         u3/5Cbmyaa8+cQfetYAgNKoBVeEuTXuVEvedRNeFqdd/xSc7Rn6U+RoNp6JoM5kmWAO1
-         byFkVS7uH0iTHMGTtEaEAvJsXW2SsPCHVlvOwMuRMMdfsP65DrTtxJH/oIhW6ojUnON6
-         5SmmRq4gGHTk1ndN0YrsNpDzjo///ADA/4yJLBQ6OXRAF5Wabgw7nLb4ZJV0LDk3Tva1
-         Z9mg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=1UkZIjrVFVA+7wFZqS424S7XJLGg8Ir1lMWkJx0j3Es=;
+        b=K1mAgGmonL9zlxmZv6dotKXjAzWeztUVJqu5zcRiDOgy+3dpOjDqI2Dp0wNSL0TswI
+         7XLoSUXFBAI9FRTs7GJDFqWGjRqJ3P1T1z4zHIt1r/yR9j0vnpGpSzUNevzrTp/WBWGk
+         WvXlVPHys4gX2AFEoIcGeV+QpcQK9CepDgtynv3rb0H0ddm58xUvUMCf6RKh2vF9BNwm
+         C0naYS3w5cGh9RL05r2X13weaF44tOY4AAZdBIg1DsC+1AaaHstNpmIXRkLrejJgocOw
+         Azgub74NPvuNbYyR1YnrVuUGrg9F482FApqE7N8/HooxuPkM6erpVs1MhSHKQv6P1sso
+         wQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4WB1jB6nT0GNnkzEivbgMBJeFx8gT0oJK+hi8Kq4WRE=;
-        b=cSB/AgvzA3/RIK01dPQPkvRPx7S7txd3jTQt2qgTx77JqyiExe02p79oWRbbaZrbKR
-         fWdgI4Vyahku1Kx73hQBysQy+pBE67sOpqjw4a8yYfu2/CLrMxImxVS9ZiBIGixqfhWw
-         CxNHy3ZUvOwUks46AsnAbLEG9dRbDnj5RklUYhCTPU5OtbEaWsmvk2Ahr+pAXUriTBKT
-         pyKqCCxSE+Em3/LdiXCvkT6y+wdPFD8TviBVmVx6klK6zfZbyv9ljxYdodj8J/qiBZbX
-         sYO40p2iebRXFw8EpQ1nEbbxQm1So5Y04LUA9O3/DJ+LzAwZli1/Bf7a/phDm6vJUoty
-         u9Cg==
-X-Gm-Message-State: AOAM531rRKORXVJv52VdrDtTiS0ZooDLcVfWIXLvtCbvmq2FWIC8w+TV
-        KWinpc3DWw/JxQFsHzgPgzVQbQ==
-X-Google-Smtp-Source: ABdhPJxO+4Dx6Cgg1M5OJYvF0W8ZkqKGbRTflVIy7v8Nm4WlFrTzqKT6e9gideff3WV12/k8hZkpFA==
-X-Received: by 2002:aa7:9515:0:b029:2e9:c6f4:2c44 with SMTP id b21-20020aa795150000b02902e9c6f42c44mr3204136pfp.28.1623899175589;
-        Wed, 16 Jun 2021 20:06:15 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id o20sm3191289pjq.57.2021.06.16.20.06.13
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=1UkZIjrVFVA+7wFZqS424S7XJLGg8Ir1lMWkJx0j3Es=;
+        b=uTmGY1DGzm2DxkdaZXM7eMzG9/iMDDS/bJH/iJT8yNqVAj0lrv4gJ0tEEAXa7MERfv
+         /bP94kWJfnLO3pU6pJ9Lh6nEVAio4Ofner1b8+VxQWt1hPa9d0KBGvcTMCBRLyX8z2Nj
+         NAIDXkZQqn0z8quuA6HEvyNYAaqnhMystdX438wz4q0IC1xLB14f2h3SK8BZZJX08b+8
+         pvDmK8QZPO5eG6nuKB8YvPdYU046vm6LjAVR0eC4MIuKa2O2ac0WYCOBsicVXSvmqRZC
+         zenci1+fWkyZCwQsYnCgCbpK8kXAvTWvcept7BZnmch047+yU5QkiKWSdX48vrzen6uU
+         Di+A==
+X-Gm-Message-State: AOAM532S/y9r9EAR257FxE35pkC1JkNCBpDSOKPaqGJLkkjAWtNeV2SQ
+        ItuGKZ/JxfZ/TEda9G7PzulM/A==
+X-Google-Smtp-Source: ABdhPJzW78qS6DUiMOUwBcWyFm6dRgnv3TqbuiU51xpXiglb5cCFys3eJB2zaGo1tbysOc5nqPgMUg==
+X-Received: by 2002:a17:90a:5b0a:: with SMTP id o10mr14322338pji.143.1623899634979;
+        Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d3sm3514418pfn.141.2021.06.16.20.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 20:06:14 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 08:36:12 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/3] arch_topology: Avoid use-after-free for
- scale_freq_data
-Message-ID: <20210617030612.sksyutwjgwmozka5@vireshk-i7>
-References: <cover.1623825725.git.viresh.kumar@linaro.org>
- <9dba462b4d09a1a8a9fbb75740b74bf91a09a3e1.1623825725.git.viresh.kumar@linaro.org>
- <20210616112544.GA23657@arm.com>
- <20210616113604.e4kc3jxb7ayqskev@vireshk-i7>
- <20210616120057.GA23282@arm.com>
+        Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
+Message-ID: <60cabdf2.1c69fb81.59b9.ae0a@mx.google.com>
+Date:   Wed, 16 Jun 2021 20:13:54 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210616120057.GA23282@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.13-rc6-122-gb7fd255fd200
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 6 builds: 0 failed,
+ 6 passed (v5.13-rc6-122-gb7fd255fd200)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-06-21, 13:00, Ionela Voinescu wrote:
-> I would agree if it wasn't for the fact that the driver provides the
-> set_freq_scale() implementation that ends up using driver internal data
-> which could have been freed by the driver's own .exit()/stop_cpu()
-> callbacks. The API and the generic implementation has the responsibility
-> of making sure of sane access to its own structures.
+pm/testing build: 6 builds: 0 failed, 6 passed (v5.13-rc6-122-gb7fd255fd200)
 
-How do you see timer core or workqueue core then ? Why do they make
-sure they don't end up calling user's function once we ask them not to
-?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc6-122-gb7fd255fd200/
 
-And also scheduler's own util update mechanism, the exact thing
-happens there. Users (cpufreq governors) call
-cpufreq_add_update_util_hook() and cpufreq_remove_update_util_hook()
-to pass their own data structure "struct update_util_data", which has
-ia callback within. This is what happens from scheduler's context in
-those cases.
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc6-122-gb7fd255fd200
+Git Commit: b7fd255fd2005d382ea1e26d3a6cd98028802541
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
 
-static inline void cpufreq_update_util(struct rq *rq, unsigned int flags)
-{
-	struct update_util_data *data;
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-	data = rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
-						  cpu_of(rq)));
-	if (data)
-		data->func(data, rq_clock(rq), flags);
-}
+Detailed per-defconfig build reports:
 
-Also note that some kind of synchronisation mechanism is indeed
-required between topology_set_scale_freq_source() and
-topology_clear_scale_freq_source(), there is no race there today,
-sure, but this is an API which is made generic.
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-> Even if we would want to keep drivers from shooting themselves in the
-> foot, I would prefer we postpone it until we have more users for this,
-> before we add any synchronisation mechanisms to functionality called
-> on the tick.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-The rcu mechanism is very much used in the scheduler itself because it
-is lightweight. Honestly I don't even see any other way (w.r.t.
-locking) users can fix it at their end. They don't know which was the
-last tick that used their callback.
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-> Let's see if there's a less invasive solution to fix CPPC for now, what
-> do you think?
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
-For me, this change is required in the API despite how CPPC ends up
-using it. Else we are failing at defining the API itself IMHO.
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
--- 
-viresh
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
