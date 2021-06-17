@@ -2,140 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F163AA98F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9770B3AA99D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jun 2021 05:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhFQD0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Jun 2021 23:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S229560AbhFQDgB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Jun 2021 23:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbhFQD00 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:26:26 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474E9C06175F
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:24:19 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u18so3828373pfk.11
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:24:19 -0700 (PDT)
+        with ESMTP id S229503AbhFQDgB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Jun 2021 23:36:01 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3815BC061574
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:33:54 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id k6so3834412pfk.12
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jun 2021 20:33:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=vQ1H5KpmR6igc6vGa3WgsWAZHbvCNMb9RNa0+vWcC+c=;
-        b=pntVkEhpVrje7UZgQbd5ogPor9DVKmZh+o6VM42V9+9qGmWQTuQzsaHU4FnqosSDmb
-         u17goz6U6MbKUWtgPZ2z/kEYiWnj2LdJPSeaTUKddqGqX1hljiGnYSuqgO3xnbuA/rGW
-         mowV5PmjPrGCx4rh/iIiUR21ylReC92w4TwqUIOIepfFOgD8YR7MOcBEi5XbrSDbfD5Z
-         GtKkRctOBp9uRnUhtDWJFWtFXaCh70/wvTRZoiRC20upA5jumdFMJIXMa7R4WxRwBIbP
-         IKFLPW3Bze94fMiXlrw1bSLFK23kQ1KVGMhB7dQQddbF3zIDvW0un1963cTibr45SyPp
-         lqgQ==
+        bh=YVqIcoZrg+RvpigGZrAOTiszoBMuUnCz4PKfzeq83ZY=;
+        b=grYGYheRU7Z5BoMtwQEq1jIWb43Dk2CZv0mAYBvQYOdhEUD3GT1Fm7LFdjkcS4MnTH
+         6iZzuRCfDIsGKhI5jma2NpGMnuX7ABB91nmn0MhTsxfM7IiYuRpDWvNgBaDjfN3LY+fN
+         fu9CunPv3oHr7CPvZ15b0oBqOD4knAWm8wSbd68PlloYRWofFZ1d00iNCPjxyC/BUuCN
+         OptcOGWJLO9g/0ihx/desuCEp6OGsMF60cX+YQr7IKBNBXmDOVHRURbMn+nLEgHCS+/9
+         uVXuBJKOVc1bM2/b0adiksmRqYfKLzO5fkopDs0wiqCmVSn642Z+t3NnjvKCK0xq9Aox
+         75tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vQ1H5KpmR6igc6vGa3WgsWAZHbvCNMb9RNa0+vWcC+c=;
-        b=oi8Mr/HzE/2CT/7XTsBPGhdLsSSxHWNDVqupk7AULqHKMWlfcVDp1kwdZo8irkBBro
-         mwJW3p+xAMF4VtKBGwwbwMP83FM8qvfSmpnVgrHS3XpJZgktag61pWyrZwrJGMUJUpTR
-         HZSYninkCM0VRMPJsXFA3YGqURGesUVPB/00hn3/5lzysBoaIQg2JU+5bjn0pukVklMf
-         rF/Te2SornVbTsEuKO2Y+jEPann0zCfiQGzIj1oD0dr8QHDQHqejluJhUw/V/1zLVH/g
-         T+DApPxKD+SnkK6njrmCf8LuX+cxFNY/ofmgJgF+yQXHCgoB42lHfxMlFIZg0xvsty9/
-         Gwfw==
-X-Gm-Message-State: AOAM531uC9n7nfZHLWLgnnodWJKQQj6h7CKXk/mNcQMtd59ElK8RuvXC
-        N4PhADMGrJN2DdLoXawHme+f/Q==
-X-Google-Smtp-Source: ABdhPJx+WjlyD29L4tT+M6GTV9f9nyqfrcFUEahFhzIAo+O28+IHwvB1LDeBisMZcWKceUhx2vCJYw==
-X-Received: by 2002:a05:6a00:1794:b029:2ee:c59c:56bf with SMTP id s20-20020a056a001794b02902eec59c56bfmr3071994pfg.2.1623900258819;
-        Wed, 16 Jun 2021 20:24:18 -0700 (PDT)
+        bh=YVqIcoZrg+RvpigGZrAOTiszoBMuUnCz4PKfzeq83ZY=;
+        b=XuZdN2xzIwwxxt74FYHZO4E2aylJlzdYJgkar/b7/60/jX5rr7NM3zexCu99YGIlhY
+         7zkBczp3FWQ5zGsh2ZArgFquzQ9tHSj1xMs7q4V6iJn1c8JhsVLSRUFDuwMoWqX57aFI
+         eWR4TVSD3llDMWpD+plFA5K9cCuFDsE1o2f6CpObP8+5wwTiuGQRC2lfR9NDvyG0bc/N
+         VjF1y4nxzTMvLo9CNIiroy8j/oOiPISeEmex19Hb1zGLh+LWMmCaCryvLUJw4Br6VV1L
+         8zRvSDfadKEWmwE7Pc7oWGAM12yETGs2aShImWHNUBVqgdyPIsOGsUDfwMHnCs+pb1yx
+         olTg==
+X-Gm-Message-State: AOAM530qtY9577qLhoaamfZ0XfbqvCVhihTztgxSTjmVn8QWqvrgN4iB
+        nKy0csXagW2F/CpnzNqxhSCvaQ==
+X-Google-Smtp-Source: ABdhPJyfP347OmSV3zgOULaptwnvXPrmS4Z/2QXEmXpeF1PtnyjH0buQ3wcVIDM54lin3E8JHdQp+w==
+X-Received: by 2002:a62:5e04:0:b029:2ea:a8dc:25d3 with SMTP id s4-20020a625e040000b02902eaa8dc25d3mr3235715pfb.6.1623900833560;
+        Wed, 16 Jun 2021 20:33:53 -0700 (PDT)
 Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id n14sm3306910pfa.138.2021.06.16.20.24.17
+        by smtp.gmail.com with ESMTPSA id a20sm3522211pfk.145.2021.06.16.20.33.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 20:24:18 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 08:54:16 +0530
+        Wed, 16 Jun 2021 20:33:52 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 09:03:51 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/3] cpufreq: CPPC: Add support for frequency
- invariance
-Message-ID: <20210617032416.r2gfp25xxvhc5t4x@vireshk-i7>
-References: <cover.1623825725.git.viresh.kumar@linaro.org>
- <e7e653ede3ef54acc906d2bde47a3b9a41533404.1623825725.git.viresh.kumar@linaro.org>
- <20210616124806.GA6495@arm.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Viresh Kumar )" <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "andrew-sh . cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH] opp: of: Allow lazy-linking of required-opps to non genpd
+Message-ID: <20210617033351.44pxdpjicm62byuh@vireshk-i7>
+References: <20210616053335.4181780-1-hsinyi@chromium.org>
+ <CGME20210616075555epcas1p136129544501878b4bedaf8e46f9a43dc@epcas1p1.samsung.com>
+ <20210616075548.ghp3lmjf4y6pyxoy@vireshk-i7>
+ <b9310754-2105-2a93-ecbf-513d9a80a91a@samsung.com>
+ <20210616090945.sn337tftdcp7y7y6@vireshk-i7>
+ <742b2623-e8ff-db1f-9168-bdbde98110dd@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210616124806.GA6495@arm.com>
+In-Reply-To: <742b2623-e8ff-db1f-9168-bdbde98110dd@samsung.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-06-21, 13:48, Ionela Voinescu wrote:
-> I was looking forward to the complete removal of stop_cpu() :).
+On 17-06-21, 10:13, Chanwoo Choi wrote:
+> The devfreq driver(exynos-bus.c) has used the dev_pm_opp_set_rate()
+> and used the passive governor without the required-opp property.
 
-No one wants to remove more code than I do :)
+Which is fine.
 
-> I'll only comment on this for now as I should know the rest.
+> I have a plan to use the required-opp property
+> between devfreq drivers (exynos-bus.c) with dev_pm_opp_set_rate().
 > 
-> Let's assume we don't have these, what happens now is the following:
-> 
-> 1. We hotplug out the last CPU in a policy, we call the
->    .stop_cpu()/exit() function which will free the cppc_cpudata structure.
-> 
->    The only vulnerability is if we have a last tick on that last CPU,
->    after the above callback was called.
-> 
-> 2. When the CPU at 1. gets hotplugged back in, the cppc_fi->cpu_data is
->    stale.
-> 
-> We do not have a problem when removing the CPPC cpufreq module as we're
-> doing cppc_freq_invariance_exit() before unregistering the driver and
-> freeing the data.
-> 
-> Are 1. and 2 the only problems we have, or have I missed any?
+> I'll support them on later if this approach doesn't break the any
+> rule of required-opp property.
 
-There is more to it. For simplicity, lets assume a quad-core setup,
-with all 4 CPUs sharing the cpufreq policy. And here is what happens
-without the new changes:
-
-- On CPPC cpufreq driver insertion, we start 4 kthreads/irq-works (1
-  for each CPU as it fires from tick) from the ->init() callback.
-
-- Now lets say we offline CPU3. The CPPC cpufreq driver isn't notified
-  by anyone and it hasn't registered itself to hotplug notifier as
-  well. So, the irq-work/kthread isn't stopped. This results in the
-  issue reported by Qian earlier.
-
-  The very same thing happens with schedutil governor too, which uses
-  very similar mechanisms, and the cpufreq core takes care of it there
-  by stopping the governor before removing the CPU from policy->cpus
-  and starting it again. So there we stop irq-work/kthread for all 4
-  CPUs, then start them only for remaining 3.
-
-  I thought about that approach as well, but it was too heavy to stop
-  everyone and start again in this case. And so I invented start_cpu()
-  and stop_cpu() callbacks.
-
-- In this case, because the CPU is going away, we need to make sure we
-  don't queue any more irq-work or kthread to it and this is one of
-  the main reasons for adding synchronization in the topology core,
-  because we need a hard guarantee here that irq-work won't fire
-  again, as the CPU won't be there or will not be in a sane state.
-
-- The same sequence of events is true for the case where the last CPU
-  of a policy goes away (not in this example, but lets say quad-core
-  setup with separate policies for each CPU).
-
-- Not just the policy, but the CPU may be going away as well.
-
-I hope I was able to clarify a bit here.
+You will be required to make some changes in core for that I am
+afraid. It won't work automatically.
 
 -- 
 viresh
