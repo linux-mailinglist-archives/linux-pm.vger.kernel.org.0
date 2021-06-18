@@ -2,249 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 864023AD475
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 23:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D3B3AD499
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 23:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbhFRVjd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 17:39:33 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:32887 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbhFRVjd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 17:39:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624052239;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=JnaCFQz5St+EGDw1QBMBxwejwzWiHa+sJHFJNjIixV0=;
-    b=i1TGzoSA1JeJUOBdMaBwQEmGOMJHqTF5zLiYmd2YZl712HPuJyMs8k1DAMhBUAB0J/
-    u8OiXb4jvlrB65OS1/nA/eqUl76bFF1IYpJMsmFpSkgUncgWnglTC3WeRmYVXUW+GI7i
-    vYm3JgXTJ0Xg6vVg5DquCQwssDgxL9W1NPUnZxLi7O/l+fZjQHb74mcSyd1SOKACt87B
-    I8ZyJUbfDuN4X1CbuRAKGNFO/Krn40Lj0Pd9F8ZsTSQnAlUb6LN54i5N0pZCvkxmRKB7
-    MkMJUOcH31ekXPDxWBamXOVaBtx6pYvB86xBUCRgsuzcc4WO7u7jVxdZqH15d7CA6e4i
-    lK6g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8f7IcfABg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id 000885x5ILbI78H
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 18 Jun 2021 23:37:18 +0200 (CEST)
-Date:   Fri, 18 Jun 2021 23:37:13 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
-        jamipkettunen@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [RESEND PATCH v4 1/3] cpuidle: qcom_spm: Detach state machine
- from main SPM handling
-Message-ID: <YM0SCaAdYMxZQya1@gerhold.net>
-References: <20210618180907.258149-1-angelogioacchino.delregno@somainline.org>
- <20210618180907.258149-2-angelogioacchino.delregno@somainline.org>
+        id S234688AbhFRVzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 17:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234685AbhFRVzY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 17:55:24 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E27EC06175F
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 14:53:14 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d9so8649555qtp.11
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 14:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tlfC7guzHnGUhI3CYP6SsQ3L2F2bpnWxpAP26B/r4lE=;
+        b=c1PJM9IMsmEV7WTgP5glA28gcryVt11Yy9rOy4sMWcHpuAuYctnhMoRA/TnndaEXu9
+         Rbcd4FhRPcC5JhriCLMuoqQm3ez0POjKf7G/OaRDnad4p2XwpEGRFybzjb5qAh+5I9wx
+         V9zRDm2/O+uNQtirG2wWc6MwxGhSbuqdaBDhxZUayBY84NvbB1/47euOL7Jy8HDPhdrU
+         joJ/K5EijUK5LXR60pm/3S8eJNDlO93A/vTG9eNu2UIt/j+Wbt51cqiXirPWCDO08Wts
+         pJzlIn37eTLTSKfOrUKBIPiWrVe0DbvU3D0cueSAOYhR4zhKuHuIC1ulTai/nATOxii4
+         iAsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tlfC7guzHnGUhI3CYP6SsQ3L2F2bpnWxpAP26B/r4lE=;
+        b=siDBNWNzX+4eeyLf7hrRwgKpIZ9Aj0GWiRPv2xdv9H5eIMrBJhEsb2WCxCS47OHK7D
+         FXCFh9K5P/bpWYpYttUA6lMVEQ3DVZLFcAtlLQNoYvpHGpUZZ2nZm0D2BSCAdMc+eHRv
+         btZ9bcQCz1gvcJGNtoe8Db4lSgTpqlHhZuIAqDplSrQ+ZJ/NG5PRgp3qwbT0nAJW/KY4
+         4fhOO40SMAPnjT6aNnwXDBxLHNkqn+kGx3siSayVsFVH9+c/k0IL2H0rJ9qwaNeo9PIE
+         pPrd941h9+NTzdvtchEhJVC36ruHbmVlZAZnXe4+QlNI+Vj1q0gV5w1bWhCA4Mvl2tNb
+         2uDA==
+X-Gm-Message-State: AOAM530FmZtsF+/5D0hROKyMHvKndkZHTstj1q6zJ3U4t6TrWck3SxjN
+        3JCaz+romOZhTs9NSwzhEJnsNu2wP3Uvpw==
+X-Google-Smtp-Source: ABdhPJwE91wGSAlfUJ9FU4CUkiG2NiKNvaCkaB0RyBPbh6dTpxuRmWrOGkt55gHzGx6RZk5nygbmMQ==
+X-Received: by 2002:a05:622a:40b:: with SMTP id n11mr12438838qtx.60.1624053193550;
+        Fri, 18 Jun 2021 14:53:13 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id w8sm4761888qkp.136.2021.06.18.14.53.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Jun 2021 14:53:12 -0700 (PDT)
+Subject: Re: [PATCH 2/5] thermal: qcom: Add support for LMh driver
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     agross@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210608222926.2707768-1-thara.gopinath@linaro.org>
+ <20210608222926.2707768-3-thara.gopinath@linaro.org>
+ <YMfBtSap7fR3rdku@builder.lan>
+ <4996de55-daa9-18a4-3c03-cf194d85500e@linaro.org>
+ <YMzd5OEhG4PYYv+E@builder.lan>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <be5f133e-5fae-9a61-3cf5-7e611a17bc77@linaro.org>
+Date:   Fri, 18 Jun 2021 17:53:11 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210618180907.258149-2-angelogioacchino.delregno@somainline.org>
+In-Reply-To: <YMzd5OEhG4PYYv+E@builder.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-Thanks for the patch!
 
-On Fri, Jun 18, 2021 at 08:09:05PM +0200, AngeloGioacchino Del Regno wrote:
-> In commit a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic
-> CPUidle driver") the SPM driver has been converted to a
-> generic CPUidle driver: that was mainly made to simplify the
-> driver and that was a great accomplishment;
->
-
-Hmm, you mention my commit but did not Cc me.
-Only saw this patch while randomly looking through linux-arm-msm. :)
-
-> Though, it was ignored that the SPM driver is not used only
-> on the ARM architecture.
-
-This sentence is a bit misleading IMO. In mainline the SPM driver is
-*currently* only used for CPUidle, and the old driver was as
-CPUidle-specific as the new one. So saying that I "ignored" something
-here is kind of wrong. :)
-
-Can you re-phrase this a bit to say that the SPM hardware is also
-used for power-collapse of the CPU caches/AVS/whatever and therefore we
-need to refactor the driver to something more independent?
-
-> In preparation for the enablement of SPM features on AArch64/ARM64,
-> split the cpuidle-qcom-spm driver in two: the CPUIdle related
-> state machine (currently used only on ARM SoCs) stays there, while
-> the SPM communication handling lands back in soc/qcom/spm.c and
-> also making sure to not discard the simplifications that were
-> introduced in the aforementioned commit.
+On 6/18/21 1:54 PM, Bjorn Andersson wrote:
+> On Mon 14 Jun 20:38 CDT 2021, Thara Gopinath wrote:
+>> On 6/14/21 4:53 PM, Bjorn Andersson wrote:
+>>> On Tue 08 Jun 17:29 CDT 2021, Thara Gopinath wrote:
+>>>> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
+> [..]
+>>>> +static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
+>>>> +{
+>>>> +	struct lmh_hw_data *lmh_data = data;
+>>>> +	int irq = irq_find_mapping(lmh_data->domain, 0);
+>>>> +
+>>>> +	/*
+>>>> +	 * Disable interrupt and call the cpufreq driver to handle the interrupt
+>>>> +	 * cpufreq will enable the interrupt once finished processing.
+>>>> +	 */
+>>>> +	disable_irq_nosync(lmh_data->irq);
+>>>
+>>> The contract between this driver's disabling of the IRQ and the
+>>> cpufreq-hw driver's enabling it when we're done polling does worry me.
+>>>
+>>> In the case of EPSS, don't we disable the interrupt during the polling
+>>> there as well? If that's the case wouldn't it be better to implement
+>>> irq_chip->irq_disable and have the cpufreq-hw driver do the disable in
+>>> both cases?
+>>
+>> Yes. You are right. In case of EPSS, the cpufreq-hw will have to disable the
+>> interrupt. I did think of the approach you suggested here. My only issue is
+>> that we will dispatch the interrupt to cpufreq-hw without it disabling it
+>> and hence the interrupt could fire again, right ?
+>>
 > 
-> Since now the "two drivers" are split, the SCM dependency in the
-> main SPM handling is gone and for this reason it was also possible
-> to move the SPM initialization early: this will also make sure that
-> whenever the SAW CPUIdle driver is getting initialized, the SPM
-> driver will be ready to do the job.
+> Does it fire again before you INTR_CLK it?
+
+You mean clear it ? I couldn't reproduce it either way. I did not try 
+the irq_chip->irq_disable either. So I will give it a try and if my 
+tests pass , I will post it.
+
 > 
-> Please note that the anticipation of the SPM initialization was
-> also done to optimize the boot times on platforms that have their
-> CPU/L2 idle states managed by other means (such as PSCI), while
-> needing SAW initialization for other purposes, like AVS control.
+> Regards,
+> Bjorn
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-The diff is quite hard to read for me (just the nature of this change,
-not your fault). Just mentioning this in case I miss something obvious.
-
-> ---
->  drivers/cpuidle/Kconfig.arm        |   1 +
->  drivers/cpuidle/cpuidle-qcom-spm.c | 294 ++++++-----------------------
->  drivers/soc/qcom/Kconfig           |   9 +
->  drivers/soc/qcom/Makefile          |   1 +
->  drivers/soc/qcom/spm.c             | 198 +++++++++++++++++++
->  include/soc/qcom/spm.h             |  45 +++++
->  6 files changed, 312 insertions(+), 236 deletions(-)
->  create mode 100644 drivers/soc/qcom/spm.c
->  create mode 100644 include/soc/qcom/spm.h
-> 
-> [...]
-> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-> index adf91a6e4d7d..3dd7bb10b82d 100644
-> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
-> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-> [...]
-> -static int spm_dev_probe(struct platform_device *pdev)
-> +static int spm_cpuidle_drv_probe(struct platform_device *pdev)
->  {
->  	[...]
-> +	for_each_possible_cpu(cpu) {
-> +		ret = spm_cpuidle_register(cpu);
-> +		if (ret != -ENODEV) {
-> +			dev_err(&pdev->dev,
-> +				"Cannot register for CPU%d: %d\n", cpu, ret);
-> +			break;
-
-Huh, why does this error for ret = 0? :S
-
-[    0.736332] qcom-spm-cpuidle qcom-spm-cpuidle: Cannot register for CPU0: 0
-
-A couple more lines in the UART log, then the device hangs forever.
-For testing I changed this to: if (ret && ret != -ENODEV).
-
-> [...]
-> @@ -213,132 +80,87 @@ static const struct of_device_id qcom_idle_state_match[] = {
-> -static int spm_cpuidle_init(struct cpuidle_driver *drv, int cpu)
-> +static int spm_cpuidle_register(int cpu)
->  {
-> +	struct platform_device *pdev = NULL;
-> +	struct spm_driver_data *spm = NULL;
-> +	struct device_node *cpu_node, *saw_node;
->  	int ret;
->  
-> -	memcpy(drv, &qcom_spm_idle_driver, sizeof(*drv));
-> -	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-
-Somehow this line got lost, which means the first cpuidle_driver will
-cover all CPUs and we will always fail to register the cpuidle_driver
-for all other CPUs:
-
-[    0.736591] failed to register cpuidle driver
-[    0.744186] qcom-spm-cpuidle qcom-spm-cpuidle: Cannot register for CPU1: -16
-[    0.748443] qcom-spm-cpuidle: probe of qcom-spm-cpuidle failed with error -16
-
-(Then the device hangs forever.)
-
-I added
-spm->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
-below
-
-> +	spm->cpuidle_driver = qcom_spm_idle_driver;
-
-and this seems to make it boot again at least.
-
-However, it seems a bit pointless now to have a separate cpuidle_driver
-per CPU, since they are all registered at the same time. With my
-refactoring this was kind of convenient because the SPM platform devices
-could happily probe independently and just register a cpuidle_driver for
-the CPU they belong to.
-
-With your patch, the cpuidle_drivers are registered at the same time for
-all CPUs, so we might as well use a single cpuidle_driver that covers
-all CPUs (like you already do without setting cpumask).
-
-Note that if you have a single cpuidle_driver for all CPUs you need to
-refactor spm_enter_idle_state() a bit. The container_of() will no longer
-work to get the CPU-specific SPM. Before my changes there was a
-DEFINE_PER_CPU for this. I guess we need to bring that back.
-
->  	[...]
-> +	ret = dt_init_idle_driver(&spm->cpuidle_driver,
-> +				  qcom_idle_state_match, 1);
-> +	if (ret <= 0)
-> +		return ret ? : -ENODEV;
->  
-> -	return drv;
-> -}
-> +	ret = qcom_scm_set_warm_boot_addr(cpu_resume_arm, cpumask_of(cpu));
-> +	if (ret)
-> +		return ret;
-
-And the advantage here is that we should be able to do this with a
-single firmware call (set the warm boot addr for all CPUs at once).
-
-> [...]
-> diff --git a/include/soc/qcom/spm.h b/include/soc/qcom/spm.h
-> new file mode 100644
-> index 000000000000..604eca2c4d4a
-> --- /dev/null
-> +++ b/include/soc/qcom/spm.h
-> @@ -0,0 +1,45 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2014,2015, Linaro Ltd.
-> + * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
-> + */
-> +
-> +#ifndef __SPM_H__
-> +#define __SPM_H__
-> +
-> +#include <linux/cpuidle.h>
-> +
-> +#define MAX_PMIC_DATA		2
-> +#define MAX_SEQ_DATA		64
-> +
-> +enum pm_sleep_mode {
-> +	PM_SLEEP_MODE_STBY,
-> +	PM_SLEEP_MODE_RET,
-> +	PM_SLEEP_MODE_SPC,
-> +	PM_SLEEP_MODE_PC,
-> +	PM_SLEEP_MODE_NR,
-> +};
-> +
-> +struct spm_reg_data {
-> +	const u16 *reg_offset;
-> +	u32 spm_cfg;
-> +	u32 spm_dly;
-> +	u32 pmic_dly;
-> +	u32 pmic_data[MAX_PMIC_DATA];
-> +	u32 avs_ctl;
-> +	u32 avs_limit;
-
-Looks like you accidentally included changes from PATCH 2/3
-("soc: qcom: spm: Implement support for SAWv4.1, SDM630/660 L2 AVS")
-here, reg_offset u8 -> u16 and adding avs_ctl and avs_limit should be in
-a separate patch. It's really hard to see that you added those here
-while moving the code. :/
-
-Thanks,
-Stephan
+-- 
+Warm Regards
+Thara (She/Her/Hers)
