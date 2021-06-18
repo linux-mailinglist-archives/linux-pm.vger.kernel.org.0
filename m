@@ -2,80 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23183ACF2E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 17:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2823AD0BA
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 18:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbhFRPgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 11:36:44 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11984 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229768AbhFRPgn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Jun 2021 11:36:43 -0400
-IronPort-SDR: phUI6VDCWGpOJxWKYyAsdsWMXOssx2ODJUDwGDWx4QgeSPVx5watjJWwoj2ntiPM0fIHbd2pws
- YVk3zfAms3eg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="204743326"
-X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
-   d="scan'208";a="204743326"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2021 08:34:33 -0700
-IronPort-SDR: YjUWpt7MffIQd3kXvC0VEISOuHbwiGJc62Dimqy4romcc6vUPkII6JPGzoy45KRTbvW5/UIqv5
- ALK931eNkYrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
-   d="scan'208";a="489101532"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2021 08:34:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0D30B2AA; Fri, 18 Jun 2021 18:34:55 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v1 1/1] thermal: intel: intel_soc_dts_iosf: Switch to use find_first_zero_bit()
-Date:   Fri, 18 Jun 2021 18:34:51 +0300
-Message-Id: <20210618153451.89246-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        id S230433AbhFRQvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 12:51:22 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:40582 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229730AbhFRQvW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 12:51:22 -0400
+Received: by mail-oi1-f179.google.com with SMTP id d19so11190786oic.7;
+        Fri, 18 Jun 2021 09:49:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=i1x6TD/6SS/OmGBCarFK671QcgNdKC4Bvk2+/pH4TwU=;
+        b=sWvjgA90RzuVRU+8ssVRIaG2EKFClkguY7YzkNy9lg/Hm0RhxafqHkexThaorxe/9+
+         JrOF2NPMbyU75AtBPK9lDsofz0sDwZJ6yvONz7EWtnxUYe8KkOEFKqk/k11OQUO5h7PA
+         oojd4Md7hC3SvlscDj/I8LdPSSxD8rV5G4UEA7mVZ4D4y0l0MRyBytBAXi3452HwMDMA
+         A+3AwSpQH9EDQjoQx80jGsnEzP1p9cwfd/wMkUpZkgYKW7UzP59NLzdg4GvZMLOsVG51
+         NAH072PkEiPDi1/mYqjF7MRsUpzyrZtnhWVCAPw4G8AI8M09cSMov1zi6wvDCNN4OfV9
+         eJ/Q==
+X-Gm-Message-State: AOAM532UCvGAvO8ZdaEyRDV9wY2xdTvdHXL479Xt85Hh8S4NKA1l+RkB
+        xHyobGffMjoFfdvtd2zSYnwZe/znNkhHyQhPErtJ2iue4Ww=
+X-Google-Smtp-Source: ABdhPJzMjcN62ugZhktlJtHRSHVmnX24e8ye+PTJWqV/k0iNDmRTtFEbofBjzLr7raSvWgvF8/Fukz6u+4A2YLnEibA=
+X-Received: by 2002:aca:49c7:: with SMTP id w190mr15627692oia.157.1624034951314;
+ Fri, 18 Jun 2021 09:49:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Jun 2021 18:49:00 +0200
+Message-ID: <CAJZ5v0iUeL_A4iVO4SizSMtuAMnQ6YUT08nWPXidr8q_wajT2g@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v5.13-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Switch to use find_first_zero_bit() instead of open-coded variant.
+Hi Linus,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thermal/intel/intel_soc_dts_iosf.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+Please pull from the tag
 
-diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-index 4f1a2f7c016c..342b0bb5a56d 100644
---- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -350,13 +350,14 @@ int intel_soc_dts_iosf_add_read_only_critical_trip(
- 	int i, j;
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		for (j = 0; j < sensors->soc_dts[i].trip_count; ++j) {
--			if (!(sensors->soc_dts[i].trip_mask & BIT(j))) {
--				return update_trip_temp(&sensors->soc_dts[i], j,
--					sensors->tj_max - critical_offset,
--					THERMAL_TRIP_CRITICAL);
--			}
--		}
-+		struct intel_soc_dts_sensor_entry *entry = &sensors->soc_dts[i];
-+		int temp = sensors->tj_max - critical_offset;
-+		unsigned long count = entry->trip_count;
-+		unsigned long mask = entry->trip_mask;
-+
-+		j = find_first_zero_bit(&mask, count);
-+		if (j < count)
-+			return update_trip_temp(entry, j, temp, THERMAL_TRIP_CRITICAL);
- 	}
- 
- 	return -EINVAL;
--- 
-2.30.2
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.13-rc7
 
+with top-most commit 771fac5e26c17845de8c679e6a947a4371e86ffc
+
+ Revert "cpufreq: CPPC: Add support for frequency invariance"
+
+on top of commit 009c9aa5be652675a06d5211e1640e02bbb1c33d
+
+ Linux 5.13-rc6
+
+to receive a power management fix for 5.13-rc7.
+
+This removes recently added frequency invariance support from the
+CPPC cpufreq driver, because it has turned out to be problematic
+and it cannot be fixed properly on time for 5.13 (Viresh Kumar).
+
+Thanks!
+
+
+---------------
+
+Viresh Kumar (1):
+      Revert "cpufreq: CPPC: Add support for frequency invariance"
+
+---------------
+
+ drivers/cpufreq/Kconfig.arm    |  10 --
+ drivers/cpufreq/cppc_cpufreq.c | 245 ++---------------------------------------
+ include/linux/arch_topology.h  |   1 -
+ kernel/sched/core.c            |   1 -
+ 4 files changed, 12 insertions(+), 245 deletions(-)
