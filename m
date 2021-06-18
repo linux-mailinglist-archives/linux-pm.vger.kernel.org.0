@@ -2,109 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC803AD4E8
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 00:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3BF3AD4ED
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 00:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbhFRWTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 18:19:42 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:20205 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbhFRWTk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 18:19:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624054644;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=ZqDCqETDBFGz+d3VQti31fhKicXVgO3dR3oNmU+TOI8=;
-    b=icaRvk5PANS0C3UX28i9YIPFBnzr8HLe6gxwsACjNdDDCUYyd2FYuqwmCLdhwXSG39
-    IgNHt5eJ6Z2hjqZC1ysNUoXXeVwx4Z1mMVNyUsQn+f4hGGFXJ3LspSvownfU1EKMOOim
-    KNl2L0QX0+L6ZDpWWkRDoDAHjIsaZv1rgErv+iG/UaClg6ZZssvyNsqe2tco2NLvgNGf
-    Qz2hBNBsgP8Wcq3JlFW1zj4Lj+qgWm4GJ56vajT2Nv+zkXZA1cDC16v9CdSSYqHeputv
-    50ZYG/5x7L+APXhileG0loPczNQ2Mh0oUd2OiKyRmAknAn2tyZ/wdEzwNcPyRK6dIhG+
-    wAgw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8f7IcfABg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id 000885x5IMHO7EW
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 19 Jun 2021 00:17:24 +0200 (CEST)
-Date:   Sat, 19 Jun 2021 00:17:19 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
-        jamipkettunen@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [RESEND PATCH v4 2/3] soc: qcom: spm: Implement support for
- SAWv4.1, SDM630/660 L2 AVS
-Message-ID: <YM0bM60FNof8d6ki@gerhold.net>
-References: <20210618180907.258149-1-angelogioacchino.delregno@somainline.org>
- <20210618180907.258149-3-angelogioacchino.delregno@somainline.org>
+        id S234912AbhFRWU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 18:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234797AbhFRWUZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 18:20:25 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA500C061574
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c15so5342817pls.13
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FE3ige4IUrzO4rZznPTG12clkaJsue7K7FUGlSBMAfs=;
+        b=Yf/hd/nvGltzFs93oV+O815gndRr0N0A4GD+hlEjUljs8fR/r42/5waH+foBbKS7WR
+         4ieWebjxoeI31qMYukpCCF4suivtuw0KIX1kY4xCHCyeA8Pd+qdR2kMIky/pA2j/9n1z
+         T5UtTANEkuiNSh3GT2iBd2oGjOT4PXXJ8YxOU/uBtqj1IiaNYwuRoT9AQFd4bB3iGSod
+         26qHtN9qmDpGolnh/MwXPQ8M2sR3UfA7xZml5iJWrbGghC/MI1rSVb3r8vzpAHp9WgHN
+         rQlO7Wfj93/2gQ031V5AE3UWSmVQEAXyZXRDPtXzUcgRjadraLTfDfG3fXk5uJ+V0D/n
+         TtDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FE3ige4IUrzO4rZznPTG12clkaJsue7K7FUGlSBMAfs=;
+        b=V08rdLrqSJRiZcaAELRhG5Oa1ENsT1SxU52UKaTgoKRE+YThsCrlZsHEvEVop5Jeyn
+         6VHRWkcq1QjOKKVOnXCI1CuDkTztFRwfb/d88o1QR+DYVXvPXJ60czBrT8r5yFN/xWhE
+         vXgmk0HQDZf+9r3lwu4bD6nvTJ/QQFlrUsY++xdpddOw1LM+4Yvi8RoduPobjIjdyexl
+         aD18PtpXM1jr99E71f6m7k/gRqgovkKtcLkzGFEKTROTbGt8gtYZL8r3fZZyCjjQyl+L
+         JLPndbvROm9fwfYeQcIGwtfqgv6ZFT9qnKRUAfux8FwOmLkVYbIiR8MqSKJzW8LUPF8F
+         w+DQ==
+X-Gm-Message-State: AOAM532uLJbwn0Fnt9oxrt+0hGPAkpkPHer2d90Dguv8y8wr0SP3scmh
+        ji9Mf9zF8b0FiyPRnQkE9T3BC40FNDYrL92pfrOpxw==
+X-Google-Smtp-Source: ABdhPJw3BE/jkA8KN4GViEwVomKCDOYCAzb4JhqF7GBtQ+4ny9zul9rQENwJ5XFkX0U2csBd6emTDpwOakbDlUjAcRc=
+X-Received: by 2002:a17:90a:fc88:: with SMTP id ci8mr24404565pjb.13.1624054695229;
+ Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210618180907.258149-3-angelogioacchino.delregno@somainline.org>
+References: <20210616085118.1141101-1-omosnace@redhat.com>
+In-Reply-To: <20210616085118.1141101-1-omosnace@redhat.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 18 Jun 2021 15:18:04 -0700
+Message-ID: <CAPcyv4jvR8CT4rYODR5KUHNdiqMwQSwJZ+OkVf61kLT3JfjC_Q@mail.gmail.com>
+Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
+ lockdown checks
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     linux-security-module@vger.kernel.org,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        selinux@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        X86 ML <x86@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, linux-efi <linux-efi@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, bpf@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>,
+        Kexec Mailing List <kexec@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 08:09:06PM +0200, AngeloGioacchino Del Regno wrote:
-> Implement the support for SAW v4.1, used in at least MSM8998,
-> SDM630, SDM660 and APQ variants and, while at it, also add the
-> configuration for the SDM630/660 Silver and Gold cluster L2
-> Adaptive Voltage Scaler: this is also one of the prerequisites
-> to allow the OSM controller to perform DCVS.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  drivers/soc/qcom/spm.c | 28 +++++++++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/spm.c b/drivers/soc/qcom/spm.c
-> index 0c8aa9240c41..843732d12c54 100644
-> --- a/drivers/soc/qcom/spm.c
-> +++ b/drivers/soc/qcom/spm.c
-> @@ -32,9 +32,28 @@ enum spm_reg {
->  	SPM_REG_SEQ_ENTRY,
->  	SPM_REG_SPM_STS,
->  	SPM_REG_PMIC_STS,
-> +	SPM_REG_AVS_CTL,
-> +	SPM_REG_AVS_LIMIT,
->  	SPM_REG_NR,
->  };
->  
-> +static const u16 spm_reg_offset_v4_1[SPM_REG_NR] = {
-> +	[SPM_REG_AVS_CTL]	= 0x904,
-> +	[SPM_REG_AVS_LIMIT]	= 0x908,
-> +};
-> +
-> +static const struct spm_reg_data spm_reg_660_gold_l2  = {
-> +	.reg_offset = spm_reg_offset_v4_1,
-> +	.avs_ctl = 0x1010031,
-> +	.avs_limit = 0x4580458,
-> +};
-> +
-> +static const struct spm_reg_data spm_reg_660_silver_l2  = {
-> +	.reg_offset = spm_reg_offset_v4_1,
-> +	.avs_ctl = 0x101c031,
+On Wed, Jun 16, 2021 at 1:51 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
+> lockdown") added an implementation of the locked_down LSM hook to
+> SELinux, with the aim to restrict which domains are allowed to perform
+> operations that would breach lockdown.
+>
+> However, in several places the security_locked_down() hook is called in
+> situations where the current task isn't doing any action that would
+> directly breach lockdown, leading to SELinux checks that are basically
+> bogus.
+>
+> To fix this, add an explicit struct cred pointer argument to
+> security_lockdown() and define NULL as a special value to pass instead
+> of current_cred() in such situations. LSMs that take the subject
+> credentials into account can then fall back to some default or ignore
+> such calls altogether. In the SELinux lockdown hook implementation, use
+> SECINITSID_KERNEL in case the cred argument is NULL.
+>
+> Most of the callers are updated to pass current_cred() as the cred
+> pointer, thus maintaining the same behavior. The following callers are
+> modified to pass NULL as the cred pointer instead:
+> 1. arch/powerpc/xmon/xmon.c
+>      Seems to be some interactive debugging facility. It appears that
+>      the lockdown hook is called from interrupt context here, so it
+>      should be more appropriate to request a global lockdown decision.
+> 2. fs/tracefs/inode.c:tracefs_create_file()
+>      Here the call is used to prevent creating new tracefs entries when
+>      the kernel is locked down. Assumes that locking down is one-way -
+>      i.e. if the hook returns non-zero once, it will never return zero
+>      again, thus no point in creating these files. Also, the hook is
+>      often called by a module's init function when it is loaded by
+>      userspace, where it doesn't make much sense to do a check against
+>      the current task's creds, since the task itself doesn't actually
+>      use the tracing functionality (i.e. doesn't breach lockdown), just
+>      indirectly makes some new tracepoints available to whoever is
+>      authorized to use them.
+> 3. net/xfrm/xfrm_user.c:copy_to_user_*()
+>      Here a cryptographic secret is redacted based on the value returned
+>      from the hook. There are two possible actions that may lead here:
+>      a) A netlink message XFRM_MSG_GETSA with NLM_F_DUMP set - here the
+>         task context is relevant, since the dumped data is sent back to
+>         the current task.
+>      b) When adding/deleting/updating an SA via XFRM_MSG_xxxSA, the
+>         dumped SA is broadcasted to tasks subscribed to XFRM events -
+>         here the current task context is not relevant as it doesn't
+>         represent the tasks that could potentially see the secret.
+>      It doesn't seem worth it to try to keep using the current task's
+>      context in the a) case, since the eventual data leak can be
+>      circumvented anyway via b), plus there is no way for the task to
+>      indicate that it doesn't care about the actual key value, so the
+>      check could generate a lot of "false alert" denials with SELinux.
+>      Thus, let's pass NULL instead of current_cred() here faute de
+>      mieux.
+>
+> Improvements-suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+> Improvements-suggested-by: Paul Moore <paul@paul-moore.com>
+> Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+[..]
+> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> index 2acc6173da36..c1747b6555c7 100644
+> --- a/drivers/cxl/mem.c
+> +++ b/drivers/cxl/mem.c
+> @@ -568,7 +568,7 @@ static bool cxl_mem_raw_command_allowed(u16 opcode)
+>         if (!IS_ENABLED(CONFIG_CXL_MEM_RAW_COMMANDS))
+>                 return false;
+>
+> -       if (security_locked_down(LOCKDOWN_NONE))
+> +       if (security_locked_down(current_cred(), LOCKDOWN_NONE))
 
-I was just randomly looking for the same value in downstream and it
-looks like Qualcomm reverted something here to the same value as for
-the gold cluster, claiming "stability issues":
+Acked-by: Dan Williams <dan.j.williams@intel.com>
 
-https://source.codeaurora.org/quic/la/kernel/msm-4.4/commit/?h=LA.UM.8.2.r2-04600-sdm660.0&id=5a07b7336a1b3fa6a3ac67470805259c5026206e
-
-The commit seems still present in recent qcom tags. I cannot say
-anything about this, but could you confirm if you are intentionally
-not also doing the same as qcom did in that commit?
-
-Thanks,
-Stephan
+...however that usage looks wrong. The expectation is that if kernel
+integrity protections are enabled then raw command access should be
+disabled. So I think that should be equivalent to LOCKDOWN_PCI_ACCESS
+in terms of the command capabilities to filter.
