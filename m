@@ -2,157 +2,281 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3BF3AD4ED
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 00:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4913AD53F
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 00:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234912AbhFRWU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 18:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S233900AbhFRWfD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 18:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbhFRWUZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 18:20:25 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA500C061574
-        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id c15so5342817pls.13
-        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FE3ige4IUrzO4rZznPTG12clkaJsue7K7FUGlSBMAfs=;
-        b=Yf/hd/nvGltzFs93oV+O815gndRr0N0A4GD+hlEjUljs8fR/r42/5waH+foBbKS7WR
-         4ieWebjxoeI31qMYukpCCF4suivtuw0KIX1kY4xCHCyeA8Pd+qdR2kMIky/pA2j/9n1z
-         T5UtTANEkuiNSh3GT2iBd2oGjOT4PXXJ8YxOU/uBtqj1IiaNYwuRoT9AQFd4bB3iGSod
-         26qHtN9qmDpGolnh/MwXPQ8M2sR3UfA7xZml5iJWrbGghC/MI1rSVb3r8vzpAHp9WgHN
-         rQlO7Wfj93/2gQ031V5AE3UWSmVQEAXyZXRDPtXzUcgRjadraLTfDfG3fXk5uJ+V0D/n
-         TtDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FE3ige4IUrzO4rZznPTG12clkaJsue7K7FUGlSBMAfs=;
-        b=V08rdLrqSJRiZcaAELRhG5Oa1ENsT1SxU52UKaTgoKRE+YThsCrlZsHEvEVop5Jeyn
-         6VHRWkcq1QjOKKVOnXCI1CuDkTztFRwfb/d88o1QR+DYVXvPXJ60czBrT8r5yFN/xWhE
-         vXgmk0HQDZf+9r3lwu4bD6nvTJ/QQFlrUsY++xdpddOw1LM+4Yvi8RoduPobjIjdyexl
-         aD18PtpXM1jr99E71f6m7k/gRqgovkKtcLkzGFEKTROTbGt8gtYZL8r3fZZyCjjQyl+L
-         JLPndbvROm9fwfYeQcIGwtfqgv6ZFT9qnKRUAfux8FwOmLkVYbIiR8MqSKJzW8LUPF8F
-         w+DQ==
-X-Gm-Message-State: AOAM532uLJbwn0Fnt9oxrt+0hGPAkpkPHer2d90Dguv8y8wr0SP3scmh
-        ji9Mf9zF8b0FiyPRnQkE9T3BC40FNDYrL92pfrOpxw==
-X-Google-Smtp-Source: ABdhPJw3BE/jkA8KN4GViEwVomKCDOYCAzb4JhqF7GBtQ+4ny9zul9rQENwJ5XFkX0U2csBd6emTDpwOakbDlUjAcRc=
-X-Received: by 2002:a17:90a:fc88:: with SMTP id ci8mr24404565pjb.13.1624054695229;
- Fri, 18 Jun 2021 15:18:15 -0700 (PDT)
+        with ESMTP id S234996AbhFRWfC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 18:35:02 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CA4C061760;
+        Fri, 18 Jun 2021 15:32:52 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 83FAC3F367;
+        Sat, 19 Jun 2021 00:32:50 +0200 (CEST)
+Subject: Re: [RESEND PATCH v4 1/3] cpuidle: qcom_spm: Detach state machine
+ from main SPM handling
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
+        jamipkettunen@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20210618180907.258149-1-angelogioacchino.delregno@somainline.org>
+ <20210618180907.258149-2-angelogioacchino.delregno@somainline.org>
+ <YM0SCaAdYMxZQya1@gerhold.net>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <ebeb5f35-b284-222f-86df-9ca6633d73ba@somainline.org>
+Date:   Sat, 19 Jun 2021 00:32:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-References: <20210616085118.1141101-1-omosnace@redhat.com>
-In-Reply-To: <20210616085118.1141101-1-omosnace@redhat.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 18 Jun 2021 15:18:04 -0700
-Message-ID: <CAPcyv4jvR8CT4rYODR5KUHNdiqMwQSwJZ+OkVf61kLT3JfjC_Q@mail.gmail.com>
-Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
- lockdown checks
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     linux-security-module@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        selinux@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        X86 ML <x86@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-cxl@vger.kernel.org, linux-efi <linux-efi@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, bpf@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>,
-        Kexec Mailing List <kexec@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YM0SCaAdYMxZQya1@gerhold.net>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 1:51 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
-> lockdown") added an implementation of the locked_down LSM hook to
-> SELinux, with the aim to restrict which domains are allowed to perform
-> operations that would breach lockdown.
->
-> However, in several places the security_locked_down() hook is called in
-> situations where the current task isn't doing any action that would
-> directly breach lockdown, leading to SELinux checks that are basically
-> bogus.
->
-> To fix this, add an explicit struct cred pointer argument to
-> security_lockdown() and define NULL as a special value to pass instead
-> of current_cred() in such situations. LSMs that take the subject
-> credentials into account can then fall back to some default or ignore
-> such calls altogether. In the SELinux lockdown hook implementation, use
-> SECINITSID_KERNEL in case the cred argument is NULL.
->
-> Most of the callers are updated to pass current_cred() as the cred
-> pointer, thus maintaining the same behavior. The following callers are
-> modified to pass NULL as the cred pointer instead:
-> 1. arch/powerpc/xmon/xmon.c
->      Seems to be some interactive debugging facility. It appears that
->      the lockdown hook is called from interrupt context here, so it
->      should be more appropriate to request a global lockdown decision.
-> 2. fs/tracefs/inode.c:tracefs_create_file()
->      Here the call is used to prevent creating new tracefs entries when
->      the kernel is locked down. Assumes that locking down is one-way -
->      i.e. if the hook returns non-zero once, it will never return zero
->      again, thus no point in creating these files. Also, the hook is
->      often called by a module's init function when it is loaded by
->      userspace, where it doesn't make much sense to do a check against
->      the current task's creds, since the task itself doesn't actually
->      use the tracing functionality (i.e. doesn't breach lockdown), just
->      indirectly makes some new tracepoints available to whoever is
->      authorized to use them.
-> 3. net/xfrm/xfrm_user.c:copy_to_user_*()
->      Here a cryptographic secret is redacted based on the value returned
->      from the hook. There are two possible actions that may lead here:
->      a) A netlink message XFRM_MSG_GETSA with NLM_F_DUMP set - here the
->         task context is relevant, since the dumped data is sent back to
->         the current task.
->      b) When adding/deleting/updating an SA via XFRM_MSG_xxxSA, the
->         dumped SA is broadcasted to tasks subscribed to XFRM events -
->         here the current task context is not relevant as it doesn't
->         represent the tasks that could potentially see the secret.
->      It doesn't seem worth it to try to keep using the current task's
->      context in the a) case, since the eventual data leak can be
->      circumvented anyway via b), plus there is no way for the task to
->      indicate that it doesn't care about the actual key value, so the
->      check could generate a lot of "false alert" denials with SELinux.
->      Thus, let's pass NULL instead of current_cred() here faute de
->      mieux.
->
-> Improvements-suggested-by: Casey Schaufler <casey@schaufler-ca.com>
-> Improvements-suggested-by: Paul Moore <paul@paul-moore.com>
-> Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
-> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-[..]
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index 2acc6173da36..c1747b6555c7 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -568,7 +568,7 @@ static bool cxl_mem_raw_command_allowed(u16 opcode)
->         if (!IS_ENABLED(CONFIG_CXL_MEM_RAW_COMMANDS))
->                 return false;
->
-> -       if (security_locked_down(LOCKDOWN_NONE))
-> +       if (security_locked_down(current_cred(), LOCKDOWN_NONE))
+Il 18/06/21 23:37, Stephan Gerhold ha scritto:
+> Hi,
+> 
+> Thanks for the patch!
+> 
+> On Fri, Jun 18, 2021 at 08:09:05PM +0200, AngeloGioacchino Del Regno wrote:
+>> In commit a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic
+>> CPUidle driver") the SPM driver has been converted to a
+>> generic CPUidle driver: that was mainly made to simplify the
+>> driver and that was a great accomplishment;
+>>
+> 
+> Hmm, you mention my commit but did not Cc me.
+> Only saw this patch while randomly looking through linux-arm-msm. :)
+> 
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
+Sorry, I've originally sent this series 6 months ago, things may fly
+off of my head... :))
 
-...however that usage looks wrong. The expectation is that if kernel
-integrity protections are enabled then raw command access should be
-disabled. So I think that should be equivalent to LOCKDOWN_PCI_ACCESS
-in terms of the command capabilities to filter.
+>> Though, it was ignored that the SPM driver is not used only
+>> on the ARM architecture.
+> 
+> This sentence is a bit misleading IMO. In mainline the SPM driver is
+> *currently* only used for CPUidle, and the old driver was as
+> CPUidle-specific as the new one. So saying that I "ignored" something
+> here is kind of wrong. :)
+> 
+> Can you re-phrase this a bit to say that the SPM hardware is also
+> used for power-collapse of the CPU caches/AVS/whatever and therefore we
+> need to refactor the driver to something more independent?
+> 
+
+On SAWv4.1, the SPM is used to regulate AVS limits but *not* power
+collapse of the CPU caches "and whatever": platforms with this version
+are using different HW to accomplish that.
+
+>> In preparation for the enablement of SPM features on AArch64/ARM64,
+>> split the cpuidle-qcom-spm driver in two: the CPUIdle related
+>> state machine (currently used only on ARM SoCs) stays there, while
+>> the SPM communication handling lands back in soc/qcom/spm.c and
+>> also making sure to not discard the simplifications that were
+>> introduced in the aforementioned commit.
+>>
+>> Since now the "two drivers" are split, the SCM dependency in the
+>> main SPM handling is gone and for this reason it was also possible
+>> to move the SPM initialization early: this will also make sure that
+>> whenever the SAW CPUIdle driver is getting initialized, the SPM
+>> driver will be ready to do the job.
+>>
+>> Please note that the anticipation of the SPM initialization was
+>> also done to optimize the boot times on platforms that have their
+>> CPU/L2 idle states managed by other means (such as PSCI), while
+>> needing SAW initialization for other purposes, like AVS control.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
+> The diff is quite hard to read for me (just the nature of this change,
+> not your fault). Just mentioning this in case I miss something obvious.
+> 
+>> ---
+>>   drivers/cpuidle/Kconfig.arm        |   1 +
+>>   drivers/cpuidle/cpuidle-qcom-spm.c | 294 ++++++-----------------------
+>>   drivers/soc/qcom/Kconfig           |   9 +
+>>   drivers/soc/qcom/Makefile          |   1 +
+>>   drivers/soc/qcom/spm.c             | 198 +++++++++++++++++++
+>>   include/soc/qcom/spm.h             |  45 +++++
+>>   6 files changed, 312 insertions(+), 236 deletions(-)
+>>   create mode 100644 drivers/soc/qcom/spm.c
+>>   create mode 100644 include/soc/qcom/spm.h
+>>
+>> [...]
+>> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+>> index adf91a6e4d7d..3dd7bb10b82d 100644
+>> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+>> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+>> [...]
+>> -static int spm_dev_probe(struct platform_device *pdev)
+>> +static int spm_cpuidle_drv_probe(struct platform_device *pdev)
+>>   {
+>>   	[...]
+>> +	for_each_possible_cpu(cpu) {
+>> +		ret = spm_cpuidle_register(cpu);
+>> +		if (ret != -ENODEV) {
+>> +			dev_err(&pdev->dev,
+>> +				"Cannot register for CPU%d: %d\n", cpu, ret);
+>> +			break;
+> 
+> Huh, why does this error for ret = 0? :S
+> 
+> [    0.736332] qcom-spm-cpuidle qcom-spm-cpuidle: Cannot register for CPU0: 0
+> 
+> A couple more lines in the UART log, then the device hangs forever.
+> For testing I changed this to: if (ret && ret != -ENODEV).
+> 
+
+I have no idea what happened here; this was indeed supposed to be what
+you just pointed out.
+
+>> [...]
+>> @@ -213,132 +80,87 @@ static const struct of_device_id qcom_idle_state_match[] = {
+>> -static int spm_cpuidle_init(struct cpuidle_driver *drv, int cpu)
+>> +static int spm_cpuidle_register(int cpu)
+>>   {
+>> +	struct platform_device *pdev = NULL;
+>> +	struct spm_driver_data *spm = NULL;
+>> +	struct device_node *cpu_node, *saw_node;
+>>   	int ret;
+>>   
+>> -	memcpy(drv, &qcom_spm_idle_driver, sizeof(*drv));
+>> -	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
+> 
+> Somehow this line got lost, which means the first cpuidle_driver will
+> cover all CPUs and we will always fail to register the cpuidle_driver
+> for all other CPUs:
+> 
+> [    0.736591] failed to register cpuidle driver
+> [    0.744186] qcom-spm-cpuidle qcom-spm-cpuidle: Cannot register for CPU1: -16
+> [    0.748443] qcom-spm-cpuidle: probe of qcom-spm-cpuidle failed with error -16
+> 
+> (Then the device hangs forever.)
+> 
+
+So you have discovered a bug for which your platform dies when SPM
+does not probe, probably due to something else being dependant on this.
+In this case, I would encourage you to produce a fix for your platform
+to not unexpectedly just hang forever if *some driver* doesn't probe:
+that's definitely not right.
+
+> I added
+> spm->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
+> below
+> 
+>> +	spm->cpuidle_driver = qcom_spm_idle_driver;
+> 
+> and this seems to make it boot again at least.
+> 
+
+I really think that I've originally messed up the patch originally:
+this doesn't seem to be the right version, even though it was marked as
+v4. I trusted my folders organization too much. Apologies.
+
+> However, it seems a bit pointless now to have a separate cpuidle_driver
+> per CPU, since they are all registered at the same time. With my
+> refactoring this was kind of convenient because the SPM platform devices
+> could happily probe independently and just register a cpuidle_driver for
+> the CPU they belong to.
+> 
+> With your patch, the cpuidle_drivers are registered at the same time for
+> all CPUs, so we might as well use a single cpuidle_driver that covers
+> all CPUs (like you already do without setting cpumask).
+> 
+> Note that if you have a single cpuidle_driver for all CPUs you need to
+> refactor spm_enter_idle_state() a bit. The container_of() will no longer
+> work to get the CPU-specific SPM. Before my changes there was a
+> DEFINE_PER_CPU for this. I guess we need to bring that back.
+> 
+>>   	[...]
+>> +	ret = dt_init_idle_driver(&spm->cpuidle_driver,
+>> +				  qcom_idle_state_match, 1);
+>> +	if (ret <= 0)
+>> +		return ret ? : -ENODEV;
+>>   
+>> -	return drv;
+>> -}
+>> +	ret = qcom_scm_set_warm_boot_addr(cpu_resume_arm, cpumask_of(cpu));
+>> +	if (ret)
+>> +		return ret;
+> 
+> And the advantage here is that we should be able to do this with a
+> single firmware call (set the warm boot addr for all CPUs at once).
+> 
+
+
+Probably staying with setting the cpumask is a better option; we don't
+
+really know if there's any platform requiring that kind of quirk: at
+least downstream, I recall that they made sure to send multiple calls.
+
+
+>> [...]
+>> diff --git a/include/soc/qcom/spm.h b/include/soc/qcom/spm.h
+>> new file mode 100644
+>> index 000000000000..604eca2c4d4a
+>> --- /dev/null
+>> +++ b/include/soc/qcom/spm.h
+>> @@ -0,0 +1,45 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2014,2015, Linaro Ltd.
+>> + * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
+>> + */
+>> +
+>> +#ifndef __SPM_H__
+>> +#define __SPM_H__
+>> +
+>> +#include <linux/cpuidle.h>
+>> +
+>> +#define MAX_PMIC_DATA		2
+>> +#define MAX_SEQ_DATA		64
+>> +
+>> +enum pm_sleep_mode {
+>> +	PM_SLEEP_MODE_STBY,
+>> +	PM_SLEEP_MODE_RET,
+>> +	PM_SLEEP_MODE_SPC,
+>> +	PM_SLEEP_MODE_PC,
+>> +	PM_SLEEP_MODE_NR,
+>> +};
+>> +
+>> +struct spm_reg_data {
+>> +	const u16 *reg_offset;
+>> +	u32 spm_cfg;
+>> +	u32 spm_dly;
+>> +	u32 pmic_dly;
+>> +	u32 pmic_data[MAX_PMIC_DATA];
+>> +	u32 avs_ctl;
+>> +	u32 avs_limit;
+> 
+> Looks like you accidentally included changes from PATCH 2/3
+> ("soc: qcom: spm: Implement support for SAWv4.1, SDM630/660 L2 AVS")
+> here, reg_offset u8 -> u16 and adding avs_ctl and avs_limit should be in
+> a separate patch. It's really hard to see that you added those here
+> while moving the code. :/
+> 
+
+This change belongs to 2/3.
+Will send a v5 with fixes.
+
+> Thanks,
+> Stephan
+> 
+
