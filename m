@@ -2,189 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCC83ACCD2
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 15:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC033ACCE1
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 15:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbhFRNzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 09:55:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39267 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234219AbhFRNzh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 09:55:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624024408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P/mlf3E91IxDGki9DJUtyEv6dP68LA3nvEkze77PADI=;
-        b=ZHkww1dmxJ9VWP+u/tTeniV2dD+M303glrW98Nnuks2m7rsz+Nmsbwdc1EzhSW4sLdOcS6
-        RDPr17F8MFalrQS7StLmVcD08rSuNYEYny2f8i2kQxa2wzQdjWfGOxUN7JZo8k5h9iuJtd
-        errPpraV0dgohyta1s1pibQiNANuulk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-294-PJq3ikfEM1SIeZB0zJO7aQ-1; Fri, 18 Jun 2021 09:53:24 -0400
-X-MC-Unique: PJq3ikfEM1SIeZB0zJO7aQ-1
-Received: by mail-ed1-f72.google.com with SMTP id p23-20020aa7cc970000b02903948bc39fd5so1591548edt.13
-        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 06:53:24 -0700 (PDT)
+        id S234094AbhFRN65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 09:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233754AbhFRN65 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 09:58:57 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174CC061574;
+        Fri, 18 Jun 2021 06:56:48 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id m18so10891322wrv.2;
+        Fri, 18 Jun 2021 06:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Xizm99JD150ezeQOoH2mePCgmp/xdHQI0Sa2KlLfCYE=;
+        b=kKFnimk0jGW0TVeqyZvO9ZxJpyRHln7vCrqNXdpfwxdm8HeoiDdp/JWycfazuaTE1U
+         x5lpZep/wsAds82Qeb4HKQaRLfhJffWrBjo8emSMoJzVcwNRDusWywVVQY/j+0AYEpKu
+         9086iEZngkzZucesNWjpGG0b1PMX3y4Mty6oLJoD1OhD6LHowCJgg078feaYjxe4n93o
+         UahRsBdHGDkfKL43kzVygIvtwyoi/j1PEp9lIvWiDgTjUeJfYme4VRO0EY+4/mmU4R5+
+         Tjy4WQLsKY2TaL17SaH7xLLjwVX4iQuW8IlhgtOHKkXdBAI/HR9WIERg36qaCPtrHIRz
+         YUPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=P/mlf3E91IxDGki9DJUtyEv6dP68LA3nvEkze77PADI=;
-        b=bMw6TL55a5o9fw58tWRlZ1YLhwOPwaxfTCz2bEIWc0Z1hFl9zrhm4kWB6Zcmb8xn5t
-         aVFP5O7tOSGpYa7XHCNI/RiIYUzvzN/nAS1IG8LalmIY0lbOGxlDn6gh9lHP+0E8+BuR
-         N3iz1hajHKvVZZAlcmcuRpn9o3DOU4e3NlMi8pZwHrJLSJqZ9lS5w9fsAj0myawuNwD2
-         K/1cdkwiaf1zIL6z06E0x461CqQa2b/yBFlcFg7ZWBjb+vqgxjaFv4bfv9SNZGnl6Jiu
-         xMJnr2hKLcieUK0mGfFnOazAtrIuUT5d200JNVCuZWQ6Dz/XLJWs1kKXTjMetxUh+V1d
-         83WA==
-X-Gm-Message-State: AOAM532Kr6boyIRNj66oRPWC996pVDbPnmqshOW2ehHbFU0KCZeJWpLp
-        U9uxRxbRtqoND/Uvb4eVK2nn4GsJuwVLolfb8/dXg/f1U+LhuT1iqonwug7fWbPR/DfNyGmRHfl
-        Ga0zmqOcOySwF8UC6c1w=
-X-Received: by 2002:a05:6402:31ba:: with SMTP id dj26mr5123211edb.71.1624024403732;
-        Fri, 18 Jun 2021 06:53:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyTsF/0Cs/2BceDIqNAQD06Z7C0XH4tntVdthlt9jCkRfrIbPEznJ7emZ4sC946B20lOowpNw==
-X-Received: by 2002:a05:6402:31ba:: with SMTP id dj26mr5123196edb.71.1624024403599;
-        Fri, 18 Jun 2021 06:53:23 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id de6sm780838edb.77.2021.06.18.06.53.22
+        bh=Xizm99JD150ezeQOoH2mePCgmp/xdHQI0Sa2KlLfCYE=;
+        b=riorZsz8eQlOI3Oc7hL90tJVGItfm5s5MLQ8OyaT7/0rV7IOXV4hcWEUbghkdxJx74
+         q68ETkJQ4tgScUKEQHG5MMVfNrJ7Xt+bdSnlAMhof3qeNnaYe5fejPmDKJJyP5CFmYPu
+         HyBUAqakUr+kT1T8ez0rp18rtriCLXtMINetJFneqEZ+N6hwXB8qotwX4RHYAVwdTCdR
+         tlXStV/IZimK9HcDg+xXoDuZ6XEZLZiRePDGzMOWNfcbTfcx3/j13CH0NJz4brRxc9s+
+         ksld4gqyCHRDImrTnhKpKqCyPJJrqGAX6sS/rfrURE1BrsHWZUA9jwlMXl9VXGiadZB9
+         54AA==
+X-Gm-Message-State: AOAM533rkaSS0EV8YFk3pbeXDnvfkNTNqmZf69D4mh3e3uFA0via6/0l
+        2hPV2hkj2henW159I/O1jEQ=
+X-Google-Smtp-Source: ABdhPJxtJtd1fV658X/G1BMWPx4eA+Rrv6VLMcP9tTD5u5EkkXdWvbtyc3bnVU4B3m2vKa2M3xBHyQ==
+X-Received: by 2002:a05:6000:1091:: with SMTP id y17mr4741964wrw.100.1624024606740;
+        Fri, 18 Jun 2021 06:56:46 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.126.134])
+        by smtp.gmail.com with ESMTPSA id 61sm9202800wrp.4.2021.06.18.06.56.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jun 2021 06:53:23 -0700 (PDT)
-Subject: Re: AW: [PATCH] power: supply: axp288_fuel_gauge: remove redundant
- continue statement
-To:     Walter Harms <wharms@bfs.de>,
-        Colin King <colin.king@canonical.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210618092924.99722-1-colin.king@canonical.com>
- <5d5dad5246f442e5aa96bdc50ac4b1f1@bfs.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <bac7f313-6696-7973-4261-27bf59055425@redhat.com>
-Date:   Fri, 18 Jun 2021 15:53:22 +0200
+        Fri, 18 Jun 2021 06:56:46 -0700 (PDT)
+Subject: Re: [PATCH v5 1/3] thermal: mediatek: Relocate driver to mediatek
+ folder
+To:     Ben Tseng <ben.tseng@mediatek.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Michael Kao <michael.kao@mediatek.com>,
+        Michael Kao <michael.kao@mediatek.comi>
+References: <20210617114707.10618-1-ben.tseng@mediatek.com>
+ <20210617114707.10618-2-ben.tseng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <372c579c-5cdc-e66a-af99-ea8ee8533ded@gmail.com>
+Date:   Fri, 18 Jun 2021 15:56:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <5d5dad5246f442e5aa96bdc50ac4b1f1@bfs.de>
+In-Reply-To: <20210617114707.10618-2-ben.tseng@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 6/18/21 1:19 PM, Walter Harms wrote:
-> Just a remark:
-> the function fuel_gauge_reg_readb() is reporting via dev_err().
-> But some callers are reporting also. Maybe someone should take
-> a look.
-> The valid return seems >=0 so removing the dev_err seems an option.
-
-Actually the whole register reading code in this driver needs to
-be reworked.
-
-The AXP288 PMIC also controls voltage-planes which are used by
-the CPU-cores and the i915 GPU which are part of the Intel SoCs
-with which this PMIC is used.
-
-This means that the PMU of the SoC needs to also talk to it
-over the same I2C bus when CPU-cores / the GPU changes C-states
-or ramp up/down their frequency.
-
-To avoid conflicts there is a special handshake with both the
-PMU itself (taking something resembling a mutex by a hw-handshake)
-as well as with the i915 driver. This handshake is hidden inside
-the i2c-adapter driver, so you don't see it in the code here.
-This handshake is also the whole reason why the regmap_read may
-return -EBUSY.
-
-This handshake is quite expensive and currently it is done for
-every single regmap_read (the handshake is many times as
-expensive as the actual I2C read) and updating the fuel-gauge
-status does quite a lot of reads.
-
-A while ago I changed the underlying code so that AXP288
-drivers can acquire access to the bus once; then do a bunch
-of regmap accesses and then release the bus again.
-
-A user who was having some stability issues has been working
-(offlist) on a patch to use a register cache which gets updated
-periodically (like how many hwmon drivers work) and then have
-all the psy property accesses come from the cache. This allows
-acquiring the bus once; do all the reads to fill the cache;
-and then release it again.  I need to review his code; but
-I've not gotten around to that yet (I really need to make
-time for this).
-
-Once we switch to this register-cache approach, then the whole
-fuel_gauge_reg_readb() wrapper can go away since then we no
-longer need to worry about EBUSY errors (once we have acquired
-the bus these cannot happen).
-
-TL;DR: you are right that there are some cleanups possible here,
-but the entire thing is going to be rewritten soon, so it is
-probably best to just leave it as is for now.
-
-Regards,
-
-Hans
 
 
-
-
-
-
-
-
-
-
-
-
+On 17/06/2021 13:47, Ben Tseng wrote:
+> From: Michael Kao <michael.kao@mediatek.com>
 > 
-> jm2c,
->  re,
->  wh
-> ________________________________________
-> Von: Colin King <colin.king@canonical.com>
-> Gesendet: Freitag, 18. Juni 2021 11:29:24
-> An: Sebastian Reichel; Hans de Goede; Chen-Yu Tsai; linux-pm@vger.kernel.org
-> Cc: kernel-janitors@vger.kernel.org; linux-kernel@vger.kernel.org
-> Betreff: [PATCH] power: supply: axp288_fuel_gauge: remove redundant continue statement
+> Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> drivers. Relocate the original thermal controller driver to it and rename
+> as soc_temp.c to show its purpose more clearly.
 > 
-> WARNUNG: Diese E-Mail kam von außerhalb der Organisation. Klicken Sie nicht auf Links oder öffnen Sie keine Anhänge, es sei denn, Sie kennen den/die Absender*in und wissen, dass der Inhalt sicher ist.
-> 
-> 
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> The continue statement at the end of a for-loop has no effect,
-> invert the if expression and remove the continue.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.comi>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
 > ---
->  drivers/power/supply/axp288_fuel_gauge.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/thermal/Kconfig                       | 14 ++++-------
+>  drivers/thermal/Makefile                      |  2 +-
+>  drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+>  drivers/thermal/mediatek/Makefile             |  1 +
+>  .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>  5 files changed, 29 insertions(+), 11 deletions(-)
+>  create mode 100644 drivers/thermal/mediatek/Kconfig
+>  create mode 100644 drivers/thermal/mediatek/Makefile
+>  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
 > 
-> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-> index 39e16ecb7638..20e63609ab47 100644
-> --- a/drivers/power/supply/axp288_fuel_gauge.c
-> +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> @@ -142,9 +142,7 @@ static int fuel_gauge_reg_readb(struct axp288_fg_info *info, int reg)
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index d7f44deab5b1..7a4ba50ba97d 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -401,16 +401,10 @@ config DA9062_THERMAL
+>  	  zone.
+>  	  Compatible with the DA9062 and DA9061 PMICs.
+>  
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>  
+>  config AMLOGIC_THERMAL
+>  	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 82fc3e616e54..9729a2b08991 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -54,7 +54,7 @@ obj-y				+= st/
+>  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..0351e73170b7
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "Mediatek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +	  This is the option for Mediatek thermal software
+> +	  solutions. Please enable corresponding options to
+> +	  get temperature information from thermal sensors or
+> +	  turn on throttle mechaisms for thermal mitigation.
+> +
+> +if MTK_THERMAL
+> +
+> +config MTK_SOC_THERMAL
+> +	tristate "Temperature sensor driver for mediatek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Enable this option if you want to get SoC temperature
+> +	  information for Mediatek platforms. This driver
+> +	  configures thermal controllers to collect temperature
+> +	  via AUXADC interface.
+> +
+> +endif
+> diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..f75313ddce5e
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
+> similarity index 100%
+> rename from drivers/thermal/mtk_thermal.c
+> rename to drivers/thermal/mediatek/soc_temp.c
 > 
->         for (i = 0; i < NR_RETRY_CNT; i++) {
->                 ret = regmap_read(info->regmap, reg, &val);
-> -               if (ret == -EBUSY)
-> -                       continue;
-> -               else
-> +               if (ret != -EBUSY)
->                         break;
->         }
-> 
-> --
-> 2.31.1
-> 
-
