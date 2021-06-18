@@ -2,185 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC033ACCE1
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 15:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23183ACF2E
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 17:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbhFRN65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 09:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbhFRN65 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 09:58:57 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174CC061574;
-        Fri, 18 Jun 2021 06:56:48 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id m18so10891322wrv.2;
-        Fri, 18 Jun 2021 06:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Xizm99JD150ezeQOoH2mePCgmp/xdHQI0Sa2KlLfCYE=;
-        b=kKFnimk0jGW0TVeqyZvO9ZxJpyRHln7vCrqNXdpfwxdm8HeoiDdp/JWycfazuaTE1U
-         x5lpZep/wsAds82Qeb4HKQaRLfhJffWrBjo8emSMoJzVcwNRDusWywVVQY/j+0AYEpKu
-         9086iEZngkzZucesNWjpGG0b1PMX3y4Mty6oLJoD1OhD6LHowCJgg078feaYjxe4n93o
-         UahRsBdHGDkfKL43kzVygIvtwyoi/j1PEp9lIvWiDgTjUeJfYme4VRO0EY+4/mmU4R5+
-         Tjy4WQLsKY2TaL17SaH7xLLjwVX4iQuW8IlhgtOHKkXdBAI/HR9WIERg36qaCPtrHIRz
-         YUPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Xizm99JD150ezeQOoH2mePCgmp/xdHQI0Sa2KlLfCYE=;
-        b=riorZsz8eQlOI3Oc7hL90tJVGItfm5s5MLQ8OyaT7/0rV7IOXV4hcWEUbghkdxJx74
-         q68ETkJQ4tgScUKEQHG5MMVfNrJ7Xt+bdSnlAMhof3qeNnaYe5fejPmDKJJyP5CFmYPu
-         HyBUAqakUr+kT1T8ez0rp18rtriCLXtMINetJFneqEZ+N6hwXB8qotwX4RHYAVwdTCdR
-         tlXStV/IZimK9HcDg+xXoDuZ6XEZLZiRePDGzMOWNfcbTfcx3/j13CH0NJz4brRxc9s+
-         ksld4gqyCHRDImrTnhKpKqCyPJJrqGAX6sS/rfrURE1BrsHWZUA9jwlMXl9VXGiadZB9
-         54AA==
-X-Gm-Message-State: AOAM533rkaSS0EV8YFk3pbeXDnvfkNTNqmZf69D4mh3e3uFA0via6/0l
-        2hPV2hkj2henW159I/O1jEQ=
-X-Google-Smtp-Source: ABdhPJxtJtd1fV658X/G1BMWPx4eA+Rrv6VLMcP9tTD5u5EkkXdWvbtyc3bnVU4B3m2vKa2M3xBHyQ==
-X-Received: by 2002:a05:6000:1091:: with SMTP id y17mr4741964wrw.100.1624024606740;
-        Fri, 18 Jun 2021 06:56:46 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id 61sm9202800wrp.4.2021.06.18.06.56.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jun 2021 06:56:46 -0700 (PDT)
-Subject: Re: [PATCH v5 1/3] thermal: mediatek: Relocate driver to mediatek
- folder
-To:     Ben Tseng <ben.tseng@mediatek.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+        id S233494AbhFRPgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 11:36:44 -0400
+Received: from mga04.intel.com ([192.55.52.120]:11984 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229768AbhFRPgn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 18 Jun 2021 11:36:43 -0400
+IronPort-SDR: phUI6VDCWGpOJxWKYyAsdsWMXOssx2ODJUDwGDWx4QgeSPVx5watjJWwoj2ntiPM0fIHbd2pws
+ YVk3zfAms3eg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="204743326"
+X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
+   d="scan'208";a="204743326"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2021 08:34:33 -0700
+IronPort-SDR: YjUWpt7MffIQd3kXvC0VEISOuHbwiGJc62Dimqy4romcc6vUPkII6JPGzoy45KRTbvW5/UIqv5
+ ALK931eNkYrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
+   d="scan'208";a="489101532"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2021 08:34:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0D30B2AA; Fri, 18 Jun 2021 18:34:55 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Michael Kao <michael.kao@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.comi>
-References: <20210617114707.10618-1-ben.tseng@mediatek.com>
- <20210617114707.10618-2-ben.tseng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <372c579c-5cdc-e66a-af99-ea8ee8533ded@gmail.com>
-Date:   Fri, 18 Jun 2021 15:56:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v1 1/1] thermal: intel: intel_soc_dts_iosf: Switch to use find_first_zero_bit()
+Date:   Fri, 18 Jun 2021 18:34:51 +0300
+Message-Id: <20210618153451.89246-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210617114707.10618-2-ben.tseng@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Switch to use find_first_zero_bit() instead of open-coded variant.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thermal/intel/intel_soc_dts_iosf.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-On 17/06/2021 13:47, Ben Tseng wrote:
-> From: Michael Kao <michael.kao@mediatek.com>
-> 
-> Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> drivers. Relocate the original thermal controller driver to it and rename
-> as soc_temp.c to show its purpose more clearly.
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.comi>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+index 4f1a2f7c016c..342b0bb5a56d 100644
+--- a/drivers/thermal/intel/intel_soc_dts_iosf.c
++++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+@@ -350,13 +350,14 @@ int intel_soc_dts_iosf_add_read_only_critical_trip(
+ 	int i, j;
+ 
+ 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+-		for (j = 0; j < sensors->soc_dts[i].trip_count; ++j) {
+-			if (!(sensors->soc_dts[i].trip_mask & BIT(j))) {
+-				return update_trip_temp(&sensors->soc_dts[i], j,
+-					sensors->tj_max - critical_offset,
+-					THERMAL_TRIP_CRITICAL);
+-			}
+-		}
++		struct intel_soc_dts_sensor_entry *entry = &sensors->soc_dts[i];
++		int temp = sensors->tj_max - critical_offset;
++		unsigned long count = entry->trip_count;
++		unsigned long mask = entry->trip_mask;
++
++		j = find_first_zero_bit(&mask, count);
++		if (j < count)
++			return update_trip_temp(entry, j, temp, THERMAL_TRIP_CRITICAL);
+ 	}
+ 
+ 	return -EINVAL;
+-- 
+2.30.2
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->  drivers/thermal/Kconfig                       | 14 ++++-------
->  drivers/thermal/Makefile                      |  2 +-
->  drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
->  drivers/thermal/mediatek/Makefile             |  1 +
->  .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
->  5 files changed, 29 insertions(+), 11 deletions(-)
->  create mode 100644 drivers/thermal/mediatek/Kconfig
->  create mode 100644 drivers/thermal/mediatek/Makefile
->  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index d7f44deab5b1..7a4ba50ba97d 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -401,16 +401,10 @@ config DA9062_THERMAL
->  	  zone.
->  	  Compatible with the DA9062 and DA9061 PMICs.
->  
-> -config MTK_THERMAL
-> -	tristate "Temperature sensor driver for mediatek SoCs"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	depends on NVMEM || NVMEM=n
-> -	depends on RESET_CONTROLLER
-> -	default y
-> -	help
-> -	  Enable this option if you want to have support for thermal management
-> -	  controller present in Mediatek SoCs
-> +menu "Mediatek thermal drivers"
-> +depends on ARCH_MEDIATEK || COMPILE_TEST
-> +source "drivers/thermal/mediatek/Kconfig"
-> +endmenu
->  
->  config AMLOGIC_THERMAL
->  	tristate "Amlogic Thermal Support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 82fc3e616e54..9729a2b08991 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -54,7 +54,7 @@ obj-y				+= st/
->  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->  obj-y				+= tegra/
->  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
->  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> new file mode 100644
-> index 000000000000..0351e73170b7
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -0,0 +1,23 @@
-> +config MTK_THERMAL
-> +	tristate "Mediatek thermal drivers"
-> +	depends on THERMAL_OF
-> +	help
-> +	  This is the option for Mediatek thermal software
-> +	  solutions. Please enable corresponding options to
-> +	  get temperature information from thermal sensors or
-> +	  turn on throttle mechaisms for thermal mitigation.
-> +
-> +if MTK_THERMAL
-> +
-> +config MTK_SOC_THERMAL
-> +	tristate "Temperature sensor driver for mediatek SoCs"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on RESET_CONTROLLER
-> +	help
-> +	  Enable this option if you want to get SoC temperature
-> +	  information for Mediatek platforms. This driver
-> +	  configures thermal controllers to collect temperature
-> +	  via AUXADC interface.
-> +
-> +endif
-> diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
-> new file mode 100644
-> index 000000000000..f75313ddce5e
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
-> similarity index 100%
-> rename from drivers/thermal/mtk_thermal.c
-> rename to drivers/thermal/mediatek/soc_temp.c
-> 
