@@ -2,86 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7BB3ACB03
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 14:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157E83ACC68
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jun 2021 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbhFRMdD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Jun 2021 08:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbhFRMcb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 08:32:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B4BC0613A2
-        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 05:30:22 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id q20so16450609lfo.2
-        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 05:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/hgJ/IpeM8Acz8X3cETsndAcP4SBtdB2NKP7XSPmuyU=;
-        b=cKWBJL/pN9U49beNK74dbR+9dM3IEiiUF+Y662z8bgKBTHLYyYAWejz/NqTv1lywAQ
-         DYEcil/exwH365+/fBO/So5bN4PoOf761WJ6JMs6pssnMceLY16xh6++nHbDmuB7Bibr
-         ZTxErmPhqDvrjN/L+KD/l2Wvw1zxIKOmzHwu6eFMbHXLChw/r2Ahy5unr4rYClZjzdZc
-         9fxBqNbjpgb9MFZpLHteYIcAOjJMs9Y0ayyw/u/bNolCrD11dihaKauPDpQ94kr+GvEE
-         2pt5b3GPBinr4MFxJ72LYD13HR/vqVmxzPScohecL2KHqprjYiW8faLB1zjcyAE2b2lw
-         SQgw==
+        id S234047AbhFRNic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Jun 2021 09:38:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24238 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234079AbhFRNiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Jun 2021 09:38:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624023371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dwAv77AeNlMLDZyLBksUycGFC3fX4Q/aI+Elu1Kw5xU=;
+        b=OEX/ddlkvtRb1UP6hGDbozHev4F6Ngg/v7TbTCbnhKf9Wh2nAvgWOOjydkOuHRlew4DaQB
+        b3jm3c2OwykwbheZKg/kQT+/orv3SG7RcH1gweA7klYb0PVGS1IgHFI3DezC4nz17mhPC+
+        IPdY0svIJpo72sHaqOTc/qwezhX8tHI=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-374-ja0bfDJXNtCNnrbbT59Pdg-1; Fri, 18 Jun 2021 09:36:10 -0400
+X-MC-Unique: ja0bfDJXNtCNnrbbT59Pdg-1
+Received: by mail-ej1-f70.google.com with SMTP id de48-20020a1709069bf0b029048ae3ebecabso395908ejc.16
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jun 2021 06:36:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/hgJ/IpeM8Acz8X3cETsndAcP4SBtdB2NKP7XSPmuyU=;
-        b=KukQ63G1Eq5GxFLTxNL990zKSRrn4Nke/xZTTacY7MdA7CYC3MsmGs5JbgMGEF4cCv
-         /1w+IwW0o6wJNxr/DQv6nxnqnXxRyAvIrNSZMaqDufpYzuXhdNlkQ3h58q4bVzDWQXw6
-         aApDx6Z/yJPxdCEI5rA75IbDlEiaCMNQKLCrfPF7wfLf5KWwPLpNJwRljW/7QXWeIEWc
-         dGeHWbPRJQYzQxP37dnZzKgzG5EO5c3yuXMIwwgF0ENPF/S6QsPeuXd2ehDqZ4KkPqia
-         wexH9nv64+FpNYS2ZsYD50jiR5BssY4R1WbRIff8EmxLKbTq4cZ7xLheacTDCQ/sj6ds
-         C6uQ==
-X-Gm-Message-State: AOAM531GtUzCfszRtbZGDRSh9pME+Xyl85Q5pNzBKSuMZeXt2UcuydMx
-        1gSWNtAaqhTvpHnMpesFntefH4RmIf4=
-X-Google-Smtp-Source: ABdhPJxw8MefQjlI/sbiM8qg7tBlJ5eIzTpC1fEZvqPJvCTKiBA2SCPEcfmjhI48ih5FFI92kndGOA==
-X-Received: by 2002:a05:6512:a87:: with SMTP id m7mr3026269lfu.30.1624019420816;
-        Fri, 18 Jun 2021 05:30:20 -0700 (PDT)
-Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
-        by smtp.gmail.com with ESMTPSA id i124sm897281lfd.62.2021.06.18.05.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 05:30:20 -0700 (PDT)
-Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
-        by home.paul.comp (8.15.2/8.15.2/Debian-14~deb10u1) with ESMTP id 15ICUHMR010732;
-        Fri, 18 Jun 2021 15:30:18 +0300
-Received: (from paul@localhost)
-        by home.paul.comp (8.15.2/8.15.2/Submit) id 15ICUHmx010731;
-        Fri, 18 Jun 2021 15:30:17 +0300
-Date:   Fri, 18 Jun 2021 15:30:17 +0300
-From:   Paul Fertser <fercerpav@gmail.com>
-To:     Martin Ashby <martin@ashbysoft.com>
-Cc:     t.schramm@manjaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: cw2015: Add CHARGE_NOW support
-Message-ID: <20210618123017.GA10695@home.paul.comp>
-References: <20210218124250.128008-1-martin@ashbysoft.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dwAv77AeNlMLDZyLBksUycGFC3fX4Q/aI+Elu1Kw5xU=;
+        b=Ax4yXu82JmY90S6bMj9P+9j7/dQZ4dwyvXZa92bGCKGilnsZv2NRt1NGO0JO+HN2eX
+         Fb9imEvB8WetPvorNFY8CuG07cuMUrmzhJuG/RrwX2LTQiaP8siGvudMNCpvPso1UVij
+         NhUsY/lAbrjH8FJHxCOnaNJSk0gC0Y8JVsfQ2ElyYN9lDkKfDy3swGS0co0hTpeOsaQw
+         EMfj9+HIxtXxiWch+0uWvxqjlS3ccOaZcoQu18tKz0Y/4V8OtkBIwuDOiLpGF6pcoG/l
+         qUBe/ode3+sqRitpQI/hU3UMEZ/hIEpx9j5RyuFaxSb6zpqInDH+rsh2V3UC5dumhmnS
+         Mv7w==
+X-Gm-Message-State: AOAM530GBA/iCmzUCgDeH5g/xNu84gu8IV6r4HwmnrJuyHrT401GoJ68
+        my5LQE09TpJz5aWH+YYD7o+CiApKmN0ssvEggghAJAgTNbpAslXeU/H1zKOlG/FCXOAMgl/5sGp
+        FJjnunQ/1R3gAwi9ssTo=
+X-Received: by 2002:a17:906:1704:: with SMTP id c4mr11309286eje.182.1624023369338;
+        Fri, 18 Jun 2021 06:36:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzR91c6OPYoDNV+ixeXoAS0a4lEBGMZghoM8VLy/9noopvEnzhrLCC5z06NQNHkpEdJHuzVDQ==
+X-Received: by 2002:a17:906:1704:: with SMTP id c4mr11309273eje.182.1624023369190;
+        Fri, 18 Jun 2021 06:36:09 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id e12sm1047791ejk.99.2021.06.18.06.36.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Jun 2021 06:36:08 -0700 (PDT)
+Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: remove redundant
+ continue statement
+To:     Colin King <colin.king@canonical.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210618092924.99722-1-colin.king@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <9d482c54-f578-5afb-9661-dbb658471b5d@redhat.com>
+Date:   Fri, 18 Jun 2021 15:36:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210218124250.128008-1-martin@ashbysoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210618092924.99722-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Martin,
+Hi,
 
-On Thu, Feb 18, 2021 at 07:42:50AM -0500, Martin Ashby wrote:
-> +	case POWER_SUPPLY_PROP_CHARGE_NOW:
-> +		val->intval = cw_bat->battery.charge_full_design_uah;
-> +		val->intval = val->intval * cw_bat->soc / 100;
+On 6/18/21 11:29 AM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> The continue statement at the end of a for-loop has no effect,
+> invert the if expression and remove the continue.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/power/supply/axp288_fuel_gauge.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+> index 39e16ecb7638..20e63609ab47 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -142,9 +142,7 @@ static int fuel_gauge_reg_readb(struct axp288_fg_info *info, int reg)
+>  
+>  	for (i = 0; i < NR_RETRY_CNT; i++) {
+>  		ret = regmap_read(info->regmap, reg, &val);
+> -		if (ret == -EBUSY)
+> -			continue;
+> -		else
+> +		if (ret != -EBUSY)
+>  			break;
+>  	}
 
-Are you sure the chip reports current state of charge relative to the
-full design capacity rather than to the latest auto-calibrated full
-capacity? That would mean that over time as the cells wear out
-cw_bat->soc (PROP_CAPACITY) is never going to be reaching 100; does
-this match your experience?
+Thanks, patch looks good to me:
 
--- 
-Be free, use free (http://www.gnu.org/philosophy/free-sw.html) software!
-mailto:fercerpav@gmail.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
