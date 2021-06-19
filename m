@@ -2,65 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9843ADA77
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 16:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794233ADB02
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Jun 2021 19:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbhFSOoc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Jun 2021 10:44:32 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56110 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbhFSOob (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Jun 2021 10:44:31 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id EA0FD1F43FFD
-Message-ID: <4c178505a73b47d08c17915aa43b5f4239a8c30c.camel@collabora.com>
-Subject: Re: [PATCH v2 3/4] dt-bindings: rockchip-thermal: Support the
- RK3568 SoC compatible
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        kernel@collabora.com, linux-pm@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        linux-rockchip@lists.infradead.org
-Date:   Sat, 19 Jun 2021 11:42:09 -0300
-In-Reply-To: <196b01a730d236a6eda99b42f18939692bc7ffcc.camel@collabora.com>
-References: <20210506175514.168365-1-ezequiel@collabora.com>
-         <20210506175514.168365-4-ezequiel@collabora.com>
-         <20210506214452.GA853809@robh.at.kernel.org>
-         <196b01a730d236a6eda99b42f18939692bc7ffcc.camel@collabora.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2-1 
+        id S234859AbhFSRCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Jun 2021 13:02:46 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:35076 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232203AbhFSRCo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Jun 2021 13:02:44 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1624122031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B0WuIzDMWF99bBZuLNCq2ygkfH35IcPVOSY6Jg7e+OI=;
+        b=zWzKICElodmiWYNyww0vsbIf5K1JIwRn9+v/TR+PlrsUkchd2PKtD5ng6LpeFgbgsTCKw4
+        GBwmGVSPosDKlhUUBZWSNx6e7wz2eqzwKRj1CuthEf+l1vTDYf3U+Y7Xu9kTG+70DBDmlK
+        Bk6Dco+InfRE+z5QGnIXhU31JJXAS+rcpcEninckSnnpG0svX6TEdlrLdqMEQTZMVfly3x
+        9TxzUOm6mtr/EJi67HqlweKY04sNhwUhk8rFZHANb9cX23E1VUNpFGkNaiwqoMfPsIyG8B
+        kcgTJwMUfiPDmBVazSTYhENptpnSjrZ1yRGnj0brteKWvQfemy8H9dbCFDc8/A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1624122031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B0WuIzDMWF99bBZuLNCq2ygkfH35IcPVOSY6Jg7e+OI=;
+        b=yGz+IcnIfKBafxps3sdFRFstTzITkh1lKwhIXMPHyEs4gwR741lmdzOnbFnqgotz0a8XG7
+        K3OHwMhzVPurVVAg==
+To:     Ondrej Mosnacek <omosnace@redhat.com>,
+        linux-security-module@vger.kernel.org,
+        James Morris <jmorris@namei.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        selinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux lockdown checks
+In-Reply-To: <20210616085118.1141101-1-omosnace@redhat.com>
+References: <20210616085118.1141101-1-omosnace@redhat.com>
+Date:   Sat, 19 Jun 2021 19:00:30 +0200
+Message-ID: <8735tdiyc1.ffs@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2021-06-19 at 11:40 -0300, Ezequiel Garcia wrote:
-> Hi Daniel,
-> 
-> On Thu, 2021-05-06 at 16:44 -0500, Rob Herring wrote:
-> > On Thu, 06 May 2021 14:55:13 -0300, Ezequiel Garcia wrote:
-> > > Add a new compatible for the thermal sensor device on RK3568 SoCs.
-> > > 
-> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > 
-> > Acked-by: Rob Herring <robh@kernel.org>
->         
-> Gentle ping for 3/4 and 4/4 in this series.
-> 
+On Wed, Jun 16 2021 at 10:51, Ondrej Mosnacek wrote:
+> diff --git a/arch/x86/mm/testmmiotrace.c b/arch/x86/mm/testmmiotrace.c
+> index bda73cb7a044..c43a13241ae8 100644
+> --- a/arch/x86/mm/testmmiotrace.c
+> +++ b/arch/x86/mm/testmmiotrace.c
+> @@ -116,7 +116,7 @@ static void do_test_bulk_ioremapping(void)
+>  static int __init init(void)
+>  {
+>  	unsigned long size = (read_far) ? (8 << 20) : (16 << 10);
+> -	int ret = security_locked_down(LOCKDOWN_MMIOTRACE);
+> +	int ret = security_locked_down(current_cred(), LOCKDOWN_MMIOTRACE);
 
-Actually, it's patches 2/4, 3/4 and 4/4.
+I have no real objection to those patches, but it strikes me odd that
+out of the 62 changed places 58 have 'current_cred()' and 4 have NULL as
+argument.
 
-Thanks!
-Ezequiel
+I can't see why this would ever end up with anything else than
+current_cred() or NULL and NULL being the 'special' case. So why not
+having security_locked_down_no_cred() and make current_cred() implicit
+for security_locked_down() which avoids most of the churn and just makes
+the special cases special. I might be missing something though.
 
+Thanks,
+
+        tglx
