@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DA43ADF4F
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Jun 2021 18:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB0A3ADF54
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Jun 2021 18:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbhFTQPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Jun 2021 12:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S230174AbhFTQPD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Jun 2021 12:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbhFTQO7 (ORCPT
+        with ESMTP id S230082AbhFTQO7 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Jun 2021 12:14:59 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9FDC061574;
-        Sun, 20 Jun 2021 09:12:45 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id m21so25862759lfg.13;
-        Sun, 20 Jun 2021 09:12:45 -0700 (PDT)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F25BC06175F;
+        Sun, 20 Jun 2021 09:12:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id f30so25947738lfj.1;
+        Sun, 20 Jun 2021 09:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jpvnw+R16ZZxCZrBWAgLq/iykxbIjW5UolBixupkKsw=;
-        b=IIhZti5BTRvUMzuB39REKFUlqbBxLT7xVWnEheIEBDPLLQHbqa+eRrpP+HoG4k52uq
-         4zjSW3GQ0aSFEULXF4EmJbpVIwTVEk6qogtDl9b+bVh0qtWgSqF8Wy2hfFYy4dsl3fGu
-         EJ75vzQuWKLiNjkXpAQ7LVjQvFWpYdNEXWXOLUr8jBcAOMrAkYHwSAwSUDGim9sXHQJ4
-         Dz8l8jm1OugWyca/3e6G+fngT5OBoj+p6AaaDYjbd+vocuhsgHuuc8Ei3x3lMMrmzcTX
-         t7iewb34GLDbFwf8Zn2kXdcdET8PaUre2JvH3GTCz/xmq2UHQUMEIqsxVjFDyVbLU5s0
-         GuWg==
+        bh=TKgHGyGZjSOsl6hRAHGiJYUzYl3Maz/O7xoBkKHr68o=;
+        b=PAK99+N6GBixYYqpNJ5I8Y0S2c6J0K9dq+Jt9AcBii34eUqJl7x8HUtjd75ASyPdmF
+         9dz+8eVHpywrNPVuSDeiBbTE8E+2w0iJQ+XHuC/+z3/sYU/f5zE53ZkvaWTnp915tGhb
+         384aERDsux4nZv40f5J1QFqqzqwPdAQrWnEf+pLB5uTXEMvTHqb9i7mi5p7R43y6PpOk
+         2d3ErDhMHoG4Q6cPAH/iQ6CxnhbXj0powGq7l+Y7E/K8MROZr0NJQp9UfiMIHQ1ZlcZ2
+         18IcUm6ZprXwV9YotxDFTf1qSTtmSmMTS9Tb+Ak0xYTJleV2L5Q3aKOgSVZsDEadEwQU
+         +HPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jpvnw+R16ZZxCZrBWAgLq/iykxbIjW5UolBixupkKsw=;
-        b=pBNZmZRcFItB7SnXPq+HZN31acgJmqaz4U9Ynmn9vyu2RsCrosvSwXicMJlHXg9TRp
-         RPdhX7jeumjDvQJYklfmj9t8EnOfdjLusDSkdVXFmbTnLacyWzdguKmNTaRdTZy/SPkG
-         SZhjk6avZNvL8TYmJ71xidvQSH2PsrbcrVXIpBnEUOSuPjvbNTchojDBTmbL3W1iLqr0
-         2jv7GQZV+YmzrbqjNbUTik341RATqBwlrQhQpguzHF9LridiMatkk8+1R3Vniqy8Aah1
-         8LAo4tRRSHdDxTwQ5U6FWFdYcjw0YQDQ5ttX8V2TfDxBnIQI01zRdrIQ7SQIfl/RZ1y3
-         vDgQ==
-X-Gm-Message-State: AOAM533cjgIy653B86mWw2QY6TMcQwt6q9uJ3wTUXLCsHDmH9VTWcw8h
-        bH7HddvDbPUZQE+A7cX44vs=
-X-Google-Smtp-Source: ABdhPJzEzP1VOqEhJI1FBenkB57AGH3rl3HzHOXGjAe1S391ie/GXjXKTfLr86iw1/5IBu/2yIsaWQ==
-X-Received: by 2002:ac2:4a61:: with SMTP id q1mr10994711lfp.572.1624205563748;
-        Sun, 20 Jun 2021 09:12:43 -0700 (PDT)
+        bh=TKgHGyGZjSOsl6hRAHGiJYUzYl3Maz/O7xoBkKHr68o=;
+        b=AMoqKmNDdsApADIBuhG5unyIHjZ5wtkgWXtDn90M3JADz+VfoUOrS14DW01YsoBGPk
+         veL1DyNJ9Ek7TSwuxWrF+LDcu+gS62znBpvsB0WIEUNUMR05p4J3VsvNimt//+f7MaER
+         AyLVk7rcmb7t8QJUX+iEJvcoXpD2NFMDrCaOtpIJiBvWx9iN1xm2h7izZ7DKqIcKkOjZ
+         62TTm9A98e0p9l/7wLa2G1em3CDSrrspc1wJCh8bQ/GmaIvZ2OTIoGiGBFutHWrxDaVh
+         AE+RNpCf9sq3DHqgH4PoKtM2S+5d6phiiMCfSNK1EU/TXWurPap1d3OLkwyG9kw1y9L6
+         BLUg==
+X-Gm-Message-State: AOAM531r4eanXvo1UzQM5ztSdiotunuerncJSSdKjH1wprlEdiZ87aHg
+        5n2EkyrZAv2dVg8ypuvF4DY=
+X-Google-Smtp-Source: ABdhPJwvCxm1B7ZGRNGv9X+CiRw0EZQHG0KV4/Z1R8TsYORGP8ZhhAix8+qzdbAG92aIzbMy9hLxyw==
+X-Received: by 2002:ac2:5c0b:: with SMTP id r11mr11600691lfp.655.1624205564662;
+        Sun, 20 Jun 2021 09:12:44 -0700 (PDT)
 Received: from localhost.localdomain (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.gmail.com with ESMTPSA id a21sm1849419ljj.21.2021.06.20.09.12.42
+        by smtp.gmail.com with ESMTPSA id a21sm1849419ljj.21.2021.06.20.09.12.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Jun 2021 09:12:43 -0700 (PDT)
+        Sun, 20 Jun 2021 09:12:44 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -55,9 +55,9 @@ To:     Zhang Rui <rui.zhang@intel.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v1 1/2] hwmon: Support set_trips() of thermal device ops
-Date:   Sun, 20 Jun 2021 19:12:22 +0300
-Message-Id: <20210620161223.16844-2-digetx@gmail.com>
+Subject: [PATCH v1 2/2] hwmon: (lm90) Implement set_trips() callback
+Date:   Sun, 20 Jun 2021 19:12:23 +0300
+Message-Id: <20210620161223.16844-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210620161223.16844-1-digetx@gmail.com>
 References: <20210620161223.16844-1-digetx@gmail.com>
@@ -67,70 +67,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Support set_trips() callback of thermal device ops. This allows HWMON
-device to operatively notify thermal core about temperature changes, which
-is very handy to have in a case where HWMON sensor is used by CPU thermal
-zone that performs passive cooling and emergency shutdown on overheat.
-Thermal core will be able to react faster to temperature changes.
+Implement set_trips() callback in order to operatively notify thermal
+core about temperature changes. Thermal core will take control over the
+LM90 temperature limits only if LM90 is attached to thermal zone in a
+device-tree and sensor interrupt is provided, otherwise old behaviour
+is unchanged.
+
+Currently only NVIDIA Tegra boards are specifying interrupt for LM90
+sensors and only couple of boards use sensor for passive cooling of CPU,
+otherwise sensor isn't actively used. Hence this change doesn't bring
+any visible effects to userspace, it merely improves thermal device
+capabilities of the LM90 driver.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/hwmon/hwmon.c | 12 ++++++++++++
- include/linux/hwmon.h |  9 +++++++++
- 2 files changed, 21 insertions(+)
+ drivers/hwmon/lm90.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index fd47ab4e6892..4bd39ed86877 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -153,8 +153,20 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index b53f17511b05..7180af611dfb 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1406,6 +1406,35 @@ static int lm90_write(struct device *dev, enum hwmon_sensor_types type,
+ 	}
  }
  
-+static int hwmon_thermal_set_trips(void *data, int low, int high)
++static int lm90_set_trips(struct device *dev, int channel, int low, int high)
 +{
-+	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
++	struct lm90_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	int err;
 +
-+	if (!hwdev->chip->ops->set_trips)
++	/*
++	 * It makes sense to set temperature trips only if interrupt is
++	 * provided since the whole point of temperature trips is to get
++	 * a quick notification about temperature changes.
++	 */
++	if (!client->irq)
 +		return 0;
 +
-+	return hwdev->chip->ops->set_trips(tdata->dev, tdata->index, low, high);
++	/* prevent integer overflow of temperature calculations */
++	low  = max(low, -255000);
++	high = min(high, 255000);
++
++	err = lm90_temp_write(dev, hwmon_temp_min, channel, low);
++	if (err < 0)
++		return err;
++
++	err = lm90_temp_write(dev, hwmon_temp_max, channel, high);
++	if (err < 0)
++		return err;
++
++	return 0;
 +}
 +
- static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
-+	.set_trips = hwmon_thermal_set_trips,
+ static umode_t lm90_is_visible(const void *data, enum hwmon_sensor_types type,
+ 			       u32 attr, int channel)
+ {
+@@ -1804,6 +1833,7 @@ static const struct hwmon_ops lm90_ops = {
+ 	.is_visible = lm90_is_visible,
+ 	.read = lm90_read,
+ 	.write = lm90_write,
++	.set_trips = lm90_set_trips,
  };
  
- static void hwmon_thermal_remove_sensor(void *data)
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 1e8d6ea8992e..7e5afcbf713d 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -390,6 +390,14 @@ enum hwmon_intrusion_attributes {
-  *			Channel number
-  *		@val:	Value to write
-  *		The function returns 0 on success or a negative error number.
-+ * @set_trips:	Callback to set temperature trips. Optional.
-+ *		Parameters are:
-+ *		@dev:	Pointer to hardware monitoring device
-+ *		@channel:
-+ *			Channel number
-+ *		@low:	Low temperature trip
-+ *		@high:	High temperature trip
-+ *		The function returns 0 on success or a negative error number.
-  */
- struct hwmon_ops {
- 	umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
-@@ -400,6 +408,7 @@ struct hwmon_ops {
- 		    u32 attr, int channel, const char **str);
- 	int (*write)(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long val);
-+	int (*set_trips)(struct device *dev, int channel, int low, int high);
- };
- 
- /**
+ static int lm90_probe(struct i2c_client *client)
 -- 
 2.30.2
 
