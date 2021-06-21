@@ -2,159 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA9D3AF6F4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 22:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A7D3AF6FA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 22:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbhFUUrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 16:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbhFUUry (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 16:47:54 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07C0C061574;
-        Mon, 21 Jun 2021 13:45:39 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id d2so27107726ljj.11;
-        Mon, 21 Jun 2021 13:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0iM1rcn8Jisd8pKDl/vHL/liKFppMqrlx8DH3/0iSFE=;
-        b=NQYaIRIpU3xVFXMHRegz7Ogy61wDaesDskEoy9xhcp8ASnjwfnGlKRUNFgShXMPepU
-         +Dx1GIWPkua8mvOWzH7+6POD35BnEC3UrjoHfE0Ge0Tbh94IoNIwWTNJFZXg2rW49kSA
-         AxOXH86fwmPfc1tMvtoCiYO3eJYnAi20tCCkoOE14AVfi2dqnsI7cc5vLxi/E0XnyIDP
-         DmjyYSEVrHVMFFptly/r8qILzhJgw//5JScwHngy+yNrxOWACENQbI/51ydYBIbZBr7z
-         fKPcDzemqODVO2w2ZDBsFiFn8PXH8jL9nu0GrexuQlqUkSuggAIG5sEOH7iNRJP1S4N7
-         wguA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0iM1rcn8Jisd8pKDl/vHL/liKFppMqrlx8DH3/0iSFE=;
-        b=MD17CSJAg9qHhO3aa6HijPguiCspiEe94lpzpiNBQvEP1V081oQot0VLeciTnTJi0H
-         idFt284ZwqQRB+5B7XAOxAaPqWKhiNNB7KcELz9L7++k8Dh5zqozHDMvqsT5hHXnH/ds
-         mDoSxidbjXPZT9q/9vjT0GBVDDX4n9ydgvCJ/379vjQNqirHovMoFqwCAJacQ0C4PIX+
-         p1Ea3Ah6xCOxek5EbXYyNX3ZEQDCHuZlAz3DQNFPUhB0fmbgkY9bKHv6b0B59BQ39yT8
-         KPjYPuW3/u+uxPqeK4q1ffZG8ZYT0xaw+WhZZxngS6PmUUAXhrI1BSq0Ux8CfulVriAG
-         UFkw==
-X-Gm-Message-State: AOAM530Txa0uR62y0l/2Ysn0F3qv0uZvn74/0j3szTFgRNDs1V8o9nRX
-        jyFB9v9I5S7JVDFK8DkS3ovW94Ck7sQ=
-X-Google-Smtp-Source: ABdhPJyEpCz5QJdXKSLI99NZmSbwn8fnV7uSLmIJCbcoogDF1r7MamhETzRZRPnZ6bHCoBq8deODfA==
-X-Received: by 2002:a05:651c:283:: with SMTP id b3mr99060ljo.12.1624308337970;
-        Mon, 21 Jun 2021 13:45:37 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.googlemail.com with ESMTPSA id y5sm1978428lfa.148.2021.06.21.13.45.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 13:45:37 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] hwmon: Support set_trips() of thermal device ops
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20210621184058.4110-1-digetx@gmail.com>
- <20210621184058.4110-3-digetx@gmail.com>
- <20210621203044.GA631670@roeck-us.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f3ea4b2d-ee84-6e28-5136-276163369497@gmail.com>
-Date:   Mon, 21 Jun 2021 23:45:36 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229890AbhFUUvD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 16:51:03 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:14552 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229790AbhFUUvD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 16:51:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1624308530; x=1655844530;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=3VRTmBGgxbNUCdwEHcZBa6NmCsXyGuWivDkf1Wx7pgM=;
+  b=DHYv/grhJPbhuy2rgHUXSoJpdozBACPu4MMvfGYAuB0ZurF3N2weISbm
+   stAeeVNUG8pi4M3fp4CW2YfEfUqWM9DDwF0NKkynqRMMcS1R9aSs2tXje
+   GVpYG8Y8WkuBEIes7PQiZ0hJZLpsUZbeM8SMfiwLGJOgRB08UCKaqgfhE
+   Y=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jun 2021 13:48:49 -0700
+X-QCInternal: smtphost
+Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jun 2021 13:48:48 -0700
+Received: from [10.38.245.98] (10.80.80.8) by nasanexm03e.na.qualcomm.com
+ (10.85.0.48) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 21 Jun
+ 2021 13:48:46 -0700
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
+ invariance
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+From:   Qian Cai <quic_qiancai@quicinc.com>
+Message-ID: <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
+Date:   Mon, 21 Jun 2021 16:48:44 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210621203044.GA631670@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <cover.1624266901.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanexm03e.na.qualcomm.com (10.85.0.48)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-21.06.2021 23:30, Guenter Roeck пишет:
-> On Mon, Jun 21, 2021 at 09:40:58PM +0300, Dmitry Osipenko wrote:
->> Support set_trips() callback of thermal device ops. This allows HWMON
->> device to operatively notify thermal core about temperature changes, which
->> is very handy to have in a case where HWMON sensor is used by CPU thermal
->> zone that performs passive cooling and emergency shutdown on overheat.
->> Thermal core will be able to react faster to temperature changes.
->>
-> 
-> I think that warrants an explanation why it doesn't matter if the
-> code doesn't really set any trip points.
 
-I'll extend the commit message.
 
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/hwmon/hwmon.c | 32 ++++++++++++++++++++++++++++++++
->>  1 file changed, 32 insertions(+)
->>
->> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->> index fd47ab4e6892..e74dc81e650d 100644
->> --- a/drivers/hwmon/hwmon.c
->> +++ b/drivers/hwmon/hwmon.c
->> @@ -153,8 +153,40 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
->>  	return 0;
->>  }
->>  
->> +static int hwmon_thermal_set_trips(void *data, int low, int high)
->> +{
->> +	struct hwmon_thermal_data *tdata = data;
->> +	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
->> +	const struct hwmon_chip_info *chip = hwdev->chip;
->> +	const struct hwmon_channel_info **info = chip->info;
->> +	unsigned int i;
->> +
->> +	if (!chip->ops->write)
->> +		return 0;
->> +
->> +	for (i = 1; info[i] && info[i]->type != hwmon_temp; i++)
->> +		continue;
-> 
-> Why start with index 1 ? While index 0 is commonly used for chip data,
-> that is not mandatory.
+On 6/21/2021 5:19 AM, Viresh Kumar wrote:
+> CPPC cpufreq driver is used for ARM servers and this patch series tries to
+> provide counter-based frequency invariance support for them in the absence for
+> architecture specific counters (like AMUs).
 
-This is borrowed from hwmon_thermal_register_sensors().
+Viresh, this series works fine on my quick tests so far. BTW, I noticed some strange things even with the series applied mentioned below when reading acpi_cppc vs cpufreq sysfs. Do you happen to know are those just hardware/firmware issues because Linux just faithfully exported the register values?
 
->> +
->> +	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MIN) {
->> +		int err = chip->ops->write(tdata->dev, hwmon_temp,
->> +					   hwmon_temp_min, tdata->index, low);
-> 
-> checkpatch will complain here because it expects an empty line after a
-> declaration. Since err is used in multiple conditionals, I would suggest
-> to declare it once in the function header.
+== Arm64 server Foo ==
+CPU max MHz:                     3000.0000
+CPU min MHz:                     1000.0000
 
-Okay, although checkpatch is happy.
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf
+300
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
+1000
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf
+200
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
+100
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq <--- should be 3000?
+2800
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf <--- should be 300?
+280
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
+100
 
-./scripts/checkpatch.pl --strict v3*
----------------------------------------------------------------
-v3-0001-hwmon-lm90-Prevent-integer-underflows-of-temperat.patch
----------------------------------------------------------------
-total: 0 errors, 0 warnings, 0 checks, 27 lines checked
+== Arm64 server Bar ==
+CPU max MHz:                     3000.0000
+CPU min MHz:                     375.0000
 
-v3-0001-hwmon-lm90-Prevent-integer-underflows-of-temperat.patch has no
-obvious style problems and is ready for submission.
------------------------------------------------------------
-v3-0002-hwmon-Support-set_trips-of-thermal-device-ops.patch
------------------------------------------------------------
-total: 0 errors, 0 warnings, 0 checks, 40 lines checked
-
->> +		if (err < 0 && err != -EOPNOTSUPP)
-> 
-> "< 0" is unnecessary.
-> 
->> +			return err;
->> +	}
->> +
->> +	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MAX) {
->> +		int err = chip->ops->write(tdata->dev, hwmon_temp,
->> +					   hwmon_temp_max, tdata->index, high);
->> +		if (err < 0 && err != -EOPNOTSUPP)
-> 
-> "< 0" is unnecessary.
-
-I'll remove it in v4.
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf <--- should be 3000? There is no cpufreq boost.
+3300
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq <--- don't understand why 0.
+0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf
+375
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
+375
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq <--- ditto
+0
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf
+3000
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
+100
