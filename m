@@ -2,96 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F453AE226
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 06:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989243AE534
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 10:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbhFUEWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 00:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhFUEWO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 00:22:14 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C15C061574;
-        Sun, 20 Jun 2021 21:19:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id i1so841163lfe.6;
-        Sun, 20 Jun 2021 21:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wQR1d2nXINli2r0qWQEuIxhuaXFegPwICSdu1LOWBLE=;
-        b=uNpS/WQe1u+O6GqY5APACmNIY2oeqiUgN0TFZtOxj3s48jAs5D+LVEFsvt4M9LKA5z
-         n47Hjd1t7EA4wVIbqBFEKILxxxASWnEw/9ld9AWhBk27xD0bp+/eErNY12LNukTPiUow
-         IP4BBVo/Q4JFxtX4GCFIqsZATynHgYOVnMrFNbN+ml6j9fmZ7YXOVvuhrSjyBmf3wlWN
-         S+lP3Tl7ny0OyhEOAi9TtDy8Y9RoV5jB42+Zp/Ij4JdXcEiH3u+Ap4fn2TPSl4+X/ogz
-         n49TptyMuLkSW6rBCNf/Q5oSnIDQoS0Nqg+Iuos3Xnk5yvMAKB+rHOHp7B5m46g+/z/w
-         2oBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wQR1d2nXINli2r0qWQEuIxhuaXFegPwICSdu1LOWBLE=;
-        b=itCuBISo8bsuOLsSlQW09vwGpxBKSTnzahW+/5JaR/8923N+VoKkjPms+BVCXyBO1K
-         MEbd4JI2klfGxMvo82XFeHP4EVbKlP3K5BSnnv9RBezHv/Sk6s8OjHzqyoKry8Diq0Zu
-         k3u+C/d+8Wug06cwcpRj/NlAWTdao8u5rWh7rtTH3j9UqCc/VxzxON3mbJOmG84cBkRq
-         dPYpatzj95UqGLYvmrJYV4OXXv7xLiN6R5Lt8BXsof1ttTktuymOlkwyl8JATNzqg4zL
-         3x28x2YJi8hFjgJmx3QcRsO4xP2ALEoXo7OcEJIC7joNHWSKQ/Bpq3SnIyVWCL2p+UN0
-         B8iA==
-X-Gm-Message-State: AOAM531TkM6Ep4hZ7QFMJgKctN3EiaX1UjcVB6qCMWQI91G0ZHwQuNf4
-        NqvjGUzLkA/bwHo+b96faDQ=
-X-Google-Smtp-Source: ABdhPJyc6b/ECLFi440OkwjYkmEOdtosozafVaK6tDf8W90rbWwATVxHsEuxNbPY8Gh39qOuSQaFJg==
-X-Received: by 2002:a19:c4b:: with SMTP id 72mr12696790lfm.15.1624249156706;
-        Sun, 20 Jun 2021 21:19:16 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.googlemail.com with ESMTPSA id 140sm2014922ljj.124.2021.06.20.21.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Jun 2021 21:19:16 -0700 (PDT)
-Subject: Re: [PATCH v18 0/2] Add memory bandwidth management to NVIDIA Tegra
- DRM driver
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-References: <20210601042108.1942-1-digetx@gmail.com>
- <8accfe1e-fc48-21ca-f7c6-bd2d60162e6d@gmail.com>
-Message-ID: <50912a57-aa43-58b0-02d2-6928578d6286@gmail.com>
-Date:   Mon, 21 Jun 2021 07:19:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230304AbhFUIrk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 04:47:40 -0400
+Received: from mailout1.secunet.com ([62.96.220.44]:57870 "EHLO
+        mailout1.secunet.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229946AbhFUIrk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 04:47:40 -0400
+X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Jun 2021 04:47:37 EDT
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id BAFED80004E;
+        Mon, 21 Jun 2021 10:35:39 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 21 Jun 2021 10:35:39 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 21 Jun
+ 2021 10:35:39 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 249D031803E8; Mon, 21 Jun 2021 10:35:39 +0200 (CEST)
+Date:   Mon, 21 Jun 2021 10:35:39 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+CC:     <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        <selinux@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
+ lockdown checks
+Message-ID: <20210621083539.GY40979@gauss3.secunet.de>
+References: <20210616085118.1141101-1-omosnace@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <8accfe1e-fc48-21ca-f7c6-bd2d60162e6d@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210616085118.1141101-1-omosnace@redhat.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-07.06.2021 01:40, Dmitry Osipenko пишет:
-> 01.06.2021 07:21, Dmitry Osipenko пишет:
->> This series adds memory bandwidth management to the NVIDIA Tegra DRM driver,
->> which is done using interconnect framework. It fixes display corruption that
->> happens due to insufficient memory bandwidth.
->>
->> Changelog:
->>
->> v18: - Moved total peak bandwidth from CRTC state to plane state and removed
->>        dummy plane bandwidth state initialization from T186+ plane hub. This
->>        was suggested by Thierry Reding to v17.
->>
->>      - I haven't done anything about the cursor's plane bandwidth which
->>        doesn't contribute to overlapping bandwidths for a small sized
->>        window because it works okay as-is.
+On Wed, Jun 16, 2021 at 10:51:18AM +0200, Ondrej Mosnacek wrote:
+> Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
+> lockdown") added an implementation of the locked_down LSM hook to
+> SELinux, with the aim to restrict which domains are allowed to perform
+> operations that would breach lockdown.
 > 
-> Thierry, will you take these patches for 5.14?
+> However, in several places the security_locked_down() hook is called in
+> situations where the current task isn't doing any action that would
+> directly breach lockdown, leading to SELinux checks that are basically
+> bogus.
 > 
+> To fix this, add an explicit struct cred pointer argument to
+> security_lockdown() and define NULL as a special value to pass instead
+> of current_cred() in such situations. LSMs that take the subject
+> credentials into account can then fall back to some default or ignore
+> such calls altogether. In the SELinux lockdown hook implementation, use
+> SECINITSID_KERNEL in case the cred argument is NULL.
+> 
+> Most of the callers are updated to pass current_cred() as the cred
+> pointer, thus maintaining the same behavior. The following callers are
+> modified to pass NULL as the cred pointer instead:
+> 1. arch/powerpc/xmon/xmon.c
+>      Seems to be some interactive debugging facility. It appears that
+>      the lockdown hook is called from interrupt context here, so it
+>      should be more appropriate to request a global lockdown decision.
+> 2. fs/tracefs/inode.c:tracefs_create_file()
+>      Here the call is used to prevent creating new tracefs entries when
+>      the kernel is locked down. Assumes that locking down is one-way -
+>      i.e. if the hook returns non-zero once, it will never return zero
+>      again, thus no point in creating these files. Also, the hook is
+>      often called by a module's init function when it is loaded by
+>      userspace, where it doesn't make much sense to do a check against
+>      the current task's creds, since the task itself doesn't actually
+>      use the tracing functionality (i.e. doesn't breach lockdown), just
+>      indirectly makes some new tracepoints available to whoever is
+>      authorized to use them.
+> 3. net/xfrm/xfrm_user.c:copy_to_user_*()
+>      Here a cryptographic secret is redacted based on the value returned
+>      from the hook. There are two possible actions that may lead here:
+>      a) A netlink message XFRM_MSG_GETSA with NLM_F_DUMP set - here the
+>         task context is relevant, since the dumped data is sent back to
+>         the current task.
+>      b) When adding/deleting/updating an SA via XFRM_MSG_xxxSA, the
+>         dumped SA is broadcasted to tasks subscribed to XFRM events -
+>         here the current task context is not relevant as it doesn't
+>         represent the tasks that could potentially see the secret.
+>      It doesn't seem worth it to try to keep using the current task's
+>      context in the a) case, since the eventual data leak can be
+>      circumvented anyway via b), plus there is no way for the task to
+>      indicate that it doesn't care about the actual key value, so the
+>      check could generate a lot of "false alert" denials with SELinux.
+>      Thus, let's pass NULL instead of current_cred() here faute de
+>      mieux.
+> 
+> Improvements-suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+> Improvements-suggested-by: Paul Moore <paul@paul-moore.com>
+> Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
 
-The display controller does _NOT_WORK_ properly without bandwidth
-management. Can we get this patch into 5.14? What is the problem?
+For the xfrm part:
+
+Acked-by: Steffen Klassert <steffen.klassert@secunet.com>
+
