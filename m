@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B8C3AE668
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4094C3AE66B
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhFUJtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 05:49:21 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43326 "EHLO
+        id S230496AbhFUJtY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 05:49:24 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:43348 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbhFUJtE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:49:04 -0400
+        with ESMTP id S230393AbhFUJtG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:49:06 -0400
 Date:   Mon, 21 Jun 2021 09:46:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1624268806;
+        s=2020; t=1624268807;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xcdqkN+zo6UeiTvw9SxJKHaIY956GpIe3W36qL5IIlM=;
-        b=ewSis+5VnUHIFOckOfDma6pUCLAnckI5cICAJTIWSQazODZpM6xoMagfkk2NpZRAnDCHkH
-        arjGotYdH+bp9Ctiob6J6jfjeYH0pNC+xUbqW4HdzlobIuc12WakkDe9XMfEbjKyD1vyDL
-        YQpM6JwrS7+t4mVWQPv7X1xrW03gPDbHq7+85Od36VAz8aTpY3odb/B7Mij83PvkFGfs+E
-        Phi45OF1FrLMvq6rkQWyJDfCgEZd+U9jO7GevOPpePku8CZblXh7ydEQV20j41ojLXI/Js
-        OGBern29m8Gds19ov0SDrGTZk2AkNDMg4bvj0pMj8brS1hk4CeVDfR/4rd0ARg==
+        bh=CNvyRCodp4v8IT1QL2PWhc0vr07nnZK8qgyitjDE4aw=;
+        b=i4DPdu3iUOlxD0ni9qo0cZLvmYdB2vkTXOmQ3+cZMqMLj8mDpBVLrwpIhs0Tl5vIcjPrLo
+        0KjOkHIVmzJ17FcoN39nu/05Ct/ya5qxD86OhwwdW4TpVDsA4xjeWNWyJsIALIUlgowe9U
+        9XMA+wjc+dqczGIaEpVfZVr9RC3pTSi6lKYkWDsa/mRy2o+HpsOZm7l1jMWRfIBafCqjKk
+        4KfFLoS4tWWoo9QlSCA6eQKjQPZFbZrzOqI88+UvJZOXzZr/okJAM5sRK+IzZxnFlL1A89
+        C2EOyp5WgdB3okAEfFJvCRK1a8xJJvbxx3ddRQyrWezxAiA11XKLU1oXtp0yVA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1624268806;
+        s=2020e; t=1624268807;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xcdqkN+zo6UeiTvw9SxJKHaIY956GpIe3W36qL5IIlM=;
-        b=z4Y3yPVZWeqWHo/mRQBe4G+sNnSNx/C8Rp+vuNhFfymrZHgKXx7icNbw4JAJoV/SCDzvjK
-        vdLMRTulFajJYQCg==
-From:   "thermal-bot for Geert Uytterhoeven" <tip-bot2@linutronix.de>
+        bh=CNvyRCodp4v8IT1QL2PWhc0vr07nnZK8qgyitjDE4aw=;
+        b=KZrWMm33n1wwsxlFyY6EQrGBuvre0GwXsOjzmz6xBTOXXgVSSoBiJBSpSWonOsYSKKy4Ir
+        81CGkGKqzs+8EhCg==
+From:   thermal-bot for Niklas =?utf-8?q?S=C3=B6derlund?= 
+        <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/rcar_gen3_thermal: Do not
- shadow rcar_gen3_ths_tj_1
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+Subject: [thermal: thermal/next] thermal/drivers/rcar_gen3_thermal: Fix
+ coefficient calculations
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         niklas.soderlund+renesas@ragnatech.se,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: =?utf-8?q?=3C9ea7e65d0331daba96f9a7925cb3d12d2170efb1=2E16230?=
- =?utf-8?q?76804=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
-References: =?utf-8?q?=3C9ea7e65d0331daba96f9a7925cb3d12d2170efb1=2E162307?=
- =?utf-8?q?6804=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
+In-Reply-To: <20210605085211.564909-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20210605085211.564909-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-Message-ID: <162426880610.395.2356144191953656208.tip-bot2@tip-bot2>
+Message-ID: <162426880669.395.3531147058445640547.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,65 +61,45 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     3ae5950db617d1cc3eb4eb55750fa9d138529b49
+Commit-ID:     8946187ab57ffd02088e50256c73dd31f49db06d
 Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//3ae5950db617d1cc3eb4eb55750fa9d138529b49
-Author:        Geert Uytterhoeven <geert+renesas@glider.be>
-AuthorDate:    Mon, 07 Jun 2021 16:41:20 +02:00
+git//8946187ab57ffd02088e50256c73dd31f49db06d
+Author:        Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+AuthorDate:    Sat, 05 Jun 2021 10:52:11 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 14 Jun 2021 19:05:01 +02:00
+CommitterDate: Mon, 14 Jun 2021 19:02:55 +02:00
 
-thermal/drivers/rcar_gen3_thermal: Do not shadow rcar_gen3_ths_tj_1
+thermal/drivers/rcar_gen3_thermal: Fix coefficient calculations
 
-With -Wshadow:
+The fixed value of 157 used in the calculations are only correct for
+M3-W, on other Gen3 SoC it should be 167. The constant can be derived
+correctly from the static TJ_3 constant and the SoC specific TJ_1 value.
+Update the calculation be correct on all Gen3 SoCs.
 
-    drivers/thermal/rcar_gen3_thermal.c: In function =E2=80=98rcar_gen3_therm=
-al_probe=E2=80=99:
-    drivers/thermal/rcar_gen3_thermal.c:310:13: warning: declaration of =E2=
-=80=98rcar_gen3_ths_tj_1=E2=80=99 shadows a global declaration [-Wshadow]
-      310 |  const int *rcar_gen3_ths_tj_1 =3D of_device_get_match_data(dev);
-	  |             ^~~~~~~~~~~~~~~~~~
-    drivers/thermal/rcar_gen3_thermal.c:246:18: note: shadowed declaration is=
- here
-      246 | static const int rcar_gen3_ths_tj_1 =3D 126;
-	  |                  ^~~~~~~~~~~~~~~~~~
-
-To add to the confusion, the local variable has a different type.
-
-Fix the shadowing by renaming the local variable to ths_tj_1.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+Fixes: 4eb39f79ef44 ("thermal: rcar_gen3_thermal: Update value of Tj_1")
+Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/9ea7e65d0331daba96f9a7925cb3d12d2170efb1.1623=
-076804.git.geert+renesas@glider.be
+Link: https://lore.kernel.org/r/20210605085211.564909-1-niklas.soderlund+rene=
+sas@ragnatech.se
 ---
- drivers/thermal/rcar_gen3_thermal.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/thermal/rcar_gen3_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_=
 thermal.c
-index 1a60adb..fdf16aa 100644
+index e1e4123..1a60adb 100644
 --- a/drivers/thermal/rcar_gen3_thermal.c
 +++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -307,7 +307,7 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- {
- 	struct rcar_gen3_thermal_priv *priv;
- 	struct device *dev =3D &pdev->dev;
--	const int *rcar_gen3_ths_tj_1 =3D of_device_get_match_data(dev);
-+	const int *ths_tj_1 =3D of_device_get_match_data(dev);
- 	struct resource *res;
- 	struct thermal_zone_device *zone;
- 	int ret, i;
-@@ -352,8 +352,7 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- 		priv->tscs[i] =3D tsc;
+@@ -143,7 +143,7 @@ static void rcar_gen3_thermal_calc_coefs(struct rcar_gen3=
+_thermal_tsc *tsc,
+ 	 * Division is not scaled in BSP and if scaled it might overflow
+ 	 * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it unscaled
+ 	 */
+-	tsc->tj_t =3D (FIXPT_INT((ptat[1] - ptat[2]) * 157)
++	tsc->tj_t =3D (FIXPT_INT((ptat[1] - ptat[2]) * (ths_tj_1 - TJ_3))
+ 		     / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
 =20
- 		priv->thermal_init(tsc);
--		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i],
--					     *rcar_gen3_ths_tj_1);
-+		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i], *ths_tj_1);
-=20
- 		zone =3D devm_thermal_zone_of_sensor_register(dev, i, tsc,
- 							    &rcar_gen3_tz_of_ops);
+ 	tsc->coef.a1 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
