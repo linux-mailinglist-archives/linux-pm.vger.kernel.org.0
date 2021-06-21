@@ -2,114 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C0B3AEB29
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 16:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7593AEB34
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 16:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhFUO0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 10:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbhFUO0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 10:26:34 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184D9C061574;
-        Mon, 21 Jun 2021 07:24:18 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so17942595otl.0;
-        Mon, 21 Jun 2021 07:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3Q+u88A7OlP4119QDatD7v4G6DTIYfrxqaTT3udWXs0=;
-        b=MHcCFhvCFi2AUQLLfNm4Gz8dP6cDRu9Oz7pok0hkt6k3YwXB97Fe8B9I8nhTmW8yaJ
-         Lzy+qQpMpnkNyZZm+Y1Xaw/CuRedX7LfNSkJLrxTjKahp4Ux9eVpX/eKnfl5e4ar40Yh
-         JWSBCVcZRY/o25f19utVuzIjWoM1ZhbWNjy1PyLXvuZ9WTKxijFb2iTxL8q/AzjRjmpy
-         nlzD4r6fW9Mied6xsF+AsJelfChfhNCIvalCJ8dLdW2IN0ZRFhUKMAYotnBt2ya0fZMi
-         6Hnv/c7iuC0LHe65HdA3njJYsj60f/V9BPlmQRunSyEd6LgHD+zA7mHNHQrkDWaM8n60
-         jegw==
+        id S229789AbhFUO26 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 10:28:58 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:44788 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229765AbhFUO25 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 10:28:57 -0400
+Received: by mail-ot1-f54.google.com with SMTP id f3-20020a0568301c23b029044ce5da4794so11285387ote.11;
+        Mon, 21 Jun 2021 07:26:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=3Q+u88A7OlP4119QDatD7v4G6DTIYfrxqaTT3udWXs0=;
-        b=Eyp2ib9J7CSaZ0OyxADVdkm0+BAlvOVNFOmlak9YzFbmRHh519AX57xR9ND7TLKFYD
-         fphPeG2Nld1TSKkC5qqP2vJ73wI4MfwnwdCGk6DNDBQ6hTO1dhj0VNjm0mtrQoicVKp8
-         HEFGVVllzbpehoKEfjNrrrLH+EKgQt61POcDXfCACn2jLIhzI7OuCVGrueJm25AY93u2
-         b5nHgZvpKdfZtcVByVseLEoYju0esS16m+L1il+gGP8zbAOKk59ftInHPk4lj2/fCyUo
-         5lUsqMZIF25UgZNVg/6GMWIbTCSmlcL9QSSRAlOliFR4QTLal+yREJhHF/V0MjfZzc1f
-         /lIA==
-X-Gm-Message-State: AOAM532++l20Y3v/3i1lrXdGXbyf4BMdwhqZ7wv8IOCiwml2fP8HD81M
-        QNGKdnMJk/4fLfJsMlo9xuw=
-X-Google-Smtp-Source: ABdhPJzziQmTYrhT5+C5sJae+4MxEqAvQf20R5dIwCsKV39qiv5T4OqlNdLUM94Avsj8z/HtBxwUEA==
-X-Received: by 2002:a9d:7516:: with SMTP id r22mr18218752otk.332.1624285457445;
-        Mon, 21 Jun 2021 07:24:17 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o5sm1877249oti.53.2021.06.21.07.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 07:24:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 21 Jun 2021 07:24:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (lm90) Prevent integer overflow of
- temperature calculations
-Message-ID: <20210621142415.GA3604789@roeck-us.net>
-References: <20210620211408.3893-1-digetx@gmail.com>
- <20210620211408.3893-2-digetx@gmail.com>
- <20210621121229.GB116119@roeck-us.net>
- <ac1c4350-687e-7999-633c-6b7354ef9b8c@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B4ch28GCk8dk3pjO3ELnpUzX8wYQmHs4b0pRuquJHU0=;
+        b=aiEbP9rjkl8X9M/ffhaE0HhKzYSakduiDCKdf1X64d9mXFinv6WCsHll2q1aov+g1l
+         KyZm9OsFLhzr40d5LhasQaUZW9i2dIpUuM6fh6AG2WzL46irxqs1fONYUDJB3BLh91wJ
+         FhURQpvMF/YXvXNx4D4GKSlxNJ8C3gxtLe0NPZy0GEmd4xsHzmwq9eedPlSj266pMf/t
+         yqczYxvAahWWkZMc+9JeXW2zduPWlZI4nwVi0FFVeEC1Lg26w+RY4OSN02szzQcLB+/y
+         sDooFgUdKg98cRz1+BsiSUvMOXVF1jbH3ptAPrpzLdg0fr+dLAXCOYbaOUZdkQeMaYKi
+         Y1yQ==
+X-Gm-Message-State: AOAM532XrVkiwsyGAFK7urdbCvGKrkxRUBR+qJ5w0ba1o6vYPdY6l3T1
+        5w7S1YAKroyJWTJnT8pml7+5APjPxE3FRKzXutg=
+X-Google-Smtp-Source: ABdhPJzDnNFhrdHd6ahLHE6AS1IKT/t0Q0mAbMRbRvZozDJwoRpfpAgJ2D3zAIXGFY0IclGrfIazuQx+P8u4wJcTOi4=
+X-Received: by 2002:a05:6830:1bf7:: with SMTP id k23mr22277783otb.206.1624285602346;
+ Mon, 21 Jun 2021 07:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac1c4350-687e-7999-633c-6b7354ef9b8c@gmail.com>
+References: <5c8da9d378dee39d9c6063713b093f51d271fa9d.1623825358.git.viresh.kumar@linaro.org>
+ <c31424b7962608eb13f946a665ba6848c4986856.1623986349.git.viresh.kumar@linaro.org>
+ <CAJZ5v0h37bs0xLUCeD7ZuZfXLPBx=6Mpr-Y+Ef=qcnDA4aoLbQ@mail.gmail.com>
+ <20210621030949.tng5xzq7dm7ngaez@vireshk-i7> <CAJZ5v0jM3nusF1fjcMHLRHPk2PhFErhBXijpWHiSNnunzPFjeA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jM3nusF1fjcMHLRHPk2PhFErhBXijpWHiSNnunzPFjeA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 21 Jun 2021 16:26:31 +0200
+Message-ID: <CAJZ5v0iHDk6Te0KogYToWSyquNcpS2edQzp1UbW3KFAVL31Hnw@mail.gmail.com>
+Subject: Re: [PATCH V3 2/3] cpufreq: intel_pstate: Migrate away from
+ ->stop_cpu() callback
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dirk Brandewie <dirk.brandewie@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 03:14:40PM +0300, Dmitry Osipenko wrote:
-> 21.06.2021 15:12, Guenter Roeck пишет:
-> > On Mon, Jun 21, 2021 at 12:14:07AM +0300, Dmitry Osipenko wrote:
-> >> The minimum temperature value that is passed to the driver is unlimited
-> >> and value that is close to INT_MIN results in integer overflow of
-> >> temperature calculations made by the driver. Limit the value in order
-> >> to prevent the overflow. For now the overflow condition is harmless,
-> >> but thermal framework won't work properly once we will support the
-> >> set_trips() callback because it will pass INT_MIN value to the driver.
-> >>
-> > AFAICS that should only happen for lm99 because all other values
-> > are bound in the temp_to_xxx functions. Where else do you see an
-> > overflow (or underflow) ?
-> 
-> You're correct that the overflow affects only lm99. But why we should
-> ignore it?
+On Mon, Jun 21, 2021 at 4:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Jun 21, 2021 at 5:09 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 18-06-21, 14:00, Rafael J. Wysocki wrote:
+> > > On Fri, Jun 18, 2021 at 5:22 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >
+> > > > commit 367dc4aa932b ("cpufreq: Add stop CPU callback to cpufreq_driver
+> > > > interface") added the stop_cpu() callback to allow the drivers to do
+> > > > clean up before the CPU is completely down and its state can't be
+> > > > modified.
+> > > >
+> > > > At that time the CPU hotplug framework used to call the cpufreq core's
+> > > > registered notifier for different events like CPU_DOWN_PREPARE and
+> > > > CPU_POST_DEAD. The stop_cpu() callback was called during the
+> > > > CPU_DOWN_PREPARE event.
+> > > >
+> > > > This is no longer the case, cpuhp_cpufreq_offline() is called only once
+> > > > by the CPU hotplug core now and we don't really need to separately
+> > > > call stop_cpu() for cpufreq drivers.
+> > > >
+> > > > Migrate to using the exit() and offline() callbacks instead of
+> > > > stop_cpu().
+> > > >
+> > > > We need to clear util hook from both the callbacks, exit() and
+> > > > offline(), since it is possible that only exit() gets called sometimes
+> > > > (specially on errors) or both get called at other times.
+> > > > intel_pstate_clear_update_util_hook() anyway have enough protection in
+> > > > place if it gets called a second time and will return early then.
+> > > >
+> > > > Cc: Dirk Brandewie <dirk.brandewie@gmail.com>
+> > > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > ---
+> > > > V2->V3:
+> > > > - Update intel_pstate_cpu_offline() as well.
+> > > > - Improved commit log.
+> > > >
+> > > >  drivers/cpufreq/intel_pstate.c | 12 ++++--------
+> > > >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > > > index 0e69dffd5a76..8f8a2d9d7daa 100644
+> > > > --- a/drivers/cpufreq/intel_pstate.c
+> > > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > > @@ -2335,6 +2335,8 @@ static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+> > > >
+> > > >         pr_debug("CPU %d going offline\n", cpu->cpu);
+> > > >
+> > > > +       intel_pstate_clear_update_util_hook(policy->cpu);
+> > > > +
+> > > >         if (cpu->suspended)
+> > > >                 return 0;
+> > > >
+> > > > @@ -2374,17 +2376,12 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > -static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> > > > -{
+> > > > -       pr_debug("CPU %d stopping\n", policy->cpu);
+> > > > -
+> > > > -       intel_pstate_clear_update_util_hook(policy->cpu);
+> > > > -}
+> > > > -
+> > > >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> > > >  {
+> > > >         pr_debug("CPU %d exiting\n", policy->cpu);
+> > > >
+> > > > +       intel_pstate_clear_update_util_hook(policy->cpu);
+> > >
+> > > This change is not needed now, because ->offline always runs before
+> > > ->exit if present.
+> >
+> > Not necessarily, we don't call ->offline() for many error paths in
+> > cpufreq_online().
+>
+> I guess you mean the error paths in cpufreq_offline()?
 
-That isn't the point. The point is that you claimed there would be a
-generic underflow, which is not the case. That means we'll only need
-to apply the fix to the lm99 specific code (which unconditionally
-subtracts an offset from the provided value, causing the underflow).
+s/offline/online/
 
-Anyway, thanks for alerting me to the issue. As it turns out, there are
-other underflow issues in the driver. With improved module test scripts,
-I get:
-
-Testing lm90 ...
-temp1_crit_hyst: Suspected underflow: [min=54000, read 85000, written -9223372036854775808]
-Testing lm99 ...
-temp1_crit_hyst: Suspected underflow: [min=96000, read 127000, written -9223372036854775808]
-temp2_crit: Suspected underflow: [min=-112000, read 143000, written -9223372036854775808]
-temp2_min: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
-temp2_max: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
-
-So we'll need fixes for lm99 temp2_{min/max/crit} and for temp1_crit_hyst
-(the latter affects all chips supported by the driver).
-
-Thanks,
-Guenter
+> IMO this is confusing/broken, because ->offline should always be
+> called after ->online has returned success.
+>
+> > offline() only comes into play after driver is registered properly once.
+>
+> The relevant intel_pstate case is a ->setpolicy driver where
+> ->setpolicy or ->online, if successful, need to be followed by
+> ->offline.
+>
+> If ->setpolicy is successful in the cpufreq_online() path, the entire
+> cpufreq_online() is successful and the error paths in question are not
+> executed.
+>
+> So the change I was talking about is not needed AFAICS.
