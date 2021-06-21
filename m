@@ -2,108 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CB73AF12F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 19:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617553AF1AA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 19:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbhFURDD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 13:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S231127AbhFURPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 13:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbhFURCu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 13:02:50 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593A6C0A888D
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 09:33:22 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id h1so8885731plt.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 09:33:22 -0700 (PDT)
+        with ESMTP id S230469AbhFURPw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 13:15:52 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8576C06175F
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 10:13:36 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h11so3045944wrx.5
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 10:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RfuZmFTIa+BiKpP9D0IXA33fRGcBiajcpX+BWebyFZw=;
-        b=mDzJgNZcryGHFACHFEDHgkTmlIYQ/uZ4s01IIQTfG0d33to/CCfw1fwmh5sUn1rYjF
-         G/YRtL9q75MzrMaZqzgAmXP0RPJFRmneElRZiNX+dDJqiJsu/tp9TrCT8uNNge1Vq3Gt
-         F7xIbG2WdbCTb+k5CtoLC3Zu7/sS9NZ163zmw=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4i6nEUVfh/Y08sl+Bt5V/buNM5eumRmDejjNLtBa3t0=;
+        b=Dhs/CzchoEy1Qd18n03P5M6oqeh73HOJ5bMqv+/Qr5DuxS9vzUpYGKW45m7ZKA1iWV
+         D6hoRxWwAVzZ3yfq8nzB0Qzuhpb+Qf9hP576yTmnMmzIa9tuFOOG8JYdVpN8Wwu3D4WR
+         SbvBDZNP9cq0rBJmd9GjUnYk4pMvXlho/B0V0bQTD4qGR70oqfyyJCpPe0PWme9P+ypZ
+         Iipek0imAwblBt2PnAs6scn5+GzjHy3eU5LH2q+kzbK+udSje5XfkqSgbdigFligtx7H
+         vW1DeOEB806VdbDDx19UNGfVncG9mbVJqMJ4lz9vSRrdKVklCmXsyxfoCyUFQtDC2aTW
+         yZlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RfuZmFTIa+BiKpP9D0IXA33fRGcBiajcpX+BWebyFZw=;
-        b=tSs/4+XX4csRTqfzMUzT3i56KeLskuc0j/u7C4nmsjkso5v/iQScIjCb400RzDFDls
-         A/ucUqUtVpEWPAbt6xcLAeq7tgqDlKD81UaVsh+0P1QcS5gu4NrVvQ9MBgxtRDiTMDa0
-         F8xpz903Bx+ADW1ifQ8+nz3lLRnL1Xn6QADS8ERM1WdgradZCNEOyfopSDN0yzxcid0x
-         lDeYhkq8A3kEM+GchLd62PT0v70cfts/Uxa6h8DghNcxt+Oo/wdCN5H4xbmdt4lhVbAM
-         FhOms5TtjFiL58afgYn18fTaQCZkiGxV+W5aQGMvqSDC637+pna31+Ilv3DtiFBlo8TE
-         koAw==
-X-Gm-Message-State: AOAM5330W2x7i3VdM7366vncBRMcMqe9DiHev07QAlG1X+jfgYDzMeKQ
-        aHvZrsszw1RVEZlNCrYw65cI9A==
-X-Google-Smtp-Source: ABdhPJyecCMpcNv4WWa9XLQ4xt+7SYjSI34gpgBHcc3fgq11CMS9BCdQ4yBSGWL8tcElRKvvq8qFEg==
-X-Received: by 2002:a17:90a:8d08:: with SMTP id c8mr21813735pjo.177.1624293201955;
-        Mon, 21 Jun 2021 09:33:21 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:9f0f:4fd2:adeb:6f55])
-        by smtp.gmail.com with UTF8SMTPSA id u23sm19400322pgk.38.2021.06.21.09.33.20
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4i6nEUVfh/Y08sl+Bt5V/buNM5eumRmDejjNLtBa3t0=;
+        b=CbPDin6x+vHkYS11gy+YCDaXqtSg1JPZPYwzKOHjRbSJp2nCCW6wdv+yv/AixO+giK
+         URrFRLqcLuyEjqWcNss1GgE7ZGsfmWLJCP8nB5k70MdzXp7j9ge0rl5yNdLVWJ9yBStG
+         y1Ys9HWOFPVWcKr9ZwOzr+xIQcMBty4jzDowmwFqN+qKhEtdABFImkgX5hLtIMZpBEVM
+         WEkxrZNyK6wwE0tVLpBNOA5h2BM9zYpiCpy/wnkPQPwJxDJs/IRCibKpRCCvv7tGjbsu
+         Ywg6rRqVsnbN42TDw/Zj21qseHmp/Vyx0tlghfZq07jbfZrhZWiSMNh0XmZixvSVc5MR
+         ry6A==
+X-Gm-Message-State: AOAM530kl1aekhxAOvG39JPzD3wPZ6QAzrnN7wW9pKdPuMLtV9Mz9X9M
+        3n3UPqxqH+8LM0WWClBr+a+OsQ==
+X-Google-Smtp-Source: ABdhPJxSoWqFYS/3j+FYJIhz0NY142RhvRcIzSb0atBjmOVMKz6zGh2e6kpvX9Ul3VkFk6qxpN/gdA==
+X-Received: by 2002:a05:6000:1a41:: with SMTP id t1mr29063076wry.175.1624295615215;
+        Mon, 21 Jun 2021 10:13:35 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211? ([2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211])
+        by smtp.googlemail.com with ESMTPSA id 9sm197835wmf.3.2021.06.21.10.13.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 09:33:21 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 09:33:19 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Odelu Kukatla <okukatla@codeaurora.org>
-Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH] interconnect: Aggregate bandwidth votes for unused nodes
- in sync_state()
-Message-ID: <YNC/T4gpCh/QAkCU@google.com>
-References: <1624122509-17508-1-git-send-email-okukatla@codeaurora.org>
+        Mon, 21 Jun 2021 10:13:34 -0700 (PDT)
+Subject: Re: [PATCH v4 0/6] Add driver for NVIDIA Tegra30 SoC Thermal sensor
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210616190417.32214-1-digetx@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <e1e3816a-ddf4-be13-0410-0b929f3be60b@linaro.org>
+Date:   Mon, 21 Jun 2021 19:13:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210616190417.32214-1-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1624122509-17508-1-git-send-email-okukatla@codeaurora.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 10:38:29PM +0530, Odelu Kukatla wrote:
-> When removing the initial bandwidth votes in sync_state(), make sure
-> to call the aggregate() function for nodes which don't have any
-> clients yet. aggregate_requests() does not invoke aggregate()
-> for unused nodes.
+
+Hi Dmitry,
+
+I compiled the your series and got these unresolved.
+
+arm-linux-gnueabi-ld: drivers/thermal/tegra/soctherm-fuse.o: in function
+`tegra_calc_shared_calib':
+soctherm-fuse.c:(.text+0x60): undefined reference to `tegra_fuse_readl'
+arm-linux-gnueabi-ld: soctherm-fuse.c:(.text+0xf0): undefined reference
+to `tegra_fuse_readl'
+arm-linux-gnueabi-ld: drivers/thermal/tegra/soctherm-fuse.o: in function
+`tegra_calc_tsensor_calib':
+soctherm-fuse.c:(.text+0x144): undefined reference to `tegra_fuse_readl'
+arm-linux-gnueabi-ld: drivers/thermal/tegra/tegra30-tsensor.o: in
+function `tegra_tsensor_fuse_read_spare':
+tegra30-tsensor.c:(.text+0x364): undefined reference to `tegra_fuse_readl'
+arm-linux-gnueabi-ld: drivers/thermal/tegra/tegra30-tsensor.o: in
+function `tegra_tsensor_probe':
+tegra30-tsensor.c:(.text+0x874): undefined reference to `tegra_fuse_readl'
+arm-linux-gnueabi-ld:
+drivers/thermal/tegra/tegra30-tsensor.o:tegra30-tsensor.c:(.text+0x904):
+more undefined references to `tegra_fuse_readl' follow
+make[1]: *** [/home/dlezcano/Work/src/linux/Makefile:1196: vmlinux] Error 1
+make: *** [/home/dlezcano/Work/src/linux/Makefile:215: __sub-make] Error 2
+
+
+
+On 16/06/2021 21:04, Dmitry Osipenko wrote:
+> Hi,
 > 
-> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
-
-It seems this should have a 'Fixes' tag for b1d681d8d324 ("interconnect:
-Add sync state support")', to make sure the change makes it into the
-stable trees.
-
-> ---
->  drivers/interconnect/core.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> This series adds support for the thermal sensor that is found on NVIDIA
+> Tegra30 SoC. Sensor monitors temperature and voltage of the SoC, it also
+> emits signals to the power management and clock controllers that are
+> performing the emergency shut down and the CPU frequency throttling
+> when a pre-programmed temperature levels are reached.
 > 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 8a1e70e..1d9a00a 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -1106,7 +1106,16 @@ void icc_sync_state(struct device *dev)
->  		dev_dbg(p->dev, "interconnect provider is in synced state\n");
->  		list_for_each_entry(n, &p->nodes, node_list) {
->  			if (n->init_avg || n->init_peak) {
-> -				aggregate_requests(n);
-> +				if (hlist_empty(&n->req_list)) {
+> Changelog:
+> 
+> v4: - Removed DIV2 CPU frequency throttling and cooling device part as was
+>       suggested by Daniel Lezcano since we need to notify cpufreq about the
+>       updated frequency and change the thermal pressure. The thermal pressure
+>       change should co-exists with the cpufreq_cooling. This all needs some
+>       more thought, so the DIV2 mitigation will come sometime later.
+> 
+>     - Added ack from Thierry Reding.
+> 
+>     - Changed default TZ trips in the device-tree to the silicon temperature
+>       levels, instead of the average device levels.
+> 
+> v3: - No code changes. CC'ed linux-pm, which was previously missed by accident.
+>       Not sure how much that is important for the thermal patches, but won't
+>       hurt to re-send since only DT binding was reviewed so far.
+> 
+> v2: - Made a very minor improvement to one error message, it now prints
+>       number of channel at which error occurred.
+> 
+>     - Added r-b from Rob Herring to the binding.
+> 
+> Dmitry Osipenko (6):
+>   dt-bindings: thermal: Add binding for Tegra30 thermal sensor
+>   thermal: thermal_of: Stop zone device before unregistering it
+>   thermal/drivers/tegra: Add driver for Tegra30 thermal sensor
+>   ARM: tegra_defconfig: Enable CONFIG_TEGRA30_TSENSOR
+>   ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR
+>   ARM: tegra: Add SoC thermal sensor to Tegra30 device-trees
+> 
+>  .../thermal/nvidia,tegra30-tsensor.yaml       |  73 ++
+>  arch/arm/boot/dts/tegra30.dtsi                |  87 ++-
+>  arch/arm/configs/multi_v7_defconfig           |   1 +
+>  arch/arm/configs/tegra_defconfig              |   1 +
+>  drivers/thermal/tegra/Kconfig                 |   7 +
+>  drivers/thermal/tegra/Makefile                |   1 +
+>  drivers/thermal/tegra/tegra30-tsensor.c       | 673 ++++++++++++++++++
+>  drivers/thermal/thermal_of.c                  |   3 +
+>  8 files changed, 842 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/nvidia,tegra30-tsensor.yaml
+>  create mode 100644 drivers/thermal/tegra/tegra30-tsensor.c
+> 
 
-nit: consider handling the common case in the 'if' branch and the exception of
-the initial votes in 'else'.
 
-> +					if (p->pre_aggregate)
-> +						p->pre_aggregate(n);
-> +
-> +					p->aggregate(n, 0, 0, 0, &n->avg_bw,
-> +						&n->peak_bw);
-> +				} else {
-> +					aggregate_requests(n);
-> +				}
-> +
->  				p->set(n, n);
->  			}
->  		}
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
