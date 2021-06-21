@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 915C33AF773
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 23:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D5B3AF777
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 23:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbhFUVfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 17:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231615AbhFUVff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 17:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbhFUVfb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 17:35:31 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3639EC061756;
-        Mon, 21 Jun 2021 14:33:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id u11so16270548ljh.2;
-        Mon, 21 Jun 2021 14:33:15 -0700 (PDT)
+        with ESMTP id S231680AbhFUVfc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 17:35:32 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3804C061574;
+        Mon, 21 Jun 2021 14:33:16 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id k8so4183052ljk.7;
+        Mon, 21 Jun 2021 14:33:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1jk2ZclpdBEYX/i3iFJW267F/ek+tRQuhMbQVF0BgrE=;
-        b=YICQtMKci5AJn2Shtt9a4JsPuq0LLF9u31qxuBLNJhLvMIssXKk2NLa/HHoYZAwaXE
-         B55nSGuM08o2m1dV9fPeWDQB0znmoGG1C11ywwbhKV8QVI3vw0cK1NZkS75+Lsfn5v1Z
-         i9Ig48RfVfxTMvEq5GjLnWxhojbNqo1NnXj1qRNfAnSd4x5z1NSsfu/CoAkoVQ3wcCNP
-         NYe3J3QOkhsdvLsMbDZROrfnMlYhdOubCiOKHaJ2B3pvIrFhj1jTlyaJMQYe77fcX4GJ
-         sp/j+I9mxORymbbIPVjb8VJo53vI1tKbuZRSfb2e0Ahn2j3a17H95nuzr3fnCSAXFXV0
-         6K7g==
+        bh=LwLiDvKh+SYknHvIUl9sZJTxK3M1sxYb6xuIBop9DcM=;
+        b=CGENMLH4FOKUotexatotqZrpSnrbqA4qPnOp5TuH0n6mWIHe64R1nJKEF5w6TJMnYV
+         boWZlAOumdzJOeNlpjwWA+gW9s2xjU1TdQVWXvfkjlrhxXuuT6D3M7lgK5WW9D4KZcCo
+         BtvhljYxplt9UAjTjXD/80UvQzyRsvBd7Pzn/nK1KXl9zS8KY/BiwypeWYmgcyurJMOd
+         iIQuJGttsmtHaNt/CeSePAVAbOkSgD1A9OS/Y4BZG9XhzmJiheG1PD8F/aoH4Kz91Aca
+         nseH7Rw7WL6tyKdxQO9xCqSZiw6iYycSCTv7G+J18/eDHBUNqUaXQ8hYp8WIM879zxlf
+         ygvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1jk2ZclpdBEYX/i3iFJW267F/ek+tRQuhMbQVF0BgrE=;
-        b=nOZpfJfFV6vXKwGrmSWsdU9AOjz8MBbrziu3VY7fq21r9+TCdhFbJcPVDS323/Lpln
-         mg7ZHsTJ05BdUFiTpGuNREdFAqrup8necohct3DYmRCypK5Rxfin5VwGTLpED1G6tIjB
-         Zw3scitlmwU0QwC/JfHLxzA7XgD3o6SJ5UmtjgKcUZDJW6mIpPEQBvFChDOSRW7/3olO
-         i3DC1i/iM9LWR5RWgoBmCqAPLEiN6oSnUcCSVUhfWPJ6IWrvu6WAGyKOc2fVKWk7tcN0
-         joT7pIvbhL1p9if7RUO3f3JIg+68uHo0m5Ax8TuS1fZfDAfc61dQvVEA858FV9svQhpG
-         tjBg==
-X-Gm-Message-State: AOAM530OFBh3CTJu5O29xiPfKEVH8Pt6FEdDTX4j6iCHu57dE+f5FHIs
-        Eu7DO9OKqP7ikPtIE8jgupY=
-X-Google-Smtp-Source: ABdhPJwah8tVZBczoVu5NMaUGDWFixuzNq0zAcAuFesvAGG8dMtzMyz59RhgSC+xRB+GV2q+S1OBQg==
-X-Received: by 2002:a2e:58c:: with SMTP id 134mr189515ljf.441.1624311193633;
-        Mon, 21 Jun 2021 14:33:13 -0700 (PDT)
+        bh=LwLiDvKh+SYknHvIUl9sZJTxK3M1sxYb6xuIBop9DcM=;
+        b=G0yIra/1DIgK4/Bil2Al+4LXdJrAGPVOaIYEkhaxrScGdc84IU5t5ThW7GgPxCpDAL
+         y8H8qvL2vumwNvKhviTXNrab8Iep/Ss39meLToFw4/AJoWEveV2i7sup0HSs/ZV15dPG
+         kEQwaA3jJjSUG3He8Eu191YXmZlQZ2trCli7rzJeDsEhpzUkjDmUagJpec7On7pEWCpW
+         w2ASJzVgGfiFv2F1Jvx79fW4T2WpSBbzXs+91WpaGdQI2ZD8Z0iS68fcKoDq/eWgY7xR
+         xUpuQY4ISrEQWufVFvS3CweXsiu7PQULR7yIcGTHQJZAJJfqxfj/1xa531YQhKR7Fq9P
+         xlSA==
+X-Gm-Message-State: AOAM53274EKOn99hL/gn9g9zaO5N0K2jLlRpjq0NdwqgQszlsmDSaI1H
+        9urkwAK++pwO7xJMGfpThBM=
+X-Google-Smtp-Source: ABdhPJzYpGk8aMYTdwETyUthyvjaqalAG3POwWNtEPPFWfh3BtaoZ68RIC1fNdTnARTZwtFEAqKQvQ==
+X-Received: by 2002:a2e:9009:: with SMTP id h9mr206916ljg.213.1624311195066;
+        Mon, 21 Jun 2021 14:33:15 -0700 (PDT)
 Received: from localhost.localdomain (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.gmail.com with ESMTPSA id u10sm1074722lfg.240.2021.06.21.14.33.12
+        by smtp.gmail.com with ESMTPSA id u10sm1074722lfg.240.2021.06.21.14.33.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 14:33:13 -0700 (PDT)
+        Mon, 21 Jun 2021 14:33:14 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -55,9 +55,9 @@ To:     Zhang Rui <rui.zhang@intel.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v4 1/2] hwmon: (lm90) Prevent integer underflows of temperature calculations
-Date:   Tue, 22 Jun 2021 00:31:52 +0300
-Message-Id: <20210621213153.28247-2-digetx@gmail.com>
+Subject: [PATCH v4 2/2] hwmon: Support set_trips() of thermal device ops
+Date:   Tue, 22 Jun 2021 00:31:53 +0300
+Message-Id: <20210621213153.28247-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210621213153.28247-1-digetx@gmail.com>
 References: <20210621213153.28247-1-digetx@gmail.com>
@@ -67,52 +67,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The min/max/crit and all other temperature values that are passed to
-the driver are unlimited and value that is close to INT_MIN results in
-integer underflow of the temperature calculations made by the driver
-for LM99 sensor. Temperature hysteresis is among those values that need
-to be limited, but limiting of hysteresis is independent from the sensor
-version. Add the missing limits.
+Support set_trips() callback of thermal device ops. This allows HWMON
+device to operatively notify thermal core about temperature changes, which
+is very handy to have in a case where HWMON sensor is used by CPU thermal
+zone that performs passive cooling and emergency shutdown on overheat.
+Thermal core will be able to react faster to temperature changes.
+
+The set_trips() callback is entirely optional. If HWMON sensor doesn't
+support setting thermal trips, then the callback is a NO-OP. The dummy
+callback has no effect on the thermal core. The temperature trips are
+either complement the temperature polling mechanism of thermal core or
+replace the polling if sensor can set the trips and polling is disabled
+by a particular device in a device-tree.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/hwmon/lm90.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/hwmon/hwmon.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index b53f17511b05..ee6b8190f08e 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1028,6 +1028,9 @@ static int lm90_set_temp11(struct lm90_data *data, int index, long val)
- 	struct reg *regp = &reg[index];
- 	int err;
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index fd47ab4e6892..9cb9d814cb88 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -153,8 +153,41 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
+ 	return 0;
+ }
  
-+	/* prevent integer underflow */
-+	val = max(val, -128000l);
++static int hwmon_thermal_set_trips(void *data, int low, int high)
++{
++	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
++	const struct hwmon_chip_info *chip = hwdev->chip;
++	const struct hwmon_channel_info **info = chip->info;
++	unsigned int i;
++	int err;
 +
- 	/* +16 degrees offset for temp2 for the LM99 */
- 	if (data->kind == lm99 && index <= 2)
- 		val -= 16000;
-@@ -1088,6 +1091,9 @@ static int lm90_set_temp8(struct lm90_data *data, int index, long val)
- 	struct i2c_client *client = data->client;
- 	int err;
++	if (!chip->ops->write)
++		return 0;
++
++	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
++		continue;
++
++	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MIN) {
++		err = chip->ops->write(tdata->dev, hwmon_temp,
++				       hwmon_temp_min, tdata->index, low);
++		if (err && err != -EOPNOTSUPP)
++			return err;
++	}
++
++	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MAX) {
++		err = chip->ops->write(tdata->dev, hwmon_temp,
++				       hwmon_temp_max, tdata->index, high);
++		if (err && err != -EOPNOTSUPP)
++			return err;
++	}
++
++	return 0;
++}
++
+ static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
+ 	.get_temp = hwmon_thermal_get_temp,
++	.set_trips = hwmon_thermal_set_trips,
+ };
  
-+	/* prevent integer underflow */
-+	val = max(val, -128000l);
-+
- 	/* +16 degrees offset for temp2 for the LM99 */
- 	if (data->kind == lm99 && index == 3)
- 		val -= 16000;
-@@ -1130,6 +1136,9 @@ static int lm90_set_temphyst(struct lm90_data *data, long val)
- 	int temp;
- 	int err;
- 
-+	/* prevent integer underflow */
-+	val = max(val, -128000l);
-+
- 	if (data->kind == adt7461 || data->kind == tmp451)
- 		temp = temp_from_u8_adt7461(data, data->temp8[LOCAL_CRIT]);
- 	else if (data->kind == max6646)
+ static void hwmon_thermal_remove_sensor(void *data)
 -- 
 2.30.2
 
