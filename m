@@ -2,127 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1673AF53A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 20:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C08F3AF55F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 20:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbhFUSnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 14:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbhFUSnb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 14:43:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDA9C06175F;
-        Mon, 21 Jun 2021 11:41:15 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id u13so12508385lfk.2;
-        Mon, 21 Jun 2021 11:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OaHrTHwOZlGiJZp19fuqPfINJsoeOnFyeJ/MKkylnkI=;
-        b=EfIszghJdm21cMreSbQ996P4YHET0dcRSj3dKOVqDInMzRelDwW2na///uju3wbFB4
-         L3NnrpvKinrjb2pK/l/SuBtg5aQNPinZRpOY9mIda+IZS4aFdxtKAfUdA4cpmNIC/TTa
-         XrkUgszFd9zc/OWujPxq6c2dFgnRxP3CZiN/oCvkkHOolOvUawfXW586wlfvnzk+78/O
-         Y+M1pqaCt66DBNmESW4qkSmv4jnAYc7MZ3FlkeTx+In/x2uNXthFjDtOO5fDn+bM0nWq
-         yGzcr1bMU6FylSmEVKPfBi6FoXGdzKlj4BG1n7EYZ2eDEMVTDOkM3MUlI0tWiE2Z7rcS
-         NGuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OaHrTHwOZlGiJZp19fuqPfINJsoeOnFyeJ/MKkylnkI=;
-        b=D7/jO2zagXoG1QOdBeDvBCOdIoFxqzJBtlqEpdIGjq14wYf3PjmgMQ7IhB/og46m4g
-         cD/DGmpn56e0RL5qqWPvsM+hm8a4irM2VDaPtRaLUIFyMrX6MLL/B+EJRh/z35VLDmAF
-         ckkMjW99cvUUo72SOsK6uFbj0yqKUT13TU0uHlLgrxAc3kBYUZzD+9mGuHEPMhqSBn/n
-         2RZqlzg6Z7ry2PsgquumilKBeOwoM0agHdElzRw46D8f4UCCuelpBPcOxz1akA7y4pCT
-         FgWyrg33+dDxIhhCp4+TwyuvR6h2xieFWxMi4iV71PG2qhL8dhUpdYPE5CUV0ZuUrdRK
-         m5yQ==
-X-Gm-Message-State: AOAM532ZbDYDC/k6tuTY8IMiMwjeJJka1krJ/q6zZnrWT7Y5XTr2+Esb
-        fV3nDPB2xTfvb09yVPfk3gc=
-X-Google-Smtp-Source: ABdhPJxwJmm4BeibPP0lzIuhx6wMYOcQrZkZUFKCj4OeTFs2ubahQPT6J+uDdEPtnXKz7H2EBRHwFQ==
-X-Received: by 2002:a05:6512:92d:: with SMTP id f13mr15320408lft.186.1624300874353;
-        Mon, 21 Jun 2021 11:41:14 -0700 (PDT)
-Received: from localhost.localdomain (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.gmail.com with ESMTPSA id y22sm1950843lfa.145.2021.06.21.11.41.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 11:41:14 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
+        id S231193AbhFUSsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 14:48:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40024 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231230AbhFUSsw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 21 Jun 2021 14:48:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94090611BD;
+        Mon, 21 Jun 2021 18:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624301198;
+        bh=qj744D706TyLzYHbyimIMkHWpg6Flb4R+WG1Q1smICE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Rsacp2LTXROn4UiKGve4taCoslKwvxYeVJeQChkJIG056ju5JiHEPBuz83rriyFE7
+         vk9nG7gwkTXQq83E00xPoPZs/7p6w3kMv9fFTQMsmbHoSyN8g7M3NJFEiCuEbfvTo7
+         5g6DgDtwNinRqBvHBypWIbLS1xIpnzx9qf6lA+JJRMDpp7lupnTLI7Qvlu28UxBs9Y
+         TUdxHyXfRbW8cAkK2LLK9Ak5Hd5RAyEEJ+2gu7xWAAEpt/4gOgwLWnCQrBlweXGDIQ
+         zbZvXaztVh/rr9krZD6BJe44kgtQOTupv2iyT7EQt6qSkAW/FRVn+u6jwn6YFUa0B7
+         VktG0niuxYQJQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matteo Croce <mcroce@microsoft.com>,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, Kees Cook <keescook@chromium.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v3 2/2] hwmon: Support set_trips() of thermal device ops
-Date:   Mon, 21 Jun 2021 21:40:58 +0300
-Message-Id: <20210621184058.4110-3-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210621184058.4110-1-digetx@gmail.com>
-References: <20210621184058.4110-1-digetx@gmail.com>
+        linux-arm-msm@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josef Bacik <josef@toxicpanda.com>, linux-pm@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>, devicetree@vger.kernel.org,
+        Petr Mladek <pmladek@suse.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        lgirdwood@gmail.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-renesas-soc@vger.kernel.org, agross@kernel.org,
+        linux-power <linux-power@fi.rohmeurope.com>
+Subject: Re: [PATCH RESEND v10 00/11] Extend regulator notification support
+Date:   Mon, 21 Jun 2021 19:45:52 +0100
+Message-Id: <162430087046.9551.16763333166755641433.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1622628333.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1622628333.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Support set_trips() callback of thermal device ops. This allows HWMON
-device to operatively notify thermal core about temperature changes, which
-is very handy to have in a case where HWMON sensor is used by CPU thermal
-zone that performs passive cooling and emergency shutdown on overheat.
-Thermal core will be able to react faster to temperature changes.
+On Thu, 3 Jun 2021 08:40:07 +0300, Matti Vaittinen wrote:
+> Extend regulator notification support
+> 
+> This series extends the regulator notification and error flag support.
+> Initial discussion on the topic can be found here:
+> https://lore.kernel.org/lkml/6046836e22b8252983f08d5621c35ececb97820d.camel@fi.rohmeurope.com/
+> 
+> In a nutshell - the series adds:
+> 
+> [...]
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/hwmon/hwmon.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Applied to
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index fd47ab4e6892..e74dc81e650d 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -153,8 +153,40 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
- }
- 
-+static int hwmon_thermal_set_trips(void *data, int low, int high)
-+{
-+	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-+	const struct hwmon_chip_info *chip = hwdev->chip;
-+	const struct hwmon_channel_info **info = chip->info;
-+	unsigned int i;
-+
-+	if (!chip->ops->write)
-+		return 0;
-+
-+	for (i = 1; info[i] && info[i]->type != hwmon_temp; i++)
-+		continue;
-+
-+	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MIN) {
-+		int err = chip->ops->write(tdata->dev, hwmon_temp,
-+					   hwmon_temp_min, tdata->index, low);
-+		if (err < 0 && err != -EOPNOTSUPP)
-+			return err;
-+	}
-+
-+	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MAX) {
-+		int err = chip->ops->write(tdata->dev, hwmon_temp,
-+					   hwmon_temp_max, tdata->index, high);
-+		if (err < 0 && err != -EOPNOTSUPP)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
-+	.set_trips = hwmon_thermal_set_trips,
- };
- 
- static void hwmon_thermal_remove_sensor(void *data)
--- 
-2.30.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
+Thanks!
+
+[01/11] dt_bindings: Add protection limit properties
+        commit: 673e851b7da81256e73fb738c550ec39bac1c9ff
+[02/11] reboot: Add hardware protection power-off
+        commit: dfa19b11385d4cf8f0242fd93e2073e25183c331
+[03/11] thermal: Use generic HW-protection shutdown API
+        commit: db0aeb4f074f7023da26fb65078197c39590346b
+[04/11] regulator: add warning flags
+        commit: e6c3092d43faf0aa095160cc552f8c05490d0962
+[05/11] regulator: move rdev_print helpers to internal.h
+        commit: 157d2230193ae683fcffcc1cd0a2c3aa4479955f
+[06/11] regulator: IRQ based event/error notification helpers
+        commit: 7111c6d1b31b42c8c758f6681e895a5116e3bad6
+[07/11] regulator: add property parsing and callbacks to set protection limits
+        commit: 89a6a5e56c8248a077d12424a1383a6b18ea840b
+[08/11] dt-bindings: regulator: bd9576 add FET ON-resistance for OCW
+        commit: 627793e4ca4f511837de893545baf0e1b8174dc2
+[09/11] regulator: bd9576: Support error reporting
+        commit: e7bf1fa58c46db9f72220c4472272d6da0a54c91
+[10/11] regulator: bd9576: Fix the driver name in id table
+        commit: e71e7d3df7eb712fc29b609bd712a63d60b81b5f
+[11/11] MAINTAINERS: Add reviewer for regulator irq_helpers
+        commit: d55444adedaee5a3024c61637032057fcf38491b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
