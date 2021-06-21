@@ -2,165 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 617553AF1AA
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 19:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B5B3AF1B8
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 19:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbhFURPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 13:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbhFURPw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 13:15:52 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8576C06175F
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 10:13:36 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h11so3045944wrx.5
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 10:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4i6nEUVfh/Y08sl+Bt5V/buNM5eumRmDejjNLtBa3t0=;
-        b=Dhs/CzchoEy1Qd18n03P5M6oqeh73HOJ5bMqv+/Qr5DuxS9vzUpYGKW45m7ZKA1iWV
-         D6hoRxWwAVzZ3yfq8nzB0Qzuhpb+Qf9hP576yTmnMmzIa9tuFOOG8JYdVpN8Wwu3D4WR
-         SbvBDZNP9cq0rBJmd9GjUnYk4pMvXlho/B0V0bQTD4qGR70oqfyyJCpPe0PWme9P+ypZ
-         Iipek0imAwblBt2PnAs6scn5+GzjHy3eU5LH2q+kzbK+udSje5XfkqSgbdigFligtx7H
-         vW1DeOEB806VdbDDx19UNGfVncG9mbVJqMJ4lz9vSRrdKVklCmXsyxfoCyUFQtDC2aTW
-         yZlg==
+        id S230291AbhFURR1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 13:17:27 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:37698 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230059AbhFURRZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 13:17:25 -0400
+Received: by mail-ot1-f47.google.com with SMTP id 102-20020a9d0eef0000b02903fccc5b733fso18438330otj.4;
+        Mon, 21 Jun 2021 10:15:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4i6nEUVfh/Y08sl+Bt5V/buNM5eumRmDejjNLtBa3t0=;
-        b=CbPDin6x+vHkYS11gy+YCDaXqtSg1JPZPYwzKOHjRbSJp2nCCW6wdv+yv/AixO+giK
-         URrFRLqcLuyEjqWcNss1GgE7ZGsfmWLJCP8nB5k70MdzXp7j9ge0rl5yNdLVWJ9yBStG
-         y1Ys9HWOFPVWcKr9ZwOzr+xIQcMBty4jzDowmwFqN+qKhEtdABFImkgX5hLtIMZpBEVM
-         WEkxrZNyK6wwE0tVLpBNOA5h2BM9zYpiCpy/wnkPQPwJxDJs/IRCibKpRCCvv7tGjbsu
-         Ywg6rRqVsnbN42TDw/Zj21qseHmp/Vyx0tlghfZq07jbfZrhZWiSMNh0XmZixvSVc5MR
-         ry6A==
-X-Gm-Message-State: AOAM530kl1aekhxAOvG39JPzD3wPZ6QAzrnN7wW9pKdPuMLtV9Mz9X9M
-        3n3UPqxqH+8LM0WWClBr+a+OsQ==
-X-Google-Smtp-Source: ABdhPJxSoWqFYS/3j+FYJIhz0NY142RhvRcIzSb0atBjmOVMKz6zGh2e6kpvX9Ul3VkFk6qxpN/gdA==
-X-Received: by 2002:a05:6000:1a41:: with SMTP id t1mr29063076wry.175.1624295615215;
-        Mon, 21 Jun 2021 10:13:35 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211? ([2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211])
-        by smtp.googlemail.com with ESMTPSA id 9sm197835wmf.3.2021.06.21.10.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 10:13:34 -0700 (PDT)
-Subject: Re: [PATCH v4 0/6] Add driver for NVIDIA Tegra30 SoC Thermal sensor
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Ion Agorria <ion@agorria.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210616190417.32214-1-digetx@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <e1e3816a-ddf4-be13-0410-0b929f3be60b@linaro.org>
-Date:   Mon, 21 Jun 2021 19:13:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jXm4NUtSsDnuPgFRz6Ycu8nMt+U8kUvdPj/gorMrW8Q=;
+        b=dnQu4yM+INZNFSogRkvEieI8Lnv1TW93WKN5ejEseWKBq1ofra4iHrW4UJE+vr3KPo
+         17k+YmBoypzRQUBQa3xpUeM6d/DEq/MLchtHebYdfgRbOBtHlQPFoyjNv+ESt7EfyBdL
+         SVeqxCxnlLM6FBuh1WY8W7I23nEhMTJCEcRuYa0RBJjRNuNl1n5mscCHgnDPI2VfwZv7
+         VgtZI1p9al/Ds5/J8281E3ReksywwxZmBatMoKNzQzi0mYLgvBMNHip15Pb9qPI80wUt
+         GC+OqjhXbA678xRXkjs2Xwz7Hp/DP7Jyp+iNJF+kEFvuRCd+WTp8/X9lOrqOnMI/0DoH
+         mQlQ==
+X-Gm-Message-State: AOAM530kl40aQdbTsLZAPGYbuoLfLuNIJA7jMy9s3YXojsLj8StIKDQG
+        NyBrHgcCYedRwSvjwVSr5yssAYduuAuhfXLjIJE=
+X-Google-Smtp-Source: ABdhPJzSwGsGfGepxGsiL+hQYZ1zqB9QAIz3cRvElmUbwzCWuT06q+OkKyQ0Ghm2bN5RhpEhNV6LxcX4Q3Vmty3OVwE=
+X-Received: by 2002:a9d:674b:: with SMTP id w11mr14327789otm.260.1624295710230;
+ Mon, 21 Jun 2021 10:15:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210616190417.32214-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <5c8da9d378dee39d9c6063713b093f51d271fa9d.1623825358.git.viresh.kumar@linaro.org>
+ <c31424b7962608eb13f946a665ba6848c4986856.1623986349.git.viresh.kumar@linaro.org>
+ <CAJZ5v0h37bs0xLUCeD7ZuZfXLPBx=6Mpr-Y+Ef=qcnDA4aoLbQ@mail.gmail.com>
+ <20210621030949.tng5xzq7dm7ngaez@vireshk-i7> <CAJZ5v0jM3nusF1fjcMHLRHPk2PhFErhBXijpWHiSNnunzPFjeA@mail.gmail.com>
+ <CAJZ5v0iHDk6Te0KogYToWSyquNcpS2edQzp1UbW3KFAVL31Hnw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iHDk6Te0KogYToWSyquNcpS2edQzp1UbW3KFAVL31Hnw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 21 Jun 2021 19:14:59 +0200
+Message-ID: <CAJZ5v0g2tCZptcqh+c55YYiO7rDHmZivMLsmpq_7005zNPN1xg@mail.gmail.com>
+Subject: Re: [PATCH V3 2/3] cpufreq: intel_pstate: Migrate away from
+ ->stop_cpu() callback
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dirk Brandewie <dirk.brandewie@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jun 21, 2021 at 4:26 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Jun 21, 2021 at 4:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Mon, Jun 21, 2021 at 5:09 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 18-06-21, 14:00, Rafael J. Wysocki wrote:
+> > > > On Fri, Jun 18, 2021 at 5:22 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > > >
+> > > > > commit 367dc4aa932b ("cpufreq: Add stop CPU callback to cpufreq_driver
+> > > > > interface") added the stop_cpu() callback to allow the drivers to do
+> > > > > clean up before the CPU is completely down and its state can't be
+> > > > > modified.
+> > > > >
+> > > > > At that time the CPU hotplug framework used to call the cpufreq core's
+> > > > > registered notifier for different events like CPU_DOWN_PREPARE and
+> > > > > CPU_POST_DEAD. The stop_cpu() callback was called during the
+> > > > > CPU_DOWN_PREPARE event.
+> > > > >
+> > > > > This is no longer the case, cpuhp_cpufreq_offline() is called only once
+> > > > > by the CPU hotplug core now and we don't really need to separately
+> > > > > call stop_cpu() for cpufreq drivers.
+> > > > >
+> > > > > Migrate to using the exit() and offline() callbacks instead of
+> > > > > stop_cpu().
+> > > > >
+> > > > > We need to clear util hook from both the callbacks, exit() and
+> > > > > offline(), since it is possible that only exit() gets called sometimes
+> > > > > (specially on errors) or both get called at other times.
+> > > > > intel_pstate_clear_update_util_hook() anyway have enough protection in
+> > > > > place if it gets called a second time and will return early then.
+> > > > >
+> > > > > Cc: Dirk Brandewie <dirk.brandewie@gmail.com>
+> > > > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > > ---
+> > > > > V2->V3:
+> > > > > - Update intel_pstate_cpu_offline() as well.
+> > > > > - Improved commit log.
+> > > > >
+> > > > >  drivers/cpufreq/intel_pstate.c | 12 ++++--------
+> > > > >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > > > > index 0e69dffd5a76..8f8a2d9d7daa 100644
+> > > > > --- a/drivers/cpufreq/intel_pstate.c
+> > > > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > > > @@ -2335,6 +2335,8 @@ static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+> > > > >
+> > > > >         pr_debug("CPU %d going offline\n", cpu->cpu);
+> > > > >
+> > > > > +       intel_pstate_clear_update_util_hook(policy->cpu);
+> > > > > +
+> > > > >         if (cpu->suspended)
+> > > > >                 return 0;
+> > > > >
+> > > > > @@ -2374,17 +2376,12 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+> > > > >         return 0;
+> > > > >  }
+> > > > >
+> > > > > -static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> > > > > -{
+> > > > > -       pr_debug("CPU %d stopping\n", policy->cpu);
+> > > > > -
+> > > > > -       intel_pstate_clear_update_util_hook(policy->cpu);
+> > > > > -}
+> > > > > -
+> > > > >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> > > > >  {
+> > > > >         pr_debug("CPU %d exiting\n", policy->cpu);
+> > > > >
+> > > > > +       intel_pstate_clear_update_util_hook(policy->cpu);
+> > > >
+> > > > This change is not needed now, because ->offline always runs before
+> > > > ->exit if present.
+> > >
+> > > Not necessarily, we don't call ->offline() for many error paths in
+> > > cpufreq_online().
+> >
+> > I guess you mean the error paths in cpufreq_offline()?
+>
+> s/offline/online/
+>
+> > IMO this is confusing/broken, because ->offline should always be
+> > called after ->online has returned success.
+> >
+> > > offline() only comes into play after driver is registered properly once.
+> >
+> > The relevant intel_pstate case is a ->setpolicy driver where
+> > ->setpolicy or ->online, if successful, need to be followed by
+> > ->offline.
+> >
+> > If ->setpolicy is successful in the cpufreq_online() path, the entire
+> > cpufreq_online() is successful and the error paths in question are not
+> > executed.
+> >
+> > So the change I was talking about is not needed AFAICS.
 
-Hi Dmitry,
-
-I compiled the your series and got these unresolved.
-
-arm-linux-gnueabi-ld: drivers/thermal/tegra/soctherm-fuse.o: in function
-`tegra_calc_shared_calib':
-soctherm-fuse.c:(.text+0x60): undefined reference to `tegra_fuse_readl'
-arm-linux-gnueabi-ld: soctherm-fuse.c:(.text+0xf0): undefined reference
-to `tegra_fuse_readl'
-arm-linux-gnueabi-ld: drivers/thermal/tegra/soctherm-fuse.o: in function
-`tegra_calc_tsensor_calib':
-soctherm-fuse.c:(.text+0x144): undefined reference to `tegra_fuse_readl'
-arm-linux-gnueabi-ld: drivers/thermal/tegra/tegra30-tsensor.o: in
-function `tegra_tsensor_fuse_read_spare':
-tegra30-tsensor.c:(.text+0x364): undefined reference to `tegra_fuse_readl'
-arm-linux-gnueabi-ld: drivers/thermal/tegra/tegra30-tsensor.o: in
-function `tegra_tsensor_probe':
-tegra30-tsensor.c:(.text+0x874): undefined reference to `tegra_fuse_readl'
-arm-linux-gnueabi-ld:
-drivers/thermal/tegra/tegra30-tsensor.o:tegra30-tsensor.c:(.text+0x904):
-more undefined references to `tegra_fuse_readl' follow
-make[1]: *** [/home/dlezcano/Work/src/linux/Makefile:1196: vmlinux] Error 1
-make: *** [/home/dlezcano/Work/src/linux/Makefile:215: __sub-make] Error 2
-
-
-
-On 16/06/2021 21:04, Dmitry Osipenko wrote:
-> Hi,
-> 
-> This series adds support for the thermal sensor that is found on NVIDIA
-> Tegra30 SoC. Sensor monitors temperature and voltage of the SoC, it also
-> emits signals to the power management and clock controllers that are
-> performing the emergency shut down and the CPU frequency throttling
-> when a pre-programmed temperature levels are reached.
-> 
-> Changelog:
-> 
-> v4: - Removed DIV2 CPU frequency throttling and cooling device part as was
->       suggested by Daniel Lezcano since we need to notify cpufreq about the
->       updated frequency and change the thermal pressure. The thermal pressure
->       change should co-exists with the cpufreq_cooling. This all needs some
->       more thought, so the DIV2 mitigation will come sometime later.
-> 
->     - Added ack from Thierry Reding.
-> 
->     - Changed default TZ trips in the device-tree to the silicon temperature
->       levels, instead of the average device levels.
-> 
-> v3: - No code changes. CC'ed linux-pm, which was previously missed by accident.
->       Not sure how much that is important for the thermal patches, but won't
->       hurt to re-send since only DT binding was reviewed so far.
-> 
-> v2: - Made a very minor improvement to one error message, it now prints
->       number of channel at which error occurred.
-> 
->     - Added r-b from Rob Herring to the binding.
-> 
-> Dmitry Osipenko (6):
->   dt-bindings: thermal: Add binding for Tegra30 thermal sensor
->   thermal: thermal_of: Stop zone device before unregistering it
->   thermal/drivers/tegra: Add driver for Tegra30 thermal sensor
->   ARM: tegra_defconfig: Enable CONFIG_TEGRA30_TSENSOR
->   ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR
->   ARM: tegra: Add SoC thermal sensor to Tegra30 device-trees
-> 
->  .../thermal/nvidia,tegra30-tsensor.yaml       |  73 ++
->  arch/arm/boot/dts/tegra30.dtsi                |  87 ++-
->  arch/arm/configs/multi_v7_defconfig           |   1 +
->  arch/arm/configs/tegra_defconfig              |   1 +
->  drivers/thermal/tegra/Kconfig                 |   7 +
->  drivers/thermal/tegra/Makefile                |   1 +
->  drivers/thermal/tegra/tegra30-tsensor.c       | 673 ++++++++++++++++++
->  drivers/thermal/thermal_of.c                  |   3 +
->  8 files changed, 842 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/nvidia,tegra30-tsensor.yaml
->  create mode 100644 drivers/thermal/tegra/tegra30-tsensor.c
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regardless of all of the above, the ->online, ->offline and ->exit
+callback routines are used by intel_pstate both in the active mode and
+the passive mode, so some more work is needed to migrate it away from
+using ->stop_cpu.
