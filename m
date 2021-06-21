@@ -2,171 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9085D3AE5D1
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2035D3AE5D4
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhFUJW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 05:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S230379AbhFUJWb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 05:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbhFUJW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:22:27 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CB0C061574
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:12 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g4so9607565pjk.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:12 -0700 (PDT)
+        with ESMTP id S230330AbhFUJWa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:22:30 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD40C061756
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:15 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id i34so8027287pgl.9
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xucopJdQYEMHhZQ7dqqB8UQAFZOXBMVYsdXdizA97FA=;
-        b=vgHziPNRBMyZcOclBhC3U0MKPvE9Hn1g1zorbrtQPSjbwjjMHtxuehLkK5jav4xtQP
-         0MsgvldXgiQbvefMiSDkhR0TiOaOfA3sw7mIbn4hm//b6lkh2TSQ/YwZbqiwf9k6q/yl
-         MpAFGvVHz6gQ8nfIE6QxXJhawJXd93wnismO4+HeCAIO4326OoyrTnZPgapwS53dgSOD
-         2mJPLOYkN9tz8rtAKlyp/n7wxonyxaqipTjoEzSm04OT0zO3uTSx3e8XZY026j5NTswn
-         9c2xHcwYqnPU4NA+I6izG4vBuEs9oAjRCzer7DlyPRnQZtSsiugwN/QrvqdekmRETZ34
-         n7rA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=h+Pr0hB3aQxiWpb5eCV/aiPVZfCXjZdbK/uF+fA2suE=;
+        b=GzDORQUQfU4EyaIz84r9ofxl7S2qiMUmnL8adgMAMRlSCje4XuoLkb9AZt5+OZ/uYc
+         bdmFmBbJfOOzTSdfwKiThKNfnYfOjUzcgK0E1v1AHbdJxj8yDUAmT/WcHTgZF5V86eaW
+         IOmErKVtiXIbnK72LGtHfyBwiLysLsLxXc0MfVqxq9qm/mlS5bUsh24zUD08THTH36H0
+         7lBFyItmFb6sudEMOE4c8N6ae5aX1P0TbHDDmPPZdn5KYMBx5RczSegJQAcVOZyMWfGg
+         vGNdwbIlfXD/vcmiDSuJsLaxrDRF+VXQsFrVUwIzFWJfHeRnc3YnWU0PCpSzn6OM8NwF
+         B5ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xucopJdQYEMHhZQ7dqqB8UQAFZOXBMVYsdXdizA97FA=;
-        b=RM1z68BVZtgrNlGyHiUkTRbEElkYeCCsM3HA+AFXsu94r/xXEgcU5KrjI9jLgB5qCy
-         km3qWTnCCXheUbptwRVns8rpPkiQSOPKJjOT7WPJmYTESSgitriBHiauVRuoaykLrB+L
-         Qg4K+vB8HnlM5of238X/Quh5LFg0ZYvqrXCNAVen9Uc/doJrtrM6cn0/rcNGxnWrT3hC
-         FmCFf1iyHpaZr+BNH7BDD/ZWLHGuDBLhgJ0aIR3f8RO1xjqLoeue3TSrnnqav22M6Qiz
-         Tcgg0ynqv/V+uj2ydOBWZ7yDC38t6e15RgBUImV20N4+bRw6/+AQK8+dC8Bt+uRq4Hfj
-         N9Hg==
-X-Gm-Message-State: AOAM532SuzKeyOSl3MN9e7EB7Iyn29pourPLeRM9xXSEoV8jIRFh8ayT
-        DWBNhRaFg6bTexWuWqQb2YJbCw==
-X-Google-Smtp-Source: ABdhPJymdL2wIiZ+VPdAPkTBA1iFDujziFi2nwnCOjvdII9bEiKPuiO3gz+pu3aUf6faKlwyhs0G5Q==
-X-Received: by 2002:a17:902:e313:b029:125:827f:c621 with SMTP id q19-20020a170902e313b0290125827fc621mr1847055plc.25.1624267212333;
-        Mon, 21 Jun 2021 02:20:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=h+Pr0hB3aQxiWpb5eCV/aiPVZfCXjZdbK/uF+fA2suE=;
+        b=YGOEe24yLkeCtAU5tWCqEEKsjqoo8NEFCSvRTb0Q2vmQS1np7TS3DelADeV8RLC4N4
+         EQfSRL9KbrsfWQigSaVmwWGEt5BpGsyJJNi6D1Kz7Ds4nxTY4qJ5rcZy1uxcr8xqQfLy
+         w5XWeELiXxZkixOu7M+Es55mKKRgDgXYhTdMOuOOeyvfxRn4VqT+2PuW4QkUXP+eA5w5
+         NmVFoPH0f9Dw74y1dUpPAIDlXuQREFicwzMMu2JUxqh9XUeM2MLFc2gzELvgjWE753bz
+         1p0ZehZ9TnNrS+XX1HdB0Z128VuPZl5xbs1P1Wf0Fo0hJBzQhLUvyJwaiO97EqUU9ZSi
+         TlpQ==
+X-Gm-Message-State: AOAM532Uj7GjOatC3ayAKfv9jhsPirZk9ybQd6nqFd5w2GTb2GQ0V4QA
+        6FGl1tvzy5L3zEDT9GNIufs5bA==
+X-Google-Smtp-Source: ABdhPJztGqVoSVeigfrMYYjeWjpM2W5IxlGJLJaOWvr+uIBpPJEwCRmMsMAJm6R+YxhzlWO4jag9lw==
+X-Received: by 2002:a63:36c1:: with SMTP id d184mr23133582pga.47.1624267215148;
+        Mon, 21 Jun 2021 02:20:15 -0700 (PDT)
 Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id w123sm7828850pff.186.2021.06.21.02.20.11
+        by smtp.gmail.com with ESMTPSA id c18sm1521186pfo.143.2021.06.21.02.20.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 02:20:11 -0700 (PDT)
+        Mon, 21 Jun 2021 02:20:14 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Ionela Voinescu <ionela.voinescu@arm.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency invariance
-Date:   Mon, 21 Jun 2021 14:49:33 +0530
-Message-Id: <cover.1624266901.git.viresh.kumar@linaro.org>
+        Qian Cai <quic_qiancai@quicinc.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 1/4] cpufreq: cppc: Fix potential memleak in cppc_cpufreq_cpu_init
+Date:   Mon, 21 Jun 2021 14:49:34 +0530
+Message-Id: <579689469ed8a7dfd68dcbb41e9191472799a326.1624266901.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1624266901.git.viresh.kumar@linaro.org>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+It's a classic example of memleak, we allocate something, we fail and
+never free the resources.
 
-Changes since V2:
+Make sure we free all resources on policy ->init() failures.
 
-- We don't need start_cpu() and stop_cpu() callbacks anymore, we can make it
-  work using policy ->init() and exit() alone.
+Fixes: a28b2bfc099c ("cppc_cpufreq: replace per-cpu data array with a list")
+Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-- Two new cleanup patches 1/4 and 2/4.
-
-- Improved commit log of 3/4.
-
-- Dropped WARN_ON(local_freq_scale > 1024), since this can occur on counter's
-  overlap (seen with Vincent's setup).
-
-- Handle stuff from init/exit() callbacks only.
-
-Changes since V1:
-
-- Few of the patches migrating users to ->exit() callback are posted separately.
-
-- The CPPC patch was completely reverted and so the support for FIE is again
-  added here from scratch.
-
-- The start_cpu() and stop_cpu() interface is reworked a little so stop_cpu() is
-  only ever called for a CPU if start_cpu() was called for it earlier.
-
-- A new patch to implement RCU locking in arch_topology core to avoid some
-  races.
-
-- Some cleanup and very clear/separate paths for FIE in cppc driver now.
-
-
--------------------------8<-------------------------
-
-CPPC cpufreq driver is used for ARM servers and this patch series tries to
-provide counter-based frequency invariance support for them in the absence for
-architecture specific counters (like AMUs).
-
-This was reverted earlier for the 5.13 kernel after Qian Cai reported kernel
-oops during suspend/resume.
-
-This is based of v5.13-rc7 + a cleanup patchset:
-
-https://lore.kernel.org/linux-pm/cover.1623825358.git.viresh.kumar@linaro.org/
-
-All the patches are pushed here together for people to run.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/log/?h=cpufreq/cppc
-
-This is tested on my Hikey platform (without the actual read/write to
-performance counters), with this script for over an hour:
-
-while true; do
-    for i in `seq 1 7`;
-    do
-        echo 0 > /sys/devices/system/cpu/cpu$i/online;
-    done;
-
-    for i in `seq 1 7`;
-    do
-        echo 1 > /sys/devices/system/cpu/cpu$i/online;
-    done;
-done
-
-
-The same is done by Vincent on ThunderX2 and no issues were seen.
-
-I would like to get this merged for 5.14, since it was recently reverted from
-5.13. And that it is still an independent change to a single driver and topology
-APIs that no one is using apart from arm64 topology stuff.
-
-Thanks.
-
---
-Viresh
-
-Viresh Kumar (4):
-  cpufreq: cppc: Fix potential memleak in cppc_cpufreq_cpu_init
-  cpufreq: cppc: Pass structure instance by reference
-  arch_topology: Avoid use-after-free for scale_freq_data
-  cpufreq: CPPC: Add support for frequency invariance
-
- drivers/base/arch_topology.c   |  27 +++-
- drivers/cpufreq/Kconfig.arm    |  10 ++
- drivers/cpufreq/cppc_cpufreq.c | 287 +++++++++++++++++++++++++++++----
- include/linux/arch_topology.h  |   1 +
- kernel/sched/core.c            |   1 +
- 5 files changed, 292 insertions(+), 34 deletions(-)
-
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index be4f62e2c5f1..35b8ae66d1fb 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -256,6 +256,16 @@ static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
+ 	return NULL;
+ }
+ 
++static void cppc_cpufreq_put_cpu_data(struct cpufreq_policy *policy)
++{
++	struct cppc_cpudata *cpu_data = policy->driver_data;
++
++	list_del(&cpu_data->node);
++	free_cpumask_var(cpu_data->shared_cpu_map);
++	kfree(cpu_data);
++	policy->driver_data = NULL;
++}
++
+ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ {
+ 	unsigned int cpu = policy->cpu;
+@@ -309,7 +319,8 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	default:
+ 		pr_debug("Unsupported CPU co-ord type: %d\n",
+ 			 policy->shared_type);
+-		return -EFAULT;
++		ret = -EFAULT;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -324,10 +335,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+ 
+ 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+-	if (ret)
+-		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+-			 caps->highest_perf, cpu, ret);
++	if (!ret)
++		return 0;
+ 
++	pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
++		 caps->highest_perf, cpu, ret);
++
++out:
++	cppc_cpufreq_put_cpu_data(policy);
+ 	return ret;
+ }
+ 
+@@ -345,12 +360,7 @@ static int cppc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+ 		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+ 			 caps->lowest_perf, cpu, ret);
+ 
+-	/* Remove CPU node from list and free driver data for policy */
+-	free_cpumask_var(cpu_data->shared_cpu_map);
+-	list_del(&cpu_data->node);
+-	kfree(policy->driver_data);
+-	policy->driver_data = NULL;
+-
++	cppc_cpufreq_put_cpu_data(policy);
+ 	return 0;
+ }
+ 
 -- 
 2.31.1.272.g89b43f80a514
 
