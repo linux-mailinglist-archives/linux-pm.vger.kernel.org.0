@@ -2,91 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E433AE8A9
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 14:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B76D3AE8D3
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 14:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbhFUMGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 08:06:17 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:36278 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhFUMGO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 08:06:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624277028;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=c+nIPTLbwTwv3NgxdRJeapby6BUJ8czrRYkdGY5Q3eI=;
-    b=q7OLoipFGcqxGrst+eo6N4qwdbA5vaODusqvon3o3OHTLL09QXjUHCcLhvA0yy1Eew
-    q56bg7lRO3cDXNEYztxCRguWQPoNT6LdEQKVKG8ScREld7EuveH/yIPMBxbUhGczMvg+
-    MyrH3ZqQZljesRMkxGqQ+6gv3J1yrlPEDSpxiKwvcBq1PhGmDR0crLppjzeFl1IKgFWC
-    2v4H0XYYf/kGfZIR2jtx1ylW0sXQxoZj4fMeArRPMdRhM4imWtUsSzhONYisvLvCYrO9
-    aKNv76QEU4q036duWmLmauYoqKqSX7Hq+VNKhBPuo9STjputQp4ZoXsXoCxPoUdQFAz/
-    rx/w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j5IczAb4o="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id 000885x5LC3lI14
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 21 Jun 2021 14:03:47 +0200 (CEST)
-Date:   Mon, 21 Jun 2021 14:03:46 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
-        jamipkettunen@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 2/3] soc: qcom: spm: Implement support for SAWv4.1,
- SDM630/660 L2 AVS
-Message-ID: <YNCAIr3BGB1J+wpe@gerhold.net>
-References: <20210618225620.623359-1-angelogioacchino.delregno@somainline.org>
- <20210618225620.623359-3-angelogioacchino.delregno@somainline.org>
+        id S229719AbhFUMOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 08:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229640AbhFUMOt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 08:14:49 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B79EC061574;
+        Mon, 21 Jun 2021 05:12:32 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so17492054oti.2;
+        Mon, 21 Jun 2021 05:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7prD3+xyczLmEe+2BW6g+fySkx140ZkBVmo1/PVnD/0=;
+        b=fm4gnMesUyw40L3SKOPhrgTBm5DZNGB6NREf6eSHQIwbSBIi+4MV1hRSGtSenQQxyf
+         V4mpB8XuBmtgMc/a1Pmx64AkTmBWXrf0SOiFEb6Vk7eElheahMKgLtxL8nzvyC0jOrPJ
+         yM5oBJNk5yUSRRhuGAI9QEOQKcj0BbehVsPR45t0hrHCowVswteZtm796p+F80NDqBO3
+         8qntcKBPouxTWLp6BCnU6wtgXeyJU6rCEPzG/wyMWzNZqEXj0opDAWcGgBflhoM8LXYV
+         uzAwlkJyIDIpE2/V2E48Cj5z54hu2HtLQDLDmRdYL5Cw8AAWLT/AUN5o4md8eNjFu4r7
+         TfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=7prD3+xyczLmEe+2BW6g+fySkx140ZkBVmo1/PVnD/0=;
+        b=tnEaapHFLKPRx7KAVwXjEoodolxc2dahDa5lrzv2HSzJWqRZnmbLTJjqrHD8G9b6EW
+         N/Y5VVQVBjwd82Vq63kpnvxU30NEeH/VUrxgXBw8RVh/hAJ+3CT6EfbfStF/owKJyX2S
+         aYN26x/T7E+zkA+KZuCazQMlF90vASY1FZH2cOsvgx+Z/CamC4yXO4Y7YlCgw74pllEq
+         tTZ8qTGmEIn0qrlxXv+CLPD7cWKiMLcXXjxX02++wetfz/WNv3u4+ujqkjuwECIjI8sE
+         ygqK+Mm2jH1mb7CQ7c5AHUYeqJPFF9YD8JJ2VaiXxDQQDDMh/+0wLPoYuMMV7/vm9ovQ
+         zy5A==
+X-Gm-Message-State: AOAM531ugoGOYjyASSw0bBAP4AyLkvZbamLFsO3NfuCaY7Wt81yzEZYT
+        VeB0CNw4wBtNEw7VvSOfE/Y=
+X-Google-Smtp-Source: ABdhPJz8s0vLG/6CFPlnj29FKy2jKzk7XkGcEWsdltHcIj7UMrnV4h5GbExX/F3zaZ+Rs5GLcq9Acg==
+X-Received: by 2002:a9d:2f0:: with SMTP id 103mr20486373otl.174.1624277551825;
+        Mon, 21 Jun 2021 05:12:31 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n20sm4086841otj.11.2021.06.21.05.12.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 05:12:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 21 Jun 2021 05:12:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (lm90) Prevent integer overflow of
+ temperature calculations
+Message-ID: <20210621121229.GB116119@roeck-us.net>
+References: <20210620211408.3893-1-digetx@gmail.com>
+ <20210620211408.3893-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210618225620.623359-3-angelogioacchino.delregno@somainline.org>
+In-Reply-To: <20210620211408.3893-2-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 12:56:19AM +0200, AngeloGioacchino Del Regno wrote:
-> Implement the support for SAW v4.1, used in at least MSM8998,
-> SDM630, SDM660 and APQ variants and, while at it, also add the
-> configuration for the SDM630/660 Silver and Gold cluster L2
-> Adaptive Voltage Scaler: this is also one of the prerequisites
-> to allow the OSM controller to perform DCVS.
+On Mon, Jun 21, 2021 at 12:14:07AM +0300, Dmitry Osipenko wrote:
+> The minimum temperature value that is passed to the driver is unlimited
+> and value that is close to INT_MIN results in integer overflow of
+> temperature calculations made by the driver. Limit the value in order
+> to prevent the overflow. For now the overflow condition is harmless,
+> but thermal framework won't work properly once we will support the
+> set_trips() callback because it will pass INT_MIN value to the driver.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  drivers/soc/qcom/spm.c | 28 +++++++++++++++++++++++++++-
->  include/soc/qcom/spm.h |  4 +++-
->  2 files changed, 30 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/spm.c b/drivers/soc/qcom/spm.c
-> [...]
->  static const struct of_device_id spm_match_table[] = {
-> +	{ .compatible = "qcom,sdm660-gold-saw2-v4.1-l2",
-> +	  .data = &spm_reg_660_gold_l2 },
-> +	{ .compatible = "qcom,sdm660-silver-saw2-v4.1-l2",
-> +	  .data = &spm_reg_660_silver_l2 },
 
-I think we need some dt-bindings patches for these? :)
-
-Also, like I mentioned on v4 I still think a short comment in commit
-message or file with the reason why you don't want the change qcom did
-in [1] would be appropriate here. You can just use what you
-already mentioned in your reply in v4 (the random lockups).
-
-Because otherwise it's not obvious why someone else shouldn't "make this
-consistent with qcom's values" sometime later and then suddenly you get
-the random lockups again.
+AFAICS that should only happen for lm99 because all other values
+are bound in the temp_to_xxx functions. Where else do you see an
+overflow (or underflow) ?
 
 Thanks,
-Stephan
+Guenter
+
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/hwmon/lm90.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index b53f17511b05..6e2fa976098f 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -1028,6 +1028,9 @@ static int lm90_set_temp11(struct lm90_data *data, int index, long val)
+>  	struct reg *regp = &reg[index];
+>  	int err;
+>  
+> +	/* prevent integer overflow */
+> +	val = max(val, -128000l);
+> +
+>  	/* +16 degrees offset for temp2 for the LM99 */
+>  	if (data->kind == lm99 && index <= 2)
+>  		val -= 16000;
+> @@ -1088,6 +1091,9 @@ static int lm90_set_temp8(struct lm90_data *data, int index, long val)
+>  	struct i2c_client *client = data->client;
+>  	int err;
+>  
+> +	/* prevent integer overflow */
+> +	val = max(val, -128000l);
+> +
+>  	/* +16 degrees offset for temp2 for the LM99 */
+>  	if (data->kind == lm99 && index == 3)
+>  		val -= 16000;
+> -- 
+> 2.30.2
+> 
