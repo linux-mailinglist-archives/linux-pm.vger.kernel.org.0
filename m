@@ -2,277 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39363AE681
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F933AE7C6
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 12:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbhFUJzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 05:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S229747AbhFULBu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 07:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhFUJzN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:55:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD69C061574
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:52:59 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 09:52:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1624269178;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6jYZE0xyBEiIv0IsKhUv3pcac/wVCF70h/VNchThUAY=;
-        b=qikr0F4qhkPd3asRmFsqcd3GnTKGr0aT1jgLaGAIJfl4F+K+Hw2EoW0gyZiZLfWvxdGom0
-        jN1ehw8HD14u5maVSfMvNBxS2iI7Y+7QNIajlXcQdBmydSHpnYLfC/lOB4HQnPa+RvJTTb
-        pWzvAGRj/CitiNPrZzbzSpVvtaLiwVbJ4Q0UTy8bkwM+vERfl+Tvol4V84GSJfKIuSqZit
-        /lGRjKurrGhGM3UMsUMCPT0T4nXu23uUWCkViH/hDThhNB/yheytcePAWjfBzyv5I9W5eG
-        MgUZSTqw7zAradLYBhYoguzZ0TJwWvc6tPQYjcVQRGsaBjlE3uL02OMhndjMvA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1624269178;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6jYZE0xyBEiIv0IsKhUv3pcac/wVCF70h/VNchThUAY=;
-        b=YY0qwEiWhoChrqFzG+thW0xnHefW0rqcEC8X9a8Z7lbBVENWRg7zRCOLDd85FIXTkAEcDn
-        yyOvdcui9Bit7ZAg==
-From:   "thermal-bot for Ezequiel Garcia" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: convert
- rockchip-thermal to json-schema
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210506175514.168365-3-ezequiel@collabora.com>
-References: <20210506175514.168365-3-ezequiel@collabora.com>
+        with ESMTP id S229641AbhFULBt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 07:01:49 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B90C061574;
+        Mon, 21 Jun 2021 03:59:34 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h2so4797683edt.3;
+        Mon, 21 Jun 2021 03:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mQxqixLK5rjqMvfwNndLJU9kpq2UUMss0IdRDqE4Nyc=;
+        b=YxZQAdUUkLMQ2M2mYkUfSjDJ+SB9P+64CPFg3uK5hM1E/C6K8NmCvjI6fxDHBrBoe5
+         Lq7cJ78pC6eJoQL/iMslWnzhkAluJRJRKlpXrcHJnAUBY4LLp/MkPZU7sYhkLRFqBEPl
+         0uRZq36q9MKx0pTNYdZeSNZVZbFJ3t7QfDM1AYpc6XcFG9PqXhyyIxdCa5GYj1KE51gX
+         CERelqx0rdtwMVSq94UjUjpVTG8H0AvhhKV8qm464N8P+VLib7JBniwt5Gxc5ZaGVkw8
+         lQDzEpiPMwHEZaSZ1PmHvgWOeshz1XWPFZ9zBPPsG67Jh3+Her1tkKd/DUdiLjAtUvJM
+         joSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mQxqixLK5rjqMvfwNndLJU9kpq2UUMss0IdRDqE4Nyc=;
+        b=njVvNvWBWgtdZ4Zc1jjo/ZF+k+3FXSkkPtDGHEfIuLP+Cg8Q9uCnfWcBTBgSvJIMSs
+         spH7Wi3g8Umr3zNOgt84mH79d/Mtcq9IJBJTn/n8zKcsV2lXDfYqv1X6M5DaRDhtHH9/
+         UiXbotFVdvKNAhqNhmlFpb35u/y8F/X7RL0y1WBOBRnstIadJxdk3WaxEMiWw0P1bgsy
+         YXt+l0h06hjYfLNU0p9Un549obS2D+RHtnaIa78e28HEEss+KGkwPDp6d1hLDpjx15Gy
+         oi04iO7HjJv1IAtdz234B6p0Abkz1bhwS3rUpN06abQEvh9Si9QhlUeGy799pSpvdvXa
+         OXjQ==
+X-Gm-Message-State: AOAM531ZSS2Xkjy6w9PUPPET8Jm84LZJ+AnSx4Dx8slY5KBeboBZiaJo
+        bRz/+oQ1c4cgV4bUWeq8B7w=
+X-Google-Smtp-Source: ABdhPJygm2GSM+8x1mA8AMigPK6YI6mwpzcBwg47WwZ0gmXyzshqwUTK6KliNuLXNpTFL6h27g8Z5Q==
+X-Received: by 2002:a50:fd1a:: with SMTP id i26mr6912086eds.181.1624273173262;
+        Mon, 21 Jun 2021 03:59:33 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id c15sm7817001edu.19.2021.06.21.03.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 03:59:32 -0700 (PDT)
+Date:   Mon, 21 Jun 2021 13:01:28 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Subject: Re: [PATCH v18 0/2] Add memory bandwidth management to NVIDIA Tegra
+ DRM driver
+Message-ID: <YNBxiFXMS9rfT93c@orome.fritz.box>
+References: <20210601042108.1942-1-digetx@gmail.com>
+ <8accfe1e-fc48-21ca-f7c6-bd2d60162e6d@gmail.com>
+ <50912a57-aa43-58b0-02d2-6928578d6286@gmail.com>
 MIME-Version: 1.0
-Message-ID: <162426917740.395.15720523016927121585.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hHIGeTg/3zFQR6Mt"
+Content-Disposition: inline
+In-Reply-To: <50912a57-aa43-58b0-02d2-6928578d6286@gmail.com>
+User-Agent: Mutt/2.0.7 (481f3800) (2021-05-04)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     6b65dc242d00b408ebbf79d0b7a16ed3f25109ec
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//6b65dc242d00b408ebbf79d0b7a16ed3f25109ec
-Author:        Ezequiel Garcia <ezequiel@collabora.com>
-AuthorDate:    Thu, 06 May 2021 14:55:12 -03:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 21 Jun 2021 11:49:43 +02:00
+--hHIGeTg/3zFQR6Mt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-dt-bindings: thermal: convert rockchip-thermal to json-schema
+On Mon, Jun 21, 2021 at 07:19:15AM +0300, Dmitry Osipenko wrote:
+> 07.06.2021 01:40, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > 01.06.2021 07:21, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >> This series adds memory bandwidth management to the NVIDIA Tegra DRM d=
+river,
+> >> which is done using interconnect framework. It fixes display corruptio=
+n that
+> >> happens due to insufficient memory bandwidth.
+> >>
+> >> Changelog:
+> >>
+> >> v18: - Moved total peak bandwidth from CRTC state to plane state and r=
+emoved
+> >>        dummy plane bandwidth state initialization from T186+ plane hub=
+=2E This
+> >>        was suggested by Thierry Reding to v17.
+> >>
+> >>      - I haven't done anything about the cursor's plane bandwidth which
+> >>        doesn't contribute to overlapping bandwidths for a small sized
+> >>        window because it works okay as-is.
+> >=20
+> > Thierry, will you take these patches for 5.14?
+> >=20
+>=20
+> The display controller does _NOT_WORK_ properly without bandwidth
+> management.
 
-Convert Rockchip Thermal sensor dt-bindings to YAML.
+That's surprising. So either it has never worked before (which I think
+I'd know) or something has caused this regression recently. In the
+latter case we need to identify what that was and revert (or fix) it.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210506175514.168365-3-ezequiel@collabora.com
----
- Documentation/devicetree/bindings/thermal/rockchip-thermal.txt  | 85 +---------------------------------------------------------------
- Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml | 95 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 95 insertions(+), 85 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> Can we get this patch into 5.14? What is the problem?
 
-diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt b/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
-deleted file mode 100644
-index 7f94669..0000000
---- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
-+++ /dev/null
-@@ -1,85 +0,0 @@
--* Temperature Sensor ADC (TSADC) on rockchip SoCs
--
--Required properties:
--- compatible : should be "rockchip,<name>-tsadc"
--   "rockchip,px30-tsadc":   found on PX30 SoCs
--   "rockchip,rv1108-tsadc": found on RV1108 SoCs
--   "rockchip,rk3228-tsadc": found on RK3228 SoCs
--   "rockchip,rk3288-tsadc": found on RK3288 SoCs
--   "rockchip,rk3328-tsadc": found on RK3328 SoCs
--   "rockchip,rk3368-tsadc": found on RK3368 SoCs
--   "rockchip,rk3399-tsadc": found on RK3399 SoCs
--- reg : physical base address of the controller and length of memory mapped
--	region.
--- interrupts : The interrupt number to the cpu. The interrupt specifier format
--	       depends on the interrupt controller.
--- clocks : Must contain an entry for each entry in clock-names.
--- clock-names : Shall be "tsadc" for the converter-clock, and "apb_pclk" for
--		the peripheral clock.
--- resets : Must contain an entry for each entry in reset-names.
--	   See ../reset/reset.txt for details.
--- reset-names : Must include the name "tsadc-apb".
--- pinctrl-names : The pin control state names;
--- pinctrl-0 : The "init" pinctrl state, it will be set before device probe.
--- pinctrl-1 : The "default" pinctrl state, it will be set after reset the
--	      TSADC controller.
--- pinctrl-2 : The "sleep" pinctrl state, it will be in for suspend.
--- #thermal-sensor-cells : Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
--
--Optional properties:
--- rockchip,hw-tshut-temp : The hardware-controlled shutdown temperature value.
--- rockchip,hw-tshut-mode : The hardware-controlled shutdown mode 0:CRU 1:GPIO.
--- rockchip,hw-tshut-polarity : The hardware-controlled active polarity 0:LOW
--			       1:HIGH.
--- rockchip,grf : The phandle of the syscon node for the general register file.
--
--Exiample:
--tsadc: tsadc@ff280000 {
--	compatible = "rockchip,rk3288-tsadc";
--	reg = <0xff280000 0x100>;
--	interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
--	clocks = <&cru SCLK_TSADC>, <&cru PCLK_TSADC>;
--	clock-names = "tsadc", "apb_pclk";
--	resets = <&cru SRST_TSADC>;
--	reset-names = "tsadc-apb";
--	pinctrl-names = "init", "default", "sleep";
--	pinctrl-0 = <&otp_gpio>;
--	pinctrl-1 = <&otp_out>;
--	pinctrl-2 = <&otp_gpio>;
--	#thermal-sensor-cells = <1>;
--	rockchip,hw-tshut-temp = <95000>;
--	rockchip,hw-tshut-mode = <0>;
--	rockchip,hw-tshut-polarity = <0>;
--};
--
--Example: referring to thermal sensors:
--thermal-zones {
--	cpu_thermal: cpu_thermal {
--		polling-delay-passive = <1000>; /* milliseconds */
--		polling-delay = <5000>; /* milliseconds */
--
--		/* sensor	ID */
--		thermal-sensors = <&tsadc	1>;
--
--		trips {
--			cpu_alert0: cpu_alert {
--				temperature = <70000>; /* millicelsius */
--				hysteresis = <2000>; /* millicelsius */
--				type = "passive";
--			};
--			cpu_crit: cpu_crit {
--				temperature = <90000>; /* millicelsius */
--				hysteresis = <2000>; /* millicelsius */
--				type = "critical";
--			};
--		};
--
--		cooling-maps {
--			map0 {
--				trip = <&cpu_alert0>;
--				cooling-device =
--				    <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--			};
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-new file mode 100644
-index 0000000..8385e8a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-@@ -0,0 +1,95 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/rockchip-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Temperature Sensor ADC (TSADC) on Rockchip SoCs
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,px30-tsadc # PX30 SoCs
-+      - rockchip,rv1108-tsadc # RV1108 SoCs
-+      - rockchip,rk3228-tsadc # RK3228 SoCs
-+      - rockchip,rk3288-tsadc # RK3288 SoCs
-+      - rockchip,rk3328-tsadc # RK3328 SoCs
-+      - rockchip,rk3368-tsadc # RK3368 SoCs
-+      - rockchip,rk3399-tsadc # RK3399 SoCs
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 2
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: tsadc
-+      - const: apb_pclk
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: tsadc-apb
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  rockchip,grf:
-+    description: The phandle of the syscon node for the general register file.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  rockchip,hw-tshut-temp:
-+    description: The hardware-controlled shutdown temperature value.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  rockchip,hw-tshut-mode:
-+    description: The hardware-controlled shutdown mode 0:CRU 1:GPIO.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1]
-+
-+  rockchip,hw-tshut-polarity:
-+    description: The hardware-controlled active polarity 0:LOW 1:HIGH.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1]
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/rk3288-cru.h>
-+
-+    tsadc: tsadc@ff280000 {
-+        compatible = "rockchip,rk3288-tsadc";
-+        reg = <0xff280000 0x100>;
-+        interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cru SCLK_TSADC>, <&cru PCLK_TSADC>;
-+        clock-names = "tsadc", "apb_pclk";
-+        resets = <&cru SRST_TSADC>;
-+        reset-names = "tsadc-apb";
-+        #thermal-sensor-cells = <1>;
-+        rockchip,hw-tshut-temp = <95000>;
-+        rockchip,hw-tshut-mode = <0>;
-+        rockchip,hw-tshut-polarity = <0>;
-+    };
+There was not enough time to review and test this, so I didn't feel
+comfortable picking it up so close to the -rc6 cut-off. I plan to pick
+this up early in the v5.14 release cycle and target v5.15.
+
+Thierry
+
+--hHIGeTg/3zFQR6Mt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmDQcYQACgkQ3SOs138+
+s6HM5Q//eNrrfdv1Eha+kmKoOay07IzXHohR56bITStHor3M0uzvNVZaSCcADjl4
+FpHEAIfe2FuS41Y81iUZqV3PmRNXloneCz4vzgFVkmz8poeq5aPwiQlsSPEzRawt
+UJbyYSGTUhtM8GvqxW6TL47M8wYCYND7bTp+GIh45nGPSuZlGIhT4Qp9zqfxARn7
+AmuA/lUkHxT5krTo1Sx9PfTENLPxMikM4MdahTnro0S1WAOqWaudqnWidV81jA2j
+pAektGCfs5uanFq8nOjpO4/AkHmYfq1FSOS0ZpYn2eyhDDK9BDPLuW4L3ithBl1o
+r+vqwedj/xAPeOWxha6JwEvMwhRReZHN0/uZTlWDnqvAVgVFrptefGKo7V355Brw
+NRgJrJFCdoCW8m2FntrRCoxTqDy0v9h+607vD3myk9pyD94IZ7SeKEwyh31vKls3
+OwIGQEVPgyDXoSolj/rG7xwF2vDN+OaW+hidqmuM3p5xpjOqwToJ996s0F0XuUc1
+x0uKQ5+jnuRH132Nn2K73OBFzBS6Le/h1N/DLtxOhq1L3VcZczRx9MYDR5aT6p5r
+Pug+Byyy3Qx0TRDUq6P+bJGTHu3di+ty0Rvrd/LdbTCXHNNctN/N95ZUseeUsG1E
+RnN2FwphYn08qZ5QKGWesnLj4+RJHVjH+c8PpXjyaj2FNXyvsZU=
+=NJyS
+-----END PGP SIGNATURE-----
+
+--hHIGeTg/3zFQR6Mt--
