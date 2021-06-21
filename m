@@ -2,506 +2,808 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F263AE5DA
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04DA3AE664
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jun 2021 11:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbhFUJWo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 05:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbhFUJWj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:22:39 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4B5C061767
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:25 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v7so13666841pgl.2
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 02:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v9CpQJBHn1mD56CNWpr1Tpf2MsYJr9cLOW/B9ZtLcrQ=;
-        b=mylYZcsEi4JnjamhB4tmmfsBtgKYnQyvHtWiVfCfxeptprLWITq2TTxuIEIVQ+WFJU
-         KLqOmEqSUbFRr+3cuDl1pHtIpZh8NUVAL/vBxpK7qLghZ5gYZit8v47wR6ZkTqfkxsV9
-         JuxTTJn9jp6mh31pkrqf8CrbsOh/2cPmMWuhpCtEf+9xUNzXpVrQHhnY4zS1WnviP8HW
-         QbqdWbjjv6pWKwTsXxo/Y+3bPd5l3H3Hl7S+wAtXBKWuRXI0xe3gBpBm3k8UrVyR5Fay
-         D85ZByOC+nl29sKhIfhBluSPdrOEkeGG6mrPJn2dKN3GL0dC3awRYMTso2Qs617wuQvJ
-         bGog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v9CpQJBHn1mD56CNWpr1Tpf2MsYJr9cLOW/B9ZtLcrQ=;
-        b=H8ci/RZd8XKPi5wLum2nCh02SZgvtjENYmpi02Imt/v6mQGv3ksh+wY7ncSb1VsgVE
-         00xD0N6VkaBbLLHkVblaAxY5NVCA0ml34X3E9+REY5HBfcgt9zkOgZsV3HXE6nMgzcrn
-         XCBJxxz/g02mV0mNvYrWM0T8MHwhn9G3F/zWx8E9DuYglZDHLV5aJx+BSNGVYcMmhGx+
-         cSblXhTDoqLUINJsHJrN/YgPlBLafdAqC2s8siZ3Wrik+/lJ1Bc6762w0dmfyDVrFQzV
-         ZAGiJkA8vE03H1PXG1Dj9q/vbaI+pOomNwS28zbXfLQo7yA65HC836XeW1iz3+FzCgan
-         bFEg==
-X-Gm-Message-State: AOAM532kIqj83FtNMcFP3bEcig8KixdjyS+O/4KsQlQ99NRBVzJH2e8z
-        tD2fyz3AJvTDKLPbJyl8RQDEqw==
-X-Google-Smtp-Source: ABdhPJwjHOZa9js5f9hzPI3JImy7cY+ou9an6slm5KafdmL1ZhMZy5/jb4PbAAOduRinMlhta/eHmA==
-X-Received: by 2002:a63:5d52:: with SMTP id o18mr23136666pgm.440.1624267224517;
-        Mon, 21 Jun 2021 02:20:24 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id c18sm15641423pgf.66.2021.06.21.02.20.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 02:20:24 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3 4/4] cpufreq: CPPC: Add support for frequency invariance
-Date:   Mon, 21 Jun 2021 14:49:37 +0530
-Message-Id: <f963d09e57115969dae32827ade5558b0467d3a0.1624266901.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1624266901.git.viresh.kumar@linaro.org>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
+        id S230269AbhFUJtN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 05:49:13 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:43206 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230452AbhFUJs7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 05:48:59 -0400
+Date:   Mon, 21 Jun 2021 09:46:42 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1624268803;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=707QSv4FsVCqPUGxPGuPu2Pzj+D98KR5KMhG3Y331Z4=;
+        b=14/jZ4j1rabE6G43sEhXDZHZEp+orgRS3N3yrW61iIPvC7CvKsQuYQHltD8P/QOAb9r29v
+        wtwjEDhWlqQd4RP/UbVZbJ8Rez7RAWYpwQAByfARQ9VC/3anUOppzfgXoMMviyyxNM84GJ
+        ZDo8bGPAhnkoQoqmezEbEedwlYaibmK9KLozahxLSigbxvgK7/1k6lmSE08MMESJulr5Z4
+        9L/4NG//x1bWa2wSr57MbIJbCHXQscHqWayGDcj+DQn+m8iOD62AucYRIWL2fJmH/wUI21
+        wJWgJcuGc6/2O9FGeP2cmXjPTGs9KhNjT4mp7Qjgcnd1AmGBoa6wTDrFrH+SGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1624268803;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=707QSv4FsVCqPUGxPGuPu2Pzj+D98KR5KMhG3Y331Z4=;
+        b=Mbg3TPZ1YrZWBLj9j488CqO1yEooLDTElW2NqyfJpIEbUjuDnyiKtFcQV99QVqUnvCz0A3
+        RkKUMafmgztt6+Aw==
+From:   "thermal-bot for Dmitry Osipenko" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/drivers/tegra: Add driver for Tegra30
+ thermal sensor
+Cc:     Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Ion Agorria <ion@agorria.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20210616190417.32214-4-digetx@gmail.com>
+References: <20210616190417.32214-4-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <162426880234.395.4399823547169052980.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Frequency Invariance Engine (FIE) is providing a frequency scaling
-correction factor that helps achieve more accurate load-tracking.
+The following commit has been merged into the thermal/next branch of thermal:
 
-Normally, this scaling factor can be obtained directly with the help of
-the cpufreq drivers as they know the exact frequency the hardware is
-running at. But that isn't the case for CPPC cpufreq driver.
+Commit-ID:     6b3c6646909619ecd0bcd995b838d8186d006c4d
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//6b3c6646909619ecd0bcd995b838d8186d006c4d
+Author:        Dmitry Osipenko <digetx@gmail.com>
+AuthorDate:    Wed, 16 Jun 2021 22:04:14 +03:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Fri, 18 Jun 2021 12:41:16 +02:00
 
-Another way of obtaining that is using the arch specific counter
-support, which is already present in kernel, but that hardware is
-optional for platforms.
+thermal/drivers/tegra: Add driver for Tegra30 thermal sensor
 
-This patch updates the CPPC driver to register itself with the topology
-core to provide its own implementation (cppc_scale_freq_tick()) of
-topology_scale_freq_tick() which gets called by the scheduler on every
-tick. Note that the arch specific counters have higher priority than
-CPPC counters, if available, though the CPPC driver doesn't need to have
-any special handling for that.
+All NVIDIA Tegra30 SoCs have a two-channel on-chip sensor unit which
+monitors temperature and voltage of the SoC. Sensors control CPU frequency
+throttling, which is activated by hardware once preprogrammed temperature
+level is breached, they also send signal to Power Management controller to
+perform emergency shutdown on a critical overheat of the SoC die. Add
+driver for the Tegra30 TSENSOR module, exposing it as a thermal sensor.
 
-On an invocation of cppc_scale_freq_tick(), we schedule an irq work
-(since we reach here from hard-irq context), which then schedules a
-normal work item and cppc_scale_freq_workfn() updates the per_cpu
-arch_freq_scale variable based on the counter updates since the last
-tick.
-
-To allow platforms to disable this CPPC counter-based frequency
-invariance support, this is all done under CONFIG_ACPI_CPPC_CPUFREQ_FIE,
-which is enabled by default.
-
-This also exports sched_setattr_nocheck() as the CPPC driver can be
-built as a module.
-
-Cc: linux-acpi@vger.kernel.org
-Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Tested-by: Andreas Westman Dorcsak <hedmoo@yahoo.com> # Asus TF700T
+Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # Asus TF201T
+Tested-by: Ihor Didenko <tailormoon@rambler.ru> # Asus TF300T
+Tested-by: Ion Agorria <ion@agorria.com> # Asus TF201T
+Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya
+Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya
+Acked-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210616190417.32214-4-digetx@gmail.com
 ---
- drivers/cpufreq/Kconfig.arm    |  10 ++
- drivers/cpufreq/cppc_cpufreq.c | 249 +++++++++++++++++++++++++++++++--
- include/linux/arch_topology.h  |   1 +
- kernel/sched/core.c            |   1 +
- 4 files changed, 247 insertions(+), 14 deletions(-)
+ drivers/thermal/tegra/Kconfig           |   7 +-
+ drivers/thermal/tegra/Makefile          |   1 +-
+ drivers/thermal/tegra/tegra30-tsensor.c | 673 +++++++++++++++++++++++-
+ 3 files changed, 681 insertions(+)
+ create mode 100644 drivers/thermal/tegra/tegra30-tsensor.c
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index e65e0a43be64..a5c5f70acfc9 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -19,6 +19,16 @@ config ACPI_CPPC_CPUFREQ
+diff --git a/drivers/thermal/tegra/Kconfig b/drivers/thermal/tegra/Kconfig
+index eca61c5..cfa41d8 100644
+--- a/drivers/thermal/tegra/Kconfig
++++ b/drivers/thermal/tegra/Kconfig
+@@ -18,4 +18,11 @@ config TEGRA_BPMP_THERMAL
+ 	  Enable this option for support for sensing system temperature of NVIDIA
+ 	  Tegra systems-on-chip with the BPMP coprocessor (Tegra186).
  
- 	  If in doubt, say N.
- 
-+config ACPI_CPPC_CPUFREQ_FIE
-+	bool "Frequency Invariance support for CPPC cpufreq driver"
-+	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
-+	default y
++config TEGRA30_TSENSOR
++	tristate "Tegra30 Thermal Sensor"
++	depends on ARCH_TEGRA_3x_SOC || COMPILE_TEST
 +	help
-+	  This extends frequency invariance support in the CPPC cpufreq driver,
-+	  by using CPPC delivered and reference performance counters.
++	  Enable this option to support thermal management of NVIDIA Tegra30
++	  system-on-chip.
 +
-+	  If in doubt, say N.
+ endmenu
+diff --git a/drivers/thermal/tegra/Makefile b/drivers/thermal/tegra/Makefile
+index 0f2b66e..eb27d19 100644
+--- a/drivers/thermal/tegra/Makefile
++++ b/drivers/thermal/tegra/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TEGRA_SOCTHERM)		+= tegra-soctherm.o
+ obj-$(CONFIG_TEGRA_BPMP_THERMAL)	+= tegra-bpmp-thermal.o
++obj-$(CONFIG_TEGRA30_TSENSOR)		+= tegra30-tsensor.o
+ 
+ tegra-soctherm-y				:= soctherm.o soctherm-fuse.o
+ tegra-soctherm-$(CONFIG_ARCH_TEGRA_124_SOC)	+= tegra124-soctherm.o
+diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+new file mode 100644
+index 0000000..9b6b693
+--- /dev/null
++++ b/drivers/thermal/tegra/tegra30-tsensor.c
+@@ -0,0 +1,673 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Tegra30 SoC Thermal Sensor driver
++ *
++ * Based on downstream HWMON driver from NVIDIA.
++ * Copyright (C) 2011 NVIDIA Corporation
++ *
++ * Author: Dmitry Osipenko <digetx@gmail.com>
++ * Copyright (C) 2021 GRATE-DRIVER project
++ */
 +
- config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
- 	tristate "Allwinner nvmem based SUN50I CPUFreq driver"
- 	depends on ARCH_SUNXI
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 490175d65082..db550fc92931 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -10,14 +10,18 @@
- 
- #define pr_fmt(fmt)	"CPPC Cpufreq:"	fmt
- 
-+#include <linux/arch_topology.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
- #include <linux/dmi.h>
-+#include <linux/irq_work.h>
-+#include <linux/kthread.h>
- #include <linux/time.h>
- #include <linux/vmalloc.h>
-+#include <uapi/linux/sched/types.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -57,6 +61,210 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 	}
- };
- 
-+#ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/math.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/reset.h>
++#include <linux/slab.h>
++#include <linux/thermal.h>
++#include <linux/types.h>
 +
-+/* Frequency invariance support */
-+struct cppc_freq_invariance {
-+	int cpu;
-+	struct irq_work irq_work;
-+	struct kthread_work work;
-+	struct cppc_perf_fb_ctrs prev_perf_fb_ctrs;
-+	struct cppc_cpudata *cpu_data;
++#include <soc/tegra/fuse.h>
++
++#include "../thermal_core.h"
++#include "../thermal_hwmon.h"
++
++#define TSENSOR_SENSOR0_CONFIG0				0x0
++#define TSENSOR_SENSOR0_CONFIG0_SENSOR_STOP		BIT(0)
++#define TSENSOR_SENSOR0_CONFIG0_HW_FREQ_DIV_EN		BIT(1)
++#define TSENSOR_SENSOR0_CONFIG0_THERMAL_RST_EN		BIT(2)
++#define TSENSOR_SENSOR0_CONFIG0_DVFS_EN			BIT(3)
++#define TSENSOR_SENSOR0_CONFIG0_INTR_OVERFLOW_EN	BIT(4)
++#define TSENSOR_SENSOR0_CONFIG0_INTR_HW_FREQ_DIV_EN	BIT(5)
++#define TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN	BIT(6)
++#define TSENSOR_SENSOR0_CONFIG0_M			GENMASK(23,  8)
++#define TSENSOR_SENSOR0_CONFIG0_N			GENMASK(31, 24)
++
++#define TSENSOR_SENSOR0_CONFIG1				0x8
++#define TSENSOR_SENSOR0_CONFIG1_TH1			GENMASK(15,  0)
++#define TSENSOR_SENSOR0_CONFIG1_TH2			GENMASK(31, 16)
++
++#define TSENSOR_SENSOR0_CONFIG2				0xc
++#define TSENSOR_SENSOR0_CONFIG2_TH3			GENMASK(15,  0)
++
++#define TSENSOR_SENSOR0_STATUS0				0x18
++#define TSENSOR_SENSOR0_STATUS0_STATE			GENMASK(2, 0)
++#define TSENSOR_SENSOR0_STATUS0_INTR			BIT(8)
++#define TSENSOR_SENSOR0_STATUS0_CURRENT_VALID		BIT(9)
++
++#define TSENSOR_SENSOR0_TS_STATUS1			0x1c
++#define TSENSOR_SENSOR0_TS_STATUS1_CURRENT_COUNT	GENMASK(31, 16)
++
++#define TEGRA30_FUSE_TEST_PROG_VER			0x28
++
++#define TEGRA30_FUSE_TSENSOR_CALIB			0x98
++#define TEGRA30_FUSE_TSENSOR_CALIB_LOW			GENMASK(15,  0)
++#define TEGRA30_FUSE_TSENSOR_CALIB_HIGH			GENMASK(31, 16)
++
++#define TEGRA30_FUSE_SPARE_BIT				0x144
++
++struct tegra_tsensor;
++
++struct tegra_tsensor_calibration_data {
++	int a, b, m, n, p, r;
 +};
 +
-+static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
-+static struct kthread_worker *kworker_fie;
++struct tegra_tsensor_channel {
++	void __iomem *regs;
++	unsigned int id;
++	struct tegra_tsensor *ts;
++	struct thermal_zone_device *tzd;
++};
 +
-+static struct cpufreq_driver cppc_cpufreq_driver;
-+static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
-+static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
++struct tegra_tsensor {
++	void __iomem *regs;
++	bool swap_channels;
++	struct clk *clk;
++	struct device *dev;
++	struct reset_control *rst;
++	struct tegra_tsensor_channel ch[2];
++	struct tegra_tsensor_calibration_data calib;
++};
 +
-+/**
-+ * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
-+ * @work: The work item.
-+ *
-+ * The CPPC driver register itself with the topology core to provide its own
-+ * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
-+ * gets called by the scheduler on every tick.
-+ *
-+ * Note that the arch specific counters have higher priority than CPPC counters,
-+ * if available, though the CPPC driver doesn't need to have any special
-+ * handling for that.
-+ *
-+ * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
-+ * reach here from hard-irq context), which then schedules a normal work item
-+ * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
-+ * based on the counter updates since the last tick.
-+ */
-+static void cppc_scale_freq_workfn(struct kthread_work *work)
++static int tegra_tsensor_hw_enable(const struct tegra_tsensor *ts)
 +{
-+	struct cppc_freq_invariance *cppc_fi;
-+	struct cppc_perf_fb_ctrs fb_ctrs = {0};
-+	struct cppc_cpudata *cpu_data;
-+	unsigned long local_freq_scale;
-+	u64 perf;
++	u32 val;
++	int err;
 +
-+	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-+	cpu_data = cppc_fi->cpu_data;
-+
-+	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
-+		pr_warn("%s: failed to read perf counters\n", __func__);
-+		return;
++	err = reset_control_assert(ts->rst);
++	if (err) {
++		dev_err(ts->dev, "failed to assert hardware reset: %d\n", err);
++		return err;
 +	}
 +
-+	perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
-+				     &fb_ctrs);
-+	cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
++	err = clk_prepare_enable(ts->clk);
++	if (err) {
++		dev_err(ts->dev, "failed to enable clock: %d\n", err);
++		return err;
++	}
 +
-+	perf <<= SCHED_CAPACITY_SHIFT;
-+	local_freq_scale = div64_u64(perf, cpu_data->perf_caps.highest_perf);
++	fsleep(1000);
 +
-+	/* This can happen due to counter's overflow */
-+	if (unlikely(local_freq_scale > 1024))
-+		local_freq_scale = 1024;
-+
-+	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
-+}
-+
-+static void cppc_irq_work(struct irq_work *irq_work)
-+{
-+	struct cppc_freq_invariance *cppc_fi;
-+
-+	cppc_fi = container_of(irq_work, struct cppc_freq_invariance, irq_work);
-+	kthread_queue_work(kworker_fie, &cppc_fi->work);
-+}
-+
-+static void cppc_scale_freq_tick(void)
-+{
-+	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
++	err = reset_control_deassert(ts->rst);
++	if (err) {
++		dev_err(ts->dev, "failed to deassert hardware reset: %d\n", err);
++		goto disable_clk;
++	}
 +
 +	/*
-+	 * cppc_get_perf_ctrs() can potentially sleep, call that from the right
-+	 * context.
++	 * Sensors are enabled after reset by default, but not gauging
++	 * until clock counter is programmed.
++	 *
++	 * M: number of reference clock pulses after which every
++	 *    temperature / voltage measurement is made
++	 *
++	 * N: number of reference clock counts for which the counter runs
 +	 */
-+	irq_work_queue(&cppc_fi->irq_work);
++	val  = FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_M, 12500);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_N, 255);
++
++	/* apply the same configuration to both channels */
++	writel_relaxed(val, ts->regs + 0x40 + TSENSOR_SENSOR0_CONFIG0);
++	writel_relaxed(val, ts->regs + 0x80 + TSENSOR_SENSOR0_CONFIG0);
++
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(ts->clk);
++
++	return err;
 +}
 +
-+static struct scale_freq_data cppc_sftd = {
-+	.source = SCALE_FREQ_SOURCE_CPPC,
-+	.set_freq_scale = cppc_scale_freq_tick,
++static int tegra_tsensor_hw_disable(const struct tegra_tsensor *ts)
++{
++	int err;
++
++	err = reset_control_assert(ts->rst);
++	if (err) {
++		dev_err(ts->dev, "failed to assert hardware reset: %d\n", err);
++		return err;
++	}
++
++	clk_disable_unprepare(ts->clk);
++
++	return 0;
++}
++
++static void devm_tegra_tsensor_hw_disable(void *data)
++{
++	const struct tegra_tsensor *ts = data;
++
++	tegra_tsensor_hw_disable(ts);
++}
++
++static int tegra_tsensor_get_temp(void *data, int *temp)
++{
++	const struct tegra_tsensor_channel *tsc = data;
++	const struct tegra_tsensor *ts = tsc->ts;
++	int err, c1, c2, c3, c4, counter;
++	u32 val;
++
++	/*
++	 * Counter will be invalid if hardware is misprogrammed or not enough
++	 * time passed since the time when sensor was enabled.
++	 */
++	err = readl_relaxed_poll_timeout(tsc->regs + TSENSOR_SENSOR0_STATUS0, val,
++					 val & TSENSOR_SENSOR0_STATUS0_CURRENT_VALID,
++					 21 * USEC_PER_MSEC,
++					 21 * USEC_PER_MSEC * 50);
++	if (err) {
++		dev_err_once(ts->dev, "ch%u: counter invalid\n", tsc->id);
++		return err;
++	}
++
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_TS_STATUS1);
++	counter = FIELD_GET(TSENSOR_SENSOR0_TS_STATUS1_CURRENT_COUNT, val);
++
++	/*
++	 * This shouldn't happen with a valid counter status, nevertheless
++	 * lets verify the value since it's in a separate (from status)
++	 * register.
++	 */
++	if (counter == 0xffff) {
++		dev_err_once(ts->dev, "ch%u: counter overflow\n", tsc->id);
++		return -EINVAL;
++	}
++
++	/*
++	 * temperature = a * counter + b
++	 * temperature = m * (temperature ^ 2) + n * temperature + p
++	 */
++	c1 = DIV_ROUND_CLOSEST(ts->calib.a * counter + ts->calib.b, 1000000);
++	c1 = c1 ?: 1;
++	c2 = DIV_ROUND_CLOSEST(ts->calib.p, c1);
++	c3 = c1 * ts->calib.m;
++	c4 = ts->calib.n;
++
++	*temp = DIV_ROUND_CLOSEST(c1 * (c2 + c3 + c4), 1000);
++
++	return 0;
++}
++
++static int tegra_tsensor_temp_to_counter(const struct tegra_tsensor *ts, int temp)
++{
++	int c1, c2;
++
++	c1 = DIV_ROUND_CLOSEST(ts->calib.p - temp * 1000, ts->calib.m);
++	c2 = -ts->calib.r - int_sqrt(ts->calib.r * ts->calib.r - c1);
++
++	return DIV_ROUND_CLOSEST(c2 * 1000000 - ts->calib.b, ts->calib.a);
++}
++
++static int tegra_tsensor_set_trips(void *data, int low, int high)
++{
++	const struct tegra_tsensor_channel *tsc = data;
++	const struct tegra_tsensor *ts = tsc->ts;
++	u32 val;
++
++	/*
++	 * TSENSOR doesn't trigger interrupt on the "low" temperature breach,
++	 * hence bail out if high temperature is unspecified.
++	 */
++	if (high == INT_MAX)
++		return 0;
++
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG1);
++	val &= ~TSENSOR_SENSOR0_CONFIG1_TH1;
++
++	high = tegra_tsensor_temp_to_counter(ts, high);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG1_TH1, high);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG1);
++
++	return 0;
++}
++
++static const struct thermal_zone_of_device_ops ops = {
++	.get_temp = tegra_tsensor_get_temp,
++	.set_trips = tegra_tsensor_set_trips,
 +};
 +
-+static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
++static bool
++tegra_tsensor_handle_channel_interrupt(const struct tegra_tsensor *ts,
++				       unsigned int id)
 +{
-+	struct cppc_freq_invariance *cppc_fi;
-+	int cpu, ret;
++	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
++	u32 val;
 +
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_STATUS0);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_STATUS0);
 +
-+	for_each_cpu(cpu, policy->cpus) {
-+		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
-+		cppc_fi->cpu = cpu;
-+		cppc_fi->cpu_data = policy->driver_data;
-+		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-+		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
++	if (FIELD_GET(TSENSOR_SENSOR0_STATUS0_STATE, val) == 5)
++		dev_err_ratelimited(ts->dev, "ch%u: counter overflowed\n", id);
 +
-+		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
-+		if (ret) {
-+			pr_warn("%s: failed to read perf counters for cpu:%d: %d\n",
-+				__func__, cpu, ret);
-+			return;
-+		}
-+	}
++	if (!FIELD_GET(TSENSOR_SENSOR0_STATUS0_INTR, val))
++		return false;
 +
-+	/* Register for freq-invariance */
-+	topology_set_scale_freq_source(&cppc_sftd, policy->cpus);
++	thermal_zone_device_update(tsc->tzd, THERMAL_EVENT_UNSPECIFIED);
++
++	return true;
 +}
 +
-+/*
-+ * We free all the resources on policy's removal and not on CPU removal as the
-+ * irq-work are per-cpu and the hotplug core takes care of flushing the pending
-+ * irq-works (hint: smpcfd_dying_cpu()) on CPU hotplug. Even if the kthread-work
-+ * fires on another CPU after the concerned CPU is removed, it won't harm.
-+ *
-+ * We just need to make sure to remove them all on policy->exit().
-+ */
-+static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
++static irqreturn_t tegra_tsensor_isr(int irq, void *data)
 +{
-+	struct cppc_freq_invariance *cppc_fi;
-+	int cpu;
++	const struct tegra_tsensor *ts = data;
++	bool handled = false;
++	unsigned int i;
 +
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
++	for (i = 0; i < ARRAY_SIZE(ts->ch); i++)
++		handled |= tegra_tsensor_handle_channel_interrupt(ts, i);
 +
-+	/* policy->cpus will be empty here, use related_cpus instead */
-+	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
-+
-+	for_each_cpu(cpu, policy->related_cpus) {
-+		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
-+		irq_work_sync(&cppc_fi->irq_work);
-+		kthread_cancel_work_sync(&cppc_fi->work);
-+	}
++	return handled ? IRQ_HANDLED : IRQ_NONE;
 +}
 +
-+static void __init cppc_freq_invariance_init(void)
++static int tegra_tsensor_disable_hw_channel(const struct tegra_tsensor *ts,
++					    unsigned int id)
 +{
-+	struct sched_attr attr = {
-+		.size		= sizeof(struct sched_attr),
-+		.sched_policy	= SCHED_DEADLINE,
-+		.sched_nice	= 0,
-+		.sched_priority	= 0,
++	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
++	struct thermal_zone_device *tzd = tsc->tzd;
++	u32 val;
++	int err;
++
++	if (!tzd)
++		goto stop_channel;
++
++	err = thermal_zone_device_disable(tzd);
++	if (err) {
++		dev_err(ts->dev, "ch%u: failed to disable zone: %d\n", id, err);
++		return err;
++	}
++
++stop_channel:
++	/* stop channel gracefully */
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_SENSOR_STOP, 1);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++
++	return 0;
++}
++
++static void tegra_tsensor_get_hw_channel_trips(struct thermal_zone_device *tzd,
++					       int *hot_trip, int *crit_trip)
++{
++	unsigned int i;
++
++	/*
++	 * 90C is the maximal critical temperature of all Tegra30 SoC variants,
++	 * use it for the default trip if unspecified in a device-tree.
++	 */
++	*hot_trip  = 85000;
++	*crit_trip = 90000;
++
++	for (i = 0; i < tzd->trips; i++) {
++		enum thermal_trip_type type;
++		int trip_temp;
++
++		tzd->ops->get_trip_temp(tzd, i, &trip_temp);
++		tzd->ops->get_trip_type(tzd, i, &type);
++
++		if (type == THERMAL_TRIP_HOT)
++			*hot_trip = trip_temp;
++
++		if (type == THERMAL_TRIP_CRITICAL)
++			*crit_trip = trip_temp;
++	}
++
++	/* clamp hardware trips to the calibration limits */
++	*hot_trip = clamp(*hot_trip, 25000, 90000);
++
++	/*
++	 * Kernel will perform a normal system shut down if it will
++	 * see that critical temperature is breached, hence set the
++	 * hardware limit by 5C higher in order to allow system to
++	 * shut down gracefully before sending signal to the Power
++	 * Management controller.
++	 */
++	*crit_trip = clamp(*crit_trip + 5000, 25000, 90000);
++}
++
++static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
++					   unsigned int id)
++{
++	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
++	struct thermal_zone_device *tzd = tsc->tzd;
++	int err, hot_trip = 0, crit_trip = 0;
++	u32 val;
++
++	if (!tzd) {
++		val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++		val &= ~TSENSOR_SENSOR0_CONFIG0_SENSOR_STOP;
++		writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++
++		return 0;
++	}
++
++	tegra_tsensor_get_hw_channel_trips(tzd, &hot_trip, &crit_trip);
++
++	/* prevent potential racing with tegra_tsensor_set_trips() */
++	mutex_lock(&tzd->lock);
++
++	dev_info_once(ts->dev, "ch%u: PMC emergency shutdown trip set to %dC\n",
++		      id, DIV_ROUND_CLOSEST(crit_trip, 1000));
++
++	hot_trip  = tegra_tsensor_temp_to_counter(ts, hot_trip);
++	crit_trip = tegra_tsensor_temp_to_counter(ts, crit_trip);
++
++	/* program LEVEL2 counter threshold */
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG1);
++	val &= ~TSENSOR_SENSOR0_CONFIG1_TH2;
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG1_TH2, hot_trip);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG1);
++
++	/* program LEVEL3 counter threshold */
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG2);
++	val &= ~TSENSOR_SENSOR0_CONFIG2_TH3;
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG2_TH3, crit_trip);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG2);
++
++	/*
++	 * Enable sensor, emergency shutdown, interrupts for level 1/2/3
++	 * breaches and counter overflow condition.
++	 *
++	 * Disable DIV2 throttle for now since we need to figure out how
++	 * to integrate it properly with the thermal framework.
++	 *
++	 * Thermal levels supported by hardware:
++	 *
++	 *     Level 0 = cold
++	 *     Level 1 = passive cooling (cpufreq DVFS)
++	 *     Level 2 = passive cooling assisted by hardware (DIV2)
++	 *     Level 3 = emergency shutdown assisted by hardware (PMC)
++	 */
++	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++	val &= ~TSENSOR_SENSOR0_CONFIG0_SENSOR_STOP;
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_DVFS_EN, 1);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_HW_FREQ_DIV_EN, 0);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_THERMAL_RST_EN, 1);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_OVERFLOW_EN, 1);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_HW_FREQ_DIV_EN, 1);
++	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1);
++	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
++
++	mutex_unlock(&tzd->lock);
++
++	err = thermal_zone_device_enable(tzd);
++	if (err) {
++		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static bool tegra_tsensor_fuse_read_spare(unsigned int spare)
++{
++	u32 val = 0;
++
++	tegra_fuse_readl(TEGRA30_FUSE_SPARE_BIT + spare * 4, &val);
++
++	return !!val;
++}
++
++static int tegra_tsensor_nvmem_setup(struct tegra_tsensor *ts)
++{
++	u32 i, ate_ver = 0, cal = 0, t1_25C = 0, t2_90C = 0;
++	int err, c1_25C, c2_90C;
++
++	err = tegra_fuse_readl(TEGRA30_FUSE_TEST_PROG_VER, &ate_ver);
++	if (err) {
++		dev_err_probe(ts->dev, err, "failed to get ATE version\n");
++		return err;
++	}
++
++	if (ate_ver < 8) {
++		dev_info(ts->dev, "unsupported ATE version: %u\n", ate_ver);
++		return -ENODEV;
++	}
++
++	/*
++	 * We have two TSENSOR channels in a two different spots on SoC.
++	 * Second channel provides more accurate data on older SoC versions,
++	 * use it as a primary channel.
++	 */
++	if (ate_ver <= 21) {
++		dev_info_once(ts->dev,
++			      "older ATE version detected, channels remapped\n");
++		ts->swap_channels = true;
++	}
++
++	err = tegra_fuse_readl(TEGRA30_FUSE_TSENSOR_CALIB, &cal);
++	if (err) {
++		dev_err(ts->dev, "failed to get calibration data: %d\n", err);
++		return err;
++	}
++
++	/* get calibrated counter values for 25C/90C thresholds */
++	c1_25C = FIELD_GET(TEGRA30_FUSE_TSENSOR_CALIB_LOW, cal);
++	c2_90C = FIELD_GET(TEGRA30_FUSE_TSENSOR_CALIB_HIGH, cal);
++
++	/* and calibrated temperatures corresponding to the counter values */
++	for (i = 0; i < 7; i++) {
++		t1_25C |= tegra_tsensor_fuse_read_spare(14 + i) << i;
++		t1_25C |= tegra_tsensor_fuse_read_spare(21 + i) << i;
++
++		t2_90C |= tegra_tsensor_fuse_read_spare(0 + i) << i;
++		t2_90C |= tegra_tsensor_fuse_read_spare(7 + i) << i;
++	}
++
++	if (c2_90C - c1_25C <= t2_90C - t1_25C) {
++		dev_err(ts->dev, "invalid calibration data: %d %d %u %u\n",
++			c2_90C, c1_25C, t2_90C, t1_25C);
++		return -EINVAL;
++	}
++
++	/* all calibration coefficients are premultiplied by 1000000 */
++
++	ts->calib.a = DIV_ROUND_CLOSEST((t2_90C - t1_25C) * 1000000,
++					(c2_90C - c1_25C));
++
++	ts->calib.b = t1_25C * 1000000 - ts->calib.a * c1_25C;
++
++	if (tegra_sku_info.revision == TEGRA_REVISION_A01) {
++		ts->calib.m =     -2775;
++		ts->calib.n =   1338811;
++		ts->calib.p =  -7300000;
++	} else {
++		ts->calib.m =     -3512;
++		ts->calib.n =   1528943;
++		ts->calib.p = -11100000;
++	}
++
++	/* except the coefficient of a reduced quadratic equation */
++	ts->calib.r = DIV_ROUND_CLOSEST(ts->calib.n, ts->calib.m * 2);
++
++	dev_info_once(ts->dev,
++		      "calibration: %d %d %u %u ATE ver: %u SoC rev: %u\n",
++		      c2_90C, c1_25C, t2_90C, t1_25C, ate_ver,
++		      tegra_sku_info.revision);
++
++	return 0;
++}
++
++static int tegra_tsensor_register_channel(struct tegra_tsensor *ts,
++					  unsigned int id)
++{
++	struct tegra_tsensor_channel *tsc = &ts->ch[id];
++	unsigned int hw_id = ts->swap_channels ? !id : id;
++
++	tsc->ts = ts;
++	tsc->id = id;
++	tsc->regs = ts->regs + 0x40 * (hw_id + 1);
++
++	tsc->tzd = devm_thermal_zone_of_sensor_register(ts->dev, id, tsc, &ops);
++	if (IS_ERR(tsc->tzd)) {
++		if (PTR_ERR(tsc->tzd) != -ENODEV)
++			return dev_err_probe(ts->dev, PTR_ERR(tsc->tzd),
++					     "failed to register thermal zone\n");
++
 +		/*
-+		 * Fake (unused) bandwidth; workaround to "fix"
-+		 * priority inheritance.
++		 * It's okay if sensor isn't assigned to any thermal zone
++		 * in a device-tree.
 +		 */
-+		.sched_runtime	= 1000000,
-+		.sched_deadline = 10000000,
-+		.sched_period	= 10000000,
-+	};
-+	int ret;
-+
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
-+
-+	kworker_fie = kthread_create_worker(0, "cppc_fie");
-+	if (IS_ERR(kworker_fie))
-+		return;
-+
-+	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
-+	if (ret) {
-+		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
-+			ret);
-+		kthread_destroy_worker(kworker_fie);
-+		return;
++		tsc->tzd = NULL;
++		return 0;
 +	}
++
++	if (devm_thermal_add_hwmon_sysfs(tsc->tzd))
++		dev_warn(ts->dev, "failed to add hwmon sysfs attributes\n");
++
++	return 0;
 +}
 +
-+static void cppc_freq_invariance_exit(void)
++static int tegra_tsensor_probe(struct platform_device *pdev)
 +{
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
++	struct tegra_tsensor *ts;
++	unsigned int i;
++	int err, irq;
 +
-+	kthread_destroy_worker(kworker_fie);
-+	kworker_fie = NULL;
-+}
++	ts = devm_kzalloc(&pdev->dev, sizeof(*ts), GFP_KERNEL);
++	if (!ts)
++		return -ENOMEM;
 +
-+#else
-+static inline void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
-+{
-+}
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
 +
-+static inline void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
-+{
-+}
++	ts->dev = &pdev->dev;
++	platform_set_drvdata(pdev, ts);
 +
-+static inline void cppc_freq_invariance_init(void)
-+{
-+}
++	ts->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(ts->regs))
++		return PTR_ERR(ts->regs);
 +
-+static inline void cppc_freq_invariance_exit(void)
-+{
-+}
-+#endif /* CONFIG_ACPI_CPPC_CPUFREQ_FIE */
++	ts->clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(ts->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(ts->clk),
++				     "failed to get clock\n");
 +
- /* Callback function used to retrieve the max frequency from DMI */
- static void cppc_find_dmi_mhz(const struct dmi_header *dm, void *private)
- {
-@@ -335,8 +543,10 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
- 
- 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
--	if (!ret)
-+	if (!ret) {
-+		cppc_cpufreq_cpu_fie_init(policy);
- 		return 0;
++	ts->rst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
++	if (IS_ERR(ts->rst))
++		return dev_err_probe(&pdev->dev, PTR_ERR(ts->rst),
++				     "failed to get reset control\n");
++
++	err = tegra_tsensor_nvmem_setup(ts);
++	if (err)
++		return err;
++
++	err = tegra_tsensor_hw_enable(ts);
++	if (err)
++		return err;
++
++	err = devm_add_action_or_reset(&pdev->dev,
++				       devm_tegra_tsensor_hw_disable,
++				       ts);
++	if (err)
++		return err;
++
++	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
++		err = tegra_tsensor_register_channel(ts, i);
++		if (err)
++			return err;
 +	}
- 
- 	pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
- 		 caps->highest_perf, cpu, ret);
-@@ -353,6 +563,8 @@ static int cppc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- 	unsigned int cpu = policy->cpu;
- 	int ret;
- 
-+	cppc_cpufreq_cpu_fie_exit(policy);
 +
- 	cpu_data->perf_ctrls.desired_perf = caps->lowest_perf;
- 
- 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
-@@ -372,12 +584,12 @@ static inline u64 get_delta(u64 t1, u64 t0)
- 	return (u32)t1 - (u32)t0;
- }
- 
--static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu_data,
--				     struct cppc_perf_fb_ctrs *fb_ctrs_t0,
--				     struct cppc_perf_fb_ctrs *fb_ctrs_t1)
-+static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t1)
- {
- 	u64 delta_reference, delta_delivered;
--	u64 reference_perf, delivered_perf;
-+	u64 reference_perf;
- 
- 	reference_perf = fb_ctrs_t0->reference_perf;
- 
-@@ -386,14 +598,11 @@ static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu_data,
- 	delta_delivered = get_delta(fb_ctrs_t1->delivered,
- 				    fb_ctrs_t0->delivered);
- 
--	/* Check to avoid divide-by zero */
--	if (delta_reference || delta_delivered)
--		delivered_perf = (reference_perf * delta_delivered) /
--					delta_reference;
--	else
--		delivered_perf = cpu_data->perf_ctrls.desired_perf;
-+	/* Check to avoid divide-by zero and invalid delivered_perf */
-+	if (!delta_reference || !delta_delivered)
-+		return cpu_data->perf_ctrls.desired_perf;
- 
--	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
-+	return (reference_perf * delta_delivered) / delta_reference;
- }
- 
- static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
-@@ -401,6 +610,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
- 	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
- 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
- 	struct cppc_cpudata *cpu_data = policy->driver_data;
-+	u64 delivered_perf;
- 	int ret;
- 
- 	cpufreq_cpu_put(policy);
-@@ -415,7 +625,10 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
- 	if (ret)
- 		return ret;
- 
--	return cppc_get_rate_from_fbctrs(cpu_data, &fb_ctrs_t0, &fb_ctrs_t1);
-+	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-+					       &fb_ctrs_t1);
++	err = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++					tegra_tsensor_isr, IRQF_ONESHOT,
++					"tegra_tsensor", ts);
++	if (err)
++		return dev_err_probe(&pdev->dev, err,
++				     "failed to request interrupt\n");
 +
-+	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
- }
- 
- static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
-@@ -516,14 +729,21 @@ static void cppc_check_hisi_workaround(void)
- 
- static int __init cppc_cpufreq_init(void)
- {
-+	int ret;
++	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
++		err = tegra_tsensor_enable_hw_channel(ts, i);
++		if (err)
++			return err;
++	}
 +
- 	if ((acpi_disabled) || !acpi_cpc_valid())
- 		return -ENODEV;
- 
- 	INIT_LIST_HEAD(&cpu_data_list);
- 
- 	cppc_check_hisi_workaround();
-+	cppc_freq_invariance_init();
- 
--	return cpufreq_register_driver(&cppc_cpufreq_driver);
-+	ret = cpufreq_register_driver(&cppc_cpufreq_driver);
-+	if (ret)
-+		cppc_freq_invariance_exit();
++	return 0;
++}
 +
-+	return ret;
- }
- 
- static inline void free_cpu_data(void)
-@@ -541,6 +761,7 @@ static inline void free_cpu_data(void)
- static void __exit cppc_cpufreq_exit(void)
- {
- 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
-+	cppc_freq_invariance_exit();
- 
- 	free_cpu_data();
- }
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 11e555cfaecb..f180240dc95f 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -37,6 +37,7 @@ bool topology_scale_freq_invariant(void);
- enum scale_freq_source {
- 	SCALE_FREQ_SOURCE_CPUFREQ = 0,
- 	SCALE_FREQ_SOURCE_ARCH,
-+	SCALE_FREQ_SOURCE_CPPC,
- };
- 
- struct scale_freq_data {
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 4ca80df205ce..5226cc26a095 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6389,6 +6389,7 @@ int sched_setattr_nocheck(struct task_struct *p, const struct sched_attr *attr)
- {
- 	return __sched_setscheduler(p, attr, false, true);
- }
-+EXPORT_SYMBOL_GPL(sched_setattr_nocheck);
- 
- /**
-  * sched_setscheduler_nocheck - change the scheduling policy and/or RT priority of a thread from kernelspace.
--- 
-2.31.1.272.g89b43f80a514
-
++static int __maybe_unused tegra_tsensor_suspend(struct device *dev)
++{
++	struct tegra_tsensor *ts = dev_get_drvdata(dev);
++	unsigned int i;
++	int err;
++
++	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
++		err = tegra_tsensor_disable_hw_channel(ts, i);
++		if (err)
++			goto enable_channel;
++	}
++
++	err = tegra_tsensor_hw_disable(ts);
++	if (err)
++		goto enable_channel;
++
++	return 0;
++
++enable_channel:
++	while (i--)
++		tegra_tsensor_enable_hw_channel(ts, i);
++
++	return err;
++}
++
++static int __maybe_unused tegra_tsensor_resume(struct device *dev)
++{
++	struct tegra_tsensor *ts = dev_get_drvdata(dev);
++	unsigned int i;
++	int err;
++
++	err = tegra_tsensor_hw_enable(ts);
++	if (err)
++		return err;
++
++	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
++		err = tegra_tsensor_enable_hw_channel(ts, i);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops tegra_tsensor_pm_ops = {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(tegra_tsensor_suspend,
++				      tegra_tsensor_resume)
++};
++
++static const struct of_device_id tegra_tsensor_of_match[] = {
++	{ .compatible = "nvidia,tegra30-tsensor", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, tegra_tsensor_of_match);
++
++static struct platform_driver tegra_tsensor_driver = {
++	.probe = tegra_tsensor_probe,
++	.driver = {
++		.name = "tegra30-tsensor",
++		.of_match_table = tegra_tsensor_of_match,
++		.pm = &tegra_tsensor_pm_ops,
++	},
++};
++module_platform_driver(tegra_tsensor_driver);
++
++MODULE_DESCRIPTION("NVIDIA Tegra30 Thermal Sensor driver");
++MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
++MODULE_LICENSE("GPL");
