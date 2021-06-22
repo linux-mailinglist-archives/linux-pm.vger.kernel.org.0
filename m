@@ -2,41 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F313B07C0
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 16:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149143B07EB
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 16:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbhFVOqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 10:46:40 -0400
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:33606 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbhFVOqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 10:46:38 -0400
-Received: by mail-oi1-f170.google.com with SMTP id s17so1192275oij.0;
-        Tue, 22 Jun 2021 07:44:23 -0700 (PDT)
+        id S230481AbhFVOxb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 10:53:31 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:36742 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230304AbhFVOxa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 10:53:30 -0400
+Received: by mail-oi1-f180.google.com with SMTP id r16so11560412oiw.3;
+        Tue, 22 Jun 2021 07:51:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XceVVVWYSn/QRpaUtGZpz57/pqLlFwPeXc0ztXrJBhU=;
-        b=dhDlnSd0Ci4c7Gg2feaHKRYY4OrFMNUHwO9AcjkKIwgutbqqpVluAczjoKDbnV+4ng
-         tgob3vt1Fri8g3TWBqxFgUyeVm0fD8IRMBSRS5pHv+LI/FMns0/hAIEDmRUx/51Usk15
-         SQvr0rdz8qVJ5a5rGuljyxqvg7tWbyPRo5D4FJfabNBzD94SG2Uyu2z4VJgJubPAwWKg
-         vkRasWvePikbBiEwYdow8upwc7l9ofyxm9dxwOGvvW3MdGiYd/g3o4v2bFLz8bLxIUdk
-         Sb7DtR3iFXUgSBFmALYL3pvtqk5zwO3m+DI4/jviUIqd4N5wSTVJHcHUpVoRtiHniqhr
-         cZlw==
-X-Gm-Message-State: AOAM5309UmOcLLRsz2LBAxFfacz9OgUP2gvceethbPdONI3P9XE6+B73
-        TRTwTQ+YnJVSWvW0uHFDRPLjCfdvXL4wqZpz1sQ=
-X-Google-Smtp-Source: ABdhPJw2I6CQjD4ZFyC8bfVz3kKsv7VIhyn3IJTy0qCNaM3JmP8dtkm56H6QsjfuqT3vQL8M9WS6UIT9hj+Hc+QizT0=
-X-Received: by 2002:aca:f0d5:: with SMTP id o204mr3455379oih.71.1624373062707;
- Tue, 22 Jun 2021 07:44:22 -0700 (PDT)
+        bh=ikdR2qd7ODXc0NnjAgqScSpE7yVB/MEFBaRgKO3qLbI=;
+        b=a+pVMcemARtSaIQKs4/qa7dJepJ9zvs3ReA+K6vVjRif23o8jF0E05WBJC5Rccp6Ua
+         T3PDgbrS5gZnwpLalcRz8Y3IXPma9JGOqo9NG2aNNtuQLimGqxIpCIzhdrEhP7cAEU//
+         6hj+GU7ZmophEHftuO/QDmUvlp6+988Njknbly1ivxy82BSroXKhDgHDZV4a+NjEnv+s
+         G6fmKNCRK1Ew/OEuOvJUUp9LL/9sxhjKt1s81ksgrRTOtBVxcEt/g5uZdah7Yac5H/AM
+         Jo2Rh0Ws76lTPkQz1oVEFYK0FXjhmN1MR5XfBiJZD8rIz+8fFIvzmcuvwrVh7gRGp78H
+         V/VQ==
+X-Gm-Message-State: AOAM532owpkqGTqMFpzdTBkQ3iKBTdQ8HtaRYs4KBVdWSHJFwKL5fnFp
+        UWs/KQ0FCjrPlSscvpZ8HXJcRz8emCTTxZBBdh/NHlqv
+X-Google-Smtp-Source: ABdhPJyMhnA5198TjKEdO1lh7HWDPRDVu3Yv2on0cVxcjBU9SjPNouIaUK0k58sobKBDtFA3xoOA+1VWif6/D2TN+tQ=
+X-Received: by 2002:a05:6808:8d9:: with SMTP id k25mr3337171oij.69.1624373474692;
+ Tue, 22 Jun 2021 07:51:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210622075925.16189-1-lukasz.luba@arm.com> <20210622075925.16189-3-lukasz.luba@arm.com>
- <CAJZ5v0iGv_1d3BT0HowLgecOfhNHNQdOwH6Kef5WE4-zeBbp2Q@mail.gmail.com> <2f7d855c-5232-ddbe-8403-db3596dcebc5@arm.com>
-In-Reply-To: <2f7d855c-5232-ddbe-8403-db3596dcebc5@arm.com>
+References: <20210622075925.16189-1-lukasz.luba@arm.com> <20210622075925.16189-4-lukasz.luba@arm.com>
+ <CAJZ5v0iVwpn0_wCZOh43DOeR2mudWYJyseMdtMsZGR-sjQ1X9Q@mail.gmail.com>
+ <4e5476a6-fa9f-a9ef-ff26-8fa1b4bb90c0@arm.com> <CAJZ5v0i0KQwTWzbEPbs=0B-j7MkE6C1XP=mZaU1hhQm9HyZGJg@mail.gmail.com>
+ <851205af-39d6-3864-bd28-ae84528946c4@arm.com>
+In-Reply-To: <851205af-39d6-3864-bd28-ae84528946c4@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Jun 2021 16:44:11 +0200
-Message-ID: <CAJZ5v0jExEJRM=aJhEpKoVjvppDz_x+pYG2-HSQUuehccwnVTQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] cpuidle: Add Active Stats calls tracking idle entry/exit
+Date:   Tue, 22 Jun 2021 16:51:03 +0200
+Message-ID: <CAJZ5v0jiu=HpyGt7JpbFsS3dA1MWp9pi7K+wgP5gh+Xn3Jx9kA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] cpufreq: Add Active Stats calls tracking
+ frequency changes
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -54,53 +57,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 3:59 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Tue, Jun 22, 2021 at 4:09 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
 >
 >
-> On 6/22/21 1:33 PM, Rafael J. Wysocki wrote:
-> > On Tue, Jun 22, 2021 at 9:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> On 6/22/21 2:51 PM, Rafael J. Wysocki wrote:
+> > On Tue, Jun 22, 2021 at 3:42 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 > >>
-> >> The Active Stats framework tracks and accounts the activity of the CPU
-> >> for each performance level. It accounts the real residency,
+> >>
+> >>
+> >> On 6/22/21 1:28 PM, Rafael J. Wysocki wrote:
+> >>> On Tue, Jun 22, 2021 at 9:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>>>
+> >>>> The Active Stats framework tracks and accounts the activity of the CPU
+> >>>> for each performance level. It accounts the real residency, when the CPU
+> >>>> was not idle, at a given performance level. This patch adds needed calls
+> >>>> which provide the CPU frequency transition events to the Active Stats
+> >>>> framework.
+> >>>>
+> >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >>>> ---
+> >>>>    drivers/cpufreq/cpufreq.c | 5 +++++
+> >>>>    1 file changed, 5 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >>>> index 802abc925b2a..d79cb9310572 100644
+> >>>> --- a/drivers/cpufreq/cpufreq.c
+> >>>> +++ b/drivers/cpufreq/cpufreq.c
+> >>>> @@ -14,6 +14,7 @@
+> >>>>
+> >>>>    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >>>>
+> >>>> +#include <linux/active_stats.h>
+> >>>>    #include <linux/cpu.h>
+> >>>>    #include <linux/cpufreq.h>
+> >>>>    #include <linux/cpu_cooling.h>
+> >>>> @@ -387,6 +388,8 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
+> >>>>
+> >>>>                   cpufreq_stats_record_transition(policy, freqs->new);
+> >>>>                   policy->cur = freqs->new;
+> >>>> +
+> >>>> +               active_stats_cpu_freq_change(policy->cpu, freqs->new);
+> >>>>           }
+> >>>>    }
+> >>>>
+> >>>> @@ -2085,6 +2088,8 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >>>>                               policy->cpuinfo.max_freq);
+> >>>>           cpufreq_stats_record_transition(policy, freq);
+> >>>>
+> >>>> +       active_stats_cpu_freq_fast_change(policy->cpu, freq);
+> >>>> +
+> >>>
+> >>> This is quite a bit of overhead and so why is it needed in addition to
+> >>> the code below?
+> >>
+> >> The code below is tracing, which is good for post-processing. We use in
+> >> our tool LISA, when we analyze the EAS decision, based on captured
+> >> trace data.
+> >>
+> >> This new code is present at run time, so subsystems like our thermal
+> >> governor IPA can use it and get better estimation about CPU used power
+> >> for any arbitrary period, e.g. 50ms, 100ms, 300ms, ...
 > >
-> > No, it doesn't.  It just measures the time between the entry and exit
-> > and that's not the real residency (because it doesn't take the exit
-> > latency into account, for example).
+> > So can it be made not run when the IPA is not using it?
 >
-> It's 'just' a 'model' and as other models has limitations, but it's
-> better than existing one, which IPA has to use:
-> cpu_util + currect_freq_at_sampling_time
-
-But the idle duration is already measured by cpuidle as
-last_residency_ns.  Why does it need to be measured once more in
-addition to that?
-
-> >
-> >> when the CPU was not idle, at a given performance level. This patch adds needed calls
-> >> which provide the CPU idle entry/exit events to the Active Stats
-> >> framework.
-> >
-> > And it adds overhead to overhead-sensitive code.
-> >
-> > AFAICS, some users of that code will not really get the benefit, so
-> > adding the overhead to it is questionable.
-> >
-> > First, why is the existing instrumentation in the idle loop insufficient?
+> I can make a Kconfig for IPA to select this ACTIVE_STATS.
+> Also, I can add description that this framework is mostly needed
+> for IPA, so don't enable it if you don't use IPA (default is 'n'
+> so it shouldn't harm others).
 >
-> The instrumentation (tracing) cannot be used at run time AFAIK. I need
-> this idle + freq information combined in a running platform, not for
-> post-processing (like we have in LISA). The thermal governor IPA would
-> use them for used power estimation.
+> This Active Stats shouldn't be stopped when thermal zone is switching
+> between governors at run time, e.g. IPA -> step_wise -> IPA
+> because when IPA is set next time, it might not have correct CPU
+> stats (what is the current frequency and for how long it has been
+> actively used).
 
-What about snapshotting last_residency_ns in the CPU wakeup path?
+But after a while it will collect enough useful data I suppose?
 
-> >
-> > Second, why do you need to add locking to this code?
+> Beside, switching governors at run time is not a good idea
+> (apart from stress testing them ;) ).
 >
-> The idle entry/exit updates the CPU's accounting data structure.
-> There is a reader of those data structures: thermal governor,
-> run from different CPU, which is the reason why I put locking for them.
+> >
+> >>>
+> >>> And pretty much the same goes for the idle loop change.  There is
+> >>> quite a bit of instrumentation in that code already and it avoids
+> >>> adding new locking for a reason.  Why is it a good idea to add more
+> >>> locking to that code?
+> >>
+> >> This active_stats_cpu_freq_fast_change() doesn't use the locking, it
+> >> relies on schedutil lock in [1].
+> >
+> > Ah, OK.
+> >
+> > But it still adds overhead AFAICS.
+>
+> Agree, it's an extra code. For platforms which use IPA it's a
+> justifiable cost, weighted by better estimation thanks to this calls.
+> For other platforms, this framework will be set to default 'n' option.
 
-So please consider doing it in a lockless manner and avoid running
-this code when it is not needed in the first place.
+A general problem with build-time configuration is for distros that
+want to ship one kernel binary to run on multiple hardware platforms.
+They need to enable those options anyway and then get the full cost on
+the platforms that don't need it, but want to use the common binary
+kernel.
+
+Again, please consider making this new code run only when it is needed
+even if configured in and if it runs, make it as low-overhead as
+possible.
