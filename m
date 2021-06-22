@@ -2,70 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 935893AF835
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 00:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5053AFA17
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 02:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhFUWFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Jun 2021 18:05:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhFUWFF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Jun 2021 18:05:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 102D0611C1;
-        Mon, 21 Jun 2021 22:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624312970;
-        bh=N2Cxf3KNPe7fSYhVuWyCxsiFVba986fqvfTgr5xifMQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=auS5jJqwJrsoh+Ns1v2qjjbteorRwKTJVYE6cW50fq3Z8c/dwvn6c0Z5DIUd9489+
-         qotwpICsuTyeSb30NHuJ/+TM0Y9biXIdUBcwxgl2OYHDu7UXzuot8Y6mRA4CUo93Vf
-         MF0lbGj3itAyAg0zESkGyW/rSMjYyHdBb+RNVhOi74hGRTen/QBa1Df33PxcMPsfsV
-         vSH5dNZnTBGoHEMJRa9Xkh2/PeNtxjN57Mb8Vo+kLIYEvo0NEwX0HtBwBscwzlYmKq
-         5TDQjb9EkAs8EvFAuOkLxzfvyYafzqVQrw8bWdqBAz52RSP1vmZf9mxakMTIA2Dawm
-         cgoGrlIoYdyCQ==
-Date:   Mon, 21 Jun 2021 17:02:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Michael <phyre@rogers.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [bugzilla-daemon@bugzilla.kernel.org: [Bug 213481] e1000e hardware
- failure due to PCI patch in all kernels 5.10.36+ with Intel I219-V]
-Message-ID: <20210621220249.GA3306177@bjorn-Precision-5520>
+        id S229949AbhFVAKH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Jun 2021 20:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229640AbhFVAKH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Jun 2021 20:10:07 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E78C061574
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 17:07:52 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id n12so6765322pgs.13
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 17:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cEZ2B0/VxjehmXDHG4+9ccmammhIbJj7C/0nukp4rN0=;
+        b=TEZqtPQoDr5M/38Kdx4v+LTnR6iZmtN2PaeBsW34PV5K8OuwMaDRjodD+QhbC3g6wA
+         c3rPjJK9VRM2TTgKzBz2/5MRrmVdO28n/pyBGMOtYpmDPWjF/LkXF0MIfPU+Guo/9+vc
+         vs72ElzBPj6G2vfbZIddOiMpTQJofVM4dgFUM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cEZ2B0/VxjehmXDHG4+9ccmammhIbJj7C/0nukp4rN0=;
+        b=qckeMA0e1n3aqfI8LXNldQ/eEJ22caDsU9YtLmNd4M6E/wVB1X7oJxDY3U4b+t+LUt
+         xG1OQz9bTm0Sie9W4iWsFGqONdPYhuRlvsufynthfLa3EvAG4lyeMotzqrIJ0HSphu8Y
+         MHbuwfyoW+WqUl0TfYO5Wrux/t98SYZClSZdjbqS9U+pSoiXU2V3298V8+D+VmUdQ+XZ
+         b2gimqfPu9ghIZUkm6skIh4pzleOZN7wceNolgBhaKNSxQ8UhMNFbMmRus7dzyfzi/cD
+         yz3IZsr+92JWv8Pe0l17Vty55iY0iJEFFVNZklqet5YlKWRK1URN05MG8Q9XIkUNe1Vm
+         Y0EQ==
+X-Gm-Message-State: AOAM5314rDJt9TUGI63hC7H66bC2ZbNBvM9wouboF/mW6INRiMgoYifa
+        ZOj3pobSgDvuWSwC1Esuzo/kbQ==
+X-Google-Smtp-Source: ABdhPJyIEERW8Z9bugjAaYkJE2XC+IsIIQNSIjl9wYtNA/TBpGkKu1694BD7NR/9teqcWiB6ZH8GXw==
+X-Received: by 2002:a63:2d46:: with SMTP id t67mr985871pgt.307.1624320471927;
+        Mon, 21 Jun 2021 17:07:51 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:9f0f:4fd2:adeb:6f55])
+        by smtp.gmail.com with UTF8SMTPSA id cu4sm290845pjb.40.2021.06.21.17.07.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jun 2021 17:07:51 -0700 (PDT)
+Date:   Mon, 21 Jun 2021 17:07:50 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mike Tipton <mdtipton@codeaurora.org>
+Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        okukatla@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: Consolidate probe functions
+Message-ID: <YNEp1kTcsqRs39tj@google.com>
+References: <20210621214241.13521-1-mdtipton@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20210621214241.13521-1-mdtipton@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-FYI.  Looks like 4514d991d992 ("PCI: PM: Do not read power state in
-pci_enable_device_flags()") appeared in v5.13-rc1, so it would be nice
-to fix before v5.13.
+On Mon, Jun 21, 2021 at 02:42:41PM -0700, Mike Tipton wrote:
+> The current probe/remove functions are implemented separately for each
+> target, but they are almost identical. Replace them with common
+> functions that can be used across all rpmh targets.
+> 
+> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=213481
+Good catch, the code is indeed very redundant.
 
-Initial report:
-
-  On the 4.19 kernel, this works perfect.  It also works perfectly in
-  Windows.  If I reboot into 4.19, there is no problem with networking,
-  however in 5.10, there is ZERO network connectivity.  The link NEVER
-  comes up.  You can't assign an IP address to the interface.
-
-
-From comment #2:
-
-  If I revert commit 4514d991d99211f225d83b7e640285f29f0755d0 (
-  https://github.com/torvalds/linux/commit/4514d991d99211f225d83b7e640285f29f0755d0)
-  from the 5.10.36 kernel, I do NOT have this hardware failure
-  message.  This commit relates to PCI power state.
-
-  It would appear something about this change that the e1000e driver
-  is not handling properly on this system, causing the card to not
-  work.
-
-  As mentioned this is in current kernel versions (5.13, 5.11, and
-  5.10.36+).  Given that this is a regression, a breaking change for
-  the usability of these cards, and we know exactly what causes it for
-  a hopefully easy fix, I've upped the severity.
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
