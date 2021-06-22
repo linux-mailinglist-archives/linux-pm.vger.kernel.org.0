@@ -2,170 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6687D3AFCFE
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 08:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A5B3AFD29
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 08:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbhFVGXL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 02:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S229695AbhFVGqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 02:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhFVGXL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 02:23:11 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6C6C061574
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l11so7140163pji.5
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
+        with ESMTP id S229574AbhFVGqe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 02:46:34 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE8C061756
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:44:18 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id h11so4760216wrx.5
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kSF9aTgYhrI1FCuFAOepwOfOP7U6F/CAMgLAI89bsVc=;
-        b=L1kbkDcOHG4cyIe5ixNxwOwyBuJlKE086ZC+yInArWVMn/f66ZhNdVffAah8xi/oFD
-         7wyQUGyc/Znjarf/mjkZoXsZO9bDoz5quPg8oswf2gyFJKVMjTERmPXzFwJ+eR8o4+SH
-         MRVSxyrXCl+ooWxdJgd31Bjbgby41C1+PgVnYLl/MYbr2q1dRhw+rJoSxGmMS0YqLgt7
-         semDm9hTtE1mMI28CD0+78taxQb9eS1VXDCicJGMYerztnyFm34txMk2gsuWzsaUP+Q+
-         d3pW1PgMfAowG9nQKJfhXP2xMNX8fuSBm6VHdZMrc8HT+MPms9CSUrOExCKYjR+um3At
-         airQ==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=WC/cFZ8lgWvP8WFGSx5vr0gm1U7x+BAcF+01oXaqU5A=;
+        b=SZ7zA6DuJHKybKieDSe8U6rI05iGm+s6z/lg0DxkNwimExI9AiSP/YJsK18upauQTF
+         b5DfO0yRbNJEmzPkPIcO8Op8asx8GgCfCgVWZWinrcFC60CNgD+6kNYPuJjbi9X/mOSQ
+         QJc8KFGoYZ+Av2Mm/kRi9IXQI1ivfVYsFvIwL+Tt762TXz+ZW8eOun31ROqPx0+PURII
+         ocgjwXSzvgb1yVsuoyG9rejkYZT+5HxG5Ht3zSxm4Wju/ZWqWtmyrhi5pTQTmrcPREgE
+         /yeyJ8G3mgPHK/gMcLs3MDilM7h+ZPofgL1Fd42KnJTtiavAq1T2NBPEVtIs5Myf3aGj
+         7TNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kSF9aTgYhrI1FCuFAOepwOfOP7U6F/CAMgLAI89bsVc=;
-        b=fwXbcTcOhrEZJZzwioUXokfb9vkbDtOK8RESSUMRSIw63rM9vOQ3rhBy/QxCbuPK9R
-         MWQpa6wz/O0buRZy33f3UpvNmAJL+NfZRvmzw4zzAnhXd5Q608rdpabr+/oxBYeGX+nQ
-         K6hszbaTBKgwo6Ncsckg8RaL4fC8dy49xGRQqwioJ53cck2UDwqd9uO50n4KUNqCGfKu
-         /iLOSTo/vTpFCzQgg5kNjsm2BCgVU9vS2Ep/F+Ugt7GnxNEKDazy3HaQEn6vdLpsR67d
-         eC2hGQO+6r37zQtAFAEwai34wrlvhoKRq0Pnr7mg79DRufrmnBnFkcbl//04xqdhJ5F6
-         KdcA==
-X-Gm-Message-State: AOAM530O9fjaWbQB9mSx8n1cI3bWapxe1R1oAT7sQGu9v89CTcb3OQeK
-        qoRdWBbbnkBWtYXiLVndyZlhaw==
-X-Google-Smtp-Source: ABdhPJxyoFN6nWGRwCn89Qx1yaTeCqnUTwlwSDExyVkJdPdnEXzNXyXKgWRrmTC4c4DBwWexuyOa1Q==
-X-Received: by 2002:a17:90a:740a:: with SMTP id a10mr2320010pjg.162.1624342855419;
-        Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id v67sm17120931pfb.193.2021.06.21.23.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 23:20:54 -0700 (PDT)
-Date:   Tue, 22 Jun 2021 11:50:52 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: Make cpufreq_online() call driver->offline() on
- errors
-Message-ID: <20210622062052.jo2by44djlyjpn5w@vireshk-i7>
-References: <11788436.O9o76ZdvQC@kreacher>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=WC/cFZ8lgWvP8WFGSx5vr0gm1U7x+BAcF+01oXaqU5A=;
+        b=Hest3njkCBXjh8lteaETAhlKUzj3NGR+LevEWqrB1xw73O2Jm0vSZYk8ezO0OhbtAX
+         HtW5XMktkmm6p70OFAaAJ5CFM43O8EHKz+s9TGHhLtL5rFQoNo5UeAot54vPTtPzsbxh
+         HNgIaUwyOhet4vmEOkSHwURAqHup6dOEy4Je8xR97Em07IXofMeLzG1Vb2uVZPe2l5Jq
+         2WdxHCdNYrH1rbmAsuHWMQ1IAWBXScWeOTy1KPTC6ATzGiekKGMJl+MEbJ8W+W/q+IAJ
+         fS7TemsHkj18Gs7o1UuyajxKPGEkH2F24XX59fdsqSqxYD9qkWOT2txFb7YX3sz4+2YO
+         QX4g==
+X-Gm-Message-State: AOAM530br3a1/4c5rNSSmf5j/VSo0YaOUw/COxdwC+Z+FEW6f2AXg/ws
+        +EcjeN2hn/qtBQ71fvPm4RU3eQ==
+X-Google-Smtp-Source: ABdhPJwmb/xVQxu2qBli69vl4Ebcew3/+SWBzyeUQbBx+Yr9UZKQJdrKYqhPZ9lH11gmnSmE3zW26Q==
+X-Received: by 2002:adf:f48c:: with SMTP id l12mr2759600wro.194.1624344257205;
+        Mon, 21 Jun 2021 23:44:17 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211? ([2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211])
+        by smtp.googlemail.com with ESMTPSA id v5sm1262932wml.26.2021.06.21.23.44.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jun 2021 23:44:16 -0700 (PDT)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] cpuidle for v5.14-rc1
+Message-ID: <da5ee4be-e62c-53d0-167a-55f6bc5bab4b@linaro.org>
+Date:   Tue, 22 Jun 2021 08:44:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11788436.O9o76ZdvQC@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-06-21, 19:26, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> In the CPU removal path the ->offline() callback provided by the
-> driver is always invoked before ->exit(),
 
-Note that exit() doesn't get called if offline() is present in the CPU
-removal path. We call exit() _only_ when the cpufreq driver gets
-unregistered.
+Hi Rafael,
 
-> but in the cpufreq_online()
-> error path it is not, so ->exit() is somehow expected to know the
-> context in which it has been called and act accordingly.
+The following changes since commit 614124bea77e452aa6df7a8714e8bc820b489922:
 
-I agree, it isn't very clear.
+  Linux 5.13-rc5 (2021-06-06 15:47:27 -0700)
 
-> That is less than straightforward, so make cpufreq_online() invoke
-> the driver's ->offline() callback before ->exit() too.
-> 
-> This only potentially affects intel_pstate at this point.
-> 
-> Fixes: 91a12e91dc39 ("cpufreq: Allow light-weight tear down and bring up of CPUs")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/cpufreq.c |    3 +++
->  1 file changed, 3 insertions(+)
-> 
-> Index: linux-pm/drivers/cpufreq/cpufreq.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/cpufreq.c
-> +++ linux-pm/drivers/cpufreq/cpufreq.c
-> @@ -1516,6 +1516,9 @@ out_destroy_policy:
->  	up_write(&policy->rwsem);
->  
->  out_exit_policy:
-> +	if (cpufreq_driver->offline)
-> +		cpufreq_driver->offline(policy);
-> +
->  	if (cpufreq_driver->exit)
->  		cpufreq_driver->exit(policy);
+are available in the Git repository at:
 
-If we want to go down this path, then we better do more and make it
-very explicit that ->offline() follows a previous invocation of
-->online().
+  https://git.linaro.org/people/daniel.lezcano/linux.git
+tags/cpuidle-v5.14-rc1
 
-Otherwise, with above we will end up calling ->offline() for two separate
-states, ->online() failed (i.e. two calls to offline() one after the other
-here) and other generic failures after ->init() passed.
+for you to fetch changes up to 0f0ac1e4eef2753d4f9cd0117019da9501921fef:
 
-So, better make it clear that online/offline are paired like
-init/exit.
+  cpuidle: qcom: Add SPM register data for MSM8226 (2021-06-16 20:03:26
++0200)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 1d1b563cea4b..0ce48dcb2e8a 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1347,14 +1347,11 @@ static int cpufreq_online(unsigned int cpu)
-        }
- 
-        if (!new_policy && cpufreq_driver->online) {
--               ret = cpufreq_driver->online(policy);
--               if (ret) {
--                       pr_debug("%s: %d: initialization failed\n", __func__,
--                                __LINE__);
--                       goto out_exit_policy;
--               }
--
--               /* Recover policy->cpus using related_cpus */
-+               /*
-+                * We did light-weight tear down earlier, don't need to do heavy
-+                * initialization here. Just recover policy->cpus using
-+                * related_cpus.
-+                */
-                cpumask_copy(policy->cpus, policy->related_cpus);
-        } else {
-                cpumask_copy(policy->cpus, cpumask_of(cpu));
-@@ -1378,6 +1375,13 @@ static int cpufreq_online(unsigned int cpu)
-                cpumask_copy(policy->related_cpus, policy->cpus);
-        }
- 
-+       ret = cpufreq_driver->online(policy);
-+       if (ret) {
-+               pr_debug("%s: %d: %d: ->online() failed\n", __func__, __LINE__,
-+                        ret);
-+               goto out_exit_policy;
-+       }
-+
-        down_write(&policy->rwsem);
-        /*
-         * affected cpus must always be the one, which are online. We aren't
-@@ -1518,6 +1522,9 @@ static int cpufreq_online(unsigned int cpu)
- 
-        up_write(&policy->rwsem);
- 
-+       if (cpufreq_driver->offline)
-+               cpufreq_driver->offline(policy);
-+
- out_exit_policy:
-        if (cpufreq_driver->exit)
-                cpufreq_driver->exit(policy);
+----------------------------------------------------------------
+- Add support for the Qcom MSM8226 (Bartosz Dudziak)
+
+----------------------------------------------------------------
+Bartosz Dudziak (2):
+      dt-bindings: arm: msm: Add SAW2 for MSM8226
+      cpuidle: qcom: Add SPM register data for MSM8226
+
+ Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt |  1 +
+ drivers/cpuidle/cpuidle-qcom-spm.c                      | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
