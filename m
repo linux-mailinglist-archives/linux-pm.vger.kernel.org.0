@@ -2,160 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811C43AFCC8
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 07:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6687D3AFCFE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 08:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhFVF6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 01:58:08 -0400
-Received: from mga17.intel.com ([192.55.52.151]:23655 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229853AbhFVF6I (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Jun 2021 01:58:08 -0400
-IronPort-SDR: v7rV6zSIWzCzd4AmBn30Fe7BXN4oG41yEkcvqk6fzCEw1wk52FcPKk0xQsYQtsCVJ7d4T9VDIa
- w5oNY5KIa6UQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="187371208"
-X-IronPort-AV: E=Sophos;i="5.83,291,1616482800"; 
-   d="scan'208";a="187371208"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2021 22:55:52 -0700
-IronPort-SDR: 7hFnf1qoslTTGHd8ClT4nUyagIkCjmzPI5u2tTfD4Cq5MEf8HteoSwEAWSt2v20VpPlhTIbJWg
- iHeAfmOiwUPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,291,1616482800"; 
-   d="scan'208";a="623352700"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Jun 2021 22:55:51 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lvZO2-0004yM-Cc; Tue, 22 Jun 2021 05:55:50 +0000
-Date:   Tue, 22 Jun 2021 13:55:42 +0800
-From:   kernel test robot <lkp@intel.com>
+        id S229490AbhFVGXL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 02:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbhFVGXL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 02:23:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6C6C061574
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l11so7140163pji.5
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kSF9aTgYhrI1FCuFAOepwOfOP7U6F/CAMgLAI89bsVc=;
+        b=L1kbkDcOHG4cyIe5ixNxwOwyBuJlKE086ZC+yInArWVMn/f66ZhNdVffAah8xi/oFD
+         7wyQUGyc/Znjarf/mjkZoXsZO9bDoz5quPg8oswf2gyFJKVMjTERmPXzFwJ+eR8o4+SH
+         MRVSxyrXCl+ooWxdJgd31Bjbgby41C1+PgVnYLl/MYbr2q1dRhw+rJoSxGmMS0YqLgt7
+         semDm9hTtE1mMI28CD0+78taxQb9eS1VXDCicJGMYerztnyFm34txMk2gsuWzsaUP+Q+
+         d3pW1PgMfAowG9nQKJfhXP2xMNX8fuSBm6VHdZMrc8HT+MPms9CSUrOExCKYjR+um3At
+         airQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kSF9aTgYhrI1FCuFAOepwOfOP7U6F/CAMgLAI89bsVc=;
+        b=fwXbcTcOhrEZJZzwioUXokfb9vkbDtOK8RESSUMRSIw63rM9vOQ3rhBy/QxCbuPK9R
+         MWQpa6wz/O0buRZy33f3UpvNmAJL+NfZRvmzw4zzAnhXd5Q608rdpabr+/oxBYeGX+nQ
+         K6hszbaTBKgwo6Ncsckg8RaL4fC8dy49xGRQqwioJ53cck2UDwqd9uO50n4KUNqCGfKu
+         /iLOSTo/vTpFCzQgg5kNjsm2BCgVU9vS2Ep/F+Ugt7GnxNEKDazy3HaQEn6vdLpsR67d
+         eC2hGQO+6r37zQtAFAEwai34wrlvhoKRq0Pnr7mg79DRufrmnBnFkcbl//04xqdhJ5F6
+         KdcA==
+X-Gm-Message-State: AOAM530O9fjaWbQB9mSx8n1cI3bWapxe1R1oAT7sQGu9v89CTcb3OQeK
+        qoRdWBbbnkBWtYXiLVndyZlhaw==
+X-Google-Smtp-Source: ABdhPJxyoFN6nWGRwCn89Qx1yaTeCqnUTwlwSDExyVkJdPdnEXzNXyXKgWRrmTC4c4DBwWexuyOa1Q==
+X-Received: by 2002:a17:90a:740a:: with SMTP id a10mr2320010pjg.162.1624342855419;
+        Mon, 21 Jun 2021 23:20:55 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id v67sm17120931pfb.193.2021.06.21.23.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 23:20:54 -0700 (PDT)
+Date:   Tue, 22 Jun 2021 11:50:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- be017033bc1a3c2373e1266c4934de79097da694
-Message-ID: <60d17b5e.8mi8BhZCJqJyUlzM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: Make cpufreq_online() call driver->offline() on
+ errors
+Message-ID: <20210622062052.jo2by44djlyjpn5w@vireshk-i7>
+References: <11788436.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <11788436.O9o76ZdvQC@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: be017033bc1a3c2373e1266c4934de79097da694  Merge branches 'acpi-ec' and 'acpi-scan' into bleeding-edge
+On 21-06-21, 19:26, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> In the CPU removal path the ->offline() callback provided by the
+> driver is always invoked before ->exit(),
 
-elapsed time: 721m
+Note that exit() doesn't get called if offline() is present in the CPU
+removal path. We call exit() _only_ when the cpufreq driver gets
+unregistered.
 
-configs tested: 97
-configs skipped: 2
+> but in the cpufreq_online()
+> error path it is not, so ->exit() is somehow expected to know the
+> context in which it has been called and act accordingly.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I agree, it isn't very clear.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         shannon_defconfig
-mips                      pic32mzda_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                         lpc32xx_defconfig
-nios2                         10m50_defconfig
-arm                             mxs_defconfig
-powerpc                     sequoia_defconfig
-mips                          ath79_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                ecovec24-romimage_defconfig
-ia64                        generic_defconfig
-powerpc                      ppc44x_defconfig
-arm                            qcom_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                        jmr3927_defconfig
-mips                       bmips_be_defconfig
-arm                          badge4_defconfig
-mips                            e55_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210621
-x86_64               randconfig-a001-20210621
-x86_64               randconfig-a005-20210621
-x86_64               randconfig-a003-20210621
-x86_64               randconfig-a004-20210621
-x86_64               randconfig-a006-20210621
-i386                 randconfig-a002-20210621
-i386                 randconfig-a001-20210621
-i386                 randconfig-a003-20210621
-i386                 randconfig-a006-20210621
-i386                 randconfig-a005-20210621
-i386                 randconfig-a004-20210621
-i386                 randconfig-a011-20210621
-i386                 randconfig-a014-20210621
-i386                 randconfig-a013-20210621
-i386                 randconfig-a015-20210621
-i386                 randconfig-a012-20210621
-i386                 randconfig-a016-20210621
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+> That is less than straightforward, so make cpufreq_online() invoke
+> the driver's ->offline() callback before ->exit() too.
+> 
+> This only potentially affects intel_pstate at this point.
+> 
+> Fixes: 91a12e91dc39 ("cpufreq: Allow light-weight tear down and bring up of CPUs")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/cpufreq.c |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> Index: linux-pm/drivers/cpufreq/cpufreq.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/cpufreq.c
+> +++ linux-pm/drivers/cpufreq/cpufreq.c
+> @@ -1516,6 +1516,9 @@ out_destroy_policy:
+>  	up_write(&policy->rwsem);
+>  
+>  out_exit_policy:
+> +	if (cpufreq_driver->offline)
+> +		cpufreq_driver->offline(policy);
+> +
+>  	if (cpufreq_driver->exit)
+>  		cpufreq_driver->exit(policy);
 
-clang tested configs:
-x86_64               randconfig-b001-20210621
-x86_64               randconfig-a012-20210621
-x86_64               randconfig-a016-20210621
-x86_64               randconfig-a015-20210621
-x86_64               randconfig-a014-20210621
-x86_64               randconfig-a013-20210621
-x86_64               randconfig-a011-20210621
+If we want to go down this path, then we better do more and make it
+very explicit that ->offline() follows a previous invocation of
+->online().
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Otherwise, with above we will end up calling ->offline() for two separate
+states, ->online() failed (i.e. two calls to offline() one after the other
+here) and other generic failures after ->init() passed.
+
+So, better make it clear that online/offline are paired like
+init/exit.
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 1d1b563cea4b..0ce48dcb2e8a 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1347,14 +1347,11 @@ static int cpufreq_online(unsigned int cpu)
+        }
+ 
+        if (!new_policy && cpufreq_driver->online) {
+-               ret = cpufreq_driver->online(policy);
+-               if (ret) {
+-                       pr_debug("%s: %d: initialization failed\n", __func__,
+-                                __LINE__);
+-                       goto out_exit_policy;
+-               }
+-
+-               /* Recover policy->cpus using related_cpus */
++               /*
++                * We did light-weight tear down earlier, don't need to do heavy
++                * initialization here. Just recover policy->cpus using
++                * related_cpus.
++                */
+                cpumask_copy(policy->cpus, policy->related_cpus);
+        } else {
+                cpumask_copy(policy->cpus, cpumask_of(cpu));
+@@ -1378,6 +1375,13 @@ static int cpufreq_online(unsigned int cpu)
+                cpumask_copy(policy->related_cpus, policy->cpus);
+        }
+ 
++       ret = cpufreq_driver->online(policy);
++       if (ret) {
++               pr_debug("%s: %d: %d: ->online() failed\n", __func__, __LINE__,
++                        ret);
++               goto out_exit_policy;
++       }
++
+        down_write(&policy->rwsem);
+        /*
+         * affected cpus must always be the one, which are online. We aren't
+@@ -1518,6 +1522,9 @@ static int cpufreq_online(unsigned int cpu)
+ 
+        up_write(&policy->rwsem);
+ 
++       if (cpufreq_driver->offline)
++               cpufreq_driver->offline(policy);
++
+ out_exit_policy:
+        if (cpufreq_driver->exit)
+                cpufreq_driver->exit(policy);
+
+
+-- 
+viresh
