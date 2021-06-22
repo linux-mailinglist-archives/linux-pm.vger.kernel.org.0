@@ -2,164 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2913B0CFE
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 20:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18AF3B0D56
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 21:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbhFVSi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 14:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S232418AbhFVTCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 15:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbhFVSi7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 14:38:59 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D813C06175F
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:36:43 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 13-20020a17090a08cdb029016eed209ca4so2793996pjn.1
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:36:43 -0700 (PDT)
+        with ESMTP id S232021AbhFVTCg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 15:02:36 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95214C061574
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 12:00:20 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id c5so295733pfv.8
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 12:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1QBBjNwfaVF7Ipv8w2OJCC7fG5ClgOQKcBvL6eDfXh0=;
-        b=VB80WzIPcsnlE/p80VwR7GhK75UuVyxl6Z10E8bIr5+Zj8FAuyYJVBbzQHj18JA6j5
-         wjbzKFHzUdOIqFj6de6wrsN088tkxcObzTm4nVblt6ZevDERjteoXFtA8pT73/YT/YPI
-         XDds1Fe5JkOqys6xm/k3RjN0koZ6TfYY6aaRA=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=N202F85Y/6pfD8x/zSUupobNKoSN2BMgsxhl4ELGlsk=;
+        b=fJGkg2vNtZx2q5srhjaCzd2fKoofyLVF0p25fP1dgypsfrd2FLzfelqfbD6N7WLWQf
+         549DWBGopPV0lyuaT3w9uHL3gJ9zVBwU2PhSVWWdiam7JDwbsbuf36dkrQi35F0ucPpS
+         2jC/xuVfPeUhnl/TRakqkq0I1kVHavuGGJ4atZPMyQwRgB7xjIcODYha4TCVXkyGGeBw
+         wKmLeUhGyPjEr5SOS7Z6fAkNCccDjE0bIu7uwgQxCaZoxEKwsNaJqUa0bjZdrngKfLYM
+         jbTngt4sn8N7RXx72HqXe7fyQhc2UgdYSo2UObSHPhKuiZbLV6owkhB+90Kt8OVKZbG3
+         ls2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1QBBjNwfaVF7Ipv8w2OJCC7fG5ClgOQKcBvL6eDfXh0=;
-        b=PoNr88VNh5Figc21qKeW/bYT/VM+TJ27xWXH6alXMxGm4TWXN1ctm1HlDU4leYlfFm
-         zfkACPxmIpy/LGtIVm0XhFcpfZFXeLR3qvH1GqouVlNh1OECJqX7tspxGk2QyKKey2ez
-         naRyA0FejsBzjCeoi4fMnCh8JW2APa/yq2a8BrabIhqQC0c+0E2RPIlmcHpXFHU1aMAn
-         8U8cTW0cMK+yiSzP9G/s1AP6xmy7CVF+Hq2RIjl4IwGMpkW2RnrSdHonz8ceMlxqI2nH
-         NO0i5sL6VlSsbNp5bAV5ihEiTNxp5yZ7+pjRxWIqGdAm2Xer9pHs55D8flSu6s3SYzMb
-         Sg7Q==
-X-Gm-Message-State: AOAM531VEjcQIP37ya/65VEbTDKwDbucZ4e+2dKxcK6QloHkZ0WSRQOS
-        2nPopPxqEvgUw0Wf9HbE4F+dpw==
-X-Google-Smtp-Source: ABdhPJwkAc7+XdjK4uZl3VgfQY0ZstQsryDfYmOBg3QcvzwALmDWfeOR89rDVldL8j8Z5YoqDtx5sw==
-X-Received: by 2002:a17:903:2c2:b029:101:9c88:d928 with SMTP id s2-20020a17090302c2b02901019c88d928mr23989245plk.62.1624387002615;
-        Tue, 22 Jun 2021 11:36:42 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:dc21:8b6f:f8cd:9070])
-        by smtp.gmail.com with UTF8SMTPSA id l201sm53483pfd.183.2021.06.22.11.36.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 11:36:42 -0700 (PDT)
-Date:   Tue, 22 Jun 2021 11:36:40 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
-        sibis@codeaurora.org, saravanak@google.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        chanwoo@kernel.org, cwchoi00@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Saravana Kannan <skannan@codeaurora.org>
-Subject: Re: [PATCH 3/4] PM / devfreq: Add cpu based scaling support to
- passive governor
-Message-ID: <YNItuDsinxDCVDGa@google.com>
-References: <20210617060546.26933-1-cw00.choi@samsung.com>
- <CGME20210617054647epcas1p431edaffea5bf7f3792b55dc3d91289ae@epcas1p4.samsung.com>
- <20210617060546.26933-4-cw00.choi@samsung.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=N202F85Y/6pfD8x/zSUupobNKoSN2BMgsxhl4ELGlsk=;
+        b=iRp4XXcN9331UZM89TOKgUV1nsw4PpGt2faVySzvg3v+g+CocmC5okIMBw4Q/0VC8I
+         zRC/KJF0pMhP1YfQzulfMiPb9cewc1+6P2R2Z5ts87kwkqpbjFWNE4WU57k3ZBbsk7kl
+         QqPoFn/u1A0fO6xDyFiQwIMoOgiZ82+Og2PslOQgGV7nS2BmmV6K97BRmdWe9P+/zsFf
+         QoxGE+Z6racd2meJD+EhKMKJXcOqHPKGni48wu358G/O5or8HYSls3DusoEuvzy0Z1uy
+         HK0AtlPDJ2eAl6eh25Q3BTNpJQ1E4Ru4qowmJjatE5CIoCIq+5vmJFQ87zsflGI3Xi2P
+         cxpg==
+X-Gm-Message-State: AOAM533qsmAZUA5kbGASEegMpJR9x1p578r5ctdZtRVwG/UNxgENJu6V
+        afkEPdWsOi7NR7wh5rOW8k4wrA==
+X-Google-Smtp-Source: ABdhPJwJBc9dAklPjOMtd/Lbb1YBa36da5gmMn3AjFuqfdWtIIURbkn/kmj/UY9wezMJDQ/shucI0Q==
+X-Received: by 2002:a65:48c5:: with SMTP id o5mr107323pgs.397.1624388417462;
+        Tue, 22 Jun 2021 12:00:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h22sm97631pfc.21.2021.06.22.12.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jun 2021 12:00:17 -0700 (PDT)
+Message-ID: <60d23341.1c69fb81.bd70e.0654@mx.google.com>
+Date:   Tue, 22 Jun 2021 12:00:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210617060546.26933-4-cw00.choi@samsung.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.13-rc7-150-ga51c80057a88
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing sleep: 3 runs, 1 regressions (v5.13-rc7-150-ga51c80057a88)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 03:05:45PM +0900, Chanwoo Choi wrote:
-> From: Saravana Kannan <skannan@codeaurora.org>
-> 
-> Many CPU architectures have caches that can scale independent of the
-> CPUs. Frequency scaling of the caches is necessary to make sure that the
-> cache is not a performance bottleneck that leads to poor performance and
-> power. The same idea applies for RAM/DDR.
-> 
-> To achieve this, this patch adds support for cpu based scaling to the
-> passive governor. This is accomplished by taking the current frequency
-> of each CPU frequency domain and then adjust the frequency of the cache
-> (or any devfreq device) based on the frequency of the CPUs. It listens
-> to CPU frequency transition notifiers to keep itself up to date on the
-> current CPU frequency.
-> 
-> To decide the frequency of the device, the governor does one of the
-> following:
-> * Derives the optimal devfreq device opp from required-opps property of
->   the parent cpu opp_table.
-> 
-> * Scales the device frequency in proportion to the CPU frequency. So, if
->   the CPUs are running at their max frequency, the device runs at its
->   max frequency. If the CPUs are running at their min frequency, the
->   device runs at its min frequency. It is interpolated for frequencies
->   in between.
-> 
-> Signed-off-by: Saravana Kannan <skannan@codeaurora.org>
-> [Sibi: Integrated cpu-freqmap governor into passive_governor]
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> [Chanwoo: Fix conflict with latest code and clean code up]
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-> ---
->  drivers/devfreq/governor.h         |  22 +++
->  drivers/devfreq/governor_passive.c | 264 ++++++++++++++++++++++++++++-
->  include/linux/devfreq.h            |  16 +-
->  3 files changed, 293 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index 9a9495f94ac6..3c36c92c89a9 100644
-> --- a/drivers/devfreq/governor.h
-> +++ b/drivers/devfreq/governor.h
-> @@ -47,6 +47,28 @@
->  #define DEVFREQ_GOV_ATTR_POLLING_INTERVAL		BIT(0)
->  #define DEVFREQ_GOV_ATTR_TIMER				BIT(1)
->  
-> +/**
-> + * struct devfreq_cpu_data - Hold the per-cpu data
-> + * @dev:	reference to cpu device.
-> + * @first_cpu:	the cpumask of the first cpu of a policy.
-> + * @opp_table:	reference to cpu opp table.
-> + * @cur_freq:	the current frequency of the cpu.
-> + * @min_freq:	the min frequency of the cpu.
-> + * @max_freq:	the max frequency of the cpu.
-> + *
-> + * This structure stores the required cpu_data of a cpu.
-> + * This is auto-populated by the governor.
-> + */
-> +struct devfreq_cpu_data {
-> +	struct device *dev;
-> +	unsigned int first_cpu;
-> +
-> +	struct opp_table *opp_table;
-> +	unsigned int cur_freq;
-> +	unsigned int min_freq;
-> +	unsigned int max_freq;
-> +};
-> +
->  /**
->   * struct devfreq_governor - Devfreq policy governor
->   * @node:		list node - contains registered devfreq governors
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index fc09324a03e0..07e864509b7e 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -8,11 +8,84 @@
->   */
->  
->  #include <linux/module.h>
-> +#include <linux/cpu.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/slab.h>
->  #include <linux/device.h>
->  #include <linux/devfreq.h>
->  #include "governor.h"
->  
-> -static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
-> +#define HZ_PER_KHZ	1000
-> +
-> +static unsigned long get_taget_freq_by_required_opp(struct device *p_dev,
-> +						struct opp_table *p_opp_table,
-> +						struct opp_table *opp_table,
-> +						unsigned long freq)
-> +{
+pm/testing sleep: 3 runs, 1 regressions (v5.13-rc7-150-ga51c80057a88)
 
-s/get_taget_freq_by_required_opp/get_target_freq_by_required_opp/
+Regressions Summary
+-------------------
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.13-rc=
+7-150-ga51c80057a88/plan/sleep/
+
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.13-rc7-150-ga51c80057a88
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      a51c80057a887e0f24bd8303b0791a130ff04121 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60d22003e490b29a6e41327b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.13-rc7-150-ga51c=
+80057a88/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.13-rc7-150-ga51c=
+80057a88/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
+0520.0/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/60d22003e490b29a6e41327c
+        failing since 306 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
+il: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =20
