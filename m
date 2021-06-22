@@ -2,141 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630493B0516
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 14:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153793B0559
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 14:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbhFVMsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 08:48:16 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:55724 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbhFVMsP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 08:48:15 -0400
-Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 06AA7BFCB9;
-        Tue, 22 Jun 2021 20:45:55 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by smtp.263.net (postfix) whith ESMTP id P12363T139710780229376S1624365950601738_;
-        Tue, 22 Jun 2021 20:45:55 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <8acd532e65a9685d924ec78448b9ffd6>
-X-RL-SENDER: pingshuo@uniontech.com
-X-SENDER: pingshuo@uniontech.com
-X-LOGIN-NAME: pingshuo@uniontech.com
-X-FST-TO: rjw@rjwysocki.net
-X-RCPT-COUNT: 7
-X-SENDER-IP: 58.240.82.166
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   pingshuo <pingshuo@uniontech.com>
-To:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, pingshuo <pingshuo@uniontech.com>
-Subject: [PATCH] hibernation:stop resume screen during hibernation
-Date:   Tue, 22 Jun 2021 20:45:47 +0800
-Message-Id: <20210622124547.28317-1-pingshuo@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S231653AbhFVNAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 09:00:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55506 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231236AbhFVNAU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Jun 2021 09:00:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69C9F6135D;
+        Tue, 22 Jun 2021 12:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624366684;
+        bh=MsIXue48g+U6sIDtLdK3UXNuqIBbcFzvvUz0rBjHvdo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hx90C9IPTtx7kgLWBWoSFbt7+kMMuLb/zAQr7ZmFTRobqkFoDXc46UIF6Jq84+fOh
+         4zyLTs50YFs76pdDT6h8JNdeEjxyv43X4TMUCDUdAFPT7/rOmu/1rCXvqePZ9SSMcq
+         03x2UO/EV6yIRA9m3QK8zqs5DyQe09SW3HCNU8ENtbDLAQkH/S/1i0SQoMFn1lfKSh
+         WDQHd8vPlP1WUZH0uYAxqUuG58bqcWyB1eoUUGk6OYM5G55JTfAjGux9mpTPKm8JGn
+         BF8YeToGeGlDVYn09BgcjSjU7IDfeLqIyADaifhjXxBxshj5Tz1l0VVPSIOBlpJe2U
+         WejcNj3yZlnmQ==
+Date:   Tue, 22 Jun 2021 07:58:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Michael <phyre@rogers.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [bugzilla-daemon@bugzilla.kernel.org: [Bug 213481] e1000e
+ hardware failure due to PCI patch in all kernels 5.10.36+ with Intel I219-V]
+Message-ID: <20210622125802.GA3323179@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gkETL83rm71LiJ8sed=UFn00_Sss8wJ20-+KQiJR0hew@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The display will be woken up during hibernation.
-if the computer equipment is poor, it will cause the screen to flicker.
-Skip to reusme the display devices in "thaw".
+On Tue, Jun 22, 2021 at 02:21:06PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Jun 22, 2021 at 12:02 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > FYI.  Looks like 4514d991d992 ("PCI: PM: Do not read power state in
+> > pci_enable_device_flags()") appeared in v5.13-rc1, so it would be nice
+> > to fix before v5.13.
+> 
+> I think let's revert it for now and revisit.
 
-Signed-off-by: pingshuo <pingshuo@uniontech.com>
----
- drivers/base/power/main.c | 43 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Sounds good.
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index f893c3c5af07..f3e92ac7b4b3 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -35,11 +35,14 @@
- #include <linux/cpuidle.h>
- #include <linux/devfreq.h>
- #include <linux/timer.h>
-+#include <linux/pci.h>
- 
- #include "../base.h"
- #include "power.h"
- 
- typedef int (*pm_callback_t)(struct device *);
-+#define VIDEO_PCI_CLASS 0x030000
-+#define VIDEO_PCI_CLASS_VALID 0xff0000
- 
- #define list_for_each_entry_rcu_locked(pos, head, member) \
- 	list_for_each_entry_rcu(pos, head, member, \
-@@ -693,6 +696,40 @@ static void async_resume_noirq(void *data, async_cookie_t cookie)
- 	put_device(dev);
- }
- 
-+/**
-+ * dpm_resume_skip_display_devices - Skip to reusme the display devices.
-+ * @dev: Device to handle.
-+ * @state: PM transition of the system being carried out.
-+ *
-+ * Delete the display devices from the wake-up list during the "thaw".
-+ */
-+static int dpm_resume_skip_display_devices(struct device *dev, pm_message_t state)
-+{
-+	struct pci_dev *pci_test = to_pci_dev(dev);
-+
-+	if (state.event == PM_EVENT_THAW) {
-+		/*
-+		 * Filter out the display devices
-+		 */
-+		if ((pci_test && ((pci_test->class & VIDEO_PCI_CLASS_VALID) == VIDEO_PCI_CLASS)) ||
-+			(dev->driver && dev->driver->name &&
-+			strncmp(dev->driver->name, "video", 6) == 0)) {
-+
-+			pr_info("Skip the display devices during the thaw.");
-+			/*
-+			 * Remove the display devices from the resume stage
-+			 */
-+			list_del(&dev->power.entry);
-+			/*
-+			 * Remove the display devices from the power down stage
-+			 */
-+			list_del(&dev->kobj.entry);
-+			return 1;
-+		}
-+	}
-+	return 0;
-+}
-+
- static void dpm_noirq_resume_devices(pm_message_t state)
- {
- 	struct device *dev;
-@@ -713,6 +750,10 @@ static void dpm_noirq_resume_devices(pm_message_t state)
- 	while (!list_empty(&dpm_noirq_list)) {
- 		dev = to_device(dpm_noirq_list.next);
- 		get_device(dev);
-+
-+		if (dpm_resume_skip_display_devices(dev, state))
-+			continue;
-+
- 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
- 		mutex_unlock(&dpm_list_mtx);
- 
-@@ -737,6 +778,8 @@ static void dpm_noirq_resume_devices(pm_message_t state)
- 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, false);
- }
- 
-+
-+
- /**
-  * dpm_resume_noirq - Execute "noirq resume" callbacks for all devices.
-  * @state: PM transition of the system being carried out.
--- 
-2.20.1
+> Do you want me to push the revert?
 
+Sure, it'd be great if you could.  I'm traveling and don't have as
+much time as usual this week.  Thanks!
 
-
+> > https://bugzilla.kernel.org/show_bug.cgi?id=213481
+> >
+> > Initial report:
+> >
+> >   On the 4.19 kernel, this works perfect.  It also works perfectly in
+> >   Windows.  If I reboot into 4.19, there is no problem with networking,
+> >   however in 5.10, there is ZERO network connectivity.  The link NEVER
+> >   comes up.  You can't assign an IP address to the interface.
+> >
+> >
+> > From comment #2:
+> >
+> >   If I revert commit 4514d991d99211f225d83b7e640285f29f0755d0 (
+> >   https://github.com/torvalds/linux/commit/4514d991d99211f225d83b7e640285f29f0755d0)
+> >   from the 5.10.36 kernel, I do NOT have this hardware failure
+> >   message.  This commit relates to PCI power state.
+> >
+> >   It would appear something about this change that the e1000e driver
+> >   is not handling properly on this system, causing the card to not
+> >   work.
+> >
+> >   As mentioned this is in current kernel versions (5.13, 5.11, and
+> >   5.10.36+).  Given that this is a regression, a breaking change for
+> >   the usability of these cards, and we know exactly what causes it for
+> >   a hopefully easy fix, I've upped the severity.
