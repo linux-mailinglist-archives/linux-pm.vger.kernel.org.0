@@ -2,143 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA2C3B068B
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 16:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A323B0708
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 16:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhFVOLx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 10:11:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:49960 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhFVOLx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Jun 2021 10:11:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76CC631B;
-        Tue, 22 Jun 2021 07:09:37 -0700 (PDT)
-Received: from [10.57.7.129] (unknown [10.57.7.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 603503F694;
-        Tue, 22 Jun 2021 07:09:35 -0700 (PDT)
-Subject: Re: [RFC PATCH 3/4] cpufreq: Add Active Stats calls tracking
- frequency changes
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Chris Redpath <Chris.Redpath@arm.com>, Beata.Michalska@arm.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Kachhap <amit.kachhap@gmail.com>
-References: <20210622075925.16189-1-lukasz.luba@arm.com>
- <20210622075925.16189-4-lukasz.luba@arm.com>
- <CAJZ5v0iVwpn0_wCZOh43DOeR2mudWYJyseMdtMsZGR-sjQ1X9Q@mail.gmail.com>
- <4e5476a6-fa9f-a9ef-ff26-8fa1b4bb90c0@arm.com>
- <CAJZ5v0i0KQwTWzbEPbs=0B-j7MkE6C1XP=mZaU1hhQm9HyZGJg@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <851205af-39d6-3864-bd28-ae84528946c4@arm.com>
-Date:   Tue, 22 Jun 2021 15:09:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231478AbhFVONr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 10:13:47 -0400
+Received: from relay03.th.seeweb.it ([5.144.164.164]:44365 "EHLO
+        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230047AbhFVONq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 10:13:46 -0400
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1E9991F9C8;
+        Tue, 22 Jun 2021 16:11:26 +0200 (CEST)
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+To:     bjorn.andersson@linaro.org
+Cc:     agross@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
+        jami.kettunen@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, stephan@gerhold.net,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v7 0/5] Implement SPM/SAW for MSM8998 and SDM6xx
+Date:   Tue, 22 Jun 2021 16:11:12 +0200
+Message-Id: <20210622141117.358893-1-angelogioacchino.delregno@somainline.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0i0KQwTWzbEPbs=0B-j7MkE6C1XP=mZaU1hhQm9HyZGJg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Changes in v7:
+- Fixed functionality breakage on ARM for cpuidle-qcom-spm... now it works :))
+- Reworded description of patch 1/5
 
+Changes in v6:
+- Moved cpuidle_driver to be private to cpuidle-qcom-spm (unused in spm.c),
+  now we are assigning the cpuidle_driver structure fields inside of the
+  spm_cpuidle_register function; this also fixes the cpumask assignment
+  issue from v5
+- Fixed another contamination from 2/3 in 1/3 (argh!! :])
+- Added dt-bindings documentation for the SPM driver
 
-On 6/22/21 2:51 PM, Rafael J. Wysocki wrote:
-> On Tue, Jun 22, 2021 at 3:42 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 6/22/21 1:28 PM, Rafael J. Wysocki wrote:
->>> On Tue, Jun 22, 2021 at 9:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> The Active Stats framework tracks and accounts the activity of the CPU
->>>> for each performance level. It accounts the real residency, when the CPU
->>>> was not idle, at a given performance level. This patch adds needed calls
->>>> which provide the CPU frequency transition events to the Active Stats
->>>> framework.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>> ---
->>>>    drivers/cpufreq/cpufreq.c | 5 +++++
->>>>    1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>> index 802abc925b2a..d79cb9310572 100644
->>>> --- a/drivers/cpufreq/cpufreq.c
->>>> +++ b/drivers/cpufreq/cpufreq.c
->>>> @@ -14,6 +14,7 @@
->>>>
->>>>    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>>>
->>>> +#include <linux/active_stats.h>
->>>>    #include <linux/cpu.h>
->>>>    #include <linux/cpufreq.h>
->>>>    #include <linux/cpu_cooling.h>
->>>> @@ -387,6 +388,8 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
->>>>
->>>>                   cpufreq_stats_record_transition(policy, freqs->new);
->>>>                   policy->cur = freqs->new;
->>>> +
->>>> +               active_stats_cpu_freq_change(policy->cpu, freqs->new);
->>>>           }
->>>>    }
->>>>
->>>> @@ -2085,6 +2088,8 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
->>>>                               policy->cpuinfo.max_freq);
->>>>           cpufreq_stats_record_transition(policy, freq);
->>>>
->>>> +       active_stats_cpu_freq_fast_change(policy->cpu, freq);
->>>> +
->>>
->>> This is quite a bit of overhead and so why is it needed in addition to
->>> the code below?
->>
->> The code below is tracing, which is good for post-processing. We use in
->> our tool LISA, when we analyze the EAS decision, based on captured
->> trace data.
->>
->> This new code is present at run time, so subsystems like our thermal
->> governor IPA can use it and get better estimation about CPU used power
->> for any arbitrary period, e.g. 50ms, 100ms, 300ms, ...
-> 
-> So can it be made not run when the IPA is not using it?
+Changes in v5:
+- Fixed contamination from patch 2/3 in patch 1/3
+- Fixed missing bits in cpuidle-qcom-spm (thanks Stephan)
 
-I can make a Kconfig for IPA to select this ACTIVE_STATS.
-Also, I can add description that this framework is mostly needed
-for IPA, so don't enable it if you don't use IPA (default is 'n'
-so it shouldn't harm others).
+Changes in v4:
+- Huge patch series has been split for better reviewability,
+  as suggested by Bjorn
 
-This Active Stats shouldn't be stopped when thermal zone is switching
-between governors at run time, e.g. IPA -> step_wise -> IPA
-because when IPA is set next time, it might not have correct CPU
-stats (what is the current frequency and for how long it has been
-actively used).
-Beside, switching governors at run time is not a good idea
-(apart from stress testing them ;) ).
+Changes in v3:
+- Rebased (no changes - was in previous series' v3)
 
-> 
->>>
->>> And pretty much the same goes for the idle loop change.  There is
->>> quite a bit of instrumentation in that code already and it avoids
->>> adding new locking for a reason.  Why is it a good idea to add more
->>> locking to that code?
->>
->> This active_stats_cpu_freq_fast_change() doesn't use the locking, it
->> relies on schedutil lock in [1].
-> 
-> Ah, OK.
-> 
-> But it still adds overhead AFAICS.
+Changes in v2:
+- Fixed MSM8998 SAW parameters on SPM driver
 
-Agree, it's an extra code. For platforms which use IPA it's a
-justifiable cost, weighted by better estimation thanks to this calls.
-For other platforms, this framework will be set to default 'n' option.
+Tested on the following smartphones:
+- Sony Xperia XA2        (SDM630)
+- Sony Xperia XA2 Ultra  (SDM630)
+- Sony Xperia 10         (SDM630)
+- Sony Xperia XZ Premium (MSM8998)
+- F(x)Tec Pro 1          (MSM8998)
+
+This is a component that we can find on very old
+chips, like MSM8974; there, it has been used to actually do the
+power scaling basically "on its own" - sending the cores in a specific
+sleep mode to save power.
+On the newer ones, including MSM8998, SDM630, 660 and others, it is still
+present! Though, this time, it's being used for the cluster caches and it
+has a different firmware (and maybe it's also slightly different HW),
+implementing the SAWv4.1 set and getting controlled *not by the OS* but
+by other controllers in the SoC (like the OSM).
+
+Contrary from MSM8974 and the like, this new version of the SPM just
+requires us to set the initial parameters for AVS and *nothing else*, as
+its states will be totally managed internally.
+
+AngeloGioacchino Del Regno (5):
+  cpuidle: qcom_spm: Detach state machine from main SPM handling
+  dt-bindings: soc: qcom: Add devicetree binding for QCOM SPM
+  soc: qcom: spm: Implement support for SAWv4.1, SDM630/660 L2 AVS
+  soc: qcom: spm: Add compatible for MSM8998 SAWv4.1 L2
+  dt-bindings: soc: qcom: spm: Document SDM660 and MSM8998 compatibles
+
+ .../bindings/soc/qcom/qcom,spm.yaml           |  76 +++++
+ drivers/cpuidle/Kconfig.arm                   |   1 +
+ drivers/cpuidle/cpuidle-qcom-spm.c            | 304 ++++--------------
+ drivers/soc/qcom/Kconfig                      |   9 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/spm.c                        | 240 ++++++++++++++
+ include/soc/qcom/spm.h                        |  43 +++
+ 7 files changed, 438 insertions(+), 236 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
+ create mode 100644 drivers/soc/qcom/spm.c
+ create mode 100644 include/soc/qcom/spm.h
+
+-- 
+2.32.0
 
