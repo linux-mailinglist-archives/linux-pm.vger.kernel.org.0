@@ -2,85 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DE03B042E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 14:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED9F3B045D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 14:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbhFVMXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 08:23:36 -0400
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:39649 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbhFVMXg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 08:23:36 -0400
-Received: by mail-oi1-f176.google.com with SMTP id m137so23527335oig.6;
-        Tue, 22 Jun 2021 05:21:19 -0700 (PDT)
+        id S231181AbhFVMat (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 08:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231598AbhFVM3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 08:29:10 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F49C061574
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 05:26:55 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e20so16983791pgg.0
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 05:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=rn23lz9+ZsFBagDuO6GXp2Y6h6QY+oC/QFMT8WiVZ9w=;
+        b=goLfY1Yx56kumnREB0xvGwtIFtB2RW0ogyxwEs9GuRz9c0f0S/xxdIakEMjxz2lKOh
+         4Md55FU4yt0tO3Md3AUbU9iGbZ8abuxNIN8MbPTKA3oupSdQdmjhJBxXN8b1VDZjjPmH
+         Um+0TZFZ9AuCe6Z5cE6AHl6nrimLMbj+RdXdwfK8tRDzNdkKNSBPWrrXMv+u7E/RtHTs
+         gBwLk8Pl0K/vMxW8k48qNUDeOmkmZiFqftn/RWgF0YcaPFa4fdlHrs+f6EUbzCXJkOtq
+         vb1aD/Oj4bDQhxrMRhQQCm0aOn6HpJxR/LMgkl0FJX3H2vHvaZrucDL5NRJlldIT2e5D
+         MlNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IZYDZKvqn5RUIF5RdEqesk2HyugkV5KHruVqM1pBjnQ=;
-        b=ih/L7mckemXNVVirFTUoIDoy+PaU5yxoBpEynOikjb0IYBORjDnZSPWTFxNkafKeOc
-         w0suU34gZKVwUhZWSbddAsQNGyaEkwQ1TMSrB7RSR2gtS0Wfisyh1DL4jEkbF96fc76j
-         VygQEzcUfCsZVs/VKZiVwDWpGAlYLAii/ViMLrNh5heHaaqz6rJOn0TZDD+UAy89qc6k
-         55e6t6h4olJ5uU7dfNjr7fS7y8Osnd0kIOB1qkN3iTWTUKHBS//LOpPLXZq69hd+SBpa
-         UkIN8CuLUS48L2teZ/8Gga3+wq63dyTvRpQUpRiIKYRwGWVfCnXvzMfefa97OtHz6CZl
-         +YZw==
-X-Gm-Message-State: AOAM532DtlJDT+zZ1CDF+mnZyGBB0uKqb0pqUmXDeu/FjLMPpUjgR9NF
-        LJuOiWCFjlY8G44x4LUpwd1ZLeybP7z1o3qhBZw=
-X-Google-Smtp-Source: ABdhPJyLsZOI1aSRXzpQfGzAVUpFHDUXhxWlEc/a8ulGsQ0/wesWKrBLi8PmY5ghpoON+k/VTYOBPvumZEsSFtmYSPc=
-X-Received: by 2002:aca:49c7:: with SMTP id w190mr2847505oia.157.1624364479311;
- Tue, 22 Jun 2021 05:21:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=rn23lz9+ZsFBagDuO6GXp2Y6h6QY+oC/QFMT8WiVZ9w=;
+        b=mZ1dCCKZWNypuFH3f+yG4RXst8xV8kLqGuoNjmrCaRG3u4bZV7fUy6nqKZb1gPwluw
+         +g4oggDmmMUxhPsbDkiwt6LAhZUXgZymMkxOu8K2Rhim6tYbEopAo4Rz7rfG6JJBP+aF
+         EC9v+Dpubo5GNWYKnKoNR55HZrec/sLuzbEJUGUrmNWnGGxpp7qpZ0lW02xRQOh+A1wP
+         F/aWYb/V/qQrZHaF8eI1b1qfb2Fm+i4ZqVYTtQqVcNMpEnfjF7XJ89NMvyznaQpcMeGd
+         zU8MrB1f6m0FdHBR2xf8EkaKrcbsoAbXtwDgFzOt/45Ugz1xKdA6jPYM0UTja/HCAvLz
+         JSAg==
+X-Gm-Message-State: AOAM530cVZs5AZFFKq3ofn+PgX1yaRBcbhRnlBHbKLqQ2+0r6OCaMgBr
+        OCOQ0wn4oXkpFWNBNzwi7G+NqA==
+X-Google-Smtp-Source: ABdhPJzSDQ8Guim3I3F8WXbXSIcesoPwv/cvlh0sbS1aWXSmaFBCWtp5c8J8zF1jJwhiVkiK55R/Yg==
+X-Received: by 2002:a63:aa07:: with SMTP id e7mr3537869pgf.170.1624364814621;
+        Tue, 22 Jun 2021 05:26:54 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r134sm14869976pfc.68.2021.06.22.05.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jun 2021 05:26:54 -0700 (PDT)
+Message-ID: <60d1d70e.1c69fb81.856a7.6371@mx.google.com>
+Date:   Tue, 22 Jun 2021 05:26:54 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210621220249.GA3306177@bjorn-Precision-5520>
-In-Reply-To: <20210621220249.GA3306177@bjorn-Precision-5520>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Jun 2021 14:21:06 +0200
-Message-ID: <CAJZ5v0gkETL83rm71LiJ8sed=UFn00_Sss8wJ20-+KQiJR0hew@mail.gmail.com>
-Subject: Re: [bugzilla-daemon@bugzilla.kernel.org: [Bug 213481] e1000e
- hardware failure due to PCI patch in all kernels 5.10.36+ with Intel I219-V]
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Michael <phyre@rogers.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.13-rc7-145-g1b02478a82ab
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.13-rc7-145-g1b02478a82ab)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 12:02 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> FYI.  Looks like 4514d991d992 ("PCI: PM: Do not read power state in
-> pci_enable_device_flags()") appeared in v5.13-rc1, so it would be nice
-> to fix before v5.13.
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc7-145-g1b02478a82ab)
 
-I think let's revert it for now and revisit.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+13-rc7-145-g1b02478a82ab/
 
-Do you want me to push the revert?
+Tree: pm
+Branch: testing
+Git Describe: v5.13-rc7-145-g1b02478a82ab
+Git Commit: 1b02478a82abb3950fbd9d64cf8c7d404ffe08d6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=213481
->
-> Initial report:
->
->   On the 4.19 kernel, this works perfect.  It also works perfectly in
->   Windows.  If I reboot into 4.19, there is no problem with networking,
->   however in 5.10, there is ZERO network connectivity.  The link NEVER
->   comes up.  You can't assign an IP address to the interface.
->
->
-> From comment #2:
->
->   If I revert commit 4514d991d99211f225d83b7e640285f29f0755d0 (
->   https://github.com/torvalds/linux/commit/4514d991d99211f225d83b7e640285f29f0755d0)
->   from the 5.10.36 kernel, I do NOT have this hardware failure
->   message.  This commit relates to PCI power state.
->
->   It would appear something about this change that the e1000e driver
->   is not handling properly on this system, causing the card to not
->   work.
->
->   As mentioned this is in current kernel versions (5.13, 5.11, and
->   5.10.36+).  Given that this is a regression, a breaking change for
->   the usability of these cards, and we know exactly what causes it for
->   a hopefully easy fix, I've upped the severity.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
