@@ -2,102 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A5B3AFD29
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 08:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04433AFD6C
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 08:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbhFVGqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 02:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
+        id S229789AbhFVGzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 02:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhFVGqe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 02:46:34 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE8C061756
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:44:18 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id h11so4760216wrx.5
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:44:18 -0700 (PDT)
+        with ESMTP id S229629AbhFVGzS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 02:55:18 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16647C06175F
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:53:03 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y4so8666985pfi.9
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jun 2021 23:53:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=WC/cFZ8lgWvP8WFGSx5vr0gm1U7x+BAcF+01oXaqU5A=;
-        b=SZ7zA6DuJHKybKieDSe8U6rI05iGm+s6z/lg0DxkNwimExI9AiSP/YJsK18upauQTF
-         b5DfO0yRbNJEmzPkPIcO8Op8asx8GgCfCgVWZWinrcFC60CNgD+6kNYPuJjbi9X/mOSQ
-         QJc8KFGoYZ+Av2Mm/kRi9IXQI1ivfVYsFvIwL+Tt762TXz+ZW8eOun31ROqPx0+PURII
-         ocgjwXSzvgb1yVsuoyG9rejkYZT+5HxG5Ht3zSxm4Wju/ZWqWtmyrhi5pTQTmrcPREgE
-         /yeyJ8G3mgPHK/gMcLs3MDilM7h+ZPofgL1Fd42KnJTtiavAq1T2NBPEVtIs5Myf3aGj
-         7TNA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=A+0Tg8/ehjkNNlYZ11nZ7l0NXx3B5Abt3YljTUc7YIU=;
+        b=uWmEAgaeRHW4CpBeXjy8FKqCGke5BEp9kO0ZEsSZ8nwqjUF983zd0m1yPQnjszkTSW
+         kh7LcDUJr70ThCHIXmfm6ftXOk3sMiPBK0SUwXtuRxzevg/1cWO+4dC5A7uHF3UtsgFs
+         VLf0x+msmNGcD7Ffqfn5k+x7I3eiz9/kwwWYnV+eRdI9fQosHGWONKtqE3k2kt56RfFX
+         UQnC/woA/zwGy6Oss6cm8cvkhx9RkMqisj6/2KtK1NQIxwVInznALAeDgbVpuQTTi4sf
+         +IXV+er/DCTxt0gsRO+3VfAPD5iYW6y+9ZWQ0St8goS7np2SmkRoVg3IfpeHs1Aiicul
+         GfLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=WC/cFZ8lgWvP8WFGSx5vr0gm1U7x+BAcF+01oXaqU5A=;
-        b=Hest3njkCBXjh8lteaETAhlKUzj3NGR+LevEWqrB1xw73O2Jm0vSZYk8ezO0OhbtAX
-         HtW5XMktkmm6p70OFAaAJ5CFM43O8EHKz+s9TGHhLtL5rFQoNo5UeAot54vPTtPzsbxh
-         HNgIaUwyOhet4vmEOkSHwURAqHup6dOEy4Je8xR97Em07IXofMeLzG1Vb2uVZPe2l5Jq
-         2WdxHCdNYrH1rbmAsuHWMQ1IAWBXScWeOTy1KPTC6ATzGiekKGMJl+MEbJ8W+W/q+IAJ
-         fS7TemsHkj18Gs7o1UuyajxKPGEkH2F24XX59fdsqSqxYD9qkWOT2txFb7YX3sz4+2YO
-         QX4g==
-X-Gm-Message-State: AOAM530br3a1/4c5rNSSmf5j/VSo0YaOUw/COxdwC+Z+FEW6f2AXg/ws
-        +EcjeN2hn/qtBQ71fvPm4RU3eQ==
-X-Google-Smtp-Source: ABdhPJwmb/xVQxu2qBli69vl4Ebcew3/+SWBzyeUQbBx+Yr9UZKQJdrKYqhPZ9lH11gmnSmE3zW26Q==
-X-Received: by 2002:adf:f48c:: with SMTP id l12mr2759600wro.194.1624344257205;
-        Mon, 21 Jun 2021 23:44:17 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211? ([2a01:e34:ed2f:f020:5ebd:8bd9:d549:4211])
-        by smtp.googlemail.com with ESMTPSA id v5sm1262932wml.26.2021.06.21.23.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 23:44:16 -0700 (PDT)
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] cpuidle for v5.14-rc1
-Message-ID: <da5ee4be-e62c-53d0-167a-55f6bc5bab4b@linaro.org>
-Date:   Tue, 22 Jun 2021 08:44:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=A+0Tg8/ehjkNNlYZ11nZ7l0NXx3B5Abt3YljTUc7YIU=;
+        b=dph2lFHyxRU8YPj5705qo1kv9qlqqQu9G7qJ5BOq7dlQfAuLLTJK03gSjPxtgLK/kb
+         r0bSg6NXg+Ek+oJi4Y/MG/MDQpDOKCpyGhiiVJk9gM43QbYxL1MiRWbvJ2BcAbG6Xg6p
+         T9IOYp/oAW1TOE0ER1snnVhyGoGUa8hzbWp7i88J2dKHu+UseEQqL7JiMh6JdAe71wPG
+         7+k1BR3E9vBfw8k56EBOKd4N7WkangZb04qUY7NFNimQTgbFgoqyy+3XH5ccGeYUweR9
+         Q/oG6cluU0KgBx6nPhWPd/H3QMKTX1YiRiyGgVngfbf+ztOivaEe1MfZxjMMwcejE1kx
+         44zg==
+X-Gm-Message-State: AOAM5324e6FaTGS6Y1Sc8duITkb4RWxcj84Db1DFVMkRZnmHfnr9ZaXV
+        96O/V1nGqESJt7KHDdUGcgV/zHADmdtjlA==
+X-Google-Smtp-Source: ABdhPJwTv7IAJoT5FFohk3D27niTo2XcR1hBZCqcYQMKOKAEs1KAKdzTzVz31HlrSO0yKq4m3T1Bpg==
+X-Received: by 2002:a63:4a18:: with SMTP id x24mr2311757pga.303.1624344782512;
+        Mon, 21 Jun 2021 23:53:02 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id d20sm14848939pfn.219.2021.06.21.23.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 23:53:02 -0700 (PDT)
+Date:   Tue, 22 Jun 2021 12:22:59 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
+ invariance
+Message-ID: <20210622065259.nw3e7ajwgzgnlm5e@vireshk-i7>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 21-06-21, 16:48, Qian Cai wrote:
+> Viresh, this series works fine on my quick tests so far.
 
-Hi Rafael,
+Thanks for testing.
 
-The following changes since commit 614124bea77e452aa6df7a8714e8bc820b489922:
+> BTW, I
+> noticed some strange things even with the series applied mentioned
+> below when reading acpi_cppc vs cpufreq sysfs. Do you happen to know
+> are those just hardware/firmware issues because Linux just
+> faithfully exported the register values?
 
-  Linux 5.13-rc5 (2021-06-06 15:47:27 -0700)
+The values are exported by drivers/acpi/cppc_acpi.c I believe and they
+look to be based on simple register reads.
 
-are available in the Git repository at:
+> == Arm64 server Foo ==
+> CPU max MHz:                     3000.0000
+> CPU min MHz:                     1000.0000
+> 
+> /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf
+> 300
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
+> 1000
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf
+> 200
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
+> 100
+> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq <--- should be 3000?
+> 2800
+> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf <--- should be 300?
+> 280
 
-  https://git.linaro.org/people/daniel.lezcano/linux.git
-tags/cpuidle-v5.14-rc1
+nominal-perf is max perf, and highest-perf is boost-perf. Same goes
+with nominal-freq (i.e. policy->max).
 
-for you to fetch changes up to 0f0ac1e4eef2753d4f9cd0117019da9501921fef:
+So 280 and 2800 look to be the correct values, 300 and 3000 come with
+boost enabled. Look at the first entry, highest_perf.
 
-  cpuidle: qcom: Add SPM register data for MSM8226 (2021-06-16 20:03:26
-+0200)
+> /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
+> 100
+> 
+> == Arm64 server Bar ==
+> CPU max MHz:                     3000.0000
+> CPU min MHz:                     375.0000
+> 
+> /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf <--- should be 3000? There is no cpufreq boost.
+> 3300
 
-----------------------------------------------------------------
-- Add support for the Qcom MSM8226 (Bartosz Dudziak)
+This isn't exported by cpufreq driver but acpi, and it just exports
+hardware values of highest_perf (with boost i.e.). cpufreq may or
+may not use this to support boost.
 
-----------------------------------------------------------------
-Bartosz Dudziak (2):
-      dt-bindings: arm: msm: Add SAW2 for MSM8226
-      cpuidle: qcom: Add SPM register data for MSM8226
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq <--- don't understand why 0.
+> 0
 
- Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt |  1 +
- drivers/cpuidle/cpuidle-qcom-spm.c                      | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
+Because corresponding hardware registers aren't implemented for your
+platform, this is the function that reads these registers:
 
+int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+{
+        ...
+
+	/* Read optional lowest and nominal frequencies if present */
+	if (CPC_SUPPORTED(low_freq_reg))
+		cpc_read(cpunum, low_freq_reg, &low_f);
+
+	if (CPC_SUPPORTED(nom_freq_reg))
+		cpc_read(cpunum, nom_freq_reg, &nom_f);
+
+	perf_caps->lowest_freq = low_f;
+	perf_caps->nominal_freq = nom_f;
+}
+
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf
+> 375
+> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
+> 375
+> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq <--- ditto
+> 0
+> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf
+> 3000
+> /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
+> 100
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+viresh
