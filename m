@@ -2,122 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814883B0C6E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 20:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06863B0CCD
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jun 2021 20:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbhFVSKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 14:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S232464AbhFVS0F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Jun 2021 14:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbhFVSKK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 14:10:10 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3667C08ECB6
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:01:44 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id s17-20020a17090a8811b029016e89654f93so2204339pjn.1
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:01:44 -0700 (PDT)
+        with ESMTP id S232371AbhFVS0C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 14:26:02 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ABCC061756
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:23:46 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id p9so3453173pgb.1
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 11:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2rN6MuRoyB0TxuLmnbC0w9XVqN0uHIDRho+X69GH4yk=;
-        b=LdhkbfJq8ZN8lClFvlLZ0SvNmYgwdK2ry+f+55bvxu9MTJ8VODtAlgGrouXNmWC5J9
-         ye8PVbx2TkD143VYAmHsIj8dz/wPfghhvRTXVAs9OLNdIJYemi+witxC+z3atZlx726B
-         87DH8WJZ1rtKqcq/nMJ0HRS5xtQWfAx+C1TNF4m4SExJyyIM+Yw41DpgGHITZ3D4l9qM
-         0WYZhnygo/Eq0uKfrKgKGS+zUt8L77m7+hD/No0mbPszY9UKvcqNyKOguh9dsdMX+3ye
-         LRS3MgLQIsXoMK6XvirCr5IOvuItOHGVdox1DVud/LLIDg4fdMO+MsxiO5e2uhIL9vFy
-         03Sg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yXA4rHiWjIH9o9XmIG32r03SHImL59Pk8RIZgBFL7d0=;
+        b=Ym2SAYocAlxz13BRcPfGv8BL5ruxEwMIEahKmrLIa951qfCVLKr9ib9qEyEluwR76s
+         arIDjvRk31dZudsnPP/G0ZxPBVpkMpoJrAqqO0lds4WJufGy4ktUWggJUY+VHBaryxhi
+         n+ChYlaDh99MnXKFn+3MinQfk0F5WEpJbIWzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2rN6MuRoyB0TxuLmnbC0w9XVqN0uHIDRho+X69GH4yk=;
-        b=f8LaUwvSmbuZFvZoMVsduGpqVor2ZOj9svUSvGaO0/eCVfq2XPDpo3ICDhiyTBUkkX
-         s/1xu9D0rzXsjO8o2Sz48iNGXmp5Z6zNqiS+Ju8SbOd8IyvMhODLmTdqGrt3ijBP0SS5
-         zM4AA/at9kBG0YYxszZL+pH05W9LVAmm/c9W/+GvpDYLWJC/mwmy9bWisSD1kt06xOe7
-         GMoWkA2AUHP9KdjAkWBp0IjQcMABNkjSEe17c+svtNHml880VGPhYf6TI7RKjc9j6hZm
-         HgcjPZuuexv15SmluEgxOAnUwHrB294waX3Cq/NyFj1iLXj6qPv5+tdYDqgS9n9exqY5
-         gsPg==
-X-Gm-Message-State: AOAM532UkyNjqjOpV2k746Jb93/8kvUjh8R9XH8rhMMiZZ0XcGCxDZvq
-        Qx/R/wWV2DKDDs2KbPY0oO+8wg==
-X-Google-Smtp-Source: ABdhPJxG+5ohxtXPffswgtsx+4YPpU2WXp1DEXK0CH/FomTMUnHbOu64LNngdWkCUi9c+FiEUBEKfw==
-X-Received: by 2002:a17:90a:4216:: with SMTP id o22mr5187398pjg.3.1624384904460;
-        Tue, 22 Jun 2021 11:01:44 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b6sm20322286pgw.67.2021.06.22.11.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 11:01:43 -0700 (PDT)
-Message-ID: <60d22587.1c69fb81.ed169.7be0@mx.google.com>
-Date:   Tue, 22 Jun 2021 11:01:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yXA4rHiWjIH9o9XmIG32r03SHImL59Pk8RIZgBFL7d0=;
+        b=j4mS+G78ZL+2wsulRh4fqtLUX9HVAimQIkUjJtF+dS6EbA7kSgzKIBzLOS6lCb+UXl
+         YGsfr2BhRk6U3ScugfgFMDKMmok9FZS5Sl+50G/h+EsukVpirn6kCEAhZR0Dih+BJajh
+         oqBzaK8roep8xYq9nSprmpNLNuI7DifUz+EsGp5rVhWFOVjSXtiGkGR1c/1qKikckxXx
+         I6xNp4QTAk6GyP3KuZDw/KvGEeGupWTXIUmnXaTpPuoqApLH3chgLuevmbnjUlVf2tlS
+         LWMmbNCvpd9eDbKModicPe8BY0uT8+tjpfbW2zhkTi/RX4vxaZcimzSBlYAd8vUpKbl3
+         DUoA==
+X-Gm-Message-State: AOAM533P0ETO7/YGf/sfAkgxDo0b4kj6Iu9VfcMsSAULNqr5sswLTQqx
+        fMrzskwKJn/Dag7wc5tOMpxF6A==
+X-Google-Smtp-Source: ABdhPJyAKRVykKU/KgvZGJQDqYy26+5sRFeqHMwGvD8r2zLxNa5qXN+gVPDw1p3/7DsMBYg0ZSOh3w==
+X-Received: by 2002:a05:6a00:1acf:b029:305:d2e4:1687 with SMTP id f15-20020a056a001acfb0290305d2e41687mr2653921pfv.50.1624386226378;
+        Tue, 22 Jun 2021 11:23:46 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:dc21:8b6f:f8cd:9070])
+        by smtp.gmail.com with UTF8SMTPSA id o1sm40173pfk.152.2021.06.22.11.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Jun 2021 11:23:46 -0700 (PDT)
+Date:   Tue, 22 Jun 2021 11:23:44 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
+        sibis@codeaurora.org, saravanak@google.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        chanwoo@kernel.org, cwchoi00@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] PM / devfreq: Export devfreq_get_freq_ragne symbol
+ within devfreq
+Message-ID: <YNIqsJLqWNSg2oxM@google.com>
+References: <20210617060546.26933-1-cw00.choi@samsung.com>
+ <CGME20210617054647epcas1p265359058d489661e09d8d48d4937ca7b@epcas1p2.samsung.com>
+ <20210617060546.26933-3-cw00.choi@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.13-rc7-150-ga51c80057a88
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (v5.13-rc7-150-ga51c80057a88)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210617060546.26933-3-cw00.choi@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.13-rc7-150-ga51c80057a88)
+On Thu, Jun 17, 2021 at 03:05:44PM +0900, Chanwoo Choi wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-13-rc7-150-ga51c80057a88/
+> Subject: PM / devfreq: Export devfreq_get_freq_ragne symbol within devfreq
 
-Tree: pm
-Branch: testing
-Git Describe: v5.13-rc7-150-ga51c80057a88
-Git Commit: a51c80057a887e0f24bd8303b0791a130ff04121
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+nit: s/ragne/range/
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+>
+> In order to get frequency range within devfreq governors,
+> export devfreq_get_freq_ragne symbol within devfreq.
+> 
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
