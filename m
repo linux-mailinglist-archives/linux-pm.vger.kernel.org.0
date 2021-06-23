@@ -2,61 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF67F3B1F19
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 18:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681243B1FE4
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 19:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFWRCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 13:02:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229523AbhFWRCN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Jun 2021 13:02:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9989C61166;
-        Wed, 23 Jun 2021 16:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624467595;
-        bh=TB2KEifs1rVjgZ9TIFfmS63QCJs3CaVCD3ylzqkt0c8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=n+KamRdzrHfL97F4633IODvPiQlUJUjhOt3Y/wDDb100Qjy3iciUDdhDFnLSYG7YQ
-         6qzAHMiEkcjcpRs14Eet/jpQ5BdHgq/LXNSMYR7jT8CSJvUuAvx7XyAe+wR5JRgDS6
-         QWbq1ZclDUTiHNDyGSimFkV3NcuzaA5PVTs0+PcKmbPHeDmwdptAbXeHBR3wYb/yi5
-         X9ocBYSu+KnArR94qLzJUZD8XNFvS9WMdhfui2s8Wujc3hVtakeuYowYWaacdCcqw+
-         5nQoQ9Xnc9zyqBPbs+dz5TCAl4HG54pFM047w1b3+Qev1txRcUDSUPS0RCw/xQMc3H
-         UNNHEw3JWKCCA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 88758609AC;
-        Wed, 23 Jun 2021 16:59:55 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fix for v5.13-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
-References: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.13-rc8
-X-PR-Tracked-Commit-Id: 4d6035f9bf4ea12776322746a216e856dfe46698
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7266f2030eb0e17c442aa6cf527263828eed79bd
-Message-Id: <162446759549.29722.17202056975267179567.pr-tracker-bot@kernel.org>
-Date:   Wed, 23 Jun 2021 16:59:55 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S229849AbhFWRzX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 13:55:23 -0400
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:34647 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhFWRzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 13:55:22 -0400
+Received: by mail-oi1-f173.google.com with SMTP id u11so4272040oiv.1;
+        Wed, 23 Jun 2021 10:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kKQr82HDDUwFX7W6f2RL9f2u87FR6WdUapSEsXW/DEs=;
+        b=KeWdipt25KXMRkrgo4efs0m9yMPVNZbI6kOvMS85qbcJhDraziteoKg5tlEkN8OF5N
+         9649HlVKd7zbigK7hKtTXjlaqxEmqmP6XkV647OO4t0zW7zRzRlV5sumEMMTE9Jvw6Y9
+         crikD4nj6Q39tW9jUmnU/dutD5Mbz7pJwAwTpwVdLyjl2RCfKog8MuWFF5z2uHRsX9Lp
+         R/xtM8Pd/4lCEaoot4OEqBY0sqmnPqn3Q9AQJu52lghn+kzFn736/tf+7wQYuy/ukGGD
+         9atzfjU0ayBNS+QrhkKK2vBVETwxhMrhUqLfg8pTfA4m/DWY5/41KTsyP0FQL9K5C0Xh
+         p8xA==
+X-Gm-Message-State: AOAM5319OsK+tjd0Cd71ioDXsUAvSDyOwzfdgPRsoyokA92Fp/OBg+hc
+        zZXtolmgnGKLSnkYZZTgDlmoVgjQzstwdW18LFM=
+X-Google-Smtp-Source: ABdhPJwVRzUAEkyf6DGKb9Rgt01zJyb6iZCfhq/4GmCXF95MvMM5PMAMAYEdojbAeYhPmygDFAJ4PoXN1OdcVCwNbew=
+X-Received: by 2002:a05:6808:8d9:: with SMTP id k25mr807424oij.69.1624470783298;
+ Wed, 23 Jun 2021 10:53:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <3219454.74lMxhSOWB@kreacher> <YNDoGICcg0V8HhpQ@eldamar.lan>
+In-Reply-To: <YNDoGICcg0V8HhpQ@eldamar.lan>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Jun 2021 19:52:52 +0200
+Message-ID: <CAJZ5v0hrcRWgre0HiJFw32dkmNUjaRzT=mFH=6WskopMbZsavA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: PM: Do not read power state in pci_enable_device_flags()
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PCI <linux-pci@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Wed, 23 Jun 2021 18:20:54 +0200:
+On Mon, Jun 21, 2021 at 9:27 PM Salvatore Bonaccorso <carnil@debian.org> wrote:
+>
+> Hi,
+>
+> On Tue, Mar 16, 2021 at 04:51:40PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > It should not be necessary to update the current_state field of
+> > struct pci_dev in pci_enable_device_flags() before calling
+> > do_pci_enable_device() for the device, because none of the
+> > code between that point and the pci_set_power_state() call in
+> > do_pci_enable_device() invoked later depends on it.
+> >
+> > Moreover, doing that is actively harmful in some cases.  For example,
+> > if the given PCI device depends on an ACPI power resource whose _STA
+> > method initially returns 0 ("off"), but the config space of the PCI
+> > device is accessible and the power state retrieved from the
+> > PCI_PM_CTRL register is D0, the current_state field in the struct
+> > pci_dev representing that device will get out of sync with the
+> > power.state of its ACPI companion object and that will lead to
+> > power management issues going forward.
+> >
+> > To avoid such issues it is better to leave the current_state value
+> > as is until it is changed to PCI_D0 by do_pci_enable_device() as
+> > appropriate.  However, the power state of the device is not changed
+> > to PCI_D0 if it is already enabled when pci_enable_device_flags()
+> > gets called for it, so update its current_state in that case, but
+> > use pci_update_current_state() covering platform PM too for that.
+> >
+> > Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
+> > Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > Max, I've added a T-by from you even though the patch is slightly different
+> > from what you have tested, but the difference shouldn't matter for your case.
+> >
+> > ---
+> >  drivers/pci/pci.c |   16 +++-------------
+> >  1 file changed, 3 insertions(+), 13 deletions(-)
+> >
+> > Index: linux-pm/drivers/pci/pci.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/pci/pci.c
+> > +++ linux-pm/drivers/pci/pci.c
+> > @@ -1870,20 +1870,10 @@ static int pci_enable_device_flags(struc
+> >       int err;
+> >       int i, bars = 0;
+> >
+> > -     /*
+> > -      * Power state could be unknown at this point, either due to a fresh
+> > -      * boot or a device removal call.  So get the current power state
+> > -      * so that things like MSI message writing will behave as expected
+> > -      * (e.g. if the device really is in D0 at enable time).
+> > -      */
+> > -     if (dev->pm_cap) {
+> > -             u16 pmcsr;
+> > -             pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > -             dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > -     }
+> > -
+> > -     if (atomic_inc_return(&dev->enable_cnt) > 1)
+> > +     if (atomic_inc_return(&dev->enable_cnt) > 1) {
+> > +             pci_update_current_state(dev, dev->current_state);
+> >               return 0;               /* already enabled */
+> > +     }
+> >
+> >       bridge = pci_upstream_bridge(dev);
+> >       if (bridge)
+>
+> A user in Debian reported that this commit caused an issue, cf.
+> https://bugs.debian.org/990008#10 with the e1000e driver failing to
+> probe the device. It was reported as well to
+> https://bugzilla.kernel.org/show_bug.cgi?id=213481
+>
+> According to the above and
+> https://bugzilla.kernel.org/show_bug.cgi?id=213481#c2 reverting
+> 4514d991d992 ("PCI: PM: Do not read power state in
+> pci_enable_device_flags()") fixes the issue.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.13-rc8
+This commit has just been reverted.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7266f2030eb0e17c442aa6cf527263828eed79bd
+We will try to address the original issue addressed by it in a different way.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks!
