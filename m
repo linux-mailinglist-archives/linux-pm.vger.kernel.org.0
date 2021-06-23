@@ -2,96 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26C63B1A93
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 14:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6903E3B1B6F
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 15:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbhFWNAI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 09:00:08 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:38663 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230019AbhFWNAI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 09:00:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1624453071; x=1655989071;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=15/CAV2snDdvyAJxjJ5PKrRh/F+DBXa8aHprIfhpyUU=;
-  b=M+SFXFoWK8Hl7ISVGlRLBol2RTa2nfzAjsRO+8wMU6NVQ/iKy/PCZBn5
-   CELXVUGPxLGgqr9Fph8/sDGancTgMzW6tfdeGgvwCeX3KYg00/sEeEvBR
-   jmwpYuQBABP/oJJVM7BMo3Yw0dqavO00nhq617EJGeDU3JRngCkZgap+Q
-   4=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Jun 2021 05:57:50 -0700
-X-QCInternal: smtphost
-Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 23 Jun 2021 05:57:49 -0700
-Received: from [10.38.240.33] (10.80.80.8) by nasanexm03e.na.qualcomm.com
- (10.85.0.48) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Jun
- 2021 05:57:47 -0700
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
+        id S230243AbhFWNrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 09:47:06 -0400
+Received: from foss.arm.com ([217.140.110.172]:35574 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230206AbhFWNrG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Jun 2021 09:47:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 840CEED1;
+        Wed, 23 Jun 2021 06:44:48 -0700 (PDT)
+Received: from localhost (unknown [10.1.195.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 238D33F718;
+        Wed, 23 Jun 2021 06:44:48 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 14:44:46 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+        Qian Cai <quic_qiancai@quicinc.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/4] cpufreq: cppc: Fix potential memleak in
+ cppc_cpufreq_cpu_init
+Message-ID: <20210623134446.GA12411@arm.com>
 References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
- <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
-From:   Qian Cai <quic_qiancai@quicinc.com>
-Message-ID: <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
-Date:   Wed, 23 Jun 2021 08:57:46 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <579689469ed8a7dfd68dcbb41e9191472799a326.1624266901.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03d.na.qualcomm.com (10.85.0.91) To
- nasanexm03e.na.qualcomm.com (10.85.0.48)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <579689469ed8a7dfd68dcbb41e9191472799a326.1624266901.git.viresh.kumar@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
-
-On 6/23/2021 12:16 AM, Viresh Kumar wrote:
-> On 21-06-21, 16:48, Qian Cai wrote:
->>
->>
->> On 6/21/2021 5:19 AM, Viresh Kumar wrote:
->>> CPPC cpufreq driver is used for ARM servers and this patch series tries to
->>> provide counter-based frequency invariance support for them in the absence for
->>> architecture specific counters (like AMUs).
->>
->> Viresh, this series works fine on my quick tests so far.
+On Monday 21 Jun 2021 at 14:49:34 (+0530), Viresh Kumar wrote:
+> It's a classic example of memleak, we allocate something, we fail and
+> never free the resources.
+>
+> Make sure we free all resources on policy ->init() failures.
 > 
-> Do you want me to add your Tested-by for the series ?
+> Fixes: a28b2bfc099c ("cppc_cpufreq: replace per-cpu data array with a list")
 
-Viresh, I am afraid I don't feel comfortable yet. I have a few new tests in development, and will provide an update once ready. Also, I noticed the delivered perf is even smaller than lowest_perf (100).
+This is on me, thanks for the fix!
 
-# cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
- ref:103377547901 del:54540736873
-# cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
- ref:103379170101 del:54541599117
+Might be better for this to be separate from the series, but I suppose
+all will be going in 5.14 anyway.
 
-100 * (54541599117 - 54540736873) / (103379170101 - 103377547901) = 53
+> Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 30 ++++++++++++++++++++----------
+>  1 file changed, 20 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index be4f62e2c5f1..35b8ae66d1fb 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -256,6 +256,16 @@ static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
+>  	return NULL;
+>  }
+>  
+> +static void cppc_cpufreq_put_cpu_data(struct cpufreq_policy *policy)
+> +{
+> +	struct cppc_cpudata *cpu_data = policy->driver_data;
+> +
+> +	list_del(&cpu_data->node);
+> +	free_cpumask_var(cpu_data->shared_cpu_map);
+> +	kfree(cpu_data);
+> +	policy->driver_data = NULL;
+> +}
+> +
+>  static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  {
+>  	unsigned int cpu = policy->cpu;
+> @@ -309,7 +319,8 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  	default:
+>  		pr_debug("Unsupported CPU co-ord type: %d\n",
+>  			 policy->shared_type);
+> -		return -EFAULT;
+> +		ret = -EFAULT;
+> +		goto out;
+>  	}
+>  
+>  	/*
+> @@ -324,10 +335,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+>  
+>  	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+> -	if (ret)
+> -		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+> -			 caps->highest_perf, cpu, ret);
+> +	if (!ret)
+> +		return 0;
+>  
+> +	pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+> +		 caps->highest_perf, cpu, ret);
+> +
 
-My understanding is that the delivered perf should fail into the range between lowest_perf and highest_perf. Is that assumption correct? This happens on 5.4-based kernel, so I am in process running your series on that system to see if there is any differences. In any case, if it is a bug it is pre-existing, but I'd like to understand a bit better in that front first.
+Nit: I would have preferred the more traditional:
+
+if (ret) {
+	pr_debug();
+	goto out;
+}
+
+return 0;
+
+It's always easier to read.
+
+Thanks,
+Ionela.
+
+> +out:
+> +	cppc_cpufreq_put_cpu_data(policy);
+>  	return ret;
+>  }
+>  
+> @@ -345,12 +360,7 @@ static int cppc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+>  		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+>  			 caps->lowest_perf, cpu, ret);
+>  
+> -	/* Remove CPU node from list and free driver data for policy */
+> -	free_cpumask_var(cpu_data->shared_cpu_map);
+> -	list_del(&cpu_data->node);
+> -	kfree(policy->driver_data);
+> -	policy->driver_data = NULL;
+> -
+> +	cppc_cpufreq_put_cpu_data(policy);
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.31.1.272.g89b43f80a514
+> 
