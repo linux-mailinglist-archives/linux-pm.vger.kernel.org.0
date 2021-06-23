@@ -2,139 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681243B1FE4
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 19:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B3B3B23D2
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 01:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbhFWRzX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 13:55:23 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:34647 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhFWRzW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 13:55:22 -0400
-Received: by mail-oi1-f173.google.com with SMTP id u11so4272040oiv.1;
-        Wed, 23 Jun 2021 10:53:03 -0700 (PDT)
+        id S229886AbhFWXJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 19:09:46 -0400
+Received: from mail-io1-f52.google.com ([209.85.166.52]:35777 "EHLO
+        mail-io1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229822AbhFWXJq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 19:09:46 -0400
+Received: by mail-io1-f52.google.com with SMTP id d9so5559051ioo.2;
+        Wed, 23 Jun 2021 16:07:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kKQr82HDDUwFX7W6f2RL9f2u87FR6WdUapSEsXW/DEs=;
-        b=KeWdipt25KXMRkrgo4efs0m9yMPVNZbI6kOvMS85qbcJhDraziteoKg5tlEkN8OF5N
-         9649HlVKd7zbigK7hKtTXjlaqxEmqmP6XkV647OO4t0zW7zRzRlV5sumEMMTE9Jvw6Y9
-         crikD4nj6Q39tW9jUmnU/dutD5Mbz7pJwAwTpwVdLyjl2RCfKog8MuWFF5z2uHRsX9Lp
-         R/xtM8Pd/4lCEaoot4OEqBY0sqmnPqn3Q9AQJu52lghn+kzFn736/tf+7wQYuy/ukGGD
-         9atzfjU0ayBNS+QrhkKK2vBVETwxhMrhUqLfg8pTfA4m/DWY5/41KTsyP0FQL9K5C0Xh
-         p8xA==
-X-Gm-Message-State: AOAM5319OsK+tjd0Cd71ioDXsUAvSDyOwzfdgPRsoyokA92Fp/OBg+hc
-        zZXtolmgnGKLSnkYZZTgDlmoVgjQzstwdW18LFM=
-X-Google-Smtp-Source: ABdhPJwVRzUAEkyf6DGKb9Rgt01zJyb6iZCfhq/4GmCXF95MvMM5PMAMAYEdojbAeYhPmygDFAJ4PoXN1OdcVCwNbew=
-X-Received: by 2002:a05:6808:8d9:: with SMTP id k25mr807424oij.69.1624470783298;
- Wed, 23 Jun 2021 10:53:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GZLDpuA79csUJoyxxQRsR7ORuZFy0jjxYyRC2e/q9a4=;
+        b=OU26BFBu2QnMKfwwJjFbP8v4anr2Je4zR25yhlGdq5oCskTtJPlkD3t/xfpewe70Wh
+         sgfVwqDI3ucAb2BQLSy2YCKJj8Q+C/h7S5sPT50ElTC3uAQT+7jRubBzuygITj8sunTc
+         z3gWO2Xqy3NYKxsO4dovuRC5Qds8jJ4OPhqex3jPV6AzepzSBZkwPAWtZrDknBgdvN6J
+         0+9pdXWSh+UKTZvWsFsi6B87aexavGJdeBBlqRUv9XYZtAWa6IDTgl5YOPY2T3oWNboE
+         e2SN/XAoP5IoIrQi+8TFgbRXzPiLxz1DJYb0+qTcEYfYpypwYHCsLWn5eYIfAGFNMAP+
+         mCww==
+X-Gm-Message-State: AOAM531M3jFzBWGThuvsNpqibbjkpCLl2ItWtZ3aLIxRVHowf5C88DWj
+        SEVOKHBY4tdGuhoRl9S/HQ==
+X-Google-Smtp-Source: ABdhPJysSMr49GWdevfUQIaAcqS/oiimDgEHRxZO4ul4XB2m7ky2tCzGBT3YSnBk7BCX9Fdml+iFXg==
+X-Received: by 2002:a05:6602:2595:: with SMTP id p21mr1570908ioo.51.1624489647011;
+        Wed, 23 Jun 2021 16:07:27 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id t15sm694356ile.28.2021.06.23.16.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 16:07:26 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 0/2] dt-bindings: Convert OPP bindings to DT schema
+Date:   Wed, 23 Jun 2021 17:07:20 -0600
+Message-Id: <20210623230722.3545986-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <3219454.74lMxhSOWB@kreacher> <YNDoGICcg0V8HhpQ@eldamar.lan>
-In-Reply-To: <YNDoGICcg0V8HhpQ@eldamar.lan>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Jun 2021 19:52:52 +0200
-Message-ID: <CAJZ5v0hrcRWgre0HiJFw32dkmNUjaRzT=mFH=6WskopMbZsavA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: PM: Do not read power state in pci_enable_device_flags()
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 9:27 PM Salvatore Bonaccorso <carnil@debian.org> wrote:
->
-> Hi,
->
-> On Tue, Mar 16, 2021 at 04:51:40PM +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > It should not be necessary to update the current_state field of
-> > struct pci_dev in pci_enable_device_flags() before calling
-> > do_pci_enable_device() for the device, because none of the
-> > code between that point and the pci_set_power_state() call in
-> > do_pci_enable_device() invoked later depends on it.
-> >
-> > Moreover, doing that is actively harmful in some cases.  For example,
-> > if the given PCI device depends on an ACPI power resource whose _STA
-> > method initially returns 0 ("off"), but the config space of the PCI
-> > device is accessible and the power state retrieved from the
-> > PCI_PM_CTRL register is D0, the current_state field in the struct
-> > pci_dev representing that device will get out of sync with the
-> > power.state of its ACPI companion object and that will lead to
-> > power management issues going forward.
-> >
-> > To avoid such issues it is better to leave the current_state value
-> > as is until it is changed to PCI_D0 by do_pci_enable_device() as
-> > appropriate.  However, the power state of the device is not changed
-> > to PCI_D0 if it is already enabled when pci_enable_device_flags()
-> > gets called for it, so update its current_state in that case, but
-> > use pci_update_current_state() covering platform PM too for that.
-> >
-> > Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
-> > Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > Max, I've added a T-by from you even though the patch is slightly different
-> > from what you have tested, but the difference shouldn't matter for your case.
-> >
-> > ---
-> >  drivers/pci/pci.c |   16 +++-------------
-> >  1 file changed, 3 insertions(+), 13 deletions(-)
-> >
-> > Index: linux-pm/drivers/pci/pci.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/pci/pci.c
-> > +++ linux-pm/drivers/pci/pci.c
-> > @@ -1870,20 +1870,10 @@ static int pci_enable_device_flags(struc
-> >       int err;
-> >       int i, bars = 0;
-> >
-> > -     /*
-> > -      * Power state could be unknown at this point, either due to a fresh
-> > -      * boot or a device removal call.  So get the current power state
-> > -      * so that things like MSI message writing will behave as expected
-> > -      * (e.g. if the device really is in D0 at enable time).
-> > -      */
-> > -     if (dev->pm_cap) {
-> > -             u16 pmcsr;
-> > -             pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > -             dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> > -     }
-> > -
-> > -     if (atomic_inc_return(&dev->enable_cnt) > 1)
-> > +     if (atomic_inc_return(&dev->enable_cnt) > 1) {
-> > +             pci_update_current_state(dev, dev->current_state);
-> >               return 0;               /* already enabled */
-> > +     }
-> >
-> >       bridge = pci_upstream_bridge(dev);
-> >       if (bridge)
->
-> A user in Debian reported that this commit caused an issue, cf.
-> https://bugs.debian.org/990008#10 with the e1000e driver failing to
-> probe the device. It was reported as well to
-> https://bugzilla.kernel.org/show_bug.cgi?id=213481
->
-> According to the above and
-> https://bugzilla.kernel.org/show_bug.cgi?id=213481#c2 reverting
-> 4514d991d992 ("PCI: PM: Do not read power state in
-> pci_enable_device_flags()") fixes the issue.
+The OPP bindings are one of the most common occurring bindings that are
+not yet converted to schema, so let's convert them.
 
-This commit has just been reverted.
+Note this depends on a dtschema change in property-units.yaml to allow 
+a matrix for opp-microvolt.
 
-We will try to address the original issue addressed by it in a different way.
+Rob
 
-Thanks!
+Rob Herring (2):
+  dt-bindings: Clean-up OPP binding node names in examples
+  dt-bindings: opp: Convert to DT schema
+
+ .../bindings/gpu/arm,mali-bifrost.yaml        |   2 +-
+ .../bindings/gpu/arm,mali-midgard.yaml        |   2 +-
+ .../bindings/interconnect/fsl,imx8m-noc.yaml  |   4 +-
+ .../allwinner,sun50i-h6-operating-points.yaml |   4 +
+ .../devicetree/bindings/opp/opp-v1.yaml       |  51 ++
+ .../devicetree/bindings/opp/opp-v2-base.yaml  | 213 ++++++
+ .../devicetree/bindings/opp/opp-v2.yaml       | 475 +++++++++++++
+ Documentation/devicetree/bindings/opp/opp.txt | 622 ------------------
+ 8 files changed, 747 insertions(+), 626 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/opp/opp-v1.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/opp-v2.yaml
+ delete mode 100644 Documentation/devicetree/bindings/opp/opp.txt
+
+-- 
+2.27.0
+
