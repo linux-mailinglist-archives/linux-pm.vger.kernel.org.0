@@ -2,136 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B55BA3B12DA
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 06:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D1C3B131B
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 07:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbhFWE10 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 00:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbhFWE1Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 00:27:25 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB946C061574
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 21:25:08 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id y14so657390pgs.12
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 21:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IsYDkx5V1mJjZwOsL/IXqLmlqBdgt7SKxZu32NLqyoA=;
-        b=KoW+3L+nAzHaFgbRElzs5uOdutafEIWxBC8B5+GDKPJmQleXVfldK7z7iqfjfcts1Q
-         rPL0kfSafE8oFpk6vrVZuNwIRU6AgR8g80QroxtsUVS3fgsrxmhUjcHJybPvXNrlECFn
-         AAucYr0aZJMlHLGw09t3jUjQgj2XGLYNcQaGeuAUDeAoyhWbX1LrqiB6kBBDGV/8z/CN
-         ++aB+n41chkQUj2WNQ3WqdialMd1lKj6yKzDF0hXvNUGzITEYsvfRPlJpIra4FVwPNQk
-         b7US4tsXnrqo0EG6dj8k2TY/Ebg3EXPdt97zdZ9/IXIIO+2y6YkdmcBVH7hSDt3Fb6qh
-         gNqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IsYDkx5V1mJjZwOsL/IXqLmlqBdgt7SKxZu32NLqyoA=;
-        b=I52eohotLMaS11bjoOBqVhks1AB5+J+KJmun1OOFMplRr0cnXQNiY/esU0a2Q5oPz9
-         OsnLsrkmStYRSLn7gNJtjObFGx1/59hkN6ZupmuRNKwOfCGPVj/5skFLoouQyWTf0+//
-         8qJslZa/SSmJ/00LR7+sIvJvzXJlgd7zQJkZPYNwUh4iHEWMLE2C5aFxiyUnA1XSEsLC
-         J6WAW3hd7BCufZAGzL0A5UsKDaIuJYM6aAi6ew34jCrgKnL6j0EEMH+B6mvCq8g4vyez
-         s/Dc56cAIn6/qYiewTEIIczqO4lvNMUcAiMFvojzqNlb5aMpT1dOMALJhaQHmJfsKG9u
-         bYPQ==
-X-Gm-Message-State: AOAM530oKnSzHT4hB3nb6czw8DlRmIAAexmZR6xWUBS6ywnPHEW+FSeM
-        3q/NEfBCX9LK1/8/rw+NgsxuPg==
-X-Google-Smtp-Source: ABdhPJykxyALIdJtvZ3O3tAzyqaObMPTohAMm6rjwil0SUh9TpEoeEcPD3F2IEayX6QLESd2Wz/U6g==
-X-Received: by 2002:a63:5743:: with SMTP id h3mr1946424pgm.362.1624422308452;
-        Tue, 22 Jun 2021 21:25:08 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id u11sm3770311pjf.46.2021.06.22.21.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 21:25:08 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V4 4/4] cpufreq: Remove stop_cpu() callback
-Date:   Wed, 23 Jun 2021 09:54:42 +0530
-Message-Id: <56e8fadcecf014ef0786499fbf4e93975b123483.1624421816.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1624421816.git.viresh.kumar@linaro.org>
-References: <cover.1624421816.git.viresh.kumar@linaro.org>
+        id S230346AbhFWFGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 01:06:06 -0400
+Received: from mga03.intel.com ([134.134.136.65]:9799 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229665AbhFWFGG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Jun 2021 01:06:06 -0400
+IronPort-SDR: 8o83gEB0/UpemL80hvyqyqEOYE7hIy98fzVk6SEoAQIe2PfLgF02D3sH+Zpqebzmc1nQzGkxCf
+ uwpKJaQLvjZQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10023"; a="207234984"
+X-IronPort-AV: E=Sophos;i="5.83,293,1616482800"; 
+   d="scan'208";a="207234984"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 22:03:49 -0700
+IronPort-SDR: t1Up4t1o0Ehl1dnLFuyev4OYApAZYVLEniTHauxQhLO8eJuYIW1c3iQAn9/XApIndLMYslSiPZ
+ +yRBPO/mK/NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,293,1616482800"; 
+   d="scan'208";a="423569212"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Jun 2021 22:03:47 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lvv3C-0005jB-UI; Wed, 23 Jun 2021 05:03:46 +0000
+Date:   Wed, 23 Jun 2021 13:03:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ a51c80057a887e0f24bd8303b0791a130ff04121
+Message-ID: <60d2c08d.Pssc1orsmO+iCW14%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that all users of stop_cpu() are migrated to use other callbacks,
-lets remove its support from the core.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: a51c80057a887e0f24bd8303b0791a130ff04121  Merge branch 'pm-pci' into linux-next
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+elapsed time: 726m
+
+configs tested: 161
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                            lart_defconfig
+powerpc                        fsp2_defconfig
+sparc64                             defconfig
+mips                         mpc30x_defconfig
+arm                        multi_v7_defconfig
+powerpc                 mpc8315_rdb_defconfig
+nds32                            alldefconfig
+powerpc                       maple_defconfig
+arm                           corgi_defconfig
+arc                    vdk_hs38_smp_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                   motionpro_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                     powernv_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                    gamecube_defconfig
+powerpc                    sam440ep_defconfig
+sh                           se7705_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                          malta_defconfig
+xtensa                           alldefconfig
+powerpc                      makalu_defconfig
+h8300                     edosk2674_defconfig
+sh                           se7724_defconfig
+arc                           tb10x_defconfig
+powerpc                  mpc866_ads_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                      acadia_defconfig
+arc                     nsimosci_hs_defconfig
+i386                                defconfig
+arm                         cm_x300_defconfig
+sh                   secureedge5410_defconfig
+mips                  decstation_64_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                         hackkit_defconfig
+arc                     haps_hs_smp_defconfig
+m68k                       m5475evb_defconfig
+arm                       netwinder_defconfig
+sh                          polaris_defconfig
+m68k                         apollo_defconfig
+powerpc                      katmai_defconfig
+h8300                            alldefconfig
+um                           x86_64_defconfig
+sh                          r7785rp_defconfig
+mips                      bmips_stb_defconfig
+sh                        edosk7705_defconfig
+arm                            zeus_defconfig
+mips                           mtx1_defconfig
+mips                           ip28_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                     ep8248e_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                       rbtx49xx_defconfig
+sh                           se7343_defconfig
+powerpc                      pcm030_defconfig
+arm                           sama5_defconfig
+arm                       cns3420vb_defconfig
+powerpc                 mpc836x_rdk_defconfig
+sh                 kfr2r09-romimage_defconfig
+m68k                          atari_defconfig
+powerpc                     tqm8555_defconfig
+m68k                        mvme16x_defconfig
+arm                        realview_defconfig
+s390                             allmodconfig
+riscv                               defconfig
+um                            kunit_defconfig
+sh                                  defconfig
+arm                        mvebu_v5_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                     kmeter1_defconfig
+microblaze                          defconfig
+arm                         orion5x_defconfig
+arm                        shmobile_defconfig
+sh                            titan_defconfig
+mips                            gpr_defconfig
+h8300                               defconfig
+arm                             rpc_defconfig
+powerpc                     sequoia_defconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210622
+i386                 randconfig-a002-20210622
+i386                 randconfig-a003-20210622
+i386                 randconfig-a006-20210622
+i386                 randconfig-a005-20210622
+i386                 randconfig-a004-20210622
+x86_64               randconfig-a012-20210622
+x86_64               randconfig-a016-20210622
+x86_64               randconfig-a015-20210622
+x86_64               randconfig-a014-20210622
+x86_64               randconfig-a013-20210622
+x86_64               randconfig-a011-20210622
+i386                 randconfig-a011-20210622
+i386                 randconfig-a014-20210622
+i386                 randconfig-a013-20210622
+i386                 randconfig-a015-20210622
+i386                 randconfig-a012-20210622
+i386                 randconfig-a016-20210622
+i386                 randconfig-a011-20210623
+i386                 randconfig-a014-20210623
+i386                 randconfig-a013-20210623
+i386                 randconfig-a015-20210623
+i386                 randconfig-a012-20210623
+i386                 randconfig-a016-20210623
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210622
+x86_64               randconfig-b001-20210623
+x86_64               randconfig-a002-20210622
+x86_64               randconfig-a001-20210622
+x86_64               randconfig-a005-20210622
+x86_64               randconfig-a003-20210622
+x86_64               randconfig-a004-20210622
+x86_64               randconfig-a006-20210622
+
 ---
- Documentation/cpu-freq/cpu-drivers.rst                    | 3 ---
- Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst | 3 ---
- drivers/cpufreq/cpufreq.c                                 | 3 ---
- include/linux/cpufreq.h                                   | 1 -
- 4 files changed, 10 deletions(-)
-
-diff --git a/Documentation/cpu-freq/cpu-drivers.rst b/Documentation/cpu-freq/cpu-drivers.rst
-index a697278ce190..74fac797c396 100644
---- a/Documentation/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/cpu-freq/cpu-drivers.rst
-@@ -71,9 +71,6 @@ And optionally
-  .exit - A pointer to a per-policy cleanup function called during
-  CPU_POST_DEAD phase of cpu hotplug process.
- 
-- .stop_cpu - A pointer to a per-policy stop function called during
-- CPU_DOWN_PREPARE phase of cpu hotplug process.
--
-  .suspend - A pointer to a per-policy suspend function which is called
-  with interrupts disabled and _after_ the governor is stopped for the
-  policy.
-diff --git a/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst b/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-index 0ca2cb646666..9570e9c9e939 100644
---- a/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-@@ -76,9 +76,6 @@ 并且可选择
-  .exit - 一个指向per-policy清理函数的指针，该函数在cpu热插拔过程的CPU_POST_DEAD
-  阶段被调用。
- 
-- .stop_cpu - 一个指向per-policy停止函数的指针，该函数在cpu热插拔过程的CPU_DOWN_PREPARE
-- 阶段被调用。
--
-  .suspend - 一个指向per-policy暂停函数的指针，该函数在关中断且在该策略的调节器停止
-  后被调用。
- 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index cbab834c37a0..5e4b5316d254 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1606,9 +1606,6 @@ static int cpufreq_offline(unsigned int cpu)
- 		policy->cdev = NULL;
- 	}
- 
--	if (cpufreq_driver->stop_cpu)
--		cpufreq_driver->stop_cpu(policy);
--
- 	if (has_target())
- 		cpufreq_exit_governor(policy);
- 
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 353969c7acd3..2e2267a36502 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -371,7 +371,6 @@ struct cpufreq_driver {
- 	int		(*online)(struct cpufreq_policy *policy);
- 	int		(*offline)(struct cpufreq_policy *policy);
- 	int		(*exit)(struct cpufreq_policy *policy);
--	void		(*stop_cpu)(struct cpufreq_policy *policy);
- 	int		(*suspend)(struct cpufreq_policy *policy);
- 	int		(*resume)(struct cpufreq_policy *policy);
- 
--- 
-2.31.1.272.g89b43f80a514
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
