@@ -2,75 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 255953B1E8A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 18:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF67F3B1F19
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 18:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhFWQXY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 12:23:24 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:33418 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbhFWQXY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 12:23:24 -0400
-Received: by mail-ot1-f49.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so2533498otl.0;
-        Wed, 23 Jun 2021 09:21:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=35WsYJT9YpRPnzEEhoqfjKbQt4vKvTmr17v8IGf8pkA=;
-        b=sYAtF3zWwgT0vjuCBM1ozsHW6O+zcXHTrlpOn/qlwwtqe3hhzc0dL1xHVQC3tlXcD6
-         40g6uk8yFFie9GKfV8MfBZ7ejiMeMwJzOk2YFce98HA88itoBVVgPsKqZBIxiZN2BIeI
-         ZZ1Ys4SRgjYahkjZg6DtkDVTVnOhITfjHq7YvWX2b539UbyVFF0RcEeGCEWG6g53wXAO
-         i0Uzb9GTeJXLdD/JXrC2tVg2VoqcUXJmD4oUJ3kGT4szkXzlXrQv0D1utPPGYPSNYTbp
-         4WnUSLiIez/bWI3n9lMCpF+0WWSgajCooovSRyftgzt46tJmkW07C+VYWV/tO77aps0X
-         lIoA==
-X-Gm-Message-State: AOAM532qxeyZIe/VJN8kMK3epXDtRPfRShmqWJ6F06ndCOHH8oZgrj54
-        N/FseOxXaSQmi3hU2yDisId+uHWJb18BxA+VilrCPQmbpmc=
-X-Google-Smtp-Source: ABdhPJzBgjWy+VqeBJbt+KGxoD1N/UTshnFIiaEUPd2SEQOGfdsJ3Kqg/RQuV+59rHsN4vwCi3U7bejsvXkGw+6ep8U=
-X-Received: by 2002:a9d:1905:: with SMTP id j5mr598865ota.321.1624465265283;
- Wed, 23 Jun 2021 09:21:05 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Jun 2021 18:20:54 +0200
-Message-ID: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v5.13-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        id S229726AbhFWRCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 13:02:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45090 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229523AbhFWRCN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Jun 2021 13:02:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9989C61166;
+        Wed, 23 Jun 2021 16:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624467595;
+        bh=TB2KEifs1rVjgZ9TIFfmS63QCJs3CaVCD3ylzqkt0c8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=n+KamRdzrHfL97F4633IODvPiQlUJUjhOt3Y/wDDb100Qjy3iciUDdhDFnLSYG7YQ
+         6qzAHMiEkcjcpRs14Eet/jpQ5BdHgq/LXNSMYR7jT8CSJvUuAvx7XyAe+wR5JRgDS6
+         QWbq1ZclDUTiHNDyGSimFkV3NcuzaA5PVTs0+PcKmbPHeDmwdptAbXeHBR3wYb/yi5
+         X9ocBYSu+KnArR94qLzJUZD8XNFvS9WMdhfui2s8Wujc3hVtakeuYowYWaacdCcqw+
+         5nQoQ9Xnc9zyqBPbs+dz5TCAl4HG54pFM047w1b3+Qev1txRcUDSUPS0RCw/xQMc3H
+         UNNHEw3JWKCCA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 88758609AC;
+        Wed, 23 Jun 2021 16:59:55 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fix for v5.13-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
+References: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0gcogmEi_-wcycEv77443_LT9w-7Ln_x1eiBm=mPiX9hA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.13-rc8
+X-PR-Tracked-Commit-Id: 4d6035f9bf4ea12776322746a216e856dfe46698
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7266f2030eb0e17c442aa6cf527263828eed79bd
+Message-Id: <162446759549.29722.17202056975267179567.pr-tracker-bot@kernel.org>
+Date:   Wed, 23 Jun 2021 16:59:55 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Wed, 23 Jun 2021 18:20:54 +0200:
 
-Please pull from the tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.13-rc8
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.13-rc8
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7266f2030eb0e17c442aa6cf527263828eed79bd
 
-with top-most commit 4d6035f9bf4ea12776322746a216e856dfe46698
+Thank you!
 
- Revert "PCI: PM: Do not read power state in pci_enable_device_flags()"
-
-on top of commit 13311e74253fe64329390df80bed3f07314ddd61
-
- Linux 5.13-rc7
-
-to receive a power management fix for 5.13-rc8.
-
-This reverts a recent PCI power management commit that causes
-initialization issues to appear on some systems.
-
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (1):
-      Revert "PCI: PM: Do not read power state in pci_enable_device_flags()"
-
----------------
-
- drivers/pci/pci.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
