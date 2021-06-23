@@ -2,95 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FF43B1C43
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 16:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919AA3B1D56
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 17:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbhFWOWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 10:22:08 -0400
-Received: from mail-io1-f41.google.com ([209.85.166.41]:46713 "EHLO
-        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbhFWOWH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 10:22:07 -0400
-Received: by mail-io1-f41.google.com with SMTP id b14so3576748iow.13;
-        Wed, 23 Jun 2021 07:19:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=UVPpaHH49R7LNxnAOOyz/+Z+U9in8qUPXgYTVhm4QcQ=;
-        b=oQWepna8lJCzTEvPfQlBJJJylyUXGIUju+1SQ/vU5aqOTiauf2dwnCCkbltAHQkMWX
-         CwAo7afuieM21nhgC0KXwLUWKjgC5GjzESDaWeMSzaYlG956MAJfdFkzux+KjGwShGna
-         dS3i9NjvzLHbIwaXjvq+tJCNbHXDJBKvpdINoipTWOkIa+HxXQu240REznVCTfxqc9tf
-         7dwQ22hxlkfNsTDYd4PBs6H3/O5bjt5ESix/LM0Gl3/99yIjf/wpigG981IW360Gcq12
-         D+O6tmrUmi6hEd/LTEHFheZ+24kti8SPXiA+n8VAfbo5eeoOFRZKUgpeV2kmkx/aGh/n
-         +jNA==
-X-Gm-Message-State: AOAM532uF8ykde8qzMuCo2lyldYwbTmDqTZCvYqAh0EU90dQxkfbn+Yj
-        FUGaJKE4HG95i7+6fkmtIA==
-X-Google-Smtp-Source: ABdhPJz3N/ThOA76tJQ73yqswaHvSdGjLeeftaHD5GTFNgF5LKgxk7CtY3xm6x0CBp18Z/iiHWbmNA==
-X-Received: by 2002:a02:620a:: with SMTP id d10mr9480381jac.22.1624457989188;
-        Wed, 23 Jun 2021 07:19:49 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p19sm13843487iob.7.2021.06.23.07.19.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 07:19:48 -0700 (PDT)
-Received: (nullmailer pid 2339996 invoked by uid 1000);
-        Wed, 23 Jun 2021 14:19:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, martin.botka@somainline.org,
-        devicetree@vger.kernel.org, jami.kettunen@somainline.org,
-        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
-        daniel.lezcano@linaro.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, linux-pm@vger.kernel.org,
-        marijn.suijten@somainline.org, robh+dt@kernel.org,
-        rjw@rjwysocki.net, stephan@gerhold.net, agross@kernel.org,
-        jeffrey.l.hugo@gmail.com
-In-Reply-To: <20210622141117.358893-3-angelogioacchino.delregno@somainline.org>
-References: <20210622141117.358893-1-angelogioacchino.delregno@somainline.org> <20210622141117.358893-3-angelogioacchino.delregno@somainline.org>
-Subject: Re: [PATCH v7 2/5] dt-bindings: soc: qcom: Add devicetree binding for QCOM SPM
-Date:   Wed, 23 Jun 2021 08:19:45 -0600
-Message-Id: <1624457985.973822.2339995.nullmailer@robh.at.kernel.org>
+        id S231370AbhFWPPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 11:15:21 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:48620 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231364AbhFWPPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 11:15:21 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.1.0)
+ id 79ccbd21b1696034; Wed, 23 Jun 2021 17:13:02 +0200
+Received: from kreacher.localnet (89-64-80-57.dynamic.chello.pl [89.64.80.57])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 52FB9669A62;
+        Wed, 23 Jun 2021 17:13:01 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 2/4] cpufreq: intel_pstate: Migrate to ->offline() instead of ->stop_cpu()
+Date:   Wed, 23 Jun 2021 17:13:00 +0200
+Message-ID: <5741915.lOV4Wx5bFT@kreacher>
+In-Reply-To: <6144911f36d3d1f5faddf81d744bd39946843f6b.1624421816.git.viresh.kumar@linaro.org>
+References: <cover.1624421816.git.viresh.kumar@linaro.org> <6144911f36d3d1f5faddf81d744bd39946843f6b.1624421816.git.viresh.kumar@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.80.57
+X-CLIENT-HOSTNAME: 89-64-80-57.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrfeegfedgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetgefgleetgeduheeugeeikeevudelueelvdeufeejfeffgeefjedugfetfeehhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdektddrheejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdehjedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+ vhhinhgtvghnthdrghhuihhtthhotheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 22 Jun 2021 16:11:14 +0200, AngeloGioacchino Del Regno wrote:
-> Add devicetree binding for Qualcomm Subsystem Power Manager (SPM).
+On Wednesday, June 23, 2021 6:24:40 AM CEST Viresh Kumar wrote:
+> commit 367dc4aa932b ("cpufreq: Add stop CPU callback to cpufreq_driver
+> interface") added the stop_cpu() callback to allow the drivers to do
+> clean up before the CPU is completely down and its state can't be
+> modified.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> At that time the CPU hotplug framework used to call the cpufreq core's
+> registered notifier for different events like CPU_DOWN_PREPARE and
+> CPU_POST_DEAD. The stop_cpu() callback was called during the
+> CPU_DOWN_PREPARE event.
+> 
+> This is no longer the case, cpuhp_cpufreq_offline() is called only once
+> by the CPU hotplug core now and we don't really need to separately
+> call stop_cpu() for cpufreq drivers.
+> 
+> Migrate to using the offline() callbacks instead of stop_cpu().
+> 
+> Cc: Dirk Brandewie <dirk.brandewie@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  .../bindings/soc/qcom/qcom,spm.yaml           | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
+>  drivers/cpufreq/intel_pstate.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
 > 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 0e69dffd5a76..b4c0ff7f5b71 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2335,6 +2335,8 @@ static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+>  
+>  	pr_debug("CPU %d going offline\n", cpu->cpu);
+>  
+> +	intel_pstate_clear_update_util_hook(policy->cpu);
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+As mentioned already in
 
-yamllint warnings/errors:
+https://lore.kernel.org/linux-pm/CAJZ5v0g2tCZptcqh+c55YYiO7rDHmZivMLsmpq_7005zNPN1xg@mail.gmail.com/
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: compatible: ['qcom,msm8974-saw2-v2.1-cpu', 'qcom,saw2'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: compatible: Additional items are not allowed ('qcom,saw2' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: '#power-domain-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
-Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml:0:0: /example-0/power-controller@f9089000: failed to match any schema with compatible: ['qcom,msm8974-saw2-v2.1-cpu', 'qcom,saw2']
-\ndoc reference errors (make refcheckdocs):
+this isn't particularly clean, because intel_pstate_cpu_offline() is
+also used in the passive mode where the above call is not needed.
 
-See https://patchwork.ozlabs.org/patch/1495727
+I would make a change like in the patch below instead.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+> +
+>  	if (cpu->suspended)
+>  		return 0;
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+---
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Combine ->stop_cpu() and ->offline()
 
-pip3 install dtschema --upgrade
+Combine the ->stop_cpu() and ->offline() callback routines for the
+active mode of intel_pstate so as to avoid setting the ->stop_cpu
+callback pointer which is going to be dropped from the framework.
 
-Please check and re-submit.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -2577,11 +2577,13 @@ static int intel_pstate_cpu_online(struc
+ 	return 0;
+ }
+ 
+-static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
++static int intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+ {
+ 	pr_debug("CPU %d stopping\n", policy->cpu);
+ 
+ 	intel_pstate_clear_update_util_hook(policy->cpu);
++
++	return intel_pstate_cpu_offline(policy);
+ }
+ 
+ static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+@@ -2654,8 +2656,7 @@ static struct cpufreq_driver intel_pstat
+ 	.resume		= intel_pstate_resume,
+ 	.init		= intel_pstate_cpu_init,
+ 	.exit		= intel_pstate_cpu_exit,
+-	.stop_cpu	= intel_pstate_stop_cpu,
+-	.offline	= intel_pstate_cpu_offline,
++	.offline	= intel_pstate_stop_cpu,
+ 	.online		= intel_pstate_cpu_online,
+ 	.update_limits	= intel_pstate_update_limits,
+ 	.name		= "intel_pstate",
+
+
 
