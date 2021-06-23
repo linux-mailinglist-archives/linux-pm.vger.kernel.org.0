@@ -2,95 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5A63B120D
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 05:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260123B129A
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 06:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhFWDRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Jun 2021 23:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S229755AbhFWESf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 00:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhFWDRh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Jun 2021 23:17:37 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18DC061574
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 20:15:20 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l11so672804pji.5
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 20:15:20 -0700 (PDT)
+        with ESMTP id S229544AbhFWESe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 00:18:34 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C177FC061574
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 21:16:16 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e33so670748pgm.3
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jun 2021 21:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=TuCy8+xkSVnt5Wvjvnwh0oeMFS0ejFv9priNd5TkRqQ=;
-        b=cG4bJf/iowDxrn+Pd0mzF9l2OghEQ+/GMmF/toFW3RtBNfInDieq+h2fdr7W5WG+L2
-         qGWY3jPZ/AzziJ6L7uNKCa3PT10hUP0g3weLHm2iayaxC2O/OhnicSbZxaNDIoj3gHsX
-         BaFM7FXs5/07EmMkot4IgozRn6BxtZ5vV5FKA1KRDthBO/6GuaHq9CxBQVstAcGLkTot
-         dSdG4utG32FVNZ5MnWysmwkbNXzokFJuXpvH4R0AJGWfKXh/goCoOBs1L8zYjcZypuYW
-         modgX+u4ldDMD8h3FZF8f/YWXdVeazndwdVgMsyPsw7VT5UuUXkftXcHCrFw4KHUZW6g
-         1fEg==
+        bh=GM/KfkvNyYfCV4WlRZzF0c8FG8z4yOZdcLnqrydTOJA=;
+        b=hUOg6lAq82C03eqNi/vyOwjZkWZuutjeTFb1It6ihSVgoGU/iaMzRBFoaX0iI3PsyE
+         uoILsXU98tHexmBNrNY6kDyhEfKO44slJMO4ZU2Nr5f2eRrIuHdcFwAAOqmmfNJkLJcr
+         /HE6YCN8zgAufwybqWCg4I2Pg+J166vId5x4a8J1lNKOCvM8gZcz+tJwWBajy+hms9M7
+         +D5+ZiGNBlFV0dWcjb3xhqNwA9R4YRt82s5QW6RsZxhKwC6/BoRmMkcDMYTVQ3/F2Vyg
+         CgwUXfMkUM3Q7WpH+jxmvVE5j2qpEAeKeqXjwE85NORwM8uhpkg0QItlPImu1sks6roF
+         JWmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TuCy8+xkSVnt5Wvjvnwh0oeMFS0ejFv9priNd5TkRqQ=;
-        b=gD9PPnHruyyPtM3A7f7kmpV/emAf41HL34Du0aSDzJXtnbtXrcM2VNZ27rhO6HDMLn
-         P1CVIk1S7gijqJ8lQDKAEFKRQhbOw1Cs/y8PnQhH24SkjTmr9Ne1QQ0tgWf19HxM/wHh
-         Dl1yHqkkr4bZl+LzvzJGgrZi+eN/Es8E602AMuX4lWVD1kbgDzymqlErFzc+KpF76HtJ
-         E0ffPskRgGmI/vJ/80JW2V2n6tdC+t1vmWb7Se4TzVenWu1lx4GOx5VJL10ajaTM0uUU
-         AJO6K5J9Xo5uWAy58Sbf/cMncXPEVazQlaZKEZq0Sy00K+fnLHlRa1UKgcBtcEt5l+/V
-         FiVA==
-X-Gm-Message-State: AOAM5338y+UZfBbhdWcnNPoeX1eGKXLRbDmaBNsyYvMBtsOHgpc3AaNy
-        mDN3S2XvJ+z1fHMpdNfgXjS2PA==
-X-Google-Smtp-Source: ABdhPJzJQB81msBICR6glRTkaUTRQt50ey4SO5o8UwaeyNGNaaBktoTMV8qvj3S/aH9E7OXeSZOVVA==
-X-Received: by 2002:a17:902:b7c9:b029:122:ee2d:25f1 with SMTP id v9-20020a170902b7c9b0290122ee2d25f1mr18423595plz.14.1624418119745;
-        Tue, 22 Jun 2021 20:15:19 -0700 (PDT)
+        bh=GM/KfkvNyYfCV4WlRZzF0c8FG8z4yOZdcLnqrydTOJA=;
+        b=WED7B6+r6uhHdejz2Aj9+X7Anotsz/0P5/GFo5hYBuP7+oK87iU3dQSg4CjZA9icVX
+         MAqPnbjViozS47LWG8E4pxjXTKt7EtvNj0zZcYnz+UffGeZxGV01uuNNKbbJjm0dWI01
+         pFHIxxqdzMlGLzBarcpZkVxlRcvXXZa5BAFktp2lieJcMgx4+rUBM8u0cx+Go2WwsDRW
+         2sF05Rgjvv1gvyhfaumB8wzLLdtpJ/koAJt42jEWvN4PsHg0GxmV9kSO0g+L1sVXiXx6
+         JYOGr44Jq/ozuG88LU75A/iYCbCvl/0kzP/pfxxiH7a1bkghtLqUkP1S/m8YYaPPvL0J
+         ODVA==
+X-Gm-Message-State: AOAM533AsqTnRwhuM/TKo6z9zjxonUbCf5fNEp3WFoXYQyROLo65+eM5
+        1wMX4u6jS9XeZU+Q9R4KJyQw5w==
+X-Google-Smtp-Source: ABdhPJylDHdym8LIvJOiroKGSEQ/OHsrjmNj1kb8o+oVjkE3RFAy6yQR+kFJv9FARzOtbYTUpgmljA==
+X-Received: by 2002:a63:4b52:: with SMTP id k18mr1967901pgl.190.1624421775966;
+        Tue, 22 Jun 2021 21:16:15 -0700 (PDT)
 Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id j15sm3490167pjn.28.2021.06.22.20.15.18
+        by smtp.gmail.com with ESMTPSA id d127sm733385pfc.50.2021.06.22.21.16.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 20:15:19 -0700 (PDT)
-Date:   Wed, 23 Jun 2021 08:45:17 +0530
+        Tue, 22 Jun 2021 21:16:15 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 09:46:13 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        dietmar.eggemann@arm.com, Chris.Redpath@arm.com,
-        Beata.Michalska@arm.com, rjw@rjwysocki.net, amit.kachhap@gmail.com
-Subject: Re: [RFC PATCH 3/4] cpufreq: Add Active Stats calls tracking
- frequency changes
-Message-ID: <20210623031517.tldkue7dcx4bt7gn@vireshk-i7>
-References: <20210622075925.16189-1-lukasz.luba@arm.com>
- <20210622075925.16189-4-lukasz.luba@arm.com>
- <20210622093258.lddlznwsndpw5mju@vireshk-i7>
- <a5d5d6b8-f358-d1d6-86d0-750af76b0cfb@arm.com>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
+ invariance
+Message-ID: <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a5d5d6b8-f358-d1d6-86d0-750af76b0cfb@arm.com>
+In-Reply-To: <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-06-21, 12:07, Lukasz Luba wrote:
-> That cpufreq_stats_record_transition() is present only if
-> CONFIG_CPU_FREQ_STAT is set. I didn't wanted to be dependent on
-> this config.
-
-Right, but you can also update the dummy
-cpufreq_stats_record_transition() function as well and you won't
-depend on the CONFIG then.
-
-> > 
-> > Plus don't you need to record this for all policy->cpus instead of
-> > just policy->cpu ?
-> > 
+On 21-06-21, 16:48, Qian Cai wrote:
 > 
-> It will be accounted for all cpus in that freq domain. The
-> active_stats_cpu_freq_fast_change() implementation uses
-> a shared structure (single for whole domain) 'shared_ast':
-> _active_stats_cpu_freq_change(ast->shared_ast, freq, ts)
-> (from patch 1/4)
+> 
+> On 6/21/2021 5:19 AM, Viresh Kumar wrote:
+> > CPPC cpufreq driver is used for ARM servers and this patch series tries to
+> > provide counter-based frequency invariance support for them in the absence for
+> > architecture specific counters (like AMUs).
+> 
+> Viresh, this series works fine on my quick tests so far.
 
-Ahh, I missed that then.
+Do you want me to add your Tested-by for the series ?
 
 -- 
 viresh
