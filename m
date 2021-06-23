@@ -2,154 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECC13B1B8E
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 15:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FF43B1C43
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jun 2021 16:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhFWNwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Jun 2021 09:52:50 -0400
-Received: from foss.arm.com ([217.140.110.172]:35660 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230229AbhFWNwu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Jun 2021 09:52:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB317ED1;
-        Wed, 23 Jun 2021 06:50:30 -0700 (PDT)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 783A03F718;
-        Wed, 23 Jun 2021 06:50:30 -0700 (PDT)
-Date:   Wed, 23 Jun 2021 14:50:29 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 3/4] arch_topology: Avoid use-after-free for
- scale_freq_data
-Message-ID: <20210623135029.GC12411@arm.com>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <f0e5849b4fe19b8aabd12640c85e13dd96945e21.1624266901.git.viresh.kumar@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0e5849b4fe19b8aabd12640c85e13dd96945e21.1624266901.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S231224AbhFWOWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Jun 2021 10:22:08 -0400
+Received: from mail-io1-f41.google.com ([209.85.166.41]:46713 "EHLO
+        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231139AbhFWOWH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Jun 2021 10:22:07 -0400
+Received: by mail-io1-f41.google.com with SMTP id b14so3576748iow.13;
+        Wed, 23 Jun 2021 07:19:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=UVPpaHH49R7LNxnAOOyz/+Z+U9in8qUPXgYTVhm4QcQ=;
+        b=oQWepna8lJCzTEvPfQlBJJJylyUXGIUju+1SQ/vU5aqOTiauf2dwnCCkbltAHQkMWX
+         CwAo7afuieM21nhgC0KXwLUWKjgC5GjzESDaWeMSzaYlG956MAJfdFkzux+KjGwShGna
+         dS3i9NjvzLHbIwaXjvq+tJCNbHXDJBKvpdINoipTWOkIa+HxXQu240REznVCTfxqc9tf
+         7dwQ22hxlkfNsTDYd4PBs6H3/O5bjt5ESix/LM0Gl3/99yIjf/wpigG981IW360Gcq12
+         D+O6tmrUmi6hEd/LTEHFheZ+24kti8SPXiA+n8VAfbo5eeoOFRZKUgpeV2kmkx/aGh/n
+         +jNA==
+X-Gm-Message-State: AOAM532uF8ykde8qzMuCo2lyldYwbTmDqTZCvYqAh0EU90dQxkfbn+Yj
+        FUGaJKE4HG95i7+6fkmtIA==
+X-Google-Smtp-Source: ABdhPJz3N/ThOA76tJQ73yqswaHvSdGjLeeftaHD5GTFNgF5LKgxk7CtY3xm6x0CBp18Z/iiHWbmNA==
+X-Received: by 2002:a02:620a:: with SMTP id d10mr9480381jac.22.1624457989188;
+        Wed, 23 Jun 2021 07:19:49 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id p19sm13843487iob.7.2021.06.23.07.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 07:19:48 -0700 (PDT)
+Received: (nullmailer pid 2339996 invoked by uid 1000);
+        Wed, 23 Jun 2021 14:19:45 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     bjorn.andersson@linaro.org, martin.botka@somainline.org,
+        devicetree@vger.kernel.org, jami.kettunen@somainline.org,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        daniel.lezcano@linaro.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, linux-pm@vger.kernel.org,
+        marijn.suijten@somainline.org, robh+dt@kernel.org,
+        rjw@rjwysocki.net, stephan@gerhold.net, agross@kernel.org,
+        jeffrey.l.hugo@gmail.com
+In-Reply-To: <20210622141117.358893-3-angelogioacchino.delregno@somainline.org>
+References: <20210622141117.358893-1-angelogioacchino.delregno@somainline.org> <20210622141117.358893-3-angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v7 2/5] dt-bindings: soc: qcom: Add devicetree binding for QCOM SPM
+Date:   Wed, 23 Jun 2021 08:19:45 -0600
+Message-Id: <1624457985.973822.2339995.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey,
-
-On Monday 21 Jun 2021 at 14:49:36 (+0530), Viresh Kumar wrote:
-> Currently topology_scale_freq_tick() (which gets called from
-> scheduler_tick()) may end up using a pointer to "struct
-> scale_freq_data", which was previously cleared by
-> topology_clear_scale_freq_source(), as there is no protection in place
-> here. The users of topology_clear_scale_freq_source() though needs a
-> guarantee that the previously cleared scale_freq_data isn't used
-> anymore, so they can free the related resources.
+On Tue, 22 Jun 2021 16:11:14 +0200, AngeloGioacchino Del Regno wrote:
+> Add devicetree binding for Qualcomm Subsystem Power Manager (SPM).
 > 
-> Since topology_scale_freq_tick() is called from scheduler tick, we don't
-> want to add locking in there. Use the RCU update mechanism instead
-> (which is already used by the scheduler's utilization update path) to
-> guarantee race free updates here.
-> 
-> synchronize_rcu() makes sure that all RCU critical sections that started
-> before it is called, will finish before it returns. And so the callers
-> of topology_clear_scale_freq_source() don't need to worry about their
-> callback getting called anymore.
-> 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Fixes: 01e055c120a4 ("arch_topology: Allow multiple entities to provide sched_freq_tick() callback")
-> Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > ---
->  drivers/base/arch_topology.c | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index c1179edc0f3b..921312a8d957 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -18,10 +18,11 @@
->  #include <linux/cpumask.h>
->  #include <linux/init.h>
->  #include <linux/percpu.h>
-> +#include <linux/rcupdate.h>
->  #include <linux/sched.h>
->  #include <linux/smp.h>
->  
-> -static DEFINE_PER_CPU(struct scale_freq_data *, sft_data);
-> +static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
->  static struct cpumask scale_freq_counters_mask;
->  static bool scale_freq_invariant;
->  
-> @@ -66,16 +67,20 @@ void topology_set_scale_freq_source(struct scale_freq_data *data,
->  	if (cpumask_empty(&scale_freq_counters_mask))
->  		scale_freq_invariant = topology_scale_freq_invariant();
->  
-> +	rcu_read_lock();
-> +
->  	for_each_cpu(cpu, cpus) {
-> -		sfd = per_cpu(sft_data, cpu);
-> +		sfd = rcu_dereference(*per_cpu_ptr(&sft_data, cpu));
->  
->  		/* Use ARCH provided counters whenever possible */
->  		if (!sfd || sfd->source != SCALE_FREQ_SOURCE_ARCH) {
-> -			per_cpu(sft_data, cpu) = data;
-> +			rcu_assign_pointer(per_cpu(sft_data, cpu), data);
->  			cpumask_set_cpu(cpu, &scale_freq_counters_mask);
->  		}
->  	}
->  
-> +	rcu_read_unlock();
-> +
->  	update_scale_freq_invariant(true);
->  }
->  EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
-> @@ -86,22 +91,32 @@ void topology_clear_scale_freq_source(enum scale_freq_source source,
->  	struct scale_freq_data *sfd;
->  	int cpu;
->  
-> +	rcu_read_lock();
-> +
->  	for_each_cpu(cpu, cpus) {
-> -		sfd = per_cpu(sft_data, cpu);
-> +		sfd = rcu_dereference(*per_cpu_ptr(&sft_data, cpu));
->  
->  		if (sfd && sfd->source == source) {
-> -			per_cpu(sft_data, cpu) = NULL;
-> +			rcu_assign_pointer(per_cpu(sft_data, cpu), NULL);
->  			cpumask_clear_cpu(cpu, &scale_freq_counters_mask);
->  		}
->  	}
->  
-> +	rcu_read_unlock();
-> +
-> +	/*
-> +	 * Make sure all references to previous sft_data are dropped to avoid
-> +	 * use-after-free races.
-> +	 */
-> +	synchronize_rcu();
-> +
->  	update_scale_freq_invariant(false);
->  }
->  EXPORT_SYMBOL_GPL(topology_clear_scale_freq_source);
->  
->  void topology_scale_freq_tick(void)
->  {
-> -	struct scale_freq_data *sfd = *this_cpu_ptr(&sft_data);
-> +	struct scale_freq_data *sfd = rcu_dereference_sched(*this_cpu_ptr(&sft_data));
->  
->  	if (sfd)
->  		sfd->set_freq_scale();
-> -- 
-> 2.31.1.272.g89b43f80a514
+>  .../bindings/soc/qcom/qcom,spm.yaml           | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
 > 
 
-Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: compatible: ['qcom,msm8974-saw2-v2.1-cpu', 'qcom,saw2'] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: compatible: Additional items are not allowed ('qcom,saw2' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml: power-controller@f9089000: '#power-domain-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
+Documentation/devicetree/bindings/soc/qcom/qcom,spm.example.dt.yaml:0:0: /example-0/power-controller@f9089000: failed to match any schema with compatible: ['qcom,msm8974-saw2-v2.1-cpu', 'qcom,saw2']
+\ndoc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1495727
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
