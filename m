@@ -2,125 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 145473B2AA0
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 10:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318763B2B34
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 11:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229465AbhFXIqp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 04:46:45 -0400
-Received: from smtpbgau1.qq.com ([54.206.16.166]:41144 "EHLO smtpbgau1.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229379AbhFXIqn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Jun 2021 04:46:43 -0400
-X-Greylist: delayed 83890 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Jun 2021 04:46:42 EDT
-X-QQ-mid: bizesmtp50t1624524257ta18clmb
-Received: from localhost.localdomain (unknown [182.148.13.245])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Thu, 24 Jun 2021 16:44:10 +0800 (CST)
-X-QQ-SSF: 0100000000200040B000C00A0000000
-X-QQ-FEAT: xmzaef4TE3dqfPHTY6rIfJftWpkKueIDu/WqMf26cgfyC/b5K/dtv/pEvB+6r
-        Bwb5YTL6rLnF8bVParl8V4ki8yek1K2AMKr3OnW3FX7qEk7T3JJkNwfFqIJ0E2iNdgddKw5
-        FbJ5EcoWgELyKlFGQnjWH02S/vlDgnYyITkG4TjXfSb4H4LVWzGa87dezlG5HFR0CywEkn+
-        IpnximnNSWT9IEJrYCtPMH7t85n1WcWQhiS/AruO7xChmc21JBKmxbaI67S9aGiGQy8/DWg
-        pWKXr+n5yAGdQoyKHYYm+2GgcV38eweRUB79dY58cgIGgNR5LG2o3fFNjN78zW8BlWbpFv5
-        Apd3rlWKYfRi0GdvoA=
-X-QQ-GoodBg: 0
-From:   Jinchao Wang <wjc@cdjrlc.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-kernel@vger.kernel.org, wjc@cdjrlc.com,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] powercap: Replace symbolic permissions with octal permissions
-Date:   Thu, 24 Jun 2021 16:44:03 +0800
-Message-Id: <20210624084403.1163-1-wjc@cdjrlc.com>
-X-Mailer: git-send-email 2.31.1
+        id S231453AbhFXJVC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 05:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231298AbhFXJVC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 05:21:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E5CC061574;
+        Thu, 24 Jun 2021 02:18:43 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id x24so9029663lfr.10;
+        Thu, 24 Jun 2021 02:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B3Xs22v9YodibxgfhDWCF12VK+jYjhqQdkvlmNgIQsQ=;
+        b=tAb1yuC1N4ve1hdrHxEzX4/lqYOF7Hg11/RQ4tyJHC4blsQ9bvQHjJ3si4OodGdXzf
+         lOJbxJxNE3Vnk0VWuKb7/s5D4P+rtK+Q28AYg3eGyt+BGeKc4mxx1kb+cJB9CS/NV62I
+         99Yr9FXmcZZDxrjDcTiw9bsLz11lJDPwq+f99NJxjqXM6iy59k2qW183wdvn0DGlwWo+
+         tgz1Pm7mFbvap/WTSmSnnfnXbDuOkHAiaM+jMWx3CwDCJfjbJ5VmGcPeIN0WQri977+O
+         PcpSdq2EX6bKXQvwetrugI+nLkuGTO7vpN0m0ZyD+FmcZ6CGsibmY6nF++8BR3/oeCQh
+         adSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B3Xs22v9YodibxgfhDWCF12VK+jYjhqQdkvlmNgIQsQ=;
+        b=R2UA66RUmZ0whZOxHzB7yJTWewEwDwtZnw/Nd6hMsCDGc2u35DUjsT5qJwCEKnhZWU
+         v0/L4IGwMec/pzb5k3xpvP9DA+lfj9LLCDvZQlNTG0faeLp8Fs2A5RZfNjni7ff2NPaz
+         A9HKGt9qp0iLz5O+I/jHsLBsqQY4ennoSXrSG8RaozhvJALJKTVzENWjZx6EPLesASRA
+         5whi4hcdq4Lj+53A/D7ZDMcIt8Rc74hFZBXJN/sGLBLnwqv/C86lKP+QptOQF/Qnx4v3
+         qPo7/m5cRiijmTHPbWWchlgaXlgrra2C4uPYPMFPySFshqi5OLeYjBun9ODjlL/yPCrW
+         0dWQ==
+X-Gm-Message-State: AOAM5325DjAlMqhH+7c30WV3qII7PSaqSUjuDTlHMDrym5mrEG8p9mJS
+        jK/4dCreIlPpPlfn41DvU4Y=
+X-Google-Smtp-Source: ABdhPJxrmwO3XfwebWb1k0Q7utcGo45C3joBKBUqYNkBTmSZHt7mlcRl2aPoRQgNaCi27CkFpz5gYg==
+X-Received: by 2002:a19:5e16:: with SMTP id s22mr3267356lfb.614.1624526321660;
+        Thu, 24 Jun 2021 02:18:41 -0700 (PDT)
+Received: from localhost.localdomain ([185.188.71.122])
+        by smtp.gmail.com with ESMTPSA id l15sm234012ljc.35.2021.06.24.02.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 02:18:41 -0700 (PDT)
+From:   Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     Daniel Gonzalez Cabanelas <dgcbueu@gmail.com>,
+        Pawel Dembicki <paweldembicki@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] power: reset: linkstation-poweroff: prepare for new devices
+Date:   Thu, 24 Jun 2021 11:18:11 +0200
+Message-Id: <20210624091813.42334-1-paweldembicki@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Resolve following checkpatch issue,
-Replace symbolic permissions with octal permissions
+This commit prepare driver for another device support.
 
-Signed-off-by: Jinchao Wang <wjc@cdjrlc.com>
+New power_off_cfg structure describes two most important things: name of
+mdio bus and pointer to register setting function. It allow to add new
+device with different mdio bus node and other phy register config.
+
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 ---
- drivers/powercap/powercap_sys.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/power/reset/linkstation-poweroff.c | 35 ++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-index f0654a932b37..e706548c59bb 100644
---- a/drivers/powercap/powercap_sys.c
-+++ b/drivers/powercap/powercap_sys.c
-@@ -223,46 +223,46 @@ static int seed_constraint_attributes(void)
+diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/reset/linkstation-poweroff.c
+index f1e843df0e16..cb5a32f852c1 100644
+--- a/drivers/power/reset/linkstation-poweroff.c
++++ b/drivers/power/reset/linkstation-poweroff.c
+@@ -29,11 +29,21 @@
+ #define LED2_FORCE_ON					(0x8 << 8)
+ #define LEDMASK						GENMASK(11,8)
  
- 	for (i = 0; i < MAX_CONSTRAINTS_PER_ZONE; ++i) {
- 		ret = create_constraint_attribute(i, "power_limit_uw",
--					S_IWUSR | S_IRUGO,
-+					0644,
- 					&constraint_attrs[i].power_limit_attr,
- 					show_constraint_power_limit_uw,
- 					store_constraint_power_limit_uw);
- 		if (ret)
- 			goto err_alloc;
- 		ret = create_constraint_attribute(i, "time_window_us",
--					S_IWUSR | S_IRUGO,
-+					0644,
- 					&constraint_attrs[i].time_window_attr,
- 					show_constraint_time_window_us,
- 					store_constraint_time_window_us);
- 		if (ret)
- 			goto err_alloc;
--		ret = create_constraint_attribute(i, "name", S_IRUGO,
-+		ret = create_constraint_attribute(i, "name", 0444,
- 				&constraint_attrs[i].name_attr,
- 				show_constraint_name,
- 				NULL);
- 		if (ret)
- 			goto err_alloc;
--		ret = create_constraint_attribute(i, "max_power_uw", S_IRUGO,
-+		ret = create_constraint_attribute(i, "max_power_uw", 0444,
- 				&constraint_attrs[i].max_power_attr,
- 				show_constraint_max_power_uw,
- 				NULL);
- 		if (ret)
- 			goto err_alloc;
--		ret = create_constraint_attribute(i, "min_power_uw", S_IRUGO,
-+		ret = create_constraint_attribute(i, "min_power_uw", 0444,
- 				&constraint_attrs[i].min_power_attr,
- 				show_constraint_min_power_uw,
- 				NULL);
- 		if (ret)
- 			goto err_alloc;
- 		ret = create_constraint_attribute(i, "max_time_window_us",
--				S_IRUGO,
-+				0444,
- 				&constraint_attrs[i].max_time_window_attr,
- 				show_constraint_max_time_window_us,
- 				NULL);
- 		if (ret)
- 			goto err_alloc;
- 		ret = create_constraint_attribute(i, "min_time_window_us",
--				S_IRUGO,
-+				0444,
- 				&constraint_attrs[i].min_time_window_attr,
- 				show_constraint_min_time_window_us,
- 				NULL);
-@@ -366,9 +366,9 @@ static void create_power_zone_common_attributes(
- 					&dev_attr_max_energy_range_uj.attr;
- 	if (power_zone->ops->get_energy_uj) {
- 		if (power_zone->ops->reset_energy_uj)
--			dev_attr_energy_uj.attr.mode = S_IWUSR | S_IRUSR;
-+			dev_attr_energy_uj.attr.mode = 0600;
- 		else
--			dev_attr_energy_uj.attr.mode = S_IRUSR;
-+			dev_attr_energy_uj.attr.mode = 0400;
- 		power_zone->zone_dev_attrs[count++] =
- 					&dev_attr_energy_uj.attr;
- 	}
++struct power_off_cfg {
++	char *mdio_node_name;
++	void (*phy_set_reg)(bool restart);
++};
++
+ static struct phy_device *phydev;
++static const struct power_off_cfg *cfg;
+ 
+-static void mvphy_reg_intn(u16 data)
++static void linkstation_mvphy_reg_intn(bool restart)
+ {
+ 	int rc = 0, saved_page;
++	u16 data = 0;
++
++	if (restart)
++		data = MII_88E1318S_PHY_LED_TCR_FORCE_INT;
+ 
+ 	saved_page = phy_select_page(phydev, MII_MARVELL_LED_PAGE);
+ 	if (saved_page < 0)
+@@ -66,11 +76,16 @@ static void mvphy_reg_intn(u16 data)
+ 		dev_err(&phydev->mdio.dev, "Write register failed, %d\n", rc);
+ }
+ 
++static const struct power_off_cfg linkstation_power_off_cfg = {
++	.mdio_node_name = "mdio",
++	.phy_set_reg = linkstation_mvphy_reg_intn,
++};
++
+ static int linkstation_reboot_notifier(struct notifier_block *nb,
+ 				       unsigned long action, void *unused)
+ {
+ 	if (action == SYS_RESTART)
+-		mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
++		cfg->phy_set_reg(true);
+ 
+ 	return NOTIFY_DONE;
+ }
+@@ -82,14 +97,18 @@ static struct notifier_block linkstation_reboot_nb = {
+ static void linkstation_poweroff(void)
+ {
+ 	unregister_reboot_notifier(&linkstation_reboot_nb);
+-	mvphy_reg_intn(0);
++	cfg->phy_set_reg(false);
+ 
+ 	kernel_restart("Power off");
+ }
+ 
+ static const struct of_device_id ls_poweroff_of_match[] = {
+-	{ .compatible = "buffalo,ls421d" },
+-	{ .compatible = "buffalo,ls421de" },
++	{ .compatible = "buffalo,ls421d",
++	  .data = &linkstation_power_off_cfg,
++	},
++	{ .compatible = "buffalo,ls421de",
++	  .data = &linkstation_power_off_cfg,
++	},
+ 	{ },
+ };
+ 
+@@ -97,13 +116,17 @@ static int __init linkstation_poweroff_init(void)
+ {
+ 	struct mii_bus *bus;
+ 	struct device_node *dn;
++	const struct of_device_id *match;
+ 
+ 	dn = of_find_matching_node(NULL, ls_poweroff_of_match);
+ 	if (!dn)
+ 		return -ENODEV;
+ 	of_node_put(dn);
+ 
+-	dn = of_find_node_by_name(NULL, "mdio");
++	match = of_match_node(ls_poweroff_of_match, dn);
++	cfg = match->data;
++
++	dn = of_find_node_by_name(NULL, cfg->mdio_node_name);
+ 	if (!dn)
+ 		return -ENODEV;
+ 
 -- 
-2.31.1
-
-
+2.25.1
 
