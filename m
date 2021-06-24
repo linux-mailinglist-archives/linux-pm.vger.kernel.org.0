@@ -2,156 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFE73B2728
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 08:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145473B2AA0
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 10:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbhFXGLV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 02:11:21 -0400
-Received: from mga11.intel.com ([192.55.52.93]:14098 "EHLO mga11.intel.com"
+        id S229465AbhFXIqp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 04:46:45 -0400
+Received: from smtpbgau1.qq.com ([54.206.16.166]:41144 "EHLO smtpbgau1.qq.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230257AbhFXGLV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Jun 2021 02:11:21 -0400
-IronPort-SDR: NDx3TZcm5w1ooclxdCzOHStoHrcaMW2XjNNQtfovHgjzFMlRgIqEfiGcfmAsewZNUxf/aPtu8e
- Oupvl/iaH6vA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10024"; a="204395807"
-X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
-   d="scan'208";a="204395807"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2021 23:09:02 -0700
-IronPort-SDR: ZhArCfPuSkZwzlunxr/+SijVPaufvrA6o+nSs5u/XR0qEj9QaWh2SpEZG8Y53qVsqFyarvdbiQ
- xcKhrZNfAPJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
-   d="scan'208";a="454928641"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2021 23:09:01 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lwIXs-0006O2-Sc; Thu, 24 Jun 2021 06:09:00 +0000
-Date:   Thu, 24 Jun 2021 14:08:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- e6cf95dcf6c8c682f07966659a40def8f973ce18
-Message-ID: <60d42154.P1ij2hzGLeeD/Laa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229379AbhFXIqn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Jun 2021 04:46:43 -0400
+X-Greylist: delayed 83890 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Jun 2021 04:46:42 EDT
+X-QQ-mid: bizesmtp50t1624524257ta18clmb
+Received: from localhost.localdomain (unknown [182.148.13.245])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Thu, 24 Jun 2021 16:44:10 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000C00A0000000
+X-QQ-FEAT: xmzaef4TE3dqfPHTY6rIfJftWpkKueIDu/WqMf26cgfyC/b5K/dtv/pEvB+6r
+        Bwb5YTL6rLnF8bVParl8V4ki8yek1K2AMKr3OnW3FX7qEk7T3JJkNwfFqIJ0E2iNdgddKw5
+        FbJ5EcoWgELyKlFGQnjWH02S/vlDgnYyITkG4TjXfSb4H4LVWzGa87dezlG5HFR0CywEkn+
+        IpnximnNSWT9IEJrYCtPMH7t85n1WcWQhiS/AruO7xChmc21JBKmxbaI67S9aGiGQy8/DWg
+        pWKXr+n5yAGdQoyKHYYm+2GgcV38eweRUB79dY58cgIGgNR5LG2o3fFNjN78zW8BlWbpFv5
+        Apd3rlWKYfRi0GdvoA=
+X-QQ-GoodBg: 0
+From:   Jinchao Wang <wjc@cdjrlc.com>
+To:     rjw@rjwysocki.net
+Cc:     linux-kernel@vger.kernel.org, wjc@cdjrlc.com,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] powercap: Replace symbolic permissions with octal permissions
+Date:   Thu, 24 Jun 2021 16:44:03 +0800
+Message-Id: <20210624084403.1163-1-wjc@cdjrlc.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e6cf95dcf6c8c682f07966659a40def8f973ce18  Merge branch 'pm-cpufreq' into bleeding-edge
+Resolve following checkpatch issue,
+Replace symbolic permissions with octal permissions
 
-elapsed time: 726m
-
-configs tested: 93
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                          rsk7203_defconfig
-sh                        edosk7760_defconfig
-m68k                          atari_defconfig
-arm                         lpc32xx_defconfig
-arm                          lpd270_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                     pseries_defconfig
-mips                        jmr3927_defconfig
-arm                      footbridge_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                 mpc8315_rdb_defconfig
-sh                         microdev_defconfig
-parisc                generic-32bit_defconfig
-powerpc                    gamecube_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210622
-i386                 randconfig-a002-20210622
-i386                 randconfig-a003-20210622
-i386                 randconfig-a006-20210622
-i386                 randconfig-a005-20210622
-i386                 randconfig-a004-20210622
-x86_64               randconfig-a012-20210622
-x86_64               randconfig-a016-20210622
-x86_64               randconfig-a015-20210622
-x86_64               randconfig-a014-20210622
-x86_64               randconfig-a013-20210622
-x86_64               randconfig-a011-20210622
-i386                 randconfig-a011-20210622
-i386                 randconfig-a014-20210622
-i386                 randconfig-a013-20210622
-i386                 randconfig-a015-20210622
-i386                 randconfig-a012-20210622
-i386                 randconfig-a016-20210622
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-b001-20210623
-x86_64               randconfig-a002-20210622
-x86_64               randconfig-a001-20210622
-x86_64               randconfig-a005-20210622
-x86_64               randconfig-a003-20210622
-x86_64               randconfig-a004-20210622
-x86_64               randconfig-a006-20210622
-
+Signed-off-by: Jinchao Wang <wjc@cdjrlc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/powercap/powercap_sys.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+index f0654a932b37..e706548c59bb 100644
+--- a/drivers/powercap/powercap_sys.c
++++ b/drivers/powercap/powercap_sys.c
+@@ -223,46 +223,46 @@ static int seed_constraint_attributes(void)
+ 
+ 	for (i = 0; i < MAX_CONSTRAINTS_PER_ZONE; ++i) {
+ 		ret = create_constraint_attribute(i, "power_limit_uw",
+-					S_IWUSR | S_IRUGO,
++					0644,
+ 					&constraint_attrs[i].power_limit_attr,
+ 					show_constraint_power_limit_uw,
+ 					store_constraint_power_limit_uw);
+ 		if (ret)
+ 			goto err_alloc;
+ 		ret = create_constraint_attribute(i, "time_window_us",
+-					S_IWUSR | S_IRUGO,
++					0644,
+ 					&constraint_attrs[i].time_window_attr,
+ 					show_constraint_time_window_us,
+ 					store_constraint_time_window_us);
+ 		if (ret)
+ 			goto err_alloc;
+-		ret = create_constraint_attribute(i, "name", S_IRUGO,
++		ret = create_constraint_attribute(i, "name", 0444,
+ 				&constraint_attrs[i].name_attr,
+ 				show_constraint_name,
+ 				NULL);
+ 		if (ret)
+ 			goto err_alloc;
+-		ret = create_constraint_attribute(i, "max_power_uw", S_IRUGO,
++		ret = create_constraint_attribute(i, "max_power_uw", 0444,
+ 				&constraint_attrs[i].max_power_attr,
+ 				show_constraint_max_power_uw,
+ 				NULL);
+ 		if (ret)
+ 			goto err_alloc;
+-		ret = create_constraint_attribute(i, "min_power_uw", S_IRUGO,
++		ret = create_constraint_attribute(i, "min_power_uw", 0444,
+ 				&constraint_attrs[i].min_power_attr,
+ 				show_constraint_min_power_uw,
+ 				NULL);
+ 		if (ret)
+ 			goto err_alloc;
+ 		ret = create_constraint_attribute(i, "max_time_window_us",
+-				S_IRUGO,
++				0444,
+ 				&constraint_attrs[i].max_time_window_attr,
+ 				show_constraint_max_time_window_us,
+ 				NULL);
+ 		if (ret)
+ 			goto err_alloc;
+ 		ret = create_constraint_attribute(i, "min_time_window_us",
+-				S_IRUGO,
++				0444,
+ 				&constraint_attrs[i].min_time_window_attr,
+ 				show_constraint_min_time_window_us,
+ 				NULL);
+@@ -366,9 +366,9 @@ static void create_power_zone_common_attributes(
+ 					&dev_attr_max_energy_range_uj.attr;
+ 	if (power_zone->ops->get_energy_uj) {
+ 		if (power_zone->ops->reset_energy_uj)
+-			dev_attr_energy_uj.attr.mode = S_IWUSR | S_IRUSR;
++			dev_attr_energy_uj.attr.mode = 0600;
+ 		else
+-			dev_attr_energy_uj.attr.mode = S_IRUSR;
++			dev_attr_energy_uj.attr.mode = 0400;
+ 		power_zone->zone_dev_attrs[count++] =
+ 					&dev_attr_energy_uj.attr;
+ 	}
+-- 
+2.31.1
+
+
+
