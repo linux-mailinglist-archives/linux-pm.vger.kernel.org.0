@@ -2,197 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B2A3B2661
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 06:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFE73B2728
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 08:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhFXEfD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 00:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbhFXEfC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 00:35:02 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F256BC061574
-        for <linux-pm@vger.kernel.org>; Wed, 23 Jun 2021 21:32:42 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id y13so2285744plc.8
-        for <linux-pm@vger.kernel.org>; Wed, 23 Jun 2021 21:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lTTd4C04SA2E3AghdMNSGn7s0cIff6cdMlZ1vAXtDSA=;
-        b=gen7iuSa1fQaov27zr35RQ3fadV1bVakwExJvyoiz/2bAisC/EC2AoCmrVyvbgzPwD
-         4nlY18J9+uD30MzVgmESRnwG7KFHNjSUm/oMxYcJ59RgRczKUQERiJGKHqOviBzoxTL6
-         0DMxTW3MAk0v0ymifRwSsciaXB//wR52cMlxJYQytRE+5McqSQDKGO7tH4DZkxUOuSo0
-         /cwV8keRsZwMejvLjCpil20D/D9pR2P9xM7WhBEGNGM+14jxF7KzzVBhbeHotw0I9eEk
-         R6U0KXym1XeZAv1klhqYuOW+UDK8YKQP4tcXjo2hn0YGW7q4CIwqvgSLLeMY6Uo7g/9H
-         h0Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lTTd4C04SA2E3AghdMNSGn7s0cIff6cdMlZ1vAXtDSA=;
-        b=t2Qj/lR+9D9gMpOUZb71E7/Mj30+eHMQobWqjMEvvaGcmfqrjvlVmd4dSbnQF+8Gnz
-         US9CnW6M91KISt5IZsZJzaQSOU1u+rRZ/qu/lWxjpYAljGEPxis/CiToNk1JQmw7O3Or
-         dTUeyQBOEtgRHdjNS+wzbjq0/fxW1rhxGPfLegfxYXFSG1SzAy4jp0pjUMJzsJbvLejE
-         5ipaXyumWKjYK0o75xIbivV/AiypfduPU444eloJFOk2zNxyH9mWb/MwoK70Rem0R+ee
-         Gwla1oOc7yqJM1e/NQfYFJqsU/1Xt8F9HIJK5OQfBvKYtszQLGT5FOWfYytJ8NflzEaz
-         9SQQ==
-X-Gm-Message-State: AOAM532p7eOLsOvqsq4/kHwj493mJLagORnJ0kXQONhsUbjIMZ2IvmNq
-        NImscZ6TtwzLegxOz9cv8JJCvA==
-X-Google-Smtp-Source: ABdhPJzz6vn2zWUKB2ryOpIaYUVQnrSaiXXW5UhtPCB+tqvxcPK98S7Q9smW66yPLcbeUXDhds9k9Q==
-X-Received: by 2002:a17:90a:de84:: with SMTP id n4mr8712489pjv.62.1624509162441;
-        Wed, 23 Jun 2021 21:32:42 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id 76sm1231543pfu.131.2021.06.23.21.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 21:32:41 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 10:02:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] dt-bindings: opp: Convert to DT schema
-Message-ID: <20210624043240.n6m3cdftz75lhm3t@vireshk-i7>
-References: <20210623230722.3545986-1-robh@kernel.org>
- <20210623230722.3545986-3-robh@kernel.org>
+        id S230393AbhFXGLV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 02:11:21 -0400
+Received: from mga11.intel.com ([192.55.52.93]:14098 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230257AbhFXGLV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Jun 2021 02:11:21 -0400
+IronPort-SDR: NDx3TZcm5w1ooclxdCzOHStoHrcaMW2XjNNQtfovHgjzFMlRgIqEfiGcfmAsewZNUxf/aPtu8e
+ Oupvl/iaH6vA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10024"; a="204395807"
+X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
+   d="scan'208";a="204395807"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2021 23:09:02 -0700
+IronPort-SDR: ZhArCfPuSkZwzlunxr/+SijVPaufvrA6o+nSs5u/XR0qEj9QaWh2SpEZG8Y53qVsqFyarvdbiQ
+ xcKhrZNfAPJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
+   d="scan'208";a="454928641"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2021 23:09:01 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lwIXs-0006O2-Sc; Thu, 24 Jun 2021 06:09:00 +0000
+Date:   Thu, 24 Jun 2021 14:08:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ e6cf95dcf6c8c682f07966659a40def8f973ce18
+Message-ID: <60d42154.P1ij2hzGLeeD/Laa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210623230722.3545986-3-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for taking it up :)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: e6cf95dcf6c8c682f07966659a40def8f973ce18  Merge branch 'pm-cpufreq' into bleeding-edge
 
-On 23-06-21, 17:07, Rob Herring wrote:
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +$id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic OPP (Operating Performance Points) Common Binding
-> +
-> +maintainers:
-> +  - Viresh Kumar <viresh.kumar@linaro.org>
-> +
-> +description: |
-> +  Devices work at voltage-current-frequency combinations and some implementations
-> +  have the liberty of choosing these. These combinations are called Operating
-> +  Performance Points aka OPPs. This document defines bindings for these OPPs
-> +  applicable across wide range of devices. For illustration purpose, this document
-> +  uses CPU as a device.
-> +
-> +  This describes the OPPs belonging to a device.
-> +
-> +select: false
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: '^opp-table(-[a-z0-9]+)?$'
-> +
-> +  opp-shared:
-> +    description:
-> +      Indicates that device nodes using this OPP Table Node's phandle switch
-> +      their DVFS state together, i.e. they share clock/voltage/current lines.
-> +      Missing property means devices have independent clock/voltage/current
-> +      lines, but they share OPP tables.
-> +    type: boolean
-> +
-> +patternProperties:
-> +  '^opp-?[0-9]+$':
-> +    type: object
-> +    description:
-> +      One or more OPP nodes describing voltage-current-frequency combinations.
-> +      Their name isn't significant but their phandle can be used to reference an
-> +      OPP. These are mandatory except for the case where the OPP table is
-> +      present only to indicate dependency between devices using the opp-shared
-> +      property.
-> +
-> +    properties:
-> +      opp-hz:
-> +        description:
-> +          Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
-> +          required property for all device nodes, unless another "required"
-> +          property to uniquely identify the OPP nodes exists. Devices like power
-> +          domains must have another (implementation dependent) property.
-> +
-> +      opp-peak-kBps:
-> +        description:
-> +          Peak bandwidth in kilobytes per second, expressed as an array of
-> +          32-bit big-endian integers. Each element of the array represents the
-> +          peak bandwidth value of each interconnect path. The number of elements
-> +          should match the number of interconnect paths.
-> +        minItems: 1
-> +        maxItems: 32  # Should be enough
+elapsed time: 726m
 
-Can we move this down, closer to opp-avg-kBps ?
+configs tested: 93
+configs skipped: 2
 
-> +
-> +      opp-microvolt:
-> +        description: |
-> +          Voltage for the OPP
-> +
-> +          A single regulator's voltage is specified with an array of size one or three.
-> +          Single entry is for target voltage and three entries are for <target min max>
-> +          voltages.
-> +
-> +          Entries for multiple regulators shall be provided in the same field separated
-> +          by angular brackets <>. The OPP binding doesn't provide any provisions to
-> +          relate the values to their power supplies or the order in which the supplies
-> +          need to be configured and that is left for the implementation specific
-> +          binding.
-> +
-> +          Entries for all regulators shall be of the same size, i.e. either all use a
-> +          single value or triplets.
-> +        minItems: 1
-> +        maxItems: 8
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-For consistency with rest of the doc, maybe add
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                          rsk7203_defconfig
+sh                        edosk7760_defconfig
+m68k                          atari_defconfig
+arm                         lpc32xx_defconfig
+arm                          lpd270_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                     pseries_defconfig
+mips                        jmr3927_defconfig
+arm                      footbridge_defconfig
+powerpc                      ppc40x_defconfig
+powerpc                 mpc8315_rdb_defconfig
+sh                         microdev_defconfig
+parisc                generic-32bit_defconfig
+powerpc                    gamecube_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210622
+i386                 randconfig-a002-20210622
+i386                 randconfig-a003-20210622
+i386                 randconfig-a006-20210622
+i386                 randconfig-a005-20210622
+i386                 randconfig-a004-20210622
+x86_64               randconfig-a012-20210622
+x86_64               randconfig-a016-20210622
+x86_64               randconfig-a015-20210622
+x86_64               randconfig-a014-20210622
+x86_64               randconfig-a013-20210622
+x86_64               randconfig-a011-20210622
+i386                 randconfig-a011-20210622
+i386                 randconfig-a014-20210622
+i386                 randconfig-a013-20210622
+i386                 randconfig-a015-20210622
+i386                 randconfig-a012-20210622
+i386                 randconfig-a016-20210622
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-# Should be enough regulators
+clang tested configs:
+x86_64               randconfig-b001-20210623
+x86_64               randconfig-a002-20210622
+x86_64               randconfig-a001-20210622
+x86_64               randconfig-a005-20210622
+x86_64               randconfig-a003-20210622
+x86_64               randconfig-a004-20210622
+x86_64               randconfig-a006-20210622
 
-> +        items:
-> +          minItems: 1
-> +          maxItems: 3
-> +
-> +      opp-microamp:
-> +        description: |
-> +          The maximum current drawn by the device in microamperes considering
-> +          system specific parameters (such as transients, process, aging,
-> +          maximum operating temperature range etc.) as necessary. This may be
-> +          used to set the most efficient regulator operating mode.
-> +
-> +          Should only be set if opp-microvolt(-name)? is set for the OPP.
-
-What is the significance of '?' here ?
-
-> +
-> +          Entries for multiple regulators shall be provided in the same field
-> +          separated by angular brackets <>. If current values aren't required
-> +          for a regulator, then it shall be filled with 0. If current values
-> +          aren't required for any of the regulators, then this field is not
-> +          required. The OPP binding doesn't provide any provisions to relate the
-> +          values to their power supplies or the order in which the supplies need
-> +          to be configured and that is left for the implementation specific
-> +          binding.
-> +        minItems: 1
-> +        maxItems: 8   # Should be enough regulators
-> +        items:
-> +          minItems: 1
-> +          maxItems: 3
-
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
