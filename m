@@ -2,281 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B07C63B2E57
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000A53B2E5C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbhFXMAm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 08:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S229928AbhFXMBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 08:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbhFXMAk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 08:00:40 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8A2C061767
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:20 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id g4so13784908qkl.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:20 -0700 (PDT)
+        with ESMTP id S229878AbhFXMBw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 08:01:52 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCCC061756
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:59:32 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d16so9821294lfn.3
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2GJGn5eLqx0s0Q4U/UEeSDrOA0kY4iGxnCx8wLaC1bI=;
-        b=wVEZVh8EAVU8wAHFfCs4SPv7x4AQ28ulZFOk+9BYtaz7vW+J1n12QuZGIUBjIl4jWJ
-         fE4ebunUy6cDhqg5J0sVzQAEvPvPqRYr9nCGxbFvwKKJbQT/2f3lluFbJMpgARz+gGaL
-         0W2kMHBFZTz/JlsfP+MLWIGOyYdHTrd5zm8rIUb2ArfjmM/g1ZHJ+0b7ZlZNp3JNgkSl
-         wLUkEbq9cVbkDbr1Kx/q1eVCJEl68wzoyRNtbjY7eXP5EOBvrWZJwy5kGBFqE+2CD1Gi
-         DrDlXaxGxRLwAI60JAa/2K19eaqEauo9N7Z4wG69/E7//e8EAoRIAWmufGjwTWh0S358
-         CdWg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xqb0SfAot0T+bnLINqL6hkkrh27//4C+mrBYM/KExsw=;
+        b=Htc1HoEBVFI1XgWupgitxfKw2XCjbvFJLPtUXneiCFiC55vuz7F4xJVJJGeJAoElBv
+         tQuMdzME3RzbdQdWJklBAeHsx615hk+q7O3alOu+0dqeRbiG3UOJFx1rD1RyZGVa5HKX
+         XnuRoAcubnoRC3yUKp0ksMR/cNkLFcag7qHeWM3OnyfdEMME7Uw59ftxNU70Y02gr0SL
+         1gxaOiWOjzBLwIg+G93gLfvsmovvo2PnbYH5qVbt59c6s+8ac2Cc8Eyi8zzFXq2Ann1I
+         i50oU5+uodLhB3bSoeI86H40CGuhfLK19fZZfG2ezCTtw6cvbzpjN9WDiFT3Ch3oaz8u
+         9Qiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2GJGn5eLqx0s0Q4U/UEeSDrOA0kY4iGxnCx8wLaC1bI=;
-        b=uTSjGw0cyWL1flOLtoHRN2J+otl5hmrWfsoUwFz5MQQNHa5mRnaLg0WsQP9Zk+eUx1
-         GTbjV6w8oO/9wnDEaKhChi1CdyeLHVY6V11jtLtGhiHuatQMT4nLsVUlps/f3F50i6lw
-         KpVtr1kegaLLGqGWsvuPEXPgYc4mOibqUIzRGBYcj+uMj+Nb/J3HSx1KDz4+a17ku3wK
-         a9pMf2CfccRj3Z/15MMJmrx4paDW7bCt8lUl6jbLP64evV3xoBe5QBQn5QmU/L5FpnkN
-         SKoDYESVTT+tKdZD2Hvy1RYDyvrfH2+tMPYOGiXPU2VfzKxokW/hEqeJwCtym5NdATIR
-         w6zw==
-X-Gm-Message-State: AOAM530ryBTwr41yOWhfqMWypf1amlOSVS4tzwZR3xaUMRxH6TyeOOUE
-        AKUkW0i1YXbatCLiD41Sf3UGFA==
-X-Google-Smtp-Source: ABdhPJzolh/ITV1zDyPuRGeHkqhJsBR59L8IZxUTPp+iiHCVjeny6Wa0B3wqofNQ9xtmsgbYEGTShQ==
-X-Received: by 2002:a37:66d0:: with SMTP id a199mr5360724qkc.238.1624535899906;
-        Thu, 24 Jun 2021 04:58:19 -0700 (PDT)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id w3sm2287173qkp.55.2021.06.24.04.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 04:58:19 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [Patch v2 5/5] arm64: boot: dts: qcom: sdm845: Remove passive trip points for thermal zones 0-7
-Date:   Thu, 24 Jun 2021 07:58:13 -0400
-Message-Id: <20210624115813.3613290-6-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210624115813.3613290-1-thara.gopinath@linaro.org>
-References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xqb0SfAot0T+bnLINqL6hkkrh27//4C+mrBYM/KExsw=;
+        b=dqA2t1x2e67Wot6tgEJ2wtNV6NSnqW+5sQlIcoGVESvyuRiNyjKRnknxL4KbxvY19K
+         hzqqWReEz0Rij/8PH4+0MIIe7iNsL76lMFP1qEmgbqRotkaIhHH2A1SJAMZJWtB/l5h9
+         jVgUoHO0wh6+k8ajMjeAlq2b/18e5sm/d97bMODW9PTVLAFtlynjdwofPZ/k1k/SW9QA
+         Cx7cSmK7vqoHALmsgzrouzJW3H0Mx1AwTRthjaPY+m2sxH0nu1r+i3PW7F0tO7Sx2leB
+         eQ7Z/yVINTu4qrMvev50KrVCHksZsnUepCU/lD5wwAHdBD5BA+JD+WIHO16O4iJCt2+M
+         Ubtg==
+X-Gm-Message-State: AOAM531Qj41vi94q9JhnK+dHhJyXNkuXVEQOfVMK5CZFxKWlGbFzBquH
+        tjeeqE0p47PaSjkWeKZenRkp02XJBfIqbNThVJDB/w==
+X-Google-Smtp-Source: ABdhPJzK8p0rLHruF0h6c9pudWIg1OvZj36XsxI8LCFy7lfwKzc2PVeNTV6LZQeE64ic0MPUgFC3+gTs4CRcnPdkB+c=
+X-Received: by 2002:ac2:4949:: with SMTP id o9mr3675161lfi.254.1624535971136;
+ Thu, 24 Jun 2021 04:59:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1624266901.git.viresh.kumar@linaro.org> <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
+ <20210623041613.v2lo3nidpgw37abl@vireshk-i7> <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
+ <20210624025414.4iszkovggk6lg6hj@vireshk-i7> <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
+ <20210624104734.GA11487@arm.com> <CAKfTPtAYuon+V96WmuLz+ekWuqVcb5k17w8ZwNuCzm2KMvZw+w@mail.gmail.com>
+ <20210624112331.GA22416@arm.com>
+In-Reply-To: <20210624112331.GA22416@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 24 Jun 2021 13:59:20 +0200
+Message-ID: <CAKfTPtCUazQu7GRUD=5-VHXBq-6rzaU5xnX_LgVr+i2YcKdvSg@mail.gmail.com>
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency invariance
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that Limits h/w is enabled to monitor thermal events around cpus and
-throttle the cpu frequencies, remove cpufreq cooling device for the cpus which
-does software throttling of cpu frequencies.
+On Thu, 24 Jun 2021 at 13:23, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> On Thursday 24 Jun 2021 at 13:15:04 (+0200), Vincent Guittot wrote:
+> > On Thu, 24 Jun 2021 at 12:48, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> > >
+> > > Hi guys,
+> > >
+> > > On Thursday 24 Jun 2021 at 11:49:53 (+0200), Vincent Guittot wrote:
+> > > > On Thu, 24 Jun 2021 at 04:54, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > > >
+> > > > > On 23-06-21, 08:57, Qian Cai wrote:
+> > > > > > Viresh, I am afraid I don't feel comfortable yet. I have a few new tests in
+> > > > > > development, and will provide an update once ready.
+> > > > >
+> > > > > Oh sure, np.
+> > > > >
+> > > > > > Also, I noticed the delivered perf is even smaller than lowest_perf (100).
+> > > > >
+> > > > > > # cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
+> > > > > >  ref:103377547901 del:54540736873
+> > > > > > # cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
+> > > > > >  ref:103379170101 del:54541599117
+> > > > > >
+> > > > > > 100 * (54541599117 - 54540736873) / (103379170101 - 103377547901) = 53
+> > > >
+> > > > I'm not sure that I understand your point. The formula above says that
+> > > > cpu8 run @ 53% of nominal performance
+> > > >
+> > >
+> > > I think this is based on a previous example Qian had where:
+> > >
+> > > /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf
+> > > 300
+> > > /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
+> > > 1000
+> > > /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
+> > > 100
+> > > /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
+> > > 100
+> > >
+> > > ..so the 100 is not from obtaining percentage, is the reference
+> > > performance.
+> > >
+> > > The logic of the formula is to obtain the delivered performance when
+> > > knowing the number of ticks for each counter, so:
+> > >
+> > > So if one gets (103379170101 - 103377547901) ticks for the counter at
+> > > running at 1GHz(perf 100), what is the frequency of the core, if its
+> > > counter ticked (54541599117 - 54540736873) times in the same interval
+> > > of time?
+> > >
+> > > The answer is 530MHz(perf 53), which is lower than the lowest frequency
+> > > at 1GHz(perf 100).
+> >
+> > But the nominal_perf is 280 and not 100 if i'm not wrong so the perf
+> > value is 148 > lowest_perf in this case
+> >
+>
+> Nominal performance has no meaning here. The reference counter ticks
+> with the frequency equivalent to reference performance.
+>
+> Nominal performance is the maximum performance when !boost. Highest
+> performance is the maximum performance available including boost
+> frequencies. So nominal performance has no impact in these translations
+> from counter values to delivered performance.
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
+my bad, nominal_perf == reference_perf on the systems that I have locally
 
-v1->v2:
-	Removing only cooling maps for cpu specific thermal zones keeping the
-	trip point definitions intact as per Daniel's suggestion. This is to
-	ensure that thermal zone temparature and trip violation information is
-	available to any userspace daemon monitoring these zones.
-
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 136 ---------------------------
- 1 file changed, 136 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 202fec09becd..7819f87d97ac 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -4994,23 +4994,6 @@ cpu0_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu0_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu0_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu1-thermal {
-@@ -5038,23 +5021,6 @@ cpu1_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu1_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu1_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu2-thermal {
-@@ -5082,23 +5048,6 @@ cpu2_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu2_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu2_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu3-thermal {
-@@ -5126,23 +5075,6 @@ cpu3_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu3_alert0>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu3_alert1>;
--					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu4-thermal {
-@@ -5170,23 +5102,6 @@ cpu4_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu4_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu4_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu5-thermal {
-@@ -5214,23 +5129,6 @@ cpu5_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu5_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu5_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu6-thermal {
-@@ -5258,23 +5156,6 @@ cpu6_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu6_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu6_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		cpu7-thermal {
-@@ -5302,23 +5183,6 @@ cpu7_crit: cpu_crit {
- 					type = "critical";
- 				};
- 			};
--
--			cooling-maps {
--				map0 {
--					trip = <&cpu7_alert0>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--				map1 {
--					trip = <&cpu7_alert1>;
--					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
--				};
--			};
- 		};
- 
- 		aoss0-thermal {
--- 
-2.25.1
-
+>
+> Hope it helps,
+> Ionela.
+>
+> >
+> > >
+> > >
+> > > > > >
+> > > > > > My understanding is that the delivered perf should fail into the range between
+> > > > > > lowest_perf and highest_perf. Is that assumption correct? This happens on
+> > > > > > 5.4-based kernel, so I am in process running your series on that system to see
+> > > > > > if there is any differences. In any case, if it is a bug it is pre-existing,
+> > > > > > but I'd like to understand a bit better in that front first.
+> > > > >
+> > > > > Vincent:
+> > > > >
+> > > > > Can that happen because of CPU idle ?
+> > > > >
+> > >
+> > > Not if the counters are implemented properly. The kernel considers that
+> > > both reference and delivered performance counters should stop or reset
+> > > during idle. The kernel would not account for idle itself.
+> > >
+> > > If the reference performance counter does not stop during idle, while
+> > > the core performance counter (delivered) does stop, the behavior above
+> > > should be seen very often.
+> > >
+> > > Qian, do you see these small delivered performance values often or
+> > > seldom?
+> > >
+> > > Thanks,
+> > > Ionela.
+> > >
+> > > > > --
+> > > > > viresh
