@@ -2,123 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4286D3B3442
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 19:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EE83B3449
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 19:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbhFXRCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 13:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S229573AbhFXRGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 13:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhFXRCp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 13:02:45 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3A8C061574
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 10:00:25 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c15so3260559pls.13
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 10:00:25 -0700 (PDT)
+        with ESMTP id S229464AbhFXRGa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 13:06:30 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7286FC061756
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 10:04:10 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id g7so2853786wri.7
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 10:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=/y1fay4uLLn0vbRutVxnngDZ4C4oYBKVEDc/l3qP3RI=;
-        b=BeM7A7NjsqfZUL8NgbY/qncUhn5RnmLXnaf9viunQ9L1wx0GyX40VIcUMQRvWDduK6
-         kAsjSecXlOkixnyRrz2MOTbsY64I60IFK4NdNAvJ3dW8W8qZxr34X1XsFtbBeBmioMeu
-         s1QRw8/DDWfSTUc+8pTh7cVrwk9YMbgdSA3olNzpimukpq/XLwSQNhMwBuzv3JZhCQg1
-         QUZ04kLp87jmUnhEjD4i2J8wKhs+EbiKeVYZR2gBcw9q8YfI+hQ4O9I/TM5gFgeBzBlD
-         6JpqxXi+okQf6M2ftL4cnvH/QFaFu08uztSEvlk0dG/50mQVaUggm8nYJ7nTYm+loCCk
-         mYBA==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=reNOTaP2efg37V1x42Oean+Lk4w5ae2OM6AA/EosNCI=;
+        b=tvq83KoEmz8ywg5WU0KwBvuX1MRUMsqkNoZjuP1rNt2eICFOkMxmv80okUT7MsNbFR
+         BA85wHt+pW5N9B/JXkGsbQmoF12LrU5QdJGL6R4eUWZgkGmgtN/obioDiXopOX6N3v3R
+         ydKhqv5HE2M0SVtnc87jIohIkF5DShUxrk2qzREt8mhT8pyfNwus3/h790t0fjtpevgh
+         S6N+jzdBMZf0CSM/WgcobrpIEYdSIiLwWaeaZkFDyS8i7cPQy1T9d48sbmLQY/d0eLAa
+         /Cwwu+P+BrqP4QxSuY/sPyxgb9XpZIeUCCtvNoi/m7eFt0lupBwmIWDIrDgA1ZngcqaM
+         Kq6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=/y1fay4uLLn0vbRutVxnngDZ4C4oYBKVEDc/l3qP3RI=;
-        b=B3kLqgde48QakvwyncLGr8wJhg8//1fBPl76lewgg/5mpsBdKvvwMWJUb4gGpciY7v
-         lGHqduzbZTgbbr9XNmEejU9A7+K7Sg7G+Lsu9YqgFbP5WVvEtFvF61/IWs+rW5qr/qko
-         bWmfQ+s8RkdofNKRdiQXPqJIbOWnz+/huIlhagRNNL9wagJCRcfzS7rYukddSR9qJqZJ
-         UzjZKP/+7bNWJqHMASVar84dOfQtmH5qVgAIhYmMoJKhRXJfNmd9Y4zBPLKLPtbljGq4
-         dtWxvUAKpF9Id7kusHCMev49poludnJiCcgRgMKt0crBeK+eGvjIN2d8iUzgFjF+ACD4
-         gbMA==
-X-Gm-Message-State: AOAM530tWdEOt8DOg3lVQo/DagfX2MiFKusXloi8ln/wKHQTvHW+VkHU
-        B7w812oe8Tuezwxotd2hqtSLqQ==
-X-Google-Smtp-Source: ABdhPJw7Nbm4pk5ERM3Zqpy7XR0uI8JiTrIJDqQ9KyiWX2RSw9YPChTXbg1Pg98e9CBjL2iiho0HAg==
-X-Received: by 2002:a17:90a:d58f:: with SMTP id v15mr8442516pju.117.1624554025067;
-        Thu, 24 Jun 2021 10:00:25 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id bp2sm3098468pjb.20.2021.06.24.10.00.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 10:00:24 -0700 (PDT)
-Message-ID: <60d4ba28.1c69fb81.1ce10.8470@mx.google.com>
-Date:   Thu, 24 Jun 2021 10:00:24 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=reNOTaP2efg37V1x42Oean+Lk4w5ae2OM6AA/EosNCI=;
+        b=aQPFNVqCjVQAxyaeqKq9P0ZGTrD6cu+V46pWHREpmZhyKAAk1CJCi6qsgZKvF5oMBt
+         5lz+BQWoSahGNZImek/06v9rUwasgTG66CU77uuM1mfHFZsDpsVfgS9MADxvdFKv4YWb
+         05tQORz1tfPwMheQlqXu2TuG5A9ppVDpEoCGPBzw6DqXwxqrwg/MLnEDCxPQAqgHN6ic
+         BCwItQOZye41X7kbBUPFjfDrCG+r+GuWZC9ZYW0RhffA+XYDy8aN+4qB4+Ma5Zf7ztHv
+         p7rBn8pS/ErFRERSRq9PCAvGTykDz3JCwyUEBoc0jp5C3eeg5E1EqkyujM+wnD2Fl/JZ
+         u2Mg==
+X-Gm-Message-State: AOAM532GjBuGJdv1b2+96DNa3kn5zb5HLvAe+nNOFwDvaWQVaLH6uKVk
+        8uQayoXwK2DjrZcXgeDNb7CdSA==
+X-Google-Smtp-Source: ABdhPJzLu44U1cdvbKio83wDqyvMaCULv9DYk6srisf1pIMN2AvaQkOPJePNjl8eAwyW7/pQ26HfpQ==
+X-Received: by 2002:a05:6000:178c:: with SMTP id e12mr4997120wrg.140.1624554248732;
+        Thu, 24 Jun 2021 10:04:08 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c52d:3cc5:c823:ade0? ([2a01:e34:ed2f:f020:c52d:3cc5:c823:ade0])
+        by smtp.googlemail.com with ESMTPSA id 9sm9919512wmf.3.2021.06.24.10.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Jun 2021 10:04:07 -0700 (PDT)
+Subject: Re: [PATCH 0/2] thermal: int340x: processor_thermal: Add new PCI MMIO
+ based thermal driver
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210525204811.3793651-1-srinivas.pandruvada@linux.intel.com>
+ <1244a17de6b1e48131d7cf23fc10b7e085cffc6f.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <9253d77e-cede-f4eb-46ed-2cfe8d488dff@linaro.org>
+Date:   Thu, 24 Jun 2021 19:04:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: pm-5.13-rc8-159-g3304616e985f
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (pm-5.13-rc8-159-g3304616e985f)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <1244a17de6b1e48131d7cf23fc10b7e085cffc6f.camel@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (pm-5.13-rc8-159-g3304616e98=
-5f)
+On 24/06/2021 18:19, Srinivas Pandruvada wrote:
+> On Tue, 2021-05-25 at 13:48 -0700, Srinivas Pandruvada wrote:
+>> This series adds a new thermal driver, which uses PCI MMIO for
+>> temperature and trips. To reuse
+>> the code the first patch just reorganizes the existing code.
+>>
+> Any comments on this series?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
-5.13-rc8-159-g3304616e985f/
+I've been through the series and it looks fine for me. Except a typo in
+the log 'anabled' but I fixed it.
 
-Tree: pm
-Branch: testing
-Git Describe: pm-5.13-rc8-159-g3304616e985f
-Git Commit: 3304616e985fa1c05e1a111375480fc88d71a574
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
