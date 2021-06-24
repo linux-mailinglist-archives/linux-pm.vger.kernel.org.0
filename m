@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 684EA3B2E45
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E313B2E4B
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhFXMAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 08:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S230225AbhFXMAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 08:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbhFXMAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 08:00:35 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3F7C061574
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:16 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id x21so4544404qtq.9
-        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:16 -0700 (PDT)
+        with ESMTP id S230308AbhFXMAg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 08:00:36 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F8DC061756
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:17 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id x21so4544447qtq.9
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eijKYTcdSgjUORNbFd3aQ96Ibey7LIG8Pwg8gaFrgAg=;
-        b=JgMRZ1otbqrdr8v6RfG1O5qyiq+sc/UK6pR7wktlQI21P6U9Ot2ebbXpqyOfCswpXD
-         vHnOrJq457FEZWbAPtRUd+0QxMYhptRZiNfxVN6WduYqUiNkjrraOj8V/VODKYnMfx7x
-         UfS82fN7N2sE+mFkuiJQwL75JYtbA6JksESv3uMIQjW7zSgfAUKNwkGaoESy2x9yuu8N
-         nLu0sXn9yBfr3QdST/FrJeuxBaM8SYzPjuFi7DgFg6dlsuBDJdPJgBlR3f+Dz52+qbUK
-         pOLofkEx/PZ6MpDUCwec4rDfH9YKzJQIFIYr/xvdBa+SCqbqzUDrl99G966QjMJOtJ1H
-         L2Mw==
+        bh=7aQPCJEPm39qd7fpESgLJT8mIRbMfhZrjqJmyb4g4Bc=;
+        b=btP7+CL1DINZxYZnwfsWSJycd1kHuzajLbXMnGxVe71xQ8tgyOosRL5bgR6NidhOdm
+         qidcG3ALAP4JBj/jg7Xz8T5xeSten2U2bM30hCqnnpEMhqpgtSDN0mLq8v0PH2tmJfha
+         4diP41Vbb5NRnAPcrNE2qlqlY0XQKBW20FUcZLuI/MtfIwqF6pt8rUY/3lCqhTQbE3EM
+         i4FH4OLbwoxoIVDluks/IJxR0RHYtItLECH42XEeI1VArcv5eKhvW+BLZbH/OY8+fJJH
+         jq+T0LBe9fx7M0bb0J3RlzKsj9bzZXheacFt3XEsF+uE0GlC8rZZH7yUiG8dqLKtiEr4
+         KaEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eijKYTcdSgjUORNbFd3aQ96Ibey7LIG8Pwg8gaFrgAg=;
-        b=IzUblUQ0WeMxEkJIkAeVoWccmPnpR9qscqGeSM/5FYVJYYALZod1YNqIyxJTFHqGY+
-         cjTSSA2ejv8oeVfT2mx93OOw+yBRJ0icIc71GtT/XLj/WqFMu7OoFkB/ll8RYeEHRYxf
-         J83qmjrAeINJC7DWOswnC+if/sqHaoqwKD7rSjvri/bjhsWjtqqAwneSodwWacUVOluZ
-         HF1cpUzmA4e+enDawcVhZtCpG1JSe0un2RGGW2KoqZEaygk2Z/bj2w6/nzWiGs1PJA/O
-         G0pch3LZ//wPbJa4cjetiYlFDUvW++r8qrjXTrnLC3Po39uI8vxu84GMHzQL2aB85TPs
-         Py3Q==
-X-Gm-Message-State: AOAM530cF9Asrd00KZE1BVXRLpZzRaq/7jgK7UpQyB2ENWhwP+lCTj4P
-        FDr5PzTfxFq7vXqxoYwXrjg7bg==
-X-Google-Smtp-Source: ABdhPJwGJ5iiNXEz9a2oX13W4as921cItoqK86UfVS7Fxq0F+btKX647Rjq10yY2LWlUAxolUDcpng==
-X-Received: by 2002:ac8:7699:: with SMTP id g25mr4231845qtr.309.1624535896000;
+        bh=7aQPCJEPm39qd7fpESgLJT8mIRbMfhZrjqJmyb4g4Bc=;
+        b=KvTvhWf55LnjraL5b+VVpNzKUbNIYGnDt8mUl15Txu0NMDV6Ffpz0NAl6d+U+VCpr3
+         COqVMmyfz5K6kvuhXWvFE7vN0PD+F6wcrK3P18GNrracLasZTDlienPK3kwDRA6IR+ao
+         tsS/p7YGka2+wdUP8FtTedIRj+7rPcO5d/9xr1ekYfP9wd6Iqt5tMZSPT3SKV0N6MBcL
+         gxUdRzddzCsmCoVa+GobO0BrbQMeOnsW94H1/XAKvW2EiXugelgD7dY0rIymVso755MP
+         a+ic+bwNi6oDNWwwLUzaXz2QJP0KRyi0lEHJO/RmmQ6ufkEJ1Nh09JWsPPdwE1vt+V/3
+         rtxg==
+X-Gm-Message-State: AOAM5328pgYvcJX5waFCtUwGfHnlS76WAHigxX+3Oc996UwqdRHAUhpP
+        NrXwUnJGBNYQoqqb3r4kldXr0g==
+X-Google-Smtp-Source: ABdhPJyo6dW/VHRmtbsoxHIK4a6bv80nadRLyuJCPpL2GXP3dZ4t8ukvHJHj6lFtCQ43iaklTElGZQ==
+X-Received: by 2002:ac8:7d91:: with SMTP id c17mr4310789qtd.287.1624535896985;
         Thu, 24 Jun 2021 04:58:16 -0700 (PDT)
 Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id w3sm2287173qkp.55.2021.06.24.04.58.15
+        by smtp.googlemail.com with ESMTPSA id w3sm2287173qkp.55.2021.06.24.04.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 04:58:15 -0700 (PDT)
+        Thu, 24 Jun 2021 04:58:16 -0700 (PDT)
 From:   Thara Gopinath <thara.gopinath@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
         daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
         rjw@rjwysocki.net, robh+dt@kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [Patch v2 1/5] firmware: qcom_scm: Introduce SCM calls to access LMh
-Date:   Thu, 24 Jun 2021 07:58:09 -0400
-Message-Id: <20210624115813.3613290-2-thara.gopinath@linaro.org>
+Subject: [Patch v2 2/5] thermal: qcom: Add support for LMh driver
+Date:   Thu, 24 Jun 2021 07:58:10 -0400
+Message-Id: <20210624115813.3613290-3-thara.gopinath@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210624115813.3613290-1-thara.gopinath@linaro.org>
 References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
@@ -65,132 +65,327 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce SCM calls to access/configure limits management hardware(LMH).
+Driver enabling various pieces of Limits Management Hardware(LMh) for cpu
+cluster0 and cpu cluster1 namely kick starting monitoring of temperature,
+current, battery current violations, enabling reliability algorithm and
+setting up various temperature limits.
+
+The following has been explained in the cover letter. I am including this
+here so that this remains in the commit message as well.
+
+LMh is a hardware infrastructure on some Qualcomm SoCs that can enforce
+temperature and current limits as programmed by software for certain IPs
+like CPU. On many newer LMh is configured by firmware/TZ and no programming
+is needed from the kernel side. But on certain SoCs like sdm845 the
+firmware does not do a complete programming of the h/w. On such soc's
+kernel software has to explicitly set up the temperature limits and turn on
+various monitoring and enforcing algorithms on the hardware.
 
 Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 ---
 
 v1->v2:
-	Changed the input parameters in qcom_scm_lmh_dcvsh from payload_buf and
-	payload_size to payload_fn, payload_reg, payload_val as per Bjorn's review
-	comments.
+	- Cosmetic and spelling fixes from review comments from Randy Dunlap
+	- Added irq_disable to lmh_irq_ops and removed disabling of irq from
+	  lmh_handle_irq. Now cpufreq explicitly disables irq prior to
+	  handling it as per Bjorn's suggestion.
+	- Rebased to new version of qcom_scm_lmh_dcvsh as changed in patch 1.
+	- Removed generic dt compatible string and introduced platform specific one
+	  as per Bjorn's suggestion.
+	- Take arm, low and high temp thresholds for LMh from dt properties instead of
+	  #defines in the driver as per Daniel's suggestion.
+	- Other minor fixes.
 
- drivers/firmware/qcom_scm.c | 54 +++++++++++++++++++++++++++++++++++++
- drivers/firmware/qcom_scm.h |  4 +++
- include/linux/qcom_scm.h    | 14 ++++++++++
- 3 files changed, 72 insertions(+)
+ drivers/thermal/qcom/Kconfig  |  10 ++
+ drivers/thermal/qcom/Makefile |   1 +
+ drivers/thermal/qcom/lmh.c    | 251 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 262 insertions(+)
+ create mode 100644 drivers/thermal/qcom/lmh.c
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index ee9cb545e73b..19e9fb91d084 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1147,6 +1147,60 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
- }
- EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
- 
-+bool qcom_scm_lmh_dcvsh_available(void)
+diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+index 8d5ac2df26dc..7d942f71e532 100644
+--- a/drivers/thermal/qcom/Kconfig
++++ b/drivers/thermal/qcom/Kconfig
+@@ -31,3 +31,13 @@ config QCOM_SPMI_TEMP_ALARM
+ 	  trip points. The temperature reported by the thermal sensor reflects the
+ 	  real time die temperature if an ADC is present or an estimate of the
+ 	  temperature based upon the over temperature stage value.
++
++config QCOM_LMH
++	tristate "Qualcomm Limits Management Hardware"
++	depends on ARCH_QCOM
++	help
++	  This enables initialization of Qualcomm limits management
++	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
++	  input from temperature and current sensors.  On many newer Qualcomm SoCs
++	  LMh is configured in the firmware and this feature need not be enabled.
++	  However, on certain SoCs like sdm845 LMh has to be configured from kernel.
+diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
+index 252ea7d9da0b..0fa2512042e7 100644
+--- a/drivers/thermal/qcom/Makefile
++++ b/drivers/thermal/qcom/Makefile
+@@ -5,3 +5,4 @@ qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
+ 				   tsens-8960.o
+ obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
+ obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
++obj-$(CONFIG_QCOM_LMH)		+= lmh.o
+diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+new file mode 100644
+index 000000000000..a14cad83b459
+--- /dev/null
++++ b/drivers/thermal/qcom/lmh.c
+@@ -0,0 +1,251 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (C) 2021, Linaro Limited. All rights reserved.
++ */
++#include <linux/module.h>
++#include <linux/interrupt.h>
++#include <linux/irqdomain.h>
++#include <linux/err.h>
++#include <linux/platform_device.h>
++#include <linux/of_platform.h>
++#include <linux/slab.h>
++#include <linux/qcom_scm.h>
++
++#define LMH_NODE_DCVS			0x44435653
++#define LMH_CLUSTER0_NODE_ID		0x6370302D
++#define LMH_CLUSTER1_NODE_ID		0x6370312D
++
++#define LMH_SUB_FN_THERMAL		0x54484D4C
++#define LMH_SUB_FN_CRNT			0x43524E54
++#define LMH_SUB_FN_REL			0x52454C00
++#define LMH_SUB_FN_BCL			0x42434C00
++
++#define LMH_ALGO_MODE_ENABLE		0x454E424C
++#define LMH_TH_HI_THRESHOLD		0x48494748
++#define LMH_TH_LOW_THRESHOLD		0x4C4F5700
++#define LMH_TH_ARM_THRESHOLD		0x41524D00
++
++#define LMH_REG_DCVS_INTR_CLR		0x8
++
++struct lmh_hw_data {
++	void __iomem *base;
++	struct irq_domain *domain;
++	int irq;
++	u32 cpu_id;
++};
++
++static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
 +{
-+	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_LMH, QCOM_SCM_LMH_LIMIT_DCVSH);
++	struct lmh_hw_data *lmh_data = data;
++	int irq = irq_find_mapping(lmh_data->domain, 0);
++
++	/*
++	 * Call the cpufreq driver to handle the interrupt.
++	 */
++	if (irq)
++		generic_handle_irq(irq);
++
++	return 0;
 +}
-+EXPORT_SYMBOL(qcom_scm_lmh_dcvsh_available);
 +
-+int qcom_scm_lmh_profile_change(u32 profile_id)
++static void lmh_enable_interrupt(struct irq_data *d)
 +{
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_SVC_LMH,
-+		.cmd = QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE,
-+		.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL),
-+		.args[0] = profile_id,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
++	struct lmh_hw_data *lmh_data = irq_data_get_irq_chip_data(d);
 +
-+	return qcom_scm_call(__scm->dev, &desc, NULL);
++	/* Clear the existing interrupt */
++	writel(0xff, lmh_data->base + LMH_REG_DCVS_INTR_CLR);
++	enable_irq(lmh_data->irq);
 +}
-+EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
 +
-+int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-+		       u64 limit_node, u32 node_id, u64 version)
++static void lmh_disable_interrupt(struct irq_data *d)
 +{
-+	dma_addr_t payload_phys;
-+	u32 *payload_buf;
-+	int payload_size = 5 * sizeof(u32);
++	struct lmh_hw_data *lmh_data = irq_data_get_irq_chip_data(d);
 +
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_SVC_LMH,
-+		.cmd = QCOM_SCM_LMH_LIMIT_DCVSH,
-+		.arginfo = QCOM_SCM_ARGS(5, QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_VAL,
-+					QCOM_SCM_VAL, QCOM_SCM_VAL),
-+		.args[1] = payload_size,
-+		.args[2] = limit_node,
-+		.args[3] = node_id,
-+		.args[4] = version,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
++	disable_irq_nosync(lmh_data->irq);
++}
 +
-+	payload_buf = dma_alloc_coherent(__scm->dev, payload_size, &payload_phys, GFP_KERNEL);
-+	if (!payload_buf)
++static struct irq_chip lmh_irq_chip = {
++	.name           = "lmh",
++	.irq_enable	= lmh_enable_interrupt,
++	.irq_disable	= lmh_disable_interrupt
++};
++
++static int lmh_irq_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
++{
++	struct lmh_hw_data *lmh_data = d->host_data;
++
++	irq_set_chip_and_handler(irq, &lmh_irq_chip, handle_simple_irq);
++	irq_set_chip_data(irq, lmh_data);
++
++	return 0;
++}
++
++static const struct irq_domain_ops lmh_irq_ops = {
++	.map = lmh_irq_map,
++	.xlate = irq_domain_xlate_onecell,
++};
++
++static int lmh_probe(struct platform_device *pdev)
++{
++	struct device *dev;
++	struct device_node *np;
++	struct lmh_hw_data *lmh_data;
++	u32 node_id;
++	int temp_low, temp_high, temp_arm, ret;
++
++	dev = &pdev->dev;
++	np = dev->of_node;
++	if (!np)
++		return -EINVAL;
++
++	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
++	if (!lmh_data)
 +		return -ENOMEM;
 +
-+	payload_buf[0] = payload_fn;
-+	payload_buf[1] = 0;
-+	payload_buf[2] = payload_reg;
-+	payload_buf[3] = 1;
-+	payload_buf[4] = payload_val;
++	lmh_data->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(lmh_data->base))
++		return PTR_ERR(lmh_data->base);
 +
-+	desc.args[0] = payload_phys;
-+	return qcom_scm_call(__scm->dev, &desc, NULL);
++	ret = of_property_read_u32(np, "qcom,lmh-cpu-id", &lmh_data->cpu_id);
++	if (ret) {
++		dev_err(dev, "missing qcom,lmh-cpu-id property\n");
++		return ret;
++	}
++
++	ret = of_property_read_u32(np, "qcom,lmh-temperature-high", &temp_high);
++	if (ret) {
++		dev_err(dev, "missing qcom,lmh-temperature-high property\n");
++		return ret;
++	}
++
++	ret = of_property_read_u32(np, "qcom,lmh-temperature-low", &temp_low);
++	if (ret) {
++		dev_err(dev, "missing qcom,lmh-temperature-low property\n");
++		return ret;
++	}
++
++	ret = of_property_read_u32(np, "qcom,lmh-temperature-arm", &temp_arm);
++	if (ret) {
++		dev_err(dev, "missing qcom,lmh-temperature-arm property\n");
++		return ret;
++	}
++
++	/*
++	 * Only sdm845 has lmh hardware currently enabled from hlos. If this is needed
++	 * for other platforms, revisit this to check if the <cpu-id, node-id> should be part
++	 * of a dt match table.
++	 */
++	if (lmh_data->cpu_id == 0) {
++		node_id = LMH_CLUSTER0_NODE_ID;
++	} else if (lmh_data->cpu_id == 4) {
++		node_id = LMH_CLUSTER1_NODE_ID;
++	} else {
++		dev_err(dev, "Wrong CPU id associated with LMh node\n");
++		return -EINVAL;
++	}
++
++	platform_set_drvdata(pdev, lmh_data);
++
++	if (!qcom_scm_lmh_dcvsh_available())
++		return -EINVAL;
++
++	/* Enable Thermal Algorithm */
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
++		return ret;
++	}
++
++	/* Enable Current Sensing Algorithm */
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error %d enabling current subfunction\n", ret);
++		return ret;
++	}
++
++	/* Enable Reliability Algorithm */
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
++		return ret;
++	}
++
++	/* Enable BCL Algorithm */
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
++		return ret;
++	}
++
++	ret = qcom_scm_lmh_profile_change(0x1);
++	if (ret) {
++		dev_err(dev, "Error %d changing profile\n", ret);
++		return ret;
++	}
++
++	/* Set default thermal trips */
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
++		return ret;
++	}
++
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error setting thermal HI threshold%d\n", ret);
++		return ret;
++	}
++
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low,
++				 LMH_NODE_DCVS, node_id, 0);
++	if (ret) {
++		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
++		return ret;
++	}
++
++	lmh_data->irq = platform_get_irq(pdev, 0);
++	lmh_data->domain = irq_domain_add_linear(np, 1, &lmh_irq_ops, lmh_data);
++	if (!lmh_data->domain) {
++		dev_err(dev, "Error adding irq_domain\n");
++		return -EINVAL;
++	}
++
++	ret = devm_request_irq(dev, lmh_data->irq, lmh_handle_irq,
++			       IRQF_TRIGGER_HIGH | IRQF_ONESHOT | IRQF_NO_SUSPEND,
++			       "lmh-irq", lmh_data);
++	if (ret) {
++		dev_err(dev, "Error %d registering irq %x\n", ret, lmh_data->irq);
++		irq_domain_remove(lmh_data->domain);
++		return ret;
++	}
++
++	/* Disable the irq and let cpufreq enable it when ready to handle the interrupt */
++	disable_irq(lmh_data->irq);
++
++	return 0;
 +}
-+EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
 +
- static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
- {
- 	struct device_node *tcsr;
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index 632fe3142462..d92156ceb3ac 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -114,6 +114,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
- #define QCOM_SCM_SVC_HDCP		0x11
- #define QCOM_SCM_HDCP_INVOKE		0x01
- 
-+#define QCOM_SCM_SVC_LMH			0x13
-+#define QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE	0x01
-+#define QCOM_SCM_LMH_LIMIT_DCVSH		0x10
++static const struct of_device_id lmh_table[] = {
++	{ .compatible = "qcom,sdm845-lmh", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, lmh_table);
 +
- #define QCOM_SCM_SVC_SMMU_PROGRAM		0x15
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index 0165824c5128..c0475d1c9885 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -109,6 +109,12 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
- 			     u32 *resp);
- 
- extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
++static struct platform_driver lmh_driver = {
++	.probe = lmh_probe,
++	.driver = {
++		.name = "qcom-lmh",
++		.of_match_table = lmh_table,
++	},
++};
++module_platform_driver(lmh_driver);
 +
-+extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-+			      u64 limit_node, u32 node_id, u64 version);
-+extern int qcom_scm_lmh_profile_change(u32 profile_id);
-+extern bool qcom_scm_lmh_dcvsh_available(void);
-+
- #else
- 
- #include <linux/errno.h>
-@@ -170,5 +176,13 @@ static inline int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
- 
- static inline int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
- 		{ return -ENODEV; }
-+
-+static inline int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-+				     u64 limit_node, u32 node_id, u64 version)
-+		{ return -ENODEV; }
-+
-+static inline int qcom_scm_lmh_profile_change(u32 profile_id) { return -ENODEV; }
-+
-+static inline bool qcom_scm_lmh_dcvsh_available(void) { return -ENODEV; }
- #endif
- #endif
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("QCOM LMh driver");
 -- 
 2.25.1
 
