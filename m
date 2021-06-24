@@ -2,159 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 647403B2DC5
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C94A3B2E44
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jun 2021 13:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbhFXLZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Jun 2021 07:25:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:54470 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232394AbhFXLZx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Jun 2021 07:25:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B47F21063;
-        Thu, 24 Jun 2021 04:23:33 -0700 (PDT)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 542573F718;
-        Thu, 24 Jun 2021 04:23:33 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 12:23:31 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-Message-ID: <20210624112331.GA22416@arm.com>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
- <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
- <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
- <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
- <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
- <20210624104734.GA11487@arm.com>
- <CAKfTPtAYuon+V96WmuLz+ekWuqVcb5k17w8ZwNuCzm2KMvZw+w@mail.gmail.com>
+        id S230236AbhFXMAf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Jun 2021 08:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230189AbhFXMAe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Jun 2021 08:00:34 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF913C061574
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:15 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id w21so13611454qkb.9
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jun 2021 04:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WwLl5u4O61O74++WtE584Gux9OkK2rj8VPrz5kolkEg=;
+        b=BuGZElxT9d2bPp2vJ3vm68V2zqLXycPZwaWV34SKRJk62Y/5FLpPjFZ9aZEl4HnxAH
+         KUNVELYQjKXq7lelDdrWgZ0+XR2J9ruLsQJkRTm3jIb+4866+W5KZ2zjpxe5A9M8Gf4B
+         m869/dhLJ/NDDPSFsT9Bc0r9YksuDMb4BIriuhQIG3hpznS2OQcPv/pdurz1wtHb7RFY
+         HcKVXsq8J/eI7wrbbDFYPh6yZ7FwqT/SsjQwO6oVwDtLPyBxu5gC4A/HX9WDqltUhQ1L
+         6kSnmdnfW7wt3qUVlVm9Y615+9XmIMvF4S2Drs07odpyes1u3LHptBIPqwK0zTcSdjmX
+         rKWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WwLl5u4O61O74++WtE584Gux9OkK2rj8VPrz5kolkEg=;
+        b=WFo8nVUuIyYEM16v48y8a6+yYbL4y3t2C6c2GfnM63Q/1g6FoGbheQ8Pc+kIH2M8fQ
+         K+sIQuiJDSG1LwzDfI9bwOni2dwaRkNay06CAj18efWx9PSlRikUCZqUaX1eVnBKiuLZ
+         N6sl0JykVwhyTpp7FeLhMiWXWxA9d6mpS3X6454n0idabKbeGWPP2ltM/OjSLPGXp55y
+         fD9tK1Bxtd9gEr2/b8jFUvytYEDdnc0xNIbeaUqEnBXaKlyL8R1sVZdgy9Qh8yy/YYpB
+         HNzWu3y/CCki/uAXRIO+ZkMEyrdzFw6mId6GFnB3X5Rwjg4rD2xWBzGSUfcjDEQx/xeW
+         wJ1Q==
+X-Gm-Message-State: AOAM530EfQQudgtIrNqmmiEZ5sihwze//TiVnWxnSgqc/CbezPVBf0dC
+        0wEt8P8+lgZcK5DDyi1W21ncYVVH2Dv8OA==
+X-Google-Smtp-Source: ABdhPJxzJNZvSodTuTsQhD7kukuCS2PPrWPZRpe7gIsd2G/g+99wU559bFsZ6kEDWu2Lr8nlexAdyA==
+X-Received: by 2002:a37:6244:: with SMTP id w65mr5390624qkb.304.1624535894939;
+        Thu, 24 Jun 2021 04:58:14 -0700 (PDT)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id w3sm2287173qkp.55.2021.06.24.04.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 04:58:14 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [Patch v2 0/5] Introduce LMh driver for Qualcomm SoCs
+Date:   Thu, 24 Jun 2021 07:58:08 -0400
+Message-Id: <20210624115813.3613290-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtAYuon+V96WmuLz+ekWuqVcb5k17w8ZwNuCzm2KMvZw+w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday 24 Jun 2021 at 13:15:04 (+0200), Vincent Guittot wrote:
-> On Thu, 24 Jun 2021 at 12:48, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
-> >
-> > Hi guys,
-> >
-> > On Thursday 24 Jun 2021 at 11:49:53 (+0200), Vincent Guittot wrote:
-> > > On Thu, 24 Jun 2021 at 04:54, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >
-> > > > On 23-06-21, 08:57, Qian Cai wrote:
-> > > > > Viresh, I am afraid I don't feel comfortable yet. I have a few new tests in
-> > > > > development, and will provide an update once ready.
-> > > >
-> > > > Oh sure, np.
-> > > >
-> > > > > Also, I noticed the delivered perf is even smaller than lowest_perf (100).
-> > > >
-> > > > > # cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
-> > > > >  ref:103377547901 del:54540736873
-> > > > > # cat /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs
-> > > > >  ref:103379170101 del:54541599117
-> > > > >
-> > > > > 100 * (54541599117 - 54540736873) / (103379170101 - 103377547901) = 53
-> > >
-> > > I'm not sure that I understand your point. The formula above says that
-> > > cpu8 run @ 53% of nominal performance
-> > >
-> >
-> > I think this is based on a previous example Qian had where:
-> >
-> > /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf
-> > 300
-> > /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
-> > 1000
-> > /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf
-> > 100
-> > /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf
-> > 100
-> >
-> > ..so the 100 is not from obtaining percentage, is the reference
-> > performance.
-> >
-> > The logic of the formula is to obtain the delivered performance when
-> > knowing the number of ticks for each counter, so:
-> >
-> > So if one gets (103379170101 - 103377547901) ticks for the counter at
-> > running at 1GHz(perf 100), what is the frequency of the core, if its
-> > counter ticked (54541599117 - 54540736873) times in the same interval
-> > of time?
-> >
-> > The answer is 530MHz(perf 53), which is lower than the lowest frequency
-> > at 1GHz(perf 100).
-> 
-> But the nominal_perf is 280 and not 100 if i'm not wrong so the perf
-> value is 148 > lowest_perf in this case
-> 
+Limits Management Hardware(LMh) is a hardware infrastructure on some
+Qualcomm SoCs that can enforce temperature and current limits as programmed
+by software for certain IPs like CPU. On many newer SoCs LMh is configured
+by firmware/TZ and no programming is needed from the kernel side. But on
+certain SoCs like sdm845 the firmware does not do a complete programming of
+the h/w block. On such SoCs kernel software has to explicitly set up the
+temperature limits and turn on various monitoring and enforcing algorithms
+on the hardware.
 
-Nominal performance has no meaning here. The reference counter ticks
-with the frequency equivalent to reference performance.
+Introduce support for enabling and programming various limit settings and
+monitoring capabilities of Limits Management Hardware(LMh) associated with
+cpu clusters. Also introduce support in cpufreq hardware driver to monitor
+the interrupt associated with cpu frequency throttling so that this
+information can be conveyed to the schdeuler via thermal pressure
+interface.
 
-Nominal performance is the maximum performance when !boost. Highest
-performance is the maximum performance available including boost
-frequencies. So nominal performance has no impact in these translations
-from counter values to delivered performance.
+With this patch series following cpu performance improvement(30-70%) is
+observed on sdm845. The reasoning here is that without LMh being programmed
+properly from the kernel, the default settings were enabling thermal
+mitigation for CPUs at too low a temperature (around 70-75 degree C).  This
+in turn meant that many a time CPUs were never actually allowed to hit the
+maximum possible/required frequencies.
 
-Hope it helps,
-Ionela.
+UnixBench whets and dhry (./Run whets dhry)
+System Benchmarks Index Score
 
-> 
-> >
-> >
-> > > > >
-> > > > > My understanding is that the delivered perf should fail into the range between
-> > > > > lowest_perf and highest_perf. Is that assumption correct? This happens on
-> > > > > 5.4-based kernel, so I am in process running your series on that system to see
-> > > > > if there is any differences. In any case, if it is a bug it is pre-existing,
-> > > > > but I'd like to understand a bit better in that front first.
-> > > >
-> > > > Vincent:
-> > > >
-> > > > Can that happen because of CPU idle ?
-> > > >
-> >
-> > Not if the counters are implemented properly. The kernel considers that
-> > both reference and delivered performance counters should stop or reset
-> > during idle. The kernel would not account for idle itself.
-> >
-> > If the reference performance counter does not stop during idle, while
-> > the core performance counter (delivered) does stop, the behavior above
-> > should be seen very often.
-> >
-> > Qian, do you see these small delivered performance values often or
-> > seldom?
-> >
-> > Thanks,
-> > Ionela.
-> >
-> > > > --
-> > > > viresh
+                Without LMh Support             With LMh Support
+1 copy test     1353.7                          1773.2
+
+8 copy tests    4473.6                          7402.3
+
+Sysbench cpu
+sysbench cpu --threads=8 --time=60 --cpu-max-prime=100000 run
+
+                Without LMh Support             With LMh Support
+Events per
+second                  355                             614
+
+Avg Latency(ms)         21.84                           13.02
+
+Thara Gopinath (5):
+  firmware: qcom_scm: Introduce SCM calls to access LMh
+  thermal: qcom: Add support for LMh driver
+  cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
+  arm64: boot: dts: qcom: sdm45: Add support for LMh node
+  arm64: boot: dts: qcom: sdm845: Remove passive trip points for thermal
+    zones 0-7
+
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 162 +++--------------
+ drivers/cpufreq/qcom-cpufreq-hw.c    | 103 +++++++++++
+ drivers/firmware/qcom_scm.c          |  54 ++++++
+ drivers/firmware/qcom_scm.h          |   4 +
+ drivers/thermal/qcom/Kconfig         |  10 ++
+ drivers/thermal/qcom/Makefile        |   1 +
+ drivers/thermal/qcom/lmh.c           | 251 +++++++++++++++++++++++++++
+ include/linux/qcom_scm.h             |  14 ++
+ 8 files changed, 463 insertions(+), 136 deletions(-)
+ create mode 100644 drivers/thermal/qcom/lmh.c
+
+-- 
+2.25.1
+
