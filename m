@@ -2,162 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141B73B46D7
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 17:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430273B4797
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 18:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbhFYPsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 11:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S229586AbhFYQ4o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 12:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhFYPsI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 11:48:08 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DAAC061574
-        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 08:45:47 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id w21so19462735qkb.9
-        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 08:45:47 -0700 (PDT)
+        with ESMTP id S229759AbhFYQ4o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 12:56:44 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ED6C061574
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 09:54:22 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id 69so5019081plc.5
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 09:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mwj/CahjscU+y04bpHECBUvebi/V1MfEC2fzu395QLo=;
-        b=nGN4vMQZ8P1icKs0xdH3WkkvUZPThVxP/td0QdTl39qQJOP6NhKPS3e9RK+pI4LHdI
-         a2dGLPdCebQ+VeD0V/jh4Im7m46MIeigsGvBjy27GgG8SjVOPd5CYbtHw/86Fuegahfu
-         bXsWZDt7oTfEtuHt0FwS+6OS5EtwpT4QDzW4mBvC9IJeN3L+rPP9lRWeHKB0ww7eFHGx
-         681j/vv0uF6uiKG5FzsFC9hoMRqsUCpf2zmHWadlm/SUeUsuo/TX7+U1sThnPRH+9wKP
-         HESKor79vVfbqqfmzqJP7qFeNN0zL9YYJAK98R83MaIf4fqTQGLSOTS3FSwgK+w1+pMO
-         qopA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=l7dX5dgpmPFuySJbZwA/qhXdydYfRA2CAHeZv6VJOdk=;
+        b=iqLixdZ4UQzIfrMpWEvBZKk5Fvm5nRLt8h9LHj6PsJATVMPi7t0AV1zK5ok8y6mRpP
+         +M8ZOCK/fdssvSFI6zERVDwSO0CDJKSow466MIVRQOMvAPt/3YvcZMXzOmooS3BsNUz8
+         aZsOdhZi6YjFTNoNOv1FnZgYDkyYti0HOxNk6ztUJX2NweNGCSJ8iJE762SgA7Loi333
+         S0LK6OC2LSk9yFqBz/NtkI0obfj2RJSGpHwnYt3uFzpzz5dFzr+CKvb95L5lGFpMROQn
+         Nqw/9cNf3YHkpLw0oADqyiPOY42p4HIc0IHJMdkevGMH5NNE0TklGkeGQNzXcUxWFWBy
+         5Hfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mwj/CahjscU+y04bpHECBUvebi/V1MfEC2fzu395QLo=;
-        b=rsQbQ4Gkg4JFVL97quPkAulhcqGJiPXV6zc28FfEbtDvg7+H5aMOt9Lf0uZ0CjOY6o
-         pb9z8SjTGShvDDgGoAI7Bf7a5oQiRcQTZUluI1Wa2Bjexpeqlt8PiTisGZmfQM3EmTHC
-         6SQQTqSe/vc8bKq4puwVzG9//qGPdca2PYMK90L5MtfDgkByq4EJJh00XPZisBTU3huK
-         BXZM3JNK+Qru9dwnq9g0sPV8CHkCO3se9M/Owq/wXg1uJgUGomV4n19UY3S5n8/0OY7+
-         9zx9x653xRLZWgh+DmS1lvwYTnMcRHGyQHYmZC2la2mxAkoOmLNRLS1lB0/4oSzaYWKC
-         Humg==
-X-Gm-Message-State: AOAM531LeGizdAwav8ojop7+FuwqaTu0Dt5a8x8PvTl3amMSxx+LYGsY
-        NK6Lod+lFxS0J1zB0sG1LCR7wA==
-X-Google-Smtp-Source: ABdhPJwWTpsA8qfT4xts8nRvl/v0ZS30IZkHdZR0u40CfAR/R+mZvZlElQB5EgtIN1cIYBwALUmv8Q==
-X-Received: by 2002:a37:a254:: with SMTP id l81mr11818502qke.90.1624635946664;
-        Fri, 25 Jun 2021 08:45:46 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id s8sm3805562qtk.96.2021.06.25.08.45.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jun 2021 08:45:46 -0700 (PDT)
-Subject: Re: [Patch v2 1/5] firmware: qcom_scm: Introduce SCM calls to access
- LMh
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
- <20210624115813.3613290-2-thara.gopinath@linaro.org>
- <YNTFdCPU2saMCT/y@google.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <9f302951-e65b-8b4f-7608-8b96e8d341a6@linaro.org>
-Date:   Fri, 25 Jun 2021 11:45:43 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=l7dX5dgpmPFuySJbZwA/qhXdydYfRA2CAHeZv6VJOdk=;
+        b=hQR65CQ6GR6AI2MTLaApipeZ8o8yPels10Evf+aHaFa9FjjEHoC/PKt5S9YFYQMZ+o
+         KmRrsCXfC4iJBKuI0HGLDHzhXAekXt3E649LDBKuTT5w6sD5ctUMBdAX1anKwMHRe18u
+         8iyYti9w718yJt3IfnwSNw1++WI79ZwAa2571bAGntiOu8ykWVBdSmw69xqOrcZhKMa8
+         E30+D7HuWcc+n337pOKDMVzNXQpH+7t6Aziu/8IeaqJEuqok/O6pAmht4yvfTkS9ivPR
+         uY5uhtpaGjbtSZxyjYRYYaHZA0+5crbhZYxwb30vXUD61tmOjuv/hZHyGfCodLTANySB
+         n3KQ==
+X-Gm-Message-State: AOAM531W43c7Ri5lriBCzpdVmbK+xtgpv59wInZQfED9BLssdLqw3NAC
+        0wrNBkF5ab/LLAOEZOosXak2Bg==
+X-Google-Smtp-Source: ABdhPJxoBHY6Quyfae50dLrV3dw6N6ydOo0cfw07RcLuzRCsFLfKsBPoKFLzrHhyox7gDhH1l8Cn4w==
+X-Received: by 2002:a17:90b:1809:: with SMTP id lw9mr12225978pjb.128.1624640061688;
+        Fri, 25 Jun 2021 09:54:21 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id b9sm5826453pfm.124.2021.06.25.09.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jun 2021 09:54:21 -0700 (PDT)
+Date:   Fri, 25 Jun 2021 22:24:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 4/4] cpufreq: CPPC: Add support for frequency
+ invariance
+Message-ID: <20210625165418.shi3gkebumqllxma@vireshk-i7>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <f963d09e57115969dae32827ade5558b0467d3a0.1624266901.git.viresh.kumar@linaro.org>
+ <20210624094812.GA6095@arm.com>
+ <20210624130418.poiy4ph66mbv3y67@vireshk-i7>
+ <20210625085454.GA15540@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <YNTFdCPU2saMCT/y@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210625085454.GA15540@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 6/24/21 1:48 PM, Matthias Kaehlcke wrote:
-> On Thu, Jun 24, 2021 at 07:58:09AM -0400, Thara Gopinath wrote:
->> Introduce SCM calls to access/configure limits management hardware(LMH).
->>
->> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->> ---
->>
->> v1->v2:
->> 	Changed the input parameters in qcom_scm_lmh_dcvsh from payload_buf and
->> 	payload_size to payload_fn, payload_reg, payload_val as per Bjorn's review
->> 	comments.
->>
->>   drivers/firmware/qcom_scm.c | 54 +++++++++++++++++++++++++++++++++++++
->>   drivers/firmware/qcom_scm.h |  4 +++
->>   include/linux/qcom_scm.h    | 14 ++++++++++
->>   3 files changed, 72 insertions(+)
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index ee9cb545e73b..19e9fb91d084 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -1147,6 +1147,60 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
->>   }
->>   EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
->>   
->> +bool qcom_scm_lmh_dcvsh_available(void)
->> +{
->> +	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_LMH, QCOM_SCM_LMH_LIMIT_DCVSH);
->> +}
->> +EXPORT_SYMBOL(qcom_scm_lmh_dcvsh_available);
->> +
->> +int qcom_scm_lmh_profile_change(u32 profile_id)
->> +{
->> +	struct qcom_scm_desc desc = {
->> +		.svc = QCOM_SCM_SVC_LMH,
->> +		.cmd = QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE,
->> +		.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL),
->> +		.args[0] = profile_id,
->> +		.owner = ARM_SMCCC_OWNER_SIP,
->> +	};
->> +
->> +	return qcom_scm_call(__scm->dev, &desc, NULL);
->> +}
->> +EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
->> +
->> +int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->> +		       u64 limit_node, u32 node_id, u64 version)
->> +{
->> +	dma_addr_t payload_phys;
->> +	u32 *payload_buf;
->> +	int payload_size = 5 * sizeof(u32);
->> +
->> +	struct qcom_scm_desc desc = {
->> +		.svc = QCOM_SCM_SVC_LMH,
->> +		.cmd = QCOM_SCM_LMH_LIMIT_DCVSH,
->> +		.arginfo = QCOM_SCM_ARGS(5, QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_VAL,
->> +					QCOM_SCM_VAL, QCOM_SCM_VAL),
->> +		.args[1] = payload_size,
->> +		.args[2] = limit_node,
->> +		.args[3] = node_id,
->> +		.args[4] = version,
->> +		.owner = ARM_SMCCC_OWNER_SIP,
->> +	};
->> +
->> +	payload_buf = dma_alloc_coherent(__scm->dev, payload_size, &payload_phys, GFP_KERNEL);
->> +	if (!payload_buf)
->> +		return -ENOMEM;
->> +
->> +	payload_buf[0] = payload_fn;
->> +	payload_buf[1] = 0;
->> +	payload_buf[2] = payload_reg;
->> +	payload_buf[3] = 1;
->> +	payload_buf[4] = payload_val;
->> +
->> +	desc.args[0] = payload_phys;
->> +	return qcom_scm_call(__scm->dev, &desc, NULL);
+On 25-06-21, 09:54, Ionela Voinescu wrote:
+> Hey,
 > 
-> dma_free_coherent()?
-
-yep.. A free should be done here. Will fix it
-
+> On Thursday 24 Jun 2021 at 18:34:18 (+0530), Viresh Kumar wrote:
+> > On 24-06-21, 10:48, Ionela Voinescu wrote:
+> > > On Monday 21 Jun 2021 at 14:49:37 (+0530), Viresh Kumar wrote:
+> > > > The Frequency Invariance Engine (FIE) is providing a frequency scaling
+> > > > correction factor that helps achieve more accurate load-tracking.
+> > > [..]
+> > > > +static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+> > > > +{
+> > > > +	struct cppc_freq_invariance *cppc_fi;
+> > > > +	int cpu;
+> > > > +
+> > > > +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > > > +		return;
+> > > > +
+> > > > +	/* policy->cpus will be empty here, use related_cpus instead */
+> > > > +	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+> > > > +
+> > > > +	for_each_cpu(cpu, policy->related_cpus) {
+> > > > +		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> > > 
+> > > Do you think it might be worth having here something like:
+> > > 
+> > > 		if (!cppc_fi->cpu_data)
+> > > 			continue;
+> > > 
+> > > This would be to protect against cases where the platform does not boot
+> > > with all CPUs or the module is loaded after some have already been
+> > > offlined. Unlikely, but..
+> > 
+> > Even in that case policy->cpus will contain all offline+online CPUs (at ->init()
+> > time), isn't it ?
+> > 
 > 
+> Right, my bad. I missed cpumask_and(policy->cpus, policy->cpus,
+> cpu_online_mask) being done after init(). It logically seems a bit
+> wrong, but drivers are in control of setting policy->cpus and acting on
+> it, and in this case the driver does the right thing.
+
+Do you want me to re-add your Reviewed-by here ?
 
 -- 
-Warm Regards
-Thara (She/Her/Hers)
+viresh
