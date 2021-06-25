@@ -2,107 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F203B47A2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5213B4813
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 19:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbhFYQ7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 12:59:00 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:49765 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229671AbhFYQ66 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 12:58:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1624640198; x=1656176198;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ZXtRMQWNJI+ejJwk7tELGIlfquZy8wE7UmEjYspURGY=;
-  b=QZ+N/dWZGHjxCkW99sC0aR027XjDI4sdeUUXOppXfYDItedMTWCewdtR
-   gsMBiSzI2fuELizIYF9YLxQd2VOtPWJ0/8oj9QTjSHdrHs6gmialfSBej
-   aXYj345MKc88xI2SxRvfb0jsz0rzXR+4+3d5KZ32eMaruJU+yn0fHjby7
-   0=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Jun 2021 09:56:37 -0700
-X-QCInternal: smtphost
-Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 25 Jun 2021 09:56:34 -0700
-Received: from [10.111.161.13] (10.80.80.8) by nasanexm03e.na.qualcomm.com
- (10.85.0.48) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 25 Jun
- 2021 09:56:32 -0700
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-CC:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
- <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
- <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
- <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
- <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
- <20210624104734.GA11487@arm.com>
- <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
- <20210625102113.GB15540@arm.com>
- <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
- <20210625143713.GA7092@arm.com>
-From:   Qian Cai <quic_qiancai@quicinc.com>
-Message-ID: <6b86e8cb-6088-12f1-863e-c5e4062bef8e@quicinc.com>
-Date:   Fri, 25 Jun 2021 12:56:31 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229653AbhFYRRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 13:17:32 -0400
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:40915 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhFYRRc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 13:17:32 -0400
+Received: by mail-oi1-f174.google.com with SMTP id d19so12047252oic.7;
+        Fri, 25 Jun 2021 10:15:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tFasrYsFKAvywn6faqXn2vvEdZnYR9YwEezboB1Quws=;
+        b=nLNcX1yv1zFEZQ++DYZdUsquyeDnRQ+PcLmYoKwwMdkDl/M6GPqHBp6f7pmGqI/rLb
+         3MDSascO7qZa91YXQuX0OfteWFyqnnwUQjUVrdv3gXrumOPkXyDK212zJz7q0SsxOHul
+         abgfGHrbM5oSjcSasrVhbYN1qTRdsjZE2EPjOb6PNOapUJoUfo8zgZcwxi/mbiOtSARH
+         0cj33wCTqwhmuu+0PqATxrTi785O2xWbvylL45HK+O0oeBy+3aFbnj2oy36SimijqMNL
+         lPd5JnDuf5Dxa+GSUbH0nFjBfrYN88SFJQi67ZCVTTd3KRetr9DMvtJ775O4f/D5CEYG
+         glxg==
+X-Gm-Message-State: AOAM530RH5SpKXrL3c0o+juuXbsIuupJ/AcsAWAZMu/0ftG4d0Z/otXa
+        z1dOp0j/Un7tQUfbNlQcOAoIA/ipUxXdiY6KR+8=
+X-Google-Smtp-Source: ABdhPJz3e/ZIkYVsF8SpYOwSc4i3w+5rC/iXH4mm2ml86brcbnPkozeJHRAx9+ZLF19XEDJ4ayGXz11eAWOVMZJIxVg=
+X-Received: by 2002:aca:d11:: with SMTP id 17mr1504892oin.69.1624641311276;
+ Fri, 25 Jun 2021 10:15:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210625143713.GA7092@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03b.na.qualcomm.com (10.85.0.98) To
- nasanexm03e.na.qualcomm.com (10.85.0.48)
+References: <CGME20210625110341epcas1p32171bda25f6020b090537e15e763d5eb@epcas1p3.samsung.com>
+ <b020c243-3175-3e31-8b7c-e1b30572e6d9@samsung.com>
+In-Reply-To: <b020c243-3175-3e31-8b7c-e1b30572e6d9@samsung.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Jun 2021 19:15:00 +0200
+Message-ID: <CAJZ5v0jqMXzcMdZx-P5_xp7_rJL1H_4FG+2HJRrG25+mWuv7BA@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for v5.14
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jun 25, 2021 at 1:03 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v5.14-rc1. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with following updates.
+
+Pulled, thanks!
 
 
-On 6/25/2021 10:37 AM, Ionela Voinescu wrote:
-> Quick questions for you:
-> 
-> 1. When you say you tried a 5.4 kernel, did you try it with these
-> patches backported? They also have some dependencies with the recent
-> changes in the arch topology driver and cpufreq so they would not be
-> straight forward to backport.
-
-No. It turned out that this 5.4-based kernel has "ondemand" governor by default which works fine which could even scale down to the lowest_perf (1000 MHz). Once switched the governor to "schedutil", it could keep the freq to the lowest. While on the latest kernel, it also works fine by using "ondemand" first and then switch to "schedutil". Even though it can only scale down to lowest_nonlinear_perf (2000 MHz). It is more of that using "schedutil" by default would not work. Also, on the latest kernel, even "userspace" governor only allows to scale down to 2000 MHz.
-
-> If the 5.4 kernel you tried did not have these patches, it might be best
-> to try next/master that has these patches, but with
-> CONFIG_ACPI_CPPC_CPUFREQ_FIE=n, just to eliminate the possibility that
-> an incorrect frequency scale factor here would affect utilization that
-> would then affect the schedutil frequency selection. I would not expect
-> this behavior even if the scale factor was wrong, but it would be good
-> to rule out.
-
-I'll try that at least see if CONFIG_ACPI_CPPC_CPUFREQ_FIE=n would make the latest kernel to be able to scale down to 1000 MHz.
-
-> 2. Is your platform booting with all CPUs? Are any hotplug operations
-> done in your scenario?
-
-Yes, booting with all CPUs. No additional hotplug there.
+> The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
+>
+>   Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.14
+>
+> for you to fetch changes up to 8c37d01e1a86073d15ea7084390fba58d9a1665f:
+>
+>   PM / devfreq: passive: Fix get_target_freq when not using required-opp (2021-06-24 10:37:35 +0900)
+>
+> ----------------------------------------------------------------
+> Detailed description for this pull request:
+>
+> 1. Update devfreq core
+> - Use DEVICE_ATTR_RW macro for devfreq userspace governor
+>
+> - Add missing error code in devfreq_add_device()
+>
+> - Fix get_target_freq when not using required-opp
+>
+> - The 86ad9a24f21e ("PM / devfreq: Add required OPPs support to passive governor")
+> supported the required-opp property for using devfreq passive governor.
+> But, 86ad9a24f21e has caused the problem on use-case when required-opp
+> is not used. So that fix the passive governor for supporting the case of when
+> required-opp is not used.
+>
+> 2. Update devfreq driver
+> - Remove unneeded get_dev_status and polling_ms from imx-bus.c because
+> imx-bus.c doesn't support simple_ondemand.
+>
+> - Remove unneeded DEVFREQ_GOV_SIMPLE_ONDEMAND dependecy from imx8m-ddrc.c
+> because it doesn't support simple_ondemand governor.
+>
+> - Use tegra30-devfreq.c as thermal cooling device
+> - Convert dt-binding doc style to yaml and add cooling-cells property
+> information to dt-binding doc for tegra30-devfreq.c
+> ----------------------------------------------------------------
+>
+> Chanwoo Choi (1):
+>       PM / devfreq: passive: Fix get_target_freq when not using required-opp
+>
+> Dmitry Osipenko (3):
+>       PM / devfreq: tegra30: Support thermal cooling
+>       dt-bindings: devfreq: tegra30-actmon: Convert to schema
+>       dt-bindings: devfreq: tegra30-actmon: Add cooling-cells
+>
+> Dong Aisheng (2):
+>       PM / devfreq: imx-bus: Remove imx_bus_get_dev_status
+>       PM / devfreq: imx8m-ddrc: Remove DEVFREQ_GOV_SIMPLE_ONDEMAND dependency
+>
+> YueHaibing (2):
+>       PM / devfreq: Add missing error code in devfreq_add_device()
+>       PM / devfreq: userspace: Use DEVICE_ATTR_RW macro
+>
+>  .../bindings/arm/tegra/nvidia,tegra30-actmon.txt   |  57 ----------
+>  .../bindings/devfreq/nvidia,tegra30-actmon.yaml    | 126 +++++++++++++++++++++
+>  drivers/devfreq/Kconfig                            |   1 -
+>  drivers/devfreq/devfreq.c                          |   1 +
+>  drivers/devfreq/governor_passive.c                 |   3 +-
+>  drivers/devfreq/governor_userspace.c               |  10 +-
+>  drivers/devfreq/imx-bus.c                          |  14 ---
+>  drivers/devfreq/tegra30-devfreq.c                  |   1 +
+>  8 files changed, 135 insertions(+), 78 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
