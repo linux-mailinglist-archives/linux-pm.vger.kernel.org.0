@@ -2,125 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5023B4A2F
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 23:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549F33B4AB4
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Jun 2021 00:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbhFYVb0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 17:31:26 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:57168 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229978AbhFYVbZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 25 Jun 2021 17:31:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624656544; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=pJQVTKLxIe0Fn9msKrGPa7GRTW4HbzJ0ouMJuFmUpVs=; b=Hezfe6OFSiPruat+yRqmxTFgYphvshlMku8HxHLOgFnd6nWePHEZc/0PhmLTOijpZG7z3bMO
- Ccjo4vqIy+Ox8+u6VCACC2sGbHGtBW5qJ/ZrGpC7VM/KhUfgOZ4uDo49phi/qWqmNTmJ2m9E
- tiJN4/k64nEDXqsMgDBgFd17QIk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 60d64a9d7e5ba0fdc07460f0 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Jun 2021 21:29:01
- GMT
-Sender: mdtipton=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 48FA0C43217; Fri, 25 Jun 2021 21:29:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-mdtipton-lv.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mdtipton)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 19461C433F1;
-        Fri, 25 Jun 2021 21:29:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 19461C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=mdtipton@codeaurora.org
-From:   Mike Tipton <mdtipton@codeaurora.org>
-To:     djakov@kernel.org
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        saravanak@google.com, okukatla@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
-Subject: [PATCH 4/4] interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
-Date:   Fri, 25 Jun 2021 14:28:39 -0700
-Message-Id: <20210625212839.24155-5-mdtipton@codeaurora.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210625212839.24155-1-mdtipton@codeaurora.org>
-References: <20210625212839.24155-1-mdtipton@codeaurora.org>
+        id S229831AbhFYWug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 18:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbhFYWuf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 18:50:35 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214FAC061574;
+        Fri, 25 Jun 2021 15:48:13 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id i5so15560127eds.1;
+        Fri, 25 Jun 2021 15:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GwvHh55LcSYnXzmmGuQCH1MSG36L8iCah28pi91QZyE=;
+        b=FJHKZ/Abwa6ukbLeMQeNKroNgDPdPBIcURidXDyRCQoEoxRGVebx4/13mw+kkGKaFo
+         1UeXom62Vsb51xnsP123yZONrQbxKW71JyQ1s3uYS+N1N+iVmtECmTgF0Uv8nqO9V27Z
+         3pjTkwp8k5ZqVBx02CHSAUlehshRO1oQyozNDmMRCjJIbAwC85eP+1NXavkvNPNojWqj
+         zT3rF0cpnutggsicdDoz+b6nqBkJ9bxTXM5YYJ7iLHhLUpBbdSQjncKVlccYefkAK3tI
+         0cjdwWSRBU4uMWfZdXJcqbrAVwJpeVxAnWcP7AHT3GLQ64CVAZ3BRvdYFkgpwDgRWCSH
+         Tysg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=GwvHh55LcSYnXzmmGuQCH1MSG36L8iCah28pi91QZyE=;
+        b=GhrfCcmucCFwRmQLpR1br7fp+KebwnkZU3X8i2f6Filunupejk2/W7TWm1/pogEDqT
+         6bkEKCY0DE6NINHNQuR4843Ygak8RCh1Sw7K+SuzcuO64eT68VL4dP8FV+ORYFdMy0dw
+         L4KOebOSuoup69E9M9UuL4wUVLcl2zoGRTws1vohr+ro/idMOtkD7IbZX3ra4/HyaSiP
+         BqNOeo3qkjNIVczEXsI7ZX1GDb0TDfFJJTvh4bVtIm17S4StC3vu8b/pX/qlvzSa5+ok
+         63/qU6lSCZ+E1lQx6tRGTjHpDHqL1vKS8IE39ajDCDM4s75dN0muoS2eCcnocOn6XHRN
+         RWAQ==
+X-Gm-Message-State: AOAM5318RKHPl+eWcM6q4iXuG6BX9AWiG9xpSJoMCwvTQMcpm9JW8rF/
+        tok1ZmanXH9SOgQRmfitoSU=
+X-Google-Smtp-Source: ABdhPJy+T78o4HjFa2vn6tfrdxhsAcbPhpemEzM0Ex0MiUE7jhOjAc3gvDtwoyuMq/cn9PmdUyd/kQ==
+X-Received: by 2002:a05:6402:487:: with SMTP id k7mr17660625edv.315.1624661290121;
+        Fri, 25 Jun 2021 15:48:10 -0700 (PDT)
+Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
+        by smtp.gmail.com with ESMTPSA id w1sm4719399edr.62.2021.06.25.15.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jun 2021 15:48:09 -0700 (PDT)
+Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] BeagleV Starlight reset support
+Date:   Sat, 26 Jun 2021 00:47:41 +0200
+Message-Id: <20210625224744.1020108-1-kernel@esmil.dk>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We're only adding BCMs to the commit list in aggregate(), but there are
-cases where pre_aggregate() is called without subsequently calling
-aggregate(). In particular, in icc_sync_state() when a node with initial
-BW has zero requests. Since BCMs aren't added to the commit list in
-these cases, we don't actually send the zero BW request to HW. So the
-resources remain on unnecessarily.
+This series adds reset support to the BeagleV Starlight board[1], and
+converts the TPS65086 PMIC device tree binding to YAML while at it.
 
-Add BCMs to the commit list in pre_aggregate() instead, which is always
-called even when there are no requests.
+Support for the StarFive JH7100 RISC-V SoC on there is not yet
+upstreamed, but early feedback on this part would be very welcome.
 
-Fixes: 976daac4a1c5 ("interconnect: qcom: Consolidate interconnect RPMh support")
-Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
----
- drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+[1] https://github.com/beagleboard/beaglev-starlight
 
-diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-index f118f57eae37..b26fda0588e0 100644
---- a/drivers/interconnect/qcom/icc-rpmh.c
-+++ b/drivers/interconnect/qcom/icc-rpmh.c
-@@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
- {
- 	size_t i;
- 	struct qcom_icc_node *qn;
-+	struct qcom_icc_provider *qp;
- 
- 	qn = node->data;
-+	qp = to_qcom_provider(node->provider);
- 
- 	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
- 		qn->sum_avg[i] = 0;
- 		qn->max_peak[i] = 0;
- 	}
-+
-+	for (i = 0; i < qn->num_bcms; i++)
-+		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
- }
- EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
- 
-@@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- {
- 	size_t i;
- 	struct qcom_icc_node *qn;
--	struct qcom_icc_provider *qp;
- 
- 	qn = node->data;
--	qp = to_qcom_provider(node->provider);
- 
- 	if (!tag)
- 		tag = QCOM_ICC_TAG_ALWAYS;
-@@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	*agg_avg += avg_bw;
- 	*agg_peak = max_t(u32, *agg_peak, peak_bw);
- 
--	for (i = 0; i < qn->num_bcms; i++)
--		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
+Emil Renner Berthing (3):
+  dt-bindings: mfd: convert tps65086.txt to YAML
+  mfd: tps65086: Make interrupt line optional
+  power: reset: Add TPS65086 restart driver
+
+ .../devicetree/bindings/mfd/ti,tps65086.yaml  | 124 ++++++++++++++++++
+ .../devicetree/bindings/mfd/tps65086.txt      |  54 --------
+ drivers/mfd/tps65086.c                        |  22 ++--
+ drivers/power/reset/Kconfig                   |   6 +
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/tps65086-restart.c        |  99 ++++++++++++++
+ 6 files changed, 242 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/tps65086.txt
+ create mode 100644 drivers/power/reset/tps65086-restart.c
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.32.0
 
