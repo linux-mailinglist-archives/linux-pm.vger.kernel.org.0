@@ -2,142 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 434783B455A
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 16:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F5A3B45DD
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 16:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbhFYOQQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 10:16:16 -0400
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:41841 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhFYOQQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 10:16:16 -0400
-Received: by mail-oo1-f46.google.com with SMTP id k21-20020a4a2a150000b029024955603642so2548794oof.8;
-        Fri, 25 Jun 2021 07:13:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eb2oox1oUIO8Ak6tDnGLYRSFQXaa3Y9McJsZ/3tyhSA=;
-        b=Vwea9orpl0WkDz0W+2MbJxUK5dNaK8XpmPnoO16gKOOm0r2a2liejsGnhXqz5AJe6/
-         3fs5G1Ik5NCS3LhE8RXy0T0qtxoU9g9kPnIfmkAYYxVeaw2ORx/bWLcg/I/MoIu5WeDn
-         s7rrak/htNhSr1uviZG7bSoWq0tGOkzz6jR825Tx/QGorFyF0PHeYDUXOooXxpVIrYox
-         Z5bxiN1pokycEiK2mQoqDS+Tp02hyaO7AIWDfmWTRExG3H2K47/Btjfv5kTEWKF1/4C/
-         4C2l6RRWM6hk3b5/UGclPkr3ilYQI98us+7t/MnXBbW7AjX+J1jC9xI+7stb+TLJZ0J2
-         y+zA==
-X-Gm-Message-State: AOAM5301SQPdgvIPLkBkEpmruh9ag1MsyTqCh5dIlta9Ou8Zwp2WXjzF
-        4lem/EZlqZtsp0MroQcs+kVwpnD2IWMLnif0yzk=
-X-Google-Smtp-Source: ABdhPJw8M9hdAhNOk4vX0DAD2iZIO6vcnGIazvppe7fETJt+EqtFocDXvQ0NnG7QX7KzoyLNjT2n3Qd0MJYwqB/iyoo=
-X-Received: by 2002:a4a:5285:: with SMTP id d127mr9265501oob.2.1624630432823;
- Fri, 25 Jun 2021 07:13:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210625134129.11885-1-tung-chen.shih@mediatek.com>
-In-Reply-To: <20210625134129.11885-1-tung-chen.shih@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Jun 2021 16:13:41 +0200
-Message-ID: <CAJZ5v0hdbML+J5yYQpoEeQJhO_QriDmmRuUhcsWDBxK1t4sknA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] cpufreq: fix the target freq not in the range of
- policy->min & max
-To:     TungChen Shih <tung-chen.shih@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S231950AbhFYOkD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 10:40:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:57492 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232000AbhFYOjg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 25 Jun 2021 10:39:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E6D61042;
+        Fri, 25 Jun 2021 07:37:15 -0700 (PDT)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.195.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F26903F694;
+        Fri, 25 Jun 2021 07:37:14 -0700 (PDT)
+Date:   Fri, 25 Jun 2021 15:37:13 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
+ invariance
+Message-ID: <20210625143713.GA7092@arm.com>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
+ <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
+ <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
+ <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
+ <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
+ <20210624104734.GA11487@arm.com>
+ <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
+ <20210625102113.GB15540@arm.com>
+ <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 3:41 PM TungChen Shih
-<tung-chen.shih@mediatek.com> wrote:
->
->     In cpufreq_frequency_table_target(), this function will try to find
-> an index for @target_freq in freq_table, and the frequency of selected
-> index should be in the range [policy->min, policy->max], which means:
->
->     policy->min <= policy->freq_table[idx].frequency <= policy->max
->
->     Though "clamp_val(target_freq, policy->min, policy->max);" would
-> have been called to check this condition, when policy->max or min is
-> not exactly one of the frequency in the frequency table,
-> policy->freq_table[idx].frequency may still go out of the range
->
->     For example, if our sorted freq_table is [3000, 2000, 1000], and
-> suppose we have:
->
->     @target_freq = 2500
->     @policy->min = 2000
->     @policy->max = 2200
->     @relation = CPUFREQ_RELATION_L
->
-> 1. After clamp_val(target_freq, policy->min, policy->max); @target_freq
-> becomes 2200
-> 2. Since we use CPUFREQ_REALTION_L, final selected freq will be 3000 which
-> beyonds policy->max
+Hey,
 
-As you accurately observed, the policy limits affect the target, not
-the frequency that will be used, and "RELATION_L" means "the closest
-frequency equal to or above the target".
+On Friday 25 Jun 2021 at 09:31:58 (-0400), Qian Cai wrote:
+> 
+> 
+> On 6/25/2021 6:21 AM, Ionela Voinescu wrote:
+> >> scaling_driver: acpi_cppc
+> >                   ^^^^^^^^^
+> > I suppose you mean "cppc-cpufreq"?
+> > 
+> > "acpi_cppc" is not a scaling driver option.
+> 
+> Ionela, yes. Sorry about that.
+> 
+> > So your CPUs run at frequencies between 200MHz and 280MHz?
+> 
+> 2000 to 2800 MHz.
+> 
 
-You are not fixing a bug here IMO, you're changing the documented behavior.
+Thank you for the clarification.
 
-> Signed-off-by: TungChen Shih <tung-chen.shih@mediatek.com>
-> ---
->  include/linux/cpufreq.h | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 353969c7acd3..60cb15740fdf 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -975,21 +975,40 @@ static inline int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
->                                                  unsigned int target_freq,
->                                                  unsigned int relation)
->  {
-> +       int idx = 0;
->         if (unlikely(policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED))
->                 return cpufreq_table_index_unsorted(policy, target_freq,
->                                                     relation);
->
->         switch (relation) {
->         case CPUFREQ_RELATION_L:
-> -               return cpufreq_table_find_index_l(policy, target_freq);
-> +               idx = cpufreq_table_find_index_l(policy, target_freq);
-> +               break;
->         case CPUFREQ_RELATION_H:
-> -               return cpufreq_table_find_index_h(policy, target_freq);
-> +               idx = cpufreq_table_find_index_h(policy, target_freq);
-> +               break;
->         case CPUFREQ_RELATION_C:
-> -               return cpufreq_table_find_index_c(policy, target_freq);
-> +               idx = cpufreq_table_find_index_c(policy, target_freq);
-> +               break;
->         default:
->                 WARN_ON_ONCE(1);
->                 return 0;
->         }
-> +
-> +       /* target index verification */
-> +       if (policy->freq_table[idx].frequency > policy->max) {
-> +               if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
-> +                       idx--;
-> +               else
-> +                       idx++;
-> +       } else if (policy->freq_table[idx].frequency < policy->min) {
-> +               if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
-> +                       idx++;
-> +               else
-> +                       idx--;
-> +       }
-> +
-> +       return idx;
->  }
->
->  static inline int cpufreq_table_count_valid_entries(const struct cpufreq_policy *policy)
-> --
-> 2.18.0
->
+> > Based on your acpi_cppc information below I would have assumed 2GHz as
+> > lowest nonlinear and 2.8GHz as nominal. The reason for this is that
+> > according to the ACPI spec the frequency values in the _CPC objects are
+> > supposed to be in MHz, so 2800 MHz for nominal frequency would be
+> > 2.8GHz.
+> > 
+> > When you try more governors, make sure to check out the difference
+> > between scaling_cur_freq and cpuinfo_cur_freq at [2]. The first gives
+> > you the frequency that the governor (schedutil) is asking for, while the
+> > second is giving you the current frequency obtained from the counters.
+> > 
+> > So to check the actual frequency the cores are running at, please check
+> > cpuinfo_cur_freq.
+> 
+> The problem is that all CPUs are never scaling down. "cpuinfo_cur_freq"
+> and "scaling_cur_freq" are always the 2800 MHz on all CPUs on this idle
+> system. This looks like a regression somewhere as in 5.4-based kernel,
+> I can see "cpuinfo_cur_freq" can go down to 2000 MHz in the same
+> scenario. I'll bisect a bit unless you have better ideas?
+
+Quick questions for you:
+
+1. When you say you tried a 5.4 kernel, did you try it with these
+patches backported? They also have some dependencies with the recent
+changes in the arch topology driver and cpufreq so they would not be
+straight forward to backport.
+
+If the 5.4 kernel you tried did not have these patches, it might be best
+to try next/master that has these patches, but with
+CONFIG_ACPI_CPPC_CPUFREQ_FIE=n, just to eliminate the possibility that
+an incorrect frequency scale factor here would affect utilization that
+would then affect the schedutil frequency selection. I would not expect
+this behavior even if the scale factor was wrong, but it would be good
+to rule out.
+
+2. Is your platform booting with all CPUs? Are any hotplug operations
+done in your scenario?
+
+Thanks,
+Ionela.
