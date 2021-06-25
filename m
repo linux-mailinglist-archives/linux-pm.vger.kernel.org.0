@@ -2,103 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF253B4694
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 17:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5351F3B46D4
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 17:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbhFYP3L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 11:29:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:58684 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229445AbhFYP3K (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 25 Jun 2021 11:29:10 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF19413A1;
-        Fri, 25 Jun 2021 08:26:49 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.7.232])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 83E683F694;
-        Fri, 25 Jun 2021 08:26:46 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Chris.Redpath@arm.com, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
-        qperret@google.com, linux-pm@vger.kernel.org, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        vincent.guittot@linaro.org, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, segall@google.com,
-        mgorman@suse.de, bristot@redhat.com, CCj.Yeh@mediatek.com
-Subject: [PATCH 3/3] PM: EM: Increase energy calculation precision
-Date:   Fri, 25 Jun 2021 16:26:03 +0100
-Message-Id: <20210625152603.25960-4-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210625152603.25960-1-lukasz.luba@arm.com>
-References: <20210625152603.25960-1-lukasz.luba@arm.com>
+        id S229950AbhFYPrW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 11:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229759AbhFYPrW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 11:47:22 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A16C061767
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 08:45:01 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id bm25so19715783qkb.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 08:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qSf9Hb89Xvgz4RD0vbZliBhiS0IdcUUlpwW5LDw/NZk=;
+        b=vMvWFhL3hrQ2d9on+2SJXtZauw0KvoKA33a/n2K/T0rAnwDpMW6ZOyZAnvoOzyFKlZ
+         xSAttO7INFBNysQaglBAlUWKMvKMAYWr8hARRkEzvcTtF+roNUK3hwdF+7kcxde6NeN8
+         mZdbdITR3GdVWUv1BJR5NE6ZVlW+4lRuvxCDXFnyFpgVaPVeuABGVKGfLyqY5y81zWa3
+         hlXjk8kHCSws3FUr/vMIVp97dLC0F7r1K/F3y095cmJqgfdZdwvwMOa9F5+IO3ILdFlx
+         vw97epES8gMju58AE2T5y+R+qC4O3JMzV6Yr5mXvqSW1Qhl7Xx4otY06HLeEydFNQkxa
+         bynw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qSf9Hb89Xvgz4RD0vbZliBhiS0IdcUUlpwW5LDw/NZk=;
+        b=iYE9DkTuBBW7u5GwQCZFfCaJ79StntJHeLmSxv1RCSsbLHMOki8EZxhPKXdlOl5sg0
+         HhtSAzTm+swGft7GCCKUJkcFRNF3c2WJkIWhQluFpUJFuoR48YUWqTIjA95x5JVTG1jF
+         yijtyZqyJunpCllH/7Js5Pi66xxanZCpg9dYkgNa9raOlBmjdNpknGNk+5CAddxmDqfA
+         xWPGxUlsRM8eFKkc7UntOcsEtZw1JbqRVj/VFw2EnJgo35DOqxlAj1wuULN2vRF6P+Cl
+         /9bISIBamWTJkk0a2LUeeYTVkIxIo9fVJ7jYtlKC5kpSALZ1ux0lQmaSXLoaZPNv5Eai
+         IXaA==
+X-Gm-Message-State: AOAM5334P68mq3ZeB/k2FKWhi5lFklmrpmb2JFTCjAJTdUQswdNhEjEU
+        UysrUlOL0EJMG0QcvAdc9MUlgA==
+X-Google-Smtp-Source: ABdhPJxp4bC6f3KpDQBZ95/st94EeUgklP+Hy2R9giYDMnPyCNasy8cMOXCrU3v0Dq+Q0MPlqyGS5A==
+X-Received: by 2002:a37:9381:: with SMTP id v123mr12119650qkd.64.1624635900080;
+        Fri, 25 Jun 2021 08:45:00 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id k9sm4018604qtq.30.2021.06.25.08.44.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Jun 2021 08:44:59 -0700 (PDT)
+Subject: Re: [Patch v2 5/5] arm64: boot: dts: qcom: sdm845: Remove passive
+ trip points for thermal zones 0-7
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
+ <20210624115813.3613290-6-thara.gopinath@linaro.org>
+ <YNS4DeHdxWY1XvvT@google.com>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <dfc80029-fc40-826a-c9ee-0c843a0a65b5@linaro.org>
+Date:   Fri, 25 Jun 2021 11:44:57 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <YNS4DeHdxWY1XvvT@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Energy Model (EM) provides useful information about device power in
-each performance state to other subsystems like: Energy Aware Scheduler
-(EAS). The energy calculation in EAS does arithmetic operation based on
-the EM em_cpu_energy(). Current implementation of that function uses
-em_perf_state::cost as a pre-computed cost coefficient equal to:
-cost = power * max_frequency / frequency.
-The 'power' is expressed in milli-Watts (or in abstract scale).
 
-There are corner cases then the EAS energy calculation for two Performance
-Domains (PDs) return the same value, e.g. 10mW. The EAS compares these
-values to choose smaller one. It might happen that this values are equal
-due to rounding error. In such scenario, we need better precision, e.g.
-10000 times better. To provide this possibility increase the precision on
-the em_perf_state::cost.
 
-This patch allows to avoid the rounding to milli-Watt errors, which might
-occur in EAS energy estimation for each Performance Domains (PD). The
-rounding error is common for small tasks which have small utilization
-values.
+On 6/24/21 12:51 PM, Matthias Kaehlcke wrote:
+> On Thu, Jun 24, 2021 at 07:58:13AM -0400, Thara Gopinath wrote:
+> 
+>> Subject: arm64: boot: dts: qcom: sdm845: Remove passive trip points for thermal zones 0-7
+> 
+> The patch doesn't remove the passive trip points (anymore?), but the cooling
+> maps/devices. Also talking about 'thermal zones 0-7' doesn't really convey
+> any useful information (and the enumeration could potentially change in the
+> future), better talk about the CPU thermal zones.
 
-The rest of the EM code doesn't change, em_perf_state::power is still
-expressed in milli-Watts (or in abstract scale). Thus, all existing
-platforms don't have to change their reported power. The same applies to
-EM clients, like thermal or DTPM (they use em_perf_state::power).
+Hi Matthias,
 
-Reported-by: CCJ Yeh <CCj.Yeh@mediatek.com>
-Suggested-by: CCJ Yeh <CCj.Yeh@mediatek.com>
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- include/linux/energy_model.h | 5 ++++-
- kernel/power/energy_model.c  | 3 ++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+Yes you are right. I forgot to change the subject. Will fix the subject 
+and provide better description of the zones in the next rev
 
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 2016f5a706e0..91037dd57e61 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -16,7 +16,10 @@
-  * @power:	The power consumed at this level (by 1 CPU or by a registered
-  *		device). It can be a total power: static and dynamic.
-  * @cost:	The cost coefficient associated with this level, used during
-- *		energy calculation. Equal to: power * max_frequency / frequency
-+ *		energy calculation. Equal to:
-+		power * 10000 * max_frequency / frequency
-+ *		To increase the energy estimation presision use different
-+ *		scale in this coefficient than in @power field.
-  */
- struct em_perf_state {
- 	unsigned long frequency;
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 0f4530b3a8cd..2724f0ac417d 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -170,7 +170,8 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
- 	/* Compute the cost of each performance state. */
- 	fmax = (u64) table[nr_states - 1].frequency;
- 	for (i = 0; i < nr_states; i++) {
--		table[i].cost = div64_u64(fmax * table[i].power,
-+		u64 power_res = (u64)table[i].power * 10000;
-+		table[i].cost = div64_u64(fmax * power_res,
- 					  table[i].frequency);
- 	}
- 
+> 
+>> Now that Limits h/w is enabled to monitor thermal events around cpus and
+>> throttle the cpu frequencies, remove cpufreq cooling device for the cpus which
+>> does software throttling of cpu frequencies.
+
 -- 
-2.17.1
-
+Warm Regards
+Thara (She/Her/Hers)
