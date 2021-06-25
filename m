@@ -2,127 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5213B4813
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 19:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56AB3B4840
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jun 2021 19:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbhFYRRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Jun 2021 13:17:32 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:40915 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhFYRRc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 13:17:32 -0400
-Received: by mail-oi1-f174.google.com with SMTP id d19so12047252oic.7;
-        Fri, 25 Jun 2021 10:15:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tFasrYsFKAvywn6faqXn2vvEdZnYR9YwEezboB1Quws=;
-        b=nLNcX1yv1zFEZQ++DYZdUsquyeDnRQ+PcLmYoKwwMdkDl/M6GPqHBp6f7pmGqI/rLb
-         3MDSascO7qZa91YXQuX0OfteWFyqnnwUQjUVrdv3gXrumOPkXyDK212zJz7q0SsxOHul
-         abgfGHrbM5oSjcSasrVhbYN1qTRdsjZE2EPjOb6PNOapUJoUfo8zgZcwxi/mbiOtSARH
-         0cj33wCTqwhmuu+0PqATxrTi785O2xWbvylL45HK+O0oeBy+3aFbnj2oy36SimijqMNL
-         lPd5JnDuf5Dxa+GSUbH0nFjBfrYN88SFJQi67ZCVTTd3KRetr9DMvtJ775O4f/D5CEYG
-         glxg==
-X-Gm-Message-State: AOAM530RH5SpKXrL3c0o+juuXbsIuupJ/AcsAWAZMu/0ftG4d0Z/otXa
-        z1dOp0j/Un7tQUfbNlQcOAoIA/ipUxXdiY6KR+8=
-X-Google-Smtp-Source: ABdhPJz3e/ZIkYVsF8SpYOwSc4i3w+5rC/iXH4mm2ml86brcbnPkozeJHRAx9+ZLF19XEDJ4ayGXz11eAWOVMZJIxVg=
-X-Received: by 2002:aca:d11:: with SMTP id 17mr1504892oin.69.1624641311276;
- Fri, 25 Jun 2021 10:15:11 -0700 (PDT)
+        id S229573AbhFYRfq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Jun 2021 13:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhFYRfp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Jun 2021 13:35:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3DC061574
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jun 2021 10:33:24 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lwphf-0004IA-M0; Fri, 25 Jun 2021 19:33:19 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lwphd-0005va-3n; Fri, 25 Jun 2021 19:33:17 +0200
+Date:   Fri, 25 Jun 2021 19:33:16 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
+Cc:     Zou Wei <zou_wei@huawei.com>, thierry.reding@gmail.com,
+        lee.jones@linaro.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
+Message-ID: <20210625173316.pfsk7rvlplv4bzef@pengutronix.de>
+References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
+ <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
 MIME-Version: 1.0
-References: <CGME20210625110341epcas1p32171bda25f6020b090537e15e763d5eb@epcas1p3.samsung.com>
- <b020c243-3175-3e31-8b7c-e1b30572e6d9@samsung.com>
-In-Reply-To: <b020c243-3175-3e31-8b7c-e1b30572e6d9@samsung.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Jun 2021 19:15:00 +0200
-Message-ID: <CAJZ5v0jqMXzcMdZx-P5_xp7_rJL1H_4FG+2HJRrG25+mWuv7BA@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for v5.14
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nw3jy26dwfiaqji6"
+Content-Disposition: inline
+In-Reply-To: <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 1:03 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request for v5.14-rc1. I add detailed description of
-> this pull request on the following tag. Please pull devfreq with following updates.
 
-Pulled, thanks!
+--nw3jy26dwfiaqji6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Rafael, Kevin and Ulf,
 
-> The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
->
->   Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.14
->
-> for you to fetch changes up to 8c37d01e1a86073d15ea7084390fba58d9a1665f:
->
->   PM / devfreq: passive: Fix get_target_freq when not using required-opp (2021-06-24 10:37:35 +0900)
->
-> ----------------------------------------------------------------
-> Detailed description for this pull request:
->
-> 1. Update devfreq core
-> - Use DEVICE_ATTR_RW macro for devfreq userspace governor
->
-> - Add missing error code in devfreq_add_device()
->
-> - Fix get_target_freq when not using required-opp
->
-> - The 86ad9a24f21e ("PM / devfreq: Add required OPPs support to passive governor")
-> supported the required-opp property for using devfreq passive governor.
-> But, 86ad9a24f21e has caused the problem on use-case when required-opp
-> is not used. So that fix the passive governor for supporting the case of when
-> required-opp is not used.
->
-> 2. Update devfreq driver
-> - Remove unneeded get_dev_status and polling_ms from imx-bus.c because
-> imx-bus.c doesn't support simple_ondemand.
->
-> - Remove unneeded DEVFREQ_GOV_SIMPLE_ONDEMAND dependecy from imx8m-ddrc.c
-> because it doesn't support simple_ondemand governor.
->
-> - Use tegra30-devfreq.c as thermal cooling device
-> - Convert dt-binding doc style to yaml and add cooling-cells property
-> information to dt-binding doc for tegra30-devfreq.c
-> ----------------------------------------------------------------
->
-> Chanwoo Choi (1):
->       PM / devfreq: passive: Fix get_target_freq when not using required-opp
->
-> Dmitry Osipenko (3):
->       PM / devfreq: tegra30: Support thermal cooling
->       dt-bindings: devfreq: tegra30-actmon: Convert to schema
->       dt-bindings: devfreq: tegra30-actmon: Add cooling-cells
->
-> Dong Aisheng (2):
->       PM / devfreq: imx-bus: Remove imx_bus_get_dev_status
->       PM / devfreq: imx8m-ddrc: Remove DEVFREQ_GOV_SIMPLE_ONDEMAND dependency
->
-> YueHaibing (2):
->       PM / devfreq: Add missing error code in devfreq_add_device()
->       PM / devfreq: userspace: Use DEVICE_ATTR_RW macro
->
->  .../bindings/arm/tegra/nvidia,tegra30-actmon.txt   |  57 ----------
->  .../bindings/devfreq/nvidia,tegra30-actmon.yaml    | 126 +++++++++++++++++++++
->  drivers/devfreq/Kconfig                            |   1 -
->  drivers/devfreq/devfreq.c                          |   1 +
->  drivers/devfreq/governor_passive.c                 |   3 +-
->  drivers/devfreq/governor_userspace.c               |  10 +-
->  drivers/devfreq/imx-bus.c                          |  14 ---
->  drivers/devfreq/tegra30-devfreq.c                  |   1 +
->  8 files changed, 135 insertions(+), 78 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra30-actmon.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+On Wed, May 12, 2021 at 06:52:22AM +0200, Uwe Kleine-K=F6nig wrote:
+> Hello,
+>=20
+> On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
+> > pm_runtime_get_sync will increment pm usage counter even it failed.
+> > Forgetting to putting operation will result in reference leak here.
+> > Fix it by replacing it with pm_runtime_resume_and_get to keep usage
+> > counter balanced.
+> >=20
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> > ---
+> >  drivers/pwm/pwm-img.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
+> > index cc37054..11b16ec 100644
+> > --- a/drivers/pwm/pwm-img.c
+> > +++ b/drivers/pwm/pwm-img.c
+> > @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip, st=
+ruct pwm_device *pwm)
+> >  	struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
+> >  	int ret;
+> > =20
+> > -	ret =3D pm_runtime_get_sync(chip->dev);
+> > +	ret =3D pm_runtime_resume_and_get(chip->dev);
+> >  	if (ret < 0)
+> >  		return ret;
+>=20
+> This patch looks right with my limited understanding of pm_runtime. A
+> similar issue in this driver was fixed in commit
+>=20
+> 	ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_get_sync() =
+failed case")
+>=20
+> where (even though the commit log talks about pm_runtime_put()) a call
+> to pm_runtime_put_autosuspend() was added in the error path.
+>=20
+> I added the PM guys to Cc, maybe they can advise about the right thing
+> to do here. Does it make sense to use the same idiom in both
+> img_pwm_enable() and img_pwm_config()?
+
+Can you give some feedback here?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--nw3jy26dwfiaqji6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDWE1kACgkQwfwUeK3K
+7AlMHAf/Seh27QiCuoDAcLlJ+osf/17c6RGJV3u5TfaG84noBRtpFr5rz8bKOQMT
+UJ/ElYO8+dIcwhxvnp6ZUuHl3x7faYThWxvQxGn4qSUN5qw2N6gpjoQ3r6HEaPU0
+vk/DdsxgXGv1g3LT3jkPM6t5lkGS9b6wQZhUxzO9ybsJNzYnK+1h8wqWr9Wz723P
+tVfFGiEiGvHpCY7B3f93AKiAQmJKIHsbg9w/p5GVeNOs/ipgqAGzvRra9uw941mY
+ItQSWvCloxcuCDpYFJLlQPzH41O3YgruK3QP4YD+raLoberxAmzQIGmTAjqWC4UG
+YbSq8uAkzioI+BT3Rd3UYjXdWBd3SA==
+=Jgez
+-----END PGP SIGNATURE-----
+
+--nw3jy26dwfiaqji6--
