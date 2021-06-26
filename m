@@ -2,116 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C39F3B4EBF
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Jun 2021 15:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58603B4F70
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Jun 2021 18:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbhFZNn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Jun 2021 09:43:58 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:2731 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229518AbhFZNny (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Jun 2021 09:43:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1624714892; x=1656250892;
-  h=subject:from:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=BexIPrr+P7AAObS1bvWIvUcR2OxWro+/IxJmIzFSTJA=;
-  b=SCWp7F1wu/x5utbVkTDNDeknrAzcMUvejHBWeX6HXGYvw4JNJg1AIF8/
-   eUyPEc5rCHIsu5IFmyztwMmnfJ26BPv1spp5pUvEgz3t3n62cJ23oOehB
-   HzOTf8VAyNJ/bofO6LgVFjKjPfp/5hGdjVdgvBxI8cbiEeD6BehJdSLX/
-   A=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jun 2021 06:41:31 -0700
-X-QCInternal: smtphost
-Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 26 Jun 2021 06:41:31 -0700
-Received: from [10.111.161.5] (10.80.80.8) by nasanexm03e.na.qualcomm.com
- (10.85.0.48) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 26 Jun
- 2021 06:41:28 -0700
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-CC:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <09a39f5c-b47b-a931-bf23-dc43229fb2dd@quicinc.com>
- <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
- <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
- <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
- <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
- <20210624104734.GA11487@arm.com>
- <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
- <20210625102113.GB15540@arm.com>
- <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
- <20210625143713.GA7092@arm.com>
- <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
-Message-ID: <9096bdb2-2a38-6ba3-0315-f6e9bd5a4c0e@quicinc.com>
-Date:   Sat, 26 Jun 2021 09:41:27 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229916AbhFZQ0P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Jun 2021 12:26:15 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:43586 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229890AbhFZQ0P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Jun 2021 12:26:15 -0400
+X-UUID: 9c6cadf2445d4918b45d29e5eb155797-20210627
+X-UUID: 9c6cadf2445d4918b45d29e5eb155797-20210627
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <tung-chen.shih@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2102777713; Sun, 27 Jun 2021 00:23:48 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 27 Jun 2021 00:23:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 27 Jun 2021 00:23:47 +0800
+From:   TungChen Shih <tung-chen.shih@mediatek.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        TungChen Shih <tung-chen.shih@mediatek.com>
+Subject: [PATCH v2 1/1] cpufreq: fix the target freq not in the range of policy->min & max
+Date:   Sun, 27 Jun 2021 00:23:25 +0800
+Message-ID: <20210626162324.8236-1-tung-chen.shih@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03b.na.qualcomm.com (10.85.0.98) To
- nasanexm03e.na.qualcomm.com (10.85.0.48)
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+    The function cpufreq_driver_resolve_freq() should return the lowest
+supported freq greater than or equal to the given target_freq, subject
+to policy (min/max) and driver limitations. However, the index returned
+by cpufreq_frequency_table_target() won't subject to policy min/max in
+some cases.
 
+    In cpufreq_frequency_table_target(), this function will try to find
+an index for @target_freq in freq_table, and the frequency of selected
+index should be in the range [policy->min, policy->max], which means:
 
-On 6/25/2021 10:29 PM, Qian Cai wrote:
-> Ionela, I found that set ACPI_PROCESSOR=y instead of ACPI_PROCESSOR=m will fix the previous mentioned issues here (any explanations of that?) even though the scaling down is not perfect. Now, we have the following on this idle system:
-> 
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
->  	79 1000000
->   	1 1160000
->  	73 1400000
->   	1 2000000
->   	4 2010000
->   	1 2800000
->   	1 860000
-> 
-> Even if I rerun a few times, there could still have a few CPUs running lower than lowest_perf (1GHz). Also, even though I set all CPUs to use "userspace" governor and set freq to the lowest. A few CPUs keep changing at will.
-> 
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
-> 	156 1000000
->   	3 2000000
->   	1 760000
+    policy->min <= policy->freq_table[idx].frequency <= policy->max
 
-Another date point is that set ACPI_CPPC_CPUFREQ_FIE=n fixed the issue that any CPU could run below the lowest freq.
+    Though "clamp_val(target_freq, policy->min, policy->max);" would
+have been called to check this condition, when policy->max or min is
+not exactly one of the frequency in the frequency table,
+policy->freq_table[idx].frequency may still go out of the range
 
-schedutil:
-# cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
-     80 1000000
-     78 1400000
-      1 2010000
-      1 2800000
+    For example, if our sorted freq_table is [3000, 2000, 1000], and
+suppose we have:
 
-userspace:
-# cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
-    158 1000000
-      2 2000000
+    @target_freq = 2500
+    @policy->min = 2000
+    @policy->max = 2200
+    @relation = CPUFREQ_RELATION_L
+
+1. After clamp_val(target_freq, policy->min, policy->max); @target_freq
+becomes 2200
+2. Since we use CPUFREQ_REALTION_L, final selected freq will be 3000 which
+beyonds policy->max
+
+Signed-off-by: TungChen Shih <tung-chen.shih@mediatek.com>
+---
+ drivers/cpufreq/cpufreq.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 802abc925b2a..8e3a17781618 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -544,8 +544,23 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+ 	if (cpufreq_driver->target_index) {
+ 		unsigned int idx;
+ 
++		/*  to find the frequency >= target_freq */
+ 		idx = cpufreq_frequency_table_target(policy, target_freq,
+ 						     CPUFREQ_RELATION_L);
++
++		/* frequency should subject to policy (min/max) */
++		if (policy->freq_table[idx].frequency > policy->max) {
++			if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
++				idx--;
++			else
++				idx++;
++		} else if (policy->freq_table[idx].frequency < policy->min) {
++			if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
++				idx++;
++			else
++				idx--;
++		}
++
+ 		policy->cached_resolved_idx = idx;
+ 		return policy->freq_table[idx].frequency;
+ 	}
+-- 
+2.18.0
+
