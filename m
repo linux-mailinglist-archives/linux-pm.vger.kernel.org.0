@@ -2,95 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3143B5096
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Jun 2021 01:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312413B527F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Jun 2021 09:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbhFZXwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Jun 2021 19:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhFZXwS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Jun 2021 19:52:18 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD74C061574
-        for <linux-pm@vger.kernel.org>; Sat, 26 Jun 2021 16:49:54 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a15so15984167lfr.6
-        for <linux-pm@vger.kernel.org>; Sat, 26 Jun 2021 16:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eISukSxr9S6lVbjbCM2Ot77tr1WgILTAvVDWCUeQenA=;
-        b=MYRxi85STBrA6ytlEgiBAF1tE55JOmd5vSToUuFjM1ecNxnCG1UeYEMOrCQTkq3P9X
-         OyesvsV1iezO8e/R1kK3dWuPHNwpgUb5ozCEm7WeNKN+sU4QAE8Zc2gS8OTGn87JNOEv
-         1IXZ60oXBsTZo03SRlWIU4LQlqeY8bwkF5QYkA2QKQ/VRVhfekQzQ9nhg2fdm4E6mOog
-         O4BNIgp9Tdjg9lF03NjUsW0NvnXYveR4cre3PMGibplazkrOI2nePRsisS1rwhjBLDpk
-         cm1lQopOxUvlIMkUK18EcgjYnLi21hgNNmFy2d6V/hG89cZTbe2iERrSysO7GnCvFwFV
-         TSEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eISukSxr9S6lVbjbCM2Ot77tr1WgILTAvVDWCUeQenA=;
-        b=Xzxqe7ZEfdDnLn8YIxa9H8WDPzJnWbXrkfLywAEMKm/ds/Z8vdBNXsz6gpnq+ThzDo
-         rwJtT4OuiLKRfSwJpgVFSFSAvBdzu7TaOD0UPCOByWwwHjNLbgSxDCpU7bnNmSkwcMAi
-         e8b//gb4DGofyyAAFMfnbahcyxuJYArUrUpqtNWo5IAp182clAZZrjK3/E1GDXi2gJce
-         MacroBkAiIHlvDa85oWH07bqutYrNxkEcexFXlymCDTM9ZWKmGvJpXXQvh16cImoyoO0
-         TiXGsPbW4a9MIcFSEEIARY+9NGHjLspyq9wPn+2AGWB85BXIGWEVhkDKbw5cqe2fi7vR
-         Dyqg==
-X-Gm-Message-State: AOAM533i6rp2YAe6LfytpclZMU/+0z22YiiovzgBBaQCw53Ygkd8a6WV
-        uJg4p6SSEJR5rp1Fh4y8K7ReoQ==
-X-Google-Smtp-Source: ABdhPJwUB44QORbuNBQmNN9Dx4OyT7aCxGiEZFMKFOvUwObcavzCQU8kG1H8revzLTi6Lcqx+RAclQ==
-X-Received: by 2002:a05:6512:610:: with SMTP id b16mr13612599lfe.631.1624751392746;
-        Sat, 26 Jun 2021 16:49:52 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id w17sm893700lft.285.2021.06.26.16.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Jun 2021 16:49:52 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        stable@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] power: supply: ab8500: Fix an old bug
-Date:   Sun, 27 Jun 2021 01:47:49 +0200
-Message-Id: <20210626234749.2958991-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        id S229542AbhF0H6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Jun 2021 03:58:41 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50373 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229507AbhF0H6k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Jun 2021 03:58:40 -0400
+X-UUID: e7ce929d298b4a2cbeb934bcd9bf50b0-20210627
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=6TSr5TS0E7uuhhXK7oCAhWahR2YqxhAPByhuMU0eWFQ=;
+        b=ISGSo8j5gsAbxZjjM/6Xdqm3XzCIIbsEayzKNP2vvmglBf/ovC6FIj4wOJPECy9IpJPie3WWGBnrmClkSZbFPQOtWvEnztnrjzLcFcsQuyvs3gqp6jKj5ZHv4Op4Gd0qww59H+QAvIR3VEgQhj2LzJJ5cG7pkD8IABdJOuYRX1A=;
+X-UUID: e7ce929d298b4a2cbeb934bcd9bf50b0-20210627
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1880613911; Sun, 27 Jun 2021 15:56:13 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 27 Jun 2021 15:56:12 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 27 Jun 2021 15:56:12 +0800
+Message-ID: <1624780572.1958.2.camel@mtkswgap22>
+Subject: Re: [PATCH v12 2/2] dt-bindings: cpufreq: add bindings for MediaTek
+ cpufreq HW
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wsd_upstream@mediatek.com>
+Date:   Sun, 27 Jun 2021 15:56:12 +0800
+In-Reply-To: <20210602165827.GA3558170@robh.at.kernel.org>
+References: <1622307153-3639-1-git-send-email-hector.yuan@mediatek.com>
+         <1622307153-3639-3-git-send-email-hector.yuan@mediatek.com>
+         <20210602165827.GA3558170@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Trying to get the AB8500 charging driver working I ran into a bit
-of bitrot: we haven't used the driver for a while so errors in
-refactorings won't be noticed.
-
-This one is pretty self evident: use argument to the macro or we
-end up with a random pointer to something else.
-
-Cc: stable@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Marcus Cooper <codekipper@gmail.com>
-Fixes: 297d716f6260 ("power_supply: Change ownership from driver to core")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/power/supply/ab8500-chargalg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/ab8500-chargalg.h b/drivers/power/supply/ab8500-chargalg.h
-index 94a6f9068bc5..07e6ff50084f 100644
---- a/drivers/power/supply/ab8500-chargalg.h
-+++ b/drivers/power/supply/ab8500-chargalg.h
-@@ -15,7 +15,7 @@
-  * - POWER_SUPPLY_TYPE_USB,
-  * because only them store as drv_data pointer to struct ux500_charger.
-  */
--#define psy_to_ux500_charger(x) power_supply_get_drvdata(psy)
-+#define psy_to_ux500_charger(x) power_supply_get_drvdata(x)
- 
- /* Forward declaration */
- struct ux500_charger;
--- 
-2.31.1
+T24gV2VkLCAyMDIxLTA2LTAyIGF0IDExOjU4IC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gU3VuLCBNYXkgMzAsIDIwMjEgYXQgMTI6NTI6MzNBTSArMDgwMCwgSGVjdG9yIFl1YW4gd3Jv
+dGU6DQo+ID4gRnJvbTogIkhlY3Rvci5ZdWFuIiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0K
+PiA+IA0KPiA+IEFkZCBkZXZpY2V0cmVlIGJpbmRpbmdzIGZvciBNZWRpYVRlayBIVyBkcml2ZXIu
+DQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogSGVjdG9yLll1YW4gPGhlY3Rvci55dWFuQG1lZGlh
+dGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRp
+YXRlay1ody55YW1sICAgICAgfCAgIDcxICsrKysrKysrKysrKysrKysrKysrDQo+ID4gIDEgZmls
+ZSBjaGFuZ2VkLCA3MSBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3
+LnlhbWwNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sIGIvRG9jdW1lbnRhdGlvbi9k
+ZXZpY2V0cmVlL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sDQo+ID4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwLi4xYWE0ZDU0DQo+ID4gLS0t
+IC9kZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9j
+cHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbA0KPiA+IEBAIC0wLDAgKzEsNzEgQEANCj4g
+PiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1
+c2UpDQo+ID4gKyVZQU1MIDEuMg0KPiA+ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJl
+ZS5vcmcvc2NoZW1hcy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbCMNCj4gPiArJHNj
+aGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQo+ID4g
+Kw0KPiA+ICt0aXRsZTogTWVkaWFUZWsncyBDUFVGUkVRIEJpbmRpbmdzDQo+ID4gKw0KPiA+ICtt
+YWludGFpbmVyczoNCj4gPiArICAtIEhlY3RvciBZdWFuIDxoZWN0b3IueXVhbkBtZWRpYXRlay5j
+b20+DQo+ID4gKw0KPiA+ICtkZXNjcmlwdGlvbjoNCj4gPiArICBDUFVGUkVRIEhXIGlzIGEgaGFy
+ZHdhcmUgZW5naW5lIHVzZWQgYnkgTWVkaWFUZWsNCj4gPiArICBTb0NzIHRvIG1hbmFnZSBmcmVx
+dWVuY3kgaW4gaGFyZHdhcmUuIEl0IGlzIGNhcGFibGUgb2YgY29udHJvbGxpbmcgZnJlcXVlbmN5
+DQo+ID4gKyAgZm9yIG11bHRpcGxlIGNsdXN0ZXJzLg0KPiA+ICsNCj4gPiArcHJvcGVydGllczoN
+Cj4gPiArICBjb21wYXRpYmxlOg0KPiA+ICsgICAgY29uc3Q6IG1lZGlhdGVrLGNwdWZyZXEtaHcN
+Cj4gPiArDQo+ID4gKyAgcmVnOg0KPiA+ICsgICAgbWluSXRlbXM6IDENCj4gPiArICAgIG1heEl0
+ZW1zOiAyDQo+ID4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiA+ICsgICAgICBBZGRyZXNzZXMgYW5k
+IHNpemVzIGZvciB0aGUgbWVtb3J5IG9mIHRoZQ0KPiA+ICsgICAgICBIVyBiYXNlcyBpbiBlYWNo
+IGZyZXF1ZW5jeSBkb21haW4uDQo+ID4gKw0KPiA+ICsgICIjcGVyZm9ybWFuY2UtZG9tYWluLWNl
+bGxzIjoNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsgICAgICBOdW1iZXIgb2YgY2VsbHMg
+aW4gYSBwZXJmb3JtYW5jZSBkb21haW4gc3BlY2lmaWVyLiBUeXBpY2FsbHkgMCBmb3Igbm9kZXMN
+Cj4gPiArICAgICAgcmVwcmVzZW50aW5nIGEgc2luZ2xlIHBlcmZvcm1hbmNlIGRvbWFpbiBhbmQg
+MSBmb3Igbm9kZXMgcHJvdmlkaW5nDQo+ID4gKyAgICAgIG11bHRpcGxlIHBlcmZvcm1hbmNlIGRv
+bWFpbnMgKGUuZy4gcGVyZm9ybWFuY2UgY29udHJvbGxlcnMpLCBidXQgY2FuIGJlDQo+ID4gKyAg
+ICAgIGFueSB2YWx1ZSBhcyBzcGVjaWZpZWQgYnkgZGV2aWNlIHRyZWUgYmluZGluZyBkb2N1bWVu
+dGF0aW9uIG9mIHBhcnRpY3VsYXINCj4gPiArICAgICAgcHJvdmlkZXIuDQo+ID4gKyAgICBlbnVt
+OiBbIDAsIDEgXQ0KPiANCj4gQ2FuJ3QgeW91IHJlc3RyaWN0IHRoaXMgdG8gYmUgMSBmb3IgTWVk
+aWF0ZWsgaC93PyBFdmVuIGlmIHlvdSBzb21ldGltZXMgDQo+IGhhdmUgYSBzaW5nbGUgZG9tYWlu
+LCBpdCdzIHByb2JhYmx5IG1vcmUgc2ltcGxlIGZvciB0aGUgZHJpdmVyIGlmIHRoaXMgDQo+IGlz
+IGZpeGVkLg0KPiANCk9LLCBJIHdpbGwgcmVzdHJpY3QgdGhpcyBhcyAxIGluIG5leHQgdmVyc2lv
+bi4NCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0g
+cmVnDQo+ID4gKyAgLSAiI3BlcmZvcm1hbmNlLWRvbWFpbi1jZWxscyINCj4gPiArDQo+ID4gK2Fk
+ZGl0aW9uYWxQcm9wZXJ0aWVzOiB0cnVlDQo+IA0KPiBTaG91bGQgYmUgZmFsc2UuDQo+IA0KT0ss
+IHRoYW5rcw0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+ID4gKyAgLSB8DQo+ID4gKyAgICBjcHVz
+IHsNCj4gPiArICAgICAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gKyAgICAgICAg
+ICAgICNzaXplLWNlbGxzID0gPDA+Ow0KPiA+ICsNCj4gPiArICAgICAgICAgICAgY3B1MDogY3B1
+QDAgew0KPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiArICAg
+ICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUiOw0KPiA+ICsgICAgICAg
+ICAgICAgICAgZW5hYmxlLW1ldGhvZCA9ICJwc2NpIjsNCj4gPiArICAgICAgICAgICAgICAgIHBl
+cmZvcm1hbmNlLWRvbWFpbnMgPSA8JnBlcmZvcm1hbmNlIDA+Ow0KPiA+ICsgICAgICAgICAgICAg
+ICAgcmVnID0gPDB4MDAwPjsNCj4gPiArICAgICAgICAgICAgfTsNCj4gPiArICAgIH07DQo+ID4g
+Kw0KPiA+ICsgICAgLyogLi4uICovDQo+ID4gKw0KPiA+ICsgICAgc29jIHsNCj4gPiArICAgICAg
+ICAjYWRkcmVzcy1jZWxscyA9IDwyPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwyPjsN
+Cj4gPiArDQo+ID4gKyAgICAgICAgcGVyZm9ybWFuY2U6IHBlcmZvcm1hbmNlLWNvbnRyb2xsZXJA
+MTFiYzAwIHsNCj4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRlayxjcHVmcmVx
+LWh3IjsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDAgMHgwMDExYmMxMCAwIDB4MTIwPiwgPDAg
+MHgwMDExYmQzMCAwIDB4MTIwPjsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICNwZXJmb3JtYW5j
+ZS1kb21haW4tY2VsbHMgPSA8MT47DQo+ID4gKyAgICAgICAgfTsNCj4gPiArICAgIH07DQo+ID4g
+LS0gDQo+ID4gMS43LjkuNQ0KDQo=
 
