@@ -2,133 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B8E3B5936
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 08:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBBE3B59B6
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 09:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhF1GlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 02:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S232382AbhF1H3L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Jun 2021 03:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbhF1GlP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 02:41:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81E6C061574
-        for <linux-pm@vger.kernel.org>; Sun, 27 Jun 2021 23:38:49 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lxkum-0002SH-IT; Mon, 28 Jun 2021 08:38:40 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lxkul-0003IP-RG; Mon, 28 Jun 2021 08:38:39 +0200
-Date:   Mon, 28 Jun 2021 08:38:39 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232376AbhF1H3L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 03:29:11 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A47C061574
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 00:26:44 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c15so8394640pls.13
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 00:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CsEyi+ba8SRVvbqYHH4jH1LVCacUh7q5WrGtZYt+9O0=;
+        b=uS/PWnJw9EEYCs7oPju6zEF2huhjziG/Ai+HwVvEbygzN696DD0hR6oCRnY0utpird
+         l9wslKvhoYQmH3iJmab+T+Abuj0VG2uHXJ9E1cksWc5ROkYG7zacDj2Peh0eUfzvmiEN
+         eSN+PgeDf0S2LYqlfaPzDTZidl7eXk4EjAFOtxV9aVje/oMACppZDyKCtPC0LKToHhRR
+         sljfjg637WIkilO3gLVuBmugZcTJ708YnXxdyXL0L+FhYYL/8DPeCjzi+mgSup2ZvXSq
+         PTZpWbv2FeE6I+50oVZTLZg3O6aCsSsH3/rmgRjl0jxwKsJIbaZxsQdx4DYZLE0oVFmj
+         Vc4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CsEyi+ba8SRVvbqYHH4jH1LVCacUh7q5WrGtZYt+9O0=;
+        b=Gu9KnziXOehOE3YSQup3lpnHpj/VhWG4lBwF70XWAUEqwCC9PcP1JGghiKhEGzcphy
+         5jPrqO6hfh8I90oFlumfngXRThHHfSilReTKU3GNDUoMy1zZyDr/oExI4bGFaQvP9O5R
+         Zy/hF73HqnER1eLLszPL4V6Jt4AAhnict6I6BJ9bI9HTtMlqiYnke0VT3XYcF99RB6Xv
+         x1iO7oypo/nCBBL5Cc1bZTfwZaenUdNJ1RnUJwem69iyXlY9K9ohHtu9u/KEu1a4PBC2
+         POq+GdmSFUqVzZvyC1GZr3WGRD5+U2jB8qwEP7QZvkyEC/IJ8lyHzYC64W56Bg+dX4h/
+         cbPw==
+X-Gm-Message-State: AOAM532tw10h56Xm3/B6W1ybo/FMyre7gYsAaBtpdKObpHSba6iwHBCo
+        it+NXwt8Z78kQslpP9lc7ijgjEbpRD5dZw==
+X-Google-Smtp-Source: ABdhPJzvj3RyJoV/06Ww25nVFOFF8bC770v05nPHwgY/XXaIshX/WE20M/moTS6WjQFUX7/ZSyTbWg==
+X-Received: by 2002:a17:90a:4d4e:: with SMTP id l14mr26329436pjh.129.1624865204126;
+        Mon, 28 Jun 2021 00:26:44 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id h24sm13522053pfn.180.2021.06.28.00.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jun 2021 00:26:43 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 12:56:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>, Sudeep.Holla@arm.com
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
-Message-ID: <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
-References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
- <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
- <CAJZ5v0huz6Ek1FTvdMs0hPOoMn+ZHiNJeDp6-ujg-1WwpCsELQ@mail.gmail.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com
+Subject: Re: [PATCH v12 1/2] cpufreq: mediatek-hw: Add support for CPUFREQ HW
+Message-ID: <20210628072641.amqk5d3svwolvhic@vireshk-i7>
+References: <1622307153-3639-1-git-send-email-hector.yuan@mediatek.com>
+ <1622307153-3639-2-git-send-email-hector.yuan@mediatek.com>
+ <20210614104058.jdwb7godqzhf7rgd@vireshk-i7>
+ <1624781848.1958.16.camel@mtkswgap22>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ouqyesh2gt3a22qr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0huz6Ek1FTvdMs0hPOoMn+ZHiNJeDp6-ujg-1WwpCsELQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <1624781848.1958.16.camel@mtkswgap22>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 27-06-21, 16:17, Hector Yuan wrote:
+> On Mon, 2021-06-14 at 16:10 +0530, Viresh Kumar wrote:
+> > On 30-05-21, 00:52, Hector Yuan wrote:
+> > > +static int mtk_get_related_cpus(int index, struct cpufreq_mtk *c)
+> > > +{
+> > > +	struct device_node *cpu_np;
+> > > +	struct of_phandle_args args;
+> > > +	int cpu, ret;
+> > > +
+> > > +	for_each_possible_cpu(cpu) {
+> > > +		cpu_np = of_cpu_device_node_get(cpu);
+> > > +		if (!cpu_np)
+> > > +			continue;
+> > > +
+> > > +		ret = of_parse_phandle_with_args(cpu_np, "performance-domains",
+> > > +						 "#performance-domain-cells", 0,
+> > > +						 &args);
+> > > +		of_node_put(cpu_np);
+> > > +		if (ret < 0)
+> > > +			continue;
+> > > +
+> > > +		if (index == args.args[0]) {
+> > > +			cpumask_set_cpu(cpu, &c->related_cpus);
+> > > +			mtk_freq_domain_map[cpu] = c;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > 
+> > I really hope this can be moved to a common place as more than one
+> > drier should be required to parse this thing.
+> > 
+> 
+> Yes, this can be a common part for all performance domain users. But may
+> I know whats your suggestion? Put this API in another file or? Thanks
 
---ouqyesh2gt3a22qr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Rob, Sudeep: You guys have a suggestion on where can we keep a routine for this
+?
 
-Hello Zou,
-
-On Fri, Jun 25, 2021 at 07:45:14PM +0200, Rafael J. Wysocki wrote:
-> On Wed, May 12, 2021 at 6:52 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
-> > > pm_runtime_get_sync will increment pm usage counter even it failed.
-> > > Forgetting to putting operation will result in reference leak here.
-> > > Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-> > > counter balanced.
-> > >
-> > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > Signed-off-by: Zou Wei <zou_wei@huawei.com>
-> > > ---
-> > >  drivers/pwm/pwm-img.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
-> > > index cc37054..11b16ec 100644
-> > > --- a/drivers/pwm/pwm-img.c
-> > > +++ b/drivers/pwm/pwm-img.c
-> > > @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip, =
-struct pwm_device *pwm)
-> > >       struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
-> > >       int ret;
-> > >
-> > > -     ret =3D pm_runtime_get_sync(chip->dev);
-> > > +     ret =3D pm_runtime_resume_and_get(chip->dev);
-> > >       if (ret < 0)
-> > >               return ret;
-> >
-> > This patch looks right with my limited understanding of pm_runtime. A
-> > similar issue in this driver was fixed in commit
-> >
-> >         ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_ge=
-t_sync() failed case")
-> >
-> > where (even though the commit log talks about pm_runtime_put()) a call
-> > to pm_runtime_put_autosuspend() was added in the error path.
-> >
-> > I added the PM guys to Cc, maybe they can advise about the right thing
-> > to do here. Does it make sense to use the same idiom in both
-> > img_pwm_enable() and img_pwm_config()?
->=20
-> I think so.
->=20
-> And calling pm_runtime_put_autosuspend() in the img_pwm_enable() error
-> path would work too.
-
-Do you care to clean this up accordingly and send a new patch?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ouqyesh2gt3a22qr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDZbmwACgkQwfwUeK3K
-7AkHdAgAh/F2qNIQATDK1b+ShrXomsXhrDHW8/TMxpw+VRjRRGpnIPzv5NMXxNNt
-v9ABxSjUBms6N1vP5ax3Jv52IJWWetn53OAOGTI99PsvESh+1yW2J6LlNAO7yyLw
-y/2Ify+L7Ppoj3vbgGYFCdgiJf/3g0f/q4xTzA3zhSPDD1Ku6enUW6+upjkYuKbs
-GAFcraEYEBSGBI186HRWB2zOB645APQXm/YZlz6dTDHwhBUBgtjkjxfy8lmW8jpc
-RZs9l8fbMWzKlk8SQPgbRUpsJnzO/+lwMnSskJQMfm1U8lL+had5PW9kTD7L39sE
-kPMOWYwIjGbKBIvVF9KnlFLHZMYt1Q==
-=p3Fy
------END PGP SIGNATURE-----
-
---ouqyesh2gt3a22qr--
+-- 
+viresh
