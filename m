@@ -2,81 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCAC3B564B
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 02:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B87B3B56DE
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 03:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbhF1A3n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Jun 2021 20:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbhF1A3n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Jun 2021 20:29:43 -0400
-Received: from coinfo.com.mx (coinfo.com.mx [IPv6:2607:f1c0:81f:9400::8b:cb57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A898C061574
-        for <linux-pm@vger.kernel.org>; Sun, 27 Jun 2021 17:27:18 -0700 (PDT)
-Received: (qmail 19325 invoked from network); 27 Jun 2021 17:07:09 -0500
-Received: from localhost (HELO coinfo.com.mx) (127.0.0.1)
- by localhost with ESMTPSA (DHE-RSA-AES256-SHA encrypted, authenticated);
- 27 Jun 2021 17:07:08 -0500
-Received: from ip188-247-73-84.zaindata.jo (ip188-247-73-84.zaindata.jo
- [188.247.73.84]) by webmail.booksmart.com.mx (Horde Framework) with HTTP;
- Sun, 27 Jun 2021 22:07:08 +0000
-Date:   Sun, 27 Jun 2021 22:07:08 +0000
-Message-ID: <20210627220708.Horde.uuIMj9XW6stB7AjGJ9rmY6k@webmail.booksmart.com.mx>
-From:   "Dr. Frederick Seward" <procesos@booksmart.com.mx>
-Subject: PROPUESTA DE NEGOCIO / =?utf-8?b?QVNPQ0lBQ0nDk04=?=
-Reply-to: frederick_seward21@protonmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S231938AbhF1Bp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Jun 2021 21:45:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231706AbhF1Bp1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 27 Jun 2021 21:45:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2758C61A1D;
+        Mon, 28 Jun 2021 01:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624844582;
+        bh=066YMFHqSGCgkK9gz/RQO+n11OjyRE0FlxJc5NciWS0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=tF2R/1UeKoBw+YfNGIuMni8e/F24wDYu6UgRnJO65rSiuzSqX0ht37aQtoJbB5qTl
+         Gc6cTbF0kJ4ItKbo+MJhSo5w+eRgxBbjlUmK8TKkpBZTlHUFq5ybSUc80gLz4ITKAD
+         13UGSDy3pzuTT84DldFJdRqkIwoibcW8ZegVYGaBbTEC3BDUK+K58TDgyAVekRTRe/
+         KidmuMALXGEVTF+wFE6rnL28ckAqKXwAevmC0CyS9J6t87tC6x+CrmqYCuxWbBmvFM
+         x3lBrQ+m7ZjNE80ZnmhgBZPXCvzUkieUvpxyuy9BPuRTS/xJpFFPtHa3yRm9PYWYP5
+         c/Arh4ZkpATXA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <20210627220708.18822.10428@coinfo.com.mx>
-X-PPP-Vhost: booksmart.com.mx
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <937ed0828486a08e2d00bce2815d491c1c9c49b4.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com> <937ed0828486a08e2d00bce2815d491c1c9c49b4.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: Re: [PATCH 5/9] clk: bd718xx: Drop BD70528 support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Sun, 27 Jun 2021 18:43:00 -0700
+Message-ID: <162484458090.3259633.13766939155374243434@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Quoting Matti Vaittinen (2021-05-25 03:15:10)
+> The only known BD70528 use-cases are such that the PMIC is controlled
+> from separate MCU which is not running Linux. I am not aware of
+> any Linux driver users. Furthermore, it seems there is no demand for
+> this IC. Let's ease the maintenance burden and drop the driver. We can
+> always add it back if there is sudden need for it.
+>=20
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+>=20
+> ---
 
-Saludos,
-
-
-FIRSTLINE Laboratory Inc, es uno de los laboratorios líderes en  
-Londres, Reino Unido. Actualmente estamos en busca de una empresa  
-confiable para una asociación comercial en el abastecimiento de  
-algunas de nuestras materias primas básicas utilizadas en la  
-fabricación de productos de extracto de aceite de alta calidad y otros  
-productos químicos farmacéuticos que salvan vidas. El laboratorio  
-FIRSTLINE se enfrenta a retrasos en los proveedores debido a las  
-restricciones de Covid19 y casi está deteniendo la producción en la  
-empresa porque esta materia prima es un extracto de aceite raro que  
-nuestra empresa aún no ha encontrado un nuevo proveedor para comprar  
-con buenos precios oficialmente.
-
-
-
-Esta es mi PROPUESTA para usted, quiero que se presente como un nuevo  
-fabricante y proveedor. Les presentaré la Junta de Laboratorio  
-FIRSTLINE. Esto nos permitirá trabajar juntos como socios y obtener  
-ganancias considerables. Usted, como fabricante, suministrará  
-FIRSTLINE a un buen precio, que le daré en detalle cuando celebremos  
-un acuerdo de MOU con el director ejecutivo y el director financiero  
-de nuestra empresa para comprarle con urgencia en comparación con el  
-precio anterior. Te sorprenderá el beneficio total. Le daré detalles  
-más específicos cuando reciba sus comentarios sobre esta propuesta.
-
-
-
-Gracias
-
-
-Dr. Frederick Seward
-Gerente de Rescher
-Teléfono: +1910565 5008
-Fax: + 1720 585 3009
-Laboratorio FIRSTLINE Reino Unido
-Chalker Way, Banbury, Oxfordshire. OX16 4XD REINO UNIDO
-
-
-
+Applied to clk-next
