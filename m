@@ -2,138 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D633B672E
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 19:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC4A3B687B
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 20:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbhF1RDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 13:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbhF1RDl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 13:03:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A3C061574
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 10:01:15 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lxud9-0001ns-TS; Mon, 28 Jun 2021 19:01:07 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lxud7-0001Xx-7Z; Mon, 28 Jun 2021 19:01:05 +0200
-Date:   Mon, 28 Jun 2021 19:01:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
-Message-ID: <20210628170105.apt7numxkdyxf6q5@pengutronix.de>
-References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
- <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
- <CAJZ5v0huz6Ek1FTvdMs0hPOoMn+ZHiNJeDp6-ujg-1WwpCsELQ@mail.gmail.com>
- <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
+        id S230309AbhF1SfF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Jun 2021 14:35:05 -0400
+Received: from mga02.intel.com ([134.134.136.20]:8039 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230220AbhF1SfE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Jun 2021 14:35:04 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="195162442"
+X-IronPort-AV: E=Sophos;i="5.83,306,1616482800"; 
+   d="scan'208";a="195162442"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 11:32:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,306,1616482800"; 
+   d="scan'208";a="454588644"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by orsmga008.jf.intel.com with ESMTP; 28 Jun 2021 11:32:37 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH -next] thermal: int340x: processor_thermal: Fix warning for return value
+Date:   Mon, 28 Jun 2021 11:32:32 -0700
+Message-Id: <20210628183232.62877-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vc24ibvllo3lf7c"
-Content-Disposition: inline
-In-Reply-To: <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Fix smatch warnings:
+drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c:258 proc_thermal_pci_probe() warn: missing error code 'ret'
 
---6vc24ibvllo3lf7c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Use PTR_ERR to return failure of thermal_zone_device_register().
 
-Hello Zou,
-On Mon, Jun 28, 2021 at 08:38:39AM +0200, Uwe Kleine-K=F6nig wrote:
-> On Fri, Jun 25, 2021 at 07:45:14PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, May 12, 2021 at 6:52 AM Uwe Kleine-K=F6nig
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > > On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
-> > > > pm_runtime_get_sync will increment pm usage counter even it failed.
-> > > > Forgetting to putting operation will result in reference leak here.
-> > > > Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-> > > > counter balanced.
-> > > >
-> > > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > > Signed-off-by: Zou Wei <zou_wei@huawei.com>
-> > > > ---
-> > > >  drivers/pwm/pwm-img.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
-> > > > index cc37054..11b16ec 100644
-> > > > --- a/drivers/pwm/pwm-img.c
-> > > > +++ b/drivers/pwm/pwm-img.c
-> > > > @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip=
-, struct pwm_device *pwm)
-> > > >       struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
-> > > >       int ret;
-> > > >
-> > > > -     ret =3D pm_runtime_get_sync(chip->dev);
-> > > > +     ret =3D pm_runtime_resume_and_get(chip->dev);
-> > > >       if (ret < 0)
-> > > >               return ret;
-> > >
-> > > This patch looks right with my limited understanding of pm_runtime. A
-> > > similar issue in this driver was fixed in commit
-> > >
-> > >         ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_=
-get_sync() failed case")
-> > >
-> > > where (even though the commit log talks about pm_runtime_put()) a call
-> > > to pm_runtime_put_autosuspend() was added in the error path.
-> > >
-> > > I added the PM guys to Cc, maybe they can advise about the right thing
-> > > to do here. Does it make sense to use the same idiom in both
-> > > img_pwm_enable() and img_pwm_config()?
-> >=20
-> > I think so.
-> >=20
-> > And calling pm_runtime_put_autosuspend() in the img_pwm_enable() error
-> > path would work too.
->=20
-> Do you care to clean this up accordingly and send a new patch?
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../intel/int340x_thermal/processor_thermal_device_pci.c      | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Note that Thierry applied your initial patch regardless of the
-inconsistency. Still I'd like to see this done in a consistent way. Do
-you care to follow up with a patch that unifies the behaviour?
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index fea4a3ffd838..99ac7994b8f4 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -254,8 +254,10 @@ static int  proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device
+ 	pci_info->tzone = thermal_zone_device_register("TCPU_PCI", 1, 1, pci_info,
+ 							&tzone_ops,
+ 							&tzone_params, 0, 0);
+-	if (IS_ERR(pci_info->tzone))
++	if (IS_ERR(pci_info->tzone)) {
++		ret = PTR_ERR(pci_info->tzone);
+ 		goto err_ret_mmio;
++	}
+ 
+ 	/* request and enable interrupt */
+ 	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+-- 
+2.27.0
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6vc24ibvllo3lf7c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDaAEgACgkQwfwUeK3K
-7AlUoAf/TOnUhoj0eYiWSFbUFIcG0bz/eWla1yA5dXRk4X4sRIy/dWLm4jwE0ti6
-lDWAa//MvhSa6cjZRiqr8MUvxjfwCkfG6C8HAt59seEhIlLOM9xZDkIuh2mrig9Q
-AUgCjwqqghPf5anR7IVWAQf+/ezprH1q7Jn/IFwrnQIlR0eI5Hd6Mn7axAqDC/xQ
-mhbj/vxJOqHzYlSwg760PL3AL1PL2hwAiZgnjId9qz3w/JMZECKCjqTuKTF0ZvkG
-gDQR+jpY9ouPM2Tn/aFLxAePAjsP/Pkhhzgo8j2NsE6x83tiBFwqrTfDQHsEr6cd
-xx9orGAcN0UFeY17YNsAuCNUDSUlOA==
-=y4Gg
------END PGP SIGNATURE-----
-
---6vc24ibvllo3lf7c--
