@@ -2,134 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A42F43B5C23
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 12:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250153B5CB5
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 12:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbhF1KIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 06:08:45 -0400
-Received: from mout.gmx.net ([212.227.17.21]:36185 "EHLO mout.gmx.net"
+        id S232653AbhF1Kv5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Jun 2021 06:51:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:56396 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232733AbhF1KIk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 28 Jun 2021 06:08:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1624874759;
-        bh=dk+4B2EPDHZqnuPFi/AP937+sSbCnrQEg/Cfq8zAITM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=YXl1dK9hAWZ72C4yTzIzb3aMOl16gsO59oBhTDhZKEme4UL6I+uWj4S05iEnxlXEg
-         VBgueRuyEytdJUJqb5X3JRr1RSHmhAiYWMBb2Qg+Q3evgCAyd9XbjkP+OGq09rDN/g
-         tBDrQZGBiJqAJjvShGenywVHm0efBiHIt7WPdy1k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.73.39] ([80.245.73.39]) by web-mail.gmx.net
- (3c-app-gmx-bs72.server.lan [172.19.170.208]) (via HTTP); Mon, 28 Jun 2021
- 12:05:59 +0200
+        id S232486AbhF1Kv4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Jun 2021 06:51:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CC94D6E;
+        Mon, 28 Jun 2021 03:49:31 -0700 (PDT)
+Received: from localhost (unknown [10.1.195.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B06E63F694;
+        Mon, 28 Jun 2021 03:49:30 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 11:49:29 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 4/4] cpufreq: CPPC: Add support for frequency
+ invariance
+Message-ID: <20210628104929.GA29595@arm.com>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <f963d09e57115969dae32827ade5558b0467d3a0.1624266901.git.viresh.kumar@linaro.org>
+ <20210624094812.GA6095@arm.com>
+ <20210624130418.poiy4ph66mbv3y67@vireshk-i7>
+ <20210625085454.GA15540@arm.com>
+ <20210625165418.shi3gkebumqllxma@vireshk-i7>
 MIME-Version: 1.0
-Message-ID: <trinity-de0268f6-e2f2-4ce9-abdd-8016c593894c-1624874759475@3c-app-gmx-bs72>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH v4] thermal: mediatek: add sensors-support
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 28 Jun 2021 12:05:59 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <9eb45f06-1303-1438-7ba0-b9ccaa898b34@gmail.com>
-References: <20210608154530.70074-1-linux@fw-web.de>
- <9eb45f06-1303-1438-7ba0-b9ccaa898b34@gmail.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:uUyJaECQIvtuZsd5/3sgXqXrQh3TqH+yL6eKcIbcVVWsq3fQjrRu0wVKQa9m2PoIHITPh
- tJ66UtdTQ/xrmnIWr+Dj7CaiMpmEsewmmf+dhOHgTWhbG2LMeUj/LzNMlntEZLK+iJ5o2ucwBRWu
- JyITlb2phwUXv3EZiUNKlOozexlFs4SBsQaUPC2jCdApKLuaAwH/GlHe8EqOumGkHjQrOu8OvDu5
- axtiwmh0U9kNN8DQHYV7QPPctXVBvOLLmkAfNKsNXWWVaRgMn0/qfBAm06le1HueANt62Rsv6xkk
- eU=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:R0LOCk1W4mQ=:RKHoPwjzwWpfhU8Ndp9jD1
- tf+crTRufbN9fEMKGPQBdnG2Ryi6JKeih97sklAm5NCzhXlNRpKKV9jCHs0sjuzggC37fNZJG
- 6eZBWJm7k7YNQKK+vCn0Yxu5zom/gVGX87ciV3/902l0WChErYPJsAjRVfi7Rw9mCI8z48STQ
- WN9Vdg5Zfdof6a+QBJ8vrxpQ2HfDZ/4WsleGiM+sy4jRVxBi0joOYGF89Yi1/JQ7CLiUNvlzY
- OVZvAjdZmsUHD1aQPKLmYy9DNJxUW8h0AzxkJmfWBsHpCJ/jWcdff5eg6TdSKWUKZTuPjvKPS
- U4r6Ove+c62huflNXIOwb3CByI+OatBp/VNyXDDBSOG7Jvrkqc+cCkcNPoTMXiFmwkekWXs1V
- IeuTScISTV2RrY7LQ/2hzxzAan2KDFN/wUa6ndbcyl3EjzMnftNn+YV9gBF+lHsMAWCCm1nL3
- SqBtae3j3t5RN8XIba6EVdEufhcJREueJa83/eAG4prmLexYgKV996sVzNvWp9STD+GBY1BS2
- t9QngD6df/+3THpld1Zh50E364uQc8u4v5W1j8iR+2LZWsMaLnLuC2Mk+HtEpd74t4/Gt8Of2
- OF5d75nTIbzb5v3FQPIsICg09x5onCBhO6kbeXcXloJPNEaJDdu9L+XO+aBxF5myfSxTJaEeb
- 7khAG/n3HtWfz83dfW7tjJmAFrHrM72YF8QpGr3DUVaucY5Wh+FFrQyf25TcQMMUA62q2ZV7E
- JmsWb/4oC2v/Mj6WdjqtsNFuiZvc0JYOWr+d/WldLFeWgmXTkLq0NhsH7XIaXDOZS0Z46kSwV
- BbnyNv2QskVUBWKLqwmh8jB6mKkinhysnmaBz3Hsy7edx0Axcw=
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210625165418.shi3gkebumqllxma@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Friday 25 Jun 2021 at 22:24:18 (+0530), Viresh Kumar wrote:
+> On 25-06-21, 09:54, Ionela Voinescu wrote:
+> > Hey,
+> > 
+> > On Thursday 24 Jun 2021 at 18:34:18 (+0530), Viresh Kumar wrote:
+> > > On 24-06-21, 10:48, Ionela Voinescu wrote:
+> > > > On Monday 21 Jun 2021 at 14:49:37 (+0530), Viresh Kumar wrote:
+> > > > > The Frequency Invariance Engine (FIE) is providing a frequency scaling
+> > > > > correction factor that helps achieve more accurate load-tracking.
+> > > > [..]
+> > > > > +static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+> > > > > +{
+> > > > > +	struct cppc_freq_invariance *cppc_fi;
+> > > > > +	int cpu;
+> > > > > +
+> > > > > +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > > > > +		return;
+> > > > > +
+> > > > > +	/* policy->cpus will be empty here, use related_cpus instead */
+> > > > > +	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+> > > > > +
+> > > > > +	for_each_cpu(cpu, policy->related_cpus) {
+> > > > > +		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> > > > 
+> > > > Do you think it might be worth having here something like:
+> > > > 
+> > > > 		if (!cppc_fi->cpu_data)
+> > > > 			continue;
+> > > > 
+> > > > This would be to protect against cases where the platform does not boot
+> > > > with all CPUs or the module is loaded after some have already been
+> > > > offlined. Unlikely, but..
+> > > 
+> > > Even in that case policy->cpus will contain all offline+online CPUs (at ->init()
+> > > time), isn't it ?
+> > > 
+> > 
+> > Right, my bad. I missed cpumask_and(policy->cpus, policy->cpus,
+> > cpu_online_mask) being done after init(). It logically seems a bit
+> > wrong, but drivers are in control of setting policy->cpus and acting on
+> > it, and in this case the driver does the right thing.
+> 
+> Do you want me to re-add your Reviewed-by here ?
+> 
 
-A gentle ping as it is reviewed but not yet visible in thermal tree [1] i =
-guess it should do,right?
+To be honest I would like to have more time on this before you merge the
+set, to better understand Qian's results and some observations I have
+for Thunder X2 (I will share in a bit).
 
-regards Frank
+For the code, I think it's fine. I have a single observation regarding
+the following code:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/=
-?h=3Dthermal/next
+> +static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+> +{
+> +	struct cppc_freq_invariance *cppc_fi;
+> +	int cpu, ret;
+> +
+> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +		return;
+> +
+> +	for_each_cpu(cpu, policy->cpus) {
+> +		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> +		cppc_fi->cpu = cpu;
+> +		cppc_fi->cpu_data = policy->driver_data;
+> +		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> +		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> +
+> +		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+> +		if (ret) {
+> +			pr_warn("%s: failed to read perf counters for cpu:%d: %d\n",
+> +				__func__, cpu, ret);
+> +			return;
+> +		}
 
-> Gesendet: Mittwoch, 09. Juni 2021 um 10:09 Uhr
-> Von: "Matthias Brugger" <matthias.bgg@gmail.com>
-> An: "Frank Wunderlich" <linux@fw-web.de>, linux-mediatek@lists.infradead=
-.org
-> Cc: "Frank Wunderlich" <frank-w@public-files.de>, "Daniel Lezcano" <dani=
-el.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, linux-pm@vger.=
-kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel=
-.org
-> Betreff: Re: [PATCH v4] thermal: mediatek: add sensors-support
->
->
->
-> On 08/06/2021 17:45, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > add HWMON-support to mediateks thermal driver to allow lm-sensors
-> > userspace tools read soc temperature
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
->
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
->
-> > ---
-> > v4: change message to dev_warn as suggested by matthias
-> > v3: drop no_hwmon
-> > v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
-> > ---
-> >  drivers/thermal/mtk_thermal.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_therm=
-al.c
-> > index 97e8678ccf0e..ede94eadddda 100644
-> > --- a/drivers/thermal/mtk_thermal.c
-> > +++ b/drivers/thermal/mtk_thermal.c
-> > @@ -23,6 +23,8 @@
-> >  #include <linux/reset.h>
-> >  #include <linux/types.h>
-> >
-> > +#include "thermal_hwmon.h"
-> > +
-> >  /* AUXADC Registers */
-> >  #define AUXADC_CON1_SET_V	0x008
-> >  #define AUXADC_CON1_CLR_V	0x00c
-> > @@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_de=
-vice *pdev)
-> >  		goto err_disable_clk_peri_therm;
-> >  	}
-> >
-> > +	ret =3D devm_thermal_add_hwmon_sysfs(tzdev);
-> > +	if (ret)
-> > +		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
-> > +
-> >  	return 0;
-> >
-> >  err_disable_clk_peri_therm:
-> >
->
+For this condition above, think about a scenario where reading counters
+for offline CPUs returns an error. I'm not sure if that can happen, to
+be honest. That would mean here that you will never initialise the freq
+source unless all CPUs in the policy are online at policy creation.
+
+My recommendation is to warn about the failed read of perf counters but
+only return from this function if the target CPU is online as well when
+reading counters fails.
+
+This is probably a nit, so I'll let you decide if you want to do something
+about this.
+
+Thanks,
+Ionela.
+
+> +	}
+> +
+> +	/* Register for freq-invariance */
+> +	topology_set_scale_freq_source(&cppc_sftd, policy->cpus);
+> +}
+
+
+
+> -- 
+> viresh
