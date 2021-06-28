@@ -2,95 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53F23B5AFE
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 11:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42F43B5C23
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 12:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbhF1JNJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 05:13:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:54496 "EHLO foss.arm.com"
+        id S232629AbhF1KIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Jun 2021 06:08:45 -0400
+Received: from mout.gmx.net ([212.227.17.21]:36185 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232284AbhF1JNJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 28 Jun 2021 05:13:09 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC2611FB;
-        Mon, 28 Jun 2021 02:10:43 -0700 (PDT)
-Received: from bogus (unknown [10.57.78.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF5AE3F694;
-        Mon, 28 Jun 2021 02:10:40 -0700 (PDT)
-Date:   Mon, 28 Jun 2021 10:09:56 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Hector Yuan <hector.yuan@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com
-Subject: Re: [PATCH v12 1/2] cpufreq: mediatek-hw: Add support for CPUFREQ HW
-Message-ID: <20210628090956.uwkrozdqvawsm3xp@bogus>
-References: <1622307153-3639-1-git-send-email-hector.yuan@mediatek.com>
- <1622307153-3639-2-git-send-email-hector.yuan@mediatek.com>
- <20210614104058.jdwb7godqzhf7rgd@vireshk-i7>
- <1624781848.1958.16.camel@mtkswgap22>
- <20210628072641.amqk5d3svwolvhic@vireshk-i7>
+        id S232733AbhF1KIk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Jun 2021 06:08:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1624874759;
+        bh=dk+4B2EPDHZqnuPFi/AP937+sSbCnrQEg/Cfq8zAITM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=YXl1dK9hAWZ72C4yTzIzb3aMOl16gsO59oBhTDhZKEme4UL6I+uWj4S05iEnxlXEg
+         VBgueRuyEytdJUJqb5X3JRr1RSHmhAiYWMBb2Qg+Q3evgCAyd9XbjkP+OGq09rDN/g
+         tBDrQZGBiJqAJjvShGenywVHm0efBiHIt7WPdy1k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.73.39] ([80.245.73.39]) by web-mail.gmx.net
+ (3c-app-gmx-bs72.server.lan [172.19.170.208]) (via HTTP); Mon, 28 Jun 2021
+ 12:05:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210628072641.amqk5d3svwolvhic@vireshk-i7>
+Message-ID: <trinity-de0268f6-e2f2-4ce9-abdd-8016c593894c-1624874759475@3c-app-gmx-bs72>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: Re: [PATCH v4] thermal: mediatek: add sensors-support
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 28 Jun 2021 12:05:59 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <9eb45f06-1303-1438-7ba0-b9ccaa898b34@gmail.com>
+References: <20210608154530.70074-1-linux@fw-web.de>
+ <9eb45f06-1303-1438-7ba0-b9ccaa898b34@gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:uUyJaECQIvtuZsd5/3sgXqXrQh3TqH+yL6eKcIbcVVWsq3fQjrRu0wVKQa9m2PoIHITPh
+ tJ66UtdTQ/xrmnIWr+Dj7CaiMpmEsewmmf+dhOHgTWhbG2LMeUj/LzNMlntEZLK+iJ5o2ucwBRWu
+ JyITlb2phwUXv3EZiUNKlOozexlFs4SBsQaUPC2jCdApKLuaAwH/GlHe8EqOumGkHjQrOu8OvDu5
+ axtiwmh0U9kNN8DQHYV7QPPctXVBvOLLmkAfNKsNXWWVaRgMn0/qfBAm06le1HueANt62Rsv6xkk
+ eU=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R0LOCk1W4mQ=:RKHoPwjzwWpfhU8Ndp9jD1
+ tf+crTRufbN9fEMKGPQBdnG2Ryi6JKeih97sklAm5NCzhXlNRpKKV9jCHs0sjuzggC37fNZJG
+ 6eZBWJm7k7YNQKK+vCn0Yxu5zom/gVGX87ciV3/902l0WChErYPJsAjRVfi7Rw9mCI8z48STQ
+ WN9Vdg5Zfdof6a+QBJ8vrxpQ2HfDZ/4WsleGiM+sy4jRVxBi0joOYGF89Yi1/JQ7CLiUNvlzY
+ OVZvAjdZmsUHD1aQPKLmYy9DNJxUW8h0AzxkJmfWBsHpCJ/jWcdff5eg6TdSKWUKZTuPjvKPS
+ U4r6Ove+c62huflNXIOwb3CByI+OatBp/VNyXDDBSOG7Jvrkqc+cCkcNPoTMXiFmwkekWXs1V
+ IeuTScISTV2RrY7LQ/2hzxzAan2KDFN/wUa6ndbcyl3EjzMnftNn+YV9gBF+lHsMAWCCm1nL3
+ SqBtae3j3t5RN8XIba6EVdEufhcJREueJa83/eAG4prmLexYgKV996sVzNvWp9STD+GBY1BS2
+ t9QngD6df/+3THpld1Zh50E364uQc8u4v5W1j8iR+2LZWsMaLnLuC2Mk+HtEpd74t4/Gt8Of2
+ OF5d75nTIbzb5v3FQPIsICg09x5onCBhO6kbeXcXloJPNEaJDdu9L+XO+aBxF5myfSxTJaEeb
+ 7khAG/n3HtWfz83dfW7tjJmAFrHrM72YF8QpGr3DUVaucY5Wh+FFrQyf25TcQMMUA62q2ZV7E
+ JmsWb/4oC2v/Mj6WdjqtsNFuiZvc0JYOWr+d/WldLFeWgmXTkLq0NhsH7XIaXDOZS0Z46kSwV
+ BbnyNv2QskVUBWKLqwmh8jB6mKkinhysnmaBz3Hsy7edx0Axcw=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 12:56:41PM +0530, Viresh Kumar wrote:
-> On 27-06-21, 16:17, Hector Yuan wrote:
-> > On Mon, 2021-06-14 at 16:10 +0530, Viresh Kumar wrote:
-> > > On 30-05-21, 00:52, Hector Yuan wrote:
-> > > > +static int mtk_get_related_cpus(int index, struct cpufreq_mtk *c)
-> > > > +{
-> > > > +	struct device_node *cpu_np;
-> > > > +	struct of_phandle_args args;
-> > > > +	int cpu, ret;
-> > > > +
-> > > > +	for_each_possible_cpu(cpu) {
-> > > > +		cpu_np = of_cpu_device_node_get(cpu);
-> > > > +		if (!cpu_np)
-> > > > +			continue;
-> > > > +
-> > > > +		ret = of_parse_phandle_with_args(cpu_np, "performance-domains",
-> > > > +						 "#performance-domain-cells", 0,
-> > > > +						 &args);
-> > > > +		of_node_put(cpu_np);
-> > > > +		if (ret < 0)
-> > > > +			continue;
-> > > > +
-> > > > +		if (index == args.args[0]) {
-> > > > +			cpumask_set_cpu(cpu, &c->related_cpus);
-> > > > +			mtk_freq_domain_map[cpu] = c;
-> > > > +		}
-> > > > +	}
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > >
-> > > I really hope this can be moved to a common place as more than one
-> > > drier should be required to parse this thing.
-> > >
-> >
-> > Yes, this can be a common part for all performance domain users. But may
-> > I know whats your suggestion? Put this API in another file or? Thanks
+Hi,
+
+A gentle ping as it is reviewed but not yet visible in thermal tree [1] i =
+guess it should do,right?
+
+regards Frank
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/=
+?h=3Dthermal/next
+
+> Gesendet: Mittwoch, 09. Juni 2021 um 10:09 Uhr
+> Von: "Matthias Brugger" <matthias.bgg@gmail.com>
+> An: "Frank Wunderlich" <linux@fw-web.de>, linux-mediatek@lists.infradead=
+.org
+> Cc: "Frank Wunderlich" <frank-w@public-files.de>, "Daniel Lezcano" <dani=
+el.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, linux-pm@vger.=
+kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel=
+.org
+> Betreff: Re: [PATCH v4] thermal: mediatek: add sensors-support
 >
-> Rob, Sudeep: You guys have a suggestion on where can we keep a routine for this
-> ?
-
-Probably in driver/cpufreq or some related headers if it needs to access
-related_cpus and is more cpufreq related in that way ?
-
-Orthogonal to that, I prefer to make the generic function take list_name
-and cells_name as generic. I see we can reuse that qcom-cpufreq-hw.c
-with "qcom,freq-domain" and "#freq-domain-cells".
-
---
-Regards,
-Sudeep
+>
+>
+> On 08/06/2021 17:45, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > add HWMON-support to mediateks thermal driver to allow lm-sensors
+> > userspace tools read soc temperature
+> >
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> > ---
+> > v4: change message to dev_warn as suggested by matthias
+> > v3: drop no_hwmon
+> > v2: drop ifdef and used devm_thermal_add_hwmon_sysfs
+> > ---
+> >  drivers/thermal/mtk_thermal.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_therm=
+al.c
+> > index 97e8678ccf0e..ede94eadddda 100644
+> > --- a/drivers/thermal/mtk_thermal.c
+> > +++ b/drivers/thermal/mtk_thermal.c
+> > @@ -23,6 +23,8 @@
+> >  #include <linux/reset.h>
+> >  #include <linux/types.h>
+> >
+> > +#include "thermal_hwmon.h"
+> > +
+> >  /* AUXADC Registers */
+> >  #define AUXADC_CON1_SET_V	0x008
+> >  #define AUXADC_CON1_CLR_V	0x00c
+> > @@ -1087,6 +1089,10 @@ static int mtk_thermal_probe(struct platform_de=
+vice *pdev)
+> >  		goto err_disable_clk_peri_therm;
+> >  	}
+> >
+> > +	ret =3D devm_thermal_add_hwmon_sysfs(tzdev);
+> > +	if (ret)
+> > +		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+> > +
+> >  	return 0;
+> >
+> >  err_disable_clk_peri_therm:
+> >
+>
