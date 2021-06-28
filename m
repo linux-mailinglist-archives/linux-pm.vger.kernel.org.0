@@ -2,90 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573F33B662E
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 17:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D633B672E
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jun 2021 19:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbhF1Pyr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 11:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S232211AbhF1RDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Jun 2021 13:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbhF1PyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 11:54:18 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0175C09CDE7
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 08:38:22 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id r3so7250589wmq.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 08:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4JaQqvoR+0f2Sh2zrstf6yPCyntyADWYeNdjvtHLij8=;
-        b=c5xC4O2gzmT8kiPNdVZtcIyKFj2dtP0Kw3VkhUSA1SlC3B89ZfhSnIf4I2fVKDvxHl
-         4cjB77Ug+GRxMI3yG8r9q3vj49dyJntVgmYPBK4wFCMPoguBewEX27uhpv1BdCN0ggDw
-         MfBAp+cPreX2UHW/D5AvKoN/19EQgHg1OSFqUo8ELBGiI00TnqyHC6tZtHaME7A9CLIF
-         TDZrRo57qxDPAjCbyDIdbc//FYLIQtpN6nuJBbRArPQOwC3ex/xtRtkR+SunR0Zdr06w
-         FT9oUUY6Ho+O5uTzFpQjm5bYmWAQ0UlOGzedfm00G8bc+Is3uLeFvMVDUv/xZLwrAjwN
-         VEtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4JaQqvoR+0f2Sh2zrstf6yPCyntyADWYeNdjvtHLij8=;
-        b=Il6JcB4t4xhzyTsEXNHgIzBJ/+kXNi/QLKMCERhw4MjXwRvfeHL1G3HwazRssy+0to
-         BDjIyADAYHVz/Ltrokbv4KwcuzQxgflFtR/DmOp31a/6AT9zWpr54u1d9ytYfdzDUJsS
-         7JU5rMqdqqQlvJ770ueSEQ+5wq+0sF5z5PgkywvUE7t9AfKttsFxMdRw5P45vETU9FWG
-         vBQ7Eo44FkVyzqyeN7WdwYsrjpX9L98sxu7SNJsMqNLCRcPs54HIOL0lliWdQF2++wY1
-         ybyuydgQ6Szofoe9QpTOpFxkgyeWIWjkk+93JUpmgBH8/aeGzZFMdq5HANBn8YFQdtNr
-         39SA==
-X-Gm-Message-State: AOAM533PVktEtmIN2Z2hyZ9G4KWTOxkrVMG0aw38Mb9XxqYCUWCwOGTF
-        HeBO7RaFigVqxxBYXa2t1OWz9Q==
-X-Google-Smtp-Source: ABdhPJy5S03IXoODGLADcWPT9mB85Cqt9LLwCy+impxfJlWAc+wlKP6dltP61XPzG97lnieMZPl08Q==
-X-Received: by 2002:a1c:ac87:: with SMTP id v129mr28215948wme.45.1624894701198;
-        Mon, 28 Jun 2021 08:38:21 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c9b2:a9e9:8b67:65fc? ([2a01:e34:ed2f:f020:c9b2:a9e9:8b67:65fc])
-        by smtp.googlemail.com with ESMTPSA id h10sm15414567wmq.0.2021.06.28.08.38.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 08:38:20 -0700 (PDT)
-Subject: Re: Aw: Re: [PATCH v4] thermal: mediatek: add sensors-support
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210608154530.70074-1-linux@fw-web.de>
- <9eb45f06-1303-1438-7ba0-b9ccaa898b34@gmail.com>
- <trinity-de0268f6-e2f2-4ce9-abdd-8016c593894c-1624874759475@3c-app-gmx-bs72>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <0ff513a4-a419-ea47-4b44-9034f538c633@linaro.org>
-Date:   Mon, 28 Jun 2021 17:38:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S232161AbhF1RDl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 13:03:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A3C061574
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 10:01:15 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lxud9-0001ns-TS; Mon, 28 Jun 2021 19:01:07 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lxud7-0001Xx-7Z; Mon, 28 Jun 2021 19:01:05 +0200
+Date:   Mon, 28 Jun 2021 19:01:05 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Zou Wei <zou_wei@huawei.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
+Message-ID: <20210628170105.apt7numxkdyxf6q5@pengutronix.de>
+References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
+ <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
+ <CAJZ5v0huz6Ek1FTvdMs0hPOoMn+ZHiNJeDp6-ujg-1WwpCsELQ@mail.gmail.com>
+ <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <trinity-de0268f6-e2f2-4ce9-abdd-8016c593894c-1624874759475@3c-app-gmx-bs72>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6vc24ibvllo3lf7c"
+Content-Disposition: inline
+In-Reply-To: <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/06/2021 12:05, Frank Wunderlich wrote:
-> Hi,
-> 
-> A gentle ping as it is reviewed but not yet visible in thermal tree [1] i guess it should do,right?
-> 
 
-Right, I thought I took it.
+--6vc24ibvllo3lf7c
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixed, thanks for the heads up.
+Hello Zou,
+On Mon, Jun 28, 2021 at 08:38:39AM +0200, Uwe Kleine-K=F6nig wrote:
+> On Fri, Jun 25, 2021 at 07:45:14PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, May 12, 2021 at 6:52 AM Uwe Kleine-K=F6nig
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > > On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
+> > > > pm_runtime_get_sync will increment pm usage counter even it failed.
+> > > > Forgetting to putting operation will result in reference leak here.
+> > > > Fix it by replacing it with pm_runtime_resume_and_get to keep usage
+> > > > counter balanced.
+> > > >
+> > > > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > > > Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> > > > ---
+> > > >  drivers/pwm/pwm-img.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
+> > > > index cc37054..11b16ec 100644
+> > > > --- a/drivers/pwm/pwm-img.c
+> > > > +++ b/drivers/pwm/pwm-img.c
+> > > > @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip=
+, struct pwm_device *pwm)
+> > > >       struct img_pwm_chip *pwm_chip =3D to_img_pwm_chip(chip);
+> > > >       int ret;
+> > > >
+> > > > -     ret =3D pm_runtime_get_sync(chip->dev);
+> > > > +     ret =3D pm_runtime_resume_and_get(chip->dev);
+> > > >       if (ret < 0)
+> > > >               return ret;
+> > >
+> > > This patch looks right with my limited understanding of pm_runtime. A
+> > > similar issue in this driver was fixed in commit
+> > >
+> > >         ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_=
+get_sync() failed case")
+> > >
+> > > where (even though the commit log talks about pm_runtime_put()) a call
+> > > to pm_runtime_put_autosuspend() was added in the error path.
+> > >
+> > > I added the PM guys to Cc, maybe they can advise about the right thing
+> > > to do here. Does it make sense to use the same idiom in both
+> > > img_pwm_enable() and img_pwm_config()?
+> >=20
+> > I think so.
+> >=20
+> > And calling pm_runtime_put_autosuspend() in the img_pwm_enable() error
+> > path would work too.
+>=20
+> Do you care to clean this up accordingly and send a new patch?
 
+Note that Thierry applied your initial patch regardless of the
+inconsistency. Still I'd like to see this done in a consistent way. Do
+you care to follow up with a patch that unifies the behaviour?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Best regards
+Uwe
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6vc24ibvllo3lf7c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDaAEgACgkQwfwUeK3K
+7AlUoAf/TOnUhoj0eYiWSFbUFIcG0bz/eWla1yA5dXRk4X4sRIy/dWLm4jwE0ti6
+lDWAa//MvhSa6cjZRiqr8MUvxjfwCkfG6C8HAt59seEhIlLOM9xZDkIuh2mrig9Q
+AUgCjwqqghPf5anR7IVWAQf+/ezprH1q7Jn/IFwrnQIlR0eI5Hd6Mn7axAqDC/xQ
+mhbj/vxJOqHzYlSwg760PL3AL1PL2hwAiZgnjId9qz3w/JMZECKCjqTuKTF0ZvkG
+gDQR+jpY9ouPM2Tn/aFLxAePAjsP/Pkhhzgo8j2NsE6x83tiBFwqrTfDQHsEr6cd
+xx9orGAcN0UFeY17YNsAuCNUDSUlOA==
+=y4Gg
+-----END PGP SIGNATURE-----
+
+--6vc24ibvllo3lf7c--
