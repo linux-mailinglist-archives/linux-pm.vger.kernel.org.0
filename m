@@ -2,119 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5086C3B6DC7
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 06:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE983B6DD6
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 07:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbhF2E5e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 00:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhF2E5c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 00:57:32 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146EBC061574
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 21:55:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id j24so2159432pfi.12
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 21:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BbTKDwb2uW5ZQoTC03i3iOYsal8RdknYASpCZq5sOhM=;
-        b=sPQ3Lph7+6T2JL44j4yaSzC2v+sAIub12k0D2sriGr5teRiSJ2qObvw0+2llyb16kt
-         wm/si3RZP4EefxrwVObDBojG52AautAUqtgcjB0bLfe4YWDRps9NK+6R87Ifw2afd4sj
-         u3ipk5oKdv6Rp7KPX8jbav2wyBpJs94UOJOd0myyf44MlW6ynO6Svar8+IrA6O0GQfLq
-         FkEgc/yR5n5bxTFjsX/NVoKQYonmxECOundZ70vDIWPXCo7F0Rc3TGqOLDdo/K0gULhm
-         zKfCoz9nanDv2DlFte9h4DEooZtVP242yi0EqetVa35IPk8On4lCvJZLWl9JCB90CCQc
-         IGFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BbTKDwb2uW5ZQoTC03i3iOYsal8RdknYASpCZq5sOhM=;
-        b=EpnPH/rruZOK6e01FlAHtna+wmUK2AiQ9Rq3NpuKyqqOBkbqVaYMpPDL6S0bVEzrjt
-         //QMnMKqN+iE+wG0HDfbXaq6dUT9rihP2pHpjK9JZq/N6nn5OLkmdauVlng07iJFd7Jh
-         xS2/F6U2kZ33loHUdDniSpGornYEzShG4d+B2YmLoqx+whCn99FLXUZzFA5kwzP6DzWo
-         /NknxoeX7X6Vta+mkWboR7px3Y3jpDq03PscIAS4XEkRhpYJVi62Mxe1BKRvJaNA8i3g
-         EhJDiqzfIjKMVEIlEuzC0WCng3IqaK+9z436yXaadc3DaPdxNR3sIsyS9NLiOswmJPGW
-         jO2g==
-X-Gm-Message-State: AOAM530V+rojizuLZfmXbgTiKNMUgfTk53kDFLRsPMKb+MfEeV3RaTcU
-        Are9t0OwgKWl49AXJoNkp4dEog==
-X-Google-Smtp-Source: ABdhPJwVvRDLtordvMpU6Gv1ZaBnGBkW/v3SlKsBN0AAW1ifyLYtRH7sZcFZFZiGVhfIEJh4LnD75Q==
-X-Received: by 2002:a63:ff22:: with SMTP id k34mr26363851pgi.336.1624942505600;
-        Mon, 28 Jun 2021 21:55:05 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id s3sm16431579pfe.49.2021.06.28.21.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jun 2021 21:55:05 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 10:25:03 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-Message-ID: <20210629045503.tc6vdq773udmyho5@vireshk-i7>
-References: <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
- <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
- <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
- <20210624104734.GA11487@arm.com>
- <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
- <20210625102113.GB15540@arm.com>
- <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
- <20210625143713.GA7092@arm.com>
- <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
- <9096bdb2-2a38-6ba3-0315-f6e9bd5a4c0e@quicinc.com>
+        id S231598AbhF2FOg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 29 Jun 2021 01:14:36 -0400
+Received: from mga04.intel.com ([192.55.52.120]:55906 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229969AbhF2FOg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Jun 2021 01:14:36 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="206261755"
+X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
+   d="scan'208";a="206261755"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 22:12:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
+   d="scan'208";a="625502307"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2021 22:12:08 -0700
+Received: from shsmsx603.ccr.corp.intel.com (10.109.6.143) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Mon, 28 Jun 2021 22:12:07 -0700
+Received: from shsmsx603.ccr.corp.intel.com (10.109.6.143) by
+ SHSMSX603.ccr.corp.intel.com (10.109.6.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Tue, 29 Jun 2021 13:12:05 +0800
+Received: from shsmsx603.ccr.corp.intel.com ([10.109.6.143]) by
+ SHSMSX603.ccr.corp.intel.com ([10.109.6.143]) with mapi id 15.01.2242.008;
+ Tue, 29 Jun 2021 13:12:05 +0800
+From:   "Zhang, Rui" <rui.zhang@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [UPDATE][PATCH] thermal: int340x: processor_thermal: Fix tcc
+ setting
+Thread-Topic: [UPDATE][PATCH] thermal: int340x: processor_thermal: Fix tcc
+ setting
+Thread-Index: AQHXbGiwqq3P26te60OZFhNIzULFPqsqcalQ
+Date:   Tue, 29 Jun 2021 05:12:05 +0000
+Message-ID: <553943329ddf452c80c15fc6cdded366@intel.com>
+References: <20210628215803.75038-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20210628215803.75038-1-srinivas.pandruvada@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9096bdb2-2a38-6ba3-0315-f6e9bd5a4c0e@quicinc.com>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-06-21, 09:41, Qian Cai wrote:
-> Another date point is that set ACPI_CPPC_CPUFREQ_FIE=n fixed the issue that any CPU could run below the lowest freq.
+
+
+> -----Original Message-----
+> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Sent: Tuesday, June 29, 2021 5:58 AM
+> To: daniel.lezcano@linaro.org; Zhang, Rui <rui.zhang@intel.com>;
+> amitk@kernel.org
+> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Srinivas
+> Pandruvada <srinivas.pandruvada@linux.intel.com>; stable@vger.kernel.org
+> Subject: [UPDATE][PATCH] thermal: int340x: processor_thermal: Fix tcc setting
+> Importance: High
 > 
-> schedutil:
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
->      80 1000000
->      78 1400000
->       1 2010000
->       1 2800000
+> The following fixes are done for tcc sysfs interface:
+> - TCC is 6 bits only from bit 29-24
+> - TCC of 0 is valid
+> - When BIT(31) is set, this register is read only
+> - Check for invalid tcc value
+> - Error for negative values
 > 
-> userspace:
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
->     158 1000000
->       2 2000000
+> Fixes: fdf4f2fb8e899 ("drivers: thermal: processor_thermal_device:
+> Export sysfs interface for TCC offset"
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org
 
-ACPI_CPPC_CPUFREQ_FIE can play a role with schedutil, but not with
-userspace governor. Userspace doesn't use the values being updated by
-ACPI_CPPC_CPUFREQ_FIE. So I think the CPUs may not have been idle,
-just for some reason.
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+> Update
+> 	Added Fixes tag and cc to stable
+> 
+>  .../processor_thermal_device.c                | 20 +++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index de4fc640deb0..0f0038af2ad4 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -78,24 +78,27 @@ static ssize_t tcc_offset_degree_celsius_show(struct
+> device *dev,
+>  	if (err)
+>  		return err;
+> 
+> -	val = (val >> 24) & 0xff;
+> +	val = (val >> 24) & 0x3f;
+>  	return sprintf(buf, "%d\n", (int)val);  }
+> 
+> -static int tcc_offset_update(int tcc)
+> +static int tcc_offset_update(unsigned int tcc)
+>  {
+>  	u64 val;
+>  	int err;
+> 
+> -	if (!tcc)
+> +	if (tcc > 63)
+>  		return -EINVAL;
+> 
+>  	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
+>  	if (err)
+>  		return err;
+> 
+> -	val &= ~GENMASK_ULL(31, 24);
+> -	val |= (tcc & 0xff) << 24;
+> +	if (val & BIT(31))
+> +		return -EPERM;
+> +
+> +	val &= ~GENMASK_ULL(29, 24);
+> +	val |= (tcc & 0x3f) << 24;
+> 
+>  	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
+>  	if (err)
+> @@ -104,14 +107,15 @@ static int tcc_offset_update(int tcc)
+>  	return 0;
+>  }
+> 
+> -static int tcc_offset_save;
+> +static unsigned int tcc_offset_save;
+> 
+>  static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+>  				struct device_attribute *attr, const char *buf,
+>  				size_t count)
+>  {
+> +	unsigned int tcc;
+>  	u64 val;
+> -	int tcc, err;
+> +	int err;
+> 
+>  	err = rdmsrl_safe(MSR_PLATFORM_INFO, &val);
+>  	if (err)
+> @@ -120,7 +124,7 @@ static ssize_t tcc_offset_degree_celsius_store(struct
+> device *dev,
+>  	if (!(val & BIT(30)))
+>  		return -EACCES;
+> 
+> -	if (kstrtoint(buf, 0, &tcc))
+> +	if (kstrtouint(buf, 0, &tcc))
+>  		return -EINVAL;
+> 
+>  	err = tcc_offset_update(tcc);
+> --
+> 2.27.0
 
-Also, now that you are able run on latest kernel (linux-next), it
-would be better if we can talk in terms of that only going forward.
-5.4 adds more to the already unstable results :)
-
--- 
-viresh
