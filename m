@@ -2,135 +2,455 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC6F3B6FDE
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 11:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3D3B70DC
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 12:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbhF2JIa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 05:08:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:46732 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232524AbhF2JIa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Jun 2021 05:08:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BCAED6E;
-        Tue, 29 Jun 2021 02:06:03 -0700 (PDT)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF6143F694;
-        Tue, 29 Jun 2021 02:06:02 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 10:06:01 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-Message-ID: <20210629090553.GC2425@arm.com>
-References: <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
- <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
- <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
- <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
- <20210624104734.GA11487@arm.com>
- <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
- <20210625102113.GB15540@arm.com>
- <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
- <20210625143713.GA7092@arm.com>
- <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
+        id S233213AbhF2Kn1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 06:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233111AbhF2Kn1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 06:43:27 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70325C061760
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 03:40:59 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id k9so8196998uaq.6
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 03:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jnkRRmLV+3fCO8hTgmX6KcACTWSfqkECczbM2Dojizs=;
+        b=ju0Dg4Qxgy1yb+xl4adlWsFgbenX94UFGXYmDuIMQaDeK0PN62ukDWTpXvDGYX+W5z
+         1oCRitSAPsGxlCZ4T0d9sYHAJIOOWPxvoSnie+EtSEm2tq5Z9W372L5X1zu14fKKl/An
+         CaVbKzCkWEuNsRwEhSBP4VIZ0ghuUF0yR0UPIlD0/t/spMWp9esIAYUT9FrWIzlduEkq
+         dKxfuw0YdZLw4GXTRdpaKdDy9wxpNW4zH2g6e8rxGBYq6Jz4wECQbed47rCwBb7yCAjK
+         w6D8Lue61oo+hstS9B9V8amarmLMqy5SftWmN/0Bn89IUcqzi77OsbGGGJxi/AA13Pxh
+         dCKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jnkRRmLV+3fCO8hTgmX6KcACTWSfqkECczbM2Dojizs=;
+        b=DbA3uxI3ghZPBmydfXw8nHK2pzqQ/gQYyfcLYKfWhC9nZOCIWont0eQXwBnkKQhwcD
+         bqCnDvFQFFbKynR58w843ozhj//l2S0Ato8PGnzndZfXynYH34QVmJ94B2tLcvEmZotQ
+         LkPp6rRlrSAX+XDCF7zWm2VxkAN95l6wna2E6HPavVOTR9gDc0n8q6OS2/Dd3J/QTCbC
+         n7UCdsqXuYGMUgd8oHKexoJbjFjyV4xNIKKPrEurIO/1eFR2x4qpyXd0WlwTK9eQmYE2
+         p93orHx2Hx8bMAzBQehMpjhhjPBo+F2tOFqTxlaBfr/8xCOZWCU8iKp6PbqiLKk7wO8W
+         16bg==
+X-Gm-Message-State: AOAM5316PMHlpMhKf7F+epl9koKOWY9whrpw+SZqYPYsbXkDgUVm0MmU
+        kc2Aq1yF6GoVWh7a6XhvyG8thDv+t9bB+dpxsZQK5A==
+X-Google-Smtp-Source: ABdhPJzgROaDauoQmBlYmniPzycAyJGFqeztot7junFkXEdjHO4ShOhYz3xAgVHSLiohL6WFjW5pOm1XKW448sBToNA=
+X-Received: by 2002:ab0:6296:: with SMTP id z22mr2187090uao.129.1624963258578;
+ Tue, 29 Jun 2021 03:40:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210624201802.3255370-1-swboyd@chromium.org>
+In-Reply-To: <20210624201802.3255370-1-swboyd@chromium.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 29 Jun 2021 12:40:22 +0200
+Message-ID: <CAPDyKFq3JAh8Ogts21P2bRkwKLGs4U9A1CmnMTbD-FacPTTYrg@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: domains: Shrink locking area of the gpd_list_lock
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Qian,
+On Thu, 24 Jun 2021 at 22:18, Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> On trogdor devices I see the following lockdep splat when stopping
+> youtube with lockdep enabled in the kernel.
+>
+>  ======================================================
+>  WARNING: possible circular locking dependency detected
+>  5.13.0-rc2 #71 Not tainted
+>  ------------------------------------------------------
+>  ThreadPoolSingl/3969 is trying to acquire lock:
+>  ffffff80d4d5c080 (&inst->lock#3){+.+.}-{3:3}, at: vdec_buf_cleanup+0x3c/0x17c [venus_dec]
+>
+>  but task is already holding lock:
+>  ffffff80d3c3c4f8 (&q->mmap_lock){+.+.}-{3:3}, at: vb2_core_reqbufs+0xe4/0x390 [videobuf2_common]
+>
+>  which lock already depends on the new lock.
+>
+>  the existing dependency chain (in reverse order) is:
+>
+>  -> #5 (&q->mmap_lock){+.+.}-{3:3}:
+>         __mutex_lock_common+0xcc/0xb88
+>         mutex_lock_nested+0x5c/0x68
+>         vb2_mmap+0xf4/0x290 [videobuf2_common]
+>         v4l2_m2m_fop_mmap+0x44/0x50 [v4l2_mem2mem]
+>         v4l2_mmap+0x5c/0xa4
+>         mmap_region+0x310/0x5a4
+>         do_mmap+0x348/0x43c
+>         vm_mmap_pgoff+0xfc/0x178
+>         ksys_mmap_pgoff+0x84/0xfc
+>         __arm64_compat_sys_aarch32_mmap2+0x2c/0x38
+>         invoke_syscall+0x54/0x110
+>         el0_svc_common+0x88/0xf0
+>         do_el0_svc_compat+0x28/0x34
+>         el0_svc_compat+0x24/0x34
+>         el0_sync_compat_handler+0xc0/0xf0
+>         el0_sync_compat+0x19c/0x1c0
+>
+>  -> #4 (&mm->mmap_lock){++++}-{3:3}:
+>         __might_fault+0x60/0x88
+>         filldir64+0x124/0x3a0
+>         dcache_readdir+0x7c/0x1ec
+>         iterate_dir+0xc4/0x184
+>         __arm64_sys_getdents64+0x78/0x170
+>         invoke_syscall+0x54/0x110
+>         el0_svc_common+0xa8/0xf0
+>         do_el0_svc_compat+0x28/0x34
+>         el0_svc_compat+0x24/0x34
+>         el0_sync_compat_handler+0xc0/0xf0
+>         el0_sync_compat+0x19c/0x1c0
+>
+>  -> #3 (&sb->s_type->i_mutex_key#3){++++}-{3:3}:
+>         down_write+0x94/0x1f4
+>         start_creating+0xb0/0x174
+>         debugfs_create_dir+0x28/0x138
+>         opp_debug_register+0x88/0xc0
+>         _add_opp_dev+0x84/0x9c
+>         _add_opp_table_indexed+0x16c/0x310
+>         _of_add_table_indexed+0x70/0xb5c
+>         dev_pm_opp_of_add_table_indexed+0x20/0x2c
+>         of_genpd_add_provider_onecell+0xc4/0x1c8
+>         rpmhpd_probe+0x21c/0x278
+>         platform_probe+0xb4/0xd4
+>         really_probe+0x140/0x35c
+>         driver_probe_device+0x90/0xcc
+>         __device_attach_driver+0xa4/0xc0
+>         bus_for_each_drv+0x8c/0xd8
+>         __device_attach+0xc4/0x150
+>         device_initial_probe+0x20/0x2c
+>         bus_probe_device+0x40/0xa4
+>         device_add+0x22c/0x3fc
+>         of_device_add+0x44/0x54
+>         of_platform_device_create_pdata+0xb0/0xf4
+>         of_platform_bus_create+0x1d0/0x350
+>         of_platform_populate+0x80/0xd4
+>         devm_of_platform_populate+0x64/0xb0
+>         rpmh_rsc_probe+0x378/0x3dc
+>         platform_probe+0xb4/0xd4
+>         really_probe+0x140/0x35c
+>         driver_probe_device+0x90/0xcc
+>         __device_attach_driver+0xa4/0xc0
+>         bus_for_each_drv+0x8c/0xd8
+>         __device_attach+0xc4/0x150
+>         device_initial_probe+0x20/0x2c
+>         bus_probe_device+0x40/0xa4
+>         device_add+0x22c/0x3fc
+>         of_device_add+0x44/0x54
+>         of_platform_device_create_pdata+0xb0/0xf4
+>         of_platform_bus_create+0x1d0/0x350
+>         of_platform_bus_create+0x21c/0x350
+>         of_platform_populate+0x80/0xd4
+>         of_platform_default_populate_init+0xb8/0xd4
+>         do_one_initcall+0x1b4/0x400
+>         do_initcall_level+0xa8/0xc8
+>         do_initcalls+0x5c/0x9c
+>         do_basic_setup+0x2c/0x38
+>         kernel_init_freeable+0x1a4/0x1ec
+>         kernel_init+0x20/0x118
+>         ret_from_fork+0x10/0x30
+>
+>  -> #2 (gpd_list_lock){+.+.}-{3:3}:
+>         __mutex_lock_common+0xcc/0xb88
+>         mutex_lock_nested+0x5c/0x68
+>         __genpd_dev_pm_attach+0x70/0x18c
+>         genpd_dev_pm_attach_by_id+0xe4/0x158
+>         genpd_dev_pm_attach_by_name+0x48/0x60
+>         dev_pm_domain_attach_by_name+0x2c/0x38
+>         dev_pm_opp_attach_genpd+0xac/0x160
+>         vcodec_domains_get+0x94/0x14c [venus_core]
+>         core_get_v4+0x150/0x188 [venus_core]
+>         venus_probe+0x138/0x444 [venus_core]
+>         platform_probe+0xb4/0xd4
+>         really_probe+0x140/0x35c
+>         driver_probe_device+0x90/0xcc
+>         device_driver_attach+0x58/0x7c
+>         __driver_attach+0xc8/0xe0
+>         bus_for_each_dev+0x88/0xd4
+>         driver_attach+0x30/0x3c
+>         bus_add_driver+0x10c/0x1e0
+>         driver_register+0x70/0x108
+>         __platform_driver_register+0x30/0x3c
+>         0xffffffde113e1044
+>         do_one_initcall+0x1b4/0x400
+>         do_init_module+0x64/0x1fc
+>         load_module+0x17f4/0x1958
+>         __arm64_sys_finit_module+0xb4/0xf0
+>         invoke_syscall+0x54/0x110
+>         el0_svc_common+0x88/0xf0
+>         do_el0_svc_compat+0x28/0x34
+>         el0_svc_compat+0x24/0x34
+>         el0_sync_compat_handler+0xc0/0xf0
+>         el0_sync_compat+0x19c/0x1c0
+>
+>  -> #1 (&opp_table->genpd_virt_dev_lock){+.+.}-{3:3}:
+>         __mutex_lock_common+0xcc/0xb88
+>         mutex_lock_nested+0x5c/0x68
+>         _set_required_opps+0x74/0x120
+>         _set_opp+0x94/0x37c
+>         dev_pm_opp_set_rate+0xa0/0x194
+>         core_clks_set_rate+0x28/0x58 [venus_core]
+>         load_scale_v4+0x228/0x2b4 [venus_core]
+>         session_process_buf+0x160/0x198 [venus_core]
+>         venus_helper_vb2_buf_queue+0xcc/0x130 [venus_core]
+>         vdec_vb2_buf_queue+0xc4/0x140 [venus_dec]
+>         __enqueue_in_driver+0x164/0x188 [videobuf2_common]
+>         vb2_core_qbuf+0x13c/0x47c [videobuf2_common]
+>         vb2_qbuf+0x88/0xec [videobuf2_v4l2]
+>         v4l2_m2m_qbuf+0x84/0x15c [v4l2_mem2mem]
+>         v4l2_m2m_ioctl_qbuf+0x24/0x30 [v4l2_mem2mem]
+>         v4l_qbuf+0x54/0x68
+>         __video_do_ioctl+0x2bc/0x3bc
+>         video_usercopy+0x558/0xb04
+>         video_ioctl2+0x24/0x30
+>         v4l2_ioctl+0x58/0x68
+>         v4l2_compat_ioctl32+0x84/0xa0
+>         __arm64_compat_sys_ioctl+0x12c/0x140
+>         invoke_syscall+0x54/0x110
+>         el0_svc_common+0x88/0xf0
+>         do_el0_svc_compat+0x28/0x34
+>         el0_svc_compat+0x24/0x34
+>         el0_sync_compat_handler+0xc0/0xf0
+>         el0_sync_compat+0x19c/0x1c0
+>
+>  -> #0 (&inst->lock#3){+.+.}-{3:3}:
+>         __lock_acquire+0x248c/0x2d6c
+>         lock_acquire+0x240/0x314
+>         __mutex_lock_common+0xcc/0xb88
+>         mutex_lock_nested+0x5c/0x68
+>         vdec_buf_cleanup+0x3c/0x17c [venus_dec]
+>         __vb2_queue_free+0x98/0x204 [videobuf2_common]
+>         vb2_core_reqbufs+0x14c/0x390 [videobuf2_common]
+>         vb2_reqbufs+0x58/0x74 [videobuf2_v4l2]
+>         v4l2_m2m_reqbufs+0x58/0x90 [v4l2_mem2mem]
+>         v4l2_m2m_ioctl_reqbufs+0x24/0x30 [v4l2_mem2mem]
+>         v4l_reqbufs+0x58/0x6c
+>         __video_do_ioctl+0x2bc/0x3bc
+>         video_usercopy+0x558/0xb04
+>         video_ioctl2+0x24/0x30
+>         v4l2_ioctl+0x58/0x68
+>         v4l2_compat_ioctl32+0x84/0xa0
+>         __arm64_compat_sys_ioctl+0x12c/0x140
+>         invoke_syscall+0x54/0x110
+>         el0_svc_common+0x88/0xf0
+>         do_el0_svc_compat+0x28/0x34
+>         el0_svc_compat+0x24/0x34
+>         el0_sync_compat_handler+0xc0/0xf0
+>         el0_sync_compat+0x19c/0x1c0
+>
+>  other info that might help us debug this:
+>
+>  Chain exists of:
+>    &inst->lock#3 --> &mm->mmap_lock --> &q->mmap_lock
+>
+>   Possible unsafe locking scenario:
+>
+>         CPU0                    CPU1
+>         ----                    ----
+>    lock(&q->mmap_lock);
+>                                 lock(&mm->mmap_lock);
+>                                 lock(&q->mmap_lock);
+>    lock(&inst->lock#3);
+>
+>   *** DEADLOCK ***
+>
+>  1 lock held by ThreadPoolSingl/3969:
+>   #0: ffffff80d3c3c4f8 (&q->mmap_lock){+.+.}-{3:3}, at: vb2_core_reqbufs+0xe4/0x390 [videobuf2_common]
+>
+>  stack backtrace:
+>  CPU: 2 PID: 3969 Comm: ThreadPoolSingl Not tainted 5.13.0-rc2 #71
+>  Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+>  Call trace:
+>   dump_backtrace+0x0/0x1b4
+>   show_stack+0x24/0x30
+>   dump_stack+0xe0/0x15c
+>   print_circular_bug+0x32c/0x388
+>   check_noncircular+0x138/0x140
+>   __lock_acquire+0x248c/0x2d6c
+>   lock_acquire+0x240/0x314
+>   __mutex_lock_common+0xcc/0xb88
+>   mutex_lock_nested+0x5c/0x68
+>   vdec_buf_cleanup+0x3c/0x17c [venus_dec]
+>   __vb2_queue_free+0x98/0x204 [videobuf2_common]
+>   vb2_core_reqbufs+0x14c/0x390 [videobuf2_common]
+>   vb2_reqbufs+0x58/0x74 [videobuf2_v4l2]
+>   v4l2_m2m_reqbufs+0x58/0x90 [v4l2_mem2mem]
+>   v4l2_m2m_ioctl_reqbufs+0x24/0x30 [v4l2_mem2mem]
+>   v4l_reqbufs+0x58/0x6c
+>   __video_do_ioctl+0x2bc/0x3bc
+>   video_usercopy+0x558/0xb04
+>   video_ioctl2+0x24/0x30
+>   v4l2_ioctl+0x58/0x68
+>   v4l2_compat_ioctl32+0x84/0xa0
+>   __arm64_compat_sys_ioctl+0x12c/0x140
+>   invoke_syscall+0x54/0x110
+>   el0_svc_common+0x88/0xf0
+>   do_el0_svc_compat+0x28/0x34
+>   el0_svc_compat+0x24/0x34
+>   el0_sync_compat_handler+0xc0/0xf0
+>   el0_sync_compat+0x19c/0x1c0
+>
+> The 'gpd_list_lock' is nominally named as such to protect the 'gpd_list'
+> from concurrent access and mutation. Unfortunately, holding that mutex
+> around various OPP framework calls leads to lockdep splats because now
+> we're doing various operations in OPP core such as registering with
+> debugfs while holding the list lock. We don't need to hold any list
+> mutex while we're calling into OPP, so let's shrink the locking area of
+> the 'gpd_list_lock' so that lockdep isn't triggered. This also helps
+> reduce contention on this lock, which probably doesn't matter much but
+> at least is nice to have.
+>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: <linux-pm@vger.kernel.org>
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Sorry for the delay. I was trying to run tests on ThunderX2 as well, as
-it can give me more control over testing, to get more insight on this.
+Thanks for fixing this!
 
-On Friday 25 Jun 2021 at 22:29:26 (-0400), Qian Cai wrote:
-> 
-> 
-> On 6/25/2021 10:37 AM, Ionela Voinescu wrote:
-> > Quick questions for you:
-> > 
-> > 1. When you say you tried a 5.4 kernel, did you try it with these
-> > patches backported? They also have some dependencies with the recent
-> > changes in the arch topology driver and cpufreq so they would not be
-> > straight forward to backport.
-> > 
-> > If the 5.4 kernel you tried did not have these patches, it might be best
-> > to try next/master that has these patches, but with
-> > CONFIG_ACPI_CPPC_CPUFREQ_FIE=n, just to eliminate the possibility that
-> > an incorrect frequency scale factor here would affect utilization that
-> > would then affect the schedutil frequency selection. I would not expect
-> > this behavior even if the scale factor was wrong, but it would be good
-> > to rule out.
-> > 
-> > 2. Is your platform booting with all CPUs? Are any hotplug operations
-> > done in your scenario?
-> 
-> Ionela, I found that set ACPI_PROCESSOR=y instead of ACPI_PROCESSOR=m
-> will fix the previous mentioned issues here (any explanations of that?)
-> even though the scaling down is not perfect. Now, we have the following
-> on this idle system:
-> 
+As I said, when discussing the previous version, I am working on
+additional improvements, but this should be a step in the right
+direction.
 
-I don't see how this would have played a role. The cppc cpufreq driver
-depends on functionality gated by CONFIG_ACPI_CPPC_LIB which in turn
-needs CONFIG_ACPI_PROCESSOR to trigger the parsing of the _CPC objects.
-If CONFIG_ACPI_PROCESSOR functionality is not built in or loaded, the
-cppc cpufreq driver could not be used at all.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
->  	79 1000000
->   	1 1160000
->  	73 1400000
->   	1 2000000
->   	4 2010000
->   	1 2800000
->   	1 860000
-> 
-> Even if I rerun a few times, there could still have a few CPUs running
-> lower than lowest_perf (1GHz). Also, even though I set all CPUs to use
-> "userspace" governor and set freq to the lowest. A few CPUs keep changing
-> at will.
-> 
+Kind regards
+Uffe
 
-I do not believe getting values lower than lowest is worrying as long as
-they are not much much lower and they don't happen very often. First of
-all firmware has control over CPU frequencies and it can decide to
-select a lower frequency if it wishes.
-
-Looking at the fact that it only happens rarely in your tests, it's also
-possible that this is introduced by the fact that the CPU only spends
-only a few cycles in active state. That would reduce the resolution of
-the computed current performance level, which results in a lower value
-when converted to frequency.
-
-Hope it helps,
-Ionela.
-
-> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
-> 	156 1000000
->   	3 2000000
->   	1 760000
+> ---
+>
+> Changes from v1:
+>  * Removed list lock in genpd_add_provider() as it serves no purpose
+>
+>  drivers/base/power/domain.c | 38 +++++++++++++++++--------------------
+>  1 file changed, 17 insertions(+), 21 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index b6a782c31613..03d18223d8bb 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1984,8 +1984,8 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>
+>         mutex_lock(&gpd_list_lock);
+>         list_add(&genpd->gpd_list_node, &gpd_list);
+> -       genpd_debug_add(genpd);
+>         mutex_unlock(&gpd_list_lock);
+> +       genpd_debug_add(genpd);
+>
+>         return 0;
+>  }
+> @@ -2172,12 +2172,19 @@ static int genpd_add_provider(struct device_node *np, genpd_xlate_t xlate,
+>
+>  static bool genpd_present(const struct generic_pm_domain *genpd)
+>  {
+> +       bool ret = false;
+>         const struct generic_pm_domain *gpd;
+>
+> -       list_for_each_entry(gpd, &gpd_list, gpd_list_node)
+> -               if (gpd == genpd)
+> -                       return true;
+> -       return false;
+> +       mutex_lock(&gpd_list_lock);
+> +       list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
+> +               if (gpd == genpd) {
+> +                       ret = true;
+> +                       break;
+> +               }
+> +       }
+> +       mutex_unlock(&gpd_list_lock);
+> +
+> +       return ret;
+>  }
+>
+>  /**
+> @@ -2188,15 +2195,13 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
+>  int of_genpd_add_provider_simple(struct device_node *np,
+>                                  struct generic_pm_domain *genpd)
+>  {
+> -       int ret = -EINVAL;
+> +       int ret;
+>
+>         if (!np || !genpd)
+>                 return -EINVAL;
+>
+> -       mutex_lock(&gpd_list_lock);
+> -
+>         if (!genpd_present(genpd))
+> -               goto unlock;
+> +               return -EINVAL;
+>
+>         genpd->dev.of_node = np;
+>
+> @@ -2207,7 +2212,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+>                         if (ret != -EPROBE_DEFER)
+>                                 dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
+>                                         ret);
+> -                       goto unlock;
+> +                       return ret;
+>                 }
+>
+>                 /*
+> @@ -2225,16 +2230,13 @@ int of_genpd_add_provider_simple(struct device_node *np,
+>                         dev_pm_opp_of_remove_table(&genpd->dev);
+>                 }
+>
+> -               goto unlock;
+> +               return ret;
+>         }
+>
+>         genpd->provider = &np->fwnode;
+>         genpd->has_provider = true;
+>
+> -unlock:
+> -       mutex_unlock(&gpd_list_lock);
+> -
+> -       return ret;
+> +       return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
+>
+> @@ -2253,8 +2255,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+>         if (!np || !data)
+>                 return -EINVAL;
+>
+> -       mutex_lock(&gpd_list_lock);
+> -
+>         if (!data->xlate)
+>                 data->xlate = genpd_xlate_onecell;
+>
+> @@ -2294,8 +2294,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+>         if (ret < 0)
+>                 goto error;
+>
+> -       mutex_unlock(&gpd_list_lock);
+> -
+>         return 0;
+>
+>  error:
+> @@ -2314,8 +2312,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+>                 }
+>         }
+>
+> -       mutex_unlock(&gpd_list_lock);
+> -
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(of_genpd_add_provider_onecell);
+>
+> base-commit: d07f6ca923ea0927a1024dfccafc5b53b61cfecc
+> --
+> https://chromeos.dev
+>
