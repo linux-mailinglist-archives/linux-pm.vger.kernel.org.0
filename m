@@ -2,194 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5853B6DE9
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 07:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9880E3B6E2E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 08:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhF2FXB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 01:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S232041AbhF2GU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 02:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhF2FXA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 01:23:00 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0902C061574
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 22:20:32 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id a2so17429647pgi.6
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 22:20:32 -0700 (PDT)
+        with ESMTP id S231958AbhF2GU3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 02:20:29 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA737C061574
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 23:18:01 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id g6-20020a17090adac6b029015d1a9a6f1aso1338928pjx.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 23:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=wKr7FA0vqoMz5lZ8aQYZkFOpTvgXxSqPGAHyogWXhmA=;
-        b=BQTcGyEaOFgaEzNWgL0U3aAv4ua18qKVcpzUgxZjcUZ1qkLiCuG4edKFSRP+of3CyG
-         lODkt0mtAg+ovzEkkeiMHky/zg5rnZsmD7OObSqHe8/NN1Fnj6HFuMNjVWufKo0pzVDg
-         IUX7UJ8RsE6JVcERMvfW6+uQnNXucT5RGsaHU9o5ZfHmckYLGYN4XVcwieVaCcILlmZ2
-         3H9MYkzb38aLGYaD4RrwsPjwGZvjutRA1Kv3+xovuwfPOBzIV8qEYPd25EB6pWQVAaHM
-         8PFSMOUXbk5e88JZq5n9vi5P0B+qEph7lrj2QCKCy3g9R3UJV5W6fW4V9UlPuvtK99b3
-         Lwug==
+        bh=hI1DeZ2pRK8aek3pSY+ZixxRt/uy7BhVNJwpyrPvK4U=;
+        b=kVGPtew0Kx8eTy5szjyeACr/mtbC6DaMpT7oBhHleodDrSuAeIPnJJRJg/8ULx/Ug4
+         miyM9Y33Nk8kTSd2gcZOEIK+yD2NbSqh1RWOiZCs1+2FjnZrn/UXhe7gt/OSDAcpS5iE
+         gjWx5+xrYvSW8yx7Px8yi5+1T2pdpX7XR1E9lqBBhZZj9oI8vSih+hYfMSWylFGsdnl6
+         1c/pZREkNYk7Hza1b1ZEw3wzjm5ou/k7B6cmPI0b+6O8dlCBOKJa6TembetnP+L8Ewoy
+         DGIp5sYYtPHfcBSEY8iUzYqovqxQsAjPVoaoUUEMInLIGzvI848yhX7Ot/W4dQgJJxiE
+         jQ4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wKr7FA0vqoMz5lZ8aQYZkFOpTvgXxSqPGAHyogWXhmA=;
-        b=BMl8BgoDKnJt3G8n5N5x80sPTWwvZH5L+E509eUZqCGak7egycC11Te7ap7thnakHM
-         fKhkpBwAxgxviOdQT7M0T0q0qCImevtOmCWtpxtYFXE1nGUrIYMEZjHKN11ehl7woJJ3
-         fSTVRugOCHgT5ififP6BNumDEaq+63Hmra10fA1MwWoZL5IExWYl8xq02LEAv4yhuL5T
-         0UrzOVlp98XHjCtpFlGIm4OVW4oMCwAqrkHhawomhnbOdLILgRb0SSkYiK4rgB0HtmOP
-         qX4WbZ23e50vQbFU/IOZs2p5PnlJbOmYhu911Dnm38RTgGupjyyE6lGi1LKnAxJs5itn
-         Jqeg==
-X-Gm-Message-State: AOAM5316ddMFB/FtpngKhqpMhZ4p3+5h9YYR+mosHZ9Q7KkHILFm7OJe
-        BBOe8AjMEssqpiBNJ0Wk067ltg==
-X-Google-Smtp-Source: ABdhPJxQoxMvsY+8msj2d7ojur78Qh6vYgssLxqEcJRU+k1k0HimFDS5ePM1wiuDDChVReESndK9cw==
-X-Received: by 2002:aa7:82cb:0:b029:2e6:f397:d248 with SMTP id f11-20020aa782cb0000b02902e6f397d248mr28776722pfn.52.1624944032106;
-        Mon, 28 Jun 2021 22:20:32 -0700 (PDT)
+        bh=hI1DeZ2pRK8aek3pSY+ZixxRt/uy7BhVNJwpyrPvK4U=;
+        b=M5L648BK5iz3b9rXWH9FWVvEP/pojOaEpnNvGjkpjr2DAOopoRNwbZZHexyott/oBU
+         F88t8Mj35/s55Gr05ZkovBAXfXb20vKct1jJanHjJ1Kis5S3vOHa6KvsPW4F9zSTIGLx
+         CpE7i97tH/yjadgFiGKZwaj/kXi2XHDPE4wKIQXC4wDm/za163zWDz7EiAxGO7PwS+fL
+         +h3aglB4pZXizrtYrEgVAn57z1v3/s0NTAR5ilZSLcDuNBrolNZaZnvhi8i4t/WmJB8x
+         pe+8t2YoILQHaduwncg8BPA0SAKeZ2gONCvKFbRNNqgv2lTMgue5suWmzToEitfYYRJF
+         6pgg==
+X-Gm-Message-State: AOAM5332SyJ7XY2fcBGTMeUiyJ2ndqzlJEpsFB2PLcRPUh95wiGr7lrH
+        eOoupEo7dphj/lxdhtKR1NsAWw==
+X-Google-Smtp-Source: ABdhPJyfVA20O8oNr9ThebtXXkg4YVGPQnBLR6jQoWQ0+A/rjn+bS5SKjwFuYmN2Dc2Yxk82ratFFw==
+X-Received: by 2002:a17:90a:ba91:: with SMTP id t17mr43507438pjr.89.1624947481144;
+        Mon, 28 Jun 2021 23:18:01 -0700 (PDT)
 Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id g11sm16843191pgj.3.2021.06.28.22.20.30
+        by smtp.gmail.com with ESMTPSA id fv8sm17093546pjb.21.2021.06.28.23.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jun 2021 22:20:30 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 10:50:28 +0530
+        Mon, 28 Jun 2021 23:18:00 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 11:47:58 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
- invariance
-Message-ID: <20210629052028.srt6metmtylsxukw@vireshk-i7>
-References: <cover.1624266901.git.viresh.kumar@linaro.org>
- <20210628115452.GA28797@arm.com>
+To:     TungChen Shih <tung-chen.shih@mediatek.com>
+Cc:     rjw@rjwysocki.net, matthias.bgg@gmail.com,
+        wsd_upstream@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 1/1] cpufreq: fix the target freq not in the range of
+ policy->min & max
+Message-ID: <20210629061758.wdavb2a4bpklmqi3@vireshk-i7>
+References: <20210626162324.8236-1-tung-chen.shih@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210628115452.GA28797@arm.com>
+In-Reply-To: <20210626162324.8236-1-tung-chen.shih@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-06-21, 12:54, Ionela Voinescu wrote:
-> If you happen to have the data around, I would like to know more about
-> your observations on ThunderX2.
-> 
-> 
-> I tried ThunderX2 as well, with the following observations:
-> 
-> Booting with userspace governor and all CPUs online, the CPPC frequency
-> scale factor was all over the place (even much larger than 1024).
-> 
-> My initial assumptions:
->  - Counters do not behave properly in light of SMT
->  - Firmware does not do a good job to keep the reference and core
->    counters monotonic: save and restore at core off.
-> 
-> So I offlined all CPUs with the exception of 0, 32, 64, 96 - threads of
-> a single core (part of policy0). With this all works very well:
+On 27-06-21, 00:23, TungChen Shih wrote:
+>     The function cpufreq_driver_resolve_freq() should return the lowest
 
-Interesting.
+Don't add extra spaces at the beginning of paragraphs here.
 
-> root@target:/sys/devices/system/cpu/cpufreq/policy0# echo 1056000 > scaling_setspeed
-> root@target:/sys/devices/system/cpu/cpufreq/policy0#
-> [ 1863.095370] CPU96: cppc scale: 697.
-> [ 1863.175370] CPU0: cppc scale: 492.
-> [ 1863.215367] CPU64: cppc scale: 492.
-> [ 1863.235366] CPU96: cppc scale: 492.
-> [ 1863.485368] CPU32: cppc scale: 492.
+> supported freq greater than or equal to the given target_freq, subject
+> to policy (min/max) and driver limitations. However, the index returned
+> by cpufreq_frequency_table_target() won't subject to policy min/max in
+> some cases.
 > 
-> root@target:/sys/devices/system/cpu/cpufreq/policy0# echo 1936000 > scaling_setspeed
-> root@target:/sys/devices/system/cpu/cpufreq/policy0#
-> [ 1891.395363] CPU96: cppc scale: 558.
-> [ 1891.415362] CPU0: cppc scale: 595.
-> [ 1891.435362] CPU32: cppc scale: 615.
-> [ 1891.465363] CPU96: cppc scale: 635.
-> [ 1891.495361] CPU0: cppc scale: 673.
-> [ 1891.515360] CPU32: cppc scale: 703.
-> [ 1891.545360] CPU96: cppc scale: 738.
-> [ 1891.575360] CPU0: cppc scale: 779.
-> [ 1891.605360] CPU96: cppc scale: 829.
-> [ 1891.635360] CPU0: cppc scale: 879.
+>     In cpufreq_frequency_table_target(), this function will try to find
+> an index for @target_freq in freq_table, and the frequency of selected
+> index should be in the range [policy->min, policy->max], which means:
 > 
-> root@target:/sys/devices/system/cpu/cpufreq/policy0#
-> root@target:/sys/devices/system/cpu/cpufreq/policy0# echo 2200000 > scaling_setspeed
-> root@target:/sys/devices/system/cpu/cpufreq/policy0#
-> [ 1896.585363] CPU32: cppc scale: 1004.
-> [ 1896.675359] CPU64: cppc scale: 973.
-> [ 1896.715359] CPU0: cppc scale: 1024.
+>     policy->min <= policy->freq_table[idx].frequency <= policy->max
 > 
-> I'm doing a rate limited printk only for increase/decrease values over
-> 64 in the scale factor value.
+>     Though "clamp_val(target_freq, policy->min, policy->max);" would
+> have been called to check this condition, when policy->max or min is
+> not exactly one of the frequency in the frequency table,
+> policy->freq_table[idx].frequency may still go out of the range
 > 
-> This showed me that SMT is handled properly.
+>     For example, if our sorted freq_table is [3000, 2000, 1000], and
+> suppose we have:
 > 
-> Then, as soon as I start onlining CPUs 1, 33, 65, 97, the scale factor
-> stops being even close to correct, for example:
+>     @target_freq = 2500
+>     @policy->min = 2000
+>     @policy->max = 2200
+>     @relation = CPUFREQ_RELATION_L
 > 
-> [238394.770328] CPU96: cppc scale: 22328.
-> [238395.628846] CPU96: cppc scale: 245.
-> [238516.087115] CPU96: cppc scale: 930.
-> [238523.385009] CPU96: cppc scale: 245.
-> [238538.767473] CPU96: cppc scale: 936.
-> [238538.867546] CPU96: cppc scale: 245.
-> [238599.367932] CPU97: cppc scale: 2728.
-> [238599.859865] CPU97: cppc scale: 452.
-> [238647.786284] CPU96: cppc scale: 1438.
-> [238669.604684] CPU96: cppc scale: 27306.
-> [238676.805049] CPU96: cppc scale: 245.
-> [238737.642902] CPU97: cppc scale: 2035.
-> [238737.664995] CPU97: cppc scale: 452.
-> [238788.066193] CPU96: cppc scale: 2749.
-> [238788.110192] CPU96: cppc scale: 245.
-> [238817.231659] CPU96: cppc scale: 2698.
-> [238818.083687] CPU96: cppc scale: 245.
-> [238845.466850] CPU97: cppc scale: 2990.
-> [238847.477805] CPU97: cppc scale: 452.
-> [238936.984107] CPU97: cppc scale: 1590.
-> [238937.029079] CPU97: cppc scale: 452.
-> [238979.052464] CPU97: cppc scale: 911.
-> [238980.900668] CPU97: cppc scale: 452.
-> [239149.587889] CPU96: cppc scale: 803.
-> [239151.085516] CPU96: cppc scale: 245.
-> [239303.871373] CPU64: cppc scale: 956.
-> [239303.906837] CPU64: cppc scale: 245.
-> [239308.666786] CPU96: cppc scale: 821.
-> [239319.440634] CPU96: cppc scale: 245.
-> [239389.978395] CPU97: cppc scale: 4229.
-> [239391.969562] CPU97: cppc scale: 452.
-> [239415.894738] CPU96: cppc scale: 630.
-> [239417.875326] CPU96: cppc scale: 245.
-> 
-> The counter values shown by feedback_ctrs do not seem monotonic even
-> when only core 0 threads are online.
-> 
-> ref:2812420736 del:166051103
-> ref:3683620736 del:641578595
-> ref:1049653440 del:1548202980
-> ref:2099053440 del:2120997459
-> ref:3185853440 del:2714205997
-> ref:712486144  del:3708490753
-> ref:3658438336 del:3401357212
-> ref:1570998080 del:2279728438
-> 
-> For now I was just wondering if you have seen the same and whether you
-> have an opinion on this.
+> 1. After clamp_val(target_freq, policy->min, policy->max); @target_freq
+> becomes 2200
+> 2. Since we use CPUFREQ_REALTION_L, final selected freq will be 3000 which
+> beyonds policy->max
 
-I think we also saw numbers like this, which didn't explain a lot on
-ThunderX2. We thought they may be due to rounding issues, but the
-offlining stuff adds an interesting factor to that.
+Right so the problem does exist, and not only with
+cpufreq_driver_resolve_freq(), but __cpufreq_driver_target() as well.
+I have a sent a patchset to update both of these to start sharing some
+code and we need to fix this for both now.
+
+> Signed-off-by: TungChen Shih <tung-chen.shih@mediatek.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 802abc925b2a..8e3a17781618 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -544,8 +544,23 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+>  	if (cpufreq_driver->target_index) {
+>  		unsigned int idx;
+>  
+> +		/*  to find the frequency >= target_freq */
+>  		idx = cpufreq_frequency_table_target(policy, target_freq,
+>  						     CPUFREQ_RELATION_L);
+> +
+> +		/* frequency should subject to policy (min/max) */
+> +		if (policy->freq_table[idx].frequency > policy->max) {
+> +			if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+> +				idx--;
+> +			else
+> +				idx++;
+> +		} else if (policy->freq_table[idx].frequency < policy->min) {
+> +			if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+> +				idx++;
+> +			else
+> +				idx--;
+> +		}
+
+This doesn't look clean to be honest.
+
+Rafael, does it make sense to update cpufreq_frequency_table_target()
+(and its internal routines) to take policy bounds in consideration, or
+something else ?
 
 -- 
 viresh
