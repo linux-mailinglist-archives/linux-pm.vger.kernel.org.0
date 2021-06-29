@@ -2,121 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FCF3B6CF0
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 05:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313643B6DA8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 06:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhF2D0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Jun 2021 23:26:12 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:9296 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbhF2D0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Jun 2021 23:26:11 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GDV6m6xVvz1BSbD;
-        Tue, 29 Jun 2021 11:18:24 +0800 (CST)
-Received: from dggemi762-chm.china.huawei.com (10.1.198.148) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Tue, 29 Jun 2021 11:23:42 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- dggemi762-chm.china.huawei.com (10.1.198.148) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 29 Jun 2021 11:23:42 +0800
-Subject: Re: [PATCH -next] pwm: img: Fix PM reference leak in img_pwm_enable()
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <1620791837-16138-1-git-send-email-zou_wei@huawei.com>
- <20210512045222.2yjm6yxikznohlmn@pengutronix.de>
- <CAJZ5v0huz6Ek1FTvdMs0hPOoMn+ZHiNJeDp6-ujg-1WwpCsELQ@mail.gmail.com>
- <20210628063839.5oeh5fvvoy3fk2gw@pengutronix.de>
- <20210628170105.apt7numxkdyxf6q5@pengutronix.de>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <060df682-1490-be4d-ff84-5e05cbdd9101@huawei.com>
-Date:   Tue, 29 Jun 2021 11:23:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S229705AbhF2EfQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 00:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhF2EfO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 00:35:14 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C70C061574
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 21:32:48 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a7so6652176pga.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Jun 2021 21:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=23i756DizbPe5Tq81adrM3z+cR5El93g/Fx0K2OMmhk=;
+        b=PpsGWIXYxBPhgafzsH2eFwhsDg5mCF0t90pleQ1+fS3Ft68xP+diqvfwpObEbh1oO+
+         bHhGDsR0mWE06IgwSiNr7YvCs/yxSGCUX3d/Hqck2bsbW4BnbtPhCORWwEqLjlGx2U1A
+         O64aJYmbygBYdr8OZQho+wdTO2OYYMJqeVzGX4DvBpEUOd2H+LWBJU6FSWdiTFaxamPQ
+         7LVn+JDX2ueCHS4fOhKPxBL6LLJH4Gu8uGgXcio8KSLFpaCPH76fz4H8pNEVphJHgGF9
+         cRfeEkbJOBi44fHyi4y/QgB5JoynuYwfx1idGdew3FsvQM/3TWpX91ic8y8mrt7IZ+F/
+         oVpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=23i756DizbPe5Tq81adrM3z+cR5El93g/Fx0K2OMmhk=;
+        b=h4cl4RKcu4rwIR6FzDgxAw8GfELZTdU8AXNKDo0hZOn/9jMVsgIH81stSoMWlTicvw
+         pOQ45kAv/aTmzKx5Z3LI8otRvB0zpe1WSpCe/hZN1LL8qm9Mrvj+26P6cd7A6Q6+JEnc
+         SQpa4hJWAuAvBsf1Ev17FDZ+z2Mix8QQSqaUbI4ZM4P4WQF1RQZP3SK6KXC72/qcltof
+         fwd9mR2Tl8HVOmpnpMZ3skjQusERZOemebJ2KnWX4RhOSUPV1egM5j4RUSgHCRRy1CXa
+         c3nzE1xt+zW7LH0okoAp+QAI8NNQAc5oCD3ec3AxZn3fOA/v7p5h8KTI0mrHn5bCsau2
+         /dTg==
+X-Gm-Message-State: AOAM53205I3Vgl9Jpt7EHQrfLWiCxRPTn8+l8YkBMQ/qv52z/nPBOW6/
+        ZplXpUiSfcriQQPyNQovDItNng==
+X-Google-Smtp-Source: ABdhPJx+RqUF1CEPwZ70q7pS/j3c5Ho9ctCQ3AvxxRU1qLwOgOmnsHD5adjz3TnwqLo+tfXBwmIvGw==
+X-Received: by 2002:a05:6a00:1888:b029:303:ec88:66c with SMTP id x8-20020a056a001888b0290303ec88066cmr28398307pfh.7.1624941167473;
+        Mon, 28 Jun 2021 21:32:47 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id 195sm16305577pfw.133.2021.06.28.21.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jun 2021 21:32:46 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 10:02:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 4/4] cpufreq: CPPC: Add support for frequency
+ invariance
+Message-ID: <20210629043244.xkjat5dqqjaixkii@vireshk-i7>
+References: <cover.1624266901.git.viresh.kumar@linaro.org>
+ <f963d09e57115969dae32827ade5558b0467d3a0.1624266901.git.viresh.kumar@linaro.org>
+ <20210624094812.GA6095@arm.com>
+ <20210624130418.poiy4ph66mbv3y67@vireshk-i7>
+ <20210625085454.GA15540@arm.com>
+ <20210625165418.shi3gkebumqllxma@vireshk-i7>
+ <20210628104929.GA29595@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210628170105.apt7numxkdyxf6q5@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggemi762-chm.china.huawei.com (10.1.198.148)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210628104929.GA29595@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Uwe,
+On 28-06-21, 11:49, Ionela Voinescu wrote:
+> To be honest I would like to have more time on this before you merge the
+> set, to better understand Qian's results and some observations I have
+> for Thunder X2 (I will share in a bit).
 
-Sorry for the delayed reply.
-Thanks for all the review,.
-To keep the consistency, it's better to clean this up accordingly, and I 
-will send a new patch soon.
+Ideally, this code was already merged in 5.13 and would have required
+us to fix any problems as we encounter them. I did revert it because
+it caused a kernel crash and I wasn't sure if there was a sane/easy
+way of fixing that so late in the release cycle. That was the right
+thing to do then.
 
-On 2021/6/29 1:01, Uwe Kleine-König wrote:
-> Hello Zou,
-> On Mon, Jun 28, 2021 at 08:38:39AM +0200, Uwe Kleine-König wrote:
->> On Fri, Jun 25, 2021 at 07:45:14PM +0200, Rafael J. Wysocki wrote:
->>> On Wed, May 12, 2021 at 6:52 AM Uwe Kleine-König
->>> <u.kleine-koenig@pengutronix.de> wrote:
->>>> On Wed, May 12, 2021 at 11:57:17AM +0800, Zou Wei wrote:
->>>>> pm_runtime_get_sync will increment pm usage counter even it failed.
->>>>> Forgetting to putting operation will result in reference leak here.
->>>>> Fix it by replacing it with pm_runtime_resume_and_get to keep usage
->>>>> counter balanced.
->>>>>
->>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
->>>>> Signed-off-by: Zou Wei <zou_wei@huawei.com>
->>>>> ---
->>>>>   drivers/pwm/pwm-img.c | 2 +-
->>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/pwm/pwm-img.c b/drivers/pwm/pwm-img.c
->>>>> index cc37054..11b16ec 100644
->>>>> --- a/drivers/pwm/pwm-img.c
->>>>> +++ b/drivers/pwm/pwm-img.c
->>>>> @@ -156,7 +156,7 @@ static int img_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
->>>>>        struct img_pwm_chip *pwm_chip = to_img_pwm_chip(chip);
->>>>>        int ret;
->>>>>
->>>>> -     ret = pm_runtime_get_sync(chip->dev);
->>>>> +     ret = pm_runtime_resume_and_get(chip->dev);
->>>>>        if (ret < 0)
->>>>>                return ret;
->>>>
->>>> This patch looks right with my limited understanding of pm_runtime. A
->>>> similar issue in this driver was fixed in commit
->>>>
->>>>          ca162ce98110 ("pwm: img: Call pm_runtime_put() in pm_runtime_get_sync() failed case")
->>>>
->>>> where (even though the commit log talks about pm_runtime_put()) a call
->>>> to pm_runtime_put_autosuspend() was added in the error path.
->>>>
->>>> I added the PM guys to Cc, maybe they can advise about the right thing
->>>> to do here. Does it make sense to use the same idiom in both
->>>> img_pwm_enable() and img_pwm_config()?
->>>
->>> I think so.
->>>
->>> And calling pm_runtime_put_autosuspend() in the img_pwm_enable() error
->>> path would work too.
->>
->> Do you care to clean this up accordingly and send a new patch?
+All those issues are gone now, we may have an issue around rounding of
+counters or some hardware specific issues, it isn't clear yet.
+
+But the stuff works fine otherwise, doesn't make the kernel crash and
+it is controlled with a CONFIG_ option, so those who don't want to use
+it can still disable it.
+
+The merge window is here now, if we don't merge it now, it gets
+delayed by a full cycle (roughly two months) and if we merge it now
+and are able to narrow down the rounding issues, if there are any, we
+will have full two months to make a fix for that and still push it in
+5.14 itself.
+
+And so I would like to get it merged in this merge window itself, it
+also makes sure more people would get to test it, like Qian was able
+to figure out a problem here for us.
+
+> For the code, I think it's fine. I have a single observation regarding
+> the following code:
 > 
-> Note that Thierry applied your initial patch regardless of the
-> inconsistency. Still I'd like to see this done in a consistent way. Do
-> you care to follow up with a patch that unifies the behaviour?
+> > +static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+> > +{
+> > +	struct cppc_freq_invariance *cppc_fi;
+> > +	int cpu, ret;
+> > +
+> > +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +		return;
+> > +
+> > +	for_each_cpu(cpu, policy->cpus) {
+> > +		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> > +		cppc_fi->cpu = cpu;
+> > +		cppc_fi->cpu_data = policy->driver_data;
+> > +		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> > +		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> > +
+> > +		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+> > +		if (ret) {
+> > +			pr_warn("%s: failed to read perf counters for cpu:%d: %d\n",
+> > +				__func__, cpu, ret);
+> > +			return;
+> > +		}
 > 
-> Best regards
-> Uwe
+> For this condition above, think about a scenario where reading counters
+> for offline CPUs returns an error. I'm not sure if that can happen, to
+> be honest. That would mean here that you will never initialise the freq
+> source unless all CPUs in the policy are online at policy creation.
 > 
+> My recommendation is to warn about the failed read of perf counters but
+> only return from this function if the target CPU is online as well when
+> reading counters fails.
+> 
+> This is probably a nit, so I'll let you decide if you want to do something
+> about this.
+
+That is a very good observation actually. Thanks for that. This is how
+I fixed it.
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index d688877e8fbe..f6540068d0fe 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -171,7 +171,13 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+                if (ret) {
+                        pr_warn("%s: failed to read perf counters for cpu:%d: %d\n",
+                                __func__, cpu, ret);
+-                       return;
++
++                       /*
++                        * Don't abort if the CPU was offline while the driver
++                        * was getting registered.
++                        */
++                       if (cpu_online(cpu))
++                               return;
+                }
+        }
+
+-- 
+viresh
