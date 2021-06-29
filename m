@@ -2,53 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C913B7260
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 14:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D4C3B72F9
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 15:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbhF2MxQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 29 Jun 2021 08:53:16 -0400
-Received: from [218.75.92.58] ([218.75.92.58]:65161 "EHLO WIN-VTPUBHNS72V"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233079AbhF2MxN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:53:13 -0400
-Received: from [192.168.43.47] (Unknown [197.210.85.75])
-        by WIN-VTPUBHNS72V with ESMTPA
-        ; Thu, 24 Jun 2021 20:46:36 +0800
-Message-ID: <B838E6C5-7F7D-4632-BAFC-5D7A2D762924@WIN-VTPUBHNS72V>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S232984AbhF2NMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 09:12:48 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:37747 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232498AbhF2NMl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 09:12:41 -0400
+Received: by mail-oi1-f176.google.com with SMTP id h9so26206489oih.4
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 06:10:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M+k/LJtxOcAqdDDUKT3QsyKiu4B+UkY+Qv5iXhujdC0=;
+        b=EJq98veQXJoycBoUdAHHAUYKMGj2wIEZAHinw2QKByotDn2EFrRNmghYaj4BxENU1g
+         O8UCGPk8zNXbYy5AzxDipyVhW4dTFBWe3bG6hv/mCLgNUp6sn3HZpVonYeobMxoz3Jri
+         iA9ZoEmdl4v/RDDd1plRLjqsWlgzRf3cBIPxrQzHQdlOkkiOfMj9wDHI7s6UDWaoDtsw
+         Dt+DBhvm2YXeHdOq+uKVviGd3jUD341eJ8iFaezndmQTxCgGAqXmTdsFC+MoHJhncTg6
+         b75+bh0pn0apHxbDSpbFaW0yBZ4rv2OUOm73ySSkK0JycOwC/HHfMuDgiHnmjT7fx8xD
+         kh8Q==
+X-Gm-Message-State: AOAM530UuaJ8zie0d+d+ciMxME/OoVKnDkd+psdlroTFPwrukWCa35v7
+        3i++O6NmcZDmvzSmOraOBRXwVlrXG18ITMFWA+8=
+X-Google-Smtp-Source: ABdhPJxetHUkRgDdYOatgVyKpmMlbLfsWiicNiW7TszJj8bDWdyd6hQiCBZ++6IGaeHEXn2qbI8CPOY4x3qdSFuWkKI=
+X-Received: by 2002:aca:417:: with SMTP id 23mr6687488oie.71.1624972212944;
+ Tue, 29 Jun 2021 06:10:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT ATTENTION
-To:     Recipients <wjjt@wjjt.cn>
-From:   "Andres Auchincloss" <wjjt@wjjt.cn>
-Date:   Thu, 24 Jun 2021 14:46:07 +0200
-Reply-To: andresauchincloss926@gmail.com
+References: <20210628073023.gytz3hkqy64hkzdr@vireshk-i7>
+In-Reply-To: <20210628073023.gytz3hkqy64hkzdr@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 29 Jun 2021 15:09:56 +0200
+Message-ID: <CAJZ5v0hePOc00aw_tQvFo=S=crUb6MxHpGMbQwPzjL6dd2eHEA@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 5.14
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Mon, Jun 28, 2021 at 9:30 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> This pull request:
+>
+> - allows partial use of required-opps for non-genpd users.
+>
+> - does a minor cleanup and uses list_del_init().
 
-I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
-
-I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
-
-Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
-
-
-
-Best Regards
-
-
+Pulled, thanks!
 
 
-Tel: +1 (587) 770-0485
-Andres .B. Auchincloss
-Chief financial officerBP Petroleum p.l.c.
-
-
-
-
-                                  Copyright ©? 1996-2021
-
+> -------------------------8<-------------------------
+>
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+>
+>   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>
+> for you to fetch changes up to 4fa82a87ba55f5eca7d194055572110652daa264:
+>
+>   opp: Allow required-opps to be used for non genpd use cases (2021-06-18 09:00:55 +0530)
+>
+> ----------------------------------------------------------------
+> Hsin-Yi Wang (1):
+>       opp: Allow required-opps to be used for non genpd use cases
+>
+> Yang Yingliang (1):
+>       opp: use list_del_init instead of list_del/INIT_LIST_HEAD
+>
+>  drivers/opp/core.c | 10 ++++++++++
+>  drivers/opp/of.c   | 27 +++------------------------
+>  2 files changed, 13 insertions(+), 24 deletions(-)
+>
+> --
+> viresh
