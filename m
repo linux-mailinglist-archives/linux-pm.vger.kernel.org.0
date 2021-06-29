@@ -2,96 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1BA3B6FDA
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 11:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC6F3B6FDE
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 11:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhF2JHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 05:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbhF2JHw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 05:07:52 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAB3C061766
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 02:05:25 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 21so16665471pfp.3
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 02:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zxf0nNdDqyVoap8M6CG4HmjTediBPHub6WIWm3X9tdg=;
-        b=oTXq0/zjuzYPodSFGvMyuSPm6dwszJ3EXXtGSdCk4pk1sIZN2jSadWGy9UglSbV4Id
-         Ak/vFfrERdzVadO8t+3Ll8wZbk6NySFl1q6Iqmkt8moV4/trIjpr+Hil3Z99I73TixFJ
-         zKkHDRWcaWS+vA4PTWDWT3GbCCsVwQp1MKHH/codd3Gg6YHr6rwlnVXsumEwnSAKd5mc
-         fhwJHhDBxLyoun0TjEQi5HIvBhNjwOa8GHN46cwYv4tS8LA3sibk2GeFpXnPnU3mtcmc
-         v75Nb3QrIXAHfdz0fZT0dZUmXyMGgivobj3/yRzZXqkLo03Tzk4GLHe0Cu8xkiBD6lZq
-         l8Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zxf0nNdDqyVoap8M6CG4HmjTediBPHub6WIWm3X9tdg=;
-        b=Mc8Bz6jPbll2+ivdNQLwM9rsNJJGMZFZh5ZNETGdJ8Eiod8rHO8J7/AnG1bHFQsolX
-         UvTs3e3dfqHJATA9W23wfwvDXLHsDagXA/i4eYGI3J8fGMWL6B9gOTuLDaLasZF2+ttg
-         k1TKoAgCirMyn4ZEmAEh47J3BMXHIhwQORmPV4cC36dNPYYcaPfB6l1N2gSTuKcmbJEi
-         UAuqnYjg/bDhlLbAgDYtoOOQec6x0TFWjkJMKAluHak+98d5TiwbzsnJ9eWqG+65v0oB
-         Zib9YyDyceBxTsZgu7Du8oxTWrQXW5Wh9GW8k7gQdwrA02ODuIdNyV4B7W34TxusxC8e
-         0ydQ==
-X-Gm-Message-State: AOAM5332j6L2LBfgP7jhxCVfXsNVdJr/YLU0srFD9/AhwF0SeYnEtLkK
-        Rxkjx/ryksXYpHOuWwfv1JoChQ==
-X-Google-Smtp-Source: ABdhPJyUPZgwjS4wGEte0i7vATCyxhKkaNbcvSyv/AlwzZqne0dvhsrD9mp5zq7yjYCtC/F8sRmOQQ==
-X-Received: by 2002:a05:6a00:8:b029:308:1d62:ba56 with SMTP id h8-20020a056a000008b02903081d62ba56mr27553764pfk.60.1624957524945;
-        Tue, 29 Jun 2021 02:05:24 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id nr12sm2303013pjb.1.2021.06.29.02.05.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 02:05:24 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 14:35:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Hector Yuan <hector.yuan@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com
-Subject: Re: [PATCH v12 1/2] cpufreq: mediatek-hw: Add support for CPUFREQ HW
-Message-ID: <20210629090522.jsiwkrki6lavo33z@vireshk-i7>
-References: <1622307153-3639-1-git-send-email-hector.yuan@mediatek.com>
- <1622307153-3639-2-git-send-email-hector.yuan@mediatek.com>
- <20210614104058.jdwb7godqzhf7rgd@vireshk-i7>
- <1624781848.1958.16.camel@mtkswgap22>
- <20210628072641.amqk5d3svwolvhic@vireshk-i7>
- <20210628090956.uwkrozdqvawsm3xp@bogus>
- <20210629024719.nmcygaigtx5wn7g5@vireshk-i7>
- <20210629090238.n23zcttkiqvzpbb5@bogus>
+        id S232644AbhF2JIa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 05:08:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:46732 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232524AbhF2JIa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Jun 2021 05:08:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BCAED6E;
+        Tue, 29 Jun 2021 02:06:03 -0700 (PDT)
+Received: from localhost (unknown [10.1.195.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF6143F694;
+        Tue, 29 Jun 2021 02:06:02 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 10:06:01 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 0/4] cpufreq: cppc: Add support for frequency
+ invariance
+Message-ID: <20210629090553.GC2425@arm.com>
+References: <20210623041613.v2lo3nidpgw37abl@vireshk-i7>
+ <2c540a58-4fef-5a3d-85b4-8862721b6c4f@quicinc.com>
+ <20210624025414.4iszkovggk6lg6hj@vireshk-i7>
+ <CAKfTPtAXMYYrG1w-iwSWXb428FkwFArEwXQgHnjShoCEMjdYcw@mail.gmail.com>
+ <20210624104734.GA11487@arm.com>
+ <daf1ddf5-6f57-84a8-2ada-90590c0c94b5@quicinc.com>
+ <20210625102113.GB15540@arm.com>
+ <1f83d787-a796-0db3-3c2f-1ca616eb1979@quicinc.com>
+ <20210625143713.GA7092@arm.com>
+ <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210629090238.n23zcttkiqvzpbb5@bogus>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <888b0178-00cc-ffa4-48a2-8563cef557a4@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-06-21, 10:02, Sudeep Holla wrote:
-> On Tue, Jun 29, 2021 at 08:17:19AM +0530, Viresh Kumar wrote:
-> > On 28-06-21, 10:09, Sudeep Holla wrote:
-> > > Probably in driver/cpufreq or some related headers if it needs to access
-> > > related_cpus and is more cpufreq related in that way ?
-> >
-> > It just needs to set a mask, so doesn't really depend on cpufreq. I
-> > was wondering if drivers/opp/of.c may be used for this, and I am not
-> > sure.
-> >
+Hi Qian,
+
+Sorry for the delay. I was trying to run tests on ThunderX2 as well, as
+it can give me more control over testing, to get more insight on this.
+
+On Friday 25 Jun 2021 at 22:29:26 (-0400), Qian Cai wrote:
 > 
-> Sounds good to me.
+> 
+> On 6/25/2021 10:37 AM, Ionela Voinescu wrote:
+> > Quick questions for you:
+> > 
+> > 1. When you say you tried a 5.4 kernel, did you try it with these
+> > patches backported? They also have some dependencies with the recent
+> > changes in the arch topology driver and cpufreq so they would not be
+> > straight forward to backport.
+> > 
+> > If the 5.4 kernel you tried did not have these patches, it might be best
+> > to try next/master that has these patches, but with
+> > CONFIG_ACPI_CPPC_CPUFREQ_FIE=n, just to eliminate the possibility that
+> > an incorrect frequency scale factor here would affect utilization that
+> > would then affect the schedutil frequency selection. I would not expect
+> > this behavior even if the scale factor was wrong, but it would be good
+> > to rule out.
+> > 
+> > 2. Is your platform booting with all CPUs? Are any hotplug operations
+> > done in your scenario?
+> 
+> Ionela, I found that set ACPI_PROCESSOR=y instead of ACPI_PROCESSOR=m
+> will fix the previous mentioned issues here (any explanations of that?)
+> even though the scaling down is not perfect. Now, we have the following
+> on this idle system:
+> 
 
-Okay.
+I don't see how this would have played a role. The cppc cpufreq driver
+depends on functionality gated by CONFIG_ACPI_CPPC_LIB which in turn
+needs CONFIG_ACPI_PROCESSOR to trigger the parsing of the _CPC objects.
+If CONFIG_ACPI_PROCESSOR functionality is not built in or loaded, the
+cppc cpufreq driver could not be used at all.
 
-Hector, add the routine to of.c in OPP core.
+> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
+>  	79 1000000
+>   	1 1160000
+>  	73 1400000
+>   	1 2000000
+>   	4 2010000
+>   	1 2800000
+>   	1 860000
+> 
+> Even if I rerun a few times, there could still have a few CPUs running
+> lower than lowest_perf (1GHz). Also, even though I set all CPUs to use
+> "userspace" governor and set freq to the lowest. A few CPUs keep changing
+> at will.
+> 
 
--- 
-viresh
+I do not believe getting values lower than lowest is worrying as long as
+they are not much much lower and they don't happen very often. First of
+all firmware has control over CPU frequencies and it can decide to
+select a lower frequency if it wishes.
+
+Looking at the fact that it only happens rarely in your tests, it's also
+possible that this is introduced by the fact that the CPU only spends
+only a few cycles in active state. That would reduce the resolution of
+the computed current performance level, which results in a lower value
+when converted to frequency.
+
+Hope it helps,
+Ionela.
+
+> # cat /sys/devices/system/cpu/*/cpufreq/cpuinfo_cur_freq | sort | uniq  -c
+> 	156 1000000
+>   	3 2000000
+>   	1 760000
