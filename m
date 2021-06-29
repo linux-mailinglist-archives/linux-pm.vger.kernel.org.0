@@ -2,455 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA3D3B70DC
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 12:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4A23B711A
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jun 2021 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbhF2Kn1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 06:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S233309AbhF2LIJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 07:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbhF2Kn1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 06:43:27 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70325C061760
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 03:40:59 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id k9so8196998uaq.6
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 03:40:59 -0700 (PDT)
+        with ESMTP id S233260AbhF2LIJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 07:08:09 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054C0C061766
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 04:05:41 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id c17so4652169vke.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 04:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jnkRRmLV+3fCO8hTgmX6KcACTWSfqkECczbM2Dojizs=;
-        b=ju0Dg4Qxgy1yb+xl4adlWsFgbenX94UFGXYmDuIMQaDeK0PN62ukDWTpXvDGYX+W5z
-         1oCRitSAPsGxlCZ4T0d9sYHAJIOOWPxvoSnie+EtSEm2tq5Z9W372L5X1zu14fKKl/An
-         CaVbKzCkWEuNsRwEhSBP4VIZ0ghuUF0yR0UPIlD0/t/spMWp9esIAYUT9FrWIzlduEkq
-         dKxfuw0YdZLw4GXTRdpaKdDy9wxpNW4zH2g6e8rxGBYq6Jz4wECQbed47rCwBb7yCAjK
-         w6D8Lue61oo+hstS9B9V8amarmLMqy5SftWmN/0Bn89IUcqzi77OsbGGGJxi/AA13Pxh
-         dCKg==
+        bh=WP9FCchbYJUzB6R/6/ON+Jxuohq8iRqrZSlVU+Rrjw4=;
+        b=zNr+QhaljzVJUuIU6WIzFWUp2fx5Zye3NMgh8bh6xk0b2roPZpTtoVSfeLaT2XxQjS
+         xdLhk5kJbjFk1+xksm0cEpgAHjr0/+emTpi1vydDyk1uP74+O1Yp4leXdmkCl8qIHxto
+         V1bQDPVwF3QzMjvMuzEdzUhCED4YX5HknrFMp0sBqG05hVIgSLoFaeSQUI3W72g8O/vU
+         SMbEkekpIK6mnmmE0DxLP67UdCNud2T4zSy+dXafM+5JrrgoFh9N0G3oG+C6RhqJiYy4
+         9xkmzqR5CZnfXuOX0AV5D/Hr8AnoOZnuoRtF+91O3hIUCdtBw1uG9wSxgPGCYC20S8XF
+         emVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jnkRRmLV+3fCO8hTgmX6KcACTWSfqkECczbM2Dojizs=;
-        b=DbA3uxI3ghZPBmydfXw8nHK2pzqQ/gQYyfcLYKfWhC9nZOCIWont0eQXwBnkKQhwcD
-         bqCnDvFQFFbKynR58w843ozhj//l2S0Ato8PGnzndZfXynYH34QVmJ94B2tLcvEmZotQ
-         LkPp6rRlrSAX+XDCF7zWm2VxkAN95l6wna2E6HPavVOTR9gDc0n8q6OS2/Dd3J/QTCbC
-         n7UCdsqXuYGMUgd8oHKexoJbjFjyV4xNIKKPrEurIO/1eFR2x4qpyXd0WlwTK9eQmYE2
-         p93orHx2Hx8bMAzBQehMpjhhjPBo+F2tOFqTxlaBfr/8xCOZWCU8iKp6PbqiLKk7wO8W
-         16bg==
-X-Gm-Message-State: AOAM5316PMHlpMhKf7F+epl9koKOWY9whrpw+SZqYPYsbXkDgUVm0MmU
-        kc2Aq1yF6GoVWh7a6XhvyG8thDv+t9bB+dpxsZQK5A==
-X-Google-Smtp-Source: ABdhPJzgROaDauoQmBlYmniPzycAyJGFqeztot7junFkXEdjHO4ShOhYz3xAgVHSLiohL6WFjW5pOm1XKW448sBToNA=
-X-Received: by 2002:ab0:6296:: with SMTP id z22mr2187090uao.129.1624963258578;
- Tue, 29 Jun 2021 03:40:58 -0700 (PDT)
+        bh=WP9FCchbYJUzB6R/6/ON+Jxuohq8iRqrZSlVU+Rrjw4=;
+        b=KUiA2VVKkpOIS+BB95G+Tog2S1vQbm5NRWyJO2KjQqwslJsuTFHZIO27MQqD25U6P0
+         qdY7pCP7cxxB+pnpVjfwTJOcWfGyZ+xtWcV0T4OcNpoDpN1B1Kgaja1GXmtcqP7FNg74
+         B1WGWzyBmz64TgrS4Z5xjbrbMHFm3qVLSJwQTw7cazqn89kRGd+Y9ybSKn8eGAsK4OgV
+         U8JNtHevrvi+RX4qKHgbi3t3+9HUfYl7TVvnUvBQLI139sKBueF4YcNhkJfsz3Mv04dP
+         B1fLneCgezUH8MoF48dmPUq4Mo2Nywz9+Q2WwvHnd/fNFRJm1X27zycFJh/SQt4C2iT2
+         VZjA==
+X-Gm-Message-State: AOAM5315EU9pkNdi1bnLA+M0Ypo/1858yCJyPYtRgV9HtCdC5/aZ0EhQ
+        wIttlXMdpUglpZO1M2hCIzn1NyofccsScPNyPAUMIw==
+X-Google-Smtp-Source: ABdhPJwXMYfdnb7T7AYFJna2nyocO4egiU9UjX+Mf3NaiSST/rUSiqCxhW5VJEWDTjoBKswtFQdyPzENurhdzMgN/2U=
+X-Received: by 2002:a1f:1d94:: with SMTP id d142mr21604483vkd.6.1624964740826;
+ Tue, 29 Jun 2021 04:05:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210624201802.3255370-1-swboyd@chromium.org>
-In-Reply-To: <20210624201802.3255370-1-swboyd@chromium.org>
+References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
+ <20210611101540.3379937-3-dmitry.baryshkov@linaro.org> <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
+ <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
+ <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
+ <YMjNaM0z+OzhAeO/@yoga> <CAPDyKFo_eNwEx5rryg3bHt_-pxBeeYfVrUZuTOHoL-x94LBwDA@mail.gmail.com>
+ <c6e99362-56c1-f2bd-7170-7b001e0f96fe@linaro.org>
+In-Reply-To: <c6e99362-56c1-f2bd-7170-7b001e0f96fe@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 29 Jun 2021 12:40:22 +0200
-Message-ID: <CAPDyKFq3JAh8Ogts21P2bRkwKLGs4U9A1CmnMTbD-FacPTTYrg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Shrink locking area of the gpd_list_lock
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+Date:   Tue, 29 Jun 2021 13:05:04 +0200
+Message-ID: <CAPDyKFqEn2JNao3w9FYmxN92Hrf=e71W77_4ZB=d0NfSEqoY7A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Jun 2021 at 22:18, Stephen Boyd <swboyd@chromium.org> wrote:
+On Mon, 28 Jun 2021 at 21:55, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> On trogdor devices I see the following lockdep splat when stopping
-> youtube with lockdep enabled in the kernel.
+> Hi,
 >
->  ======================================================
->  WARNING: possible circular locking dependency detected
->  5.13.0-rc2 #71 Not tainted
->  ------------------------------------------------------
->  ThreadPoolSingl/3969 is trying to acquire lock:
->  ffffff80d4d5c080 (&inst->lock#3){+.+.}-{3:3}, at: vdec_buf_cleanup+0x3c/0x17c [venus_dec]
+> On 17/06/2021 12:07, Ulf Hansson wrote:
+> > + Rajendra
+> >
+> > On Tue, 15 Jun 2021 at 17:55, Bjorn Andersson
+> > <bjorn.andersson@linaro.org> wrote:
+> >>
+> >> On Tue 15 Jun 05:17 CDT 2021, Ulf Hansson wrote:
+> >>
+> >>> + Mark
+> >>>
+> >>> On Fri, 11 Jun 2021 at 16:34, Dmitry Baryshkov
+> >>> <dmitry.baryshkov@linaro.org> wrote:
+> >>>>
+> >>>> Added Stephen to Cc list
+> >>>>
+> >>>> On Fri, 11 Jun 2021 at 16:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >>>>>
+> >>>>> On Fri, 11 Jun 2021 at 12:15, Dmitry Baryshkov
+> >>>>> <dmitry.baryshkov@linaro.org> wrote:
+> >>>>>>
+> >>>>>> In case of nested genpds it is easy to get the following warning from
+> >>>>>> lockdep, because all genpd's mutexes share same locking class. Use the
+> >>>>>> per-genpd locking class to stop lockdep from warning about possible
+> >>>>>> deadlocks. It is not possible to directly use genpd nested locking, as
+> >>>>>> it is not the genpd code calling genpd. There are interim calls to
+> >>>>>> regulator core.
+> >>>>>>
+> >>>>>> [    3.030219] ============================================
+> >>>>>> [    3.030220] WARNING: possible recursive locking detected
+> >>>>>> [    3.030221] 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480 Not tainted
+> >>>>>> [    3.030222] --------------------------------------------
+> >>>>>> [    3.030223] kworker/u16:0/7 is trying to acquire lock:
+> >>>>>> [    3.030224] ffffde0eabd29aa0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> >>>>>> [    3.030236]
+> >>>>>> [    3.030236] but task is already holding lock:
+> >>>>>> [    3.030236] ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> >>>>>> [    3.030240]
+> >>>>>> [    3.030240] other info that might help us debug this:
+> >>>>>> [    3.030240]  Possible unsafe locking scenario:
+> >>>>>> [    3.030240]
+> >>>>>> [    3.030241]        CPU0
+> >>>>>> [    3.030241]        ----
+> >>>>>> [    3.030242]   lock(&genpd->mlock);
+> >>>>>> [    3.030243]   lock(&genpd->mlock);
+> >>>>>> [    3.030244]
+> >>>>>> [    3.030244]  *** DEADLOCK ***
+> >>>>>> [    3.030244]
+> >>>>>> [    3.030244]  May be due to missing lock nesting notation
+> >>>>>> [    3.030244]
+> >>>>>> [    3.030245] 6 locks held by kworker/u16:0/7:
+> >>>>>> [    3.030246]  #0: ffff6cca00010938 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
+> >>>>>> [    3.030252]  #1: ffff8000100c3db0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1f0/0x730
+> >>>>>> [    3.030255]  #2: ffff6cca00ce3188 (&dev->mutex){....}-{3:3}, at: __device_attach+0x3c/0x184
+> >>>>>> [    3.030260]  #3: ffffde0eabcfd6d0 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x18/0x2c
+> >>>>>> [    3.030264]  #4: ffff8000100c3968 (regulator_ww_class_acquire){+.+.}-{0:0}, at: regulator_lock_dependent+0x6c/0x1b0
+> >>>>>> [    3.030270]  #5: ffff6cca00a59158 (regulator_ww_class_mutex){+.+.}-{3:3}, at: regulator_lock_recursive+0x94/0x1d0
+> >>>>>> [    3.030273]
+> >>>>>> [    3.030273] stack backtrace:
+> >>>>>> [    3.030275] CPU: 6 PID: 7 Comm: kworker/u16:0 Not tainted 5.13.0-rc3-00054-gf8f0a2f2b643-dirty #2480
+> >>>>>> [    3.030276] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+> >>>>>> [    3.030278] Workqueue: events_unbound deferred_probe_work_func
+> >>>>>> [    3.030280] Call trace:
+> >>>>>> [    3.030281]  dump_backtrace+0x0/0x1a0
+> >>>>>> [    3.030284]  show_stack+0x18/0x24
+> >>>>>> [    3.030286]  dump_stack+0x108/0x188
+> >>>>>> [    3.030289]  __lock_acquire+0xa20/0x1e0c
+> >>>>>> [    3.030292]  lock_acquire.part.0+0xc8/0x320
+> >>>>>> [    3.030294]  lock_acquire+0x68/0x84
+> >>>>>> [    3.030296]  __mutex_lock+0xa0/0x4f0
+> >>>>>> [    3.030299]  mutex_lock_nested+0x40/0x50
+> >>>>>> [    3.030301]  genpd_lock_mtx+0x18/0x2c
+> >>>>>> [    3.030303]  dev_pm_genpd_set_performance_state+0x94/0x1a0
+> >>>>>> [    3.030305]  reg_domain_enable+0x28/0x4c
+> >>>>>> [    3.030308]  _regulator_do_enable+0x420/0x6b0
+> >>>>>> [    3.030310]  _regulator_enable+0x178/0x1f0
+> >>>>>> [    3.030312]  regulator_enable+0x3c/0x80
+> >>>>>
+> >>>>> At a closer look, I am pretty sure that it's the wrong code design
+> >>>>> that triggers this problem, rather than that we have a real problem in
+> >>>>> genpd. To put it simply, the code in genpd isn't designed to work like
+> >>>>> this. We will end up in circular looking paths, leading to deadlocks,
+> >>>>> sooner or later if we allow the above code path.
+> >>>>>
+> >>>>> To fix it, the regulator here needs to be converted to a proper PM
+> >>>>> domain. This PM domain should be assigned as the parent to the one
+> >>>>> that is requested to be powered on.
+> >>>>
+> >>>> This more or less resembles original design, replaced per review
+> >>>> request to use separate regulator
+> >>>> (https://lore.kernel.org/linux-arm-msm/160269659638.884498.4031967462806977493@swboyd.mtv.corp.google.com/,
+> >>>> https://lore.kernel.org/linux-arm-msm/20201023131925.334864-1-dmitry.baryshkov@linaro.org/).
+> >>>
+> >>> Thanks for the pointers. In hindsight, it looks like the
+> >>> "regulator-fixed-domain" DT binding wasn't the right thing.
+> >>>
+> >>> Fortunately, it looks like the problem can be quite easily fixed, by
+> >>> moving to a correct model of the domain hierarchy.
+> >>>
+> >>
+> >> Can you give some pointers to how we actually fix this?
+> >>
+> >> The problem that lead us down this path is that drivers/clk/qcom/gdsc.c
+> >> describes power domains, which are parented by domains provided by
+> >> drivers/soc/qcom/rpmhpd.c.
+> >>
+> >> But I am unable to find a way for the gdsc driver to get hold of the
+> >> struct generic_pm_domain of the resources exposed by the rpmhpd driver.
+> >
+> > You don't need a handle to the struct generic_pm_domain, to assign a
+> > parent/child domain. Instead you can use of_genpd_add_subdomain(),
+> > which takes two "struct of_phandle_args*" corresponding to the
+> > parent/child device nodes of the genpd providers and then let genpd
+> > internally do the look up.
 >
->  but task is already holding lock:
->  ffffff80d3c3c4f8 (&q->mmap_lock){+.+.}-{3:3}, at: vb2_core_reqbufs+0xe4/0x390 [videobuf2_common]
+> I've taken a look onto of_genpd_add_subdomain. Please correct me if I'm
+> wrong, I have the feeling that this function is badly designed. It
+> provokes to use the following sequence:
+> - register child domain
+> - register child's domain provider
+> - mark child as a subdomain of a parent.
 >
->  which lock already depends on the new lock.
->
->  the existing dependency chain (in reverse order) is:
->
->  -> #5 (&q->mmap_lock){+.+.}-{3:3}:
->         __mutex_lock_common+0xcc/0xb88
->         mutex_lock_nested+0x5c/0x68
->         vb2_mmap+0xf4/0x290 [videobuf2_common]
->         v4l2_m2m_fop_mmap+0x44/0x50 [v4l2_mem2mem]
->         v4l2_mmap+0x5c/0xa4
->         mmap_region+0x310/0x5a4
->         do_mmap+0x348/0x43c
->         vm_mmap_pgoff+0xfc/0x178
->         ksys_mmap_pgoff+0x84/0xfc
->         __arm64_compat_sys_aarch32_mmap2+0x2c/0x38
->         invoke_syscall+0x54/0x110
->         el0_svc_common+0x88/0xf0
->         do_el0_svc_compat+0x28/0x34
->         el0_svc_compat+0x24/0x34
->         el0_sync_compat_handler+0xc0/0xf0
->         el0_sync_compat+0x19c/0x1c0
->
->  -> #4 (&mm->mmap_lock){++++}-{3:3}:
->         __might_fault+0x60/0x88
->         filldir64+0x124/0x3a0
->         dcache_readdir+0x7c/0x1ec
->         iterate_dir+0xc4/0x184
->         __arm64_sys_getdents64+0x78/0x170
->         invoke_syscall+0x54/0x110
->         el0_svc_common+0xa8/0xf0
->         do_el0_svc_compat+0x28/0x34
->         el0_svc_compat+0x24/0x34
->         el0_sync_compat_handler+0xc0/0xf0
->         el0_sync_compat+0x19c/0x1c0
->
->  -> #3 (&sb->s_type->i_mutex_key#3){++++}-{3:3}:
->         down_write+0x94/0x1f4
->         start_creating+0xb0/0x174
->         debugfs_create_dir+0x28/0x138
->         opp_debug_register+0x88/0xc0
->         _add_opp_dev+0x84/0x9c
->         _add_opp_table_indexed+0x16c/0x310
->         _of_add_table_indexed+0x70/0xb5c
->         dev_pm_opp_of_add_table_indexed+0x20/0x2c
->         of_genpd_add_provider_onecell+0xc4/0x1c8
->         rpmhpd_probe+0x21c/0x278
->         platform_probe+0xb4/0xd4
->         really_probe+0x140/0x35c
->         driver_probe_device+0x90/0xcc
->         __device_attach_driver+0xa4/0xc0
->         bus_for_each_drv+0x8c/0xd8
->         __device_attach+0xc4/0x150
->         device_initial_probe+0x20/0x2c
->         bus_probe_device+0x40/0xa4
->         device_add+0x22c/0x3fc
->         of_device_add+0x44/0x54
->         of_platform_device_create_pdata+0xb0/0xf4
->         of_platform_bus_create+0x1d0/0x350
->         of_platform_populate+0x80/0xd4
->         devm_of_platform_populate+0x64/0xb0
->         rpmh_rsc_probe+0x378/0x3dc
->         platform_probe+0xb4/0xd4
->         really_probe+0x140/0x35c
->         driver_probe_device+0x90/0xcc
->         __device_attach_driver+0xa4/0xc0
->         bus_for_each_drv+0x8c/0xd8
->         __device_attach+0xc4/0x150
->         device_initial_probe+0x20/0x2c
->         bus_probe_device+0x40/0xa4
->         device_add+0x22c/0x3fc
->         of_device_add+0x44/0x54
->         of_platform_device_create_pdata+0xb0/0xf4
->         of_platform_bus_create+0x1d0/0x350
->         of_platform_bus_create+0x21c/0x350
->         of_platform_populate+0x80/0xd4
->         of_platform_default_populate_init+0xb8/0xd4
->         do_one_initcall+0x1b4/0x400
->         do_initcall_level+0xa8/0xc8
->         do_initcalls+0x5c/0x9c
->         do_basic_setup+0x2c/0x38
->         kernel_init_freeable+0x1a4/0x1ec
->         kernel_init+0x20/0x118
->         ret_from_fork+0x10/0x30
->
->  -> #2 (gpd_list_lock){+.+.}-{3:3}:
->         __mutex_lock_common+0xcc/0xb88
->         mutex_lock_nested+0x5c/0x68
->         __genpd_dev_pm_attach+0x70/0x18c
->         genpd_dev_pm_attach_by_id+0xe4/0x158
->         genpd_dev_pm_attach_by_name+0x48/0x60
->         dev_pm_domain_attach_by_name+0x2c/0x38
->         dev_pm_opp_attach_genpd+0xac/0x160
->         vcodec_domains_get+0x94/0x14c [venus_core]
->         core_get_v4+0x150/0x188 [venus_core]
->         venus_probe+0x138/0x444 [venus_core]
->         platform_probe+0xb4/0xd4
->         really_probe+0x140/0x35c
->         driver_probe_device+0x90/0xcc
->         device_driver_attach+0x58/0x7c
->         __driver_attach+0xc8/0xe0
->         bus_for_each_dev+0x88/0xd4
->         driver_attach+0x30/0x3c
->         bus_add_driver+0x10c/0x1e0
->         driver_register+0x70/0x108
->         __platform_driver_register+0x30/0x3c
->         0xffffffde113e1044
->         do_one_initcall+0x1b4/0x400
->         do_init_module+0x64/0x1fc
->         load_module+0x17f4/0x1958
->         __arm64_sys_finit_module+0xb4/0xf0
->         invoke_syscall+0x54/0x110
->         el0_svc_common+0x88/0xf0
->         do_el0_svc_compat+0x28/0x34
->         el0_svc_compat+0x24/0x34
->         el0_sync_compat_handler+0xc0/0xf0
->         el0_sync_compat+0x19c/0x1c0
->
->  -> #1 (&opp_table->genpd_virt_dev_lock){+.+.}-{3:3}:
->         __mutex_lock_common+0xcc/0xb88
->         mutex_lock_nested+0x5c/0x68
->         _set_required_opps+0x74/0x120
->         _set_opp+0x94/0x37c
->         dev_pm_opp_set_rate+0xa0/0x194
->         core_clks_set_rate+0x28/0x58 [venus_core]
->         load_scale_v4+0x228/0x2b4 [venus_core]
->         session_process_buf+0x160/0x198 [venus_core]
->         venus_helper_vb2_buf_queue+0xcc/0x130 [venus_core]
->         vdec_vb2_buf_queue+0xc4/0x140 [venus_dec]
->         __enqueue_in_driver+0x164/0x188 [videobuf2_common]
->         vb2_core_qbuf+0x13c/0x47c [videobuf2_common]
->         vb2_qbuf+0x88/0xec [videobuf2_v4l2]
->         v4l2_m2m_qbuf+0x84/0x15c [v4l2_mem2mem]
->         v4l2_m2m_ioctl_qbuf+0x24/0x30 [v4l2_mem2mem]
->         v4l_qbuf+0x54/0x68
->         __video_do_ioctl+0x2bc/0x3bc
->         video_usercopy+0x558/0xb04
->         video_ioctl2+0x24/0x30
->         v4l2_ioctl+0x58/0x68
->         v4l2_compat_ioctl32+0x84/0xa0
->         __arm64_compat_sys_ioctl+0x12c/0x140
->         invoke_syscall+0x54/0x110
->         el0_svc_common+0x88/0xf0
->         do_el0_svc_compat+0x28/0x34
->         el0_svc_compat+0x24/0x34
->         el0_sync_compat_handler+0xc0/0xf0
->         el0_sync_compat+0x19c/0x1c0
->
->  -> #0 (&inst->lock#3){+.+.}-{3:3}:
->         __lock_acquire+0x248c/0x2d6c
->         lock_acquire+0x240/0x314
->         __mutex_lock_common+0xcc/0xb88
->         mutex_lock_nested+0x5c/0x68
->         vdec_buf_cleanup+0x3c/0x17c [venus_dec]
->         __vb2_queue_free+0x98/0x204 [videobuf2_common]
->         vb2_core_reqbufs+0x14c/0x390 [videobuf2_common]
->         vb2_reqbufs+0x58/0x74 [videobuf2_v4l2]
->         v4l2_m2m_reqbufs+0x58/0x90 [v4l2_mem2mem]
->         v4l2_m2m_ioctl_reqbufs+0x24/0x30 [v4l2_mem2mem]
->         v4l_reqbufs+0x58/0x6c
->         __video_do_ioctl+0x2bc/0x3bc
->         video_usercopy+0x558/0xb04
->         video_ioctl2+0x24/0x30
->         v4l2_ioctl+0x58/0x68
->         v4l2_compat_ioctl32+0x84/0xa0
->         __arm64_compat_sys_ioctl+0x12c/0x140
->         invoke_syscall+0x54/0x110
->         el0_svc_common+0x88/0xf0
->         do_el0_svc_compat+0x28/0x34
->         el0_svc_compat+0x24/0x34
->         el0_sync_compat_handler+0xc0/0xf0
->         el0_sync_compat+0x19c/0x1c0
->
->  other info that might help us debug this:
->
->  Chain exists of:
->    &inst->lock#3 --> &mm->mmap_lock --> &q->mmap_lock
->
->   Possible unsafe locking scenario:
->
->         CPU0                    CPU1
->         ----                    ----
->    lock(&q->mmap_lock);
->                                 lock(&mm->mmap_lock);
->                                 lock(&q->mmap_lock);
->    lock(&inst->lock#3);
->
->   *** DEADLOCK ***
->
->  1 lock held by ThreadPoolSingl/3969:
->   #0: ffffff80d3c3c4f8 (&q->mmap_lock){+.+.}-{3:3}, at: vb2_core_reqbufs+0xe4/0x390 [videobuf2_common]
->
->  stack backtrace:
->  CPU: 2 PID: 3969 Comm: ThreadPoolSingl Not tainted 5.13.0-rc2 #71
->  Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
->  Call trace:
->   dump_backtrace+0x0/0x1b4
->   show_stack+0x24/0x30
->   dump_stack+0xe0/0x15c
->   print_circular_bug+0x32c/0x388
->   check_noncircular+0x138/0x140
->   __lock_acquire+0x248c/0x2d6c
->   lock_acquire+0x240/0x314
->   __mutex_lock_common+0xcc/0xb88
->   mutex_lock_nested+0x5c/0x68
->   vdec_buf_cleanup+0x3c/0x17c [venus_dec]
->   __vb2_queue_free+0x98/0x204 [videobuf2_common]
->   vb2_core_reqbufs+0x14c/0x390 [videobuf2_common]
->   vb2_reqbufs+0x58/0x74 [videobuf2_v4l2]
->   v4l2_m2m_reqbufs+0x58/0x90 [v4l2_mem2mem]
->   v4l2_m2m_ioctl_reqbufs+0x24/0x30 [v4l2_mem2mem]
->   v4l_reqbufs+0x58/0x6c
->   __video_do_ioctl+0x2bc/0x3bc
->   video_usercopy+0x558/0xb04
->   video_ioctl2+0x24/0x30
->   v4l2_ioctl+0x58/0x68
->   v4l2_compat_ioctl32+0x84/0xa0
->   __arm64_compat_sys_ioctl+0x12c/0x140
->   invoke_syscall+0x54/0x110
->   el0_svc_common+0x88/0xf0
->   do_el0_svc_compat+0x28/0x34
->   el0_svc_compat+0x24/0x34
->   el0_sync_compat_handler+0xc0/0xf0
->   el0_sync_compat+0x19c/0x1c0
->
-> The 'gpd_list_lock' is nominally named as such to protect the 'gpd_list'
-> from concurrent access and mutation. Unfortunately, holding that mutex
-> around various OPP framework calls leads to lockdep splats because now
-> we're doing various operations in OPP core such as registering with
-> debugfs while holding the list lock. We don't need to hold any list
-> mutex while we're calling into OPP, so let's shrink the locking area of
-> the 'gpd_list_lock' so that lockdep isn't triggered. This also helps
-> reduce contention on this lock, which probably doesn't matter much but
-> at least is nice to have.
->
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: <linux-pm@vger.kernel.org>
-> Cc: Viresh Kumar <vireshk@kernel.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> So we have a (short) timeslice when users can get hold of child domain,
+> but the system knows about a child domain, but does not about a
+> parent/child relationship.
 
-Thanks for fixing this!
+Correct!
 
-As I said, when discussing the previous version, I am working on
-additional improvements, but this should be a step in the right
-direction.
+This is tricky, but the best we have managed to come up with, so far.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Additionally, I think this hasn't been an issue, because providers and
+subdomains have been registered way earlier than consumers. Of course,
+it would be nice with a more robust solution.
+
+>
+> I think this function should be changed to take struct generic_pm_domain
+> as a second argument. I will attempt refactoring cpuidle-psci-domain to
+> follow this, let's see if this will work.
+
+I am not sure what is the best approach here. You may be right.
+
+>
+> Another option would be to export genpd_get_from_provider() and to use
+> genpd_add_subdomain() directly.
+
+That could work too.
+
+Another option would be to introduce an intermediate state for the
+genpd provider, that can be used to prevent devices from getting
+attached to it (returning -EPROBE_DEFER if that happens), until the
+topology (child/parent domains) has been initialized as well. Just
+thinking out loud...
+
+>
+> I think I'd need this function anyway for the gdsc code. During
+> gdsc_init() we check gdsc status and this requires register access (and
+> thus powering on the parent domain) before the gdsc is registered itself
+> as a power domain.
+
+As a workaround (temporary), perhaps you can add a ->sync_state()
+callback to mitigate part of the problems (which gets called when
+*all* consumers are attached), along the lines of what we also do in
+the cpuidle-psci-domain.
 
 Kind regards
 Uffe
-
-> ---
->
-> Changes from v1:
->  * Removed list lock in genpd_add_provider() as it serves no purpose
->
->  drivers/base/power/domain.c | 38 +++++++++++++++++--------------------
->  1 file changed, 17 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index b6a782c31613..03d18223d8bb 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1984,8 +1984,8 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->
->         mutex_lock(&gpd_list_lock);
->         list_add(&genpd->gpd_list_node, &gpd_list);
-> -       genpd_debug_add(genpd);
->         mutex_unlock(&gpd_list_lock);
-> +       genpd_debug_add(genpd);
->
->         return 0;
->  }
-> @@ -2172,12 +2172,19 @@ static int genpd_add_provider(struct device_node *np, genpd_xlate_t xlate,
->
->  static bool genpd_present(const struct generic_pm_domain *genpd)
->  {
-> +       bool ret = false;
->         const struct generic_pm_domain *gpd;
->
-> -       list_for_each_entry(gpd, &gpd_list, gpd_list_node)
-> -               if (gpd == genpd)
-> -                       return true;
-> -       return false;
-> +       mutex_lock(&gpd_list_lock);
-> +       list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
-> +               if (gpd == genpd) {
-> +                       ret = true;
-> +                       break;
-> +               }
-> +       }
-> +       mutex_unlock(&gpd_list_lock);
-> +
-> +       return ret;
->  }
->
->  /**
-> @@ -2188,15 +2195,13 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
->  int of_genpd_add_provider_simple(struct device_node *np,
->                                  struct generic_pm_domain *genpd)
->  {
-> -       int ret = -EINVAL;
-> +       int ret;
->
->         if (!np || !genpd)
->                 return -EINVAL;
->
-> -       mutex_lock(&gpd_list_lock);
-> -
->         if (!genpd_present(genpd))
-> -               goto unlock;
-> +               return -EINVAL;
->
->         genpd->dev.of_node = np;
->
-> @@ -2207,7 +2212,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
->                         if (ret != -EPROBE_DEFER)
->                                 dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
->                                         ret);
-> -                       goto unlock;
-> +                       return ret;
->                 }
->
->                 /*
-> @@ -2225,16 +2230,13 @@ int of_genpd_add_provider_simple(struct device_node *np,
->                         dev_pm_opp_of_remove_table(&genpd->dev);
->                 }
->
-> -               goto unlock;
-> +               return ret;
->         }
->
->         genpd->provider = &np->fwnode;
->         genpd->has_provider = true;
->
-> -unlock:
-> -       mutex_unlock(&gpd_list_lock);
-> -
-> -       return ret;
-> +       return 0;
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
->
-> @@ -2253,8 +2255,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->         if (!np || !data)
->                 return -EINVAL;
->
-> -       mutex_lock(&gpd_list_lock);
-> -
->         if (!data->xlate)
->                 data->xlate = genpd_xlate_onecell;
->
-> @@ -2294,8 +2294,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->         if (ret < 0)
->                 goto error;
->
-> -       mutex_unlock(&gpd_list_lock);
-> -
->         return 0;
->
->  error:
-> @@ -2314,8 +2312,6 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->                 }
->         }
->
-> -       mutex_unlock(&gpd_list_lock);
-> -
->         return ret;
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_add_provider_onecell);
->
-> base-commit: d07f6ca923ea0927a1024dfccafc5b53b61cfecc
-> --
-> https://chromeos.dev
->
