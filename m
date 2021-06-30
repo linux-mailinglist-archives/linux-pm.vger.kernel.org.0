@@ -2,80 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F249B3B89B1
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 22:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDF23B8AA4
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 00:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbhF3U3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 16:29:45 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:56754 "EHLO mail.skyhub.de"
+        id S232705AbhF3W6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 18:58:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33366 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234208AbhF3U3p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Jun 2021 16:29:45 -0400
-Received: from zn.tnic (p200300ec2f12c300341904cf3ce6da03.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:c300:3419:4cf:3ce6:da03])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9468B1EC052A;
-        Wed, 30 Jun 2021 22:27:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1625084834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=86yXg3hLUA1nTjtkdrF8ezRaEgM4FbW0oMD3BQItYJ4=;
-        b=U9QqFhZE8zeta3O6rwSTpio3PZepEPd6hMTZZlMZKI3j5AviK6zI4HnHVp4eBgXlPt2TP7
-        yDC5EOErSIrTFJFqMhIFFb3ScTHtjKVpqp2EgD1XJumGLQfoJjgqyYyJM/AHUwOTT6FsxJ
-        0PCd12rXShZCeUsZt9LtS4ce6RFn7OU=
-Date:   Wed, 30 Jun 2021 22:27:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] ACPI updates for v5.14-rc1
-Message-ID: <YNzTmmru8JK++Abo@zn.tnic>
-References: <CAJZ5v0hm5ihfU_hBbMB9u7SmH18PLGp6+Z6=wBLa8WxaVQRTpg@mail.gmail.com>
- <YNxLvhBBE7Ff6Q5u@zn.tnic>
- <CAJZ5v0g_+xDVYRiVR4aDFKsNqLg9DeGAMKU1+CPCorpf=Ceb7A@mail.gmail.com>
+        id S232397AbhF3W6g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Jun 2021 18:58:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3F54613D1;
+        Wed, 30 Jun 2021 22:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625093767;
+        bh=1XbpMrAHLknLLoDhzLADpsI4YXpwMU7vvfhNLq5DXh8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Gg1GriXGY/N+rrmX/YSR1NIBzGTRhex6grbfuCbGsS6L6q2SqsXM358PqRyWjLxZ5
+         BflxoiOroAxRzWQKMbH2C+RkkuTWE3nwdn5WYL/Cz4g6Dz+qmzC/TJ17plQq3iqTM+
+         87fQuZOABInlaf0b4jUMep1lOaAv0YzKr4U58J24rScMqI8vUcoZVuQdrz0wMddd3+
+         bwEeXbhY4NHPISSA8PxEOmlzK5k4/tNzWHijTkB7OgBmzoI9uDu5Wu3hbdtVmGn9PK
+         W1jV216OcTVSPfxfv0is6LuaWRd1I24Wr8Wuok/c9n5S+InXTOqY8MWinIrsB4FqlM
+         MkyTrTnahYjKw==
+From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Ken Ma <make@marvell.com>, Victor Gu <xigu@marvell.com>
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
+        Philip Soares <philips@netisense.com>,
+        linux-pm@vger.kernel.org,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Konstantin Porotchkin <kostap@marvell.com>,
+        nnet <nnet@fastmail.fm>, Nadav Haklai <nadavh@marvell.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
+Date:   Thu,  1 Jul 2021 00:56:01 +0200
+Message-Id: <20210630225601.6372-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210630135942.29730-1-kabel@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g_+xDVYRiVR4aDFKsNqLg9DeGAMKU1+CPCorpf=Ceb7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 07:19:05PM +0200, Rafael J. Wysocki wrote:
-> What about the following help text (white space damage by gmail)?
-> 
-> ---
->  drivers/acpi/Kconfig |   10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> Index: linux-pm/drivers/acpi/Kconfig
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/Kconfig
-> +++ linux-pm/drivers/acpi/Kconfig
-> @@ -548,3 +548,13 @@ config ACPI_PRMT
->      bool "Platform Runtime Mechanism Support"
->      depends on EFI && X86_64
->      default y
-> +    help
-> +      Platform Runtime Mechanism (PRM) is a firmware interface exposing a
-> +      set of binary executables that can be called from the AML interpreter
-> +      or directly from device drivers.
-> +
-> +      Say Y to enable the AML interpreter to execute the PRM code.
-> +
-> +      While this feature is optional in principle, leaving it out may
-> +      substantially increase computational overhead related to the
-> +      initialization of some server systems.
+The 1.2 GHz variant of the Armada 3720 SOC is unstable with DVFS: when
+the SOC boots, the WTMI firmware sets clocks and AVS values that work
+correctly with 1.2 GHz CPU frequency, but random crashes occur once
+cpufreq driver starts scaling.
 
-Thanks, much better!
+We do not know currently what is the reason:
+- it may be that the voltage value for L0 for 1.2 GHz variant provided
+  by the vendor in the OTP is simply incorrect when scaling is used,
+- it may be that some delay is needed somewhere,
+- it may be something else.
 
+The most sane solution now seems to be to simply forbid the cpufreq
+driver on 1.2 GHz variant.
+
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
+---
+If someone from Marvell could look into this, it would be great since
+basically 1.2 GHz variant cannot scale, which is a feature that was
+claimed to be supported by the SOC.
+
+Ken Ma / Victor Gu, you have worked on commit
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/d6719fdc2b3cac58064f41b531f86993c919aa9a
+in linux-marvell.
+Your patch takes away the 1202 mV constant for 1.2 GHz base CPU
+frequency and instead adds code that computes the voltages from the
+voltage found in L0 AVS register (which is filled in by WTMI firmware).
+
+Do you know why the code does not work correctly for some 1.2 GHz
+boards? Do we need to force the L0 voltage to 1202 mV if it is lower,
+or something?
+---
+ drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
+index 3fc98a3ffd91..c10fc33b29b1 100644
+--- a/drivers/cpufreq/armada-37xx-cpufreq.c
++++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+@@ -104,7 +104,11 @@ struct armada_37xx_dvfs {
+ };
+ 
+ static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
+-	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
++	/*
++	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
++	 * unstable because we do not know how to configure it properly.
++	 */
++	/* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} }, */
+ 	{.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
+ 	{.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
+ 	{.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5, 6} },
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
