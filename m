@@ -2,120 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F863B874C
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 18:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E863B8751
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 19:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhF3RBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 13:01:20 -0400
-Received: from mail-oo1-f41.google.com ([209.85.161.41]:43715 "EHLO
-        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbhF3RBU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 13:01:20 -0400
-Received: by mail-oo1-f41.google.com with SMTP id b17-20020a4aba110000b029024c219a3d83so793712oop.10;
-        Wed, 30 Jun 2021 09:58:50 -0700 (PDT)
+        id S229814AbhF3RDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 13:03:45 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:40802 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbhF3RDo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 13:03:44 -0400
+Received: by mail-oi1-f175.google.com with SMTP id l26so1200363oic.7;
+        Wed, 30 Jun 2021 10:01:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8E3SiP4jfFVx6xLQQNrRfMsJfLJy/U2zQlBC/YkWL00=;
-        b=klTSpxYRpFIvQXGWrwwqw9M0gMiM24nSn8MDq5fjfjG8PDTYfOxBHsWVN/HxbA2Yah
-         OuCk14z2oSUrv8HvJ00z3DyivzENx9u233y1aHRY8E/FCbWkhUGKsJXqzW53I3oF70c/
-         3omxQIoCLExc17AY9SFintIPs0J+FjI8oBfPetNaBxI3nfQAJIoxBKWMCvD+yj1ZNBhH
-         lstNhP/13Y8R4bilV/zNKamh3h9HvcdWjtj9Xx9hQpV3uslCn7LIqdc2G1OiqY5DGyTe
-         zlbbTSmi9vNJ+K59hoXilCWA54tLDtZBaciqFDBdjB5BCHO8yDknoK3Hd3aZnufNDA5M
-         V53A==
-X-Gm-Message-State: AOAM5310P0da4B/qiHHT9T3cO1VEzngHRQQCm20SX9AgUthJLtJHOFv6
-        OOZtvLMe1dDsgqXSqtlJQTLmMeAXdTwZMKht1OM=
-X-Google-Smtp-Source: ABdhPJwtvr/uVzDMqIxSnt7ynjNGjlzLEkFCM0ypZRYLmwlRkcXeVplJye5Crd6T4H2zMDQJvp1vMAjv7pXTxgkqZ7w=
-X-Received: by 2002:a4a:5285:: with SMTP id d127mr9064967oob.2.1625072330298;
- Wed, 30 Jun 2021 09:58:50 -0700 (PDT)
+        bh=xTjSyaFQS7XnJNczYIzf9hXNc2aJUcdGoOWTLAlowDc=;
+        b=DCjT515hgYCEH4yCNadp2NCKBjDa9BXrqS6o6Inaad31yaZmrs7vjQsuo7R8cWie4e
+         qVJQpOmE7gUebTB/BVoSgAqm8/qXjL/z59TR7tIifhpTeKCuamyVCAOUEdIs3OIxOD//
+         TicSBmruAunBRY5fzTBe+oaMoogrUYWM0jyUtxPE1CHHKi2XNf9ABUPvgsQd+pPXmNMP
+         NQqgcIq/DncmyeBfYxuMrmGZQ4/+F3ys8dNUsZkNIrNJ3rervl4iVltMhBghmXbjCsu0
+         55DumJh44RqR1AuP7yalzpNPTC1I6EBx5Epm07PgHapmpnLIlgCIk0Q8apoXCxHP6SYV
+         VuLg==
+X-Gm-Message-State: AOAM532MtNHC/jO0GReS/Ob0KjYCAtYtSZa5rcj52Bi2qUS0RztpiVVA
+        b8HKNnrw4rsi23t5TO567AJiJF32mQWpPYLFNbg=
+X-Google-Smtp-Source: ABdhPJxW87779//+LyPvUb00M0A5ZCmL8LjAd5vaItb5M9OLoWKDmHUM9UY5gn0xqTUscZ1GHKYLRFStBEG792r5OQc=
+X-Received: by 2002:aca:417:: with SMTP id 23mr11474706oie.71.1625072474548;
+ Wed, 30 Jun 2021 10:01:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1624421816.git.viresh.kumar@linaro.org> <6144911f36d3d1f5faddf81d744bd39946843f6b.1624421816.git.viresh.kumar@linaro.org>
- <5741915.lOV4Wx5bFT@kreacher> <20210624015138.nzrrgiqyk3hblknv@vireshk-i7>
-In-Reply-To: <20210624015138.nzrrgiqyk3hblknv@vireshk-i7>
+References: <20210625152603.25960-1-lukasz.luba@arm.com> <20210625152603.25960-2-lukasz.luba@arm.com>
+In-Reply-To: <20210625152603.25960-2-lukasz.luba@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Jun 2021 18:58:39 +0200
-Message-ID: <CAJZ5v0ixck=1qzxrnAn5vgMcaA5NB4WtcK1RXj3+RvR2vV_VhA@mail.gmail.com>
-Subject: Re: [PATCH V4 2/4] cpufreq: intel_pstate: Migrate to ->offline()
- instead of ->stop_cpu()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
+Date:   Wed, 30 Jun 2021 19:01:03 +0200
+Message-ID: <CAJZ5v0iOzp5FKo4NsNE-m+sEXZUvv1TbkAO_9+jSidx9c0iq8A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
+ of EAS estimated energy
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chris Redpath <Chris.Redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Quentin Perret <qperret@google.com>,
         Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        CCj.Yeh@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 3:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, Jun 25, 2021 at 5:26 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On 23-06-21, 17:13, Rafael J. Wysocki wrote:
-> > As mentioned already in
-> >
-> > https://lore.kernel.org/linux-pm/CAJZ5v0g2tCZptcqh+c55YYiO7rDHmZivMLsmpq_7005zNPN1xg@mail.gmail.com/
+> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
+> task. It probes many possibilities and compares the estimated energy values
+> for different scenarios. For calculating those energy values it relies on
+> Energy Model (EM) data and em_cpu_energy(). The precision which is used in
+> EM data is in milli-Watts (or abstract scale), which sometimes is not
+> sufficient. In some cases it might happen that two CPUs from different
+> Performance Domains (PDs) get the same calculated value for a given task
+> placement, but in more precised scale, they might differ. This rounding
+> error has to be addressed. This patch prepares EAS code for better
+> precision in the coming EM improvements.
 >
-> Sorry about failing to reply over that, I got confused somehow..
->
-> > this isn't particularly clean, because intel_pstate_cpu_offline() is
-> > also used in the passive mode where the above call is not needed.
->
-> intel_pstate_clear_update_util_hook() returns early if the hook was never
-> registered, and so calling it was safe, but yes not very clean.
->
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Subject: [PATCH] cpufreq: intel_pstate: Combine ->stop_cpu() and ->offline()
-> >
-> > Combine the ->stop_cpu() and ->offline() callback routines for the
-> > active mode of intel_pstate so as to avoid setting the ->stop_cpu
-> > callback pointer which is going to be dropped from the framework.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpufreq/intel_pstate.c |    7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> > @@ -2577,11 +2577,13 @@ static int intel_pstate_cpu_online(struc
-> >       return 0;
-> >  }
-> >
-> > -static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
-> > +static int intel_pstate_stop_cpu(struct cpufreq_policy *policy)
-> >  {
-> >       pr_debug("CPU %d stopping\n", policy->cpu);
-> >
-> >       intel_pstate_clear_update_util_hook(policy->cpu);
-> > +
-> > +     return intel_pstate_cpu_offline(policy);
-> >  }
-> >
-> >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
-> > @@ -2654,8 +2656,7 @@ static struct cpufreq_driver intel_pstat
-> >       .resume         = intel_pstate_resume,
-> >       .init           = intel_pstate_cpu_init,
-> >       .exit           = intel_pstate_cpu_exit,
-> > -     .stop_cpu       = intel_pstate_stop_cpu,
-> > -     .offline        = intel_pstate_cpu_offline,
-> > +     .offline        = intel_pstate_stop_cpu,
->
-> I would suggest to rename intel_pstate_cpu_offline() as
-> intel_cpufreq_cpu_offline() and intel_pstate_stop_cpu() as
-> intel_pstate_cpu_offline(), so we remove the stop-cpu terminology completely.
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 
-I have followed the above suggestion and applied the modified patch
-along with the rest of this series.
+If you want me to pick up this series, this patch requires an ACK from
+the scheduler maintainers.
 
-> Either way:
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Thanks!
-
-> >       .online         = intel_pstate_cpu_online,
-> >       .update_limits  = intel_pstate_update_limits,
-> >       .name           = "intel_pstate",
+> ---
+>  kernel/sched/fair.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7b8990fd4896..b517c9e79768 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6582,7 +6582,7 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
+>   * to compute what would be the energy if we decided to actually migrate that
+>   * task.
+>   */
+> -static long
+> +static u64
+>  compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>  {
+>         struct cpumask *pd_mask = perf_domain_span(pd);
+> @@ -6689,12 +6689,13 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>   */
+>  static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  {
+> -       unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
+>         struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
+> +       u64 prev_delta = ULLONG_MAX, best_delta = ULLONG_MAX;
+>         int cpu, best_energy_cpu = prev_cpu, target = -1;
+> -       unsigned long cpu_cap, util, base_energy = 0;
+> +       unsigned long cpu_cap, util;
+>         struct sched_domain *sd;
+>         struct perf_domain *pd;
+> +       u64 base_energy = 0;
+>
+>         rcu_read_lock();
+>         pd = rcu_dereference(rd->pd);
+> @@ -6718,9 +6719,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>                 goto unlock;
+>
+>         for (; pd; pd = pd->next) {
+> -               unsigned long cur_delta, spare_cap, max_spare_cap = 0;
+> +               unsigned long spare_cap, max_spare_cap = 0;
+>                 bool compute_prev_delta = false;
+> -               unsigned long base_energy_pd;
+> +               u64 base_energy_pd, cur_delta;
+>                 int max_spare_cap_cpu = -1;
+>
+>                 for_each_cpu_and(cpu, perf_domain_span(pd), sched_domain_span(sd)) {
+> @@ -6790,7 +6791,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>          * Pick the best CPU if prev_cpu cannot be used, or if it saves at
+>          * least 6% of the energy used by prev_cpu.
+>          */
+> -       if ((prev_delta == ULONG_MAX) ||
+> +       if ((prev_delta == ULLONG_MAX) ||
+>             (prev_delta - best_delta) > ((prev_delta + base_energy) >> 4))
+>                 target = best_energy_cpu;
+>
+> --
+> 2.17.1
+>
