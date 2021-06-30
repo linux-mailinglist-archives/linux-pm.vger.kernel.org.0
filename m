@@ -2,69 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B8A3B882E
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 20:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F249B3B89B1
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 22:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbhF3SLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 14:11:01 -0400
-Received: from smtprelay0010.hostedemail.com ([216.40.44.10]:36714 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232694AbhF3SLA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 14:11:00 -0400
-X-Greylist: delayed 495 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Jun 2021 14:11:00 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave07.hostedemail.com (Postfix) with ESMTP id 0A8BB182C36E0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jun 2021 18:00:18 +0000 (UTC)
-Received: from omf11.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 996BA182BF4F3;
-        Wed, 30 Jun 2021 18:00:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 9D93620A29C;
-        Wed, 30 Jun 2021 18:00:13 +0000 (UTC)
-Message-ID: <d32d67710c87e5fde488ccbf094f4fa649655a58.camel@perches.com>
-Subject: Re: [PATCH] powercap: Replace symbolic permissions with octal
- permissions
-From:   Joe Perches <joe@perches.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jinchao Wang <wjc@cdjrlc.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Wed, 30 Jun 2021 11:00:12 -0700
-In-Reply-To: <CAJZ5v0h9Nx-u0U5O1hp1-BzzKXMVd3UO5BuGH6oc95aXQeu=ag@mail.gmail.com>
-References: <20210624084403.1163-1-wjc@cdjrlc.com>
-         <CAJZ5v0h9Nx-u0U5O1hp1-BzzKXMVd3UO5BuGH6oc95aXQeu=ag@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        id S234255AbhF3U3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 16:29:45 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:56754 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234208AbhF3U3p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Jun 2021 16:29:45 -0400
+Received: from zn.tnic (p200300ec2f12c300341904cf3ce6da03.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:c300:3419:4cf:3ce6:da03])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9468B1EC052A;
+        Wed, 30 Jun 2021 22:27:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1625084834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=86yXg3hLUA1nTjtkdrF8ezRaEgM4FbW0oMD3BQItYJ4=;
+        b=U9QqFhZE8zeta3O6rwSTpio3PZepEPd6hMTZZlMZKI3j5AviK6zI4HnHVp4eBgXlPt2TP7
+        yDC5EOErSIrTFJFqMhIFFb3ScTHtjKVpqp2EgD1XJumGLQfoJjgqyYyJM/AHUwOTT6FsxJ
+        0PCd12rXShZCeUsZt9LtS4ce6RFn7OU=
+Date:   Wed, 30 Jun 2021 22:27:06 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] ACPI updates for v5.14-rc1
+Message-ID: <YNzTmmru8JK++Abo@zn.tnic>
+References: <CAJZ5v0hm5ihfU_hBbMB9u7SmH18PLGp6+Z6=wBLa8WxaVQRTpg@mail.gmail.com>
+ <YNxLvhBBE7Ff6Q5u@zn.tnic>
+ <CAJZ5v0g_+xDVYRiVR4aDFKsNqLg9DeGAMKU1+CPCorpf=Ceb7A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9D93620A29C
-X-Spam-Status: No, score=-2.90
-X-Stat-Signature: r3aumi41y1cmpu7by8xrwmz566mj1rzi
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19q3KI551Z+RXekoPIyewutzcuwojVEW2A=
-X-HE-Tag: 1625076013-190973
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g_+xDVYRiVR4aDFKsNqLg9DeGAMKU1+CPCorpf=Ceb7A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2021-06-30 at 19:41 +0200, Rafael J. Wysocki wrote:
-> On Thu, Jun 24, 2021 at 10:44 AM Jinchao Wang <wjc@cdjrlc.com> wrote:
-> > 
-> > Resolve following checkpatch issue,
-> > Replace symbolic permissions with octal permissions
+On Wed, Jun 30, 2021 at 07:19:05PM +0200, Rafael J. Wysocki wrote:
+> What about the following help text (white space damage by gmail)?
 > 
-> I don't see much value in this replacement and checkpatch complaining
-> about the existing code base is not something to worry about in
-> general.
+> ---
+>  drivers/acpi/Kconfig |   10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> Index: linux-pm/drivers/acpi/Kconfig
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/Kconfig
+> +++ linux-pm/drivers/acpi/Kconfig
+> @@ -548,3 +548,13 @@ config ACPI_PRMT
+>      bool "Platform Runtime Mechanism Support"
+>      depends on EFI && X86_64
+>      default y
+> +    help
+> +      Platform Runtime Mechanism (PRM) is a firmware interface exposing a
+> +      set of binary executables that can be called from the AML interpreter
+> +      or directly from device drivers.
+> +
+> +      Say Y to enable the AML interpreter to execute the PRM code.
+> +
+> +      While this feature is optional in principle, leaving it out may
+> +      substantially increase computational overhead related to the
+> +      initialization of some server systems.
 
-https://lore.kernel.org/lkml/CA+55aFw5v23T-zvDZp-MmD_EYxF8WbafwwB59934FV7g21uMGQ@mail.gmail.com/
+Thanks, much better!
 
-I do agree that in general checkpatch should not really be used as
-the sole argument in favor of changing existing code.
+-- 
+Regards/Gruss,
+    Boris.
 
-So removing the "resolve following checkpatch issue" from the
-commit message and replacing it with something like "to improve
-readability" would be better.
-
-
+https://people.kernel.org/tglx/notes-about-netiquette
