@@ -2,80 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8463B7C4B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 05:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9003B7C83
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 06:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbhF3Dzq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 23:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbhF3Dzl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 23:55:41 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE2C061760
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 20:53:12 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id cs1-20020a17090af501b0290170856e1a8aso3346886pjb.3
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 20:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UD8T97d6m5wJ+ibsAaXsXaCeGXCEKJyV5O+K6ZTbqtk=;
-        b=R7GIPWVXUcCcFCZro/fdSCmKWKSZvb0/CPUuhSh6bLmBN+XLgDK4j3FaDTiEwW2Uyc
-         4jlJ2KBTfrJv6u4/aSfvO+bH6Y1Bw0Oe2fA800RIkbCB9DHg7SIguJYYOdTorgfb4I9D
-         ohrOYZYT/ehlwSZRzW5vwL7NJwK+XdkCOltFHuKFzwXVe0RrulCgKq8qSyIw8567KuQi
-         SF3Ka/kuOYQ6idEixi3oo3CsrtcRiCAirnFwdTLSQV1J6NVDIwgeu77++PNC+5KZ8ukw
-         RCccynICKc9Li5OSM0gK+/iCqXDWMWfQq4PGbmIsQHpsjyX8IWlYvLABj1BSmn6KjIMr
-         KkWQ==
+        id S233038AbhF3EVj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 00:21:39 -0400
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:44748 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232790AbhF3EVj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 00:21:39 -0400
+Received: by mail-pj1-f50.google.com with SMTP id p4-20020a17090a9304b029016f3020d867so492122pjo.3;
+        Tue, 29 Jun 2021 21:19:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UD8T97d6m5wJ+ibsAaXsXaCeGXCEKJyV5O+K6ZTbqtk=;
-        b=nf/LvwYBWEh6BaXermJHN656lEFgCjW3cp/NndsyjjRkvSXEERsy0qLq7JO00H2HGe
-         bAWjZifVIq7EbdSy5VxSRKwpC7vdHOzbaJIC8q4RFvfxTl+u1e4FrEA7jDtiotH1ShRA
-         j3YNuuGwsXwOtmFnGEevYsK6pOTpnk1MUeS/4gnNaOLOJhQU1YWNPvme9MRku9CSN36k
-         Pz1yQr4/y5ZiIjJnqxrVpJ7+6N9HdnAsEu8GYolpvNs2FykxjJW57cxBI90Dz5NnYTfk
-         cbLSCIA0xQT25Uo+T5U144zeqdY6bkW99cjFdWyQzFt7G6eGjBXnUpHpBj1ENYNlfaiu
-         v08w==
-X-Gm-Message-State: AOAM532cv8viPuCdgQITe5s7sNZm6IWm6fPFMDmL79AOZbQXWxFA226n
-        10X72hYMZW+MpkqfJn+0B6ERpg==
-X-Google-Smtp-Source: ABdhPJzwaGRPZR/RwPb5361P3l44INggwSiCue7C9Mww3eNhmzaKQEkIeHOGInLB9v/6PM7o1G3asA==
-X-Received: by 2002:a17:90a:fa92:: with SMTP id cu18mr2311163pjb.215.1625025192309;
-        Tue, 29 Jun 2021 20:53:12 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id n33sm19872937pgm.55.2021.06.29.20.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 20:53:11 -0700 (PDT)
-Date:   Wed, 30 Jun 2021 09:23:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [Patch v2 3/5] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
- support
-Message-ID: <20210630035307.gaglmi36lqk3shwp@vireshk-i7>
-References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
- <20210624115813.3613290-4-thara.gopinath@linaro.org>
- <20210629023556.v3u4hdye5ojolubq@vireshk-i7>
- <5d194c91-e557-e5f5-60d6-ad2b1ca2def4@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5C6jNx9+TcPzvp0Y/utV/ErF30s90q+UrdhTRBoe9Vo=;
+        b=X+xg+HJGv5fWbTtGB+O3+Hw372D+pEbssrnnGALXx7xkg0nXDPBuo/5Bfynb+n3INP
+         ZGAE+D4Lxc6HUK4lU0zVCfvEWbVRjV73ib+q9WD4MusdpBitw+IYAxgAc3neodKI4H4g
+         k55RPWbwnzs8Z0NHK7/G1bFbE4p2wad0riqOWBzVtYWU4bnCcvZ3J7iJab6JCQlSHeJp
+         NMPaUSvjHlTKBpdyN988pUNeeXXCtmwN5fWERLzmUxYiw/3RSTp1UCJ0X4BXOQR/lnhc
+         hf1nxEreUkOwPIo+E8Gy4uIDTj5ysK/pG9aFJcMgOzLEij27TCNTV9EiBPZ1dgM5+vp7
+         0awQ==
+X-Gm-Message-State: AOAM531K4JAGQvXF4zm3SOKXZ/1ZV1Cwt1xhnKA2d0njsun6Uj9CAEE2
+        EawIuB1xua/No3Ad2RpHkiW38nB++Dw=
+X-Google-Smtp-Source: ABdhPJyqwHl439haX6M/8UMYRPk3/L5Odjfmy1nvUg9KFwvcj5Xxi5YpOcgb4buc2mNlRM+OjOUYBw==
+X-Received: by 2002:a17:90b:1014:: with SMTP id gm20mr26889821pjb.165.1625026717342;
+        Tue, 29 Jun 2021 21:18:37 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:b36f:1d4c:3b33:df45? ([2601:647:4000:d7:b36f:1d4c:3b33:df45])
+        by smtp.gmail.com with ESMTPSA id j2sm19286203pfj.168.2021.06.29.21.18.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jun 2021 21:18:36 -0700 (PDT)
+Subject: Re: [PATCH v4 2/3] scsi: sd: send REQUEST SENSE for
+ BLIST_MEDIA_CHANGE devices in runtime_resume()
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, stern@rowland.harvard.edu
+References: <20210628133412.1172068-1-martin.kepplinger@puri.sm>
+ <20210628133412.1172068-3-martin.kepplinger@puri.sm>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <37a8e36c-73fd-b8a7-0175-ce6613efc043@acm.org>
+Date:   Tue, 29 Jun 2021 21:18:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d194c91-e557-e5f5-60d6-ad2b1ca2def4@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210628133412.1172068-3-martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-06-21, 22:25, Thara Gopinath wrote:
-> I don't think cpufreq_cooling recognizes boost frequencies. The max state
-> there is the max of nominal frequencies , right? If not, it might be a good
-> idea to add this check there as well.
+On 6/28/21 6:34 AM, Martin Kepplinger wrote:
+> +static int sd_resume_runtime(struct device *dev)
+> +{
+> +	struct scsi_disk *sdkp = dev_get_drvdata(dev);
+> +	struct scsi_device *sdp;
+> +	int timeout, retries, res;
+> +	struct scsi_sense_hdr my_sshdr;
 
-Ahh, that explains it.
+Since the sense data is ignored, consider removing the "my_sshdr"
+declaration and passing NULL as sense pointer to scsi_execute().
 
--- 
-viresh
+> +	if (!sdkp)	/* E.g.: runtime resume at the start of sd_probe() */
+> +		return 0;
+
+Are you sure that this code is necessary? There is an
+scsi_autopm_get_device(sdp) call at the start of sd_probe() and
+scsi_autopm_put_device(sdp) call at the end of sd_probe(). In other
+words, no runtime suspend will happen between the
+device_initialize(&sdkp->dev) call in sd_probe() and the
+dev_set_drvdata(dev, sdkp) call in the same function.
+
+> +	if (sdp->sdev_bflags & BLIST_MEDIA_CHANGE) {
+> +		for (retries = 3; retries > 0; --retries) {
+> +			unsigned char cmd[10] = { 0 };
+> +
+> +			cmd[0] = REQUEST_SENSE;
+
+Please define the CDB as follows:
+
+	static const u8 cmd[10] = { REQUEST_SENSE };
+
+> +			/*
+> +			 * Leave the rest of the command zero to indicate
+> +			 * flush everything.
+> +			 */
+
+Shouldn't this comment appear above the CDB definition? Also, what does
+"flush everything" mean? According to SPC sense data is discarded from
+the device while processing REQUEST SENSE, no matter what the value of
+the ALLOCATION LENGTH parameter in that command is. From SPC-6: "the
+REQUEST SENSE command with any allocation length clears the sense data."
+
+> +			res = scsi_execute(sdp, cmd, DMA_NONE, NULL, 0, NULL,
+> +					   &my_sshdr, timeout,
+> +					   sdkp->max_retries, 0, RQF_PM, NULL);
+
+Only one level of retries please. Can sdkp->max_retries be changed into 1?
+
+Thanks,
+
+Bart.
