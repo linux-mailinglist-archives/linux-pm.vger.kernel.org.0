@@ -2,122 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF303B8795
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 19:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8653C3B87AF
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 19:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbhF3RVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 13:21:47 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:40838 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbhF3RVr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 13:21:47 -0400
-Received: by mail-oi1-f174.google.com with SMTP id l26so1266492oic.7;
-        Wed, 30 Jun 2021 10:19:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=whtWAytPA5br2VV4bJUkRa0hO694zx905NLhlKUp6LU=;
-        b=aUD2KogdniYhCFtx3q0EkA+BYPKrXuXebRT1OyYfACrqrQDAuuStijVQsgiCarb973
-         QfAKLZGkbeHCWgcsmHY5xLt6KEovSIq90SY0u5kmDAdvtRicsX0uao85tkfHHD43cl7G
-         D6SJ6rKg/ScNmf6NS9RUgiBAb8fLKKPDZ2VcJzb7HpziLMFf8rqh/adqnbenQgZ8oR6r
-         8SvRFxeJlR4Wn84OysZK3vnrwMXBjp1PmlpJOJeN3KWLxUeBdq46fq9Ssw3lt41BwQh+
-         5ErVEe0lPZj0xVUO8tCKB3cvYUkX+w8cTjX7dFGhpLiIgYNMccT4eAMslWUiH0CbR9Ru
-         XRvg==
-X-Gm-Message-State: AOAM530OiDEOXB9SkHYIbEG/U9tCjgFxkFpycYqEMI4cjJfvAZtirraw
-        hF/ChrumQVTI7D8lv5yHFDi/+XT1us9wy2Q3XgHzZuTy9Lc=
-X-Google-Smtp-Source: ABdhPJygstd0PRgk2pxEcXN0jArtIMaBZc9XO/XHoaayrFM6WqvQTdGWNTD46q43af/peMAHQCUHNxybVhOfWC9ocRY=
-X-Received: by 2002:aca:417:: with SMTP id 23mr11542778oie.71.1625073556563;
- Wed, 30 Jun 2021 10:19:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJZ5v0hm5ihfU_hBbMB9u7SmH18PLGp6+Z6=wBLa8WxaVQRTpg@mail.gmail.com>
- <YNxLvhBBE7Ff6Q5u@zn.tnic>
-In-Reply-To: <YNxLvhBBE7Ff6Q5u@zn.tnic>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Jun 2021 19:19:05 +0200
-Message-ID: <CAJZ5v0g_+xDVYRiVR4aDFKsNqLg9DeGAMKU1+CPCorpf=Ceb7A@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI updates for v5.14-rc1
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        id S232544AbhF3Rbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 13:31:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:42988 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229573AbhF3Rbd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Jun 2021 13:31:33 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 302C36D;
+        Wed, 30 Jun 2021 10:29:04 -0700 (PDT)
+Received: from [10.57.10.3] (unknown [10.57.10.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D4243F718;
+        Wed, 30 Jun 2021 10:29:01 -0700 (PDT)
+Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
+ of EAS estimated energy
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chris Redpath <Chris.Redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Quentin Perret <qperret@google.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        CCj.Yeh@mediatek.com
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-2-lukasz.luba@arm.com>
+ <CAJZ5v0iOzp5FKo4NsNE-m+sEXZUvv1TbkAO_9+jSidx9c0iq8A@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <ffc63114-c1c2-f866-8b2a-15e9fd0a7818@arm.com>
+Date:   Wed, 30 Jun 2021 18:28:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0iOzp5FKo4NsNE-m+sEXZUvv1TbkAO_9+jSidx9c0iq8A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 12:47 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Jun 29, 2021 at 09:01:10PM +0200, Rafael J. Wysocki wrote:
-> > Erik Kaneda (6):
-> >       ACPICA: Fix memory leak caused by _CID repair function
-> >       ACPICA: iASL: add disassembler support for PRMT
-> >       ACPICA: Add support for PlatformRtMechanism OperationRegion handler
-> >       ACPICA: Add PRMT module header to facilitate parsing
-> >       ACPI: PRM: implement OperationRegion handler for the
-> > PlatformRtMechanism subtype
->
-> $ git checkout master
-> $ git pull
-> $ make oldconfig
->
-> Platform Runtime Mechanism Support (ACPI_PRMT) [Y/n/?] (NEW) ?
->
-> There is no help available for this option.
-> Symbol: ACPI_PRMT [=y]
-> Type  : bool
-> Defined at drivers/acpi/Kconfig:547
->   Prompt: Platform Runtime Mechanism Support
->   Depends on: EFI [=y] && X86_64 [=y]
->   Location:
->     -> Power management and ACPI options
->
->
->
-> Platform Runtime Mechanism Support (ACPI_PRMT) [Y/n/?] (NEW)
->
-> I don't know what that means, there's no help, no nothing. And it is
-> default y for no apparent reason.
->
-> /me looks at the commit message:
->
->     Platform Runtime Mechanism (PRM) is a firmware interface that exposes
->     a set of binary executables that can either be called from the AML
->     interpreter or device drivers by bypassing the AML interpreter.
->     This change implements the AML interpreter path.
->
-> I'm still unclear whether I need it or not.
 
-That's a fair point.
 
-> Guys, you need to think about your users and to write help text which is
-> *actually* usable for people who do not deal with ACPI firmware gunk.
+On 6/30/21 6:01 PM, Rafael J. Wysocki wrote:
+> On Fri, Jun 25, 2021 at 5:26 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
+>> task. It probes many possibilities and compares the estimated energy values
+>> for different scenarios. For calculating those energy values it relies on
+>> Energy Model (EM) data and em_cpu_energy(). The precision which is used in
+>> EM data is in milli-Watts (or abstract scale), which sometimes is not
+>> sufficient. In some cases it might happen that two CPUs from different
+>> Performance Domains (PDs) get the same calculated value for a given task
+>> placement, but in more precised scale, they might differ. This rounding
+>> error has to be addressed. This patch prepares EAS code for better
+>> precision in the coming EM improvements.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> If you want me to pick up this series, this patch requires an ACK from
+> the scheduler maintainers.
+> 
 
-We will.
+It would be great, if you could take it after e.g. Peter ACK it.
 
-What about the following help text (white space damage by gmail)?
+Peter could you have a look at it, please?
+In this patch 1/3 we have only variables upgrade.
 
----
- drivers/acpi/Kconfig |   10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-Index: linux-pm/drivers/acpi/Kconfig
-===================================================================
---- linux-pm.orig/drivers/acpi/Kconfig
-+++ linux-pm/drivers/acpi/Kconfig
-@@ -548,3 +548,13 @@ config ACPI_PRMT
-     bool "Platform Runtime Mechanism Support"
-     depends on EFI && X86_64
-     default y
-+    help
-+      Platform Runtime Mechanism (PRM) is a firmware interface exposing a
-+      set of binary executables that can be called from the AML interpreter
-+      or directly from device drivers.
-+
-+      Say Y to enable the AML interpreter to execute the PRM code.
-+
-+      While this feature is optional in principle, leaving it out may
-+      substantially increase computational overhead related to the
-+      initialization of some server systems.
+Regards,
+Lukasz
