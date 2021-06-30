@@ -2,62 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5605A3B7C8D
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 06:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7943B7D2B
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 08:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbhF3EXH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 00:23:07 -0400
-Received: from mail-pl1-f180.google.com ([209.85.214.180]:34616 "EHLO
-        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbhF3EXH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 00:23:07 -0400
-Received: by mail-pl1-f180.google.com with SMTP id h1so746623plt.1;
-        Tue, 29 Jun 2021 21:20:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pNvsroCK6GcDFcekS7YXdbq6zffuEiaBrmTEkSU+Plc=;
-        b=gv09EQjvkqm7ykOgs6hHYkmaF08f35auTCCvUj5jbjcpTnLWSrV4kfGakHA5uwW8qB
-         x1EGbTkN5hSNeqLYpZXu4MpkCHgVd8L+BULM9pxp14YxAUTflXCq5vq7xz2EPRQKU4VF
-         jxni7fIxci/IuiGs+Z0PvdVuTxs1aLHX4JAz/6b11sUuJR+8u5rK/hmUl+T/dvzJZ4Yg
-         ZTupXQzZqOxnWpEefFocAfDEKzLVsWsve4BOMr3QncXdHLUaeD4FRojiiLWPSABFT41A
-         QYsGnx4NgptzZYo0wvgZMHwumyVtrydVEQZUtScrfXfgZY1Ruqto/MxIll/sat6xooiP
-         Sbcg==
-X-Gm-Message-State: AOAM532JamdihjXnYMjm/eQGMKb+T8/5pbMb4aSaJTw3yT5DIu4KjJd+
-        gJwI4AwsejeNGODQY+WJWaY=
-X-Google-Smtp-Source: ABdhPJw9d0uHLCEIDUCo4TQyg/XurPk4FECuOnfL+lo3l9VmXcFLSthQ6o7JrRDeU+xI+O00wNug1Q==
-X-Received: by 2002:a17:902:da8f:b029:129:fdf:f921 with SMTP id j15-20020a170902da8fb02901290fdff921mr2899184plx.72.1625026838274;
-        Tue, 29 Jun 2021 21:20:38 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:b36f:1d4c:3b33:df45? ([2601:647:4000:d7:b36f:1d4c:3b33:df45])
-        by smtp.gmail.com with ESMTPSA id m16sm14818055pfo.1.2021.06.29.21.20.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Jun 2021 21:20:37 -0700 (PDT)
-Subject: Re: [PATCH v4 1/3] scsi: devinfo: add new flag BLIST_MEDIA_CHANGE
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, stern@rowland.harvard.edu
-References: <20210628133412.1172068-1-martin.kepplinger@puri.sm>
- <20210628133412.1172068-2-martin.kepplinger@puri.sm>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <2cc764ed-7248-0157-f8f5-755ddafa9179@acm.org>
-Date:   Tue, 29 Jun 2021 21:20:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210628133412.1172068-2-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S232469AbhF3GKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 02:10:53 -0400
+Received: from mga02.intel.com ([134.134.136.20]:46961 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232431AbhF3GKw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Jun 2021 02:10:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10030"; a="195448595"
+X-IronPort-AV: E=Sophos;i="5.83,311,1616482800"; 
+   d="scan'208";a="195448595"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 23:08:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,311,1616482800"; 
+   d="scan'208";a="455156577"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by orsmga008.jf.intel.com with ESMTP; 29 Jun 2021 23:08:22 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, jing2.liu@intel.com,
+        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH v6 25/26] intel_idle/amx: Clear the AMX state before entering idle
+Date:   Tue, 29 Jun 2021 23:02:25 -0700
+Message-Id: <20210630060226.24652-26-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210630060226.24652-1-chang.seok.bae@intel.com>
+References: <20210630060226.24652-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/28/21 6:34 AM, Martin Kepplinger wrote:
-> add a new flag for devices that issue MEDIA CHANGE unit attentions
-> when actually no medium changed. Drivers can then act accordingly in
-> case they need to work around it, i.e. in resume().
+When AMX is enabled, initialize AMX state before going idle.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+This assures that the kernel will only request idle states with clean AMX
+state. In the case of the C6 idle state, this may allow the hardware to get
+to a deeper power saving condition.
+
+[ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
+
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+---
+Changes from v5:
+* Moved the code to intel_idle. (Peter Zijlstra)
+* Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
+* Updated the code comment. (Dave Hansen)
+
+Changes from v4:
+* Added as a new patch. (Thomas Gleixner)
+---
+ arch/x86/include/asm/special_insns.h |  6 +++
+ drivers/idle/intel_idle.c            | 79 ++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index f3fbb84ff8a7..fada1bb82c7b 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
+ 	return 0;
+ }
+ 
++static inline void tile_release(void)
++{
++	/* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
++	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
++}
++
+ #endif /* __KERNEL__ */
+ 
+ #endif /* _ASM_X86_SPECIAL_INSNS_H */
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index ec1b9d306ba6..a77c6d7a10e5 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -54,6 +54,8 @@
+ #include <asm/intel-family.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/internal.h>
++#include <asm/special_insns.h>
+ 
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -155,6 +157,55 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 	return 0;
+ }
+ 
++/**
++ * idle_tile() - Initialize TILE registers in INIT-state
++ *
++ * Leaving state in the dirty TILE registers may prevent the processor from
++ * entering lower-power idle states. Use TILERELEASE to initialize the
++ * state. Destroying fpregs state is safe after the fpstate update.
++ *
++ * Returns:	None
++ */
++static inline void idle_tile(void)
++{
++	if (boot_cpu_has(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
++		tile_release();
++		fpregs_deactivate(&current->thread.fpu);
++	}
++}
++
++/**
++ * intel_idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state.
++ */
++static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
++				     struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle(dev, drv, index);
++}
++
++/**
++ * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state.
++ */
++static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
++					    struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle_s2idle(dev, drv, index);
++}
++
+ /*
+  * States are indexed by the cstate number,
+  * which is also the index into the MWAIT hint array.
+@@ -752,6 +803,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
+ 		.enter = NULL }
+ };
+ 
++static struct cpuidle_state spr_cstates[] __initdata = {
++	{
++		.name = "C1",
++		.desc = "MWAIT 0x00",
++		.flags = MWAIT2flg(0x00),
++		.exit_latency = 1,
++		.target_residency = 1,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.name = "C6",
++		.desc = "MWAIT 0x20",
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.exit_latency = 128,
++		.target_residency = 384,
++		.enter = &intel_idle_tile,
++		.enter_s2idle = intel_idle_s2idle_tile, },
++	{
++		.enter = NULL }
++};
++
+ static struct cpuidle_state atom_cstates[] __initdata = {
+ 	{
+ 		.name = "C1E",
+@@ -1095,6 +1167,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_spr __initconst = {
++	.state_table = spr_cstates,
++	.disable_promotion_to_c1e = true,
++	.use_acpi = true,
++};
++
+ static const struct idle_cpu idle_cpu_avn __initconst = {
+ 	.state_table = avn_cstates,
+ 	.disable_promotion_to_c1e = true,
+@@ -1157,6 +1235,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
++	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
+-- 
+2.17.1
+
