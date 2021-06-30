@@ -2,101 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2203B862C
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 17:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F8A3B871C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 18:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbhF3PZM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 11:25:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:35010 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235417AbhF3PZL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Jun 2021 11:25:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=9R9P8AiD4eICRk/YycK6n/jr3g/PddKIech/QyoVcCo=; b=Hb
-        VyiP2kUlh1k9jUNMTHQO5z/87+0mEoOY+NB8aJPdxq1YloHOWGQuzlCZy5IEBXcqLy/iOAWJeABEm
-        sX5l1eLU8jCQC4ia5O/qGoq1i5cQOLi2FCGElfQdz7AGTunhtulJLGKKSKqB2mntCbFpfuCyjmHK9
-        dEvz5qkKuUR3BtU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lyc2l-00Bg9B-Od; Wed, 30 Jun 2021 17:22:27 +0200
-Date:   Wed, 30 Jun 2021 17:22:27 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
-        Philip Soares <philips@netisense.com>,
-        linux-pm@vger.kernel.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Konstantin Porotchkin <kostap@marvell.com>,
-        nnet <nnet@fastmail.fm>, Nadav Haklai <nadavh@marvell.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.iorg>
-Subject: Re: [PATCH] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
-Message-ID: <YNyMM20/nO3kQDVY@lunn.ch>
-References: <20210630135942.29730-1-kabel@kernel.org>
+        id S229572AbhF3QfR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 12:35:17 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:41884 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbhF3QfQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 12:35:16 -0400
+Received: by mail-ot1-f41.google.com with SMTP id m6-20020a9d1d060000b029044e2d8e855eso3303485otm.8;
+        Wed, 30 Jun 2021 09:32:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xjiwcwmwYVU/Y0LKZ3Up/yPWW67ykZw9kfOwYgExw7A=;
+        b=G6qS367FD1QKC6bno/AP2nyWpY3qXcLnA3UclT+3eizEdF3wvHYjo2qYhBnPq2+ub0
+         hOUoIfLCfOXP+kLuZ82ZmG0gvablffdzbtl+2gDKnWVJNMJQoPLEJCT70CCDQrprEqcI
+         FojbpmTV12WBQGC7MM81Trw0XFKjyvDoodu3S3xlPQTJr7JkJfETJi3YWr2ZT/Q4x/1t
+         JUOI8QUcXf2iBi40scLivEhy0UGtdR2OnvtIbiDx2uqiMa7HRqyHCm7liaHrcIbltDxX
+         dH2V6WG8uGfcTEoqiaae6sA7471RuoNLKpfGXN02tjl6HIE0JjXb24c2C7uFkWdOlAeW
+         i0iw==
+X-Gm-Message-State: AOAM531CsFtbZPgsvwLNhC3MS/+5pAjqrF4JwFBfc1yuM9DC2uCrQtf3
+        sdiHxX48Pq4984W2kwWWwZOeecAfwQIM32OLQ+I=
+X-Google-Smtp-Source: ABdhPJxfrb8HvU4LnjaS0Rjd6JV80ARcJH49aa6L8I/mgHtJMzv8D4zC8Uxs6rvB5RN02anw7eODG50Q8pyJ77E6X+k=
+X-Received: by 2002:a05:6830:1d8:: with SMTP id r24mr3146657ota.206.1625070767446;
+ Wed, 30 Jun 2021 09:32:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210630135942.29730-1-kabel@kernel.org>
+References: <20210626162324.8236-1-tung-chen.shih@mediatek.com> <20210629061758.wdavb2a4bpklmqi3@vireshk-i7>
+In-Reply-To: <20210629061758.wdavb2a4bpklmqi3@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 30 Jun 2021 18:32:36 +0200
+Message-ID: <CAJZ5v0g2fc7UDFajbFCZS0ctSZcV-h_JCwts6w6fe3Xy_S=gzA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] cpufreq: fix the target freq not in the range of
+ policy->min & max
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        TungChen Shih <tung-chen.shih@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 03:59:42PM +0200, Marek Behún wrote:
-> The 1.2 GHz variant of the Armada 3720 SOC is unstable with DVFS: when
-> the SOC boots, the WTMI firmware sets clocks and AVS values that work
-> correctly with 1.2 GHz CPU frequency, but random crashes occur once
-> cpufreq driver starts scaling.
-> 
-> We do not know currently what is the reason:
-> - it may be that the voltage value for L0 for 1.2 GHz variant provided
->   by the vendor in the OTP is simply incorrect when scaling is used,
-> - it may be that some delay is needed somewhere,
-> - it may be something else.
-> 
-> The most sane solution now seems to be to simply forbid the cpufreq
-> driver on 1.2 GHz variant.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.iorg>
-> Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
-> ---
-> If someone from Marvell could look into this, it would be great since
-> basically 1.2 GHz variant cannot scale, which is a feature that was
-> claimed to be supported by the SOC.
-> ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> index 3fc98a3ffd91..1ef3dde9a40b 100644
-> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> @@ -104,7 +104,13 @@ struct armada_37xx_dvfs {
->  };
->  
->  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
-> +#if 0
-> +	/*
-> +	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
-> +	 * unstable because we do not know how to configure it properly.
-> +	 */
->  	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
-> +#endif
+On Tue, Jun 29, 2021 at 8:18 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 27-06-21, 00:23, TungChen Shih wrote:
+> >     The function cpufreq_driver_resolve_freq() should return the lowest
+>
+> Don't add extra spaces at the beginning of paragraphs here.
+>
+> > supported freq greater than or equal to the given target_freq, subject
+> > to policy (min/max) and driver limitations. However, the index returned
+> > by cpufreq_frequency_table_target() won't subject to policy min/max in
+> > some cases.
+> >
+> >     In cpufreq_frequency_table_target(), this function will try to find
+> > an index for @target_freq in freq_table, and the frequency of selected
+> > index should be in the range [policy->min, policy->max], which means:
+> >
+> >     policy->min <= policy->freq_table[idx].frequency <= policy->max
+> >
+> >     Though "clamp_val(target_freq, policy->min, policy->max);" would
+> > have been called to check this condition, when policy->max or min is
+> > not exactly one of the frequency in the frequency table,
+> > policy->freq_table[idx].frequency may still go out of the range
+> >
+> >     For example, if our sorted freq_table is [3000, 2000, 1000], and
+> > suppose we have:
+> >
+> >     @target_freq = 2500
+> >     @policy->min = 2000
+> >     @policy->max = 2200
+> >     @relation = CPUFREQ_RELATION_L
+> >
+> > 1. After clamp_val(target_freq, policy->min, policy->max); @target_freq
+> > becomes 2200
+> > 2. Since we use CPUFREQ_REALTION_L, final selected freq will be 3000 which
+> > beyonds policy->max
+>
+> Right so the problem does exist,
 
-I suspect you will get some drive by patches from bot handlers
-removing the #if 0, since such code is not liked within the kernel,
-and bot handlers blindly do what the bot tells them.
+That IMO is a matter for discussion and the patch author seems to have
+decided to ignore my previous comments.
 
-So i would suggest you avoid #if 0, and move the .cpu_req_max entry
-into the comment.
+> and not only with
+> cpufreq_driver_resolve_freq(), but __cpufreq_driver_target() as well.
 
-     Andrew
+That all depends on what the policy min and max limits are expected to
+mean and so far the interpretation has been that they are applied to
+the target frequency coming from the governor.
+
+Drivers have never been expected to ensure that the final effective
+frequency will always be between the policy min and max and, indeed,
+they may not even be able to ensure that.
+
+Now, because RELATION_L is defined as "the closest frequency equal to
+or above the target", running at a frequency below the target is
+questionable even if the max limit gets in the way.  IOW, RELATION_L
+takes precedence over the policy max limit.
+
+Accordingly, I'm not going to apply this patch or anything similar to
+it until I'm given a really convincing argument otherwise.
+
+> I have a sent a patchset to update both of these to start sharing some
+> code and we need to fix this for both now.
+>
+> > Signed-off-by: TungChen Shih <tung-chen.shih@mediatek.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 802abc925b2a..8e3a17781618 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -544,8 +544,23 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+> >       if (cpufreq_driver->target_index) {
+> >               unsigned int idx;
+> >
+> > +             /*  to find the frequency >= target_freq */
+> >               idx = cpufreq_frequency_table_target(policy, target_freq,
+> >                                                    CPUFREQ_RELATION_L);
+> > +
+> > +             /* frequency should subject to policy (min/max) */
+> > +             if (policy->freq_table[idx].frequency > policy->max) {
+> > +                     if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+> > +                             idx--;
+> > +                     else
+> > +                             idx++;
+> > +             } else if (policy->freq_table[idx].frequency < policy->min) {
+> > +                     if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+> > +                             idx++;
+> > +                     else
+> > +                             idx--;
+> > +             }
+>
+> This doesn't look clean to be honest.
+>
+> Rafael, does it make sense to update cpufreq_frequency_table_target()
+> (and its internal routines) to take policy bounds in consideration, or
+> something else ?
+>
+> --
+> viresh
