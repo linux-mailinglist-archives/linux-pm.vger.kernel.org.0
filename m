@@ -2,16 +2,16 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FD53B7FFF
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 11:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6423B8001
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 11:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbhF3Jde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 05:33:34 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:59574 "EHLO
+        id S233839AbhF3Jdf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 05:33:35 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:59564 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbhF3Jdd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 05:33:33 -0400
-Date:   Wed, 30 Jun 2021 09:31:03 -0000
+        with ESMTP id S233827AbhF3Jde (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 05:33:34 -0400
+Date:   Wed, 30 Jun 2021 09:31:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1625045464;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -19,12 +19,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c4HOgI0EG35RaMExzUUqKktRFZ/tyzlA015m9m41XA8=;
-        b=bx4VNncXRskQMrph3LJ2bSju5r7UXuithLZXiras/DQBYRXatVaDaVZtnEIcuWkn2SVC2g
-        VnaXDhbA8Rrjcrl1U6BvZvNkA8rIV4JBGgKATK/KE1mTJVEWTzTt4ExAKEEza4lkOiQK2v
-        ll63cIrMqJQFmsElcsjdc+v24gfGYooG9smelpIDpyRWxt3Kl+sriAuJ8e1L/iDtbY/5hY
-        DI4DVoDtJLKMJRhZfBLYR+jvZhJmr0JS2BnqXhFBs5WJQzZhdVIp5UQWtk/2ZTCCLjxn+b
-        aDnXHF+NYHX87Md8l7BjWeUHAJS+gnbiXpEu959WpQwgDOENByzxk0seyFH8DQ==
+        bh=Sn9tO8Zd2lyDWREqSHXe4v4qiKW+J4hrHo8Ee4D3Sps=;
+        b=4Sz6TaBLgmBpDUHsaOJ1+ajLJ9vadWZd9jX5XrMLDebopOMERpQaMhE4eIgnfmx7NOZU2Q
+        mqrv4Tw5crG7s7pjPTBf1nOHtu4azWB9yeCDdO1t8FeKpbrrwAWwgpI9ynPdpMJNsshpPT
+        SYzUmoO4Cma4bFAoo8UpIEpbWF6YAcy3GiLFJ83fVHaFthgy5n+Df31YMvdbFkDdPvBct1
+        Tvxnw3sPn6s+DSWU1FDT46hwq/rDCbojLRngN0TyIzsQq276vhqpvqL0iPgMchMDVgCuFs
+        HTl97URm+Sn5vKWNPKX8ajncBdNtdiDzPBWsR1FfE+dlMB5prfHxZUAtQmv1Aw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1625045464;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -32,22 +32,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c4HOgI0EG35RaMExzUUqKktRFZ/tyzlA015m9m41XA8=;
-        b=aDDYjoRK+VnQeWHdNf8wMhGRCuhxKDWxgJ4IGLfP6E7Cmr/hjpD5Ku0kEesZsxtdrlLiG7
-        7u6Hg10agOWqzLAA==
-From:   "thermal-bot for Andy Shevchenko" <tip-bot2@linutronix.de>
+        bh=Sn9tO8Zd2lyDWREqSHXe4v4qiKW+J4hrHo8Ee4D3Sps=;
+        b=snZTcQNw2A5c5CJwcNu5UDeGcZkAuMMGlu1dVgAGAlPQ0uRZvAG9pnc3FWNwhE0i9oy0Oa
+        Q6pzY1L5r2suD9Ag==
+From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/intel/intel_soc_dts_iosf:
- Switch to use find_first_zero_bit()
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+Subject: [thermal: thermal/next] dt-bindings: thermal: tsens: Add sc8180x compatible
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210618153451.89246-1-andriy.shevchenko@linux.intel.com>
-References: <20210618153451.89246-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
+References: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Message-ID: <162504546362.395.17933701592353332670.tip-bot2@tip-bot2>
+Message-ID: <162504546412.395.16858670632126215451.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,47 +59,36 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     58d353c888a04efaac04547702ff05d16c43f9b3
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//58d353c888a04efaac04547702ff05d16c43f9b3
-Author:        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-AuthorDate:    Fri, 18 Jun 2021 18:34:51 +03:00
+Commit-ID:     b0abe16a26f7c79dcbee05b4eb18b590a8f625d9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//b0abe16a26f7c79dcbee05b4eb18b590a8f625d9
+Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
+AuthorDate:    Tue, 08 Jun 2021 13:16:38 -07:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 21 Jun 2021 15:50:54 +02:00
+CommitterDate: Mon, 21 Jun 2021 13:43:36 +02:00
 
-thermal/drivers/intel/intel_soc_dts_iosf: Switch to use find_first_zero_bit()
+dt-bindings: thermal: tsens: Add sc8180x compatible
 
-Switch to use find_first_zero_bit() instead of open-coded variant.
+The Qualcomm sc8180x platform has the usual tsens blocks, add compatible
+for this.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210618153451.89246-1-andriy.shevchenko@linux.intel.com
+Link: https://lore.kernel.org/r/20210608201638.2136344-1-bjorn.andersson@linaro.org
 ---
- drivers/thermal/intel/intel_soc_dts_iosf.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-index 4f1a2f7..342b0bb 100644
---- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -350,13 +350,14 @@ int intel_soc_dts_iosf_add_read_only_critical_trip(
- 	int i, j;
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		for (j = 0; j < sensors->soc_dts[i].trip_count; ++j) {
--			if (!(sensors->soc_dts[i].trip_mask & BIT(j))) {
--				return update_trip_temp(&sensors->soc_dts[i], j,
--					sensors->tj_max - critical_offset,
--					THERMAL_TRIP_CRITICAL);
--			}
--		}
-+		struct intel_soc_dts_sensor_entry *entry = &sensors->soc_dts[i];
-+		int temp = sensors->tj_max - critical_offset;
-+		unsigned long count = entry->trip_count;
-+		unsigned long mask = entry->trip_mask;
-+
-+		j = find_first_zero_bit(&mask, count);
-+		if (j < count)
-+			return update_trip_temp(entry, j, temp, THERMAL_TRIP_CRITICAL);
- 	}
- 
- 	return -EINVAL;
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 0d4cfe0..ccf70dd 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -47,6 +47,7 @@ properties:
+               - qcom,msm8998-tsens
+               - qcom,sc7180-tsens
+               - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
+               - qcom,sdm845-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
