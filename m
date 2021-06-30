@@ -2,135 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 737A73B87D5
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 19:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BB63B87F0
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 19:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbhF3RoB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 13:44:01 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:40782 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbhF3RoB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 13:44:01 -0400
-Received: by mail-ot1-f43.google.com with SMTP id d21-20020a9d72d50000b02904604cda7e66so3535506otk.7;
-        Wed, 30 Jun 2021 10:41:32 -0700 (PDT)
+        id S229573AbhF3Rtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 13:49:52 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:35535 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231879AbhF3Rtw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 13:49:52 -0400
+Received: by mail-ot1-f41.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so3596275oti.2;
+        Wed, 30 Jun 2021 10:47:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WuoWABrkilomkOA5uB95Bfp7IioH6BpIGGeWdbIgIzE=;
-        b=WzzXCUx0RpQ8iwzaqeTR+ME8b1QmkTO+61R67JTfPb0jQZr7+ZpTGrWTk6v+Q2ici7
-         oSoz3b/R7Oxs/2ydKZiT0hI9VEvF4nY6fYlLxdEonfSs2xQfE7zKSxFzS/z7410eKvwZ
-         j3pRbYvEPjK2QnBOS6pOuno5ayNQ6F7g/o5FdYgycQh9P/kJjxMR5+H0Ws3xEVeRmYE7
-         wE1DyFDg8jDpZZuNUPq0ncuveZwQmckbHbMCtE14R3sBGoBZZygoQ4zArVF3ExA6F7Ac
-         9wDNRqzkU7dsRYNY0N1swZLOgihPa5HEe8taffPLnEdiCUEEqfxViDnVuNlHC1B4bNZf
-         erqA==
-X-Gm-Message-State: AOAM5329YmIOn0X2QYTGKVyfPOn4iCnQTkKr9hrWePuU538sDG6DuxXn
-        H3dHlU0EkU10yJia10SpsFnbNd1mWGzKha7HqD8z5y71
-X-Google-Smtp-Source: ABdhPJxNcVyWVlpPEYsRHXT4kE9Adn2eAGiw5uJ3MGDwUdILM7IzPFy4Lwat9pHW6IU+Ld0yyq+k0MloSd6s8FBsQ1s=
-X-Received: by 2002:a9d:674b:: with SMTP id w11mr10055713otm.260.1625074891758;
- Wed, 30 Jun 2021 10:41:31 -0700 (PDT)
+        bh=r0XgWyFZDrmT/H0aoUSBhg+ke5B0GhsrurcaFTIWJWQ=;
+        b=DIj/s5WKke38+rGSrav7A+0xNRsurLT0qPjU19wmOEhStqT3u7ajm0acmQs/kScNYO
+         HgHegaIEz0DmAXwe6bt+x19RcutPhKBYsyjuroR4yF0HO0vzgUH4xW9110RL681gCEh3
+         N2FdCxxCWRlv1s1oq1qiG8YyLK4IZPpHbTyvUfVY6paji0cmsUSeXg3GehXUgPzvek6Z
+         mAbzA3+SkBQb2omOcciNfYrJ2+IerrTYPurrvwIo9cGBGTu7UJO8sjG7gedaABgThpE6
+         NK+KTkM/T2n9ztZX8eZGUkMfm/EQ3UZ2OPtd7Ya3oepUTrtL39uZbAbXWLk+Q6MbK7xR
+         ML3A==
+X-Gm-Message-State: AOAM533k7ql6a7mv3ZwqALyVXiU1ueTOooU8MCsZQaDxT+w4O+KvDMxK
+        CmkYrUU8dHytKjqKXTPJZv9Y90/7hKU4ZejxjPc=
+X-Google-Smtp-Source: ABdhPJxwWx3tmHzoPh1fZYoh1qm2eKe3SjYZVp6OnZReK4+cCy5BZhr8KFdCe1G9B8A8eDU02bWfBgs6KW1bsk0/3uQ=
+X-Received: by 2002:a9d:674b:: with SMTP id w11mr10076387otm.260.1625075241865;
+ Wed, 30 Jun 2021 10:47:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210624084403.1163-1-wjc@cdjrlc.com>
-In-Reply-To: <20210624084403.1163-1-wjc@cdjrlc.com>
+References: <b5ac439050ab3c5b92621e20490fe7f46d631ef6.1624946983.git.viresh.kumar@linaro.org>
+In-Reply-To: <b5ac439050ab3c5b92621e20490fe7f46d631ef6.1624946983.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Jun 2021 19:41:21 +0200
-Message-ID: <CAJZ5v0h9Nx-u0U5O1hp1-BzzKXMVd3UO5BuGH6oc95aXQeu=ag@mail.gmail.com>
-Subject: Re: [PATCH] powercap: Replace symbolic permissions with octal permissions
-To:     Jinchao Wang <wjc@cdjrlc.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Wed, 30 Jun 2021 19:47:11 +0200
+Message-ID: <CAJZ5v0hwJwO4F3xJM697Y2SHfoPQ8PCgZNfG7WHHynGoqCZW_g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: Reuse cpufreq_driver_resolve_freq() in __cpufreq_driver_target()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        TungChen Shih <tung-chen.shih@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 10:44 AM Jinchao Wang <wjc@cdjrlc.com> wrote:
+On Tue, Jun 29, 2021 at 8:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Resolve following checkpatch issue,
-> Replace symbolic permissions with octal permissions
-
-I don't see much value in this replacement and checkpatch complaining
-about the existing code base is not something to worry about in
-general.
-
-> Signed-off-by: Jinchao Wang <wjc@cdjrlc.com>
+> __cpufreq_driver_target() open codes cpufreq_driver_resolve_freq(), lets
+> make the former reuse the later.
+>
+> Separate out __resolve_freq() to accept relation as well as an argument
+> and use it at both the locations.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/powercap/powercap_sys.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+>  drivers/cpufreq/cpufreq.c | 42 ++++++++++++++++++++-------------------
+>  1 file changed, 22 insertions(+), 20 deletions(-)
 >
-> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-> index f0654a932b37..e706548c59bb 100644
-> --- a/drivers/powercap/powercap_sys.c
-> +++ b/drivers/powercap/powercap_sys.c
-> @@ -223,46 +223,46 @@ static int seed_constraint_attributes(void)
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 802abc925b2a..d691c6c97c79 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -524,19 +524,8 @@ void cpufreq_disable_fast_switch(struct cpufreq_policy *policy)
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_disable_fast_switch);
 >
->         for (i = 0; i < MAX_CONSTRAINTS_PER_ZONE; ++i) {
->                 ret = create_constraint_attribute(i, "power_limit_uw",
-> -                                       S_IWUSR | S_IRUGO,
-> +                                       0644,
->                                         &constraint_attrs[i].power_limit_attr,
->                                         show_constraint_power_limit_uw,
->                                         store_constraint_power_limit_uw);
->                 if (ret)
->                         goto err_alloc;
->                 ret = create_constraint_attribute(i, "time_window_us",
-> -                                       S_IWUSR | S_IRUGO,
-> +                                       0644,
->                                         &constraint_attrs[i].time_window_attr,
->                                         show_constraint_time_window_us,
->                                         store_constraint_time_window_us);
->                 if (ret)
->                         goto err_alloc;
-> -               ret = create_constraint_attribute(i, "name", S_IRUGO,
-> +               ret = create_constraint_attribute(i, "name", 0444,
->                                 &constraint_attrs[i].name_attr,
->                                 show_constraint_name,
->                                 NULL);
->                 if (ret)
->                         goto err_alloc;
-> -               ret = create_constraint_attribute(i, "max_power_uw", S_IRUGO,
-> +               ret = create_constraint_attribute(i, "max_power_uw", 0444,
->                                 &constraint_attrs[i].max_power_attr,
->                                 show_constraint_max_power_uw,
->                                 NULL);
->                 if (ret)
->                         goto err_alloc;
-> -               ret = create_constraint_attribute(i, "min_power_uw", S_IRUGO,
-> +               ret = create_constraint_attribute(i, "min_power_uw", 0444,
->                                 &constraint_attrs[i].min_power_attr,
->                                 show_constraint_min_power_uw,
->                                 NULL);
->                 if (ret)
->                         goto err_alloc;
->                 ret = create_constraint_attribute(i, "max_time_window_us",
-> -                               S_IRUGO,
-> +                               0444,
->                                 &constraint_attrs[i].max_time_window_attr,
->                                 show_constraint_max_time_window_us,
->                                 NULL);
->                 if (ret)
->                         goto err_alloc;
->                 ret = create_constraint_attribute(i, "min_time_window_us",
-> -                               S_IRUGO,
-> +                               0444,
->                                 &constraint_attrs[i].min_time_window_attr,
->                                 show_constraint_min_time_window_us,
->                                 NULL);
-> @@ -366,9 +366,9 @@ static void create_power_zone_common_attributes(
->                                         &dev_attr_max_energy_range_uj.attr;
->         if (power_zone->ops->get_energy_uj) {
->                 if (power_zone->ops->reset_energy_uj)
-> -                       dev_attr_energy_uj.attr.mode = S_IWUSR | S_IRUSR;
-> +                       dev_attr_energy_uj.attr.mode = 0600;
->                 else
-> -                       dev_attr_energy_uj.attr.mode = S_IRUSR;
-> +                       dev_attr_energy_uj.attr.mode = 0400;
->                 power_zone->zone_dev_attrs[count++] =
->                                         &dev_attr_energy_uj.attr;
+> -/**
+> - * cpufreq_driver_resolve_freq - Map a target frequency to a driver-supported
+> - * one.
+> - * @policy: associated policy to interrogate
+> - * @target_freq: target frequency to resolve.
+> - *
+> - * The target to driver frequency mapping is cached in the policy.
+> - *
+> - * Return: Lowest driver-supported frequency greater than or equal to the
+> - * given target_freq, subject to policy (min/max) and driver limitations.
+> - */
+> -unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+> -                                        unsigned int target_freq)
+> +static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+> +               unsigned int target_freq, unsigned int relation)
+>  {
+>         target_freq = clamp_val(target_freq, policy->min, policy->max);
+>         policy->cached_target_freq = target_freq;
+> @@ -545,7 +534,7 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+>                 unsigned int idx;
+>
+>                 idx = cpufreq_frequency_table_target(policy, target_freq,
+> -                                                    CPUFREQ_RELATION_L);
+> +                                                    relation);
+>                 policy->cached_resolved_idx = idx;
+>                 return policy->freq_table[idx].frequency;
 >         }
+> @@ -555,6 +544,23 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+>
+>         return target_freq;
+>  }
+> +
+> +/**
+> + * cpufreq_driver_resolve_freq - Map a target frequency to a driver-supported
+> + * one.
+> + * @policy: associated policy to interrogate
+> + * @target_freq: target frequency to resolve.
+> + *
+> + * The target to driver frequency mapping is cached in the policy.
+> + *
+> + * Return: Lowest driver-supported frequency greater than or equal to the
+> + * given target_freq, subject to policy (min/max) and driver limitations.
+> + */
+> +unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+> +                                        unsigned int target_freq)
+> +{
+> +       return __resolve_freq(policy, target_freq, CPUFREQ_RELATION_L);
+> +}
+>  EXPORT_SYMBOL_GPL(cpufreq_driver_resolve_freq);
+>
+>  unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> @@ -2225,13 +2231,11 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
+>                             unsigned int relation)
+>  {
+>         unsigned int old_target_freq = target_freq;
+> -       int index;
+>
+>         if (cpufreq_disabled())
+>                 return -ENODEV;
+>
+> -       /* Make sure that target_freq is within supported range */
+> -       target_freq = clamp_val(target_freq, policy->min, policy->max);
+> +       target_freq = __resolve_freq(policy, target_freq, relation);
+>
+>         pr_debug("target for CPU %u: %u kHz, relation %u, requested %u kHz\n",
+>                  policy->cpu, target_freq, relation, old_target_freq);
+> @@ -2252,9 +2256,7 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
+>         if (!cpufreq_driver->target_index)
+>                 return -EINVAL;
+>
+> -       index = cpufreq_frequency_table_target(policy, target_freq, relation);
+> -
+> -       return __target_index(policy, index);
+> +       return __target_index(policy, policy->cached_resolved_idx);
+>  }
+>  EXPORT_SYMBOL_GPL(__cpufreq_driver_target);
+>
 > --
-> 2.31.1
->
->
->
+
+Applied as 5.14-rc1 material along with the [2/2], thanks!
