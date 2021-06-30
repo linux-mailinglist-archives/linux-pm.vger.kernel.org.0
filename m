@@ -2,218 +2,293 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CD03B7B57
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 03:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18D13B7B7D
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 04:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhF3BkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Jun 2021 21:40:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:47623 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230033AbhF3BkI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Jun 2021 21:40:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10030"; a="206448856"
-X-IronPort-AV: E=Sophos;i="5.83,310,1616482800"; 
-   d="scan'208";a="206448856"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 18:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,310,1616482800"; 
-   d="scan'208";a="558134934"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Jun 2021 18:37:38 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lyPAY-0009Tf-6J; Wed, 30 Jun 2021 01:37:38 +0000
-Date:   Wed, 30 Jun 2021 09:36:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- e132b9a1079c9a25ae896d443b0eca1b272b5f5b
-Message-ID: <60dbcaae.BXdivaVhXNyA6ZcM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232386AbhF3C1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Jun 2021 22:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232430AbhF3C1n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Jun 2021 22:27:43 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA4BC061766
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 19:25:13 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id j14so328508qvu.6
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jun 2021 19:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7/he0D2loD88b1uHUtFHjQmeUSldqVtd/Mp90qGy3EA=;
+        b=RImqw0cKz7BmgX+9mMv6XaNVNbPZx7DRNvr9PTn6Eb3NzLxmdk8t5yodds2pOd/kDR
+         6uMiE7xLgXKWT4eJiegqQTUKTKxaPEnrZ7XNYV76cc18DqKEKk/CEFyS8laD5nf7/gLw
+         f/FV/ROdstuT+g+ibEaHrPyuz4BS3W+SUnTLm6eSvYKmXcpvVfiHYZclKMRhXgvg4lSP
+         QS3iVZTlV42v3bQsXl00zlPcanoNzE36toD7U0baH58CC4EmH7u7T3/2kWU6FFjA/RPb
+         sbEDidgiJ8/z6VfPkAnDV7wBocMD98/p1iNuunSvoxx3KeNiLyaUUUQ2y9Q3l9Y4iboH
+         TyoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7/he0D2loD88b1uHUtFHjQmeUSldqVtd/Mp90qGy3EA=;
+        b=Y3YV6TMrLjlxozBr5HC8J6V53zNvLF2a3z4hEGTocdt1upMbSQAWvd5h3kAx/by3AT
+         BvLwO9SDOuhP/BnO86Tq3h7HPdE/1Fj6f8EHEhh2jEtacsjM6IxWUVnr+HDXjam5KMT6
+         FMGQD+06rCx5brHLceb8gH+rkYWkKPcutHNShD3Y/UsNInKT9NdpEvIfjYiVdACUWSjB
+         7g1kS2kK1hOidRMMHwjf0yAmpwmepYIfwxnckObMExe8E6TzGUvXk5TCXDvZ0ApsCe1E
+         oDbBDnwqBWpxLdpU5OfHkSDVV5I3PO7LJfscwh9r+e00Sh/Dw13usD4aAT7zVafuIah6
+         e7ow==
+X-Gm-Message-State: AOAM5328/QFqQpD39WkrOyfHPeXqj+EPNKta4FFRf1MW2sqKAQ8Qjkpl
+        GFHzMrTHKjaAUBZ+6laY73utSQ==
+X-Google-Smtp-Source: ABdhPJwQrRY8wFTGdC9bM760IH5q68es5ECl1z6SPztmY4LvhVh5u5FunECPUpQepqoPHzHjk0DAiw==
+X-Received: by 2002:a0c:ffa2:: with SMTP id d2mr34967988qvv.50.1625019912758;
+        Tue, 29 Jun 2021 19:25:12 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id x28sm10838945qtm.71.2021.06.29.19.25.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jun 2021 19:25:12 -0700 (PDT)
+Subject: Re: [Patch v2 3/5] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
+ support
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210624115813.3613290-1-thara.gopinath@linaro.org>
+ <20210624115813.3613290-4-thara.gopinath@linaro.org>
+ <20210629023556.v3u4hdye5ojolubq@vireshk-i7>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5d194c91-e557-e5f5-60d6-ad2b1ca2def4@linaro.org>
+Date:   Tue, 29 Jun 2021 22:25:10 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20210629023556.v3u4hdye5ojolubq@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e132b9a1079c9a25ae896d443b0eca1b272b5f5b  Merge branch 'pm-opp' into linux-next
 
-elapsed time: 730m
 
-configs tested: 159
-configs skipped: 4
+On 6/28/21 10:35 PM, Viresh Kumar wrote:
+> On 24-06-21, 07:58, Thara Gopinath wrote:
+>> Add interrupt support to notify the kernel of h/w initiated frequency
+>> throttling by LMh. Convey this to scheduler via thermal presssure
+>> interface.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>
+>> v1->v2:
+>> 	- Introduced qcom_cpufreq_hw_lmh_init to consolidate LMh related initializations
+>> 	  as per Viresh's review comment.
+>> 	- Moved the piece of code restarting polling/re-enabling LMh interrupt to
+>> 	  qcom_lmh_dcvs_notify therby simplifying isr and timer callback as per Viresh's
+>> 	  suggestion.
+>> 	- Droped cpus from qcom_cpufreq_data and instead using cpus from cpufreq_policy in
+>> 	  qcom_lmh_dcvs_notify as per Viresh's review comment.
+>> 	- Dropped dt property qcom,support-lmh as per Bjorn's suggestion.
+>> 	- Other minor/cosmetic fixes
+>>
+>>   drivers/cpufreq/qcom-cpufreq-hw.c | 103 ++++++++++++++++++++++++++++++
+>>   1 file changed, 103 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> index f86859bf76f1..241f6f2b441f 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> @@ -13,6 +13,7 @@
+>>   #include <linux/of_platform.h>
+>>   #include <linux/pm_opp.h>
+>>   #include <linux/slab.h>
+>> +#include <linux/interrupt.h>
+> 
+> Please don't break the alphabetical order here.
+> 
+>>   #define LUT_MAX_ENTRIES			40U
+>>   #define LUT_SRC				GENMASK(31, 30)
+>> @@ -22,10 +23,13 @@
+>>   #define CLK_HW_DIV			2
+>>   #define LUT_TURBO_IND			1
+>>   
+>> +#define HZ_PER_KHZ			1000
+>>
+>>   struct qcom_cpufreq_soc_data {
+>>   	u32 reg_enable;
+>>   	u32 reg_freq_lut;
+>>   	u32 reg_volt_lut;
+>> +	u32 reg_current_vote;
+>>   	u32 reg_perf_state;
+>>   	u8 lut_row_size;
+>>   };
+>> @@ -33,7 +37,10 @@ struct qcom_cpufreq_soc_data {
+>>   struct qcom_cpufreq_data {
+>>   	void __iomem *base;
+>>   	struct resource *res;
+>> +	struct delayed_work lmh_dcvs_poll_work;
+>>   	const struct qcom_cpufreq_soc_data *soc_data;
+>> +	struct cpufreq_policy *policy;
+>> +	int lmh_dcvs_irq;
+>>   };
+>>   
+>>   static unsigned long cpu_hw_rate, xo_rate;
+>> @@ -251,10 +258,79 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
+>>   	}
+>>   }
+>>   
+>> +static inline unsigned long qcom_lmh_vote_to_freq(u32 val)
+>> +{
+>> +	return (val & 0x3FF) * 19200;
+>> +}
+>> +
+>> +static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>> +{
+>> +	struct cpufreq_policy *policy = data->policy;
+>> +	struct dev_pm_opp *opp;
+>> +	struct device *dev;
+>> +	unsigned long max_capacity, capacity, freq_hz, throttled_freq;
+>> +	unsigned int val, freq;
+>> +
+>> +	/*
+>> +	 * Get the h/w throttled frequency, normalize it using the
+>> +	 * registered opp table and use it to calculate thermal pressure.
+>> +	 */
+>> +	val = readl_relaxed(data->base + data->soc_data->reg_current_vote);
+>> +	freq = qcom_lmh_vote_to_freq(val);
+>> +	freq_hz = freq * HZ_PER_KHZ;
+>> +
+>> +	dev = get_cpu_device(cpumask_first(policy->cpus));
+>> +	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
+>> +	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
+>> +		opp = dev_pm_opp_find_freq_ceil(dev, &freq_hz);
+>> +
+>> +	throttled_freq = freq_hz / HZ_PER_KHZ;
+>> +
+>> +	/* Update thermal pressure */
+>> +	max_capacity = arch_scale_cpu_capacity(cpumask_first(policy->cpus));
+>> +	capacity = throttled_freq * max_capacity;
+>> +	capacity /= policy->cpuinfo.max_freq;
+>> +	/* Don't pass boost capacity to scheduler */
+>> +	if (capacity > max_capacity)
+>> +		capacity = max_capacity;
+> 
+> I wonder why this check isn't present for cpufreq_cooling.c .
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Hi Viresh,
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-ia64                             allyesconfig
-arm                         at91_dt_defconfig
-arm                       imx_v6_v7_defconfig
-ia64                         bigsur_defconfig
-powerpc                     mpc512x_defconfig
-mips                         tb0219_defconfig
-mips                         db1xxx_defconfig
-sh                               j2_defconfig
-arm                          badge4_defconfig
-powerpc                        icon_defconfig
-sh                     magicpanelr2_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc64                           defconfig
-mips                            gpr_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                      pcm030_defconfig
-arm                            qcom_defconfig
-arm                           sama5_defconfig
-sh                            titan_defconfig
-mips                     loongson1c_defconfig
-ia64                        generic_defconfig
-arm                         hackkit_defconfig
-m68k                        m5307c3_defconfig
-powerpc                      mgcoge_defconfig
-powerpc                     skiroot_defconfig
-arm                      integrator_defconfig
-arc                          axs101_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc                    gamecube_defconfig
-arm                           sunxi_defconfig
-arm                         cm_x300_defconfig
-powerpc                      obs600_defconfig
-arm                        keystone_defconfig
-arm                          exynos_defconfig
-openrisc                 simple_smp_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                      ep88xc_defconfig
-ia64                          tiger_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                     tqm8548_defconfig
-arm                      jornada720_defconfig
-powerpc                      bamboo_defconfig
-x86_64                           alldefconfig
-mips                           ci20_defconfig
-arc                     nsimosci_hs_defconfig
-arm                         nhk8815_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                            zeus_defconfig
-riscv                    nommu_k210_defconfig
-arc                         haps_hs_defconfig
-powerpc                     tqm8540_defconfig
-mips                           gcw0_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-mips                            ar7_defconfig
-riscv                    nommu_virt_defconfig
-arm                          moxart_defconfig
-arm                         s5pv210_defconfig
-arm                         s3c2410_defconfig
-h8300                            allyesconfig
-sh                         apsh4a3a_defconfig
-csky                                defconfig
-powerpc                   currituck_defconfig
-arm                       mainstone_defconfig
-openrisc                            defconfig
-arm                           tegra_defconfig
-mips                      loongson3_defconfig
-powerpc                     powernv_defconfig
-sh                           se7751_defconfig
-mips                        qi_lb60_defconfig
-powerpc                     pseries_defconfig
-powerpc                       eiger_defconfig
-powerpc                      chrp32_defconfig
-mips                         tb0226_defconfig
-h8300                            alldefconfig
-powerpc                     asp8347_defconfig
-powerpc                       holly_defconfig
-x86_64                            allnoconfig
-arm                        spear3xx_defconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210628
-i386                 randconfig-a002-20210628
-i386                 randconfig-a003-20210628
-i386                 randconfig-a006-20210628
-i386                 randconfig-a005-20210628
-i386                 randconfig-a004-20210628
-i386                 randconfig-a002-20210629
-i386                 randconfig-a001-20210629
-i386                 randconfig-a003-20210629
-i386                 randconfig-a006-20210629
-i386                 randconfig-a005-20210629
-i386                 randconfig-a004-20210629
-x86_64               randconfig-a012-20210628
-x86_64               randconfig-a016-20210628
-x86_64               randconfig-a015-20210628
-x86_64               randconfig-a013-20210628
-x86_64               randconfig-a014-20210628
-x86_64               randconfig-a011-20210628
-i386                 randconfig-a011-20210628
-i386                 randconfig-a014-20210628
-i386                 randconfig-a013-20210628
-i386                 randconfig-a015-20210628
-i386                 randconfig-a016-20210628
-i386                 randconfig-a012-20210628
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+I don't think cpufreq_cooling recognizes boost frequencies. The max 
+state there is the max of nominal frequencies , right? If not, it might 
+be a good idea to add this check there as well.
 
-clang tested configs:
-x86_64               randconfig-b001-20210628
-x86_64               randconfig-a002-20210628
-x86_64               randconfig-a005-20210628
-x86_64               randconfig-a001-20210628
-x86_64               randconfig-a003-20210628
-x86_64               randconfig-a004-20210628
-x86_64               randconfig-a006-20210628
+I will fix rest of your comments in v3.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Warm Regards
+Thara (She/Her/Hers)
+
+> 
+>> +	arch_set_thermal_pressure(policy->cpus, max_capacity - capacity);
+>> +	/*
+> 
+> Whenever you mix code and comments, please separate them with a blank
+> line, else it becomes a bit messy and harder to read.
+> 
+>> +	 * If h/w throttled frequency is higher than what cpufreq has requested for, stop
+>> +	 * polling and switch back to interrupt mechanism
+>> +	 */
+>> +	if (throttled_freq >= qcom_cpufreq_hw_get(cpumask_first(policy->cpus)))
+>> +		/* Clear the existing interrupts and enable it back */
+>> +		enable_irq(data->lmh_dcvs_irq);
+>> +	else
+>> +		mod_delayed_work(system_highpri_wq, &data->lmh_dcvs_poll_work,
+>> +				 msecs_to_jiffies(10));
+>> +}
+>> +
+>> +static void qcom_lmh_dcvs_poll(struct work_struct *work)
+>> +{
+>> +	struct qcom_cpufreq_data *data;
+>> +
+>> +	data = container_of(work, struct qcom_cpufreq_data, lmh_dcvs_poll_work.work);
+>> +
+>> +	qcom_lmh_dcvs_notify(data);
+>> +}
+>> +
+>> +static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
+>> +{
+>> +	struct qcom_cpufreq_data *c_data = data;
+>> +
+>> +	/* Disable interrupt and enable polling */
+>> +	disable_irq_nosync(c_data->lmh_dcvs_irq);
+>> +	qcom_lmh_dcvs_notify(c_data);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static const struct qcom_cpufreq_soc_data qcom_soc_data = {
+>>   	.reg_enable = 0x0,
+>>   	.reg_freq_lut = 0x110,
+>>   	.reg_volt_lut = 0x114,
+>> +	.reg_current_vote = 0x704,
+>>   	.reg_perf_state = 0x920,
+>>   	.lut_row_size = 32,
+>>   };
+>> @@ -274,6 +350,23 @@ static const struct of_device_id qcom_cpufreq_hw_match[] = {
+>>   };
+>>   MODULE_DEVICE_TABLE(of, qcom_cpufreq_hw_match);
+>>   
+>> +static void qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy)
+>> +{
+>> +	struct qcom_cpufreq_data *data = policy->driver_data;
+>> +	struct platform_device *pdev = cpufreq_get_driver_data();
+>> +	struct device *dev = &pdev->dev;
+>> +	int ret;
+>> +
+>> +	ret = devm_request_irq(dev, data->lmh_dcvs_irq, qcom_lmh_dcvs_handle_irq,
+>> +			       0, "dcvsh-irq", data);
+>> +	if (ret) {
+>> +		dev_err(dev, "Error %d registering irq %x\n", ret, data->lmh_dcvs_irq);
+>> +		return;
+>> +	}
+>> +	data->policy = policy;
+>> +	INIT_DEFERRABLE_WORK(&data->lmh_dcvs_poll_work, qcom_lmh_dcvs_poll);
+>> +}
+>> +
+>>   static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>>   {
+>>   	struct platform_device *pdev = cpufreq_get_driver_data();
+>> @@ -370,6 +463,16 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>>   			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
+>>   	}
+>>   
+>> +	/* Look for LMh interrupt. If no interrupt line is specified /
+>> +	 * if there is an error, allow cpufreq to be enabled as usual.
+>> +	 */
+> 
+> Proper comment style please..
+> 
+>> +	data->lmh_dcvs_irq = platform_get_irq(pdev, index);
+>> +	if (data->lmh_dcvs_irq > 0) {
+>> +		qcom_cpufreq_hw_lmh_init(policy);
+>> +	} else if (data->lmh_dcvs_irq != -ENXIO) {
+>> +		ret = data->lmh_dcvs_irq;
+>> +		goto error;
+>> +	}
+> 
+> Move all of this to qcom_cpufreq_hw_lmh_init().
+> 
+> And I don't see any cleanup for this stuff. There is no guarantee that
+> the irq won't fire and queue up a work right after cpufreq driver is
+> unregistered and before the devm_ stuff gets released.
+> 
+>>   	return 0;
+>>   error:
+>>   	kfree(data);
+>> -- 
+>> 2.25.1
+> 
+
+
