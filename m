@@ -2,93 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6423B8001
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8533B80F0
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jun 2021 12:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbhF3Jdf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 05:33:35 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:59564 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbhF3Jde (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 05:33:34 -0400
-Date:   Wed, 30 Jun 2021 09:31:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1625045464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sn9tO8Zd2lyDWREqSHXe4v4qiKW+J4hrHo8Ee4D3Sps=;
-        b=4Sz6TaBLgmBpDUHsaOJ1+ajLJ9vadWZd9jX5XrMLDebopOMERpQaMhE4eIgnfmx7NOZU2Q
-        mqrv4Tw5crG7s7pjPTBf1nOHtu4azWB9yeCDdO1t8FeKpbrrwAWwgpI9ynPdpMJNsshpPT
-        SYzUmoO4Cma4bFAoo8UpIEpbWF6YAcy3GiLFJ83fVHaFthgy5n+Df31YMvdbFkDdPvBct1
-        Tvxnw3sPn6s+DSWU1FDT46hwq/rDCbojLRngN0TyIzsQq276vhqpvqL0iPgMchMDVgCuFs
-        HTl97URm+Sn5vKWNPKX8ajncBdNtdiDzPBWsR1FfE+dlMB5prfHxZUAtQmv1Aw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1625045464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sn9tO8Zd2lyDWREqSHXe4v4qiKW+J4hrHo8Ee4D3Sps=;
-        b=snZTcQNw2A5c5CJwcNu5UDeGcZkAuMMGlu1dVgAGAlPQ0uRZvAG9pnc3FWNwhE0i9oy0Oa
-        Q6pzY1L5r2suD9Ag==
-From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: tsens: Add sc8180x compatible
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
-References: <20210608201638.2136344-1-bjorn.andersson@linaro.org>
+        id S232904AbhF3KuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 06:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229882AbhF3KuE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 06:50:04 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9304C061756;
+        Wed, 30 Jun 2021 03:47:35 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f12c30098bf4c52f71fbadd.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:c300:98bf:4c52:f71f:badd])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2ACFC1EC0391;
+        Wed, 30 Jun 2021 12:47:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1625050052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TkZy/QD833ha13+1IsV4q1qSizeGPCgUyVXoEPrETa0=;
+        b=C7pdnqFEEK2T/fX3doHU2H9dhnWElzyZdk6lcxAG+/mRWm8i09G0hU8kCbGoGnByP06lAr
+        h1BYRT350UhDMxencZmZJoJ0M5pwZ+y7jovHlmtW70GzdER3tSh/FjBqeIyVCE6dZnMjZ7
+        RT3mcw55i6niPEBe1YSU/1K/fWdgwVc=
+Date:   Wed, 30 Jun 2021 12:47:26 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Erik Kaneda <erik.kaneda@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] ACPI updates for v5.14-rc1
+Message-ID: <YNxLvhBBE7Ff6Q5u@zn.tnic>
+References: <CAJZ5v0hm5ihfU_hBbMB9u7SmH18PLGp6+Z6=wBLa8WxaVQRTpg@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <162504546412.395.16858670632126215451.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hm5ihfU_hBbMB9u7SmH18PLGp6+Z6=wBLa8WxaVQRTpg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Tue, Jun 29, 2021 at 09:01:10PM +0200, Rafael J. Wysocki wrote:
+> Erik Kaneda (6):
+>       ACPICA: Fix memory leak caused by _CID repair function
+>       ACPICA: iASL: add disassembler support for PRMT
+>       ACPICA: Add support for PlatformRtMechanism OperationRegion handler
+>       ACPICA: Add PRMT module header to facilitate parsing
+>       ACPI: PRM: implement OperationRegion handler for the
+> PlatformRtMechanism subtype
 
-Commit-ID:     b0abe16a26f7c79dcbee05b4eb18b590a8f625d9
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//b0abe16a26f7c79dcbee05b4eb18b590a8f625d9
-Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
-AuthorDate:    Tue, 08 Jun 2021 13:16:38 -07:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 21 Jun 2021 13:43:36 +02:00
+$ git checkout master
+$ git pull
+$ make oldconfig
 
-dt-bindings: thermal: tsens: Add sc8180x compatible
+Platform Runtime Mechanism Support (ACPI_PRMT) [Y/n/?] (NEW) ?
 
-The Qualcomm sc8180x platform has the usual tsens blocks, add compatible
-for this.
+There is no help available for this option.
+Symbol: ACPI_PRMT [=y]
+Type  : bool
+Defined at drivers/acpi/Kconfig:547
+  Prompt: Platform Runtime Mechanism Support
+  Depends on: EFI [=y] && X86_64 [=y]
+  Location:
+    -> Power management and ACPI options
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210608201638.2136344-1-bjorn.andersson@linaro.org
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 0d4cfe0..ccf70dd 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -47,6 +47,7 @@ properties:
-               - qcom,msm8998-tsens
-               - qcom,sc7180-tsens
-               - qcom,sc7280-tsens
-+              - qcom,sc8180x-tsens
-               - qcom,sdm845-tsens
-               - qcom,sm8150-tsens
-               - qcom,sm8250-tsens
+
+Platform Runtime Mechanism Support (ACPI_PRMT) [Y/n/?] (NEW)
+
+I don't know what that means, there's no help, no nothing. And it is
+default y for no apparent reason.
+
+/me looks at the commit message:
+
+    Platform Runtime Mechanism (PRM) is a firmware interface that exposes
+    a set of binary executables that can either be called from the AML
+    interpreter or device drivers by bypassing the AML interpreter.
+    This change implements the AML interpreter path.
+
+I'm still unclear whether I need it or not.
+
+Guys, you need to think about your users and to write help text which is
+*actually* usable for people who do not deal with ACPI firmware gunk.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
