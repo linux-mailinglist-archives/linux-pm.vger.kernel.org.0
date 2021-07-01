@@ -2,150 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 497B43B8DA8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 08:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107C13B9055
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 12:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbhGAGQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jul 2021 02:16:58 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63562 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234116AbhGAGQ6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 1 Jul 2021 02:16:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10031"; a="294114634"
-X-IronPort-AV: E=Sophos;i="5.83,313,1616482800"; 
-   d="scan'208";a="294114634"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 23:14:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,313,1616482800"; 
-   d="scan'208";a="408820952"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jun 2021 23:14:26 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lypxx-000AL7-Sc; Thu, 01 Jul 2021 06:14:25 +0000
-Date:   Thu, 01 Jul 2021 14:13:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 54e91db567d8a20a43770821fb3e61f29f82b625
-Message-ID: <60dd5d13.nPxop5C2CWI96YnH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236002AbhGAKKH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jul 2021 06:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235995AbhGAKKG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 06:10:06 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF4CC061756
+        for <linux-pm@vger.kernel.org>; Thu,  1 Jul 2021 03:07:35 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id j8so3524485vsd.0
+        for <linux-pm@vger.kernel.org>; Thu, 01 Jul 2021 03:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fsy59JmCVg9wIRw553TU269kL3+xAeRU1nsYXjldgz4=;
+        b=JnRpdDxD1A2yN+SDzUAogsCY8SQBxlyvdSAo58DVfzL48Mb/U4nEBE2JBiBdd37kXi
+         GVgaPPMNSaYcu+WOoBCDJeBByUqEhXzTiN8upY9/5SIL4VFgFrTDS9ZIKPw5eOjOJ+ay
+         rq9z4CQ8nuiNHfhWGhL3BUO3P28Q0nuXTv1KCZC/PMeh6GrCfXWNg1V3tEPTpL4tum+/
+         41dLUHQRR09RSoLOfTOVxpX9S75pxC3kqiUoKjBIkQDGvJYci5TUxQrhHJbk+/0GDWYB
+         Bn+MovDBNvRMARAE7Aws6ixtJCAjFMxHMOFBKGHuTySMjqnhLBX7mmd6T4VQCqE9xaHk
+         c0tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fsy59JmCVg9wIRw553TU269kL3+xAeRU1nsYXjldgz4=;
+        b=B8MxHPINf3RaG1sYT7/bI4C9ejYefydyWayQh7GtaQgNFTPfCBM1NHDXujFBovGK7G
+         gC5T7Ii4pUiox0/nXgoixlD6yPwr7zDAC6thaJqTrrQy7C1TJS/4y033nCAiSmCiFhzd
+         sfkX05BlD8CaygOLzaz5srBkELD+gNDSZsyuHG4JAjnT7195OBOUrDv/fpdlkfUIhLal
+         uwz6ERLp9F4AbIfTlJtDUtdGS3VRHuEb8OwuLNIMznhbOI24kpcGxSDB5ct/FqLUObKv
+         wX5LKFX3l09JfafljaR+4+qiqSxrv6xwvr1WZtrhf348MdnFQN3JSuKKMjDpHP0GAE8i
+         /LSA==
+X-Gm-Message-State: AOAM530cAZW0NDu/joBHprK76jR5DoLkBvqKg20Z2IpkFSIvnQZEK1/B
+        /pwhSchAcWyusnF/qWLLBYqgsALQZ/Cx1PRsimFyLw==
+X-Google-Smtp-Source: ABdhPJynxTlvIaBrgDAuYwMcsngknZHO/5b3IKWexZ/Up/Sftfl9DWWzjkELrV3hfTDdaO9jAPUy1vxrTdZL3nE4/ws=
+X-Received: by 2002:a05:6102:502:: with SMTP id l2mr36934693vsa.19.1625134054938;
+ Thu, 01 Jul 2021 03:07:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20210611101540.3379937-1-dmitry.baryshkov@linaro.org>
+ <20210611101540.3379937-3-dmitry.baryshkov@linaro.org> <CAPDyKFo5mUZZcPum9A5mniYSsbG2KBxqw628M622FaP+piG=Pw@mail.gmail.com>
+ <CAA8EJprSj8FUuHkFUcinrbfd3oukeLqOivWianBrnt_9Si8ZRQ@mail.gmail.com>
+ <CAPDyKFoMC_7kJx_Wb4LKgxvRCoqHYFtwsJ2b7Cr4OvjA94DtHg@mail.gmail.com>
+ <YMjNaM0z+OzhAeO/@yoga> <CAPDyKFo_eNwEx5rryg3bHt_-pxBeeYfVrUZuTOHoL-x94LBwDA@mail.gmail.com>
+ <c6e99362-56c1-f2bd-7170-7b001e0f96fe@linaro.org> <YNs3q0HI1WKrKOXx@yoga>
+In-Reply-To: <YNs3q0HI1WKrKOXx@yoga>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 1 Jul 2021 12:06:58 +0200
+Message-ID: <CAPDyKFqSwPn7wUXB9mayT78hshDFBK+DO7cqbmZRjXNAJDQfZw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: domain: use per-genpd lockdep class
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 54e91db567d8a20a43770821fb3e61f29f82b625  Merge branch 'acpi-video' into bleeding-edge
+On Tue, 29 Jun 2021 at 17:09, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 28 Jun 14:55 CDT 2021, Dmitry Baryshkov wrote:
+>
+> > Hi,
+> >
+> > On 17/06/2021 12:07, Ulf Hansson wrote:
+> > > + Rajendra
+> > >
+> > > On Tue, 15 Jun 2021 at 17:55, Bjorn Andersson
+> > > <bjorn.andersson@linaro.org> wrote:
+> [..]
+> > > > But I am unable to find a way for the gdsc driver to get hold of the
+> > > > struct generic_pm_domain of the resources exposed by the rpmhpd driver.
+> > >
+> > > You don't need a handle to the struct generic_pm_domain, to assign a
+> > > parent/child domain. Instead you can use of_genpd_add_subdomain(),
+> > > which takes two "struct of_phandle_args*" corresponding to the
+> > > parent/child device nodes of the genpd providers and then let genpd
+> > > internally do the look up.
+> >
+> [..]
+> >
+> > I think I'd need this function anyway for the gdsc code. During gdsc_init()
+> > we check gdsc status and this requires register access (and thus powering on
+> > the parent domain) before the gdsc is registered itself as a power domain.
+> >
+>
+> But this is a register access in the dispcc block, which is the context
+> that our gdsc_init() operates. So describing that MMCX is the
+> power-domain for dispcc should ensure that the power-domain is enabled.
 
-elapsed time: 727m
+Right.
 
-configs tested: 91
-configs skipped: 3
+As a note, when we assign a child domain to a parent domain, via
+of_genpd_add_subdomain() for example - and the child domain has been
+powered on, this requires the parent domain to be turned on as well.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> We do however need to make sure that dispcc doesn't hog its
+> power-domain, and that any register accesses in runtime is done with the
+> parenting power-domain enabled. E.g. the clock framework wraps all
+> operations in pm_runtime_get/put(), but I don't see anything in the
+> gnepd code for this.
+>
+>
+> And for gcc I'm worried that we might have some GDSCs that are parented
+> by CX and some by MX, but I do still think that the register accesses
+> are only related to one of these.
+>
+> But this seems like a continuation of the special case in dispcc, so I
+> think we should be able to focus on getting that right before we attempt
+> the general case (and I don't know if we have a need for this today).
+>
+> Regards,
+> Bjorn
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                     tqm8548_defconfig
-sh                           se7619_defconfig
-mips                           xway_defconfig
-powerpc                     sbc8548_defconfig
-arc                          axs103_defconfig
-m68k                        m5307c3_defconfig
-arm                        magician_defconfig
-ia64                         bigsur_defconfig
-mips                          ath25_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210630
-x86_64               randconfig-a001-20210630
-x86_64               randconfig-a004-20210630
-x86_64               randconfig-a005-20210630
-x86_64               randconfig-a006-20210630
-x86_64               randconfig-a003-20210630
-i386                 randconfig-a004-20210630
-i386                 randconfig-a001-20210630
-i386                 randconfig-a003-20210630
-i386                 randconfig-a002-20210630
-i386                 randconfig-a005-20210630
-i386                 randconfig-a006-20210630
-i386                 randconfig-a014-20210630
-i386                 randconfig-a011-20210630
-i386                 randconfig-a016-20210630
-i386                 randconfig-a012-20210630
-i386                 randconfig-a013-20210630
-i386                 randconfig-a015-20210630
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Unfortunately, I didn't understand all the above things.
 
-clang tested configs:
-x86_64               randconfig-b001-20210630
-x86_64               randconfig-a012-20210630
-x86_64               randconfig-a015-20210630
-x86_64               randconfig-a016-20210630
-x86_64               randconfig-a013-20210630
-x86_64               randconfig-a011-20210630
-x86_64               randconfig-a014-20210630
+In any case, please tell me if there is anything else that blocks you
+from moving forward with the power domain conversion? I am happy to
+help.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind regards
+Uffe
