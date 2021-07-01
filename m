@@ -2,93 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 226AF3B94D8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 18:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9AD3B94F9
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 18:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhGAQsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jul 2021 12:48:19 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:41495 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbhGAQsS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 12:48:18 -0400
-Received: by mail-ot1-f41.google.com with SMTP id m6-20020a9d1d060000b029044e2d8e855eso7132199otm.8;
-        Thu, 01 Jul 2021 09:45:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tg55kCy9BnkaIPndB0hyuKuJD9G9ni7AlPPZSuQ9v3w=;
-        b=uFe1QGQNN+hWCZqMZBI0l9dnXY3+F4ht0UMtQw7UfsTHIXhBhLQQbxcbLIYpegjvD6
-         pxNu0hz2UfyOk8hpgnDCm9ZD8PSCk3hro/s5U0+cm0j5iPG1qoXbLguQZo3dQAJiHqny
-         4RkuXw3gMOtRYuMJnL1AJbO4CDN0xkCXYI0zoxXTAFrEYTZubv18CXr4ef1WUr1d0ggy
-         V/w+kamiLtqbpyL0H9Z8lkP/BLzYMr8czJyV2kbql5+/0wtLwbXgyTD1Is9/X21wu1wQ
-         i5GOaeZ7uRgcnCPQYEWPwmsgrnSLw6PTCDtjmcsND0rkVTl+Iqi9ryBpizl2YcnBW4bU
-         qq4g==
-X-Gm-Message-State: AOAM533vkw0EooG9faXX6pxkwZ31NjT16zi1xni+CrpDOnd7eLYpvQO8
-        kAnwHHvZeUhFp79Sgr2MtOPMribOOJvnVGF4KyU=
-X-Google-Smtp-Source: ABdhPJzJRnn4f+Vbn+ymJy286bml0QkXr0HrBOpFwNgfZMUVbXSNYFoo4KA1Pu2nyMOx8volQGLdwbVBVNuW2BqDwWI=
-X-Received: by 2002:a9d:674b:: with SMTP id w11mr775865otm.260.1625157947244;
- Thu, 01 Jul 2021 09:45:47 -0700 (PDT)
+        id S232376AbhGAQ7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jul 2021 12:59:07 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:53342 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhGAQ7G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 12:59:06 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1625158596; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=a6Y+UJzX51hrFbNp2BhxTJQy4FwK+otdQWbFQJKCVAo=;
+ b=MMHPqNBgN7cXJsjSGL+El74Md6se60ibJzug57eLkEhqQ83qyCedlISyFIPZHnHfXYTJuUZq
+ tuy5ldsL1Sunieyv3xZ+eiHYdZDvUNl7Ybx9aNrLnh64G1FKOvrjCEUaTvmsQK+5usEznpgf
+ 50Q4bGbahCIGNBAgKwwkdS7eko0=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 60ddf3c3f3042986149733b6 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Jul 2021 16:56:35
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5525CC433D3; Thu,  1 Jul 2021 16:56:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B7763C433F1;
+        Thu,  1 Jul 2021 16:56:33 +0000 (UTC)
 MIME-Version: 1.0
-References: <20210701004538.23483-1-mark-pk.tsai@mediatek.com>
-In-Reply-To: <20210701004538.23483-1-mark-pk.tsai@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 1 Jul 2021 18:45:36 +0200
-Message-ID: <CAJZ5v0gtWRpbpL82Nh9VpkXQfOqMXAC08nNmEovHq_=xdwN=mA@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: use ktime_us_delta in initcall_debug_report()
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>, yj.chiang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 01 Jul 2021 22:26:33 +0530
+From:   okukatla@codeaurora.org
+To:     Mike Tipton <mdtipton@codeaurora.org>
+Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        saravanak@google.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdtipton=codeaurora.org@codeaurora.org
+Subject: Re: [PATCH 1/4] interconnect: Zero initial BW after sync-state
+In-Reply-To: <20210625212839.24155-2-mdtipton@codeaurora.org>
+References: <20210625212839.24155-1-mdtipton@codeaurora.org>
+ <20210625212839.24155-2-mdtipton@codeaurora.org>
+Message-ID: <14c52b496918900c9cb3bef662a9e833@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 1, 2021 at 2:45 AM Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
->
-> usecs is no more used after trace_device_pm_report_time replaced
-> by device_pm_callback_start/end in the below change.
->
-> commit e8bca479c3f2 ("PM / sleep: trace events for device PM callbacks")
->
-> Use ktime_us_delta to make the debug log more precise instead of
-> nsecs >> 10.
->
-> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+On 2021-06-26 02:58, Mike Tipton wrote:
+> The initial BW values may be used by providers to enforce floors. Zero
+> these values after sync-state so that providers know when to stop
+> enforcing them.
+> 
+> Fixes: b1d681d8d324 ("interconnect: Add sync state support")
+> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
 > ---
->  drivers/base/power/main.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index f893c3c5af07..d568772152c2 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -220,16 +220,13 @@ static void initcall_debug_report(struct device *dev, ktime_t calltime,
->                                   void *cb, int error)
->  {
->         ktime_t rettime;
-> -       s64 nsecs;
->
->         if (!pm_print_times_enabled)
->                 return;
->
->         rettime = ktime_get();
-> -       nsecs = (s64) ktime_to_ns(ktime_sub(rettime, calltime));
-> -
->         dev_info(dev, "%pS returned %d after %Ld usecs\n", cb, error,
-> -                (unsigned long long)nsecs >> 10);
-> +                (unsigned long long)ktime_us_delta(rettime, calltime));
->  }
->
->  /**
-> --
-
-Applied as 5.14-rc1 material with some edits in the subject and
-changelog, thanks!
+>  drivers/interconnect/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 8a1e70e00876..945121e18b5c 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1106,6 +1106,8 @@ void icc_sync_state(struct device *dev)
+>  		dev_dbg(p->dev, "interconnect provider is in synced state\n");
+>  		list_for_each_entry(n, &p->nodes, node_list) {
+>  			if (n->init_avg || n->init_peak) {
+> +				n->init_avg = 0;
+> +				n->init_peak = 0;
+nit: It is good to reset init/floor levels back to zero, but we don't 
+need to do this as we have sync_state flag to let providers know when to 
+stop enforcing.
+>  				aggregate_requests(n);
+>  				p->set(n, n);
+>  			}
