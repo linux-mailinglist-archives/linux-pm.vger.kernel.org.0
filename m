@@ -2,121 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4803B8BE3
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 04:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B823B8C18
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 04:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbhGACIZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Jun 2021 22:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S236006AbhGAC1Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Jun 2021 22:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237937AbhGACIZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 22:08:25 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAABEC061756
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jun 2021 19:05:54 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id s14so4583129pfg.0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jun 2021 19:05:54 -0700 (PDT)
+        with ESMTP id S234257AbhGAC1Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Jun 2021 22:27:16 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825EC061756;
+        Wed, 30 Jun 2021 19:24:46 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id w11so6256876ljh.0;
+        Wed, 30 Jun 2021 19:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=hYLPIH+F1aB/Ex8sZNkV7diVvNOcwuZCotdh6VJ4Qbg=;
-        b=IMylXk/p+JZY6Th53oRg8tCZv2NfvEyCZI7o7oPHuEPZELUmkzU/2DoYZCQI15uRCz
-         XWIBEHm5MAkoMJ++7E0BDKGSHZzx8lRKWOIdLGJq8KKW/GfF8Tmfk5LTxJxQc4PfbvPZ
-         u/FLSTsH8GyLcR0N+IwDlHWdvV3hHzQXL8dKa5Q5MpOyBeZUFZyu7S/bIpX3LdMHCCRC
-         OuufR3sird9A0LNyal/9hWVm0LCwlS4BYBVN7TP/g2RSl0XD/0ai729/uze7+q1w2zql
-         g3W7eqw60T9lvuUDAF8C5TFKJclwpIBt6O3iRiIIXPtCuifL6lkUaMQ//IkJyR8TsD5Z
-         ZtGA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RrqU3stqnWdI8RnhBwfKj963UQrIAO5dfsy80N5VUiE=;
+        b=BdfByYTN95GBLkgXSqMYY+PNPUl5sLnc2mb9hsTqZbtO3N3zWCG0VA4CX/jkTg6Igd
+         lIq5S8L0NBCHzrTqFs3kOrZuf/0eVjXjaaUqKVyhkZUvjVP7BihD+B8TkThjmBBsKbLb
+         /x/2i7gk4YhkPrEc92SE7e3HWxLhKpBBnBUKqVE+80aPXPHo1rcaUiDcBD3afSm4eX5w
+         x4pZ29UxQzCxMEgihQi+J3PMX7GPjNuzyenyB/K0AlTCIH1okDVn6HfIDK28bsE9oMfY
+         LAcun0VUI6Yh23I3SA1xuFBcD0AzH67bwp/zAhiIACOppAqJ6yF5xoMNrJ/sPZBUkj4o
+         ckNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=hYLPIH+F1aB/Ex8sZNkV7diVvNOcwuZCotdh6VJ4Qbg=;
-        b=D2Q+tgKKmFyBfSg+/QQ2XPNMvxGlqfeoL0/BpVnnnAGsqTM3H05GCrnNkP5ckxLBuD
-         MzuLS8AIPYQ7+HKnM/JXv8f3XWzIcoqhH3xPbBwgMQe51Cbtrw+k6n7eTgkcvc2tZHx6
-         GWTw191doMleI7P77emR6olT3WmWu1bq8+GfVJD2gBZ9/vURX1eHdJ647KwbSIOXwzIm
-         Kl8or4+wbXMMdO4Co9u1EuaRNDVTmhAyFpghROQN9IgLY13O/x1MEDyIGJgp22LW+pAJ
-         UDXR0ir2N3Im3TxQBRedQ4YXyCo04LoMtJujxiH/ryxI3GUf/+TKKD4aDLVrb298k9Sp
-         sK2Q==
-X-Gm-Message-State: AOAM531Oz0DBe/mTM4i9wyzJUICTmJwW4esCEcaoBakB3Foim1cq9gya
-        VjDerIy0G7bNEMfwCyotHhONVw==
-X-Google-Smtp-Source: ABdhPJyTDL/dfNm7m2yjLiMW1+Cu0+vTJmiQm1v7xjgUfCHQu6Ku4fAV7DpWI5a/ySOmX/Oy8rzeQw==
-X-Received: by 2002:a63:5052:: with SMTP id q18mr36695578pgl.349.1625105154108;
-        Wed, 30 Jun 2021 19:05:54 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id e4sm4186275pgu.15.2021.06.30.19.05.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RrqU3stqnWdI8RnhBwfKj963UQrIAO5dfsy80N5VUiE=;
+        b=lwDSZSWqsIBhikNdeCn6Nqy4uuwPFFU8KhRDSpSAGOZpbZgrfLW7yyy4QOWNV+Mq++
+         AudNg4sQmpSEFyL2rOKY3h99ccQCT+hnLCK33uROcx2UrpTl+irXigVrWFaziwd7hMyu
+         cj2ojXYZgMbKgrQMP3CgsDPgiB+yPDer9XLQzuJ5ctvpfn5fH2UEkn0ykDZVqhOje7+T
+         EQADO/Cm0OLkNfD9LX/OYOBD3sqQk5T15GoX2FgebRDvXh2S1Y8OX1QlLG2hc3KA9iWv
+         R1BXV9FWmr/+WJ5PsjNj9zZat0GM/m3/I3Fyk5CoWXcf93dhK2+5ZnXkuMBUlH2k8Omz
+         ynUw==
+X-Gm-Message-State: AOAM530PowCfPfrwyMvwMI/xp+EEkhetjVkKmhhrDPdJZfHnDgPil8RW
+        Qust9JoBa5R+BcRXD+cQBno=
+X-Google-Smtp-Source: ABdhPJzyQYyTHTjeGySupd8Mxc9DWBkUZVa0CrmFxqNvvYXI5Pn+LXIHs10UGZPb7WZjjtuoVEGnEA==
+X-Received: by 2002:a2e:7801:: with SMTP id t1mr10090979ljc.330.1625106284458;
+        Wed, 30 Jun 2021 19:24:44 -0700 (PDT)
+Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.gmail.com with ESMTPSA id v7sm2407262ljn.14.2021.06.30.19.24.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 19:05:53 -0700 (PDT)
-Date:   Thu, 1 Jul 2021 07:35:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Ken Ma <make@marvell.com>, Victor Gu <xigu@marvell.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
-        Philip Soares <philips@netisense.com>,
-        linux-pm@vger.kernel.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Konstantin Porotchkin <kostap@marvell.com>,
-        nnet <nnet@fastmail.fm>, Nadav Haklai <nadavh@marvell.com>
-Subject: Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz
- variant
-Message-ID: <20210701020551.svhbjpbdw526cq7a@vireshk-i7>
-References: <20210630135942.29730-1-kabel@kernel.org>
- <20210630225601.6372-1-kabel@kernel.org>
+        Wed, 30 Jun 2021 19:24:43 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v1 00/12] Add OTG mode support to Tegra USB PHY, SMB347 and Nexus 7
+Date:   Thu,  1 Jul 2021 05:23:53 +0300
+Message-Id: <20210701022405.10817-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210630225601.6372-1-kabel@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-21, 00:56, Marek Behún wrote:
-> The 1.2 GHz variant of the Armada 3720 SOC is unstable with DVFS: when
-> the SOC boots, the WTMI firmware sets clocks and AVS values that work
-> correctly with 1.2 GHz CPU frequency, but random crashes occur once
-> cpufreq driver starts scaling.
-> 
-> We do not know currently what is the reason:
-> - it may be that the voltage value for L0 for 1.2 GHz variant provided
->   by the vendor in the OTP is simply incorrect when scaling is used,
-> - it may be that some delay is needed somewhere,
-> - it may be something else.
-> 
-> The most sane solution now seems to be to simply forbid the cpufreq
-> driver on 1.2 GHz variant.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
-> ---
-> If someone from Marvell could look into this, it would be great since
-> basically 1.2 GHz variant cannot scale, which is a feature that was
-> claimed to be supported by the SOC.
-> 
-> Ken Ma / Victor Gu, you have worked on commit
-> https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/d6719fdc2b3cac58064f41b531f86993c919aa9a
-> in linux-marvell.
-> Your patch takes away the 1202 mV constant for 1.2 GHz base CPU
-> frequency and instead adds code that computes the voltages from the
-> voltage found in L0 AVS register (which is filled in by WTMI firmware).
-> 
-> Do you know why the code does not work correctly for some 1.2 GHz
-> boards? Do we need to force the L0 voltage to 1202 mV if it is lower,
-> or something?
-> ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+Hi,
 
-I am not picking it up for 5.14-rc1 to make sure others get a chance
-to provide reviews.
+This series adds USB OTG mode support to the NVIDIA Tegra USB PHY driver,
+SMB347 charger driver and Nexus 7 tablet.
+
+Dmitry Osipenko (12):
+  dt-bindings: phy: tegra20-usb-phy: Convert to schema
+  dt-bindings: phy: tegra20-usb-phy: Document properties needed for OTG
+    mode
+  soc/tegra: pmc: Expose USB regmap to all SoCs
+  usb: phy: tegra: Support OTG mode programming
+  usb: otg-fsm: Fix hrtimer list corruption
+  dt-bindings: power: supply: smb347-charger: Document USB VBUS
+    regulator
+  power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+  power: supply: smb347-charger: Remove caching of charger state
+  power: supply: smb347-charger: Implement USB VBUS regulator
+  arm64: tegra132: Add new properties to USB PHY device-tree node
+  ARM: tegra: Add new properties to USB PHY device-tree nodes
+  ARM: tegra: nexus7: Enable USB OTG mode
+
+ .../bindings/phy/nvidia,tegra20-usb-phy.txt   |  74 ----
+ .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 377 ++++++++++++++++++
+ .../power/supply/summit,smb347-charger.yaml   |  28 ++
+ arch/arm/boot/dts/tegra114.dtsi               |   6 +
+ arch/arm/boot/dts/tegra124.dtsi               |   9 +
+ arch/arm/boot/dts/tegra20.dtsi                |   9 +
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |  25 +-
+ arch/arm/boot/dts/tegra30.dtsi                |   9 +
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi      |   9 +
+ drivers/power/supply/Kconfig                  |   1 +
+ drivers/power/supply/smb347-charger.c         | 259 +++++++++++-
+ drivers/soc/tegra/pmc.c                       |   6 +-
+ drivers/usb/common/usb-otg-fsm.c              |   6 +-
+ drivers/usb/phy/phy-tegra-usb.c               | 166 +++++++-
+ .../dt-bindings/power/summit,smb347-charger.h |   4 +
+ include/linux/usb/otg-fsm.h                   |   1 +
+ include/linux/usb/tegra_usb_phy.h             |   5 +
+ 17 files changed, 891 insertions(+), 103 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.yaml
 
 -- 
-viresh
+2.30.2
+
