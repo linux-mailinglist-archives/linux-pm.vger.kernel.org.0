@@ -2,20 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0773B90D8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 12:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728573B90D1
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jul 2021 12:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbhGALAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jul 2021 07:00:20 -0400
-Received: from relay06.th.seeweb.it ([5.144.164.167]:60393 "EHLO
+        id S236256AbhGALAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jul 2021 07:00:15 -0400
+Received: from relay06.th.seeweb.it ([5.144.164.167]:35843 "EHLO
         relay06.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbhGALAP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 07:00:15 -0400
+        with ESMTP id S236194AbhGALAN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 07:00:13 -0400
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 4C2613F641;
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C7CB13F640;
         Thu,  1 Jul 2021 12:57:39 +0200 (CEST)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
@@ -30,9 +30,9 @@ Cc:     viresh.kumar@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
         ~postmarketos/upstreaming@lists.sr.ht, jeffrey.l.hugo@gmail.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH v6 7/9] cpufreq: qcom-hw: Allow getting the maximum transition latency for OPPs
-Date:   Thu,  1 Jul 2021 12:57:28 +0200
-Message-Id: <20210701105730.322718-8-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v6 8/9] dt-bindings: cpufreq: qcom-hw: Add bindings for 8998
+Date:   Thu,  1 Jul 2021 12:57:29 +0200
+Message-Id: <20210701105730.322718-9-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210701105730.322718-1-angelogioacchino.delregno@somainline.org>
 References: <20210701105730.322718-1-angelogioacchino.delregno@somainline.org>
@@ -42,89 +42,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to fine-tune the frequency scaling from various governors,
-allow to set a maximum transition latency from OPPs, which may be
-different depending on the SoC.
+The OSM programming addition has been done under the
+qcom,cpufreq-hw-8998 compatible name: specify the requirement
+of two additional register spaces for this functionality.
+This implementation, with the same compatible, has been
+tested on MSM8998 and SDM630.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 35 +++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 9 deletions(-)
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 67 ++++++++++++++-----
+ 1 file changed, 52 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 54b79fe772b6..0b80c65a22a8 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -1331,6 +1331,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	void __iomem *base;
- 	struct qcom_cpufreq_data *data;
- 	char fdom_resname[] = "freq-domainX";
-+	unsigned int transition_latency;
- 	int cpu_count, index, ret;
- 
- 	cpu_dev = get_cpu_device(policy->cpu);
-@@ -1381,22 +1382,31 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	data->soc_data = of_device_get_match_data(&pdev->dev);
- 	data->base = base;
- 	data->res = res;
-+	policy->driver_data = data;
- 
--	/* HW should be in enabled state to proceed */
--	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
--		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
--		ret = -ENODEV;
--		goto error;
--	}
--
--	qcom_get_related_cpus(index, policy->cpus);
-+	cpu_count = qcom_get_related_cpus(index, policy->cpus);
- 	if (!cpumask_weight(policy->cpus)) {
- 		dev_err(dev, "Domain-%d failed to get related CPUs\n", index);
- 		ret = -ENOENT;
- 		goto error;
- 	}
- 
--	policy->driver_data = data;
-+	if (!data->soc_data->uses_tz) {
-+		ret = qcom_cpufreq_hw_osm_setup(cpu_dev, policy,
-+						cpu_count, index);
-+		if (ret) {
-+			dev_err(dev, "Cannot setup the OSM for CPU%d: %d\n",
-+				policy->cpu, ret);
-+			goto error;
-+		}
-+	}
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+index bc81b6203e27..29b663321a0b 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -18,6 +18,10 @@ description: |
+ properties:
+   compatible:
+     oneOf:
++      - description: Non-secure v1 of CPUFREQ HW
++        items:
++          - const: qcom,cpufreq-hw-8998
 +
-+	/* HW should be in enabled state to proceed */
-+	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
-+		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
-+		ret = -ENODEV;
-+		goto error;
-+	}
+       - description: v1 of CPUFREQ HW
+         items:
+           - const: qcom,cpufreq-hw
+@@ -28,21 +32,9 @@ properties:
+               - qcom,sm8250-cpufreq-epss
+           - const: qcom,cpufreq-epss
  
- 	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy);
- 	if (ret) {
-@@ -1411,6 +1421,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		goto error;
- 	}
+-  reg:
+-    minItems: 2
+-    maxItems: 3
+-    items:
+-      - description: Frequency domain 0 register region
+-      - description: Frequency domain 1 register region
+-      - description: Frequency domain 2 register region
++  reg: {}
  
-+	transition_latency = dev_pm_opp_get_max_transition_latency(cpu_dev);
-+	if (!transition_latency)
-+		transition_latency = CPUFREQ_ETERNAL;
+-  reg-names:
+-    minItems: 2
+-    maxItems: 3
+-    items:
+-      - const: freq-domain0
+-      - const: freq-domain1
+-      - const: freq-domain2
++  reg-names: {}
+ 
+   clocks:
+     items:
+@@ -57,10 +49,55 @@ properties:
+   '#freq-domain-cells':
+     const: 1
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        const: qcom,cpufreq-hw-8998
++then:
++  properties:
++    reg:
++      minItems: 2
++      maxItems: 6
++      items:
++        - description: Frequency domain 0 register region
++        - description: Operating State Manager domain 0 register region
++        - description: Frequency domain 1 register region
++        - description: Operating State Manager domain 1 register region
++        - description: PLL ACD domain 0 register region (if ACD programming required)
++        - description: PLL ACD domain 1 register region (if ACD programming required)
 +
-+	policy->cpuinfo.transition_latency = transition_latency;
++    reg-names:
++      minItems: 2
++      maxItems: 6
++      items:
++        - const: "osm-domain0"
++        - const: "freq-domain0"
++        - const: "osm-domain1"
++        - const: "freq-domain1"
++        - const: "osm-acd0"
++        - const: "osm-acd1"
 +
- 	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
- 
- 	if (policy_has_boost_freq(policy)) {
-@@ -1421,6 +1437,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 
- 	return 0;
- error:
-+	policy->driver_data = NULL;
- 	kfree(data);
- unmap_base:
- 	iounmap(base);
++else:
++  properties:
++    reg:
++      minItems: 2
++      maxItems: 3
++      items:
++        - description: Frequency domain 0 register region
++        - description: Frequency domain 1 register region
++        - description: Frequency domain 2 register region
++    reg-names:
++      minItems: 2
++      maxItems: 3
++      items:
++        - const: "freq-domain0"
++        - const: "freq-domain1"
++        - const: "freq-domain2"
++
+ required:
+   - compatible
+   - reg
+-  - reg-names
+   - clocks
+   - clock-names
+   - '#freq-domain-cells'
 -- 
 2.32.0
 
