@@ -2,154 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26263B9BF0
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 07:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8EA3B9D4D
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 10:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbhGBFVu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jul 2021 01:21:50 -0400
-Received: from mga09.intel.com ([134.134.136.24]:18521 "EHLO mga09.intel.com"
+        id S230023AbhGBIHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jul 2021 04:07:47 -0400
+Received: from comms.puri.sm ([159.203.221.185]:43932 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229676AbhGBFVr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 2 Jul 2021 01:21:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="208627577"
-X-IronPort-AV: E=Sophos;i="5.83,316,1616482800"; 
-   d="scan'208";a="208627577"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 22:19:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,316,1616482800"; 
-   d="scan'208";a="642442390"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Jul 2021 22:19:12 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lzBa3-000AuY-Vq; Fri, 02 Jul 2021 05:19:11 +0000
-Date:   Fri, 02 Jul 2021 13:18:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- b2c6ba264cd2dc1caa70bcb4c400f6c37c78c0a6
-Message-ID: <60dea19b.bfuKxohZaVw+vcmD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229519AbhGBIHr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Jul 2021 04:07:47 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 9B003DF80A;
+        Fri,  2 Jul 2021 01:04:44 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id D7DRqfSlUVAH; Fri,  2 Jul 2021 01:04:40 -0700 (PDT)
+Message-ID: <b1d39dfbe1398192ef1181fc98d6b7e6bedeb649.camel@puri.sm>
+Subject: Re: [PATCH v5 2/3] scsi: sd: send REQUEST SENSE for
+ BLIST_MEDIA_CHANGE devices in runtime_resume()
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     bvanassche@acm.org, jejb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        kernel@puri.sm, stern@rowland.harvard.edu
+Date:   Fri, 02 Jul 2021 10:04:35 +0200
+In-Reply-To: <YN3WD4Vem5Zx8Dvq@infradead.org>
+References: <20210630084453.186764-1-martin.kepplinger@puri.sm>
+         <20210630084453.186764-3-martin.kepplinger@puri.sm>
+         <YN3WD4Vem5Zx8Dvq@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: b2c6ba264cd2dc1caa70bcb4c400f6c37c78c0a6  Merge branch 'acpi-prm' into bleeding-edge
+Am Donnerstag, dem 01.07.2021 um 15:49 +0100 schrieb Christoph Hellwig:
+> On Wed, Jun 30, 2021 at 10:44:52AM +0200, Martin Kepplinger wrote:
+> > +       struct scsi_disk *sdkp = dev_get_drvdata(dev);
+> > +       struct scsi_device *sdp = sdkp->device;
+> > +       int timeout, res;
+> > +
+> > +       timeout = sdp->request_queue->rq_timeout *
+> > SD_FLUSH_TIMEOUT_MULTIPLIER;
+> 
+> Is REQUEST SENSE reqlly a so slow operation on these devices that
+> we need to override the timeout?
 
-elapsed time: 728m
+using SD_TIMEOUT works equally fine for me. Is that what you'd rather
+like to see?
 
-configs tested: 95
-configs skipped: 2
+Bart, is SD_TIMEOUT equally ok for you? If so, I'll resend with your
+reviewed-by.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+thank you for reviewing!
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                  mpc866_ads_defconfig
-xtensa                generic_kc705_defconfig
-sh                          sdk7780_defconfig
-sh                         microdev_defconfig
-arm                        cerfcube_defconfig
-arm                  colibri_pxa270_defconfig
-sh                          r7780mp_defconfig
-arc                        nsim_700_defconfig
-arm                            hisi_defconfig
-h8300                    h8300h-sim_defconfig
-arm                       aspeed_g4_defconfig
-sh                          rsk7269_defconfig
-powerpc                   lite5200b_defconfig
-mips                        qi_lb60_defconfig
-xtensa                              defconfig
-powerpc                     mpc512x_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210630
-x86_64               randconfig-a001-20210630
-x86_64               randconfig-a004-20210630
-x86_64               randconfig-a005-20210630
-x86_64               randconfig-a006-20210630
-x86_64               randconfig-a003-20210630
-i386                 randconfig-a004-20210630
-i386                 randconfig-a001-20210630
-i386                 randconfig-a003-20210630
-i386                 randconfig-a002-20210630
-i386                 randconfig-a005-20210630
-i386                 randconfig-a006-20210630
-i386                 randconfig-a015-20210701
-i386                 randconfig-a016-20210701
-i386                 randconfig-a011-20210701
-i386                 randconfig-a012-20210701
-i386                 randconfig-a013-20210701
-i386                 randconfig-a014-20210701
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+                            martin
 
-clang tested configs:
-x86_64               randconfig-b001-20210701
-x86_64               randconfig-a012-20210630
-x86_64               randconfig-a015-20210630
-x86_64               randconfig-a016-20210630
-x86_64               randconfig-a013-20210630
-x86_64               randconfig-a011-20210630
-x86_64               randconfig-a014-20210630
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
