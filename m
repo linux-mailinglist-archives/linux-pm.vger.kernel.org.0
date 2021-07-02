@@ -2,135 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECCB3B9991
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 01:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5D23B9AE0
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 05:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbhGAXqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jul 2021 19:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234527AbhGAXqc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 19:46:32 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B81C061764;
-        Thu,  1 Jul 2021 16:44:00 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u13so14928405lfk.2;
-        Thu, 01 Jul 2021 16:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+unlqaajKL+UdtGKZaBkJ1mKCovLdUju0d1rygjTQhE=;
-        b=iniODsK0ILiq3O7K8T4TiBZfT1PmucBVW8O4a4XrldImMkT/pH4rdIMZIv/rnxaN6Z
-         8cT2qoUxV9l503ixbCNjxRirhsRrtswiTtSuHCIAxYIJ1XfrDkbltoShIbuSykqsUS/J
-         E0IlVVoa4cxI/QYpsHs0gDycrLyXBBQCV+aikY32FsoGWQiWlFfuITJrvlgdRJCJwahi
-         ArIWDg5j4wtNgMuRU3fP2TBvGPz/yXIB8DXycKo9wzYsGfChzy1v2N94bQSUlMCJA0EI
-         nMmqUc92KwEBElSIL1XNQoat3rkpdsjKrXNYKZm7hi7FZ+JT8LKNzW8gmjI5ZO5NHPwC
-         s8UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+unlqaajKL+UdtGKZaBkJ1mKCovLdUju0d1rygjTQhE=;
-        b=rsC8BjKFc/U1jyhFts07+g+tAQ1DgnLTqgzq4lSEHuCAof3f90Lr+52M/0xe2Ys+Jc
-         5olN06WaOqXI8Xxu99psV31E3pMNLb8mbxl4k8wL9heKANu4OJcgD7bJdN7g1LXHOXF/
-         VMfV3eSQL54WyYH0AEVuS7XpNTMcMfcmyN3DMynAoR1lDnzjBgOw/hnTUkdI+8riWP71
-         AMGinjSl+jaQmrDK/qUmHIn1GvX8M0O6W8LfUR9ySAC2Bk8hMrQDcSFjq5gTn6zHDbrx
-         HTJjS0ZYRve9WPmqRf+4OlHHRaZm0bHdK/oZD6fCVgwFpbAe3Sk2b1n8Ra3WSrL9VrYh
-         v0GA==
-X-Gm-Message-State: AOAM5328paSS2HR0GJb8w9KSo7kuWSnD88OVwO+Ws0jaEcjotaGUYUea
-        JEq5F37Ku8YNKBqBg6xDHHY=
-X-Google-Smtp-Source: ABdhPJyzCGwhxPL7ezuvAI2EmCZef0N2hJNcfbkPSe8ZUsqC4JKcehVh34cy4nu0b/W+JkVQGFe4Gg==
-X-Received: by 2002:a05:6512:3f1:: with SMTP id n17mr1570723lfq.355.1625183039264;
-        Thu, 01 Jul 2021 16:43:59 -0700 (PDT)
-Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.gmail.com with ESMTPSA id e23sm60743lfq.221.2021.07.01.16.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jul 2021 16:43:58 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
+        id S234769AbhGBDPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jul 2021 23:15:08 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:43094 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234820AbhGBDPG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jul 2021 23:15:06 -0400
+X-UUID: b74212b83f8d44dc90ea041510caad80-20210702
+X-UUID: b74212b83f8d44dc90ea041510caad80-20210702
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1533488050; Fri, 02 Jul 2021 11:12:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 2 Jul 2021 11:12:15 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 2 Jul 2021 11:12:15 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v2 12/12] ARM: tegra: nexus7: Enable USB OTG mode
-Date:   Fri,  2 Jul 2021 02:43:17 +0300
-Message-Id: <20210701234317.26393-13-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210701234317.26393-1-digetx@gmail.com>
-References: <20210701234317.26393-1-digetx@gmail.com>
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v19 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Fri, 2 Jul 2021 11:12:07 +0800
+Message-ID: <20210702031214.21597-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Nexus 7 has OTG-cable microUSB port, enable OTG mode. USB peripheral
-devices now can be connected to Nexus 7 using OTG adapter, switching
-USB port into host mode.
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- .../tegra30-asus-nexus7-grouper-common.dtsi   | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-index 8bc552b09672..c341e8971b2f 100644
---- a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-@@ -941,9 +941,29 @@ power_supply: charger@6a {
- 			interrupts = <TEGRA_GPIO(V, 1) IRQ_TYPE_EDGE_BOTH>;
- 
- 			summit,enable-charge-control = <SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW>;
-+			summit,inok-polarity = <SMB3XX_SYSOK_INOK_ACTIVE_LOW>;
- 			summit,enable-usb-charging;
- 
- 			monitored-battery = <&battery_cell>;
-+
-+			usb_vbus: usb-vbus {
-+				regulator-name = "usb_vbus";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-min-microamp = <750000>;
-+				regulator-max-microamp = <750000>;
-+
-+				/*
-+				 * SMB347 INOK input pin is connected to PMIC's
-+				 * ACOK output, which is fixed to ACTIVE_LOW as
-+				 * long as battery voltage is in a good range.
-+				 *
-+				 * Active INOK disables SMB347 output, so polarity
-+				 * needs to be toggled when we want to get the
-+				 * output.
-+				 */
-+				summit,needs-inok-toggle;
-+			};
- 		};
- 	};
- 
-@@ -1017,12 +1037,13 @@ sdmmc4: mmc@78000600 {
- 	usb@7d000000 {
- 		compatible = "nvidia,tegra30-udc";
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
-+		vbus-supply = <&usb_vbus>;
- 	};
- 
- 	usb-phy@7d000000 {
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
- 		nvidia,hssync-start-delay = <0>;
- 		nvidia,xcvr-lsfslew = <2>;
- 		nvidia,xcvr-lsrslew = <2>;
--- 
-2.30.2
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1360551/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
+
+changes since v18:
+- Add edge case handling in svs_set_freqs_pct_v3() when turn_pt is 0.
+If we don't add this handling, SVS HIGH bank will fill FREQPCT74 / FREQPCT30 with 0 and SVS controller won't run normally.
+- Remove redundant SVSB_MON_VOLT_IGNORE flag from svs_mt8192_banks[]'s low bank configuration.
+
+Roger Lu (7):
+  [v19,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v19,2/7] arm64: dts: mt8183: add svs device information
+  [v19,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v19,4/7] soc: mediatek: SVS: add debug commands
+  [v19,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v19,6/7] arm64: dts: mt8192: add svs device information
+  [v19,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   15 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2527 +++++++++++++++++
+ 6 files changed, 2679 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
+
 
