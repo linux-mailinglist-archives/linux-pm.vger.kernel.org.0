@@ -2,95 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C173BA433
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 21:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630E53BA452
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 21:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbhGBTKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jul 2021 15:10:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:52972 "EHLO foss.arm.com"
+        id S230427AbhGBTTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jul 2021 15:19:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:53196 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230172AbhGBTKA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 2 Jul 2021 15:10:00 -0400
+        id S229996AbhGBTTi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Jul 2021 15:19:38 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39E061FB;
-        Fri,  2 Jul 2021 12:07:28 -0700 (PDT)
-Received: from [10.57.14.38] (unknown [10.57.14.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 270633F718;
-        Fri,  2 Jul 2021 12:07:24 -0700 (PDT)
-Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
- of EAS estimated energy
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Redpath <Chris.Redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40E561FB;
+        Fri,  2 Jul 2021 12:17:06 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1EF33F718;
+        Fri,  2 Jul 2021 12:17:04 -0700 (PDT)
+Date:   Fri, 2 Jul 2021 20:17:00 +0100
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        CCj.Yeh@mediatek.com
-References: <20210625152603.25960-1-lukasz.luba@arm.com>
- <20210625152603.25960-2-lukasz.luba@arm.com>
- <CAJZ5v0iOzp5FKo4NsNE-m+sEXZUvv1TbkAO_9+jSidx9c0iq8A@mail.gmail.com>
- <ffc63114-c1c2-f866-8b2a-15e9fd0a7818@arm.com>
-Message-ID: <6ce4d4c8-889b-f2cf-f282-213b9a7651ab@arm.com>
-Date:   Fri, 2 Jul 2021 20:07:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
+ frequencies
+Message-ID: <20210702191658.GA30379@e120877-lin.cambridge.arm.com>
+References: <a4971ab0-87d7-4457-49ec-ce20106be358@arm.com>
+ <20210616093127.lfpi4rje56b3dhwx@vireshk-i7>
+ <ff9a9daa-7d25-ea08-2cd9-fc56f778acde@arm.com>
+ <20210616105327.wnppsau4gg5ihrlv@vireshk-i7>
+ <4d975236-943c-ea82-547b-04f2bead9f48@arm.com>
+ <0a930559-a648-c20d-f3f6-09e4974a031d@arm.com>
+ <CAJZ5v0iMHeAOpDStN_qZLbM7-My4rQuAC9nEcT3sHCC33bH3NA@mail.gmail.com>
+ <CAJZ5v0hOXHtoN3Z+Mw9Ym_HaY0OxessNAKTEpp6GM5_pnLJauw@mail.gmail.com>
+ <a660b9ec-3ee7-28b2-569c-5a8d1510d927@arm.com>
+ <CAJZ5v0iQve59SxD0TJ19wonj=WO7qVSApM-xPf_FYUf42Z3d5Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ffc63114-c1c2-f866-8b2a-15e9fd0a7818@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iQve59SxD0TJ19wonj=WO7qVSApM-xPf_FYUf42Z3d5Q@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peter,
+[...]
 
-Gentle ping.
-You might missed my previous email.
+> > >
+> > > I'm guessing that the problem is that cpufreq_cooling works by using
+> > > freq_qos_update_request() to update the max frequency limit and if
+> > > that is in effect you'd rather use the inefficient frequencies,
+> > > whereas when the governor selects an inefficient frequency  below the
+> > > policy limit, you'd rather use a higher-but-efficient frequency
+> > > instead (within the policy limit).
+> > >
+> > > Am I guessing correctly?
+> > >
+> >
+> > Yes, correct. Thermal would use all (efficient + inefficient), but
+> > we in cpufreq governor would like to pick if possible the efficient
+> > one (below the thermal limit).
+> 
+> To address that, you need to pass more information from schedutil to
+> __cpufreq_driver_target() that down the road can be used by
+> cpufreq_frequency_table_target() to decide whether or not to skip the
+> inefficient frequencies.
+> 
+> For example, you can define CPUFREQ_RELATION_EFFICIENT and pass it
+> from schedutil to __cpufreq_driver_target() in the "relation"
+> argument, and clear it if the target frequency is above the max policy
+> limit, or if ->target() is to be called.
 
-On 6/30/21 6:28 PM, Lukasz Luba wrote:
-> 
-> 
-> On 6/30/21 6:01 PM, Rafael J. Wysocki wrote:
->> On Fri, Jun 25, 2021 at 5:26 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
->>> task. It probes many possibilities and compares the estimated energy 
->>> values
->>> for different scenarios. For calculating those energy values it 
->>> relies on
->>> Energy Model (EM) data and em_cpu_energy(). The precision which is 
->>> used in
->>> EM data is in milli-Watts (or abstract scale), which sometimes is not
->>> sufficient. In some cases it might happen that two CPUs from different
->>> Performance Domains (PDs) get the same calculated value for a given task
->>> placement, but in more precised scale, they might differ. This rounding
->>> error has to be addressed. This patch prepares EAS code for better
->>> precision in the coming EM improvements.
->>>
->>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>
->> If you want me to pick up this series, this patch requires an ACK from
->> the scheduler maintainers.
->>
-> 
-> It would be great, if you could take it after e.g. Peter ACK it.
-> 
-> Peter could you have a look at it, please?
-> In this patch 1/3 we have only variables upgrade.
-> 
-> Regards,
-> Lukasz
+What about a cpufreq_policy option that if sets would make
+cpufreq_frequency_table_target() skip inefficient OPPs while staying within
+the limit of max policy? Each governor could decide to set it or not, but
+it would hide the efficiency resolution to the governor and allow drivers
+that implements ->target() to also implements support for inefficient OPPs.
 
-Could you have a look and ACK the patch 1/3, please?
+That flag could be set according to a new cpufreq_governor flag
+CPUFREQ_GOV_SKIP_INEFFICIENCIES?
+
+That could though modify behaviors like powersave_bias from ondemand. But if
+a frequency is inefficient, there's probably no power saving anyway.
+
+-- 
+Vincent
