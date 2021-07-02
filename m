@@ -2,112 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C98A3B9DFA
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 11:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5983BA185
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jul 2021 15:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbhGBJVs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jul 2021 05:21:48 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:39831 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230112AbhGBJVo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jul 2021 05:21:44 -0400
-X-UUID: aefc18c3c8344f5695a816aabdf4c0da-20210702
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=IYyNmRrPNeyd0roXCcc3ug77Q20krYCuClxefjY+zjA=;
-        b=OBxH2xcXEmkripda1zuduv7SxCUobWyN+AsPyEXi+WIztrYQ/9nHQP2br4XnAn+8YDTob/E2wPxlgUmTOjXrO6KGb7AlHHY84WnUXxBaWLPsNQdiGBgU9FIQ9CNztxkR/KxFLCyJVLDKUGNUWifjtEFb17eIk+c8nzAJCItw09A=;
-X-UUID: aefc18c3c8344f5695a816aabdf4c0da-20210702
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 723412632; Fri, 02 Jul 2021 17:19:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 2 Jul 2021 17:19:06 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 2 Jul 2021 17:19:06 +0800
-Message-ID: <0911434c39aa76a6312f19baa2a468c65589de3d.camel@mediatek.com>
-Subject: Re: [PATCH v19 3/7] soc: mediatek: SVS: introduce MTK SVS engine
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        "Kevin Hilman" <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Nicolas Boichat" <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Date:   Fri, 2 Jul 2021 17:19:06 +0800
-In-Reply-To: <bf4f26cdca7174ba687e29a581a5276511112fe7.camel@pengutronix.de>
-References: <20210702031214.21597-1-roger.lu@mediatek.com>
-         <20210702031214.21597-4-roger.lu@mediatek.com>
-         <bf4f26cdca7174ba687e29a581a5276511112fe7.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S232774AbhGBNqI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jul 2021 09:46:08 -0400
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:42532 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232891AbhGBNqH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jul 2021 09:46:07 -0400
+Received: by mail-pj1-f41.google.com with SMTP id p17-20020a17090b0111b02901723ab8d11fso6112999pjz.1;
+        Fri, 02 Jul 2021 06:43:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A8O7QLpS69tWkUIOVJYRaUSUHM9jeCpg1TDyB8l/WfE=;
+        b=AkzIIjjQFagT3MRFqRHlIig3OTeoysRuD6PGzd9LgGnf2Q2dLHhpiyoAzz/rGSi50j
+         eJXy9AUd8vY32OlGDgC1a624ub/qk5diKa709qB3qbROkHBTNecmCtNRpPp5TapGLw5s
+         Dzx4w6EB7jHLwcHVeMiQ/MC5cbbpiQheyLWhrrXj875cJrQJDUdW6JmDeXrSQVDXXhq1
+         XOTquTEj6MrU6HMvOyfGVFiZ3pqwo1Wh4w/8BMmK7haaXErBBYQdag44HWZ5VNWgue+J
+         QnZ9Bee1tw330AzIVEnO+JM9VcmPq6FYkNpnh2PFuegihk6k9tTHSCpok7XT8Bn7dI9Z
+         n3Kg==
+X-Gm-Message-State: AOAM532lx13mbV5AIwu7ca6HYc7Eeq5+n/EBIVdrjNrsKfVxkhryEwG7
+        5BCp0v0/nmBy5R34f+iRTYw=
+X-Google-Smtp-Source: ABdhPJzXiskbJbYqJP+kYAuyYuVXSmi+ghRxO8IMEExGuk/sE1rHVR9pt46XfZdmem3E39NYRg+/6A==
+X-Received: by 2002:a17:90b:3142:: with SMTP id ip2mr14954286pjb.63.1625233415268;
+        Fri, 02 Jul 2021 06:43:35 -0700 (PDT)
+Received: from [192.168.50.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id m205sm2975341pfd.25.2021.07.02.06.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jul 2021 06:43:34 -0700 (PDT)
+Subject: Re: [PATCH v5 2/3] scsi: sd: send REQUEST SENSE for
+ BLIST_MEDIA_CHANGE devices in runtime_resume()
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, kernel@puri.sm,
+        stern@rowland.harvard.edu
+References: <20210630084453.186764-1-martin.kepplinger@puri.sm>
+ <20210630084453.186764-3-martin.kepplinger@puri.sm>
+ <YN3WD4Vem5Zx8Dvq@infradead.org>
+ <b1d39dfbe1398192ef1181fc98d6b7e6bedeb649.camel@puri.sm>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <232717d6-fa10-aaec-cd15-8ed5e7e1117e@acm.org>
+Date:   Fri, 2 Jul 2021 06:43:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <b1d39dfbe1398192ef1181fc98d6b7e6bedeb649.camel@puri.sm>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgUGhpbGlwcCwNCg0KVGhhbmtzIGZvciB0aGUgYWR2aWNlLg0KDQpPbiBGcmksIDIwMjEtMDct
-MDIgYXQgMTA6MzMgKzAyMDAsIFBoaWxpcHAgWmFiZWwgd3JvdGU6DQo+IEhpIFJvZ2VyLA0KPiAN
-Cj4gT24gRnJpLCAyMDIxLTA3LTAyIGF0IDExOjEyICswODAwLCBSb2dlciBMdSB3cm90ZToNCj4g
-Wy4uLl0NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLXN2cy5jIGIv
-ZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLXN2cy5jDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQN
-Cj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLmMyZmNiYzIwNGIxZA0KPiA+IC0tLSAvZGV2L251bGwN
-Cj4gPiArKysgYi9kcml2ZXJzL3NvYy9tZWRpYXRlay9tdGstc3ZzLmMNCj4gPiBAQCAtMCwwICsx
-LDE3MjQgQEANCj4gDQo+IFsuLi5dDQo+ID4gK3N0YXRpYyBpbnQgc3ZzX3N1c3BlbmQoc3RydWN0
-IGRldmljZSAqZGV2KQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3Qgc3ZzX3BsYXRmb3JtICpzdnNwID0g
-ZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gKwlzdHJ1Y3Qgc3ZzX2JhbmsgKnN2c2I7DQo+ID4g
-Kwl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICsJaW50IHJldDsNCj4gPiArCXUzMiBpZHg7DQo+
-ID4gKw0KPiA+ICsJZm9yIChpZHggPSAwOyBpZHggPCBzdnNwLT5iYW5rX251bTsgaWR4KyspIHsN
-Cj4gPiArCQlzdnNiID0gJnN2c3AtPmJhbmtzW2lkeF07DQo+ID4gKw0KPiA+ICsJCS8qIFdhaXQg
-aWYgc3ZzX2lzcigpIGlzIHN0aWxsIGluIHByb2Nlc3MuICovDQo+ID4gKwkJc3Bpbl9sb2NrX2ly
-cXNhdmUoJm10a19zdnNfbG9jaywgZmxhZ3MpOw0KPiA+ICsJCXN2c3AtPnBiYW5rID0gc3ZzYjsN
-Cj4gPiArCQlzdnNfc3dpdGNoX2Jhbmsoc3ZzcCk7DQo+ID4gKwkJc3ZzX3dyaXRlbChzdnNwLCBT
-VlNCX0VOX09GRiwgU1ZTRU4pOw0KPiA+ICsJCXN2c193cml0ZWwoc3ZzcCwgU1ZTQl9JTlRTVFNf
-Q0xFQU4sIElOVFNUUyk7DQo+ID4gKwkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmbXRrX3N2c19s
-b2NrLCBmbGFncyk7DQo+ID4gKw0KPiA+ICsJCXN2c2ItPnN1c3BlbmRlZCA9IHRydWU7DQo+ID4g
-KwkJaWYgKHN2c2ItPnBoYXNlICE9IFNWU0JfUEhBU0VfSU5JVDAxKSB7DQo+ID4gKwkJCXN2c2It
-PnBoYXNlID0gU1ZTQl9QSEFTRV9FUlJPUjsNCj4gPiArCQkJc3ZzX2FkanVzdF9wbV9vcHBfdm9s
-dHMoc3ZzYiwgdHJ1ZSk7DQo+ID4gKwkJfQ0KPiA+ICsJfQ0KPiA+ICsNCj4gPiArCWlmIChzdnNw
-LT5yc3QpIHsNCj4gDQo+IFRoaXMgaXMgbm90IG5lY2Vzc2FyeSwgcmVzZXRfY29udHJvbF9hc3Nl
-cnQoKSBjaGVja3MgZm9yIChyc3RjID09IE5VTEwpDQo+IGl0c2VsZi4NCk9rYXkuIFdlJ2xsIHJl
-bW92ZSAiaWYgKHN2c3AtPnJzdCkgeyIgaW4gdGhlIG5leHQgcGF0Y2guIFRoYW5rcy4NCg0KPiAN
-Cj4gPiArCQlyZXQgPSByZXNldF9jb250cm9sX2Fzc2VydChzdnNwLT5yc3QpOw0KPiA+ICsJCWlm
-IChyZXQpIHsNCj4gPiArCQkJZGV2X2VycihzdnNwLT5kZXYsICJjYW5ub3QgYXNzZXJ0IHJlc2V0
-ICVkXG4iLCByZXQpOw0KPiA+ICsJCQlyZXR1cm4gcmV0Ow0KPiA+ICsJCX0NCj4gPiArCX0NCj4g
-PiArDQo+ID4gKwljbGtfZGlzYWJsZV91bnByZXBhcmUoc3ZzcC0+bWFpbl9jbGspOw0KPiA+ICsN
-Cj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IHN2c19yZXN1
-bWUoc3RydWN0IGRldmljZSAqZGV2KQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3Qgc3ZzX3BsYXRmb3Jt
-ICpzdnNwID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gKwlzdHJ1Y3Qgc3ZzX2JhbmsgKnN2
-c2I7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsJdTMyIGlkeDsNCj4gPiArDQo+ID4gKwlyZXQgPSBj
-bGtfcHJlcGFyZV9lbmFibGUoc3ZzcC0+bWFpbl9jbGspOw0KPiA+ICsJaWYgKHJldCkgew0KPiA+
-ICsJCWRldl9lcnIoc3ZzcC0+ZGV2LCAiY2Fubm90IGVuYWJsZSBtYWluX2NsaywgZGlzYWJsZSBz
-dnNcbiIpOw0KPiA+ICsJCXJldHVybiByZXQ7DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICsJaWYgKHN2
-c3AtPnJzdCkgew0KPiANCj4gU2FtZSBhcyBhYm92ZSwgcmVzZXRfY29udHJvbF9kZWFzc2VydChO
-VUxMKSB3aWxsIGp1c3QgcmV0dXJuIDAuDQpPa2F5LiBXZSdsbCByZW1vdmUgImlmIChzdnNwLT5y
-c3QpIHsiIGluIHRoZSBuZXh0IHBhdGNoLiBUaGFua3MuDQo+IA0KPiA+ICsJCXJldCA9IHJlc2V0
-X2NvbnRyb2xfZGVhc3NlcnQoc3ZzcC0+cnN0KTsNCj4gPiArCQlpZiAocmV0KSB7DQo+ID4gKwkJ
-CWRldl9lcnIoc3ZzcC0+ZGV2LCAiY2Fubm90IGRlYXNzZXJ0IHJlc2V0ICVkXG4iLCByZXQpOw0K
-PiA+ICsJCQlyZXR1cm4gcmV0Ow0KPiA+ICsJCX0NCj4gPiArCX0NCj4gPiArDQo+ID4gKwlmb3Ig
-KGlkeCA9IDA7IGlkeCA8IHN2c3AtPmJhbmtfbnVtOyBpZHgrKykgew0KPiA+ICsJCXN2c2IgPSAm
-c3ZzcC0+YmFua3NbaWR4XTsNCj4gPiArCQlzdnNiLT5zdXNwZW5kZWQgPSBmYWxzZTsNCj4gPiAr
-CX0NCj4gPiArDQo+ID4gKwlyZXQgPSBzdnNfaW5pdDAyKHN2c3ApOw0KPiA+ICsJaWYgKHJldCkN
-Cj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArCXN2c19tb25fbW9kZShzdnNwKTsNCj4g
-PiArDQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiANCj4gcmVnYXJkcw0KPiBQaGlsaXBwDQo=
+On 7/2/21 1:04 AM, Martin Kepplinger wrote:
+> Am Donnerstag, dem 01.07.2021 um 15:49 +0100 schrieb Christoph Hellwig:
+>> On Wed, Jun 30, 2021 at 10:44:52AM +0200, Martin Kepplinger wrote:
+>>> +       struct scsi_disk *sdkp = dev_get_drvdata(dev);
+>>> +       struct scsi_device *sdp = sdkp->device;
+>>> +       int timeout, res;
+>>> +
+>>> +       timeout = sdp->request_queue->rq_timeout *
+>>> SD_FLUSH_TIMEOUT_MULTIPLIER;
+>>
+>> Is REQUEST SENSE reqlly a so slow operation on these devices that
+>> we need to override the timeout?
+> 
+> using SD_TIMEOUT works equally fine for me. Is that what you'd rather
+> like to see?
+> 
+> Bart, is SD_TIMEOUT equally ok for you? If so, I'll resend with your
+> reviewed-by.
 
+Hi Martin,
+
+I prefer sdp->request_queue->rq_timeout instead of SD_TIMEOUT since the 
+former is configurable via sysfs.
+
+Thanks,
+
+Bart.
