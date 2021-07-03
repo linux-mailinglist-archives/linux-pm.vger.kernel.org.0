@@ -2,184 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF8A3BA7DE
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jul 2021 10:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE15B3BA858
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jul 2021 13:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhGCIpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Jul 2021 04:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbhGCIpS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jul 2021 04:45:18 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12185C061762;
-        Sat,  3 Jul 2021 01:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PFCM19IYyhz7jH3VrV8Q9fkUeAhfoXHRT3367WSPUVc=; b=D6+pjJDGxiqOuFTDwu62WS7x7O
-        XacLijYjvp+DBB9APz5mEGC8TO3rYv/Oki/zn9/+MAeOpapdWONIp15/3ip8rGHfVP6yiMNcGL+Cg
-        hTNgT7ABQtIIRI8sHuppY9lWRHgFJlYGeIqVrA8VB6uAwzy7JnkxYq3G8iCS+qk2YwAs=;
-Received: from p200300ccff37da001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff37:da00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1lzbEX-0006OU-DJ; Sat, 03 Jul 2021 10:42:41 +0200
-Received: from andi by aktux with local (Exim 4.92)
-        (envelope-from <andreas@kemnade.info>)
-        id 1lzbEX-0008Hu-2W; Sat, 03 Jul 2021 10:42:41 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, jic23@kernel.org,
-        lars@metafoo.de, sre@kernel.org, andreas@kemnade.info,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        leonard.crestez@nxp.com, letux-kernel@openphoenux.org
-Subject: [PATCH 4/4] power: supply: rn5t618: Add voltage_now property
-Date:   Sat,  3 Jul 2021 10:42:24 +0200
-Message-Id: <20210703084224.31623-5-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210703084224.31623-1-andreas@kemnade.info>
-References: <20210703084224.31623-1-andreas@kemnade.info>
+        id S230234AbhGCLK4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Jul 2021 07:10:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51084 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229829AbhGCLK4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 3 Jul 2021 07:10:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E0FD6162A;
+        Sat,  3 Jul 2021 11:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625310503;
+        bh=la7QnelDNFLhNjusTN/qGJQp8b6+XlbmXDa/JaB3FIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RMxLJ7Zrihaykg0n7Ky0Nq83U57Z8EB+sMgZlxbrK1YyM/yWDYFnMDzDAkufeXH1O
+         YxWu0HoVP4OEQcF6W/IBJ4LEneFyzcogTfKsc+Hxtl8jheMyQPA9n+G+6goD9CwmPg
+         iKJ5GPsI3HoVC3tawow3mWuCiWdtRUHiuwohfv9lin3Zta91D5Bv97MrLqv5B0vrSx
+         FQJs1v5AMozJmClSLUxySDlmlVju39IAl17/35nfoNyGLwSFm1NibqVM8FFjeX4K1w
+         ffEM0x6TVDHUdIfnbc5pnlqFUqoZusMbQdiFpDl7Num0Tth9M36lEGO6072q2ouMcX
+         4lWRor0gpCSOQ==
+Date:   Sat, 3 Jul 2021 19:08:09 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 05/12] usb: otg-fsm: Fix hrtimer list corruption
+Message-ID: <20210703110809.GA4289@Peter>
+References: <20210701234317.26393-1-digetx@gmail.com>
+ <20210701234317.26393-6-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210701234317.26393-6-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Read voltage_now via IIO and provide the property.
+On 21-07-02 02:43:10, Dmitry Osipenko wrote:
+> The HNP work can be re-scheduled while it's still in-fly. This results in
+> re-initialization of the busy work, resetting the hrtimer's list node of
+> the work and crashing kernel with null dereference within kernel/timer
+> once work's timer is expired. It's very easy to trigger this problem by
+> re-plugging USB cable quickly. Initialize HNP work only once to fix this
+> trouble.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/power/supply/rn5t618_power.c | 56 ++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Fully OTG compliance support has not maintained for years, what's the use case you
+still want to use?
 
-diff --git a/drivers/power/supply/rn5t618_power.c b/drivers/power/supply/rn5t618_power.c
-index 819061918b2a..b062208c8a91 100644
---- a/drivers/power/supply/rn5t618_power.c
-+++ b/drivers/power/supply/rn5t618_power.c
-@@ -9,10 +9,12 @@
- #include <linux/device.h>
- #include <linux/bitops.h>
- #include <linux/errno.h>
-+#include <linux/iio/consumer.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/mfd/rn5t618.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
- #include <linux/regmap.h>
-@@ -64,6 +66,8 @@ struct rn5t618_power_info {
- 	struct power_supply *battery;
- 	struct power_supply *usb;
- 	struct power_supply *adp;
-+	struct iio_channel *channel_vusb;
-+	struct iio_channel *channel_vadp;
- 	int irq;
- };
- 
-@@ -77,6 +81,7 @@ static enum power_supply_usb_type rn5t618_usb_types[] = {
- static enum power_supply_property rn5t618_usb_props[] = {
- 	/* input current limit is not very accurate */
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_USB_TYPE,
- 	POWER_SUPPLY_PROP_ONLINE,
-@@ -85,6 +90,7 @@ static enum power_supply_property rn5t618_usb_props[] = {
- static enum power_supply_property rn5t618_adp_props[] = {
- 	/* input current limit is not very accurate */
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_ONLINE,
- };
-@@ -464,6 +470,16 @@ static int rn5t618_adp_get_property(struct power_supply *psy,
- 
- 		val->intval = FROM_CUR_REG(regval);
- 		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		if (!info->channel_vadp)
-+			return -ENODATA;
-+
-+		ret = iio_read_channel_processed(info->channel_vadp, &val->intval);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval *= 1000;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -589,6 +605,16 @@ static int rn5t618_usb_get_property(struct power_supply *psy,
- 			val->intval = FROM_CUR_REG(regval);
- 		}
- 		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		if (!info->channel_vusb)
-+			return -ENODATA;
-+
-+		ret = iio_read_channel_processed(info->channel_vusb, &val->intval);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval *= 1000;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -711,6 +737,28 @@ static int rn5t618_power_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, info);
- 
-+	info->channel_vusb = devm_iio_channel_get(&pdev->dev, "vusb");
-+	if (IS_ERR(info->channel_vusb)) {
-+		ret = PTR_ERR(info->channel_vusb);
-+		if (ret == -EPROBE_DEFER)
-+			return ret;
-+
-+		dev_warn(&pdev->dev, "could not request vusb iio channel (%d)",
-+			 ret);
-+		info->channel_vusb = NULL;
-+	}
-+
-+	info->channel_vadp = devm_iio_channel_get(&pdev->dev, "vadp");
-+	if (IS_ERR(info->channel_vadp)) {
-+		ret = PTR_ERR(info->channel_vadp);
-+		if (ret == -EPROBE_DEFER)
-+			return ret;
-+
-+		dev_warn(&pdev->dev, "could not request vadp iio channel (%d)",
-+			 ret);
-+		info->channel_vadp = NULL;
-+	}
-+
- 	ret = regmap_read(info->rn5t618->regmap, RN5T618_CONTROL, &v);
- 	if (ret)
- 		return ret;
-@@ -778,9 +826,17 @@ static int rn5t618_power_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id rn5t618_power_of_match[] = {
-+	{.compatible = "ricoh,rc5t619-power", },
-+	{.compatible = "ricoh,rn5t618-power", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, rn5t618_power_of_match);
-+
- static struct platform_driver rn5t618_power_driver = {
- 	.driver = {
- 		.name   = "rn5t618-power",
-+		.of_match_table = of_match_ptr(rn5t618_power_of_match),
- 	},
- 	.probe = rn5t618_power_probe,
- };
+Peter
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/usb/common/usb-otg-fsm.c | 6 +++++-
+>  include/linux/usb/otg-fsm.h      | 1 +
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+> index 3740cf95560e..0697fde51d00 100644
+> --- a/drivers/usb/common/usb-otg-fsm.c
+> +++ b/drivers/usb/common/usb-otg-fsm.c
+> @@ -193,7 +193,11 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
+>  	if (!fsm->host_req_flag)
+>  		return;
+>  
+> -	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> +	if (!fsm->hnp_work_inited) {
+> +		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> +		fsm->hnp_work_inited = true;
+> +	}
+> +
+>  	schedule_delayed_work(&fsm->hnp_polling_work,
+>  					msecs_to_jiffies(T_HOST_REQ_POLL));
+>  }
+> diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
+> index 3aee78dda16d..784659d4dc99 100644
+> --- a/include/linux/usb/otg-fsm.h
+> +++ b/include/linux/usb/otg-fsm.h
+> @@ -196,6 +196,7 @@ struct otg_fsm {
+>  	struct mutex lock;
+>  	u8 *host_req_flag;
+>  	struct delayed_work hnp_polling_work;
+> +	bool hnp_work_inited;
+>  	bool state_changed;
+>  };
+>  
+> -- 
+> 2.30.2
+> 
+
 -- 
-2.30.2
+
+Thanks,
+Peter Chen
 
