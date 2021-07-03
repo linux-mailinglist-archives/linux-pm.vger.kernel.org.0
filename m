@@ -2,91 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 150153BA9C6
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jul 2021 19:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D563BAA25
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jul 2021 21:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhGCRZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Jul 2021 13:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S229504AbhGCTnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Jul 2021 15:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhGCRZR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jul 2021 13:25:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D77C061762;
-        Sat,  3 Jul 2021 10:22:42 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r16so18120421ljk.9;
-        Sat, 03 Jul 2021 10:22:41 -0700 (PDT)
+        with ESMTP id S229473AbhGCTnJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jul 2021 15:43:09 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4331C061762
+        for <linux-pm@vger.kernel.org>; Sat,  3 Jul 2021 12:40:34 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id w19so24697830lfk.5
+        for <linux-pm@vger.kernel.org>; Sat, 03 Jul 2021 12:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GkqlghX39ZQMv0VL5XMqearbdcMjcK0zkdFdKOtJnZE=;
-        b=JPznIM0Ow6NR7CkKU2r2nhwUcgQydZM7A1VNBFp+isDWXxuevJXSfv8RQkurrGQL2k
-         WPQI59y6D3Tsnx8EwwRGVJArttxiRuNmrmX1DG58hyG/SDRlYihmk353i+llBl2zLCjg
-         fSfnVH9lD/Rjs5dJf9p75JWWl84pxuczO6ZuoD1hB9/JVLPHUnTQgeKPUkfLS/dmG/qs
-         mu7ImVMZ3anXjv9croyzuBMSReWpgtRDi5WnHEFhqT59Iw0O6HEU7d/z8JGkWoGPo/Fb
-         73S7EShfF1P5P9sxmGyFsvelgFUCsky2sQDBx8HSB7pWnbs6tI/NdFzBJAIfzggsLDFP
-         PnUQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LteJNCSpTKh9xbMe/59RuQkpJr9zFLx0HiImxwfUUxA=;
+        b=IFW9WhGy7gFSHI4FBwLNIuzV3jUA75+mJyCK+RSA5ZyehBHPnhfC64M3+hb2OezQrK
+         m7MqQccJenLyyKStvWQRZGdBsda0dzcSrb2ZGgtwwhul5AmkAarzV2BaueqXE/xZJGJL
+         3JoduOJcq621Gck9Eq6b0+R9WviMs6Jp3URHM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GkqlghX39ZQMv0VL5XMqearbdcMjcK0zkdFdKOtJnZE=;
-        b=GeCZbNj+hh0yyo7eYN02DKa4NLy1JaEjUhANj7AAm63LXNTdpYng27AjUrraamfinE
-         RpsHUKymFlmZtoPrQ7/iwnDOLFt+yoFTK1lOgKxsGMMtxcRjqhSdS1WDy3ybieZJgXDV
-         tj8eX8c3Do5ZLor2biOE5D012gN3nQCovPtQLkgJKqaZtAuRKnxA75EcevcNWpLJeuc0
-         uGyO4Oq/L+ZGRo+GW6hTdWCrDcSUt7jEBMIXcQgrvMmcskmq67P9eEEThEnSW/Lnt01v
-         H3fxRZT3EsVD04DlGUFBcWhLwmodp4L3NidcF1FfKQpFQ8V9s1uY6L3P3x5GJE5RgUWm
-         a2uQ==
-X-Gm-Message-State: AOAM532P/42N91FIo73btN+xMXlfihmTk/OKv73jlcFeWzleWR3ziOgm
-        4hofPYh2lBOlWCclEBA9PqPYrFhtjsQ=
-X-Google-Smtp-Source: ABdhPJz99JpS1s9M1J2vPLOFyo50q0z+BC5l0L+5Y8kLjHwHDWH3mZKaBsEFzY7LPxfB6iP5MWp3FQ==
-X-Received: by 2002:a05:651c:504:: with SMTP id o4mr4090359ljp.357.1625332960228;
-        Sat, 03 Jul 2021 10:22:40 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id x3sm749371ljm.43.2021.07.03.10.22.39
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LteJNCSpTKh9xbMe/59RuQkpJr9zFLx0HiImxwfUUxA=;
+        b=cLGpSMHmkm4l0gd0AG6H2AL7o5hDxZfBKSSniGkARo+NIL5xaNJ8LQ+FUClxCm473N
+         ps/hkHFVnV1lpZ6BqbKayNXQ5WreQvdfWZK2I2MKtmZWdW4PprY5puHoSvnuVnpivkeT
+         GX+t/p8N4efQ/Z+DeoW5hq5cUJnZNfSbjSb9i4exkN7EgbGl75b4sfcl3grXSJwV5Epb
+         bEumrs0ruXj5rkNUkE+wHm1YucHth8OMJHLDTtF8q5jegt4I80SyKGAOSZHupgGNNeKC
+         N2i4+Vmx+khNUefXjA8YzRKyRVZWPaxZ9bYb3ah/tgj9f9b5P+H45hxuSjKCEY6W6gY4
+         34wA==
+X-Gm-Message-State: AOAM533qCkwlRDzB6qK+RtZ09GawVAfrqsBAerldW2Zw3ZJhAKEQ+yD6
+        +VuLDwwXYJRYJDGeMG0oWKZzBs86ZPmlbxlo9N4=
+X-Google-Smtp-Source: ABdhPJwPFqeCzxOerne1+h9EdOW2pGBFxuZAk1Ckfk/pl+foyC1bPRtfo8rVL0SnnMCo7IZKgpd9vQ==
+X-Received: by 2002:a19:ca52:: with SMTP id h18mr4491313lfj.180.1625341232934;
+        Sat, 03 Jul 2021 12:40:32 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id n6sm750634ljc.68.2021.07.03.12.40.32
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jul 2021 10:22:39 -0700 (PDT)
-Subject: Re: [PATCH v2 05/12] usb: otg-fsm: Fix hrtimer list corruption
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210701234317.26393-1-digetx@gmail.com>
- <20210701234317.26393-6-digetx@gmail.com> <20210703110809.GA4289@Peter>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <29476aa3-c34e-8bf0-5eab-f7def493f329@gmail.com>
-Date:   Sat, 3 Jul 2021 20:22:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Sat, 03 Jul 2021 12:40:32 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id d16so24693959lfn.3
+        for <linux-pm@vger.kernel.org>; Sat, 03 Jul 2021 12:40:32 -0700 (PDT)
+X-Received: by 2002:a2e:a276:: with SMTP id k22mr4368475ljm.465.1625340861140;
+ Sat, 03 Jul 2021 12:34:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210703110809.GA4289@Peter>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <7a9ac752-2c1a-b05f-c5bd-9049c0bdd54e@linaro.org>
+In-Reply-To: <7a9ac752-2c1a-b05f-c5bd-9049c0bdd54e@linaro.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 3 Jul 2021 12:34:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZzeaZb0ByL+zPV1grizuxw2nAnmzU49S7pzV7sPS1Hg@mail.gmail.com>
+Message-ID: <CAHk-=wgZzeaZb0ByL+zPV1grizuxw2nAnmzU49S7pzV7sPS1Hg@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal for v5.14-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <zhang.chunyan@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Rajeshwari Ravindra Kamble <rkambl@codeaurora.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-03.07.2021 14:08, Peter Chen пишет:
-> On 21-07-02 02:43:10, Dmitry Osipenko wrote:
->> The HNP work can be re-scheduled while it's still in-fly. This results in
->> re-initialization of the busy work, resetting the hrtimer's list node of
->> the work and crashing kernel with null dereference within kernel/timer
->> once work's timer is expired. It's very easy to trigger this problem by
->> re-plugging USB cable quickly. Initialize HNP work only once to fix this
->> trouble.
-> 
-> Fully OTG compliance support has not maintained for years, what's the use case you
-> still want to use?
+On Sat, Jul 3, 2021 at 9:17 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v5.14-rc1
 
-I don't have any use case for it, but I had CONFIG_USB_OTG_FSM=y and it
-was crashing kernel badly. The OTG works perfectly fine without the FSM.
+This does not build for me. And I suspect it never built in linux-next either.
+
+I get
+
+  ERROR: modpost: "tegra_fuse_readl"
+[drivers/thermal/tegra/tegra30-tsensor.ko] undefined!
+  ERROR: modpost: "tegra_fuse_readl"
+[drivers/thermal/tegra/tegra-soctherm.ko] undefined!
+  make[1]: *** [scripts/Makefile.modpost:150: modules-only.symvers] Error 1
+  make[1]: *** Deleting file 'modules-only.symvers'
+  make: *** [Makefile:1762: modules] Error 2
+
+and I think it's due to that commit 1f9c5936b10c
+("thermal/drivers/tegra: Correct compile-testing of drivers") which
+quite sensibly tries to extend build coverage for the tegra thermal
+drivers, but that build coverage doesn't actually *work* outside the
+tegra world.
+
+That commit says "All Tegra thermal drivers support compile-testing",
+but clearly they stumble at the last hurdle.
+
+I made the decision to just unpull this, not because I couldn't fix
+it, but because if it was this untested, I don't want to worry about
+all the *other* code in there too.
+
+               Linus
