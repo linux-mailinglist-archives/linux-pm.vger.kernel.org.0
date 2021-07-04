@@ -2,118 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652CF3BADC8
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 18:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE413BAE28
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 20:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhGDQRl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jul 2021 12:17:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229547AbhGDQRl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 4 Jul 2021 12:17:41 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 330C561245;
-        Sun,  4 Jul 2021 16:15:01 +0000 (UTC)
-Date:   Sun, 4 Jul 2021 17:17:26 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org, lars@metafoo.de,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, leonard.crestez@nxp.com,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH 2/4] mfd: rn5t618: Add of compatibles for ADC and power
-Message-ID: <20210704171726.299ed620@jic23-huawei>
-In-Reply-To: <20210703183111.2b2b9b4f@aktux>
-References: <20210703084224.31623-1-andreas@kemnade.info>
-        <20210703084224.31623-3-andreas@kemnade.info>
-        <20210703170405.60828c57@jic23-huawei>
-        <20210703183111.2b2b9b4f@aktux>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S229642AbhGDSFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Jul 2021 14:05:04 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:55752 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229636AbhGDSFE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jul 2021 14:05:04 -0400
+Date:   Sun, 04 Jul 2021 18:02:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1625421746;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zl8b24X6b1YuA30lD6ejZ4gDTXykbocVgLDWkfJ7uEM=;
+        b=alMnw2V1th7Er7OLL0ge1JxaMW+IWqZueNPEw3JBcQwqV4Id/jCcDbHXwfQBTPVIUJEfHu
+        drLr25WD9S9BWuPllveT/shoHogG11khF/6y7znaOt/SiCaXILqh2RjAWp3/xCAA06XiTk
+        ufIIi0cTEEp+sG9QxkdR9ezh19JIxI0gGpZJeesg/dr55najdCBjTazFYsc9gUUW8HYLi6
+        xPgZ6am5BlNRhC4LKyVt1LbfRmRFQ6yaazQPFysVYuxsCzmL1aREUc/EImL4q9faPz9C7v
+        PYLgjhwhje3jAfUDlJ4Z1sn7L77/b/lKEUFa2SnJVGxHuxoJxm1oUY5wsr8TAg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1625421746;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zl8b24X6b1YuA30lD6ejZ4gDTXykbocVgLDWkfJ7uEM=;
+        b=MSJLGGRHOmExeY1FCvXzQzscO5tdutKsUzvCcs2Q6fyxtcoEE4WrbmvvhznBpmtwERaOfG
+        oQ91VLTqFeFtM+Bg==
+From:   "thermal-bot for Srinivas Pandruvada" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/drivers/int340x/processor_thermal:
+ Fix tcc setting
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org
+In-Reply-To: <20210628215803.75038-1-srinivas.pandruvada@linux.intel.com>
+References: <20210628215803.75038-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-ID: <162542174492.395.18073104723994090543.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 3 Jul 2021 18:31:11 +0200
-Andreas Kemnade <andreas@kemnade.info> wrote:
+The following commit has been merged into the thermal/next branch of thermal:
 
-> Hi,
-> 
-> On Sat, 3 Jul 2021 17:04:05 +0100
-> Jonathan Cameron <jic23@kernel.org> wrote:
-> 
-> > On Sat,  3 Jul 2021 10:42:22 +0200
-> > Andreas Kemnade <andreas@kemnade.info> wrote:
-> >   
-> > > This allows having devicetree nodes for the subdevices.
-> > > 
-> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > > ---
-> > >  drivers/mfd/rn5t618.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
-> > > index 384acb459427..b916c7471ca3 100644
-> > > --- a/drivers/mfd/rn5t618.c
-> > > +++ b/drivers/mfd/rn5t618.c
-> > > @@ -24,8 +24,10 @@ static const struct mfd_cell rn5t618_cells[] = {
-> > >  };
-> > >  
-> > >  static const struct mfd_cell rc5t619_cells[] = {
-> > > -	{ .name = "rn5t618-adc" },
-> > > -	{ .name = "rn5t618-power" },
-> > > +	{ .name = "rn5t618-adc",
-> > > +	  .of_compatible = "ricoh,rc5t619-adc" },    
-> > 
-> > Odd to have a name of 618 and a compatible of 619.  Why?
-> > Definitely deserves a comment if this is necessary for some reason!
-> >   
-> Background of this whole thing:
-> Both RN5T618 and RC5T619 have an ADC. I would expect the driver to work
-> for both but I cannot prove that. No RN5T618 here to test. Maybe it
-> requires some quirks, probably not. The only hint I have is that
-> a) I use register definitions added to the kernel for RN5T618 support
-> b) public datasheets looks same regarding the ADC.
-> c) out-of-tree code for the RN5T618 does not give a clear picture, it
-> shows no differences but is not complete enough to judge.
-> 
-> To avoid introducing untested things, I am only adding it to the
-> rc5t619_cell list. I would really hope that someone does some rn5t618
-> tests... Because everything else which is both for the RN5T618 and
-> RC5T619 uses rn5t618 as a name, I continued that practise.
-> 
-> The subdevice driver also gets the information whether it is a rn5t618
-> or rc5t619 via rn5t618->variant, so it can handle things.
-> 
-> > > +	{ .name = "rn5t618-power",
-> > > +	  .of_compatible = "ricoh,rc5t619-power" },  
-> 
-> Similar situation here.
-> 
-> > >  	{ .name = "rn5t618-regulator" },
-> > >  	{ .name = "rc5t619-rtc" },  
-> and this one definitively only exists in the rc5t619.
+Commit-ID:     fe6a6de6692e7f7159c1ff42b07ecd737df712b4
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fe6a6de6692e7f7159c1ff42b07ecd737df712b4
+Author:        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+AuthorDate:    Mon, 28 Jun 2021 14:58:03 -07:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Sun, 04 Jul 2021 18:28:04 +02:00
 
-All sounds reasonable to me.
-Dt binding wise we'd normally handle this with a double compatible,
-with the more part specific one first.  That way we can diverge later
-if we need to, but don't need to care about it until an identified need
-has occurred.
+thermal/drivers/int340x/processor_thermal: Fix tcc setting
 
-compatible = "ricoh,rc5t619-adc", "ricoh,rc5t618-adc";  (or something like that) 
+The following fixes are done for tcc sysfs interface:
+- TCC is 6 bits only from bit 29-24
+- TCC of 0 is valid
+- When BIT(31) is set, this register is read only
+- Check for invalid tcc value
+- Error for negative values
 
-Anyhow, for now perhaps a comment to express briefly what you state above.
+Fixes: fdf4f2fb8e899 ("drivers: thermal: processor_thermal_device: Export sysfs interface for TCC offset")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210628215803.75038-1-srinivas.pandruvada@linux.intel.com
+---
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-> 
-> > >  	{ .name = "rn5t618-wdt" },    
-> > 
-> >   
-> 
-> Regards,
-> Andreas
-
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index de4fc64..0f0038a 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -78,24 +78,27 @@ static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+ 	if (err)
+ 		return err;
+ 
+-	val = (val >> 24) & 0xff;
++	val = (val >> 24) & 0x3f;
+ 	return sprintf(buf, "%d\n", (int)val);
+ }
+ 
+-static int tcc_offset_update(int tcc)
++static int tcc_offset_update(unsigned int tcc)
+ {
+ 	u64 val;
+ 	int err;
+ 
+-	if (!tcc)
++	if (tcc > 63)
+ 		return -EINVAL;
+ 
+ 	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
+ 	if (err)
+ 		return err;
+ 
+-	val &= ~GENMASK_ULL(31, 24);
+-	val |= (tcc & 0xff) << 24;
++	if (val & BIT(31))
++		return -EPERM;
++
++	val &= ~GENMASK_ULL(29, 24);
++	val |= (tcc & 0x3f) << 24;
+ 
+ 	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
+ 	if (err)
+@@ -104,14 +107,15 @@ static int tcc_offset_update(int tcc)
+ 	return 0;
+ }
+ 
+-static int tcc_offset_save;
++static unsigned int tcc_offset_save;
+ 
+ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 				struct device_attribute *attr, const char *buf,
+ 				size_t count)
+ {
++	unsigned int tcc;
+ 	u64 val;
+-	int tcc, err;
++	int err;
+ 
+ 	err = rdmsrl_safe(MSR_PLATFORM_INFO, &val);
+ 	if (err)
+@@ -120,7 +124,7 @@ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 	if (!(val & BIT(30)))
+ 		return -EACCES;
+ 
+-	if (kstrtoint(buf, 0, &tcc))
++	if (kstrtouint(buf, 0, &tcc))
+ 		return -EINVAL;
+ 
+ 	err = tcc_offset_update(tcc);
