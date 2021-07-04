@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A6D3BADC1
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 18:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652CF3BADC8
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 18:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhGDQKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jul 2021 12:10:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40166 "EHLO mail.kernel.org"
+        id S229570AbhGDQRl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Jul 2021 12:17:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229537AbhGDQKj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 4 Jul 2021 12:10:39 -0400
+        id S229547AbhGDQRl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 4 Jul 2021 12:17:41 -0400
 Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1A4A2613B1;
-        Sun,  4 Jul 2021 16:07:59 +0000 (UTC)
-Date:   Sun, 4 Jul 2021 17:10:23 +0100
+        by mail.kernel.org (Postfix) with ESMTPSA id 330C561245;
+        Sun,  4 Jul 2021 16:15:01 +0000 (UTC)
+Date:   Sun, 4 Jul 2021 17:17:26 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
-        devicetree@vger.kernel.org, lars@metafoo.de,
-        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sre@kernel.org, robh+dt@kernel.org,
-        leonard.crestez@nxp.com, lee.jones@linaro.org
-Subject: Re: [Letux-kernel] [PATCH 0/4] mfd: rn5t618: Extend ADC support
-Message-ID: <20210704171023.6199826a@jic23-huawei>
-In-Reply-To: <20210703185540.5b6bec20@aktux>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, lars@metafoo.de,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, leonard.crestez@nxp.com,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH 2/4] mfd: rn5t618: Add of compatibles for ADC and power
+Message-ID: <20210704171726.299ed620@jic23-huawei>
+In-Reply-To: <20210703183111.2b2b9b4f@aktux>
 References: <20210703084224.31623-1-andreas@kemnade.info>
-        <20210703165950.6e2aeb89@jic23-huawei>
-        <20210703183932.75c7012a@aktux>
-        <20210703185540.5b6bec20@aktux>
+        <20210703084224.31623-3-andreas@kemnade.info>
+        <20210703170405.60828c57@jic23-huawei>
+        <20210703183111.2b2b9b4f@aktux>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -39,52 +39,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 3 Jul 2021 18:55:40 +0200
+On Sat, 3 Jul 2021 18:31:11 +0200
 Andreas Kemnade <andreas@kemnade.info> wrote:
 
-> On Sat, 3 Jul 2021 18:39:40 +0200
-> Andreas Kemnade <andreas@kemnade.info> wrote:
+> Hi,
 > 
-> > Hi,
-> > 
-> > On Sat, 3 Jul 2021 16:59:50 +0100
-> > Jonathan Cameron <jic23@kernel.org> wrote:
+> On Sat, 3 Jul 2021 17:04:05 +0100
+> Jonathan Cameron <jic23@kernel.org> wrote:
+> 
+> > On Sat,  3 Jul 2021 10:42:22 +0200
+> > Andreas Kemnade <andreas@kemnade.info> wrote:
 > >   
-> > > On Sat,  3 Jul 2021 10:42:20 +0200
-> > > Andreas Kemnade <andreas@kemnade.info> wrote:
-> > >     
-> > > > Add devicetree support so that consumers can reference the channels
-> > > > via devicetree, especially the power subdevice can make use of that
-> > > > to provide voltage_now properties.      
+> > > This allows having devicetree nodes for the subdevices.
 > > > 
-> > > Does the mapping vary from board to board?  Often these mappings are
-> > > internal to the chip so might as well be provided hard coded in the
-> > > relevant drivers rather than via DT. See drivers that have iio_map
-> > > structure arrays.
-> > >     
-> > Most things are internal to the chip, but 
-> > AIN1/AIN0 are external and could be connected to anything.
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > ---
+> > >  drivers/mfd/rn5t618.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
+> > > index 384acb459427..b916c7471ca3 100644
+> > > --- a/drivers/mfd/rn5t618.c
+> > > +++ b/drivers/mfd/rn5t618.c
+> > > @@ -24,8 +24,10 @@ static const struct mfd_cell rn5t618_cells[] = {
+> > >  };
+> > >  
+> > >  static const struct mfd_cell rc5t619_cells[] = {
+> > > -	{ .name = "rn5t618-adc" },
+> > > -	{ .name = "rn5t618-power" },
+> > > +	{ .name = "rn5t618-adc",
+> > > +	  .of_compatible = "ricoh,rc5t619-adc" },    
+> > 
+> > Odd to have a name of 618 and a compatible of 619.  Why?
+> > Definitely deserves a comment if this is necessary for some reason!
 > >   
-> hmm, iio_map stuff looks nice, so before messing with devicetree,
-> I could solve 90% of the problem by just using iio_map? For my use
-> cases it is enough to have the internal stuff at the moment. That would
-> simplify stuff a lot.
+> Background of this whole thing:
+> Both RN5T618 and RC5T619 have an ADC. I would expect the driver to work
+> for both but I cannot prove that. No RN5T618 here to test. Maybe it
+> requires some quirks, probably not. The only hint I have is that
+> a) I use register definitions added to the kernel for RN5T618 support
+> b) public datasheets looks same regarding the ADC.
+> c) out-of-tree code for the RN5T618 does not give a clear picture, it
+> shows no differences but is not complete enough to judge.
 > 
-> So I could go forward with the iio_map stuff now, and if there is a use
-> case for AIN1/0, the devicetree stuff can be added later?
+> To avoid introducing untested things, I am only adding it to the
+> rc5t619_cell list. I would really hope that someone does some rn5t618
+> tests... Because everything else which is both for the RN5T618 and
+> RC5T619 uses rn5t618 as a name, I continued that practise.
+> 
+> The subdevice driver also gets the information whether it is a rn5t618
+> or rc5t619 via rn5t618->variant, so it can handle things.
+> 
+> > > +	{ .name = "rn5t618-power",
+> > > +	  .of_compatible = "ricoh,rc5t619-power" },  
+> 
+> Similar situation here.
+> 
+> > >  	{ .name = "rn5t618-regulator" },
+> > >  	{ .name = "rc5t619-rtc" },  
+> and this one definitively only exists in the rc5t619.
 
-I was just thinking the same.  I 'think' that it will first try to find
-a mapping via device tree and then use the iio_map stuff.
+All sounds reasonable to me.
+Dt binding wise we'd normally handle this with a double compatible,
+with the more part specific one first.  That way we can diverge later
+if we need to, but don't need to care about it until an identified need
+has occurred.
 
-So you can probably get away with a mixture of the two.
-Worth testing that works though (hook up iio-hwmon to AIN0 perhaps whilst
-also using the iio_map approach).
+compatible = "ricoh,rc5t619-adc", "ricoh,rc5t618-adc";  (or something like that) 
 
-I might be completely wrong though and am not aware of anyone currently
-doing this...
+Anyhow, for now perhaps a comment to express briefly what you state above.
 
-Jonathan
-
+> 
+> > >  	{ .name = "rn5t618-wdt" },    
+> > 
+> >   
 > 
 > Regards,
 > Andreas
