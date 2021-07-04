@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9697B3BABDB
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 09:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B25A3BABDE
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jul 2021 09:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbhGDHnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jul 2021 03:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S229573AbhGDHnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Jul 2021 03:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhGDHnt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jul 2021 03:43:49 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169B9C061765
-        for <linux-pm@vger.kernel.org>; Sun,  4 Jul 2021 00:41:15 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so12477638pjs.2
-        for <linux-pm@vger.kernel.org>; Sun, 04 Jul 2021 00:41:15 -0700 (PDT)
+        with ESMTP id S229540AbhGDHnw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jul 2021 03:43:52 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B732C061765
+        for <linux-pm@vger.kernel.org>; Sun,  4 Jul 2021 00:41:17 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so12477666pjs.2
+        for <linux-pm@vger.kernel.org>; Sun, 04 Jul 2021 00:41:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Y2JvDwp3TfASNY2nYjyfxKqjVkgvIs8uvDCzlvHG2AA=;
-        b=cbrduWjiQDcg1zBJYNfFqJlwRhenjmvi02OUBwr8M4hyh8/l3aDFwt2Vy1ZRblRZ6K
-         1SOfwbZhNI/1AhuNfkurXrnNtEIQp0pcEel+V7xEswXE8qJW3b2gSmIDaTxUNi7RLeca
-         vfuEVL191zztFFkSQ7e2PTS+A641GNx76vDII+QCNt7DEsLVNNUpVsKel1P5tcA6s/6e
-         BlLVFtK3093ZAiV7/rjobH8nig1pxRbCgsTXE9da1w3CHhbvHP6cP1yKOjXN1nRWUNEW
-         F+Hi1pGWY9ajJzGRZdf4BU4PFhVynDvZm5FRQNSz08BY0JrxQ4LfyJzv5zGRDnzVsZhj
-         GwgA==
+        bh=HDIrJvvsYWuc6ETGsLx0yysZhuZFRshLStXAyTVxX4g=;
+        b=G9buf/mi2kfYFqNAooOgyOcPIo1rXsZbVNvtetH9l8NOmQEN5UgVNjEQLaufuxZBct
+         C6NoODOdpBytyS5VVR7o7isLsfrIQ0cHw6I+H057eDB/oVKE7g6xMp2ivmAHOrtmmK3x
+         o+wkarBQqhC9//45GRpSVZpUEIwO3UxUfnCN/fEtXH3W+v3fMecfCrkBjzaNBFHy26O8
+         01pQ2MqU4ibhIhQkRzllM8uSZJpjShNXUonMqxVhi7/K+Rnv/wdLO5SmRi/nnWThqmiZ
+         v2yp/rwEtZEa8FL6uzM1bn2yviBSJn36D+YVh9T5lVSq2ckIH9N28JEyHIORogWctRgJ
+         zx+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Y2JvDwp3TfASNY2nYjyfxKqjVkgvIs8uvDCzlvHG2AA=;
-        b=bjdLnZHaIa7DJ2YRoOP3r/x/fRaZNUxL6cIyc+vdojNwuogE9HZVjrRodbdKbuPmTe
-         XyRFTo1jI3t2RJzlVc87sVuwh2F+/IGovK8kNXLXSjQvOgqS4xItGXBtWsCtzq9uH314
-         0it6a7Ar0TKMoeSQRtJdYZfq21Vq20Mw7F3DBp+pGkwTswAXsMZyV4MHRyQfSe6QXd0s
-         9o9MZ1rEOpyb4mXuEXoM9mB6YYL7yd+x1rA4vGFHJikX7YnkzERjCgvd3pFEp0X/neis
-         6QL6GgcnlfOb7spavk1vXAnXzCRQyaGrFQUnqeTJ1fWEZxTAgbZks2gQYeLqe/2GOXGb
-         FR5g==
-X-Gm-Message-State: AOAM532W6UuuFKlRd7/R893mJlY+9vI67ym5KkOSfb+iNT0rRpEMPd3a
-        a2UTnYhi884GgVWsOosALZwJEA==
-X-Google-Smtp-Source: ABdhPJwGmTyodmzASq3EdwqjQVy7NsyVqG3mZlScAbL5o9KQK27DmKnTNeCgdySHHZLmg2TcVtdRPw==
-X-Received: by 2002:a17:90a:d506:: with SMTP id t6mr8292715pju.26.1625384474616;
-        Sun, 04 Jul 2021 00:41:14 -0700 (PDT)
+        bh=HDIrJvvsYWuc6ETGsLx0yysZhuZFRshLStXAyTVxX4g=;
+        b=jfDcOBsYgJ2UjyAKwqUCJlr0JsOr1cV1HnT+uZADPnvJE+nwwPKAywPDCXyk8hbndT
+         7czPiZbJUjIOt2E4cjgJckoXg+VeyitPlrfWwEyzoPGfUx+5+3b0svW7ONQE/nkZ7NMj
+         fRewL74z9XDZXWaKX5P+bN4qUQrrww1rE3SUkiMYrDZukbsP9uR0gFKWV3ARfMRy6m1N
+         sqqmcMy5+w5HfRc1cjC3zfj4d/DsQnSPZaHg2BzeyZrk5feRwXtOY4daJJUeekBBTaNX
+         wd/jX8YPS3bh5AzJA0cWFd0FOuX+tRxFBdgBSdYyKa2YNbpCG04v+/tY80gDg5PwpMs5
+         LaFg==
+X-Gm-Message-State: AOAM5320q+gfTEpRwtQOkIy+yPQpX2uhUEQxgsuZmdQVP9ybcgHzyCA0
+        fuPoFM53fCahQFsBkWEMzjQaMQ==
+X-Google-Smtp-Source: ABdhPJzEyyuaiMSgs2qvy6BH1qMn/CvKTYdpLqMmpQi/HCaX7JNhwS1XTVdpaFoqucne6QjasGQBMg==
+X-Received: by 2002:a17:902:d217:b029:105:e265:65c7 with SMTP id t23-20020a170902d217b0290105e26565c7mr7290765ply.16.1625384477169;
+        Sun, 04 Jul 2021 00:41:17 -0700 (PDT)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id gz24sm7052956pjb.0.2021.07.04.00.41.12
+        by smtp.gmail.com with ESMTPSA id gz24sm7052956pjb.0.2021.07.04.00.41.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jul 2021 00:41:14 -0700 (PDT)
+        Sun, 04 Jul 2021 00:41:16 -0700 (PDT)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH 2/3] dt-bindings: qcom,pon: Add 'qcom,mode-in-imem' support
-Date:   Sun,  4 Jul 2021 15:40:44 +0800
-Message-Id: <20210704074045.21643-3-shawn.guo@linaro.org>
+Subject: [PATCH 3/3] power: reset: qcom-pon: Add support for 'qcom,mode-in-imem'
+Date:   Sun,  4 Jul 2021 15:40:45 +0800
+Message-Id: <20210704074045.21643-4-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210704074045.21643-1-shawn.guo@linaro.org>
 References: <20210704074045.21643-1-shawn.guo@linaro.org>
@@ -62,57 +62,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's not always the case that reboot mode value gets stored in PON
-register.  For example, Sony Xperia M4 Aqua phone (MSM8939) uses a
-different set of mode value and stores them in IMEM.  Add property
-'qcom,mode-in-imem' to distinguish this mechanism from the existing one.
+Add support for DT property 'qcom,mode-in-imem', which is used on
+devices like Sony Xperia M4 Aqua phone (MSM8939) to store a different
+set of mode values IMEM rather than PON register.
 
 Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 ---
- .../bindings/power/reset/qcom,pon.yaml        | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/power/reset/qcom-pon.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-index 7764c804af1d..a6270e39b7a2 100644
---- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-@@ -23,6 +23,10 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
+index 4a688741a88a..f63d49c72f55 100644
+--- a/drivers/power/reset/qcom-pon.c
++++ b/drivers/power/reset/qcom-pon.c
+@@ -42,6 +42,24 @@ static int pm8916_reboot_mode_write(struct reboot_mode_driver *reboot,
+ 	return ret;
+ }
  
-+  qcom,mode-in-imem:
-+    description: Reboot mode is stored in IMEM rather than PON register
-+    type: boolean
++static int pm8916_reboot_mode_write_imem(struct reboot_mode_driver *reboot,
++					 unsigned int magic)
++{
++	struct pm8916_pon *pon = container_of(reboot, struct pm8916_pon,
++					      reboot_mode);
++	void __iomem *imem;
 +
- patternProperties:
-   "^mode-.+":
-     $ref: /schemas/types.yaml#/definitions/uint32
-@@ -35,6 +39,7 @@ required:
- additionalProperties: false
++	imem = devm_ioremap(pon->dev, pon->baseaddr, 4);
++	if (!imem) {
++		dev_err(pon->dev, "failed to map imem\n");
++		return -ENOMEM;
++	}
++
++	writel(magic, imem);
++
++	return 0;
++}
++
+ static int pm8916_pon_probe(struct platform_device *pdev)
+ {
+ 	struct pm8916_pon *pon;
+@@ -66,7 +84,12 @@ static int pm8916_pon_probe(struct platform_device *pdev)
  
- examples:
-+  # Example 1: Reboot mode is stored in PON register
-   - |
-     pmic {
-         #address-cells = <1>;
-@@ -47,3 +52,17 @@ examples:
-             mode-recovery = <0x1>;
-         };
-     };
-+  # Example 2: Reboot mode is stored in IMEM
-+  - |
-+    pmic {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
+ 	pon->reboot_mode.dev = &pdev->dev;
+ 	pon->reason_shift = (long)of_device_get_match_data(&pdev->dev);
+-	pon->reboot_mode.write = pm8916_reboot_mode_write;
 +
-+        pon@800 {
-+            compatible = "qcom,pm8916-pon";
-+            reg = <0x860065c>;
-+            qcom,mode-in-imem;
-+            mode-bootloader = <0x77665500>;
-+            mode-recovery = <0x77665502>;
-+        };
-+    };
++	if (device_property_present(&pdev->dev, "qcom,mode-in-imem"))
++		pon->reboot_mode.write = pm8916_reboot_mode_write_imem;
++	else
++		pon->reboot_mode.write = pm8916_reboot_mode_write;
++
+ 	error = devm_reboot_mode_register(&pdev->dev, &pon->reboot_mode);
+ 	if (error) {
+ 		dev_err(&pdev->dev, "can't register reboot mode\n");
 -- 
 2.17.1
 
