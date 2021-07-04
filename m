@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D838D3BAF80
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jul 2021 00:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C033BAF83
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jul 2021 00:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbhGDW6r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jul 2021 18:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S230014AbhGDW6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Jul 2021 18:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbhGDW6m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jul 2021 18:58:42 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E1AC061574;
-        Sun,  4 Jul 2021 15:56:05 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id t30so2042370ljo.5;
-        Sun, 04 Jul 2021 15:56:05 -0700 (PDT)
+        with ESMTP id S229941AbhGDW6n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jul 2021 18:58:43 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D7C061762;
+        Sun,  4 Jul 2021 15:56:06 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id c28so5612539lfp.11;
+        Sun, 04 Jul 2021 15:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JqSUXf/ZgNGuB1vWN3GmV72dPap7cFs2CpoCHTXSAoU=;
-        b=WP/0jNtEwZ0sjun+btlq67YNd80T7cXwE1IkniyePIhpdmHXXMvv9yymm8kYFf63nQ
-         FJxqgb4OPYQTr2hBvnesT/9XFmX9mG0Q1abGUkdFncYhCQUdCpY7d2//ngeCtZW3AQG7
-         Az+UUKqW6E0JcqNlkMaFsml6iI2xNTTE/EjHwBenklwTnj+0cdwJWFOEV6F8tueAlx3w
-         va4kWCkMqAu8cQwYe9Vbs4nvE0vjaxh893t8+H0m4YdTE8UczFZJxegFBzKEgmmTwTJi
-         glZc8L5QpHNrvP6h00my/jHrWh4xcI/RlYYdO0XhoGnnIPp7CyTvH6h6U7QVxTvpLNkp
-         wGxA==
+        bh=j0s0M0z8QxhlBsL/EnH/YmL65tjqGzsbgcjcWgYpzJI=;
+        b=hPtwlF/YsRqPd5mmTAIYIlsA48PeQnSqk3bk9ZQPDFAeTP9+ScSsdirrC67NjnA8Xy
+         nRKOVHo0sbM925B7P3cFNHk9gXd0lO5s0QDRmUixnyf5DS4k4gPd1bCCxOz6BBXJMQFG
+         6I3jdE435HVe3nOQTA6qzCu2lYvAINQYtOEuz2g8oP9U+fVfqSIH8kfScXllkiGz6dOB
+         1j3zbumNgSZZgj31MGg5XGmOPCk3wq0BoBXkAI8Q5JPnas5XrPH/nEKswbeNw97yRYiv
+         pYwf9yfzqYoHmzZQzm30yLizlXS1yCnlygz+tgAkYrOIYT0eBdgGFTFd7mTlyUYsGj8q
+         1vNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JqSUXf/ZgNGuB1vWN3GmV72dPap7cFs2CpoCHTXSAoU=;
-        b=I5T9pYHpK44P7yHbWSVjbzUHtkcLdrdp4Nt92AIAFCrastFKwUGJVT12NQzv01NOUV
-         B87yRt8jto78vkaAHosUkG64Hi7FtbvVYF6cRAuPGjQl359Up49zXq1fD5iln32QlDFu
-         Z7O7zdmAz6bJyR439slxD0l85F3f+iTqLpCojdyiLrL5boMV10cPGfbGKGFxVcCNCjxQ
-         FgsfekeUbpfvhFmWN4uoq7rl8ndNQlLhAdCNSigTfI39AA6kf7pNLdFSWfVObPE1qVi1
-         WinCBizm12JkZr9h7uEpWVQorLWjIZAnqKXnhEBL4jYO9GtDEyLCi7NEiBvvaXhhyeKC
-         evgw==
-X-Gm-Message-State: AOAM533tdh+CB1YWl16/52oDHLW3ww7C0BpG47v0g+n084+XIF8I6ZIq
-        +CeC4Sxp6sOByVqRvu07bo8=
-X-Google-Smtp-Source: ABdhPJz3cgnktcm6j8vgfJzh0t0Ttm7cJvw7C4vIbbXS9x25qz6uPZP9dTQA850q/qi+fDfF/07ZkQ==
-X-Received: by 2002:a05:651c:a07:: with SMTP id k7mr9022928ljq.477.1625439364325;
-        Sun, 04 Jul 2021 15:56:04 -0700 (PDT)
+        bh=j0s0M0z8QxhlBsL/EnH/YmL65tjqGzsbgcjcWgYpzJI=;
+        b=sXQrLLRFDVYW7ZfdFfUAJbx6jYwHledRwol4onddm2RJ4vJZextZ/9GLZ3N2sZPLWn
+         3QIr3zKrxlXcbGzJ/YrRThVDOceuGhjy/u8wxVhoj7t5EawXno91pIp7MajqxwY0oV0r
+         M0MNfodJhAff5PNqq9tVKRudnXpncauNqnmeHTOROyA6GHiEjl9tRq1ZEsPBmMxbMpMi
+         +Mi/vVWTCjxuIGr0ec6R6l4l3QiSr+VcJ+uf4Em/79UDCUZzy1VdQhgEWhCU/SAI025c
+         nKjFeSYm7v8kR9BGDcywtZC3jUIEee/r+F1oSfRRRMGioQJ7Gp1/aQUzbV19dPWRyWXp
+         UeyQ==
+X-Gm-Message-State: AOAM531SMI3VqNoMsZ1S5Hl+6vXYegid5nYRNs/ycDFF63XjW8DbN3nN
+        YzKsPjHFwUiaE+eJTq3dM5A=
+X-Google-Smtp-Source: ABdhPJzL1NLRsiK6JiBHsnCMYe8W+wwSI5V2oXPYjSehALhqs7WTs0i6vrpVnOaNlnPYlBSQD8MwHQ==
+X-Received: by 2002:a05:6512:90a:: with SMTP id e10mr8239819lft.70.1625439365088;
+        Sun, 04 Jul 2021 15:56:05 -0700 (PDT)
 Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.gmail.com with ESMTPSA id i13sm497921lfc.111.2021.07.04.15.56.03
+        by smtp.gmail.com with ESMTPSA id i13sm497921lfc.111.2021.07.04.15.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 04 Jul 2021 15:56:04 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
@@ -60,9 +60,9 @@ To:     Thierry Reding <treding@nvidia.com>,
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v3 06/12] dt-bindings: power: supply: smb347-charger: Document USB VBUS regulator
-Date:   Mon,  5 Jul 2021 01:54:27 +0300
-Message-Id: <20210704225433.32029-7-digetx@gmail.com>
+Subject: [PATCH v3 07/12] power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+Date:   Mon,  5 Jul 2021 01:54:28 +0300
+Message-Id: <20210704225433.32029-8-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210704225433.32029-1-digetx@gmail.com>
 References: <20210704225433.32029-1-digetx@gmail.com>
@@ -72,82 +72,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SMB347 can supply power to USB VBUS, which is required by OTG-cable
-devices that want to switch USB port into the host mode. Add USB VBUS
-regulator properties.
+The smb347_set_writable() is used by interrupt handler and outside of it.
+The interrupt should be disabled when the function is used outside of
+interrupt handler in order to prevent racing with the interrupt context.
+Add new parameter to smb347_set_writable() that allows to disable IRQ.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../power/supply/summit,smb347-charger.yaml   | 28 +++++++++++++++++++
- .../dt-bindings/power/summit,smb347-charger.h |  4 +++
- 2 files changed, 32 insertions(+)
+ drivers/power/supply/smb347-charger.c | 30 +++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-index 983fc215c1e5..cd3d834f734d 100644
---- a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-@@ -73,6 +73,24 @@ properties:
-       - 1 # SMB3XX_SOFT_TEMP_COMPENSATE_CURRENT Current compensation
-       - 2 # SMB3XX_SOFT_TEMP_COMPENSATE_VOLTAGE Voltage compensation
- 
-+  summit,inok-polarity:
-+    description: |
-+      Polarity of INOK signal indicating presence of external power supply.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum:
-+      - 0 # SMB3XX_SYSOK_INOK_ACTIVE_LOW
-+      - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
+diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
+index df240420f2de..db1378b41f80 100644
+--- a/drivers/power/supply/smb347-charger.c
++++ b/drivers/power/supply/smb347-charger.c
+@@ -671,10 +671,22 @@ static int smb347_set_temp_limits(struct smb347_charger *smb)
+  *
+  * Returns %0 on success and negative errno in case of failure.
+  */
+-static int smb347_set_writable(struct smb347_charger *smb, bool writable)
++static int smb347_set_writable(struct smb347_charger *smb, bool writable,
++			       bool irq_toggle)
+ {
+-	return regmap_update_bits(smb->regmap, CMD_A, CMD_A_ALLOW_WRITE,
+-				  writable ? CMD_A_ALLOW_WRITE : 0);
++	struct i2c_client *client = to_i2c_client(smb->dev);
++	int ret;
 +
-+  usb-vbus:
-+    $ref: "../../regulator/regulator.yaml#"
-+    type: object
++	if (writable && irq_toggle && !smb->irq_unsupported)
++		disable_irq(client->irq);
 +
-+    properties:
-+      summit,needs-inok-toggle:
-+        type: boolean
-+        description: INOK signal is fixed and polarity needs to be toggled
-+                     in order to enable/disable output mode.
++	ret = regmap_update_bits(smb->regmap, CMD_A, CMD_A_ALLOW_WRITE,
++				 writable ? CMD_A_ALLOW_WRITE : 0);
 +
- allOf:
-   - if:
-       properties:
-@@ -134,6 +152,7 @@ examples:
-             reg = <0x7f>;
- 
-             summit,enable-charge-control = <SMB3XX_CHG_ENABLE_PIN_ACTIVE_HIGH>;
-+            summit,inok-polarity = <SMB3XX_SYSOK_INOK_ACTIVE_LOW>;
-             summit,chip-temperature-threshold-celsius = <110>;
-             summit,mains-current-limit-microamp = <2000000>;
-             summit,usb-current-limit-microamp = <500000>;
-@@ -141,6 +160,15 @@ examples:
-             summit,enable-mains-charging;
- 
-             monitored-battery = <&battery>;
++	if ((!writable || ret) && irq_toggle && !smb->irq_unsupported)
++		enable_irq(client->irq);
 +
-+            usb-vbus {
-+                regulator-name = "usb_vbus";
-+                regulator-min-microvolt = <5000000>;
-+                regulator-max-microvolt = <5000000>;
-+                regulator-min-microamp = <750000>;
-+                regulator-max-microamp = <750000>;
-+                summit,needs-inok-toggle;
-+            };
-         };
-     };
++	return ret;
+ }
  
-diff --git a/include/dt-bindings/power/summit,smb347-charger.h b/include/dt-bindings/power/summit,smb347-charger.h
-index d918bf321a71..3205699b5e41 100644
---- a/include/dt-bindings/power/summit,smb347-charger.h
-+++ b/include/dt-bindings/power/summit,smb347-charger.h
-@@ -16,4 +16,8 @@
- #define SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW	1
- #define SMB3XX_CHG_ENABLE_PIN_ACTIVE_HIGH	2
+ static int smb347_hw_init(struct smb347_charger *smb)
+@@ -682,7 +694,7 @@ static int smb347_hw_init(struct smb347_charger *smb)
+ 	unsigned int val;
+ 	int ret;
  
-+/* Polarity of INOK signal */
-+#define SMB3XX_SYSOK_INOK_ACTIVE_LOW		0
-+#define SMB3XX_SYSOK_INOK_ACTIVE_HIGH		1
-+
- #endif
+-	ret = smb347_set_writable(smb, true);
++	ret = smb347_set_writable(smb, true, false);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -758,7 +770,7 @@ static int smb347_hw_init(struct smb347_charger *smb)
+ 	ret = smb347_start_stop_charging(smb);
+ 
+ fail:
+-	smb347_set_writable(smb, false);
++	smb347_set_writable(smb, false, false);
+ 	return ret;
+ }
+ 
+@@ -866,7 +878,7 @@ static int smb347_irq_set(struct smb347_charger *smb, bool enable)
+ 	if (smb->irq_unsupported)
+ 		return 0;
+ 
+-	ret = smb347_set_writable(smb, true);
++	ret = smb347_set_writable(smb, true, true);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -891,7 +903,7 @@ static int smb347_irq_set(struct smb347_charger *smb, bool enable)
+ 	ret = regmap_update_bits(smb->regmap, CFG_PIN, CFG_PIN_EN_CHARGER_ERROR,
+ 				 enable ? CFG_PIN_EN_CHARGER_ERROR : 0);
+ fail:
+-	smb347_set_writable(smb, false);
++	smb347_set_writable(smb, false, true);
+ 	return ret;
+ }
+ 
+@@ -919,7 +931,7 @@ static int smb347_irq_init(struct smb347_charger *smb,
+ 	if (!client->irq)
+ 		return 0;
+ 
+-	ret = smb347_set_writable(smb, true);
++	ret = smb347_set_writable(smb, true, false);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -931,7 +943,7 @@ static int smb347_irq_init(struct smb347_charger *smb,
+ 				 CFG_STAT_ACTIVE_HIGH | CFG_STAT_DISABLED,
+ 				 CFG_STAT_DISABLED);
+ 
+-	smb347_set_writable(smb, false);
++	smb347_set_writable(smb, false, false);
+ 
+ 	if (ret < 0) {
+ 		dev_warn(smb->dev, "failed to initialize IRQ: %d\n", ret);
 -- 
 2.32.0
 
