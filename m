@@ -2,221 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D60763BBD75
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jul 2021 15:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890033BBDFD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jul 2021 16:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhGEN1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jul 2021 09:27:36 -0400
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:40538 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhGEN1g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jul 2021 09:27:36 -0400
-Received: by mail-ot1-f47.google.com with SMTP id d21-20020a9d72d50000b02904604cda7e66so18292192otk.7;
-        Mon, 05 Jul 2021 06:24:59 -0700 (PDT)
+        id S230414AbhGEOMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jul 2021 10:12:02 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:36728 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230333AbhGEOMB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jul 2021 10:12:01 -0400
+Received: by mail-oi1-f176.google.com with SMTP id 11so20897722oid.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jul 2021 07:09:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wBFZgrsOPrbsUN1uPwodsfr1xtraggXX60tVKBlbJAE=;
-        b=ui6ffD0Aw8+5ke1KvHOZmydv/xAvupCwcfenFq7tjaZwA1WzTIBaMm0pvyNlSRWNi+
-         2O717kFhp8jZSs7DZr8+4g6iDHKyf4ghB+i57JDYWgXkWAR5xSOcfP0WffMF+RPYXMn7
-         +fAVu8dqnfUiR2TAClaNijmllRSX95+fH/bWWm1V+tApHmZmF42pQis/mcAc1ioIlIeJ
-         /8T8mCLbVET6JXVuFA8LsNVEqMVbYrKjpN65/Mg3bAYlLWwKXqqFkXoVP6gyQ8G3qlRB
-         ND53/af+w7mm6IDF+6QD0LIrIl7ftjhr4h6SHVhRUBgKjGes/foHgZfAVKmWvOO9ApHc
-         RY7g==
-X-Gm-Message-State: AOAM531Tx7yaoTDQKiHVzFHj1QMxK2YDO7oZoTCQSXYgDk8q79tpShRJ
-        3rtf7jkC9K85Pteg5L9QRuVUQ4mrcolRVDPUcbQ=
-X-Google-Smtp-Source: ABdhPJwNj0BbvjrdzGAJ0ts+MYxii4BhPeMSPLcInedbRaacxy889Ea/5IE4yjfljc9RQRrEmHU9dqUJ4e9Y66P1h4g=
-X-Received: by 2002:a05:6830:1d8:: with SMTP id r24mr11413386ota.206.1625491498880;
- Mon, 05 Jul 2021 06:24:58 -0700 (PDT)
+        bh=PWNF2z7e4wzXVNVKtV8jGxjbjzxTWKSRdbqjRsQ9Txg=;
+        b=PvIMPHmcIA5aFBDG7riynyv3zdOuk2DVfr10osXjPoPzrgjMzBnD2jNd5pRO+xfDyw
+         Zv5kFBoWfIZk3FcC7PxV4IwVSnBEqsBHvVIGqM7TY/udvoAI3L9rHpwOZ6GMwEZ6+vbU
+         edpJUJ9KNO88zeqZUuWyLDX/ZDL8XuZB8Dytv4Li3uR/F9h8G/zopo4HYcJbRgiMSJFl
+         80XN5PM4xygvJbGqxeWws7FO1YgD/HB7ku3rYodMH9ib8nlLjsNaSc9IHYewjaf95aHr
+         E9oS0ILgxyBRZvPf0UWD8XFS/BPsTvuvQDM8oJYfuUsaGYn+EHZWv/Z6Lyp6UEirUjJ4
+         WeNw==
+X-Gm-Message-State: AOAM530laeOS7QocaLo7gE1nv4wBMhS/6k/OGY9hsMlvyrpOW+eYIaJ8
+        rbpH2YNz8AKZmQbE7uFFbpaHw5u8Yc5Xyip1Tt4=
+X-Google-Smtp-Source: ABdhPJzBykU99G8W9IyL+tzrPjwe64W8dUhsg9RVnkXdF+QciH1eQp74IWQ/OzT+XL1OryDxGjlaejfrXH9FQmO8lBg=
+X-Received: by 2002:aca:c457:: with SMTP id u84mr1133984oif.69.1625494163657;
+ Mon, 05 Jul 2021 07:09:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <1867445.PYKUYFuaPT@kreacher> <007101d77117$b3b837a0$1b28a6e0$@telus.net>
-In-Reply-To: <007101d77117$b3b837a0$1b28a6e0$@telus.net>
+References: <a4971ab0-87d7-4457-49ec-ce20106be358@arm.com> <20210616093127.lfpi4rje56b3dhwx@vireshk-i7>
+ <ff9a9daa-7d25-ea08-2cd9-fc56f778acde@arm.com> <20210616105327.wnppsau4gg5ihrlv@vireshk-i7>
+ <4d975236-943c-ea82-547b-04f2bead9f48@arm.com> <0a930559-a648-c20d-f3f6-09e4974a031d@arm.com>
+ <CAJZ5v0iMHeAOpDStN_qZLbM7-My4rQuAC9nEcT3sHCC33bH3NA@mail.gmail.com>
+ <CAJZ5v0hOXHtoN3Z+Mw9Ym_HaY0OxessNAKTEpp6GM5_pnLJauw@mail.gmail.com>
+ <a660b9ec-3ee7-28b2-569c-5a8d1510d927@arm.com> <CAJZ5v0iQve59SxD0TJ19wonj=WO7qVSApM-xPf_FYUf42Z3d5Q@mail.gmail.com>
+ <20210702191658.GA30379@e120877-lin.cambridge.arm.com>
+In-Reply-To: <20210702191658.GA30379@e120877-lin.cambridge.arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Jul 2021 15:24:43 +0200
-Message-ID: <CAJZ5v0jH6pXs07r9xvUwUDWz7A8DbDO-2UfMUTmMygO1PJ76=Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Mon, 5 Jul 2021 16:09:12 +0200
+Message-ID: <CAJZ5v0ijLepOyGX0Et1h3j6AbtFxV_-mq+2uNrv8syG0RPiJbg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient frequencies
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 4, 2021 at 11:01 PM Doug Smythies <dsmythies@telus.net> wrote:
+On Fri, Jul 2, 2021 at 9:17 PM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
 >
-> Hi Rafael,
+> [...]
 >
-> On 2021.06.02 11:14 Rafael J. Wysocki wrote:
->
-> > Hi All,
+> > > >
+> > > > I'm guessing that the problem is that cpufreq_cooling works by using
+> > > > freq_qos_update_request() to update the max frequency limit and if
+> > > > that is in effect you'd rather use the inefficient frequencies,
+> > > > whereas when the governor selects an inefficient frequency  below the
+> > > > policy limit, you'd rather use a higher-but-efficient frequency
+> > > > instead (within the policy limit).
+> > > >
+> > > > Am I guessing correctly?
+> > > >
+> > >
+> > > Yes, correct. Thermal would use all (efficient + inefficient), but
+> > > we in cpufreq governor would like to pick if possible the efficient
+> > > one (below the thermal limit).
 > >
-> > This series of patches addresses some theoretical shortcoming in the
-> > TEO (Timer Events Oriented) cpuidle governor by reworking its idle
-> > state selection logic to some extent.
+> > To address that, you need to pass more information from schedutil to
+> > __cpufreq_driver_target() that down the road can be used by
+> > cpufreq_frequency_table_target() to decide whether or not to skip the
+> > inefficient frequencies.
 > >
-> > Patches [1-2/5] are introductory cleanups and the substantial changes are
-> > made in patches [3-4/5] (please refer to the changelogs of these two
-> > patches for details).  The last patch only deals with documentation.
-> >
-> > Even though this work is mostly based on theoretical considerations, it
-> > shows a measurable reduction of the number of cases in which the
-> shallowest
-> > idle state is selected while it would be more beneficial to select a
-> deeper
-> > one or the deepest idle state is selected while it would be more
-> beneficial to
-> > select a shallower one, which should be a noticeable improvement.
+> > For example, you can define CPUFREQ_RELATION_EFFICIENT and pass it
+> > from schedutil to __cpufreq_driver_target() in the "relation"
+> > argument, and clear it if the target frequency is above the max policy
+> > limit, or if ->target() is to be called.
 >
-> Do you have any test results to share? Or test methods that I can try?
-> I have done a few tests, and generally don't notice much difference.
-> Perhaps an increase in idle state 2 below (was to shallow) numbers.
-> I am searching for some results that would offset the below:
->
-> The difficulty I am having with this patch set is the additional overhead
-> which becomes significant at the extremes, where idle state 0 is dominant.
-> Throughout the history of teo, I have used multiple one core pipe-tests
-> for this particular test. Some results:
->
-> CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> HWP: disabled
-> CPU frequency scaling driver: intel_pstate, active, powersave
-> Pipe-tests are run forever, printing average loop time for the
-> Last 2.5 million loops. 1021 of those are again averaged.
-> Total = 2.5525e9 loops
-> The power and idle data is sampled for 100 minutes.
->
-> Note 1: other tests were also done and also with passive,
-> schedutil, but it isn't relevant for this test because the
-> CPU frequency stays pinned at maximum.
->
-> Note 2: I use TCC offset for thermal throttling, but I disabled it
-> for these tests, because the temperature needed to go higher
-> than my normal throttling point.
->
-> Idle configuration 1: As a COMETLAKE processor, with 4 idle states.
-> Kernel 5.13-RC4.
->
-> Before patch set average:
-> 2.8014 uSec/loop
-> 113.9 watts
-> Idle state 0 residency: 9.450%
-> Idle state 0 entries per minute: 256,812,896.6
->
-> After patch set average:
-> 2.8264 uSec/loop, 0.89% slower
-> 114.0 watts
-> Idle state 0 residency: 8.677%
-> Idle state 0 entries per minute: 254,560,049.9
->
-> Menu governor:
-> 2.8051 uSec/loop, 0.13% slower
-> 113.9 watts
-> Idle state 0 residency: 8.437%
-> Idle state 0 entries per minute: 256,436,417.2
->
-> O.K., perhaps not so bad, but also not many idle states.
->
-> Idle configuration 2: As a SKYLAKE processor, with 9 idle states.
-> i.e.:
-> /drivers/idle/intel_idle.c
-> static const struct x86_cpu_id intel_idle_ids[] __initconst
-> ...
->    X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X, &idle_cpu_skx),
-> + X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, &idle_cpu_skl),
->
-> Purpose: To demonstrate increasing overhead as a function of number
-> of idle states.
-> Kernel 5.13.
->
-> Before patch set average:
-> 2.8394 uSec/loop
-> 114.2 watts
-> Idle state 0 residency: 7.212%
-> Idle state 0 entries per minute: 253,391,954.3
->
-> After patch set average:
-> 2.9103 uSec/loop, 2.5% slower
-> 114.4 watts, 0.18% more
-> Idle state 0 residency: 6.152%, 14.7% less.
-> Idle state 0 entries per minute: 244,024,752.1
->
-> Menu governor:
-> 2.8141 uSec/loop, 0.89% faster
-> 113.9 watts,  0.26% less
-> Idle state 0 residency: 7.167%, 0.6% less
-> Idle state 0 entries per minute: 255,650,610.7
->
-> Another potentially interesting test was the ebizzy test:
-> Records per second, averaged over many tests, varying
-> threads and intervals:
->
-> passive, schedutil:
-> Before: 6771.977
-> After: 5502.643, -18.7%
-> Menu: 10728.89, +58.4%
->
-> Active, powersave:
-> Before: 8361.82
-> After: 8463.31, +1.2%
-> Menu: 8225.58, -1.6%
->
-> I think it has more to do with CPU scaling governors
-> than this patch set, so:
->
-> performance:
-> Before: 12137.33
-> After: 12083.26, -0.4%
-> Menu: 11983.73, -1.3%
->
-> These and other test results available here:
-> (encoded to prevent a barrage of bots)
->
-> double u double u double u dot smythies dot com
-> /~doug/linux/idle/teo-2021-06/
->
-> ... a day later ...
->
-> I might have an answer to my own question.
-> By switching to cross core pipe-tests, and only loading down one
-> CPU per core, I was able to get a lot more activity in other idle states.
-> The test runs for 100 minutes, and the results change with time, but
-> I'll leave that investigation for another day (there is no throttling):
->
-> 1st 50 tests:
-> Before: 3.888 uSec/loop
-> After: 3.764 uSec/loop
-> Menu: 3.464 uSec/loop
->
-> Tests 50 to 100:
-> Before: 4.329 uSec/loop
-> After: 3.919 uSec/loop
-> Menu: 3.514 uSec/loop
->
-> Tests 200 to 250:
-> Before: 5.089 uSec/loop
-> After: 4.364 uSec/loop
-> Menu: 4.619 uSec/loop
->
-> Tests 280 to 330:
-> Before: 5.142 uSec/loop
-> After: 4.464 uSec/loop
-> Menu: 4.619 uSec/loop
->
-> Notice that the "after" this patch set is applied eventually does
-> better than using the menu governor. Its processor package power
-> always remains less, than the menu governor.
+> What about a cpufreq_policy option that if sets would make
+> cpufreq_frequency_table_target() skip inefficient OPPs while staying within
+> the limit of max policy?
 
-That's good news, thanks!
+That would work too, ->
 
-> The results can be viewed graphically at the above link, but the
-> most dramatic results are:
+> Each governor could decide to set it or not, but
+> it would hide the efficiency resolution to the governor and allow drivers
+> that implements ->target() to also implements support for inefficient OPPs.
+
+-> but alternatively there could be an additional cpufreq driver flag
+to be set by the drivers implementing ->target() and wanting to deal
+with CPUFREQ_RELATION_EFFICIENT themselves (an opt-in of sorts).
+
+So the governors that want it may pass CPUFREQ_RELATION_EFFICIENT to
+__cpufreq_driver_target() and then it will be passed to ->target()
+depending on whether or not the new driver flag is set.
+
+> That flag could be set according to a new cpufreq_governor flag
+> CPUFREQ_GOV_SKIP_INEFFICIENCIES?
 >
-> Idle state 3 above % goes from 70% to 5%.
-> Idle state 2 below % goes from 13% to less than 1%.
+> That could though modify behaviors like powersave_bias from ondemand. But if
+> a frequency is inefficient, there's probably no power saving anyway.
 
-This also looks promising.
+AFAICS, the userspace governor aside, using inefficient frequencies
+only works with the powersave governor.  In the other cases,
+RELATION_L (say) can be interpreted as "the closest efficient
+frequency equal to or above the target" with the max policy limit
+possibly causing inefficient frequencies to be used if they are closer
+to the limit than the next efficient one.
 
-Thank you for all of the results!
+As a rule, the governors don't assume that there are any inefficient
+frequencies in the table.  In fact, they don't make any assumptions
+regarding the contents of the frequency table at all.  They don't even
+assume that the driver uses a frequency table in the first place.
