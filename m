@@ -2,196 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D76B13BDE2C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 21:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A77C3BDE30
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 21:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhGFTsl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 15:48:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59363 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229811AbhGFTsk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jul 2021 15:48:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625600761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0lzOK3mNHZjRxYRggPARjfbhZ+54iSiODJM7MfNEdlE=;
-        b=RsAAOgyzXblO1tOWCG1bs/fpABR/RQ4h7qC54t1SVKXXWtfAKK0vu46wh0dEC8Q6mmRohK
-        AgdQ8AtDGJUDt1sljtjl14lktnWGVd5fj5kfUsWFJUmaiMS0led5ZX76KAnPEyeGmsU8mW
-        KmaJmd+iP6Cl78X0ORFR0wNCdQAxVNo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-571-DlAxHlpPN-2ksNdoQhAVUA-1; Tue, 06 Jul 2021 15:45:58 -0400
-X-MC-Unique: DlAxHlpPN-2ksNdoQhAVUA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0855218414AD;
-        Tue,  6 Jul 2021 19:45:57 +0000 (UTC)
-Received: from localhost (ovpn-113-53.rdu2.redhat.com [10.10.113.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 459CC60854;
-        Tue,  6 Jul 2021 19:45:53 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH 2/2] power: supply: bq24735: add watchdog timer delay support
-Date:   Tue,  6 Jul 2021 16:45:38 -0300
-Message-Id: <20210706194538.368792-3-bmeneg@redhat.com>
-In-Reply-To: <20210706194538.368792-1-bmeneg@redhat.com>
-References: <20210706194538.368792-1-bmeneg@redhat.com>
+        id S229807AbhGFTxo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 15:53:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:49122 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229793AbhGFTxn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Jul 2021 15:53:43 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2AA31042;
+        Tue,  6 Jul 2021 12:51:04 -0700 (PDT)
+Received: from [10.57.7.228] (unknown [10.57.7.228])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D085C3F5A1;
+        Tue,  6 Jul 2021 12:51:01 -0700 (PDT)
+Subject: Re: [PATCH 3/3] PM: EM: Increase energy calculation precision
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Chris.Redpath@arm.com, morten.rasmussen@arm.com,
+        qperret@google.com, linux-pm@vger.kernel.org, peterz@infradead.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, mingo@redhat.com,
+        juri.lelli@redhat.com, rostedt@goodmis.org, segall@google.com,
+        mgorman@suse.de, bristot@redhat.com, CCj.Yeh@mediatek.com
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-4-lukasz.luba@arm.com>
+ <be567416-e7ac-e672-ddfe-f9175ba1c016@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <fa2bac05-1992-9166-0b5f-2477af39bb55@arm.com>
+Date:   Tue, 6 Jul 2021 20:51:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <be567416-e7ac-e672-ddfe-f9175ba1c016@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The BQ24735 charger allows the user to set the watchdog timer delay between
-two consecutives ChargeCurrent or ChargeVoltage command writes, if the IC
-doesn't receive any command before the timeout happens, the charge is turned
-off.
 
-This patch adds the support to the user to change the default/POR value with
-four discrete values:
 
-  0 - disabled
-  1 - enabled, 44 sec
-  2 - enabled, 88 sec
-  3 - enabled, 175 sec (default at POR)
+On 7/5/21 1:45 PM, Dietmar Eggemann wrote:
+> On 25/06/2021 17:26, Lukasz Luba wrote:
+>> The Energy Model (EM) provides useful information about device power in
+>> each performance state to other subsystems like: Energy Aware Scheduler
+>> (EAS). The energy calculation in EAS does arithmetic operation based on
+>> the EM em_cpu_energy(). Current implementation of that function uses
+>> em_perf_state::cost as a pre-computed cost coefficient equal to:
+>> cost = power * max_frequency / frequency.
+>> The 'power' is expressed in milli-Watts (or in abstract scale).
+>>
+>> There are corner cases then the EAS energy calculation for two Performance
+>              ^^^^^^^^^^^^
+> 
+> Again, an easy to understand example to describe in which situation this
+> change would bring a benefit would help.
+> 
+>> Domains (PDs) return the same value, e.g. 10mW. The EAS compares these
+>> values to choose smaller one. It might happen that this values are equal
+>> due to rounding error. In such scenario, we need better precision, e.g.
+>> 10000 times better. To provide this possibility increase the precision on
+>> the em_perf_state::cost.
+>>
+>> This patch allows to avoid the rounding to milli-Watt errors, which might
+>> occur in EAS energy estimation for each Performance Domains (PD). The
+>> rounding error is common for small tasks which have small utilization
+>> values.
+> 
+> What's the influence of the CPU utilization 'cpu_util_next()' here?
+> 
+> compute_energy()
+>      em_cpu_energy()
+>              return ps->cost * sum_util / scale_cpu
+>                                ^^^^^^^^
 
-These are the options supported in the ChargeOptions register bits 13&14.
+This is the place where the rounding error triggers. If sum_util is
+small and scale_cpu is e.g. 1024, then we have a small fraction here.
+It depends on the EM 'cost', but for most platforms we have small
+power and cost values, so we suffer this rounding.
+The example that I gave in my response in patch 2/3 shows this.
 
-Also, this patch make one additional check when poll-interval is set by the
-user: if the interval set is greater than the WDT timeout it'll fail during
-the probe stage, preventing the user to set non-compatible values between
-the two options.
+>> The rest of the EM code doesn't change, em_perf_state::power is still
+>> expressed in milli-Watts (or in abstract scale). Thus, all existing
+>> platforms don't have to change their reported power. The same applies to
+> 
+> Not only existing platforms since there are no changes. So why
+> highlighting `existing` here.?
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
- .../bindings/power/supply/bq24735.yaml        | 13 +++++
- drivers/power/supply/bq24735-charger.c        | 48 +++++++++++++++++++
- include/linux/power/bq24735-charger.h         |  1 +
- 3 files changed, 62 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-index 131be6782c4b..62399efab467 100644
---- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-@@ -56,6 +56,19 @@ properties:
-       The POR value is 0x1000h. This number is in mA (e.g. 8064).
-       See the spec for more information about the InputCurrent (0x3fh) register.
- 
-+  ti,wdt-timeout:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Used to control and set the charger watchdog delay between consecutive
-+      charge voltage and charge current commands.
-+      This value must be:
-+        0 - disabled
-+        1 - 44 seconds
-+        2 - 88 seconds
-+        3 - 175 seconds
-+      The POR value is 0x11 (3).
-+      See the spec for more information about the ChargeOptions(0x12h) register.
-+
-   ti,external-control:
-     type: boolean
-     description: |
-diff --git a/drivers/power/supply/bq24735-charger.c b/drivers/power/supply/bq24735-charger.c
-index 3ce36d09c017..88f1cb1e9fee 100644
---- a/drivers/power/supply/bq24735-charger.c
-+++ b/drivers/power/supply/bq24735-charger.c
-@@ -45,6 +45,8 @@
- /* ChargeOptions bits of interest */
- #define BQ24735_CHARGE_OPT_CHG_DISABLE	(1 << 0)
- #define BQ24735_CHARGE_OPT_AC_PRESENT	(1 << 4)
-+#define BQ24735_CHARGE_OPT_WDT_OFFSET	13
-+#define BQ24735_CHARGE_OPT_WDT		(3 << BQ24735_CHARGE_OPT_WDT_OFFSET)
- 
- struct bq24735 {
- 	struct power_supply		*charger;
-@@ -156,6 +158,20 @@ static int bq24735_config_charger(struct bq24735 *charger)
- 		}
- 	}
- 
-+	if (pdata->wdt_timeout) {
-+		value = pdata->wdt_timeout;
-+
-+		ret = bq24735_update_word(charger->client, BQ24735_CHARGE_OPT,
-+					  BQ24735_CHARGE_OPT_WDT,
-+					  (value << BQ24735_CHARGE_OPT_WDT_OFFSET));
-+		if (ret < 0) {
-+			dev_err(&charger->client->dev,
-+				"Failed to write watchdog timer: %d\n",
-+				ret);
-+			return ret;
-+		}
-+	}
-+
- 	return 0;
- }
- 
-@@ -347,6 +363,17 @@ static struct bq24735_platform *bq24735_parse_dt_data(struct i2c_client *client)
- 	if (!ret)
- 		pdata->input_current = val;
- 
-+	ret = of_property_read_u32(np, "ti,wdt-timeout", &val);
-+	if (!ret) {
-+		if (val <= 3) {
-+			pdata->wdt_timeout = val;
-+		} else {
-+			dev_warn(&client->dev,
-+				 "Invalid value for ti,wdt-timeout: %d",
-+				 val);
-+		}
-+	}
-+
- 	pdata->ext_control = of_property_read_bool(np, "ti,external-control");
- 
- 	return pdata;
-@@ -476,6 +503,27 @@ static int bq24735_charger_probe(struct i2c_client *client,
- 			return 0;
- 		if (!charger->poll_interval)
- 			return 0;
-+		if (charger->pdata->wdt_timeout) {
-+			int wdt_ms;
-+
-+			switch (charger->pdata->wdt_timeout) {
-+			case 1:
-+				wdt_ms = 44000;
-+				break;
-+			case 2:
-+				wdt_ms = 88000;
-+				break;
-+			case 3:
-+				wdt_ms = 175000;
-+				break;
-+			}
-+
-+			if (charger->poll_interval > wdt_ms) {
-+				dev_err(&client->dev,
-+					"Poll interval greater than WDT timeout\n");
-+				return -EINVAL;
-+			}
-+		}
- 
- 		ret = devm_delayed_work_autocancel(&client->dev, &charger->poll,
- 						   bq24735_poll);
-diff --git a/include/linux/power/bq24735-charger.h b/include/linux/power/bq24735-charger.h
-index 321dd009ce66..ecf4ab6bfbd7 100644
---- a/include/linux/power/bq24735-charger.h
-+++ b/include/linux/power/bq24735-charger.h
-@@ -12,6 +12,7 @@ struct bq24735_platform {
- 	uint32_t charge_current;
- 	uint32_t charge_voltage;
- 	uint32_t input_current;
-+	uint8_t wdt_timeout;
- 
- 	const char *name;
- 
--- 
-2.31.1
-
+I just wanted to be clear that it doesn't affect existing platforms
+at all. We don't require to report power in better resolution e.g.
+micro-Watts.
+Also, the clients in the kernel won't be affected, since they use
+EM 'power' filed, not 'cost'.
