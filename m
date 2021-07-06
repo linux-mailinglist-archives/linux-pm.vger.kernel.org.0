@@ -2,96 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A933BC48B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 03:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D123BC5DE
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 07:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbhGFBSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jul 2021 21:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhGFBST (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jul 2021 21:18:19 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDAC061574;
-        Mon,  5 Jul 2021 18:15:41 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bq39so22708878lfb.12;
-        Mon, 05 Jul 2021 18:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xG6P1+sDQl4jEV3cq/HGM+DddaPYqM/HhUpbXndOJ58=;
-        b=HhsZ0ceURhcOFz0Vj0ytT1juZaq7agnU9T1ESybefYQGZPdHYOu6SPYBjEIBXwZMyw
-         zfpxxRW6w5uHhpT63pNPeB0Q7av4f6MWeAVz9f+hnbqjeMDogGshggk8FRMk8Vt0l3NX
-         0mc6lfcyV3/RE+2cNDGfY/6Z+22eoBmtqwxxpCwoPDHIw+K1CD9xvdbU0BKZ/qEbsINs
-         l4RqAxTy6eHzaeAzw0ado/C4Ns0k6POG/PmsXeW8nDWWSQggOjnhBytjgw4xPZRkS64x
-         cyzfsWt8kW9ncdpiz/KehBgmmyoQPzGncWOjuKoRPsSUVyqojrK1y6EhIiu9BXxYdRyM
-         q7Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xG6P1+sDQl4jEV3cq/HGM+DddaPYqM/HhUpbXndOJ58=;
-        b=aZ5lMsgsazkX1O0KedjGWpwVVGYMXR33h7FjbfbJaoaG7jQxNSDa+5AnB9HE/L0kUM
-         vb43WFyluDbEJbfUYiegYe185+QjWepgGPBrd9lK3hMVf5R724ywYURA0hrp3c/agiJ+
-         hBWj7hbCI+S20CvtIyX587AHquIsUMrqpjJ/3rAs/RLgoxuvijNLrgFA1gW1tym+SphL
-         8nsBWMV+RQQ5U+U7A8DUairL58e5hSjFVBUWZa4yI49ezpj2kt5ykPJkXrK/oURtB47e
-         dTW61Mh2PbJJYnCOmX8Pz4mfTZiZSjtnwq1EjEnFfuSsUSxvhptTzbYHCqmSXxxDFx+7
-         OIAA==
-X-Gm-Message-State: AOAM5319fthad/HkAclvA6+KUJToXdy6JSN6vtp2hkfgbimXhowGdi6F
-        IJggWxyX3MkNh/50TX6R4ed5FfXWSIs=
-X-Google-Smtp-Source: ABdhPJx0b1UAbp7vUWsVA5lY+rJ5RQHv58/MSrNSLpj0P8z7RSnb7ral8ckTetYkrbknjOFXB26Q0Q==
-X-Received: by 2002:a05:6512:3c89:: with SMTP id h9mr12102895lfv.17.1625534140087;
-        Mon, 05 Jul 2021 18:15:40 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id a8sm1532867ljq.127.2021.07.05.18.15.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jul 2021 18:15:39 -0700 (PDT)
-Subject: Re: [PATCH v3 05/12] usb: otg-fsm: Fix hrtimer list corruption
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210704225433.32029-1-digetx@gmail.com>
- <20210704225433.32029-6-digetx@gmail.com> <20210706005739.GA19143@nchen>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <04a679be-ec66-f71f-5b61-59b8ef82e128@gmail.com>
-Date:   Tue, 6 Jul 2021 04:15:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229996AbhGFFGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 01:06:52 -0400
+Received: from mga18.intel.com ([134.134.136.126]:14397 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229963AbhGFFGw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Jul 2021 01:06:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10036"; a="196337775"
+X-IronPort-AV: E=Sophos;i="5.83,327,1616482800"; 
+   d="scan'208";a="196337775"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2021 22:04:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,327,1616482800"; 
+   d="scan'208";a="422724010"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Jul 2021 22:04:11 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m0dFj-000CkP-4X; Tue, 06 Jul 2021 05:04:11 +0000
+Date:   Tue, 06 Jul 2021 13:03:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 984a70f0572cb9a6cc5fc72c061cbc072ef27789
+Message-ID: <60e3e43f.J+nTY0ypAzSb4ieQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210706005739.GA19143@nchen>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-06.07.2021 03:57, Peter Chen пишет:
-> On 21-07-05 01:54:26, Dmitry Osipenko wrote:
->> The HNP work can be re-scheduled while it's still in-fly. This results in
->> re-initialization of the busy work, resetting the hrtimer's list node of
->> the work and crashing kernel with null dereference within kernel/timer
->> once work's timer is expired. It's very easy to trigger this problem by
->> re-plugging USB cable quickly. Initialize HNP work only once to fix this
->> trouble.
->>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> 
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> 
-> It is better to append kernel dump if you have v4 patchset.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 984a70f0572cb9a6cc5fc72c061cbc072ef27789  Merge branch 'pm-domains' into bleeding-edge
 
-The stacktrace isn't very useful because it crashes within a hrtimer
-code from a work thread, i.e. it doesn't point at usb at all. It
-actually took me some effort to find where the bug was.
+elapsed time: 726m
+
+configs tested: 94
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                     sbc8548_defconfig
+arm                         vf610m4_defconfig
+powerpc                      acadia_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                    mvme5100_defconfig
+sparc                       sparc64_defconfig
+mips                    maltaup_xpa_defconfig
+sh                             shx3_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                        realview_defconfig
+csky                             alldefconfig
+xtensa                       common_defconfig
+arc                                 defconfig
+sh                          sdk7786_defconfig
+m68k                          sun3x_defconfig
+powerpc                     kmeter1_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20210705
+i386                 randconfig-a006-20210705
+i386                 randconfig-a001-20210705
+i386                 randconfig-a003-20210705
+i386                 randconfig-a005-20210705
+i386                 randconfig-a002-20210705
+i386                 randconfig-a015-20210705
+i386                 randconfig-a016-20210705
+i386                 randconfig-a012-20210705
+i386                 randconfig-a011-20210705
+i386                 randconfig-a014-20210705
+i386                 randconfig-a013-20210705
+x86_64               randconfig-a004-20210705
+x86_64               randconfig-a002-20210705
+x86_64               randconfig-a005-20210705
+x86_64               randconfig-a006-20210705
+x86_64               randconfig-a003-20210705
+x86_64               randconfig-a001-20210705
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210705
+x86_64               randconfig-a015-20210705
+x86_64               randconfig-a014-20210705
+x86_64               randconfig-a012-20210705
+x86_64               randconfig-a011-20210705
+x86_64               randconfig-a016-20210705
+x86_64               randconfig-a013-20210705
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
