@@ -2,98 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A77C3BDE30
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 21:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15EA3BDE38
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 21:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbhGFTxo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 15:53:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:49122 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbhGFTxn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Jul 2021 15:53:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2AA31042;
-        Tue,  6 Jul 2021 12:51:04 -0700 (PDT)
-Received: from [10.57.7.228] (unknown [10.57.7.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D085C3F5A1;
-        Tue,  6 Jul 2021 12:51:01 -0700 (PDT)
-Subject: Re: [PATCH 3/3] PM: EM: Increase energy calculation precision
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Chris.Redpath@arm.com, morten.rasmussen@arm.com,
-        qperret@google.com, linux-pm@vger.kernel.org, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        vincent.guittot@linaro.org, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, segall@google.com,
-        mgorman@suse.de, bristot@redhat.com, CCj.Yeh@mediatek.com
-References: <20210625152603.25960-1-lukasz.luba@arm.com>
- <20210625152603.25960-4-lukasz.luba@arm.com>
- <be567416-e7ac-e672-ddfe-f9175ba1c016@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <fa2bac05-1992-9166-0b5f-2477af39bb55@arm.com>
-Date:   Tue, 6 Jul 2021 20:51:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230002AbhGFT6U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 15:58:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31763 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229984AbhGFT6U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jul 2021 15:58:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625601340;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=l48cLKIP4BLYpRskzPjaknnhgQT9va3wQwvPL+4/Sx0=;
+        b=ffpUIpbJE+J/GmMZKi6kc4KMbiSp9w2n/W2jyw280ctV/wta+c5tAJHnHppgs7FaClLpxv
+        OTygzyXIq6SWMKZhb518ijDir02EdF7tyRyrYTpTj4eTFhOO9CcAwvJttbcFUe5z1UoI/j
+        QT16dFc9k4yudDA84WFflpkatmw3pus=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-438-PTl6vPsJP-KKJVaaIutiZQ-1; Tue, 06 Jul 2021 15:55:39 -0400
+X-MC-Unique: PTl6vPsJP-KKJVaaIutiZQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3B5D800D62;
+        Tue,  6 Jul 2021 19:55:38 +0000 (UTC)
+Received: from localhost (ovpn-113-53.rdu2.redhat.com [10.10.113.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CBCF5D9D5;
+        Tue,  6 Jul 2021 19:55:31 +0000 (UTC)
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bruno Meneguele <bmeneg@redhat.com>
+Subject: [PATCH v2 0/2] add Watchdog Timer delay support for BQ24735
+Date:   Tue,  6 Jul 2021 16:55:25 -0300
+Message-Id: <20210706195527.371108-1-bmeneg@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <be567416-e7ac-e672-ddfe-f9175ba1c016@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The IC BQ24735 has the ability to suspend the battery charging in case the
+system freezes for some reason: the IC observes consecutive writes for
+either CargeCurrent of ChargVoltage registers in a maximum period of time.
 
+This period of time can be configured by the user through the ChargeOption
+register in the bits 13 and 14, but it's only possible to change if the user
+sends the value directly accessing the I2C bus through userspace, because
+the kernel driver doesn't read or write to the Watchdog bits.
 
-On 7/5/21 1:45 PM, Dietmar Eggemann wrote:
-> On 25/06/2021 17:26, Lukasz Luba wrote:
->> The Energy Model (EM) provides useful information about device power in
->> each performance state to other subsystems like: Energy Aware Scheduler
->> (EAS). The energy calculation in EAS does arithmetic operation based on
->> the EM em_cpu_energy(). Current implementation of that function uses
->> em_perf_state::cost as a pre-computed cost coefficient equal to:
->> cost = power * max_frequency / frequency.
->> The 'power' is expressed in milli-Watts (or in abstract scale).
->>
->> There are corner cases then the EAS energy calculation for two Performance
->              ^^^^^^^^^^^^
-> 
-> Again, an easy to understand example to describe in which situation this
-> change would bring a benefit would help.
-> 
->> Domains (PDs) return the same value, e.g. 10mW. The EAS compares these
->> values to choose smaller one. It might happen that this values are equal
->> due to rounding error. In such scenario, we need better precision, e.g.
->> 10000 times better. To provide this possibility increase the precision on
->> the em_perf_state::cost.
->>
->> This patch allows to avoid the rounding to milli-Watt errors, which might
->> occur in EAS energy estimation for each Performance Domains (PD). The
->> rounding error is common for small tasks which have small utilization
->> values.
-> 
-> What's the influence of the CPU utilization 'cpu_util_next()' here?
-> 
-> compute_energy()
->      em_cpu_energy()
->              return ps->cost * sum_util / scale_cpu
->                                ^^^^^^^^
+This patchset enables the user to configure the value through the
+device-tree option "ti,wdt-timeout".
 
-This is the place where the rounding error triggers. If sum_util is
-small and scale_cpu is e.g. 1024, then we have a small fraction here.
-It depends on the EM 'cost', but for most platforms we have small
-power and cost values, so we suffer this rounding.
-The example that I gave in my response in patch 2/3 shows this.
+Bruno Meneguele (2):
+  power: supply: bq24735: reorganize ChargeOption command macros
+  power: supply: bq24735: add watchdog timer delay support
 
->> The rest of the EM code doesn't change, em_perf_state::power is still
->> expressed in milli-Watts (or in abstract scale). Thus, all existing
->> platforms don't have to change their reported power. The same applies to
-> 
-> Not only existing platforms since there are no changes. So why
-> highlighting `existing` here.?
+ .../bindings/power/supply/bq24735.yaml        | 13 ++++
+ drivers/power/supply/bq24735-charger.c        | 75 ++++++++++++++++---
+ include/linux/power/bq24735-charger.h         |  1 +
+ 3 files changed, 77 insertions(+), 12 deletions(-)
 
-I just wanted to be clear that it doesn't affect existing platforms
-at all. We don't require to report power in better resolution e.g.
-micro-Watts.
-Also, the clients in the kernel won't be affected, since they use
-EM 'power' filed, not 'cost'.
+-- 
+2.31.1
+
