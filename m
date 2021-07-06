@@ -2,258 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5833BD79B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 15:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74E83BDA2F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbhGFNVe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 09:21:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:42200 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231935AbhGFNVd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Jul 2021 09:21:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81F131FB;
-        Tue,  6 Jul 2021 06:18:54 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.7.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 584153F73B;
-        Tue,  6 Jul 2021 06:18:52 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        Chris.Redpath@arm.com, Beata.Michalska@arm.com,
-        viresh.kumar@linaro.org, rjw@rjwysocki.net, amit.kachhap@gmail.com
-Subject: [RFC PATCH v2 6/6] thermal: cpufreq_cooling: Improve power estimation based on Active Stats framework
-Date:   Tue,  6 Jul 2021 14:18:28 +0100
-Message-Id: <20210706131828.22309-7-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210706131828.22309-1-lukasz.luba@arm.com>
+        id S231803AbhGFPbZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 11:31:25 -0400
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:39903 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231773AbhGFPbY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jul 2021 11:31:24 -0400
+Received: by mail-oi1-f170.google.com with SMTP id b2so24979106oiy.6;
+        Tue, 06 Jul 2021 08:28:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=djILV2ZTCAiQFmxRl7gNQdjv1pea/PEm/sUtUv5E55c=;
+        b=OTtZtRBkJhhvirZXUynUZxJDyiQlwjl5wxo0mtAO+4JO2g3k8/8CCd2anUnq1AKl/5
+         mW7vVpVUrbv6gDiAjAOjtvVaSsUUBQYZ8fBxKYdIgcpfWLIZd9TG8+WZh5Iej53cBHyS
+         T2Z6m3vetX06dGXrfkzl4/lLNNiKklf3UlPR1h9VftIOI8vtf5iJ52vqlDylW2y/rwcf
+         UZwh5MRQsi1FyYBp9FEzovsQgYuv3vdEUQ5NEPLKZyJCjUYta4+VeXSUUOfdlav5MNjg
+         KXBurk7lHf4Z3bxhoCkP+hswSFlewzdzgE0U5s1Rj60WQsEwjAOx2jfddrWw6gxxjNWP
+         tedg==
+X-Gm-Message-State: AOAM530d3V1pNWvYid3WTcNQPMMs6EJRba9CDdLcoNoq5aByl20Yemlz
+        wIb3is6+QA9Qmafbkl50nCzO2ffA8WpSKC90TpE=
+X-Google-Smtp-Source: ABdhPJyKKRg/nmhU3LnNi8n7HVcwiy5Yv15l8jBQtjaBy8mf8K7onM340jjQZuWRa+e311tjvirZ8148VDkeAgqL4gw=
+X-Received: by 2002:aca:c457:: with SMTP id u84mr5393364oif.69.1625585325117;
+ Tue, 06 Jul 2021 08:28:45 -0700 (PDT)
+MIME-Version: 1.0
 References: <20210706131828.22309-1-lukasz.luba@arm.com>
+In-Reply-To: <20210706131828.22309-1-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 6 Jul 2021 17:28:34 +0200
+Message-ID: <CAJZ5v0ga1O9Y9Lam=BoXofE7sjTNpYVSTjAWvSGZ+j__aCeXJw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/6] Introduce Active Stats framework with CPU
+ performance statistics
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Chris Redpath <Chris.Redpath@arm.com>, Beata.Michalska@arm.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kachhap <amit.kachhap@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq_cooling has dedicated APIs for thermal governor called
-Intelligent Power Allocation (IPA). IPA needs the CPUs power used by the
-devices in the past.  Based on this, IPA tries to estimate the power
-budget, allocate new budget and split it across cooling devices for the
-next period (keeping the system in the thermal envelope).  When the input
-power estimated value has big error, the whole mechanism does not work
-properly. The current power estimation assumes constant frequency during
-the whole IPA period (e.g. 100ms). This can cause big error in the power
-estimation, especially when SchedUtil governor is used and frequency is
-often adjusted to the current need. This can be visible in periodic
-workloads, when the frequency oscillates between two OPPs and IPA samples
-the lower frequency.
+On Tue, Jul 6, 2021 at 3:18 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi all,
+>
+> This patch set introduces a new mechanism: Active Stats framework (ASF), which
+> gathers and maintains statistics of CPU performance - time residency at each
+> performance state.
+>
+> The ASF tracks all the frequency transitions as well as CPU
+> idle entry/exit events for all CPUs. Based on that it accounts the active
+> (non-idle) residency time for each CPU at each frequency. This information can
+> be used by some other subsystems (like thermal governor) to enhance their
+> estimations about CPU usage at a given period.
 
-This patch introduces a new mechanism which solves this frequency
-sampling problem. It uses Active Stats framework to track and account
-the CPU power used for a given IPA period.
+This seems to mean that what is needed is something like the cpufreq
+stats but only collected during the time when CPUs are not in idle
+states.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/thermal/cpufreq_cooling.c | 132 ++++++++++++++++++++++++++++++
- 1 file changed, 132 insertions(+)
+> Does it fix something in mainline?
+> Yes, there is thermal governor Intelligent Power Allocation (IPA), which
+> estimates the CPUs power used in the past. IPA is sampling the CPU utilization
+> and frequency and relies on the info available at the time of sampling
+> and this imposes the estimation errors.
+> The use of ASF solve the issue and enables IPA to make better estimates.
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index eeb4e4b76c0b..90dca20e458a 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -10,6 +10,7 @@
-  *		Viresh Kumar <viresh.kumar@linaro.org>
-  *
-  */
-+#include <linux/active_stats.h>
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
- #include <linux/cpu_cooling.h>
-@@ -61,6 +62,7 @@ struct time_in_idle {
-  * @policy: cpufreq policy.
-  * @idle_time: idle time stats
-  * @qos_req: PM QoS contraint to apply
-+ * @ast_mon: Active Stats Monitor array of pointers
-  *
-  * This structure is required for keeping information of each registered
-  * cpufreq_cooling_device.
-@@ -75,6 +77,9 @@ struct cpufreq_cooling_device {
- 	struct time_in_idle *idle_time;
- #endif
- 	struct freq_qos_request qos_req;
-+#ifdef CONFIG_ACTIVE_STATS
-+	struct active_stats_monitor **ast_mon;
-+#endif
- };
- 
- #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-@@ -124,6 +129,107 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- 	return cpufreq_cdev->em->table[i].frequency;
- }
- 
-+#ifdef CONFIG_ACTIVE_STATS
-+static u32 account_cpu_power(struct active_stats_monitor *ast_mon,
-+			     struct em_perf_domain *em)
-+{
-+	u64 single_power, residency, total_time;
-+	struct active_stats_state *result;
-+	u32 power = 0;
-+	int i;
-+
-+	mutex_lock(&ast_mon->lock);
-+	result = ast_mon->snapshot.result;
-+	total_time = ast_mon->local_period;
-+
-+	for (i = 0; i < ast_mon->states_count; i++) {
-+		residency = result->residency[i];
-+		single_power = em->table[i].power * residency;
-+		single_power = div64_u64(single_power, total_time);
-+		power += (u32)single_power;
-+	}
-+
-+	mutex_unlock(&ast_mon->lock);
-+
-+	return power;
-+}
-+
-+static u32 get_power_est(struct cpufreq_cooling_device *cdev)
-+{
-+	int num_cpus, ret, i;
-+	u32 total_power = 0;
-+
-+	num_cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		ret = active_stats_cpu_update_monitor(cdev->ast_mon[i]);
-+		if (ret)
-+			return 0;
-+
-+		total_power += account_cpu_power(cdev->ast_mon[i], cdev->em);
-+	}
-+
-+	return total_power;
-+}
-+
-+static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
-+				       u32 *power)
-+{
-+	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-+	struct cpufreq_policy *policy = cpufreq_cdev->policy;
-+
-+	*power = get_power_est(cpufreq_cdev);
-+
-+	trace_thermal_power_cpu_get_power(policy->related_cpus, 0, 0, 0,
-+					  *power);
-+
-+	return 0;
-+}
-+
-+static void clean_cpu_monitoring(struct cpufreq_cooling_device *cdev)
-+{
-+	int num_cpus, i;
-+
-+	if (!cdev->ast_mon)
-+		return;
-+
-+	num_cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	for (i = 0; i < num_cpus; i++)
-+		active_stats_cpu_free_monitor(cdev->ast_mon[i++]);
-+
-+	kfree(cdev->ast_mon);
-+	cdev->ast_mon = NULL;
-+}
-+
-+static int setup_cpu_monitoring(struct cpufreq_cooling_device *cdev)
-+{
-+	int cpu, cpus, i = 0;
-+
-+	if (cdev->ast_mon)
-+		return 0;
-+
-+	cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	cdev->ast_mon = kcalloc(cpus, sizeof(struct active_stats_monitor *),
-+				GFP_KERNEL);
-+	if (!cdev->ast_mon)
-+		return -ENOMEM;
-+
-+	for_each_cpu(cpu, cdev->policy->related_cpus) {
-+		cdev->ast_mon[i] = active_stats_cpu_setup_monitor(cpu);
-+		if (IS_ERR_OR_NULL(cdev->ast_mon[i++]))
-+			goto cleanup;
-+	}
-+
-+	return 0;
-+
-+cleanup:
-+	clean_cpu_monitoring(cdev);
-+	return -EINVAL;
-+}
-+#else
-+
- /**
-  * get_load() - get load for a cpu
-  * @cpufreq_cdev: struct cpufreq_cooling_device for the cpu
-@@ -184,6 +290,15 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
- 	return (raw_cpu_power * cpufreq_cdev->last_load) / 100;
- }
- 
-+static void clean_cpu_monitoring(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+}
-+
-+static int setup_cpu_monitoring(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+	return 0;
-+}
-+
- /**
-  * cpufreq_get_requested_power() - get the current power
-  * @cdev:	&thermal_cooling_device pointer
-@@ -252,6 +367,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
- 
- 	return 0;
- }
-+#endif
- 
- /**
-  * cpufreq_state2power() - convert a cpu cdev state to power consumed
-@@ -323,6 +439,20 @@ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
- 	return 0;
- }
- 
-+static int cpufreq_change_governor(struct thermal_cooling_device *cdev,
-+				   bool governor_up)
-+{
-+	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-+	int ret = 0;
-+
-+	if (governor_up)
-+		ret = setup_cpu_monitoring(cpufreq_cdev);
-+	else
-+		clean_cpu_monitoring(cpufreq_cdev);
-+
-+	return ret;
-+}
-+
- static inline bool em_is_sane(struct cpufreq_cooling_device *cpufreq_cdev,
- 			      struct em_perf_domain *em) {
- 	struct cpufreq_policy *policy;
-@@ -566,6 +696,7 @@ __cpufreq_cooling_register(struct device_node *np,
- 		cooling_ops->get_requested_power = cpufreq_get_requested_power;
- 		cooling_ops->state2power = cpufreq_state2power;
- 		cooling_ops->power2state = cpufreq_power2state;
-+		cooling_ops->change_governor = cpufreq_change_governor;
- 	} else
- #endif
- 	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
-@@ -690,6 +821,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 
- 	thermal_cooling_device_unregister(cdev);
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
-+	clean_cpu_monitoring(cpufreq_cdev);
- 	free_idle_time(cpufreq_cdev);
- 	kfree(cpufreq_cdev);
- }
--- 
-2.17.1
+Obviously the IPA is not used on all platforms where cpufreq and
+cpuidle are used.  What platforms are going to benefit from this
+change?
 
+> Why it couldn't be done using existing frameworks?
+> The CPUFreq and CPUIdle statistics are not combined, so it is not possible
+> to derive the information on how long exactly the CPU was running with a given
+> frequency.
+
+But it doesn't mean that the statistics could not be combined.
+
+For instance, the frequency of the CPU cannot change via cpufreq when
+active_stats_cpu_idle_enter() is running, so instead of using an
+entirely new framework for collecting statistics it might update the
+existing cpufreq stats to register that event.
+
+And analogously for the wakeup.
+
+> This new framework combines that information and provides
+> it in a handy way.
+
+I'm not convinced about the last piece.
+
+> IMHO it has to be implemented as a new framework, next to
+> CPUFreq and CPUIdle, due to a clean design and not just hooks from thermal
+> governor into the frequency change and idle code paths.
+
+As far as the design is concerned, I'm not sure if I agree with it.
+
+From my perspective it's all a 1000-line patch that I have to read and
+understand to figure out what the design is.
+
+> Tha patch 4/6 introduces a new API for cooling devices, which allows to
+> stop tracking the freq and idle statistics.
+>
+> The patch set contains also a patches 5/6 6/6 which adds the new power model
+> based on ASF into the cpufreq cooling (used by thermal governor IPA).
+> It is added as ifdef option, since Active Stats might be not compiled in.
+> The ASF is a compile time option, but that might be changed and IPA could
+> select it, which would allow to remove some redundant code from
+> cpufreq_cooling.c.
+>
+> Comments and suggestions are very welcome.
+
+I'm totally not convinced that it is necessary to put the extra 1000
+lines of code into the kernel to address the problem at hand.
