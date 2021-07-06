@@ -2,153 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D123BC5DE
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 07:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CAE3BC7AC
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 10:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbhGFFGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 01:06:52 -0400
-Received: from mga18.intel.com ([134.134.136.126]:14397 "EHLO mga18.intel.com"
+        id S230333AbhGFIPm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 04:15:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:34358 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229963AbhGFFGw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Jul 2021 01:06:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10036"; a="196337775"
-X-IronPort-AV: E=Sophos;i="5.83,327,1616482800"; 
-   d="scan'208";a="196337775"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2021 22:04:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,327,1616482800"; 
-   d="scan'208";a="422724010"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Jul 2021 22:04:11 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m0dFj-000CkP-4X; Tue, 06 Jul 2021 05:04:11 +0000
-Date:   Tue, 06 Jul 2021 13:03:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 984a70f0572cb9a6cc5fc72c061cbc072ef27789
-Message-ID: <60e3e43f.J+nTY0ypAzSb4ieQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230257AbhGFIPl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Jul 2021 04:15:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3217E31B;
+        Tue,  6 Jul 2021 01:13:03 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D05DC3F5A1;
+        Tue,  6 Jul 2021 01:13:01 -0700 (PDT)
+Date:   Tue, 6 Jul 2021 09:12:56 +0100
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient
+ frequencies
+Message-ID: <20210706081256.GA216826@e120877-lin.cambridge.arm.com>
+References: <ff9a9daa-7d25-ea08-2cd9-fc56f778acde@arm.com>
+ <20210616105327.wnppsau4gg5ihrlv@vireshk-i7>
+ <4d975236-943c-ea82-547b-04f2bead9f48@arm.com>
+ <0a930559-a648-c20d-f3f6-09e4974a031d@arm.com>
+ <CAJZ5v0iMHeAOpDStN_qZLbM7-My4rQuAC9nEcT3sHCC33bH3NA@mail.gmail.com>
+ <CAJZ5v0hOXHtoN3Z+Mw9Ym_HaY0OxessNAKTEpp6GM5_pnLJauw@mail.gmail.com>
+ <a660b9ec-3ee7-28b2-569c-5a8d1510d927@arm.com>
+ <CAJZ5v0iQve59SxD0TJ19wonj=WO7qVSApM-xPf_FYUf42Z3d5Q@mail.gmail.com>
+ <20210702191658.GA30379@e120877-lin.cambridge.arm.com>
+ <CAJZ5v0ijLepOyGX0Et1h3j6AbtFxV_-mq+2uNrv8syG0RPiJbg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0ijLepOyGX0Et1h3j6AbtFxV_-mq+2uNrv8syG0RPiJbg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 984a70f0572cb9a6cc5fc72c061cbc072ef27789  Merge branch 'pm-domains' into bleeding-edge
+[...]
 
-elapsed time: 726m
+> >
+> > What about a cpufreq_policy option that if sets would make
+> > cpufreq_frequency_table_target() skip inefficient OPPs while staying within
+> > the limit of max policy?
+> 
+> That would work too, ->
+> 
+> > Each governor could decide to set it or not, but
+> > it would hide the efficiency resolution to the governor and allow drivers
+> > that implements ->target() to also implements support for inefficient OPPs.
+> 
+> -> but alternatively there could be an additional cpufreq driver flag
+> to be set by the drivers implementing ->target() and wanting to deal
+> with CPUFREQ_RELATION_EFFICIENT themselves (an opt-in of sorts).
+> 
+> So the governors that want it may pass CPUFREQ_RELATION_EFFICIENT to
+> __cpufreq_driver_target() and then it will be passed to ->target()
+> depending on whether or not the new driver flag is set.
 
-configs tested: 94
-configs skipped: 2
+Of course, I can implement this instead of a cpufreq_policy flag in v4.
+I suppose then right fallback for CPUFREQ_RELATION_EFFICIENT in case the
+driver doesn't opt-in is CPUFREQ_RELATION_L.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> 
+> > That flag could be set according to a new cpufreq_governor flag
+> > CPUFREQ_GOV_SKIP_INEFFICIENCIES?
+> >
+> > That could though modify behaviors like powersave_bias from ondemand. But if
+> > a frequency is inefficient, there's probably no power saving anyway.
+> 
+> AFAICS, the userspace governor aside, using inefficient frequencies
+> only works with the powersave governor.  In the other cases,
+> RELATION_L (say) can be interpreted as "the closest efficient
+> frequency equal to or above the target" with the max policy limit
+> possibly causing inefficient frequencies to be used if they are closer
+> to the limit than the next efficient one.
+> 
+> As a rule, the governors don't assume that there are any inefficient
+> frequencies in the table.  In fact, they don't make any assumptions
+> regarding the contents of the frequency table at all.  They don't even
+> assume that the driver uses a frequency table in the first place.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                     sbc8548_defconfig
-arm                         vf610m4_defconfig
-powerpc                      acadia_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                    mvme5100_defconfig
-sparc                       sparc64_defconfig
-mips                    maltaup_xpa_defconfig
-sh                             shx3_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                        realview_defconfig
-csky                             alldefconfig
-xtensa                       common_defconfig
-arc                                 defconfig
-sh                          sdk7786_defconfig
-m68k                          sun3x_defconfig
-powerpc                     kmeter1_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20210705
-i386                 randconfig-a006-20210705
-i386                 randconfig-a001-20210705
-i386                 randconfig-a003-20210705
-i386                 randconfig-a005-20210705
-i386                 randconfig-a002-20210705
-i386                 randconfig-a015-20210705
-i386                 randconfig-a016-20210705
-i386                 randconfig-a012-20210705
-i386                 randconfig-a011-20210705
-i386                 randconfig-a014-20210705
-i386                 randconfig-a013-20210705
-x86_64               randconfig-a004-20210705
-x86_64               randconfig-a002-20210705
-x86_64               randconfig-a005-20210705
-x86_64               randconfig-a006-20210705
-x86_64               randconfig-a003-20210705
-x86_64               randconfig-a001-20210705
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+So all the governors, beside powersave and userspace would replace their
+RELATION_L with RELATION_EFFICIENT. I'll add the changes in v4.
 
-clang tested configs:
-x86_64               randconfig-b001-20210705
-x86_64               randconfig-a015-20210705
-x86_64               randconfig-a014-20210705
-x86_64               randconfig-a012-20210705
-x86_64               randconfig-a011-20210705
-x86_64               randconfig-a016-20210705
-x86_64               randconfig-a013-20210705
+So if I sum-up: new RELATION_EFFICIENT that resolves RELATION_L to an higher
+efficient frequency (if necessary) within the limits of policy->max.
+CPUfreq drivers can opt-in by setting an appropriate flag. If they do not,
+RELATION_EFFICIENT will be rewritten in RELATION_L. All governors but userspace
+and powersave would use RELATION_EFFICIENT instead of RELATION_L.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If that works for you, I'll implement this in a v4, as well as some
+improvements for the CPUfreq/EM registration following the discussion with
+Viresh.
+
+-- 
+Vincent
