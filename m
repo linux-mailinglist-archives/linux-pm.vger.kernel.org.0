@@ -2,45 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D94E3BDBAB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 18:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B53B3BDE23
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 21:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbhGFQyI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 12:54:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:46508 "EHLO foss.arm.com"
+        id S229938AbhGFTrW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 15:47:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:48994 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230247AbhGFQyH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Jul 2021 12:54:07 -0400
+        id S229781AbhGFTrW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Jul 2021 15:47:22 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 457A0106F;
-        Tue,  6 Jul 2021 09:51:28 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D6301042;
+        Tue,  6 Jul 2021 12:44:43 -0700 (PDT)
 Received: from [10.57.7.228] (unknown [10.57.7.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17FFD3F5A1;
-        Tue,  6 Jul 2021 09:51:25 -0700 (PDT)
-Subject: Re: [RFC PATCH v2 0/6] Introduce Active Stats framework with CPU
- performance statistics
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Chris Redpath <Chris.Redpath@arm.com>, Beata.Michalska@arm.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Kachhap <amit.kachhap@gmail.com>
-References: <20210706131828.22309-1-lukasz.luba@arm.com>
- <CAJZ5v0ga1O9Y9Lam=BoXofE7sjTNpYVSTjAWvSGZ+j__aCeXJw@mail.gmail.com>
- <1de9d474-fdeb-8db6-0b01-53a90f7c20c8@arm.com>
- <CAJZ5v0gzpfT__EyrVuZSr32ms7-YJZw7qEok0WZECv1iDRRvWA@mail.gmail.com>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2253A3F5A1;
+        Tue,  6 Jul 2021 12:44:39 -0700 (PDT)
+Subject: Re: [PATCH 2/3] PM: EM: Make em_cpu_energy() able to return bigger
+ values
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Chris.Redpath@arm.com,
+        morten.rasmussen@arm.com, qperret@google.com,
+        linux-pm@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
+        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
+        segall@google.com, mgorman@suse.de, bristot@redhat.com,
+        CCj.Yeh@mediatek.com
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-3-lukasz.luba@arm.com>
+ <266f4b52-62c5-48bc-2680-1f09b6eb90cc@arm.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <4d4801c3-1d84-9754-815c-71a6412cf4f3@arm.com>
-Date:   Tue, 6 Jul 2021 17:51:24 +0100
+Message-ID: <5c6a952e-b274-2b62-4008-5eadec64ac76@arm.com>
+Date:   Tue, 6 Jul 2021 20:44:38 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0gzpfT__EyrVuZSr32ms7-YJZw7qEok0WZECv1iDRRvWA@mail.gmail.com>
+In-Reply-To: <266f4b52-62c5-48bc-2680-1f09b6eb90cc@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -50,165 +46,189 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 7/6/21 5:34 PM, Rafael J. Wysocki wrote:
-> On Tue, Jul 6, 2021 at 5:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> On 7/6/21 4:28 PM, Rafael J. Wysocki wrote:
->>> On Tue, Jul 6, 2021 at 3:18 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi all,
->>>>
->>>> This patch set introduces a new mechanism: Active Stats framework (ASF), which
->>>> gathers and maintains statistics of CPU performance - time residency at each
->>>> performance state.
->>>>
->>>> The ASF tracks all the frequency transitions as well as CPU
->>>> idle entry/exit events for all CPUs. Based on that it accounts the active
->>>> (non-idle) residency time for each CPU at each frequency. This information can
->>>> be used by some other subsystems (like thermal governor) to enhance their
->>>> estimations about CPU usage at a given period.
->>>
->>> This seems to mean that what is needed is something like the cpufreq
->>> stats but only collected during the time when CPUs are not in idle
->>> states.
->>
->> Yes
+On 7/5/21 1:44 PM, Dietmar Eggemann wrote:
+> On 25/06/2021 17:26, Lukasz Luba wrote:
+>> The Energy Model (EM) em_cpu_energy() is responsible for providing good
+>> estimation regarding CPUs energy. It contains proper data structures which
+>> are then used during calculation. The values stored in there are in
+>> milli-Watts precision (or in abstract scale) smaller that 0xffff, which use
 > 
-> So this is a clear problem statement: the cpufreq statistics cover the
-> time when CPUs are in idle states, so they are not suitable for
-> certain purposes, like thermal control.
+> I guess you refer to 'if (... || power > EM_MAX_POWER)' check in
+> em_create_perf_table() [kernel/power/energy_model.c].
 
-Agree, it's better described problem statement.
+Correct
 
 > 
-> The most straightforward approach to address it seems to be to modify
-> the collection of cpufreq statistics so that they don't include the
-> time spent by CPUs in idle states, or to make it possible to
-> distinguish the time spent in idle states from the "active" time.
+>> sufficient unsigned long even on 32-bit machines. There are scenarios where
+>                                                                ^^^^^^^^^
 > 
->>>> Does it fix something in mainline?
->>>> Yes, there is thermal governor Intelligent Power Allocation (IPA), which
->>>> estimates the CPUs power used in the past. IPA is sampling the CPU utilization
->>>> and frequency and relies on the info available at the time of sampling
->>>> and this imposes the estimation errors.
->>>> The use of ASF solve the issue and enables IPA to make better estimates.
->>>
->>> Obviously the IPA is not used on all platforms where cpufreq and
->>> cpuidle are used.  What platforms are going to benefit from this
->>> change?
->>
->> Arm platforms which still use kernel thermal to control temperature,
->> such as Chromebooks or mid-, low-end phones.
-> 
-> Which means that this feature is not going to be universally useful.
-> 
-> However, if the time spent by CPUs in idle states were accounted for
-> in the cpufreq statistics, that would be universally useful.
+> Can you describe these scenarios better with one example (EAS placement
+> of an example task on a 2 PD system) which highlights the issue and how
+> it this patch-set solves it?
 
-True
+There are two places in the code where it makes a difference:
+
+1. In the find_energy_efficient_cpu() where we are searching for
+best_delta. We might suffer there when two PDs return the same result,
+like in the example below.
+
+Scenario:
+Low utilized system e.g. ~200 sum_util for PD0 and ~220 for PD1. There
+are quite a few small tasks ~10-15 util. These tasks would suffer for
+the rounding error. Such system utilization has been seen while playing
+some simple games. In such condition our partner reported 5..10mA less
+battery drain.
+
+Some details:
+We have two Perf Domains (PDs): PD0 (big) and PD1 (little)
+Let's compare w/o patch set ('old') and w/ patch set ('new')
+We are comparing energy w/ task and w/o task placed in the PDs
+
+a) 'old' w/o patch set, PD0
+task_util = 13
+cost = 480
+sum_util_w/o_task = 215
+sum_util_w_task = 228
+scale_cpu = 1024
+energy_w/o_task = 480 * 215 / 1024 = 100.78 => 100
+energy_w_task = 480 * 228 / 1024 = 106.87 => 106
+energy_diff = 106 - 100 = 6 (this is equal to 'old' PD1's energy_diff in 
+'c)')
+
+b) 'new' w/ patch set, PD0
+task_util = 13
+cost = 480 * 10000 = 4800000
+sum_util_w/o_task = 215
+sum_util_w_task = 228
+energy_w/o_task = 4800000 * 215 / 1024 = 1007812
+energy_w_task = 4800000 * 228 / 1024  = 1068750
+energy_diff = 1068750 - 1007812 = 60938 (this is not equal to 'new' 
+PD1's energy_diff in 'd)')
+
+c) 'old' w/o patch set, PD1
+task_util = 13
+cost = 160
+sum_util_w/o_task = 283
+sum_util_w_task = 293
+scale_cpu = 355
+energy_w/o_task = 160 * 283 / 355 = 127.55 => 127
+energy_w_task = 160 * 296 / 355 = 133.41 => 133
+energy_diff = 133 - 127 = 6 (this is equal to 'old' PD0's energy_diff in 
+'a)')
+
+d) 'new' w/ patch set, PD1
+task_util = 13
+cost = 160 * 10000 = 1600000
+sum_util_w/o_task = 283
+sum_util_w_task = 293
+scale_cpu = 355
+(no '/ scale_cpu' needed here)
+energy_w/o_task = 1600000 * 283 / 355 = 1275492
+energy_w_task = 1600000 * 296 / 355 =   1334084
+energy_diff = 1334084 - 1275492 = 58592 (this is not equal to 'new' 
+PD0's energy_diff in 'b)')
+
+2. Difference in the the last feec() step: margin filter
+With the patch set the margin comparison also has better resolution,
+so it's possible to hit better placement thanks to that.
+
+Please see the traces below.
+How to interpret these values:
+In the first trace below, there is diff=124964 and margin=123381
+the EM 'cost' is multiplied by 10000, so we we divide these two,
+it will be '12 > 12', so it won't be placed into the better PD
+with lower best delta.
+
+In the last 2 examples you would see close values in the
+prev_delta=49390 best_delta=43945
+Without the patch they would be rounded to
+prev_delta=4 best_delta=4
+and the task might be placed wrongly.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   systemd-logind-440     [000] d..5    82.164218: compute_energy: 
+energy=43945, sum_util=9 cpu=4
+   systemd-logind-440     [000] d..5    82.164232: compute_energy: 
+energy=766601, sum_util=157 cpu=4
+   systemd-logind-440     [000] d..5    82.164242: compute_energy: 
+energy=766601, sum_util=157 cpu=4
+   systemd-logind-440     [000] d..5    82.164253: compute_energy: 
+energy=1207500, sum_util=299 cpu=0
+   systemd-logind-440     [000] d..5    82.164263: compute_energy: 
+energy=1805192, sum_util=447 cpu=0
+   systemd-logind-440     [000] d..5    82.164273: select_task_rq_fair: 
+EAS: prev_delta=722656 best_delta=597692 diff=124964 margin=123381
+   systemd-logind-440     [000] d..5    82.164278: select_task_rq_fair: 
+EAS: hit!!!
+
+
+   systemd-logind-440     [000] d.h4   134.954038: compute_energy: 
+energy=366210, sum_util=75 cpu=4
+   systemd-logind-440     [000] d.h4   134.954067: compute_energy: 
+energy=463867, sum_util=95 cpu=4
+   systemd-logind-440     [000] d.h4   134.954090: compute_energy: 
+energy=463867, sum_util=95 cpu=4
+   systemd-logind-440     [000] d.h4   134.954117: compute_energy: 
+energy=257347, sum_util=99 cpu=0
+   systemd-logind-440     [000] d.h4   134.954137: compute_energy: 
+energy=309336, sum_util=119 cpu=0
+   systemd-logind-440     [000] d.h4   134.954160: select_task_rq_fair: 
+EAS: prev_delta=97657 best_delta=51989 diff=45668 margin=45075
+   systemd-logind-440     [000] d.h4   134.954171: select_task_rq_fair: 
+EAS: hit!!!
+
+
+           <idle>-0       [001] d.s4   226.019763: compute_energy: 
+energy=0, sum_util=0 cpu=4
+           <idle>-0       [001] d.s4   226.019790: compute_energy: 
+energy=43945, sum_util=9 cpu=4
+           <idle>-0       [001] d.s4   226.019817: compute_energy: 
+energy=5198, sum_util=2 cpu=0
+           <idle>-0       [001] d.s4   226.019838: compute_energy: 
+energy=54588, sum_util=21 cpu=0
+           <idle>-0       [001] d.s4   226.019858: compute_energy: 
+energy=54588, sum_util=21 cpu=0
+           <idle>-0       [001] d.s4   226.019881: select_task_rq_fair: 
+EAS: prev_delta=49390 best_delta=43945 diff=5445 margin=3411
+           <idle>-0       [001] d.s4   226.019891: select_task_rq_fair: 
+EAS: hit!!!
+
+
+           <idle>-0       [001] d.s4   270.019780: compute_energy: 
+energy=0, sum_util=0 cpu=4
+           <idle>-0       [001] d.s4   270.019807: compute_energy: 
+energy=43945, sum_util=9 cpu=4
+           <idle>-0       [001] d.s4   270.019833: compute_energy: 
+energy=5198, sum_util=2 cpu=0
+           <idle>-0       [001] d.s4   270.019854: compute_energy: 
+energy=54588, sum_util=21 cpu=0
+           <idle>-0       [001] d.s4   270.019874: compute_energy: 
+energy=54588, sum_util=21 cpu=0
+           <idle>-0       [001] d.s4   270.019897: select_task_rq_fair: 
+EAS: prev_delta=49390 best_delta=43945 diff=5445 margin=3411
+           <idle>-0       [001] d.s4   270.019908: select_task_rq_fair: 
+EAS: hit!!!
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 > 
->>>
->>>> Why it couldn't be done using existing frameworks?
->>>> The CPUFreq and CPUIdle statistics are not combined, so it is not possible
->>>> to derive the information on how long exactly the CPU was running with a given
->>>> frequency.
->>>
->>> But it doesn't mean that the statistics could not be combined.
->>>
->>> For instance, the frequency of the CPU cannot change via cpufreq when
->>> active_stats_cpu_idle_enter() is running, so instead of using an
->>> entirely new framework for collecting statistics it might update the
->>> existing cpufreq stats to register that event.
->>
->> True, but keep in mind that the cpufreq most likely works for a few
->> CPUs (policy::related_cpus), while cpuidle in a per-cpu fashion.
->> I would say that cpuidle should check during enter/exit what is
->> the currently set frequency for cluster and account its active
->> period.
-> 
-> Yes, that's not particularly difficult to achieve in principle: on
-> idle entry and exit, update the cpufreq statistics of the policy
-> including the current CPU.
+> In this example you can list all the things which must be there to
+> create a situation in EAS in which the patch-set helps.
 
-Sounds good.
+I hope the description above now add more light into this issue.
 
 > 
->>>
->>> And analogously for the wakeup.
->>>
->>>> This new framework combines that information and provides
->>>> it in a handy way.
->>>
->>> I'm not convinced about the last piece.
->>
->> The handy structure is called Active Stats Monitor. It samples
->> the stats gathered after processing idle. That private
->> structure maintains statistics which are for a given period
->> (current snapshot - previous snapshot).
+>> we would like to provide calculated estimations in a better precision and
+>> the values might be 1000 times bigger. This patch makes possible to use
 > 
-> So collecting the statistics should be fast and simple and processing
-> them need not be.
-> 
-> Ideally, they should be processed only when somebody asks the data.
+> Where is this `1000` coming from?
 
-Correct.
+It's just a statement that in the next patches we would increase the
+resolution by a few orders of magnitude. In patch 3/3 it's 10000.
+I can align with that value also in this statement.
 
-> 
-> I'm not sure if that is the case in the current patchset.
+Thank you Dietmar for having a look at this!
 
-Which is the case in current implementation, where the Active Stats
-Monitor (ASM) is run in the context of thermal workqueue. It is
-scheduled every 100ms to run IPA throttling, which does the
-statistics gathering and calculation in the ASM. Time accounted for this
-major calculation is moved to the 'client' (like IPA) context.
-
-> 
->>>
->>>> IMHO it has to be implemented as a new framework, next to
->>>> CPUFreq and CPUIdle, due to a clean design and not just hooks from thermal
->>>> governor into the frequency change and idle code paths.
->>>
->>> As far as the design is concerned, I'm not sure if I agree with it.
->>>
->>>   From my perspective it's all a 1000-line patch that I have to read and
->>> understand to figure out what the design is.
->>
->> I can help you with understanding it with some design docs if you want.
-> 
-> That may help, but let's avoid doing extra work just yet.
-
-Understood
-
-> 
->>>
->>>> Tha patch 4/6 introduces a new API for cooling devices, which allows to
->>>> stop tracking the freq and idle statistics.
->>>>
->>>> The patch set contains also a patches 5/6 6/6 which adds the new power model
->>>> based on ASF into the cpufreq cooling (used by thermal governor IPA).
->>>> It is added as ifdef option, since Active Stats might be not compiled in.
->>>> The ASF is a compile time option, but that might be changed and IPA could
->>>> select it, which would allow to remove some redundant code from
->>>> cpufreq_cooling.c.
->>>>
->>>> Comments and suggestions are very welcome.
->>>
->>> I'm totally not convinced that it is necessary to put the extra 1000
->>> lines of code into the kernel to address the problem at hand.
->>>
->>
->> I understand your concerns. If you have another idea than this framework
->> I'm happy to hear it. Maybe better stats in cpuidle, which would be
->> are of the cpufreq?
-> 
-> One idea that I have is outlined above and I'm not seeing a reason to
-> put cpufreq statistics into cpuidle.
-> 
-
-I'm happy to prepare such RFC if you like. I would just need a bit more
-information. It sounds your proposed solution might be smaller in code
-size, since the client's statistics accounting might be moved to the
-cpufreq_cooling.c (which now live in the ASM). Also, there won't be a
-new framework to maintain (which is a big plus).
+Regards,
+Lukasz
 
