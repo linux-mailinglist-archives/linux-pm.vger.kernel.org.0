@@ -2,142 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E23C3BC883
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 11:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CB03BD68F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jul 2021 14:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbhGFJeN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jul 2021 05:34:13 -0400
-Received: from mail-eopbgr70051.outbound.protection.outlook.com ([40.107.7.51]:15073
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230472AbhGFJeN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Jul 2021 05:34:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ls1+VgcfpPut81U9piU8qjbwniLJ5G3x7Fcz+9R8Od3jHDDvYDVFFIjOLzfWDhnoymge0iAH5cK0c7CBxp4Pcsi2H2+MLZmtTbBR+DCwRGFoPVGBcrhAsgAqmO2edHldMQWe3650DhUvilXuFGZ1unE/Gw7xXz4cLITnteaJTdTZ/wbSl4PDOUm5v/QNcY6ojcBfPyPoJAanhDUFROWpTpEA9gAOP6M78R9AtINd6krXNSMuCXCQVESbnfKY/T0fNA1kyZLVXc2I/cWQfp2D9OfflrlW7IMw2bQbM7mTX6i3KBWDgX1iKnjNakGF5YEfPePWy6M4wkcJIxFTtuM6bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9TH4dSuE/RICWuqVedJF6PJG/9soufp/J9D/JBeclCA=;
- b=RpFTFnPZHnAOl/P7GnvWmNM5eKV4AExbT0Xo3TwZN3LC88R0CWnoMA5KoboNLcT73WtGHx25Y4fC35mFhoe5QpRPS1pCMFnG/MhfzCxp/N7IvFg2P8We5/7TxO9oJ9MXZNeJFzVuvFxBAfR95hGCsARpNXNFQcwnLcqZ+0ILcoPsdmcCvpH+mQYKNfhdRPVI7CDrz21cQqtGNmbvI6yWMg1Fnd5yWWLXR8RzQ2s90gmbSgsPFZ8TNvDfgAsMus2wem/RLdwXPdPG7+Pp9XKPOC+eVvXaClBkrbhfZh+c/m8j2L0BFgGjQ2wL+rsaXiEpsS/+avcGg8bVP+/MaJHU8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9TH4dSuE/RICWuqVedJF6PJG/9soufp/J9D/JBeclCA=;
- b=eLWzJFVfx9CquFkIiX1+u1Go5JdAgf/Ltw1jg9Ze7gGWxhWdCY/pEjkCVq/e3XJdm1jSPf8qIc6fClyIgucIRWozBJ8wueunW8M19qYeh+nNxlb1OOEk+U4yya1FV4mV/adU/q74rL+icgW1rPV2jjiftKfzyhN7cBFTexQ4MNE=
-Authentication-Results: rjwysocki.net; dkim=none (message not signed)
- header.d=none;rjwysocki.net; dmarc=none action=none header.from=oss.nxp.com;
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
- by DB8PR04MB5660.eurprd04.prod.outlook.com (2603:10a6:10:a5::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19; Tue, 6 Jul
- 2021 09:31:30 +0000
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::c445:d742:eb76:86dd]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::c445:d742:eb76:86dd%9]) with mapi id 15.20.4287.033; Tue, 6 Jul 2021
- 09:31:30 +0000
-From:   peng.fan@oss.nxp.com
-To:     rjw@rjwysocki.net, khilman@kernel.org, ulf.hansson@linaro.org,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] PM: domains: not update genpd status when power on fail
-Date:   Tue,  6 Jul 2021 18:05:19 +0800
-Message-Id: <20210706100519.13851-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.30.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.71]
-X-ClientProxiedBy: SGXP274CA0010.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::22)
- To DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
+        id S233510AbhGFMhh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jul 2021 08:37:37 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:35646 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238562AbhGFMOR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jul 2021 08:14:17 -0400
+Received: by mail-ot1-f53.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so21356035oti.2
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jul 2021 05:11:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sqS1EE5ZCqXXrj+zliiH/OuJG8X+J4V/WoEfh/3zb70=;
+        b=P/fa2uk9dVhMd7C+TONNMXT6RtX7NcekvqOdUibb3OujwRlPiHx9f1OoHl3xkarQ46
+         dvFILFySirSSsnoyr8arIDmUHWdBRXQGvjaJknKKR+woKy7dAi+yA8GDrIFo0XvD15xA
+         ksorfqE1VNy7HNzIH1y3mUVb2Q8YTKrhq5vVkJCoB+MBeayVedCA1pQgxVAI70iedWwO
+         Yq9JPtEm5RA3cUc4rbPsanLS9KXSiUeF+8ZoGHWbqQa3I+yZE/9FyxAEOx29OVXUFzvn
+         Wsq0JME7AfqdkBfBaSJkAhJxkngT9eZM7wpiqeMTcwF29us0C4LP/7Z339QXGeMHsj/0
+         o/cQ==
+X-Gm-Message-State: AOAM530KkSeH2liT27RwZDX3qpQhPUHv6feV5oFWofBFWzBZL6Vaom8Q
+        2LjdOh/oFGwCyiv6WHg7CCOBu5OcnTftaCmVXVu8Vn11F6A=
+X-Google-Smtp-Source: ABdhPJzXatIluzbOjqv2w9KcZpQ0FfZw9wFN0BdqyjEpjtzppq8XwHGpoXMjA76WkCvcVDzfmF0MJu/Qs+2CKtp/DXM=
+X-Received: by 2002:a9d:22a5:: with SMTP id y34mr4250930ota.321.1625573496019;
+ Tue, 06 Jul 2021 05:11:36 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from linux-1xn6.ap.freescale.net (119.31.174.71) by SGXP274CA0010.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Tue, 6 Jul 2021 09:31:27 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe833d82-699c-4ff4-b0cc-08d94060d61b
-X-MS-TrafficTypeDiagnostic: DB8PR04MB5660:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB8PR04MB56600FB7660FFA3673EDA765C91B9@DB8PR04MB5660.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hQnl1EQ7RBu/o2P83fmKzbe14Y4WV32IInAMiyYEUJ1FSC7aidFMcD70OrvTA8oYMxBN81NS1VxhvCrQUGuGOxkwZNqIyD3uxQAfMYYTp5OHyTsqQjDGTIA12s1GIyjkmzqGxM3M8a7z5o7SgyWUU/b30PRGFGWEYfO3C23msOswKlf9K9kpnCVoONXyZyfOsZ6J9aI9jjbOaDizE64rWk9UOnzgwRhvvmcUR2cIUQ9S5ilvFI9YVclWN+wpBvx7osv0YJXIO0PsggoLNCkgdD8mhPOWqdicHtnLQrYQJJBLWnSf2LDuLwYQDK+IzfhCkwvWElOJuUwRlSV8ly3tZGPsqh30rFhqY3xCLu/RvBLIg2TAojBNVWPuhL7Ds3qXtoPSViu9iRD8ZfiO8bYjbkCsCMz7h6v0WqP0cKU6s7ryM/WE4KhMbM+tTIP/CJT2diX8g0Niom+5vj0RPZChxN33WVv9x5YQplokjAxiiVIPtOlwMwNoM8K8aki+s5PvbcRLY1Tb7JYkE4mMij7UK6gIk6wgVPklgF5q9eGgy21pVJ+ji0Lycdi/Pxgi6oTNvlpKXjM7WmLL583RskUwUNWlcSa1hlNhTVdmSsN0JZJ/Da0IUvZL0Cqu3YT2PfttqB4zu30tJDQPg6ScCUKl1TtMbjgmoGImq71u5zX0YUQF9uniwFp0AeO4j92tA4oSXHCRdaVvbZOznmV/6GbsZg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(136003)(39860400002)(366004)(1076003)(4744005)(52116002)(956004)(26005)(316002)(5660300002)(8936002)(6506007)(6486002)(86362001)(83380400001)(8676002)(2616005)(66946007)(66556008)(6666004)(478600001)(38350700002)(66476007)(2906002)(186003)(6512007)(38100700002)(16526019)(9686003)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VUW2msvlTzJ/8QUwrsjWXQo6N3ENT4H+QfV60IKPHvvC5W7KVuY1wvxBqcFH?=
- =?us-ascii?Q?YTG4lwWofEMKKr0hzQaC1q6F09E5aPNjCnO8QhaDM5FN4E0b5CxVAR25iEaX?=
- =?us-ascii?Q?YDDMd0RN5HTakIS7CAwjWyEG+6a4XCGYTcGPUMU2WMQ0I17kuneZiCLnXjAF?=
- =?us-ascii?Q?xQ2oFk3VJJrpFsQiXHfDm5qkHHSQLQZmo+QaFletaaCLf5kWPb/UrsMUTHd0?=
- =?us-ascii?Q?ZN50Ltnp9g2oTHpUPulYkQ+j2AkJJCVFIyjLCJnXTr2GmiQY7wRuRa7Cmdi8?=
- =?us-ascii?Q?VvnrLQMRuaCz4srdgot96BZIC1aQ61SLhlhkCSPXqwRZKEttIRnhU6smYLT9?=
- =?us-ascii?Q?J9ca1VgkFqKDRw3QJNvpuHU5SnOIkA1hCko8CVOgcYre8ldCZWoFxq18ju63?=
- =?us-ascii?Q?qkQvbfcVZrPYAGc5RePIwhLpmfDxKLtB6+77TsBIGEASAJklQZ7NdcqOn8oF?=
- =?us-ascii?Q?2KiKtEA9300/dZ+XV9F4jNMxgk6IJCaFSoQCp2AylbbsiyeWI7x/Ax4mjw1C?=
- =?us-ascii?Q?CGfweGCaka3Kj4nFsvbsXVGL8KTCfZ7RyGVjdmswNbR6yIJDMg6lyA/zgel0?=
- =?us-ascii?Q?Rl9bYp5yPiNG6Ql99Xs2qyvCzdhKf4qPHiM1UnhyZafLzJifauhPfurC/SYh?=
- =?us-ascii?Q?aV7NC66vX5EHGrxuu9LxKSG4w6PX/hlaH5UTrjYjVGDsqHgI837KdT/bdesq?=
- =?us-ascii?Q?HNvsPvK9z5MomQDw4hXBh+zDoZSM4Tv+Nwxnqt/tA5aqddwRsDTyYzXeCGvX?=
- =?us-ascii?Q?Hf1MD/whNGRWAJE01FTy9A2We4jOaupSTRC4rU/jXFD3SrSUpwGEmLGQsd0Y?=
- =?us-ascii?Q?7wF5vBSvDDz3k7fT7UVnYQbIGUEUvEKO9BKQKqyaflrrfXUYZto0P0oTCxGe?=
- =?us-ascii?Q?WXu+9eRPtizCHA4YndfE8IpRx+/PlJ2Ocfj5mkbByJl9WSGnyj+9pORGvzr6?=
- =?us-ascii?Q?rUPK46nzzM6Ik2SVkrFNaJb6WHQ/BXyKQkBfA3y8bbxF1VR/q/Wjr409W6Ni?=
- =?us-ascii?Q?ePX7m1RR6eGT430y8Sr0FD5owHlmtRZn2kmsADkGdr3UUcvOAFK7TJQrB6/N?=
- =?us-ascii?Q?N2ouJQUXBiaC68cTYBF+jYzCfOC2IL8tAaAhAusU5MiyJpq+56LhJgXWeOL9?=
- =?us-ascii?Q?BM6iHyMpiVz5nEqw0Air2LwcMGbzyWZx87mPkhsdbfmpGdaWjCfMxBlbZ/Bd?=
- =?us-ascii?Q?DIzUnEsMhezlAXEyJptLVwcWo2hsKW7WKOWRNPHhxcsJbObS2DC5OE2GxrXe?=
- =?us-ascii?Q?O1/Rmrj3Ifetr5mge2L95AzfynCeopzSxP3Q9aYBfeWyS+dAvcgAk9UQNB4b?=
- =?us-ascii?Q?o9/m6f7BagZIgQXEtoJPbt8P?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe833d82-699c-4ff4-b0cc-08d94060d61b
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2021 09:31:30.6501
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S9GLEKGKrIR3ZHXikVnUTK4qjNJkrd6O2fmKBjkg3SZJtfLwfrKSIFupRI0hK3Fg90/vZuy7pyahwnJDsAoDWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB5660
+References: <ff9a9daa-7d25-ea08-2cd9-fc56f778acde@arm.com> <20210616105327.wnppsau4gg5ihrlv@vireshk-i7>
+ <4d975236-943c-ea82-547b-04f2bead9f48@arm.com> <0a930559-a648-c20d-f3f6-09e4974a031d@arm.com>
+ <CAJZ5v0iMHeAOpDStN_qZLbM7-My4rQuAC9nEcT3sHCC33bH3NA@mail.gmail.com>
+ <CAJZ5v0hOXHtoN3Z+Mw9Ym_HaY0OxessNAKTEpp6GM5_pnLJauw@mail.gmail.com>
+ <a660b9ec-3ee7-28b2-569c-5a8d1510d927@arm.com> <CAJZ5v0iQve59SxD0TJ19wonj=WO7qVSApM-xPf_FYUf42Z3d5Q@mail.gmail.com>
+ <20210702191658.GA30379@e120877-lin.cambridge.arm.com> <CAJZ5v0ijLepOyGX0Et1h3j6AbtFxV_-mq+2uNrv8syG0RPiJbg@mail.gmail.com>
+ <20210706081256.GA216826@e120877-lin.cambridge.arm.com>
+In-Reply-To: <20210706081256.GA216826@e120877-lin.cambridge.arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 6 Jul 2021 14:11:24 +0200
+Message-ID: <CAJZ5v0h+zZZOn70eGD9XZy0rcy0ic-C1=UC7YGLhUahVgC4pzg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] cpufreq: Add an interface to mark inefficient frequencies
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Tue, Jul 6, 2021 at 10:13 AM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
+>
+> [...]
+>
+> > >
+> > > What about a cpufreq_policy option that if sets would make
+> > > cpufreq_frequency_table_target() skip inefficient OPPs while staying within
+> > > the limit of max policy?
+> >
+> > That would work too, ->
+> >
+> > > Each governor could decide to set it or not, but
+> > > it would hide the efficiency resolution to the governor and allow drivers
+> > > that implements ->target() to also implements support for inefficient OPPs.
+> >
+> > -> but alternatively there could be an additional cpufreq driver flag
+> > to be set by the drivers implementing ->target() and wanting to deal
+> > with CPUFREQ_RELATION_EFFICIENT themselves (an opt-in of sorts).
+> >
+> > So the governors that want it may pass CPUFREQ_RELATION_EFFICIENT to
+> > __cpufreq_driver_target() and then it will be passed to ->target()
+> > depending on whether or not the new driver flag is set.
+>
+> Of course, I can implement this instead of a cpufreq_policy flag in v4.
+> I suppose then right fallback for CPUFREQ_RELATION_EFFICIENT in case the
+> driver doesn't opt-in is CPUFREQ_RELATION_L.
+>
+> >
+> > > That flag could be set according to a new cpufreq_governor flag
+> > > CPUFREQ_GOV_SKIP_INEFFICIENCIES?
+> > >
+> > > That could though modify behaviors like powersave_bias from ondemand. But if
+> > > a frequency is inefficient, there's probably no power saving anyway.
+> >
+> > AFAICS, the userspace governor aside, using inefficient frequencies
+> > only works with the powersave governor.  In the other cases,
+> > RELATION_L (say) can be interpreted as "the closest efficient
+> > frequency equal to or above the target" with the max policy limit
+> > possibly causing inefficient frequencies to be used if they are closer
+> > to the limit than the next efficient one.
+> >
+> > As a rule, the governors don't assume that there are any inefficient
+> > frequencies in the table.  In fact, they don't make any assumptions
+> > regarding the contents of the frequency table at all.  They don't even
+> > assume that the driver uses a frequency table in the first place.
+>
+> So all the governors, beside powersave and userspace would replace their
+> RELATION_L with RELATION_EFFICIENT. I'll add the changes in v4.
+>
+> So if I sum-up: new RELATION_EFFICIENT that resolves RELATION_L to an higher
+> efficient frequency (if necessary) within the limits of policy->max.
 
-When _genpd_power_on fail, the generic power domain status
-should not be changed to GENPD_STATE_ON.
+Yes.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/base/power/domain.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+It can be called RELATION_E for brevity.
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index ab0b740cc0f1..754a5d384479 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -1101,6 +1101,7 @@ static void genpd_sync_power_on(struct generic_pm_domain *genpd, bool use_lock,
- 				unsigned int depth)
- {
- 	struct gpd_link *link;
-+	int ret;
- 
- 	if (genpd_status_on(genpd))
- 		return;
-@@ -1117,8 +1118,9 @@ static void genpd_sync_power_on(struct generic_pm_domain *genpd, bool use_lock,
- 			genpd_unlock(link->parent);
- 	}
- 
--	_genpd_power_on(genpd, false);
--	genpd->status = GENPD_STATE_ON;
-+	ret = _genpd_power_on(genpd, false);
-+	if (!ret)
-+		genpd->status = GENPD_STATE_ON;
- }
- 
- /**
--- 
-2.30.0
+> CPUfreq drivers can opt-in by setting an appropriate flag. If they do not,
+> RELATION_EFFICIENT will be rewritten in RELATION_L.
 
+Yes, and cpufreq_frequency_table_target() will take RELATION_E into
+account if set.
+
+> All governors but userspace and powersave would use RELATION_EFFICIENT instead of RELATION_L.
+
+Yes.
+
+> If that works for you, I'll implement this in a v4, as well as some
+> improvements for the CPUfreq/EM registration following the discussion with
+> Viresh.
+
+Sounds good, thanks!
