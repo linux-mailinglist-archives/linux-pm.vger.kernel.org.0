@@ -2,164 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38C73BE606
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 11:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EAD3BE619
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 12:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbhGGJ7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 05:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S230494AbhGGKFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 06:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbhGGJ7N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 05:59:13 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C03AC06175F
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jul 2021 02:56:33 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id q18so3054929lfc.7
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jul 2021 02:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kGW/nRoBu30tv7Ct47L5ywv9N9fYBMZBlHQ91yDyhbU=;
-        b=Upf4p/aSFZlDnJglzlRV11YYUdXG1aXaYnzKeQzZIss5zA2u7SfVkTDcVKkDakIamk
-         3hz/8kIuICcyAtvWcMQzs/+gcUuEsCGs35lchhqOnlVssZQyBP3NYNb4JxzCcknwoSmq
-         YVXVpIdsnm70UFLYK3Jzz32MJSJwLHzzX7ENAxvNFX6jS48HbOq8c+tAx1gdmEi23CoS
-         c2P7F+Yl4uyTAM/GjyGBtSGe1wy+wWu+1krKKo0433g4WIq/IWyws7lDwm9JyMSZzlka
-         Crsv32GQiwI3CbQxFj9ThpqX69OtCisokCdxd/chNGQ2BUtzHEPNgnWxzmCltAosvpFo
-         9Omw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kGW/nRoBu30tv7Ct47L5ywv9N9fYBMZBlHQ91yDyhbU=;
-        b=OSAdPRRKGbWnsZw9u4NowXViuOl04oTww95CrIy/H1Sp2k1qCN7NtFooi+QKcQyX2R
-         LcdTEOXt8BfomPU/YTjzy6Ees/CUCAaGrk13pm+1tpG2u1lQ09P2EiKuzhJQgGblcQPe
-         bMG/XGz9hGW5DtKNM/Ebt4Ia5bI43TqeLEsN+g4W7MB/Us/a+qcl7NQsZxIXSWPpYQhY
-         YN5svf19rzslKSE9nxy9PMcdKQ6MqnhBSZ7tXJQ/73vdyq+Hp4PyA8zXLO2rkDN2AZH0
-         sVHxd8qrscdt79SUdU5Bwa0MFcgxve7FkTbfMykju7hFoWpdro4toRMWLhbuTKOWSY30
-         b80Q==
-X-Gm-Message-State: AOAM530q+K7YJN++g0VTGWKD+3PzxdVUGNOGFs/QUWtpSMCl48D9WdqZ
-        jQiTUQJgwK6+WGNT8TexfaF1Zc2hoD5lnCAk85PCAg==
-X-Google-Smtp-Source: ABdhPJx+svSjwrHvWsHFEBkIsOkqsXhMX5eMxYYx+OBQhAYE0ztSw+T9AzeGelj7dReHN+I3vjq/c7CAAZQEqCgNq1M=
-X-Received: by 2002:a19:505a:: with SMTP id z26mr17355505lfj.470.1625651791931;
- Wed, 07 Jul 2021 02:56:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210625152603.25960-1-lukasz.luba@arm.com> <20210625152603.25960-2-lukasz.luba@arm.com>
- <CAKfTPtAV9GjQaXc2FV0OuEzTGQw9hFiKpwMfAxP-JQ_QFCUC3w@mail.gmail.com>
- <a6a49480-7d5d-fd0e-3940-0b6baac5acc0@arm.com> <CAKfTPtAbck=mTR4g9L1hVGzN2dz4PjKNXoDZeMH19HGwpW3Buw@mail.gmail.com>
- <2f43b211-da86-9d48-4e41-1c63359865bb@arm.com> <CAKfTPtDk1ANfjR5h_EjErVfQ7=is3n9QOaKKxz81tMHtqUM7jA@mail.gmail.com>
- <297df159-1681-f0a7-843d-f34d86e51d4c@arm.com>
-In-Reply-To: <297df159-1681-f0a7-843d-f34d86e51d4c@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 7 Jul 2021 11:56:20 +0200
-Message-ID: <CAKfTPtCEo+gkV2TMhOHSnuUyu5BC54o-B4Hb=QbzgT6Dft-PhQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
- of EAS estimated energy
+        with ESMTP id S229949AbhGGKFQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 06:05:16 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18587C061574;
+        Wed,  7 Jul 2021 03:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lcapCN48fsJkIvRKO2zKEWUzLtifLzkbUYXcK15Ll0M=; b=X/TzKhIOPpGn7DHzSiGl+I8O5C
+        hxl/Y9N1th1qdP/9wfBI/pElj+XP6RIq+tNliaWhM057QqKxVntqMkWGbBMyl85aN8NUsbxuUNcLd
+        QT+ukRXHxsNrTxyQ2+RfiKOhu2ZeFP7GB+zqo3/vCJIFeqZCaVtppfxbK5U1kXH62AbCu7DtZRwYL
+        iR7X+1UGo+Z04ILwdvkXyr09dc4mZcvbIqkcLgF3Yz7sO/yt+C1GSAIzEp5cL2ynF5VDuXtrm1j9u
+        fwSA/YBLnqpG+HonLWltKfP6cBhF8VyNnCgkxRUFTOoGJDY87eC3UCsmZFtzHirNpZj7qQrutm++Z
+        ai0p29Lw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m14NA-00CHg5-8U; Wed, 07 Jul 2021 10:01:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD73230007E;
+        Wed,  7 Jul 2021 12:01:38 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 77E6F2CAC4F58; Wed,  7 Jul 2021 12:01:38 +0200 (CEST)
+Date:   Wed, 7 Jul 2021 12:01:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Chris Redpath <Chris.Redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+Cc:     linux-kernel@vger.kernel.org, Chris.Redpath@arm.com,
+        dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
+        qperret@google.com, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
+        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
+        segall@google.com, mgorman@suse.de, bristot@redhat.com,
         CCj.Yeh@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/3] PM: EM: Make em_cpu_energy() able to return bigger
+ values
+Message-ID: <YOV7gt67DyYXtBkF@hirez.programming.kicks-ass.net>
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-3-lukasz.luba@arm.com>
+ <YOVSu08LpHX5cx/+@hirez.programming.kicks-ass.net>
+ <ca9853d1-5ff2-bdac-7581-61bffa3fdaaa@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca9853d1-5ff2-bdac-7581-61bffa3fdaaa@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 7 Jul 2021 at 11:48, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 7/7/21 10:37 AM, Vincent Guittot wrote:
-> > On Wed, 7 Jul 2021 at 10:23, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 7/7/21 9:00 AM, Vincent Guittot wrote:
-> >>> On Wed, 7 Jul 2021 at 09:49, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 7/7/21 8:07 AM, Vincent Guittot wrote:
-> >>>>> On Fri, 25 Jun 2021 at 17:26, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>>>
-> >>>>>> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
-> >>>>>> task. It probes many possibilities and compares the estimated energy values
-> >>>>>> for different scenarios. For calculating those energy values it relies on
-> >>>>>> Energy Model (EM) data and em_cpu_energy(). The precision which is used in
-> >>>>>> EM data is in milli-Watts (or abstract scale), which sometimes is not
-> >>>>>> sufficient. In some cases it might happen that two CPUs from different
-> >>>>>> Performance Domains (PDs) get the same calculated value for a given task
-> >>>>>> placement, but in more precised scale, they might differ. This rounding
-> >>>>>> error has to be addressed. This patch prepares EAS code for better
-> >>>>>> precision in the coming EM improvements.
-> >>>>>
-> >>>>> Could you explain why 32bits results are not enough and you need to
-> >>>>> move to 64bits ?
-> >>>>>
-> >>>>> Right now the result is in the range [0..2^32[ mW. If you need more
-> >>>>> precision and you want to return uW instead, you will have a result in
-> >>>>> the range  [0..4kW[ which seems to be still enough
-> >>>>>
-> >>>>
-> >>>> Currently we have the max value limit for 'power' in EM which is
-> >>>> EM_MAX_POWER 0xffff (64k - 1). We allow to register such big power
-> >>>> values ~64k mW (~64Watts) for an OPP. Then based on 'power' we
-> >>>> pre-calculate 'cost' fields:
-> >>>> cost[i] = power[i] * freq_max / freq[i]
-> >>>> So, for max freq the cost == power. Let's use that in the example.
-> >>>>
-> >>>> Then the em_cpu_energy() calculates as follow:
-> >>>> cost * sum_util / scale_cpu
-> >>>> We are interested in the first part - the value of multiplication.
-> >>>
-> >>> But all these are internal computations of the energy model. At the
-> >>> end, the computed energy that is returned by compute_energy() and
-> >>> em_cpu_energy(), fits in a long
-> >>
-> >> Let's take a look at existing *10000 precision for x CPUs:
-> >> cost * sum_util / scale_cpu =
-> >> (64k *10000) * (x * 800) / 1024
-> >> which is:
-> >> x * ~500mln
-> >>
-> >> So to be close to overflowing u32 the 'x' has to be > (?=) 8
-> >> (depends on sum_util).
-> >
-> > Sorry but I don't get your point.
-> > This patch is about the return type of compute_energy() and
-> > em_cpu_energy(). And even if we decide to return uW instead of mW,
-> > there is still a lot of margin.
-> >
-> > It's not because you need u64 for computing intermediate value that
-> > you must returns u64
->
-> The example above shows the need of u64 return value for platforms
-> which are:
-> - 32bit
-> - have e.g. 16 CPUs
-> - has big power value e.g. ~64k mW
-> Then let's to the calc:
-> (64k * 10000) * (16 * 800) / 1024 = ~8000mln = ~8bln
+On Wed, Jul 07, 2021 at 09:09:08AM +0100, Lukasz Luba wrote:
+> For now we would live with this simple code which improves
+> all recent 64bit platforms and is easy to take it into Android
+> common kernel. The next step would be more scattered across
+> other subsystems, so harder to backport to Android 5.4 and others.
 
-so you return a power consumption of 8kW !!!
-
->
-> The returned value after applying the whole patch set
-> won't fit in u32 for such cluster.
->
-> We might make *assumption* that the 32bit platforms will not
-> have bigger number of CPUs in the cluster or won't report
-> big power values. But I didn't wanted to make such assumption.
->
->
+Ah, you *do* only care about 64bit :-) So one option is to only increase
+precision for 64BIT builds, just like we do for scale_load() and
+friends.
