@@ -2,145 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652263BF1C6
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 23:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36B33BF458
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 05:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhGGWAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 18:00:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53372 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229717AbhGGWAK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Jul 2021 18:00:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C88E61C4C;
-        Wed,  7 Jul 2021 21:57:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625695049;
-        bh=v0LNti4luoXSnbee2IcWr5yKje765uzZmtzhwYLqE9A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=E3v080lZEtlKuiacrMg2W/HJoyoZXYdSjsMnEo0i3b8V7kPoJryIB7mBvTH07eJ4l
-         hYD4UOyR7aURJLfTFO5UQ5SwDMsuOeAsn2rhEVAnxkMN3I6qczwwSGKcgMzey3Fr6v
-         UGw6RAcfr01tyZj/O8jywfEQn/M4OcrgyJBC12qOL65gD2xNxgxSWziJ7s/5gz8HSp
-         5wE9tCwnWvOfJoXAZt14BOOe6xjudHyw7h/R6oVArBJe6IHh5WiCjN+28nS3UmodcS
-         ezBN3C501mRZ360I29Hx0A7IefJ3JCmQnQU82c3+dOTm4Jq5F9dplSwfmIXl+6cxFd
-         XcpVMjAXGRD9g==
-Date:   Wed, 7 Jul 2021 16:57:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
-        Koba Ko <koba.ko@canonical.com>,
-        Rajat Jain <rajatja@google.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4] PCI/PM: Target PM state is D3hot if device can only
- generate PME from D3cold
-Message-ID: <20210707215728.GA214645@bjorn-Precision-5520>
+        id S230432AbhGHD4o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 23:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230418AbhGHD4o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 23:56:44 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BE3C061760
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jul 2021 20:54:02 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso5719199wmh.4
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jul 2021 20:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZWa3MSZDHv15RjZ0z5EeC98vQiHtGeO/uXKzI8GzBFw=;
+        b=XTCFr7170JgT/QHOQKK4OIXt9x5YcaLpXvKfdNAjUQNxxHB4+We8I/BYK5sweWKUdx
+         Khde29SVANgVGQ07/jlLHi3Ly55pBIp8Ua3RStYF8B1eijhyS191g1LYWDJQ/q36y1CM
+         Wes7FduTI10HEzdpBC2LDQpPCXfEcdbbUquQiuQ/8ElzBvkZP/4kiAXg2NAowGpEU46V
+         eWawf+2L92tBhiinHxhQDUhPvQyGpuA/OR2mlD1+GBPqpY9lI9GParrCwTjfEnN1A50h
+         r/bIRHfzvU9DpzKoEw0USBUyKhBe3k1N3As3CrGHEGCIiEqjXJJjf2MwSyx0mDfwRFZ4
+         QGGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZWa3MSZDHv15RjZ0z5EeC98vQiHtGeO/uXKzI8GzBFw=;
+        b=blXAgLINazTt1G3rNyMrh7oq1dy7wirvC8fQxoKbkVTP+8XNY8D3RzXq4GK5FdVH95
+         +gJ1R1f0qIUeVAGy8/SlOELVda+p8yFDt4Cf9syhOOWMUyYqdYptKxLWlqiiJwouzDCs
+         2Rggy05tIqmyY47azMua5fBTnmugSdoXuZUZDh9yRU8qVhW3brakZ4lseHn6OIqd7sJn
+         yxy4CZtwdjV60pqKBbz2poIsbRJZF0riinIROhFJvGBSxUGH80cI1ffiI7Eof+6mLTXJ
+         1nmJ3ZrBq1AB0oU4t0c0MjQqgxc/kf51ATUrxELOW4GbdhhRGNukw2JOV/Iol6nZZlJX
+         7VkA==
+X-Gm-Message-State: AOAM530dtUKjriNYdmCK+54sv/QISa5qdautQlJR5VoIx7XvxPegpM97
+        5zPx9f0SF7ieACoPu0nzkJ5Zp1q3G7wwQcSgxGDn3g==
+X-Google-Smtp-Source: ABdhPJx5pjQOButJOiL0ZDCL2KfyzjM7GnKT+FRKBaTw9/Vh+a8HUsBlndetR7xxCwd82zoAhU9bMDNtRcpg2p3RqNQ=
+X-Received: by 2002:a05:600c:3399:: with SMTP id o25mr30069191wmp.3.1625716440637;
+ Wed, 07 Jul 2021 20:54:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210617123653.58640-1-mika.westerberg@linux.intel.com>
+References: <CAAhSdy00KAqg37PCAGwNXt_2HTpxGY68yTPNHDEbrSwdiLa2jw@mail.gmail.com>
+ <mhng-baa27714-d293-409b-9c07-6b2d1043bfad@palmerdabbelt-glaptop>
+In-Reply-To: <mhng-baa27714-d293-409b-9c07-6b2d1043bfad@palmerdabbelt-glaptop>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 7 Jul 2021 21:21:47 +0530
+Message-ID: <CAAhSdy21kOR8f8=9R-1HQW4ncmVcJEFRjNWU1N+mLejAHgBcHg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/8] RISC-V CPU Idle Support
+To:     Palmer Dabbelt <palmerdabbelt@google.com>
+Cc:     Anup Patel <Anup.Patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        liush <liush@allwinnertech.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 03:36:53PM +0300, Mika Westerberg wrote:
-> Some PCIe devices only support PME (Power Management Event) from D3cold.
-> One example is ASMedia xHCI controller:
-> 
-> 11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
->   ...
->   Capabilities: [78] Power Management version 3
->   	  Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
-> 	  Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 
-> With such devices, if it has wake enabled, the kernel selects lowest
-> possible power state to be D0 in pci_target_state(). This is problematic
-> because it prevents the root port it is connected to enter low power
-> state too which makes the system consume more energy than necessary.
+On Wed, Jul 7, 2021 at 2:29 AM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+>
+> On Mon, 21 Jun 2021 21:49:11 PDT (-0700), anup@brainfault.org wrote:
+> > Hi Palmer,
+> >
+> > On Thu, Jun 10, 2021 at 10:52 AM Anup Patel <anup.patel@wdc.com> wrote:
+> >>
+> >> This series adds RISC-V CPU Idle support using SBI HSM suspend function.
+> >> The RISC-V SBI CPU idle driver added by this series is highly inspired
+> >> from the ARM PSCI CPU idle driver.
+> >>
+> >> At high-level, this series includes the following changes:
+> >> 1) Preparatory arch/riscv patches (Patches 1 to 3)
+> >> 2) Defines for RISC-V SBI HSM suspend (Patch 4)
+> >> 3) Preparatory patch to share code between RISC-V SBI CPU idle driver
+> >>    and ARM PSCI CPU idle driver (Patch 5)
+> >> 4) RISC-V SBI CPU idle driver and related DT bindings (Patches 6 to 7)
+> >>
+> >> These patches can be found in riscv_sbi_hsm_suspend_v7 branch at
+> >> https://github.com/avpatel/linux
+> >>
+> >> Special thanks Sandeep Tripathy for providing early feeback on SBI HSM
+> >> support in all above projects (RISC-V SBI specification, OpenSBI, and
+> >> Linux RISC-V).
+> >>
+> >> Changes since v6:
+> >>  - Fixed error reported by "make DT_CHECKER_FLAGS=-m dt_binding_check"
+> >>
+> >> Changes since v5:
+> >>  - Rebased on Linux-5.13-rc5
+> >>  - Removed unnecessary exports from PATCH5
+> >>  - Removed stray ";" from PATCH5
+> >>  - Moved sbi_cpuidle_pd_power_off() under "#ifdef CONFIG_DT_IDLE_GENPD"
+> >>    in PATCH6
+> >>
+> >> Changes since v4:
+> >>  - Rebased on Linux-5.13-rc2
+> >>  - Renamed all dt_idle_genpd functions to have "dt_idle_" prefix
+> >>  - Added MAINTAINERS file entry for dt_idle_genpd
+> >>
+> >> Changes since v3:
+> >>  - Rebased on Linux-5.13-rc2
+> >>  - Fixed __cpu_resume_enter() which was broken due to XIP kernel support
+> >>  - Removed "struct dt_idle_genpd_ops" abstraction which simplifies code
+> >>    sharing between ARM PSCI and RISC-V SBI drivers in PATCH5
+> >>
+> >> Changes since v2:
+> >>  - Rebased on Linux-5.12-rc3
+> >>  - Updated PATCH7 to add common DT bindings for both ARM and RISC-V
+> >>    idle states
+> >>  - Added "additionalProperties = false" for both idle-states node and
+> >>    child nodes in PATCH7
+> >>
+> >> Changes since v1:
+> >>  - Fixex minor typo in PATCH1
+> >>  - Use just "idle-states" as DT node name for CPU idle states
+> >>  - Added documentation for "cpu-idle-states" DT property in
+> >>    devicetree/bindings/riscv/cpus.yaml
+> >>  - Added documentation for "riscv,sbi-suspend-param" DT property in
+> >>    devicetree/bindings/riscv/idle-states.yaml
+> >>
+> >> Anup Patel (8):
+> >>   RISC-V: Enable CPU_IDLE drivers
+> >>   RISC-V: Rename relocate() and make it global
+> >>   RISC-V: Add arch functions for non-retentive suspend entry/exit
+> >>   RISC-V: Add SBI HSM suspend related defines
+> >>   cpuidle: Factor-out power domain related code from PSCI domain driver
+> >>   cpuidle: Add RISC-V SBI CPU idle driver
+> >>   dt-bindings: Add common bindings for ARM and RISC-V idle states
+> >>   RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine
+> >
+> > Can you please review this series ?
+> >
+> > It would be nice to consider this series for Linux-5.14.
+>
+> I'd assumed this one was part of the 0.3.0 freeze.
 
-IIUC this is because the loop that checks which states support PME
-starts with D3hot and doesn't even look at D3cold.
+Yes, SBI HSM suspend call is part of SBI v0.3.0 release.
+(Refer, https://github.com/riscv/riscv-sbi-doc/releases/tag/v0.3.0)
 
-> The problem in pci_target_state() is that it only accounts the "current"
-> device state, so when the bridge above it (a root port for instance) is
-> transitioned into D3hot the device transitions into D3cold. This is
-> because when the root port is first transitioned into D3hot then the
-> ACPI power resource is turned off which puts the PCIe link to L2/L3 (and
-> the root port and the device are in D3cold). If the root port is kept in
-> D3hot it still means that the device below it is still effectively in
-> D3cold as no configuration messages pass through. Furthermore the
-> implementation note of PCIe 5.0 sec 5.3.1.4 says that the device should
-> expect to be transitioned into D3cold soon after its link transitions
-> into L2/L3 Ready state.
-> 
-> Taking the above into consideration, instead of forcing the device stay
-> in D0 we modify pci_target_state() to return D3hot in this special case
-> and make __pci_enable_wake() to enable PME too in this case.
-> 
-> Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
-> Reported-by: Koba Ko <koba.ko@canonical.com>
-> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
-> The previous version of the patch is here:
-> 
-> https://lore.kernel.org/linux-pm/20210616150516.28242-1-mika.westerberg@linux.intel.com/
-> 
-> Changes from the previous version:
-> 
->   * Dropped redundant test in pci_target_state().
-> 
->  drivers/pci/pci.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index b717680377a9..043c5c304308 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -2485,7 +2485,13 @@ static int __pci_enable_wake(struct pci_dev *dev, pci_power_t state, bool enable
->  	if (enable) {
->  		int error;
->  
-> -		if (pci_pme_capable(dev, state))
-> +		/*
-> +		 * Enable PME if device is capable from given state.
-> +		 * Special case is device that can only generate PME
-> +		 * from D3cold then we enable PME too.
-> +		 */
-> +		if (pci_pme_capable(dev, state) ||
-> +		    (state == PCI_D3hot && pci_pme_capable(dev, PCI_D3cold)))
->  			pci_pme_active(dev, true);
->  		else
->  			ret = 1;
-> @@ -2595,6 +2601,14 @@ static pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup)
->  		 * PME#.
->  		 */
->  		if (dev->pme_support) {
-> +			/*
-> +			 * Special case if device supports only PME from
-> +			 * D3cold but not from D3hot we still return D3hot.
-> +			 */
-> +			if (target_state == PCI_D3hot &&
-> +				(dev->pme_support & (1 << PCI_D3cold)))
-> +				return target_state;
+Regards,
+Anup
 
-I've spent quite a bit of time trying to understand this, and I'm kind
-of dragging my feet on it because I haven't been able to really
-connect this with the specs.  It also seems unfortunate to have to add
-this special case in two places.
-
-It seems like we're basically lying and *saying* we're going to put
-the device in D3hot, but due to some magic invisible assumption, we
-*actually* put it in D3cold.
-
->  			while (target_state
->  			      && !(dev->pme_support & (1 << target_state)))
->  				target_state--;
-
-Nit 1: "if (target_state == PCI_D3hot && ...) return target_state;"
-means "if (...) return PCI_D3hot;".  When we're returning a constant
-value that we already know, I think it's clearer to use the constant.
-
-Nit 2: it looks like both these tests should use pci_pme_capable(),
-which would match the other special case in __pci_enable_wake().
+>
+> >
+> > Regards,
+> > Anup
+> >
+> >>
+> >>  .../bindings/arm/msm/qcom,idle-state.txt      |   2 +-
+> >>  .../devicetree/bindings/arm/psci.yaml         |   2 +-
+> >>  .../bindings/{arm => cpu}/idle-states.yaml    | 228 ++++++-
+> >>  .../devicetree/bindings/riscv/cpus.yaml       |   6 +
+> >>  MAINTAINERS                                   |  14 +
+> >>  arch/riscv/Kconfig                            |   7 +
+> >>  arch/riscv/Kconfig.socs                       |   3 +
+> >>  arch/riscv/configs/defconfig                  |  13 +-
+> >>  arch/riscv/configs/rv32_defconfig             |   6 +-
+> >>  arch/riscv/include/asm/asm.h                  |  17 +
+> >>  arch/riscv/include/asm/cpuidle.h              |  24 +
+> >>  arch/riscv/include/asm/sbi.h                  |  27 +-
+> >>  arch/riscv/include/asm/suspend.h              |  35 +
+> >>  arch/riscv/kernel/Makefile                    |   2 +
+> >>  arch/riscv/kernel/asm-offsets.c               |   3 +
+> >>  arch/riscv/kernel/cpu_ops_sbi.c               |   2 +-
+> >>  arch/riscv/kernel/head.S                      |  18 +-
+> >>  arch/riscv/kernel/process.c                   |   3 +-
+> >>  arch/riscv/kernel/suspend.c                   |  86 +++
+> >>  arch/riscv/kernel/suspend_entry.S             | 123 ++++
+> >>  drivers/cpuidle/Kconfig                       |   9 +
+> >>  drivers/cpuidle/Kconfig.arm                   |   1 +
+> >>  drivers/cpuidle/Kconfig.riscv                 |  15 +
+> >>  drivers/cpuidle/Makefile                      |   5 +
+> >>  drivers/cpuidle/cpuidle-psci-domain.c         | 138 +---
+> >>  drivers/cpuidle/cpuidle-psci.h                |  15 +-
+> >>  drivers/cpuidle/cpuidle-sbi.c                 | 626 ++++++++++++++++++
+> >>  drivers/cpuidle/dt_idle_genpd.c               | 177 +++++
+> >>  drivers/cpuidle/dt_idle_genpd.h               |  50 ++
+> >>  29 files changed, 1472 insertions(+), 185 deletions(-)
+> >>  rename Documentation/devicetree/bindings/{arm => cpu}/idle-states.yaml (74%)
+> >>  create mode 100644 arch/riscv/include/asm/cpuidle.h
+> >>  create mode 100644 arch/riscv/include/asm/suspend.h
+> >>  create mode 100644 arch/riscv/kernel/suspend.c
+> >>  create mode 100644 arch/riscv/kernel/suspend_entry.S
+> >>  create mode 100644 drivers/cpuidle/Kconfig.riscv
+> >>  create mode 100644 drivers/cpuidle/cpuidle-sbi.c
+> >>  create mode 100644 drivers/cpuidle/dt_idle_genpd.c
+> >>  create mode 100644 drivers/cpuidle/dt_idle_genpd.h
+> >>
+> >> --
+> >> 2.25.1
+> >>
