@@ -2,138 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E073BE411
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D72A3BE41B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhGGIDH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbhGGIDG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 04:03:06 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F80BC061574
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jul 2021 01:00:26 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id q184so1059556ljq.0
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jul 2021 01:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=haGVx5xtTBF+VtzwL/lf0Kn8JJj/cDxNCUCB/6GBJpg=;
-        b=Pbd+/aMolsKOQG+lwZY8mgF04Ayl5UHoly0ldhMkisOAGIhNt5qwhhQ/P3EcyhLNas
-         glu4XAf1X2q8XsK5AbHYivdZfc+gEy8MtYEFkyxi8qrLiCPabCblemNaQ70uBOzShmjk
-         KLnt3PM5wrzFmPQgsV6bbHaFX+wAi7ZVMxcYBeaXMr3BcBL0E79YtKSjySrOkOLqEYBc
-         h0LJNdg+RN50S9Hyt1l9vbkwQdHemPeiluOoSUIzegZdDnaa9EN/htD46iUErWF+G1vr
-         7qBvUrJG/qtKQ516HgeWpx5tNgEU5nrsgg4dIYNVLh3X9Lxa10eDTbjIadSUFUvlQLzR
-         Mdzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=haGVx5xtTBF+VtzwL/lf0Kn8JJj/cDxNCUCB/6GBJpg=;
-        b=fEb4Mo5AFPbkscVjUHICSPm0BXJceBa+0Sqmrcw5UL+Bfdj5dn0BWCOj2i4qFItzUf
-         2AJrkVUD3Nsm2XzcStbPtutjuEP1zlM7mDwG8jBhejtaMq6bf4z2N8Cgk9OsZXfNoxRe
-         KEtxI6zsExDTLMSMalQdxxhZYpCnLmA8wYehNcA4+sBTlq+Pas4NlJQVKAU5DFp9/3re
-         VluEF1FCcK29/qwiba0JIH5HPGm/dkqDvovdhrX8BgcuvGoNhweie5s123iCkSlxOSwc
-         YiOYXuKB1KUGxNWt1KLif4G82qruxcrQXXQJByoWmW07rWk51OVjCFQBsOfpgF1SODMv
-         FD6w==
-X-Gm-Message-State: AOAM533Rk39yMP0YFrxeqmG5jTWvTS4lh8BYLvn6jrf+tQay1nCqeaTP
-        RhGWzpnNLB2PunXoN6D3hCH24aC4yne3zzMog0FirA==
-X-Google-Smtp-Source: ABdhPJz0lm5Be97IeqSsNKXdCQo7E3elpVDfj98ujSXkZ5RvypuKhI42qylz+ZcbGgwbPiBFBCxchCyO37/GwC3bkaY=
-X-Received: by 2002:a2e:3a05:: with SMTP id h5mr6279612lja.209.1625644824533;
- Wed, 07 Jul 2021 01:00:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210625152603.25960-1-lukasz.luba@arm.com> <20210625152603.25960-2-lukasz.luba@arm.com>
- <CAKfTPtAV9GjQaXc2FV0OuEzTGQw9hFiKpwMfAxP-JQ_QFCUC3w@mail.gmail.com> <a6a49480-7d5d-fd0e-3940-0b6baac5acc0@arm.com>
-In-Reply-To: <a6a49480-7d5d-fd0e-3940-0b6baac5acc0@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 7 Jul 2021 10:00:13 +0200
-Message-ID: <CAKfTPtAbck=mTR4g9L1hVGzN2dz4PjKNXoDZeMH19HGwpW3Buw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
- of EAS estimated energy
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Chris Redpath <Chris.Redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        id S230414AbhGGILz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 04:11:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:59318 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230398AbhGGILy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Jul 2021 04:11:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99274ED1;
+        Wed,  7 Jul 2021 01:09:14 -0700 (PDT)
+Received: from [10.57.1.129] (unknown [10.57.1.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20833F694;
+        Wed,  7 Jul 2021 01:09:11 -0700 (PDT)
+Subject: Re: [PATCH 2/3] PM: EM: Make em_cpu_energy() able to return bigger
+ values
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Chris.Redpath@arm.com,
+        dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
+        qperret@google.com, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
+        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
+        segall@google.com, mgorman@suse.de, bristot@redhat.com,
         CCj.Yeh@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-3-lukasz.luba@arm.com>
+ <YOVSu08LpHX5cx/+@hirez.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <ca9853d1-5ff2-bdac-7581-61bffa3fdaaa@arm.com>
+Date:   Wed, 7 Jul 2021 09:09:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <YOVSu08LpHX5cx/+@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 7 Jul 2021 at 09:49, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 7/7/21 8:07 AM, Vincent Guittot wrote:
-> > On Fri, 25 Jun 2021 at 17:26, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
-> >> task. It probes many possibilities and compares the estimated energy values
-> >> for different scenarios. For calculating those energy values it relies on
-> >> Energy Model (EM) data and em_cpu_energy(). The precision which is used in
-> >> EM data is in milli-Watts (or abstract scale), which sometimes is not
-> >> sufficient. In some cases it might happen that two CPUs from different
-> >> Performance Domains (PDs) get the same calculated value for a given task
-> >> placement, but in more precised scale, they might differ. This rounding
-> >> error has to be addressed. This patch prepares EAS code for better
-> >> precision in the coming EM improvements.
-> >
-> > Could you explain why 32bits results are not enough and you need to
-> > move to 64bits ?
-> >
-> > Right now the result is in the range [0..2^32[ mW. If you need more
-> > precision and you want to return uW instead, you will have a result in
-> > the range  [0..4kW[ which seems to be still enough
-> >
->
-> Currently we have the max value limit for 'power' in EM which is
-> EM_MAX_POWER 0xffff (64k - 1). We allow to register such big power
-> values ~64k mW (~64Watts) for an OPP. Then based on 'power' we
-> pre-calculate 'cost' fields:
-> cost[i] = power[i] * freq_max / freq[i]
-> So, for max freq the cost == power. Let's use that in the example.
->
-> Then the em_cpu_energy() calculates as follow:
-> cost * sum_util / scale_cpu
-> We are interested in the first part - the value of multiplication.
 
-But all these are internal computations of the energy model. At the
-end, the computed energy that is returned by compute_energy() and
-em_cpu_energy(), fits in a long
 
->
-> The sum_util values that we can see for x CPUs which have scale_cap=1024
-> can be close to 800, let's use it in the example:
-> cost * sum_util = 64k * (x * 800), where
-> x=4: ~200mln
-> x=8: ~400mln
-> x=16: ~800mln
-> x=64: ~3200mln (last one which would fit in u32)
->
-> When we increase the precision by even 100, then the above values won't
-> fit in the u32. Even a max cost of e.g. 10k mW and 100 precision has
-> issues:
-> cost * sum_util = (10k *100) * (x * 800), where
-> x=4: ~3200mln
-> x=8: ~6400mln
->
-> For *1000 precision even a power of 1Watt becomes an issue:
-> cost * sum_util = (1k *1000) * (x * 800), where
-> x=4: ~3200mln
-> x=8: ~6400mln
->
-> That's why to make the code safe for bigger power values, I had to use
-> the u64 on 32bit machines.
+On 7/7/21 8:07 AM, Peter Zijlstra wrote:
+> On Fri, Jun 25, 2021 at 04:26:02PM +0100, Lukasz Luba wrote:
+>> The Energy Model (EM) em_cpu_energy() is responsible for providing good
+>> estimation regarding CPUs energy. It contains proper data structures which
+>> are then used during calculation. The values stored in there are in
+>> milli-Watts precision (or in abstract scale) smaller that 0xffff, which use
+>> sufficient unsigned long even on 32-bit machines. There are scenarios where
+>> we would like to provide calculated estimations in a better precision and
+>> the values might be 1000 times bigger. This patch makes possible to use
+>> quite big values for also 32-bit machines.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   include/linux/energy_model.h | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+>> index 3f221dbf5f95..2016f5a706e0 100644
+>> --- a/include/linux/energy_model.h
+>> +++ b/include/linux/energy_model.h
+>> @@ -101,7 +101,7 @@ void em_dev_unregister_perf_domain(struct device *dev);
+>>    * Return: the sum of the energy consumed by the CPUs of the domain assuming
+>>    * a capacity state satisfying the max utilization of the domain.
+>>    */
+>> -static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>> +static inline u64 em_cpu_energy(struct em_perf_domain *pd,
+>>   				unsigned long max_util, unsigned long sum_util,
+>>   				unsigned long allowed_cpu_cap)
+>>   {
+>> @@ -180,7 +180,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>>   	 *   pd_nrg = ------------------------                       (4)
+>>   	 *                  scale_cpu
+>>   	 */
+>> -	return ps->cost * sum_util / scale_cpu;
+>> +	return div_u64((u64)ps->cost * sum_util, scale_cpu);
+> 
+> So these patches are all rather straight forward, however.. the above is
+> pretty horrific on a 32bit box, and we do quite a few of them per
+> wakeup. Is this really worth the performance penalty on 32bit CPUs?
+
+True, for 2 cluster SoC we might do this 5 times (or less, depends on
+system state). We don't have new 32bit big.LITTLE platforms, the newest
+is ~7years old and is actually the only one using EAS. It's not put
+into new devices AFAIK.
+
+> 
+> Do you really still care about 32bit CPUs, or is this mostly an artifact
+> of wanting to unconditionally increase the precision?
+> 
+
+We discussed this internally and weighted the 32bit old big.little.
+
+There is a solution, but needs more work and a lot of changes in the
+whole kernel due to modified EM (affects IPA, DTPM, registration, ...).
+
+I have been working on a next step for code that you've pointed:
+get rid of this runtime division.
+It would be possible to pre-calculate the:
+'ps->cost / scale_cpu' at the moment when EM is registered and store
+it in the ps->cost. So we would have just:
+return ps->cost * sum_util
+
+The only issue is a late boot of biggest cores, which would destroy
+the old scale_cpu values for other PDs. I need to probably add
+RCU locking into the EM and update the other PDs' EMs when
+the last biggest CPU boots after a few second and registers its
+EM.
+
+For now we would live with this simple code which improves
+all recent 64bit platforms and is easy to take it into Android
+common kernel. The next step would be more scattered across
+other subsystems, so harder to backport to Android 5.4 and others.
