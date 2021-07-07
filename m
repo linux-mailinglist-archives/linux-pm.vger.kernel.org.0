@@ -2,106 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24D3BE6CE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 13:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5373BE891
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 15:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbhGGLFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 07:05:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:34584 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231220AbhGGLFE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Jul 2021 07:05:04 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 674A11042;
-        Wed,  7 Jul 2021 04:02:24 -0700 (PDT)
-Received: from [10.57.1.129] (unknown [10.57.1.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 757693F5A1;
-        Wed,  7 Jul 2021 04:02:21 -0700 (PDT)
-Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
- of EAS estimated energy
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Chris Redpath <Chris.Redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        CCj.Yeh@mediatek.com
-References: <20210625152603.25960-1-lukasz.luba@arm.com>
- <20210625152603.25960-2-lukasz.luba@arm.com>
- <CAKfTPtAV9GjQaXc2FV0OuEzTGQw9hFiKpwMfAxP-JQ_QFCUC3w@mail.gmail.com>
- <a6a49480-7d5d-fd0e-3940-0b6baac5acc0@arm.com>
- <CAKfTPtAbck=mTR4g9L1hVGzN2dz4PjKNXoDZeMH19HGwpW3Buw@mail.gmail.com>
- <2f43b211-da86-9d48-4e41-1c63359865bb@arm.com>
- <CAKfTPtDk1ANfjR5h_EjErVfQ7=is3n9QOaKKxz81tMHtqUM7jA@mail.gmail.com>
- <297df159-1681-f0a7-843d-f34d86e51d4c@arm.com>
- <CAKfTPtCEo+gkV2TMhOHSnuUyu5BC54o-B4Hb=QbzgT6Dft-PhQ@mail.gmail.com>
- <27916860-33b1-f0a0-acff-4722a733c81b@arm.com>
- <CAKfTPtB2ogGbGBjJNRBB5jvN24q-tXFR+BpJ31fzsTd2=pDTHQ@mail.gmail.com>
- <ee3ebbaa-7b6d-416d-2caa-197c2713dd4e@arm.com>
- <CAKfTPtAN6-ytxa2Qj3=z27e8ZBoqGrWAZce9CojL3wbZSotUsQ@mail.gmail.com>
- <58cb7ad3-ffff-8940-4c8e-2c46dcc86d54@arm.com>
- <CAKfTPtCy-dbo0xnW8iKaQy94_iV=JYbMU-X4qanzL6RXcL7xEw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <e3b11a84-9a26-9a7d-cf90-12a7a8fbcc3f@arm.com>
-Date:   Wed, 7 Jul 2021 12:02:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231452AbhGGNQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 09:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229757AbhGGNQV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 09:16:21 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFF6C06175F
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jul 2021 06:13:41 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id l7so2076571wrv.7
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jul 2021 06:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpnf5ui3+hnRrY8YGy8rXi5xfNzvjgI0JQwfh/q3EXQ=;
+        b=A+dROaEL7bCBWiUmI8lBLdEC/lc9Sy2rh7+vdSTNbzjYBg3472ZuPMmdwRjufGy0fV
+         It7dj4eHCpP6GQVHDvvOLEBi6XEs9TVzRFmKunJQGIrpKaIl8if09zuZ/8adMPOxnnS5
+         H9zisXyoLmSKqosGfhTZU26j1910lTfn5ZaxMLY8TLmZwRJZDdwoZ4qP4jzFPbuI7b35
+         vqqY5utc7W9mMtdaYFm3mgmvw4BL4ToVv+QYNUjG6xPWZvKiyUdMauRDfmry4QlJyFwO
+         N2YWUR/xifzonDnRF3ekkMwOGQxIDuGYFvqZNGEXoAK+abkDBqVrb9WNEx3+ciQBmEi9
+         7z/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpnf5ui3+hnRrY8YGy8rXi5xfNzvjgI0JQwfh/q3EXQ=;
+        b=sxUFsYDuHdLNEkUtCT6aoyaltlKiQsFL8Row7JK4VPd0F+CD3vY+2hUzUEQ85Or24V
+         BIGef8x8UrNvD3BqgMNkdMrSdGz7ohejSNeLCWzaodOAYCARMDGLnpg2Z57hksKcipqD
+         /3XD57coC7OjN8aoHXIjT8bPCfyuY9tjFuFhRgrWbx5HNN1cZ0Coi1rq/eq9+31TS3a4
+         aLY6c+xlgBmlHW1RDlANI+vzuuB1Qws5i9v0xG3938rYl6maF9r+JYHcZESoaJL5PzNm
+         GhJXeuomd7PKm4RdWfVnyx6XwraJ/PpcUEANEsFeXCDycXgUreVi2Ez8nMtvAnk3LgNw
+         iNwg==
+X-Gm-Message-State: AOAM530dHVTwuLopqUjmWkafnS0QICLR2BYARJzUjz1zT1roolBVTdo4
+        B22sVeH5fXhrJvZJDCoLHYeqsQ==
+X-Google-Smtp-Source: ABdhPJxpLc/cU0rZmKkqSAhSoisQ07hiLtrU/n9NHfWMJzu5RI/qj5Ap1lugexNGg5YdyYtl6V26cg==
+X-Received: by 2002:adf:e743:: with SMTP id c3mr9100943wrn.354.1625663620040;
+        Wed, 07 Jul 2021 06:13:40 -0700 (PDT)
+Received: from bismarck.berto.se (p4fca2710.dip0.t-ipconnect.de. [79.202.39.16])
+        by smtp.googlemail.com with ESMTPSA id l20sm19233670wmq.3.2021.07.07.06.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jul 2021 06:13:39 -0700 (PDT)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 0/3] thermal: rcar_gen3_thermal: Add support for trip points
+Date:   Wed,  7 Jul 2021 15:13:03 +0200
+Message-Id: <20210707131306.4098443-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <CAKfTPtCy-dbo0xnW8iKaQy94_iV=JYbMU-X4qanzL6RXcL7xEw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Daniel,
 
+This small series adds support for the .set_trips() to the 
+rcar_gen3_thermal driver on the platforms that supports it.
 
-On 7/7/21 11:50 AM, Vincent Guittot wrote:
-> On Wed, 7 Jul 2021 at 12:41, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 7/7/21 11:32 AM, Vincent Guittot wrote:
->>> On Wed, 7 Jul 2021 at 12:29, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>>
->>>>
->>>> On 7/7/21 11:11 AM, Vincent Guittot wrote:
->>>>> On Wed, 7 Jul 2021 at 12:06, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>>
->>>>
->>>> [snip]
->>>>
->>>>>> No. It's in 0.1uW scale, so 800Watts. Which is 16 CPUs * 64Watts
->>>>>
->>>>> Oh! you want 0.1uW precision .... This doesn't seem realistic at all.
->>>>> I'm not even sure that the power model can even reach an accuracy of
->>>>> 1mW
->>>>>
->>>>
->>>> True, the EM is registering platform with 1mW precision, but 1uW
->>>
->>> Do you mean 1uW or 0.1uW ?
->>
->> In this patch set I've proposed 0.1uW, but I'm open to drop one
->> order of magnitude. The 1uW still be good.
-> 
-> I don't want to underestimate the capabilities of the power model but
-> I don't see which benefit you will get with 0.1uW precision
-> With a 1uW precision the long type currently used for the returned
-> value is fine for 32bits machine AFAICT
-> 
+Patch 1/3 prepares for the new feature by expanding the OF match data 
+while patch 2/3 adds the actual change. Patch 3/3 is a drive-by fix of a 
+datatype found while working on this feature.
 
-For 1uW and 1.2Watts for one core, 4 CPUs in cluster we get:
-(1200 * 1000) * (4 * 1024) = ~4.9bln
-so it would need div 64 version
+The work is based on-top of thermal/next [1] and tested on M3-N and V3U 
+without any regressions or other issues.
+
+1. fe6a6de6692e7f71 ("thermal/drivers/int340x/processor_thermal: Fix tcc setting")
+
+Niklas Söderlund (3):
+  thermal: rcar_gen3_thermal: Create struct for OF match data
+  thermal: rcar_gen3_thermal: Add support for hardware trip points
+  thermal: rcar_gen3_thermal: Fix datatype for loop counter
+
+ drivers/thermal/rcar_gen3_thermal.c | 170 ++++++++++++++++++++++++----
+ 1 file changed, 150 insertions(+), 20 deletions(-)
+
+-- 
+2.32.0
+
