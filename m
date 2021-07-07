@@ -2,82 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98E33BE43A
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3280B3BE44B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbhGGIU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 04:20:58 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:60844 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbhGGIU6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 04:20:58 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 8DF12FB0CF;
-        Wed,  7 Jul 2021 16:17:59 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [113.57.152.160])
-        by smtp.263.net (postfix) whith ESMTP id P5175T139827079014144S1625645873824660_;
-        Wed, 07 Jul 2021 16:18:00 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <90a70faef2d71da9e8ee3658958bed4f>
-X-RL-SENDER: zhuguanghong@uniontech.com
-X-SENDER: zhuguanghong@uniontech.com
-X-LOGIN-NAME: zhuguanghong@uniontech.com
-X-FST-TO: sre@kernel.org
-X-RCPT-COUNT: 4
-X-SENDER-IP: 113.57.152.160
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   zhuguanghong <zhuguanghong@uniontech.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuguanghong <zhuguanghong@uniontech.com>
-Subject: [PATCH] POWER SUPPLY CLASS/SUBSYSTEM : add new status 'Full charging' can show that the battery is fully charged but still charging
-Date:   Wed,  7 Jul 2021 16:17:51 +0800
-Message-Id: <20210707081751.17021-1-zhuguanghong@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S230087AbhGGI0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 04:26:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:59560 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230086AbhGGI0j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Jul 2021 04:26:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15C98ED1;
+        Wed,  7 Jul 2021 01:23:59 -0700 (PDT)
+Received: from [10.57.1.129] (unknown [10.57.1.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CA3B3F694;
+        Wed,  7 Jul 2021 01:23:56 -0700 (PDT)
+Subject: Re: [PATCH 1/3] sched/fair: Prepare variables for increased precision
+ of EAS estimated energy
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Chris Redpath <Chris.Redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        CCj.Yeh@mediatek.com
+References: <20210625152603.25960-1-lukasz.luba@arm.com>
+ <20210625152603.25960-2-lukasz.luba@arm.com>
+ <CAKfTPtAV9GjQaXc2FV0OuEzTGQw9hFiKpwMfAxP-JQ_QFCUC3w@mail.gmail.com>
+ <a6a49480-7d5d-fd0e-3940-0b6baac5acc0@arm.com>
+ <CAKfTPtAbck=mTR4g9L1hVGzN2dz4PjKNXoDZeMH19HGwpW3Buw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <2f43b211-da86-9d48-4e41-1c63359865bb@arm.com>
+Date:   Wed, 7 Jul 2021 09:23:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKfTPtAbck=mTR4g9L1hVGzN2dz4PjKNXoDZeMH19HGwpW3Buw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Signed-off-by: zhuguanghong <zhuguanghong@uniontech.com>
----
- drivers/power/supply/power_supply_sysfs.c | 1 +
- include/linux/power_supply.h              | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index c3d7cbcd4fad..0ddb84b7637f 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -78,6 +78,7 @@ static const char * const POWER_SUPPLY_STATUS_TEXT[] = {
- 	[POWER_SUPPLY_STATUS_DISCHARGING]	= "Discharging",
- 	[POWER_SUPPLY_STATUS_NOT_CHARGING]	= "Not charging",
- 	[POWER_SUPPLY_STATUS_FULL]		= "Full",
-+	[POWER_SUPPLY_STATUS_FULL_CHARGING]	= "Full charging",
- };
- 
- static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index be203985ecdd..04844dbb18c4 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -37,6 +37,7 @@ enum {
- 	POWER_SUPPLY_STATUS_DISCHARGING,
- 	POWER_SUPPLY_STATUS_NOT_CHARGING,
- 	POWER_SUPPLY_STATUS_FULL,
-+	POWER_SUPPLY_STATUS_FULL_CHARGING,
- };
- 
- /* What algorithm is the charger using? */
--- 
-2.20.1
 
 
+On 7/7/21 9:00 AM, Vincent Guittot wrote:
+> On Wed, 7 Jul 2021 at 09:49, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 7/7/21 8:07 AM, Vincent Guittot wrote:
+>>> On Fri, 25 Jun 2021 at 17:26, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> The Energy Aware Scheduler (EAS) tries to find best CPU for a waking up
+>>>> task. It probes many possibilities and compares the estimated energy values
+>>>> for different scenarios. For calculating those energy values it relies on
+>>>> Energy Model (EM) data and em_cpu_energy(). The precision which is used in
+>>>> EM data is in milli-Watts (or abstract scale), which sometimes is not
+>>>> sufficient. In some cases it might happen that two CPUs from different
+>>>> Performance Domains (PDs) get the same calculated value for a given task
+>>>> placement, but in more precised scale, they might differ. This rounding
+>>>> error has to be addressed. This patch prepares EAS code for better
+>>>> precision in the coming EM improvements.
+>>>
+>>> Could you explain why 32bits results are not enough and you need to
+>>> move to 64bits ?
+>>>
+>>> Right now the result is in the range [0..2^32[ mW. If you need more
+>>> precision and you want to return uW instead, you will have a result in
+>>> the range  [0..4kW[ which seems to be still enough
+>>>
+>>
+>> Currently we have the max value limit for 'power' in EM which is
+>> EM_MAX_POWER 0xffff (64k - 1). We allow to register such big power
+>> values ~64k mW (~64Watts) for an OPP. Then based on 'power' we
+>> pre-calculate 'cost' fields:
+>> cost[i] = power[i] * freq_max / freq[i]
+>> So, for max freq the cost == power. Let's use that in the example.
+>>
+>> Then the em_cpu_energy() calculates as follow:
+>> cost * sum_util / scale_cpu
+>> We are interested in the first part - the value of multiplication.
+> 
+> But all these are internal computations of the energy model. At the
+> end, the computed energy that is returned by compute_energy() and
+> em_cpu_energy(), fits in a long
 
+Let's take a look at existing *10000 precision for x CPUs:
+cost * sum_util / scale_cpu =
+(64k *10000) * (x * 800) / 1024
+which is:
+x * ~500mln
+
+So to be close to overflowing u32 the 'x' has to be > (?=) 8
+(depends on sum_util).
+
+> 
+>>
+>> The sum_util values that we can see for x CPUs which have scale_cap=1024
+>> can be close to 800, let's use it in the example:
+>> cost * sum_util = 64k * (x * 800), where
+>> x=4: ~200mln
+>> x=8: ~400mln
+>> x=16: ~800mln
+>> x=64: ~3200mln (last one which would fit in u32)
+>>
+>> When we increase the precision by even 100, then the above values won't
+>> fit in the u32. Even a max cost of e.g. 10k mW and 100 precision has
+>> issues:
+>> cost * sum_util = (10k *100) * (x * 800), where
+>> x=4: ~3200mln
+>> x=8: ~6400mln
+>>
+>> For *1000 precision even a power of 1Watt becomes an issue:
+>> cost * sum_util = (1k *1000) * (x * 800), where
+>> x=4: ~3200mln
+>> x=8: ~6400mln
+>>
+>> That's why to make the code safe for bigger power values, I had to use
+>> the u64 on 32bit machines.
