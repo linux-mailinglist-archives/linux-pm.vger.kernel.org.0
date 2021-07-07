@@ -2,119 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D72A3BE41B
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98E33BE43A
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 10:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhGGILz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jul 2021 04:11:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:59318 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230398AbhGGILy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Jul 2021 04:11:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99274ED1;
-        Wed,  7 Jul 2021 01:09:14 -0700 (PDT)
-Received: from [10.57.1.129] (unknown [10.57.1.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20833F694;
-        Wed,  7 Jul 2021 01:09:11 -0700 (PDT)
-Subject: Re: [PATCH 2/3] PM: EM: Make em_cpu_energy() able to return bigger
- values
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Chris.Redpath@arm.com,
-        dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
-        qperret@google.com, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
-        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
-        segall@google.com, mgorman@suse.de, bristot@redhat.com,
-        CCj.Yeh@mediatek.com
-References: <20210625152603.25960-1-lukasz.luba@arm.com>
- <20210625152603.25960-3-lukasz.luba@arm.com>
- <YOVSu08LpHX5cx/+@hirez.programming.kicks-ass.net>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <ca9853d1-5ff2-bdac-7581-61bffa3fdaaa@arm.com>
-Date:   Wed, 7 Jul 2021 09:09:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230231AbhGGIU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 04:20:58 -0400
+Received: from lucky1.263xmail.com ([211.157.147.132]:60844 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230162AbhGGIU6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 04:20:58 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 8DF12FB0CF;
+        Wed,  7 Jul 2021 16:17:59 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [113.57.152.160])
+        by smtp.263.net (postfix) whith ESMTP id P5175T139827079014144S1625645873824660_;
+        Wed, 07 Jul 2021 16:18:00 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <90a70faef2d71da9e8ee3658958bed4f>
+X-RL-SENDER: zhuguanghong@uniontech.com
+X-SENDER: zhuguanghong@uniontech.com
+X-LOGIN-NAME: zhuguanghong@uniontech.com
+X-FST-TO: sre@kernel.org
+X-RCPT-COUNT: 4
+X-SENDER-IP: 113.57.152.160
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   zhuguanghong <zhuguanghong@uniontech.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguanghong <zhuguanghong@uniontech.com>
+Subject: [PATCH] POWER SUPPLY CLASS/SUBSYSTEM : add new status 'Full charging' can show that the battery is fully charged but still charging
+Date:   Wed,  7 Jul 2021 16:17:51 +0800
+Message-Id: <20210707081751.17021-1-zhuguanghong@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <YOVSu08LpHX5cx/+@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Signed-off-by: zhuguanghong <zhuguanghong@uniontech.com>
+---
+ drivers/power/supply/power_supply_sysfs.c | 1 +
+ include/linux/power_supply.h              | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index c3d7cbcd4fad..0ddb84b7637f 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -78,6 +78,7 @@ static const char * const POWER_SUPPLY_STATUS_TEXT[] = {
+ 	[POWER_SUPPLY_STATUS_DISCHARGING]	= "Discharging",
+ 	[POWER_SUPPLY_STATUS_NOT_CHARGING]	= "Not charging",
+ 	[POWER_SUPPLY_STATUS_FULL]		= "Full",
++	[POWER_SUPPLY_STATUS_FULL_CHARGING]	= "Full charging",
+ };
+ 
+ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index be203985ecdd..04844dbb18c4 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -37,6 +37,7 @@ enum {
+ 	POWER_SUPPLY_STATUS_DISCHARGING,
+ 	POWER_SUPPLY_STATUS_NOT_CHARGING,
+ 	POWER_SUPPLY_STATUS_FULL,
++	POWER_SUPPLY_STATUS_FULL_CHARGING,
+ };
+ 
+ /* What algorithm is the charger using? */
+-- 
+2.20.1
 
 
-On 7/7/21 8:07 AM, Peter Zijlstra wrote:
-> On Fri, Jun 25, 2021 at 04:26:02PM +0100, Lukasz Luba wrote:
->> The Energy Model (EM) em_cpu_energy() is responsible for providing good
->> estimation regarding CPUs energy. It contains proper data structures which
->> are then used during calculation. The values stored in there are in
->> milli-Watts precision (or in abstract scale) smaller that 0xffff, which use
->> sufficient unsigned long even on 32-bit machines. There are scenarios where
->> we would like to provide calculated estimations in a better precision and
->> the values might be 1000 times bigger. This patch makes possible to use
->> quite big values for also 32-bit machines.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/linux/energy_model.h | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index 3f221dbf5f95..2016f5a706e0 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -101,7 +101,7 @@ void em_dev_unregister_perf_domain(struct device *dev);
->>    * Return: the sum of the energy consumed by the CPUs of the domain assuming
->>    * a capacity state satisfying the max utilization of the domain.
->>    */
->> -static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->> +static inline u64 em_cpu_energy(struct em_perf_domain *pd,
->>   				unsigned long max_util, unsigned long sum_util,
->>   				unsigned long allowed_cpu_cap)
->>   {
->> @@ -180,7 +180,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->>   	 *   pd_nrg = ------------------------                       (4)
->>   	 *                  scale_cpu
->>   	 */
->> -	return ps->cost * sum_util / scale_cpu;
->> +	return div_u64((u64)ps->cost * sum_util, scale_cpu);
-> 
-> So these patches are all rather straight forward, however.. the above is
-> pretty horrific on a 32bit box, and we do quite a few of them per
-> wakeup. Is this really worth the performance penalty on 32bit CPUs?
 
-True, for 2 cluster SoC we might do this 5 times (or less, depends on
-system state). We don't have new 32bit big.LITTLE platforms, the newest
-is ~7years old and is actually the only one using EAS. It's not put
-into new devices AFAIK.
-
-> 
-> Do you really still care about 32bit CPUs, or is this mostly an artifact
-> of wanting to unconditionally increase the precision?
-> 
-
-We discussed this internally and weighted the 32bit old big.little.
-
-There is a solution, but needs more work and a lot of changes in the
-whole kernel due to modified EM (affects IPA, DTPM, registration, ...).
-
-I have been working on a next step for code that you've pointed:
-get rid of this runtime division.
-It would be possible to pre-calculate the:
-'ps->cost / scale_cpu' at the moment when EM is registered and store
-it in the ps->cost. So we would have just:
-return ps->cost * sum_util
-
-The only issue is a late boot of biggest cores, which would destroy
-the old scale_cpu values for other PDs. I need to probably add
-RCU locking into the EM and update the other PDs' EMs when
-the last biggest CPU boots after a few second and registers its
-EM.
-
-For now we would live with this simple code which improves
-all recent 64bit platforms and is easy to take it into Android
-common kernel. The next step would be more scattered across
-other subsystems, so harder to backport to Android 5.4 and others.
