@@ -2,169 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1E3BEA2F
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 17:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3097D3BEC89
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jul 2021 18:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbhGGPEH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 7 Jul 2021 11:04:07 -0400
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:33284 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbhGGPB0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jul 2021 11:01:26 -0400
-Received: by mail-ua1-f50.google.com with SMTP id d2so914953uan.0;
-        Wed, 07 Jul 2021 07:58:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vlm292106JybCSEG0JoaJ6H+Y0Gf+RBNZMwDxvh4Ogk=;
-        b=ngaS64kcsj0I+jaYV0f0T5O0VuNS4wSmAN5S3hI4wYO6DAhje6Rr8VAWaxHI6MUM1N
-         2tuU89nyLiQhkdJMxJ6duVM//EyR4XTOuY0IqKKTDgZdXnSMJ5XhDladBIPZCN6xGUMd
-         zxBj/abmBN8ommKfFoaGxJ5kqSbkVnloO/prOKcrbEKAf4/TLvWAcFAYGtveY6yI9yit
-         NYS+/RxTVBsBjiRpRFEMSAMV2CQJgThsTpqOITVtl1nkUWwklTAs0WB0PJPHqq8rPAbh
-         WaHIuB7b+9VvUONX+GwXnFRgPOcSYgZ4JYSumxyV7YpshvQ3ZdBJEgEycBL2qqSYbzhN
-         cGgw==
-X-Gm-Message-State: AOAM532QNhCqs9h2/AXu3L8ixUZvsLSHyDCPRiIGlX+Mcy3Kyk+WNbA5
-        uDsfG3Zx2KbBDgdAUDyTdUfN3qjpJuYTPuTNqpo=
-X-Google-Smtp-Source: ABdhPJxIYn3S7WWqdQhEdzjXqMj6/MXPlOLJz0j1yvhjySL0rhP0QiGgYwcd1nCk9orFy4zyNLCQ78OXsRdHh2oKGz4=
-X-Received: by 2002:a9f:3f0d:: with SMTP id h13mr19060607uaj.100.1625669924846;
- Wed, 07 Jul 2021 07:58:44 -0700 (PDT)
+        id S230121AbhGGQuu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jul 2021 12:50:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229975AbhGGQuu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Jul 2021 12:50:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FE3361C83;
+        Wed,  7 Jul 2021 16:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625676489;
+        bh=k0JV4tSCIZihgVLBxZqxe5k6bWz3d1873m0Xerujc8c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KlK6Rr1NJJA0wJAx/LcU9EVmjCLGPIPHTCKXlMq9Nl+thtAaREoqx1XfP+JR1kW2c
+         ehAZpvXECyhe3J+sUlnd5FOMhtOJA6uEkyHCflFHCBEmAWHwDMWmtr6KKxHQ1oqYEn
+         Z6E8nyx6obSuZF06WyOZr6YIFdtKsfGXxr4+es3Z99nx9djrmtnbba9L/oe/LNfbu7
+         Ji4mNF3I+KVvPGSMsOMmIujH4qXXCUpbhgFfXmKjulYcHFZUL40gtnXHk0V4SEl9YV
+         5mFko7DDGtSztLkt1OfMmzYzlbjkuEsGfQ4wAJiEHP9IXZNnkenLH9FF97e1CEmUoB
+         w5ahxGS1nvJDQ==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 7778F3C0C97; Wed,  7 Jul 2021 18:47:32 +0200 (CEST)
+Date:   Wed, 7 Jul 2021 18:47:32 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 5.14
+Message-ID: <20210707164732.4vcivdobkykccrha@earth.universe>
 MIME-Version: 1.0
-References: <20210707131306.4098443-1-niklas.soderlund+renesas@ragnatech.se> <20210707131306.4098443-3-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20210707131306.4098443-3-niklas.soderlund+renesas@ragnatech.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Jul 2021 16:58:33 +0200
-Message-ID: <CAMuHMdWTm79PXOgvuwDuFb8_LhvQxcR4wGsVKmP1vCbHN-3Mhg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] thermal: rcar_gen3_thermal: Add support for hardware
- trip points
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="evu6hrxzrrci4lu3"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
 
-On Wed, Jul 7, 2021 at 3:14 PM Niklas Söderlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> All supported hardware except V3U is capable of generating interrupts
-> to the CPU when the temperature go below or above a set value. Use this
-> to implement support for the set_trip() feature of the thermal core on
-> supported hardware.
->
-> The V3U have its interrupts routed to the ECM module and therefore can
-> not be used to implement set_trip() as the driver can't be made aware of
-> when the interrupt triggers.
->
-> Each TSC is capable of tracking up-to three different temperatures while
-> only two are needed to implement the tracking of the thermal window.
->
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+--evu6hrxzrrci4lu3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for your patch!
+Hi Linus,
 
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -81,6 +81,7 @@ struct equation_coefs {
->
->  struct rcar_gen3_thermal_info {
->         int ths_tj_1;
-> +       bool have_irq;
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-Do you need this flag? See below.
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
->  };
->
->  struct rcar_gen3_thermal_tsc {
-> @@ -95,7 +96,8 @@ struct rcar_gen3_thermal_priv {
->         const struct rcar_gen3_thermal_info *info;
->         struct rcar_gen3_thermal_tsc *tscs[TSC_MAX_NUM];
->         unsigned int num_tscs;
-> -       void (*thermal_init)(struct rcar_gen3_thermal_tsc *tsc);
-> +       void (*thermal_init)(struct rcar_gen3_thermal_priv *priv,
+are available in the Git repository at:
 
-Do you need priv? See below.
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.14
 
-> +                            struct rcar_gen3_thermal_tsc *tsc);
->  };
->
->  static inline u32 rcar_gen3_thermal_read(struct rcar_gen3_thermal_tsc *tsc,
-> @@ -195,16 +197,75 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+for you to fetch changes up to f1c74a6c07e76fcb31a4bcc1f437c4361a2674ce:
 
->  static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
->         .get_temp       = rcar_gen3_thermal_get_temp,
-> +       .set_trips      = rcar_gen3_thermal_set_trips,
->  };
->
-> +static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops_no_irq = {
-> +       .get_temp       = rcar_gen3_thermal_get_temp,
-> +};
+  power: supply: ab8500: Fix an old bug (2021-06-30 00:14:55 +0200)
 
-What about having a single non-const thermal_zone_of_device_ops,
-and filling in .set_trip when interrupts are present?
+----------------------------------------------------------------
+power supply and reset changes for the v5.14 series
 
-> @@ -240,6 +305,9 @@ static void rcar_gen3_thermal_init(struct rcar_gen3_thermal_tsc *tsc)
->
->         rcar_gen3_thermal_write(tsc, REG_GEN3_IRQCTL, 0);
->         rcar_gen3_thermal_write(tsc, REG_GEN3_IRQMSK, 0);
-> +       if (priv->info->have_irq)
+battery/charger driver changes:
+ * convert charger-manager binding to YAML
+ * drop bd70528-charger driver
+ * drop pm2301-charger driver
+ * introduce rt5033-battery driver
+ * misc. improvements and fixes
 
-I think you can check for the presence of tsc->zone->ops->set_trips instead.
+----------------------------------------------------------------
+Andreas Kemnade (2):
+      power: supply: rn5t618: Add charger type detection
+      power: supply: rn5t618: Add input current limit
 
-> +               rcar_gen3_thermal_write(tsc, REG_GEN3_IRQEN,
-> +                                       IRQ_TEMPD1 | IRQ_TEMP2);
->
->         reg_val = rcar_gen3_thermal_read(tsc, REG_GEN3_THCTR);
->         reg_val |= THCTR_THSST;
+Andy Shevchenko (1):
+      power: supply: bq24190_charger: drop of_match_ptr() from device ID table
 
-> @@ -314,8 +388,37 @@ static void rcar_gen3_hwmon_action(void *data)
->         thermal_remove_hwmon_sysfs(zone);
->  }
->
-> +static int rcar_gen3_thermal_request_irqs(struct rcar_gen3_thermal_priv *priv,
-> +                                         struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       unsigned int i;
-> +       char *irqname;
-> +       int ret, irq;
-> +
-> +       for (i = 0; i < 2; i++) {
-> +               irq = platform_get_irq(pdev, i);
+Bixuan Cui (1):
+      power: reset: gpio-poweroff: add missing MODULE_DEVICE_TABLE
 
-Would it make sense to use platform_get_irq_optional() instead,
-to auto-detect variants with and without interrupt support?
+Carl Philipp Klemm (2):
+      power: supply: cpcap-battery: invalidate config when incompatible measurements are read
+      power: supply: cpcap-charger: get the battery inserted infomation from cpcap-battery
 
-> +               if (irq < 0)
-> +                       return irq;
-> +
-> +               irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:ch%d",
-> +                                        dev_name(dev), i);
-> +               if (!irqname)
-> +                       return -ENOMEM;
-> +
-> +               ret = devm_request_threaded_irq(dev, irq, NULL,
-> +                                               rcar_gen3_thermal_irq,
-> +                                               IRQF_ONESHOT, irqname, priv);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return 0;
-> +}
+Colin Ian King (1):
+      power: supply: axp288_fuel_gauge: remove redundant continue statement
 
-Gr{oetje,eeting}s,
+Guenter Roeck (1):
+      power: supply: ab8500: Drop unnecessary NULL check after container_of
 
-                        Geert
+Hans de Goede (2):
+      power: supply: axp288_fuel_gauge: Rename fuel_gauge_blacklist to no_battery_list
+      power: supply: axp288_fuel_gauge: Make "T3 MRD" no_battery_list DMI entry more generic
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hermann Lauer (1):
+      power: supply: axp20x_battery: allow disabling battery charging
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Ikjoon Jang (1):
+      power: supply: sbs-battery: cache constant string properties
+
+Jian Xin (1):
+      power: supply: ab8500: Fix typo
+
+Krzysztof Kozlowski (8):
+      MAINTAINERS: power: supply: use Krzysztof Kozlowski's Canonical address
+      power: ab8500: remove unused header
+      MAINTAINERS: power: supply: cover also header files
+      power: supply: max17042: Do not enforce (incorrect) interrupt trigger type
+      power: supply: max17040: Do not enforce (incorrect) interrupt trigger type
+      power: supply: max17040: remove non-working POWER_SUPPLY_PROP_STATUS
+      power: supply: max17040: simplify POWER_SUPPLY_PROP_ONLINE
+      power: supply: max17040: drop unused platform data support
+
+Linus Walleij (8):
+      power: supply: ab8500: Move to componentized binding
+      power: supply: ab8500: Call battery population once
+      power: supply: ab8500: Avoid NULL pointers
+      power: supply: ab8500: Enable USB and AC
+      power: supply: ab8500: Drop unused member
+      power: supply: pm2301_charger: Delete driver
+      power: supply: smb347-charger: Drop unused include
+      power: supply: ab8500: Fix an old bug
+
+Matti Vaittinen (1):
+      power: supply: Drop BD70528 support
+
+Maximilian Luz (2):
+      power: supply: surface_battery: Fix battery event handling
+      power: supply: surface-charger: Fix type of integer variable
+
+Sebastian Reichel (2):
+      dt-bindings: power: supply: charger-manager: Convert to DT schema format
+      Merge branch 'psy-fixes' into psy-next
+
+Stephan Gerhold (2):
+      dt-bindings: power: supply: Add DT schema for richtek,rt5033-battery
+      power: supply: rt5033_battery: Fix device tree enumeration
+
+Yu Jiahua (1):
+      drivers: power: add missing MODULE_DEVICE_TABLE in keystone-reset.c
+
+Zhen Lei (1):
+      power: reset: at91-sama5d2_shdwc: Remove redundant error printing in at91_shdwc_probe()
+
+Zou Wei (5):
+      power: supply: sc27xx: Add missing MODULE_DEVICE_TABLE
+      power: supply: sc2731_charger: Add missing MODULE_DEVICE_TABLE
+      power: reset: regulator-poweroff: add missing MODULE_DEVICE_TABLE
+      power: supply: charger-manager: add missing MODULE_DEVICE_TABLE
+      power: supply: ab8500: add missing MODULE_DEVICE_TABLE
+
+ .../bindings/power/supply/charger-manager.txt      |   91 --
+ .../bindings/power/supply/charger-manager.yaml     |  215 ++++
+ .../bindings/power/supply/maxim,max17040.yaml      |    2 +-
+ .../power/supply/richtek,rt5033-battery.yaml       |   54 +
+ MAINTAINERS                                        |    3 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c           |    4 +-
+ drivers/power/reset/gpio-poweroff.c                |    1 +
+ drivers/power/reset/keystone-reset.c               |    1 +
+ drivers/power/reset/regulator-poweroff.c           |    1 +
+ drivers/power/supply/Kconfig                       |   12 +-
+ drivers/power/supply/Makefile                      |    3 +-
+ drivers/power/supply/ab8500-bm.h                   |    7 +-
+ drivers/power/supply/ab8500-chargalg.h             |    2 +-
+ drivers/power/supply/ab8500_btemp.c                |  126 +-
+ drivers/power/supply/ab8500_charger.c              |  381 +++---
+ drivers/power/supply/ab8500_fg.c                   |  145 ++-
+ drivers/power/supply/abx500_chargalg.c             |  117 +-
+ drivers/power/supply/axp20x_battery.c              |   17 +-
+ drivers/power/supply/axp288_fuel_gauge.c           |   26 +-
+ drivers/power/supply/bd70528-charger.c             |  710 -----------
+ drivers/power/supply/bq24190_charger.c             |   11 +-
+ drivers/power/supply/charger-manager.c             |    1 +
+ drivers/power/supply/cpcap-battery.c               |   19 +-
+ drivers/power/supply/cpcap-charger.c               |   39 +-
+ drivers/power/supply/max17040_battery.c            |   42 +-
+ drivers/power/supply/max17042_battery.c            |    2 +-
+ drivers/power/supply/pm2301_charger.c              | 1249 --------------------
+ drivers/power/supply/rn5t618_power.c               |  235 ++++
+ drivers/power/supply/rt5033_battery.c              |    7 +
+ drivers/power/supply/sbs-battery.c                 |  153 ++-
+ drivers/power/supply/sc2731_charger.c              |    1 +
+ drivers/power/supply/sc27xx_fuel_gauge.c           |    1 +
+ drivers/power/supply/smb347-charger.c              |    1 -
+ drivers/power/supply/surface_battery.c             |   14 +-
+ drivers/power/supply/surface_charger.c             |    2 +-
+ include/linux/max17040_battery.h                   |   16 -
+ include/linux/pm2301_charger.h                     |   48 -
+ include/linux/power/ab8500.h                       |   16 -
+ 38 files changed, 1113 insertions(+), 2662 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/charger-manager.txt
+ create mode 100644 Documentation/devicetree/bindings/power/supply/charger-manager.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml
+ delete mode 100644 drivers/power/supply/bd70528-charger.c
+ delete mode 100644 drivers/power/supply/pm2301_charger.c
+ delete mode 100644 include/linux/max17040_battery.h
+ delete mode 100644 include/linux/pm2301_charger.h
+ delete mode 100644 include/linux/power/ab8500.h
+
+--evu6hrxzrrci4lu3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmDl2p4ACgkQ2O7X88g7
++poqpxAAhr6AEC0iJuCj6rBLDBjLFmIvlWi1FTOX0dJkgXumyU+1aJ+2LtQ6zcPH
+jDCloICas0enPBkQyno/Tb+k8w4eqmKjG0mYbKu/kqIrubqKAijQd46d/alTR7WO
+wkjjlKlyBizGpkqzctUpp5KXGyk5Ox/DybHD6FOx5PNk89Ey0H82vtAhC2jWxZys
+aH4l/i/P57rX7L7am3DHIxsrkEtmP2KZyxAXgbSKeyPFuEj05a2pNMqtP7i3vkBU
+a0SYrGGJapdqHRLLTOMs5WCBNgMzIHIHMilaQH7qhwlWbOxRbtOg+vc5Aqe4vuU0
+A/f3KyHk3N3q+jvnsrRJ1xABDs3BCEALqckncyrUeCLjqqAx2stNuHwVd9LhZGiu
+XPnhOPdBOWVdF73fqh2WXsjjFyHRgPJlk3VY+ibeuLrv78FOtxznArk/GrRfuPEe
+PU0bDZclhubViBxmBuVRh/S9EiI+TtbaDU9j8sI36BKxazBs8+zGAOOuVY3KxLwp
+YbieUdBo9xK1xIhbF7b+dEmX8dTZJ5L4OQPC162v96h8Tc4Ybb250TgZr0qwek9/
+jnXU6nXb0AEHXykEXVGBfAl43/Bw46kBB297ArwVxfnzWEF5zvX+lURVdT9AODcD
+tVgkHieoPJog7kuDzxwFaYzgosjyduCBc/GCLuS+xspvQpRgXVE=
+=eHeo
+-----END PGP SIGNATURE-----
+
+--evu6hrxzrrci4lu3--
