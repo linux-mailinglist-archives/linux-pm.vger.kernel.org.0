@@ -2,141 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD403BF744
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 11:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4679B3BF807
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 12:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbhGHJLL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jul 2021 05:11:11 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47232 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231254AbhGHJLL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jul 2021 05:11:11 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16894jlV055988;
-        Thu, 8 Jul 2021 05:08:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=JPJDLe0p4ZjhEFucYJlDDkxue6Tk2PTl5d+5nvsL6qE=;
- b=AzNQwZ6xuDPxnCb7xw9sj+naBglfF8O3fijEP1F6hyyXSGYVht3RGUaR7yMMy1funRtC
- K5x9vHRf/v19nEV0cK2zVvzpFxI3g10CICZQ/e+PM7sRxgBbI/gOK09TB3u1WJdoILM/
- BSpDeTxygKxzhKB+2/KbGJnJrAOrV58KaBY/0JkNBzOThnfS7Dr/j4CW/6Qw8HyekyTT
- fbhox1BSJsEc7/Vg6McbpeL7DvDu2AdAX60SbZEoBKic40yWZ87R4JlEGAQ+fwQjGbFr
- HBv6sy/Hjb/JeCA2EB493JJWwVPWQT0w+Yovywq7K830AfXyKRLD0mHbwS9r1GRdsLX6 Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39nwn01c8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jul 2021 05:08:16 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 168951xJ059928;
-        Thu, 8 Jul 2021 05:08:16 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39nwn01c8j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jul 2021 05:08:16 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 168979ig006029;
-        Thu, 8 Jul 2021 09:08:15 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma01wdc.us.ibm.com with ESMTP id 39jfhca9r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jul 2021 09:08:15 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16898EoM18612528
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Jul 2021 09:08:14 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E1686E058;
-        Thu,  8 Jul 2021 09:08:14 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D14F96E052;
-        Thu,  8 Jul 2021 09:08:13 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.199.42.113])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  8 Jul 2021 09:08:13 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 451722E3B06; Thu,  8 Jul 2021 14:38:08 +0530 (IST)
-Date:   Thu, 8 Jul 2021 14:38:08 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     "Pratik R. Sampat" <psampat@linux.ibm.com>
-Cc:     mpe@ellerman.id.au, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        pratik.r.sampat@gmail.com
-Subject: Re: [PATCH] cpufreq:powernv: Fix init_chip_info initialization in
- numa=off
-Message-ID: <20210708090808.GA21260@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <20210615050949.10071-1-psampat@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210615050949.10071-1-psampat@linux.ibm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UgbXKmIpz22uEgfbU_KqL_zudiRSdQ8B
-X-Proofpoint-ORIG-GUID: twlkEIaGgywqDefwKHZo2OlwpgoN0mA-
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-08_04:2021-07-06,2021-07-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- clxscore=1011 impostorscore=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107080050
+        id S231332AbhGHKMD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jul 2021 06:12:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:55276 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231324AbhGHKMC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Jul 2021 06:12:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 990A2ED1;
+        Thu,  8 Jul 2021 03:09:20 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2C4C63F5A1;
+        Thu,  8 Jul 2021 03:09:19 -0700 (PDT)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com
+Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v4 0/9] Inefficient OPPs
+Date:   Thu,  8 Jul 2021 11:08:57 +0100
+Message-Id: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Pratik,
+Hi all,
 
-On Tue, Jun 15, 2021 at 10:39:49AM +0530, Pratik R. Sampat wrote:
-> In the numa=off kernel command-line configuration init_chip_info() loops
-> around the number of chips and attempts to copy the cpumask of that node
-> which is NULL for all iterations after the first chip.
+Here's the new patch-set version that brings support for skipping
+inefficiencies found by the Energy Model. This version doesn't bring
+changes for all the drivers that could benefit from this work at the
+moment. I'll do that in the next version or in a separated patch-set.
+Also, it's been discussed that enabling RELATION_E should be a driver
+flag. This sadly needs to be read in functions that do not have access to
+cpufreq_driver. Hence, I created a new policy flag instead.
 
-Thanks for taking a look into this. Indeed there is an issue here
-because the code here assumes that node_mask as a proxy for the
-chip_mask. This assumption breaks when run with numa=off, since there will only be a
-single node, but multiple chips.
+A bit of context:
 
+We (Power team in Arm) are working with an experimental kernel for the
+Google's Pixel4 to evaluate and improve the current mainline performance
+and energy consumption on a real life device with Android.
 
-> 
-> Hence adding a check to bail out after the first initialization if there
-> is only one node.
-> 
-> Fixes: 053819e0bf84 ("cpufreq: powernv: Handle throttling due to Pmax capping at chip level")
-> Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
-> Reported-by: Shirisha Ganta <shirishaganta1@ibm.com>
-> ---
->  drivers/cpufreq/powernv-cpufreq.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index e439b43c19eb..663f9c4b5e3a 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -1078,6 +1078,8 @@ static int init_chip_info(void)
->  		INIT_WORK(&chips[i].throttle, powernv_cpufreq_work_fn);
->  		for_each_cpu(cpu, &chips[i].mask)
->  			per_cpu(chip_info, cpu) =  &chips[i];
-> +		if (num_possible_nodes() == 1)
-> +			break;
+The SD855 SoC found in this phone has several OPPs that are inefficient.
+I.e. despite a lower frequency, they have a greater cost. (That cost being
+fmax * OPP power / OPP freq). This issue is twofold. First of course,
+running a specific workload at an inefficient OPP is counterproductive
+since it wastes wasting energy. But also, inefficient OPPs make a
+performance domain less appealing for task placement than it really is.
 
-With this we will only initialize the chip[0].throttle work function,
-while for the rest of the chips chip[i].throttle will be
-uninitialized. While we may be running in the numa=off mode, the fact
-remains that those other chips do exist and they may experiencing
-throttling, during which they will try to schedule work for chip[i] in
-order to take corrective action, which will fail.
-
-Hence a more correct approach may be to maintain a chip[i] mask
-independent of the node mask.
+We evaluated the change presented here by running 30 iterations of Android
+PCMark "Work 2.0 Performance". While we did not see any statistically
+significant performance impact, this change allowed to drastically improve
+the idle time residency.
 
 
+                           |   Running   |  WFI [1]  |    Idle   |
+   ------------------------+-------------+-----------+-----------+
+   Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+   ------------------------+-------------+-----------+-----------+
+   Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+   ------------------------+-------------+-----------+-----------+
+   Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+   ------------------------+-------------+-----------+-----------+
 
+On the SD855, the inefficient OPPs are found on the little cluster. By
+removing them from the Energy Model, we make the most efficient CPUs more
+appealing for task placement, helping to reduce the running time for the
+medium and big CPUs. Increasing idle time is crucial for this platform due
+to the substantial energy cost differences among the clusters. Also,
+despite not appearing in the statistics (the idle driver used here doesn't
+report it), we can speculate that we also improve the cluster idle time.
 
+[1] WFI: Wait for interrupt.
 
->  	}
->  
->  free_and_return:
-> -- 
-> 2.30.2
-> 
+Changelog since v3:
+  - New freq-table relation CPUFREQ_RELATION_E.
+  - New CPUFreq driver flag CPUFREQ_READ_ENERGY_MODEL.
+  - EM flag to skip or not inefficiencies (driven by CPUFreq).
+  - Fix infinite loop in set_freq_table_efficiencies().
+
+Changelog since v2:
+  - Add separated support for inefficiencies into CPUFreq.
+  - Collect Reviewed-by for the first patch.
+
+Changelog since v1:
+  - Remove the Look-up table as the numbers weren't strong enough to
+    justify the implementation.
+  - Split the patch.
+
+Vincent Donnefort (9):
+  PM / EM: Fix inefficient states detection
+  PM / EM: Mark inefficient states
+  PM / EM: Extend em_perf_domain with a flag field
+  PM / EM: Allow skipping inefficient states
+  cpufreq: Add an interface to mark inefficient frequencies
+  cpufreq: Add a new freq-table relation CPUFREQ_RELATION_E
+  cpufreq: CPUFREQ_RELATION_E in schedutil ondemand and conservative
+  cpufreq: Add driver flag CPUFREQ_READ_ENERGY_MODEL
+  cpufreq: dt: Add CPUFREQ_READ_ENERGY_MODEL
+
+ drivers/cpufreq/cpufreq-dt.c           |  2 +-
+ drivers/cpufreq/cpufreq.c              | 67 ++++++++++++++++++++++++++++++++-
+ drivers/cpufreq/cpufreq_conservative.c |  2 +-
+ drivers/cpufreq/cpufreq_ondemand.c     |  4 +-
+ drivers/cpufreq/freq_table.c           | 57 +++++++++++++++++++++++++++-
+ include/linux/cpufreq.h                | 50 +++++++++++++++++++++++--
+ include/linux/energy_model.h           | 68 +++++++++++++++++++++++++++++-----
+ kernel/power/energy_model.c            | 46 ++++++++++++++---------
+ kernel/sched/cpufreq_schedutil.c       |  2 +-
+ 9 files changed, 260 insertions(+), 38 deletions(-)
+
+-- 
+2.7.4
+
