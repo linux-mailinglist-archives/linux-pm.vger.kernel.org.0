@@ -2,168 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008023BF6F3
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 10:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD403BF744
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 11:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbhGHIoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jul 2021 04:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbhGHIoC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jul 2021 04:44:02 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E73C061762
-        for <linux-pm@vger.kernel.org>; Thu,  8 Jul 2021 01:41:19 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id x16so4798223pfa.13
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jul 2021 01:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=siIuMvkXC2AVcIAZnzYzjDZWFrnTkQc9eTe2lFO2xjo=;
-        b=DujFxJpm3hWBqoWJv2Di1EJVj7ZvxBbelgppRj+l57Sj16YYV7daiUYS7bSKQLK47V
-         XYvc6MyAQLcUI98nH2Nyg+89rhjM1gpBmr3vQhv4MK9VXmhxAK7w03V23ZAtaWDomdIX
-         CH2ol5Xp3PT3v9YV282aWB8em1upmDM9DTQvqHOVutPqDwERWmM6xcPCa5RuGCHnm7tH
-         tdEQTLo9mOR4KFYjiPDjs636VQIQhu1dpwF/tcjd7CtSpZ/vipUc1ejrpi9pSBw5GZT/
-         wli1J17dDAN+Yby8fYAWDEbj1E3310hTETxEe71uBPFbMjWUrHc9dvw3Pe4eybBaO5Ts
-         xGCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=siIuMvkXC2AVcIAZnzYzjDZWFrnTkQc9eTe2lFO2xjo=;
-        b=QcbYnutQ05HIuFTsIPFU5rha0eH1YkiulVU+E9Z7/SfrNirH/13YcUASmhs9BUx/1w
-         KqQvHNOMRm+Id4SY6bDP/TCQ6+aAZqmbeZiEL8Msk4W0SGZASX9h0kInLb2ZF+C1aJny
-         FnODWZIq38sp3+6yDVQpFEYnN1QL/y24ioLQ4jrFGb6mak7w3sV6cxL6eWQJJzXloGKP
-         IpBzlfTLlr2SjbsVc7BjgAGl8IfFKtsg3rdKInnJ+ixJGHAYHCri5EThY3bRBeo9xMhl
-         jFWnblTB4MOZZRXC3UL5GhcdCGHRfd5WIx26pdE5Da4haptCsROZLv53ZAYBAxvJcnRq
-         mdhA==
-X-Gm-Message-State: AOAM5304ASDdGL4cza0lMRQsu+Sed1S255dUGiD3xU/2RyPJupHb32OW
-        oqaFe4W0+6YuaVCj+A08bCMBiA==
-X-Google-Smtp-Source: ABdhPJwNkrsYNZXeC2SoeK/gWKgSM6Q8IZozaSiKHUBGMkYNoeLiZIgsEUZu1iiiGpZWvV3hjOCAtA==
-X-Received: by 2002:a63:7152:: with SMTP id b18mr30661407pgn.224.1625733679256;
-        Thu, 08 Jul 2021 01:41:19 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id 10sm1881109pjc.41.2021.07.08.01.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 01:41:18 -0700 (PDT)
-Date:   Thu, 8 Jul 2021 14:11:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jami.kettunen@somainline.org,
-        paul.bouchara@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, jeffrey.l.hugo@gmail.com
-Subject: Re: [PATCH v6 7/9] cpufreq: qcom-hw: Allow getting the maximum
- transition latency for OPPs
-Message-ID: <20210708084117.gk2b4cfbr774xuvy@vireshk-i7>
-References: <20210701105730.322718-1-angelogioacchino.delregno@somainline.org>
- <20210701105730.322718-8-angelogioacchino.delregno@somainline.org>
+        id S231255AbhGHJLL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jul 2021 05:11:11 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47232 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231254AbhGHJLL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jul 2021 05:11:11 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16894jlV055988;
+        Thu, 8 Jul 2021 05:08:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=JPJDLe0p4ZjhEFucYJlDDkxue6Tk2PTl5d+5nvsL6qE=;
+ b=AzNQwZ6xuDPxnCb7xw9sj+naBglfF8O3fijEP1F6hyyXSGYVht3RGUaR7yMMy1funRtC
+ K5x9vHRf/v19nEV0cK2zVvzpFxI3g10CICZQ/e+PM7sRxgBbI/gOK09TB3u1WJdoILM/
+ BSpDeTxygKxzhKB+2/KbGJnJrAOrV58KaBY/0JkNBzOThnfS7Dr/j4CW/6Qw8HyekyTT
+ fbhox1BSJsEc7/Vg6McbpeL7DvDu2AdAX60SbZEoBKic40yWZ87R4JlEGAQ+fwQjGbFr
+ HBv6sy/Hjb/JeCA2EB493JJWwVPWQT0w+Yovywq7K830AfXyKRLD0mHbwS9r1GRdsLX6 Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39nwn01c8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jul 2021 05:08:16 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 168951xJ059928;
+        Thu, 8 Jul 2021 05:08:16 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39nwn01c8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jul 2021 05:08:16 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 168979ig006029;
+        Thu, 8 Jul 2021 09:08:15 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01wdc.us.ibm.com with ESMTP id 39jfhca9r8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jul 2021 09:08:15 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16898EoM18612528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jul 2021 09:08:14 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E1686E058;
+        Thu,  8 Jul 2021 09:08:14 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D14F96E052;
+        Thu,  8 Jul 2021 09:08:13 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.199.42.113])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Jul 2021 09:08:13 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 451722E3B06; Thu,  8 Jul 2021 14:38:08 +0530 (IST)
+Date:   Thu, 8 Jul 2021 14:38:08 +0530
+From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
+To:     "Pratik R. Sampat" <psampat@linux.ibm.com>
+Cc:     mpe@ellerman.id.au, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Subject: Re: [PATCH] cpufreq:powernv: Fix init_chip_info initialization in
+ numa=off
+Message-ID: <20210708090808.GA21260@in.ibm.com>
+Reply-To: ego@linux.vnet.ibm.com
+References: <20210615050949.10071-1-psampat@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210701105730.322718-8-angelogioacchino.delregno@somainline.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210615050949.10071-1-psampat@linux.ibm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UgbXKmIpz22uEgfbU_KqL_zudiRSdQ8B
+X-Proofpoint-ORIG-GUID: twlkEIaGgywqDefwKHZo2OlwpgoN0mA-
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-08_04:2021-07-06,2021-07-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ clxscore=1011 impostorscore=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107080050
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-21, 12:57, AngeloGioacchino Del Regno wrote:
-> In order to fine-tune the frequency scaling from various governors,
-> allow to set a maximum transition latency from OPPs, which may be
-> different depending on the SoC.
+Hello Pratik,
 
-You are doing much more than just this, why ?
+On Tue, Jun 15, 2021 at 10:39:49AM +0530, Pratik R. Sampat wrote:
+> In the numa=off kernel command-line configuration init_chip_info() loops
+> around the number of chips and attempts to copy the cpumask of that node
+> which is NULL for all iterations after the first chip.
 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 35 +++++++++++++++++++++++--------
->  1 file changed, 26 insertions(+), 9 deletions(-)
+Thanks for taking a look into this. Indeed there is an issue here
+because the code here assumes that node_mask as a proxy for the
+chip_mask. This assumption breaks when run with numa=off, since there will only be a
+single node, but multiple chips.
+
+
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 54b79fe772b6..0b80c65a22a8 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -1331,6 +1331,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  	void __iomem *base;
->  	struct qcom_cpufreq_data *data;
->  	char fdom_resname[] = "freq-domainX";
-> +	unsigned int transition_latency;
->  	int cpu_count, index, ret;
->  
->  	cpu_dev = get_cpu_device(policy->cpu);
-> @@ -1381,22 +1382,31 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  	data->soc_data = of_device_get_match_data(&pdev->dev);
->  	data->base = base;
->  	data->res = res;
-> +	policy->driver_data = data;
->  
-> -	/* HW should be in enabled state to proceed */
-> -	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
-> -		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
-> -		ret = -ENODEV;
-> -		goto error;
-> -	}
-> -
-> -	qcom_get_related_cpus(index, policy->cpus);
-> +	cpu_count = qcom_get_related_cpus(index, policy->cpus);
->  	if (!cpumask_weight(policy->cpus)) {
->  		dev_err(dev, "Domain-%d failed to get related CPUs\n", index);
->  		ret = -ENOENT;
->  		goto error;
+> Hence adding a check to bail out after the first initialization if there
+> is only one node.
+> 
+> Fixes: 053819e0bf84 ("cpufreq: powernv: Handle throttling due to Pmax capping at chip level")
+> Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
+> Reported-by: Shirisha Ganta <shirishaganta1@ibm.com>
+> ---
+>  drivers/cpufreq/powernv-cpufreq.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+> index e439b43c19eb..663f9c4b5e3a 100644
+> --- a/drivers/cpufreq/powernv-cpufreq.c
+> +++ b/drivers/cpufreq/powernv-cpufreq.c
+> @@ -1078,6 +1078,8 @@ static int init_chip_info(void)
+>  		INIT_WORK(&chips[i].throttle, powernv_cpufreq_work_fn);
+>  		for_each_cpu(cpu, &chips[i].mask)
+>  			per_cpu(chip_info, cpu) =  &chips[i];
+> +		if (num_possible_nodes() == 1)
+> +			break;
+
+With this we will only initialize the chip[0].throttle work function,
+while for the rest of the chips chip[i].throttle will be
+uninitialized. While we may be running in the numa=off mode, the fact
+remains that those other chips do exist and they may experiencing
+throttling, during which they will try to schedule work for chip[i] in
+order to take corrective action, which will fail.
+
+Hence a more correct approach may be to maintain a chip[i] mask
+independent of the node mask.
+
+
+
+
+
 >  	}
 >  
-> -	policy->driver_data = data;
-> +	if (!data->soc_data->uses_tz) {
-> +		ret = qcom_cpufreq_hw_osm_setup(cpu_dev, policy,
-> +						cpu_count, index);
-> +		if (ret) {
-> +			dev_err(dev, "Cannot setup the OSM for CPU%d: %d\n",
-> +				policy->cpu, ret);
-> +			goto error;
-> +		}
-> +	}
-> +
-> +	/* HW should be in enabled state to proceed */
-> +	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
-> +		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
-> +		ret = -ENODEV;
-> +		goto error;
-> +	}
-
-The commit log doesn't speak about any of the above.
-
->  
->  	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy);
->  	if (ret) {
-> @@ -1411,6 +1421,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  		goto error;
->  	}
->  
-> +	transition_latency = dev_pm_opp_get_max_transition_latency(cpu_dev);
-> +	if (!transition_latency)
-> +		transition_latency = CPUFREQ_ETERNAL;
-> +
-> +	policy->cpuinfo.transition_latency = transition_latency;
-> +
->  	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
->  
->  	if (policy_has_boost_freq(policy)) {
-> @@ -1421,6 +1437,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  
->  	return 0;
->  error:
-> +	policy->driver_data = NULL;
->  	kfree(data);
->  unmap_base:
->  	iounmap(base);
+>  free_and_return:
 > -- 
-> 2.32.0
-
--- 
-viresh
+> 2.30.2
+> 
