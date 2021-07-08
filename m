@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56983BF80E
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 12:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8F33BF80F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jul 2021 12:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbhGHKMO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jul 2021 06:12:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:55394 "EHLO foss.arm.com"
+        id S231479AbhGHKMQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jul 2021 06:12:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:55410 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231324AbhGHKMO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Jul 2021 06:12:14 -0400
+        id S231470AbhGHKMP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Jul 2021 06:12:15 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43396113E;
-        Thu,  8 Jul 2021 03:09:32 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E03BBED1;
+        Thu,  8 Jul 2021 03:09:33 -0700 (PDT)
 Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C9BF43F5A1;
-        Thu,  8 Jul 2021 03:09:30 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 745593F5A1;
+        Thu,  8 Jul 2021 03:09:32 -0700 (PDT)
 From:   Vincent Donnefort <vincent.donnefort@arm.com>
 To:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
         vincent.guittot@linaro.org, qperret@google.com
 Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
         lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org,
         Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v4 7/9] cpufreq: CPUFREQ_RELATION_E in schedutil ondemand and conservative
-Date:   Thu,  8 Jul 2021 11:09:04 +0100
-Message-Id: <1625738946-295849-8-git-send-email-vincent.donnefort@arm.com>
+Subject: [PATCH v4 8/9] cpufreq: Add driver flag CPUFREQ_READ_ENERGY_MODEL
+Date:   Thu,  8 Jul 2021 11:09:05 +0100
+Message-Id: <1625738946-295849-9-git-send-email-vincent.donnefort@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
 References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
@@ -33,92 +33,124 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Avoid inefficient frequencies with the freq-table relation
-CPUFREQ_RELATION_E instead of CPUFREQ_RELATION_L in governors where it is
-possible. Are left aside:
+The Energy Model has a 1:1 mapping between OPPs and performance states
+(em_perf_state). If a CPUFreq driver registers an Energy Model, the
+inefficiencies found by the latter can apply to CPUFreq.
+CPUFREQ_READ_ENERGY_MODEL allows, during registration, to read those
+inefficiencies and mark the freq-table accordingly.
 
-  - userspace: there is no reason to not honour user requests.
-  - powersave: selects the lowest frequency possible.
+If a driver that set CPUFREQ_READ_ENERGY_MODEL, doesn't use a custom
+->target() callback, CPUFreq can handle skipping inefficient frequencies
+on its own and will automatically enable the freq-table relation
+CPUFREQ_RELATION_E.
 
-Caveat in ondemand: the governor only using CPUFREQ_RELATION_L when
-powersavebias is set, the inefficient frequencies would be skipped only in
-a such configuration.
+If CPUFREQ_RELATION_E is enabled, CPUFreq will let the Energy Model know
+inefficiencies shouldn't be taken into account for the energy estimation.
 
 Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 74eaa23bcc7c..f8d01d083df0 100644
+index f8d01d083df0..cb8950da4a47 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -545,7 +545,7 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
- 		unsigned int idx;
- 
- 		idx = cpufreq_frequency_table_target(policy, target_freq,
--						     CPUFREQ_RELATION_L);
-+						     CPUFREQ_RELATION_E);
- 		policy->cached_resolved_idx = idx;
- 		return policy->freq_table[idx].frequency;
- 	}
-diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-index aa39ff31ec9f..084b35dbb4ef 100644
---- a/drivers/cpufreq/cpufreq_conservative.c
-+++ b/drivers/cpufreq/cpufreq_conservative.c
-@@ -134,7 +134,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
- 		else
- 			requested_freq = policy->min;
- 
--		__cpufreq_driver_target(policy, requested_freq, CPUFREQ_RELATION_L);
-+		__cpufreq_driver_target(policy, requested_freq, CPUFREQ_RELATION_E);
- 		dbs_info->requested_freq = requested_freq;
- 	}
- 
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index ac361a8b1d3b..19689d15d3d3 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -123,7 +123,7 @@ static void dbs_freq_increase(struct cpufreq_policy *policy, unsigned int freq)
- 		return;
- 
- 	__cpufreq_driver_target(policy, freq, od_tuners->powersave_bias ?
--			CPUFREQ_RELATION_L : CPUFREQ_RELATION_H);
-+			CPUFREQ_RELATION_E : CPUFREQ_RELATION_H);
+@@ -19,6 +19,7 @@
+ #include <linux/cpu_cooling.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
++#include <linux/energy_model.h>
+ #include <linux/init.h>
+ #include <linux/kernel_stat.h>
+ #include <linux/module.h>
+@@ -1313,6 +1314,58 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+ 	kfree(policy);
  }
  
- /*
-@@ -161,7 +161,7 @@ static void od_update(struct cpufreq_policy *policy)
- 		if (od_tuners->powersave_bias)
- 			freq_next = od_ops.powersave_bias_target(policy,
- 								 freq_next,
--								 CPUFREQ_RELATION_L);
-+								 CPUFREQ_RELATION_E);
++static inline void
++cpufreq_read_inefficiencies_from_em(struct cpufreq_policy *policy,
++				    struct em_perf_domain *em_pd)
++{
++	struct cpufreq_frequency_table *pos, *table = policy->freq_table;
++	struct em_perf_state *em_table;
++	bool found = false;
++	int i;
++
++	if (!(cpufreq_driver->flags & CPUFREQ_READ_ENERGY_MODEL))
++		return;
++
++	if (!em_pd) {
++		pr_warn("CPUFreq driver wants to read inefficiencies from the Energy Model but none found\n");
++		return;
++	}
++
++	em_table = em_pd->table;
++
++	for (i = 0; i < em_pd->nr_perf_states; i++) {
++		if (!(em_table[i].flags & EM_PERF_STATE_INEFFICIENT))
++			continue;
++
++		cpufreq_for_each_valid_entry(pos, table) {
++			if (pos->frequency == em_table[i].frequency) {
++				pos->flags |= CPUFREQ_INEFFICIENT_FREQ;
++				found = true;
++				break;
++			}
++		}
++	}
++
++	if (!found)
++		return;
++
++	/*
++	 * If the driver does not use a custom ->target() callback, we can
++	 * automatically enable CPUFREQ_RELATION_E, supported by the default
++	 * function cpufreq_frequency_table_target(). Otherwise, the driver
++	 * must set this flag itself.
++	 */
++	if (!cpufreq_driver->target)
++		policy->relation_efficient = true;
++
++	/*
++	 * With CPUFREQ_RELATION_E enabled, inefficient frequencies will be
++	 * skipped. Let know the Energy Model it can skip them too.
++	 */
++	if (policy->relation_efficient)
++		em_pd->flags |= EM_PERF_DOMAIN_SKIP_INEFFICIENCIES;
++}
++
+ static int cpufreq_online(unsigned int cpu)
+ {
+ 	struct cpufreq_policy *policy;
+@@ -1367,6 +1420,12 @@ static int cpufreq_online(unsigned int cpu)
+ 			goto out_free_policy;
+ 		}
  
- 		__cpufreq_driver_target(policy, freq_next, CPUFREQ_RELATION_C);
- 	}
++		/*
++		 * Sync potential inefficiencies with the Energy Model if the
++		 * driver requested CPUFREQ_READ_ENERGY_MODEL.
++		 */
++		cpufreq_read_inefficiencies_from_em(policy, em_cpu_get(cpu));
++
+ 		ret = cpufreq_table_validate_and_sort(policy);
+ 		if (ret)
+ 			goto out_exit_policy;
 diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index c7764ae05f84..0110408fcf2d 100644
+index 0110408fcf2d..f5e94207094c 100644
 --- a/include/linux/cpufreq.h
 +++ b/include/linux/cpufreq.h
-@@ -638,7 +638,7 @@ static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy)
- 	if (policy->max < policy->cur)
- 		__cpufreq_driver_target(policy, policy->max, CPUFREQ_RELATION_H);
- 	else if (policy->min > policy->cur)
--		__cpufreq_driver_target(policy, policy->min, CPUFREQ_RELATION_L);
-+		__cpufreq_driver_target(policy, policy->min, CPUFREQ_RELATION_E);
- }
+@@ -440,6 +440,14 @@ struct cpufreq_driver {
+  */
+ #define CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	BIT(6)
  
- /* Governor attribute set */
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 57124614363d..d6c7694b75bd 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -481,7 +481,7 @@ static void sugov_work(struct kthread_work *work)
- 	raw_spin_unlock_irqrestore(&sg_policy->update_lock, flags);
- 
- 	mutex_lock(&sg_policy->work_lock);
--	__cpufreq_driver_target(sg_policy->policy, freq, CPUFREQ_RELATION_L);
-+	__cpufreq_driver_target(sg_policy->policy, freq, CPUFREQ_RELATION_E);
- 	mutex_unlock(&sg_policy->work_lock);
- }
++/*
++ * Set by drivers which register an Energy Model and want to use the latter to
++ * populate the freq-table with inefficiency information. If the same driver
++ * is not implementing the ->target() callback, setting this flag will also
++ * automatically enable CPUFREQ_RELATION_E.
++ */
++#define CPUFREQ_READ_ENERGY_MODEL		BIT(7)
++
+ int cpufreq_register_driver(struct cpufreq_driver *driver_data);
+ int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
  
 -- 
 2.7.4
