@@ -2,86 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931553C1CEC
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 03:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9A93C1D6E
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 04:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbhGIBFr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jul 2021 21:05:47 -0400
-Received: from m15113.mail.126.com ([220.181.15.113]:39012 "EHLO
-        m15113.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbhGIBFq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jul 2021 21:05:46 -0400
-X-Greylist: delayed 1835 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 21:05:46 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Bau5W
-        sM5tFaq/gw8r4NEOvCzfyvBXA7HtsNl9Sbf5FE=; b=aZhn1kJEQEGGjytiJ7TZW
-        q2JNKZattBTdKTgcfb1e2BOrooA6+vYn1DIHz1z3v22L3sXoQePMln470RQpsRm+
-        4kMO+olnH4Zx6ERlOLfsnsQqEfUekuqE5BYM4vNDNmCPr2YJRu4RG3K4yuZmWeDC
-        5danLZBjjDH6gPI49kcER4=
-Received: from localhost.localdomain (unknown [111.28.186.210])
-        by smtp3 (Coremail) with SMTP id DcmowADHz88MmedgOBXESw--.12897S2;
-        Fri, 09 Jul 2021 08:32:13 +0800 (CST)
-From:   xiongxin <win239@126.com>
-To:     rjw@rjwysocki.net, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>
-Subject: [PATCH] PM / s2idle: Fix the failure of specifying "mem_sleep_default=" parameter
-Date:   Fri,  9 Jul 2021 08:32:04 +0800
-Message-Id: <20210709003204.26944-1-win239@126.com>
-X-Mailer: git-send-email 2.25.1
+        id S230501AbhGIC0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jul 2021 22:26:49 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:6773 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230368AbhGIC0t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jul 2021 22:26:49 -0400
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GLcK54WvBzXr3N
+        for <linux-pm@vger.kernel.org>; Fri,  9 Jul 2021 10:18:33 +0800 (CST)
+Received: from [127.0.0.1] (10.40.193.166) by dggeme756-chm.china.huawei.com
+ (10.3.19.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 9 Jul
+ 2021 10:24:04 +0800
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Subject: Question about __pm_runtime_disable()
+To:     <rafael.j.wysocki@intel.com>
+CC:     <linuxarm@huawei.com>, Linux PM <linux-pm@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Message-ID: <4c65cdd3-05cd-499d-0dd1-b7d6e76372b1@hisilicon.com>
+Date:   Fri, 9 Jul 2021 10:24:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowADHz88MmedgOBXESw--.12897S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uw15KFyrXFWDWw4UXw4xJFb_yoW8Gw4Dp3
-        4rK3y8Ka12yryYyF4Utw4kZFy5X3WrKFWYka9rK3ykGrW3Wwn5Gr1Utr17X34YvrZ7ZF4I
-        vrn7tw4qqwnY9FDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jwpnPUUUUU=
-X-Originating-IP: [111.28.186.210]
-X-CM-SenderInfo: xzlqjjaz6rjloofrz/1tbiHRHJilpEEOR2sQACsg
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.193.166]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: xiongxin <xiongxin@kylinos.cn>
+Hi Rafael and other guys,
 
-On the arm64 platform, the psci driver is used by default to set the
-suspend_ops structure; but the psci_acpi_init() function is called
-before the command-line parameter "mem_sleep_default=" is specified;
-the user cannot set the desired suspend mode through the
-"mem_sleep_default=" parameter;
+I encounter a runtime PM issue: there are four devices, and device 0 is 
+the parent device, and device 1/2/3 are the children devices of device 0.
 
-In mem_sleep_default_setup(), judge whether suspend_ops is set, if it
-has been assigned, rewrite the value of mem_sleep_current variable; in
-order to complete the user setting;
+All of them supports runtime PM. But i want to ignore device2 and 
+device3, so that if device 1 is suspended, then device0 can
 
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+be suspended. I use function pm_runtime_disable() to disable device2 and 
+device3, and device 1 is suspended but device0 is still active.
 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index d8cae434f9eb..bef4b17de3f6 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -192,6 +192,21 @@ static int __init mem_sleep_default_setup(char *str)
- 			break;
- 		}
- 
-+	/*
-+	 * When the suspend_ops has been set, "mem_sleep_default=*" will
-+	 * be invalid, here to fix this situation.
-+	 */
-+	if (suspend_ops) {
-+		if (mem_sleep_default == PM_SUSPEND_TO_IDLE)
-+			mem_sleep_current = PM_SUSPEND_TO_IDLE;
-+		else if ((mem_sleep_default == PM_SUSPEND_STANDBY) &&
-+				valid_state(PM_SUSPEND_STANDBY))
-+			mem_sleep_current = PM_SUSPEND_STANDBY;
-+		else if ((mem_sleep_default >= PM_SUSPEND_MEM) &&
-+				valid_state(PM_SUSPEND_MEM))
-+			mem_sleep_current = PM_SUSPEND_MEM;
-+	}
+I find that runtime_active_kids of device0 is still 2 though 
+runtime_usage = 0, so it doesn't enter suspend status.
+
+And i hack the code of funciton __pm_runtime_disable() to decrease 
+child_count of device's parent as follows, and it works.
+
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index b570848..6ba224b 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1382,6 +1382,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_barrier);
+   */
+  void __pm_runtime_disable(struct device *dev, bool check_resume)
+  {
++       struct device *parent = NULL;
 +
- 	return 1;
- }
- __setup("mem_sleep_default=", mem_sleep_default_setup);
--- 
-2.25.1
+         spin_lock_irq(&dev->power.lock);
+
+         if (dev->power.disable_depth > 0) {
+@@ -1413,6 +1415,10 @@ void __pm_runtime_disable(struct device *dev, 
+bool check_resume)
+         if (!dev->power.disable_depth++)
+                 __pm_runtime_barrier(dev);
+
++       if (dev->parent) {
++               parent = dev->parent;
++               atomic_add_unless(&parent->power.child_count, -1, 0);
++       }
+   out:
+         spin_unlock_irq(&dev->power.lock);
+  }
+
+Is it appropriate for me to use function pm_runtime_disable() to ignore 
+them (i try function function pm_suspend_ignore_children(), but it 
+ignores all children of the device )?
+Or does it need to decrease child_count the device's parent in function 
+__pm_runtime_disable() ?
+
+
+Best Regard,
+Xiang Chen
+
 
