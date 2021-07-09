@@ -2,86 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A8F3C23FB
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 15:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533703C2433
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 15:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhGINJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 09:09:46 -0400
-Received: from mail-vs1-f47.google.com ([209.85.217.47]:35513 "EHLO
-        mail-vs1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbhGINJo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 09:09:44 -0400
-Received: by mail-vs1-f47.google.com with SMTP id h18so5551172vsj.2;
-        Fri, 09 Jul 2021 06:06:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f9K50uqbO+OiOIh+y9BZ3Xord6eCTGCDJbMPLK8l0eg=;
-        b=EBEZzyR5U25hGognpAacPuMnX++dEbyHcSCf42Vk8NX4PGKN5e++z8eG8rdmDXvtLB
-         wyN+OOzzgdhAx7e/iQw0wi9RrEKRTkG+yrqCfK3wv/kAfin/Vruih22OnH5Urw9s8/hz
-         mXnuWREJRyEClrnZ90ovEBfUL3iOntHIn5cBQoeTDsU4SBW3qZpv+quV3S2jInhhpHPA
-         hlAYKYTFRmJCXJK18a+9c3N4eMKT/ORECvGF3Q1MrGMvFmgnmVhVTBtehGXcs267hU/N
-         f6RwM/J8yO9GOryHcpZraUNqxSAsK3yUshwUnN5laLlaPIX7R7EfkwXNrpf1FmC6Ei0k
-         YEmQ==
-X-Gm-Message-State: AOAM5319YE4ujcfL0NrJPFIy6n3r3r+kf6nvfj7XE7v24JpHyVisji1s
-        dzqy0X0aYAUxGVhNjteTX8jk87gmzArGb+4EQKU=
-X-Google-Smtp-Source: ABdhPJx3ZIltFRr1pc6I8+WpbqTDhmio+F0DH8vBQADE5fqcKRACpSnhwHDQdnzBNzZeeKxVuaR7iUkPgKNj5sKN05c=
-X-Received: by 2002:a67:f98c:: with SMTP id b12mr36045844vsq.40.1625836019416;
- Fri, 09 Jul 2021 06:06:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210709125611.135920-1-ulf.hansson@linaro.org>
-In-Reply-To: <20210709125611.135920-1-ulf.hansson@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 9 Jul 2021 15:06:48 +0200
-Message-ID: <CAMuHMdU0AVFVb3tXW4wkEibSx50nzYKW1GopgZPfKp1SS7Mf1g@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Don't attach a device to genpd that
- corresponds to a provider
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S231938AbhGINVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 09:21:33 -0400
+Received: from mga18.intel.com ([134.134.136.126]:25063 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231925AbhGINVc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Jul 2021 09:21:32 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="196974898"
+X-IronPort-AV: E=Sophos;i="5.84,226,1620716400"; 
+   d="scan'208";a="196974898"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2021 06:18:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,226,1620716400"; 
+   d="scan'208";a="628856893"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.79]) ([10.237.72.79])
+  by orsmga005.jf.intel.com with ESMTP; 09 Jul 2021 06:18:44 -0700
+Subject: Re: [PATCH V2 1/2] driver core: Add ability to delete device links of
+ unregistered devices
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Saravana Kannan <saravanak@google.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210709064341.6206-1-adrian.hunter@intel.com>
+ <20210709064341.6206-2-adrian.hunter@intel.com>
+ <CAJZ5v0hZCUruTc9U64Kx0EO8iky34AR+=QeNcSafQEvcGWapLw@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <f538dda5-6c55-0930-b258-85a3245f06a8@intel.com>
+Date:   Fri, 9 Jul 2021 16:18:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0hZCUruTc9U64Kx0EO8iky34AR+=QeNcSafQEvcGWapLw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
+On 9/07/21 2:28 pm, Rafael J. Wysocki wrote:
+> On Fri, Jul 9, 2021 at 8:43 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Managed device links are deleted by device_del(). However it is possible to
+>> add a device link to a consumer before device_add(), and then discover an
+>> error prevents the device from being used. In that case normally references
+>> to the device would be dropped and the device would be deleted. However the
+>> device link holds a reference to the device, so the device link and device
+>> remain indefinitely.
+>>
+>> Amend device link removal to accept removal of a link with an
+>> unregistered consumer device.
+>>
+>> To make that work nicely, the devlink_remove_symlinks() function must be
+>> amended to cope with the absence of the consumer's sysfs presence,
+>> otherwise sysfs_remove_link() will generate a warning.
+>>
+>> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Fixes: b294ff3e34490 ("scsi: ufs: core: Enable power management for wlun")
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  drivers/base/core.c | 11 ++++++++---
+>>  1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/base/core.c b/drivers/base/core.c
+>> index ea5b85354526..24bacdb315c6 100644
+>> --- a/drivers/base/core.c
+>> +++ b/drivers/base/core.c
+>> @@ -562,7 +562,8 @@ static void devlink_remove_symlinks(struct device *dev,
+>>         struct device *con = link->consumer;
+>>         char *buf;
+>>
+>> -       sysfs_remove_link(&link->link_dev.kobj, "consumer");
+>> +       if (device_is_registered(con))
+>> +               sysfs_remove_link(&link->link_dev.kobj, "consumer");
+> 
+> I think that this is needed regardless of the changes in
+> device_link_put_kref(), because if somebody decides to delete a
+> stateless device link before registering the consumer device,
+> sysfs_remove_link() will still complain, won't it?
 
-Thanks for your patch!
+I would think so.
 
-On Fri, Jul 9, 2021 at 2:56 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> According to the common power domain DT bindings, a power domain provider
-> must have a "#power-domain-cells" property in its OF node. Additionally, if
-> a provider has a "power-domains" property, it means that it has a parent
-> domain.
+> 
+>>         sysfs_remove_link(&link->link_dev.kobj, "supplier");
+>>
+>>         len = max(strlen(dev_bus_name(sup)) + strlen(dev_name(sup)),
+>> @@ -575,8 +576,10 @@ static void devlink_remove_symlinks(struct device *dev,
+>>                 return;
+>>         }
+>>
+>> -       snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
+>> -       sysfs_remove_link(&con->kobj, buf);
+>> +       if (device_is_registered(con)) {
+>> +               snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
+>> +               sysfs_remove_link(&con->kobj, buf);
+>> +       }
+> 
+> And here too, if I'm not mistaken.
+> 
+> So in that case it would be better to put the above changes into a
+> separate patch and add a Fixes tag to it.
 
-OK.
+Yes, that makes sense.  I'll send a V3
 
-> It has turned out that some OF nodes that represents a genpd provider may
-> also be compatible with a regular platform device. This leads to, during
-> probe, genpd_dev_pm_attach(), genpd_dev_pm_attach_by_name() and
-> genpd_dev_pm_attach_by_id() tries to attach the corresponding struct device
-> to the genpd provider's parent domain, which is wrong. Instead the genpd
+> 
+>>         snprintf(buf, len, "consumer:%s:%s", dev_bus_name(con), dev_name(con));
+>>         sysfs_remove_link(&sup->kobj, buf);
+>>         kfree(buf);
+>> @@ -885,6 +888,8 @@ static void device_link_put_kref(struct device_link *link)
+>>  {
+>>         if (link->flags & DL_FLAG_STATELESS)
+>>                 kref_put(&link->kref, __device_link_del);
+>> +       else if (!device_is_registered(link->consumer))
+>> +               __device_link_del(&link->kref);
+>>         else
+>>                 WARN(1, "Unable to drop a managed device link reference\n");
+>>  }
+>> --
+>> 2.17.1
+>>
 
-Why is that wrong?
-
-> provider should only assign a parent domain, through
-> pm_genpd_add_subdomain() or of_genpd_add_subdomain().
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
