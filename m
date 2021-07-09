@@ -2,101 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050223C1F84
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 08:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B073C1F99
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 09:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbhGIGqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 02:46:23 -0400
-Received: from mga04.intel.com ([192.55.52.120]:52839 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230494AbhGIGqX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Jul 2021 02:46:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="207832915"
-X-IronPort-AV: E=Sophos;i="5.84,226,1620716400"; 
-   d="scan'208";a="207832915"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 23:43:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,226,1620716400"; 
-   d="scan'208";a="648869612"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.79])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2021 23:43:35 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/2] scsi: ufshcd: Fix device links when BOOT WLUN fails to probe
-Date:   Fri,  9 Jul 2021 09:43:41 +0300
-Message-Id: <20210709064341.6206-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210709064341.6206-1-adrian.hunter@intel.com>
-References: <20210709064341.6206-1-adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+        id S230409AbhGIGtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 02:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230351AbhGIGtd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 02:49:33 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720BC0613DD
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jul 2021 23:46:49 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id u14so8973600pga.11
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jul 2021 23:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xaT7y+PG7DwjxYqSoSUwIQdL1dKO1pep2OkWSy56kbM=;
+        b=d5blS0UKDt1DBFfpUH8YUVsFUu3RxbvZlJYKp6BG++edlFbJ4tAl+QNPo4S8A/a+pV
+         ouFm4c9mTUFYOt6koEkc648nuL8RKfwUUv2hvolAnfM7rnACSEeebCiYWW44XhW3AiTK
+         o/BzoHT3HmebkOY9tmTaGCclZIgTjf7UsUWMhhhWRpmQgZ2PY+IA/VywWkqiBU4QH4SO
+         HDN17LUfO7CM8K4SOnRk4s7lKl3r/2j7DhNhzj9/Jmv1NfW4J7BLZb0OD/UPwGkK+NhS
+         tNpvX7YcI5LiKdjDVKVN490+uV/E148TR3rQwE6HYxJsK9Jxe6Gmos6rNW6hjUO8ljPv
+         vyPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xaT7y+PG7DwjxYqSoSUwIQdL1dKO1pep2OkWSy56kbM=;
+        b=IcQTNvDeJVAz9ulYdQw+kQ56+vfU3AI49R3DCpin7BL86c5MEMeW5V2jL+iHkKNC3d
+         oONiETvZvUWgobSnpVTXOfjosyOvmAicvzKhVn3a7Wpt3RAjKIWXYTSEx8vgAChLs2yE
+         t98K6aL+9bSRVmTBBMNi+caIzawBilwcKvTqERSnbO/lJzvVYSfusttO0WDciR8ya11k
+         O1URTPZ1LlkNbdCAl0/z4DVnMkGyHmS+c93NMwDuKN4yvRpG5MTblAxIikLGP6pX3Iay
+         rWP1aOcyGVAtYugxlMB+BaTc3WWGvAvlqheNMkicwOgcp7yxeegEkbgo465juGC3WdeL
+         s6RQ==
+X-Gm-Message-State: AOAM531luQziy83/L9c2D+bnO8rgRrRi2xGmosdPr7u3OQTlLMV6KY1V
+        O/2ozHFW9MEyzZbrQGty6DNKSw==
+X-Google-Smtp-Source: ABdhPJyVTVZo24ToIx/xl45xZBXM5V3PkgfTRfpGnXJqHEyvGXd7a+kvj0PE+uAEH9XoX97HcocWOQ==
+X-Received: by 2002:a65:550a:: with SMTP id f10mr11024883pgr.155.1625813209004;
+        Thu, 08 Jul 2021 23:46:49 -0700 (PDT)
+Received: from localhost ([106.201.108.2])
+        by smtp.gmail.com with ESMTPSA id x13sm4283500pjh.30.2021.07.08.23.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jul 2021 23:46:48 -0700 (PDT)
+Date:   Fri, 9 Jul 2021 12:16:46 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
+        tdas@codeaurora.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [Patch v3 3/6] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
+ support
+Message-ID: <20210709064646.7vjgiba2o7beudly@vireshk-i7>
+References: <20210708120656.663851-1-thara.gopinath@linaro.org>
+ <20210708120656.663851-4-thara.gopinath@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210708120656.663851-4-thara.gopinath@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If a LUN fails to probe (e.g. absent BOOT WLUN), the device will not have
-been registered but can still have a device link holding a reference to the
-device. The unwanted device link will prevent runtime suspend indefinitely,
-and cause some warnings if the supplier is ever deleted (e.g. by unbinding
-the UFS host controller). Fix by explicitly deleting the device link when
-SCSI destroys the SCSI device.
+On 08-07-21, 08:06, Thara Gopinath wrote:
+>  static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  {
+>  	struct platform_device *pdev = cpufreq_get_driver_data();
+> @@ -370,6 +480,10 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
+>  	}
+>  
+> +	ret = qcom_cpufreq_hw_lmh_init(policy, index);
 
-Fixes: b294ff3e34490 ("scsi: ufs: core: Enable power management for wlun")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- drivers/scsi/ufs/ufshcd.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+You missed unregistering EM here (which is also missing from exit,
+which you need to fix first in a separate patch).
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 708b3b62fc4d..9864a8ee0263 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5020,15 +5020,34 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
- static void ufshcd_slave_destroy(struct scsi_device *sdev)
- {
- 	struct ufs_hba *hba;
-+	unsigned long flags;
- 
- 	hba = shost_priv(sdev->host);
- 	/* Drop the reference as it won't be needed anymore */
- 	if (ufshcd_scsi_to_upiu_lun(sdev->lun) == UFS_UPIU_UFS_DEVICE_WLUN) {
--		unsigned long flags;
--
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 		hba->sdev_ufs_device = NULL;
- 		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+	} else if (hba->sdev_ufs_device) {
-+		struct device *supplier = NULL;
-+
-+		/* Ensure UFS Device WLUN exists and does not disappear */
-+		spin_lock_irqsave(hba->host->host_lock, flags);
-+		if (hba->sdev_ufs_device) {
-+			supplier = &hba->sdev_ufs_device->sdev_gendev;
-+			get_device(supplier);
-+		}
-+		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+
-+		if (supplier) {
-+			/*
-+			 * If a LUN fails to probe (e.g. absent BOOT WLUN), the
-+			 * device will not have been registered but can still
-+			 * have a device link holding a reference to the device.
-+			 */
-+			device_link_remove(&sdev->sdev_gendev, supplier);
-+			put_device(supplier);
-+		}
- 	}
- }
- 
+> +	if (ret)
+> +		goto error;
+> +
+>  	return 0;
+>  error:
+>  	kfree(data);
+> @@ -389,6 +503,10 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+>  
+>  	dev_pm_opp_remove_all_dynamic(cpu_dev);
+>  	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
+> +	if (data->lmh_dcvs_irq > 0) {
+> +		devm_free_irq(cpu_dev, data->lmh_dcvs_irq, data);
+
+Why using devm variants here and while requesting the irq ? 
+
+> +		cancel_delayed_work_sync(&data->lmh_dcvs_poll_work);
+> +	}
+
+Please move this to qcom_cpufreq_hw_lmh_exit() or something.
+
+Now with sequence of disabling interrupt, etc, I see a potential
+problem.
+
+CPU0                                    CPU1
+
+qcom_cpufreq_hw_cpu_exit()
+-> devm_free_irq();
+                                        qcom_lmh_dcvs_poll()
+                                        -> qcom_lmh_dcvs_notify()
+                                          -> enable_irq()
+
+-> cancel_delayed_work_sync();
+
+
+What will happen if enable_irq() gets called after freeing the irq ?
+Not sure, but it looks like you will hit this then from manage.c:
+
+WARN(!desc->irq_data.chip, KERN_ERR "enable_irq before
+                                     setup/request_irq: irq %u\n", irq))
+
+?
+
+You got a chicken n egg problem :)
+
 -- 
-2.17.1
-
+viresh
