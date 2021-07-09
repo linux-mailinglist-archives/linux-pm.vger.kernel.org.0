@@ -2,130 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3A73C22D8
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 13:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090893C23CC
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 14:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbhGILbr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 07:31:47 -0400
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:45811 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbhGILbr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 07:31:47 -0400
-Received: by mail-ot1-f50.google.com with SMTP id 75-20020a9d08510000b02904acfe6bcccaso9069597oty.12;
-        Fri, 09 Jul 2021 04:29:03 -0700 (PDT)
+        id S229671AbhGIM7T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 08:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231470AbhGIM7G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 08:59:06 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F59BC0613E5
+        for <linux-pm@vger.kernel.org>; Fri,  9 Jul 2021 05:56:22 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id u25so7868844ljj.11
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jul 2021 05:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pmQouUwnHXSB4OdiUD3dDMTm+uNqG32/fIygOWS1rqk=;
+        b=TNKFzaJYG6b/K8hMZsQR7UYuFjKqUsAHnAEfeDxwl7ckEscf2i5Exwp88H0e7TaCgf
+         M1afe6FMM0NJYlHmc1SSrDADUNI7CMYsSyXfFNww2GK55OFVtTNVep48yJuhNHe07xSo
+         ZoLL+JQ20Yuwct0eB1oNBH1gJ650Z+SNC9hmpVOPQeDzNJLFYbh/WipSsiYTAlPUJbCg
+         ZytnNWUbSRGFe69YGizzFEevlVfn8N1Sdwz3y0j6SZMrZoaM6X1ULChOtDXQEFgy2NIL
+         ux+oyFxFuDHErBIjFhDiDFzwCyDPMyFNnpZeycoBxp4ToRXu4UyXZDsNymtrnLoihPA3
+         ABjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wTbGnuKSf0w+U6qJZrDRBkicmtkQO5iEcPQTwx3qaD4=;
-        b=g+pXASeIk/rftnhIDz/+W5VwMm47ZSEgt7QRqZT99iqzTxlxQvyuCjQYqEAWqrCNtA
-         OtxJwgtYDXSeJ9RXv2rQBRaEdBaNGr1JCfdE0KgRlZRhkOfILn6E2uthPFeTB9URlMAT
-         dyFpL05Wfqyqn9mYkIFwupEC6bUd+JtwZO5xCPm7gfcUiQFpP+JahsiIRt7s7HPIJ2SR
-         q1yrrKwXGnBmAARkD458C/fWUSP+7+bdddzagECa8OFbZXXudqk06rc004kMCSPGWU/6
-         de9s+x5JwQZ8JACqj8vND3NWaqnS2cHN7jkht8+xqxvcz4SR6UXtEwb/a3tOdFj4ZQAm
-         KLOw==
-X-Gm-Message-State: AOAM531mcy/fSgz2TfwIh6rtef+A/kx6XQuUjQQcMinfDx6LVQ/llNv1
-        0IrvNSxHtEUEMCrPTAf8HGOzymazJ9ORCAUnEVY=
-X-Google-Smtp-Source: ABdhPJxRrDnsyXfBCbIopMe49y/55+/91kNnjIJF/raODSrHZaDjB3utSk3RL9J128t/aHvwHyXxNafx7GlVEVJFLEc=
-X-Received: by 2002:a9d:5f19:: with SMTP id f25mr15787861oti.206.1625830141429;
- Fri, 09 Jul 2021 04:29:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210709064341.6206-1-adrian.hunter@intel.com> <20210709064341.6206-2-adrian.hunter@intel.com>
-In-Reply-To: <20210709064341.6206-2-adrian.hunter@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 9 Jul 2021 13:28:49 +0200
-Message-ID: <CAJZ5v0hZCUruTc9U64Kx0EO8iky34AR+=QeNcSafQEvcGWapLw@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] driver core: Add ability to delete device links of
- unregistered devices
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pmQouUwnHXSB4OdiUD3dDMTm+uNqG32/fIygOWS1rqk=;
+        b=jnMU029QffsKE43zmwulZs2/WyT051PjsnN27iiksmTn3cpB/2n7xZmDk6/yKatNC/
+         HhbJnqTSGpem+cv0Qo8JxTY8Zg4YqgoiVvJvnVieHuxO9Vz0n6+rL29DJdVCnraogWcC
+         Ej4UOdp1Yxj8hTpEYIHV+6UXUHdDmblhIOB6e/80JltD2t+a6yfFa0aoqbErApdF6R4v
+         z9hizJzQSIA95j3TzaoE493MrZsUQlwJE3RtjWk82fySKCgSDT60JEPznj68zfJsRd1B
+         kMiSUA2ppPSjFkJXx9Lq/r8h13AkAacNN5uJLav6JFwDrZRhAeAluF1MXAGMnu9wQo23
+         nipQ==
+X-Gm-Message-State: AOAM531ca3iejeqaMn3dVBpMF12WAhQWcZsLsTdDUfFoAEgGlhSK0A9Q
+        GWkjG99Dew2hiyk+fNC6dmbteQ==
+X-Google-Smtp-Source: ABdhPJws6OEf65ZuRSjGD6inMZ75FyrYIUnjQzy1kEHtRfxPsLOsHjSEXRvBaqrzpe/ko9aygtFZRA==
+X-Received: by 2002:a05:651c:210:: with SMTP id y16mr14067901ljn.437.1625835380940;
+        Fri, 09 Jul 2021 05:56:20 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
+        by smtp.gmail.com with ESMTPSA id q5sm462097lfr.37.2021.07.09.05.56.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jul 2021 05:56:19 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Saravana Kannan <saravanak@google.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] PM: domains: Don't attach a device to genpd that corresponds to a provider
+Date:   Fri,  9 Jul 2021 14:56:11 +0200
+Message-Id: <20210709125611.135920-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 9, 2021 at 8:43 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Managed device links are deleted by device_del(). However it is possible to
-> add a device link to a consumer before device_add(), and then discover an
-> error prevents the device from being used. In that case normally references
-> to the device would be dropped and the device would be deleted. However the
-> device link holds a reference to the device, so the device link and device
-> remain indefinitely.
->
-> Amend device link removal to accept removal of a link with an
-> unregistered consumer device.
->
-> To make that work nicely, the devlink_remove_symlinks() function must be
-> amended to cope with the absence of the consumer's sysfs presence,
-> otherwise sysfs_remove_link() will generate a warning.
->
-> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Fixes: b294ff3e34490 ("scsi: ufs: core: Enable power management for wlun")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  drivers/base/core.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index ea5b85354526..24bacdb315c6 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -562,7 +562,8 @@ static void devlink_remove_symlinks(struct device *dev,
->         struct device *con = link->consumer;
->         char *buf;
->
-> -       sysfs_remove_link(&link->link_dev.kobj, "consumer");
-> +       if (device_is_registered(con))
-> +               sysfs_remove_link(&link->link_dev.kobj, "consumer");
+According to the common power domain DT bindings, a power domain provider
+must have a "#power-domain-cells" property in its OF node. Additionally, if
+a provider has a "power-domains" property, it means that it has a parent
+domain.
 
-I think that this is needed regardless of the changes in
-device_link_put_kref(), because if somebody decides to delete a
-stateless device link before registering the consumer device,
-sysfs_remove_link() will still complain, won't it?
+It has turned out that some OF nodes that represents a genpd provider may
+also be compatible with a regular platform device. This leads to, during
+probe, genpd_dev_pm_attach(), genpd_dev_pm_attach_by_name() and
+genpd_dev_pm_attach_by_id() tries to attach the corresponding struct device
+to the genpd provider's parent domain, which is wrong. Instead the genpd
+provider should only assign a parent domain, through
+pm_genpd_add_subdomain() or of_genpd_add_subdomain().
 
->         sysfs_remove_link(&link->link_dev.kobj, "supplier");
->
->         len = max(strlen(dev_bus_name(sup)) + strlen(dev_name(sup)),
-> @@ -575,8 +576,10 @@ static void devlink_remove_symlinks(struct device *dev,
->                 return;
->         }
->
-> -       snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
-> -       sysfs_remove_link(&con->kobj, buf);
-> +       if (device_is_registered(con)) {
-> +               snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
-> +               sysfs_remove_link(&con->kobj, buf);
-> +       }
+Let's fix this problem in genpd by checking for the "#power-domain-cells"
+property in the OF node for the struct device that is about to be attached.
 
-And here too, if I'm not mistaken.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-So in that case it would be better to put the above changes into a
-separate patch and add a Fixes tag to it.
+This turned up when I was reviewing a couple of genpd realted Qcom patches [1],
+from Dmitry Baryshkov (on cc).
 
->         snprintf(buf, len, "consumer:%s:%s", dev_bus_name(con), dev_name(con));
->         sysfs_remove_link(&sup->kobj, buf);
->         kfree(buf);
-> @@ -885,6 +888,8 @@ static void device_link_put_kref(struct device_link *link)
->  {
->         if (link->flags & DL_FLAG_STATELESS)
->                 kref_put(&link->kref, __device_link_del);
-> +       else if (!device_is_registered(link->consumer))
-> +               __device_link_del(&link->kref);
->         else
->                 WARN(1, "Unable to drop a managed device link reference\n");
->  }
-> --
-> 2.17.1
->
+I haven't been able to run much tests, so help with that would be greatly
+appreciated. If someone encounter issues, I am happy to help to fix those.
+
+Kind regards
+Ulf Hansson
+
+[1]
+https://lkml.org/lkml/2021/7/9/7
+https://lkml.org/lkml/2021/7/9/8
+
+---
+ drivers/base/power/domain.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index a934c679e6ce..21991fb56a19 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2699,6 +2699,10 @@ int genpd_dev_pm_attach(struct device *dev)
+ 	if (!dev->of_node)
+ 		return 0;
+ 
++	/* Don't try to attach a genpd provider. */
++	if (of_find_property(dev->of_node, "#power-domain-cells", NULL))
++		return NULL;
++
+ 	/*
+ 	 * Devices with multiple PM domains must be attached separately, as we
+ 	 * can only attach one PM domain per device.
+@@ -2737,6 +2741,10 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
+ 	if (!dev->of_node)
+ 		return NULL;
+ 
++	/* Don't try to attach a genpd provider. */
++	if (of_find_property(dev->of_node, "#power-domain-cells", NULL))
++		return NULL;
++
+ 	/* Verify that the index is within a valid range. */
+ 	num_domains = of_count_phandle_with_args(dev->of_node, "power-domains",
+ 						 "#power-domain-cells");
+-- 
+2.25.1
+
