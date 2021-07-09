@@ -2,100 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6CB3C26F9
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 17:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5C23C2713
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 17:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbhGIPnb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 11:43:31 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:33464 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbhGIPna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 11:43:30 -0400
-Received: by mail-ot1-f43.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so9896250otl.0;
-        Fri, 09 Jul 2021 08:40:47 -0700 (PDT)
+        id S232263AbhGIPxK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 11:53:10 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:43984 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232248AbhGIPxK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 11:53:10 -0400
+Received: by mail-oi1-f172.google.com with SMTP id m3so12687246oig.10
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jul 2021 08:50:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ncf7zOhU65T4VQiognHrm7EoMLCmcDNC05EuerCbCYQ=;
-        b=JlxNPjIQaKo6hL+4P/Qu9GESx+wsVJRPnAtFcj5DL0asiFXwckgS9E+TTX0sAFU9dE
-         bHvWnjM5jwWuWlhPeCfNMz5lQDTYOa3W5Tkb+oHQYMzOEnLSYC93Picf5CVk2RDsX5jW
-         3QF60aOa1cnJ2qQZAz/kqI2o3oWGzU/gH/S8RTmS+kgpZUDOkVgFG2oBh2vsT/EoMnB/
-         1WNwfz/82aan8au4eBRJniD+LzRV2Wc85rFkiZ2NB/aWG6evSf6YmTBpQoU0zgQcN3ud
-         6ZYbXGkR+Qms/Gohm+dp/HFsI7GjkuTa/vCziI40G48oiRmQtGv1vH5g1hT/UqDquTni
-         xz8g==
-X-Gm-Message-State: AOAM530VrAi4XjtJn6Yuolh4aI+CySKjznYlAspr4eS2CbuB1nSkpCHl
-        mJhJ1S83QohdTnCVlW5mjZ/zMO0suYQfTAaCUorhXLpL
-X-Google-Smtp-Source: ABdhPJx91i3Ekt/sXNn9pDxbH3hCLXoeaiuVi+KFL894kC4ssc4z/O06FVGuPuQqzl9APn6oa1iW9SiE49L/KD1kkrE=
-X-Received: by 2002:a9d:22a5:: with SMTP id y34mr18522163ota.321.1625845246762;
- Fri, 09 Jul 2021 08:40:46 -0700 (PDT)
+        bh=sr+XMjDKyDhlaFAhWTMGzIR/npmMHuwQFkxJli8TMS0=;
+        b=mxGhN/rtluid41l/y0Wh1fzfHGJIpsYG9pjeyf2lRfa8tU8s7NVLFdQZuCB68AjQwp
+         m0ITgOxzyFT2toGGCjiHYyN+48RJtNWSE62TsDSGBuL840nYHDiJGb9EB3IzU70vxwP7
+         ujsuHDkl+p0Tc7arCBSRMUAERjjERKt21letpCkKbZL/f3VE6F8CDjfLP3P/DJaI4b+G
+         jllXNypyoOcX+C/c0YihrM2XkqJBkvT6kLdWpDHkOsmL5Wcwiy9dJlBV1yUjmj5ZJI6F
+         cL2csyCMBnReVltjSVQfS3xPwPidt2srit2dIOgM+ESaYC13j7d3AK7EEFDSjc+08tbw
+         OFIg==
+X-Gm-Message-State: AOAM530siSvil8M456hBO6PYp+dhUbmTcx6NI25KpOafQkvvwwB7+5Sm
+        xyev52R06xLDmIsHR5Dxv3YiGzKbVpTbtOlwyI0ENAVeWpU=
+X-Google-Smtp-Source: ABdhPJzM4iKP9irqSgMTAsrODDiZ9cCJ+MzFmE8+lIbDxlRRA8fIKTULusVqCk+SdLQGwE57vTqLbStnM4dDm4uNfo4=
+X-Received: by 2002:a05:6808:15a6:: with SMTP id t38mr8966405oiw.157.1625845814982;
+ Fri, 09 Jul 2021 08:50:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210709003204.26944-1-win239@126.com>
-In-Reply-To: <20210709003204.26944-1-win239@126.com>
+References: <4c65cdd3-05cd-499d-0dd1-b7d6e76372b1@hisilicon.com>
+In-Reply-To: <4c65cdd3-05cd-499d-0dd1-b7d6e76372b1@hisilicon.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 9 Jul 2021 17:40:35 +0200
-Message-ID: <CAJZ5v0giqpTnJS_4D0LxfJpdk6-xjziNcu=xXkJo+KD12NYHgA@mail.gmail.com>
-Subject: Re: [PATCH] PM / s2idle: Fix the failure of specifying
- "mem_sleep_default=" parameter
-To:     xiongxin <win239@126.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
+Date:   Fri, 9 Jul 2021 17:50:04 +0200
+Message-ID: <CAJZ5v0hsK_kJMfyQFaf1AjJHFHde1J3U2FxhsaJ59KVkyxsoQg@mail.gmail.com>
+Subject: Re: Question about __pm_runtime_disable()
+To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linuxarm <linuxarm@huawei.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        xiongxin <xiongxin@kylinos.cn>
+        John Garry <john.garry@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 9, 2021 at 3:03 AM xiongxin <win239@126.com> wrote:
+On Fri, Jul 9, 2021 at 4:24 AM chenxiang (M) <chenxiang66@hisilicon.com> wrote:
 >
-> From: xiongxin <xiongxin@kylinos.cn>
+> Hi Rafael and other guys,
 >
-> On the arm64 platform, the psci driver is used by default to set the
-> suspend_ops structure; but the psci_acpi_init() function is called
-> before the command-line parameter "mem_sleep_default=" is specified;
-> the user cannot set the desired suspend mode through the
-> "mem_sleep_default=" parameter;
+> I encounter a runtime PM issue: there are four devices, and device 0 is
+> the parent device, and device 1/2/3 are the children devices of device 0.
 >
-> In mem_sleep_default_setup(), judge whether suspend_ops is set, if it
-> has been assigned, rewrite the value of mem_sleep_current variable; in
-> order to complete the user setting;
+> All of them supports runtime PM. But i want to ignore device2 and
+> device3, so that if device 1 is suspended, then device0 can
 >
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-
-It's the third submission of the same patch AFAICS.
-
-Have you made any changes to it since the previous submissions?  If
-not, it is not necessary (or even useful) to resend it.
-
+> be suspended. I use function pm_runtime_disable() to disable device2 and
+> device3, and device 1 is suspended but device0 is still active.
 >
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index d8cae434f9eb..bef4b17de3f6 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -192,6 +192,21 @@ static int __init mem_sleep_default_setup(char *str)
->                         break;
->                 }
+> I find that runtime_active_kids of device0 is still 2 though
+> runtime_usage = 0, so it doesn't enter suspend status.
 >
-> +       /*
-> +        * When the suspend_ops has been set, "mem_sleep_default=*" will
-> +        * be invalid, here to fix this situation.
-> +        */
-> +       if (suspend_ops) {
-> +               if (mem_sleep_default == PM_SUSPEND_TO_IDLE)
-> +                       mem_sleep_current = PM_SUSPEND_TO_IDLE;
-> +               else if ((mem_sleep_default == PM_SUSPEND_STANDBY) &&
-> +                               valid_state(PM_SUSPEND_STANDBY))
-> +                       mem_sleep_current = PM_SUSPEND_STANDBY;
-> +               else if ((mem_sleep_default >= PM_SUSPEND_MEM) &&
-> +                               valid_state(PM_SUSPEND_MEM))
-> +                       mem_sleep_current = PM_SUSPEND_MEM;
-> +       }
+> And i hack the code of funciton __pm_runtime_disable() to decrease
+> child_count of device's parent as follows, and it works.
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index b570848..6ba224b 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1382,6 +1382,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_barrier);
+>    */
+>   void __pm_runtime_disable(struct device *dev, bool check_resume)
+>   {
+> +       struct device *parent = NULL;
 > +
->         return 1;
->  }
->  __setup("mem_sleep_default=", mem_sleep_default_setup);
-> --
-> 2.25.1
+>          spin_lock_irq(&dev->power.lock);
 >
+>          if (dev->power.disable_depth > 0) {
+> @@ -1413,6 +1415,10 @@ void __pm_runtime_disable(struct device *dev,
+> bool check_resume)
+>          if (!dev->power.disable_depth++)
+>                  __pm_runtime_barrier(dev);
+>
+> +       if (dev->parent) {
+> +               parent = dev->parent;
+> +               atomic_add_unless(&parent->power.child_count, -1, 0);
+> +       }
+>    out:
+>          spin_unlock_irq(&dev->power.lock);
+>   }
+>
+> Is it appropriate for me to use function pm_runtime_disable() to ignore
+> them
+
+No, it is not.
+
+> (i try function function pm_suspend_ignore_children(), but it
+> ignores all children of the device )?
+
+IMV you still need to use ignore_children (and yes, all of the
+children will be ignored in that case) and use pm_runtime_get_*() and
+pm_runtime_put_*() on the parent in the child 1 driver to make the
+parent automatically resume and suspend, respectively.
+
+> Or does it need to decrease child_count the device's parent in function
+> __pm_runtime_disable() ?
+
+Doing this is not recommended.
