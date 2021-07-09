@@ -2,61 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 649B83C2571
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 15:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D393C2583
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 16:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbhGIOBa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 10:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S229499AbhGIOGU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 10:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbhGIOBa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 10:01:30 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369A8C0613E6
-        for <linux-pm@vger.kernel.org>; Fri,  9 Jul 2021 06:58:47 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id j2so3128247vsi.6
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jul 2021 06:58:47 -0700 (PDT)
+        with ESMTP id S231981AbhGIOGS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 10:06:18 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E6CC0613DD
+        for <linux-pm@vger.kernel.org>; Fri,  9 Jul 2021 07:03:33 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id m12so5615050vst.8
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jul 2021 07:03:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f+jqwXayeNUZ676AiS+w8n65h49A/Hu6kZF0Sox7IxU=;
-        b=OKcT+/vMUbgm2ve+XWOxsIcC+mlyUwS7xzS+dj2h1FJV7htYdu/yqy+pzRoeZlfPtk
-         JD09fRHiiFYQhf2QgwB279PuXp5aVCz3Hwz/x60G9wX+ZAzn1utbJqQhccUa0ainIEfu
-         G5BeQfjFizSrxuvrWqPMrTbb0lKnKE7rlPJhDg84EUUlIPW8DELB+PJn0sBXGjkrwG6D
-         UqVJuSMKom/v8tAp1OeSU8+UcNTB2t3lkccnCbMi/wopvW9gROVrBrJaMcDg6R2kup+q
-         kpkJyIVBt63MikBplfNVI3uQU2FRVTAsGeLhFFRCON7v+C3a/SYCKSzCzYA3r6aojOUV
-         7FAQ==
+        bh=EBkQv3Hb+EzyUp0xx15eV4nVWdwYInxQXj14j/hSkTw=;
+        b=cV0PX7CieMyXh9iNqKRndqDwrdVktE8MpkQGh7gIJGtMwzmg139Lp1mpUyvfOxJwJ9
+         I9sgKO0Sin7o6j0hGdqAXONJfIj/MmANYUFLh8P1zCMChpnL7cNJA1aaVerT1WIN8dLn
+         ymggkU6DMHnL8ZciNxRaMJ3n2zDGgNTaxPhtRjmbb7kuBsIf6CT0YHlUpFkWmLKeN7uc
+         WFJwo6YHGgAyLe/mr1osIlySOLdQa5Trmz/RkFLYDd9EFDGefzxGMrJxNvM1RxFdAIZG
+         AVrIZksQ7rmo+q6tH7fbS5k5KZXDBHa/vX08tU8exMfpC9kwwT6mOfWu9Z6fZ213MBSr
+         yNbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f+jqwXayeNUZ676AiS+w8n65h49A/Hu6kZF0Sox7IxU=;
-        b=LDYdz4HMbnYdOmG/Gb5qVTnon4fbwJf1Ho+9EkC+yWXBz6pQMQZTS1U820VOCMbcDy
-         XVRLnx6uUN66tA+iEdwEJuVL4N8JALIso6Y8kbTzA/KW4xzPJPnBnvLhxIcLLa7W4Wd7
-         9e4QUAQqBqwe1PkJp/CTyPTcwRN1ZkoiccAmTF8U7z2qAXpPJZUzaNlmiU/wu72FWqXH
-         dR0NndahycnMerM7pwjob4s7F/cQ92K1FNexJH0Awy0LXs2VA87Y9bjRLPnLhkLUK90v
-         fPEQUzP4j6TKRGX4sdMK70fBQazNmArHivb4c6nrWcRfI/EWXhXJSybuWrJNDLIaT7kh
-         9zug==
-X-Gm-Message-State: AOAM530bsY9yPAc2U+Qgm/MvMfjCZuVr6MBW90E5seL8tyNP9bnM6O9s
-        xf+a5j7HdntjqXV3pJgyjW1Rc9/et2IBBBueggI8aQ==
-X-Google-Smtp-Source: ABdhPJwT8DvqvEQUQWjDGhWJ5TcIUQa3R+OZE3pOVn9lHid3k8BqbKpDjfOb8KQMHzEqWy+1MF44SLU3G4+qvWcz8p0=
-X-Received: by 2002:a67:8c46:: with SMTP id o67mr35490491vsd.34.1625839126328;
- Fri, 09 Jul 2021 06:58:46 -0700 (PDT)
+        bh=EBkQv3Hb+EzyUp0xx15eV4nVWdwYInxQXj14j/hSkTw=;
+        b=drSe8b3W+dZfRvF/vTkHfpp2+5D/OL+JJEVScLA7x7N60uh+GWWatiiFDN8w/i2f+m
+         SVPsck4elHfN1hwtMi3udGNeqkRMwll6cxSeUHhDUVVzu24s9j4Hi6UGATfiKgbv0md/
+         hH5oJBTNKNVynaLpCh0SCacwhRubWV0iUVmXNX2VKmDbspIPejOuimBTKx9LOWJQWOpG
+         FxGemsXfCoNmGj+BgO95NM4nMdMbrz8HNSydmnnzv/5fR4Z4SYTeBZj/+WULXON5GOMK
+         tZFboL4kuuidLeoHzS7MePoQTMc3mjDGNkgyEa0O8dQsvAYB+Agt7fh4SURPrKmq8pix
+         Iivw==
+X-Gm-Message-State: AOAM532gOP5HhFOEglD1vNCe7nqQH8GY4+7D8qfCJm5jWtKdD3tXmPQw
+        fm11wU+pL28gGHF2KVqpTQCyrP6xMiUoEomuuUAU0Q==
+X-Google-Smtp-Source: ABdhPJyPpoCp87aEuVQW5m5FI3Cui8FxZacZGxGIMAD4zSwLzIbB62U+qZsOhXQBE5CTcJBuq51KlID1ViB9HjqKgBo=
+X-Received: by 2002:a67:8c46:: with SMTP id o67mr35531294vsd.34.1625839412692;
+ Fri, 09 Jul 2021 07:03:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210709125611.135920-1-ulf.hansson@linaro.org>
  <CAMuHMdU0AVFVb3tXW4wkEibSx50nzYKW1GopgZPfKp1SS7Mf1g@mail.gmail.com>
- <CAPDyKFpzw0mQPFs-jyMX=T6WpZ+vFqrWmoKUWD+9wW8LWqyHuA@mail.gmail.com> <YOhTU0xUShJQXrL5@yoga>
-In-Reply-To: <YOhTU0xUShJQXrL5@yoga>
+ <CAPDyKFpzw0mQPFs-jyMX=T6WpZ+vFqrWmoKUWD+9wW8LWqyHuA@mail.gmail.com>
+ <CAMuHMdWcvAeeif6HwBMrQUs2z+jKcfY1DuKRYeyB+GTkiXGjSw@mail.gmail.com>
+ <CAPDyKFo8SCbmJXQJJ4OR8_Tg=+YdK76k2Sg=KcO3t7ve2zzaHw@mail.gmail.com> <CAMuHMdW8f0YGwNBAzwG65OE+Wq59SqUFmHhDPE0Nju7OpDzLYA@mail.gmail.com>
+In-Reply-To: <CAMuHMdW8f0YGwNBAzwG65OE+Wq59SqUFmHhDPE0Nju7OpDzLYA@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Jul 2021 15:58:10 +0200
-Message-ID: <CAPDyKFr+VtGvyfJip-Mu6Gdcj1jQNtkrHRg6tJsJtAKkg0Y9+g@mail.gmail.com>
+Date:   Fri, 9 Jul 2021 16:02:55 +0200
+Message-ID: <CAPDyKFp3p0Ly9UDBxNo2qOE=N9VH1nzW=JkH_R_xfw4D=XkCGA@mail.gmail.com>
 Subject: Re: [PATCH] PM: domains: Don't attach a device to genpd that
  corresponds to a provider
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux PM list <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Saravana Kannan <saravanak@google.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -68,87 +70,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 9 Jul 2021 at 15:47, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+On Fri, 9 Jul 2021 at 15:58, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Fri 09 Jul 08:22 CDT 2021, Ulf Hansson wrote:
+> Hi Ulf,
 >
-> > On Fri, 9 Jul 2021 at 15:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Fri, Jul 9, 2021 at 3:48 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > On Fri, 9 Jul 2021 at 15:35, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Fri, Jul 9, 2021 at 3:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > On Fri, 9 Jul 2021 at 15:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > On Fri, Jul 9, 2021 at 2:56 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > According to the common power domain DT bindings, a power domain provider
+> > > > > > must have a "#power-domain-cells" property in its OF node. Additionally, if
+> > > > > > a provider has a "power-domains" property, it means that it has a parent
+> > > > > > domain.
+> > > > >
+> > > > > OK.
+> > > > >
+> > > > > > It has turned out that some OF nodes that represents a genpd provider may
+> > > > > > also be compatible with a regular platform device. This leads to, during
+> > > > > > probe, genpd_dev_pm_attach(), genpd_dev_pm_attach_by_name() and
+> > > > > > genpd_dev_pm_attach_by_id() tries to attach the corresponding struct device
+> > > > > > to the genpd provider's parent domain, which is wrong. Instead the genpd
+> > > > >
+> > > > > Why is that wrong?
+> > > >
+> > > > It may lead to that the struct device that corresponds to a genpd
+> > > > provider may be attached to the parent domain. In other words, the
+> > > > parent domain will not only be controlled by a child domain
+> > > > (corresponding to the provider), but also through the provider's
+> > > > struct device. As far as I can tell, this has never been the intent
+> > > > for how things should work in genpd.
 > > >
-> > > Hi Ulf,
-> > >
-> > > Thanks for your patch!
-> > >
-> > > On Fri, Jul 9, 2021 at 2:56 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > According to the common power domain DT bindings, a power domain provider
-> > > > must have a "#power-domain-cells" property in its OF node. Additionally, if
-> > > > a provider has a "power-domains" property, it means that it has a parent
-> > > > domain.
-> > >
-> > > OK.
-> > >
-> > > > It has turned out that some OF nodes that represents a genpd provider may
-> > > > also be compatible with a regular platform device. This leads to, during
-> > > > probe, genpd_dev_pm_attach(), genpd_dev_pm_attach_by_name() and
-> > > > genpd_dev_pm_attach_by_id() tries to attach the corresponding struct device
-> > > > to the genpd provider's parent domain, which is wrong. Instead the genpd
-> > >
-> > > Why is that wrong?
+> > > Ah, you're worried about the case where the subdomain is a child of
+> > > the parent domain, but the actual subdomain controller (represented
+> > > by the platform device) isn't?
 > >
-> > It may lead to that the struct device that corresponds to a genpd
-> > provider may be attached to the parent domain. In other words, the
-> > parent domain will not only be controlled by a child domain
-> > (corresponding to the provider), but also through the provider's
-> > struct device. As far as I can tell, this has never been the intent
-> > for how things should work in genpd.
-> >
-> > So wrong or not, I guess it depends on what you expect to happen.
-> >
-> > Do you see an issue with changing this?
-> >
+> > Well, even if the platform device represents a subdomain controller,
+> > should it really be attached to the parent domain?
 >
-> But this exactly what we have in the case of the "dispcc" in the
-> Qualcomm platform that Dmitry is working on.
->
-> The provider driver needs the parent power-domain to be powered in order
-> to poke the registers and then it is the parent of the power-domains
-> exposed.
->
-> If I understand your proposed patch we'll have to manually attach the
-> parent domain to the struct device of the controller with this patch?
+> That's what the presence of the "power-domains" property means,
+> isn't it?
+> If the subdomain controller itself is not part of the parent power
+> domain, there should not be a "power-domains" property.  So perhaps
+> we need a new property ("power-domain-parent"?) to indicate what is
+> the parent domain for the subdomains in this case?
 
-Not even that would work after $subject patch, as it prevents
-providers from being attached to a domain.
+Hmm, but perhaps it's just a matter of expectations of what will
+happen during attach.
 
-It sure sounds like you need to control power for the parent domain,
-not only by registering a child domain to it.
+On the other hand a new binding for the parent would make it more
+clear. I wouldn't mind.
 
 >
-> Is the Qualcomm case unique or will this change cut power do other genpd
-> providers assuming the same?
-
-I think the Qualcomm case is a bit unique or at least the first I
-heard of. However, this change would affect all and of course we must
-not break things.
-
+> > In any case, it means that the provider needs to manage runtime PM,
+> > etc for its struct device to not prevent the parent domain from being
+> > powered off.
 >
+> Shouldn't all drivers for devices that can be somewhere in a PM Domain
+> hierarchy do that anyway? :-)  See e.g. commit 3a611e26e958b037
+> ("net/smsc911x: Add minimal runtime PM support").
 >
->
-> Worth mentioning as we discuss this is that we have another genpd
-> provider, where I think the exposed genpds are parented by a few
-> different (each one with a specific) parent domains. In this case we'd
-> be forced to manually attach the genpd provider to the parent domain
-> that it actually is powered by (as no automatic attachment happens when
-> multiple domains are specified).
+> If "simple-bus" would do that, we could get rid of "simple-pm-bus"...
 
-Yes, that's correct (assuming we don't apply $subject patch).
+Right, I totally forgot about that. Thanks for reminding me.
 
-To sum up:
-
-Rafael I am withdrawing the $subject patch, it seems like it may break
-existing expectations of what will happen during attach.
-
-Moreover, it may actually be beneficial to allow the attach to succeed
-for the Qcom case, so let's leave this as is.
+As I said in the other thread, let's drop this patch for now.
 
 Kind regards
 Uffe
