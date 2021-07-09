@@ -2,39 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D3F3C2657
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 16:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBF23C2655
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 16:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbhGIO5D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 10:57:03 -0400
-Received: from server34.i7host.com.br ([186.227.200.26]:40712 "EHLO
+        id S232338AbhGIO5A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 10:57:00 -0400
+Received: from server34.i7host.com.br ([186.227.200.26]:40696 "EHLO
         server34.i7host.com.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbhGIO5C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 10:57:02 -0400
+        with ESMTP id S232331AbhGIO5A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 10:57:00 -0400
+X-Greylist: delayed 1602 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Jul 2021 10:56:59 EDT
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=smartgreen.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mieQJeji+kRVhr5p2jiTn0geBt9uhhRa6NZ8eq2C/y0=; b=JgpBFHRfchC6OTJCPbuJPtfDxa
-        +WxABLUNlccgG5SqDNJlXzyyqlpNgsitsMOs0Zoic6AhuRy3GaOZum0AfbHWUmX2iSZ9ZlptDqu4V
-        HoumfVd1X+pIGwVi0tdm9+d+Xp1/MOMrUYecYac35JT9ohpE0lL7QoblH0/GQgZFnvCTUfbah4J9z
-        hQCjygNbJqYs1biONGfpw5okwqL3ZelRAQFkyg/ettSfxTbbCNasQJHjuEURjDEGFSqC8BAm5Jwr2
-        FxhnzCxKKvhu6F2hlNLEAL2YtcCdvvoMtk5GvoYtoDC1vCLYTE2Or+dXwPn8rqXvknHrd6S1+c24w
-        lmPbo9wQ==;
-Received: from [177.220.172.135] (port=48408 helo=localhost)
+        bh=hU+MVofcKoNZvP6V/E8+VkI+Ly8G5YP+8N61tZ+inrY=; b=eCm5YOigVa5zYP5xYBvhpNMvXL
+        mo9dLbp2obx785bULC07zcGIx2KqQ54Mvqx46h6XiprZdlF7t9OlgsuYKh6pAYTA3HuP2iJCH5W7A
+        YbD7Ga0CcTelYiagvuMrGcyEu/2ugUteipsXVBbGVas2w2WHUKc359vpWrNjD7M/beZt1JUk/UXhi
+        M8p/M1UHB96BgN/URRKZV9swC8o5oNEprjf+7OgD3ItQb+5DPu5V54EGaXfsEtYWWhti1om5rEx++
+        6fqNUN4QIqW2uyY/mZtLYI8hrrCt4j0CVSsxCmbo+WZSjJ6JcT12Vc7hAjbW+BK8LVlGEm3mciDZv
+        5aUWFtHQ==;
+Received: from [177.220.172.135] (port=48385 helo=localhost)
         by server34.i7host.com.br with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <bruno.meneguele@smartgreen.net>)
-        id 1m1rTx-004uZt-QU; Fri, 09 Jul 2021 11:27:59 -0300
+        id 1m1rU5-004ub5-B2; Fri, 09 Jul 2021 11:28:06 -0300
 From:   Bruno Meneguele <bruno.meneguele@smartgreen.net>
 To:     sre@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bruno Meneguele <bruno.meneguele@smartgreen.net>
-Subject: [PATCH v3 1/2] power: supply: bq24735: reorganize ChargeOption command macros
-Date:   Fri,  9 Jul 2021 11:27:30 -0300
-Message-Id: <20210709142731.23418-2-bruno.meneguele@smartgreen.net>
+Subject: [PATCH v3 2/2] power: supply: bq24735: add watchdog timer delay support
+Date:   Fri,  9 Jul 2021 11:27:31 -0300
+Message-Id: <20210709142731.23418-3-bruno.meneguele@smartgreen.net>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210709142731.23418-1-bruno.meneguele@smartgreen.net>
 References: <20210709142731.23418-1-bruno.meneguele@smartgreen.net>
@@ -54,98 +55,149 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rename ChargeOption macros to match the others for ChargeCurrent and
-ChargeVoltage and also separate the command & masks macros from the bits of
-interest macros for each command.  This macro doesn't introduce any
-functional change, only code re-org.
+The BQ24735 charger allows the user to set the watchdog timer delay between
+two consecutives ChargeCurrent or ChargeVoltage command writes, if the IC
+doesn't receive any command before the timeout happens, the charge is turned
+off.
+
+This patch adds the support to the user to change the default/POR value with
+four discrete values:
+
+  0 - disabled
+  1 - enabled, 44 sec
+  2 - enabled, 88 sec
+  3 - enabled, 175 sec (default at POR)
+
+These are the options supported in the ChargeOptions register bits 13&14.
+
+Also, this patch make one additional check when poll-interval is set by the
+user: if the interval set is greater than the WDT timeout it'll fail during
+the probe stage, preventing the user to set non-compatible values between
+the two options.
 
 Signed-off-by: Bruno Meneguele <bruno.meneguele@smartgreen.net>
 ---
- drivers/power/supply/bq24735-charger.c | 27 ++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ .../bindings/power/supply/bq24735.yaml        | 13 +++++
+ drivers/power/supply/bq24735-charger.c        | 48 +++++++++++++++++++
+ include/linux/power/bq24735-charger.h         |  1 +
+ 3 files changed, 62 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+index 131be6782c4b..62399efab467 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+@@ -56,6 +56,19 @@ properties:
+       The POR value is 0x1000h. This number is in mA (e.g. 8064).
+       See the spec for more information about the InputCurrent (0x3fh) register.
+ 
++  ti,wdt-timeout:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Used to control and set the charger watchdog delay between consecutive
++      charge voltage and charge current commands.
++      This value must be:
++        0 - disabled
++        1 - 44 seconds
++        2 - 88 seconds
++        3 - 175 seconds
++      The POR value is 0x11 (3).
++      See the spec for more information about the ChargeOptions(0x12h) register.
++
+   ti,external-control:
+     type: boolean
+     description: |
 diff --git a/drivers/power/supply/bq24735-charger.c b/drivers/power/supply/bq24735-charger.c
-index b5d619db79f6..3ce36d09c017 100644
+index 3ce36d09c017..88f1cb1e9fee 100644
 --- a/drivers/power/supply/bq24735-charger.c
 +++ b/drivers/power/supply/bq24735-charger.c
-@@ -31,9 +31,8 @@
+@@ -45,6 +45,8 @@
+ /* ChargeOptions bits of interest */
+ #define BQ24735_CHARGE_OPT_CHG_DISABLE	(1 << 0)
+ #define BQ24735_CHARGE_OPT_AC_PRESENT	(1 << 4)
++#define BQ24735_CHARGE_OPT_WDT_OFFSET	13
++#define BQ24735_CHARGE_OPT_WDT		(3 << BQ24735_CHARGE_OPT_WDT_OFFSET)
  
- #include <linux/power/bq24735-charger.h>
- 
--#define BQ24735_CHG_OPT			0x12
--#define BQ24735_CHG_OPT_CHARGE_DISABLE	(1 << 0)
--#define BQ24735_CHG_OPT_AC_PRESENT	(1 << 4)
-+/* BQ24735 available commands and their respective masks */
-+#define BQ24735_CHARGE_OPT		0x12
- #define BQ24735_CHARGE_CURRENT		0x14
- #define BQ24735_CHARGE_CURRENT_MASK	0x1fc0
- #define BQ24735_CHARGE_VOLTAGE		0x15
-@@ -43,6 +42,10 @@
- #define BQ24735_MANUFACTURER_ID		0xfe
- #define BQ24735_DEVICE_ID		0xff
- 
-+/* ChargeOptions bits of interest */
-+#define BQ24735_CHARGE_OPT_CHG_DISABLE	(1 << 0)
-+#define BQ24735_CHARGE_OPT_AC_PRESENT	(1 << 4)
-+
  struct bq24735 {
  	struct power_supply		*charger;
- 	struct power_supply_desc	charger_desc;
-@@ -167,8 +170,8 @@ static inline int bq24735_enable_charging(struct bq24735 *charger)
- 	if (ret)
- 		return ret;
- 
--	return bq24735_update_word(charger->client, BQ24735_CHG_OPT,
--				   BQ24735_CHG_OPT_CHARGE_DISABLE, 0);
-+	return bq24735_update_word(charger->client, BQ24735_CHARGE_OPT,
-+				   BQ24735_CHARGE_OPT_CHG_DISABLE, 0);
- }
- 
- static inline int bq24735_disable_charging(struct bq24735 *charger)
-@@ -176,9 +179,9 @@ static inline int bq24735_disable_charging(struct bq24735 *charger)
- 	if (charger->pdata->ext_control)
- 		return 0;
- 
--	return bq24735_update_word(charger->client, BQ24735_CHG_OPT,
--				   BQ24735_CHG_OPT_CHARGE_DISABLE,
--				   BQ24735_CHG_OPT_CHARGE_DISABLE);
-+	return bq24735_update_word(charger->client, BQ24735_CHARGE_OPT,
-+				   BQ24735_CHARGE_OPT_CHG_DISABLE,
-+				   BQ24735_CHARGE_OPT_CHG_DISABLE);
- }
- 
- static bool bq24735_charger_is_present(struct bq24735 *charger)
-@@ -188,14 +191,14 @@ static bool bq24735_charger_is_present(struct bq24735 *charger)
- 	} else {
- 		int ac = 0;
- 
--		ac = bq24735_read_word(charger->client, BQ24735_CHG_OPT);
-+		ac = bq24735_read_word(charger->client, BQ24735_CHARGE_OPT);
- 		if (ac < 0) {
- 			dev_dbg(&charger->client->dev,
- 				"Failed to read charger options : %d\n",
- 				ac);
- 			return false;
+@@ -156,6 +158,20 @@ static int bq24735_config_charger(struct bq24735 *charger)
  		}
--		return (ac & BQ24735_CHG_OPT_AC_PRESENT) ? true : false;
-+		return (ac & BQ24735_CHARGE_OPT_AC_PRESENT) ? true : false;
  	}
  
- 	return false;
-@@ -208,11 +211,11 @@ static int bq24735_charger_is_charging(struct bq24735 *charger)
- 	if (!bq24735_charger_is_present(charger))
- 		return 0;
- 
--	ret  = bq24735_read_word(charger->client, BQ24735_CHG_OPT);
-+	ret  = bq24735_read_word(charger->client, BQ24735_CHARGE_OPT);
- 	if (ret < 0)
- 		return ret;
- 
--	return !(ret & BQ24735_CHG_OPT_CHARGE_DISABLE);
-+	return !(ret & BQ24735_CHARGE_OPT_CHG_DISABLE);
++	if (pdata->wdt_timeout) {
++		value = pdata->wdt_timeout;
++
++		ret = bq24735_update_word(charger->client, BQ24735_CHARGE_OPT,
++					  BQ24735_CHARGE_OPT_WDT,
++					  (value << BQ24735_CHARGE_OPT_WDT_OFFSET));
++		if (ret < 0) {
++			dev_err(&charger->client->dev,
++				"Failed to write watchdog timer: %d\n",
++				ret);
++			return ret;
++		}
++	}
++
+ 	return 0;
  }
  
- static void bq24735_update(struct bq24735 *charger)
+@@ -347,6 +363,17 @@ static struct bq24735_platform *bq24735_parse_dt_data(struct i2c_client *client)
+ 	if (!ret)
+ 		pdata->input_current = val;
+ 
++	ret = of_property_read_u32(np, "ti,wdt-timeout", &val);
++	if (!ret) {
++		if (val <= 3) {
++			pdata->wdt_timeout = val;
++		} else {
++			dev_warn(&client->dev,
++				 "Invalid value for ti,wdt-timeout: %d",
++				 val);
++		}
++	}
++
+ 	pdata->ext_control = of_property_read_bool(np, "ti,external-control");
+ 
+ 	return pdata;
+@@ -476,6 +503,27 @@ static int bq24735_charger_probe(struct i2c_client *client,
+ 			return 0;
+ 		if (!charger->poll_interval)
+ 			return 0;
++		if (charger->pdata->wdt_timeout) {
++			int wdt_ms;
++
++			switch (charger->pdata->wdt_timeout) {
++			case 1:
++				wdt_ms = 44000;
++				break;
++			case 2:
++				wdt_ms = 88000;
++				break;
++			case 3:
++				wdt_ms = 175000;
++				break;
++			}
++
++			if (charger->poll_interval > wdt_ms) {
++				dev_err(&client->dev,
++					"Poll interval greater than WDT timeout\n");
++				return -EINVAL;
++			}
++		}
+ 
+ 		ret = devm_delayed_work_autocancel(&client->dev, &charger->poll,
+ 						   bq24735_poll);
+diff --git a/include/linux/power/bq24735-charger.h b/include/linux/power/bq24735-charger.h
+index 321dd009ce66..ce5a030ca111 100644
+--- a/include/linux/power/bq24735-charger.h
++++ b/include/linux/power/bq24735-charger.h
+@@ -12,6 +12,7 @@ struct bq24735_platform {
+ 	uint32_t charge_current;
+ 	uint32_t charge_voltage;
+ 	uint32_t input_current;
++	uint32_t wdt_timeout;
+ 
+ 	const char *name;
+ 
 -- 
 2.31.1
 
