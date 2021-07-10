@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427633C38AA
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1EE3C38CE
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbhGJXzn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jul 2021 19:55:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41308 "EHLO mail.kernel.org"
+        id S234006AbhGJX4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jul 2021 19:56:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233879AbhGJXyx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:54:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 727D4613DC;
-        Sat, 10 Jul 2021 23:51:32 +0000 (UTC)
+        id S233006AbhGJXz0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:55:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 259EF61356;
+        Sat, 10 Jul 2021 23:51:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961093;
-        bh=jD10MEmmsMtXO80he3B1eOkXfbkNRRj7TJMSSwPQHr0=;
+        s=k20201202; t=1625961106;
+        bh=ybeXuRAs2tUZ6YTq9vO+e6lkY6b0PV3pKurHNc+YfuU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R+s9gSLUBWqXzVYNsqET3AmcpWW+c1wpL3NB4g78AKsL5h3tAdv6ZfhtdBAmgC57a
-         9SHe0eDre4lUAm0AZDLi4VI0TXP0Y6MUsDn6Clb0HhFX7q2TMjTwpek2ggjxhbhty/
-         Z8Jkf1VmqgK4P+ZMo28R98PQbIaM0Pg3VaYefFTBQWpTDXpmjrmodzyRbJtVMbB+ql
-         mUCItVKzHLk2SsUKZcXySf1XHSeb4Tj0Km+dxyT+nmYIliGar5/yk3WyI0Jq5MI+Rc
-         ARMwtV2nVqa6XHjW3lqOKFGZv5zkEnkSn1A1aoD6Atu/kT9XyNjo7tIsFyC9/Gc+/k
-         8ZEE6c1QZHrEQ==
+        b=pGIp5THvzqtEs0E5Hn+3PEyUGkP3YXLy32Xgw9mmOHq5OyZ6+6CUK+WBsjENu8xOH
+         GAKA97/aHvT4KQWdS6nydMTchvJJdMgDjVl62oUhpDl5D/HAmqQa7dTxoo9vwepcXu
+         oEe/8R8eknAz8hjb0r7Pw03ZZ+GILnTEMSCZWyXI3iHcdBqyM62mEdJyp2Dgtr5w5c
+         Q99TBWg6nzX2FaUwr/+7rmzNntniCO+BQkeLRUUGvyMfGI9cV+YEhUBjq+c7CF664I
+         WMFXj6McP8cAbWFJztAsv5zt453ANX42rvuKkDCap+NLWS8HHyn2PZ6p+Hto1ukatJ
+         9o/qit86mZzYQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/28] power: supply: ab8500: add missing MODULE_DEVICE_TABLE
-Date:   Sat, 10 Jul 2021 19:50:59 -0400
-Message-Id: <20210710235107.3221840-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 02/22] power: supply: ab8500: Avoid NULL pointers
+Date:   Sat, 10 Jul 2021 19:51:23 -0400
+Message-Id: <20210710235143.3222129-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710235107.3221840-1-sashal@kernel.org>
-References: <20210710235107.3221840-1-sashal@kernel.org>
+In-Reply-To: <20210710235143.3222129-1-sashal@kernel.org>
+References: <20210710235143.3222129-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,60 +42,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Zou Wei <zou_wei@huawei.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit dfe52db13ab8d24857a9840ec7ca75eef800c26c ]
+[ Upstream commit 5bcb5087c9dd3dca1ff0ebd8002c5313c9332b56 ]
 
-This patch adds missing MODULE_DEVICE_TABLE definition which generates
-correct modalias for automatic loading of this driver when it is built
-as an external module.
+Sometimes the code will crash because we haven't enabled
+AC or USB charging and thus not created the corresponding
+psy device. Fix it by checking that it is there before
+notifying.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/ab8500_btemp.c   | 1 +
- drivers/power/supply/ab8500_charger.c | 1 +
- drivers/power/supply/ab8500_fg.c      | 1 +
- 3 files changed, 3 insertions(+)
+ drivers/power/supply/ab8500_charger.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index 8fe81259bfd9..c8a22df65036 100644
---- a/drivers/power/supply/ab8500_btemp.c
-+++ b/drivers/power/supply/ab8500_btemp.c
-@@ -1120,6 +1120,7 @@ static const struct of_device_id ab8500_btemp_match[] = {
- 	{ .compatible = "stericsson,ab8500-btemp", },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, ab8500_btemp_match);
- 
- static struct platform_driver ab8500_btemp_driver = {
- 	.probe = ab8500_btemp_probe,
 diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 90dbf3760e83..28e9d4f9ab8c 100644
+index 98b335042ba6..76b6c60cde80 100644
 --- a/drivers/power/supply/ab8500_charger.c
 +++ b/drivers/power/supply/ab8500_charger.c
-@@ -3633,6 +3633,7 @@ static const struct of_device_id ab8500_charger_match[] = {
- 	{ .compatible = "stericsson,ab8500-charger", },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, ab8500_charger_match);
+@@ -407,6 +407,14 @@ static void ab8500_enable_disable_sw_fallback(struct ab8500_charger *di,
+ static void ab8500_power_supply_changed(struct ab8500_charger *di,
+ 					struct power_supply *psy)
+ {
++	/*
++	 * This happens if we get notifications or interrupts and
++	 * the platform has been configured not to support one or
++	 * other type of charging.
++	 */
++	if (!psy)
++		return;
++
+ 	if (di->autopower_cfg) {
+ 		if (!di->usb.charger_connected &&
+ 		    !di->ac.charger_connected &&
+@@ -433,7 +441,15 @@ static void ab8500_charger_set_usb_connected(struct ab8500_charger *di,
+ 		if (!connected)
+ 			di->flags.vbus_drop_end = false;
  
- static struct platform_driver ab8500_charger_driver = {
- 	.probe = ab8500_charger_probe,
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 6fc4bc30644c..69452fc085b9 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3230,6 +3230,7 @@ static const struct of_device_id ab8500_fg_match[] = {
- 	{ .compatible = "stericsson,ab8500-fg", },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, ab8500_fg_match);
+-		sysfs_notify(&di->usb_chg.psy->dev.kobj, NULL, "present");
++		/*
++		 * Sometimes the platform is configured not to support
++		 * USB charging and no psy has been created, but we still
++		 * will get these notifications.
++		 */
++		if (di->usb_chg.psy) {
++			sysfs_notify(&di->usb_chg.psy->dev.kobj, NULL,
++				     "present");
++		}
  
- static struct platform_driver ab8500_fg_driver = {
- 	.probe = ab8500_fg_probe,
+ 		if (connected) {
+ 			mutex_lock(&di->charger_attached_mutex);
 -- 
 2.30.2
 
