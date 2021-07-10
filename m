@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BE13C391C
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6703C393E
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbhGJX5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jul 2021 19:57:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40502 "EHLO mail.kernel.org"
+        id S233494AbhGJX60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jul 2021 19:58:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40030 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234007AbhGJX4V (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:56:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93AA961369;
-        Sat, 10 Jul 2021 23:52:17 +0000 (UTC)
+        id S233733AbhGJX5O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:57:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 51C0C613F0;
+        Sat, 10 Jul 2021 23:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961138;
-        bh=vGFioSWvtRgICLzoYPoDXxpPQu2d3N5bConmOJySD3w=;
+        s=k20201202; t=1625961151;
+        bh=ThfxepNJR/qJxfzRKXhX4UznVlvzq8+CwZJ1OZt1VwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PtUfd6j8G0sIT/GF25k8lIbf/uvHjjIpUMdJlVBNkOjWN0Aa4zg4hVvUkcbIj7KhE
-         dAVys2IgqzGnk7VfzW/QnQ1EMwupUTI5aW1mr3z0wBMhnwGCIq1r/7nv+yTMxh1Zea
-         /FKVnOxHrJPg++0MNnObnQ3QwGJUlrm6qZZX9ILYkyTo3odDB37fQfvnaYWLkuKVVe
-         RNrdZiJTfzGHDAptCH1q+PSEAxqLoGq1LKRDZtbjasC2jd4cW+imPlrluX5NHjO6yN
-         S2ZYR35ylYSk/R+u/dB8h54WbUo81rE6GlFQOiFTFG9qyi3yGK4tEdzWfOL70uuBXy
-         HmfxYO6WPsbyw==
+        b=gYBVp5O6dbW8k/qs35Ym6M3fJr3hRfaNCYTmHRZNBlcW9puATJUxH6bmQ6ADg5uHc
+         uf/CMismn8r/lVbZIN8q2r2TA6V027bGgeNHklNBRC6xW4XmgGsXmZAZxTaS1xX+b6
+         2Y7TlmkTu0vP0v5Uy1h0XNEn54YeSfoJ7Zk50LjAO151bX1ODn6wNmqZmyw9VfeUt1
+         /HnzFs8zRE6eutGnEwyXhOjMYRvb1Lob3TkA3Vn8jvyIzfz7ZzEjGZYkhmRN6ku1KC
+         xieqb489QsHodP0zv67xvPpUtVQYbRcWcX78Bgpmb1P51CXb3+QCE+N0AFp6hvTKAf
+         lPNuR+GgcLNYw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bixuan Cui <cuibixuan@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/21] power: reset: gpio-poweroff: add missing MODULE_DEVICE_TABLE
-Date:   Sat, 10 Jul 2021 19:51:55 -0400
-Message-Id: <20210710235212.3222375-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 14/21] power: supply: charger-manager: add missing MODULE_DEVICE_TABLE
+Date:   Sat, 10 Jul 2021 19:52:05 -0400
+Message-Id: <20210710235212.3222375-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710235212.3222375-1-sashal@kernel.org>
 References: <20210710235212.3222375-1-sashal@kernel.org>
@@ -42,34 +42,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bixuan Cui <cuibixuan@huawei.com>
+From: Zou Wei <zou_wei@huawei.com>
 
-[ Upstream commit ed3443fb4df4e140a22f65144546c8a8e1e27f4e ]
+[ Upstream commit 073b5d5b1f9cc94a3eea25279fbafee3f4f5f097 ]
 
 This patch adds missing MODULE_DEVICE_TABLE definition which generates
 correct modalias for automatic loading of this driver when it is built
 as an external module.
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/reset/gpio-poweroff.c | 1 +
+ drivers/power/supply/charger-manager.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/reset/gpio-poweroff.c b/drivers/power/reset/gpio-poweroff.c
-index be3d81ff51cc..a44e3427fdeb 100644
---- a/drivers/power/reset/gpio-poweroff.c
-+++ b/drivers/power/reset/gpio-poweroff.c
-@@ -84,6 +84,7 @@ static const struct of_device_id of_gpio_poweroff_match[] = {
- 	{ .compatible = "gpio-poweroff", },
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index f60dfc213257..5edd0824ef70 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -1484,6 +1484,7 @@ static const struct of_device_id charger_manager_match[] = {
+ 	},
  	{},
  };
-+MODULE_DEVICE_TABLE(of, of_gpio_poweroff_match);
++MODULE_DEVICE_TABLE(of, charger_manager_match);
  
- static struct platform_driver gpio_poweroff_driver = {
- 	.probe = gpio_poweroff_probe,
+ static struct charger_desc *of_cm_parse_desc(struct device *dev)
+ {
 -- 
 2.30.2
 
