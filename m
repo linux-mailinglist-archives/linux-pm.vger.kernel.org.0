@@ -2,100 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4D03C2ADC
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jul 2021 23:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419063C2C82
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jul 2021 03:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbhGIVdo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jul 2021 17:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbhGIVdo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 17:33:44 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12950C0613DD;
-        Fri,  9 Jul 2021 14:30:59 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id e20so10179138ljn.8;
-        Fri, 09 Jul 2021 14:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7W1D2O2qCEKR7zKJko/Cm8ADrfYCvs83FXBwHmuFLyE=;
-        b=BdGDQ6jSViMaKzGdsr6ZoU0Tvd2zdumu+PG7fYrDZ3n2CsSldNFUxvbWKD+yRrc8PM
-         t4o6jkAlroYfRR0emUYH/ZW6ziAilDLfp7/DtRyw+GY/w5gVGcvS8pNq+4F42ooggwrq
-         rUis38T7r91qvNISo6AbW6w8KVIh67BQUibiklO3cT7XrYpsApINVpHvuSWKYCpMTHvz
-         YbOipvwDmtEQyq3vPTGMUoqTcQETjs8wDYrdIkUykFnlc2zGJMqd22iaSYMXIzJFZVuS
-         lVSjcItQzxhY95u2nBTIsxKlQRpjYYmUJr+cYcjxzuZCTCw3mUHyuGgaOuMCn4SMAhmq
-         ZGIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7W1D2O2qCEKR7zKJko/Cm8ADrfYCvs83FXBwHmuFLyE=;
-        b=RgERSvzzvNzCt2rStGN0ZfKGfLYukqARtvD+Qvi5KqyUkU1wJMA+pKTfTVNUK5LiHW
-         JRHYirr0r6nFj/6A30ZeolzU9CBYo5/48GzIdfSdLhYbjS1A3YxVdSZjK3fCly7Glz81
-         KymAbh4ADlfWLh+QcL+73M7cCgyeowD0q6PJz951gGF42g4K4yrbMundgCG7JO4lt7eC
-         hgZU/+LMtsWEHKGt/dY52p7migt1oyWrT9ukhgzynVoDSIAgbSUuiCzhCC+EWwQY0GCA
-         Mm7fXSZI4233c6pZr6LyxnBOz2uJdNxEmwKO7eRyi0MSIRJtrm9oMe3WGbfkpXXx55dG
-         VTBQ==
-X-Gm-Message-State: AOAM5306S+jXFGsarwgO7ET4QhakFEdqrsHePPKff0Vh9VXqKRt91mFy
-        i91roIDYDvy3uwq8o1jaQ+d0Zg/fdGU=
-X-Google-Smtp-Source: ABdhPJx7Ivk1JigvlM02oU8v95RxaDB+0vSAbo5j+QhkyIX8MAl/FYsqYFAam37aCC/eIPTOxvoHkg==
-X-Received: by 2002:a2e:8001:: with SMTP id j1mr31741200ljg.332.1625866257344;
-        Fri, 09 Jul 2021 14:30:57 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id y12sm681083ljh.19.2021.07.09.14.30.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jul 2021 14:30:56 -0700 (PDT)
-Subject: Re: [PATCH v1 05/12] usb: otg-fsm: Fix hrtimer list corruption
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210701022405.10817-1-digetx@gmail.com>
- <20210701022405.10817-6-digetx@gmail.com> <YOd/SfxC26esmVXU@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7b0940a9-ea65-d83e-7450-a09a0082bcd5@gmail.com>
-Date:   Sat, 10 Jul 2021 00:30:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230317AbhGJB2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jul 2021 21:28:11 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:11248 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229703AbhGJB2L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jul 2021 21:28:11 -0400
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GMByw6WBFz1CH3Z;
+        Sat, 10 Jul 2021 09:19:52 +0800 (CST)
+Received: from [127.0.0.1] (10.40.193.166) by dggeme756-chm.china.huawei.com
+ (10.3.19.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Sat, 10
+ Jul 2021 09:25:24 +0800
+Subject: Re: Question about __pm_runtime_disable()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+References: <4c65cdd3-05cd-499d-0dd1-b7d6e76372b1@hisilicon.com>
+ <CAJZ5v0hsK_kJMfyQFaf1AjJHFHde1J3U2FxhsaJ59KVkyxsoQg@mail.gmail.com>
+CC:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <84394f6f-0534-30e5-a4f2-7a7a4a28e244@hisilicon.com>
+Date:   Sat, 10 Jul 2021 09:25:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-In-Reply-To: <YOd/SfxC26esmVXU@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <CAJZ5v0hsK_kJMfyQFaf1AjJHFHde1J3U2FxhsaJ59KVkyxsoQg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.40.193.166]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-09.07.2021 01:42, Michał Mirosław пишет:
-> On Thu, Jul 01, 2021 at 05:23:58AM +0300, Dmitry Osipenko wrote:
->> The HNP work can be re-scheduled while it's still in-fly. This results in
->> re-initialization of the busy work, resetting the hrtimer's list node of
->> the work and crashing kernel with null dereference within kernel/timer
->> once work's timer is expired. It's very easy to trigger this problem by
->> re-plugging USB cable quickly. Initialize HNP work only once to fix this
->> trouble.
-> [...]
->> -	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
->> +	if (!fsm->hnp_work_inited) {
->> +		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
->> +		fsm->hnp_work_inited = true;
->> +	}
->> +
-> 
-> Maybe you could just add an initialization function to be called by
-> users of otg_fsm? It seems that only chipidea driver uses this
-> struct currently.
 
-If there are any out-of-tree users of the OTG FSM, then they will all
-get the fix too using the universal solution.
+
+在 2021/7/9 23:50, Rafael J. Wysocki 写道:
+> On Fri, Jul 9, 2021 at 4:24 AM chenxiang (M) <chenxiang66@hisilicon.com> wrote:
+>> Hi Rafael and other guys,
+>>
+>> I encounter a runtime PM issue: there are four devices, and device 0 is
+>> the parent device, and device 1/2/3 are the children devices of device 0.
+>>
+>> All of them supports runtime PM. But i want to ignore device2 and
+>> device3, so that if device 1 is suspended, then device0 can
+>>
+>> be suspended. I use function pm_runtime_disable() to disable device2 and
+>> device3, and device 1 is suspended but device0 is still active.
+>>
+>> I find that runtime_active_kids of device0 is still 2 though
+>> runtime_usage = 0, so it doesn't enter suspend status.
+>>
+>> And i hack the code of funciton __pm_runtime_disable() to decrease
+>> child_count of device's parent as follows, and it works.
+>>
+>> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+>> index b570848..6ba224b 100644
+>> --- a/drivers/base/power/runtime.c
+>> +++ b/drivers/base/power/runtime.c
+>> @@ -1382,6 +1382,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_barrier);
+>>     */
+>>    void __pm_runtime_disable(struct device *dev, bool check_resume)
+>>    {
+>> +       struct device *parent = NULL;
+>> +
+>>           spin_lock_irq(&dev->power.lock);
+>>
+>>           if (dev->power.disable_depth > 0) {
+>> @@ -1413,6 +1415,10 @@ void __pm_runtime_disable(struct device *dev,
+>> bool check_resume)
+>>           if (!dev->power.disable_depth++)
+>>                   __pm_runtime_barrier(dev);
+>>
+>> +       if (dev->parent) {
+>> +               parent = dev->parent;
+>> +               atomic_add_unless(&parent->power.child_count, -1, 0);
+>> +       }
+>>     out:
+>>           spin_unlock_irq(&dev->power.lock);
+>>    }
+>>
+>> Is it appropriate for me to use function pm_runtime_disable() to ignore
+>> them
+> No, it is not.
+>
+>> (i try function function pm_suspend_ignore_children(), but it
+>> ignores all children of the device )?
+> IMV you still need to use ignore_children (and yes, all of the
+> children will be ignored in that case) and use pm_runtime_get_*() and
+> pm_runtime_put_*() on the parent in the child 1 driver to make the
+> parent automatically resume and suspend, respectively.
+
+Ok, thanks for the suggestion.
+
+>
+>> Or does it need to decrease child_count the device's parent in function
+>> __pm_runtime_disable() ?
+> Doing this is not recommended.
+>
+> .
+>
+
+
