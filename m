@@ -2,74 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D273C3646
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jul 2021 21:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042163C3751
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhGJTLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jul 2021 15:11:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56458 "EHLO mail.kernel.org"
+        id S230423AbhGJXvp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jul 2021 19:51:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229599AbhGJTLa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 10 Jul 2021 15:11:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0AA9561356;
-        Sat, 10 Jul 2021 19:08:45 +0000 (UTC)
+        id S229674AbhGJXvp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:51:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D256861355;
+        Sat, 10 Jul 2021 23:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625944125;
-        bh=b6DzQXZFI2jA9bLWkmCKhlPpRMpg1hht2O+OL+cH024=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ERLkhv4509tUThPm47nw9gU1QY3/EvXrMxjglpCE19crnCuqZzeivb9zOevVK4Adu
-         cWBhsOqN0zMsZen+EbIWzbGLreY/I/ovMiY9tKDlO4+70sTENWYFubcA4T0D2DKfun
-         n0ch477dd6dVvcd67SJaa8ymk/HYi26/XVQtSwcKiL4s8GvaAKJe2Si7mkJoUY3fqH
-         NQAbvSaekrKlTsFqbERBoY8VIq/Tq83KV7W9a/1GgJA5PJjil5ZRDNPN1DLVJvWn9P
-         K6zuUJkTRnFbcW07n7qrRFGEc9W8+RBAng1JeEQGdyMpBCLLi2mRZu6dlc4sRGsVbY
-         S3LPRntQDS9iQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E9DC560986;
-        Sat, 10 Jul 2021 19:08:44 +0000 (UTC)
-Subject: Re: [GIT PULL] thermal for v5.14-rc1 #2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
-References: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.14-rc1
-X-PR-Tracked-Commit-Id: fe6a6de6692e7f7159c1ff42b07ecd737df712b4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f7ea4be434fe7ea38699d14c1192481899e6ac94
-Message-Id: <162594412489.8052.12475027127622760227.pr-tracker-bot@kernel.org>
-Date:   Sat, 10 Jul 2021 19:08:44 +0000
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chunyan Zhang <zhang.chunyan@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Rajeshwari Ravindra Kamble <rkambl@codeaurora.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>
+        s=k20201202; t=1625960939;
+        bh=LxXAEoD5Ila78o+YYGT3jjqLa2D/vUuiuMAS6PHKgPI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q/4Bgtf5a2ZzoJCiMBmjmqMDrwldiG+JiBY0N2DCa28G5uJOqjzeDDRjaeLauN58H
+         okuRtU4t7lrOkSxJ+J0k3VwaKKeopmz+luA/Ds5dF38P1PMT7oy7aDxbP+c0956A5/
+         LBluaMzZQopsSkNrIF4sCuCC31F0z/P+1CaNLqIanpq+XoUKfCxUVvPI7RrtQD+g4h
+         HNPYSBA0A1VCaClijH7zXN6l3cjLN9xEQDUG7+fusW57JxC6BQiTTC/6tnfdG456pG
+         Ag2zv/TXM+A+cJwU1LzUMYUY+2NznovYsyXKd0KQnKDztTyuJutjp3J3DmmvRI+2sr
+         nZwBREniUhbUg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 01/53] power: supply: sc27xx: Add missing MODULE_DEVICE_TABLE
+Date:   Sat, 10 Jul 2021 19:48:05 -0400
+Message-Id: <20210710234857.3220040-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 8 Jul 2021 17:40:37 +0200:
+From: Zou Wei <zou_wei@huawei.com>
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.14-rc1
+[ Upstream commit 603fcfb9d4ec1cad8d66d3bb37f3613afa8a661a ]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f7ea4be434fe7ea38699d14c1192481899e6ac94
+This patch adds missing MODULE_DEVICE_TABLE definition which generates
+correct modalias for automatic loading of this driver when it is built
+as an external module.
 
-Thank you!
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/sc27xx_fuel_gauge.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
+index 9c627618c224..1ae8374e1ceb 100644
+--- a/drivers/power/supply/sc27xx_fuel_gauge.c
++++ b/drivers/power/supply/sc27xx_fuel_gauge.c
+@@ -1342,6 +1342,7 @@ static const struct of_device_id sc27xx_fgu_of_match[] = {
+ 	{ .compatible = "sprd,sc2731-fgu", },
+ 	{ }
+ };
++MODULE_DEVICE_TABLE(of, sc27xx_fgu_of_match);
+ 
+ static struct platform_driver sc27xx_fgu_driver = {
+ 	.probe = sc27xx_fgu_probe,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+
