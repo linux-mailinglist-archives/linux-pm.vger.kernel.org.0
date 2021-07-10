@@ -2,58 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7993C351D
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jul 2021 17:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D273C3646
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jul 2021 21:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbhGJPWW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jul 2021 11:22:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33748 "EHLO mail.kernel.org"
+        id S229948AbhGJTLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jul 2021 15:11:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229805AbhGJPWU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 10 Jul 2021 11:22:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D66DC61357;
-        Sat, 10 Jul 2021 15:19:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625930375;
-        bh=wmv3i0bl05QfU7AkJuYqTwOAkbHj2WKCpijd4L8v89o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JpG4z3cw9rrZJclLN3ssfKpvpPk1dox9uREMy0NmNPE8+zRurQIXLW1cy6IW9FmOU
-         unSLInVbK+LyclIki/b+qOa+7Ec0xhLau1oeLFUOYe4pKXDk52tg02nuoPNv4sS74H
-         LvVv+rf6a1gm17ZrEHvaj0wxz5hizFecXclCU9BA=
-Date:   Sat, 10 Jul 2021 17:19:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 1/3] driver core: Prevent warning when removing a
- device link from unregistered consumer
-Message-ID: <YOm6hWQ+RL7ILm3p@kroah.com>
-References: <20210710103819.12532-1-adrian.hunter@intel.com>
- <20210710103819.12532-2-adrian.hunter@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210710103819.12532-2-adrian.hunter@intel.com>
+        id S229599AbhGJTLa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Jul 2021 15:11:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0AA9561356;
+        Sat, 10 Jul 2021 19:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625944125;
+        bh=b6DzQXZFI2jA9bLWkmCKhlPpRMpg1hht2O+OL+cH024=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ERLkhv4509tUThPm47nw9gU1QY3/EvXrMxjglpCE19crnCuqZzeivb9zOevVK4Adu
+         cWBhsOqN0zMsZen+EbIWzbGLreY/I/ovMiY9tKDlO4+70sTENWYFubcA4T0D2DKfun
+         n0ch477dd6dVvcd67SJaa8ymk/HYi26/XVQtSwcKiL4s8GvaAKJe2Si7mkJoUY3fqH
+         NQAbvSaekrKlTsFqbERBoY8VIq/Tq83KV7W9a/1GgJA5PJjil5ZRDNPN1DLVJvWn9P
+         K6zuUJkTRnFbcW07n7qrRFGEc9W8+RBAng1JeEQGdyMpBCLLi2mRZu6dlc4sRGsVbY
+         S3LPRntQDS9iQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E9DC560986;
+        Sat, 10 Jul 2021 19:08:44 +0000 (UTC)
+Subject: Re: [GIT PULL] thermal for v5.14-rc1 #2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
+References: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <8b2470a5-3090-87c3-0fad-d8eefdf54f4f@linaro.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.14-rc1
+X-PR-Tracked-Commit-Id: fe6a6de6692e7f7159c1ff42b07ecd737df712b4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f7ea4be434fe7ea38699d14c1192481899e6ac94
+Message-Id: <162594412489.8052.12475027127622760227.pr-tracker-bot@kernel.org>
+Date:   Sat, 10 Jul 2021 19:08:44 +0000
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <zhang.chunyan@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Rajeshwari Ravindra Kamble <rkambl@codeaurora.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 10, 2021 at 01:38:17PM +0300, Adrian Hunter wrote:
-> sysfs_remove_link() causes a warning if the parent directory does not
-> exist. That can happen if the device link consumer has not been registered.
-> So do not attempt sysfs_remove_link() in that case.
-> 
-> Fixes: 287905e68dd29 ("driver core: Expose device link details in sysfs")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  drivers/base/core.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+The pull request you sent on Thu, 8 Jul 2021 17:40:37 +0200:
 
-No Cc: stable for this?  Why not?
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.14-rc1
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f7ea4be434fe7ea38699d14c1192481899e6ac94
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
