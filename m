@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CE33C37F9
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4773F3C3801
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 01:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbhGJXxh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jul 2021 19:53:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39648 "EHLO mail.kernel.org"
+        id S232507AbhGJXxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jul 2021 19:53:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232601AbhGJXxF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:53:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9124F610A2;
-        Sat, 10 Jul 2021 23:50:18 +0000 (UTC)
+        id S233156AbhGJXxK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:53:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ECDB7610CA;
+        Sat, 10 Jul 2021 23:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961019;
-        bh=31Q2SxNVO6mzsD2YnuunmRyukAVykWhnb+sZHX1XplY=;
+        s=k20201202; t=1625961024;
+        bh=23nU0Z0c4ClXTL8Q6dRXQsqs5gKp/AnMZRZMTR7PDeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IOYFUS1pK8JxjbaN1BLKIFDd4TLNMtRTcwT0/kVar+JjYyizbBBzHEMa/lJJpLtDg
-         kk3HYtGvAyBFn24vFV2OYj1RIA7SGNBMeXOdJnU7o4/4Cx86sNAeiQGHqG9WjkbY0U
-         eI/ZS6LhFlmXSgEkugicqqJIijNsbeKsjfzFhtK3cTIqVbLfYsmz5orq98v6tmOeMB
-         CXMf5VN+z+Fs9RRfyDCqEqudXSZLx2pozpx8hc1ClbTfp4OzgdGgLGxiAJzhCG6KPb
-         a+D2jxS/QgL4ZGTyK3ZTfqwSHevXN6QPSkTAwn6UKclx/6UkevbXlHMGdhD7OTGMgY
-         GOWf8ApcVfzOg==
+        b=Jr77CPFc8pgDn2v8FhDg9nMkDg6W/cauj/ZJ6u+rMpbyxPhOoqL8MMs5veX7g+jG3
+         MhCIeaj6rxnm4gjvRi3+Eq4ACePqcgXLyCVDck+qrAI494Yv8T20yhBaMgQR1veWFQ
+         rRztSHKJddaqUAmuJI4omZqG14H2TjkR7ofby6S6WYObLK7i3dT1kyvDQD1KfrNEY4
+         bFjuP0BdBayf34jq8wT4T3sOxBZmMKq3dbyp9EryEjWEiPiuk+uBqrNJ2rPjeEQ7zV
+         gODoKS1ocZWJQpZgb/NOxOpg8a3CV5QOPagIdWYArLTmPi4x+qdKMv55seCCxBoftd
+         fO+CZ+RzfYB0g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/37] power: supply: sc2731_charger: Add missing MODULE_DEVICE_TABLE
-Date:   Sat, 10 Jul 2021 19:49:40 -0400
-Message-Id: <20210710235016.3221124-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 06/37] power: supply: ab8500: Avoid NULL pointers
+Date:   Sat, 10 Jul 2021 19:49:44 -0400
+Message-Id: <20210710235016.3221124-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710235016.3221124-1-sashal@kernel.org>
 References: <20210710235016.3221124-1-sashal@kernel.org>
@@ -42,34 +42,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Zou Wei <zou_wei@huawei.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit 2aac79d14d76879c8e307820b31876e315b1b242 ]
+[ Upstream commit 5bcb5087c9dd3dca1ff0ebd8002c5313c9332b56 ]
 
-This patch adds missing MODULE_DEVICE_TABLE definition which generates
-correct modalias for automatic loading of this driver when it is built
-as an external module.
+Sometimes the code will crash because we haven't enabled
+AC or USB charging and thus not created the corresponding
+psy device. Fix it by checking that it is there before
+notifying.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/sc2731_charger.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/ab8500_charger.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-index 335cb857ef30..288b79836c13 100644
---- a/drivers/power/supply/sc2731_charger.c
-+++ b/drivers/power/supply/sc2731_charger.c
-@@ -524,6 +524,7 @@ static const struct of_device_id sc2731_charger_of_match[] = {
- 	{ .compatible = "sprd,sc2731-charger", },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, sc2731_charger_of_match);
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index db65be026920..6765d0901320 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -413,6 +413,14 @@ static void ab8500_enable_disable_sw_fallback(struct ab8500_charger *di,
+ static void ab8500_power_supply_changed(struct ab8500_charger *di,
+ 					struct power_supply *psy)
+ {
++	/*
++	 * This happens if we get notifications or interrupts and
++	 * the platform has been configured not to support one or
++	 * other type of charging.
++	 */
++	if (!psy)
++		return;
++
+ 	if (di->autopower_cfg) {
+ 		if (!di->usb.charger_connected &&
+ 		    !di->ac.charger_connected &&
+@@ -439,7 +447,15 @@ static void ab8500_charger_set_usb_connected(struct ab8500_charger *di,
+ 		if (!connected)
+ 			di->flags.vbus_drop_end = false;
  
- static struct platform_driver sc2731_charger_driver = {
- 	.driver = {
+-		sysfs_notify(&di->usb_chg.psy->dev.kobj, NULL, "present");
++		/*
++		 * Sometimes the platform is configured not to support
++		 * USB charging and no psy has been created, but we still
++		 * will get these notifications.
++		 */
++		if (di->usb_chg.psy) {
++			sysfs_notify(&di->usb_chg.psy->dev.kobj, NULL,
++				     "present");
++		}
+ 
+ 		if (connected) {
+ 			mutex_lock(&di->charger_attached_mutex);
 -- 
 2.30.2
 
