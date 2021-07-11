@@ -2,106 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D46F3C3B7B
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 12:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31E93C3DE5
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jul 2021 18:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbhGKKWE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jul 2021 06:22:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231998AbhGKKWD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 11 Jul 2021 06:22:03 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6A2A6124B;
-        Sun, 11 Jul 2021 10:19:14 +0000 (UTC)
-Date:   Sun, 11 Jul 2021 11:21:30 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     lars@metafoo.de, sre@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v2 1/2] iio: adc: rn5t618: Add iio map
-Message-ID: <20210711112130.45339212@jic23-huawei>
-In-Reply-To: <20210705113637.28908-2-andreas@kemnade.info>
-References: <20210705113637.28908-1-andreas@kemnade.info>
-        <20210705113637.28908-2-andreas@kemnade.info>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S229688AbhGKQTd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 11 Jul 2021 12:19:33 -0400
+Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:41990 "EHLO
+        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhGKQTd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jul 2021 12:19:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 5D3941846551;
+        Sun, 11 Jul 2021 09:52:47 -0500 (-05)
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id I9gRudPYEOWo; Sun, 11 Jul 2021 09:52:47 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id EED5D184656B;
+        Sun, 11 Jul 2021 09:52:46 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id COr1rxTm3crp; Sun, 11 Jul 2021 09:52:46 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.79.139])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 1849B1846579;
+        Sun, 11 Jul 2021 09:52:38 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
+From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
+Date:   Sun, 11 Jul 2021 16:52:29 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210711145239.1849B1846579@mail.07d05.mspz7.gob.ec>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon,  5 Jul 2021 13:36:36 +0200
-Andreas Kemnade <andreas@kemnade.info> wrote:
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-> Add iio map to allow power driver to read out values as a consumer.
-> This approach does not block later addition of devicetree support
-> which would be helpful if there is an in-kernel consumer for AIN0/1.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Looks good.  I'm assuming this will go via the power tree, perhaps with
-an immutable branch on off chance we have any other changes in the same
-driver this cycle.
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-> ---
-> Changes in v2:
-> - provide consumer mapping via iio_map instead of devicetree
-> 
->  drivers/iio/adc/rn5t618-adc.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/rn5t618-adc.c b/drivers/iio/adc/rn5t618-adc.c
-> index 7010c4276947..c56fccb2c8e1 100644
-> --- a/drivers/iio/adc/rn5t618-adc.c
-> +++ b/drivers/iio/adc/rn5t618-adc.c
-> @@ -16,6 +16,8 @@
->  #include <linux/completion.h>
->  #include <linux/regmap.h>
->  #include <linux/iio/iio.h>
-> +#include <linux/iio/driver.h>
-> +#include <linux/iio/machine.h>
->  #include <linux/slab.h>
->  
->  #define RN5T618_ADC_CONVERSION_TIMEOUT   (msecs_to_jiffies(500))
-> @@ -189,6 +191,19 @@ static const struct iio_chan_spec rn5t618_adc_iio_channels[] = {
->  	RN5T618_ADC_CHANNEL(AIN0, IIO_VOLTAGE, "AIN0")
->  };
->  
-> +static struct iio_map rn5t618_maps[] = {
-> +	IIO_MAP("VADP", "rn5t618-power", "vadp"),
-> +	IIO_MAP("VUSB", "rn5t618-power", "vusb"),
-> +	{ /* sentinel */ }
-> +};
-> +
-> +static void unregister_map(void *data)
-> +{
-> +	struct iio_dev *iio_dev = (struct iio_dev *) data;
-> +
-> +	iio_map_array_unregister(iio_dev);
-> +}
-> +
->  static int rn5t618_adc_probe(struct platform_device *pdev)
->  {
->  	int ret;
-> @@ -239,6 +254,14 @@ static int rn5t618_adc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	ret = iio_map_array_register(iio_dev, rn5t618_maps);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = devm_add_action_or_reset(adc->dev, unregister_map, iio_dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	return devm_iio_device_register(adc->dev, iio_dev);
->  }
->  
+Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
 
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
