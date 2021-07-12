@@ -2,144 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FB83C433D
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 06:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE8C3C4F69
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 12:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbhGLEoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 00:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S239119AbhGLHZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 03:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229466AbhGLEoD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 00:44:03 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFEAC0613E8
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jul 2021 21:41:15 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n10so1326317plk.1
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jul 2021 21:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZL0bec2agHsc0j6ce/Gb5bsSghII65P7kEsioPLg7/I=;
-        b=WPci+XbTcvjEfOXEze65WR/kHiJj7UnotldAAu3YV5QxlaYIadepyymWghBbbGgVhR
-         S9Lezk9hED0qIXMmE07/fHAeTk0Tu+2zzWJa38fGbKb1jvqBRxN26Nl4R8cmK9EO/NbE
-         O7HFlaT8Vh2s0HQL0mutd3aGJcZW969KDbu7cVK84yZDtn+lQutF8Ap2xKeLMxmjiYkk
-         SSR4D7i5jnaRKH6bwcidT5MLu7HqcW20j6GW7w/qG3Pba1DyV0zt14wq7xnpEbugEHvk
-         Gx8kbYIY4/bOsIg7wfcutupfK46FJeJ38nH3mTO2r2SrSgfzBg/rjZdu2VCInk47K0k+
-         Ma/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZL0bec2agHsc0j6ce/Gb5bsSghII65P7kEsioPLg7/I=;
-        b=tXT9gpEXXK2t1dLC7tRaTgbbPVo1frpth63PFGB9c1edUCRLgXJjkqxoPyg8Fc3xkw
-         KSwe3ZDgcDFy5JyMKMsYVhQaafnhC9E9QvB/K+CiH228NpX+1dD2Rz4SemvCa6n0fPSH
-         pDXnN5qDeiQiUsuA2MJ9yqhwt69Mxbr3E3NCjLdQk8/fQS8wxv7F+9SMoibKGmlTmJt7
-         eYSakRr1YHXREa0C9cCKgsSLhcCVmqvlxWfVNvYP6+cpkTHK4y5GWKXpgj7s4fw1tfAK
-         //zrScyEEtaodWUWP9yZpKDCyf/UDcUYkndPkLxwQlQpXzp2XTm7jCffLynBgBnFkc+M
-         HP+g==
-X-Gm-Message-State: AOAM5320yMi1iMUKXQ2EJXHnzxb7dKSTYX3n8UU/zoIVcNw11UReIGqG
-        0er/2DnbMY5K4ELLIvVw6w8NYw==
-X-Google-Smtp-Source: ABdhPJwyJwbbVUxFVSM9rN48hfrK7Ghw5kZUYF+Hhou78UTmm5hOddVf9Ch77a6a3nYY5Vr3tBDR9w==
-X-Received: by 2002:a17:90a:db98:: with SMTP id h24mr23092454pjv.156.1626064875097;
-        Sun, 11 Jul 2021 21:41:15 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id s36sm6810167pgk.64.2021.07.11.21.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 21:41:14 -0700 (PDT)
-Date:   Mon, 12 Jul 2021 10:11:12 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
-        tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [Patch v3 3/6] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
- support
-Message-ID: <20210712044112.svhlagrktcfvyj35@vireshk-i7>
-References: <20210708120656.663851-1-thara.gopinath@linaro.org>
- <20210708120656.663851-4-thara.gopinath@linaro.org>
- <20210709064646.7vjgiba2o7beudly@vireshk-i7>
- <5a98ef2a-d170-f52d-cc48-b838cddaa5c2@linaro.org>
+        with ESMTP id S1343882AbhGLHUI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 03:20:08 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C10C025397;
+        Mon, 12 Jul 2021 00:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:To:From:Date:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4Ku+fho4Qa2ctqbzzklG68fzz9r2UqJK370+yapiLZc=; b=ag7kV+FXM4JBQH7e2//dT1ivFv
+        A59SAxXTXopPlbcEbf+RoxCFo0UquO5n03eZLpE4Gh+7KE/cDJfcUy5RtV3h/E1+WhRnqKkogLEBO
+        C61h1r1gvS0HVVVxIX3kSR8Be0J7H0+bx+WlSiyuKEq9WFAMZOHYYBKBFILR0vs5T8TI=;
+Received: from p200300ccff0a76001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0a:7600:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1m2q6E-0005aH-RK; Mon, 12 Jul 2021 09:11:30 +0200
+Date:   Mon, 12 Jul 2021 09:11:30 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Jonathan Cameron <jic23@kernel.org>, lars@metafoo.de,
+        sre@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v2 2/2] power: supply: rn5t618: Add voltage_now property
+Message-ID: <20210712091130.2096cf23@aktux>
+In-Reply-To: <20210711112039.43c4af7b@jic23-huawei>
+References: <20210705113637.28908-1-andreas@kemnade.info>
+ <20210705113637.28908-3-andreas@kemnade.info>
+ <20210711112039.43c4af7b@jic23-huawei>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a98ef2a-d170-f52d-cc48-b838cddaa5c2@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-07-21, 11:37, Thara Gopinath wrote:
-> On 7/9/21 2:46 AM, Viresh Kumar wrote:
-> > > @@ -389,6 +503,10 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
-> > >   	dev_pm_opp_remove_all_dynamic(cpu_dev);
-> > >   	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
-> > > +	if (data->lmh_dcvs_irq > 0) {
-> > > +		devm_free_irq(cpu_dev, data->lmh_dcvs_irq, data);
-> > 
-> > Why using devm variants here and while requesting the irq ?
+On Sun, 11 Jul 2021 11:20:39 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-Missed this one ?
-
-> > 
-> > > +		cancel_delayed_work_sync(&data->lmh_dcvs_poll_work);
-> > > +	}
-> > 
-> > Please move this to qcom_cpufreq_hw_lmh_exit() or something.
+> On Mon,  5 Jul 2021 13:36:37 +0200
+> Andreas Kemnade <andreas@kemnade.info> wrote:
 > 
-> Ok.
+> > Read voltage_now via IIO and provide the property.
+> > 
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > Reported-by: kernel test robot <lkp@intel.com>  
+> Huh?  Seems unlikely it pointed out that this patch was necessary in general.
+> If highlighting a particular fix in an earlier version, then state what it was
+> in the commit message. Note for fixes that get rolled into patches, it's
+> often just mentioned in the change log and we skip the tag because it can
+> cause confusion.
 > 
-> > 
-> > Now with sequence of disabling interrupt, etc, I see a potential
-> > problem.
-> > 
-> > CPU0                                    CPU1
-> > 
-> > qcom_cpufreq_hw_cpu_exit()
-> > -> devm_free_irq();
-> >                                          qcom_lmh_dcvs_poll()
-> >                                          -> qcom_lmh_dcvs_notify()
-> >                                            -> enable_irq()
-> > 
-> > -> cancel_delayed_work_sync();
-> > 
-> > 
-> > What will happen if enable_irq() gets called after freeing the irq ?
-> > Not sure, but it looks like you will hit this then from manage.c:
-> > 
-> > WARN(!desc->irq_data.chip, KERN_ERR "enable_irq before
-> >                                       setup/request_irq: irq %u\n", irq))
-> > 
-> > ?
-> > 
-> > You got a chicken n egg problem :)
-> 
-> Yes indeed! But also it is a very rare chicken and egg problem.
-> The scenario here is that the cpus are busy and running load causing a
-> thermal overrun and lmh is engaged. At the same time for this issue to be
-> hit the cpu is trying to exit/disable cpufreq.
+The robot found a problem in v1 (missing depends on IIO). It is fixed
+now. The message from the bot tells to add a tag. It seems not to make
+sense. But probably the bot is also running on public branches (which
+will not be rebase) and uses the same message where it actually makes
+sense.
 
-Yes, it is a very specific case but it needs to be resolved anyway. You don't
-want to get this ever :)
+I will send a v3 with that tag removed and the other comment addressed.
 
-> Calling
-> cancel_delayed_work_sync first could solve this issue, right ?
-> cancel_delayed_work_sync guarantees the work not to be pending even if
-> it requeues itself on return. So once the delayed work is cancelled, the
-> interrupts can be safely disabled. Thoughts ?
-
-I don't think even that would provide such guarantees to you here, as there is
-a chance the work gets queued again because of an interrupt that triggers right
-after you cancel the work.
-
-The basic way of solving such issues is that once you cancel something, you need
-to guarantee that it doesn't get triggered again, no matter what.
-
-The problem here I see is with your design itself, both delayed work and irq can
-enable each other, so no matter which one you disable first, won't be
-sufficient. You need to fix that design somehow.
-
--- 
-viresh
+Regards,
+Andreas
