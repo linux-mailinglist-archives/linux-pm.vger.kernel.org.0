@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B703C5F70
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 17:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A523C5F7B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 17:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbhGLPnT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 11:43:19 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:45442 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233225AbhGLPnT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Jul 2021 11:43:19 -0400
+        id S235474AbhGLPoY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 11:44:24 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:43186 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235637AbhGLPoY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 11:44:24 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1626104430; h=Content-Transfer-Encoding: Content-Type:
+ s=smtp; t=1626104495; h=Content-Transfer-Encoding: Content-Type:
  In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To:
- Subject: From: Sender; bh=KVqF9QLdzAaHdNmKyTR6MevSTnWOxaAjQ+zmx82O5i4=;
- b=d/0kgEAc7uxR7Bf6uKjd1Bp1++ZEphG5zi5m+Td1nUsovJVQlZUwragkmgziORWXMFxO3ZGe
- QvId/cK2J1CO/6G+a+MHXa9dGo7PBPgm+Gsq4e3uLXX+Wlo0HWLAgImJdnVVV+vNbT5iVbFs
- 87r1Ft9Uxvu3Dj8VnVFAjfhWyW8=
-X-Mailgun-Sending-Ip: 69.72.43.7
+ Subject: From: Sender; bh=HfDY19Td7Yb6LP09Ydf7zDiMxK8u7WGqFqG3C/QOekU=;
+ b=Wzplgz6+FTc6zUX7gxGf1SwCiwEaispGFitDd2RgLrRGhy+0uzNO3QNFG0cT+ypvu0DwJhzI
+ P/bkEQaZOGebO+R1eZGGlEcWPyFR8Pe8juPF45tyqMppMTALdaPgF9iSvdKEOTB2Si5FEa7P
+ U1IYj7jeuuhNNzQfzztGhwo6IFY=
+X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 60ec6251f30429861417df68 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Jul 2021 15:40:01
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60ec62941938941955eb8ed2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Jul 2021 15:41:08
  GMT
 Sender: mdtipton=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C8F7DC4338A; Mon, 12 Jul 2021 15:40:00 +0000 (UTC)
+        id F393FC43460; Mon, 12 Jul 2021 15:41:07 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -39,28 +39,27 @@ Received: from [192.168.1.12] (pool-96-253-99-54.rcmdva.fios.verizon.net [96.253
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: mdtipton)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 01AB0C433D3;
-        Mon, 12 Jul 2021 15:39:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 01AB0C433D3
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 05E4DC433D3;
+        Mon, 12 Jul 2021 15:41:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 05E4DC433D3
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=mdtipton@codeaurora.org
 From:   Mike Tipton <mdtipton@codeaurora.org>
-Subject: Re: [PATCH 2/4] interconnect: Always call pre_aggregate before
- aggregate
+Subject: Re: [PATCH 1/4] interconnect: Zero initial BW after sync-state
 To:     okukatla@codeaurora.org
 Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
         saravanak@google.com, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         mdtipton=codeaurora.org@codeaurora.org
 References: <20210625212839.24155-1-mdtipton@codeaurora.org>
- <20210625212839.24155-3-mdtipton@codeaurora.org>
- <000574efe90897c1738299cfba4fea7d@codeaurora.org>
-Message-ID: <d847ed42-e6ba-1686-f753-7dfecd7efa57@codeaurora.org>
-Date:   Mon, 12 Jul 2021 08:39:57 -0700
+ <20210625212839.24155-2-mdtipton@codeaurora.org>
+ <14c52b496918900c9cb3bef662a9e833@codeaurora.org>
+Message-ID: <86e76352-1199-0fc6-9e5d-b7d45db37636@codeaurora.org>
+Date:   Mon, 12 Jul 2021 08:41:03 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <000574efe90897c1738299cfba4fea7d@codeaurora.org>
+In-Reply-To: <14c52b496918900c9cb3bef662a9e833@codeaurora.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -68,40 +67,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/1/2021 11:55 AM, okukatla@codeaurora.org wrote:
+On 7/1/2021 9:56 AM, okukatla@codeaurora.org wrote:
 > On 2021-06-26 02:58, Mike Tipton wrote:
->> The pre_aggregate callback isn't called in all cases before calling
->> aggregate. Add the missing calls so providers can rely on consistent
->> framework behavior.
+>> The initial BW values may be used by providers to enforce floors. Zero
+>> these values after sync-state so that providers know when to stop
+>> enforcing them.
 >>
->> Fixes: d3703b3e255f ("interconnect: Aggregate before setting initial 
->> bandwidth")
+>> Fixes: b1d681d8d324 ("interconnect: Add sync state support")
 >> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
 >> ---
->>  drivers/interconnect/core.c | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>  drivers/interconnect/core.c | 2 ++
+>>  1 file changed, 2 insertions(+)
 >>
 >> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 945121e18b5c..cfd54c90a6bb 100644
+>> index 8a1e70e00876..945121e18b5c 100644
 >> --- a/drivers/interconnect/core.c
 >> +++ b/drivers/interconnect/core.c
->> @@ -973,9 +973,12 @@ void icc_node_add(struct icc_node *node, struct
->> icc_provider *provider)
->>      }
->>      node->avg_bw = node->init_avg;
->>      node->peak_bw = node->init_peak;
->> -    if (provider->aggregate)
->> +    if (provider->aggregate) {
->> +        if (provider->pre_aggregate)
->> +            provider->pre_aggregate(node);
-> nit: we can invoke pre_aggregate() out side of if (qcom_icc_aggregate).
+>> @@ -1106,6 +1106,8 @@ void icc_sync_state(struct device *dev)
+>>          dev_dbg(p->dev, "interconnect provider is in synced state\n");
+>>          list_for_each_entry(n, &p->nodes, node_list) {
+>>              if (n->init_avg || n->init_peak) {
+>> +                n->init_avg = 0;
+>> +                n->init_peak = 0;
+> nit: It is good to reset init/floor levels back to zero, but we don't 
+> need to do this as we have sync_state flag to let providers know when to 
+> stop enforcing.
 
-Sure, will update this.
+The synced_state variable is static to this file. It's not exposed to 
+providers. In fact, we could entirely remove synced_state with this 
+patch since it's unnecessary after zeroing the initial floors.
 
-> 
->>          provider->aggregate(node, 0, node->init_avg, node->init_peak,
->>                      &node->avg_bw, &node->peak_bw);
->> +    }
->>      provider->set(node, node);
->>      node->avg_bw = 0;
->>      node->peak_bw = 0;
+>>                  aggregate_requests(n);
+>>                  p->set(n, n);
+>>              }
