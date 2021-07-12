@@ -2,121 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAABB3C653D
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 23:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FFF3C655D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 23:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbhGLVD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 17:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S232416AbhGLVYM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 17:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbhGLVD0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 17:03:26 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D039C0613DD
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 14:00:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p22so4637476pfh.8
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 14:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=mKVYQ6K/sHmv2ZUNAfztYfnGRYbFwe28Au4UJpQtHPI=;
-        b=nNyr0i7C5jXlT9cxzkoGhgtb/VUq88Jgg2IzT55MK8J4GXR24sUbWP6FBWVb2hKlyk
-         JUSWefM4FUxsi5+84C1q2qyKBgOuoSk6zHOg1Mg9XZk/5Vsa3vsbiKcq5awGavJ5dUWp
-         W5zlI4rKsbBQf361zuw8pnJKHLXKBA9n7SfSnH0yzu4la6z5EWHughq+WCbtf8MQUhCm
-         DxN+qhhJr0XmsvbQ8pEG0MznaGgn/8wdZhSrYcZXRDv49qN8Eh2ZXU4BO5msycpkkmg1
-         bOwFhhqMIB01WoNVpoioNkzkvNA60Xm7YAWdzEMEEZv8jp7hfgHdlZDhGpBcGQNB+QnS
-         UZRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=mKVYQ6K/sHmv2ZUNAfztYfnGRYbFwe28Au4UJpQtHPI=;
-        b=M5D6KnUGewsViTHVDEizXmmvq6yZe3S7nHrLUdH99PF5LWCSC4aYzjgpPNCD6z3Rfp
-         Ajs5kdGgW+8Q/DwYrZTgsIMH/sBDw+yc7UFCF1cz/3oeU94Q6CX3tBWJO7MurdH5HxPm
-         iWTKoBnyXsQocWN5eh04eU4je0NAM8MDopBbUypTklV0GND0iV6Jht6dowPPQVZh2zyp
-         5ZTx0Alji0WaID96+ESjPNXbd4RX4WtExEd5zycQb10PISc+/bTyIz1voz6l9FbNEjnZ
-         nj9ZU1qlWIyDweVkf+FRIaOw1tC3HOBmXejtPAeBai4Lay92/mcwVLV0bmLmK0N7DYd2
-         Vflw==
-X-Gm-Message-State: AOAM5330uDQLfCii756ssaD3LrOmtgLmrisxVsJQ6pntZB/Q7cKJT7wY
-        TWgGOuHBMns9C4lXRSM2hG1RlCg3vCVx4A==
-X-Google-Smtp-Source: ABdhPJwCEFT2e1soKcJaLKVZXew2lsj84vm/F4Qe7koBOvbAfI496Nm9x8xSM3ONp6swNJ/0h5i6Sw==
-X-Received: by 2002:a62:bd15:0:b029:31c:a584:5f97 with SMTP id a21-20020a62bd150000b029031ca5845f97mr1082655pff.33.1626123635933;
-        Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w6sm19518159pgh.56.2021.07.12.14.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
-Message-ID: <60ecad73.1c69fb81.96aba.a0bb@mx.google.com>
-Date:   Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230087AbhGLVYL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 17:24:11 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62482C0613DD;
+        Mon, 12 Jul 2021 14:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PxpFtOyzlVJwPX/Mfz8sm41CAFc+8w5BTtrBNBBTbO0=; b=RkeMbERVOlWyXvvEQJR0hu0o2H
+        1UQRc/oYXO18tQDZFyrUD9+1Nm9ZpEup+tgWUMNEEUTQXtG2vHPfYG9R6llzRnc4hRAj78lMtqaRO
+        iG/5e0QkVCSXDcv8vCRNMRWGlYsGlezCaE+pZ99byk56oy+USv++VDUTsH9KcAhMofyc=;
+Received: from p200300ccff0a76001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0a:7600:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1m33Mb-0001dI-2U; Mon, 12 Jul 2021 23:21:18 +0200
+Received: from andi by aktux with local (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1m33Ma-0004vb-Nh; Mon, 12 Jul 2021 23:21:16 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     jic23@kernel.org, lars@metafoo.de, sre@kernel.org,
+        andreas@kemnade.info, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: [PATCH v3 0/2] mfd: rn5t618: Extend ADC support
+Date:   Mon, 12 Jul 2021 23:21:09 +0200
+Message-Id: <20210712212111.18896-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.14-rc1
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc1)
+Add iio map to make voltage_now related channels accessible to power
+driver.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-14-rc1/
+Changes in v3:
+- use scale functions
+- add acks
 
-Tree: pm
-Branch: testing
-Git Describe: v5.14-rc1
-Git Commit: e73f0f0ee7541171d89f2e2491130c7771ba58d3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Changes in v2:
+- use iio_map instead of devicetree to allow mapping which does not
+  block future extension by devicetree.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
+*** BLURB HERE ***
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Andreas Kemnade (2):
+  iio: adc: rn5t618: Add iio map
+  power: supply: rn5t618: Add voltage_now property
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+ drivers/iio/adc/rn5t618-adc.c        | 23 +++++++++++++++++
+ drivers/power/supply/Kconfig         |  2 ++
+ drivers/power/supply/rn5t618_power.c | 38 ++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+-- 
+2.30.2
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
