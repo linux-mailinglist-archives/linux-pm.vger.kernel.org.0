@@ -2,107 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E471A3C5F4C
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 17:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37D83C5F62
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 17:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbhGLPfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 11:35:22 -0400
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:33368 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbhGLPfW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 11:35:22 -0400
-Received: by mail-oi1-f170.google.com with SMTP id s23so10115282oij.0;
-        Mon, 12 Jul 2021 08:32:33 -0700 (PDT)
+        id S233861AbhGLPjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 11:39:51 -0400
+Received: from mail-il1-f175.google.com ([209.85.166.175]:37527 "EHLO
+        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232203AbhGLPjv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 11:39:51 -0400
+Received: by mail-il1-f175.google.com with SMTP id o8so9162903ilf.4;
+        Mon, 12 Jul 2021 08:37:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eoSbY0l2R7T8Dp+6SHfm2nWBKshC7xSCH+2ackq8X5c=;
-        b=XVw0bM9zvtZGN7to/lrXOgyFkKq9XhLilh2KJ0A70wWP/EYKTy71djTVhLOjzRKWTJ
-         DnCyfofcxdn2VwVFD9GpoUqDynIDjP2f7qBZ7AL/rR0MoE0NA480HJtDoXOMqnkYkBT9
-         P3f+UH5ON0SF++8Cbm2DKUT02rXoErf/8WHtEkHgfnSgfGkXb7px0HOmD9+2wSa9NL3N
-         5E2+vHWj3IEG8EuTgsE0c6nRt0L2/kYxVMexI059nsRtC62XSGpO/jkxi+H642tm49uv
-         c6OW1nbYaWBdOMstra1fXgDrRGJXuwnbeVz4qgsI4y3pJKNrFRTmaFrx9jLzUfMEEgd+
-         fQ+Q==
-X-Gm-Message-State: AOAM532f8hTZsk5iRbdmFLT+yIzjtC0xK0YUxF7xexhu2uEqVSownPlA
-        SR2aq3xaWT+InTPqzTf6k+JsTC3spRJ9sgY70pY=
-X-Google-Smtp-Source: ABdhPJxClNJyjoaMQqdJXvZAOQo95mnJXirXCuszMI5IbtvGcJQtRRqPY44SqSd1Pty6j/tp4+bw2nCBh/u4v/O0hQI=
-X-Received: by 2002:a05:6808:10d0:: with SMTP id s16mr5729607ois.69.1626103952819;
- Mon, 12 Jul 2021 08:32:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+v/C3HhVpzVh+emkYtSgeszTQ+6xKMpx5E3RKEB3iPM=;
+        b=r9SWYg+Q7CkYIQyDKlB759YE8hC9YndXNltax7Ktd5et3CkwGf+Tikn2U9J6qCRiYu
+         RozpZ22u4QF/m3E9YFashQvGZ4oCm2/q9TDedZTk265b9EB5BovjQtU7IlTRHBwlRGcM
+         lmD2OrPKWSnb/s5txRwszeYw/vGshizHn2szc1/dyk0Bs8TMZN4KeSDau9iGSx0KB/+/
+         jOEMY6bo5sirk2wazYlGwskHoMcjUCEzg1EKdugKvxpAXxAbRmpI9O13pdYLmttnZ3Oj
+         e2eQeCN2oCEENYOPl7E9GUyOB+F8ykvHm8xLodrbKQycq+sr0NxS+kfkb6a6MgY3UAiA
+         Q1SQ==
+X-Gm-Message-State: AOAM530bjLdgiA3T0mui8Bhjd+MR6mPM5aI0UQh/kYgJ6zuIJpRjdgGW
+        4mfumley1Fxo/fS6BZTfhw==
+X-Google-Smtp-Source: ABdhPJzmc51CTY7qWur4uyZR4os11C6oex2SMvWqW2cYkTp5LM+cb9uBLblf3Ze6b3tN+PPkmiJSiQ==
+X-Received: by 2002:a92:d083:: with SMTP id h3mr13387917ilh.157.1626104222749;
+        Mon, 12 Jul 2021 08:37:02 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id t3sm5039256ilm.87.2021.07.12.08.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 08:37:02 -0700 (PDT)
+Received: (nullmailer pid 1980098 invoked by uid 1000);
+        Mon, 12 Jul 2021 15:36:59 -0000
+Date:   Mon, 12 Jul 2021 09:36:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Heidelberg <david@ixit.cz>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/12] dt-bindings: phy: tegra20-usb-phy: Convert to
+ schema
+Message-ID: <20210712153659.GA1980043@robh.at.kernel.org>
+References: <20210704225433.32029-1-digetx@gmail.com>
+ <20210704225433.32029-2-digetx@gmail.com>
 MIME-Version: 1.0
-References: <4327888.LvFx2qVVIh@kreacher> <5327028b-6e0b-e83c-b147-da083a23634c@gmail.com>
- <CAJZ5v0iCyLircAL928bA4-+Pd1UtaBcZ-PVRNk3qJScSybzwCQ@mail.gmail.com> <CAJZ5v0iw==AbxPR9P=SBWYWKi8PVwp9DafoXe3MTuqA8BVmAsw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iw==AbxPR9P=SBWYWKi8PVwp9DafoXe3MTuqA8BVmAsw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jul 2021 17:32:21 +0200
-Message-ID: <CAJZ5v0goZPRD24Wdd0HoqAFF9HYKifd_=e02FNCm2EmMGLEj8Q@mail.gmail.com>
-Subject: Re: [PATCH][RFT] PCI: Use pci_update_current_state() in pci_enable_device_flags()
-To:     Michael <phyre@rogers.com>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210704225433.32029-2-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 5:30 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Jul 9, 2021 at 1:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Thu, Jul 8, 2021 at 10:34 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
-> > >
-> > > On 7/8/21 3:25 PM, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Updating the current_state field of struct pci_dev the way it is done
-> > > > in pci_enable_device_flags() before calling do_pci_enable_device() may
-> > > > not work.  For example, if the given PCI device depends on an ACPI
-> > > > power resource whose _STA method initially returns 0 ("off"), but the
-> > > > config space of the PCI device is accessible and the power state
-> > > > retrieved from the PCI_PM_CTRL register is D0, the current_state
-> > > > field in the struct pci_dev representing that device will get out of
-> > > > sync with the power.state of its ACPI companion object and that will
-> > > > lead to power management issues going forward.
-> > > >
-> > > > To avoid such issues, make pci_enable_device_flags() call
-> > > > pci_update_current_state() which takes ACPI device power management
-> > > > into account, if present, to retrieve the current power state of the
-> > > > device.
-> > > >
-> > > > Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
-> > > > Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >
-> > > > Hi Maximilian,
-> > > >
-> > > > Because commit 4514d991d992 ("PCI: PM: Do not read power state in
-> > > > pci_enable_device_flags()"), the issue addressed by it is back, so
-> > > > we need an alternative way to address it.
-> > > >
-> > > > Can you please check if this patch makes that issue go away?
-> > >
-> > > Hi,
-> > >
-> > > just tested this on v5.13 and it works, thanks! Feel free to add
-> > >
-> > > Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
+On Mon, 05 Jul 2021 01:54:22 +0300, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra20 USB PHY binding to schema.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/phy/nvidia,tegra20-usb-phy.txt   |  74 ----
+>  .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 357 ++++++++++++++++++
+>  2 files changed, 357 insertions(+), 74 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
+>  create mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.yaml
+> 
 
-Gmail decided to drop Salvatore's address from the To list for me,
-sorry about that.
-
-> Michael, Salvatore, since this alternative to commit 4514d991d992
-> works for Maximilian, I'm going to queue it up for 5.15 (barring any
-> objections from Bjorn), so I would appreciate it if you could test it
-> and let me know whether or not there were any problems with it.
->
-> The patch can be downloaded from
-> https://patchwork.kernel.org/project/linux-pm/patch/4327888.LvFx2qVVIh@kreacher
->
-> Thanks!
+Reviewed-by: Rob Herring <robh@kernel.org>
