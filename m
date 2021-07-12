@@ -2,120 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1220A3C61A9
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 19:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CAE3C61FC
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 19:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbhGLRPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 13:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbhGLRPS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 13:15:18 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30A8C061786
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 10:12:29 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id l26so25289592oic.7
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 10:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hhYJAhkDrtzD1TZ603Y285exmmtUvo2J1DNQvlpOcc4=;
-        b=iSdM+gXa0EpZbAN3Rcdr/ucRq4XtUaafuQg2PbaF/3hUxE9nLSSrhte/oVc/Jgaamt
-         fJwmmcCbCn6gU3rE3UnGpCLDyCa5YKVTi/U1GerYkpk7LIg+4WuOk/0tF39ywnkT9xJX
-         TGE64ilHlaV3aVy7CQ/Xk89puC3XcVhmjZjb83V/v3gwPghYMzDaipQNuHG2/e4vD0ju
-         WyqlL6TJWT+qbACuMjmKP6+M5h0i8AY/hCgNWhXm6iJMfBKY9u2/tt7St2CyjLGh8U8D
-         XaFE2M4ts2Z73BhA3GeqagIBN6svOgZWRpcGhdcl+Mqn+UhnqBR+mtyD68ZuO4yDdwdv
-         k35w==
+        id S235160AbhGLRfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 13:35:12 -0400
+Received: from mail-io1-f43.google.com ([209.85.166.43]:47072 "EHLO
+        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233887AbhGLRfK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 13:35:10 -0400
+Received: by mail-io1-f43.google.com with SMTP id y8so23669534iop.13;
+        Mon, 12 Jul 2021 10:32:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hhYJAhkDrtzD1TZ603Y285exmmtUvo2J1DNQvlpOcc4=;
-        b=NZi9/pl4ImPcDKtmABzDLTe6tvfr7F7DURhT2sCCL/QKAfubR+W05QhpqydrDhbydJ
-         TuIYxpErd8nCh4t1lw2IPjlTJ9BiL0obMJ/osxB7/W0fLANBMg9ugMr2IAry4aXVHSU1
-         kpgleDJcqr1K0AYuFS4yIL4lQR8d3UFw/viivZUZEsbBUvMNbYVtggVf5s5sjTaXfPSz
-         28KcFJrN7C82hu7Zg1IOQfPJtrAxFEhf3IXWvjfSpecW8lJK0E8Lqz2q5IU493hWga5Q
-         2lB7CjwFWsBRReCpjdzWgb6XngqXKbmSyxjW69R2db4iGsUtRFsN1PHIh3nVNxfHkA9e
-         WaeQ==
-X-Gm-Message-State: AOAM533Y201x54dKO0nAcgOaTGL/EAmBu+Vn3Sp+TT1vVncE0sDPnzSB
-        r8sbODrcskqACb3ySvWVlCHSyQ==
-X-Google-Smtp-Source: ABdhPJwGv2i/4fNcLoL/Oj1RiFgJsvY/v54G/YzCwIQEseT14L/UZEscy4PJvTlnsQvCIrJyx7BwtA==
-X-Received: by 2002:aca:5714:: with SMTP id l20mr11515246oib.74.1626109949263;
-        Mon, 12 Jul 2021 10:12:29 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id g1sm3257182otq.22.2021.07.12.10.12.28
+        bh=f7BUFs0FlI3Hj4UaAhqIjPZ08b65CDzd+MMh8k0ttO8=;
+        b=U9OLr2J+u3FHtd+6c4ggPLZtx2JH+i7LDo/EVVcim9Lc4l5nAaTtSo9cRc1Z1unNC/
+         NaLjjSF0LfXzQYLvVFXfhul4Hz7IKJ9WZHw6wiZDymT/3r8pN+bvbIkyuv6GuUS2/q7N
+         PcyYL4maM0g9m5kgv6fG8XiAbrYmnI916r6D3ZVWrJamBEtAyQdpz7W1KlPuOUAylmIl
+         p+8gY3VHYzp6urdW6KNP42EBsyyrm3LvxkstnZZyw1U3Rw4AQlrM+B1glrDLdN1oZueO
+         DpFNQLJ6Zf6tq26JZ1PSvEMboe9JXTZvpslZBFSy9M5Mu7xVepLtwwb2S9wWXfmd4DT1
+         tyFQ==
+X-Gm-Message-State: AOAM53187fz3cSRXF/YrA+znnvpIE0l0uNay8W6mxhOmLQ2seBw3lF6k
+        hFxQl5RBGrtriP8NPxsPzQ==
+X-Google-Smtp-Source: ABdhPJwG2c51hutmWd6VMKfsFj8MIYs0Zb7FuppHgPDObOEZufjTBVDkWQdC4Xux/LgL+gZJGOe4eQ==
+X-Received: by 2002:a05:6638:d4d:: with SMTP id d13mr171938jak.140.1626111140345;
+        Mon, 12 Jul 2021 10:32:20 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id g1sm7711422ilq.13.2021.07.12.10.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jul 2021 10:12:28 -0700 (PDT)
-Date:   Mon, 12 Jul 2021 12:12:26 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/3] power: reset: qcom-pon: Add support for
- 'qcom,pon-reboot-not-used'
-Message-ID: <YOx3+qy2JhmLP87r@yoga>
-References: <20210705025032.12804-1-shawn.guo@linaro.org>
- <20210705025032.12804-4-shawn.guo@linaro.org>
+        Mon, 12 Jul 2021 10:32:19 -0700 (PDT)
+Received: (nullmailer pid 2158356 invoked by uid 1000);
+        Mon, 12 Jul 2021 17:32:16 -0000
+Date:   Mon, 12 Jul 2021 11:32:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, tdas@codeaurora.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [Patch v3 6/6] dt-bindings: thermal: Add dt binding for QCOM LMh
+Message-ID: <20210712173216.GA2150396@robh.at.kernel.org>
+References: <20210708120656.663851-1-thara.gopinath@linaro.org>
+ <20210708120656.663851-7-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210705025032.12804-4-shawn.guo@linaro.org>
+In-Reply-To: <20210708120656.663851-7-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun 04 Jul 21:50 CDT 2021, Shawn Guo wrote:
-
-> Check property 'qcom,pon-reboot-not-used' and skip reboot-mode setup
-> if the property is present.  This is useful for devices that use IMEM
-> instead of PON register to pass reboot mode, but still want to populate
-> pwrkey and resin devices.
+On Thu, Jul 08, 2021 at 08:06:56AM -0400, Thara Gopinath wrote:
+> Add dt binding documentation to describe Qualcomm
+> Limits Management Hardware node.
 > 
-
-If IMEM is used instead, I think it should be sufficient for the DT
-author to omit mode-* properties to achieve this. If the PON hardware
-doesn't support mode-*, then that should be reflected in the DT binding
-and compatible.
-
-Regards,
-Bjorn
-
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 > ---
->  drivers/power/reset/qcom-pon.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
 > 
-> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
-> index 4a688741a88a..85fae9e85878 100644
-> --- a/drivers/power/reset/qcom-pon.c
-> +++ b/drivers/power/reset/qcom-pon.c
-> @@ -47,6 +47,14 @@ static int pm8916_pon_probe(struct platform_device *pdev)
->  	struct pm8916_pon *pon;
->  	int error;
->  
-> +	if (device_property_present(&pdev->dev, "qcom,pon-reboot-not-used")) {
-> +		/*
-> +		 * Skip reboot-mode setup and registration if PON is not used
-> +		 * for passing reboot mode at all.
-> +		 */
-> +		goto done;
-> +	}
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+> new file mode 100644
+> index 000000000000..7f62bd3d543d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2021 Linaro Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/qcom-lmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	pon = devm_kzalloc(&pdev->dev, sizeof(*pon), GFP_KERNEL);
->  	if (!pon)
->  		return -ENOMEM;
-> @@ -75,6 +83,7 @@ static int pm8916_pon_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, pon);
->  
-> +done:
->  	return devm_of_platform_populate(&pdev->dev);
->  }
->  
+> +title: Qualcomm Limits Management Hardware(LMh)
+> +
+> +maintainers:
+> +  - Thara Gopinath <thara.gopinath@linaro.org>
+> +
+> +description:
+> +  Limits Management Hardware(LMh) is a hardware infrastructure on some
+> +  Qualcomm SoCs that can enforce temperature and current limits as
+> +  programmed by software for certain IPs like CPU.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sdm845-lmh
+> +
+> +  reg:
+> +    items:
+> +      - description: core registers
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  '#interrupt-cells':
+> +    const: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  qcom,lmh-cpu-id:
+> +    description:
+> +      CPU id of the first cpu in the LMh cluster
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+The way we reference other nodes in DT is phandles. 'cpus' is already 
+somewhat established for this case.
+
+> +
+> +  qcom,lmh-temperature-arm:
+> +    description:
+> +      An integer expressing temperature threshold in millicelsius at which
+
+Use unit suffix when you have units.
+
+> +      the LMh thermal FSM is engaged.
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +
+> +  qcom,lmh-temperature-low:
+> +    description:
+> +      An integer expressing temperature threshold in millicelsius at which
+> +      the LMh thermal FSM is engaged.
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +
+> +  qcom,lmh-temperature-high:
+> +    description:
+> +      An integer expressing temperature threshold in millicelsius at which
+> +      the LMh thermal FSM is engaged.
+
+What's the difference in the 3 properties because the description is the 
+same.
+
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - #interrupt-cells
+> +  - interrupt-controller
+> +  - qcom,lmh-cpu-id
+> +  - qcom,lmh-temperature-arm
+> +  - qcom,lmh-temperature-low
+> +  - qcom,lmh-temperature-high
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/qcom,rpmh.h>
+> +    #include <dt-bindings/interconnect/qcom,sdm845.h>
+> +
+> +    lmh_cluster1: lmh@17d70800 {
+> +      compatible = "qcom,sdm845-lmh";
+> +      reg = <0 0x17d70800 0 0x401>;
+> +      interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> +      qcom,lmh-cpu-id = <0x4>;
+> +      qcom,lmh-temperature-arm = <65000>;
+> +      qcom,lmh-temperature-low = <94500>;
+> +      qcom,lmh-temperature-high = <95000>;
+> +      interrupt-controller;
+
+What devices is this an interrupt controller for?
+
+> +      #interrupt-cells = <1>;
+> +    };
+> +  - |
+> +    lmh_cluster0: lmh@17d78800 {
+> +      compatible = "qcom,sdm845-lmh";
+> +      reg = <0 0x17d78800 0 0x401>;
+> +      interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +      qcom,lmh-cpu-id = <0x0>;
+> +      qcom,lmh-temperature-arm = <65000>;
+> +      qcom,lmh-temperature-low = <94500>;
+> +      qcom,lmh-temperature-high = <95000>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <1>;
+> +    };
+> +  - |
 > -- 
-> 2.17.1
+> 2.25.1
+> 
 > 
