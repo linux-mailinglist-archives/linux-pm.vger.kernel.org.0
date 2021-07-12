@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0F33C4043
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 02:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87FF3C4045
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 02:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbhGLAGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jul 2021 20:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S230014AbhGLAGh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Jul 2021 20:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhGLAGe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jul 2021 20:06:34 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F04DC0613DD;
-        Sun, 11 Jul 2021 17:03:47 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id k3so3505347qtq.7;
-        Sun, 11 Jul 2021 17:03:47 -0700 (PDT)
+        with ESMTP id S229660AbhGLAGg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jul 2021 20:06:36 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB0C0613DD;
+        Sun, 11 Jul 2021 17:03:49 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id g8so12574430qth.10;
+        Sun, 11 Jul 2021 17:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JTbm+Ivds98cb9V5q8q1C/zZH2NCdOMIxgLjAuUIi4Y=;
-        b=e6KFZp5MY5dIqEWOMEdQlVZO85JAxGhf/+0C/OMeAttBchIQ1aDkUiVV61LM3bo01l
-         Kn9v6ftCBZZgx4/QJnk4QQWbxrdfHNi7tHlCkOQWc1ANc1dwfRhdssAyojVtuR57zSzC
-         5IfWbjOOQsI+D5iKessslUL6mRYS7YVhhtmhxIf4OhRg1tESH4U6d71pUiAXZEK42qPl
-         OLMUr/TxC9S85vFDXJZQFvSn6BG+G8QshZQdmcB96FcbbVQkTMQQzsMHNQMrCRiPwKrd
-         HBWi7K+bfh41gNgc5Rz36wJLYnFQDAkX48vGOiNjHUY4DrKy9rWXW2d149SCr/wSUecg
-         IZfw==
+        bh=e+RoyTz3ioafoGh1CV850v6zHYBwTfvOJ8SdICb6XYM=;
+        b=U53qDbIR47l3Xnh3SM8c+JxK119FMEOq1vmVL+WVvmZcc/UpaxlN4adUp2mrY8yJ5u
+         aOsntTmiXbrP8+p+LaU8nsWK8IIhpAi44P6PUHzKZ5+/d91hhxKllJ3LRX9EBH0rUSgJ
+         JIqVy9eGyvgWDxzBSVVzzy9bLz/RMaW400W4Pkz5QavptjNiGKJO/+0e8HGKGyZmD75Z
+         r61gXDVoSBrj9iAoX+3PwzZWuK/EGXIOTziHvSqPDyCbboEue3N1+rlz/+rVecHBWNfV
+         MK2Zwzyy/6Jb0siCnW2dkgYQ5pfYC9RyCXGRs3rv+Ucym3YXjEzu3+oy5fOhUtmXgqNS
+         E3Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JTbm+Ivds98cb9V5q8q1C/zZH2NCdOMIxgLjAuUIi4Y=;
-        b=VUxaNh+LwIJSSonDbnXigZEI1iKBEniJM9Fe3U8KiPOwJm2kmbadyqfvRTPAH9R8+V
-         T0nI8uYYDnoq306K58bOYQBtgdoqB+XB8JP5hjBQ+zgwNnSRuXCiW25qmlUeDQNZBCmg
-         f89b/P/1JNRksi+El4a9QQPPulOCTt05aOY9Dd+DeLg6MPeVxahNrLDkHDB6TRBcR8os
-         cxPk0MGgXFY2PfyGryiadn56IwPaTYQ+uyP4Ru5uKmcq5ye+jinTzOMnU/2sa5brfY//
-         pw/7GZcpiCU0eT6FdptyrE8JmdXddU/lnQdPSq4t+zfSfWnHl+ej05fuE+VWTcO79W5A
-         yu3Q==
-X-Gm-Message-State: AOAM531xPf4rCLq1OksGZP+AinW33a4etF1B8Yh7yoFAQqyNpiupZbia
-        VmzOfAQU0Exx53JHeSBllqE=
-X-Google-Smtp-Source: ABdhPJw0mJHjZBY3C7gjk9CFWVqFMYRFXUipZmACDMOIVTeq82kTY3tLRgRyMuHI9FTFHh01JLiSSw==
-X-Received: by 2002:ac8:7f02:: with SMTP id f2mr27210251qtk.213.1626048226877;
-        Sun, 11 Jul 2021 17:03:46 -0700 (PDT)
+        bh=e+RoyTz3ioafoGh1CV850v6zHYBwTfvOJ8SdICb6XYM=;
+        b=VlKWnczOZsC/kbU5zXaHf/h8GHJzYuyveBrQ3mCpoiNaI2s9kwJ8cPiwDhEbxI7jWD
+         Ocjff3LJSPDO615b78TqSMA79M+htE1Ott37csce58GoahzD3TUoCNHN2f38EUGMtIcx
+         uvgca9I5DoXJcVSpHzgcZg9yfYcC8F7aGvQVe9sLj2eRAyzj1SpQwnzdrdaWpU6Sy3xt
+         bV0Lz3+/LXAudPR6+SdaPwh8Y5jnubrtSxIAAM/IlpmPW+3KB+PvbJKgbm0dax9xEObG
+         HLFS93eVqmSQcZczN0kbQUmSs13vCVt3e+AwR/TjCzZQI7HuiFEAC4uln1SfuIQXjq7z
+         KX1w==
+X-Gm-Message-State: AOAM531rA2ZPl6aS5G5uxaBcawnCXLlsjmfk7PfelvpoOHmejFrwB+Kl
+        r4BZuUakcgBFprgcyahiGwo=
+X-Google-Smtp-Source: ABdhPJxfR8HnL+OYJPS86Mj4YW/rYlFIKRTtgPAJ4YYQQr3+pG/W8DVlyJsJDP56SmzPsDj2OeVTEA==
+X-Received: by 2002:ac8:7d90:: with SMTP id c16mr44142363qtd.337.1626048228764;
+        Sun, 11 Jul 2021 17:03:48 -0700 (PDT)
 Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.gmail.com with ESMTPSA id h10sm4970290qta.74.2021.07.11.17.03.45
+        by smtp.gmail.com with ESMTPSA id h10sm4970290qta.74.2021.07.11.17.03.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:03:46 -0700 (PDT)
+        Sun, 11 Jul 2021 17:03:48 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 2/5] soc/tegra: irq: Add stubs needed for compile testing
-Date:   Mon, 12 Jul 2021 03:03:19 +0300
-Message-Id: <20210712000322.4224-3-digetx@gmail.com>
+Subject: [PATCH v2 3/5] soc/tegra: pm: Make stubs usable for compile testing
+Date:   Mon, 12 Jul 2021 03:03:20 +0300
+Message-Id: <20210712000322.4224-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210712000322.4224-1-digetx@gmail.com>
 References: <20210712000322.4224-1-digetx@gmail.com>
@@ -65,34 +65,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add stubs needed for compile-testing of tegra-cpuidle driver.
+The PM stubs need to depend on ARCH_TEGRA in order to be usable for
+compile-testing of tegra-cpuidle driver. Add the dependency.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- include/soc/tegra/irq.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/soc/tegra/pm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/soc/tegra/irq.h b/include/soc/tegra/irq.h
-index 8eb11a7109e4..94539551c8c1 100644
---- a/include/soc/tegra/irq.h
-+++ b/include/soc/tegra/irq.h
-@@ -6,8 +6,15 @@
- #ifndef __SOC_TEGRA_IRQ_H
- #define __SOC_TEGRA_IRQ_H
+diff --git a/include/soc/tegra/pm.h b/include/soc/tegra/pm.h
+index 08477d7bfab9..81701944fe78 100644
+--- a/include/soc/tegra/pm.h
++++ b/include/soc/tegra/pm.h
+@@ -16,7 +16,7 @@ enum tegra_suspend_mode {
+ 	TEGRA_MAX_SUSPEND_MODE,
+ };
  
--#if defined(CONFIG_ARM)
-+#include <linux/types.h>
-+
-+#if defined(CONFIG_ARM) && defined(CONFIG_ARCH_TEGRA)
- bool tegra_pending_sgi(void);
-+#else
-+static inline bool tegra_pending_sgi(void)
-+{
-+	return false;
-+}
- #endif
+-#if defined(CONFIG_PM_SLEEP) && defined(CONFIG_ARM)
++#if defined(CONFIG_PM_SLEEP) && defined(CONFIG_ARM) && defined(CONFIG_ARCH_TEGRA)
+ enum tegra_suspend_mode
+ tegra_pm_validate_suspend_mode(enum tegra_suspend_mode mode);
  
- #endif /* __SOC_TEGRA_IRQ_H */
 -- 
 2.32.0
 
