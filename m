@@ -2,190 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CAE3C61FC
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 19:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAABB3C653D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 23:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbhGLRfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 13:35:12 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:47072 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbhGLRfK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 13:35:10 -0400
-Received: by mail-io1-f43.google.com with SMTP id y8so23669534iop.13;
-        Mon, 12 Jul 2021 10:32:20 -0700 (PDT)
+        id S232890AbhGLVD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 17:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230087AbhGLVD0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 17:03:26 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D039C0613DD
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 14:00:36 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p22so4637476pfh.8
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 14:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=mKVYQ6K/sHmv2ZUNAfztYfnGRYbFwe28Au4UJpQtHPI=;
+        b=nNyr0i7C5jXlT9cxzkoGhgtb/VUq88Jgg2IzT55MK8J4GXR24sUbWP6FBWVb2hKlyk
+         JUSWefM4FUxsi5+84C1q2qyKBgOuoSk6zHOg1Mg9XZk/5Vsa3vsbiKcq5awGavJ5dUWp
+         W5zlI4rKsbBQf361zuw8pnJKHLXKBA9n7SfSnH0yzu4la6z5EWHughq+WCbtf8MQUhCm
+         DxN+qhhJr0XmsvbQ8pEG0MznaGgn/8wdZhSrYcZXRDv49qN8Eh2ZXU4BO5msycpkkmg1
+         bOwFhhqMIB01WoNVpoioNkzkvNA60Xm7YAWdzEMEEZv8jp7hfgHdlZDhGpBcGQNB+QnS
+         UZRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f7BUFs0FlI3Hj4UaAhqIjPZ08b65CDzd+MMh8k0ttO8=;
-        b=U9OLr2J+u3FHtd+6c4ggPLZtx2JH+i7LDo/EVVcim9Lc4l5nAaTtSo9cRc1Z1unNC/
-         NaLjjSF0LfXzQYLvVFXfhul4Hz7IKJ9WZHw6wiZDymT/3r8pN+bvbIkyuv6GuUS2/q7N
-         PcyYL4maM0g9m5kgv6fG8XiAbrYmnI916r6D3ZVWrJamBEtAyQdpz7W1KlPuOUAylmIl
-         p+8gY3VHYzp6urdW6KNP42EBsyyrm3LvxkstnZZyw1U3Rw4AQlrM+B1glrDLdN1oZueO
-         DpFNQLJ6Zf6tq26JZ1PSvEMboe9JXTZvpslZBFSy9M5Mu7xVepLtwwb2S9wWXfmd4DT1
-         tyFQ==
-X-Gm-Message-State: AOAM53187fz3cSRXF/YrA+znnvpIE0l0uNay8W6mxhOmLQ2seBw3lF6k
-        hFxQl5RBGrtriP8NPxsPzQ==
-X-Google-Smtp-Source: ABdhPJwG2c51hutmWd6VMKfsFj8MIYs0Zb7FuppHgPDObOEZufjTBVDkWQdC4Xux/LgL+gZJGOe4eQ==
-X-Received: by 2002:a05:6638:d4d:: with SMTP id d13mr171938jak.140.1626111140345;
-        Mon, 12 Jul 2021 10:32:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id g1sm7711422ilq.13.2021.07.12.10.32.17
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=mKVYQ6K/sHmv2ZUNAfztYfnGRYbFwe28Au4UJpQtHPI=;
+        b=M5D6KnUGewsViTHVDEizXmmvq6yZe3S7nHrLUdH99PF5LWCSC4aYzjgpPNCD6z3Rfp
+         Ajs5kdGgW+8Q/DwYrZTgsIMH/sBDw+yc7UFCF1cz/3oeU94Q6CX3tBWJO7MurdH5HxPm
+         iWTKoBnyXsQocWN5eh04eU4je0NAM8MDopBbUypTklV0GND0iV6Jht6dowPPQVZh2zyp
+         5ZTx0Alji0WaID96+ESjPNXbd4RX4WtExEd5zycQb10PISc+/bTyIz1voz6l9FbNEjnZ
+         nj9ZU1qlWIyDweVkf+FRIaOw1tC3HOBmXejtPAeBai4Lay92/mcwVLV0bmLmK0N7DYd2
+         Vflw==
+X-Gm-Message-State: AOAM5330uDQLfCii756ssaD3LrOmtgLmrisxVsJQ6pntZB/Q7cKJT7wY
+        TWgGOuHBMns9C4lXRSM2hG1RlCg3vCVx4A==
+X-Google-Smtp-Source: ABdhPJwCEFT2e1soKcJaLKVZXew2lsj84vm/F4Qe7koBOvbAfI496Nm9x8xSM3ONp6swNJ/0h5i6Sw==
+X-Received: by 2002:a62:bd15:0:b029:31c:a584:5f97 with SMTP id a21-20020a62bd150000b029031ca5845f97mr1082655pff.33.1626123635933;
+        Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w6sm19518159pgh.56.2021.07.12.14.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jul 2021 10:32:19 -0700 (PDT)
-Received: (nullmailer pid 2158356 invoked by uid 1000);
-        Mon, 12 Jul 2021 17:32:16 -0000
-Date:   Mon, 12 Jul 2021 11:32:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [Patch v3 6/6] dt-bindings: thermal: Add dt binding for QCOM LMh
-Message-ID: <20210712173216.GA2150396@robh.at.kernel.org>
-References: <20210708120656.663851-1-thara.gopinath@linaro.org>
- <20210708120656.663851-7-thara.gopinath@linaro.org>
+        Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
+Message-ID: <60ecad73.1c69fb81.96aba.a0bb@mx.google.com>
+Date:   Mon, 12 Jul 2021 14:00:35 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210708120656.663851-7-thara.gopinath@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.14-rc1
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 08:06:56AM -0400, Thara Gopinath wrote:
-> Add dt binding documentation to describe Qualcomm
-> Limits Management Hardware node.
-> 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> new file mode 100644
-> index 000000000000..7f62bd3d543d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2021 Linaro Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/qcom-lmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Limits Management Hardware(LMh)
-> +
-> +maintainers:
-> +  - Thara Gopinath <thara.gopinath@linaro.org>
-> +
-> +description:
-> +  Limits Management Hardware(LMh) is a hardware infrastructure on some
-> +  Qualcomm SoCs that can enforce temperature and current limits as
-> +  programmed by software for certain IPs like CPU.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sdm845-lmh
-> +
-> +  reg:
-> +    items:
-> +      - description: core registers
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  qcom,lmh-cpu-id:
-> +    description:
-> +      CPU id of the first cpu in the LMh cluster
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc1)
 
-The way we reference other nodes in DT is phandles. 'cpus' is already 
-somewhat established for this case.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+14-rc1/
 
-> +
-> +  qcom,lmh-temperature-arm:
-> +    description:
-> +      An integer expressing temperature threshold in millicelsius at which
+Tree: pm
+Branch: testing
+Git Describe: v5.14-rc1
+Git Commit: e73f0f0ee7541171d89f2e2491130c7771ba58d3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Use unit suffix when you have units.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-> +      the LMh thermal FSM is engaged.
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
-> +  qcom,lmh-temperature-low:
-> +    description:
-> +      An integer expressing temperature threshold in millicelsius at which
-> +      the LMh thermal FSM is engaged.
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
-> +  qcom,lmh-temperature-high:
-> +    description:
-> +      An integer expressing temperature threshold in millicelsius at which
-> +      the LMh thermal FSM is engaged.
+Detailed per-defconfig build reports:
 
-What's the difference in the 3 properties because the description is the 
-same.
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - #interrupt-cells
-> +  - interrupt-controller
-> +  - qcom,lmh-cpu-id
-> +  - qcom,lmh-temperature-arm
-> +  - qcom,lmh-temperature-low
-> +  - qcom,lmh-temperature-high
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/qcom,rpmh.h>
-> +    #include <dt-bindings/interconnect/qcom,sdm845.h>
-> +
-> +    lmh_cluster1: lmh@17d70800 {
-> +      compatible = "qcom,sdm845-lmh";
-> +      reg = <0 0x17d70800 0 0x401>;
-> +      interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +      qcom,lmh-cpu-id = <0x4>;
-> +      qcom,lmh-temperature-arm = <65000>;
-> +      qcom,lmh-temperature-low = <94500>;
-> +      qcom,lmh-temperature-high = <95000>;
-> +      interrupt-controller;
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-What devices is this an interrupt controller for?
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-> +      #interrupt-cells = <1>;
-> +    };
-> +  - |
-> +    lmh_cluster0: lmh@17d78800 {
-> +      compatible = "qcom,sdm845-lmh";
-> +      reg = <0 0x17d78800 0 0x401>;
-> +      interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-> +      qcom,lmh-cpu-id = <0x0>;
-> +      qcom,lmh-temperature-arm = <65000>;
-> +      qcom,lmh-temperature-low = <94500>;
-> +      qcom,lmh-temperature-high = <95000>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <1>;
-> +    };
-> +  - |
-> -- 
-> 2.25.1
-> 
-> 
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
