@@ -2,155 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4523C6183
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 19:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2143C618E
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jul 2021 19:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbhGLRJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jul 2021 13:09:39 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:62342 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234561AbhGLRJj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 13:09:39 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.1.0)
- id 1126075ed0e12430; Mon, 12 Jul 2021 19:06:48 +0200
-Received: from kreacher.localnet (89-64-82-45.dynamic.chello.pl [89.64.82.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9E3C7669C07;
-        Mon, 12 Jul 2021 19:06:47 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
-        Koba Ko <koba.ko@canonical.com>
-Subject: [RFT][PATCH] PCI: PM: Add special case handling for PCIe device wakeup
-Date:   Mon, 12 Jul 2021 19:06:47 +0200
-Message-ID: <5475468.DvuYhMxLoT@kreacher>
+        id S234187AbhGLRLh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jul 2021 13:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233331AbhGLRLh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jul 2021 13:11:37 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CEAC0613DD
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 10:08:47 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id w15-20020a056830144fb02904af2a0d96f3so19591614otp.6
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jul 2021 10:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eoRs3jZry7KcnKcDapY0XJ0GGSCOklV/X4YSX1hb1x8=;
+        b=PJwQSJBOZq7qli3w+9NUFnTbKKfVbFNYdEcCYjiG5LdgbQCS1WBWDlpmNPEnPs2B1X
+         Ay6ImdQbwk+iELQJuM47wGLXfgueZE4gd29ibMTpGgraYgx4HGjYmW+SzhGouu8rpbRk
+         XysJ8L6C8UtquuBxPD7Lzea/Dz/3KWpU7ZkZok+EuT5ISKzEGnbco+nmZBCPDcvgg897
+         yGe6hnoxXAPt9VexTjmxAbnHSxvz21DMVAoAkC1BS0BMQbjx7tbjrMSBO9SFDHQYN4Fq
+         AfKBE/KnkIyCh4AV0bmfEArS4OcqmNwXx9LoIJxD0T/mSzBu1xGnYPEoEbMJEU75DmVy
+         z51w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eoRs3jZry7KcnKcDapY0XJ0GGSCOklV/X4YSX1hb1x8=;
+        b=bmBfhImfk3SNdEma7CC/a3YC9+aAawaFPakJ23KdRkpaboemutqy0GkYu6GWJ5G3V7
+         Bf3/6Ma0RJ4jmSqGMG9z4bJjAF+6BANuJdylPEx5t+08KWCuixKBh7VhdxOcZYBbuvU+
+         mg4uA43UHUOOozvHOOeMTJhmSxSZK9acdTLdoI4yissEyXol/WzWP5/NzDfM/ODHlfWS
+         2et7zZgnrO2+emT1DZamQf6xIyvTe6wQk2w2QdDj8Pn3Hf/j0wKX5bNU1P0lWsl+Eq5d
+         ePMqPx4sYuPHinZljxcRDNFh6UklTQVc2aXZiOTEJyreVBTzMBJwWZT2YkSClId3fU0I
+         fTZA==
+X-Gm-Message-State: AOAM530FjNl9D0jNvZYo3uuC80681BfJgJLhHkjokANCtXaMGolRwq5m
+        s2tE1V/ZPyS3VnNWpVj9iTqhCQ==
+X-Google-Smtp-Source: ABdhPJxxZh+RoC33x45e5HtehEjtcbXLDiBQcMFbCCv9umYtziLtzdZUph/tUf1jm3FlN+xmYmWL4Q==
+X-Received: by 2002:a05:6830:4027:: with SMTP id i7mr45106ots.180.1626109727111;
+        Mon, 12 Jul 2021 10:08:47 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k4sm162226otp.2.2021.07.12.10.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 10:08:46 -0700 (PDT)
+Date:   Mon, 12 Jul 2021 12:08:44 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: qcom,pon: Add
+ 'qcom,pon-reboot-not-used' property
+Message-ID: <YOx3HGWEyHWr8bYB@yoga>
+References: <20210705025032.12804-1-shawn.guo@linaro.org>
+ <20210705025032.12804-3-shawn.guo@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.64.82.45
-X-CLIENT-HOSTNAME: 89-64-82-45.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddruddvgddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdekvddrgeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedvrdeghedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrghirdhhvghnghdrfhgvnhhgsegtrghnohhnihgtrghlrdgtohhmpdhrtghpthhtohepuhhtkhgrrhhshhdrhhdrphgrthgvlhesihhnthgvlhdrtghomhdprhgtphhtthhopehkohgsrgdrkhhosegtrghnohhnihgtrghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210705025032.12804-3-shawn.guo@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sun 04 Jul 21:50 CDT 2021, Shawn Guo wrote:
 
-Some PCIe devices only support PME (Power Management Event) from
-D3cold.  One example is the ASMedia xHCI controller:
+> Add an optional 'qcom,pon-reboot-not-used' property for devices, which
+> do not use PON register to pass reboot mode but other mechanism, e.g.
+> particular IMEM address.
+> 
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> index 7764c804af1d..584eff179904 100644
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> @@ -23,6 +23,10 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  qcom,pon-reboot-not-used:
+> +    description: Support of reboot mode passing through PON register is not used
+> +    type: boolean
+> +
 
- 11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
-   ...
-   Capabilities: [78] Power Management version 3
-           Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
-           Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+How is this different from just not specifying any mode-* properties?
 
-In those cases, if the device is expected to generate wakeup events
-from its final power state, pci_target_state() returns D0, which
-prevents the PCIe port the device is connected to from entering any
-low-power states too.  However, if the device were allowed to go into
-D3hot, its parent PCIe port would also be able to go into D3 and if
-it goes into D3cold, it would cause the endpoint device to end up in
-D3cold too (as per the PCI PM spec v1.2, Table 6-1), in which case
-the endpoint would be able to signal PME.  This means that the system
-could be put into a lower-power configuration without sacrificing the
-the given device's ability to generate PME.
+Regards,
+Bjorn
 
-In order to avoid missing that opportunity, extend pci_pme_capable()
-to check the device's parent in the special case when the target
-state is D3hot and the device can only signal PME from D3cold and
-update pci_target_state() to return the current target state if
-pci_pme_capable() returns 'true' for it.
-
-Link: https://lore.kernel.org/linux-pm/20210617123653.58640-1-mika.westerberg@linux.intel.com
-Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
-Reported-by: Koba Ko <koba.ko@canonical.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Hi,
-
-Anyone who can reproduce the problem described in the changelog,
-please test the patch and let me know the result.
-
-Thanks!
-
----
- drivers/pci/pci.c |   38 ++++++++++++++++++++++++++------------
- 1 file changed, 26 insertions(+), 12 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -2298,10 +2298,29 @@ void pci_pme_wakeup_bus(struct pci_bus *
-  */
- bool pci_pme_capable(struct pci_dev *dev, pci_power_t state)
- {
-+	struct pci_dev *parent;
-+
- 	if (!dev->pm_cap)
- 		return false;
- 
--	return !!(dev->pme_support & (1 << state));
-+	if (dev->pme_support & (1 << state))
-+		return true;
-+
-+	/*
-+	 * Special case: The target state is D3hot and the device only supports
-+	 * signaling PME from D3cold, but it is a PCIe device whose parent port
-+	 * can go into D3cold.  In that case, if the device is allowed to go
-+	 * into D3hot, the parent port can go into D3cold which will cause the
-+	 * device to end up in D3cold, so it will be able to signal PME from the
-+	 * final state.
-+	 */
-+	if (state != PCI_D3hot || !(dev->pme_support & (1 << PCI_D3cold)))
-+		return false;
-+
-+	parent = dev->bus->self;
-+	return pci_bridge_d3_possible(parent) &&
-+		platform_pci_power_manageable(parent) &&
-+		platform_pci_choose_state(parent) == PCI_D3cold;
- }
- EXPORT_SYMBOL(pci_pme_capable);
- 
-@@ -2595,17 +2614,12 @@ static pci_power_t pci_target_state(stru
- 	if (dev->current_state == PCI_D3cold)
- 		target_state = PCI_D3cold;
- 
--	if (wakeup) {
--		/*
--		 * Find the deepest state from which the device can generate
--		 * PME#.
--		 */
--		if (dev->pme_support) {
--			while (target_state
--			      && !(dev->pme_support & (1 << target_state)))
--				target_state--;
--		}
--	}
-+	if (!wakeup || !dev->pme_support || pci_pme_capable(dev, target_state))
-+		return target_state;
-+
-+	/* Find the deepest state from which the device can generate PME#. */
-+	while (target_state && !(dev->pme_support & (1 << target_state)))
-+		target_state--;
- 
- 	return target_state;
- }
-
-
-
+>  patternProperties:
+>    "^mode-.+":
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> -- 
+> 2.17.1
+> 
