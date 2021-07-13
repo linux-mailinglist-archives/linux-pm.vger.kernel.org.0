@@ -2,87 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E6A3C733C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jul 2021 17:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701F93C744B
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jul 2021 18:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbhGMPcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jul 2021 11:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236932AbhGMPcO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jul 2021 11:32:14 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE5C0613E9
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jul 2021 08:29:24 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id a6so30596281ljq.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jul 2021 08:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BH1R2YDByvxjcRj7+sjhYJFEOJey1VxQapoVe6e4nvk=;
-        b=Fk8Ubdjr48N+SiJ92d5G02R+GXD5TIvyBPz5yH7VNVUGrBdAsTjgR8hPWqUmhvSaDr
-         pHE8wKmnn9lFFukjPeZwrkdzNBoirsYK1Le4zm4ykuqmXDoyMzIld2ymdExx0zs3Lv6f
-         GocJbqueVB0qRmaYamMRJfNscPc11wJlQ3uMM9aX8ofSo0seiSZqo9+cmSWAY4MRbq8/
-         4m8Bl9rYKcFMKXLSlMRTY/2Ht0dJO8h/jG/4poBFYT2lPaFDeMivs0O10NfVW3IfHH9B
-         Rn2ss0oqWl8GclRC23qS0Aqwe5Z5JKypJL7dcJyC2tMr1+7BPrAnW56WCxGqCB+DOMsk
-         KfUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BH1R2YDByvxjcRj7+sjhYJFEOJey1VxQapoVe6e4nvk=;
-        b=rTUFaEgdP6USVbYTWLpkvflaIpRQcieZZlXQFqJnsuvq3X7aQM94mg9NNFa51/49gE
-         vzRv0nlrq4wzbqJC+oSzj8JFrSlLz2DqVqZ4sgIdqOnxdQYXgw62g+5kzOOr0cbE3YxA
-         cbd7FpNucoDX08mxvXviIQ4v4KKr9I+hDlgJ3jSaULY1FgV5cfcUKjhZc+rzK1QUuy57
-         00ZSH1O4wmltDsEtfsA3p06xhkGdr25pR5j61ytWpY6NF3hrnjIM+Yh0m6XXCbs7zVtj
-         H8bXZkjFMw1niu87GFa0aADMnllm538Wp0WfcSC2NIWlWXBcet4GhwCDhoX96AVdz4Pc
-         BBnA==
-X-Gm-Message-State: AOAM531KrKHrG+84frQMuIuaSzk1ys7rG1HDIUDgtXLQRx2v+bLgP4CW
-        Pi2GIy919v6n9KHIkFZWtpOKdw==
-X-Google-Smtp-Source: ABdhPJyZGiKIAqLj4i2YdeNVuM2WFM/a1ud5+B5tHvEdgkjitRtfVYdwRZzqgpXkBq6Lqlci4epfmw==
-X-Received: by 2002:a2e:b5b5:: with SMTP id f21mr4743065ljn.479.1626190162678;
-        Tue, 13 Jul 2021 08:29:22 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id d8sm827395ljg.86.2021.07.13.08.29.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 08:29:22 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5/5] power: supply: ab8500: Drop some includes from bmdata
-Date:   Tue, 13 Jul 2021 17:27:09 +0200
-Message-Id: <20210713152709.871833-5-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210713152709.871833-1-linus.walleij@linaro.org>
-References: <20210713152709.871833-1-linus.walleij@linaro.org>
+        id S231153AbhGMQWJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jul 2021 12:22:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32588 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230229AbhGMQWI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jul 2021 12:22:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1626193157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=awbwz8Mi1G1+f2fwGt3ZEpkOa0ZEsi8ROYjzYe/Okus=;
+        b=PoxG3ZFQEIknPgusP3jAlPopWFK8MOplxhvPlQ2MYBymohwpwqs7RRESBlrr/PIQ7r1MgN
+        yILgJUWeVdPoaJ6k3pgEBvY9JfrFKROZeJ3IzsQJxrGxSoWecbADwrshRumoIVF7xWhlPn
+        brxHJX0zBCcu+boIfCx7zS3+gHE2gD0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-456-JG1pSGTjO-m9PADZ5-L7Wg-1; Tue, 13 Jul 2021 12:19:16 -0400
+X-MC-Unique: JG1pSGTjO-m9PADZ5-L7Wg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 258DB1B2C983;
+        Tue, 13 Jul 2021 16:19:15 +0000 (UTC)
+Received: from localhost (ovpn-112-172.ams2.redhat.com [10.36.112.172])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C1F819C44;
+        Tue, 13 Jul 2021 16:19:14 +0000 (UTC)
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Jason Wang <jasowang@redhat.com>,
+        linux-block@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        virtualization@lists.linux-foundation.org,
+        linux-pm@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Subject: [RFC 0/3] cpuidle: add poll_source API and virtio vq polling
+Date:   Tue, 13 Jul 2021 17:19:03 +0100
+Message-Id: <20210713161906.457857-1-stefanha@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This file isn't using any AB8500 symbols so drop these includes.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/power/supply/ab8500_bmdata.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index f705c19ef359..6f5fb794042c 100644
---- a/drivers/power/supply/ab8500_bmdata.c
-+++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -2,8 +2,6 @@
- #include <linux/export.h>
- #include <linux/power_supply.h>
- #include <linux/of.h>
--#include <linux/mfd/abx500.h>
--#include <linux/mfd/abx500/ab8500.h>
- 
- #include "ab8500-bm.h"
- 
--- 
-2.31.1
+VGhlc2UgcGF0Y2hlcyBhcmUgbm90IHBvbGlzaGVkIHlldCBidXQgSSB3b3VsZCBsaWtlIHJlcXVl
+c3QgZmVlZGJhY2sgb24gdGhpcw0KYXBwcm9hY2ggYW5kIHNoYXJlIHBlcmZvcm1hbmNlIHJlc3Vs
+dHMgd2l0aCB5b3UuDQoNCklkbGUgQ1BVcyB0ZW50YXRpdmVseSBlbnRlciBhIGJ1c3kgd2FpdCBs
+b29wIGJlZm9yZSBoYWx0aW5nIHdoZW4gdGhlIGNwdWlkbGUNCmhhbHRwb2xsIGRyaXZlciBpcyBl
+bmFibGVkIGluc2lkZSBhIHZpcnR1YWwgbWFjaGluZS4gVGhpcyByZWR1Y2VzIHdha2V1cA0KbGF0
+ZW5jeSBmb3IgZXZlbnRzIHRoYXQgb2NjdXIgc29vbiBhZnRlciB0aGUgdkNQVSBiZWNvbWVzIGlk
+bGUuDQoNClRoaXMgcGF0Y2ggc2VyaWVzIGV4dGVuZHMgdGhlIGNwdWlkbGUgYnVzeSB3YWl0IGxv
+b3Agd2l0aCB0aGUgbmV3IHBvbGxfc291cmNlDQpBUEkgc28gZHJpdmVycyBjYW4gcGFydGljaXBh
+dGUgaW4gcG9sbGluZy4gU3VjaCBwb2xsaW5nLWF3YXJlIGRyaXZlcnMgZGlzYWJsZQ0KdGhlaXIg
+ZGV2aWNlJ3MgaXJxIGR1cmluZyB0aGUgYnVzeSB3YWl0IGxvb3AgdG8gYXZvaWQgdGhlIGNvc3Qg
+b2YgaW50ZXJydXB0cy4NClRoaXMgcmVkdWNlcyBsYXRlbmN5IGZ1cnRoZXIgdGhhbiByZWd1bGFy
+IGNwdWlkbGUgaGFsdHBvbGwsIHdoaWNoIHN0aWxsIHJlbGllcw0Kb24gaXJxcy4NCg0KVmlydGlv
+IGRyaXZlcnMgYXJlIG1vZGlmaWVkIHRvIHVzZSB0aGUgcG9sbF9zb3VyY2UgQVBJIHNvIGFsbCB2
+aXJ0aW8gZGV2aWNlDQp0eXBlcyBnZXQgdGhpcyBmZWF0dXJlLiBUaGUgZm9sbG93aW5nIHZpcnRp
+by1ibGsgZmlvIGJlbmNobWFyayByZXN1bHRzIHNob3cgdGhlDQppbXByb3ZlbWVudDoNCg0KICAg
+ICAgICAgICAgIElPUFMgKG51bWpvYnM9NCwgaW9kZXB0aD0xLCA0IHZpcnRxdWV1ZXMpDQogICAg
+ICAgICAgICAgICBiZWZvcmUgICBwb2xsX3NvdXJjZSAgICAgIGlvX3BvbGwNCjRrIHJhbmRyZWFk
+ICAgIDE2NzEwMiAgMTg2MDQ5ICgrMTElKSAgMTg2NjU0ICgrMTElKQ0KNGsgcmFuZHdyaXRlICAg
+MTYyMjA0ICAxODEyMTQgKCsxMSUpICAxODE4NTAgKCsxMiUpDQo0ayByYW5kcncgICAgICAxNTk1
+MjAgIDE3NzA3MSAoKzExJSkgIDE3NzkyOCAoKzExJSkNCg0KVGhlIGNvbXBhcmlzb24gYWdhaW5z
+dCBpb19wb2xsIHNob3dzIHRoYXQgY3B1aWRsZSBwb2xsX3NvdXJjZSBhY2hpZXZlcw0KZXF1aXZh
+bGVudCBwZXJmb3JtYW5jZSB0byB0aGUgYmxvY2sgbGF5ZXIncyBpb19wb2xsIGZlYXR1cmUgKHdo
+aWNoIEkNCmltcGxlbWVudGVkIGluIGEgc2VwYXJhdGUgcGF0Y2ggc2VyaWVzIFsxXSkuDQoNClRo
+ZSBhZHZhbnRhZ2Ugb2YgcG9sbF9zb3VyY2UgaXMgdGhhdCBhcHBsaWNhdGlvbnMgZG8gbm90IG5l
+ZWQgdG8gZXhwbGljaXRseSBzZXQNCnRoZSBSV0ZfSElQUkkgSS9PIHJlcXVlc3QgZmxhZy4gVGhl
+IHBvbGxfc291cmNlIGFwcHJvYWNoIGlzIGF0dHJhY3RpdmUgYmVjYXVzZQ0KZmV3IGFwcGxpY2F0
+aW9ucyBhY3R1YWxseSB1c2UgUldGX0hJUFJJIGFuZCBpdCB0YWtlcyBhZHZhbnRhZ2Ugb2YgQ1BV
+IGN5Y2xlcyB3ZQ0Kd291bGQgaGF2ZSBzcGVudCBpbiBjcHVpZGxlIGhhbHRwb2xsIGFueXdheS4N
+Cg0KVGhlIGN1cnJlbnQgc2VyaWVzIGRvZXMgbm90IGltcHJvdmUgdmlydGlvLW5ldC4gSSBoYXZl
+bid0IGludmVzdGlnYXRlZCBkZWVwbHksDQpidXQgaXQgaXMgcG9zc2libGUgdGhhdCBOQVBJIGFu
+ZCBwb2xsX3NvdXJjZSBkbyBub3QgY29tYmluZS4gU2VlIHRoZSBmaW5hbA0KcGF0Y2ggZm9yIGEg
+c3RhcnRpbmcgcG9pbnQgb24gbWFraW5nIHRoZSB0d28gd29yayB0b2dldGhlci4NCg0KSSBoYXZl
+IG5vdCB0cmllZCB0aGlzIG9uIGJhcmUgbWV0YWwgYnV0IGl0IG1pZ2h0IGhlbHAgdGhlcmUgdG9v
+LiBUaGUgY29zdCBvZg0KZGlzYWJsaW5nIGEgZGV2aWNlJ3MgaXJxIG11c3QgYmUgbGVzcyB0aGFu
+IHRoZSBzYXZpbmdzIGZyb20gYXZvaWRpbmcgaXJxDQpoYW5kbGluZyBmb3IgdGhpcyBvcHRpbWl6
+YXRpb24gdG8gbWFrZSBzZW5zZS4NCg0KWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4
+LWJsb2NrLzIwMjEwNTIwMTQxMzA1LjM1NTk2MS0xLXN0ZWZhbmhhQHJlZGhhdC5jb20vDQoNClN0
+ZWZhbiBIYWpub2N6aSAoMyk6DQogIGNwdWlkbGU6IGFkZCBwb2xsX3NvdXJjZSBBUEkNCiAgdmly
+dGlvOiBhZGQgcG9sbF9zb3VyY2UgdmlydHF1ZXVlIHBvbGxpbmcNCiAgc29mdGlycTogcGFydGlj
+aXBhdGUgaW4gY3B1aWRsZSBwb2xsaW5nDQoNCiBkcml2ZXJzL2NwdWlkbGUvTWFrZWZpbGUgICAg
+ICAgICAgIHwgICAxICsNCiBkcml2ZXJzL3ZpcnRpby92aXJ0aW9fcGNpX2NvbW1vbi5oIHwgICA3
+ICsrDQogaW5jbHVkZS9saW51eC9pbnRlcnJ1cHQuaCAgICAgICAgICB8ICAgMiArDQogaW5jbHVk
+ZS9saW51eC9wb2xsX3NvdXJjZS5oICAgICAgICB8ICA1MyArKysrKysrKysrKysrKysNCiBpbmNs
+dWRlL2xpbnV4L3ZpcnRpby5oICAgICAgICAgICAgIHwgICAyICsNCiBpbmNsdWRlL2xpbnV4L3Zp
+cnRpb19jb25maWcuaCAgICAgIHwgICAyICsNCiBkcml2ZXJzL2NwdWlkbGUvcG9sbF9zb3VyY2Uu
+YyAgICAgIHwgMTAyICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQogZHJpdmVycy9jcHVp
+ZGxlL3BvbGxfc3RhdGUuYyAgICAgICB8ICAgNiArKw0KIGRyaXZlcnMvdmlydGlvL3ZpcnRpby5j
+ICAgICAgICAgICAgfCAgMzQgKysrKysrKysrKw0KIGRyaXZlcnMvdmlydGlvL3ZpcnRpb19wY2lf
+Y29tbW9uLmMgfCAgODYgKysrKysrKysrKysrKysrKysrKysrKysrDQogZHJpdmVycy92aXJ0aW8v
+dmlydGlvX3BjaV9tb2Rlcm4uYyB8ICAgMiArDQoga2VybmVsL3NvZnRpcnEuYyAgICAgICAgICAg
+ICAgICAgICB8ICAxNCArKysrDQogMTIgZmlsZXMgY2hhbmdlZCwgMzExIGluc2VydGlvbnMoKykN
+CiBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9saW51eC9wb2xsX3NvdXJjZS5oDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IGRyaXZlcnMvY3B1aWRsZS9wb2xsX3NvdXJjZS5jDQoNCi0tIA0KMi4zMS4x
+DQoNCg==
 
