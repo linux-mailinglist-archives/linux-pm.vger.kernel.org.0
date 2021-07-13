@@ -2,108 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBF53C7451
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jul 2021 18:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE473C76F8
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jul 2021 21:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbhGMQWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jul 2021 12:22:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24864 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231428AbhGMQWN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jul 2021 12:22:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626193162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LkVbvILKBq40WaEmHLBRSgoHvH/vzwrA0dUxLC2cHSE=;
-        b=h4NVAU573xF6cAzB8SuI9BaVEwASb+RKGKVCOETmsdML3QHe8s8FsGt4NzHrPAskGWAbK7
-        p8fBOY2ENmIXGh5LXEcHR3/Q2pQMNUxblg7UTRMj7xtCFTVlBsLWoZisZtYS98kQVPOoDu
-        vG0qD+imlrDNaM7bcGWu3/VDOcl8h7E=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-522-kWE6OaooNECjV1bN-9szzQ-1; Tue, 13 Jul 2021 12:19:21 -0400
-X-MC-Unique: kWE6OaooNECjV1bN-9szzQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CF48C1009444;
-        Tue, 13 Jul 2021 16:19:19 +0000 (UTC)
-Received: from localhost (ovpn-112-172.ams2.redhat.com [10.36.112.172])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 713906091B;
-        Tue, 13 Jul 2021 16:19:19 +0000 (UTC)
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Jason Wang <jasowang@redhat.com>,
-        linux-block@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        virtualization@lists.linux-foundation.org,
-        linux-pm@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Subject: [RFC 3/3] softirq: participate in cpuidle polling
-Date:   Tue, 13 Jul 2021 17:19:06 +0100
-Message-Id: <20210713161906.457857-4-stefanha@redhat.com>
-In-Reply-To: <20210713161906.457857-1-stefanha@redhat.com>
-References: <20210713161906.457857-1-stefanha@redhat.com>
+        id S229944AbhGMTeD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jul 2021 15:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229478AbhGMTeD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jul 2021 15:34:03 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE9C0613DD;
+        Tue, 13 Jul 2021 12:31:13 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id b12so20513775pfv.6;
+        Tue, 13 Jul 2021 12:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8S0JSRUnQxgp/widcUStdZ06A70Ry0fn6tF6qKTL8sQ=;
+        b=XBQC4nn4Ju2cayLDVzYRc2KTECptBWNVFUp7dq5KiANVq0zEVFEvG07cFC352ZR/Ow
+         qC0cawY8B127gdbpsCmKuP+h1swZ23LUM/rYHmxe6UeLZvttgPZF6Gl6HH1EkvKFkdZx
+         sUG+Rx5YowW2lC1Mri4TIqJ9vvW2dFoCWeLaFLf5X5te/mc/Wm3dNDtqF3nS2/7S+MmB
+         KSEGsrRQ/So50sSWNHg1l+UMBdnpRinOruDfZUkdU+D1ucXU+cPjilDN1CpdgjWkzGnR
+         SMhAx167T+XVlkil0iIbEHBLA047XnBGk8ijhV0wUTQI6Lr2Fhjodc2RDzYA9cwmoTvY
+         P1Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8S0JSRUnQxgp/widcUStdZ06A70Ry0fn6tF6qKTL8sQ=;
+        b=ttfPD47a3hevOECpe0iRRANIsdNPUh0qzWqmwsZTJIWH71u88nN7mSof6fXPLMVb2N
+         /QnG5o2s7DcZ7g83Rb+a/QIda4GmQ8lkcHharht7WO7HRep/nY2WecwpJ0vrESbRWlQj
+         dmttjjPM7Td6xbjkPbYYKrBbpZLYRDgcOFPD2IT/VWkQSJxnUb28Werk3B7CmLSGrqhT
+         6Al6I1w6gpmB5CThPd25lkLbiE80c3kk8C7nU16OzGaBnNLVHkw001w1pk7Hyvua//Id
+         7tvaGc3rvtvv08nlmfrMym9dCToOuTC20fzJL0yZ7Z1rRHR4P5xyWPNdhtm/yAyq5+mX
+         5skQ==
+X-Gm-Message-State: AOAM531BfC+F89W+pcpu3SAzXwEeh9Q9wk08yfKnbYgU9WaH4QWcAFTJ
+        d4owVQOm09D+K0Hv9mZPOvFF6HO+pbOwDg==
+X-Google-Smtp-Source: ABdhPJwOaqRJewNcfFrs7Mf2YVnL0Kb+iOqhJI6Pvqll8XIVxUaRWR5QkClCmP9lqeM2syWTiPNLMw==
+X-Received: by 2002:a63:7d15:: with SMTP id y21mr5710913pgc.352.1626204671826;
+        Tue, 13 Jul 2021 12:31:11 -0700 (PDT)
+Received: from [172.30.1.52] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id n33sm21904753pgm.55.2021.07.13.12.31.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jul 2021 12:31:11 -0700 (PDT)
+Subject: Re: [PATCH 4/4] PM / devfreq: passive: Reduce duplicate code when
+ passive_devfreq case
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
+        sibis@codeaurora.org, saravanak@google.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        chanwoo@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210617060546.26933-1-cw00.choi@samsung.com>
+ <CGME20210617054647epcas1p41cd87f03bc6f5b44b6f2d7a3e5924860@epcas1p4.samsung.com>
+ <20210617060546.26933-5-cw00.choi@samsung.com> <YNIthEVkS8OK19pm@google.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <30340383-c136-6a21-3e88-18cd6ed9cba1@gmail.com>
+Date:   Wed, 14 Jul 2021 04:31:06 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <YNIthEVkS8OK19pm@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tm9ybWFsbHkgc29mdGlycXMgYXJlIGludm9rZWQgd2hlbiBleGl0aW5nIGlycXMuIFdoZW4gcG9s
-bGluZyBpbiB0aGUKY3B1aWRsZSBkcml2ZXIgdGhlcmUgbWF5IGJlIG5vIGlycS4gVGhlcmVmb3Jl
-IHBlbmRpbmcgc29mdGlycXMgZ28KdW5ub3RpY2VkIGFuZCBwb2xsaW5nIGNvbnRpbnVlcyB3aXRo
-b3V0IGludm9raW5nIHRoZW0uCgpBZGQgYSBzb2Z0aXJxX3BvbGwoKSBmdW5jdGlvbiB0byBleHBs
-aWNpdGx5IGNoZWNrIGZvciBhbmQgaW52b2tlCnNvZnRpcnFzLgoKU2lnbmVkLW9mZi1ieTogU3Rl
-ZmFuIEhham5vY3ppIDxzdGVmYW5oYUByZWRoYXQuY29tPgotLS0KVGhpcyBjb21taXQgaXMgbm90
-IG5lZWRlZCBmb3IgdmlydGlvLWJsay4gSSBhZGRlZCBpdCB3aGVuIEkgcmVhbGl6ZWQKdmlydGlv
-LW5ldCdzIE5BUEkgc2NoZWR1bGluZyBtaWdodCBub3QgYmUgZGV0ZWN0ZWQgYnkgdGhlIGNwdWlk
-bGUgYnVzeQp3YWl0IGxvb3AgYmVjYXVzZSBpdCBpcyB1bmF3YXJlIG9mIHNvZnRpcnFzLiBIb3dl
-dmVyLCBldmVuIGFmdGVyIGRvaW5nCnRoaXMgdmlydGlvLW5ldCdzIE5BUEkgcG9sbGluZyBkb2Vz
-bid0IGNvbWJpbmUgd2l0aCBjcHVpZGxlIGhhbHRwb2xsLgoKUGVyaGFwcyB0aGlzIHBhdGNoIGlz
-IHN0aWxsIGRlc2lyYWJsZSBmb3IgY3B1aWRsZSBwb2xsX3N0YXRlIGluIGNhc2UgYQpzb2Z0aXJx
-IGlzIHJhaXNlZD8KLS0tCiBpbmNsdWRlL2xpbnV4L2ludGVycnVwdC5oICAgICB8ICAyICsrCiBk
-cml2ZXJzL2NwdWlkbGUvcG9sbF9zb3VyY2UuYyB8ICAzICsrKwoga2VybmVsL3NvZnRpcnEuYyAg
-ICAgICAgICAgICAgfCAxNCArKysrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCAxOSBpbnNl
-cnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9pbnRlcnJ1cHQuaCBiL2luY2x1
-ZGUvbGludXgvaW50ZXJydXB0LmgKaW5kZXggNDc3Nzg1MGE2ZGM3Li45YmZkY2M0NjZiYTggMTAw
-NjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvaW50ZXJydXB0LmgKKysrIGIvaW5jbHVkZS9saW51eC9p
-bnRlcnJ1cHQuaApAQCAtNTczLDYgKzU3Myw4IEBAIHN0cnVjdCBzb2Z0aXJxX2FjdGlvbgogYXNt
-bGlua2FnZSB2b2lkIGRvX3NvZnRpcnEodm9pZCk7CiBhc21saW5rYWdlIHZvaWQgX19kb19zb2Z0
-aXJxKHZvaWQpOwogCitleHRlcm4gdm9pZCBzb2Z0aXJxX3BvbGwodm9pZCk7CisKIGV4dGVybiB2
-b2lkIG9wZW5fc29mdGlycShpbnQgbnIsIHZvaWQgKCphY3Rpb24pKHN0cnVjdCBzb2Z0aXJxX2Fj
-dGlvbiAqKSk7CiBleHRlcm4gdm9pZCBzb2Z0aXJxX2luaXQodm9pZCk7CiBleHRlcm4gdm9pZCBf
-X3JhaXNlX3NvZnRpcnFfaXJxb2ZmKHVuc2lnbmVkIGludCBucik7CmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2NwdWlkbGUvcG9sbF9zb3VyY2UuYyBiL2RyaXZlcnMvY3B1aWRsZS9wb2xsX3NvdXJjZS5j
-CmluZGV4IDQ2MTAwZTVhNzFlNC4uZWQyMDBmZWIwZGFhIDEwMDY0NAotLS0gYS9kcml2ZXJzL2Nw
-dWlkbGUvcG9sbF9zb3VyY2UuYworKysgYi9kcml2ZXJzL2NwdWlkbGUvcG9sbF9zb3VyY2UuYwpA
-QCAtNiw2ICs2LDcgQEAKICNpbmNsdWRlIDxsaW51eC9sb2NrZGVwLmg+CiAjaW5jbHVkZSA8bGlu
-dXgvcGVyY3B1Lmg+CiAjaW5jbHVkZSA8bGludXgvcG9sbF9zb3VyY2UuaD4KKyNpbmNsdWRlIDxs
-aW51eC9pbnRlcnJ1cHQuaD4KIAogLyogVGhlIHBlci1jcHUgbGlzdCBvZiByZWdpc3RlcmVkIHBv
-bGwgc291cmNlcyAqLwogREVGSU5FX1BFUl9DUFUoc3RydWN0IGxpc3RfaGVhZCwgcG9sbF9zb3Vy
-Y2VfbGlzdCk7CkBAIC0yNiw2ICsyNyw4IEBAIHZvaWQgcG9sbF9zb3VyY2VfcnVuX29uY2Uodm9p
-ZCkKIAogCWxpc3RfZm9yX2VhY2hfZW50cnkoc3JjLCB0aGlzX2NwdV9wdHIoJnBvbGxfc291cmNl
-X2xpc3QpLCBub2RlKQogCQlzcmMtPm9wcy0+cG9sbChzcmMpOworCisJc29mdGlycV9wb2xsKCk7
-CiB9CiAKIC8qIENhbGxlZCBmcm9tIGlkbGUgdGFzayB3aXRoIFRJRl9QT0xMSU5HX05SRkxBRyBz
-ZXQgYW5kIGlycXMgZW5hYmxlZCAqLwpkaWZmIC0tZ2l0IGEva2VybmVsL3NvZnRpcnEuYyBiL2tl
-cm5lbC9zb2Z0aXJxLmMKaW5kZXggNDk5Mjg1M2VmNTNkLi5mNDViZjAyMDQyMTggMTAwNjQ0Ci0t
-LSBhL2tlcm5lbC9zb2Z0aXJxLmMKKysrIGIva2VybmVsL3NvZnRpcnEuYwpAQCAtNjExLDYgKzYx
-MSwyMCBAQCB2b2lkIGlycV9lbnRlcih2b2lkKQogCWlycV9lbnRlcl9yY3UoKTsKIH0KIAorLyoq
-CisgKiBzb2Z0aXJxX3BvbGwoKSAtIGludm9rZSBwZW5kaW5nIHNvZnRpcnFzCisgKgorICogTm9y
-bWFsbHkgaXQgaXMgbm90IG5lY2Vzc2FyeSB0byBleHBsaWNpdGx5IHBvbGwgZm9yIHNvZnRpcnFz
-LCBidXQgaW4gdGhlCisgKiBjcHVpZGxlIGRyaXZlciBhIHBvbGxpbmcgZnVuY3Rpb24gbWF5IGhh
-dmUgcmFpc2VkIGEgc29mdGlycSB3aXRoIG5vIGlycSBleGl0CisgKiB0byBpbnZva2UgaXQuIFRo
-ZXJlZm9yZSBpdCBpcyBuZWNlc3NhcnkgdG8gcG9sbCBmb3IgcGVuZGluZyBzb2Z0aXJxcyBhbmQK
-KyAqIGludm9rZSB0aGVtIGV4cGxpY2l0bHkuCisgKi8KK3ZvaWQgc29mdGlycV9wb2xsKHZvaWQp
-Cit7CisJaWYgKCFpbl9pbnRlcnJ1cHQoKSAmJiBsb2NhbF9zb2Z0aXJxX3BlbmRpbmcoKSkKKwkJ
-aW52b2tlX3NvZnRpcnEoKTsKK30KKwogc3RhdGljIGlubGluZSB2b2lkIHRpY2tfaXJxX2V4aXQo
-dm9pZCkKIHsKICNpZmRlZiBDT05GSUdfTk9fSFpfQ09NTU9OCi0tIAoyLjMxLjEKCg==
+Hi Matthias,
 
+On 21. 6. 23. 오전 3:35, Matthias Kaehlcke wrote:
+> On Thu, Jun 17, 2021 at 03:05:46PM +0900, Chanwoo Choi wrote:
+>> In order to keep the consistent coding style between passive_devfreq
+>> and passive_cpufreq, use common code for handling required opp property.
+>> Also remove the unneed conditional statement and unify the comment
+>> of both passive_devfreq and passive_cpufreq when getting the target frequency.
+>>
+>> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+>> ---
+>>   drivers/devfreq/governor_passive.c | 80 ++++++------------------------
+>>   1 file changed, 15 insertions(+), 65 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+>> index 07e864509b7e..7102cb7eb30d 100644
+>> --- a/drivers/devfreq/governor_passive.c
+>> +++ b/drivers/devfreq/governor_passive.c
+>> @@ -91,66 +91,17 @@ static int get_target_freq_with_devfreq(struct devfreq *devfreq,
+>>   	struct devfreq_passive_data *p_data
+>>   			= (struct devfreq_passive_data *)devfreq->data;
+>>   	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
+>> -	unsigned long child_freq = ULONG_MAX;
+>> -	struct dev_pm_opp *opp, *p_opp;
+>> -	int i, count;
+>> -
+>> -	/*
+>> -	 * If the devfreq device with passive governor has the specific method
+>> -	 * to determine the next frequency, should use the get_target_freq()
+>> -	 * of struct devfreq_passive_data.
+>> -	 */
+>> -	if (p_data->get_target_freq)
+>> -		return p_data->get_target_freq(devfreq, freq);
+>> -
+>> -	/*
+>> -	 * If the parent and passive devfreq device uses the OPP table,
+>> -	 * get the next frequency by using the OPP table.
+>> -	 */
+>> -
+>> -	/*
+>> -	 * - parent devfreq device uses the governors except for passive.
+>> -	 * - passive devfreq device uses the passive governor.
+>> -	 *
+>> -	 * Each devfreq has the OPP table. After deciding the new frequency
+>> -	 * from the governor of parent devfreq device, the passive governor
+>> -	 * need to get the index of new frequency on OPP table of parent
+>> -	 * device. And then the index is used for getting the suitable
+>> -	 * new frequency for passive devfreq device.
+>> -	 */
+>> -	if (!devfreq->profile || !devfreq->profile->freq_table
+>> -		|| devfreq->profile->max_state <= 0)
+>> -		return -EINVAL;
+>> -
+>> -	/*
+>> -	 * The passive governor have to get the correct frequency from OPP
+>> -	 * list of parent device. Because in this case, *freq is temporary
+>> -	 * value which is decided by ondemand governor.
+>> -	 */
+>> -	if (devfreq->opp_table && parent_devfreq->opp_table) {
+>> -		p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent,
+>> -						freq, 0);
+>> -		if (IS_ERR(p_opp))
+>> -			return PTR_ERR(p_opp);
+>> -
+>> -		opp = dev_pm_opp_xlate_required_opp(parent_devfreq->opp_table,
+>> -						    devfreq->opp_table, p_opp);
+>> -		dev_pm_opp_put(p_opp);
+>> -
+>> -		if (IS_ERR(opp))
+>> -			goto no_required_opp;
+>> -
+>> -		*freq = dev_pm_opp_get_freq(opp);
+>> -		dev_pm_opp_put(opp);
+>> -
+>> -		return 0;
+>> -	}
+>> +	unsigned long target_freq;
+>> +	int i;
+>> +
+>> +	/* Get target freq via required opps */
+>> +	target_freq = get_taget_freq_by_required_opp(parent_devfreq->dev.parent,
+>> +						parent_devfreq->opp_table,
+>> +						devfreq->opp_table, *freq);
+> 
+> s/get_taget_freq_by_required_opp/get_target_freq_by_required_opp/
+> 
+> Also need to be fixed in "[3/4] PM / devfreq: Add cpu based scaling
+> support to passive governor".
+
+Thanks for catch. I'll fix it.
+
+> 
+>> +	if (target_freq)
+>> +		goto out;
+>>   
+>> -no_required_opp:
+>> -	/*
+>> -	 * Get the OPP table's index of decided frequency by governor
+>> -	 * of parent device.
+>> -	 */
+>> +	/* Use Interpolation if required opps is not available */
+> 
+> s/Interpolation/interpolation/
+
+I'll fix it.
+
+> 
+>>   	for (i = 0; i < parent_devfreq->profile->max_state; i++)
+>>   		if (parent_devfreq->profile->freq_table[i] == *freq)
+>>   			break;
+>> @@ -158,16 +109,15 @@ static int get_target_freq_with_devfreq(struct devfreq *devfreq,
+>>   	if (i == parent_devfreq->profile->max_state)
+>>   		return -EINVAL;
+>>   
+>> -	/* Get the suitable frequency by using index of parent device. */
+>>   	if (i < devfreq->profile->max_state) {
+>> -		child_freq = devfreq->profile->freq_table[i];
+>> +		target_freq = devfreq->profile->freq_table[i];
+>>   	} else {
+>> -		count = devfreq->profile->max_state;
+>> -		child_freq = devfreq->profile->freq_table[count - 1];
+>> +		i = devfreq->profile->max_state;
+>> +		target_freq = devfreq->profile->freq_table[i - 1];
+>>   	}
+>>   
+>> -	/* Return the suitable frequency for passive device. */
+>> -	*freq = child_freq;
+>> +out:
+>> +	*freq = target_freq;
+> 
+> You might want to split the child_freq => target_freq and commentary change into
+> a separate patch, since it is not directly related with the switch to
+> get_target_freq_by_required_opp().
+
+OK. I will not change about child_freq -> target_freq.
+
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
