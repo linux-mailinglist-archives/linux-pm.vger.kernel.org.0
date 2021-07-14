@@ -2,182 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF063C9338
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jul 2021 23:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9F23C9428
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jul 2021 01:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbhGNVml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jul 2021 17:42:41 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:34437 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbhGNVml (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jul 2021 17:42:41 -0400
-Received: by mail-io1-f53.google.com with SMTP id g22so3970183iom.1;
-        Wed, 14 Jul 2021 14:39:49 -0700 (PDT)
+        id S237313AbhGNXEh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jul 2021 19:04:37 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:34506 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230388AbhGNXEg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jul 2021 19:04:36 -0400
+Received: by mail-io1-f44.google.com with SMTP id g22so4202866iom.1;
+        Wed, 14 Jul 2021 16:01:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z4NVch98aD43iq8SXnnDg49i1tAZP403b8WipKs5Fxk=;
-        b=rNuzhnSJRMn20FFKRa+Tduzs5viYix0G4ddQd5OlsiVSqxbtccnA9hsuURiO6BYu7/
-         gN4C+bjzMLJYQFygxcdAUBwWVzgFgsI/CeSlnFIGWy4KOTBfWtHUK5KwyC2jKXB9j7m4
-         le54zptkLQt2JDWlRoqDoHBCmoKjXn7OfaiIszczXpAm4kbkP7RNy7bCccnDUMLnCx9z
-         LOGsuPZD3LiqebSXt2PKSP4nLweGHpqczK32cXOgF51YMWOUCjvj2dFbgbvGS36rwnZn
-         lnXu2zMIAjyaB5U/MjpOvPAAst/Xo+J81W47uqTYSOWvX84WhqC3T2iOgVcAWhT7APC4
-         QBBA==
-X-Gm-Message-State: AOAM531DLo9LOnqp659mad8iHnFnK/qn+o+UsHWh2FVW0c9ucPPwswHa
-        f9xEozcNg4Kg+CiFaK9BMw==
-X-Google-Smtp-Source: ABdhPJz97bBkq0lPll10famTNgRCP51FL5VqscHn3cleh0Hvh8gNMsaxOKFtV/a39iCGHSXpmeakjQ==
-X-Received: by 2002:a5d:8888:: with SMTP id d8mr156540ioo.170.1626298788855;
-        Wed, 14 Jul 2021 14:39:48 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iWYj7BYmLf4sE9pZYmPOjA7KWU/Cdxu9ZYSyNE9Xa2o=;
+        b=CQX9I86nolMTA+nUCqykOHWs1MpTYKS1kP4Xoh+GVhuif5TTLZ+rBapSAP5afKv9ga
+         yiO8k80LBmwnd+2t62Sgk8UjPfWkW5J7EmzfybmH2zaNoW0t2U9T81/BdrKwqzYFvn7h
+         SZzihneyU/I67HaOL1n5mql4FS2AVJByG9ixER06ynfQ6K66Ff2KKm+zP5dTcl67fnz1
+         MckFkKlFK6wxo58/k+WKGwNL9HRdjeJgfl4eOaZoqfNnLqHZ0C0DPLiaS6v/F9TrajgL
+         /WXVT6UDUqwQWdxh03CM5GLkK7gND5rC/Om+EjNjdlZxt6TPwnq4RpN5SqS7VYh7GDlu
+         RmIg==
+X-Gm-Message-State: AOAM5324E19B95MeIlgVa0Fc9b+dkLKKeQW5t5nZ9G0ZhLLl6hQdICEp
+        dafCAAIgjqrQCuxa2akB8g==
+X-Google-Smtp-Source: ABdhPJxRnII1A4P7617nk+P/dL3rkhW199nEWSWXEjBvCWsHF3w+QlDdvckSGvOuEEncV11dSrn9uQ==
+X-Received: by 2002:a6b:6016:: with SMTP id r22mr407400iog.12.1626303703032;
+        Wed, 14 Jul 2021 16:01:43 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m184sm1891441ioa.17.2021.07.14.14.39.47
+        by smtp.gmail.com with ESMTPSA id l8sm2217302iok.26.2021.07.14.16.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 14:39:48 -0700 (PDT)
-Received: (nullmailer pid 3575334 invoked by uid 1000);
-        Wed, 14 Jul 2021 21:39:46 -0000
-Date:   Wed, 14 Jul 2021 15:39:46 -0600
+        Wed, 14 Jul 2021 16:01:42 -0700 (PDT)
+Received: (nullmailer pid 3701173 invoked by uid 1000);
+        Wed, 14 Jul 2021 23:01:40 -0000
+Date:   Wed, 14 Jul 2021 17:01:40 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     bjorn.andersson@linaro.org, viresh.kumar@linaro.org,
-        agross@kernel.org, rjw@rjwysocki.net, devicetree@vger.kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jami.kettunen@somainline.org,
-        paul.bouchara@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, jeffrey.l.hugo@gmail.com
-Subject: Re: [PATCH v6 8/9] dt-bindings: cpufreq: qcom-hw: Add bindings for
- 8998
-Message-ID: <20210714213946.GA3568065@robh.at.kernel.org>
-References: <20210701105730.322718-1-angelogioacchino.delregno@somainline.org>
- <20210701105730.322718-9-angelogioacchino.delregno@somainline.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 06/12] dt-bindings: power: supply: smb347-charger:
+ Document USB VBUS regulator
+Message-ID: <20210714230140.GA3697673@robh.at.kernel.org>
+References: <20210704225433.32029-1-digetx@gmail.com>
+ <20210704225433.32029-7-digetx@gmail.com>
+ <20210712153905.GA1980362@robh.at.kernel.org>
+ <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210701105730.322718-9-angelogioacchino.delregno@somainline.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 01, 2021 at 12:57:29PM +0200, AngeloGioacchino Del Regno wrote:
-> The OSM programming addition has been done under the
-> qcom,cpufreq-hw-8998 compatible name: specify the requirement
-> of two additional register spaces for this functionality.
-> This implementation, with the same compatible, has been
-> tested on MSM8998 and SDM630.
-
-Certainly we should be using the new binding for any new SoCs.
-
+On Tue, Jul 13, 2021 at 03:22:40AM +0300, Dmitry Osipenko wrote:
+> 12.07.2021 18:39, Rob Herring пишет:
+> >> +  summit,inok-polarity:
+> >> +    description: |
+> >> +      Polarity of INOK signal indicating presence of external power supply.
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    enum:
+> >> +      - 0 # SMB3XX_SYSOK_INOK_ACTIVE_LOW
+> >> +      - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
+> >> +
+> >> +  usb-vbus:
+> >> +    $ref: "../../regulator/regulator.yaml#"
+> >> +    type: object
+> >        unevaluatedProperties: false
+> > 
+> > With that,
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > 
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 67 ++++++++++++++-----
->  1 file changed, 52 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> index bc81b6203e27..29b663321a0b 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> @@ -18,6 +18,10 @@ description: |
->  properties:
->    compatible:
->      oneOf:
-> +      - description: Non-secure v1 of CPUFREQ HW
-> +        items:
-> +          - const: qcom,cpufreq-hw-8998
-> +
->        - description: v1 of CPUFREQ HW
->          items:
->            - const: qcom,cpufreq-hw
-> @@ -28,21 +32,9 @@ properties:
->                - qcom,sm8250-cpufreq-epss
->            - const: qcom,cpufreq-epss
->  
-> -  reg:
-> -    minItems: 2
-> -    maxItems: 3
-> -    items:
-> -      - description: Frequency domain 0 register region
-> -      - description: Frequency domain 1 register region
-> -      - description: Frequency domain 2 register region
-> +  reg: {}
->  
-> -  reg-names:
-> -    minItems: 2
-> -    maxItems: 3
-> -    items:
-> -      - const: freq-domain0
-> -      - const: freq-domain1
-> -      - const: freq-domain2
-> +  reg-names: {}
->  
->    clocks:
->      items:
-> @@ -57,10 +49,55 @@ properties:
->    '#freq-domain-cells':
->      const: 1
->  
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: qcom,cpufreq-hw-8998
-> +then:
-> +  properties:
-> +    reg:
-> +      minItems: 2
-> +      maxItems: 6
-> +      items:
-> +        - description: Frequency domain 0 register region
-> +        - description: Operating State Manager domain 0 register region
-> +        - description: Frequency domain 1 register region
-> +        - description: Operating State Manager domain 1 register region
-> +        - description: PLL ACD domain 0 register region (if ACD programming required)
-> +        - description: PLL ACD domain 1 register region (if ACD programming required)
-> +
-> +    reg-names:
-> +      minItems: 2
-> +      maxItems: 6
-> +      items:
-> +        - const: "osm-domain0"
-> +        - const: "freq-domain0"
-> +        - const: "osm-domain1"
-> +        - const: "freq-domain1"
-> +        - const: "osm-acd0"
-> +        - const: "osm-acd1"
+> I tried to add the unevaluatedProperties + a random unrelated property
+> to the example usb-vbus node and dt_binding_check is happy with that. So
+> the unevaluatedProperties has no effect, is it supposed to be so?
 
-This is different enough and there's not much else to this bindings, so 
-I think you should do a separate schema doc.
+Yes, until support lands upstream[1].
 
-BTW, Don't need quotes here.
+Rob
 
-> +
-> +else:
-> +  properties:
-> +    reg:
-> +      minItems: 2
-> +      maxItems: 3
-> +      items:
-> +        - description: Frequency domain 0 register region
-> +        - description: Frequency domain 1 register region
-> +        - description: Frequency domain 2 register region
-> +    reg-names:
-> +      minItems: 2
-> +      maxItems: 3
-> +      items:
-> +        - const: "freq-domain0"
-> +        - const: "freq-domain1"
-> +        - const: "freq-domain2"
-> +
->  required:
->    - compatible
->    - reg
-> -  - reg-names
->    - clocks
->    - clock-names
->    - '#freq-domain-cells'
-> -- 
-> 2.32.0
-> 
-> 
+[1] https://github.com/Julian/jsonschema/pull/817
