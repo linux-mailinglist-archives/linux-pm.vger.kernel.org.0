@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3613C90E1
+	by mail.lfdr.de (Postfix) with ESMTP id D91EA3C90E2
 	for <lists+linux-pm@lfdr.de>; Wed, 14 Jul 2021 22:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbhGNT4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jul 2021 15:56:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47012 "EHLO mail.kernel.org"
+        id S237203AbhGNT4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jul 2021 15:56:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241180AbhGNTu0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:50:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E1D87613E7;
-        Wed, 14 Jul 2021 19:47:10 +0000 (UTC)
+        id S238046AbhGNTuw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:50:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DE47613D1;
+        Wed, 14 Jul 2021 19:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626292031;
-        bh=Xn+rjXSz7RP1Rc1/G87Hjw31RhbVej4EgykkbaNouX0=;
+        s=k20201202; t=1626292076;
+        bh=YOgllG/rTEmQTDw1A015Rm1sGiBtgaiqWBPhjMR2xtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XMSLW9YoM+DJLCkKffiDk+nVdNOyOo5j6aaEymBVxyMvyiednTYWZ6kyeLv6lh2gf
-         bMUODxnNLn4onTP/emVeWrvWZwOxKQteapTadH1FXvbEC0VQ3qusAmTkGl7ihs82yK
-         FecVmaY2E4/RK3LwmIGoDO+GlOQ6RuZlP0Kk61Yxyf+GHE62vo0RdhTwfSVDCNeoJN
-         K2lUh4szUDeqRGyosALXrM5xsnIDXYyNVtdAbFpX5Nfg10gSnjQ4mr28ActR1gy9Yh
-         z2y955qrH4E9oakVYk2GZZzbr08L+KTDBWlTHxF+SsZ+N3UgdrgwgHhhRyD5RNnV3A
-         w3lFrUCzWf9Uw==
+        b=kPfuphhw+PgbVzeTDHqlcd8vMwAfKdb40d8XDw8RwcAhQdglxSGSKpMb2JQr6V/O1
+         1U5Hy77oLUyRE56EXn2axMMutadlvkYdKmb4VxZ3+KYIop6TCigp90Jv50eu2fGJjs
+         uivWzQnXy299fI+YTeDYSBfYXdluoyzbf2VB/xkMmWt4LcWa5iIVaJOW2kRQJENC/i
+         BzXnVYgHDVn4r7rL0wLDjpIPB43rLHfvFM21M/pOdjgZsfe0+G7W0OTECZq9jYx0wR
+         698Qzhk5wRVF62NAkKqjHD1RfFvsT/pbal2uMYXeeQirdnEQdFOwplvF58dmA/5WNz
+         U0qntlGWHfWMg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 32/39] thermal/core: Correct function name thermal_zone_device_unregister()
-Date:   Wed, 14 Jul 2021 15:46:17 -0400
-Message-Id: <20210714194625.55303-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 22/28] thermal/core: Correct function name thermal_zone_device_unregister()
+Date:   Wed, 14 Jul 2021 15:47:17 -0400
+Message-Id: <20210714194723.55677-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210714194625.55303-1-sashal@kernel.org>
-References: <20210714194625.55303-1-sashal@kernel.org>
+In-Reply-To: <20210714194723.55677-1-sashal@kernel.org>
+References: <20210714194723.55677-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,10 +59,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 7b0ffc1c0ea9..a24296d68f3e 100644
+index fcefafe7df48..2db83b555e59 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -1303,7 +1303,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+@@ -1304,7 +1304,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
  EXPORT_SYMBOL_GPL(thermal_zone_device_register);
  
  /**
