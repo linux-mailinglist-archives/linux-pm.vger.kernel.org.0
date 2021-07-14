@@ -2,45 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A953C8ABB
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jul 2021 20:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124453C8AC1
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jul 2021 20:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbhGNSYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jul 2021 14:24:36 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:35409 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbhGNSYg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jul 2021 14:24:36 -0400
-Received: by mail-oi1-f177.google.com with SMTP id p67so3323726oig.2;
-        Wed, 14 Jul 2021 11:21:43 -0700 (PDT)
+        id S229738AbhGNSZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jul 2021 14:25:10 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:43875 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229662AbhGNSZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jul 2021 14:25:09 -0400
+Received: by mail-ot1-f45.google.com with SMTP id i12-20020a05683033ecb02903346fa0f74dso3442840otu.10;
+        Wed, 14 Jul 2021 11:22:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0KcpjwXhcCKnHcviynWkzqMFtlMWRocVGM/Qc8KU/ac=;
-        b=aNhdwBKIGRxlkBRsO56bx9W8HHTKu0QMlZjah98H+vVsRLUyuZIsIQjP3hm0de51du
-         kci5BF6oSlBDzVBhWQiPocYULLLFqy0HieAe0xu2jtiHuUX6mQgeR3Sy8GKQDtzGLS3J
-         cXILLptA+eVf/cdbHKnbENkkIVH55zhKg8ThCLjqETUKtqkB/DQB6gZub6z8lURnsAHp
-         4PsSyZLfRwnUCFbc/NLm1gQdtKpih6yLB3G+0brX00EgODhLQ7UGSjH07yG+dvOu4w1J
-         p59kVTkkkub23HnQoedwzrq8Pat8DFTamTV+DhoEZXmzpKY/APNg+FjH+sQzkpd10dLN
-         PhMg==
-X-Gm-Message-State: AOAM530Uwrxk3CX/FFPaNGL+ykjysMrrz8/OjMwmjxxEKuUv8lQEXP55
-        vlfuryZVYi9w06+wgIYqNfO7wAWUXwu50vIeiV8=
-X-Google-Smtp-Source: ABdhPJzqbNv3YOFVhJxye+TyrJL14HgG5jNwvBep50muv7b1MOtq0jwqlVnIdv9Ufn/78vBQWnLxWc5ZndD5gGXkrcM=
-X-Received: by 2002:a05:6808:10d0:: with SMTP id s16mr7913602ois.69.1626286903018;
- Wed, 14 Jul 2021 11:21:43 -0700 (PDT)
+        bh=lDo0D3q6xI+9CA5bjocxngrcesl99uMobhkETI9ZjYY=;
+        b=HPqbUtTtLkndlxKTFY9pIISApyxDY8WbF0ppzaRaKYy/uCKmDx9Xl3H0NZDHSqsk0Q
+         Iyyj7BpwjFZiQJZAsCC38yxw8VT6wf9WXoJf2RDE9RLnf9N5SMsqMRmV2NCN39bISQn6
+         sjJorQPTwCARL/dzMUyUonCROpYGSbbzyv6zQ0OtdAWf2odUO3ezjQz/2CPD/UIqGCPI
+         g+KH9XQrFwcbdDps/y49VExjjitbI1uxHXoegvBJJDohZL36VvQT8LgwZTAoUtgVIWQe
+         JTc4aXqfyQ7rTe0XeAkZjGPvDarhZ5YHz5D3nL108dAlTpBnshKZZEXaEkVNOf2chemp
+         8G1w==
+X-Gm-Message-State: AOAM5304HIbV7Qq/dTd3DH2syt4lYkkrrT/Y2eI1yG2MftieeQgOyxQd
+        C9kzGXlvBmvQcr2hvnZV45SuNDYLeaD5faqCtJ4=
+X-Google-Smtp-Source: ABdhPJy+D3OKfKUzHB57KwHRHXtNSntVyqMak4CtaepbVm1jZ0TzbPUFm4CL9SguFXdEWCNVKpMXbhZgjQyfB53V8Lk=
+X-Received: by 2002:a9d:604e:: with SMTP id v14mr9278938otj.260.1626286936835;
+ Wed, 14 Jul 2021 11:22:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210710103819.12532-1-adrian.hunter@intel.com>
- <20210710103819.12532-2-adrian.hunter@intel.com> <YOm6hWQ+RL7ILm3p@kroah.com>
-In-Reply-To: <YOm6hWQ+RL7ILm3p@kroah.com>
+References: <20210710103819.12532-1-adrian.hunter@intel.com> <20210710103819.12532-2-adrian.hunter@intel.com>
+In-Reply-To: <20210710103819.12532-2-adrian.hunter@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Jul 2021 20:21:32 +0200
-Message-ID: <CAJZ5v0gpS3L_PM0=jetCac=GwK-GAEz8paKk15GX9F+Bhszv7A@mail.gmail.com>
+Date:   Wed, 14 Jul 2021 20:22:06 +0200
+Message-ID: <CAJZ5v0iPXYvmOPv-kQnzMbkqNZtaZ9TMgJht5=VNnx0t3gi1Dw@mail.gmail.com>
 Subject: Re: [PATCH V3 1/3] driver core: Prevent warning when removing a
  device link from unregistered consumer
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Saravana Kannan <saravanak@google.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
@@ -56,22 +55,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 10, 2021 at 5:19 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Sat, Jul 10, 2021 at 12:38 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> On Sat, Jul 10, 2021 at 01:38:17PM +0300, Adrian Hunter wrote:
-> > sysfs_remove_link() causes a warning if the parent directory does not
-> > exist. That can happen if the device link consumer has not been registered.
-> > So do not attempt sysfs_remove_link() in that case.
-> >
-> > Fixes: 287905e68dd29 ("driver core: Expose device link details in sysfs")
-> > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> > ---
-> >  drivers/base/core.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> sysfs_remove_link() causes a warning if the parent directory does not
+> exist. That can happen if the device link consumer has not been registered.
+> So do not attempt sysfs_remove_link() in that case.
 >
-> No Cc: stable for this?  Why not?
+> Fixes: 287905e68dd29 ("driver core: Expose device link details in sysfs")
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-AFAICS that would be
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
+> ---
+>  drivers/base/core.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index ea5b85354526..2de8f7d8cf54 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -575,8 +575,10 @@ static void devlink_remove_symlinks(struct device *dev,
+>                 return;
+>         }
+>
+> -       snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
+> -       sysfs_remove_link(&con->kobj, buf);
+> +       if (device_is_registered(con)) {
+> +               snprintf(buf, len, "supplier:%s:%s", dev_bus_name(sup), dev_name(sup));
+> +               sysfs_remove_link(&con->kobj, buf);
+> +       }
+>         snprintf(buf, len, "consumer:%s:%s", dev_bus_name(con), dev_name(con));
+>         sysfs_remove_link(&sup->kobj, buf);
+>         kfree(buf);
+> --
+> 2.17.1
+>
