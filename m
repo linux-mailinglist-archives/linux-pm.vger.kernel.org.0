@@ -2,73 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BDA3CA24F
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jul 2021 18:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDAB3CA435
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jul 2021 19:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbhGOQcl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jul 2021 12:32:41 -0400
-Received: from mail-io1-f46.google.com ([209.85.166.46]:34329 "EHLO
-        mail-io1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbhGOQcl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jul 2021 12:32:41 -0400
-Received: by mail-io1-f46.google.com with SMTP id g22so7173681iom.1;
-        Thu, 15 Jul 2021 09:29:47 -0700 (PDT)
+        id S235191AbhGOR2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhGOR2f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jul 2021 13:28:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A334C061760
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id b5-20020a17090a9905b029016fc06f6c5bso4935293pjp.5
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
+         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
+         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
+         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
+         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
+         7b/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v1sGyty0gd4iWu3C0ErzREGdbTnaUB1Y47ERaQdKRHQ=;
-        b=tP5MtCbqOJttlDLkmR3IV9VZkL8ifux50hPr1sTIFADvEfk4awzxu3oq4dZd4LdCmj
-         taycb15lPUYsXpRkJbnyNAAkngVbSFIt6wR4XctNYmsknD4PkUP09DyQGu+D8mj21Upv
-         bKdYv45ahxR18MREOrvN2DgJcI0C1EXKCNqJAcVBNofjLRZKGno28XN+DN7ldvJBFu4S
-         XrPq8rQirHFv35Lo8Nz8bvXKq+IkJiDy5w1peh0DGDyz4zzfDENBWOvG0S/nr5OB9md2
-         /XzU8/Ro59NO7jQGHXxplXGg7REQPgcol6In14+1i+AttMQijH9o0BwgqzH3BPGRcota
-         0txw==
-X-Gm-Message-State: AOAM532twfMxjpBpZbnUBDceLdGPjoLD4Pk7jEeoHn6M4WoH3z9Qz8Jq
-        1o68T37R78NrPhRGRW64Ow==
-X-Google-Smtp-Source: ABdhPJw5QX6CywVdSfB1MVePX9dufRHI9Tmxd4hvIU019ILBXIrMdD0QbzQb2b6Pv64zSONFgSiIgQ==
-X-Received: by 2002:a02:3b26:: with SMTP id c38mr4877816jaa.12.1626366587396;
-        Thu, 15 Jul 2021 09:29:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z12sm3427093iom.6.2021.07.15.09.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jul 2021 09:29:46 -0700 (PDT)
-Received: (nullmailer pid 1196299 invoked by uid 1000);
-        Thu, 15 Jul 2021 16:29:42 -0000
-Date:   Thu, 15 Jul 2021 10:29:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     YT Lee <yt.lee@mediatek.com>
-Cc:     louis.yu@mediatek.com, charles.yang@mediatek.com,
-        eballetbo@gmail.com, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, xiaoqing.liu@mediatek.com, nm@ti.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        angus.lin@mediatek.com, robh+dt@kernel.org, roger.lu@mediatek.com,
-        linux-pm@vger.kernel.org, sboyd@kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        khilman@kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, drinkcat@google.com,
-        linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
-        fan.chen@mediatek.com, srv_heupstream@mediatek.com
-Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: add mt8195 svs
- dt-bindings
-Message-ID: <20210715162942.GA1196241@robh.at.kernel.org>
-References: <20210713020552.18667-1-yt.lee@mediatek.com>
- <20210713020552.18667-2-yt.lee@mediatek.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=sSoFtJ/qDECsWKVMcajdo3Xv/QLaUlxxOfcDsK6gZzwnfO/w8ZRL1cbbAe5R5STVFI
+         bIFayyVNhtFqCU+/tPgASycOxBQQrR6MmBPvDUXxTwu+HqQhU2wh0Ipiy1Te4e7d/4B0
+         Nu7xlt2c4fr2bguEMJvVVmUFOLsnWpTkt8O75gJe8uoJqbatvMAfIdjRzDiSrHifEZfH
+         NARFM3wy5QJAD35uTCSqlPgVSwyKtg15+o7j9tzV5YH0CLHEifUqO/55lB6yipkDAMOo
+         7dlYAM7+eJq0wBUxLMgHs4/GsXQ/jgAlRTFryoMYucBaxTO/Pajm639uajND+8I2xNnC
+         hi8w==
+X-Gm-Message-State: AOAM530iHdm5BI6TWFyGYZQuMf0Boxv67OBwJAw9sZNVVa9AR5WDPjQk
+        WzOixzChMvVJqjDRCfrMVlAH1b33ERN6lA7Ktc4=
+X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
+X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
+ Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713020552.18667-2-yt.lee@mediatek.com>
+Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:41 +0000
+Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 13 Jul 2021 10:05:51 +0800, YT Lee wrote:
-> Add new binding documentation of the mt8195 svs.
-> 
-> Signed-off-by: YT Lee <yt.lee@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hello Dear,
 
-Acked-by: Rob Herring <robh@kernel.org>
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
+
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
+
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
