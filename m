@@ -2,124 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D51A3CAC87
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jul 2021 21:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B2A3CB1D5
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 07:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343872AbhGOTiN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jul 2021 15:38:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39270 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345409AbhGOTgS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 15 Jul 2021 15:36:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 55AAB61285;
-        Thu, 15 Jul 2021 19:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626377604;
-        bh=7tNfwApTPzfLfh6RfezcVqTOt5G3e1U8pv8OBwedrhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bi5FNPI/pbLZE4d4X5tx5IbWgGU5gYASovT/gmp+gc1BXGnDejR5AZErHpHC7b8oB
-         TlqloOQL5G3sRRzc1lmVw/7FtY7DskW7q5wUj532sQJGVE9ZCeWlkFSib2KhW1g2SX
-         heDO6qeufSXPaGwOF0Im3BhbXUpoXfTSHNtJiKAeVUxFOSN5ku0MXAPD10RmQ+0CKv
-         6BNqROfaM3lzeZMxQoyS3y1ASjHgi3DH77YviH58ypVcvEDdMarHNPdXqqlFuWT6qZ
-         tLnWfoUfZpfHosjFJRliwqQ1u/DQe16k3F46NX04Yz+6o0G5t1Mpqg0sQWv7YUt+o/
-         ybLibHyoyGCow==
-Received: by pali.im (Postfix)
-        id B3C737B5; Thu, 15 Jul 2021 21:33:21 +0200 (CEST)
-Date:   Thu, 15 Jul 2021 21:33:21 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Konstantin Porotchkin <kostap@marvell.com>,
-        Nadav Haklai <nadavh@marvell.com>, Ken Ma <make@marvell.com>,
-        Victor Gu <xigu@marvell.com>,
-        Jason Hung <jhung@globalscaletechnologies.com>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
-        Philip Soares <philips@netisense.com>,
-        linux-pm@vger.kernel.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, nnet <nnet@fastmail.fm>
-Subject: Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz
- variant
-Message-ID: <20210715193321.z3vswz6x4rzvw2fd@pali>
-References: <20210630135942.29730-1-kabel@kernel.org>
- <20210630225601.6372-1-kabel@kernel.org>
- <20210702163035.nmb5pniwpqtmaz4b@pali>
- <20210708143451.4htvdop4zvjufrq6@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210708143451.4htvdop4zvjufrq6@pali>
-User-Agent: NeoMutt/20180716
+        id S234018AbhGPFRX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jul 2021 01:17:23 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:27988 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234054AbhGPFRT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 01:17:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1626412465; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=I70l+8gMqxdcJWfj49GFWkomNHZ5b0g+xdm+8kx2ybA=; b=czMDQwPB9c8zuEu3uCpkTaukClmvGB86wBwDAGtLiaQjGUEwXmM48AShcIrKrSkTCpqbFcLN
+ mLRly+yXkonbb51/FSz49cpzY3DiqPGHfh5Z5vVhiAAscSzhxw4wamTyj0N48KdzFF538yYF
+ Voay/rwLfeJmfHJf3YIg8BkVFhA=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 60f11599d0100c7cf9b167de (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Jul 2021 05:14:01
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5E3BCC4338A; Fri, 16 Jul 2021 05:14:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A3F5AC433D3;
+        Fri, 16 Jul 2021 05:13:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A3F5AC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     ulf.hansson@linaro.org, bjorn.andersson@linaro.org,
+        viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH v3 0/2] PM / Domains: Add support for 'required-opps' to set default perf state
+Date:   Fri, 16 Jul 2021 10:43:43 +0530
+Message-Id: <1626412425-30715-1-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ping! Gentle reminder for Marvell people.
+This is a re-spin of the series [1] which was adding support for a new
+DT binding (assigned-performance-state) and based on the discussions on
+that thread [2] it was concluded that we could achieve the same with the
+existing 'required-opps' binding instead.
 
-On Thursday 08 July 2021 16:34:51 Pali Rohár wrote:
-> Konstantin, Nadav, Ken, Victor, Jason: This issue is pretty serious,
-> CPU on 1.2GHz A3720 is crashing. Could you please look at it?
-> 
-> On Friday 02 July 2021 18:30:35 Pali Rohár wrote:
-> > +Jason from GlobalScale as this issue affects GlobalScale Espressobin Ultra and V7 1.2 GHz boards.
-> > 
-> > On Thursday 01 July 2021 00:56:01 Marek Behún wrote:
-> > > The 1.2 GHz variant of the Armada 3720 SOC is unstable with DVFS: when
-> > > the SOC boots, the WTMI firmware sets clocks and AVS values that work
-> > > correctly with 1.2 GHz CPU frequency, but random crashes occur once
-> > > cpufreq driver starts scaling.
-> > > 
-> > > We do not know currently what is the reason:
-> > > - it may be that the voltage value for L0 for 1.2 GHz variant provided
-> > >   by the vendor in the OTP is simply incorrect when scaling is used,
-> > > - it may be that some delay is needed somewhere,
-> > > - it may be something else.
-> > > 
-> > > The most sane solution now seems to be to simply forbid the cpufreq
-> > > driver on 1.2 GHz variant.
-> > > 
-> > > Signed-off-by: Marek Behún <kabel@kernel.org>
-> > > Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
-> > > ---
-> > > If someone from Marvell could look into this, it would be great since
-> > > basically 1.2 GHz variant cannot scale, which is a feature that was
-> > > claimed to be supported by the SOC.
-> > > 
-> > > Ken Ma / Victor Gu, you have worked on commit
-> > > https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/d6719fdc2b3cac58064f41b531f86993c919aa9a
-> > > in linux-marvell.
-> > > Your patch takes away the 1202 mV constant for 1.2 GHz base CPU
-> > > frequency and instead adds code that computes the voltages from the
-> > > voltage found in L0 AVS register (which is filled in by WTMI firmware).
-> > > 
-> > > Do you know why the code does not work correctly for some 1.2 GHz
-> > > boards? Do we need to force the L0 voltage to 1202 mV if it is lower,
-> > > or something?
-> > > ---
-> > >  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > index 3fc98a3ffd91..c10fc33b29b1 100644
-> > > --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > @@ -104,7 +104,11 @@ struct armada_37xx_dvfs {
-> > >  };
-> > >  
-> > >  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
-> > > -	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
-> > > +	/*
-> > > +	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
-> > > +	 * unstable because we do not know how to configure it properly.
-> > > +	 */
-> > > +	/* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} }, */
-> > >  	{.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
-> > >  	{.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
-> > >  	{.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5, 6} },
-> > > -- 
-> > > 2.31.1
-> > > 
+So this series, just drops the new binding and uses required-opps to achieve
+the default perf state setting thats needed by some devices.
+
+---
+Some devics within power-domains with performance states do not
+support DVFS, but still need to vote on a default/static state
+while they are active. Add support for this using the 'required-opps'
+property in device tree.
+
+[1] https://lore.kernel.org/patchwork/project/lkml/list/?series=501336&state=%2A&archive=both
+[2] https://lore.kernel.org/patchwork/patch/1436886/
+
+Rajendra Nayak (2):
+  PM / Domains: Add support for 'required-opps' to set default perf
+    state
+  arm64: dts: sc7180: Add required-opps for i2c
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 24 ++++++++++++++++++++++++
+ drivers/base/power/domain.c          | 27 +++++++++++++++++++++++++++
+ include/linux/pm_domain.h            |  1 +
+ 3 files changed, 52 insertions(+)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
