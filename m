@@ -2,75 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8903CBCC0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 21:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608E43CBD47
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 22:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbhGPTmM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jul 2021 15:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S230256AbhGPUD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jul 2021 16:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbhGPTmM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 15:42:12 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453C4C061760
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 12:39:17 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id c197so12135354oib.11
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 12:39:17 -0700 (PDT)
+        with ESMTP id S233008AbhGPUDx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 16:03:53 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1209BC06175F
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:00:57 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bu12so17006763ejb.0
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:00:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=fv7DMd/gditUGd89KsZv6kzGs+OqmSKrVvU2f7TJ2+4=;
-        b=Mpr02/1AW3f18Bb7yv3Nx1eLLmiLG8qlYaDWjqSEtb94u3VXNqZpJIFPZF5AZAYrv4
-         euboawnbYOrMxF3OPRs0jHyxBRjazEdcT3+6u/3TkizPZagpBwGvU/SFpzT/UwWPaIg7
-         C7Tsk1W2jc5M2wXUoEfxlsxOCYO4QqPm0KNzw=
+        d=rammhold-de.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kdw0IQFcrZt6p5a2Ip3t1Stcax4FglAn7CAcnCq9/SM=;
+        b=dh6cUHAnOvTvoIvocM9kSSSzAyojdxBbrfoWEW3dOuT5r8XB6/86iQo+3RCoDsYTPy
+         I/Y7BFgrEnEIz5nruIlu7cg7itgBAodiL66lQFqVhS+g+1oZxhgLu6z1PqL2dHCsXMLz
+         nixLpfPwT0m5S9alqIl68ZVJAcivcE2mN6yqguSBAU8/9efhLPUEBDm7A4DGWEThu3V+
+         ZxdXYMA4IrErXxZXuC+HYLlwmQFWsyyTxkvPHPcg8zI1R30jPg3HF/V+koL7ESQfgsdC
+         M2T4xMAn0hhKKt84vCSVOpQqPtumGaW83aQ/mAzv57Ey5irZxD1lpIsMdT+D027uIN1S
+         /eHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=fv7DMd/gditUGd89KsZv6kzGs+OqmSKrVvU2f7TJ2+4=;
-        b=ULm/1S4Ux92W/6S5sXQM2S+J1awJRFbC9QM0XL9OcBsGfcS4robgt9jyIfm1Yrl7z1
-         6U70TEkQbpGa1jlyMiV/ZIj7dD7vcvoR7CzTT7xSNlcj9g5kZImFFXDcu2f92b6Ao/tC
-         GSGck1aPEyNDfYoWk37X3xEq77SXMWO1DCMpNHI+dIk3+FgtOUfiH/vJWFmknfx3zATk
-         DvXfmDq+oaVUerPm2Gcd4GVjhi+s0kGAnJkN3ee6YFH+15JAdH+rRTxX69TGp72AmtLa
-         SsefyLYy/ekgPbdoKZh4jkKQozMG/1cibU6cvLCGCdHuJXAQ6qNrHQlPH2eQujZiMAOg
-         h7LA==
-X-Gm-Message-State: AOAM530nfzRvzrItqZ6Pph5ukMfnJIJwhb29QTgGdKS94arHJbGvEaRP
-        TlBkaa6UgYzmmz2S8SYYuyKulZOAUhGJmxBbMtlxEw==
-X-Google-Smtp-Source: ABdhPJycyfU2OpnyY8fwekR9OEhg1REuKFzJyJ9WFoqtk/B5zwwVo35Tvga6/Erqr4MKZV48CnYi9IgxHuWqdIpFqW0=
-X-Received: by 2002:aca:7545:: with SMTP id q66mr9245579oic.19.1626464356697;
- Fri, 16 Jul 2021 12:39:16 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 16 Jul 2021 21:39:16 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kdw0IQFcrZt6p5a2Ip3t1Stcax4FglAn7CAcnCq9/SM=;
+        b=JL7PIR/ocRd/EjMCxN1UMFWwfXd4Sa1RSa848tWZxUkXAB5O7LZrXFd0IQfdqN0yV5
+         g2VpXS47R/RK5YTK2sGvZm2NP5BIgVuGjcpGOYGV3soMvmuXA5qqBxHu9yXlW/nd8GGp
+         23UnGwYOq6MzTbmk80F0rWORBQRJq8LZCq8RgPc8oiT7cDlrVD3DJBjHu4GlcluYfe3r
+         /oMa0ZrwUXcfJPkvqoSuTyfsFI1RK8AXczoZO3wGfIIbmLRhrhqcxG0lbudJwVyBPlw8
+         Uc8MRG7j8htxPK+dFrekOZrbGK3iEVatXerKeaTc6Ejf/w4SMgqHiz1AZe3d+cxnLry9
+         jGnQ==
+X-Gm-Message-State: AOAM530gJhtyPyNycLUwczBNSTs+mLwec4OqYT9hyWh5MMPnIQC5djZ1
+        uFciZaNA7SBcIIaffLMBVZI/UjciVAqoF6cK
+X-Google-Smtp-Source: ABdhPJy4BwHJ6z5T0auOOYDx4/jEfFccIT9YPIMcZinqkT5hbGkCQFtenoLlumCpqJmyBznubvNkag==
+X-Received: by 2002:a17:906:6dc5:: with SMTP id j5mr13500151ejt.364.1626465655654;
+        Fri, 16 Jul 2021 13:00:55 -0700 (PDT)
+Received: from localhost ([2a00:e67:1fd:a:4a4c:28ed:97af:54ad])
+        by smtp.gmail.com with ESMTPSA id l16sm1717539eje.67.2021.07.16.13.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 13:00:55 -0700 (PDT)
+From:   andreas@rammhold.de
+To:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Rammhold <andreas@rammhold.de>
+Subject: [PATCH] tools: cpupower: fix typo in cpupower-idle-set(1) manpage
+Date:   Fri, 16 Jul 2021 22:00:34 +0200
+Message-Id: <20210716200034.2158602-1-andreas@rammhold.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
-References: <1626429658-18961-1-git-send-email-rnayak@codeaurora.org> <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Fri, 16 Jul 2021 21:39:16 +0200
-Message-ID: <CAE-0n51y2JEy-singr5i9gFFO4uGJ_UVDFChNPUwnTEBO=5kQg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] arm64: dts: sc7180: Add required-opps for i2c
-To:     Rajendra Nayak <rnayak@codeaurora.org>, bjorn.andersson@linaro.org,
-        ulf.hansson@linaro.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        rojay@codeaurora.org, stephan@gerhold.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Rajendra Nayak (2021-07-16 03:00:58)
-> qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
-> Though qup-i2c does not support DVFS, it still needs to vote for a
-> performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
-> requirement.
->
-> Use 'required-opps' to pass this information from
-> device tree, and also add the power-domains property to specify
-> the CX power-domain.
->
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> ---
+From: Andreas Rammhold <andreas@rammhold.de>
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+The tools name was wrong in the SYNTAX section of the manpage it should
+read "idle-set" instead of "idle-info".
+
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+---
+ tools/power/cpupower/man/cpupower-idle-set.1 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
+index 21916cff7516..8cef3c71e19e 100644
+--- a/tools/power/cpupower/man/cpupower-idle-set.1
++++ b/tools/power/cpupower/man/cpupower-idle-set.1
+@@ -4,7 +4,7 @@
+ cpupower\-idle\-set \- Utility to set cpu idle state specific kernel options
+ .SH "SYNTAX"
+ .LP
+-cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
++cpupower [ \-c cpulist ] idle\-set [\fIoptions\fP]
+ .SH "DESCRIPTION"
+ .LP
+ The cpupower idle\-set subcommand allows to set cpu idle, also called cpu
+-- 
+2.32.0
+
