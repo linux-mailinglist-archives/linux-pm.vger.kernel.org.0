@@ -2,88 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E43CBD47
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 22:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1624F3CBD9F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 22:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbhGPUD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jul 2021 16:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S233119AbhGPUV7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jul 2021 16:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbhGPUDx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 16:03:53 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1209BC06175F
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:00:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bu12so17006763ejb.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:00:56 -0700 (PDT)
+        with ESMTP id S233492AbhGPUV4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 16:21:56 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32144C06175F
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:19:00 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id y66so2892983oie.7
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jul 2021 13:19:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rammhold-de.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kdw0IQFcrZt6p5a2Ip3t1Stcax4FglAn7CAcnCq9/SM=;
-        b=dh6cUHAnOvTvoIvocM9kSSSzAyojdxBbrfoWEW3dOuT5r8XB6/86iQo+3RCoDsYTPy
-         I/Y7BFgrEnEIz5nruIlu7cg7itgBAodiL66lQFqVhS+g+1oZxhgLu6z1PqL2dHCsXMLz
-         nixLpfPwT0m5S9alqIl68ZVJAcivcE2mN6yqguSBAU8/9efhLPUEBDm7A4DGWEThu3V+
-         ZxdXYMA4IrErXxZXuC+HYLlwmQFWsyyTxkvPHPcg8zI1R30jPg3HF/V+koL7ESQfgsdC
-         M2T4xMAn0hhKKt84vCSVOpQqPtumGaW83aQ/mAzv57Ey5irZxD1lpIsMdT+D027uIN1S
-         /eHQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=763nLM9hOG1xzTfiRC2C+QIzwsAiunJSWdOJQ5k5fPs=;
+        b=U+WJbIw+QbtFWTk7uPEAZRY73FbUf/tDRQRuXsIo1cPylkyO9zzhyU7pDwxd+yTJ85
+         zpiR45QHSGo73POsvAUjPQ/l/iQI5fZlw/MyleuuGAD/oeAX6/x9NXOtqKG1i/9XQuie
+         hw293qk7qpj2PJYW3rlJEjalQYHJ7s5xPgEbiJ+0+LqHdKAM0ly4PWB3aTYa9Mek1CuF
+         AbK6EkBhFF4KMNpm/5riMYQ0dmjw+AxczWK1qsj9RebPQoMogqXRkiNReHSDDZ9Irb2F
+         A12DOSe1qm7aN+5Y9osoDmM4W2DZHqBvIj9ID25oIKXMv/uoVezS7p6pfZq8+D4OhqfJ
+         kFqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kdw0IQFcrZt6p5a2Ip3t1Stcax4FglAn7CAcnCq9/SM=;
-        b=JL7PIR/ocRd/EjMCxN1UMFWwfXd4Sa1RSa848tWZxUkXAB5O7LZrXFd0IQfdqN0yV5
-         g2VpXS47R/RK5YTK2sGvZm2NP5BIgVuGjcpGOYGV3soMvmuXA5qqBxHu9yXlW/nd8GGp
-         23UnGwYOq6MzTbmk80F0rWORBQRJq8LZCq8RgPc8oiT7cDlrVD3DJBjHu4GlcluYfe3r
-         /oMa0ZrwUXcfJPkvqoSuTyfsFI1RK8AXczoZO3wGfIIbmLRhrhqcxG0lbudJwVyBPlw8
-         Uc8MRG7j8htxPK+dFrekOZrbGK3iEVatXerKeaTc6Ejf/w4SMgqHiz1AZe3d+cxnLry9
-         jGnQ==
-X-Gm-Message-State: AOAM530gJhtyPyNycLUwczBNSTs+mLwec4OqYT9hyWh5MMPnIQC5djZ1
-        uFciZaNA7SBcIIaffLMBVZI/UjciVAqoF6cK
-X-Google-Smtp-Source: ABdhPJy4BwHJ6z5T0auOOYDx4/jEfFccIT9YPIMcZinqkT5hbGkCQFtenoLlumCpqJmyBznubvNkag==
-X-Received: by 2002:a17:906:6dc5:: with SMTP id j5mr13500151ejt.364.1626465655654;
-        Fri, 16 Jul 2021 13:00:55 -0700 (PDT)
-Received: from localhost ([2a00:e67:1fd:a:4a4c:28ed:97af:54ad])
-        by smtp.gmail.com with ESMTPSA id l16sm1717539eje.67.2021.07.16.13.00.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=763nLM9hOG1xzTfiRC2C+QIzwsAiunJSWdOJQ5k5fPs=;
+        b=r82MKC7Q9vrUkMfmr1GFTEUNDysY+G9emdHEtpFiPNEwb4CZPDSUCYKcvnaM0JAc42
+         YE201IHe9dNe9Ki7CoBQH8O/J3MrkpnSTx3WZS3d3nCjDgk6Sr88KavsrkPlPXXyNWn/
+         cz+bcOBFcb03OWZFx1puqjPs14UuIUY5ok1ycAHEqmtr0RTofQB4Kl61CWiMGoqAIUwQ
+         Bu6voQy0eBliyzQdF9ngRkB1qKxxlxV7DThSJgFB8JN3BScXTQUXtzs3ff/79eyjaGBF
+         6TRwZoFmjP8QnfJAYZIGpMkgnmkr3tA+be4STj1XohD5SWFlysV0jT8mt+8HmMG7vcgM
+         VxuA==
+X-Gm-Message-State: AOAM533k6QqE36iQ0OxRDKzYj05xn9ZD1zLs/FqFHU5Be68ns9UUCwvG
+        PGbf1n/T00Kxyr4EMML62xeTfw==
+X-Google-Smtp-Source: ABdhPJyhjp4YjBkTEJEbAorL7JPZfDyaZTF/3+0OklBw8xqW343rmBB9mWANS3uGMTklxuxtDX5/1w==
+X-Received: by 2002:a54:448a:: with SMTP id v10mr2428740oiv.44.1626466739501;
+        Fri, 16 Jul 2021 13:18:59 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q63sm404390ooq.4.2021.07.16.13.18.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jul 2021 13:00:55 -0700 (PDT)
-From:   andreas@rammhold.de
-To:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Rammhold <andreas@rammhold.de>
-Subject: [PATCH] tools: cpupower: fix typo in cpupower-idle-set(1) manpage
-Date:   Fri, 16 Jul 2021 22:00:34 +0200
-Message-Id: <20210716200034.2158602-1-andreas@rammhold.de>
-X-Mailer: git-send-email 2.32.0
+        Fri, 16 Jul 2021 13:18:59 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 15:18:56 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     ulf.hansson@linaro.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net
+Subject: Re: [PATCH v4 2/2] arm64: dts: sc7180: Add required-opps for i2c
+Message-ID: <YPHpsO5LlQRQxj9y@yoga>
+References: <1626429658-18961-1-git-send-email-rnayak@codeaurora.org>
+ <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Andreas Rammhold <andreas@rammhold.de>
+On Fri 16 Jul 05:00 CDT 2021, Rajendra Nayak wrote:
 
-The tools name was wrong in the SYNTAX section of the manpage it should
-read "idle-set" instead of "idle-info".
+> qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
+> Though qup-i2c does not support DVFS, it still needs to vote for a
+> performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
+> requirement.
+> 
 
-Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
----
- tools/power/cpupower/man/cpupower-idle-set.1 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sounds good, but...
 
-diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
-index 21916cff7516..8cef3c71e19e 100644
---- a/tools/power/cpupower/man/cpupower-idle-set.1
-+++ b/tools/power/cpupower/man/cpupower-idle-set.1
-@@ -4,7 +4,7 @@
- cpupower\-idle\-set \- Utility to set cpu idle state specific kernel options
- .SH "SYNTAX"
- .LP
--cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
-+cpupower [ \-c cpulist ] idle\-set [\fIoptions\fP]
- .SH "DESCRIPTION"
- .LP
- The cpupower idle\-set subcommand allows to set cpu idle, also called cpu
--- 
-2.32.0
+> Use 'required-opps' to pass this information from
+> device tree, and also add the power-domains property to specify
+> the CX power-domain.
+> 
 
+..is the required-opps really needed with my rpmhpd patch in place?
+
+Regards,
+Bjorn
+
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index a5d58eb..cd30185 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -785,8 +785,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi0: spi@880000 {
+> @@ -837,8 +839,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi1: spi@884000 {
+> @@ -889,8 +893,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			uart2: serial@888000 {
+> @@ -923,8 +929,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi3: spi@88c000 {
+> @@ -975,8 +983,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			uart4: serial@890000 {
+> @@ -1009,8 +1019,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>  						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi5: spi@894000 {
+> @@ -1074,8 +1086,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi6: spi@a80000 {
+> @@ -1126,8 +1140,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			uart7: serial@a84000 {
+> @@ -1160,8 +1176,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi8: spi@a88000 {
+> @@ -1212,8 +1230,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			uart9: serial@a8c000 {
+> @@ -1246,8 +1266,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi10: spi@a90000 {
+> @@ -1298,8 +1320,10 @@
+>  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>  						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>  				interconnect-names = "qup-core", "qup-config",
+>  							"qup-memory";
+> +				power-domains = <&rpmhpd SC7180_CX>;
+> +				required-opps = <&rpmhpd_opp_low_svs>;
+>  				status = "disabled";
+>  			};
+>  
+>  			spi11: spi@a94000 {
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
