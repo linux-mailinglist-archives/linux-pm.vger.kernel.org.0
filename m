@@ -2,97 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79DA3CBA9E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 18:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EB93CBB41
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 19:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhGPQlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jul 2021 12:41:12 -0400
-Received: from mga07.intel.com ([134.134.136.100]:14458 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229462AbhGPQlL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Jul 2021 12:41:11 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="274584105"
-X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="274584105"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 09:38:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="656445438"
-Received: from srpawnik.iind.intel.com ([10.223.107.57])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Jul 2021 09:38:14 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH] thermal: int340x: Use IMOK independently
-Date:   Fri, 16 Jul 2021 22:09:46 +0530
-Message-Id: <20210716163946.3142-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S230256AbhGPRh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jul 2021 13:37:26 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:36683 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230189AbhGPRhZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 13:37:25 -0400
+Received: by mail-ot1-f52.google.com with SMTP id h24-20020a9d64180000b029036edcf8f9a6so10657996otl.3;
+        Fri, 16 Jul 2021 10:34:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aN0V4F1Aj9SwjsmpapzhlvC9T2mVION7Ql9AGvw7OH8=;
+        b=nYT59yw8a+e7C5dDHA/R544J/GiZH4hIqGbCX7B391Ys4kKi8LoE5Wyq8TgZtG+n3e
+         ElHpKhNC7HeB7cx7fd/MO3Lya4/hsarQMCEIFTDU7H5JiKGpwLzpv47t4BJGkHb7oZfv
+         +gkhydKL3zI3UntJNq7XB/TsTwtwaH5nPXCZsn9J22k6Vbh/zEa2YjthLcAxsv5Dstnt
+         wCoka2e+rttL2z8E1WAe1MrgUdy/dVkxhYyTNCwCR0AoLDY6jpl0ade1VEh1wyz3/Vss
+         /rWi4kf8WPJCTCYQZcJROf8XYxwRkTCaE6H7oWly2KMM+iqlvyM/tINtW3HWrLExKxk9
+         fMSA==
+X-Gm-Message-State: AOAM531MUI2kpIluk2S46OkIap+W/U7honDZSuOncKAp4Ew5DoVjt2mc
+        NFefi7o5JZmFqiq3dPrgB8/EzuvypoXMm4cCx0g=
+X-Google-Smtp-Source: ABdhPJxYhr3UbEFNFNp0jq2DWF5u0Fy6cb6G1PeobySFQ/O8TzZz6mnn2K1WPSYZMUixPlbXy8MjvYZqIplKNlKf5W0=
+X-Received: by 2002:a05:6830:9a:: with SMTP id a26mr1902433oto.260.1626456870386;
+ Fri, 16 Jul 2021 10:34:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210710130313.5072-1-chang.seok.bae@intel.com> <20210710130313.5072-26-chang.seok.bae@intel.com>
+In-Reply-To: <20210710130313.5072-26-chang.seok.bae@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Jul 2021 19:34:19 +0200
+Message-ID: <CAJZ5v0he2O=AAuravL8pppzBd+OTd=oGWH2Sv1JFhDfqET160A@mail.gmail.com>
+Subject: Re: [PATCH v7 25/26] intel_idle/amx: Add SPR support with XTILEDATA capability
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Borislav Petkov <bp@suse.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>, thiago.macieira@intel.com,
+        jing2.liu@intel.com, "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some chrome platform requires IMOK method in coreboot. But these platforms
-don't use GDDV data vault in coreboot. As per current code flow, to enable
-and use IMOK only, we need to have GDDV support as well in coreboot. This
-patch removes the dependency for IMOK from GDDV to enable and use IMOK
-independently.
+On Sat, Jul 10, 2021 at 3:09 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> Add a custom Sapphire Rapids (SPR) C-state table to intel_idle driver. The
+> parameters in this table are preferred over those supplied by ACPI.
+>
+> SPR supports AMX, and so this custom table uses idle entry points that know
+> how to initialize AMX TMM state, if necessary.
+>
+> This guarantees that AMX TMM state will never be the cause of hardware
+> C-state demotion from C6 to C1E. Under some conditions this may result in
+> improved power savings, and thus higher available turbo frequency budget.
+>
+> [ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
+>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> ---
+> Changes from v6:
+> * Update the changelog and function description. (Rafael J. Wysocki)
+>
+> Changes from v5:
+> * Moved the code to intel_idle. (Peter Zijlstra)
+> * Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
+> * Updated the code comment. (Dave Hansen)
+>
+> Changes from v4:
+> * Added as a new patch. (Thomas Gleixner)
+> ---
+>  arch/x86/include/asm/special_insns.h |  6 +++
+>  drivers/idle/intel_idle.c            | 79 ++++++++++++++++++++++++++++
+>  2 files changed, 85 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> index f3fbb84ff8a7..fada1bb82c7b 100644
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
+>         return 0;
+>  }
+>
+> +static inline void tile_release(void)
+> +{
+> +       /* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
+> +       asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
+> +}
+> +
+>  #endif /* __KERNEL__ */
+>
+>  #endif /* _ASM_X86_SPECIAL_INSNS_H */
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index e6c543b5ee1d..00f331b64131 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -54,6 +54,8 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/msr.h>
+> +#include <asm/fpu/internal.h>
+> +#include <asm/special_insns.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -155,6 +157,55 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+>         return 0;
+>  }
+>
+> +/**
+> + * idle_tile() - Initialize TILE registers in INIT-state
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- .../intel/int340x_thermal/int3400_thermal.c        | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+The parens should not be present here.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 823354a1a91a..19926beeb3b7 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -108,9 +108,12 @@ static struct attribute *imok_attr[] = {
- 	NULL
- };
- 
-+static const struct attribute_group imok_attribute_group = {
-+	.attrs = imok_attr,
-+};
-+
- static const struct attribute_group data_attribute_group = {
- 	.bin_attrs = data_attributes,
--	.attrs = imok_attr,
- };
- 
- static ssize_t available_uuids_show(struct device *dev,
-@@ -522,6 +525,12 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 	if (result)
- 		goto free_rel_misc;
- 
-+	if (acpi_has_method(priv->adev->handle, "IMOK")) {
-+		result = sysfs_create_group(&pdev->dev.kobj, &imok_attribute_group);
-+		if (result)
-+			goto free_imok;
-+	}
-+
- 	if (priv->data_vault) {
- 		result = sysfs_create_group(&pdev->dev.kobj,
- 					    &data_attribute_group);
-@@ -545,6 +554,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 	}
- free_uuid:
- 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
-+free_imok:
-+	sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
- free_rel_misc:
- 	if (!priv->rel_misc_dev_res)
- 		acpi_thermal_rel_misc_device_remove(priv->adev->handle);
-@@ -573,6 +584,7 @@ static int int3400_thermal_remove(struct platform_device *pdev)
- 	if (priv->data_vault)
- 		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
- 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
-+	sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
- 	thermal_zone_device_unregister(priv->thermal);
- 	kfree(priv->data_vault);
- 	kfree(priv->trts);
--- 
-2.17.1
+With this fixed:
 
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> + *
+> + * Leaving state in the dirty TILE registers may prevent the processor from
+> + * entering lower-power idle states. Use TILERELEASE to initialize the
+> + * state. Destroying fpregs state is safe after the fpstate update.
+> + */
+> +static inline void idle_tile(void)
+> +{
+> +       if (boot_cpu_has(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
+> +               tile_release();
+> +               fpregs_deactivate(&current->thread.fpu);
+> +       }
+> +}
+> +
+> +/**
+> + * intel_idle_tile - Ask the processor to enter the given idle state.
+> + * @dev: cpuidle device of the target CPU.
+> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
+> + * @index: Target idle state index.
+> + *
+> + * Ensure TILE registers in INIT-state before using intel_idle() to
+> + * enter the idle state.
+> + */
+> +static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
+> +                                    struct cpuidle_driver *drv, int index)
+> +{
+> +       idle_tile();
+> +
+> +       return intel_idle(dev, drv, index);
+> +}
+> +
+> +/**
+> + * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
+> + * @dev: cpuidle device of the target CPU.
+> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
+> + * @index: Target idle state index.
+> + *
+> + * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
+> + * enter the idle state.
+> + */
+> +static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
+> +                                           struct cpuidle_driver *drv, int index)
+> +{
+> +       idle_tile();
+> +
+> +       return intel_idle_s2idle(dev, drv, index);
+> +}
+> +
+>  /*
+>   * States are indexed by the cstate number,
+>   * which is also the index into the MWAIT hint array.
+> @@ -752,6 +803,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
+>                 .enter = NULL }
+>  };
+>
+> +static struct cpuidle_state spr_cstates[] __initdata = {
+> +       {
+> +               .name = "C1",
+> +               .desc = "MWAIT 0x00",
+> +               .flags = MWAIT2flg(0x00),
+> +               .exit_latency = 1,
+> +               .target_residency = 1,
+> +               .enter = &intel_idle,
+> +               .enter_s2idle = intel_idle_s2idle, },
+> +       {
+> +               .name = "C6",
+> +               .desc = "MWAIT 0x20",
+> +               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .exit_latency = 128,
+> +               .target_residency = 384,
+> +               .enter = &intel_idle_tile,
+> +               .enter_s2idle = intel_idle_s2idle_tile, },
+> +       {
+> +               .enter = NULL }
+> +};
+> +
+>  static struct cpuidle_state atom_cstates[] __initdata = {
+>         {
+>                 .name = "C1E",
+> @@ -1095,6 +1167,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
+>         .use_acpi = true,
+>  };
+>
+> +static const struct idle_cpu idle_cpu_spr __initconst = {
+> +       .state_table = spr_cstates,
+> +       .disable_promotion_to_c1e = true,
+> +       .use_acpi = true,
+> +};
+> +
+>  static const struct idle_cpu idle_cpu_avn __initconst = {
+>         .state_table = avn_cstates,
+>         .disable_promotion_to_c1e = true,
+> @@ -1157,6 +1235,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+>         X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,           &idle_cpu_skx),
+>         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,           &idle_cpu_icx),
+>         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &idle_cpu_icx),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
+>         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &idle_cpu_knl),
+>         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &idle_cpu_knl),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,       &idle_cpu_bxt),
+> --
+> 2.17.1
+>
