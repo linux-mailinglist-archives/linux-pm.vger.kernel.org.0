@@ -2,81 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EF93CBA90
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 18:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79DA3CBA9E
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jul 2021 18:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhGPQct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jul 2021 12:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhGPQcs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jul 2021 12:32:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D158CC06175F;
-        Fri, 16 Jul 2021 09:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+ZVAm4xpz85ls8m+eACfkwM9aiG6C0ltgRT5LhxMQI8=; b=cMZFl3ZJj/VH1q9Wb5ETK79ZtT
-        QihBAZEucOwQNwJrwDrb4ANgPasmf/Z8utphRcwRPShzAyF5cUvARa5KH8vTZZecl35Sbnp34+bPD
-        gKyR0RkdMQ2E10MapvpxGZEJCPoFVKFET/MQBwxGO09N+GIxFF+W/HlfBqgOYD6eYUOanAeCy7HaZ
-        aFOYzheOuI4iZ5m35RkB+0SOUBIwLQ1009wi1Mkn71mYELvIFHdn3yR7I60y1DFVuA+uf0oavkJr2
-        ElajL+AWWHl7M45JaYVZ+/bnuS/cMysV7TjvaCUf9zDJPPyXxy24bIz6hltcgHnm4awCROKKr1F6w
-        TKES9yzQ==;
-Received: from [2601:1c0:6280:3f0::aefb]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m4Qim-004rvN-A6; Fri, 16 Jul 2021 16:29:52 +0000
-Subject: Re: [PATCH v6 0/3] power: supply: mt6360_charger: add MT6360 charger
- support
-To:     Gene Chen <gene.chen.richtek@gmail.com>, sre@kernel.org,
-        matthias.bgg@gmail.com, matti.vaittinen@fi.rohmeurope.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gene_chen@richtek.com, Wilma.Wu@mediatek.com, cy_huang@richtek.com,
-        benjamin.chao@mediatek.com,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <20210716094353.140536-1-gene.chen.richtek@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <a01521d3-bd79-a813-554a-39a750775938@infradead.org>
-Date:   Fri, 16 Jul 2021 09:29:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210716094353.140536-1-gene.chen.richtek@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S229498AbhGPQlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jul 2021 12:41:12 -0400
+Received: from mga07.intel.com ([134.134.136.100]:14458 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229462AbhGPQlL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Jul 2021 12:41:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="274584105"
+X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
+   d="scan'208";a="274584105"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 09:38:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
+   d="scan'208";a="656445438"
+Received: from srpawnik.iind.intel.com ([10.223.107.57])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Jul 2021 09:38:14 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     sumeet.r.pawnikar@intel.com
+Subject: [PATCH] thermal: int340x: Use IMOK independently
+Date:   Fri, 16 Jul 2021 22:09:46 +0530
+Message-Id: <20210716163946.3142-1-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/16/21 2:43 AM, Gene Chen wrote:
-> 
-> This patch series add MT6360 Charger support contains driver and binding
-> document
-> 
-> Gene Chen (3)
->  lib: add linear range get selector within
->  dt-bindings: power: Add bindings document for Charger support on MT6360 PMIC
->  power: supply: mt6360_charger: add MT6360 charger support
-> 
->  Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml |   48 
->  drivers/power/supply/Kconfig                                       |   11 
->  drivers/power/supply/Makefile                                      |    1 
->  drivers/power/supply/mt6360_charger.c                              |  867 ++++++++++
->  include/linux/linear_range.h                                       |    2 
->  lib/linear_ranges.c                                                |   31 
->  6 files changed, 960 insertions(+)
-> 
+Some chrome platform requires IMOK method in coreboot. But these platforms
+don't use GDDV data vault in coreboot. As per current code flow, to enable
+and use IMOK only, we need to have GDDV support as well in coreboot. This
+patch removes the dependency for IMOK from GDDV to enable and use IMOK
+independently.
 
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+---
+ .../intel/int340x_thermal/int3400_thermal.c        | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Hi Gene,
-
-All patches in this series are addressed to "inux-pm@vger.kernel.org" (missing leading 'l'),
-so I expect that you should resend the series.
-
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 823354a1a91a..19926beeb3b7 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -108,9 +108,12 @@ static struct attribute *imok_attr[] = {
+ 	NULL
+ };
+ 
++static const struct attribute_group imok_attribute_group = {
++	.attrs = imok_attr,
++};
++
+ static const struct attribute_group data_attribute_group = {
+ 	.bin_attrs = data_attributes,
+-	.attrs = imok_attr,
+ };
+ 
+ static ssize_t available_uuids_show(struct device *dev,
+@@ -522,6 +525,12 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 	if (result)
+ 		goto free_rel_misc;
+ 
++	if (acpi_has_method(priv->adev->handle, "IMOK")) {
++		result = sysfs_create_group(&pdev->dev.kobj, &imok_attribute_group);
++		if (result)
++			goto free_imok;
++	}
++
+ 	if (priv->data_vault) {
+ 		result = sysfs_create_group(&pdev->dev.kobj,
+ 					    &data_attribute_group);
+@@ -545,6 +554,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 	}
+ free_uuid:
+ 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
++free_imok:
++	sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
+ free_rel_misc:
+ 	if (!priv->rel_misc_dev_res)
+ 		acpi_thermal_rel_misc_device_remove(priv->adev->handle);
+@@ -573,6 +584,7 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+ 	if (priv->data_vault)
+ 		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
+ 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
++	sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
+ 	thermal_zone_device_unregister(priv->thermal);
+ 	kfree(priv->data_vault);
+ 	kfree(priv->trts);
 -- 
-~Randy
+2.17.1
 
