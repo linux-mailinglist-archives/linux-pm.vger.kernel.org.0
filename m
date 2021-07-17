@@ -2,43 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2343C3CC485
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 18:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B72F3CC486
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 18:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbhGQQr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 12:47:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41241 "EHLO
+        id S231642AbhGQQr1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 12:47:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31879 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231346AbhGQQr0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 12:47:26 -0400
+        by vger.kernel.org with ESMTP id S231346AbhGQQr1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 12:47:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626540268;
+        s=mimecast20190719; t=1626540270;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=T/StxDhbvYjQt/NObXcIte38ToEmHqJDGT4iofQyXjE=;
-        b=iBQTw7r5ScNt9POEnbqfxJGLVcOjFoLWqWv6zY+AOZkJyWQOORAEZI0AIFtyaZcr1B8B/1
-        pFaYSYQExqmN717ttP4XRb/40Qjyh+3Aj0x98ddtgyIeiLOZp7QH+U8OmaBikLtFFI81sc
-        beNbYOxE6nhg+Y5fjmLNRKMPOvHxYwk=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M7MfyRBE6Upv6sUcuCbvDVgd8N9MvhrV6Ou+uTsFtFE=;
+        b=V5yqjf+/m6Cmu8XrhmvuZTJmuAvZ2vvWiLWQkDIDjYl90bXUsZcjNWgg+btTEdhaLpZyf/
+        nmvAZDPb7prl8EG5zLtBFFGstdR/sJ494ZYOdPkE2hDyZw+vBkCOVHnnrEnUoLIKE3mnK1
+        7oRPHCOnb2VfoI2A/ZP1YSYFHhlcGtc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-317-csDaPCNXNU-R3Kk_XmUNQg-1; Sat, 17 Jul 2021 12:44:27 -0400
-X-MC-Unique: csDaPCNXNU-R3Kk_XmUNQg-1
+ us-mta-333-wMS-NZ7mP6-8DatbzrlOOg-1; Sat, 17 Jul 2021 12:44:29 -0400
+X-MC-Unique: wMS-NZ7mP6-8DatbzrlOOg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 591541800D41;
-        Sat, 17 Jul 2021 16:44:26 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8851C362F8;
+        Sat, 17 Jul 2021 16:44:27 +0000 (UTC)
 Received: from x1.localdomain (ovpn-112-42.ams2.redhat.com [10.36.112.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6E0D75DEFA;
-        Sat, 17 Jul 2021 16:44:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9EAE85DA2D;
+        Sat, 17 Jul 2021 16:44:26 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>, Andrejus Basovas <cpp@gcc.lt>,
         linux-pm@vger.kernel.org
-Subject: [PATCH 00/10] power: supply: axp288_fuel_gauge: Reduce number of register accesses + cleanups
-Date:   Sat, 17 Jul 2021 18:44:14 +0200
-Message-Id: <20210717164424.274283-1-hdegoede@redhat.com>
+Subject: [PATCH 01/10] power: supply: axp288_fuel_gauge: Fix define alignment
+Date:   Sat, 17 Jul 2021 18:44:15 +0200
+Message-Id: <20210717164424.274283-2-hdegoede@redhat.com>
+In-Reply-To: <20210717164424.274283-1-hdegoede@redhat.com>
+References: <20210717164424.274283-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
@@ -46,58 +49,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The I2C-bus to the XPower AXP288 is shared between the Linux kernel and
-the SoCs P-Unit. The P-Unit has a semaphore which the kernel must "lock"
-before it may use the bus and while the kernel holds the semaphore the CPU
-and GPU power-states must not be changed otherwise the system will freeze.
-This is a complex process, which is quite expensive.
+The values of various defines used in the driver are not aligned
+properly when tabsize is set to 8 (I guess they were created with
+a different tabsize).
 
-To ensure that no unguarded I2C-bus accesses happen, the semaphore is
-taken by the I2C-bus-driver for every I2C transfer. When upower refreshes
-its battery stats it reads all the power-supply properties at once,
-leading to the semaphore getting hammered which sometimes causes the
-system to hang.
+Properly align the defines to make the code easier to read.
 
-Andrejus maintains a large "fleet" of affected Cherry Trail tablets
-and was seeing these hangs semi regularly. After discussing this with
-me Andrejus wrote the caching patch in this series which greatly reduces
-the number of semaphore accesses and since then there have been no
-reports of hangs in the fleet of devices which he maintains.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/axp288_fuel_gauge.c | 38 ++++++++++++------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-I've cleaned up Andrejus work a bit before submitting it upstream and
-while working on this I found a slew of other issues in this driver
-which bugged me enough to write a bunch of cleanup patches. I've also
-added some extra patches to also reduce the semaphore use during driver
-probe.
-
-Regards,
-
-Hans
-
-
-Andrejus Basovas (1):
-  power: supply: axp288_fuel_gauge: Refresh all registers in one go
-
-Hans de Goede (9):
-  power: supply: axp288_fuel_gauge: Fix define alignment
-  power: supply: axp288_fuel_gauge: Remove debugfs support
-  power: supply: axp288_fuel_gauge: Silence the chatty IRQ mapping code
-  power: supply: axp288_fuel_gauge: Report register-address on readb /
-    writeb errors
-  power: supply: axp288_fuel_gauge: Drop retry logic from
-    fuel_gauge_reg_readb()
-  power: supply: axp288_fuel_gauge: Store struct device pointer in
-    axp288_fg_info
-  power: supply: axp288_fuel_gauge: Only read PWR_OP_MODE,
-    FG_LOW_CAP_REG regs once
-  power: supply: axp288_fuel_gauge: Move the AXP20X_CC_CTRL check
-    together with the other checks
-  power: supply: axp288_fuel_gauge: Take the P-Unit semaphore only once
-    during probe()
-
- drivers/power/supply/axp288_fuel_gauge.c | 489 +++++++++--------------
- 1 file changed, 186 insertions(+), 303 deletions(-)
-
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index 2ba2d8d6b8e6..99928789040d 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -23,34 +23,34 @@
+ #include <linux/seq_file.h>
+ #include <asm/unaligned.h>
+ 
+-#define PS_STAT_VBUS_TRIGGER		(1 << 0)
+-#define PS_STAT_BAT_CHRG_DIR		(1 << 2)
+-#define PS_STAT_VBAT_ABOVE_VHOLD	(1 << 3)
+-#define PS_STAT_VBUS_VALID		(1 << 4)
+-#define PS_STAT_VBUS_PRESENT		(1 << 5)
++#define PS_STAT_VBUS_TRIGGER			(1 << 0)
++#define PS_STAT_BAT_CHRG_DIR			(1 << 2)
++#define PS_STAT_VBAT_ABOVE_VHOLD		(1 << 3)
++#define PS_STAT_VBUS_VALID			(1 << 4)
++#define PS_STAT_VBUS_PRESENT			(1 << 5)
+ 
+-#define CHRG_STAT_BAT_SAFE_MODE		(1 << 3)
++#define CHRG_STAT_BAT_SAFE_MODE			(1 << 3)
+ #define CHRG_STAT_BAT_VALID			(1 << 4)
+-#define CHRG_STAT_BAT_PRESENT		(1 << 5)
++#define CHRG_STAT_BAT_PRESENT			(1 << 5)
+ #define CHRG_STAT_CHARGING			(1 << 6)
+ #define CHRG_STAT_PMIC_OTP			(1 << 7)
+ 
+ #define CHRG_CCCV_CC_MASK			0xf     /* 4 bits */
+-#define CHRG_CCCV_CC_BIT_POS		0
++#define CHRG_CCCV_CC_BIT_POS			0
+ #define CHRG_CCCV_CC_OFFSET			200     /* 200mA */
+-#define CHRG_CCCV_CC_LSB_RES		200     /* 200mA */
++#define CHRG_CCCV_CC_LSB_RES			200     /* 200mA */
+ #define CHRG_CCCV_ITERM_20P			(1 << 4)    /* 20% of CC */
+ #define CHRG_CCCV_CV_MASK			0x60        /* 2 bits */
+-#define CHRG_CCCV_CV_BIT_POS		5
++#define CHRG_CCCV_CV_BIT_POS			5
+ #define CHRG_CCCV_CV_4100MV			0x0     /* 4.10V */
+ #define CHRG_CCCV_CV_4150MV			0x1     /* 4.15V */
+ #define CHRG_CCCV_CV_4200MV			0x2     /* 4.20V */
+ #define CHRG_CCCV_CV_4350MV			0x3     /* 4.35V */
+ #define CHRG_CCCV_CHG_EN			(1 << 7)
+ 
+-#define FG_CNTL_OCV_ADJ_STAT		(1 << 2)
++#define FG_CNTL_OCV_ADJ_STAT			(1 << 2)
+ #define FG_CNTL_OCV_ADJ_EN			(1 << 3)
+-#define FG_CNTL_CAP_ADJ_STAT		(1 << 4)
++#define FG_CNTL_CAP_ADJ_STAT			(1 << 4)
+ #define FG_CNTL_CAP_ADJ_EN			(1 << 5)
+ #define FG_CNTL_CC_EN				(1 << 6)
+ #define FG_CNTL_GAUGE_EN			(1 << 7)
+@@ -71,23 +71,23 @@
+ #define FG_CC_CAP_VALID				(1 << 7)
+ #define FG_CC_CAP_VAL_MASK			0x7F
+ 
+-#define FG_LOW_CAP_THR1_MASK		0xf0    /* 5% tp 20% */
++#define FG_LOW_CAP_THR1_MASK			0xf0    /* 5% tp 20% */
+ #define FG_LOW_CAP_THR1_VAL			0xa0    /* 15 perc */
+-#define FG_LOW_CAP_THR2_MASK		0x0f    /* 0% to 15% */
++#define FG_LOW_CAP_THR2_MASK			0x0f    /* 0% to 15% */
+ #define FG_LOW_CAP_WARN_THR			14  /* 14 perc */
+ #define FG_LOW_CAP_CRIT_THR			4   /* 4 perc */
+ #define FG_LOW_CAP_SHDN_THR			0   /* 0 perc */
+ 
+-#define NR_RETRY_CNT    3
+-#define DEV_NAME	"axp288_fuel_gauge"
++#define NR_RETRY_CNT				3
++#define DEV_NAME				"axp288_fuel_gauge"
+ 
+ /* 1.1mV per LSB expressed in uV */
+ #define VOLTAGE_FROM_ADC(a)			((a * 11) / 10)
+ /* properties converted to uV, uA */
+-#define PROP_VOLT(a)		((a) * 1000)
+-#define PROP_CURR(a)		((a) * 1000)
++#define PROP_VOLT(a)				((a) * 1000)
++#define PROP_CURR(a)				((a) * 1000)
+ 
+-#define AXP288_FG_INTR_NUM	6
++#define AXP288_FG_INTR_NUM			6
+ enum {
+ 	QWBTU_IRQ = 0,
+ 	WBTU_IRQ,
 -- 
 2.31.1
 
