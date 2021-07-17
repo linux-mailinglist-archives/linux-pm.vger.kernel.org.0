@@ -2,136 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4063CC48F
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 18:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34763CC4AF
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 19:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbhGQQrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 12:47:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55111 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232135AbhGQQrm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 12:47:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626540285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qAYBzJYjCndDUNzyo7GCS7T4/TEKnsZRkw8FZBiiYys=;
-        b=CN+UJ6tQ13awXMy3pyUvppcympW6ZsBFxBvhOV78yqcmdVktiSjjteQNVfMa2YVi9IORNC
-        LjSq69a3sHEceAO26IBlFkn1mxLPMtJI6mcpLdcKxGuacTz4QCEm1a5MugUruOkD/I378Q
-        jGQNhNL1Ibh2VxBJd7fZkaKZvBWNqTY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-526-wFJPXBI3NNWNaVK-nVPLow-1; Sat, 17 Jul 2021 12:44:44 -0400
-X-MC-Unique: wFJPXBI3NNWNaVK-nVPLow-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S232601AbhGQRIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 13:08:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232307AbhGQRIj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 17 Jul 2021 13:08:39 -0400
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 26B22802C80;
-        Sat, 17 Jul 2021 16:44:43 +0000 (UTC)
-Received: from x1.localdomain (ovpn-112-42.ams2.redhat.com [10.36.112.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E3A2C5DA2D;
-        Sat, 17 Jul 2021 16:44:37 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Andrejus Basovas <cpp@gcc.lt>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 10/10] power: supply: axp288_fuel_gauge: Take the P-Unit semaphore only once during probe()
-Date:   Sat, 17 Jul 2021 18:44:24 +0200
-Message-Id: <20210717164424.274283-11-hdegoede@redhat.com>
-In-Reply-To: <20210717164424.274283-1-hdegoede@redhat.com>
-References: <20210717164424.274283-1-hdegoede@redhat.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id B023661158;
+        Sat, 17 Jul 2021 17:05:39 +0000 (UTC)
+Date:   Sat, 17 Jul 2021 18:08:02 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andreas Kemnade <andreas@kemnade.info>, lars@metafoo.de,
+        sre@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v3 0/2] mfd: rn5t618: Extend ADC support
+Message-ID: <20210717180802.7261d8bb@jic23-huawei>
+In-Reply-To: <YO1Ob18YsDdEMfuf@google.com>
+References: <20210712212111.18896-1-andreas@kemnade.info>
+        <YO1Ob18YsDdEMfuf@google.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The I2C-bus to the XPower AXP288 is shared between the Linux kernel and
-the SoCs P-Unit. The P-Unit has a semaphore which the kernel must "lock"
-before it may use the bus. If not explicitly taken by the I2C-driver,
-then this semaphore is automatically taken by the I2C-bus-driver for
-each I2C-transfer and this is a quite expensive operation.
+On Tue, 13 Jul 2021 09:27:27 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-Explicitly take the semaphore in probe() around the register-accesses
-done during probe, so that this only needs to be done once, rather then
-once per register-access.
+> On Mon, 12 Jul 2021, Andreas Kemnade wrote:
+> 
+> > Add iio map to make voltage_now related channels accessible to power
+> > driver.
+> > 
+> > Changes in v3:
+> > - use scale functions
+> > - add acks
+> > 
+> > Changes in v2:
+> > - use iio_map instead of devicetree to allow mapping which does not
+> >   block future extension by devicetree.
+> > 
+> > 
+> > *** BLURB HERE ***  
+> 
+> Doh!
+> 
+> > Andreas Kemnade (2):
+> >   iio: adc: rn5t618: Add iio map
+> >   power: supply: rn5t618: Add voltage_now property
+> > 
+> >  drivers/iio/adc/rn5t618-adc.c        | 23 +++++++++++++++++
+> >  drivers/power/supply/Kconfig         |  2 ++
+> >  drivers/power/supply/rn5t618_power.c | 38 ++++++++++++++++++++++++++++
+> >  3 files changed, 63 insertions(+)  
+> 
+> Not sure I get this.
+> 
+> Firstly, the cover-letter is marked as MFD, but no MFD changes occur.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/axp288_fuel_gauge.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+So this is a bit of a fun corner case.  The series 'used' to include an mfd
+change that made that labelling relevant.  Then that went away as I suggested
+that we could do it in a simpler fashion.
+Under the circumstances the series needed a rename!
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index 016d8d6bec40..c1da217fdb0e 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -661,31 +661,35 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	ret = iosf_mbi_block_punit_i2c_access();
-+	if (ret < 0)
-+		goto out_free_iio_chan;
-+
- 	/*
- 	 * On some devices the fuelgauge and charger parts of the axp288 are
- 	 * not used, check that the fuelgauge is enabled (CC_CTRL != 0).
- 	 */
- 	ret = regmap_read(axp20x->regmap, AXP20X_CC_CTRL, &val);
- 	if (ret < 0)
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	if (val == 0) {
- 		ret = -ENODEV;
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	}
- 
- 	ret = fuel_gauge_reg_readb(info, AXP288_FG_DES_CAP1_REG);
- 	if (ret < 0)
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 
- 	if (!(ret & FG_DES_CAP1_VALID)) {
- 		dev_err(&pdev->dev, "axp288 not configured by firmware\n");
- 		ret = -ENODEV;
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	}
- 
- 	ret = fuel_gauge_reg_readb(info, AXP20X_CHRG_CTRL1);
- 	if (ret < 0)
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	switch ((ret & CHRG_CCCV_CV_MASK) >> CHRG_CCCV_CV_BIT_POS) {
- 	case CHRG_CCCV_CV_4100MV:
- 		info->max_volt = 4100;
-@@ -703,14 +707,20 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
- 
- 	ret = fuel_gauge_reg_readb(info, AXP20X_PWR_OP_MODE);
- 	if (ret < 0)
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	info->pwr_op = ret;
- 
- 	ret = fuel_gauge_reg_readb(info, AXP288_FG_LOW_CAP_REG);
- 	if (ret < 0)
--		goto out_free_iio_chan;
-+		goto unblock_punit_i2c_access;
- 	info->low_cap = ret;
- 
-+unblock_punit_i2c_access:
-+	iosf_mbi_unblock_punit_i2c_access();
-+	/* In case we arrive here by goto because of a register access error */
-+	if (ret < 0)
-+		goto out_free_iio_chan;
-+
- 	psy_cfg.drv_data = info;
- 	info->bat = power_supply_register(&pdev->dev, &fuel_gauge_desc, &psy_cfg);
- 	if (IS_ERR(info->bat)) {
--- 
-2.31.1
+> Secondly, I am only in receipt of the 0th patch which seems odd.  IMHO
+> patch sets should be sent threaded and all parties should see
+> discussion on all patches regardless of whether they maintain them or
+> not, since the overall conversation is often useful/relevant to all.
+> 
+Absolutely agree for small series like this.
 
+Anyhow, as far as I'm concerned this is now in the hands of the power supply
+maintainers anyway so ignoring it ;)
+
+Jonathan
