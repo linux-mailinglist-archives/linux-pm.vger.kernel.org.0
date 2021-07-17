@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 073D03CC312
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 14:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1643CC318
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 14:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbhGQMOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 08:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S234824AbhGQMOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 08:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234214AbhGQMOf (ORCPT
+        with ESMTP id S234330AbhGQMOf (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 08:14:35 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D86C06175F;
-        Sat, 17 Jul 2021 05:11:36 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id x25so20567372lfu.13;
-        Sat, 17 Jul 2021 05:11:36 -0700 (PDT)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F32C061765;
+        Sat, 17 Jul 2021 05:11:37 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id s17so7215800ljo.12;
+        Sat, 17 Jul 2021 05:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mhtGFKsHUzTaL2MCRyNEETLxWQghXk5mgR3qIkfiMRo=;
-        b=Pyf+duse+B325RhIuZ6bn5vcs4z/uDq91/4eJysesxl4YEdzytnTQCe+tonw9LdF8z
-         EJc3FBd/5KPLL4vCskkamJDpKISTa8me6Ym41Ztgcs0RbATyBR5/ejNz7uqNMPbSsoxr
-         fRWoolCjQq3OKdCcC4nFFJLW1HbOwIFkgKGJWzxIP9lmr/nbsmj7/j9scLqK/i4KNjBi
-         ELMrU5Cnm++H58kWnoaYq/O8hUhqcVNsecqFRx743UjW8NFcvnVlZS84D4YiSNF/r3H1
-         SfVI2K4w4Go1R+MyUSa4CyL8NLkQlK6aGoqg5AKC9afeN08ER7jEUEgtfYMhlWrkcWe1
-         Atpw==
+        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
+        b=MPGGjtky5B1QjVnHzZk2Y9tZ5eRCeZDogYDcIrAFBSqneLBpI8uAdKFMV7hnIhZto3
+         E4qBBrXTSPk5xSpwWbVo6MiNItgc2UZYRxIWFqDsSLemUgVAMoGxrYHDk3VDQ3EscKRH
+         FgyOnn6ktqiSkzDNpfiMVPl3keAxC0MZmXj6hdMaEwwI6TolCQjn0r7xl6MkcdDLN4Hg
+         WBgP6pnhnxt3Z4Jpbpn0z04p0FD+WSaWs3dx1MXMCOVAoJ8H5+Bb1shLSjIKv3Q5I7Kt
+         QkepzB5OD1Or6iTNdaqwFPiqa4i1t45nXCV75WlaPX1xQPY7Qn0Eff9sqstZlvQhxbhB
+         TS8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mhtGFKsHUzTaL2MCRyNEETLxWQghXk5mgR3qIkfiMRo=;
-        b=aR4KWXXK4+N3Rew1sQh8WyE85xf2IvXPuZbL31j4Ao1yXiRlfyCPncESTZQThD92A/
-         HfZmP+i1XoxUT6jQ3Du1bxZbweIKe0vlpTCHko0q+44YigK1H1nG5dW2eoY+lNpDWEkr
-         MaOU7yYg5NIsHvGKsD6+nXgi9c2MGdk18WM3kQEfpYRvlvQe0yMiIiTy709JWY5U0RvP
-         ZUX2AoRAEHV8UU88YUf6qJK0Gd8jMobRbU+u+CPUh8RtNupG+Wv4s5WUPP3j/Yfu0PLD
-         ZWn48HNcxTZ/dDHDlDKO7yWV216mE5ZnGMkgXaxJLKIunpphHJJUIJX0Gk14CWrKamrv
-         ko+g==
-X-Gm-Message-State: AOAM531qCmLrtah6oiaacnpQbsWVfQhgDgnWSK493nEB7U4HOP+skM3B
-        JygCSOLnqf9CrkA5CqHJdA0=
-X-Google-Smtp-Source: ABdhPJx1qT5F1hsh8G/3nFguyAr/P4fsjXEl16/uHxhXsiJFSR3jFtISsrodmcHvZiR8eVuPf07+kQ==
-X-Received: by 2002:ac2:5dec:: with SMTP id z12mr5714088lfq.310.1626523894971;
-        Sat, 17 Jul 2021 05:11:34 -0700 (PDT)
+        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
+        b=kVnphTkLoXxK1KO2fuQDadONZW48G1ZNpWgSAdfj+b9C796+U9AbQXJgt344bPpLfW
+         3ghr8JMVNluB+SwbW8FskgeUTTIpZA2b6sViGtsWzOlOz8FgkkrNdp/iC1i7GdfGqQt8
+         /VsM6GG3vnMHNT1R04vlk2+m4Y/KUetEpfD8LgHdX8mDEswpUAMbOvERFqI+AnnEvIoV
+         D3n30+JB/9bcs3kiaClhFOZiO/4mjlDN/alohOmOjdljZ9ySrvwdwcupFCOG8yMHrb1D
+         UlaUNQU7Civ2n/JsfHA2IugF+FELwZHThy6aL6WGDeozduLonBnPa2c3C/tJfpx5d5R7
+         bx2g==
+X-Gm-Message-State: AOAM53369tH3XJ0x0alDWFGYqDqsGREkNZ+9zWEzVrmZAjAq+y9kWThM
+        hubgE5eN5Dr4XuBVPj8ybwM=
+X-Google-Smtp-Source: ABdhPJwLtaMqw1TRvMbCm3ekqLeX8D0ZjgQWdCO0U6IJvKNwbj5hgc5XsS0cTxgG7iyGadGOL43arw==
+X-Received: by 2002:a05:651c:896:: with SMTP id d22mr13758314ljq.242.1626523895793;
+        Sat, 17 Jul 2021 05:11:35 -0700 (PDT)
 Received: from localhost.localdomain (46-138-17-250.dynamic.spd-mgts.ru. [46.138.17.250])
-        by smtp.gmail.com with ESMTPSA id m16sm852597lfq.23.2021.07.17.05.11.34
+        by smtp.gmail.com with ESMTPSA id m16sm852597lfq.23.2021.07.17.05.11.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 05:11:34 -0700 (PDT)
+        Sat, 17 Jul 2021 05:11:35 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,9 +60,9 @@ To:     Thierry Reding <treding@nvidia.com>,
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v4 11/12] ARM: tegra: nexus7: Enable USB OTG mode
-Date:   Sat, 17 Jul 2021 15:11:11 +0300
-Message-Id: <20210717121112.3248-12-digetx@gmail.com>
+Subject: [PATCH v4 12/12] arm64: tegra132: Add new properties to USB PHY device-tree node
+Date:   Sat, 17 Jul 2021 15:11:12 +0300
+Message-Id: <20210717121112.3248-13-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210717121112.3248-1-digetx@gmail.com>
 References: <20210717121112.3248-1-digetx@gmail.com>
@@ -72,65 +72,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Nexus 7 has OTG-cable microUSB port, enable OTG mode. USB peripheral
-devices now can be connected to Nexus 7 using OTG adapter, switching
-USB port into host mode.
+Add new properties to USB PHYs needed for enabling USB OTG mode.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../tegra30-asus-nexus7-grouper-common.dtsi   | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-index 4f116c26f6ce..798ac22a50d2 100644
---- a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-@@ -941,9 +941,29 @@ power_supply: charger@6a {
- 			interrupts = <TEGRA_GPIO(V, 1) IRQ_TYPE_EDGE_BOTH>;
- 
- 			summit,enable-charge-control = <SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW>;
-+			summit,inok-polarity = <SMB3XX_SYSOK_INOK_ACTIVE_LOW>;
- 			summit,enable-usb-charging;
- 
- 			monitored-battery = <&battery_cell>;
-+
-+			usb_vbus: usb-vbus {
-+				regulator-name = "usb_vbus";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-min-microamp = <750000>;
-+				regulator-max-microamp = <750000>;
-+
-+				/*
-+				 * SMB347 INOK input pin is connected to PMIC's
-+				 * ACOK output, which is fixed to ACTIVE_LOW as
-+				 * long as battery voltage is in a good range.
-+				 *
-+				 * Active INOK disables SMB347 output, so polarity
-+				 * needs to be toggled when we want to get the
-+				 * output.
-+				 */
-+				summit,needs-inok-toggle;
-+			};
- 		};
+diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+index 9928a87f593a..f79a66226457 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+@@ -1123,6 +1123,7 @@ phy1: usb-phy@7d000000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d000000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USBD>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1142,6 +1143,7 @@ phy1: usb-phy@7d000000 {
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
+ 		nvidia,has-utmi-pad-registers;
++		nvidia,pmc = <&tegra_pmc 0>;
+ 		status = "disabled";
  	};
  
-@@ -1017,12 +1037,13 @@ sdmmc4: mmc@78000600 {
- 	usb@7d000000 {
- 		compatible = "nvidia,tegra30-udc";
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
-+		vbus-supply = <&usb_vbus>;
+@@ -1162,6 +1164,7 @@ phy2: usb-phy@7d004000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d004000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USB2>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1180,6 +1183,7 @@ phy2: usb-phy@7d004000 {
+ 		nvidia,hssquelch-level = <2>;
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
++		nvidia,pmc = <&tegra_pmc 1>;
+ 		status = "disabled";
  	};
  
- 	usb-phy@7d000000 {
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
- 		nvidia,hssync-start-delay = <0>;
- 		nvidia,xcvr-lsfslew = <2>;
- 		nvidia,xcvr-lsrslew = <2>;
+@@ -1200,6 +1204,7 @@ phy3: usb-phy@7d008000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d008000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USB3>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1218,6 +1223,7 @@ phy3: usb-phy@7d008000 {
+ 		nvidia,hssquelch-level = <2>;
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
++		nvidia,pmc = <&tegra_pmc 2>;
+ 		status = "disabled";
+ 	};
+ 
 -- 
 2.32.0
 
