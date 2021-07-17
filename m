@@ -2,135 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1643CC318
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 14:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 868143CC41F
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 17:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbhGQMOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 08:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbhGQMOf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 08:14:35 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F32C061765;
-        Sat, 17 Jul 2021 05:11:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id s17so7215800ljo.12;
-        Sat, 17 Jul 2021 05:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=MPGGjtky5B1QjVnHzZk2Y9tZ5eRCeZDogYDcIrAFBSqneLBpI8uAdKFMV7hnIhZto3
-         E4qBBrXTSPk5xSpwWbVo6MiNItgc2UZYRxIWFqDsSLemUgVAMoGxrYHDk3VDQ3EscKRH
-         FgyOnn6ktqiSkzDNpfiMVPl3keAxC0MZmXj6hdMaEwwI6TolCQjn0r7xl6MkcdDLN4Hg
-         WBgP6pnhnxt3Z4Jpbpn0z04p0FD+WSaWs3dx1MXMCOVAoJ8H5+Bb1shLSjIKv3Q5I7Kt
-         QkepzB5OD1Or6iTNdaqwFPiqa4i1t45nXCV75WlaPX1xQPY7Qn0Eff9sqstZlvQhxbhB
-         TS8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=kVnphTkLoXxK1KO2fuQDadONZW48G1ZNpWgSAdfj+b9C796+U9AbQXJgt344bPpLfW
-         3ghr8JMVNluB+SwbW8FskgeUTTIpZA2b6sViGtsWzOlOz8FgkkrNdp/iC1i7GdfGqQt8
-         /VsM6GG3vnMHNT1R04vlk2+m4Y/KUetEpfD8LgHdX8mDEswpUAMbOvERFqI+AnnEvIoV
-         D3n30+JB/9bcs3kiaClhFOZiO/4mjlDN/alohOmOjdljZ9ySrvwdwcupFCOG8yMHrb1D
-         UlaUNQU7Civ2n/JsfHA2IugF+FELwZHThy6aL6WGDeozduLonBnPa2c3C/tJfpx5d5R7
-         bx2g==
-X-Gm-Message-State: AOAM53369tH3XJ0x0alDWFGYqDqsGREkNZ+9zWEzVrmZAjAq+y9kWThM
-        hubgE5eN5Dr4XuBVPj8ybwM=
-X-Google-Smtp-Source: ABdhPJwLtaMqw1TRvMbCm3ekqLeX8D0ZjgQWdCO0U6IJvKNwbj5hgc5XsS0cTxgG7iyGadGOL43arw==
-X-Received: by 2002:a05:651c:896:: with SMTP id d22mr13758314ljq.242.1626523895793;
-        Sat, 17 Jul 2021 05:11:35 -0700 (PDT)
-Received: from localhost.localdomain (46-138-17-250.dynamic.spd-mgts.ru. [46.138.17.250])
-        by smtp.gmail.com with ESMTPSA id m16sm852597lfq.23.2021.07.17.05.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 05:11:35 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v4 12/12] arm64: tegra132: Add new properties to USB PHY device-tree node
-Date:   Sat, 17 Jul 2021 15:11:12 +0300
-Message-Id: <20210717121112.3248-13-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210717121112.3248-1-digetx@gmail.com>
-References: <20210717121112.3248-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S235164AbhGQPiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 11:38:17 -0400
+Received: from mga09.intel.com ([134.134.136.24]:24192 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235162AbhGQPiR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 17 Jul 2021 11:38:17 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10047"; a="210853896"
+X-IronPort-AV: E=Sophos;i="5.84,248,1620716400"; 
+   d="scan'208";a="210853896"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2021 08:35:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,248,1620716400"; 
+   d="scan'208";a="631387079"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jul 2021 08:35:12 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com,
+        thiago.macieira@intel.com, jing2.liu@intel.com,
+        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH v8 25/26] intel_idle/amx: Add SPR support with XTILEDATA capability
+Date:   Sat, 17 Jul 2021 08:29:02 -0700
+Message-Id: <20210717152903.7651-26-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210717152903.7651-1-chang.seok.bae@intel.com>
+References: <20210717152903.7651-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add new properties to USB PHYs needed for enabling USB OTG mode.
+Add a custom Sapphire Rapids (SPR) C-state table to intel_idle driver. The
+parameters in this table are preferred over those supplied by ACPI.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+SPR supports AMX, and so this custom table uses idle entry points that know
+how to initialize AMX TMM state, if necessary.
+
+This guarantees that AMX TMM state will never be the cause of hardware
+C-state demotion from C6 to C1E. Under some conditions this may result in
+improved power savings, and thus higher available turbo frequency budget.
+
+[ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
+
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
 ---
- arch/arm64/boot/dts/nvidia/tegra132.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes from v6:
+* Update the changelog and function description. (Rafael J. Wysocki)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-index 9928a87f593a..f79a66226457 100644
---- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-@@ -1123,6 +1123,7 @@ phy1: usb-phy@7d000000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d000000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USBD>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1142,6 +1143,7 @@ phy1: usb-phy@7d000000 {
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
- 		nvidia,has-utmi-pad-registers;
-+		nvidia,pmc = <&tegra_pmc 0>;
- 		status = "disabled";
- 	};
+Changes from v5:
+* Moved the code to intel_idle. (Peter Zijlstra)
+* Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
+* Updated the code comment. (Dave Hansen)
+
+Changes from v4:
+* Added as a new patch. (Thomas Gleixner)
+---
+ arch/x86/include/asm/special_insns.h |  6 +++
+ drivers/idle/intel_idle.c            | 79 ++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index f3fbb84ff8a7..fada1bb82c7b 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
+ 	return 0;
+ }
  
-@@ -1162,6 +1164,7 @@ phy2: usb-phy@7d004000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d004000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB2>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1180,6 +1183,7 @@ phy2: usb-phy@7d004000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 1>;
- 		status = "disabled";
- 	};
++static inline void tile_release(void)
++{
++	/* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
++	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
++}
++
+ #endif /* __KERNEL__ */
  
-@@ -1200,6 +1204,7 @@ phy3: usb-phy@7d008000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d008000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB3>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1218,6 +1223,7 @@ phy3: usb-phy@7d008000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 2>;
- 		status = "disabled";
- 	};
+ #endif /* _ASM_X86_SPECIAL_INSNS_H */
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index e6c543b5ee1d..fe1ba26cc797 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -54,6 +54,8 @@
+ #include <asm/intel-family.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/internal.h>
++#include <asm/special_insns.h>
  
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -155,6 +157,55 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 	return 0;
+ }
+ 
++/**
++ * idle_tile - Initialize TILE registers in INIT-state
++ *
++ * Leaving state in the dirty TILE registers may prevent the processor from
++ * entering lower-power idle states. Use TILERELEASE to initialize the
++ * state. Destroying fpregs state is safe after the fpstate update.
++ */
++static inline void idle_tile(void)
++{
++	if (boot_cpu_has(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
++		tile_release();
++		fpregs_deactivate(&current->thread.fpu);
++	}
++}
++
++/**
++ * intel_idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state before using intel_idle() to
++ * enter the idle state.
++ */
++static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
++				     struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle(dev, drv, index);
++}
++
++/**
++ * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
++ * enter the idle state.
++ */
++static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
++					    struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle_s2idle(dev, drv, index);
++}
++
+ /*
+  * States are indexed by the cstate number,
+  * which is also the index into the MWAIT hint array.
+@@ -752,6 +803,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
+ 		.enter = NULL }
+ };
+ 
++static struct cpuidle_state spr_cstates[] __initdata = {
++	{
++		.name = "C1",
++		.desc = "MWAIT 0x00",
++		.flags = MWAIT2flg(0x00),
++		.exit_latency = 1,
++		.target_residency = 1,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.name = "C6",
++		.desc = "MWAIT 0x20",
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.exit_latency = 128,
++		.target_residency = 384,
++		.enter = &intel_idle_tile,
++		.enter_s2idle = intel_idle_s2idle_tile, },
++	{
++		.enter = NULL }
++};
++
+ static struct cpuidle_state atom_cstates[] __initdata = {
+ 	{
+ 		.name = "C1E",
+@@ -1095,6 +1167,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_spr __initconst = {
++	.state_table = spr_cstates,
++	.disable_promotion_to_c1e = true,
++	.use_acpi = true,
++};
++
+ static const struct idle_cpu idle_cpu_avn __initconst = {
+ 	.state_table = avn_cstates,
+ 	.disable_promotion_to_c1e = true,
+@@ -1157,6 +1235,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
++	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
 -- 
-2.32.0
+2.17.1
 
