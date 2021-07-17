@@ -2,211 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 868143CC41F
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 17:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902A53CC469
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 18:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbhGQPiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 11:38:17 -0400
-Received: from mga09.intel.com ([134.134.136.24]:24192 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235162AbhGQPiR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 17 Jul 2021 11:38:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10047"; a="210853896"
-X-IronPort-AV: E=Sophos;i="5.84,248,1620716400"; 
-   d="scan'208";a="210853896"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2021 08:35:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,248,1620716400"; 
-   d="scan'208";a="631387079"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jul 2021 08:35:12 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com,
-        thiago.macieira@intel.com, jing2.liu@intel.com,
-        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH v8 25/26] intel_idle/amx: Add SPR support with XTILEDATA capability
-Date:   Sat, 17 Jul 2021 08:29:02 -0700
-Message-Id: <20210717152903.7651-26-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210717152903.7651-1-chang.seok.bae@intel.com>
-References: <20210717152903.7651-1-chang.seok.bae@intel.com>
+        id S229603AbhGQQXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 12:23:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47196 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229462AbhGQQXH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 12:23:07 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 890A01F43463
+Received: by earth.universe (Postfix, from userid 1000)
+        id 03D273C0C97; Sat, 17 Jul 2021 18:20:07 +0200 (CEST)
+Date:   Sat, 17 Jul 2021 18:20:06 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4 08/12] power: supply: smb347-charger: Remove caching
+ of charger state
+Message-ID: <20210717162006.66cqkbw2mertd6tr@earth.universe>
+References: <20210717121112.3248-1-digetx@gmail.com>
+ <20210717121112.3248-9-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dgyf46uz57z2zrjo"
+Content-Disposition: inline
+In-Reply-To: <20210717121112.3248-9-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a custom Sapphire Rapids (SPR) C-state table to intel_idle driver. The
-parameters in this table are preferred over those supplied by ACPI.
 
-SPR supports AMX, and so this custom table uses idle entry points that know
-how to initialize AMX TMM state, if necessary.
+--dgyf46uz57z2zrjo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This guarantees that AMX TMM state will never be the cause of hardware
-C-state demotion from C6 to C1E. Under some conditions this may result in
-improved power savings, and thus higher available turbo frequency budget.
+Hi,
 
-[ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
+On Sat, Jul 17, 2021 at 03:11:08PM +0300, Dmitry Osipenko wrote:
+> Regmap already provides us with the caching, so remove caching of charger
+> state to make code cleaner.
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
----
-Changes from v6:
-* Update the changelog and function description. (Rafael J. Wysocki)
+cache_type is not initialized in smb347's regmap config and thus
+set to 0 =3D REGCACHE_NONE:
 
-Changes from v5:
-* Moved the code to intel_idle. (Peter Zijlstra)
-* Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
-* Updated the code comment. (Dave Hansen)
+static const struct regmap_config smb347_regmap =3D {
+	.reg_bits	=3D 8,
+	.val_bits	=3D 8,
+	.max_register	=3D SMB347_MAX_REGISTER,
+	.volatile_reg	=3D smb347_volatile_reg,
+	.readable_reg	=3D smb347_readable_reg,
+};
 
-Changes from v4:
-* Added as a new patch. (Thomas Gleixner)
----
- arch/x86/include/asm/special_insns.h |  6 +++
- drivers/idle/intel_idle.c            | 79 ++++++++++++++++++++++++++++
- 2 files changed, 85 insertions(+)
+-- Sebastian
 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index f3fbb84ff8a7..fada1bb82c7b 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
- 	return 0;
- }
- 
-+static inline void tile_release(void)
-+{
-+	/* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
-+	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index e6c543b5ee1d..fe1ba26cc797 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -54,6 +54,8 @@
- #include <asm/intel-family.h>
- #include <asm/mwait.h>
- #include <asm/msr.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/special_insns.h>
- 
- #define INTEL_IDLE_VERSION "0.5.1"
- 
-@@ -155,6 +157,55 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
- }
- 
-+/**
-+ * idle_tile - Initialize TILE registers in INIT-state
-+ *
-+ * Leaving state in the dirty TILE registers may prevent the processor from
-+ * entering lower-power idle states. Use TILERELEASE to initialize the
-+ * state. Destroying fpregs state is safe after the fpstate update.
-+ */
-+static inline void idle_tile(void)
-+{
-+	if (boot_cpu_has(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
-+		tile_release();
-+		fpregs_deactivate(&current->thread.fpu);
-+	}
-+}
-+
-+/**
-+ * intel_idle_tile - Ask the processor to enter the given idle state.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Ensure TILE registers in INIT-state before using intel_idle() to
-+ * enter the idle state.
-+ */
-+static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
-+				     struct cpuidle_driver *drv, int index)
-+{
-+	idle_tile();
-+
-+	return intel_idle(dev, drv, index);
-+}
-+
-+/**
-+ * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
-+ * enter the idle state.
-+ */
-+static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
-+					    struct cpuidle_driver *drv, int index)
-+{
-+	idle_tile();
-+
-+	return intel_idle_s2idle(dev, drv, index);
-+}
-+
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -752,6 +803,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
-+static struct cpuidle_state spr_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00),
-+		.exit_latency = 1,
-+		.target_residency = 1,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 128,
-+		.target_residency = 384,
-+		.enter = &intel_idle_tile,
-+		.enter_s2idle = intel_idle_s2idle_tile, },
-+	{
-+		.enter = NULL }
-+};
-+
- static struct cpuidle_state atom_cstates[] __initdata = {
- 	{
- 		.name = "C1E",
-@@ -1095,6 +1167,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_spr __initconst = {
-+	.state_table = spr_cstates,
-+	.disable_promotion_to_c1e = true,
-+	.use_acpi = true,
-+};
-+
- static const struct idle_cpu idle_cpu_avn __initconst = {
- 	.state_table = avn_cstates,
- 	.disable_promotion_to_c1e = true,
-@@ -1157,6 +1235,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
--- 
-2.17.1
 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/power/supply/smb347-charger.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply=
+/smb347-charger.c
+> index db1378b41f80..f81c60c679a0 100644
+> --- a/drivers/power/supply/smb347-charger.c
+> +++ b/drivers/power/supply/smb347-charger.c
+> @@ -135,7 +135,6 @@
+>   * @id: SMB charger ID
+>   * @mains_online: is AC/DC input connected
+>   * @usb_online: is USB input connected
+> - * @charging_enabled: is charging enabled
+>   * @irq_unsupported: is interrupt unsupported by SMB hardware
+>   * @max_charge_current: maximum current (in uA) the battery can be charg=
+ed
+>   * @max_charge_voltage: maximum voltage (in uV) the battery can be charg=
+ed
+> @@ -192,7 +191,6 @@ struct smb347_charger {
+>  	unsigned int		id;
+>  	bool			mains_online;
+>  	bool			usb_online;
+> -	bool			charging_enabled;
+>  	bool			irq_unsupported;
+> =20
+>  	unsigned int		max_charge_current;
+> @@ -358,21 +356,13 @@ static int smb347_charging_status(struct smb347_cha=
+rger *smb)
+> =20
+>  static int smb347_charging_set(struct smb347_charger *smb, bool enable)
+>  {
+> -	int ret =3D 0;
+> -
+>  	if (smb->enable_control !=3D SMB3XX_CHG_ENABLE_SW) {
+>  		dev_dbg(smb->dev, "charging enable/disable in SW disabled\n");
+>  		return 0;
+>  	}
+> =20
+> -	if (smb->charging_enabled !=3D enable) {
+> -		ret =3D regmap_update_bits(smb->regmap, CMD_A, CMD_A_CHG_ENABLED,
+> -					 enable ? CMD_A_CHG_ENABLED : 0);
+> -		if (!ret)
+> -			smb->charging_enabled =3D enable;
+> -	}
+> -
+> -	return ret;
+> +	return regmap_update_bits(smb->regmap, CMD_A, CMD_A_CHG_ENABLED,
+> +				  enable ? CMD_A_CHG_ENABLED : 0);
+>  }
+> =20
+>  static inline int smb347_charging_enable(struct smb347_charger *smb)
+> --=20
+> 2.32.0
+>=20
+
+--dgyf46uz57z2zrjo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmDzAzIACgkQ2O7X88g7
++pquQw//T9rvYylRZXTm+X6TbARMLX/jnUii6FLPGAAb5Xs/ROMpqOqzUuK5v9JL
+iOs1r2DNcK1OzdDEPLwh2OA5FHoihxx+K/ZMLm0aAJZNXmTbmysa0UcdFWrRgtrV
+CZ41kuCa3VOJWBexZt+MZ1vXjIOi1T4CGfbhoGnFggv+jEHF/k6+XncDSFCw/HDn
+PiZm5TklYUEQPkcJPhGBxQra1UNjTGOg6XQ4rIfgKQG/TyTdEv2/MAPsHLk9KC5N
+6NgGxBRcvDgb+BLmJ4d5j4FLebnSIJaRaRSN5rojjdIIG72mwtSbeyq/URs5ucKU
+ejDWI/nag9xwPPU+l+LFc7sYiUuEnWameuuzbex1kpa4/uWDX9QRvnPZpZWhTAfC
+8Ki+Sg4BkVIxvyosRmKUBccAfPNrs6TPPfpjgbiHjvrYkk2ZS5aJ1/vZeW94vDuw
+rph+KJQ5yHIjwdXnbx6i+zjjwAphdqOUpFqc+KeOyrGp8Q0Re4RVRs+wxd6pEdCo
++FapgItIggnp8FGvfOwSIqEC2Hhz/wOFLKlKudhbKdESeAqXf/VxqP6Tf1mESP9Y
+vQDYcglbuiU5bAiWO6bmEPOvPa4IYYBf5oAxhDe/fR9fGM/JrZenFpavcsVHAQV7
+bRiHd5YeHAmORHxxvb3iB/U0jKwFdKnYE+PJOrfbcWtViktV4gY=
+=9ZX5
+-----END PGP SIGNATURE-----
+
+--dgyf46uz57z2zrjo--
