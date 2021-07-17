@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A063CC564
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 20:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833A83CC555
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jul 2021 20:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbhGQS0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jul 2021 14:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S235612AbhGQS0R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jul 2021 14:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235454AbhGQS0L (ORCPT
+        with ESMTP id S235444AbhGQS0L (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jul 2021 14:26:11 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F78FC0613E1;
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A4C061766;
         Sat, 17 Jul 2021 11:23:12 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id s13so113929lfi.12;
+Received: by mail-lf1-x12b.google.com with SMTP id g22so9691536lfu.0;
         Sat, 17 Jul 2021 11:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mhtGFKsHUzTaL2MCRyNEETLxWQghXk5mgR3qIkfiMRo=;
-        b=Gg1diUprWAc2cZdVHQx9WoS1B1Ow8Z6j8TYp/Syk+Vg8KxAR2Uz1vYgh5TMs6CsePI
-         OPRKKnRdb73OuhHHABSo4QtQKvBtPHNyPMCDnliytMhEGp90S2YxoW/3xc4eCxQ30dPG
-         ZqupQYCkPz0ydqkALLSL50V3XEtFNElGapG1Gd/JP8vXDtCo2F3Ah86Q7GQGlscyHCBU
-         8XNgOCP9vpVqbUIvSU0L76mKpt5adxtW/ejJjhc35Hs0qlQ/7/ef3W+7rWXqFHPgAP/s
-         jUKAFZ7//0g0CwYNefNDAIcevqpeRuHM1z6wHx9HLNNwM03yynjv1dYnwv4JFJjxzE2D
-         wBWw==
+        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
+        b=SaXxFTfEqC7NQlicWHSd03MNyG0RY/znqNOu4rKxPWPMT0ZQh8EUVnKZA1kpZw7MYo
+         gMmTSBmrOtbO70/O/pRvEBTehOafvb1TYOzBqqVvsfLUir6/g4T+ZhcHrnYqeVILHoU3
+         kUqy8YrgPCwFY+AhW3jjdRmJStzEabxuBOJxG9S/qOTY0JW+VZxyeWmg9x+mlgrbVLgb
+         A2ci7JvQXzeac1GoEq1MgO84reNM6bIURlghKdyH8cKX9I7kVktxW5p6wV+wP96TH49H
+         nYjY5CrNc94G0uT2C8ibJc72V3BnwVZItcTepsUIE84a4FJfjFZRRtMSTNAKiePjd7vM
+         7T2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mhtGFKsHUzTaL2MCRyNEETLxWQghXk5mgR3qIkfiMRo=;
-        b=evS+CYNDH6hGEU7fSm5VfiZgFWxEw6A9M5oIc/6HY8s9D8+7ZVi7bL95RrenSEhUMF
-         Y3gfFx7eQEl4HnYoAnf4scUWUHSH6IWJBBvL2LW6EZaIcj/N85/7O1zmm2pPOcWujgc1
-         Jm520octtPcVGq4wT2HSnhxJDa6qnL43SD7HbznpkZy1AS1J980GG+tD2X+v84Xvi8o1
-         esExSZSltQ3OUE4DTITOTeXUkEmV39QclaiFLi+dPRXr8ImBHoSvGxuWjqaqvM1h441F
-         eTWRQ/Apo7gsnMCDVZ5BW0QeYJoKwn14xypNwRz2OsP935hlarLd1jF6Y4HrOHrRWeIj
-         WDlQ==
-X-Gm-Message-State: AOAM530ht2s3zXL8AfwO2ElpVWVujLAtxtQxn5oKE7UZPkFVDQfBbQr4
-        p3En7wvgOMi+dvkueiEBxmc=
-X-Google-Smtp-Source: ABdhPJwDYGsO2a8K+7QLiUFVN9dM4bo/qtFUTx5RxuTAoLWALSfmJFbFs1uk2NfD59eYCpsQEmygZA==
-X-Received: by 2002:a19:6a09:: with SMTP id u9mr12345853lfu.119.1626546190562;
-        Sat, 17 Jul 2021 11:23:10 -0700 (PDT)
+        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
+        b=C71Y+UavVW+qJIRegTWGIgVC7FxUUfRvtcQc9rFiEaRLW2gQDfJIE6UXRhwsIulYLV
+         dvtjnHpoCGVSzA8CH6ySOiAIg+IpYmBuoRQKNYNPuLO7RuZmY84sTNcHe2w+3K2u38No
+         VvBVzPoOdbf0icVmkZe2Oi8UJalJYDQoZ+JE2RToZa+MR7tjvW5JXHt1qhv2t18uLqNs
+         OxiqW4oTRozE9/v2wSmtIWc4LiT80hzNsFB70dtoU+cgRzF1r9qT3p+wMRbS5ghins9e
+         cxm4RWSC1KogNl4tvpToGakodc+YTtu5TTdbFovyRmTPp8TFeMIzG7fEGGTp/sNPrIy/
+         lpDA==
+X-Gm-Message-State: AOAM533HabSKwygI4zEUluc5O7qdfxwHuJEZ5s2YqoSmehyLSwNngg/O
+        d60D5nq+wNlZb4M7jq66O0k=
+X-Google-Smtp-Source: ABdhPJx6kt3p/8AdTmBN/YG3dBRZZZ/0Uc//D7ucLTcZ1BioGC5bY11m6kaP7JckoOWhwxwWmO47CA==
+X-Received: by 2002:a05:6512:16a6:: with SMTP id bu38mr12308203lfb.92.1626546191314;
+        Sat, 17 Jul 2021 11:23:11 -0700 (PDT)
 Received: from localhost.localdomain (46-138-17-250.dynamic.spd-mgts.ru. [46.138.17.250])
-        by smtp.gmail.com with ESMTPSA id z20sm1409532ljk.123.2021.07.17.11.23.09
+        by smtp.gmail.com with ESMTPSA id z20sm1409532ljk.123.2021.07.17.11.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 11:23:10 -0700 (PDT)
+        Sat, 17 Jul 2021 11:23:11 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,9 +60,9 @@ To:     Thierry Reding <treding@nvidia.com>,
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v5 11/12] ARM: tegra: nexus7: Enable USB OTG mode
-Date:   Sat, 17 Jul 2021 21:21:33 +0300
-Message-Id: <20210717182134.30262-12-digetx@gmail.com>
+Subject: [PATCH v5 12/12] arm64: tegra132: Add new properties to USB PHY device-tree node
+Date:   Sat, 17 Jul 2021 21:21:34 +0300
+Message-Id: <20210717182134.30262-13-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210717182134.30262-1-digetx@gmail.com>
 References: <20210717182134.30262-1-digetx@gmail.com>
@@ -72,65 +72,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Nexus 7 has OTG-cable microUSB port, enable OTG mode. USB peripheral
-devices now can be connected to Nexus 7 using OTG adapter, switching
-USB port into host mode.
+Add new properties to USB PHYs needed for enabling USB OTG mode.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../tegra30-asus-nexus7-grouper-common.dtsi   | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-index 4f116c26f6ce..798ac22a50d2 100644
---- a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-@@ -941,9 +941,29 @@ power_supply: charger@6a {
- 			interrupts = <TEGRA_GPIO(V, 1) IRQ_TYPE_EDGE_BOTH>;
- 
- 			summit,enable-charge-control = <SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW>;
-+			summit,inok-polarity = <SMB3XX_SYSOK_INOK_ACTIVE_LOW>;
- 			summit,enable-usb-charging;
- 
- 			monitored-battery = <&battery_cell>;
-+
-+			usb_vbus: usb-vbus {
-+				regulator-name = "usb_vbus";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-min-microamp = <750000>;
-+				regulator-max-microamp = <750000>;
-+
-+				/*
-+				 * SMB347 INOK input pin is connected to PMIC's
-+				 * ACOK output, which is fixed to ACTIVE_LOW as
-+				 * long as battery voltage is in a good range.
-+				 *
-+				 * Active INOK disables SMB347 output, so polarity
-+				 * needs to be toggled when we want to get the
-+				 * output.
-+				 */
-+				summit,needs-inok-toggle;
-+			};
- 		};
+diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+index 9928a87f593a..f79a66226457 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+@@ -1123,6 +1123,7 @@ phy1: usb-phy@7d000000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d000000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USBD>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1142,6 +1143,7 @@ phy1: usb-phy@7d000000 {
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
+ 		nvidia,has-utmi-pad-registers;
++		nvidia,pmc = <&tegra_pmc 0>;
+ 		status = "disabled";
  	};
  
-@@ -1017,12 +1037,13 @@ sdmmc4: mmc@78000600 {
- 	usb@7d000000 {
- 		compatible = "nvidia,tegra30-udc";
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
-+		vbus-supply = <&usb_vbus>;
+@@ -1162,6 +1164,7 @@ phy2: usb-phy@7d004000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d004000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USB2>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1180,6 +1183,7 @@ phy2: usb-phy@7d004000 {
+ 		nvidia,hssquelch-level = <2>;
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
++		nvidia,pmc = <&tegra_pmc 1>;
+ 		status = "disabled";
  	};
  
- 	usb-phy@7d000000 {
- 		status = "okay";
--		dr_mode = "peripheral";
-+		dr_mode = "otg";
- 		nvidia,hssync-start-delay = <0>;
- 		nvidia,xcvr-lsfslew = <2>;
- 		nvidia,xcvr-lsrslew = <2>;
+@@ -1200,6 +1204,7 @@ phy3: usb-phy@7d008000 {
+ 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
+ 		reg = <0x0 0x7d008000 0x0 0x4000>,
+ 		      <0x0 0x7d000000 0x0 0x4000>;
++		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+ 		phy_type = "utmi";
+ 		clocks = <&tegra_car TEGRA124_CLK_USB3>,
+ 			 <&tegra_car TEGRA124_CLK_PLL_U>,
+@@ -1218,6 +1223,7 @@ phy3: usb-phy@7d008000 {
+ 		nvidia,hssquelch-level = <2>;
+ 		nvidia,hsdiscon-level = <5>;
+ 		nvidia,xcvr-hsslew = <12>;
++		nvidia,pmc = <&tegra_pmc 2>;
+ 		status = "disabled";
+ 	};
+ 
 -- 
 2.32.0
 
