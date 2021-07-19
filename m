@@ -2,172 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B443CD423
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jul 2021 13:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803CD3CE70C
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jul 2021 19:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbhGSLKQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jul 2021 07:10:16 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:50317 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236302AbhGSLKQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Jul 2021 07:10:16 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1626695456; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=cuNYcuoxuLNPM9zRI3jedhlC+1gr//ok0e0lHbfvDqg=; b=weLvoX15VS3PrtnueKVNTgg+BpRtO/snJ4PTGtkXw7aStBgXVZVYHKeUYUAdpIhvUihjbgbr
- rbzCL86Za4/XxJVqBtAr6MZxXIDQQsVhjaxANlSqEPGeDFpRtfjzPOMEqw062+CxB2mDRlCe
- UxN/Z2MahGmRG5aVM3SMSsK8UqE=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 60f5671fd0100c7cf9fbf4c7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 19 Jul 2021 11:50:55
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B9902C43217; Mon, 19 Jul 2021 11:50:55 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.50.42.221] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E0AD9C433D3;
-        Mon, 19 Jul 2021 11:50:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E0AD9C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH v4 1/2] PM / Domains: Add support for 'required-opps' to
- set default perf state
-To:     Stephen Boyd <swboyd@chromium.org>, bjorn.andersson@linaro.org,
-        ulf.hansson@linaro.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        rojay@codeaurora.org, stephan@gerhold.net
-References: <1626429658-18961-1-git-send-email-rnayak@codeaurora.org>
- <1626429658-18961-2-git-send-email-rnayak@codeaurora.org>
- <CAE-0n52AkJWAL0ptFgZOrD_BXrrMte5EbZUksf5UYzBxYisCBQ@mail.gmail.com>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <43c77084-cfea-ef7f-8454-6f0dbc3b6577@codeaurora.org>
-Date:   Mon, 19 Jul 2021 17:20:49 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S1349763AbhGSQUS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jul 2021 12:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352759AbhGSQOh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jul 2021 12:14:37 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B5DC069A4A
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jul 2021 09:09:47 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id e11so18315817oii.9
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jul 2021 09:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5pip44uz8G7BvdketPGGb7rO6ArAVuWxJOw8cYl5Dck=;
+        b=pTokBLHDVKUO6/S3IXyWzU0zhd+tz6Gtzh0fmA122RJbECmVbws0irqr5MuT96wcv1
+         cp95ZgMJQI6W+8Gsvt1v/hPalzRu+gYem1Vnp2KzyIzvDe3+Bk1lwZz4D3UXHlEDEMpr
+         gMlzSmzTVzSvTtMNRj38dm7zE9SY9GZRn5FzqPFL0/jf2qLcAyHyyA0addRmRIbFXTPN
+         8JXWYDD/ertD1+MhskCe8Ht+Fsxiej2r2UeMh4swFdfAxHW+WKIrSIKzfXj3AVsVUbaB
+         cjy5NuLdvuP1ZM4xpDC9qN78HCI5Rv5U2P/PPBkBWk/DRdhpgOEHPmSZZl8DILw5qtNn
+         oiUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5pip44uz8G7BvdketPGGb7rO6ArAVuWxJOw8cYl5Dck=;
+        b=tRV0bn6vIqA/epn9hAzf+ezsnCe2yikb6jllOeHmt1yLMMMebOidu1ZPMAY2Z/BU6V
+         hZCp3FpGocqQWPfvnx1oqDReldB5HwBf+xl3r9tHnEPdo6GHpp1Uj1Cme/CB81TCrxZg
+         NdvWVsAUt94o1KUxs1MFncRv74Hh4MnC1Q9KYW88rfVScRPa1kyCQrNHd37l587CZMok
+         KeCaqMneHrl2JWf7EiaE8L5GjHt0B6N0Xqun1AFTfEqFskzef4UHIGTQUqrvc387mw5i
+         JGJJTQB76iE9wihrwWGXMKZahmWomYzIQ1ZFKwhXq21S4eGE9t6odMabmvCbidSlkDKR
+         XXUA==
+X-Gm-Message-State: AOAM532L6If90cKasxITZoyTzBj5o+LeqiWhY0ZRe8rcIhYh1ypTGL9C
+        vRVmb2ATHdCDOsFNjDAkvYU1sg==
+X-Google-Smtp-Source: ABdhPJwQCvoXkJu7zax2U3Jk0zW9PX4Ges1w6phQIYQ662ersmvpvpSXwXazl78T/nS00H8n/6O//Q==
+X-Received: by 2002:aca:b309:: with SMTP id c9mr8414386oif.135.1626712385860;
+        Mon, 19 Jul 2021 09:33:05 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h1sm3774252otj.48.2021.07.19.09.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jul 2021 09:33:05 -0700 (PDT)
+Date:   Mon, 19 Jul 2021 11:33:02 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     agross@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
+        tdas@codeaurora.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [Patch v3 4/6] arm64: boot: dts: qcom: sdm45: Add support for
+ LMh node
+Message-ID: <YPWpPt+EfTtAUEOH@yoga>
+References: <20210708120656.663851-1-thara.gopinath@linaro.org>
+ <20210708120656.663851-5-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n52AkJWAL0ptFgZOrD_BXrrMte5EbZUksf5UYzBxYisCBQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210708120656.663851-5-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu 08 Jul 07:06 CDT 2021, Thara Gopinath wrote:
 
-On 7/17/2021 1:49 AM, Stephen Boyd wrote:
-> Quoting Rajendra Nayak (2021-07-16 03:00:57)
->> Some devics within power domains with performance states do not
+> Add LMh nodes for cpu cluster0 and cpu cluster1. Also add interrupt
+> support in cpufreq node to capture the LMh interrupt and let the scheduler
+> know of the max frequency throttling.
 > 
-> devices
-> 
->> support DVFS, but still need to vote on a default/static state
->> while they are active. They can express this using the 'required-opps'
->> property in device tree, which points to the phandle of the OPP
->> supported by the corresponding power-domains.
->>
->> Add support to parse this information from DT and then set the
->> specified performance state during attach and drop it on detach.
->> Also drop/set as part of runtime suspend/resume callbacks.
->>
->> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
->> ---
->>   drivers/base/power/domain.c | 37 ++++++++++++++++++++++++++++++++++---
->>   include/linux/pm_domain.h   |  1 +
->>   2 files changed, 35 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index a934c67..dcc0b71 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -1000,6 +1008,8 @@ static int genpd_runtime_resume(struct device *dev)
->>          genpd_stop_dev(genpd, dev);
->>   err_poweroff:
->>          if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
->> +               if (default_pstate)
->> +                       dev_pm_genpd_set_performance_state(dev, 0);
->>                  genpd_lock(genpd);
->>                  gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> 
-> Maybe this should be
-> 
-> 		  prev_state = genpd_drop_performance_state(dev);
-> 		  if (!default_pstate)
-> 		  	gdp_data->rpm_pstate = prev_state;
-> 
-> so we don't call dev_pm_genpd_set_performance_state() effectively twice?
-> Also it would make sure we call dev_pm_genpd_set_performance_state()
-> underneath the genpd_lock() if that is important. Similarly do that on
-> suspend path.
 
-looking through this more, I think I can completely drop any special
-handling for default_pstate in runtime suspend and resume. The existing
-drop/restore login Ulf has added should take care of it.
-I'll test and respin soon.
+Just noticed, could you please drop "boot: " from $subject and add the
+missing '8', as you're resubmitting the series.
 
+Regards,
+Bjorn
+
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
 > 
->>                  genpd_power_off(genpd, true, 0);
->> @@ -2598,6 +2608,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
->>
->>          dev_dbg(dev, "removing from PM domain %s\n", pd->name);
->>
->> +       /* Drop the default performance state */
->> +       if (dev_gpd_data(dev)->default_pstate) {
->> +               dev_pm_genpd_set_performance_state(dev, 0);
->> +               dev_gpd_data(dev)->default_pstate = 0;
->> +       }
->> +
->>          for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
->>                  ret = genpd_remove_device(pd, dev);
->>                  if (ret != -EAGAIN)
->> @@ -2675,10 +2692,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->>                  genpd_unlock(pd);
->>          }
->>
->> -       if (ret)
->> +       if (ret) {
->>                  genpd_remove_device(pd, dev);
->> +               return -EPROBE_DEFER;
->> +       }
->> +
->> +       /* Set the default performance state */
->> +       np = base_dev->of_node;
->> +       if (of_parse_phandle(np, "required-opps", index)) {
->> +               pstate = of_get_required_opp_performance_state(np, index);
->> +               if (pstate < 0) {
->> +                       dev_err(dev, "failed to set pstate:%d", pstate);
+> v2->v3:
+> 	- Changed the LMh low and high trip to 94500 and 95000 mC from
+> 	  74500 and 75000 mC. This was a bug that got introduced in v2.
+> v1->v2:
+> 	- Dropped dt property qcom,support-lmh as per Bjorn's review comments.
+> 	- Changed lmh compatible from generic to platform specific.
+> 	- Introduced properties specifying arm, low and high temp thresholds for LMh
+> 	  as per Daniel's suggestion.
 > 
-> Missing newline on printk. Also can we spell out pstate as "failed to
-> set required performance state %d for power-domain %d"?
-
-thanks, will fix when I respin.
-Thanks for the review.
-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
->> +                       ret = pstate;
->> +               }
->> +               dev_pm_genpd_set_performance_state(dev, pstate);
->> +               dev_gpd_data(dev)->default_pstate = pstate;
->> +       }
->>
->> -       return ret ? -EPROBE_DEFER : 1;
->> +       return ret ? ret : 1;
->>   }
->>
->>   /**
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 0a86fe71a66d..4da6b8f3dd7b 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -3646,6 +3646,30 @@ swm: swm@c85 {
+>  			};
+>  		};
+>  
+> +		lmh_cluster1: lmh@17d70800 {
+> +			compatible = "qcom,sdm845-lmh";
+> +			reg = <0 0x17d70800 0 0x401>;
+> +			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> +			qcom,lmh-cpu-id = <0x4>;
+> +			qcom,lmh-temperature-arm = <65000>;
+> +			qcom,lmh-temperature-low = <94500>;
+> +			qcom,lmh-temperature-high = <95000>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +		};
+> +
+> +		lmh_cluster0: lmh@17d78800 {
+> +			compatible = "qcom,sdm845-lmh";
+> +			reg = <0 0x17d78800 0 0x401>;
+> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +			qcom,lmh-cpu-id = <0x0>;
+> +			qcom,lmh-temperature-arm = <65000>;
+> +			qcom,lmh-temperature-low = <94500>;
+> +			qcom,lmh-temperature-high = <95000>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +		};
+> +
+>  		sound: sound {
+>  		};
+>  
+> @@ -4911,6 +4935,8 @@ cpufreq_hw: cpufreq@17d43000 {
+>  			reg = <0 0x17d43000 0 0x1400>, <0 0x17d45800 0 0x1400>;
+>  			reg-names = "freq-domain0", "freq-domain1";
+>  
+> +			interrupts-extended = <&lmh_cluster0 0>, <&lmh_cluster1 0>;
+> +
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+>  			clock-names = "xo", "alternate";
+>  
+> -- 
+> 2.25.1
+> 
