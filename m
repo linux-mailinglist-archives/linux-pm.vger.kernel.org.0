@@ -2,78 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A77093CF7B3
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 12:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7C33CFAC6
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 15:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbhGTJkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jul 2021 05:40:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:55304 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236690AbhGTJjH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Jul 2021 05:39:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1FD36D;
-        Tue, 20 Jul 2021 03:18:41 -0700 (PDT)
-Received: from [10.57.6.251] (unknown [10.57.6.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AD943F73D;
-        Tue, 20 Jul 2021 03:18:38 -0700 (PDT)
-Subject: Re: [PATCH v2 1/1] PM: EM: Increase energy calculation precision
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Chris.Redpath@arm.com,
-        dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
-        qperret@google.com, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org, peterz@infradead.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, vincent.guittot@linaro.org,
-        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
-        segall@google.com, mgorman@suse.de, bristot@redhat.com,
-        CCj.Yeh@mediatek.com
-References: <20210720094153.31097-1-lukasz.luba@arm.com>
- <20210720094153.31097-2-lukasz.luba@arm.com> <YPabR/dfllPVZbzu@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <3578f5dc-fc6c-da1d-9bf5-092522a35f97@arm.com>
-Date:   Tue, 20 Jul 2021 11:18:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S238657AbhGTMzn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jul 2021 08:55:43 -0400
+Received: from mail-il1-f175.google.com ([209.85.166.175]:43647 "EHLO
+        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239141AbhGTMyT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 08:54:19 -0400
+Received: by mail-il1-f175.google.com with SMTP id w1so19107303ilg.10;
+        Tue, 20 Jul 2021 06:34:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iXVXQCvX+rDxAmIhcemQIg3BD3R+OAgKkEeUeDAOaWU=;
+        b=a+pAn7LxrDq+B3+ZhUOwd596Hs4hVs3kg19YlM2D/E0dz4O/MZwITyz/5ZsF6hnoL8
+         KHS69rxuWzwwMQvwHFsZ7cXmAqnII0TlJmpqIzk+P1xvsKp5Y+6uw2Pj+KbXmJm1Z7Po
+         +Ap0g3AGKYjHeN0+V0KWE+JXlz5E9o/s48UBv7EaXNvStfGvctRCVopAF6RlUspVHccv
+         m271FV/cNrjfs9zwHtEaHcXZWp4b8kWnxMrCOEL869WdNSxE8bcS6g62xZ0MJjNoZZxS
+         SQ5/PaE8V+rY57p6m2OoAvvqeofK/E/i28lEMn525cV/xeKksowbNjnxqbY0kh5YI3M8
+         1EFg==
+X-Gm-Message-State: AOAM5315wOdkCR6pksfdxihat4bHEVfICbW38MkdN5DG/Toqe14LrTmj
+        fG0Xav//U6NoZrqLa5B67w==
+X-Google-Smtp-Source: ABdhPJynuTGR01DW0qDQzAyJlxt9B4QibZ2YJFfotEtHfK6UrcGS8SIQSUwEVcONxP5BN2KDaz1dQg==
+X-Received: by 2002:a92:ad04:: with SMTP id w4mr20381626ilh.221.1626788097223;
+        Tue, 20 Jul 2021 06:34:57 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id 10sm2014932iln.39.2021.07.20.06.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jul 2021 06:34:56 -0700 (PDT)
+Received: (nullmailer pid 4157543 invoked by uid 1000);
+        Tue, 20 Jul 2021 13:34:54 -0000
+Date:   Tue, 20 Jul 2021 07:34:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] dt-bindings: opp: Convert to DT schema
+Message-ID: <20210720133454.GA4147058@robh.at.kernel.org>
+References: <20210719202732.2490287-1-robh@kernel.org>
+ <20210720043108.bmoydy3a2r3gqhnq@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <YPabR/dfllPVZbzu@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210720043108.bmoydy3a2r3gqhnq@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
-
-On 7/20/21 10:45 AM, Greg KH wrote:
-> On Tue, Jul 20, 2021 at 10:41:53AM +0100, Lukasz Luba wrote:
-
-[snip]
-
->>
->> Fixes: 27871f7a8a341ef ("PM: Introduce an Energy Model management framework")
->> Reported-by: CCJ Yeh <CCj.Yeh@mediatek.com>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/linux/energy_model.h | 16 ++++++++++++++++
->>   kernel/power/energy_model.c  |  3 ++-
->>   2 files changed, 18 insertions(+), 1 deletion(-)
->>
+On Tue, Jul 20, 2021 at 10:01:08AM +0530, Viresh Kumar wrote:
+> On 19-07-21, 14:27, Rob Herring wrote:
+> > Convert the OPP v1 and v2 bindings to DT schema format. As the OPPv2 binding
+> > can be extended by vendors, we need to split the common part out from the
+> > "operating-points-v2" conforming compatible.
+> > 
+> > Cc: Yangtao Li <tiny.windzz@gmail.com>
+> > Cc: Nishanth Menon <nm@ti.com>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Maxime Ripard <mripard@kernel.org>
+> > Cc: Chen-Yu Tsai <wens@csie.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > v2:
+> > - move opp-peak-kBps next to opp-avg-kBps. Also add a dependency schema.
+> > - Correct the opp-microamp schemas. It's always a single value for each
+> >   regulator.
+> > - Add missing type for '^opp-microamp-'
 > 
-> <formletter>
-> 
-> This is not the correct way to submit patches for inclusion in the
-> stable kernel tree.  Please read:
->      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> for how to do this properly.
-> 
-> </formletter>
-> 
+> Applied. Thanks.
 
-I shouldn't have sent to CC -stable for now.
-I will create and send a dedicated patch for stable
-with proper commit ID after it's merged (like I did last time).
-We are heading to stable 5.4+ (so the Android could get it).
+I found some issues with it, can you drop it? 
 
-Regards,
-Lukasz
+Rob
+
