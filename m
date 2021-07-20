@@ -2,116 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 094463CFE6C
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 17:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A1F3CFEF1
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 18:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239702AbhGTPRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jul 2021 11:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S229536AbhGTPck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jul 2021 11:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242852AbhGTPM7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 11:12:59 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5815C0613E0
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jul 2021 08:52:46 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id a17-20020a9d3e110000b02904ce97efee36so10184979otd.7
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jul 2021 08:52:46 -0700 (PDT)
+        with ESMTP id S233517AbhGTP1j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 11:27:39 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241F7C0613E7
+        for <linux-pm@vger.kernel.org>; Tue, 20 Jul 2021 09:07:18 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id f8-20020a1c1f080000b029022d4c6cfc37so1790440wmf.5
+        for <linux-pm@vger.kernel.org>; Tue, 20 Jul 2021 09:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Walcc93S0Gr05g0IhulInQ/Cw8QbGOXukB2N6LJ3+Tk=;
-        b=xEJ1qDxDIzGBjx0jNFiWHrs9TNJ4UHztUudPOL5sF2K8e5d/w6TJi0I4CfREwXGWQE
-         AZOw1XITpr//UuJiLOqGocyI+LWqOyO8ZWlSQa/bmUzdMUj+VKxCB5MOLU/kiRoQK6y3
-         /HY0kDJn1X2NOhZXFsc8n28eGro1lMwjLsD58u1uLyBVaykWJr6DmGld3FNkPmbFdsLa
-         xlf3coWQOS0vfBAfxF2VsmXSlJ3sHg8ZRovmGmdAIgZY+uSL0fEO7tDaYyRCY3ixz3/8
-         zALjuoLKwVaULZaziMzWTeSjQeTUIyOwIJCCTfRZSRKVHC7I6OyLfuX90oFwJbfaVT4Q
-         nDdQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Gj6/MjwS+J4keCNnFYk1TQ+l4VVmRSXxrXDi5n5Ny3A=;
+        b=gRT05Pn+DjxRaYaQ3SNjK87ik5viYwcI+vEQBGYCJKXp+85XrKT1fQplwtyoDLjGg2
+         6Qm1OYymAU0bFf7C3NOz5mLcuRMvVUreToOlOhkwBKzwWP5gor6/M/h5rfroSNCyLdFv
+         PdyTRd9/r9cNphQ/KVfSF6jMtjyOt9/P2R+lpJqsSZz4BSdR4Hpl5xase7lCGIH5fmTD
+         ZUkiTdNmOeyUmvJ8y+l6qXiIuj+wgfJC7MoxsFp8ZrF2vJL9bdWgREeDXCjzUD3KgT79
+         DDXJU0Krj1Oz9JiTidP6+M5sFyX3FKllpYMs/4nxZEIK7f5i9q6u2eCFN1v3fEojfJXx
+         Odcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Walcc93S0Gr05g0IhulInQ/Cw8QbGOXukB2N6LJ3+Tk=;
-        b=NIuVKTN4x7maI235LhL3h2HrvbxFhrN3uTlTCPVWLYnZy/mW4Rmjm1oY4tZs+RbB4t
-         GhT3jUbWczOAE64lvuPDooIsxJbssCzHrNjzxidvGKDBzPpDOY3Mu/PK/vNeMObGCEhE
-         j8MC8wMvZo3PHSdYqUbER5TJQFYpTNfMuluDiMcMutlR7V6z5961FlaJ4LSgvZj3FtsQ
-         1C0p4jJWvx8N8h5z8qFGZhqS/xgUWbcKxPYohHq94a0d+CS+alDZztyfs7Ox82CGDmKD
-         MQ7/OaVcN2vDJ+Calbf2YF/IAE/PUTon7HLofQTEJA9z6W/QU/3LbCddQ2XiiiMlvzVb
-         fCxA==
-X-Gm-Message-State: AOAM5316BPhsHLwL6WgwUqx8iHTABg2PUJOu+6PDPnEiYceBJrlXnJJA
-        8OsY6hZa1esoPuL47JNp8sHJCA==
-X-Google-Smtp-Source: ABdhPJyb4yFdL9Q4uvdT65qV5B7tMOJW3NpSLII118Ct3t+4szV/WE3LyJqYygW/2V40uJFEYtG+LA==
-X-Received: by 2002:a9d:6750:: with SMTP id w16mr7136785otm.177.1626796366037;
-        Tue, 20 Jul 2021 08:52:46 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q15sm233294otf.70.2021.07.20.08.52.45
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Gj6/MjwS+J4keCNnFYk1TQ+l4VVmRSXxrXDi5n5Ny3A=;
+        b=Z3+seCwom3hhD/PoPtVIqgcucNO38WgHiyOYpLNecezUkfUwrb4+suaHVzviKX7Lyz
+         LB51N3cK4uB9fJ8jxAkkfL0mTQjt6F7BlcVR0frb+g+Kbsl1vq12XUys0Oxz6HCk8koG
+         MKFA2aAp6UtVng1uKnPyCJNq670TB1ffSxCLLiSQeopUdNrojfuVheajOMVt8fzXCS50
+         1v499ZMpS7v5SE/yw7281ODYuS7ksW/oRu8p9kznT4UxXeyliK+kj51tHvK7BifmMr07
+         ZiCfipC83GwoEyOJmpJwbqoR1e75vAhCofzF2kkZ/St4jAiuXlDJUmUOsYpX2et75Nye
+         inBQ==
+X-Gm-Message-State: AOAM531zFWfjED3SioseNKZcuJOWYv3WOyWoQDu4carG0fS4PFnhI29W
+        sNmK6qzNn/zeOX9lJVFzpJNdqw==
+X-Google-Smtp-Source: ABdhPJwkPXNxyIOEI1iwTxTrl+7ksvGsjQ9ocmdf90SP7jwdElbWhOPHa6fxSUo60olZC1ffA0K8nw==
+X-Received: by 2002:a05:600c:47c4:: with SMTP id l4mr3865020wmo.125.1626797236726;
+        Tue, 20 Jul 2021 09:07:16 -0700 (PDT)
+Received: from google.com ([31.124.24.141])
+        by smtp.gmail.com with ESMTPSA id w18sm26022717wrg.68.2021.07.20.09.07.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 08:52:45 -0700 (PDT)
-Date:   Tue, 20 Jul 2021 10:52:43 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     agross@kernel.org, sre@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] power: supply: qcom_smbb: Remove superfluous error
- message
-Message-ID: <YPbxS4KV+Fx01p7G@yoga>
-References: <20210720141539.7716-1-tangbin@cmss.chinamobile.com>
+        Tue, 20 Jul 2021 09:07:16 -0700 (PDT)
+Date:   Tue, 20 Jul 2021 17:07:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] mfd: tps65086: Make interrupt line optional
+Message-ID: <YPb0spKPvEvuuMWc@google.com>
+References: <20210625224744.1020108-1-kernel@esmil.dk>
+ <20210625224744.1020108-3-kernel@esmil.dk>
+ <YPbmmqfOuE5w6EgW@google.com>
+ <CANBLGcy_28q23vRJk9=UZR_Feeqod-ETET=v4Ub=35edySH7SA@mail.gmail.com>
+ <YPbsodxMk+VvU/3D@google.com>
+ <CANBLGcx08XajR8khJmKARBjy7bQ5ebbgO+RRqRu=bvyMx7LuKA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210720141539.7716-1-tangbin@cmss.chinamobile.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANBLGcx08XajR8khJmKARBjy7bQ5ebbgO+RRqRu=bvyMx7LuKA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 20 Jul 09:15 CDT 2021, Tang Bin wrote:
+On Tue, 20 Jul 2021, Emil Renner Berthing wrote:
 
-> In the probe function, when get irq failed, the function
-> platform_get_irq_byname() logs an error message, so remove
-> redundant message here.
+> On Tue, 20 Jul 2021 at 17:32, Lee Jones <lee.jones@linaro.org> wrote:
+> > On Tue, 20 Jul 2021, Emil Renner Berthing wrote:
+> > > On Tue, 20 Jul 2021 at 17:07, Lee Jones <lee.jones@linaro.org> wrote:
+> > > > On Sat, 26 Jun 2021, Emil Renner Berthing wrote:
+> > > > > The BeagleV Starlight v0.9 board[1] doesn't have the IRQB line routed to
+> > > > > the SoC, but it is still useful to be able to reach the PMIC over I2C
+> > > > > for the other functionality it provides.
+> > > > >
+> > > > > [1] https://github.com/beagleboard/beaglev-starlight
+> > > > >
+> > > > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > ---
+> > > > >  .../devicetree/bindings/mfd/ti,tps65086.yaml  |  3 ---
+> > > >
+> > > > This is not present in my current tree.
+> > > >
+> > > > Looks like it's still *.txt.
+> > > >
+> > > > Am I missing a patch?
+> > >
+> > > Yes, the first patch in the series converts that to yaml. I'm quite
+> > > sure I had the same list of recipients on all 4 mails in the series,
+> > > so don't know why that should be missing.
+> >
+> > Oh, it's not marked as 'important' because it has open review comments
+> > on it.
+> >
+> > Just have this for now then:
+> >
+> > For my own reference (apply this as-is to your sign-off block):
+> >
+> >   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > 
-> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> Thanks! Do you want to have a look at 3/3 or should I just send a v2
+> to fix the yaml conversion now?
 
-This says "Zhang certified this patch's origin, then you took the patch
-and you certified it's origin" - per Documentation/process/submitting-patches.rst
+Patch 3 should be split.
 
-But you, Tang, is the author or the patch, so how can Zhang have touched
-it before you wrote it?
+I think it should also s/restart/reset/.
 
-Perhaps you worked on it together? In which case you should include a
-Co-developed-by to indicate this.
-
-
-Both commit message and patch looks good though!
-
-Regards,
-Bjorn
-
-> ---
->  drivers/power/supply/qcom_smbb.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/supply/qcom_smbb.c b/drivers/power/supply/qcom_smbb.c
-> index c890e1cec..84cc9fba0 100644
-> --- a/drivers/power/supply/qcom_smbb.c
-> +++ b/drivers/power/supply/qcom_smbb.c
-> @@ -929,11 +929,8 @@ static int smbb_charger_probe(struct platform_device *pdev)
->  		int irq;
->  
->  		irq = platform_get_irq_byname(pdev, smbb_charger_irqs[i].name);
-> -		if (irq < 0) {
-> -			dev_err(&pdev->dev, "failed to get irq '%s'\n",
-> -				smbb_charger_irqs[i].name);
-> +		if (irq < 0)
->  			return irq;
-> -		}
->  
->  		smbb_charger_irqs[i].handler(irq, chg);
->  
-> -- 
-> 2.20.1.windows.1
-> 
-> 
-> 
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
