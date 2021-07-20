@@ -2,38 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C163CF621
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 10:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675A43CF623
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 10:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbhGTHsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jul 2021 03:48:50 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:40278
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232313AbhGTHst (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 03:48:49 -0400
+        id S233899AbhGTHsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jul 2021 03:48:52 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:53960
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232349AbhGTHsu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 03:48:50 -0400
 Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1F44A40616;
-        Tue, 20 Jul 2021 08:29:22 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 8E5FA404A2;
+        Tue, 20 Jul 2021 08:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
         s=20210705; t=1626769767;
         bh=CC18GBbjPHCdP1gYvQIWC86yDSWhY5wuo6EYPhoHKD0=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=PDkr2jfw1Fwqmn2/VgXCC0szB3APZO14mwi27lrYmeahKW3nRCfHGcjo4rOWCVdPb
-         TTuI2HvKBm1h/S98Vvx3vqd4FdSbxa3mi1GDOlb8FkY71gcr4hNVodY6JD63Iulyvr
-         EzQ65YEamYLa2waT2yjwdIXNwaBTiYGMA0T28tm3gUjwhr3ejcYScsee1MlJr853Ad
-         ebg53rZ4s01n+lWdSe5tWUcDveT5A9Eu9su+Tv8+S3HqgZYWVQ2vqVLFYTKUQc0XQk
-         cwaB1Y5TsyLIa8yfo9HHyaX0drSBZmb685V6Y1IclMEzq57xEGdUAUNbYaNPoE2Ev4
-         jop4Fntl5RWWQ==
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=S/IlXY962gz4RCNv/Vl+M+/z6FCsjXFHc5w7KU9mfr1adh9AXtWgpx7GQDbFLRBYN
+         Ih0nFcmPsJWWm6bHTee+ykSCemBfsmcjdhNLr9B0hhx7lEgEvyNJHIG4jiuPr/7Uka
+         edolGhjd8+dnzvErPvQqWHtRxDNTXdAdZAXYRV6lSiMJQ/IZ7BK3e57UoQ//kidKeE
+         m7A3Ls6/Fy7+apNpcOjvrMSkkXnTCplJ5aReUoTp4VI2PjSbAf8z2tGTY8FNTFdtX3
+         HDtkjadjfBYu2n6do9Hcr+6I2CwXBfBiUikwDL1TbSQq4STfplfieR5dsDQI3orDT3
+         SoLHViO5Odz+Q==
 From:   Colin King <colin.king@canonical.com>
 To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH][V2][next] power: supply: ab8500: clean up warnings found by checkpatch
-Date:   Tue, 20 Jul 2021 09:29:21 +0100
-Message-Id: <20210720082922.6398-1-colin.king@canonical.com>
+Date:   Tue, 20 Jul 2021 09:29:22 +0100
+Message-Id: <20210720082922.6398-2-colin.king@canonical.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210720082922.6398-1-colin.king@canonical.com>
+References: <20210720082922.6398-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
