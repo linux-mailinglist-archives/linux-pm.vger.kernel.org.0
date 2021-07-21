@@ -2,187 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1A93D0DA9
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jul 2021 13:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1772B3D10A8
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jul 2021 16:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238396AbhGUKs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jul 2021 06:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239986AbhGUKIi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 06:08:38 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC5BC061762
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 03:48:29 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 283833F74F;
-        Wed, 21 Jul 2021 12:48:25 +0200 (CEST)
-Subject: Re: [PATCH v6 8/9] dt-bindings: cpufreq: qcom-hw: Add bindings for
- 8998
-To:     Rob Herring <robh@kernel.org>
-Cc:     bjorn.andersson@linaro.org, viresh.kumar@linaro.org,
-        agross@kernel.org, rjw@rjwysocki.net, devicetree@vger.kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jami.kettunen@somainline.org,
-        paul.bouchara@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, jeffrey.l.hugo@gmail.com
-References: <20210701105730.322718-1-angelogioacchino.delregno@somainline.org>
- <20210701105730.322718-9-angelogioacchino.delregno@somainline.org>
- <20210714213946.GA3568065@robh.at.kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <7d012e8c-4570-9d60-32c3-fb271ce636b8@somainline.org>
-Date:   Wed, 21 Jul 2021 12:48:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S236970AbhGUNYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jul 2021 09:24:50 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:46809 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239103AbhGUNYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 09:24:49 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0F0D05C0218;
+        Wed, 21 Jul 2021 10:05:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 21 Jul 2021 10:05:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm3; bh=s/UJMsLstRQEa
+        tmqEBAhanNjKIYqM1TuZI100FllJ7E=; b=JppD9OxR+Huy8ISMMv9z+p6RWep2g
+        FmAwQFLIl1zMm9A39SetUMgbCX1p50gpjaoX5NB7gdlGSCXFRaYZLEhjqy4afFJn
+        F3fDbB+28qsBKqSUiy3/OmOYpgZRI9H+hK5KoD0NjkTKnYuQF7VPeGXi+gIG8faV
+        aO+Sua/G2/QP1frCN5KCp0jjcjJi07H8sPH9DvOeMe82yCmnx/dKKqSjth9Jl1zO
+        ABfHvzPF4XD8Q3wMSogzboMuJP+/JM9tJfnfPzIzbzJb3btCPsSUECpNC1xvzJXz
+        ysylwPWtROsz34olnUNFMixHAc68yCXxj0w8txypjUuUt1wlMi+UNFwWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=s/UJMsLstRQEatmqEBAhanNjKIYqM1TuZI100FllJ7E=; b=bIBxKes8
+        raEN+E2cstJnervPGBY5/ccSOPRJNfEt3rI0GPCEZor7zS6UHtJgFDPY4txzLNnH
+        40o6MhyhLEUb6JDlO8MBQV+6J5k0uDy4k/CxDecZpEZqrEKzTQw9Rv7kMiLmV+l4
+        gKcH9bB6J6mIS/PX95uFyMGfGYkxL8LNhclt55JbpOlFH6Mp9d+ze+ubdT1IGvtv
+        mOWYqGfNk9VeBbXUzrVmovDAFQei8df476xpgiI5jZac3qzkzEN+9y5XGpWP0y0o
+        g9G2NCnVRG+npA9Hb8tlBW51gPp36JY4T7ngfvkZtWjvB/vMMRUVa2CtT6e59MD1
+        y10pRtezykUxMQ==
+X-ME-Sender: <xms:pSn4YE5QSpcU8yd2ccOYepqTapOyhU2wyRyHdGN2Sz0vOQSUt5xQ9A>
+    <xme:pSn4YF5hqCJJCuK8NUpQyj5bkWsygz4Wnut1vKGtqdSTrmoGv0cdLFcRyU2obQuKR
+    nwDVqNmOQu9uj0Aoec>
+X-ME-Received: <xmr:pSn4YDdBNEcxynyVdDZaWWKUQyA3TxQ5ySxeElIHDSTwBaOaK2ZIONCjBT3RWnPYlZP5liwkCCEgP00KG7I34xuGde4FwLd-UICZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeeggdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpedvkeelveefffekjefhffeuleetleefudeifeehuddugffghffhffehveevheeh
+    vdenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:pSn4YJKablmG1wWf-W0EBEtWntX8p7pVmuuf-wlUQvdYPV6lcR8P1w>
+    <xmx:pSn4YILA0sldm0dgTkrnl6UXHkCDPbwf4ilPY6h-4fCEtz3kx1-sfw>
+    <xmx:pSn4YKxfb_xhX_jxponaBNpUKRcHSo7UMFj9maBbl9k-7UoQ3Q53lA>
+    <xmx:pin4YH_lYeG_3SJaWoY4v6JUQKjOvME7nPDAeslFUd9FtB-F2SFOBA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Jul 2021 10:05:25 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH 28/54] dt-bindings: power: supply: axp20x: Add AXP803 compatible
+Date:   Wed, 21 Jul 2021 16:03:58 +0200
+Message-Id: <20210721140424.725744-29-maxime@cerno.tech>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210721140424.725744-1-maxime@cerno.tech>
+References: <20210721140424.725744-1-maxime@cerno.tech>
 MIME-Version: 1.0
-In-Reply-To: <20210714213946.GA3568065@robh.at.kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 14/07/21 23:39, Rob Herring ha scritto:
-> On Thu, Jul 01, 2021 at 12:57:29PM +0200, AngeloGioacchino Del Regno wrote:
->> The OSM programming addition has been done under the
->> qcom,cpufreq-hw-8998 compatible name: specify the requirement
->> of two additional register spaces for this functionality.
->> This implementation, with the same compatible, has been
->> tested on MSM8998 and SDM630.
-> 
-> Certainly we should be using the new binding for any new SoCs.
-> 
+The AXP803 compatible was introduced recently with a fallback to the
+AXP813, but it was never documented.
 
-Yes that's totally true, I should've probably added the new bindings directly
-instead of making it implicit that the 8998 model is valid for the others.
-Adding more bindings will explicitly clarify that the support is extended to
-630/660 so yeah, I agree.
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Sebastian Reichel <sre@kernel.org>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+ .../supply/x-powers,axp20x-ac-power-supply.yaml    | 11 +++++++----
+ .../x-powers,axp20x-battery-power-supply.yaml      | 11 +++++++----
+ .../supply/x-powers,axp20x-usb-power-supply.yaml   | 14 +++++++++-----
+ 3 files changed, 23 insertions(+), 13 deletions(-)
 
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->> ---
->>   .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 67 ++++++++++++++-----
->>   1 file changed, 52 insertions(+), 15 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->> index bc81b6203e27..29b663321a0b 100644
->> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->> @@ -18,6 +18,10 @@ description: |
->>   properties:
->>     compatible:
->>       oneOf:
->> +      - description: Non-secure v1 of CPUFREQ HW
->> +        items:
->> +          - const: qcom,cpufreq-hw-8998
->> +
->>         - description: v1 of CPUFREQ HW
->>           items:
->>             - const: qcom,cpufreq-hw
->> @@ -28,21 +32,9 @@ properties:
->>                 - qcom,sm8250-cpufreq-epss
->>             - const: qcom,cpufreq-epss
->>   
->> -  reg:
->> -    minItems: 2
->> -    maxItems: 3
->> -    items:
->> -      - description: Frequency domain 0 register region
->> -      - description: Frequency domain 1 register region
->> -      - description: Frequency domain 2 register region
->> +  reg: {}
->>   
->> -  reg-names:
->> -    minItems: 2
->> -    maxItems: 3
->> -    items:
->> -      - const: freq-domain0
->> -      - const: freq-domain1
->> -      - const: freq-domain2
->> +  reg-names: {}
->>   
->>     clocks:
->>       items:
->> @@ -57,10 +49,55 @@ properties:
->>     '#freq-domain-cells':
->>       const: 1
->>   
->> +if:
->> +  properties:
->> +    compatible:
->> +      contains:
->> +        const: qcom,cpufreq-hw-8998
->> +then:
->> +  properties:
->> +    reg:
->> +      minItems: 2
->> +      maxItems: 6
->> +      items:
->> +        - description: Frequency domain 0 register region
->> +        - description: Operating State Manager domain 0 register region
->> +        - description: Frequency domain 1 register region
->> +        - description: Operating State Manager domain 1 register region
->> +        - description: PLL ACD domain 0 register region (if ACD programming required)
->> +        - description: PLL ACD domain 1 register region (if ACD programming required)
->> +
->> +    reg-names:
->> +      minItems: 2
->> +      maxItems: 6
->> +      items:
->> +        - const: "osm-domain0"
->> +        - const: "freq-domain0"
->> +        - const: "osm-domain1"
->> +        - const: "freq-domain1"
->> +        - const: "osm-acd0"
->> +        - const: "osm-acd1"
-> 
-> This is different enough and there's not much else to this bindings, so
-> I think you should do a separate schema doc.
-> 
-> BTW, Don't need quotes here.
-> 
-
-If you think that this would be appropriate, then I guess it's trivial to
-do that and I will... though, I am 99% sure that these bindings will never
-get updated, as Qualcomm has shifted to do the programming in TZ and there
-surely will never be any new SoC requiring this kind of thing.
-
-The ones that do require this should be around 6, if my memory isn't failing...
-
->> +
->> +else:
->> +  properties:
->> +    reg:
->> +      minItems: 2
->> +      maxItems: 3
->> +      items:
->> +        - description: Frequency domain 0 register region
->> +        - description: Frequency domain 1 register region
->> +        - description: Frequency domain 2 register region
->> +    reg-names:
->> +      minItems: 2
->> +      maxItems: 3
->> +      items:
->> +        - const: "freq-domain0"
->> +        - const: "freq-domain1"
->> +        - const: "freq-domain2"
->> +
->>   required:
->>     - compatible
->>     - reg
->> -  - reg-names
->>     - clocks
->>     - clock-names
->>     - '#freq-domain-cells'
->> -- 
->> 2.32.0
->>
->>
+diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-ac-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-ac-power-supply.yaml
+index dcda6660b8ed..de6a23aee977 100644
+--- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-ac-power-supply.yaml
++++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-ac-power-supply.yaml
+@@ -21,10 +21,13 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - x-powers,axp202-ac-power-supply
+-      - x-powers,axp221-ac-power-supply
+-      - x-powers,axp813-ac-power-supply
++    oneOf:
++      - const: x-powers,axp202-ac-power-supply
++      - const: x-powers,axp221-ac-power-supply
++      - items:
++          - const: x-powers,axp803-ac-power-supply
++          - const: x-powers,axp813-ac-power-supply
++      - const: x-powers,axp813-ac-power-supply
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
+index 86e8a713d4e2..d1f0df123a5a 100644
+--- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
++++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
+@@ -19,10 +19,13 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - x-powers,axp209-battery-power-supply
+-      - x-powers,axp221-battery-power-supply
+-      - x-powers,axp813-battery-power-supply
++    oneOf:
++      - const: x-powers,axp202-battery-power-supply
++      - const: x-powers,axp221-battery-power-supply
++      - items:
++          - const: x-powers,axp803-battery-power-supply
++          - const: x-powers,axp813-battery-power-supply
++      - const: x-powers,axp813-battery-power-supply
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+index 61f1b320c157..0c371b55c9e1 100644
+--- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
++++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+@@ -20,11 +20,15 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - x-powers,axp202-usb-power-supply
+-      - x-powers,axp221-usb-power-supply
+-      - x-powers,axp223-usb-power-supply
+-      - x-powers,axp813-usb-power-supply
++    oneOf:
++      - enum:
++          - x-powers,axp202-usb-power-supply
++          - x-powers,axp221-usb-power-supply
++          - x-powers,axp223-usb-power-supply
++          - x-powers,axp813-usb-power-supply
++      - items:
++          - const: x-powers,axp803-usb-power-supply
++          - const: x-powers,axp813-usb-power-supply
+ 
+ 
+ required:
+-- 
+2.31.1
 
