@@ -2,162 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C333D075E
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jul 2021 05:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236543D0971
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jul 2021 09:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbhGUCtc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jul 2021 22:49:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32984 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231363AbhGUCtb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jul 2021 22:49:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626838208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k05rJ04IU9dEG8xbaeJSAOzZNy8JTOVIRfo0vVOjOCg=;
-        b=UkrQAPY/jJJBP7IhjgyWmTvbkFxAnwKlONODMGHTpjbG14cFAtDREsLYAMEWKPzvUbCaeu
-        qkdS4IMQJXcDLPOYDhttPJMTOLlGxf6nN2Bs5KMyFmoNntNru5d8IcKht8AMnnGubPHYYt
-        kNnJPHioxad/MoAhuD6i3+HpGkXR+tA=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-479-PNcotGnhPeO958BhZ5wxPA-1; Tue, 20 Jul 2021 23:30:07 -0400
-X-MC-Unique: PNcotGnhPeO958BhZ5wxPA-1
-Received: by mail-pf1-f199.google.com with SMTP id s5-20020aa78d450000b02902ace63a7e93so966670pfe.8
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jul 2021 20:30:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=k05rJ04IU9dEG8xbaeJSAOzZNy8JTOVIRfo0vVOjOCg=;
-        b=W6dEOnA80LpgkRjOth3fcb18Tb29CX9C0TRn8Dv4lUAR8zP+I01oSBZanv/O3dLQfJ
-         5S+2hKxiI5yDUpWdClvrW0sW9ltHrPUlGjqSlrDCZOhDxA17d7/1lWT7IffEq59Akaw3
-         ho53HYobIhNNG82eIgFuNG4eGQkeB6NsGOClVBFCEhBdBaFgpdMLGcZbjVfRyeht6fSe
-         J1fKQS16YWNzb0hAxMDFJtK2ihd46sGLYT+S66caelmWXHONhOli2BEcoKO5rgQxP7Yt
-         VtI/n2zi7APCsKKn7tLlmHdcdDkI/d5ULE4UIMGd0CKSNqdqbZ90PQLfiEr5T62goV4J
-         TBlw==
-X-Gm-Message-State: AOAM533F80ZWbt4wJ53QWFIJix2JYaLw/4YgHZkn/5eVsHl/jCA0EisD
-        VHREKEMztp1q2yV5MXA57Wh2v71qqx8tByjZh1XoNaAIB13NlCKefj4UqIX63qe7KEStmZ1IEN7
-        CNQTa+F3bNyIdKZK9WJc=
-X-Received: by 2002:a17:90a:17eb:: with SMTP id q98mr1637498pja.183.1626838206005;
-        Tue, 20 Jul 2021 20:30:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyESsAEWCDLWvcTfXZOmxCYVAakGzjamKbkQkgTTty1VuN8o5+HezI8WKMk3qXoufEpH/sFbw==
-X-Received: by 2002:a17:90a:17eb:: with SMTP id q98mr1637476pja.183.1626838205751;
-        Tue, 20 Jul 2021 20:30:05 -0700 (PDT)
-Received: from wangxiaodeMacBook-Air.local ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id w14sm30244343pgo.75.2021.07.20.20.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jul 2021 20:30:05 -0700 (PDT)
-Subject: Re: [RFC 0/3] cpuidle: add poll_source API and virtio vq polling
-To:     Stefan Hajnoczi <stefanha@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        virtualization@lists.linux-foundation.org,
-        linux-pm@vger.kernel.org, Christoph Hellwig <hch@infradead.org>
-References: <20210713161906.457857-1-stefanha@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <1008dee4-fce1-2462-1520-f5432bc89a07@redhat.com>
-Date:   Wed, 21 Jul 2021 11:29:55 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        id S234501AbhGUGan (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jul 2021 02:30:43 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:43394 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234387AbhGUG2y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 02:28:54 -0400
+X-UUID: 89419f5c2c724cbcb7edb9126c754917-20210721
+X-UUID: 89419f5c2c724cbcb7edb9126c754917-20210721
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 578080394; Wed, 21 Jul 2021 15:09:06 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 21 Jul 2021 15:09:04 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 21 Jul 2021 15:09:04 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v20 0/7] soc: mediatek: SVS: introduce MTK SVS engine
+Date:   Wed, 21 Jul 2021 15:08:57 +0800
+Message-ID: <20210721070904.15636-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20210713161906.457857-1-stefanha@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-在 2021/7/14 上午12:19, Stefan Hajnoczi 写道:
-> These patches are not polished yet but I would like request feedback on this
-> approach and share performance results with you.
->
-> Idle CPUs tentatively enter a busy wait loop before halting when the cpuidle
-> haltpoll driver is enabled inside a virtual machine. This reduces wakeup
-> latency for events that occur soon after the vCPU becomes idle.
->
-> This patch series extends the cpuidle busy wait loop with the new poll_source
-> API so drivers can participate in polling. Such polling-aware drivers disable
-> their device's irq during the busy wait loop to avoid the cost of interrupts.
-> This reduces latency further than regular cpuidle haltpoll, which still relies
-> on irqs.
->
-> Virtio drivers are modified to use the poll_source API so all virtio device
-> types get this feature. The following virtio-blk fio benchmark results show the
-> improvement:
->
->               IOPS (numjobs=4, iodepth=1, 4 virtqueues)
->                 before   poll_source      io_poll
-> 4k randread    167102  186049 (+11%)  186654 (+11%)
-> 4k randwrite   162204  181214 (+11%)  181850 (+12%)
-> 4k randrw      159520  177071 (+11%)  177928 (+11%)
->
-> The comparison against io_poll shows that cpuidle poll_source achieves
-> equivalent performance to the block layer's io_poll feature (which I
-> implemented in a separate patch series [1]).
->
-> The advantage of poll_source is that applications do not need to explicitly set
-> the RWF_HIPRI I/O request flag. The poll_source approach is attractive because
-> few applications actually use RWF_HIPRI and it takes advantage of CPU cycles we
-> would have spent in cpuidle haltpoll anyway.
->
-> The current series does not improve virtio-net. I haven't investigated deeply,
-> but it is possible that NAPI and poll_source do not combine. See the final
-> patch for a starting point on making the two work together.
->
-> I have not tried this on bare metal but it might help there too. The cost of
-> disabling a device's irq must be less than the savings from avoiding irq
-> handling for this optimization to make sense.
->
-> [1] https://lore.kernel.org/linux-block/20210520141305.355961-1-stefanha@redhat.com/
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1360551/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
 
-Hi Stefan:
+changes since v19:
+- Rebase to kernel 5.14-rc1
+- Remove "if (svsp->rst)" check in svs_suspend()/svs_resume() because reset_control_assert()/reset_control_deassert() already takes care of this error handling.
 
-Some questions:
+Roger Lu (7):
+  [v20,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v20,2/7] arm64: dts: mt8183: add svs device information
+  [v20,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v20,4/7] soc: mediatek: SVS: add debug commands
+  [v20,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v20,6/7] arm64: dts: mt8192: add svs device information
+  [v20,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-1) What's the advantages of introducing polling at virtio level instead 
-of doing it at each subsystems? Polling in virtio level may only work 
-well if all (or most) of the devices are virtio
-2) What's the advantages of using cpuidle instead of using a thread (and 
-leverage the scheduler)?
-3) Any reason it's virtio_pci specific not a general virtio one?
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   15 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2523 +++++++++++++++++
+ 6 files changed, 2675 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
-Thanks
-
-(Btw, do we need to cc scheduler guys?)
-
-
->
-> Stefan Hajnoczi (3):
->    cpuidle: add poll_source API
->    virtio: add poll_source virtqueue polling
->    softirq: participate in cpuidle polling
->
->   drivers/cpuidle/Makefile           |   1 +
->   drivers/virtio/virtio_pci_common.h |   7 ++
->   include/linux/interrupt.h          |   2 +
->   include/linux/poll_source.h        |  53 +++++++++++++++
->   include/linux/virtio.h             |   2 +
->   include/linux/virtio_config.h      |   2 +
->   drivers/cpuidle/poll_source.c      | 102 +++++++++++++++++++++++++++++
->   drivers/cpuidle/poll_state.c       |   6 ++
->   drivers/virtio/virtio.c            |  34 ++++++++++
->   drivers/virtio/virtio_pci_common.c |  86 ++++++++++++++++++++++++
->   drivers/virtio/virtio_pci_modern.c |   2 +
->   kernel/softirq.c                   |  14 ++++
->   12 files changed, 311 insertions(+)
->   create mode 100644 include/linux/poll_source.h
->   create mode 100644 drivers/cpuidle/poll_source.c
->
 
