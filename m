@@ -2,115 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AFD3D003B
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jul 2021 19:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6923D061E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jul 2021 02:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbhGTQtM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jul 2021 12:49:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60416 "EHLO mail.kernel.org"
+        id S232245AbhGTXcE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jul 2021 19:32:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229627AbhGTQtI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Jul 2021 12:49:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1B198600D4;
-        Tue, 20 Jul 2021 17:29:43 +0000 (UTC)
+        id S231765AbhGTXcB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 20 Jul 2021 19:32:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F19266101B;
+        Wed, 21 Jul 2021 00:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626802186;
-        bh=dQ6r/chbOgykjGAd23iEH80jHjtf0Qtrm8TBrM0+oPg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=h//eQ0MpXU8d/CgDmQfQz/MYnx0cKNqQTcfCM8ar22itSA1O5Xihy6N9/8lEShRGV
-         CJTjqen/MKr8ItMYdZLvn+ywUQE/0hecv0cnC7u6aTluj0N6Q/Y2N30/oxrADheGfa
-         xwhwh3iFezb/QgtPLJO2GM4yFhwyrmtIHX3JrIKpLN2ixAyeEbPyGgJ6X5Urg7gCyl
-         3j5nu0QbePUvMid8Rx//IkaxcXURUs+D8omSdzFTtDuZzDdBFG3G2Pc926Z67e8R00
-         ih+1mMj/HyMGlrBg7d3tKVlOe+1nHqGwKtEM5SWpbEgeJC7WvN7bbs4vwwzsVmV6Qp
-         5UTMzx0/Ymt3A==
-Subject: Re: [PATCH v3 2/3] dt-bindings: Clean-up OPP binding node names in
- examples
-To:     Rob Herring <robh@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        linux-omap@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-References: <20210720144121.66713-1-robh@kernel.org>
- <20210720144121.66713-2-robh@kernel.org>
-From:   Georgi Djakov <djakov@kernel.org>
-Message-ID: <b30f82df-86f3-51b7-df78-607d4f83f1ab@kernel.org>
-Date:   Tue, 20 Jul 2021 20:29:40 +0300
+        s=k20201202; t=1626826359;
+        bh=lYXkX3S8CqeBNBxz55FI+vEABUN7e84q0v25YCXZZBo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=e7xYcm5OiSAtCgBJ1qa025M+AK2LwAiCsPvYKn3YRJr+nHuQUzKmDRiVhSFBMV2Pq
+         dCq6WtI4SueU/mhACB9slwpzSqgsEld/13OFoZVjMIifnk0UqX4rgqx12pt+zGVIF/
+         BbWkY+wWfCRujX2WzLx5zQar7xv6+IpJq2qeZR26rWoSGZ2MmfEYf1rxKv5i3G5SVN
+         G2JsxPbjg+YEr6yUKHCbcLf9lJuey/yuXwbw+TDGQBc/pKVEaTVW5sP2DZppCSsjVv
+         ntGhFKgEbrIvr+V9Mmb/20uQDlq3Z7uSs6UWP+0OO+6DW4T18t1MbhLOz/gJsTF4a6
+         IGPJreV/BIlYg==
+Date:   Tue, 20 Jul 2021 19:12:37 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Nikolai Zhubr <zhubr.2@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] x86: PIRQ/ELCR-related fixes and updates
+Message-ID: <20210721001237.GA144325@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <20210720144121.66713-2-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20.07.21 17:41, Rob Herring wrote:
-> In preparation to convert OPP bindings to DT schema, clean-up a few OPP
-> binding node names in the binding examples.
+On Tue, Jul 20, 2021 at 05:27:43AM +0200, Maciej W. Rozycki wrote:
+> Hi,
 > 
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Leonard Crestez <leonard.crestez@nxp.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-pm@vger.kernel.org
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Acked-by: Georgi Djakov <djakov@kernel.org>
-
-> ---
->   Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml   | 2 +-
->   Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml   | 2 +-
->   .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml       | 4 ++--
->   3 files changed, 4 insertions(+), 4 deletions(-)
+>  In the course of adding PIRQ routing support for Nikolai's FinALi system 
+> I realised we need to have some infrastructure for the indirectly accessed
+> configuration space implemented by some chipsets as well as Cyrix CPUs and 
+> also included with the Intel MP spec for the IMCR register via port I/O 
+> space locations 0x22/0x23.  With that in place I implemented PIRQ support 
+> for the Intel PCEB/ESC combined EISA southbridge using the same scheme to 
+> access the relevant registers and for the final remaining Intel chipset of 
+> the era, that is the i420EX.
 > 
-> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> index 0f73f436bea7..4bea51d1e7ea 100644
-> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> @@ -136,7 +136,7 @@ examples:
->         resets = <&reset 0>, <&reset 1>;
->       };
->   
-> -    gpu_opp_table: opp_table0 {
-> +    gpu_opp_table: opp-table {
->         compatible = "operating-points-v2";
->   
->         opp-533000000 {
-> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-> index 696c17aedbbe..d209f272625d 100644
-> --- a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-> @@ -160,7 +160,7 @@ examples:
->         #cooling-cells = <2>;
->       };
->   
-> -    gpu_opp_table: opp_table0 {
-> +    gpu_opp_table: opp-table {
->         compatible = "operating-points-v2";
->   
->         opp-533000000 {
-> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> index a8873739d61a..b8204ed22dd5 100644
-> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> @@ -81,10 +81,10 @@ examples:
->           noc_opp_table: opp-table {
->               compatible = "operating-points-v2";
->   
-> -            opp-133M {
-> +            opp-133333333 {
->                   opp-hz = /bits/ 64 <133333333>;
->               };
-> -            opp-800M {
-> +            opp-800000000 {
->                   opp-hz = /bits/ 64 <800000000>;
->               };
->           };
+>  While at it I chose to rewrite ELCR register accesses to avoid using 
+> magic numbers scattered across our code and use proper macros like with 
+> the remaining PIC registers, and while at it again I noticed and fixed a 
+> number of typos: s/ECLR/ELCR/.
 > 
+>  Since there are mechanical dependencies between the patches (except for 
+> typo fixes) I chose to send them as a series rather than individually, 
+> though 3/6 depends on: <https://lore.kernel.org/patchwork/patch/1452772/> 
+> necessarily as well, the fate of which is currently unclear to me.
+> 
+>  See individual change descriptions for details.
+> 
+>  Nikolai: for your system only 1/6 and 2/6 are required, though you are 
+> free to experiment with all the patches.  Mind that 3/6 mechanically 
+> depends on the earlier change for the SIO PIRQ router referred above.  In 
+> any case please use the debug patch for PCI code as well as the earlier 
+> patches for your other system and send the resulting bootstrap log for 
+> confirmation.
+> 
+>  Ideally this would be verified with PCI interrupt sharing, but for that 
+> you'd have to track down one or more multifunction option cards (USB 2.0 
+> interfaces with legacy 1.1 functions or serial/parallel multi-I/O cards 
+> are good candidates, but of course there are more) or option devices with 
+> PCI-to-PCI bridges, and then actually use some of these devices as well.  
+> Any interrupt sharing will be reported, e.g.:
+> 
+> pci 0000:00:07.0: SIO/PIIX/ICH IRQ router [8086:7000]
+> pci 0000:00:11.0: PCI INT A -> PIRQ 63, mask deb8, excl 0c20
+> pci 0000:00:11.0: PCI INT A -> newirq 0
+> PCI: setting IRQ 11 as level-triggered
+> pci 0000:00:11.0: found PCI INT A -> IRQ 11
+> pci 0000:00:11.0: sharing IRQ 11 with 0000:00:07.2
+> pci 0000:02:00.0: using bridge 0000:00:11.0 INT A to get INT A
+> pci 0000:00:11.0: sharing IRQ 11 with 0000:02:00.0
+> pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
+> pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
+> pci 0000:03:00.0: using bridge 0000:00:11.0 INT A to get INT A
+> pci 0000:00:11.0: sharing IRQ 11 with 0000:03:00.0
+> pci 0000:04:00.0: using bridge 0000:00:11.0 INT B to get INT A
+> pci 0000:04:00.3: using bridge 0000:00:11.0 INT A to get INT D
+> pci 0000:00:11.0: sharing IRQ 11 with 0000:04:00.3
+> pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
+> pci 0000:06:08.0: using bridge 0000:00:11.0 INT C to get INT A
+> pci 0000:06:08.1: using bridge 0000:00:11.0 INT D to get INT B
+> pci 0000:06:08.2: using bridge 0000:00:11.0 INT A to get INT C
+> pci 0000:00:11.0: sharing IRQ 11 with 0000:06:08.2
+> 
+> -- a lot of sharing and swizzling here. :)  You'd most definitely need: 
+> <https://lore.kernel.org/patchwork/patch/1454747/> for that though, as I 
+> can't imagine PCI BIOS 2.1 PIRQ routers to commonly enumerate devices 
+> behind PCI-to-PCI bridges, given that they fail to cope with more complex 
+> bus topologies created by option devices in the first place.
 
+Looks nicely done but I have no ability to review or test, so I assume
+the x86 folks will take care of this.
+
+Bjorn
