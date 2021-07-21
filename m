@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E953D1A49
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 01:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764113D1A4E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 01:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbhGUWbj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jul 2021 18:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S231145AbhGUWcQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jul 2021 18:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbhGUWbj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 18:31:39 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C9CC061757
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 16:12:14 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id f12-20020a056830204cb029048bcf4c6bd9so3619661otp.8
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 16:12:14 -0700 (PDT)
+        with ESMTP id S231133AbhGUWcP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 18:32:15 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F12C0613D3
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 16:12:50 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id w188so4623058oif.10
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 16:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
          :subject:to:cc;
-        bh=MPq/5xe+ZFrc5ThTaYuC8k1u7ZZx3W3gcPTLJ7TqUVc=;
-        b=Y05kIYu1Rc6yqQaGglurstZd9kUhswNFuOz4n0FMlXcPadby9Ug9bveEoYND5fgwJi
-         PiUJiRw+PELZ31ItnqcfWq2mSgCTAE7a7FPwBmt728U+NqePRiXzW1SEaOEjdAZCQEFY
-         VsB0ZeEUx6JQebpfCMhM+XBSHtwZxAdTgLr3c=
+        bh=8FOspe8EXemmdftQmdCKjMGD4GlMF6TNjn5qZ/urTzA=;
+        b=JujPltrXTID9FgcLmXYI1ZWisQEd6ZPMsqsoPqZyr7ByJev91/mrJXSOPpUzIFVaKE
+         sDc5C8Kjx4s+efZM9Ew06IwrZD3n4dxPvTft6hlBLyHNMwG3wNn8QCGxYoZImVhSZ8s8
+         mAi7lBCzi0ZZhb9aqLajQ/WYt3yCX6XhXF4wg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
          :user-agent:date:message-id:subject:to:cc;
-        bh=MPq/5xe+ZFrc5ThTaYuC8k1u7ZZx3W3gcPTLJ7TqUVc=;
-        b=cWSgjUwA7jhPh25LkDFrt135XBrDFn5qVMa9i5MuaAhCRbDC+Jckix3z88bAU//0V5
-         KRsoTsRk9M22wQhYz+uGdLdHBZ7HENw7/qM7kDrUpewET8GeivABxINay2nRj/mgOyyw
-         jHzV6Eb6B8FKUTA6ezFGXvRkfsXW1l07JVw8I264B30R4dB5tU3vLj9Bh0En9m780gAi
-         bYxP7xE8cFj2qH7wbje2c60ORvVBwPXXyhmA5GzhC6fI8FZ8r7bqQx5UNhE5XZ+VCoyB
-         m8gzIgabMz+HvW5VTq1b0oAJ7DiHTg3NQ0VbQNjx3SijkRVTN2DOoUrIZrx1VtH9if8O
-         hSgw==
-X-Gm-Message-State: AOAM531TPRNtGXg2I8T0bTIf2770mCwbK8GwN/YQ0aq4Ew2DblEP+8vk
-        v3ULCI0zSUKdUavIcT8oQFGcyx9rpCImrfNB/wFdRw==
-X-Google-Smtp-Source: ABdhPJzglFe0sSuxI2Kvcg8hWnhsIoLyZGok/Wp8G7gjYlEThZGGtf81RU4aHu7fYlFhlWtPY3Aipz35Jj9FSk0lAJ4=
-X-Received: by 2002:a9d:8c7:: with SMTP id 65mr27882594otf.25.1626909133892;
- Wed, 21 Jul 2021 16:12:13 -0700 (PDT)
+        bh=8FOspe8EXemmdftQmdCKjMGD4GlMF6TNjn5qZ/urTzA=;
+        b=TbV6rRw5WW5Ezn87pGC/LKQ0RKgGvWG9hJYnjXhwP64sn4XuyB1exP3pztkURej8rC
+         yMGcM1RrpmF9DHJsq3u93koCx2vpuCHr+M4m6U/WcnoZrdG6HWqn4oJKy0KjWPUKM8Co
+         3sqDakmhz4sM9L1p4Ad5fKacE9VlYz7xdzfjxoUhEB9qRETdhT5IjBBeuT1i5+NAhOvq
+         tn+iBaOuTMVkKfpOkszDlPJWLpuSjJwgvidR99dmOLxpm6TARhLT2EqLWA9LUDnlF6Iw
+         Oq4HQvVbluS7Bev2XJwA5N6w2NW9IqODIdJoSOX7+uqwTdvsVJvDg04zEWVP2cGZBjqr
+         HcdA==
+X-Gm-Message-State: AOAM5304qf1UfwPzWJDGa4Yo7xDy+bwcVQMDrpF5Jh4+5yp5EO9wn9xI
+        mv4VDrA+MmrgMhrERWt0MjxWR0PBemgBhF/zHCCXTg==
+X-Google-Smtp-Source: ABdhPJy8NuPRrw9bVuQcemTROc6i7a8wJv5B/r/uEFXnRHvKBvk6Hgu9VOi3NYL0M63QrdqC5paifG36zjJYN4het0A=
+X-Received: by 2002:aca:4dc6:: with SMTP id a189mr4207788oib.166.1626909170104;
+ Wed, 21 Jul 2021 16:12:50 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 21 Jul 2021 23:12:13 +0000
+ HTTPREST; Wed, 21 Jul 2021 23:12:49 +0000
 MIME-Version: 1.0
-In-Reply-To: <1620800053-26405-5-git-send-email-skakit@codeaurora.org>
-References: <1620800053-26405-1-git-send-email-skakit@codeaurora.org> <1620800053-26405-5-git-send-email-skakit@codeaurora.org>
+In-Reply-To: <1620800053-26405-6-git-send-email-skakit@codeaurora.org>
+References: <1620800053-26405-1-git-send-email-skakit@codeaurora.org> <1620800053-26405-6-git-send-email-skakit@codeaurora.org>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.9.1
-Date:   Wed, 21 Jul 2021 23:12:13 +0000
-Message-ID: <CAE-0n52BMdoRHe-oy2_8fji8KfBF8wQD9BR-MuRajSp7Keo79w@mail.gmail.com>
-Subject: Re: [PATCH V4 4/5] dt-bindings: input: pm8941-pwrkey: Convert pm8941
- power key binding to yaml
+Date:   Wed, 21 Jul 2021 23:12:49 +0000
+Message-ID: <CAE-0n52T0fOcZxn-ZoLyw-VHvjC0mR7J24O+0DynkcTsRNoi6g@mail.gmail.com>
+Subject: Re: [PATCH V4 5/5] dt-bindings: power: reset: qcom-pon: Convert qcom
+ PON binding to yaml
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -67,13 +67,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting satya priya (2021-05-11 23:14:12)
-> Convert qcom pm8941 power key binding from .txt to .yaml format.
->
-> The example has been removed in favour of full example being
-> available in the qcom,pon.yaml binding.
+Quoting satya priya (2021-05-11 23:14:13)
+> Convert qcom PON binding from .txt to .yaml format.
 >
 > Signed-off-by: satya priya <skakit@codeaurora.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
 
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
