@@ -2,89 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB9B3D2681
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 17:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB07D3D275A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 18:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbhGVOkl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jul 2021 10:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S229536AbhGVPcL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jul 2021 11:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbhGVOhq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jul 2021 10:37:46 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8EDC0613D3
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 08:18:21 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id y6so5649529ilj.13
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 08:18:21 -0700 (PDT)
+        with ESMTP id S229632AbhGVPcK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jul 2021 11:32:10 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0AEC061575
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 09:12:45 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id s5so5868829ild.5
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 09:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NI1tkVPHHCoVNKoha3MwqOvNjOSw9sWtWtPdC8h3zH4=;
-        b=Ahn32Cse8RzK3iPlUhzEXMgCqlvtSlil4ECp75F5+sIaZ02CcWWp9/Vd+RcRBiYgAc
-         93II+fSGzfGxh82aVjM64byakIpTqHX62IghtE6b5xsu1RYBFcHOka8xRRbgXrx+h8o8
-         apYS0erZEFF0VBhVVxk4aFiSs6ee3qCc0EIdI=
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=ICEz6n3pVf9Vk+tzL5p0fvUItl4lvYSroSdckHL7HBo=;
+        b=EPBubVQ+53GLxlG7PUtcHGG724gGseIWBF+8ETwzGmKmBd5jZNv1gOd6DW2uJZMGE9
+         2CVQH32kJUMf7kMPK9E+lQNS/jDxUKg16yng3vU46LIpDQCVsngUicaOZjL2TI16u8VC
+         a+oIOmKGPrcPojdhFUM33N0gWXjte2tzlt70I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=NI1tkVPHHCoVNKoha3MwqOvNjOSw9sWtWtPdC8h3zH4=;
-        b=OWJd15flKOI4Wb4ny0BYCmT1oVfUTp1NlU0JJlqsREmMhiVCRe53fo9vMzMBPsjozR
-         hU53Fu1EdWrjjHY0hiEfZJlLKPBDEmvjp8JeYErd01jxHwiTbDUuREOlzanOgic+D1T6
-         4RMMC9BUzWLc7/E0/1gQsABYGtnczib6I0lyqQVOGSC2HoJLoQqijD3p8Hvfvnp/b2Gj
-         vN3LIC+8svhl0QABGSNSNWKofAktzvX9fz3fLzr5wSFadW3v4vc2YaeBdYLC31VGOWDV
-         9KQsOLPw4W6YYL4r5b/6io9wBQbf1lslQER214BjnJ+hax0gg+WvvTZVvvhJezUOQpEi
-         OYAQ==
-X-Gm-Message-State: AOAM530SoHpevbgVKiDuXmpw8KHXAnOkwKlyHTSod1VLtlRF2Z847pBo
-        5HeI6D4o15WkWvOoCDFGfG4ThQ==
-X-Google-Smtp-Source: ABdhPJxPORMVGq60hUklsfidz/YTKslTfwxtHpvsxEKSZRelKAXW+THXMg90COpcDtEtyUVxutzd8w==
-X-Received: by 2002:a05:6e02:170c:: with SMTP id u12mr261404ill.116.1626967100492;
-        Thu, 22 Jul 2021 08:18:20 -0700 (PDT)
+        bh=ICEz6n3pVf9Vk+tzL5p0fvUItl4lvYSroSdckHL7HBo=;
+        b=MgyyuwBfzZRv+BGMKSfIrzUIlGiUGxpg1duPhmH8laR0TuCv52Q20+CxuJmLXeckP2
+         DmwZnDfaWW+IIzOLUohNqit4/4NTr1t1p8WLxe1ER/ejPZ6fmUIGnhlpMlgGKOjgpTLf
+         8iPGvk+dPClB6iAjHMGMuaCdzr2HmOMeuj+vRDxw0j9elDFqIOZRfEFEKc3y0VvdOac5
+         Ao518vxz2DGH+eRgkFWQhhK6CbdpcQBYHKnQlerAvOQMZof8D+DxZwyISUuRVGn4G0MF
+         wVeWtWIXnY4vQlxy2NPLEvoYnn8fJ9Sq+d16QmBfcYLwlueNPiwHL6M+p5DncBDMBFQl
+         hYhw==
+X-Gm-Message-State: AOAM531ASBaJrLLjiJcX6Zo1eIshlqx2Fqd//VQvMBDl8Mmej/faifWp
+        LP+vP9QncdbbHnfJ60SsaPJelg==
+X-Google-Smtp-Source: ABdhPJxjvwU6Eln78LNnvW8d/s+U82xI1U1CMBs/mmnancvRG7gaqP3MZicYf+t0JWMPeL8pwTscoA==
+X-Received: by 2002:a92:7f03:: with SMTP id a3mr397983ild.254.1626970364903;
+        Thu, 22 Jul 2021 09:12:44 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id e14sm14805326ilq.32.2021.07.22.08.18.19
+        by smtp.gmail.com with ESMTPSA id k4sm16391894ior.55.2021.07.22.09.12.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jul 2021 08:18:20 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] cpupower: Fix amd cpu (family < 0x17) active state
- issue
-To:     =?UTF-8?B?5b6Q56aP5rW3?= <xufuhai1992@gmail.com>, shuah@kernel.org,
-        Thomas Renninger <trenn@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lishujin@kuaishou.com, xufuhai <xufuhai@kuaishou.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <b709dee3-4337-56bd-9ecb-a983142e416d@gmail.com>
+        Thu, 22 Jul 2021 09:12:44 -0700 (PDT)
+Subject: Re: [PATCH] tools: cpupower: fix typo in cpupower-idle-set(1) manpage
+To:     andreas@rammhold.de, Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20210716200034.2158602-1-andreas@rammhold.de>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f4a86da9-446b-7104-e785-b4380dbc216a@linuxfoundation.org>
-Date:   Thu, 22 Jul 2021 09:18:19 -0600
+Message-ID: <f8778c74-bfd9-d366-1c39-55dbccb84d0c@linuxfoundation.org>
+Date:   Thu, 22 Jul 2021 10:12:43 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <b709dee3-4337-56bd-9ecb-a983142e416d@gmail.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <20210716200034.2158602-1-andreas@rammhold.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/30/21 12:58 AM, Ðì¸£º£ wrote:
-> From: xufuhai<xufuhai@kuaishou.com>
+On 7/16/21 2:00 PM, andreas@rammhold.de wrote:
+> From: Andreas Rammhold <andreas@rammhold.de>
 > 
-> For the old  AMD processor (family < 0x17), cpupower will call the
-> amd_pci_get_num_boost_states function, but for the non-root user
-> pci_read_byte function (implementation comes from the psutil library),
-> val will be set to 0xff, indicating that there is no read function
-> callback. At this time, the original logic will set the cpupower turbo
-> active state to yes. This is an obvious issue~
+> The tools name was wrong in the SYNTAX section of the manpage it should
+> read "idle-set" instead of "idle-info".
 > 
-> Reproduce procedure:
-> 	cpupower frequency-info
+> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+> ---
+>   tools/power/cpupower/man/cpupower-idle-set.1 | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
+> index 21916cff7516..8cef3c71e19e 100644
+> --- a/tools/power/cpupower/man/cpupower-idle-set.1
+> +++ b/tools/power/cpupower/man/cpupower-idle-set.1
+> @@ -4,7 +4,7 @@
+>   cpupower\-idle\-set \- Utility to set cpu idle state specific kernel options
+>   .SH "SYNTAX"
+>   .LP
+> -cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
+> +cpupower [ \-c cpulist ] idle\-set [\fIoptions\fP]
+>   .SH "DESCRIPTION"
+>   .LP
+>   The cpupower idle\-set subcommand allows to set cpu idle, also called cpu
 > 
 
-Please resend this patch and the following from the same
-address as the Signed-off-by.
+Thank you. Applied to
 
-https://patchwork.kernel.org/project/linux-pm/patch/2dccdf57-1546-e55e-2efe-3ac91ed7f043@gmail.com/
+git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower
+
+This patch will be included in my next cpupower pull request to Rafael.
 
 thanks,
 -- Shuah
+
