@@ -2,102 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB07D3D275A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 18:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9894E3D2C87
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 21:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbhGVPcL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jul 2021 11:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S230290AbhGVSeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jul 2021 14:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbhGVPcK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jul 2021 11:32:10 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0AEC061575
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 09:12:45 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id s5so5868829ild.5
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 09:12:45 -0700 (PDT)
+        with ESMTP id S230103AbhGVSeF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jul 2021 14:34:05 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0DFC061575
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 12:14:39 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id a17-20020a9d3e110000b02904ce97efee36so1001001otd.7
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 12:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=ICEz6n3pVf9Vk+tzL5p0fvUItl4lvYSroSdckHL7HBo=;
-        b=EPBubVQ+53GLxlG7PUtcHGG724gGseIWBF+8ETwzGmKmBd5jZNv1gOd6DW2uJZMGE9
-         2CVQH32kJUMf7kMPK9E+lQNS/jDxUKg16yng3vU46LIpDQCVsngUicaOZjL2TI16u8VC
-         a+oIOmKGPrcPojdhFUM33N0gWXjte2tzlt70I=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=isgGvNleCQDQ5ZdmwxZj9FzyqTxiANzYbXVOil6iZug=;
+        b=odMklhiy7f9Hhe0qNbb4ZYtcPisRl4sRDuCYCq7tr+NcbNJDToHW7voaQIecnecbe6
+         As7AmhKgxJqED0N/8dsuHvZe1gC8+sFQv1pQP+h9Yg3v54VSADxrkZC++GU50J3FSbUd
+         oJIuqZpW2tvzpttnWB58/CND0Ie3Iuoh0hk8dQDYWYwOqGmCHwUlY6zorYcz4kVjZC32
+         XwNYQAADKHKX/ERlHsaCcypmOoLMWUYwEfMQ+ANTukDrkr3Z18FhTbTlL4m6D5/bPTcX
+         E95a2mVGDQy0XHgt53OPE1NPq6NJV7tLRHWO3no8bETSK7aKcmLNipnzOeRZjnlhY0xf
+         JxMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ICEz6n3pVf9Vk+tzL5p0fvUItl4lvYSroSdckHL7HBo=;
-        b=MgyyuwBfzZRv+BGMKSfIrzUIlGiUGxpg1duPhmH8laR0TuCv52Q20+CxuJmLXeckP2
-         DmwZnDfaWW+IIzOLUohNqit4/4NTr1t1p8WLxe1ER/ejPZ6fmUIGnhlpMlgGKOjgpTLf
-         8iPGvk+dPClB6iAjHMGMuaCdzr2HmOMeuj+vRDxw0j9elDFqIOZRfEFEKc3y0VvdOac5
-         Ao518vxz2DGH+eRgkFWQhhK6CbdpcQBYHKnQlerAvOQMZof8D+DxZwyISUuRVGn4G0MF
-         wVeWtWIXnY4vQlxy2NPLEvoYnn8fJ9Sq+d16QmBfcYLwlueNPiwHL6M+p5DncBDMBFQl
-         hYhw==
-X-Gm-Message-State: AOAM531ASBaJrLLjiJcX6Zo1eIshlqx2Fqd//VQvMBDl8Mmej/faifWp
-        LP+vP9QncdbbHnfJ60SsaPJelg==
-X-Google-Smtp-Source: ABdhPJxjvwU6Eln78LNnvW8d/s+U82xI1U1CMBs/mmnancvRG7gaqP3MZicYf+t0JWMPeL8pwTscoA==
-X-Received: by 2002:a92:7f03:: with SMTP id a3mr397983ild.254.1626970364903;
-        Thu, 22 Jul 2021 09:12:44 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k4sm16391894ior.55.2021.07.22.09.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jul 2021 09:12:44 -0700 (PDT)
-Subject: Re: [PATCH] tools: cpupower: fix typo in cpupower-idle-set(1) manpage
-To:     andreas@rammhold.de, Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20210716200034.2158602-1-andreas@rammhold.de>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f8778c74-bfd9-d366-1c39-55dbccb84d0c@linuxfoundation.org>
-Date:   Thu, 22 Jul 2021 10:12:43 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=isgGvNleCQDQ5ZdmwxZj9FzyqTxiANzYbXVOil6iZug=;
+        b=j+svr6DLjXwIZJS5z6RNkwd8ZqrDiLZsJxksEu2VudwiYq3yqVWplppi2Opey8BQZu
+         fA3Hj/DYf810KlbNNMst+kvii+PxExA3D3u19R2N4bDd4+JRQUbQWzMiScWiLKFIkB7/
+         CNNQTGVF9vwGtz/GNQyOnSLn3WLtNVU5IzA753GhK/YRWshllSrI+mYw2d6bIs0uFqgl
+         7SadUX5DYkn8pEGWcQl2S0mrES8nQ83bJM3Q0RCRM/EAEzbRUMMECvkK11rCuiOnre+x
+         B4efeu0ZJ5Vol99PqRi7av/ZvceDV/4PxYL5ORxiGIqeNPUp1bIcWITSbJ9JvSN3efob
+         zDFA==
+X-Gm-Message-State: AOAM531MmIg/m4qlDsfmOib2OUQ6I1KDkStnUuNJFLaRp4WPjMO0n6XA
+        hVFuhWGicUGeVynvTxw7bBo=
+X-Google-Smtp-Source: ABdhPJzgWs3FZsYUB2vP3NY/Nc9Pw28lermfl60sj+okNEm3iezGfjknBRBFVyB3MvfjvcBDvAjGUw==
+X-Received: by 2002:a9d:2d82:: with SMTP id g2mr924019otb.30.1626981278686;
+        Thu, 22 Jul 2021 12:14:38 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id r26sm3106167ooh.32.2021.07.22.12.14.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jul 2021 12:14:37 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
+        robh+dt@kernel.org, lee.jones@linaro.org,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [RFC 0/4] power: supply: Add Support for RK817 Charger
+Date:   Thu, 22 Jul 2021 14:14:26 -0500
+Message-Id: <20210722191430.28203-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210716200034.2158602-1-andreas@rammhold.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/16/21 2:00 PM, andreas@rammhold.de wrote:
-> From: Andreas Rammhold <andreas@rammhold.de>
-> 
-> The tools name was wrong in the SYNTAX section of the manpage it should
-> read "idle-set" instead of "idle-info".
-> 
-> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
-> ---
->   tools/power/cpupower/man/cpupower-idle-set.1 | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
-> index 21916cff7516..8cef3c71e19e 100644
-> --- a/tools/power/cpupower/man/cpupower-idle-set.1
-> +++ b/tools/power/cpupower/man/cpupower-idle-set.1
-> @@ -4,7 +4,7 @@
->   cpupower\-idle\-set \- Utility to set cpu idle state specific kernel options
->   .SH "SYNTAX"
->   .LP
-> -cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
-> +cpupower [ \-c cpulist ] idle\-set [\fIoptions\fP]
->   .SH "DESCRIPTION"
->   .LP
->   The cpupower idle\-set subcommand allows to set cpu idle, also called cpu
-> 
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Thank you. Applied to
+As this is my first charger driver, I'm submitting it as an RFC so I
+can get input from the community on what else is needed to make the
+driver consistent with the quality upstream expects.
 
-git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
-This patch will be included in my next cpupower pull request to Rafael.
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-thanks,
--- Shuah
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
+
+ .../devicetree/bindings/mfd/rk808.txt         |  35 +-
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  26 +
+ drivers/mfd/rk808.c                           |  16 +-
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rk817_charger.c          | 927 ++++++++++++++++++
+ include/linux/mfd/rk808.h                     |  87 ++
+ 7 files changed, 1095 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
+-- 
+2.25.1
 
