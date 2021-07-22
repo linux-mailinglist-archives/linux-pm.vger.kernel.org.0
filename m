@@ -2,478 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F35E3D1C49
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 05:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C393D1C8F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 05:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbhGVCd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jul 2021 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbhGVCdy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 22:33:54 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1410BC0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 20:14:30 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id u11so5186125oiv.1
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jul 2021 20:14:30 -0700 (PDT)
+        id S229900AbhGVDTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jul 2021 23:19:11 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:13138 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230438AbhGVDTK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jul 2021 23:19:10 -0400
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16M3pLIu004763;
+        Thu, 22 Jul 2021 03:59:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=0SLU7ucV7dhNxjJdhvrw7XDr45DyJQQKVqpcWkStXGM=;
+ b=0qdpyHP2XexAy0ofbq3lTxKYJTT8ThT+4QESLm/jFnr41GWa4Q/KB4Km933pugnU03ES
+ tgA2xW/L+LutN2qK5qucdk1umERJsn/XeEiGWWBiL224JKYwdlO8N2Sn0N9LHOY73k//
+ xS1YVDCo7MyxdWCwdhRxj9nqaC9vBbDpkyLFMvjGtIZVbRkoS88F4MB4xc+fZl7So3xk
+ 9gqzq3lDdFRmelvhs9El3ttTez0WT9Imv0wIfWwVGX7trqqr30EiT36SNBhC90YaHbZG
+ hjGyucuuPTClUrbfgMJN2O76Vu9E1yCMY7P/0iJu+Y0N8uSh6cAZGMEg4bitwxKz1VXc 2g== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2020-01-29;
+ bh=0SLU7ucV7dhNxjJdhvrw7XDr45DyJQQKVqpcWkStXGM=;
+ b=K6HHe/kPFJYCx2YWhNk8eRXMg51yj6L3UUuJ6Iq5/I4K3WWT4HYOkYAVp7q1ukIUUsET
+ l76MwZCJR0gaYtN/Rg51aYgekxJ/a1BABCwERlDS9EaE5JBqDNzkruGha61cNL1/ZuVF
+ FD/jFGlCh//ltI7gX8Vci9FRBmAow0yJPD2/NDqP/isnZtd9oVpPlr3xviO0Q23KsXDJ
+ E/Jbpn3P+O37hEdu0veeC1JFXjWEFQvx50OBx3bPByaHwJYWwagHFsnci9O+te2fbqTD
+ c1ZbciczxBmU9vv/E9u+PckBjJJnONN56wbHY34fdONJLb4FJ9LyrwhLuPvQNCEWzyQP EQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39xc6btj23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jul 2021 03:59:09 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16M3tNat182261;
+        Thu, 22 Jul 2021 03:59:09 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by aserp3030.oracle.com with ESMTP id 39wunn753m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jul 2021 03:59:08 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aiLhaN99jdPYG+Svfjnv5IcuOVWqlZ5/Xwa/SwzJ+96LzANtqnTKmi3sbFKoNkSppztmll7A/jn9MvmLHGEgZyFqQ2DKtDlubwsFC2akYSVibpMjycOKSGl4wouERqw2JMe9nt3VfSjqgEdUxAGS0a8fKQTeScPy2Acpadbo5LG+MCKn0JcpLt5u0cGsMB2D22aQRSLe7+C6xb7B5dg9pGjUKT9cNSqfFrl5KR0X3Aswf7VKV+MM01Ae2kE29hnLT6/67fii5MMiaJxquLkoVYiQIgJ8xHjbM0ZdtoldijkKZviulgK+PWeIrahHcfCoRDNR396EV4WG6t6Pjp2vZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0SLU7ucV7dhNxjJdhvrw7XDr45DyJQQKVqpcWkStXGM=;
+ b=CdFUl30SxkmHyWf3bMWgtg1enGhV5nJXQjseiPJB2BByv9/+uZovA4CbXvzQawwCjpJeerbQ/FOu/r0RPzWa3Mkfbh4I9ppbKnwagIUcam0dPLuPCnwbHXXTUv+vkdE02cSLwD0VfpAMmXmHVUcdNA5u3AKW3uVRaZeHCrb7ekbWbwhZSLSN/2cYgz4g6k5orJiUrQYYEdcHxltfAJAyG3UQESF6ZbFLFVtMEby4iVz4kTdoHtmq6h10eg1nu7ZmXq1D4wuTnwxC/g48botdBeUm5asFy+ADN7Ei2Ct1Pb44hnXlwZnX4Y2liKmyJVLNZFRjhquT/WqQi6winB8QJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=SVe4xUwviYCln6UFypUh195dRZrh9mig/tZa7Mov25Y=;
-        b=Q1kqTQ35FYsHWVdwEHZyo4CQkFwuDQgYd8OPCiagMkCOBgZm+XMSjRxV9LEA6ZbjDA
-         sYHs4O3yvJrLsAPWArnNSyrflX1jDtEQgaFKPmk+pjO/cw/YVP1PNY6rJSbZLga0TAQ7
-         Xmg/mB4wcKM5NRs6UIikiFiRVfZ6YdxwtMRh/n02/lAedW5poxyz6bNE6B1AeckFcZkz
-         dt4u75l57Z2k/VtPrnTG5ltEsTXA6eGJZHzSpXRv+oCh0w879nAjXOuAcgCnuJ91UqTU
-         Cj07J+c+vME8O/SJ69P6b7RvwP5NlZXsZoc47aUm0AdYSvbBK02jhgBW7cXPcPVWHf8F
-         u7RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=SVe4xUwviYCln6UFypUh195dRZrh9mig/tZa7Mov25Y=;
-        b=AdKIWnKC4sZlDcbJhYQcx9QXyoU1JJNu6Xhc/Bvq9iYTbLYRz3YnlBevLMkNw6L1a6
-         WuDx1QgxsRAhTORUzTSvs65C5rqRyg095URVagfH7Ko6dUSTo8mqIO3JSIe62DZ2rv1R
-         bFzy53AuSqVfdFGbdMcVQjMsRs3xgy9F9gdbAVxz47GQ//EbYYdR/qiR9nHuMd4CMsY/
-         HOZlcsU3X8Vob1ZwfAANW7mdxGEl0T/iGixeBwWPJV6qFYSDHGkBcC1CPgxTokbtccuS
-         z7/4MFIbc5cWFvmZi6eN4KolF9rku6yDfJ6kqKkvrmJxibU34sDVl39oi8GY83Y8PKiQ
-         CSNA==
-X-Gm-Message-State: AOAM531lQ6jpF3sTbaf/8ic43XwPCo+z/u3lnoEiH764IieoFpFMfIDo
-        YPjSosA9lKwXm4J6GbuzX/96mg==
-X-Google-Smtp-Source: ABdhPJyemqZzuzY7TnRUy3x6Do6ZA9+AQMjUmLqDYw2fxzufTEQ0F9eTtzBU5rGi0rYzM3VWYoyRMw==
-X-Received: by 2002:aca:5f8b:: with SMTP id t133mr4355606oib.15.1626923669217;
-        Wed, 21 Jul 2021 20:14:29 -0700 (PDT)
-Received: from MacBook-Pro.hackershack.net (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id v11sm2490478ott.68.2021.07.21.20.14.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jul 2021 20:14:28 -0700 (PDT)
-Subject: Re: [Patch v3 0/6] Introduce LMh driver for Qualcomm SoCs
-To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, robh+dt@kernel.org
-Cc:     tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210708120656.663851-1-thara.gopinath@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-Message-ID: <c630a7a0-d1d0-d04c-8abf-2490c0932661@kali.org>
-Date:   Wed, 21 Jul 2021 22:14:26 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0SLU7ucV7dhNxjJdhvrw7XDr45DyJQQKVqpcWkStXGM=;
+ b=XZqWbFu8Lvi9ZVu3WIL9DuMcKSvF/HAZNqvCt5Y6OSiX2wT2O68nU1ZRYCPo0hgqIsoP2zFEt5jNoofK9buyuuu1tIeV5+7Vdy8FVH0oFIHDyTe4ClMC8gO84EwpDSbcAnkBMF9NGgRppFZELiD6jFlyDTMgkZK7KYhb9UD38lc=
+Authentication-Results: puri.sm; dkim=none (message not signed)
+ header.d=none;puri.sm; dmarc=none action=none header.from=oracle.com;
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH0PR10MB4454.namprd10.prod.outlook.com (2603:10b6:510:3a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.24; Thu, 22 Jul
+ 2021 03:59:06 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::153e:22d1:d177:d4f1]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::153e:22d1:d177:d4f1%8]) with mapi id 15.20.4331.034; Thu, 22 Jul 2021
+ 03:59:06 +0000
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     bvanassche@acm.org, hch@infradead.org, jejb@linux.ibm.com,
+        kernel@puri.sm, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, stern@rowland.harvard.edu
+Subject: Re: [PATCH v6 0/3] fix runtime PM for SD card readers
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1czrbxapj.fsf@ca-mkp.ca.oracle.com>
+References: <20210704075403.147114-1-martin.kepplinger@puri.sm>
+Date:   Wed, 21 Jul 2021 23:59:02 -0400
+In-Reply-To: <20210704075403.147114-1-martin.kepplinger@puri.sm> (Martin
+        Kepplinger's message of "Sun, 4 Jul 2021 09:54:00 +0200")
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0501CA0081.namprd05.prod.outlook.com
+ (2603:10b6:803:22::19) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-In-Reply-To: <20210708120656.663851-1-thara.gopinath@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ca-mkp.ca.oracle.com (138.3.200.58) by SN4PR0501CA0081.namprd05.prod.outlook.com (2603:10b6:803:22::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.7 via Frontend Transport; Thu, 22 Jul 2021 03:59:05 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ccb2cbb2-4f5f-4ab0-572c-08d94cc50d32
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4454:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <PH0PR10MB445413B5B2F2BFF1283E82DB8EE49@PH0PR10MB4454.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JWQ9S322CXI/jhNjtUqlDgj1QrxKLV8yLSU7zr54xYKJyXNcCk1FeH1DLgQGT+CsroO7RmpJLIia4/iZFZUlBjWPjeRVFS+YhYXPLo3Y5zoG3a7Kh2ijF+8xtsKGNzcJaX/IcRCj3u2tnYkmmeNQgOxlByzXZd4eW4a5nQARCB+qC33Ituilm3V4agmUwx3o1NNgEqDnz3U/vNC0+XShMbxDkVJEF0AZuE6VowHWV1EmxezK841o3SQBhY3Ctr5T6JssfXlYy6nZYgOLDvcy16uyOPDE7F9IXL9HKZq2GfYHwGkMmo2Px8nB/HLH0jKWYv2dvCvrZ0AAr521pLzyNkx9FBy0TNYMeC7ArE9ppvv/yfrU2lkFqt/3vmsE1361IwLRs+1kXd49gBj4tnkjX3pO9/2Abeho4LvK3BsPP2vhPIe1AKi/zthkDd7Z0d3CXRYKWNYbA+IEh7ZH5jUQpi5iztbohpLBWiO4YqUzfUaDh6vp6AffhDzEIlYrWHg5kym8ZYogNAq+2PDYC/Wn4EKVAeFfUmrvP447GQUZ6cPImp+P3wGyt5MPVDolUJKqMTrYRdbu+eZzUMWnebHwnVvGH+No/9jWzjAwiYMRhEnUNA6Ltn1jnVOl6DxXz9rVk2aW0GE/ypb6c41MBKSRSNaHnEYxHqlbV1O9y1bX5430fogYR6XS2HeyxWg4nn4DzaFFkEw1UbrW7mu6Ygjztg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(316002)(7696005)(8676002)(5660300002)(66476007)(8936002)(36916002)(52116002)(186003)(508600001)(4326008)(66556008)(6666004)(66946007)(956004)(26005)(2906002)(38100700002)(86362001)(6916009)(55016002)(4744005)(38350700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1HXm0/T5snTMLBozEfvv5d9OTRZgcoRrJqSXWg3Ks1j1uSsSlbHxnnRs9ol+?=
+ =?us-ascii?Q?YkUdJU6czkp2dpbr/ABLQsA3qZ0RcWukXFO9e5Tv+/Dt0yys4VZHNwNWOjWT?=
+ =?us-ascii?Q?35LpoX/xSZf5QyRyf6UrvXAU6T22dtMrpvJ9TZaNH/+artYmQI0Zm46jeWXJ?=
+ =?us-ascii?Q?nq69q8HgbPgrXbPNGvdCHvvJIgdbhFml0t1hYpmwVfxOPa29WGmjNjqAtGdd?=
+ =?us-ascii?Q?BdjpXnUCCdHZ9hl8pSQpSYlgN2A2m17hyricAcGpbvziIMxka6aLda0lQEeO?=
+ =?us-ascii?Q?x0P7LoeNvlwiRK7ljXAmF9WxQIv6acFJ68+I1JgrrJ4+ob5ZDNDTGaal5HaA?=
+ =?us-ascii?Q?o9n6rzu20tMO1fyH2MCtxEzhqNSNu7L2fLOw09ZNTSQN1OR0MC6TbZGOQBAY?=
+ =?us-ascii?Q?+3l3RC05UtHBJYyPg+yBJLok0cQ2fHu53dhnbK4nLK7rzOmCfinrR51atK1j?=
+ =?us-ascii?Q?onh+2Q9ntUGLiBjx2bnqB7dWrcXjMMsTu8h5ddNguRTJ7WLdiBTSx6xFFsUS?=
+ =?us-ascii?Q?YgcZ90Q1X430L274HFeW1zQxlgoGyAI+X3LqQmztakE3UtGqxuEIc0dtSEnP?=
+ =?us-ascii?Q?zPqwkt9l4p0CrpbxzXeDwc0HLOL6Qj8atJZsIi7Es2gOPvMR6j7RI5OoPZpX?=
+ =?us-ascii?Q?de3ose/JBz3RPZqFYDnT2NVfKBciY+n8L65+T7FGQXSYzWQADnYDPDOWXVGM?=
+ =?us-ascii?Q?SowbHCBKCpZ3uX/5RVD7rUmZ+3WhufiwIyPff8/fAL9fVO8XeRWLGEj1xsJp?=
+ =?us-ascii?Q?YlgR5gylrzJ0yjwCGVmDRrKHSfRGN8lFa+e/jBsylBZTZkN/tozqbf9bR+Ls?=
+ =?us-ascii?Q?Vxjv1sfrBMHkyif21tBZoExOHAGfEJRHCAm0/9IMGese4tBug4ilCHrhA+0l?=
+ =?us-ascii?Q?FuX/e8wNExyDVWPbHA9l7gxcyy7owtOo5X396MBYRbFbi6FQrtfL+X5Pxjz1?=
+ =?us-ascii?Q?hrJTEQ3DezxRhF9SRwHzDhRW5ZusXD/aYFJiK5FbnP6AQTjU+Zt0o+FsMiya?=
+ =?us-ascii?Q?7hU/3FOFt5abp9Zf/VmbwCTlVKjLHOmFLsAyRtgUvxxGQOOxCioZU1WUulTP?=
+ =?us-ascii?Q?Hp7gMXHEULEODTx1dIxz6Fc1bklunuUlMaHM5PQxFhmeh4bcpfxdme2KDwJd?=
+ =?us-ascii?Q?CHLvVlqm7UGxcpZOa3nL1rJm035+gYSuIc/CoNa4h4ek3vUglwPGluWOljhX?=
+ =?us-ascii?Q?ZFXjKPLTEIVv606b7imhXuezbrTEj42mWrEERf+H3cbWtm1RrGzLOVmZ5P5T?=
+ =?us-ascii?Q?Ig+f/AtVWWiWUNhrUD9YBXwm0VgH8sH4Mrqo4Y3R3bl9xDqA0hODbmIAKZgk?=
+ =?us-ascii?Q?ryQH+UTw/DGh+hSNJxpHjx4v?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccb2cbb2-4f5f-4ab0-572c-08d94cc50d32
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2021 03:59:06.5049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BI80WNtM6uJrawYxPrSLTDbZw5lbNui+nVx4sR9R6cGlnQrgGxfoMhN5/Rupt10XrAQBDU6VU5n23T4YSbaQ5ckQ/ytg+jGohnbNA/SnOwI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4454
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10052 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2107220020
+X-Proofpoint-GUID: pf64l-3G5lHXcJo2HMPkrze_SCRzBB9a
+X-Proofpoint-ORIG-GUID: pf64l-3G5lHXcJo2HMPkrze_SCRzBB9a
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thara!
 
-On 7/8/21 7:06 AM, Thara Gopinath wrote:
-> Limits Management Hardware(LMh) is a hardware infrastructure on some
-> Qualcomm SoCs that can enforce temperature and current limits as programmed
-> by software for certain IPs like CPU. On many newer SoCs LMh is configured
-> by firmware/TZ and no programming is needed from the kernel side. But on
-> certain SoCs like sdm845 the firmware does not do a complete programming of
-> the h/w block. On such SoCs kernel software has to explicitly set up the
-> temperature limits and turn on various monitoring and enforcing algorithms
-> on the hardware.
->
-> Introduce support for enabling and programming various limit settings and
-> monitoring capabilities of Limits Management Hardware(LMh) associated with
-> cpu clusters. Also introduce support in cpufreq hardware driver to monitor
-> the interrupt associated with cpu frequency throttling so that this
-> information can be conveyed to the schdeuler via thermal pressure
-> interface.
->
-> With this patch series following cpu performance improvement(30-70%) is
-> observed on sdm845. The reasoning here is that without LMh being programmed
-> properly from the kernel, the default settings were enabling thermal
-> mitigation for CPUs at too low a temperature (around 70-75 degree C).  This
-> in turn meant that many a time CPUs were never actually allowed to hit the
-> maximum possible/required frequencies.
->
-> UnixBench whets and dhry (./Run whets dhry)
-> System Benchmarks Index Score
->
->                 Without LMh Support             With LMh Support
-> 1 copy test     1353.7                          1773.2
->
-> 8 copy tests    4473.6                          7402.3
->
-> Sysbench cpu
-> sysbench cpu --threads=8 --time=60 --cpu-max-prime=100000 run
->
->                 Without LMh Support             With LMh Support
-> Events per
-> second                  355                             614
->
-> Avg Latency(ms)         21.84                           13.02
->
-> v2->v3:
-> 	- Included patch adding dt binding documentation for LMh nodes.
-> 	- Rebased to v5.13
->
-> Thara Gopinath (6):
->   firmware: qcom_scm: Introduce SCM calls to access LMh
->   thermal: qcom: Add support for LMh driver
->   cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
->   arm64: boot: dts: qcom: sdm45: Add support for LMh node
->   arm64: boot: dts: qcom: sdm845: Remove cpufreq cooling devices for CPU
->     thermal zones
->   dt-bindings: thermal: Add dt binding for QCOM LMh
->
->  .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          | 162 ++----------
->  drivers/cpufreq/qcom-cpufreq-hw.c             | 118 +++++++++
->  drivers/firmware/qcom_scm.c                   |  58 +++++
->  drivers/firmware/qcom_scm.h                   |   4 +
->  drivers/thermal/qcom/Kconfig                  |  10 +
->  drivers/thermal/qcom/Makefile                 |   1 +
->  drivers/thermal/qcom/lmh.c                    | 239 ++++++++++++++++++
->  include/linux/qcom_scm.h                      |  14 +
->  9 files changed, 570 insertions(+), 136 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
->  create mode 100644 drivers/thermal/qcom/lmh.c
->
-I've been using these patches on a 5.13 kernel
-(https://github.com/steev/linux/tree/linux-5.13.y - while trying to
-track down a different issue, while playing a video on youtube, as well
-as compressing a 9.2GB file with xz, I got the following
+Martin,
 
-|Jul 21 21:44:21 limitless kernel: [ 5438.914591] EXT4-fs (loop0p1):
-mounting ext3 file system using the ext4 subsystem |
+> (According to Alan Stern, "as far as I know, all") SD card readers
+> send MEDIA_CHANGED unit attention notification on (runtime) resume. We
+> cannot use runtime PM with these devices as I/O always fails in that
+> case.
 
-|Jul 21 21:44:21 limitless kernel: [ 5438.920817] EXT4-fs (loop0p1):
-mounted filesystem with ordered data mode. Opts: (null). Quota mode:
-none. |
+Made a few changes (added "ignore" to clarify what the flag does and
+twiddled how the workaround is triggered in sd.c). Applied to
+5.15/scsi-staging, thanks!
 
-|Jul 21 21:45:56 limitless kernel: [ 5533.893290] BUG: scheduling while
-atomic: swapper/0/0/0x00010000 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.893333] Modules linked in:
-dm_mod loop tcp_diag inet_diag aes_ce_ccm rfcomm algif_hash
-algif_skcipher af_alg bnep lz4 lz4_compress q6asm_dai zram q6routing
-zsmalloc q6afe_dai q6adm q6asm q6afe q6dsp_common q6core snd_soc_wsa881x
-regmap_sdw snd_soc_wcd934x soundwire_qcom gpio_wcd934x binfmt_misc
-venus_enc venus_dec videobuf2_dma_contig nls_ascii nls_cp437 vfat fat
-wcd934x regmap_slimbus qrtr_smd fastrpc apr aes_ce_blk crypto_simd
-cryptd aes_ce_cipher crct10dif_ce ghash_ce gf128mul sha2_ce uvcvideo
-videobuf2_vmalloc videobuf2_memops hci_uart ath10k_snoc sha256_arm64
-sha1_ce btqca ath10k_core ath btrtl mac80211 btbcm btintel
-snd_soc_sdm845 snd_soc_rt5663 snd_soc_qcom_common snd_soc_rl6231
-soundwire_bus pm8941_pwrkey qcom_spmi_adc5 bluetooth qcom_vadc_common
-snd_soc_core venus_core snd_compress snd_pcm_dmaengine snd_pcm
-v4l2_mem2mem snd_timer snd qcom_spmi_temp_alarm videobuf2_v4l2 soundcore
-industrialio videobuf2_common videodev joydev mc hid_multitouch
-ecdh_generic ecc cfg80211 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.893841]  qcom_rng sg rfkill
-qrtr ns libarc4 qcom_q6v5_mss slim_qcom_ngd_ctrl qcom_q6v5_pas evdev
-pdr_interface qcom_pil_info qcom_q6v5 slimbus qcom_sysmon rmtfs_mem
-bam_dma qcom_wdt fuse configfs ip_tables x_tables autofs4 ext4 mbcache
-jbd2 msm rtc_pm8xxx llcc_qcom ti_sn65dsi86 ocmem i2c_hid_of
-drm_kms_helper ipa qcom_common qmi_helpers mdt_loader camcc_sdm845
-panel_simple drm gpio_keys |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894072] CPU: 0 PID: 0 Comm:
-swapper/0 Tainted: G        W         5.13.4 #1 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894087] Hardware name: LENOVO
-81JL/LNVNB161216, BIOS 9UCN33WW(V2.06) 06/ 4/2019 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894098] Call trace: |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894103]  dump_backtrace+0x0/0x1e4 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894133]  show_stack+0x24/0x30 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894150]  dump_stack+0xd0/0x12c |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894168]  __schedule_bug+0x68/0x80 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894186]  __schedule+0x74c/0x8ac |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894202]  schedule+0x54/0xe0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894217]  schedule_preempt_disabled+0x1c/0x2c |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894234]  __mutex_lock.constprop.0+0x55c/0x590 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894247]  __mutex_lock_slowpath+0x1c/0x30 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894260]  mutex_lock+0x6c/0x80 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894271]  dev_pm_opp_find_freq_floor+0x4c/0x200 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894287]  qcom_lmh_dcvs_notify+0x74/0x170 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894301]  qcom_lmh_dcvs_handle_irq+0x30/0x44 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894313]  __handle_irq_event_percpu+0x68/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894328]  handle_irq_event+0x6c/0x1b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894340]  handle_simple_irq+0xc8/0x170 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894355]  generic_handle_irq+0x3c/0x5c |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894368]  lmh_handle_irq+0x40/0x50 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894383]  __handle_irq_event_percpu+0x68/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894395]  handle_irq_event+0x6c/0x1b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894407]  handle_fasteoi_irq+0xcc/0x1fc |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894421]  __handle_domain_irq+0x88/0xec |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894433]  gic_handle_irq+0xc8/0x148 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894446]  el1_irq+0xbc/0x140 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894458]  arch_local_irq_enable+0xc/0x14 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894473]  __schedule+0x2fc/0x8ac |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894489]  schedule_idle+0x34/0x54 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894504]  do_idle+0x1a4/0x2b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894520]  cpu_startup_entry+0x34/0xa0 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894536]  rest_init+0xcc/0xdc |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894550]  arch_call_rest_init+0x1c/0x28 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.894567]  start_kernel+0x5b4/0x5ec |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894954] ------------[ cut here
-]------------ |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.894966] irq 156 handler
-qcom_lmh_dcvs_handle_irq+0x0/0x44 enabled interrupts |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895005] WARNING: CPU: 0 PID: 0
-at kernel/irq/handle.c:159 __handle_irq_event_percpu+0x1d8/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895028] Modules linked in:
-dm_mod loop tcp_diag inet_diag aes_ce_ccm rfcomm algif_hash
-algif_skcipher af_alg bnep lz4 lz4_compress q6asm_dai zram q6routing
-zsmalloc q6afe_dai q6adm q6asm q6afe q6dsp_common q6core snd_soc_wsa881x
-regmap_sdw snd_soc_wcd934x soundwire_qcom gpio_wcd934x binfmt_misc
-venus_enc venus_dec videobuf2_dma_contig nls_ascii nls_cp437 vfat fat
-wcd934x regmap_slimbus qrtr_smd fastrpc apr aes_ce_blk crypto_simd
-cryptd aes_ce_cipher crct10dif_ce ghash_ce gf128mul sha2_ce uvcvideo
-videobuf2_vmalloc videobuf2_memops hci_uart ath10k_snoc sha256_arm64
-sha1_ce btqca ath10k_core ath btrtl mac80211 btbcm btintel
-snd_soc_sdm845 snd_soc_rt5663 snd_soc_qcom_common snd_soc_rl6231
-soundwire_bus pm8941_pwrkey qcom_spmi_adc5 bluetooth qcom_vadc_common
-snd_soc_core venus_core snd_compress snd_pcm_dmaengine snd_pcm
-v4l2_mem2mem snd_timer snd qcom_spmi_temp_alarm videobuf2_v4l2 soundcore
-industrialio videobuf2_common videodev joydev mc hid_multitouch
-ecdh_generic ecc cfg80211 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895508]  qcom_rng sg rfkill
-qrtr ns libarc4 qcom_q6v5_mss slim_qcom_ngd_ctrl qcom_q6v5_pas evdev
-pdr_interface qcom_pil_info qcom_q6v5 slimbus qcom_sysmon rmtfs_mem
-bam_dma qcom_wdt fuse configfs ip_tables x_tables autofs4 ext4 mbcache
-jbd2 msm rtc_pm8xxx llcc_qcom ti_sn65dsi86 ocmem i2c_hid_of
-drm_kms_helper ipa qcom_common qmi_helpers mdt_loader camcc_sdm845
-panel_simple drm gpio_keys |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895732] CPU: 0 PID: 0 Comm:
-swapper/0 Tainted: G        W         5.13.4 #1 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895747] Hardware name: LENOVO
-81JL/LNVNB161216, BIOS 9UCN33WW(V2.06) 06/ 4/2019 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895756] pstate: 60400005 (nZCv
-daif +PAN -UAO -TCO BTYPE=--) |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895771] pc :
-__handle_irq_event_percpu+0x1d8/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895785] lr :
-__handle_irq_event_percpu+0x1d8/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895798] sp : ffff800010003de0 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895805] x29: ffff800010003de0
-x28: ffffc75e330a3b00 x27: ffffc75e32c02000 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895831] x26: ffff4900496e0600
-x25: ffffc75e32c02000 x24: ffffc75e33099a20 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895856] x23: 000000000000009c
-x22: ffff800010003e74 x21: 0000000000000000 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895881] x20: 0000000000000000
-x19: ffff490049c02900 x18: 00000000fffffffb |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895905] x17: 0000000000000000
-x16: 0000000000000000 x15: 0000000000000020 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895929] x14: 727265746e692064
-x13: 656c62616e652034 x12: 3478302f3078302b |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895954] x11: ffffc75e3311a9b0
-x10: 00000000fffff000 x9 : ffffc75e31abe5a0 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.895978] x8 : ffffc75e330c29b0
-x7 : ffffc75e3311a9b0 x6 : 0000000000000000 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896002] x5 : ffff4901b36fa9c8
-x4 : ffff800010003bd0 x3 : 0000000000000001 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896026] x2 : 0000000000000000
-x1 : 0000000000000000 x0 : ffffc75e330a3b00 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896050] Call trace: |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896057]  __handle_irq_event_percpu+0x1d8/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896072]  handle_irq_event+0x6c/0x1b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896085]  handle_simple_irq+0xc8/0x170 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896101]  generic_handle_irq+0x3c/0x5c |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896113]  lmh_handle_irq+0x40/0x50 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896128]  __handle_irq_event_percpu+0x68/0x210 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896141]  handle_irq_event+0x6c/0x1b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896153]  handle_fasteoi_irq+0xcc/0x1fc |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896168]  __handle_domain_irq+0x88/0xec |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896180]  gic_handle_irq+0xc8/0x148 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896193]  el1_irq+0xbc/0x140 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896206]  arch_local_irq_enable+0xc/0x14 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896221]  __schedule+0x2fc/0x8ac |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896238]  schedule_idle+0x34/0x54 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896254]  do_idle+0x1a4/0x2b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896269]  cpu_startup_entry+0x34/0xa0 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896285]  rest_init+0xcc/0xdc |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896299]  arch_call_rest_init+0x1c/0x28 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896316]  start_kernel+0x5b4/0x5ec |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896332] ---[ end trace
-9b7875032d5e8e07 ]--- |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896573] BUG: scheduling while
-atomic: swapper/0/0/0xffff0000 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896583] Modules linked in:
-dm_mod loop tcp_diag inet_diag aes_ce_ccm rfcomm algif_hash
-algif_skcipher af_alg bnep lz4 lz4_compress q6asm_dai zram q6routing
-zsmalloc q6afe_dai q6adm q6asm q6afe q6dsp_common q6core snd_soc_wsa881x
-regmap_sdw snd_soc_wcd934x soundwire_qcom gpio_wcd934x binfmt_misc
-venus_enc venus_dec videobuf2_dma_contig nls_ascii nls_cp437 vfat fat
-wcd934x regmap_slimbus qrtr_smd fastrpc apr aes_ce_blk crypto_simd
-cryptd aes_ce_cipher crct10dif_ce ghash_ce gf128mul sha2_ce uvcvideo
-videobuf2_vmalloc videobuf2_memops hci_uart ath10k_snoc sha256_arm64
-sha1_ce btqca ath10k_core ath btrtl mac80211 btbcm btintel
-snd_soc_sdm845 snd_soc_rt5663 snd_soc_qcom_common snd_soc_rl6231
-soundwire_bus pm8941_pwrkey qcom_spmi_adc5 bluetooth qcom_vadc_common
-snd_soc_core venus_core snd_compress snd_pcm_dmaengine snd_pcm
-v4l2_mem2mem snd_timer snd qcom_spmi_temp_alarm videobuf2_v4l2 soundcore
-industrialio videobuf2_common videodev joydev mc hid_multitouch
-ecdh_generic ecc cfg80211 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896746]  qcom_rng sg rfkill
-qrtr ns libarc4 qcom_q6v5_mss slim_qcom_ngd_ctrl qcom_q6v5_pas evdev
-pdr_interface qcom_pil_info qcom_q6v5 slimbus qcom_sysmon rmtfs_mem
-bam_dma qcom_wdt fuse configfs ip_tables x_tables autofs4 ext4 mbcache
-jbd2 msm rtc_pm8xxx llcc_qcom ti_sn65dsi86 ocmem i2c_hid_of
-drm_kms_helper ipa qcom_common qmi_helpers mdt_loader camcc_sdm845
-panel_simple drm gpio_keys |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896819] CPU: 0 PID: 0 Comm:
-swapper/0 Tainted: G        W         5.13.4 #1 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896824] Hardware name: LENOVO
-81JL/LNVNB161216, BIOS 9UCN33WW(V2.06) 06/ 4/2019 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896827] Call trace: |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896829]  dump_backtrace+0x0/0x1e4 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896838]  show_stack+0x24/0x30 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896843]  dump_stack+0xd0/0x12c |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896849]  __schedule_bug+0x68/0x80 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896855]  __schedule+0x74c/0x8ac |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896860]  schedule_idle+0x34/0x54 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896866]  do_idle+0x1a4/0x2b0 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896871]  cpu_startup_entry+0x34/0xa0 |
-
-|Jul 21 21:45:56 limitless kernel: [ 5533.896876]  rest_init+0xcc/0xdc |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896881]  arch_call_rest_init+0x1c/0x28 |
-
-|Jul 21 21:45:56 limitless kernel: [
-5533.896887]  start_kernel+0x5b4/0x5ec|
+-- 
+Martin K. Petersen	Oracle Linux Engineering
