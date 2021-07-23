@@ -2,112 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C313D2DA5
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jul 2021 22:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2597C3D3483
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jul 2021 08:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhGVTrf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jul 2021 15:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbhGVTrf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jul 2021 15:47:35 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AF4C061575
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 13:28:09 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id c204so6530744ybb.4
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jul 2021 13:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JShzBsE1gslUcj6DK5RqtL+x9Drx5IU2YuOFiHBfDHw=;
-        b=IRLteODQGte94LrMcF8c6DvMU7ZpPp+nfht8VwL5H+Msw9FsWAt2ml94EZfghfSv28
-         U0IoQu7i35gxNE6BG1lGutxLT+Nt1aZGCZQ4VXzbjjE0poS7Geq/72XLhwJEYPvlQ499
-         sUee252QaP8wAZj7qZzW+4Euk3W6gGjBoTS6M46PB6PRuuP/tTpQHdjcVRRWhKKlnVKg
-         A/f25qcxsUfeHoOBuCOLN+BQbyRGqAY06URrRck/SlVSv0ls/AC6U6ZREzRY82q6PGXj
-         y3aSuy5EC8SCX/9BebCa92Z7Qx1Ly1ozMZEI0aVr/MLgI2HlHrz9aeGynJUg9Y4qCjla
-         3pPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JShzBsE1gslUcj6DK5RqtL+x9Drx5IU2YuOFiHBfDHw=;
-        b=eOQN/81tIZ5gj3ttGcOaKpOdGejs69HsocBS+3axg1LIZwymnoGurjOzvA2cA1B4FB
-         JGfeTcUsbchbVkJjkOts/SraapnixRGWQPJ4IT4omf8t4CsIM+baUDhEd4KLvzqqCOn6
-         1Cz+odBSYEc3fBrJt7bIiAuU17hdfucuK5q02/61vazggm0rWlRU2HdfIKKevYKN+1/k
-         OBP111Y+WOKyFl11Q8LmBTqcSCvFHd382CmfikGVZ2aEkWc/eywOswSrCfSKNP/v3MVh
-         wF9aGuQpVnDC5D/ryBagteD+DOZjXQyEU4As4jS1ySfhKkNk+Ny/YLWLzkTTnzdLKX4W
-         KkEg==
-X-Gm-Message-State: AOAM530w8QlaOqE8jzFHbMJLiQiRXjoAYlDqjfflZ5VU51Z9TrCNIZRE
-        EjGcCrarq0ish0BehvV/kDYSrYsIVLcCpDpqgWw=
-X-Google-Smtp-Source: ABdhPJwWOfW0irKxoybP4rg4Plpb/H2/VmYLX+xlDoqLALk8hNOKmcJ40S5hZXcreYjK5mns0JSKeOyV3z3LsStAMac=
-X-Received: by 2002:a25:ad62:: with SMTP id l34mr1810562ybe.457.1626985688015;
- Thu, 22 Jul 2021 13:28:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210722191430.28203-1-macroalpha82@gmail.com>
-In-Reply-To: <20210722191430.28203-1-macroalpha82@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 22 Jul 2021 16:27:53 -0400
-Message-ID: <CAMdYzYp3W2NGN+VHZAC__hutmtGcUTHeQ=tDo+OAeygUQ5kXTw@mail.gmail.com>
-Subject: Re: [RFC 0/4] power: supply: Add Support for RK817 Charger
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-pm@vger.kernel.org,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        maccraft123mc@gmail.com, sre@kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>, lee.jones@linaro.org,
-        Chris Morgan <macromorgan@hotmail.com>
+        id S233733AbhGWFg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jul 2021 01:36:59 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:43412 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229788AbhGWFg7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jul 2021 01:36:59 -0400
+X-UUID: 102d7e6f98aa4d88ba2953fd7f08bc46-20210723
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=0+OFaZT+V5fX2+7/ZvRj5IJQIdPcmVaOWGckKOtfowo=;
+        b=WQq95mbqI6E8VGOW4nyRQAH1TwXtzVk0qYlWNnw/HQwoIQxOCjOyYRZERnf7c0tnjPJzdzIlNEvNjdHNwpA5ThTij8wNZWAd25Ueld11gBPbFdBbIUY+yYlkPzDaz4HTVQxnHMOfiRllK6PMtiuNMRxiN8/LcvdxAJBeLIRNBMI=;
+X-UUID: 102d7e6f98aa4d88ba2953fd7f08bc46-20210723
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ben.tseng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 59563751; Fri, 23 Jul 2021 14:17:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 23 Jul 2021 14:17:25 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 23 Jul 2021 14:17:25 +0800
+Message-ID: <1f92b245537d6390b7b2bde62ce8b99a3df9d445.camel@mediatek.com>
+Subject: Re: [PATCH v5 2/3] thermal: mediatek: Add LVTS drivers for SoC
+ theraml zones
+From:   Ben Tseng <ben.tseng@mediatek.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>, <hsinyi@chromium.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Yu-Chia Chang <ethan.chang@mediatek.com>
+Date:   Fri, 23 Jul 2021 14:17:25 +0800
+In-Reply-To: <06b1804c-4675-2997-8c5c-bcdffbcfc4a1@linaro.org>
+References: <20210617114707.10618-1-ben.tseng@mediatek.com>
+         <20210617114707.10618-3-ben.tseng@mediatek.com>
+         <06b1804c-4675-2997-8c5c-bcdffbcfc4a1@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 3:15 PM Chris Morgan <macroalpha82@gmail.com> wrote:
->
-> From: Chris Morgan <macromorgan@hotmail.com>
->
-> As this is my first charger driver, I'm submitting it as an RFC so I
-> can get input from the community on what else is needed to make the
-> driver consistent with the quality upstream expects.
->
-> This series is to add support for the Rockchip rk817 battery charger
-> which is present in all Rockchip RK817 PMICs. The driver was written
-> as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
-> myself Chris Morgan <macromorgan@hotmail.com>.
->
-> The driver requires some basic parameters be described about the
-> battery in the devicetree such as the maximum capacity, the minimum
-> and maximum voltage for the battery, the maximum charge current, the
-> maximum charge voltage, and the value of sample resistors and sleep
-> currents.
+T24gTW9uLCAyMDIxLTA2LTIxIGF0IDEzOjI2ICswMjAwLCBEYW5pZWwgTGV6Y2FubyB3cm90ZToN
+Cj4gT24gMTcvMDYvMjAyMSAxMzo0NywgQmVuIFRzZW5nIHdyb3RlOg0KPiA+IEZyb206IE1pY2hh
+ZWwgS2FvIDxtaWNoYWVsLmthb0BtZWRpYXRlay5jb20+DQo+ID4gDQo+ID4gQWRkIGEgTFZUUyAo
+TG93IHZvbHRhZ2UgdGhlcm1hbCBzZW5zb3IpIGRyaXZlciB0byByZXBvcnQganVuY3Rpb24NCj4g
+PiB0ZW1wZXJhdHVyZXMgaW4gTWVkaWF0ZWsgU29DIGFuZCByZWdpc3RlciB0aGUgbWF4aW11bSB0
+ZW1wZXJhdHVyZQ0KPiA+IG9mIHNlbnNvcnMgYW5kIGVhY2ggc2Vuc29yIGFzIGEgdGhlcm1hbCB6
+b25lLg0KPiANCj4gSSB0aGluayB3ZSBhbHJlYWR5IHRhbGtlZCBhYm91dCB0aGF0LiBXZSBkb24n
+dCB3YW50IGEgdGhlcm1hbCBzZW5zb3INCj4gZHJpdmVyIHRvIGFnZ3JlZ2F0ZSB0aGUgdGVtcGVy
+YXR1cmVzIGJ1dCBjcmVhdGUgc29tZSBraW5kb2YgdmlydHVhbA0KPiBzZW5zb3Igd2l0aCBhIHBy
+b3BlcnR5IChtaW4sIG1heCwgYXZnLCAuLi4pIHdoaWNoIGlzIHVzYWJsZSBieQ0KPiBhbnlvbmUu
+DQo+IA0KPiBbIC4uLiBdDQo+IA0KPiANCj4gDQoNCkRlYXIgRGFuaWVsLA0KDQpTb3JyeSBmb3Ig
+dGhlIGxhdGUgcmVwbHkuDQoNCkFmdGVyIHN1cnZleSAsSSdtIG5vdCBzdXJlIHdoZXRoZXIgdGhl
+IHBhdGNoWzFdIGlzIHRoZSBhcmNoaXRlY3R1cmUgb2YNCnZpcnR1YWwgdGhlcm1hbCBzZW5zb3Ig
+d2hpY2ggeW91IGNvbW1lbnRlZC4NCg0KT3IsIGlzIHRoZXJlIGFueSBleGlzdGluZyBmcmFtZXdv
+cmsgb24gbWFpbmxpbmUgYWxyZWFkeSBzdXBwb3J0IHZpcnR1YWwNCnNlbnNvcj8NCkNvdWxkIHlv
+dSBoZWxwIHRvIHByb3ZpZGUgcmVmZXJlbmNlIHRvIHVzPw0KVGhhbmsgeW91IHNvIG11Y2guDQoN
+ClsxXSANCmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9saW51eC1wbS9wYXRj
+aC8xNjA2NDY2MjA0LTMxNjU3LTEtZ2l0LXNlbmQtZW1haWwtZ2FvLnl1bnhpYW82QGdtYWlsLmNv
+bS8NCg0KQlJzDQpCZW4NCg0KDQoNCg==
 
-Excellent work!
-A quick test on the quartz64 model a shows expected values.
-I'll do some long term testing as well.
-
->
-> Chris Morgan (4):
->   dt-bindings: Add Rockchip rk817 battery charger support
->   mfd: Add Rockchip rk817 battery charger support
->   power: supply: Add charger driver for Rockchip RK817
->   arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
->
->  .../devicetree/bindings/mfd/rk808.txt         |  35 +-
->  .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  26 +
->  drivers/mfd/rk808.c                           |  16 +-
->  drivers/power/supply/Kconfig                  |   6 +
->  drivers/power/supply/Makefile                 |   1 +
->  drivers/power/supply/rk817_charger.c          | 927 ++++++++++++++++++
->  include/linux/mfd/rk808.h                     |  87 ++
->  7 files changed, 1095 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/power/supply/rk817_charger.c
->
-> --
-> 2.25.1
->
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
