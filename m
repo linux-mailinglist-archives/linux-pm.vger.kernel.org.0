@@ -2,265 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1073D4B1E
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jul 2021 05:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240703D4EDC
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jul 2021 19:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhGYCfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Jul 2021 22:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S230303AbhGYQVF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Jul 2021 12:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbhGYCfc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Jul 2021 22:35:32 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92494C06175F
-        for <linux-pm@vger.kernel.org>; Sat, 24 Jul 2021 20:16:02 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id o185so6725766oih.13
-        for <linux-pm@vger.kernel.org>; Sat, 24 Jul 2021 20:16:02 -0700 (PDT)
+        with ESMTP id S229709AbhGYQVE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Jul 2021 12:21:04 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1715CC061757
+        for <linux-pm@vger.kernel.org>; Sun, 25 Jul 2021 10:01:34 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id u10so8140637oiw.4
+        for <linux-pm@vger.kernel.org>; Sun, 25 Jul 2021 10:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qU1AQGUnzAw+tR9LiitVOozStwaZW7Fxl3hPiKdznLY=;
-        b=z22benouZj6zj2bR2WhXxpmi7bvoS4Ig6vypL4a/j6+n94aaZRe1dSeZUnmSo6ymo4
-         flmG2UP5uPJ77u1OAoGViyqNbk+o/CUVVHXJaWqxKplIz3RkwwERD1JxaMB30l2R323q
-         jMM2ex9P//goFPBHrMYuXvQ0mFbXX9qTCFC8HtL0C4K1f8x5zvQ5DoEVxbiUY6HP/OY2
-         6SZDNfJB0qGH7cSthG8TKvDX1RfqrrsP25GoY87OBkJTuEzS4dlI74RQqvzhWuPLeCZM
-         psv8zTqYwgYu7JsTpEG+qnkkZCIJLGyFmwbYwmLe2JLthgo66tL4K16uL4b4+Z3990rj
-         pg1A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=J0CqnawQFzTaboVphqTqnPpq47SB6w0kctdgBqfSago=;
+        b=ITGcVgWjSvk5bdFkmu5wJhRrOIzDh7n905jeU+xxK0Mz9qtizqH+GcTExX46Y0QVas
+         5OE3hmix/dh79fsNFA9eB0sYl3mYP4aTas4Gwj5JjuFGvTENZ8gyHOMtNnBH8dRQAMeK
+         etMtwLyA2hEgPDgaCvMfvz24iEUyCFFCpLx3L/W/XkMWCJmrYtk9kqG2Qui5owf8X1Hg
+         8PM180c3svlm4TGJ8KEebXANtqymxujl3Xm66BwvuyJ4ZHVsueIWafOo7dPE5Dk87pvD
+         bSZuRwPbjn50cpOOPz82O3HHYkSXefr2AB2Yt4XXwq46rpXa+tEsgT/wlc+Rocw8FU2L
+         YdqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qU1AQGUnzAw+tR9LiitVOozStwaZW7Fxl3hPiKdznLY=;
-        b=d8VvRUUqdpl20UEqzBCny5sDyDtlHMtotU7sDg8jVQf8N/F826tkhGb2FVdMdqo7l5
-         OqXzHGqrzhegkYK2k2aGDQBOEVQIMyA5Y3x8m97IZsgLPLD+SukTF9Mv9KTT1TFZO0UY
-         r3BF5TMdIl2bNCcuCZSd9eE121O0xW7DJHepEpAu4zHPOQz+GY7UxxlH4An659dHdjfO
-         w38sfOuOJ1ep7/4MK6U3D4jfMPVYSJezWKQr7Qho8Mq+RdOrdyjO9Z3xSxVKl8idNJjO
-         hoAgoXj3Ucmk6hhKftB25xQ13GoOBV3CnOW410dmICb4bZnPQV5KTbkxMf63noJJ4rTt
-         Pe0w==
-X-Gm-Message-State: AOAM533bgfxrxX/NrMFI0O7kBK1LgBybCjyY+AkQrhnN8dksgPN97kt1
-        Se/aQ619iqw/Xh+xulxVRYvT0w==
-X-Google-Smtp-Source: ABdhPJxIjL2FbGXn7dCQTRhU811vMnH9qJvn0LLvhRdN6cso4k3B7jbTmEc7dwQlHPysKa1p6eyQww==
-X-Received: by 2002:aca:fc12:: with SMTP id a18mr7208886oii.85.1627182960828;
-        Sat, 24 Jul 2021 20:16:00 -0700 (PDT)
-Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id k7sm6210660otn.60.2021.07.24.20.15.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J0CqnawQFzTaboVphqTqnPpq47SB6w0kctdgBqfSago=;
+        b=lX9bUIq9OZUKl3RXM9b6xM9uYoL8JgqdHrO3uZuQONp5DtXXEldYc94ihlvnHU5+kM
+         l8qZxYgqQWZc6XvOO/y+yxby9G6bqRVhjhLX4ukWwEK87PgaJBlP20d2X56IW/8JdYAe
+         gSiEtq2j2g2YVvYQdyoxMpq//a1nxRcdl19ui67kKT7KaaXKiEjjl2MEUh5pC7q/qZ36
+         +c5OZYUCtX5lgeb7jLz/x6SPSldBKQB3SKVJlw1PYIvdOwGkou2G1Zfn7kHevEKqyXcT
+         h1ElQmb9mt8OSFLnGxkJqfNCkrcg5YvEJTBLOd6Yzo+4+3BD6OqbKcLzjiGkI8sidB8i
+         boZQ==
+X-Gm-Message-State: AOAM5322rFdn+5rH2+jcmoGGCTaUfKBUYYgLeITq96aWVsyTqOUVk20f
+        zK0cSC8JVe6fuR/nRcmFnU5TTQ==
+X-Google-Smtp-Source: ABdhPJwkUYRSRS/PVfVlS/yPsxZSb3XuJOtkClFX3eA5J4vUj2jA5H1/Ze8TUvDpulmBKoPP1z6+vg==
+X-Received: by 2002:aca:4355:: with SMTP id q82mr14520179oia.165.1627232493401;
+        Sun, 25 Jul 2021 10:01:33 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id r24sm6852639otg.14.2021.07.25.10.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jul 2021 20:16:00 -0700 (PDT)
+        Sun, 25 Jul 2021 10:01:32 -0700 (PDT)
+Date:   Sun, 25 Jul 2021 12:01:30 -0500
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: osm-l3: Use driver-specific naming
-Date:   Sat, 24 Jul 2021 20:14:14 -0700
-Message-Id: <20210725031414.3961227-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.29.2
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, ulf.hansson@linaro.org,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, rojay@codeaurora.org,
+        stephan@gerhold.net
+Subject: Re: [PATCH v4 2/2] arm64: dts: sc7180: Add required-opps for i2c
+Message-ID: <YP2Y6qs5P5mb2jzE@yoga>
+References: <1626429658-18961-1-git-send-email-rnayak@codeaurora.org>
+ <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
+ <YPHpsO5LlQRQxj9y@yoga>
+ <CAE-0n53CHD8c7C4ETWRgzmZmFSCcBw46wSs4pKbYMRjA_tD3yg@mail.gmail.com>
+ <YPHxfHPC/faq/y+J@yoga>
+ <CAE-0n50qx80cMFPJ1x9rc+EMR1L+j2CUMyDjWAbnE9mPHjf-TQ@mail.gmail.com>
+ <YPIBK/NJgBNZVI8Y@yoga>
+ <12711a61-e16c-d2bc-6e04-ab94c7551abe@codeaurora.org>
+ <YPXQNFYKfH/xZxFY@yoga>
+ <bc79ea3e-4981-8f9b-f9a7-59cb972047a7@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc79ea3e-4981-8f9b-f9a7-59cb972047a7@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In situations were the developer screws up by e.g. not giving the OSM
-nodes unique identifiers the interconnect framework might mix up nodes
-between the OSM L3 provider and e.g. the RPMh provider.
+On Mon 19 Jul 23:29 CDT 2021, Rajendra Nayak wrote:
 
-The resulting callstack containts "qcom_icc_set", which is not unique to
-the OSM L3 provider driver. Once the faulting qcom_icc_set() is
-identified it's further confusing that "qcom_icc_node" is different
-between the different drivers.
+> 
+> 
+> On 7/20/2021 12:49 AM, Bjorn Andersson wrote:
+> > On Mon 19 Jul 04:37 CDT 2021, Rajendra Nayak wrote:
+> > 
+> > > 
+> > > 
+> > > On 7/17/2021 3:29 AM, Bjorn Andersson wrote:
+> > > > On Fri 16 Jul 16:49 CDT 2021, Stephen Boyd wrote:
+> > > > 
+> > > > > Quoting Bjorn Andersson (2021-07-16 13:52:12)
+> > > > > > On Fri 16 Jul 15:21 CDT 2021, Stephen Boyd wrote:
+> > > > > > 
+> > > > > > > Quoting Bjorn Andersson (2021-07-16 13:18:56)
+> > > > > > > > On Fri 16 Jul 05:00 CDT 2021, Rajendra Nayak wrote:
+> > > > > > > > 
+> > > > > > > > > qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
+> > > > > > > > > Though qup-i2c does not support DVFS, it still needs to vote for a
+> > > > > > > > > performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
+> > > > > > > > > requirement.
+> > > > > > > > > 
+> > > > > > > > 
+> > > > > > > > Sounds good, but...
+> > > > > > > > 
+> > > > > > > > > Use 'required-opps' to pass this information from
+> > > > > > > > > device tree, and also add the power-domains property to specify
+> > > > > > > > > the CX power-domain.
+> > > > > > > > > 
+> > > > > > > > 
+> > > > > > > > ..is the required-opps really needed with my rpmhpd patch in place?
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > Yes? Because rpmhpd_opp_low_svs is not the lowest performance state for
+> > > > > > > CX.
+> > > > > > 
+> > > > > > On e.g. sm8250 the first available non-zero corner presented in cmd-db
+> > > > > > is low_svs.
+> > > 
+> > > what rail is this? the mmcx? Perhaps it does not support RET.
+> > > cx usually supports both collapse state and RET.
+> > > 
+> > 
+> > That was the one I was specifically looking at for the MDSS_GDSC->MMCX
+> > issue, so it's likely I didn't look elsewhere.
+> > 
+> > > > > 
+> > > > > Indeed. On sc7180 it's not the first non-zero corner. I suppose
+> > > > > retention for CX isn't actually used when the SoC is awake so your
+> > > > > rpmhpd patch is putting in a vote for something that doesn't do anything
+> > > > > at runtime for CX? I imagine that rpmh only sets the aggregate corner to
+> > > > > retention when the whole SoC is suspended/sleeping, otherwise things
+> > > > > wouldn't go very well. Similarly, min_svs may be VDD minimization? If
+> > > > > so, those first two states are basically states that shouldn't be used
+> > > > > at runtime, almost like sleep states.
+> > > > > 
+> > > > 
+> > > > But if that's the case, I don't think it's appropriate for the "enabled
+> > > > state" of the domain to use any of those corners.
+> > > 
+> > > I rechecked the downstream kernels where all this voting happens from within
+> > > the clock drivers, and I do see votes to min_svs for some clocks, but Stephen is
+> > > right that RET is not something that's voted on while in active state.
+> > > 
+> > > But always going with something just above the ret level while active will also
+> > > not work for all devices, for instance for i2c on 7180, it needs a cx vote of
+> > > low svs while the rail (cx) does support something lower than that which is min svs.
+> > > (why can't it just work with min svs?, I don't know, these values and recommendations
+> > > come in from the voltage plans published by HW teams for every SoC and we just end up
+> > > using them in SW, perhaps something to dig further and understand which I will try and
+> > > do but these are the values in voltage plans and downstream kernels which work for now)
+> > > 
+> > 
+> > So to some degree this invalidates my argumentation about the
+> > enabled_corner in rpmhpd, given that "enabled" means a different corner
+> > for each rail - not just the one with lowest non-zero value.
+> 
+> Right, it might work in some cases but might not work for all.
+> 
 
-To avoid this confusion, rename the node struct and the setter in the
-OSM L3 driver to include "osm_l3" in their names.
+Which makes it way less desirable.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+The enable state for rpmhpd power domains doesn't meet my expectations
+for how a power domain should behave, but we should at least be
+consistent across all consumers of it then...
 
-This was written after the sc8180x patch and as such applies ontop of:
-https://lore.kernel.org/linux-arm-msm/20210725025834.3941777-2-bjorn.andersson@linaro.org/
 
- drivers/interconnect/qcom/osm-l3.c | 46 +++++++++++++++---------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+But the original issue remains, that when a device is powered by
+MDSS_GDSC, which is a subdomain of MMCX we still need to ensure that
+"on" for MMCX is actually "on" - which just happens to be the first
+non-0 corner.
 
-diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-index 13e41b932567..c7af143980de 100644
---- a/drivers/interconnect/qcom/osm-l3.c
-+++ b/drivers/interconnect/qcom/osm-l3.c
-@@ -38,7 +38,7 @@
- 
- #define OSM_L3_MAX_LINKS		1
- 
--#define to_qcom_provider(_provider) \
-+#define to_osm_l3_provider(_provider) \
- 	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
- 
- struct qcom_osm_l3_icc_provider {
-@@ -50,14 +50,14 @@ struct qcom_osm_l3_icc_provider {
- };
- 
- /**
-- * struct qcom_icc_node - Qualcomm specific interconnect nodes
-+ * struct qcom_osm_l3_node - Qualcomm specific interconnect nodes
-  * @name: the node name used in debugfs
-  * @links: an array of nodes where we can go next while traversing
-  * @id: a unique node identifier
-  * @num_links: the total number of @links
-  * @buswidth: width of the interconnect between a node and the bus
-  */
--struct qcom_icc_node {
-+struct qcom_osm_l3_node {
- 	const char *name;
- 	u16 links[OSM_L3_MAX_LINKS];
- 	u16 id;
-@@ -65,8 +65,8 @@ struct qcom_icc_node {
- 	u16 buswidth;
- };
- 
--struct qcom_icc_desc {
--	const struct qcom_icc_node **nodes;
-+struct qcom_osm_l3_desc {
-+	const struct qcom_osm_l3_node **nodes;
- 	size_t num_nodes;
- 	unsigned int lut_row_size;
- 	unsigned int reg_freq_lut;
-@@ -74,7 +74,7 @@ struct qcom_icc_desc {
- };
- 
- #define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
--	static const struct qcom_icc_node _name = {			\
-+	static const struct qcom_osm_l3_node _name = {			\
- 		.name = #_name,						\
- 		.id = _id,						\
- 		.buswidth = _buswidth,					\
-@@ -85,12 +85,12 @@ struct qcom_icc_desc {
- DEFINE_QNODE(sdm845_osm_apps_l3, SDM845_MASTER_OSM_L3_APPS, 16, SDM845_SLAVE_OSM_L3);
- DEFINE_QNODE(sdm845_osm_l3, SDM845_SLAVE_OSM_L3, 16);
- 
--static const struct qcom_icc_node *sdm845_osm_l3_nodes[] = {
-+static const struct qcom_osm_l3_node *sdm845_osm_l3_nodes[] = {
- 	[MASTER_OSM_L3_APPS] = &sdm845_osm_apps_l3,
- 	[SLAVE_OSM_L3] = &sdm845_osm_l3,
- };
- 
--static const struct qcom_icc_desc sdm845_icc_osm_l3 = {
-+static const struct qcom_osm_l3_desc sdm845_icc_osm_l3 = {
- 	.nodes = sdm845_osm_l3_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm845_osm_l3_nodes),
- 	.lut_row_size = OSM_LUT_ROW_SIZE,
-@@ -101,12 +101,12 @@ static const struct qcom_icc_desc sdm845_icc_osm_l3 = {
- DEFINE_QNODE(sc7180_osm_apps_l3, SC7180_MASTER_OSM_L3_APPS, 16, SC7180_SLAVE_OSM_L3);
- DEFINE_QNODE(sc7180_osm_l3, SC7180_SLAVE_OSM_L3, 16);
- 
--static const struct qcom_icc_node *sc7180_osm_l3_nodes[] = {
-+static const struct qcom_osm_l3_node *sc7180_osm_l3_nodes[] = {
- 	[MASTER_OSM_L3_APPS] = &sc7180_osm_apps_l3,
- 	[SLAVE_OSM_L3] = &sc7180_osm_l3,
- };
- 
--static const struct qcom_icc_desc sc7180_icc_osm_l3 = {
-+static const struct qcom_osm_l3_desc sc7180_icc_osm_l3 = {
- 	.nodes = sc7180_osm_l3_nodes,
- 	.num_nodes = ARRAY_SIZE(sc7180_osm_l3_nodes),
- 	.lut_row_size = OSM_LUT_ROW_SIZE,
-@@ -117,12 +117,12 @@ static const struct qcom_icc_desc sc7180_icc_osm_l3 = {
- DEFINE_QNODE(sc8180x_osm_apps_l3, SC8180X_MASTER_OSM_L3_APPS, 32, SC8180X_SLAVE_OSM_L3);
- DEFINE_QNODE(sc8180x_osm_l3, SC8180X_SLAVE_OSM_L3, 32);
- 
--static const struct qcom_icc_node *sc8180x_osm_l3_nodes[] = {
-+static const struct qcom_osm_l3_node *sc8180x_osm_l3_nodes[] = {
- 	[MASTER_OSM_L3_APPS] = &sc8180x_osm_apps_l3,
- 	[SLAVE_OSM_L3] = &sc8180x_osm_l3,
- };
- 
--static const struct qcom_icc_desc sc8180x_icc_osm_l3 = {
-+static const struct qcom_osm_l3_desc sc8180x_icc_osm_l3 = {
- 	.nodes = sc8180x_osm_l3_nodes,
- 	.num_nodes = ARRAY_SIZE(sc8180x_osm_l3_nodes),
- 	.lut_row_size = OSM_LUT_ROW_SIZE,
-@@ -133,12 +133,12 @@ static const struct qcom_icc_desc sc8180x_icc_osm_l3 = {
- DEFINE_QNODE(sm8150_osm_apps_l3, SM8150_MASTER_OSM_L3_APPS, 32, SM8150_SLAVE_OSM_L3);
- DEFINE_QNODE(sm8150_osm_l3, SM8150_SLAVE_OSM_L3, 32);
- 
--static const struct qcom_icc_node *sm8150_osm_l3_nodes[] = {
-+static const struct qcom_osm_l3_node *sm8150_osm_l3_nodes[] = {
- 	[MASTER_OSM_L3_APPS] = &sm8150_osm_apps_l3,
- 	[SLAVE_OSM_L3] = &sm8150_osm_l3,
- };
- 
--static const struct qcom_icc_desc sm8150_icc_osm_l3 = {
-+static const struct qcom_osm_l3_desc sm8150_icc_osm_l3 = {
- 	.nodes = sm8150_osm_l3_nodes,
- 	.num_nodes = ARRAY_SIZE(sm8150_osm_l3_nodes),
- 	.lut_row_size = OSM_LUT_ROW_SIZE,
-@@ -149,12 +149,12 @@ static const struct qcom_icc_desc sm8150_icc_osm_l3 = {
- DEFINE_QNODE(sm8250_epss_apps_l3, SM8250_MASTER_EPSS_L3_APPS, 32, SM8250_SLAVE_EPSS_L3);
- DEFINE_QNODE(sm8250_epss_l3, SM8250_SLAVE_EPSS_L3, 32);
- 
--static const struct qcom_icc_node *sm8250_epss_l3_nodes[] = {
-+static const struct qcom_osm_l3_node *sm8250_epss_l3_nodes[] = {
- 	[MASTER_EPSS_L3_APPS] = &sm8250_epss_apps_l3,
- 	[SLAVE_EPSS_L3_SHARED] = &sm8250_epss_l3,
- };
- 
--static const struct qcom_icc_desc sm8250_icc_epss_l3 = {
-+static const struct qcom_osm_l3_desc sm8250_icc_epss_l3 = {
- 	.nodes = sm8250_epss_l3_nodes,
- 	.num_nodes = ARRAY_SIZE(sm8250_epss_l3_nodes),
- 	.lut_row_size = EPSS_LUT_ROW_SIZE,
-@@ -162,11 +162,11 @@ static const struct qcom_icc_desc sm8250_icc_epss_l3 = {
- 	.reg_perf_state = EPSS_REG_PERF_STATE,
- };
- 
--static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
-+static int qcom_osm_l3_set(struct icc_node *src, struct icc_node *dst)
- {
- 	struct qcom_osm_l3_icc_provider *qp;
- 	struct icc_provider *provider;
--	const struct qcom_icc_node *qn;
-+	const struct qcom_osm_l3_node *qn;
- 	struct icc_node *n;
- 	unsigned int index;
- 	u32 agg_peak = 0;
-@@ -175,7 +175,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 
- 	qn = src->data;
- 	provider = src->provider;
--	qp = to_qcom_provider(provider);
-+	qp = to_osm_l3_provider(provider);
- 
- 	list_for_each_entry(n, &provider->nodes, node_list)
- 		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
-@@ -208,10 +208,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 	u32 info, src, lval, i, prev_freq = 0, freq;
- 	static unsigned long hw_rate, xo_rate;
- 	struct qcom_osm_l3_icc_provider *qp;
--	const struct qcom_icc_desc *desc;
-+	const struct qcom_osm_l3_desc *desc;
- 	struct icc_onecell_data *data;
- 	struct icc_provider *provider;
--	const struct qcom_icc_node **qnodes;
-+	const struct qcom_osm_l3_node **qnodes;
- 	struct icc_node *node;
- 	size_t num_nodes;
- 	struct clk *clk;
-@@ -281,7 +281,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 
- 	provider = &qp->provider;
- 	provider->dev = &pdev->dev;
--	provider->set = qcom_icc_set;
-+	provider->set = qcom_osm_l3_set;
- 	provider->aggregate = icc_std_aggregate;
- 	provider->xlate = of_icc_xlate_onecell;
- 	INIT_LIST_HEAD(&provider->nodes);
-@@ -303,7 +303,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 		}
- 
- 		node->name = qnodes[i]->name;
--		/* Cast away const and add it back in qcom_icc_set() */
-+		/* Cast away const and add it back in qcom_osm_l3_set() */
- 		node->data = (void *)qnodes[i];
- 		icc_node_add(node, provider);
- 
--- 
-2.29.2
+But I presume we will end up having to do the same with &gcc's GDSCs,
+which are subdomains of CX and MX where this isn't true.
 
+> > 
+> > So perhaps instead of introducing the enabled_corner we need to
+> > introduce your patch and slap a WARN_ON(corner == 0) in
+> > rpmhpd_power_on() - to ensure that all clients that uses a rpmhpd domain
+> > actually do vote for a high enough corner?
+> 
+> So this would mean the expectation is that the clients set the perf state/corner
+> before they call power_on? I don;t think that's the case today with most clients,
+> infact its the opposite, we power on first and then make a call to set the perf
+> state of the domain.
+> 
+
+You're right, it's pretty much always the opposite, given that genpd
+will always enable the domain during attach.
+
+Regards,
+Bjorn
+
+> > 
+> > Regards,
+> > Bjorn
+> > 
+> > > > 
+> > > > As this means that anyone who needs any of the rpmhpd domains active
+> > > > also needs to specify required-opps, which wouldn't be needed for any
+> > > > other power domain provider.
+> > > > 
+> > > > And more importantly it means that a device sitting in a GDSC, which
+> > > > would be parented by a rpmhpd domain has no way to specify the GDSC and
+> > > > trickle the minimum-vote up to the rpmhpd domain. (And I know that we
+> > > > don't describe the parentship of the GDSCs today, but this patch
+> > > > tells me that it's around the corner - for more than MMCX)
+> > > > 
+> > > > Regards,
+> > > > Bjorn
+> > > > 
+> > > > > > 
+> > > > > > And if this (which?) clock requires a higher corner than the lowest
+> > > > > > possible in order to tick at this "lowest" frequency, I'm certainly
+> > > > > > interested in some more details.
+> > > > > > 
+> > > 
+> > > -- 
+> > > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> > > of Code Aurora Forum, hosted by The Linux Foundation
+> 
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
