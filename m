@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC8D3D67D6
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 22:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DB73D67D9
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 22:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbhGZTXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jul 2021 15:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S231540AbhGZTYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jul 2021 15:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbhGZTXr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 15:23:47 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11705C061757
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 13:04:16 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id z6-20020a9d24860000b02904d14e47202cso11151362ota.4
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 13:04:16 -0700 (PDT)
+        with ESMTP id S231848AbhGZTYN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 15:24:13 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612AC061757
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 13:04:40 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id o185so12266011oih.13
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 13:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/UJ/PgAf9rpspIdYUyy6W0XNumgiVgXfjlUArwaqmlE=;
-        b=S1p9g1qr1nxZ/RtAJmEQaKmuV9HF7p49a6Sr5UXPPsn669XOAnJxrhZXEkfkdUjDav
-         89v2EiSuE1/YwPgdzzgT1R2PUVLBEtoFQM2HcsXEPkFgWj2ZJCj34bKQ7EPm8ALCIiW0
-         IJ1uwaVJovWtvkWwdNKKR/+sBmtRBL9oTPJZU=
+        bh=y8qxPhXibeauL3TNJ0rA0BM5c6Te/qTP5D2t4SuhdGk=;
+        b=ShogC7f4yg6AU4ZuvXIJ6iZ2WCzGWAz7XPkIhO4mTtkCm+v3G8CM6P4Q1lXW5rn5d2
+         9tcKWxpTA5Qap0eV/ivdZJYBpN4AO8YKue4OBZs8NMNpPiAHDsopFPJZ5lTrtYeyIdg+
+         DDSxOIQCoxDh9oH3d8SViB29WrZNv/IBHXqOs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/UJ/PgAf9rpspIdYUyy6W0XNumgiVgXfjlUArwaqmlE=;
-        b=FMAp4l2acRjFW+36silOed+Y+iDgZesE9HPVbjkVp8nmpB7UTONnDqJZCyMBR6tei8
-         PGh5qE9graLie+MPNWUm0zGekIZ+3Bi+jXH25LB86yAruIL/7wd1A7U68/YR4P9rpohw
-         8ooq3jVdkaTTuoe6Pp+ZbTqxAir724MTLYS/apoHbqvDzo+HvIM02r8gLK2vzZJn19/a
-         ph1d3xRQwz4czNHMGTRWHBZ/VcRKEWudIiBXq3ASrZKkUoDlCWAmbCxhcwtMCvOeeYhb
-         gU5PXOg9tu2d27ghNybhVyzUUhdF0DJn6UfVs3OObg153A7HAy5w9SF/9byiYsiR6tdQ
-         /fUw==
-X-Gm-Message-State: AOAM531MqryWVJMSJwj5GgiilzHdscHL8dSYHNeXeNM0fH3xOSjmEzBU
-        wuIbvpz2wpU2O2Oj9uuVSsqnTw==
-X-Google-Smtp-Source: ABdhPJxh6yZ28zBf0PUAfviAH/W4yXT6zxb1eFDrTtGKIhv4eKO/Sd9TdIWuaOMPRNq91YNAgKUGjA==
-X-Received: by 2002:a05:6830:7:: with SMTP id c7mr13295153otp.313.1627329855429;
-        Mon, 26 Jul 2021 13:04:15 -0700 (PDT)
+        bh=y8qxPhXibeauL3TNJ0rA0BM5c6Te/qTP5D2t4SuhdGk=;
+        b=G+RIeXCkZZTKAAjCyna7PSGgAp9CPBnnsCieGSbOHT2Ayr2L6WCK5buUAhRvQO29ho
+         yJh+OQ0nLrVFpU+ZpbrR1x24HTrPxVZORyC3q6y4v9ztbxpNW8g2m/3h2uIzY7F61oO8
+         FOjV5darfu9XJh5gGOgP1LMsIc81KdciQ5IFkVaRSCQDsHyjxZO+Pkc8MN7d+MmGMBCl
+         pLP2UoVUs2ndwXUCuTR5ei6f8+JNX34OlRotGxlnomZGd15plfzYKYlDhgCT6rwiWWUv
+         B9DiDPbvqZXc43jOMDUULBXAp7tRK/aGZn5n0sKw4b9/uaul9+57C+k0Ls1+qa/9AfPw
+         gobw==
+X-Gm-Message-State: AOAM5307di39awznJynuz6CnZ3nABGZeH/FyvTeM1MSiCTpEmzfDZ3xY
+        nDq+0CuDiajuoltBL8NfAsZBvQ==
+X-Google-Smtp-Source: ABdhPJx290csJRp5Q9NvP/HUN2LMB44B/K1xiseY90PzZsY0ECUjGoEAo/6RawBwyGx0xv9yWM8BKg==
+X-Received: by 2002:aca:c40a:: with SMTP id u10mr468462oif.111.1627329880111;
+        Mon, 26 Jul 2021 13:04:40 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x38sm160557ott.42.2021.07.26.13.04.14
+        by smtp.gmail.com with ESMTPSA id v7sm132569ooj.46.2021.07.26.13.04.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jul 2021 13:04:14 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] cpupower: Fix amd cpu (family < 0x17) active state
- issue
+        Mon, 26 Jul 2021 13:04:39 -0700 (PDT)
+Subject: Re: [PATCH v5 2/2] cpupower: Fix to return negative value if no
+ permisssion for read_msr
 To:     =?UTF-8?B?5b6Q56aP5rW3?= <xufuhai1992@gmail.com>, shuah@kernel.org,
         Thomas Renninger <trenn@suse.com>
 Cc:     xufuhai <xufuhai@kuaishou.com>, lishujin@kuaishou.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <CAOkq_Bf4NABfLnfVczj3sh5=8EqQxdZZeFc_3rQ24TmBbN365g@mail.gmail.com>
+References: <CAOkq_Bfc_u6crJtB=qJY4P76KnkLHF_7ZbFOsDsb5hhtpO5_FQ@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c8aba22f-c61a-ef98-e3be-2102582dbffe@linuxfoundation.org>
-Date:   Mon, 26 Jul 2021 14:04:14 -0600
+Message-ID: <2d0dd861-b62e-5bb0-79ba-0be05f0d6028@linuxfoundation.org>
+Date:   Mon, 26 Jul 2021 14:04:38 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <CAOkq_Bf4NABfLnfVczj3sh5=8EqQxdZZeFc_3rQ24TmBbN365g@mail.gmail.com>
+In-Reply-To: <CAOkq_Bfc_u6crJtB=qJY4P76KnkLHF_7ZbFOsDsb5hhtpO5_FQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -67,18 +67,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/23/21 12:23 AM, 徐福海 wrote:
+On 7/23/21 12:26 AM, 徐福海 wrote:
 > From: xufuhai<xufuhai1992@gmail.com>  <mailto:xufuhai@kuaishou.com>
 > 
-> For the old  AMD processor (family < 0x17), cpupower will call the
-> amd_pci_get_num_boost_states function, but for the non-root user
-> pci_read_byte function (implementation comes from the psutil library),
-> val will be set to 0xff, indicating that there is no read function
-> callback. At this time, the original logic will set the cpupower turbo
-> active state to yes. This is an obvious issue~
+> If the read_msr function is executed by a non-root user, the function returns
+> -1, which means that there is no permission to access//dev/cpu//%d/msr, but
+> cpufreq_has_boost_support should also return -1 immediately, and should not
+> follow the original logic to return 0, which will cause amd The cpupower tool
+> returns the boost active state as 0.
 > 
 > Reproduce procedure:
-> 	cpupower frequency-info
+>          cpupower frequency-info
 > 
 > Reported-by:   yangrui<yangrui@kuaishou.com>  <mailto:yangrui@kuaishou.com>
 > Signed-off-by: xufuhai<xufuhai1992@gmail.com>  <mailto:xufuhai@kuaishou.com>
