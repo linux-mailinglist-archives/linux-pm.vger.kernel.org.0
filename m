@@ -2,122 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34CE3D6773
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 21:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAEA3D6799
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 21:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbhGZSlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jul 2021 14:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbhGZSlN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 14:41:13 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FC0C061757
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 12:21:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f13so2405110plj.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 12:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=kW02NH4JkLTTeQKWGZHEOKD/xfYe3UpcABTowE9yy3Q=;
-        b=00rKTMdeG6mMfOEQf6uZHkD0Dz+Ize89AjPZJV2M+TMonfMSdOB7pzmmnesHgzvyTO
-         wzgizFp3NrqJvT0+H9SMJSlN/lvk+W4wybf1gohRcoHXkBDHBxPUZsLf8h+zFaQN5AT3
-         9k97wZMPlEzBKgRFTjQWRXN6nqSa1GKaEUg6lwdvalUrY0kq7uS8rtdhOSvQKwd0Fo2w
-         UgT5LMGGC0K0KFzfBo9C29ZrLE6T+bw9RKsp46wpmbbeqftbyXccoaZKfel/J+ezryO2
-         +vYewbiEszkcW6vcU0DCmp8oWFwgOPX1cNlb3l130eH8GC7j0SxWNGvlWVhu3flhm9kR
-         a1mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=kW02NH4JkLTTeQKWGZHEOKD/xfYe3UpcABTowE9yy3Q=;
-        b=U7yz0LxHmey4/R71940ODSnV41m5WbJG3pWV8evLDFdOO+WhYnVqr4tUdr65ULsVCK
-         gO8IuhTHJQX+tVRfkB9rw1Dq/WYXREwUFqel48DPQYBHjb3nR/uDMPwxb2NaiIJ+BW4M
-         exERniQdjj3bGDhrydFtn9C7+TcGnwxRx700+0djcrt/FqK8Jrxa+I2mfXumCgjNL0gU
-         xaZkqaTf09z0y9c0xJlGgrQTB6eDj4a71+fPm6SlZxzVUq1VFoZS8Aiw7O+v2iwF/DmY
-         TtX6Yew/kMDx1PVjgYZVFunJwge956xTHwSE0aZ5efd5VZx91brsVyxJADrxB2D5f7hF
-         mOLQ==
-X-Gm-Message-State: AOAM530NCesZkz5FijJyf3T58CCjq3GR2f8QUMtXU87pO6VxUS1uMV88
-        YfXPs3NYUYFs2TScjbLwlzAPyQ==
-X-Google-Smtp-Source: ABdhPJzyrhC6jJm7y2eGc2ejP5omR5jGnycG/iWk224URBOCih5VttIDJ6DCs8AZT853Q17PshCNGw==
-X-Received: by 2002:a17:90a:46c2:: with SMTP id x2mr17888002pjg.197.1627327301525;
-        Mon, 26 Jul 2021 12:21:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t23sm831138pfe.8.2021.07.26.12.21.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 12:21:41 -0700 (PDT)
-Message-ID: <60ff0b45.1c69fb81.9c12a.36ac@mx.google.com>
-Date:   Mon, 26 Jul 2021 12:21:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S231844AbhGZTB0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jul 2021 15:01:26 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:51742 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229882AbhGZTBZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 15:01:25 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 49F911C0B76; Mon, 26 Jul 2021 21:41:52 +0200 (CEST)
+Date:   Mon, 26 Jul 2021 21:41:46 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     shiva.linuxworks@gmail.com
+Cc:     rjw@rjwysocki.net, len.brown@intel.com, linux-pm@vger.kernel.org,
+        kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shivamurthy Shastri <sshivamurthy@micron.com>,
+        Keith Busch <kbush@kernel.org>
+Subject: Re: [PATCH v2 1/2] PM: enable support for imminent power loss
+Message-ID: <20210726194146.GA3986@localhost>
+References: <20210726132223.1661-1-sshivamurthy@micron.com>
+ <20210726132223.1661-2-sshivamurthy@micron.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.14-rc3-16-g1dae4a65c011
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (v5.14-rc3-16-g1dae4a65c011)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210726132223.1661-2-sshivamurthy@micron.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc3-16-g1dae4a65c011)
+Hi!
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-14-rc3-16-g1dae4a65c011/
+> If the shutdown is pwerformed when the platform is running on the
+> limited backup power supply, some of the devices might not have enough
+> power to perform a clean shutdown.
+> 
+> It is necessary to inform the driver about the limited backup power
+> supply, to allow the driver to decide to perform the minimal required
+> operation for a fast and clean shutdown.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.14-rc3-16-g1dae4a65c011
-Git Commit: 1dae4a65c01109508ee17281b6d92b734d7bc1f3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+If you can do shutdown that is fast & clean, why not do it always?
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+How fast is normal shutdown vs. fast shutdown?
 
-Detailed per-defconfig build reports:
+> +#define PM_SUSPEND_FLAG_POWER_LOSS_IMMINENT	BIT(3)
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+I believe we should be more concrete here. Like explaining use (did
+UPS say battery is low? Or does it mean 10 seconds remaining? Or...?)
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Plus, who sets this flag? Userland?
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Best regards,
+								Pavel
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
