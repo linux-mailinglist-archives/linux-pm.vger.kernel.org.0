@@ -2,99 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 187BD3D560B
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 11:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36813D5A3E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jul 2021 15:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbhGZIWF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jul 2021 04:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S233502AbhGZMmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jul 2021 08:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhGZIWF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 04:22:05 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA24DC061760
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 02:02:33 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id i10so7670157pla.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jul 2021 02:02:33 -0700 (PDT)
+        with ESMTP id S233408AbhGZMmu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jul 2021 08:42:50 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF68CC061757;
+        Mon, 26 Jul 2021 06:23:18 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id k14-20020a05600c1c8eb02901f13dd1672aso7712454wms.0;
+        Mon, 26 Jul 2021 06:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=m2PkWVzinhOCRo3IGzVGrt63/A23oKKmVsPMQyo7PTw=;
-        b=FY+UeXPr2uTrkK9TRyGO9fg62FZmL0DWVOERpKDuc3mN0/nYNb2w4Fhd+8r8v79cSi
-         xsTVteM9dE4KDr9W/3OE/d4Mym3p8Mk9twh9tlTBKUXFTt5mEp/58FVK0l69Mg2vq5wR
-         1G6wfu8Y87sIvLLMv5dGEpONizVbIBrr6pfzTpLwp48yHHS57vIGluDdnOkaZog24VFk
-         54iiK3jtXvBGRO8Z8gc2O2I+oQBjVRsmgZPKUU2XJINjflDRy24EWFMMuPlPEmRUStXL
-         s0zUwG3nm3NCCW8yyyX9Ard2zlPjGJfDLd8ul/ckDfMaS9/0tWY+I5V6T+gWln/iR0C9
-         sjNQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YoTT5JSM0KXApnvSxTPPv5lEEtSTHE0jP5EJ2+BXK/4=;
+        b=mZSYePYuhUR/H3XVrwsU6Pb4g2MT7EECN5Cfd2yiEbYJ7qmp4aFq18eFxjOlVwMmP2
+         kRQ7FUs21J0PgfqMlAAAhIUukxUnMLiuwrt32ICQEAGSS+0HmFrd7l56WAeliPPxlMjx
+         /w2NgI7Ofztw49O206jJEC48oVhlZo3bjwq6kXYRSyMJGznu0kUO8k9JAP5p4bYVakIA
+         v2pHs9uGvg170OMBHB0Gi6w4oR8LEtgHLGbNOnMDvMNZAB+EbobO7LhAPfK6V9IUpVAB
+         zjJ4YHiihD4btVY6jvBIL8gmKDV2neqjmxcToa+7knOKfbABsOLYpnoTZ/Xw/fnqRZRO
+         pevQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=m2PkWVzinhOCRo3IGzVGrt63/A23oKKmVsPMQyo7PTw=;
-        b=O0vQPHIRcN2elPWfTtjtL6mav0cPtzd0zzMbpCX+TtLdwygPrKTknx7bVBz0nBQIjf
-         riwJr8DxzQGWSIyI2dSVUlUMoT2Iij2NTuV2TusUJqvugYUYzyfgKfDSnkotGfLQIP8W
-         MYMAYsjAxv257X8Bm6KE5boJNaQvz7G1+IdXoH+nCyD7BR4LCLbdWsvUg3fdpbZSFLHt
-         KlV0+uEU/h4ZyMA3J+kfNtPQ/L3t+rYXDalxVVXnxVU6WJCxzdz7G9aMvnFW+yWsPaoe
-         So2+Nf9pR3VSvUna1AS2ZhLl1IpdBCGwEt0ygM/+IQD2xcdBAkqMbChWs72Mgy+kPc+6
-         tuyg==
-X-Gm-Message-State: AOAM5323k5ocZLfiQQquDAXwiSDcUelEfmxPgjybYKNnt5oyhyFR/P5A
-        3Y6qbrSVGAlsF2wFv2F2Xp643A==
-X-Google-Smtp-Source: ABdhPJxxRV+PHI9ZVH/W3WGvcEF5g6VdV1A+fJNtMaleKWCAh48BmH1VvwKy91J85Gmd4o9G/ItHVg==
-X-Received: by 2002:a17:902:be0f:b029:12b:6dff:2a22 with SMTP id r15-20020a170902be0fb029012b6dff2a22mr13666172pls.1.1627290153214;
-        Mon, 26 Jul 2021 02:02:33 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id ce15sm37175324pjb.3.2021.07.26.02.02.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YoTT5JSM0KXApnvSxTPPv5lEEtSTHE0jP5EJ2+BXK/4=;
+        b=Lu9/KpXubo8i4QpJDc8FUqay4Bf8fmo0FDzExqQ3Yw7llfiqNet3H/OH964ZnFBbyf
+         BSMLqg6XUMj6jSrd2R78gj7rZRqyBHIeO5NOei3TUkZlXFZ0HhsmKZdS54b6GlJm0hHn
+         L6MTcGJYk45dfIF1kY8Jr4xlYR7vtIxEU8ta0MBXxT7Vr18g/jJ5c26zyR9+tMrBXYRa
+         98degBGzepGWp+/yq/9YqXSOb1EChCrz2SHOI9/WjL9Thc92DmBd9reUdzh8PGQYMPbb
+         ECWrIN2b+sd2EsanKOLCGibgLMIiL2fywGRcAj/tqKH/EzCKjOfr5pHXy/9b+UojrTdY
+         ArTQ==
+X-Gm-Message-State: AOAM531lbjv0d30tg8zJ7O/b3movENJMyMdMDNYAEaY+a9ThFtOgAKJB
+        kvwpiTPHfeGfN2FOoUPaBgk=
+X-Google-Smtp-Source: ABdhPJxU5jilS297dc5rkI2UEbiBQRYHMTgzJueVTM3EwBDy7lQOv2gWHV/Psmf1QdzuaNGEu/uiDA==
+X-Received: by 2002:a05:600c:4f4d:: with SMTP id m13mr27309380wmq.31.1627305797286;
+        Mon, 26 Jul 2021 06:23:17 -0700 (PDT)
+Received: from microndev.lxd (ip5f5ac0ff.dynamic.kabel-deutschland.de. [95.90.192.255])
+        by smtp.gmail.com with ESMTPSA id w15sm8580wmi.3.2021.07.26.06.23.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 02:02:32 -0700 (PDT)
-Date:   Mon, 26 Jul 2021 14:32:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: remove WARN when no valid OPPs remain
-Message-ID: <20210726090230.ghsxqzv3pjw55ell@vireshk-i7>
-References: <aae042425e7a55d7d0f873cdfc3712953fb0df10.1627288191.git.mirq-linux@rere.qmqm.pl>
+        Mon, 26 Jul 2021 06:23:16 -0700 (PDT)
+From:   shiva.linuxworks@gmail.com
+X-Google-Original-From: sshivamurthy@micron.com
+To:     rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
+        linux-pm@vger.kernel.org, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de, sagi@grimberg.me, linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Shivamurthy Shastri <sshivamurthy@micron.com>
+Subject: [PATCH v2 0/2] Abrupt Shutdown for NVMe SSD
+Date:   Mon, 26 Jul 2021 13:22:21 +0000
+Message-Id: <20210726132223.1661-1-sshivamurthy@micron.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aae042425e7a55d7d0f873cdfc3712953fb0df10.1627288191.git.mirq-linux@rere.qmqm.pl>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-07-21, 10:30, Michał Mirosław wrote:
-> This WARN can be triggered per-core and the stack trace is not useful.
-> Replace it with plain dev_err(). Fix a comment while at it.
-> 
-> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> ---
->  drivers/opp/of.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index c582a9ca397b..01feeba78426 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -985,8 +985,9 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
->  		}
->  	}
->  
-> -	/* There should be one of more OPP defined */
-> -	if (WARN_ON(!count)) {
-> +	/* There should be one or more OPPs defined */
-> +	if (!count) {
-> +		dev_err(dev, "%s: no supported OPPs", __func__);
->  		ret = -ENOENT;
->  		goto remove_static_opp;
->  	}
+From: Shivamurthy Shastri <sshivamurthy@micron.com>
 
-Applied. Thanks.
+In the platform with a limited backup power supply, devices like NVMe
+SSD does unsafe shutdown.
+
+These two patches address this issue by adding a power loss imminent
+flag. The platform will enable the power loss imminent flag if the
+platform's power is running on the limited backup power supply. During
+the shutdown, the driver checks this information and pwerforms the
+abrupt shutdown.
+
+Shivamurthy Shastri (2):
+  PM: introduce power loss imminent
+  nvme: Add abrupt shutdown support
+
+ drivers/nvme/host/core.c |  7 ++++++-
+ drivers/nvme/host/pci.c  |  6 ++++--
+ include/linux/suspend.h  | 28 +++++++++++++++++++++++++---
+ 3 files changed, 35 insertions(+), 6 deletions(-)
 
 -- 
-viresh
+2.25.1
+
