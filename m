@@ -2,190 +2,271 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3AF3D75C0
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 15:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D743D76D2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbhG0NS3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 09:18:29 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:40838 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbhG0NS1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 09:18:27 -0400
-Received: by mail-oi1-f177.google.com with SMTP id q6so15032902oiw.7;
-        Tue, 27 Jul 2021 06:18:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ExJ0LotWxubbVajAcl3wn20A9whrV9bAX/MLYMrbYEY=;
-        b=Z3BA/FsBiYydtwiti9poWiSpsPjUD0gaePeMdVJFo39x/kMvK3YaHIoXIOgWeujmF8
-         Gi4jz2KvPcQArWw2axxDVKJm97vgJMBGwM1GZaScHOYCj2XoVjVjBR8g3sHIMDI1llnn
-         MJ7r5MoZdEzDjch2o7iryKSpA6n4xsv5YvSLMSqNi0I1DpRh9+VsRoDnXa9jTtfQgVIl
-         tV4BjmZQLmIMFjMKvJnwgPS7MQL8HIteSA6nWBKnKkDjkDDykzcDF6++YISwIF6H4sXI
-         26BmnHsqokDgO5YgUUuAsvC1WkyK/IRbBM4IbtLykzurYNDk1D6PH9Y2BtmbO+lLVQiz
-         tlBw==
-X-Gm-Message-State: AOAM531mABr6LY8C+HhFsJPrgh2RJPj8FwnfVdxV9xzsOz7OKmXQPUQM
-        l1aZJuuAFYVz/NsKFZppkDOdnWfS8Hawy+vyfM8=
-X-Google-Smtp-Source: ABdhPJxE8sKaO2HwcBrn71zWq3IU3UGLmu2YNIssb+e4f4lsapoxT2OBK4hKrWgUvtOOepvu5el4eoBG2jZgPLZuKu4=
-X-Received: by 2002:aca:4f57:: with SMTP id d84mr15104627oib.71.1627391906449;
- Tue, 27 Jul 2021 06:18:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <5475468.DvuYhMxLoT@kreacher> <YP/mN6kSwMPWW+Mn@lahna>
-In-Reply-To: <YP/mN6kSwMPWW+Mn@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Jul 2021 15:18:15 +0200
-Message-ID: <CAJZ5v0iFiax87oWaz+SjZdcaL4fPAH-4Du=eXx-kWTH6RK2DbQ@mail.gmail.com>
-Subject: Re: [RFT][PATCH] PCI: PM: Add special case handling for PCIe device wakeup
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
+        id S232278AbhG0NdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jul 2021 09:33:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47631 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236537AbhG0NdH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 09:33:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627392787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fm8lgs96oZg9fEfhAHy4eXddFvZa4+bpbiafqpalwmA=;
+        b=SXDHpDdTzjwkClz57ZH21Z9Z/5Gi+yb1Y8C8Q5Vvh8HdVZJyTRSKUyNy//76rAhIZvWRd8
+        iaS8WJ+wSbtZiRHQOY1t3xcgVgQJiAlb9MTQsTfzPnchfHGfQUFB1SkZWa10Qgu7qztBlj
+        EQvIEnW32ND8rTh98sWGaCuNCk7N8Es=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-594-PY1Mr8BuOeCKUF6RQkf9dQ-1; Tue, 27 Jul 2021 09:33:03 -0400
+X-MC-Unique: PY1Mr8BuOeCKUF6RQkf9dQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 128CA801AE7;
+        Tue, 27 Jul 2021 13:33:02 +0000 (UTC)
+Received: from localhost (ovpn-113-165.ams2.redhat.com [10.36.113.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 930F61970F;
+        Tue, 27 Jul 2021 13:32:52 +0000 (UTC)
+Date:   Tue, 27 Jul 2021 14:32:51 +0100
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        virtualization@lists.linux-foundation.org,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
-        Koba Ko <koba.ko@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [RFC 0/3] cpuidle: add poll_source API and virtio vq polling
+Message-ID: <YQALA8sQMx0xYtt+@stefanha-x1.localdomain>
+References: <20210713161906.457857-1-stefanha@redhat.com>
+ <1008dee4-fce1-2462-1520-f5432bc89a07@redhat.com>
+ <YPfryV7qZVRbjNgP@stefanha-x1.localdomain>
+ <869a993d-a1b0-1c39-d081-4cdd2b71041f@redhat.com>
+ <YP7SEkDEIBOch9U8@stefanha-x1.localdomain>
+ <CAJZ5v0h+RrRP-3MtV8dgxmba0rDfqoOw54DsFh0yx3YGUAVRqw@mail.gmail.com>
+ <YP7cTjrfipfsJe9O@stefanha-x1.localdomain>
+ <CAJZ5v0i4+2xda4Z6=JwRQf4ZzM2_agiyCwhMDRzAC-yz39fGzg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="N2H8x3xJ2augdtSN"
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i4+2xda4Z6=JwRQf4ZzM2_agiyCwhMDRzAC-yz39fGzg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 12:56 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Mon, Jul 12, 2021 at 07:06:47PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Some PCIe devices only support PME (Power Management Event) from
-> > D3cold.  One example is the ASMedia xHCI controller:
-> >
-> >  11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
-> >    ...
-> >    Capabilities: [78] Power Management version 3
-> >            Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
-> >            Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> >
-> > In those cases, if the device is expected to generate wakeup events
-> > from its final power state, pci_target_state() returns D0, which
-> > prevents the PCIe port the device is connected to from entering any
-> > low-power states too.  However, if the device were allowed to go into
-> > D3hot, its parent PCIe port would also be able to go into D3 and if
-> > it goes into D3cold, it would cause the endpoint device to end up in
-> > D3cold too (as per the PCI PM spec v1.2, Table 6-1), in which case
-> > the endpoint would be able to signal PME.  This means that the system
-> > could be put into a lower-power configuration without sacrificing the
-> > the given device's ability to generate PME.
-> >
-> > In order to avoid missing that opportunity, extend pci_pme_capable()
-> > to check the device's parent in the special case when the target
-> > state is D3hot and the device can only signal PME from D3cold and
-> > update pci_target_state() to return the current target state if
-> > pci_pme_capable() returns 'true' for it.
->
-> Thanks a lot for this!
->
-> I tried the patch and unfortunately it does not solve the issue but I
-> think I know what the problem is, see below.
 
-OK, it's good that you can access a system having this issue.
+--N2H8x3xJ2augdtSN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Link: https://lore.kernel.org/linux-pm/20210617123653.58640-1-mika.westerberg@linux.intel.com
-> > Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
-> > Reported-by: Koba Ko <koba.ko@canonical.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
+On Mon, Jul 26, 2021 at 06:37:13PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Jul 26, 2021 at 6:04 PM Stefan Hajnoczi <stefanha@redhat.com> wro=
+te:
 > >
-> > Hi,
+> > On Mon, Jul 26, 2021 at 05:47:19PM +0200, Rafael J. Wysocki wrote:
+> > > On Mon, Jul 26, 2021 at 5:17 PM Stefan Hajnoczi <stefanha@redhat.com>=
+ wrote:
+> > > >
+> > > > On Thu, Jul 22, 2021 at 05:04:57PM +0800, Jason Wang wrote:
+> > > > >
+> > > > > =E5=9C=A8 2021/7/21 =E4=B8=8B=E5=8D=885:41, Stefan Hajnoczi =E5=
+=86=99=E9=81=93:
+> > > > > > On Wed, Jul 21, 2021 at 11:29:55AM +0800, Jason Wang wrote:
+> > > > > > > =E5=9C=A8 2021/7/14 =E4=B8=8A=E5=8D=8812:19, Stefan Hajnoczi =
+=E5=86=99=E9=81=93:
+> > > > > > > > These patches are not polished yet but I would like request=
+ feedback on this
+> > > > > > > > approach and share performance results with you.
+> > > > > > > >
+> > > > > > > > Idle CPUs tentatively enter a busy wait loop before halting=
+ when the cpuidle
+> > > > > > > > haltpoll driver is enabled inside a virtual machine. This r=
+educes wakeup
+> > > > > > > > latency for events that occur soon after the vCPU becomes i=
+dle.
+> > > > > > > >
+> > > > > > > > This patch series extends the cpuidle busy wait loop with t=
+he new poll_source
+> > > > > > > > API so drivers can participate in polling. Such polling-awa=
+re drivers disable
+> > > > > > > > their device's irq during the busy wait loop to avoid the c=
+ost of interrupts.
+> > > > > > > > This reduces latency further than regular cpuidle haltpoll,=
+ which still relies
+> > > > > > > > on irqs.
+> > > > > > > >
+> > > > > > > > Virtio drivers are modified to use the poll_source API so a=
+ll virtio device
+> > > > > > > > types get this feature. The following virtio-blk fio benchm=
+ark results show the
+> > > > > > > > improvement:
+> > > > > > > >
+> > > > > > > >                IOPS (numjobs=3D4, iodepth=3D1, 4 virtqueues)
+> > > > > > > >                  before   poll_source      io_poll
+> > > > > > > > 4k randread    167102  186049 (+11%)  186654 (+11%)
+> > > > > > > > 4k randwrite   162204  181214 (+11%)  181850 (+12%)
+> > > > > > > > 4k randrw      159520  177071 (+11%)  177928 (+11%)
+> > > > > > > >
+> > > > > > > > The comparison against io_poll shows that cpuidle poll_sour=
+ce achieves
+> > > > > > > > equivalent performance to the block layer's io_poll feature=
+ (which I
+> > > > > > > > implemented in a separate patch series [1]).
+> > > > > > > >
+> > > > > > > > The advantage of poll_source is that applications do not ne=
+ed to explicitly set
+> > > > > > > > the RWF_HIPRI I/O request flag. The poll_source approach is=
+ attractive because
+> > > > > > > > few applications actually use RWF_HIPRI and it takes advant=
+age of CPU cycles we
+> > > > > > > > would have spent in cpuidle haltpoll anyway.
+> > > > > > > >
+> > > > > > > > The current series does not improve virtio-net. I haven't i=
+nvestigated deeply,
+> > > > > > > > but it is possible that NAPI and poll_source do not combine=
+=2E See the final
+> > > > > > > > patch for a starting point on making the two work together.
+> > > > > > > >
+> > > > > > > > I have not tried this on bare metal but it might help there=
+ too. The cost of
+> > > > > > > > disabling a device's irq must be less than the savings from=
+ avoiding irq
+> > > > > > > > handling for this optimization to make sense.
+> > > > > > > >
+> > > > > > > > [1] https://lore.kernel.org/linux-block/20210520141305.3559=
+61-1-stefanha@redhat.com/
+> > > > > > >
+> > > > > > > Hi Stefan:
+> > > > > > >
+> > > > > > > Some questions:
+> > > > > > >
+> > > > > > > 1) What's the advantages of introducing polling at virtio lev=
+el instead of
+> > > > > > > doing it at each subsystems? Polling in virtio level may only=
+ work well if
+> > > > > > > all (or most) of the devices are virtio
+> > > > > > I'm not sure I understand the question. cpuidle haltpoll benefi=
+ts all
+> > > > > > devices today, except it incurs interrupt latency. The poll_sou=
+rce API
+> > > > > > eliminates the interrupt latency for drivers that can disable d=
+evice
+> > > > > > interrupts cheaply.
+> > > > > >
+> > > > > > This patch adds poll_source to core virtio code so that all vir=
+tio
+> > > > > > drivers get this feature for free. No driver-specific changes a=
+re
+> > > > > > needed.
+> > > > > >
+> > > > > > If you mean networking, block layer, etc by "subsystems" then t=
+here's
+> > > > > > nothing those subsystems can do to help. Whether poll_source ca=
+n be used
+> > > > > > depends on the specific driver, not the subsystem. If you consi=
+der
+> > > > > > drivers/virtio/ a subsystem, then that's exactly what the patch=
+ series
+> > > > > > is doing.
+> > > > >
+> > > > >
+> > > > > I meant, if we choose to use idle poll, we have some several choi=
+ces:
+> > > > >
+> > > > > 1) bus level (e.g the virtio)
+> > > > > 2) subsystem level (e.g the networking and block)
+> > > > >
+> > > > > I'm not sure which one is better.
+> > > >
+> > > > This API is intended to be driver- or bus-level. I don't think
+> > > > subsystems can do very much since they don't know the hardware
+> > > > capabilities (cheap interrupt disabling) and in most cases there's =
+no
+> > > > advantage of plumbing it through subsystems when drivers can call t=
+he
+> > > > API directly.
+> > > >
+> > > > > > > 2) What's the advantages of using cpuidle instead of using a =
+thread (and
+> > > > > > > leverage the scheduler)?
+> > > > > > In order to combine with the existing cpuidle infrastructure. N=
+o new
+> > > > > > polling loop is introduced and no additional CPU cycles are spe=
+nt on
+> > > > > > polling.
+> > > > > >
+> > > > > > If cpuidle itself is converted to threads then poll_source would
+> > > > > > automatically operate in a thread too, but this patch series do=
+esn't
+> > > > > > change how the core cpuidle code works.
+> > > > >
+> > > > >
+> > > > > So networking subsystem can use NAPI busy polling in the process =
+context
+> > > > > which means it can be leveraged by the scheduler.
+> > > > >
+> > > > > I'm not sure it's a good idea to poll drivers for a specific bus =
+in the
+> > > > > general cpu idle layer.
+> > > >
+> > > > Why? Maybe because the cpuidle execution environment is a little sp=
+ecial?
+> > >
+> > > Well, this would be prone to abuse.
+> > >
+> > > The time spent in that driver callback counts as CPU idle time while
+> > > it really is the driver running and there is not limit on how much
+> > > time the callback can take, while doing costly things in the idle loop
+> > > is generally avoided, because on wakeup the CPU needs to be available
+> > > to the task needing it as soon as possible.  IOW, the callback
+> > > potentially add unbounded latency to the CPU wakeup path.
 > >
-> > Anyone who can reproduce the problem described in the changelog,
-> > please test the patch and let me know the result.
-> >
-> > Thanks!
-> >
-> > ---
-> >  drivers/pci/pci.c |   38 ++++++++++++++++++++++++++------------
-> >  1 file changed, 26 insertions(+), 12 deletions(-)
-> >
-> > Index: linux-pm/drivers/pci/pci.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/pci/pci.c
-> > +++ linux-pm/drivers/pci/pci.c
-> > @@ -2298,10 +2298,29 @@ void pci_pme_wakeup_bus(struct pci_bus *
-> >   */
-> >  bool pci_pme_capable(struct pci_dev *dev, pci_power_t state)
-> >  {
-> > +     struct pci_dev *parent;
-> > +
-> >       if (!dev->pm_cap)
-> >               return false;
-> >
-> > -     return !!(dev->pme_support & (1 << state));
-> > +     if (dev->pme_support & (1 << state))
-> > +             return true;
-> > +
-> > +     /*
-> > +      * Special case: The target state is D3hot and the device only supports
-> > +      * signaling PME from D3cold, but it is a PCIe device whose parent port
-> > +      * can go into D3cold.  In that case, if the device is allowed to go
-> > +      * into D3hot, the parent port can go into D3cold which will cause the
-> > +      * device to end up in D3cold, so it will be able to signal PME from the
-> > +      * final state.
-> > +      */
-> > +     if (state != PCI_D3hot || !(dev->pme_support & (1 << PCI_D3cold)))
-> > +             return false;
-> > +
-> > +     parent = dev->bus->self;
-> > +     return pci_bridge_d3_possible(parent) &&
-> > +             platform_pci_power_manageable(parent) &&
->
-> Here. We cannot assume that the parent has ACPI node either.
+> > How is this different from driver interrupt handlers running during
+> > cpuidle?
+>=20
+> The time spent on handling interrupts does not count as CPU idle time.
 
-I see.  Obviously, I assumed that this was the case.
+Is that taken care of by account_hardirq_enter()?
 
-> For instance when PCIe is tunneled over TBT/USB4 there can be several PCIe
-> switches between the problem endpoint and the root port (which has the
-> ACPI node of course). I think the safe assumption is to check for the
-> root port and whether platform_pci_power_manageable() returns true for
-> it but I may be missing something.
+Drivers using poll_source have two pieces:
+1. A small piece of code that polls the device.
+2. A larger piece of code that runs when polling succeeds. This is
+   basically the irq handler.
 
-Well, if any of the ports on the path between the target endpoint and
-the root complex can be put into D3cold via ACPI, the endpoint will
-end up in D3cold effectively, so I think that all of them need to be
-checked.
+Would it be acceptable to run #1 from cpuidle but defer #2 so it's not
+accounted as idle time?
 
-Let me change the patch to do that.
+Thanks,
+Stefan
 
-> > +             platform_pci_choose_state(parent) == PCI_D3cold;
-> >  }
-> >  EXPORT_SYMBOL(pci_pme_capable);
-> >
-> > @@ -2595,17 +2614,12 @@ static pci_power_t pci_target_state(stru
-> >       if (dev->current_state == PCI_D3cold)
-> >               target_state = PCI_D3cold;
-> >
-> > -     if (wakeup) {
-> > -             /*
-> > -              * Find the deepest state from which the device can generate
-> > -              * PME#.
-> > -              */
-> > -             if (dev->pme_support) {
-> > -                     while (target_state
-> > -                           && !(dev->pme_support & (1 << target_state)))
-> > -                             target_state--;
-> > -             }
-> > -     }
-> > +     if (!wakeup || !dev->pme_support || pci_pme_capable(dev, target_state))
-> > +             return target_state;
-> > +
-> > +     /* Find the deepest state from which the device can generate PME#. */
-> > +     while (target_state && !(dev->pme_support & (1 << target_state)))
-> > +             target_state--;
-> >
-> >       return target_state;
-> >  }
-> >
-> >
+--N2H8x3xJ2augdtSN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmEACwMACgkQnKSrs4Gr
+c8gr+gf+Krz5uK7igE9flabFjcMXVxdI4o6fMwLG0LUmsULn4HOQiWMd2CU/UpUe
+RurunecxzjmCJyTQim82onIX81MZJMeVK2GJCcuTOu+Ggbr+tbhXO3lsSBWPDpbT
+7MgNxG+y4Unv2ErSZLS+OWPq6gYLXgBpecOBthE1yJux2K/s1CcAPeF7QEdoTZut
+HKKqrdVVH51c+tn8LG9Xgviza8Gpvr5tgovCGyTN15f9d36FNgW0Xq7/hKVjk1yx
+hY3U+dTkfSWvsYJS3K/KKrjIppWt0rr+71tjNC+l4ngTLb9npGmNWJ0B02cac6Yd
+j/REXsTsnGf7Dw7brj2Mhdr99yDf/A==
+=Gpcr
+-----END PGP SIGNATURE-----
+
+--N2H8x3xJ2augdtSN--
+
