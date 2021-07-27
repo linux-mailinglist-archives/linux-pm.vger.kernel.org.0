@@ -2,63 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512263D7BFB
+	by mail.lfdr.de (Postfix) with ESMTP id 04BCC3D7BF9
 	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 19:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbhG0RQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 13:16:22 -0400
-Received: from box.trvn.ru ([194.87.146.52]:52621 "EHLO box.trvn.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhG0RQV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S229506AbhG0RQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 27 Jul 2021 13:16:21 -0400
+Received: from box.trvn.ru ([194.87.146.52]:55379 "EHLO box.trvn.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229494AbhG0RQV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 27 Jul 2021 13:16:21 -0400
+X-Greylist: delayed 588 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Jul 2021 13:16:20 EDT
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 79A33413D3;
-        Tue, 27 Jul 2021 22:06:28 +0500 (+05)
+        by box.trvn.ru (Postfix) with ESMTPSA id 9FB2C41408;
+        Tue, 27 Jul 2021 22:06:34 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1627405589; bh=1+ecd5RxP5Uu5mrSwspRP0Hg++hsqVRh3UdQruBewQo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gu6DPLyLOcrzln61ZvTvlqDHox5pqN7yr0b7Wz65ba1Le9Fq3jPs3gJtr30ROjZLF
-         aR4KggTq53VE8WIHvBF+Hk0VZP8XmrsR2USdbaE+kFBQQhhcq6z2Gu3yZPCFM+D4iS
-         Em8AR5wXT6n+2o+azb3FCwWjIeP4EOXhHent128qCuVqJM9VEI0aldLA1kFN5yxeaA
-         LnmzI0QTcKwbyWnEONd4ENCYMBpnDIXT9fC5obiBzdR21+SX3JtPfT2L861H4J8p2C
-         tmWtbagczx4e1tzscB93zQ1mmD2K0yDylxL0QNN8EA6S3gPWsyGIehwQorpOFxcXXo
-         Tudgseh3lFYdQ==
+        t=1627405594; bh=J1QeZY0GGxGmKqHWfK3B8iOjYhKTd83rZqFYkpeUGxU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=p/z31ToftYcAHNl2NmLIapDRICE5pqrSkmgNpdRf7a/ZYp7aRgOiU1TIfG3pKOP7i
+         4/DyTth35V81SRx6kNFHXuadSlJrfDhmE7gG0f3n6yp/TQnxGN/SQIj1iFfwLDf/Ex
+         NCfaMwWQVHDklFf/GsZ9JprZB1YaQXn8KxAYjZTR/FwIi4xOOjRUHxcQ38XdFvX4IH
+         Zc5+G8I7pcZq8+xQgNniwZEYWL4L8SGwiZnbZY6nECjm2lAyR+6H+LAkqypbtZUS2l
+         pPz7CbOslZbV+Xvm2grvwvl6byiC+7infAOG1uWpfbh1OMSBOtMenip1Hm/sDhx5Eb
+         zrdt+kd0nOVGw==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     sre@kernel.org
 Cc:     robh+dt@kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH 1/2] dt-bindings: power: supply: max17042: Document max77849-battery
-Date:   Tue, 27 Jul 2021 22:03:44 +0500
-Message-Id: <20210727170345.115004-1-nikita@trvn.ru>
+Subject: [PATCH 2/2] power: supply: max17042_battery: Add support for MAX77849 Fuel-Gauge
+Date:   Tue, 27 Jul 2021 22:03:45 +0500
+Message-Id: <20210727170345.115004-2-nikita@trvn.ru>
+In-Reply-To: <20210727170345.115004-1-nikita@trvn.ru>
+References: <20210727170345.115004-1-nikita@trvn.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-max77849 is a combined fuel-gauge, charger and MUIC device. Add it to
-the bindings documentation.
+MAX77849 is a combined fuel-gauge, charger and MUIC IC. Notably,
+fuel-gauge has dedicated i2c lines and seems to be fully compatible
+with max17047. Add new compatible for it reusing max17047 code paths.
 
 Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
- .../devicetree/bindings/power/supply/maxim,max17042.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/max17042_battery.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-index c70f05ea6d27..42ebf87d300b 100644
---- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-@@ -19,6 +19,7 @@ properties:
-       - maxim,max17047
-       - maxim,max17050
-       - maxim,max17055
-+      - maxim,max77849-battery
- 
-   reg:
-     maxItems: 1
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index ce2041b30a06..f28c90ea41b4 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -1196,6 +1196,7 @@ static const struct of_device_id max17042_dt_match[] = {
+ 	{ .compatible = "maxim,max17047" },
+ 	{ .compatible = "maxim,max17050" },
+ 	{ .compatible = "maxim,max17055" },
++	{ .compatible = "maxim,max77849-battery" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, max17042_dt_match);
+@@ -1206,6 +1207,7 @@ static const struct i2c_device_id max17042_id[] = {
+ 	{ "max17047", MAXIM_DEVICE_TYPE_MAX17047 },
+ 	{ "max17050", MAXIM_DEVICE_TYPE_MAX17050 },
+ 	{ "max17055", MAXIM_DEVICE_TYPE_MAX17055 },
++	{ "max77849-battery", MAXIM_DEVICE_TYPE_MAX17047 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, max17042_id);
 -- 
 2.30.2
 
