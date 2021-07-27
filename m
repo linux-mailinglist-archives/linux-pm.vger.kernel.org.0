@@ -2,177 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28F23D6FAA
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 08:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FC53D7074
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 09:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbhG0GtZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 02:49:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9736 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235205AbhG0GtZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 02:49:25 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16R6YZZr031688;
-        Tue, 27 Jul 2021 02:49:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4gKl0q2cCG3K0uWmHofx3rjoSMwefxziUQ3VJpNnV4w=;
- b=du6MRDY0J1mBENbGmQ6B5qGjstjN5EpVK/im5p0EwHOo9F//VUIWoNubMWsbZ5aGfhxF
- Z7WLvZ0A5sBT/rvP1vurgPr442mLyrK5TSrRZf8CmbUTpNEUto+QuKN/sIZ+Jge78iEA
- eJkvcBbkrJEtzwKh4SsiaNzd2F+K+av+O539a8vNKcF6uL4APDa67jxeHitgwm1bGNce
- UWj8UeGZ3VUmBf8wgrl4J/K5VCX1iLcuchyvHDkuQFuLmTa5kC/RtJ8rE5QvF9gsgm9C
- jTLium8IKThP6vv7KadyvS7i7tPcyt5XykVWvyyffIuMl6Um16YBIYWoBCuITjLlMX7q KA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2d080qa9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 02:49:14 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16R6Ynl7033625;
-        Tue, 27 Jul 2021 02:49:13 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2d080q92-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 02:49:13 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16R6CSpi027171;
-        Tue, 27 Jul 2021 06:49:11 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3a235m07db-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 06:49:11 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16R6n8Zv28311894
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 06:49:08 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 932F0A4062;
-        Tue, 27 Jul 2021 06:49:08 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA1CEA405B;
-        Tue, 27 Jul 2021 06:49:05 +0000 (GMT)
-Received: from [9.199.45.94] (unknown [9.199.45.94])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jul 2021 06:49:05 +0000 (GMT)
-Subject: Re: [PATCH] cpufreq:powernv: Fix init_chip_info initialization in
- numa=off
-To:     ego@linux.vnet.ibm.com
-Cc:     mpe@ellerman.id.au, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, pratik.r.sampat@gmail.com
-References: <20210726170758.61041-1-psampat@linux.ibm.com>
- <20210727061656.GA10282@in.ibm.com>
-From:   Pratik Sampat <psampat@linux.ibm.com>
-Message-ID: <60aaa78a-ece1-73d2-ea4c-e3835a6e3ab8@linux.ibm.com>
-Date:   Tue, 27 Jul 2021 12:19:04 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+        id S235629AbhG0HgF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jul 2021 03:36:05 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:52530 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235504AbhG0HgE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 27 Jul 2021 03:36:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1627371365; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=n206CYcrj+jIUe5lGFPaF01ju7Kvlgz+cLDVUWfQPaE=; b=mJrz9bIqF3cTxLSOJui9ytwmn85VNI3hWYHLijLtcZBO8uDvBtMH8Umf4+9kN6mNNZQj8DlG
+ eIfOcWX5MahX3BM/hvLlkbTJM23l/kBr15yCELxE4TLCcy/FEZrBmzsfu4OnPDvusnaKZ1Na
+ S+o6iWZDUYxela/2OBbyx0a1/SI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 60ffb75fe81205dd0ae3e611 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Jul 2021 07:35:59
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 64F4BC4338A; Tue, 27 Jul 2021 07:35:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.50.54.206] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4D9DCC433F1;
+        Tue, 27 Jul 2021 07:35:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4D9DCC433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH v4 2/2] arm64: dts: sc7180: Add required-opps for i2c
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, ulf.hansson@linaro.org,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, rojay@codeaurora.org,
+        stephan@gerhold.net
+References: <1626429658-18961-1-git-send-email-rnayak@codeaurora.org>
+ <1626429658-18961-3-git-send-email-rnayak@codeaurora.org>
+ <YPHpsO5LlQRQxj9y@yoga>
+ <CAE-0n53CHD8c7C4ETWRgzmZmFSCcBw46wSs4pKbYMRjA_tD3yg@mail.gmail.com>
+ <YPHxfHPC/faq/y+J@yoga>
+ <CAE-0n50qx80cMFPJ1x9rc+EMR1L+j2CUMyDjWAbnE9mPHjf-TQ@mail.gmail.com>
+ <YPIBK/NJgBNZVI8Y@yoga> <12711a61-e16c-d2bc-6e04-ab94c7551abe@codeaurora.org>
+ <YPXQNFYKfH/xZxFY@yoga> <bc79ea3e-4981-8f9b-f9a7-59cb972047a7@codeaurora.org>
+ <YP2Y6qs5P5mb2jzE@yoga>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <b6b315ae-ee68-6ba8-7453-f28dace3d8d2@codeaurora.org>
+Date:   Tue, 27 Jul 2021 13:05:52 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210727061656.GA10282@in.ibm.com>
+In-Reply-To: <YP2Y6qs5P5mb2jzE@yoga>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2wm48rhKY5L38nFjNAYG_fYMRPhOJ6TD
-X-Proofpoint-GUID: rpSxo2XOqTUJmE7fJEZ_NqTsKBv5681R
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_04:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2107140000 definitions=main-2107270038
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+On 7/25/2021 10:31 PM, Bjorn Andersson wrote:
+> On Mon 19 Jul 23:29 CDT 2021, Rajendra Nayak wrote:
+> 
+>>
+>>
+>> On 7/20/2021 12:49 AM, Bjorn Andersson wrote:
+>>> On Mon 19 Jul 04:37 CDT 2021, Rajendra Nayak wrote:
+>>>
+>>>>
+>>>>
+>>>> On 7/17/2021 3:29 AM, Bjorn Andersson wrote:
+>>>>> On Fri 16 Jul 16:49 CDT 2021, Stephen Boyd wrote:
+>>>>>
+>>>>>> Quoting Bjorn Andersson (2021-07-16 13:52:12)
+>>>>>>> On Fri 16 Jul 15:21 CDT 2021, Stephen Boyd wrote:
+>>>>>>>
+>>>>>>>> Quoting Bjorn Andersson (2021-07-16 13:18:56)
+>>>>>>>>> On Fri 16 Jul 05:00 CDT 2021, Rajendra Nayak wrote:
+>>>>>>>>>
+>>>>>>>>>> qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
+>>>>>>>>>> Though qup-i2c does not support DVFS, it still needs to vote for a
+>>>>>>>>>> performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
+>>>>>>>>>> requirement.
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Sounds good, but...
+>>>>>>>>>
+>>>>>>>>>> Use 'required-opps' to pass this information from
+>>>>>>>>>> device tree, and also add the power-domains property to specify
+>>>>>>>>>> the CX power-domain.
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> ..is the required-opps really needed with my rpmhpd patch in place?
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Yes? Because rpmhpd_opp_low_svs is not the lowest performance state for
+>>>>>>>> CX.
+>>>>>>>
+>>>>>>> On e.g. sm8250 the first available non-zero corner presented in cmd-db
+>>>>>>> is low_svs.
+>>>>
+>>>> what rail is this? the mmcx? Perhaps it does not support RET.
+>>>> cx usually supports both collapse state and RET.
+>>>>
+>>>
+>>> That was the one I was specifically looking at for the MDSS_GDSC->MMCX
+>>> issue, so it's likely I didn't look elsewhere.
+>>>
+>>>>>>
+>>>>>> Indeed. On sc7180 it's not the first non-zero corner. I suppose
+>>>>>> retention for CX isn't actually used when the SoC is awake so your
+>>>>>> rpmhpd patch is putting in a vote for something that doesn't do anything
+>>>>>> at runtime for CX? I imagine that rpmh only sets the aggregate corner to
+>>>>>> retention when the whole SoC is suspended/sleeping, otherwise things
+>>>>>> wouldn't go very well. Similarly, min_svs may be VDD minimization? If
+>>>>>> so, those first two states are basically states that shouldn't be used
+>>>>>> at runtime, almost like sleep states.
+>>>>>>
+>>>>>
+>>>>> But if that's the case, I don't think it's appropriate for the "enabled
+>>>>> state" of the domain to use any of those corners.
+>>>>
+>>>> I rechecked the downstream kernels where all this voting happens from within
+>>>> the clock drivers, and I do see votes to min_svs for some clocks, but Stephen is
+>>>> right that RET is not something that's voted on while in active state.
+>>>>
+>>>> But always going with something just above the ret level while active will also
+>>>> not work for all devices, for instance for i2c on 7180, it needs a cx vote of
+>>>> low svs while the rail (cx) does support something lower than that which is min svs.
+>>>> (why can't it just work with min svs?, I don't know, these values and recommendations
+>>>> come in from the voltage plans published by HW teams for every SoC and we just end up
+>>>> using them in SW, perhaps something to dig further and understand which I will try and
+>>>> do but these are the values in voltage plans and downstream kernels which work for now)
+>>>>
+>>>
+>>> So to some degree this invalidates my argumentation about the
+>>> enabled_corner in rpmhpd, given that "enabled" means a different corner
+>>> for each rail - not just the one with lowest non-zero value.
+>>
+>> Right, it might work in some cases but might not work for all.
+>>
+> 
+> Which makes it way less desirable.
+> 
+> The enable state for rpmhpd power domains doesn't meet my expectations
+> for how a power domain should behave, 
 
-On 27/07/21 11:46 am, Gautham R Shenoy wrote:
-> On Mon, Jul 26, 2021 at 10:37:57PM +0530, Pratik R. Sampat wrote:
->> In the numa=off kernel command-line configuration init_chip_info() loops
->> around the number of chips and attempts to copy the cpumask of that node
->> which is NULL for all iterations after the first chip.
->>
->> Hence, store the cpu mask for each chip instead of derving cpumask from
->> node while populating the "chips" struct array and copy that to the
->> chips[i].mask
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 053819e0bf84 ("cpufreq: powernv: Handle throttling due to Pmax capping at chip level")
->> Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
->> Reported-by: Shirisha Ganta <shirisha.ganta1@ibm.com>
->> ---
->>   drivers/cpufreq/powernv-cpufreq.c | 15 +++++++++++++--
->>   1 file changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
->> index 005600cef273..8ec10d9aed8f 100644
->> --- a/drivers/cpufreq/powernv-cpufreq.c
->> +++ b/drivers/cpufreq/powernv-cpufreq.c
->> @@ -1046,12 +1046,20 @@ static int init_chip_info(void)
->>   	unsigned int *chip;
->>   	unsigned int cpu, i;
->>   	unsigned int prev_chip_id = UINT_MAX;
->> +	cpumask_t *chip_cpu_mask;
->>   	int ret = 0;
->>
->>   	chip = kcalloc(num_possible_cpus(), sizeof(*chip), GFP_KERNEL);
->>   	if (!chip)
->>   		return -ENOMEM;
->>
->> +	/* Allocate a chip cpu mask large enough to fit mask for all chips */
->> +	chip_cpu_mask = kcalloc(32, sizeof(cpumask_t), GFP_KERNEL);
-> I suppose by 32 you mean the maximum number of chips possible. You
-> could use a #define for that.
+Right and that's perhaps because these are not the usual power-domains,
+which have one "on/active" state and one or more "off/inactive" states (off/ret/clock-stop)
+Rpmhpd has multiple "on/active" states, and whats "on/active" for one consumer
+might not be "on/active" for another, so this information is hard to be managed
+at a generic level and these requests in some way or the other need to come
+in explicitly from the resp. consumers.
 
-ack, I could #define the constant.
-
-> Otherwise, the patch looks good to me.
->
-> Reviewed-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
->
-Thanks
-Pratik
-
->
->> +	if (!chip_cpu_mask) {
->> +		ret = -ENOMEM;
->> +		goto free_and_return;
->> +	}
->> +
->>   	for_each_possible_cpu(cpu) {
->>   		unsigned int id = cpu_to_chip_id(cpu);
+> but we should at least be
+> consistent across all consumers of it then...
+> 
+> 
+> But the original issue remains, that when a device is powered by
+> MDSS_GDSC, which is a subdomain of MMCX we still need to ensure that
+> "on" for MMCX is actually "on" - which just happens to be the first
+> non-0 corner.
+> 
+> But I presume we will end up having to do the same with &gcc's GDSCs,
+> which are subdomains of CX and MX where this isn't true.
+> 
+>>>
+>>> So perhaps instead of introducing the enabled_corner we need to
+>>> introduce your patch and slap a WARN_ON(corner == 0) in
+>>> rpmhpd_power_on() - to ensure that all clients that uses a rpmhpd domain
+>>> actually do vote for a high enough corner?
 >>
->> @@ -1059,22 +1067,25 @@ static int init_chip_info(void)
->>   			prev_chip_id = id;
->>   			chip[nr_chips++] = id;
->>   		}
->> +		cpumask_set_cpu(cpu, &chip_cpu_mask[nr_chips-1]);
->>   	}
+>> So this would mean the expectation is that the clients set the perf state/corner
+>> before they call power_on? I don;t think that's the case today with most clients,
+>> infact its the opposite, we power on first and then make a call to set the perf
+>> state of the domain.
 >>
->>   	chips = kcalloc(nr_chips, sizeof(struct chip), GFP_KERNEL);
->>   	if (!chips) {
->>   		ret = -ENOMEM;
->> -		goto free_and_return;
->> +		goto out_chip_cpu_mask;
->>   	}
+> 
+> You're right, it's pretty much always the opposite, given that genpd
+> will always enable the domain during attach.
+> 
+> Regards,
+> Bjorn
+> 
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>>>>
+>>>>> As this means that anyone who needs any of the rpmhpd domains active
+>>>>> also needs to specify required-opps, which wouldn't be needed for any
+>>>>> other power domain provider.
+>>>>>
+>>>>> And more importantly it means that a device sitting in a GDSC, which
+>>>>> would be parented by a rpmhpd domain has no way to specify the GDSC and
+>>>>> trickle the minimum-vote up to the rpmhpd domain. (And I know that we
+>>>>> don't describe the parentship of the GDSCs today, but this patch
+>>>>> tells me that it's around the corner - for more than MMCX)
+>>>>>
+>>>>> Regards,
+>>>>> Bjorn
+>>>>>
+>>>>>>>
+>>>>>>> And if this (which?) clock requires a higher corner than the lowest
+>>>>>>> possible in order to tick at this "lowest" frequency, I'm certainly
+>>>>>>> interested in some more details.
+>>>>>>>
+>>>>
+>>>> -- 
+>>>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+>>>> of Code Aurora Forum, hosted by The Linux Foundation
 >>
->>   	for (i = 0; i < nr_chips; i++) {
->>   		chips[i].id = chip[i];
->> -		cpumask_copy(&chips[i].mask, cpumask_of_node(chip[i]));
->> +		cpumask_copy(&chips[i].mask, &chip_cpu_mask[i]);
->>   		INIT_WORK(&chips[i].throttle, powernv_cpufreq_work_fn);
->>   		for_each_cpu(cpu, &chips[i].mask)
->>   			per_cpu(chip_info, cpu) =  &chips[i];
->>   	}
->>
->> +out_chip_cpu_mask:
->> +	kfree(chip_cpu_mask);
->>   free_and_return:
->>   	kfree(chip);
->>   	return ret;
 >> -- 
->> 2.31.1
->>
+>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+>> of Code Aurora Forum, hosted by The Linux Foundation
 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
