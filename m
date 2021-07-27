@@ -2,100 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9913D7D62
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 20:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CE03D7ED1
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 22:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbhG0S0v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 14:26:51 -0400
-Received: from mail-il1-f182.google.com ([209.85.166.182]:38663 "EHLO
-        mail-il1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbhG0S0t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 14:26:49 -0400
-Received: by mail-il1-f182.google.com with SMTP id h18so195241ilc.5;
-        Tue, 27 Jul 2021 11:26:48 -0700 (PDT)
+        id S230476AbhG0UGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jul 2021 16:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230469AbhG0UGk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 16:06:40 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8734FC061757
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jul 2021 13:06:40 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id j1so1540692pjv.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jul 2021 13:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=PwWl2aSuu6+Di4TaYJklMnkd+oXVKsyMZMTbKM+A+u8=;
+        b=GjjTQEx7cmQ4zLT2IsEMp1dHExxHTJJPdNifLGuzeHOyl85uK+W94wFykfmba9pGcz
+         0HTKN8p3jjW0tpWPvalpO9Key8qoO6tvnO5OTsjj8leLwAns+o4cT1wdKg8+vwvCaBvN
+         usKbb5AzUN4ROfXv/zsx7tqgYkLiBq7BuWrPnedWeiPM1RU8qadLPpgIPPF3bJ8Q8p95
+         03iPFN5yl2EPY1etCgOZ/cR2Pcrb+smAA4CV5aYuUYtGqfIM8Q7rd11Qy5QmimU9LPQ3
+         mZSqPQkGw8ietikJcSxYZL0LUUER6tPhF0lOUAuJofuQnJLpXM00K1r6Mpi96piZEDeV
+         ixwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=2ZN+Os4KcblXwXlTL5vzGACuV2+/v2kG3feRmGVKyCo=;
-        b=BRzHPIoDVKNnF+bu6IZ/d3FagDEFXVA0zSgzabCx4LooKpQX3bTf+mR4KdcAzI1FYy
-         bnpoVL4KEZiZa8H+9D7PslSOtTiqTiYF9IEa1A0z+E35hBlsaKHMFo7R18rxweDKZHqa
-         whOhD54HRVGeg+Wv5WTwOJwIkU8P44QkCs+g0A4j2R/fEZnGiHC+mfwAJgZvjAfK/Qez
-         RNjoqjCsNNVvUF/hJPo/crFdz2JFpA0a9dM38H3Fgnks76s72TknnN8Mb4GG3hAcMdeC
-         KADI1pgXxqXR933G804S/e7NnssuZPDgX6x++vNBq38rQ0erhewmrPSEoyT5imLUOe7o
-         1u0w==
-X-Gm-Message-State: AOAM533KHYu2IKBCdmQSCuqRd059x+pgRXFgsFHVIpY1CUfXXGdpRdk8
-        alhJMwZobAtFDaAfTE+D2w==
-X-Google-Smtp-Source: ABdhPJxJ2NYaxQ1nbNMMl3dkF0KXaLypDNB2gEo4iR1RWB0PAxHYmIYgSOJlEvITbTdqjse0NV4VtA==
-X-Received: by 2002:a92:dc8a:: with SMTP id c10mr17390858iln.48.1627410408071;
-        Tue, 27 Jul 2021 11:26:48 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id h13sm2066103ila.44.2021.07.27.11.26.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jul 2021 11:26:47 -0700 (PDT)
-Received: (nullmailer pid 3210656 invoked by uid 1000);
-        Tue, 27 Jul 2021 18:26:35 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steev@kali.org, robh+dt@kernel.org, viresh.kumar@linaro.org,
-        devicetree@vger.kernel.org, rui.zhang@intel.com, rjw@rjwysocki.net
-In-Reply-To: <20210727152512.1098329-7-thara.gopinath@linaro.org>
-References: <20210727152512.1098329-1-thara.gopinath@linaro.org> <20210727152512.1098329-7-thara.gopinath@linaro.org>
-Subject: Re: [Patch v4 6/6] dt-bindings: thermal: Add dt binding for QCOM LMh
-Date:   Tue, 27 Jul 2021 12:26:35 -0600
-Message-Id: <1627410395.886153.3210655.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=PwWl2aSuu6+Di4TaYJklMnkd+oXVKsyMZMTbKM+A+u8=;
+        b=f113B/MTXhN4DoQKhYlCBneEGkJQDKIMxUWhFbU8VepLKkBc+UpaW21Hua5tH34eI0
+         /8/h0vnTt2WA1qi+/0qVX30kmzWYnxdxVukg4xSa42ZG/VAq4vl+qoucvxW0qH2fds8O
+         4K+bMKLY9HRmeqNNC1kCWgESQsyQ+5VG3Fo7B3lKZmd9M0pMGo0CrLUDUrPC7oPwY76f
+         7dpo8YRbXSe1N7q9n4KB88XB9OnrOz1NRyKyCwfh5RPqW7AUWzzxZrqlowZyr4/CYvQl
+         wzZ3v95F09Y8ezw5aVSLUBiR3p1nX9NlzRT8KgG6wtPezdy8DdOcR93xWp7/iayzPpp7
+         JyNw==
+X-Gm-Message-State: AOAM532RHThk8aN0HFQq8FIsVKSQD8KsVb63QuNDixwW4SZtLhf0InHz
+        jUjJ0eNyCozFrydyoIOVVxtCXg==
+X-Google-Smtp-Source: ABdhPJz1eke9REWf5ey8sjMLPlapYCBiZ5nkq2cf+SnoX82CZjudaQlB11GZQciL7Ozt9/omc5RjTA==
+X-Received: by 2002:a17:902:b487:b029:12c:4051:a8de with SMTP id y7-20020a170902b487b029012c4051a8demr5298018plr.76.1627416400041;
+        Tue, 27 Jul 2021 13:06:40 -0700 (PDT)
+Received: from DougS18 ([173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id y30sm4205738pfa.220.2021.07.27.13.06.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Jul 2021 13:06:39 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <1867445.PYKUYFuaPT@kreacher>
+In-Reply-To: <1867445.PYKUYFuaPT@kreacher>
+Subject: RE: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
+Date:   Tue, 27 Jul 2021 13:06:39 -0700
+Message-ID: <000801d78322$e9b94980$bd2bdc80$@telus.net>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJWv5LtWSG8O5a4tG6eLIHdXBOua6pYw/kg
+Content-Language: en-ca
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 27 Jul 2021 11:25:12 -0400, Thara Gopinath wrote:
-> Add dt binding documentation to describe Qualcomm
-> Limits Management Hardware node.
-> 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
-> 
-> v3->v4:
-> 	- Changed dt property qcom,lmh-cpu-id to qcom,lmh-cpu and made it
-> 	  a phandle pointing to the cpu node instead of a number as per
-> 	  Rob Herring's review comments.
-> 	- Added suffix -millicelsius to all temperature properties as per
-> 	  Rob Herring's review comments.
-> 	- Dropped unnecessary #includes in the example as pointed out by Bjorn.
-> 	- Other minor fixes.
-> 
->  .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> 
+Hi Rafael,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Further to my reply of 2021.07.04  on this, I have
+continued to work with and test this patch set.
 
-yamllint warnings/errors:
+On 2021.06.02 11:14 Rafael J. Wysocki wrote:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml: required:3: None is not of type 'string'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml: ignoring, error in schema: required: 3
-warning: no schema found in file: ./Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-Documentation/devicetree/bindings/thermal/qcom-lmh.example.dt.yaml:0:0: /example-0/lmh@17d70800: failed to match any schema with compatible: ['qcom,sdm845-lmh']
-Documentation/devicetree/bindings/thermal/qcom-lmh.example.dt.yaml:0:0: /example-1/lmh@17d78800: failed to match any schema with compatible: ['qcom,sdm845-lmh']
-\ndoc reference errors (make refcheckdocs):
+>This series of patches addresses some theoretical shortcoming in the
+> TEO (Timer Events Oriented) cpuidle governor by reworking its idle
+> state selection logic to some extent.
+>
+> Patches [1-2/5] are introductory cleanups and the substantial changes =
+are
+> made in patches [3-4/5] (please refer to the changelogs of these two
+> patches for details).  The last patch only deals with documentation.
+>
+> Even though this work is mostly based on theoretical considerations, =
+it
+> shows a measurable reduction of the number of cases in which the =
+shallowest
+> idle state is selected while it would be more beneficial to select a =
+deeper
+> one or the deepest idle state is selected while it would be more =
+beneficial to
+> select a shallower one, which should be a noticeable improvement.
 
-See https://patchwork.ozlabs.org/patch/1510556
+I am concentrating in the idle state 0 and 1 area.
+When I disable idle state 0, the expectation is its
+usage will fall to idle state 1. It doesn't.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Conditions:
+CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+HWP: disabled
+CPU frequency scaling driver: intel_pstate, active
+CPU frequency scaling governor: performance.
+Idle configuration: As a COMETLAKE processor, with 4 idle states.
+Sample time for below: 1 minute.
+Workflow: Cross core named pipe token passing, 12 threads.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Kernel 5.14-rc3: idle: teo governor
 
-pip3 install dtschema --upgrade
+All idle states enabled: PASS
+Processor: 97 watts
+Idle state 0 entries: 811151
+Idle state 1 entries: 140300776
+Idle state 2 entries: 889
+Idle state 3 entries: 8
 
-Please check and re-submit.
+Idle state 0 disabled: FAIL <<<<<
+Processor: 96 watts
+Idle state 0 entries: 0
+Idle state 1 entries: 65599283
+Idle state 2 entries: 364399
+Idle state 3 entries: 65112651
+
+Kernel 5.14-rc3: idle: menu governor
+
+All idle states enabled: PASS
+Processor: 102 watts
+Idle state 0 entries: 169320747
+Idle state 1 entries: 1860110
+Idle state 2 entries: 14
+Idle state 3 entries: 54
+
+Idle state 0 disabled: PASS
+Processor: 96.7 watts
+Idle state 0 entries: 0
+Idle state 1 entries: 141936790
+Idle state 2 entries: 0
+Idle state 3 entries: 6
+
+Prior to this patch set:
+Kernel 5.13: idle: teo governor
+
+All idle states enabled: PASS
+Processor: 97 watts
+Idle state 0 entries: 446735
+Idle state 1 entries: 140903027
+Idle state 2 entries: 0
+Idle state 3 entries: 0
+
+Idle state 0 disabled: PASS
+Processor: 96 watts
+Idle state 0 entries: 0
+Idle state 1 entries: 139308125
+Idle state 2 entries: 0
+Idle state 3 entries: 0
+
+I haven't tried to isolate the issue in the code, yet.
+Nor have I explored to determine if there might
+be other potential idle state disabled issues.
+
+... Doug
+
 
