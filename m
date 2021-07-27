@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6592D3D71E3
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 11:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BD03D71E5
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 11:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbhG0J0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 05:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S236090AbhG0J0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jul 2021 05:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbhG0J0J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 05:26:09 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC94AC061764;
-        Tue, 27 Jul 2021 02:26:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gs8so7527120ejc.13;
-        Tue, 27 Jul 2021 02:26:08 -0700 (PDT)
+        with ESMTP id S235946AbhG0J0K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 05:26:10 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598F7C061757;
+        Tue, 27 Jul 2021 02:26:09 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id qk33so2438972ejc.12;
+        Tue, 27 Jul 2021 02:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mBKXCsHfwip4Rwb+DfNH2Tu2tuIAQDn6p9m9ppniW64=;
-        b=PaYQREomEDTfoBTOeayOvSQUZPuLugWj1zJJ3wgIho7cyBxghUd8rdo9sVvOBnyA70
-         p5VOpxCCd2KFsoeDfFqFcAV1oz9W7gJSI3LAg2WHBWR3p9B++pUpKeB6cmHfjroTiBCe
-         GVe/xMCT4Gfjlt7Sv1LqKIkhRtAY++SiJfVm8yV+eETgm4harn/An0dZOrEEmFgrmC2Q
-         gcLTmUGA745v9kb2rRpi+QL3EpUvw1HLw+haR7lDitUBfXJc7k9BKuy5XRSk71D7DC+H
-         T4sbKSUCvCtKV56MpI0rPopwky3D725DWFncVDAgwpFD38pJDZR+CnNCVrJDpqn2yO1Z
-         uGFw==
+        bh=zTxbpyEBi9BLHVqlKkligQWKEqtO8+9t1v/xWkgvTkU=;
+        b=hIF8ix9U4rnGSGmj5vMRPasBGm0tDHFAzvcMAEeiP69CvHPSZ2stmch0+WdJYLwZ/B
+         8fWCzZuiZ16mLE6nSWFVPWPmKErMNUkf9zIApidOVaASxAmm8YGsF3JmWWe+mLA2JYKI
+         CTQSWNVBTFqH1wk3hUpoFjr2SSI494HOm+v/5ZZFpTPLdWVROnPRdXW8V8HVhAqLCLFt
+         bZwcHhGBdJhmtatEGi/vH12hv6UyiAJsJw7+Qz67eUGrvfTYmi10abuQW8tKGUf94eWb
+         nSkZDxAPH7ff5zzK7FPZvJ8PeIgkwdk4IDOM/WjKufuasb9JDTLyMZ6ERfxbok+Pn+aS
+         UYnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=mBKXCsHfwip4Rwb+DfNH2Tu2tuIAQDn6p9m9ppniW64=;
-        b=Il4pj0tsWsv+hvtmCUEBTLzmLljJVqpa6S7vt27YeI2bNUejbnovLyf9tlBPjTGjUU
-         22nkEe7YZQwNYwu1NkIUDCY65MOIfRbww37c+bAzj8N8tg3Um8tnKVZKAL34uIgHxFcL
-         kkqFkNa1m2qMZNmaioS2VR+vgTvhQH8npZ+RV23gAqZ0jK1+iOLoHJ5SKWWpyU28e4y5
-         iuE4TjbFhQ7JwSNcGLr+NzS7Ihs1FpOQzihmDeWMd8j79l0Z9JpfF2GHRJdidAs5Rww2
-         fn5G8AilfXfgIwWagnSpECXeIT0BysEx53wY9pMOvm90rqjU5jlujaqEKXY/DqONJOy9
-         f+qw==
-X-Gm-Message-State: AOAM532fy15CZYJU3e8658IpP2DS7fFHaSZD5OcPAz4dkvvINcpMs6t3
-        O3oGg4QJyAItv1vKfvlxkYw=
-X-Google-Smtp-Source: ABdhPJzTtskTMc5QZec5ZUvY3TDl4N0+dAB9ON6+fTzXzORIu58twTG7edWEwy6LylQVcHNEbgY6/g==
-X-Received: by 2002:a17:906:dbd9:: with SMTP id yc25mr21126510ejb.367.1627377967400;
+        bh=zTxbpyEBi9BLHVqlKkligQWKEqtO8+9t1v/xWkgvTkU=;
+        b=SMjgSHCZvxg1x048RbBmtpYtKi6478oZm142EeKLy0pdQsJCo/qy70x94F2lNjBk9h
+         UVkQHCVdcZ3J3b19j8a+qp6mK4/sxfe3rbhHHvTPvRsg7wPkHskoNcgU5pj2jLURkSga
+         /kFOf82NEPCDBySeYP/xmVfWM8SLUsA5R/hhWfZtXgeSYySqjHf61pCpIcVRHqBVCQs+
+         TR8XG08vY8rq697ccSTKPLDfu9sJJ1KwJQt8GvhHfnoPl3UiZWH6PYJqe9KiKTpedT0Y
+         3SSVaF+aqNQF17M45ZlCyfRtlLdF9LZrmLXwc39yBvEpaHohkpSctTODGIM0XJAeegoJ
+         bMRA==
+X-Gm-Message-State: AOAM531/qJQKqQ01t43NlsDKZTdUu3qtIU/jbRkM2JvbsFhZBhMDgWcY
+        Aec6lT2fWuxt1AzerZFGv7Y=
+X-Google-Smtp-Source: ABdhPJzWBthXzvd02bAnk0H2j9AbAxH2DKotrJ6HuwNjc7S9f7aO/yqw3yg2G4aIpf/LkDwcWoBchg==
+X-Received: by 2002:a17:906:d182:: with SMTP id c2mr21594069ejz.111.1627377967994;
         Tue, 27 Jul 2021 02:26:07 -0700 (PDT)
 Received: from stitch.. ([82.192.166.82])
-        by smtp.gmail.com with ESMTPSA id g3sm692369ejp.2.2021.07.27.02.26.06
+        by smtp.gmail.com with ESMTPSA id g3sm692369ejp.2.2021.07.27.02.26.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 27 Jul 2021 02:26:07 -0700 (PDT)
 Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
@@ -52,11 +52,10 @@ From:   Emil Renner Berthing <kernel@esmil.dk>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Emil Renner Berthing <kernel@esmil.dk>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/4] mfd: tps65086: Make interrupt line optional
-Date:   Tue, 27 Jul 2021 11:25:52 +0200
-Message-Id: <20210727092554.1059305-3-kernel@esmil.dk>
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/4] power: reset: Add TPS65086 restart driver
+Date:   Tue, 27 Jul 2021 11:25:53 +0200
+Message-Id: <20210727092554.1059305-4-kernel@esmil.dk>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210727092554.1059305-1-kernel@esmil.dk>
 References: <20210727092554.1059305-1-kernel@esmil.dk>
@@ -66,80 +65,156 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The BeagleV Starlight v0.9 board[1] doesn't have the IRQB line routed to
-the SoC, but it is still useful to be able to reach the PMIC over I2C
-for the other functionality it provides such as GPIOs and regulator
-settings.
+The only way to reset the BeagleV Starlight v0.9 board[1] properly is to
+tell the PMIC to reset itself which will then assert the external reset
+lines of the SoC, USB hub and ethernet phy.
+
+This adds a driver to register a reset handler to do just that.
 
 [1] https://github.com/beagleboard/beaglev-starlight
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../devicetree/bindings/mfd/ti,tps65086.yaml  |  3 ---
- drivers/mfd/tps65086.c                        | 21 ++++++++++---------
- 2 files changed, 11 insertions(+), 13 deletions(-)
+ drivers/power/reset/Kconfig            |  6 ++
+ drivers/power/reset/Makefile           |  1 +
+ drivers/power/reset/tps65086-restart.c | 98 ++++++++++++++++++++++++++
+ 3 files changed, 105 insertions(+)
+ create mode 100644 drivers/power/reset/tps65086-restart.c
 
-diff --git a/Documentation/devicetree/bindings/mfd/ti,tps65086.yaml b/Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
-index 9f6e1349eadc..6aeedda3be15 100644
---- a/Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
-@@ -87,9 +87,6 @@ additionalProperties: false
- required:
-   - compatible
-   - reg
--  - interrupts
--  - interrupt-controller
--  - '#interrupt-cells'
-   - gpio-controller
-   - '#gpio-cells'
-   - regulators
-diff --git a/drivers/mfd/tps65086.c b/drivers/mfd/tps65086.c
-index 341466ef20cc..cc3478ee9a64 100644
---- a/drivers/mfd/tps65086.c
-+++ b/drivers/mfd/tps65086.c
-@@ -100,29 +100,30 @@ static int tps65086_probe(struct i2c_client *client,
- 		 (char)((version & TPS65086_DEVICEID_OTP_MASK) >> 4) + 'A',
- 		 (version & TPS65086_DEVICEID_REV_MASK) >> 6);
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 4d1192062508..4b563db3ab3e 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -204,6 +204,12 @@ config POWER_RESET_ST
+ 	help
+ 	  Reset support for STMicroelectronics boards.
  
--	ret = regmap_add_irq_chip(tps->regmap, tps->irq, IRQF_ONESHOT, 0,
--				  &tps65086_irq_chip, &tps->irq_data);
--	if (ret) {
--		dev_err(tps->dev, "Failed to register IRQ chip\n");
--		return ret;
-+	if (tps->irq > 0) {
-+		ret = regmap_add_irq_chip(tps->regmap, tps->irq, IRQF_ONESHOT, 0,
-+					  &tps65086_irq_chip, &tps->irq_data);
-+		if (ret) {
-+			dev_err(tps->dev, "Failed to register IRQ chip\n");
-+			return ret;
-+		}
- 	}
- 
- 	ret = mfd_add_devices(tps->dev, PLATFORM_DEVID_AUTO, tps65086_cells,
- 			      ARRAY_SIZE(tps65086_cells), NULL, 0,
- 			      regmap_irq_get_domain(tps->irq_data));
--	if (ret) {
-+	if (ret && tps->irq > 0)
- 		regmap_del_irq_chip(tps->irq, tps->irq_data);
--		return ret;
--	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int tps65086_remove(struct i2c_client *client)
- {
- 	struct tps65086 *tps = i2c_get_clientdata(client);
- 
--	regmap_del_irq_chip(tps->irq, tps->irq_data);
-+	if (tps->irq > 0)
-+		regmap_del_irq_chip(tps->irq, tps->irq_data);
- 
- 	return 0;
- }
++config POWER_RESET_TPS65086
++	bool "TPS65086 restart driver"
++	depends on MFD_TPS65086
++	help
++	  This driver adds support for resetting the TPS65086 PMIC on restart.
++
+ config POWER_RESET_VERSATILE
+ 	bool "ARM Versatile family reboot driver"
+ 	depends on ARM
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index cf3f4d02d8a5..f606a2f60539 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+ obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
+ obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
+ obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
++obj-$(CONFIG_POWER_RESET_TPS65086) += tps65086-restart.o
+ obj-$(CONFIG_POWER_RESET_VERSATILE) += arm-versatile-reboot.o
+ obj-$(CONFIG_POWER_RESET_VEXPRESS) += vexpress-poweroff.o
+ obj-$(CONFIG_POWER_RESET_XGENE) += xgene-reboot.o
+diff --git a/drivers/power/reset/tps65086-restart.c b/drivers/power/reset/tps65086-restart.c
+new file mode 100644
+index 000000000000..78b89f745a3d
+--- /dev/null
++++ b/drivers/power/reset/tps65086-restart.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 Emil Renner Berthing
++ */
++
++#include <linux/mfd/tps65086.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/reboot.h>
++
++struct tps65086_restart {
++	struct notifier_block handler;
++	struct device *dev;
++};
++
++static int tps65086_restart_notify(struct notifier_block *this,
++				   unsigned long mode, void *cmd)
++{
++	struct tps65086_restart *tps65086_restart =
++		container_of(this, struct tps65086_restart, handler);
++	struct tps65086 *tps65086 = dev_get_drvdata(tps65086_restart->dev->parent);
++	int ret;
++
++	ret = regmap_write(tps65086->regmap, TPS65086_FORCESHUTDN, 1);
++	if (ret) {
++		dev_err(tps65086_restart->dev, "%s: error writing to tps65086 pmic: %d\n",
++			__func__, ret);
++		return NOTIFY_DONE;
++	}
++
++	/* give it a little time */
++	mdelay(200);
++
++	WARN_ON(1);
++
++	return NOTIFY_DONE;
++}
++
++static int tps65086_restart_probe(struct platform_device *pdev)
++{
++	struct tps65086_restart *tps65086_restart;
++	int ret;
++
++	tps65086_restart = devm_kzalloc(&pdev->dev, sizeof(*tps65086_restart), GFP_KERNEL);
++	if (!tps65086_restart)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, tps65086_restart);
++
++	tps65086_restart->handler.notifier_call = tps65086_restart_notify;
++	tps65086_restart->handler.priority = 192;
++	tps65086_restart->dev = &pdev->dev;
++
++	ret = register_restart_handler(&tps65086_restart->handler);
++	if (ret) {
++		dev_err(&pdev->dev, "%s: cannot register restart handler: %d\n",
++			__func__, ret);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++static int tps65086_restart_remove(struct platform_device *pdev)
++{
++	struct tps65086_restart *tps65086_restart = platform_get_drvdata(pdev);
++	int ret;
++
++	ret = unregister_restart_handler(&tps65086_restart->handler);
++	if (ret) {
++		dev_err(&pdev->dev, "%s: cannot unregister restart handler: %d\n",
++			__func__, ret);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++static const struct platform_device_id tps65086_restart_id_table[] = {
++	{ "tps65086-reset", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(platform, tps65086_restart_id_table);
++
++static struct platform_driver tps65086_restart_driver = {
++	.driver = {
++		.name = "tps65086-restart",
++	},
++	.probe = tps65086_restart_probe,
++	.remove = tps65086_restart_remove,
++	.id_table = tps65086_restart_id_table,
++};
++module_platform_driver(tps65086_restart_driver);
++
++MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
++MODULE_DESCRIPTION("TPS65086 restart driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.32.0
 
