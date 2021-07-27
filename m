@@ -2,271 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D743D76D2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 15:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EF63D79A9
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jul 2021 17:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbhG0NdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jul 2021 09:33:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47631 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236537AbhG0NdH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 09:33:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627392787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fm8lgs96oZg9fEfhAHy4eXddFvZa4+bpbiafqpalwmA=;
-        b=SXDHpDdTzjwkClz57ZH21Z9Z/5Gi+yb1Y8C8Q5Vvh8HdVZJyTRSKUyNy//76rAhIZvWRd8
-        iaS8WJ+wSbtZiRHQOY1t3xcgVgQJiAlb9MTQsTfzPnchfHGfQUFB1SkZWa10Qgu7qztBlj
-        EQvIEnW32ND8rTh98sWGaCuNCk7N8Es=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-594-PY1Mr8BuOeCKUF6RQkf9dQ-1; Tue, 27 Jul 2021 09:33:03 -0400
-X-MC-Unique: PY1Mr8BuOeCKUF6RQkf9dQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 128CA801AE7;
-        Tue, 27 Jul 2021 13:33:02 +0000 (UTC)
-Received: from localhost (ovpn-113-165.ams2.redhat.com [10.36.113.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 930F61970F;
-        Tue, 27 Jul 2021 13:32:52 +0000 (UTC)
-Date:   Tue, 27 Jul 2021 14:32:51 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        virtualization@lists.linux-foundation.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [RFC 0/3] cpuidle: add poll_source API and virtio vq polling
-Message-ID: <YQALA8sQMx0xYtt+@stefanha-x1.localdomain>
-References: <20210713161906.457857-1-stefanha@redhat.com>
- <1008dee4-fce1-2462-1520-f5432bc89a07@redhat.com>
- <YPfryV7qZVRbjNgP@stefanha-x1.localdomain>
- <869a993d-a1b0-1c39-d081-4cdd2b71041f@redhat.com>
- <YP7SEkDEIBOch9U8@stefanha-x1.localdomain>
- <CAJZ5v0h+RrRP-3MtV8dgxmba0rDfqoOw54DsFh0yx3YGUAVRqw@mail.gmail.com>
- <YP7cTjrfipfsJe9O@stefanha-x1.localdomain>
- <CAJZ5v0i4+2xda4Z6=JwRQf4ZzM2_agiyCwhMDRzAC-yz39fGzg@mail.gmail.com>
+        id S237104AbhG0PZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jul 2021 11:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236978AbhG0PZn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jul 2021 11:25:43 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87529C061765
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jul 2021 08:25:14 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id z24so12683906qkz.7
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jul 2021 08:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZZK1Rd7NI6DtGUw1dux730psOSqbcpXN58j1qSdbMgw=;
+        b=LyivXD0axHeLtbIXnUVgA+/WCdkotHzXVnEE4eZ/UmyvGPpdTR6C89BexzAd0cJFKW
+         nP0hzyiASsVa9xQb4tTfTQ8iyzdqHS5fsiFUYQOYGc2x+5lpNWTy2j/XAN65Nkzh4uYd
+         vI5kjNalDupkycWtjP8Gt+urgAGi7CJZfqMLzx84E66gxtBPGo35KuYKSYoTF/K2bnea
+         KFLkScwOgFyz7jS2AWGqVgiqQMV0AzXdS7/5WxmP21KlTgTQQZtkAVtdT1PpxEuISgxk
+         1zY/LWtWV/KXKD1J3qdGU6zdP9o/AgZN4OKX6K2MVEcYDnqBqhMrEI8QS3OEvOGeLdeo
+         udUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZZK1Rd7NI6DtGUw1dux730psOSqbcpXN58j1qSdbMgw=;
+        b=S42S+4hZYNqL0TeQvNksBpnH/O/s464gzdCPMwDTBWXpdwpIvtG+gLJSDddsEsK8v8
+         AKrMS/C4KS7Ep4aeYMN6rI9adXnyLGBHAKRtpFOsdEVqcLVp+Jhfs599ijyLSxfACRr8
+         gCycXXTcXVp79bAsFgBNrcFH7j11CQHUJwaKUQ4KbvxsiCOBZPMWaVFElGL4u+evgHAR
+         R1SyzxoFn/Y+ge4UzC7gIPpKAWx7fJ+FFQllkvGRO0CicBAz6fIv9EPBPBIVkrZCyr6h
+         Nqtf1zEqZHAB1EPlqAszl36Np5G7uKs45oZ/SrUf6BbvFXeL7kuuzArFeN9c97a5AgYS
+         W0qQ==
+X-Gm-Message-State: AOAM533ObDsRODuNFrGOIl4cXReG7DMC3qlnhjdm+94/C2VtKN5ZeFF+
+        DbswwTBwF6RSCAZM4jDOLGm1YA==
+X-Google-Smtp-Source: ABdhPJw0MS12bAyHiKyVFbaWv2yJeAcpz8la/FAT+4Xeykk3cUg8jC/lY+rhfv8wuWTna2zI2mzPJA==
+X-Received: by 2002:a37:313:: with SMTP id 19mr22335450qkd.295.1627399513547;
+        Tue, 27 Jul 2021 08:25:13 -0700 (PDT)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id q4sm1539663qtr.20.2021.07.27.08.25.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jul 2021 08:25:13 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        rjw@rjwysocki.net, robh+dt@kernel.org
+Cc:     steev@kali.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [Patch v4 0/6] Introduce LMh driver for Qualcomm SoCs
+Date:   Tue, 27 Jul 2021 11:25:06 -0400
+Message-Id: <20210727152512.1098329-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="N2H8x3xJ2augdtSN"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i4+2xda4Z6=JwRQf4ZzM2_agiyCwhMDRzAC-yz39fGzg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Limits Management Hardware(LMh) is a hardware infrastructure on some
+Qualcomm SoCs that can enforce temperature and current limits as programmed
+by software for certain IPs like CPU. On many newer SoCs LMh is configured
+by firmware/TZ and no programming is needed from the kernel side. But on
+certain SoCs like sdm845 the firmware does not do a complete programming of
+the h/w block. On such SoCs kernel software has to explicitly set up the
+temperature limits and turn on various monitoring and enforcing algorithms
+on the hardware.
 
---N2H8x3xJ2augdtSN
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Introduce support for enabling and programming various limit settings and
+monitoring capabilities of Limits Management Hardware(LMh) associated with
+cpu clusters. Also introduce support in cpufreq hardware driver to monitor
+the interrupt associated with cpu frequency throttling so that this
+information can be conveyed to the schdeuler via thermal pressure
+interface.
 
-On Mon, Jul 26, 2021 at 06:37:13PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jul 26, 2021 at 6:04 PM Stefan Hajnoczi <stefanha@redhat.com> wro=
-te:
-> >
-> > On Mon, Jul 26, 2021 at 05:47:19PM +0200, Rafael J. Wysocki wrote:
-> > > On Mon, Jul 26, 2021 at 5:17 PM Stefan Hajnoczi <stefanha@redhat.com>=
- wrote:
-> > > >
-> > > > On Thu, Jul 22, 2021 at 05:04:57PM +0800, Jason Wang wrote:
-> > > > >
-> > > > > =E5=9C=A8 2021/7/21 =E4=B8=8B=E5=8D=885:41, Stefan Hajnoczi =E5=
-=86=99=E9=81=93:
-> > > > > > On Wed, Jul 21, 2021 at 11:29:55AM +0800, Jason Wang wrote:
-> > > > > > > =E5=9C=A8 2021/7/14 =E4=B8=8A=E5=8D=8812:19, Stefan Hajnoczi =
-=E5=86=99=E9=81=93:
-> > > > > > > > These patches are not polished yet but I would like request=
- feedback on this
-> > > > > > > > approach and share performance results with you.
-> > > > > > > >
-> > > > > > > > Idle CPUs tentatively enter a busy wait loop before halting=
- when the cpuidle
-> > > > > > > > haltpoll driver is enabled inside a virtual machine. This r=
-educes wakeup
-> > > > > > > > latency for events that occur soon after the vCPU becomes i=
-dle.
-> > > > > > > >
-> > > > > > > > This patch series extends the cpuidle busy wait loop with t=
-he new poll_source
-> > > > > > > > API so drivers can participate in polling. Such polling-awa=
-re drivers disable
-> > > > > > > > their device's irq during the busy wait loop to avoid the c=
-ost of interrupts.
-> > > > > > > > This reduces latency further than regular cpuidle haltpoll,=
- which still relies
-> > > > > > > > on irqs.
-> > > > > > > >
-> > > > > > > > Virtio drivers are modified to use the poll_source API so a=
-ll virtio device
-> > > > > > > > types get this feature. The following virtio-blk fio benchm=
-ark results show the
-> > > > > > > > improvement:
-> > > > > > > >
-> > > > > > > >                IOPS (numjobs=3D4, iodepth=3D1, 4 virtqueues)
-> > > > > > > >                  before   poll_source      io_poll
-> > > > > > > > 4k randread    167102  186049 (+11%)  186654 (+11%)
-> > > > > > > > 4k randwrite   162204  181214 (+11%)  181850 (+12%)
-> > > > > > > > 4k randrw      159520  177071 (+11%)  177928 (+11%)
-> > > > > > > >
-> > > > > > > > The comparison against io_poll shows that cpuidle poll_sour=
-ce achieves
-> > > > > > > > equivalent performance to the block layer's io_poll feature=
- (which I
-> > > > > > > > implemented in a separate patch series [1]).
-> > > > > > > >
-> > > > > > > > The advantage of poll_source is that applications do not ne=
-ed to explicitly set
-> > > > > > > > the RWF_HIPRI I/O request flag. The poll_source approach is=
- attractive because
-> > > > > > > > few applications actually use RWF_HIPRI and it takes advant=
-age of CPU cycles we
-> > > > > > > > would have spent in cpuidle haltpoll anyway.
-> > > > > > > >
-> > > > > > > > The current series does not improve virtio-net. I haven't i=
-nvestigated deeply,
-> > > > > > > > but it is possible that NAPI and poll_source do not combine=
-=2E See the final
-> > > > > > > > patch for a starting point on making the two work together.
-> > > > > > > >
-> > > > > > > > I have not tried this on bare metal but it might help there=
- too. The cost of
-> > > > > > > > disabling a device's irq must be less than the savings from=
- avoiding irq
-> > > > > > > > handling for this optimization to make sense.
-> > > > > > > >
-> > > > > > > > [1] https://lore.kernel.org/linux-block/20210520141305.3559=
-61-1-stefanha@redhat.com/
-> > > > > > >
-> > > > > > > Hi Stefan:
-> > > > > > >
-> > > > > > > Some questions:
-> > > > > > >
-> > > > > > > 1) What's the advantages of introducing polling at virtio lev=
-el instead of
-> > > > > > > doing it at each subsystems? Polling in virtio level may only=
- work well if
-> > > > > > > all (or most) of the devices are virtio
-> > > > > > I'm not sure I understand the question. cpuidle haltpoll benefi=
-ts all
-> > > > > > devices today, except it incurs interrupt latency. The poll_sou=
-rce API
-> > > > > > eliminates the interrupt latency for drivers that can disable d=
-evice
-> > > > > > interrupts cheaply.
-> > > > > >
-> > > > > > This patch adds poll_source to core virtio code so that all vir=
-tio
-> > > > > > drivers get this feature for free. No driver-specific changes a=
-re
-> > > > > > needed.
-> > > > > >
-> > > > > > If you mean networking, block layer, etc by "subsystems" then t=
-here's
-> > > > > > nothing those subsystems can do to help. Whether poll_source ca=
-n be used
-> > > > > > depends on the specific driver, not the subsystem. If you consi=
-der
-> > > > > > drivers/virtio/ a subsystem, then that's exactly what the patch=
- series
-> > > > > > is doing.
-> > > > >
-> > > > >
-> > > > > I meant, if we choose to use idle poll, we have some several choi=
-ces:
-> > > > >
-> > > > > 1) bus level (e.g the virtio)
-> > > > > 2) subsystem level (e.g the networking and block)
-> > > > >
-> > > > > I'm not sure which one is better.
-> > > >
-> > > > This API is intended to be driver- or bus-level. I don't think
-> > > > subsystems can do very much since they don't know the hardware
-> > > > capabilities (cheap interrupt disabling) and in most cases there's =
-no
-> > > > advantage of plumbing it through subsystems when drivers can call t=
-he
-> > > > API directly.
-> > > >
-> > > > > > > 2) What's the advantages of using cpuidle instead of using a =
-thread (and
-> > > > > > > leverage the scheduler)?
-> > > > > > In order to combine with the existing cpuidle infrastructure. N=
-o new
-> > > > > > polling loop is introduced and no additional CPU cycles are spe=
-nt on
-> > > > > > polling.
-> > > > > >
-> > > > > > If cpuidle itself is converted to threads then poll_source would
-> > > > > > automatically operate in a thread too, but this patch series do=
-esn't
-> > > > > > change how the core cpuidle code works.
-> > > > >
-> > > > >
-> > > > > So networking subsystem can use NAPI busy polling in the process =
-context
-> > > > > which means it can be leveraged by the scheduler.
-> > > > >
-> > > > > I'm not sure it's a good idea to poll drivers for a specific bus =
-in the
-> > > > > general cpu idle layer.
-> > > >
-> > > > Why? Maybe because the cpuidle execution environment is a little sp=
-ecial?
-> > >
-> > > Well, this would be prone to abuse.
-> > >
-> > > The time spent in that driver callback counts as CPU idle time while
-> > > it really is the driver running and there is not limit on how much
-> > > time the callback can take, while doing costly things in the idle loop
-> > > is generally avoided, because on wakeup the CPU needs to be available
-> > > to the task needing it as soon as possible.  IOW, the callback
-> > > potentially add unbounded latency to the CPU wakeup path.
-> >
-> > How is this different from driver interrupt handlers running during
-> > cpuidle?
->=20
-> The time spent on handling interrupts does not count as CPU idle time.
+With this patch series following cpu performance improvement(30-70%) is
+observed on sdm845. The reasoning here is that without LMh being programmed
+properly from the kernel, the default settings were enabling thermal
+mitigation for CPUs at too low a temperature (around 70-75 degree C).  This
+in turn meant that many a time CPUs were never actually allowed to hit the
+maximum possible/required frequencies.
 
-Is that taken care of by account_hardirq_enter()?
+UnixBench whets and dhry (./Run whets dhry)
+System Benchmarks Index Score
 
-Drivers using poll_source have two pieces:
-1. A small piece of code that polls the device.
-2. A larger piece of code that runs when polling succeeds. This is
-   basically the irq handler.
+                Without LMh Support             With LMh Support
+1 copy test     1353.7                          1773.2
 
-Would it be acceptable to run #1 from cpuidle but defer #2 so it's not
-accounted as idle time?
+8 copy tests    4473.6                          7402.3
 
-Thanks,
-Stefan
+Sysbench cpu
+sysbench cpu --threads=8 --time=60 --cpu-max-prime=100000 run
 
---N2H8x3xJ2augdtSN
-Content-Type: application/pgp-signature; name="signature.asc"
+                Without LMh Support             With LMh Support
+Events per
+second                  355                             614
 
------BEGIN PGP SIGNATURE-----
+Avg Latency(ms)         21.84                           13.02
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmEACwMACgkQnKSrs4Gr
-c8gr+gf+Krz5uK7igE9flabFjcMXVxdI4o6fMwLG0LUmsULn4HOQiWMd2CU/UpUe
-RurunecxzjmCJyTQim82onIX81MZJMeVK2GJCcuTOu+Ggbr+tbhXO3lsSBWPDpbT
-7MgNxG+y4Unv2ErSZLS+OWPq6gYLXgBpecOBthE1yJux2K/s1CcAPeF7QEdoTZut
-HKKqrdVVH51c+tn8LG9Xgviza8Gpvr5tgovCGyTN15f9d36FNgW0Xq7/hKVjk1yx
-hY3U+dTkfSWvsYJS3K/KKrjIppWt0rr+71tjNC+l4ngTLb9npGmNWJ0B02cac6Yd
-j/REXsTsnGf7Dw7brj2Mhdr99yDf/A==
-=Gpcr
------END PGP SIGNATURE-----
+v3->v4:
+	- Rebased to v5.14-rc2.
 
---N2H8x3xJ2augdtSN--
+v2->v3:
+        - Included patch adding dt binding documentation for LMh nodes.
+        - Rebased to v5.13
+
+Thara Gopinath (6):
+  firmware: qcom_scm: Introduce SCM calls to access LMh
+  thermal: qcom: Add support for LMh driver
+  cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
+  arm64: dts: qcom: sdm45: Add support for LMh node
+  arm64: dts: qcom: sdm845: Remove cpufreq cooling devices for CPU
+    thermal zones
+  dt-bindings: thermal: Add dt binding for QCOM LMh
+
+ .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 162 ++----------
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 142 +++++++++++
+ drivers/firmware/qcom_scm.c                   |  58 +++++
+ drivers/firmware/qcom_scm.h                   |   4 +
+ drivers/thermal/qcom/Kconfig                  |  10 +
+ drivers/thermal/qcom/Makefile                 |   1 +
+ drivers/thermal/qcom/lmh.c                    | 232 ++++++++++++++++++
+ include/linux/qcom_scm.h                      |  14 ++
+ 9 files changed, 587 insertions(+), 136 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+ create mode 100644 drivers/thermal/qcom/lmh.c
+
+-- 
+2.25.1
 
