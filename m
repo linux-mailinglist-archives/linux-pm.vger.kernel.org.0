@@ -2,204 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 269B33D92D2
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 18:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D003D9438
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 19:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbhG1QKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jul 2021 12:10:52 -0400
-Received: from mail-il1-f173.google.com ([209.85.166.173]:33617 "EHLO
-        mail-il1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237436AbhG1QKJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 12:10:09 -0400
-Received: by mail-il1-f173.google.com with SMTP id y4so3100860ilp.0;
-        Wed, 28 Jul 2021 09:10:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OCZVThIbf1ShScmnxV7KW8mpeH/qB15sH5W8oxF9Flw=;
-        b=n+fYXVnV7oXIOhsQYV9+CYPwdmB2ROubz9dhaf5IK+doqYRj79Kk5zy1ak6Hf3sMFF
-         ZYgqg6Qp7aynv13sehSJ74dr1MTvxD2j56d9YOFzEokgbk2af0kHrcb3isBq5ZaQwfJM
-         4yZrVPn6qyNJoKLQki/UWiAsB/6FuFZ5S/l18mici7lUCWIcxoBKl38NaEZTizqN0N1i
-         oKrhbTCM1fLMk61q9BGwcUqTPFaPMFl3riYDObL/CBWf9gTUpeMB5G1NGJ/5s2PfA90k
-         LOIO7uZlUjelEZSIJC0ZpmoxPhytvB29evr4zr1cASMZbvzGc3+WR6HEZNC8yUU9fcEl
-         agHg==
-X-Gm-Message-State: AOAM533saelKZsFtNXDo6AE4NJcrk6xBeye1Ew9P0PUQA4yj16VwjoZB
-        0RfrXKmYBUxVc3bnlhM6FQ==
-X-Google-Smtp-Source: ABdhPJxE3veSdmQ48nFHmou/1qK1TVA+w3ifTI7TRG6TpSuzPDoCqvN7s815GG+nzZ+cUao0iCffOQ==
-X-Received: by 2002:a92:3207:: with SMTP id z7mr386220ile.288.1627488606095;
-        Wed, 28 Jul 2021 09:10:06 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b14sm194545ilr.45.2021.07.28.09.10.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 09:10:04 -0700 (PDT)
-Received: (nullmailer pid 1161592 invoked by uid 1000);
-        Wed, 28 Jul 2021 16:10:00 -0000
-Date:   Wed, 28 Jul 2021 10:10:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        rjw@rjwysocki.net, steev@kali.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [Patch v4 6/6] dt-bindings: thermal: Add dt binding for QCOM LMh
-Message-ID: <20210728161000.GA1153621@robh.at.kernel.org>
-References: <20210727152512.1098329-1-thara.gopinath@linaro.org>
- <20210727152512.1098329-7-thara.gopinath@linaro.org>
+        id S229567AbhG1RZL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jul 2021 13:25:11 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53084 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhG1RZK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 13:25:10 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id d053bcc70460610a; Wed, 28 Jul 2021 19:25:06 +0200
+Received: from kreacher.localnet (89-64-80-148.dynamic.chello.pl [89.64.80.148])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 5E854669F32;
+        Wed, 28 Jul 2021 19:25:05 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
+        Koba Ko <koba.ko@canonical.com>
+Subject: [PATCH v2] PCI: PM: Add special case handling for PCIe device wakeup
+Date:   Wed, 28 Jul 2021 19:25:04 +0200
+Message-ID: <3149540.aeNJFYEL58@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727152512.1098329-7-thara.gopinath@linaro.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.64.80.148
+X-CLIENT-HOSTNAME: 89-64-80-148.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrgeelgdelfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdevgfetueetheekudeuvdduteelvefftdfftdejjeeukeffteeikefgiefghedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepkeelrdeigedrkedtrddugeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrddugeekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+ pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgrihdrhhgvnhhgrdhfvghnghestggrnhhonhhitggrlhdrtghomhdprhgtphhtthhopehuthhkrghrshhhrdhhrdhprghtvghlsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhosggrrdhkohestggrnhhonhhitggrlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 11:25:12AM -0400, Thara Gopinath wrote:
-> Add dt binding documentation to describe Qualcomm
-> Limits Management Hardware node.
-> 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
-> 
-> v3->v4:
-> 	- Changed dt property qcom,lmh-cpu-id to qcom,lmh-cpu and made it
-> 	  a phandle pointing to the cpu node instead of a number as per
-> 	  Rob Herring's review comments.
-> 	- Added suffix -millicelsius to all temperature properties as per
-> 	  Rob Herring's review comments.
-> 	- Dropped unnecessary #includes in the example as pointed out by Bjorn.
-> 	- Other minor fixes.
-> 
->  .../devicetree/bindings/thermal/qcom-lmh.yaml | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> new file mode 100644
-> index 000000000000..0978f458b9ec
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2021 Linaro Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/qcom-lmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Limits Management Hardware(LMh)
-> +
-> +maintainers:
-> +  - Thara Gopinath <thara.gopinath@linaro.org>
-> +
-> +description:
-> +  Limits Management Hardware(LMh) is a hardware infrastructure on some
-> +  Qualcomm SoCs that can enforce temperature and current limits as
-> +  programmed by software for certain IPs like CPU.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sdm845-lmh
-> +
-> +  reg:
-> +    items:
-> +      - description: core registers
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  qcom,lmh-cpu:
-> +    description:
-> +      phandle of the first cpu in the LMh cluster
-> +    $ref: /schemas/types.yaml#/definitions/phandle
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-'cpus' property is the somewhat standard way to reference a cpu.
+Some PCIe devices only support PME (Power Management Event) from
+D3cold.  One example is the ASMedia xHCI controller:
 
-But you should already have cpu topology information, why do you need 
-this?
+ 11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
+   ...
+   Capabilities: [78] Power Management version 3
+       Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
+       Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
 
-> +
-> +  qcom,lmh-temp-arm-millicelsius:
-> +    description:
-> +      An integer expressing temperature threshold at which the LMh thermal
-> +      FSM is engaged.
-> +    $ref: /schemas/types.yaml#/definitions/int32
+In those cases, if the device is expected to generate wakeup events
+from its final power state, pci_target_state() returns D0, which
+prevents the PCIe hierarchy above the device from entering any
+low-power states too, but the device cannot signal PME from D0
+either.  However, if the device were allowed to go into D3hot, its
+parent PCIe port and its ancestors would also be able to go into D3
+and if any of them goes into D3cold, the device would end up in
+D3cold too (as per the PCI PM spec v1.2, Table 6-1), in which case
+it would be able to signal PME.
 
-Standard unit-suffixes already have a type.
+This means that the system could be put into a lower-power
+configuration while meeting the requirement to enable the device to
+generate PME from the final state (which is not the case if the
+device stays in D0 along with the entire hierarchy above it).
 
-> +
-> +  qcom,lmh-temp-low-millicelsius:
-> +    description:
-> +      An integer expressing temperature threshold at which the state machine
-> +      will attempt to remove frequency throttling.
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
-> +  qcom,lmh-temp-high-millicelsius:
-> +    description:
-> +      An integer expressing temperature threshold at which the state machine
-> +      will attempt to throttle the frequency.
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - #interrupt-cells
-> +  - interrupt-controller
-> +  - qcom,lmh-cpu
-> +  - qcom,lmh-temp-arm-millicelsius
-> +  - qcom,lmh-temp-low-millicelsius
-> +  - qcom,lmh-temp-high-millicelsius
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    lmh_cluster1: lmh@17d70800 {
+In order to avoid missing that opportunity, extend pci_pme_capable()
+to return 'true' in the special case when the target state is D3hot
+and the device can only signal PME from D3cold and update
+pci_target_state() to return the current target state if
+pci_pme_capable() returns 'true' for it.
 
-Drop unused labels.
+This change can be regarded as a pci_target_state() fix, because that
+function should ignore its 'wakeup' argument if signaling PME from
+any power states shallower than the current candidate one (including
+D0) is not supported.
 
-> +      compatible = "qcom,sdm845-lmh";
-> +      reg = <0x17d70800 0x401>;
+Link: https://lore.kernel.org/linux-pm/20210617123653.58640-1-mika.westerberg@linux.intel.com
+Fixes: 666ff6f83e1d ("PCI/PM: Avoid using device_may_wakeup() for runtime PM")
+Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
+Reported-by: Koba Ko <koba.ko@canonical.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-0x401 is an odd size...
+Hi Mika,
 
-> +      interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +      qcom,lmh-cpu = <&CPU4>;
-> +      qcom,lmh-temp-arm-millicelsius = <65000>;
-> +      qcom,lmh-temp-low-millicelsius = <94500>;
-> +      qcom,lmh-temp-high-millicelsius = <95000>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <1>;
-> +    };
-> +  - |
+IMO it is better to address the case in which the device cannot signal PME from
+D0 (as well as from any power states shallower than D3cold), which appears to be
+the one at hand, to start with and then, if need be, take care of the case in
+which signaling PME from both D0 and D3cold is supported separately.
 
-Seems like this is 1 example, not 2.
+If the device cannot signal PME from D0, then there is no point returning D0
+from pci_target_state() just because 'wakeup' is set, so this is a bug, and
+then enabling PME in case the device ends up in D3cold can be regarded as "best
+effort" (we cannot guarantee that this will always happen, but then it is the
+only way to enable it to signal wakeup anyway).
 
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    lmh_cluster0: lmh@17d78800 {
-> +      compatible = "qcom,sdm845-lmh";
-> +      reg = <0x17d78800 0x401>;
-> +      interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-> +      qcom,lmh-cpu = <&CPU0>;
-> +      qcom,lmh-temp-arm-millicelsius = <65000>;
-> +      qcom,lmh-temp-low-millicelsius = <94500>;
-> +      qcom,lmh-temp-high-millicelsius = <95000>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <1>;
-> +    };
-> +  - |
-> -- 
-> 2.25.1
-> 
-> 
+The case when signaling PME from D0 and D3cold (if we need to worry about it at
+all) is more controversial, because in that case leaving the device in D0 really
+allows it to signal wakeup, while putting it into D3hot in hope that it will end
+up in D3cold may not work.
+
+Cheers!
+
+-> v2:
+   * Instead of checking the direct parent of the device in question, which
+     doesn't work, check if the device can signal PME from any power states
+     shallower than D3cold, including D0.  If not, return 'true' from
+     pci_pme_capable() for D3hot as a way to indicate that the device should
+     be able to signal wakeup from the final state conditional on getting
+     one of its ancestors into D3cold.
+
+---
+ drivers/pci/pci.c |   34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
+
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -2301,7 +2300,21 @@ bool pci_pme_capable(struct pci_dev *dev
+ 	if (!dev->pm_cap)
+ 		return false;
+ 
+-	return !!(dev->pme_support & (1 << state));
++	if (dev->pme_support & (1 << state))
++		return true;
++
++	/*
++	 * Special case: The target state is D3hot and the device (which is a
++	 * PCIe one) only supports signaling PME from D3cold.  In that case, if
++	 * the device is allowed to go into D3hot, its ancestor PCIe port may go
++	 * into D3cold which will cause the device to end up in D3cold too
++	 * (along the lines of the PCI PM spec v1.2, Table 6-1), so it will be
++	 * able to signal PME from the final state.  It will not be able to
++	 * signal PME if left in D0, however.
++	 */
++	return state == PCI_D3hot && pci_is_pcie(dev) &&
++		(dev->pme_support & (1 << PCI_D3cold)) &&
++		!(dev->pme_support ^ (1 << PCI_D3cold));
+ }
+ EXPORT_SYMBOL(pci_pme_capable);
+ 
+@@ -2595,17 +2608,12 @@ static pci_power_t pci_target_state(stru
+ 	if (dev->current_state == PCI_D3cold)
+ 		target_state = PCI_D3cold;
+ 
+-	if (wakeup) {
+-		/*
+-		 * Find the deepest state from which the device can generate
+-		 * PME#.
+-		 */
+-		if (dev->pme_support) {
+-			while (target_state
+-			      && !(dev->pme_support & (1 << target_state)))
+-				target_state--;
+-		}
+-	}
++	if (!wakeup || !dev->pme_support || pci_pme_capable(dev, target_state))
++		return target_state;
++
++	/* Find the deepest state from which the device can generate PME#. */
++	while (target_state && !(dev->pme_support & (1 << target_state)))
++		target_state--;
+ 
+ 	return target_state;
+ }
+
+
+
