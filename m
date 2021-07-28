@@ -2,133 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1FB3D8E66
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 14:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49E03D8FAF
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbhG1M6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jul 2021 08:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbhG1M6H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 08:58:07 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EEAC061757
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 05:58:05 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id s48so3734596ybi.7
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 05:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4bRUEOcKLm4DS4B/jW3feMkPgYheSCRlhCV3QPcIdfM=;
-        b=r74xakMZ0GiSUxuVoyqO2APZWeaXmcbQVrXVDiOwVxqOXx9GehIwH9mGx4ycKOytQW
-         HnGv1o7MAsiF5djl3nbNAK84t3xUkxmxrOJM4phlolM03We9YVytoRUiie5+/Ypy4woY
-         4sE7Z6pQxSiPHIzdzOAM96SlrxLQT5vbDyuOAvqcyMr6kGKzm4MNt3iMa3aefeXISMpg
-         HY+lYyVATYSzUISOzWqbZcZBfZtJePPI5Vy8xfUesSAhbHwc+0KgQwwYuSYdqRiWYfnc
-         /oyM3k+Xr2a+7XBIJXAmMigVKATbwnjETeSXsSmxREWe7kaC+hmfbCqKCnCYB2xKlQ+m
-         GyKA==
+        id S237264AbhG1Nxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jul 2021 09:53:32 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:37388 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237459AbhG1NxG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 09:53:06 -0400
+Received: by mail-ot1-f49.google.com with SMTP id z6-20020a9d24860000b02904d14e47202cso2157650ota.4;
+        Wed, 28 Jul 2021 06:53:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4bRUEOcKLm4DS4B/jW3feMkPgYheSCRlhCV3QPcIdfM=;
-        b=b+wwU+1EOZFVKF6xsq1jKJ+nUvjT55OEtolXJiqbESG4iQQrv71T8WtMS/fmzAULyA
-         eQjisN2pDET/qKIrzawf5qmJEwlPwlusH2rUNuNTbG/a1q7onFwP/eMRXE+xMG4anZdv
-         cboi0Umzcc1rQLgorumNvMcW9+M7HlVog390TZrQ6PaFQB9lbUEVNiGBFq+XHZtGlbir
-         whYTeaQyZZCjo592PvLgdN37LgQp4MbZHLT5y88FD5iYmnHA/Yyp99tzn6SP1zszgJPE
-         jJD4XCxTFXe8mFfrO8cLKQA7AL30T5uYPtVm/TtRBQ/MNFgS9z6EQJJ6yQIU7h9kx9z3
-         rpMA==
-X-Gm-Message-State: AOAM531vGEDwOtBIZIC7EwXZeEwMIIPKqsXhyC2e8qrr939nKQeOGhAR
-        XUIlRX6KXGkahgCxAXHOw0pTNRMupBoxYdFzPNw=
-X-Google-Smtp-Source: ABdhPJzmzWvu27COtLqMKKkTMUYpg/RrU2KpvbhDxtRYowsBJyb58EUIfvC1aCTFfcDylioNXM0Vz5iuQoLCN0k9lZk=
-X-Received: by 2002:a25:808b:: with SMTP id n11mr18554881ybk.141.1627477084646;
- Wed, 28 Jul 2021 05:58:04 -0700 (PDT)
+        bh=EQ2uTtmQSF7eeJSxOaPiuG0wacoqEZYWK0ECaKxTctU=;
+        b=oGQB6gE01Ppa7kZS+0sq873X5i13SWu6OdEI7jh84/o4C7zxrnxWUKkR8JjZEi0MsD
+         rGeOZh7HjXu5uZvP2DlgS2JGxMOcCsL4ktUUuXSUpBJTvC5DCwN8MnT/mpEHFUG1UrOL
+         +jkOCRcQHtgSHWyzRwHFNZd0jV941DpVOSHameUmPCIHtdv0+Y36SlEl3ahkbV9NiyuN
+         F/+CFt5NYevyB4WE7pje9qU9qqIjp1GnqYpsaKXqnrN4FcFTEXPPM0MpLS6JjixCWoEa
+         kUCCQdsbYn5xF3eAMG1z5RPiErqFL9BPk8dE08VCcLMBo0P3hJ9LV6MpSZdjZmnrqbTc
+         d/bw==
+X-Gm-Message-State: AOAM5339Bq2R+Ue/2c2Hw6L4XWgB+X6tbc5OkMpEF7+bzaJRT3oQT8m2
+        iDj4hRFXf+mFMOdcAFq/Ilf0iSpmVnfqYlOvAgI=
+X-Google-Smtp-Source: ABdhPJwTnNGP3qLFPqtkpJp48iEuk+9w1bYwKVJ49seRbatZVwQgS1znIJlIzRN9T5GaQemDotp88A5AaHT/SXUqpzY=
+X-Received: by 2002:a05:6830:9a:: with SMTP id a26mr82592oto.260.1627480383227;
+ Wed, 28 Jul 2021 06:53:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210726190130.1973-1-macroalpha82@gmail.com>
-In-Reply-To: <20210726190130.1973-1-macroalpha82@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 28 Jul 2021 08:57:52 -0400
-Message-ID: <CAMdYzYqjrReKOWBMsaGpjj-hSvQYap=hMeyvpeggKuz+mVkULw@mail.gmail.com>
-Subject: Re: [RFC v2 0/4] power: supply: Add Support for RK817 Charger
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        maccraft123mc@gmail.com, sre@kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Chris Morgan <macromorgan@hotmail.com>
+References: <1867445.PYKUYFuaPT@kreacher> <000801d78322$e9b94980$bd2bdc80$@telus.net>
+In-Reply-To: <000801d78322$e9b94980$bd2bdc80$@telus.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Jul 2021 15:52:51 +0200
+Message-ID: <CAJZ5v0jashhvE4vRNAft1qfZ_Ud==tG1Yh29ad7BSfhk5xjx4A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 3:02 PM Chris Morgan <macroalpha82@gmail.com> wrote:
+On Tue, Jul 27, 2021 at 10:06 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> From: Chris Morgan <macromorgan@hotmail.com>
+> Hi Rafael,
 >
-> As this is my first charger driver, I'm submitting it as an RFC so I
-> can get input from the community on what else is needed to make the
-> driver consistent with the quality upstream expects.
+> Further to my reply of 2021.07.04  on this, I have
+> continued to work with and test this patch set.
 >
-> This series is to add support for the Rockchip rk817 battery charger
-> which is present in all Rockchip RK817 PMICs. The driver was written
-> as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
-> myself Chris Morgan <macromorgan@hotmail.com>.
+> On 2021.06.02 11:14 Rafael J. Wysocki wrote:
 >
-> The driver requires some basic parameters be described about the
-> battery in the devicetree such as the maximum capacity, the minimum
-> and maximum voltage for the battery, the maximum charge current, the
-> maximum charge voltage, and the value of sample resistors and sleep
-> currents.
+> >This series of patches addresses some theoretical shortcoming in the
+> > TEO (Timer Events Oriented) cpuidle governor by reworking its idle
+> > state selection logic to some extent.
+> >
+> > Patches [1-2/5] are introductory cleanups and the substantial changes are
+> > made in patches [3-4/5] (please refer to the changelogs of these two
+> > patches for details).  The last patch only deals with documentation.
+> >
+> > Even though this work is mostly based on theoretical considerations, it
+> > shows a measurable reduction of the number of cases in which the shallowest
+> > idle state is selected while it would be more beneficial to select a deeper
+> > one or the deepest idle state is selected while it would be more beneficial to
+> > select a shallower one, which should be a noticeable improvement.
 >
-> The hardware itself contains an ADC capable of measuring the voltage,
-> current, and temperature of the battery (though my implementation of an
-> Odroid Go Advance lacks a thermistor for temperature). It also contains
-> a columb counter, registers for tracking the measured voltage and
-> current at boot, and a few bytes of nvram for storing data.
+> I am concentrating in the idle state 0 and 1 area.
+> When I disable idle state 0, the expectation is its
+> usage will fall to idle state 1. It doesn't.
+>
+> Conditions:
+> CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> HWP: disabled
+> CPU frequency scaling driver: intel_pstate, active
+> CPU frequency scaling governor: performance.
+> Idle configuration: As a COMETLAKE processor, with 4 idle states.
+> Sample time for below: 1 minute.
+> Workflow: Cross core named pipe token passing, 12 threads.
+>
+> Kernel 5.14-rc3: idle: teo governor
+>
+> All idle states enabled: PASS
+> Processor: 97 watts
+> Idle state 0 entries: 811151
+> Idle state 1 entries: 140300776
+> Idle state 2 entries: 889
+> Idle state 3 entries: 8
+>
+> Idle state 0 disabled: FAIL <<<<<
+> Processor: 96 watts
+> Idle state 0 entries: 0
+> Idle state 1 entries: 65599283
+> Idle state 2 entries: 364399
+> Idle state 3 entries: 65112651
 
-Feel free to add my Tested-by: Peter Geis <pgwipeout@gmail.com>
+This looks odd.
 
-Tested on the Pine64 Quartz64 Model A.
-We can't go as low on the battery voltage, otherwise the SOC becomes
-unstable before it can shut down.
-<3625000 0> seems sufficient for us though (adding this for the
-benefit of anyone else testing).
-
-Voltages are accurate as measured at the battery.
-Are there plans to expose the thermal sensor (if that's possible)?
-
->
-> Changes from V1:
->
->  - Fixed a CLANG warning regarding an uninitalized variable.
->  - Fixed a CLANG warning regarding a pointer as a bool value always
->    returning as true.
->  - Added Maya Matuszczyk to the Signed-off-by.
->
-> Chris Morgan (4):
->   [RFC v2 1/4] dt-bindings: Add Rockchip rk817 battery charger support
->   [RFC v2 2/4] mfd: Add Rockchip rk817 battery charger support
->   [RFC v2 3/4] power: supply: Add charger driver for Rockchip RK817
->   [RFC 4/4] arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
->
->  .../devicetree/bindings/mfd/rk808.txt         |  35 +-
->  .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  25 +
->  drivers/mfd/rk808.c                           |  16 +-
->  drivers/power/supply/Kconfig                  |   6 +
->  drivers/power/supply/Makefile                 |   1 +
->  drivers/power/supply/rk817_charger.c          | 932 ++++++++++++++++++
->  include/linux/mfd/rk808.h                     |  87 ++
->  7 files changed, 1099 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/power/supply/rk817_charger.c
->
-> --
-> 2.25.1
->
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+Thanks for the report, I'll take a look at this.
