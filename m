@@ -2,178 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D003D9438
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 19:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791A63D9486
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 19:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbhG1RZL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jul 2021 13:25:11 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:53084 "EHLO
+        id S229591AbhG1Rrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jul 2021 13:47:51 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61116 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhG1RZK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 13:25:10 -0400
+        with ESMTP id S229556AbhG1Rrv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 13:47:51 -0400
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id d053bcc70460610a; Wed, 28 Jul 2021 19:25:06 +0200
+ id 1bac0f76ef49d9c3; Wed, 28 Jul 2021 19:47:48 +0200
 Received: from kreacher.localnet (89-64-80-148.dynamic.chello.pl [89.64.80.148])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 5E854669F32;
-        Wed, 28 Jul 2021 19:25:05 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 5DCDA660547;
+        Wed, 28 Jul 2021 19:47:47 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
-        Koba Ko <koba.ko@canonical.com>
-Subject: [PATCH v2] PCI: PM: Add special case handling for PCIe device wakeup
-Date:   Wed, 28 Jul 2021 19:25:04 +0200
-Message-ID: <3149540.aeNJFYEL58@kreacher>
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
+Date:   Wed, 28 Jul 2021 19:47:46 +0200
+Message-ID: <2178828.iZASKD2KPV@kreacher>
+In-Reply-To: <CAJZ5v0jashhvE4vRNAft1qfZ_Ud==tG1Yh29ad7BSfhk5xjx4A@mail.gmail.com>
+References: <1867445.PYKUYFuaPT@kreacher> <000801d78322$e9b94980$bd2bdc80$@telus.net> <CAJZ5v0jashhvE4vRNAft1qfZ_Ud==tG1Yh29ad7BSfhk5xjx4A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 89.64.80.148
 X-CLIENT-HOSTNAME: 89-64-80-148.dynamic.chello.pl
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrgeelgdelfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdevgfetueetheekudeuvdduteelvefftdfftdejjeeukeffteeikefgiefghedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepkeelrdeigedrkedtrddugeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrddugeekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
- pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgrihdrhhgvnhhgrdhfvghnghestggrnhhonhhitggrlhdrtghomhdprhgtphhtthhopehuthhkrghrshhhrdhhrdhprghtvghlsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhosggrrdhkohestggrnhhonhhitggrlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrgeelgdeliecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdejlefghfeiudektdelkeekvddugfeghffggeejgfeukeejleevgffgvdeluddtnecukfhppeekledrieegrdektddrudegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrudegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopegushhmhihthhhivghssehtvghluhhsrdhnvghtpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wednesday, July 28, 2021 3:52:51 PM CEST Rafael J. Wysocki wrote:
+> On Tue, Jul 27, 2021 at 10:06 PM Doug Smythies <dsmythies@telus.net> wrote:
+> >
+> > Hi Rafael,
+> >
+> > Further to my reply of 2021.07.04  on this, I have
+> > continued to work with and test this patch set.
+> >
+> > On 2021.06.02 11:14 Rafael J. Wysocki wrote:
+> >
+> > >This series of patches addresses some theoretical shortcoming in the
+> > > TEO (Timer Events Oriented) cpuidle governor by reworking its idle
+> > > state selection logic to some extent.
+> > >
+> > > Patches [1-2/5] are introductory cleanups and the substantial changes are
+> > > made in patches [3-4/5] (please refer to the changelogs of these two
+> > > patches for details).  The last patch only deals with documentation.
+> > >
+> > > Even though this work is mostly based on theoretical considerations, it
+> > > shows a measurable reduction of the number of cases in which the shallowest
+> > > idle state is selected while it would be more beneficial to select a deeper
+> > > one or the deepest idle state is selected while it would be more beneficial to
+> > > select a shallower one, which should be a noticeable improvement.
+> >
+> > I am concentrating in the idle state 0 and 1 area.
+> > When I disable idle state 0, the expectation is its
+> > usage will fall to idle state 1. It doesn't.
+> >
+> > Conditions:
+> > CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> > HWP: disabled
+> > CPU frequency scaling driver: intel_pstate, active
+> > CPU frequency scaling governor: performance.
+> > Idle configuration: As a COMETLAKE processor, with 4 idle states.
+> > Sample time for below: 1 minute.
+> > Workflow: Cross core named pipe token passing, 12 threads.
+> >
+> > Kernel 5.14-rc3: idle: teo governor
+> >
+> > All idle states enabled: PASS
+> > Processor: 97 watts
+> > Idle state 0 entries: 811151
+> > Idle state 1 entries: 140300776
+> > Idle state 2 entries: 889
+> > Idle state 3 entries: 8
+> >
+> > Idle state 0 disabled: FAIL <<<<<
+> > Processor: 96 watts
+> > Idle state 0 entries: 0
+> > Idle state 1 entries: 65599283
+> > Idle state 2 entries: 364399
+> > Idle state 3 entries: 65112651
+> 
+> This looks odd.
+> 
+> Thanks for the report, I'll take a look at this.
 
-Some PCIe devices only support PME (Power Management Event) from
-D3cold.  One example is the ASMedia xHCI controller:
+I have found an issue in the code that may be responsible for the
+observed behavior and should be addressed by the appended patch (not
+tested yet).
 
- 11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
-   ...
-   Capabilities: [78] Power Management version 3
-       Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
-       Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+Basically, the "disabled" check in the second loop over states in
+teo_select() needs to exclude the first enabled state, because
+there are no more states to check after that.
 
-In those cases, if the device is expected to generate wakeup events
-from its final power state, pci_target_state() returns D0, which
-prevents the PCIe hierarchy above the device from entering any
-low-power states too, but the device cannot signal PME from D0
-either.  However, if the device were allowed to go into D3hot, its
-parent PCIe port and its ancestors would also be able to go into D3
-and if any of them goes into D3cold, the device would end up in
-D3cold too (as per the PCI PM spec v1.2, Table 6-1), in which case
-it would be able to signal PME.
+Plus the time span check needs to be done when the given state
+is about to be selected, because otherwise the function may end up
+returning a state for which the sums are too low.
 
-This means that the system could be put into a lower-power
-configuration while meeting the requirement to enable the device to
-generate PME from the final state (which is not the case if the
-device stays in D0 along with the entire hierarchy above it).
-
-In order to avoid missing that opportunity, extend pci_pme_capable()
-to return 'true' in the special case when the target state is D3hot
-and the device can only signal PME from D3cold and update
-pci_target_state() to return the current target state if
-pci_pme_capable() returns 'true' for it.
-
-This change can be regarded as a pci_target_state() fix, because that
-function should ignore its 'wakeup' argument if signaling PME from
-any power states shallower than the current candidate one (including
-D0) is not supported.
-
-Link: https://lore.kernel.org/linux-pm/20210617123653.58640-1-mika.westerberg@linux.intel.com
-Fixes: 666ff6f83e1d ("PCI/PM: Avoid using device_may_wakeup() for runtime PM")
-Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
-Reported-by: Koba Ko <koba.ko@canonical.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Hi Mika,
-
-IMO it is better to address the case in which the device cannot signal PME from
-D0 (as well as from any power states shallower than D3cold), which appears to be
-the one at hand, to start with and then, if need be, take care of the case in
-which signaling PME from both D0 and D3cold is supported separately.
-
-If the device cannot signal PME from D0, then there is no point returning D0
-from pci_target_state() just because 'wakeup' is set, so this is a bug, and
-then enabling PME in case the device ends up in D3cold can be regarded as "best
-effort" (we cannot guarantee that this will always happen, but then it is the
-only way to enable it to signal wakeup anyway).
-
-The case when signaling PME from D0 and D3cold (if we need to worry about it at
-all) is more controversial, because in that case leaving the device in D0 really
-allows it to signal wakeup, while putting it into D3hot in hope that it will end
-up in D3cold may not work.
-
-Cheers!
-
--> v2:
-   * Instead of checking the direct parent of the device in question, which
-     doesn't work, check if the device can signal PME from any power states
-     shallower than D3cold, including D0.  If not, return 'true' from
-     pci_pme_capable() for D3hot as a way to indicate that the device should
-     be able to signal wakeup from the final state conditional on getting
-     one of its ancestors into D3cold.
+Thanks!
 
 ---
- drivers/pci/pci.c |   34 +++++++++++++++++++++-------------
- 1 file changed, 21 insertions(+), 13 deletions(-)
+ drivers/cpuidle/governors/teo.c |   26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-Index: linux-pm/drivers/pci/pci.c
+Index: linux-pm/drivers/cpuidle/governors/teo.c
 ===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -2301,7 +2300,21 @@ bool pci_pme_capable(struct pci_dev *dev
- 	if (!dev->pm_cap)
- 		return false;
+--- linux-pm.orig/drivers/cpuidle/governors/teo.c
++++ linux-pm/drivers/cpuidle/governors/teo.c
+@@ -404,25 +404,27 @@ static int teo_select(struct cpuidle_dri
+ 			intercept_sum += bin->intercepts;
+ 			recent_sum += bin->recent;
  
--	return !!(dev->pme_support & (1 << state));
-+	if (dev->pme_support & (1 << state))
-+		return true;
-+
-+	/*
-+	 * Special case: The target state is D3hot and the device (which is a
-+	 * PCIe one) only supports signaling PME from D3cold.  In that case, if
-+	 * the device is allowed to go into D3hot, its ancestor PCIe port may go
-+	 * into D3cold which will cause the device to end up in D3cold too
-+	 * (along the lines of the PCI PM spec v1.2, Table 6-1), so it will be
-+	 * able to signal PME from the final state.  It will not be able to
-+	 * signal PME if left in D0, however.
-+	 */
-+	return state == PCI_D3hot && pci_is_pcie(dev) &&
-+		(dev->pme_support & (1 << PCI_D3cold)) &&
-+		!(dev->pme_support ^ (1 << PCI_D3cold));
- }
- EXPORT_SYMBOL(pci_pme_capable);
+-			if (dev->states_usage[i].disable)
++			if (dev->states_usage[i].disable && i > idx0)
+ 				continue;
  
-@@ -2595,17 +2608,12 @@ static pci_power_t pci_target_state(stru
- 	if (dev->current_state == PCI_D3cold)
- 		target_state = PCI_D3cold;
+ 			span_ns = teo_middle_of_bin(i, drv);
+-			if (!teo_time_ok(span_ns)) {
+-				/*
+-				 * The current state is too shallow, so select
+-				 * the first enabled deeper state.
+-				 */
+-				duration_ns = last_enabled_span_ns;
+-				idx = last_enabled_idx;
+-				break;
+-			}
  
--	if (wakeup) {
--		/*
--		 * Find the deepest state from which the device can generate
--		 * PME#.
--		 */
--		if (dev->pme_support) {
--			while (target_state
--			      && !(dev->pme_support & (1 << target_state)))
--				target_state--;
--		}
--	}
-+	if (!wakeup || !dev->pme_support || pci_pme_capable(dev, target_state))
-+		return target_state;
-+
-+	/* Find the deepest state from which the device can generate PME#. */
-+	while (target_state && !(dev->pme_support & (1 << target_state)))
-+		target_state--;
+ 			if ((!alt_recent || 2 * recent_sum > idx_recent_sum) &&
+ 			    (!alt_intercepts ||
+ 			     2 * intercept_sum > idx_intercept_sum)) {
+-				idx = i;
+-				duration_ns = span_ns;
++				if (!teo_time_ok(span_ns) ||
++				    dev->states_usage[i].disable) {
++					/*
++					 * The current state is too shallow or
++					 * disabled, so select the first enabled
++					 * deeper state.
++					 */
++					duration_ns = last_enabled_span_ns;
++					idx = last_enabled_idx;
++				} else {
++					idx = i;
++					duration_ns = span_ns;
++				}
+ 				break;
+ 			}
  
- 	return target_state;
- }
 
 
 
