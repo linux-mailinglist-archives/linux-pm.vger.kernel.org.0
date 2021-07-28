@@ -2,148 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3063D9662
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jul 2021 22:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240693D9842
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 00:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhG1UHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jul 2021 16:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S232163AbhG1WTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jul 2021 18:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbhG1UHx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 16:07:53 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A04C0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 13:07:50 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id x15so5214259oic.9
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 13:07:50 -0700 (PDT)
+        with ESMTP id S232114AbhG1WTK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jul 2021 18:19:10 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869B9C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 15:19:08 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id 129so3881720qkg.4
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 15:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=97hQfQK7XavPSltv9pN4yF2y5jNc7cIdloHZZGHQCvY=;
-        b=Z7jTTKBFGpWIxboKqwgJRsOZp1J+aWDmjni8p5+XEVDRVJmY29+ni5XltyAcjXJrPd
-         VKRiyGY2cxhdfvhTRdTJXxMi8S4rhnmsf7fgxGaIh3UvIFWi4IDtUyJAop5wHOt23ZWF
-         4DS/rBN4kxsmc5k3UIkqOFWLnzdGHlERYnLb/rN8QlBNhMpET6iELjrDWctsQitUPXGL
-         2sckHJR93BoAb3Tm7MNt5hGZ34d1TvqTBveiQqtTZfbncswKMzJrgB6ult5Anul6wbBt
-         IngUJZkLp/kFIdNqQ4EVmz2DH5drGaBqdJBFNlZL/yfplvskUs3XOZoFU1YNCvGzVSnO
-         EDgA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Srjf0aL7kHAVVp8xOjNVibfUf0NYqsilKH/clpF6XdM=;
+        b=UsieRyKWGPZS8uLn0zEzD+tYsGMx8iEd2JshbEJ87il9BCsUc5DGd5DDnzaJaJviAF
+         hG6b6fha0xukyKUjebYyRg0RrxT9FsdMzUMZ9jSObEtjydk98dW1tmfkegE6nX7XN4ry
+         Tyv+nRIS+dO8htCj8kgMgdYm0tPiOxAUYo3Dmb9mK7Zp+roGAoZ6rT5MxxklKcrMcoqG
+         E1KUkTurjqjl1U8Yi31iYwNM31HsnJ9UU/Zi/l9TBxNsp6w+GoyhGcXa0qk5uC/hKALu
+         MY8jcdHO5aIbEAiWNOGVUxUE973rDiVItbVoT64OVo2sgpl9ErORVX5OYIlRVahnA7qQ
+         TPHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=97hQfQK7XavPSltv9pN4yF2y5jNc7cIdloHZZGHQCvY=;
-        b=M3uVujFlSOADBG0xLJHsm8/nmt3xXqvG+JuA+HeWfi7ziQOVz5XSTbeJfY4Ui1ZT4z
-         7cojXFUUTQK6Foc03GvYzpgwPwMQL6JrYS3HbihZ5TaPxWxWCn84W3Y9wIQ91sXGYouY
-         WcqMBlOvfHb+vUTO6jbAuPwOdUQfJDa13yhjuV18WjT3clcY6m+BtDMKw8swuLgrGwnG
-         3AhLGDLU3hGl156JwCHlGRm/SMritrh/yMwSU2uR6cf1hPXRpg/8owfE33J2ThTObWZ3
-         VpepaKq9R8V8S+mfmZhKt4kVeXz43ncsdF8BtIkqrvzrb+OoSNTwyvtfxYpHy4QW6lTX
-         2DZA==
-X-Gm-Message-State: AOAM533OA+ke3MAqrr0mtLOKZWDMFTvmjKeu5t7qPpYL27aScxzWXvpZ
-        sGJ6Dvv8hy8sJBMAaYOdectezw==
-X-Google-Smtp-Source: ABdhPJwD7U8+qAvbZ4kuKnlj7p/+LPIrjaNSnetymU4fcJ2ltcIGDeO08kf0oVPEIdx8JqShaVs4sA==
-X-Received: by 2002:aca:1e12:: with SMTP id m18mr7648287oic.95.1627502869900;
-        Wed, 28 Jul 2021 13:07:49 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n1sm182047otk.34.2021.07.28.13.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 13:07:49 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 13:05:59 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] PM: clk: add devm_pm_clk_create helper
-Message-ID: <YQG4pz/z2nBNA+tJ@ripper>
-References: <20210728142445.774158-1-dmitry.baryshkov@linaro.org>
- <20210728142445.774158-3-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Srjf0aL7kHAVVp8xOjNVibfUf0NYqsilKH/clpF6XdM=;
+        b=DM8mM3bHp99akyOEM2n9icmQn41WVHhgE0pTsbPosOrIboubSBsdvSuH6ObejDWcN6
+         CdmAoP51XKJQ0S69rOWr6YSy5WHTd+b179cixBC5fA5Oew7Zwk3hpD/ys1+wSYLm/P9K
+         zvlLiUTEAmTN6dm3PS2a3ITlcReYYCYU18N0aKfogEirApDOW0qm1v6B9Hnlva741ato
+         uNyzpxj/EaaZJ7UL5ymFDGx95DGg91AaCc1xWVukm4G3638agk9CfyuTNBlO+Cx542vL
+         bsLRD5kw3dssogQDPsI+0AHilQse5rEboixID+kGYQr7D7WUD4Jk3GG3bBH80Ae7Tclv
+         DpvQ==
+X-Gm-Message-State: AOAM5326kZt2AAo4YV58LwzVJmsvDz4VWwC1Etw3TlYtX60IHUDx3MPd
+        G/GQiP92uMa2KIR8/3D2EKbF4w==
+X-Google-Smtp-Source: ABdhPJygj1RUvPO57MdF67FNVU9lphmm1Rf9eF4v8v5eAw1/v+05x5ILFVQykGw6CtLEzds/4nan8w==
+X-Received: by 2002:a37:a004:: with SMTP id j4mr1950099qke.499.1627510746886;
+        Wed, 28 Jul 2021 15:19:06 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id n188sm745065qke.54.2021.07.28.15.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jul 2021 15:19:06 -0700 (PDT)
+Subject: Re: [Patch v4 3/6] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
+ support
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
+        steev@kali.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20210727152512.1098329-1-thara.gopinath@linaro.org>
+ <20210727152512.1098329-4-thara.gopinath@linaro.org>
+ <20210728035014.25mgvrpnraxfslq7@vireshk-i7>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <9a257605-d282-cd06-cc44-5ad5a5f8484d@linaro.org>
+Date:   Wed, 28 Jul 2021 18:19:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210728142445.774158-3-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20210728035014.25mgvrpnraxfslq7@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 28 Jul 07:24 PDT 2021, Dmitry Baryshkov wrote:
 
-> Add devm_pm_clk_create helper, devres-enabled version of the
-> pm_clk_create(), which will call pm_clk_destroy at the correct time.
+
+On 7/27/21 11:50 PM, Viresh Kumar wrote:
+> On 27-07-21, 11:25, Thara Gopinath wrote:
+>> +static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>> +{
+> 
+>> +	/* In the unlikely case cpufreq is de-registered do not enable polling or h/w interrupt */
+>> +
+>> +	spin_lock(&data->throttle_lock);
+>> +	if (data->cancel_throttle) {
+>> +		spin_unlock(&data->throttle_lock);
+>> +		return;
+>> +	}
+>> +	spin_unlock(&data->throttle_lock);
+>> +
+>> +	/*
+>> +	 * If h/w throttled frequency is higher than what cpufreq has requested for, stop
+>> +	 * polling and switch back to interrupt mechanism
+>> +	 */
+>> +
+>> +	if (throttled_freq >= qcom_cpufreq_hw_get(cpumask_first(policy->cpus)))
+>> +		/* Clear the existing interrupts and enable it back */
+>> +		enable_irq(data->throttle_irq);
+>> +	else
+>> +		mod_delayed_work(system_highpri_wq, &data->throttle_work,
+>> +				 msecs_to_jiffies(10));
+>> +}
+> 
+>> +static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+>> +{
+>> +	if (data->throttle_irq <= 0)
+>> +		return;
+>> +
+>> +	spin_lock(&data->throttle_lock);
+>> +	data->cancel_throttle = true;
+>> +	spin_unlock(&data->throttle_lock);
+>> +	cancel_delayed_work_sync(&data->throttle_work);
+>> +	free_irq(data->throttle_irq, data);
+>> +}
+> 
+> Lets see if we can still make it break :)
+> 
+> CPU0                                            CPU1
+> 
+> qcom_lmh_dcvs_notify()                          qcom_cpufreq_hw_lmh_exit()
+> 
+> spin_unlock()
+>                                                  spin_lock(),
+>                                                  cancel_throttle = true
+>                                                  spin_unlock()
+> 
+>                                                  cancel_delayed_work_sync()
+> mod_delayed_work()
+>                                                  free_irq()
+>                                                  kfree(data)
+> qcom_lmh_dcvs_poll()
+> Uses data.
+> 
+> 
+> Sorry, locking is fun :)
+
+Ha! I was too lazy to write this down! So how about I make this a mutex 
+and put mod_delayed_work() inside the lock. So it will be something like 
+below
+
+qcom_lmh_dcvs_notify()			qcom_cpufreq_hw_lmh_exit()
+
+mutex_lock()				mutex_lock()
+   if (data->cancel_throttle) {		cancel_throttle = true
+	mutex_unlock()			mutex_unlock()
+	return				cancel_delayed_work_sync()
+   }					free_irq()
+   enable_irq() / mod_delayed_work()
+mutex_unlock()
+
+I will let you break it!
+
 > 
 
-As with path 1, please describe why this is a good thing. (I definitely
-think it is, but I've been part of the discussion leading up to this
-patch)
-
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/base/power/clock_ops.c | 17 +++++++++++++++++
->  include/linux/pm_clock.h       |  5 +++++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-> index 0251f3e6e61d..4110c19c08dc 100644
-> --- a/drivers/base/power/clock_ops.c
-> +++ b/drivers/base/power/clock_ops.c
-> @@ -519,6 +519,23 @@ void pm_clk_destroy(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_clk_destroy);
->  
-> +static void pm_clk_destroy_action(void *data)
-> +{
-> +	pm_clk_destroy(data);
-> +}
-> +
-
-As this is an addition to the API, it deserves some kerneldoc.
-
-Regards,
-Bjorn
-
-> +int devm_pm_clk_create(struct device *dev)
-> +{
-> +	int ret;
-> +
-> +	ret = pm_clk_create(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_add_action_or_reset(dev, pm_clk_destroy_action, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_clk_create);
-> +
->  /**
->   * pm_clk_suspend - Disable clocks in a device's PM clock list.
->   * @dev: Device to disable the clocks for.
-> diff --git a/include/linux/pm_clock.h b/include/linux/pm_clock.h
-> index 8ddc7860e131..ada3a0ab10bf 100644
-> --- a/include/linux/pm_clock.h
-> +++ b/include/linux/pm_clock.h
-> @@ -47,6 +47,7 @@ extern void pm_clk_remove(struct device *dev, const char *con_id);
->  extern void pm_clk_remove_clk(struct device *dev, struct clk *clk);
->  extern int pm_clk_suspend(struct device *dev);
->  extern int pm_clk_resume(struct device *dev);
-> +extern int devm_pm_clk_create(struct device *dev);
->  #else
->  static inline bool pm_clk_no_clocks(struct device *dev)
->  {
-> @@ -83,6 +84,10 @@ static inline void pm_clk_remove(struct device *dev, const char *con_id)
->  static inline void pm_clk_remove_clk(struct device *dev, struct clk *clk)
->  {
->  }
-> +static inline int devm_pm_clk_create(struct device *dev)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif
->  
->  #ifdef CONFIG_HAVE_CLK
-> -- 
-> 2.30.2
-> 
+-- 
+Warm Regards
+Thara (She/Her/Hers)
