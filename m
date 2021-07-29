@@ -2,149 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA703DA129
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 12:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601923DA18A
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 12:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbhG2KhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Jul 2021 06:37:25 -0400
-Received: from mail-co1nam11on2065.outbound.protection.outlook.com ([40.107.220.65]:62817
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229591AbhG2KhY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Jul 2021 06:37:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m9BhTpcV108Bl8792NAxtN3J1gFl2Oq0P+eb5Erj+4GnbsWXH6gdYsK17B1gCkea2wzT3zZrtjbuz3rND7PANYZIExAHWuIXE59eceTcj7dB3jhoLPn0yRHCPT7nSkzp7NG6JNfkLSYJDMaIAraj8qkIdBIVCFHKCG6sEpyuezDy4+aSoCmXtUbHgDVq06fELWqnv8tToC+NbH4ZzvlYPULl/ZonKFP80m/B6H+x37wEJqwNmNCoyVBEXhBxKscNjMpOvN03uaQXmMj6qifXvMzHv63Rja10eAU7LG10J6M2hXpdBL90bAIhBaRL5UOdeNqCUUP8CeHPnznjTZm6bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJ339CnPDV1hdxPv624J2oqydHyZUHxG0tLhHGC+T2A=;
- b=l1AxlTfGRX9bWWb2Jer1zfZAAhKBy86vBQOmAvXphvQIe0V6uHeijsq0trWNWMJIZcleVR4UIbcpjhi3LtXY54u7rkK4BP+qYOxWPuIbTLuHsExl96cfwrycZ4LdUgIZTZ3mR7N6+9unWIOtmzIdfBcQam2YqGUqF9LyqwYVDHhWVDpcuNmNVDTUiYzXP946DZriHzP1eC4CYLN7XzViroNe5cSZ4Maw+LhFC7A7WgtwZgfU/XbiSEHnJHXCT92lXlReajx7q0VhlGWMO4URx6tqehwlkGiZxTEKhP8aFsU2KimRjNswz/uC8Ao1/exv6ckXMx3QRJIk01DjXt/4Ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
- dkim=pass header.d=micron.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJ339CnPDV1hdxPv624J2oqydHyZUHxG0tLhHGC+T2A=;
- b=PNx4I5421AukZx6jOGxlFVJ8FXa8BaLyFWMLw+zeKClzpGTpxykmcj0lgMnOAq8HcnZd5MHks27Do3XuBbGBRXhyfp2s/URpehOYu2wOpWmO5NlJ/f27kFB7t8UlVGQxcL4l9QemkQir91gx/fpX8C/Da+4LcLLJrCr1eOYQYtg=
-Received: from BLAPR08MB6900.namprd08.prod.outlook.com (2603:10b6:208:325::21)
- by BL0PR08MB5332.namprd08.prod.outlook.com (2603:10b6:208:2b::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.29; Thu, 29 Jul
- 2021 10:37:18 +0000
-Received: from BLAPR08MB6900.namprd08.prod.outlook.com
- ([fe80::fde3:800c:617d:f516]) by BLAPR08MB6900.namprd08.prod.outlook.com
- ([fe80::fde3:800c:617d:f516%9]) with mapi id 15.20.4373.019; Thu, 29 Jul 2021
- 10:37:18 +0000
-From:   "Shivamurthy Shastri (sshivamurthy)" <sshivamurthy@micron.com>
-To:     Keith Busch <kbusch@kernel.org>
-CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shiva.linuxworks@gmail.com" <shiva.linuxworks@gmail.com>
-Subject: RE: [EXT] Re: [PATCH v2 0/2] Abrupt Shutdown for NVMe SSD
-Thread-Topic: [EXT] Re: [PATCH v2 0/2] Abrupt Shutdown for NVMe SSD
-Thread-Index: AQHXgjJctJSWzcMb8U6/xvTW6b+HaKtZxW6A
-Date:   Thu, 29 Jul 2021 10:37:18 +0000
-Message-ID: <BLAPR08MB690021D560D577A959673570B8EB9@BLAPR08MB6900.namprd08.prod.outlook.com>
-References: <20210726132223.1661-1-sshivamurthy@micron.com>
- <20210726152434.GA2024939@dhcp-10-100-145-180.wdc.com>
-In-Reply-To: <20210726152434.GA2024939@dhcp-10-100-145-180.wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Enabled=true;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SetDate=2021-07-29T10:37:15Z;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Method=Standard;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Name=Confidential;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SiteId=f38a5ecd-2813-4862-b11b-ac1d563c806f;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_ActionId=6d976bf5-c61b-4e19-b413-eff5bb380c6e;
- MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_ContentBits=3
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=micron.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d83c9123-880c-4704-18e4-08d9527cd6e9
-x-ms-traffictypediagnostic: BL0PR08MB5332:
-x-microsoft-antispam-prvs: <BL0PR08MB53326D07C09997DDDA531255B8EB9@BL0PR08MB5332.namprd08.prod.outlook.com>
-x-ms-exchange-transport-forked: True
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xts25C1dI1mTL9e0/44bu980rc+V5lB7ynFBAx1oPN10s0ov+QVL0bwrbJoaQLNTx0UrcgqywKXFhlb1xOM5PM4zHVXgYyWmNKeaD5duJi2fBqwNBDISM34Kc1BH9+gUbwxS+0V2U+Zb5wkzxyvtTqz9prEGNIZloaCQv+5Ex/x4L8Wx74s+2h/J9zmZk5n+C4Inu5Xyyxve5UVYTq1/b+h/ZgRD9C7ORuM4CMjLWi9i9i2B1ryk0B4r2nh0eOMrMCSJC9+C2corqZ+jeYAawEOBIcD1t3U/7sgr7REC9F6Hc8CwSBHlk3JGv8gcjd4iyp3NMFqsukiDVATTPIAs19x82bU7VyPu9ghDqMfxIolofbSwcFzqg4yEHvMnWCGKLgTLz5nGy9vnwBlMvX+EZ9JxpwGi7WcKf+T1CmqOlkDGFYxnhp9jt52VbNLh9xmuCqsP8qscvq1n0mgZoXb8ikeegvhI3CYsi6jJ0EYwealp790mNZJ771O6eMAkD7J5V7AChabX8i5hILxY8sNjJXUE2cQY6kvgmTX9v84I7n02Y7vEOqZqVDNMVrTzFH8LC+chxXY9UfNwO/PB9SlALdkBMQD+EcP30I6kv86FuJmFMsMGGQEDbpInbU8WWptOt2WXcyeSOrv1L9R3ShIyo46sx+ie30QBIAPzMFzhvMJbDlSZF+JrVUawyQgXPtyGGLRl9JJ39NduepUGAFR5GQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR08MB6900.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(39860400002)(346002)(136003)(366004)(52536014)(7416002)(38070700005)(122000001)(8676002)(38100700002)(186003)(66446008)(9686003)(7696005)(26005)(71200400001)(66556008)(64756008)(76116006)(66476007)(66946007)(55016002)(6506007)(8936002)(316002)(4744005)(478600001)(86362001)(4326008)(83380400001)(5660300002)(2906002)(33656002)(6916009)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?W10qXbrzQoghdWI/lS8zaaFknjfgLX/wuxzGA+mj3Y44qWTHoGDxnHnuK95/?=
- =?us-ascii?Q?3McM6E+ewBmUHduTP54ZJy5S5yCs2yziqjj1UcKN3zDKWHvpW1pZ5lliRxJp?=
- =?us-ascii?Q?yxkMIvV0WvYxlQwvJLvsUVm2OYldXc21G8UAMlimJU6AAypI/9ZilS22Ubau?=
- =?us-ascii?Q?eRc1znhtiPjmCaOBTOhkNgpJ+YAr8+gr/tk3hKj216lFw+DCc3U/1FHcvHKc?=
- =?us-ascii?Q?pAwvIIxrlhQn6JEbzd4x5O/VaJHI0gJAuVulS4mqIyWLkVIm8tKE+q9ulu2o?=
- =?us-ascii?Q?AdAYo5UXo4Bk4IYvXM+jKvD7RmcGDQsSu/ZYtRAt61EEXTGdD2TsZG7UB4si?=
- =?us-ascii?Q?JypGxs7FWx9ywDCDucCIaNkVijoZxtoS7FQ647QlZj24p/1IXo+wNFXMpxj2?=
- =?us-ascii?Q?EEo6T/3/ydqCGpz1Pgrr0HL1E2LxFZhFjzTwhTVkOHrQ234vSNwY4HlAcz3/?=
- =?us-ascii?Q?imP7zkdOtfXnp/JcPSAsUZoWp7tfkswMiC6iRwArqER6Qv/RCsra5jikUIPO?=
- =?us-ascii?Q?kXgFyb1M071saGEHRcivvebNv1MkMTnul+DQ1Jd809hUcfqp5Mt24EFW4R/i?=
- =?us-ascii?Q?0/SFhpG6IjY84hYokyZnYh40Xusz7zpdPkaDYd6urI8V9d/dAwmzUAsSjW+S?=
- =?us-ascii?Q?zxbPRArhseaR4qVx7A9tyXMjk0VGhljo76n8atsa8iQm7GU3mKpEzj0rTA0j?=
- =?us-ascii?Q?1i27rhwbJL15vKMEzouXELr04/1MbyBfq1sfYtb77ETnLiI+DLJUzK4t3VYA?=
- =?us-ascii?Q?/SGGMwcDv1nYz5ZDRLCsxTCowtufmclBo9uFr1mX48+oirXerC0nCnUY3SvP?=
- =?us-ascii?Q?wRPkfMcKaHxwy4TEB6rXqfyOf+ZmTLz9dh1ZSp4OObiF0rk2hcXD4h8IFz+c?=
- =?us-ascii?Q?3OsSpH3fI3eIGac3ycKtSwNUKEpGah2n750UzBWdKgC0zM1302PvYtlWF5ks?=
- =?us-ascii?Q?fLUOqGPePspZX/LFflOt06bG8+4pMO2oEdFW8Vk2KsUS/s6nHIy4j9jyNEyh?=
- =?us-ascii?Q?gRZ/0QXSXYALn8frdo+fahYtkP0JZSKZN+GBfzurWrtS0vyYwrDPVp4hO6mz?=
- =?us-ascii?Q?NxOSLY3FKmts7RWITRnPDH5PZdFcHM7EAHPgh6tHCeRP6Ir+AA3g2qMA8gD3?=
- =?us-ascii?Q?4ipw4qR1k/+2Wo3nOu3kepmIjXFrIInrQgCnckPesTla2yh5Nu1hSHi4iKbW?=
- =?us-ascii?Q?emGtziwC7jXVS9VzmiuWKFbZn/SGZA4QozlwQ1sNcoYdktqEijljNDIif+2x?=
- =?us-ascii?Q?oaMqH9c/BfZaVyzobhjrgSor6KaPcb36YjakcbOjQHn3LkXMHx3kp7b9KdMj?=
- =?us-ascii?Q?uKZEssxU3lOA0XeRv0BW+2fF?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S231815AbhG2Ku7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jul 2021 06:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234085AbhG2Ku6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 06:50:58 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF97C061765
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jul 2021 03:50:54 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id jm13so3149501qvb.5
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jul 2021 03:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7LDSqJbg5uCatZHHPu87WA9Bh6dYYJKdoQ4UcOW9Nqk=;
+        b=R+6Utq/mypO/2BTESax//iPcjehFNB85vYbB++C51eQcimGRAY1islhP1BkqB4EO6f
+         eD1GDVj7bSuVkbDfpXdRLtnvnyjaqxTal+EM+ROj+JJzMV531IrZCIrWLXWK7q52Va8S
+         QMxIeu+c01guO+Dyygq2Obc4YFHokMC7XAarXF/dc5BJ1rhFbX4nTD2wpekkOWp6HaTy
+         r+gCjeMzIf3XVBnbWPcCBpibBJmKHUUumHJ+eIN0A5JttMhW6SS2z2Ipo0dWJd8+2ilc
+         hQtG8NaIMqL2frteNVLJEavYWuB6N3t3/R0k55rZKTXK+NM0vysud8OMLaa8GlnOuidt
+         sZBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7LDSqJbg5uCatZHHPu87WA9Bh6dYYJKdoQ4UcOW9Nqk=;
+        b=PHHN2OmIRxCfPxNVrfYhxZPeBWHDV28X2+5cA+JhqFnbEQ3685zlvPVRp7zpY+RBbM
+         An3fwKo6a8W0T7r9lnFj9+wfAOT+c7yYo4QD/+JiaD+6zTepXUsjlpuWq+orH1KkLr7G
+         ExU6BIeDUG1iHI0Q8Yq2XloQXjVSLpvkQ0+htsyGXcxPxATUlIRQJoAtUWyxgv2lBu+a
+         sRH154COe9TH11gUVIjkA70v9bRdc7/n2Ejh8Moa4Q7hYaC3WuFCSz61WejNON8kfSaO
+         TU1vS/UEp//AdiHIBdeLB7jm3v+OvT8RpB0FhKHoffpb8kIYIJ3PB7ypXSlium0Yf/iB
+         lISg==
+X-Gm-Message-State: AOAM530hrQKeYrJLmbzOrWRtrGYX7x02h4hHAOQpCPVt1GCIcyLoXEbO
+        OkKLLT1fBxME1Ibi2cN4obK7Lg==
+X-Google-Smtp-Source: ABdhPJymclFCGkiQXunpw1ReNKgxD5q725uzyeVyljJl8XX1w+h0z08VUI397n+uEQLXPhkGIF4G1w==
+X-Received: by 2002:a0c:e087:: with SMTP id l7mr4591930qvk.23.1627555853690;
+        Thu, 29 Jul 2021 03:50:53 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id 188sm1515483qkj.48.2021.07.29.03.50.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jul 2021 03:50:52 -0700 (PDT)
+Subject: Re: [PATCH 14/39] arm64: dts: qcom: sdm630: Add TSENS node
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210728222542.54269-1-konrad.dybcio@somainline.org>
+ <20210728222542.54269-15-konrad.dybcio@somainline.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <860f1120-c5a4-f531-3ea9-aa90c6b063dc@linaro.org>
+Date:   Thu, 29 Jul 2021 06:50:52 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR08MB6900.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d83c9123-880c-4704-18e4-08d9527cd6e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2021 10:37:18.3075
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aMsNcwLCb2yfj6zSQvLjq5MXg1viZPT5BbZxdJabuj7pTzIKTn5KNpu0hHGxbH6z0t5roMZmMufjuaEKsB98Ig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR08MB5332
+In-Reply-To: <20210728222542.54269-15-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Micron Confidential
+Hi Konrad,
 
-Hi,
+On 7/28/21 6:25 PM, Konrad Dybcio wrote:
+> This will enable temperature reporting for various SoC
+> components.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>   .../devicetree/bindings/thermal/qcom-tsens.yaml       |  1 +
+>   arch/arm64/boot/dts/qcom/sdm630.dtsi                  | 11 +++++++++++
+>   2 files changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 4a2eaf28e3fd..d3b9e9b600a2 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -48,6 +48,7 @@ properties:
+>                 - qcom,sc7180-tsens
+>                 - qcom,sc7280-tsens
+>                 - qcom,sc8180x-tsens
+> +              - qcom,sdm630-tsens
+>                 - qcom,sdm845-tsens
+>                 - qcom,sm8150-tsens
+>                 - qcom,sm8250-tsens
+> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> index 1e54828817d5..7e9c80e35fba 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> @@ -627,6 +627,17 @@ mnoc: interconnect@1745000 {
+>   				 <&mmcc AHB_CLK_SRC>;
+>   		};
+>   
+> +		tsens: thermal-sensor@10ae000 {
+> +			compatible = "qcom,sdm630-tsens", "qcom,tsens-v2";
+> +			reg = <0x010ae000 0x1000>, /* TM */
+> +				  <0x010ad000 0x1000>; /* SROT */
+> +			#qcom,sensors = <12>;
 
->=20
->=20
-> On Mon, Jul 26, 2021 at 01:22:21PM +0000, shiva.linuxworks@gmail.com wrot=
-e:
-> > In the platform with a limited backup power supply, devices like NVMe
-> > SSD does unsafe shutdown.
-> >
-> > These two patches address this issue by adding a power loss imminent
-> > flag. The platform will enable the power loss imminent flag if the
-> > platform's power is running on the limited backup power supply. During
-> > the shutdown, the driver checks this information and pwerforms the
-> > abrupt shutdown.
->=20
-> I think the pm framework and nvme usage are ok, but you need a platform
-> specific caller to set the new power loss flag before this should be
-> considered, otherwise this is just unreachable code.
+Are all 12 sensors used ? I see that in a later patch "arm64: dts: qcom: 
+sdm630: Add thermal-zones configuration" only 9 are used.
 
-Sure, I will send platform specific caller along with V3.
+> +			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
+> +					 <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "uplow", "critical";
+> +			#thermal-sensor-cells = <1>;
+> +		};
+> +
+>   		tcsr_mutex_regs: syscon@1f40000 {
+>   			compatible = "syscon";
+>   			reg = <0x01f40000 0x20000>;
+> 
 
-Thanks,
-Shiva
-
-Micron Confidential
+-- 
+Warm Regards
+Thara (She/Her/Hers)
