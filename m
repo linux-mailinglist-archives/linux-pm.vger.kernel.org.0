@@ -2,218 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0743D9DB1
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 08:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA703DA129
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 12:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbhG2Get (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Jul 2021 02:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbhG2Get (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 02:34:49 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F5C061757
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 23:34:45 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id r5so4671603ilc.13
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jul 2021 23:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+tVSS016LUwhx9hyDnuL9UJ/gkPRcAcwtfAfy1deii4=;
-        b=KGIuH5ot/6SvrFO+KZa6YgjzSZpvMmh09oqN0KjNShyJ6iphJhOrSNAPckv0H37Y48
-         gAuiR3Mr2po+1uEVIghcdiavTmSi0JLKmfJ9Mg2AUcStmNuSzkaSpwqdqjBMrxeKBMkT
-         h0U/FCiaoDfy/r4U60JRxUSOrDIfsdh19+7tf/rLB5XG+YzOOzoCl/xMcq3Y0a1sq9gB
-         DJhmasuE/rG6RoamidTuI5M4OkZN2rwEYWqRi32OgTmnGKqtWoBe/HjRrN/hDDFQd3xG
-         4Zw7H3yK8f1IpK1A1UhCMjh0BJ2WwqW0KjECjYEpC/Mrp0Eiu+MkC5NjZaODFMklwpaK
-         TmdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+tVSS016LUwhx9hyDnuL9UJ/gkPRcAcwtfAfy1deii4=;
-        b=ALo/EwEyi2QBF2RDG3FZU31j174N4lDHZP1d+m95wyhX/IOUw9h3PtgL4LryPTHShe
-         vQCyVA5lbWgwwJJB9eIhMoMnb4Ddzfwf7JPhObNHDGS+w7unu298zMb7XwipykrriZb7
-         NaVjBA7rI9/VpnRfoEuQoWSh1z3/Qb2c3xD6+CikBg0TzEpnmagsvWpGy8jO0WeCGXF7
-         ICLdx4UMopitg8RywfEY0McfhKulTeMVPMLngVqGUg8VPxyj2J1EwLtL7K2c1jdsCkTE
-         9XqTNshYdrd71KCkpOLakycs4LY30wCOLB4d6JniVpXWG/ddknJUhkxjwBq5f87vZzm5
-         PCow==
-X-Gm-Message-State: AOAM5300y1X3Q09cYWsk+78leNyCP5MCJsa4Tk3ktCHTwtN/q0udyC6F
-        m5pg6Yc0/g2okeQnIyzkFvvsF4ib+2tGkANPPxolTQ==
-X-Google-Smtp-Source: ABdhPJxtW7oK00Qe5dWu/4AW/JMToFmK3GP0PqLrzDJQiyUddzjceoMokmMn1eAbagOhqyoLaZkUo96o7fIvOXrALwU=
-X-Received: by 2002:a92:d741:: with SMTP id e1mr1300490ilq.18.1627540485255;
- Wed, 28 Jul 2021 23:34:45 -0700 (PDT)
+        id S233273AbhG2KhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jul 2021 06:37:25 -0400
+Received: from mail-co1nam11on2065.outbound.protection.outlook.com ([40.107.220.65]:62817
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229591AbhG2KhY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Jul 2021 06:37:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m9BhTpcV108Bl8792NAxtN3J1gFl2Oq0P+eb5Erj+4GnbsWXH6gdYsK17B1gCkea2wzT3zZrtjbuz3rND7PANYZIExAHWuIXE59eceTcj7dB3jhoLPn0yRHCPT7nSkzp7NG6JNfkLSYJDMaIAraj8qkIdBIVCFHKCG6sEpyuezDy4+aSoCmXtUbHgDVq06fELWqnv8tToC+NbH4ZzvlYPULl/ZonKFP80m/B6H+x37wEJqwNmNCoyVBEXhBxKscNjMpOvN03uaQXmMj6qifXvMzHv63Rja10eAU7LG10J6M2hXpdBL90bAIhBaRL5UOdeNqCUUP8CeHPnznjTZm6bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fJ339CnPDV1hdxPv624J2oqydHyZUHxG0tLhHGC+T2A=;
+ b=l1AxlTfGRX9bWWb2Jer1zfZAAhKBy86vBQOmAvXphvQIe0V6uHeijsq0trWNWMJIZcleVR4UIbcpjhi3LtXY54u7rkK4BP+qYOxWPuIbTLuHsExl96cfwrycZ4LdUgIZTZ3mR7N6+9unWIOtmzIdfBcQam2YqGUqF9LyqwYVDHhWVDpcuNmNVDTUiYzXP946DZriHzP1eC4CYLN7XzViroNe5cSZ4Maw+LhFC7A7WgtwZgfU/XbiSEHnJHXCT92lXlReajx7q0VhlGWMO4URx6tqehwlkGiZxTEKhP8aFsU2KimRjNswz/uC8Ao1/exv6ckXMx3QRJIk01DjXt/4Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fJ339CnPDV1hdxPv624J2oqydHyZUHxG0tLhHGC+T2A=;
+ b=PNx4I5421AukZx6jOGxlFVJ8FXa8BaLyFWMLw+zeKClzpGTpxykmcj0lgMnOAq8HcnZd5MHks27Do3XuBbGBRXhyfp2s/URpehOYu2wOpWmO5NlJ/f27kFB7t8UlVGQxcL4l9QemkQir91gx/fpX8C/Da+4LcLLJrCr1eOYQYtg=
+Received: from BLAPR08MB6900.namprd08.prod.outlook.com (2603:10b6:208:325::21)
+ by BL0PR08MB5332.namprd08.prod.outlook.com (2603:10b6:208:2b::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.29; Thu, 29 Jul
+ 2021 10:37:18 +0000
+Received: from BLAPR08MB6900.namprd08.prod.outlook.com
+ ([fe80::fde3:800c:617d:f516]) by BLAPR08MB6900.namprd08.prod.outlook.com
+ ([fe80::fde3:800c:617d:f516%9]) with mapi id 15.20.4373.019; Thu, 29 Jul 2021
+ 10:37:18 +0000
+From:   "Shivamurthy Shastri (sshivamurthy)" <sshivamurthy@micron.com>
+To:     Keith Busch <kbusch@kernel.org>
+CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shiva.linuxworks@gmail.com" <shiva.linuxworks@gmail.com>
+Subject: RE: [EXT] Re: [PATCH v2 0/2] Abrupt Shutdown for NVMe SSD
+Thread-Topic: [EXT] Re: [PATCH v2 0/2] Abrupt Shutdown for NVMe SSD
+Thread-Index: AQHXgjJctJSWzcMb8U6/xvTW6b+HaKtZxW6A
+Date:   Thu, 29 Jul 2021 10:37:18 +0000
+Message-ID: <BLAPR08MB690021D560D577A959673570B8EB9@BLAPR08MB6900.namprd08.prod.outlook.com>
+References: <20210726132223.1661-1-sshivamurthy@micron.com>
+ <20210726152434.GA2024939@dhcp-10-100-145-180.wdc.com>
+In-Reply-To: <20210726152434.GA2024939@dhcp-10-100-145-180.wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Enabled=true;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SetDate=2021-07-29T10:37:15Z;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Method=Standard;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Name=Confidential;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SiteId=f38a5ecd-2813-4862-b11b-ac1d563c806f;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_ActionId=6d976bf5-c61b-4e19-b413-eff5bb380c6e;
+ MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_ContentBits=3
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=micron.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d83c9123-880c-4704-18e4-08d9527cd6e9
+x-ms-traffictypediagnostic: BL0PR08MB5332:
+x-microsoft-antispam-prvs: <BL0PR08MB53326D07C09997DDDA531255B8EB9@BL0PR08MB5332.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Xts25C1dI1mTL9e0/44bu980rc+V5lB7ynFBAx1oPN10s0ov+QVL0bwrbJoaQLNTx0UrcgqywKXFhlb1xOM5PM4zHVXgYyWmNKeaD5duJi2fBqwNBDISM34Kc1BH9+gUbwxS+0V2U+Zb5wkzxyvtTqz9prEGNIZloaCQv+5Ex/x4L8Wx74s+2h/J9zmZk5n+C4Inu5Xyyxve5UVYTq1/b+h/ZgRD9C7ORuM4CMjLWi9i9i2B1ryk0B4r2nh0eOMrMCSJC9+C2corqZ+jeYAawEOBIcD1t3U/7sgr7REC9F6Hc8CwSBHlk3JGv8gcjd4iyp3NMFqsukiDVATTPIAs19x82bU7VyPu9ghDqMfxIolofbSwcFzqg4yEHvMnWCGKLgTLz5nGy9vnwBlMvX+EZ9JxpwGi7WcKf+T1CmqOlkDGFYxnhp9jt52VbNLh9xmuCqsP8qscvq1n0mgZoXb8ikeegvhI3CYsi6jJ0EYwealp790mNZJ771O6eMAkD7J5V7AChabX8i5hILxY8sNjJXUE2cQY6kvgmTX9v84I7n02Y7vEOqZqVDNMVrTzFH8LC+chxXY9UfNwO/PB9SlALdkBMQD+EcP30I6kv86FuJmFMsMGGQEDbpInbU8WWptOt2WXcyeSOrv1L9R3ShIyo46sx+ie30QBIAPzMFzhvMJbDlSZF+JrVUawyQgXPtyGGLRl9JJ39NduepUGAFR5GQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR08MB6900.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(39860400002)(346002)(136003)(366004)(52536014)(7416002)(38070700005)(122000001)(8676002)(38100700002)(186003)(66446008)(9686003)(7696005)(26005)(71200400001)(66556008)(64756008)(76116006)(66476007)(66946007)(55016002)(6506007)(8936002)(316002)(4744005)(478600001)(86362001)(4326008)(83380400001)(5660300002)(2906002)(33656002)(6916009)(54906003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?W10qXbrzQoghdWI/lS8zaaFknjfgLX/wuxzGA+mj3Y44qWTHoGDxnHnuK95/?=
+ =?us-ascii?Q?3McM6E+ewBmUHduTP54ZJy5S5yCs2yziqjj1UcKN3zDKWHvpW1pZ5lliRxJp?=
+ =?us-ascii?Q?yxkMIvV0WvYxlQwvJLvsUVm2OYldXc21G8UAMlimJU6AAypI/9ZilS22Ubau?=
+ =?us-ascii?Q?eRc1znhtiPjmCaOBTOhkNgpJ+YAr8+gr/tk3hKj216lFw+DCc3U/1FHcvHKc?=
+ =?us-ascii?Q?pAwvIIxrlhQn6JEbzd4x5O/VaJHI0gJAuVulS4mqIyWLkVIm8tKE+q9ulu2o?=
+ =?us-ascii?Q?AdAYo5UXo4Bk4IYvXM+jKvD7RmcGDQsSu/ZYtRAt61EEXTGdD2TsZG7UB4si?=
+ =?us-ascii?Q?JypGxs7FWx9ywDCDucCIaNkVijoZxtoS7FQ647QlZj24p/1IXo+wNFXMpxj2?=
+ =?us-ascii?Q?EEo6T/3/ydqCGpz1Pgrr0HL1E2LxFZhFjzTwhTVkOHrQ234vSNwY4HlAcz3/?=
+ =?us-ascii?Q?imP7zkdOtfXnp/JcPSAsUZoWp7tfkswMiC6iRwArqER6Qv/RCsra5jikUIPO?=
+ =?us-ascii?Q?kXgFyb1M071saGEHRcivvebNv1MkMTnul+DQ1Jd809hUcfqp5Mt24EFW4R/i?=
+ =?us-ascii?Q?0/SFhpG6IjY84hYokyZnYh40Xusz7zpdPkaDYd6urI8V9d/dAwmzUAsSjW+S?=
+ =?us-ascii?Q?zxbPRArhseaR4qVx7A9tyXMjk0VGhljo76n8atsa8iQm7GU3mKpEzj0rTA0j?=
+ =?us-ascii?Q?1i27rhwbJL15vKMEzouXELr04/1MbyBfq1sfYtb77ETnLiI+DLJUzK4t3VYA?=
+ =?us-ascii?Q?/SGGMwcDv1nYz5ZDRLCsxTCowtufmclBo9uFr1mX48+oirXerC0nCnUY3SvP?=
+ =?us-ascii?Q?wRPkfMcKaHxwy4TEB6rXqfyOf+ZmTLz9dh1ZSp4OObiF0rk2hcXD4h8IFz+c?=
+ =?us-ascii?Q?3OsSpH3fI3eIGac3ycKtSwNUKEpGah2n750UzBWdKgC0zM1302PvYtlWF5ks?=
+ =?us-ascii?Q?fLUOqGPePspZX/LFflOt06bG8+4pMO2oEdFW8Vk2KsUS/s6nHIy4j9jyNEyh?=
+ =?us-ascii?Q?gRZ/0QXSXYALn8frdo+fahYtkP0JZSKZN+GBfzurWrtS0vyYwrDPVp4hO6mz?=
+ =?us-ascii?Q?NxOSLY3FKmts7RWITRnPDH5PZdFcHM7EAHPgh6tHCeRP6Ir+AA3g2qMA8gD3?=
+ =?us-ascii?Q?4ipw4qR1k/+2Wo3nOu3kepmIjXFrIInrQgCnckPesTla2yh5Nu1hSHi4iKbW?=
+ =?us-ascii?Q?emGtziwC7jXVS9VzmiuWKFbZn/SGZA4QozlwQ1sNcoYdktqEijljNDIif+2x?=
+ =?us-ascii?Q?oaMqH9c/BfZaVyzobhjrgSor6KaPcb36YjakcbOjQHn3LkXMHx3kp7b9KdMj?=
+ =?us-ascii?Q?uKZEssxU3lOA0XeRv0BW+2fF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <1867445.PYKUYFuaPT@kreacher> <000801d78322$e9b94980$bd2bdc80$@telus.net>
- <CAJZ5v0jashhvE4vRNAft1qfZ_Ud==tG1Yh29ad7BSfhk5xjx4A@mail.gmail.com> <2178828.iZASKD2KPV@kreacher>
-In-Reply-To: <2178828.iZASKD2KPV@kreacher>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 28 Jul 2021 23:34:37 -0700
-Message-ID: <CAAYoRsVko5jG=xqH=KTochqQu95i7PDo_6f1LCPGvAP0=XdVTA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] cpuidle: teo: Rework the idle state selection logic
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR08MB6900.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d83c9123-880c-4704-18e4-08d9527cd6e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2021 10:37:18.3075
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aMsNcwLCb2yfj6zSQvLjq5MXg1viZPT5BbZxdJabuj7pTzIKTn5KNpu0hHGxbH6z0t5roMZmMufjuaEKsB98Ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR08MB5332
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 10:47 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> On Wednesday, July 28, 2021 3:52:51 PM CEST Rafael J. Wysocki wrote:
-> > On Tue, Jul 27, 2021 at 10:06 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > Further to my reply of 2021.07.04  on this, I have
-> > > continued to work with and test this patch set.
-> > >
-> > > On 2021.06.02 11:14 Rafael J. Wysocki wrote:
-> > >
-> > > >This series of patches addresses some theoretical shortcoming in the
-> > > > TEO (Timer Events Oriented) cpuidle governor by reworking its idle
-> > > > state selection logic to some extent.
-> > > >
-> > > > Patches [1-2/5] are introductory cleanups and the substantial changes are
-> > > > made in patches [3-4/5] (please refer to the changelogs of these two
-> > > > patches for details).  The last patch only deals with documentation.
-> > > >
-> > > > Even though this work is mostly based on theoretical considerations, it
-> > > > shows a measurable reduction of the number of cases in which the shallowest
-> > > > idle state is selected while it would be more beneficial to select a deeper
-> > > > one or the deepest idle state is selected while it would be more beneficial to
-> > > > select a shallower one, which should be a noticeable improvement.
-> > >
-> > > I am concentrating in the idle state 0 and 1 area.
-> > > When I disable idle state 0, the expectation is its
-> > > usage will fall to idle state 1. It doesn't.
-> > >
-> > > Conditions:
-> > > CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> > > HWP: disabled
-> > > CPU frequency scaling driver: intel_pstate, active
-> > > CPU frequency scaling governor: performance.
-> > > Idle configuration: As a COMETLAKE processor, with 4 idle states.
-> > > Sample time for below: 1 minute.
-> > > Workflow: Cross core named pipe token passing, 12 threads.
-> > >
-> > > Kernel 5.14-rc3: idle: teo governor
-> > >
-> > > All idle states enabled: PASS
-> > > Processor: 97 watts
-> > > Idle state 0 entries: 811151
-> > > Idle state 1 entries: 140300776
-> > > Idle state 2 entries: 889
-> > > Idle state 3 entries: 8
-> > >
-> > > Idle state 0 disabled: FAIL <<<<<
-> > > Processor: 96 watts
-> > > Idle state 0 entries: 0
-> > > Idle state 1 entries: 65599283
-> > > Idle state 2 entries: 364399
-> > > Idle state 3 entries: 65112651
+Micron Confidential
+
+Hi,
+
+>=20
+>=20
+> On Mon, Jul 26, 2021 at 01:22:21PM +0000, shiva.linuxworks@gmail.com wrot=
+e:
+> > In the platform with a limited backup power supply, devices like NVMe
+> > SSD does unsafe shutdown.
 > >
-> > This looks odd.
-> >
-> > Thanks for the report, I'll take a look at this.
->
-> I have found an issue in the code that may be responsible for the
-> observed behavior and should be addressed by the appended patch (not
-> tested yet).
->
-> Basically, the "disabled" check in the second loop over states in
-> teo_select() needs to exclude the first enabled state, because
-> there are no more states to check after that.
->
-> Plus the time span check needs to be done when the given state
-> is about to be selected, because otherwise the function may end up
-> returning a state for which the sums are too low.
->
-> Thanks!
->
-> ---
->  drivers/cpuidle/governors/teo.c |   26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
->
-> Index: linux-pm/drivers/cpuidle/governors/teo.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> +++ linux-pm/drivers/cpuidle/governors/teo.c
-> @@ -404,25 +404,27 @@ static int teo_select(struct cpuidle_dri
->                         intercept_sum += bin->intercepts;
->                         recent_sum += bin->recent;
->
-> -                       if (dev->states_usage[i].disable)
-> +                       if (dev->states_usage[i].disable && i > idx0)
->                                 continue;
->
->                         span_ns = teo_middle_of_bin(i, drv);
-> -                       if (!teo_time_ok(span_ns)) {
-> -                               /*
-> -                                * The current state is too shallow, so select
-> -                                * the first enabled deeper state.
-> -                                */
-> -                               duration_ns = last_enabled_span_ns;
-> -                               idx = last_enabled_idx;
-> -                               break;
-> -                       }
->
->                         if ((!alt_recent || 2 * recent_sum > idx_recent_sum) &&
->                             (!alt_intercepts ||
->                              2 * intercept_sum > idx_intercept_sum)) {
-> -                               idx = i;
-> -                               duration_ns = span_ns;
-> +                               if (!teo_time_ok(span_ns) ||
-> +                                   dev->states_usage[i].disable) {
-> +                                       /*
-> +                                        * The current state is too shallow or
-> +                                        * disabled, so select the first enabled
-> +                                        * deeper state.
-> +                                        */
-> +                                       duration_ns = last_enabled_span_ns;
-> +                                       idx = last_enabled_idx;
-> +                               } else {
-> +                                       idx = i;
-> +                                       duration_ns = span_ns;
-> +                               }
->                                 break;
->                         }
+> > These two patches address this issue by adding a power loss imminent
+> > flag. The platform will enable the power loss imminent flag if the
+> > platform's power is running on the limited backup power supply. During
+> > the shutdown, the driver checks this information and pwerforms the
+> > abrupt shutdown.
+>=20
+> I think the pm framework and nvme usage are ok, but you need a platform
+> specific caller to set the new power loss flag before this should be
+> considered, otherwise this is just unreachable code.
 
-Hi Rafael,
+Sure, I will send platform specific caller along with V3.
 
-I tried the patch and when I disabled idle state 0
-got, very similar to before:
+Thanks,
+Shiva
 
-Idle state 0 disabled: FAIL
-Processor: 95 watts
-Idle state 0 entries: 0
-Idle state 1 entries: 65,475,534
-Idle state 2 entries: 333144
-Idle state 3 entries: 65,247,048
-
-However, I accidently left it for about 30 minutes
-and noticed:
-
-Idle state 0 disabled:
-Processor: 83 watts
-Idle state 0 entries: 0
-Idle state 1 entries: 88,706,831
-Idle state 2 entries: 100
-Idle state 3 entries: 662
-
-I went back to unmodified kernel 5.13-rc3 and
-let it run longer with idle state 0 disabled, and
-after 30 minutes it had changed but nowhere
-near as much:
-
-Idle state 0 disabled:
-Processor: 87 watts
-Idle state 0 entries: 0
-Idle state 1 entries: 70,361,020
-Idle state 2 entries: 71219
-Idle state 3 entries: 27,249,975
-
-... Doug
+Micron Confidential
