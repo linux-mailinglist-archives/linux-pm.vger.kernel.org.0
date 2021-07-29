@@ -2,135 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597B93DA48D
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 15:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8697A3DA4AF
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 15:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237573AbhG2NoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Jul 2021 09:44:19 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:44956 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbhG2NoS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 09:44:18 -0400
-Received: by mail-oi1-f175.google.com with SMTP id w6so8481328oiv.11;
-        Thu, 29 Jul 2021 06:44:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q4MUJTLQyNBDUmaLrQznI2p58A4zdIyxdbFZC77QNdA=;
-        b=RAqmNQYUX3VS5yxdHG1TGRh7pke1ns8iFpuG60cD9EbfCSlxGoadSE0qL4fGCVLhO1
-         BbACLpHxId2Oj0Le2amTvTKqbWnC2EBdw9pPnGEg6JmdFmsE9vGHkYohmFmOzCeJ2zxG
-         eJVOW+K4S2exjetZe2OQb46idsNb47ArxRwmOsfei8Y3AJ0qlIChUWsfclUZ6RfPVMzn
-         E4gWzeK/+Fwv7KbAbSQ6ZHmZvdJrF6/rmUFN69S/kkgQHE40WIXvt7UIE9lVsyWLOJbT
-         53DJ15hGfOodNC21WAi5xDpwqdQoVmov4bS6NEuTiqUmN6ZleDRVBXKVCzhscwEbXAnB
-         1HCw==
-X-Gm-Message-State: AOAM532+7k/+AN37Fhwp+r+wimj9+YYECQiDzaBkhGuz3FTfW2WjxpSX
-        L8Oz/5T1Br6RuajDHW8WfGy4vWAQoSt3ivoiirc=
-X-Google-Smtp-Source: ABdhPJxew3Nr58iygpTRNLBs3zllyLSEpX9PFZm5rv36vU203cUij2xZEDuMW04KbaviIkCwf/ICxVNZbzPvShYsJ0I=
-X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr1129391oib.71.1627566255112;
- Thu, 29 Jul 2021 06:44:15 -0700 (PDT)
+        id S237774AbhG2Nsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jul 2021 09:48:52 -0400
+Received: from m-r2.th.seeweb.it ([5.144.164.171]:59517 "EHLO
+        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237712AbhG2Nsv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 09:48:51 -0400
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 28A2A3F403;
+        Thu, 29 Jul 2021 15:48:47 +0200 (CEST)
+Subject: Re: [PATCH 14/39] arm64: dts: qcom: sdm630: Add TSENS node
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org, marijn.suijten@somainline.org,
+        jamipkettunen@somainline.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210728222542.54269-1-konrad.dybcio@somainline.org>
+ <20210728222542.54269-15-konrad.dybcio@somainline.org>
+ <860f1120-c5a4-f531-3ea9-aa90c6b063dc@linaro.org>
+ <2318377c-959a-a42b-81b5-44e2629570d5@somainline.org>
+ <afee55a8-d7d3-709a-ea4f-0306698c9976@linaro.org>
+ <b16d8000-85a7-d957-77d2-d921e5b09829@somainline.org>
+ <a7f90fe0-ee24-a47d-089d-e716a5766fcd@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <2ffc4e54-a501-bd2d-3f29-a6df34023445@somainline.org>
+Date:   Thu, 29 Jul 2021 15:48:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-References: <3149540.aeNJFYEL58@kreacher> <YQKruWMmSXeH3GL6@lahna>
-In-Reply-To: <YQKruWMmSXeH3GL6@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jul 2021 15:44:04 +0200
-Message-ID: <CAJZ5v0gUQHV_3A_nFR23M6K8sW6vdVzM3PgTT5yFY9jGUxm2RA@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: PM: Add special case handling for PCIe device wakeup
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
-        Koba Ko <koba.ko@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <a7f90fe0-ee24-a47d-089d-e716a5766fcd@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mika,
+Il 29/07/21 13:14, Thara Gopinath ha scritto:
+> 
+> 
+> On 7/29/21 6:55 AM, Konrad Dybcio wrote:
+>>
+>> On 29.07.2021 12:54, Thara Gopinath wrote:
+>>>
+>>>
+>>> On 7/29/21 6:52 AM, Konrad Dybcio wrote:
+>>>>
+>>>> On 29.07.2021 12:50, Thara Gopinath wrote:
+>>>>> Hi Konrad,
+>>>>>
+>>>>> On 7/28/21 6:25 PM, Konrad Dybcio wrote:
+>>>>>> This will enable temperature reporting for various SoC
+>>>>>> components.
+>>>>>>
+>>>>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>>>>> <angelogioacchino.delregno@somainline.org>
+>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>>> ---
+>>>>>>     .../devicetree/bindings/thermal/qcom-tsens.yaml       |  1 +
+>>>>>>     arch/arm64/boot/dts/qcom/sdm630.dtsi                  | 11 +++++++++++
+>>>>>>     2 files changed, 12 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml 
+>>>>>> b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>>>>> index 4a2eaf28e3fd..d3b9e9b600a2 100644
+>>>>>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>>>>> @@ -48,6 +48,7 @@ properties:
+>>>>>>                   - qcom,sc7180-tsens
+>>>>>>                   - qcom,sc7280-tsens
+>>>>>>                   - qcom,sc8180x-tsens
+>>>>>> +              - qcom,sdm630-tsens
+>>>>>>                   - qcom,sdm845-tsens
+>>>>>>                   - qcom,sm8150-tsens
+>>>>>>                   - qcom,sm8250-tsens
+>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi 
+>>>>>> b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+>>>>>> index 1e54828817d5..7e9c80e35fba 100644
+>>>>>> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
+>>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+>>>>>> @@ -627,6 +627,17 @@ mnoc: interconnect@1745000 {
+>>>>>>                      <&mmcc AHB_CLK_SRC>;
+>>>>>>             };
+>>>>>>     +        tsens: thermal-sensor@10ae000 {
+>>>>>> +            compatible = "qcom,sdm630-tsens", "qcom,tsens-v2";
+>>>>>> +            reg = <0x010ae000 0x1000>, /* TM */
+>>>>>> +                  <0x010ad000 0x1000>; /* SROT */
+>>>>>> +            #qcom,sensors = <12>;
+>>>>>
+>>>>> Are all 12 sensors used ? I see that in a later patch "arm64: dts: qcom: 
+>>>>> sdm630: Add thermal-zones configuration" only 9 are used.
+>>>>
+>>>> Hi,
+>>>>
+>>>> if I recall correctly, they all give output but not all of the mappings were 
+>>>> documented in the downstream sources and we have no documentation whatsoever :(
+>>>
+>>> Right. In that case, why not change #qcom,sensors to 9 and add rest of the 
+>>> sensors if and when needed ?
+>>>
+>> I don't think it makes sense to describe the hardware incorrectly, even if some 
+>> of it is unused.
+> 
+> My thinking was more along the lines of don't expose unused h/w bits.
+> 
 
-On Thu, Jul 29, 2021 at 3:23 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Wed, Jul 28, 2021 at 07:25:04PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Some PCIe devices only support PME (Power Management Event) from
-> > D3cold.  One example is the ASMedia xHCI controller:
-> >
-> >  11:00.0 USB controller: ASMedia Technology Inc. ASM1042A USB 3.0 Host Controller (prog-if 30 [XHCI])
-> >    ...
-> >    Capabilities: [78] Power Management version 3
-> >        Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA PME(D0-,D1-,D2-,D3hot-,D3cold+)
-> >        Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> >
-> > In those cases, if the device is expected to generate wakeup events
-> > from its final power state, pci_target_state() returns D0, which
-> > prevents the PCIe hierarchy above the device from entering any
-> > low-power states too, but the device cannot signal PME from D0
-> > either.  However, if the device were allowed to go into D3hot, its
-> > parent PCIe port and its ancestors would also be able to go into D3
-> > and if any of them goes into D3cold, the device would end up in
-> > D3cold too (as per the PCI PM spec v1.2, Table 6-1), in which case
-> > it would be able to signal PME.
-> >
-> > This means that the system could be put into a lower-power
-> > configuration while meeting the requirement to enable the device to
-> > generate PME from the final state (which is not the case if the
-> > device stays in D0 along with the entire hierarchy above it).
-> >
-> > In order to avoid missing that opportunity, extend pci_pme_capable()
-> > to return 'true' in the special case when the target state is D3hot
-> > and the device can only signal PME from D3cold and update
-> > pci_target_state() to return the current target state if
-> > pci_pme_capable() returns 'true' for it.
-> >
-> > This change can be regarded as a pci_target_state() fix, because that
-> > function should ignore its 'wakeup' argument if signaling PME from
-> > any power states shallower than the current candidate one (including
-> > D0) is not supported.
-> >
-> > Link: https://lore.kernel.org/linux-pm/20210617123653.58640-1-mika.westerberg@linux.intel.com
-> > Fixes: 666ff6f83e1d ("PCI/PM: Avoid using device_may_wakeup() for runtime PM")
-> > Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
-> > Reported-by: Koba Ko <koba.ko@canonical.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Tried this now and it fixes the issue! Also checked with another device
-> that actually supports PME from other states than D3cold and it also
-> works (as expected).
->
-> Feel free to add my,
->
-> Tested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+You're right about not exposing unused HW bits, but even PC x86 motherboards
+(I mean the smbus/i2c drivers for the big holy management/sensors chips) do
+have such a "base" configuration, where some lines are read as 0 because they
+are effectively not connected by hardware.
 
-Thank you!
+In order to avoid confusion to other developers, in my personal opinion, it would
+be good go for the current value of 12 (which isn't incorrect, as that's what the
+SoC supports)... I don't think that anyone would be confused by seeing zero
+readings on some sensors (if their device don't support such sensor), as I think
+that everyone is used to that anyway, even if that's in other circumstances...
 
-However, after giving some more consideration to this, I've realized
-that it may still not be the cleanest way to address the issue at
-hand.
+In any case, luckily that's also safe, because there's no firmware that restricts
+the readings to a subset of sensors in this domain (nobody is going to get a
+hypervisor fault for that).
 
-Namely, there are two things we want to happen: (1) pci_target_state()
-should return the original candidate target state if 'wakeup' is true,
-but the device cannot signal PME from any states shallower than the
-original one (including D0) and (2) __pci_enable_wake() should call
-pci_pme_active() for devices that support signaling PME from D3cold
-regardless of whether or not they support signaling PME from the power
-state passed to it (because a device may end up in D3cold as a result
-of a transition of the hierarchy above it and PME should be signaled
-then).  They are only related to each other because the PME signaling
-capability is taken into account in both places, but in fact (1) has
-nothing to do with D3cold (and making it effectively depend on whether
-or not the device can signal PME from D3cold is somewhat artificial)
-and (2) has nothing to do with what the target power state of the
-device is.  And so each of these two things should be covered by a
-separate patch.
+I would also, in case, propose to see how things go: I would expect other
+developers to push device trees for many SDM630/636/660 devices, including but
+not limited to smartphones and SBCs.. so perhaps if we find out that really
+nobody uses the 12 sensors, or if the very vast majority uses a different amount,
+perhaps we may just transfer the value to device-specific configurations in one
+go, as to avoid unnecessary noise... I think :)))
 
-Let me post an alternative patch series in accordance with the above.
+>>
+>>
+>>
+> 
+
