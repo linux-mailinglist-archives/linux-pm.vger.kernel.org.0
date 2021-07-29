@@ -2,93 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 555F63DAABC
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 20:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3AB3DAE62
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 23:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbhG2SFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Jul 2021 14:05:50 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:12795 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231741AbhG2SFu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Jul 2021 14:05:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1627581947; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=PLW/47MBI7lmzQDOwAD0iszRmpCfxwkuMIi69UJPeG4=; b=kcTJ/FLBor18+WDPdvNp35zmXljn4ZO7CdA2wewInQwB9oXZxY6oWmqeFZUF6Y17hkbQtVM5
- N29TVJeMyISHsKo1vVPMMNkMBYJ9wN+MDtMoOIq0TXy8J+UorFpjJa9hR5aWRTzWnzk8gGr4
- OoYDuw/bRc2utEJpDqm+4s3YCbg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 6102eddf4815712f3ade39b9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Jul 2021 18:05:19
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7C16EC433D3; Thu, 29 Jul 2021 18:05:18 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3FE23C43217;
-        Thu, 29 Jul 2021 18:05:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3FE23C43217
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     sboyd@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        mka@chromium.org
-Cc:     viresh.kumar@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dianders@chromium.org, tdas@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8350: Fixup the cpufreq node
-Date:   Thu, 29 Jul 2021 23:34:45 +0530
-Message-Id: <1627581885-32165-5-git-send-email-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1627581885-32165-1-git-send-email-sibis@codeaurora.org>
-References: <1627581885-32165-1-git-send-email-sibis@codeaurora.org>
+        id S233500AbhG2VeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jul 2021 17:34:10 -0400
+Received: from mail-il1-f180.google.com ([209.85.166.180]:46634 "EHLO
+        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229944AbhG2VeJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 17:34:09 -0400
+Received: by mail-il1-f180.google.com with SMTP id r5so7311235ilc.13;
+        Thu, 29 Jul 2021 14:34:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+US/sCT1dhxOJ4U91k6ZMMJ60qAI+1w/R3MOkEoiC8U=;
+        b=N2mu7X/uGwO9E86DQfdrTaZrtfwE3m7nGq9oT+vEfU7/Vpnc/mtR9MiapSBHhiFSiI
+         jDP+gp4f5meF6BQ+yO/xWiAzDCxUpq/sEDaEv9PgiU9IPMbiQgNowXYMoUiFwLB6ddVm
+         ZgBRunv+MT+w1mo/K8PG1xCShQLvJ+maDBjyXLEQ2NO2hNjM/hHYkHXun2AjL4u0lx2d
+         l/Q8Q7d2+9WQSFeny4+KzfxW3s3d8uiX1i1gE0+HC6w8xPgGjZ3qqa4XsbWeXiVEsaQ6
+         BvEB4Y7z18kucMDT/47JXFcrUg7/NY3i8abtED2S//MY9vf9fOoPsnm+6L+NatCbqIk7
+         64+g==
+X-Gm-Message-State: AOAM531mNPnhVkuK6+drUMZNu+Fnuoz7FbdoUngf7wYVZnFGduTVVBw/
+        02TCGI6LsZzlLJQMCHMiWw==
+X-Google-Smtp-Source: ABdhPJyapp7U+fLii2gEVm9kIg7KKSiwOiZDZmljwYAOtMmG5lXlR7cdkQlYnOXAoduHlLOzfLJaRQ==
+X-Received: by 2002:a92:d3d1:: with SMTP id c17mr5000523ilh.86.1627594444720;
+        Thu, 29 Jul 2021 14:34:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id j20sm2944416ile.17.2021.07.29.14.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jul 2021 14:34:03 -0700 (PDT)
+Received: (nullmailer pid 932724 invoked by uid 1000);
+        Thu, 29 Jul 2021 21:34:02 -0000
+Date:   Thu, 29 Jul 2021 15:34:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SC8180x DT
+ bindings
+Message-ID: <YQMeyu9bPLC2d7+S@robh.at.kernel.org>
+References: <20210723194243.3675795-1-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210723194243.3675795-1-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixup the register regions used by the cpufreq node on SM8350 SoC to
-support per core L3 DCVS.
+On Fri, 23 Jul 2021 12:42:42 -0700, Bjorn Andersson wrote:
+> From: Georgi Djakov <georgi.djakov@linaro.org>
+> 
+> Add compatibles and port definitions for the SC8180x RPMH interconnect
+> providers.
+> 
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> [bjorn: Split defines from driver patch and added binding update]
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  11 ++
+>  .../dt-bindings/interconnect/qcom,sc8180x.h   | 185 ++++++++++++++++++
+>  2 files changed, 196 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sc8180x.h
+> 
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index a631d58166b1..d0a5a5568602 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -967,11 +967,10 @@
- 		};
- 
- 		cpufreq_hw: cpufreq@18591000 {
--			compatible = "qcom,sm8350-cpufreq-epss", "qcom,cpufreq-epss";
--			reg = <0 0x18591000 0 0x1000>,
--			      <0 0x18592000 0 0x1000>,
--			      <0 0x18593000 0 0x1000>;
--			reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
-+			compatible = "qcom,cpufreq-epss";
-+			reg = <0 0x18591100 0 0x900>,
-+			      <0 0x18592100 0 0x900>,
-+			      <0 0x18593100 0 0x900>;
- 
- 			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
- 			clock-names = "xo", "alternate";
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Reviewed-by: Rob Herring <robh@kernel.org>
