@@ -2,102 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D643DA804
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 17:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7296E3DA88C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jul 2021 18:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238126AbhG2P4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Jul 2021 11:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238094AbhG2P4g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 11:56:36 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CCEC061765;
-        Thu, 29 Jul 2021 08:56:31 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 71232200C7;
-        Thu, 29 Jul 2021 17:56:28 +0200 (CEST)
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-To:     bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
-        jami.kettunen@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
-        stephan@gerhold.net, robh@kernel.org, bartosz.dudziak@snejp.pl,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH v8 5/5] dt-bindings: soc: qcom: spm: Document SDM660 and MSM8998 compatibles
-Date:   Thu, 29 Jul 2021 17:56:09 +0200
-Message-Id: <20210729155609.608159-6-angelogioacchino.delregno@somainline.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210729155609.608159-1-angelogioacchino.delregno@somainline.org>
-References: <20210729155609.608159-1-angelogioacchino.delregno@somainline.org>
+        id S232388AbhG2QL1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jul 2021 12:11:27 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44638 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232951AbhG2QIY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jul 2021 12:08:24 -0400
+X-UUID: 345792b1281a4c648a2d62ac9c720d2f-20210730
+X-UUID: 345792b1281a4c648a2d62ac9c720d2f-20210730
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1695897104; Fri, 30 Jul 2021 00:08:18 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 30 Jul 2021 00:08:16 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 30 Jul 2021 00:08:16 +0800
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
+        <hector.yuan@mediatek.com>
+Subject: [PATCH v13] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Fri, 30 Jul 2021 00:08:09 +0800
+Message-ID: <1627574891-26514-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver was updated to add SAW2 v4.1 support for new SoCs: document
-the new compatibles.
+The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
+The driver implements the cpufreq driver interface for this hardware engine. 
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
----
- .../bindings/soc/qcom/qcom,spm.yaml           | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+From v12 to v13, there are two modifications.
+1. Move related_cpus function to common place, so all performance-domain cpufreq driver can refer.
+2. Make cpu resource init to each policy rather than per-cpu
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-index 507216100e3f..d68c002527fa 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-@@ -18,6 +18,10 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,sdm660-gold-saw2-v4.1-l2
-+          - qcom,sdm660-silver-saw2-v4.1-l2
-+          - qcom,msm8998-gold-saw2-v4.1-l2
-+          - qcom,msm8998-silver-saw2-v4.1-l2
-           - qcom,msm8226-saw2-v2.1-cpu
-           - qcom,msm8974-saw2-v2.1-cpu
-           - qcom,apq8084-saw2-v2.1-cpu
-@@ -36,6 +40,8 @@ additionalProperties: false
- 
- examples:
-   - |
-+
-+    /* Example 1: SoC using SAW2 and kpss-acc-v2 CPUIdle */
-     cpus {
-         #address-cells = <1>;
-         #size-cells = <0>;
-@@ -55,4 +61,20 @@ examples:
-         reg = <0xf9089000 0x1000>;
-     };
- 
-+  - |
-+
-+    /*
-+     * Example 2: New-gen multi cluster SoC using SAW only for L2;
-+     * This does not require any cpuidle driver, nor any cpu phandle.
-+     */
-+    power-manager@17812000 {
-+        compatible = "qcom,msm8998-gold-saw2-v4.1-l2", "qcom,saw2";
-+        reg = <0x17812000 0x1000>;
-+    };
-+
-+    power-manager@17912000 {
-+        compatible = "qcom,msm8998-silver-saw2-v4.1-l2", "qcom,saw2";
-+        reg = <0x17912000 0x1000>;
-+    };
-+
- ...
--- 
-2.32.0
+From v11 to v12, there are two modifications.
+1. Based on patchset[1], align binding with scmi for performance domain(latest version).
+2. Shrink binding example wording. 
 
+From v8 to v9, there are three more modifications.
+1. Based on patchset[2], align binding with scmi for performance domain.
+2. Add the CPUFREQ fast switch function support and define DVFS latency.
+3. Based on patchser[3], add energy model API parameter for mW.
+
+From v7 to v8, there are three more patches based on patchset v8[4].
+This patchset is about to register power table to Energy model for EAS and thermal usage.
+1. EM CPU power table
+- Register energy model table for EAS and thermal cooling device usage.
+- Read the coresponding LUT for power table.
+2. SVS initialization
+- The SVS(Smart Voltage Scaling) engine is a hardware which is
+  used to calculate optimized voltage values for CPU power domain.
+  DVFS driver could apply those optimized voltage values to reduce power consumption.
+- Driver will polling if HW engine is done for SVS initialization.
+  After that, driver will read power table and register it to EAS.
+- CPUs must be in power on state when doing SVS. Use pm_qos to block cpu-idle state for SVS initializing.
+3. Cooling device flag
+- Add cooling device flag for thermal
+[1]  https://lore.kernel.org/linux-devicetree/20210517155458.1016707-1-sudeep.holla@arm.com/
+[2]  https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com/
+[3]  https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=c250d50fe2ce627ca9805d9c8ac11cbbf922a4a6
+[4]  https://lkml.org/lkml/2020/9/23/384
+
+
+Hector.Yuan (2):
+  dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
+  cpufreq: mediatek-hw: Add support for CPUFREQ HW
+
+ .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |   70 ++++
+ drivers/cpufreq/Kconfig.arm                        |   12 +
+ drivers/cpufreq/Makefile                           |    1 +
+ drivers/cpufreq/mediatek-cpufreq-hw.c              |  357 ++++++++++++++++++++
+ include/linux/cpufreq.h                            |   39 +++
+ 5 files changed, 479 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+ create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
