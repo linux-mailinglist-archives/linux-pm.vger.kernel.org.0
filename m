@@ -2,84 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7E73DBDD0
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jul 2021 19:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24B13DBE48
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jul 2021 20:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhG3Rh2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jul 2021 13:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S230199AbhG3SYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jul 2021 14:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbhG3Rh1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jul 2021 13:37:27 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7376CC061765;
-        Fri, 30 Jul 2021 10:37:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g13so19322801lfj.12;
-        Fri, 30 Jul 2021 10:37:22 -0700 (PDT)
+        with ESMTP id S230094AbhG3SYL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jul 2021 14:24:11 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8495EC061765
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jul 2021 11:24:05 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id dk2so2864002qvb.3
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jul 2021 11:24:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YdD/cQbxE12roUQGUPlpfAtfifyzljBPvXuX8vTuNeQ=;
-        b=OHLEomAUDEdDieEdq+73CDWNR3GZ9sjoIWNZUB6G0iOgneOiKlsjmU2LKmepB4/7K4
-         K4LPYZOpdzackoANKPBCKPSia9gb8vn4s300ngs0LMWAIfTRrTDVJJhtJiOWg0nBfUPb
-         eKLSZuhYp9ZDHfBe3p6i88WWMPgoOuIJ0nMBpExQ3EdpgKYwqhFqIRaXm+fIkApaofk5
-         UzbdScesIb9d1IxiVfstMurv4iaCf4t2R3A/8tHkwUaUWhnfSdGRUu7RauPljNiFgCI5
-         5W2IGaPuJFZqxABEB8Yd0P8suhrCr+LhA5Hg6h+wlJ5AKv5ao5Dt7S/d0gSZUt95NG2P
-         mcrg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lpTj1qbBhUjsFO3ShCuhQlstpCRBWbI+98sXsatNNS0=;
+        b=nvoJbYYos3edtySrFC3sNrtYaePSz35pEA5Ucgp1us801EwDxgvhYHe5xNUt49wnQB
+         lDiR+WepP+JDWFGZN2Q/6QOTpDLIpexO3Zue5iOIOpHt2rKLkRCgpiThEhipLoyi5fLw
+         gJHy4qphNLyXadI5deevRbOP0hbFtDyzzryQlXAnSMtYnBQGJyU6WwAdKip701vZWNs+
+         CDs9NsrICj5g8BBPD2Kk5B05I9xoDzpcyrdomLOXdV/sF/dWZ/BSO50js90EXjZEmi+G
+         blAKza0sOUe2ubzjERyRsT5yt86446xj4z75KbGmQPytlq8V3KbHQNvL9U5E0IhyzoQU
+         jerA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YdD/cQbxE12roUQGUPlpfAtfifyzljBPvXuX8vTuNeQ=;
-        b=TqWcts8+gxe9LRLh0RZW55s+NhxHXh8x8KNw6cHnKiLIQxZVWekzB+oF1WppBXeK+J
-         j7I4tAOgm7pxG8DxP0Hz+b95Ps19yPaM8uSJgmocF1kdo3h4UjKpKHhAh/gUGXLyU32z
-         Rdu4huvU28YLVQ2wfYHZFkFmZyjdbJ5JE6o+Z5vQ/bnVdoQQDqXuYq8Rh1b5KnMuc2lf
-         Lunk9gwqUGoJhC8gmwU8fg5rAq+OakctwjqStFxJUtfjP7XxvjvuuCbhj92I3NVb9ab6
-         uC/t+HcIl0pa+GBiXMx/sLk29Mpz+0sO3SpOEcpS5RyVNGasNkHfVALrVHffFb7yuChb
-         B7Mg==
-X-Gm-Message-State: AOAM5316h3VV0WN1kVWRFhMFnuIk+fys0Eb8bkIAN3Xlm39jRsTp0vKa
-        8gpp50Sa+cRrgOSijMZQn9c=
-X-Google-Smtp-Source: ABdhPJwy8rI9+LJQTi6lVK2rpSiGY4hRkUnXqyk7UBMJ1mSAW7CPTJaIXxKYe3Umh7FA/tCTkTv6FA==
-X-Received: by 2002:a05:6512:3e0b:: with SMTP id i11mr2517488lfv.221.1627666640891;
-        Fri, 30 Jul 2021 10:37:20 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-39-114.dynamic.spd-mgts.ru. [94.29.39.114])
-        by smtp.googlemail.com with ESMTPSA id h34sm201080lfv.231.2021.07.30.10.37.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jul 2021 10:37:20 -0700 (PDT)
-Subject: Re: [PATCH v5 00/12] Add OTG mode support to Tegra USB PHY, SMB347
- and Nexus 7
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <20210717182134.30262-1-digetx@gmail.com>
-Message-ID: <ed3c2a5c-a916-2215-a767-5546fa8cd352@gmail.com>
-Date:   Fri, 30 Jul 2021 20:37:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lpTj1qbBhUjsFO3ShCuhQlstpCRBWbI+98sXsatNNS0=;
+        b=h+e7wwZWusfQ4PaxRWWCQCfQIFcchiFo4U6jLUtsB7xqDDZ7BGsL6g944xqfR+U9TC
+         ySUVCt0ceguz33GeRZl1Zg1SzENH47rzi3Ro3cGCOAaaJMLSjn1ZDjOgM1kiAhg5E0q5
+         PMoZzA9jqb2s/YTKg6g5bAzgBGdzuoApeGzJEMpUEdgs9D8BVURnXOqFNyuHGkwvRQqu
+         2lvRdtcPCHRzLwKLetx1PoDjWyV9+fhY90N/VlFav7nYtKTJcRb8ZNBiAXlvZJbRugAA
+         Cc/UNb711KKKmZNj45i1jo5mKv5QyBKSFIxZh62oFxPMF8rX1tLqDVO5morNMQS+uLNx
+         TsQg==
+X-Gm-Message-State: AOAM533JOJxI6gC8/oISzwpA7dtmPqgAXaU03aWOJmK5aN37hbYNrJkz
+        LOoEtzndS76z7O6GIUzK9Z7xDSC84Stm3goZTg4=
+X-Google-Smtp-Source: ABdhPJw+y5SDv+Hi0+xbHWjkczzC5L1I5eDhwD8mikOK4YXyK9lP9vyXYvMJmMR4GdUWcr+TjpS87MY+IU8dfriy0vI=
+X-Received: by 2002:ad4:46ed:: with SMTP id h13mr4238934qvw.56.1627669444698;
+ Fri, 30 Jul 2021 11:24:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210717182134.30262-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6214:625:0:0:0:0 with HTTP; Fri, 30 Jul 2021 11:24:04
+ -0700 (PDT)
+Reply-To: westernunion-claimcollector@collector.org
+From:   WESTERN UNION MONEY TRANSFER OFFICE <mr.grecadams@gmail.com>
+Date:   Fri, 30 Jul 2021 19:24:04 +0100
+Message-ID: <CAEjXcM37HNV7zUz9oiKGo7wMKpsWihjt_FJsSHQTzEZDX4bZFw@mail.gmail.com>
+Subject: THE MONEY HAS BEEN SENT, PLEASE CONFIRM
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-17.07.2021 21:21, Dmitry Osipenko пишет:
-...
->   power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
->   power: supply: smb347-charger: Utilize generic regmap caching
->   power: supply: smb347-charger: Implement USB VBUS regulator
+-- 
 
-I noticed that charging doesn't work properly now, will fix it in v6.
+
+Dear Beneficiary;
+
+Our Operation Manager has extract your 1st payment of $5,000.00 out of
+your total fund of ($1.5million) We need your full  information for
+the transfer.
+
+We scheduled installment sums of USD $5,000.00 daily through the cash
+fast Western Union, payment at counter as directed and we have
+commenced the relevant programming and the documentations of the said
+fund, as we are instructed to make the first payment of USD$5,000.00
+MTCN available in your name upon the receipt of your information from
+you as follows.
+
+Your Name,
+
+Address,
+
+Telephone
+
+ID CARD
+
+Contact our Operational Manager,Mr WETAYEM MYSHEAR through our office
+email for more enlightenment on your money.
+
+Email (westernunion.collector@collector.org)
+
+Thanks
+
+Managnment
