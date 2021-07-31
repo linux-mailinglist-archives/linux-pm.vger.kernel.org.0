@@ -2,134 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399673DC764
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Jul 2021 19:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5473DC802
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Jul 2021 21:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbhGaRjd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Jul 2021 13:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S230384AbhGaTup (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Jul 2021 15:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbhGaRjT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Jul 2021 13:39:19 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC87C0617BD;
-        Sat, 31 Jul 2021 10:39:07 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m13so24899993lfg.13;
-        Sat, 31 Jul 2021 10:39:07 -0700 (PDT)
+        with ESMTP id S229560AbhGaTup (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Jul 2021 15:50:45 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5984BC0613CF
+        for <linux-pm@vger.kernel.org>; Sat, 31 Jul 2021 12:50:38 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id b6so2619450lff.10
+        for <linux-pm@vger.kernel.org>; Sat, 31 Jul 2021 12:50:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=MQujzLlEnO36raJBMAT9fzpDdMWfWGz1uVH0Uu5hA9Xx1PD1KBkSvTCXaTZMVdczJB
-         lPupngVIb+yocPz38kxOOSTCE2JuW4FRTpSclkb/trtdWTNtAjdVZjK51KeNSywI91rZ
-         B2XbRpZVcZqDPgNRmOIIha3gZLsqf/W3CT5mbGXSqXgk98fLFSpdJY+VbOQIi6ZWLwgz
-         hainLQYoyk/fmAg2fjkY90VcNOOYaX4en/B5cB1Pv0qO1Li9IiTIKBDa73v6gSJtlDk4
-         XhSpd2nbbrhi4oQkM5PZVblNumQ//dq2x5BoewCUDF7XgCwaCcRoXbECCg5T+8LWFW4+
-         JhOQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=khLLzZRJdRr4Ab5JfhBto0Hu6+RMcOzJeZhEm4aW+G0=;
+        b=K39cH77coIx/ZonRf/tMpTR9gnQHXDPbnfbKyU/4vS1X3agEz7SNR6PAVKv9ls+yY0
+         OoZ41jc82rZFcex0Ip6J42Y744MHnII69DtWFSgdg5P5Njg/wd6pr7tS7ybr78P/DnzV
+         W6NEbIrIOX4BE2ZvpWhSQ/GJxsd7phpp+sgGVm9ToSEFGFwDv3SnHShI2vZUxYO/cmmu
+         XiNaNTTt9FMo4Y2CjVPLKZTuuPmhc1h2r9VgTRORlvDDwt8LQtqO2Xu+UIe+oJFcmi40
+         x16WoQN+TMwao/hoghADd5jDgbFEB/TDexZX719U98a6ZtCaXEyWzF2qjEJxjl99ppMD
+         O1Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=X+p2iCkQ4eH2ELzeiK++M37yU8rKL9ZC7peved9rcbUNFPrgztXlmaYKteXsg3EgWP
-         ROkqo64XyQQ+WCQRwQRh7Mw9hziKPfl0xW8JlhvoXZQVJn4EfG42LAkqoODYmtuXcm6/
-         bjkMyqCxvN9qJa3FpJp/LlHkjRc3pX+fz8epmQMjf5T6vAoHb5n0qxddLWL8irSG0AZy
-         fncW6C86nyYkQ2u9rC596oYDLP6WcgG3uFF7O3+4omuR53e5eCVE313MTt9IlHgblSqV
-         eTKQ7Jjc9WEUilbpMfhdElYBrULD1LKL1LMEJ8Sz+SAmrVnDtz/pTRY+y28P65aSbiPz
-         vGdg==
-X-Gm-Message-State: AOAM531sWc7m8e8EMVGH+YhSvQYh0ks1VbwCtrG60oKcpWGy5vVmbTXA
-        VFqhiS6T8a2XX8bGa1XSun8=
-X-Google-Smtp-Source: ABdhPJzUMpYaCzhlyTvF2sPmwQ/o7m7NJzBlbqGXRAIBp7NvEr3VJpCMhBpsb2K0T7fhVbLfBds4Yg==
-X-Received: by 2002:a05:6512:3ca6:: with SMTP id h38mr6292523lfv.94.1627753146135;
-        Sat, 31 Jul 2021 10:39:06 -0700 (PDT)
-Received: from localhost.localdomain (94-29-22-96.dynamic.spd-mgts.ru. [94.29.22.96])
-        by smtp.gmail.com with ESMTPSA id s15sm445272lfp.216.2021.07.31.10.39.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=khLLzZRJdRr4Ab5JfhBto0Hu6+RMcOzJeZhEm4aW+G0=;
+        b=AaIx8a5gEtaUXc5BxHuTCH82tjiekDWsniA3voLYYLoobWropKJDY9Ky9AgOSnjJ63
+         NxkDh3yle9dw+x/SPf9b52ywmGEhfacvmuV7IlPUwZKm10dRXmky2Wxx1SYmqL2rbqMd
+         qy0KWP6C8KZjm2fbHPICItV7RpeNA3wJfeZuqLa+FXlS6NUL1syTWcpj6ylQ5ndvarHH
+         yLaUsJTJ91hcyYLyneVTJDGDOTQ+PlA4YdWQ/U6MBfGJ+SM8sreVZ+8HDSHzjex8gmoK
+         oxtJNuDJuqik85BlaPdV4t8TESW18ix+h0mkmuP8lV+ittCcm4R9tvvJXXIGmpZ1fhOW
+         JWxA==
+X-Gm-Message-State: AOAM530cAamJZvhsREEgi+igxNnxTRDEDwRhExigmmtZxsNvg9q0QPEc
+        1SgagETkzRBUoVWHJb8w6yIxjS8omHEBVQ==
+X-Google-Smtp-Source: ABdhPJwd3GePKFUHowoYR9pmOoggIqqKjpqudqiEsxvWlhGWb1QuvWsz5xNAS5wC1Yh+IcFaj4QBjQ==
+X-Received: by 2002:a19:c504:: with SMTP id w4mr6683409lfe.192.1627761036719;
+        Sat, 31 Jul 2021 12:50:36 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f3sm469827lfm.76.2021.07.31.12.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Jul 2021 10:39:05 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
+        Sat, 31 Jul 2021 12:50:36 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v6 12/12] arm64: tegra132: Add new properties to USB PHY device-tree node
-Date:   Sat, 31 Jul 2021 20:38:42 +0300
-Message-Id: <20210731173842.19643-13-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210731173842.19643-1-digetx@gmail.com>
-References: <20210731173842.19643-1-digetx@gmail.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 0/3] PM: add two devres helpers and use them in qcom cc
+Date:   Sat, 31 Jul 2021 22:50:31 +0300
+Message-Id: <20210731195034.979084-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add new properties to USB PHYs needed for enabling USB OTG mode.
+Most of the drivers using using pm_runtime_enable() or pm_clk_create()
+follow the same pattern: call the function in the probe() path and call
+correspondingly pm_runtime_disable() or pm_clk_destroy() from the
+probe()'s error path and from the remove() function. This common code
+pattern has several drawbacks. I.e. driver authors have to ensure that
+the disable/destroy call in the error path really corresponds to the
+proper error clause. Or that the disable/destroy call is not missed in
+the remove() callback.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm64/boot/dts/nvidia/tegra132.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Add two devres helpers replacing these code patterns with relevant devm
+function call, removing the need to call corresponding disable/destroy
+functions. As an example modify Qualcomm clock controller code to use
+new helpers. In this case we are able to drop error path and remove
+functions completely, simplifying the drivers in question.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-index 9928a87f593a..f79a66226457 100644
---- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-@@ -1123,6 +1123,7 @@ phy1: usb-phy@7d000000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d000000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USBD>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1142,6 +1143,7 @@ phy1: usb-phy@7d000000 {
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
- 		nvidia,has-utmi-pad-registers;
-+		nvidia,pmc = <&tegra_pmc 0>;
- 		status = "disabled";
- 	};
- 
-@@ -1162,6 +1164,7 @@ phy2: usb-phy@7d004000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d004000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB2>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1180,6 +1183,7 @@ phy2: usb-phy@7d004000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 1>;
- 		status = "disabled";
- 	};
- 
-@@ -1200,6 +1204,7 @@ phy3: usb-phy@7d008000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d008000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB3>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1218,6 +1223,7 @@ phy3: usb-phy@7d008000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 2>;
- 		status = "disabled";
- 	};
- 
--- 
-2.32.0
+Changes since v2:
+ - Expand commit messages
+ - Drop extra clock controller changes not strictly relevant to these
+   two helpers
+
+Changes since v1:
+ - Add a patch making Qualcomm clock controller drivers actually execute
+   these helpers, thus demonstrating their usage and the necessity
+
+----------------------------------------------------------------
+Dmitry Baryshkov (3):
+      PM: runtime: add devm_pm_runtime_enable helper
+      PM: runtime: add devm_pm_clk_create helper
+      clk: qcom: use devm_pm_runtime_enable and devm_pm_clk_create
+
+ drivers/base/power/clock_ops.c        | 17 +++++++++++++++++
+ drivers/base/power/runtime.c          | 17 +++++++++++++++++
+ drivers/clk/qcom/camcc-sc7180.c       | 25 ++++++++++---------------
+ drivers/clk/qcom/lpass-gfm-sm8250.c   | 21 +++++++++------------
+ drivers/clk/qcom/lpasscorecc-sc7180.c | 18 ++----------------
+ drivers/clk/qcom/mss-sc7180.c         | 30 ++++++++----------------------
+ drivers/clk/qcom/q6sstop-qcs404.c     | 32 +++++++++-----------------------
+ drivers/clk/qcom/turingcc-qcs404.c    | 30 ++++++++----------------------
+ include/linux/pm_clock.h              |  5 +++++
+ include/linux/pm_runtime.h            |  4 ++++
+ 10 files changed, 89 insertions(+), 110 deletions(-)
+
 
