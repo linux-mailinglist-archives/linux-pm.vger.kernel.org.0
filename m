@@ -2,73 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEEB3DCB90
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Aug 2021 14:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4C73DCBCE
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Aug 2021 15:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbhHAMQe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Aug 2021 08:16:34 -0400
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:44938 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbhHAMQe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Aug 2021 08:16:34 -0400
-Received: by mail-lf1-f49.google.com with SMTP id a26so28345998lfr.11;
-        Sun, 01 Aug 2021 05:16:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=I5TxH9Dz7wUsp7F7REERcqwAt5FskLKXNhEpcILLzD0=;
-        b=QLf3jYzW30j/gXjeSauqPJQ3FcUrVSCQUDftBCdAA9x+4V1OzSJTBmCrtVyXU7jM43
-         AgTj9DZ42e2yNIxyYj0qxfF2HR3FXrBRNR6mFt57sLQWVgKep+jUR22XcixJBAROSgJ7
-         +dq6who6m+jXkMlPg41OhhkF2VbgZxkr2c5ffObCRqSbC0sh1lqdulWTSyXM1j+B+gWh
-         BGPeSvBMUeY9anwXoCjQwnsvlmD/Xj57Q6k2xOw80ld/rQIWoe4fa0ogtrAC/7eahR3V
-         bKvIVRdHbrCchmRqB4lQJJ+Z+6bMsB7KSKlesVfkdsTzOVLFsGDnXYOAew3f9fHj9ebd
-         1d3g==
-X-Gm-Message-State: AOAM533e8YjmOHIGUNXv5Zar5F+4zCjr7hHsb9XRgEXD2zeV5XPdqwPM
-        shUsECjzrBRjENG53FF7KG4I0UXmy54/5A==
-X-Google-Smtp-Source: ABdhPJxvjjj9Ywcb/zMes+J49NP5TwlqFvmKvP5lrfmwbDNf4EqOWvaYponIX0nXTGzXJ6yuNxajwQ==
-X-Received: by 2002:ac2:52a4:: with SMTP id r4mr960270lfm.419.1627820185252;
-        Sun, 01 Aug 2021 05:16:25 -0700 (PDT)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id c10sm621516ljn.11.2021.08.01.05.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Aug 2021 05:16:24 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id a7so20161550ljq.11;
-        Sun, 01 Aug 2021 05:16:24 -0700 (PDT)
-X-Received: by 2002:a2e:321a:: with SMTP id y26mr7975789ljy.463.1627820184577;
- Sun, 01 Aug 2021 05:16:24 -0700 (PDT)
+        id S231979AbhHANb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Aug 2021 09:31:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44691 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231939AbhHANbV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Aug 2021 09:31:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627824671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=F2g1G2ZjfbboivOFSZHlZWG2pe4LkyUdhmp7pzLEBaA=;
+        b=a5W48HtC/0OBmTFyA5qgxp1lSpRfRGV6NxFzLBE6InMFx5vjim6NH7Atj6Oors7jv5TKDt
+        Sz3VrjrcrLPWqzYKxa5DzZvzneHCpzsdW3sF+62QHAr25A4K0NdbgTF155yL97FwwHQ6Zr
+        diMbdsdQzVWQPU1z8vGhVnvUg8NNiFs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-565-SbyAq-XAMVSDyKA3IagmWA-1; Sun, 01 Aug 2021 09:31:10 -0400
+X-MC-Unique: SbyAq-XAMVSDyKA3IagmWA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3741F801A92;
+        Sun,  1 Aug 2021 13:31:08 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.192.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CF2660916;
+        Sun,  1 Aug 2021 13:31:06 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Andrejus Basovas <cpp@gcc.lt>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3 00/10] power: supply: axp288_fuel_gauge: Reduce number of register accesses + cleanups
+Date:   Sun,  1 Aug 2021 15:30:55 +0200
+Message-Id: <20210801133105.101761-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20210721140424.725744-1-maxime@cerno.tech> <20210721140424.725744-29-maxime@cerno.tech>
-In-Reply-To: <20210721140424.725744-29-maxime@cerno.tech>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 1 Aug 2021 20:16:12 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67QnD+nFG6QtLy332k_0W6kELTJEqtui_sf7Qf5nMxCmQ@mail.gmail.com>
-Message-ID: <CAGb2v67QnD+nFG6QtLy332k_0W6kELTJEqtui_sf7Qf5nMxCmQ@mail.gmail.com>
-Subject: Re: [linux-sunxi] [PATCH 28/54] dt-bindings: power: supply: axp20x:
- Add AXP803 compatible
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 10:05 PM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> The AXP803 compatible was introduced recently with a fallback to the
-> AXP813, but it was never documented.
->
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Hi all,
 
-Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+Changes in v3:
+- Replace "depends on X86" with "depends on IOSF_MBI" as the new code uses
+  symbols which are only defined when IOSF_MBI support is enabled.
+  Depending on this is ok since IOSF_MBI support should always be enabled
+  on devices which use the AXP288 PMIC.
+
+Changes in v2:
+- Add a "depends on X86" to Kconfig since the iosf_mbi functions are X86 only
+  (the AXP288 PMIC is only used on X86 devices).
+
+And here is the v1 cover-letter again:
+
+The I2C-bus to the XPower AXP288 is shared between the Linux kernel and
+the SoCs P-Unit. The P-Unit has a semaphore which the kernel must "lock"
+before it may use the bus and while the kernel holds the semaphore the CPU
+and GPU power-states must not be changed otherwise the system will freeze.
+This is a complex process, which is quite expensive.
+
+To ensure that no unguarded I2C-bus accesses happen, the semaphore is
+taken by the I2C-bus-driver for every I2C transfer. When upower refreshes
+its battery stats it reads all the power-supply properties at once,
+leading to the semaphore getting hammered which sometimes causes the
+system to hang.
+
+Andrejus maintains a large "fleet" of affected Cherry Trail tablets
+and was seeing these hangs semi regularly. After discussing this with
+me Andrejus wrote the caching patch in this series which greatly reduces
+the number of semaphore accesses and since then there have been no
+reports of hangs in the fleet of devices which he maintains.
+
+I've cleaned up Andrejus work a bit before submitting it upstream and
+while working on this I found a slew of other issues in this driver
+which bugged me enough to write a bunch of cleanup patches. I've also
+added some extra patches to also reduce the semaphore use during driver
+probe.
+
+Regards,
+
+Hans
+
+
+Andrejus Basovas (1):
+  power: supply: axp288_fuel_gauge: Refresh all registers in one go
+
+Hans de Goede (9):
+  power: supply: axp288_fuel_gauge: Fix define alignment
+  power: supply: axp288_fuel_gauge: Remove debugfs support
+  power: supply: axp288_fuel_gauge: Silence the chatty IRQ mapping code
+  power: supply: axp288_fuel_gauge: Report register-address on readb /
+    writeb errors
+  power: supply: axp288_fuel_gauge: Drop retry logic from
+    fuel_gauge_reg_readb()
+  power: supply: axp288_fuel_gauge: Store struct device pointer in
+    axp288_fg_info
+  power: supply: axp288_fuel_gauge: Only read PWR_OP_MODE,
+    FG_LOW_CAP_REG regs once
+  power: supply: axp288_fuel_gauge: Move the AXP20X_CC_CTRL check
+    together with the other checks
+  power: supply: axp288_fuel_gauge: Take the P-Unit semaphore only once
+    during probe()
+
+ drivers/power/supply/Kconfig             |   2 +-
+ drivers/power/supply/axp288_fuel_gauge.c | 489 +++++++++--------------
+ 2 files changed, 187 insertions(+), 304 deletions(-)
+
+-- 
+2.31.1
+
