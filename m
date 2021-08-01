@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C703DCBD1
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Aug 2021 15:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096863DCBD5
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Aug 2021 15:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbhHANbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Aug 2021 09:31:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30621 "EHLO
+        id S231955AbhHANbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Aug 2021 09:31:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48831 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231951AbhHANba (ORCPT
+        by vger.kernel.org with ESMTP id S231953AbhHANba (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Aug 2021 09:31:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627824671;
+        s=mimecast20190719; t=1627824673;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M7MfyRBE6Upv6sUcuCbvDVgd8N9MvhrV6Ou+uTsFtFE=;
-        b=fvA5A5CnTbzHt967vplTttD3D3Bxyl3yS0SC77bZ1ezevPOqElHtu9bysH95/N+11FsM0r
-        jrwi6TebylDTUUuTo0txvXnNxEWGtKXNvR4WOLWjTZq42emTSROumVNj3WWQBnhHPg0DtJ
-        S2XmeXjHiFzwFt0imSn7zGGxHrnSuDw=
+        bh=NhhFJsN4uaWwrvVc5CNcekyun2R2NhbUY5AUOcH4/A0=;
+        b=KXUg65QKHALd2jFTmgcV3UP84QfaJv0NFLmRRMBonM5eSqvJ3Nm3QGlO1LmVWITDRfWsTO
+        7ZR9ct3fkTzgz/MGByirZgSFhzGLoSKYks4fdBmfQ3u87sYacK3wcoO9KEn9AIy08xVFhQ
+        NFo/rub1Eg5lpPZYpMIX8m02FEOr/N8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-366-fUZ8UIIVPSGTc4_t5SvfOQ-1; Sun, 01 Aug 2021 09:31:10 -0400
-X-MC-Unique: fUZ8UIIVPSGTc4_t5SvfOQ-1
+ us-mta-72-PlruZiMaMAOOkehW-eg2nA-1; Sun, 01 Aug 2021 09:31:12 -0400
+X-MC-Unique: PlruZiMaMAOOkehW-eg2nA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 760EC6409E;
-        Sun,  1 Aug 2021 13:31:09 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F7FF1006C85;
+        Sun,  1 Aug 2021 13:31:10 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CABE60CC4;
-        Sun,  1 Aug 2021 13:31:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B369A60916;
+        Sun,  1 Aug 2021 13:31:09 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>, Andrejus Basovas <cpp@gcc.lt>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v3 01/10] power: supply: axp288_fuel_gauge: Fix define alignment
-Date:   Sun,  1 Aug 2021 15:30:56 +0200
-Message-Id: <20210801133105.101761-2-hdegoede@redhat.com>
+Subject: [PATCH v3 02/10] power: supply: axp288_fuel_gauge: Remove debugfs support
+Date:   Sun,  1 Aug 2021 15:30:57 +0200
+Message-Id: <20210801133105.101761-3-hdegoede@redhat.com>
 In-Reply-To: <20210801133105.101761-1-hdegoede@redhat.com>
 References: <20210801133105.101761-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -49,99 +49,191 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The values of various defines used in the driver are not aligned
-properly when tabsize is set to 8 (I guess they were created with
-a different tabsize).
+The debugfs code is simply just dumping a bunch of registers, the same
+information can also easily be gotten through the regmap debugfs
+interface or through the i2cdump utility.
 
-Properly align the defines to make the code easier to read.
+I've not used the debugfs interface once in all these years that I've
+been working on the axp288_fuel_gauge driver, so lets just remove it.
+
+Note this also removes the temperature-channels from the list of
+IIO ADC channels used by the driver, since these were only used in the
+debugfs interface.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/axp288_fuel_gauge.c | 38 ++++++++++++------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ drivers/power/supply/axp288_fuel_gauge.c | 123 -----------------------
+ 1 file changed, 123 deletions(-)
 
 diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index 2ba2d8d6b8e6..99928789040d 100644
+index 99928789040d..d189849564db 100644
 --- a/drivers/power/supply/axp288_fuel_gauge.c
 +++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -23,34 +23,34 @@
- #include <linux/seq_file.h>
+@@ -19,8 +19,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/iio/consumer.h>
+-#include <linux/debugfs.h>
+-#include <linux/seq_file.h>
  #include <asm/unaligned.h>
  
--#define PS_STAT_VBUS_TRIGGER		(1 << 0)
--#define PS_STAT_BAT_CHRG_DIR		(1 << 2)
--#define PS_STAT_VBAT_ABOVE_VHOLD	(1 << 3)
--#define PS_STAT_VBUS_VALID		(1 << 4)
--#define PS_STAT_VBUS_PRESENT		(1 << 5)
-+#define PS_STAT_VBUS_TRIGGER			(1 << 0)
-+#define PS_STAT_BAT_CHRG_DIR			(1 << 2)
-+#define PS_STAT_VBAT_ABOVE_VHOLD		(1 << 3)
-+#define PS_STAT_VBUS_VALID			(1 << 4)
-+#define PS_STAT_VBUS_PRESENT			(1 << 5)
+ #define PS_STAT_VBUS_TRIGGER			(1 << 0)
+@@ -98,9 +96,6 @@ enum {
+ };
  
--#define CHRG_STAT_BAT_SAFE_MODE		(1 << 3)
-+#define CHRG_STAT_BAT_SAFE_MODE			(1 << 3)
- #define CHRG_STAT_BAT_VALID			(1 << 4)
--#define CHRG_STAT_BAT_PRESENT		(1 << 5)
-+#define CHRG_STAT_BAT_PRESENT			(1 << 5)
- #define CHRG_STAT_CHARGING			(1 << 6)
- #define CHRG_STAT_PMIC_OTP			(1 << 7)
- 
- #define CHRG_CCCV_CC_MASK			0xf     /* 4 bits */
--#define CHRG_CCCV_CC_BIT_POS		0
-+#define CHRG_CCCV_CC_BIT_POS			0
- #define CHRG_CCCV_CC_OFFSET			200     /* 200mA */
--#define CHRG_CCCV_CC_LSB_RES		200     /* 200mA */
-+#define CHRG_CCCV_CC_LSB_RES			200     /* 200mA */
- #define CHRG_CCCV_ITERM_20P			(1 << 4)    /* 20% of CC */
- #define CHRG_CCCV_CV_MASK			0x60        /* 2 bits */
--#define CHRG_CCCV_CV_BIT_POS		5
-+#define CHRG_CCCV_CV_BIT_POS			5
- #define CHRG_CCCV_CV_4100MV			0x0     /* 4.10V */
- #define CHRG_CCCV_CV_4150MV			0x1     /* 4.15V */
- #define CHRG_CCCV_CV_4200MV			0x2     /* 4.20V */
- #define CHRG_CCCV_CV_4350MV			0x3     /* 4.35V */
- #define CHRG_CCCV_CHG_EN			(1 << 7)
- 
--#define FG_CNTL_OCV_ADJ_STAT		(1 << 2)
-+#define FG_CNTL_OCV_ADJ_STAT			(1 << 2)
- #define FG_CNTL_OCV_ADJ_EN			(1 << 3)
--#define FG_CNTL_CAP_ADJ_STAT		(1 << 4)
-+#define FG_CNTL_CAP_ADJ_STAT			(1 << 4)
- #define FG_CNTL_CAP_ADJ_EN			(1 << 5)
- #define FG_CNTL_CC_EN				(1 << 6)
- #define FG_CNTL_GAUGE_EN			(1 << 7)
-@@ -71,23 +71,23 @@
- #define FG_CC_CAP_VALID				(1 << 7)
- #define FG_CC_CAP_VAL_MASK			0x7F
- 
--#define FG_LOW_CAP_THR1_MASK		0xf0    /* 5% tp 20% */
-+#define FG_LOW_CAP_THR1_MASK			0xf0    /* 5% tp 20% */
- #define FG_LOW_CAP_THR1_VAL			0xa0    /* 15 perc */
--#define FG_LOW_CAP_THR2_MASK		0x0f    /* 0% to 15% */
-+#define FG_LOW_CAP_THR2_MASK			0x0f    /* 0% to 15% */
- #define FG_LOW_CAP_WARN_THR			14  /* 14 perc */
- #define FG_LOW_CAP_CRIT_THR			4   /* 4 perc */
- #define FG_LOW_CAP_SHDN_THR			0   /* 0 perc */
- 
--#define NR_RETRY_CNT    3
--#define DEV_NAME	"axp288_fuel_gauge"
-+#define NR_RETRY_CNT				3
-+#define DEV_NAME				"axp288_fuel_gauge"
- 
- /* 1.1mV per LSB expressed in uV */
- #define VOLTAGE_FROM_ADC(a)			((a * 11) / 10)
- /* properties converted to uV, uA */
--#define PROP_VOLT(a)		((a) * 1000)
--#define PROP_CURR(a)		((a) * 1000)
-+#define PROP_VOLT(a)				((a) * 1000)
-+#define PROP_CURR(a)				((a) * 1000)
- 
--#define AXP288_FG_INTR_NUM	6
-+#define AXP288_FG_INTR_NUM			6
  enum {
- 	QWBTU_IRQ = 0,
- 	WBTU_IRQ,
+-	BAT_TEMP = 0,
+-	PMIC_TEMP,
+-	SYSTEM_TEMP,
+ 	BAT_CHRG_CURR,
+ 	BAT_D_CURR,
+ 	BAT_VOLT,
+@@ -204,119 +199,6 @@ static int fuel_gauge_read_12bit_word(struct axp288_fg_info *info, int reg)
+ 	return (buf[0] << 4) | ((buf[1] >> 4) & 0x0f);
+ }
+ 
+-#ifdef CONFIG_DEBUG_FS
+-static int fuel_gauge_debug_show(struct seq_file *s, void *data)
+-{
+-	struct axp288_fg_info *info = s->private;
+-	int raw_val, ret;
+-
+-	seq_printf(s, " PWR_STATUS[%02x] : %02x\n",
+-		AXP20X_PWR_INPUT_STATUS,
+-		fuel_gauge_reg_readb(info, AXP20X_PWR_INPUT_STATUS));
+-	seq_printf(s, "PWR_OP_MODE[%02x] : %02x\n",
+-		AXP20X_PWR_OP_MODE,
+-		fuel_gauge_reg_readb(info, AXP20X_PWR_OP_MODE));
+-	seq_printf(s, " CHRG_CTRL1[%02x] : %02x\n",
+-		AXP20X_CHRG_CTRL1,
+-		fuel_gauge_reg_readb(info, AXP20X_CHRG_CTRL1));
+-	seq_printf(s, "       VLTF[%02x] : %02x\n",
+-		AXP20X_V_LTF_DISCHRG,
+-		fuel_gauge_reg_readb(info, AXP20X_V_LTF_DISCHRG));
+-	seq_printf(s, "       VHTF[%02x] : %02x\n",
+-		AXP20X_V_HTF_DISCHRG,
+-		fuel_gauge_reg_readb(info, AXP20X_V_HTF_DISCHRG));
+-	seq_printf(s, "    CC_CTRL[%02x] : %02x\n",
+-		AXP20X_CC_CTRL,
+-		fuel_gauge_reg_readb(info, AXP20X_CC_CTRL));
+-	seq_printf(s, "BATTERY CAP[%02x] : %02x\n",
+-		AXP20X_FG_RES,
+-		fuel_gauge_reg_readb(info, AXP20X_FG_RES));
+-	seq_printf(s, "    FG_RDC1[%02x] : %02x\n",
+-		AXP288_FG_RDC1_REG,
+-		fuel_gauge_reg_readb(info, AXP288_FG_RDC1_REG));
+-	seq_printf(s, "    FG_RDC0[%02x] : %02x\n",
+-		AXP288_FG_RDC0_REG,
+-		fuel_gauge_reg_readb(info, AXP288_FG_RDC0_REG));
+-	seq_printf(s, "     FG_OCV[%02x] : %04x\n",
+-		AXP288_FG_OCVH_REG,
+-		fuel_gauge_read_12bit_word(info, AXP288_FG_OCVH_REG));
+-	seq_printf(s, " FG_DES_CAP[%02x] : %04x\n",
+-		AXP288_FG_DES_CAP1_REG,
+-		fuel_gauge_read_15bit_word(info, AXP288_FG_DES_CAP1_REG));
+-	seq_printf(s, "  FG_CC_MTR[%02x] : %04x\n",
+-		AXP288_FG_CC_MTR1_REG,
+-		fuel_gauge_read_15bit_word(info, AXP288_FG_CC_MTR1_REG));
+-	seq_printf(s, " FG_OCV_CAP[%02x] : %02x\n",
+-		AXP288_FG_OCV_CAP_REG,
+-		fuel_gauge_reg_readb(info, AXP288_FG_OCV_CAP_REG));
+-	seq_printf(s, "  FG_CC_CAP[%02x] : %02x\n",
+-		AXP288_FG_CC_CAP_REG,
+-		fuel_gauge_reg_readb(info, AXP288_FG_CC_CAP_REG));
+-	seq_printf(s, " FG_LOW_CAP[%02x] : %02x\n",
+-		AXP288_FG_LOW_CAP_REG,
+-		fuel_gauge_reg_readb(info, AXP288_FG_LOW_CAP_REG));
+-	seq_printf(s, "TUNING_CTL0[%02x] : %02x\n",
+-		AXP288_FG_TUNE0,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE0));
+-	seq_printf(s, "TUNING_CTL1[%02x] : %02x\n",
+-		AXP288_FG_TUNE1,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE1));
+-	seq_printf(s, "TUNING_CTL2[%02x] : %02x\n",
+-		AXP288_FG_TUNE2,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE2));
+-	seq_printf(s, "TUNING_CTL3[%02x] : %02x\n",
+-		AXP288_FG_TUNE3,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE3));
+-	seq_printf(s, "TUNING_CTL4[%02x] : %02x\n",
+-		AXP288_FG_TUNE4,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE4));
+-	seq_printf(s, "TUNING_CTL5[%02x] : %02x\n",
+-		AXP288_FG_TUNE5,
+-		fuel_gauge_reg_readb(info, AXP288_FG_TUNE5));
+-
+-	ret = iio_read_channel_raw(info->iio_channel[BAT_TEMP], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-batttemp : %d\n", raw_val);
+-	ret = iio_read_channel_raw(info->iio_channel[PMIC_TEMP], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-pmictemp : %d\n", raw_val);
+-	ret = iio_read_channel_raw(info->iio_channel[SYSTEM_TEMP], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-systtemp : %d\n", raw_val);
+-	ret = iio_read_channel_raw(info->iio_channel[BAT_CHRG_CURR], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-chrgcurr : %d\n", raw_val);
+-	ret = iio_read_channel_raw(info->iio_channel[BAT_D_CURR], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-dchrgcur : %d\n", raw_val);
+-	ret = iio_read_channel_raw(info->iio_channel[BAT_VOLT], &raw_val);
+-	if (ret >= 0)
+-		seq_printf(s, "axp288-battvolt : %d\n", raw_val);
+-
+-	return 0;
+-}
+-
+-DEFINE_SHOW_ATTRIBUTE(fuel_gauge_debug);
+-
+-static void fuel_gauge_create_debugfs(struct axp288_fg_info *info)
+-{
+-	info->debug_file = debugfs_create_file("fuelgauge", 0666, NULL,
+-		info, &fuel_gauge_debug_fops);
+-}
+-
+-static void fuel_gauge_remove_debugfs(struct axp288_fg_info *info)
+-{
+-	debugfs_remove(info->debug_file);
+-}
+-#else
+-static inline void fuel_gauge_create_debugfs(struct axp288_fg_info *info)
+-{
+-}
+-static inline void fuel_gauge_remove_debugfs(struct axp288_fg_info *info)
+-{
+-}
+-#endif
+-
+ static void fuel_gauge_get_status(struct axp288_fg_info *info)
+ {
+ 	int pwr_stat, fg_res, curr, ret;
+@@ -753,9 +635,6 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
+ 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
+ 	struct power_supply_config psy_cfg = {};
+ 	static const char * const iio_chan_name[] = {
+-		[BAT_TEMP] = "axp288-batt-temp",
+-		[PMIC_TEMP] = "axp288-pmic-temp",
+-		[SYSTEM_TEMP] = "axp288-system-temp",
+ 		[BAT_CHRG_CURR] = "axp288-chrg-curr",
+ 		[BAT_D_CURR] = "axp288-chrg-d-curr",
+ 		[BAT_VOLT] = "axp288-batt-volt",
+@@ -844,7 +723,6 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
+ 		goto out_free_iio_chan;
+ 	}
+ 
+-	fuel_gauge_create_debugfs(info);
+ 	fuel_gauge_init_irq(info);
+ 
+ 	return 0;
+@@ -869,7 +747,6 @@ static int axp288_fuel_gauge_remove(struct platform_device *pdev)
+ 	int i;
+ 
+ 	power_supply_unregister(info->bat);
+-	fuel_gauge_remove_debugfs(info);
+ 
+ 	for (i = 0; i < AXP288_FG_INTR_NUM; i++)
+ 		if (info->irq[i] >= 0)
 -- 
 2.31.1
 
