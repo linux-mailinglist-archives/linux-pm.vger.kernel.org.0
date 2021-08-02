@@ -2,69 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B563DE03D
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Aug 2021 21:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09BD3DE0F8
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Aug 2021 22:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbhHBToI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Aug 2021 15:44:08 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:46027 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhHBToH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Aug 2021 15:44:07 -0400
-Received: by mail-io1-f44.google.com with SMTP id a1so6968540ioa.12;
-        Mon, 02 Aug 2021 12:43:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UIx0ZqKKCt1QeNsKj9VP+KBngtWiqMVZrBHp0giLU/Y=;
-        b=Aso35+qOccU8QBN5PayO0ZiACLzX7pBvJKGdkyKhInRy2xXVFcCK0rUTJlNyzTNxIp
-         GLrvgeWeL7pgjXpadNryzDRQs23Bym5G1hgxNJaAIv/JUdGpApM5Sr0BUZaOGxeMuhAC
-         iscVAnUTBKdgaQ82qOqrKfffggNWlre4DzZvQI0ABjkdBJNbyDW7T04GE1vA1EjORUD7
-         7uB2Y0+pxh7v9SUBDxwLZZjR1orDSLNT7cpRHDjOBQI+Pg3tvRjapkWMA7o3lIhZ24HO
-         K82LAfR5z9dUAVcHTvw/GXPYFzfKw8KwWv/UL9C8uofJuENHfMEm4OQaFmbFnX2YqgTb
-         b3hg==
-X-Gm-Message-State: AOAM5313h6GhhS5pBilxOp5PcELNRZKrjB6wvXzQHdgZIDpm1S79SDt2
-        yyr6ls2bpzgpxGzdTsTwYw==
-X-Google-Smtp-Source: ABdhPJzC0CfojHvi25wZzGSPc1WMkNQyDFsJXAM4BGMqB6UE6irlNbA21tzE8L58mJWNMcFvWI5fJA==
-X-Received: by 2002:a02:a115:: with SMTP id f21mr15968055jag.3.1627933436977;
-        Mon, 02 Aug 2021 12:43:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id v14sm7673103ioh.11.2021.08.02.12.43.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 12:43:56 -0700 (PDT)
-Received: (nullmailer pid 1481103 invoked by uid 1000);
-        Mon, 02 Aug 2021 19:43:55 -0000
-Date:   Mon, 2 Aug 2021 13:43:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Emil Renner Berthing <kernel@esmil.dk>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: convert tps65086.txt to YAML
-Message-ID: <YQhK+5i6YZpRIz+o@robh.at.kernel.org>
-References: <20210727092554.1059305-1-kernel@esmil.dk>
- <20210727092554.1059305-2-kernel@esmil.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727092554.1059305-2-kernel@esmil.dk>
+        id S232298AbhHBUqd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Aug 2021 16:46:33 -0400
+Received: from foss.arm.com ([217.140.110.172]:40308 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232294AbhHBUqd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Aug 2021 16:46:33 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACBDE11D4;
+        Mon,  2 Aug 2021 13:46:22 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.10.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F30CF3F70D;
+        Mon,  2 Aug 2021 13:46:19 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     sudeep.holla@arm.com, cristian.marussi@arm.com, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, nicola.mazzucato@arm.com,
+        lukasz.luba@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: arm_scmi: Fix error path when allocation failed
+Date:   Mon,  2 Aug 2021 21:45:50 +0100
+Message-Id: <20210802204550.12647-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 27 Jul 2021 11:25:51 +0200, Emil Renner Berthing wrote:
-> This converts the tps65086.txt binding description to YAML schema so
-> dts files can be verified automatically.
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> ---
->  .../devicetree/bindings/mfd/ti,tps65086.yaml  | 127 ++++++++++++++++++
->  .../devicetree/bindings/mfd/tps65086.txt      |  54 --------
->  2 files changed, 127 insertions(+), 54 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/tps65086.txt
-> 
+Print warning and return an error which would stop the initialization
+when cpumask allocation failed.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 80a064dbd556 ("scmi-cpufreq: Get opp_shared_cpus from opp-v2 for EM")
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index ec9a87ca2dbb..b159123e68fd 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -133,8 +133,10 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 		return -ENODEV;
+ 	}
+ 
+-	if (!zalloc_cpumask_var(&opp_shared_cpus, GFP_KERNEL))
+-		ret = -ENOMEM;
++	if (!zalloc_cpumask_var(&opp_shared_cpus, GFP_KERNEL)) {
++		dev_warn(cpu_dev, "failed to allocate cpumask\n");
++		return -ENOMEM;
++	}
+ 
+ 	/* Obtain CPUs that share SCMI performance controls */
+ 	ret = scmi_get_sharing_cpus(cpu_dev, policy->cpus);
+-- 
+2.17.1
+
