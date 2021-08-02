@@ -2,126 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D703DCEEA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Aug 2021 05:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9151E3DCF68
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Aug 2021 06:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhHBD22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Aug 2021 23:28:28 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:44603 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbhHBD21 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Aug 2021 23:28:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1627874899; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=JCB8vVm40Ygev3lb2qOV67F7cVZ3peAJ9oCE0yR1aSk=;
- b=TcTkiLfAW7p/lk3jQVgXe07DZxTkB7yNLdnAvv1YUmFF65LW9zcxBMGymJSpaZCdBSma9IQl
- zHWBsFvVPF+7P3G4YhxSmkvSKKF5MGHm/BrgyKV02xWcJa8UsfxtxocCfZ8AUVJMtYhKsy62
- N6i+hTvjy3xQId5/O/4We4mWJzM=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 610766529771b05b24beec4b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 02 Aug 2021 03:28:18
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3CF53C43460; Mon,  2 Aug 2021 03:28:18 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7BC38C433F1;
-        Mon,  2 Aug 2021 03:28:17 +0000 (UTC)
+        id S232190AbhHBEYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Aug 2021 00:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232211AbhHBEYa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Aug 2021 00:24:30 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE554C06179B
+        for <linux-pm@vger.kernel.org>; Sun,  1 Aug 2021 21:24:20 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id hs10so20077177ejc.0
+        for <linux-pm@vger.kernel.org>; Sun, 01 Aug 2021 21:24:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=FtyL1jenxhHoD0FEqr0JzEzar9WxjQ0aFEwPIjOui/KxHqjdRIaWw+qc9fVrqT7/Dn
+         Pnh35Va41LybAL6U8YkeIBgROe6j/64zDWESXr3a3yRfbQQPGRB9fNiPFd+zLtRJzUIN
+         QuzzTY5SkBKHMhw3aNm828s4szNx+qezVfjbXBb1AnLosRqM3hZLsmXFs11UFe9XwQd0
+         8wSmR+hXWoecdn7C1dRJ3raMOO2OzRp8To/v4OIIenhLUR2Xi2bEwQKHQsPiMZ9RJ/f/
+         /P5G34L+RYG0gvY4mQKUVcv9jgYngramQoP+XViWVUuAojxufRmPTkFAnPt7xVda61k1
+         G8fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=t/dRbtx0aVma4a9KeJYgwA36ZvlYN5tJvhaC5IkbBOSKquar3CN8aU6g9z8ObaVVBR
+         sQLKAb9FFvblUvu16By2fVsQ6YEj4YVuvtVS5rp0mUsk9ZQL9Cs9HWVMqMORoJGMpX2u
+         E/UkpRz4r16wfEjogh8dF0HMbSJIhYktTnBGU/MLcdUn/SFe80na4lKWuYRF2+OW3XMo
+         pXMUvP/obA5l3X+hx4bYDFggUTgjyE+Rfakkh5hMz1SMY+ynLQRlGJYFntV3pj44cxFE
+         wLlzvyE3QTlKYFuPRrKK5nt9hW53ZfCNBkzJ9cWz7P5uj2l/MsYyLRB8mI/rLsPNAOaq
+         GAqg==
+X-Gm-Message-State: AOAM531jdxGGNEkip8dgMG0Hwmk4kmFv7wy1gM5bI9AEfLUlXV75b41S
+        4Opd6xyWbNFxirCb56ezO1PvUO/iBVaeTqV7m1n7lSWyomUc5w==
+X-Google-Smtp-Source: ABdhPJzys5yCwXnLOHH4NsCIcKA9f726GMnAOsN9NLlhSmyZNb7UhzU0IEwJ6FYKksyg3UeOKVwrbLA6pAJm2hMlOV0=
+X-Received: by 2002:aa7:c0d1:: with SMTP id j17mr16890014edp.217.1627878249276;
+ Sun, 01 Aug 2021 21:24:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 02 Aug 2021 08:58:17 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: sc7280: Add cpu OPP tables
-In-Reply-To: <CAD=FV=VfvW1PqJiR7Lh5RNyR6EQ1E8JK0N+KqJiB8DK49oUZ4A@mail.gmail.com>
-References: <1620807083-5451-1-git-send-email-sibis@codeaurora.org>
- <1620807083-5451-3-git-send-email-sibis@codeaurora.org>
- <CAD=FV=VfvW1PqJiR7Lh5RNyR6EQ1E8JK0N+KqJiB8DK49oUZ4A@mail.gmail.com>
-Message-ID: <db28cb8d8f3057958bb2e059b8ac90ba@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:08
+ -0700 (PDT)
+Reply-To: ablahikazabl67@gmail.com
+From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
+Date:   Mon, 2 Aug 2021 05:24:08 +0100
+Message-ID: <CAKwBCXuzDf40zPCct3xg8L9LubxzXWgC230fQ80GXrmg_Yuttw@mail.gmail.com>
+Subject: More Authentic Information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-07-31 03:50, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, May 12, 2021 at 1:11 AM Sibi Sankar <sibis@codeaurora.org> 
-> wrote:
->> 
->> Add OPP tables required to scale DDR/L3 per freq-domain on SC7280 
->> SoCs.
->> 
->> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> ---
->> 
->> V3:
->>  * Rename cpu opp table nodes [Matthias]
->>  * Rename opp phandles [Doug]
->> 
->> Depends on the following patch series:
->> L3 Provider Support: 
->> https://lore.kernel.org/lkml/1618556290-28303-1-git-send-email-okukatla@codeaurora.org/
->> CPUfreq Support: 
->> https://lore.kernel.org/lkml/1618020280-5470-2-git-send-email-tdas@codeaurora.org/
->> RPMH Provider Support: 
->> https://lore.kernel.org/lkml/1619517059-12109-1-git-send-email-okukatla@codeaurora.org/
->> 
-
-Doug,
-
-2 of the above 3 dependencies have
-landed. L3 provider still needs a
-re-spin.
-
-https://patchwork.kernel.org/project/linux-arm-msm/cover/1627581885-32165-1-git-send-email-sibis@codeaurora.org/
-
-We also have a new series ^^ on the
-list which will affect #2 merge.
-
-
->> It also depends on L3 and cpufreq dt nodes from the ^^ series to not 
->> have
->> overlapping memory regions.
->> 
->>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 215 
->> +++++++++++++++++++++++++++++++++++
->>  1 file changed, 215 insertions(+)
-> 
-> I see patch #1 in mainline now. Does that mean it's time to land patch
-> #2 in the Qualcomm tree now? ...or maybe it needs to be re-posted?
-> 
-
-> -Doug
-
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+Dear Partner,
+
+I am soliciting your partnership to relocate $12.5 Million to your
+country for investment on my behalf and you will be entitled to 30% of
+the sum once the transaction is successful made.
+
+Please indicate your genuine interest if you are capable so that i
+will send you the authentic details and documents of the transaction
+in awareness with some of my fellow Directors in the bank.
+
+If you are interested, here is my private Email address:
+(ablahikazabl67@gmail.com)
+For more authentic and legit information.
+
+
+Regards :  Abdoulahi Kazim
