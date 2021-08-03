@@ -2,163 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 954F13DF687
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 22:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9951A3DF6C0
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 23:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhHCUlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Aug 2021 16:41:44 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:46994 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbhHCUln (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Aug 2021 16:41:43 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 173KfRSG072451;
-        Tue, 3 Aug 2021 15:41:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1628023287;
-        bh=6Mev7Km3gabjcz50WEBXisbMvaXrrUq4Smfw6hukFfw=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Un5NeG4O+dF5//IYlWIAcJ7AURe4nTYdwqoPdOhsnehNILi3o82wjWIb20kci2of8
-         qBEQdK2z4uefXLyxpD8DJBPghlQIzGZw+Bfp+gKV7cQPIQobI5ftcZ5t3VZas0/fOs
-         w0476us51cIHf5q4KAMGGi9GLBi4/o6E2VJpm16E=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 173KfRJ6034908
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Aug 2021 15:41:27 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 3 Aug
- 2021 15:41:27 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Tue, 3 Aug 2021 15:41:27 -0500
-Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 173KfPBN119960;
-        Tue, 3 Aug 2021 15:41:25 -0500
-Subject: Re: [PATCH net-next 1/4] ethtool: runtime-resume netdev parent before
- ethtool ioctl ops
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <106547ef-7a61-2064-33f5-3cc8d12adb34@gmail.com>
- <cb44d295-5267-48a7-b7c7-e4bf5b884e7a@gmail.com>
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-Message-ID: <b4744988-4463-6463-243a-354cd87c4ced@ti.com>
-Date:   Tue, 3 Aug 2021 23:41:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231852AbhHCVQN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Aug 2021 17:16:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40846 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231519AbhHCVQN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Aug 2021 17:16:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E3A1A60F0F;
+        Tue,  3 Aug 2021 21:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628025361;
+        bh=hzGVYpSoT4c8eD9xIvtVELfHC2qZ9qRppSvQ6vReMyk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D7Z+CKbg2Z3xrAEjI8SCn68xBlte0yJcYGNFV212KyjPRdf6vuWbwxSE61SEMRw9j
+         nc7Z8FpXxEVtIA4kNg+PkGkHfaCJRVhJlzKo8RXJGXeSlpUK9G8LpwBNZkYcGVoB11
+         BmIzYXXJlKoop/0GwA1/d7+ryoouWpOw1UtZcbyF8hslz+LigrSBt3dNRYdZqaa6NR
+         MAwDjI/q1THimh2Tl7OA2Qim/0t9BEGOzcqyiSF72T6HczXbExcnGHyYbfmaGuieLf
+         tGQDP1cdDZVVPmc2zVukorqiqIAH1Ek9cpMjBENGR7t/aCJo6qYy1wTrZgWz67jhYP
+         WHi0dVrOKTg+Q==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] cpuidle: pseries: Mark pseries_idle_proble() as __init
+Date:   Tue,  3 Aug 2021 14:15:47 -0700
+Message-Id: <20210803211547.1093820-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.33.0.rc0
 MIME-Version: 1.0
-In-Reply-To: <cb44d295-5267-48a7-b7c7-e4bf5b884e7a@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+After commit 7cbd631d4dec ("cpuidle: pseries: Fixup CEDE0 latency only
+for POWER10 onwards"), pseries_idle_probe() is no longer inlined when
+compiling with clang, which causes a modpost warning:
 
+WARNING: modpost: vmlinux.o(.text+0xc86a54): Section mismatch in
+reference from the function pseries_idle_probe() to the function
+.init.text:fixup_cede0_latency()
+The function pseries_idle_probe() references
+the function __init fixup_cede0_latency().
+This is often because pseries_idle_probe lacks a __init
+annotation or the annotation of fixup_cede0_latency is wrong.
 
-On 01/08/2021 13:36, Heiner Kallweit wrote:
-> If a network device is runtime-suspended then:
-> - network device may be flagged as detached and all ethtool ops (even if not
->    accessing the device) will fail because netif_device_present() returns
->    false
-> - ethtool ops may fail because device is not accessible (e.g. because being
->    in D3 in case of a PCI device)
-> 
-> It may not be desirable that userspace can't use even simple ethtool ops
-> that not access the device if interface or link is down. To be more friendly
-> to userspace let's ensure that device is runtime-resumed when executing the
-> respective ethtool op in kernel.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->   net/ethtool/ioctl.c | 18 +++++++++++++++---
->   1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> index baa5d1004..b7ff9abe7 100644
-> --- a/net/ethtool/ioctl.c
-> +++ b/net/ethtool/ioctl.c
-> @@ -23,6 +23,7 @@
->   #include <linux/rtnetlink.h>
->   #include <linux/sched/signal.h>
->   #include <linux/net.h>
-> +#include <linux/pm_runtime.h>
->   #include <net/devlink.h>
->   #include <net/xdp_sock_drv.h>
->   #include <net/flow_offload.h>
-> @@ -2589,7 +2590,7 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
->   	int rc;
->   	netdev_features_t old_features;
->   
-> -	if (!dev || !netif_device_present(dev))
-> +	if (!dev)
->   		return -ENODEV;
->   
->   	if (copy_from_user(&ethcmd, useraddr, sizeof(ethcmd)))
-> @@ -2645,10 +2646,18 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
->   			return -EPERM;
->   	}
->   
-> +	if (dev->dev.parent)
-> +		pm_runtime_get_sync(dev->dev.parent);
+pseries_idle_probe() is a non-init function, which calls
+fixup_cede0_latency(), which is an init function, explaining the
+mismatch. pseries_idle_probe() is only called from
+pseries_processor_idle_init(), which is an init function, so mark
+pseries_idle_probe() as __init so there is no more warning.
 
-the PM Runtime should allow to wake up parent when child is resumed if everything is configured properly.
+Fixes: 054e44ba99ae ("cpuidle: pseries: Add function to parse extended CEDE records")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/cpuidle/cpuidle-pseries.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-rpm_resume()
-...
-     if (!parent && dev->parent) {
-  --> here
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index bba449b77641..7e7ab5597d7a 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -403,7 +403,7 @@ static void __init fixup_cede0_latency(void)
+  * pseries_idle_probe()
+  * Choose state table for shared versus dedicated partition
+  */
+-static int pseries_idle_probe(void)
++static int __init pseries_idle_probe(void)
+ {
+ 
+ 	if (cpuidle_disable != IDLE_NO_OVERRIDE)
 
-So, hence PM runtime calls are moved to from drivers to net_core wouldn't be more correct approach to
-enable PM runtime for netdev->dev and lets PM runtime do the job?
-
-But, to be honest, I'm not sure adding PM runtime manipulation to the net core is a good idea -
-at minimum it might be tricky and required very careful approach (especially in err path).
-For example, even in this patch you do not check return value of pm_runtime_get_sync() and in
-commit bd869245a3dc ("net: core: try to runtime-resume detached device in __dev_open") also actualy.
-
-
-The TI CPSW driver may also be placed in non reachable state when netdev is closed (and even lose context),
-but we do not use netif_device_detach() (so netdev is accessible through netdev_ops/ethtool_ops),
-but instead wake up device by runtime PM for allowed operations or just save requested configuration which
-is applied at netdev->open() time then.
-I feel that using netif_device_detach() in PM runtime sounds like a too heavy approach ;)
-
-huh, see it's merged already, so...
-
-> +
-> +	if (!netif_device_present(dev)) {
-> +		rc = -ENODEV;
-> +		goto out;
-> +	}
-> +
->   	if (dev->ethtool_ops->begin) {
->   		rc = dev->ethtool_ops->begin(dev);
-> -		if (rc  < 0)
-> -			return rc;
-> +		if (rc < 0)
-> +			goto out;
->   	}
->   	old_features = dev->features;
->   
-> @@ -2867,6 +2876,9 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
->   
->   	if (old_features != dev->features)
->   		netdev_features_change(dev);
-> +out:
-> +	if (dev->dev.parent)
-> +		pm_runtime_put(dev->dev.parent);
->   
->   	return rc;
->   }
-> 
-
+base-commit: a6cae77f1bc89368a4e2822afcddc45c3062d499
 -- 
-Best regards,
-grygorii
+2.33.0.rc0
+
