@@ -2,77 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1813DEE35
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 14:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA28D3DEEBC
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 15:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbhHCMun (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Aug 2021 08:50:43 -0400
-Received: from ozlabs.org ([203.11.71.1]:35649 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235805AbhHCMun (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 3 Aug 2021 08:50:43 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GfF8h75d1z9sRK;
-        Tue,  3 Aug 2021 22:50:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1627995030;
-        bh=+CYpznebU7Ex+1BJ7brPdLmFw2QBMoCXMi1ax8iYBt0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=diDFZ/UfenmPrIxFt+LNqTslMcGHsjOuyv75gr66REdBq+oLb/5HymeyVUlT+ovYR
-         NZuZ3QNmrSdsKynLVVkXAgsJbrZrCus8CyRQp2TFqnMWMPK4S45XCHRXJHZW0ydFqt
-         M4CVHXu0aQPpuwCVdWg/iyzQeVZFfE+gZw2pTrOi3tGKqzelfsC1+K8LTQ/o0Uj4Fu
-         rvXrDmFQb3lLiWAjFR1X5AmsQF7ir3ZBT0ZP2Ra2vhvkYB2GF8D32Tud62zheS1Rox
-         uzE+YRMMfvmdEq7FpWmX/ca4K2WokM3RX+Luo8yhjI+09igStqzuPRb77YGRtxrDz2
-         FDb3GzWqruBzg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, joedecke@de.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v5 0/2] cpuidle/pseries: cleanup of the CEDE0 latency
- fixup code
-In-Reply-To: <162798602812.163057.13114310314725073045.b4-ty@ellerman.id.au>
-References: <1626676399-15975-1-git-send-email-ego@linux.vnet.ibm.com>
- <162798602812.163057.13114310314725073045.b4-ty@ellerman.id.au>
-Date:   Tue, 03 Aug 2021 22:50:28 +1000
-Message-ID: <87o8aeofor.fsf@mpe.ellerman.id.au>
+        id S235782AbhHCNHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Aug 2021 09:07:48 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:33731 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235635AbhHCNHs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Aug 2021 09:07:48 -0400
+Received: by mail-ot1-f48.google.com with SMTP id 61-20020a9d0d430000b02903eabfc221a9so20654401oti.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Aug 2021 06:07:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ya3uuO3/jRTkl43K2zdZgkezpx6fwubsCQN3ElnBmRo=;
+        b=tvQMtbSZym8iVZa6e36YmAVW8+ZWKReRNSGe+vHFVVjewven3ZJjA/T8r7h6AAVfM8
+         h2nJso6Q7pEa0YtOp+O2k5wGntTnWD/TrORdZ1/Q+dJaiu4kIWQ4Qq7nfwu+Tvn6D80j
+         59tnXwnjLve7Oc9Tp0Zs+coD7QQpwIzKOn6LjMcEi7AJJN5rlut8hkAL5wusgDJKziiA
+         8AppVbyTv0NiUTyET4U2BJSmJspHYCXtOtqssR87GkRshS1Gt1HY11Zd6X3pCbCzNpW+
+         mIa0TIUIJhAPgfttOhI7bwnWUIso7+h8CuEBfml4RGFsdNXDOfm8TF2dPCjPy2SP98X4
+         VqoQ==
+X-Gm-Message-State: AOAM531F0o7OdnCdPq8fBtv5/aF1aM8ezwG8GlizWNCFKO51DOyic8Tl
+        pEg6OfwZ5rfYYiFykmyR7Dq5apRkpSVhXiqS/GE=
+X-Google-Smtp-Source: ABdhPJyW3GL1UQ6AxbUyAc79s76GDZX3BBDwVimPbiBLNai2Zp1l8ZkE69O4z4XVxTRMhlEcMjUIQO5AH0CTbur3B00=
+X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr7519626oth.321.1627996057263;
+ Tue, 03 Aug 2021 06:07:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <0edfdadc-336b-657d-5566-beeb4f4343ac@gmail.com>
+In-Reply-To: <0edfdadc-336b-657d-5566-beeb4f4343ac@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 3 Aug 2021 15:07:20 +0200
+Message-ID: <CAJZ5v0gps0C2923VqM8876npvhcETsyN+ajAkBKX5kf49J0+Mg@mail.gmail.com>
+Subject: Re: Annotate pm_runtime_resume_and_get() as __must_check ?
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Michael Ellerman <patch-notifications@ellerman.id.au> writes:
-> On Mon, 19 Jul 2021 12:03:17 +0530, Gautham R. Shenoy wrote:
->> 
->> Hi,
->> 
->> This is the v5 of the patchset to fixup CEDE0 latency only from
->> POWER10 onwards.
->> 
->> 
->> [...]
+On Sat, Jul 31, 2021 at 11:36 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
 >
-> Applied to powerpc/next.
->
-> [1/2] cpuidle/pseries: Fixup CEDE0 latency only for POWER10 onwards
->       https://git.kernel.org/powerpc/c/7cbd631d4decfd78f8a17196dce9abcd4e7e1e94
-> [2/2] cpuidle/pseries: Do not cap the CEDE0 latency in fixup_cede0_latency()
->       https://git.kernel.org/powerpc/c/4bceb03859c1a508669ce542c649c8d4f5d4bd93
+> Seeing an erroneous use of pm_runtime_resume_and_get() in a patch I wonder
+> whether we should annotate this function as __must_check. If the caller
+> doesn't check the return code he doesn't know whether usage counter was
+> bumped or not. Therefore I see a good chance that this results in a usage
+> counter imbalance.
 
-First commit had a bad fixes tag, so now these are:
-
-[1/2] cpuidle/pseries: Fixup CEDE0 latency only for POWER10 onwards
-      https://git.kernel.org/powerpc/c/50741b70b0cbbafbd9199f5180e66c0c53783a4a
-[2/2] cpuidle/pseries: Do not cap the CEDE0 latency in fixup_cede0_latency()
-      https://git.kernel.org/powerpc/c/71737a6c2a8f801622d2b71567d1ec1e4c5b40b8
-
-cheers
+Sounds reasonable.  Please send a patch to make that change.
