@@ -2,54 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA28D3DEEBC
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 15:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B303DEEF4
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Aug 2021 15:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbhHCNHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Aug 2021 09:07:48 -0400
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:33731 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbhHCNHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Aug 2021 09:07:48 -0400
-Received: by mail-ot1-f48.google.com with SMTP id 61-20020a9d0d430000b02903eabfc221a9so20654401oti.0
-        for <linux-pm@vger.kernel.org>; Tue, 03 Aug 2021 06:07:37 -0700 (PDT)
+        id S236192AbhHCNSk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Aug 2021 09:18:40 -0400
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:36642 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235954AbhHCNSk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Aug 2021 09:18:40 -0400
+Received: by mail-oo1-f49.google.com with SMTP id z3-20020a4a98430000b029025f4693434bso5180470ooi.3;
+        Tue, 03 Aug 2021 06:18:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ya3uuO3/jRTkl43K2zdZgkezpx6fwubsCQN3ElnBmRo=;
-        b=tvQMtbSZym8iVZa6e36YmAVW8+ZWKReRNSGe+vHFVVjewven3ZJjA/T8r7h6AAVfM8
-         h2nJso6Q7pEa0YtOp+O2k5wGntTnWD/TrORdZ1/Q+dJaiu4kIWQ4Qq7nfwu+Tvn6D80j
-         59tnXwnjLve7Oc9Tp0Zs+coD7QQpwIzKOn6LjMcEi7AJJN5rlut8hkAL5wusgDJKziiA
-         8AppVbyTv0NiUTyET4U2BJSmJspHYCXtOtqssR87GkRshS1Gt1HY11Zd6X3pCbCzNpW+
-         mIa0TIUIJhAPgfttOhI7bwnWUIso7+h8CuEBfml4RGFsdNXDOfm8TF2dPCjPy2SP98X4
-         VqoQ==
-X-Gm-Message-State: AOAM531F0o7OdnCdPq8fBtv5/aF1aM8ezwG8GlizWNCFKO51DOyic8Tl
-        pEg6OfwZ5rfYYiFykmyR7Dq5apRkpSVhXiqS/GE=
-X-Google-Smtp-Source: ABdhPJyW3GL1UQ6AxbUyAc79s76GDZX3BBDwVimPbiBLNai2Zp1l8ZkE69O4z4XVxTRMhlEcMjUIQO5AH0CTbur3B00=
-X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr7519626oth.321.1627996057263;
- Tue, 03 Aug 2021 06:07:37 -0700 (PDT)
+        bh=Jzgmo5C/b0+xzlET/lKyhYqyoM2IpN27wZmzahcw0Uw=;
+        b=CtcIu0ZvnHYje+pDG6zVlm4v8+5Ki691e0v89aVwiyCwdkAMWN08StGuj0EBmpGLzD
+         I3dMt0T8lH86KtGEJJ25L9uEBlhAwSS+vOreaRnJMeAbz6f+1yB/YeXLkBDnSI/SUevB
+         L06NbdefgIYIwNF+y92TSzfyleX7Oaz5meTyqqQm2DOSXteYdK4g6i2rAqKhJR3y/mrP
+         hfjdL2lCn3UrJzYjjg987nbA8NJ3tmzbPsabIVe+kaS/LbfrgEkW7YqT0ivuz4zIOk+x
+         YwU8YMu+pRKa2rOl2bp52mRlqfYpZAkbgUXrAiN096IgZrkYU1ntQ2SSstvkv4pSmxx/
+         wSHQ==
+X-Gm-Message-State: AOAM533lptcGeSblBArJKRvRQqsjt3b6enGMVDmQs8Q7GirU21QNRk8u
+        KON9TnaawHuZMXOxnwEf3qiY7Zwp173GpHKflOcFIYOL
+X-Google-Smtp-Source: ABdhPJwUnCpBnG7Hm+qjkkQ1D0gAVQYjd5Q+13WU0ZbW44GFeWdqxs87Bjnlug4/L+rQJcjvsxdtbFL+9lAtCQCCmxE=
+X-Received: by 2002:a05:6820:161f:: with SMTP id bb31mr14245725oob.44.1627996708797;
+ Tue, 03 Aug 2021 06:18:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <0edfdadc-336b-657d-5566-beeb4f4343ac@gmail.com>
-In-Reply-To: <0edfdadc-336b-657d-5566-beeb4f4343ac@gmail.com>
+References: <4336554.LvFx2qVVIh@kreacher> <CAAYoRsX+NnOom6f7s6=xOM8rwa_S6tPaQyReYfgDGU4wDkG2uQ@mail.gmail.com>
+In-Reply-To: <CAAYoRsX+NnOom6f7s6=xOM8rwa_S6tPaQyReYfgDGU4wDkG2uQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 3 Aug 2021 15:07:20 +0200
-Message-ID: <CAJZ5v0gps0C2923VqM8876npvhcETsyN+ajAkBKX5kf49J0+Mg@mail.gmail.com>
-Subject: Re: Annotate pm_runtime_resume_and_get() as __must_check ?
-To:     Heiner Kallweit <hkallweit1@gmail.com>
+Date:   Tue, 3 Aug 2021 15:18:11 +0200
+Message-ID: <CAJZ5v0hFZV6xucCmdDhg6=ActBZarr4so9tkAvzA5cuT5WWjMA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] cpuidle: teo: Fix selection when idle state 0 is disabled
+To:     Doug Smythies <dsmythies@telus.net>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 31, 2021 at 11:36 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+On Sat, Jul 31, 2021 at 6:04 AM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> Seeing an erroneous use of pm_runtime_resume_and_get() in a patch I wonder
-> whether we should annotate this function as __must_check. If the caller
-> doesn't check the return code he doesn't know whether usage counter was
-> bumped or not. Therefore I see a good chance that this results in a usage
-> counter imbalance.
+> On Fri, Jul 30, 2021 at 7:39 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > Hi,
+> >
+> > Patch [1/2] fixes idle state selection in the teo governor when idle state 0
+> > is disabled (which is broken after recent changes in that governor) and patch
+> > [2/2] renames two local variables on top of that change.
+> >
+> > Please see the patch changelogs for details.
+>
+> Hi Rafael,
+>
+> I tested this version of the patches, and the idle state 0
+> disabled issue has been fixed.
 
-Sounds reasonable.  Please send a patch to make that change.
+Thanks for the confirmation!
