@@ -2,93 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 278273E0492
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 17:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE3B3E05C9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 18:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbhHDPnA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Aug 2021 11:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbhHDPnA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 11:43:00 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F79C061799
-        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 08:42:46 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 68-20020a9d0f4a0000b02904b1f1d7c5f4so2003121ott.9
-        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 08:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nerYHUdRdbYFzlQjp5pBoYJPHBZ2ZgnUm5+kWyeZxBY=;
-        b=wfdGZd9XHdfd+zP+YSLJJy7gG32dbhFR9Efzf5TPu93R2J3HjQjBtPeqdPenpYcxl4
-         4sdHcsot6An9sJ247y+29GAJu3C70lIL7Lr0gJLkRE/Q3EX8DZQkYvs70b5pBZ/tDBGL
-         5n8ibsLIRbE82UQjyVia08aPqJ84YkaEqPHeDKksMFbacZWbjQix1hNH4SDZI0zneveJ
-         pY1L+Jksj0DNcGmM0VD8DrdMe07s56PSrmpWVF2q97iYj4zjFpwXpeH1rBOpmVKHJ+ba
-         sQtWjymrSDd1DK/TVjRA049weJexV5hQsYAehJzR1B0Tk57pO+HL85+iYFQ72iiag+vf
-         pCaQ==
+        id S236782AbhHDQWY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Aug 2021 12:22:24 -0400
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:42537 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234482AbhHDQWX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 12:22:23 -0400
+Received: by mail-oi1-f181.google.com with SMTP id x15so3442855oic.9
+        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 09:22:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nerYHUdRdbYFzlQjp5pBoYJPHBZ2ZgnUm5+kWyeZxBY=;
-        b=LGY2KVAVWhmiYVMyZ84x0TAonm2YwQpNlUNok72+SUCJmSyKTZpAylXcqnar8aMPV9
-         V5+wNBAJ8XliwBEkSoBmajrBDJtYuc+CXpc7fc+ZMXCmegncyy6evq7mmRSUHyC54JrR
-         9Y8Yz0Mnzch0ZQI8w2YsqWZdti7oCNH4oKV5OFT8nQzFbVnp143sft4ZXXOppeHaHvo6
-         TJpY3s19kiSQsTRhlvpSf5NUjf0MIriCecr/jkFrHSobaQag14y7T8kDATj2DgCyjIEt
-         Ta4NCRutesl00VlWhmMK5HOj4RDWogTewaJWled+RE0jls1CB6aAQCQLgBCK/zMx7frp
-         WJ4A==
-X-Gm-Message-State: AOAM531uJFK2eXv3rdAcuVbKffDe/oF2qem5CmRzrVPdxtSgik8RZuy5
-        W8a2f/h5t9ecYL86ssMQn2f+Dg==
-X-Google-Smtp-Source: ABdhPJwypfzyjnmpuMLC/38I3EdRmDzEz0C1h58e8QbTD79cwWkNXJVGZpXVfOiEOIwzfxQFJzcT6w==
-X-Received: by 2002:a9d:190e:: with SMTP id j14mr287443ota.48.1628091766082;
-        Wed, 04 Aug 2021 08:42:46 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q15sm446187otf.70.2021.08.04.08.42.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 08:42:45 -0700 (PDT)
-Date:   Wed, 4 Aug 2021 10:42:43 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: blacklist Qualcomm sm8150 in cpufreq-dt-platdev
-Message-ID: <YQq1c8UYb78qJjxm@builder.lan>
-References: <20210804133451.2503674-1-thara.gopinath@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UMbvxbG6oItl3iX85gnma2mVT4moY/ShzczGz3Jn4tw=;
+        b=Qf9HsMMbLVqwiyQiPqgBfNhoDCZLd0DirtwV6MY0OTqvuNs1m8J1Vg1SzvcRl4Zayv
+         rBwapgsiJwGdxHFXvHOnnXhPH/vvBzrJ4MFdarMwy0+XIbZhIUwSV6IuqX+X4hpGiKTd
+         izFwVLJKjAapHZaLfoDwExnHtUWD2wB/bNd+5JOCo/3Xu7ZdVwBRaXbrnCGWaV3pWWmu
+         iKBONVqyfiF9wW8TgcHnl3Duhht5fqnD7r3Dd0A4l1MU4FnaiIdMPqoV+QVCvgxInPMa
+         ncz64xtiSnhgGaLpBucetocXhAnrm50gR4AItG5s4F22HWHFggjvfrFpelq9X751dq9H
+         x5BA==
+X-Gm-Message-State: AOAM5317bOrDDRH3BMMgN3Au5p7l96NjTQc6W+/CGHpvaQn/1yGi39rT
+        JHASzZQrFZyycJDFj1EwA9ZaJvOktl5HJAib+BY=
+X-Google-Smtp-Source: ABdhPJyiLLIQkw1Y90u8i/7a8AKtwDmANSGusTbGTKZ/zUmnZXjQ0HiAUGsI61fEMa59zW9+prs2b3GoWOiLY5vBI84=
+X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr212405oib.71.1628094129379;
+ Wed, 04 Aug 2021 09:22:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210804133451.2503674-1-thara.gopinath@linaro.org>
+References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+In-Reply-To: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 4 Aug 2021 18:21:58 +0200
+Message-ID: <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] Inefficient OPPs
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 04 Aug 08:34 CDT 2021, Thara Gopinath wrote:
+On Thu, Jul 8, 2021 at 12:09 PM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
+>
+> Hi all,
+>
+> Here's the new patch-set version that brings support for skipping
+> inefficiencies found by the Energy Model. This version doesn't bring
+> changes for all the drivers that could benefit from this work at the
+> moment. I'll do that in the next version or in a separated patch-set.
+> Also, it's been discussed that enabling RELATION_E should be a driver
+> flag. This sadly needs to be read in functions that do not have access to
+> cpufreq_driver. Hence, I created a new policy flag instead.
+>
+> A bit of context:
+>
+> We (Power team in Arm) are working with an experimental kernel for the
+> Google's Pixel4 to evaluate and improve the current mainline performance
+> and energy consumption on a real life device with Android.
+>
+> The SD855 SoC found in this phone has several OPPs that are inefficient.
+> I.e. despite a lower frequency, they have a greater cost. (That cost being
+> fmax * OPP power / OPP freq). This issue is twofold. First of course,
+> running a specific workload at an inefficient OPP is counterproductive
+> since it wastes wasting energy. But also, inefficient OPPs make a
+> performance domain less appealing for task placement than it really is.
+>
+> We evaluated the change presented here by running 30 iterations of Android
+> PCMark "Work 2.0 Performance". While we did not see any statistically
+> significant performance impact, this change allowed to drastically improve
+> the idle time residency.
+>
+>
+>                            |   Running   |  WFI [1]  |    Idle   |
+>    ------------------------+-------------+-----------+-----------+
+>    Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+>    ------------------------+-------------+-----------+-----------+
+>    Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+>    ------------------------+-------------+-----------+-----------+
+>    Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+>    ------------------------+-------------+-----------+-----------+
+>
+> On the SD855, the inefficient OPPs are found on the little cluster. By
+> removing them from the Energy Model, we make the most efficient CPUs more
+> appealing for task placement, helping to reduce the running time for the
+> medium and big CPUs. Increasing idle time is crucial for this platform due
+> to the substantial energy cost differences among the clusters. Also,
+> despite not appearing in the statistics (the idle driver used here doesn't
+> report it), we can speculate that we also improve the cluster idle time.
+>
+> [1] WFI: Wait for interrupt.
+>
+> Changelog since v3:
+>   - New freq-table relation CPUFREQ_RELATION_E.
+>   - New CPUFreq driver flag CPUFREQ_READ_ENERGY_MODEL.
+>   - EM flag to skip or not inefficiencies (driven by CPUFreq).
+>   - Fix infinite loop in set_freq_table_efficiencies().
+>
+> Changelog since v2:
+>   - Add separated support for inefficiencies into CPUFreq.
+>   - Collect Reviewed-by for the first patch.
+>
+> Changelog since v1:
+>   - Remove the Look-up table as the numbers weren't strong enough to
+>     justify the implementation.
+>   - Split the patch.
+>
+> Vincent Donnefort (9):
+>   PM / EM: Fix inefficient states detection
+>   PM / EM: Mark inefficient states
+>   PM / EM: Extend em_perf_domain with a flag field
+>   PM / EM: Allow skipping inefficient states
+>   cpufreq: Add an interface to mark inefficient frequencies
+>   cpufreq: Add a new freq-table relation CPUFREQ_RELATION_E
+>   cpufreq: CPUFREQ_RELATION_E in schedutil ondemand and conservative
+>   cpufreq: Add driver flag CPUFREQ_READ_ENERGY_MODEL
+>   cpufreq: dt: Add CPUFREQ_READ_ENERGY_MODEL
 
-> The Qualcomm sm8150 platform uses the qcom-cpufreq-hw driver, so
-> add it to the cpufreq-dt-platdev driver's blocklist.
-> 
+The cpufreq changes are mostly fine by me now, but I would like to
+hear from Viresh regarding this.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 9d5a38a91f10..231e585f6ba2 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -141,6 +141,7 @@ static const struct of_device_id blocklist[] __initconst = {
->  	{ .compatible = "qcom,sc7280", },
->  	{ .compatible = "qcom,sc8180x", },
->  	{ .compatible = "qcom,sdm845", },
-> +	{ .compatible = "qcom,sm8150", },
->  
->  	{ .compatible = "st,stih407", },
->  	{ .compatible = "st,stih410", },
-> -- 
-> 2.25.1
-> 
+>
+>  drivers/cpufreq/cpufreq-dt.c           |  2 +-
+>  drivers/cpufreq/cpufreq.c              | 67 ++++++++++++++++++++++++++++++++-
+>  drivers/cpufreq/cpufreq_conservative.c |  2 +-
+>  drivers/cpufreq/cpufreq_ondemand.c     |  4 +-
+>  drivers/cpufreq/freq_table.c           | 57 +++++++++++++++++++++++++++-
+>  include/linux/cpufreq.h                | 50 +++++++++++++++++++++++--
+>  include/linux/energy_model.h           | 68 +++++++++++++++++++++++++++++-----
+>  kernel/power/energy_model.c            | 46 ++++++++++++++---------
+>  kernel/sched/cpufreq_schedutil.c       |  2 +-
+>  9 files changed, 260 insertions(+), 38 deletions(-)
+>
+> --
