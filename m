@@ -2,118 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BCF3DFDCA
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 11:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2571F3DFE98
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 12:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236321AbhHDJS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Aug 2021 05:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S237309AbhHDKAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Aug 2021 06:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236371AbhHDJSx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 05:18:53 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977F9C06179E
-        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 02:18:40 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z4so1410282wrv.11
-        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 02:18:40 -0700 (PDT)
+        with ESMTP id S236397AbhHDKAX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 06:00:23 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09445C0613D5
+        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 03:00:11 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id k24so696023vsg.9
+        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 03:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CN5L8qgaMlhbixKVT8x+IFvwOIZrIEWv5/cRqTSdyn0=;
-        b=V2TTIebazihcW6g3TugX7/QHrxJV3cYQyVykcnOBRwAqnTtrkOwGUwqbu/aIquNnz4
-         K5nSg1OsZkz9kSwjNoFmpf8R31DdRL+WZAF/0nJAgFpI3S6fLBkp8/UZ7gGX41Qdp2Uj
-         LY1UMM6mWD99L5q/g79zHEYArf3Kso6gilC9NgibLH50GNMK9IgycAH5Qc/Doymc2fRd
-         l2IclE3S+lDcHm+bJWCNGSijm3iVe2IHr5+zy33MFHhzu2xF8Hp81vKRN8m/oKa5FTQ2
-         b9uJbOHpCNy8XFAx/0K2kp47WEuxkEctaNRSGDzr63FB7CdWoPaf0o3POE8uRZtG3uGX
-         j1Xg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KZQURuUvCTt1Dtzvc06E1K1bLOJD8iseyaRl8XN5Pfc=;
+        b=hLsLtCjOZNf8KRF5d/vdQ9oZuNAoT9Eg3LqcwzTR1WqqPznTHVqfZ7QC5CE4teJJOE
+         vJROdJstvA+WA5mLYhAzMDB1DIxd5ywVPl9xMCFBIh1nUiTgw4Ph+dkj8D9SzUXKA6fZ
+         sVa8WeDimt4VpSJ8VnXxHAmqb8yztQWS7mn+vpYKF1rfotJmVW8TYetCigqq/FVr7uNx
+         531UgugUZQaVtyfqyl9eLDl7+/Lms+2Cc9uwWWjTqJfI79kJFFB8mZjP069zbQcQniDe
+         1bMS/4FMCNWGqUH1zGD6cnkYxxDtYopR7XSSzLLSqOsWrvu8ZUZz5EusoKUKcEpo00ps
+         0LAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CN5L8qgaMlhbixKVT8x+IFvwOIZrIEWv5/cRqTSdyn0=;
-        b=hkmYcWhT2wqiBYaD5Y2rVlvM/xUZp4VSS0KRGSaWsv/jQdMrZUrcelMFfpg3BCWZpN
-         ITz8c2UzhhnHR6BpWHHKLjuO7IKJy7/6+vhtel7x7yxMZmBI4sjlt2ffqejTpBILTmRY
-         XK1+qeMpbQMJn9SjERKKr/Xega6taiXQ2j8BkMLqXyE2fUqTL/t+EutJ06UbjboYuhBl
-         675LXGS8fsq6JHLZgzyNGVQh4RgBimOVlL+9bK9qZ3n+5yQbqGvSuHH6Vl33RzmkelWh
-         8nMTLXKDbkRAzkKkAvLUHBb7a5dgb0Fq1bMyw8ApdH0ztYt+6rdVzkcD0N8yNiI5l0ZC
-         6JhA==
-X-Gm-Message-State: AOAM530BKoYd9VmcKq4OfjULdGu/ZMdLYeMlLfPqrfaYWpRgjYZIxdOe
-        +Hqucao729Gtl1UMwAUR8UaL3w==
-X-Google-Smtp-Source: ABdhPJwzFJkGhDMjJiTZ43STuFX1kh7fazOHR6ylJHye3NgGEIkZZ3uILn57OWp4w/LHOPIcA9VseQ==
-X-Received: by 2002:adf:8169:: with SMTP id 96mr27120773wrm.424.1628068719204;
-        Wed, 04 Aug 2021 02:18:39 -0700 (PDT)
-Received: from bismarck.berto.se (p4fca2222.dip0.t-ipconnect.de. [79.202.34.34])
-        by smtp.googlemail.com with ESMTPSA id f74sm1653172wmf.16.2021.08.04.02.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 02:18:38 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2 2/2] thermal: rcar_gen3_thermal: Store TSC id as unsigned int
-Date:   Wed,  4 Aug 2021 11:18:18 +0200
-Message-Id: <20210804091818.2196806-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210804091818.2196806-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20210804091818.2196806-1-niklas.soderlund+renesas@ragnatech.se>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KZQURuUvCTt1Dtzvc06E1K1bLOJD8iseyaRl8XN5Pfc=;
+        b=iyBId7Fl4LZJPeHkYLqlIVfJTQ94K6rRLmi5jxgft6V3nJdL9ObaIPlJZ0IR2xRzn4
+         h7buMUQd5IbeQW+wMVXpwf4yihEkpIp1a6oM84cvzU7ux/pqqm+BUK/b3nIvigvOC8Va
+         5ptlgODOylpKdVBSeSZnPB9/HOFDf5T64rhqjaR1BSEgsju3CfgUNsbkFailE+M9o7y4
+         rbUhHMRtQs33vWjXQHu8e1J4ULohLWbVHWeYxT/MwF9EkZKezwycRd1++7ZqupdUhtTr
+         diYgWNqsl67ZKF6WDZk7iTQETNOwKibWxKOPmb7mJ2MXnrsuokkUC6ws1mYz3T8vs72A
+         IweQ==
+X-Gm-Message-State: AOAM530MuQZa2Wlz1Yzcy7VOcKMC6C+prYmVn/jHrOlG/CJNp8lBsqYO
+        RVujMaEq3eWqtBss0IbrUG1xIOnM6CL1FsT5Msqq0A==
+X-Google-Smtp-Source: ABdhPJxbm5Y/wyGvHg385WeEq/rdxsg9pBpHshQlE18FxBQCwqaKoec7NnZjlIGraYbQyO4/D4SyyrqC1cHImBk2U4o=
+X-Received: by 2002:a67:328f:: with SMTP id y137mr16927749vsy.34.1628071210155;
+ Wed, 04 Aug 2021 03:00:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210701232728.23591-1-digetx@gmail.com> <20210701232728.23591-3-digetx@gmail.com>
+ <CAPDyKFrtWDYJo_NjS8306Z9ykbg7XZ55jC9hKEBMGkcrx1=4kQ@mail.gmail.com> <1034458d-78e0-5036-e278-6fee5d0d75ac@gmail.com>
+In-Reply-To: <1034458d-78e0-5036-e278-6fee5d0d75ac@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 4 Aug 2021 11:59:33 +0200
+Message-ID: <CAPDyKFoafAk72Kw6X7626Niduaii0V5VM4dGSWmq+e3JTh7VRg@mail.gmail.com>
+Subject: Re: [PATCH v7 02/37] soc/tegra: pmc: Implement attach_dev() of power
+ domain drivers
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The TSC id and number of TSC ids should be stored as unsigned int as
-they can't be negative. Fix the datatype of the loop counter 'i' and
-rcar_gen3_thermal_tsc.id to reflect this.
+On Mon, 2 Aug 2021 at 20:23, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 02.08.2021 17:48, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+> >> +       if (!list_empty(&genpd->child_links)) {
+> >> +               link =3D list_first_entry(&genpd->child_links, struct =
+gpd_link,
+> >> +                                       child_node);
+> >> +               core_genpd =3D link->parent;
+> >> +       } else {
+> >> +               core_genpd =3D genpd;
+> >> +       }
+> >
+> > This looks a bit odd to me. A genpd provider shouldn't need to walk
+> > these links as these are considered internals to genpd. Normally this
+> > needs lockings, etc.
+> >
+> > Why exactly do you need this?
+>
+> We have a chain of PMC domain -> core domain, both domains are created
+> and liked together by this PMC driver. Devices are attached to either
+> PMC domain or to core domain. PMC domain doesn't handle the performance
+> changes, performance requests go down to the core domain.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
-* Changes since v1
-- Fix rcar_gen3_thermal_tsc.id and dev_info() as pointed out by Geert.
-- Update commit message to better capture the new data members pointed
-  out in v1.
----
- drivers/thermal/rcar_gen3_thermal.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Did I get this right? The core domain is the parent to the PMC domain?
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index e49593437edeb3ca..85228d308dd35b19 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -84,7 +84,7 @@ struct rcar_gen3_thermal_tsc {
- 	struct thermal_zone_device *zone;
- 	struct equation_coefs coef;
- 	int tj_t;
--	int id; /* thermal channel id */
-+	unsigned int id; /* thermal channel id */
- };
- 
- struct rcar_gen3_thermal_priv {
-@@ -398,7 +398,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 	const int *ths_tj_1 = of_device_get_match_data(dev);
- 	struct resource *res;
- 	struct thermal_zone_device *zone;
--	int ret, i;
-+	unsigned int i;
-+	int ret;
- 
- 	/* default values if FUSEs are missing */
- 	/* TODO: Read values from hardware on supported platforms */
-@@ -467,7 +468,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		if (ret < 0)
- 			goto error_unregister;
- 
--		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
-+		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
- 	}
- 
- 	priv->num_tscs = i;
--- 
-2.32.0
+>
+> This is needed in order to translate the device's OPP into performance
+> state of the core domain, based on the domain to which device is attached=
+.
 
+So, the PMC domain doesn't have an OPP table associated with it, but
+some of its attached devices may still have available OPPs, which
+should be managed through the parent domain (core domain). Correct?
+
+Is there a DT patch in the series that I can look at that shows how
+this is encoded?
+
+Hmm, I have the feeling that we should try to manage in some generic
+way in genpd, rather than having to deal with it here.
+
+>
+> >> +
+> >> +       pd_opp_table =3D dev_pm_opp_get_opp_table(&core_genpd->dev);
+> >> +       if (IS_ERR(pd_opp_table)) {
+> >> +               dev_err(&genpd->dev, "failed to get OPP table of %s: %=
+pe\n",
+> >> +                       dev_name(&core_genpd->dev), pd_opp_table);
+> >> +               ret =3D PTR_ERR(pd_opp_table);
+> >> +               goto put_dev_opp;
+> >> +       }
+> >> +
+> >> +       pd_opp =3D dev_pm_opp_xlate_required_opp(opp_table, pd_opp_tab=
+le, opp);
+> >> +       if (IS_ERR(pd_opp)) {
+> >> +               dev_err(&genpd->dev,
+> >> +                       "failed to xlate required OPP for %luHz of %s:=
+ %pe\n",
+> >> +                       rate, dev_name(dev), pd_opp);
+> >> +               ret =3D PTR_ERR(pd_opp);
+> >> +               goto put_pd_opp_table;
+> >> +       }
+> >> +
+> >> +       /*
+> >> +        * The initialized state will be applied by GENPD core on the =
+first
+> >> +        * RPM-resume of the device.  This means that drivers don't ne=
+ed to
+> >> +        * explicitly initialize performance state.
+> >> +        */
+> >> +       state =3D pm_genpd_opp_to_performance_state(&core_genpd->dev, =
+pd_opp);
+> >> +       gpd_data->rpm_pstate =3D state;
+> >
+> > Could the above be replaced with Rajendra's suggestion [1], which
+> > changes genpd to internally during attach, to set a default
+> > performance state when there is a "required-opp" specified in the
+> > device  node?
+>
+> It's not a "static" performance level here, but any level depending on
+> h/w state left from bootloader and etc. The performance level
+> corresponds to the voltage of the core domain, hence we need to
+> initialize the voltage vote before device is resumed.
+
+Why not let the driver deal with this instead? It should be able to
+probe its device, no matter what state the bootloader has put the
+device into.
+
+To me, it sounds like a call to dev_pm_genpd_set_performance_state()
+(perhaps via dev_pm_opp_set_opp() or dev_pm_opp_set_rate()) from the
+driver itself, should be sufficient?
+
+I understand that it means the domain may change the OPP during boot,
+without respecting a vote for a device that has not been probed yet.
+But is there a problem with this?
+
+Kind regards
+Uffe
