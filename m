@@ -2,101 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B343DFA28
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 06:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD463DFB3C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 07:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbhHDEC7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Aug 2021 00:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhHDECv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 00:02:51 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11CAC0613D5
-        for <linux-pm@vger.kernel.org>; Tue,  3 Aug 2021 21:02:39 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id k2so1534882plk.13
-        for <linux-pm@vger.kernel.org>; Tue, 03 Aug 2021 21:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZB8hSYRKOrLl+E7loPd/8HK8c+ZXrxlOogYwUY2eSfs=;
-        b=xuIYEBsn2ryqdGX+FkuwetInmokALqieaEGMa8kT90J0hA64MKJqN0LJ878I/0lb0v
-         tkhcV8blLh+C1rmWsmvy+Aux/jdhiT9Z2rmcDr7uPC1+pfCN/TZGCpfWTV0diARD4xwW
-         UItWZf4bsjcUCjL2MGH5HHjx8MZY17xbW0F97PHlpCMA5NvJM5uemsbs9K81DN50Eu5A
-         XzbRGMyFC8HsaYITWy9qRAGTQ3aa158OQn+jl4R4IlsMlUWJ2m4LjsxYsCN0UCHOnM2/
-         4aCgBGoeHSX9jDDlyxsLDysGL9MslKaWc4w2pOpAODcJrvOQigULv7OqP4th2UBSFISU
-         hbfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZB8hSYRKOrLl+E7loPd/8HK8c+ZXrxlOogYwUY2eSfs=;
-        b=NonCRX6URCBSpM6Lf+cbCQ4yKWbmSC7BplacMb3c3uycruRFffZhxzph3uyZetX50x
-         8F34Q4FKij0swZU1YGh2IJTMCXR4cvqbZ4tsB1i2xGXxI69oHJ2sveVtZ/FCdkbAu0iP
-         GMLxFHuGOfv0FBhRApxtpT2htt9jCZWpkaxG1wgvjkDwdWDXRhf/XHm7nzg78f4lq0NS
-         lG+n5VjAVijbpHnvAmMFt6JZAfq3YrABi14ER4Sskbnkf9MxnxO13ZmwCMSHm+VnTj5x
-         h40OynnfqblyXGXHQmwSZKxXI+gh73z/6ullUhVN9ljscna4atUFfICz5+fKQzwIBufh
-         KYaA==
-X-Gm-Message-State: AOAM531AMJVOFQwieKI1Qcbrf6p9DDR/o+V2E6X+2ymBMtjH8l9qy7c0
-        jvVDJ0eXUBdnbva8XS/pVJfDeA==
-X-Google-Smtp-Source: ABdhPJy3dsyNIt/AZvz2RkHKRr3vR7DVqumnZSQuCTMohgzQ/9WXO5p0bWhT04eDCNmAyiuOnAi//g==
-X-Received: by 2002:a17:902:ce8f:b029:12c:c4e7:682d with SMTP id f15-20020a170902ce8fb029012cc4e7682dmr7288244plg.58.1628049759151;
-        Tue, 03 Aug 2021 21:02:39 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id g20sm723281pfv.88.2021.08.03.21.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 21:02:38 -0700 (PDT)
-Date:   Wed, 4 Aug 2021 09:32:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        cristian.marussi@arm.com, rjw@rjwysocki.net,
-        nicola.mazzucato@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: arm_scmi: Fix error path when allocation
- failed
-Message-ID: <20210804040237.ssrba26jpe572mjf@vireshk-i7>
-References: <20210803090744.12143-1-lukasz.luba@arm.com>
+        id S235012AbhHDFt0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Aug 2021 01:49:26 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30063 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232887AbhHDFtZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Aug 2021 01:49:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="201021367"
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="201021367"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 22:49:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="670790234"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2021 22:49:11 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mB9mA-000Ece-U9; Wed, 04 Aug 2021 05:49:10 +0000
+Date:   Wed, 04 Aug 2021 13:49:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 1c016eb02e4517ee1a985e4db117f2a6764d0f01
+Message-ID: <610a2a4c.6Cl0wJs0lSxruNZS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210803090744.12143-1-lukasz.luba@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-08-21, 10:07, Lukasz Luba wrote:
-> Stop the initialization when cpumask allocation failed and return an
-> error.
-> 
-> Fixes: 80a064dbd556 ("scmi-cpufreq: Get opp_shared_cpus from opp-v2 for EM")
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
-> changes:
-> v2:
-> - removed dev_warn() since it's not needed in this case
-> - adjusted the patch description
-> 
->  drivers/cpufreq/scmi-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index ec9a87ca2dbb..75f818d04b48 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -134,7 +134,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  	}
->  
->  	if (!zalloc_cpumask_var(&opp_shared_cpus, GFP_KERNEL))
-> -		ret = -ENOMEM;
-> +		return -ENOMEM;
->  
->  	/* Obtain CPUs that share SCMI performance controls */
->  	ret = scmi_get_sharing_cpus(cpu_dev, policy->cpus);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 1c016eb02e4517ee1a985e4db117f2a6764d0f01  Merge branch 'acpica' into bleeding-edge
 
-Applied. Thanks.
+elapsed time: 808m
 
--- 
-viresh
+configs tested: 87
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                     tqm5200_defconfig
+powerpc                 mpc832x_mds_defconfig
+mips                        qi_lb60_defconfig
+arm                           u8500_defconfig
+arm                     am200epdkit_defconfig
+mips                        nlm_xlr_defconfig
+ia64                        generic_defconfig
+powerpc                      acadia_defconfig
+arm                        multi_v5_defconfig
+arm                            mps2_defconfig
+arc                          axs103_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+x86_64                            allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20210803
+i386                 randconfig-a005-20210803
+i386                 randconfig-a002-20210803
+i386                 randconfig-a006-20210803
+i386                 randconfig-a001-20210803
+i386                 randconfig-a003-20210803
+i386                 randconfig-a012-20210803
+i386                 randconfig-a011-20210803
+i386                 randconfig-a015-20210803
+i386                 randconfig-a013-20210803
+i386                 randconfig-a014-20210803
+i386                 randconfig-a016-20210803
+x86_64               randconfig-a002-20210803
+x86_64               randconfig-a004-20210803
+x86_64               randconfig-a006-20210803
+x86_64               randconfig-a003-20210803
+x86_64               randconfig-a001-20210803
+x86_64               randconfig-a005-20210803
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a012-20210803
+x86_64               randconfig-a016-20210803
+x86_64               randconfig-a013-20210803
+x86_64               randconfig-a011-20210803
+x86_64               randconfig-a014-20210803
+x86_64               randconfig-a015-20210803
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
