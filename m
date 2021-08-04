@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B9C3DF909
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 02:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B343DFA28
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 06:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbhHDAyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Aug 2021 20:54:22 -0400
-Received: from ozlabs.org ([203.11.71.1]:40325 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231519AbhHDAyW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 3 Aug 2021 20:54:22 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GfYCg5V6nz9s5R;
-        Wed,  4 Aug 2021 10:54:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1628038448;
-        bh=ZBaaN+tHPwpLYY+UfYI00dZzEufAibCKvfz+hWbOPT8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SecjGxb4zhSK/gvdLmqKFw1IObeowXLCrXHbse9GzKj3Ujnp4pPaxQiQ2do9cGDFJ
-         q79FFv5+8WEH1jFVUanj6Mob5W/7BhNZc5XS0lyBzoO06GntTYDE2+6U0gHXZNhN2s
-         NNb1h4//1FAyuf7c+bgmtyT1nXF2KgY12kaetCTEzyo0wcT31T7RIXHaeMKBeH3GDA
-         843YqXp8YhqEwVmxGj4YaBk9loKPGf7K2923QVx50MYuGyv4qJ4JmTTdinaNYvGLX8
-         LTV0n3kjj3VKiJ3FUIqVDa3QhsRvl198z3za6WSj9CYzbtvGTEdHInVdKYawEWQuDj
-         Adlu0iS1k34gA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] cpuidle: pseries: Mark pseries_idle_proble() as __init
-In-Reply-To: <20210803211547.1093820-1-nathan@kernel.org>
-References: <20210803211547.1093820-1-nathan@kernel.org>
-Date:   Wed, 04 Aug 2021 10:54:04 +1000
-Message-ID: <87lf5ini6r.fsf@mpe.ellerman.id.au>
+        id S229634AbhHDEC7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Aug 2021 00:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhHDECv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 00:02:51 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11CAC0613D5
+        for <linux-pm@vger.kernel.org>; Tue,  3 Aug 2021 21:02:39 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id k2so1534882plk.13
+        for <linux-pm@vger.kernel.org>; Tue, 03 Aug 2021 21:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZB8hSYRKOrLl+E7loPd/8HK8c+ZXrxlOogYwUY2eSfs=;
+        b=xuIYEBsn2ryqdGX+FkuwetInmokALqieaEGMa8kT90J0hA64MKJqN0LJ878I/0lb0v
+         tkhcV8blLh+C1rmWsmvy+Aux/jdhiT9Z2rmcDr7uPC1+pfCN/TZGCpfWTV0diARD4xwW
+         UItWZf4bsjcUCjL2MGH5HHjx8MZY17xbW0F97PHlpCMA5NvJM5uemsbs9K81DN50Eu5A
+         XzbRGMyFC8HsaYITWy9qRAGTQ3aa158OQn+jl4R4IlsMlUWJ2m4LjsxYsCN0UCHOnM2/
+         4aCgBGoeHSX9jDDlyxsLDysGL9MslKaWc4w2pOpAODcJrvOQigULv7OqP4th2UBSFISU
+         hbfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZB8hSYRKOrLl+E7loPd/8HK8c+ZXrxlOogYwUY2eSfs=;
+        b=NonCRX6URCBSpM6Lf+cbCQ4yKWbmSC7BplacMb3c3uycruRFffZhxzph3uyZetX50x
+         8F34Q4FKij0swZU1YGh2IJTMCXR4cvqbZ4tsB1i2xGXxI69oHJ2sveVtZ/FCdkbAu0iP
+         GMLxFHuGOfv0FBhRApxtpT2htt9jCZWpkaxG1wgvjkDwdWDXRhf/XHm7nzg78f4lq0NS
+         lG+n5VjAVijbpHnvAmMFt6JZAfq3YrABi14ER4Sskbnkf9MxnxO13ZmwCMSHm+VnTj5x
+         h40OynnfqblyXGXHQmwSZKxXI+gh73z/6ullUhVN9ljscna4atUFfICz5+fKQzwIBufh
+         KYaA==
+X-Gm-Message-State: AOAM531AMJVOFQwieKI1Qcbrf6p9DDR/o+V2E6X+2ymBMtjH8l9qy7c0
+        jvVDJ0eXUBdnbva8XS/pVJfDeA==
+X-Google-Smtp-Source: ABdhPJy3dsyNIt/AZvz2RkHKRr3vR7DVqumnZSQuCTMohgzQ/9WXO5p0bWhT04eDCNmAyiuOnAi//g==
+X-Received: by 2002:a17:902:ce8f:b029:12c:c4e7:682d with SMTP id f15-20020a170902ce8fb029012cc4e7682dmr7288244plg.58.1628049759151;
+        Tue, 03 Aug 2021 21:02:39 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id g20sm723281pfv.88.2021.08.03.21.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Aug 2021 21:02:38 -0700 (PDT)
+Date:   Wed, 4 Aug 2021 09:32:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        cristian.marussi@arm.com, rjw@rjwysocki.net,
+        nicola.mazzucato@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: arm_scmi: Fix error path when allocation
+ failed
+Message-ID: <20210804040237.ssrba26jpe572mjf@vireshk-i7>
+References: <20210803090744.12143-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210803090744.12143-1-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> After commit 7cbd631d4dec ("cpuidle: pseries: Fixup CEDE0 latency only
-> for POWER10 onwards"), pseries_idle_probe() is no longer inlined when
-> compiling with clang, which causes a modpost warning:
->
-> WARNING: modpost: vmlinux.o(.text+0xc86a54): Section mismatch in
-> reference from the function pseries_idle_probe() to the function
-> .init.text:fixup_cede0_latency()
-> The function pseries_idle_probe() references
-> the function __init fixup_cede0_latency().
-> This is often because pseries_idle_probe lacks a __init
-> annotation or the annotation of fixup_cede0_latency is wrong.
->
-> pseries_idle_probe() is a non-init function, which calls
-> fixup_cede0_latency(), which is an init function, explaining the
-> mismatch. pseries_idle_probe() is only called from
-> pseries_processor_idle_init(), which is an init function, so mark
-> pseries_idle_probe() as __init so there is no more warning.
->
-> Fixes: 054e44ba99ae ("cpuidle: pseries: Add function to parse extended CEDE records")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On 03-08-21, 10:07, Lukasz Luba wrote:
+> Stop the initialization when cpumask allocation failed and return an
+> error.
+> 
+> Fixes: 80a064dbd556 ("scmi-cpufreq: Get opp_shared_cpus from opp-v2 for EM")
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  drivers/cpuidle/cpuidle-pseries.c | 2 +-
+> changes:
+> v2:
+> - removed dev_warn() since it's not needed in this case
+> - adjusted the patch description
+> 
+>  drivers/cpufreq/scmi-cpufreq.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-
-I don't see this in my builds for some reason, but I guess toolchain or
-config differences probably explain it.
-
-Regardless, the patch is correct so I'll pick it up, thanks.
-
-cheers
-
-> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-> index bba449b77641..7e7ab5597d7a 100644
-> --- a/drivers/cpuidle/cpuidle-pseries.c
-> +++ b/drivers/cpuidle/cpuidle-pseries.c
-> @@ -403,7 +403,7 @@ static void __init fixup_cede0_latency(void)
->   * pseries_idle_probe()
->   * Choose state table for shared versus dedicated partition
->   */
-> -static int pseries_idle_probe(void)
-> +static int __init pseries_idle_probe(void)
->  {
+> 
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index ec9a87ca2dbb..75f818d04b48 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -134,7 +134,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  	}
 >  
->  	if (cpuidle_disable != IDLE_NO_OVERRIDE)
->
-> base-commit: a6cae77f1bc89368a4e2822afcddc45c3062d499
-> -- 
-> 2.33.0.rc0
+>  	if (!zalloc_cpumask_var(&opp_shared_cpus, GFP_KERNEL))
+> -		ret = -ENOMEM;
+> +		return -ENOMEM;
+>  
+>  	/* Obtain CPUs that share SCMI performance controls */
+>  	ret = scmi_get_sharing_cpus(cpu_dev, policy->cpus);
+
+Applied. Thanks.
+
+-- 
+viresh
