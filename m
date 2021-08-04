@@ -2,114 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1A73DF846
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 01:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B9C3DF909
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 02:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbhHCXM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Aug 2021 19:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbhHCXM4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Aug 2021 19:12:56 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64191C06175F
-        for <linux-pm@vger.kernel.org>; Tue,  3 Aug 2021 16:12:44 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id n16so750677oij.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Aug 2021 16:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i+DGuoeLoChs6Ei4AJ031ih+E+zcev4zRO6x+z1vz+s=;
-        b=tgrVhS0xsGM0woAKFLMfnMFTciJ1Rc6vsLIQyP/i2i8ArCp0ErwmvRnIh5IaCpVlVT
-         de6ZVG4jUMWYikAZYeiPkbmPlV2DsOGvq7lZUJ/cnhqGCo4bUXEcWINETSM5w7fv7Hva
-         meSj8az8RjT/s1kpdDIlaAiSnkSjO8AKAfP1EltllFdN/t4WHr4SCA0oVy31rtY3s0+V
-         kQJB1KPg20T8AJ2dmOSmm6ilkk26gRow/9MByAqNm5NK8kFyfkBDFOqIfG7Uz9E3879/
-         4zcK42u0y90EM4WwbBLdEpGe+F+chBSADThwzz8A/bEGNJrRef2ktx867M7jdQKxXcRn
-         0DGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i+DGuoeLoChs6Ei4AJ031ih+E+zcev4zRO6x+z1vz+s=;
-        b=BWUxsi5cczeVWKuTMGkDuihkp3RJUyH1Vr34ai3wbp1d7wktsTRgIxZj/K+Cbkpnsz
-         hRtEbhkE5om2B3gPAazYZ8ilGDHooroBYEpKZMOBFJIuizSnbFS3G+bYoB78Pjn+QRPc
-         /5C/OCbFK3MI1s1F+/dWGgCVzlODSFbj6taO63CoHMQlRVe2NvtJXHdM0af9Cv85Wa7s
-         7lhERwCmyc+v9vDU/9IMXesDP8vhfPN13H8XVX9psaztVjilXyxgxvjfuVLkVflifIW2
-         hoNyY8tvxiJAeAHacFv/7OM3WD4UdM8PEWSxHnGbd3d3mNRismPMbWQPTmF3qV1vwI3q
-         6PEw==
-X-Gm-Message-State: AOAM531+5Trgh14mLAsqg+oArUgm99ysvMYcWl7XI2RQYsrx/m0/tdOG
-        eQkR5w/k7dfxNkD1KtGKl9ynmQ==
-X-Google-Smtp-Source: ABdhPJwa87SFdE7d4lnFkZg5tizEp+UNMG3WPscx4sDxJhPVVs2Sft3z8URa70QYD0vL7GWqu3V4gw==
-X-Received: by 2002:a54:4107:: with SMTP id l7mr4759521oic.66.1628032363639;
-        Tue, 03 Aug 2021 16:12:43 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q187sm132746oif.2.2021.08.03.16.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 16:12:43 -0700 (PDT)
-Date:   Tue, 3 Aug 2021 18:12:41 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2] PM: AVS: qcom-cpr: Use
- nvmem_cell_read_variable_le_u32()
-Message-ID: <YQnNaULsNVuQwYOz@builder.lan>
-References: <20210521134437.v2.1.Id1c70158722750aec0673d60c12e46a9c66bbfed@changeid>
- <CAD=FV=X8xgn=ueyryFZVA-VNLEU_sk8H29D08JaEpw2Qh2OFqQ@mail.gmail.com>
+        id S231542AbhHDAyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Aug 2021 20:54:22 -0400
+Received: from ozlabs.org ([203.11.71.1]:40325 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231519AbhHDAyW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Aug 2021 20:54:22 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GfYCg5V6nz9s5R;
+        Wed,  4 Aug 2021 10:54:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1628038448;
+        bh=ZBaaN+tHPwpLYY+UfYI00dZzEufAibCKvfz+hWbOPT8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SecjGxb4zhSK/gvdLmqKFw1IObeowXLCrXHbse9GzKj3Ujnp4pPaxQiQ2do9cGDFJ
+         q79FFv5+8WEH1jFVUanj6Mob5W/7BhNZc5XS0lyBzoO06GntTYDE2+6U0gHXZNhN2s
+         NNb1h4//1FAyuf7c+bgmtyT1nXF2KgY12kaetCTEzyo0wcT31T7RIXHaeMKBeH3GDA
+         843YqXp8YhqEwVmxGj4YaBk9loKPGf7K2923QVx50MYuGyv4qJ4JmTTdinaNYvGLX8
+         LTV0n3kjj3VKiJ3FUIqVDa3QhsRvl198z3za6WSj9CYzbtvGTEdHInVdKYawEWQuDj
+         Adlu0iS1k34gA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] cpuidle: pseries: Mark pseries_idle_proble() as __init
+In-Reply-To: <20210803211547.1093820-1-nathan@kernel.org>
+References: <20210803211547.1093820-1-nathan@kernel.org>
+Date:   Wed, 04 Aug 2021 10:54:04 +1000
+Message-ID: <87lf5ini6r.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=X8xgn=ueyryFZVA-VNLEU_sk8H29D08JaEpw2Qh2OFqQ@mail.gmail.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 23 Jul 18:05 CDT 2021, Doug Anderson wrote:
+Nathan Chancellor <nathan@kernel.org> writes:
+> After commit 7cbd631d4dec ("cpuidle: pseries: Fixup CEDE0 latency only
+> for POWER10 onwards"), pseries_idle_probe() is no longer inlined when
+> compiling with clang, which causes a modpost warning:
+>
+> WARNING: modpost: vmlinux.o(.text+0xc86a54): Section mismatch in
+> reference from the function pseries_idle_probe() to the function
+> .init.text:fixup_cede0_latency()
+> The function pseries_idle_probe() references
+> the function __init fixup_cede0_latency().
+> This is often because pseries_idle_probe lacks a __init
+> annotation or the annotation of fixup_cede0_latency is wrong.
+>
+> pseries_idle_probe() is a non-init function, which calls
+> fixup_cede0_latency(), which is an init function, explaining the
+> mismatch. pseries_idle_probe() is only called from
+> pseries_processor_idle_init(), which is an init function, so mark
+> pseries_idle_probe() as __init so there is no more warning.
+>
+> Fixes: 054e44ba99ae ("cpuidle: pseries: Add function to parse extended CEDE records")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/cpuidle/cpuidle-pseries.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Rafael / Bjorn,
-> 
-> On Fri, May 21, 2021 at 1:45 PM Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > Let's delete the private function cpr_read_efuse() since it does the
-> > basically the same thing as the new API call
-> > nvmem_cell_read_variable_le_u32().
-> >
-> > Differences between the new API call and the old private function:
-> > * less error printing (I assume this is OK).
-> > * will give an error if the value doesn't fit in 32-bits (the old code
-> >   would have truncated silently).
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> > I haven't done any more than compile-test this. Mostly I'm just
-> > writing this patch because it helped provide inspiration for the
-> > general API function.
-> >
-> > Changes in v2:
-> > - Resending v1 as a singleton patch; dependency is merged in mainline.
-> >
-> >  drivers/soc/qcom/cpr.c | 43 +++++-------------------------------------
-> >  1 file changed, 5 insertions(+), 38 deletions(-)
-> 
-> Are either of you interested in landing this? I guess Rafael landed
-> most of the recent changes to this driver, but it used to be under the
-> 'power' directory. Now that it's under 'drivers/soc/qcom' maybe it
-> should go through Bjorn's tree?
-> 
+I don't see this in my builds for some reason, but I guess toolchain or
+config differences probably explain it.
 
-Yes, it makes sense to pick it up through my tree, unfortunately I
-forgot about this move and ignored the patch in my queue based on the
-$subject.
+Regardless, the patch is correct so I'll pick it up, thanks.
 
-I've picked it up now.
+cheers
 
-Regards,
-Bjorn
+> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+> index bba449b77641..7e7ab5597d7a 100644
+> --- a/drivers/cpuidle/cpuidle-pseries.c
+> +++ b/drivers/cpuidle/cpuidle-pseries.c
+> @@ -403,7 +403,7 @@ static void __init fixup_cede0_latency(void)
+>   * pseries_idle_probe()
+>   * Choose state table for shared versus dedicated partition
+>   */
+> -static int pseries_idle_probe(void)
+> +static int __init pseries_idle_probe(void)
+>  {
+>  
+>  	if (cpuidle_disable != IDLE_NO_OVERRIDE)
+>
+> base-commit: a6cae77f1bc89368a4e2822afcddc45c3062d499
+> -- 
+> 2.33.0.rc0
