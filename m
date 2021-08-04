@@ -2,58 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103CE3E00C9
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 14:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847643E0219
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Aug 2021 15:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237994AbhHDMEU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Aug 2021 08:04:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237991AbhHDMET (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Aug 2021 08:04:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F25CC60F22;
-        Wed,  4 Aug 2021 12:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628078646;
-        bh=SA09EAAKTkUs1OqwmkOmft4MkR4GN2nXfPFNIrNpdXs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GPe4efqDC7Xbj/2Eg3fPcTh+8aRcYpWQ+9NYlQAZmiUgyRRgyYed31yEGisg8pr6r
-         bpDY40rNZm86eTB5xHmh/cU9nM/YOoA/3NCKuBxuxpULdng0v7eNUlqCrQcunftKll
-         XyAB91uOqhu4CIsEKbfJjGTq1nsOZDqSNTNdgpJ4=
-Date:   Wed, 4 Aug 2021 14:04:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ting Wang <zxc52fgh@gmail.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangting11 <wangting11@xiaomi.com>
-Subject: Re: [PATCH v11 0/4] add some power supply properties about
- wireless/wired charging
-Message-ID: <YQqCNKoLdwaCjmIl@kroah.com>
-References: <cover.1627992564.git.wangting11@xiaomi.com>
+        id S237040AbhHDNfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Aug 2021 09:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231310AbhHDNfF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 09:35:05 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F65C061798
+        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 06:34:53 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f12so1537620qkh.10
+        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 06:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XSfNtUyU9x/YGEG2BT0B9uxjpaTMgrW+GMW+Gx0V97Q=;
+        b=TpJYOKtrBFCaIgXuJrcHTL9EdQQt/csWAYYnG/TNqSXdjlttxf00i3FumuVwQpC/i0
+         pyfQyywmeGDkG/1pH3aozxBecjgdjvF+ryY1UQ2NFBsNKqfCflLMbOzmDqL4qk/UYiJy
+         js9SGtFIVZ+rhbM66/odc+gGx5HYgIko2j2ShmUO5qJgoiQig132zbESQ5bK//hFwj1c
+         oyueGqgnhmdwYSYBk/5UjslheYVPlT9RMCqXz9RHPdBNwNKkkJMZvtt573O0tECXCWV/
+         lkmiok0E7LQpt+rvED+wrD/Ln7HahrGdtgWIyvCItrhGEPAK1RFNudkEuAz3/xqjvXiX
+         Qr8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XSfNtUyU9x/YGEG2BT0B9uxjpaTMgrW+GMW+Gx0V97Q=;
+        b=SNnhezy8xQmP+wzv78ADOIiqOYClGgmcoH/4JeM5zPVj6v/01+F5FR8jT06jcedcwz
+         IwZkOR48mSwo9gVlydETmTi6o0p6zFqzfAs9SGQAHPF7xr8GRe2ws3lpLU9pfKivnnAu
+         n53IUl+8MJFwzRwZ5u4GsS1dA0kaW/Bd12x2YTMqMnuGde5Fz3M74PRc/iLHv3f8t705
+         HZ4wv4YUcLRN4zIuVZmQtxAy0kD5hh16NKRzjX/+rcbiOk9FU7JP1FhSvlcBkMdn+EhR
+         9b54exqHTckfaC2vtuFCsAIYVmaegoYNiv962WsK+d1kRxWl5aDPcEqa7KwDPmz7JcvA
+         GHOQ==
+X-Gm-Message-State: AOAM533/FCkcKijf/QvPWFiMnQ64arg2VNaTJl3T4XyTUHeCImw7KxbV
+        KiBTR6doarxmFIyBb+mECqpdxw==
+X-Google-Smtp-Source: ABdhPJyk5Ylha0tBS0IPdf6k19JH5IiOL/TMwax3CAbXwe5mPVxvRQa2P0A+g9mDDJAgyUrioDgaTQ==
+X-Received: by 2002:a05:620a:448c:: with SMTP id x12mr26075570qkp.39.1628084092359;
+        Wed, 04 Aug 2021 06:34:52 -0700 (PDT)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id z23sm847908qts.96.2021.08.04.06.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Aug 2021 06:34:51 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] cpufreq: blacklist Qualcomm sm8150 in cpufreq-dt-platdev
+Date:   Wed,  4 Aug 2021 09:34:51 -0400
+Message-Id: <20210804133451.2503674-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1627992564.git.wangting11@xiaomi.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 04, 2021 at 07:01:57PM +0800, Ting Wang wrote:
-> From: wangting11 <wangting11@xiaomi.com>
-> 
-> This patchset aims to provide power supply properties about wireless/wired charging.
-> "quick_charge_type" reports different types of quick charge based on the charging power;
-> "tx_adapter" shows" the type of wireless charging adapter;
-> "signal_strength" shows the coupling level between TX and RX;
-> "reverse_chg_mode" provides the interface of enabling/disabling wireless reverse charging.
-> 
-> Changes in V11
->  - Fix build error on linus/master 
->  - Fix build error on power-supply/for-next
->  - Fix conflict
+The Qualcomm sm8150 platform uses the qcom-cpufreq-hw driver, so
+add it to the cpufreq-dt-platdev driver's blocklist.
 
-Where are the users of these new properties?  Shouldn't drivers be
-submitted with them as well, otherwise why would these be added?
+Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 9d5a38a91f10..231e585f6ba2 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -141,6 +141,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "qcom,sc7280", },
+ 	{ .compatible = "qcom,sc8180x", },
+ 	{ .compatible = "qcom,sdm845", },
++	{ .compatible = "qcom,sm8150", },
+ 
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+-- 
+2.25.1
 
-greg k-h
