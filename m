@@ -2,116 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33D63E0C6F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 04:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8B73E0CFF
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 06:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbhHEC3f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Aug 2021 22:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        id S229446AbhHEEFw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Aug 2021 00:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbhHEC3f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Aug 2021 22:29:35 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521E3C061765;
-        Wed,  4 Aug 2021 19:29:20 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x14so6132627edr.12;
-        Wed, 04 Aug 2021 19:29:20 -0700 (PDT)
+        with ESMTP id S231821AbhHEEFw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 00:05:52 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9321EC061798
+        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 21:05:37 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id nh14so6142776pjb.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 21:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Hcrbuo/eI/947WksZPPotw6nEi7GjDzfNHwXQNC+UzE=;
-        b=nwwkLudnzjFmnS9SJehZ6QB75IhJdVsdr1SqDdsngdllPPsdShPqH4mvn05+tbjwl7
-         h1M8QWUIJQIkDFlUQ7DYan/GKhx1DLrWW5lbKk4ikGwnGeqVUlFQlBMXK22IUvDlPXxu
-         DNYGTL4nqt8rXGz8aS0FJVRBmaqLvDJG6c6OGs6320JZJrKhTyo/mH9EOsd9ubua9H23
-         F3UwljHEB7WwIUsOMyOEQWuOWqIJf8OkgI372dOcbChPo7dcIHOH/awCjWSaKHDZIDEr
-         zPCVpOt8YvhfawBtDvzrpkwp6IveOkPV81WnfEzRVPFwSTY1n5zPw9fvusDY0RmBnGMc
-         umHQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/tmrG3FNtvqmHMxfNd/70AdCn3lth7qM0+cOOLSMGRw=;
+        b=n9nKcnvu1TGK246QsMUW5hEHiQdw7jid0rI8Ai2n3Q6YF5HO71e8vyOF8h6RRBOfKp
+         Ax1Mus2CrSKnM70CTTAG2iYZE1GCkJBZjBqmeq6SAyntruRPoNCDGMxodU3FNzPQPf5R
+         5SmvUXPxtI1QPlsqolZ+h1Gu4GhBSjY2n5ZjpM+4pxQImBejAQJStgy8wouoKSm8IX89
+         01L64ptvJvD09cyynbbPhFnLj5wjHR69d/H104GfUVCxGWzls6yO0ZkX5+uenUeXlSO7
+         0tEvspnNsLl0uYGT3pMty6INrvcrix/th2DVXWOAnq5VOTmTzeLZNJzv0lotVDyUQQ23
+         JgCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Hcrbuo/eI/947WksZPPotw6nEi7GjDzfNHwXQNC+UzE=;
-        b=eQjaS8OEHpAIg3yLbt55cxx3xNv820YZ9p/5xgEVSNT/9J6FiF46b2co5ItK+PcBKA
-         4Zptxm13ZLSfGOwRCdYvvWgdVVk65Tjtlga4PGVcdS7b0kC7wZZZF/wzl4Laf4H+JXr+
-         DUq1JJ95ufFsLuCRYrlE2Ik4Jb1zz3po4vexTRyMm4RfGyan/uhXpyPOwUYfJiMUuOMA
-         FrLzgmBbblylcgCiHOskOLfSvTYPaCykzvOOzj+sLc269BDuh6R6QEVxxgib5G5lGMrj
-         krCIgqpyqvLWQ6s5tMqyoy2Ix9Ka3/uPO/dhr0VWnG50xd6Vu6dllDw59o8sVQZZ22m9
-         Op2w==
-X-Gm-Message-State: AOAM533OsonKC2KkNSmgUQuK6/r0IRggSa3eTK2xsMpe2806n8wgW1sZ
-        TLgxzbVpNADaeXJ0Nj0Bfr1/d1UU94kOFNrSeQQ=
-X-Google-Smtp-Source: ABdhPJzb+2TzxJfJb2e8HF5avLFj3koEXDKBINkpVYO2yKgjLo5Y+Jh85kkSOsc1M8Cjy8sVEk/+kU36IMoj3ebg2vI=
-X-Received: by 2002:a05:6402:510:: with SMTP id m16mr3354641edv.280.1628130559007;
- Wed, 04 Aug 2021 19:29:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/tmrG3FNtvqmHMxfNd/70AdCn3lth7qM0+cOOLSMGRw=;
+        b=ax467PEug3uQWrVAUYfcXZVdnOD+Au6N5lvPQROe81ryOUMmApuxxygqiOHNtwNhIs
+         FIEyIkBbdKCx25LSjlftx8ez686yX2d5OO2eE7/MPcM2Kqne0w9uIQyF7ACxsNFfsnjs
+         WYJdMKjj/Uu20/78383VXZjyGNebnY51UDHzXwdz7o6dPHnY4Dwphv/NxYPK2um1Z+nU
+         f1+PqLYpB1qE9KiDNP73makupanNjwen2E3ns4IsnDR8oCpFWj7ubQyl4znOTwmFihoT
+         lBK2BDnDSwuPLSQ2+EAWtz6ANyyAJ2AU/0Xcvfq+Nj3638nkIfSKxM16NEl4mMCFBa4i
+         gJuA==
+X-Gm-Message-State: AOAM531Bx6IfSTZGKe00aG/dBFoHrvtlJxRUse5NFZPGxc+96D8OYgsV
+        W08TjScbEsTYvC6J8wMLDMhdMQ==
+X-Google-Smtp-Source: ABdhPJz3BjNgAWw0KM1IUvz+qiNMzaEqBaeVS0JDBOjG/zw/L3WF9l+vFaGNLvHO3cCPmwhNKoQKDg==
+X-Received: by 2002:a17:90a:2ec6:: with SMTP id h6mr12940123pjs.9.1628136337051;
+        Wed, 04 Aug 2021 21:05:37 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id w186sm4779223pfw.106.2021.08.04.21.05.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Aug 2021 21:05:36 -0700 (PDT)
+Date:   Thu, 5 Aug 2021 09:35:34 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH v5 1/2] PM / Domains: Add support for 'required-opps' to
+ set default perf state
+Message-ID: <20210805040534.bmscqfjb6etywmu3@vireshk-i7>
+References: <1626764876-10229-1-git-send-email-rnayak@codeaurora.org>
+ <1626764876-10229-2-git-send-email-rnayak@codeaurora.org>
+ <CAPDyKFrzHD6rXP5TnqrAVnrZExc2JLFe3HoGF+yM_tsaZYwh8g@mail.gmail.com>
+ <35950d34-5cab-1b09-9864-49217a83f68d@codeaurora.org>
+ <6fe7d326-1822-5a49-cca7-df9a2739dca8@codeaurora.org>
+ <CAPDyKFrTQ0jy_u_oPN3kAXkd+FYMpHmStuU2pm8FHLa_OvXzBA@mail.gmail.com>
 MIME-Version: 1.0
-References: <cover.1627992564.git.wangting11@xiaomi.com> <YQqCNKoLdwaCjmIl@kroah.com>
-In-Reply-To: <YQqCNKoLdwaCjmIl@kroah.com>
-From:   =?UTF-8?B?5ZCnIeeOi+Wptw==?= <zxc52fgh@gmail.com>
-Date:   Thu, 5 Aug 2021 10:29:08 +0800
-Message-ID: <CAA=jPj2RVcQ3eyrcu2=2uPrZoTU0ffB9vsM-bpy8yGOu2w8odQ@mail.gmail.com>
-Subject: Re: [PATCH v11 0/4] add some power supply properties about
- wireless/wired charging
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangting11 <wangting11@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrTQ0jy_u_oPN3kAXkd+FYMpHmStuU2pm8FHLa_OvXzBA@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+On 04-08-21, 13:39, Ulf Hansson wrote:
+> Viresh, would it make sense to remove that print? I mean, the
+> required-opps property could be considered as optional and it seems a
+> bit silly that a pre-parsing of the property is needed to figure that
+> out.
 
- A demo of =E2=80=9CThe usage of quick charge type property=E2=80=9D is upl=
-oaded in
-PATCH v11 1/4 drivers/power/supply/qcom_smbb.c.
+Sure, np.
 
-
-The usage of the other three properties is about wireless charging.The
-code of our driver can refer to the link below.
-
-POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE=EF=BC=9A
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/p=
-ower/supply/qcom/qpnp-smb5.c#L1434
-
-POWER_SUPPLY_PROP_REVERSE_CHG_MODE=EF=BC=9A
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/p=
-ower/supply/qcom/qpnp-smb5.c#L2572
-
-POWER_SUPPLY_PROP_TX_ADAPTER=EF=BC=9A
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/p=
-ower/supply/qcom/qpnp-smb5.c#L2633
-
-POWER_SUPPLY_PROP_SIGNAL_STRENGTH=EF=BC=9A
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/p=
-ower/supply/qcom/qpnp-smb5.c#L2609
-
-Thanks=EF=BC=8C
-Wangting
-
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2021=E5=B9=B48=E6=9C=884=E6=
-=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=888:04=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Aug 04, 2021 at 07:01:57PM +0800, Ting Wang wrote:
-> > From: wangting11 <wangting11@xiaomi.com>
-> >
-> > This patchset aims to provide power supply properties about wireless/wi=
-red charging.
-> > "quick_charge_type" reports different types of quick charge based on th=
-e charging power;
-> > "tx_adapter" shows" the type of wireless charging adapter;
-> > "signal_strength" shows the coupling level between TX and RX;
-> > "reverse_chg_mode" provides the interface of enabling/disabling wireles=
-s reverse charging.
-> >
-> > Changes in V11
-> >  - Fix build error on linus/master
-> >  - Fix build error on power-supply/for-next
-> >  - Fix conflict
->
-> Where are the users of these new properties?  Shouldn't drivers be
-> submitted with them as well, otherwise why would these be added?
->
-> thanks,
->
-> greg k-h
+-- 
+viresh
