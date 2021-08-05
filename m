@@ -2,145 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0DE3E1A3F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 19:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3AF73E1AB8
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 19:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239251AbhHERUK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Aug 2021 13:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239104AbhHERUJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 13:20:09 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7D3C061765
-        for <linux-pm@vger.kernel.org>; Thu,  5 Aug 2021 10:19:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id F0D1D1F442FA
-Received: by earth.universe (Postfix, from userid 1000)
-        id CE7543C0C9B; Thu,  5 Aug 2021 19:19:51 +0200 (CEST)
-Date:   Thu, 5 Aug 2021 19:19:51 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andrejus Basovas <cpp@gcc.lt>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] power: supply: axp288_fuel_gauge: Reduce number
- of register accesses + cleanups
-Message-ID: <20210805171951.xkvndkzpx3od2nki@earth.universe>
-References: <20210801133105.101761-1-hdegoede@redhat.com>
+        id S239957AbhHERrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Aug 2021 13:47:47 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:34071 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231253AbhHERrr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 13:47:47 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628185652; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=twDWcYvXpXMj28plsG6TYmw0mB6jklivM6KZ+CaQRIQ=;
+ b=sdroU9j43i1AQSb/bqMCjeyj69pQ45O5xD8Kdi/1nwTTZrmHTu9EYtHjkyI5cufCAh/CWN0X
+ yb6W1sWyizrFYCYCdWaLMnsHgmw3FiveU+Hf4gDctQm+WQRy3bc5hzDbFs3MnO9vSTQ8C8Jp
+ iqW+mrzmjGhR+OFyB74XKSRCz/A=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 610c242bb4dfc4b0efcbff56 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 05 Aug 2021 17:47:23
+ GMT
+Sender: sibis=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7D896C433F1; Thu,  5 Aug 2021 17:47:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 56ED7C4338A;
+        Thu,  5 Aug 2021 17:47:20 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vqchxw65lzo2rot7"
-Content-Disposition: inline
-In-Reply-To: <20210801133105.101761-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 05 Aug 2021 23:17:20 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     bjorn.andersson@linaro.org, mka@chromium.org, robh+dt@kernel.org,
+        viresh.kumar@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dianders@chromium.org, tdas@codeaurora.org
+Subject: Re: [PATCH 2/4] cpufreq: qcom: Re-arrange register offsets to support
+ per core L3 DCVS
+In-Reply-To: <CAE-0n53cH749NC9JPqJvMZGBQf47AZ3qY66eoqk2CiQHvuumkg@mail.gmail.com>
+References: <1627581885-32165-1-git-send-email-sibis@codeaurora.org>
+ <1627581885-32165-3-git-send-email-sibis@codeaurora.org>
+ <CAE-0n53cH749NC9JPqJvMZGBQf47AZ3qY66eoqk2CiQHvuumkg@mail.gmail.com>
+Message-ID: <352d549f40dfa2ae51589649652d2e97@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Stephen,
 
---vqchxw65lzo2rot7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for taking time to review
+the series.
 
-Hi Hans,
+On 2021-08-05 00:31, Stephen Boyd wrote:
+> Quoting Sibi Sankar (2021-07-29 11:04:43)
+>> Qualcomm SoCs (starting with SM8350) support per core voting for L3 
+>> cache
+>> frequency.
+> 
+> And the L3 cache frequency voting code can't be put into this cpufreq
+> driver?
 
-On Sun, Aug 01, 2021 at 03:30:55PM +0200, Hans de Goede wrote:
-> Hi all,
->=20
-> Changes in v3:
-> - Replace "depends on X86" with "depends on IOSF_MBI" as the new code uses
->   symbols which are only defined when IOSF_MBI support is enabled.
->   Depending on this is ok since IOSF_MBI support should always be enabled
->   on devices which use the AXP288 PMIC.
->=20
-> Changes in v2:
-> - Add a "depends on X86" to Kconfig since the iosf_mbi functions are X86 =
-only
->   (the AXP288 PMIC is only used on X86 devices).
->=20
-> And here is the v1 cover-letter again:
->=20
-> The I2C-bus to the XPower AXP288 is shared between the Linux kernel and
-> the SoCs P-Unit. The P-Unit has a semaphore which the kernel must "lock"
-> before it may use the bus and while the kernel holds the semaphore the CPU
-> and GPU power-states must not be changed otherwise the system will freeze.
-> This is a complex process, which is quite expensive.
->=20
-> To ensure that no unguarded I2C-bus accesses happen, the semaphore is
-> taken by the I2C-bus-driver for every I2C transfer. When upower refreshes
-> its battery stats it reads all the power-supply properties at once,
-> leading to the semaphore getting hammered which sometimes causes the
-> system to hang.
->=20
-> Andrejus maintains a large "fleet" of affected Cherry Trail tablets
-> and was seeing these hangs semi regularly. After discussing this with
-> me Andrejus wrote the caching patch in this series which greatly reduces
-> the number of semaphore accesses and since then there have been no
-> reports of hangs in the fleet of devices which he maintains.
->=20
-> I've cleaned up Andrejus work a bit before submitting it upstream and
-> while working on this I found a slew of other issues in this driver
-> which bugged me enough to write a bunch of cleanup patches. I've also
-> added some extra patches to also reduce the semaphore use during driver
-> probe.
+Yes, it could have gone either into
+the cpufreq driver or l3 interconnect
+provider driver. Taniya/Odelu preferred
+the latter, because of the need for other
+clients to vote for l3 frequencies in
+the future. The other option to prevent
+register re-arrangement would involve
+using syscons from the cpufreq node, which
+really wasn't necessary since there
+wasn't any register overlap between the
+two drivers.
 
-Thanks, I applied the whole series. The double goto from the last
-patch is a bit ugly and can be avoided by switching the driver to
-devm_*(). Do you mind doing so?
+> 
+>> So, re-arrange the cpufreq register offsets to allow access for
+>> the L3 interconnect to implement per core control. Also prevent 
+>> binding
+>> breakage caused by register offset shuffling by using the 
+>> SM8250/SM8350
+>> EPSS compatible.
+>> 
+>> Fixes: 7dbd121a2c58 ("arm64: dts: qcom: sc7280: Add cpufreq hw node")
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> ---
+>>  drivers/cpufreq/qcom-cpufreq-hw.c | 23 +++++++++++++++++++----
+>>  1 file changed, 19 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c 
+>> b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> index f86859bf76f1..74ef3b38343b 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> @@ -28,6 +28,7 @@ struct qcom_cpufreq_soc_data {
+>>         u32 reg_volt_lut;
+>>         u32 reg_perf_state;
+>>         u8 lut_row_size;
+>> +       bool skip_enable;
+>>  };
+>> 
+>>  struct qcom_cpufreq_data {
+>> @@ -257,19 +258,31 @@ static const struct qcom_cpufreq_soc_data 
+>> qcom_soc_data = {
+>>         .reg_volt_lut = 0x114,
+>>         .reg_perf_state = 0x920,
+>>         .lut_row_size = 32,
+>> +       .skip_enable = false,
+>>  };
+>> 
+>>  static const struct qcom_cpufreq_soc_data epss_soc_data = {
+>> +       .reg_freq_lut = 0x0,
+>> +       .reg_volt_lut = 0x100,
+>> +       .reg_perf_state = 0x220,
+>> +       .lut_row_size = 4,
+>> +       .skip_enable = true,
+>> +};
+>> +
+>> +static const struct qcom_cpufreq_soc_data epss_sm8250_soc_data = {
+>>         .reg_enable = 0x0,
+>>         .reg_freq_lut = 0x100,
+>>         .reg_volt_lut = 0x200,
+>>         .reg_perf_state = 0x320,
+>>         .lut_row_size = 4,
+>> +       .skip_enable = false,
+>>  };
+>> 
+>>  static const struct of_device_id qcom_cpufreq_hw_match[] = {
+>>         { .compatible = "qcom,cpufreq-hw", .data = &qcom_soc_data },
+>>         { .compatible = "qcom,cpufreq-epss", .data = &epss_soc_data },
+>> +       { .compatible = "qcom,sm8250-cpufreq-epss", .data = 
+>> &epss_sm8250_soc_data },
+>> +       { .compatible = "qcom,sm8350-cpufreq-epss", .data = 
+>> &epss_sm8250_soc_data },
+>>         {}
+>>  };
+>>  MODULE_DEVICE_TABLE(of, qcom_cpufreq_hw_match);
+>> @@ -334,10 +347,12 @@ static int qcom_cpufreq_hw_cpu_init(struct 
+>> cpufreq_policy *policy)
+>>         data->res = res;
+>> 
+>>         /* HW should be in enabled state to proceed */
+> 
+> It looks odd that we're no longer making sure that the clk domain is
+> enabled when we probe the driver. Why is that OK?
 
--- Sebastian
+On newer EPSS hw it's no longer
+required to perform the additional
+hw enable check. IIRC we don't do
+that on corresponding downstream
+kernels as well.
 
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
-> Andrejus Basovas (1):
->   power: supply: axp288_fuel_gauge: Refresh all registers in one go
->=20
-> Hans de Goede (9):
->   power: supply: axp288_fuel_gauge: Fix define alignment
->   power: supply: axp288_fuel_gauge: Remove debugfs support
->   power: supply: axp288_fuel_gauge: Silence the chatty IRQ mapping code
->   power: supply: axp288_fuel_gauge: Report register-address on readb /
->     writeb errors
->   power: supply: axp288_fuel_gauge: Drop retry logic from
->     fuel_gauge_reg_readb()
->   power: supply: axp288_fuel_gauge: Store struct device pointer in
->     axp288_fg_info
->   power: supply: axp288_fuel_gauge: Only read PWR_OP_MODE,
->     FG_LOW_CAP_REG regs once
->   power: supply: axp288_fuel_gauge: Move the AXP20X_CC_CTRL check
->     together with the other checks
->   power: supply: axp288_fuel_gauge: Take the P-Unit semaphore only once
->     during probe()
->=20
->  drivers/power/supply/Kconfig             |   2 +-
->  drivers/power/supply/axp288_fuel_gauge.c | 489 +++++++++--------------
->  2 files changed, 187 insertions(+), 304 deletions(-)
->=20
-> --=20
-> 2.31.1
+> 
+>> -       if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) 
+>> {
+>> -               dev_err(dev, "Domain-%d cpufreq hardware not 
+>> enabled\n", index);
+>> -               ret = -ENODEV;
+>> -               goto error;
+>> +       if (!data->soc_data->skip_enable) {
+>> +               if (!(readl_relaxed(base + data->soc_data->reg_enable) 
+>> & 0x1)) {
+>> +                       dev_err(dev, "Domain-%d cpufreq hardware not 
+>> enabled\n", index);
+>> +                       ret = -ENODEV;
+>> +                       goto error;
+>> +               }
+>>         }
+>> 
 
---vqchxw65lzo2rot7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEMHbMACgkQ2O7X88g7
-+pq9hBAAjiAxFddqqo63nVci5EaJVi6CQdi/GAKFpyeowXkB30KkDRIePVgzNVHl
-sOuyXwjmsZNG/8BXBeE0yvZL4TGpV1/rB9EJnnvjmyifp/9PJ9tJk88YmMCxgoAY
-s7LTJuVkr3jeyf2bRY/Zcm7XCAU8bWgbNG25Kj9lZ4SOTpkhLYaqJzflci3hd1uL
-XKy8byOyXzkT2vKVO8Z5eBAtUnTjiLCXALzkpmQ/GwcZgdP/8oBOCX9m43pUNqz5
-RdCfF4Z9yACS4Iz7TMX3mWcuHDi+9zWHYnRSHzLoBvCBMKc2xS1gI80jd8Juih4r
-yEYod0R7wB4olb5ogM/naxCqJOa1tuKYis8QtwxSvyay4htrv/33vA1yhm/TDZJ/
-v4MSYV57ZkY4wymumDzc1JIHaXxZlZOoqaubjusa81tNOCLowWRzwSoZ53CRm4gf
-XrFLHAe91nRBc5BHTERah4Q7+DKfZ3bVFSk1eWiL0dc9AwTesupaPHEmbsZwUeuM
-bgDIIevVgEza0bGqJ94BEChVa+HSPdKybvXV3tHJvDGv9+gRzs1Z9Wyo5+RwSO0L
-eb8sdpjibqEZ6Ese3F4EcdqIz2ZuCUqiJoPB4XP7K1rK48lLl/MUzizbBmmK/jHF
-sxwg0wDblMvuEQPG93OPW7dE/nLlzMpBUrlWoJjxvCVZVdaUz+8=
-=yLyR
------END PGP SIGNATURE-----
-
---vqchxw65lzo2rot7--
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
