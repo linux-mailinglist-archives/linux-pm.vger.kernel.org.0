@@ -2,105 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3D03E18F7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 17:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5033E190B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 18:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242784AbhHEP7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Aug 2021 11:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242731AbhHEP7n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 11:59:43 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D466FC061765;
-        Thu,  5 Aug 2021 08:59:28 -0700 (PDT)
+        id S242886AbhHEQEY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Aug 2021 12:04:24 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60304 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242904AbhHEQEL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 12:04:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id AB7CF1F44206
+        with ESMTPSA id 93F041F4421F
 Received: by earth.universe (Postfix, from userid 1000)
-        id 206F23C0C9B; Thu,  5 Aug 2021 17:59:25 +0200 (CEST)
-Date:   Thu, 5 Aug 2021 17:59:25 +0200
+        id 526623C0C9B; Thu,  5 Aug 2021 18:03:53 +0200 (CEST)
+Date:   Thu, 5 Aug 2021 18:03:53 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: sc27xx: Delete superfluous error message
-Message-ID: <20210805155925.7eoiuxbchwcegnyt@earth.universe>
-References: <20210805125233.16268-1-tangbin@cmss.chinamobile.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2 v2] dt-bindings: power: Extend battery bindings with
+ type
+Message-ID: <20210805160353.syzqrzv2ucisoqfg@earth.universe>
+References: <20210805085828.3451909-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="37i7djb4jbjvjxc2"
+        protocol="application/pgp-signature"; boundary="oiyoqqtumybqrj3r"
 Content-Disposition: inline
-In-Reply-To: <20210805125233.16268-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20210805085828.3451909-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---37i7djb4jbjvjxc2
+--oiyoqqtumybqrj3r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Aug 05, 2021 at 08:52:33PM +0800, Tang Bin wrote:
-> In the function sc27xx_fgu_probe(), when get irq failed,
-> platform_get_irq() logs an error message, so remove
-> redundant message here.
+On Thu, Aug 05, 2021 at 10:58:27AM +0200, Linus Walleij wrote:
+> This adds a battery-type property and bindings for the different
+> "technologies" that are used in Linux. More types can be added.
 >=20
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> This is needed to convert the custom ST-Ericsson AB8500 battery
+> properties over to the generic battery bindings.
+>=20
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Add devicetree list to Cc
+> - Use "device-chemistry" instead of "battery-type" as this
+>   has precedence in standards.
+> I need a bunch of new bindings for switch the STE AB8500 custom
+> bindings out, but I need to start somewhere, this is as good as
+> any place to start.
 > ---
 
-Thanks, queued.
+Waiting a bit to give Rob a chance to review this. From my side
+it looks good.
 
---Sebastian
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
->  drivers/power/supply/sc27xx_fuel_gauge.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+-- Sebastian
+
+>  .../devicetree/bindings/power/supply/battery.yaml  | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 >=20
-> diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/sup=
-ply/sc27xx_fuel_gauge.c
-> index 9c627618c..5e7f7a19e 100644
-> --- a/drivers/power/supply/sc27xx_fuel_gauge.c
-> +++ b/drivers/power/supply/sc27xx_fuel_gauge.c
-> @@ -1229,10 +1229,8 @@ static int sc27xx_fgu_probe(struct platform_device=
- *pdev)
->  	}
+> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml =
+b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> index c3b4b7543591..d56ac484fec5 100644
+> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> @@ -31,6 +31,20 @@ properties:
+>    compatible:
+>      const: simple-battery
 > =20
->  	irq =3D platform_get_irq(pdev, 0);
-> -	if (irq < 0) {
-> -		dev_err(dev, "no irq resource specified\n");
-> +	if (irq < 0)
->  		return irq;
-> -	}
+> +  device-chemistry:
+> +    description: This describes the chemical technology of the battery.
+> +    oneOf:
+> +      - const: nickel-cadmium
+> +      - const: nickel-metal-hydride
+> +      - const: lithium-ion
+> +        description: This is a blanket type for all lithium-ion batterie=
+s,
+> +          including those below. If possible, a precise compatible string
+> +          from below should be used, but sometimes it is unknown which s=
+pecific
+> +          lithium ion battery is employed and this wide compatible can b=
+e used.
+> +      - const: lithium-ion-polymer
+> +      - const: lithium-ion-iron-phosphate
+> +      - const: lithium-ion-manganese-oxide
+> +
+>    over-voltage-threshold-microvolt:
+>      description: battery over-voltage limit
 > =20
->  	ret =3D devm_request_threaded_irq(data->dev, irq, NULL,
->  					sc27xx_fgu_interrupt,
 > --=20
-> 2.20.1.windows.1
->=20
->=20
+> 2.31.1
 >=20
 
---37i7djb4jbjvjxc2
+--oiyoqqtumybqrj3r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEMCtYACgkQ2O7X88g7
-+pq0Ng/7BkQAIB4/ThTdQvIXJarp3t0TrgG28nUJ9ZWyimudzseVrrgmnaI9TsM5
-ystKE8Hxux1l+Z3aXJwQkNI61rTNL/9K/bfJrKVPRE5yKxDohYpyZyy5c/Te2gqF
-GXZ98gc6RE62mRm9XrZ6omld0gFtfbZ74c7Sw5W3FuonfE/6j6d1PBXqANP7lxJt
-vcO1+p5sYeDSqGsn9wiweRDLODmRAPfVeDuc+7R44Z4Wcxung/q7Vjpu4mEbkNpY
-+Yd8vYbQpw6ZgiebybV3L8StzNtBx2z+wg4tj2GvhHuQ+NZDan7jyqiPcC+QTW6B
-fb0wavnozBtW/HasBepGm9kSsOSHzSI3JJopVoKL258ELD9THG1bGAAkAPwSmVc1
-QVaUrolTNX9AohZKJasdUNsfsPntWOEq0eaABk65vKnYBCiJ5sWCoM2dy8eVnReD
-WToZ4M9JqMAo16UeAYbHKO9Ydav6x7ijZBElo76Zj8jrDGOKYt/uPOSrRynu6lTY
-Uf0QBYS4AQvGBowUWSbgO20wIzJr7ldprsiXaQ81H0pFVe0O/JpiIpallegQek5+
-BcrFfX1wwuEn3dmj8AxndybVsAHv1yY3JF6HM2FInoLWDrSS5ebF/wDv2nt12+xr
-s+kHBmT+4g1j6fSFzLXAGECk0ZorOeOD8LrLPwUdWSKW6Vd4WdA=
-=K6MR
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEMC+kACgkQ2O7X88g7
++popLA/+PNOpiLKC1qeVP6JTjpkWV8YRO8pDgUpjaR3lUP3gGMg5HnWkqk0h7FPG
+WC53PP59Ba3JU8gD7kMBuAupxyMD1vwT82ZwoPDAmSlxZAS1PMYDK6FkFKCEfaHY
+kFOQX/JxHfCPllUE9YBUUFddcZW4Ti4tXZgIuNCbC4ipf03HthTzTBJeslKkAjxX
+i+TJdWWj8vKiQgXiACRw4ytYD5UbGQm9xBEqOQPYBM14t9obyV98HWmjTX7Knh8o
+YF+szqYAWLHfzR+ub9/aZLiQrkNoYHPZgv17RTxPh9ea53MjHcMQk8FKSU6IJxrO
+7EgfgLpAKeRTNUUUZFND8YEkkv8HIxN80DYXmgqx+CYdxrdRyYycOX9JrjcdvYG0
+zzCIeh/Eb7NlijFa6g31MRguKK0BdpasG9sVPk9VRXFVOOjtmAjQ2eQyMgzTarx2
+GZVmdjVbOHclv04TUBRURbeYz5EgngKYbUEoM8JIWpEHMqtXRHwvVEcCBwk4/gpP
+2V0S4AAImjSNghFHWbodqP8a/CCfrEhr2jtiDK08Knr8yGXi4h5JDE3tfW44fXIX
+iqP+jsQkfBjwE9tgmUkmo45QGUdgPzoM7uz28X8ri67lyJgSzB25vPA6UUgUZ2J2
+LDLcKpT+hAiY0D2BsEPbnp8aQ1pleFIzQ9/VgV4BJMF8unK+dLw=
+=ymCk
 -----END PGP SIGNATURE-----
 
---37i7djb4jbjvjxc2--
+--oiyoqqtumybqrj3r--
