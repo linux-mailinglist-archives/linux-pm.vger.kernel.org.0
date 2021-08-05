@@ -2,97 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D353E0D06
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 06:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A4C3E0DE2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Aug 2021 07:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbhHEENq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Aug 2021 00:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S231143AbhHEFvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Aug 2021 01:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbhHEENq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 00:13:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BD2C061765
-        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 21:13:31 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id e21so5555032pla.5
-        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 21:13:31 -0700 (PDT)
+        with ESMTP id S229892AbhHEFvK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 01:51:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B44FC061765
+        for <linux-pm@vger.kernel.org>; Wed,  4 Aug 2021 22:50:55 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id mt6so6447288pjb.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Aug 2021 22:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FqB8XGm+aamjbVDR+I0fpf47HqBYuxRSrQDk6Wt6JK8=;
-        b=jyAJPEcYskiQauSKaezVhYGduYQB509Pexly95GuGm2KwJ/OPI3hddL6xWgolV0opZ
-         7qeg5ajf21wDpQekmIq4MBx3fFy4vja3FAn+1hlwuprSyFkscLrIEVgxg6YLhXhDoVV7
-         NLNl5iWqI3A8u5yh6i5+qO06UVmXSlvKSf5X5oPVX2J5ffUqt7DMsC5Fxhp6yoIQk7+3
-         J0pimAZmykN+evRpy9Uuc5y91gz2ePYQGAXVgZjjdCL7mGwb2Lqj6p56Gc5P6qpyeWz9
-         psc6u9JRYMifyM0RQuKRaeO2o34gWEgtVoINrIv1yRSgCk8z6nljRys5o1uKGXlhRLAs
-         F0XQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=IhlFcEJ3Ey+FvnFqP6SL6I4PAijNOqIkFEL281s7fw0=;
+        b=Ogdyws4BjzLySgfIuElgUG11L8psN2IYIvd4ztc0XbQk07QvxLnbYhKbkbmm9aK26d
+         OWph2VTMTK1Nx0GqdfrjJT0L+VJPG6eHuj2e1IAb1wZXRpALS1+6PY8nuhhOzPHlZcOa
+         PASlA5qbVPW7F5H1gsUhAkQ3aCt8xFGxRCZLzDEP9IbtN3SjA6f1KV+BPgrXN8sCTH37
+         NRbHxvl2ODN96+MXy4lko6oYgvUB9JOTS7lMsajbU9qsjytv5n3CYjOC6leL4Ouo2GYQ
+         YDmpWy3NMGtdo47B1GJOFrs+A/sEmFlKjrsV9Us5GLk8rMyt4POUV/VTte/o3e0XKcuI
+         zybA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FqB8XGm+aamjbVDR+I0fpf47HqBYuxRSrQDk6Wt6JK8=;
-        b=ugLYsXIXO7hj1GiTFu3zAsPwuLpUwxeMiYEv1cFCvHm40Ob9u9hYUr42UwtqEzpA66
-         T3TN6SLHb61zegW490MR/uq/kA6N/FSlpfsMjXJFRsBHFsmYs66w9/D+6XJJPlFjfml9
-         P9IS3YKOh+mRhpiKfaP6wtPqJAZ4iQUvhXjTQI135fLeYThemtfOVwVuirSc9ON3LMq2
-         XkkXbNIfbqeWMFUQi0bJPJpLNr0SuN1VT+mBcokoWiogDi0XKnhLagUqidp0RyWQOZt4
-         i4M15HcksT49ucbDYmgKhV3FnjiSCo65Oy9fnB1w8/+ZhZ9BU8i6FtyUwm3IfY2FJJgo
-         w3kg==
-X-Gm-Message-State: AOAM531cq9UBOKqR57Ol9PGtWqWlabjYZsmGB1OkisBTrbrMoNzPrr5z
-        50P7PpmxQ35JDs3Y+lOThO8hTQ==
-X-Google-Smtp-Source: ABdhPJy/cCv7Gt8iYtqpJVtfVCS+dSM1sieVhL45IykaMlSJTCGbhjC/mpKXWv4T+OgvjVV7nERFyw==
-X-Received: by 2002:a62:e416:0:b029:3c5:f084:7212 with SMTP id r22-20020a62e4160000b02903c5f0847212mr2778606pfh.76.1628136810122;
-        Wed, 04 Aug 2021 21:13:30 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id j19sm4525423pfr.82.2021.08.04.21.13.29
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=IhlFcEJ3Ey+FvnFqP6SL6I4PAijNOqIkFEL281s7fw0=;
+        b=dEjHYGrtVWNojoQQkVBX6weosI1M35xaAlcEVc2K0YKnV9isIDiWD+NkLkBqqLb8fm
+         IFq25IXyIZiRK2czUo6F0nNtv2FlGnlRs3S6qxvKdBh98rzPk2WRx1+t/aXmcePRfbUg
+         LpsoKAh7H+ipao1RfP8QNWb8E1+PtQlqdX1Eq1DYeGyZFBz1BbuhyL5Mach/rk7m63t5
+         Cedg+GCmKBP5RuyNgQUSDaCIfpKQ8nT96aQm3WvAD9E+p3/ka5KIBqr6lMqYYm0NCGv/
+         X6Mz4JDXG4iEQKI8f9PY5Swq3wA4CWFTZsj+9vUSDy7BGJHHHSvJkjYDg/bgB+i1uKJq
+         LXcA==
+X-Gm-Message-State: AOAM5303cH7s1Iag3N+4BOJTWEW/fxNNjTU08wGVgHUOu9ieQmlMkucd
+        dvmoXa5cYJQ3sNQt3DzKLcG7/Q==
+X-Google-Smtp-Source: ABdhPJz205HNLFa9urpursH+0URCDNv7SWz9VIDSyoywyAkd4lA2zGV8r82u6DjSlVQHvPeIN/2P3g==
+X-Received: by 2002:a05:6a00:1712:b029:327:75dd:c8da with SMTP id h18-20020a056a001712b029032775ddc8damr3145771pfc.34.1628142655171;
+        Wed, 04 Aug 2021 22:50:55 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x2sm4484212pjq.35.2021.08.04.22.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 21:13:29 -0700 (PDT)
-Date:   Thu, 5 Aug 2021 09:43:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     rjw@rjwysocki.net, bjorn.andersson@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [Patch v2] cpufreq: blocklist Qualcomm sm8150 in
- cpufreq-dt-platdev
-Message-ID: <20210805041328.cte244ee2nop4zv6@vireshk-i7>
-References: <20210804203420.2641463-1-thara.gopinath@linaro.org>
+        Wed, 04 Aug 2021 22:50:54 -0700 (PDT)
+Message-ID: <610b7c3e.1c69fb81.a1939.e19d@mx.google.com>
+Date:   Wed, 04 Aug 2021 22:50:54 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210804203420.2641463-1-thara.gopinath@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.14-rc4-18-g197da54f3a8e
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.14-rc4-18-g197da54f3a8e)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-08-21, 16:34, Thara Gopinath wrote:
-> The Qualcomm sm8150 platform uses the qcom-cpufreq-hw driver, so
-> add it to the cpufreq-dt-platdev driver's blocklist.
-> 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> v1->v2: Replaced "blacklist" in subject header with "blocklist".
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 9d5a38a91f10..231e585f6ba2 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -141,6 +141,7 @@ static const struct of_device_id blocklist[] __initconst = {
->  	{ .compatible = "qcom,sc7280", },
->  	{ .compatible = "qcom,sc8180x", },
->  	{ .compatible = "qcom,sdm845", },
-> +	{ .compatible = "qcom,sm8150", },
->  
->  	{ .compatible = "st,stih407", },
->  	{ .compatible = "st,stih410", },
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc4-18-g197da54f3a8e)
 
-Applied. Thanks.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+14-rc4-18-g197da54f3a8e/
 
--- 
-viresh
+Tree: pm
+Branch: testing
+Git Describe: v5.14-rc4-18-g197da54f3a8e
+Git Commit: 197da54f3a8ea155a1d3c5bf025cf6329a8dafc7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
