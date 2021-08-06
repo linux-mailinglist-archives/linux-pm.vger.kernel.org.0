@@ -2,77 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BED3E2F0B
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 19:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A033E3020
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 22:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242112AbhHFR5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 13:57:07 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:39902 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbhHFR5H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 13:57:07 -0400
-Received: by mail-ot1-f44.google.com with SMTP id f20-20020a9d6c140000b02904bb9756274cso9829745otq.6;
-        Fri, 06 Aug 2021 10:56:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=577vfbAoSijgmcE4GmYPM0NJ6hQ7vUCyHwxoobFddU8=;
-        b=JOuNds/GXuXDU2xzbknAmcelxDrabc27PP70GTsTvdbiYpZ6Vdwnb5zuQBDzADkPsI
-         P1u17+JTe2QKL+aqqXHKrUHS4bEeLptWMvuzX2FakaPBDAbVmFqHIl30+rr0722gPl63
-         a0VMPfs/9tvQylBW5Bwd2BoTHF/CXBVm2aBySE6yrtY7PgsXZvVQi41/BvrmnoRzuwTP
-         dhM/SmwaqhGQHxb4Ja/3ZWqCaEQodIuUd78bzK9teSm+24VLJ8iA3wlzw/9IT57ZACjn
-         E8xplgNMpBg9fqsR5WWfIQqxH5NTNNMM15FCPRo4cdfhArp1NetYwqS9qiBfQnN/6wf/
-         XMqg==
-X-Gm-Message-State: AOAM530fPSL+YYr5fqK+XdSQE5x///oAlFkLIS3C+7whOtcKsb3cnif3
-        Z0gvp0fuGAw3WFWjv+jyy7+XfO1v9UxEXyJ3R4H7gS41kaQ=
-X-Google-Smtp-Source: ABdhPJyDauh3wSg/0kcH0FGbxcO9mB4Aemh5mUJPsOnopPDb6zlDY8dJcu0JTx4nxvghdGYfS/WdcDiE1eGJdgDQLuU=
-X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr8579754oth.321.1628272610281;
- Fri, 06 Aug 2021 10:56:50 -0700 (PDT)
+        id S244384AbhHFUKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 16:10:37 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51734 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237293AbhHFUKh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 16:10:37 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 0E8001F44D9E
+Received: by earth.universe (Postfix, from userid 1000)
+        id CDB293C0C99; Fri,  6 Aug 2021 22:10:17 +0200 (CEST)
+Date:   Fri, 6 Aug 2021 22:10:17 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andrejus Basovas <cpp@gcc.lt>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 00/10] power: supply: axp288_fuel_gauge: Reduce number
+ of register accesses + cleanups
+Message-ID: <20210806201017.oqmxi2ll25adnbxr@earth.universe>
+References: <20210801133105.101761-1-hdegoede@redhat.com>
+ <20210805171951.xkvndkzpx3od2nki@earth.universe>
+ <8b43afbb-918a-9a88-5a0d-a6d1f3509a97@redhat.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 Aug 2021 19:56:39 +0200
-Message-ID: <CAJZ5v0jUHUByXOpDKgKeEJzwDq7eE36sP9sVdRJn7jMBSneTMw@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.14-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ag5x3tcfassbj2yw"
+Content-Disposition: inline
+In-Reply-To: <8b43afbb-918a-9a88-5a0d-a6d1f3509a97@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
 
-Please pull from the tag
+--ag5x3tcfassbj2yw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.14-rc5
+Hi Hans,
 
-with top-most commit 4adae7dd10db10f20f51833dc11b3cf7a342ad38
+On Fri, Aug 06, 2021 at 01:36:31PM +0200, Hans de Goede wrote:
+> Hi Sebastian,
+>=20
+> > The double goto from the last patch is a bit ugly and can be
+> > avoided by switching the driver to devm_*(). Do you mind doing
+> > so?
+>=20
+> No I can take care of this, the problem is finding some time for
+> it though. I've added this to my to do list, but there is a bunch
+> of higher priority items above it.
+>=20
+> Still I will try to get around to doing some clean-up by switching
+> to devm_... eventually.
 
- cpuidle: teo: Rename two local variables in teo_select()
+Thanks, please take your time.
 
-on top of commit c500bee1c5b2f1d59b1081ac879d73268ab0ff17
+-- Sebastian
 
- Linux 5.14-rc4
+--ag5x3tcfassbj2yw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-to receive power management fixes for 5.14-rc5.
+-----BEGIN PGP SIGNATURE-----
 
-These fix a recent regression in the timer events oriented (TEO)
-cpuidle governor causing it to misbehave when idle state 0 is
-disabled and rename two local variables for improved clarity
-on top of that.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmENlyEACgkQ2O7X88g7
++powrg//ePjBtvEVFMGntMWHkJPOAiqZASnzUqXn/5s7s66+9v06775HA2F+BFdQ
+bAWusinsm1i9nM9oYMJlJbywt4kFHhZ3F2lMNoCcs2eEpol6AdqSsumREHixZF6M
+omhdqFYvSsmNP3h7UnFXFt/6XHx8VBxHMx7tZZUrx5PyLsN0VaUCZcaHVvQeCcRA
+Oqo6L4xMatVzaGeQVQ1ab/ycwUmFQgGuxl858OIvDrFSGc1+wfAROIBlb15vkNuE
+CjPCdTeMUAs0fpP+H0SLml9OTl/AqDFQTagep4ye9cmJ9DTBF00ATSGRsLEIUtcy
+CKxwHB3MZ9FMsfejXm35nF1Bij7rfgXEAM/0OqXDEa8BPIXwrNnmQF7xZsavs8L5
+FNiXj8OsWUeT/8IGcLqhZrg15Mbjw/4khpmxR+MVdYRue1+9nwkTEMtzCcDI/piT
+mZ7LoLKsHlVlujgMjufTSTOzvS9KQgAH+IZh+Rw1qpK4ph6yOJ9Ieg3ESDDHhoTl
+sHKxs9Wp/lsxcxiKGMFON2/WuAfGIq/QbG6Y9acSi7VXUS1vJDmDBEQBHx7WyhWm
+FpIl1fkprktOuSDZpI/n6hMiLOWcEpTM6Xc9khZOB6jaOUD8fWbIe0i6VAsHIkvi
+hjpG6Hht13fkkfZgX5FthOK30mMjqC05Gwro1sIHqjDCRwN2Luo=
+=+vj2
+-----END PGP SIGNATURE-----
 
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (2):
-      cpuidle: teo: Fix alternative idle state lookup
-      cpuidle: teo: Rename two local variables in teo_select()
-
----------------
-
- drivers/cpuidle/governors/teo.c | 48 ++++++++++++++++++++++++++---------------
- 1 file changed, 31 insertions(+), 17 deletions(-)
+--ag5x3tcfassbj2yw--
