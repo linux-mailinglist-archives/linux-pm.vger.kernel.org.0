@@ -2,83 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A033E3020
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 22:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B513E3023
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 22:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244384AbhHFUKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 16:10:37 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51734 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237293AbhHFUKh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 16:10:37 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 0E8001F44D9E
-Received: by earth.universe (Postfix, from userid 1000)
-        id CDB293C0C99; Fri,  6 Aug 2021 22:10:17 +0200 (CEST)
-Date:   Fri, 6 Aug 2021 22:10:17 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andrejus Basovas <cpp@gcc.lt>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] power: supply: axp288_fuel_gauge: Reduce number
- of register accesses + cleanups
-Message-ID: <20210806201017.oqmxi2ll25adnbxr@earth.universe>
-References: <20210801133105.101761-1-hdegoede@redhat.com>
- <20210805171951.xkvndkzpx3od2nki@earth.universe>
- <8b43afbb-918a-9a88-5a0d-a6d1f3509a97@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ag5x3tcfassbj2yw"
-Content-Disposition: inline
-In-Reply-To: <8b43afbb-918a-9a88-5a0d-a6d1f3509a97@redhat.com>
+        id S237293AbhHFUL3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 16:11:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40076 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244659AbhHFUL0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Aug 2021 16:11:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id C61BE61154;
+        Fri,  6 Aug 2021 20:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628280670;
+        bh=XvhoFCbRmXWYvxYsvjjMDqGR/RdmuT2QxjFds4AGd5M=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PzbL3DUxLa/DB5L12sGAFUkphivZj1Orjxk0gWVVFJIQR1/cMycp00fnOUQ4A4/wx
+         /iS7CPUpJI43paXWldc3lqwVTRySm4mPrf8FTYIoevHRzOAAyWoTsE4+LkfpDwLZfX
+         ld87D30ewbFN9FOaGc3tz1ExFghaB/iIDHNEl671cRFbZRNVqw4j74knh9Xh/ZGn0n
+         Q9D0Y1BkzWDQ5Ia8cjE49/pBC1iQaEEvoW/Rl8XFYJ1817UpyKXIO9UuOu0JiSL44j
+         6qsDIm4elOEisWbxDEk11xNqKXGXgsSMza5cHgaL7rkMDYxlKhsCuL+Ys5/j6vIqzu
+         FyRKnhj+0cpmQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BABEC60A7C;
+        Fri,  6 Aug 2021 20:11:10 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v5.14-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0jUHUByXOpDKgKeEJzwDq7eE36sP9sVdRJn7jMBSneTMw@mail.gmail.com>
+References: <CAJZ5v0jUHUByXOpDKgKeEJzwDq7eE36sP9sVdRJn7jMBSneTMw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jUHUByXOpDKgKeEJzwDq7eE36sP9sVdRJn7jMBSneTMw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc5
+X-PR-Tracked-Commit-Id: 4adae7dd10db10f20f51833dc11b3cf7a342ad38
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9917de73b499d160e76b6cc0aad2b3869dd057a3
+Message-Id: <162828067075.25549.12530540429653377601.pr-tracker-bot@kernel.org>
+Date:   Fri, 06 Aug 2021 20:11:10 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Fri, 6 Aug 2021 19:56:39 +0200:
 
---ag5x3tcfassbj2yw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc5
 
-Hi Hans,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9917de73b499d160e76b6cc0aad2b3869dd057a3
 
-On Fri, Aug 06, 2021 at 01:36:31PM +0200, Hans de Goede wrote:
-> Hi Sebastian,
->=20
-> > The double goto from the last patch is a bit ugly and can be
-> > avoided by switching the driver to devm_*(). Do you mind doing
-> > so?
->=20
-> No I can take care of this, the problem is finding some time for
-> it though. I've added this to my to do list, but there is a bunch
-> of higher priority items above it.
->=20
-> Still I will try to get around to doing some clean-up by switching
-> to devm_... eventually.
+Thank you!
 
-Thanks, please take your time.
-
--- Sebastian
-
---ag5x3tcfassbj2yw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmENlyEACgkQ2O7X88g7
-+powrg//ePjBtvEVFMGntMWHkJPOAiqZASnzUqXn/5s7s66+9v06775HA2F+BFdQ
-bAWusinsm1i9nM9oYMJlJbywt4kFHhZ3F2lMNoCcs2eEpol6AdqSsumREHixZF6M
-omhdqFYvSsmNP3h7UnFXFt/6XHx8VBxHMx7tZZUrx5PyLsN0VaUCZcaHVvQeCcRA
-Oqo6L4xMatVzaGeQVQ1ab/ycwUmFQgGuxl858OIvDrFSGc1+wfAROIBlb15vkNuE
-CjPCdTeMUAs0fpP+H0SLml9OTl/AqDFQTagep4ye9cmJ9DTBF00ATSGRsLEIUtcy
-CKxwHB3MZ9FMsfejXm35nF1Bij7rfgXEAM/0OqXDEa8BPIXwrNnmQF7xZsavs8L5
-FNiXj8OsWUeT/8IGcLqhZrg15Mbjw/4khpmxR+MVdYRue1+9nwkTEMtzCcDI/piT
-mZ7LoLKsHlVlujgMjufTSTOzvS9KQgAH+IZh+Rw1qpK4ph6yOJ9Ieg3ESDDHhoTl
-sHKxs9Wp/lsxcxiKGMFON2/WuAfGIq/QbG6Y9acSi7VXUS1vJDmDBEQBHx7WyhWm
-FpIl1fkprktOuSDZpI/n6hMiLOWcEpTM6Xc9khZOB6jaOUD8fWbIe0i6VAsHIkvi
-hjpG6Hht13fkkfZgX5FthOK30mMjqC05Gwro1sIHqjDCRwN2Luo=
-=+vj2
------END PGP SIGNATURE-----
-
---ag5x3tcfassbj2yw--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
