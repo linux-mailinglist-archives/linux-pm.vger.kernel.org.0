@@ -2,106 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8CE3E3126
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 23:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EB23E3129
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 23:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242180AbhHFVeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 17:34:22 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52438 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241353AbhHFVeV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 17:34:21 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id D3E421F410D4
-Received: by earth.universe (Postfix, from userid 1000)
-        id 9A8203C0C99; Fri,  6 Aug 2021 23:34:02 +0200 (CEST)
-Date:   Fri, 6 Aug 2021 23:34:02 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 29/54] dt-bindings: power: supply: axp20x-battery: Add
- AXP209 compatible
-Message-ID: <20210806213402.xvp7oucjio7xmq6c@earth.universe>
-References: <20210721140424.725744-1-maxime@cerno.tech>
- <20210721140424.725744-30-maxime@cerno.tech>
+        id S243523AbhHFVex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 17:34:53 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:44746 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241353AbhHFVew (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 17:34:52 -0400
+Received: by mail-io1-f48.google.com with SMTP id d22so14163705ioy.11;
+        Fri, 06 Aug 2021 14:34:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NG1EvzhxK2IFtwPmuLqscAo9Y1Y9BvzPpEQPGw44YJQ=;
+        b=lEzoCxXIdijdPDdZQsbwNtpvG3xfyEA2Oh0V8XLkE7AsEQWFAoo2zWoaC+++fr9LqS
+         Rsfddd9A1m2lwDWK6+zzG0vzLgdvbNgHfejPqZcvN17gQQch4y90xIt5rZDmDvuIlwBx
+         YFisFjcNhQoeq2otoG4XWOUfP9N7cKHn038s5DBCBx/LcNQ2XCEjx283Q8oPLTTSZy4/
+         C4xLOFUbDZ4UMoDN2wQYlbBc7lknXcwpkvYE455sSNVNObguk6lv6y3fIC/DAMwtksJ1
+         qmTqkix29sBslP7ZtML1UpaBmhlvwAMQQqSC1mxyrOHxWtiofv9ZdX/uSh39nsQdO0Jz
+         FsBg==
+X-Gm-Message-State: AOAM533RQWv25yhVj27JFxzJXz6yBW1Ug0i9KVyq/4ULxOWG4VG5fCj8
+        I1pYrcQSn+oOe+p1rDM/sA==
+X-Google-Smtp-Source: ABdhPJwgqBBlqTHJ9XEXcwpVSKBXLOyWARewwd1sBoKNpClwAREQfGffWnndQXu2y+LOTEe0arPV+w==
+X-Received: by 2002:a92:bf12:: with SMTP id z18mr452390ilh.274.1628285675403;
+        Fri, 06 Aug 2021 14:34:35 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id z18sm5044005ilp.68.2021.08.06.14.34.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Aug 2021 14:34:34 -0700 (PDT)
+Received: (nullmailer pid 1841077 invoked by uid 1000);
+        Fri, 06 Aug 2021 21:34:33 -0000
+Date:   Fri, 6 Aug 2021 15:34:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 3/6] dt-bindings: interconnect: Move SDM660 to a new
+ RPM-QoS file
+Message-ID: <YQ2q6VmE+C9HLiYs@robh.at.kernel.org>
+References: <20210801152427.475547-1-y.oudjana@protonmail.com>
+ <20210801152427.475547-4-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hjjkku4jwm5csdpa"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210721140424.725744-30-maxime@cerno.tech>
+In-Reply-To: <20210801152427.475547-4-y.oudjana@protonmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---hjjkku4jwm5csdpa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Jul 21, 2021 at 04:03:59PM +0200, Maxime Ripard wrote:
-> The AXP209 compatible was used in Device Trees and the driver, but it
-> was never documented.
->=20
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+On Sun, 01 Aug 2021 15:25:20 +0000, Yassine Oudjana wrote:
+> Move SDM660 to a new shared file to allow for adding other similar SoCs.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 > ---
+>  .../interconnect/{qcom,sdm660.yaml => qcom,rpm-qos.yaml} | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>  rename Documentation/devicetree/bindings/interconnect/{qcom,sdm660.yaml => qcom,rpm-qos.yaml} (91%)
+> 
 
-Thanks, queued.
-
--- Sebastian
-
->  .../power/supply/x-powers,axp20x-battery-power-supply.yaml       | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp2=
-0x-battery-power-supply.yaml b/Documentation/devicetree/bindings/power/supp=
-ly/x-powers,axp20x-battery-power-supply.yaml
-> index d1f0df123a5a..d055428ae39f 100644
-> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-batt=
-ery-power-supply.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-batt=
-ery-power-supply.yaml
-> @@ -21,6 +21,7 @@ properties:
->    compatible:
->      oneOf:
->        - const: x-powers,axp202-battery-power-supply
-> +      - const: x-powers,axp209-battery-power-supply
->        - const: x-powers,axp221-battery-power-supply
->        - items:
->            - const: x-powers,axp803-battery-power-supply
-> --=20
-> 2.31.1
->=20
-
---hjjkku4jwm5csdpa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmENqsoACgkQ2O7X88g7
-+ppdXA/+OzX85KTiIKpd0ZUsoGKaGmWdEK461TIU+FJNFz92goip5A6mbAPH7cVp
-OoAb9rDQG6X9kz3Lqm0hqB2SICMQ77H+4W49X4GETnMTS/4ews3kzJtUlVX/6yWD
-wzZ2XpaVx9Qs+oAOvLQpk29rRVf0A26z4SEluqqo8QGbVqPbdPzl6YAzOX2M+f9Y
-cKFYvRsHQNnJoSZkkNPHc7vXSpeu0B6ptRDG92ICoMDzcxaiAd3VdWvw4F4B3akZ
-cnHX5NZalaActgtDCiY0XUUVyowzAWFcJfLYCf5sDTC1R7Gn5y9BZBzKsO5lNxHc
-go4QtinY8HPMKhTDHsHGMaMK9QMq+c2eBlydhUlx3A3+QDDocclY+1jOXJQJfBRo
-WKtkhanicetP0qolvku/GWfr34CGZcMP3jFcdYjvWIAdti2t6Da6ZE29nNcFfJgO
-vnoiNTSgIyxUxU/l3wk6eXURDzQ0v7jrdIYv35CXSAPCRSozwtUy+CFyV+iL41x9
-VeWfkPSAzrPwr2zdWElBPVX3lW/ILzKDMxrbI7rs1YloZrVtSHnuZkaagm04Gy+/
-WUqDXZ6yeVHa62tDaer4jmqgGUznI++UhN+q6ms4Yjq7AjG4QhIa1SLGmB4K96iU
-vDE6IXe8J2+hMKHuEIVwbImaVOdnwbLs+m0T7sWvZZsnrMPcWJI=
-=87C9
------END PGP SIGNATURE-----
-
---hjjkku4jwm5csdpa--
+Reviewed-by: Rob Herring <robh@kernel.org>
