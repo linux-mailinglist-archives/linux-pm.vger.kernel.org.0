@@ -2,96 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF643E23B5
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 09:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76A13E26B1
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 11:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241405AbhHFHIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 03:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S243869AbhHFJDO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 05:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbhHFHIk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 03:08:40 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3261C06179B
-        for <linux-pm@vger.kernel.org>; Fri,  6 Aug 2021 00:08:23 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d9so5776912qty.12
-        for <linux-pm@vger.kernel.org>; Fri, 06 Aug 2021 00:08:23 -0700 (PDT)
+        with ESMTP id S243794AbhHFJDN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 05:03:13 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F2C061798
+        for <linux-pm@vger.kernel.org>; Fri,  6 Aug 2021 02:02:58 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id b21so10912659ljo.13
+        for <linux-pm@vger.kernel.org>; Fri, 06 Aug 2021 02:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8v6kprns5CP71Og9SwwrzxzwlPrkxlGXJS2Peqqg05c=;
-        b=I9Qtk2Z3aUp69yE7XB+dMGm/K2SVBqEWxXnCXzMD3v+A68F7AUvBhMs3UtqjPHn/30
-         VL8fm1pUNPEVaG9CKvXtFixt3DHCqCwXAkjB+6aFIaYwNzpa8q5YHI0MSqamdvv/UALO
-         qoGfwK0mo8XVvtUAtSO6Tu6dG8Rm32NaJvtpSure9mOTCC4xCCyPuKQQ2ADrK9vVRITV
-         VIlsmLVGBlxGJ+aNjZFVYkt9FWs2ih+50/D9JbxoXSLwig4tPGvK38dC2Zpd42AUf/dj
-         yww1wCL9ZyEaTqV62BKA1KtjFHJa7CVtLGFqEXrrTC5Pho20SP6uwkyY8scN+9XUSCem
-         HVsw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pdz+F0PxTcBoWBPi7w93ZPa5df8AmKqUiM4AHtMKqjM=;
+        b=HRDupAr1I+CswQ0FGrJ7o7eBsDG2I267kRrxFv0UNPplUMlZldUsOtmZo/FUfNJLcN
+         uSlGrsNpI1quZZwG6soDUNyoq6+UonjF+z4LtYGwUILwev63l/GRJ0W9VVAKil5k8F6g
+         L+4HUPyUp1CmLnCk/mzjA4he+UWunVEG0siwqQB9aj+y1+NR3NP6GPz4suvGZWlwRv2K
+         nJqk6u+4nfI7YrOSkt1WsPaDDL9M0fhPG9XnlMzrxF2VkX8VT2Oi7Qay52kdsRQnoWle
+         +oJvq8i63LH6X3Lkb2Fdkha8KlBOPy32Y24MXodl52/2HfqScqUD/ryYojGRozjiQX+e
+         nerA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8v6kprns5CP71Og9SwwrzxzwlPrkxlGXJS2Peqqg05c=;
-        b=iRS4zQ0KAwKki8WTvWVYYMhBuKL37fbFzwepIN0oOsUgy7KRpV7SZ6PkIe4+eWoGCY
-         sCpaN5d8jOs89bRaMgsJwPBjDu5M76scc5WH+s6Xiejy0J1/cTYmSoThkbACQcZMDsLm
-         Y+/SsN9pRVGSx7lUWWwsueGcTbY7silpOta+WKyEJAUJTAmh9R1YXJYR9eNTtH/4kwYB
-         YmOYldmRaAca7wVzRPUlaK7CMo4hQBA4OlD7zqfM6MIsfDrmScy0q046bPGbp+FkD4CA
-         nM/ps30VrFShEkLgN7rejA5N7rnXBj18l8ultDM+lZLD7ias63ZlvxyV0PbML6s1YFq/
-         49qA==
-X-Gm-Message-State: AOAM532UuiY05EVO098iMulWZJEDxHdh+mU2XmxcHkF8ewebWYVCEUq/
-        0zgw9h8NulYFdJ/3duhompGDth0QPOcFHolc97cTbcmF4LM=
-X-Google-Smtp-Source: ABdhPJwZJjWNwQc2GLaNWSE4U1kR/DIUZnRAOZnqxukRfnii7bkVthy9u4zRIm4N+L11+2iDhSH3JlBXVOxkkFb7WxE=
-X-Received: by 2002:ac8:44a8:: with SMTP id a8mr7687963qto.238.1628233702729;
- Fri, 06 Aug 2021 00:08:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pdz+F0PxTcBoWBPi7w93ZPa5df8AmKqUiM4AHtMKqjM=;
+        b=EIOyJb0U1Yg9VslLVUisMZ2JJN0x97Jv4UWWAnR1xQSEOq9UiZUMcSFYkTp5GQ09bX
+         0NtN7peLpl8U5Kp4eZVnGdcqXUrAL74mQ6vTbdZqoYOL554SFyGxtBkBCrF+5SlZMq7q
+         1UuyvsIIfPuyzhyuZ3Y+kmc23uU0cfsGbH33BORVqnqt+PyOUeifM60NtrG0s0AKu+vP
+         +wmPvJ/+Qou1QMuXX7aFrKtJ2ai/aaKdoIxYpms86OLAsaCZQRP/5xhQdhSF9yBasOBP
+         m2+oJkWcqVYJREs7P6DYQcFyt4z7FW9Dfpc0HIiu6vLgaNDJvZxFImbg/MoShPN82nvC
+         WRvA==
+X-Gm-Message-State: AOAM532/w4z4Ik1wUreHTMfn1zZW8c9xAvgetfLL/eeKjy3rIt8FxNoD
+        oGRUWGlL9wuTddm622fbxDx/Gw==
+X-Google-Smtp-Source: ABdhPJzIb/d74o4UoAR6WzeLTKhrVQWDJkMDEKcrCH8TOG/8QoAJgTAJvlXboDgchGXJVpK4rvTg+A==
+X-Received: by 2002:a2e:82d5:: with SMTP id n21mr5983933ljh.126.1628240576384;
+        Fri, 06 Aug 2021 02:02:56 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id s18sm640799lje.25.2021.08.06.02.02.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Aug 2021 02:02:56 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: power: Bindings for Samsung batteries
+Date:   Fri,  6 Aug 2021 11:00:50 +0200
+Message-Id: <20210806090050.3510671-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210731195034.979084-1-dmitry.baryshkov@linaro.org> <162820760640.19113.2386978922035728014@swboyd.mtv.corp.google.com>
-In-Reply-To: <162820760640.19113.2386978922035728014@swboyd.mtv.corp.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 6 Aug 2021 10:08:11 +0300
-Message-ID: <CAA8EJppSVotv-O=2h3BVqAC6f7xG+2BvUREesKs9v7RJkLORrQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] PM: add two devres helpers and use them in qcom cc
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Taniya Das <tdas@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 6 Aug 2021 at 02:53, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Dmitry Baryshkov (2021-07-31 12:50:31)
-> > Most of the drivers using using pm_runtime_enable() or pm_clk_create()
-> > follow the same pattern: call the function in the probe() path and call
-> > correspondingly pm_runtime_disable() or pm_clk_destroy() from the
-> > probe()'s error path and from the remove() function. This common code
-> > pattern has several drawbacks. I.e. driver authors have to ensure that
-> > the disable/destroy call in the error path really corresponds to the
-> > proper error clause. Or that the disable/destroy call is not missed in
-> > the remove() callback.
-> >
-> > Add two devres helpers replacing these code patterns with relevant devm
-> > function call, removing the need to call corresponding disable/destroy
-> > functions. As an example modify Qualcomm clock controller code to use
-> > new helpers. In this case we are able to drop error path and remove
-> > functions completely, simplifying the drivers in question.
->
-> There are lots of folks on the To: line so I'm not sure who is supposed
-> to apply this. Please indicate which maintainer tree you're planning to
-> land a series through if it touches different areas of the tree.
+This adds device tree bindings for Samsung SDI batteries.
+Everything can be determined from the product number so the entire
+battery is just a specific compatible string.
 
-I'd prefer for them to go through the clock tree.
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ .../power/supply/samsung,battery.yaml         | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/samsung,battery.yaml
 
+diff --git a/Documentation/devicetree/bindings/power/supply/samsung,battery.yaml b/Documentation/devicetree/bindings/power/supply/samsung,battery.yaml
+new file mode 100644
+index 000000000000..40292d581b10
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/samsung,battery.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/samsung,battery.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung SDI Batteries
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++description: |
++  Samsung SDI (Samsung Digital Interface) batteries are all different versions
++  of lithium ion chemistry devices used for mobile phones, laptops and other
++  portable electronics. The batteries are adapted to a specific product and
++  the physical restrictions make it impossible to use another battery with the
++  product, so product device trees can specify these batteries. Operating
++  systems should determine hardware characteristics of the batteries from the
++  compatible string.
++
++properties:
++  compatible:
++    oneOf:
++      - const: samsung,eb-l1m7flu
++        description: 3.8V 1500 mAh battery used in Samsung GT-I8190
++      - const: samsung,eb425161la
++        description: 3.8V 1500 mAh battery used in Samsung SGH-T599 and SGH-I407
++      - const: samsung,eb425161lu
++        description: 3.8V 1500 mAh battery used in Samsung GT-I8160
++      - const: samsung,eb485159lu
++        description: 3.8V 1700 mAh battery used in Samsung GT-S7710
++      - const: samsung,eb535151vu
++        description: 3.8V 1500 mAh battery used in Samsung GT-I9070
++      - const: samsung,eb585157lu
++        description: 3.8V 2000 mAh battery used in Samsung GT-I8530
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    power {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      battery: battery {
++        compatible = "samsung,eb425161la";
++      };
++
++      charger@11 {
++        reg = <0x11>;
++        monitored-battery = <&battery>;
++      };
++    };
 -- 
-With best wishes
-Dmitry
+2.31.1
+
