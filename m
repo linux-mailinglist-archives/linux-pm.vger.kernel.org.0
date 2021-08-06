@@ -2,116 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816DF3E222D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 05:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904683E2366
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 08:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbhHFDaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Aug 2021 23:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbhHFDaP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Aug 2021 23:30:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99938C061798;
-        Thu,  5 Aug 2021 20:29:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id mt6so14004607pjb.1;
-        Thu, 05 Aug 2021 20:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=fS+XTOKPP/A+4Ea3Vfvk2lusfIUrsBa+uJZOXKxOTBs=;
-        b=ONTPD9LmSno01aJOy1CjhKkYK3doqsHNZJrZJypUlYU/TnSa8zfSp1hgMhRtYwTIlq
-         ffoizk7QD3R1/qUjFO1u3vDNlJFWDvgrSfY+yBrHMxgy2pPR/+1lfsCgB47FAIEBq/Z0
-         u0cijgJtcZG2L58LElWv5Dw+zz8MMtvFAIt2eur6osbqkGOV07jUP6c7sa23yruL/MP/
-         PvvaISEbIJcwiOgZQEj+pCdlMpY598g9v7h+lpjoSRYbDQtzsfOcsDxuu+6bMqCRGOwX
-         4iAzKeGCSrchlHPqDnpyZQ7NtexcrLUUPSU7XWisGSrph402NGg7B3B2OsVaIF9xGicX
-         CEtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=fS+XTOKPP/A+4Ea3Vfvk2lusfIUrsBa+uJZOXKxOTBs=;
-        b=Yx4ex47yUmX2BnWX35pIBkLIws/51OKl5zUntq6BPVJf+16BcFOcxG4/CCxsZE1QkY
-         9gnF3pjTTlR1M6zXI7M+hTri+oLG4Hjmn6mQAYg53JCz8cGm9Nh/iJwNHSkI9HMUmgD3
-         lGn74w2MH1l9uUXd5pisTVVm27NmQUSGId5Q7ekrpn5rhkCBThWQ98YO5KL6zUzTnWSx
-         WZunY6tjBrSkcSflUKHU2+AnQ9Y2c2Jg5NBC0C1asyhUHMGo5oNEhFFbYww4TJ29ALai
-         86EoRzLZtNxOPMfYtWK/lD4rgUSJDxqAFQZdFqJfRKfIdE2M981AECxNdC+hDeUqGElb
-         xtTA==
-X-Gm-Message-State: AOAM530ts6Iii6r0MbZsRrxLdp0fT7k8w4Su+CR4MjuDrZtQh5qkS+h+
-        bIoDnjrq/aXoJj5EeIMK2+w=
-X-Google-Smtp-Source: ABdhPJwwWTURvjJ6ZonVIkYlcjFJ8ZdvWN6X+EzmB8O32dYuQDvMmXI9NMayJiB5K5hZhN3jBLnXaw==
-X-Received: by 2002:a17:90a:4204:: with SMTP id o4mr18366892pjg.199.1628220597080;
-        Thu, 05 Aug 2021 20:29:57 -0700 (PDT)
-Received: from [10.173.0.66] ([45.135.186.87])
-        by smtp.gmail.com with ESMTPSA id nr6sm962042pjb.39.2021.08.05.20.29.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Aug 2021 20:29:56 -0700 (PDT)
-Subject: Re: [BUG] power: supply: 88pm860x_battery: possible
- uninitialized-variable access in measure_vbatt()
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, "Jett.Zhou" <jtzhou@marvell.com>
-References: <e2080eb9-bbe2-5077-761d-b5594edb6006@gmail.com>
- <20210805174908.ctg6n5iwmg5izap3@earth.universe>
-From:   Tuo Li <islituo@gmail.com>
-Message-ID: <94bb8568-3f3b-b3af-c98f-9d9bf36528e1@gmail.com>
-Date:   Fri, 6 Aug 2021 11:29:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S233299AbhHFGnB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 02:43:01 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:53363 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230386AbhHFGnB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 02:43:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628232165; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=d+wULbWjBRllkEa5XIMxDJfmrRItDoUDZncVMJPdisU=;
+ b=jf62UsVVwMOVC/L7tRf2Wz8oKChBDGMzKmaJhxeL+PYKVaQONNYEBShQ4vxQnUq81d6J7S0N
+ IPZ+z+WG0fdfM5Bk05M0+kiUesJnsgFgeBcWfSay55J+P0ZaYGfMFGG1drERX0LwHvFoX2Ab
+ gRMU8sREmAqqpOgI5g83GjqfJlU=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 610cd9e48c78eaf808be871a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 06 Aug 2021 06:42:44
+ GMT
+Sender: sibis=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BFDA8C433D3; Fri,  6 Aug 2021 06:42:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 19E5BC433F1;
+        Fri,  6 Aug 2021 06:42:43 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20210805174908.ctg6n5iwmg5izap3@earth.universe>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 06 Aug 2021 12:12:42 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     bjorn.andersson@linaro.org, mka@chromium.org, robh+dt@kernel.org,
+        viresh.kumar@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dianders@chromium.org, tdas@codeaurora.org
+Subject: Re: [PATCH 2/4] cpufreq: qcom: Re-arrange register offsets to support
+ per core L3 DCVS
+In-Reply-To: <CAE-0n53b2M7hAw=NnUDW1_EG2N-521K=URQHmARH0DmLf7hwhA@mail.gmail.com>
+References: <1627581885-32165-1-git-send-email-sibis@codeaurora.org>
+ <1627581885-32165-3-git-send-email-sibis@codeaurora.org>
+ <CAE-0n53cH749NC9JPqJvMZGBQf47AZ3qY66eoqk2CiQHvuumkg@mail.gmail.com>
+ <352d549f40dfa2ae51589649652d2e97@codeaurora.org>
+ <CAE-0n53b2M7hAw=NnUDW1_EG2N-521K=URQHmARH0DmLf7hwhA@mail.gmail.com>
+Message-ID: <da0ea9c90d93e9e5f94e9cdb426e304b@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for your feedback, and any further feedback about this problem 
-would be appreciated.
+On 2021-08-05 23:55, Stephen Boyd wrote:
+> Quoting Sibi Sankar (2021-08-05 10:47:20)
+>> Stephen,
+>> 
+>> Thanks for taking time to review
+>> the series.
+>> 
+>> On 2021-08-05 00:31, Stephen Boyd wrote:
+>> > Quoting Sibi Sankar (2021-07-29 11:04:43)
+>> >> Qualcomm SoCs (starting with SM8350) support per core voting for L3
+>> >> cache
+>> >> frequency.
+>> >
+>> > And the L3 cache frequency voting code can't be put into this cpufreq
+>> > driver?
+>> 
+>> Yes, it could have gone either into
+>> the cpufreq driver or l3 interconnect
+>> provider driver. Taniya/Odelu preferred
+>> the latter, because of the need for other
+>> clients to vote for l3 frequencies in
+>> the future.
+> 
+> What other clients are those?
 
-Best wishes,
-Tuo Li
+https://lore.kernel.org/lkml/20190814152116.GB28465@jcrouse1-lnx.qualcomm.com/
 
-On 2021/8/6 1:49, Sebastian Reichel wrote:
-> [adding Jett Zhou to Cc who introduced the driver]
->
-> Hi,
->
-> On Wed, Jul 28, 2021 at 06:24:12PM +0800, Li Tuo wrote:
->> Our static analysis tool finds a possible uninitialized-variable access in
->> the 88pm860x_battery driver in Linux 5.14.0-rc3:
->>
->> In calc_soc():
->> 369:    int ocv;
->> 376:    switch (state) {
->> 380:    case OCV_MODE_SLEEP:
->> 381:        ret = measure_vbatt(info, OCV_MODE_SLEEP, &ocv);
->>
->> In measure_vbatt(struct pm860x_battery_info *info, int state, int *data)
->> 176:    switch (state) {
->> 184:    case OCV_MODE_SLEEP:
->> 201:        *data = ((*data & 0xff) * 27 * 25) >> 9;
->>
->> If the variable state is OCV_MODE_SLEEP, the function measure_vbatt() is
->> called with the argument &ocv, and the corresponding parameter is data.
->> Thus *data is uninitialized but it is used at line 201.
->>
->> I am not quite sure whether this possible uninitialized-variable access is
->> real and how to fix it if it is real.
->> Any feedback would be appreciated, thanks!
->>
->> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> I suppose the code is suppose to look like this:
->
-> 201:        *data = ((ret & 0xff) * 27 * 25) >> 9;
->
-> Considering quite some code is spent before to setup ret, which is
-> never used. I don't have the device (nor datasheets) though. Considering
-> the driver has only seen trivial cleanups over the last 9 years, maybe
-> it can just be removed?
->
-> -- Sebastian
+GPU was supposed to be one of the
+other clients that would vote for
+l3.
 
+> 
+>> The other option to prevent
+>> register re-arrangement would involve
+>> using syscons from the cpufreq node, which
+>> really wasn't necessary since there
+>> wasn't any register overlap between the
+>> two drivers.
+> 
+> Let's not do that.
+> 
+>> 
+>> >
+>> >> So, re-arrange the cpufreq register offsets to allow access for
+>> >> the L3 interconnect to implement per core control. Also prevent
+>> >> binding
+>> >> breakage caused by register offset shuffling by using the
+>> >> SM8250/SM8350
+>> >> EPSS compatible.
+>> >>
+>> >> Fixes: 7dbd121a2c58 ("arm64: dts: qcom: sc7280: Add cpufreq hw node")
+>> >> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> >> ---
+>> >>  drivers/cpufreq/qcom-cpufreq-hw.c | 23 +++++++++++++++++++----
+>> >>  1 file changed, 19 insertions(+), 4 deletions(-)
+>> >>
+>> >> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> >> b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> >> index f86859bf76f1..74ef3b38343b 100644
+>> >> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> >> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> >> @@ -28,6 +28,7 @@ struct qcom_cpufreq_soc_data {
+>> >>         u32 reg_volt_lut;
+>> >>         u32 reg_perf_state;
+>> >>         u8 lut_row_size;
+>> >> +       bool skip_enable;
+>> >>  };
+>> >>
+>> >>  struct qcom_cpufreq_data {
+>> >> @@ -257,19 +258,31 @@ static const struct qcom_cpufreq_soc_data
+>> >> qcom_soc_data = {
+>> >>         .reg_volt_lut = 0x114,
+>> >>         .reg_perf_state = 0x920,
+>> >>         .lut_row_size = 32,
+>> >> +       .skip_enable = false,
+>> >>  };
+>> >>
+>> >>  static const struct qcom_cpufreq_soc_data epss_soc_data = {
+>> >> +       .reg_freq_lut = 0x0,
+>> >> +       .reg_volt_lut = 0x100,
+>> >> +       .reg_perf_state = 0x220,
+>> >> +       .lut_row_size = 4,
+>> >> +       .skip_enable = true,
+>> >> +};
+>> >> +
+>> >> +static const struct qcom_cpufreq_soc_data epss_sm8250_soc_data = {
+>> >>         .reg_enable = 0x0,
+>> >>         .reg_freq_lut = 0x100,
+>> >>         .reg_volt_lut = 0x200,
+>> >>         .reg_perf_state = 0x320,
+>> >>         .lut_row_size = 4,
+>> >> +       .skip_enable = false,
+>> >>  };
+>> >>
+>> >>  static const struct of_device_id qcom_cpufreq_hw_match[] = {
+>> >>         { .compatible = "qcom,cpufreq-hw", .data = &qcom_soc_data },
+>> >>         { .compatible = "qcom,cpufreq-epss", .data = &epss_soc_data },
+>> >> +       { .compatible = "qcom,sm8250-cpufreq-epss", .data =
+>> >> &epss_sm8250_soc_data },
+>> >> +       { .compatible = "qcom,sm8350-cpufreq-epss", .data =
+>> >> &epss_sm8250_soc_data },
+>> >>         {}
+>> >>  };
+>> >>  MODULE_DEVICE_TABLE(of, qcom_cpufreq_hw_match);
+>> >> @@ -334,10 +347,12 @@ static int qcom_cpufreq_hw_cpu_init(struct
+>> >> cpufreq_policy *policy)
+>> >>         data->res = res;
+>> >>
+>> >>         /* HW should be in enabled state to proceed */
+>> >
+>> > It looks odd that we're no longer making sure that the clk domain is
+>> > enabled when we probe the driver. Why is that OK?
+>> 
+>> On newer EPSS hw it's no longer
+>> required to perform the additional
+>> hw enable check. IIRC we don't do
+>> that on corresponding downstream
+>> kernels as well.
+> 
+> It's fairly clear that we no longer perform the additional check. The
+> question is why that's OK.
+
+Taniya probably would know more
+about the history behind the change.
+I'll dig up more info regarding ^^
+and update the thread.
+
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
