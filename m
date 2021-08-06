@@ -2,72 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBF03E2D63
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 17:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117A53E2D6A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 17:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242767AbhHFPOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 11:14:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:34680 "EHLO foss.arm.com"
+        id S234937AbhHFPQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 11:16:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234841AbhHFPOU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Aug 2021 11:14:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C96DF1042;
-        Fri,  6 Aug 2021 08:14:03 -0700 (PDT)
-Received: from [10.57.9.90] (unknown [10.57.9.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F3773F66F;
-        Fri,  6 Aug 2021 08:13:59 -0700 (PDT)
-Subject: Re: [PATCH v3] PM: EM: Increase energy calculation precision
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Chris Redpath <Chris.Redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, segall@google.com,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        CCj.Yeh@mediatek.com
-References: <20210803102744.23654-1-lukasz.luba@arm.com>
- <4e6b02fb-b421-860b-4a07-ed6cccdc1570@arm.com>
- <CAJZ5v0hgpM+ErHMTYLFFasvn=Ptc0MyaaFn=HSxOcGcDcBwMVg@mail.gmail.com>
- <c23f8fac-4515-5891-0778-18e65eeb7087@arm.com>
- <CAJZ5v0iB_vbbqzee6HSoLbVwVBWMmpvHWLZ_5_neWWqXr1JqoQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <fca3c5a9-a756-da87-698a-584effec8488@arm.com>
-Date:   Fri, 6 Aug 2021 16:13:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232091AbhHFPQj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Aug 2021 11:16:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 726586113C;
+        Fri,  6 Aug 2021 15:16:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628262983;
+        bh=5EQVQZE7KCLf8QCR8UMxWlsi5KRF1bSRTflymQ2CGzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FFBOiFC1omFG4oeN/9vAb3em/q/pCUjst1ywNCt5zTl3jm4NUEhYj6VCJXw2udaGS
+         wfjSRioecHGRD6ZC32wQ+k3w4wpaGu037rFQQMuRRy3xJbYbGGileo0qlRdImKF0LH
+         VCLKdG4Mi/Hz47OdEfjR/9ZAh/rxekt3fF3zxmNM=
+Date:   Fri, 6 Aug 2021 17:16:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     psodagud@codeaurora.org
+Cc:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: sleep: core: Avoid setting power.must_resume to false
+Message-ID: <YQ1SRbBrcKl2Vt9f@kroah.com>
+References: <1627313074-436260-1-git-send-email-psodagud@codeaurora.org>
+ <YQl6Bnjrnypbsz/s@kroah.com>
+ <0fe9a873ca77293151a61f64d355895f@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0iB_vbbqzee6HSoLbVwVBWMmpvHWLZ_5_neWWqXr1JqoQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fe9a873ca77293151a61f64d355895f@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Aug 06, 2021 at 08:07:08AM -0700, psodagud@codeaurora.org wrote:
+> On 2021-08-03 10:16, Greg KH wrote:
+> > On Mon, Jul 26, 2021 at 08:24:34AM -0700, Prasad Sodagudi wrote:
+> > > There are variables(power.may_skip_resume and dev->power.must_resume)
+> > > and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices
+> > > after
+> > > a system wide suspend transition.
+> > > 
+> > > Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
+> > > its "noirq" and "early" resume callbacks to be skipped if the device
+> > > can be left in suspend after a system-wide transition into the working
+> > > state. PM core determines that the driver's "noirq" and "early" resume
+> > > callbacks should be skipped or not with dev_pm_skip_resume()
+> > > function by
+> > > checking power.may_skip_resume variable.
+> > > 
+> > > power.must_resume variable is getting set to false in
+> > > __device_suspend()
+> > > function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
+> > > dev->power.usage_count variables. This is leading to failure to call
+> > > resume handler for some of the devices suspended in early suspend
+> > > phase.
+> > > So check device's DPM_FLAG_MAY_SKIP_RESUME flag before
+> > > setting power.must_resume variable.
+> > > 
+> > > Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
+> > > ---
+> > >  drivers/base/power/main.c | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > > index d568772..8eebc4d 100644
+> > > --- a/drivers/base/power/main.c
+> > > +++ b/drivers/base/power/main.c
+> > > @@ -1642,7 +1642,11 @@ static int __device_suspend(struct device
+> > > *dev, pm_message_t state, bool async)
+> > >  	}
+> > > 
+> > >  	dev->power.may_skip_resume = true;
+> > > -	dev->power.must_resume = false;
+> > > +	if ((atomic_read(&dev->power.usage_count) <= 1) &&
+> > > +			(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
+> > 
+> > What is preventing that atomic value from changing _right_ after you
+> > just read this?
+> > 
+> > and very odd indentation, checkpatch didn't complain about this?
+> Sure. I will fix indentation problem once Rafael reviewed this patch.
 
+Neither of us can take this as-is, so why wait?
 
-On 8/6/21 2:32 PM, Rafael J. Wysocki wrote:
-
-[snip]
-
-> 
-> OK, applied as 5.15 material.
-
-Thank you Rafael!
-
-> 
-> However, since I'm on vacation next week, it will show up in
-> linux-next after -rc6.
-
-No worries. Have a nice vacation!
