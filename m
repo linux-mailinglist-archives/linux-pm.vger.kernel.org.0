@@ -2,154 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0DA3E2B1B
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 15:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C29E3E2B56
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 15:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343898AbhHFNEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 09:04:33 -0400
-Received: from mga11.intel.com ([192.55.52.93]:11073 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343883AbhHFNEb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Aug 2021 09:04:31 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="211261951"
-X-IronPort-AV: E=Sophos;i="5.84,300,1620716400"; 
-   d="scan'208";a="211261951"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2021 06:04:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,300,1620716400"; 
-   d="scan'208";a="504017952"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.174]) ([10.237.72.174])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Aug 2021 06:04:09 -0700
-Subject: [PATCH V5] scsi: ufshcd: Fix device links when BOOT WLUN fails to
- probe
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-References: <20210716114408.17320-1-adrian.hunter@intel.com>
- <20210716114408.17320-3-adrian.hunter@intel.com>
- <c78aac34-5c55-f6b6-3450-d5c3f09781fa@intel.com>
- <35b2bd0f-5766-debd-2b4c-c642a85df367@acm.org>
- <yq1czqrguch.fsf@ca-mkp.ca.oracle.com>
- <739a1abf-fca0-458e-5c8c-1d6ed90b56e0@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <a1c9bac8-b560-b662-f0aa-58c7e000cbbd@intel.com>
-Date:   Fri, 6 Aug 2021 16:04:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        id S1344029AbhHFN2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 09:28:19 -0400
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:38850 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244222AbhHFN2T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 09:28:19 -0400
+Received: by mail-oo1-f45.google.com with SMTP id y23-20020a4a62570000b029028727ffa408so227737oog.5;
+        Fri, 06 Aug 2021 06:28:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EwaYK5QiZh6IiR8aTLx1BO+CiD1SZPRY4ebE2HYvd5w=;
+        b=rXw6Xn6KVZk1RG46K0OljhAN5g0F9XEQRw4NBzN1xaohumgOV53BgZaoLbuCAQl5NY
+         nN1YW/Q8YUDK/m+UxkfTWs/WbJFLzbMh0H2cBgIVczWc6SvGk61Buo71/9EzH1Qo2A6G
+         g/qQGcDjsMU4U0qKI5awhLw8mf341L0ifaXPh+KUhKQ/Ou1tpanBtFOU03NMv8nY9h7s
+         pb4tjFJ5ww8CcMLdk3hkoIZ7vk3LjdSdYbfNCGNbgb3lB4nXYTpyDICR8zJoVs0UC051
+         Ul5USHh9SUCLLVGd3gxJi/2Ow6fpmX8zIVVtyVBnXVYtAGgMKa7aMvoB0rnjShX5FFfv
+         YBYw==
+X-Gm-Message-State: AOAM533nu467rQlEQvGVdgi69q/ioKmXUCMxMrvYbYSdXhzzrDIEHLXd
+        K3GTs+YqfWCrec7TK3m/iPql4qgTgr3KLqtCOh8=
+X-Google-Smtp-Source: ABdhPJw8ttVHgV+Oa1vdqUFxeArJcAXGBlUr5m9E2BY5sUKwfIHc7iA/RV3QbuZaxEP4hiE/yJfn+K/21JgqJ/gxR0c=
+X-Received: by 2002:a4a:5dc6:: with SMTP id w189mr6803193ooa.1.1628256482887;
+ Fri, 06 Aug 2021 06:28:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <739a1abf-fca0-458e-5c8c-1d6ed90b56e0@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210731195034.979084-1-dmitry.baryshkov@linaro.org>
+ <20210731195034.979084-2-dmitry.baryshkov@linaro.org> <CAJZ5v0gWD8WSQU4oPMSdZFM9VpNpc4TAFJ=_wQLB60XFxw-Ciw@mail.gmail.com>
+ <CAA8EJpq5DB2a=C+eo_S7QgVMzpm=mvUcC4DkWwGoKQ1g8trmgA@mail.gmail.com>
+In-Reply-To: <CAA8EJpq5DB2a=C+eo_S7QgVMzpm=mvUcC4DkWwGoKQ1g8trmgA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 6 Aug 2021 15:27:51 +0200
+Message-ID: <CAJZ5v0gOZkXp3X3hNTAtyuFoBA2xUMX274qv=yaj0jYD8XRgBw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] PM: runtime: add devm_pm_runtime_enable helper
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Managed device links are deleted by device_del(). However it is possible to
-add a device link to a consumer before device_add(), and then discovering
-an error prevents the device from being used. In that case normally
-references to the device would be dropped and the device would be deleted.
-However the device link holds a reference to the device, so the device link
-and device remain indefinitely (unless the supplier is deleted).
+On Wed, Aug 4, 2021 at 11:03 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Wed, 4 Aug 2021 at 21:07, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Sat, Jul 31, 2021 at 9:50 PM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > A typical code pattern for pm_runtime_enable() call is to call it in the
+> > > _probe function and to call pm_runtime_disable() both from _probe error
+> > > path and from _remove function. For some drivers the whole remove
+> > > function would consist of the call to pm_remove_disable().
+> > >
+> > > Add helper function to replace this bolierplate piece of code. Calling
+> > > devm_pm_runtime_enable() removes the need for calling
+> > > pm_runtime_disable() both in the probe()'s error path and in the
+> > > remove() function.
+> > >
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  drivers/base/power/runtime.c | 17 +++++++++++++++++
+> > >  include/linux/pm_runtime.h   |  4 ++++
+> > >  2 files changed, 21 insertions(+)
+> > >
+> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > index 8a66eaf731e4..ec94049442b9 100644
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -1447,6 +1447,23 @@ void pm_runtime_enable(struct device *dev)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(pm_runtime_enable);
+> > >
+> > > +static void pm_runtime_disable_action(void *data)
+> > > +{
+> > > +       pm_runtime_disable(data);
+> > > +}
+> > > +
+> > > +/**
+> > > + * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
+> > > + * @dev: Device to handle.
+> > > + */
+> > > +int devm_pm_runtime_enable(struct device *dev)
+> > > +{
+> > > +       pm_runtime_enable(dev);
+> > > +
+> > > +       return devm_add_action_or_reset(dev, pm_runtime_disable_action, dev);
+> >
+> > When exactly is pm_runtime_disable_action() going to run by this rule?
+> >  When the device goes away or when the driver is unbound from it?
+>
+> When the driver is unbound (either because probe() returns an error or
+> because __device_release_driver() is being called).
+> This corresponds to a typical call to pm_runtime_disable() from the
+> probe()'s error path or in the remove() callback.
 
-For UFSHCD, if a LUN fails to probe (e.g. absent BOOT WLUN), the device
-will not have been registered but can still have a device link holding a
-reference to the device. The unwanted device link will prevent runtime
-suspend indefinitely.
+OK, so
 
-Amend device link removal to accept removal of a link with an unregistered
-consumer device (suggested by Rafael), and fix UFSHCD by explicitly
-deleting the device link when SCSI destroys the SCSI device.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Fixes: b294ff3e34490 ("scsi: ufs: core: Enable power management for wlun")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
----
-
-
-Patch "driver core: Prevent warning when removing a device link from
-unregistered consumer" is already in Linus' tree:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e64daad660a0c9ace3acdc57099fffe5ed83f977
-
-
-Changes in V5:
-
-  Rebase on 5.15/scsi-staging
-
-
-
- drivers/base/core.c       |  2 ++
- drivers/scsi/ufs/ufshcd.c | 23 +++++++++++++++++++++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index cadcade65825..9badd7f7fe62 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -884,6 +884,8 @@ static void device_link_put_kref(struct device_link *link)
- {
- 	if (link->flags & DL_FLAG_STATELESS)
- 		kref_put(&link->kref, __device_link_del);
-+	else if (!device_is_registered(link->consumer))
-+		__device_link_del(&link->kref);
- 	else
- 		WARN(1, "Unable to drop a managed device link reference\n");
- }
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 6c263e94144b..9f72698ff597 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5028,6 +5028,7 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
- static void ufshcd_slave_destroy(struct scsi_device *sdev)
- {
- 	struct ufs_hba *hba;
-+	unsigned long flags;
- 
- 	hba = shost_priv(sdev->host);
- 
-@@ -5035,11 +5036,29 @@ static void ufshcd_slave_destroy(struct scsi_device *sdev)
- 
- 	/* Drop the reference as it won't be needed anymore */
- 	if (ufshcd_scsi_to_upiu_lun(sdev->lun) == UFS_UPIU_UFS_DEVICE_WLUN) {
--		unsigned long flags;
--
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 		hba->sdev_ufs_device = NULL;
- 		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+	} else if (hba->sdev_ufs_device) {
-+		struct device *supplier = NULL;
-+
-+		/* Ensure UFS Device WLUN exists and does not disappear */
-+		spin_lock_irqsave(hba->host->host_lock, flags);
-+		if (hba->sdev_ufs_device) {
-+			supplier = &hba->sdev_ufs_device->sdev_gendev;
-+			get_device(supplier);
-+		}
-+		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+
-+		if (supplier) {
-+			/*
-+			 * If a LUN fails to probe (e.g. absent BOOT WLUN), the
-+			 * device will not have been registered but can still
-+			 * have a device link holding a reference to the device.
-+			 */
-+			device_link_remove(&sdev->sdev_gendev, supplier);
-+			put_device(supplier);
-+		}
- 	}
- }
- 
--- 
-2.17.1
-
+for the PM-runtime framework changes in this series (patches [1-2/3])
+and please feel free to route them in through whatever tree is most
+suitable (or let me know if you want me to pick them up).
