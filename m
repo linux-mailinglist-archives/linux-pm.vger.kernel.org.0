@@ -2,125 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 852DF3E2702
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 11:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE153E274E
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Aug 2021 11:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244335AbhHFJQZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Aug 2021 05:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
+        id S231553AbhHFJc4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Aug 2021 05:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244240AbhHFJQZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 05:16:25 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B4DC061799
-        for <linux-pm@vger.kernel.org>; Fri,  6 Aug 2021 02:16:09 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id f42so16597812lfv.7
-        for <linux-pm@vger.kernel.org>; Fri, 06 Aug 2021 02:16:09 -0700 (PDT)
+        with ESMTP id S244420AbhHFJc4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Aug 2021 05:32:56 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA357C06179B
+        for <linux-pm@vger.kernel.org>; Fri,  6 Aug 2021 02:32:40 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id k24so4826378vsg.9
+        for <linux-pm@vger.kernel.org>; Fri, 06 Aug 2021 02:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k9jZjKgObn+5x57XzHmaAGp51SrNq/b1Up96pA7QkbY=;
-        b=avasmMSEYZFhfXf4gy12LlgRjQ13oOmPw2HFy45ehyD045bWE2Rrf7cv8e4hawgJ+W
-         ypCXjAu/bfZ3KJfMYd4WH4R3Qf72rLsZDzmcoo/LSnBJi61ZxWOVMXlZ/KyhrnmxW2CE
-         PmungY8HryQtmkDzEaJNW2ho+WksmFvYZ+QdFwCMNr2sDbyU/r4Y34WUNT6nGJxu0OP3
-         BlKscyRZliZdRj1iRuIJde0JbN5H32irl5A8e1kYOnGhKTxLqXBIJAxhpvgucFExCXus
-         U67GxFqzXwqBJiCmfZl4tD6VZxlcRgp9IYVLaEb6GyVOR6be9z/uU71fQrpKvEIr7H15
-         bkCQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hG7ad08wIaDvmaneskOxS98xzOuakO0shjMfqcJhf/0=;
+        b=hMu6wdmsIydv5n9UioqGMhi3NdWSB/gd114kREAS+K9yylruPgSJndFExuw8ozfeGO
+         GdtAjzm8rBOTxnmkHvqbu7kIjYoIlQVlFMcJu6gZwcMsEnTfAgWtR5bOCu8ULScBXQJJ
+         VcVw53SwVoCGiEySclc/39VPhrTmkILFH5aNXYcXbTYJcXc84+XPdsNGt04gU3EXEknv
+         987It+qBSY6m5j60ObfZ1xEocKkPVA3EMrVmgLpNOp2DRns9mVHCVAA1aakeRdTw5JoO
+         Z4/7cRQBAk228VIIWMTo+Wx8N4HchVa6WWVCZYoGpKP+CER9LgvANl5oVUC3K7A2/y04
+         5OPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k9jZjKgObn+5x57XzHmaAGp51SrNq/b1Up96pA7QkbY=;
-        b=WG0HcUoqtW9BT3FvYZ1JzZ6aV4/NZQ8Tn+xceNBRw7LLcUKk52CIjatAm9Xd0Htg73
-         blWkIGQxcejtcLb04wUsceJ0X09zP8NBYDhtmOXM3p083kj3ojRGHb2i0HvM8aTq6Xxb
-         Qo5qFotqt/9tjLkeJ7rBR8vtF4exu2+x6qZMDGpFgqmQJRxcUbOUQK3T8WRDSESePqHK
-         DRwc3pizx0m57DPheZVh9g0u98N2Y2aMe57Fu4756wzZYc6bl2UyyRSyQJZulQsunisT
-         bH/GHHFmacW55eSWr9Jx1WAs0MIjN78i+KbneENY+Br+xd24Frg1cEYJpJW745jOcSKh
-         RdQg==
-X-Gm-Message-State: AOAM531na/C5I/a7dKaHd2w6Affz2eHFYAitQFCvpYuVpsDjYZIGf2RI
-        Gwoo80ql0380PlggsxZhpZt0pg==
-X-Google-Smtp-Source: ABdhPJzpxbT7zHt60wJqeJOlFUeADILZg48RcUWs/ywH7VxTjJSLgO5CdNUM7oDqo1hll8VuTrHMag==
-X-Received: by 2002:a05:6512:3b94:: with SMTP id g20mr7120669lfv.0.1628241367796;
-        Fri, 06 Aug 2021 02:16:07 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id r25sm633918ljc.118.2021.08.06.02.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Aug 2021 02:16:07 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v2] mfd/cpuidle: ux500: Rename driver symbol
-Date:   Fri,  6 Aug 2021 11:14:04 +0200
-Message-Id: <20210806091404.3521189-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hG7ad08wIaDvmaneskOxS98xzOuakO0shjMfqcJhf/0=;
+        b=eKGMSPJarNKl3/4h6ENeIDJmkmMsFIaQfBpK0/+7wm7CI163opHjvt7JqdgCUDeuL/
+         flK/fC2LUX0frv1Xzf8MJ+a2lLOnBwCwh+tzxiPl5LLM02WHWSvodigOnr5LTtconvfi
+         OanRuFd6kcPU4sZvUqJ+Fq/vBl+4oIy+MfjhD58zdc9wG1sVIdOehZ9K/8tnGJQenJF6
+         D7xRJ9+Ha4++Rbfn9K6gvyNGm9ttl/C3PQyMjOJJPVxkuiMMzMV7QVCa6JODQoPg5zPB
+         TmApjhfibaeW7NltXoBvdPaea9+m0NLya/aNaTi2GLi5z3mBcpsd1VZbCdfRFXvkQJ/B
+         HMfw==
+X-Gm-Message-State: AOAM531kAoWpZPdYjlQt9DIHiWfIvk5d8UXQhxJP8Db2/y2Q8kvINYhA
+        gyWCHAWV0Auh05y9k5JtuYkVjCppJ/31tiwklEayFA==
+X-Google-Smtp-Source: ABdhPJynKc93n6ipIB8hMXdJbwfMvreyYjrVW9QsyI+/iIksqcj/6XpbRPGThpwYkyD6MPj4X1c9cqd6zqik6xU3kn8=
+X-Received: by 2002:a67:7c14:: with SMTP id x20mr8347304vsc.42.1628242359627;
+ Fri, 06 Aug 2021 02:32:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org> <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
+In-Reply-To: <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 6 Aug 2021 11:32:03 +0200
+Message-ID: <CAPDyKFrebwt5=S7hqXvcqRvt+-EXLcVmRSRZt1uPf-9n7_pRDg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
+ set default perf state
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The PRCMU driver defines this as a DT node but there are no bindings
-for it and it needs no data from the device tree. Just spawn the
-device directly in the same way as the watchdog.
+On Wed, 4 Aug 2021 at 12:58, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+> Some devices within power domains with performance states do not
+> support DVFS, but still need to vote on a default/static state
+> while they are active. They can express this using the 'required-opps'
+> property in device tree, which points to the phandle of the OPP
+> supported by the corresponding power-domains.
+>
+> Add support to parse this information from DT and then set the
+> specified performance state during attach and drop it on detach.
+> runtime suspend/resume callbacks already have logic to drop/set
+> the vote as needed and should take care of dropping the default
+> perf state vote on runtime suspend and restore it back on runtime
+> resume.
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  drivers/base/power/domain.c | 28 ++++++++++++++++++++++++++--
+>  include/linux/pm_domain.h   |  1 +
+>  2 files changed, 27 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index a934c67..b9b5a9b 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2598,6 +2598,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
+>
+>         dev_dbg(dev, "removing from PM domain %s\n", pd->name);
+>
+> +       /* Drop the default performance state */
+> +       if (dev_gpd_data(dev)->default_pstate) {
+> +               dev_pm_genpd_set_performance_state(dev, 0);
+> +               dev_gpd_data(dev)->default_pstate = 0;
+> +       }
+> +
+>         for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
+>                 ret = genpd_remove_device(pd, dev);
+>                 if (ret != -EAGAIN)
+> @@ -2637,6 +2643,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>  {
+>         struct of_phandle_args pd_args;
+>         struct generic_pm_domain *pd;
+> +       struct device_node *np;
+> +       int pstate;
+>         int ret;
+>
+>         ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
+> @@ -2675,10 +2683,26 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                 genpd_unlock(pd);
+>         }
+>
+> -       if (ret)
+> +       if (ret) {
+>                 genpd_remove_device(pd, dev);
+> +               return -EPROBE_DEFER;
+> +       }
+> +
+> +       /* Set the default performance state */
+> +       np = dev->of_node;
+> +       if (of_parse_phandle(np, "required-opps", index)) {
 
-Name it "db8500-cpuidle" since there are no ambitions to support any
-more SoCs than this one.
+Looks like Viresh thinks it's a good idea to drop the error print in
+of_get_required_opp_performance_state() when there is no
+"required-opps" specifier.
 
-This rids this annoying boot message:
-[    0.032610] cpuidle-dbx500: Failed to locate of_node [id: 0]
+Would you mind folding in a patch for that in the series, so this code
+can be simplified according to our earlier discussions?
 
-However I think the device still spawns and work just fine, despite
-not finding a device tree node.
+> +               pstate = of_get_required_opp_performance_state(np, index);
+> +               if (pstate < 0) {
+> +                       ret = pstate;
+> +                       dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
+> +                               pd->name, ret);
+> +               } else {
+> +                       dev_pm_genpd_set_performance_state(dev, pstate);
+> +                       dev_gpd_data(dev)->default_pstate = pstate;
+> +               }
+> +       }
+>
+> -       return ret ? -EPROBE_DEFER : 1;
+> +       return ret ? ret : 1;
+>  }
+>
+>  /**
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 21a0577..67017c9 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -198,6 +198,7 @@ struct generic_pm_domain_data {
+>         struct notifier_block *power_nb;
+>         int cpu;
+>         unsigned int performance_state;
+> +       unsigned int default_pstate;
+>         unsigned int rpm_pstate;
+>         ktime_t next_wakeup;
+>         void *data;
 
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: linux-pm@vger.kernel.org
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Use MFD_CELL_NAME()
-- Collect Daniel's ACK.
----
- drivers/cpuidle/cpuidle-ux500.c | 2 +-
- drivers/mfd/db8500-prcmu.c      | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Other than the above, this looks good to me!
 
-diff --git a/drivers/cpuidle/cpuidle-ux500.c b/drivers/cpuidle/cpuidle-ux500.c
-index a2d34be17a09..f7d778580e9b 100644
---- a/drivers/cpuidle/cpuidle-ux500.c
-+++ b/drivers/cpuidle/cpuidle-ux500.c
-@@ -117,7 +117,7 @@ static int dbx500_cpuidle_probe(struct platform_device *pdev)
- 
- static struct platform_driver dbx500_cpuidle_plat_driver = {
- 	.driver = {
--		.name = "cpuidle-dbx500",
-+		.name = "db8500-cpuidle",
- 	},
- 	.probe = dbx500_cpuidle_probe,
- };
-diff --git a/drivers/mfd/db8500-prcmu.c b/drivers/mfd/db8500-prcmu.c
-index 75049cf38832..2f4ba91c404a 100644
---- a/drivers/mfd/db8500-prcmu.c
-+++ b/drivers/mfd/db8500-prcmu.c
-@@ -2951,14 +2951,13 @@ static const struct mfd_cell common_prcmu_devs[] = {
- 		.pdata_size = sizeof(db8500_wdt_pdata),
- 		.id = -1,
- 	},
-+	MFD_CELL_NAME("db8500-cpuidle"),
- };
- 
- static const struct mfd_cell db8500_prcmu_devs[] = {
- 	MFD_CELL_OF("db8500-prcmu-regulators", NULL,
- 		    &db8500_regulators, sizeof(db8500_regulators), 0,
- 		    "stericsson,db8500-prcmu-regulator"),
--	MFD_CELL_OF("cpuidle-dbx500",
--		    NULL, NULL, 0, 0, "stericsson,cpuidle-dbx500"),
- 	MFD_CELL_OF("db8500-thermal",
- 		    NULL, NULL, 0, 0, "stericsson,db8500-thermal"),
- };
--- 
-2.31.1
-
+Kind regards
+Uffe
