@@ -2,157 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CABD43E37EA
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Aug 2021 04:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A033E3B4B
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Aug 2021 18:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbhHHCCp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Aug 2021 22:02:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:39796 "EHLO mga14.intel.com"
+        id S231674AbhHHQK5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Aug 2021 12:10:57 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:48923 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229882AbhHHCCo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 7 Aug 2021 22:02:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10069"; a="214269109"
-X-IronPort-AV: E=Sophos;i="5.84,304,1620716400"; 
-   d="scan'208";a="214269109"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2021 19:02:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,304,1620716400"; 
-   d="scan'208";a="504616672"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2021 19:02:24 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mCY8u-000IKY-B0; Sun, 08 Aug 2021 02:02:24 +0000
-Date:   Sun, 08 Aug 2021 10:02:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 228706e6d423b9209b3f55f36cb34a95e7f1a153
-Message-ID: <610f3b1d.xEyyZPUgcwkMKDZk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S231493AbhHHQK4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 8 Aug 2021 12:10:56 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628439037; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=TUtG/7v31EHpzEaehYylLLyrFo1D7qT/4XBaE92PLG8=; b=ukROZYvvwaBz2hjfh7LZ8gcfUCLzZ7PNIby0ujgY+iv84Waij2Nc7LBRHdxfcebTTgNiuWpB
+ qiEMoz4EuXDBpMD5rfuK1+2JXLSkQmTYZK0gTqA/GIiqK7t/yQdoEdGjSGyjFumsgDPPF4wN
+ CeSNdk/tiqCY18pE2NS321IaBNY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 611001fcb4dfc4b0efad5e37 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 08 Aug 2021 16:10:36
+ GMT
+Sender: psodagud=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 30EC4C4323A; Sun,  8 Aug 2021 16:10:36 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from th-lint-038.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: psodagud)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CA2BEC433D3;
+        Sun,  8 Aug 2021 16:10:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CA2BEC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=psodagud@codeaurora.org
+From:   Prasad Sodagudi <psodagud@codeaurora.org>
+To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net
+Cc:     len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, pavel@ucw.cz, psodagud@codeaurora.org
+Subject: [PATCH v2] PM: sleep: core: Avoid setting power.must_resume to false
+Date:   Sun,  8 Aug 2021 09:10:27 -0700
+Message-Id: <1628439027-345496-1-git-send-email-psodagud@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <YQ4hj+blYxHdUl79@kroah.com>
+References: <YQ4hj+blYxHdUl79@kroah.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 228706e6d423b9209b3f55f36cb34a95e7f1a153  Merge branch 'pm-cpufreq' into bleeding-edge
+There are variables(power.may_skip_resume and dev->power.must_resume)
+and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices after
+a system wide suspend transition.
 
-elapsed time: 2139m
+Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
+its "noirq" and "early" resume callbacks to be skipped if the device
+can be left in suspend after a system-wide transition into the working
+state. PM core determines that the driver's "noirq" and "early" resume
+callbacks should be skipped or not with dev_pm_skip_resume() function by
+checking power.may_skip_resume variable.
 
-configs tested: 98
-configs skipped: 4
+power.must_resume variable is getting set to false in __device_suspend()
+function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
+dev->power.usage_count variables. In problematic scenario, where
+all the devices in the suspend_late stage are successful and some
+device can fail to suspend in suspend_noirq phase. So some devices
+successfully suspended in suspend_late stage are not getting chance
+to execute __device_suspend_noirq() to set dev->power.must_resume
+variable to true and not getting resumed in early_resume phase.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
+setting power.must_resume variable in __device_suspend function.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210804
-arc                     haps_hs_smp_defconfig
-arm                          pcm027_defconfig
-arm                         lpc32xx_defconfig
-sh                           sh2007_defconfig
-mips                        nlm_xlp_defconfig
-sh                          rsk7264_defconfig
-arm                       imx_v6_v7_defconfig
-ia64                        generic_defconfig
-powerpc                         wii_defconfig
-mips                        bcm47xx_defconfig
-sh                            migor_defconfig
-m68k                        m5307c3_defconfig
-powerpc                        fsp2_defconfig
-arm                      footbridge_defconfig
-arm                           spitz_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc               mpc834x_itxgp_defconfig
-sh                        edosk7760_defconfig
-arm                           tegra_defconfig
-microblaze                          defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210805
-i386                 randconfig-a004-20210805
-i386                 randconfig-a002-20210805
-i386                 randconfig-a006-20210805
-i386                 randconfig-a003-20210805
-i386                 randconfig-a001-20210805
-x86_64               randconfig-a012-20210804
-x86_64               randconfig-a016-20210804
-x86_64               randconfig-a011-20210804
-x86_64               randconfig-a013-20210804
-x86_64               randconfig-a014-20210804
-x86_64               randconfig-a015-20210804
-i386                 randconfig-a012-20210806
-i386                 randconfig-a011-20210806
-i386                 randconfig-a015-20210806
-i386                 randconfig-a013-20210806
-i386                 randconfig-a014-20210806
-i386                 randconfig-a016-20210806
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c001-20210806
-x86_64               randconfig-a002-20210804
-x86_64               randconfig-a006-20210804
-x86_64               randconfig-a004-20210804
-x86_64               randconfig-a003-20210804
-x86_64               randconfig-a001-20210804
-x86_64               randconfig-a005-20210804
-
+Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
+Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/base/power/main.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index d568772..9ee6987 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -1642,7 +1642,11 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+ 	}
+ 
+ 	dev->power.may_skip_resume = true;
+-	dev->power.must_resume = false;
++	if ((atomic_read(&dev->power.usage_count) <= 1) &&
++	     (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
++		dev->power.must_resume = false;
++	else
++		dev->power.must_resume = true;
+ 
+ 	dpm_watchdog_set(&wd, dev);
+ 	device_lock(dev);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
