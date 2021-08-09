@@ -2,70 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DCC3E5017
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 01:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E563A3E502D
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 01:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbhHIXrI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Aug 2021 19:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
+        id S233194AbhHIX5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Aug 2021 19:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232717AbhHIXrI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 19:47:08 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05D1C0613D3;
-        Mon,  9 Aug 2021 16:46:46 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id m9so26180114ljp.7;
-        Mon, 09 Aug 2021 16:46:46 -0700 (PDT)
+        with ESMTP id S231127AbhHIX5Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 19:57:16 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ED3C0613D3;
+        Mon,  9 Aug 2021 16:56:55 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id n17so12318304lft.13;
+        Mon, 09 Aug 2021 16:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xiApi7G+VnFykOPRYjvLWbpQLitx31kBAvkrkjs55U4=;
-        b=hj6cjc6vEf6M1bmBMLNtoe6SXdhi0jjQcbBuoAfWb3QrIfBuZowJ/IBymxQw8deQmb
-         FNxfrP6mBH6cLjLTIbp3JOIA51xXIb99Xd9u61kZV7kJgXepwSBSdGQ8oP9unEBplgAZ
-         LxD2vTliuGcvvkHR3MPuteQ3QVkeViStJK09Vk+uEVsg9ZfY7a9U+xisUucy02KOJvzw
-         THeyJei7nvht+d/r3Y6iqf8745DrwHTeLEd/4qChHyuf33aLAr4doh5pJjZopC1eEA1K
-         J8CM8i8O8zXsewXV8iU21Mr7bhpj/U2uw+P3yx9RmvttEnf/VCuWlqxt/AzS7KtlFO00
-         hM4w==
+        bh=wP2bayLmU+3K18X+SE8nuL9RPrBb9v8I/h7ZwghcHyc=;
+        b=jtBA8OX0piq6L6d+cUYv0qXKlJ00wiGPTtae34YO3dHTzchRsCEFwOseq8Y1d7IdEu
+         ivWSUigsp+2RNnEuh9vO1dYGKD28mbADWlLE5HkfznL/9mgglj7MkgwGer/rA6uNBJtG
+         oJ/p2NO+NwWWTgiFcSVE0J2wA0eoCTDbgyraSFkuEI4+KpKl4USYxPsiGvvijQDC9vTv
+         sFp/Z1eTvS0UW5GsCd8hflafQq91rUce8FJeGbnADp2yQT3qRwy+0QtZFdoVsPjhLb/2
+         roXSLb7yqKAEkb8UIx44+8iMsOtbB07YWAt/UpplU4J0x0eY/ejvXo4ras9YCKzvGxWD
+         QXPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=xiApi7G+VnFykOPRYjvLWbpQLitx31kBAvkrkjs55U4=;
-        b=mQlOJSgo6KLp/6v89mnlocGrE48LTq5s4L0XM52nWd0yRgT/KCHrMuW0oGAC6ACZzG
-         r62eYn0RFNf18D9GAxu6hx2IZzeSe2S0MD2hl4HLqonAk2tB9Q2nus3R0i99FSGyLdnv
-         9V6PIIPZ3T7dbjFKulmydK+Jv9FCTsutKIGE+EUIQVwNb2biQWwmgkF9MLm1rx8hHObK
-         oA3X1KN4trK/zb9sHHe9qcTmNE0R6xMoJT/GqOyLg0vYmtkKKqHyA4ILlpsxHESo2jkD
-         79Y7zs1GGShnn++Syv5CCy3IVOSEpWCLalTu6A4YqyoPoFqUM3S1+jLeYYDtxww/H93S
-         ad3A==
-X-Gm-Message-State: AOAM532/kZkZOoA6dYZPcUmAQPKQkuNlRvLSJY1RHVCYjRD97eCzTT6u
-        U6SwM/Td++ExYpuRYHSS5WE=
-X-Google-Smtp-Source: ABdhPJx5RIySknB2pRdg4ziQQNjaT4cVz4nC+C+8kafzn7EsIH2nl0aRqJ2NE3O26Edu6kPTlrLkog==
-X-Received: by 2002:a2e:b532:: with SMTP id z18mr6586507ljm.309.1628552805027;
-        Mon, 09 Aug 2021 16:46:45 -0700 (PDT)
+        bh=wP2bayLmU+3K18X+SE8nuL9RPrBb9v8I/h7ZwghcHyc=;
+        b=nqomB4jprrczmnE1wIPV9WEYSCUz29O4FBSsWsjk/RC2x1jLPEp8dkd0IA/8DZW1Gp
+         T/blx2tczY93Q4jaFZDSGMxcegdFYBtlVT4LIxZ14uc39Bo8Ex4qHDCCK48tKsEBh7nY
+         zHAwkrMPlMD0/ptvRRzvBXUQzHUPZm7msblkr1A/HmCBT6LLHf5sIYon82xoa4oC/VP7
+         04aCk2t/D/3Fr+lWYD5DH2tu+5Z4XaIRua3jQPd/tT6VaBIQuKfr97SCQxZqVDR1TQzl
+         FB7Uxbuv4GlgLHYL7SKK8pP9ywQhs5CHygF2Q2Ms1dEI6V41g5UmvSeL0tp7C49YNHMp
+         gV6A==
+X-Gm-Message-State: AOAM533lWDSD7lahH+faH7phO/aIDUzwneGiF93jBHH3bzs/s8zBlqUa
+        DUvUj5vB8TcJHqVsssuN93OMrA5fDR0=
+X-Google-Smtp-Source: ABdhPJxbznr9B+GvA4Ip6tbIHh9Mks/IMZ0ezhi85KAPmj3cZfiR6/1w6WjYu+I0ZOYSZ3svtawpiw==
+X-Received: by 2002:a19:7017:: with SMTP id h23mr20523075lfc.532.1628553413356;
+        Mon, 09 Aug 2021 16:56:53 -0700 (PDT)
 Received: from [192.168.2.145] (46-138-117-53.dynamic.spd-mgts.ru. [46.138.117.53])
-        by smtp.googlemail.com with ESMTPSA id q23sm1872117lfp.169.2021.08.09.16.46.44
+        by smtp.googlemail.com with ESMTPSA id o8sm951395lft.85.2021.08.09.16.56.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Aug 2021 16:46:44 -0700 (PDT)
-Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
- set default perf state
+        Mon, 09 Aug 2021 16:56:52 -0700 (PDT)
+Subject: Re: [PATCH v7 02/37] soc/tegra: pmc: Implement attach_dev() of power
+ domain drivers
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20210701232728.23591-1-digetx@gmail.com>
+ <20210701232728.23591-3-digetx@gmail.com>
+ <CAPDyKFrtWDYJo_NjS8306Z9ykbg7XZ55jC9hKEBMGkcrx1=4kQ@mail.gmail.com>
+ <1034458d-78e0-5036-e278-6fee5d0d75ac@gmail.com>
+ <CAPDyKFoafAk72Kw6X7626Niduaii0V5VM4dGSWmq+e3JTh7VRg@mail.gmail.com>
+ <a5dfdf59-f5b5-d28e-6b02-b0c860ba8d80@gmail.com>
+ <CAPDyKFq+ExjbGrN=yUUXPKfN_fGrwY6EAYn9a6VUFFU_VjhC=g@mail.gmail.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rajendra Nayak <rnayak@codeaurora.org>, ulf.hansson@linaro.org,
-        bjorn.andersson@linaro.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net
-References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org>
- <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
- <f58e631d-67a7-4981-ce59-6a4772b44564@gmail.com>
- <c43ddc6b-32ca-433d-76f2-901cb594eaf1@gmail.com>
-Message-ID: <9588f01d-1cb6-7ca3-eb41-74259f1678f6@gmail.com>
-Date:   Tue, 10 Aug 2021 02:46:43 +0300
+Message-ID: <6741262b-386b-7635-fd42-ebd4f877fddd@gmail.com>
+Date:   Tue, 10 Aug 2021 02:56:52 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <c43ddc6b-32ca-433d-76f2-901cb594eaf1@gmail.com>
+In-Reply-To: <CAPDyKFq+ExjbGrN=yUUXPKfN_fGrwY6EAYn9a6VUFFU_VjhC=g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,63 +80,139 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-10.08.2021 01:44, Dmitry Osipenko пишет:
-> 10.08.2021 01:26, Dmitry Osipenko пишет:
->> 04.08.2021 13:58, Rajendra Nayak пишет:
->>> @@ -2637,6 +2643,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->>>  {
->>>  	struct of_phandle_args pd_args;
->>>  	struct generic_pm_domain *pd;
->>> +	struct device_node *np;
->>> +	int pstate;
->>>  	int ret;
->>>  
->>>  	ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
->>> @@ -2675,10 +2683,26 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->>>  		genpd_unlock(pd);
->>>  	}
->>>  
->>> -	if (ret)
->>> +	if (ret) {
->>>  		genpd_remove_device(pd, dev);
->>> +		return -EPROBE_DEFER;
->>> +	}
->>> +
->>> +	/* Set the default performance state */
->>> +	np = dev->of_node;
->>> +	if (of_parse_phandle(np, "required-opps", index)) {
-
-The OF node returned by of_parse_phandle() must be put.
-
->>> +		pstate = of_get_required_opp_performance_state(np, index);
-
-If you have more than one power domain, then this will override the
-pstate which was set for a previous domain. This code doesn't feel solid
-to me, at least a clarifying comment is needed about how it's supposed
-to work.
-
->>> +		if (pstate < 0) {
->>> +			ret = pstate;
->>> +			dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
->>> +				pd->name, ret);
->>> +		} else {
->>> +			dev_pm_genpd_set_performance_state(dev, pstate);
+09.08.2021 17:15, Ulf Hansson пишет:
+>> We did that in a previous versions of this series where drivers were
+>> calling devm_tegra_core_dev_init_opp_table() helper during the probe to
+>> initialize performance state of the domain. Moving OPP state
+>> initialization into central place made drivers cleaner by removing the
+>> boilerplate code.
+> I am not against doing this in a central place, like $subject patch
+> suggests. As a matter of fact, it makes perfect sense to me.
 > 
-> Where is error handling?
+> However, what I am concerned about, is that you require to use genpd
+> internal data structures to do it. I think we should try to avoid
+> that.
+
+Alright, what do you think about this:
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index a934c679e6ce..5faed62075e9 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2669,12 +2669,37 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 	dev->pm_domain->detach = genpd_dev_pm_detach;
+ 	dev->pm_domain->sync = genpd_dev_pm_sync;
+ 
++	if (pd->default_performance_state) {
++		unsigned int default_pstate;
++
++		ret = pd->default_performance_state(pd, dev);
++		if (ret < 0) {
++			dev_err(dev, "failed to get default performance state for PM domain %s: %d\n",
++				pd->name, ret);
++			goto out;
++		}
++
++		default_pstate = ret;
++
++		if (power_on) {
++			ret = dev_pm_genpd_set_performance_state(dev, default_pstate);
++			if (ret) {
++				dev_err(dev, "failed to set default performance state %u for PM domain %s: %d\n",
++					default_pstate, pd->name, ret);
++				goto out;
++			}
++		} else {
++			dev_gpd_data(dev)->rpm_pstate = default_pstate;
++		}
++	}
++
+ 	if (power_on) {
+ 		genpd_lock(pd);
+ 		ret = genpd_power_on(pd, 0);
+ 		genpd_unlock(pd);
+ 	}
+ 
++out:
+ 	if (ret)
+ 		genpd_remove_device(pd, dev);
+ 
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 81d1f019fa0c..9efb55f52462 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -518,15 +518,14 @@ static const char * const tegra_emc_compats[] = {
+  * We retrieve clock rate of the attached device and initialize domain's
+  * performance state in accordance to the clock rate.
+  */
+-static int tegra_pmc_pd_attach_dev(struct generic_pm_domain *genpd,
+-				   struct device *dev)
++static int tegra_pmc_genpd_default_perf_state(struct generic_pm_domain *genpd,
++					      struct device *dev)
+ {
+-	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
+ 	struct opp_table *opp_table, *pd_opp_table;
+ 	struct generic_pm_domain *core_genpd;
+ 	struct dev_pm_opp *opp, *pd_opp;
+-	unsigned long rate, state;
+ 	struct gpd_link *link;
++	unsigned long rate;
+ 	struct clk *clk;
+ 	u32 hw_version;
+ 	int ret;
+@@ -633,8 +632,7 @@ static int tegra_pmc_pd_attach_dev(struct generic_pm_domain *genpd,
+ 	 * RPM-resume of the device.  This means that drivers don't need to
+ 	 * explicitly initialize performance state.
+ 	 */
+-	state = pm_genpd_opp_to_performance_state(&core_genpd->dev, pd_opp);
+-	gpd_data->rpm_pstate = state;
++	ret = pm_genpd_opp_to_performance_state(&core_genpd->dev, pd_opp);
+ 	dev_pm_opp_put(pd_opp);
+ 
+ put_pd_opp_table:
+@@ -1383,7 +1381,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
+ 
+ 	pg->id = id;
+ 	pg->genpd.name = np->name;
+-	pg->genpd.attach_dev = tegra_pmc_pd_attach_dev;
++	pg->genpd.default_performance_state = tegra_pmc_genpd_default_perf_state;
+ 	pg->genpd.power_off = tegra_genpd_power_off;
+ 	pg->genpd.power_on = tegra_genpd_power_on;
+ 	pg->pmc = pmc;
+@@ -1500,7 +1498,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ 		return -ENOMEM;
+ 
+ 	genpd->name = np->name;
+-	genpd->attach_dev = tegra_pmc_pd_attach_dev;
++	genpd->default_performance_state = tegra_pmc_genpd_default_perf_state;
+ 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+ 	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
+ 
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 21a0577305ef..cd4867817ca5 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -143,6 +143,8 @@ struct generic_pm_domain {
+ 			  struct device *dev);
+ 	void (*detach_dev)(struct generic_pm_domain *domain,
+ 			   struct device *dev);
++	int (*default_performance_state)(struct generic_pm_domain *domain,
++					 struct device *dev);
+ 	unsigned int flags;		/* Bit field of configs for genpd */
+ 	struct genpd_power_state *states;
+ 	void (*free_states)(struct genpd_power_state *states,
+
+>> I can revert back to the previous variant, although this variant works
+>> well too.
+> I looked at that code and in that path we end up calling
+> dev_pm_opp_set_rate(), after it has initialized the opp table for the
+> device.
 > 
->>> +			dev_gpd_data(dev)->default_pstate = pstate;
->>> +		}
->>> +	}
->>
->> Why performance state is set after genpd_power_on()?
+> Rather than doing the OF parsing above to find out the current state
+> for the device, why can't you just call dev_pm_opp_set_rate() to
+> initialize a proper vote instead?
+> 
 
-Should set_performance_state() be invoked when power_on=false?
+For some devices clock rate is either preset by bootloader, or by clk driver, or by assigned-clocks in a device-tree. And then I don't see what's the difference in comparison to initialization for the current rate.
 
-I assume it should be:
-
-if (power_on) {
-	dev_pm_genpd_set_performance_state(dev, pstate);
-	dev_gpd_data(dev)->default_pstate = pstate;
-} else {
-	dev_gpd_data(dev)->rpm_pstate = pstate;
-}
+For some devices, like memory controller, we can't just change the clock rate because it's a complex procedure and some boards will use fixed rate, but the power vote still must be initialized.
