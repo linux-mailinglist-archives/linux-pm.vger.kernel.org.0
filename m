@@ -2,97 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1863E3E9C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Aug 2021 06:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D843E4468
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Aug 2021 13:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbhHIECu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Aug 2021 00:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhHIECs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 00:02:48 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F138C06175F
-        for <linux-pm@vger.kernel.org>; Sun,  8 Aug 2021 21:02:27 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id u21-20020a17090a8915b02901782c36f543so23570226pjn.4
-        for <linux-pm@vger.kernel.org>; Sun, 08 Aug 2021 21:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AldQEcLU4Bne5/QfBPbwiq3+rOKR/0YKFPDI7z5qWzM=;
-        b=FNfaXUcgjFapEPeJS/coW9Sgr5hM560Gq/sxITmJcpGadngAZXX0UrhUGGU4LJ3z5e
-         WsiaIFTg8RBGVlLiLcQ0H12+LAgs2Xmpt611wcg4qoqe0enkc/yl/hh1M1AVdeC+iadI
-         WxPQ8siqRHbQ4LXP0NYHNPaddy7Wkj+1fXK0rdxxKi8McucbLzPUE8GciicXCZLCLpJx
-         kfPz5G+1GI+kSahLi64QjvW0PeDDFdSm4Nroq8KB1f0fy4O5m9NHeJSMks06IJDhwQen
-         R6rpEXZzxHsFCwKr+TUJhs1uyd8PBeWNIZWuaLdDC2FanVNzRmxO7BX2kDUQOrQGpTNQ
-         6LZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=AldQEcLU4Bne5/QfBPbwiq3+rOKR/0YKFPDI7z5qWzM=;
-        b=KYDqI8eN6CwwvNIAFi1iZrJVdIFEqDeEw9WhsY6Nb0YY6CZMssoLyCPHi2ZXjTMTmH
-         Z91imAncRUVMZ8a6JcJfB4gHCji6bTOyFGFZvsldL394qCUYugcisl7LPT0KKAkML+FG
-         DuJtIDYKqWV5C7g88MSGNUP1CVIvCEuTtOa7vU/dSraJI9dOzuIn/+yb9NQrygSVq+oS
-         4T9c0bGNrayB4zGP+5n5jPHwy+cPMxfKE5izwsyemlrVEtKbknAdu/ndg6ks1KzxbFlY
-         edybiX2MTONWPYgVuJsTTy34cH5htPoSFQwCyLqISGHmyBhb4CSinsbYDAQhYk6Cbe2N
-         FVfw==
-X-Gm-Message-State: AOAM531SgDuhjgEmh5Mbc3cUAEno8++cN5Ezc7F5T18PhHh0AIENKCe5
-        LDvFYi+wvtmfVF8GGoKU7tSTiQ==
-X-Google-Smtp-Source: ABdhPJyNZaMk+UNxY9w3x6CwfBpmJrtsgAchn1G88YMHV5tQRbbeqfL5YxG6ZzhKrjgpcBWfvlubqA==
-X-Received: by 2002:a17:90a:bd18:: with SMTP id y24mr34173222pjr.83.1628481746909;
-        Sun, 08 Aug 2021 21:02:26 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id j15sm18005156pfh.194.2021.08.08.21.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Aug 2021 21:02:26 -0700 (PDT)
-Date:   Mon, 9 Aug 2021 09:32:24 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Konstantin Porotchkin <kostap@marvell.com>,
-        Nadav Haklai <nadavh@marvell.com>, Ken Ma <make@marvell.com>,
-        Victor Gu <xigu@marvell.com>, Evan Wang <xswang@marvell.com>,
-        Benjamin Huang <gdhuang@marvell.com>,
-        Igal Liberman <igall@marvell.com>,
-        Jason Hung <jhung@globalscaletechnologies.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
-        Philip Soares <philips@netisense.com>,
-        linux-pm@vger.kernel.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, nnet <nnet@fastmail.fm>
-Subject: Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz
- variant
-Message-ID: <20210809040224.j2rvopmmqda3utc5@vireshk-i7>
-References: <20210630135942.29730-1-kabel@kernel.org>
- <20210630225601.6372-1-kabel@kernel.org>
- <20210702163035.nmb5pniwpqtmaz4b@pali>
- <20210708143451.4htvdop4zvjufrq6@pali>
- <20210715193321.z3vswz6x4rzvw2fd@pali>
- <20210808193026.xuyaufi5wqnrcakd@pali>
+        id S234112AbhHILJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Aug 2021 07:09:24 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:16215 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233632AbhHILJX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Aug 2021 07:09:23 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628507343; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=iVGYr8BvmR6QN2P1ZSMux09dzqkFjV+3tlj3x4l+kQ8=; b=R3BDJWPured8aLTvLzYCURa5+qgx3mogCioS5irPC1RqRhsabfBUwdAHWElJzZNsgHqXXAJR
+ oinqBrt+Ob77IX2B2g+my0sbNHXllnMB9CBKZRoIf5uKWPnw2LMiW7LPBc/1qMwiR/cY98a4
+ I2pDeLev/Rq/Si4e0IUmWs6qjVA=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61110cc98c78eaf8089be40a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 09 Aug 2021 11:08:57
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 41654C433F1; Mon,  9 Aug 2021 11:08:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.100] (unknown [49.207.220.239])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4BFD7C433D3;
+        Mon,  9 Aug 2021 11:08:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4BFD7C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
+ set default perf state
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org>
+ <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
+ <CAPDyKFrebwt5=S7hqXvcqRvt+-EXLcVmRSRZt1uPf-9n7_pRDg@mail.gmail.com>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <2afd0fac-ed28-c090-a345-3fd4284b4125@codeaurora.org>
+Date:   Mon, 9 Aug 2021 16:38:50 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210808193026.xuyaufi5wqnrcakd@pali>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAPDyKFrebwt5=S7hqXvcqRvt+-EXLcVmRSRZt1uPf-9n7_pRDg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-08-21, 21:30, Pali Rohár wrote:
-> Gentle reminder. This is really serious issue. Could you please look at it?
-> 
-> Adding more MarvellEmbeddedProcessors people to the loop: Evan, Benjamin an Igal
 
-We can not hang forever for something that breaks stuff. Applied this for 5.14
-now.
+
+On 8/6/2021 3:02 PM, Ulf Hansson wrote:
+> On Wed, 4 Aug 2021 at 12:58, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>>
+>> Some devices within power domains with performance states do not
+>> support DVFS, but still need to vote on a default/static state
+>> while they are active. They can express this using the 'required-opps'
+>> property in device tree, which points to the phandle of the OPP
+>> supported by the corresponding power-domains.
+>>
+>> Add support to parse this information from DT and then set the
+>> specified performance state during attach and drop it on detach.
+>> runtime suspend/resume callbacks already have logic to drop/set
+>> the vote as needed and should take care of dropping the default
+>> perf state vote on runtime suspend and restore it back on runtime
+>> resume.
+>>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> ---
+>>   drivers/base/power/domain.c | 28 ++++++++++++++++++++++++++--
+>>   include/linux/pm_domain.h   |  1 +
+>>   2 files changed, 27 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index a934c67..b9b5a9b 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -2598,6 +2598,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
+>>
+>>          dev_dbg(dev, "removing from PM domain %s\n", pd->name);
+>>
+>> +       /* Drop the default performance state */
+>> +       if (dev_gpd_data(dev)->default_pstate) {
+>> +               dev_pm_genpd_set_performance_state(dev, 0);
+>> +               dev_gpd_data(dev)->default_pstate = 0;
+>> +       }
+>> +
+>>          for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
+>>                  ret = genpd_remove_device(pd, dev);
+>>                  if (ret != -EAGAIN)
+>> @@ -2637,6 +2643,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>>   {
+>>          struct of_phandle_args pd_args;
+>>          struct generic_pm_domain *pd;
+>> +       struct device_node *np;
+>> +       int pstate;
+>>          int ret;
+>>
+>>          ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
+>> @@ -2675,10 +2683,26 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>>                  genpd_unlock(pd);
+>>          }
+>>
+>> -       if (ret)
+>> +       if (ret) {
+>>                  genpd_remove_device(pd, dev);
+>> +               return -EPROBE_DEFER;
+>> +       }
+>> +
+>> +       /* Set the default performance state */
+>> +       np = dev->of_node;
+>> +       if (of_parse_phandle(np, "required-opps", index)) {
+> 
+> Looks like Viresh thinks it's a good idea to drop the error print in
+> of_get_required_opp_performance_state() when there is no
+> "required-opps" specifier.
+> 
+> Would you mind folding in a patch for that in the series, so this code
+> can be simplified according to our earlier discussions?
+
+Sure, I can do that, apart from the error print, the function currently also
+returns a -EINVAL in case of the missing 'required-opps', are we suggesting
+we change that to not return an error also?
+
+Since this is completely optional in the device node, we would want the function to
+ideally not return error and only do so in case 'required-opps' exists and the
+translation to performance state fails.
+I am not sure that's the behavior we expect in case of 'required-opps' in the OPP
+tables also, Viresh?
+
+> 
+>> +               pstate = of_get_required_opp_performance_state(np, index);
+>> +               if (pstate < 0) {
+>> +                       ret = pstate;
+>> +                       dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
+>> +                               pd->name, ret);
+>> +               } else {
+>> +                       dev_pm_genpd_set_performance_state(dev, pstate);
+>> +                       dev_gpd_data(dev)->default_pstate = pstate;
+>> +               }
+>> +       }
+>>
+>> -       return ret ? -EPROBE_DEFER : 1;
+>> +       return ret ? ret : 1;
+>>   }
+>>
+>>   /**
+>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+>> index 21a0577..67017c9 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -198,6 +198,7 @@ struct generic_pm_domain_data {
+>>          struct notifier_block *power_nb;
+>>          int cpu;
+>>          unsigned int performance_state;
+>> +       unsigned int default_pstate;
+>>          unsigned int rpm_pstate;
+>>          ktime_t next_wakeup;
+>>          void *data;
+> 
+> Other than the above, this looks good to me!
+> 
+> Kind regards
+> Uffe
+> 
 
 -- 
-viresh
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
