@@ -2,168 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845F73E484F
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Aug 2021 17:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEE83E4A0C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Aug 2021 18:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbhHIPGj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Aug 2021 11:06:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48504 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234421AbhHIPGj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 11:06:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628521578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h1BLMAe5YsS6aV52djyyk9gFPnC1TzrPzUp84kLJoV0=;
-        b=Wg8EDEK8UXB4fxQebAsDYncRFJ3qKb5DVkl1kmhbzg7T/eSIEamz1bm26Im6JXwe/UAk6X
-        l84WHYw7dW0uNjE/MECa8MaAr3G/MD5ARGWLSJOo4NXpdQKCAjSaQU0PhK0nrjGxcn9aHu
-        3vAe81ccvLccYQULLoErnNNNmltxksA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-127-Z8sYkhpdPyClvbJlCJcjAg-1; Mon, 09 Aug 2021 11:06:16 -0400
-X-MC-Unique: Z8sYkhpdPyClvbJlCJcjAg-1
-Received: by mail-ed1-f70.google.com with SMTP id k14-20020a05640212ceb02903bc50d32c17so9106069edx.12
-        for <linux-pm@vger.kernel.org>; Mon, 09 Aug 2021 08:06:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=h1BLMAe5YsS6aV52djyyk9gFPnC1TzrPzUp84kLJoV0=;
-        b=rHBFvdpWvQMRVXrh4n4J4LIzyyNB8zBbUNsGzXdpzFwECYldvR0S4DiP18oHJTc3kq
-         h1S3LQFaKPbTyVftqKekFRIIfqby2upqai5gIBnbZQBuARybztbYX/CM67qBhTYxlKEh
-         5shgOxAl49snJ1rSEsAsBvLJ5uiCmUd9QSvVYddhhhheaTUyQrz5l4DBuPZXFYY7BNNl
-         xggxuPELMKTub6MpYczsCbdN+Ao4OF6sW9XGLZ7Tpv5wFV1Nfr/vqOeECGYZdDXUPJye
-         SLyeGO/u1pFKTrsfqPXMLBothGG28Tpq3pWfbHewYwPnaG9Lf3HwmbVadUgyhaRjbE+0
-         3b8g==
-X-Gm-Message-State: AOAM5326+uyElXg8p0jd2gw+7CnoisV10QXY1eWANnz5Qsxbo2e/JL7y
-        ye0XqMsqbg5SJN+UljJH4bjD9B8KkmNlqsJYdO/9bryE7mmlY9vraW83QpaZ/FSo8MhmgzSm7AO
-        1ItW71zP4f/luItiqrUs=
-X-Received: by 2002:a05:6402:74f:: with SMTP id p15mr29862212edy.195.1628521575646;
-        Mon, 09 Aug 2021 08:06:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxGmpo104C/++Uzh5sWBJQXUsPCqYIp8y6Z6w9HHNDWz0IZVjnC6MCm5jA2s+22Kof9tzWCMw==
-X-Received: by 2002:a05:6402:74f:: with SMTP id p15mr29862184edy.195.1628521575511;
-        Mon, 09 Aug 2021 08:06:15 -0700 (PDT)
-Received: from x1.localdomain ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id j5sm8144667edv.10.2021.08.09.08.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Aug 2021 08:06:14 -0700 (PDT)
-Subject: Re: AMD laptops defaulting to S3 instead of S0ix (was amd_sfh)
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Liang, Prike" <Prike.Liang@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>
-Cc:     "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Stephen MacNeil <macneisj@gmail.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-acpi <linux-acpi@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>
-References: <CALWF37bJU92DxcD4VhBxbS+X+EUv-UW2oY-ogwMyNyGAnn=0WA@mail.gmail.com>
- <309288ec-27ac-0321-dce5-e9ba2bbab7ed@redhat.com>
- <BN9PR12MB505286920B83D4C71AC81E3CA0EE9@BN9PR12MB5052.namprd12.prod.outlook.com>
- <e11ce06f-8a5d-345a-5113-dd8802e9a0b9@amd.com>
- <eab56fac-175b-29b7-f66b-398b6477f390@redhat.com>
- <20210803002018.GH2563957@hr-amd>
- <BYAPR12MB3238DC9B9BBDF9B21C430646FBF09@BYAPR12MB3238.namprd12.prod.outlook.com>
- <f258d6c6-d022-4ab9-a4c9-d38122f3b8e4@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <9a28cfd1-9756-0e87-68a6-b30e6e23beee@redhat.com>
-Date:   Mon, 9 Aug 2021 17:06:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233041AbhHIQdD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Aug 2021 12:33:03 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:21648 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233658AbhHIQck (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 12:32:40 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628526739; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ScGC4Wqnf3TqhG3D0GIJYJnUSJr2rvY61q05HrRAX9w=;
+ b=H9N68soig5d/rDUY0O/p5lywgUQJKucNaKPqkNTCIeA7EtdkDGXFMC9pN48/NVk9iuw0aZHP
+ mEDmEZBVnxFglMq/EkZ++ZCH/azrnUq1k+8kTUiaeRgc7gkA9ST4iqBAZkZHv/hdAdwxRtyP
+ wGA2AIayoaMdD1VzEFHfK0hpXDM=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61115873f746c298d974aec5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 09 Aug 2021 16:31:47
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 80F2BC43144; Mon,  9 Aug 2021 16:31:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D1736C43460;
+        Mon,  9 Aug 2021 16:31:46 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <f258d6c6-d022-4ab9-a4c9-d38122f3b8e4@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 09 Aug 2021 22:01:46 +0530
+From:   okukatla@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sibi Sankar <sibis@codeaurora.org>, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, evgreen@google.com,
+        georgi.djakov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [V4 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
+ SC7280
+In-Reply-To: <CAE-0n51btkt9ehEFrm+WucP90ZufKw1PEQqzNGVDRy51jByXkw@mail.gmail.com>
+References: <1624015734-16778-1-git-send-email-okukatla@codeaurora.org>
+ <1624015734-16778-2-git-send-email-okukatla@codeaurora.org>
+ <CAE-0n51btkt9ehEFrm+WucP90ZufKw1PEQqzNGVDRy51jByXkw@mail.gmail.com>
+Message-ID: <618b3a664b3556718a867e815e94578f@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Thanks Stephen for the reviews!
 
-On 8/9/21 4:39 PM, Limonciello, Mario wrote:
-> This thread is a mix of top posting and bottom posting and confusing to follow.  Some inline comments below.
+On 2021-07-09 04:52, Stephen Boyd wrote:
+> Quoting Odelu Kukatla (2021-06-18 04:28:52)
+>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+>> SoCs.
+>> 
+>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+>> ---
+>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  9 
+>> ++++++++-
+>>  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 
+>> +++++++++-
+>>  2 files changed, 17 insertions(+), 2 deletions(-)
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml 
+>> b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>> index d6a95c3..9f67c8e 100644
+>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>> @@ -18,12 +18,19 @@ properties:
+>>    compatible:
+>>      enum:
+>>        - qcom,sc7180-osm-l3
+>> +      - qcom,sc7280-epss-l3
+>>        - qcom,sdm845-osm-l3
+>>        - qcom,sm8150-osm-l3
+>>        - qcom,sm8250-epss-l3
+>> 
+>>    reg:
+>> -    maxItems: 1
+>> +    minItems: 1
+>> +    maxItems: 4
 > 
-> On 8/2/2021 21:42, Liang, Prike wrote:
->> [Public]
->>
->> In the AMD existing S0ix system seems needn't monitor SFH idle state, meanwhile SFH is powered by S5 rail and the rail keeps ON when SOC is in S3/S0i3 state. Regards to SFH stop working after S3 resume maybe caused by power rail and device context tear down during S3 suspend. In addition, we also need implement SFH suspend callback in amd-sfh-hid like as other vendor.
+> Can we base this on the compatible string so that only sc7280-epss-l3
+> requires 4 items? and then the others require 1 reg property?
 > 
-> I think PM callbacks for SFH will resolve the issue at hand and are the most likely the correct solution in this instance.
-
-Ack.
-
-> 
->>> -----Original Message-----
->>> From: Huang, Ray <Ray.Huang@amd.com>
->>> Sent: Tuesday, August 3, 2021 8:20 AM
->>> To: Hans de Goede <hdegoede@redhat.com>
->>> Cc: Natikar, Basavaraj <Basavaraj.Natikar@amd.com>; Shah, Nehal-
->>> bakulchandra <Nehal-bakulchandra.Shah@amd.com>; Stephen MacNeil
->>> <macneisj@gmail.com>; Limonciello, Mario <Mario.Limonciello@amd.com>;
->>> Rafael J . Wysocki <rjw@rjwysocki.net>; Linux PM <linux-
->>> pm@vger.kernel.org>; linux-acpi <linux-acpi@vger.kernel.org>; Natikar,
->>> Basavaraj <Basavaraj.Natikar@amd.com>; S-k, Shyam-sundar <Shyam-
->>> sundar.S-k@amd.com>; Liang, Prike <Prike.Liang@amd.com>
->>> Subject: Re: AMD laptops defaulting to S3 instead of S0ix (was amd_sfh)
->>>
->>> + Prike
->>>
->>> On Mon, Aug 02, 2021 at 01:43:01PM +0200, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> On 8/2/21 11:34 AM, Basavaraj Natikar wrote:
->>>>> On 8/1/2021 5:15 PM, Shah, Nehal-bakulchandra wrote:
->>>>>> [AMD Official Use Only]
->>>>>>
->>>>>> Adding few more folks
->>>>>>
->>>>>> -----Original Message-----
->>>>>> From: Hans de Goede <hdegoede@redhat.com>
->>>>>> Sent: Sunday, August 1, 2021 3:17 PM
->>>>>> To: Stephen MacNeil <macneisj@gmail.com>; Limonciello, Mario
->>>>>> <Mario.Limonciello@amd.com>; Rafael J . Wysocki <rjw@rjwysocki.net>
->>>>>> Cc: Linux PM <linux-pm@vger.kernel.org>; linux-acpi
->>>>>> <linux-acpi@vger.kernel.org>
->>>>>> Subject: AMD laptops defaulting to S3 instead of S0ix (was amd_sfh)
->>>>>>
->>>>>> Hi Rafael, Mario,
->>>>>>
->>>>>> Stephen is having an issue with a recent AMD laptop (a Lenovo Ideapad
->>> model) where Linux defaults to using S3/deep suspend instead of S0ix/s2idle.
->>>>>
->>>>> Hi Hans, Et al.
->>>>>
->>>>> Looks like the Lenovo platform Stephen MacNeil is using does not support
->>> the S2Idle as the FADT flags as not set (looking at the output of the script).
-> 
-> So Lenovo intends the platform to be S3 this means.
-
-Ok.
-
->>>>
->>>> I believe it does, if it would not support s2idle at all, then this
->>>> would not be offered as an option in the "cat /sys/power/mem_sleep"
->>> output.
-> 
-> I don't believe this to be correct.  s2idle is always added.
-> 
-> You can look at the comments (and in the code) to see this:
-> https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c173d3639d4772966/kernel/power/suspend.c#L174
-
-Ah, I was under the impression that s2idle would only be shown and be supported 
-by the kernel when advertised as supported by the ACPI tables. So this is all just
-my bad and in this case it indeed seems the intention of the vendor (Lenovo)
-that the laptop will use S3 for suspend.
-
-Sorry for the noise / confusion.
-
-Regards,
-
-Hans
-
+Done, Addressing this in new revision.
+>> +    items:
+>> +      - description: OSM clock domain-0 base address and size
+>> +      - description: OSM clock domain-1 base address and size
+>> +      - description: OSM clock domain-2 base address and size
+>> +      - description: OSM clock domain-3 base address and size
+>> 
+>>    clocks:
+>>      items:
