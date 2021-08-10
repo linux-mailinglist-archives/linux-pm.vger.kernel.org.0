@@ -2,107 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EA33E5C07
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 15:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9173E5C45
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 15:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241711AbhHJNnR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 09:43:17 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:57890 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbhHJNnK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 09:43:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628602968; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=TUtG/7v31EHpzEaehYylLLyrFo1D7qT/4XBaE92PLG8=; b=Kpa44sQ+DziklOTexIwpxib/6FNFseRUbPvqrVChjdRYtfa4x0rWXwjOuddO96bb1dnBP2fD
- YeKZvBST6AnbVvUyVpaAvLkdRjBt+xc8DQUT2LkWk7fdKm9ZjZz+x/tqrkuCBhV0dHynpKK9
- VOG68+PAjsKfvdsJSZ0gn3qzTNk=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 6112824076c3a9a172683ef5 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Aug 2021 13:42:24
- GMT
-Sender: psodagud=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 0BED8C4338A; Tue, 10 Aug 2021 13:42:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from th-lint-038.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: psodagud)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 25AA6C433D3;
-        Tue, 10 Aug 2021 13:42:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 25AA6C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=psodagud@codeaurora.org
-From:   Prasad Sodagudi <psodagud@codeaurora.org>
-To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net
-Cc:     len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, pavel@ucw.cz, psodagud@codeaurora.org
-Subject: [PATCH v2] PM: sleep: core: Avoid setting power.must_resume to false
-Date:   Tue, 10 Aug 2021 06:42:12 -0700
-Message-Id: <1628602932-246733-2-git-send-email-psodagud@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1628602932-246733-1-git-send-email-psodagud@codeaurora.org>
-References: <1628602932-246733-1-git-send-email-psodagud@codeaurora.org>
+        id S242012AbhHJNxv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 09:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242017AbhHJNxs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 09:53:48 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF2C06179B
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 06:53:26 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id c9so26362769wri.8
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 06:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KGQUuCBolB3utTNPACMz6iKuWRDIGgWJm/VpB8UjVfc=;
+        b=Lt1tyTHbI94Kgt8wK9nxBSF3jPgGselZKupAsXiBd6uILEZdcKhg5LYPO6QfrIiNvi
+         DWrV2wRXXA01ZHs26Vovn0Uojl4XIZZFox4wswtHZgW6Xuxv9jpzdV5pcfkzcnB8xjO1
+         TBhoaYhdFbcRFLb7zW+HVGuD9FiUQp4XHqAABpYgaKY4UU49KRmdSyW6Gl4SH0P13q5B
+         Y8wnQ6tNXvOlirXy8jU6Jnp8ImOSwA01aM1IFV5xhXKnjxp2c/EBgSwL8wXkddc1RRFa
+         eVi+aWY8EqcCcAi0Ux4F4hsXAxDQinpBrytVKz9rF1QrcnzQ3f3cxJ1deYdyTrUpm9FP
+         u/Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KGQUuCBolB3utTNPACMz6iKuWRDIGgWJm/VpB8UjVfc=;
+        b=E4upt/uOqeZeg+DjjZ1CRY6XUkNzeJh39ETQsRTChZFKwkypbiqeqJSXHFCmdFJ8KV
+         hE+Fl5hvaiMLFnOuubgG3ZmSCP5ZzhY7taXLUxPUnYWMo51BbOeoKD7mU3mSykV2d7aC
+         dSJYHIYGrTj23K16xwOcezETJHs/Ls6J/j7L9R4A8pUzCICFwGQVGHM7upGLt6MMpUK6
+         +0q8nK2Qwb95SReGshUtIfB1nKHNq0ufRVSyLJNAZ4ZMzSqmOKgRQ9wlThzGuTmQyk+6
+         Vv9zDmgQTMuF95V2Zpf8wZE0po2xAWt/uKx89Xm+z04nVAlSJX2nG4mLJuJJznRhR0OO
+         Yt1w==
+X-Gm-Message-State: AOAM532yord6ueX1poBFreFhQ0Dj7q24JLcXkdTuqavMUs7O136wGqJb
+        Y6JZ0MuJBz6J+feDVzRJqIVnrg==
+X-Google-Smtp-Source: ABdhPJyP5/KLF9l16H0O6iAMcu4TdoATOhVCPzOX8vMqts7ssz/9ljckqMeKlqZVUnJFhD3xwJoprg==
+X-Received: by 2002:a5d:660e:: with SMTP id n14mr13818163wru.346.1628603604443;
+        Tue, 10 Aug 2021 06:53:24 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e920:cedf:a082:9d02])
+        by smtp.gmail.com with ESMTPSA id 18sm3305981wmv.27.2021.08.10.06.53.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 06:53:24 -0700 (PDT)
+Date:   Tue, 10 Aug 2021 14:53:18 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
+Message-ID: <YRKEztjdIFU1J5/9@google.com>
+References: <cover.1628579170.git.viresh.kumar@linaro.org>
+ <YRJym+Vn4bbwQzzs@google.com>
+ <af06b333-3d8a-807c-9ccb-d491d6a54930@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af06b333-3d8a-807c-9ccb-d491d6a54930@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are variables(power.may_skip_resume and dev->power.must_resume)
-and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices after
-a system wide suspend transition.
+On Tuesday 10 Aug 2021 at 14:25:15 (+0100), Lukasz Luba wrote:
+> The way I see this is that the flag in cpufreq avoids
+> mistakes potentially made by driver developer. It will automaticaly
+> register the *simple* EM model via dev_pm_opp_of_register_em() on behalf
+> of drivers (which is already done manually by drivers). The developer
+> would just set the flag similarly to CPUFREQ_IS_COOLING_DEV and be sure
+> it will register at the right time. Well tested flag approach should be
+> safer, easier to understand, maintain.
 
-Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
-its "noirq" and "early" resume callbacks to be skipped if the device
-can be left in suspend after a system-wide transition into the working
-state. PM core determines that the driver's "noirq" and "early" resume
-callbacks should be skipped or not with dev_pm_skip_resume() function by
-checking power.may_skip_resume variable.
-
-power.must_resume variable is getting set to false in __device_suspend()
-function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
-dev->power.usage_count variables. In problematic scenario, where
-all the devices in the suspend_late stage are successful and some
-device can fail to suspend in suspend_noirq phase. So some devices
-successfully suspended in suspend_late stage are not getting chance
-to execute __device_suspend_noirq() to set dev->power.must_resume
-variable to true and not getting resumed in early_resume phase.
-
-Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
-setting power.must_resume variable in __device_suspend function.
-
-Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
-Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
----
- drivers/base/power/main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index d568772..9ee6987 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1642,7 +1642,11 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
- 	}
- 
- 	dev->power.may_skip_resume = true;
--	dev->power.must_resume = false;
-+	if ((atomic_read(&dev->power.usage_count) <= 1) &&
-+	     (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
-+		dev->power.must_resume = false;
-+	else
-+		dev->power.must_resume = true;
- 
- 	dpm_watchdog_set(&wd, dev);
- 	device_lock(dev);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+I would agree with all that if calling dev_pm_opp_of_register_em() was
+complicated, but that is not really the case. I don't think we ever call
+PM_OPP directly from cpufreq core ATM, which makes a lot of sense if you
+consider PM_OPP arch-specific. I could understand that we might accept a
+little 'violation' of the abstraction with this series if there were
+real benefits, but I just don't see them.
