@@ -2,106 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886413E8414
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 22:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943CC3E85A0
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 23:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbhHJUG1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 16:06:27 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:58826 "EHLO m43-7.mailgun.net"
+        id S234715AbhHJVsF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 17:48:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51542 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232176AbhHJUG0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 16:06:26 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628625964; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=6bfmi8AzrJv9+nPqsBRGQGrcOB34hjItme5M0oX8YAo=; b=Yrz1hwz4GyufpdlLm2SuesiZq+E0LE6opejmNI/NV29vQi8pkmelqmE2D1XV4plIDyWyE80U
- L/3RxtM7sC5VezQkMFSG3ntfG/fKEAWTHIrQNdkUHJ2K7Le30Xi0wAymjCMoFG68mn8THTGg
- AnkBQjbFyKRlxgk5Q6FTFDBxXSg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 6112dc1db14e7e2ecb3c966d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Aug 2021 20:05:49
- GMT
-Sender: psodagud=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 76167C4323A; Tue, 10 Aug 2021 20:05:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from th-lint-038.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: psodagud)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 386FEC433F1;
-        Tue, 10 Aug 2021 20:05:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 386FEC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=psodagud@codeaurora.org
-From:   Prasad Sodagudi <psodagud@codeaurora.org>
-To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net
-Cc:     len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, pavel@ucw.cz, psodagud@codeaurora.org
-Subject: [PATCH v3] PM: sleep: core: Avoid setting power.must_resume to false
-Date:   Tue, 10 Aug 2021 13:05:38 -0700
-Message-Id: <1628625938-149376-1-git-send-email-psodagud@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S234388AbhHJVsE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Aug 2021 17:48:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F30386056B;
+        Tue, 10 Aug 2021 21:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628632062;
+        bh=wfH6ldLowlDtWjigLrVOdUDg6tP64KWTHklxRYd4VT8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GZ9n0zErFuZI5rGZsQV0RqkxJmu6XYnn1jrGAjamTtHqATbOz/3SyQZhaXmfMuxV1
+         5zFn53aBL/AshPCVmCkuN3Vfv01ue+/RHqdV23ufnGwjn/o5vcT2H1RoXLxn/BdBUv
+         cdI5SQkQfVKjDT3ZtqetGvw055ipjICgAHt+OFwKAPVmLRVBtT1u3zO52+qenoGm81
+         FE2tZnt5eDRp2kztz63PiqawFfDqLkMwLCdijSUpmwB1ES57k2LZJJD40r32+nW/mW
+         yBXiWLa8kcqeUcs+yEVd/ZK2XBgQBS0X7WsrCZuUtzTb0I3ZUL1JUD97XvmmtaXRqY
+         Q/PmuoRi+Pdkw==
+Date:   Tue, 10 Aug 2021 16:47:40 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     Sam Edwards <CFSworks@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: [bugzilla-daemon@bugzilla.kernel.org: [Bug 214025] New: Better error
+ message for PCI devices killed during boot?]
+Message-ID: <20210810214740.GA2306774@bjorn-Precision-5520>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are variables(power.may_skip_resume and dev->power.must_resume)
-and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices after
-a system wide suspend transition.
+[+cc Rafael, linux-pci, linux-pm]
 
-Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
-its "noirq" and "early" resume callbacks to be skipped if the device
-can be left in suspend after a system-wide transition into the working
-state. PM core determines that the driver's "noirq" and "early" resume
-callbacks should be skipped or not with dev_pm_skip_resume() function by
-checking power.may_skip_resume variable.
+Sorry for the trouble this caused you, and thanks for the report.
 
-power.must_resume variable is getting set to false in __device_suspend()
-function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
-dev->power.usage_count variables. In problematic scenario, where
-all the devices in the suspend_late stage are successful and some
-device can fail to suspend in suspend_noirq phase. So some devices
-successfully suspended in suspend_late stage are not getting chance
-to execute __device_suspend_noirq() to set dev->power.must_resume
-variable to true and not getting resumed in early_resume phase.
+I completely agree that these messages are not really useful to users.
+After all your troubleshooting, were you able to do something to make
+the NVMe device usable?
 
-Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
-setting power.must_resume variable in __device_suspend function.
+You mention ACPI powering off the device between PCI enumeration and
+the driver's probe method.  Did you open a bug report about that, too?
+I think we might need to explore that situation to resolve this.
 
-Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
-Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
----
- V2 -> V3: Format issues patch posting
- V1 -> V2: Fixed indentation and commit text to include scenario
- drivers/base/power/main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+The "config space inaccessible" message comes from
+pci_raw_set_power_state(), and it means we got ~0 when reading the
+Power Management Control/Status register.  That's not a valid value,
+so I assume the device was in D3cold, where it can't respond to config
+reads.
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index d568772..9ee6987 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1642,7 +1642,11 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
- 	}
- 
- 	dev->power.may_skip_resume = true;
--	dev->power.must_resume = false;
-+	if ((atomic_read(&dev->power.usage_count) <= 1) &&
-+	     (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
-+		dev->power.must_resume = false;
-+	else
-+		dev->power.must_resume = true;
- 
- 	dpm_watchdog_set(&wd, dev);
- 	device_lock(dev);
+The fact that we enumerated the device means it was in at least D3hot,
+where it *can* respond to config reads.  PCI cannot put a device into
+D3cold directly; only ACPI or similar platform code can do that.
+
+----- Forwarded message from bugzilla-daemon@bugzilla.kernel.org -----
+
+Date: Tue, 10 Aug 2021 17:27:17 +0000
+From: bugzilla-daemon@bugzilla.kernel.org
+To: bjorn@helgaas.com
+Subject: [Bug 214025] New: Better error message for PCI devices killed during
+	boot?
+Message-ID: <bug-214025-41252@https.bugzilla.kernel.org/>
+
+https://bugzilla.kernel.org/show_bug.cgi?id=214025
+
+            Bug ID: 214025
+           Summary: Better error message for PCI devices killed during
+                    boot?
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.13.8
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: low
+          Priority: P1
+         Component: PCI
+          Assignee: drivers_pci@kernel-bugs.osdl.org
+          Reporter: CFSworks@gmail.com
+        Regression: No
+
+Hello,
+
+I recently finished troubleshooting an issue where some NVMe SSD on the PCIe
+bus wasn't being initialized by the driver; the kernel log contained:
+
+pci 0000:02:00.0: CLS mismatch (64 != 1020), using 64 bytes
+...
+nvme 0000:02:00.0: can't change power state from D3hot to D0 (config space
+inaccessible)
+
+The problem (which deserves its own bug report) was that ACPI initialization
+was powering off the device between the time the PCI bus was scanned and the
+time the driver was probing the device. The CLS value of 1020 came from the
+register being read as 0xFF (255*4 = 1020) due to the config space being
+inaccessible. However, to a user who doesn't have full intuition about PCI,
+neither of these messages is particularly clear about what's really happening.
+
+I'd have expected a (WARN/ERR) message saying something more like, "pci
+0000:02:00.0: device has unexpectedly disappeared from the bus; removing"
+implemented either as a check right before driver probing or at key stages of
+the PCI device fixup process (such as when computing CLS). This check is
+probably not necessary for hotplugged devices, since major platform power
+management initialization won't happen between the hotplug event and driver
+binding, but I strongly believe it's appropriate at boot when other subsystems
+are liable to interfere with PCI devices.
+
+An alternative to removing the device would be to keep it present in sysfs but
+put it in some other state (D3cold?) and hold off on trying to bind the driver.
+This hopefully increases the chance that the user sees that the device is
+present but in an unusual state.
+
+Thoughts?
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.
+
+----- End forwarded message -----
