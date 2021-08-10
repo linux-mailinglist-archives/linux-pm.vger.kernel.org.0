@@ -2,95 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B363E53D3
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 08:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4343E5461
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 09:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237922AbhHJGrj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 02:47:39 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:20127 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbhHJGrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 02:47:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628578034; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=Zp3bPmSJ+KgCWZVgE2zzrHfP/znd1zdAF7unHp7sX1Q=; b=EYF6fffejqhFtg9U7TGgCgIzDjMkSL6XUazekAY4WhfYHZpBtVZlKDIBmPbuXcW+95WZH6zV
- eR7dDDzO+YAxhj6CLgyY5Djs1pFY2rZPVWIbU7dOUdoqt7HOmmsm7FbKj66yBnETJ9dmpPyP
- g3E23juCWoO/C5XgQGd/NXP8QSI=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 611220da91487ad5201bb217 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Aug 2021 06:46:50
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 0B2E6C4360C; Tue, 10 Aug 2021 06:46:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 15FC0C4360C;
-        Tue, 10 Aug 2021 06:46:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 15FC0C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, okukatla@codeaurora.org,
-        seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
-Subject: [v6 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-Date:   Tue, 10 Aug 2021 12:16:02 +0530
-Message-Id: <1628577962-3995-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1628577962-3995-1-git-send-email-okukatla@codeaurora.org>
-References: <1628577962-3995-1-git-send-email-okukatla@codeaurora.org>
+        id S232968AbhHJHh1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 03:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233744AbhHJHh0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 03:37:26 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF8C0613D3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 00:37:04 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id m24-20020a17090a7f98b0290178b1a81700so4033977pjl.4
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 00:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Gp9yqcscf7/Q8S71rNb+DklCmCjBfuOZWtoJrdKgq14=;
+        b=IAglVf6Pn8I8I9dsDbHjIfeAkSA/yD6E0MfLksr0I3bbp7rSOQLo46sTKTKHyl9KbR
+         1/Ax/Ap4XrXSvqSfj4UKWMsMiK2Qlt+w+AwybJt6Afct7yPg8QghYKttCJvCY/xqXvkm
+         SkVBZJ83g65LBxLJZxqL82lCxNFSOhBzmTWP+VjWSx6JwYTMIlwFMEqzKCpRoO2ZHeMy
+         iLi9J2g4OA/gouk7AIivwb3wNG0F55BWN3FaLUULACXKVzJzbp8T6EZqU2AN3WsvBWuT
+         6xKHRzNBm8HKbeykYID8qlR3XXsS6uZSkgeIJMMAyf3R73Ni3U2SsNf7QyhEebDAbH1k
+         0nNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Gp9yqcscf7/Q8S71rNb+DklCmCjBfuOZWtoJrdKgq14=;
+        b=CfQZrXpCYpvUgFWCT5H5A/72gkFdSC9oK2QxRJbA2jXCjWt0WmhAnWHLDbhxkelbiR
+         +qJXVqy3WbuHjjUWC5dL2DR7cpiuGIvm0+z2/YqARxpLSV/61IzP3xfOV9/mmoqtzlxG
+         nCTrnCiH5Hj3hyGjmrGqCfYML0mMpVPt+bFGvMr1PO+iznX3tEseVrtGvVBh+23I2YX4
+         ZqwCdxmU6juQYZkxZQrJMuuKAbZz3U85Eo/YfIruXkdPKlNUkQnJrTz6ixtf8yEpoKui
+         4UQ8owAKlk7D0htRC64tKhy39yB2hNdhxziPahRz35oy11uL1Ayu5SHLX8g4WSoVvqWR
+         A5cA==
+X-Gm-Message-State: AOAM5310p5FN1qN/Gl8Z22MlTdPKY3ZwPZ+/vdNwQEdwqHMrNZK238Lp
+        OOpN7n2HK3GevYMGgHJwlswe2g==
+X-Google-Smtp-Source: ABdhPJxILYrr525KX9FnT9P3v0D4xd0mT7Xu47cl+ZsvaVSJ3lXE+EgGIYbCSv1kqvc+zewvjPYhrA==
+X-Received: by 2002:a17:902:b601:b029:12b:d9a:894f with SMTP id b1-20020a170902b601b029012b0d9a894fmr350019pls.63.1628581023914;
+        Tue, 10 Aug 2021 00:37:03 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id v14sm1734591pjd.35.2021.08.10.00.37.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 00:37:03 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        lukasz.luba@arm.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: [PATCH 0/8] cpufreq: Auto-register with energy model
+Date:   Tue, 10 Aug 2021 13:06:47 +0530
+Message-Id: <cover.1628579170.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-SoCs.
+Provide a cpufreq driver flag so drivers can ask the cpufreq core to register
+with the EM core on their behalf. This allows us to get rid of duplicated code
+in the drivers and fix the unregistration part as well, which none of the
+drivers have done until now.
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This would also make the registration with EM core to happen only after policy
+is fully initialized, and the EM core can do other stuff from in there, like
+marking frequencies as inefficient (WIP). Though this patchset is useful without
+that work being done and should be merged nevertheless.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 53a21d0..e78f055 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -586,6 +586,15 @@
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-+		epss_l3: interconnect@18590000 {
-+			compatible = "qcom,sc7280-epss-l3";
-+			reg = <0 0x18590000 0 1000>, <0 0x18591000 0 0x100>,
-+				<0 0x18592000 0 0x100>, <0 0x18593000 0 0x100>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+			#interconnect-cells = <1>;
-+		};
-+
- 		ipa: ipa@1e40000 {
- 			compatible = "qcom,sc7280-ipa";
- 
+This doesn't update scmi cpufreq driver for now as it is a special case and need
+to be handled differently. Though we can make it work with this if required.
+
+This is build/boot tested by the bot for a couple of boards.
+
+https://gitlab.com/vireshk/pmko/-/pipelines/350674298
+
+--
+Viresh
+
+Viresh Kumar (8):
+  cpufreq: Auto-register with energy model if asked
+  cpufreq: dt: Use auto-registration for energy model
+  cpufreq: imx6q: Use auto-registration for energy model
+  cpufreq: mediatek: Use auto-registration for energy model
+  cpufreq: omap: Use auto-registration for energy model
+  cpufreq: qcom-cpufreq-hw: Use auto-registration for energy model
+  cpufreq: scpi: Use auto-registration for energy model
+  cpufreq: vexpress: Use auto-registration for energy model
+
+ drivers/cpufreq/cpufreq-dt.c           | 5 ++---
+ drivers/cpufreq/cpufreq.c              | 9 +++++++++
+ drivers/cpufreq/imx6q-cpufreq.c        | 4 ++--
+ drivers/cpufreq/mediatek-cpufreq.c     | 5 ++---
+ drivers/cpufreq/omap-cpufreq.c         | 4 ++--
+ drivers/cpufreq/qcom-cpufreq-hw.c      | 5 ++---
+ drivers/cpufreq/scpi-cpufreq.c         | 5 ++---
+ drivers/cpufreq/vexpress-spc-cpufreq.c | 5 ++---
+ include/linux/cpufreq.h                | 6 ++++++
+ 9 files changed, 29 insertions(+), 19 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.31.1.272.g89b43f80a514
 
