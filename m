@@ -2,88 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C1A3E5123
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 04:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9573E512C
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 04:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbhHJCrw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Aug 2021 22:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S233744AbhHJCzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Aug 2021 22:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbhHJCru (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 22:47:50 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACFFC061799
-        for <linux-pm@vger.kernel.org>; Mon,  9 Aug 2021 19:47:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d1so18999464pll.1
-        for <linux-pm@vger.kernel.org>; Mon, 09 Aug 2021 19:47:29 -0700 (PDT)
+        with ESMTP id S232968AbhHJCzM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 22:55:12 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F93C0613D3;
+        Mon,  9 Aug 2021 19:54:51 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 61-20020a9d0d430000b02903eabfc221a9so20467682oti.0;
+        Mon, 09 Aug 2021 19:54:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aLz3R/PfInuBDOwjVvzSA+K2mOEipBXOGKBTYuR/UjQ=;
-        b=u82RUKq0Cu9k+cH1e/nJUGAYPe+uSr9FwNA/i2Ax5QbR7bnnC5z9Abbug2YTjQxgPQ
-         UaI9ruWDRXjrJxQ+E6kokRmM2Olb4t6VPWQiS/R+xMnOg7xskW5sHupXISw6uVhJZVQR
-         EeQaz++xbMfFDdseC+9Ya8r4VHLrJ714j/gKVemJFr23QOdzZ32E37pa3+bKyUHekFQP
-         t+aELbDGjXDOcLnSJ+YzZBmYsAbxepz1MVngI+I2YZgchl+1mZsm9ZkDFH6PyQA7bd76
-         k9RHg4S1IWkgKQ+ptJyXMlhkEOuYP4n+A2vDTRqsJbL4TItoyW+doNNtr02TIXI7gyqN
-         vXUw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hp5elchFMSgljRTpgVl4ksQKLgHUDuHAq3O323royD8=;
+        b=ToXi3M/FBrMPWLWRVLSfG93Yb3qdjE1LpXnI2cR4Lfa5qIVyph+6pw4F8IwaoWu+t6
+         2pxkSa03pXMtPCSIEoPuWuvSF6xLTRO9sMvvVXTZEzLWws1mkke2Q1ZktydubzHl9ars
+         WquzLIid6BQwPp8IUrYbezgyYAUV2Vo/heNOe5NuAJ4OqdLLQlLEHla1j+hh83JWWets
+         W8fvbDHbaS8ASPZJDDVs/rgb4vmrZBBCbZ5JCBkz91StPyR48NKqtGpNxwg63woNtu80
+         X7Wpn56MAM/1Ij8WyBXAl8h2LeUmRg1djFfNZkKSpgmNepZQEDP23cklAVVST9JYxXKk
+         NqDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aLz3R/PfInuBDOwjVvzSA+K2mOEipBXOGKBTYuR/UjQ=;
-        b=mTP7xaIaJDlDcjUUoO/g0EAVmpNu689cAl1RXcu+2M2UsZvC5+7LNtdHDfVeAiVhLL
-         Upbe3tnJ3c1dnMrpgA8dvo4Ps7grW6NImYJZydLAqr/ZKQhFFZpddZiSW6KkCVnmL8K6
-         xoWLw+lbSu7KCHdfose/R8h4YlU/Gkt6HnUt5qbTAJrAHWA6rv/WuhSfFDBP51K+bMHy
-         qKbvFf/iRIASTKbM2o3DWNQCbkHzMAHdFFi1KnQw4kn82V7PQlGMPvv9pkQUQ6OSwOde
-         JMk8ZVWKsk1qGXQOxO/ZCYp55MweC26ZyUeMyrezCAsBrJdfhgMxspajLtPyLqyWpprr
-         26lw==
-X-Gm-Message-State: AOAM530XeDna+qtqBdiAzKjiW2LuosRx0fVvVc6xOHh9jzMzkiIbJbTt
-        JUEG2OxBERXT5GBMtDDBG/qAXrgG163/DQ==
-X-Google-Smtp-Source: ABdhPJw4qsk6dKbmfyAQJNyBrmv6RENs2/OaroTuk2V8kwmx42VX7YmwQechtP9JeFUoTNE8Hm7Tdw==
-X-Received: by 2002:a63:594e:: with SMTP id j14mr491424pgm.249.1628563648525;
-        Mon, 09 Aug 2021 19:47:28 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id c23sm21805549pfn.140.2021.08.09.19.47.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hp5elchFMSgljRTpgVl4ksQKLgHUDuHAq3O323royD8=;
+        b=A/r0n04hSl6uZhmZOqQwyPo6TK4HYCvFneZcfASZUxaqVTgWrMO992p6uIV0V6YOzb
+         /u1qgC2lQJfZKYqkUnNAJBW84LY4/n0QS9yeM+4CGTXgseAKBDK6pEX4242GiRA2taaW
+         zkmJMYF7NLJwNrSmakxDLRqmha9AOrNErXajt11n0m0xsOL7d6hChYD215HwQmffXNqE
+         QZBv1d738zqhqjKH6vgFazBns9Y+fqGhC5d2pPHx7Y0wM8C/uND2rNO7CNUybLHWYAhb
+         I1VBXnFNAPBgqedbeppt9DKllN2wBQG+Vk7J4KO81yP79jEjZRzcBFerjGzKhukhGw7W
+         gExA==
+X-Gm-Message-State: AOAM532ZTNTHwS/bnla8cfCn1B5EnZuXcx9o7Ga0Yd8A/ZooI+HZ48Aw
+        /JLbsno4cKecUvX5GIc9TbI1q6iJIhc=
+X-Google-Smtp-Source: ABdhPJxwJJCdLwwwG/zkqNWug2qEx45WhKQV0FyuMGaceyHb//lIfuvWxPbL+ekzOSLYhFG7+PHagw==
+X-Received: by 2002:a05:6830:43a3:: with SMTP id s35mr18606061otv.262.1628564090599;
+        Mon, 09 Aug 2021 19:54:50 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id h187sm3654898oif.48.2021.08.09.19.54.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 19:47:28 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 08:17:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
-        steev@kali.org, tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [Patch v5 3/6] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
- support
-Message-ID: <20210810024723.qne6ntjtv5zxf576@vireshk-i7>
-References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
- <20210809191605.3742979-4-thara.gopinath@linaro.org>
+        Mon, 09 Aug 2021 19:54:50 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
+        robh+dt@kernel.org, lee.jones@linaro.org, pgwipeout@gmail.com,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v3 0/4] power: supply: Add Support for RK817 Charger
+Date:   Mon,  9 Aug 2021 21:54:32 -0500
+Message-Id: <20210810025436.23367-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210809191605.3742979-4-thara.gopinath@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-08-21, 15:16, Thara Gopinath wrote:
-> Add interrupt support to notify the kernel of h/w initiated frequency
-> throttling by LMh. Convey this to scheduler via thermal presssure
-> interface.
-> 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
-> 
-> v4->v5:
-> 	- Changed throttle_lock from a spinlock to mutex to take potential
-> 	  race between LMh de-init sequence and reenabling of
-> 	  interrupts/polling after a thermal throttle event.
-> 	- Other cosmetic fixes as pointed out by Viresh.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-How do you expect this to get merged ? I pick up this patch alone ?
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
+
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
+
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
+
+ .../devicetree/bindings/mfd/rk808.txt         |  36 +-
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  26 +
+ drivers/mfd/rk808.c                           |  16 +-
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rk817_charger.c          | 922 ++++++++++++++++++
+ include/linux/mfd/rk808.h                     |  87 ++
+ 7 files changed, 1092 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
 
 -- 
-viresh
+2.25.1
+
