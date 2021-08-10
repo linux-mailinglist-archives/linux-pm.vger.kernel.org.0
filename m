@@ -2,101 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CC73E57F1
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 12:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3713E57F9
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 12:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbhHJKF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 06:05:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:52810 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232974AbhHJKFZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 06:05:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CFFC6D;
-        Tue, 10 Aug 2021 03:05:03 -0700 (PDT)
-Received: from [10.57.9.181] (unknown [10.57.9.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE0B83F70D;
-        Tue, 10 Aug 2021 03:05:01 -0700 (PDT)
-Subject: Re: [PATCH 8/8] cpufreq: vexpress: Use auto-registration for energy
- model
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S238753AbhHJKHR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 06:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238628AbhHJKHR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 06:07:17 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950ADC061798
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 03:06:55 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id k2so20249395plk.13
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 03:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=86LjhHwH2Y01JTFkrW4LltEIu0xfncQuIXbpof7c38U=;
+        b=EPTZS1zs4hk/XgPzFZqbffWZQVnvrLyR3ikBz/nldBEri4wKTNPG02YCMYf3qAitT6
+         q+Z4cbOAc+zBcMmq3+5mHoTiue9Oo7xe7e/GL5CVZ04ytybTU4xlb2s2j6jHQjQk62bx
+         QF28hlimfhwV5gfNzfpwvrbzhJIZwfbT2HB+x2ZZtC/clMpcdRJQkXr0qth60U2HVJ7e
+         667FyQcw0RUlRQ3txtiM1oraHW0alOh+QhDLENmbpQfvclDNkfEEpUTvYhT2R6HaMF8L
+         buUhy+OmMCSHsLxF3cVcRztrvwwPRv6uD8LFb+ZoxIzUw9b+Fua3foOHksXpoLVrHKuZ
+         VDng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=86LjhHwH2Y01JTFkrW4LltEIu0xfncQuIXbpof7c38U=;
+        b=IrlCpyVHexZUUIs2Y1/hLpBz0O54gImRHQG9Mq2VsV7uETHQ2qHBsPSgEx8ESpz5DJ
+         1V0XcbTShsua+h9oZwshFBT8U+rEu0BuXE0MpboPK+3Zq/aNESai7Wmfa30pfqzpcs9J
+         r+Dmi/QOcWZZn/FuMrDwEeCUwOxHhlrKm9LR3aezau1tTGhTvu31dXI/NhNip9XDquQL
+         O3/5voFYjl2hwniUY2I6EORjh1RBPJTUc2Ks3F9L3YFfla1meSg40mMfvovm5PSsxM5h
+         bbNljIyjEgRXMBpigXAAQ73qXi7CP13UL5GLa5XQCIB9v8hpeRII5mYyf4cAWwws4fCq
+         Dmnw==
+X-Gm-Message-State: AOAM533HHcWVBIzY9hH4td02Vez8+t9c8B4eTPs94qwO1YOMXh95dq05
+        NcPRDgBxw9h2C8L0QW918erAFA==
+X-Google-Smtp-Source: ABdhPJya2Sgo4k+tUz0e5kI+ZjaNDAiFasmQ7SRwJDsYaa4PKlQ/HHyqa0QnogcR6+emA0GopdeupQ==
+X-Received: by 2002:a17:903:248f:b029:128:d5ea:18a7 with SMTP id p15-20020a170903248fb0290128d5ea18a7mr10803526plw.83.1628590015127;
+        Tue, 10 Aug 2021 03:06:55 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id t13sm20302715pjg.25.2021.08.10.03.06.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 03:06:54 -0700 (PDT)
+Date:   Tue, 10 Aug 2021 15:36:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Vincent Donnefort <vincent.donnefort@arm.com>,
         Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 8/8] cpufreq: vexpress: Use auto-registration for energy
+ model
+Message-ID: <20210810100652.h473q6hgtc5czfyk@vireshk-i7>
 References: <cover.1628579170.git.viresh.kumar@linaro.org>
  <87fecd84e3f6ff6f153be14b0d53de93c0b04ae6.1628579170.git.viresh.kumar@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d3629cc7-d9db-0e54-94e9-278e308b7e8e@arm.com>
-Date:   Tue, 10 Aug 2021 11:05:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ <d3629cc7-d9db-0e54-94e9-278e308b7e8e@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <87fecd84e3f6ff6f153be14b0d53de93c0b04ae6.1628579170.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3629cc7-d9db-0e54-94e9-278e308b7e8e@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 8/10/21 8:36 AM, Viresh Kumar wrote:
-> Use the CPUFREQ_REGISTER_WITH_EM flag to allow cpufreq core to
-> automatically register with the energy model.
+On 10-08-21, 11:05, Lukasz Luba wrote:
+> I can see that this driver calls explicitly the
+> of_cpufreq_cooling_register()
+> It does this in the cpufreq_driver->ready() callback
+> implementation: ve_spc_cpufreq_ready()
 > 
-> This allows removal of boiler plate code from the driver and fixes the
-> unregistration part as well.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/vexpress-spc-cpufreq.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
-> index 51dfa9ae6cf5..28c4c3254337 100644
-> --- a/drivers/cpufreq/vexpress-spc-cpufreq.c
-> +++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
-> @@ -442,8 +442,6 @@ static int ve_spc_cpufreq_init(struct cpufreq_policy *policy)
->   	policy->freq_table = freq_table[cur_cluster];
->   	policy->cpuinfo.transition_latency = 1000000; /* 1 ms */
->   
-> -	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
-> -
->   	if (is_bL_switching_enabled())
->   		per_cpu(cpu_last_req_freq, policy->cpu) =
->   						clk_get_cpu_rate(policy->cpu);
-> @@ -487,7 +485,8 @@ static void ve_spc_cpufreq_ready(struct cpufreq_policy *policy)
->   static struct cpufreq_driver ve_spc_cpufreq_driver = {
->   	.name			= "vexpress-spc",
->   	.flags			= CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
-> -					CPUFREQ_NEED_INITIAL_FREQ_CHECK,
-> +				  CPUFREQ_NEED_INITIAL_FREQ_CHECK |
-> +				  CPUFREQ_REGISTER_WITH_EM,
->   	.verify			= cpufreq_generic_frequency_table_verify,
->   	.target_index		= ve_spc_cpufreq_set_target,
->   	.get			= ve_spc_cpufreq_get_rate,
-> 
+> With that in mind, the new code in the patch 1/8, which
+> registers the EM, should be called even earlier, above:
+> ---------------------8<---------------------------------
+> /* Callback for handling stuff after policy is ready */
+> 	if (cpufreq_driver->ready)
+> 		cpufreq_driver->ready(policy);
+> ------------------->8----------------------------------
 
-I can see that this driver calls explicitly the
-of_cpufreq_cooling_register()
-It does this in the cpufreq_driver->ready() callback
-implementation: ve_spc_cpufreq_ready()
+Thanks. I will look at this sequencing issue again.
 
-With that in mind, the new code in the patch 1/8, which
-registers the EM, should be called even earlier, above:
----------------------8<---------------------------------
-/* Callback for handling stuff after policy is ready */
-	if (cpufreq_driver->ready)
-		cpufreq_driver->ready(policy);
-------------------->8----------------------------------
+> This also triggered a question:
+> If this new flag can be set in the cpufreq driver which hasn't set
+> CPUFREQ_IS_COOLING_DEV
+> ?
 
-This also triggered a question:
-If this new flag can be set in the cpufreq driver which hasn't set
-CPUFREQ_IS_COOLING_DEV
-?
-I can only see one driver (this one in the patch) which has such
-configuration.
+Why not ?
 
+> I can only see one driver (this one in the patch) which has such
+> configuration.
+
+-- 
+viresh
