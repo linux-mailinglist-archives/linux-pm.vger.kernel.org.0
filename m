@@ -2,42 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE593E598A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 13:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF3E3E59EC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 14:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238743AbhHJL7D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 07:59:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54814 "EHLO mail.kernel.org"
+        id S240247AbhHJM2s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 08:28:48 -0400
+Received: from foss.arm.com ([217.140.110.172]:54298 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238798AbhHJL7C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 07:59:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F29860EBD;
-        Tue, 10 Aug 2021 11:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628596720;
-        bh=mGS5Gc7W6N/iGmYXqSU1qGE5hU54bLGn93VwUvI393M=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mDmTgYLnmU8OWwCJ34jbIcKcbUcImg9O9l2CFCwhn4Hn9VcORUrjPm8m/4/2xI+Ui
-         U65jKpR/IHKgNxNShNniqoBzVh5Z5e0jSGz9s3LR/40JxJcZ37xi2tW91fGpzdy2bm
-         hLOGv8r9QGMlrj5JKCAESuV5fuhPn79utX8f7l0Oc0P5ZiNsqZV8jlkV4ifVbpXggf
-         4f4e5WWsfmYGaw4HmrZ7LzT1fFbYBblp/ZQTCsAZoWT7R8wMcV00iYJ1+fC4+Z7Nyx
-         a4aUDCau7gb7TecEiUYbm3Ns7z53T3UFdGScMI2CSdCYLOhctZcVFjHB+h6NUb7n8/
-         Lo4n2ZYxN0NaA==
-Subject: Re: [v6 2/3] interconnect: qcom: Add EPSS L3 support on SC7280
-To:     Odelu Kukatla <okukatla@codeaurora.org>, georgi.djakov@linaro.org,
-        bjorn.andersson@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-arm-msm-owner@vger.kernel.org
-References: <1628577962-3995-1-git-send-email-okukatla@codeaurora.org>
- <1628577962-3995-3-git-send-email-okukatla@codeaurora.org>
-From:   Georgi Djakov <djakov@kernel.org>
-Message-ID: <b2e74ff4-c15c-3df3-27d9-87cebbf9342d@kernel.org>
-Date:   Tue, 10 Aug 2021 14:58:26 +0300
+        id S238569AbhHJM2r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Aug 2021 08:28:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 318066D;
+        Tue, 10 Aug 2021 05:28:25 -0700 (PDT)
+Received: from [10.57.9.181] (unknown [10.57.9.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA6893F70D;
+        Tue, 10 Aug 2021 05:28:22 -0700 (PDT)
+Subject: Re: [PATCH v4 0/9] Inefficient OPPs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
+ <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
+Date:   Tue, 10 Aug 2021 13:28:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1628577962-3995-3-git-send-email-okukatla@codeaurora.org>
+In-Reply-To: <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -45,143 +46,107 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Odelu,
 
-On 10.08.21 9:46, Odelu Kukatla wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
-> SC7280 SoCs.
+
+On 8/10/21 7:13 AM, Viresh Kumar wrote:
+> On 04-08-21, 18:21, Rafael J. Wysocki wrote:
+>> The cpufreq changes are mostly fine by me now, but I would like to
+>> hear from Viresh regarding this.
 > 
-> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
-> ---
->   drivers/interconnect/qcom/osm-l3.c | 136 +++++++++++++++++++++++++++++++------
->   drivers/interconnect/qcom/sc7280.h |  10 +++
->   2 files changed, 125 insertions(+), 21 deletions(-)
+> I have few doubts/concerns here.
 > 
-> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-> index c7af143..3b16e73 100644
-> --- a/drivers/interconnect/qcom/osm-l3.c
-> +++ b/drivers/interconnect/qcom/osm-l3.c
-> @@ -9,12 +9,14 @@
->   #include <linux/io.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> +#include <linux/of_address.h>
->   #include <linux/of_device.h>
->   #include <linux/platform_device.h>
->   
->   #include <dt-bindings/interconnect/qcom,osm-l3.h>
->   
->   #include "sc7180.h"
-> +#include "sc7280.h"
->   #include "sc8180x.h"
->   #include "sdm845.h"
->   #include "sm8150.h"
-> @@ -33,17 +35,33 @@
->   
->   /* EPSS Register offsets */
->   #define EPSS_LUT_ROW_SIZE		4
-> +#define EPSS_REG_L3_VOTE		0x90
->   #define EPSS_REG_FREQ_LUT		0x100
->   #define EPSS_REG_PERF_STATE		0x320
-> +#define EPSS_CORE_OFFSET		0x4
-> +#define EPSS_L3_VOTE_REG(base, cpu)\
-> +			(((base) + EPSS_REG_L3_VOTE) +\
-> +			((cpu) * EPSS_CORE_OFFSET))
->   
-> -#define OSM_L3_MAX_LINKS		1
-> +#define L3_DOMAIN_CNT		4
-> +#define L3_MAX_LINKS		9
->   
->   #define to_osm_l3_provider(_provider) \
->   	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
->   
-> +/**
-> + * @domain_base: an array of base address for each clock domain
+> Just to iterate it again, the idea here is to choose a higher
+> frequency, which will work in an efficient manner based on energy
+> consumption. So this _only_ works for the case where the caller asked
+> for CPUFREQ_RELATION_L.
+> 
+> - The new flag being added here, CPUFREQ_RELATION_E, doesn't feel
+>    complete in this sense to me. It should rather be called as
+>    CPUFREQ_RELATION_LE instead as it is _always_ used with relation L.
+> 
+> - IMO this has made the caller site a bit confusing now, i.e.  why we
+>    send CPUFREQ_RELATION_E sometimes and CPUFREQ_RELATION_H at other
+>    times. Why shouldn't the _H freq be efficient as well ? I understand
+>    that this was done to not do the efficient stuff in case of
+>    userspace/powersave/performance governors.
+> 
+>    What about reusing following for finding all such cases ?
+> 
+>          policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING
+> 
+>    The driver can set a flag to tell if it wants efficient frequencies
+>    or not, and at runtime we apply efficient algorithm only if the
+>    current governor does DVFS, which will leave out
+>    userspace/performance/powersave.
+> 
+> 
+> Now the other thing I didn't like since the beginning, I still don't
+> like it :)
+> 
+> A cpufreq table is provided by the driver, which can have some
+> inefficient frequencies. The inefficient frequencies can be caught by
+> many parts of the kernel, the current way (in this series) is via EM.
+> But this can totally be anything else as well, like a devfreq driver.
 
-This is not a valid kerneldoc. Please add a title for
-	struct qcom_osm_l3_icc_provider
+Currently devfreq drivers and governors don't support 'inefficient'
+OPPs idea. They are not even 'utilization' driven yet. I'm not sure
+if that would make sense for their workloads. For now, they are far
+behind the CPUFreq/scheduler development in this field.
+It needs more research and experiments, to even estimate if this brings
+benefits. So, I would just skip devfreq use case...
 
-> + * @max_state: max supported frequency level
-> + * @per_core_dcvs: flag used to indicate whether the frequency scaling
-> + * for each core is enabled
-> + * @reg_perf_state: requested frequency level
-> + * @lut_tables: an array of supported frequency levels
-> + * @provider: interconnect provider of this node
-> + */
->   struct qcom_osm_l3_icc_provider {
-> -	void __iomem *base;
-> +	void __iomem *domain_base[L3_DOMAIN_CNT];
->   	unsigned int max_state;
-> +	bool per_core_dcvs;
->   	unsigned int reg_perf_state;
->   	unsigned long lut_tables[LUT_MAX_ENTRIES];
->   	struct icc_provider provider;
-> @@ -56,32 +74,44 @@ struct qcom_osm_l3_icc_provider {
->    * @id: a unique node identifier
->    * @num_links: the total number of @links
->    * @buswidth: width of the interconnect between a node and the bus
-> + * @domain: clock domain of the cpu node
-> + * @cpu: cpu instance within its clock domain
->    */
->   struct qcom_osm_l3_node {
->   	const char *name;
-> -	u16 links[OSM_L3_MAX_LINKS];
-> +	u16 links[L3_MAX_LINKS];
->   	u16 id;
->   	u16 num_links;
->   	u16 buswidth;
-> +	u8 domain;
-> +	u8 cpu;
->   };
->   
->   struct qcom_osm_l3_desc {
->   	const struct qcom_osm_l3_node **nodes;
->   	size_t num_nodes;
-> +	bool per_core_dcvs;
->   	unsigned int lut_row_size;
->   	unsigned int reg_freq_lut;
->   	unsigned int reg_perf_state;
->   };
->   
-> -#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
-> +#define __DEFINE_QNODE(_name, _id, _buswidth, _domain, _cpu, ...)	\
->   	static const struct qcom_osm_l3_node _name = {			\
->   		.name = #_name,						\
->   		.id = _id,						\
->   		.buswidth = _buswidth,					\
-> +		.domain = _domain,					\
-> +		.cpu = _cpu,						\
->   		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
->   		.links = { __VA_ARGS__ },				\
->   	}
->   
-> +#define DEFINE_QNODE(_name, _id, _buswidth, ...)		\
-> +		__DEFINE_QNODE(_name, _id, _buswidth, 0, 0, __VA_ARGS__ )
+> 
+> The way we have tied this whole thing with EM, via
+> cpufreq_read_inefficiencies_from_em(), is what I don't like. We have
+> closely bound the whole thing with one of the ways this can be done
+> and we shouldn't be polluting the cpufreq core with this IMHO. In a
+> sane world, the cpufreq core should just provide an API, like
+> cpufreq_set_freq_invariant() and it can be called by any part of
+> the kernel.
+> 
+> I understand that the current problem is where do we make that call
+> from and I suggested dev_pm_opp_of_register_em() for the same earlier.
+> But that doesn't work as the policy isn't properly initialized by that
+> point.
 
-Nit: No space before the close parenthesis please.
+True, the policy is not initialized yet when cpufreq_driver::init()
+callback is called, which the current place for scmi-cpufreq.
 
-> +#define DEFINE_DCVS_QNODE(_name, _id, _buswidth, _domain, _cpu, ...)		\
-> +		__DEFINE_QNODE(_name, _id, _buswidth, _domain, _cpu, __VA_ARGS__ )
+What about the other callback cpufreq_driver::ready() ?
+This might solve the two issues I mentioned below.
 
-Ditto
+> 
+> Now that I see the current implementation, I think we can make it work
+> in a different way.
+> 
+> - Copy what's done for thermal-cooling in cpufreq core, i.e.
+>    CPUFREQ_IS_COOLING_DEV flag, for the EM core as well. So the cpufreq
+>    drivers can set a flag, CPUFREQ_REGISTER_EM, and the cpufreq core
+>    can call dev_pm_opp_of_register_em() on their behalf. This call will
+>    be made from cpufreq_online(), just before/after
+>    cpufreq_thermal_control_enabled() stuff. By this point the policy is
+>    properly initialized and is also updated in
+>    per_cpu(cpufreq_cpu_data).
+> 
+> - Now the cpufreq core can provide an API like
+>    cpufreq_set_freq_invariant(int cpu, unsigned long freq), which can
+>    be called from EM core's implementation of
+>    em_dev_register_perf_domain().
+> 
 
-> +
->   DEFINE_QNODE(sdm845_osm_apps_l3, SDM845_MASTER_OSM_L3_APPS, 16, SDM845_SLAVE_OSM_L3);
->   DEFINE_QNODE(sdm845_osm_l3, SDM845_SLAVE_OSM_L3, 16);
->   
-> @@ -162,26 +192,80 @@ static const struct qcom_osm_l3_desc sm8250_icc_epss_l3 = {
->   	.reg_perf_state = EPSS_REG_PERF_STATE,
->   };
->   
-> +DEFINE_DCVS_QNODE(sc7280_epss_apps_l3, SC7280_MASTER_EPSS_L3_APPS, 32, 0, 0,
-> +					SC7280_SLAVE_EPSS_L3_SHARED, SC7280_SLAVE_EPSS_L3_CPU0,
-> +					SC7280_SLAVE_EPSS_L3_CPU1, SC7280_SLAVE_EPSS_L3_CPU2,
-> +					SC7280_SLAVE_EPSS_L3_CPU3, SC7280_SLAVE_EPSS_L3_CPU4,
-> +					SC7280_SLAVE_EPSS_L3_CPU5, SC7280_SLAVE_EPSS_L3_CPU6,
-> +					SC7280_SLAVE_EPSS_L3_CPU7);
+I have to point out that there are two issues (which we
+might solve):
+1. Advanced setup, due to per-CPU performance requests,
+which are not limited to real DVFS domain.
+The scmi-cpufreq (and possibly some other soon) uses more
+tricky EM setup. As you might recall, the construction of temporary
+cpumask is a bit complex, since we want per-CPU policy, but the
+cpumask pass to EM has not a single bit but is 'spanned' with a few
+CPUs.
 
-Nit: Please align these to the open parenthesis.
+2. The scmi-cpufreq (and IIRC MTK cpufreq driver soon) requires
+custom struct em_data_callback, since the power data is coming from FW.
 
-Thanks,
-Georgi
-
+If there is a need for complex EM registration, maybe we could
+do it in the cpufreq_driver::ready(). The policy would be ready
+during that call, so it might fly.
