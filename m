@@ -2,126 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F813E5134
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 04:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5898D3E516B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 05:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbhHJCzR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Aug 2021 22:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbhHJCzR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 22:55:17 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB52FC061799;
-        Mon,  9 Aug 2021 19:54:55 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id a7-20020a9d5c870000b029050333abe08aso6637590oti.13;
-        Mon, 09 Aug 2021 19:54:55 -0700 (PDT)
+        id S235034AbhHJDVf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Aug 2021 23:21:35 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:15516 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233987AbhHJDVf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Aug 2021 23:21:35 -0400
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17A3CJ75019010;
+        Tue, 10 Aug 2021 03:21:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=aDNn5MUn0UlUn+FaFAYDGrNsI9A/fjMlNqqSQYJVR80=;
+ b=P6od2glQmksopu4Eg2NAn9X5++bMwgCMyATlbZnosteBroBHHv3XJO/jYhho0pEXdBMz
+ XAl189p3jR21BTn4HHnpWD2rg/i6I+EbcdcUXYSItcCpn2fbEraKuO2sFEcCrvRo9Dnq
+ pAq6e0p9yTJvPZlO/ujA/S3RQEoSYsYOzdLl3UHeNgpYaRV9oAbohnr5XiNxePsiNefV
+ MACo6gxs/ell6QgNiDddQcJX0wgFeW8bleEaSNZwjYul5sWA2uKpJ6Sw5sxCYSIwfLbp
+ 97/EMvNYXyj8wsVP28rMsFjv/1bcm2042D5Tdv4mfA6+0gaY69VOUfJApUcutllnM6rr NA== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2020-01-29;
+ bh=aDNn5MUn0UlUn+FaFAYDGrNsI9A/fjMlNqqSQYJVR80=;
+ b=kBH3Rk+56uMr5ebKAgIx8oAFVcNV0N6cI80+iMe/ciZgaRBOJIXDV2My7xF+Ob/3KOpD
+ KYFJ34M2p2LwYEiZyW4ZXujM++PLLo/2n6PFdcFcBBMWl3bgyHkn9eM6PWxwcCcXJae+
+ qtob9O3+XNKnLRn1iJBVbTV1AjvKT0PlG2I1wLjY27CKpFlNK9qj2WNOyRCdTTMb5mtN
+ JTYbT+S/FJQNQXXVXaqTa1VZR0ow4iZwbgHrzGrsNIPS0AE2UniwXqMHkQWReYRTPp5+
+ 2Isw1ZwrAfqp1fcA6yY1Yfd3BLeM7xzoFmomOibcJ8wXmpUJkzlAjOoOXoTjmo1WXbxW oQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3aaq8aatrv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Aug 2021 03:21:06 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 17A3A80N085198;
+        Tue, 10 Aug 2021 03:21:04 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
+        by userp3030.oracle.com with ESMTP id 3a9f9w34b5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Aug 2021 03:21:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M0Vsii4dNnOM4pDk5exVRy8x/6EP9sPI3NcKdasFbfmujJeOPr0vPi7jnswp8BVXANaVO0p/0byQ25u81gVfTgJe2wnJoZHXs9VNB7utdVa0uafG5v2grtHFYDg4PX2TDlRqSRdRohb28v3dND02wYf54JJqlYb/Tk2dzW+NGcxWx3ZppR6oVxCicasR1iFq/CapqjqsmCwilnARI3NFhGr8nrYhX5hHwx6E6kPoMBrGNLSo73BhXLZetN8fQulOj48Jr58plBmj/JbKYgQCsVarxPoOGtXM9O0y6TA/JLuUg51FS+R7dk6OD95VoC/4LTUpAn6eNbHwZ2I8GnvjVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aDNn5MUn0UlUn+FaFAYDGrNsI9A/fjMlNqqSQYJVR80=;
+ b=j2adXAZ7ICSYgrnX5HnsEjNSOoQQ8wmZATHLg4M80CazvA/pr7JtY1qLPFezWNcIMA7qWMwkifTppC9cdxoRYn05k9psFGY5OPxDDljnpITZKihTf6dYy9hatBYIWMnkUjhJCXksMsZQ7GwJffC9CuqlW/Kf+XHayI5NruB11jaAJKKCfz7jTHfVRfP4eWtzF9VRo6Q0njt8UxWjchxNGuf2Ioy9aZ7e998+qNhoJui9s1oolH7+bmCfyaQ7ZLR+zI5LPaL1LKzxZ7S2S9XOkAyu7xuxGEUfJQemGJpLSSrSyMaArVt9Zhou3V4nAGzEpFi4BTTSEUoE/W8KXWXP8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CTuSMH4A7Ffb6ZlHMh0V3hg0lEYSc6xST4UQtOrkdPg=;
-        b=Mc8XzRnKYGwBFbKGq0j1Ioq0aMvAl1z7h8aGveQLoAawDFeikygiS+FmjQGTkn26vh
-         4BgmKsfTk5KVrMfxGHzRS3ql0ZXfzscKc49wgFpeZPFjE0V/Yg+McqqW0P39yHbLU+ht
-         uUAQuiDfXpuXiC3CZcmH9eGUDqI6egyuAkbiQmKEZbeb6B2dQ78+1OrW89Xsk0/LwYIQ
-         IAX0+mwqRcmC8f+r13bw5mKSxvfuK6RHEB9Udcjc3ldzIUfso67veXp08xMTdNre26ot
-         4MqAl66bsCfJhxY3IeJFGb93PEVee1q+CrPnuJeFe87a5Yan+kvD16DqNKhXBtoZ/qlO
-         le0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CTuSMH4A7Ffb6ZlHMh0V3hg0lEYSc6xST4UQtOrkdPg=;
-        b=TZvy5SMkn81u8XzjFMmclLFVTM0LkCrD6h4tpJc9WPw80jEN15p++7MoiT3C6AI6Ve
-         W+gPIuugyDuBzwKzG9ejX3XKp7nC+eonQMhrjISqQgiF/U1T5rCDY1Q21t4dQMevmpL5
-         BpV1/gbLxlN4BL5kPW9EXbGMgGBADwobHkmGgd0ndMzjt4uH4H+69zrcWmDu5joiWsHu
-         RaaTfkHGDy8uS5NAubktxmcXP1HDuawE6ZplaDn2ld+QAuIT9DrkHhUEDb/kPlzmF2Y8
-         nTK/LFihvqz9ZuoKCCy6CXa0l6cnrxeuP9HvUjjVIRk9GwkWBrDvL50J+xQc3s8/i392
-         Javw==
-X-Gm-Message-State: AOAM530lunSQY3J6K+cuFBONJN4O01+AN3Z2+yJOgTDMr8MYpNdnM+w2
-        BfKKn4IWsBgQ7tYvyA/EXX45Gzsd2+s=
-X-Google-Smtp-Source: ABdhPJwlRVu7yKGk3mooNF1L4OP8yzSS8BwyFARWD8TW5wtBBXh6+oSlKwOLSOpq7w6GK3rgAQJJww==
-X-Received: by 2002:a9d:67d9:: with SMTP id c25mr13471087otn.65.1628564094777;
-        Mon, 09 Aug 2021 19:54:54 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id h187sm3654898oif.48.2021.08.09.19.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 19:54:54 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
-        robh+dt@kernel.org, lee.jones@linaro.org, pgwipeout@gmail.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH v3 4/4] arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
-Date:   Mon,  9 Aug 2021 21:54:36 -0500
-Message-Id: <20210810025436.23367-5-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210810025436.23367-1-macroalpha82@gmail.com>
-References: <20210810025436.23367-1-macroalpha82@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aDNn5MUn0UlUn+FaFAYDGrNsI9A/fjMlNqqSQYJVR80=;
+ b=Q8i0iZGpQgp8oveHdiRDNe6wum9YppbZGEaKvKJYQU9fnI+m5U4Y6sRTlcnnRfRpcU78mDN8q3APTxJg2evbpdF8NDNlTlw16mSizUwYK6tw1/1GhVT5cGJTGWoL3gxPpb9XNBo2v0gDItJech8iM0ntVfJ9IZGLhqnuiNVekIQ=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=oracle.com;
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH0PR10MB5563.namprd10.prod.outlook.com (2603:10b6:510:f2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Tue, 10 Aug
+ 2021 03:21:02 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c0ed:36a0:7bc8:f2dc]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c0ed:36a0:7bc8:f2dc%6]) with mapi id 15.20.4394.023; Tue, 10 Aug 2021
+ 03:21:02 +0000
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH V5] scsi: ufshcd: Fix device links when BOOT WLUN fails
+ to probe
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pmumvvce.fsf@ca-mkp.ca.oracle.com>
+References: <20210716114408.17320-1-adrian.hunter@intel.com>
+        <20210716114408.17320-3-adrian.hunter@intel.com>
+        <c78aac34-5c55-f6b6-3450-d5c3f09781fa@intel.com>
+        <35b2bd0f-5766-debd-2b4c-c642a85df367@acm.org>
+        <yq1czqrguch.fsf@ca-mkp.ca.oracle.com>
+        <739a1abf-fca0-458e-5c8c-1d6ed90b56e0@intel.com>
+        <a1c9bac8-b560-b662-f0aa-58c7e000cbbd@intel.com>
+Date:   Mon, 09 Aug 2021 23:21:00 -0400
+In-Reply-To: <a1c9bac8-b560-b662-f0aa-58c7e000cbbd@intel.com> (Adrian Hunter's
+        message of "Fri, 6 Aug 2021 16:04:41 +0300")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0236.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::31) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ca-mkp.ca.oracle.com (138.3.200.58) by SJ0PR03CA0236.namprd03.prod.outlook.com (2603:10b6:a03:39f::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.16 via Frontend Transport; Tue, 10 Aug 2021 03:21:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 61b97948-84eb-48a2-9995-08d95bade1e5
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5563:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <PH0PR10MB55633D284136F6102A3C36F28EF79@PH0PR10MB5563.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TT1+dWLYryBBQFchAkbKK21FuVyrmerbfnlnvKwASWhXuJVP2+rRl0E1+9DvxjoAxEEtEzcA9oN2NrC4b7y6Tkub2/J1xGKE5y5uyZuhumHiC1hXxQVVtNK+EBL7fVujjQoHpoEzK5Gcco3bKVURN5uwLw+VmViWb5gz4syVqHVH8PFSW+CByScs4vJgRB1frKJwaeTEIlND1gi2hOwSvxdOV242dCUtSaXfnJmuTITXp5Z3oqtM2rTd0lUEARmMQUMMj1QRpK18JvMwPjYTPVs0txfdXCtYIkX/YC+hm4xSFdtrsw6CRxB8Kun1yTVMH01TgZPQBgWH8NL6B+pTlsMxyQqA/aMWfhN16p7tGfKPHo9b2dOwxIpCFkfG/XwnJTOot58qgLr+76iEoRUMoGa1eoHaJ+pWiptwMExBg9PKduZ5loHuBqdu83taaRMi9QndBZLVEnNvLGYBZXbrQAmDl/FL4RIDr6sc+Ha2KPgyJZnrQwKEIBVrJWJz4nic9CknPGeokwkj64QQRINWUmYMcyQsrPn2I6XO1YylJ5/LEkEj53TnXfwd43ocT4Gv9OiP5r0QqFGF6TF30qnWjBQkgxbgLTRfqErPENgtnxjTcrmOAtZSGqZ/OJ7QGhLrjUxdiJcrc1hEcihtwztpKMNT2QHCkvyZZX06/u7wLOVSx0+P3LB8L1M3kuM3Ry4z
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(136003)(376002)(396003)(366004)(186003)(4326008)(956004)(55016002)(4744005)(86362001)(26005)(2906002)(7416002)(38100700002)(38350700002)(54906003)(478600001)(6916009)(8936002)(5660300002)(52116002)(36916002)(7696005)(83380400001)(8676002)(66946007)(316002)(66476007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XkApIZeUnO2jvCYPiAhxsCrM75mnZ4K+V53bySK/7h9V2sgDm0sjA3F2msn0?=
+ =?us-ascii?Q?YiAXoB2rb72AsEhIe5ehv28TbZNXO5ze8VYg9dyynb9mRJedy/biogTw/Nui?=
+ =?us-ascii?Q?d2ayaRP/LlYzGcfAMiZLG0qkQyaCLvrOftAxwMLFOI8jTGbCVunJFX+Rfbp5?=
+ =?us-ascii?Q?DYD+tvs71Nfpjntp0jNDMwNvCUcb9jerpQ9EvtDuiqLOFnwMw1VBNw5OI7Mh?=
+ =?us-ascii?Q?kAmI2P9ZaB6PCZHsbrIJoYzcxtMFiYFnaexb3iX2SxoTkRX9KzNtjyHAOXXA?=
+ =?us-ascii?Q?XFVOHq3juI81cAmikishViYy3FfPUi1PNI0IcEZhjnKBSrpFftq0oaRdTBTU?=
+ =?us-ascii?Q?m/Ut6MEbrcXo+NHnuMqJF2MsyW4yZyzNHeffQp93jAQGALd0s3ny0IXgQPDs?=
+ =?us-ascii?Q?JaMWkz0ajYTUZ04qHnJ3guWmsuYniaIjAWOlyjy7cziyQa+Lk71q4Qro9xSf?=
+ =?us-ascii?Q?B+FGC29JboxpyCgRLxXXJQLXgW0B1qXWnr8sJKeF2w25EOzHPLbNRRiObEBy?=
+ =?us-ascii?Q?s7L06F1I1k9zC9sttotKazoCcbfGp8SRD1KIvjhM8bDz+KzWgtebpqPHki12?=
+ =?us-ascii?Q?YlFHAXq+uKxxwVhArI5EmVQyHtc5ylbahbuzdqFy8xMuqr4NUDZno22qrZ78?=
+ =?us-ascii?Q?YFR7EyJ0RMRp9yjz8jG9WtON2KiwW5bR9hJNaL8Y3MyaCJJiz5qJcrh09svf?=
+ =?us-ascii?Q?RVfFZL5F+6oYiu2cewJNhU31Pk1+pYbnu6Q9f4f8PhDbkFg0Lwb0FpZesB3B?=
+ =?us-ascii?Q?aM5jDXWFLrSWu2Vd0bh/FaLarBP3957ypULCRnNvV1tppr2/TdByGt2IsZN1?=
+ =?us-ascii?Q?xHt78Zm5Wvu4+HS5GCISles8BhoAbsHfF1sj+0V2UT+zzaLztursbPGDqfIN?=
+ =?us-ascii?Q?thkHz4pjtYaGq9w+rMdzx2qamQDzsRU5Lk1TnvjKMnZWEtFYO9psA1+zmtEm?=
+ =?us-ascii?Q?upx0EAz1tI4hG7cGTdq4xjhBQZomjZqRW439waNHqppUjHjruWua7hGQla/H?=
+ =?us-ascii?Q?jQ2e3YTucG9LULEBqppfihuXZ7D+aSTRgiHDWY/F+BKYQA240qniLmnsqcFi?=
+ =?us-ascii?Q?w9lDa5snqX8cv49uDKzZeI6FoXvmoSfJ5O0bHN8fAPWtpgk0pzCblgEjMfui?=
+ =?us-ascii?Q?48ege+IdRr/2j/2z94ezMRmcNNyL1VhfUdHbaOyP5RLvMW1pBoq2FUKNwd/v?=
+ =?us-ascii?Q?r5idDYZt0lpkkbjGms45qFW8DOPYyGmkSV6G73/n9AxlbIB5JA3nkUC2pvGa?=
+ =?us-ascii?Q?0uuqcAoJUoldSIF9VrlFNf52N7W6YXz9YOAOAs4Y8sUOu+sUfLYl0dEHifMY?=
+ =?us-ascii?Q?i7j0xyfyB5Ec2fcXsG+1/ImT?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61b97948-84eb-48a2-9995-08d95bade1e5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2021 03:21:02.7763
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7O5SexZtwfWpn7f1GylJiX8wP1OsC2pJ2s1FdqsuDi/MApu5x3a2gIt/oewVQpZ4YsMFpHrIvliXzd9X9CKqDvqxdyIoq3tp7sBjXRHywu4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5563
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10071 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
+ adultscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108100019
+X-Proofpoint-ORIG-GUID: b54y-D-c0DvfWQQhZoxIiVUGB-aTl5Mk
+X-Proofpoint-GUID: b54y-D-c0DvfWQQhZoxIiVUGB-aTl5Mk
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
 
-Add the new rk817 charger driver to the Odroid Go Advance. Create a
-monitored battery node as well for the charger to use. All values
-from monitored battery are gathered from the BSP kernel for the
-Odroid Go Advance provided by HardKernel.
+Adrian,
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
----
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+> Managed device links are deleted by device_del(). However it is
+> possible to add a device link to a consumer before device_add(), and
+> then discovering an error prevents the device from being used. In that
+> case normally references to the device would be dropped and the device
+> would be deleted.  However the device link holds a reference to the
+> device, so the device link and device remain indefinitely (unless the
+> supplier is deleted).
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index 7fc674a99a6c..aff8d0768c5a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -52,6 +52,25 @@ backlight: backlight {
- 		pwms = <&pwm1 0 25000 0>;
- 	};
- 
-+	battery_cell: battery-cell {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3000000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <180000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		voltage-min-design-microvolt = <3500000>;
-+
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 =	<4106000 100>, <4071000 95>, <4018000 90>, <3975000 85>,
-+					<3946000 80>, <3908000 75>, <3877000 70>, <3853000 65>,
-+					<3834000 60>, <3816000 55>, <3802000 50>, <3788000 45>,
-+					<3774000 40>, <3760000 35>, <3748000 30>, <3735000 25>,
-+					<3718000 20>, <3697000 15>, <3685000 10>, <3625000 5>,
-+					<3500000 0>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
-@@ -462,6 +481,13 @@ regulator-state-mem {
- 			};
- 		};
- 
-+		rk817_battery: battery {
-+			monitored-battery = <&battery_cell>;
-+			rockchip,resistor-sense-micro-ohms = <10000>;
-+			rockchip,sleep-enter-current-microamp = <300000>;
-+			rockchip,sleep-filter-current-microamp = <100000>;
-+		};
-+
- 		rk817_codec: codec {
- 			rockchip,mic-in-differential;
- 		};
+Applied to 5.15/scsi-staging, thanks!
+
 -- 
-2.25.1
-
+Martin K. Petersen	Oracle Linux Engineering
