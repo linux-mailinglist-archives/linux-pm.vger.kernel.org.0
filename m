@@ -2,129 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943CC3E85A0
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 23:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322913E868B
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 01:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234715AbhHJVsF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 17:48:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234388AbhHJVsE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 17:48:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F30386056B;
-        Tue, 10 Aug 2021 21:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628632062;
-        bh=wfH6ldLowlDtWjigLrVOdUDg6tP64KWTHklxRYd4VT8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GZ9n0zErFuZI5rGZsQV0RqkxJmu6XYnn1jrGAjamTtHqATbOz/3SyQZhaXmfMuxV1
-         5zFn53aBL/AshPCVmCkuN3Vfv01ue+/RHqdV23ufnGwjn/o5vcT2H1RoXLxn/BdBUv
-         cdI5SQkQfVKjDT3ZtqetGvw055ipjICgAHt+OFwKAPVmLRVBtT1u3zO52+qenoGm81
-         FE2tZnt5eDRp2kztz63PiqawFfDqLkMwLCdijSUpmwB1ES57k2LZJJD40r32+nW/mW
-         yBXiWLa8kcqeUcs+yEVd/ZK2XBgQBS0X7WsrCZuUtzTb0I3ZUL1JUD97XvmmtaXRqY
-         Q/PmuoRi+Pdkw==
-Date:   Tue, 10 Aug 2021 16:47:40 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Sam Edwards <CFSworks@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: [bugzilla-daemon@bugzilla.kernel.org: [Bug 214025] New: Better error
- message for PCI devices killed during boot?]
-Message-ID: <20210810214740.GA2306774@bjorn-Precision-5520>
+        id S235417AbhHJXb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 19:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235242AbhHJXb4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 19:31:56 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D41C061798
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 16:31:34 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id z9-20020a9d62c90000b0290462f0ab0800so1120571otk.11
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 16:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=DdVdn9iNnWyMUjEKky2BxxbxaluBkvajxWA2hdi0viQ=;
+        b=SJyRTDGNn25cPioEO33i9E465TFVUM3oyVwTlhDMc/02U34Y6PJudLH+ImNGYKQHij
+         ZymOHdDNXbbJyU7vyl3D8Q07kVLp+l19e9o7YEcgvDWLD/Y3ZCoMSqAik3ogP+qXFVKb
+         awn+a8WwyYujXfV6b5hFgk5tLM5b2e9Aj4d0Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=DdVdn9iNnWyMUjEKky2BxxbxaluBkvajxWA2hdi0viQ=;
+        b=tEqujsOmTNRMaZnjrHK8RIBtjKd6tbgeTy8DKIEaCFP76tEAK+6CsAenYqS/okuLeJ
+         PxICskxJPNd73WWaKIgai3iHpQSrU0//I8yAXZJFxa7ippocAt7hkqeOv7qOwnxvdHvB
+         YW/D15PxfrXYkvl+S5TK+iYTdGlvKtfH10gLWeg4NAjBbsC6mveEISsTQliZ/HE6uEhh
+         Ev3trpca8KsVyTywkbvFAdFRhzcKyUAVTW8bHmFoSLnwx2Pim+UrOMTaX/o8YR446ADa
+         IoSGsSOsTek7L+wijcrfERXhFr86LXzDnxWu0kCZ6mUAG+FKtCwGM8mfhywL5uG96nEt
+         KXaQ==
+X-Gm-Message-State: AOAM5305UrDetF6iKhs875EaPN+ndUfNwP8VCkni895fcq2QLcpjuCwZ
+        DEtpHrz/Wa55Qy3W4Ozqcr/NNAMdEg4GubGjeMS6vQ==
+X-Google-Smtp-Source: ABdhPJx2AAfQiWqyLOxU4A5451d9RiJWf3pxTqnLNNHUZFFyXlTs8W8aHceuoLd9sS3hJE9+rvOco02aXCO3VgUcCgI=
+X-Received: by 2002:a05:6830:1490:: with SMTP id s16mr23006661otq.233.1628638293521;
+ Tue, 10 Aug 2021 16:31:33 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 10 Aug 2021 16:31:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20210721175432.2119-5-mdtipton@codeaurora.org>
+References: <20210721175432.2119-1-mdtipton@codeaurora.org> <20210721175432.2119-5-mdtipton@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 10 Aug 2021 16:31:33 -0700
+Message-ID: <CAE-0n52iVgX0JjjnYi=NDg49xP961p=+W5R2bmO+2xwRceFhfA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] interconnect: qcom: icc-rpmh: Add BCMs to commit
+ list in pre_aggregate
+To:     Mike Tipton <mdtipton@codeaurora.org>, djakov@kernel.org
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        saravanak@google.com, okukatla@codeaurora.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Alex Elder <elder@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, linux-pci, linux-pm]
+Quoting Mike Tipton (2021-07-21 10:54:32)
+> We're only adding BCMs to the commit list in aggregate(), but there are
+> cases where pre_aggregate() is called without subsequently calling
+> aggregate(). In particular, in icc_sync_state() when a node with initial
+> BW has zero requests. Since BCMs aren't added to the commit list in
+> these cases, we don't actually send the zero BW request to HW. So the
+> resources remain on unnecessarily.
+>
+> Add BCMs to the commit list in pre_aggregate() instead, which is always
+> called even when there are no requests.
+>
+> Fixes: 976daac4a1c5 ("interconnect: qcom: Consolidate interconnect RPMh support")
+> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> ---
 
-Sorry for the trouble this caused you, and thanks for the report.
+This patch breaks reboot for me on sc7180 Lazor
 
-I completely agree that these messages are not really useful to users.
-After all your troubleshooting, were you able to do something to make
-the NVMe device usable?
+[  107.136454] kvm: exiting hardware virtualization
+[  107.163741] platform video-firmware.0: Removing from iommu group 13
+[  107.193412] SError Interrupt on CPU1, code 0xbe000011 -- SError
+[  107.193428] CPU: 1 PID: 4289 Comm: reboot Not tainted 5.14.0-rc1+ #12
+[  107.193432] Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+[  107.193436] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO BTYPE=--)
+[  107.193440] pc : el1_interrupt+0x20/0x60
+[  107.193443] lr : el1h_64_irq_handler+0x18/0x24
+[  107.193445] sp : ffffffc014093a10
+[  107.193448] x29: ffffffc014093a10 x28: ffffff8088295ec0 x27: 0000000000000000
+[  107.193465] x26: ffffff8080ed4c18 x25: ffffffd0beece000 x24: ffffffd0bef45000
+[  107.193476] x23: 0000000060400009 x22: ffffffd0be0bc1a0 x21: ffffffc014093b90
+[  107.193487] x20: ffffffd0bdc100f8 x19: ffffffc014093a40 x18: 000000000007d829
+[  107.193497] x17: ffffffd067412b54 x16: ffffffd0be0bc164 x15: ffffffd067413d0c
+[  107.193507] x14: ffffffd0bdd24fa4 x13: ffffffd0bdc26180 x12: ffffffd0bdc26260
+[  107.193517] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+[  107.193528] x8 : 00000000000000c0 x7 : bbbbbbbbbbbbbbbb x6 : ffffffd0bde488dc
+[  107.193539] x5 : 0000000000200017 x4 : ffffff809b5c4b40 x3 : 0000000000200018
+[  107.193549] x2 : ffffff8088295ec0 x1 : ffffffd0bdc100f8 x0 : ffffffc014093a40
+[  107.193561] Kernel panic - not syncing: Asynchronous SError Interrupt
+[  107.193564] CPU: 1 PID: 4289 Comm: reboot Not tainted 5.14.0-rc1+ #12
+[  107.193567] Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+[  107.193570] Call trace:
+[  107.193573]  dump_backtrace+0x0/0x1c8
+[  107.193577]  show_stack+0x24/0x30
+[  107.193579]  dump_stack_lvl+0x64/0x7c
+[  107.193582]  dump_stack+0x18/0x38
+[  107.193584]  panic+0x158/0x39c
+[  107.193586]  nmi_panic+0x88/0xa0
+[  107.193589]  arm64_serror_panic+0x80/0x8c
+[  107.193593]  do_serror+0x0/0x80
+[  107.193595]  do_serror+0x58/0x80
+[  107.193597]  el1h_64_error_handler+0x30/0x48
+[  107.193601]  el1h_64_error+0x78/0x7c
+[  107.193603]  el1_interrupt+0x20/0x60
+[  107.193606]  el1h_64_irq_handler+0x18/0x24
+[  107.193609]  el1h_64_irq+0x78/0x7c
+[  107.193612]  refcount_dec_and_mutex_lock+0x3c/0xb4
+[  107.193616]  ipa_clock_put+0x34/0x74 [ipa]
+[  107.193619]  ipa_deconfig+0x64/0x74 [ipa]
+[  107.193622]  ipa_remove+0xbc/0x110 [ipa]
+[  107.193625]  ipa_shutdown+0x24/0x50 [ipa]
+[  107.193628]  platform_shutdown+0x30/0x3c
+[  107.193631]  device_shutdown+0x150/0x208
+[  107.193633]  kernel_restart_prepare+0x44/0x50
+[  107.193637]  kernel_restart+0x24/0x70
+[  107.193640]  __arm64_sys_reboot+0x188/0x230
+[  107.193643]  invoke_syscall+0x4c/0x120
+[  107.193646]  el0_svc_common+0x84/0xe0
+[  107.193648]  do_el0_svc_compat+0x2c/0x38
+[  107.193651]  el0_svc_compat+0x20/0x30
+[  107.193654]  el0t_32_sync_handler+0xc0/0xf0
+[  107.193657]  el0t_32_sync+0x19c/0x1a0
 
-You mention ACPI powering off the device between PCI enumeration and
-the driver's probe method.  Did you open a bug report about that, too?
-I think we might need to explore that situation to resolve this.
+Presumably some sort of interconnect is getting turned off earlier than
+before?
 
-The "config space inaccessible" message comes from
-pci_raw_set_power_state(), and it means we got ~0 when reading the
-Power Management Control/Status register.  That's not a valid value,
-so I assume the device was in D3cold, where it can't respond to config
-reads.
-
-The fact that we enumerated the device means it was in at least D3hot,
-where it *can* respond to config reads.  PCI cannot put a device into
-D3cold directly; only ACPI or similar platform code can do that.
-
------ Forwarded message from bugzilla-daemon@bugzilla.kernel.org -----
-
-Date: Tue, 10 Aug 2021 17:27:17 +0000
-From: bugzilla-daemon@bugzilla.kernel.org
-To: bjorn@helgaas.com
-Subject: [Bug 214025] New: Better error message for PCI devices killed during
-	boot?
-Message-ID: <bug-214025-41252@https.bugzilla.kernel.org/>
-
-https://bugzilla.kernel.org/show_bug.cgi?id=214025
-
-            Bug ID: 214025
-           Summary: Better error message for PCI devices killed during
-                    boot?
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.13.8
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: low
-          Priority: P1
-         Component: PCI
-          Assignee: drivers_pci@kernel-bugs.osdl.org
-          Reporter: CFSworks@gmail.com
-        Regression: No
-
-Hello,
-
-I recently finished troubleshooting an issue where some NVMe SSD on the PCIe
-bus wasn't being initialized by the driver; the kernel log contained:
-
-pci 0000:02:00.0: CLS mismatch (64 != 1020), using 64 bytes
-...
-nvme 0000:02:00.0: can't change power state from D3hot to D0 (config space
-inaccessible)
-
-The problem (which deserves its own bug report) was that ACPI initialization
-was powering off the device between the time the PCI bus was scanned and the
-time the driver was probing the device. The CLS value of 1020 came from the
-register being read as 0xFF (255*4 = 1020) due to the config space being
-inaccessible. However, to a user who doesn't have full intuition about PCI,
-neither of these messages is particularly clear about what's really happening.
-
-I'd have expected a (WARN/ERR) message saying something more like, "pci
-0000:02:00.0: device has unexpectedly disappeared from the bus; removing"
-implemented either as a check right before driver probing or at key stages of
-the PCI device fixup process (such as when computing CLS). This check is
-probably not necessary for hotplugged devices, since major platform power
-management initialization won't happen between the hotplug event and driver
-binding, but I strongly believe it's appropriate at boot when other subsystems
-are liable to interfere with PCI devices.
-
-An alternative to removing the device would be to keep it present in sysfs but
-put it in some other state (D3cold?) and hold off on trying to bind the driver.
-This hopefully increases the chance that the user sees that the device is
-present but in an unusual state.
-
-Thoughts?
-
--- 
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.
-
------ End forwarded message -----
+>  drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> index f118f57eae37..b26fda0588e0 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
+>  {
+>         size_t i;
+>         struct qcom_icc_node *qn;
+> +       struct qcom_icc_provider *qp;
+>
+>         qn = node->data;
+> +       qp = to_qcom_provider(node->provider);
+>
+>         for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+>                 qn->sum_avg[i] = 0;
+>                 qn->max_peak[i] = 0;
+>         }
+> +
+> +       for (i = 0; i < qn->num_bcms; i++)
+> +               qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
+>
+> @@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>  {
+>         size_t i;
+>         struct qcom_icc_node *qn;
+> -       struct qcom_icc_provider *qp;
+>
+>         qn = node->data;
+> -       qp = to_qcom_provider(node->provider);
+>
+>         if (!tag)
+>                 tag = QCOM_ICC_TAG_ALWAYS;
+> @@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>         *agg_avg += avg_bw;
+>         *agg_peak = max_t(u32, *agg_peak, peak_bw);
+>
+> -       for (i = 0; i < qn->num_bcms; i++)
+> -               qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+> -
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
