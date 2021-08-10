@@ -2,88 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0779F3E7CB4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 17:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411A03E7ECB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 19:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240612AbhHJPsF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 11:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S232982AbhHJRfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 13:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbhHJPsE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 11:48:04 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B449C0613C1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 08:47:42 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 6so1249689wme.5
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 08:47:42 -0700 (PDT)
+        with ESMTP id S232974AbhHJRec (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 13:34:32 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40945C0619C0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 10:33:14 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h11so15238044ljo.12
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 10:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vDaGuwWbiFYHv/+u9xTKhERWor1NRN9LJwDDU43ZPlM=;
-        b=Zw9cPJo1djs0P+aiL4Z/uQBZO7+xZbCaqaA0wZD859awofWDpQew9kIJ+YMvQXP6zf
-         LcLqeVcIrZEC946/btXSi+LIGio8KqU6aPfnAc4R/qVR5DRCEhy/XwoEw4lCAhkHzEjo
-         kC1vUPy81d0ihEi9HNCSB9i60gpv1z0rpmnwCzFuOT0MsjbQoJ7cAp5jscmduHW8TIKf
-         Scfqpm3nnAm4s4eE8xWvnYRXZEZ5rBj/MpJltLRqpgd2ghuSeZriEClDKT9ITheAiepp
-         C0vnmnN81qWxRSnuV9kzDSvUN318xPhBOjtMZEftH591aCQrPbEYvhjACyGyaLXBoWn/
-         d1KA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
+        b=RsiBBdA9QKOcTCF5lGXKVsjmClQ3sMV8nYRHi5UzQ6RFRdaZ6t981j56diJ7q3WLiT
+         dSrogDmRt6kwHS+J+pcIdphvlu5Vk62bOJudqb0dzEOf5Tr6sAVMWTY2NbEn++ZnSdaf
+         F4yj6h4F7VBk6uVCXN4p2StSiBpSckLhr0NJoCtUTvVh+gCrpSdvA2dss+nT8Q4XWg+b
+         4x9fMuBGMminOSzPCK8njOsWexpWsfb2omBFXa3GLhHqzUauC1r8oyB3fDvFuiS7qNjT
+         fDqijYMWxjmP3EeBvtWaIUY7Z5YEma/9OhqmI5Ya7ZKqW/5hzlkm8xAdNsqyzESz/5Xj
+         5sZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vDaGuwWbiFYHv/+u9xTKhERWor1NRN9LJwDDU43ZPlM=;
-        b=ZZ/EjvRCakI1eD+ouZEDI95ujQcKQDtacSVbOa7BelVD+DKWvyIh58DY4lv9sKZkFc
-         PCGuDGu0XrVVcxRk8bX0JeoVOnBWyO5gbFafjsXDWZUI+Z+SXH+tMPF7hoT54v/BneLj
-         di7f8l0+qSvfBN3Vo+ylzg3Iq8Yp3PME97zdm440hzTMN706LsNqWhOZ7F9aC+meADzA
-         hV3sjqd+5cJjZC0J/oxpRoMgUuAGUtt2Qiz19mlgR6LrT1/BOAf72IHMBT3D1lNi0DhL
-         ohrLXeJxvePqFzOSY3e+5JGHbxso6tU6uf6RM90Q8GyTFv6RmA4Bzt2atoMRFR2I75Wa
-         ysTg==
-X-Gm-Message-State: AOAM533QNm37DV8cW5whLtgFeb0l2E5MHcTyWGaHVfFQ4SvqrH+TTZhD
-        HEY3nsLub3ycKJt21e4nxdYnAg==
-X-Google-Smtp-Source: ABdhPJw70tHNLWZeI/EEou5AcrDTftv1+g96Lmw+NLH5xI0MNk7/l3taECzY7vXzOuEm9nwaS+S0Nw==
-X-Received: by 2002:a05:600c:3b15:: with SMTP id m21mr23356236wms.99.1628610461080;
-        Tue, 10 Aug 2021 08:47:41 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e920:cedf:a082:9d02])
-        by smtp.gmail.com with ESMTPSA id z13sm12663882wrs.71.2021.08.10.08.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 08:47:40 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 16:47:34 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, r@google.com
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-Message-ID: <YRKfluMP8G41/P61@google.com>
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
- <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
- <YRKINFhDmYqvgxsN@google.com>
- <cf9d78fe-cff0-1992-2c15-7053e4431296@arm.com>
- <b888407c-d444-8184-cbb7-ce8e925b254b@arm.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
+        b=Piqh/4+9q0y+kj8m/Nu3K2yDj8+gLd0dKEQSfj9zI7zZyuE2lbbiOZXyI2qRw4X46R
+         cc0jMjN54NdVF4/ugSmtrvGQyHAz5uUjQXEB61Tst8WyBE3zDs5c5y/vTPEAXBZ0Yt5m
+         9gJuOAn+4ptCeyTBbwnORm+6SKJJ/2dOHfbs2aAI9G1LMmBlLnBh7QpZKB2VHALQy7E4
+         TkrHAkdP160c1suRdVx1glcWKrOEcaQe87oVbhgwOqqS2pH668NLAoxgnipAWWaTFRL1
+         oyZbTuhZ5gU0q1OBR+dsxepeyjBHV63GkD4A3djoRHZHkSTh5bJE7ZsN3ddGz4jsgp7D
+         5iOA==
+X-Gm-Message-State: AOAM5308lh2fZum9qFAR5nTPFva019CtmQwb3PVLwURDwWgq06BJ33Ts
+        t8A7biJ/g0k7xwNhchxMXTO0KWZ7gwdfMB66GRU=
+X-Google-Smtp-Source: ABdhPJw+sC+pBQw0G+0ULVvin/r/jCVVb1V7XUqN67UCoWrnBzyIXnaSzK5br1SZrCupI/L0LIZWgMfi7vhpZK+Wcm0=
+X-Received: by 2002:a05:651c:32c:: with SMTP id b12mr1745558ljp.198.1628616792032;
+ Tue, 10 Aug 2021 10:33:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b888407c-d444-8184-cbb7-ce8e925b254b@arm.com>
+Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:10
+ -0700 (PDT)
+Reply-To: majidmuzaffar8@gmail.com
+From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
+Date:   Tue, 10 Aug 2021 20:33:10 +0300
+Message-ID: <CAFsu49XXzY7ugKhGzJm5OPKe2LG1R35c-Dkp83VgS3+u27y=sQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 10 Aug 2021 at 16:12:29 (+0100), Lukasz Luba wrote:
-> I've checked that. It's not the policy notifier and arch_topology which
-> cause an issue, but the cpufreq governor setup code. Anyway, we cannot
-> wait so late with the EM registration, till e.g. ::ready() callback.
+Salam alaikum,
 
-Aha, yes, because by the time the arch_topology driver rebuilds the
-sched domains, the governor is not 'installed', which means the
-scheduler is not in a position to enable EAS yet. So we need to wait
-until sched_cpufreq_governor_change() is called for that. Makes sense,
-thanks for checking, and +1 to your conclusion.
+I am the investment officer of UAE based investment company who are
+ready to fund projects outside UAE, in the form of debt finance. We
+grant loan to both Corporate and private entities at a low interest
+rate of 3% ROI per annum. The terms are very flexible and interesting.
+Kindly revert back if you have projects that needs funding for further
+discussion and negotiation.
+
+Thanks
+
+investment officer
