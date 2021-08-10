@@ -2,126 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE6F3E5720
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 11:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EBD3E572E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 11:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhHJJhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 05:37:22 -0400
-Received: from foss.arm.com ([217.140.110.172]:52142 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229447AbhHJJhV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 05:37:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0DD11063;
-        Tue, 10 Aug 2021 02:36:59 -0700 (PDT)
-Received: from [10.57.9.181] (unknown [10.57.9.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51F413F718;
-        Tue, 10 Aug 2021 02:36:58 -0700 (PDT)
-Subject: Re: [PATCH 1/8] cpufreq: Auto-register with energy model if asked
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S239229AbhHJJix (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 05:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239216AbhHJJix (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 05:38:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AF4C0613D3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 02:38:31 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id e19so6675212pla.10
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 02:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vmGUDQVffEqjbU2fZFvw8N47aHxiBCcFlMvcbAC01SE=;
+        b=rc8M6nZCQwEpSRpemhf/Q1rL6/CIirc2mlzmVyR1qN/PYfCrHzBm4N3m2WofOIbmFG
+         bHD+r/QwBap/2vi2ZQL00lgZHY3qzqSxS9+61KYKaEziQfCzrQNwofBekE5aGPl0rZac
+         lgeZyr7TouXlOCti0z7vr1MUrNtJH7o3cbfYXtBsN8coOIl/c1J9+GNbEH3jZ+mzn1w8
+         KQeH0J1FAXbbaEDcz8gYjnwqXz6NNTqDIB6nncZaDvnIZMT4wHv8BWFVAWKKCXR3reOz
+         IaK0BCjbmZTrdfcS59kLCjx23dXcKSm/FHYfNs8E1MN978YoNK8eOj4/FKlva8ZAVbRC
+         DEKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vmGUDQVffEqjbU2fZFvw8N47aHxiBCcFlMvcbAC01SE=;
+        b=kxBM3fUzhaTEJ35zWgHnN18lXlaTLxkwCfjtBCjQzIUygncpITEpoXQhyA/zOdIONS
+         E51mU3ode3TMLXw475u5XGS2nlghEBz8q5Di6oH1evKWPOf5lFR7mRUPXs8GwTih8NA7
+         X9kY7EBxes0LxaMXAU5YW/jFyBYbX/WniIOIIGKHz9p4u41z8EwBp4M/IbTDe54zUwd2
+         n/8IQDXHI1qZDPMH9OLfXMr0wvmCxgmubJ/gv2DpeeVVdGJz0DyJTiRr7qXgX/QlaPxB
+         59WHd4JkvF2g5xpNYIUxVBt3cb/xmTl9jVOWV6mPlhRLMO9p6JMBzFf4FinhoQVk7lod
+         US8Q==
+X-Gm-Message-State: AOAM530DWHFQyR7nhM6xKM0KbsSIF0OzJKJ2UGtaVQWY4soffAHR/UiQ
+        1E3okurr2hmwt+iGNFEvqHraYg==
+X-Google-Smtp-Source: ABdhPJyGot8stnvmdsgoYb49sCstnXWOftc1D8Kb8lVuCM1UKO0gCMI8K/5WCQ9Pe/Wf9Xq6iuAArg==
+X-Received: by 2002:a17:90b:802:: with SMTP id bk2mr30864189pjb.51.1628588311453;
+        Tue, 10 Aug 2021 02:38:31 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id c9sm21394623pgq.58.2021.08.10.02.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 02:38:30 -0700 (PDT)
+Date:   Tue, 10 Aug 2021 15:08:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Vincent Donnefort <vincent.donnefort@arm.com>,
         linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] cpufreq: Auto-register with energy model if asked
+Message-ID: <20210810093828.drel3kuurmhd4ki7@vireshk-i7>
 References: <cover.1628579170.git.viresh.kumar@linaro.org>
  <b48e2c944db072c220a1b0ae0c3d94eb1c4da7ab.1628579170.git.viresh.kumar@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <f96f852f-0d73-7ad2-d7a9-eab6a5b7f454@arm.com>
-Date:   Tue, 10 Aug 2021 10:36:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ <f96f852f-0d73-7ad2-d7a9-eab6a5b7f454@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <b48e2c944db072c220a1b0ae0c3d94eb1c4da7ab.1628579170.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f96f852f-0d73-7ad2-d7a9-eab6a5b7f454@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 10-08-21, 10:36, Lukasz Luba wrote:
+> The of_cpufreq_cooling_register() should be called after the EM
+> is present for the CPU device. When you check that function,
+> you will see that we call
+> em_cpu_get(policy->cpu)
+> to get the EM pointer. Otherwise IPA might fail.
 
+Good point.
 
-On 8/10/21 8:36 AM, Viresh Kumar wrote:
-> Many cpufreq drivers register with the energy model for each policy and
-> do exactly the same thing. Follow the footsteps of thermal-cooling, to
-> get it done from the cpufreq core itself.
-> 
-> Provide a cpufreq driver flag so drivers can ask the cpufreq core to
-> register with the EM core on their behalf. This allows us to get rid of
-> duplicated code in the drivers.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/cpufreq.c | 9 +++++++++
->   include/linux/cpufreq.h   | 6 ++++++
->   2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 06c526d66dd3..a060dc2aa2f2 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -23,6 +23,7 @@
->   #include <linux/kernel_stat.h>
->   #include <linux/module.h>
->   #include <linux/mutex.h>
-> +#include <linux/pm_opp.h>
->   #include <linux/pm_qos.h>
->   #include <linux/slab.h>
->   #include <linux/suspend.h>
-> @@ -1511,6 +1512,11 @@ static int cpufreq_online(unsigned int cpu)
->   	if (cpufreq_thermal_control_enabled(cpufreq_driver))
->   		policy->cdev = of_cpufreq_cooling_register(policy);
-
-The of_cpufreq_cooling_register() should be called after the EM
-is present for the CPU device. When you check that function,
-you will see that we call
-em_cpu_get(policy->cpu)
-to get the EM pointer. Otherwise IPA might fail.
-
->   
-> +	if (cpufreq_driver->flags & CPUFREQ_REGISTER_WITH_EM) {
-> +		dev_pm_opp_of_register_em(get_cpu_device(policy->cpu),
-> +					  policy->related_cpus);
-> +	}
-> +
-
-So please move these new code above the thermal registration few lines
-above.
-
->   	pr_debug("initialization complete\n");
->   
->   	return 0;
-> @@ -1602,6 +1608,9 @@ static int cpufreq_offline(unsigned int cpu)
->   		goto unlock;
->   	}
->   
-> +	if (cpufreq_driver->flags & CPUFREQ_REGISTER_WITH_EM)
-> +		dev_pm_opp_of_unregister_em(get_cpu_device(cpu));
-> +
-
-Here is similar situation. Move the EM unregister after the thermal is
-done. For consistency it's OK, the real EM struct won't be freed
-for CPUs (due to scheduler reasons), though.
-
->   	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
->   		cpufreq_cooling_unregister(policy->cdev);
->   		policy->cdev = NULL;
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 9fd719475fcd..f11723cd4cca 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -424,6 +424,12 @@ struct cpufreq_driver {
->    */
->   #define CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	BIT(6)
->   
-> +/*
-> + * Set by drivers that want the core to automatically register the CPU device
-> + * with Energy Model.
-> + */
-> +#define CPUFREQ_REGISTER_WITH_EM		BIT(7)
-> +
->   int cpufreq_register_driver(struct cpufreq_driver *driver_data);
->   int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
->   
-> 
+-- 
+viresh
