@@ -2,43 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF3E3E59EC
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 14:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750A43E5A00
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 14:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240247AbhHJM2s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 08:28:48 -0400
-Received: from foss.arm.com ([217.140.110.172]:54298 "EHLO foss.arm.com"
+        id S239470AbhHJMeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 08:34:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238569AbhHJM2r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Aug 2021 08:28:47 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 318066D;
-        Tue, 10 Aug 2021 05:28:25 -0700 (PDT)
-Received: from [10.57.9.181] (unknown [10.57.9.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA6893F70D;
-        Tue, 10 Aug 2021 05:28:22 -0700 (PDT)
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
-Date:   Tue, 10 Aug 2021 13:28:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S240555AbhHJMeT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Aug 2021 08:34:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8576D60462;
+        Tue, 10 Aug 2021 12:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628598837;
+        bh=fhsz0BxVURPIdp6eG839zOcCbucoqG9Srd3uY0rDGfM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UjQoAzF/KSd7KTwl/9zpnY1yw1HV3jqfcWuzxJlimpM7BlpR4AX2gQ8wVr54kNE5f
+         JzNcNaba5PKiJwigcmNrLnG+VyTBoPZ9gaWiV0ERZ0gF6VqVZ3g8qcEo7p8xFTwA7p
+         vGAAy+Y/MF07RzrrtXyAD3/3hWsSm4Svd/MbPyFjNriivatsjxcNK8fuJTvv9buswM
+         +GdXz9M/jnytv17hHZEDcgvE2RRnDdUqYMTPmvrhbI6UbvsDxGG4rAtiRdJEB6euWf
+         fn/EP/pjZFQp28E0qgnVmz+JIJjR3tf1ltrr9L0busOsNOZN3dTjFnfvA+jcW8P+ty
+         qapslyqaBremg==
+Subject: Re: [v6 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect
+ provider
+To:     Odelu Kukatla <okukatla@codeaurora.org>, georgi.djakov@linaro.org,
+        bjorn.andersson@linaro.org, evgreen@google.com,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
+        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
+References: <1628577962-3995-1-git-send-email-okukatla@codeaurora.org>
+ <1628577962-3995-4-git-send-email-okukatla@codeaurora.org>
+From:   Georgi Djakov <djakov@kernel.org>
+Message-ID: <544023fc-f440-53bb-3308-33a1782aac19@kernel.org>
+Date:   Tue, 10 Aug 2021 15:33:52 +0300
 MIME-Version: 1.0
-In-Reply-To: <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
+In-Reply-To: <1628577962-3995-4-git-send-email-okukatla@codeaurora.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -46,107 +48,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Odelu,
 
+On 10.08.21 9:46, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
+> SoCs.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 53a21d0..e78f055 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -586,6 +586,15 @@
+>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>   		};
+>   
+> +		epss_l3: interconnect@18590000 {
 
-On 8/10/21 7:13 AM, Viresh Kumar wrote:
-> On 04-08-21, 18:21, Rafael J. Wysocki wrote:
->> The cpufreq changes are mostly fine by me now, but I would like to
->> hear from Viresh regarding this.
-> 
-> I have few doubts/concerns here.
-> 
-> Just to iterate it again, the idea here is to choose a higher
-> frequency, which will work in an efficient manner based on energy
-> consumption. So this _only_ works for the case where the caller asked
-> for CPUFREQ_RELATION_L.
-> 
-> - The new flag being added here, CPUFREQ_RELATION_E, doesn't feel
->    complete in this sense to me. It should rather be called as
->    CPUFREQ_RELATION_LE instead as it is _always_ used with relation L.
-> 
-> - IMO this has made the caller site a bit confusing now, i.e.  why we
->    send CPUFREQ_RELATION_E sometimes and CPUFREQ_RELATION_H at other
->    times. Why shouldn't the _H freq be efficient as well ? I understand
->    that this was done to not do the efficient stuff in case of
->    userspace/powersave/performance governors.
-> 
->    What about reusing following for finding all such cases ?
-> 
->          policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING
-> 
->    The driver can set a flag to tell if it wants efficient frequencies
->    or not, and at runtime we apply efficient algorithm only if the
->    current governor does DVFS, which will leave out
->    userspace/performance/powersave.
-> 
-> 
-> Now the other thing I didn't like since the beginning, I still don't
-> like it :)
-> 
-> A cpufreq table is provided by the driver, which can have some
-> inefficient frequencies. The inefficient frequencies can be caught by
-> many parts of the kernel, the current way (in this series) is via EM.
-> But this can totally be anything else as well, like a devfreq driver.
+This DT node should be moved after apps_rsc: rsc@18200000
+and before cpufreq@18591000
 
-Currently devfreq drivers and governors don't support 'inefficient'
-OPPs idea. They are not even 'utilization' driven yet. I'm not sure
-if that would make sense for their workloads. For now, they are far
-behind the CPUFreq/scheduler development in this field.
-It needs more research and experiments, to even estimate if this brings
-benefits. So, I would just skip devfreq use case...
+> +			compatible = "qcom,sc7280-epss-l3";
+> +			reg = <0 0x18590000 0 1000>, <0 0x18591000 0 0x100>,
+> +				<0 0x18592000 0 0x100>, <0 0x18593000 0 0x100>;
 
-> 
-> The way we have tied this whole thing with EM, via
-> cpufreq_read_inefficiencies_from_em(), is what I don't like. We have
-> closely bound the whole thing with one of the ways this can be done
-> and we shouldn't be polluting the cpufreq core with this IMHO. In a
-> sane world, the cpufreq core should just provide an API, like
-> cpufreq_set_freq_invariant() and it can be called by any part of
-> the kernel.
-> 
-> I understand that the current problem is where do we make that call
-> from and I suggested dev_pm_opp_of_register_em() for the same earlier.
-> But that doesn't work as the policy isn't properly initialized by that
-> point.
+Please align to the open parenthesis, to be consistent with the rest of
+the file.
 
-True, the policy is not initialized yet when cpufreq_driver::init()
-callback is called, which the current place for scmi-cpufreq.
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+> +			clock-names = "xo", "alternate";
+> +			#interconnect-cells = <1>;
+> +		};
+> +
+>   		ipa: ipa@1e40000 {
+>   			compatible = "qcom,sc7280-ipa";
 
-What about the other callback cpufreq_driver::ready() ?
-This might solve the two issues I mentioned below.
+Thanks,
+Georgi
 
-> 
-> Now that I see the current implementation, I think we can make it work
-> in a different way.
-> 
-> - Copy what's done for thermal-cooling in cpufreq core, i.e.
->    CPUFREQ_IS_COOLING_DEV flag, for the EM core as well. So the cpufreq
->    drivers can set a flag, CPUFREQ_REGISTER_EM, and the cpufreq core
->    can call dev_pm_opp_of_register_em() on their behalf. This call will
->    be made from cpufreq_online(), just before/after
->    cpufreq_thermal_control_enabled() stuff. By this point the policy is
->    properly initialized and is also updated in
->    per_cpu(cpufreq_cpu_data).
-> 
-> - Now the cpufreq core can provide an API like
->    cpufreq_set_freq_invariant(int cpu, unsigned long freq), which can
->    be called from EM core's implementation of
->    em_dev_register_perf_domain().
-> 
-
-I have to point out that there are two issues (which we
-might solve):
-1. Advanced setup, due to per-CPU performance requests,
-which are not limited to real DVFS domain.
-The scmi-cpufreq (and possibly some other soon) uses more
-tricky EM setup. As you might recall, the construction of temporary
-cpumask is a bit complex, since we want per-CPU policy, but the
-cpumask pass to EM has not a single bit but is 'spanned' with a few
-CPUs.
-
-2. The scmi-cpufreq (and IIRC MTK cpufreq driver soon) requires
-custom struct em_data_callback, since the power data is coming from FW.
-
-If there is a need for complex EM registration, maybe we could
-do it in the cpufreq_driver::ready(). The policy would be ready
-during that call, so it might fly.
