@@ -2,112 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3533E5617
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 10:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872FD3E569B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Aug 2021 11:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbhHJI7D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 04:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbhHJI7D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 04:59:03 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8274C0613D3
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 01:58:41 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id e19so6537097pla.10
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 01:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=tGDqpKKXonaqPg0I3+jQOa3tQeUyBDJ1nSpQ/SRm3gw=;
-        b=J5ban8UIulJl+A2a0/t8Z/EKE9XSyU1s4q8UvYt5NZNjWDsS/iqzpu7M0sOj9ifFJp
-         R4VovNiOo0jSvwTBR6etr0ErRf15KU0VSNk9/WCs3eN201bZR644VFWjNoxuRo7PmTOk
-         Vlmd618p5vDShOwdXxRn9qtue2bJ0KaEGyMZxQAOXIxcVepkfJBWWoNXBQljOuTC5ArJ
-         owsX4aTwWM/Ep4k3bulHjCk97c4xXaXNvsu2c8I7hz82AZ5Rn/GXDSGMWD+UWsWV9DGM
-         9JiIEL9w1V5+0GXFE7Zqib8CGgSKs7pJOx6XRwTM6ECowwRqOiVBW2zWE+10k4lbDLfo
-         9/5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=tGDqpKKXonaqPg0I3+jQOa3tQeUyBDJ1nSpQ/SRm3gw=;
-        b=N5s/jt1jaW1psrmxf7l6eMZoHj2c/Jz1b9ITmKfu2updIsXLGPbYQ3fSW3dzpIutPL
-         n7nVKUZ4u7U+5cYwdjA//REQAWRSrmJS/pwtbZ4PvAOqh2TAaLlCpFKN2neSyx2JSOkE
-         ECEOXi+zbt9DJFX0tG77P1PA6eedJvgEipFZWAAj2GFce15gzr5wyJos0zD2zmZsid2c
-         nROzn9OtAsJSch3u6YLZxQ44DiXI3tzxYMgqQLPjsNf2pYp24CwZVvB1DTY4HeNmjc9U
-         i5I9gVpvUED4SL2Nm7uqLe6COelBJmKEL8+hRNHSAGmppHbosXllb//79E6cq7zY83P/
-         14SA==
-X-Gm-Message-State: AOAM530JgjdwCHOE2Z04UZnM7XpxBz3nf/AEZyh7z02A/+StHnrYl8Tb
-        MC7RCvdbv5+TwSgBRrea9xyLmA==
-X-Google-Smtp-Source: ABdhPJyH6Xa+4feAnFwPXT0mzJbEB1OSxpPpmZXhjNfHupZDysMD3rh4obwtfecxTfTPkY0fIMiX+A==
-X-Received: by 2002:a17:90b:102:: with SMTP id p2mr3925721pjz.126.1628585921202;
-        Tue, 10 Aug 2021 01:58:41 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id t26sm22757180pfq.75.2021.08.10.01.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 01:58:40 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 14:28:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm fixes for 5.14
-Message-ID: <20210810085838.d3hv3rxli5vxozlz@vireshk-i7>
+        id S238837AbhHJJS3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 05:18:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:51682 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238813AbhHJJS0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Aug 2021 05:18:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78AA6D6E;
+        Tue, 10 Aug 2021 02:18:04 -0700 (PDT)
+Received: from [10.57.9.181] (unknown [10.57.9.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC2E23F718;
+        Tue, 10 Aug 2021 02:17:59 -0700 (PDT)
+Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+References: <cover.1628579170.git.viresh.kumar@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6449a61f-a5fc-0b81-65b2-7bf77b8a71aa@arm.com>
+Date:   Tue, 10 Aug 2021 10:17:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <cover.1628579170.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi Viresh,
 
-This pull request contains:
+I like the idea, only small comments here in the cover letter.
 
-- Addition of SoCs to blocklist for cpufreq-dt driver (Bjorn Andersson
-  and Thara Gopinath).
+On 8/10/21 8:36 AM, Viresh Kumar wrote:
+> Provide a cpufreq driver flag so drivers can ask the cpufreq core to register
+> with the EM core on their behalf. This allows us to get rid of duplicated code
+> in the drivers and fix the unregistration part as well, which none of the
+> drivers have done until now.
 
-- Fix error path for scmi driver (Lukasz Luba).
+The EM is never freed for CPUs by design. The unregister function was
+introduced for devfreq devices.
 
-- Temporarily disable highest frequency for armada, its unsafe and
-  breaks stuff.
+> 
+> This would also make the registration with EM core to happen only after policy
+> is fully initialized, and the EM core can do other stuff from in there, like
+> marking frequencies as inefficient (WIP). Though this patchset is useful without
+> that work being done and should be merged nevertheless.
+> 
+> This doesn't update scmi cpufreq driver for now as it is a special case and need
+> to be handled differently. Though we can make it work with this if required.
 
-Thanks.
+The scmi cpufreq driver uses direct EM API, which provides flexibility
+and should stay as is.
 
---
-Viresh
+Let me review the patches.
 
--------------------------8<-------------------------
-
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
-
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to 484f2b7c61b9ae58cc00c5127bcbcd9177af8dfe:
-
-  cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant (2021-08-09 09:31:22 +0530)
-
-----------------------------------------------------------------
-Bjorn Andersson (1):
-      cpufreq: blacklist Qualcomm sc8180x in cpufreq-dt-platdev
-
-Lukasz Luba (1):
-      cpufreq: arm_scmi: Fix error path when allocation failed
-
-Marek Behún (1):
-      cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
-
-Thara Gopinath (1):
-      cpufreq: blocklist Qualcomm sm8150 in cpufreq-dt-platdev
-
- drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
- drivers/cpufreq/cpufreq-dt-platdev.c  | 2 ++
- drivers/cpufreq/scmi-cpufreq.c        | 2 +-
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
+Regards,
+Lukasz
