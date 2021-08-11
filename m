@@ -2,147 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4583E8910
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 06:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5933E8930
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 06:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbhHKEC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 00:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S229730AbhHKEWy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 00:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhHKEC1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 00:02:27 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAA9C061765
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 21:02:04 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id e19so945169pla.10
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 21:02:04 -0700 (PDT)
+        with ESMTP id S229534AbhHKEWy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 00:22:54 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD70C0613D3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 21:22:30 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 61-20020a9d0d430000b02903eabfc221a9so1952295oti.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 21:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jRwfuGmvF8xbiPUIJCPloUI3wsZDXM/h0JGCw+MPHd0=;
-        b=l7iO+YU8dcuI5Hc29W3yz451VLZwJ3dYgtNNUS+RBLqxW3FQQWbtqDjL4tcbD7kK0s
-         eo7kbChJibj3n3JX5STWMNxCmIpARAYm9wBkLzj48iyIh7PCUm5Loy46dYpbJhKk0LV/
-         P7CepF7En1BhHjaZD/kH787tGYhRVgccgk1Y3Se/2U1hflRdTXz9PM8HNvU7un1UQFZC
-         VTLNnZKzjIQFK7w0jlyM2M9caqhhxCe31EEsgUhkZMs+fx6ODQCqa7cYLz3aaN7e4vwD
-         3SwagOiDpdiEoHU3SkWJqUWxNCCwcTX7EaVCzNkEiuhRiUv82zIuCcuLM4R8F/ij9o/s
-         4dOQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=M+Fy0eR1+iop2G2YtVgpRm77F8HTctO7zKKFznc4zBo=;
+        b=Fo9g5LijgBrQLPT6MYDEQNxX6viodg54hr7z4FkxTTA21xFg3ZrnNnIuV5eOFU6HpM
+         HeXLgv/LwnWd2M9n9fm3NUb6HDbfUx4E4CtwuAH2Q51QtqvgmaESGr+NmF0AXxHRXs5n
+         ewFZnhcT5+bJ+kMcpEX9LWMIvBWWSLrSYEXws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jRwfuGmvF8xbiPUIJCPloUI3wsZDXM/h0JGCw+MPHd0=;
-        b=Yjs+ImZRuphCKqRc3wqjWd/CHjKU2nu4xA6rqlx8Q1Zxd+mcVeXNlLjMvNoMOjEZUI
-         TVHj/6FOOwq2fPq//OGkTaFhCnBp++wq7B6v7oIt2NptwSqRk9E2in4YW8oYzEfoj0Ob
-         t03qiyT6EIn7/I0rPjTkYdpNOA1Y+sX50qX1AuxLh4uFK7iWtLrtOaRDZRYJtLEE+Aef
-         VGmiki75+UDwLbOndbwD5oc9zqvS11hWvNiTdyAta8RQIA6dia2ZXVzf80pOcK1C9ghg
-         /WqQj7re4p8BlN8sF9G1AAbzF7BuFtD5znX6UkLZ0bqN6ThchR16swZD4Tdd1Hu1pkL6
-         uukQ==
-X-Gm-Message-State: AOAM533Zn2LIiNKOLt9fA8a8QZsrAguAUxuvyg1jUSCK3UJQNT7DUMGQ
-        tr90eJXl+/Qt8hJuwHH7sdEVsNotCMDmqQ==
-X-Google-Smtp-Source: ABdhPJwFLFMwpYrnuPmtpdpOFSeI+0vU/VaYZvSu2FG7aUSb2Fzi9mhS0LY1gh1ymqEtCRFXCdT3fw==
-X-Received: by 2002:a17:902:d918:b029:12d:22d5:869a with SMTP id c24-20020a170902d918b029012d22d5869amr12757592plz.82.1628654523671;
-        Tue, 10 Aug 2021 21:02:03 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id a8sm30644175pgd.50.2021.08.10.21.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 21:02:03 -0700 (PDT)
-Date:   Wed, 11 Aug 2021 09:31:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-Message-ID: <20210811040158.pp22htkw4nhnudwr@vireshk-i7>
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
- <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=M+Fy0eR1+iop2G2YtVgpRm77F8HTctO7zKKFznc4zBo=;
+        b=odRusZt16Pz6tzLGS7eeek69EGFlu89jlLx5RwFcEJOE+y6ff8Hs/XV/zz0IJUbLTi
+         DrApVkRDGxQH6leW+44+PpOO+zR8WBTvNwpsKktWr/C2bOQLf20zmInGdCMheYJORGaL
+         oSkyasTy5D3FNL8aky3hgob8XHZGv3488Fu6s/5mVcMKeelmOMf7vQPwq8I1o3D3xRgd
+         sJTnrAXcvPiFe4EZBDKmKCUET7wa0vlS1QksA+/ctcw0witblDb7agfxOjGW+7cTwkpK
+         r0yMMvwhu8LllJWj15nVCEPqhQyXgDQiqJ7mi5dM6wxlmq9aa1l45r/Ug+v4xYebs56j
+         mWmQ==
+X-Gm-Message-State: AOAM533ofDHyuMz9vPOrVZZa8k2nbo1qxRk7oAMuadfQ5woG8bSH3I5m
+        B3I9Js1qJR7FHLUUqyb7zFLwiTsE9SgxZu+n3Y78Sg==
+X-Google-Smtp-Source: ABdhPJwFN1LHRL2LcpvpMcDdnpPoGURPoblDU8DwG8F5DDcdYAcQghp0zgONfhmA3uMvE4qsiAJCUK817GUSoi+F0hI=
+X-Received: by 2002:a05:6830:44a7:: with SMTP id r39mr23466057otv.25.1628655750208;
+ Tue, 10 Aug 2021 21:22:30 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 10 Aug 2021 21:22:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <YRMXOlA5a98BwT3i@builder.lan>
+References: <20210721175432.2119-1-mdtipton@codeaurora.org>
+ <20210721175432.2119-5-mdtipton@codeaurora.org> <CAE-0n52iVgX0JjjnYi=NDg49xP961p=+W5R2bmO+2xwRceFhfA@mail.gmail.com>
+ <YRMXOlA5a98BwT3i@builder.lan>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 10 Aug 2021 21:22:29 -0700
+Message-ID: <CAE-0n53L_muNfpcunPmAWh-dG1h_y8xVqUG-es2CY8jdbnM8mg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] interconnect: qcom: icc-rpmh: Add BCMs to commit
+ list in pre_aggregate
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Mike Tipton <mdtipton@codeaurora.org>, djakov@kernel.org,
+        agross@kernel.org, saravanak@google.com, okukatla@codeaurora.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Alex Elder <elder@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-08-21, 13:28, Lukasz Luba wrote:
-> On 8/10/21 7:13 AM, Viresh Kumar wrote:
-> > A cpufreq table is provided by the driver, which can have some
-> > inefficient frequencies. The inefficient frequencies can be caught by
-> > many parts of the kernel, the current way (in this series) is via EM.
-> > But this can totally be anything else as well, like a devfreq driver.
-> 
-> Currently devfreq drivers and governors don't support 'inefficient'
-> OPPs idea. They are not even 'utilization' driven yet. I'm not sure
-> if that would make sense for their workloads. For now, they are far
-> behind the CPUFreq/scheduler development in this field.
+Quoting Bjorn Andersson (2021-08-10 17:18:02)
+> On Tue 10 Aug 18:31 CDT 2021, Stephen Boyd wrote:
+>
+> > Quoting Mike Tipton (2021-07-21 10:54:32)
+> > > We're only adding BCMs to the commit list in aggregate(), but there are
+> > > cases where pre_aggregate() is called without subsequently calling
+> > > aggregate(). In particular, in icc_sync_state() when a node with initial
+> > > BW has zero requests. Since BCMs aren't added to the commit list in
+> > > these cases, we don't actually send the zero BW request to HW. So the
+> > > resources remain on unnecessarily.
+> > >
+> > > Add BCMs to the commit list in pre_aggregate() instead, which is always
+> > > called even when there are no requests.
+> > >
+> > > Fixes: 976daac4a1c5 ("interconnect: qcom: Consolidate interconnect RPMh support")
+> > > Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> > > ---
+> >
+> > This patch breaks reboot for me on sc7180 Lazor
+> >
+>
+> FWIW, it prevents at least SM8150 from booting (need to check my other
+> boards as well), because its no longer okay to have the interconnect
+> providers defined without having all client paths specified.
 
-That's not my point.
-
-> It needs more research and experiments, to even estimate if this brings
-> benefits. So, I would just skip devfreq use case...
-
-I don't care about devfreq case at all, just like you. What I am
-saying is that this API can be called from anywhere and hard-coding
-this for just EM is a plain Hack. A framework should never allow it.
-
-> > I understand that the current problem is where do we make that call
-> > from and I suggested dev_pm_opp_of_register_em() for the same earlier.
-> > But that doesn't work as the policy isn't properly initialized by that
-> > point.
-> 
-> True, the policy is not initialized yet when cpufreq_driver::init()
-> callback is called, which the current place for scmi-cpufreq.
-> 
-> What about the other callback cpufreq_driver::ready() ?
-> This might solve the two issues I mentioned below.
-
-Yeah, lets see if we can solve that problem here.
-
-> > Now that I see the current implementation, I think we can make it work
-> > in a different way.
-> > 
-> > - Copy what's done for thermal-cooling in cpufreq core, i.e.
-> >    CPUFREQ_IS_COOLING_DEV flag, for the EM core as well. So the cpufreq
-> >    drivers can set a flag, CPUFREQ_REGISTER_EM, and the cpufreq core
-> >    can call dev_pm_opp_of_register_em() on their behalf. This call will
-> >    be made from cpufreq_online(), just before/after
-> >    cpufreq_thermal_control_enabled() stuff. By this point the policy is
-> >    properly initialized and is also updated in
-> >    per_cpu(cpufreq_cpu_data).
-> > 
-> > - Now the cpufreq core can provide an API like
-> >    cpufreq_set_freq_invariant(int cpu, unsigned long freq), which can
-> >    be called from EM core's implementation of
-> >    em_dev_register_perf_domain().
-> > 
-> 
-> I have to point out that there are two issues (which we
-> might solve):
-> 1. Advanced setup, due to per-CPU performance requests,
-> which are not limited to real DVFS domain.
-> The scmi-cpufreq (and possibly some other soon) uses more
-> tricky EM setup. As you might recall, the construction of temporary
-> cpumask is a bit complex, since we want per-CPU policy, but the
-> cpumask pass to EM has not a single bit but is 'spanned' with a few
-> CPUs.
-> 
-> 2. The scmi-cpufreq (and IIRC MTK cpufreq driver soon) requires
-> custom struct em_data_callback, since the power data is coming from FW.
-> 
-> If there is a need for complex EM registration, maybe we could
-> do it in the cpufreq_driver::ready(). The policy would be ready
-> during that call, so it might fly.
-
--- 
-viresh
+So maybe the best course of action is to revert this patch from Linus'
+tree? It's not a super huge deal as "can't boot", but certainly makes
+reboot annoying on sc7180.
