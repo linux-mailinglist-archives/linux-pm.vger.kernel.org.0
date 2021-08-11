@@ -2,109 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACCF3E8D94
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 11:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0493E8DFA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 12:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbhHKJxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 05:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236647AbhHKJxh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 05:53:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7B6C0613D5
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 02:53:14 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id w13-20020a17090aea0db029017897a5f7bcso3819941pjy.5
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 02:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yN5JGDsQRbqNYGictWkZk65RsQg7qzCYVO5IdGVoaBw=;
-        b=jT8c08ChLL2mhNYjWrg2WH961eloGTK7WLroKUhk1+HDo/YM/IS+TatyC2cp810l+O
-         0u+8hzUlKaym9ME0OwoavnqJUGcIpn88I9Idf/kYyhFAPk5xIPMh48wpBIaOaPTqX5MT
-         msjuGgIKwByuZEB0CZDR5/aAcaTDR9tglGCbejFiC2kY8d111jY2EPLGmKXc4WUWKR0t
-         ysxJyCokcS3h6WUhFWZ0rWGAEJhcRcycvyjSkN5g/Lmv3DabzrTvvVprW5nF4pR4KPqc
-         UF9FYUExy1pzZr79hfcb9pGPg00cGCsbPNciGT1qL5RE0uAZl2NDYcH5zFa0dU2bnHxL
-         nVew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yN5JGDsQRbqNYGictWkZk65RsQg7qzCYVO5IdGVoaBw=;
-        b=sa1fj6RjVWrfZ54sB4lQEF/T6aJ+bvItjFZRAhdcw6BNhDohbAnd1HFAtRClgyOgfC
-         /Pvp6J3O6q0+yYXUdC9RMt0Tdi5Yg0Yqq7/L5YGZeBiG8r0lQv0mRtyXzwc+daZDJAgG
-         Y1pJspwkqq8a+/lOOdFdt2t/vWnZOLZXhveHgf8G83m/fQnsvQQleBp38rDn8V8Gek6u
-         w7A48ALilOsXB9WQ+iQfyAFE2pKY8YsfdSLAD1+m/FOO2D9blHFIrA2U8Y2vJ7MXIOuE
-         I7SiT3nArOZiYYYwW5BmQrGkwJXBlUcDVdOnGXMNDYXqXkCu75bZs03qkA9lWptOvX8k
-         UfWg==
-X-Gm-Message-State: AOAM531tC++duzxoBjzS3flnXXMQeoBOYvjIjIyyD4oe0UAr6vatYvrD
-        jqZilFwRH3v5iJzSx9xuhgeRCA==
-X-Google-Smtp-Source: ABdhPJyq2OUPvDwt1HcJwEVMav+d2aFK2NfnnSvBGT0D8jiXAM3hY/HQnrCiTJv6msGhlEIvfUuJ9A==
-X-Received: by 2002:a63:4710:: with SMTP id u16mr307872pga.232.1628675594245;
-        Wed, 11 Aug 2021 02:53:14 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id y23sm29928446pgf.38.2021.08.11.02.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 02:53:13 -0700 (PDT)
-Date:   Wed, 11 Aug 2021 15:23:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        lukasz.luba@arm.com, Andy Gross <agross@kernel.org>,
+        id S236772AbhHKKBh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 06:01:37 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:64775 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236798AbhHKKBf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 06:01:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628676072; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=YsRXRW60o9vyHLLImrko8sF08vcveheFzhu6/n2s0+Y=; b=YvbW0Cw8LN9CtNbWPSmtoSPWyLX6zdqAU8d9rrf4Ks4ViVKjvUWZPu1qZBJ6tcdoBOvS9yMe
+ F3g2Gz6VXLSCWKReVb5pMBoM7EXqAtqYZtAFvDPjSYAyaD/MB+Iv2mGNJ8yNfNBlqr/R6p4T
+ 7Pan140aXhDWMjhHWuBB/n46XyE=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61139fd5f746c298d96b87ac (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 11 Aug 2021 10:00:52
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7E28FC433F1; Wed, 11 Aug 2021 10:00:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.1.100] (unknown [49.207.220.239])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 89553C433F1;
+        Wed, 11 Aug 2021 10:00:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 89553C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
+ set default perf state
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
-Message-ID: <20210811095311.e6wnma2ubkqdtuic@vireshk-i7>
-References: <cover.1628579170.git.viresh.kumar@linaro.org>
- <YRJym+Vn4bbwQzzs@google.com>
- <20210811051859.ihjzhvrnuct2knvy@vireshk-i7>
- <20210811053406.jqwextgtnxhgsjd2@vireshk-i7>
- <YROc95YKA1Y/TfYI@google.com>
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org>
+ <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
+ <CAPDyKFrebwt5=S7hqXvcqRvt+-EXLcVmRSRZt1uPf-9n7_pRDg@mail.gmail.com>
+ <2afd0fac-ed28-c090-a345-3fd4284b4125@codeaurora.org>
+ <20210810024308.gurvzpbe2bc2bhky@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <e452c0b5-5555-d6e2-40da-6aa21a26766d@codeaurora.org>
+Date:   Wed, 11 Aug 2021 15:30:46 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YROc95YKA1Y/TfYI@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210810024308.gurvzpbe2bc2bhky@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-08-21, 10:48, Quentin Perret wrote:
-> I think this should work, but perhaps will be a bit tricky for cpufreq
-> driver developers as they need to have a pretty good understanding of
-> the stack to know that they should do the registration from here and not
-> ->init() for instance. Suggested alternative: we introduce a ->register_em()
-> callback to cpufreq_driver, and turn dev_pm_opp_of_register_em() into a
-> valid handler for this callback. This should 'document' things a bit
-> better, avoid some of the problems your other series tried to achieve, and
-> allow us to call the EM registration in exactly the right place from
-> cpufreq core. On the plus side, we could easily make this work for e.g.
-> the SCMI driver which would only need to provide its own version of
-> ->register_em().
+
+On 8/10/2021 8:13 AM, Viresh Kumar wrote:
+> On 09-08-21, 16:38, Rajendra Nayak wrote:
+>> Sure, I can do that, apart from the error print, the function currently also
+>> returns a -EINVAL in case of the missing 'required-opps', are we suggesting
+>> we change that to not return an error also?
 > 
-> Thoughts?
+> No.
+> 
+>> Since this is completely optional in the device node, we would want the function to
+>> ideally not return error and only do so in case 'required-opps' exists and the
+>> translation to performance state fails.
+> 
+> Not really. The function should return failure if the property isn't
+> there, but it shouldn't be EINVAL but ENODEV.
 
-I had exactly the same thing in mind, but was thinking of two
-callbacks, to register and unregister. But yeah, we aren't going to
-register for now at least :)
+In my case I don't want to error out if the property is missing, I want to error out
+only when the property exists but can't be translated into a performance state.
 
-I wasn't sure if that should be done or not, since we also have
-ready() callback. So was reluctant to suggest it earlier. But that can
-work well as well.
+So currently I check if the property exists and *only then* try to translate it, Ulf asked
+me to skip the check. If I do that and I call of_get_required_opp_performance_state()
+unconditionally, and if it errors out I will need to put in additional logic (check for
+return value of ENODEV) to distinguish between the property-does-not-exist vs
+property-exists-but-cannot-be-translated case.
+It just seems more straight-forward to call this only when the property exists, Ulf?
+  
 
 -- 
-viresh
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
