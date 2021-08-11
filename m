@@ -2,115 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED293E8F8F
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 13:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902933E900D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 14:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbhHKLih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 07:38:37 -0400
-Received: from foss.arm.com ([217.140.110.172]:47948 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237371AbhHKLig (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 11 Aug 2021 07:38:36 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8850106F;
-        Wed, 11 Aug 2021 04:38:12 -0700 (PDT)
-Received: from [10.57.12.152] (unknown [10.57.12.152])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 114053F70D;
-        Wed, 11 Aug 2021 04:38:09 -0700 (PDT)
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Quentin Perret <qperret@google.com>, r@google.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S237506AbhHKMGj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 08:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237453AbhHKMGi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 08:06:38 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D6FC061798
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 05:06:14 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t7-20020a17090a5d87b029017807007f23so9121929pji.5
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 05:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FKg83oB/EOubumHMLyW/+CxlonCs6Sr8DZwUqs7o61s=;
+        b=hVsCtquq6U45kkQsI7Vj3hNlKPy4eJSsAmLAbQEn+7pXV2fOQSrxopruKn3Ijor4hJ
+         G3XsS5s9jVLqw0cMSMl5wK6FVWYmItaavWYetcFnlX4D5xn3TCcyZaVSIVPzMQQJ6I5R
+         dx1WDeV5O6HZSPu941m4uq2vC2UQNKfSo7DfOH5e2VWf4Gw+gb0cgXH7QF8UrNJHR05Q
+         ASd86ZctPo0kjcQxyD0AcAr7jotdkEb09HtawOdq2Yg9MgJ7Q7EkgYv6WJZ8hN8c7JGa
+         czQYiGXR9gLjmD+F/9aozWcLXiB4+NT46gLj7Ed2ICK9sOgrgVSsXmWHZmxmz0ZpZed1
+         iI9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FKg83oB/EOubumHMLyW/+CxlonCs6Sr8DZwUqs7o61s=;
+        b=NHGxsRVJhFVTdr0rYZLY4GFCwKRmUZcm0KgoTry1UPzBSfjHwkytd4QiKUCGRKyl+P
+         rZC5C5/ZYYM0gk1DiseU1FVPNBkPG94iPz632oSs/BZs0rOMenwaTqZzvYYENeNZZNFU
+         QBbMPlnDRL7ajhu88dEq3qAsufDVsGDvC4+jG7tSlI9zMkKWk/hsVTyPbcdapftjkivl
+         IpOdwONNdYU5FTdEbEmIqqCG1mbmS/6RsaRrgEnoSSNkFelEaN2sr7Ly108qV9QrAB6W
+         /M8BQuKSgdfrnbRW69PJA/G87B48Tzyh+ETkcsiVvjFylczIsNgPX/aa0sdlylH2EVdv
+         v47Q==
+X-Gm-Message-State: AOAM532ci6NPzG1QNLlUe/6wHRXwhwoqBxvpgS7+8xmQXHSGPWd0IStG
+        PWOVfLsoQEgG5NbMJrUt1Bd2Gg==
+X-Google-Smtp-Source: ABdhPJztfFMMqUn9AEZt5iJ8AdfS9ivDU1oMjYwxS6YRWF0FK+JSOzQ526ggirfhbR8GWllwV35JIQ==
+X-Received: by 2002:a17:90a:404a:: with SMTP id k10mr37162653pjg.145.1628683574049;
+        Wed, 11 Aug 2021 05:06:14 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id v20sm2695779pgi.39.2021.08.11.05.06.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Aug 2021 05:06:13 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
- <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com> <YRKINFhDmYqvgxsN@google.com>
- <cf9d78fe-cff0-1992-2c15-7053e4431296@arm.com>
- <b888407c-d444-8184-cbb7-ce8e925b254b@arm.com> <YRKfluMP8G41/P61@google.com>
- <20210811050327.3yxrk4kqxjjwaztx@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <165735fc-1d03-42cb-b5eb-8a9c1d3c4387@arm.com>
-Date:   Wed, 11 Aug 2021 12:38:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: [PATCH V2 0/9] cpufreq: Auto-register with energy model
+Date:   Wed, 11 Aug 2021 17:28:38 +0530
+Message-Id: <cover.1628682874.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-In-Reply-To: <20210811050327.3yxrk4kqxjjwaztx@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Many cpufreq drivers register with the energy model for each policy and
+do exactly the same thing. Follow the footsteps of thermal-cooling, to
+get it done from the cpufreq core itself.
 
+Provide a new callback, which will be called, if present, by the cpufreq
+core at the right moment (more on that in the code's comment). Also
+provide a generic implementation that uses dev_pm_opp_of_register_em().
 
-On 8/11/21 6:03 AM, Viresh Kumar wrote:
-> On 10-08-21, 16:47, Quentin Perret wrote:
->> On Tuesday 10 Aug 2021 at 16:12:29 (+0100), Lukasz Luba wrote:
->>> I've checked that. It's not the policy notifier and arch_topology which
->>> cause an issue, but the cpufreq governor setup code. Anyway, we cannot
->>> wait so late with the EM registration, till e.g. ::ready() callback.
->>
->> Aha, yes, because by the time the arch_topology driver rebuilds the
->> sched domains, the governor is not 'installed', which means the
->> scheduler is not in a position to enable EAS yet. So we need to wait
->> until sched_cpufreq_governor_change() is called for that. Makes sense,
->> thanks for checking, and +1 to your conclusion.
-> 
-> What about this then ?
+This also allows us to register with the EM at a later point of time,
+compared to ->init(), from where the EM core can access cpufreq policy
+directly using cpufreq_cpu_get() type of helpers and perform other work,
+like marking few frequencies inefficient, this will be done separately.
 
-If it doesn't break the current drivers which implement this callback,
-then looks good.
+This is build/boot tested by the bot for a couple of boards.
 
-> 
-> Author: Viresh Kumar <viresh.kumar@linaro.org>
-> Date:   Wed Aug 11 10:24:28 2021 +0530
-> 
->      cpufreq: Call ->ready() before initializing governor
-> 
->      The driver may want to do stuff from the ->ready() callback, like
->      registering with the EM core, after the policy is initialized, but
->      before the governor is setup (since governor may end up using that
->      information).
-> 
->      Call the ->ready() callback before setting up the governor.
-> 
->      Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/cpufreq.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index a060dc2aa2f2..2df41b98bbb3 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1494,6 +1494,10 @@ static int cpufreq_online(unsigned int cpu)
->                  write_unlock_irqrestore(&cpufreq_driver_lock, flags);
->          }
-> 
-> +       /* Callback for handling stuff after policy is ready */
-> +       if (cpufreq_driver->ready)
-> +               cpufreq_driver->ready(policy);
-> +
->          ret = cpufreq_init_policy(policy);
->          if (ret) {
->                  pr_err("%s: Failed to initialize policy for cpu: %d (%d)\n",
-> @@ -1505,10 +1509,6 @@ static int cpufreq_online(unsigned int cpu)
-> 
->          kobject_uevent(&policy->kobj, KOBJ_ADD);
-> 
-> -       /* Callback for handling stuff after policy is ready */
-> -       if (cpufreq_driver->ready)
-> -               cpufreq_driver->ready(policy);
-> -
->          if (cpufreq_thermal_control_enabled(cpufreq_driver))
->                  policy->cdev = of_cpufreq_cooling_register(policy);
-> 
+https://gitlab.com/vireshk/pmko/-/pipelines/351525873
+
+Note that I haven't picked any of the Reviewed-by tags from the first version
+since the idea is very much changed here.
+
+V1->V2:
+- Add a callback instead of flag.
+- Register before governor is initialized.
+- Update scmi driver as well.
+- Don't unregister from the EM core.
+
+--
+Viresh
+
+Viresh Kumar (9):
+  cpufreq: Auto-register with energy model if asked
+  cpufreq: dt: Use auto-registration for energy model
+  cpufreq: imx6q: Use auto-registration for energy model
+  cpufreq: mediatek: Use auto-registration for energy model
+  cpufreq: omap: Use auto-registration for energy model
+  cpufreq: qcom-cpufreq-hw: Use auto-registration for energy model
+  cpufreq: scpi: Use auto-registration for energy model
+  cpufreq: vexpress: Use auto-registration for energy model
+  cpufreq: scmi: Use .register_em() callback
+
+ drivers/cpufreq/cpufreq-dt.c           |  3 +-
+ drivers/cpufreq/cpufreq.c              | 12 ++++++
+ drivers/cpufreq/imx6q-cpufreq.c        |  2 +-
+ drivers/cpufreq/mediatek-cpufreq.c     |  3 +-
+ drivers/cpufreq/omap-cpufreq.c         |  2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c      |  3 +-
+ drivers/cpufreq/scmi-cpufreq.c         | 55 +++++++++++++++-----------
+ drivers/cpufreq/scpi-cpufreq.c         |  3 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c |  3 +-
+ include/linux/cpufreq.h                | 14 +++++++
+ 10 files changed, 65 insertions(+), 35 deletions(-)
+
+-- 
+2.31.1.272.g89b43f80a514
+
