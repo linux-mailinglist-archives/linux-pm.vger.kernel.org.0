@@ -2,83 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D1B3E87B2
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 03:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2343E8812
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 04:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbhHKBjQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Aug 2021 21:39:16 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:45156 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhHKBjQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Aug 2021 21:39:16 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628645934; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=Zm6ZufoPa2Vzbq714mN4eHoIrlYEf7LG9dIpJUkh/bY=; b=ghc9oYcP+wd/pGPmMhetrQJh0UEsVuLD3njf2Uq3HTdjSbLG9CkbyQ1T2OfGV7LYsq5+nvR0
- jBi4467LZgDes1ACFI8627vskBtZ7iO25BC6dAnhfAT1x/1MdkkVA7xKMPbvUQjPuG0IuhHt
- hYuHvZIbuEYzGyWMA0MRmEQvtss=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 61132a2a76c3a9a17243b8d1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 11 Aug 2021 01:38:50
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1D444C433D3; Wed, 11 Aug 2021 01:38:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tdas-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 83A49C433F1;
-        Wed, 11 Aug 2021 01:38:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 83A49C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v1] cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag
-Date:   Wed, 11 Aug 2021 07:08:38 +0530
-Message-Id: <1628645918-12890-1-git-send-email-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S231776AbhHKCmC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Aug 2021 22:42:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:40442 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232212AbhHKCl4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Aug 2021 22:41:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B301C6D;
+        Tue, 10 Aug 2021 19:41:32 -0700 (PDT)
+Received: from bogus (unknown [10.57.12.241])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6008A3F40C;
+        Tue, 10 Aug 2021 19:41:29 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 03:40:01 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 8/8] cpufreq: vexpress: Use auto-registration for energy
+ model
+Message-ID: <20210811024001.arrak7lk7eyuwcld@bogus>
+References: <cover.1628579170.git.viresh.kumar@linaro.org>
+ <87fecd84e3f6ff6f153be14b0d53de93c0b04ae6.1628579170.git.viresh.kumar@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fecd84e3f6ff6f153be14b0d53de93c0b04ae6.1628579170.git.viresh.kumar@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As remote cpufreq updates are supported on QCOM platforms, set
-dvfs_possible_from_any_cpu cpufreq driver flag.
+On Tue, Aug 10, 2021 at 01:06:55PM +0530, Viresh Kumar wrote:
+> Use the CPUFREQ_REGISTER_WITH_EM flag to allow cpufreq core to
+> automatically register with the energy model.
+> 
+> This allows removal of boiler plate code from the driver and fixes the
+> unregistration part as well.
+> 
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index f86859b..20455aa 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -161,6 +161,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 		return ret;
- 	} else {
- 		policy->fast_switch_possible = true;
-+		policy->dvfs_possible_from_any_cpu = true;
- 		icc_scaling_enabled = false;
- 	}
-
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
-
+-- 
+Regards,
+Sudeep
