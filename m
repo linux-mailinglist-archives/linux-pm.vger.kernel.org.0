@@ -2,197 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FF13E8989
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 06:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1A43E8993
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 07:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbhHKEig (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 00:38:36 -0400
-Received: from mail-0301.mail-europe.com ([188.165.51.139]:40477 "EHLO
-        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbhHKEid (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 00:38:33 -0400
-Date:   Wed, 11 Aug 2021 04:37:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1628656682;
-        bh=OCiFQZnCOnUGcGj+ycOgpUC4rhDlZ6RCMWuzNwlouAM=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=RVVc+eOGNmArjtdkPGpgCUcte3lrsKJdhPNaM/V3WoG/cmBt4Nh9/JuEJaLgs0/Ja
-         9aTZXjh1fH4UDo28X6cbjJXyF3J3BFSMEQ2GYJZZqRFODttDmiJ9Gnnx3KKYqpvAU3
-         EAf/2PMQh/EJl0dzfq8iCTXiboORnxon1soDVav8=
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v3 6/6] arm64: dts: qcom: msm8996: Add interconnect support
-Message-ID: <20210811043451.189776-7-y.oudjana@protonmail.com>
-In-Reply-To: <20210811043451.189776-1-y.oudjana@protonmail.com>
-References: <20210811043451.189776-1-y.oudjana@protonmail.com>
+        id S234086AbhHKFDx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 01:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233766AbhHKFDx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 01:03:53 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6CC061765
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:03:30 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q2so1101040plr.11
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=m8Vuc12nkOtKj8Tmc2m3PPOmyZGEWDnC41TJJxSyiFY=;
+        b=nLLZQEHouLliJNEisx69s5GYTZxWLqoq+g6oR/APktXzMgWiOn5WvwU++OvUjYMFuu
+         LF799VaRb/fOKN2iUuD2V4SYUgve9/oZVUT7NKFG0nQ39qU7pftN2cIjm1cixPkuFap2
+         AR/eAle97WVqT+9/b8AIUmB54jNNJClMZSsbe8KCEPyXw5kgKtDeyUiwOl1Tfmq92BvJ
+         yJo94oXRdL+rpuJBJ/ZLdAfwYfbCBTNc4UesJluvy62P+ePplM5Kar2N/md0gSwU8PoA
+         klft+e09JLah7atrHlhVJ1sSgBtiBcHB0cHCkB2RsIUDrSdObzmTQHHQ7JD0lNgNhvDV
+         3t9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=m8Vuc12nkOtKj8Tmc2m3PPOmyZGEWDnC41TJJxSyiFY=;
+        b=hZH3Cvv4i33ChxXs3kZlVAHaUBO4Jsky2GNJJkZKFLv/nQ36yczyP/MJeDaB+fcRn3
+         HW0Ip0hFL6n4zZpIHrcBIc+NN8A+8LeCct05Af9Ywm/sdf+UvAU2Hnlot3YPW9+y2NCp
+         Augwnn4g3hmxVIxQA3ok4FZz0UfiYDIaCJSNWvzqR3RpW6rl87FKVWrzg60prpIrEYNx
+         jaG2HdAae0/O5popGHCsovzHXSiSVxd3FmgFOBv+kDNG93fkj0D4MDtERlF/eOB9p8JS
+         abENb6H/oh59qzySDRkC17FiDAfrVu1x4L/p0StcnCSCAs8GjpTahupCRjDAhcBYmRlA
+         ZJyA==
+X-Gm-Message-State: AOAM5331AwlHRlJQ68aACHejWYJRHIn9KiR7NBXtenqDY71KuY0p/sIr
+        0jYlyZw+QsLPvWAV/hfEDtPVUg==
+X-Google-Smtp-Source: ABdhPJwOXhuvigI203mBa8qBfD5jUeXbkoJ2tFP9xIPJ3uRHgK5z7KHxKnDbhfWBYdMk38Nq1/miCQ==
+X-Received: by 2002:a62:dd83:0:b029:2e8:e511:c32f with SMTP id w125-20020a62dd830000b02902e8e511c32fmr32771198pff.49.1628658209978;
+        Tue, 10 Aug 2021 22:03:29 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id n11sm24290042pjf.17.2021.08.10.22.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 22:03:29 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 10:33:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, r@google.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v4 0/9] Inefficient OPPs
+Message-ID: <20210811050327.3yxrk4kqxjjwaztx@vireshk-i7>
+References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
+ <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
+ <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
+ <YRKINFhDmYqvgxsN@google.com>
+ <cf9d78fe-cff0-1992-2c15-7053e4431296@arm.com>
+ <b888407c-d444-8184-cbb7-ce8e925b254b@arm.com>
+ <YRKfluMP8G41/P61@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YRKfluMP8G41/P61@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add interconnect providers for the multiple NoCs available on the platform,
-and assign interconnects used by some blocks.
+On 10-08-21, 16:47, Quentin Perret wrote:
+> On Tuesday 10 Aug 2021 at 16:12:29 (+0100), Lukasz Luba wrote:
+> > I've checked that. It's not the policy notifier and arch_topology which
+> > cause an issue, but the cpufreq governor setup code. Anyway, we cannot
+> > wait so late with the EM registration, till e.g. ::ready() callback.
+> 
+> Aha, yes, because by the time the arch_topology driver rebuilds the
+> sched domains, the governor is not 'installed', which means the
+> scheduler is not in a position to enable EAS yet. So we need to wait
+> until sched_cpufreq_governor_change() is called for that. Makes sense,
+> thanks for checking, and +1 to your conclusion.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+What about this then ?
+
+Author: Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Wed Aug 11 10:24:28 2021 +0530
+
+    cpufreq: Call ->ready() before initializing governor
+
+    The driver may want to do stuff from the ->ready() callback, like
+    registering with the EM core, after the policy is initialized, but
+    before the governor is setup (since governor may end up using that
+    information).
+
+    Call the ->ready() callback before setting up the governor.
+
+    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-Changes since v2:
- - Remove interconnect paths from CPUs since cpufreq driver doesn't support=
- icc scaling yet.
+ drivers/cpufreq/cpufreq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 80 +++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index a060dc2aa2f2..2df41b98bbb3 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1494,6 +1494,10 @@ static int cpufreq_online(unsigned int cpu)
+                write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+        }
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index 78c55ca10ba9..64637b15ff14 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/interconnect/qcom,msm8996.h>
- #include <dt-bindings/soc/qcom,apr.h>
- #include <dt-bindings/thermal/thermal.h>
-=20
-@@ -683,6 +684,15 @@ gcc: clock-controller@300000 {
- =09=09=09clock-names =3D "cxo2";
- =09=09};
-=20
-+=09=09bimc: interconnect@408000 {
-+=09=09=09compatible =3D "qcom,msm8996-bimc";
-+=09=09=09reg =3D <0x00408000 0x5a000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_BIMC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_BIMC_A_CLK>;
-+=09=09};
++       /* Callback for handling stuff after policy is ready */
++       if (cpufreq_driver->ready)
++               cpufreq_driver->ready(policy);
 +
- =09=09tsens0: thermal-sensor@4a9000 {
- =09=09=09compatible =3D "qcom,msm8996-tsens", "qcom,tsens-v2";
- =09=09=09reg =3D <0x004a9000 0x1000>, /* TM */
-@@ -705,6 +715,61 @@ tsens1: thermal-sensor@4ad000 {
- =09=09=09#thermal-sensor-cells =3D <1>;
- =09=09};
-=20
-+=09=09cnoc: interconnect@500000 {
-+=09=09=09compatible =3D "qcom,msm8996-cnoc";
-+=09=09=09reg =3D <0x00500000 0x1000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_CNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_CNOC_A_CLK>;
-+=09=09};
-+
-+=09=09snoc: interconnect@524000 {
-+=09=09=09compatible =3D "qcom,msm8996-snoc";
-+=09=09=09reg =3D <0x00524000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_SNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_SNOC_A_CLK>;
-+=09=09};
-+
-+=09=09a1noc: interconnect@562000 {
-+=09=09=09compatible =3D "qcom,msm8996-a1noc";
-+=09=09=09reg =3D <0x00562000 0x5000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR1_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR1_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09a2noc: interconnect@583000 {
-+=09=09=09compatible =3D "qcom,msm8996-a2noc";
-+=09=09=09reg =3D <0x00583000 0x7000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09mnoc: interconnect@5a4000 {
-+=09=09=09compatible =3D "qcom,msm8996-mnoc";
-+=09=09=09reg =3D <0x005a4000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a", "iface";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_MMAXI_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_MMAXI_A_CLK>,
-+=09=09=09=09 <&mmcc AHB_CLK_SRC>;
-+=09=09};
-+
-+=09=09pnoc: interconnect@5c0000 {
-+=09=09=09compatible =3D "qcom,msm8996-pnoc";
-+=09=09=09reg =3D <0x005c0000 0x3000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_PCNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_PCNOC_A_CLK>;
-+=09=09};
-+
- =09=09tcsr_mutex_regs: syscon@740000 {
- =09=09=09compatible =3D "syscon";
- =09=09=09reg =3D <0x00740000 0x40000>;
-@@ -784,6 +849,11 @@ mdp: mdp@901000 {
- =09=09=09=09assigned-clock-rates =3D <300000000>,
- =09=09=09=09=09 <19200000>;
-=20
-+=09=09=09=09interconnects =3D <&mnoc MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>=
-,
-+=09=09=09=09=09=09<&mnoc MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09=09<&mnoc MASTER_ROTATOR &bimc SLAVE_EBI_CH0>;
-+=09=09=09=09interconnect-names =3D "mdp0-mem", "mdp1-mem", "rotator-mem";
-+
- =09=09=09=09ports {
- =09=09=09=09=09#address-cells =3D <1>;
- =09=09=09=09=09#size-cells =3D <0>;
-@@ -955,6 +1025,9 @@ gpu: gpu@b00000 {
- =09=09=09=09"mem",
- =09=09=09=09"mem_iface";
-=20
-+=09=09=09interconnects =3D <&bimc MASTER_GRAPHICS_3D &bimc SLAVE_EBI_CH0>;
-+=09=09=09interconnect-names =3D "gfx-mem";
-+
- =09=09=09power-domains =3D <&mmcc GPU_GX_GDSC>;
- =09=09=09iommus =3D <&adreno_smmu 0>;
-=20
-@@ -1947,6 +2020,9 @@ venus: video-codec@c00000 {
- =09=09=09=09 <&mmcc VIDEO_AXI_CLK>,
- =09=09=09=09 <&mmcc VIDEO_MAXI_CLK>;
- =09=09=09clock-names =3D "core", "iface", "bus", "mbus";
-+=09=09=09interconnects =3D <&mnoc MASTER_VIDEO_P0 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &mnoc SLAVE_VENUS_CFG>;
-+=09=09=09interconnect-names =3D "video-mem", "cpu-cfg";
- =09=09=09iommus =3D <&venus_smmu 0x00>,
- =09=09=09=09 <&venus_smmu 0x01>,
- =09=09=09=09 <&venus_smmu 0x0a>,
-@@ -2563,6 +2639,10 @@ usb3: usb@6af8800 {
- =09=09=09=09=09  <&gcc GCC_USB30_MASTER_CLK>;
- =09=09=09assigned-clock-rates =3D <19200000>, <120000000>;
-=20
-+=09=09=09interconnects =3D <&a2noc MASTER_USB3 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &snoc SLAVE_USB3>;
-+=09=09=09interconnect-names =3D "usb-ddr", "apps-usb";
-+
- =09=09=09power-domains =3D <&gcc USB30_GDSC>;
- =09=09=09status =3D "disabled";
-=20
---=20
-2.32.0
+        ret = cpufreq_init_policy(policy);
+        if (ret) {
+                pr_err("%s: Failed to initialize policy for cpu: %d (%d)\n",
+@@ -1505,10 +1509,6 @@ static int cpufreq_online(unsigned int cpu)
 
+        kobject_uevent(&policy->kobj, KOBJ_ADD);
 
+-       /* Callback for handling stuff after policy is ready */
+-       if (cpufreq_driver->ready)
+-               cpufreq_driver->ready(policy);
+-
+        if (cpufreq_thermal_control_enabled(cpufreq_driver))
+                policy->cdev = of_cpufreq_cooling_register(policy);
+
+-- 
+viresh
