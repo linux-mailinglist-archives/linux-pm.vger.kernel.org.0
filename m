@@ -2,156 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D9B3E8D6E
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 11:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCAE3E8D83
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 11:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236618AbhHKJqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 05:46:09 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:47616 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236462AbhHKJqI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 11 Aug 2021 05:46:08 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628675145; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=uSt79frfisEnQoSy8AUSjOVYQKhD134iVOQ+hRTplH0=; b=TKtmcL0fJ0aaEdiBialfeHpc7hxUd/MMtBMDu2hCnCwdF/JPnP1rZONo0oBKvy/3QCrv9xhh
- bqY7FfplYGIG2PDT1Was7YJi3fkxIolfqsM97xENEQMm8zj6Ab8UhgbUKVEzHDqMWIGEuwRd
- U1xAfhEWvaf3CcMA6xiccEE39QM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 61139c4866ff107904a6b1bc (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 11 Aug 2021 09:45:44
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3CE94C43143; Wed, 11 Aug 2021 09:45:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.1.100] (unknown [49.207.220.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 515AAC4338A;
-        Wed, 11 Aug 2021 09:45:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 515AAC4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
- set default perf state
-To:     Dmitry Osipenko <digetx@gmail.com>, ulf.hansson@linaro.org,
-        bjorn.andersson@linaro.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net
-References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org>
- <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
- <f58e631d-67a7-4981-ce59-6a4772b44564@gmail.com>
- <c43ddc6b-32ca-433d-76f2-901cb594eaf1@gmail.com>
- <9588f01d-1cb6-7ca3-eb41-74259f1678f6@gmail.com>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <5f676dbe-6b8a-d302-cd81-2d12fe089e5a@codeaurora.org>
-Date:   Wed, 11 Aug 2021 15:15:37 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S236726AbhHKJtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 05:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236718AbhHKJtL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 05:49:11 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F7C0613D5
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 02:48:47 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso3965021wms.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 02:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p4WmlR24/y2/H/iFDZT8SMkW7O2fno0PSDl3vpvyQeE=;
+        b=iaVC7Y7Zmp0QcX38aol/tjPqpn4a9rxsP+5sEfJ55JdRHQf78WhTS54TvYm1QuiZb9
+         Tfv0V+kMCmuN3NlmWiy+TFbkP8Z36BybITbwzyiRLjWOhIIr9BHtWja4KxbVpcBPi/HI
+         HuD68dSvDc/WEbgyaUM8PsEuId/nmfzZ9pPp60bwzZ1zayPm70ShfyqrudfelYC77Hsv
+         lYfsQBRYWFNavWRipVgXXp3YGsoJzSPKV2/B/dz02TFMtktJ/TilyV8Jiu+vO4+FU2Ra
+         CLbILl4Kx7dV2I8iGXshcBeO08NSv6p9CNlc4nncGiFlrwXLzL7ajuNEyVzb/lB2uvJY
+         953w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p4WmlR24/y2/H/iFDZT8SMkW7O2fno0PSDl3vpvyQeE=;
+        b=XDXdL0ItY9WVRl9RPsy1QSZAs8FU/2fMk5KeovT+GtYLLYwNOGSF+BdDtu7TxpgMpd
+         2QY/u1dh2tTdSBs4ktvT9cSzBJ/JOjwNV+ViUycZSlqyciql7G6RtP9hzxXvVrUKqvzg
+         gqcg1hknk5nzZRKw9UypiMSBrE54qAyYEZSaxjiLzfcfKUqjtcJprWQCI5Z/88Tj0iOI
+         cGVblqGirkQBUog3chekB1Le+jzMD+iRdGdRxyA6Ljul+ecq0SL04pBvVmg0KqnrqiuV
+         Y/HLq8yiWKNHKnBAza5BBMreEqN9iwu90sGOcHyCYbBAttCZNsPiKa+hep6+1BsKC7nC
+         v4oQ==
+X-Gm-Message-State: AOAM531BmbTdGcmuFc3kdteDFtG71Cz+kW230xJEVeNPgaeRvRrDSm8b
+        J7R/wYdoKo2vyf5a4dqK4QnRLg==
+X-Google-Smtp-Source: ABdhPJwGyl1imWlJBD9wXE9eHTwazSKJ1G8Ab8pkXMP8KjdfEz4VJdIoamsdZzeXoxBFY1zz1ZxyEw==
+X-Received: by 2002:a7b:c350:: with SMTP id l16mr8974823wmj.151.1628675325873;
+        Wed, 11 Aug 2021 02:48:45 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:43fd:e634:73d9:e10e])
+        by smtp.gmail.com with ESMTPSA id p4sm14701093wrq.81.2021.08.11.02.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Aug 2021 02:48:45 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 10:48:39 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        lukasz.luba@arm.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
+Message-ID: <YROc95YKA1Y/TfYI@google.com>
+References: <cover.1628579170.git.viresh.kumar@linaro.org>
+ <YRJym+Vn4bbwQzzs@google.com>
+ <20210811051859.ihjzhvrnuct2knvy@vireshk-i7>
+ <20210811053406.jqwextgtnxhgsjd2@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <9588f01d-1cb6-7ca3-eb41-74259f1678f6@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210811053406.jqwextgtnxhgsjd2@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 8/10/2021 5:16 AM, Dmitry Osipenko wrote:
-> 10.08.2021 01:44, Dmitry Osipenko пишет:
->> 10.08.2021 01:26, Dmitry Osipenko пишет:
->>> 04.08.2021 13:58, Rajendra Nayak пишет:
->>>> @@ -2637,6 +2643,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->>>>   {
->>>>   	struct of_phandle_args pd_args;
->>>>   	struct generic_pm_domain *pd;
->>>> +	struct device_node *np;
->>>> +	int pstate;
->>>>   	int ret;
->>>>   
->>>>   	ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
->>>> @@ -2675,10 +2683,26 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->>>>   		genpd_unlock(pd);
->>>>   	}
->>>>   
->>>> -	if (ret)
->>>> +	if (ret) {
->>>>   		genpd_remove_device(pd, dev);
->>>> +		return -EPROBE_DEFER;
->>>> +	}
->>>> +
->>>> +	/* Set the default performance state */
->>>> +	np = dev->of_node;
->>>> +	if (of_parse_phandle(np, "required-opps", index)) {
+On Wednesday 11 Aug 2021 at 11:04:06 (+0530), Viresh Kumar wrote:
+> On 11-08-21, 10:48, Viresh Kumar wrote:
+> > On 10-08-21, 13:35, Quentin Perret wrote:
+> > > This series adds more code than it removes,
+> > 
+> > Sadly yes :(
+> > 
+> > > and the unregistration is
+> > > not a fix as we don't ever remove the EM tables by design, so not sure
+> > > either of these points are valid arguments.
+> > 
+> > I think that design needs to be looked over again, it looks broken to
+> > me everytime I land onto this code. I wonder why we don't unregister
+> > stuff.
 > 
-> The OF node returned by of_parse_phandle() must be put.
-
-Thanks for spotting that, I will fix it, though I might just drop
-the use of of_parse_phandle() and call of_get_required_opp_performance_state()
-unconditionally as suggested by Ulf.
-
+> Coming back to this series. We have two options, based on what I
+> proposed here:
 > 
->>>> +		pstate = of_get_required_opp_performance_state(np, index);
+> https://lore.kernel.org/linux-pm/20210811050327.3yxrk4kqxjjwaztx@vireshk-i7/
 > 
-> If you have more than one power domain, then this will override the
-> pstate which was set for a previous domain. This code doesn't feel solid
-> to me, at least a clarifying comment is needed about how it's supposed
-> to work.
+> 1. Let cpufreq core register with EM on behalf of cpufreq drivers.
 
-I don't quite understand the concern here, this should work with devices
-having multiple power-domains as well. __genpd_dev_pm_attach gets called
-once per power-domain, and we use the index above to identify the power-domain.
-  
->>>> +		if (pstate < 0) {
->>>> +			ret = pstate;
->>>> +			dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
->>>> +				pd->name, ret);
->>>> +		} else {
->>>> +			dev_pm_genpd_set_performance_state(dev, pstate);
->>
->> Where is error handling?
+If we're going that route, I think we should allow _all_ possible
+EM registration methods (via PM_OPP or else) to be done that way.
+Otherwise we're creating an inconsitency in how the EM is registered
+(e.g. from the ->init() cpufreq callback for some, or from cpufreq core
+for others) which is problematic as we risk building features that
+assume loading is done at a certain time, which won't work for some
+platforms.
 
-Sure, I'll fix that.
+> 2. Update drivers to use ->ready() callback to do this stuff.
 
->>
->>>> +			dev_gpd_data(dev)->default_pstate = pstate;
->>>> +		}
->>>> +	}
->>>
->>> Why performance state is set after genpd_power_on()?
+I think this should work, but perhaps will be a bit tricky for cpufreq
+driver developers as they need to have a pretty good understanding of
+the stack to know that they should do the registration from here and not
+->init() for instance. Suggested alternative: we introduce a ->register_em()
+callback to cpufreq_driver, and turn dev_pm_opp_of_register_em() into a
+valid handler for this callback. This should 'document' things a bit
+better, avoid some of the problems your other series tried to achieve, and
+allow us to call the EM registration in exactly the right place from
+cpufreq core. On the plus side, we could easily make this work for e.g.
+the SCMI driver which would only need to provide its own version of
+->register_em().
 
-The requirement is that the domain is operating at a given performance
-state before the device becomes operational. The driver should ideally wait
-for the attach to complete before expecting the device to be functional.
-So the order here should really not matter, or rather the small amount of time
-while the power-domain is on but not at the right performance state should
-not matter if that's the concern.
-
-> 
-> Should set_performance_state() be invoked when power_on=false?
-> 
-> I assume it should be:
-> 
-> if (power_on) {
-> 	dev_pm_genpd_set_performance_state(dev, pstate);
-> 	dev_gpd_data(dev)->default_pstate = pstate;
-> } else {
-> 	dev_gpd_data(dev)->rpm_pstate = pstate;
-> }
-> 
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Thoughts?
