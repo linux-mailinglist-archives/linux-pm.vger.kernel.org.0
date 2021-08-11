@@ -2,95 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B28E3E8E1E
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 12:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A33E8E6D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 12:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbhHKKI3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 06:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S237006AbhHKKVU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 06:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236632AbhHKKIX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 06:08:23 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E59BC061799
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 03:07:52 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id b7so1990250plh.7
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 03:07:52 -0700 (PDT)
+        with ESMTP id S237043AbhHKKVS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 06:21:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C504C0613D3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 03:12:55 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id f9-20020a05600c1549b029025b0f5d8c6cso3997652wmg.4
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 03:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tzsS7AZHN5hyd5i/vgo5pHazU+FL6RQAhM9b4mH3Hqc=;
-        b=xrg/dN5zYbriK5itgrKCFqwpt+tinhh9L15HeF9ETxBRpzawjZhN+vtNwQXjjaR8v0
-         MNMTTN+tXhlSPNM8qipa7OYd60SCVukCgd0Y6YJLdEAQw3VYCHFYOqwIUIhhFtERSGZ/
-         wlA8jJ5WT34nwiSSC65FuuGPkxZ9bA4KNM+Q8SJO2JRhovDhAfFR4AWh2MROFe+zVRxN
-         aEHMrJoEpBX3wkLBg1QHKRci/W0t6cSqweFGSE5mbCv9WeypUmZOLaXsntY1KcZfoTnU
-         2S01vgFvBZ82jQ2RvEyU1O+qWzGWsFL7pdIRnc8M2GQWJhVQ/QQxiM0I3dKAh2Xp4Wvc
-         vzqw==
+         :content-disposition:in-reply-to;
+        bh=p5hWIHd43oZmZdmAe/Tgt2mQU61JUn32MeibY7PUSWQ=;
+        b=E1WNTy4ZBaOXroPhEU16oAmoIb7TxHWc5vaO1clqHr5vgR4jZVhcU1nElSRfIMPsDQ
+         /UNOosQE4tYr7JXG8D4EA2OmU8SOMOQrNCnAt/Fx6jWiTS1HPx41awL3B63/DdxaulvK
+         pBj+l5XS/40ASUIdZ1z6PMtZuL0oH3Omu8WJwUou1ygTjkWHk/T3NESdtkuxBjHPL/+W
+         AE6icFv17yVdjd4ED/b/bFgmOu6PEZfSTfE4At7H0YPs9lT47OGMCBH5MDq+58w7Yl0T
+         tGTnUYD+DKPtEOCog6ax5XbBjg8gc/Dq7gZ+3PxTeyD9UGnnul7NgA2wP2jpLi/Vnn1b
+         N4eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tzsS7AZHN5hyd5i/vgo5pHazU+FL6RQAhM9b4mH3Hqc=;
-        b=aIxr876THnrNm+XAnFvEuUGwvEk9GNW+WatbtiY2K2YGkmeic0JapG8KHvGnzUcvDr
-         +uWg+6yajx+4+OpzXsQy8uZWj6U344saQ4Jr7D/rs5y/IK+iS9rKr6tAUbngX5PraOLk
-         y900XpqCQ0pKGFPU4Y9l/6bQzgIBp/LSSSEXZ8cqWfpTcelC0FrqVX/PAzhYweG3iWv0
-         SlXXHgnSmGJHCsyE2q9oyebS5cNiwIt73wRJKAceIx9P0HXoaMsMfn/eNzo2YwLjHk8o
-         feja/wy5CUy5FAE4pZvc2LmGKfaYXjtl2hXQxufKaklsiXCkiUmS1d4zD3WdMjPWGCcR
-         j8tQ==
-X-Gm-Message-State: AOAM531RyPDhue+HZDWE0Oqdh0c6FpytPBY6VW6zo/bwIMVTfL/P8/E5
-        XXxl7EBiRE7/+niw5eDBeYZz/g==
-X-Google-Smtp-Source: ABdhPJxRiSSMq+j2y9GrkjclfC8eCBy4HeC/eBdFwjlqBgsbEfhh24xzyew4tdnIOtXaJlSnoDnklw==
-X-Received: by 2002:a17:902:8301:b029:12c:d401:1b52 with SMTP id bd1-20020a1709028301b029012cd4011b52mr259440plb.10.1628676471746;
-        Wed, 11 Aug 2021 03:07:51 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id ci23sm24633791pjb.47.2021.08.11.03.07.50
+         :mime-version:content-disposition:in-reply-to;
+        bh=p5hWIHd43oZmZdmAe/Tgt2mQU61JUn32MeibY7PUSWQ=;
+        b=IJrxynJa0gtXY3R2XZtx5eEo8yi02kuEKWrYLPaIYoU+nR5LqhTrQVn1KcJ6RI2T40
+         ITxezSiIasmSdQAJRvoLhSXglz3SYJNR31CJr9+mGSJky9s6yAYqDIJpbyciQI4NB6fK
+         y6kUhF90j4AzvH0BXt6ncY1hpSN9Y3SVm71ndhiIElGe9JDtPzbW9rk8098xhGtlSdgA
+         qEQkmaXoaoDCDaWAwUpeYYAQHHXKYvtVKVe5aAtLAnTlnXI3rb4joimZBkIvtgzXtMA5
+         62X8D/8WYvXHOffr67e9hBpZj7S0idR8tAwKGKz2aiXn17lNDTx+6f2oaGIUgzPfrxEu
+         W9yg==
+X-Gm-Message-State: AOAM531/sE0C4ij43OLoYOJDK0KrWKHWku7KqeXTlk2/1yEh4YP+61Z8
+        DCLpN8h4Z4a/T0hUc4va5dw5SA==
+X-Google-Smtp-Source: ABdhPJxx/8GKFZfYfxHB5UKxM22ERPUJVsGXmqlPMwwmbrYcLQCJo+fx5ibR5G/YN51tKO70Jg3Ugw==
+X-Received: by 2002:a1c:e904:: with SMTP id q4mr26867549wmc.26.1628676773827;
+        Wed, 11 Aug 2021 03:12:53 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:43fd:e634:73d9:e10e])
+        by smtp.gmail.com with ESMTPSA id n10sm8172810wmq.3.2021.08.11.03.12.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 03:07:51 -0700 (PDT)
-Date:   Wed, 11 Aug 2021 15:37:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Wed, 11 Aug 2021 03:12:53 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 11:12:47 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        lukasz.luba@arm.com, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [PATCH v6 1/2] PM / Domains: Add support for 'required-opps' to
- set default perf state
-Message-ID: <20210811100749.kwg6435m7xj7ulwa@vireshk-i7>
-References: <1628074696-7979-1-git-send-email-rnayak@codeaurora.org>
- <1628074696-7979-2-git-send-email-rnayak@codeaurora.org>
- <CAPDyKFrebwt5=S7hqXvcqRvt+-EXLcVmRSRZt1uPf-9n7_pRDg@mail.gmail.com>
- <2afd0fac-ed28-c090-a345-3fd4284b4125@codeaurora.org>
- <20210810024308.gurvzpbe2bc2bhky@vireshk-i7>
- <e452c0b5-5555-d6e2-40da-6aa21a26766d@codeaurora.org>
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
+Message-ID: <YROin5WudmmEPard@google.com>
+References: <cover.1628579170.git.viresh.kumar@linaro.org>
+ <YRJym+Vn4bbwQzzs@google.com>
+ <20210811051859.ihjzhvrnuct2knvy@vireshk-i7>
+ <20210811053406.jqwextgtnxhgsjd2@vireshk-i7>
+ <YROc95YKA1Y/TfYI@google.com>
+ <20210811095311.e6wnma2ubkqdtuic@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e452c0b5-5555-d6e2-40da-6aa21a26766d@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210811095311.e6wnma2ubkqdtuic@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-08-21, 15:30, Rajendra Nayak wrote:
-> In my case I don't want to error out if the property is missing, I want to error out
-> only when the property exists but can't be translated into a performance state.
+On Wednesday 11 Aug 2021 at 15:23:11 (+0530), Viresh Kumar wrote:
+> On 11-08-21, 10:48, Quentin Perret wrote:
+> > I think this should work, but perhaps will be a bit tricky for cpufreq
+> > driver developers as they need to have a pretty good understanding of
+> > the stack to know that they should do the registration from here and not
+> > ->init() for instance. Suggested alternative: we introduce a ->register_em()
+> > callback to cpufreq_driver, and turn dev_pm_opp_of_register_em() into a
+> > valid handler for this callback. This should 'document' things a bit
+> > better, avoid some of the problems your other series tried to achieve, and
+> > allow us to call the EM registration in exactly the right place from
+> > cpufreq core. On the plus side, we could easily make this work for e.g.
+> > the SCMI driver which would only need to provide its own version of
+> > ->register_em().
+> > 
+> > Thoughts?
 > 
-> So currently I check if the property exists and *only then* try to translate it, Ulf asked
-> me to skip the check. If I do that and I call of_get_required_opp_performance_state()
-> unconditionally, and if it errors out I will need to put in additional logic (check for
-> return value of ENODEV) to distinguish between the property-does-not-exist vs
-> property-exists-but-cannot-be-translated case.
-> It just seems more straight-forward to call this only when the property exists, Ulf?
+> I had exactly the same thing in mind, but was thinking of two
+> callbacks, to register and unregister. But yeah, we aren't going to
+> register for now at least :)
 
-The same check will be done by OPP core as well, so it is better to
-optimize for the success case here. I will say, don't error out on
-ENODEV, rest you know well.
+Ack, we probably want both once we unregister things.
 
--- 
-viresh
+> I wasn't sure if that should be done or not, since we also have
+> ready() callback. So was reluctant to suggest it earlier. But that can
+> work well as well.
+
+I think using the ready() callback can work just fine as long as we
+document clearly it is important to register the EM from there and not
+anywhere else. The dedicated em_register() callback makes that a bit
+clearer and should avoid a bit of boilerplate in the driver, but it's
+not a big deal really, so I'm happy either way ;)
