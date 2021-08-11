@@ -2,149 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3853E89A2
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 07:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959393E89AE
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Aug 2021 07:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbhHKFTv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Aug 2021 01:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S234229AbhHKFVc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Aug 2021 01:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbhHKFTZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 01:19:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC2BC0613D5
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:19:02 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bo18so1665503pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:19:02 -0700 (PDT)
+        with ESMTP id S233389AbhHKFVb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Aug 2021 01:21:31 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D908FC061765
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:21:08 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g12-20020a17090a7d0cb0290178f80de3d8so2708002pjl.2
+        for <linux-pm@vger.kernel.org>; Tue, 10 Aug 2021 22:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HZD0Vc3lp/XqIPTm8s+fyeFvAaL1Bw4mNZGMJyfHjck=;
-        b=JsUzkrlDPAu8MK89pY4o2ZMqmceYFpkvBK5JN4Q3rcKt2yG6fIG7GyD/keZNyuPlO/
-         pWDGRH0qVmkLvGILreUzHaQu2FqD7yCQInNs4MJfpOiBzeWCu1wVYqJHzzWd7jjg+1lK
-         BPFkK9UOvNfF/dC32k369RJCDXvuGtx44NefqAQ8+PCbgjAa2GCfEu+hhsZOan5ymCE4
-         Ckimj6yuQU672Pnu8Th/zBuzKM9OCrQ0Z4nuzcpM71M4Ou7EoR9Xl8bFAePomrmwMIFX
-         SScfYhAV4fznqI7SG3+EA8jmNDowekCV9Zq4xhx491ewQCRU3dBLaVY249wQNytNEBdH
-         cKTg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+XJ7EP0hOZhzV9mAsci1OAWe7gXCZSWRDHJrS8jiH/Q=;
+        b=J7V5OBHZIzvtODbBFS8R213FoHL1S/wrR7vNcmrIda2ffCKudbmAYbJRWN45sQoQky
+         1ydBeX4PnO9mAZ8rExgp/9oYqUzmAekXb7pzxnNAVURQ5anovtARCz2QBFrOmYgxgNca
+         fCpm37LK2Qo+38rMHY27mRBA9VxZn+cZR4KIGc6lxXdD/A2aSMiAgKcotaqqU+ET+/Cm
+         HmsEzzFMhClealnsbaDpj/nQEyk5VN9HKTaYiuNFHsSEtBtbtmgnW7aIAPY6do3FMoIL
+         Hq82IszkRdErwWZJGijJTotTJbkjjNkPGPT0uRUKlFBNZ0FjFBFG/OovSWqWDsh9gduX
+         kktg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HZD0Vc3lp/XqIPTm8s+fyeFvAaL1Bw4mNZGMJyfHjck=;
-        b=ttUHpxDoOqXx/JKzw1xhs3JFkfmCwMh6wUj7bY8Ari2Y7R4DwdNK5PpAELcMDUJDq4
-         a9CmMfhmmg3UkGAg3j5gXz/m3qCF3BKNphZ5Hsacu2DoBMGznPIAkAAzVFY6OAndvCul
-         gKBP2wYaumkqIdbRmg22Pkop0yyrWVeFLSOw8FB9sxVkwqzFv2mzxI8WWaJwMafupKiL
-         nF8DZZ5MZk4l7j81ONDdl0V8FC3jLdMGNOGmB555+VCpylAQ0xzxUEqqIRjAkN7nMn02
-         z5A8x8QV662dczY+Yn7HlxwKoXe5uaOfHmpsb2oSxK4mi8w3vvCW3HFMAHk4UBmW1OWa
-         BDKQ==
-X-Gm-Message-State: AOAM531RgAY/aZq4M8bzbL2aeW0OEn8nXaRlbdIlpWRnizg29spBaF6F
-        yzG+/+aA1eN/6+qPWzKIJyYnWQ==
-X-Google-Smtp-Source: ABdhPJzkff8ozUzWrLhACtgWHkaRe212yS2ydFbdEsIQCClF9gDAs7w5Kivh/WFFx4A/swTDLByBiw==
-X-Received: by 2002:a17:90a:ce0a:: with SMTP id f10mr35357981pju.71.1628659141754;
-        Tue, 10 Aug 2021 22:19:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+XJ7EP0hOZhzV9mAsci1OAWe7gXCZSWRDHJrS8jiH/Q=;
+        b=tuPETqKysxC4+AAMDAxkDwlrtg7zp7Se9SupBTZ5Vv7Ob3n6UaqwExw0sKZJ9feftN
+         RIWwfrhN1iK2AdBc+tgmOSGbgX1fHminH+Mu9SJ/xE1vbVwBePAEOnI2HGlGpUA86M8K
+         0t8uP+XHYJskhiBWH41Cg+bifUiaQLGUjPXKmaHTOyIiUhpDalgzadniWgpmIYIWeY8X
+         TzOV4rYARAh/2XqXmvwo3hPTyoIZKLelElsFubJJ6nDza1eUlvmvLxVialMJ6+bfb7UK
+         UrMfW8f5ieftPIDYj1phwWO8nxPZ7vEXgLAOe6Le7Yfu6wMTChD/AX+q+wha0BNcGVOt
+         DGSg==
+X-Gm-Message-State: AOAM5336ybk8K1FcZ//4xg1p4N0qK0AN2gkM0CMFXsIwrKQQamg/xmDa
+        iNdwfParW5n+6u9BHv8JtMPC7A==
+X-Google-Smtp-Source: ABdhPJwwqRVqnFH0DCU+u1BbGyrXRZrwxUnWmd0ikZgZlfFytrgZhZgaPk+ea0KpLfB/89mPMHFCHQ==
+X-Received: by 2002:a17:902:7144:b029:12b:24ce:a83c with SMTP id u4-20020a1709027144b029012b24cea83cmr10157315plm.54.1628659268440;
+        Tue, 10 Aug 2021 22:21:08 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id z13sm4816257pjd.44.2021.08.10.22.19.00
+        by smtp.gmail.com with ESMTPSA id e35sm5147978pjk.28.2021.08.10.22.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 22:19:01 -0700 (PDT)
-Date:   Wed, 11 Aug 2021 10:48:59 +0530
+        Tue, 10 Aug 2021 22:21:08 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        lukasz.luba@arm.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH 0/8] cpufreq: Auto-register with energy model
-Message-ID: <20210811051859.ihjzhvrnuct2knvy@vireshk-i7>
-References: <cover.1628579170.git.viresh.kumar@linaro.org>
- <YRJym+Vn4bbwQzzs@google.com>
+        Lukasz Luba <lukasz.luba@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: vexpress: Set CPUFREQ_IS_COOLING_DEV flag
+Date:   Wed, 11 Aug 2021 10:51:04 +0530
+Message-Id: <0efe0c7b1c07591f07a905021f455b033441784f.1628659212.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YRJym+Vn4bbwQzzs@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-08-21, 13:35, Quentin Perret wrote:
-> On Tuesday 10 Aug 2021 at 13:06:47 (+0530), Viresh Kumar wrote:
-> > Provide a cpufreq driver flag so drivers can ask the cpufreq core to register
-> > with the EM core on their behalf.
-> 
-> Hmm, that's not quite what this does. This asks the cpufreq core to
-> use *PM_OPP* to register an EM, which I think is kinda wrong to do from
-> there IMO. The decision to use PM_OPP or another mechanism to register
-> an EM belongs to platform specific code (drivers), so it is odd for the
-> PM_OPP registration to have its own cpufreq flag but not the other ways.
-> 
-> As mentioned in another thread, the very reason to have PM_EM is to not
-> depend on PM_OPP, so I'm worried about the direction of travel with this
-> series TBH.
+Reuse the cpufreq core's registration of cooling device by setting the
+CPUFREQ_IS_COOLING_DEV flag. Set this only if bL switcher isn't enabled.
 
-I had to use the pm-opp version, since almost everyone was using that.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Sudeep, is this broken ? I wonder why we didn't do it earlier.
 
-On the other hand, there isn't a lot of OPP specific stuff in
-dev_pm_opp_of_register_em(). It just uses dev_pm_opp_get_opp_count(),
-that's all. This ended up in the OPP core, nothing else. Maybe we can
-now move it back to the EM core and name it differently ?
+ drivers/cpufreq/vexpress-spc-cpufreq.c | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
-> > This allows us to get rid of duplicated code
-> > in the drivers and fix the unregistration part as well, which none of the
-> > drivers have done until now.
-> 
-> This series adds more code than it removes,
-
-Sadly yes :(
-
-> and the unregistration is
-> not a fix as we don't ever remove the EM tables by design, so not sure
-> either of these points are valid arguments.
-
-I think that design needs to be looked over again, it looks broken to
-me everytime I land onto this code. I wonder why we don't unregister
-stuff.
-
-Lets say, I am working on the cpufreq driver and I want to test that
-on my ARM machine. Rebooting a simpler board to test stuff out is
-easy, but if I am working on an ARM server which is running lots of
-other userspace stuff as well, I won't want to reboot the machine just
-to test a different versions of the driver. I will rather want to
-build the driver as module and insert/remove it again and again.
-
-If the frequency table changes in between versions, this just breaks
-as EM won't be updated again.
-
-This breaks one of the most basic rules of Linux Kernel. Inserting a
-module should have exactly the same final behavior every single time.
-This model doesn't guarantee it. It simply looks broken.
-
-> > This would also make the registration with EM core to happen only after policy
-> > is fully initialized, and the EM core can do other stuff from in there, like
-> > marking frequencies as inefficient (WIP). Though this patchset is useful without
-> > that work being done and should be merged nevertheless.
-> > 
-> > This doesn't update scmi cpufreq driver for now as it is a special case and need
-> > to be handled differently. Though we can make it work with this if required.
-> 
-> Note that we'll have more 'special cases' if other architectures start
-> using PM_EM, which is what we have been trying to allow since the
-> beginning, so that's worth keeping in mind.
-
-Yes, we need to take care of all such special cases as well.
-
+diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
+index 28c4c3254337..618b263434ca 100644
+--- a/drivers/cpufreq/vexpress-spc-cpufreq.c
++++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
+@@ -15,7 +15,6 @@
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/cpumask.h>
+-#include <linux/cpu_cooling.h>
+ #include <linux/device.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+@@ -47,7 +46,6 @@ static bool bL_switching_enabled;
+ #define ACTUAL_FREQ(cluster, freq)  ((cluster == A7_CLUSTER) ? freq << 1 : freq)
+ #define VIRT_FREQ(cluster, freq)    ((cluster == A7_CLUSTER) ? freq >> 1 : freq)
+ 
+-static struct thermal_cooling_device *cdev[MAX_CLUSTERS];
+ static struct clk *clk[MAX_CLUSTERS];
+ static struct cpufreq_frequency_table *freq_table[MAX_CLUSTERS + 1];
+ static atomic_t cluster_usage[MAX_CLUSTERS + 1];
+@@ -455,11 +453,6 @@ static int ve_spc_cpufreq_exit(struct cpufreq_policy *policy)
+ 	struct device *cpu_dev;
+ 	int cur_cluster = cpu_to_cluster(policy->cpu);
+ 
+-	if (cur_cluster < MAX_CLUSTERS) {
+-		cpufreq_cooling_unregister(cdev[cur_cluster]);
+-		cdev[cur_cluster] = NULL;
+-	}
+-
+ 	cpu_dev = get_cpu_device(policy->cpu);
+ 	if (!cpu_dev) {
+ 		pr_err("%s: failed to get cpu%d device\n", __func__,
+@@ -471,17 +464,6 @@ static int ve_spc_cpufreq_exit(struct cpufreq_policy *policy)
+ 	return 0;
+ }
+ 
+-static void ve_spc_cpufreq_ready(struct cpufreq_policy *policy)
+-{
+-	int cur_cluster = cpu_to_cluster(policy->cpu);
+-
+-	/* Do not register a cpu_cooling device if we are in IKS mode */
+-	if (cur_cluster >= MAX_CLUSTERS)
+-		return;
+-
+-	cdev[cur_cluster] = of_cpufreq_cooling_register(policy);
+-}
+-
+ static struct cpufreq_driver ve_spc_cpufreq_driver = {
+ 	.name			= "vexpress-spc",
+ 	.flags			= CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
+@@ -492,7 +474,6 @@ static struct cpufreq_driver ve_spc_cpufreq_driver = {
+ 	.get			= ve_spc_cpufreq_get_rate,
+ 	.init			= ve_spc_cpufreq_init,
+ 	.exit			= ve_spc_cpufreq_exit,
+-	.ready			= ve_spc_cpufreq_ready,
+ 	.attr			= cpufreq_generic_attr,
+ };
+ 
+@@ -552,6 +533,9 @@ static int ve_spc_cpufreq_probe(struct platform_device *pdev)
+ 	for (i = 0; i < MAX_CLUSTERS; i++)
+ 		mutex_init(&cluster_lock[i]);
+ 
++	if (!is_bL_switching_enabled())
++		ve_spc_cpufreq_driver.flags |= CPUFREQ_IS_COOLING_DEV;
++
+ 	ret = cpufreq_register_driver(&ve_spc_cpufreq_driver);
+ 	if (ret) {
+ 		pr_info("%s: Failed registering platform driver: %s, err: %d\n",
 -- 
-viresh
+2.31.1.272.g89b43f80a514
+
