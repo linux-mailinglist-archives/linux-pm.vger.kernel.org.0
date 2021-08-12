@@ -2,215 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDDA3EA3BC
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726DA3EA3F1
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbhHLL2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Aug 2021 07:28:42 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:17175 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbhHLL2l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 07:28:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628767696; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=XC1oXGl6RhLL8EDIf3T6NaqALry94hjHfj48dPdlLwo=; b=kJq2xcvdoB8rC4yUh/dyFd6nYG8AJlUn1/9asFNoXoOHdLduXh4xskJWJjMANqhFf5lgVeP1
- W1zb9/Xds0zjPy6oW81iuP3rmC0n5eYSOTvdOtcb/cv0XtOK0qBGk0pmtet35R0xaFfrMIzI
- /idGoKmIyduLW6BUCVzosTJ3R0o=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 611505b876c3a9a17270ed40 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 11:27:52
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DD6CCC43147; Thu, 12 Aug 2021 11:27:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 460E8C43148;
-        Thu, 12 Aug 2021 11:27:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 460E8C43148
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-To:     ulf.hansson@linaro.org, bjorn.andersson@linaro.org,
-        viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net,
-        digetx@gmail.com, Rajendra Nayak <rnayak@codeaurora.org>
-Subject: [PATCH v7 3/3] arm64: dts: sc7180: Add required-opps for i2c
-Date:   Thu, 12 Aug 2021 16:57:22 +0530
-Message-Id: <1628767642-4008-4-git-send-email-rnayak@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org>
-References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org>
+        id S236923AbhHLLqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Aug 2021 07:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231467AbhHLLqt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 07:46:49 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F8DC061765
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:24 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id m39so2689795uad.9
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dqTStev+wYL6Dxoo88ZspHDb/tS9Nzm53GGUL0+lh+g=;
+        b=gQcZt/UfAcwS5D+nBy4DaQGe0l1WZGVpzBPyRGmtaqz1LAcqV+ODkWaS0i4Sggsh+k
+         nubMU25BdBOnlIzRZKwDdfF2s29Uklyuscx2uR6WDfUyx1pZQ4sgMQTwc5PkLgLs0GRz
+         zHbuOIeUq4GFZZf6wr5P+6eCtX1+liEOeaxL8Xob5w2YYY5zEVZHg+R3H6XwFAObUz6O
+         wC+G6FPbVn1UVZoBu2c4ZwodDzSEnscrY0I7ivJkw6QtUN8gEyw5LiRjMPaxLciVaRHk
+         rVflX189QRHYLuEYdmQfvxbxgtO0dxUZZTNQiM0bo+S1r9S56/P0Ke7DJPRTsWwUzY0f
+         qdbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dqTStev+wYL6Dxoo88ZspHDb/tS9Nzm53GGUL0+lh+g=;
+        b=oqSmIE7r98X9bIXkpHPiR9MC4gFxeusAO2u0tuX70YKxW6PaRhF3HnJMZBduPzQ/La
+         okhmXOrkodVrzo7tOnjCe73gmYGyTebDr4eU5oyD1T9fT8z9yTSF9pX7g7rWhJA4TGka
+         GsQRlpydB+bWd/+XJ0MFfG/oDazMqoRUrT2DDqjTdI/qrDpKS/r2PxAgVk82iCr+UZu8
+         Wv2/ZqRdy8qGTSXil4B/1OQd+WY/iUZY0yRE9FKaucE2D1NV2LtWzZGDf3uhZOcxBt++
+         X98Yh83jMS+M8zKLNi82Wp4cq+gl0owlDEunyJACy+8z7RWuyaMBWQhWhCI3EabPXATQ
+         7V9Q==
+X-Gm-Message-State: AOAM5300kUTB5jfsMtJWOeYTNImQIaxAOUqUQSvpLIKEqDjEcmedGCUa
+        TSR0NspYd83Llor21iyhzRBEg6icy//s2E3rz4yYVA==
+X-Google-Smtp-Source: ABdhPJzrpjG3MA2aQirSmS7CoSCz0zHPU4zYhrCxt9ru09NER+p/85knZT4Qe7T7zJqIBP9HyiJ/0M0D/W2SuX/ZM2o=
+X-Received: by 2002:a9f:25a7:: with SMTP id 36mr1584262uaf.129.1628768782902;
+ Thu, 12 Aug 2021 04:46:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org> <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
+In-Reply-To: <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 12 Aug 2021 13:45:46 +0200
+Message-ID: <CAPDyKFoOta-4JX5ViJ6D5gArpQSobgecSV5yQ4SQ4-31_TMgcQ@mail.gmail.com>
+Subject: Re: [PATCH v7 1/3] opp: Don't print an error if required-opps is missing
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Dmitry Osipenko <digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
-Though qup-i2c does not support DVFS, it still needs to vote for a
-performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
-requirement.
+On Thu, 12 Aug 2021 at 13:27, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+> The 'required-opps' property is considered optional, hence remove
+> the pr_err() in of_parse_required_opp() when we find the property is
+> missing.
+> While at it, also fix the return value of
+> of_get_required_opp_performance_state() when of_parse_required_opp()
+> fails, return a -ENODEV instead of the -EINVAL.
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 
-Use 'required-opps' to pass this information from
-device tree, and also add the power-domains property to specify
-the CX power-domain.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Kind regards
+Uffe
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 4721c15..c8921e2 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -790,8 +790,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi0: spi@880000 {
-@@ -842,8 +844,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi1: spi@884000 {
-@@ -894,8 +898,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			uart2: serial@888000 {
-@@ -928,8 +934,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi3: spi@88c000 {
-@@ -980,8 +988,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			uart4: serial@890000 {
-@@ -1014,8 +1024,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi5: spi@894000 {
-@@ -1079,8 +1091,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi6: spi@a80000 {
-@@ -1131,8 +1145,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			uart7: serial@a84000 {
-@@ -1165,8 +1181,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi8: spi@a88000 {
-@@ -1217,8 +1235,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			uart9: serial@a8c000 {
-@@ -1251,8 +1271,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi10: spi@a90000 {
-@@ -1303,8 +1325,10 @@
- 						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				required-opps = <&rpmhpd_opp_low_svs>;
- 				status = "disabled";
- 			};
- 
- 			spi11: spi@a94000 {
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
 
+> ---
+>  drivers/opp/of.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index d298e38..9bdabad 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -95,15 +95,7 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
+>  static struct device_node *of_parse_required_opp(struct device_node *np,
+>                                                  int index)
+>  {
+> -       struct device_node *required_np;
+> -
+> -       required_np = of_parse_phandle(np, "required-opps", index);
+> -       if (unlikely(!required_np)) {
+> -               pr_err("%s: Unable to parse required-opps: %pOF, index: %d\n",
+> -                      __func__, np, index);
+> -       }
+> -
+> -       return required_np;
+> +       return of_parse_phandle(np, "required-opps", index);
+>  }
+>
+>  /* The caller must call dev_pm_opp_put_opp_table() after the table is used */
+> @@ -1327,7 +1319,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+>
+>         required_np = of_parse_required_opp(np, index);
+>         if (!required_np)
+> -               return -EINVAL;
+> +               return -ENODEV;
+>
+>         opp_table = _find_table_of_opp_np(required_np);
+>         if (IS_ERR(opp_table)) {
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+>
