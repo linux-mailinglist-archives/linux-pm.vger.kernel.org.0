@@ -2,67 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0733E9D8E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 06:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7B23E9D90
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 06:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbhHLEgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Aug 2021 00:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S234069AbhHLEg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Aug 2021 00:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbhHLEgT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 00:36:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA875C0613D3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 21:35:54 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id w13-20020a17090aea0db029017897a5f7bcso8686489pjy.5
-        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 21:35:54 -0700 (PDT)
+        with ESMTP id S234037AbhHLEgV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 00:36:21 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77745C061799
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 21:35:57 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id b7so5619659plh.7
+        for <linux-pm@vger.kernel.org>; Wed, 11 Aug 2021 21:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HAdryzVWDItJYYyaDLA7TehMKmxc7AbVJUX+CfkiRLM=;
-        b=xzANoon5SbQWRFGC1BUPcxuFt4rcYZc8/rPCpYUjdCqey0034wFpO6mH6LFYSEQvVw
-         2nxj3THpCJA9kO5visFyu0mNL/9jkIuuPPeveXEv89LFPKOeCUuYSeVr8aXD1aX8X/QF
-         rKU17iP/WdMU+QYu8OaNypVR6mGiZdu/WjazUaCM+rhTWa3sq5BWK1ljtVWIB60NYXwl
-         rcIzGW+1/IoEaw0ZnCkWrPG9RQPm5bJR0fp/2VJ8Br8bpi+zrPG23NvlXOMqcezp3AfZ
-         XS4DasrPso/XizZc3lRn9FPzcJwvOxedKzWzqV8tey/IS9cTyqwSBhl09rQfG7MvLBf0
-         YPeQ==
+        bh=5B6LAGyn6qpvhvvXqvmp0F5nk8/QX8RYvQTVx1M0/gM=;
+        b=QP4d91nKyPuYgkXOj2993WRqr7vFWjzAt2pAYEpOqBJrX79KK7X7Lye9RW33nVemOS
+         glTh3230AbIEle58TNmDHg+mGlObfxcChEqEIgpM51UFcNuoT5t2gwEZYo9rstSe+BUh
+         G8oAVPZc4Or2lHFxR9TnUcIaCZpTTeNW497UmbMV9rdrFsDQX3C4DbEyHzT9ETDcJuHH
+         44M487nZNgj5a1TirMtTv5x8vkPi0ZRWgBVRFM/hm1MZ4gPWlnqSsL9XbuORZM21Fqvq
+         2Kb9HOtRennF8T/9AvDxP+8H2lNL1JiYws1Z/YqfyQ//45J/2m8OCM9lP/bKaiSF0mx/
+         SA2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HAdryzVWDItJYYyaDLA7TehMKmxc7AbVJUX+CfkiRLM=;
-        b=YRY7jJqqqj+6HGW07PTrOyXAdVpmDaXigKrhfywfSt+p3+IuMZwmsoVvPs7HHdRk+8
-         Q+YDnvrGf4uWwlea9QMl/YaBDZl07jNPA8N8rMNhcqp09eG+Mj2YQsw6DNtMRdVMaH6c
-         rfAO6tMtP0WaQGVWgmrt4akPLT8N2DVHoraRhFokRfiMwphYDJX0LWTg/eM11Caz/W2T
-         bECDd8WFOhSCAtS790PPM5/KgfNK+lvKKcA4aqh6Frtc2YPZJeLCrpWzQpzqaeUVjGV6
-         AEd66FVjrpHTGIEeZCcDiyLlsy9ENtWc9u+7i+Uk/uRBGGLT8QeBljtMzbH6Z1tR3vF5
-         fGiA==
-X-Gm-Message-State: AOAM53375Ml5yLz2C9y5iPs6WteQNwrpz0yeu1XXpfPQA79QqH2e4qjc
-        p1qsFVJJvO/HTpodfzxXsiyqWQ==
-X-Google-Smtp-Source: ABdhPJy2AbrBOUm7YSLqdS9F+padZ3/Kqb30z/4DNK85cIGfcg4uF6WfM2R4KPJNix9Qjy6EOWSz3Q==
-X-Received: by 2002:a62:3082:0:b029:3cb:52bd:c0ab with SMTP id w124-20020a6230820000b02903cb52bdc0abmr2310147pfw.56.1628742954426;
-        Wed, 11 Aug 2021 21:35:54 -0700 (PDT)
+        bh=5B6LAGyn6qpvhvvXqvmp0F5nk8/QX8RYvQTVx1M0/gM=;
+        b=ruXxMX9v9HBVdmDLQbAgG5ywRjg5MjnjZJXkQI3JwSBvZvZR4bvpP6AQkCBGrKBdX9
+         cMvwE+kxwLPfBNtTqx85xjci6Zo3jAj7xDuTHWvacpD598bJ7B253ZXtN/tkxBsULkFW
+         /D+WdkLjfwje1WXniRmT/LZ2inAFv+mQs/p2A5qGGsgGeYBq9DPWACX/0vszzCphMyKq
+         1Sv11ig8R5sC4HcpZRxAxE7x9OaewnsZT9MTyAql1bhY68As2tUUtZF/3O/i++MJORH9
+         y/addNczouj/jGb7Feilc/tR3ijydY2GmNtIxLE3zUOYTln0HfdZP7z/COv7I+qTtmrK
+         kFgA==
+X-Gm-Message-State: AOAM533sQzGHqUccQcBCc396KjS1zQ8ZVbJSPpiBxW+XVwbJI09BAVpv
+        WQrvp9OjHzSJtaOMFnVVPlXWWjVZ4xK8Fg==
+X-Google-Smtp-Source: ABdhPJywxltlmffoNhquAq7k75/erYD2KPWkiClGULINl/c/3BgHh8iADap4QiF3r0hcPTmn6BYUhg==
+X-Received: by 2002:a17:902:bc41:b029:12d:3f9b:401e with SMTP id t1-20020a170902bc41b029012d3f9b401emr2042045plz.47.1628742957070;
+        Wed, 11 Aug 2021 21:35:57 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id q1sm1377480pfn.6.2021.08.11.21.35.53
+        by smtp.gmail.com with ESMTPSA id v31sm1420379pgl.49.2021.08.11.21.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 21:35:54 -0700 (PDT)
+        Wed, 11 Aug 2021 21:35:56 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Vincent Donnefort <vincent.donnefort@arm.com>,
         lukasz.luba@arm.com, Quentin Perret <qperret@google.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
+        Matthias Brugger <matthias.bgg@gmail.com>
 Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/9] cpufreq: imx6q: Use .register_em() to register with energy model
-Date:   Thu, 12 Aug 2021 10:05:16 +0530
-Message-Id: <fcd300c685d5152e76a811c492b0e6eccde29717.1628742634.git.viresh.kumar@linaro.org>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH V3 4/9] cpufreq: mediatek: Use .register_em() to register with energy model
+Date:   Thu, 12 Aug 2021 10:05:17 +0530
+Message-Id: <3701fd64a3fb947fc805ca0d108ab87562a9659b.1628742634.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1628742634.git.viresh.kumar@linaro.org>
 References: <cover.1628742634.git.viresh.kumar@linaro.org>
@@ -77,29 +74,30 @@ cpufreq_register_em_with_opp() to register with the EM core.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/imx6q-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
-index 5bf5fc759881..90beb26ed34e 100644
---- a/drivers/cpufreq/imx6q-cpufreq.c
-+++ b/drivers/cpufreq/imx6q-cpufreq.c
-@@ -192,7 +192,6 @@ static int imx6q_cpufreq_init(struct cpufreq_policy *policy)
- 	policy->clk = clks[ARM].clk;
- 	cpufreq_generic_init(policy, freq_table, transition_latency);
- 	policy->suspend_freq = max_freq;
--	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 87019d5a9547..866163883b48 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -448,8 +448,6 @@ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
+ 	policy->driver_data = info;
+ 	policy->clk = info->cpu_clk;
  
+-	dev_pm_opp_of_register_em(info->cpu_dev, policy->cpus);
+-
  	return 0;
  }
-@@ -204,6 +203,7 @@ static struct cpufreq_driver imx6q_cpufreq_driver = {
- 	.target_index = imx6q_set_target,
+ 
+@@ -471,6 +469,7 @@ static struct cpufreq_driver mtk_cpufreq_driver = {
  	.get = cpufreq_generic_get,
- 	.init = imx6q_cpufreq_init,
+ 	.init = mtk_cpufreq_init,
+ 	.exit = mtk_cpufreq_exit,
 +	.register_em = cpufreq_register_em_with_opp,
- 	.name = "imx6q-cpufreq",
+ 	.name = "mtk-cpufreq",
  	.attr = cpufreq_generic_attr,
- 	.suspend = cpufreq_generic_suspend,
+ };
 -- 
 2.31.1.272.g89b43f80a514
 
