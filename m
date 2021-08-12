@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 726DA3EA3F1
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4041A3EA3F7
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236923AbhHLLqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Aug 2021 07:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S236960AbhHLLqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Aug 2021 07:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbhHLLqt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 07:46:49 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F8DC061765
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:24 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id m39so2689795uad.9
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:24 -0700 (PDT)
+        with ESMTP id S236944AbhHLLqw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 07:46:52 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252A4C061765
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:27 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id a8so3638158vsl.4
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 04:46:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dqTStev+wYL6Dxoo88ZspHDb/tS9Nzm53GGUL0+lh+g=;
-        b=gQcZt/UfAcwS5D+nBy4DaQGe0l1WZGVpzBPyRGmtaqz1LAcqV+ODkWaS0i4Sggsh+k
-         nubMU25BdBOnlIzRZKwDdfF2s29Uklyuscx2uR6WDfUyx1pZQ4sgMQTwc5PkLgLs0GRz
-         zHbuOIeUq4GFZZf6wr5P+6eCtX1+liEOeaxL8Xob5w2YYY5zEVZHg+R3H6XwFAObUz6O
-         wC+G6FPbVn1UVZoBu2c4ZwodDzSEnscrY0I7ivJkw6QtUN8gEyw5LiRjMPaxLciVaRHk
-         rVflX189QRHYLuEYdmQfvxbxgtO0dxUZZTNQiM0bo+S1r9S56/P0Ke7DJPRTsWwUzY0f
-         qdbg==
+        bh=swYbe+r4xM2v4bBc0/5cq0xuu+4foimm3BarAlyAuTQ=;
+        b=rSyQgWPumok7BEHX+INbSmsyoJaICO/L+a9+pz1Pt4S6Y4f70jYWPMys2rQLl7UeFE
+         W20wzry3Fk8gj9ezOY3whW5zXh1Hd14d4UMbp1gOfygJ489TBymqVgSsNJgatdWd2MOu
+         xuem01PYzMNtl+DbHonziW98heLzCJY7VdSvYnmeFfYzuStV2ekfMqWwCeTV3ynZy5t7
+         FxhA9KK9r/VGbDHwgvWiuAHErfaAVCO3hxbdaM1F8AbZfySw9GMCm+UEgYp6F8SXpIUv
+         FrzInDM2CRtuvCFdtWnTRJs4upqDMcZTX0dQYpbT1XyQ8yHuwaH0PNB9NWbuKI8/9t+5
+         8Xpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dqTStev+wYL6Dxoo88ZspHDb/tS9Nzm53GGUL0+lh+g=;
-        b=oqSmIE7r98X9bIXkpHPiR9MC4gFxeusAO2u0tuX70YKxW6PaRhF3HnJMZBduPzQ/La
-         okhmXOrkodVrzo7tOnjCe73gmYGyTebDr4eU5oyD1T9fT8z9yTSF9pX7g7rWhJA4TGka
-         GsQRlpydB+bWd/+XJ0MFfG/oDazMqoRUrT2DDqjTdI/qrDpKS/r2PxAgVk82iCr+UZu8
-         Wv2/ZqRdy8qGTSXil4B/1OQd+WY/iUZY0yRE9FKaucE2D1NV2LtWzZGDf3uhZOcxBt++
-         X98Yh83jMS+M8zKLNi82Wp4cq+gl0owlDEunyJACy+8z7RWuyaMBWQhWhCI3EabPXATQ
-         7V9Q==
-X-Gm-Message-State: AOAM5300kUTB5jfsMtJWOeYTNImQIaxAOUqUQSvpLIKEqDjEcmedGCUa
-        TSR0NspYd83Llor21iyhzRBEg6icy//s2E3rz4yYVA==
-X-Google-Smtp-Source: ABdhPJzrpjG3MA2aQirSmS7CoSCz0zHPU4zYhrCxt9ru09NER+p/85knZT4Qe7T7zJqIBP9HyiJ/0M0D/W2SuX/ZM2o=
-X-Received: by 2002:a9f:25a7:: with SMTP id 36mr1584262uaf.129.1628768782902;
- Thu, 12 Aug 2021 04:46:22 -0700 (PDT)
+        bh=swYbe+r4xM2v4bBc0/5cq0xuu+4foimm3BarAlyAuTQ=;
+        b=ZRtDPInzKf1Pm5+3YI5/UUfFyDdCumm+qOrb705X2Awov4o22rFxO/bQOrQJwGjlDw
+         OeHFpgESJfQ+HJnkXOYKnnXUTbJdFs/TLVX/goBpW+OJIn6AAGTwgCjE/Lzt2F1fnXMb
+         8ZaReGun3shMxzFqwoIZZ/rMeWU5fG+chAApXATMf6UvRpW5Seb1cW444vFe7YLppjHY
+         rw24gOCW/usn25jnKYnWhMoOmkFhvjrH5LJpcHZ0g9doWRxCUowd5diJjjvqbzoGiL+w
+         SUFWwz5KnPfdRrvnr21ssXf9I8hLcKCRAP5NVhMmEkz9/i8+/OTQovQivo9QS8+N8kbT
+         mMFw==
+X-Gm-Message-State: AOAM532egXl8fsC3I9evPZK21kP2s6ZdsVluFHeCwQDr9nVMcdyFITqa
+        zVJetdNjI5N5CH8u+o3tNuCOdNaiYDRWWN02HtTW7Q==
+X-Google-Smtp-Source: ABdhPJyo9v28rhQvbcDkSGaYK1PaVI8y4qhKY7V8XxfLNyiQn2krtfXEdb5A/BAcwjwCOnghLJAJNayOzDi4vZv4Fyw=
+X-Received: by 2002:a67:7c11:: with SMTP id x17mr2588868vsc.55.1628768786350;
+ Thu, 12 Aug 2021 04:46:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org> <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
-In-Reply-To: <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
+References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org> <1628767642-4008-4-git-send-email-rnayak@codeaurora.org>
+In-Reply-To: <1628767642-4008-4-git-send-email-rnayak@codeaurora.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 12 Aug 2021 13:45:46 +0200
-Message-ID: <CAPDyKFoOta-4JX5ViJ6D5gArpQSobgecSV5yQ4SQ4-31_TMgcQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] opp: Don't print an error if required-opps is missing
+Date:   Thu, 12 Aug 2021 13:45:49 +0200
+Message-ID: <CAPDyKFoJM4zzt_KskXLPqe6x6j4_-ftS0tc_C-mgJk2tC-pJSw@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] arm64: dts: sc7180: Add required-opps for i2c
 To:     Rajendra Nayak <rnayak@codeaurora.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -68,14 +68,17 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, 12 Aug 2021 at 13:27, Rajendra Nayak <rnayak@codeaurora.org> wrote:
 >
-> The 'required-opps' property is considered optional, hence remove
-> the pr_err() in of_parse_required_opp() when we find the property is
-> missing.
-> While at it, also fix the return value of
-> of_get_required_opp_performance_state() when of_parse_required_opp()
-> fails, return a -ENODEV instead of the -EINVAL.
+> qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz)
+> Though qup-i2c does not support DVFS, it still needs to vote for a
+> performance state on 'CX' to satisfy the 19.2 Mhz clock frequency
+> requirement.
+>
+> Use 'required-opps' to pass this information from
+> device tree, and also add the power-domains property to specify
+> the CX power-domain.
 >
 > Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
@@ -84,39 +87,145 @@ Uffe
 
 
 > ---
->  drivers/opp/of.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 >
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index d298e38..9bdabad 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -95,15 +95,7 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
->  static struct device_node *of_parse_required_opp(struct device_node *np,
->                                                  int index)
->  {
-> -       struct device_node *required_np;
-> -
-> -       required_np = of_parse_phandle(np, "required-opps", index);
-> -       if (unlikely(!required_np)) {
-> -               pr_err("%s: Unable to parse required-opps: %pOF, index: %d\n",
-> -                      __func__, np, index);
-> -       }
-> -
-> -       return required_np;
-> +       return of_parse_phandle(np, "required-opps", index);
->  }
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index 4721c15..c8921e2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -790,8 +790,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
 >
->  /* The caller must call dev_pm_opp_put_opp_table() after the table is used */
-> @@ -1327,7 +1319,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+>                         spi0: spi@880000 {
+> @@ -842,8 +844,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
 >
->         required_np = of_parse_required_opp(np, index);
->         if (!required_np)
-> -               return -EINVAL;
-> +               return -ENODEV;
+>                         spi1: spi@884000 {
+> @@ -894,8 +898,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
 >
->         opp_table = _find_table_of_opp_np(required_np);
->         if (IS_ERR(opp_table)) {
+>                         uart2: serial@888000 {
+> @@ -928,8 +934,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi3: spi@88c000 {
+> @@ -980,8 +988,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         uart4: serial@890000 {
+> @@ -1014,8 +1024,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
+>                                                 <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi5: spi@894000 {
+> @@ -1079,8 +1091,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi6: spi@a80000 {
+> @@ -1131,8 +1145,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         uart7: serial@a84000 {
+> @@ -1165,8 +1181,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi8: spi@a88000 {
+> @@ -1217,8 +1235,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         uart9: serial@a8c000 {
+> @@ -1251,8 +1271,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi10: spi@a90000 {
+> @@ -1303,8 +1325,10 @@
+>                                                 <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
+>                                                 <&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
+>                                 interconnect-names = "qup-core", "qup-config",
+>                                                         "qup-memory";
+> +                               power-domains = <&rpmhpd SC7180_CX>;
+> +                               required-opps = <&rpmhpd_opp_low_svs>;
+>                                 status = "disabled";
+>                         };
+>
+>                         spi11: spi@a94000 {
 > --
 > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
 > of Code Aurora Forum, hosted by The Linux Foundation
