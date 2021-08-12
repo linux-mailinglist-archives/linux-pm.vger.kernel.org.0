@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947B43EA3AE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15723EA3B8
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Aug 2021 13:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbhHLL2M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Aug 2021 07:28:12 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:56221 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232025AbhHLL2L (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Aug 2021 07:28:11 -0400
+        id S236835AbhHLL2Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Aug 2021 07:28:24 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:58716 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236814AbhHLL2X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 07:28:23 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628767666; h=References: In-Reply-To: Message-Id: Date:
+ s=smtp; t=1628767678; h=References: In-Reply-To: Message-Id: Date:
  Subject: Cc: To: From: Sender;
- bh=ulIvF7Kssb3jgwEb0gW09ZO2wOi6cmtsMYz/TWOxlbI=; b=mkMSYJWSath4Abp3xH90oNdK1otOQ8ovcvWHT1WMnNVpt0jvLJ5xFp15zvigY/AANqd5ZtfV
- +A9/c0QkL/B0V1lubof1e+7xUeNQJcI0i3SX8WrxSXJxFqEIXqm9RqSaHte2HAVx+dBwcucP
- 23Xr+w5WDw5+4UeMNt5qu2nbLzQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
+ bh=3tPMSIR0yeMvYncnvt56rtm6k7//fGvTLyHMUBzi+80=; b=dX5dngwZ1I0xg6eKz1a62FTwu8KU1pA1wAtzlMb7EUZ/zm/FKNrCTppFJ/Y6i0YnqNeMyTNT
+ WTUhEGjKMYmH49HjNHmAomxSaZaAx0ig8FuUfErk/Nq4gBJhxEuk7/t3BYdkeZz2z7+OHKNf
+ GJcbMVWDOuwqVy3kSPNILc079uU=
+X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
  smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 611505b291487ad5202f87c1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 11:27:46
+ 611505b691487ad5202f9279 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 11:27:50
  GMT
 Sender: rnayak=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5D32DC43146; Thu, 12 Aug 2021 11:27:45 +0000 (UTC)
+        id 623B9C4338A; Thu, 12 Aug 2021 11:27:49 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -37,9 +37,9 @@ Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Out
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EA2FFC4323A;
-        Thu, 12 Aug 2021 11:27:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EA2FFC4323A
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1EFFDC43217;
+        Thu, 12 Aug 2021 11:27:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1EFFDC43217
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
 From:   Rajendra Nayak <rnayak@codeaurora.org>
@@ -49,9 +49,9 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net,
         digetx@gmail.com, Rajendra Nayak <rnayak@codeaurora.org>
-Subject: [PATCH v7 1/3] opp: Don't print an error if required-opps is missing
-Date:   Thu, 12 Aug 2021 16:57:20 +0530
-Message-Id: <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
+Subject: [PATCH v7 2/3] PM / Domains: Add support for 'required-opps' to set default perf state
+Date:   Thu, 12 Aug 2021 16:57:21 +0530
+Message-Id: <1628767642-4008-3-git-send-email-rnayak@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org>
 References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org>
@@ -59,48 +59,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 'required-opps' property is considered optional, hence remove
-the pr_err() in of_parse_required_opp() when we find the property is
-missing.
-While at it, also fix the return value of
-of_get_required_opp_performance_state() when of_parse_required_opp()
-fails, return a -ENODEV instead of the -EINVAL.
+Some devices within power domains with performance states do not
+support DVFS, but still need to vote on a default/static state
+while they are active. They can express this using the 'required-opps'
+property in device tree, which points to the phandle of the OPP
+supported by the corresponding power-domains.
+
+Add support to parse this information from DT and then set the
+specified performance state during attach and drop it on detach.
+runtime suspend/resume callbacks already have logic to drop/set
+the vote as needed and should take care of dropping the default
+perf state vote on runtime suspend and restore it back on runtime
+resume.
 
 Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 ---
- drivers/opp/of.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ drivers/base/power/domain.c | 30 ++++++++++++++++++++++++++++--
+ include/linux/pm_domain.h   |  1 +
+ 2 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index d298e38..9bdabad 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -95,15 +95,7 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
- static struct device_node *of_parse_required_opp(struct device_node *np,
- 						 int index)
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index a934c67..e1c8994 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2598,6 +2598,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
+ 
+ 	dev_dbg(dev, "removing from PM domain %s\n", pd->name);
+ 
++	/* Drop the default performance state */
++	if (dev_gpd_data(dev)->default_pstate) {
++		dev_pm_genpd_set_performance_state(dev, 0);
++		dev_gpd_data(dev)->default_pstate = 0;
++	}
++
+ 	for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
+ 		ret = genpd_remove_device(pd, dev);
+ 		if (ret != -EAGAIN)
+@@ -2637,6 +2643,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
  {
--	struct device_node *required_np;
--
--	required_np = of_parse_phandle(np, "required-opps", index);
--	if (unlikely(!required_np)) {
--		pr_err("%s: Unable to parse required-opps: %pOF, index: %d\n",
--		       __func__, np, index);
--	}
--
--	return required_np;
-+	return of_parse_phandle(np, "required-opps", index);
+ 	struct of_phandle_args pd_args;
+ 	struct generic_pm_domain *pd;
++	int pstate;
+ 	int ret;
+ 
+ 	ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
+@@ -2675,10 +2682,29 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 		genpd_unlock(pd);
+ 	}
+ 
+-	if (ret)
++	if (ret) {
+ 		genpd_remove_device(pd, dev);
++		return -EPROBE_DEFER;
++	}
+ 
+-	return ret ? -EPROBE_DEFER : 1;
++	/* Set the default performance state */
++	pstate = of_get_required_opp_performance_state(dev->of_node, index);
++	if (pstate < 0 && pstate != -ENODEV) {
++		ret = pstate;
++		goto err;
++	} else if (pstate > 0) {
++		ret = dev_pm_genpd_set_performance_state(dev, pstate);
++		if (ret)
++			goto err;
++		dev_gpd_data(dev)->default_pstate = pstate;
++	}
++	return 1;
++
++err:
++	dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
++		pd->name, ret);
++	genpd_remove_device(pd, dev);
++	return ret;
  }
  
- /* The caller must call dev_pm_opp_put_opp_table() after the table is used */
-@@ -1327,7 +1319,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
- 
- 	required_np = of_parse_required_opp(np, index);
- 	if (!required_np)
--		return -EINVAL;
-+		return -ENODEV;
- 
- 	opp_table = _find_table_of_opp_np(required_np);
- 	if (IS_ERR(opp_table)) {
+ /**
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 21a0577..67017c9 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -198,6 +198,7 @@ struct generic_pm_domain_data {
+ 	struct notifier_block *power_nb;
+ 	int cpu;
+ 	unsigned int performance_state;
++	unsigned int default_pstate;
+ 	unsigned int rpm_pstate;
+ 	ktime_t	next_wakeup;
+ 	void *data;
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
 of Code Aurora Forum, hosted by The Linux Foundation
