@@ -2,115 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B183EB001
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 08:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849753EB153
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 09:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbhHMG1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 02:27:30 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:13310 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238523AbhHMG1a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 02:27:30 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GmD9Y4K3nz85pm;
-        Fri, 13 Aug 2021 14:26:57 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 13 Aug 2021 14:26:57 +0800
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 13 Aug 2021 14:26:56 +0800
-Subject: Re: [PATCH] x86/acpi: Don't add CPUs that are not online capable
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     Alex Deucher <alexander.deucher@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
-References: <20210812051657.28605-1-mario.limonciello@amd.com>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <a671969e-526f-cdc0-6c77-0eb2d940ec5c@huawei.com>
-Date:   Fri, 13 Aug 2021 14:26:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S238974AbhHMHYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 03:24:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238787AbhHMHYF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Aug 2021 03:24:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E53056103E;
+        Fri, 13 Aug 2021 07:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628839419;
+        bh=Op1DPt7UoLm4Jfz2g7mIQzK9pON5ZGq4qTreOrFk/m8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FsaIxPhhom0jQ/AqNnv8daSMfvwEbIbS0HThsquNyVmdxm8oUoZTxtMHGUQoLJ++A
+         hX+mkdfu9o7cOfCnI3k8Wx1xoS3fJA4ONUKxHCi7H8r9xKLYzmWx6dnxcZ1R/ktW14
+         yGBYJpCAUGVW9UsoppIsrK8Y05cGRB+cxvWbB8rs=
+Date:   Fri, 13 Aug 2021 09:23:37 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Prasad Sodagudi <psodagud@codeaurora.org>
+Cc:     rjw@rjwysocki.net, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz
+Subject: Re: [PATCH v3] PM: sleep: core: Avoid setting power.must_resume to
+ false
+Message-ID: <YRYd+dSdWa7Mr+n9@kroah.com>
+References: <1628625938-149376-1-git-send-email-psodagud@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20210812051657.28605-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1628625938-149376-1-git-send-email-psodagud@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021/8/12 13:16, Mario Limonciello wrote:
-> A number of systems are showing "hotplug capable" CPUs when they
-> are not really hotpluggable.  This is because the MADT has extra
-> CPU entries to support different CPUs that may be inserted into
-> the socket with different numbers of cores.
+On Tue, Aug 10, 2021 at 01:05:38PM -0700, Prasad Sodagudi wrote:
+> There are variables(power.may_skip_resume and dev->power.must_resume)
+> and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices after
+> a system wide suspend transition.
 > 
-> The ACPI spec is clear that the Online Capable bit in the
-> MADT should be used to determine whether or not a CPU is hotplug
-> capable when the enabled bit is not set.
-
-This was introduced in ACPI 6.3 spec, which means ACPI 6.2 and
-earlier versions don't include the "Online Capable bit".
-
+> Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
+> its "noirq" and "early" resume callbacks to be skipped if the device
+> can be left in suspend after a system-wide transition into the working
+> state. PM core determines that the driver's "noirq" and "early" resume
+> callbacks should be skipped or not with dev_pm_skip_resume() function by
+> checking power.may_skip_resume variable.
 > 
-> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html?#local-apic-flags
-> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-> Reviewed-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> power.must_resume variable is getting set to false in __device_suspend()
+> function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
+> dev->power.usage_count variables. In problematic scenario, where
+> all the devices in the suspend_late stage are successful and some
+> device can fail to suspend in suspend_noirq phase. So some devices
+> successfully suspended in suspend_late stage are not getting chance
+> to execute __device_suspend_noirq() to set dev->power.must_resume
+> variable to true and not getting resumed in early_resume phase.
+> 
+> Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
+> setting power.must_resume variable in __device_suspend function.
+> 
+> Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
+> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
 > ---
->   arch/x86/kernel/acpi/boot.c | 6 ++++++
->   include/acpi/actbl2.h       | 1 +
->   2 files changed, 7 insertions(+)
+>  V2 -> V3: Format issues patch posting
+>  V1 -> V2: Fixed indentation and commit text to include scenario
+>  drivers/base/power/main.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index e55e0c1fad8c..eeb10b27d6de 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -239,6 +239,12 @@ acpi_parse_lapic(union acpi_subtable_headers * header, const unsigned long end)
->   	if (processor->id == 0xff)
->   		return 0;
->   
-> +	/* don't register processors that can not be onlined */
-> +	if (!(processor->lapic_flags & ACPI_MADT_ENABLED)) {
-> +		if (!(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
-> +			return 0;
-> +	}
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index d568772..9ee6987 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1642,7 +1642,11 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+>  	}
+>  
+>  	dev->power.may_skip_resume = true;
+> -	dev->power.must_resume = false;
+> +	if ((atomic_read(&dev->power.usage_count) <= 1) &&
+> +	     (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
+> +		dev->power.must_resume = false;
+> +	else
+> +		dev->power.must_resume = true;
 
-For firmware using ACPI 6.2 and early versions, the
-ACPI_MADT_ONLINE_CAPABLE bit is reserved as zero, so if
-we set CPU as disabled, the code here will always return
-0 in those firmwares.
+Again, what happens if the usage_count changes right after reading the
+value?  What protects that from happening?
 
-> +
->   	/*
->   	 * We need to register disabled CPU as well to permit
->   	 * counting disabled CPUs. This allows us to size
+thanks,
 
-So we will not register the disabled CPU and will break
-CPU hotplug features.
-
-I think we need to consider the compatibility with old versions
-of firmware.
-
-Thanks
-Hanjun
-
+greg k-h
