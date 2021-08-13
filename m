@@ -2,141 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E84A3EBB20
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 19:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BD43EBB37
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 19:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhHMROQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 13:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhHMROB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 13:14:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7E0C061756;
-        Fri, 13 Aug 2021 10:11:10 -0700 (PDT)
+        id S232297AbhHMRSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 13:18:21 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58602 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232151AbhHMRSN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 13:18:13 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 469431F4132B
+        with ESMTPSA id D06D01F44A1D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 41AF23C0C99; Fri, 13 Aug 2021 19:11:06 +0200 (CEST)
-Date:   Fri, 13 Aug 2021 19:11:06 +0200
+        id 8DD2C3C0C99; Fri, 13 Aug 2021 19:17:39 +0200 (CEST)
+Date:   Fri, 13 Aug 2021 19:17:39 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Gene Chen <gene.chen.richtek@gmail.com>, matthias.bgg@gmail.com,
-        matti.vaittinen@fi.rohmeurope.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rdunlap@infradead.org, gene_chen@richtek.com,
-        Wilma.Wu@mediatek.com, cy_huang@richtek.com,
-        benjamin.chao@mediatek.com
-Subject: Re: [PATCH resend v6 0/3] power: supply: mt6360_charger: add MT6360
- charger support
-Message-ID: <20210813171106.entpro4b6dstho4s@earth.universe>
-References: <20210719033914.16990-1-gene.chen.richtek@gmail.com>
- <20210813155438.4ssph6deqksob2uv@earth.universe>
- <20210813155858.GD5209@sirena.org.uk>
- <20210813162029.q5slrkubelfy3mvh@earth.universe>
- <20210813163254.GF5209@sirena.org.uk>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     Daniel Gonzalez Cabanelas <dgcbueu@gmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] power: reset: linkstation-poweroff: prepare for new
+ devices
+Message-ID: <20210813171739.cafastjubtkvqkty@earth.universe>
+References: <20210624091813.42334-1-paweldembicki@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="till3xkqoa2uchbj"
+        protocol="application/pgp-signature"; boundary="zlbul57bczkluur7"
 Content-Disposition: inline
-In-Reply-To: <20210813163254.GF5209@sirena.org.uk>
+In-Reply-To: <20210624091813.42334-1-paweldembicki@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---till3xkqoa2uchbj
+--zlbul57bczkluur7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Aug 13, 2021 at 05:32:54PM +0100, Mark Brown wrote:
-> On Fri, Aug 13, 2021 at 06:20:29PM +0200, Sebastian Reichel wrote:
-> > On Fri, Aug 13, 2021 at 04:58:58PM +0100, Mark Brown wrote:
+On Thu, Jun 24, 2021 at 11:18:11AM +0200, Pawel Dembicki wrote:
+> This commit prepare driver for another device support.
 >=20
-> > > We're still waiting for review from Matti on the linear ranges bit -
-> > > normally that goes through the regulator tree, do you have a tag to p=
-ull
-> > > in case of merge conflicts?
+> New power_off_cfg structure describes two most important things: name of
+> mdio bus and pointer to register setting function. It allow to add new
+> device with different mdio bus node and other phy register config.
 >=20
-> > He actually already provided his Rb in v5, Gene did not carry it
-> > over properly (I added it) and the patch looks simple enough, that
-> > Linus will know what to do in case of a conflict. But if you insist
-> > I can unroll my tree and create a topic branch for this.
->=20
-> It would be better, the issues I'm worrying about are more general
-> refactorings or whatever that create actual dependencies rather than
-> just trivial add/add type issues - it can make doing some kinds of work
-> really painful if things go via a different tree.
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+> ---
 
-There you go:
+Thanks, queued.
 
 -- Sebastian
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+>  drivers/power/reset/linkstation-poweroff.c | 35 ++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/r=
+eset/linkstation-poweroff.c
+> index f1e843df0e16..cb5a32f852c1 100644
+> --- a/drivers/power/reset/linkstation-poweroff.c
+> +++ b/drivers/power/reset/linkstation-poweroff.c
+> @@ -29,11 +29,21 @@
+>  #define LED2_FORCE_ON					(0x8 << 8)
+>  #define LEDMASK						GENMASK(11,8)
+> =20
+> +struct power_off_cfg {
+> +	char *mdio_node_name;
+> +	void (*phy_set_reg)(bool restart);
+> +};
+> +
+>  static struct phy_device *phydev;
+> +static const struct power_off_cfg *cfg;
+> =20
+> -static void mvphy_reg_intn(u16 data)
+> +static void linkstation_mvphy_reg_intn(bool restart)
+>  {
+>  	int rc =3D 0, saved_page;
+> +	u16 data =3D 0;
+> +
+> +	if (restart)
+> +		data =3D MII_88E1318S_PHY_LED_TCR_FORCE_INT;
+> =20
+>  	saved_page =3D phy_select_page(phydev, MII_MARVELL_LED_PAGE);
+>  	if (saved_page < 0)
+> @@ -66,11 +76,16 @@ static void mvphy_reg_intn(u16 data)
+>  		dev_err(&phydev->mdio.dev, "Write register failed, %d\n", rc);
+>  }
+> =20
+> +static const struct power_off_cfg linkstation_power_off_cfg =3D {
+> +	.mdio_node_name =3D "mdio",
+> +	.phy_set_reg =3D linkstation_mvphy_reg_intn,
+> +};
+> +
+>  static int linkstation_reboot_notifier(struct notifier_block *nb,
+>  				       unsigned long action, void *unused)
+>  {
+>  	if (action =3D=3D SYS_RESTART)
+> -		mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
+> +		cfg->phy_set_reg(true);
+> =20
+>  	return NOTIFY_DONE;
+>  }
+> @@ -82,14 +97,18 @@ static struct notifier_block linkstation_reboot_nb =
+=3D {
+>  static void linkstation_poweroff(void)
+>  {
+>  	unregister_reboot_notifier(&linkstation_reboot_nb);
+> -	mvphy_reg_intn(0);
+> +	cfg->phy_set_reg(false);
+> =20
+>  	kernel_restart("Power off");
+>  }
+> =20
+>  static const struct of_device_id ls_poweroff_of_match[] =3D {
+> -	{ .compatible =3D "buffalo,ls421d" },
+> -	{ .compatible =3D "buffalo,ls421de" },
+> +	{ .compatible =3D "buffalo,ls421d",
+> +	  .data =3D &linkstation_power_off_cfg,
+> +	},
+> +	{ .compatible =3D "buffalo,ls421de",
+> +	  .data =3D &linkstation_power_off_cfg,
+> +	},
+>  	{ },
+>  };
+> =20
+> @@ -97,13 +116,17 @@ static int __init linkstation_poweroff_init(void)
+>  {
+>  	struct mii_bus *bus;
+>  	struct device_node *dn;
+> +	const struct of_device_id *match;
+> =20
+>  	dn =3D of_find_matching_node(NULL, ls_poweroff_of_match);
+>  	if (!dn)
+>  		return -ENODEV;
+>  	of_node_put(dn);
+> =20
+> -	dn =3D of_find_node_by_name(NULL, "mdio");
+> +	match =3D of_match_node(ls_poweroff_of_match, dn);
+> +	cfg =3D match->data;
+> +
+> +	dn =3D of_find_node_by_name(NULL, cfg->mdio_node_name);
+>  	if (!dn)
+>  		return -ENODEV;
+> =20
+> --=20
+> 2.25.1
+>=20
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/ib-mt6360-for-5.15-signed
-
-for you to fetch changes up to 0402e8ebb8b869e375e8af7243044df21b5ff378:
-
-  power: supply: mt6360_charger: add MT6360 charger support (2021-08-13 18:=
-37:49 +0200)
-
-----------------------------------------------------------------
-Immutable branch between regulator and power-supply for for 5.15
-
-This immutable branch introduces the MT6360 charger driver,
-which requires a new linear range helper.
-
-Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-----------------------------------------------------------------
-Gene Chen (3):
-      lib: add linear range get selector within
-      dt-bindings: power: Add bindings document for Charger support on MT63=
-60 PMIC
-      power: supply: mt6360_charger: add MT6360 charger support
-
- .../bindings/power/supply/mt6360_charger.yaml      |  48 ++
- drivers/power/supply/Kconfig                       |  11 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/mt6360_charger.c              | 867 +++++++++++++++++=
-++++
- include/linux/linear_range.h                       |   2 +
- lib/linear_ranges.c                                |  31 +
- 6 files changed, 960 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/mt6360_c=
-harger.yaml
- create mode 100644 drivers/power/supply/mt6360_charger.c
-
---till3xkqoa2uchbj
+--zlbul57bczkluur7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWp6UACgkQ2O7X88g7
-+ppLYw//Tmxqf+UT+LcdCta9hrvT6tKxd9T2vw6MSJIbp0C77IhaXfKoITwr28Rj
-Cq+GI026tp2b9Q8EtZVuKw/44AOWlefD1JusL2AVLV11lrQpt65ULD9YiaXr2Wuq
-XbIxE6Q97jVTVcGRtvgOKiG2+IYdS445BtLlVWlljvCl0UnC1Kie30JSlLjNwJ1a
-BbpQb8QOmfL9EMByiq8lrBG3TyiCh4gnQ2N8JeOsWBJFzVX5Xw6AFTJfiyKGTEQ+
-jOUm7yAcbAP8JoAdjVeYt5h+UX5RvBIlXY0AL10fvFXo+3hCnhvbXVWhWdfXZCXU
-CcaTDLZUyLsIM9k9fRwxvYxUs9FIo3+UD+EwZMbDF4TwUQ0Y57uvh3gfhOOw/ZL5
-1whGny7xLTFN3jv1UhuKX5+0fUuVtN7jzX4mtWWbtWlReH655LBdVpApq3GkiY3Z
-BFnFSEPoQnbzCT1qnFWApaN2NjybgK5xlJVyJ7zhGxlYKDPolBTData35IF0ZdQz
-u6hG5atJj1KJYNaQ4yFG54GcU5hzw+/63VONGDfAckuUNletGEC2Lrzb/mCYBDWz
-C52e6afwwH0rkmZ9mTdkiKTm/ksxxwiySlKMBAvwOf7dGNULBeUUvIQUVAyiKrDm
-Z3b4m1O0WNWXoTjqJoxQUDQUo2QhkRA+ZPO1zzalUDeHmzxG91Y=
-=D8wa
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWqTMACgkQ2O7X88g7
++prrDQ//SeP6zggVT8iyWjHr79wRUR4zvYmEOX2XDjq1E7DIfdEaq6VFMw2abWt3
+1EVq6UaF/oQUJdWogaRI7Jly5iaJNAf/T9fvzeaj8QHVnEGkB/WAKuhY2X3bP8GH
+IwSD3NMO6J4+nV61mP6dIMqDq3IN/13vfY46re6+lHPiJEHA4NqODEpGO2idCMMv
+2FYIUrNe6duxc/yoxDYIBuoIcR8sVf0+E8gEsnpASrJYe0mJj3vQfbNE+o4etBVf
+U0EREUd6wuWRx00W2Yh36YULlSoUsWWSrO/t0J6LfmT1+bWlPRj5IzZGC8Ep+43P
+BBfxIdj3MooXntYWKrVd6cvHx2Zhp9gqBecApPLBvzfrK/WN2ogDKeHiNjEiP73v
+UY1+sxarW8cSGxyBXMckyQsu2u+P5p5hyH/HPg6cppDpT5RUQutfu0hITVubYiA9
+5t3LEjxNnT7HwQd0utbDZYq0a7OGm7DWAL5n9Tv3EyVZPT568MCUi3YHIJZjXsmO
+UT5x54lN/6P5dRnIINRvzoFy0rgPC2laoue25TWA+ppnWWgdaXcmNFAeWLxmhLOc
+FMK+gNHIbTyRGN58ODpkBKvZAXFpG33CnJibG+70mpwfRQm1920wFtSACN2HNeiu
+Z9Ho/O+ddgW/K7I2/c8cJneredVxADFVkomIpiZ8p4M81D0bp3Y=
+=NwJ4
 -----END PGP SIGNATURE-----
 
---till3xkqoa2uchbj--
+--zlbul57bczkluur7--
