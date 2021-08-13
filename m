@@ -2,116 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E040D3EAF1A
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 06:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B183EB001
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 08:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbhHMEMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 00:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbhHMEMy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 00:12:54 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E358C0617A8
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 21:12:28 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so9945740pje.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 21:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1NSKiSP+VuZbySQVbJIy2ItyhUu8xuFfwgMBa7ttLiU=;
-        b=V368k3JFhLvKxY7VE7ceRV1/PU3gL14wHNRNZ65yR30XkuqzGfLUiiUj9iLXkrRHZJ
-         IQBRcbNcmzqC97b251H0Zma9wj9VfltAZfQLhPppM43TTXMToMJ9GjH9E8L3DmhYA6SZ
-         vwgmgWLUD5YiyJ5tsf8sqMdyWaU+u74KnoWAWk/YiVCvMoERPYbFL2P8rNTGIstZthu+
-         VQZ0uePHUpjpfKDZpOfSqarA57OlxD8KXsBzwjPJXca8vjUmirpAdBWppYYQE26EmqoS
-         4JCK9Xu0fgb01903HF3eW2uxT8tDMNycAbu/IyLSXjjLbOmKYjtFCpgg2v4qUYw2za+8
-         NJHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1NSKiSP+VuZbySQVbJIy2ItyhUu8xuFfwgMBa7ttLiU=;
-        b=cz+wTtlzOjwsoVTxaVSMt7DH2SRnxZ1iiOjuy1rtVOlGrGX1ks3bb48PNo5XBKEwGw
-         ATp1qAvuD/PiBUF/6DlXvDD5hz/tNRCJ8ghXZBLNRxtxWErcLHEPlxUSVACMKHIeLwEd
-         Ziz4Rh9//tKsLMCEQN9YOzWSFK5UQ3+LixUlYW7ajf7Z0l2LoeviHsrH46l8Y5SiqejX
-         Wzg2OBtbfL8eDniuqTjrXNHChZNTtHUBuAjqJ2bWFOHWWaiBo8uXu1V8pSVn2izdVw+g
-         8W9qkdyRbPM65rg7t6r77C5R6Wa6uj5XbGOnJZwJCj9AiRzvECHmCrzMG+A1jhIgM0pf
-         3+3w==
-X-Gm-Message-State: AOAM532qWTxbid9yP0aXUeE+vvOoeO9A71k7riePh9tnMEQKKkBiTLOL
-        MUNdc9C6oYdkP1LLrgTNFNMcJw==
-X-Google-Smtp-Source: ABdhPJxSMEu76XmMWmPEJXM16ZkzDqGuwMxS8zWmY94EFDKPPEN3ik1qhjYxbxqoRqEA1Q+P4Bit4w==
-X-Received: by 2002:a65:680d:: with SMTP id l13mr468254pgt.307.1628827947656;
-        Thu, 12 Aug 2021 21:12:27 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 125sm359239pfy.17.2021.08.12.21.12.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Aug 2021 21:12:27 -0700 (PDT)
-Date:   Fri, 13 Aug 2021 09:42:24 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] opp: Release current OPP properly
-Message-ID: <20210813041224.dqz3kbynr5ffjclj@vireshk-i7>
-References: <20210812101353.14318-1-digetx@gmail.com>
+        id S238575AbhHMG1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 02:27:30 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:13310 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238523AbhHMG1a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 02:27:30 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GmD9Y4K3nz85pm;
+        Fri, 13 Aug 2021 14:26:57 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 13 Aug 2021 14:26:57 +0800
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 13 Aug 2021 14:26:56 +0800
+Subject: Re: [PATCH] x86/acpi: Don't add CPUs that are not online capable
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+CC:     Alex Deucher <alexander.deucher@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
+References: <20210812051657.28605-1-mario.limonciello@amd.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <a671969e-526f-cdc0-6c77-0eb2d940ec5c@huawei.com>
+Date:   Fri, 13 Aug 2021 14:26:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210812101353.14318-1-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210812051657.28605-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.247]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-08-21, 13:13, Dmitry Osipenko wrote:
-> The current_opp is released only when whole OPP table is released,
-> otherwise it's only marked as removed by dev_pm_opp_remove_table().
-> Functions like dev_pm_opp_put_clkname() and dev_pm_opp_put_supported_hw()
-> are checking whether OPP table is empty and it's not if current_opp is
-> set since it holds the refcount of OPP, this produces a noisy warning
-> from these functions about busy OPP table. Release current_opp when
-> OPP table is removed to fix it.
+On 2021/8/12 13:16, Mario Limonciello wrote:
+> A number of systems are showing "hotplug capable" CPUs when they
+> are not really hotpluggable.  This is because the MADT has extra
+> CPU entries to support different CPUs that may be inserted into
+> the socket with different numbers of cores.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> The ACPI spec is clear that the Online Capable bit in the
+> MADT should be used to determine whether or not a CPU is hotplug
+> capable when the enabled bit is not set.
+
+This was introduced in ACPI 6.3 spec, which means ACPI 6.2 and
+earlier versions don't include the "Online Capable bit".
+
+> 
+> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html?#local-apic-flags
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/opp/core.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>   arch/x86/kernel/acpi/boot.c | 6 ++++++
+>   include/acpi/actbl2.h       | 1 +
+>   2 files changed, 7 insertions(+)
 > 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index b335c077f215..73da968b5c86 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1378,9 +1378,6 @@ static void _opp_table_kref_release(struct kref *kref)
->  	list_del(&opp_table->node);
->  	mutex_unlock(&opp_table_lock);
->  
-> -	if (opp_table->current_opp)
-> -		dev_pm_opp_put(opp_table->current_opp);
-> -
->  	_of_clear_opp_table(opp_table);
->  
->  	/* Release clk */
-> @@ -2901,6 +2898,12 @@ void dev_pm_opp_remove_table(struct device *dev)
->  	if (_opp_remove_all_static(opp_table))
->  		dev_pm_opp_put_opp_table(opp_table);
->  
-> +	/* Drop reference taken by _find_current_opp() */
-> +	if (opp_table->current_opp) {
-> +		dev_pm_opp_put(opp_table->current_opp);
-> +		opp_table->current_opp = NULL;
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index e55e0c1fad8c..eeb10b27d6de 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -239,6 +239,12 @@ acpi_parse_lapic(union acpi_subtable_headers * header, const unsigned long end)
+>   	if (processor->id == 0xff)
+>   		return 0;
+>   
+> +	/* don't register processors that can not be onlined */
+> +	if (!(processor->lapic_flags & ACPI_MADT_ENABLED)) {
+> +		if (!(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+> +			return 0;
 > +	}
+
+For firmware using ACPI 6.2 and early versions, the
+ACPI_MADT_ONLINE_CAPABLE bit is reserved as zero, so if
+we set CPU as disabled, the code here will always return
+0 in those firmwares.
+
 > +
+>   	/*
+>   	 * We need to register disabled CPU as well to permit
+>   	 * counting disabled CPUs. This allows us to size
 
-It is better to drop the reference when the OPP table is really
-getting removed.
+So we will not register the disabled CPU and will break
+CPU hotplug features.
 
-I think the WARN_ON() in the put_* functions can be dropped. It is
-important to check this when the stuff is getting set, like in
-dev_pm_opp_set_supported_hw(), but removal is just fine.
+I think we need to consider the compatibility with old versions
+of firmware.
 
--- 
-viresh
+Thanks
+Hanjun
+
