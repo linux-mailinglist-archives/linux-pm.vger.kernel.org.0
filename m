@@ -2,83 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DC93EB9A1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 17:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41F63EB9A5
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 18:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241209AbhHMP7q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 11:59:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41092 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241089AbhHMP7q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 13 Aug 2021 11:59:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A75261038;
-        Fri, 13 Aug 2021 15:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628870359;
-        bh=mmIVKecooge/8bcS9f0J7os6PhKUAnx5VYDKl8xDsBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h0UeKtiuCmF7ZbGSAr0SIZuSsu5fpSiZqBAlXQ+aTihpG1KFZdVf83yzaeFv7bEg1
-         1K+YglebukLQDc8ijvvaAipKKtcAaAQkWqvMJD08xNSRkYQ+xlqtK6AMxkm3DKEWql
-         3RlkZFQQgZPHT0A4e2QSBWpGsh16HWG2wKCXu6FCEPvgMSkN9f+a5mewQGj0jJcJkA
-         U/4A/q3lwab0e0RTjibr4JmKgEnBLj7YTSu5S5IcVk3CVDJUyJkAS15RtTHNexrWnn
-         lNs71tHa7orNoez4ewAEK04xCTs6CMKGyY9r+/+ELDMSrWAUCgb1HN2b5WcyLBvSXb
-         +oOhXJntx8Itg==
-Date:   Fri, 13 Aug 2021 16:58:58 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Gene Chen <gene.chen.richtek@gmail.com>, matthias.bgg@gmail.com,
-        matti.vaittinen@fi.rohmeurope.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rdunlap@infradead.org, gene_chen@richtek.com,
-        Wilma.Wu@mediatek.com, cy_huang@richtek.com,
-        benjamin.chao@mediatek.com
-Subject: Re: [PATCH resend v6 0/3] power: supply: mt6360_charger: add MT6360
- charger support
-Message-ID: <20210813155858.GD5209@sirena.org.uk>
-References: <20210719033914.16990-1-gene.chen.richtek@gmail.com>
- <20210813155438.4ssph6deqksob2uv@earth.universe>
+        id S241209AbhHMQAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 12:00:37 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57626 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241382AbhHMQAg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 12:00:36 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 8B2581F44986
+Received: by earth.universe (Postfix, from userid 1000)
+        id 647943C0C99; Fri, 13 Aug 2021 18:00:06 +0200 (CEST)
+Date:   Fri, 13 Aug 2021 18:00:06 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v3 0/2] mfd: rn5t618: Extend ADC support
+Message-ID: <20210813160006.r4anec2g5vv73mao@earth.universe>
+References: <20210712212111.18896-1-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zbGR4y+acU1DwHSi"
+        protocol="application/pgp-signature"; boundary="2n5xgpexbbwyfdgu"
 Content-Disposition: inline
-In-Reply-To: <20210813155438.4ssph6deqksob2uv@earth.universe>
-X-Cookie: E Pluribus Unix
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210712212111.18896-1-andreas@kemnade.info>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zbGR4y+acU1DwHSi
+--2n5xgpexbbwyfdgu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 13, 2021 at 05:54:38PM +0200, Sebastian Reichel wrote:
-> On Mon, Jul 19, 2021 at 11:39:11AM +0800, Gene Chen wrote:
-> > This patch series add MT6360 Charger support contains driver and binding
-> > document
+Hi,
 
-> Thanks, queued.
+On Mon, Jul 12, 2021 at 11:21:09PM +0200, Andreas Kemnade wrote:
+> Add iio map to make voltage_now related channels accessible to power
+> driver.
+>=20
+> Changes in v3:
+> - use scale functions
+> - add acks
+>=20
+> Changes in v2:
+> - use iio_map instead of devicetree to allow mapping which does not
+>   block future extension by devicetree.
 
-We're still waiting for review from Matti on the linear ranges bit -
-normally that goes through the regulator tree, do you have a tag to pull
-in case of merge conflicts?
+Thanks, queued.
 
---zbGR4y+acU1DwHSi
+-- Sebastian
+
+> *** BLURB HERE ***
+
+:)
+
+> Andreas Kemnade (2):
+>   iio: adc: rn5t618: Add iio map
+>   power: supply: rn5t618: Add voltage_now property
+>=20
+>  drivers/iio/adc/rn5t618-adc.c        | 23 +++++++++++++++++
+>  drivers/power/supply/Kconfig         |  2 ++
+>  drivers/power/supply/rn5t618_power.c | 38 ++++++++++++++++++++++++++++
+>  3 files changed, 63 insertions(+)
+>=20
+> --=20
+> 2.30.2
+>=20
+
+--2n5xgpexbbwyfdgu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEWlsIACgkQJNaLcl1U
-h9AoZwf9HFxqK2eAq4AklZVlMqvPXdEMOIAyrwH6KkySTkl5AajtCofzW9m+02vr
-rZ0r+Hbp5wngiO1gS2xHi9IiOupIZ/T0FfUSNKYavSX7+tocv+KlAkDRFd+ktpCo
-7rtr9aBOqcljkdX5n2OYZKvwZdJBj6uPEh7qxNivFxpEbCmx8ymL1YWL1pEYlblR
-r3sgWu/fZ1sbp1sFwCvf8GqjmP7Qexqaps6Pg+URJFRoKMlctTDp58ONiE71g8t/
-Mw0vlKqG4564sYxo1Pp+cxL+lsv5GvUMvWxEwvi+2nlmc2TD0sZ0KKgkGKtQyzJd
-kSrVVJ83AhIEe86ozgS7kgsj3tTR3g==
-=bg/U
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWlwYACgkQ2O7X88g7
++ppMJA/7B8DgrZ1oaXrWqWSByzip+PLtC1Xov6eDVPZC6o/sGihnJcYewrhCR10x
+fwRV3sY/aj4/M1vOoiJF3CHHSg57gzLx8cNXi+a7tz5KY/cHcg2NCx4E9J4zffNy
+d1i6rmRYhuDCxvGAvko0kz59nW1UwDEd5NLl+QaFPazoKnwPgTlOPSMR3NfFGWFm
+FbJyt6Q2ZfiGptfyXBeNFEyfLbg0nIEE34RNbClhhKz+37kt91wgDvTFvieEGAxd
+cQGL/wKoBWfytjZc5kDN4o/SZRQSRQXdv6ercuj+3yvVcRASnqlR43wo75vTOsZZ
+MBFLOSFei0e7KOY2yAov4zKlOvJj4Y3CfdqkU3GgQI6qxzh1crzqOfnmb8oItVPE
+jOVVKmb43ctd1w6dSTvqEq6lZTuQma8kSfq9EdUdzHfKjpqhFClY3c5+KK2QYcQR
++DMNUJGRIge9JrXk3E3b6PpFA/xjsjJ/Of1qJ7+Ap2I5eogd75idaGhh3wDxmH6J
+Ps3U0pSV3QtXV/6bHn+tX2AEXvdl1PdemDCDJVoLByuzBUDqaL43qubwDdjlE+Ex
+cfGBNsaoK4FQgh13H9ILibQQxsyxGK611XGDrM0l493Ly9K3ln1I6Gcmg3PRWBUn
+13sphZ9c/wgAR6PRiMml7SmboBA9173iUgK2Qnt/rKIKDAxGCHU=
+=F8VB
 -----END PGP SIGNATURE-----
 
---zbGR4y+acU1DwHSi--
+--2n5xgpexbbwyfdgu--
