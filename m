@@ -2,125 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 647B43EB99A
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 17:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DC93EB9A1
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 17:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241293AbhHMPzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 11:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbhHMPzJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 11:55:09 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E2C061756;
-        Fri, 13 Aug 2021 08:54:42 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 618541F40E8C
-Received: by earth.universe (Postfix, from userid 1000)
-        id 449DF3C0C99; Fri, 13 Aug 2021 17:54:38 +0200 (CEST)
-Date:   Fri, 13 Aug 2021 17:54:38 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Gene Chen <gene.chen.richtek@gmail.com>
-Cc:     matthias.bgg@gmail.com, matti.vaittinen@fi.rohmeurope.com,
-        broonie@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S241209AbhHMP7q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 11:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241089AbhHMP7q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Aug 2021 11:59:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A75261038;
+        Fri, 13 Aug 2021 15:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628870359;
+        bh=mmIVKecooge/8bcS9f0J7os6PhKUAnx5VYDKl8xDsBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h0UeKtiuCmF7ZbGSAr0SIZuSsu5fpSiZqBAlXQ+aTihpG1KFZdVf83yzaeFv7bEg1
+         1K+YglebukLQDc8ijvvaAipKKtcAaAQkWqvMJD08xNSRkYQ+xlqtK6AMxkm3DKEWql
+         3RlkZFQQgZPHT0A4e2QSBWpGsh16HWG2wKCXu6FCEPvgMSkN9f+a5mewQGj0jJcJkA
+         U/4A/q3lwab0e0RTjibr4JmKgEnBLj7YTSu5S5IcVk3CVDJUyJkAS15RtTHNexrWnn
+         lNs71tHa7orNoez4ewAEK04xCTs6CMKGyY9r+/+ELDMSrWAUCgb1HN2b5WcyLBvSXb
+         +oOhXJntx8Itg==
+Date:   Fri, 13 Aug 2021 16:58:58 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Gene Chen <gene.chen.richtek@gmail.com>, matthias.bgg@gmail.com,
+        matti.vaittinen@fi.rohmeurope.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         rdunlap@infradead.org, gene_chen@richtek.com,
         Wilma.Wu@mediatek.com, cy_huang@richtek.com,
         benjamin.chao@mediatek.com
 Subject: Re: [PATCH resend v6 0/3] power: supply: mt6360_charger: add MT6360
  charger support
-Message-ID: <20210813155438.4ssph6deqksob2uv@earth.universe>
+Message-ID: <20210813155858.GD5209@sirena.org.uk>
 References: <20210719033914.16990-1-gene.chen.richtek@gmail.com>
+ <20210813155438.4ssph6deqksob2uv@earth.universe>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ikusuaweozgwybmv"
+        protocol="application/pgp-signature"; boundary="zbGR4y+acU1DwHSi"
 Content-Disposition: inline
-In-Reply-To: <20210719033914.16990-1-gene.chen.richtek@gmail.com>
+In-Reply-To: <20210813155438.4ssph6deqksob2uv@earth.universe>
+X-Cookie: E Pluribus Unix
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ikusuaweozgwybmv
+--zbGR4y+acU1DwHSi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Fri, Aug 13, 2021 at 05:54:38PM +0200, Sebastian Reichel wrote:
+> On Mon, Jul 19, 2021 at 11:39:11AM +0800, Gene Chen wrote:
+> > This patch series add MT6360 Charger support contains driver and binding
+> > document
 
-On Mon, Jul 19, 2021 at 11:39:11AM +0800, Gene Chen wrote:
-> This patch series add MT6360 Charger support contains driver and binding
-> document
+> Thanks, queued.
 
-Thanks, queued.
+We're still waiting for review from Matti on the linear ranges bit -
+normally that goes through the regulator tree, do you have a tag to pull
+in case of merge conflicts?
 
--- Sebastian
-
-> Gene Chen (3)
->  lib: add linear range get selector within
->  dt-bindings: power: Add bindings document for Charger support on MT6360 =
-PMIC
->  power: supply: mt6360_charger: add MT6360 charger support
->=20
->  Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml |   4=
-8=20
->  drivers/power/supply/Kconfig                                       |   1=
-1=20
->  drivers/power/supply/Makefile                                      |    =
-1=20
->  drivers/power/supply/mt6360_charger.c                              |  86=
-7 ++++++++++
->  include/linux/linear_range.h                                       |    =
-2=20
->  lib/linear_ranges.c                                                |   3=
-1=20
->  6 files changed, 960 insertions(+)
->=20
-> changelogs between v1 & v2
->  - Add binding property with unit and custom name prefix
->  - Remove extcon device, redundant brackets and interrupts
->  - Fix power supply prop "charger type"
->=20
-> changelogs between v2 & v3
->  - Add register selector to value mapping
->=20
-> changelogs between v3 & v4
->  - move pdata vinovp to mt6360_chg_info
->  - remove unuse sysfs attribute
->  - refactor debug log and warning
->  - add power supply prop input voltage limit
->=20
-> changelogs between v4 & v5
->  - add linear range selector mapping
->  - use linear range to map charger setting
->=20
-> changelogs between v5 & v6
->  - use REGULATOR_LINEAR_RANGE
->  - use devm_work_autocancel
->  - fix Kconfig description
->=20
->=20
-
---ikusuaweozgwybmv
+--zbGR4y+acU1DwHSi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWlb4ACgkQ2O7X88g7
-+ppfhg//Yi9xvms8G9ziPuIbkk/ywWDy7CTX6w5F2khCLGeODcH5NRpXPimmnrES
-tod2JRpFOEvSplEAosnQR2e0PgCdCL2k0x0Ii0jQWJ3oJwSawTMGM95wx+7XiQB7
-S/ncgc4Q9XkRx0btxMJ2ogKxjQzSKFh43AAhymt/p33ErnDvkbRNTX50SLNvyafy
-/d0cry4eYF/wVU0L3xzO1RwILaK7HbOCoGI9XPzjR+76z9zQibtzJ9jg8/qSD2iP
-BopKCrqOPTQvHGNt0/UHeVFj4OB34qhiHQqih0zONA9DdzLYOtvBvxpGn/1a31xN
-0x4DzAOoVL3RcdAAT6dzrVsck8xn55wC2VcMDnMZd0uPANNLnILcXsWriaa69wrS
-cj7Y1SUJdq7fbS3u3Pm6qcRDc24BORSR+oulRNJUaPM+Ylr/ADW+m9XCgTwCYnCQ
-WUcqxa8rN+SEVDjo4mpBe2X5hOvn5hJopr7Xt6460sMtqvWN11H/B+NtdT47EwuG
-pr6MZbqV2AUeZsz3Kf5F8i+QDeHMHn3vj6nkphP3w29gDcEGhd2bRqZ3QAG0tg03
-vlLl07V1kryFcI0CQC5QPDEzLKG6whmmARoqJHVgR9Yw/bsvm97XPnX03fVVqwjT
-gPwvndYyHoo4M8rhN6C6KdJVyjoUGo7CdnZO5nbUTK8cAPK685c=
-=E5U1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEWlsIACgkQJNaLcl1U
+h9AoZwf9HFxqK2eAq4AklZVlMqvPXdEMOIAyrwH6KkySTkl5AajtCofzW9m+02vr
+rZ0r+Hbp5wngiO1gS2xHi9IiOupIZ/T0FfUSNKYavSX7+tocv+KlAkDRFd+ktpCo
+7rtr9aBOqcljkdX5n2OYZKvwZdJBj6uPEh7qxNivFxpEbCmx8ymL1YWL1pEYlblR
+r3sgWu/fZ1sbp1sFwCvf8GqjmP7Qexqaps6Pg+URJFRoKMlctTDp58ONiE71g8t/
+Mw0vlKqG4564sYxo1Pp+cxL+lsv5GvUMvWxEwvi+2nlmc2TD0sZ0KKgkGKtQyzJd
+kSrVVJ83AhIEe86ozgS7kgsj3tTR3g==
+=bg/U
 -----END PGP SIGNATURE-----
 
---ikusuaweozgwybmv--
+--zbGR4y+acU1DwHSi--
