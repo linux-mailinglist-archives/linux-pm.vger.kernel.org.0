@@ -2,61 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB69C3EAE90
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 04:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6733EAF0A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 05:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238144AbhHMC2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Aug 2021 22:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S238645AbhHMD6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Aug 2021 23:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237040AbhHMC2R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 22:28:17 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C73EC061756
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 19:27:51 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id f10so2772104wml.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 19:27:51 -0700 (PDT)
+        with ESMTP id S238628AbhHMD6W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Aug 2021 23:58:22 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A325AC0617A8
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 20:57:56 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id nt11so13458372pjb.2
+        for <linux-pm@vger.kernel.org>; Thu, 12 Aug 2021 20:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6jmiNUMDO6gpUCudYn1ayfY6iN/DRGf3Nn68M4njEUk=;
-        b=VoR1ExbWjelHaynHXn1l2quaD0yha1x5PYLOTbeNIyrxaKciQaq8v9C/ksBy8+a9X1
-         8NcGSAOu3cfeHt29Zl9PR1rFhqy9oDaKTYGwuIURtoKfk0G9y98sfmtv4G4yJdRKChAO
-         lMostl/mI3Wo3JlUS6JUz6qwfl9dzWfBqR+D+MTs8TQY9ZHyQYjk1rpBe4ZHYLR6tTYS
-         YCUyVXDbukKIyps7wRn9tzDZxhFizbKwG4f+ouCkZ/gdzWPTklST4C/H8E+uvGVL6/+g
-         PDyEj98BdpbAujXSLjj9weRWypQPsAMdQyvNJVE9TLtMu35UuQUVoUQ9TfXS+AMo/Pb6
-         2Vrw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MvmuwhxcqYAbdPmkTIufV5uQRwUnrxELEdSjPA9KrXo=;
+        b=eOwiRNh4MUanAxbqTJMBRZCZfu41L9y7gdH60FKetDLsqWzSItkABZc2JszeZ82opI
+         bfkEzhtcD2es9gu2FAoDAUD+8r0bgLFFKMlRuYwEIbemol70oWZxCO31WcLOv5eMCRNa
+         CJz0KsyMOp6WuJk25J8DqIzQcqdedVyC1mhgHbhFE87rdyadBI69e49/dXtQgjr5nbwK
+         VwFZ8KAWt5PmbX1zUdzO5/uHS77AD+9oVD4cjLD1dgCyEgN0HdYt+pNQ9evzQR5Xju/D
+         A2Cbwl1uAfUjP6ecqadlbt+ewPMPfQYRiHSWmx1YWwU4/vp+unPk39FFAHC70KWSX+1c
+         sUrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6jmiNUMDO6gpUCudYn1ayfY6iN/DRGf3Nn68M4njEUk=;
-        b=Yx+9sVSutzCLR+f1g4a8/zRZVzsKlUa4rAaqTD6NYS0AlvgLckkF5jnNpVkz+OwB1b
-         Eozmxu9Q4R0h/PrmvWuNTXLYXafiCXZbbt6Fk2mHUvPqBwLEAns/HMAC/ZxdNpehBq62
-         yxj3tGpz2ndxn6Ln1Lj0lwweldq6DHoxGgtskeM+8fXv6210TzkjzZs8JNSjW1eQ38wh
-         AV9FnxqSqwT2cgJpZ+k6cTzqU6ODfAVsS/BTjNXhCWrU6LV47+LV0uQwOfseweBdKu8m
-         kpCv6JK7mlMyHKl1oKA59h2rckOAAY8Fw9EuobGMF8wDgHNHaQ0W+xxPWoeXPu7+FpnL
-         FjWQ==
-X-Gm-Message-State: AOAM5338iinyfmzzIrlm6VPjh1wROUBwG1UKh2nn38P+06VwK2cOCOFW
-        ox1ph2Ejw5PbF32ruEvW2YBoNEdYueupgUYhf0Q=
-X-Google-Smtp-Source: ABdhPJw7i0IdWGtZaj9QaHcSI10hTKfAoJhSXbPEsOObtaB2C4KNe8mixeAso2GlOIjkU1IhvhGWBqzRJcqArm1hVfY=
-X-Received: by 2002:a1c:f203:: with SMTP id s3mr317710wmc.138.1628821669768;
- Thu, 12 Aug 2021 19:27:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MvmuwhxcqYAbdPmkTIufV5uQRwUnrxELEdSjPA9KrXo=;
+        b=bCaC7xUuKqJ9jEssWefia8sw5FNJ7KqKpQ8xBJbAeosIdWPThNTJmDNcQPNeU1CuqL
+         CQN787ZtFQLkt7RXHLTaK0N9LpVlrJ06+B0H+YVGD/3IJ0e2TNT7UDLxqLc+hnqhl3OP
+         tNI8L9cTFMIPeXYo8kgkyV2qpNMAKyQaSBGpld083elWi7p5qOv9WD9KnKQTuv0IcZIL
+         mu29iMLRmwz2jWcTE+Osscdg4osfl7YS+d5MlzVEC6hwq/c8107hNLI4ukjkSQT/gHEK
+         ZOP/GSPlfVqC7ChMpDVBt/uExBKOENJHaOjgaBdiHk/bRHhUsGdSxgUIuLE7vpr9nYoj
+         yw9A==
+X-Gm-Message-State: AOAM533esCNv8GKT/oZvczUTQCVMlLtLxBUChq3Hv8zmoALd8mFWI7h0
+        NywmvVCJ2l8FZIoSFCScE6s6fg==
+X-Google-Smtp-Source: ABdhPJxRDakJcVqHqBRWt5r47fIPr4C/oo8C0jNq80oWE8P2YNHnQVm97OlAzna+HWJyBkUGtgz+2g==
+X-Received: by 2002:a65:44c3:: with SMTP id g3mr421133pgs.233.1628827076146;
+        Thu, 12 Aug 2021 20:57:56 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id x1sm299780pfn.64.2021.08.12.20.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Aug 2021 20:57:55 -0700 (PDT)
+Date:   Fri, 13 Aug 2021 09:27:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     ulf.hansson@linaro.org, bjorn.andersson@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, rojay@codeaurora.org, stephan@gerhold.net,
+        digetx@gmail.com
+Subject: Re: [PATCH v7 1/3] opp: Don't print an error if required-opps is
+ missing
+Message-ID: <20210813035753.7b6ye4yzztmp2ly7@vireshk-i7>
+References: <1628767642-4008-1-git-send-email-rnayak@codeaurora.org>
+ <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
 MIME-Version: 1.0
-Received: by 2002:adf:d0c9:0:0:0:0:0 with HTTP; Thu, 12 Aug 2021 19:27:49
- -0700 (PDT)
-Reply-To: cherrykona@hotmail.com
-From:   Cherry Kona <ambroisetete20@gmail.com>
-Date:   Thu, 12 Aug 2021 19:27:49 -0700
-Message-ID: <CALnhZLSTwNfC=kxb8iMs2jnV6E6wh8qXdT-vmg-ABMiKF1zNLg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1628767642-4008-2-git-send-email-rnayak@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--- 
+On 12-08-21, 16:57, Rajendra Nayak wrote:
+> The 'required-opps' property is considered optional, hence remove
+> the pr_err() in of_parse_required_opp() when we find the property is
+> missing.
+> While at it, also fix the return value of
+> of_get_required_opp_performance_state() when of_parse_required_opp()
+> fails, return a -ENODEV instead of the -EINVAL.
+> 
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  drivers/opp/of.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
 
-Did you receive my last message i sent to you? Please with honesty you
-can add me with my whats App number +228 9222 0198 ok
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
