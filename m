@@ -2,156 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2073EB6BB
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 16:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6EC3EB992
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 17:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240366AbhHMOdC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 10:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbhHMOdC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 10:33:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BB3C061756;
-        Fri, 13 Aug 2021 07:32:35 -0700 (PDT)
+        id S241357AbhHMPyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 11:54:22 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57574 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241418AbhHMPyW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 11:54:22 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 093741F44936
+        with ESMTPSA id A8F7C1F40E8C
 Received: by earth.universe (Postfix, from userid 1000)
-        id DC4D53C0C99; Fri, 13 Aug 2021 16:32:28 +0200 (CEST)
-Date:   Fri, 13 Aug 2021 16:32:28 +0200
+        id 4B5E23C0C99; Fri, 13 Aug 2021 17:53:51 +0200 (CEST)
+Date:   Fri, 13 Aug 2021 17:53:51 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Tang Bin <tangbin@cmss.chinamobile.com>, wens@csie.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] power: supply: axp288_charger: Use the defined variable
- to clean code
-Message-ID: <20210813143228.i5ngphf7qbeem2kc@earth.universe>
-References: <20210811104929.24608-1-tangbin@cmss.chinamobile.com>
- <60b7038f-2c68-4559-6a97-a5f2bc97647f@redhat.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2][next] power: supply: ab8500: clean up warnings found
+ by checkpatch
+Message-ID: <20210813155351.dj67imzn5nfpdf3d@earth.universe>
+References: <20210720082922.6398-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p34b5vbjhvnni57o"
+        protocol="application/pgp-signature"; boundary="lewwtmsomymedhht"
 Content-Disposition: inline
-In-Reply-To: <60b7038f-2c68-4559-6a97-a5f2bc97647f@redhat.com>
+In-Reply-To: <20210720082922.6398-1-colin.king@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---p34b5vbjhvnni57o
+--lewwtmsomymedhht
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Aug 12, 2021 at 05:20:25PM +0200, Hans de Goede wrote:
-> Hi,
+On Tue, Jul 20, 2021 at 09:29:21AM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 >=20
-> On 8/11/21 12:49 PM, Tang Bin wrote:
-> > Use the defined variable "dev" to make the code cleaner.
-> >=20
-> > Co-developed-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> > Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> > Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> Clean up a handful of checkpatch warnings:
+>  - static const char * array should probably be static const char * const
+>  - function arguments should have identifier names
+>  - else should follow close brace '}'
+>  - suspect code indent for conditional statements
+>  - unnecessary parentheses in an if condition
+>  - avoid multiple line dereference
+>  - remove debug showing function execution, ftrace can trace these better
+>  - prefer 'long' over 'long int' as the int is unnecessary
 >=20
-> Thanks, patch looks good to me:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+> V2: Fix subject, s/cppcheck/checkpatch/
+>     Remove debug, ftrace can track these better.
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
+>  drivers/power/supply/ab8500_chargalg.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
 >=20
-> Regards,
->=20
-> Hans
->=20
->=20
-> > ---
-> >  drivers/power/supply/axp288_charger.c | 11 +++++------
-> >  1 file changed, 5 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supp=
-ly/axp288_charger.c
-> > index a4df1ea92..b9553be9b 100644
-> > --- a/drivers/power/supply/axp288_charger.c
-> > +++ b/drivers/power/supply/axp288_charger.c
-> > @@ -813,7 +813,7 @@ static int axp288_charger_probe(struct platform_dev=
-ice *pdev)
-> >  	if (val =3D=3D 0)
-> >  		return -ENODEV;
-> > =20
-> > -	info =3D devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-> > +	info =3D devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> >  	if (!info)
-> >  		return -ENOMEM;
-> > =20
-> > @@ -823,7 +823,7 @@ static int axp288_charger_probe(struct platform_dev=
-ice *pdev)
-> > =20
-> >  	info->cable.edev =3D extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
-> >  	if (info->cable.edev =3D=3D NULL) {
-> > -		dev_dbg(&pdev->dev, "%s is not ready, probe deferred\n",
-> > +		dev_dbg(dev, "%s is not ready, probe deferred\n",
-> >  			AXP288_EXTCON_DEV_NAME);
-> >  		return -EPROBE_DEFER;
-> >  	}
-> > @@ -834,8 +834,7 @@ static int axp288_charger_probe(struct platform_dev=
-ice *pdev)
-> >  			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
-> >  			return -EPROBE_DEFER;
-> >  		}
-> > -		dev_info(&pdev->dev,
-> > -			 "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
-> > +		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
-> >  	}
-> > =20
-> >  	platform_set_drvdata(pdev, info);
-> > @@ -874,7 +873,7 @@ static int axp288_charger_probe(struct platform_dev=
-ice *pdev)
-> >  	INIT_WORK(&info->otg.work, axp288_charger_otg_evt_worker);
-> >  	info->otg.id_nb.notifier_call =3D axp288_charger_handle_otg_evt;
-> >  	if (info->otg.cable) {
-> > -		ret =3D devm_extcon_register_notifier(&pdev->dev, info->otg.cable,
-> > +		ret =3D devm_extcon_register_notifier(dev, info->otg.cable,
-> >  					EXTCON_USB_HOST, &info->otg.id_nb);
-> >  		if (ret) {
-> >  			dev_err(dev, "failed to register EXTCON_USB_HOST notifier\n");
-> > @@ -899,7 +898,7 @@ static int axp288_charger_probe(struct platform_dev=
-ice *pdev)
-> >  					NULL, axp288_charger_irq_thread_handler,
-> >  					IRQF_ONESHOT, info->pdev->name, info);
-> >  		if (ret) {
-> > -			dev_err(&pdev->dev, "failed to request interrupt=3D%d\n",
-> > +			dev_err(dev, "failed to request interrupt=3D%d\n",
-> >  								info->irq[i]);
-> >  			return ret;
-> >  		}
-> >=20
+> diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/suppl=
+y/ab8500_chargalg.c
+> index 46b0c9fedebb..ff4b26b1ceca 100644
+> --- a/drivers/power/supply/ab8500_chargalg.c
+> +++ b/drivers/power/supply/ab8500_chargalg.c
+> @@ -123,7 +123,7 @@ enum ab8500_chargalg_states {
+>  	STATE_WD_EXPIRED,
+>  };
+> =20
+> -static const char *states[] =3D {
+> +static const char * const states[] =3D {
+>  	"HANDHELD_INIT",
+>  	"HANDHELD",
+>  	"CHG_NOT_OK_INIT",
+> @@ -274,8 +274,8 @@ static enum power_supply_property ab8500_chargalg_pro=
+ps[] =3D {
+> =20
+>  struct ab8500_chargalg_sysfs_entry {
+>  	struct attribute attr;
+> -	ssize_t (*show)(struct ab8500_chargalg *, char *);
+> -	ssize_t (*store)(struct ab8500_chargalg *, const char *, size_t);
+> +	ssize_t (*show)(struct ab8500_chargalg *di, char *buf);
+> +	ssize_t (*store)(struct ab8500_chargalg *di, const char *buf, size_t le=
+ngth);
+>  };
+> =20
+>  /**
+> @@ -526,8 +526,7 @@ static int ab8500_chargalg_kick_watchdog(struct ab850=
+0_chargalg *di)
+>  			di->usb_chg->ops.kick_wd(di->usb_chg);
+> =20
+>  		return di->ac_chg->ops.kick_wd(di->ac_chg);
+> -	}
+> -	else if (di->usb_chg && di->usb_chg->ops.kick_wd &&
+> +	} else if (di->usb_chg && di->usb_chg->ops.kick_wd &&
+>  			di->chg_info.online_chg & USB_CHG)
+>  		return di->usb_chg->ops.kick_wd(di->usb_chg);
+> =20
+> @@ -750,8 +749,8 @@ static void ab8500_chargalg_check_temp(struct ab8500_=
+chargalg *di)
+>  			di->t_hyst_norm =3D 0;
+>  			di->t_hyst_lowhigh =3D di->bm->temp_hysteresis;
+>  		} else {
+> -		/* Within hysteresis */
+> -		dev_dbg(di->dev, "Within hysteresis limit temp: %d "
+> +			/* Within hysteresis */
+> +			dev_dbg(di->dev, "Within hysteresis limit temp: %d "
+>  				"hyst_lowhigh %d, hyst normal %d\n",
+>  				di->batt_data.temp, di->t_hyst_lowhigh,
+>  				di->t_hyst_norm);
+> @@ -867,7 +866,7 @@ static enum maxim_ret ab8500_chargalg_chg_curr_maxim(=
+struct ab8500_chargalg *di)
+> =20
+>  	di->ccm.wait_cnt =3D 0;
+> =20
+> -	if ((di->batt_data.inst_curr > di->ccm.original_iset)) {
+> +	if (di->batt_data.inst_curr > di->ccm.original_iset) {
+>  		dev_dbg(di->dev, " Maximization Ibat (%dmA) too high"
+>  			" (limit %dmA) (current iset: %dmA)!\n",
+>  			di->batt_data.inst_curr, di->ccm.original_iset,
+> @@ -1545,8 +1544,7 @@ static void ab8500_chargalg_algorithm(struct ab8500=
+_chargalg *di)
+> =20
+>  	case STATE_WAIT_FOR_RECHARGE:
+>  		if (di->batt_data.percent <=3D
+> -		    di->bm->bat_type[di->bm->batt_id].
+> -		    recharge_cap)
+> +		    di->bm->bat_type[di->bm->batt_id].recharge_cap)
+>  			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
+>  		break;
+> =20
+> @@ -1676,8 +1674,6 @@ static void ab8500_chargalg_wd_work(struct work_str=
+uct *work)
+>  	struct ab8500_chargalg *di =3D container_of(work,
+>  		struct ab8500_chargalg, chargalg_wd_work.work);
+> =20
+> -	dev_dbg(di->dev, "ab8500_chargalg_wd_work\n");
+> -
+>  	ret =3D ab8500_chargalg_kick_watchdog(di);
+>  	if (ret < 0)
+>  		dev_err(di->dev, "failed to kick watchdog\n");
+> @@ -1754,7 +1750,7 @@ static ssize_t ab8500_chargalg_curr_step_show(struc=
+t ab8500_chargalg *di,
+>  static ssize_t ab8500_chargalg_curr_step_store(struct ab8500_chargalg *d=
+i,
+>  					       const char *buf, size_t length)
+>  {
+> -	long int param;
+> +	long param;
+>  	int ret;
+> =20
+>  	ret =3D kstrtol(buf, 10, &param);
+> @@ -1787,7 +1783,7 @@ static ssize_t ab8500_chargalg_en_show(struct ab850=
+0_chargalg *di,
+>  static ssize_t ab8500_chargalg_en_store(struct ab8500_chargalg *di,
+>  	const char *buf, size_t length)
+>  {
+> -	long int param;
+> +	long param;
+>  	int ac_usb;
+>  	int ret;
+> =20
+> --=20
+> 2.31.1
 >=20
 
---p34b5vbjhvnni57o
+--lewwtmsomymedhht
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWgnUACgkQ2O7X88g7
-+ppfRQ//YjORzu6Bjkgl9QouyJ/6F37ZKr4QtMIvQCPWEuPup+AIGu+u746KTHty
-GwKu7cSFuW4MFITvJz3YwR0/L5Ky4QXlmB04pHPb5+4BfIAItZmUP9uJZhcnAeo0
-eCvG651r3wvrWEUwKuYHJA7W3LL0PxbfOG4oNs2O67tXSVAWLOJA+k5LPQm4b4NA
-zQcTIh/fMYiKHUX2OHeWGl0v0Sl5zifMQxauS1Sm2N/Q6pHs/PxwQJLMp1rolMmh
-2vNWfZm0ffmwrtOS+SVW1xoRl48ib+BQazbzgFt6EziBsI6ulDGPsumt3EeDdJ/D
-vwSE3+CW+LR4mE4QnYWl/e0YxeZd/p6wUHamsh75GXjDEgrJ3HkZR/ykaGsxlrBr
-hZGv67GhIipVWzR6t/rZe5OWh+1P5Pbt5+9P79KzTY6F2ARvI60YRFIbOsqHdcJB
-MCVX9qV0k6eRHT+p/9IRHRiuBi5ddAgSaZoR2BXxfDK+8lkgCdLRzzRG5cVlTmpg
-qXj64+EMmZqoZM/dzC+Qu/ETaEM00y/QdS0ednvm3EYEWIfnmAtbvNG7rdE7VzbY
-XHagSFNjFsFyPXQn4d7KfRLUYT9ZnQ2qZMZ2tJHMOBd2/RrF+m8bWaTqDNPoL1j8
-gFrP1cBtJWE5MnGV/EpJKurnz9LKF35+z4dRWzzbrMzEoFePUTo=
-=P4N8
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEWlYgACgkQ2O7X88g7
++ppDoA/7B0JZuIjapZNNyPrc+2hDpJOBtiTyT/1zqaRTfREcBFd7ns700z8+attk
+kSJmbfg13v4kKr/SfaJ3r6galSfdJTJJo9xH/qsdJy9towapyKubU78y3lMRzv1v
+GqpXh3GGq/jJ3clokRI4AlT6ngKjrh7tx/1czHfl31PuOYp2WwUuMEDXX01NHVX5
+BWL6YNX45EPuba+2CJNmaqOBU0PmToca44uf46XNnPAq6cuR2WhtGWYm/2zm40c1
+5Sg6vr+YB5X2qX457LnHyC9Y+YSA2WQFGjEZ2lW2hmG1MyCSRYWz+XcKgDUQJxgX
+6QQZRR+NQL7AhldrSxSBS/DH9VV79Zdgn/nrnSoFFvgbB/PwlhbRmWk5F0PfdXbO
+bynoTeEXefLySFUzNDGPwIgUtJkXwbxx0RO0ViqNrpeGQEWBEG6yHrmthY8CbY3O
++r0JOhfhhB+YRzio4rQLEt7b9NkgH5VWlz7vzgmIrIFqxFG2vi3PyWp9lNHfD7fQ
+N1mH6JUTLMS2jvtUSnJSkj5VpI16wFaFZms0JtRIO0MjMae9/ELI6uI6ewYNAtLp
+nicG/lJg9kiz2XuyVHg19TVBOtUTOs9sot9iopZ1HXMgbVqD9+NlHuVID0yFtri8
+IEmK9wA/ULZAltFumR57RbjWArqwgHUkjvXqXTDkpopZi7ihWz4=
+=mZ7a
 -----END PGP SIGNATURE-----
 
---p34b5vbjhvnni57o--
+--lewwtmsomymedhht--
