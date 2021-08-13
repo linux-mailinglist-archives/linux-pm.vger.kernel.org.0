@@ -2,88 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86183EBB67
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 19:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6970B3EBC09
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Aug 2021 20:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhHMR0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Aug 2021 13:26:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38866 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229533AbhHMR0M (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 13 Aug 2021 13:26:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4D1060F36;
-        Fri, 13 Aug 2021 17:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628875545;
-        bh=bmfn7HbaaCItG5D2XO6GaE2puQJLN9rvaABOzoYwYRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iwgXXRq72gtd4nZHWuZoh7lOvyjwD50w3KX0bd//GnWIV0vc1ulSzvI/Tnc/M/pk9
-         a0m+QuNF0RSxm/QTGyMWyeY4Aeli4trKm6bGJfTNsqC3HLPdthQXE4fHjyg0gU9aTR
-         K0VzwueqE0tGHRfClLzJp1hpzipICxLVX+wbGJ8AIB9I9o9sMKuq4K5PqcMrRepXwR
-         pXnbFz0d0zaAT7p1gK4rdG2ESVJM6v5sH2aelEdVoZfHfm6AIMCyR9nWdfsRVBSB/d
-         E3EJ2UPCDbXbL7cZDdgKR7GnAChJ22fQ3OjVGxfhqOCLbl8EyDPohfhLRxNKXTufl7
-         h6MdWyntVwWmQ==
-Date:   Fri, 13 Aug 2021 18:25:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Gene Chen <gene.chen.richtek@gmail.com>, matthias.bgg@gmail.com,
-        matti.vaittinen@fi.rohmeurope.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rdunlap@infradead.org, gene_chen@richtek.com,
-        Wilma.Wu@mediatek.com, cy_huang@richtek.com,
-        benjamin.chao@mediatek.com
-Subject: Re: [PATCH resend v6 0/3] power: supply: mt6360_charger: add MT6360
- charger support
-Message-ID: <20210813172524.GG5209@sirena.org.uk>
-References: <20210719033914.16990-1-gene.chen.richtek@gmail.com>
- <20210813155438.4ssph6deqksob2uv@earth.universe>
- <20210813155858.GD5209@sirena.org.uk>
- <20210813162029.q5slrkubelfy3mvh@earth.universe>
- <20210813163254.GF5209@sirena.org.uk>
- <20210813171106.entpro4b6dstho4s@earth.universe>
+        id S232789AbhHMS1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Aug 2021 14:27:18 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:46957 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233526AbhHMS0z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Aug 2021 14:26:55 -0400
+Received: by mail-oi1-f179.google.com with SMTP id o185so17106008oih.13;
+        Fri, 13 Aug 2021 11:26:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WYCNoGBght09bQuIXOlTFX4QMjS4tFI3LYNWjVBrRhU=;
+        b=hhEywIJ0R/6LtGNSnrA983xWCAWCObIg1oe5dZmPmUfQmZoKw9xFppEJTMqjDBALFb
+         c471HZVry1FS+YFshjFkO2t5/sjDIwxQbrWK5JfJyJtrOJGR17y/VYlcfZ/i1+Wda55X
+         l3Glwendck7yhTrngVF7iGXkN7rI/DJ5JN0OoT1GDxUjlpoBIkJP68ofXWXfbNeDrKFb
+         5gw49l6av7jFc+AvI+YovuzA0Y+5yrFZTSOrpzgCYMAifxjUM4KwK0v3XPQHI7P2pi1Y
+         Xya64RoOK4SASnkRj/v1fvJYAzOUykSnp5yvdBw9Ib9ir2sKfXe/x1pcaYcxEndpsgpA
+         6ttA==
+X-Gm-Message-State: AOAM533McIdWbukVeof4bMJ9OPUBesHzSIDm+dTy4zG7utHspPvwT0HR
+        cwnf6cFhgWxg24ZPV8Fjzg==
+X-Google-Smtp-Source: ABdhPJz7SjpVK76kUR4gQAgTEtBgkp19NbC2fnCO5DFhgE88OHm6uT0GPS69jiWRjUAvMCOl3dAr3Q==
+X-Received: by 2002:a05:6808:105:: with SMTP id b5mr3070659oie.42.1628879187967;
+        Fri, 13 Aug 2021 11:26:27 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j125sm501170oif.53.2021.08.13.11.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 11:26:27 -0700 (PDT)
+Received: (nullmailer pid 3810108 invoked by uid 1000);
+        Fri, 13 Aug 2021 18:26:26 -0000
+Date:   Fri, 13 Aug 2021 13:26:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2 v2] dt-bindings: power: Extend battery bindings with
+ type
+Message-ID: <YRa5UnBcmW1KBIEd@robh.at.kernel.org>
+References: <20210805085828.3451909-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lHGcFxmlz1yfXmOs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210813171106.entpro4b6dstho4s@earth.universe>
-X-Cookie: E Pluribus Unix
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210805085828.3451909-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Aug 05, 2021 at 10:58:27AM +0200, Linus Walleij wrote:
+> This adds a battery-type property and bindings for the different
 
---lHGcFxmlz1yfXmOs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+s/battery-type/"device-chemistry"/
 
-On Fri, Aug 13, 2021 at 07:11:06PM +0200, Sebastian Reichel wrote:
-> On Fri, Aug 13, 2021 at 05:32:54PM +0100, Mark Brown wrote:
+Otherwise,
 
-> > It would be better, the issues I'm worrying about are more general
-> > refactorings or whatever that create actual dependencies rather than
-> > just trivial add/add type issues - it can make doing some kinds of work
-> > really painful if things go via a different tree.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> There you go:
-
-Thanks!
-
---lHGcFxmlz1yfXmOs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEWqwQACgkQJNaLcl1U
-h9B8MQf/SabFhXiu82blgagfCOLQoxiKYIr+aSGYjCQoWyz9Zvt1gSq1HULJmgc1
-ofKQVgValsxqtpU6UYzPMVBIPhqpZ/TIbgYHvlLMSrpD07Nt3tddjDr/g6fYGyj7
-dwfQAa5QrxXz3uRPWpszlgQtkas3tpTM4lNF/ytOHWq1Lk9Mz3CmujN9qsbPKf/U
-DBVVEsV+oBCVG1atIOrKqZQCUrOkhG/KxhTrw1DquIN4IL6ygGUbhNVxi7nbRgu1
-z0TtqU54hgl3ALZZ1jxS3ehe/9zNP4zMZKk1qG+T6pj2kYwRmmDPVD9VFntbP1lP
-0KOZoYGZKBO8aBs6x06t78BGFwd42w==
-=KFpM
------END PGP SIGNATURE-----
-
---lHGcFxmlz1yfXmOs--
+> "technologies" that are used in Linux. More types can be added.
+> 
+> This is needed to convert the custom ST-Ericsson AB8500 battery
+> properties over to the generic battery bindings.
+> 
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Add devicetree list to Cc
+> - Use "device-chemistry" instead of "battery-type" as this
+>   has precedence in standards.
+> I need a bunch of new bindings for switch the STE AB8500 custom
+> bindings out, but I need to start somewhere, this is as good as
+> any place to start.
+> ---
+>  .../devicetree/bindings/power/supply/battery.yaml  | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
