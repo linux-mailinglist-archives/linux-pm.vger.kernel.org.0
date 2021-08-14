@@ -2,94 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB963EC20C
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Aug 2021 12:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DB53EC216
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Aug 2021 12:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbhHNKiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Aug 2021 06:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S237914AbhHNKqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Aug 2021 06:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237953AbhHNKiN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Aug 2021 06:38:13 -0400
+        with ESMTP id S237850AbhHNKqe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Aug 2021 06:46:34 -0400
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F287BC0617AD
-        for <linux-pm@vger.kernel.org>; Sat, 14 Aug 2021 03:37:44 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso11415265wmq.3
-        for <linux-pm@vger.kernel.org>; Sat, 14 Aug 2021 03:37:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF05C0617AE
+        for <linux-pm@vger.kernel.org>; Sat, 14 Aug 2021 03:46:05 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so8482253wmb.5
+        for <linux-pm@vger.kernel.org>; Sat, 14 Aug 2021 03:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=b/Qff+jgXrDhHuuoGtLAHrj3fuh4dTxu/3Q1oLK4n8Q=;
-        b=HJL2l1Dpc/J4K4yfvomdt3qXLJ/QLhZOCgHm56mMldgkdC9wNqTT92qrGVVVmiA5E7
-         s+eZ3UE+WSVMOV1JuU+RwFoQvSwAI4wAb2c25tFKcIKuJ3P4h3hQMaPjR55zVLF7yqc0
-         olArDY5fQ8ls2HjtNV9K3pFVvGeiYr9P9/w9ZuTnEBBa33mkINm4kpD+rLbGNL7r29VG
-         xQjtvgY/3wEkqTEpkxGlEF1agw0MtFLoy6fnNOLrQ/U3JjatLVdqQsbpiPxeEHyV5DSN
-         s5hqTHCVkbUJ1zsWDacpRnzlBX86KLazem8prxJoxpNxxLs8nGQ4BIR3HDh52W+bmzZL
-         hdbQ==
+        bh=GifoOqx6SBFwu3FmttmT9/vPFr3vQ27vYXItoPzfJbw=;
+        b=iGKh7WrVF4MYNXHXmMuE4HGs2rA+BEqWJdnXx5ZB4V8/VbbgOA+EVrDUxNhEIqD3ou
+         ornGW1iaYUVFiU29FPznnm5EeccA8yzASP2GO1Og95jGLgHz+Fux3CiVQh/3ppoU4wCj
+         e6TXhrqpVniBVAAQhPCmNpBv327gwXRClqIw+d4GbEJubjreuydBJ0Ez2wAVAnNGlQGI
+         s0gW6WB6TEi5rFjmilKmtFyCj3STAbLcnKrZiCet9tNZLODUSkClFeSs1EcXdfvmcNOn
+         KhQSrlr4wcrwm3hvLDkDAjrL16ZM2AyYi85tdEAV/Z0lRBefuHBYKa+aSzTVOFm3/Vzo
+         ozmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=b/Qff+jgXrDhHuuoGtLAHrj3fuh4dTxu/3Q1oLK4n8Q=;
-        b=po+3ZJED/qNcrCl0MNy2bCsM+vp5X5nFKBTJ9fpRZH/CYy+PcE1n/qQlW2TZyRV6+g
-         ULnLWZ26Qh497gJ/JlaopQq25U2TX2GU/s6alFsnUYc+FXdhYBxrW1WMBlBwNwfUKCnW
-         5eyVdaLwjB210JT/MyyjMtiMmzslK2kApfw2Q7XlM8PweD33b4uLr+fmtDNc3NFZVvll
-         RkEba9TrvrGdeeM8HRZNTFYIJ02pPI0T9xpQWkaotZppODDSclQyWHF1GSKgY8y25QoD
-         u/Pl40gC7LP3f/jk6qI1ShSF2SZqyin0GfxRUbXkjeKWPDbnFxF0z2QmB2YzCPQgw2Dp
-         lcPw==
-X-Gm-Message-State: AOAM53025OyJljoxWjolWg+Xo4uxCXtFZvlFtTIZr//hcXOv22E6k1IF
-        h5KdCfN0HkJnwoh+L4Z4UeKKPA==
-X-Google-Smtp-Source: ABdhPJzQ48slGMIdnfZowqGimrHWLTCgEUosGpoZOS695J9Vebr2A4e2oYVBp9dC0EG9L+eBMlpU4g==
-X-Received: by 2002:a7b:cc8b:: with SMTP id p11mr6614718wma.25.1628937463289;
-        Sat, 14 Aug 2021 03:37:43 -0700 (PDT)
+        bh=GifoOqx6SBFwu3FmttmT9/vPFr3vQ27vYXItoPzfJbw=;
+        b=cmRSNhYbECC/xllfsDLWtv2SiVZYuyG026hPgcNosJi/RS49CMm1GovLhR3UYczbQb
+         oVo8saJ5ND0MjaXUccTkimGCtshryJd2vxpCNXn6cto7xSrH5mgu4jfcLReR9BDM1Tqp
+         fjL/K6s2KpHnS9CwHlNRvhG1L8XS+b/hI8PfiIcEcK+1OKtHIp99AI25LthMyW+0OaSO
+         qCEQLJEYBu/YK51Qyt5LF9zf0VB8bjp6Wq6c0P2MDFRzg0m8YBy7NeMLaAfCKgyIyOyl
+         Pre0QrayfFWFhkopMFD5D8kOXHrdef5hl2TUKZ1y3v+jpTcaO5pkCOw9BRGwicxOkBeh
+         QPMA==
+X-Gm-Message-State: AOAM533266UbSAey267B9K2oqkQXEat4DPLaEoWjmmhqZhYADAsqOois
+        B9l/ODg1mp1wCHS8Jm6mwiHl0+WUnH3jaNit
+X-Google-Smtp-Source: ABdhPJwD51MeaLVeBz/WK26aIMBhej+CHSLIoF//Z0NKAcKPUzPRVFdORiIYFrqgmWAsn3DfbaNlBQ==
+X-Received: by 2002:a05:600c:20f:: with SMTP id 15mr6639569wmi.176.1628937964110;
+        Sat, 14 Aug 2021 03:46:04 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:5df3:d0eb:3945:640d? ([2a01:e34:ed2f:f020:5df3:d0eb:3945:640d])
-        by smtp.googlemail.com with ESMTPSA id e17sm4228437wru.7.2021.08.14.03.37.42
+        by smtp.googlemail.com with ESMTPSA id f2sm4210847wru.31.2021.08.14.03.46.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Aug 2021 03:37:42 -0700 (PDT)
-Subject: Re: [PATCH v1 2/2] cpuidle: tegra: Check whether PMC is ready
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210718212706.21659-1-digetx@gmail.com>
- <20210718212706.21659-3-digetx@gmail.com> <YROdQXO4aVLQ8DkP@orome.fritz.box>
+        Sat, 14 Aug 2021 03:46:03 -0700 (PDT)
+Subject: Re: [PATCH v8 1/5] cpuidle: qcom_spm: Detach state machine from main
+ SPM handling
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>, rjw@rjwysocki.net
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
+        jami.kettunen@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
+        stephan@gerhold.net, robh@kernel.org, bartosz.dudziak@snejp.pl
+References: <20210729155609.608159-1-angelogioacchino.delregno@somainline.org>
+ <20210729155609.608159-2-angelogioacchino.delregno@somainline.org>
+ <YQsbBQAdGhX7eO+5@builder.lan>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <8d61d4d5-8e4b-5c18-923c-eceb954e8d5d@linaro.org>
-Date:   Sat, 14 Aug 2021 12:37:41 +0200
+Message-ID: <f688b8b4-4fdb-4497-22db-920bd67d255e@linaro.org>
+Date:   Sat, 14 Aug 2021 12:46:02 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <YROdQXO4aVLQ8DkP@orome.fritz.box>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YQsbBQAdGhX7eO+5@builder.lan>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/08/2021 11:49, Thierry Reding wrote:
-> On Mon, Jul 19, 2021 at 12:27:06AM +0300, Dmitry Osipenko wrote:
->> Check whether PMC is ready before proceeding with the cpuidle registration.
->> This fixes racing with the PMC driver probe order, which results in a
->> disabled deepest CC6 idling state if cpuidle driver is probed before the
->> PMC.
+On 05/08/2021 00:56, Bjorn Andersson wrote:
+> On Thu 29 Jul 10:56 CDT 2021, AngeloGioacchino Del Regno wrote:
+> 
+>> In commit a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic
+>> CPUidle driver") the SPM driver has been converted to a
+>> generic CPUidle driver: that was mainly made to simplify the
+>> driver and that was a great accomplishment;
+>> Though, at that time, this driver was only applicable to ARM 32-bit SoCs,
+>> lacking logic about the handling of newer generation SAW.
 >>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/cpuidle/cpuidle-tegra.c | 3 +++
->>  1 file changed, 3 insertions(+)
+>> In preparation for the enablement of SPM features on AArch64/ARM64,
+>> split the cpuidle-qcom-spm driver in two: the CPUIdle related
+>> state machine (currently used only on ARM SoCs) stays there, while
+>> the SPM communication handling lands back in soc/qcom/spm.c and
+>> also making sure to not discard the simplifications that were
+>> introduced in the aforementioned commit.
+>>
+>> Since now the "two drivers" are split, the SCM dependency in the
+>> main SPM handling is gone and for this reason it was also possible
+>> to move the SPM initialization early: this will also make sure that
+>> whenever the SAW CPUIdle driver is getting initialized, the SPM
+>> driver will be ready to do the job.
+>>
+>> Please note that the anticipation of the SPM initialization was
+>> also done to optimize the boot times on platforms that have their
+>> CPU/L2 idle states managed by other means (such as PSCI), while
+>> needing SAW initialization for other purposes, like AVS control.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+>> Tested-by: Stephan Gerhold <stephan@gerhold.net>
 > 
-> Rafael, Daniel,
+> Rafael, Daniel, any objections to me picking this patch through the qcom
+> tree?
 > 
-> would you mind if I took this into the Tegra tree? It's got a dependency
-> on the PMC driver, which usually goes via the Tegra tree already, and
-> there's nothing cpuidle-specific in here, it's all Tegra-specific
-> integration quirks.
 
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
 
 
 -- 
