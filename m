@@ -2,102 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B1D3ECB8B
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Aug 2021 23:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BF03ECB98
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 00:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbhHOVyM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Aug 2021 17:54:12 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55358 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhHOVyL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Aug 2021 17:54:11 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 481211F42390
-Received: by earth.universe (Postfix, from userid 1000)
-        id 235823C0C9B; Sun, 15 Aug 2021 23:53:37 +0200 (CEST)
-Date:   Sun, 15 Aug 2021 23:53:37 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Kezhou Li <kezhou.li@tinno.com>
-Cc:     pali@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [External][PATCH] power: supply: bq2415x: fix deadlock in
- bq2415x_set_autotimer
-Message-ID: <20210815215337.kvxngq2ba7viqfip@earth.universe>
-References: <1624277660-11440-1-git-send-email-kezhou.li@tinno.com>
+        id S230184AbhHOWKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Aug 2021 18:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229582AbhHOWKf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Aug 2021 18:10:35 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13AC061764;
+        Sun, 15 Aug 2021 15:10:04 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id k5so2921778lfu.4;
+        Sun, 15 Aug 2021 15:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=qG3xd9FrDeupsPwKg/Vc42uAbKfVCy/1xjeqXZAMe1A=;
+        b=th+Klh1ha4srMNZHDomFwGBf9bf/Xgs88c1y6ENI/KEc/xkX8VClsOaR2ZPmyrjCOS
+         wPpGeISyXO/s/CeLZ81sOvlh6h+gPkbxPZJFeD7C59+QjKC0Qdt8CIVzwTh8Mt0FpBG6
+         W4xVrXX7ZBgEbMUyGv9Zkk5NMmEz+qIczIyCROgux1YHO9nqYPRU3R+xnZcYOuWR2i4V
+         9ENlx0/iVdaWWSMnPsABB9HD2mNwigENMApiUPIdEuJ6IWIVEcPLi/id1WyE4YS0rK56
+         pjkDoX3XKjtpjbQOspK81S+cgaLux7R6D1iXlnbBjeLra0ujOOrvutp2fb9zOcnRbdn3
+         C71Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=qG3xd9FrDeupsPwKg/Vc42uAbKfVCy/1xjeqXZAMe1A=;
+        b=d8KRkqvd9aeG/fq/7XkH1fabRTiL+FnXVFpTwAqn/vulvuJ6tPKAJocxumXLj4TA3v
+         fNEW/I3KO2FKxqLfaSrGsuxmYbj5L8Pg5auQR0hssrSOwMXIG4mVSsRMPuojA9eauYYK
+         nwHwHh88JFK5TfDhc+M/vNO04K94LKpM7JnQ1me6iER3ZWgAAE/RVLQEa/G5qmkwAFAN
+         m8oquQSzbJG1awoGJyRtDEnbKnU/gwZoEKa3dWfbjsWh/ayzmcYGwdNe4mKlYDHdCXX3
+         HVCk0gACiukQIZ6TfVXSFbLM2uBdsxkfbxs6oR3r4I/XVqegfN5ktV5OYYVrWgXu+Due
+         J0yg==
+X-Gm-Message-State: AOAM532hQVkH23+nvB9np8FcDkUkN1h0w5GWBywNi4mmRYBvcmH7EAgi
+        XVG6gcgtZKfxn6TuGzG8LWw=
+X-Google-Smtp-Source: ABdhPJzHciuPs15NMgtyIiX6wXXPm/vUzNwlYpgWhz1sWg1JDEPZTK3elB/fmoKLKeeS008NM5y0Vg==
+X-Received: by 2002:a05:6512:152a:: with SMTP id bq42mr9340696lfb.68.1629065402500;
+        Sun, 15 Aug 2021 15:10:02 -0700 (PDT)
+Received: from [192.168.0.91] ([188.242.181.97])
+        by smtp.googlemail.com with ESMTPSA id a10sm769244lfl.215.2021.08.15.15.10.01
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Sun, 15 Aug 2021 15:10:02 -0700 (PDT)
+Message-ID: <611993B1.4070302@gmail.com>
+Date:   Mon, 16 Aug 2021 01:22:41 +0300
+From:   Nikolai Zhubr <zhubr.2@gmail.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.2.4) Gecko/20100608 Thunderbird/3.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lrodfk3q7x4pfbmq"
-Content-Disposition: inline
-In-Reply-To: <1624277660-11440-1-git-send-email-kezhou.li@tinno.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] x86: PIRQ/ELCR-related fixes and updates
+References: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello Maciej,
 
---lrodfk3q7x4pfbmq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+20.07.2021 6:27, Maciej W. Rozycki:
+[...]
+>   Nikolai: for your system only 1/6 and 2/6 are required, though you are
+> free to experiment with all the patches.  Mind that 3/6 mechanically
+> depends on the earlier change for the SIO PIRQ router referred above.  In
+> any case please use the debug patch for PCI code as well as the earlier
+> patches for your other system and send the resulting bootstrap log for
+> confirmation.
 
-Hi,
+Here is a new log with 1/6 and 2/6 applied:
 
-On Mon, Jun 21, 2021 at 08:14:20PM +0800, Kezhou Li wrote:
-> From: "Kezhou Li" <kezhou.li@tinno.com>
->=20
-> The bq2415x_timer_error called by bq2415x_timer_work when some error
-> happens, and then calls cancel_delayed_work_sync(&bq->work). Finally
-> this function is waiting for the work to finish but the work is
-> waiting for the return of the function. So it causes a deadlock.
->=20
-> Signed-off-by: Kezhou Li <kezhou.li@tinno.com>
-> ---
+https://pastebin.com/0MgXAGtG
 
-The patch is not correct, since bq2415x_sysfs_set_timer() should
-call cancel_delayed_work_sync() for the "off" case.
+It looks like something went a bit unexpected ("runtime IRQ mapping not 
+provided by arch").
 
--- Sebastian
 
->  drivers/power/supply/bq2415x_charger.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/suppl=
-y/bq2415x_charger.c
-> index 5724001..7889edb 100644
-> --- a/drivers/power/supply/bq2415x_charger.c
-> +++ b/drivers/power/supply/bq2415x_charger.c
-> @@ -862,8 +862,6 @@ static void bq2415x_set_autotimer(struct bq2415x_devi=
-ce *bq, int state)
->  		schedule_delayed_work(&bq->work, BQ2415X_TIMER_TIMEOUT * HZ);
->  		bq2415x_exec_command(bq, BQ2415X_TIMER_RESET);
->  		bq->timer_error =3D NULL;
-> -	} else {
-> -		cancel_delayed_work_sync(&bq->work);
->  	}
-> =20
->  	mutex_unlock(&bq2415x_timer_mutex);
-> --=20
-> 1.9.1
->=20
+Thank you,
 
---lrodfk3q7x4pfbmq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEZjN4ACgkQ2O7X88g7
-+ppnvRAAodF+sl1yWvvtAQSg15s5o+umWBmRxDTGaMYidY/rZ3z9uD/X2KbLwP0h
-nB9FzHo6Gzw0P2JFtFGU1ZCmmhNgZhd/+jhtVMFQGUqmRCCW+N5bu8ybO3ATElKp
-9wQEb47NMWCI1Qj0WJf3+n16xifopuZGEerbIuHJ9fI3BejBzW890p4dcXMp7TjR
-SDpJAIuxLltSGkxHrd1Av3UmCDYu48MbMgyuGQInwt/hIL8yNV3j6AtnRsAD+mF4
-dcE9EExUQXNCEW5bFtMtqqwdtqWkErNFYBfTZK75GpWm5LWdvLzHNuMtBvF/llaB
-H5PDV1AySzr/ton1TG/ieD5P7iVpacQj6ahpGtLmFdx+BqU1kj5RLp+ILv7BRSj4
-WAsZBMODDObjmkgQAEWjf5h3uLGRR9iR8loZdSye6wbWQacd0KPKkpQSaLaL7jkE
-IRcnGH17x9TCuCFDwd4xlqFCMcXdui9mbwLa6lr2vPxK6vlrVOwjuXpCObcGKIFY
-zLSSDsZxt3ZCr714eIr+JEIEqHow34W2Ty8f7WoqW1PJZM+en3wRRAfKWTmtHBV3
-Nb/MV7mFhj5CO5pvVJ0otcycmB4KZQLQqg/eRno+i+MZ74DRQHAtvmB7qw2xCspf
-RajjK4c+75QkKy8MKDWAG+Q90UKQorL1py+o/HZLcZVbKZHp9xM=
-=GbaK
------END PGP SIGNATURE-----
-
---lrodfk3q7x4pfbmq--
+Regards,
+Nikolai
