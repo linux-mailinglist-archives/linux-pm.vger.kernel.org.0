@@ -2,109 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772203EDACE
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 18:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A08A3EDB18
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 18:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbhHPQWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 12:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S229904AbhHPQmU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 12:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhHPQWm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 12:22:42 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364A9C061764;
-        Mon, 16 Aug 2021 09:22:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 86B9B1F412B4
-Received: by earth.universe (Postfix, from userid 1000)
-        id B35603C0C9B; Mon, 16 Aug 2021 18:22:07 +0200 (CEST)
-Date:   Mon, 16 Aug 2021 18:22:07 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v6 05/12] dt-bindings: power: supply: smb347-charger:
- Document USB VBUS regulator
-Message-ID: <20210816162207.v4ka4vtuajf5jpb6@earth.universe>
-References: <20210731173842.19643-1-digetx@gmail.com>
- <20210731173842.19643-6-digetx@gmail.com>
- <20210806211314.sfjl5jke27hz3jj7@earth.universe>
- <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+        with ESMTP id S230118AbhHPQmT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 12:42:19 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF56C061764
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 09:41:47 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q11so24519115wrr.9
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 09:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VaH1mb4YJaNfLIoBKAGqOfF1CidyUq6GE8UUo9yf+IA=;
+        b=0FL71FFEFYgZAt/2TDNCQRJcLZD2MkQLLdGdsGCqZYWqpra+iVRmwzXSODwQZtO7gt
+         QU9YZW3WRnh50AlUz/MsVFLpME9SsElyFHsUnbwad24NUpGtq74VMBZ1Kopr161ovvQk
+         A+yVSlk26gYm/FmroNM/RifBzC6zfHcaqzlotstlTYmgMBjE85WzFkOhkpfJpB0TyfDF
+         vnNeX9EVBOPkURpdcjsTZNDlsyMWPhtVf35FqOJCUZd7nki3E+uMHMtuhUIqqn46g+e5
+         aT7sw8vOMx1QLx3vhhdbE3Z8VBKk4SVr+zpvaqjAFRFmsGKEq3OuP8BFoY/yfj40jTXg
+         KM5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VaH1mb4YJaNfLIoBKAGqOfF1CidyUq6GE8UUo9yf+IA=;
+        b=g9mS1o87nBQg9I/XvmY7zTVRmZ3MrIkXUDn5Tfp9tRrybfDoFX/QcqAS/HeVyxZ3xF
+         voJmLc06HVHpEGHVQ2H1iEvo6in8z73UHlAOI045uiz3IVvL7feu5Fv0bSiUtJBQTmpX
+         hp/poFyeYqqmVmi5UhmkBP+krSUAEwl+3NWj3z2zMtX0CA/mIMidp8ns4IA1BG4NX3/6
+         S20BacVPPoizqLLAoHcDjoLooxYUyBWRO2YehOenTWvcE/a7EPAhKIad1syj3hy8ArAA
+         TTCu3ywevMVc0HwAPPqxZGyDf1EEZXt+dJzS01CVTroUV8DStHrT/PjGgm4800ltgIuk
+         pNcw==
+X-Gm-Message-State: AOAM533ULeXAqcDrT6XHl2tWIN3vvxHqZD75N1K40YhxfcvfjOM12Eni
+        aqb/X9q52M/1figoHQWv934GbA==
+X-Google-Smtp-Source: ABdhPJxQMWnKzZ0ECLs1a7IEhF2g+rE7+74yku7t8LzXIre6H3dSFys3LS0NMgoW5aqYBTJQ3z4dqg==
+X-Received: by 2002:a05:6000:184a:: with SMTP id c10mr19924577wri.26.1629132106459;
+        Mon, 16 Aug 2021 09:41:46 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:3a81:3690:b885:8dcf:f8c6:7841])
+        by smtp.gmail.com with ESMTPSA id m10sm15211730wro.63.2021.08.16.09.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 09:41:45 -0700 (PDT)
+From:   Alexandre Bailon <abailon@baylibre.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     ben.tseng@mediatek.com, michael.kao@mediatek.com,
+        ethan.chang@mediatek.com, fparent@baylibre.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH 0/3] Add support of thermal for mt8195
+Date:   Mon, 16 Aug 2021 18:43:04 +0200
+Message-Id: <20210816164307.557315-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="erjfwqt7yl2kd7cr"
-Content-Disposition: inline
-In-Reply-To: <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This adds thermal support for mt8195.
+Depends on https://patchwork.kernel.org/project/linux-mediatek/list/?series=502403
 
---erjfwqt7yl2kd7cr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The changes required to support the mt8195 look very similar to those for
+the mt6873 but the differences make code factorisation difficult.
 
-Hi,
+Alexandre Bailon (1):
+  dt-bindings: thermal: Add binding document for mt8195 thermal
+    controller
 
-On Mon, Aug 16, 2021 at 06:39:09PM +0300, Dmitry Osipenko wrote:
-> 07.08.2021 00:13, Sebastian Reichel =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi,
-> >=20
-> > On Sat, Jul 31, 2021 at 08:38:35PM +0300, Dmitry Osipenko wrote:
-> >> SMB347 can supply power to USB VBUS, which is required by OTG-cable
-> >> devices that want to switch USB port into the host mode. Add USB VBUS
-> >> regulator properties.
-> >>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >=20
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> Sebastian, you can pick up these patches into the power tree:
->=20
-> dt-bindings: power: supply: smb347-charger: Document USB VBUS
-> regulator
-> power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
-> power: supply: smb347-charger: Utilize generic regmap caching
-> power: supply: smb347-charger: Add missing pin control activation
-> power: supply: smb347-charger: Implement USB VBUS regulator
->=20
-> The reset of the patches could go via the Tegra tree. It's probably a
-> bit too late for the Tegra patches since Thierry already made 5.15 PR,
-> but should be fine for the power. Thanks in advance!
+Michael Kao (1):
+  thermal: mediatek: Add thermal zone settings for mt8195
 
-Queued now.
+Tinghan Shen (1):
+  arm64: dts: mt8195: Add thermal zone and thermal policy
 
--- Sebastian
+ .../thermal/mediatek-thermal-lvts.yaml        |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 164 ++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.c      | 209 ++++++++++++++++--
+ 3 files changed, 361 insertions(+), 18 deletions(-)
 
---erjfwqt7yl2kd7cr
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.31.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEakJ8ACgkQ2O7X88g7
-+ppCOA//Uim7ycc5jXS9N7YcXL7DOj+86gG/dde8tv/tLAtvEWcyZvRNsJqO/P4q
-jF8rSsiOytZ6PZi7swIU+/lBUIs2sVAY55+GGFAxMAf8ZVWu4b0hUHiMdrCAL3BZ
-CCRP5NNT8HNQOetJ5Xt8zjpiBCZFy5OXim+F+JQF8w9H23co7DS1Fx2IjWJwulAF
-5uwxEB5Hy9FxosI97g7LFKR37Qe2NwNNSxW3q9wDRqNri5HP64frhOut/tT6Wnmn
-t1S1WD9m/JsP1QA9cofXKKF9enhXCdzLnDEWUqcZZol3cDm+LGsMdAnHCPmcsfJ+
-iQpIXtJec6je5pPQpd9nbS/UlriErZSfoGEKrnIVTYLV+qOI+gY1Y0bt33HgChBy
-LOnmVUTuBxGD2Za1pPray1bEeAV5hQI+H5BtWqar5Dk/xFsBMFMnxWymQn/bkD7j
-GzI0daxC2IAaSIexsfoPnv1gM6DMrlV1Zuv1rpmaT3r/XV3Pk+FgnGifwW9R3CEW
-KrDTTTKe48TxtNv92B+8WynRN1y2YBhAjuPtyvBOgVe7ohbphWAqjdYX+dBBi2mC
-kjWfXAMTunUjnIkO3ik06UsC+h8+WMKwIwNb3zLbsp0COv91+bZi/O/gaQokvqmU
-OTEYff6rwW/cuLzKptXhEwT61Q52jdbS44NSBcFv/kpLC9vgVwQ=
-=AMiA
------END PGP SIGNATURE-----
-
---erjfwqt7yl2kd7cr--
