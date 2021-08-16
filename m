@@ -2,67 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422783ED9EB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 17:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8649C3EDA08
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 17:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbhHPPdZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 11:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        id S232884AbhHPPjr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 11:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhHPPdZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 11:33:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569E0C0613C1;
-        Mon, 16 Aug 2021 08:32:53 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id i28so8547563lfl.2;
-        Mon, 16 Aug 2021 08:32:53 -0700 (PDT)
+        with ESMTP id S236748AbhHPPjo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 11:39:44 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384AAC061764;
+        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t9so35324399lfc.6;
+        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hvKEFcnj6UwSa3ayzmSl9tvWYXHQ0pEJNdBHHDUYHVs=;
-        b=bvNaSZBdUi0PywHh2d8NONhB/11X/70LYuPfW3w5xBzDanBgvFPt75UbtZi5rG0egh
-         HThD17KT4Em0ttO91WvtCVNw3p7qhIX08oktynQT1oQ+50s2HnioZQXDwbtObeRJG9wB
-         gOW9yq3ZK91Ofc+2sIhJ9aUCOR1lYr6wnJqaBGWA2iQpvzB3FJRzV7E+ohz3epigIc+j
-         izpimwRVbHz1oX8JmuQxtdl5qcL+9/4lbA7Bts4s2AmuKpMSzqHQ0X04VjHl7ZFMDPR+
-         lhTOWtnTkI/m08RbPAgLBNz8GpwDzFpBcAsw0Kgl2v65qxchQeDqaK1PcMsWgEwHtJtn
-         PcAQ==
+        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
+        b=UMbCMbBAwfuhjpCWl3t3Ll9mbF30yfBmsWphmS8+Ta98tmTqcWfC3Kq3JLHDi27ooV
+         brfx16+Ulv155VrOnXNNdPkQfSgnF+OnEn1WTwP8OJmzDesZCWsHzL7piNnAFEEYZdf7
+         mHlSFzyrXAXkP2MShRWUTO5BJqbgO1MdXO8Fqmbu0wTQKIxUoc1np6yUAG3yXj1d26kh
+         OYXpfEPxi5kVfmL8CQEx8plzuW5ljp9shETvG6dBJIEKqp+4LkIk26E8f+njntx77sS4
+         kZpON449jbp76ErTRQcGQr8URpo71gITZmwKYhs+HShcDRSNO2m4jNimkU+uIiuqQLZQ
+         wQmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=hvKEFcnj6UwSa3ayzmSl9tvWYXHQ0pEJNdBHHDUYHVs=;
-        b=rTwH7+8ouS7e4hxEfkaDeop/D3xTDtDbU2qjJngTgijmQ1jZ+Sls5sYCBYyI9+ObV2
-         KqrPqy/22aO4rf/K31kv33+Ftsy4RAyBgIIF6Y3gwY1R80Jl7WN/eEmZ45pjOwebFsTD
-         pTsk1eQIYAXTSoFnQyhFBA0vxg5F8blBoenZvpNnqEsha+zHN1dCzzPn+WmOwgm8fp7E
-         4qY/CQLHd4tWjngTxf8jr1V1MUpDk3Ag+zg8d02vHRX2qsGFRL1iKmkU4DzOA/LBm8Gd
-         NwTkg8RHaFw5dvO7AmVitGfVnX8su/nosKxZZx7tjFArMpDl3nN62bC4AQRxin1flQ7R
-         IXNA==
-X-Gm-Message-State: AOAM530VJqtzhWEHjwFRLhxxoqHmFppYnhZpnLEyyQj/bLP2Ys8FG4UX
-        GcEqxo4VVeIMR9C1BALqKkJ/ZaP64Ok=
-X-Google-Smtp-Source: ABdhPJxsmoy5XdzdavPh2SpH/NLVK2rXELY6fqz7P5XzALLrkXwbwkWkiQa8He+RXf+HplGJyEByEA==
-X-Received: by 2002:a05:6512:904:: with SMTP id e4mr11959599lft.170.1629127971632;
-        Mon, 16 Aug 2021 08:32:51 -0700 (PDT)
+        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
+        b=n3ndcUhWtqlVSAGEx6QIj4p1pgSQ9loJ7WmNmSFpw8N/pFnM+w0Rhy+SsVUnt4JuCH
+         1VBj6u+wyOCSKvnByD9ewUx/DeCqAYKESehv/lOk27aGbnJcqK/k/xCmhoAdnbAWctPi
+         y55t2sn58j5CH2Q6SiEk3qHRggIH7wDF3DEHqwErb4NLFX6Cf9hJB0ZCJI+MJ4VJZqAJ
+         rTtsgbNlkof1hUUIlbkCCuXjZeTCpRccv1+TeOhQraQ6fJKSw5GtecCogLLN4vcwjYmu
+         kfdfuPGAocOOaWyDI6HRv1FjcciRNWVf7qABAbgSS8OQ4NCKAqbsY7eOQziPh8yUlXqK
+         zpgQ==
+X-Gm-Message-State: AOAM530YA3FoxgInhPjFgNBNHWXZhj5KmI2O1sZW5Qhbs/hyUEZElveC
+        3vk0sUXd3RZXdXRWp67udQZbIjBIcuQ=
+X-Google-Smtp-Source: ABdhPJyrmXfhpLAU/KOQY7BsiWYzn8V0yz6Jvc7+AAr/u2dCgesHtuftJ2Z/t8Wf7npnSqjRxWOnSQ==
+X-Received: by 2002:a19:c7d4:: with SMTP id x203mr12095093lff.575.1629128350477;
+        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
 Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.googlemail.com with ESMTPSA id y26sm703901lfg.103.2021.08.16.08.32.51
+        by smtp.googlemail.com with ESMTPSA id k12sm641889ljm.65.2021.08.16.08.39.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 08:32:51 -0700 (PDT)
-Subject: Re: [PATCH v2 5/5] cpuidle: tegra: Enable compile testing
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
+Subject: Re: [PATCH v6 05/12] dt-bindings: power: supply: smb347-charger:
+ Document USB VBUS regulator
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210712000322.4224-1-digetx@gmail.com>
- <20210712000322.4224-6-digetx@gmail.com>
-Message-ID: <bae8fc99-b29e-0721-c37e-a29898c7cba4@gmail.com>
-Date:   Mon, 16 Aug 2021 18:32:50 +0300
+        Mark Brown <broonie@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210731173842.19643-1-digetx@gmail.com>
+ <20210731173842.19643-6-digetx@gmail.com>
+ <20210806211314.sfjl5jke27hz3jj7@earth.universe>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+Date:   Mon, 16 Aug 2021 18:39:09 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210712000322.4224-6-digetx@gmail.com>
+In-Reply-To: <20210806211314.sfjl5jke27hz3jj7@earth.universe>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,27 +77,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-12.07.2021 03:03, Dmitry Osipenko пишет:
-> Enable compile testing of tegra-cpuidle driver.
+07.08.2021 00:13, Sebastian Reichel пишет:
+> Hi,
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/cpuidle/Kconfig.arm | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Sat, Jul 31, 2021 at 08:38:35PM +0300, Dmitry Osipenko wrote:
+>> SMB347 can supply power to USB VBUS, which is required by OTG-cable
+>> devices that want to switch USB port into the host mode. Add USB VBUS
+>> regulator properties.
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
 > 
-> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-> index 334f83e56120..599286fc0b08 100644
-> --- a/drivers/cpuidle/Kconfig.arm
-> +++ b/drivers/cpuidle/Kconfig.arm
-> @@ -99,7 +99,7 @@ config ARM_MVEBU_V7_CPUIDLE
->  
->  config ARM_TEGRA_CPUIDLE
->  	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
-> -	depends on ARCH_TEGRA && !ARM64
-> +	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
->  	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
->  	select ARM_CPU_SUSPEND
->  	help
-> 
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Daniel, could you please ack this patch?
+Sebastian, you can pick up these patches into the power tree:
+
+dt-bindings: power: supply: smb347-charger: Document USB VBUS
+regulator
+power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+power: supply: smb347-charger: Utilize generic regmap caching
+power: supply: smb347-charger: Add missing pin control activation
+power: supply: smb347-charger: Implement USB VBUS regulator
+
+The reset of the patches could go via the Tegra tree. It's probably a
+bit too late for the Tegra patches since Thierry already made 5.15 PR,
+but should be fine for the power. Thanks in advance!
