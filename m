@@ -2,140 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2CA3ECD8A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 06:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDB33ECD90
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 06:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhHPESC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 00:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S229485AbhHPEXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 00:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbhHPER4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 00:17:56 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D63C061764
-        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id n13-20020a17090a4e0d00b0017946980d8dso11386264pjh.5
-        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
+        with ESMTP id S229550AbhHPEXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 00:23:36 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA00C061764
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:23:05 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so30400410pjr.1
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Hx4SkasqHslIrkDgnLhNdvAsspclML8ZdzK0kZt3bgQ=;
-        b=nk3VDIgd23DD3SPeU1QaCI04yRwaNdCElwpLEL+QnPbgWztx6y+IenZkEqvYt3bbda
-         KhYFqS5LjiT5U+z9otfnJob8ezly+O/p+5X9UoxseetHcn87sClcYhy3gakoCl3OmSPA
-         81X5IJiuY+hNuvEHQrvKXUf99f5X4YSLvZQQIX6svQYBuf7CvML2DhdSLEK3i2DAaAL3
-         hD+XzuaYLz70iOOHae45AcK+ZRRBUCNhikKPn909cn0RiGqp5rzXoQbvNyb+2290lyuu
-         J3BJcYvxJnu5XS1VfUw1MjUm3Q7PDp1u7NnwmRyEvkFucJeA34p+NH2jASOnJIpUja/R
-         g4cA==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=ZZKPEIAIH1dCk2O/M6Uefq9wmmOllhC+NfJpoa3OD3I=;
+        b=YZIq1JNNk3vi5uJIeK4R37PAtVaEsgHPYRva1Nd6SxhIHqe40gUm69++E1fPbIDQFq
+         pueQihfY/iTJ3JHe7odiRrf0MiwXFjVq0LicLncU5rwjPV227K9+YfvBzpTzD9dInpbC
+         7fd455BDTaJbxDZ9ROK0YAEebU78EI+sGQ2oY8EbtCiqv+r+/PrFrin1PMXB3CHxH30m
+         dm9t5X3dLNH1aKq7i85GvSA4A0EU2Am3ynLpmsjug9vr4pdsbi+p1tHYO52G5kpadYdF
+         yk6MP3gORBzYUz94QhKIL0CHD1da3pT//vZw2XZnXpYQf+J3rbOCQUSix2AiD/2lXtww
+         Zfnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Hx4SkasqHslIrkDgnLhNdvAsspclML8ZdzK0kZt3bgQ=;
-        b=SXwo/HeHj23HFTYfpjk54veLkGP0uhTy0KkkWV2Ii3wFTPPAhEJb8DAuaGdEqmZLGY
-         r+25fdT+d2+eHbPavusah+MJ4/G7dIvmtswuw42z0dN1a/ckW0lUqMTu8p4jc7dDyrZr
-         CxVuU3Sisvby71kRRg9AzWy5IyWDeZGksNGJM21B1kGFqGvCrqvh2SaoYhFOiSAPJtqb
-         DR40QgarjgriDHgmtM21jPmWMNWkCewCQ9GTmkL1oYlcSCHa9zgsn7zyhQReKshklzwW
-         Ivb5Z/QgssHiwsbS044kF5hfNgImvCbDJhv1vcx8RQF0fIdavB/tPNKAVngZcvC0H1rB
-         kduw==
-X-Gm-Message-State: AOAM531oaiqp1nqXa25z21jI1Y8UiR5YN/1Dbb9mK9GFCH7yv1IsA8yV
-        fuVJqh3WLGlPR7P2MKzZE6hrTQ==
-X-Google-Smtp-Source: ABdhPJwSgSjgEUvvzoEEm5XqAAvnv82h9wIkZthBG0xOjXr2hpHl3GotbydTdxfNnQhSq8gAh8JHvg==
-X-Received: by 2002:a65:6444:: with SMTP id s4mr5065185pgv.11.1629087441329;
-        Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=ZZKPEIAIH1dCk2O/M6Uefq9wmmOllhC+NfJpoa3OD3I=;
+        b=txispttSV61Ox//86Kiu90e++etSRfD++DQFAUrLb3oFyB3SVX1CdUxki8JC1nNvHs
+         kDzR0Xar6ovf4p5NrMjdw4BDlftc24Xbbq3LpOqsOF6ksJcKWaQ68ovNLDm/GRyixE2U
+         nJwl7WCowchXFyiuFeT32Cgrg0e4x1f9D1SlcKWCi/bkgPB3b+OFLQB5u22xtFiVSSQL
+         ItqYAGVGQVUScmHhH1mDkoVR2L77ISxSYdpV3r8rSsxDjMPQBm/p3yXkXgdICxdgbENv
+         V61vXYv9IVrvrxRQby+QrBW3J1hIz7HB3hGT8O7PvK7Y/M+LUjPNCDso8NGaDW708VZq
+         qO9w==
+X-Gm-Message-State: AOAM532SsW5EXg4ymo01auLyzEEUk0d+x+kDXJC+8VKIbaUQbceSCW3W
+        w7a2Roa1a9PpNpPEIDSf/6QmhxbIXHhJyw==
+X-Google-Smtp-Source: ABdhPJw9Y9TwMjJYxU3A2gVUNu4WaI+Ev0ni6f9p87nXGdPsko0YgsCmByEibcCyNJtx3A0dGlC5YA==
+X-Received: by 2002:a62:65c7:0:b029:3c3:4eff:1b26 with SMTP id z190-20020a6265c70000b02903c34eff1b26mr14100410pfb.48.1629087785002;
+        Sun, 15 Aug 2021 21:23:05 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id l126sm11484011pgl.14.2021.08.15.21.17.20
+        by smtp.gmail.com with ESMTPSA id k6sm7797883pjl.55.2021.08.15.21.23.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Aug 2021 21:17:20 -0700 (PDT)
-Date:   Mon, 16 Aug 2021 09:47:18 +0530
+        Sun, 15 Aug 2021 21:23:04 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 09:53:02 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] opp: Drop empty-table checks from _put functions
-Message-ID: <20210816041718.yguabfbebzgdf5ea@vireshk-i7>
-References: <20210815164344.7796-1-digetx@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] OPP fixes for 5.14
+Message-ID: <20210816042302.b5gblymaguy5qvbq@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210815164344.7796-1-digetx@gmail.com>
+Content-Transfer-Encoding: 8bit
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-08-21, 19:43, Dmitry Osipenko wrote:
-> The current_opp is released only when whole OPP table is released,
-> otherwise it's only marked as removed by dev_pm_opp_remove_table().
-> Functions like dev_pm_opp_put_clkname() and dev_pm_opp_put_supported_hw()
-> are checking whether OPP table is empty and it's not if current_opp is
-> set since it holds the refcount of OPP, this produces a noisy warning
-> from these functions about busy OPP table. Remove the checks to fix it.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/opp/core.c | 15 ---------------
->  1 file changed, 15 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index b335c077f215..5543c54dacc5 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1856,9 +1856,6 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
->  	if (unlikely(!opp_table))
->  		return;
->  
-> -	/* Make sure there are no concurrent readers while updating opp_table */
-> -	WARN_ON(!list_empty(&opp_table->opp_list));
-> -
->  	kfree(opp_table->supported_hw);
->  	opp_table->supported_hw = NULL;
->  	opp_table->supported_hw_count = 0;
-> @@ -1944,9 +1941,6 @@ void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
->  	if (unlikely(!opp_table))
->  		return;
->  
-> -	/* Make sure there are no concurrent readers while updating opp_table */
-> -	WARN_ON(!list_empty(&opp_table->opp_list));
-> -
->  	kfree(opp_table->prop_name);
->  	opp_table->prop_name = NULL;
->  
-> @@ -2056,9 +2050,6 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
->  	if (!opp_table->regulators)
->  		goto put_opp_table;
->  
-> -	/* Make sure there are no concurrent readers while updating opp_table */
-> -	WARN_ON(!list_empty(&opp_table->opp_list));
-> -
->  	if (opp_table->enabled) {
->  		for (i = opp_table->regulator_count - 1; i >= 0; i--)
->  			regulator_disable(opp_table->regulators[i]);
-> @@ -2178,9 +2169,6 @@ void dev_pm_opp_put_clkname(struct opp_table *opp_table)
->  	if (unlikely(!opp_table))
->  		return;
->  
-> -	/* Make sure there are no concurrent readers while updating opp_table */
-> -	WARN_ON(!list_empty(&opp_table->opp_list));
-> -
->  	clk_put(opp_table->clk);
->  	opp_table->clk = ERR_PTR(-EINVAL);
->  
-> @@ -2279,9 +2267,6 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
->  	if (unlikely(!opp_table))
->  		return;
->  
-> -	/* Make sure there are no concurrent readers while updating opp_table */
-> -	WARN_ON(!list_empty(&opp_table->opp_list));
-> -
->  	opp_table->set_opp = NULL;
->  
->  	mutex_lock(&opp_table->lock);
+Hi Rafael,
 
-Applied. Thanks.
+This pull request removes few WARN() statements from the OPP core.
 
--- 
-viresh
+Thanks.
+
+--
+Viresh
+
+-------------------------8<-------------------------
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/fixes
+
+for you to fetch changes up to c3ddfe66d2bb511f7fbcdc8e64952c7859e7e69d:
+
+  opp: Drop empty-table checks from _put functions (2021-08-16 09:42:08 +0530)
+
+----------------------------------------------------------------
+Dmitry Osipenko (1):
+      opp: Drop empty-table checks from _put functions
+
+Michał Mirosław (1):
+      opp: remove WARN when no valid OPPs remain
+
+ drivers/opp/core.c | 15 ---------------
+ drivers/opp/of.c   |  5 +++--
+ 2 files changed, 3 insertions(+), 17 deletions(-)
