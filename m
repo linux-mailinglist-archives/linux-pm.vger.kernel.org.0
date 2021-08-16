@@ -2,162 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C1A3EDD6C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 20:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6433EDFF7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 00:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbhHPS5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 14:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbhHPS5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 14:57:30 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A503C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 11:56:58 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id u15so12180032wmj.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 11:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=m7ZOM7cdRkICqtiyacBDNsj4qURRxO1sWw5i5EgJhx0=;
-        b=HzJ75RUvClIBbqraulv6LCtCEKRyhF9l86bNICahsL0BMDn+tr2MAGedaCoiS/M7HI
-         3Ttln2ZDTzMQV/73OAgb5gWdhqVTcAfaMui/jwC/yGkqKyrWPECIE5BGB9wuRotTtJZR
-         n8glPdDvrAkL6NsfQuijpU7NTf+EitF7KrlYHBWiagTBD87z3EiqPC6ePhyVfex4LW1R
-         bzJOqbK5rRd2/pUmjgicupfKYa5CF6ZgyjklG6WR05kEG1tJglD4u63hsIct80uAMX0l
-         mufsLlgPEG0x9jXY+YS8QfK1nmsTKOsGjQu5tgwNUmQkNLRKK/BFJRlM20iaJgIeqnG2
-         Ks6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=m7ZOM7cdRkICqtiyacBDNsj4qURRxO1sWw5i5EgJhx0=;
-        b=XHBWss9l3rMUXr96kgjn8lL+jypx9e8WU6E/JXrUP6Xt066QJe2lGbaMUOpd/9WHAZ
-         3zLmqi0adWRwE2F3hgiYF/qzak64BV/sTSIoDsXJI/pwq9KLOsCFk6Uv05rvSkv0mAhb
-         Z0we9MOr1vZxGVelBDV32ZqSnqd8CVxPoa1V5/SsolUX69rx2rUfOpJmFotybvmQlJ8D
-         KMD/VE+RsCdiAWZTCGq5ARrOYqsJjdhFyzoo7O4nDxcGt7kd4eFe8LkF29Kn3El/yH95
-         HZWvUMSZm+TgehN2+qBvhtLJWlhTHk4YMPT1ySP8q0LIn2VPtB4LAdjVsLhSR9wPnrH7
-         93Qg==
-X-Gm-Message-State: AOAM533tvh5rptdCSnPqSJjpMwx8gNBwPll9G+QltGdH49EFWe5+xwWS
-        6Y9reKOpaLUoCxfMXe6WXNp+sA==
-X-Google-Smtp-Source: ABdhPJzoBGbVSUBBJBd79CzIiBUvM5rY3Ebc57V8YSLGDbhAuaNana1b9dAMLW1tLEGIgbbn9dJJ0g==
-X-Received: by 2002:a1c:f414:: with SMTP id z20mr524519wma.94.1629140216638;
-        Mon, 16 Aug 2021 11:56:56 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e1b0:48c1:6199:9cb4? ([2a01:e34:ed2f:f020:e1b0:48c1:6199:9cb4])
-        by smtp.googlemail.com with ESMTPSA id g9sm386690wmk.34.2021.08.16.11.56.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 11:56:56 -0700 (PDT)
-Subject: Re: [PATCH v5 2/3] thermal: mediatek: Add LVTS drivers for SoC
- theraml zones
-To:     Ben Tseng <ben.tseng@mediatek.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Michael Kao <michael.kao@mediatek.com>,
-        Yu-Chia Chang <ethan.chang@mediatek.com>
-References: <20210617114707.10618-1-ben.tseng@mediatek.com>
- <20210617114707.10618-3-ben.tseng@mediatek.com>
- <06b1804c-4675-2997-8c5c-bcdffbcfc4a1@linaro.org>
- <1f92b245537d6390b7b2bde62ce8b99a3df9d445.camel@mediatek.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <8a38b9fe-0448-3ddc-9ffc-c43137b5ecaa@linaro.org>
-Date:   Mon, 16 Aug 2021 20:56:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232067AbhHPWbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 18:31:15 -0400
+Received: from angie.orcam.me.uk ([78.133.224.34]:33038 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232471AbhHPWbO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 18:31:14 -0400
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id C0FDB92009C; Tue, 17 Aug 2021 00:30:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id BBCE492009B;
+        Tue, 17 Aug 2021 00:30:39 +0200 (CEST)
+Date:   Tue, 17 Aug 2021 00:30:39 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Nikolai Zhubr <zhubr.2@gmail.com>
+cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] x86: PIRQ/ELCR-related fixes and updates
+In-Reply-To: <611993B1.4070302@gmail.com>
+Message-ID: <alpine.DEB.2.21.2108160027350.45958@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk> <611993B1.4070302@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <1f92b245537d6390b7b2bde62ce8b99a3df9d445.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Nikolai,
 
-Hi Ben,
-
-On 23/07/2021 08:17, Ben Tseng wrote:
-> On Mon, 2021-06-21 at 13:26 +0200, Daniel Lezcano wrote:
->> On 17/06/2021 13:47, Ben Tseng wrote:
->>> From: Michael Kao <michael.kao@mediatek.com>
->>>
->>> Add a LVTS (Low voltage thermal sensor) driver to report junction
->>> temperatures in Mediatek SoC and register the maximum temperature
->>> of sensors and each sensor as a thermal zone.
->>
->> I think we already talked about that. We don't want a thermal sensor
->> driver to aggregate the temperatures but create some kindof virtual
->> sensor with a property (min, max, avg, ...) which is usable by
->> anyone.
->>
->> [ ... ]
->>
->>
->>
+> >   Nikolai: for your system only 1/6 and 2/6 are required, though you are
+> > free to experiment with all the patches.  Mind that 3/6 mechanically
+> > depends on the earlier change for the SIO PIRQ router referred above.  In
+> > any case please use the debug patch for PCI code as well as the earlier
+> > patches for your other system and send the resulting bootstrap log for
+> > confirmation.
 > 
-> Dear Daniel,
+> Here is a new log with 1/6 and 2/6 applied:
 > 
-> Sorry for the late reply.
+> https://pastebin.com/0MgXAGtG
+> 
+> It looks like something went a bit unexpected ("runtime IRQ mapping not
+> provided by arch").
 
-sorry too, missed to answer. Another thread pointed to this one and I
-figured out I forgot to answer.
+ Offhand it looks like your system does not supply a PIRQ table, not at 
+least at the usual locations we look through.  The presence of the table 
+is reported like:
 
-> After survey ,I'm not sure whether the patch[1] is the architecture of
-> virtual thermal sensor which you commented.
+PCI: IRQ init
+PCI: Interrupt Routing Table found at 0xfde10
+[...]
+PCI: IRQ fixup
 
-Ah, yes that is kind of what it would be requested but really generic so
-anyone can use it.
+while your system says:
 
-> Or, is there any existing framework on mainline already support virtual
-> sensor?
+PCI: IRQ init
+PCI: IRQ fixup
 
-No unfortunately, it is not done [yet].
+If you have a look through /dev/mem and see if there's a "$PIR" signature 
+somewhere (though not a Linux kernel area of course), then we may know for 
+sure.
 
-> Could you help to provide reference to us?
+ I'm a little busy at the moment with other stuff and may not be able to 
+look into it properly right now.  There may be no solution, not at least 
+an easy one.  A DMI quirk is not possible, because:
 
-Ok, we had this discussion several times on the mailing list and at the
-different events like the Linux Plumbers conference. But I was not able
-to find out a pointer.
+DMI not present or invalid.
 
-Basically the idea is simple, we don't want drivers doing weird things
-in their get_temp callback. This callback must return the temperature
-associated to a physical sensor in a 1:1 manner.
+There is a PCI BIOS:
 
-However, some people want to define a thermal zone but with an
-aggregation of different sensors.
+PCI: PCI BIOS revision 2.10 entry at 0xf6f41, last bus=0
 
-At this point, we are unsure how to do that.
+however, so CONFIG_PCI_BIOS just might work.  Please try that too, by 
+choosing CONFIG_PCI_GOANY or CONFIG_PCI_GOBIOS (it may break things 
+horribly though I imagine).
 
-Having a virtual sensor would be more adequate as it won't impact
-anything except the DT for a configuration. And we can make it to evolve
-without having to change all the thermal framework internals.
-
-From a DT point of view, a virtual sensor device cuold have phandles to
-the different sensors and let's say a property telling what do to (avg,
-min, max, ...). The thermal zone will point to the virtual device.
-
-In the driver itself, the get_temp will just call get_temp of all the
-sensors and do the operation specified in the property.
-
-With that, the drivers stay consistent and we have the flexibility to do
-whatever we want.
-
-Does it make sense ?
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Maciej
