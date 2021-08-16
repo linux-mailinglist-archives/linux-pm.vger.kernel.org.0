@@ -2,95 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5DC3ECD61
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 05:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2CA3ECD8A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 06:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbhHPD5T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Aug 2021 23:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S229550AbhHPESC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 00:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbhHPD5S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Aug 2021 23:57:18 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EFAC0613C1
-        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id m24-20020a17090a7f98b0290178b1a81700so25301437pjl.4
-        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+        with ESMTP id S229485AbhHPER4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 00:17:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D63C061764
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id n13-20020a17090a4e0d00b0017946980d8dso11386264pjh.5
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=gvadNFsaIgiABi8nyMBbFkuOLcKZzzS4U0y+leheTts=;
-        b=D3LBC/f7rLT/rYcd64sHfY2FxurZfCEchbKE1/eaOJoe56mPSZR6h4tMljq0sps0Vz
-         9DVWOygVK3kYhbEKlj4wLVtfalocgqzbrBgmb4n3WTCVr86Ee2V4c02AglGaljZ7ggn4
-         SfL7Dx5/oqoBaok6i5IR7r5IKmT5ReKuxJ37cJI+emvEewXNTiF+cHwXsNvjyX10USlP
-         fuMZ1fVPpT6q6tzs5mOMTL3FlrTewkOLWrp+IgRofYHoYLbwTX78HKhzFk+qH+wX9Fiu
-         D9fnhEAV+uJ1v1EU/3QHVBIAo2CkQuTH3nB7YEekEveQpxda77iCUd2dW+zB3pgNQcj1
-         xeBQ==
+        bh=Hx4SkasqHslIrkDgnLhNdvAsspclML8ZdzK0kZt3bgQ=;
+        b=nk3VDIgd23DD3SPeU1QaCI04yRwaNdCElwpLEL+QnPbgWztx6y+IenZkEqvYt3bbda
+         KhYFqS5LjiT5U+z9otfnJob8ezly+O/p+5X9UoxseetHcn87sClcYhy3gakoCl3OmSPA
+         81X5IJiuY+hNuvEHQrvKXUf99f5X4YSLvZQQIX6svQYBuf7CvML2DhdSLEK3i2DAaAL3
+         hD+XzuaYLz70iOOHae45AcK+ZRRBUCNhikKPn909cn0RiGqp5rzXoQbvNyb+2290lyuu
+         J3BJcYvxJnu5XS1VfUw1MjUm3Q7PDp1u7NnwmRyEvkFucJeA34p+NH2jASOnJIpUja/R
+         g4cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gvadNFsaIgiABi8nyMBbFkuOLcKZzzS4U0y+leheTts=;
-        b=geeziuWeidGhe/GY2CNIPip/7R/8miPPHXLNuWh932owpPLu8cNprGvJF4+9gxRjcm
-         1Ro+ts0afZqQ6NZ0lCE2jAJTbg2KlnHGbe4/oTatlguM1cYHJWCLv8edrhJ3zrP+qGCZ
-         fyWhr1nh84nlG5U37czXSoKT0HsbLkOvVuJt3aXB4dGS3bkMDyN+XMxF7av4nakqSQ3o
-         UUK8Xb2sSYR4GGBA02pXLnzUfzlaJPkKb2F+88zixPPnRCjrJGCzNxsqQphv2YfLBBQ0
-         /9x0Qvs+5cAfLDuB3Cnw/Y2pzOwrsRwcCicXGMC6beF4uTAUfaJ0negH4QsU7ouzB1q6
-         hFyA==
-X-Gm-Message-State: AOAM530QaoaVdmvz/3kivztTRmxl7Zu2AGsmo2V4T/XmlO145aFT7F3+
-        WDmF8KT//39TblmdwrRu+/KfOA==
-X-Google-Smtp-Source: ABdhPJygh9jXEiS0xdOBLk5UuvT6xq7WGsOYJdmMaiIxfbP0KxCMQKNoFrdlvlUg54QU99ndALix5Q==
-X-Received: by 2002:a63:ed03:: with SMTP id d3mr12814656pgi.24.1629086207454;
-        Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+        bh=Hx4SkasqHslIrkDgnLhNdvAsspclML8ZdzK0kZt3bgQ=;
+        b=SXwo/HeHj23HFTYfpjk54veLkGP0uhTy0KkkWV2Ii3wFTPPAhEJb8DAuaGdEqmZLGY
+         r+25fdT+d2+eHbPavusah+MJ4/G7dIvmtswuw42z0dN1a/ckW0lUqMTu8p4jc7dDyrZr
+         CxVuU3Sisvby71kRRg9AzWy5IyWDeZGksNGJM21B1kGFqGvCrqvh2SaoYhFOiSAPJtqb
+         DR40QgarjgriDHgmtM21jPmWMNWkCewCQ9GTmkL1oYlcSCHa9zgsn7zyhQReKshklzwW
+         Ivb5Z/QgssHiwsbS044kF5hfNgImvCbDJhv1vcx8RQF0fIdavB/tPNKAVngZcvC0H1rB
+         kduw==
+X-Gm-Message-State: AOAM531oaiqp1nqXa25z21jI1Y8UiR5YN/1Dbb9mK9GFCH7yv1IsA8yV
+        fuVJqh3WLGlPR7P2MKzZE6hrTQ==
+X-Google-Smtp-Source: ABdhPJwSgSjgEUvvzoEEm5XqAAvnv82h9wIkZthBG0xOjXr2hpHl3GotbydTdxfNnQhSq8gAh8JHvg==
+X-Received: by 2002:a65:6444:: with SMTP id s4mr5065185pgv.11.1629087441329;
+        Sun, 15 Aug 2021 21:17:21 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id t18sm9400997pfg.111.2021.08.15.20.56.46
+        by smtp.gmail.com with ESMTPSA id l126sm11484011pgl.14.2021.08.15.21.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
-Date:   Mon, 16 Aug 2021 09:26:44 +0530
+        Sun, 15 Aug 2021 21:17:20 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 09:47:18 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Han Wang <zjuwanghan@outlook.com>, ionela.voinescu@arm.com
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] cpufreq: remove useless INIT_LIST_HEAD()
-Message-ID: <20210816035644.b5y45yldxsi6nrgh@vireshk-i7>
-References: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] opp: Drop empty-table checks from _put functions
+Message-ID: <20210816041718.yguabfbebzgdf5ea@vireshk-i7>
+References: <20210815164344.7796-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
+In-Reply-To: <20210815164344.7796-1-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Ionela who added this.
-
-On 15-08-21, 21:07, Han Wang wrote:
-> list cpu_data_list has been inited staticly through LIST_HEAD,
-> so there's no need to call another INIT_LIST_HEAD. Simply remove
-> it from cppc_cpufreq_init.
+On 15-08-21, 19:43, Dmitry Osipenko wrote:
+> The current_opp is released only when whole OPP table is released,
+> otherwise it's only marked as removed by dev_pm_opp_remove_table().
+> Functions like dev_pm_opp_put_clkname() and dev_pm_opp_put_supported_hw()
+> are checking whether OPP table is empty and it's not if current_opp is
+> set since it holds the refcount of OPP, this produces a noisy warning
+> from these functions about busy OPP table. Remove the checks to fix it.
 > 
-> Signed-off-by: Han Wang <zjuwanghan@outlook.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/cpufreq/cppc_cpufreq.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/opp/core.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index d4c27022b..db1719626 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -741,8 +741,6 @@ static int __init cppc_cpufreq_init(void)
->  	if ((acpi_disabled) || !acpi_cpc_valid())
->  		return -ENODEV;
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index b335c077f215..5543c54dacc5 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1856,9 +1856,6 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+>  	if (unlikely(!opp_table))
+>  		return;
 >  
-> -	INIT_LIST_HEAD(&cpu_data_list);
+> -	/* Make sure there are no concurrent readers while updating opp_table */
+> -	WARN_ON(!list_empty(&opp_table->opp_list));
 > -
->  	cppc_check_hisi_workaround();
->  	cppc_freq_invariance_init();
+>  	kfree(opp_table->supported_hw);
+>  	opp_table->supported_hw = NULL;
+>  	opp_table->supported_hw_count = 0;
+> @@ -1944,9 +1941,6 @@ void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+>  	if (unlikely(!opp_table))
+>  		return;
 >  
-> -- 
-> 2.25.1
+> -	/* Make sure there are no concurrent readers while updating opp_table */
+> -	WARN_ON(!list_empty(&opp_table->opp_list));
+> -
+>  	kfree(opp_table->prop_name);
+>  	opp_table->prop_name = NULL;
+>  
+> @@ -2056,9 +2050,6 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+>  	if (!opp_table->regulators)
+>  		goto put_opp_table;
+>  
+> -	/* Make sure there are no concurrent readers while updating opp_table */
+> -	WARN_ON(!list_empty(&opp_table->opp_list));
+> -
+>  	if (opp_table->enabled) {
+>  		for (i = opp_table->regulator_count - 1; i >= 0; i--)
+>  			regulator_disable(opp_table->regulators[i]);
+> @@ -2178,9 +2169,6 @@ void dev_pm_opp_put_clkname(struct opp_table *opp_table)
+>  	if (unlikely(!opp_table))
+>  		return;
+>  
+> -	/* Make sure there are no concurrent readers while updating opp_table */
+> -	WARN_ON(!list_empty(&opp_table->opp_list));
+> -
+>  	clk_put(opp_table->clk);
+>  	opp_table->clk = ERR_PTR(-EINVAL);
+>  
+> @@ -2279,9 +2267,6 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
+>  	if (unlikely(!opp_table))
+>  		return;
+>  
+> -	/* Make sure there are no concurrent readers while updating opp_table */
+> -	WARN_ON(!list_empty(&opp_table->opp_list));
+> -
+>  	opp_table->set_opp = NULL;
+>  
+>  	mutex_lock(&opp_table->lock);
+
+Applied. Thanks.
 
 -- 
 viresh
