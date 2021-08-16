@@ -2,135 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF2B3ECD5D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 05:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5DC3ECD61
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 05:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbhHPDyc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Aug 2021 23:54:32 -0400
-Received: from mga09.intel.com ([134.134.136.24]:55425 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229873AbhHPDyb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 15 Aug 2021 23:54:31 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10077"; a="215788527"
-X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
-   d="scan'208";a="215788527"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2021 20:54:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
-   d="scan'208";a="530165161"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Aug 2021 20:53:59 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rui.zhang@intel.com, hdegoede@redhat.com,
-        daniel.lezcano@linaro.org, hpa@redhat.com, mgross@linux.intel.com,
-        alex.hung@canonical.com, sujith.thomas@intel.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal/drivers/intel: Move intel_menlow to thermal drivers
-Date:   Sun, 15 Aug 2021 20:53:56 -0700
-Message-Id: <20210816035356.1955982-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        id S231680AbhHPD5T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Aug 2021 23:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229816AbhHPD5S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Aug 2021 23:57:18 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EFAC0613C1
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m24-20020a17090a7f98b0290178b1a81700so25301437pjl.4
+        for <linux-pm@vger.kernel.org>; Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gvadNFsaIgiABi8nyMBbFkuOLcKZzzS4U0y+leheTts=;
+        b=D3LBC/f7rLT/rYcd64sHfY2FxurZfCEchbKE1/eaOJoe56mPSZR6h4tMljq0sps0Vz
+         9DVWOygVK3kYhbEKlj4wLVtfalocgqzbrBgmb4n3WTCVr86Ee2V4c02AglGaljZ7ggn4
+         SfL7Dx5/oqoBaok6i5IR7r5IKmT5ReKuxJ37cJI+emvEewXNTiF+cHwXsNvjyX10USlP
+         fuMZ1fVPpT6q6tzs5mOMTL3FlrTewkOLWrp+IgRofYHoYLbwTX78HKhzFk+qH+wX9Fiu
+         D9fnhEAV+uJ1v1EU/3QHVBIAo2CkQuTH3nB7YEekEveQpxda77iCUd2dW+zB3pgNQcj1
+         xeBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gvadNFsaIgiABi8nyMBbFkuOLcKZzzS4U0y+leheTts=;
+        b=geeziuWeidGhe/GY2CNIPip/7R/8miPPHXLNuWh932owpPLu8cNprGvJF4+9gxRjcm
+         1Ro+ts0afZqQ6NZ0lCE2jAJTbg2KlnHGbe4/oTatlguM1cYHJWCLv8edrhJ3zrP+qGCZ
+         fyWhr1nh84nlG5U37czXSoKT0HsbLkOvVuJt3aXB4dGS3bkMDyN+XMxF7av4nakqSQ3o
+         UUK8Xb2sSYR4GGBA02pXLnzUfzlaJPkKb2F+88zixPPnRCjrJGCzNxsqQphv2YfLBBQ0
+         /9x0Qvs+5cAfLDuB3Cnw/Y2pzOwrsRwcCicXGMC6beF4uTAUfaJ0negH4QsU7ouzB1q6
+         hFyA==
+X-Gm-Message-State: AOAM530QaoaVdmvz/3kivztTRmxl7Zu2AGsmo2V4T/XmlO145aFT7F3+
+        WDmF8KT//39TblmdwrRu+/KfOA==
+X-Google-Smtp-Source: ABdhPJygh9jXEiS0xdOBLk5UuvT6xq7WGsOYJdmMaiIxfbP0KxCMQKNoFrdlvlUg54QU99ndALix5Q==
+X-Received: by 2002:a63:ed03:: with SMTP id d3mr12814656pgi.24.1629086207454;
+        Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id t18sm9400997pfg.111.2021.08.15.20.56.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Aug 2021 20:56:47 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 09:26:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Han Wang <zjuwanghan@outlook.com>, ionela.voinescu@arm.com
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] cpufreq: remove useless INIT_LIST_HEAD()
+Message-ID: <20210816035644.b5y45yldxsi6nrgh@vireshk-i7>
+References: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Moved drivers/platform/x86/intel_menlow.c to drivers/thermal/intel.
++Ionela who added this.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- MAINTAINERS                                            |  4 ++--
- drivers/platform/x86/Kconfig                           | 10 ----------
- drivers/platform/x86/Makefile                          |  1 -
- drivers/thermal/intel/Kconfig                          |  9 +++++++++
- drivers/thermal/intel/Makefile                         |  1 +
- drivers/{platform/x86 => thermal/intel}/intel_menlow.c |  0
- 6 files changed, 12 insertions(+), 13 deletions(-)
- rename drivers/{platform/x86 => thermal/intel}/intel_menlow.c (100%)
+On 15-08-21, 21:07, Han Wang wrote:
+> list cpu_data_list has been inited staticly through LIST_HEAD,
+> so there's no need to call another INIT_LIST_HEAD. Simply remove
+> it from cppc_cpufreq_init.
+> 
+> Signed-off-by: Han Wang <zjuwanghan@outlook.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index d4c27022b..db1719626 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -741,8 +741,6 @@ static int __init cppc_cpufreq_init(void)
+>  	if ((acpi_disabled) || !acpi_cpc_valid())
+>  		return -ENODEV;
+>  
+> -	INIT_LIST_HEAD(&cpu_data_list);
+> -
+>  	cppc_check_hisi_workaround();
+>  	cppc_freq_invariance_init();
+>  
+> -- 
+> 2.25.1
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd25e4ecf0b9..4231aea31a6f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9459,10 +9459,10 @@ F:	include/linux/mfd/intel-m10-bmc.h
- 
- INTEL MENLOW THERMAL DRIVER
- M:	Sujith Thomas <sujith.thomas@intel.com>
--L:	platform-driver-x86@vger.kernel.org
-+L:	linux-pm@vger.kernel.org
- S:	Supported
- W:	https://01.org/linux-acpi
--F:	drivers/platform/x86/intel_menlow.c
-+F:	drivers/thermal/intel/intel_menlow.c
- 
- INTEL P-Unit IPC DRIVER
- M:	Zha Qipeng <qipeng.zha@intel.com>
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index d12db6c316ea..da312426b4a5 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -720,16 +720,6 @@ config INTEL_INT0002_VGPIO
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called intel_int0002_vgpio.
- 
--config INTEL_MENLOW
--	tristate "Thermal Management driver for Intel menlow platform"
--	depends on ACPI_THERMAL
--	select THERMAL
--	help
--	  ACPI thermal management enhancement driver on
--	  Intel Menlow platform.
--
--	  If unsure, say N.
--
- config INTEL_OAKTRAIL
- 	tristate "Intel Oaktrail Platform Extras"
- 	depends on ACPI
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index 7ee369aab10d..0d3af23f1186 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -72,7 +72,6 @@ obj-$(CONFIG_INTEL_ATOMISP2_LED)	+= intel_atomisp2_led.o
- obj-$(CONFIG_INTEL_ATOMISP2_PM)		+= intel_atomisp2_pm.o
- obj-$(CONFIG_INTEL_HID_EVENT)		+= intel-hid.o
- obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
--obj-$(CONFIG_INTEL_MENLOW)		+= intel_menlow.o
- obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
- obj-$(CONFIG_INTEL_VBTN)		+= intel-vbtn.o
- 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index e4299ca3423c..c83ea5d04a1d 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -90,3 +90,12 @@ config INTEL_TCC_COOLING
- 	  Note that, on different platforms, the behavior might be different
- 	  on how fast the setting takes effect, and how much the CPU frequency
- 	  is reduced.
-+
-+config INTEL_MENLOW
-+	tristate "Thermal Management driver for Intel menlow platform"
-+	depends on ACPI_THERMAL
-+	help
-+	  ACPI thermal management enhancement driver on
-+	  Intel Menlow platform.
-+
-+	  If unsure, say N.
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index 5ff2afa388f7..960b56268b4a 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -12,3 +12,4 @@ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
- obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
- obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
- obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-+obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
-diff --git a/drivers/platform/x86/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-similarity index 100%
-rename from drivers/platform/x86/intel_menlow.c
-rename to drivers/thermal/intel/intel_menlow.c
 -- 
-2.31.1
-
+viresh
