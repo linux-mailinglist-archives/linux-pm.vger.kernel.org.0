@@ -2,131 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9093ED2E1
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 13:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEAB3ED424
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 14:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbhHPLIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 07:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S229643AbhHPMlQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 08:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbhHPLIp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 07:08:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486EEC061764;
-        Mon, 16 Aug 2021 04:08:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id BB8571F42B20
-Received: by earth.universe (Postfix, from userid 1000)
-        id 340193C0C9B; Mon, 16 Aug 2021 13:08:10 +0200 (CEST)
-Date:   Mon, 16 Aug 2021 13:08:10 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] power: supply: max17042: handle fails of reading
- status register
-Message-ID: <20210816110810.sw2jkt2dqlo3iedr@earth.universe>
-References: <20210816082716.21193-1-krzysztof.kozlowski@canonical.com>
- <820c80fa-c412-dd71-62a4-0ba1e1a97820@redhat.com>
+        with ESMTP id S230030AbhHPMky (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 08:40:54 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189A3C0617AF
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 05:40:17 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id f5so23342612wrm.13
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 05:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YKFV/fGAy+OCvpppPuHuSrc517KYZ+55CkL6GKvlPn8=;
+        b=Bg8I2gF+Bjd0AA2MgvkQIB9OYiX7mVstkmhluN50T39ksJg2/uh9xQK+jf+dNlO55A
+         7B0MA1bwfApHQTuNrTXkw6tEGf0puionJ3b7fNmsHmIPh0LsmZZBPek9v0v3jxKi9MoO
+         esG8UYrpmw1ACW8KUpvri6ESmtZK5ALT2AHXvgadk/VVqB5JMmL5zwRrsmRLfuMbnEqG
+         NShztgO+H6uLt/haCuQj5rMddlbb2F8g/QyETxEzamGe3v2LD6tWPGWx7cNkcx5iOlpb
+         xlc1mTZ0NjVFTUG41QFiH11JmUF7mUJct2SvzecsP+zKZR2qhuVzMYt8uZhk04Mmelb4
+         MpTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YKFV/fGAy+OCvpppPuHuSrc517KYZ+55CkL6GKvlPn8=;
+        b=A7You36/4V/P6SCl4LA0hj3HRBj2L4drW/gcF56YI+jWKA4FofyGwznSWqxLX7hB3t
+         ibJtvYed7/KMIyfl55bx+aWjvwN0t9EUxPFXg7HP+8SKrcXpzRuWUArSCHaSP7hP4/GG
+         e2ihuna5/AUNohGxnsCbyObWLSj2h/mmFshA4jUm5BsrpKEno6PaNl83nt//aWLhyejO
+         rJGGFDM7+mQL4JOb0R9BAo6VHPCgelQ5o97td+9pWRYlb792GWW19UBPcmC9/aSUkwWT
+         nAc7dq0+ZrKKJdnPKyRSzxhoIiZx+fPb8jh1yMAstpbo9Oa4ZNr0ju9bc8cqmNyKCQKJ
+         2anA==
+X-Gm-Message-State: AOAM530g3l3z8ENvcNYBvJjo2sStqJpX5HyJo50iJMp4w55cjDY1qQdj
+        XuZOcsSmUO6Lik2NwCCdyPTgvA==
+X-Google-Smtp-Source: ABdhPJxQUhmIDC5n1PtRkioXFL6G/WDM0kRh+2rAEDKPnVa1NppeaOOdt4CyHTscwYW0LGaTuLVY1g==
+X-Received: by 2002:adf:f2ca:: with SMTP id d10mr18708071wrp.149.1629117615294;
+        Mon, 16 Aug 2021 05:40:15 -0700 (PDT)
+Received: from google.com ([2.31.167.59])
+        by smtp.gmail.com with ESMTPSA id o14sm1687867wms.2.2021.08.16.05.40.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 05:40:14 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 13:40:13 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: convert tps65086.txt to YAML
+Message-ID: <YRpcrensjNvOfraQ@google.com>
+References: <20210727092554.1059305-1-kernel@esmil.dk>
+ <20210727092554.1059305-2-kernel@esmil.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vwwvktmiv53b3xj"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <820c80fa-c412-dd71-62a4-0ba1e1a97820@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210727092554.1059305-2-kernel@esmil.dk>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 27 Jul 2021, Emil Renner Berthing wrote:
 
---6vwwvktmiv53b3xj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> This converts the tps65086.txt binding description to YAML schema so
+> dts files can be verified automatically.
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> ---
+>  .../devicetree/bindings/mfd/ti,tps65086.yaml  | 127 ++++++++++++++++++
+>  .../devicetree/bindings/mfd/tps65086.txt      |  54 --------
+>  2 files changed, 127 insertions(+), 54 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps65086.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/tps65086.txt
 
-Hi,
+Applied, thanks.
 
-On Mon, Aug 16, 2021 at 10:42:01AM +0200, Hans de Goede wrote:
-> Hi,
->=20
-> On 8/16/21 10:27 AM, Krzysztof Kozlowski wrote:
-> > Reading status register can fail in the interrupt handler.  In such
-> > case, the regmap_read() will not store anything useful under passed
-> > 'val' variable and random stack value will be used to determine type of
-> > interrupt.
-> >=20
-> > Handle the regmap_read() failure to avoid handling interrupt type and
-> > triggering changed power supply event based on random stack value.
-> >=20
-> > Fixes: 39e7213edc4f ("max17042_battery: Support regmap to access device=
-'s registers")
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->=20
-> Thanks, the entire series looks good to me:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> For the series.
-
-Thanks, series queued.
-
--- Sebastian
-
->=20
-> Regards,
->=20
-> Hans
->=20
-> > ---
-> >  drivers/power/supply/max17042_battery.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/su=
-pply/max17042_battery.c
-> > index ce2041b30a06..858ae97600d4 100644
-> > --- a/drivers/power/supply/max17042_battery.c
-> > +++ b/drivers/power/supply/max17042_battery.c
-> > @@ -869,8 +869,12 @@ static irqreturn_t max17042_thread_handler(int id,=
- void *dev)
-> >  {
-> >  	struct max17042_chip *chip =3D dev;
-> >  	u32 val;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(chip->regmap, MAX17042_STATUS, &val);
-> > +	if (ret)
-> > +		return IRQ_HANDLED;
-> > =20
-> > -	regmap_read(chip->regmap, MAX17042_STATUS, &val);
-> >  	if ((val & STATUS_INTR_SOCMIN_BIT) ||
-> >  		(val & STATUS_INTR_SOCMAX_BIT)) {
-> >  		dev_info(&chip->client->dev, "SOC threshold INTR\n");
-> >=20
->=20
-
---6vwwvktmiv53b3xj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEaRxMACgkQ2O7X88g7
-+poBKhAAk5pmj5Djl2zZVinaNrMQkERWS5zRujTOO105iG1WIdst9L1KbJUwVng7
-12lgHIeeQi+GeaW69Ytd7Rm7WhTZp/kE1R2qyfNOQKMs1x9eRZAcgK7slhspUPCb
-e/YNN41n3h90ulV34Zn87Ta4sTPoCUkz89XUs45qE00oK03y6ySXJnwT919BXSsr
-9Ix1bVDcWTz98limS+rB3YsSDUL5r9LJ1wuu8azTemdvGIXDppZ2QYiUzbOlrO1R
-JrLa/O3q/OgpWJUi2iu1gaXvOU9WR4V/slgUG9FOgpgfFN+bSgqtYe6NX+Yk2zDu
-E2XbPxSbH83ktRmw9TAC0DJYpkOgcA9g8Xl+4oc1YcPDUDqMVMqP/gZ0L5waxlK6
-ukA8dLox/+cGScT7ajDFh4g409XfQ4YHFukNTe+DRt04ovX1R13SIHhS59BkSzjT
-MFYgfesyJdYoLX6aDdQFl/KUg/G3/dJ8YxTsyOYW00ErDPu141HgEkKNTEmt2HoV
-85qN8RuoPCIv92lieAOJenjsQXmYHD3p/hRTBdLlqsraoqdWQXK2yYNdJB9RL4Vj
-5VM692MuWbsPoQ5MyMt/1+6xkCBoHKdHgHjghsViwvyWA28OnFBPCKidxCc26QK2
-sQa0+8+32ke4ITG50k5Uj506PGkpRehovfMCQ6vPQxJlQYtTx6s=
-=qDkR
------END PGP SIGNATURE-----
-
---6vwwvktmiv53b3xj--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
