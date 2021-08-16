@@ -2,140 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A10DC3ED8A6
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 16:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD433ED8D5
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 16:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhHPOFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 10:05:55 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:35496 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbhHPOFy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 10:05:54 -0400
-Received: by mail-oi1-f180.google.com with SMTP id r26so846597oij.2;
-        Mon, 16 Aug 2021 07:05:23 -0700 (PDT)
+        id S229902AbhHPOUm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 10:20:42 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:38673 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230094AbhHPOUj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 10:20:39 -0400
+Received: by mail-ot1-f48.google.com with SMTP id 108-20020a9d01750000b029050e5cc11ae3so21115325otu.5
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 07:20:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iRKDceU3mYZYX25ILhTGVfCF7ZiGQ+F4qa4yz3TodTY=;
-        b=h1IZyY9J/x0hGY9XoqXMt0umxGozmjm6S9aJZiPMDhvOcqreu+XR5uZwzz+gfZDMur
-         8h/9uIPKtsHkkUhhJjzYAW7aMUHiaJMLVzNhWBjFVQn1M1eQP/kY5amd3HYo8nfuttcK
-         y3WjG3uavbeYqNVbGkni+JXVGl7AFxqp9amWHjjGd9RDHHS9Amun/6K1/NPMhun2ucVN
-         eRdurYIskcN1uLHqEYfAXbHR4YqQuo0orCte3wru/StIM1WNGw2zQln9BYLpIFyWv0ik
-         sGru3nFXa/ZOeMVBKhDKNfmh/RrDfcIUfkBJ8NNO90oBSx5HfF6pyEcl/8X6mqvArFGy
-         siCg==
-X-Gm-Message-State: AOAM5331y24jeYmjKS0gSxzAYA219m8ksVu4Gh37M+qhmKyZOzu8ubwN
-        W1uKBqOxDp9vvkrzlo/DoXW/wLHzQmjjnHlmOi8=
-X-Google-Smtp-Source: ABdhPJzOdg3EzWB1728dV5c78AxtjaL0FOKppTxbZlVBy1uVvoUG+e3bXhxL9cLwgjZnAzYITWjRnwYsZLREFWQZJLM=
-X-Received: by 2002:a05:6808:220c:: with SMTP id bd12mr12187934oib.157.1629122722961;
- Mon, 16 Aug 2021 07:05:22 -0700 (PDT)
+        bh=Z8fRqi6W0q43XhD24FVMcvxlBJPIyhTDKtNsJvPuZ/8=;
+        b=rBAW+BjcpAKmC1GUYNKxcufJ4P0rQFDoTCZuQJDxLJcUK2RNZR2yxPL0oTkiQH5K5b
+         RJV8vlbNDEfDhqr06nUHTUIcZlenXBi6Z2oDm2aU+cADvtGVQnrGjU6kX3e86g/7oKaD
+         VPiGCVeTeuVcO4tRfpW9O+PVpIihxgNqHo449Nepc1GkpKELRi6d6A3qTpeELWhXq6LK
+         U8g4sUfr5q7OELEkTlgYmhBQOSVX9eoKmjjohpchJ+24Y+vYZZjxZ07bODZ6RAmGE+e+
+         RH3zmZI3LKEkCselW2WwTjrYJT+lF27zipBJ0RJYgKdwwhHm2bPWAuQAkonKocC+D7r8
+         H02Q==
+X-Gm-Message-State: AOAM533oZyxPqf3Fm4H1BAZ1IdzOzqI1OFbF7Q1x1az4Nn4a7uzt82iD
+        6slkYYuxAHWtVOc9omiA7ZCoC167P7vAVF9xim8=
+X-Google-Smtp-Source: ABdhPJy4c64EksW5u3esMFqNcw2ra08sGv1XhUDF22IsMX0wdCwVPMlcsJ0kQYMrRSWeZ98kGvE8egUbLRNZmatAPco=
+X-Received: by 2002:a9d:a75:: with SMTP id 108mr12687701otg.260.1629123607656;
+ Mon, 16 Aug 2021 07:20:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210813161842.222414-1-mario.limonciello@amd.com>
-In-Reply-To: <20210813161842.222414-1-mario.limonciello@amd.com>
+References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com> <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
+In-Reply-To: <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 16 Aug 2021 16:04:57 +0200
-Message-ID: <CAJZ5v0jynpMMnMBQuyJPYfSG-6JSe5=a6wW0UtUnpGuh68CqkA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/acpi: Don't add CPUs that are not online capable
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Ray Huang <Ray.Huang@amd.com>,
+Date:   Mon, 16 Aug 2021 16:19:41 +0200
+Message-ID: <CAJZ5v0hta1mEVatT=6ZMLhZCs3btcSbTT10YEihfdvB-WxDuzQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] Inefficient OPPs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 6:19 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, Aug 10, 2021 at 8:13 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> A number of systems are showing "hotplug capable" CPUs when they
-> are not really hotpluggable.  This is because the MADT has extra
-> CPU entries to support different CPUs that may be inserted into
-> the socket with different numbers of cores.
+> On 04-08-21, 18:21, Rafael J. Wysocki wrote:
+> > The cpufreq changes are mostly fine by me now, but I would like to
+> > hear from Viresh regarding this.
 >
-> Starting with ACPI 6.3 the spec has an Online Capable bit in the
-> MADT used to determine whether or not a CPU is hotplug capable
-> when the enabled bit is not set.
+> I have few doubts/concerns here.
 >
-> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html?#local-apic-flags
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  arch/x86/kernel/acpi/boot.c | 10 ++++++++++
->  include/acpi/actbl2.h       |  1 +
->  2 files changed, 11 insertions(+)
+> Just to iterate it again, the idea here is to choose a higher
+> frequency, which will work in an efficient manner based on energy
+> consumption. So this _only_ works for the case where the caller asked
+> for CPUFREQ_RELATION_L.
 >
-> Changes from v1->v2:
->  * Check the revision field in MADT to determine if it matches the
->    bump from ACPI 6.3 as suggested by Hanjun Guo
->  * Update description
->
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index e55e0c1fad8c..bfa69a5c9c0b 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -53,6 +53,8 @@ int acpi_ioapic;
->  int acpi_strict;
->  int acpi_disable_cmcff;
->
-> +bool acpi_support_online_capable;
+> - The new flag being added here, CPUFREQ_RELATION_E, doesn't feel
+>   complete in this sense to me. It should rather be called as
+>   CPUFREQ_RELATION_LE instead as it is _always_ used with relation L.
 
-Missing static?
+Well, this mostly is a matter of what the flag means.  If "E" implies
+"L", I don't see a problem.
 
-> +
->  /* ACPI SCI override configuration */
->  u8 acpi_sci_flags __initdata;
->  u32 acpi_sci_override_gsi __initdata = INVALID_ACPI_IRQ;
-> @@ -138,6 +140,8 @@ static int __init acpi_parse_madt(struct acpi_table_header *table)
->
->                 pr_debug("Local APIC address 0x%08x\n", madt->address);
->         }
-> +       if (madt->header.revision >= 5)
-> +               acpi_support_online_capable = true;
->
->         default_acpi_madt_oem_check(madt->header.oem_id,
->                                     madt->header.oem_table_id);
-> @@ -239,6 +243,12 @@ acpi_parse_lapic(union acpi_subtable_headers * header, const unsigned long end)
->         if (processor->id == 0xff)
->                 return 0;
->
-> +       /* don't register processors that can not be onlined */
-> +       if (acpi_support_online_capable &&
-> +           !(processor->lapic_flags & ACPI_MADT_ENABLED) &&
-> +           !(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
-> +               return 0;
-> +
->         /*
->          * We need to register disabled CPU as well to permit
->          * counting disabled CPUs. This allows us to size
-> diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-> index 2069ac38a4e2..fae45e383987 100644
-> --- a/include/acpi/actbl2.h
-> +++ b/include/acpi/actbl2.h
+> - IMO this has made the caller site a bit confusing now, i.e.  why we
+>   send CPUFREQ_RELATION_E sometimes and CPUFREQ_RELATION_H at other
+>   times. Why shouldn't the _H freq be efficient as well ?
 
-The one below is an ACPICA change and I'd prefer it to be integrated
-via the upstream ACPICA.
+This is a good point, though.
 
-Could you prepare an ACPICA pull request for just the bit below and
-send it via GitHub?
+>  I understand  that this was done to not do the efficient stuff in case of
+>   userspace/powersave/performance governors.
+>
+>   What about reusing following for finding all such cases ?
+>
+>         policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING
+>
+>   The driver can set a flag to tell if it wants efficient frequencies
+>   or not, and at runtime we apply efficient algorithm only if the
+>   current governor does DVFS, which will leave out
+>   userspace/performance/powersave.
 
-> @@ -808,6 +808,7 @@ struct acpi_madt_multiproc_wakeup_mailbox {
->  /* MADT Local APIC flags */
+As long as this can be done without actually accessing
+policy->governor->flags on every transition, it sounds like a good
+idea.
+
+> Now the other thing I didn't like since the beginning, I still don't
+> like it :)
 >
->  #define ACPI_MADT_ENABLED           (1)        /* 00: Processor is usable if set */
-> +#define ACPI_MADT_ONLINE_CAPABLE    (2)        /* 01: System HW supports enabling processor at runtime */
+> A cpufreq table is provided by the driver, which can have some
+> inefficient frequencies. The inefficient frequencies can be caught by
+> many parts of the kernel, the current way (in this series) is via EM.
+> But this can totally be anything else as well, like a devfreq driver.
 >
->  /* MADT MPS INTI flags (inti_flags) */
+> The way we have tied this whole thing with EM, via
+> cpufreq_read_inefficiencies_from_em(), is what I don't like. We have
+> closely bound the whole thing with one of the ways this can be done
+> and we shouldn't be polluting the cpufreq core with this IMHO. In a
+> sane world, the cpufreq core should just provide an API, like
+> cpufreq_set_freq_invariant() and it can be called by any part of
+> the kernel.
+
+Right.
+
+> I understand that the current problem is where do we make that call
+> from and I suggested dev_pm_opp_of_register_em() for the same earlier.
+> But that doesn't work as the policy isn't properly initialized by that
+> point.
 >
-> --
+> Now that I see the current implementation, I think we can make it work
+> in a different way.
+>
+> - Copy what's done for thermal-cooling in cpufreq core, i.e.
+>   CPUFREQ_IS_COOLING_DEV flag, for the EM core as well. So the cpufreq
+>   drivers can set a flag, CPUFREQ_REGISTER_EM, and the cpufreq core
+>   can call dev_pm_opp_of_register_em() on their behalf. This call will
+>   be made from cpufreq_online(), just before/after
+>   cpufreq_thermal_control_enabled() stuff. By this point the policy is
+>   properly initialized and is also updated in
+>   per_cpu(cpufreq_cpu_data).
+>
+> - Now the cpufreq core can provide an API like
+>   cpufreq_set_freq_invariant(int cpu, unsigned long freq), which can
+>   be called from EM core's implementation of
+>   em_dev_register_perf_domain().
+
+Sounds reasonable to me.
