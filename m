@@ -2,192 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200C3ED12C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 11:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580DD3ED14F
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235336AbhHPJnO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 05:43:14 -0400
-Received: from mga07.intel.com ([134.134.136.100]:47659 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231673AbhHPJnO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Aug 2021 05:43:14 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10077"; a="279571825"
-X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
-   d="scan'208";a="279571825"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 02:42:42 -0700
-X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
-   d="scan'208";a="519589901"
-Received: from pwang16-mobl10.ccr.corp.intel.com ([10.255.29.15])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 02:42:39 -0700
-Message-ID: <830b7bb290268ac4a4ba8f9c5542b3fa36aff415.camel@intel.com>
-Subject: Re: [PATCH] thermal/drivers/intel: Move intel_menlow to thermal
- drivers
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        hpa@redhat.com, mgross@linux.intel.com, alex.hung@canonical.com,
-        sujith.thomas@intel.com, andriy.shevchenko@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Date:   Mon, 16 Aug 2021 17:42:37 +0800
-In-Reply-To: <144b2a35-bd24-2a88-c538-5c7c4a6c4fd1@linaro.org>
-References: <20210816035356.1955982-1-srinivas.pandruvada@linux.intel.com>
-         <4d1c20ab-6c81-8e9f-6d0f-180ecaa92812@redhat.com>
-         <144b2a35-bd24-2a88-c538-5c7c4a6c4fd1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S235368AbhHPJxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 05:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235336AbhHPJxn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 05:53:43 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2001C061764;
+        Mon, 16 Aug 2021 02:53:11 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id x10so16377088wrt.8;
+        Mon, 16 Aug 2021 02:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JAhbLXhuiKr15f569cp5ZlH29FsUdWP9r+HrMVJpIZI=;
+        b=ZTYDLcpgsR+WBvS9Ay5rkaSI2IDGZJx7bHVphRf9rG25VzfxPWNxwM2FBOQYlksEYJ
+         nkbRT5W4oE6Zb6uSH23FVDcxJ1U6vRGkxonLza7J371J+nFmuF52PzHezn3AJ84/iBfk
+         wLsqHgfC/b0EmBIpmDVTUDi1s/xWEogvnuY2U6Z9heaHoU03aGviK8EG6HDr7cwvWcCS
+         EJT5aur4lYO8970HvvRs88lu3rIv2gXi5Fac5Ux5SufAulQxXsdFx82LbcjbuSm8qnNr
+         7DH/aELVrFdCz9pcz0yP4eDWo7EPDg+lZcewV9DtsPMIKhJbKSqgSLc+k0cxYpa1lnxz
+         kmtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JAhbLXhuiKr15f569cp5ZlH29FsUdWP9r+HrMVJpIZI=;
+        b=B2xSR/c2gRBqAUhSCm8UA6UrbnLAwPJQQ9DyiwiOBrO5Qvt6k7ToMX5OJmWFRoLkEs
+         1me09sZwfGykfkRLQZmZTVGUqm+m7U1qRFQnvuc7GbwKQvH/aH2TdalbVdl2xjGw/vHz
+         VHmQvEaWYWEEpA8b4LwIp+hDhWVbVEm+41gtt19Z+dV7Pso95bk3BRv/x3git13gVEF9
+         7XoN34RA5rLo1szm9EDSb4+TZcINhJw5rpveGjlaMY34Ya+JzBmF0JsE3ih2YQWnSgcX
+         ZZGZJPrULslDHBfF/g5bsP89WtJzFMceKUm43kKneumICuj/ruZDQ2S59SzLh3IPSmLb
+         XIeQ==
+X-Gm-Message-State: AOAM533steB8XBOLhEWRhjBuO/0X3pooqxkP4Jn5KlO2kWjTNGTrn9go
+        bZHOyooMPdVTJCjAd6+DpkQ=
+X-Google-Smtp-Source: ABdhPJzkq0DMPLKzLvG3MOiFX8IELX/UVhokVOU8VeEoHR+ro93o2BiXPK7pgpZuDyfCQ9CEkmBwlw==
+X-Received: by 2002:a05:6000:186:: with SMTP id p6mr17698437wrx.19.1629107590269;
+        Mon, 16 Aug 2021 02:53:10 -0700 (PDT)
+Received: from localhost (pd9e51807.dip0.t-ipconnect.de. [217.229.24.7])
+        by smtp.gmail.com with ESMTPSA id m6sm3398602wms.42.2021.08.16.02.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 02:53:09 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 11:53:08 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] cpuidle: tegra: Check whether PMC is ready
+Message-ID: <YRo1hK/KnS0oA1vj@orome.fritz.box>
+References: <20210718212706.21659-1-digetx@gmail.com>
+ <20210718212706.21659-3-digetx@gmail.com>
+ <YROdQXO4aVLQ8DkP@orome.fritz.box>
+ <8d61d4d5-8e4b-5c18-923c-eceb954e8d5d@linaro.org>
+ <8f22c97d-63f7-6d2a-7b1e-92b0b80a5275@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/FxjFLhUbsKPIo++"
+Content-Disposition: inline
+In-Reply-To: <8f22c97d-63f7-6d2a-7b1e-92b0b80a5275@gmail.com>
+User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-08-16 at 10:05 +0200, Daniel Lezcano wrote:
-> Hi Hans,
-> 
-> On 16/08/2021 09:55, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 8/16/21 5:53 AM, Srinivas Pandruvada wrote:
-> > > Moved drivers/platform/x86/intel_menlow.c to
-> > > drivers/thermal/intel.
-> > > 
-> > > Signed-off-by: Srinivas Pandruvada <
-> > > srinivas.pandruvada@linux.intel.com>
-> > 
-> > Thank you.
-> > 
-> > Rui, with this upcoming patch-series:
-> > 
-> > 
-https://lore.kernel.org/platform-driver-x86/c6a90704-5080-d479-0022-58e5d106c026@infradead.org/T/#t
-> > 
-> > drivers/platform/x86/Kconfig + Makefile
-> > 
-> > Are going to see quite a bit of churn, is it ok if I merge this
-> > patch
-> > through the pdx86 tree to avoid conflicts with all those changes?
-> > 
-> > Rui, if this is ok, may I have your ack for this then ?
-> 
-> As co-maintainer:
-> 
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Done, thanks for the reminder.
+--/FxjFLhUbsKPIo++
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--rui
+On Sat, Aug 14, 2021 at 04:45:42PM +0300, Dmitry Osipenko wrote:
+> 14.08.2021 13:37, Daniel Lezcano =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On 11/08/2021 11:49, Thierry Reding wrote:
+> >> On Mon, Jul 19, 2021 at 12:27:06AM +0300, Dmitry Osipenko wrote:
+> >>> Check whether PMC is ready before proceeding with the cpuidle registr=
+ation.
+> >>> This fixes racing with the PMC driver probe order, which results in a
+> >>> disabled deepest CC6 idling state if cpuidle driver is probed before =
+the
+> >>> PMC.
+> >>>
+> >>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >>> ---
+> >>>  drivers/cpuidle/cpuidle-tegra.c | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>
+> >> Rafael, Daniel,
+> >>
+> >> would you mind if I took this into the Tegra tree? It's got a dependen=
+cy
+> >> on the PMC driver, which usually goes via the Tegra tree already, and
+> >> there's nothing cpuidle-specific in here, it's all Tegra-specific
+> >> integration quirks.
+> >=20
+> > Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>=20
+> I got another thought about how it could be solved. We could move the
+> creation of the cpuidle platform device into the PMC driver. Thierry,
+> what do you think?
 
-> 
-> 
-> 
-> > > ---
-> > >  MAINTAINERS                                            |  4 ++--
-> > >  drivers/platform/x86/Kconfig                           | 10 ----
-> > > ------
-> > >  drivers/platform/x86/Makefile                          |  1 -
-> > >  drivers/thermal/intel/Kconfig                          |  9
-> > > +++++++++
-> > >  drivers/thermal/intel/Makefile                         |  1 +
-> > >  drivers/{platform/x86 => thermal/intel}/intel_menlow.c |  0
-> > >  6 files changed, 12 insertions(+), 13 deletions(-)
-> > >  rename drivers/{platform/x86 => thermal/intel}/intel_menlow.c
-> > > (100%)
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index fd25e4ecf0b9..4231aea31a6f 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -9459,10 +9459,10 @@ F:	include/linux/mfd/intel-m10-
-> > > bmc.h
-> > >  
-> > >  INTEL MENLOW THERMAL DRIVER
-> > >  M:	Sujith Thomas <sujith.thomas@intel.com>
-> > > -L:	platform-driver-x86@vger.kernel.org
-> > > +L:	linux-pm@vger.kernel.org
-> > >  S:	Supported
-> > >  W:	https://01.org/linux-acpi
-> > > -F:	drivers/platform/x86/intel_menlow.c
-> > > +F:	drivers/thermal/intel/intel_menlow.c
-> > >  
-> > >  INTEL P-Unit IPC DRIVER
-> > >  M:	Zha Qipeng <qipeng.zha@intel.com>
-> > > diff --git a/drivers/platform/x86/Kconfig
-> > > b/drivers/platform/x86/Kconfig
-> > > index d12db6c316ea..da312426b4a5 100644
-> > > --- a/drivers/platform/x86/Kconfig
-> > > +++ b/drivers/platform/x86/Kconfig
-> > > @@ -720,16 +720,6 @@ config INTEL_INT0002_VGPIO
-> > >  	  To compile this driver as a module, choose M here: the module
-> > > will
-> > >  	  be called intel_int0002_vgpio.
-> > >  
-> > > -config INTEL_MENLOW
-> > > -	tristate "Thermal Management driver for Intel menlow platform"
-> > > -	depends on ACPI_THERMAL
-> > > -	select THERMAL
-> > > -	help
-> > > -	  ACPI thermal management enhancement driver on
-> > > -	  Intel Menlow platform.
-> > > -
-> > > -	  If unsure, say N.
-> > > -
-> > >  config INTEL_OAKTRAIL
-> > >  	tristate "Intel Oaktrail Platform Extras"
-> > >  	depends on ACPI
-> > > diff --git a/drivers/platform/x86/Makefile
-> > > b/drivers/platform/x86/Makefile
-> > > index 7ee369aab10d..0d3af23f1186 100644
-> > > --- a/drivers/platform/x86/Makefile
-> > > +++ b/drivers/platform/x86/Makefile
-> > > @@ -72,7 +72,6 @@ obj-$(CONFIG_INTEL_ATOMISP2_LED)	+=
-> > > intel_atomisp2_led.o
-> > >  obj-$(CONFIG_INTEL_ATOMISP2_PM)		+= intel_atomisp2_pm.o
-> > >  obj-$(CONFIG_INTEL_HID_EVENT)		+= intel-hid.o
-> > >  obj-$(CONFIG_INTEL_INT0002_VGPIO)	+=
-> > > intel_int0002_vgpio.o
-> > > -obj-$(CONFIG_INTEL_MENLOW)		+= intel_menlow.o
-> > >  obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
-> > >  obj-$(CONFIG_INTEL_VBTN)		+= intel-vbtn.o
-> > >  
-> > > diff --git a/drivers/thermal/intel/Kconfig
-> > > b/drivers/thermal/intel/Kconfig
-> > > index e4299ca3423c..c83ea5d04a1d 100644
-> > > --- a/drivers/thermal/intel/Kconfig
-> > > +++ b/drivers/thermal/intel/Kconfig
-> > > @@ -90,3 +90,12 @@ config INTEL_TCC_COOLING
-> > >  	  Note that, on different platforms, the behavior might be
-> > > different
-> > >  	  on how fast the setting takes effect, and how much the CPU
-> > > frequency
-> > >  	  is reduced.
-> > > +
-> > > +config INTEL_MENLOW
-> > > +	tristate "Thermal Management driver for Intel menlow platform"
-> > > +	depends on ACPI_THERMAL
-> > > +	help
-> > > +	  ACPI thermal management enhancement driver on
-> > > +	  Intel Menlow platform.
-> > > +
-> > > +	  If unsure, say N.
-> > > diff --git a/drivers/thermal/intel/Makefile
-> > > b/drivers/thermal/intel/Makefile
-> > > index 5ff2afa388f7..960b56268b4a 100644
-> > > --- a/drivers/thermal/intel/Makefile
-> > > +++ b/drivers/thermal/intel/Makefile
-> > > @@ -12,3 +12,4 @@ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) +=
-> > > intel_bxt_pmic_thermal.o
-> > >  obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
-> > >  obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
-> > >  obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-> > > +obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
-> > > diff --git a/drivers/platform/x86/intel_menlow.c
-> > > b/drivers/thermal/intel/intel_menlow.c
-> > > similarity index 100%
-> > > rename from drivers/platform/x86/intel_menlow.c
-> > > rename to drivers/thermal/intel/intel_menlow.c
-> > > 
-> 
-> 
+Looking around a bit, it looks like we've got two "virtual" platform
+devices related to CPU on Tegra20 and some of the later SoCs. A little
+while ago when we introduced the CPU frequency driver for Tegra194 we
+had a similar discussion. The problem at the time was that there was no
+way to create a virtual platform device from platform code, and adding a
+device tree node for this wasn't really an option either, since it does
+not actually describe the hardware accurately.
 
+What we ended up doing for Tegra194 was to add a compatible string to
+the /cpus node ("nvidia,tegra194-ccplex") which was then used for
+matching a CPU frequency driver against.
+
+I imagine we could do something similar for these older chips and
+perhaps even have a single driver for the CCPLEX that either registers
+CPU idle and CPU frequency scaling functionality, or have that driver
+register virtual devices. I slightly prefer the first variant because
+then we associate the driver with the hardware that it's actually
+driving. It's slightly unconventional because now CPU idle and CPU
+frequency drivers would be implemented in the same driver, but it isn't
+all that exotic these days anymore, either.
+
+If the maintainers prefer we could always keep the code split into two
+source files, one per subsystem, and call into that code from the CCPLEX
+driver. I think even then it'd still be the cleanest solution because we
+don't have to "invent" a new device just for the sake of fitting the
+driver model that we happen to have.
+
+Thierry
+
+--/FxjFLhUbsKPIo++
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEaNYEACgkQ3SOs138+
+s6HT+w//ZI+9IViNuhkUW3Z7Peo91l6nKc6T7XOGIXQfV19555Sj60sEI6t/iVJq
+b3FFliv1NUCr3LgZRD+YzGQbW00GiVunreVgI/EDhXiXDAHAlT8n1dsf4qqoa5lc
+H8frsJOGd0B+nMG13ycwFQYGh1xUVUxU80lPhbdivPucCIDB+1B/XKexN7Leqd82
+idhpaHw+gT6YWBrR8dDxdX2tBYox/9n6Iy8HjIx4G9ErKErVkKk26grNKzmHY07X
+2tUF727WFpunZsnpOKbgdPr3yBmg0MxAvhygG4otqQz92SzY0ZiHFYtVO4nCwDz+
+XmwaklY2NMUeSoNjekCNj7sPhCkGw8cPhYTIgs6twg+xXQgkwSdkHmcDm2WP81D1
+5H5YVNfQznxONIAD9xSqS3EdIAT9wzd7sipcDp/IHzMG3L83pi/DN6tYNyhBdbPO
+1a8/oskfmNWKJ/sx7mRgzrvybGcFaIO3MxTnafRMOnWoVVpAOLFyhnNuKaupdEEs
+K/KvkJEZaTbcxDYP323WTkZ3RMNn4OczQELL7lcJW2TZOikLFLooEu6/lSI4iAVa
+ICoKuQwmA9KLA67AVViFwRlZAvsCHjZi6t2HFErtBpwdvZKLQzoLNdfS5DinL5o3
+OVpk+2IeZ4XSTUd/gn859qgNJMD94gSnJ3uqvdRBNv04etaiQ2U=
+=N2nq
+-----END PGP SIGNATURE-----
+
+--/FxjFLhUbsKPIo++--
