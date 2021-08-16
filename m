@@ -2,125 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F093ED077
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 10:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E383ED129
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 11:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbhHPImj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 04:42:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55698 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234951AbhHPImi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 04:42:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629103326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4EFm6gVEreXk1Z8T6prMck0p8oHnL3WE32KdZ7f5jjo=;
-        b=iAZlansawZhGxrKKSUi/mwiUYfR97NX8oBPGjeX02ja+7hRdBtNPxunBw+GPlgQDVBy6i0
-        G4hILlUUIAoISRGAbgqgWuE/r1hDZ/c/kGJPc2KMMlTjarWAT8iy055VhM/L739LPWAi+8
-        jHCjOezrUzXMIr57/CaJfJaLV22i5JA=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-454-MDa8wu4JPyeRCGcfu6uudQ-1; Mon, 16 Aug 2021 04:42:03 -0400
-X-MC-Unique: MDa8wu4JPyeRCGcfu6uudQ-1
-Received: by mail-ej1-f70.google.com with SMTP id j10-20020a17090686cab02905b86933b59dso3927063ejy.18
-        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 01:42:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4EFm6gVEreXk1Z8T6prMck0p8oHnL3WE32KdZ7f5jjo=;
-        b=q6/PBMSjKCPV5kTa89rLw09ZEcYLAgPgK82xEl7gQZlGQtGoYM7PcN/sc9RWnj5NlI
-         V707/WNDyMLXGd9n9FslF1aqo3SBV/Sitk0yBuvqDJi9xnzOebGBgQfooZQeakJe1vJ2
-         zBuaR+7LOFXTI8bqv86Vfe8GhVPLOtzdv+NqgSf4JT+0+z0v23eZVyoRPIymTjEdvVmD
-         71QPo7Byyvs7R74VLVaBsxWhkwnikqLZTiv39s1/mQwaS8ryfqOnjGRSneazp41LAjk2
-         ANzGYaPSy2SsoTOfHhc7uDPCP5bhd/7Co973DfFzEzR0SzWfFbGOgWypNCq854ndOqMR
-         KUqA==
-X-Gm-Message-State: AOAM5300PLLgqePe9uHN+aZby/FchlppB2MNGz0G19XM062Bt9kW1uEt
-        QhSGDh4PK/VAeMpsNLkRpu/lcB5CliiFHeSYeQA3qsYXcZU9msYWe8EYq45qV8etRvH7JfB6/dd
-        mBLuvttGjPOoexjHxhIQ=
-X-Received: by 2002:a17:907:6089:: with SMTP id ht9mr14319196ejc.422.1629103322109;
-        Mon, 16 Aug 2021 01:42:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwhMOzUyKSIFJf2ZL/Rg4zpaV6lNxzUjZedt8/SufJLv342AisfKH/2GBGZYRWCOz9DFVAUbQ==
-X-Received: by 2002:a17:907:6089:: with SMTP id ht9mr14319179ejc.422.1629103321911;
-        Mon, 16 Aug 2021 01:42:01 -0700 (PDT)
-Received: from x1.localdomain ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id d22sm3453388ejj.47.2021.08.16.01.42.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 01:42:01 -0700 (PDT)
-Subject: Re: [PATCH 1/3] power: supply: max17042: handle fails of reading
- status register
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        stable@vger.kernel.org
-References: <20210816082716.21193-1-krzysztof.kozlowski@canonical.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <820c80fa-c412-dd71-62a4-0ba1e1a97820@redhat.com>
-Date:   Mon, 16 Aug 2021 10:42:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210816082716.21193-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S235336AbhHPJmS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 05:42:18 -0400
+Received: from mga18.intel.com ([134.134.136.126]:2384 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231673AbhHPJmS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 16 Aug 2021 05:42:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10077"; a="202987128"
+X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
+   d="scan'208";a="202987128"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 02:41:46 -0700
+X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
+   d="scan'208";a="519589659"
+Received: from pwang16-mobl10.ccr.corp.intel.com ([10.255.29.15])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 02:41:44 -0700
+Message-ID: <ce17bc12f60177b991d3084c79f71204ecc919b0.camel@intel.com>
+Subject: Re: [PATCH] thermal/drivers/intel: Move intel_menlow to thermal
+ drivers
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        hdegoede@redhat.com, daniel.lezcano@linaro.org, hpa@redhat.com,
+        mgross@linux.intel.com, alex.hung@canonical.com,
+        sujith.thomas@intel.com, andriy.shevchenko@linux.intel.com
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Date:   Mon, 16 Aug 2021 17:41:41 +0800
+In-Reply-To: <20210816035356.1955982-1-srinivas.pandruvada@linux.intel.com>
+References: <20210816035356.1955982-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 8/16/21 10:27 AM, Krzysztof Kozlowski wrote:
-> Reading status register can fail in the interrupt handler.  In such
-> case, the regmap_read() will not store anything useful under passed
-> 'val' variable and random stack value will be used to determine type of
-> interrupt.
+On Sun, 2021-08-15 at 20:53 -0700, Srinivas Pandruvada wrote:
+> Moved drivers/platform/x86/intel_menlow.c to drivers/thermal/intel.
 > 
-> Handle the regmap_read() failure to avoid handling interrupt type and
-> triggering changed power supply event based on random stack value.
-> 
-> Fixes: 39e7213edc4f ("max17042_battery: Support regmap to access device's registers")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Srinivas Pandruvada <
+> srinivas.pandruvada@linux.intel.com>
 
-Thanks, the entire series looks good to me:
+Acked-by: Zhang Rui <rui.zhang@intel.com>
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-For the series.
-
-Regards,
-
-Hans
-
+thanks,
+rui
 > ---
->  drivers/power/supply/max17042_battery.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  MAINTAINERS                                            |  4 ++--
+>  drivers/platform/x86/Kconfig                           | 10 --------
+> --
+>  drivers/platform/x86/Makefile                          |  1 -
+>  drivers/thermal/intel/Kconfig                          |  9
+> +++++++++
+>  drivers/thermal/intel/Makefile                         |  1 +
+>  drivers/{platform/x86 => thermal/intel}/intel_menlow.c |  0
+>  6 files changed, 12 insertions(+), 13 deletions(-)
+>  rename drivers/{platform/x86 => thermal/intel}/intel_menlow.c (100%)
 > 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index ce2041b30a06..858ae97600d4 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -869,8 +869,12 @@ static irqreturn_t max17042_thread_handler(int id, void *dev)
->  {
->  	struct max17042_chip *chip = dev;
->  	u32 val;
-> +	int ret;
-> +
-> +	ret = regmap_read(chip->regmap, MAX17042_STATUS, &val);
-> +	if (ret)
-> +		return IRQ_HANDLED;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fd25e4ecf0b9..4231aea31a6f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9459,10 +9459,10 @@ F:	include/linux/mfd/intel-m10-bmc.h
 >  
-> -	regmap_read(chip->regmap, MAX17042_STATUS, &val);
->  	if ((val & STATUS_INTR_SOCMIN_BIT) ||
->  		(val & STATUS_INTR_SOCMAX_BIT)) {
->  		dev_info(&chip->client->dev, "SOC threshold INTR\n");
-> 
+>  INTEL MENLOW THERMAL DRIVER
+>  M:	Sujith Thomas <sujith.thomas@intel.com>
+> -L:	platform-driver-x86@vger.kernel.org
+> +L:	linux-pm@vger.kernel.org
+>  S:	Supported
+>  W:	https://01.org/linux-acpi
+> -F:	drivers/platform/x86/intel_menlow.c
+> +F:	drivers/thermal/intel/intel_menlow.c
+>  
+>  INTEL P-Unit IPC DRIVER
+>  M:	Zha Qipeng <qipeng.zha@intel.com>
+> diff --git a/drivers/platform/x86/Kconfig
+> b/drivers/platform/x86/Kconfig
+> index d12db6c316ea..da312426b4a5 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -720,16 +720,6 @@ config INTEL_INT0002_VGPIO
+>  	  To compile this driver as a module, choose M here: the module
+> will
+>  	  be called intel_int0002_vgpio.
+>  
+> -config INTEL_MENLOW
+> -	tristate "Thermal Management driver for Intel menlow platform"
+> -	depends on ACPI_THERMAL
+> -	select THERMAL
+> -	help
+> -	  ACPI thermal management enhancement driver on
+> -	  Intel Menlow platform.
+> -
+> -	  If unsure, say N.
+> -
+>  config INTEL_OAKTRAIL
+>  	tristate "Intel Oaktrail Platform Extras"
+>  	depends on ACPI
+> diff --git a/drivers/platform/x86/Makefile
+> b/drivers/platform/x86/Makefile
+> index 7ee369aab10d..0d3af23f1186 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -72,7 +72,6 @@ obj-$(CONFIG_INTEL_ATOMISP2_LED)	+=
+> intel_atomisp2_led.o
+>  obj-$(CONFIG_INTEL_ATOMISP2_PM)		+= intel_atomisp2_pm.o
+>  obj-$(CONFIG_INTEL_HID_EVENT)		+= intel-hid.o
+>  obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
+> -obj-$(CONFIG_INTEL_MENLOW)		+= intel_menlow.o
+>  obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
+>  obj-$(CONFIG_INTEL_VBTN)		+= intel-vbtn.o
+>  
+> diff --git a/drivers/thermal/intel/Kconfig
+> b/drivers/thermal/intel/Kconfig
+> index e4299ca3423c..c83ea5d04a1d 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -90,3 +90,12 @@ config INTEL_TCC_COOLING
+>  	  Note that, on different platforms, the behavior might be
+> different
+>  	  on how fast the setting takes effect, and how much the CPU
+> frequency
+>  	  is reduced.
+> +
+> +config INTEL_MENLOW
+> +	tristate "Thermal Management driver for Intel menlow platform"
+> +	depends on ACPI_THERMAL
+> +	help
+> +	  ACPI thermal management enhancement driver on
+> +	  Intel Menlow platform.
+> +
+> +	  If unsure, say N.
+> diff --git a/drivers/thermal/intel/Makefile
+> b/drivers/thermal/intel/Makefile
+> index 5ff2afa388f7..960b56268b4a 100644
+> --- a/drivers/thermal/intel/Makefile
+> +++ b/drivers/thermal/intel/Makefile
+> @@ -12,3 +12,4 @@ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) +=
+> intel_bxt_pmic_thermal.o
+>  obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
+>  obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
+>  obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
+> +obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
+> diff --git a/drivers/platform/x86/intel_menlow.c
+> b/drivers/thermal/intel/intel_menlow.c
+> similarity index 100%
+> rename from drivers/platform/x86/intel_menlow.c
+> rename to drivers/thermal/intel/intel_menlow.c
 
