@@ -2,159 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580DD3ED14F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 11:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9093ED2E1
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 13:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235368AbhHPJxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 05:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S231857AbhHPLIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 07:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235336AbhHPJxn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 05:53:43 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2001C061764;
-        Mon, 16 Aug 2021 02:53:11 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id x10so16377088wrt.8;
-        Mon, 16 Aug 2021 02:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JAhbLXhuiKr15f569cp5ZlH29FsUdWP9r+HrMVJpIZI=;
-        b=ZTYDLcpgsR+WBvS9Ay5rkaSI2IDGZJx7bHVphRf9rG25VzfxPWNxwM2FBOQYlksEYJ
-         nkbRT5W4oE6Zb6uSH23FVDcxJ1U6vRGkxonLza7J371J+nFmuF52PzHezn3AJ84/iBfk
-         wLsqHgfC/b0EmBIpmDVTUDi1s/xWEogvnuY2U6Z9heaHoU03aGviK8EG6HDr7cwvWcCS
-         EJT5aur4lYO8970HvvRs88lu3rIv2gXi5Fac5Ux5SufAulQxXsdFx82LbcjbuSm8qnNr
-         7DH/aELVrFdCz9pcz0yP4eDWo7EPDg+lZcewV9DtsPMIKhJbKSqgSLc+k0cxYpa1lnxz
-         kmtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JAhbLXhuiKr15f569cp5ZlH29FsUdWP9r+HrMVJpIZI=;
-        b=B2xSR/c2gRBqAUhSCm8UA6UrbnLAwPJQQ9DyiwiOBrO5Qvt6k7ToMX5OJmWFRoLkEs
-         1me09sZwfGykfkRLQZmZTVGUqm+m7U1qRFQnvuc7GbwKQvH/aH2TdalbVdl2xjGw/vHz
-         VHmQvEaWYWEEpA8b4LwIp+hDhWVbVEm+41gtt19Z+dV7Pso95bk3BRv/x3git13gVEF9
-         7XoN34RA5rLo1szm9EDSb4+TZcINhJw5rpveGjlaMY34Ya+JzBmF0JsE3ih2YQWnSgcX
-         ZZGZJPrULslDHBfF/g5bsP89WtJzFMceKUm43kKneumICuj/ruZDQ2S59SzLh3IPSmLb
-         XIeQ==
-X-Gm-Message-State: AOAM533steB8XBOLhEWRhjBuO/0X3pooqxkP4Jn5KlO2kWjTNGTrn9go
-        bZHOyooMPdVTJCjAd6+DpkQ=
-X-Google-Smtp-Source: ABdhPJzkq0DMPLKzLvG3MOiFX8IELX/UVhokVOU8VeEoHR+ro93o2BiXPK7pgpZuDyfCQ9CEkmBwlw==
-X-Received: by 2002:a05:6000:186:: with SMTP id p6mr17698437wrx.19.1629107590269;
-        Mon, 16 Aug 2021 02:53:10 -0700 (PDT)
-Received: from localhost (pd9e51807.dip0.t-ipconnect.de. [217.229.24.7])
-        by smtp.gmail.com with ESMTPSA id m6sm3398602wms.42.2021.08.16.02.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 02:53:09 -0700 (PDT)
-Date:   Mon, 16 Aug 2021 11:53:08 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] cpuidle: tegra: Check whether PMC is ready
-Message-ID: <YRo1hK/KnS0oA1vj@orome.fritz.box>
-References: <20210718212706.21659-1-digetx@gmail.com>
- <20210718212706.21659-3-digetx@gmail.com>
- <YROdQXO4aVLQ8DkP@orome.fritz.box>
- <8d61d4d5-8e4b-5c18-923c-eceb954e8d5d@linaro.org>
- <8f22c97d-63f7-6d2a-7b1e-92b0b80a5275@gmail.com>
+        with ESMTP id S231652AbhHPLIp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 07:08:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486EEC061764;
+        Mon, 16 Aug 2021 04:08:14 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id BB8571F42B20
+Received: by earth.universe (Postfix, from userid 1000)
+        id 340193C0C9B; Mon, 16 Aug 2021 13:08:10 +0200 (CEST)
+Date:   Mon, 16 Aug 2021 13:08:10 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] power: supply: max17042: handle fails of reading
+ status register
+Message-ID: <20210816110810.sw2jkt2dqlo3iedr@earth.universe>
+References: <20210816082716.21193-1-krzysztof.kozlowski@canonical.com>
+ <820c80fa-c412-dd71-62a4-0ba1e1a97820@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/FxjFLhUbsKPIo++"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6vwwvktmiv53b3xj"
 Content-Disposition: inline
-In-Reply-To: <8f22c97d-63f7-6d2a-7b1e-92b0b80a5275@gmail.com>
-User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
+In-Reply-To: <820c80fa-c412-dd71-62a4-0ba1e1a97820@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---/FxjFLhUbsKPIo++
-Content-Type: text/plain; charset=utf-8
+--6vwwvktmiv53b3xj
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 14, 2021 at 04:45:42PM +0300, Dmitry Osipenko wrote:
-> 14.08.2021 13:37, Daniel Lezcano =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On 11/08/2021 11:49, Thierry Reding wrote:
-> >> On Mon, Jul 19, 2021 at 12:27:06AM +0300, Dmitry Osipenko wrote:
-> >>> Check whether PMC is ready before proceeding with the cpuidle registr=
-ation.
-> >>> This fixes racing with the PMC driver probe order, which results in a
-> >>> disabled deepest CC6 idling state if cpuidle driver is probed before =
-the
-> >>> PMC.
-> >>>
-> >>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>> ---
-> >>>  drivers/cpuidle/cpuidle-tegra.c | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>
-> >> Rafael, Daniel,
-> >>
-> >> would you mind if I took this into the Tegra tree? It's got a dependen=
-cy
-> >> on the PMC driver, which usually goes via the Tegra tree already, and
-> >> there's nothing cpuidle-specific in here, it's all Tegra-specific
-> >> integration quirks.
-> >=20
-> > Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi,
+
+On Mon, Aug 16, 2021 at 10:42:01AM +0200, Hans de Goede wrote:
+> Hi,
 >=20
-> I got another thought about how it could be solved. We could move the
-> creation of the cpuidle platform device into the PMC driver. Thierry,
-> what do you think?
+> On 8/16/21 10:27 AM, Krzysztof Kozlowski wrote:
+> > Reading status register can fail in the interrupt handler.  In such
+> > case, the regmap_read() will not store anything useful under passed
+> > 'val' variable and random stack value will be used to determine type of
+> > interrupt.
+> >=20
+> > Handle the regmap_read() failure to avoid handling interrupt type and
+> > triggering changed power supply event based on random stack value.
+> >=20
+> > Fixes: 39e7213edc4f ("max17042_battery: Support regmap to access device=
+'s registers")
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>=20
+> Thanks, the entire series looks good to me:
+>=20
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>=20
+> For the series.
 
-Looking around a bit, it looks like we've got two "virtual" platform
-devices related to CPU on Tegra20 and some of the later SoCs. A little
-while ago when we introduced the CPU frequency driver for Tegra194 we
-had a similar discussion. The problem at the time was that there was no
-way to create a virtual platform device from platform code, and adding a
-device tree node for this wasn't really an option either, since it does
-not actually describe the hardware accurately.
+Thanks, series queued.
 
-What we ended up doing for Tegra194 was to add a compatible string to
-the /cpus node ("nvidia,tegra194-ccplex") which was then used for
-matching a CPU frequency driver against.
+-- Sebastian
 
-I imagine we could do something similar for these older chips and
-perhaps even have a single driver for the CCPLEX that either registers
-CPU idle and CPU frequency scaling functionality, or have that driver
-register virtual devices. I slightly prefer the first variant because
-then we associate the driver with the hardware that it's actually
-driving. It's slightly unconventional because now CPU idle and CPU
-frequency drivers would be implemented in the same driver, but it isn't
-all that exotic these days anymore, either.
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+> > ---
+> >  drivers/power/supply/max17042_battery.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/su=
+pply/max17042_battery.c
+> > index ce2041b30a06..858ae97600d4 100644
+> > --- a/drivers/power/supply/max17042_battery.c
+> > +++ b/drivers/power/supply/max17042_battery.c
+> > @@ -869,8 +869,12 @@ static irqreturn_t max17042_thread_handler(int id,=
+ void *dev)
+> >  {
+> >  	struct max17042_chip *chip =3D dev;
+> >  	u32 val;
+> > +	int ret;
+> > +
+> > +	ret =3D regmap_read(chip->regmap, MAX17042_STATUS, &val);
+> > +	if (ret)
+> > +		return IRQ_HANDLED;
+> > =20
+> > -	regmap_read(chip->regmap, MAX17042_STATUS, &val);
+> >  	if ((val & STATUS_INTR_SOCMIN_BIT) ||
+> >  		(val & STATUS_INTR_SOCMAX_BIT)) {
+> >  		dev_info(&chip->client->dev, "SOC threshold INTR\n");
+> >=20
+>=20
 
-If the maintainers prefer we could always keep the code split into two
-source files, one per subsystem, and call into that code from the CCPLEX
-driver. I think even then it'd still be the cleanest solution because we
-don't have to "invent" a new device just for the sake of fitting the
-driver model that we happen to have.
-
-Thierry
-
---/FxjFLhUbsKPIo++
+--6vwwvktmiv53b3xj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEaNYEACgkQ3SOs138+
-s6HT+w//ZI+9IViNuhkUW3Z7Peo91l6nKc6T7XOGIXQfV19555Sj60sEI6t/iVJq
-b3FFliv1NUCr3LgZRD+YzGQbW00GiVunreVgI/EDhXiXDAHAlT8n1dsf4qqoa5lc
-H8frsJOGd0B+nMG13ycwFQYGh1xUVUxU80lPhbdivPucCIDB+1B/XKexN7Leqd82
-idhpaHw+gT6YWBrR8dDxdX2tBYox/9n6Iy8HjIx4G9ErKErVkKk26grNKzmHY07X
-2tUF727WFpunZsnpOKbgdPr3yBmg0MxAvhygG4otqQz92SzY0ZiHFYtVO4nCwDz+
-XmwaklY2NMUeSoNjekCNj7sPhCkGw8cPhYTIgs6twg+xXQgkwSdkHmcDm2WP81D1
-5H5YVNfQznxONIAD9xSqS3EdIAT9wzd7sipcDp/IHzMG3L83pi/DN6tYNyhBdbPO
-1a8/oskfmNWKJ/sx7mRgzrvybGcFaIO3MxTnafRMOnWoVVpAOLFyhnNuKaupdEEs
-K/KvkJEZaTbcxDYP323WTkZ3RMNn4OczQELL7lcJW2TZOikLFLooEu6/lSI4iAVa
-ICoKuQwmA9KLA67AVViFwRlZAvsCHjZi6t2HFErtBpwdvZKLQzoLNdfS5DinL5o3
-OVpk+2IeZ4XSTUd/gn859qgNJMD94gSnJ3uqvdRBNv04etaiQ2U=
-=N2nq
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEaRxMACgkQ2O7X88g7
++poBKhAAk5pmj5Djl2zZVinaNrMQkERWS5zRujTOO105iG1WIdst9L1KbJUwVng7
+12lgHIeeQi+GeaW69Ytd7Rm7WhTZp/kE1R2qyfNOQKMs1x9eRZAcgK7slhspUPCb
+e/YNN41n3h90ulV34Zn87Ta4sTPoCUkz89XUs45qE00oK03y6ySXJnwT919BXSsr
+9Ix1bVDcWTz98limS+rB3YsSDUL5r9LJ1wuu8azTemdvGIXDppZ2QYiUzbOlrO1R
+JrLa/O3q/OgpWJUi2iu1gaXvOU9WR4V/slgUG9FOgpgfFN+bSgqtYe6NX+Yk2zDu
+E2XbPxSbH83ktRmw9TAC0DJYpkOgcA9g8Xl+4oc1YcPDUDqMVMqP/gZ0L5waxlK6
+ukA8dLox/+cGScT7ajDFh4g409XfQ4YHFukNTe+DRt04ovX1R13SIHhS59BkSzjT
+MFYgfesyJdYoLX6aDdQFl/KUg/G3/dJ8YxTsyOYW00ErDPu141HgEkKNTEmt2HoV
+85qN8RuoPCIv92lieAOJenjsQXmYHD3p/hRTBdLlqsraoqdWQXK2yYNdJB9RL4Vj
+5VM692MuWbsPoQ5MyMt/1+6xkCBoHKdHgHjghsViwvyWA28OnFBPCKidxCc26QK2
+sQa0+8+32ke4ITG50k5Uj506PGkpRehovfMCQ6vPQxJlQYtTx6s=
+=qDkR
 -----END PGP SIGNATURE-----
 
---/FxjFLhUbsKPIo++--
+--6vwwvktmiv53b3xj--
