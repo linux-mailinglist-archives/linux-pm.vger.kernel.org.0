@@ -2,100 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BF03ECB98
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 00:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF2B3ECD5D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 05:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhHOWKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Aug 2021 18:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbhHOWKf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Aug 2021 18:10:35 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13AC061764;
-        Sun, 15 Aug 2021 15:10:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k5so2921778lfu.4;
-        Sun, 15 Aug 2021 15:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=qG3xd9FrDeupsPwKg/Vc42uAbKfVCy/1xjeqXZAMe1A=;
-        b=th+Klh1ha4srMNZHDomFwGBf9bf/Xgs88c1y6ENI/KEc/xkX8VClsOaR2ZPmyrjCOS
-         wPpGeISyXO/s/CeLZ81sOvlh6h+gPkbxPZJFeD7C59+QjKC0Qdt8CIVzwTh8Mt0FpBG6
-         W4xVrXX7ZBgEbMUyGv9Zkk5NMmEz+qIczIyCROgux1YHO9nqYPRU3R+xnZcYOuWR2i4V
-         9ENlx0/iVdaWWSMnPsABB9HD2mNwigENMApiUPIdEuJ6IWIVEcPLi/id1WyE4YS0rK56
-         pjkDoX3XKjtpjbQOspK81S+cgaLux7R6D1iXlnbBjeLra0ujOOrvutp2fb9zOcnRbdn3
-         C71Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=qG3xd9FrDeupsPwKg/Vc42uAbKfVCy/1xjeqXZAMe1A=;
-        b=d8KRkqvd9aeG/fq/7XkH1fabRTiL+FnXVFpTwAqn/vulvuJ6tPKAJocxumXLj4TA3v
-         fNEW/I3KO2FKxqLfaSrGsuxmYbj5L8Pg5auQR0hssrSOwMXIG4mVSsRMPuojA9eauYYK
-         nwHwHh88JFK5TfDhc+M/vNO04K94LKpM7JnQ1me6iER3ZWgAAE/RVLQEa/G5qmkwAFAN
-         m8oquQSzbJG1awoGJyRtDEnbKnU/gwZoEKa3dWfbjsWh/ayzmcYGwdNe4mKlYDHdCXX3
-         HVCk0gACiukQIZ6TfVXSFbLM2uBdsxkfbxs6oR3r4I/XVqegfN5ktV5OYYVrWgXu+Due
-         J0yg==
-X-Gm-Message-State: AOAM532hQVkH23+nvB9np8FcDkUkN1h0w5GWBywNi4mmRYBvcmH7EAgi
-        XVG6gcgtZKfxn6TuGzG8LWw=
-X-Google-Smtp-Source: ABdhPJzHciuPs15NMgtyIiX6wXXPm/vUzNwlYpgWhz1sWg1JDEPZTK3elB/fmoKLKeeS008NM5y0Vg==
-X-Received: by 2002:a05:6512:152a:: with SMTP id bq42mr9340696lfb.68.1629065402500;
-        Sun, 15 Aug 2021 15:10:02 -0700 (PDT)
-Received: from [192.168.0.91] ([188.242.181.97])
-        by smtp.googlemail.com with ESMTPSA id a10sm769244lfl.215.2021.08.15.15.10.01
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sun, 15 Aug 2021 15:10:02 -0700 (PDT)
-Message-ID: <611993B1.4070302@gmail.com>
-Date:   Mon, 16 Aug 2021 01:22:41 +0300
-From:   Nikolai Zhubr <zhubr.2@gmail.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.2.4) Gecko/20100608 Thunderbird/3.1
+        id S229926AbhHPDyc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Aug 2021 23:54:32 -0400
+Received: from mga09.intel.com ([134.134.136.24]:55425 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229873AbhHPDyb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 15 Aug 2021 23:54:31 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10077"; a="215788527"
+X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
+   d="scan'208";a="215788527"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2021 20:54:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; 
+   d="scan'208";a="530165161"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Aug 2021 20:53:59 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rui.zhang@intel.com, hdegoede@redhat.com,
+        daniel.lezcano@linaro.org, hpa@redhat.com, mgross@linux.intel.com,
+        alex.hung@canonical.com, sujith.thomas@intel.com,
+        andriy.shevchenko@linux.intel.com
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal/drivers/intel: Move intel_menlow to thermal drivers
+Date:   Sun, 15 Aug 2021 20:53:56 -0700
+Message-Id: <20210816035356.1955982-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] x86: PIRQ/ELCR-related fixes and updates
-References: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2107171813230.9461@angie.orcam.me.uk>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Maciej,
+Moved drivers/platform/x86/intel_menlow.c to drivers/thermal/intel.
 
-20.07.2021 6:27, Maciej W. Rozycki:
-[...]
->   Nikolai: for your system only 1/6 and 2/6 are required, though you are
-> free to experiment with all the patches.  Mind that 3/6 mechanically
-> depends on the earlier change for the SIO PIRQ router referred above.  In
-> any case please use the debug patch for PCI code as well as the earlier
-> patches for your other system and send the resulting bootstrap log for
-> confirmation.
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ MAINTAINERS                                            |  4 ++--
+ drivers/platform/x86/Kconfig                           | 10 ----------
+ drivers/platform/x86/Makefile                          |  1 -
+ drivers/thermal/intel/Kconfig                          |  9 +++++++++
+ drivers/thermal/intel/Makefile                         |  1 +
+ drivers/{platform/x86 => thermal/intel}/intel_menlow.c |  0
+ 6 files changed, 12 insertions(+), 13 deletions(-)
+ rename drivers/{platform/x86 => thermal/intel}/intel_menlow.c (100%)
 
-Here is a new log with 1/6 and 2/6 applied:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd25e4ecf0b9..4231aea31a6f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9459,10 +9459,10 @@ F:	include/linux/mfd/intel-m10-bmc.h
+ 
+ INTEL MENLOW THERMAL DRIVER
+ M:	Sujith Thomas <sujith.thomas@intel.com>
+-L:	platform-driver-x86@vger.kernel.org
++L:	linux-pm@vger.kernel.org
+ S:	Supported
+ W:	https://01.org/linux-acpi
+-F:	drivers/platform/x86/intel_menlow.c
++F:	drivers/thermal/intel/intel_menlow.c
+ 
+ INTEL P-Unit IPC DRIVER
+ M:	Zha Qipeng <qipeng.zha@intel.com>
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index d12db6c316ea..da312426b4a5 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -720,16 +720,6 @@ config INTEL_INT0002_VGPIO
+ 	  To compile this driver as a module, choose M here: the module will
+ 	  be called intel_int0002_vgpio.
+ 
+-config INTEL_MENLOW
+-	tristate "Thermal Management driver for Intel menlow platform"
+-	depends on ACPI_THERMAL
+-	select THERMAL
+-	help
+-	  ACPI thermal management enhancement driver on
+-	  Intel Menlow platform.
+-
+-	  If unsure, say N.
+-
+ config INTEL_OAKTRAIL
+ 	tristate "Intel Oaktrail Platform Extras"
+ 	depends on ACPI
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 7ee369aab10d..0d3af23f1186 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -72,7 +72,6 @@ obj-$(CONFIG_INTEL_ATOMISP2_LED)	+= intel_atomisp2_led.o
+ obj-$(CONFIG_INTEL_ATOMISP2_PM)		+= intel_atomisp2_pm.o
+ obj-$(CONFIG_INTEL_HID_EVENT)		+= intel-hid.o
+ obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
+-obj-$(CONFIG_INTEL_MENLOW)		+= intel_menlow.o
+ obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
+ obj-$(CONFIG_INTEL_VBTN)		+= intel-vbtn.o
+ 
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index e4299ca3423c..c83ea5d04a1d 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -90,3 +90,12 @@ config INTEL_TCC_COOLING
+ 	  Note that, on different platforms, the behavior might be different
+ 	  on how fast the setting takes effect, and how much the CPU frequency
+ 	  is reduced.
++
++config INTEL_MENLOW
++	tristate "Thermal Management driver for Intel menlow platform"
++	depends on ACPI_THERMAL
++	help
++	  ACPI thermal management enhancement driver on
++	  Intel Menlow platform.
++
++	  If unsure, say N.
+diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
+index 5ff2afa388f7..960b56268b4a 100644
+--- a/drivers/thermal/intel/Makefile
++++ b/drivers/thermal/intel/Makefile
+@@ -12,3 +12,4 @@ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
+ obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
+ obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
+ obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
++obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
+diff --git a/drivers/platform/x86/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+similarity index 100%
+rename from drivers/platform/x86/intel_menlow.c
+rename to drivers/thermal/intel/intel_menlow.c
+-- 
+2.31.1
 
-https://pastebin.com/0MgXAGtG
-
-It looks like something went a bit unexpected ("runtime IRQ mapping not 
-provided by arch").
-
-
-Thank you,
-
-Regards,
-Nikolai
