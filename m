@@ -2,104 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8649C3EDA08
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 17:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31C63EDC37
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 19:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbhHPPjr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 11:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbhHPPjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 11:39:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384AAC061764;
-        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t9so35324399lfc.6;
-        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
-        b=UMbCMbBAwfuhjpCWl3t3Ll9mbF30yfBmsWphmS8+Ta98tmTqcWfC3Kq3JLHDi27ooV
-         brfx16+Ulv155VrOnXNNdPkQfSgnF+OnEn1WTwP8OJmzDesZCWsHzL7piNnAFEEYZdf7
-         mHlSFzyrXAXkP2MShRWUTO5BJqbgO1MdXO8Fqmbu0wTQKIxUoc1np6yUAG3yXj1d26kh
-         OYXpfEPxi5kVfmL8CQEx8plzuW5ljp9shETvG6dBJIEKqp+4LkIk26E8f+njntx77sS4
-         kZpON449jbp76ErTRQcGQr8URpo71gITZmwKYhs+HShcDRSNO2m4jNimkU+uIiuqQLZQ
-         wQmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
-        b=n3ndcUhWtqlVSAGEx6QIj4p1pgSQ9loJ7WmNmSFpw8N/pFnM+w0Rhy+SsVUnt4JuCH
-         1VBj6u+wyOCSKvnByD9ewUx/DeCqAYKESehv/lOk27aGbnJcqK/k/xCmhoAdnbAWctPi
-         y55t2sn58j5CH2Q6SiEk3qHRggIH7wDF3DEHqwErb4NLFX6Cf9hJB0ZCJI+MJ4VJZqAJ
-         rTtsgbNlkof1hUUIlbkCCuXjZeTCpRccv1+TeOhQraQ6fJKSw5GtecCogLLN4vcwjYmu
-         kfdfuPGAocOOaWyDI6HRv1FjcciRNWVf7qABAbgSS8OQ4NCKAqbsY7eOQziPh8yUlXqK
-         zpgQ==
-X-Gm-Message-State: AOAM530YA3FoxgInhPjFgNBNHWXZhj5KmI2O1sZW5Qhbs/hyUEZElveC
-        3vk0sUXd3RZXdXRWp67udQZbIjBIcuQ=
-X-Google-Smtp-Source: ABdhPJyrmXfhpLAU/KOQY7BsiWYzn8V0yz6Jvc7+AAr/u2dCgesHtuftJ2Z/t8Wf7npnSqjRxWOnSQ==
-X-Received: by 2002:a19:c7d4:: with SMTP id x203mr12095093lff.575.1629128350477;
-        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.googlemail.com with ESMTPSA id k12sm641889ljm.65.2021.08.16.08.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
-Subject: Re: [PATCH v6 05/12] dt-bindings: power: supply: smb347-charger:
- Document USB VBUS regulator
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210731173842.19643-1-digetx@gmail.com>
- <20210731173842.19643-6-digetx@gmail.com>
- <20210806211314.sfjl5jke27hz3jj7@earth.universe>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
-Date:   Mon, 16 Aug 2021 18:39:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231325AbhHPRS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Aug 2021 13:18:56 -0400
+Received: from server34.i7host.com.br ([186.227.200.26]:53780 "EHLO
+        server34.i7host.com.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230525AbhHPRS4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 13:18:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=smartgreen.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7uQYH/aXvbtf28rj/PHbNBpUcSyy2gaJTwpVkCfcodk=; b=Z1fgJ1H/kmGSZxB5ZFan5T3jeP
+        +fyV4qCi72UUabaXm7ZYbILg79ugwNP9+jNwTfIU8K6WKGg+nusxQ6CpwVXlpuEnFuLPyKN7UGVOp
+        pea/iX62tXQnWpz26oEzznXv2FNayLhohIXiBHuVylQQDzSFEvoKh+CWdygX3xj/RyHeChJI926KZ
+        SW4Q7GHrveNJJJEO3NprIEt4Qnqku09G2gUNI2aVeBXYlhfifshg8y6tXFFKcBOZWT9ccQMuPj0Si
+        RmA0rxrCaSTD2N4/akkiEj7Pj0GaNxCRoElJbeZ88W41RvxQNvwiEbxRd21Mz5OiaL51VNNl6Igpq
+        fnyPm1zQ==;
+Received: from [177.220.172.187] (port=3717 helo=localhost)
+        by server34.i7host.com.br with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <bruno.meneguele@smartgreen.net>)
+        id 1mFfKb-00GnpD-9M; Mon, 16 Aug 2021 13:19:21 -0300
+Date:   Mon, 16 Aug 2021 13:19:19 -0300
+From:   Bruno Meneguele <bruno.meneguele@smartgreen.net>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] power: supply: bq24735: add watchdog timer delay
+ support
+Message-ID: <YRqQB0lL6tVv7wFa@glitch>
+References: <20210709142731.23418-1-bruno.meneguele@smartgreen.net>
+ <20210709142731.23418-3-bruno.meneguele@smartgreen.net>
+ <20210813162914.p3mzc47ixpmdk62f@earth.universe>
 MIME-Version: 1.0
-In-Reply-To: <20210806211314.sfjl5jke27hz3jj7@earth.universe>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+ovW7MO3Lc9bWcnh"
+Content-Disposition: inline
+In-Reply-To: <20210813162914.p3mzc47ixpmdk62f@earth.universe>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server34.i7host.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - smartgreen.net
+X-Get-Message-Sender-Via: server34.i7host.com.br: authenticated_id: bruno.meneguele@smartgreen.net
+X-Authenticated-Sender: server34.i7host.com.br: bruno.meneguele@smartgreen.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-07.08.2021 00:13, Sebastian Reichel пишет:
+
+--+ovW7MO3Lc9bWcnh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 13, 2021 at 06:29:14PM +0200, Sebastian Reichel wrote:
 > Hi,
-> 
-> On Sat, Jul 31, 2021 at 08:38:35PM +0300, Dmitry Osipenko wrote:
->> SMB347 can supply power to USB VBUS, which is required by OTG-cable
->> devices that want to switch USB port into the host mode. Add USB VBUS
->> regulator properties.
->>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
-> 
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>=20
+> On Fri, Jul 09, 2021 at 11:27:31AM -0300, Bruno Meneguele wrote:
+> > The BQ24735 charger allows the user to set the watchdog timer delay bet=
+ween
+> > two consecutives ChargeCurrent or ChargeVoltage command writes, if the =
+IC
+> > doesn't receive any command before the timeout happens, the charge is t=
+urned
+> > off.
+> >=20
+> > This patch adds the support to the user to change the default/POR value=
+ with
+> > four discrete values:
+> >=20
+> >   0 - disabled
+> >   1 - enabled, 44 sec
+> >   2 - enabled, 88 sec
+> >   3 - enabled, 175 sec (default at POR)
+> >=20
+> > These are the options supported in the ChargeOptions register bits 13&1=
+4.
+> >=20
+> > Also, this patch make one additional check when poll-interval is set by=
+ the
+> > user: if the interval set is greater than the WDT timeout it'll fail du=
+ring
+> > the probe stage, preventing the user to set non-compatible values betwe=
+en
+> > the two options.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bruno.meneguele@smartgreen.net>
+> > ---
+> >  .../bindings/power/supply/bq24735.yaml        | 13 +++++
+>=20
+> Patches for the DT bindings needs to be CC'd to the DT binding
+> maintainers and should be in their own patch.
+>=20
 
-Sebastian, you can pick up these patches into the power tree:
+Sorry about that, didn't know.
+Will do that in v4.
 
-dt-bindings: power: supply: smb347-charger: Document USB VBUS
-regulator
-power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
-power: supply: smb347-charger: Utilize generic regmap caching
-power: supply: smb347-charger: Add missing pin control activation
-power: supply: smb347-charger: Implement USB VBUS regulator
+> >  drivers/power/supply/bq24735-charger.c        | 48 +++++++++++++++++++
+> >  include/linux/power/bq24735-charger.h         |  1 +
+> >  3 files changed, 62 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yam=
+l b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> > index 131be6782c4b..62399efab467 100644
+> > --- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> > +++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> > @@ -56,6 +56,19 @@ properties:
+> >        The POR value is 0x1000h. This number is in mA (e.g. 8064).
+> >        See the spec for more information about the InputCurrent (0x3fh)=
+ register.
+> > =20
+> > +  ti,wdt-timeout:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      Used to control and set the charger watchdog delay between conse=
+cutive
+> > +      charge voltage and charge current commands.
+> > +      This value must be:
+> > +        0 - disabled
+> > +        1 - 44 seconds
+> > +        2 - 88 seconds
+> > +        3 - 175 seconds
+> > +      The POR value is 0x11 (3).
+> > +      See the spec for more information about the ChargeOptions(0x12h)=
+ register.
+> > +
+>=20
+> This is missing=20
+>=20
+> minimum: 0
+> maximum: 3
+>=20
 
-The reset of the patches could go via the Tegra tree. It's probably a
-bit too late for the Tegra patches since Thierry already made 5.15 PR,
-but should be fine for the power. Thanks in advance!
+Indeed. Will fix in v4.
+
+> >    ti,external-control:
+> >      type: boolean
+> >      description: |
+> > diff --git a/drivers/power/supply/bq24735-charger.c b/drivers/power/sup=
+ply/bq24735-charger.c
+> > index 3ce36d09c017..88f1cb1e9fee 100644
+> > --- a/drivers/power/supply/bq24735-charger.c
+> > +++ b/drivers/power/supply/bq24735-charger.c
+> > @@ -45,6 +45,8 @@
+> >  /* ChargeOptions bits of interest */
+> >  #define BQ24735_CHARGE_OPT_CHG_DISABLE	(1 << 0)
+> >  #define BQ24735_CHARGE_OPT_AC_PRESENT	(1 << 4)
+> > +#define BQ24735_CHARGE_OPT_WDT_OFFSET	13
+> > +#define BQ24735_CHARGE_OPT_WDT		(3 << BQ24735_CHARGE_OPT_WDT_OFFSET)
+> > =20
+> >  struct bq24735 {
+> >  	struct power_supply		*charger;
+> > @@ -156,6 +158,20 @@ static int bq24735_config_charger(struct bq24735 *=
+charger)
+> >  		}
+> >  	}
+> > =20
+> > +	if (pdata->wdt_timeout) {
+> > +		value =3D pdata->wdt_timeout;
+> > +
+> > +		ret =3D bq24735_update_word(charger->client, BQ24735_CHARGE_OPT,
+> > +					  BQ24735_CHARGE_OPT_WDT,
+> > +					  (value << BQ24735_CHARGE_OPT_WDT_OFFSET));
+> > +		if (ret < 0) {
+> > +			dev_err(&charger->client->dev,
+> > +				"Failed to write watchdog timer: %d\n",
+> > +				ret);
+> > +			return ret;
+> > +		}
+> > +	}
+>=20
+> binding says '0' =3D disabled, but code implements '0' =3D do not
+> change.
+>=20
+
+Well noticed. Will fix in v4.
+
+I'm going to send a v4 without patch 1/2 because I noticed you already
+queued for-next, so the next version should have only 1/2 heandling the
+code and 2/2 specifically for dt-bindings.
+
+
+--=20
+Bruno Meneguele
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--+ovW7MO3Lc9bWcnh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmEakAcACgkQYdRkFR+R
+okPC1AgAj09+Wr7H2NHMWZiX0h/j6ZXkFrFrHC/ms+RLNnQaQv0kNUFfYcbWoMhY
+UC3O9Y7l+QuWrH0noNvZeEg0IozCTAoou+8m/akoAn0Ya83SlnoGWvhZ/mcpZUH/
+Rklt4Ra06UP/NyQBhAnE5+Gs0srANkUcuAcxSZB4JXoAoKAgKCaW+aDEv2jPW5w1
+Fx66WsQ/788SKfpzl5J5cRGg0HvvJCjm9HV/GVv8lYY1VK80kLO7eu1lM7EdIYaX
+Ej0BQ8AOTsHfqEgie73POpGkDz+CSGYAVOSS252Z6513tQ6rnTqb1SAVAFy0r8dw
+R1UYk5hsZpBPaOPUTigAvbw0tZfdxA==
+=yti8
+-----END PGP SIGNATURE-----
+
+--+ovW7MO3Lc9bWcnh--
