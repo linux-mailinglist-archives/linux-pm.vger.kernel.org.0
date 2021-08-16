@@ -2,134 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66AB3ED904
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 16:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F5F3ED915
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Aug 2021 16:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbhHPOg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Aug 2021 10:36:57 -0400
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:42603 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhHPOgv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 10:36:51 -0400
-Received: by mail-oi1-f172.google.com with SMTP id t35so26957310oiw.9
-        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 07:36:20 -0700 (PDT)
+        id S232322AbhHPOny convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 16 Aug 2021 10:43:54 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:42687 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232306AbhHPOnn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Aug 2021 10:43:43 -0400
+Received: by mail-ot1-f47.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so6288337otk.9
+        for <linux-pm@vger.kernel.org>; Mon, 16 Aug 2021 07:42:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2gyXJ2fQfNgEbfIyUhG5VcSL/HbXX36cgu0vdiQlNpA=;
-        b=mfalqnDAswSx4vaCKL1/BQ43YUHUgnjOzDT735E2k7GZZk7MjST9+Xckreo/DwAlk2
-         CNISM2/WKfOoBDBGK4TiTUXqRCdVV0kThucotUgH3rDOj9tsPHFelnKTuXQeYaxwydjt
-         OVOvp0rDNxI4dl56MJQgvzbMsiNF/dZUrBqdhH22z1o+ezt9vMrShxO+4GNo/t/JbDI/
-         3599lleCW3I8VB0EQ5yFSZCFbZTVegCV31uAZVax8gj00zm/xyn97KRb/hPLV+5VpB1y
-         mEgB7QW2asyNy3wY+62TV3t22hROqbBNR/6xAD9G8W+UXCDSvmKYzYUVJVjuzayrLiz5
-         u84Q==
-X-Gm-Message-State: AOAM533edgHS/bHZ6JooHIS3TIwD0CXdeuatk5zanwXF033x6tnxyFTh
-        b9MxzKLydnrKmu2v8iO5GA5agr46wbl5yWqaIwk=
-X-Google-Smtp-Source: ABdhPJxSBVYGv8CheJknkfwZYe0tCJIOvJW5PGLUNFTxCvzUR3FMVRLmPDw0xCWWZBMdkjnN1bGSNr3Q6coEYigZK3M=
-X-Received: by 2002:a05:6808:220c:: with SMTP id bd12mr12303928oib.157.1629124579942;
- Mon, 16 Aug 2021 07:36:19 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=o3zIYhRKMYiOatvKkPmccElA+Ur3dI0oD6LCYLtXsM8=;
+        b=O0jm+OOm0O4ciHOT/q7fYDWF5w2b0dP+tAF/XhoagWpNYXnF64FcWGm/9xTrEX/mgG
+         OL+8HS380EJvk0i6+7SS+SBE06rkYou6LWJ1ysF1bUDEALC+QsJK+t+OzvEMolHtLc4k
+         fpezJxTam/4gojOnvNvYW1kZri1ln6O1Y2Q/viVU2I3ZzzQ7lVyBgCyUojG3utKhyyEi
+         ZwyRz9vnFvtG3KFrof1IK8wr+ichtc++oegDE69a9Cotd0w7h3R//ND0vA0uFqK7AtKM
+         6rJX3iI4VMT2fcjH770jUt1HaHiO956aO65EMGRcg+EWXPidWix57rcMAP41F3GA4JC1
+         d0vw==
+X-Gm-Message-State: AOAM533e1/13dr/qtfvkaejx5QgIdqeVTg+IF04V9KTWbfs0KZ0lnbt1
+        SGs7zBhG6jN/v/uXt/iw/0telPZAGKuFUw4sf30FjyVo
+X-Google-Smtp-Source: ABdhPJzO0GJfZsW5LoZhQwwu/hFlQaP9U+IzDO6CTemReRJRU7prbL5VEKLkSIH+wEEFhuNwY9W33zGkZjnIvi/nVGk=
+X-Received: by 2002:a9d:7396:: with SMTP id j22mr7703499otk.206.1629124952068;
+ Mon, 16 Aug 2021 07:42:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7> <78bc08fe-71c2-398c-9a10-caa54b8bd866@arm.com>
- <YRKINFhDmYqvgxsN@google.com> <cf9d78fe-cff0-1992-2c15-7053e4431296@arm.com>
- <b888407c-d444-8184-cbb7-ce8e925b254b@arm.com> <YRKfluMP8G41/P61@google.com>
- <20210811050327.3yxrk4kqxjjwaztx@vireshk-i7> <165735fc-1d03-42cb-b5eb-8a9c1d3c4387@arm.com>
-In-Reply-To: <165735fc-1d03-42cb-b5eb-8a9c1d3c4387@arm.com>
+References: <20210810085838.d3hv3rxli5vxozlz@vireshk-i7>
+In-Reply-To: <20210810085838.d3hv3rxli5vxozlz@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 16 Aug 2021 16:35:53 +0200
-Message-ID: <CAJZ5v0jc4KNeM2CotsPrD_Mnen57x3wCneGYzy5yNOdJ27wWOg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Quentin Perret <qperret@google.com>, r@google.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
+Date:   Mon, 16 Aug 2021 16:42:06 +0200
+Message-ID: <CAJZ5v0j4N+puor2x2_vqB-zaJe-m_-pv6cipV_fCbRyKAd6Zgg@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.14
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 1:38 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Tue, Aug 10, 2021 at 10:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
+> Hi Rafael,
 >
+> This pull request contains:
 >
-> On 8/11/21 6:03 AM, Viresh Kumar wrote:
-> > On 10-08-21, 16:47, Quentin Perret wrote:
-> >> On Tuesday 10 Aug 2021 at 16:12:29 (+0100), Lukasz Luba wrote:
-> >>> I've checked that. It's not the policy notifier and arch_topology which
-> >>> cause an issue, but the cpufreq governor setup code. Anyway, we cannot
-> >>> wait so late with the EM registration, till e.g. ::ready() callback.
-> >>
-> >> Aha, yes, because by the time the arch_topology driver rebuilds the
-> >> sched domains, the governor is not 'installed', which means the
-> >> scheduler is not in a position to enable EAS yet. So we need to wait
-> >> until sched_cpufreq_governor_change() is called for that. Makes sense,
-> >> thanks for checking, and +1 to your conclusion.
-> >
-> > What about this then ?
+> - Addition of SoCs to blocklist for cpufreq-dt driver (Bjorn Andersson
+>   and Thara Gopinath).
 >
-> If it doesn't break the current drivers which implement this callback,
-> then looks good.
+> - Fix error path for scmi driver (Lukasz Luba).
+>
+> - Temporarily disable highest frequency for armada, its unsafe and
+>   breaks stuff.
 
-It was introduced by
+I wasn;t able to pull last week, sorry about that.
 
-7c45cf31b3ab cpufreq: Introduce ->ready() callback for cpufreq drivers
+> -------------------------8<-------------------------
+>
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+>
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
 
-and appears to be still suitable for the purpose stated in the changelog.
+And now it looks like there's more stuff on this branch.
 
-Anyway, the vexpress-spc driver is the only one doing anything
-significant in this callback AFAICS.
+Can you please create a branch with fixes only and send this again
+with respect to that branch?
 
-> >
-> > Author: Viresh Kumar <viresh.kumar@linaro.org>
-> > Date:   Wed Aug 11 10:24:28 2021 +0530
-> >
-> >      cpufreq: Call ->ready() before initializing governor
-> >
-> >      The driver may want to do stuff from the ->ready() callback, like
-> >      registering with the EM core, after the policy is initialized, but
-> >      before the governor is setup (since governor may end up using that
-> >      information).
-> >
-> >      Call the ->ready() callback before setting up the governor.
-> >
-> >      Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >   drivers/cpufreq/cpufreq.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index a060dc2aa2f2..2df41b98bbb3 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1494,6 +1494,10 @@ static int cpufreq_online(unsigned int cpu)
-> >                  write_unlock_irqrestore(&cpufreq_driver_lock, flags);
-> >          }
-> >
-> > +       /* Callback for handling stuff after policy is ready */
-> > +       if (cpufreq_driver->ready)
-> > +               cpufreq_driver->ready(policy);
-> > +
-> >          ret = cpufreq_init_policy(policy);
-> >          if (ret) {
-> >                  pr_err("%s: Failed to initialize policy for cpu: %d (%d)\n",
-> > @@ -1505,10 +1509,6 @@ static int cpufreq_online(unsigned int cpu)
-> >
-> >          kobject_uevent(&policy->kobj, KOBJ_ADD);
-> >
-> > -       /* Callback for handling stuff after policy is ready */
-> > -       if (cpufreq_driver->ready)
-> > -               cpufreq_driver->ready(policy);
-> > -
-> >          if (cpufreq_thermal_control_enabled(cpufreq_driver))
-> >                  policy->cdev = of_cpufreq_cooling_register(policy);
-> >
+> for you to fetch changes up to 484f2b7c61b9ae58cc00c5127bcbcd9177af8dfe:
+>
+>   cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant (2021-08-09 09:31:22 +0530)
+>
+> ----------------------------------------------------------------
+> Bjorn Andersson (1):
+>       cpufreq: blacklist Qualcomm sc8180x in cpufreq-dt-platdev
+>
+> Lukasz Luba (1):
+>       cpufreq: arm_scmi: Fix error path when allocation failed
+>
+> Marek Behún (1):
+>       cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
+>
+> Thara Gopinath (1):
+>       cpufreq: blocklist Qualcomm sm8150 in cpufreq-dt-platdev
+>
+>  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
+>  drivers/cpufreq/cpufreq-dt-platdev.c  | 2 ++
+>  drivers/cpufreq/scmi-cpufreq.c        | 2 +-
+>  3 files changed, 8 insertions(+), 2 deletions(-)
+>
