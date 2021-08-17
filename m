@@ -2,227 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158093EED2E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 15:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B63B3EEDF4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 16:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237445AbhHQNRx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 09:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbhHQNRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 09:17:52 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E9C061764
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 06:17:19 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id x10so22264780wrt.8
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 06:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+GkZlku1Bw2JCl4HvkcPQD//HnyGFQIsuXa7PcP9+u4=;
-        b=zobAv814/jIA9hveR+EkNCwDf42MUiRgvR0jepBC7V2gciaCGjUZ3styiQZrII/VGa
-         qx77TDd0skliye2OiYngq8oLgDQoXMCxlS5/59T8Cl/xOwXettAGn+YoSLCW+UGsJyZn
-         TIkq0LD3BN/+Czb9ip5I2Deej+XiqaImJxB/Mx+i0psWXBSOW2sn4rxNZihvLV50PFoL
-         v6d+WfCiza0TKEFKzFuyGmjgTBZnlACPbs1usIJdMlQTed2Fb7I2O6DEr0dnY3K3tc3O
-         ajC4oiwU9PuEuQJ7tn2zGDR40m+g9fPfDRM76GWajlGvHy0lRWgeU8eE/p6cIr0UXOAc
-         l4Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+GkZlku1Bw2JCl4HvkcPQD//HnyGFQIsuXa7PcP9+u4=;
-        b=oIiu1yEM2gMhf8ZexIF7OqZjppJvIWjOjhoS0XPE2W/vG1hRTqZfNiOMmq8mHpNRzT
-         fngRG9XKbzPsCZaykULn87Umv2IwILwScxSUgXK/bVLqgoSoug75kH88BwGOutgPNj9S
-         14TXfAEhQieF+7CnhGhGiWarCZrZcancVty8Z2DzJL0TAdI5tJZnoUhNB4YmWHBgRJ33
-         H24cPJv/otbabnrj435lr5XgDaJtaXFC6G6r3veF209WrNDbTzUXZCVQqCJc78+ubPpb
-         /ABPnu8EJ68MIdCi0YDFEn9U3+ul5S6wifTvaXEBWw2+7eLVYOu964Df8pWYg/F0HMHa
-         PWLw==
-X-Gm-Message-State: AOAM531WlZNtdfIQkXOE9DXKJihIUh8o7g2YoPPdcM5gPke1RwsDdfze
-        B4Ma4KtVPBvwHzEuQ8+KYIgLrQ==
-X-Google-Smtp-Source: ABdhPJwiEhB1GoU5iRLmZV1y4Ji/YZrd0AlU+/xLj1e9DFnO2wK155hd4GpX9VHaaZ/iIKuoh1oVjQ==
-X-Received: by 2002:adf:bb85:: with SMTP id q5mr4002312wrg.186.1629206237558;
-        Tue, 17 Aug 2021 06:17:17 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:52c4:e6e5:cc9e:e70a? ([2a01:e34:ed2f:f020:52c4:e6e5:cc9e:e70a])
-        by smtp.googlemail.com with ESMTPSA id f2sm2464427wru.31.2021.08.17.06.17.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Aug 2021 06:17:17 -0700 (PDT)
-Subject: Re: [Patch v5 1/6] firmware: qcom_scm: Introduce SCM calls to access
- LMh
-To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        viresh.kumar@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org
-Cc:     steev@kali.org, tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
- <20210809191605.3742979-2-thara.gopinath@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <19659756-4716-4c5b-949a-58d362dcee22@linaro.org>
-Date:   Tue, 17 Aug 2021 15:17:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S234446AbhHQOBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 10:01:45 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53788 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230208AbhHQOBp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 10:01:45 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 6364F1F4320F
+Received: by earth.universe (Postfix, from userid 1000)
+        id 1A2403C08DB; Tue, 17 Aug 2021 16:01:09 +0200 (CEST)
+Date:   Tue, 17 Aug 2021 16:01:09 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH 1/4] power: supply: max17042_battery: clean up
+ MAX17055_V_empty
+Message-ID: <20210817140109.sp4sk7cqkxjrcmyf@earth.universe>
+References: <20210816165016.3153776-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-In-Reply-To: <20210809191605.3742979-2-thara.gopinath@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z6mpwaxoo7zhi7lb"
+Content-Disposition: inline
+In-Reply-To: <20210816165016.3153776-1-sebastian.krzyszkowiak@puri.sm>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/08/2021 21:15, Thara Gopinath wrote:
-> Introduce SCM calls to access/configure limits management hardware(LMH).
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 
-Hi Bjorn, Andy,
+--z6mpwaxoo7zhi7lb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-do you mind if I pick this patch along with patch 2/6 ?
+Hi,
 
-Thanks
-
-  -- Daniel
-
+On Mon, Aug 16, 2021 at 06:50:13PM +0200, Sebastian Krzyszkowiak wrote:
+> This register is same as in MAX17047 and MAX17050, so there's no need
+> for custom casing it.
+>=20
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 > ---
-> 
-> v2->v3:
-> 	Added freeing of payload_buf after the scm call in qcom_scm_lmh_dcvsh as per
-> 	Matthias review comments.
-> 
-> v1->v2:
-> 	Changed the input parameters in qcom_scm_lmh_dcvsh from payload_buf and
-> 	payload_size to payload_fn, payload_reg, payload_val as per Bjorn's review
-> 	comments.
-> 
->  drivers/firmware/qcom_scm.c | 58 +++++++++++++++++++++++++++++++++++++
->  drivers/firmware/qcom_scm.h |  4 +++
->  include/linux/qcom_scm.h    | 14 +++++++++
->  3 files changed, 76 insertions(+)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 47ea2bd42b10..8a503753fe2a 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -1147,6 +1147,64 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
->  }
->  EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
->  
-> +bool qcom_scm_lmh_dcvsh_available(void)
-> +{
-> +	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_LMH, QCOM_SCM_LMH_LIMIT_DCVSH);
-> +}
-> +EXPORT_SYMBOL(qcom_scm_lmh_dcvsh_available);
-> +
-> +int qcom_scm_lmh_profile_change(u32 profile_id)
-> +{
-> +	struct qcom_scm_desc desc = {
-> +		.svc = QCOM_SCM_SVC_LMH,
-> +		.cmd = QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE,
-> +		.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL),
-> +		.args[0] = profile_id,
-> +		.owner = ARM_SMCCC_OWNER_SIP,
-> +	};
-> +
-> +	return qcom_scm_call(__scm->dev, &desc, NULL);
-> +}
-> +EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
-> +
-> +int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-> +		       u64 limit_node, u32 node_id, u64 version)
-> +{
-> +	dma_addr_t payload_phys;
-> +	u32 *payload_buf;
-> +	int ret, payload_size = 5 * sizeof(u32);
-> +
-> +	struct qcom_scm_desc desc = {
-> +		.svc = QCOM_SCM_SVC_LMH,
-> +		.cmd = QCOM_SCM_LMH_LIMIT_DCVSH,
-> +		.arginfo = QCOM_SCM_ARGS(5, QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_VAL,
-> +					QCOM_SCM_VAL, QCOM_SCM_VAL),
-> +		.args[1] = payload_size,
-> +		.args[2] = limit_node,
-> +		.args[3] = node_id,
-> +		.args[4] = version,
-> +		.owner = ARM_SMCCC_OWNER_SIP,
-> +	};
-> +
-> +	payload_buf = dma_alloc_coherent(__scm->dev, payload_size, &payload_phys, GFP_KERNEL);
-> +	if (!payload_buf)
-> +		return -ENOMEM;
-> +
-> +	payload_buf[0] = payload_fn;
-> +	payload_buf[1] = 0;
-> +	payload_buf[2] = payload_reg;
-> +	payload_buf[3] = 1;
-> +	payload_buf[4] = payload_val;
-> +
-> +	desc.args[0] = payload_phys;
-> +
-> +	ret = qcom_scm_call(__scm->dev, &desc, NULL);
-> +
-> +	dma_free_coherent(__scm->dev, payload_size, payload_buf, payload_phys);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
-> +
->  static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
->  {
->  	struct device_node *tcsr;
-> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> index 632fe3142462..d92156ceb3ac 100644
-> --- a/drivers/firmware/qcom_scm.h
-> +++ b/drivers/firmware/qcom_scm.h
-> @@ -114,6 +114,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
->  #define QCOM_SCM_SVC_HDCP		0x11
->  #define QCOM_SCM_HDCP_INVOKE		0x01
->  
-> +#define QCOM_SCM_SVC_LMH			0x13
-> +#define QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE	0x01
-> +#define QCOM_SCM_LMH_LIMIT_DCVSH		0x10
-> +
->  #define QCOM_SCM_SVC_SMMU_PROGRAM		0x15
->  #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
->  #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
-> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> index 0165824c5128..c0475d1c9885 100644
-> --- a/include/linux/qcom_scm.h
-> +++ b/include/linux/qcom_scm.h
-> @@ -109,6 +109,12 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
->  			     u32 *resp);
->  
->  extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
-> +
-> +extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-> +			      u64 limit_node, u32 node_id, u64 version);
-> +extern int qcom_scm_lmh_profile_change(u32 profile_id);
-> +extern bool qcom_scm_lmh_dcvsh_available(void);
-> +
->  #else
->  
->  #include <linux/errno.h>
-> @@ -170,5 +176,13 @@ static inline int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
->  
->  static inline int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
->  		{ return -ENODEV; }
-> +
-> +static inline int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-> +				     u64 limit_node, u32 node_id, u64 version)
-> +		{ return -ENODEV; }
-> +
-> +static inline int qcom_scm_lmh_profile_change(u32 profile_id) { return -ENODEV; }
-> +
-> +static inline bool qcom_scm_lmh_dcvsh_available(void) { return -ENODEV; }
->  #endif
->  #endif
-> 
 
+Thanks, series queued.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+-- Sebastian
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>  drivers/power/supply/max17042_battery.c | 4 ----
+>  include/linux/power/max17042_battery.h  | 1 -
+>  2 files changed, 5 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supp=
+ly/max17042_battery.c
+> index c6078f179fb3..01e6728a9e2b 100644
+> --- a/drivers/power/supply/max17042_battery.c
+> +++ b/drivers/power/supply/max17042_battery.c
+> @@ -283,8 +283,6 @@ static int max17042_get_property(struct power_supply =
+*psy,
+>  	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+>  		if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17042)
+>  			ret =3D regmap_read(map, MAX17042_V_empty, &data);
+> -		else if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)
+> -			ret =3D regmap_read(map, MAX17055_V_empty, &data);
+>  		else
+>  			ret =3D regmap_read(map, MAX17047_V_empty, &data);
+>  		if (ret < 0)
+> @@ -778,8 +776,6 @@ static inline void max17042_override_por_values(struc=
+t max17042_chip *chip)
+> =20
+>  	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17042)
+>  		max17042_override_por(map, MAX17042_V_empty, config->vempty);
+> -	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)
+> -		max17042_override_por(map, MAX17055_V_empty, config->vempty);
+>  	else
+>  		max17042_override_por(map, MAX17047_V_empty, config->vempty);
+>  	max17042_override_por(map, MAX17042_TempNom, config->temp_nom);
+> diff --git a/include/linux/power/max17042_battery.h b/include/linux/power=
+/max17042_battery.h
+> index d55c746ac56e..7e5da60cbea3 100644
+> --- a/include/linux/power/max17042_battery.h
+> +++ b/include/linux/power/max17042_battery.h
+> @@ -113,7 +113,6 @@ enum max17042_register {
+>  enum max17055_register {
+>  	MAX17055_QRes		=3D 0x0C,
+>  	MAX17055_TTF		=3D 0x20,
+> -	MAX17055_V_empty	=3D 0x3A,
+>  	MAX17055_TIMER		=3D 0x3E,
+>  	MAX17055_USER_MEM	=3D 0x40,
+>  	MAX17055_RGAIN		=3D 0x42,
+> --=20
+> 2.32.0
+>=20
+
+--z6mpwaxoo7zhi7lb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEbwR4ACgkQ2O7X88g7
++ppD0g/+N5t8Og3doAgkCzV4Y+a6PfrLQCISpaT6ONuEUEaX/ugB6m6EhIlZfPYw
++3rqKhc1Krl8YY5kE5KvQdsQusZ/CT07WwweJYVtdV7xd8iLX0DufNoVPI1E+2Cd
+fbkavXryxKLVsFXx8yDFaj5nkdU5E/zCfyTqHRlJT25H0WNWFWbfd6v7ppunpzRC
+kOQ3VBqz467M499lFcpyJIDPSaWhSEICJAuMgcRkK97Pey6DA1AjiconiLpWQxkR
+NujXXgiBpSBDSgXF87OmVBlS/qA3hMXB91kcdYd2yMaKSccBa84pbwOdt24oDhE4
+ekSYPBOshRxIsH+VK4sJBkxRgburVUlYPjnK3vCNq6ZBQtX3BZT1vINP2MdkuMXz
+G2DWioREPp6W0IolC8Bk9zUQSJ8VFk9qd+7mzii2AShsFg9LL2T5rX9xgMLidkZB
+gJO35edtvxOTihaiSy/1X6yj/0gWBrNUpxkBaZ8lki92aRcTbLw5H7VqcxcZ5JJM
+Mhl3mx7IZ3Q+7CiXKNkN/DbAthUoxV7aGVZnBR+ptt7DS8/VunGhGbtLJ6ucGSoq
+jhevOMsDqr8PBz/9B7/gRWpEuhUnQjlvw1AAIFW+UWk8yUNpU2Dzcc5mP97Fsqpl
+ToT/OGJn+jEQhD5QmH+zV194cO4471P0XVNwCuBbtyoZU1hmAo4=
+=gfuG
+-----END PGP SIGNATURE-----
+
+--z6mpwaxoo7zhi7lb--
