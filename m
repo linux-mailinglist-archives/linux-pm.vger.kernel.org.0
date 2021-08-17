@@ -2,154 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C633EE982
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 11:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B113EE9EB
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 11:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbhHQJT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 05:19:58 -0400
-Received: from mga18.intel.com ([134.134.136.126]:32313 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235050AbhHQJT6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Aug 2021 05:19:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="203181252"
-X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="203181252"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 02:19:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="449197094"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Aug 2021 02:19:18 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mFvFe-000RcJ-07; Tue, 17 Aug 2021 09:19:18 +0000
-Date:   Tue, 17 Aug 2021 17:18:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- d0eded4f9e450c928a018f5fd675b75e1b726803
-Message-ID: <611b7eff.IBmhgftfkYrWgNXY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237640AbhHQJce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 05:32:34 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:30053 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235402AbhHQJce (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 05:32:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629192721; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=6sHZ1ZtwteF4o5eU2+kx2gIR+Rvv1gmPIdGlHOP95Yo=; b=ikmsG1QnyEj5qen/mUeEv6AwWa2GGtGvWc6OYMVjUWFSFTPUH0gr7hbK1b6WYEa2C8iU461I
+ yZfHMC/Br8h3XduxamZSfZ9mEidGOz3Ri/VbDOT8JlicrasOB8MYc0smfcrXfW4YPa79XMTG
+ Ifmhm/s5MTk3tUzZjGNgI/9a+LU=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 611b820bf746c298d9e3d234 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 09:31:55
+ GMT
+Sender: mkshah=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 79B3FC4360C; Tue, 17 Aug 2021 09:31:55 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.0
+Received: from [192.168.29.129] (unknown [49.36.81.12])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2C78CC4338F;
+        Tue, 17 Aug 2021 09:31:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 2C78CC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH] cpuidle: governor: export cpuidle governor functions
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Todd Kjos <tkjos@google.com>,
+        Srinivas Rao L <lsrao@codeaurora.org>
+References: <010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com>
+ <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
+ <20200922161215.GD30658@codeaurora.org>
+ <CAJZ5v0ipDRkPe6N9B6RzvHyCBobz8B9EoBfPh4DANrL_e86+Ww@mail.gmail.com>
+ <bd62ffea-9736-f8f7-6a48-13e81f802aea@linaro.org>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <2fe42a4d-469a-0424-45d4-5d7027c88263@codeaurora.org>
+Date:   Tue, 17 Aug 2021 15:01:49 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <bd62ffea-9736-f8f7-6a48-13e81f802aea@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d0eded4f9e450c928a018f5fd675b75e1b726803  Merge branch 'pm-cpu' into bleeding-edge
+Hi Daniel/Rafael,
 
-elapsed time: 931m
+ >> would it make sense to convert the governors into modules
 
-configs tested: 95
-configs skipped: 3
+i am not aware if this was not pursued further due to any issue.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Do you see any concerns to allow existing governors compiled as loadable 
+module?
+if not i can work on same and post. please do let me know your thoughts 
+on this.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210816
-mips                           gcw0_defconfig
-arm                        keystone_defconfig
-arm                           h5000_defconfig
-arm                  colibri_pxa270_defconfig
-sh                            hp6xx_defconfig
-arm                       mainstone_defconfig
-powerpc                      pasemi_defconfig
-arm                         lubbock_defconfig
-xtensa                          iss_defconfig
-sh                            shmin_defconfig
-m68k                           sun3_defconfig
-arc                          axs101_defconfig
-mips                     loongson2k_defconfig
-arm                        cerfcube_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                 xes_mpc85xx_defconfig
-mips                     decstation_defconfig
-arm                      jornada720_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210816
-x86_64               randconfig-a004-20210816
-x86_64               randconfig-a003-20210816
-x86_64               randconfig-a001-20210816
-x86_64               randconfig-a005-20210816
-x86_64               randconfig-a002-20210816
-i386                 randconfig-a004-20210816
-i386                 randconfig-a003-20210816
-i386                 randconfig-a002-20210816
-i386                 randconfig-a001-20210816
-i386                 randconfig-a006-20210816
-i386                 randconfig-a005-20210816
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+i have CCed Saravana and Todd for awareness.
 
-clang tested configs:
-x86_64               randconfig-a011-20210816
-x86_64               randconfig-a013-20210816
-x86_64               randconfig-a016-20210816
-x86_64               randconfig-a012-20210816
-x86_64               randconfig-a015-20210816
-x86_64               randconfig-a014-20210816
-i386                 randconfig-a011-20210816
-i386                 randconfig-a015-20210816
-i386                 randconfig-a013-20210816
-i386                 randconfig-a014-20210816
-i386                 randconfig-a016-20210816
-i386                 randconfig-a012-20210816
+Thanks,
+Maulik
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 10/10/2020 1:56 AM, Daniel Lezcano wrote:
+> Hi Rafael,
+>
+> On 22/09/2020 19:27, Rafael J. Wysocki wrote:
+>> Hi Lina,
+>>
+>> On Tue, Sep 22, 2020 at 6:12 PM Lina Iyer <ilina@codeaurora.org> wrote:
+>>> Hi Rafael,
+>>>
+>>> On Tue, Sep 22 2020 at 10:00 -0600, Rafael J. Wysocki wrote:
+>>>> Sorry for the delay.
+>>>>
+>>>> On Wed, Sep 9, 2020 at 12:15 AM Lina Iyer <ilina@codeaurora.org> wrote:
+>>>>> Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
+>>>>> capability of registering cpuidle governors, which was unused at that
+>>>>> time. By exporting the symbol, let's allow platform specific modules to
+>>>>> register cpuidle governors and use cpuidle_governor_latency_req() to get
+>>>>> the QoS for the CPU.
+>>>> Which platform-specific modules may want to do that and why?
+>>>>
+>>> We are planning a custom cpuidle governor for QCOM SoCs. With Android,
+>>> the idea is to make them loadable modules so they can be in a separate
+>>> partition.
+>> Well, the $subject patch is not applicable without a mainline user
+>> requiring this, so it needs to be posted along with that user.
+> Putting apart the custom cpuidle governor mentioned above, would it make
+> sense to convert the governors into modules ? It is pointless to have
+> all of them compiled in, especially with distros doing make
+> allmodconfig, no?
+>
+>
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+
