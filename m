@@ -2,123 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E161D3EED24
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 15:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158093EED2E
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 15:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbhHQNQl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 09:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S237445AbhHQNRx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 09:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbhHQNQk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 09:16:40 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E45C061764
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 06:16:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 0CF121F433B5
-Received: by earth.universe (Postfix, from userid 1000)
-        id 47B6B3C08DB; Tue, 17 Aug 2021 15:16:02 +0200 (CEST)
-Date:   Tue, 17 Aug 2021 15:16:02 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Thomas Marangoni <thomas@marangoni.cc>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: Define own attributes in power supply driver
-Message-ID: <20210817131602.yotgm5kfjldtxc72@earth.universe>
-References: <95324fdb-20c1-3286-0223-09ff62d8957d@marangoni.cc>
+        with ESMTP id S239122AbhHQNRw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 09:17:52 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E9C061764
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 06:17:19 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id x10so22264780wrt.8
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 06:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+GkZlku1Bw2JCl4HvkcPQD//HnyGFQIsuXa7PcP9+u4=;
+        b=zobAv814/jIA9hveR+EkNCwDf42MUiRgvR0jepBC7V2gciaCGjUZ3styiQZrII/VGa
+         qx77TDd0skliye2OiYngq8oLgDQoXMCxlS5/59T8Cl/xOwXettAGn+YoSLCW+UGsJyZn
+         TIkq0LD3BN/+Czb9ip5I2Deej+XiqaImJxB/Mx+i0psWXBSOW2sn4rxNZihvLV50PFoL
+         v6d+WfCiza0TKEFKzFuyGmjgTBZnlACPbs1usIJdMlQTed2Fb7I2O6DEr0dnY3K3tc3O
+         ajC4oiwU9PuEuQJ7tn2zGDR40m+g9fPfDRM76GWajlGvHy0lRWgeU8eE/p6cIr0UXOAc
+         l4Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+GkZlku1Bw2JCl4HvkcPQD//HnyGFQIsuXa7PcP9+u4=;
+        b=oIiu1yEM2gMhf8ZexIF7OqZjppJvIWjOjhoS0XPE2W/vG1hRTqZfNiOMmq8mHpNRzT
+         fngRG9XKbzPsCZaykULn87Umv2IwILwScxSUgXK/bVLqgoSoug75kH88BwGOutgPNj9S
+         14TXfAEhQieF+7CnhGhGiWarCZrZcancVty8Z2DzJL0TAdI5tJZnoUhNB4YmWHBgRJ33
+         H24cPJv/otbabnrj435lr5XgDaJtaXFC6G6r3veF209WrNDbTzUXZCVQqCJc78+ubPpb
+         /ABPnu8EJ68MIdCi0YDFEn9U3+ul5S6wifTvaXEBWw2+7eLVYOu964Df8pWYg/F0HMHa
+         PWLw==
+X-Gm-Message-State: AOAM531WlZNtdfIQkXOE9DXKJihIUh8o7g2YoPPdcM5gPke1RwsDdfze
+        B4Ma4KtVPBvwHzEuQ8+KYIgLrQ==
+X-Google-Smtp-Source: ABdhPJwiEhB1GoU5iRLmZV1y4Ji/YZrd0AlU+/xLj1e9DFnO2wK155hd4GpX9VHaaZ/iIKuoh1oVjQ==
+X-Received: by 2002:adf:bb85:: with SMTP id q5mr4002312wrg.186.1629206237558;
+        Tue, 17 Aug 2021 06:17:17 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:52c4:e6e5:cc9e:e70a? ([2a01:e34:ed2f:f020:52c4:e6e5:cc9e:e70a])
+        by smtp.googlemail.com with ESMTPSA id f2sm2464427wru.31.2021.08.17.06.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 06:17:17 -0700 (PDT)
+Subject: Re: [Patch v5 1/6] firmware: qcom_scm: Introduce SCM calls to access
+ LMh
+To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, rui.zhang@intel.com,
+        viresh.kumar@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org
+Cc:     steev@kali.org, tdas@codeaurora.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
+ <20210809191605.3742979-2-thara.gopinath@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <19659756-4716-4c5b-949a-58d362dcee22@linaro.org>
+Date:   Tue, 17 Aug 2021 15:17:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ui5hgdffi6tzslqy"
-Content-Disposition: inline
-In-Reply-To: <95324fdb-20c1-3286-0223-09ff62d8957d@marangoni.cc>
+In-Reply-To: <20210809191605.3742979-2-thara.gopinath@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 09/08/2021 21:15, Thara Gopinath wrote:
+> Introduce SCM calls to access/configure limits management hardware(LMH).
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 
---ui5hgdffi6tzslqy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Bjorn, Andy,
 
-Hi,
+do you mind if I pick this patch along with patch 2/6 ?
 
-On Tue, Aug 17, 2021 at 08:33:50AM +0200, Thomas Marangoni wrote:
-> Hello,
-> I'm new to developing kernel drivers and want to improve the driver of the
-> axp209 battery driver. I've read the documentation about the Linux power
-> supply class
-> (https://www.kernel.org/doc/html/latest/power/power_supply_class.html) and
-> there it says: "Power supply class is extensible, and allows to define
-> drivers own attributes.". The problem is I couldn't find any documentation
-> or example of how to add own attributes. My goal is to have an own attrib=
-ute
-> showing up at /sys/class/power_supply/axp20x-battery/
->=20
-> Is there any example on how to do that or any documentation I didn't foun=
-d?
->=20
-> Thanks for your help!
+Thanks
 
-Custom attributes are registered via the attr_grp member of
-'struct power_supply_config' when registering the power-supply.
-See for example drivers/power/supply/surface_battery.c:
+  -- Daniel
 
----------------------------------------------------------------------------=
----
-static ssize_t alarm_show(struct device *dev, struct device_attribute *attr=
-, char *buf)
-{
-    ...
-}
+> ---
+> 
+> v2->v3:
+> 	Added freeing of payload_buf after the scm call in qcom_scm_lmh_dcvsh as per
+> 	Matthias review comments.
+> 
+> v1->v2:
+> 	Changed the input parameters in qcom_scm_lmh_dcvsh from payload_buf and
+> 	payload_size to payload_fn, payload_reg, payload_val as per Bjorn's review
+> 	comments.
+> 
+>  drivers/firmware/qcom_scm.c | 58 +++++++++++++++++++++++++++++++++++++
+>  drivers/firmware/qcom_scm.h |  4 +++
+>  include/linux/qcom_scm.h    | 14 +++++++++
+>  3 files changed, 76 insertions(+)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 47ea2bd42b10..8a503753fe2a 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1147,6 +1147,64 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
+>  }
+>  EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
+>  
+> +bool qcom_scm_lmh_dcvsh_available(void)
+> +{
+> +	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_LMH, QCOM_SCM_LMH_LIMIT_DCVSH);
+> +}
+> +EXPORT_SYMBOL(qcom_scm_lmh_dcvsh_available);
+> +
+> +int qcom_scm_lmh_profile_change(u32 profile_id)
+> +{
+> +	struct qcom_scm_desc desc = {
+> +		.svc = QCOM_SCM_SVC_LMH,
+> +		.cmd = QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE,
+> +		.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL),
+> +		.args[0] = profile_id,
+> +		.owner = ARM_SMCCC_OWNER_SIP,
+> +	};
+> +
+> +	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +}
+> +EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
+> +
+> +int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+> +		       u64 limit_node, u32 node_id, u64 version)
+> +{
+> +	dma_addr_t payload_phys;
+> +	u32 *payload_buf;
+> +	int ret, payload_size = 5 * sizeof(u32);
+> +
+> +	struct qcom_scm_desc desc = {
+> +		.svc = QCOM_SCM_SVC_LMH,
+> +		.cmd = QCOM_SCM_LMH_LIMIT_DCVSH,
+> +		.arginfo = QCOM_SCM_ARGS(5, QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_VAL,
+> +					QCOM_SCM_VAL, QCOM_SCM_VAL),
+> +		.args[1] = payload_size,
+> +		.args[2] = limit_node,
+> +		.args[3] = node_id,
+> +		.args[4] = version,
+> +		.owner = ARM_SMCCC_OWNER_SIP,
+> +	};
+> +
+> +	payload_buf = dma_alloc_coherent(__scm->dev, payload_size, &payload_phys, GFP_KERNEL);
+> +	if (!payload_buf)
+> +		return -ENOMEM;
+> +
+> +	payload_buf[0] = payload_fn;
+> +	payload_buf[1] = 0;
+> +	payload_buf[2] = payload_reg;
+> +	payload_buf[3] = 1;
+> +	payload_buf[4] = payload_val;
+> +
+> +	desc.args[0] = payload_phys;
+> +
+> +	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+> +
+> +	dma_free_coherent(__scm->dev, payload_size, payload_buf, payload_phys);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
+> +
+>  static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
+>  {
+>  	struct device_node *tcsr;
+> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> index 632fe3142462..d92156ceb3ac 100644
+> --- a/drivers/firmware/qcom_scm.h
+> +++ b/drivers/firmware/qcom_scm.h
+> @@ -114,6 +114,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  #define QCOM_SCM_SVC_HDCP		0x11
+>  #define QCOM_SCM_HDCP_INVOKE		0x01
+>  
+> +#define QCOM_SCM_SVC_LMH			0x13
+> +#define QCOM_SCM_LMH_LIMIT_PROFILE_CHANGE	0x01
+> +#define QCOM_SCM_LMH_LIMIT_DCVSH		0x10
+> +
+>  #define QCOM_SCM_SVC_SMMU_PROGRAM		0x15
+>  #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
+>  #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
+> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+> index 0165824c5128..c0475d1c9885 100644
+> --- a/include/linux/qcom_scm.h
+> +++ b/include/linux/qcom_scm.h
+> @@ -109,6 +109,12 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
+>  			     u32 *resp);
+>  
+>  extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
+> +
+> +extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+> +			      u64 limit_node, u32 node_id, u64 version);
+> +extern int qcom_scm_lmh_profile_change(u32 profile_id);
+> +extern bool qcom_scm_lmh_dcvsh_available(void);
+> +
+>  #else
+>  
+>  #include <linux/errno.h>
+> @@ -170,5 +176,13 @@ static inline int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
+>  
+>  static inline int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
+>  		{ return -ENODEV; }
+> +
+> +static inline int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+> +				     u64 limit_node, u32 node_id, u64 version)
+> +		{ return -ENODEV; }
+> +
+> +static inline int qcom_scm_lmh_profile_change(u32 profile_id) { return -ENODEV; }
+> +
+> +static inline bool qcom_scm_lmh_dcvsh_available(void) { return -ENODEV; }
+>  #endif
+>  #endif
+> 
 
-static ssize_t alarm_store(struct device *dev, struct device_attribute *att=
-r, const char *buf,
-                           size_t count)
-{
-    ...
-}
 
-static DEVICE_ATTR_RW(alarm);
-=20
-static struct attribute *spwr_battery_attrs[] =3D {
-        &dev_attr_alarm.attr,
-        NULL,
-};
-ATTRIBUTE_GROUPS(spwr_battery);
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-static int spwr_battery_register(struct spwr_battery_device *bat)
-{
-    ...
-    psy_cfg.attr_grp =3D spwr_battery_groups;
-    bat->psy =3D devm_power_supply_register(&bat->sdev->dev, &bat->psy_desc=
-, &psy_cfg);
-    ...
-}
----------------------------------------------------------------------------=
----
-
--- Sebastian
-
---ui5hgdffi6tzslqy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEbtowACgkQ2O7X88g7
-+praSRAAlfzmGcYapWwT7RZUvai8UMLbwqAhkgogYWD3mjDhgJo05OldZyjHERSn
-2XY7QpCLH+3D0Fzinu4fFC5HbgRQHgM4Bbs666oZa/+uZ/w8yLwtOfkukZabtecW
-QifrYrdRyo2+/jRvSwa/ITcBA432oiiSh1TPpT7hXzkAkJXzTw7I7Q0yHPCEbQ3/
-MKgtp0HklXMPZ6RPJYXCsAHBfzU9ouqLT2w93VZffcwSUDQu6UG8VLTxtstY7JnT
-JdfWNh1lxxFkKtz7G3C1YXgL+0S2EY5uv1lGEkNDGgGadrtw+/cpnRaoshgs+I9w
-uZ1YeL2SxfjWFzHR4SnlEycj66N1opfoQm2PTj+NSFNSJBuEVQ/eDTyDnDjgdqB4
-MsvRHU2x2N1J3JlTDxbIauG0QfcwYHUHR5Sq56rjaj3Ddrk5Wg7M96dnSB5I18Qe
-BvJhpQmYfSV3UrrJDtl4y0ywO3ekka19K19VUZ7d7It9FbRRLWIC4ofnl583k2U+
-9H7MjwaSA12UebWpEqUetMpm4VRNOVRw/XZ6laSgeX2bzOJBIBalOSK76f/APjzK
-hIWWcWZeAkn0qwAsk6sDYAUFDNMYH9IgAmZt9nmdXaweJ1+V/CG+eL6sa5Avscx8
-N9TX/FXV0TBvP9aE4HQtkYecToHoSPtBglmZTS7uD/uFyOk6Y4U=
-=vCak
------END PGP SIGNATURE-----
-
---ui5hgdffi6tzslqy--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
