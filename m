@@ -2,79 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF533EE8BE
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 10:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669CB3EE913
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 11:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239210AbhHQImI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 17 Aug 2021 04:42:08 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:49169 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbhHQImH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 04:42:07 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B00621C0014;
-        Tue, 17 Aug 2021 08:41:24 +0000 (UTC)
-Date:   Tue, 17 Aug 2021 10:41:23 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 21/34] mtd: rawnand: tegra: Add runtime PM and OPP
- support
-Message-ID: <20210817104123.1854cf17@xps13>
-In-Reply-To: <20210817012754.8710-22-digetx@gmail.com>
-References: <20210817012754.8710-1-digetx@gmail.com>
-        <20210817012754.8710-22-digetx@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235315AbhHQJEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 05:04:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:52676 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239474AbhHQJEm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Aug 2021 05:04:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 513B331B;
+        Tue, 17 Aug 2021 02:03:58 -0700 (PDT)
+Received: from [10.57.11.194] (unknown [10.57.11.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF03D3F40C;
+        Tue, 17 Aug 2021 02:03:55 -0700 (PDT)
+Subject: Re: [PATCH v4 0/9] Inefficient OPPs
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
+ <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
+ <CAJZ5v0hta1mEVatT=6ZMLhZCs3btcSbTT10YEihfdvB-WxDuzQ@mail.gmail.com>
+ <20210817070619.g6ootmga3nyxm7tz@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <43cd2dfc-a9bf-ccaa-292c-a36124d57025@arm.com>
+Date:   Tue, 17 Aug 2021 10:03:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210817070619.g6ootmga3nyxm7tz@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
 
-Dmitry Osipenko <digetx@gmail.com> wrote on Tue, 17 Aug 2021 04:27:41
-+0300:
 
-> The NAND on Tegra belongs to the core power domain and we're going to
-> enable GENPD support for the core domain. Now NAND must be resumed using
-> runtime PM API in order to initialize the NAND power state. Add runtime PM
-> and OPP support to the NAND driver.
+On 8/17/21 8:06 AM, Viresh Kumar wrote:
+> On 16-08-21, 16:19, Rafael J. Wysocki wrote:
+>> On Tue, Aug 10, 2021 at 8:13 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>>   I understand  that this was done to not do the efficient stuff in case of
+>>>    userspace/powersave/performance governors.
+>>>
+>>>    What about reusing following for finding all such cases ?
+>>>
+>>>          policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING
+>>>
+>>>    The driver can set a flag to tell if it wants efficient frequencies
+>>>    or not, and at runtime we apply efficient algorithm only if the
+>>>    current governor does DVFS, which will leave out
+>>>    userspace/performance/powersave.
+>>
+>> As long as this can be done without actually accessing
+>> policy->governor->flags on every transition, it sounds like a good
+>> idea.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/mtd/nand/raw/tegra_nand.c | 62 +++++++++++++++++++++++++++----
->  1 file changed, 54 insertions(+), 8 deletions(-)
+> Great.
+> 
+> Vincent, I hope you will be taking this forward then ?
 > 
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Vincent has been on vacations for quite a while, but he will be back
+next week.
 
-Thanks,
-Miquèl
+Thank you guys for the comments.
