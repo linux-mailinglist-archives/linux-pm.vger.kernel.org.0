@@ -2,79 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669CB3EE913
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 11:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C633EE982
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 11:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbhHQJEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 05:04:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:52676 "EHLO foss.arm.com"
+        id S235212AbhHQJT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 05:19:58 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32313 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239474AbhHQJEm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Aug 2021 05:04:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 513B331B;
-        Tue, 17 Aug 2021 02:03:58 -0700 (PDT)
-Received: from [10.57.11.194] (unknown [10.57.11.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF03D3F40C;
-        Tue, 17 Aug 2021 02:03:55 -0700 (PDT)
-Subject: Re: [PATCH v4 0/9] Inefficient OPPs
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-References: <1625738946-295849-1-git-send-email-vincent.donnefort@arm.com>
- <CAJZ5v0jLzj48-Bu1-i4=r3aratJwRzVYuaPvycUb--4jKSRkHw@mail.gmail.com>
- <20210810061323.kc5kvy6m6566z3gz@vireshk-i7>
- <CAJZ5v0hta1mEVatT=6ZMLhZCs3btcSbTT10YEihfdvB-WxDuzQ@mail.gmail.com>
- <20210817070619.g6ootmga3nyxm7tz@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <43cd2dfc-a9bf-ccaa-292c-a36124d57025@arm.com>
-Date:   Tue, 17 Aug 2021 10:03:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S235050AbhHQJT6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Aug 2021 05:19:58 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="203181252"
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="203181252"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 02:19:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="449197094"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Aug 2021 02:19:18 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mFvFe-000RcJ-07; Tue, 17 Aug 2021 09:19:18 +0000
+Date:   Tue, 17 Aug 2021 17:18:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ d0eded4f9e450c928a018f5fd675b75e1b726803
+Message-ID: <611b7eff.IBmhgftfkYrWgNXY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210817070619.g6ootmga3nyxm7tz@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d0eded4f9e450c928a018f5fd675b75e1b726803  Merge branch 'pm-cpu' into bleeding-edge
 
+elapsed time: 931m
 
-On 8/17/21 8:06 AM, Viresh Kumar wrote:
-> On 16-08-21, 16:19, Rafael J. Wysocki wrote:
->> On Tue, Aug 10, 2021 at 8:13 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>>   I understand  that this was done to not do the efficient stuff in case of
->>>    userspace/powersave/performance governors.
->>>
->>>    What about reusing following for finding all such cases ?
->>>
->>>          policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING
->>>
->>>    The driver can set a flag to tell if it wants efficient frequencies
->>>    or not, and at runtime we apply efficient algorithm only if the
->>>    current governor does DVFS, which will leave out
->>>    userspace/performance/powersave.
->>
->> As long as this can be done without actually accessing
->> policy->governor->flags on every transition, it sounds like a good
->> idea.
-> 
-> Great.
-> 
-> Vincent, I hope you will be taking this forward then ?
-> 
+configs tested: 95
+configs skipped: 3
 
-Vincent has been on vacations for quite a while, but he will be back
-next week.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thank you guys for the comments.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210816
+mips                           gcw0_defconfig
+arm                        keystone_defconfig
+arm                           h5000_defconfig
+arm                  colibri_pxa270_defconfig
+sh                            hp6xx_defconfig
+arm                       mainstone_defconfig
+powerpc                      pasemi_defconfig
+arm                         lubbock_defconfig
+xtensa                          iss_defconfig
+sh                            shmin_defconfig
+m68k                           sun3_defconfig
+arc                          axs101_defconfig
+mips                     loongson2k_defconfig
+arm                        cerfcube_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                     decstation_defconfig
+arm                      jornada720_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+x86_64                            allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20210816
+x86_64               randconfig-a004-20210816
+x86_64               randconfig-a003-20210816
+x86_64               randconfig-a001-20210816
+x86_64               randconfig-a005-20210816
+x86_64               randconfig-a002-20210816
+i386                 randconfig-a004-20210816
+i386                 randconfig-a003-20210816
+i386                 randconfig-a002-20210816
+i386                 randconfig-a001-20210816
+i386                 randconfig-a006-20210816
+i386                 randconfig-a005-20210816
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a011-20210816
+x86_64               randconfig-a013-20210816
+x86_64               randconfig-a016-20210816
+x86_64               randconfig-a012-20210816
+x86_64               randconfig-a015-20210816
+x86_64               randconfig-a014-20210816
+i386                 randconfig-a011-20210816
+i386                 randconfig-a015-20210816
+i386                 randconfig-a013-20210816
+i386                 randconfig-a014-20210816
+i386                 randconfig-a016-20210816
+i386                 randconfig-a012-20210816
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
