@@ -2,80 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D4C3EF24C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 20:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39BE3EF24E
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 20:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhHQS4D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 14:56:03 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:44896 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbhHQS4D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 14:56:03 -0400
-Received: by mail-ot1-f46.google.com with SMTP id l36-20020a0568302b24b0290517526ce5e3so18635548otv.11
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 11:55:29 -0700 (PDT)
+        id S233118AbhHQS4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 14:56:36 -0400
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:35627 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229821AbhHQS4g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 14:56:36 -0400
+Received: by mail-ot1-f50.google.com with SMTP id f16-20020a056830205000b00519b99d3dcbso5114459otp.2;
+        Tue, 17 Aug 2021 11:56:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0oVA9ax9HIRa42n7TWrU5sO636ECPXB6T2mdsUie4rs=;
-        b=DJZ4r2zc8rapwvFxs+S9Nc1xlZM8xHleD9j2YPQ3YCDJF6M0xO16PtQ+zKunzy1HCq
-         p9vek+2BFVW/HLj3fBnOV2ozITbhKSiSU2fYQlpCcyzzQN80lzBdHKeNKd8tNNJGhJgs
-         FFfrXWnA6jyk4e62iEOFHlbUsj+Mh0oTDzFB/XvHPXJStHFwC5EquI3AThb2hZFRY+wE
-         l/pbAl/JvCWFi1NN3Wx0mYZ7mBxPTdOKXTbwP4Zu4CgaCCclsavAaNSFd7xpbTFnYo61
-         KpkcDDbXdBxTD/4HMLxjeNjSqF9xcx/+zcydVQ+j1lxRcYN4aiYcizZminPj/IbmFhlu
-         Ndcg==
-X-Gm-Message-State: AOAM533hEzywtu6ovDviuke0/Axdr8p1JigByiQ3BxSxiKOG9eD78NiM
-        BuVBRvUGR2qP04i9d6juTYG+D7cHNA+XAHJIPOY=
-X-Google-Smtp-Source: ABdhPJxDKwRL5+lvzFQCac2puXfkDHwL3i2HKD85W1XvvywYjNfMUkTP5qj3PRm1IpgjPN2IFofcPV+pxAo2domlo/4=
-X-Received: by 2002:a9d:a75:: with SMTP id 108mr3706256otg.260.1629226529374;
- Tue, 17 Aug 2021 11:55:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7mKYKjiMf8dpl43oyObweK1f4wE9KHcQrULWUKHnVeA=;
+        b=hLM8U2dTCb+SRDGevxKVjrsA4m931N58HY6cJ+TTscu4cZxixkZaxCirmhpPXHUjz6
+         CojAMIPUxPz9qptE/7uzCSaVteuOm+IoadYf87vJ7B1fQjVyhyu/vITYiR32uAr/D5cj
+         POv58LHmu9CL1swQUNrONCry8SKPn9zx2kTKhswmv/otYCc7uhSaE4ky3H+5Xi/xQKKS
+         Nx7bGj37ehxbuiN3Mf5QS5Vdu67H1GXl1Ohduv5w1UeL6Sfvz4EA+Nb4pevf4o5AGNJD
+         pBf+v73zya26z+el74QbGCVzQFrWecWiRbzAET34LDVnbzOzWVEE1kHLakKOEMJD+oqg
+         JZjA==
+X-Gm-Message-State: AOAM530Z+tv6gvaZJkX4aCfHx4K50m2pc2FXyqfqwPz8kSpJwg34xfxi
+        KJh8QRdVXdGrHS1dj0z1JQ==
+X-Google-Smtp-Source: ABdhPJyQNJxThPdp7vu06wPqqH1HYkNYsHwow2EYSlzyZhhiv4Cs65rxOPBFu2tNIBLSJeZ/MOFNjA==
+X-Received: by 2002:a9d:2623:: with SMTP id a32mr3566338otb.230.1629226562620;
+        Tue, 17 Aug 2021 11:56:02 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x3sm579736ooe.32.2021.08.17.11.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 11:56:02 -0700 (PDT)
+Received: (nullmailer pid 656992 invoked by uid 1000);
+        Tue, 17 Aug 2021 18:56:00 -0000
+Date:   Tue, 17 Aug 2021 13:56:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     agross@kernel.org, tdas@codeaurora.org,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, steev@kali.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        rui.zhang@intel.com, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
+        mka@chromium.org
+Subject: Re: [Patch v5 6/6] dt-bindings: thermal: Add dt binding for QCOM LMh
+Message-ID: <YRwGQNSqXiwR9pfl@robh.at.kernel.org>
+References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
+ <20210809191605.3742979-8-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-References: <20210810085838.d3hv3rxli5vxozlz@vireshk-i7> <CAJZ5v0j4N+puor2x2_vqB-zaJe-m_-pv6cipV_fCbRyKAd6Zgg@mail.gmail.com>
- <20210817034516.pvyxlmq5do733ock@vireshk-i7>
-In-Reply-To: <20210817034516.pvyxlmq5do733ock@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Aug 2021 20:55:18 +0200
-Message-ID: <CAJZ5v0jgyLJ=BDtXeFfjxh4J_OgKSM_uuQ1MQPX=vu+52pLc_A@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.14
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210809191605.3742979-8-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 5:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 16-08-21, 16:42, Rafael J. Wysocki wrote:
-> > And now it looks like there's more stuff on this branch.
->
-> Sorry about that.
->
-> Hi Rafael,
->
-> This pull request contains:
->
-> - Addition of SoCs to blocklist for cpufreq-dt driver (Bjorn Andersson
->   and Thara Gopinath).
->
-> - Fix error path for scmi driver (Lukasz Luba).
->
-> - Temporarily disable highest frequency for armada, its unsafe and
->   breaks stuff.
->
-> -------------------------8<-------------------------
->
-> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
->
->   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
->
-> for you to fetch changes up to 484f2b7c61b9ae58cc00c5127bcbcd9177af8dfe:
->
->   cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant (2021-08-09 09:31:22 +0530)
+On Mon, 09 Aug 2021 15:16:05 -0400, Thara Gopinath wrote:
+> Add dt binding documentation to describe Qualcomm
+> Limits Management Hardware node.
+> 
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+> 
+> v4->v5:
+> 	- Renam
+> v3->v4:
+> 	- Changed dt property qcom,lmh-cpu-id to qcom,lmh-cpu and made it
+> 	  a phandle pointing to the cpu node instead of a number as per
+> 	  Rob Herring's review comments.
+> 	- Added suffix -millicelsius to all temperature properties as per
+> 	  Rob Herring's review comments.
+> 	- Dropped unnecessary #includes in the example as pointed out by Bjorn.
+> 	- Other minor fixes.
+> 
+>  .../devicetree/bindings/thermal/qcom-lmh.yaml | 82 +++++++++++++++++++
+>  1 file changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+> 
 
-Pulled, thanks!
+Reviewed-by: Rob Herring <robh@kernel.org>
