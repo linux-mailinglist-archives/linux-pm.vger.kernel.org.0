@@ -2,76 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A093E3EF4E6
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Aug 2021 23:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DF13EF5C1
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 00:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbhHQVY5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 17:24:57 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:38680 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbhHQVY5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 17:24:57 -0400
-Received: by mail-ot1-f45.google.com with SMTP id 108-20020a9d01750000b029050e5cc11ae3so148279otu.5;
-        Tue, 17 Aug 2021 14:24:23 -0700 (PDT)
+        id S235719AbhHQW2t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 18:28:49 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:35796 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234789AbhHQW2t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 18:28:49 -0400
+Received: by mail-ot1-f48.google.com with SMTP id f16-20020a056830205000b00519b99d3dcbso367206otp.2;
+        Tue, 17 Aug 2021 15:28:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7W9npOknUtUU037y5TUXkyCwGRj5nJWHyHC1caEq6G0=;
-        b=KaPUtZkb+dBxxKHSQIF/5l2JzsO79gpKqdkEHiiN5vC+85hchaOfmAV6ZtP5dJlKaj
-         K4FenRRArgYw/UpLm/8fJkUTgJpk5lntVQvXlRUd8mBFu4dGwv6MgT58YSdM+SzhPXLg
-         XS3oYwHLsaRCwE2yH7LAWzyAf3nDSlphvC7p5kXsV9yWHiSSthw42w/H188oOtCn2X9g
-         slRVMHkGxYbMaeg0Ct1w+/EM5EcOd5p3DCpCxYLd237YXa1lSxCibEKiQ0iczAYpGO9h
-         Zuy96VtkGcPsqoN8w59fyZi5syZiEdz5KqHOMcA4jZ3sC607L48ZCG6f4bIjq9SCWc7D
-         nZsA==
-X-Gm-Message-State: AOAM5338r/SnTi0LhWU0KinwuvOSR5QqDrj0FasRb6rHZjmvieeCn518
-        d/uGvJcDOAYA53/b/hOw9A==
-X-Google-Smtp-Source: ABdhPJz5WjCQw00OSV19UzmnYoJNag5H4oeeak/snW4AcVvwi66ujDfDHn7AEgc1RlfMhusAaMvC0g==
-X-Received: by 2002:a9d:8ed:: with SMTP id 100mr4115192otf.232.1629235463552;
-        Tue, 17 Aug 2021 14:24:23 -0700 (PDT)
+        bh=yqBt5Rgo6x3qOVwQ9RpTYru0Ol+9vLDtDZYPvLG/Nso=;
+        b=TZT6R870sFvsqAY12y6nGjUXmKVqDUSboUBohUbcj5Nb8LIvs5KlYHat6epGU12NLK
+         sLLk7MA9qX6wEMvopNep2oppVxCoKQwAFT0eraxTMA41OGNbhU/FfPjHNe2e1/5jBZKv
+         vH3HjdB8WZV8dvDXN4CCVC1y++6sFDl4NAJzbyv5XvKsYNKYIzdVscevYmw+Cz3WK44j
+         pQ6tMswkLmDU1x6zyhp8PJIBfvsAgpUs12U0HeiMzNclL8vqEVCaPohmZ9992F9QKmwN
+         VPJooWlrN6Q7BZter7qMvzZRfgjPkZ04UuQyVLZ2cLeoW0VIN9SNz16Dt31twyZTQFE9
+         J4MQ==
+X-Gm-Message-State: AOAM532VBGs2bcW2SPk4BdQDxKe3dzixWu6AkKe2D+3vRnmezf0dxQjS
+        6ClEuJHMNd+T0LgKaiwvfQ==
+X-Google-Smtp-Source: ABdhPJyxHYPltWfKk7mCAVYciyfTMzbKZ3rwbDA2cQ+BEc2np0c9ZJ016LaffgB99T8qWfF0kFBERg==
+X-Received: by 2002:a05:6830:33c9:: with SMTP id q9mr4303965ott.170.1629239295491;
+        Tue, 17 Aug 2021 15:28:15 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u127sm779604oib.16.2021.08.17.14.24.22
+        by smtp.gmail.com with ESMTPSA id d26sm702902oos.41.2021.08.17.15.28.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 14:24:22 -0700 (PDT)
-Received: (nullmailer pid 866082 invoked by uid 1000);
-        Tue, 17 Aug 2021 21:24:21 -0000
-Date:   Tue, 17 Aug 2021 16:24:21 -0500
+        Tue, 17 Aug 2021 15:28:14 -0700 (PDT)
+Received: (nullmailer pid 952015 invoked by uid 1000);
+        Tue, 17 Aug 2021 22:28:14 -0000
+Date:   Tue, 17 Aug 2021 17:28:14 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Dawei Chien <dawei.chien@mediatek.com>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ryan Case <ryandcase@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Arvin Wang <arvin.wang@mediatek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, James Liao <jamesjj.liao@mediatek.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        linux-kernel@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: Re: [V11,PATCH 11/19] dt-bindings: interconnect: add MT8195
- interconnect dt-bindings
-Message-ID: <YRwpBQu+rXPiUe3i@robh.at.kernel.org>
-References: <20210812085846.2628-1-dawei.chien@mediatek.com>
- <20210812085846.2628-12-dawei.chien@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-pm@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        devicetree@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Subject: Re: [PATCH 3/3] dt-bindings: power: supply: max17042: describe
+ interrupt
+Message-ID: <YRw3/jDApVGFBfxC@robh.at.kernel.org>
+References: <20210816082716.21193-1-krzysztof.kozlowski@canonical.com>
+ <20210816082716.21193-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210812085846.2628-12-dawei.chien@mediatek.com>
+In-Reply-To: <20210816082716.21193-3-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 12 Aug 2021 16:58:38 +0800, Dawei Chien wrote:
-> Add interconnect provider dt-bindings for MT8195
+On Mon, 16 Aug 2021 10:27:16 +0200, Krzysztof Kozlowski wrote:
+> The Maxim 17042-family of fuel gauges are often embedded in other Maxim
+> chips, e.g. in Maxim 77693 which is a companion power management IC.
+> In such designs there might be actually two interrupts:
+>  - INTB signaling change from charger, flash or MUIC,
+>  - ALERT signaling change from fuel gauge.
 > 
-> Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
+> Describe the interrupt in bindings to make it clear it is about the fuel
+> gauge ALERT interrupt, not the INT.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  include/dt-bindings/interconnect/mtk,mt8195-emi.h | 42 +++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 include/dt-bindings/interconnect/mtk,mt8195-emi.h
+>  .../devicetree/bindings/power/supply/maxim,max17042.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
