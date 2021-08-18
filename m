@@ -2,181 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0C93EFB1C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 08:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DBD3EFC3F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 08:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbhHRGI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Aug 2021 02:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S238231AbhHRGXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Aug 2021 02:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239165AbhHRGIP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 02:08:15 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2598FC061154
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:05:59 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id a21so1069735pfh.5
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:05:59 -0700 (PDT)
+        with ESMTP id S237947AbhHRGXe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 02:23:34 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BECFC061764;
+        Tue, 17 Aug 2021 23:23:00 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id i28so3039419ljm.7;
+        Tue, 17 Aug 2021 23:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NTYV2vCojWGaRvoj20z4daltbaCLEHm5I23EtSqrsdc=;
-        b=gcLhrbC6oh1Q4v7lBnuyaS91t4jaL8TehpxBKFXFSBMm2H8MVSQk2tUC2P0GUeSeUv
-         h/dbuSnQtyawGoL6LpCi/+xx7NsJ21uSVxeAivgSkoywKe+OIiou9Fs+GBDr8IzotyVN
-         9YcRY+LtNaBwMh5J6OjEP2f59D4wukYLAQ6gs=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HRbW8G1xwSB2ls1NijjktR4beuv1neTM9+sNIEIh1SY=;
+        b=QhekG6HEhPh05G6EVGmH5gG1vsu7rLtXHoMmf8TooWyY48CtokKXpp3Ao28M9gzDIL
+         bOVJgsJpVuu4U6ZWhqbn/zzSzP/fh3SXlt9kSPpa9GZDTZZhDmzkZCL094g6b3/xpTlq
+         nR0VqcsEMuT8DrZzKg9OpHD9vAWhvLMA9THzTn2p/fALoh3IOyqRWsGfYkKKKn80LTpF
+         0ONjMpwOjktQ6neNrcoQ/FCq6G1LpKBpZ2d3r2xDohXQf3R33Yqsm7PvyRSmOAMdrmX2
+         8g7Na8C+8jCc1UJQu7St/hkelmGm9SnYblY2IzzA+hu0M9oU3v9y97qHAydPZ+UblpGW
+         RUgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NTYV2vCojWGaRvoj20z4daltbaCLEHm5I23EtSqrsdc=;
-        b=Mc/FdMi/l8fJjTaCzEq1bql4iJ+0L7OqB1/R9X078FEgtO3Rng2BVC+h+YzRlIc/cX
-         3XPiN4PIGI+vwwRY9s8zYeb6vnXXcqJLiO8o1QLIEjkPn9CpJHT5ySB7BYgjgCbCM29W
-         VEOrpi2OjBgsK4Xye7tiSi2KL9GFhVqrIavppiXEORXh4lEFtm5VCC/S5P23+v0Dii7z
-         jGGm4b+LVeaIWjY460Y96BwDWYCT6UslUNmi+T7kO5dGDne2By/oVqAButneNHd6PSjP
-         6NhAofLuY/7QWTbVJhW9AziOYies0KfmXFq2ZWnbz9FmBsNoCfnoOLwwi4DzI6Q2769H
-         6f6w==
-X-Gm-Message-State: AOAM533LGWU5U0cd+RyelmXxdinpsO66BaESVtb9msxzTu4MonO5R7l9
-        WVRX6ZxCPqdBby5uczslAGpIog==
-X-Google-Smtp-Source: ABdhPJzKHoX3yyU+dnBla/w9sJktvSQulGP69FZGHBDzf2nPRtzqPXfJGufcOa8NTqoZzja7AHU62Q==
-X-Received: by 2002:a05:6a00:2d6:b0:3e2:e023:c6cd with SMTP id b22-20020a056a0002d600b003e2e023c6cdmr1988068pft.19.1629266758722;
-        Tue, 17 Aug 2021 23:05:58 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n23sm5008845pgv.76.2021.08.17.23.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 23:05:57 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-staging@lists.linux.dev,
-        linux-block@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 12/63] thermal: intel: int340x_thermal: Use struct_group() for memcpy() region
-Date:   Tue, 17 Aug 2021 23:04:42 -0700
-Message-Id: <20210818060533.3569517-13-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210818060533.3569517-1-keescook@chromium.org>
-References: <20210818060533.3569517-1-keescook@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HRbW8G1xwSB2ls1NijjktR4beuv1neTM9+sNIEIh1SY=;
+        b=ena2CNacUns3FV3/aQkd2xATzx7JekVKL5+A/9nVDDeA+CacHLtkC6bkkARPmbOctJ
+         JP3i8O/B6y92K4tmG+Vx02Sgqx9avieFVu1N9DmjqgCKa4iE7SJKy2bJd745uzb6fCng
+         otHvp6VWBqARfnP38rK5HPjf5FZpNEkVPCNIzwc3gklTv5dd1KsVcGH95aWrnhKB51/v
+         BL389qyFVo41t8k2VSNDT8ctI3EKHr3X3TSubpOs8ytIEZ34RAQEnTUdlW0+R7zuj/sV
+         GJtQYWT6R2ddJ3hZWa2gfiOPl+KEhRL8yLaFI2ZrRDZ1LD5y+dl8piu+U8Gt45n8AYQ4
+         FXnQ==
+X-Gm-Message-State: AOAM530gJNojWuaDn5fB3w4rB2rJZYqAItjm3lVsC9jaopXK1Oz6jK7I
+        QT1v3hcWkTlQtExD9i5wFfLdmbhb9X0=
+X-Google-Smtp-Source: ABdhPJyL01ZM7X19Ri9kaNq915zcz165uE238H3LdTxs+q0TxSrtrvPc1BOJdsnl0Akd4i2Y2iKECw==
+X-Received: by 2002:a2e:a785:: with SMTP id c5mr6383685ljf.434.1629267778216;
+        Tue, 17 Aug 2021 23:22:58 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
+        by smtp.googlemail.com with ESMTPSA id w4sm503212ljg.99.2021.08.17.23.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 23:22:57 -0700 (PDT)
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-2-digetx@gmail.com>
+ <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
+ <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
+ <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
+ <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
+ <20210818043131.7klajx6drvvkftoc@vireshk-i7>
+ <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7>
+ <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+Date:   Wed, 18 Aug 2021 09:22:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3430; h=from:subject; bh=eWRxzyg8ZHcfvuxChrH1G3MSkKagVjV8YQYyT7daR/o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHKMgzFFZrngl6f/ha2lcQf7jZ0XOwEEmDffMqDAl g1Ks8xmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYRyjIAAKCRCJcvTf3G3AJr4LEA CsX0wkoSQ5k+eRw495v98ZukqiRSRwtgtvHDRZg+FSzpTwOnEEYMAyH7uOTV2xyt//wSEjLpityQkQ 6DJYoi8exVReP0/IGENdNgCX9CSvnY4mKgOStyQOF6wF6zUmA49X9+fDt/me/CXdx2hYbg0vtLMnkq 5gBvKdXtWgWRoELEugEmh2t5qHjUpqpCNnyRtLha7bTKgabmSOmpcevXF1HoOvOs1cRNXoPcdx5CV0 bDoINmq6Xyh/tk0h4pIdo6SfZAOs0c3ErkSnT15sehzyggOoDkGVjJG5VBR3mukUg7mBnWnktHwIHX /tYJqO+CdgwVMhdFRyKr6l6llZ3FYBwNYN/FLkfP1rnu6FXfH0LeQTTnuKm5YeiGKMK3k9oxRcqmp2 gMgnuYcTxVZ3rCDIYJJ6MzSIQtwWs9qBXZvHiQV4DaUG4xlsdQl73NhV0kA1qUrWu1KG3ET05Fm+c4 HDpZitCNYo0GvcGDfWBeLQqlbQ7IfL2V3I6YLWINVfJEsKl+g2+ctBb19ZzFmusloqZCbrZPyTc+0S NmmotsEztnwmtEBmMhE7LJfL4We9u8itUfkywd+2pr4j4z1E7U8Zv+BycFc/U8vYneKZZgYxcHGWiO T+ntRlh8llbsS1IRx6+6G4JBfFq6XbT/Hv9hLw4FXNSrDM+N5Np9vPDUT0Ow==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+In-Reply-To: <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), avoid intentionally writing across
-neighboring fields.
+18.08.2021 08:58, Viresh Kumar пишет:
+> On 18-08-21, 08:21, Dmitry Osipenko wrote:
+>> Yes, GENPD will cache the perf state across suspend/resume and initially
+>> cached value is out of sync with h/w.
+>>
+>> Nothing else. But let me clarify it all again.
+> 
+> Thanks for your explanation.
+> 
+>> Initially the performance state of all GENPDs is 0 for all devices.
+>>
+>> The clock rate is preinitialized for all devices to a some default rate
+>> by clk driver, or by bootloader or by assigned-clocks in DT.
+>>
+>> When device is rpm-resumed, the resume callback of a device driver
+>> enables the clock.
+>>
+>> Before clock is enabled, the voltage needs to be configured in
+>> accordance to the clk rate.
+>>
+>> So now we have a GENPD with pstate=0 on a first rpm-resume, which
+>> doesn't match the h/w configuration. Calling dev_pm_opp_sync() sets the
+>> pstate in accordance to the h/w config.
+> 
+> What about calling dev_pm_opp_set_rate(dev, clk_get_rate(dev)) here
+> instead ? That will work, right ? The advantage is it works without
+> any special routine to do so.
 
-Use struct_group() in struct art around members weight, and ac[0-9]_max,
-so they can be referenced together. This will allow memcpy() and sizeof()
-to more easily reason about sizes, improve readability, and avoid future
-warnings about writing beyond the end of weight.
+It will work, but a dedicated helper is nicer.
 
-"pahole" shows no size nor member offset changes to struct art.
-"objdump -d" shows no meaningful object code changes (i.e. only source
-line number induced differences).
+> I also wonder looking at your gr3d.c changes, you set a set-opp
+> helper, but the driver doesn't call set_opp_rate at all. Who calls it
+> ?
 
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- .../intel/int340x_thermal/acpi_thermal_rel.c  |  5 +-
- .../intel/int340x_thermal/acpi_thermal_rel.h  | 48 ++++++++++---------
- 2 files changed, 29 insertions(+), 24 deletions(-)
+dev_pm_opp_sync() calls it from _set_opp().
 
-diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-index a478cff8162a..e90690a234c4 100644
---- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-+++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-@@ -250,8 +250,9 @@ static int fill_art(char __user *ubuf)
- 		get_single_name(arts[i].source, art_user[i].source_device);
- 		get_single_name(arts[i].target, art_user[i].target_device);
- 		/* copy the rest int data in addition to source and target */
--		memcpy(&art_user[i].weight, &arts[i].weight,
--			sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
-+		BUILD_BUG_ON(sizeof(art_user[i].data) !=
-+			     sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
-+		memcpy(&art_user[i].data, &arts[i].data, sizeof(art_user[i].data));
- 	}
- 
- 	if (copy_to_user(ubuf, art_user, art_len))
-diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-index 58822575fd54..78d942477035 100644
---- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-+++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-@@ -17,17 +17,19 @@
- struct art {
- 	acpi_handle source;
- 	acpi_handle target;
--	u64 weight;
--	u64 ac0_max;
--	u64 ac1_max;
--	u64 ac2_max;
--	u64 ac3_max;
--	u64 ac4_max;
--	u64 ac5_max;
--	u64 ac6_max;
--	u64 ac7_max;
--	u64 ac8_max;
--	u64 ac9_max;
-+	struct_group(data,
-+		u64 weight;
-+		u64 ac0_max;
-+		u64 ac1_max;
-+		u64 ac2_max;
-+		u64 ac3_max;
-+		u64 ac4_max;
-+		u64 ac5_max;
-+		u64 ac6_max;
-+		u64 ac7_max;
-+		u64 ac8_max;
-+		u64 ac9_max;
-+	);
- } __packed;
- 
- struct trt {
-@@ -47,17 +49,19 @@ union art_object {
- 	struct {
- 		char source_device[8]; /* ACPI single name */
- 		char target_device[8]; /* ACPI single name */
--		u64 weight;
--		u64 ac0_max_level;
--		u64 ac1_max_level;
--		u64 ac2_max_level;
--		u64 ac3_max_level;
--		u64 ac4_max_level;
--		u64 ac5_max_level;
--		u64 ac6_max_level;
--		u64 ac7_max_level;
--		u64 ac8_max_level;
--		u64 ac9_max_level;
-+		struct_group(data,
-+			u64 weight;
-+			u64 ac0_max_level;
-+			u64 ac1_max_level;
-+			u64 ac2_max_level;
-+			u64 ac3_max_level;
-+			u64 ac4_max_level;
-+			u64 ac5_max_level;
-+			u64 ac6_max_level;
-+			u64 ac7_max_level;
-+			u64 ac8_max_level;
-+			u64 ac9_max_level;
-+		);
- 	};
- 	u64 __data[ACPI_NR_ART_ELEMENTS];
- };
--- 
-2.30.2
+> And if it is all about just syncing the genpd core, then can the genpd
+> core do something like what clk framework does? i.e. allow a new
+> optional genpd callback, get_performance_state() (just like
+> set_performance_state()), which can be called initially by the core to
+> get the performance to something other than zero. opp-set-rate is
+> there to set the performance state and enable the stuff as well.
+> That's why it looks incorrect in your case, where the function was
+> only required to be called once, and you are ending up calling it on
+> each resume. Limiting that with another local variable is bad as well.
 
+We discussed variant with get_performance_state() previously and Ulf
+didn't like it either since it still requires to touch 'internals' of GENPD.
