@@ -2,242 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106F43EF7C4
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 03:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B793EF7DE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 04:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbhHRB6P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 21:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S236498AbhHRCFi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 22:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbhHRB6O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 21:58:14 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64A9C0613A4
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 18:57:39 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id w4so610768ljh.13
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 18:57:39 -0700 (PDT)
+        with ESMTP id S233380AbhHRCFh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 22:05:37 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9DFC061764;
+        Tue, 17 Aug 2021 19:05:03 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z2so1237790lft.1;
+        Tue, 17 Aug 2021 19:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hyuS5cM+oS2D4iIFxbCcLrvi4PV7C/ZWM3vAMDfggqs=;
-        b=fw3Pv/8hwoCJb3C2ZkrikqkHidQ7HYp7ty1BaZDF6MUj0v7JIgN69LA8wyjnMNdnD0
-         BlubyNBKMyQ/+jvPNGdRqxxRYqXjQ35dFVHYeQdY2eQCoyuseSaES9B5rvf0KLXCdkaX
-         pCcGr9j/Ldyb8xUQB2FN7XE5VAixVbzCigw82DtrCgUdxcF+6OFJo6oL3DFogqMfvpjK
-         eew+l1Y6lY0q6NfRDXLGMvyCn1k35dRfsxnzRDE6kugo+27OF1L5mzRhb6pucDdcySXF
-         nFHk0dcuExPwvvRSmrKGWznHvHlbgODsaVYxeivgl8ta+nsWZNJv5aaBbB+ENft2xfEk
-         s1zg==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X8+ZsfkkdhFJ3lNlK7e7T4FVUdx6tvIJ9KJHYwNXX0E=;
+        b=psE/+Zb/PlhPOXdD9k7AaCLwlvP8OKK2CxCpqtTva5uF/wv+Xtz6ZZdtrMlAsRQDtg
+         7rJ1+OFJG70Mh6foE8c/wWZu0py55FepYDWxIbDuoVTxTgBuzT8ZcFjpgV0uw7z0bwOq
+         i9HHUiAj3Xqbast6UUZ8gmBgbXw0U4LpmOyNFm67RejtBHQP2jypUFUUKW0xIcMgMKcL
+         ChJSL/bQlQM0gRznLB21YUo8/DgwCsLyw/I/zDvt4ajeJqQnSAPqYHVtMBJYBP0KBvdo
+         65wfts0XEWuHOf4x7WBr50M1S1Ive7NyVGoWeMXJtbq5mjMMdP45+6N1n0CRVKczG1XI
+         jxgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hyuS5cM+oS2D4iIFxbCcLrvi4PV7C/ZWM3vAMDfggqs=;
-        b=n9+B/sucbZkSsuNvLNTTlj/BOHn1SEw2IS+VcBGl24GXSk5OPA7YIvx6RR/0yT9/7z
-         Bw3G5C4t7G6spofedroaqVQ2NmqhQwY6UFo3PpboGS+VGc8LM5gvjFoll6pG8mQEif0Y
-         /1QTzvzw9s/kFtykh+P99vnGXPl6hv020Nj0FCc+TldLJvyBhqiLiX549mjOPRBab5G8
-         OEbXzxtCoPKr2wIXIiXu390LOS+eHcYQIjXzIqqz5aUEcXca3QxMQUFG4eqbEf5mi/GM
-         NWDdx5Ihp8Onsh93Sowa272O9I2hyTuX7uAan5u8QZvDiJPHIRhiIm1tjFu5GUS5kQJz
-         dgiA==
-X-Gm-Message-State: AOAM5334avHXNriWRUL4kFWltEvB0gw4SlA6NaAq7SzgcoV0IojzSwk+
-        Ppo0s6bBKY4nb2buEaO8E4/S7vKiOSbPbQ==
-X-Google-Smtp-Source: ABdhPJzz/5K9HFWsPi/+QBKP8arQpae2ngvrP4N9KgFD9IBuNUFpQoREvhzbYQLycCA3UNUlDHKB9g==
-X-Received: by 2002:a05:651c:2de:: with SMTP id f30mr5598687ljo.79.1629251858052;
-        Tue, 17 Aug 2021 18:57:38 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y8sm349500lfh.249.2021.08.17.18.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 18:57:37 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 5/5] interconnect: msm8939: add support for AP-owned nodes
-Date:   Wed, 18 Aug 2021 04:57:32 +0300
-Message-Id: <20210818015732.1717810-6-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210818015732.1717810-1-dmitry.baryshkov@linaro.org>
-References: <20210818015732.1717810-1-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X8+ZsfkkdhFJ3lNlK7e7T4FVUdx6tvIJ9KJHYwNXX0E=;
+        b=nIFaXjtJgRKn12nQMXlgWtjIg0O4k7TSmlvjzrsk1Cn42u2rp0rMQhuM+lxT8uvuOq
+         pmPOHMSE2ddHa1qaltQvYkxdy1KjLYkRyUpGggnv3MB0xfDe4NcP5pjIg7HmL3miZDvD
+         x/OsqS/X8Q8BcwdihhgWP1JfZQpcgcML13oAO0yB5DS1NouzoPPSa3Xi63dWIVK8oU3o
+         tnCIpXpjAINkxyV3mjfmEEMi0KsFJNCa52eVtYwvqh/unIJCutgw7gJqao0sLOf6oBvm
+         wvdy31qrugL7ap8bbGQWpMzPcs8GORRlSBAJnesPnt4Ab0wyGFxaUACKyLp3bVxabkkb
+         LY3Q==
+X-Gm-Message-State: AOAM5302pOY/937Fs8CHosz17DxDCSdkAAn0neuo2JbfjqwUnWdU+Ay0
+        abOdsrT64BD1+NtHECPhp5l5yVXRaJI=
+X-Google-Smtp-Source: ABdhPJwwMJ2c/iB7oqJvPztbQr932HvMGogZlivLLNy//t0lEE4kjZGF01UFpJ8GCXlQsFh175I2Fw==
+X-Received: by 2002:a05:6512:3771:: with SMTP id z17mr4806675lft.46.1629252301306;
+        Tue, 17 Aug 2021 19:05:01 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
+        by smtp.googlemail.com with ESMTPSA id z7sm350800lft.302.2021.08.17.19.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 19:05:00 -0700 (PDT)
+Subject: Re: [PATCH v8 09/34] dt-bindings: host1x: Document Memory Client
+ resets of Host1x, GR2D and GR3D
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-10-digetx@gmail.com>
+ <YRxfWJJ6+1GgVs33@robh.at.kernel.org>
+ <fa9a1fb7-8a87-de1a-e40a-fdc4f4d05d57@gmail.com>
+Message-ID: <9deced25-b184-7b5b-cebf-0ad82bd959db@gmail.com>
+Date:   Wed, 18 Aug 2021 05:04:59 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <fa9a1fb7-8a87-de1a-e40a-fdc4f4d05d57@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Port support for AP-owned nodes from the downstream device tree.
+18.08.2021 04:37, Dmitry Osipenko пишет:
+> 18.08.2021 04:16, Rob Herring пишет:
+>> On Tue, Aug 17, 2021 at 04:27:29AM +0300, Dmitry Osipenko wrote:
+>>> Memory Client should be blocked before hardware reset is asserted in order
+>>> to prevent memory corruption and hanging of memory controller.
+>>>
+>>> Document Memory Client resets of Host1x, GR2D and GR3D hardware units.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>  .../bindings/display/tegra/nvidia,tegra20-host1x.txt          | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
+>>> index 62861a8fb5c6..07a08653798b 100644
+>>> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
+>>> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
+>>> @@ -18,6 +18,7 @@ Required properties:
+>>>  - resets: Must contain an entry for each entry in reset-names.
+>>>    See ../reset/reset.txt for details.
+>>>  - reset-names: Must include the following entries:
+>>> +  - mc
+>>>    - host1x
+>>
+>> New entries should be at the end. Order matters.
+> 
+> Indeed, order matters. In this case it matters by the hardware because
+> memory reset must be asserted before the controller's reset. We rely on
+> it in the code of the GENPD driver. Hence it's the intended order in
+> this patch.
+> 
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/interconnect/qcom/msm8939.c | 82 ++++++++++++++++++++++-------
- 1 file changed, 62 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-index 4a5a2ec64960..55c33a9044c5 100644
---- a/drivers/interconnect/qcom/msm8939.c
-+++ b/drivers/interconnect/qcom/msm8939.c
-@@ -11,6 +11,7 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/regmap.h>
- #include <linux/of_device.h>
- 
- #include <dt-bindings/interconnect/qcom,msm8939.h>
-@@ -110,32 +111,32 @@ enum {
- 	MSM8939_SNOC_PNOC_SLV,
- };
- 
--DEFINE_QNODE(bimc_snoc_mas, MSM8939_BIMC_SNOC_MAS, 8, -1, -1, MSM8939_BIMC_SNOC_SLV);
-+DEFINE_QNODE_AP(bimc_snoc_mas, MSM8939_BIMC_SNOC_MAS, 8, -1, -1, -1, 0, -1, MSM8939_BIMC_SNOC_SLV);
- DEFINE_QNODE(bimc_snoc_slv, MSM8939_BIMC_SNOC_SLV, 16, -1, 2, MSM8939_SNOC_INT_0, MSM8939_SNOC_INT_1);
--DEFINE_QNODE(mas_apss, MSM8939_MASTER_AMPSS_M0, 16, -1, -1, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
-+DEFINE_QNODE_AP(mas_apss, MSM8939_MASTER_AMPSS_M0, 16, -1, -1, NOC_QOS_MODE_FIXED, 0, 0, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
- DEFINE_QNODE(mas_audio, MSM8939_MASTER_LPASS, 4, -1, -1, MSM8939_PNOC_MAS_0);
- DEFINE_QNODE(mas_blsp_1, MSM8939_MASTER_BLSP_1, 4, -1, -1, MSM8939_PNOC_MAS_1);
- DEFINE_QNODE(mas_dehr, MSM8939_MASTER_DEHR, 4, -1, -1, MSM8939_PNOC_MAS_0);
--DEFINE_QNODE(mas_gfx, MSM8939_MASTER_GRAPHICS_3D, 16, -1, -1, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
--DEFINE_QNODE(mas_jpeg, MSM8939_MASTER_JPEG, 16, -1, -1, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
--DEFINE_QNODE(mas_mdp0, MSM8939_MASTER_MDP_PORT0, 16, -1, -1, MSM8939_SNOC_MM_INT_1, MSM8939_SNOC_MM_INT_2);
--DEFINE_QNODE(mas_mdp1, MSM8939_MASTER_MDP_PORT1, 16, -1, -1, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
--DEFINE_QNODE(mas_cpp, MSM8939_MASTER_CPP, 16, -1, -1, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mas_gfx, MSM8939_MASTER_GRAPHICS_3D, 16, -1, -1, NOC_QOS_MODE_FIXED, 0, 2, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
-+DEFINE_QNODE_AP(mas_jpeg, MSM8939_MASTER_JPEG, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 6, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mas_mdp0, MSM8939_MASTER_MDP_PORT0, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 7, MSM8939_SNOC_MM_INT_1, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mas_mdp1, MSM8939_MASTER_MDP_PORT1, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 13, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mas_cpp, MSM8939_MASTER_CPP, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 12, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
- DEFINE_QNODE(mas_pcnoc_crypto_0, MSM8939_MASTER_CRYPTO_CORE0, 8, -1, -1, MSM8939_PNOC_INT_1);
- DEFINE_QNODE(mas_pcnoc_sdcc_1, MSM8939_MASTER_SDCC_1, 8, -1, -1, MSM8939_PNOC_INT_1);
- DEFINE_QNODE(mas_pcnoc_sdcc_2, MSM8939_MASTER_SDCC_2, 8, -1, -1, MSM8939_PNOC_INT_1);
--DEFINE_QNODE(mas_qdss_bam, MSM8939_MASTER_QDSS_BAM, 8, -1, -1, MSM8939_SNOC_QDSS_INT);
--DEFINE_QNODE(mas_qdss_etr, MSM8939_MASTER_QDSS_ETR, 8, -1, -1, MSM8939_SNOC_QDSS_INT);
-+DEFINE_QNODE_AP(mas_qdss_bam, MSM8939_MASTER_QDSS_BAM, 8, -1, -1, NOC_QOS_MODE_FIXED, 1, 11, MSM8939_SNOC_QDSS_INT);
-+DEFINE_QNODE_AP(mas_qdss_etr, MSM8939_MASTER_QDSS_ETR, 8, -1, -1, NOC_QOS_MODE_FIXED, 1, 10, MSM8939_SNOC_QDSS_INT);
- DEFINE_QNODE(mas_snoc_cfg, MSM8939_MASTER_SNOC_CFG, 4, -1, -1, MSM8939_SLAVE_SRVC_SNOC);
- DEFINE_QNODE(mas_spdm, MSM8939_MASTER_SPDM, 4, -1, -1, MSM8939_PNOC_MAS_0);
--DEFINE_QNODE(mas_tcu0, MSM8939_MASTER_TCU0, 16, -1, -1, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
-+DEFINE_QNODE_AP(mas_tcu0, MSM8939_MASTER_TCU0, 16, -1, -1, NOC_QOS_MODE_FIXED, 2, 6, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
- DEFINE_QNODE(mas_usb_hs1, MSM8939_MASTER_USB_HS1, 4, -1, -1, MSM8939_PNOC_MAS_1);
- DEFINE_QNODE(mas_usb_hs2, MSM8939_MASTER_USB_HS2, 4, -1, -1, MSM8939_PNOC_MAS_1);
--DEFINE_QNODE(mas_vfe, MSM8939_MASTER_VFE, 16, -1, -1, MSM8939_SNOC_MM_INT_1, MSM8939_SNOC_MM_INT_2);
--DEFINE_QNODE(mas_video, MSM8939_MASTER_VIDEO_P0, 16, -1, -1, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
--DEFINE_QNODE(mm_int_0, MSM8939_SNOC_MM_INT_0, 16, -1, -1, MSM8939_SNOC_BIMC_2_MAS);
--DEFINE_QNODE(mm_int_1, MSM8939_SNOC_MM_INT_1, 16, -1, -1, MSM8939_SNOC_BIMC_1_MAS);
--DEFINE_QNODE(mm_int_2, MSM8939_SNOC_MM_INT_2, 16, -1, -1, MSM8939_SNOC_INT_0);
-+DEFINE_QNODE_AP(mas_vfe, MSM8939_MASTER_VFE, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 9, MSM8939_SNOC_MM_INT_1, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mas_video, MSM8939_MASTER_VIDEO_P0, 16, -1, -1, NOC_QOS_MODE_BYPASS, 0, 8, MSM8939_SNOC_MM_INT_0, MSM8939_SNOC_MM_INT_2);
-+DEFINE_QNODE_AP(mm_int_0, MSM8939_SNOC_MM_INT_0, 16, -1, -1, -1, 0, -1, MSM8939_SNOC_BIMC_2_MAS);
-+DEFINE_QNODE_AP(mm_int_1, MSM8939_SNOC_MM_INT_1, 16, -1, -1, -1, 0, -1, MSM8939_SNOC_BIMC_1_MAS);
-+DEFINE_QNODE_AP(mm_int_2, MSM8939_SNOC_MM_INT_2, 16, -1, -1, -1, 0, -1, MSM8939_SNOC_INT_0);
- DEFINE_QNODE(pcnoc_int_0, MSM8939_PNOC_INT_0, 8, -1, -1, MSM8939_PNOC_SNOC_MAS, MSM8939_PNOC_SLV_0, MSM8939_PNOC_SLV_1, MSM8939_PNOC_SLV_2, MSM8939_PNOC_SLV_3, MSM8939_PNOC_SLV_4, MSM8939_PNOC_SLV_8, MSM8939_PNOC_SLV_9);
- DEFINE_QNODE(pcnoc_int_1, MSM8939_PNOC_INT_1, 8, -1, -1, MSM8939_PNOC_SNOC_MAS);
- DEFINE_QNODE(pcnoc_m_0, MSM8939_PNOC_MAS_0, 8, -1, -1, MSM8939_PNOC_INT_0);
-@@ -149,7 +150,7 @@ DEFINE_QNODE(pcnoc_s_8, MSM8939_PNOC_SLV_8, 4, -1, -1, MSM8939_SLAVE_USB_HS1, MS
- DEFINE_QNODE(pcnoc_s_9, MSM8939_PNOC_SLV_9, 4, -1, -1, MSM8939_SLAVE_SDCC_2, MSM8939_SLAVE_LPASS, MSM8939_SLAVE_USB_HS2);
- DEFINE_QNODE(pcnoc_snoc_mas, MSM8939_PNOC_SNOC_MAS, 8, 29, -1, MSM8939_PNOC_SNOC_SLV);
- DEFINE_QNODE(pcnoc_snoc_slv, MSM8939_PNOC_SNOC_SLV, 8, -1, 45, MSM8939_SNOC_INT_0, MSM8939_SNOC_INT_BIMC, MSM8939_SNOC_INT_1);
--DEFINE_QNODE(qdss_int, MSM8939_SNOC_QDSS_INT, 8, -1, -1, MSM8939_SNOC_INT_0, MSM8939_SNOC_INT_BIMC);
-+DEFINE_QNODE_AP(qdss_int, MSM8939_SNOC_QDSS_INT, 8, -1, -1, -1, 0, -1, MSM8939_SNOC_INT_0, MSM8939_SNOC_INT_BIMC);
- DEFINE_QNODE(slv_apps_l2, MSM8939_SLAVE_AMPSS_L2, 16, -1, -1, 0);
- DEFINE_QNODE(slv_apss, MSM8939_SLAVE_APSS, 4, -1, -1, 0);
- DEFINE_QNODE(slv_audio, MSM8939_SLAVE_LPASS, 4, -1, -1, 0);
-@@ -188,12 +189,12 @@ DEFINE_QNODE(slv_tlmm, MSM8939_SLAVE_TLMM, 4, -1, -1, 0);
- DEFINE_QNODE(slv_usb_hs1, MSM8939_SLAVE_USB_HS1, 4, -1, -1, 0);
- DEFINE_QNODE(slv_usb_hs2, MSM8939_SLAVE_USB_HS2, 4, -1, -1, 0);
- DEFINE_QNODE(slv_venus_cfg, MSM8939_SLAVE_VENUS_CFG, 4, -1, -1, 0);
--DEFINE_QNODE(snoc_bimc_0_mas, MSM8939_SNOC_BIMC_0_MAS, 16, -1, -1, MSM8939_SNOC_BIMC_0_SLV);
--DEFINE_QNODE(snoc_bimc_0_slv, MSM8939_SNOC_BIMC_0_SLV, 16, -1, -1, MSM8939_SLAVE_EBI_CH0);
-+DEFINE_QNODE_AP(snoc_bimc_0_mas, MSM8939_SNOC_BIMC_0_MAS, 16, -1, -1, -1, 0, -1, MSM8939_SNOC_BIMC_0_SLV);
-+DEFINE_QNODE_AP(snoc_bimc_0_slv, MSM8939_SNOC_BIMC_0_SLV, 16, -1, -1, -1, 0, -1, MSM8939_SLAVE_EBI_CH0);
- DEFINE_QNODE(snoc_bimc_1_mas, MSM8939_SNOC_BIMC_1_MAS, 16, 76, -1, MSM8939_SNOC_BIMC_1_SLV);
- DEFINE_QNODE(snoc_bimc_1_slv, MSM8939_SNOC_BIMC_1_SLV, 16, -1, 104, MSM8939_SLAVE_EBI_CH0);
--DEFINE_QNODE(snoc_bimc_2_mas, MSM8939_SNOC_BIMC_2_MAS, 16, -1, -1, MSM8939_SNOC_BIMC_2_SLV);
--DEFINE_QNODE(snoc_bimc_2_slv, MSM8939_SNOC_BIMC_2_SLV, 16, -1, -1, MSM8939_SLAVE_EBI_CH0);
-+DEFINE_QNODE_AP(snoc_bimc_2_mas, MSM8939_SNOC_BIMC_2_MAS, 16, -1, -1, -1, 0, -1, MSM8939_SNOC_BIMC_2_SLV);
-+DEFINE_QNODE_AP(snoc_bimc_2_slv, MSM8939_SNOC_BIMC_2_SLV, 16, -1, -1, -1, 0, -1, MSM8939_SLAVE_EBI_CH0);
- DEFINE_QNODE(snoc_int_0, MSM8939_SNOC_INT_0, 8, 99, 130, MSM8939_SLAVE_QDSS_STM, MSM8939_SLAVE_IMEM, MSM8939_SNOC_PNOC_MAS);
- DEFINE_QNODE(snoc_int_1, MSM8939_SNOC_INT_1, 8, -1, -1, MSM8939_SLAVE_APSS, MSM8939_SLAVE_CATS_128, MSM8939_SLAVE_OCMEM_64);
- DEFINE_QNODE(snoc_int_bimc, MSM8939_SNOC_INT_BIMC, 8, 101, 132, MSM8939_SNOC_BIMC_1_MAS);
-@@ -222,9 +223,19 @@ static struct qcom_icc_node *msm8939_snoc_nodes[] = {
- 	[SNOC_QDSS_INT] = &qdss_int,
- };
- 
-+static const struct regmap_config msm8939_snoc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x14080,
-+	.fast_io	= true,
-+};
-+
- static struct qcom_icc_desc msm8939_snoc = {
- 	.nodes = msm8939_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_snoc_nodes),
-+	.regmap_cfg = &msm8939_snoc_regmap_config,
-+	.qos_offset = 0x7000,
- };
- 
- static struct qcom_icc_node *msm8939_snoc_mm_nodes[] = {
-@@ -239,9 +250,19 @@ static struct qcom_icc_node *msm8939_snoc_mm_nodes[] = {
- 	[SNOC_MM_INT_2] = &mm_int_2,
- };
- 
-+static const struct regmap_config msm8939_snoc_mm_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x14080,
-+	.fast_io	= true,
-+};
-+
- static struct qcom_icc_desc msm8939_snoc_mm = {
- 	.nodes = msm8939_snoc_mm_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_snoc_mm_nodes),
-+	.regmap_cfg = &msm8939_snoc_mm_regmap_config,
-+	.qos_offset = 0x7000,
- };
- 
- static struct qcom_icc_node *msm8939_bimc_nodes[] = {
-@@ -256,9 +277,20 @@ static struct qcom_icc_node *msm8939_bimc_nodes[] = {
- 	[SNOC_BIMC_2_SLV] = &snoc_bimc_2_slv,
- };
- 
-+static const struct regmap_config msm8939_bimc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x62000,
-+	.fast_io	= true,
-+};
-+
- static struct qcom_icc_desc msm8939_bimc = {
- 	.nodes = msm8939_bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_bimc_nodes),
-+	.is_bimc_node = true,
-+	.regmap_cfg = &msm8939_bimc_regmap_config,
-+	.qos_offset = 0x8000,
- };
- 
- static struct qcom_icc_node *msm8939_pcnoc_nodes[] = {
-@@ -316,9 +348,19 @@ static struct qcom_icc_node *msm8939_pcnoc_nodes[] = {
- 	[SNOC_PCNOC_SLV] = &snoc_pcnoc_slv,
- };
- 
-+static const struct regmap_config msm8939_pcnoc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x11000,
-+	.fast_io	= true,
-+};
-+
- static struct qcom_icc_desc msm8939_pcnoc = {
- 	.nodes = msm8939_pcnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_pcnoc_nodes),
-+	.regmap_cfg = &msm8939_pcnoc_regmap_config,
-+	.qos_offset = 0x7000,
- };
- 
- static const struct of_device_id msm8939_noc_of_match[] = {
--- 
-2.32.0
-
+Although, my bad. It should be to reorder items here, it's not a GENPD
+binding.
