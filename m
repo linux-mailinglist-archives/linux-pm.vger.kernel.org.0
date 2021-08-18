@@ -2,88 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D0A3EF8BF
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 05:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8233EF8E8
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 05:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbhHRDi3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Aug 2021 23:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S237287AbhHRD4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Aug 2021 23:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbhHRDi2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 23:38:28 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D912CC061764
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 20:37:54 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id a21so775039pfh.5
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 20:37:54 -0700 (PDT)
+        with ESMTP id S237181AbhHRD4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Aug 2021 23:56:11 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62387C0613D9
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 20:55:36 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id w8so865070pgf.5
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 20:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CIqXxZQMTfYf4KMWVdTMecbn2bp1Cy3dF+snZnUCor0=;
-        b=M4aL//HWus/ItMfUDjKFkNtL6bXZ+RaJqIQS2scGji60+vB4vhgzGtpnPTCO8fvrTr
-         bRLJwf0SDFdMZh0b/z/T/Og7loudWl/gY4/scDaiXq1N26UH19zvEEaYg7MUJPpqlZ3a
-         XIjQdgc3G77Tm5K/f/fwD4RNjzVcbQuyCAA1yeavivJz/6xpvhUO1/iN/tvjYjCm6zcF
-         XUdaKe/Ty30DX5wiDKtJ2KAg45mm3+ec7gc7O8Yofn+L/rATdz0E4/I4j0pPKqYf7cVx
-         q0BUYgmvmVqdgwBgSalrYNsB0z/TU8At6SFePmn/lJPAGBhCujBgA3Gd6b917AqUxklw
-         M5Sw==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=VGIhwyovjc9cLTorbY5F7s7VUrCyo5ROsIE6mKdF2i8=;
+        b=rsLZ+5+cs34CeKm8FdeypOasGszO5Z+LGg/gURNdpo/BaltaeBSvKidQFxg+U/P7vq
+         S/zusxLUtdDoCDzHAq+gTq22WAB40n4Qkk0Ku4cXOc+uTEyaQRKWv/b52rLV4JZHB+rE
+         GpTGxz7vZkIm7Ms92t/jEfqzxajkgCcDGx/hfYVqqHH+Ja2QK6EJtgOjTFD7Mons7/7z
+         jRQRosrCR9tYeU2COXGJUOTnQsHGWC5eYAYHYZf+lDoWMOvzM0YqaRI8vzA1Q6qR94h5
+         JdL36SX2xj7RIzuN9CFefrR3429SFDWAFHYvDz+a1OiNH/4h5wRF/0Uqw9a4yTL9NaQb
+         DX8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CIqXxZQMTfYf4KMWVdTMecbn2bp1Cy3dF+snZnUCor0=;
-        b=nikzfZEOA5fQ0LerFZY58yJUN0UITPkMG1tLnC3qvGfwV0S8cYDgvGL80ZEsRU4YhW
-         0SLWlHYUHD1mrlBlyHODQKAk1i9R1yiZdYGkbCzSFe/CJ6SKE9zzl0VYeUDQ4hKB5Vfx
-         0mH9yhpoFGhn9/rLbKKnX7IhziEotqSMRTGwYhANVH0HuggtO8nRMk5wVjxSAYikDFtr
-         w4Mopr/FcLa57wnbPbOvGMe2A6lhl5V70cuK38XIVdNLmdgRMygtGZC8wlbkGV9URuSH
-         NKn4iVXJDAt5u1kb3INCO1IURgLWm9q90+tWX/iyFIFNqcJAg+T3ECqh3weAvIPwlU4f
-         hnpg==
-X-Gm-Message-State: AOAM531fhomsBZprZPWmor3lbtZarQH4HjfpqP2ML4S6frqDYJzn+DFi
-        y7IxzfwCHmbDsNbfVfNkRPEOoA==
-X-Google-Smtp-Source: ABdhPJzOGxsw50WI5481yu1W8E5V0EvRZ+mP8uNqjTo8rrInZA/Ke2EUBvabuKvfYMAk2yI2gnDwsQ==
-X-Received: by 2002:a65:64d1:: with SMTP id t17mr6676899pgv.291.1629257874429;
-        Tue, 17 Aug 2021 20:37:54 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=VGIhwyovjc9cLTorbY5F7s7VUrCyo5ROsIE6mKdF2i8=;
+        b=ncBvukJ1QZlw7gI77V9PkghyZt5WNJZOuz2bHqOr9YA8S1Q39EI1yvTdlEfQVvkbUd
+         flIwCOvfk+au0SLqPKnwNesvUW/MzxcHr0kUq2dMYSRfGQsGeehJTvC+Lv3wresP6WlE
+         T0yLNv1WPLpi9HWNgTsJZluSVYWGGoho+e65yIhH9u2VUVrE9vatS4M3NuCRgSStnbR0
+         7FhgLONFMlkDDU6wIMQjb4DoyzsPE41Sg+WrGSoSewSHhpn+LScxzhuTl9qjmUEe72uS
+         4Dl99UVQkWPLDJpDCw4nMuw47D/4vR0GmZ6BJHoQjHXa7obULfDkJxAADEdggT9YgIf9
+         tx3Q==
+X-Gm-Message-State: AOAM5338iPH9VeELrl36CsNH1DEUQRsWFtkduzOwVBBVmXEyaLszfZj8
+        1gbof39Ma0nzaHK/CaDYIguewg==
+X-Google-Smtp-Source: ABdhPJxZ0gvNmqzlYvzU9rK9OQ8NNCMq9wCIZZhKFhU5FN4x6UJRSgCEgSUhRZIdfilYavV9v+XkrA==
+X-Received: by 2002:a62:a20d:0:b029:35b:73da:dc8d with SMTP id m13-20020a62a20d0000b029035b73dadc8dmr7200457pff.54.1629258935761;
+        Tue, 17 Aug 2021 20:55:35 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id h22sm4018298pfv.76.2021.08.17.20.37.53
+        by smtp.gmail.com with ESMTPSA id u21sm4880194pgk.57.2021.08.17.20.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 20:37:53 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 09:07:51 +0530
+        Tue, 17 Aug 2021 20:55:35 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 09:25:33 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
-        steev@kali.org, tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [Patch v5 3/6] cpufreq: qcom-cpufreq-hw: Add dcvs interrupt
- support
-Message-ID: <20210818033751.uulg5tgwfddmwp47@vireshk-i7>
-References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
- <20210809191605.3742979-4-thara.gopinath@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-2-digetx@gmail.com>
+ <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
+ <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210809191605.3742979-4-thara.gopinath@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-08-21, 15:16, Thara Gopinath wrote:
-> Add interrupt support to notify the kernel of h/w initiated frequency
-> throttling by LMh. Convey this to scheduler via thermal presssure
-> interface.
+On 17-08-21, 18:49, Dmitry Osipenko wrote:
+> 17.08.2021 10:55, Viresh Kumar пишет:
+> ...
+> >> +int dev_pm_opp_sync(struct device *dev)
+> >> +{
+> >> +	struct opp_table *opp_table;
+> >> +	struct dev_pm_opp *opp;
+> >> +	int ret = 0;
+> >> +
+> >> +	/* Device may not have OPP table */
+> >> +	opp_table = _find_opp_table(dev);
+> >> +	if (IS_ERR(opp_table))
+> >> +		return 0;
+> >> +
+> >> +	if (!_get_opp_count(opp_table))
+> >> +		goto put_table;
+> >> +
+> >> +	opp = _find_current_opp(dev, opp_table);
+> >> +	ret = _set_opp(dev, opp_table, opp, opp->rate);
+> > 
+> > And I am not sure how this will end up working, since new OPP will be
+> > equal to old one. Since I see you call this from resume() at many
+> > places.
 > 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
+> Initially OPP table is "uninitialized" and opp_table->enabled=false,
+> hence the first sync always works even if OPP is equal to old one. Once
+> OPP has been synced, all further syncs are NO-OPs, hence it doesn't
+> matter how many times syncing is called.
 > 
-> v4->v5:
-> 	- Changed throttle_lock from a spinlock to mutex to take potential
-> 	  race between LMh de-init sequence and reenabling of
-> 	  interrupts/polling after a thermal throttle event.
-> 	- Other cosmetic fixes as pointed out by Viresh.
+> https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/opp/core.c#L1012
 
-Applied. Thanks.
+Right, but how will this work from Resume ? Won't that be a no-op ?
 
 -- 
 viresh
