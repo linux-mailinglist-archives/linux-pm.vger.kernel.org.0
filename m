@@ -2,156 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A233F05AF
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 16:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009633F06BA
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 16:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238656AbhHROHn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Aug 2021 10:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbhHROHl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 10:07:41 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23442C061764;
-        Wed, 18 Aug 2021 07:07:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id x12so3693126wrr.11;
-        Wed, 18 Aug 2021 07:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i6nHV4Vzm5Umu6SJhmhoU8e3Ow8sOCfq6m4vf5vpOCg=;
-        b=ZJdtuwUuQvNaAbdr9Fz2fAvktw5J/+5+vjt8im/pkRZqyKjHlmqluk+dpJgPv/GFEk
-         rs7jlCk5NOlSnehipLU0nyzn/A/7FZS7QQCaIl7MSF6vAha+BX6LZBrQQREaflmjEitO
-         dlEahiAy8zC6MjFccmUrLBYvfs88a8jl/uHALh0tSc5Nn+N5OqlxOYEPLAvMwQAyowns
-         Ndkxrox4afb9mQcpEWWL0GiCRmTwzTOHCYxL6M4H8oWTYs7RmlUoqU0WistPX7vqT8pO
-         6Su4Nkctsrk6dlh0F8i2tqudBygnvEpqj+ChJ3xGjixCFrJ6bgmI3P/HGSPs7QQyovGr
-         4V5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i6nHV4Vzm5Umu6SJhmhoU8e3Ow8sOCfq6m4vf5vpOCg=;
-        b=ppTKTa/703CeAEI59hNnPTP/m+Te09QvsyLaeQh0wbfGD3ANAmhKMOlfhQXmALYSWs
-         DlxWkHbk1MN+JvtWh6lDqeUG7D+zicVKtvEX1pCIwk1UPaSTijlDGylYiZs+97zGeaHP
-         GCjLexRwAm6GmTygFxVYwAA11t6uWcWH2IJIhfgF1P6z35GqpeVkbJbJBtQPb8V8hsjl
-         eY7uj0ZgwV6BTFl3ObiJ+uUIQHDaGIICQBqNhZ1fPmAvqeR8gD3ar5rM4WdhRARzjA+u
-         HLroI4XkcBeKM3auSgk/dAaQlHG78hntBNSiuk+w+p+AWXJ1Ktcq0UKeoHR77GZdYob3
-         zv5Q==
-X-Gm-Message-State: AOAM531/qHmw0w9EyI5oh5UVYX8+7+9wnrwn4tterqWOKh2FChP7EGci
-        ixA7Jxc1TL0TXzc4XHUZtZQ=
-X-Google-Smtp-Source: ABdhPJyXq9/0R+WfXjdNLNbDmiuZklvSlQEBjFaDDAdAwgPSc6Y2VNRCrYkje8+AywzsdZxW8DAWow==
-X-Received: by 2002:a5d:500a:: with SMTP id e10mr11157882wrt.332.1629295624742;
-        Wed, 18 Aug 2021 07:07:04 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id e2sm6158851wrq.56.2021.08.18.07.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 07:07:03 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 16:07:02 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
-Message-ID: <YR0UBi/ejy+oF4Hm@orome.fritz.box>
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-8-digetx@gmail.com>
+        id S238637AbhHROcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Aug 2021 10:32:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39616 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238113AbhHROcJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Aug 2021 10:32:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 322736102A;
+        Wed, 18 Aug 2021 14:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629297094;
+        bh=ncrRWgj2Bq2+OHlv1UfRsN4lntRiLI4pzjySr9pdJB0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=W0DumQW01xpl6sTklDWzu7F3kNdp+4YVKO72a7WvbtYyrVxKe+xN2qoa/KSj5D3vy
+         TJVwmxqHIe2myWWdXMCHt5PSpUvlYML3S0iNePczPFcunVDxKI1vgH7+vMbM/r1OLZ
+         vcte50St9PgwKlLH7O3mIIMVaEZEMoPS2j8gGxfW3V4SaDKetiwB8LVK4KRCj01llg
+         k7x1N21YHeArDL6SUDhhdk7PoylDWjpwTomlHLiJQ+KBupaxqIqSpC5cYsyEVcqe7Q
+         m0A0GbE6fJrSh6YKFmP2SUUzVLK/pxEgCLUZRDYSfUZUOIBICHJVJgKXlFWiwu/7i7
+         fmtOb5s3/LdJQ==
+Received: by mail-ej1-f49.google.com with SMTP id bq25so5429814ejb.11;
+        Wed, 18 Aug 2021 07:31:34 -0700 (PDT)
+X-Gm-Message-State: AOAM5322JHaywkGUZJvpI81t9QwA/mzzkqD0y6YLXV0cnGxm5GTTsrq7
+        xBHqQsOBoI4mldQ7KzNe9Us9MQ2PyOX8xAbk8w==
+X-Google-Smtp-Source: ABdhPJyykdC+jiKpEM2YAMM63v5jb9SS1uxnZS8MhiM92coZtkLMMJguta0ERfWBr+mToxXid9kpz5kSsVLml9mESAU=
+X-Received: by 2002:a17:907:393:: with SMTP id ss19mr10439349ejb.468.1629297092760;
+ Wed, 18 Aug 2021 07:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GjgnhAguwPYREA1d"
-Content-Disposition: inline
-In-Reply-To: <20210817012754.8710-8-digetx@gmail.com>
-User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
+References: <20210813125414.104467-1-krzysztof.kozlowski@canonical.com>
+ <73eebe7b-46da-137b-1938-09a5b453320a@arm.com> <0ec05a0b-9499-3bf4-a231-ea53b1cf99ed@canonical.com>
+In-Reply-To: <0ec05a0b-9499-3bf4-a231-ea53b1cf99ed@canonical.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 18 Aug 2021 09:31:21 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLOHY0P=Y8-Ss0cYr54SWgpV0zktEg8p-Cj_F+juDQNoA@mail.gmail.com>
+Message-ID: <CAL_JsqLOHY0P=Y8-Ss0cYr54SWgpV0zktEg8p-Cj_F+juDQNoA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: memory: convert Samsung Exynos DMC to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Aug 16, 2021 at 3:32 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 16/08/2021 09:53, Lukasz Luba wrote:
+> > Hi Krzysztof,
+> >
+> > On 8/13/21 1:54 PM, Krzysztof Kozlowski wrote:
+> >> Convert Samsung Exynos5422 SoC frequency and voltage scaling for
+> >> Dynamic Memory Controller to DT schema format using json-schema.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >> ---
+> >>   .../memory-controllers/exynos5422-dmc.txt     |  84 -----------
+> >>   .../samsung,exynos5422-dmc.yaml               | 137 ++++++++++++++++++
+> >>   MAINTAINERS                                   |   2 +-
+> >
+> > I'm not an expert in this DT scripts and why it complains. Maybe it
+> > complains because the "samsung,exynos-ppmu" is defined in the .txt
+> > file... (?)
+> > Although, in general looks OK.
+> >
+> > Acked-by: Lukasz Luba <lukasz.luba@arm.com>
+>
+> I think the warning (triggered by DT_CHECKER_FLAGS=-m) can be ignored
+> because it complains about compatible in example which is not present in
+> the bindings. Usually it means someone wrote example not matching the
+> bindings (e.g. a typo in compatible) but here it is on purpose.
 
---GjgnhAguwPYREA1d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ultimately, it will mean the binding is undocumented (or a typo). But
+right now, it means the binding is undocumented with a schema. It's
+off by default because there's still about 80 warnings. It's turned on
+for the bot so we don't add more. So please don't ignore it.
 
-On Tue, Aug 17, 2021 at 04:27:27AM +0300, Dmitry Osipenko wrote:
-[...]
-> +struct clk *tegra_clk_register(struct clk_hw *hw)
-> +{
-> +	struct platform_device *pdev;
-> +	struct device *dev = NULL;
-> +	struct device_node *np;
-> +	const char *dev_name;
-> +
-> +	np = tegra_clk_get_of_node(hw);
-> +
-> +	if (!of_device_is_available(np))
-> +		goto put_node;
-> +
-> +	dev_name = kasprintf(GFP_KERNEL, "tegra_clk_%s", hw->init->name);
-> +	if (!dev_name)
-> +		goto put_node;
-> +
-> +	pdev = of_platform_device_create(np, dev_name, NULL);
-> +	if (!pdev) {
-> +		pr_err("%s: failed to create device for %pOF\n", __func__, np);
-> +		kfree(dev_name);
-> +		goto put_node;
-> +	}
-> +
-> +	dev = &pdev->dev;
-> +	pm_runtime_enable(dev);
-> +put_node:
-> +	of_node_put(np);
-> +
-> +	return clk_register(dev, hw);
-> +}
-
-This looks wrong. Why do we need struct platform_device objects for each
-of these clocks? That's going to be a massive amount of platform devices
-and they will completely mess up sysfs.
-
-Thierry
-
---GjgnhAguwPYREA1d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEdFAYACgkQ3SOs138+
-s6HeRQ/+On1vzXNiDk0hs4KISsGV+2p4XxyJVq/mvJWq4nwbzB0fnbltpnQGekNK
-rv9LKvLwpMpikV4RHOysHn4hnusz+I3P/SOJVq8nB5ctz7QEcklxJNgaKIyY3Nri
-JD8EiV936HB8R2Ecg5fEynk0MHmJ4+Pe1pFjfK/3i6l1Xx5Xy+jt/AwHXkTAJG6B
-LilpaYxjeYK0xLVY0uy/3TWmSNj7zmA9NLYadLedHWKAIrmfdhL4qEn0keHZPjeN
-wTRUkexp/mHpfwaNRpUvHM2sF6WuetFM6FrIIAEyVB4SSq3usTLtWtFWl3qca2Vi
-f/LKNT+GlKsS7vs6/bokHE5CtOc1bbILItuJCunjCSnOgElWzJ+WV2oAdBodcDr9
-AaDHCtN1kTr/1f0KYw3zKQHErq1Z9sRrTeETjAkYSE6agOOHm+eBIkPF38mdl7ZN
-eI5syiX8NwgIHv4jp1YR6lbvplx9XhD9Se4EcrgNSytiYYWfZMDEyH3dFTzCjzyT
-E5pNO8BuA8JHJWCUYtqjl+OccK0XhnR99XyHvsb1HM+jT0EqRjLc59PJlOwQeX2f
-KwOX9DhOQf+ZyRegAHSh4uNpR2fySasbnBT7RwyG17MKbeoTEqTOTJ5QZmMXSqDa
-kNchGN8JwMPpyDcw6adERGyrLYh0tFLdrM+1JjImnnDrLx9SuRo=
-=yj83
------END PGP SIGNATURE-----
-
---GjgnhAguwPYREA1d--
+Rob
