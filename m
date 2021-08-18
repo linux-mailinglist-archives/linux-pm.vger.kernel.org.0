@@ -2,32 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EB03F051C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 15:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEEF3F0522
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 15:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbhHRNqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Aug 2021 09:46:48 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42241 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237797AbhHRNqn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Aug 2021 09:46:43 -0400
+        id S238388AbhHRNq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Aug 2021 09:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238206AbhHRNqx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 09:46:53 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FDCC0613A3;
+        Wed, 18 Aug 2021 06:46:19 -0700 (PDT)
 Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4GqTgy4TBLz9t2g; Wed, 18 Aug 2021 23:46:06 +1000 (AEST)
+        id 4GqTh13bTxz9t18; Wed, 18 Aug 2021 23:46:09 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-pm@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-In-Reply-To: <20210803211547.1093820-1-nathan@kernel.org>
-References: <20210803211547.1093820-1-nathan@kernel.org>
-Subject: Re: [PATCH] cpuidle: pseries: Mark pseries_idle_proble() as __init
-Message-Id: <162929392065.3619265.16135263225670762399.b4-ty@ellerman.id.au>
-Date:   Wed, 18 Aug 2021 23:38:40 +1000
+To:     pratik.r.sampat@gmail.com, rjw@rjwysocki.net,
+        "Pratik R. Sampat" <psampat@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
+        mpe@ellerman.id.au
+In-Reply-To: <20210728120500.87549-1-psampat@linux.ibm.com>
+References: <20210728120500.87549-1-psampat@linux.ibm.com>
+Subject: Re: [PATCH v2 0/1] cpufreq:powernv: Fix init_chip_info initialization in numa=off
+Message-Id: <162929392908.3619265.5755055049744911919.b4-ty@ellerman.id.au>
+Date:   Wed, 18 Aug 2021 23:38:49 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -35,24 +34,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Aug 2021 14:15:47 -0700, Nathan Chancellor wrote:
-> After commit 7cbd631d4dec ("cpuidle: pseries: Fixup CEDE0 latency only
-> for POWER10 onwards"), pseries_idle_probe() is no longer inlined when
-> compiling with clang, which causes a modpost warning:
+On Wed, 28 Jul 2021 17:34:59 +0530, Pratik R. Sampat wrote:
+> v1: https://lkml.org/lkml/2021/7/26/1509
+> Changelog v1-->v2:
+> Based on comments from Gautham,
+> 1. Included a #define for MAX_NR_CHIPS instead of hardcoding the
+> allocation.
 > 
-> WARNING: modpost: vmlinux.o(.text+0xc86a54): Section mismatch in
-> reference from the function pseries_idle_probe() to the function
-> .init.text:fixup_cede0_latency()
-> The function pseries_idle_probe() references
-> the function __init fixup_cede0_latency().
-> This is often because pseries_idle_probe lacks a __init
-> annotation or the annotation of fixup_cede0_latency is wrong.
+> Pratik R. Sampat (1):
+>   cpufreq:powernv: Fix init_chip_info initialization in numa=off
 > 
 > [...]
 
 Applied to powerpc/next.
 
-[1/1] cpuidle: pseries: Mark pseries_idle_proble() as __init
-      https://git.kernel.org/powerpc/c/d04691d373e75c83424b85c0e68e4a3f9370c10d
+[1/1] cpufreq:powernv: Fix init_chip_info initialization in numa=off
+      https://git.kernel.org/powerpc/c/f34ee9cb2c5ac5af426fee6fa4591a34d187e696
 
 cheers
