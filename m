@@ -2,145 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 981E13EFA7D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 08:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0C93EFB1C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 08:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbhHRGBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Aug 2021 02:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S238606AbhHRGI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Aug 2021 02:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237822AbhHRGBP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 02:01:15 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637B1C0617AF
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:00:37 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so8241233pjr.1
-        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:00:37 -0700 (PDT)
+        with ESMTP id S239165AbhHRGIP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 02:08:15 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2598FC061154
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:05:59 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id a21so1069735pfh.5
+        for <linux-pm@vger.kernel.org>; Tue, 17 Aug 2021 23:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jSLfXbs59mtRstzo4Hk2BNosvMcxHU6QjHDYVbvhF94=;
-        b=IZiDZuRS1dgbax2OIM0qBL1zjf9wYlmKLTEfzJy5RuUwQu4eQ6Cqmnd2ZfQ9EnnS5E
-         Jr1fAcgL/JdFgkFZ89xjBuBPSORKqFiw+3e1WhRfjnkRI6XhhARyc2h+l5KPSXucToC1
-         5NtBgghBSCisOGicrsb9AX3gqpRGgB9wryJPh6wD220SUglcmvJcuJFjUggtI/Et9Qhq
-         yJL8iRXbbCgl4lZdUfxZejEJadW6CurxesAMbeYQ33LbfTu1KA1dNxOq6HMfw0FLGwDr
-         OcBg18AVZFD7ZTL3PphKIXIDGtjeF3qBwk12Pxl3ByoW3VLzL+hvaHjyLcAcizZ3cE8S
-         xzgA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NTYV2vCojWGaRvoj20z4daltbaCLEHm5I23EtSqrsdc=;
+        b=gcLhrbC6oh1Q4v7lBnuyaS91t4jaL8TehpxBKFXFSBMm2H8MVSQk2tUC2P0GUeSeUv
+         h/dbuSnQtyawGoL6LpCi/+xx7NsJ21uSVxeAivgSkoywKe+OIiou9Fs+GBDr8IzotyVN
+         9YcRY+LtNaBwMh5J6OjEP2f59D4wukYLAQ6gs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jSLfXbs59mtRstzo4Hk2BNosvMcxHU6QjHDYVbvhF94=;
-        b=U0+fjE7NVBJtzvtWOIURP7+Xg/HX/B0WM5G8pWDiqLzZAiyJG4U67uCssMP+1nm6z2
-         0ZprfP5Tq0fcCKaAxCUXoseYsucXIQENbrNHBtV9OvjGcUxby3ymwqUUJoIXuoDU5Blj
-         n9Ucas2BKgP3lbiXl5JQKFz21j22U/VlXaT5hnuyL+26qslZdj2ZhF7RtpRINKgezHeq
-         vzPGUxYFgXeh/+BPMBMr2rWYiKi4usjsCmR3XU8aVjUT277xeG0KX+KzlFgM2YJxTevU
-         gWzqzHrhXkl2gtB/FEKsJraxaRppBiBwAx3082VOw864xW9S/YEVhjR/mAGtQQg0XVS/
-         vzSw==
-X-Gm-Message-State: AOAM531HW3atXGycyudATE6PAS83Dm8Sk0Bkgh6bTCDoPBkfvBh0p6TX
-        K7b2kho5WHA4oTXCDLM0dIeeGQ==
-X-Google-Smtp-Source: ABdhPJz6nHvt8tLhRUxNLQv5z93Dx/TL1iQrf7p3Xot0rNlhIhtJA6nFhb5bwd/3tPACvE5mJ3aZJA==
-X-Received: by 2002:a17:902:edc8:b029:12d:4a06:1c25 with SMTP id q8-20020a170902edc8b029012d4a061c25mr5874222plk.61.1629266436958;
-        Tue, 17 Aug 2021 23:00:36 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 136sm6020660pge.77.2021.08.17.23.00.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NTYV2vCojWGaRvoj20z4daltbaCLEHm5I23EtSqrsdc=;
+        b=Mc/FdMi/l8fJjTaCzEq1bql4iJ+0L7OqB1/R9X078FEgtO3Rng2BVC+h+YzRlIc/cX
+         3XPiN4PIGI+vwwRY9s8zYeb6vnXXcqJLiO8o1QLIEjkPn9CpJHT5ySB7BYgjgCbCM29W
+         VEOrpi2OjBgsK4Xye7tiSi2KL9GFhVqrIavppiXEORXh4lEFtm5VCC/S5P23+v0Dii7z
+         jGGm4b+LVeaIWjY460Y96BwDWYCT6UslUNmi+T7kO5dGDne2By/oVqAButneNHd6PSjP
+         6NhAofLuY/7QWTbVJhW9AziOYies0KfmXFq2ZWnbz9FmBsNoCfnoOLwwi4DzI6Q2769H
+         6f6w==
+X-Gm-Message-State: AOAM533LGWU5U0cd+RyelmXxdinpsO66BaESVtb9msxzTu4MonO5R7l9
+        WVRX6ZxCPqdBby5uczslAGpIog==
+X-Google-Smtp-Source: ABdhPJzKHoX3yyU+dnBla/w9sJktvSQulGP69FZGHBDzf2nPRtzqPXfJGufcOa8NTqoZzja7AHU62Q==
+X-Received: by 2002:a05:6a00:2d6:b0:3e2:e023:c6cd with SMTP id b22-20020a056a0002d600b003e2e023c6cdmr1988068pft.19.1629266758722;
+        Tue, 17 Aug 2021 23:05:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n23sm5008845pgv.76.2021.08.17.23.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 23:00:36 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 11:30:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210818060034.tdu3ocbqlnao336u@vireshk-i7>
-References: <20210817012754.8710-2-digetx@gmail.com>
- <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
- <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
- <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
- <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
- <20210818043131.7klajx6drvvkftoc@vireshk-i7>
- <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7>
- <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+        Tue, 17 Aug 2021 23:05:57 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-staging@lists.linux.dev,
+        linux-block@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 12/63] thermal: intel: int340x_thermal: Use struct_group() for memcpy() region
+Date:   Tue, 17 Aug 2021 23:04:42 -0700
+Message-Id: <20210818060533.3569517-13-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210818060533.3569517-1-keescook@chromium.org>
+References: <20210818060533.3569517-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3430; h=from:subject; bh=eWRxzyg8ZHcfvuxChrH1G3MSkKagVjV8YQYyT7daR/o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHKMgzFFZrngl6f/ha2lcQf7jZ0XOwEEmDffMqDAl g1Ks8xmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYRyjIAAKCRCJcvTf3G3AJr4LEA CsX0wkoSQ5k+eRw495v98ZukqiRSRwtgtvHDRZg+FSzpTwOnEEYMAyH7uOTV2xyt//wSEjLpityQkQ 6DJYoi8exVReP0/IGENdNgCX9CSvnY4mKgOStyQOF6wF6zUmA49X9+fDt/me/CXdx2hYbg0vtLMnkq 5gBvKdXtWgWRoELEugEmh2t5qHjUpqpCNnyRtLha7bTKgabmSOmpcevXF1HoOvOs1cRNXoPcdx5CV0 bDoINmq6Xyh/tk0h4pIdo6SfZAOs0c3ErkSnT15sehzyggOoDkGVjJG5VBR3mukUg7mBnWnktHwIHX /tYJqO+CdgwVMhdFRyKr6l6llZ3FYBwNYN/FLkfP1rnu6FXfH0LeQTTnuKm5YeiGKMK3k9oxRcqmp2 gMgnuYcTxVZ3rCDIYJJ6MzSIQtwWs9qBXZvHiQV4DaUG4xlsdQl73NhV0kA1qUrWu1KG3ET05Fm+c4 HDpZitCNYo0GvcGDfWBeLQqlbQ7IfL2V3I6YLWINVfJEsKl+g2+ctBb19ZzFmusloqZCbrZPyTc+0S NmmotsEztnwmtEBmMhE7LJfL4We9u8itUfkywd+2pr4j4z1E7U8Zv+BycFc/U8vYneKZZgYxcHGWiO T+ntRlh8llbsS1IRx6+6G4JBfFq6XbT/Hv9hLw4FXNSrDM+N5Np9vPDUT0Ow==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-08-21, 11:28, Viresh Kumar wrote:
-> On 18-08-21, 08:21, Dmitry Osipenko wrote:
-> > Yes, GENPD will cache the perf state across suspend/resume and initially
-> > cached value is out of sync with h/w.
-> > 
-> > Nothing else. But let me clarify it all again.
-> 
-> Thanks for your explanation.
-> 
-> > Initially the performance state of all GENPDs is 0 for all devices.
-> > 
-> > The clock rate is preinitialized for all devices to a some default rate
-> > by clk driver, or by bootloader or by assigned-clocks in DT.
-> > 
-> > When device is rpm-resumed, the resume callback of a device driver
-> > enables the clock.
-> > 
-> > Before clock is enabled, the voltage needs to be configured in
-> > accordance to the clk rate.
-> > 
-> > So now we have a GENPD with pstate=0 on a first rpm-resume, which
-> > doesn't match the h/w configuration. Calling dev_pm_opp_sync() sets the
-> > pstate in accordance to the h/w config.
-> 
-> What about calling dev_pm_opp_set_rate(dev, clk_get_rate(dev)) here
-> instead ? That will work, right ? The advantage is it works without
-> any special routine to do so.
-> 
-> I also wonder looking at your gr3d.c changes, you set a set-opp
-> helper, but the driver doesn't call set_opp_rate at all. Who calls it
-> ?
-> 
-> And if it is all about just syncing the genpd core, then can the genpd
-> core do something like what clk framework does? i.e. allow a new
-> optional genpd callback, get_performance_state() (just like
-> set_performance_state()), which can be called initially by the core to
-> get the performance to something other than zero. opp-set-rate is
-> there to set the performance state and enable the stuff as well.
-> That's why it looks incorrect in your case, where the function was
-> only required to be called once, and you are ending up calling it on
-> each resume. Limiting that with another local variable is bad as well.
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), avoid intentionally writing across
+neighboring fields.
 
-Ulf, this last part is for you :)
+Use struct_group() in struct art around members weight, and ac[0-9]_max,
+so they can be referenced together. This will allow memcpy() and sizeof()
+to more easily reason about sizes, improve readability, and avoid future
+warnings about writing beyond the end of weight.
 
+"pahole" shows no size nor member offset changes to struct art.
+"objdump -d" shows no meaningful object code changes (i.e. only source
+line number induced differences).
+
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ .../intel/int340x_thermal/acpi_thermal_rel.c  |  5 +-
+ .../intel/int340x_thermal/acpi_thermal_rel.h  | 48 ++++++++++---------
+ 2 files changed, 29 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+index a478cff8162a..e90690a234c4 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+@@ -250,8 +250,9 @@ static int fill_art(char __user *ubuf)
+ 		get_single_name(arts[i].source, art_user[i].source_device);
+ 		get_single_name(arts[i].target, art_user[i].target_device);
+ 		/* copy the rest int data in addition to source and target */
+-		memcpy(&art_user[i].weight, &arts[i].weight,
+-			sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
++		BUILD_BUG_ON(sizeof(art_user[i].data) !=
++			     sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
++		memcpy(&art_user[i].data, &arts[i].data, sizeof(art_user[i].data));
+ 	}
+ 
+ 	if (copy_to_user(ubuf, art_user, art_len))
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+index 58822575fd54..78d942477035 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+@@ -17,17 +17,19 @@
+ struct art {
+ 	acpi_handle source;
+ 	acpi_handle target;
+-	u64 weight;
+-	u64 ac0_max;
+-	u64 ac1_max;
+-	u64 ac2_max;
+-	u64 ac3_max;
+-	u64 ac4_max;
+-	u64 ac5_max;
+-	u64 ac6_max;
+-	u64 ac7_max;
+-	u64 ac8_max;
+-	u64 ac9_max;
++	struct_group(data,
++		u64 weight;
++		u64 ac0_max;
++		u64 ac1_max;
++		u64 ac2_max;
++		u64 ac3_max;
++		u64 ac4_max;
++		u64 ac5_max;
++		u64 ac6_max;
++		u64 ac7_max;
++		u64 ac8_max;
++		u64 ac9_max;
++	);
+ } __packed;
+ 
+ struct trt {
+@@ -47,17 +49,19 @@ union art_object {
+ 	struct {
+ 		char source_device[8]; /* ACPI single name */
+ 		char target_device[8]; /* ACPI single name */
+-		u64 weight;
+-		u64 ac0_max_level;
+-		u64 ac1_max_level;
+-		u64 ac2_max_level;
+-		u64 ac3_max_level;
+-		u64 ac4_max_level;
+-		u64 ac5_max_level;
+-		u64 ac6_max_level;
+-		u64 ac7_max_level;
+-		u64 ac8_max_level;
+-		u64 ac9_max_level;
++		struct_group(data,
++			u64 weight;
++			u64 ac0_max_level;
++			u64 ac1_max_level;
++			u64 ac2_max_level;
++			u64 ac3_max_level;
++			u64 ac4_max_level;
++			u64 ac5_max_level;
++			u64 ac6_max_level;
++			u64 ac7_max_level;
++			u64 ac8_max_level;
++			u64 ac9_max_level;
++		);
+ 	};
+ 	u64 __data[ACPI_NR_ART_ELEMENTS];
+ };
 -- 
-viresh
+2.30.2
+
