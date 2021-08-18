@@ -2,116 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 036213F0135
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 12:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1D23F0152
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Aug 2021 12:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234542AbhHRKFK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Aug 2021 06:05:10 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:60586 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbhHRKFG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 06:05:06 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629281072; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=ffYmGcp7Eu3u33+LBwJ9wlg05be8ylA9sfwQ3B7Gs8o=; b=pC/ufhj7UY8zWG1jOVraH/+dcxTQ9QHxVeC+BFOwSQGL+finSKBcw7rQKP8Xj5vzoaBeqG/x
- u6bcG5NUA3yVkNFHgKeRoAmqHwGtJQp/+eOLOrpJpco9ATn9vdXTU7EpQ+8z+R0dJqo+oYD5
- nk3U0LEkTW3XFiBiCSc6fQMTeyo=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 611cdb01b3873958f527e4f9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 18 Aug 2021 10:03:45
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id EE8D9C4360C; Wed, 18 Aug 2021 10:03:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.102] (unknown [49.204.181.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4FF2BC4338F;
-        Wed, 18 Aug 2021 10:03:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 4FF2BC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v2] cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu
- cpufreq driver flag
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>
-References: <1628777955-7198-1-git-send-email-tdas@codeaurora.org>
- <CAD=FV=UF1MMKg9Y0HD3xpZ36BVZyuzr3xkwXzeSz__T1XD1r=w@mail.gmail.com>
-From:   Taniya Das <tdas@codeaurora.org>
-Message-ID: <77dde5fa-6b12-d970-ac3e-0d3f6c352fbe@codeaurora.org>
-Date:   Wed, 18 Aug 2021 15:33:37 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S233855AbhHRKKF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Aug 2021 06:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233872AbhHRKKC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Aug 2021 06:10:02 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F7DC0613A3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Aug 2021 03:09:26 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id e9so1408357vst.6
+        for <linux-pm@vger.kernel.org>; Wed, 18 Aug 2021 03:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oSMbBaxj5kYnNMOz3HCW8c2GlUKNZpl4G8kt8vaDvcU=;
+        b=NUh5EB/TshJuP06sY5queTXRGXqZEcl6UMqE3f6o4C7Yia1aQ7YYVwjSqato7REGKR
+         ytMlzGxdm1dXPtaK5whOZ0H7rSbvF5peR2wviaOGrorE6BcPYImZyUzulxDwUsFPuWLL
+         5meVhpkcaBkJDevWoxCSWZsvC5nJ7ZnpAY2bGN7+nkDxVClk3HURgKAukKwevldHPSBd
+         uKsOCzfFz4fP/YbEiE46NuL+3ooaMnSQgmklXAz6fLHlvgEGNgwEPm1JpSu0mHG8iX+S
+         G1rewHtqg4EDw2hrAD1fMBl1z5/lSpUx+/rIUDOZ+tcCTRi6DZjOeA44wsHIAFoqgBbV
+         KNmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oSMbBaxj5kYnNMOz3HCW8c2GlUKNZpl4G8kt8vaDvcU=;
+        b=HnuHfA81g4zmMB0i7yGdjq0zB2OYDxtJODn54BL9Ye8uKjicufXQywTJH+5lQ3wO+b
+         K7ucAY1Yv+PZxCbWoMK2jxJg0APCFQ9bqfmYCwhLlOwst2GU/9wmLBugVo5J8+95mXr/
+         rk67u6eKutrld5S15xE0NTmaCH8Fa5eNiZnrbkle6YsCcyAUztAvrTFjPT0So13XY++f
+         Q3I7QU6av4i8sew4JmS6kQgVYtchS/LDYmsqYmP6Y4QA3MExLrHhf3nFW2mErxTqzwvx
+         l+H7wpnFRKA+lRF6G5PvdVMtgHb3x/9UavkgufwZZ6YJ31eRnFCUW663+C8Ts4xcFduP
+         0FJQ==
+X-Gm-Message-State: AOAM533/iCzKCvHul8NMRrsGQkW2BDr6112em2+LPHIPji57to1sTNOc
+        vopB8PToGh0J0gzRkyOykGC1lNupJwbrcIGCuqunOg==
+X-Google-Smtp-Source: ABdhPJxX5vUHiF4S9rKI8AwIyB37h/2agUjbKLWH1bKK7BdK0tRX0vp1siQiAlDeJWpHDBxGhS/HHDjvQsTJxQC3MTQ=
+X-Received: by 2002:a05:6102:5f4:: with SMTP id w20mr6416911vsf.34.1629281364036;
+ Wed, 18 Aug 2021 03:09:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=UF1MMKg9Y0HD3xpZ36BVZyuzr3xkwXzeSz__T1XD1r=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
+In-Reply-To: <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 18 Aug 2021 12:08:47 +0200
+Message-ID: <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+On Wed, 18 Aug 2021 at 11:50, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 18-08-21, 11:41, Ulf Hansson wrote:
+> > On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > What we need here is just configure. So something like this then:
+> > >
+> > > - genpd->get_performance_state()
+> > >   -> dev_pm_opp_get_current_opp() //New API
+> > >   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
+> > >
+> > > This can be done just once from probe() then.
+> >
+> > How would dev_pm_opp_get_current_opp() work? Do you have a suggestion?
+>
+> The opp core already has a way of finding current OPP, that's what
+> Dmitry is trying to use here. It finds it using clk_get_rate(), if
+> that is zero, it picks the lowest freq possible.
+>
+> > I am sure I understand the problem. When a device is getting probed,
+> > it needs to consume power, how else can the corresponding driver
+> > successfully probe it?
+>
+> Dmitry can answer that better, but a device doesn't necessarily need
+> to consume energy in probe. It can consume bus clock, like APB we
+> have, but the more energy consuming stuff can be left disabled until
+> the time a user comes up. Probe will just end up registering the
+> driver and initializing it.
 
-Thanks for your review.
+That's perfectly fine, as then it's likely that it won't vote for an
+OPP, but can postpone that as well.
 
-On 8/13/2021 2:03 AM, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Aug 12, 2021 at 7:19 AM Taniya Das <tdas@codeaurora.org> wrote:
->>
->> As remote cpufreq updates are supported on QCOM platforms, set
->> dvfs_possible_from_any_cpu cpufreq driver flag.
->>
->> Signed-off-by: Taniya Das <tdas@codeaurora.org>
->> ---
->>
->> [v2]
->>    * update the dvfs_possible_from_any_cpu always.
->>
->>   drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index f86859b..53d3898 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -223,6 +223,8 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
->>
->>          table[i].frequency = CPUFREQ_TABLE_END;
->>          policy->freq_table = table;
->> +       policy->dvfs_possible_from_any_cpu = true;
->> +
-> 
-> Why is this in the qcom_cpufreq_hw_read_lut() function? Shouldn't it
-> be straight in qcom_cpufreq_hw_cpu_init()?
-> 
-All CPU policy related data is updated here, thus wanted to keep it 
-together.
+Perhaps the problem is rather that the HW may already carry a non-zero
+vote made from a bootloader. If the consumer driver tries to clear
+that vote (calling dev_pm_opp_set_rate(dev, 0), for example), it would
+still not lead to any updates of the performance state in genpd,
+because genpd internally has initialized the performance-state to
+zero.
 
-> -Doug
-> 
+Dmitry?
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation.
+>
+> --
+> viresh
 
---
+Kind regards
+Uffe
