@@ -2,128 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3298C3F1C26
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Aug 2021 17:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720593F1D9E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Aug 2021 18:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240725AbhHSPEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Aug 2021 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
+        id S229870AbhHSQRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Aug 2021 12:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240700AbhHSPEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Aug 2021 11:04:10 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1726DC061756
-        for <linux-pm@vger.kernel.org>; Thu, 19 Aug 2021 08:03:34 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id d16so4183419vsf.12
-        for <linux-pm@vger.kernel.org>; Thu, 19 Aug 2021 08:03:34 -0700 (PDT)
+        with ESMTP id S229497AbhHSQRl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Aug 2021 12:17:41 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A644AC061575;
+        Thu, 19 Aug 2021 09:17:04 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o15so4158257wmr.3;
+        Thu, 19 Aug 2021 09:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LxeIiFGzA9+nCXREKf+MuHrFXJ4KP6fo54AIdNxUpxk=;
-        b=j2faza2Tjx8fcJI/p1fwwisw9XX4xAmB15S883aQsGplzkZKB3AW7MzbfVGTceKF4M
-         F594aJpmxGFHj80os51sZOaE838Lt2pzaCang9q0ljhhPPvMU+GRJb/6sQ98aAGWzNx+
-         HNlEUPXyDXhcy+Kle835ZsrOnEyjRlsCvOkTp+al88fVm1zoBBN9crOY61k7km734nRT
-         OgRdzq76b40E5mXMUgoSMCXIFXvKCB5QjLVc6yo0A1L87EB+gGmAnnZmIFtMzgctyz7+
-         JkLvLRasabd4yUovx0YJKxesCVKxMNY8ZqsGHF4bIUzncjocwPcp3ZRw+nvGIgzIQGY5
-         0mCA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=60qINEW/AajNCq1e+l/+W08Fyl6DoGCIURNuZ7bsdck=;
+        b=uTqJWSeNGF+lF+nvNnEIkEavsCZHzmRSicfBPYqjqhCUMol7qkO7p4zdXBxXzeS4vT
+         LUXoyy4jqxt9JRa9GA2emnqvcgjM5m2JH6xpgqUnHRqrvhXJ0ra+UdQrGTHBIigAbPLh
+         VtxYJrYzvVlZAFn9BLoC03dGbU6/D7G3RL7V20nMcs7xOj6F0WluZa6ULpmAHfq5dHWJ
+         HXoLsG3Ntc0X9376FP560pBl7c5j6ef3ByAkw7chpgshwtvTwJMn4sKZPsmEYVKGvuIs
+         umScIh5+iEwTdQ0CShvhEEtGLV53HAS6lzbT7CRVhL1cxI0eKkOyVSJRLsE+nSFs10iz
+         Va5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LxeIiFGzA9+nCXREKf+MuHrFXJ4KP6fo54AIdNxUpxk=;
-        b=uH9C0rmDAxlLHdoPgWI64fbuE4iKJhwkxldDc/Yh50ZkSEBYi7+2n9jJ/j2/SUM/2N
-         Jz5loyI+GL1k8je2UtJMQEnhq922TQjFVNWeAevTQfup3N5BrhwciLA4FuArnC+SJs7+
-         Q0TrW3HIDACX+o6xAuUtWLFeeSQCc5CQCosKVJik+zBuKYoqA9GTLrdcDgXODHNx8lT7
-         GuddSxepUqWt7G0gEDOgec52r4ODtrvykHJ6qLFfpddRY1mYadlgIU9yerS5DuU6q/Gu
-         CfrcXS8b9NX/wNaagFSRshyrikZugCPrw8KuubZ94trofed4hHDrhgiIInLjvnkoaStV
-         /L4g==
-X-Gm-Message-State: AOAM533sX5xU4fXELnxZ5BjeR90Cr8QHBUtp3SObqB+LJ/6UHs2CyBcy
-        u2DgpDyJTLrTXUvB6cdNMoXtewL/lAKat4wUhos/Ag==
-X-Google-Smtp-Source: ABdhPJwVrPaKisYbYhaQOFuZlYwQ+Wc4l/X1XXthUJ0v9p6pBtnY63AhF3f1HII6vMkrfq//cdj/N3/jUNV/EeeNNAQ=
-X-Received: by 2002:a67:f6d8:: with SMTP id v24mr12966030vso.48.1629385413278;
- Thu, 19 Aug 2021 08:03:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com>
- <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
- <20200922161215.GD30658@codeaurora.org> <CAJZ5v0ipDRkPe6N9B6RzvHyCBobz8B9EoBfPh4DANrL_e86+Ww@mail.gmail.com>
- <bd62ffea-9736-f8f7-6a48-13e81f802aea@linaro.org> <2fe42a4d-469a-0424-45d4-5d7027c88263@codeaurora.org>
-In-Reply-To: <2fe42a4d-469a-0424-45d4-5d7027c88263@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 Aug 2021 17:02:57 +0200
-Message-ID: <CAPDyKFqpQSaVG63UxK9iuRnnONVD6iY2+aHZCe=cbrfuuV+dwg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: governor: export cpuidle governor functions
-To:     Maulik Shah <mkshah@codeaurora.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=60qINEW/AajNCq1e+l/+W08Fyl6DoGCIURNuZ7bsdck=;
+        b=RI1bYk24P1GtNB/U1ZDFhu4TpcFKXTG7nH3BKLxR39aUxac4+JI31pYozRHoTaGhGC
+         JkZ+QKA5Aj77Xhs6GE/SVpQH1SSWpfjJ0QU/hSdpnWY1BH0ldglo5+zLgMHH+q3ZeZuP
+         NXRmBXsZX4QmJLrbIcsMd1EtMNyuzXXRSXh8ascFLYJ2ODo5bQ0O5ZhlTiAUO4KI/19u
+         zVTQf544ImnakiyZKw2eiDnDKi6fuVOS6A2iU8+w+TT6CbZqpizCOjanoOmIrcLN6M0x
+         Vo8jR0ytTa38YscPHCeWkjllG3WAK8ybli5yhlJx04fQrix9RHFyTZTLZZm3W9Z19rns
+         q9XQ==
+X-Gm-Message-State: AOAM532gSRbN7mZM7W2zlml/fE8EnzpVn0zwMuP9iltBqMVYVhPS19l5
+        1WDvJNWtkQuKuCKhWHcokYw=
+X-Google-Smtp-Source: ABdhPJx2olGrXmJhDc92ifXD/T9C9Dyg3QQIU/AaBjuCkLci0TRvThG/zCRGsYcF6TD012k/6ZhEWA==
+X-Received: by 2002:a1c:26c5:: with SMTP id m188mr14633566wmm.19.1629389823304;
+        Thu, 19 Aug 2021 09:17:03 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id e25sm3956144wra.90.2021.08.19.09.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Aug 2021 09:17:02 -0700 (PDT)
+Date:   Thu, 19 Aug 2021 18:17:01 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Todd Kjos <tkjos@google.com>,
-        Srinivas Rao L <lsrao@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 19/34] pwm: tegra: Add runtime PM and OPP support
+Message-ID: <YR6D/QMDakjlD5Ve@orome.fritz.box>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-20-digetx@gmail.com>
+ <YR5ay6+r0hJsUbhy@orome.fritz.box>
+ <CAPDyKFqr6NYO89io+6EfwrtELhTMps-tpGcAVbmuQ1_NnOD7Ew@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="v92KmlAbafaPcAq1"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqr6NYO89io+6EfwrtELhTMps-tpGcAVbmuQ1_NnOD7Ew@mail.gmail.com>
+User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 17 Aug 2021 at 11:32, Maulik Shah <mkshah@codeaurora.org> wrote:
->
-> Hi Daniel/Rafael,
->
->  >> would it make sense to convert the governors into modules
->
-> i am not aware if this was not pursued further due to any issue.
->
-> Do you see any concerns to allow existing governors compiled as loadable
-> module?
-> if not i can work on same and post. please do let me know your thoughts
-> on this.
->
-> i have CCed Saravana and Todd for awareness.
 
-I suggest you re-submit a new patch and put some arguments of why this
-is useful for us in the commit message. Then we can discuss that
-instead, rather than this old patch.
+--v92KmlAbafaPcAq1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Kind regards
-Uffe
+On Thu, Aug 19, 2021 at 04:04:50PM +0200, Ulf Hansson wrote:
+> On Thu, 19 Aug 2021 at 15:21, Thierry Reding <thierry.reding@gmail.com> w=
+rote:
+> >
+> > On Tue, Aug 17, 2021 at 04:27:39AM +0300, Dmitry Osipenko wrote:
+> > > The PWM on Tegra belongs to the core power domain and we're going to
+> > > enable GENPD support for the core domain. Now PWM must be resumed usi=
+ng
+> > > runtime PM API in order to initialize the PWM power state. The PWM cl=
+ock
+> > > rate must be changed using OPP API that will reconfigure the power do=
+main
+> > > performance state in accordance to the rate. Add runtime PM and OPP
+> > > support to the PWM driver.
+> > >
+> > > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > > ---
+> > >  drivers/pwm/pwm-tegra.c | 104 ++++++++++++++++++++++++++++++++------=
+--
+> > >  1 file changed, 85 insertions(+), 19 deletions(-)
+> >
+> > Can this be safely applied independently of the rest of the series, or
+> > are there any dependencies on earlier patches?
+>=20
+> Just to make sure we don't rush something in, I would rather withhold
+> all runtime PM related patches in the series, until we have agreed on
+> how to fix the in genpd/opp core parts. Simply, because those may very
+> well affect the deployments in the drivers.
 
->
-> Thanks,
-> Maulik
->
-> On 10/10/2020 1:56 AM, Daniel Lezcano wrote:
-> > Hi Rafael,
-> >
-> > On 22/09/2020 19:27, Rafael J. Wysocki wrote:
-> >> Hi Lina,
-> >>
-> >> On Tue, Sep 22, 2020 at 6:12 PM Lina Iyer <ilina@codeaurora.org> wrote:
-> >>> Hi Rafael,
-> >>>
-> >>> On Tue, Sep 22 2020 at 10:00 -0600, Rafael J. Wysocki wrote:
-> >>>> Sorry for the delay.
-> >>>>
-> >>>> On Wed, Sep 9, 2020 at 12:15 AM Lina Iyer <ilina@codeaurora.org> wrote:
-> >>>>> Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
-> >>>>> capability of registering cpuidle governors, which was unused at that
-> >>>>> time. By exporting the symbol, let's allow platform specific modules to
-> >>>>> register cpuidle governors and use cpuidle_governor_latency_req() to get
-> >>>>> the QoS for the CPU.
-> >>>> Which platform-specific modules may want to do that and why?
-> >>>>
-> >>> We are planning a custom cpuidle governor for QCOM SoCs. With Android,
-> >>> the idea is to make them loadable modules so they can be in a separate
-> >>> partition.
-> >> Well, the $subject patch is not applicable without a mainline user
-> >> requiring this, so it needs to be posted along with that user.
-> > Putting apart the custom cpuidle governor mentioned above, would it make
-> > sense to convert the governors into modules ? It is pointless to have
-> > all of them compiled in, especially with distros doing make
-> > allmodconfig, no?
-> >
-> >
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
->
+Okay, understood. I didn't realize this may have an impact on how
+drivers need to cooperate. I'll hold off on applying any of these
+patches until the discussion has settled, then.
+
+Thierry
+
+--v92KmlAbafaPcAq1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEeg/oACgkQ3SOs138+
+s6HxGg//Ql/ilCJ6m24EOkbDMDHwSFLN7MYgmfi1Muvarf/bqQFb1LIOonS0qeTr
+fHvvi587/6LtOdHE0PNwTl0SEz5UpxSojnZdTDjV2/JdSgy7LeJ2RBbeZ7kxVCMP
+3ud/I9kVkE1BaAtRzX0sqNJOIDA2MG00wBq08+PNS9ihOvipqypiweD5JSaB5MSi
+Gof9qhzVOZV/ONjRZ7Ib0kjig/qx0+lpJ2W/15QdU4/OHp9QP/ONoinEIk9WPaXU
+QveXwGDwo27fi1MQQKsQCwoytQZaaFjqyy3gnZNiAjY6fUikfa0TSvjZBXGJduvf
+YXJJIt1dy09Zk589NliTddgaZE4anOdgW7c02KwLSLw4RxsAgFG8xfj1Z8i9DhWs
+GQGNkYNXlia3rj7uiU6dJGLlhtyNblI96fNGXqnlhnIkuDJvYuKm9BRs9e9gGDva
+qvsD03sjGzToLh26dSvTZa6KPqK7pgqkPyOxP4PuqUNECw5IOfVNXd5S4JKQMHat
+QDO1QwVz9eg29cSSX7oziTvc7b1iS0IqVdtfiDa/SzWC7sdCVn+hCVD+SR5vEDHY
+6KcokLAcDqd8YXs71HDqDz4G3L+P17bEoHjcYIz/zJl+c5r+JDmxuhCHL0Ak7KlO
+BxfqqqYVBPahJsnmVcGVnAMavszy2PwqEQXM9PGZYEevCsi83lo=
+=yoaX
+-----END PGP SIGNATURE-----
+
+--v92KmlAbafaPcAq1--
