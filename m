@@ -2,43 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843603F34B1
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 21:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3E53F34B4
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 21:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhHTTfk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 20 Aug 2021 15:35:40 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:45762 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbhHTTfi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 15:35:38 -0400
-Received: by mail-ot1-f44.google.com with SMTP id r17-20020a0568302371b0290504f3f418fbso16249146oth.12;
-        Fri, 20 Aug 2021 12:35:00 -0700 (PDT)
+        id S229672AbhHTTg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 15:36:57 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:41839 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232596AbhHTTgz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 15:36:55 -0400
+Received: by mail-ot1-f46.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso1498517ota.8;
+        Fri, 20 Aug 2021 12:36:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=UhhdjSVB/AbbZ0MLULfGdhAskZ9J1ly9WiPjDdOzwC4=;
-        b=YTD+F83E6UIKdPiFr3FcsUOQ+sLdOy+V0Ny7AEER+bHnKCVi7GlgYDaYe/Ajsvqgin
-         zdbrK8+z9LX+LCowx0E+Ksc/1ZTMJNMeLpfBXo4t8hDx/0Vq0fRfyM3HrgNNmeHWoGd5
-         bxr1a9FXMu2Wv3je/1znTgB7JkPyoYThH3oFiV01LLD5TKeBrRZDyZriQOLHYdTvDz/E
-         /R4QVWDbHPyuaqKkrbfB+Z/et6xq4rz/BN5n8C5il30JaOPBlGfS9yvWBBER6bXoYswQ
-         hYmiyqsJ13RgZjyXbe//O3F+GKn3rTAmkwd+PufdS+WCuBIekKOePlf7vw3yqhx6t2Bu
-         TDAg==
-X-Gm-Message-State: AOAM5300MRqLxhvog4pYORP6iH0e30T3TL05pF8okrMB39rbRg3K4Cky
-        UE1UOJSRR37XS/ZADXSxPJ2pVolZRgfsni9kLvKQDwqUzZFqvQ==
-X-Google-Smtp-Source: ABdhPJzvwKhSjGFsvgjSHHxLsEY+O3hKaLvTv6ew8y8HgOE2xJjATeGRRUvBVeC51PeInGvRazFmUQJqDaQWmqkeHAI=
-X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr18642775oth.321.1629488099804;
- Fri, 20 Aug 2021 12:34:59 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=tlG8gFHdwbNMnGBV3L4Ud/dyohUxKHygZ2pV3sjYueE=;
+        b=FTX0gFQd+RTqjJ7VR1RUabuGvXFn+rMoCtvL8as5UXpGUzoJHYfc0DdfO4e/iBEjdP
+         YgmaoMzTkke15xHAGyXFosWQHmqTI1fOA/KbL4JWaIaAm5AG/aHoIeX9qAh84nOg4YKX
+         faRoQdi0HzVMAHziTpBbpxYTJYpgd6T6Ld7KDdAiu9LGL5jrp5PJ4jlhDiTa/SJM6xk0
+         SEDcIcXsS6KidnSbUXWqltZEE3TAq1C27A1GYDKjXLhaNGCZby3/4BAntK8PdMQVGRoA
+         j4p/U3aRigp0+eMhogCoknvJsI+sVl3UIq3XQ+dhbmHthhZE3nzcY5lmlqfaKiUSYXph
+         xuCA==
+X-Gm-Message-State: AOAM532nGkqS2VuZNFP63XOX4Sr0TZIwNYIFFe0e5QbwIFlHUfWHepJK
+        P2jDfq9JBw6qj/5QbtvOcFMwQwNQuYIvKJGVtZc=
+X-Google-Smtp-Source: ABdhPJzO4vI7OgzMyMxKl9AmbSMGac8CHAtTH/FPfvvhz15gV2BzjRw3meT56Q1PVZzlFup7BncdO3WjE0JjBMsWj3M=
+X-Received: by 2002:a9d:a57:: with SMTP id 81mr5054906otg.260.1629488177258;
+ Fri, 20 Aug 2021 12:36:17 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Aug 2021 21:34:48 +0200
-Message-ID: <CAJZ5v0j7hmSZObB5Aptr=9z4LbbazwzWy7UK6KCjSp_1C8QCOQ@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.14-rc7
+Date:   Fri, 20 Aug 2021 21:36:06 +0200
+Message-ID: <CAJZ5v0g14eg5PT5+AnKh_Uf+a7Ap5t5+G_LcU8+A-tQS3UY15g@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v5.14-rc7
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -48,63 +47,42 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.14-rc7
+ acpi-5.14-rc7
 
-with top-most commit f2963c7ec7cc337ca286271f3111b1ed3ad5f023
+with top-most commit 0f09f4c48118ce3c562e1028df7fe0f8150493d6
 
- Merge branch 'pm-opp'
+ Merge branch 'acpi-pm'
 
 on top of commit 7c60610d476766e128cc4284bb6349732cbd6606
 
  Linux 5.14-rc6
 
-to receive power management fixes for 5.14-rc7.
+to receive ACPI fixes for 5.14-rc7.
 
-These fix some issues in the ARM cpufreq drivers and in the
-operating performance points (OPP) framework.
+These fix two mistakes in new code.
 
 Specifics:
 
- - Fix unuseful WARN() in the OPP core and prevent a noisy warning
-   from being printed by OPP _put functions (Dmitry Osipenko).
+ - Prevent confusing messages from being printed if the PRMT table
+   is not present or there are no PRM modules (Aubrey Li).
 
- - Fix error path when allocation failed in the arm_scmi cpufreq
-   driver (Lukasz Luba).
-
- - Blacklist Qualcomm sc8180x and Qualcomm sm8150 in
-   cpufreq-dt-platdev (Bjorn Andersson, Thara Gopinath).
-
- - Forbid cpufreq for 1.2 GHz variant in the armada-37xx cpufreq
-   driver (Marek Behún).
+ - Fix the handling of suspend-to-idle entry and exit in the case
+   when the Microsoft UUID is used with the Low-Power S0 Idle _DSM
+   interface (Mario Limonciello).
 
 Thanks!
 
 
 ---------------
 
-Bjorn Andersson (1):
-      cpufreq: blacklist Qualcomm sc8180x in cpufreq-dt-platdev
+Aubrey Li (1):
+      ACPI: PRM: Deal with table not present or no module found
 
-Dmitry Osipenko (1):
-      opp: Drop empty-table checks from _put functions
-
-Lukasz Luba (1):
-      cpufreq: arm_scmi: Fix error path when allocation failed
-
-Marek Behún (1):
-      cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
-
-Michał Mirosław (1):
-      opp: remove WARN when no valid OPPs remain
-
-Thara Gopinath (1):
-      cpufreq: blocklist Qualcomm sm8150 in cpufreq-dt-platdev
+Mario Limonciello (1):
+      ACPI: PM: s2idle: Invert Microsoft UUID entry and exit
 
 ---------------
 
- drivers/cpufreq/armada-37xx-cpufreq.c |  6 +++++-
- drivers/cpufreq/cpufreq-dt-platdev.c  |  2 ++
- drivers/cpufreq/scmi-cpufreq.c        |  2 +-
- drivers/opp/core.c                    | 15 ---------------
- drivers/opp/of.c                      |  5 +++--
- 5 files changed, 11 insertions(+), 19 deletions(-)
+ drivers/acpi/prmt.c       | 6 ++++++
+ drivers/acpi/x86/s2idle.c | 4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
