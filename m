@@ -2,156 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BBA3F2CD5
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 15:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348E03F2CDB
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 15:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbhHTNJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 09:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S240616AbhHTNLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 09:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbhHTNJZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 09:09:25 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B02EC0613D9
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id u39so4077812uad.10
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
+        with ESMTP id S238510AbhHTNLH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 09:11:07 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A822C061575
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 06:10:29 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q6so14213497wrv.6
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 06:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
-        b=WC/dbJiZXZbYao7JhIntQY4TZ71VEiAo3x28NE7fEM5kyH3E5QMkrYaKxo+tOHuBq2
-         4fOoN/8kF20QYOvTlDeczofK7BcIqjasNY7CBq53XfqL9k8ztpMQHfVcSzVO71rO64Zq
-         McT44tin8yfog5Tj3F9uEcMm8s9RXuEY0am/zJIYxZIPBOSKQ0gPSUGTqV2fLnNdUMyA
-         Udra5icYrRXmu3Bub8tb1oL++vAVtV4op8H5c4RaKOsboeh/aX+gQt/xKF7m6+TffsNV
-         KpFsGCqib0Qpb9uD4iaINA3IeiJAs50v1pCyq6JF3tpma3/8Ou1apbdGh5FgySUdxEte
-         6zRw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JGwwJdwtudLTEIgTRNxfN12vJMwR2ib2m9Rc8xqQO/A=;
+        b=be/++HF/SDiU7XR3QbVbS6Huz3knXu6tpXk5v6plce1xWf2mn3upyePrih4x1tbvWW
+         zhbJuifVz7kz0hphM9KoCVzsyb36tU1MvVs6Bfi31YkjJaLU3OAuktDaNUIPpvtoBpru
+         /U6ki79X0NCd2B1A1bpQfL6qNJ/57wVCM6t4uP2k2txAYNII2QRptgmMnAZwjaX7UUxV
+         qcXAsaz5medx2G1nnUuVN+Zcs71ii0ap0B64nzqkpCF7laTCJpHEMhIZshM0xuCnA+Jr
+         LuUgSHWBUU9MU5gQVHkCAyc+FPPcxqiLjeWipEhX4brJKh98lWI79lyXf0imSTcYX0dD
+         pU3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
-        b=G5w0AGduH1E9vFhGA8tOYUGImZHc80tdG5h30HjMAM0UzaBgJqR7XSugrShbB8XVob
-         q5JCNEBlUNgFyUo6au8SWRmmoVYoW/BxWakTrrCPM3tzV3KfR6ULAloouCCe2rqpj/qK
-         Jp2eKtcFuGsSuH8XaKwelcZIYrSkuxi4HiUY/5f5hzQiTCaCq/BpcgbI3WIdGgnIFwRv
-         7roVr6amRV5ppRv8gJdcTzBU9cnerS7u0U8LcJNfTR4ebThCKWIqVFd0Ln5mKCG0t2bA
-         Qs04zB6lWWIz4TA0Vwt1nKc1QdpfIo4WvuXTyXqB/OXzXJQ/sms1pOzue9Hg70myhOzs
-         Hd7w==
-X-Gm-Message-State: AOAM531KQ80QUP4Gqpj1uuqT2b6zYCGDdNpemz6KesHojuAmkald+IlM
-        +At/uA6fodQQbFO/edPdj1BNB7IMJKKqiE6/PSiwBg==
-X-Google-Smtp-Source: ABdhPJyudXWst0uOFOvLTh4dvpAObwIHCZFQbOR7Ax2SinJKzLNlpYWdAnSEO7YQ/BLnbTZWMq48nnebeaOpVOjUigE=
-X-Received: by 2002:ab0:60a9:: with SMTP id f9mr15039087uam.19.1629464926939;
- Fri, 20 Aug 2021 06:08:46 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JGwwJdwtudLTEIgTRNxfN12vJMwR2ib2m9Rc8xqQO/A=;
+        b=SXz3wbeWVoNEyWeCXMthNDdwjGjodgj2NQWegU2gxmZDCxLcP83TY9v9B4wpr6KsfU
+         TATKLCNwRkkYhqOC9wvaHTtxUNgJeO/uiBUWwxUUiZ3OiKQtGdQaVnUpoM1tiO1ZVg6X
+         EiXuoRg2EbzG3Ozrv9+9ojYUHXKNJTvb4ncv9VSstmNsCZjA+QjyxIpM3vGFYxsbhfMJ
+         sScWtETLhavM/JQdztuw0cS3SuObkyGZQLxjHaAPjhU8yQxxhCnYyoAFePQtfJlJA62D
+         LiZ5S68fV+hJYnAtQVlIpK9NZllnyOaVRUqcbvfKfXvr4k0PADx1gw6QkzB7BYS868U+
+         NRew==
+X-Gm-Message-State: AOAM530Jvm2d3LW4lqbG2MQ6pyN0dl1tT3+fvzUJFvkyzfactDpiA5cw
+        o8UEuoxzrdAl2GuJGuR2Aokr8g==
+X-Google-Smtp-Source: ABdhPJw39LyMV35FzoMSAega8xxA34c4SQk4/eGco8RfbC4n5Ho8h2ylExfMZsUsWJQmKkDXzUCY2w==
+X-Received: by 2002:adf:f9d2:: with SMTP id w18mr10021565wrr.402.1629465027666;
+        Fri, 20 Aug 2021 06:10:27 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c378:b01b:5d2d:5223? ([2a01:e34:ed2f:f020:c378:b01b:5d2d:5223])
+        by smtp.googlemail.com with ESMTPSA id v1sm5755286wrt.93.2021.08.20.06.10.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Aug 2021 06:10:27 -0700 (PDT)
+Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Process HWP Guaranteed change
+ notification
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rui.zhang@intel.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        lenb@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210820024006.2347720-1-srinivas.pandruvada@linux.intel.com>
+ <20210820024006.2347720-2-srinivas.pandruvada@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <567c9ec4-9b88-f2f5-6d75-075dd96a76ae@linaro.org>
+Date:   Fri, 20 Aug 2021 15:10:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210817012754.8710-1-digetx@gmail.com> <20210817012754.8710-8-digetx@gmail.com>
- <YR0UBi/ejy+oF4Hm@orome.fritz.box> <da7356cb-05ee-ba84-8a7c-6e69d853a805@gmail.com>
- <YR04YHGEluqLIZeo@orome.fritz.box> <ad99db08-4696-1636-5829-5260f93dc681@gmail.com>
- <YR6Mvips3HAntDy0@orome.fritz.box> <e17bbe8d-7c0f-fc3d-03c7-d75c54c24a43@gmail.com>
- <YR+VDZzTihmpENp6@orome.fritz.box>
-In-Reply-To: <YR+VDZzTihmpENp6@orome.fritz.box>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Aug 2021 15:08:10 +0200
-Message-ID: <CAPDyKFpJ+TK0w1GZEA7G=rtAjq5ipmVR4P0wy7uHiEGVWRk5yA@mail.gmail.com>
-Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210820024006.2347720-2-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
+On 20/08/2021 04:40, Srinivas Pandruvada wrote:
+> It is possible that HWP guaranteed ratio is changed in response to
+> change in power and thermal limits. For example when Intel Speed Select
+> performance profile is changed or there is change in TDP, hardware can
+> send notifications. It is possible that the guaranteed ratio is
+> increased. This creates an issue when turbo is disabled, as the old
+> limits set in MSR_HWP_REQUEST are still lower and hardware will clip
+> to older limits.
+> 
+> This change enables HWP interrupt and process HWP interrupts. When
+> guaranteed is changed, calls cpufreq_update_policy() so that driver
+> callbacks are called to update to new HWP limits. This callback
+> is called from a delayed workqueue of 10ms to avoid frequent updates.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-> >
-> > I'm creating platform device for the clocks that require DVFS. These
-> > clocks don't use regulator, they are attached to the CORE domain.
-> > GENPD framework manages the performance state, aggregating perf votes
-> > from each device, i.e. from each clock individually.
-> >
-> > You want to reinvent another layer of aggregation on top of GENPD.
-> > This doesn't worth the effort, we won't get anything from it, it
-> > should be a lot of extra complexity for nothing. We will also lose
-> > from it because pm_genpd_summary won't show you a per-device info.
-> >
-> > domain                          status          children                           performance
-> >     /device                                             runtime status
-> > ----------------------------------------------------------------------------------------------
-> > heg                             on                                                 1000000
-> >     /devices/soc0/50000000.host1x                       active                     1000000
-> >     /devices/soc0/50000000.host1x/54140000.gr2d         suspended                  0
-> > mpe                             off-0                                              0
-> > vdec                            off-0                                              0
-> >     /devices/soc0/6001a000.vde                          suspended                  0
-> > venc                            off-0                                              0
-> > 3d1                             off-0                                              0
-> >     /devices/genpd:1:54180000.gr3d                      suspended                  0
-> > 3d0                             off-0                                              0
-> >     /devices/genpd:0:54180000.gr3d                      suspended                  0
-> > core-domain                     on                                                 1000000
-> >                                                 3d0, 3d1, venc, vdec, mpe, heg
-> >     /devices/soc0/7d000000.usb                          active                     1000000
-> >     /devices/soc0/78000400.mmc                          active                     950000
-> >     /devices/soc0/7000f400.memory-controller            unsupported                1000000
-> >     /devices/soc0/7000a000.pwm                          active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_c        active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_e        suspended                  0
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_m        active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_sclk         active                     1000000
-> >
->
-> I suppose if there's really no good way of doing this other than
-> providing a struct device, then so be it. I think the cleaned up sysfs
-> shown in the summary above looks much better than what the original
-> would've looked like.
->
-> Perhaps an additional tweak to that would be to not create platform
-> devices. Instead, just create struct device. Those really have
-> everything you need (.of_node, and can be used with RPM and GENPD). As I
-> mentioned earlier, platform device implies a CPU-memory-mapped bus,
-> which this clearly isn't. It's kind of a separate "bus" if you want, so
-> just using struct device directly seems more appropriate.
+Does this patch depend on 1/2 ?
 
-Just a heads up. If you don't use a platform device or have a driver
-associated with it for probing, you need to manage the attachment to
-genpd yourself. That means calling one of the dev_pm_domain_attach*()
-APIs, but that's perfectly fine, ofcourse.
+> ---
+>  drivers/cpufreq/intel_pstate.c | 39 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index bb4549959b11..0fd2375c1f1e 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -32,6 +32,7 @@
+>  #include <asm/cpu_device_id.h>
+>  #include <asm/cpufeature.h>
+>  #include <asm/intel-family.h>
+> +#include "../drivers/thermal/intel/thermal_interrupt.h"
+>  
+>  #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
+>  
+> @@ -219,6 +220,7 @@ struct global_params {
+>   * @sched_flags:	Store scheduler flags for possible cross CPU update
+>   * @hwp_boost_min:	Last HWP boosted min performance
+>   * @suspended:		Whether or not the driver has been suspended.
+> + * @hwp_notify_work:	workqueue for HWP notifications.
+>   *
+>   * This structure stores per CPU instance data for all CPUs.
+>   */
+> @@ -257,6 +259,7 @@ struct cpudata {
+>  	unsigned int sched_flags;
+>  	u32 hwp_boost_min;
+>  	bool suspended;
+> +	struct delayed_work hwp_notify_work;
+>  };
+>  
+>  static struct cpudata **all_cpu_data;
+> @@ -1625,6 +1628,40 @@ static void intel_pstate_sysfs_hide_hwp_dynamic_boost(void)
+>  
+>  /************************** sysfs end ************************/
+>  
+> +static void intel_pstate_notify_work(struct work_struct *work)
+> +{
+> +	mutex_lock(&intel_pstate_driver_lock);
+> +	cpufreq_update_policy(smp_processor_id());
+> +	wrmsrl(MSR_HWP_STATUS, 0);
+> +	mutex_unlock(&intel_pstate_driver_lock);
+> +}
+> +
+> +void notify_hwp_interrupt(void)
+> +{
+> +	unsigned int this_cpu = smp_processor_id();
+> +	struct cpudata *cpudata;
+> +	u64 value;
+> +
+> +	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+> +		return;
+> +
+> +	rdmsrl(MSR_HWP_STATUS, value);
+> +	if (!(value & 0x01))
+> +		return;
+> +
+> +	cpudata = all_cpu_data[this_cpu];
+> +	schedule_delayed_work_on(this_cpu, &cpudata->hwp_notify_work, msecs_to_jiffies(10));
+> +}
+> +
+> +static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
+> +{
+> +	/* Enable HWP notification interrupt for guaranteed performance change */
+> +	if (boot_cpu_has(X86_FEATURE_HWP_NOTIFY)) {
+> +		INIT_DELAYED_WORK(&cpudata->hwp_notify_work, intel_pstate_notify_work);
+> +		wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x01);
+> +	}
+> +}
+> +
+>  static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+>  {
+>  	/* First disable HWP notification interrupt as we don't process them */
+> @@ -1634,6 +1671,8 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+>  	wrmsrl_on_cpu(cpudata->cpu, MSR_PM_ENABLE, 0x1);
+>  	if (cpudata->epp_default == -EINVAL)
+>  		cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
+> +
+> +	intel_pstate_enable_hwp_interrupt(cpudata);
+>  }
+>  
+>  static int atom_get_min_pstate(void)
+> 
 
->
-> We did something similar for XUSB pads, see drivers/phy/tegra/xusb.[ch]
-> for an example of how that was done. I think you can do something
-> similar here.
->
-> Thierry
 
-Kind regards
-Uffe
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
