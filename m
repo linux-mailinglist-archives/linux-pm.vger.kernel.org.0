@@ -2,97 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A623F2B29
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 13:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A423F2B3E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 13:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240164AbhHTLZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 07:25:21 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:13886 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239655AbhHTLZV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 07:25:21 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629458683; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=aRDo/wiZpYzTq3buxPSsGVJx60A3/h5ElkMW1ANqrlo=; b=Nc5CRJMkXIZKzd71ofn8kHBnNYJAEqnbeSLsMEiRWCWA1702UWuh75fuc13HL2M8MDUDtR2k
- G3G9nKP3tO6avLT3Q3ZJs6M0nTUsNArv30Prw3OkgLn5IiM+AMn2zp7MRjAQfhyrRaeh/gAE
- N8Gpx48eKiiU2SBOAQoRzQMRMSI=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 611f90e289fbdf3ffe38c614 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 20 Aug 2021 11:24:18
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1473EC4360C; Fri, 20 Aug 2021 11:24:18 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 09616C4360C;
-        Fri, 20 Aug 2021 11:24:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 09616C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, okukatla@codeaurora.org,
-        seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
-Subject: [v7 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-Date:   Fri, 20 Aug 2021 16:53:41 +0530
-Message-Id: <1629458622-4915-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
-References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
+        id S239629AbhHTLbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 07:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238769AbhHTLbI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 07:31:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812DFC061575
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 04:30:30 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id n5so1423239wro.12
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 04:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qDKfRZRU7nzYZWhRJJ9/0dIDBxxKxoJMevlwhIQ2MBE=;
+        b=K9ZRFlHl8vmyynKsEHwmhmZn0L2EbAYxMEMV/C4Vbc5Qe4HOZC6X+5qWCoBXRa1xKB
+         bBH71UNA71ckpnPSCf4XjKX1WTOkG/1ASY6fGe51D5of8fPZ9Q+HBcx/WIZycmN1PBuK
+         K1bTez5YaDVNTYpDAMfkGm9FMzEJQ6/yAtxrtY2Gag3iZpE6oAHM+BaBadhpFlMUrhaG
+         NpjUALqy+A0xidp/HSgA3n7AjGS3qVvQytL0ErA07LSRqGgCs7VKwHAq5dcInFZ5qb5K
+         8YGP7znljbcJEFBBbZvHijsJrFGCGOSTYMvu0gmALqNVTXD0BOqza24oJ4G0yLMgq3Po
+         upSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qDKfRZRU7nzYZWhRJJ9/0dIDBxxKxoJMevlwhIQ2MBE=;
+        b=Q9pXakqb4dUQYxHxL8u+U4lK5G8t55ZcyLXEjpQ2c993L2pCOFZfrWm0OmlYCPSnDG
+         Fl/H9hY1S1MWXX0lYdNQX5CUVwQ0XaJWCf6OFavKBzHyNBy+1Ug89GxgnckHnHm1EMTX
+         cxjU0Xa0xdaa9wx681VkraencK2EjuJbLaecAtXPqxWAMDoIsi50d2ktWHi/DAbYqdzu
+         b2tCMq4mHDCYURaCK7Ynmjr/tQjgdE96Fk6I/89c7JguxAX7suYkCTPjWB3Op/glmuhy
+         yBNWTPuCmnBcZcd02+7wa+OGr8j5Viz/lJQSpMunLpkyC2FEPj76r2f1w7Iu2rty9oR7
+         H2Hw==
+X-Gm-Message-State: AOAM532XyQCxyQq1tBYsp8qSKyesng6IRCMTLsiPCfMph1ROfy4tOFoI
+        ausWgxcFK+uisjwb2OEWh+8f0g==
+X-Google-Smtp-Source: ABdhPJxgiXh5Uwv9cgb9XBAyiujiZHro30bND8lWH4Gh5erzv2Oh3PODyusAuRD+3aJZyfhhVApvJQ==
+X-Received: by 2002:adf:f0c2:: with SMTP id x2mr9412185wro.107.1629459028907;
+        Fri, 20 Aug 2021 04:30:28 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c378:b01b:5d2d:5223? ([2a01:e34:ed2f:f020:c378:b01b:5d2d:5223])
+        by smtp.googlemail.com with ESMTPSA id h11sm11696878wmc.23.2021.08.20.04.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Aug 2021 04:30:28 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/2] Add a generic virtual thermal sensor
+To:     Alexandre Bailon <abailon@baylibre.com>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com
+References: <20210819123215.591593-1-abailon@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f7d1205b-e859-e059-c835-c09a85c8c480@linaro.org>
+Date:   Fri, 20 Aug 2021 13:30:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210819123215.591593-1-abailon@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-SoCs.
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Alexandre,
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 53a21d0..cf59b47 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1848,6 +1848,17 @@
- 			};
- 		};
- 
-+		epss_l3: interconnect@18590000 {
-+			compatible = "qcom,sc7280-epss-l3";
-+			reg = <0 0x18590000 0 1000>,
-+			      <0 0x18591000 0 0x100>,
-+			      <0 0x18592000 0 0x100>,
-+			      <0 0x18593000 0 0x100>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+			#interconnect-cells = <1>;
-+		};
-+
- 		cpufreq_hw: cpufreq@18591000 {
- 			compatible = "qcom,cpufreq-epss";
- 			reg = <0 0x18591100 0 0x900>,
+thanks for the proposal.
+
+On 19/08/2021 14:32, Alexandre Bailon wrote:
+> This series add a virtual thermal sensor that uses the hardware thermal sensors,
+> aggregate them to return a temperature.
+> 
+> My first aptempt was to do the aggregation in the thermal zone but it was not
+> that easy to do, and, there were some case that would have been conflictual
+> such as setting differents trip for a regular zone and a multisensor zone.
+> 
+> Instead, I made a virtual thermal sensor that could registered in a thermal
+> zone, and have its own properties.
+> It could be added in the device tree, with the list of sensors to aggregate,
+> and the type of aggregation to be done.
+> 
+> As example:
+>   soc_max_sensor: soc_max_sensor {
+>     compatible = "generic,thermal-aggregator";
+>     #thermal-sensor-cells = <1>;
+>     type = "max";
+>     thermal-sensors = <&lvts 0>, <&lvts 1>, <&lvts 2>, <&lvts 3>,
+>           <&lvts 4>, <&lvts 5>, <&lvts 6>, <&lvts 7>,
+>           <&lvts 8>, <&lvts 9>, <&lvts 10>, <&lvts 11>,
+>           <&lvts 12>, <&lvts 13>, <&lvts 14>, <&lvts 15>,
+>           <&lvts 16>;
+>   };
+> 
+> The current series build and work but it would require to be completed
+> aswell a lot of cleanup.
+> Before working on it, I would like to get some feedback and I know if that
+> would an acceptable solution and continue that way.
+
+Yes, I think it is going to the right direction.
+
+IMO, we can get rid of the thermal_of changes. From a design PoV, the
+patch itself should be the virtual thermal driver without any changes in
+the core code, including thermal_of.
+
+I have some comments on patch 2/2
+
+
+> Follows the following discussion:
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20210617114707.10618-3-ben.tseng@mediatek.com/
+> 
+> Alexandre Bailon (2):
+>   thermal: provide a way to get thermal sensor from a device tree node
+>   thermal: add a virtual sensor to aggregate temperatures
+> 
+>  drivers/thermal/Kconfig              |   8 ++
+>  drivers/thermal/Makefile             |   1 +
+>  drivers/thermal/thermal_aggregator.c | 134 +++++++++++++++++++++++++++
+>  drivers/thermal/thermal_of.c         |  43 +++++++++
+>  include/linux/thermal.h              |  12 +++
+>  5 files changed, 198 insertions(+)
+>  create mode 100644 drivers/thermal/thermal_aggregator.c
+> 
+
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
