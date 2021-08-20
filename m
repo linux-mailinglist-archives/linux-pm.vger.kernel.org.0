@@ -2,84 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09663F31CF
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 18:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843603F34B1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 21:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbhHTQ7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 12:59:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43436 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbhHTQ7w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 12:59:52 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 869B91F4489C
-Received: by earth.universe (Postfix, from userid 1000)
-        id A945F3C0C98; Fri, 20 Aug 2021 18:59:11 +0200 (CEST)
-Date:   Fri, 20 Aug 2021 18:59:11 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] power: supply: core: Fix parsing of battery
- chemistry/technology
-Message-ID: <20210820165911.ecpgxfhxyyhemnwo@earth.universe>
-References: <20210819235111.25357-1-digetx@gmail.com>
- <CACRpkda=hcw5dN8TfV01egb4_fzSi3kNOCz1UguYcKyQKDW9mA@mail.gmail.com>
+        id S230380AbhHTTfk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 20 Aug 2021 15:35:40 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:45762 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229978AbhHTTfi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 15:35:38 -0400
+Received: by mail-ot1-f44.google.com with SMTP id r17-20020a0568302371b0290504f3f418fbso16249146oth.12;
+        Fri, 20 Aug 2021 12:35:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=UhhdjSVB/AbbZ0MLULfGdhAskZ9J1ly9WiPjDdOzwC4=;
+        b=YTD+F83E6UIKdPiFr3FcsUOQ+sLdOy+V0Ny7AEER+bHnKCVi7GlgYDaYe/Ajsvqgin
+         zdbrK8+z9LX+LCowx0E+Ksc/1ZTMJNMeLpfBXo4t8hDx/0Vq0fRfyM3HrgNNmeHWoGd5
+         bxr1a9FXMu2Wv3je/1znTgB7JkPyoYThH3oFiV01LLD5TKeBrRZDyZriQOLHYdTvDz/E
+         /R4QVWDbHPyuaqKkrbfB+Z/et6xq4rz/BN5n8C5il30JaOPBlGfS9yvWBBER6bXoYswQ
+         hYmiyqsJ13RgZjyXbe//O3F+GKn3rTAmkwd+PufdS+WCuBIekKOePlf7vw3yqhx6t2Bu
+         TDAg==
+X-Gm-Message-State: AOAM5300MRqLxhvog4pYORP6iH0e30T3TL05pF8okrMB39rbRg3K4Cky
+        UE1UOJSRR37XS/ZADXSxPJ2pVolZRgfsni9kLvKQDwqUzZFqvQ==
+X-Google-Smtp-Source: ABdhPJzvwKhSjGFsvgjSHHxLsEY+O3hKaLvTv6ew8y8HgOE2xJjATeGRRUvBVeC51PeInGvRazFmUQJqDaQWmqkeHAI=
+X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr18642775oth.321.1629488099804;
+ Fri, 20 Aug 2021 12:34:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3f4ojlolkkyg7fff"
-Content-Disposition: inline
-In-Reply-To: <CACRpkda=hcw5dN8TfV01egb4_fzSi3kNOCz1UguYcKyQKDW9mA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Aug 2021 21:34:48 +0200
+Message-ID: <CAJZ5v0j7hmSZObB5Aptr=9z4LbbazwzWy7UK6KCjSp_1C8QCOQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.14-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
---3f4ojlolkkyg7fff
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please pull from the tag
 
-Hi,
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.14-rc7
 
-On Fri, Aug 20, 2021 at 03:41:56PM +0200, Linus Walleij wrote:
-> On Fri, Aug 20, 2021 at 1:51 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->=20
-> > The power_supply_get_battery_info() fails if device-chemistry property
-> > is missing in a device-tree because error variable is propagated to the
-> > final return of the function, fix it.
-> >
-> > Fixes: 4eef766b7d4d ("power: supply: core: Parse battery chemistry/tech=
-nology")
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->=20
-> Oops,
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+with top-most commit f2963c7ec7cc337ca286271f3111b1ed3ad5f023
 
-Thanks, queued.
+ Merge branch 'pm-opp'
 
--- Sebastian
+on top of commit 7c60610d476766e128cc4284bb6349732cbd6606
 
---3f4ojlolkkyg7fff
-Content-Type: application/pgp-signature; name="signature.asc"
+ Linux 5.14-rc6
 
------BEGIN PGP SIGNATURE-----
+to receive power management fixes for 5.14-rc7.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEf308ACgkQ2O7X88g7
-+poS1Q//ZI+PmHqDuWeotKFoAKYjxxcTgqJeDe3MwFXGh15cdVXMjXxt4Hmh/UAS
-wRQVr8TkHSAeTpcpf0zuUxoXguqN8pdX0v5fiGe7ZY9Th1/EyY6V04R1uRYvRvIt
-jySe6Qvm+Lqd1NV2CyQ2pML4+uAClP42DLWlSYRwgVucSlHk+i2+uOCIb0sn5En9
-y4psP7+OpiNZIFbkeQZ0LF+mhRg9whkTP5NEmqCVnDeaeIEEpcsx24ymrmjOfxmX
-iIn+kbeYLhJU8RZKlph9tb2jGNKxhoaGybSLvitehs8d12WnyXPlrQ25Ue+FkRNV
-PFMP5s8q1dT90fAoEP8YDNf/tr4/Iy98PRYRuDtKSdbb0sm3oy3UiHc5fU8QBml4
-ky00Z3gtfGNQHoeNwepHNoqHaofRku2vnfuXJbArwX+j3glLqqFupaQ4NJ3YdQfO
-uz09yJfc2aFrC0VW/vmeJZa8JPkSeV7iype2Btl6NvhumXYd5Bn4ZkZWH2YDp363
-3eVRb8v/PMyI1alqQcPgdqk1Y1rzLaddBj1My1u+NIGOocnbEPEDdE1YQMiu7K0F
-a5IAFR32crLCqjAIsJLcsZ4ysUW++SYC168qsFl47RwPRJ/qM5Qu/+1rBJaEYv9A
-Siux44wn+5ZM6zJcPOY+v0dq7Vx11n7+R5GII51iM2zX7zHxzdg=
-=HlZL
------END PGP SIGNATURE-----
+These fix some issues in the ARM cpufreq drivers and in the
+operating performance points (OPP) framework.
 
---3f4ojlolkkyg7fff--
+Specifics:
+
+ - Fix unuseful WARN() in the OPP core and prevent a noisy warning
+   from being printed by OPP _put functions (Dmitry Osipenko).
+
+ - Fix error path when allocation failed in the arm_scmi cpufreq
+   driver (Lukasz Luba).
+
+ - Blacklist Qualcomm sc8180x and Qualcomm sm8150 in
+   cpufreq-dt-platdev (Bjorn Andersson, Thara Gopinath).
+
+ - Forbid cpufreq for 1.2 GHz variant in the armada-37xx cpufreq
+   driver (Marek Behún).
+
+Thanks!
+
+
+---------------
+
+Bjorn Andersson (1):
+      cpufreq: blacklist Qualcomm sc8180x in cpufreq-dt-platdev
+
+Dmitry Osipenko (1):
+      opp: Drop empty-table checks from _put functions
+
+Lukasz Luba (1):
+      cpufreq: arm_scmi: Fix error path when allocation failed
+
+Marek Behún (1):
+      cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
+
+Michał Mirosław (1):
+      opp: remove WARN when no valid OPPs remain
+
+Thara Gopinath (1):
+      cpufreq: blocklist Qualcomm sm8150 in cpufreq-dt-platdev
+
+---------------
+
+ drivers/cpufreq/armada-37xx-cpufreq.c |  6 +++++-
+ drivers/cpufreq/cpufreq-dt-platdev.c  |  2 ++
+ drivers/cpufreq/scmi-cpufreq.c        |  2 +-
+ drivers/opp/core.c                    | 15 ---------------
+ drivers/opp/of.c                      |  5 +++--
+ 5 files changed, 11 insertions(+), 19 deletions(-)
