@@ -2,137 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAA63F2500
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 04:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF47F3F2560
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 05:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237892AbhHTCwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Aug 2021 22:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237636AbhHTCwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Aug 2021 22:52:16 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9915FC061575;
-        Thu, 19 Aug 2021 19:51:38 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w20so17265865lfu.7;
-        Thu, 19 Aug 2021 19:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zboB1Q6i9oYgbkK+DWfMo5HokGy8eox3TcOGLTI8/TQ=;
-        b=MSPObL9gtIfvXhGm8vmuM1WlsX8S9aqUcJKehk6hQXt2kTc0FpmAMpCNdosprR8DEi
-         /yWFr3UlXiFd2ptrMNopWEd4mvb/K8eNekkIVvnlp6AKdEAvU+jGXH5uVDxvGcdGZoGg
-         7d0zSU30Fr03L6Jyi08Us+ikNmam6soR3xc9TnEUbHxYKYK/+DxyeuIlb2H/R67utUeG
-         f8Hx0eRqtRpuLlOkbbDR3VqVNtgKs+C8IJnFlLq0D7i7HgCycFYmI+7YKNlKYZOsIZqi
-         M8cceb7ZJ2VG2spCfJmWhEcSNn6fxBgRnLJwFtl+p9dAcHXGqIRgt1IqsRHAMWfqn/Mz
-         6mnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zboB1Q6i9oYgbkK+DWfMo5HokGy8eox3TcOGLTI8/TQ=;
-        b=Fte0SRty0Uxt3DppV1yP+tZesHgOhbSKOlOlG8XOO4C7v4bn6eRSmMIYCcPFIjQx4Y
-         m9+LEH06oTnnPBpy4iCQ9CihyfKJQ5hKM+y/Yv6DZT6hKzLuU1hR89T0F/KjiI+bHHe+
-         UCKLw8TyX/REKdwNGQ1yZbCjLn8EdsYvg8tiIx2JxUKDoBojSER7AZtFeBkIpXRGQcrD
-         Tp7LffUKVdqVtMgjVQkNl54jE/nNIuum/zFppghEjq3ITApPIL6xZZBpZ7jplj0hHSTJ
-         ipBoU41s8N3k5luR1SZXKyhT1RiDbKfg2g0ljP64isLZ4GYWFjX+qgBJtgduOVBc1oG8
-         o7Iw==
-X-Gm-Message-State: AOAM533Tq8igYXOdZTPeWdpW7U7elfm3hAcEu/JYAyWryyzWbSoavb7T
-        SdUhkP0PPyOoI2gWPzN0HF00eNjcRDk=
-X-Google-Smtp-Source: ABdhPJxyaLUy3vFiucIY3S77FtdQqbUhTA2/WSHmXMHR7V1HqPjJvW4kwuD0WLGfg5N30COber68xA==
-X-Received: by 2002:ac2:4c94:: with SMTP id d20mr12622519lfl.640.1629427896895;
-        Thu, 19 Aug 2021 19:51:36 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
-        by smtp.googlemail.com with ESMTPSA id w9sm2965ljo.36.2021.08.19.19.51.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Aug 2021 19:51:36 -0700 (PDT)
-Subject: Re: [PATCH v8 06/34] dt-bindings: clock: tegra-car: Document new
- tegra-clocks sub-node
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-7-digetx@gmail.com> <YR0SSz7KMh7TwaFW@orome.fritz.box>
- <eff5ef47-e6e0-3e03-cf1a-d931b0f2dc2a@gmail.com>
- <YR033zuYWWLCeYpM@orome.fritz.box>
- <a5b942cb-1611-9ae1-6e89-4b68fdaf03e3@gmail.com>
- <YR6HWMuYcF6NIepi@orome.fritz.box>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <cad7c578-f533-12f8-3dc0-d2854344148c@gmail.com>
-Date:   Fri, 20 Aug 2021 05:51:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <YR6HWMuYcF6NIepi@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S234930AbhHTDgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Aug 2021 23:36:09 -0400
+Received: from mga17.intel.com ([192.55.52.151]:33598 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234832AbhHTDgH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Aug 2021 23:36:07 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10081"; a="196960523"
+X-IronPort-AV: E=Sophos;i="5.84,336,1620716400"; 
+   d="scan'208";a="196960523"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 20:35:30 -0700
+X-IronPort-AV: E=Sophos;i="5.84,336,1620716400"; 
+   d="scan'208";a="532824765"
+Received: from cshi-mobl.ccr.corp.intel.com ([10.249.172.9])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 20:35:28 -0700
+Message-ID: <9df6459a7b00ae59b12070a4b1a311c4a29f2321.camel@intel.com>
+Subject: Re: [PATCH 1/2] thermal: intel: Allow processing of HWP interrupt
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, lenb@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 20 Aug 2021 11:35:25 +0800
+In-Reply-To: <20210820024006.2347720-1-srinivas.pandruvada@linux.intel.com>
+References: <20210820024006.2347720-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-19.08.2021 19:31, Thierry Reding пишет:
->> The "device" representation is internal to the kernel. It's okay to me
->> to have PLLs represented by a device, it's a distinct h/w by itself.
->>
->> CCF supports managing of clock's RPM and it requires to have clock to be
->> backed by a device. That's what we are using here.
->>
->> Please see
->> https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/clk/clk.c#L109
-> Looking at the implementation of __clk_register() and where that device
-> pointer typically comes from, I don't think the way this is used here is
-> what was intended. The way I interpret the code is that a clock is
-> registered with a parent device (i.e. its provider) and
-> clk_pm_runtime_get() is then used internally as a way to make sure that
-> when a clock is prepared, it's parent device is runtime resumed. This is
-> presumably to ensure that any registers that the driver might need to
-> access in order to prepare and enable the clock are accessible (i.e. the
-> CAR is not powered off or in reset).
+On Thu, 2021-08-19 at 19:40 -0700, Srinivas Pandruvada wrote:
+> Add a weak function to process HWP (Hardware P-states) notifications
+> and
+> move updating HWP_STATUS MSR to this function.
 > 
-> So the struct device that is passed to __clk_register() (or its callers)
-> should be that of the CAR rather than virtual struct devices created by
-> the CAR.
+> This allows HWP interrupts to be processed by the intel_pstate driver
+> in
+> HWP mode by overriding the implementation.
 > 
-> And it's a bit debatable whether or not PLLs represent distinct
-> hardware. Ultimately every transistor on a chip could be considered
-> distinct hardware. But a platform device is a device on a platform bus,
-> which is really just another way of saying it's a hardware block that's
-> accessible from the CPU via a memory-mapped address. A PLL (just like
-> other clocks) is merely a resource exposed by means of access to these
-> registers. So I don't think they should be platform devices. Even making
-> them struct device:s seems a bit of a stretch.
-> 
-> Is there any reason why struct clk can't be used for this? I mean, the
-> whole purpose of that structure is to represent clocks. Why do we need
-> to make them special?
+> Signed-off-by: Srinivas Pandruvada <
+> srinivas.pandruvada@linux.intel.com>
 
-Because we need to perform DVFS for PLLs. The only way to do it without
-having to reinvent existing frameworks is to use these frameworks and
-they require a device.
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+
+thanks,
+rui
+> ---
+>  drivers/thermal/intel/therm_throt.c       | 7 ++++++-
+>  drivers/thermal/intel/thermal_interrupt.h | 3 +++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/intel/therm_throt.c
+> b/drivers/thermal/intel/therm_throt.c
+> index 99abdc03c44c..dab7e8fb1059 100644
+> --- a/drivers/thermal/intel/therm_throt.c
+> +++ b/drivers/thermal/intel/therm_throt.c
+> @@ -569,13 +569,18 @@ static void notify_thresholds(__u64 msr_val)
+>  		platform_thermal_notify(msr_val);
+>  }
+>  
+> +void __weak notify_hwp_interrupt(void)
+> +{
+> +	wrmsrl_safe(MSR_HWP_STATUS, 0);
+> +}
+> +
+>  /* Thermal transition interrupt handler */
+>  void intel_thermal_interrupt(void)
+>  {
+>  	__u64 msr_val;
+>  
+>  	if (static_cpu_has(X86_FEATURE_HWP))
+> -		wrmsrl_safe(MSR_HWP_STATUS, 0);
+> +		notify_hwp_interrupt();
+>  
+>  	rdmsrl(MSR_IA32_THERM_STATUS, msr_val);
+>  
+> diff --git a/drivers/thermal/intel/thermal_interrupt.h
+> b/drivers/thermal/intel/thermal_interrupt.h
+> index 53f427bb58dc..01e7bed2ffc7 100644
+> --- a/drivers/thermal/intel/thermal_interrupt.h
+> +++ b/drivers/thermal/intel/thermal_interrupt.h
+> @@ -12,4 +12,7 @@ extern int (*platform_thermal_notify)(__u64
+> msr_val);
+>   * callback has rate control */
+>  extern bool (*platform_thermal_package_rate_control)(void);
+>  
+> +/* Handle HWP interrupt */
+> +extern void notify_hwp_interrupt(void);
+> +
+>  #endif /* _INTEL_THERMAL_INTERRUPT_H */
+
