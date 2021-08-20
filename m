@@ -2,301 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D49A3F2C80
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 14:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C230F3F2C93
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 14:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240626AbhHTMxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 08:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S240583AbhHTM6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 08:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240614AbhHTMxO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 08:53:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AAC061756
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 05:52:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id h13so14181251wrp.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 05:52:36 -0700 (PDT)
+        with ESMTP id S237844AbhHTM6q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 08:58:46 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518ABC061757
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 05:58:08 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id b5so6124242vsq.2
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 05:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uDTdVQ6VcZqXNEvJcgw1HUA2KyfCBkRaPWncrxYNJWk=;
-        b=eaqy9ksXHq1q+ufHfMy7Qz7AXCXvmsVesluSW3w0jpQYOQhekVNJ+E0Pj6/oxpOT0O
-         TF+mRFG7M+BYd2TI3lnDniRRUSfJpkDFXou7iZytU2SRMtQvUuATihVA92x8Nngp7lNn
-         /9Y3+c3mGSiJ5REDTQohfw145gDG131qbXqs23kUILV1uKkHBBzjaKawMiJSGydsw/cF
-         8iOHq8CDfOvTX0AzW7OaFfg9tQwsYd83paPmEhGtz31h06j7jt7p4Y4XQbeYqaRNCaeA
-         gJRMi8gCwFT1Et3aD+b1IIXE7DlSoKo/jvOdMJ6BTFSTFEI61i5ONZJH1jKVZy6xjisH
-         KZgw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VSaFeBdX4kWGJjrK0LDIdAG7HMHyEVXfRCzRhlCm2Vc=;
+        b=DnhQLGM/mJBYM14dOuxq+G21zQDLVubpP7oZsUxJRpqY3uVOSAs9B5niS+x3uyTre7
+         OY65Ox4XCQkPwIIGObNgixcuUbaA0/pd1FB1Qo2ODsYfIBziSCun36IE9isJ3506pXpF
+         1ecf2r9wVgXbr/9QFjwW0VOiK0pGJUOmyNQXonlOuHCAOSpdd8cj85h6sjjS6N0HUfRU
+         JG2biriboTkHUtYnQwws5fcglapOqHqn2aq4ItDnRLAMkRsQbfB5v6w1xfxzn4Mat3vo
+         rreigmWF3PCK6SScj/XbW99E8SMa2IrssaqGiq9CflV2XUtvkisBvF3/Z2VuEfCmGOrP
+         jh6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uDTdVQ6VcZqXNEvJcgw1HUA2KyfCBkRaPWncrxYNJWk=;
-        b=kGDIN24qmuX9jNakV2vgtVXpm5FXj0U0bLhtWJ3hDE3Bbb+hKmGElEBS0zJa+A0NlI
-         lf1oaqWzoqkZjhIaFRr7GPfAI+7K8lFJtrnYdiLM8waTVjO+fPuf/y8P/oIWMJ6Ia9w5
-         5+oMHF2Kq8FN0IqV+PgfVo7DAIMUlhqDmanYyGLFphyIwk8jIVto3QIVsTZsGq1TIwMX
-         wZMoRaYcZEw66FXQYW0WALSMshXmVPdNXbh73Ucvf5VsQqIBteHFbXyAeV014zyl/B6q
-         jCW2kgV0CPeC+1GrEJua/V+dy6Xzl/KVckzIS1phsiANp8H/WXcoNM5KfmEUOSU6LW4G
-         kDKw==
-X-Gm-Message-State: AOAM533Hf/0dr+VKesxoPTFBV5SkSGikprKo+u1AxfADI73iiwipDfCI
-        MIh6R65ZYpYGdBtIoIcHganqaA==
-X-Google-Smtp-Source: ABdhPJyEMhIbVJ1kesB31+cLegNOQi/PQSCZwwVw08RHY1eqJxi2kXF8pHctFA3eKG6OzuND2D+ezg==
-X-Received: by 2002:a5d:4c4e:: with SMTP id n14mr9750950wrt.226.1629463955154;
-        Fri, 20 Aug 2021 05:52:35 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c378:b01b:5d2d:5223? ([2a01:e34:ed2f:f020:c378:b01b:5d2d:5223])
-        by smtp.googlemail.com with ESMTPSA id y14sm3820717wma.28.2021.08.20.05.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Aug 2021 05:52:34 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/2] thermal: add a virtual sensor to aggregate
- temperatures
-To:     Alexandre Bailon <abailon@baylibre.com>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com
-References: <20210819123215.591593-1-abailon@baylibre.com>
- <20210819123215.591593-3-abailon@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <068ad0f9-ca73-6f62-f04a-6916c055279a@linaro.org>
-Date:   Fri, 20 Aug 2021 14:52:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VSaFeBdX4kWGJjrK0LDIdAG7HMHyEVXfRCzRhlCm2Vc=;
+        b=F3JU4ZsSqkYHiKb13cFRSzBwTwo4eGthRUDbNBjESIySHYXm8JFknk0pufjb6RC2JL
+         pMHXdoNmvFbzxRCT0Ju26U97mphnSW58tOhVUzn7JYybIzDH/5p045F06tJCQp95BTzA
+         sbDZ3Ok3If00yBOvzdRmfj9O9xO+Nbf1IEnQOLr+Y5d8sRk8lokgbELktF+iyMkpUmMd
+         IGzqGM1Gk/gpZO4NojAO32/MEn6rwY+RWKAds68BLJGByOtVdLMc50YsBLEGb5n3d8tS
+         ny+/Dg7gpWCcwskday8EGM1kaatre7Mp1NOjSpi7urNvw337WrWwcyW479mpmDc6eBxT
+         eO5A==
+X-Gm-Message-State: AOAM5329oafwcht6lmyKYNOzNdqOg1XMJvjBhXqIzKquPFFVRSB0n62l
+        HTsKL5eVs3riQEq04aHExSRveAI5TATG6qtS41B98g==
+X-Google-Smtp-Source: ABdhPJyCu5OoKXB/ZnU0BhDnI9FQ/nriFA8C9gxuFpc66zGzEUSQ7NZWEdQGpN5i65y/ydiL4YG1C5HABdRFQK6zhTY=
+X-Received: by 2002:a67:3212:: with SMTP id y18mr16683598vsy.19.1629464287428;
+ Fri, 20 Aug 2021 05:58:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210819123215.591593-3-abailon@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com> <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+ <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com> <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+In-Reply-To: <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 20 Aug 2021 14:57:31 +0200
+Message-ID: <CAPDyKFo0rzHT4AhueWjyz9k2ZqUy8N6Od5pbr8sL_m0Jf2AwUg@mail.gmail.com>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/08/2021 14:32, Alexandre Bailon wrote:
-> This adds a virtual thermal sensor that reads temperature from
-> hardware sensor and return an aggregated temperature.
-> Currently, this only return the max temperature.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->  drivers/thermal/Kconfig              |   8 ++
->  drivers/thermal/Makefile             |   1 +
->  drivers/thermal/thermal_aggregator.c | 134 +++++++++++++++++++++++++++
->  3 files changed, 143 insertions(+)
->  create mode 100644 drivers/thermal/thermal_aggregator.c
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 7a4ba50ba97d0..f9c152cfb95bc 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -228,6 +228,14 @@ config THERMAL_MMIO
->  	  register or shared memory, is a potential candidate to work with this
->  	  driver.
->  
-> +config THERMAL_AGGREGATOR
+On Fri, 20 Aug 2021 at 07:18, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 19-08-21, 16:55, Ulf Hansson wrote:
+> > Right, that sounds reasonable.
+> >
+> > We already have pm_genpd_opp_to_performance_state() which translates
+> > an OPP to a performance state. This function invokes the
+> > ->opp_to_performance_state() for a genpd. Maybe we need to allow a
+> > genpd to not have ->opp_to_performance_state() callback assigned
+> > though, but continue up in the hierarchy to see if the parent has the
+> > callback assigned, to make this work for Tegra?
+> >
+> > Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
+> > allowing us to pass the device instead of the genpd. But that's a
+> > minor thing.
+>
+> I am not concerned a lot about how it gets implemented, and am not
+> sure as well, as I haven't looked into these details since sometime.
+> Any reasonable thing will be accepted, as simple as that.
+>
+> > Finally, the precondition to use the above, is to first get a handle
+> > to an OPP table. This is where I am struggling to find a generic
+> > solution, because I guess that would be platform or even consumer
+> > driver specific for how to do this. And at what point should we do
+> > this?
+>
+> Hmm, I am not very clear with the whole picture at this point of time.
+>
+> Dmitry, can you try to frame a sequence of events/calls/etc that will
+> define what kind of devices we are looking at here, and how this can
+> be made to work ?
+>
+> > > > Viresh, please take a look at what I did in [1]. Maybe it could be done
+> > > > in another way.
+> > >
+> > > I looked into this and looked like too much trouble. The
+> > > implementation needs to be simple. I am not sure I understand all the
+> > > problems you faced while doing that, would be better to start with a
+> > > simpler implementation of get_performance_state() kind of API for
+> > > genpd, after the domain is attached and its OPP table is initialized.
+> > >
+> > > Note, that the OPP table isn't required to be fully initialized for
+> > > the device at this point, we can parse the DT as well if needed be.
+> >
+> > Sure, but as I indicated above, you need some kind of input data to
+> > figure out what OPP table to pick, before you can translate that into
+> > a performance state. Is that always the clock rate, for example?
+>
+> Eventually it can be clock, bandwidth, or pstate of anther genpd, not
+> sure what all we are looking for now. It should be just clock right
+> now as far as I can imagine :)
+>
+> > Perhaps, we should start with adding a dev_pm_opp_get_from_rate() or
+> > what do you think? Do you have other suggestions?
+>
+> We already have similar APIs, so that won't be a problem. We also have
+> a mechanism inside the OPP core, frequency based, which is used to
+> guess the current OPP. Maybe we can enhance and use that directly
+> here.
 
-We discussed the virtual sensor doing aggregation but may be we can give
-it another purpose in the future like returning a constant temp or
-low/high pass filter.
+After reading the last reply from Dmitry, I am starting to think that
+the problem he is facing can be described and solved in a much easier
+way.
 
-It may make sense to use a more generic name like virtual sensor for
-example.
+If I am correct, it looks like we don't need to add APIs to get OPPs
+for a clock rate or set initial performance state values according to
+the HW in genpd.
 
-> +	tristate "Generic thermal aggregator driver"
-> +	depends on TERMAL_OF || COMPILE_TEST
+See my other response to Dmitry, let's see where that leads us.
 
-s/TERMAL_OF/THERMAL_OF/
-
-> +	help
-> +	  This option enables the generic thermal sensor aggregator.
-> +	  This driver creates a thermal sensor that reads the hardware sensors
-> +	  and aggregate the temperature.
-> +
->  config HISI_THERMAL
->  	tristate "Hisilicon thermal driver"
->  	depends on ARCH_HISI || COMPILE_TEST
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 9729a2b089919..5b20ef15aebbe 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->  obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_THERMAL_AGGREGATOR) += thermal_aggregator.o
-> diff --git a/drivers/thermal/thermal_aggregator.c b/drivers/thermal/thermal_aggregator.c
-> new file mode 100644
-> index 0000000000000..76f871dbfee9e
-> --- /dev/null
-> +++ b/drivers/thermal/thermal_aggregator.c
-> @@ -0,0 +1,134 @@
-> +#include <linux/err.h>
-> +#include <linux/export.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
-> +#include <linux/types.h>
-> +#include <linux/string.h>
-> +
-> +const char *aggr_types[] = {
-> +	"min",
-> +	"max",
-> +	"avg",
-> +};
-> +
-> +struct thermal_aggr;
-> +
-> +typedef int (*aggregate_fn)(struct thermal_aggr *aggr);
-> +
-> +struct thermal_aggr_sensor {
-> +	struct thermal_sensor *sensor;
-> +
-> +	struct list_head node;
-> +};
-> +
-> +struct thermal_aggr {
-> +	struct list_head sensors;
-> +	aggregate_fn *aggregate;
-> +	//struct thermal_zone_device *tz;
-> +};
-> +
-> +static int thermal_aggr_read_temp(void *data, int *temperature)
-> +{
-> +	struct thermal_aggr *aggr = data;
-> +	struct thermal_aggr_sensor *sensor;
-> +	int max_temp = 0;
-> +	int temp;
-> +
-
-What happens if a hardware sensor module is unloaded ?
-
-> +	list_for_each_entry(sensor, &aggr->sensors, node) {
-> +		if (!sensor->sensor) {
-> +			return -ENODEV;
-> +		}
-
-
-
-
-> +		sensor->sensor->ops->get_temp(sensor->sensor->sensor_data, &temp);
-> +		max_temp = max(max_temp, temp);
-> +	}
-> +
-> +	*temperature = max_temp;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops thermal_aggr_max_ops = {
-> +	.get_temp = thermal_aggr_read_temp,
-
-	.get_temp = thermal_virtual_sensor_get_temp ?
-> +};
-> +
-> +static int thermal_aggr_probe(struct platform_device *pdev)
-> +{
-> +	struct thermal_aggr *aggr;
-> +	struct device *dev = &pdev->dev;
-> +	struct of_phandle_args args;
-> +	int count;
-> +	int ret;
-> +	int i;
-> +
-> +	count = of_count_phandle_with_args(dev->of_node,
-> +					   "thermal-sensors",
-> +					   "#thermal-sensor-cells");
-> +	if (count <= 0)
-> +		return -EINVAL;
-> +
-> +	aggr = kzalloc(sizeof(*aggr), GFP_KERNEL);
-
-	devm_kzalloc
-
-> +	INIT_LIST_HEAD(&aggr->sensors);
-> +
-> +	for (i = 0; i < count; i++) {
-> +		struct thermal_sensor *sensor;
-> +		struct thermal_aggr_sensor *aggr_sensor;
-> +		int id;
-> +
-> +		ret = of_parse_phandle_with_args(dev->of_node,
-> +						 "thermal-sensors",
-> +						 "#thermal-sensor-cells",
-> +						 i,
-> +						 &args);
-> +		if (ret) {
-> +			return ret;
-> +		}
-> +
-> +		id = args.args_count ? args.args[0] : 0;
-> +		sensor = thermal_of_get_sensor(args.np, id);
-> +		if (sensor == NULL) {
-> +			return -EPROBE_DEFER;
-> +		}
-> +
-> +		aggr_sensor = kzalloc(sizeof(*aggr_sensor), GFP_KERNEL);
-
-		devm_kzalloc
-
-> +		aggr_sensor->np = args.np;
-
-Why the 'np' and id are stored, they won't be needed anymore, no ?
-
-> +		aggr_sensor->id = id;
-> +		aggr_sensor->sensor = sensor;
-> +		list_add(&aggr_sensor->node, &aggr->sensors);
-> +	}
-> +
-> +	/*tzdev = */devm_thermal_zone_of_sensor_register(dev, 0, aggr, &thermal_aggr_max_ops);
-> +
-> +	return 0;
-> +}
-> +
-> +static int thermal_aggr_remove(struct platform_device *pdev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id thermal_aggr_of_match[] = {
-> +	{
-> +		.compatible = "generic,thermal-aggregator",  "^virtual,.*":
-
-As stated in the documentation
-Documentation/devicetree/bindings/vendor-prefixes.yaml
-
-  "^virtual,.*":
-    description: Used for virtual device without specific vendor.
-
-I suggest something like:
-
-	.compatible = "virtual,thermal-sensor",
-
-
-> +	},
-> +	{
-> +	},
-> +};
-> +MODULE_DEVICE_TABLE(of, thermal_aggr_of_match);
-> +
-> +static struct platform_driver thermal_aggr = {
-> +	.probe = thermal_aggr_probe,
-> +	.remove = thermal_aggr_remove,
-> +	.driver = {
-> +		.name = "thermal-aggregator",
-> +		.of_match_table = thermal_aggr_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(thermal_aggr);
-> +MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
-> +MODULE_DESCRIPTION("Thermal sensor aggregator");
-> +MODULE_LICENSE("GPL v2");
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Kind regards
+Uffe
