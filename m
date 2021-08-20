@@ -2,87 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3E53F34B4
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 21:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004893F3588
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 22:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbhHTTg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 15:36:57 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:41839 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbhHTTgz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 15:36:55 -0400
-Received: by mail-ot1-f46.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso1498517ota.8;
-        Fri, 20 Aug 2021 12:36:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=tlG8gFHdwbNMnGBV3L4Ud/dyohUxKHygZ2pV3sjYueE=;
-        b=FTX0gFQd+RTqjJ7VR1RUabuGvXFn+rMoCtvL8as5UXpGUzoJHYfc0DdfO4e/iBEjdP
-         YgmaoMzTkke15xHAGyXFosWQHmqTI1fOA/KbL4JWaIaAm5AG/aHoIeX9qAh84nOg4YKX
-         faRoQdi0HzVMAHziTpBbpxYTJYpgd6T6Ld7KDdAiu9LGL5jrp5PJ4jlhDiTa/SJM6xk0
-         SEDcIcXsS6KidnSbUXWqltZEE3TAq1C27A1GYDKjXLhaNGCZby3/4BAntK8PdMQVGRoA
-         j4p/U3aRigp0+eMhogCoknvJsI+sVl3UIq3XQ+dhbmHthhZE3nzcY5lmlqfaKiUSYXph
-         xuCA==
-X-Gm-Message-State: AOAM532nGkqS2VuZNFP63XOX4Sr0TZIwNYIFFe0e5QbwIFlHUfWHepJK
-        P2jDfq9JBw6qj/5QbtvOcFMwQwNQuYIvKJGVtZc=
-X-Google-Smtp-Source: ABdhPJzO4vI7OgzMyMxKl9AmbSMGac8CHAtTH/FPfvvhz15gV2BzjRw3meT56Q1PVZzlFup7BncdO3WjE0JjBMsWj3M=
-X-Received: by 2002:a9d:a57:: with SMTP id 81mr5054906otg.260.1629488177258;
- Fri, 20 Aug 2021 12:36:17 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Aug 2021 21:36:06 +0200
-Message-ID: <CAJZ5v0g14eg5PT5+AnKh_Uf+a7Ap5t5+G_LcU8+A-tQS3UY15g@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v5.14-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        id S240038AbhHTUsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 16:48:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240403AbhHTUst (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 20 Aug 2021 16:48:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 49A036115C;
+        Fri, 20 Aug 2021 20:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629492491;
+        bh=DWxz+E9y8QfqSwer/XDINgmlgbDQqH6OFTpIa3LlqdE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=XHyKusFrCU2tweQhUw7HXSYHeEpCpuYN43xQloQKRHJ4Q3CJNBYvxu765OEsN33Tt
+         e9hWyC4BLkb5EeHh+hgGZQU9gaUDzlyDPNfOBi/aTrQ5ZGBJ/AvocLXhJQ8UKf9sdI
+         XEKP9HODrckdlTOK1D2gYevnpkAbqT7ifWpB0fpyqvSLYaAD6PqCCYTkxnganxZ3oS
+         rPEpwAEZGPH46IiOiI0PE29oBQFXZH2/A20ZzMaGeBHrnyjfUwZ8ZwH5XAkVX1Y9s0
+         occoICyBYWW8mn3Iem8uu1kxX5FNHh0r612bihPpCEKFBfUfKpjghDinpbfDhCHfEs
+         jAuQXVA/0ol2Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3CEE760A21;
+        Fri, 20 Aug 2021 20:48:11 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v5.14-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0g14eg5PT5+AnKh_Uf+a7Ap5t5+G_LcU8+A-tQS3UY15g@mail.gmail.com>
+References: <CAJZ5v0g14eg5PT5+AnKh_Uf+a7Ap5t5+G_LcU8+A-tQS3UY15g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0g14eg5PT5+AnKh_Uf+a7Ap5t5+G_LcU8+A-tQS3UY15g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.14-rc7
+X-PR-Tracked-Commit-Id: 0f09f4c48118ce3c562e1028df7fe0f8150493d6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fa54d366a6e4fe3e16322abdb8b5115f8be0da8b
+Message-Id: <162949249124.8168.17683135104906314521.pr-tracker-bot@kernel.org>
+Date:   Fri, 20 Aug 2021 20:48:11 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri, 20 Aug 2021 21:36:06 +0200:
 
-Please pull from the tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.14-rc7
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.14-rc7
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fa54d366a6e4fe3e16322abdb8b5115f8be0da8b
 
-with top-most commit 0f09f4c48118ce3c562e1028df7fe0f8150493d6
+Thank you!
 
- Merge branch 'acpi-pm'
-
-on top of commit 7c60610d476766e128cc4284bb6349732cbd6606
-
- Linux 5.14-rc6
-
-to receive ACPI fixes for 5.14-rc7.
-
-These fix two mistakes in new code.
-
-Specifics:
-
- - Prevent confusing messages from being printed if the PRMT table
-   is not present or there are no PRM modules (Aubrey Li).
-
- - Fix the handling of suspend-to-idle entry and exit in the case
-   when the Microsoft UUID is used with the Low-Power S0 Idle _DSM
-   interface (Mario Limonciello).
-
-Thanks!
-
-
----------------
-
-Aubrey Li (1):
-      ACPI: PRM: Deal with table not present or no module found
-
-Mario Limonciello (1):
-      ACPI: PM: s2idle: Invert Microsoft UUID entry and exit
-
----------------
-
- drivers/acpi/prmt.c       | 6 ++++++
- drivers/acpi/x86/s2idle.c | 4 ++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
