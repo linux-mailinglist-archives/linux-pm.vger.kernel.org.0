@@ -2,131 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7BB3F2E88
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 17:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09663F31CF
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 18:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240988AbhHTPFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 11:05:32 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38480
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240996AbhHTPFa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 11:05:30 -0400
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CF23840791
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 15:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1629471890;
-        bh=co/K2QfxDh6TErvx3NAqZuZOZOZtgloEm8goQR7xz/0=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=ePhZu6dunAFII3wRiyVvAta/C/lhJdsN0z/PhzH5y4z+csMfd0PSFJv4xiDbSmAKv
-         kPYMER/0BBK1iKZlKiTc6pRxbJW7w3FKzglpWIqAxNLF8P/B8Q9O9yw0aB3gV7dgv0
-         IwQPs3xq8PtKw1QHOLWnP1SqI8LBgQ8TB4S8TLcZ3CddHapCnu/F4TuQ9IBKyaAlKr
-         Xr1RKSyKG6DdaI0wWjiQ21nmLlK4BIpPzy1gM6Wb38p8fnvN8dcUCF8QBHUvJyGdhj
-         hQ2bGL2Q+gZjbUu4HEs8tSdFVH9pswqzDxZkB9VBwnVA6Ev8G8F798tR2FpXEbZtOA
-         UapOMVyBAcHdA==
-Received: by mail-ed1-f69.google.com with SMTP id eg56-20020a05640228b8b02903be79801f9aso4651892edb.21
-        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 08:04:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=co/K2QfxDh6TErvx3NAqZuZOZOZtgloEm8goQR7xz/0=;
-        b=Vsq3GhZC+B7ou2kn1P4Xr9RXDuAFF6ysIKQcUjJRycLYmdsijFBQRzNOizSPzTqO8+
-         6QsUnjZwJvfUr+SbeTH+CNgqtzqRkI7N28N2n09dgMUuuhHiL0C91sHgqM1s9tKsx0Pq
-         onmdnPJffZ6GwI7C54nZw+baNJafeM3vChQ3EpFmtxR3ml+J4A8AFKXpG+A8MhOKtW6j
-         gF5q7+O2RQ7iNDPMaxxrEOTDx7iz9ma2kLyyNRLueRNCeSH44JHrhJK4f8UAZo3AZG1E
-         gzpXtJLnfevqW0rRog1ZKWR5gybvXkOUuaOg4H+eA6TCI3I60kwPoj2h3JDNu4Qj3Ncy
-         2k2g==
-X-Gm-Message-State: AOAM530y8maS+Ha/YJfEHRWGAlMmAEqxs7bDf+/TyFGIjtaL44ynxX9q
-        vAWnQ+eivS11p24L6+iQXAraEhcbYIzUleK+sCsbA29l2ZEQQBv22yhAJaPnEoJzigfNTmN7Wkq
-        eydKc9p/gxNE4mbBQw7aHTo+0RYdtJVQWwMSD
-X-Received: by 2002:aa7:de85:: with SMTP id j5mr22065113edv.147.1629471889808;
-        Fri, 20 Aug 2021 08:04:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdeLXpscZy4Zhp5zOqh9nMZYRaJqrPl/dZjs2YnBELKdAFBq4I5kEdodoEKntp1GvfTauNag==
-X-Received: by 2002:aa7:de85:: with SMTP id j5mr22065094edv.147.1629471889655;
-        Fri, 20 Aug 2021 08:04:49 -0700 (PDT)
-Received: from localhost.localdomain ([86.32.42.198])
-        by smtp.gmail.com with ESMTPSA id ck17sm3690735edb.88.2021.08.20.08.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Aug 2021 08:04:49 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] ARM: dts: exynos: align PPMU event node names with dtschema
-Date:   Fri, 20 Aug 2021 17:03:53 +0200
-Message-Id: <20210820150353.161161-4-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210820150353.161161-1-krzysztof.kozlowski@canonical.com>
-References: <20210820150353.161161-1-krzysztof.kozlowski@canonical.com>
+        id S231512AbhHTQ7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 12:59:52 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43436 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230048AbhHTQ7w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 12:59:52 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 869B91F4489C
+Received: by earth.universe (Postfix, from userid 1000)
+        id A945F3C0C98; Fri, 20 Aug 2021 18:59:11 +0200 (CEST)
+Date:   Fri, 20 Aug 2021 18:59:11 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] power: supply: core: Fix parsing of battery
+ chemistry/technology
+Message-ID: <20210820165911.ecpgxfhxyyhemnwo@earth.universe>
+References: <20210819235111.25357-1-digetx@gmail.com>
+ <CACRpkda=hcw5dN8TfV01egb4_fzSi3kNOCz1UguYcKyQKDW9mA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3f4ojlolkkyg7fff"
+Content-Disposition: inline
+In-Reply-To: <CACRpkda=hcw5dN8TfV01egb4_fzSi3kNOCz1UguYcKyQKDW9mA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use hyphen instead of underscore and align the PPMU event node name with
-dtschema.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+--3f4ojlolkkyg7fff
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
+Hi,
 
-Changes since v1:
-1. New patch
----
- arch/arm/boot/dts/exynos5420.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Fri, Aug 20, 2021 at 03:41:56PM +0200, Linus Walleij wrote:
+> On Fri, Aug 20, 2021 at 1:51 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>=20
+> > The power_supply_get_battery_info() fails if device-chemistry property
+> > is missing in a device-tree because error variable is propagated to the
+> > final return of the function, fix it.
+> >
+> > Fixes: 4eef766b7d4d ("power: supply: core: Parse battery chemistry/tech=
+nology")
+> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>=20
+> Oops,
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index e23e8ffb093f..10ccd5cb69fd 100644
---- a/arch/arm/boot/dts/exynos5420.dtsi
-+++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -302,7 +302,7 @@ ppmu_dmc0_0: ppmu@10d00000 {
- 			clocks = <&clock CLK_PCLK_PPMU_DREX0_0>;
- 			clock-names = "ppmu";
- 			events {
--				ppmu_event3_dmc0_0: ppmu-event3-dmc0_0 {
-+				ppmu_event3_dmc0_0: ppmu-event3-dmc0-0 {
- 					event-name = "ppmu-event3-dmc0_0";
- 				};
- 			};
-@@ -314,7 +314,7 @@ ppmu_dmc0_1: ppmu@10d10000 {
- 			clocks = <&clock CLK_PCLK_PPMU_DREX0_1>;
- 			clock-names = "ppmu";
- 			events {
--				ppmu_event3_dmc0_1: ppmu-event3-dmc0_1 {
-+				ppmu_event3_dmc0_1: ppmu-event3-dmc0-1 {
- 					event-name = "ppmu-event3-dmc0_1";
- 				};
- 			};
-@@ -326,7 +326,7 @@ ppmu_dmc1_0: ppmu@10d60000 {
- 			clocks = <&clock CLK_PCLK_PPMU_DREX1_0>;
- 			clock-names = "ppmu";
- 			events {
--				ppmu_event3_dmc1_0: ppmu-event3-dmc1_0 {
-+				ppmu_event3_dmc1_0: ppmu-event3-dmc1-0 {
- 					event-name = "ppmu-event3-dmc1_0";
- 				};
- 			};
-@@ -338,7 +338,7 @@ ppmu_dmc1_1: ppmu@10d70000 {
- 			clocks = <&clock CLK_PCLK_PPMU_DREX1_1>;
- 			clock-names = "ppmu";
- 			events {
--				ppmu_event3_dmc1_1: ppmu-event3-dmc1_1 {
-+				ppmu_event3_dmc1_1: ppmu-event3-dmc1-1 {
- 					event-name = "ppmu-event3-dmc1_1";
- 				};
- 			};
--- 
-2.30.2
+Thanks, queued.
 
+-- Sebastian
+
+--3f4ojlolkkyg7fff
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEf308ACgkQ2O7X88g7
++poS1Q//ZI+PmHqDuWeotKFoAKYjxxcTgqJeDe3MwFXGh15cdVXMjXxt4Hmh/UAS
+wRQVr8TkHSAeTpcpf0zuUxoXguqN8pdX0v5fiGe7ZY9Th1/EyY6V04R1uRYvRvIt
+jySe6Qvm+Lqd1NV2CyQ2pML4+uAClP42DLWlSYRwgVucSlHk+i2+uOCIb0sn5En9
+y4psP7+OpiNZIFbkeQZ0LF+mhRg9whkTP5NEmqCVnDeaeIEEpcsx24ymrmjOfxmX
+iIn+kbeYLhJU8RZKlph9tb2jGNKxhoaGybSLvitehs8d12WnyXPlrQ25Ue+FkRNV
+PFMP5s8q1dT90fAoEP8YDNf/tr4/Iy98PRYRuDtKSdbb0sm3oy3UiHc5fU8QBml4
+ky00Z3gtfGNQHoeNwepHNoqHaofRku2vnfuXJbArwX+j3glLqqFupaQ4NJ3YdQfO
+uz09yJfc2aFrC0VW/vmeJZa8JPkSeV7iype2Btl6NvhumXYd5Bn4ZkZWH2YDp363
+3eVRb8v/PMyI1alqQcPgdqk1Y1rzLaddBj1My1u+NIGOocnbEPEDdE1YQMiu7K0F
+a5IAFR32crLCqjAIsJLcsZ4ysUW++SYC168qsFl47RwPRJ/qM5Qu/+1rBJaEYv9A
+Siux44wn+5ZM6zJcPOY+v0dq7Vx11n7+R5GII51iM2zX7zHxzdg=
+=HlZL
+-----END PGP SIGNATURE-----
+
+--3f4ojlolkkyg7fff--
