@@ -2,163 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34423F266B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 07:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1013F28E2
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Aug 2021 11:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238170AbhHTFTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Aug 2021 01:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S232773AbhHTJKU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Aug 2021 05:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234628AbhHTFTX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 01:19:23 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C4BC061760
-        for <linux-pm@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id t42so5039731pfg.12
-        for <linux-pm@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
+        with ESMTP id S233761AbhHTJKT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Aug 2021 05:10:19 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42550C061760
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id e14so10179580qkg.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
-        b=PAK0FwHpNruccQOMJcEETGgiuehcBfGqSXwbOalixpfWmC8iUPHKv0ZRFhT4USGW3L
-         s3ikZix1CXYk8w3jX5LaxfyZfb40GBiPWSjG9bWn3gJp9a9Md0FR48UGizRgXzY9ODgl
-         10gDNc8YxX4abwwur3/2Ib4tR0HK4fxAVz95jdn0g5Bjm1f+zlmZUdf0J4uOmNCA+73o
-         QmFwB0uLKerpVDInoO9o15o02ie64XpCaCSsIImcFb/KjT6Us0KvUWI0KV441DGxP1Gb
-         Qjx6eoerfkbM7U/RrGe2d3xgWfRJJ6PVyX/2MvEkhvBiHXfKbkbdOk6b4KB2LrxPQeQV
-         fLzw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
+        b=hFJnYYN6W4CsDcIVyUx2ldgP3beMW4jLNH/SGyYzXZ7BCc0KGd1k2ND/ddXkVyFBzR
+         guIjkcbm1NmdCLbZe8HMFSijx65jRHp/SdEKwlTl1Wrrm5GfFB+4ZVS5sv8x1a29xP5U
+         THsPNWQYsSJ5yPuhXe5CCySbf3d8KHk4ieqNWU1QRBTQFpIYNevU0ISY6bHFs3nh/n2S
+         aeYB/F9nFQwaieLCZI54fOmj0REUKAHwNOHq6pxHqVkFNAYAR1ZrLiFgkhfJD1EtDH4X
+         GpetBqXCAI10TRHamsMBRTUQpFk6zzmcbkWEi4ufFi/59ztBcLqf45Sb9NTW5DLLfDf/
+         UjVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
-        b=A/rc8kYcLXuD1IOfcvqVbtGFRGi9Ry65E20LjkTQiq4sjRvHAHPh+0LGthmv6OuVLv
-         g8WMYB0m/s59wBl+vYyyeW8ZJCEyYCrikwIbBgwC8V29AoWBsCpM0ESYZoJs8dpVbUcT
-         mWjyDluVSnftjxig4k34WnF8Rg/drWwQl23iTOOGcgSQH30kSjvOwDb6zDtWN+xq4K8/
-         r3nK9y99DxHZuGzwY8Aw58an/iJh0hLqPkCGCiO1O+UKvMA4udGrHtDXHu5cMv46NC9r
-         D78CmNot5/+5FGgt9ErJREZYwTyx712lBaAHc1yLFK+srHpk0s52RXP+me8e1QKqW+XC
-         NxEw==
-X-Gm-Message-State: AOAM532vUKJvRhxAXwZNMSLyYrqbFBLUn5cuj/YlpJM7bmMYW+GUchT8
-        /Di2b9EiIt61VyoZ0Zds4fYggQ==
-X-Google-Smtp-Source: ABdhPJwH30rFrNGt2fTNK9Na7wrgKwgjGw7543RwntMIs+dfy9PTWNVMu53RFGAQHLSof48YBaglZA==
-X-Received: by 2002:a62:8283:0:b0:3e0:f3f3:839d with SMTP id w125-20020a628283000000b003e0f3f3839dmr17811980pfd.37.1629436725848;
-        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id i26sm5582209pfu.6.2021.08.19.22.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
-Date:   Fri, 20 Aug 2021 10:48:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
-References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
- <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
+        b=N1tuBo7euX9SZtKpOgcD5m2ezk3bxPLVOeilz43R5vqi8+0+hh38179hZP6VWl9ock
+         JcWJVIuRlh+9N9DpMtatdiemK4r+eT9jSi2w1UHzi6Jm1QFRHx/xczjuj+VhoQ/tXnXZ
+         rkwnW8FIKp7uWfmQsY18a+yZ6dfVSjAzx2wsP9Z0Z6+jRFGKiMQcjGeY+kc0eoqsKWmB
+         bT/wkdDyxO+IecDq3z80g1TH2RdH5JDW1dYvBborQExaPQ00X37FLi1N3BQFND9DOS/4
+         HZtgWIrfDE+npwraF+XQu3NmuwcVxdIoaFrWrqmI7jpogo+PFGjTZTbDTdkUGyd5JwO3
+         p3fw==
+X-Gm-Message-State: AOAM532HzTqhspK1YOURNhftQXh6g3V2IGPt/gHY+40mklN+HXJEwUu6
+        LrO39cVG9dBg8T2Ss2yKTxYRpAwM+x6ol7egths=
+X-Google-Smtp-Source: ABdhPJyG2xEmxAYbVbw0iUlOEmdXfXcy24m7DXEexS/mITfNOxQp5Wtr3TQ/AKKjTgQq+sXNyeHYc24WCQSN0Ret/HU=
+X-Received: by 2002:a37:846:: with SMTP id 67mr7997191qki.167.1629450581284;
+ Fri, 20 Aug 2021 02:09:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Received: by 2002:ac8:5184:0:0:0:0:0 with HTTP; Fri, 20 Aug 2021 02:09:40
+ -0700 (PDT)
+Reply-To: geomic123@yahoo.com
+From:   George Micheal <philipowiredu77@gmail.com>
+Date:   Fri, 20 Aug 2021 10:09:40 +0100
+Message-ID: <CAGkcCGHZMGrNP48LcZn4sRuaLsMHSeJnxJjFCOZvC71-qdJ4xg@mail.gmail.com>
+Subject: Waiting for response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-08-21, 16:55, Ulf Hansson wrote:
-> Right, that sounds reasonable.
-> 
-> We already have pm_genpd_opp_to_performance_state() which translates
-> an OPP to a performance state. This function invokes the
-> ->opp_to_performance_state() for a genpd. Maybe we need to allow a
-> genpd to not have ->opp_to_performance_state() callback assigned
-> though, but continue up in the hierarchy to see if the parent has the
-> callback assigned, to make this work for Tegra?
-> 
-> Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
-> allowing us to pass the device instead of the genpd. But that's a
-> minor thing.
-
-I am not concerned a lot about how it gets implemented, and am not
-sure as well, as I haven't looked into these details since sometime.
-Any reasonable thing will be accepted, as simple as that.
-
-> Finally, the precondition to use the above, is to first get a handle
-> to an OPP table. This is where I am struggling to find a generic
-> solution, because I guess that would be platform or even consumer
-> driver specific for how to do this. And at what point should we do
-> this?
-
-Hmm, I am not very clear with the whole picture at this point of time.
-
-Dmitry, can you try to frame a sequence of events/calls/etc that will
-define what kind of devices we are looking at here, and how this can
-be made to work ?
-
-> > > Viresh, please take a look at what I did in [1]. Maybe it could be done
-> > > in another way.
-> >
-> > I looked into this and looked like too much trouble. The
-> > implementation needs to be simple. I am not sure I understand all the
-> > problems you faced while doing that, would be better to start with a
-> > simpler implementation of get_performance_state() kind of API for
-> > genpd, after the domain is attached and its OPP table is initialized.
-> >
-> > Note, that the OPP table isn't required to be fully initialized for
-> > the device at this point, we can parse the DT as well if needed be.
-> 
-> Sure, but as I indicated above, you need some kind of input data to
-> figure out what OPP table to pick, before you can translate that into
-> a performance state. Is that always the clock rate, for example?
-
-Eventually it can be clock, bandwidth, or pstate of anther genpd, not
-sure what all we are looking for now. It should be just clock right
-now as far as I can imagine :)
-
-> Perhaps, we should start with adding a dev_pm_opp_get_from_rate() or
-> what do you think? Do you have other suggestions?
-
-We already have similar APIs, so that won't be a problem. We also have
-a mechanism inside the OPP core, frequency based, which is used to
-guess the current OPP. Maybe we can enhance and use that directly
-here.
-
 -- 
-viresh
+Dear Sir/Madam
+
+My name is Mr George Michael,i am the Personal Aid to former
+President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
+west Africa, who is currently in exile with his farmily. I have been
+trying on how to get in touch with you over an important issue
+concerning a project that will be profitable. I anticipate hearing
+from you for more details.
+
+Yours faithfully
+Mr George Michael
