@@ -2,68 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B459D3F39EA
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Aug 2021 11:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1383F3BCB
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Aug 2021 19:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbhHUJlw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Aug 2021 05:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S232729AbhHUReo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Aug 2021 13:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbhHUJlv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Aug 2021 05:41:51 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D7C06175F
-        for <linux-pm@vger.kernel.org>; Sat, 21 Aug 2021 02:41:12 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id r7so17880984wrs.0
-        for <linux-pm@vger.kernel.org>; Sat, 21 Aug 2021 02:41:12 -0700 (PDT)
+        with ESMTP id S231131AbhHURen (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Aug 2021 13:34:43 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD23C061575;
+        Sat, 21 Aug 2021 10:34:03 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id j12so8475978ljg.10;
+        Sat, 21 Aug 2021 10:34:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=defXgJNMGstYRhCF8ONqO9+5/XVgcipP497hoW+zv1g=;
-        b=arxZhscJnhuNRya/y63eouJWZpRFVlWoC5RJ31m1zQtriCSx1fo/nOYWtppDcptQxp
-         8GLlL5xyWTvYe6dkzBWa6FS7UtK/BUhxtviFMvG4uxWFSmLD0xc4ZqEMaNt/fXmHStOA
-         lZI2kWarNUL9jCrG9nHw8n0G+OJVAwGEqDRDcYKDvmYRmC3Qp2E3ANv5lK3Hq220Vegz
-         BRFhTauacxoG53kG3RtvrXN7wmC1DZluJ16jPChbvUh3nRailltADT6bXlWkr4W1FUv9
-         x4Nn3VjUA7syhPflVaV6b9DVSyABz2QEL4p+Dh0kxALDrdWfQn4BdlhIdfsKYT8Si7kr
-         dHmg==
+        bh=IFNRcLXLjPsNOEY9uO49C8t2A331d7150PuMHBQ0iTI=;
+        b=lUVy4r6EmCBUpkDfMifythiDTY/ondphd036uPMFa4RPvNLeL6L40wQqqsFEgfXx8X
+         Xv7fDSH9MFGejR5k7WM2poITA05adirsqndUU8tLGvhp1bdvOoFZ+7h2u5kG5XUcYFy9
+         YYZ9RqbElnB30bSXB1sTyZl+hy+cJ0JcScyJ7QYmzB7PI51NAqS1AKqC3e23DQIKFKMJ
+         vLHVB8vLS51zw87ZvMLpqT5wkQu3NhsmaQ7Su/ZSfv0KWiuLLYyPme5jEBcvbTwStA3/
+         KYZEiyZqnUMKaYYL1Y2Yeo4oE90zbAqGujX97l8WdEzhHbX0b72VQTFvODB/2MJ2eEW4
+         tGBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=defXgJNMGstYRhCF8ONqO9+5/XVgcipP497hoW+zv1g=;
-        b=btiEV60nF8dD0DL/l/pf6ozxVT+4e60+cyx/vlWRw4IlmRyP4kV8VDOGrkEpIT4UNE
-         MMd7lOfpq49wPwU6s5ZZ46izxlgh3wPGtrPifaCUmjYAskmTCedqkrO25Ge9fPtHKltd
-         5/fc+K5qmgBgI37xJt6nYowJmw78B1ZI3jO1M+v/OxKpF3A1w2Kyt2T8x2hGcc8PaeWI
-         iQYOIo1E+gp3pZXRUtN58GppH8d/VVnDFviGtYQ2e7iZIt4D0qVRkTKu1xnidqQrVEEt
-         w+J2oYdlc7vmIxSothb9xSCQDhmBq5NqnWjy+haV+SC0PsXqgNLQ/EyfReFN1NRrmwTF
-         vJjg==
-X-Gm-Message-State: AOAM530H38LR3rQBuAkHcKV/a+BvTUVtUi59Xee7d1cou80HRfgjrGkJ
-        mEYheA2PTttL7eTup36kZAuC8A==
-X-Google-Smtp-Source: ABdhPJzmr5nWYtmDQhUCWlxXi83+L6HsLQnQ08FPu9AFcKawPHv82sQWrP5/KBIDBfLJt2jOs5b+jA==
-X-Received: by 2002:adf:c044:: with SMTP id c4mr3001815wrf.275.1629538870421;
-        Sat, 21 Aug 2021 02:41:10 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e7c:3055:aad:f62d? ([2a01:e34:ed2f:f020:e7c:3055:aad:f62d])
-        by smtp.googlemail.com with ESMTPSA id q11sm248813wrx.85.2021.08.21.02.41.08
+        bh=IFNRcLXLjPsNOEY9uO49C8t2A331d7150PuMHBQ0iTI=;
+        b=bkd6giQVKttzqezpWvLaChF+M90adpYKHN9Mxf+KyBRcObfc5LqEOrFa1BE39SkZ7U
+         Uj1SrkIgHBooKLO7xvRrmfZjUXUwiF74YCow4UrN/80SVFFS4lBrgHGmY3hM+mzqPSdU
+         JdYpAT0vEAjqr43tpv3QPZBSyzznM30g86TUZMljm6IsI3MDSmEG2ZYCWEt/uG/yUpSK
+         YlkWxW/VZ+6q6ByrJDBaohjH/VbrofqJG1H+OlsgPEPxVvYntT8ZPuaaUkrtutXR5zCn
+         UFcmHPpDhGYoYQ7RHpQOK4JzJ7CyM7tOXqf9WAcWh/dJRtmRJHsL76WwXnsZMBKaIrJ+
+         8aSA==
+X-Gm-Message-State: AOAM533Uw7S4+7hyu5aSVCL05JgwwaEjtAknTOwxP/zcZhST3GagzHfP
+        bYnZ1yABsCW/w19Ia+vfr98JjQLFX84=
+X-Google-Smtp-Source: ABdhPJyO9VF4ra6RvNiH6n/UUkOW+Qh3yY6M28atOYzpaWkyjml2dkwAfMgDWLgva7AcA19E18buOw==
+X-Received: by 2002:a2e:a606:: with SMTP id v6mr20443277ljp.366.1629567242153;
+        Sat, 21 Aug 2021 10:34:02 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
+        by smtp.googlemail.com with ESMTPSA id d14sm966993lfq.195.2021.08.21.10.34.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Aug 2021 02:41:09 -0700 (PDT)
-Subject: Re: [Patch v5 2/6] thermal: qcom: Add support for LMh driver
-To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, rui.zhang@intel.com,
-        viresh.kumar@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org
-Cc:     steev@kali.org, tdas@codeaurora.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210809191605.3742979-1-thara.gopinath@linaro.org>
- <20210809191605.3742979-3-thara.gopinath@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <fcbb6d64-7e39-7f03-e76c-512946124777@linaro.org>
-Date:   Sat, 21 Aug 2021 11:41:08 +0200
+        Sat, 21 Aug 2021 10:34:01 -0700 (PDT)
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+References: <20210818043131.7klajx6drvvkftoc@vireshk-i7>
+ <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7>
+ <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+ <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
+ <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
+ <0354acbe-d856-4040-f453-8e8164102045@gmail.com>
+ <CAPDyKFoQdn1rm91iFNJwZwpSYcKJBjDLqtJB4KZAkhgY1Grm-Q@mail.gmail.com>
+ <87073fc2-d7b3-98f4-0067-29430ea2adef@gmail.com>
+ <CAPDyKFqSsAk8a5CTNpRT2z4Wvf8BehJKDbVhUKfHc2Jzj7aTNA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9129a9f0-8c9b-d8e0-ddf5-c8820871fb7f@gmail.com>
+Date:   Sat, 21 Aug 2021 20:34:00 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210809191605.3742979-3-thara.gopinath@linaro.org>
+In-Reply-To: <CAPDyKFqSsAk8a5CTNpRT2z4Wvf8BehJKDbVhUKfHc2Jzj7aTNA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -71,339 +111,245 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+20.08.2021 15:42, Ulf Hansson пишет:
+> On Thu, 19 Aug 2021 at 21:35, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 19.08.2021 16:07, Ulf Hansson пишет:
+>>> On Wed, 18 Aug 2021 at 17:43, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>
+>>>> 18.08.2021 13:08, Ulf Hansson пишет:
+>>>>> On Wed, 18 Aug 2021 at 11:50, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>>>>>
+>>>>>> On 18-08-21, 11:41, Ulf Hansson wrote:
+>>>>>>> On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>>>>>>> What we need here is just configure. So something like this then:
+>>>>>>>>
+>>>>>>>> - genpd->get_performance_state()
+>>>>>>>>   -> dev_pm_opp_get_current_opp() //New API
+>>>>>>>>   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
+>>>>>>>>
+>>>>>>>> This can be done just once from probe() then.
+>>>>>>>
+>>>>>>> How would dev_pm_opp_get_current_opp() work? Do you have a suggestion?
+>>>>>>
+>>>>>> The opp core already has a way of finding current OPP, that's what
+>>>>>> Dmitry is trying to use here. It finds it using clk_get_rate(), if
+>>>>>> that is zero, it picks the lowest freq possible.
+>>>>>>
+>>>>>>> I am sure I understand the problem. When a device is getting probed,
+>>>>>>> it needs to consume power, how else can the corresponding driver
+>>>>>>> successfully probe it?
+>>>>>>
+>>>>>> Dmitry can answer that better, but a device doesn't necessarily need
+>>>>>> to consume energy in probe. It can consume bus clock, like APB we
+>>>>>> have, but the more energy consuming stuff can be left disabled until
+>>>>>> the time a user comes up. Probe will just end up registering the
+>>>>>> driver and initializing it.
+>>>>>
+>>>>> That's perfectly fine, as then it's likely that it won't vote for an
+>>>>> OPP, but can postpone that as well.
+>>>>>
+>>>>> Perhaps the problem is rather that the HW may already carry a non-zero
+>>>>> vote made from a bootloader. If the consumer driver tries to clear
+>>>>> that vote (calling dev_pm_opp_set_rate(dev, 0), for example), it would
+>>>>> still not lead to any updates of the performance state in genpd,
+>>>>> because genpd internally has initialized the performance-state to
+>>>>> zero.
+>>>>
+>>>> We don't need to discover internal SoC devices because we use
+>>>> device-tree on ARM. For most devices power isn't required at a probe
+>>>> time because probe function doesn't touch h/w at all, thus devices are
+>>>> left in suspended state after probe.
+>>>>
+>>>> We have three components comprising PM on Tegra:
+>>>>
+>>>> 1. Power gate
+>>>> 2. Clock state
+>>>> 3. Voltage state
+>>>>
+>>>> GENPD on/off represents the 'power gate'.
+>>>>
+>>>> Clock and reset are controlled by device drivers using clk and rst APIs.
+>>>>
+>>>> Voltage state is represented by GENPD's performance level.
+>>>>
+>>>> GENPD core assumes that at a first rpm-resume of a consumer device, its
+>>>> genpd_performance=0. Not true for Tegra because h/w of the device is
+>>>> preconfigured to a non-zero perf level initially, h/w may not support
+>>>> zero level at all.
+>>>
+>>> I think you may be misunderstanding genpd's behaviour around this, but
+>>> let me elaborate.
+>>>
+>>> In genpd_runtime_resume(), we try to restore the performance state for
+>>> the device that genpd_runtime_suspend() *may* have dropped earlier.
+>>> That means, if genpd_runtime_resume() is called prior
+>>> genpd_runtime_suspend() for the first time, it means that
+>>> genpd_runtime_resume() will *not* restore a performance state, but
+>>> instead just leave the performance state as is for the device (see
+>>> genpd_restore_performance_state()).
+>>>
+>>> In other words, a consumer driver may use the following sequence to
+>>> set an initial performance state for the device during ->probe():
+>>>
+>>> ...
+>>> rate = clk_get_rate()
+>>> dev_pm_opp_set_rate(rate)
+>>>
+>>> pm_runtime_enable()
+>>> pm_runtime_resume_and_get()
+>>> ...
+>>>
+>>> Note that, it's the consumer driver's responsibility to manage device
+>>> specific resources, in its ->runtime_suspend|resume() callbacks.
+>>> Typically that means dealing with clock gating/ungating, for example.
+>>>
+>>> In the other scenario where a consumer driver prefers to *not* call
+>>> pm_runtime_resume_and_get() in its ->probe(), because it doesn't need
+>>> to power on the device to complete probing, then we don't want to vote
+>>> for an OPP at all - and we also want the performance state for the
+>>> device in genpd to be set to zero. Correct?
+>>
+>> Yes
+>>
+>>> Is this the main problem you are trying to solve, because I think this
+>>> doesn't work out of the box as of today?
+>>
+>> The main problem is that the restored performance state is zero for the
+>> first genpd_runtime_resume(), while it's not zero from the h/w perspective.
+> 
+> This should not be a problem, but can be handled by the consumer driver.
+> 
+> genpd_runtime_resume() calls genpd_restore_performance_state() to
+> restore a performance state for the device. However, in the scenario
+> you describe, "gpd_data->rpm_pstate" is zero, which makes
+> genpd_restore_performance_state() to just leave the device's
+> performance state as is - it will *not* restore the performance state
+> to zero.
+> 
+> To make the consumer driver deal with this, it would need to call
+> dev_pm_opp_set_rate() from within its ->runtime_resume() callback.
+> 
+>>
+>>> There is another concern though, but perhaps it's not a problem after
+>>> all. Viresh told us that dev_pm_opp_set_rate() may turn on resources
+>>> like clock/regulators. That could certainly be problematic, in
+>>> particular if the device and its genpd have OPP tables associated with
+>>> it and the consumer driver wants to follow the above sequence in
+>>> probe.
+>>
+>> dev_pm_opp_set_rate() won't enable clocks and regulators, but it may
+>> change the clock rate and voltage. This is also platform/driver specific
+>> because it's up to OPP user how to configure OPP table. On Tegra we only
+>> assign clock to OPP table, regulators are unused.
+>>
+>>> Viresh, can you please chime in here and elaborate on some of the
+>>> magic happening behind dev_pm_opp_set_rate() API - is there a problem
+>>> here or not?
+>>>
+>>>>
+>>>> GENPD core assumes that consumer devices can work at any performance
+>>>> level. Not true for Tegra because voltage needs to be set in accordance
+>>>> to the clock rate before clock is enabled, otherwise h/w won't work
+>>>> properly, perhaps clock may be unstable or h/w won't be latching.
+>>>
+>>> Correct. Genpd relies on the callers to use the OPP framework if there
+>>> are constraints like you describe above.
+>>>
+>>> That said, it's not forbidden for a consumer driver to call
+>>> dev_pm_genpd_set_performance_state() directly, but then it better
+>>> knows exactly what it's doing.
+>>>
+>>>>
+>>>> Performance level should be set to 0 while device is suspended.
+>>>
+>>> Do you mean system suspend or runtime suspend? Or both?
+>>
+>> Runtime suspend.
+> 
+> Alright. So that's already taken care of for us in genpd_runtime_suspend().
+> 
+> Or perhaps you have discovered some problem with this?
+> 
+>>
+>>>> Performance level needs to be bumped on rpm-resume of a device in
+>>>> accordance to h/w state before hardware is enabled.
+>>>
+>>> Assuming there was a performance state set for the device when
+>>> genpd_runtime_suspend() was called, genpd_runtime_resume() will
+>>> restore that state according to the sequence you described.
+>>
+>> What do you think about adding API that will allow drivers to explicitly
+>> set the restored performance state of a power domain?
+>>
+>> Another option could be to change the GENPD core, making it to set the
+>> rpm_pstate when dev_pm_genpd_set_performance_state(dev) is invoked and
+>> device is rpm-suspended, instead of calling the
+>> genpd->set_performance_state callback.
+>>
+>> Then drivers will be able to sync the perf state at a probe time.
+>>
+>> What do you think?
+> 
+> I don't think it's needed, see my reply earlier above. However your
+> change touches another problem though, see below.
+> 
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index a934c679e6ce..cc15ab9eacc9 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -435,7 +435,7 @@ static void genpd_restore_performance_state(struct
+>> device *dev,
+>>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int
+>> state)
+>>  {
+>>         struct generic_pm_domain *genpd;
+>> -       int ret;
+>> +       int ret = 0;
+>>
+>>         genpd = dev_to_genpd_safe(dev);
+>>         if (!genpd)
+>> @@ -446,7 +446,10 @@ int dev_pm_genpd_set_performance_state(struct
+>> device *dev, unsigned int state)
+>>                 return -EINVAL;
+>>
+>>         genpd_lock(genpd);
+>> -       ret = genpd_set_performance_state(dev, state);
+>> +       if (pm_runtime_suspended(dev))
+>> +               dev_gpd_data(dev)->rpm_pstate = state;
+>> +       else
+>> +               ret = genpd_set_performance_state(dev, state);
+>>         genpd_unlock(genpd);
+> 
+> This doesn't work for all cases. For example, when a consumer driver
+> deploys runtime PM support in its ->probe() according to the below
+> sequence:
+> 
+> ...
+> dev_pm_opp_set_rate(rate)
+> pm_runtime_get_noresume()
+> pm_runtime_set_active()
+> pm_runtime_enable()
+> ...
+> pm_runtime_put()
+> ...
+> 
+> We need to call genpd_set_performance_state() independently of whether
+> the device is runtime suspended or not.
 
-Hi Thara,
+I don't see where is the problem in yours example.
 
-On 09/08/2021 21:16, Thara Gopinath wrote:
-> Driver enabling various pieces of Limits Management Hardware(LMh) for cpu
-> cluster0 and cpu cluster1 namely kick starting monitoring of temperature,
-> current, battery current violations, enabling reliability algorithm and
-> setting up various temperature limits.
-> 
-> The following has been explained in the cover letter. I am including this
-> here so that this remains in the commit message as well.
-> 
-> LMh is a hardware infrastructure on some Qualcomm SoCs that can enforce
-> temperature and current limits as programmed by software for certain IPs
-> like CPU. On many newer LMh is configured by firmware/TZ and no programming
-> is needed from the kernel side. But on certain SoCs like sdm845 the
-> firmware does not do a complete programming of the h/w. On such soc's
-> kernel software has to explicitly set up the temperature limits and turn on
-> various monitoring and enforcing algorithms on the hardware.
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org> # Lenovo Yoga C630
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+pm_runtime_suspended() = false while RPM is disabled. When device is
+resumed, the rpm_pstate=0, so it won't change the pstate on resume.
 
-Is it possible to have an option to disable/enable the LMh driver at
-runtime, for instance with a module parameter ?
+> Although, it actually seems like good idea to update
+> dev_gpd_data(dev)->rpm_pstate = state here, as to make sure
+> genpd_runtime_resume() doesn't restore an old/invalid value that was
+> saved while dropping the performance state vote for the device in
+> genpd_runtime_suspend() earlier.
+> 
+> Let me send a patch for this shortly, to close this window of a possible error.
 
-> ---
-> 
-> v4->v5:
-> 	- Minor change related to renaming of dt binding property qcom,lmh-cpu
-> 	  to cpus as per Rob Herring's review comments.
-> 
-> v3->v4:
-> 	- Minor code re-arrangement and removal of redundant code as per Bjorn's
-> 	  review comments
-> 	- Added suppress_bind_attrs to driver as per Bjorn's review comments.
-> 	- Changes to support changes in LMh dt node properties naming and types.
-> 
-> v2->v3:
-> 	- Rearranged enabling of various LMh subfunction and removed returning
-> 	  on error in enabling any one subfunction as the different pieces can
-> 	  operate and thus be enabled independently.
-> 	- Other minor cosmetic fixes.
-> 
-> v1->v2:
-> 	- Cosmetic and spelling fixes from review comments from Randy Dunlap
-> 	- Added irq_disable to lmh_irq_ops and removed disabling of irq from
-> 	  lmh_handle_irq. Now cpufreq explicitly disables irq prior to
-> 	  handling it as per Bjorn's suggestion.
-> 	- Rebased to new version of qcom_scm_lmh_dcvsh as changed in patch 1.
-> 	- Removed generic dt compatible string and introduced platform specific one
-> 	  as per Bjorn's suggestion.
-> 	- Take arm, low and high temp thresholds for LMh from dt properties instead of
-> 	  #defines in the driver as per Daniel's suggestion.
-> 	- Other minor fixes.
-> 
->  drivers/thermal/qcom/Kconfig  |  10 ++
->  drivers/thermal/qcom/Makefile |   1 +
->  drivers/thermal/qcom/lmh.c    | 232 ++++++++++++++++++++++++++++++++++
->  3 files changed, 243 insertions(+)
->  create mode 100644 drivers/thermal/qcom/lmh.c
-> 
-> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-> index 8d5ac2df26dc..7d942f71e532 100644
-> --- a/drivers/thermal/qcom/Kconfig
-> +++ b/drivers/thermal/qcom/Kconfig
-> @@ -31,3 +31,13 @@ config QCOM_SPMI_TEMP_ALARM
->  	  trip points. The temperature reported by the thermal sensor reflects the
->  	  real time die temperature if an ADC is present or an estimate of the
->  	  temperature based upon the over temperature stage value.
-> +
-> +config QCOM_LMH
-> +	tristate "Qualcomm Limits Management Hardware"
-> +	depends on ARCH_QCOM
-> +	help
-> +	  This enables initialization of Qualcomm limits management
-> +	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
-> +	  input from temperature and current sensors.  On many newer Qualcomm SoCs
-> +	  LMh is configured in the firmware and this feature need not be enabled.
-> +	  However, on certain SoCs like sdm845 LMh has to be configured from kernel.
-> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
-> index 252ea7d9da0b..0fa2512042e7 100644
-> --- a/drivers/thermal/qcom/Makefile
-> +++ b/drivers/thermal/qcom/Makefile
-> @@ -5,3 +5,4 @@ qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
->  				   tsens-8960.o
->  obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
->  obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
-> +obj-$(CONFIG_QCOM_LMH)		+= lmh.o
-> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-> new file mode 100644
-> index 000000000000..eafa7526eb8b
-> --- /dev/null
-> +++ b/drivers/thermal/qcom/lmh.c
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/*
-> + * Copyright (C) 2021, Linaro Limited. All rights reserved.
-> + */
-> +#include <linux/module.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/err.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/slab.h>
-> +#include <linux/qcom_scm.h>
-> +
-> +#define LMH_NODE_DCVS			0x44435653
-> +#define LMH_CLUSTER0_NODE_ID		0x6370302D
-> +#define LMH_CLUSTER1_NODE_ID		0x6370312D
-> +
-> +#define LMH_SUB_FN_THERMAL		0x54484D4C
-> +#define LMH_SUB_FN_CRNT			0x43524E54
-> +#define LMH_SUB_FN_REL			0x52454C00
-> +#define LMH_SUB_FN_BCL			0x42434C00
-> +
-> +#define LMH_ALGO_MODE_ENABLE		0x454E424C
-> +#define LMH_TH_HI_THRESHOLD		0x48494748
-> +#define LMH_TH_LOW_THRESHOLD		0x4C4F5700
-> +#define LMH_TH_ARM_THRESHOLD		0x41524D00
-> +
-> +#define LMH_REG_DCVS_INTR_CLR		0x8
-> +
-> +struct lmh_hw_data {
-> +	void __iomem *base;
-> +	struct irq_domain *domain;
-> +	int irq;
-> +};
-> +
-> +static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
-> +{
-> +	struct lmh_hw_data *lmh_data = data;
-> +	int irq = irq_find_mapping(lmh_data->domain, 0);
-> +
-> +	/* Call the cpufreq driver to handle the interrupt */
-> +	if (irq)
-> +		generic_handle_irq(irq);
-> +
-> +	return 0;
-> +}
-> +
-> +static void lmh_enable_interrupt(struct irq_data *d)
-> +{
-> +	struct lmh_hw_data *lmh_data = irq_data_get_irq_chip_data(d);
-> +
-> +	/* Clear the existing interrupt */
-> +	writel(0xff, lmh_data->base + LMH_REG_DCVS_INTR_CLR);
-> +	enable_irq(lmh_data->irq);
-> +}
-> +
-> +static void lmh_disable_interrupt(struct irq_data *d)
-> +{
-> +	struct lmh_hw_data *lmh_data = irq_data_get_irq_chip_data(d);
-> +
-> +	disable_irq_nosync(lmh_data->irq);
-> +}
-> +
-> +static struct irq_chip lmh_irq_chip = {
-> +	.name           = "lmh",
-> +	.irq_enable	= lmh_enable_interrupt,
-> +	.irq_disable	= lmh_disable_interrupt
-> +};
-> +
-> +static int lmh_irq_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
-> +{
-> +	struct lmh_hw_data *lmh_data = d->host_data;
-> +
-> +	irq_set_chip_and_handler(irq, &lmh_irq_chip, handle_simple_irq);
-> +	irq_set_chip_data(irq, lmh_data);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct irq_domain_ops lmh_irq_ops = {
-> +	.map = lmh_irq_map,
-> +	.xlate = irq_domain_xlate_onecell,
-> +};
-> +
-> +static int lmh_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct device_node *cpu_node;
-> +	struct lmh_hw_data *lmh_data;
-> +	int temp_low, temp_high, temp_arm, cpu_id, ret;
-> +	u32 node_id;
-> +
-> +	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
-> +	if (!lmh_data)
-> +		return -ENOMEM;
-> +
-> +	lmh_data->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(lmh_data->base))
-> +		return PTR_ERR(lmh_data->base);
-> +
-> +	cpu_node = of_parse_phandle(np, "cpus", 0);
-> +	if (!cpu_node)
-> +		return -EINVAL;
-> +	cpu_id = of_cpu_node_to_id(cpu_node);
-> +	of_node_put(cpu_node);
-> +
-> +	ret = of_property_read_u32(np, "qcom,lmh-temp-high-millicelsius", &temp_high);
-> +	if (ret) {
-> +		dev_err(dev, "missing qcom,lmh-temp-high-millicelsius property\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = of_property_read_u32(np, "qcom,lmh-temp-low-millicelsius", &temp_low);
-> +	if (ret) {
-> +		dev_err(dev, "missing qcom,lmh-temp-low-millicelsius property\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = of_property_read_u32(np, "qcom,lmh-temp-arm-millicelsius", &temp_arm);
-> +	if (ret) {
-> +		dev_err(dev, "missing qcom,lmh-temp-arm-millicelsius property\n");
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Only sdm845 has lmh hardware currently enabled from hlos. If this is needed
-> +	 * for other platforms, revisit this to check if the <cpu-id, node-id> should be part
-> +	 * of a dt match table.
-> +	 */
-> +	if (cpu_id == 0) {
-> +		node_id = LMH_CLUSTER0_NODE_ID;
-> +	} else if (cpu_id == 4) {
-> +		node_id = LMH_CLUSTER1_NODE_ID;
-> +	} else {
-> +		dev_err(dev, "Wrong CPU id associated with LMh node\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!qcom_scm_lmh_dcvsh_available())
-> +		return -EINVAL;
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret)
-> +		dev_err(dev, "Error %d enabling current subfunction\n", ret);
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret)
-> +		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret)
-> +		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = qcom_scm_lmh_profile_change(0x1);
-> +	if (ret) {
-> +		dev_err(dev, "Error %d changing profile\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Set default thermal trips */
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Error setting thermal HI threshold%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low,
-> +				 LMH_NODE_DCVS, node_id, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	lmh_data->irq = platform_get_irq(pdev, 0);
-> +	lmh_data->domain = irq_domain_add_linear(np, 1, &lmh_irq_ops, lmh_data);
-> +	if (!lmh_data->domain) {
-> +		dev_err(dev, "Error adding irq_domain\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Disable the irq and let cpufreq enable it when ready to handle the interrupt */
-> +	irq_set_status_flags(lmh_data->irq, IRQ_NOAUTOEN);
-> +	ret = devm_request_irq(dev, lmh_data->irq, lmh_handle_irq,
-> +			       IRQF_ONESHOT | IRQF_NO_SUSPEND,
-> +			       "lmh-irq", lmh_data);
-> +	if (ret) {
-> +		dev_err(dev, "Error %d registering irq %x\n", ret, lmh_data->irq);
-> +		irq_domain_remove(lmh_data->domain);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id lmh_table[] = {
-> +	{ .compatible = "qcom,sdm845-lmh", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, lmh_table);
-> +
-> +static struct platform_driver lmh_driver = {
-> +	.probe = lmh_probe,
-> +	.driver = {
-> +		.name = "qcom-lmh",
-> +		.of_match_table = lmh_table,
-> +		.suppress_bind_attrs = true,
-> +	},
-> +};
-> +module_platform_driver(lmh_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("QCOM LMh driver");
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+It will also remove the need to resume device just to change the clock
+rate, like I needed to do it in the PWM patch of this series.
