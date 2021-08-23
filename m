@@ -2,72 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCA53F525D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 22:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9B53F5260
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 22:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbhHWUpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 16:45:14 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:41530 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbhHWUpN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 16:45:13 -0400
-Received: by mail-ot1-f43.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso25039590ota.8;
-        Mon, 23 Aug 2021 13:44:30 -0700 (PDT)
+        id S232486AbhHWUsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 16:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232237AbhHWUsT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 16:48:19 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A743C061757
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 13:47:36 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id v123so1707975pfb.11
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 13:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iqqQYPFTiTWzXroeL8WpSJd5c5IZNIpSjhG2loOBzBw=;
+        b=FG6c3nQvIps26rKSmTcaH6Az0LNIhW+K2OGBSOOwoN1HOn84v0raLBdU3r4vaCsd5+
+         R0dDbGiK+J+AOGYsF6ksYuVvdt1QHYLF2JtLwaA4d6BgYQso+LraWV4hqL9nIA5LbIj7
+         blzhix1FGgARpatD1x5G7VlNY0zTsSMpBAh7o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pnr2xBK6f14eA69KuSvKgWmz6GZszF17FwIvkm7oDPQ=;
-        b=TgVKODDU201gj8GFMShejoxGML2gktiRIaYEkEJVYQF5k3erIE8wRqZ+H52kfTqiqZ
-         dYPOjs5vN8Gjj30bOqWhwMrWjA0Dgw43qh4lDgmplucCjZAHzzgQ/kp5Cu3K5NKJwIRN
-         OylBWQmspH54ZZZABAcI61yYpRY4rRebsJPJTrp+kl9Ff4/SxrfmLmPwHYA0HRL3w0y7
-         E0dMV7cvH8BpBCauEpVUDmrj/VIVTmMdbx6ubKTIx7JJuIanmLjsYqJtExcEM3fC9xqa
-         9/IYbxV01cC6s9vJf6LQuu0uZfWYmc4v6gYEwkeZXt0gzroOuNZiHN0SdQEHEMyQnXih
-         S0qg==
-X-Gm-Message-State: AOAM533KsTaxOxbWBxZgY1PdPRaBRdJFCnbPtWeaVx9SA6QEcmKkV9IJ
-        5jKw5iOvYr4cyRz6Xq7j/Q==
-X-Google-Smtp-Source: ABdhPJymyma9K8zi/fJwYE1whIW0bn8y6+qCPO73H/lWchveQw3/xnjL7fxLXL0v8fKNbN7U/MLrUw==
-X-Received: by 2002:a9d:6490:: with SMTP id g16mr29309183otl.184.1629751470513;
-        Mon, 23 Aug 2021 13:44:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b2sm3072327ook.46.2021.08.23.13.44.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 13:44:28 -0700 (PDT)
-Received: (nullmailer pid 2691639 invoked by uid 1000);
-        Mon, 23 Aug 2021 20:44:27 -0000
-Date:   Mon, 23 Aug 2021 15:44:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Odelu Kukatla <okukatla@codeaurora.org>
-Cc:     elder@linaro.org, linux-kernel@vger.kernel.org, evgreen@google.com,
-        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>, mdtipton@codeaurora.org,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-msm-owner@vger.kernel.org, devicetree@vger.kernel.org,
-        seansw@qti.qualcomm.com, saravanak@google.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        Sibi Sankar <sibis@codeaurora.org>, georgi.djakov@linaro.org
-Subject: Re: [v7 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
- SC7280
-Message-ID: <YSQIq3jNK0eRCOaD@robh.at.kernel.org>
-References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
- <1629458622-4915-2-git-send-email-okukatla@codeaurora.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iqqQYPFTiTWzXroeL8WpSJd5c5IZNIpSjhG2loOBzBw=;
+        b=AwBdHYMqiiw+e/F8f96gedtq+9xYPWe1OhXTKlEvNiR7vR0rfA+lkBHKQi7fygC3Wi
+         Ao9M/ku1QZnArw1DRk77tYLDYnQzndaUSo2KlLHskRGaL++hCxmC8N1USZw2LgIl2zun
+         lY0g8asrYWtlzBOHQXaJmZmaXDf1nP4x0Y21d9zMHlHTWBUaYAZb2Yy5eyJ9p6H17r54
+         7MXQiGniz+jaIFVCFxRtdiRTjtCDIwqECrZo+RkiYCT9JezQeBCOsBiXxfdfrVAzZzzA
+         Q3TVndr+kopuqbYixiWU7P1ZzDYn7SfsKt3UiiDgtMV4vWyIQxyv0h9li8Cj8uk/q5Dj
+         8ZIg==
+X-Gm-Message-State: AOAM532R4TQl+QSjGxJfLFYamJlKkcSqFS7q23hv7DRm2ZjQhOGhUYHx
+        PSNTDFZutL/owdgiYsuCUWRl3w==
+X-Google-Smtp-Source: ABdhPJwNKgbJA9BPCMqJ6p3GWvSzeBWZnRMWepA/DybWLKOzEyeQZnfgepMqdlvjcJlE1x2oAVmz0g==
+X-Received: by 2002:aa7:8387:0:b029:395:a683:a0e6 with SMTP id u7-20020aa783870000b0290395a683a0e6mr35515262pfm.12.1629751655690;
+        Mon, 23 Aug 2021 13:47:35 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6b46:820f:610b:67c7])
+        by smtp.gmail.com with UTF8SMTPSA id y25sm15472529pfm.80.2021.08.23.13.47.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Aug 2021 13:47:35 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH] thermal: qcom: spmi-adc-tm5: Don't abort probing if a sensor is not used
+Date:   Mon, 23 Aug 2021 13:47:30 -0700
+Message-Id: <20210823134726.1.I1dd23ddf77e5b3568625d80d6827653af071ce19@changeid>
+X-Mailer: git-send-email 2.33.0.rc2.250.ged5fa647cd-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1629458622-4915-2-git-send-email-okukatla@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 20 Aug 2021 16:53:39 +0530, Odelu Kukatla wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
-> SoCs.
-> 
-> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
-> ---
->  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  9 ++++++++-
->  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 +++++++++-
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
+adc_tm5_register_tzd() registers the thermal zone sensors for all
+channels of the thermal monitor. If the registration of one channel
+fails the function skips the processing of the remaining channels
+and returns an error, which results in _probe() being aborted.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+One of the reasons the registration could fail is that none of the
+thermal zones is using the channel/sensor, which hardly is a critical
+error (if it is an error at all). If this case is detected emit a
+warning and continue with processing the remaining channels.
+
+Fixes: ca66dca5eda6 ("thermal: qcom: add support for adc-tm5 PMIC thermal monitor")
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
+
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index 232fd0b33325..8494cc04aa21 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -359,6 +359,12 @@ static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
+ 							   &adc_tm->channels[i],
+ 							   &adc_tm5_ops);
+ 		if (IS_ERR(tzd)) {
++			if (PTR_ERR(tzd) == -ENODEV) {
++				dev_warn(adc_tm->dev, "thermal sensor on channel %d is not used\n",
++					 adc_tm->channels[i].channel);
++				continue;
++			}
++
+ 			dev_err(adc_tm->dev, "Error registering TZ zone for channel %d: %ld\n",
+ 				adc_tm->channels[i].channel, PTR_ERR(tzd));
+ 			return PTR_ERR(tzd);
+-- 
+2.33.0.rc2.250.ged5fa647cd-goog
+
