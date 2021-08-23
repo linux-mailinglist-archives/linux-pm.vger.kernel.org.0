@@ -2,93 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDBF3F4FA3
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 19:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530D13F5049
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 20:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbhHWRis (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 13:38:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229660AbhHWRip (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Aug 2021 13:38:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E0ADB6136F;
-        Mon, 23 Aug 2021 17:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629740282;
-        bh=x4MlFpqxl6ajTVhBSqLNVs0i4vGMFw/x3MAuCoHtdGA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=TWZifOzwoPm4sKr/O/Rr1wNUiKwCWwM8SjKBqUtiqkovCJIRksvN9Hi4x+L5NGUl7
-         EcIca5KPfgSXZrk/TzL+ERAyC8iM/27BOLJL4nQCXUPCGqZ6qK0joUq8/1by4ptmEV
-         6OizLwvoy7S6Vp69jkGpz4wqECWc3iP0umIkNIEdPx20UKloV+uyRXWPE/tRG8OnUM
-         YEFZtejAP44c1Xqd/xsMwgBvK0Sy9O/Ot4dqvQxpBPgaRcKn34RBD17UN1jJn98AqU
-         pt2s+6kdZbncrnljuappCDAbG2SPYNjcD5xprnYqYn8lBkQczD9dwpWnIS/UT8sKqx
-         4V+cN/I/3GwDQ==
-Subject: Re: [PATCH 1/5] interconnect: icc-rpm: move bus clocks handling into
- qnoc_probe
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20210818015732.1717810-1-dmitry.baryshkov@linaro.org>
- <20210818015732.1717810-2-dmitry.baryshkov@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-Message-ID: <502a616d-a8aa-528e-d60f-85b05317b410@kernel.org>
-Date:   Mon, 23 Aug 2021 20:37:58 +0300
+        id S231421AbhHWSVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 14:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229985AbhHWSVM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 14:21:12 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCDFC061575
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 11:20:29 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id om1-20020a17090b3a8100b0017941c44ce4so48323pjb.3
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 11:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=v6nJKM7oOq1HEpL6VSgZv2xyDV+/RRc4rTukqq1uUu8=;
+        b=eBAkLL9pw8jkrhqlMP/CSjuiDfiiHfyCa0EZo8lFGRwk1ZiuaDSk2f73qDoYc/ONxA
+         h+hicNgHKYFlX7d4G4Uj8rcp4nB6JZ1R7BUwyGuju9qIvKOycIXMsJ/cMddQwPJekHHV
+         pmBZPGptJ5hH2GsAXsj3/3A9lbB01N+xkmwDfrYbIsJ2/Ca+2si0jb/YlOm4xwUhONIf
+         z/+CBI6K74/negILu+8Wpb/xvNDdZ5m8FdO7b3Tv+HdARvYFnPcnusvAG/8WdplXWAkh
+         WXCvAftukxaomn9ZBiCwHrz/LLQLIgkkq+XfIPYTYAywEgrGgzQcERvMmk82G2w2VsBS
+         iMhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=v6nJKM7oOq1HEpL6VSgZv2xyDV+/RRc4rTukqq1uUu8=;
+        b=iJ90spxBY2/gHtFbOp07tMBzZl3lsU8efROHbTNMcA8L7RXtXPRGZTQ0vJjweiaEJC
+         qjPWg7E2B1BhHGIdRkKDPIm70tBZqOFrUh+5Gnl/0TXFi30/Q5VOKAi/5cHC/lQZapTk
+         R9AK8ZDaZ6+KCr3F7mUaPuYOe0BwmQ/WIGs4/B9e/8Vk863AbzxgFIZrn25jAOHKXGre
+         rKlLI6pFnu/V78VT11A/h5TrJX5RlxXCXStYSrV297GWtw5gHD9wFDZLCcZZqUXrrSTN
+         Vggb3l+HrJFhtylaGmOFvti6xc1mo6U8OfRUMArFAxE3keYou3/+awscc8UgTnK5FD4o
+         JM+g==
+X-Gm-Message-State: AOAM5315cdrHyKCYyw7YL1GtOGjTfN0zFrcs45WDw5+vOmXqyELLmSVm
+        fG/z6SGHePjSEYIc5w7G5rZcdg==
+X-Google-Smtp-Source: ABdhPJzPn+ReOxkD6+BJzD0lcgTLhzkH/2bmw/VdJ2vCJw++/6nLqXUWb7k4JWFQcWEeNY7fzodmsw==
+X-Received: by 2002:a17:90b:e87:: with SMTP id fv7mr21192059pjb.85.1629742829264;
+        Mon, 23 Aug 2021 11:20:29 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s1sm13283473pfd.13.2021.08.23.11.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Aug 2021 11:20:28 -0700 (PDT)
+Message-ID: <6123e6ec.1c69fb81.7b012.63aa@mx.google.com>
+Date:   Mon, 23 Aug 2021 11:20:28 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210818015732.1717810-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.14-rc7-50-gbd1cb9850313
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.14-rc7-50-gbd1cb9850313)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.14-rc7-50-gbd1cb9850313)
 
-Thank you for working on this!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+14-rc7-50-gbd1cb9850313/
 
-On 18.08.21 4:57, Dmitry Baryshkov wrote:
-> All icc-rpm drivers use the same set of bus clocks. Move handling of bus
-> clocks to qnoc_probe. This both simplifies the code and allows using
-> qnoc_probe as device's probe funcion.
-> 
+Tree: pm
+Branch: testing
+Git Describe: v5.14-rc7-50-gbd1cb9850313
+Git Commit: bd1cb9850313a606390b4b21b9d07b2ca9ede9b1
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-s/funcion/function/
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 22 ++++++++++++++--------
->   drivers/interconnect/qcom/icc-rpm.h |  5 ++---
->   drivers/interconnect/qcom/msm8916.c | 13 +------------
->   drivers/interconnect/qcom/msm8939.c | 13 +------------
->   drivers/interconnect/qcom/qcs404.c  | 13 +------------
->   5 files changed, 19 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 54de49ca7808..394f515cc88d 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -86,8 +86,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   	return 0;
->   }
->   
-> -int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
-> -	       const struct clk_bulk_data *cd)
-> +static const char * const bus_clocks[] = {
-> +	"bus", "bus_a",
-> +};
-> +
-> +int qnoc_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
->   	const struct qcom_icc_desc *desc;
-> @@ -97,6 +100,8 @@ int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
->   	struct qcom_icc_provider *qp;
->   	struct icc_node *node;
->   	size_t num_nodes, i;
-> +	const char * const * cds;
+Detailed per-defconfig build reports:
 
-Please use: const char * const *cds;
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-Thanks,
-Georgi
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
