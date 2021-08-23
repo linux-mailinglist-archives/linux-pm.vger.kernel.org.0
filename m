@@ -2,114 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1E93F5207
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 22:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCA53F525D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 22:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbhHWU0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 16:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbhHWU0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 16:26:11 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA33CC061575;
-        Mon, 23 Aug 2021 13:25:27 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q21so33609913ljj.6;
-        Mon, 23 Aug 2021 13:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TS6xlglVLGeDbAGeYFqIJEG7imj091QkptCAvdSg7xQ=;
-        b=dAvZ/CN92uZ8xeZ1GLlT9gNaX466/UBvXIY2XO7OginCHKsgjtBSQIpxgSzO2OdlqM
-         L2WAHyVJHhPUIuzCbTSiaG3YoWx+ZSDjKtcA4WNAhqiMbQI9WXi+IYcegQsZ3Cw4DqQV
-         Xex5dwdD0svHyZPkK7P/NfhEQHlPZtuKryf4H9umvFTQlVTIEG3QtC774aN+AXyl8HbC
-         DQi2sGbP7Wq99kFuHmPYYkkmqfkKJWFsdXLtC7dFiLrbvg8NKY2psEY3NNY4TpfqTN+h
-         vVcvjK0SkZvDpqtEfq1jVJGZ4F1xjW1Qs4fKQ6ib37YqJFN81B8NKa8EfKgrZ986FQll
-         S9dQ==
+        id S232460AbhHWUpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 16:45:14 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:41530 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232237AbhHWUpN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 16:45:13 -0400
+Received: by mail-ot1-f43.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso25039590ota.8;
+        Mon, 23 Aug 2021 13:44:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TS6xlglVLGeDbAGeYFqIJEG7imj091QkptCAvdSg7xQ=;
-        b=jcFWiFsb8ejQ6//i/trzzaB332q+J0NHKpgU397Ym8GQVSrdDnqRUH3ArqnVaL2GDn
-         mk4kxajWANfLKv3eQkN1eiSA0asBiCS1H6FEjMja7mOBbsVNnlVdAxRw6ES5nGsAYHD2
-         2V2q4+f6KNJvWPSScHNP/nmH9Ai0fHuFc+nwFBasSmotn04MKLfjHvk6vKNcj4rzBkly
-         ZrEdOxeT7DN5j93CGi5pMTNmeDTVP+m+iwAogOVknUWET264cmt2WnwlBKTuSngLHnxL
-         GrPuqNvRbGhNG2EfKA6PK9hQ419QjC0XmEq0tapQEbEgQCmB5DB5OWQBTHXIJ+5oQ2Ui
-         XmRQ==
-X-Gm-Message-State: AOAM532te9ig3rUpFwPTGPwTHbDgTr34QTcYEv20MJ+MlMCFghC/OuY2
-        26ZuHvWHHBKoeR25spjo07k=
-X-Google-Smtp-Source: ABdhPJwHJn5Md+n7t8CBGRdqpzKgIhKI5zMB3Js+h+J6VWNt2ClxwJm2bz1AIwFvJajfTU2dDZ9VGg==
-X-Received: by 2002:a2e:86d1:: with SMTP id n17mr22927187ljj.237.1629750326405;
-        Mon, 23 Aug 2021 13:25:26 -0700 (PDT)
-Received: from localhost.localdomain (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
-        by smtp.gmail.com with ESMTPSA id q25sm1542626lfr.235.2021.08.23.13.25.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pnr2xBK6f14eA69KuSvKgWmz6GZszF17FwIvkm7oDPQ=;
+        b=TgVKODDU201gj8GFMShejoxGML2gktiRIaYEkEJVYQF5k3erIE8wRqZ+H52kfTqiqZ
+         dYPOjs5vN8Gjj30bOqWhwMrWjA0Dgw43qh4lDgmplucCjZAHzzgQ/kp5Cu3K5NKJwIRN
+         OylBWQmspH54ZZZABAcI61yYpRY4rRebsJPJTrp+kl9Ff4/SxrfmLmPwHYA0HRL3w0y7
+         E0dMV7cvH8BpBCauEpVUDmrj/VIVTmMdbx6ubKTIx7JJuIanmLjsYqJtExcEM3fC9xqa
+         9/IYbxV01cC6s9vJf6LQuu0uZfWYmc4v6gYEwkeZXt0gzroOuNZiHN0SdQEHEMyQnXih
+         S0qg==
+X-Gm-Message-State: AOAM533KsTaxOxbWBxZgY1PdPRaBRdJFCnbPtWeaVx9SA6QEcmKkV9IJ
+        5jKw5iOvYr4cyRz6Xq7j/Q==
+X-Google-Smtp-Source: ABdhPJymyma9K8zi/fJwYE1whIW0bn8y6+qCPO73H/lWchveQw3/xnjL7fxLXL0v8fKNbN7U/MLrUw==
+X-Received: by 2002:a9d:6490:: with SMTP id g16mr29309183otl.184.1629751470513;
+        Mon, 23 Aug 2021 13:44:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id b2sm3072327ook.46.2021.08.23.13.44.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 13:25:26 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v1] PM: domains: Improve runtime PM performance state handling
-Date:   Mon, 23 Aug 2021 23:24:12 +0300
-Message-Id: <20210823202412.25716-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 23 Aug 2021 13:44:28 -0700 (PDT)
+Received: (nullmailer pid 2691639 invoked by uid 1000);
+        Mon, 23 Aug 2021 20:44:27 -0000
+Date:   Mon, 23 Aug 2021 15:44:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     elder@linaro.org, linux-kernel@vger.kernel.org, evgreen@google.com,
+        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>, mdtipton@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-msm-owner@vger.kernel.org, devicetree@vger.kernel.org,
+        seansw@qti.qualcomm.com, saravanak@google.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        Sibi Sankar <sibis@codeaurora.org>, georgi.djakov@linaro.org
+Subject: Re: [v7 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
+ SC7280
+Message-ID: <YSQIq3jNK0eRCOaD@robh.at.kernel.org>
+References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
+ <1629458622-4915-2-git-send-email-okukatla@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1629458622-4915-2-git-send-email-okukatla@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-GENPD core doesn't support handling performance state changes while
-consumer device is runtime-suspended or when runtime PM is disabled.
-GENPD core may override performance state that was configured by device
-driver while RPM of the device was disabled or device was RPM-suspended.
-Let's close that gap by allowing drivers to control performance state
-while RPM of a consumer device is disabled and to set up performance
-state of RPM-suspended device that will be applied by GENPD core on
-RPM-resume of the device.
+On Fri, 20 Aug 2021 16:53:39 +0530, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+> SoCs.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |  9 ++++++++-
+>  include/dt-bindings/interconnect/qcom,osm-l3.h                 | 10 +++++++++-
+>  2 files changed, 17 insertions(+), 2 deletions(-)
+> 
 
-Fixes: 5937c3ce2122 ("PM: domains: Drop/restore performance state votes for devices at runtime PM")
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/base/power/domain.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index e1c8994ae225..3a13a942d012 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -435,7 +435,7 @@ static void genpd_restore_performance_state(struct device *dev,
- int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
- {
- 	struct generic_pm_domain *genpd;
--	int ret;
-+	int ret = 0;
- 
- 	genpd = dev_to_genpd_safe(dev);
- 	if (!genpd)
-@@ -446,7 +446,13 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
- 		return -EINVAL;
- 
- 	genpd_lock(genpd);
--	ret = genpd_set_performance_state(dev, state);
-+	if (pm_runtime_suspended(dev)) {
-+		dev_gpd_data(dev)->rpm_pstate = state;
-+	} else {
-+		ret = genpd_set_performance_state(dev, state);
-+		if (!ret)
-+			dev_gpd_data(dev)->rpm_pstate = 0;
-+	}
- 	genpd_unlock(genpd);
- 
- 	return ret;
--- 
-2.32.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
