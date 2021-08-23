@@ -2,70 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237013F4A33
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 14:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA623F4B54
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 15:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbhHWMBJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 08:01:09 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:41608 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbhHWMBI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 08:01:08 -0400
-Received: by mail-ot1-f43.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso20783150ota.8
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 05:00:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=blanjJiqa18Ws+C3xYfyg3iv0ipvqHMPxqRwYr2MkoQ=;
-        b=LFWVtrgSxIXMz9+lDJxkyQ9HDROB2r9JX2phOdbzOD4veO/iqBGriYyoMdUNeM8LX4
-         bcFqWQ3Uqa9Pzl0VhbciDhuQ7kfvZGt498XBWQUwgMBeNz0z7R+Akgern+JchkyRxXj1
-         U3VDADgyGWQ0Np7pOG7GKAPTyhqI2tA/6JXXce7lsYd3AzgOCxP4NKth7NIT4liRfGsn
-         MBHW5m7RfF65zXxOyscP/NtdaRFvfwvsyc+DSQ7mbR0kkY2hxHl7DlFjtWAV07SeAh2r
-         TEaWL3OVf1xKsm48OlgIJGIpzOuQ8kZ/jFM3X45Z4cZ2dRiTd1aYbyhhmPMNt8am7FLj
-         biYg==
-X-Gm-Message-State: AOAM533k0pR71lBi5pSaSJysyzUf+BKGc4u9PC572qzgypY0XYRhnb7m
-        B7YX/xTh30VSEpTYbJgbjkMuoU+odeaVcSbxFEc=
-X-Google-Smtp-Source: ABdhPJw3Aqdg5lk2it0XF0K3Ex3MebtyifzmLl7hNsMCCYY279ahgVS09JlgnT7cwGGcJdFnSaRB4G6uFdotPK/aJ08=
-X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr10672511ois.69.1629720025846;
- Mon, 23 Aug 2021 05:00:25 -0700 (PDT)
+        id S237055AbhHWNGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 09:06:24 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:24864 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237164AbhHWNGX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Aug 2021 09:06:23 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629723941; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=E/fEWaEX6Seb48cm6rL3CGJPlVqJg5lWlfTNvs0q/oI=;
+ b=FtVZl9AzBxe5P+QdKTK+e4APtJaeJdoSHVSiz1NvzLhJuQP3Gkq6RSHr2dAxeGX1WAU0TXiI
+ 0pfNRnn88yh9qubCq4QfScqZxT+IrhnMvQ8QAzSASKNUq+eyo88VaDiJtgosrLql6vX1g5bu
+ 82g9GLS3yuij1YLIgn/lJ4XlHFk=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 61239cb00f9b337f11b9693c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 23 Aug 2021 13:03:44
+ GMT
+Sender: psodagud=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8D93AC43460; Mon, 23 Aug 2021 13:03:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: psodagud)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7520EC4338F;
+        Mon, 23 Aug 2021 13:03:41 +0000 (UTC)
 MIME-Version: 1.0
-References: <20210823071855.l6wklzvuomizklsw@vireshk-i7>
-In-Reply-To: <20210823071855.l6wklzvuomizklsw@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 Aug 2021 14:00:10 +0200
-Message-ID: <CAJZ5v0jykTj5LpewUmRs9CKcEZybEOX8ZbQNVmGoa_7yLa1+9w@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP fixes for 5.14
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 23 Aug 2021 06:03:41 -0700
+From:   psodagud@codeaurora.org
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     rjw@rjwysocki.net, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz
+Subject: Re: [PATCH v3] PM: sleep: core: Avoid setting power.must_resume to
+ false
+In-Reply-To: <YRYd+dSdWa7Mr+n9@kroah.com>
+References: <1628625938-149376-1-git-send-email-psodagud@codeaurora.org>
+ <YRYd+dSdWa7Mr+n9@kroah.com>
+Message-ID: <6cc2d5677d246352e13b766d4fbef6af@codeaurora.org>
+X-Sender: psodagud@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 9:18 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request fixes regression in the OPP core for a corner case.
->
-> Thanks.
->
-> --
-> Viresh
->
-> -------------------------8<-------------------------
-> The following changes since commit c3ddfe66d2bb511f7fbcdc8e64952c7859e7e69d:
->
->   opp: Drop empty-table checks from _put functions (2021-08-16 09:42:08 +0530)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/fixes
->
-> for you to fetch changes up to 19526d092ceb32d619fce73fe0bdca4370890124:
->
->   opp: core: Check for pending links before reading required_opp pointers (2021-08-23 12:44:55 +0530)
+On 2021-08-13 00:23, Greg KH wrote:
+> On Tue, Aug 10, 2021 at 01:05:38PM -0700, Prasad Sodagudi wrote:
+>> There are variables(power.may_skip_resume and dev->power.must_resume)
+>> and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices 
+>> after
+>> a system wide suspend transition.
+>> 
+>> Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
+>> its "noirq" and "early" resume callbacks to be skipped if the device
+>> can be left in suspend after a system-wide transition into the working
+>> state. PM core determines that the driver's "noirq" and "early" resume
+>> callbacks should be skipped or not with dev_pm_skip_resume() function 
+>> by
+>> checking power.may_skip_resume variable.
+>> 
+>> power.must_resume variable is getting set to false in 
+>> __device_suspend()
+>> function without checking device's DPM_FLAG_MAY_SKIP_RESUME and
+>> dev->power.usage_count variables. In problematic scenario, where
+>> all the devices in the suspend_late stage are successful and some
+>> device can fail to suspend in suspend_noirq phase. So some devices
+>> successfully suspended in suspend_late stage are not getting chance
+>> to execute __device_suspend_noirq() to set dev->power.must_resume
+>> variable to true and not getting resumed in early_resume phase.
+>> 
+>> Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
+>> setting power.must_resume variable in __device_suspend function.
+>> 
+>> Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the 
+>> resume phase")
+>> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
+>> ---
+>>  V2 -> V3: Format issues patch posting
+>>  V1 -> V2: Fixed indentation and commit text to include scenario
+>>  drivers/base/power/main.c | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index d568772..9ee6987 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -1642,7 +1642,11 @@ static int __device_suspend(struct device *dev, 
+>> pm_message_t state, bool async)
+>>  	}
+>> 
+>>  	dev->power.may_skip_resume = true;
+>> -	dev->power.must_resume = false;
+>> +	if ((atomic_read(&dev->power.usage_count) <= 1) &&
+>> +	     (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME)))
+>> +		dev->power.must_resume = false;
+>> +	else
+>> +		dev->power.must_resume = true;
+> 
+> Again, what happens if the usage_count changes right after reading the
+> value?  What protects that from happening?
 
-Pulled, thanks!
+Hi Gregh KH,
+Yes. you are right.  I think, relying on  the usage_count at the  
+__device_suspend stage may not be correct.
+Devices IRQs are still enabled and usage_count can be changed even after 
+reading.
+I will send next patchset without power.usage_count check.
+
+@@ -1649,7 +1651,10 @@ static int __device_suspend(struct device *dev, 
+pm_message_t state, bool async)
+         }
+
+         dev->power.may_skip_resume = true;
+-       dev->power.must_resume = false;
++       if (dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME))
++               dev->power.must_resume = false;
++       else
++               dev->power.must_resume = true;
+
+
+> 
+> thanks,
+> 
+> greg k-h
