@@ -2,89 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E16983F46BD
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 10:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46583F47F7
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Aug 2021 11:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbhHWIlb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 04:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S235704AbhHWJ5E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 05:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235518AbhHWIlb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 04:41:31 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109EDC061575
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 01:40:49 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v10so13844900wrd.4
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 01:40:48 -0700 (PDT)
+        with ESMTP id S232526AbhHWJ5E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 05:57:04 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99CCC061575
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 02:56:19 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id z24-20020a17090acb1800b0018e87a24300so1421732pjt.0
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 02:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8YbZ6EnieJwLfzvh2I8z0yFpVKK2fILyd5OU4iRqLnY=;
-        b=DQwIsyRCbWyKCN5dTdL84j8eKjM8PixnU0XWIF5E9w88cK7sZ4x/qEgbsbLfL93Kvl
-         K2Yc3J7SF8UTlRPUURYIMUi0OeW8tsqdU4oN9dCtbUPP2wPyGiPuKy8A/QsJmrjqnar2
-         K6r9N3exn6fpVb/AllJ1yU/wHfDuC/tEyoKIrPeWwkGZOJUcCp/LL6H2SZrlygZELQVe
-         VrxxAkFE4mz6sOhVlgEHuPSAqLhtdMeJpM19fMGeGXoGbiymwjGJr9+r43bGjYwVo7Nx
-         jMiZifCYYIpRz5lDf0jwTQD4y6lVquurnkEwImB0tEoz3SfkZokfkqWWEjtrgwzq5N7p
-         YLmA==
+        h=from:to:cc:subject:date:message-id;
+        bh=+HcYX4o3oYabXOVjOFPvNIFXnMCujvnBt9jGvMZEMNQ=;
+        b=cmYV78ghXsy4hjtR3Z117IW2pU/YgW/Xlv/y/3eea6DCXCAMlwvzYmSE95Mi/znrIi
+         sHc9IoOoV+KBpBu3EipOfMbPVtgYDExm+iM7aT9G5I5IZZqcZT5qpNjtpFHh7Y2ES/2P
+         PQYeISUXrny4nVFTUrKh0PpPj2RI2dfkCHOJV4tLZFIwyn/UiidKHADujfYSbnqACWxB
+         PGLVVZHTgmi3ltfXqczTKvC3wzVfkLqjdkYNVu1GUtjUY4tNOE4CWVtaj+qyWyq8XupV
+         FN7kBqUMgRYF+EX0jKiEP2E89bSuHcqXao8QGczw0uEPC4O0NRrKFTyu3kI+Dum5LJ0F
+         zcaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8YbZ6EnieJwLfzvh2I8z0yFpVKK2fILyd5OU4iRqLnY=;
-        b=C/ylmLxVCC7yNJwaWZyOl8L7aKAve56yPozxOGdJsoDjH1DHSfWz1ANX43GNKuzjDl
-         efyaFBRvIXymy1mvtjM16+ywFNvz7/2EKZDGzZYcYBgyadQ9mccqbfIEfSbkZ4x23yoR
-         ZD4KW3LHL8/roMJ7r4fqf/G8P+3Yf6E/TxBc/fGwCUbXqOWz9CZxXjcj0RGHVFibUCJP
-         PuQP43z+AsqNSC/hiK4Hemxxtn4gkyH59tDyAaQjvOY142Bxufly3wiBF8JdKAfGsKs3
-         zpWubn8PEe39BLItdiDFZNzLt81R0hgfeXtatON9VSG1QH8iRj5Kqkr8ioxZQ9cBsdsm
-         YQ2Q==
-X-Gm-Message-State: AOAM5300cMmnmQEeNVeID7D41rgfD6vFg0Ow2IbjVjFb/wnni1kylJKG
-        g/ddjWTVpkWXG3A4yhJbqu/Vjg==
-X-Google-Smtp-Source: ABdhPJzL2jd89F5hSs8TRFT7YjYOrLvPQ5ahvcDBNmnq6H3m3GuuLODSBZ+7dJ+Gozv045u4T3KbHg==
-X-Received: by 2002:a5d:63c4:: with SMTP id c4mr11694732wrw.27.1629708047510;
-        Mon, 23 Aug 2021 01:40:47 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:fe2d:133f:1574:bbe? ([2a01:e34:ed2f:f020:fe2d:133f:1574:bbe])
-        by smtp.googlemail.com with ESMTPSA id b15sm14724177wrq.5.2021.08.23.01.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Aug 2021 01:40:46 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/2] Add a generic virtual thermal sensor
-To:     Alexandre Bailon <abailon@baylibre.com>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com
-References: <20210819123215.591593-1-abailon@baylibre.com>
- <f7d1205b-e859-e059-c835-c09a85c8c480@linaro.org>
- <df9ad6a9-4cf9-dd41-8876-d19bef03d6a5@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <87f1e4aa-1c54-e5ca-7bb6-e0638e4c1b4a@linaro.org>
-Date:   Mon, 23 Aug 2021 10:40:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <df9ad6a9-4cf9-dd41-8876-d19bef03d6a5@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+HcYX4o3oYabXOVjOFPvNIFXnMCujvnBt9jGvMZEMNQ=;
+        b=Iowixo/WtL88UY4YDYg2NlUWZ9GncNRg9L7B6iBue8kF5c6JBIZL4i/Bz7treWo7a3
+         QC3TvUl0jjZTJA7KoMGJlJuauPx0W3JSbIMRODu0T3Cj23cB9tC/hhSnPyBTMIgTrWJ9
+         44m3jx7ZN8Z2mnFDeFt15onKNI+hLO2oXH7twv0T9Dugh3g2XOGmnqRaq5BT1MNYEWxM
+         79baqXAmJnB8Iw8ZMJh+kESjitZdnaGStYkCoXCmGPhyJQWvN6GaeZazfktHH6+4XoVs
+         vFMuWGcZJ6dlGCg93OEiM4quO2GnDftUuxZLhP0h/2bAfq+S768BhkVJNf8aANKge/s0
+         mYgQ==
+X-Gm-Message-State: AOAM530UzKaoyTbq/6HWtmYf3fLqHCg+XwpS0iukbkFBWejg8X+FuR3t
+        n5wvtVLjplDJCHoEmqLQvyVAvg==
+X-Google-Smtp-Source: ABdhPJyojLzAIU8oA6E7pgKoWx1updv6tv/T/1Pj7USfwiU/5uJ/llsOkcLobIAW08B9ShwhwJQGwA==
+X-Received: by 2002:a17:902:8d8a:b029:12d:3774:3630 with SMTP id v10-20020a1709028d8ab029012d37743630mr28229682plo.65.1629712579445;
+        Mon, 23 Aug 2021 02:56:19 -0700 (PDT)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id z24sm18708230pjq.43.2021.08.23.02.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Aug 2021 02:56:19 -0700 (PDT)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH 0/3] Add missing A2NoC QoS clocks for SDM660 interconnect driver
+Date:   Mon, 23 Aug 2021 17:56:00 +0800
+Message-Id: <20210823095603.5538-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/08/2021 09:35, Alexandre Bailon wrote:
+The series updates SDM660 interconnect bindings, driver and device tree
+to add A2NoC clocks required for QoS registers programming per downstream
+kernel[1].  Otherwise, qcom_icc_noc_set_qos_priority() call on mas_ufs or
+mas_usb_hs node will simply result in a hardware hang on SDM660 SoC.
 
-[ ... ]
+[1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
 
-> I am not really satisfied of that patch but that the simplest way I
-> found to do it.
-> How would you proceed to get the hw sensor from its device tree phandle
-> and id ?
+Shawn Guo (3):
+  dt-bindings: interconnect: sdm660: Add missing a2noc qos clocks
+  interconnect: qcom: sdm660: Add missing a2noc qos clocks
+  arm64: dts: qcom: sdm630: Add missing a2noc qos clocks
 
-Could the function 'thermal_zone_of_get_sensor_id' help ?
-
+ .../bindings/interconnect/qcom,sdm660.yaml    | 41 ++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          | 17 ++++++--
+ drivers/interconnect/qcom/sdm660.c            | 14 +++++++
+ 3 files changed, 67 insertions(+), 5 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
