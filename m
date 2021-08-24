@@ -2,146 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F244C3F5671
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 05:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ECE3F5704
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 06:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234708AbhHXDHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 23:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S229604AbhHXEKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Aug 2021 00:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235092AbhHXDFo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 23:05:44 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A711BC0613A4
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j2so6959041pll.1
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
+        with ESMTP id S229540AbhHXEKq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Aug 2021 00:10:46 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE50C061575;
+        Mon, 23 Aug 2021 21:10:02 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id s21-20020a4ae495000000b0028e499b5921so3361795oov.12;
+        Mon, 23 Aug 2021 21:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ftVLBcz2CA6HVw5Sak06NSKiX7H+vKeynT4dia9GcmU=;
-        b=k+9ugNQMNP1T757zCmBjD0HZ4Cm6T3BE+v/X7Wxf65qXhZ4Y1Om/ZwreVVsFldU5ED
-         26Au5VziBd3fTRw9qajnc5Q1bzTZtCXlNbNzYEhhdrLy0j6q3RP41Bfsx2Vet4JiZwHE
-         HpssKarI+iW9nKfS+aZW4kug15wwleM1PIEsfGzs+E/ENGb7NoFhvlaUVQuCR3IWspbE
-         1jdc92yTGvHUY8w5qgAHpd6F4jZjsLSyz7OphX6zYHG1h8uepViMakkTUt9Apji0AqlD
-         h496UE7ulnKIyaYIIz+9WlMWKL7f+UCly0DgUoeMlhVK/OeculmtFoztQ69V1z3oNjW5
-         BaQw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7s0jc31HPLAs0gXkmeRMnAPIKh72hl0mqHTuEnX+aY=;
+        b=GGBV6KeWVbtgT6Mm6iQM27J2B036M/xQ9+GGgBC8Ru/8KZuIgTnoGtcmkUpZvpKDUk
+         MY7xk5FDUfSWmdhgiCTKSFtVbK+UuvSV8wW3w7sIjYUK4YVRcZbli7PS4qIQzpXhNHFZ
+         ZsXR0kXo6SVDk7Fqdb7kAw32MdGSe6MdoFBT47WCEvWd7v+7ajknW6q8P3vo5E7B0kqw
+         r1huv6Te0ajpcW95LLyb0oBDyEd44jE4GKnOGWbXZNP/70d0DHxjXR6qHy0CzDImkST6
+         SdwbQhYPvWu9WFLa4bLumCYJMboK9z3UmOKxbhl7j46GbibsPENkzb0P2HCyRa0Lz1oj
+         G5Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ftVLBcz2CA6HVw5Sak06NSKiX7H+vKeynT4dia9GcmU=;
-        b=ucj7DQAkoXcqW4sb6rlZR3/jw8Jg0qQ/MT8+LUs903IGCCvU+NXn7xvHzF3cDh6xtM
-         xlzBj+bCNVBjqhTBb6szCP6T1H7v1862HQ8dkiJNLnXdmBizPQuk06XCkGcTIoo9bXP1
-         AqijKDTW8zYH+h5YbGRZlp5R3W99TmDvlh96HVy/hzvGY/EEZVq3WShnHu5cnRx34OCU
-         hTBaGewv+kW2EPCtdwzetDRrfWtGF1IHVRgq8/7HpQHj/9j2wZWJ1J62ATt3tJFaPdN7
-         5fPV+oYZpo4ABxvl3t/Z4xaNHDF0iqT3MAeilEwldBBDJ0tVlksU1h3iaeVZ/gQHGyav
-         zQ2Q==
-X-Gm-Message-State: AOAM531XO9S175Cwi5u3OFacefLDg4SrYKOIQdFoGVnbSfVe85NLdhsG
-        EDr99ytNdRbkTqyVzCOdWwyo4A==
-X-Google-Smtp-Source: ABdhPJxgNZPrPk9tzmxpkCehrPdfFes88M8DqFhHlA/X7V8qZTGRmqZiqGy9NJMzzCPLtwobPdjSGw==
-X-Received: by 2002:a17:902:e547:b029:12c:563c:4a03 with SMTP id n7-20020a170902e547b029012c563c4a03mr30922945plf.46.1629774264209;
-        Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id c12sm16184839pfl.56.2021.08.23.20.04.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7s0jc31HPLAs0gXkmeRMnAPIKh72hl0mqHTuEnX+aY=;
+        b=Pyy36iBfry2rl2mP4jYxIQSjrEmh1RxqUl45iXeJ3ClkDXct9XRD893pdIwHPC8Oo6
+         sE5eFeb0JKblNtQriJRAf0TkUiBY72DCSOCOsahZ22OhptUcB/Kml4T8TbHQr4zSIV9K
+         RyOw5uHvj5wqpSp2nNSULv0l5nUwyg7g2p6zCA54o0rF6RY/jN2W5FWio7hL6XIpvUXD
+         mDjqdj/HDFqLS7BtibZ3yY6hA1R4YnzpOQ9xILBtVpZMHq182Sxm2ZC8aVvrs7/xGXEt
+         SpsvrveVVOkiHtRBULFQcBJtvwYn2vXZ3r7BZ49zswhl7TZmhsrWM4P+4nk5kLuhkZa/
+         IaHA==
+X-Gm-Message-State: AOAM531uf/7mXEzA3ChekqKhqvTDFHaoyLgYNGVcjTa9rZ6j2x4HFaKz
+        cLx3WPymLx/vF7+n/YYdHWA=
+X-Google-Smtp-Source: ABdhPJxDcvzCfgf6iqIMItm82HL8VmZJ9GdO4AcSWiZgXL4fvrSMaJlYxIM5/kSCe+gZgYmouKRVng==
+X-Received: by 2002:a4a:4484:: with SMTP id o126mr5055737ooa.90.1629778202181;
+        Mon, 23 Aug 2021 21:10:02 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id i19sm3922818ooe.44.2021.08.23.21.10.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 20:04:23 -0700 (PDT)
-Date:   Tue, 24 Aug 2021 08:34:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210824030421.3tjfjkx3c2silbnz@vireshk-i7>
-References: <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
- <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
- <CAPDyKFo0rzHT4AhueWjyz9k2ZqUy8N6Od5pbr8sL_m0Jf2AwUg@mail.gmail.com>
- <085d1a2e-57b0-222e-c569-12f3c6bc8161@gmail.com>
+        Mon, 23 Aug 2021 21:10:01 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        lee.jones@linaro.org, robh+dt@kernel.org, heiko@sntech.de,
+        sre@kernel.org, maccraft123mc@gmail.com,
+        devicetree@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v4 0/4] power: supply: Add Support for RK817 Charger
+Date:   Mon, 23 Aug 2021 23:09:51 -0500
+Message-Id: <20210824040955.29112-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <085d1a2e-57b0-222e-c569-12f3c6bc8161@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-08-21, 23:24, Dmitry Osipenko wrote:
-> It's not clear to me whether it will be okay to add a generic OPP syncing by clock rate or should it be a Tegra-specific helper. Viresh, what do you think about this generic OPP helper:
-> 
-> /**
->  * dev_pm_opp_sync_with_clk_rate() - Sync OPP state with clock rate
->  * @dev:	device for which we do this operation
->  *
->  * Sync OPP table state with the current clock rate of device.
->  *
->  * Return: 0 on success or a negative error value.
->  */
-> int dev_pm_opp_sync_with_clk_rate(struct device *dev)
-> {
-> 	struct opp_table *opp_table;
-> 	int ret = 0;
-> 
-> 	/* Device may not have OPP table */
-> 	opp_table = _find_opp_table(dev);
-> 	if (IS_ERR(opp_table))
-> 		return 0;
-> 
-> 	/* Device may not use clock */
-> 	if (IS_ERR(opp_table->clk))
-> 		goto put_table;
-> 
-> 	/* Device may have empty OPP table */
-> 	if (!_get_opp_count(opp_table))
-> 		goto put_table;
-> 
-> 	ret = dev_pm_opp_set_rate(dev, clk_get_rate(opp_table->clk));
-> put_table:
-> 	/* Drop reference taken by _find_opp_table() */
-> 	dev_pm_opp_put_opp_table(opp_table);
-> 
-> 	return ret;
-> }
-> EXPORT_SYMBOL_GPL(dev_pm_opp_sync_with_clk_rate);
+From: Chris Morgan <macromorgan@hotmail.com>
 
-I am not sure why you still need this, hope we were going another way
-? Anyway I will have a look at what you have posted now.
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
+
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
+
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
+
+Changes from V3:
+
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
+
+ .../devicetree/bindings/mfd/rk808.txt         |  38 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  26 +
+ drivers/mfd/rk808.c                           |  16 +-
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rk817_charger.c          | 959 ++++++++++++++++++
+ include/linux/mfd/rk808.h                     |  87 ++
+ 7 files changed, 1132 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
 
 -- 
-viresh
+2.25.1
+
