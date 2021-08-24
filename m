@@ -2,70 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB523F53C5
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 01:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE3E3F53FA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 02:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbhHWXuw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 19:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S233390AbhHXAJ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 20:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbhHWXut (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 19:50:49 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC2BC061757
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 16:50:05 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so41065060otf.6
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 16:50:05 -0700 (PDT)
+        with ESMTP id S233381AbhHXAJ3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 20:09:29 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30802C06175F
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 17:08:46 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id dt3so10751085qvb.6
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 17:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=WoDDjdzbvPyEs19Npp+KsDh7LDnbNT5MIojU8+tk5Fw=;
-        b=lxV+LoLa6AmzEui46cKIIlmIVceP1kYM8VWwX7911dwfuaalkODC+0x8OScWBEMuc+
-         R5+iNiCXJR/9dZKmqhyjGONtNUjng1Uh4paCMbcZbPTX1zbc9gwrOZeeQJ6c9R9p97ut
-         8sh+04l2eksB3ZaemEeRRbtxSvyMcIGshrD+s=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qXHgg8bh4V9/RfLoZDOv21AHCTmNqs2XAaQ2Uix6BLU=;
+        b=WRlLLaLWLWRVsmSdu/QDc1Rh7jw0BbtL7yBuVloYbQAOhCFewPibup7cK+gPbEhBXa
+         NvhXpKkSuYpoe7tO7OCFtjVcf5gMTzW5+6MOMrhkBoAHRX/SXTwZzL/zbzb5+UmjZ+F+
+         QgtBIjydKYagFMU2hZ7f9t71p2OkzysjGAzQ2gaJPMHtTu7V2jZBM1PNMPYxKWmEPGXc
+         cHhTbGo2L673WHmtQMVJoV7Nsx9T0hQSKH3yfhTIjQfh4TKIfPISlVfyUu1KS5WIIrDO
+         CeZvI3TKTahZ8iLpRLwjda7zcyyOsxj9D2WhHLu7f0QuoHAcZRG5Klb5xSeabXkzP53D
+         14nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=WoDDjdzbvPyEs19Npp+KsDh7LDnbNT5MIojU8+tk5Fw=;
-        b=E3pqVqNGAD6IXnZIlUfB1QtfwmfdsCuDRcJ9veJLy/wEqNxubao2ARlf817py0P34x
-         oaFzqwkiBatFoIPR7bzIh9qI8GkEEj0QsS6gvXaKQFzy31py8e3kZq5mkUlMLNvGW/6N
-         KKECeL03zuaXNiEONUwn+Wq/nx2fFsPsAa2K7P0rPrkca8+5kOfv70lRLqU5WzWDQcx9
-         bgN70sfX/wh1NUMobwijhP+LRmVxXbLYXB3iYH2D3JesAtBvSM1QQztUTR+Ik0lJEI6Y
-         JkS/ssdCaTP5uUy+/VD8rNZB14H7x/od0NQb/6rhWhNXODvUlEves/DFL4qPxyeiadF/
-         5I5w==
-X-Gm-Message-State: AOAM533NcqwWC5Q7DVE0jmQSFwGDyLSo5a0B9IYCQJpjlZhCIhGJwe91
-        EIIQVpDHEfzyKWOI8xK7hHb2a8Cp5ZeCfEnZdPIL2A==
-X-Google-Smtp-Source: ABdhPJyplZFiLcT/PUaK7ZB+YTOaFz++lRFqFYou4I57i80IsaoaIZAZ18qqb81QRva1zUDu1wKPZC4CXzo1GJhyYpY=
-X-Received: by 2002:a05:6830:2473:: with SMTP id x51mr22956792otr.34.1629762605326;
- Mon, 23 Aug 2021 16:50:05 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Aug 2021 18:50:04 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qXHgg8bh4V9/RfLoZDOv21AHCTmNqs2XAaQ2Uix6BLU=;
+        b=BcmGG9UlTrRor3XH2dkQIbOxJeiabNjBw7Sg4OYNgeOco/ADGedNvfya8yOwEuPgVb
+         bydckX8o6U/mlIe2mUeFA9knsxkLkTmy47xk+pxo7QWkeeuAnLU271KizMt6huQeafib
+         14BYWj0A6VqZgS/XJO0K6kN3kSvjJREz06M1JLyg2Ra2r3lPAK1lXeXa2U3iwDHyhUSO
+         d00MCK3nEGNsY+9mGRKMO9XraRVdQU5P4ZZoetRMwBTan5q5b1SKFSRfqu6nV/INT4St
+         5hzBB5TRYWztJDhUuzmXbQYVbHod3bMQrNzTD2e8POVXZKo9Sefg0bmbhUMGJOBGakNq
+         /+LA==
+X-Gm-Message-State: AOAM530qrjz5ijtUu1cYSY+1WWekNR4+IMCB1oPMkNpQFQx1r63rlE2w
+        8BsUz9XTt3Pt16JoQ0QUwGPHwOQ7gfduB94x9SphTA==
+X-Google-Smtp-Source: ABdhPJyWbfNm8Z/jZ9f9qujiZJUDa0z4Oqk0Nanie5mU4W3bucnaFpllzzx45zlKucYLuf8LltVPw4Pd+0AOn0rb0Qg=
+X-Received: by 2002:ad4:54e9:: with SMTP id k9mr4461953qvx.4.1629763725350;
+ Mon, 23 Aug 2021 17:08:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210823134726.1.I1dd23ddf77e5b3568625d80d6827653af071ce19@changeid>
 References: <20210823134726.1.I1dd23ddf77e5b3568625d80d6827653af071ce19@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Mon, 23 Aug 2021 18:50:04 -0500
-Message-ID: <CAE-0n52Rp9QGUYeP==YdXEJAwbtHtZX=5b3gaR-smLMFybsf6A@mail.gmail.com>
+In-Reply-To: <20210823134726.1.I1dd23ddf77e5b3568625d80d6827653af071ce19@changeid>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 24 Aug 2021 03:08:34 +0300
+Message-ID: <CAA8EJpqtuPam2b-87FC=pJidZ=df5KROxcBi8811aZm_WBwqFg@mail.gmail.com>
 Subject: Re: [PATCH] thermal: qcom: spmi-adc-tm5: Don't abort probing if a
  sensor is not used
-To:     Amit Kucheria <amitk@kernel.org>, Andy Gross <agross@kernel.org>,
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Matthias Kaehlcke (2021-08-23 13:47:30)
+On Mon, 23 Aug 2021 at 23:47, Matthias Kaehlcke <mka@chromium.org> wrote:
+>
 > adc_tm5_register_tzd() registers the thermal zone sensors for all
 > channels of the thermal monitor. If the registration of one channel
 > fails the function skips the processing of the remaining channels
@@ -78,12 +83,36 @@ Quoting Matthias Kaehlcke (2021-08-23 13:47:30)
 >
 > Fixes: ca66dca5eda6 ("thermal: qcom: add support for adc-tm5 PMIC thermal monitor")
 > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 > ---
+>
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> index 232fd0b33325..8494cc04aa21 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> @@ -359,6 +359,12 @@ static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
+>                                                            &adc_tm->channels[i],
+>                                                            &adc_tm5_ops);
+>                 if (IS_ERR(tzd)) {
+> +                       if (PTR_ERR(tzd) == -ENODEV) {
+> +                               dev_warn(adc_tm->dev, "thermal sensor on channel %d is not used\n",
+> +                                        adc_tm->channels[i].channel);
+> +                               continue;
+> +                       }
+> +
+>                         dev_err(adc_tm->dev, "Error registering TZ zone for channel %d: %ld\n",
+>                                 adc_tm->channels[i].channel, PTR_ERR(tzd));
+>                         return PTR_ERR(tzd);
+> --
+> 2.33.0.rc2.250.ged5fa647cd-goog
+>
 
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Should we also disable the 'charger-thermistor@0' node in
-sc7180-trogdor.dtsi on lazor boards, instead of the thermal zone, or in
-addition to the thermal zone? It isn't used so there's not much value in
-exposing it.
+-- 
+With best wishes
+Dmitry
