@@ -2,139 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8FE3F5572
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 03:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F244C3F5671
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 05:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhHXBS3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 21:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S234708AbhHXDHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 23:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233568AbhHXBS2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 21:18:28 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2D7C06175F
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 18:17:45 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y190so16933288pfg.7
-        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 18:17:45 -0700 (PDT)
+        with ESMTP id S235092AbhHXDFo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Aug 2021 23:05:44 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A711BC0613A4
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id j2so6959041pll.1
+        for <linux-pm@vger.kernel.org>; Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Hqn67LxL3lG3twDFl2dpaEiJy0jyMcHPR1Uu+GiQgVA=;
-        b=v73Zr5Q8pN7sStTrMPxEY3ITjm7HbhS4Dw7jKdD4VGbGcZG72luOiHCDKRu5C5LuEW
-         Tsyj2Ep9MJI3t/W2YLYwY8OaHQy8UbQQaHtNyjFw0yX6VO0sxXKFZ1O2ILzCnlgV0KjH
-         XMTesil4WZ9dWMCZ+zJ74rwNJrr8yvWOblfMPlGNWN+TXqhsK+0rFyNLdNbfYpr7IamA
-         zC7a4HOfxwsfSIEo/NZcuJ0zDADfBUAigPRiJwelVIGAGFTu/vVExDHk0ux1whKuDC5U
-         SuOCk9R3Na1fwlB8v8FCd022NesV626edWrG5zGhHtfGjec5Io/CJNaU/BiwCFtmn83+
-         p2Wg==
+        bh=ftVLBcz2CA6HVw5Sak06NSKiX7H+vKeynT4dia9GcmU=;
+        b=k+9ugNQMNP1T757zCmBjD0HZ4Cm6T3BE+v/X7Wxf65qXhZ4Y1Om/ZwreVVsFldU5ED
+         26Au5VziBd3fTRw9qajnc5Q1bzTZtCXlNbNzYEhhdrLy0j6q3RP41Bfsx2Vet4JiZwHE
+         HpssKarI+iW9nKfS+aZW4kug15wwleM1PIEsfGzs+E/ENGb7NoFhvlaUVQuCR3IWspbE
+         1jdc92yTGvHUY8w5qgAHpd6F4jZjsLSyz7OphX6zYHG1h8uepViMakkTUt9Apji0AqlD
+         h496UE7ulnKIyaYIIz+9WlMWKL7f+UCly0DgUoeMlhVK/OeculmtFoztQ69V1z3oNjW5
+         BaQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Hqn67LxL3lG3twDFl2dpaEiJy0jyMcHPR1Uu+GiQgVA=;
-        b=Cmi6SmZCK3OXnNFT1Cpgoy7C1qQaUwmKMYR67aCnvE17frqylEA01KgcPL1PEFqhZP
-         sCvKWoGALy6RjXzhlrl/waYr13htOdMJ8WH8o6dh8DQY5DmtxQhz5h4u0hO/gKwtkmOS
-         GGqXeevsG/9A7HhdrAXCGQIQul6ncm0+uv6zkEYhNPWZTFy1qy6geIwtocqToFPxhvAN
-         WxpblcSAW/GucCQWSJvZ6yfWGXC3GCRWRn+yeu2tSJKBFuf+fY9tUXbnbMybSuqKcoOe
-         7/8CLHj6OXP6ZPptiUHibOuOWRk+PQsnA7F7uudygVYbibDW3voFlkcrerfXpXvOwEFM
-         ZCWQ==
-X-Gm-Message-State: AOAM53323HIHVnr0Q576kHtbbRc+SiFO00X6KRjafN/CmE+Cgy1PhpgX
-        r1P+Xwf/KCf4f9alx5P/9UxS+Q==
-X-Google-Smtp-Source: ABdhPJzoptsMtsMBaGJ1f/2Nl5/lIr6SJerpLtnEjmXym1WbcktKQBRjUA2lqjy2dTRi9CQ/Qjs6pQ==
-X-Received: by 2002:a05:6a00:134e:b0:3e1:1ed:80ff with SMTP id k14-20020a056a00134e00b003e101ed80ffmr36035307pfu.34.1629767865125;
-        Mon, 23 Aug 2021 18:17:45 -0700 (PDT)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c17sm416876pjq.16.2021.08.23.18.17.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Aug 2021 18:17:44 -0700 (PDT)
-Date:   Tue, 24 Aug 2021 09:17:38 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        bh=ftVLBcz2CA6HVw5Sak06NSKiX7H+vKeynT4dia9GcmU=;
+        b=ucj7DQAkoXcqW4sb6rlZR3/jw8Jg0qQ/MT8+LUs903IGCCvU+NXn7xvHzF3cDh6xtM
+         xlzBj+bCNVBjqhTBb6szCP6T1H7v1862HQ8dkiJNLnXdmBizPQuk06XCkGcTIoo9bXP1
+         AqijKDTW8zYH+h5YbGRZlp5R3W99TmDvlh96HVy/hzvGY/EEZVq3WShnHu5cnRx34OCU
+         hTBaGewv+kW2EPCtdwzetDRrfWtGF1IHVRgq8/7HpQHj/9j2wZWJ1J62ATt3tJFaPdN7
+         5fPV+oYZpo4ABxvl3t/Z4xaNHDF0iqT3MAeilEwldBBDJ0tVlksU1h3iaeVZ/gQHGyav
+         zQ2Q==
+X-Gm-Message-State: AOAM531XO9S175Cwi5u3OFacefLDg4SrYKOIQdFoGVnbSfVe85NLdhsG
+        EDr99ytNdRbkTqyVzCOdWwyo4A==
+X-Google-Smtp-Source: ABdhPJxgNZPrPk9tzmxpkCehrPdfFes88M8DqFhHlA/X7V8qZTGRmqZiqGy9NJMzzCPLtwobPdjSGw==
+X-Received: by 2002:a17:902:e547:b029:12c:563c:4a03 with SMTP id n7-20020a170902e547b029012c563c4a03mr30922945plf.46.1629774264209;
+        Mon, 23 Aug 2021 20:04:24 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id c12sm16184839pfl.56.2021.08.23.20.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Aug 2021 20:04:23 -0700 (PDT)
+Date:   Tue, 24 Aug 2021 08:34:21 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm630: Add missing a2noc qos
- clocks
-Message-ID: <20210824011737.GA22595@dragon>
-References: <20210823095603.5538-1-shawn.guo@linaro.org>
- <20210823095603.5538-4-shawn.guo@linaro.org>
- <CAA8EJpqPMMvtDL5NqUJTDfVEAqX9VD9Y_TWmXxh8DpS8hwDuJg@mail.gmail.com>
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210824030421.3tjfjkx3c2silbnz@vireshk-i7>
+References: <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
+ <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+ <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+ <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+ <CAPDyKFo0rzHT4AhueWjyz9k2ZqUy8N6Od5pbr8sL_m0Jf2AwUg@mail.gmail.com>
+ <085d1a2e-57b0-222e-c569-12f3c6bc8161@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpqPMMvtDL5NqUJTDfVEAqX9VD9Y_TWmXxh8DpS8hwDuJg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <085d1a2e-57b0-222e-c569-12f3c6bc8161@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 07:51:32PM +0300, Dmitry Baryshkov wrote:
-> On Mon, 23 Aug 2021 at 12:56, Shawn Guo <shawn.guo@linaro.org> wrote:
-> >
-> > It adds the missing a2noc clocks required for QoS registers programming
-> > per downstream kernel[1].
-> >
-> > [1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
-> >
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdm630.dtsi | 17 ++++++++++++++---
-> >  1 file changed, 14 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> > index 9153e6616ba4..b3a7f3bf1560 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> > @@ -652,11 +652,22 @@
-> >
-> >                 a2noc: interconnect@1704000 {
-> >                         compatible = "qcom,sdm660-a2noc";
-> > -                       reg = <0x01704000 0xc100>;
-> > +                       reg = <0x01704000 0x1c000>;
+On 23-08-21, 23:24, Dmitry Osipenko wrote:
+> It's not clear to me whether it will be okay to add a generic OPP syncing by clock rate or should it be a Tegra-specific helper. Viresh, what do you think about this generic OPP helper:
 > 
-> Shawn, as you are at it, do we want to keep these nocs shifted
-> compared to the downstream dtsi (so that the offset of QoS registers
-> is 0) or we'd better introduce QoS register offset and move noc start
-> address to the same address as in downstream?
-
-Dmitry, thanks for spotting this!  This is really an unintended leftover
-from debugging.  I will drop it in v2.  For address alignment with
-downstream, I do not really have a strong opinion and I can live with
-either of them :)
-
-Shawn
-
-> >                         #interconnect-cells = <1>;
-> > -                       clock-names = "bus", "bus_a";
-> > +                       clock-names = "bus",
-> > +                                     "bus_a",
-> > +                                     "ipa",
-> > +                                     "ufs_axi",
-> > +                                     "aggre2_ufs_axi",
-> > +                                     "aggre2_usb3_axi",
-> > +                                     "cfg_noc_usb2_axi";
-> >                         clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
-> > -                                <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>;
-> > +                                <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>,
-> > +                                <&rpmcc RPM_SMD_IPA_CLK>,
-> > +                                <&gcc GCC_UFS_AXI_CLK>,
-> > +                                <&gcc GCC_AGGRE2_UFS_AXI_CLK>,
-> > +                                <&gcc GCC_AGGRE2_USB3_AXI_CLK>,
-> > +                                <&gcc GCC_CFG_NOC_USB2_AXI_CLK>;
-> >                 };
-> >
-> >                 mnoc: interconnect@1745000 {
-> > --
-> > 2.17.1
-> >
+> /**
+>  * dev_pm_opp_sync_with_clk_rate() - Sync OPP state with clock rate
+>  * @dev:	device for which we do this operation
+>  *
+>  * Sync OPP table state with the current clock rate of device.
+>  *
+>  * Return: 0 on success or a negative error value.
+>  */
+> int dev_pm_opp_sync_with_clk_rate(struct device *dev)
+> {
+> 	struct opp_table *opp_table;
+> 	int ret = 0;
 > 
+> 	/* Device may not have OPP table */
+> 	opp_table = _find_opp_table(dev);
+> 	if (IS_ERR(opp_table))
+> 		return 0;
 > 
-> -- 
-> With best wishes
-> Dmitry
+> 	/* Device may not use clock */
+> 	if (IS_ERR(opp_table->clk))
+> 		goto put_table;
+> 
+> 	/* Device may have empty OPP table */
+> 	if (!_get_opp_count(opp_table))
+> 		goto put_table;
+> 
+> 	ret = dev_pm_opp_set_rate(dev, clk_get_rate(opp_table->clk));
+> put_table:
+> 	/* Drop reference taken by _find_opp_table() */
+> 	dev_pm_opp_put_opp_table(opp_table);
+> 
+> 	return ret;
+> }
+> EXPORT_SYMBOL_GPL(dev_pm_opp_sync_with_clk_rate);
+
+I am not sure why you still need this, hope we were going another way
+? Anyway I will have a look at what you have posted now.
+
+-- 
+viresh
