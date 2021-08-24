@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3322E3F54CE
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 02:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38AB3F54EC
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 02:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbhHXA4p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Aug 2021 20:56:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48138 "EHLO mail.kernel.org"
+        id S234722AbhHXA5h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Aug 2021 20:57:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234557AbhHXAzz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Aug 2021 20:55:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DBBF6142A;
-        Tue, 24 Aug 2021 00:54:59 +0000 (UTC)
+        id S234264AbhHXA4N (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Aug 2021 20:56:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F12561507;
+        Tue, 24 Aug 2021 00:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629766499;
-        bh=KBtAVMP+VFpQhLREu6k36qT5cu56hxJkOwhYETtEKyw=;
+        s=k20201202; t=1629766515;
+        bh=oZLfST+fZeckfbcHYORaBw8qhlYlN8ehRkZ4EU2b5KU=;
         h=From:To:Cc:Subject:Date:From;
-        b=NdImHMosDdf3a0pYgbCrVeBweSR+Lop/Bg7EOzDRd3Wnxs4rwzXA9EJhxQg8EG2aT
-         cRyIL0Sz0xVRlPu5QEoQFDUhf/Q0uKZnSyhbINXFhxD8Sk4at1J+Si00aPljPEwGWM
-         upBXIyHAf2a4D3zYcbfV7B48IviUXimSr4ht6lhMef8sydhGQ26c3SZ3emC0f8fK+j
-         +oxSc5yOejKjWBCFQpcr0NY1g1zd1tyF2+7AkL9kBt3Oqt8e+vu4O36vJ3Qcp6F70Q
-         qLWtbQ7w1rJmtU4mFkVb7Jb7QMq1jU5fzMrRciNR3xaUodvz9K+T8xSKlGmvw6BOx+
-         P2s8pkEZqs0XQ==
+        b=iqmvV2HSdShB3t6kygaU014jTyvDZ9FFa+3EVVgxN8zmK6Z+z4YaSMjlwGi20p6Hy
+         JwX/jlAZhDdqnLk37uf7E0EoWSRbkOov2oj8D/KIBu9uc0Lpqwz7fp36oAX18/s7S0
+         /2CyMrO8AdC63tugYta06wLenfHqx1PO+uZ7MH0yPCo4jYQYgddxcHJMCj//OP3e+R
+         m88R28hRNOmSixflJ/tVYAb6PTOR2qJXOSiHomP6T2McxUMD3zlctuCIzuTcJ9Zoi9
+         6Ej93U/3tchfBWWddWD6ta+bM/G8Ib9D8HIFlHud65YOgSG8aHhQuidNMHQKtWDgsl
+         /fiWvkPMJ3LUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 01/10] opp: remove WARN when no valid OPPs remain
-Date:   Mon, 23 Aug 2021 20:54:48 -0400
-Message-Id: <20210824005458.631377-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/10] opp: remove WARN when no valid OPPs remain
+Date:   Mon, 23 Aug 2021 20:55:03 -0400
+Message-Id: <20210824005513.631557-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,10 +56,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 249738e1e0b7..603c688fe23d 100644
+index d64a13d7881b..a53123356697 100644
 --- a/drivers/opp/of.c
 +++ b/drivers/opp/of.c
-@@ -682,8 +682,9 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+@@ -423,8 +423,9 @@ static int _of_add_opp_table_v2(struct device *dev, struct device_node *opp_np)
  		}
  	}
  
@@ -69,7 +69,7 @@ index 249738e1e0b7..603c688fe23d 100644
 +	if (!count) {
 +		dev_err(dev, "%s: no supported OPPs", __func__);
  		ret = -ENOENT;
- 		goto remove_static_opp;
+ 		goto put_opp_table;
  	}
 -- 
 2.30.2
