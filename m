@@ -2,261 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7191F3F578D
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 07:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702183F5962
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 09:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhHXFSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Aug 2021 01:18:20 -0400
-Received: from mga06.intel.com ([134.134.136.31]:55331 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229955AbhHXFST (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Aug 2021 01:18:19 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10085"; a="278249116"
-X-IronPort-AV: E=Sophos;i="5.84,346,1620716400"; 
-   d="scan'208";a="278249116"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 22:17:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,346,1620716400"; 
-   d="scan'208";a="515282858"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2021 22:17:35 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        lenb@kernel.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [RFC PATCH 3/3] thermal/drivers/cpuidle_cooling: cpuidle cooling driver for non DT/ARM
-Date:   Mon, 23 Aug 2021 22:17:31 -0700
-Message-Id: <20210824051731.2495462-4-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210824051731.2495462-1-srinivas.pandruvada@linux.intel.com>
-References: <20210824051731.2495462-1-srinivas.pandruvada@linux.intel.com>
+        id S235010AbhHXHvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Aug 2021 03:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235016AbhHXHvJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Aug 2021 03:51:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE02C061764
+        for <linux-pm@vger.kernel.org>; Tue, 24 Aug 2021 00:50:25 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id k5so43544154lfu.4
+        for <linux-pm@vger.kernel.org>; Tue, 24 Aug 2021 00:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6QO1D4em1C1nHhx4CrZWdcZbA0xiY6t0RyCdsuKnSIc=;
+        b=J+teq1gJxTGcdDdovG62/xyX0zhT90ekovliPz6FUvv+cDrIGlMWqeec3K5DhZKc9b
+         sKzRTQMDvL7dFH9FPd5CtBuQJg+Yl4y2aHt19H1ZJaWGBeM6vKMdd16e3XeygeCCjpwz
+         NZiY7+ewI6hasOprk90Ru4OtMSeauYeCE98rWJRp1keD1ZA9nOf0sBR2SfnGSQWWzcaj
+         R9KJMY2CwAl6NH5DniF+cYgkyI8g7cQ3kPTvSyUA1+NWay+IXQ63Aovfs1ejma4xWtu/
+         gezld7YZjfEnqsbWHNjvm7FZyx1xsix2sDbJjPRzLGU0RwB0mzKXgXdKc0C05/kRKjdc
+         Vxtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6QO1D4em1C1nHhx4CrZWdcZbA0xiY6t0RyCdsuKnSIc=;
+        b=a1EfV/DCfcwb4KHnd9qU7KZ94hdN3r2Qt//2Sw/D7kgeYQQjvklm+kotcklsaHRHY6
+         SHzCQUOelJjpTc/yBG962E2U+lINvoiKVid/20h8+wZhL6BG2lt58BVHhl7q8ben7sDW
+         T3tfRqXlKTx+h4brnRVPn0fTxbvm70y45YNmpXPaskGmvIHhC1U3YLVccc7lC+7Sl6sD
+         wLp9Z1rQr6K6Tw1QazMrSU7Shnt0Rnf/e+Qtf4oI2bGBvyvF9eWm8LstzPqIrpFboBEB
+         T1iN+GCSUUctiwJlaCe5adYbJAoohuY4G8DsRIwpCyeBKg8XyzhTl2yawaEJr17wIIxB
+         ZgDQ==
+X-Gm-Message-State: AOAM531fr7O0uTnxqENCowtDbYTjyCQpZjqXVjKi8l3OjJi92siKrprr
+        Hkuoa+sOsK3JVpHzUczNh10vE7gjLmeMIcgic0j50w==
+X-Google-Smtp-Source: ABdhPJwx4dKcJvjHiOTt9/eKDcemiVgAnjhvJZRoh7bVIfSjwhVemY3ea6OxjbXR0eqxvl8sAu2ZYiMgikuVkG90MF0=
+X-Received: by 2002:ac2:4d1c:: with SMTP id r28mr287872lfi.584.1629791424267;
+ Tue, 24 Aug 2021 00:50:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210823202412.25716-1-digetx@gmail.com>
+In-Reply-To: <20210823202412.25716-1-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 24 Aug 2021 09:49:47 +0200
+Message-ID: <CAPDyKFpsEMmuF4XzUX=ko4H3iBSu_77_+vozETg9njC94x8goA@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: domains: Improve runtime PM performance state handling
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This driver has same functionality as existing cpuidle_cooling driver.
-This uses idle injection to cool a CPU. This driver reuses all the code
-from the existing driver, except the DT specific function.
+On Mon, 23 Aug 2021 at 22:25, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> GENPD core doesn't support handling performance state changes while
+> consumer device is runtime-suspended or when runtime PM is disabled.
+> GENPD core may override performance state that was configured by device
+> driver while RPM of the device was disabled or device was RPM-suspended.
+> Let's close that gap by allowing drivers to control performance state
+> while RPM of a consumer device is disabled and to set up performance
+> state of RPM-suspended device that will be applied by GENPD core on
+> RPM-resume of the device.
+>
+> Fixes: 5937c3ce2122 ("PM: domains: Drop/restore performance state votes for devices at runtime PM")
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Each CPU is registered as a cooling device, with type = idle-x, where
-x is the cpu number.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-It registers two module parameters:
-idle_duration_us : To change default idle duration
-idle_latency_us : To change default latency
+Rafael, if not too late, can you please queue this as a fix for v5.14?
+I haven't heard about any regression, but the error is there.
 
-The meaning of these parameters is same as in the existing code. It is
-described in the header of file drivers/powercap/idle_inject.c.
+Kind regards
+Uffe
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/Kconfig                   |  12 ++
- drivers/thermal/Makefile                  |   2 +
- drivers/thermal/cpuidle_cooling_generic.c | 155 ++++++++++++++++++++++
- 3 files changed, 169 insertions(+)
- create mode 100644 drivers/thermal/cpuidle_cooling_generic.c
-
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 3d669a1774d3..3efe3df75337 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -193,6 +193,18 @@ config CPU_IDLE_THERMAL
- 	  idle cycle.
- endif
- 
-+config CPU_IDLE_THERMAL_GENERIC
-+	tristate "CPU idle cooling device"
-+	depends on !CPU_THERMAL
-+	select CPU_IDLE_THERMAL_CORE
-+	help
-+	  This implements the CPU cooling mechanism through
-+	  idle injection. This will throttle the CPU by injecting
-+	  idle cycle.
-+
-+	  This driver can also be built as a module. If so, the module will
-+          be called cpuidle_cooling_generic.
-+
- config DEVFREQ_THERMAL
- 	bool "Generic device cooling support"
- 	depends on PM_DEVFREQ
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 769d025beb11..c6dce523ab2b 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -26,6 +26,8 @@ thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpufreq_cooling.o
- thermal_sys-$(CONFIG_CPU_IDLE_THERMAL_CORE)	+= cpuidle_cooling_core.o
- thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
- 
-+obj-$(CONFIG_CPU_IDLE_THERMAL_GENERIC) += cpuidle_cooling_generic.o
-+
- # devfreq cooling
- thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
- 
-diff --git a/drivers/thermal/cpuidle_cooling_generic.c b/drivers/thermal/cpuidle_cooling_generic.c
-new file mode 100644
-index 000000000000..adb33dfba2e7
---- /dev/null
-+++ b/drivers/thermal/cpuidle_cooling_generic.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Generic cpu idle cooling driver
-+ * Copyright (c) 2021, Intel Corporation.
-+ * All rights reserved.
-+ *
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/cpufeature.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/idle_inject.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/thermal.h>
-+#include <linux/topology.h>
-+
-+#include "cpuidle_cooling_core.h"
-+
-+#define IDLE_DURATION   10000
-+#define IDLE_LATENCY    5000
-+
-+static int idle_duration_us = IDLE_DURATION;
-+static int idle_latency_us = IDLE_LATENCY;
-+
-+module_param(idle_duration_us, int, 0644);
-+MODULE_PARM_DESC(idle_duration_us,
-+		 "Idle duration in us.");
-+
-+module_param(idle_latency_us, int, 0644);
-+MODULE_PARM_DESC(idle_latency_us,
-+		 "Idle latency in us.");
-+
-+struct cpuidle_cooling {
-+	struct thermal_cooling_device *cdev;
-+	struct idle_inject_device *ii_dev;
-+	struct cpuidle_cooling_device *idle_cdev;
-+};
-+static DEFINE_PER_CPU(struct cpuidle_cooling, cooling_devs);
-+static cpumask_t cpuidle_cpu_mask;
-+
-+static int cpuidle_cooling_register(int cpu)
-+{
-+	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-+	struct cpuidle_cooling_device *idle_cdev;
-+	struct thermal_cooling_device *cdev;
-+	struct idle_inject_device *ii_dev;
-+	char *name;
-+	int ret;
-+
-+	if (cpumask_test_cpu(cpu, &cpuidle_cpu_mask))
-+		return 0;
-+
-+	idle_cdev = kzalloc(sizeof(*idle_cdev), GFP_KERNEL);
-+	if (!idle_cdev) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	ii_dev = idle_inject_register((struct cpumask *)cpumask_of(cpu));
-+	if (!ii_dev) {
-+		pr_err("idle_inject_register failed for cpu:%d\n", cpu);
-+		ret = -EINVAL;
-+		goto out_kfree;
-+	}
-+
-+	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
-+	idle_inject_set_latency(ii_dev, idle_latency_us);
-+
-+	idle_cdev->ii_dev = ii_dev;
-+
-+	name = kasprintf(GFP_KERNEL, "idle-%d", cpu);
-+	if (!name) {
-+		ret = -ENOMEM;
-+		goto out_unregister;
-+	}
-+
-+	cdev = thermal_cooling_device_register(name, idle_cdev,
-+					       cpuidle_cooling_get_ops());
-+	if (IS_ERR(cdev)) {
-+		ret = PTR_ERR(cdev);
-+		goto out_kfree_name;
-+	}
-+
-+	pr_debug("%s: Idle injection set with idle duration=%u, latency=%u\n",
-+		 name, idle_duration_us, idle_latency_us);
-+
-+	kfree(name);
-+
-+	cooling_dev->cdev = cdev;
-+	cooling_dev->ii_dev = ii_dev;
-+	cooling_dev->idle_cdev = idle_cdev;
-+	cpumask_set_cpu(cpu, &cpuidle_cpu_mask);
-+
-+	return 0;
-+
-+out_kfree_name:
-+	kfree(name);
-+out_unregister:
-+	idle_inject_unregister(ii_dev);
-+out_kfree:
-+	kfree(idle_cdev);
-+out:
-+	return ret;
-+}
-+
-+static void cpuidle_cooling_unregister(int cpu)
-+{
-+	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-+
-+	thermal_cooling_device_unregister(cooling_dev->cdev);
-+	idle_inject_unregister(cooling_dev->ii_dev);
-+	kfree(cooling_dev->idle_cdev);
-+}
-+
-+static int cpuidle_cooling_cpu_online(unsigned int cpu)
-+{
-+	cpuidle_cooling_register(cpu);
-+
-+	return 0;
-+}
-+
-+static enum cpuhp_state cpuidle_cooling_hp_state __read_mostly;
-+
-+static int __init cpuidle_cooling_init(void)
-+{
-+	int ret;
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+				"thermal/cpuidle_cooling:online",
-+				cpuidle_cooling_cpu_online, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	cpuidle_cooling_hp_state = ret;
-+
-+	return 0;
-+}
-+module_init(cpuidle_cooling_init)
-+
-+static void __exit cpuidle_cooling_exit(void)
-+{
-+	int i;
-+
-+	cpuhp_remove_state(cpuidle_cooling_hp_state);
-+
-+	for_each_cpu(i,	&cpuidle_cpu_mask) {
-+		cpuidle_cooling_unregister(i);
-+	}
-+}
-+module_exit(cpuidle_cooling_exit)
-+
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
-
+> ---
+>  drivers/base/power/domain.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index e1c8994ae225..3a13a942d012 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -435,7 +435,7 @@ static void genpd_restore_performance_state(struct device *dev,
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>  {
+>         struct generic_pm_domain *genpd;
+> -       int ret;
+> +       int ret = 0;
+>
+>         genpd = dev_to_genpd_safe(dev);
+>         if (!genpd)
+> @@ -446,7 +446,13 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>                 return -EINVAL;
+>
+>         genpd_lock(genpd);
+> -       ret = genpd_set_performance_state(dev, state);
+> +       if (pm_runtime_suspended(dev)) {
+> +               dev_gpd_data(dev)->rpm_pstate = state;
+> +       } else {
+> +               ret = genpd_set_performance_state(dev, state);
+> +               if (!ret)
+> +                       dev_gpd_data(dev)->rpm_pstate = 0;
+> +       }
+>         genpd_unlock(genpd);
+>
+>         return ret;
+> --
+> 2.32.0
+>
