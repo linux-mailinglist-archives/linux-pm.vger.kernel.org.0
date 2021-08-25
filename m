@@ -2,114 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1633F7C3F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 20:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6633F7CBF
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 21:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238098AbhHYSeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Aug 2021 14:34:15 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56878 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237633AbhHYScI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 14:32:08 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id bd8eaabcade34f46; Wed, 25 Aug 2021 20:31:12 +0200
-Received: from kreacher.localnet (unknown [213.134.181.157])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 899F566A28D;
-        Wed, 25 Aug 2021 20:31:11 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPI: power: Drop name from struct acpi_power_resource
-Date:   Wed, 25 Aug 2021 20:31:10 +0200
-Message-ID: <2616419.mvXUDI8C0e@kreacher>
+        id S242493AbhHYTcQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Aug 2021 15:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242489AbhHYTcQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 15:32:16 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F33C0613D9
+        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 12:31:30 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so369576otf.6
+        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 12:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=J6WVjBvRIT9A+PrV6sxYc5oJqYhffihj3mZfN9H1dBg=;
+        b=cRh+wuj9sAm9jNkbwlr/GCHXATQ88pPCKppXfUIy6dkAQwiRWGUxp7B/uI5Qvv6SW9
+         udoev0jxKXpaNed5mEERl71dmvdRngbtcrWxZB2DgfJBAojZiX1ktlzaoUMusoW0ZA6K
+         Gh/+Hfl1aKsLDeEcA9z8w/swfj7HoWcrixe38=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=J6WVjBvRIT9A+PrV6sxYc5oJqYhffihj3mZfN9H1dBg=;
+        b=KAwJBi+pn2GxQ6EBMA7guxPccUis3rlugRV0wm/eSGS14NsjgtK0o3HdjdYeDdueXF
+         GW+mI8mLR3uSBWEPvW85hp87dF1fZY/97GeSfGQXsYBxtatrKRfBlUAQ8cNaALHlCUbs
+         8y8ZVOmxYVQ8soxUSQTctr2W5Urc2p9QuTvaE+GG0Rtkk9994oucDOm6ABkSENVEWkSA
+         /6PWMxTIsxIupMwRYIxrcPuXcquAtEC4r3x7zYzhJ2IpoALi0WWyGxViB4WpILIaQRwL
+         p2NeOUMlDNZK8Sp/KdxdH4P8lLvcV4P1FwtTL3zaeq+hAT3frgfC1cv9EJKpdtY3C+Mw
+         b+rg==
+X-Gm-Message-State: AOAM5312v5Gauq2/YJIHuM23VmPT0/nLHM9F1byJly0SHtdsb1puiBGc
+        M6XhSzofCQCphsV+D0yejdU+cgLG12BOOg==
+X-Google-Smtp-Source: ABdhPJzn7PpAMNIwAANraSQTOK7Ycgz1keQAfVRX9TYP4QAz30FZ/pSOKYIUDkIykLmZS5fZSUh6QQ==
+X-Received: by 2002:a05:6830:2a06:: with SMTP id y6mr89291otu.134.1629919889711;
+        Wed, 25 Aug 2021 12:31:29 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k19sm156565oiw.49.2021.08.25.12.31.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Aug 2021 12:31:29 -0700 (PDT)
+Subject: Re: [PATCH] selftests: cleanup config
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, shuah@kernel.org, Jason@zx2c4.com,
+        masahiroy@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210825050948.10339-1-lizhijian@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6547d239-56b7-71c0-70c9-20a67bdad1dd@linuxfoundation.org>
+Date:   Wed, 25 Aug 2021 13:31:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.157
-X-CLIENT-HOSTNAME: 213.134.181.157
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddruddtledguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrddukedurdduheejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddrudehjedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+In-Reply-To: <20210825050948.10339-1-lizhijian@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 8/24/21 11:09 PM, Li Zhijian wrote:
+> - DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
+> - SYNC was removed since aff9da10e21 ("staging/android: make sync_timeline internal to sw_sync")
+> 
 
-Drop the name field (that only is used in diagnostic messages) from
-struct acpi_power_resource and use the name of the power resource
-device object instead of it.
+Please write a complete commit log explaining the change
+and tell us what happens if we don't do this.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/power.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+> $ for k in $(grep ^CONFIG $(find tools/testing/selftests/ -name config) | awk -F'=' '{print$1}' | awk -F':' '{print $2}' | sort | uniq); do  k=${k#CONFIG_}; git grep -qw -e "menuconfig $k" -e "config $k" || echo "$k is missing"; done;
+> DEBUG_PI_LIST is missing
+> SYNC is missing
+> 
+> CC: Philip Li <philip.li@intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> ---
+>   tools/testing/selftests/cpufreq/config              | 2 +-
+>   tools/testing/selftests/sync/config                 | 1 -
+>   tools/testing/selftests/wireguard/qemu/debug.config | 2 +-
+>   3 files changed, 2 insertions(+), 3 deletions(-)
+> 
 
-Index: linux-pm/drivers/acpi/power.c
-===================================================================
---- linux-pm.orig/drivers/acpi/power.c
-+++ linux-pm/drivers/acpi/power.c
-@@ -48,7 +48,6 @@ struct acpi_power_dependent_device {
- struct acpi_power_resource {
- 	struct acpi_device device;
- 	struct list_head list_node;
--	char *name;
- 	u32 system_level;
- 	u32 order;
- 	unsigned int ref_count;
-@@ -70,6 +69,11 @@ static DEFINE_MUTEX(power_resource_list_
-                              Power Resource Management
-    -------------------------------------------------------------------------- */
- 
-+static inline const char *resource_dev_name(struct acpi_power_resource *pr)
-+{
-+	return dev_name(&pr->device.dev);
-+}
-+
- static inline
- struct acpi_power_resource *to_power_resource(struct acpi_device *device)
- {
-@@ -264,7 +268,8 @@ acpi_power_resource_add_dependent(struct
- 
- 	dep->dev = dev;
- 	list_add_tail(&dep->node, &resource->dependents);
--	dev_dbg(dev, "added power dependency to [%s]\n", resource->name);
-+	dev_dbg(dev, "added power dependency to [%s]\n",
-+		resource_dev_name(resource));
- 
- unlock:
- 	mutex_unlock(&resource->resource_lock);
-@@ -283,7 +288,7 @@ acpi_power_resource_remove_dependent(str
- 			list_del(&dep->node);
- 			kfree(dep);
- 			dev_dbg(dev, "removed power dependency to [%s]\n",
--				resource->name);
-+				resource_dev_name(resource));
- 			break;
- 		}
- 	}
-@@ -381,7 +386,7 @@ static int __acpi_power_on(struct acpi_p
- 
- 	list_for_each_entry(dep, &resource->dependents, node) {
- 		dev_dbg(dep->dev, "runtime resuming because [%s] turned on\n",
--			resource->name);
-+			resource_dev_name(resource));
- 		pm_request_resume(dep->dev);
- 	}
- 
-@@ -953,7 +958,6 @@ struct acpi_device *acpi_add_power_resou
- 	mutex_init(&resource->resource_lock);
- 	INIT_LIST_HEAD(&resource->list_node);
- 	INIT_LIST_HEAD(&resource->dependents);
--	resource->name = device->pnp.bus_id;
- 	strcpy(acpi_device_name(device), ACPI_POWER_DEVICE_NAME);
- 	strcpy(acpi_device_class(device), ACPI_POWER_CLASS);
- 	device->power.state = ACPI_STATE_UNKNOWN;
+Please split this into 3 patches
 
-
+thanks,
+-- Shuah
 
