@@ -2,124 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661943F6ADE
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Aug 2021 23:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B4D3F6EAE
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 07:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbhHXVNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Aug 2021 17:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbhHXVNO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Aug 2021 17:13:14 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C1EC061757
-        for <linux-pm@vger.kernel.org>; Tue, 24 Aug 2021 14:12:30 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id v33-20020a0568300921b0290517cd06302dso49769934ott.13
-        for <linux-pm@vger.kernel.org>; Tue, 24 Aug 2021 14:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=VvJ41OUQjcIqP2/V4RRgvKQKaUvc+Q8/8VHMdF1do8Q=;
-        b=a0llSe0VINrc71feDG/BpuGjlsKvKo1iN5416uQ31/w+N0ksxUtZ2meejEL/ITGZ/d
-         bJ3OvkrKH+YluSXZMocEAT8uHOzSCUb+SdTwx5+9DPC7LsEsKDFETFXq5jnAc36l2T6Y
-         vfciSWjKmqrl9mr7EVpRx7xmCEzgFsXnO6QcM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=VvJ41OUQjcIqP2/V4RRgvKQKaUvc+Q8/8VHMdF1do8Q=;
-        b=sPyBhk6OseSYfOMSkQeModTIfxhUp8LCsBvQMeLsb4v8RbLNskk6EAmTBezSMIpjN4
-         beOjGro+rsKnigys8SrVUnkg94dTc312ojmPF39mO/hfv6peHKTnIBBGP71JWCLVhDiz
-         kEJhC6GUN5kig3qm9Ea0YyifIsWxdTlyP3qoeYRG5kTMOWEoRBNTBM3/08JPZidJAsuT
-         Ifr+9DZZwicd+5ZrrstUQTbJN9gMNcwp0N6XLe42foQiQeRYNkBGJNFpIUPAIJ4gAMC9
-         KkJIF6esj+VuNfF14HwuSYWDozGZHhMKdB6oIiJ0URUFYSp3xvzy85A7VIr3AAa5A9uT
-         QOgQ==
-X-Gm-Message-State: AOAM5330eOEm7wfkzrycNfW7eprI7uiKaV7dEKu49C18m3btMCKnS/uM
-        29aTO+ov5+aiN4cb173f/c7LzQ1Fi/7i84WR6vS8Dw==
-X-Google-Smtp-Source: ABdhPJx08FQcEL2UXtCAGxTVtKc6L4YcEdQ26f3P0zd41icoXQklXAOtrjA3tbBpHCVb7lXrokHsBMM4SWrlwn2irUI=
-X-Received: by 2002:a05:6808:181a:: with SMTP id bh26mr4480953oib.166.1629839549674;
- Tue, 24 Aug 2021 14:12:29 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 24 Aug 2021 14:12:29 -0700
+        id S231550AbhHYFFs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Aug 2021 01:05:48 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:15318 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230407AbhHYFFs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 01:05:48 -0400
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ALdJKkqjjMwc7y6KTzTLN7IwF1XBQXuYji2hC?=
+ =?us-ascii?q?6mlwRA09TyX4rbHLoB1/73LJYVkqNk3I5urrBEDtexLhHP1OkOws1NWZLWrbUQ?=
+ =?us-ascii?q?KTRekM0WKI+UyDJ8SRzI5g/JYlW61/Jfm1NlJikPv9iTPSL/8QhPWB74Ck7N2z?=
+ =?us-ascii?q?80tQ?=
+X-IronPort-AV: E=Sophos;i="5.84,349,1620662400"; 
+   d="scan'208";a="113428576"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 25 Aug 2021 13:05:01 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 302994D0D497;
+        Wed, 25 Aug 2021 13:04:57 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 25 Aug 2021 13:04:56 +0800
+Received: from localhost.localdomain (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 25 Aug 2021 13:04:56 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>, <shuah@kernel.org>,
+        <Jason@zx2c4.com>, <masahiroy@kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wireguard@lists.zx2c4.com>, <netdev@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Philip Li <philip.li@intel.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: [PATCH] selftests: cleanup config
+Date:   Wed, 25 Aug 2021 13:09:48 +0800
+Message-ID: <20210825050948.10339-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <YSU8djt765o81YiQ@google.com>
-References: <20210823134726.1.I1dd23ddf77e5b3568625d80d6827653af071ce19@changeid>
- <CAE-0n52Rp9QGUYeP==YdXEJAwbtHtZX=5b3gaR-smLMFybsf6A@mail.gmail.com> <YSU8djt765o81YiQ@google.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Tue, 24 Aug 2021 14:12:29 -0700
-Message-ID: <CAE-0n52SDVCqyp64cWd0uw1F4NRO3N8dT5LNOO+eh-zvWpffoQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: qcom: spmi-adc-tm5: Don't abort probing if a
- sensor is not used
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 302994D0D497.A0473
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Matthias Kaehlcke (2021-08-24 11:37:42)
-> On Mon, Aug 23, 2021 at 06:50:04PM -0500, Stephen Boyd wrote:
-> > Quoting Matthias Kaehlcke (2021-08-23 13:47:30)
-> > > adc_tm5_register_tzd() registers the thermal zone sensors for all
-> > > channels of the thermal monitor. If the registration of one channel
-> > > fails the function skips the processing of the remaining channels
-> > > and returns an error, which results in _probe() being aborted.
-> > >
-> > > One of the reasons the registration could fail is that none of the
-> > > thermal zones is using the channel/sensor, which hardly is a critical
-> > > error (if it is an error at all). If this case is detected emit a
-> > > warning and continue with processing the remaining channels.
-> > >
-> > > Fixes: ca66dca5eda6 ("thermal: qcom: add support for adc-tm5 PMIC thermal monitor")
-> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > ---
-> >
-> > Reported-by: Stephen Boyd <swboyd@chromium.org>
-> > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->
-> Thanks for the review!
->
-> > Should we also disable the 'charger-thermistor@0' node in
-> > sc7180-trogdor.dtsi on lazor boards, instead of the thermal zone, or in
-> > addition to the thermal zone? It isn't used so there's not much value in
-> > exposing it.
->
-> I wouldn't do it instead of disabling the thermal zone, a TZ without a
-> sensor doesn't seem very useful.
->
-> IIUC the thermistor nodes would need to be deleted, not disabled.
-> Currently the nodes don't have labels, so either the labels would need
-> to be added, or the deletion would have to look something like this:
->
-> &pm6150_adc {
->         /delete-node/ charger-thermistor@4f;
-> };
->
-> &pm6150_adc_tm {
->         /delete-node/ charger-thermistor@0;
-> };
->
-> If the change is done for Lazor it should also be done for PomPom and
-> CoachZ.
->
-> I don't see a strong need to delete the ADC nodes with the clutter it
-> adds, but I'm open to it if you prefer :)
+- DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
+- SYNC was removed since aff9da10e21 ("staging/android: make sync_timeline internal to sw_sync")
 
-The driver will be present in system memory when it is never used. I was
-mostly noticing that adc_tm5_get_dt_data() calls
-of_get_available_child_count() and bails probe if there aren't any child
-nodes. In this case, the only child node is charger-thermistor, so probe
-for this driver would fail if the thermistor was removed. So at that
-point, I wonder if we should disable the thermal zone node (already
-done) and then also the adc node (sadly called adc-tm). This way we
-don't eat up kernel memory to describe a device that isn't used and a
-driver that wastes time probing and then fails to probe anyway.
+$ for k in $(grep ^CONFIG $(find tools/testing/selftests/ -name config) | awk -F'=' '{print$1}' | awk -F':' '{print $2}' | sort | uniq); do  k=${k#CONFIG_}; git grep -qw -e "menuconfig $k" -e "config $k" || echo "$k is missing"; done;
+DEBUG_PI_LIST is missing
+SYNC is missing
+
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/cpufreq/config              | 2 +-
+ tools/testing/selftests/sync/config                 | 1 -
+ tools/testing/selftests/wireguard/qemu/debug.config | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+index 27ff72ebd0f5..75e900793e8a 100644
+--- a/tools/testing/selftests/cpufreq/config
++++ b/tools/testing/selftests/cpufreq/config
+@@ -6,7 +6,7 @@ CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+ CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
+ CONFIG_DEBUG_RT_MUTEXES=y
+-CONFIG_DEBUG_PI_LIST=y
++CONFIG_DEBUG_PLIST=y
+ CONFIG_DEBUG_SPINLOCK=y
+ CONFIG_DEBUG_MUTEXES=y
+ CONFIG_DEBUG_LOCK_ALLOC=y
+diff --git a/tools/testing/selftests/sync/config b/tools/testing/selftests/sync/config
+index 1ab7e8130db2..47ff5afc3727 100644
+--- a/tools/testing/selftests/sync/config
++++ b/tools/testing/selftests/sync/config
+@@ -1,4 +1,3 @@
+ CONFIG_STAGING=y
+ CONFIG_ANDROID=y
+-CONFIG_SYNC=y
+ CONFIG_SW_SYNC=y
+diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
+index fe07d97df9fa..2b321b8a96cf 100644
+--- a/tools/testing/selftests/wireguard/qemu/debug.config
++++ b/tools/testing/selftests/wireguard/qemu/debug.config
+@@ -47,7 +47,7 @@ CONFIG_DEBUG_ATOMIC_SLEEP=y
+ CONFIG_TRACE_IRQFLAGS=y
+ CONFIG_DEBUG_BUGVERBOSE=y
+ CONFIG_DEBUG_LIST=y
+-CONFIG_DEBUG_PI_LIST=y
++CONFIG_DEBUG_PLIST=y
+ CONFIG_PROVE_RCU=y
+ CONFIG_SPARSE_RCU_POINTER=y
+ CONFIG_RCU_CPU_STALL_TIMEOUT=21
+-- 
+2.31.1
+
+
+
