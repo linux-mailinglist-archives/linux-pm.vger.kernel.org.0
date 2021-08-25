@@ -2,221 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC34D3F79A0
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 18:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4BB3F7C07
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 20:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbhHYQBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Aug 2021 12:01:47 -0400
-Received: from mga17.intel.com ([192.55.52.151]:36228 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241796AbhHYQBg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Aug 2021 12:01:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10087"; a="197791842"
-X-IronPort-AV: E=Sophos;i="5.84,351,1620716400"; 
-   d="scan'208";a="197791842"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 09:00:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,351,1620716400"; 
-   d="scan'208";a="494317325"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Aug 2021 09:00:47 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, lenb@kernel.org, dave.hansen@intel.com,
-        thiago.macieira@intel.com, jing2.liu@intel.com,
-        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH v10 26/28] intel_idle/amx: Add SPR support with XTILEDATA capability
-Date:   Wed, 25 Aug 2021 08:54:11 -0700
-Message-Id: <20210825155413.19673-27-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210825155413.19673-1-chang.seok.bae@intel.com>
-References: <20210825155413.19673-1-chang.seok.bae@intel.com>
+        id S242280AbhHYSIi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Aug 2021 14:08:38 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:42642 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242375AbhHYSIi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 14:08:38 -0400
+Received: by mail-ot1-f49.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so68830otk.9;
+        Wed, 25 Aug 2021 11:07:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cBhKgJXwtRuKkyuUOozNOA3zhnnr2AaXGBgtEDyTnPY=;
+        b=StjvTQvsEWt5kZP318jc43xnXg14GS1Wp4NgeNWCUDNUkstjjbjC1hIma3LTjkPlLw
+         irbU6P6Ulshr2m4sZjT3LpvpejK5KvJRMR7mbdyZUU0QOkSkK+vuDhqh1vIWQGcgXYYX
+         mDSYaN1Q+yxV8VymOjINybXLILvtiwniOkUsYGqAnR1uNsRvAFkaFdaWDmdK0Qn2TcAL
+         vy8Rb9enmu5K6ghXyajflZ/8Ruyh17VPJbLZmbWWqbcA6UeVdW4dqm5oW19KPxzbgrR3
+         GreJpWdWxH3P4B/JXT9+hkkx1aqInmaxOm0r2j6cpDLKVEnNZZqV0m+uNy3HIHv5jNrL
+         jjSg==
+X-Gm-Message-State: AOAM530mAcvSFvFJ+OojKSYbfEH4QVIAIAA+r0PyQt/R0HyO+9wgSr/b
+        GSYq2Rg/CVGgQFxJ0XO4WjCLRhvis1AxARcs+cY=
+X-Google-Smtp-Source: ABdhPJz0Zho6TQi3O0gMD6uj30AOc12BMXUDSb4gbn3p6TNX0wN22JdeML9eibp94h64829FmT+iYJScjZ/WZ0Ic9X8=
+X-Received: by 2002:a05:6830:1f59:: with SMTP id u25mr39030356oth.321.1629914871814;
+ Wed, 25 Aug 2021 11:07:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210819004305.20203-1-deepak.sharma@amd.com>
+In-Reply-To: <20210819004305.20203-1-deepak.sharma@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 Aug 2021 20:07:40 +0200
+Message-ID: <CAJZ5v0jWX=H=aZ25PzHdH05bRJvtYbGHfyTgH_68k4kfYkZc5A@mail.gmail.com>
+Subject: Re: [PATCH] x86/ACPI/State: Optimize C3 entry on AMD CPUs
+To:     Deepak Sharma <deepak.sharma@amd.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a custom Sapphire Rapids (SPR) C-state table to intel_idle driver. The
-parameters in this table are preferred over those supplied by ACPI.
+On Thu, Aug 19, 2021 at 2:43 AM Deepak Sharma <deepak.sharma@amd.com> wrote:
+>
+> AMD CPU which support C3 shares cache. Its not necessary to flush the
+> caches in software before entering C3. This will cause performance drop
+> for the cores which share some caches. ARB_DIS is not used with current
+> AMD C state implementation. So set related flags correctly.
+>
+> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
 
-SPR supports AMX, and so this custom table uses idle entry points that know
-how to initialize AMX TMM state, if necessary.
+Applied as 5.15 material under the edited subject "x86: ACPI: cstate:
+Optimize C3 entry on AMD CPUs", thanks!
 
-This guarantees that AMX TMM state will never be the cause of hardware
-C-state demotion from C6 to C1E. Under some conditions this may result in
-improved power savings, and thus higher available turbo frequency budget.
-
-[ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
-
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
----
-Changes from v9:
-* Add a comment to use tile_release() after preempt_disable(). (Dave
-  Hansen)
-* Use cpu_feature_enabled() instead of boot_cpu_has(). (Borislav Petkov)
-* Add a Suggested-by tag.
-
-Changes from v6:
-* Update the changelog and function description. (Rafael J. Wysocki)
-
-Changes from v5:
-* Moved the code to intel_idle. (Peter Zijlstra)
-* Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
-* Updated the code comment. (Dave Hansen)
-
-Changes from v4:
-* Added as a new patch. (Thomas Gleixner)
----
- arch/x86/include/asm/special_insns.h |  6 ++
- drivers/idle/intel_idle.c            | 82 ++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+)
-
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index f3fbb84ff8a7..fada1bb82c7b 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
- 	return 0;
- }
- 
-+static inline void tile_release(void)
-+{
-+	/* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
-+	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index e6c543b5ee1d..72b72fa0e072 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -54,6 +54,8 @@
- #include <asm/intel-family.h>
- #include <asm/mwait.h>
- #include <asm/msr.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/special_insns.h>
- 
- #define INTEL_IDLE_VERSION "0.5.1"
- 
-@@ -155,6 +157,58 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
- }
- 
-+/**
-+ * idle_tile - Initialize TILE registers in INIT-state
-+ *
-+ * Leaving state in the dirty TILE registers may prevent the processor from
-+ * entering lower-power idle states. Use TILERELEASE to initialize the
-+ * state. Destroying fpregs state is safe after the fpstate update.
-+ *
-+ * WARNING: It should be called after preemption is disabled; otherwise,
-+ * reschedule is possible with the destroyed state.
-+ */
-+static inline void idle_tile(void)
-+{
-+	if (cpu_feature_enabled(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
-+		tile_release();
-+		fpregs_deactivate(&current->thread.fpu);
-+	}
-+}
-+
-+/**
-+ * intel_idle_tile - Ask the processor to enter the given idle state.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Ensure TILE registers in INIT-state before using intel_idle() to
-+ * enter the idle state.
-+ */
-+static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
-+				     struct cpuidle_driver *drv, int index)
-+{
-+	idle_tile();
-+
-+	return intel_idle(dev, drv, index);
-+}
-+
-+/**
-+ * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
-+ * enter the idle state.
-+ */
-+static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
-+					    struct cpuidle_driver *drv, int index)
-+{
-+	idle_tile();
-+
-+	return intel_idle_s2idle(dev, drv, index);
-+}
-+
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -752,6 +806,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
-+static struct cpuidle_state spr_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00),
-+		.exit_latency = 1,
-+		.target_residency = 1,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 128,
-+		.target_residency = 384,
-+		.enter = &intel_idle_tile,
-+		.enter_s2idle = intel_idle_s2idle_tile, },
-+	{
-+		.enter = NULL }
-+};
-+
- static struct cpuidle_state atom_cstates[] __initdata = {
- 	{
- 		.name = "C1E",
-@@ -1095,6 +1170,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_spr __initconst = {
-+	.state_table = spr_cstates,
-+	.disable_promotion_to_c1e = true,
-+	.use_acpi = true,
-+};
-+
- static const struct idle_cpu idle_cpu_avn __initconst = {
- 	.state_table = avn_cstates,
- 	.disable_promotion_to_c1e = true,
-@@ -1157,6 +1238,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
--- 
-2.17.1
-
+> ---
+>  arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7de599eba7f0..62a5986d625a 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+>                  */
+>                 flags->bm_control = 0;
+>         }
+> +       if (c->x86_vendor == X86_VENDOR_AMD) {
+> +               /*
+> +                * For all AMD CPUs that support C3, caches should not be
+> +                * flushed by software while entering C3 type state. Set
+> +                * bm->check to 1 so that kernel doesn't need to execute
+> +                * cache flush operation.
+> +                */
+> +               flags->bm_check = 1;
+> +               /*
+> +                * In current AMD C state implementation ARB_DIS is no longer
+> +                * used. So set bm_control to zero to indicate ARB_DIS is not
+> +                * required while entering C3 type state.
+> +                */
+> +               flags->bm_control = 0;
+> +       }
+>  }
+>  EXPORT_SYMBOL(acpi_processor_power_init_bm_check);
+>
+> --
+> 2.25.1
+>
