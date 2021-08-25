@@ -2,75 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6413F7C12
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 20:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773BF3F7C1A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Aug 2021 20:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242390AbhHYSOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Aug 2021 14:14:21 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:45999 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236070AbhHYSOS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 14:14:18 -0400
-Received: by mail-oi1-f177.google.com with SMTP id q39so529808oiw.12;
-        Wed, 25 Aug 2021 11:13:32 -0700 (PDT)
+        id S235631AbhHYSSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Aug 2021 14:18:25 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:40852 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234629AbhHYSSZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 14:18:25 -0400
+Received: by mail-ot1-f48.google.com with SMTP id x9-20020a056830278900b0051b8be1192fso117004otu.7;
+        Wed, 25 Aug 2021 11:17:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kkPIXF51FfSkJbx5Q2Ca1hyHpTm5BestCxPXQa4Te4M=;
-        b=RkdLqHFl4h0iuWfqsvrGLkN8IAXRXyokR5aZPbge3EsbcfOz0VifI3zeS0M7hAsZkP
-         7aOmr4GXebCK24qv1XP4pRQ264ixhI6HTMAMAigkg4mm8266OfbXE6Fdf3n2oxF6VlLD
-         0W4ImjkD9AVmNWAkM15AIG+76i5NUxGCgxtX1kxJSY5sjZ8VThfv4bZ3diV96L83GdId
-         nVI0VRdYZFlb9VE7T/NvxQ4Ix+aCfguF0wmUwYzZS83oGdEvXLErzieC2h/x+xp1tLMq
-         xGuwcs9gBTXzBQsg5QrC5Y2L6bM5pfX17ESrMlutRUQJykrkoBBQCFHEHuZOVIPEfA8+
-         L11w==
-X-Gm-Message-State: AOAM533bvPTFwyd/OLCgkjvj7UurtFSvlUBcn65yA5Cqf9c1yJ+VsWJ8
-        jS/2ViXr3VX9p26iw/LXjczHIhDDXpzQbuTZH4tQ2PvwyU4=
-X-Google-Smtp-Source: ABdhPJw0JJO/f8hNzUzFr/J+W5HTSMsUC6XF4ENBH/5W/nMIs44Ri2EbQzG9J1UE0ofvRbkrixLOOvR+ryYRWiWYRF0=
-X-Received: by 2002:a05:6808:10ce:: with SMTP id s14mr8196055ois.157.1629915207707;
- Wed, 25 Aug 2021 11:13:27 -0700 (PDT)
+        bh=LQ0pZPWQx0ZHOI2wEp9wamWoXIMX5iP3PcetWMvFO/g=;
+        b=dfB5DmEN21Ej4e2EzE1d61MTtzQ1UzHOajh3jWqcdgZ3uXcbotd6p7Q83VZtYRavFY
+         dIWwtHAdLkscnop1FE64benYQHo5qvH4Inj1+7lDKWxklfJLaogeiLb2d0EZQzpRDTKH
+         U1rlXPP1taw15SFJlLBD0+n/jZsOB7En7g8FSL9lTfriPhV7GucTJDH739FbNh0juF9V
+         lv18ksyBZOx5pGFzmfGhEUQD/m4HHUJJR4c5NeC6BhV8ZiQ8tyyyvpvVsvKdboTDNnTs
+         8q3YXxIUX/7wDg1S45cjs9qpoMU8rGLzICuKe27RIE4TlWeaSqPlxO7pGwJYUXqUTYwk
+         Mz6Q==
+X-Gm-Message-State: AOAM5307iXD0Kf80VdOO95AnytkbKpBDClAK80mDxvGRA99Y6oL+HyY8
+        fXN4bSbNbVqJtNGOVBGtXWK+8q4DbXwtM0/isDY=
+X-Google-Smtp-Source: ABdhPJxtNO2eegtOegb2C9Yt03ivbvRBEbfYOPZ5oAJGHuLq2dvU7KBgtu/I+X63rKxNNn7CmbZNRKid1WgYS3JRqPI=
+X-Received: by 2002:a9d:a57:: with SMTP id 81mr24725554otg.260.1629915458885;
+ Wed, 25 Aug 2021 11:17:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210820115233.5297-1-sumeet.r.pawnikar@intel.com>
-In-Reply-To: <20210820115233.5297-1-sumeet.r.pawnikar@intel.com>
+References: <20210823202412.25716-1-digetx@gmail.com> <CAPDyKFpsEMmuF4XzUX=ko4H3iBSu_77_+vozETg9njC94x8goA@mail.gmail.com>
+In-Reply-To: <CAPDyKFpsEMmuF4XzUX=ko4H3iBSu_77_+vozETg9njC94x8goA@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Aug 2021 20:13:16 +0200
-Message-ID: <CAJZ5v0jVWKOnzcsGkpEv84=EN4R+fgBg4B=28DyV_n7+hNUXcw@mail.gmail.com>
-Subject: Re: [PATCH] powercap: Add Power Limit4 support for Alder Lake SoC
-To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 25 Aug 2021 20:17:27 +0200
+Message-ID: <CAJZ5v0hox4Y7pQARTTjMkj5TdDkcuKkyeB3=YR3YFnAcGMUJeA@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: domains: Improve runtime PM performance state handling
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 1:51 PM Sumeet Pawnikar
-<sumeet.r.pawnikar@intel.com> wrote:
+On Tue, Aug 24, 2021 at 9:51 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Add Power Limit4 support for Alder Lake SoC.
+> On Mon, 23 Aug 2021 at 22:25, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >
+> > GENPD core doesn't support handling performance state changes while
+> > consumer device is runtime-suspended or when runtime PM is disabled.
+> > GENPD core may override performance state that was configured by device
+> > driver while RPM of the device was disabled or device was RPM-suspended.
+> > Let's close that gap by allowing drivers to control performance state
+> > while RPM of a consumer device is disabled and to set up performance
+> > state of RPM-suspended device that will be applied by GENPD core on
+> > RPM-resume of the device.
+> >
+> > Fixes: 5937c3ce2122 ("PM: domains: Drop/restore performance state votes for devices at runtime PM")
+> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 >
-> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> Acked-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/powercap/intel_rapl_msr.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 >
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-> index cc3b22881bfe..1be45f36ab6c 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -138,6 +138,8 @@ static int rapl_msr_write_raw(int cpu, struct reg_action *ra)
->  /* List of verified CPUs. */
->  static const struct x86_cpu_id pl4_support_ids[] = {
->         { X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
-> +       { X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
-> +       { X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
->         {}
->  };
->
-> --
+> Rafael, if not too late, can you please queue this as a fix for v5.14?
+> I haven't heard about any regression, but the error is there.
 
-Applied as 5.15 material, thankis!
+Done, thanks!
+
+
+> > ---
+> >  drivers/base/power/domain.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index e1c8994ae225..3a13a942d012 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -435,7 +435,7 @@ static void genpd_restore_performance_state(struct device *dev,
+> >  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+> >  {
+> >         struct generic_pm_domain *genpd;
+> > -       int ret;
+> > +       int ret = 0;
+> >
+> >         genpd = dev_to_genpd_safe(dev);
+> >         if (!genpd)
+> > @@ -446,7 +446,13 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+> >                 return -EINVAL;
+> >
+> >         genpd_lock(genpd);
+> > -       ret = genpd_set_performance_state(dev, state);
+> > +       if (pm_runtime_suspended(dev)) {
+> > +               dev_gpd_data(dev)->rpm_pstate = state;
+> > +       } else {
+> > +               ret = genpd_set_performance_state(dev, state);
+> > +               if (!ret)
+> > +                       dev_gpd_data(dev)->rpm_pstate = 0;
+> > +       }
+> >         genpd_unlock(genpd);
+> >
+> >         return ret;
+> > --
+> > 2.32.0
+> >
