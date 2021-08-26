@@ -2,130 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 278513F80C4
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 04:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DBA3F83C8
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 10:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238048AbhHZC4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Aug 2021 22:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237527AbhHZC4m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 22:56:42 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD31BC0613C1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c4so868382plh.7
-        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XZJy3B7m2q1WQYxMFNJqVt+qoddOU66BMzkNgwutOWg=;
-        b=BqMyQF/pRrF5xvz5gMLvg1PjbQE0frktW1h8fThSOxAyiiCfj3dL0xTey26htEbkAU
-         qVk4YC/4pxXxGHnr1GTo9bAoMJ4eX1tti5O7V1wnRrIafIwyVqmUZ2m6I0wxB2W1enrU
-         HYOhVAex2Ke6zlvt61UNmgKkPh0dFb29lz983ZdH0aQ73RTHtAt7M1/VCP+x5TO9AjAI
-         IJ3QFiGrCxXaLSKuBsbiYJZ42RDh74ChanCbedOwOUd6kuh7jO/uAx7AqCUeER3jlnSQ
-         JtlHN1LIH4ywCIyB5pTCzFG5gUqpfLooaOTxS3rQYlWnLCOQf96ZEpwgb/6YUmVVCCWa
-         uEzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XZJy3B7m2q1WQYxMFNJqVt+qoddOU66BMzkNgwutOWg=;
-        b=k6FIpQ6HuyT4pcVCC3bGa2W6JJEaLpBEvlFrCSZa2t2NTD4PiEmk7OC2mM0mla0KOe
-         LwaxRt0B0D2oI109Gx1JQCiknaJsk78auB3ZvVAClVVIcvCidr7b0Ry9Bues5Db6xf5K
-         eE8oWgDxCfHsxOPIssCpDxHCyknocdPDiAT2BCqTuWOQATRkUVPLN6fCRgsA/n0vJp3X
-         SKVkgGV+cfjaNHzbAm9sldq12kyig0imZ31eeOcNv5tMjXzQ0Q05qbBm9pgrXg6E6wLn
-         xmD/xokOchP6anNTSimfKZ28w9WsMhEvIGkPfQrLpj9Fh6GBDbYwz0TGitBIh4F5/n2L
-         UGiw==
-X-Gm-Message-State: AOAM531+CVXIjnRQ64ZIITSfoxNQriCXGQQQNaosaic0VXfyE8XPqRlt
-        BSeox6vEZT0rYOLa5ftF2DLXMA==
-X-Google-Smtp-Source: ABdhPJxp/UrPyXCwFMVDb4P8xsIyAd9gtXZ72kFLG9qw2YDutl/4rgLBxJGBT6WkpyrCaGfD2F0KiA==
-X-Received: by 2002:a17:90b:3144:: with SMTP id ip4mr14265346pjb.22.1629946555282;
-        Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 22sm1308517pgn.88.2021.08.25.19.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 19:55:54 -0700 (PDT)
-Date:   Thu, 26 Aug 2021 08:25:50 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210826025550.sshd7xl3gsuendoi@vireshk-i7>
-References: <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
- <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
- <b887de8c-a40b-a62e-8abf-698e67cdb70c@gmail.com>
- <ed70e422-e0e9-8c2a-7ce6-e39cb6fd8108@gmail.com>
- <20210826025427.exdinwkuavyfcp3f@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210826025427.exdinwkuavyfcp3f@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S240315AbhHZIhI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Aug 2021 04:37:08 -0400
+Received: from foss.arm.com ([217.140.110.172]:41500 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240351AbhHZIhH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Aug 2021 04:37:07 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1CD1D6E;
+        Thu, 26 Aug 2021 01:36:17 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5BE563F5A1;
+        Thu, 26 Aug 2021 01:36:16 -0700 (PDT)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com
+Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v5 0/8] inefficient OPPs
+Date:   Thu, 26 Aug 2021 09:35:36 +0100
+Message-Id: <1629966944-439570-1-git-send-email-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-08-21, 08:24, Viresh Kumar wrote:
-> On 25-08-21, 18:41, Dmitry Osipenko wrote:
-> > Thinking a bit more about this, I got a nicer variant which actually works in all cases for Tegra.
-> > 
-> > Viresh / Ulf, what do you think about this:
-> 
-> This is what I have been suggesting from day 1 :)
-> 
-> https://lore.kernel.org/linux-staging/20210818055849.ybfajzu75ecpdrbn@vireshk-i7/
-> 
->  "
->   And if it is all about just syncing the genpd core, then can the
->   genpd core do something like what clk framework does? i.e. allow a
->   new optional genpd callback, get_performance_state() (just like
->   set_performance_state()), which can be called initially by the core
->   to get the performance to something other than zero.
->  "
-> 
-> Looks good to me :)
+Hi all,
 
-When you refresh this stuff, please send only 3-4 patches to update
-the core stuff and show an example. Once we finalize with the
-interface, you can update all the users. Else this is just noise for
-everyone else.
+Here's the new version for the inefficient OPPs. This patch-set is based on the
+following series from Viresh:
+
+  [PATCH V3 0/9] Add callback to register with energy model
+  https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
+
+The main changes are:
+
+ 1. The EM inefficiencies reading is now done in the .register_em callback,
+    introduced by the patch-set above.
+
+ 2. Inefficiencies will be skipped for all governors declaring
+    CPUFREQ_GOV_DYNAMIC_SWITCHING, no matter the relation.
+
+A bit of context:
+
+We (Power team in Arm) are working with an experimental kernel for the
+Google's Pixel4 to evaluate and improve the current mainline performance
+and energy consumption on a real life device with Android.
+
+The SD855 SoC found in this phone has several OPPs that are inefficient.
+I.e. despite a lower frequency, they have a greater cost. (That cost being
+fmax * OPP power / OPP freq). This issue is twofold. First of course,
+running a specific workload at an inefficient OPP is counterproductive
+since it wastes wasting energy. But also, inefficient OPPs make a
+performance domain less appealing for task placement than it really is.
+
+We evaluated the change presented here by running 30 iterations of Android
+PCMark "Work 2.0 Performance". While we did not see any statistically
+significant performance impact, this change allowed to drastically improve
+the idle time residency.
+
+
+                           |   Running   |  WFI [1]  |    Idle   |
+   ------------------------+-------------+-----------+-----------+
+   Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+   ------------------------+-------------+-----------+-----------+
+   Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+   ------------------------+-------------+-----------+-----------+
+   Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+   ------------------------+-------------+-----------+-----------+
+
+On the SD855, the inefficient OPPs are found on the little cluster. By
+removing them from the Energy Model, we make the most efficient CPUs more
+appealing for task placement, helping to reduce the running time for the
+medium and big CPUs. Increasing idle time is crucial for this platform due
+to the substantial energy cost differences among the clusters. Also,
+despite not appearing in the statistics (the idle driver used here doesn't
+report it), we can speculate that we also improve the cluster idle time.
+
+[1] WFI: Wait for interrupt.
+
+Changelog since v4:
+  - Remove CPUFREQ_RELATION_E.
+  - Skip inefficient OPPs for all governors with CPUFREQ_GOV_DYNAMIC_SWITCHING
+  - Remove CPUFREQ_READ_ENERGY_MODEL in favor of the register_em callback.
+
+Changelog since v3:
+  - New freq-table relation CPUFREQ_RELATION_E.
+  - New CPUFreq driver flag CPUFREQ_READ_ENERGY_MODEL.
+  - EM flag to skip or not inefficiencies (driven by CPUFreq).
+  - Fix infinite loop in set_freq_table_efficiencies().
+
+Changelog since v2:
+  - Add separated support for inefficiencies into CPUFreq.
+  - Collect Reviewed-by for the first patch.
+
+Changelog since v1:
+  - Remove the Look-up table as the numbers weren't strong enough to
+
+Vincent Donnefort (8):
+  PM / EM: Fix inefficient states detection
+  PM / EM: Mark inefficient states
+  PM / EM: Extend em_perf_domain with a flag field
+  PM / EM: Allow skipping inefficient states
+  cpufreq: Add an interface to mark inefficient frequencies
+  cpufreq: Skip inefficient frequencies
+  cpufreq: Read inefficiencies from EM
+  cpufreq: scmi: Read inefficiencies from EM
+
+ drivers/cpufreq/cpufreq.c      | 13 ++++++
+ drivers/cpufreq/freq_table.c   | 46 +++++++++++++++++++++
+ drivers/cpufreq/scmi-cpufreq.c |  7 ++--
+ include/linux/cpufreq.h        | 90 +++++++++++++++++++++++++++++++++++++++---
+ include/linux/energy_model.h   | 68 ++++++++++++++++++++++++++-----
+ kernel/power/energy_model.c    | 46 ++++++++++++---------
+ 6 files changed, 234 insertions(+), 36 deletions(-)
 
 -- 
-viresh
+2.7.4
+
