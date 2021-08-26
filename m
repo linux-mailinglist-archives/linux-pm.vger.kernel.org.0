@@ -2,125 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DBA3F83C8
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 10:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70393F83C5
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbhHZIhI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S232957AbhHZIhI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 26 Aug 2021 04:37:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:41500 "EHLO foss.arm.com"
+Received: from foss.arm.com ([217.140.110.172]:41512 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240351AbhHZIhH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S240498AbhHZIhH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 26 Aug 2021 04:37:07 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1CD1D6E;
-        Thu, 26 Aug 2021 01:36:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA732101E;
+        Thu, 26 Aug 2021 01:36:19 -0700 (PDT)
 Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5BE563F5A1;
-        Thu, 26 Aug 2021 01:36:16 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 364AA3F5A1;
+        Thu, 26 Aug 2021 01:36:18 -0700 (PDT)
 From:   Vincent Donnefort <vincent.donnefort@arm.com>
 To:     peterz@infradead.org, rjw@rjwysocki.net, viresh.kumar@linaro.org,
         vincent.guittot@linaro.org, qperret@google.com
 Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
         lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org,
         Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v5 0/8] inefficient OPPs
-Date:   Thu, 26 Aug 2021 09:35:36 +0100
-Message-Id: <1629966944-439570-1-git-send-email-vincent.donnefort@arm.com>
+Subject: [PATCH v5 1/8] PM / EM: Fix inefficient states detection
+Date:   Thu, 26 Aug 2021 09:35:37 +0100
+Message-Id: <1629966944-439570-2-git-send-email-vincent.donnefort@arm.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1629966944-439570-1-git-send-email-vincent.donnefort@arm.com>
+References: <1629966944-439570-1-git-send-email-vincent.donnefort@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+Currently, a debug message is printed if an inefficient state is detected
+in the Energy Model. Unfortunately, it won't detect if the first state is
+inefficient or if two successive states are. Fix this behavior.
 
-Here's the new version for the inefficient OPPs. This patch-set is based on the
-following series from Viresh:
+Fixes: 27871f7a8a34 (PM: Introduce an Energy Model management framework)
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Reviewed-by: Quentin Perret <qperret@google.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
-  [PATCH V3 0/9] Add callback to register with energy model
-  https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
-
-The main changes are:
-
- 1. The EM inefficiencies reading is now done in the .register_em callback,
-    introduced by the patch-set above.
-
- 2. Inefficiencies will be skipped for all governors declaring
-    CPUFREQ_GOV_DYNAMIC_SWITCHING, no matter the relation.
-
-A bit of context:
-
-We (Power team in Arm) are working with an experimental kernel for the
-Google's Pixel4 to evaluate and improve the current mainline performance
-and energy consumption on a real life device with Android.
-
-The SD855 SoC found in this phone has several OPPs that are inefficient.
-I.e. despite a lower frequency, they have a greater cost. (That cost being
-fmax * OPP power / OPP freq). This issue is twofold. First of course,
-running a specific workload at an inefficient OPP is counterproductive
-since it wastes wasting energy. But also, inefficient OPPs make a
-performance domain less appealing for task placement than it really is.
-
-We evaluated the change presented here by running 30 iterations of Android
-PCMark "Work 2.0 Performance". While we did not see any statistically
-significant performance impact, this change allowed to drastically improve
-the idle time residency.
-
-
-                           |   Running   |  WFI [1]  |    Idle   |
-   ------------------------+-------------+-----------+-----------+
-   Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
-   ------------------------+-------------+-----------+-----------+
-   Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
-   ------------------------+-------------+-----------+-----------+
-   Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
-   ------------------------+-------------+-----------+-----------+
-
-On the SD855, the inefficient OPPs are found on the little cluster. By
-removing them from the Energy Model, we make the most efficient CPUs more
-appealing for task placement, helping to reduce the running time for the
-medium and big CPUs. Increasing idle time is crucial for this platform due
-to the substantial energy cost differences among the clusters. Also,
-despite not appearing in the statistics (the idle driver used here doesn't
-report it), we can speculate that we also improve the cluster idle time.
-
-[1] WFI: Wait for interrupt.
-
-Changelog since v4:
-  - Remove CPUFREQ_RELATION_E.
-  - Skip inefficient OPPs for all governors with CPUFREQ_GOV_DYNAMIC_SWITCHING
-  - Remove CPUFREQ_READ_ENERGY_MODEL in favor of the register_em callback.
-
-Changelog since v3:
-  - New freq-table relation CPUFREQ_RELATION_E.
-  - New CPUFreq driver flag CPUFREQ_READ_ENERGY_MODEL.
-  - EM flag to skip or not inefficiencies (driven by CPUFreq).
-  - Fix infinite loop in set_freq_table_efficiencies().
-
-Changelog since v2:
-  - Add separated support for inefficiencies into CPUFreq.
-  - Collect Reviewed-by for the first patch.
-
-Changelog since v1:
-  - Remove the Look-up table as the numbers weren't strong enough to
-
-Vincent Donnefort (8):
-  PM / EM: Fix inefficient states detection
-  PM / EM: Mark inefficient states
-  PM / EM: Extend em_perf_domain with a flag field
-  PM / EM: Allow skipping inefficient states
-  cpufreq: Add an interface to mark inefficient frequencies
-  cpufreq: Skip inefficient frequencies
-  cpufreq: Read inefficiencies from EM
-  cpufreq: scmi: Read inefficiencies from EM
-
- drivers/cpufreq/cpufreq.c      | 13 ++++++
- drivers/cpufreq/freq_table.c   | 46 +++++++++++++++++++++
- drivers/cpufreq/scmi-cpufreq.c |  7 ++--
- include/linux/cpufreq.h        | 90 +++++++++++++++++++++++++++++++++++++++---
- include/linux/energy_model.h   | 68 ++++++++++++++++++++++++++-----
- kernel/power/energy_model.c    | 46 ++++++++++++---------
- 6 files changed, 234 insertions(+), 36 deletions(-)
-
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index a332ccd829e2..97e62469a6b3 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -107,8 +107,7 @@ static void em_debug_remove_pd(struct device *dev) {}
+ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+ 				int nr_states, struct em_data_callback *cb)
+ {
+-	unsigned long opp_eff, prev_opp_eff = ULONG_MAX;
+-	unsigned long power, freq, prev_freq = 0;
++	unsigned long power, freq, prev_freq = 0, prev_cost = ULONG_MAX;
+ 	struct em_perf_state *table;
+ 	int i, ret;
+ 	u64 fmax;
+@@ -153,27 +152,21 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+ 
+ 		table[i].power = power;
+ 		table[i].frequency = prev_freq = freq;
+-
+-		/*
+-		 * The hertz/watts efficiency ratio should decrease as the
+-		 * frequency grows on sane platforms. But this isn't always
+-		 * true in practice so warn the user if a higher OPP is more
+-		 * power efficient than a lower one.
+-		 */
+-		opp_eff = freq / power;
+-		if (opp_eff >= prev_opp_eff)
+-			dev_dbg(dev, "EM: hertz/watts ratio non-monotonically decreasing: em_perf_state %d >= em_perf_state%d\n",
+-					i, i - 1);
+-		prev_opp_eff = opp_eff;
+ 	}
+ 
+ 	/* Compute the cost of each performance state. */
+ 	fmax = (u64) table[nr_states - 1].frequency;
+-	for (i = 0; i < nr_states; i++) {
++	for (i = nr_states - 1; i >= 0; i--) {
+ 		unsigned long power_res = em_scale_power(table[i].power);
+ 
+ 		table[i].cost = div64_u64(fmax * power_res,
+ 					  table[i].frequency);
++		if (table[i].cost >= prev_cost) {
++			dev_dbg(dev, "EM: OPP:%lu is inefficient\n",
++				table[i].frequency);
++		} else {
++			prev_cost = table[i].cost;
++		}
+ 	}
+ 
+ 	pd->table = table;
 -- 
 2.7.4
 
