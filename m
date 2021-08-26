@@ -2,87 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF0F3F9007
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 23:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA803F90D5
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 01:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243668AbhHZVL1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Aug 2021 17:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S243620AbhHZXFA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Aug 2021 19:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243666AbhHZVL1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 17:11:27 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77E7C0613C1
-        for <linux-pm@vger.kernel.org>; Thu, 26 Aug 2021 14:10:39 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id x10-20020a056830408a00b004f26cead745so5263987ott.10
-        for <linux-pm@vger.kernel.org>; Thu, 26 Aug 2021 14:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hmzl073ewZyYsXPdhzIxU+Fe5INAGh33z33qCWb/BBY=;
-        b=PwKcXxTQu0PLxuNxvYVR2riKux1AWdbl6f1MFR7suCWaxHWn3k0BV7zo9B+djsReZQ
-         Bh4VfvFIn2jRCV52f9eLOSSY1/ttB5sTJ5RAl0d+PNBSYOf9RNAz33NhdIQri9nNtK6Q
-         3MZiq2JDxV62ClAaZ+insEe54Fz31HseQ0CJk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hmzl073ewZyYsXPdhzIxU+Fe5INAGh33z33qCWb/BBY=;
-        b=DtwgP1QfGFaDB7RtMSjsV16p6dyuC2oTSWvnf6yBFb4y8dogNo0vWCuL2CCVWIJ7Q6
-         Qw3mPIetDT1wyj09ZEzaifGcaPvpuVz36Otipyfnaf9ekqnA9FFpmiW9syPkrKdSLr+I
-         HZvOwWJy99gD3edPELgEOXcd4MTXD3ABbm4faKwl+9A2ZPoEDmCDDG3s9cQDZpL/+JiF
-         FoO2TuYIkWt93pMpTbZaa6yCVNKjkoF7Iz76MoGOmlCETyPLUW1Xy2NUCOWVdYG2grxU
-         hYhRNJF2aiNYrRoYy2IQqCLwiqb0OwQ2YrMZJaQXSdM7VeMKQXr1UzwTTzvw54zaDTt0
-         OVlA==
-X-Gm-Message-State: AOAM531c6SclJDwYa6Kx8DxPt7lgaApWyaTaTDdNtuhLDTehku0Qmrno
-        fforoEncU0bSlFjJDkToCOh6dQ==
-X-Google-Smtp-Source: ABdhPJze7E90lW6vo39eeNprTsxNRNJ8Pl5eqsinxpwMIFglpGFTOrJ3iNCxVdwcY8s3LswDGW76iA==
-X-Received: by 2002:a9d:74c5:: with SMTP id a5mr5007877otl.205.1630012239095;
-        Thu, 26 Aug 2021 14:10:39 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id bf6sm910332oib.0.2021.08.26.14.10.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Aug 2021 14:10:38 -0700 (PDT)
-Subject: Re: [PATCH v2 2/3] selftests/cpufreq: Rename DEBUG_PI_LIST to
- DEBUG_PLIST
-To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     philip.li@intel.com, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20210826015847.7416-1-lizhijian@cn.fujitsu.com>
- <20210826015847.7416-3-lizhijian@cn.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7b10c3e6-7869-d8dd-b9b8-5e74f874cdfe@linuxfoundation.org>
-Date:   Thu, 26 Aug 2021 15:10:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S243671AbhHZXE7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 19:04:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6580C061757;
+        Thu, 26 Aug 2021 16:04:11 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1630019050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0gpa157GpPFxJE+YbjP2jHsHV1CvXem+6WSmprBT1tw=;
+        b=YxuFW6u9c7YdvOjkgChqcmtRAJAr7EMNHixFt8BU7bH/N/bJpilFUitWU7BQe6+goVcIF4
+        12uZrYGgC8boZk4MWlLLJxY8H2tpjAzRQbapFL5Rc7vvF8xbk3NqSjbKQM3eqXg1vDSuEA
+        BIfgdtW0yvFwOCFfOYsTi+0LNr1YVgE6bJBbQLTVtE9thbNVMdXRz6wnju0DcBvrenIu5m
+        yzWmQQrM8T8t3hTYMwqrI67yaNsYktynuNTHYwfRiqYBG2by2qKe/Xik14ZczawCx+48/y
+        nmYvktUcqCBQjvnn79YRsu3wRnmZuUCeAEIHMwjEMWCNalkxAAscdswg48Tr0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1630019050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0gpa157GpPFxJE+YbjP2jHsHV1CvXem+6WSmprBT1tw=;
+        b=jRiv7cHT0qRBBthC9QARpOWd/yIlzDu/QkuOQnu4r9m22gstqOmiA28e2i8F/cr95Q8oaV
+        OcopMFhMSJsEgZBA==
+To:     Deepak Sharma <deepak.sharma@amd.com>, deepak.sharma@amd.com
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/ACPI/State: Optimize C3 entry on AMD CPUs
+In-Reply-To: <20210819004305.20203-1-deepak.sharma@amd.com>
+References: <20210819004305.20203-1-deepak.sharma@amd.com>
+Date:   Fri, 27 Aug 2021 01:04:09 +0200
+Message-ID: <8735qv3j12.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20210826015847.7416-3-lizhijian@cn.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/25/21 7:58 PM, Li Zhijian wrote:
-> DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
-> 
-> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: linux-pm@vger.kernel.org
-> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+On Wed, Aug 18 2021 at 17:43, Deepak Sharma wrote:
+
+> AMD CPU which support C3 shares cache. Its not necessary to flush the
+> caches in software before entering C3. This will cause performance drop
+> for the cores which share some caches. ARB_DIS is not used with current
+> AMD C state implementation. So set related flags correctly.
+>
+> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
 > ---
+>  arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7de599eba7f0..62a5986d625a 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+>  		 */
+>  		flags->bm_control = 0;
+>  	}
+> +	if (c->x86_vendor == X86_VENDOR_AMD) {
+> +		/*
+> +		 * For all AMD CPUs that support C3, caches should not be
+> +		 * flushed by software while entering C3 type state. Set
+> +		 * bm->check to 1 so that kernel doesn't need to execute
+> +		 * cache flush operation.
+> +		 */
+> +		flags->bm_check = 1;
+> +		/*
+> +		 * In current AMD C state implementation ARB_DIS is no longer
 
-Can you please state what you arr fxing and also keep the sentences
-75 chars or less.
+Fine for current implementations, but what about older implementations?
 
-Where is LKP warning? Include the warning and explain why this
-change is necessary.
+Thanks,
 
-thanks,
--- Shuah
+        tglx
