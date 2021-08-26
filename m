@@ -2,81 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A603F8019
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 03:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15CB3F80B8
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Aug 2021 04:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237045AbhHZBzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Aug 2021 21:55:22 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:41401 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235172AbhHZBzV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 21:55:21 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aq6j6h6+fvmy5LgFRAk5uk+DkI+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
- =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
- =?us-ascii?q?=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.84,352,1620662400"; 
-   d="scan'208";a="113479374"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 26 Aug 2021 09:54:32 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 28CA24D0D9D1;
-        Thu, 26 Aug 2021 09:54:31 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 26 Aug 2021 09:54:20 +0800
-Received: from localhost.localdomain (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 26 Aug 2021 09:54:19 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <philip.li@intel.com>, <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH v2 2/3] selftests/cpufreq: Rename DEBUG_PI_LIST to DEBUG_PLIST
-Date:   Thu, 26 Aug 2021 09:58:46 +0800
-Message-ID: <20210826015847.7416-3-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210826015847.7416-1-lizhijian@cn.fujitsu.com>
-References: <20210826015847.7416-1-lizhijian@cn.fujitsu.com>
+        id S238052AbhHZCzU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Aug 2021 22:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237644AbhHZCzT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Aug 2021 22:55:19 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B31C0617AD
+        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 19:54:32 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id j4-20020a17090a734400b0018f6dd1ec97so1300499pjs.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Aug 2021 19:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zY5JqCFiL9ajwRDJE9ra9rr5h/8lLdU1bpaSqHW2cUY=;
+        b=zBbl6+vdhsHvJNmzRzPXjUjbZjS1JrIbTs8BWJQyR5yrjQ0NIdbYJbf6GP5pApFCVp
+         QwHpr9xoOjbWOHQbf9w84qKF6hnSDYRTcKs92IQ4JEXvC49dJwGf73JNm9e6WL0CaiJ3
+         5m6NOPRUdzpMEkdzaTnJgAib8c7/I1cWyzCPMW9eSlXIY9pGdD3717L7Hz3AuL6VwDK4
+         N4OzVhpVgELJBvWYnrW5vu5o6L3KYwE3MnqcLvfRQ8BGGYt0siZaxfeUknn6gUpgr0d+
+         DOZnGFD+Kfi4FkVDiCh75RoA6R1huFUJmi6KO1t34IILBc+ygQJ2sBcVh+9gAmmY5SNn
+         0pYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zY5JqCFiL9ajwRDJE9ra9rr5h/8lLdU1bpaSqHW2cUY=;
+        b=eetsXmx+IJTBdzdTOb4/qV5uLIys4KiaoA6cD6xG+VzxMlHmENlTBGwf6sVz5MrI0w
+         QrdPtEDOfTqY5fOOm7ljtp2YEtKBdUud5qMXvctiB14oEefGKtVm3HToTG31w2ORHBKr
+         sLJL0Qr65kAOIE+02mw+bQAqBpZByzj/8cgSwRsPfI+/2FRk3hTfUrzTx3KmsQZRAME+
+         pMwCTsdjwwxYB3JyAVGJchzs7iXhHIo3/EYjry2cdAEJQIewmbmGjIUUmajQ5GSYKCit
+         FptMfxOOHTSkQ4LIMHJMuRRKkguPngGPv9L+sCIPyi0ghtpDWGPjupnEUQKIRRKAVDFD
+         EeOQ==
+X-Gm-Message-State: AOAM532eKpTy0wv9dj+I5xSBJXpvLQa2H7XnjjE2VkOQXW4TS0mGiwZ2
+        zVwWSYEpaRoUnL+eq1MvPTy5Aw==
+X-Google-Smtp-Source: ABdhPJwJ9pkRHq/CTCcQjTYNpLDk2RhglIYRZ3ZolL1qTMxvdQiuO7bqSMhmqzPibKf11tEWAM5bLQ==
+X-Received: by 2002:a17:903:31d6:b0:133:9932:6998 with SMTP id v22-20020a17090331d600b0013399326998mr1459044ple.45.1629946472125;
+        Wed, 25 Aug 2021 19:54:32 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id nl9sm7142139pjb.33.2021.08.25.19.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 19:54:31 -0700 (PDT)
+Date:   Thu, 26 Aug 2021 08:24:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210826025427.exdinwkuavyfcp3f@vireshk-i7>
+References: <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
+ <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+ <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+ <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+ <b887de8c-a40b-a62e-8abf-698e67cdb70c@gmail.com>
+ <ed70e422-e0e9-8c2a-7ce6-e39cb6fd8108@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 28CA24D0D9D1.AF687
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed70e422-e0e9-8c2a-7ce6-e39cb6fd8108@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
+On 25-08-21, 18:41, Dmitry Osipenko wrote:
+> Thinking a bit more about this, I got a nicer variant which actually works in all cases for Tegra.
+> 
+> Viresh / Ulf, what do you think about this:
 
-CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC: Viresh Kumar <viresh.kumar@linaro.org>
-CC: linux-pm@vger.kernel.org
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/cpufreq/config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is what I have been suggesting from day 1 :)
 
-diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
-index 27ff72ebd0f5..75e900793e8a 100644
---- a/tools/testing/selftests/cpufreq/config
-+++ b/tools/testing/selftests/cpufreq/config
-@@ -6,7 +6,7 @@ CONFIG_CPU_FREQ_GOV_ONDEMAND=y
- CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_DEBUG_RT_MUTEXES=y
--CONFIG_DEBUG_PI_LIST=y
-+CONFIG_DEBUG_PLIST=y
- CONFIG_DEBUG_SPINLOCK=y
- CONFIG_DEBUG_MUTEXES=y
- CONFIG_DEBUG_LOCK_ALLOC=y
+https://lore.kernel.org/linux-staging/20210818055849.ybfajzu75ecpdrbn@vireshk-i7/
+
+ "
+  And if it is all about just syncing the genpd core, then can the
+  genpd core do something like what clk framework does? i.e. allow a
+  new optional genpd callback, get_performance_state() (just like
+  set_performance_state()), which can be called initially by the core
+  to get the performance to something other than zero.
+ "
+
+Looks good to me :)
+
 -- 
-2.31.1
-
-
-
+viresh
