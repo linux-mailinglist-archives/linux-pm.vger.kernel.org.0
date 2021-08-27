@@ -2,89 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E9D3F9F40
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 20:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4583FA051
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 22:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhH0Szn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Aug 2021 14:55:43 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:42823 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbhH0Szf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Aug 2021 14:55:35 -0400
-Received: by mail-oi1-f178.google.com with SMTP id bi4so7036569oib.9;
-        Fri, 27 Aug 2021 11:54:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=cJzqcTZF3D93KOJy22n9/xJntgyLy5n8Pb1qlIMUGEg=;
-        b=gY0BX+dlZ6V58tc3RBVbINAzzD7vUwqviW4tabZY6aac04CWM/fAxFP5d+MkhThiWA
-         BHRKhLo3TzJherKZp46a+YVrfm1Y4/TdY9VlOle1nDzb5Q2y1GR/vZCy2ValpP+cd1F0
-         SWNLMYwnFnPyKzfmDIo11IAdpfrIknGyuD9g975wVSa1T/LIhcGsRW4SCNd4juGIOC50
-         aaNShi97CdVsjXeWrthqPv8jal3li1o6e8lomuYAS+1iW/X7vgZ1mbRy7bwxy2g/aHD8
-         g1JrhM937Qy/NJHTJEE6koDwu0xVWREtN0h5IrXyQrzSv5bl12LsdaP6YXrBnwxnNIkI
-         I5/A==
-X-Gm-Message-State: AOAM5311osQQ6HRc0pbqbyPbQC0RoU5/v82xgV4ZBGZoafq/FpzLyyuI
-        TXEdEHrvPoqoijMxfU9FB1pM4qNo80G7p+e9XeKcPuV9shsf6w==
-X-Google-Smtp-Source: ABdhPJxCY26tIzZyHh6NA+Ujsafc5l9vBPJ5GdiG0OjrVDECYs5PXBPvl7BIXPD7ERw5j1nFtZj//RUhlZzx07GlNlE=
-X-Received: by 2002:a05:6808:10ce:: with SMTP id s14mr16583165ois.157.1630090481187;
- Fri, 27 Aug 2021 11:54:41 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 27 Aug 2021 20:54:30 +0200
-Message-ID: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.14-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        id S231395AbhH0UL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Aug 2021 16:11:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37836 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231391AbhH0UL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 27 Aug 2021 16:11:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 02C6E608FB;
+        Fri, 27 Aug 2021 20:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630095067;
+        bh=MCNCRWO8Iyar+jWlhrg/7lCu19XJQtakFIJroKILm64=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kcqGe3+sMNxjcOa26F/RsXa6e5LGAaWMrWK/WDrIUInzy49b5Dnufc4gtfoXWZwqA
+         ixu9kDNzjZiLOvvyQk/Q4xPDhlVr/eZZtKafFoXoTZ56bCn+unVT2xsC13hx9GoLOn
+         FG8bZ1vfZb2evXItjrqnS6ekP13qyPd24ljUzqbnvamjNyIr0M4PaIUWXUUKkc2dwh
+         JivfvINKwV8RF48drs2CFrFCejPAQH4HK1gh55qBTQnpg+/jg3qLMIMYrhodnltfu9
+         PAjR+si78bTk2vvYWrFC2s69BL68sm86HsAuHrtoQ5IIU668PaqqIbHvN+MMYETjlB
+         nEpZz4cjenbLg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EFF8C609D2;
+        Fri, 27 Aug 2021 20:11:06 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v5.14-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
+References: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc8
+X-PR-Tracked-Commit-Id: 7ee5fd12e8cac91bdec6de8417b030ed05d5d7ee
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c0006dc6957ef0b5d3e785556f30f928af05ab0c
+Message-Id: <163009506697.27622.4711267495705264241.pr-tracker-bot@kernel.org>
+Date:   Fri, 27 Aug 2021 20:11:06 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri, 27 Aug 2021 20:54:30 +0200:
 
-Please pull from the tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc8
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.14-rc8
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c0006dc6957ef0b5d3e785556f30f928af05ab0c
 
-with top-most commit 7ee5fd12e8cac91bdec6de8417b030ed05d5d7ee
+Thank you!
 
- Merge branch 'pm-opp'
-
-on top of commit e22ce8eb631bdc47a4a4ea7ecf4e4ba499db4f93
-
- Linux 5.14-rc7
-
-to receive power management fixes for 5.14-rc8 (or final 5.14).
-
-These fix two issues introduced during this cycle, one of which
-is a regression and the other one affects new code.
-
-Specifics:
-
- - Prevent the operating performance points (OPP) code from crashing
-   when some entries in the table of required OPPs are set to error
-   pointer values (Marijn Suijten).
-
- - Prevent the generic power domains (genpd) framework from
-   incorrectly overriding the performance state of a device set
-   by its driver while it is runtime-suspended or when runtime
-   PM of it is disabled (Dmitry Osipenko).
-
-Thanks!
-
-
----------------
-
-Dmitry Osipenko (1):
-      PM: domains: Improve runtime PM performance state handling
-
-Marijn Suijten (1):
-      opp: core: Check for pending links before reading required_opp pointers
-
----------------
-
- drivers/base/power/domain.c | 10 ++++++++--
- drivers/opp/core.c          |  8 ++++----
- 2 files changed, 12 insertions(+), 6 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
