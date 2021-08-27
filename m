@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC653F9203
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 03:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DF73F9206
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 03:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244006AbhH0Bit (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Aug 2021 21:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S244018AbhH0Biu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Aug 2021 21:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243988AbhH0Bir (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 21:38:47 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC029C061757;
-        Thu, 26 Aug 2021 18:37:58 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so10921953lfg.9;
-        Thu, 26 Aug 2021 18:37:58 -0700 (PDT)
+        with ESMTP id S243992AbhH0Bis (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 21:38:48 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924E7C061757;
+        Thu, 26 Aug 2021 18:37:59 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id d16so8593424ljq.4;
+        Thu, 26 Aug 2021 18:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CXaK/5nv+UW78r8SKxW/ix4L99XrgI4rfiEmtKQrQYc=;
-        b=WC5cOLrjFcCPvHIv6Rwms6Y0kwCm01/4ksbMHYGDIaPkMsMJljZQcvP1/ebYJWmmXf
-         xZDLvLrBpaHi1dAp9gkPTVoNL4CgD0wJMJRZhoZ7K82bQxmdzrHlKmCg6W5wfqVjPCZQ
-         N+IxerMT0zVArwDfblk7TAVSOlJJhXx3VeQi46AkH3MfeBe8Pk+x9hJXqV6Q4IfhVqZh
-         9MRIFmw/YjkSBNoouXW1SQIJabIpa6MWAVIIodj5xRsAiVY+AQwYvXJ267teR3T4sX5i
-         sDFPl985HszyszqhQXHkotQbKAYuyao+UHHGiF2t+ABHZqGywQE/HevM8cMM2PoPwP38
-         u/dw==
+        bh=uC5mTv9GIr5hy4zC/Rc4VuhD4bWEaK9tTCVTW2lWVlg=;
+        b=Vf3I9vqGSbQeOavUBCE9oNbJSVO42DxQgR3wjLIddVO97SP+juRUX+SnJlE8j+tyjY
+         jpSmJphVi+hIkRDDFZd3MAvRPw7xOCFZpfrTXz1TeywftL7e8IpFGekFcqIySQpnuh05
+         4TyPWYP+u35Cm83CwTRyAwk7RGaHqF3LG0aARY2lDFdC88SvneJ8rCfrOjIk2gGROwkR
+         ZIXiGccJfhNGIWDIFeoehJSY03F9hXSRhHyb8j9WVJ8C3wI5OQ6pJCzB3LYTIZc2bPQy
+         ovyLnNcZIaOYbHaqc6ZtGfYqjUkg6oRNF5vuKUHt/TatZhBrBaZZr7HgWnRt/XLuq2mB
+         +CWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CXaK/5nv+UW78r8SKxW/ix4L99XrgI4rfiEmtKQrQYc=;
-        b=EkPp0K1cKulxI3nnGoNDdkzs0GUhdRvFzW0KlKCEG/EWX/JIZYVMekERkGUb8NI07y
-         YhhqY84SREBTsK0n78m1/Fi02seARAwcIrNGE7pjZYgl0vl9TiEubjnJNOmFYqUNOXdk
-         UauthTG4cIrRDiF8KYB+957cA1LSqisYwJZgjQgeezAaUZ3QUJ5kCgFb5bdxIvtEDIYQ
-         XGfi49LXESMOjsLbQiYxZ1SaKfR1RWG6qnH8oIITOwlf5nDclLfj31HwpQz8XwCPGuNt
-         JZ7F7YDGOK+q7C1Bg5WzbtZZuMv2VEZ8mhFQnSM0uT71MIhBiguXhUJwsJ4wcV6stE9G
-         mZjg==
-X-Gm-Message-State: AOAM531LVwlGyR85SkAsF2MtkIOyynnFMIe3+XD6wy+t0m48As6Mwr07
-        STGptQdtZWZ5yj7msBQpoBs=
-X-Google-Smtp-Source: ABdhPJzSi5yPgYUpKQNd9GxZw+0qvkRCn+wNHynWiX4ttlnKYx2sgZQXDNe8Cflg61i0ZoXRBKMB+w==
-X-Received: by 2002:a19:ee15:: with SMTP id g21mr4824580lfb.182.1630028277350;
-        Thu, 26 Aug 2021 18:37:57 -0700 (PDT)
+        bh=uC5mTv9GIr5hy4zC/Rc4VuhD4bWEaK9tTCVTW2lWVlg=;
+        b=Ww5KrV5yLu8+N4QIhR2TJOxdMTXTUDmmQfD/+G61yjPjmtIcXJ60fWG68QaN2tHu2R
+         fK80zsqqE1d9muVFNyrol9Y37+rzB13xYKAX2fRLnwtuP9g2NexwmbP/9fvym0OkVCc4
+         0KHuUtOH0UuhhrMeEG5MVTgoIij7lDQLEU/eTQZ8rrDCdAXWAB3vjAxHXd4MG8+o8mRW
+         6wxSKcMUW8O4JEN89R0l2q2pv2Pd9pjC9gdH0uLt59f9rjwhFjIefI0YxyHkN4Au2amF
+         YbpV3KB/FoyRyuuFdkFJfNvVHHbGlPX3PLUg8A776qZVfl1nsJ8Bvo2Fsau10ev5S+7y
+         SoPQ==
+X-Gm-Message-State: AOAM531/Ry9gVjog2H5uhFa+XEoMupwJeBxy1TusITPRQPFx08V9+jv3
+        6Dz1WzuXLMJCl8KjFIG5ju7hJaSILVk=
+X-Google-Smtp-Source: ABdhPJzDhcr8vCeBSL2PK7U5FqCdcyjRRWnUS+4kq+QJO4rfztt0W9Oj5wPDnQ/7BmlueaXkV87G/Q==
+X-Received: by 2002:a2e:b52c:: with SMTP id z12mr5524273ljm.271.1630028278002;
+        Thu, 26 Aug 2021 18:37:58 -0700 (PDT)
 Received: from localhost.localdomain (94-29-17-251.dynamic.spd-mgts.ru. [94.29.17.251])
-        by smtp.gmail.com with ESMTPSA id y3sm494289lfa.240.2021.08.26.18.37.56
+        by smtp.gmail.com with ESMTPSA id y3sm494289lfa.240.2021.08.26.18.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 18:37:56 -0700 (PDT)
+        Thu, 26 Aug 2021 18:37:57 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,9 +57,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
 Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v9 4/8] PM: domains: Add get_performance_state() callback
-Date:   Fri, 27 Aug 2021 04:34:11 +0300
-Message-Id: <20210827013415.24027-5-digetx@gmail.com>
+Subject: [PATCH v9 5/8] soc/tegra: pmc: Implement get_performance_state() callback
+Date:   Fri, 27 Aug 2021 04:34:12 +0300
+Message-Id: <20210827013415.24027-6-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210827013415.24027-1-digetx@gmail.com>
 References: <20210827013415.24027-1-digetx@gmail.com>
@@ -69,78 +69,126 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add get_performance_state() callback that retrieves and initializes
-performance state of a device attached to a power domain. This removes
-inconsistency of the performance state with hardware state.
+Implement get_performance_state() callback of power domains to
+initialize theirs performance state in accordance to the clock
+rate of attached device.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/base/power/domain.c | 32 +++++++++++++++++++++++++++++---
- include/linux/pm_domain.h   |  2 ++
- 2 files changed, 31 insertions(+), 3 deletions(-)
+ drivers/soc/tegra/pmc.c | 86 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3a13a942d012..8b828dcdf7f8 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2700,15 +2700,41 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 		goto err;
- 	} else if (pstate > 0) {
- 		ret = dev_pm_genpd_set_performance_state(dev, pstate);
--		if (ret)
-+		if (ret) {
-+			dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
-+				pd->name, ret);
- 			goto err;
-+		}
- 		dev_gpd_data(dev)->default_pstate = pstate;
- 	}
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 50091c4ec948..ea552f7ed922 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -505,6 +505,90 @@ static void tegra_pmc_scratch_writel(struct tegra_pmc *pmc, u32 value,
+ 		writel(value, pmc->scratch + offset);
+ }
+ 
++static const char * const tegra_pd_no_perf_compats[] = {
++	"nvidia,tegra20-sclk",
++	"nvidia,tegra30-sclk",
++	"nvidia,tegra30-pllc",
++	"nvidia,tegra30-plle",
++	"nvidia,tegra30-pllm",
++	"nvidia,tegra20-dc",
++	"nvidia,tegra30-dc",
++	"nvidia,tegra20-emc",
++	"nvidia,tegra30-emc",
++	NULL,
++};
 +
-+	if (pd->get_performance_state && !dev_gpd_data(dev)->default_pstate) {
-+		bool dev_suspended = false;
++static int tegra_pmc_pd_get_performance_state(struct generic_pm_domain *genpd,
++					      struct device *dev,
++					      bool *dev_suspended)
++{
++	struct opp_table *hw_opp_table, *clk_opp_table;
++	struct dev_pm_opp *opp;
++	u32 hw_version;
++	int ret;
 +
-+		ret = pd->get_performance_state(pd, base_dev, &dev_suspended);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to get performance state for power-domain %s: %d\n",
-+				pd->name, ret);
-+			goto err;
-+		}
++	/*
++	 * The EMC devices are a special case because we have a protection
++	 * from non-EMC drivers getting clock handle before EMC driver is
++	 * fully initialized.  The goal of the protection is to prevent
++	 * devfreq driver from getting failures if it will try to change
++	 * EMC clock rate until clock is fully initialized.  The EMC drivers
++	 * will initialize the performance state by themselves.
++	 *
++	 * Display controller also is a special case because only controller
++	 * driver could get the clock rate based on configuration of internal
++	 * divider.
++	 *
++	 * Clock driver uses its own state syncing.
++	 */
++	if (of_device_compatible_match(dev->of_node, tegra_pd_no_perf_compats))
++		return 0;
 +
-+		pstate = ret;
++	if (of_machine_is_compatible("nvidia,tegra20"))
++		hw_version = BIT(tegra_sku_info.soc_process_id);
++	else
++		hw_version = BIT(tegra_sku_info.soc_speedo_id);
 +
-+		if (dev_suspended) {
-+			dev_gpd_data(dev)->rpm_pstate = pstate;
-+		} else if (pstate > 0) {
-+			ret = dev_pm_genpd_set_performance_state(dev, pstate);
-+			if (ret) {
-+				dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
-+					pd->name, ret);
-+				goto err;
-+			}
-+		}
++	hw_opp_table = dev_pm_opp_set_supported_hw(dev, &hw_version, 1);
++	if (IS_ERR(hw_opp_table)) {
++		dev_err(dev, "failed to set OPP supported HW: %pe\n",
++			hw_opp_table);
++		return PTR_ERR(hw_opp_table);
 +	}
 +
- 	return 1;
++	clk_opp_table = dev_pm_opp_set_clkname(dev, NULL);
++	if (IS_ERR(clk_opp_table)) {
++		dev_err(dev, "failed to set OPP clk: %pe\n", clk_opp_table);
++		ret = PTR_ERR(clk_opp_table);
++		goto put_hw;
++	}
++
++	ret = devm_pm_opp_of_add_table(dev);
++	if (ret) {
++		dev_err(dev, "failed to add OPP table: %d\n", ret);
++		goto put_clk;
++	}
++
++	opp = dev_pm_opp_from_clk_rate(dev);
++	if (IS_ERR(opp)) {
++		dev_err(dev, "failed to get current OPP: %pe\n", opp);
++		ret = PTR_ERR(opp);
++	} else {
++		ret = dev_pm_opp_get_required_pstate(opp, 0);
++		dev_pm_opp_put(opp);
++	}
++
++	*dev_suspended = true;
++
++	dev_pm_opp_of_remove_table(dev);
++put_clk:
++	dev_pm_opp_put_clkname(clk_opp_table);
++put_hw:
++	dev_pm_opp_put_supported_hw(hw_opp_table);
++
++	return ret;
++}
++
+ /*
+  * TODO Figure out a way to call this with the struct tegra_pmc * passed in.
+  * This currently doesn't work because readx_poll_timeout() can only operate
+@@ -1237,6 +1321,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
  
- err:
--	dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
--		pd->name, ret);
- 	genpd_remove_device(pd, dev);
- 	return ret;
- }
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 67017c9390c8..4f78b31791ae 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -133,6 +133,8 @@ struct generic_pm_domain {
- 						 struct dev_pm_opp *opp);
- 	int (*set_performance_state)(struct generic_pm_domain *genpd,
- 				     unsigned int state);
-+	int (*get_performance_state)(struct generic_pm_domain *genpd,
-+				     struct device *dev, bool *dev_suspended);
- 	struct gpd_dev_ops dev_ops;
- 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
- 	ktime_t next_wakeup;	/* Maintained by the domain governor */
+ 	pg->id = id;
+ 	pg->genpd.name = np->name;
++	pg->genpd.get_performance_state = tegra_pmc_pd_get_performance_state;
+ 	pg->genpd.power_off = tegra_genpd_power_off;
+ 	pg->genpd.power_on = tegra_genpd_power_on;
+ 	pg->pmc = pmc;
+@@ -1353,6 +1438,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ 		return -ENOMEM;
+ 
+ 	genpd->name = np->name;
++	genpd->get_performance_state = tegra_pmc_pd_get_performance_state;
+ 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+ 	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
+ 
 -- 
 2.32.0
 
