@@ -2,118 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6422D3F9375
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 06:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B153F9599
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 09:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbhH0EQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Aug 2021 00:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S244555AbhH0Hy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Aug 2021 03:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbhH0EQ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Aug 2021 00:16:29 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B649C061757;
-        Thu, 26 Aug 2021 21:15:41 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id q21so9112824ljj.6;
-        Thu, 26 Aug 2021 21:15:41 -0700 (PDT)
+        with ESMTP id S244550AbhH0Hy2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Aug 2021 03:54:28 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C47C061757
+        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 00:53:39 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id c8so23078lfi.3
+        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 00:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SyhHgV5tmGCX9EPESfwHvVUgx4qCN8VC/mRNtowNnh0=;
-        b=pIrUozoO0pV0T3BaVPB2WheUxq08WOaRZJQ53dtVSvbYm0X9gwbq1E1Z+WKCp/oGOv
-         U/AwQNtbGgmPJPjt5EVt5LunpTMAnX8t41nM7Bl8x91YtiuZiPRBglcTDUG6LO+PHr5z
-         s61MS5czakRQ3pwVFz8W9r9xHRcgT05YVixj4Z7iHaVWkbBZFM+cdBbfbTu9gJYUnc43
-         GcLGxhVu556rPFQ8YwTYgsBlMjGusIrVKVgxSU7USTLFGOeHR0J06BPhE+qnzzM5iAKH
-         EVCVJJDxkKjQVyOeXUP2OWTi0be/dxuh3txGmrKtBKFn1vruEKXpwNVviqKfJni2TwuK
-         emmw==
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FnvhmoF5/z5/Vlkplzor1LntS+hajMMuv6rFjI/7vFw=;
+        b=NRx5Wx6kgOUXMrIJ2SbxoHAdocMAaMe+q3x/PbhlpQ753+LbpjsX4my4xo/BNlbDWM
+         X+RX+7MeLQZub1WWy3wOwIfyUBCpAbZQvpuhdBUXN9pXxAykoArZndCZm9D8+pWmD6/n
+         Os+oiJRMwJNY5v2GRnZBb2+hfMehbUV4ZKEfzyixmfth71yaofaAu6svKhWW16AMrfvD
+         530Yg3AkQgpDOGcMdnwMnM1bH4VI87O8WaubWNe0QIZk4pJXXPsEVIF4IyK3PjMH3WeP
+         DnthtUJdG/UqBsUTvv6IXRM+UMCy/BpuDqpRpmUddAvf9xzf2KLmfOjj+iR3Pu86IljA
+         HebA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SyhHgV5tmGCX9EPESfwHvVUgx4qCN8VC/mRNtowNnh0=;
-        b=V/WlBr3Dh09rFuRx1Yl19q7Bj53DXjqV6fntpqce1x+WittJiPraHmpRrdCBp3tcKm
-         tbUnsI602PbaJe5kYQz9XapuIrVb7BrUAH7LO7FTqZrzbF4TeFzlOygzd1JfM95VaLZN
-         snmVyY0Q/fSlC4XzaLdlPstQeUeN4UgD0c/R/1rHiflvOp8N+KIwmPExRMYEkMy1WhdC
-         sdhPSOf6sh7mBSWNTPwJTHXkfqayRTzgNeoVU/CLNJTwoKl8eFNreldyUFiqUi9zE04+
-         njD4GPtdVeZx+M+u7gxPbKqihSFG8UTu7gmmOJ5w95lTgsfpD3tGvyIqTO+DdWHaCVN4
-         cHpg==
-X-Gm-Message-State: AOAM532BGqwYNXVKt93Y3PM9hheUv707WK17zb3mh16Z1NsMJtKPoHVm
-        4F8c+HBb5sSTbgptDHahLwKwDsJnRc4=
-X-Google-Smtp-Source: ABdhPJzMmDjs3tgVeVB3w/NSRqThcAnkcJFyzHyj0wG0hDpRHoJzdUGE1zuNyE5jqInZtxz/cISkTw==
-X-Received: by 2002:a2e:8185:: with SMTP id e5mr6054691ljg.31.1630037739601;
-        Thu, 26 Aug 2021 21:15:39 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-17-251.dynamic.spd-mgts.ru. [94.29.17.251])
-        by smtp.googlemail.com with ESMTPSA id l26sm477488lfh.247.2021.08.26.21.15.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Aug 2021 21:15:39 -0700 (PDT)
-Subject: Re: [PATCH v9 5/8] soc/tegra: pmc: Implement get_performance_state()
- callback
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FnvhmoF5/z5/Vlkplzor1LntS+hajMMuv6rFjI/7vFw=;
+        b=FUdmmeSeePeFkYgDVqOp/6Q8RLXiKngntlzpnrghvOxdrWumzpuXHg5DKO91xE3PHm
+         TJHJ56+tLaFmi4jc09qjnwN56liwUbBTedn+dcgkcri7b9TFreCsvIx++oW6LqlMjKji
+         5f59YarmufjUdQ7A7Lx9geeNBmLiXv3Ams8QSGNDVzlIwAbajShuP606DN+F85HOfWYC
+         Zvpmlv02FC0JPSuj4R/QdzaF1ICEeWalQRDiUHykKyH30PCgyDvVEs2vi9IzcaR+ZtpW
+         CVse/QcURSK0/PRyR54SoWEFx5KzrnIG71Nz8/jjFLtE8EvVZqyk/rrifmSKgNTOAndb
+         2BBw==
+X-Gm-Message-State: AOAM531GB34Hx73bSZ+g4kRB8QJkXwil/B7VFa7UAylkm2La1zfkXFkO
+        nBTyI14WHWAWvHdmNqs9ZQfYVQ==
+X-Google-Smtp-Source: ABdhPJwZdfVkvJZoC4n948k+9nQxzZ9D3jLacRPvLtoGWBGZcLZ3Dp0V5XDuyUJdJv98SJ3r3qThog==
+X-Received: by 2002:a05:6512:3092:: with SMTP id z18mr5792558lfd.395.1630050817735;
+        Fri, 27 Aug 2021 00:53:37 -0700 (PDT)
+Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
+        by smtp.gmail.com with ESMTPSA id l13sm520144lfj.199.2021.08.27.00.53.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 00:53:37 -0700 (PDT)
+Date:   Fri, 27 Aug 2021 09:53:36 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20210827013415.24027-1-digetx@gmail.com>
- <20210827013415.24027-6-digetx@gmail.com>
- <20210827030557.aymjkky7athjxpow@vireshk-i7>
- <9c2287ca-4c51-d782-a0a5-4b1227c2e9db@gmail.com>
- <7aca6da3-89a7-a4a6-c720-8be4a105a696@gmail.com>
- <20210827040239.roal5jpndamzotle@vireshk-i7>
- <4a945d40-b30a-8a30-bdf8-4e17ad26cea7@gmail.com>
- <20210827041303.5rz6xcyc2bo75tbr@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <01117523-5793-e3ff-9d50-24f964e4e745@gmail.com>
-Date:   Fri, 27 Aug 2021 07:15:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: domains: Fix domain attach for CONFIG_PM_OPP=n
+Message-ID: <YSiaAM9AbryH+uwB@oden.dyn.berto.se>
+References: <4fb42fa1b76b38c6628f056cfd804bb5b4e74d99.1629818532.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-In-Reply-To: <20210827041303.5rz6xcyc2bo75tbr@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <4fb42fa1b76b38c6628f056cfd804bb5b4e74d99.1629818532.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.08.2021 07:13, Viresh Kumar пишет:
-> On 27-08-21, 07:08, Dmitry Osipenko wrote:
->> 27.08.2021 07:02, Viresh Kumar пишет:
->>> On 27-08-21, 06:47, Dmitry Osipenko wrote:
->>>> Actually, it doesn't work.
->>>>
->>>> The devm_tegra_core_dev_init_opp_table() needs to set clk to support older device-tree and now OPP table already has clk being set.
->>>>
->>>> WARNING: CPU: 2 PID: 92 at drivers/opp/core.c:2146 dev_pm_opp_set_clkname+0x97/0xb8
->>>> Modules linked in:
->>>> CPU: 2 PID: 92 Comm: kworker/u8:1 Tainted: G        W         5.14.0-rc7-next-20210826-00181-g6389463cbb0a #9318
->>>> Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
->>>> Workqueue: events_unbound deferred_probe_work_func
->>>> [<c010cc91>] (unwind_backtrace) from [<c0108d35>] (show_stack+0x11/0x14)
->>>> [<c0108d35>] (show_stack) from [<c0a6c1bd>] (dump_stack_lvl+0x2b/0x34)
->>>> [<c0a6c1bd>] (dump_stack_lvl) from [<c011fc47>] (__warn+0xbb/0x100)
->>>> [<c011fc47>] (__warn) from [<c0a696e3>] (warn_slowpath_fmt+0x4b/0x80)
->>>> [<c0a696e3>] (warn_slowpath_fmt) from [<c07407b3>] (dev_pm_opp_set_clkname+0x97/0xb8)
->>>> [<c07407b3>] (dev_pm_opp_set_clkname) from [<c07407e3>] (devm_pm_opp_set_clkname+0xf/0x64)
->>>> [<c07407e3>] (devm_pm_opp_set_clkname) from [<c050735b>] (devm_tegra_core_dev_init_opp_table+0x23/0x144)
->>>
->>> Why are you calling this anymore ?
->>
->> Older device-trees don't have OPPs, meanwhile drivers will use
->> dev_pm_opp_set_rate() and it requires OPP table to be set up using
->> devm_pm_opp_set_clkname().
->>
->> The devm_tegra_core_dev_init_opp_table() is a common helper that sets up
->> OPP table for Tegra drivers and it sets the clk.
-> 
-> Ahh, I see. that's okay then. Just add a comment over it to specify the same.
-> Doing devm_pm_opp_set_clkname(dev, NULL) is special and looks suspicious
-> otherwise.
+Hi Geert,
 
-I'll add comment, thanks.
+Thanks for your work.
+
+On 2021-08-24 17:23:38 +0200, Geert Uytterhoeven wrote:
+> If CONFIG_PM_OPP=n, of_get_required_opp_performance_state() always
+> returns -EOPNOTSUPP, and all drivers for devices that are part of a PM
+> Domain fail to probe with:
+> 
+>     failed to set required performance state for power-domain foo: -95
+>     probe of bar failed with error -95
+> 
+> Fix this by treating -EOPNOTSUPP the same as -ENODEV.
+> 
+> Fixes: c016baf7dc58e77a ("PM: domains: Add support for 'required-opps' to set default perf state")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Niklas S�derlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index a10d740c4f2a1c28..7b197690e6442911 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2760,7 +2760,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>  
+>  	/* Set the default performance state */
+>  	pstate = of_get_required_opp_performance_state(dev->of_node, index);
+> -	if (pstate < 0 && pstate != -ENODEV) {
+> +	if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+>  		ret = pstate;
+>  		goto err;
+>  	} else if (pstate > 0) {
+> -- 
+> 2.25.1
+> 
+
+-- 
+Regards,
+Niklas S�derlund
