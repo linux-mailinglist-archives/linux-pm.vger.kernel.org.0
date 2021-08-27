@@ -2,91 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA803F90D5
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 01:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99DE3F91F9
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 03:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243620AbhHZXFA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Aug 2021 19:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S243862AbhH0Bio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Aug 2021 21:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243671AbhHZXE7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 19:04:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6580C061757;
-        Thu, 26 Aug 2021 16:04:11 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1630019050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0gpa157GpPFxJE+YbjP2jHsHV1CvXem+6WSmprBT1tw=;
-        b=YxuFW6u9c7YdvOjkgChqcmtRAJAr7EMNHixFt8BU7bH/N/bJpilFUitWU7BQe6+goVcIF4
-        12uZrYGgC8boZk4MWlLLJxY8H2tpjAzRQbapFL5Rc7vvF8xbk3NqSjbKQM3eqXg1vDSuEA
-        BIfgdtW0yvFwOCFfOYsTi+0LNr1YVgE6bJBbQLTVtE9thbNVMdXRz6wnju0DcBvrenIu5m
-        yzWmQQrM8T8t3hTYMwqrI67yaNsYktynuNTHYwfRiqYBG2by2qKe/Xik14ZczawCx+48/y
-        nmYvktUcqCBQjvnn79YRsu3wRnmZuUCeAEIHMwjEMWCNalkxAAscdswg48Tr0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1630019050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0gpa157GpPFxJE+YbjP2jHsHV1CvXem+6WSmprBT1tw=;
-        b=jRiv7cHT0qRBBthC9QARpOWd/yIlzDu/QkuOQnu4r9m22gstqOmiA28e2i8F/cr95Q8oaV
-        OcopMFhMSJsEgZBA==
-To:     Deepak Sharma <deepak.sharma@amd.com>, deepak.sharma@amd.com
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/ACPI/State: Optimize C3 entry on AMD CPUs
-In-Reply-To: <20210819004305.20203-1-deepak.sharma@amd.com>
-References: <20210819004305.20203-1-deepak.sharma@amd.com>
-Date:   Fri, 27 Aug 2021 01:04:09 +0200
-Message-ID: <8735qv3j12.ffs@tglx>
+        with ESMTP id S231481AbhH0Bio (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Aug 2021 21:38:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36903C061757;
+        Thu, 26 Aug 2021 18:37:56 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id x27so10991607lfu.5;
+        Thu, 26 Aug 2021 18:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IUmWVwWoAUbYJXKv2uQqUajLZbxGXscHex9Izfr6lxE=;
+        b=nmWYP+2B4emQnIRAIpGYgl8CTo3uQOe6MWttJgK1JqN1Sl9p7Ru55pFrEogPMCQCY1
+         +ErDQ7UrQhphvl1jYqfNOV7jPx6nE6MGGSMfG6vf3JTOtUD4JsxqJbBpqq4H8plmLWFB
+         4rDSUVu2q4VZwhriLcJmGw+QMIB3E3NNAoHtkqqfhddlDEjADpICArF9Fc3vilMrT7/Y
+         juVuzCwA+GSqXhmIiFNYU1yGc01myVgz7uLOyJqNd8vvtJjpcbi3SudS79gCDL8ivtwS
+         hw24ncYnHLhKmTIlCkTpPfSypWZ2blZCV5PFZWVhjrWJGfUeU1zA/JROzUXCDqkEkNzF
+         2DZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IUmWVwWoAUbYJXKv2uQqUajLZbxGXscHex9Izfr6lxE=;
+        b=EDW+CyjT1LsVORP5RavUB4yl8EmCdCqYR1YPXzlDtFI/WQMiWLdesg3SVC9wpMIIhw
+         3TBcg4OwfmiNyohnljTmEH+q5HzO/d5H6h6uPK5pk1cloISyszbHiJNW7RsDwabbqIcw
+         6ETdN3/ZXA9SHHjxeOOgjMfxLwSNN0BKjN9D1U6ZUB5TgS5JMN4C06jHPy/9dnmb7+Ei
+         LfWeJqX7kZou+5zzZ3TJlhLe+bnSRyNfttWX59eIPZISDSVDPmBb1dNb+RUXEzHBShEa
+         3NwP6drKwWZtKnNgJpnbRUoGHB9sQbbuTeIm+bXYMWl+tCLAYPv6tnBEc4MLZT3tGHJp
+         zV+A==
+X-Gm-Message-State: AOAM533kwh/P5FNNfGG9+OrgVhkiOtq8BxjYss2yGMKtc0vJTruS4YyF
+        fgUHyZbop9dLvBE2Ot0nAgI=
+X-Google-Smtp-Source: ABdhPJyYXSVBc9MTcKidwSkHdYCNlqYYFWeCajI7avxHy44F7pjY++jRR+lVHnqmpB6n1aHNTegLuQ==
+X-Received: by 2002:a05:6512:752:: with SMTP id c18mr4815761lfs.346.1630028274590;
+        Thu, 26 Aug 2021 18:37:54 -0700 (PDT)
+Received: from localhost.localdomain (94-29-17-251.dynamic.spd-mgts.ru. [94.29.17.251])
+        by smtp.gmail.com with ESMTPSA id y3sm494289lfa.240.2021.08.26.18.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 18:37:54 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v9 0/8] NVIDIA Tegra power management patches for 5.16
+Date:   Fri, 27 Aug 2021 04:34:07 +0300
+Message-Id: <20210827013415.24027-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 18 2021 at 17:43, Deepak Sharma wrote:
+This is a reduced version of the patchset which adds power management
+support to NVIDIA Tegra drivers. Viresh Kumar asked to send these PD/OPP
+patches separately for now to reduce the noise and finalize the review.
 
-> AMD CPU which support C3 shares cache. Its not necessary to flush the
-> caches in software before entering C3. This will cause performance drop
-> for the cores which share some caches. ARB_DIS is not used with current
-> AMD C state implementation. So set related flags correctly.
->
-> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
-> ---
->  arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-> index 7de599eba7f0..62a5986d625a 100644
-> --- a/arch/x86/kernel/acpi/cstate.c
-> +++ b/arch/x86/kernel/acpi/cstate.c
-> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
->  		 */
->  		flags->bm_control = 0;
->  	}
-> +	if (c->x86_vendor == X86_VENDOR_AMD) {
-> +		/*
-> +		 * For all AMD CPUs that support C3, caches should not be
-> +		 * flushed by software while entering C3 type state. Set
-> +		 * bm->check to 1 so that kernel doesn't need to execute
-> +		 * cache flush operation.
-> +		 */
-> +		flags->bm_check = 1;
-> +		/*
-> +		 * In current AMD C state implementation ARB_DIS is no longer
+I implemented new get_performance_state() GENPD callback as was discussed
+in v8. GR3D driver patch shows how it's used by consumer drivers, which
+is a good example because 3d driver supports both cases of a single and
+multi-domain hardware, it also uses OPP API more extensively than other
+drivers.
 
-Fine for current implementations, but what about older implementations?
+Dmitry Osipenko (8):
+  opp: Add dev_pm_opp_from_clk_rate()
+  opp: Allow dev_pm_opp_set_clkname() to replace released clock
+  opp: Change type of dev_pm_opp_attach_genpd(names) argument
+  PM: domains: Add get_performance_state() callback
+  soc/tegra: pmc: Implement get_performance_state() callback
+  soc/tegra: Add devm_tegra_core_dev_init_opp_table_simple()
+  gpu: host1x: Add host1x_channel_stop()
+  drm/tegra: gr3d: Support generic power domain and runtime PM
 
-Thanks,
+ drivers/base/power/domain.c  |  32 ++-
+ drivers/gpu/drm/tegra/gr3d.c | 384 ++++++++++++++++++++++++++++++-----
+ drivers/gpu/host1x/channel.c |   8 +
+ drivers/opp/core.c           |  50 ++++-
+ drivers/soc/tegra/pmc.c      |  86 ++++++++
+ include/linux/host1x.h       |   1 +
+ include/linux/pm_domain.h    |   2 +
+ include/linux/pm_opp.h       |  14 +-
+ include/soc/tegra/common.h   |  13 ++
+ 9 files changed, 522 insertions(+), 68 deletions(-)
 
-        tglx
+-- 
+2.32.0
+
