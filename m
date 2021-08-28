@@ -2,66 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9DE3FA5A3
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 14:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D698C3FA654
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 17:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbhH1M1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Aug 2021 08:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbhH1M1c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Aug 2021 08:27:32 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B93C061756
-        for <linux-pm@vger.kernel.org>; Sat, 28 Aug 2021 05:26:42 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id e186so12613284iof.12
-        for <linux-pm@vger.kernel.org>; Sat, 28 Aug 2021 05:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=bKl4c41raTVoaA+33YBVMVrKY74WMrUexN8uUM/kw/M=;
-        b=liEl3fDskC8cy9OnpCNGPxqybW8o25bGBqliM1/C9F2JcOYqMbuT4cmR+Rg9pv7quX
-         s9P3vUIdDfeQQFBEMDwyzLYTTd79SONe0rlHPr/65VHINt20tlXRLIXQdeXZglSrwIgD
-         gBQTYEkVTPlzYnzNQqtS749xmms6gEKdjJuWI801LtKXP4KeTMQaP2vnhTTrog/R7eZp
-         WuEc3gjIzPE3GoPPCz4NUMwPWzw2lmGST1+iIo4SMJ8tx7D34aRwvKC3ttYfebj/NIji
-         oPFl3L+Kls3Q9xSDlsMCkGJI5v0zCpUoF6pBu7NwzMv1kwWXViuDUz1SlWRTlhIVD8jM
-         hEmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=bKl4c41raTVoaA+33YBVMVrKY74WMrUexN8uUM/kw/M=;
-        b=SU1QTpE3b14YmINrqVOy65jYGpLjN4d8bZuEZh0eU7IjbbJIyu3aDxoDHWqyyj3Axi
-         hv7NwpKxByV1GXbOaH3AJLwEXjE9i5EZ9tZeSEd66twmArxH6+aKqekPL1TKHxPNHWpH
-         FbiHVbqaAC1hTxjWI4QCpHDXsM9iE7+mRVogzKU61G8mkZr2S0ufkruRh7PgURKWMTqV
-         rQMddH3wfT1wJNRXo94MaxeSYGBIhOiJ5e4nj880E/aNgEbSdwVYddlsqF4VNuAm+prg
-         eijpfAM3JHr1U5QjsD0rYz2G7IMILfFBVTVki7i7erjudMwJRFD1PIuHbBDbwLqin0wZ
-         rFDw==
-X-Gm-Message-State: AOAM532crjFC5RhpyQAexQbTL4KdxBBkhkgVUVjq/gYigkpOSS2bSSnR
-        Odc09d6e1Gr/5hUC6M0EZdL/l2M2DbBN90RNsUs=
-X-Google-Smtp-Source: ABdhPJxSVYeoZU/RhIwo84FmgNbQQjvYlhXx6Y5yyE4BGFUBKc6e4XTyk6u0Krdj5IMBn308Sa4jnwWixc3jGidmk+w=
-X-Received: by 2002:a05:6602:1503:: with SMTP id g3mr11370604iow.25.1630153601924;
- Sat, 28 Aug 2021 05:26:41 -0700 (PDT)
+        id S234335AbhH1PCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Aug 2021 11:02:14 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51226 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229799AbhH1PCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Aug 2021 11:02:09 -0400
+X-UUID: 3d2bd27b280b4d1b9955348bd6d2f68b-20210828
+X-UUID: 3d2bd27b280b4d1b9955348bd6d2f68b-20210828
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1609193618; Sat, 28 Aug 2021 23:01:16 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 28 Aug 2021 23:01:15 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 28 Aug 2021 23:01:15 +0800
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
+        <hector.yuan@mediatek.com>
+Subject: [PATCH v14] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Sat, 28 Aug 2021 23:01:09 +0800
+Message-ID: <1630162872-25452-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Received: by 2002:a5e:8f06:0:0:0:0:0 with HTTP; Sat, 28 Aug 2021 05:26:41
- -0700 (PDT)
-Reply-To: kaylamanthey222@yahoo.com
-From:   Sgt Kayla Manthey <cavanic46@gmail.com>
-Date:   Sat, 28 Aug 2021 12:26:41 +0000
-Message-ID: <CAPeM+grVKg_U-irzcSAaLNCCYKO_QncXJw4dxTXU0qakvgC+rA@mail.gmail.com>
-Subject: =?UTF-8?B?RMO6ZmFtLCDFvmUgc2EgbWkgb3p2ZcWh?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ahoj drah=C3=BD priate=C4=BE,
+The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
+The driver implements the cpufreq driver interface for this hardware engine. 
 
-Som ser=C5=BEant Kayla Manthey z USA. Ak v=C3=A1m to nevad=C3=AD, chcel by =
-som s vami
-komunikova=C5=A5. D=C3=BAfam, =C5=BEe sa =C4=8Dim skor ozve=C5=A1.
+From v13 to v14, there are three modifications.
+1. Replace cpu domain map to policy driver data 
+2. Remove dummy performance-domain parsing
+3. Separate modification in cpufreq.h to another patch
 
-Ser=C5=BEant Kayla Manthey.
+From v12 to v13, there are two modifications.
+1. Move related_cpus function to common place, so all performance-domain cpufreq driver can refer.
+2. Make cpu resource init to each policy rather than per-cpu
+
+From v11 to v12, there are two modifications.
+1. Based on patchset[1], align binding with scmi for performance domain(latest version).
+2. Shrink binding example wording. 
+
+From v8 to v9, there are three more modifications.
+1. Based on patchset[2], align binding with scmi for performance domain.
+2. Add the CPUFREQ fast switch function support and define DVFS latency.
+3. Based on patchser[3], add energy model API parameter for mW.
+
+From v7 to v8, there are three more patches based on patchset v8[4].
+This patchset is about to register power table to Energy model for EAS and thermal usage.
+1. EM CPU power table
+- Register energy model table for EAS and thermal cooling device usage.
+- Read the coresponding LUT for power table.
+2. SVS initialization
+- The SVS(Smart Voltage Scaling) engine is a hardware which is
+  used to calculate optimized voltage values for CPU power domain.
+  DVFS driver could apply those optimized voltage values to reduce power consumption.
+- Driver will polling if HW engine is done for SVS initialization.
+  After that, driver will read power table and register it to EAS.
+- CPUs must be in power on state when doing SVS. Use pm_qos to block cpu-idle state for SVS initializing.
+3. Cooling device flag
+- Add cooling device flag for thermal
+[1]  https://lore.kernel.org/linux-devicetree/20210517155458.1016707-1-sudeep.holla@arm.com/
+[2]  https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com/
+[3]  https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=c250d50fe2ce627ca9805d9c8ac11cbbf922a4a6
+[4]  https://lkml.org/lkml/2020/9/23/384
+
+
+Hector.Yuan (3):
+  ndings: cpufreq: add bindings for MediaTek cpufreq HW
+  cpufreq: Add of_perf_domain_get_sharing_cpumask
+  cpufreq: mediatek-hw: Add support for CPUFREQ HW
+
+ .../bindings/cpufreq/cpufreq-mediatek-hw.yaml |  70 ++++
+ drivers/cpufreq/Kconfig.arm                   |  12 +
+ drivers/cpufreq/Makefile                      |   1 +
+ drivers/cpufreq/mediatek-cpufreq-hw.c         | 319 ++++++++++++++++++
+ include/linux/cpufreq.h                       |  39 +++
+ 5 files changed, 441 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+ create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
+
