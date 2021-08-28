@@ -2,108 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A29C3FA3BB
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 06:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9DE3FA5A3
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 14:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhH1EpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Aug 2021 00:45:16 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:49832 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbhH1EpQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Aug 2021 00:45:16 -0400
-Received: by mail-io1-f70.google.com with SMTP id k6-20020a6b3c060000b0290568c2302268so5302725iob.16
-        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 21:44:26 -0700 (PDT)
+        id S234147AbhH1M1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Aug 2021 08:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234012AbhH1M1c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Aug 2021 08:27:32 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B93C061756
+        for <linux-pm@vger.kernel.org>; Sat, 28 Aug 2021 05:26:42 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id e186so12613284iof.12
+        for <linux-pm@vger.kernel.org>; Sat, 28 Aug 2021 05:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=bKl4c41raTVoaA+33YBVMVrKY74WMrUexN8uUM/kw/M=;
+        b=liEl3fDskC8cy9OnpCNGPxqybW8o25bGBqliM1/C9F2JcOYqMbuT4cmR+Rg9pv7quX
+         s9P3vUIdDfeQQFBEMDwyzLYTTd79SONe0rlHPr/65VHINt20tlXRLIXQdeXZglSrwIgD
+         gBQTYEkVTPlzYnzNQqtS749xmms6gEKdjJuWI801LtKXP4KeTMQaP2vnhTTrog/R7eZp
+         WuEc3gjIzPE3GoPPCz4NUMwPWzw2lmGST1+iIo4SMJ8tx7D34aRwvKC3ttYfebj/NIji
+         oPFl3L+Kls3Q9xSDlsMCkGJI5v0zCpUoF6pBu7NwzMv1kwWXViuDUz1SlWRTlhIVD8jM
+         hEmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=JV7h5CQOr+nuXXZ8H13qPIBPgqFcVEsgvYOpM06/UEI=;
-        b=mA2CKAeexa/ByHXVi+jzPimdkW6GXggLCSTpWivEBWgOjN1SyaJbuEN51J5n1RHgnb
-         lRg3vyq+D+CAyz9+0Okw4WTHbCy1lJuYdB5XktUXFlMPvXbBet3Ah6b9yyo4ZYSH5X6B
-         K6fKXpmO/kVVWtdRxMPd+qruTIKCLRtyTyL3vrvj/9cdQJXZDIlQyvoA62hRBxcyhH7n
-         Y2WJ49wJLocHmpGJM2SaUeddhR9ohu2ID2KD7KNvC/ogRCTzjP5EsnuFf5sqGVY869sO
-         0sFNx9b5zomlJAGj+vJeObChGDaknyuJAZI6uzPmxjlINELBjZ+kUZ+QPS9QtDy1oDkv
-         H0Ng==
-X-Gm-Message-State: AOAM533tx7MtcjkDLpN9Qlpa+3qi+Vcsgmjfd0pUtjdRw9ikvvYlHIcp
-        8ndiMgMJpQO/JighVpmjpyUC9TzpVUTX7YKIwlRz1Uv2cUs8
-X-Google-Smtp-Source: ABdhPJzHxr32HLgq7+E3KnzmlIQt/NZpNY7kLZyt9dJ8h3MgC8vTjHHV/rOjEIiA5zU2eCqbZSevYwX5u6bm+DWQWzT9qEjCUNGz
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=bKl4c41raTVoaA+33YBVMVrKY74WMrUexN8uUM/kw/M=;
+        b=SU1QTpE3b14YmINrqVOy65jYGpLjN4d8bZuEZh0eU7IjbbJIyu3aDxoDHWqyyj3Axi
+         hv7NwpKxByV1GXbOaH3AJLwEXjE9i5EZ9tZeSEd66twmArxH6+aKqekPL1TKHxPNHWpH
+         FbiHVbqaAC1hTxjWI4QCpHDXsM9iE7+mRVogzKU61G8mkZr2S0ufkruRh7PgURKWMTqV
+         rQMddH3wfT1wJNRXo94MaxeSYGBIhOiJ5e4nj880E/aNgEbSdwVYddlsqF4VNuAm+prg
+         eijpfAM3JHr1U5QjsD0rYz2G7IMILfFBVTVki7i7erjudMwJRFD1PIuHbBDbwLqin0wZ
+         rFDw==
+X-Gm-Message-State: AOAM532crjFC5RhpyQAexQbTL4KdxBBkhkgVUVjq/gYigkpOSS2bSSnR
+        Odc09d6e1Gr/5hUC6M0EZdL/l2M2DbBN90RNsUs=
+X-Google-Smtp-Source: ABdhPJxSVYeoZU/RhIwo84FmgNbQQjvYlhXx6Y5yyE4BGFUBKc6e4XTyk6u0Krdj5IMBn308Sa4jnwWixc3jGidmk+w=
+X-Received: by 2002:a05:6602:1503:: with SMTP id g3mr11370604iow.25.1630153601924;
+ Sat, 28 Aug 2021 05:26:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:7f0f:: with SMTP id a15mr8811837ild.245.1630125866379;
- Fri, 27 Aug 2021 21:44:26 -0700 (PDT)
-Date:   Fri, 27 Aug 2021 21:44:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000034712e05ca9741e8@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Write in __pm_runtime_resume
-From:   syzbot <syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, len.brown@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pavel@ucw.cz, rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Received: by 2002:a5e:8f06:0:0:0:0:0 with HTTP; Sat, 28 Aug 2021 05:26:41
+ -0700 (PDT)
+Reply-To: kaylamanthey222@yahoo.com
+From:   Sgt Kayla Manthey <cavanic46@gmail.com>
+Date:   Sat, 28 Aug 2021 12:26:41 +0000
+Message-ID: <CAPeM+grVKg_U-irzcSAaLNCCYKO_QncXJw4dxTXU0qakvgC+rA@mail.gmail.com>
+Subject: =?UTF-8?B?RMO6ZmFtLCDFvmUgc2EgbWkgb3p2ZcWh?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Ahoj drah=C3=BD priate=C4=BE,
 
-syzbot found the following issue on:
+Som ser=C5=BEant Kayla Manthey z USA. Ak v=C3=A1m to nevad=C3=AD, chcel by =
+som s vami
+komunikova=C5=A5. D=C3=BAfam, =C5=BEe sa =C4=8Dim skor ozve=C5=A1.
 
-HEAD commit:    5e63226c7228 Add linux-next specific files for 20210827
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=123771b1300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c03a8fdabc6b3ae
-dashboard link: https://syzkaller.appspot.com/bug?extid=7d41312fe3f123a6f605
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: null-ptr-deref in atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
-BUG: KASAN: null-ptr-deref in __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
-Write of size 4 at addr 0000000000000388 by task syz-executor.1/8810
-
-CPU: 0 PID: 8810 Comm: syz-executor.1 Not tainted 5.14.0-rc7-next-20210827-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __kasan_report mm/kasan/report.c:446 [inline]
- kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
- __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
- pm_runtime_get include/linux/pm_runtime.h:370 [inline]
- h5_recv+0x2c4/0x680 drivers/bluetooth/hci_h5.c:590
- hci_uart_tty_receive+0x24d/0x710 drivers/bluetooth/hci_ldisc.c:613
- tiocsti drivers/tty/tty_io.c:2311 [inline]
- tty_ioctl+0x8db/0x1600 drivers/tty/tty_io.c:2719
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x4665f9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc6badab188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 000000000056bf80 RCX: 00000000004665f9
-RDX: 00000000200000c0 RSI: 0000000000005412 RDI: 0000000000000003
-RBP: 00000000004bfcc4 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000056bf80
-R13: 00007ffe925987cf R14: 00007fc6badab300 R15: 0000000000022000
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Ser=C5=BEant Kayla Manthey.
