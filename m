@@ -2,60 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4583FA051
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Aug 2021 22:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF493FA21E
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 02:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbhH0UL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Aug 2021 16:11:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37836 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231391AbhH0UL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Aug 2021 16:11:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 02C6E608FB;
-        Fri, 27 Aug 2021 20:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630095067;
-        bh=MCNCRWO8Iyar+jWlhrg/7lCu19XJQtakFIJroKILm64=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=kcqGe3+sMNxjcOa26F/RsXa6e5LGAaWMrWK/WDrIUInzy49b5Dnufc4gtfoXWZwqA
-         ixu9kDNzjZiLOvvyQk/Q4xPDhlVr/eZZtKafFoXoTZ56bCn+unVT2xsC13hx9GoLOn
-         FG8bZ1vfZb2evXItjrqnS6ekP13qyPd24ljUzqbnvamjNyIr0M4PaIUWXUUKkc2dwh
-         JivfvINKwV8RF48drs2CFrFCejPAQH4HK1gh55qBTQnpg+/jg3qLMIMYrhodnltfu9
-         PAjR+si78bTk2vvYWrFC2s69BL68sm86HsAuHrtoQ5IIU668PaqqIbHvN+MMYETjlB
-         nEpZz4cjenbLg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EFF8C609D2;
-        Fri, 27 Aug 2021 20:11:06 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fixes for v5.14-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
-References: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0i0a-mYqok8qQfQjpG-zPti=smyZR9HKxFAcQQY6VNrJw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc8
-X-PR-Tracked-Commit-Id: 7ee5fd12e8cac91bdec6de8417b030ed05d5d7ee
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c0006dc6957ef0b5d3e785556f30f928af05ab0c
-Message-Id: <163009506697.27622.4711267495705264241.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 Aug 2021 20:11:06 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S232631AbhH1AUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Aug 2021 20:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232616AbhH1AUf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Aug 2021 20:20:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47244C0613D9
+        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 17:19:45 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id ot2-20020a17090b3b4200b0019127f8ed87so8852216pjb.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 17:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=b16CLFbJG+Bf47i4hXvhl6N06JEcub1msRySgqEtlk0=;
+        b=YSg9bOGjLtbKqJos1Rcdbb23CekNuOsJldRd6jRfzYvNVQVrFL1M6wAA8fHWJCDG25
+         gXbl2sHsv9PNdF4KGMbq8de2EVVDm9Q6SWRvlCesL9Nqb2aNK+vdqmvu+9GUp94RnGiK
+         b3qw9qyUpY6nPmim9aS3ybgxPChyf4cHRgEQfUpfXaM50BHytRLOmekQkFDHq0LZt2CP
+         D2PmkaYy/q8JMRiA0RLBeEnoEGPBGeLUIrtSuygWdhVBt/6nCMaPz+sv0MxxNFPeNHaK
+         4uemYEfNLcVVRntnyB98FVsgM/61yxKRbgNdtJ8cf7pqMg1NEFgQw/iEDr+4ZqBvoG1D
+         uLTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=b16CLFbJG+Bf47i4hXvhl6N06JEcub1msRySgqEtlk0=;
+        b=HBOvVXlB4658RXME87QgUCejGXi7VFvIiNdaK2ElNzz4jK2bXV1q02jGNHE0F0ZoKL
+         9kTUDFMvLyN6UoJbIgOGzXwY+Pqdx6XgLOatGhSabymT4t6yxgOzsINvmTRuJqOr/pq2
+         V6G1Ogt1j3W8L8SCnjqNLVBosrPF8q/Ry6fN7kL7/T877AkB0nWUAY0zlz1/wjk8i8w2
+         PjNDztXRJ9Y45BSRBEa4emB7H3V0TveBof/C5Kn7hQOgFJdKxYDS5VyK6EAN7sL9WB6e
+         Flr6ygeFclwDA9ho43ICC6jQ7+PO7/Lbx8qn9XVFrb6hcgdGB5FWo1xryH4RwxNvZqwy
+         pZPA==
+X-Gm-Message-State: AOAM531XxF4FzNU5Tl8qo6GOdCOoOANCmzwVCyhlj9zK8iyNBitVOb6c
+        BoyNMA3U0zVn1oKUVDQL+vvpHg==
+X-Google-Smtp-Source: ABdhPJzFtiino5dM+2bp8meNFI0v/1EfLSfVgBLzEYt3oMpxHTrTLBenXubricLEHTWBImaD+99tVA==
+X-Received: by 2002:a17:902:f703:b029:12c:982:c9ae with SMTP id h3-20020a170902f703b029012c0982c9aemr11128283plo.20.1630109984732;
+        Fri, 27 Aug 2021 17:19:44 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s20sm6851631pfe.205.2021.08.27.17.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 17:19:44 -0700 (PDT)
+Message-ID: <61298120.1c69fb81.e903b.1f1b@mx.google.com>
+Date:   Fri, 27 Aug 2021 17:19:44 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: acpi-5.14-rc8-64-ga93c0039d89d
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (acpi-5.14-rc8-64-ga93c0039d89d)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 27 Aug 2021 20:54:30 +0200:
+pm/testing build: 7 builds: 0 failed, 7 passed (acpi-5.14-rc8-64-ga93c0039d=
+89d)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.14-rc8
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
+i-5.14-rc8-64-ga93c0039d89d/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c0006dc6957ef0b5d3e785556f30f928af05ab0c
+Tree: pm
+Branch: testing
+Git Describe: acpi-5.14-rc8-64-ga93c0039d89d
+Git Commit: a93c0039d89d6f11b98f49db841515e65a5dd0ba
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Thank you!
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
