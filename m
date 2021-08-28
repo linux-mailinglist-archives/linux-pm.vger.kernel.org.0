@@ -2,257 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359053FA2AD
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 03:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A29C3FA3BB
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Aug 2021 06:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbhH1BDs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Aug 2021 21:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbhH1BDr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Aug 2021 21:03:47 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3856FC0617AE
-        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 18:02:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id u11-20020a17090adb4b00b00181668a56d6so6026480pjx.5
-        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 18:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=JLZIwfK6hCeD2SrXpeJ4JUVVDM2aTBeBWw6is+AKjzM=;
-        b=SDqD4cCXSYvL7tagGM8BtD8JkvlTk5U3ScXLZxGs8Gxl//zm5SLQPKuYeLDO+GUzrp
-         84C0LTatKKw5vp89W7EZRiYy59iozVqPQAOMQfuBdncqXRUhj0dxPVJGXiYuUzJlEOe4
-         LmyLYf1mpLQjAggxZxCtd5P7W5VtenBpfIeRVBFNrBR7J+SWLQArhLvjEch57ZFQCckl
-         myuXpZ94d0wzIOw7IrqwrwlfvvbG0YkD/Op215E5dWNQNeDg+hez2cu8mq/hJzA6/JHu
-         KHZ643Ajz5sQFZYXxkjXtw9zX4exX4Zmdjx27z5UiEXIvm6dfgnFexZZ9CaRWk3+NIiN
-         W7Bw==
+        id S230348AbhH1EpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Aug 2021 00:45:16 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:49832 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230215AbhH1EpQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Aug 2021 00:45:16 -0400
+Received: by mail-io1-f70.google.com with SMTP id k6-20020a6b3c060000b0290568c2302268so5302725iob.16
+        for <linux-pm@vger.kernel.org>; Fri, 27 Aug 2021 21:44:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=JLZIwfK6hCeD2SrXpeJ4JUVVDM2aTBeBWw6is+AKjzM=;
-        b=d/cU+3zTxlyFPrXQZku+FMMqP0ax8UR08x0W0jnpigYXxcs8IlAg5opZMxTvd7BdUL
-         XlPsZful0+XaSx2XlrR2FXtH5OYRrce2shLP7yYvZO7ur0Dtx7Pwe+DIxS0MR5b1Vhru
-         cFTYT/KZ7QxCfnoIbt8cl11O5V44ui+HYhqwHMXkWCIAYz7cHbhMOUcPAUHXxFVVwcgr
-         z50dPwfhOw2iqMFJbh49HxuyKKzSr60hbxGOZtD/mE7U2PdhrQTV01c9ZTFgVAPIZf1v
-         HFE4e5GUgxBWqjJQMswbZ6Z8cz77IwzqxE+VkiuY5TcpMGpgHnpfEkEcsmy8uq5AGeDs
-         PAAw==
-X-Gm-Message-State: AOAM533IOyBDNfmcFIzTnGADbosepYwDJejgVczoYag+QRcRCP2pLkcZ
-        u5F+UlPffvaoVpsnYHjt58oKZw==
-X-Google-Smtp-Source: ABdhPJydshs+vNhaMGAFiAp+AvKh+o3fGj633gDW25QwCnVhUC0ZMNro/fV5Sm10twMIgbyhYBNrtA==
-X-Received: by 2002:a17:903:228e:b0:137:529:980d with SMTP id b14-20020a170903228e00b001370529980dmr11096624plh.43.1630112577711;
-        Fri, 27 Aug 2021 18:02:57 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u7sm7553948pju.13.2021.08.27.18.02.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 18:02:57 -0700 (PDT)
-Message-ID: <61298b41.1c69fb81.da2c1.4cb3@mx.google.com>
-Date:   Fri, 27 Aug 2021 18:02:57 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JV7h5CQOr+nuXXZ8H13qPIBPgqFcVEsgvYOpM06/UEI=;
+        b=mA2CKAeexa/ByHXVi+jzPimdkW6GXggLCSTpWivEBWgOjN1SyaJbuEN51J5n1RHgnb
+         lRg3vyq+D+CAyz9+0Okw4WTHbCy1lJuYdB5XktUXFlMPvXbBet3Ah6b9yyo4ZYSH5X6B
+         K6fKXpmO/kVVWtdRxMPd+qruTIKCLRtyTyL3vrvj/9cdQJXZDIlQyvoA62hRBxcyhH7n
+         Y2WJ49wJLocHmpGJM2SaUeddhR9ohu2ID2KD7KNvC/ogRCTzjP5EsnuFf5sqGVY869sO
+         0sFNx9b5zomlJAGj+vJeObChGDaknyuJAZI6uzPmxjlINELBjZ+kUZ+QPS9QtDy1oDkv
+         H0Ng==
+X-Gm-Message-State: AOAM533tx7MtcjkDLpN9Qlpa+3qi+Vcsgmjfd0pUtjdRw9ikvvYlHIcp
+        8ndiMgMJpQO/JighVpmjpyUC9TzpVUTX7YKIwlRz1Uv2cUs8
+X-Google-Smtp-Source: ABdhPJzHxr32HLgq7+E3KnzmlIQt/NZpNY7kLZyt9dJ8h3MgC8vTjHHV/rOjEIiA5zU2eCqbZSevYwX5u6bm+DWQWzT9qEjCUNGz
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: acpi-5.14-rc8-64-ga93c0039d89d
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 77 runs,
- 5 regressions (acpi-5.14-rc8-64-ga93c0039d89d)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-Received: by 2002:a92:7f0f:: with SMTP id a15mr8811837ild.245.1630125866379;
+ Fri, 27 Aug 2021 21:44:26 -0700 (PDT)
+Date:   Fri, 27 Aug 2021 21:44:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034712e05ca9741e8@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Write in __pm_runtime_resume
+From:   syzbot <syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 77 runs, 5 regressions (acpi-5.14-rc8-64-ga93c0039d89d)
+Hello,
 
-Regressions Summary
--------------------
+syzbot found the following issue on:
 
-platform             | arch  | lab          | compiler | defconfig         =
- | regressions
----------------------+-------+--------------+----------+-------------------=
--+------------
-bcm2837-rpi-3-b      | arm64 | lab-baylibre | gcc-8    | defconfig         =
- | 1          =
+HEAD commit:    5e63226c7228 Add linux-next specific files for 20210827
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=123771b1300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9c03a8fdabc6b3ae
+dashboard link: https://syzkaller.appspot.com/bug?extid=7d41312fe3f123a6f605
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
 
-beagle-xm            | arm   | lab-baylibre | gcc-8    | multi_v7_defconfig=
- | 1          =
+Unfortunately, I don't have any reproducer for this issue yet.
 
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig         =
- | 1          =
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com
 
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-8    | defconfig         =
- | 2          =
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: null-ptr-deref in atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
+BUG: KASAN: null-ptr-deref in __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
+Write of size 4 at addr 0000000000000388 by task syz-executor.1/8810
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-5.1=
-4-rc8-64-ga93c0039d89d/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: acpi-5.14-rc8-64-ga93c0039d89d
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a93c0039d89d6f11b98f49db841515e65a5dd0ba =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
- | regressions
----------------------+-------+--------------+----------+-------------------=
--+------------
-bcm2837-rpi-3-b      | arm64 | lab-baylibre | gcc-8    | defconfig         =
- | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/612981ee647056e9188e2c9e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+CPU: 0 PID: 8810 Comm: syz-executor.1 Not tainted 5.14.0-rc7-next-20210827-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
+ __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
+ pm_runtime_get include/linux/pm_runtime.h:370 [inline]
+ h5_recv+0x2c4/0x680 drivers/bluetooth/hci_h5.c:590
+ hci_uart_tty_receive+0x24d/0x710 drivers/bluetooth/hci_ldisc.c:613
+ tiocsti drivers/tty/tty_io.c:2311 [inline]
+ tty_ioctl+0x8db/0x1600 drivers/tty/tty_io.c:2719
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4665f9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc6badab188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000056bf80 RCX: 00000000004665f9
+RDX: 00000000200000c0 RSI: 0000000000005412 RDI: 0000000000000003
+RBP: 00000000004bfcc4 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000056bf80
+R13: 00007ffe925987cf R14: 00007fc6badab300 R15: 0000000000022000
+==================================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-  * baseline.login: https://kernelci.org/test/case/id/612981ee647056e9188e2=
-c9f
-        failing since 46 days (last pass: devprop-5.13-rc8-173-ge132b9a1079=
-c, first fail: v5.14-rc1) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
- | regressions
----------------------+-------+--------------+----------+-------------------=
--+------------
-beagle-xm            | arm   | lab-baylibre | gcc-8    | multi_v7_defconfig=
- | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61298089e0cd29fae48e2c97
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61298089e0cd29fae48e2=
-c98
-        failing since 22 days (last pass: v5.14-rc3-20-g604483c9d252, first=
- fail: v5.14-rc4-28-g9ac32de19606) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
- | regressions
----------------------+-------+--------------+----------+-------------------=
--+------------
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig         =
- | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61297e6a1f17e37d058e2c8d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a0=
-0.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a0=
-0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/riscv/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61297e6a1f17e37d058e2=
-c8e
-        failing since 274 days (last pass: pm-5.10-rc4-33-g52d108cd060d, fi=
-rst fail: pm-5.10-rc6-75-g735f7fba25ec) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
- | regressions
----------------------+-------+--------------+----------+-------------------=
--+------------
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-8    | defconfig         =
- | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61298125b882ce0ad78e2c7a
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-odroid-n=
-2.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.14-rc8-64-ga=
-93c0039d89d/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-odroid-n=
-2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/61298125b882ce0a=
-d78e2c80
-        new failure (last pass: v5.14-rc7-64-g2a7254aa7491)
-        1 lines
-
-    2021-08-28T00:19:41.584491  / # =
-
-    2021-08-28T00:19:41.687832  #
-    2021-08-28T00:19:41.789275  export SHELL=3D/bin/sh
-    2021-08-28T00:19:41.789672  =
-
-    2021-08-28T00:19:41.789872  / # #
-    2021-08-28T00:19:41.891036  / # export SHELL=3D/bin/sh. /lava-752993/en=
-vironment
-    2021-08-28T00:19:41.992259  /lava-752993/bin/lava-test-runner /lava-752=
-993/0
-    2021-08-28T00:19:41.993271  =
-
-    2021-08-28T00:19:41.993434  / # . /lava-752993/environment
-    2021-08-28T00:19:41.994012  / # /lava-752993/bin/lava-test-runner /lava=
--752993/0 =
-
-    ... (9 line(s) more)  =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61298125b882ce0=
-ad78e2c82
-        new failure (last pass: v5.14-rc7-64-g2a7254aa7491)
-        2 lines =
-
- =20
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
