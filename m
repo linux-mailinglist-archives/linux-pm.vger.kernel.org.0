@@ -2,71 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C963FAD48
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Aug 2021 18:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DA93FADF8
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Aug 2021 21:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbhH2Q6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Aug 2021 12:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S233379AbhH2TKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Aug 2021 15:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbhH2Q6G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Aug 2021 12:58:06 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A69C061756
-        for <linux-pm@vger.kernel.org>; Sun, 29 Aug 2021 09:57:14 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id m11-20020a056820034b00b0028bb60b551fso3806132ooe.5
-        for <linux-pm@vger.kernel.org>; Sun, 29 Aug 2021 09:57:14 -0700 (PDT)
+        with ESMTP id S232897AbhH2TKw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Aug 2021 15:10:52 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C9C061756
+        for <linux-pm@vger.kernel.org>; Sun, 29 Aug 2021 12:09:59 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id d16so21969093ljq.4
+        for <linux-pm@vger.kernel.org>; Sun, 29 Aug 2021 12:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XUOatBCS7KXMQIRek9BuQ4CNFHjXdIKefBYCv6RPNRY=;
-        b=XGxY52+NF2/w/zK/epC56qLafpIVSgixVn/8kFgCf/uO14jUv4ZfiZHW1hw///uF09
-         MGqHv+0ofkf4UmZaW2Md/JTwWaNq6H+Nv3+/Wc79yM7RKH97f7QWX88aCnmMI5BUgf5r
-         VsGYXu0sVM9LdBKBUMoZdwLr/CwuiZknW3s6t07bXY81ccNjTtcPAxRrrV6GiswKKMgI
-         GjBiO1BCc5JkvVWkQA3y9N1nBmlAXmAwVk0yM5oHYREch8D0xi47fjO9ctAR0n6bqtuT
-         ssm7uGdiq1QpcuW8NQMJQPUGSZntNBSJgLCYz+NxkjvTallDpn08YH3YIgZy1ETmRZN8
-         ODcA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kZvGZdT6RSA5Fpa57FNTpKBZHVWz2QTfWSfFBXfNFHU=;
+        b=DrCljDdfCo+lBGtGLRmyB4o6rQbv4TeyX4Drm8ehxEz1BJpi+BWVj1E428aI5VjRzT
+         qSbqZmAUe9kgyv8l/JRyu4kCf1Uc0B0J7OXpqPXUFuzehoyQI3ZA9PqzaeMaFYO92KZp
+         npO/c/TbB/6lA4nSF2O3A0jwhCVxH0kGxZZvXSkdXTVpTBiWHPwe4QU4JTs3v113yhCB
+         xPcl1T4UejvU5qHSMoe6n84LYhN1WmQuC4pNoDesszxO63RgVewpD08pv9q47VpAydp7
+         TjUt1kxU6P7ALMFcYSUAJ4FSrCJnFTUGdQ+rS8gAKYNwDpQuF8Pq0lRAR0aEqVK/Gs59
+         Mfig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XUOatBCS7KXMQIRek9BuQ4CNFHjXdIKefBYCv6RPNRY=;
-        b=fsNzwOhCiIVg4EbbJ5Ocsui/2PwX6zQNcSZmGQLCG7vM0GpvhxO32K6zJsLyufeO4O
-         CdS0hpejSfHfxevXkJZied3II/JTiCWZXrPUaJzhFrHHmPkTcB4/ba9OAq7fvl4T8KuE
-         P2YwuyPgk1Wlv6NpZT3za5bdRJwQp+lbgeQb5w+2HhWRhs3XU++AlfF2z1eorW7irR9M
-         Ah5r1e7YmEy0X0CquUs3eaXg2t5vxo7DAVm1nzestGldCjIjdRKlcJKYhBA0O4mQaNdT
-         QVLDqhhpplwzwd+zStMEvn9iHpR5//q96uYm6heScKQUNaOOvh0xnPON85e/F8JEu5uC
-         rXzA==
-X-Gm-Message-State: AOAM5316U/57IIO8uztMHkmCaDynJfNDWXf1iIT6S0F+zbAJZJFxo7W3
-        jEuUh9pYU8185nhojqFVhXx5M0Z7dkdljBlpCkU=
-X-Google-Smtp-Source: ABdhPJzPdyqe5N7zbKdTXG6AlHkr6i1F4ww60dZ6p6lAD3Ug4lpBUPI/do0nxNFFIlBAO7wA88X/Q/E+voSKSFqlPzc=
-X-Received: by 2002:a4a:b64b:: with SMTP id f11mr7253550ooo.18.1630256233429;
- Sun, 29 Aug 2021 09:57:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kZvGZdT6RSA5Fpa57FNTpKBZHVWz2QTfWSfFBXfNFHU=;
+        b=JFUh67oEVTRG0+wzlTTnEE6bDYriqEDvD1rY6PECgyps9ER7JscQBiL5U0zspUqVog
+         1rQkghrcCVgbMZ90yvH5xVYca3at6VdlZdIbmCGePR0O30a3GFfPhYgblBMWabRmAA0f
+         OVed2IbSntIm0p84kCmPKd31SOBC8fv80tQ6kKUbqhYN9/+9tOgYuQwAhieop8qVPPz0
+         Q8RatdOwR+RM8AYNFo7GXS4B81C4+x70vufw7gK7Wai0OfuZ8kwNWtYunqHoLMvt2QDC
+         Yf2FsGNpuKy2uL1qg+cc+W8NSva7l6geAd0t/cl7q34y16kQ5Iairg3F7dI3xqmkR3Z7
+         5mVA==
+X-Gm-Message-State: AOAM533lr7Cmw2l/gOurswqGZ0QjDbhbdMCdei5z0tBNsA7RU0MO8SVx
+        b6r4ohycK7PSgYCcbPBCHxuxbj4BWGMDPNdY9g1Q1Q==
+X-Google-Smtp-Source: ABdhPJxCSw20sOvXWZzeD9OCjtvjPdcCMXxl2xVeKRRntI5UnzuFb3gKYb5s+B1HPOovLKmDV45JcGagXUjMkhjkD58=
+X-Received: by 2002:a2e:9d88:: with SMTP id c8mr17243245ljj.467.1630264198248;
+ Sun, 29 Aug 2021 12:09:58 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4a:b201:0:0:0:0:0 with HTTP; Sun, 29 Aug 2021 09:57:13
- -0700 (PDT)
-Reply-To: sroomf70@gmail.com
-From:   "Mr. Ali Moses" <alimoses07@gmail.com>
-Date:   Sun, 29 Aug 2021 09:57:13 -0700
-Message-ID: <CADWzZe5T8dVHy5qvvDtxLgWSgu07xhSf3Crp1c_uLoxprVfxzA@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
+References: <20210806090050.3510671-1-linus.walleij@linaro.org>
+In-Reply-To: <20210806090050.3510671-1-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 29 Aug 2021 21:09:47 +0200
+Message-ID: <CACRpkdbdgdpg7CNQ+s4SkJBOsWfuOOWmXTar+cx2Eu_Wt5qNfw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: power: Bindings for Samsung batteries
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--- 
-Greetings,
-From Mr. Ali Moses, please a huge amount of payment was made into your
-account. as soon as your respond is noted the payment confirmation
-slip will immediately send to you.  please do not hesitate to reply as
-soon as you receive this message. awaiting your urgent reply please.
+On Fri, Aug 6, 2021 at 11:02 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Thanks
-Mr. Ali Moses,
-Foreign Remittance
+> This adds device tree bindings for Samsung SDI batteries.
+> Everything can be determined from the product number so the entire
+> battery is just a specific compatible string.
+>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Best regards
-Prof. Dr Diane
-Head of Foreign Operation
+Sebastian: can this be merged? I am working on corresponding code
+for Linux to populate Samsung batteries from compatible.
+
+Yours,
+Linus Walleij
