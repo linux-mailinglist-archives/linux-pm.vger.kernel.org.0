@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97BF3FC58E
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 12:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB233FC592
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 12:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240937AbhHaKWe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 06:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S240982AbhHaKWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 06:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240905AbhHaKWe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 06:22:34 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E99C06175F
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 03:21:39 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z2so37488362lft.1
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 03:21:38 -0700 (PDT)
+        with ESMTP id S240975AbhHaKWm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 06:22:42 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD023C061760
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 03:21:46 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id h1so30820221ljl.9
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 03:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SaQiFvhNq7368+94ke7tCwmU8u/vT5hggbptJeHOcYo=;
-        b=OQ8Bc7H/j7dY8F+7/WWLC8l2pfhCHESOHANGP40xBtANdPJhhCoXsFJE8/mcMLl6lb
-         bKH2QIzdw8Z3bHXrkZiaqsbkx9pU/7qQ3ikcKw5DsQifxf7w4S6mRQvk1kjExY/XCrBL
-         x1f8EISuWCWhIkqllRSOpX0AE8ii8ONpNBj807/cw5HxrPKESUk9MTq7svvQQbGk8/DX
-         PT6GqOiEW+D9hmrjFv2Db0EVRCjLTLSb9b0DMV2Id/Pszpdi0+sYj409rQuECO1+Zsdc
-         D/bTITEW67QawE23Dz0u5spWInPsJ8lnUGdvyx/xOZCTiDWTFogofPOFgZWhd5KL98sg
-         ZfmA==
+        bh=wQ8kS/+bTV4avdS2tU6jC3f6zz+Ryry/9cKDRK1gufo=;
+        b=jiP1wMEEvsgc3n7vYx1ledvZpCZkUX5FcfCU/d4NmQ10imEb+nTwuV7AvPQyuAhzpe
+         YsP/UU3DHPPh2i10yLbc78f5nCMLrerGJ6O5w2qQxXo1os1R5iEn/nQbRPHBGoAOHkXS
+         1aGLp5y3Z3p+M9xTR3mVec6Ve/Wj+o+zBAE2jyiAeEhGtBnmOfK3J7BHgoO9AKlkFMG8
+         XHtHiuMg1cbBY5AtMl5rgl7rqbMvAu7ThdDV0Pq3/ED5GoRF4shP/c5KQGW9yKirDnmq
+         d2LCC2MTmPF6h0Symi6YMYf/1TDJKL/EaXJSAYRhHwpoTPEraIaRvdsHZ1cUt089Z39h
+         /jrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SaQiFvhNq7368+94ke7tCwmU8u/vT5hggbptJeHOcYo=;
-        b=nKj8pqvMunUDABcNFiicn9FhyU29hA3BIZqEvPpaypzZB7n9rC8uyyBkTjjg98TLn0
-         Tm7b3qXyIxTMyNMhmREIlVfy+Xzy00Sbavv8OMxkOFSBx/E6hAefLF2THnS0JXblIWFO
-         zYUuGS498XRHsHcOPLSh41fcLfvb3zvdKO4QCruhRJAGR5vuaKygs4SJ2VWI+t5Jt5Wd
-         Qdr0spElQ/LiQ3f86S2BZqHH5cWjzHfj4ig91y3lGSlZObeXgtUMbH4wcOWtxZwv8xYV
-         ONsCZUtl0HgB+XRCcgoiU8VSM1Tedn6RdYeQK+eN0Q9ovBjkH473TSZHS7Bc9I/sbRQd
-         iHQA==
-X-Gm-Message-State: AOAM531uxHNXB4jt1mSb91swkEfvM0VPXDcxWAfmXP7dRZEL0CroenZI
-        kMqr2vTkaBv2eDLL1Lnmm4PjJg==
-X-Google-Smtp-Source: ABdhPJysTQHKjj6sHl08LoVd8gzCM5Oi5pHDfNeAo1fs+lBAhuD47ThIpXSDKSYwaxeOL6peufsGZQ==
-X-Received: by 2002:a05:6512:2210:: with SMTP id h16mr20684305lfu.621.1630405297014;
-        Tue, 31 Aug 2021 03:21:37 -0700 (PDT)
+        bh=wQ8kS/+bTV4avdS2tU6jC3f6zz+Ryry/9cKDRK1gufo=;
+        b=iTiIg6tEPkJ5FXynSz2exjW7wagbEAWSs7U0Unig1ZobTEIWPF5EiK849l8bVLTVv6
+         bc98mxf1ph5fBPZiJ1YtuYmwvDK8xLX+YBiLAQLPVrD64rHjj0xFg1spqJKaf/hKn203
+         sJ7e4mn/TI3Fpk4PVwnTwJqFlhIgRC4Iha+RuqW3ymkrBJKU7QvbgpCcizKDK++XPhlo
+         up8i4wbQl29fZAdnwOisbW6t+eDXRjUMtqJQWiKe9T0OiNkWqa7IvysiMoo3HQhK/l9Y
+         0bp0uizH6CHVlc2BUDoi04CWk3uYCPwr7ZUQ2MFsO7AKHp+hfSKegGwrv85nsBdYRuho
+         jsFw==
+X-Gm-Message-State: AOAM532XTmEekexDQyNAt8tmzuHDuz6/EUZoJYzvkFyzyyELYS3QlZ8Y
+        +vNp4qmZqg12DX6h9/tvdyZarQ==
+X-Google-Smtp-Source: ABdhPJyfAO80CqzIGBt9m8D2PiuI5w5PJosyAgh/JmPeY8WX1k4mcSvpAtqPgpVYTTOGtXaXZQRtog==
+X-Received: by 2002:a05:651c:2ca:: with SMTP id f10mr24621298ljo.211.1630405305074;
+        Tue, 31 Aug 2021 03:21:45 -0700 (PDT)
 Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
-        by smtp.gmail.com with ESMTPSA id b21sm753714lfi.104.2021.08.31.03.21.35
+        by smtp.gmail.com with ESMTPSA id d13sm1687864lfk.232.2021.08.31.03.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 03:21:36 -0700 (PDT)
+        Tue, 31 Aug 2021 03:21:44 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Saravana Kannan <saravanak@google.com>,
         Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
@@ -55,9 +55,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Dmitry Osipenko <digetx@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 1/2] of: property: fw_devlink: Rename 'node_not_dev' to 'optional_con_dev'
-Date:   Tue, 31 Aug 2021 12:21:25 +0200
-Message-Id: <20210831102125.624661-1-ulf.hansson@linaro.org>
+Subject: [PATCH 2/2] of: property: fw_devlink: Set 'optional_con_dev' for parse_power_domains
+Date:   Tue, 31 Aug 2021 12:21:41 +0200
+Message-Id: <20210831102141.624725-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,59 +65,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the struct supplier_bindings the member 'node_not_dev' is described as
-"The consumer node containing the property is never a device.", but that
-doesn't match the behaviour of the code in of_link_property().
+The power-domain DT bindings [1] doesn't enforce a compatible string for a
+provider node, even if this is common to use. In particular, when
+describing a hierarchy with parent/child power-domains, as the psci DT
+bindings [2] for example, it's sometimes not applicable to use a compatible
+string.
 
-To make the behaviour consistent with the description, let's rename the
-member to "optional_con_dev" and clarify the corresponding comment.
+Therefore, let's set the 'optional_con_dev' to true to avoid creating
+incorrect fw_devlinks for power-domains.
+
+[1] Documentation/devicetree/bindings/power/power-domain.yaml
+[2] Documentation/devicetree/bindings/arm/psci.yaml
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/of/property.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+
+Some more details of what goes on here. I have added a debug print in
+of_link_to_phandle() to see the fw_devlinks that gets created.
+
+This is what happens on Dragonboard 410c when 'optional_con_dev' isn't set:
+...
+[    0.041274] device: 'psci': device_add
+[    0.041366] OF: Linking power-domain-cpu0 (consumer) to psci (supplier)
+[    0.041395] OF: Linking power-domain-cpu1 (consumer) to psci (supplier)
+[    0.041423] OF: Linking power-domain-cpu2 (consumer) to psci (supplier)
+[    0.041451] OF: Linking power-domain-cpu3 (consumer) to psci (supplier)
+[    0.041494] device: 'platform:psci--platform:psci': device_add
+[    0.041556] platform psci: Linked as a sync state only consumer to psci
+...
+
+This is what happens on Dragonboard 410c when 'optional_con_dev' is set:
+...
+[    0.041179] device: 'psci': device_add
+[    0.041265] OF: Not linking psci to psci - is descendant
+[    0.041293] OF: Not linking psci to psci - is descendant
+[    0.041319] OF: Not linking psci to psci - is descendant
+[    0.041346] OF: Not linking psci to psci - is descendant
+...
+
+The relevant dtsi file:
+arch/arm64/boot/dts/qcom/msm8916.dtsi
+
+Kind regards
+Ulf Hansson
+
+---
+ drivers/of/property.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/of/property.c b/drivers/of/property.c
-index 6c028632f425..2babb1807228 100644
+index 2babb1807228..4d607fdbea24 100644
 --- a/drivers/of/property.c
 +++ b/drivers/of/property.c
-@@ -1249,7 +1249,8 @@ static struct device_node *parse_##fname(struct device_node *np,	     \
-  * @parse_prop.index: For properties holding a list of phandles, this is the
-  *		      index into the list
-  * @optional: Describes whether a supplier is mandatory or not
-- * @node_not_dev: The consumer node containing the property is never a device.
-+ * @optional_con_dev: The consumer node containing the property may not be a
-+ *		      device, then try finding one from an ancestor node.
-  *
-  * Returns:
-  * parse_prop() return values are
-@@ -1261,7 +1262,7 @@ struct supplier_bindings {
- 	struct device_node *(*parse_prop)(struct device_node *np,
- 					  const char *prop_name, int index);
- 	bool optional;
--	bool node_not_dev;
-+	bool optional_con_dev;
- };
- 
- DEFINE_SIMPLE_PROP(clocks, "clocks", "#clock-cells")
-@@ -1370,7 +1371,7 @@ static const struct supplier_bindings of_supplier_bindings[] = {
- 	{ .parse_prop = parse_pinctrl6, },
- 	{ .parse_prop = parse_pinctrl7, },
- 	{ .parse_prop = parse_pinctrl8, },
--	{ .parse_prop = parse_remote_endpoint, .node_not_dev = true, },
-+	{ .parse_prop = parse_remote_endpoint, .optional_con_dev = true, },
- 	{ .parse_prop = parse_gpio_compat, },
- 	{ .parse_prop = parse_interrupts, },
- 	{ .parse_prop = parse_regulators, },
-@@ -1415,7 +1416,7 @@ static int of_link_property(struct device_node *con_np, const char *prop_name)
- 		while ((phandle = s->parse_prop(con_np, prop_name, i))) {
- 			struct device_node *con_dev_np;
- 
--			con_dev_np = s->node_not_dev
-+			con_dev_np = s->optional_con_dev
- 					? of_get_compat_node(con_np)
- 					: of_node_get(con_np);
- 			matched = true;
+@@ -1356,7 +1356,7 @@ static const struct supplier_bindings of_supplier_bindings[] = {
+ 	{ .parse_prop = parse_io_channels, },
+ 	{ .parse_prop = parse_interrupt_parent, },
+ 	{ .parse_prop = parse_dmas, .optional = true, },
+-	{ .parse_prop = parse_power_domains, },
++	{ .parse_prop = parse_power_domains, .optional_con_dev = true, },
+ 	{ .parse_prop = parse_hwlocks, },
+ 	{ .parse_prop = parse_extcon, },
+ 	{ .parse_prop = parse_nvmem_cells, },
 -- 
 2.25.1
 
