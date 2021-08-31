@@ -2,170 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABA63FCBF8
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 19:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937D43FCC00
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 19:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbhHaRBd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 13:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S240229AbhHaRED (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 13:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239820AbhHaRBd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 13:01:33 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245DAC061575
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:00:37 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id c206so15768279ybb.12
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:00:37 -0700 (PDT)
+        with ESMTP id S240180AbhHaREC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 13:04:02 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5645C061760
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:03:06 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so5882231ooh.7
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i8PcX2+XWTTfkBhJlaSnXEKAq4tUSIhCVzkx3+YPIzQ=;
-        b=Nxy18LRSUwEYVA5DTKMZAvL4rAk1tRd5SCwCgy3kPwmFcVczamy4c0w8t80hPz1I/f
-         8oOKJSQS8NIvS/huWDDoCBky8SREsb/slcloX8HAqtlcTraI1PlIeKH/xoU347db2UgF
-         eabJg2g/87Heihsq4Usegv+QuGs2SMEnntgqucDklj+OFjAgF3q2pg5JzMYve6GONNS5
-         sFJdlF0RhkvU8VAqHItEVl1SjXA38WyW09y6fjdnVfjszkOKmafamigdLLJdnxZtoFth
-         4+nsV8f0/SqIHX9ShTWLwWECxxvaUdpANLuzGdduu2672mr3I34VfIZJjXwyDJM2nt7P
-         GyWg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aquqJwbc9m/hIVCd01TlOuCXbAUHlFJOz/03vmUb8IM=;
+        b=q5jjzmupuZysdq6pWM6sahYpgGRYgqndWyW/wAc+WhHHcvPtSPx1jDAU0woWnKbRbo
+         tn/icMFl7O5TPVcbFWiyHWfHBfvH5q4M81Eye4+TLIsH/xh7sS1GZCXpszVjli5RBp7t
+         qmxrNg7JaX8/jUCQ5qmckF4xKx4F33oh3CEKEfs8y9TcaZBc93oUfwmnVbwoNriqOyBO
+         R9cYqvxZZbqb45UeyIa/tIfRHVBkkfpDqNdXKGaCkcrWV4ntPwL+rWnRq9jw/awNpe5d
+         Kr7ft9qBkhKzqN+TUudBVrTf8xbZcd/tYx7zs2WSramLm+f3npGOdIeZzeF7mA5ujJjR
+         s8jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i8PcX2+XWTTfkBhJlaSnXEKAq4tUSIhCVzkx3+YPIzQ=;
-        b=tFisxPT0c4bRmOWMwfnSqMCVKhYNtlsdFiuTnaXaI5DFZkQQ6h0xo8JS+wDVDjNMNT
-         v8e76K8Y1cis+FSKsobZMkFFKDXCHtksQl13pRyM7xvzq0wfIrfRU0uL9q7Ltni56bD0
-         UlXVAncCWPSa0xinHG/A35oUn2hy7XkDqhtVnAH5ig7nOfiNPA7yW3Iu7AD6joxK9uoW
-         w2pUrbUOjFgeAvfJlEWpn6nOnDjmIQjsr7RBDgk3ergXa6EpJH4lWw8pwZM60xnwfY1i
-         tn00k/9Wt/LR6WtOCjiSelKi9DgVzJgJuYNn115XFXDRNzBxT0TgPgVRz/1VXtaQ/EPs
-         H1Cw==
-X-Gm-Message-State: AOAM530aifkasgKC24XLR6MIbzumgMn7d/RlZzHmn22SgUxVQjm+7e+8
-        P8dsk9EgiNYFUM8aTSvmqUE8V4nmm9CqzEWBbsLAfQ==
-X-Google-Smtp-Source: ABdhPJyf9scnnsIgG/atu8659uQZbS+IseYKqkkKL5AGE9MW5L/11vKlLX+Muk/K6RFkSJiRqA7sQEPY8pv9w5+F+jw=
-X-Received: by 2002:a25:6746:: with SMTP id b67mr33221625ybc.96.1630429236196;
- Tue, 31 Aug 2021 10:00:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aquqJwbc9m/hIVCd01TlOuCXbAUHlFJOz/03vmUb8IM=;
+        b=rTfUwc/NvaZKedEN46W5AVf5sINhUzZez4bvQe2xIUZLTeI9UVrPyDl9RpBpb4c2EO
+         OANuBPxyvW0X0CzSb+TkKBHiN/hxDDtiKfRi0txhgzuiLJPpkSk6CUnU0U09V6zGD/47
+         U4beiE8grTX8njN7Fk8pFxJ0aQ5QSarp5DhoHRLVi1lxESiJwu2UJ92xJr6t3tdH2X1p
+         qn3qEzSHTziaFW/Xvu1cNlXAJWtb5mNOm/+UUqD+/BVG4EKnw6z9D6qY3nlbKn247hK9
+         NLJZre/Rxg4tc8m+PVcGqcNRT372TWELDkmUeuu7+JrHq1jpxiW9UQ9yNzTMHTXKEDpS
+         M3cw==
+X-Gm-Message-State: AOAM530ZIOcSDL87lb6eW5dj6bDzzhn1hGpLhzniKaf/flqbKm1XRblk
+        ZXLGoUSNKX+Vrf41sMO2puI3Hw==
+X-Google-Smtp-Source: ABdhPJxKKFdY8MvkADZc3EpXGvVWUIRpCwdjGVe7w41nCD/MZyO774PBzlWQ8ANv/3d0FU5rFERitw==
+X-Received: by 2002:a4a:df43:: with SMTP id j3mr15210793oou.37.1630429386025;
+        Tue, 31 Aug 2021 10:03:06 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y138sm3647410oie.22.2021.08.31.10.03.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Aug 2021 10:03:05 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 10:04:14 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>, sboyd@kernel.org,
+        robh+dt@kernel.org, viresh.kumar@linaro.org, agross@kernel.org,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        tdas@codeaurora.org
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc7280: Fixup the cpufreq node
+Message-ID: <YS5hDq+xblntYbh0@ripper>
+References: <1627581885-32165-1-git-send-email-sibis@codeaurora.org>
+ <1627581885-32165-4-git-send-email-sibis@codeaurora.org>
+ <YS5LDb4KDFx/dRnM@google.com>
 MIME-Version: 1.0
-References: <CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 31 Aug 2021 09:59:58 -0700
-Message-ID: <CAGETcx8JDR+5Aj2uwnQJ9sL+8-p=Cxix+P4sP8-ygMQ8_2AcXA@mail.gmail.com>
-Subject: Re: [RFD] drivers: base: A driver's ->sync_state() callback don't get called
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YS5LDb4KDFx/dRnM@google.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 31, 2021 at 6:56 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> Hi Saravana, Rafael, Stephen,
->
-> I have observed an issue with a driver's  ->sync_state() callback that
-> doesn't get called, even if consumers/supplier device links conditions
-> should have been satisfied. I have narrowed down the problem, but I am
-> not sure what is the best solution to fix it, hence I am turning to
-> you for some discussion/advice.
->
-> I have two test platform drivers, one that matches on the
-> "test,pm-domains-test" compatible string (this driver also has the
-> ->sync_state() callback assigned) and another driver that matches on
-> "test,runtime-pm-test".
->
-> This is the relevant part in my DTS file:
->
->        pm_domain_test {
->                 compatible = "test,pm-domains-test";
->
->                 pdParent: power-domain-parent {
->                         #power-domain-cells = <0>;
->                 };
->
->                 pdChild: power-domain-child {
->                         #power-domain-cells = <0>;
->                         power-domains = <&pdParent>;
->                 };
->         };
->
->         soctest: soctest {
->                 compatible = "simple-bus";
->
->                 rpmtest0 {
->                         compatible = "test,runtime-pm-test";
->                         power-domains = <&pdParent>;
->                 };
->         };
->
-> During boot the fw_devlinks are being created and their corresponding
-> links. With some debug enabled this shows some of the interesting
-> parts that are being printed to the log:
->
-> [    0.041539] device: 'pm_domain_test': device_add
-> [    0.041629] OF: Not linking pm_domain_test to pm_domain_test - is descendant
-> [    0.041718] device: 'soctest': device_add
-> [    0.041803] OF: Linking rpmtest0 (consumer) to pm_domain_test (supplier)
-> [    0.041829] device: 'platform:pm_domain_test--platform:soctest': device_add
-> [    0.041892] platform soctest: Linked as a sync state only consumer
-> to pm_domain_test
-> [    0.041957] OF:    create child: /soctest/rpmtest0
-> [    0.041995] device: 'soctest:rpmtest0': device_add
-> [    0.042072] device:
-> 'platform:pm_domain_test--platform:soctest:rpmtest0': device_add
-> [    0.042132] devices_kset: Moving soctest:rpmtest0 to end of list
-> [    0.042141] platform soctest:rpmtest0: Linked as a consumer to pm_domain_test
->
-> The interesting thing here is the "sync state only" link that gets
-> created. I assume there are good reasons for creating this link, even
-> if I fail to understand exactly why.
+On Tue 31 Aug 08:30 PDT 2021, Matthias Kaehlcke wrote:
 
-In general there's a good reason for creating these links from parent
-devices of the consumer to the supplier. It is documented in the code
-under __fw_devlink_link_to_consumers().
+> On Thu, Jul 29, 2021 at 11:34:44PM +0530, Sibi Sankar wrote:
+> > Fixup the register regions used by the cpufreq node on SC7280 SoC to
+> > support per core L3 DCVS.
+> > 
+> > Fixes: 7dbd121a2c58 ("arm64: dts: qcom: sc7280: Add cpufreq hw node")
+> > Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> 
+> This patch landed in the Bjorn's tree, however the corresponding driver
+> change ("cpufreq: qcom: Re-arrange register offsets to support per core
+> L3 DCVS" / https://patchwork.kernel.org/project/linux-arm-msm/patch/1627581885-32165-3-git-send-email-sibis@codeaurora.org/)
+> did not land in any maintainer tree yet AFAIK. IIUC the DT change alone
+> breaks cpufreq since the changed register regions require the changed
+> offset in the cpufreq driver.
+> 
 
-/*
- * If consumer device is not available yet, make a "proxy"
- * SYNC_STATE_ONLY link from the consumer's parent device to
- * the supplier device. This is necessary to make sure the
- * supplier doesn't get a sync_state() callback before the real
- * consumer can create a device link to the supplier.
- *
- * This proxy link step is needed to handle the case where the
- * consumer's parent device is added before the supplier.
- */
+Thanks for the note Matthias, it must have slipped by as I scraped the
+inbox for things that looked ready.
 
-and under __fw_devlink_link_to_suppliers().
+I'm actually not in favor of splitting these memory blocks in DT to
+facilitate the Linux implementation of splitting that in multiple
+drivers...
 
-/*
- * Make "proxy" SYNC_STATE_ONLY device links to represent the needs of
- * all the descendants. This proxy link step is needed to handle the
- * case where the supplier is added before the consumer's parent device
- * (@dev).
- */
+But I've not been following up on that discussion.
 
+Regards,
+Bjorn
 
->
-> In any case, the sync state only link never gets dropped, which I
-> assume is because there is no driver getting bound for the "soctest"
-> device (it has only the "simple-bus" compatible).
-
-Yeah, you've identified the problem correctly. I've been thinking
-about this possibility (and all the side effects a fix might have). I
-can send out a fix for this soon (within a week or so).
-
-> In other words, it doesn't matter that both the rpmtest0 and the
-> pm_domain_test devices are probed, thus satisfying the
-> supplier/consumer conditions, the ->sync_state() callback doesn't get
-> called anyway.
->
-> Can you perhaps help to point me in a direction of how to best fix this problem?
-
-I hope you are okay with me sending a fix.
-
-
--Saravana
+> Sibi, please confirm or clarify that my concern is unwarranted.
