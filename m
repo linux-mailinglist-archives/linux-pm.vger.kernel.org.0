@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D483FC901
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 15:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE6C3FC904
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 15:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbhHaN55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 09:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S232617AbhHaN57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 09:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbhHaN54 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 09:57:56 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE59C061575;
-        Tue, 31 Aug 2021 06:57:00 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id g14so3788389ljk.5;
-        Tue, 31 Aug 2021 06:57:00 -0700 (PDT)
+        with ESMTP id S230406AbhHaN55 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 09:57:57 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA7C0613D9;
+        Tue, 31 Aug 2021 06:57:01 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id g13so38678241lfj.12;
+        Tue, 31 Aug 2021 06:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b0/cqGavEHwgsYtk4vTJO+BDi1z8O7toXfeYU/faT8s=;
-        b=fhwxuRbSDKX/TZ2i6TzSrxfeiG763DDq9XWavBnavi1jgPfM7KavrpOghI7hIPNTiL
-         ZDzwm6WBycm5e4C4tltQ3ofeWPSMqphDZkTKHxkRSV8xmsdaU6a8nxbR4Q8ZwYA4Xj6L
-         CREmgJ4ERebr3FOduMDSNkl5vjvTJjL/KScW2KeqkjAo7g7YIoep3Ew5cq9WfQm3zi0n
-         xCjdHrXU3sEzQM8J9UbcTsfGztvi31HE/pC0sqkHZyKhCYc5XrybVCGWysQZihUst7TW
-         KoH3A95F4IZrQrazVIzNBRuix99RbIKOMtjOpao0OLPsygMyI0H9eP/5w7YfO+/fBBbd
-         lzHw==
+        bh=Hgtc73wlzCPnDSrqZMFKdeSGLWZ/vHH3cfFR111Xa/s=;
+        b=irnCEBugj9h5KB1fYkP9OvMOkrJp63BMzspkE3SIn6OkBb9KaSEzQAbQ0BAYE73ciH
+         pHUAfquaR4slUFDj6gB0OqxIxsm9XSqPy49d+bdol3VK8435+ffiV+GM5ZL+fkYjPrmW
+         mBb53w4VxpN9zV31qYYnzILN3oTaIAA1FqO6IaRD10aYLkVRevjGL6uxrt6hw+f012bL
+         xwyYx1l9j7OkKoA1Or4G6TJTuli+FEtW7GO9PfOEernLjVayZO26JxQcjTXTABGSJA4H
+         oJPlWFzvsnasQu7cUKNSxA70jV7o+MaVY0uzOBTrT7UUQm4a1xG1m2/VHDwfjBFQXa6z
+         XJkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b0/cqGavEHwgsYtk4vTJO+BDi1z8O7toXfeYU/faT8s=;
-        b=MiSJzC4nX3OxHL7e5JbBnClUpctwczOEjnVrSYRi+tb17OwZtNi4NVLd2lWlZbdiab
-         Deo3b5uEbyFC/D4D7zWgDnjbOMu2YdRKx2sQj8XIcwmo3IcwSFp6oW+WZm1T9m+ysbxR
-         sgH4vpY2Sm/iHotnjexQUciZDRxu8qU1auDNG2paJWIkGPSHgXXVIJrM/UqvB9dt3b44
-         8DzvvNVpmFdvR7nj0g9njvGuoUTYx58GPLDGSYekLx5cCwJpv0R9YNdzf1IwANh5noNh
-         uPuyXzoUQ925S64mLG2vO7Qd7HBOkkFzEI8f0Ll584rSynQF8XzA0nqUlSCAr0gVOLLY
-         Soow==
-X-Gm-Message-State: AOAM5331hTddZ7fHaKmxag+ySLKGrciIo3XhAw8dA65QRhqFBQx7mNtF
-        VSvgGKUK2FctUuUXuC/O8Gc=
-X-Google-Smtp-Source: ABdhPJymsO0TUupAbW3s5AjqlceExa694368OtSMKsTx+2Ovkae7LbJU2Gn+zzlQcybuJZV6cdMvmw==
-X-Received: by 2002:a2e:8881:: with SMTP id k1mr25360627lji.443.1630418219389;
-        Tue, 31 Aug 2021 06:56:59 -0700 (PDT)
+        bh=Hgtc73wlzCPnDSrqZMFKdeSGLWZ/vHH3cfFR111Xa/s=;
+        b=VJLmzNYgjb3WeHvjTizw39vN3fRM6BETs1ZRhYZS3P+zAY1C3Rz+9+tjwWBGq5r2JF
+         XafjpR8rGHpR36QoZu50lrkOi6q1aWRPhp4oJ9rOMh/Kvmhw0CMQhv0M+8KcaSUKkpki
+         qBpP1ebZeQB2hweXTgmijrWBZuzxsH6EU0z6M9qtXiDB5WzvRiKBnJZu8xDV4332ncA+
+         LMi0KW8QGioFq53mIPBR9r0HV+lTnj0TBVxrjlUrxMN8MeIpRkn1vKN2fvOervn4Bl65
+         GticKGMEM8VgVFFgfUbgxgTbFHXyFkSnHfuHte/vF9RFNCEw1fflSwcEou7tA377b5/C
+         TogQ==
+X-Gm-Message-State: AOAM533S4Ki8Qtq4CvQ0PdkGE97VdLwdBB+o2hi9iUEk31h1Sf51Jz4e
+        TC6GbKjtjSMyjoG8IWlYajQ=
+X-Google-Smtp-Source: ABdhPJwBxEAKZykniE6gECVoOUXIP0Uxwd71uV46hgknj7vXpR/Ih5V3Mns3w7BORSlEuE5R8NVqrw==
+X-Received: by 2002:a19:4955:: with SMTP id l21mr22326210lfj.5.1630418220155;
+        Tue, 31 Aug 2021 06:57:00 -0700 (PDT)
 Received: from localhost.localdomain (46-138-26-37.dynamic.spd-mgts.ru. [46.138.26.37])
-        by smtp.gmail.com with ESMTPSA id x4sm2203622ljm.98.2021.08.31.06.56.58
+        by smtp.gmail.com with ESMTPSA id x4sm2203622ljm.98.2021.08.31.06.56.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 31 Aug 2021 06:56:59 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
@@ -57,9 +57,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
 Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v10 2/8] opp: Allow dev_pm_opp_set_clkname() to replace released clock
-Date:   Tue, 31 Aug 2021 16:54:44 +0300
-Message-Id: <20210831135450.26070-3-digetx@gmail.com>
+Subject: [PATCH v10 3/8] opp: Change type of dev_pm_opp_attach_genpd(names) argument
+Date:   Tue, 31 Aug 2021 16:54:45 +0300
+Message-Id: <20210831135450.26070-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210831135450.26070-1-digetx@gmail.com>
 References: <20210831135450.26070-1-digetx@gmail.com>
@@ -69,29 +69,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The opp_table->clk is set to error once clock is released by
-dev_pm_opp_put_clkname(). This doesn't allow to set clock again,
-until OPP table is re-created from scratch. Check opp_table->clk
-for both NULL and ERR_PTR to allow the clock's replacement.
+Elements of the 'names' array are not changed by the code, constify them
+for consistency.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/opp/core.c     | 6 +++---
+ include/linux/pm_opp.h | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index dde8a5cc948c..602e502d092e 100644
+index 602e502d092e..d4e706a8b70d 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -2146,7 +2146,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
- 	}
+@@ -2359,12 +2359,12 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+  * "required-opps" are added in DT.
+  */
+ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+-		const char **names, struct device ***virt_devs)
++		const char * const *names, struct device ***virt_devs)
+ {
+ 	struct opp_table *opp_table;
+ 	struct device *virt_dev;
+ 	int index = 0, ret = -EINVAL;
+-	const char **name = names;
++	const char * const *name = names;
  
- 	/* clk shouldn't be initialized at this point */
--	if (WARN_ON(opp_table->clk)) {
-+	if (WARN_ON(!IS_ERR_OR_NULL(opp_table->clk))) {
- 		ret = -EBUSY;
- 		goto err;
- 	}
+ 	opp_table = _add_opp_table(dev, false);
+ 	if (IS_ERR(opp_table))
+@@ -2468,7 +2468,7 @@ static void devm_pm_opp_detach_genpd(void *data)
+  *
+  * Return: 0 on success and errorno otherwise.
+  */
+-int devm_pm_opp_attach_genpd(struct device *dev, const char **names,
++int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names,
+ 			     struct device ***virt_devs)
+ {
+ 	struct opp_table *opp_table;
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index c8091977efb8..37d5d71e0835 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -156,9 +156,9 @@ int devm_pm_opp_set_clkname(struct device *dev, const char *name);
+ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
+ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
+ int devm_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
+-struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
++struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs);
+ void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
+-int devm_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
++int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs);
+ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, struct opp_table *dst_table, struct dev_pm_opp *src_opp);
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
+ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
+@@ -377,7 +377,7 @@ static inline int devm_pm_opp_set_clkname(struct device *dev, const char *name)
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs)
++static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs)
+ {
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+@@ -385,7 +385,7 @@ static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, cons
+ static inline void dev_pm_opp_detach_genpd(struct opp_table *opp_table) {}
+ 
+ static inline int devm_pm_opp_attach_genpd(struct device *dev,
+-					   const char **names,
++					   const char * const *names,
+ 					   struct device ***virt_devs)
+ {
+ 	return -EOPNOTSUPP;
 -- 
 2.32.0
 
