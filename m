@@ -2,86 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC5D3FC72D
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 14:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440BA3FC8C0
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 15:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240495AbhHaMQp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 08:16:45 -0400
-Received: from mail-vs1-f51.google.com ([209.85.217.51]:37666 "EHLO
-        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239099AbhHaMQk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 08:16:40 -0400
-Received: by mail-vs1-f51.google.com with SMTP id i23so13043246vsj.4;
-        Tue, 31 Aug 2021 05:15:45 -0700 (PDT)
+        id S237433AbhHaNvJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 09:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238236AbhHaNvB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 09:51:01 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5527EC0613A3
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 06:50:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id dm15so26911218edb.10
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 06:50:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zPX1Cx6i1wGAaNv/FyWRibhoHk490fta5weo1iPmB0Q=;
+        b=1dVdeB6E9D4+m134wRVReiHxIto9X5gCIKMBqQuRf87ES60DlT5paBnu3uA0Wer4x2
+         ny9wiMkfWtxR/Jww/CTgv66he1SAsLUUk4ZAaPnUDD7UQXXtjtzbdc+HxNbFcOEoioPZ
+         sWNnXfuuI79IjoTQAcbKSmuJHP3Pa07T+UStcaM7PpYUDsRZ3uWHw5aadzlmR7mU2GZH
+         bnWGy6bUdTewhMMNj8Hj6SXb1IQeqDl6BCCCD4dcaRuCou3iF3gxiKz6qIn1+GeXI9aR
+         espETnz/DEToQCnl5tcSCsCNxkJSLAEYfd4DKxlRK25cwk2hHeKRLRS2xX8IbcrVxPCv
+         7M6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bnku0FFHfkBfdTCD06jvZHLPwNXL6nx4uAdXOIMz+aw=;
-        b=d3vkWumSN/7okZZwqUxwChaxiIC3WG/Y+MkDbiq2zjWLQVKD1D22zvclUPGoyoaS33
-         MbKRXTDpGRWN1tb20G7T0GVJvYcfDLPXcTJ9g41+8ZCLmOm6EhyM7SNYXOpd44qbIL3t
-         U7eYCJtbDvonscnx/xv/0vcOA/h+OGpYSgjLblA/dTfmRPsKpMN9QKcMhcBd1bYzeIUT
-         ohz9GvKmShdZeAVjjkNAQ7AbzY38nXxkka6iFV07oHrefYdzfzCr/IYw6QN5e1ty6seA
-         Xt5gMtMTTPH7Dzx81UoKEoNeyH0Uy1VyoFwfIa7V1eAZw0zcnErjTPqtn4h+5DJxZwuH
-         PsqQ==
-X-Gm-Message-State: AOAM533o/xgGqts2DSl7UrE6fDAo4iDy8b0cze/1knfs71CKThvcVGyO
-        38TCxWk0oIxvQZ3GJae+RTnC8mx3S5Ps4yrubbs=
-X-Google-Smtp-Source: ABdhPJwDYKJvKetBta1+JjjLOvO7qKHnmkgrzd/T0qifBWKYm5DYsHohpk/PwO3kQ8r8y0SRqMJ0OXCmoTLMUtrPg38=
-X-Received: by 2002:a05:6102:3e92:: with SMTP id m18mr17878737vsv.53.1630412141822;
- Tue, 31 Aug 2021 05:15:41 -0700 (PDT)
+        bh=zPX1Cx6i1wGAaNv/FyWRibhoHk490fta5weo1iPmB0Q=;
+        b=V6pdUy7t6cInqgqax+V4r3uYpaFpiEH38C6hMm13QYvvhntkGtIKQDpuGzoEC7FXOu
+         qxoSV/NjXO3sz7/xtTxDnLlmToi/tkfGwas/0xM1Ncqin7hLqF4W+80DxOwTNTns+Fpe
+         JvzNkQZFAGjyxugbco/HleB9KKIZ3R6GR33ltnLNPXJcpwIP/yvUi9oXT9IA1g3fQza2
+         w7VNWIiydED11yCYEdgytbSold1J/EmXcRa3gXjR+iGWXYmuzOpO6jMb42V/mXQKxtRX
+         +/greBg5zvizouwn/CbGhOc0u3negU0zhG0CDghgH6gjr+piCsZdivfMogGiGKQclEnm
+         FbOA==
+X-Gm-Message-State: AOAM531yGLNXGxPcDQrJTrtBzg1lYjXfEngC6hbE1388yhwABxkb0aD7
+        rZ+fwkExbe3QJ4QNAvu0yCssi4mAg7dPAYKsOK3n
+X-Google-Smtp-Source: ABdhPJyGDT7sjKnvAaslCh6VU3oeZudwS5qG9rubETPaZxPkqNoONMqbRw1AEONbP0PiecvVT5WPlpdCnWvYhqaPj8Q=
+X-Received: by 2002:a05:6402:4cf:: with SMTP id n15mr30404106edw.269.1630417801745;
+ Tue, 31 Aug 2021 06:50:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210731195034.979084-1-dmitry.baryshkov@linaro.org> <20210731195034.979084-3-dmitry.baryshkov@linaro.org>
-In-Reply-To: <20210731195034.979084-3-dmitry.baryshkov@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 31 Aug 2021 14:15:30 +0200
-Message-ID: <CAMuHMdXmJ-s42NgB9HboudGh3M+_HwfmfFEcBuWNNKoFke8a0g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] PM: runtime: add devm_pm_clk_create helper
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20210616085118.1141101-1-omosnace@redhat.com> <CAHC9VhSr2KpeBXuyoHR3_hs+qczFUaBx0oCSMfBBA5UNYU+0KA@mail.gmail.com>
+ <CAFqZXNvJtMOfLk-SLt2S2qt=+-x8fm9jS3NKxFoT0_5d2=8Ckg@mail.gmail.com>
+In-Reply-To: <CAFqZXNvJtMOfLk-SLt2S2qt=+-x8fm9jS3NKxFoT0_5d2=8Ckg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 31 Aug 2021 09:49:50 -0400
+Message-ID: <CAHC9VhRdh0uTBur8PHOR4bL38rQozatO7J2fwEzZiLwRXLL7fg@mail.gmail.com>
+Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
+ lockdown checks
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-efi@vger.kernel.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-serial@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        kexec@lists.infradead.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Tue, Aug 31, 2021 at 5:08 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> Can we move this forward somehow, please?
 
-Thanks for your patch!
-
-On Sat, Jul 31, 2021 at 9:51 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
-> A typical code pattern for pm_clk_create() call is to call it in the
-> _probe function and to call pm_clk_destroy() both from _probe error path
-> and from _remove function. For some drivers the whole remove function
-> would consist of the call to pm_remove_disable().
-
-Is it? I could find only one (drivers/clk/mmp/clk-audio.c).
-All other users call it from their PM Domain .attach_dev() callback,
-which cannot become managed.
-
-> Add helper function to replace this bolierplate piece of code. Calling
-> devm_pm_clk_create() removes the need for calling pm_clk_destroy() both
-> in the probe()'s error path and in the remove() function.
->
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+As mentioned previously, I can merge this via the SELinux tree but I
+need to see some ACKs from the other subsystems first, not to mention
+some resolution to the outstanding questions.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+paul moore
+www.paul-moore.com
