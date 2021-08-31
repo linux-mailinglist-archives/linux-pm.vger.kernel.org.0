@@ -2,41 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804823FCB57
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 18:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A133FCBC9
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 18:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239789AbhHaQSx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 12:18:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:56302 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239733AbhHaQSw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 31 Aug 2021 12:18:52 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E7C16D;
-        Tue, 31 Aug 2021 09:17:57 -0700 (PDT)
-Received: from [10.57.20.161] (unknown [10.57.20.161])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E01583F766;
-        Tue, 31 Aug 2021 09:17:54 -0700 (PDT)
-Subject: Re: [PATCH V3 9/9] cpufreq: scmi: Use .register_em() to register with
- energy model
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <cover.1628742634.git.viresh.kumar@linaro.org>
- <8158488baa1ea1aebd09c8d256db7420051d05ac.1628742634.git.viresh.kumar@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d454df8e-9adb-ea97-727e-f182e95707ef@arm.com>
-Date:   Tue, 31 Aug 2021 17:17:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S240219AbhHaQvS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 12:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240105AbhHaQvS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 12:51:18 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB133C061575
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id n24so25735029ion.10
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
+        b=MfjSCVNRe434fYhenU9ffr8sZqfGAcf1uUoqNOVaIRgH+JaKZSNKzJHusmvxK81+C3
+         8CDko/RSC3or7OxXyVLlmiifUT5pRiw5wyL47f3ED22Kad1Ie/Q1cWV7Ruotylp+l4Vp
+         WB40MKtUpWJ1InzLUYKdHuVwCVDgddn42mr+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
+        b=CtNHC39RixCvWsPlI2W1ls8padBu4K6V1Z8p/Iv4EHM1TuisXQFmPgDYIagJLmFl14
+         nf0ybk2EJuxXiqRdzkiwPgsXpybkppGtbyzg9CjOVukRDrcOK+CC9f+rQO9HsmhxGHpS
+         tl/UUt54hqc2NGur6TXj1v+wYzAJ35rJmjpNnYfdYzXJCi9M8Ye5b+BxZkOGZm1xhlOL
+         bqQf2mze936tPEmUyKsxYVbDO7DPm2uNvMJI6mWxtSCvZ9L+ig8cN1H+QiVHJANv5LGo
+         sRDHBJw1qmjFLF4LPQDFZxbhrZZX7ztpzgSFg9dZ22a1WPojmN1xOlBaUsod9rQbG38k
+         +FHA==
+X-Gm-Message-State: AOAM533zdD4oEVjBGjsNcdeRFh+HeDmRYgrQVmqM4VpZJWD14zK4rnnb
+        fa0r0zYOsUrW2SUcEuYngipDfA==
+X-Google-Smtp-Source: ABdhPJyJg5KBLvWmLAPWyRpm+uePjJeTSZiwMFAFjgh5Ssa6EJ4XJ4Xc7U5XLea3QhF1v9iT5FAxQA==
+X-Received: by 2002:a6b:7a03:: with SMTP id h3mr23648569iom.39.1630428622224;
+        Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 3sm6079565iln.79.2021.08.31.09.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Aug 2021 09:50:21 -0700 (PDT)
+Subject: Re: [PATCH v3 0/2] kselftests: clean configs
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     philip.li@intel.com, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3a386a77-80f5-81c0-5bda-df656c057fa6@linuxfoundation.org>
+Date:   Tue, 31 Aug 2021 10:50:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <8158488baa1ea1aebd09c8d256db7420051d05ac.1628742634.git.viresh.kumar@linaro.org>
+In-Reply-To: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -44,72 +68,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On 8/31/21 4:23 AM, Li Zhijian wrote:
+> 0Day will check if all configs listing under selftests are able
+> to be enabled properly.
+> 
+> For the missing configs, it will report something like:
+> LKP WARN miss config CONFIG_SYNC= of sync/config
+> 
+> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> CC: Viresh Kumar <viresh.kumar@linaro.org>
+> CC: linux-pm@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Li Zhijian (2):
+>    selftests/sync: Remove the deprecated config SYNC
+>    selftests/cpufreq: Rename DEBUG_PI_LIST to DEBUG_PLIST
+> 
+>   tools/testing/selftests/cpufreq/config | 2 +-
+>   tools/testing/selftests/sync/config    | 1 -
+>   2 files changed, 1 insertion(+), 2 deletions(-)
+> 
 
-My apologies for delay I was on holidays. I've seen the pull requests,
-so it's too late, but just for history...
+Thank you. These two patches will be queued up for 5.15
 
-I have tested this new callback with hacked juno FW which works in
-the per-cpu perf requests. There are no issues.
-
-Some debug prints:
-
-[    3.110072] cpu cpu0: cpumask weight(opp_shared_cpus)=4 weight 
-policy->cpus=1
-[    3.117666] cpu cpu0: Empty OPP table
-[    3.121418] cpu cpu0: OPP table empty
-[    3.131367] cpu cpu0: EM: created perf domain
-[    3.137848] cpu cpu1: cpumask weight(opp_shared_cpus)=2 weight 
-policy->cpus=1
-[    3.145220] cpu cpu1: Empty OPP table
-[    3.148961] cpu cpu1: OPP table empty
-[    3.158193] cpu cpu1: EM: created perf domain
-[    3.164325] cpu cpu2: cpumask weight(opp_shared_cpus)=2 weight 
-policy->cpus=1
-[    3.173430] cpu cpu3: cpumask weight(opp_shared_cpus)=4 weight 
-policy->cpus=1
-[    3.181947] cpu cpu4: cpumask weight(opp_shared_cpus)=4 weight 
-policy->cpus=1
-[    3.190620] cpu cpu5: cpumask weight(opp_shared_cpus)=4 weight 
-policy->cpus=1
-
-root@sqwt-ubuntu:~# grep . /sys/kernel/debug/energy_model/cpu0/ps\:*/*
-/sys/kernel/debug/energy_model/cpu0/ps:450000/cost:79
-/sys/kernel/debug/energy_model/cpu0/ps:450000/frequency:450000
-/sys/kernel/debug/energy_model/cpu0/ps:450000/power:42
-/sys/kernel/debug/energy_model/cpu0/ps:575000/cost:85
-/sys/kernel/debug/energy_model/cpu0/ps:575000/frequency:575000
-/sys/kernel/debug/energy_model/cpu0/ps:575000/power:58
-/sys/kernel/debug/energy_model/cpu0/ps:700000/cost:95
-/sys/kernel/debug/energy_model/cpu0/ps:700000/frequency:700000
-/sys/kernel/debug/energy_model/cpu0/ps:700000/power:79
-/sys/kernel/debug/energy_model/cpu0/ps:775000/cost:106
-/sys/kernel/debug/energy_model/cpu0/ps:775000/frequency:775000
-/sys/kernel/debug/energy_model/cpu0/ps:775000/power:97
-/sys/kernel/debug/energy_model/cpu0/ps:850000/cost:119
-/sys/kernel/debug/energy_model/cpu0/ps:850000/frequency:850000
-/sys/kernel/debug/energy_model/cpu0/ps:850000/power:119
-root@sqwt-ubuntu:~# cat /sys/kernel/debug/energy_model/cpu0/cpus
-0,3-5
-root@sqwt-ubuntu:~# cat /sys/kernel/debug/energy_model/cpu1/cpus
-1-2
-root@sqwt-ubuntu:~# grep . /sys/kernel/debug/energy_model/cpu1/ps\:*/*
-/sys/kernel/debug/energy_model/cpu1/ps:1100000/cost:583
-/sys/kernel/debug/energy_model/cpu1/ps:1100000/frequency:1100000
-/sys/kernel/debug/energy_model/cpu1/ps:1100000/power:583
-/sys/kernel/debug/energy_model/cpu1/ps:450000/cost:391
-/sys/kernel/debug/energy_model/cpu1/ps:450000/frequency:450000
-/sys/kernel/debug/energy_model/cpu1/ps:450000/power:160
-/sys/kernel/debug/energy_model/cpu1/ps:625000/cost:420
-/sys/kernel/debug/energy_model/cpu1/ps:625000/frequency:625000
-/sys/kernel/debug/energy_model/cpu1/ps:625000/power:239
-/sys/kernel/debug/energy_model/cpu1/ps:800000/cost:471
-/sys/kernel/debug/energy_model/cpu1/ps:800000/frequency:800000
-/sys/kernel/debug/energy_model/cpu1/ps:800000/power:343
-/sys/kernel/debug/energy_model/cpu1/ps:950000/cost:525
-/sys/kernel/debug/energy_model/cpu1/ps:950000/frequency:950000
-/sys/kernel/debug/energy_model/cpu1/ps:950000/power:454
-root@sqwt-ubuntu:~#
-
-Regards,
-Lukasz
+thanks,
+-- Shuah
