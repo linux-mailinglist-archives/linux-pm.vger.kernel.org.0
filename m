@@ -2,123 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C54B3FC8DB
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 15:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E3F3FC8FB
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 15:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237433AbhHaNyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 09:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S230362AbhHaN54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 09:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238353AbhHaNyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 09:54:38 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB874C0613A3
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 06:53:42 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id d6so26966131edt.7
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 06:53:42 -0700 (PDT)
+        with ESMTP id S231862AbhHaN5y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 09:57:54 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C4AC061764;
+        Tue, 31 Aug 2021 06:56:59 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id m4so31915857ljq.8;
+        Tue, 31 Aug 2021 06:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0KsdRco5g3Rxsur7HnzmWia1aqV1LswyiZ+q0x+vuSY=;
-        b=HQ7YjqNn+GvyrMyaEw4Ts6k7wU5aPcFPAWZ/MvIgnb/b3nJTG/bZDiK6JU5Urc0OGw
-         eYdX1ndiXPm2WmlL+IK4/u/BaFz6AbYdNIgxPmK/jtKVgAB4AXg1YnEwThk50eDSwxKa
-         5zamzfT+Mw9ZsLCNbbSg/KnigE4n5pxUzOD+A/0pPF9mh4JO0EwgAg6tp4mjPp+2ybhC
-         LKwkjJVc1hih9nB2NRvpLDKH15CvIzCDRkybcb8PHSW6J2tGC65jUPq2wh7pHwEv7mh1
-         GGntJW/v2BIHeuezNaO8q8z3cKspObfYA7MpK111176yeraZmzPIIb/SJwoe9ailV5zQ
-         GIEQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vh1dGOF6z3ZHEXOnLNafwuf+KocUmg+Di2EHeSGPS14=;
+        b=ESbQnhfCmCTAv6lQEk+bz2yhb0U05g9NZlMwZTZXxLDXNiktDG3SdJSKPGIRX7CmzQ
+         h5i9e3k2A/SXOkPua8wV4mk/OWd1unmcuUZ0VaGiFzgHkHxt9tB0WSvywwt9ZHDDKoGJ
+         l5n3AmISoacdCW3Zulxp9BTaKBGUOnjLTvPOTR+VCLvFoBcNkC7XQ9dtEQnObj1cBQf0
+         tbrlNB8sXbtvZE1fcx13Pa+XwkRc/QCnme2+J4Yn487svGYnF+qxrLdDlcKMDsIbDsJ6
+         myBCphEvLKIzuN35eED+SwEFlqsvEQQK/n//Bxt97W5z127qNCdOxZi0pQ7h9JuVNyPW
+         vkew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0KsdRco5g3Rxsur7HnzmWia1aqV1LswyiZ+q0x+vuSY=;
-        b=cLZihB6hfXC3ZCg7ILi3s6pK1ikHlgiRyXuxpkvLr4Bi8BfXtda9sBjKdluyBC67sO
-         oaVpdBMwUJQIVSJ2qLJUqK7gEEnh/02eGIbrcneZ0YAu/ioB4gTvSC9T5XB6f7w95CXR
-         NuKivy/5FwdgXjrhNIM2YDSf6onNWErlYdNc65VMAR055h5/zSF5foapoBgUCcwUjSAQ
-         q7OJ8a6Iw3u0LMxmJ/ZAio8ppOkmPcEAqOuxm8H6JNxqh4Mi9tQ34RZCytbpnSabcVl+
-         yru9zTVnOEkCHkDpezxilpTicIQDpJeYF4ajSdMrrAxR0+Wvt0YB/TZUQbDVz8iIc/Vk
-         Zakg==
-X-Gm-Message-State: AOAM530/0PChU/Ou8yC3YohLOlJlUH7rcy53HHlpS6KxTB/l47hKm5zj
-        pK1rXU/a93lRyqEjDw/893fl8fP3A14CmJicsilc
-X-Google-Smtp-Source: ABdhPJws3lszVbtjZiLZOptaWsbrL101boZlKAvA+uSpyGqWqgyhydVacfD22Otuw8Ioe1qUU+ZoAgTEh8gbHZtS+70=
-X-Received: by 2002:a05:6402:4cf:: with SMTP id n15mr30419950edw.269.1630418020725;
- Tue, 31 Aug 2021 06:53:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vh1dGOF6z3ZHEXOnLNafwuf+KocUmg+Di2EHeSGPS14=;
+        b=VkNXxwVa4lnIdPTA8zYPHDgQ4ODBRfRyYW3IybR8VNudHgaadXArqQKpXlHsha1UBU
+         8vaLOd1jPU6dXxARdJ8PDz45HRPh0fbWZP7WvPaMicPjWQvHWg/3qw0p5v6l5iYZ0+S7
+         mUzqdeg4GcAtHr8JFD6bW1jZM66WjlrKkhiYb0LDicGuMyFeOM8yN7U+XXcgJSkgdOeJ
+         1xpGt98o0+H7uysLuMmxH9ZX9foaRgx1eH1fqxfC0pkhceeWrMPiGeQ8ofRolGussJyR
+         ygAM6UIwcOiVJmZ8OicZylAzvFd1q2bX0z2nps09t6mM9lUAG2m11XOCaD/WpgdUSGsE
+         wXJw==
+X-Gm-Message-State: AOAM533nCroX5qo5Oj7wp6Istvh3jh2O9KIxM532xB7lmlkFX4sAZ7bB
+        rgWYp3g3y/hCevI9RmVb8QM=
+X-Google-Smtp-Source: ABdhPJzLG6MDZYE9+tYPEw2ML4qOqYcuZlHRjY8J0I5DsAoQoMQif5isenxdToNxPJBSPojKTTA5Iw==
+X-Received: by 2002:a2e:a7cf:: with SMTP id x15mr25134828ljp.227.1630418217974;
+        Tue, 31 Aug 2021 06:56:57 -0700 (PDT)
+Received: from localhost.localdomain (46-138-26-37.dynamic.spd-mgts.ru. [46.138.26.37])
+        by smtp.gmail.com with ESMTPSA id x4sm2203622ljm.98.2021.08.31.06.56.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Aug 2021 06:56:57 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v10 0/8] NVIDIA Tegra power management patches for 5.16
+Date:   Tue, 31 Aug 2021 16:54:42 +0300
+Message-Id: <20210831135450.26070-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20210616085118.1141101-1-omosnace@redhat.com> <CAPcyv4jvR8CT4rYODR5KUHNdiqMwQSwJZ+OkVf61kLT3JfjC_Q@mail.gmail.com>
- <CAFqZXNtuH0329Xvcb415Kar-=o6wwrkFuiP8BZ_2OQhHLqkkAg@mail.gmail.com>
-In-Reply-To: <CAFqZXNtuH0329Xvcb415Kar-=o6wwrkFuiP8BZ_2OQhHLqkkAg@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 31 Aug 2021 09:53:29 -0400
-Message-ID: <CAHC9VhTGECM2p+Q8n48aSdfJzY6XrpXQ5tcFurjWc4A3n8Qxjg@mail.gmail.com>
-Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
- lockdown checks
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        X86 ML <x86@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-cxl@vger.kernel.org, linux-efi <linux-efi@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Kexec Mailing List <kexec@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 31, 2021 at 5:09 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> On Sat, Jun 19, 2021 at 12:18 AM Dan Williams <dan.j.williams@intel.com> wrote:
-> > On Wed, Jun 16, 2021 at 1:51 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+This is a reduced version of the patchset which adds power management
+support to NVIDIA Tegra drivers. Viresh Kumar asked to send these PD/OPP
+patches separately for now to reduce the noise and finalize the review.
 
-...
+I implemented new dev_get_performance_state() GENPD callback as was
+discussed in v8/v9. GR3D driver patch shows how it's used by consumer
+drivers.
 
-> > > diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> > > index 2acc6173da36..c1747b6555c7 100644
-> > > --- a/drivers/cxl/mem.c
-> > > +++ b/drivers/cxl/mem.c
-> > > @@ -568,7 +568,7 @@ static bool cxl_mem_raw_command_allowed(u16 opcode)
-> > >         if (!IS_ENABLED(CONFIG_CXL_MEM_RAW_COMMANDS))
-> > >                 return false;
-> > >
-> > > -       if (security_locked_down(LOCKDOWN_NONE))
-> > > +       if (security_locked_down(current_cred(), LOCKDOWN_NONE))
-> >
-> > Acked-by: Dan Williams <dan.j.williams@intel.com>
-> >
-> > ...however that usage looks wrong. The expectation is that if kernel
-> > integrity protections are enabled then raw command access should be
-> > disabled. So I think that should be equivalent to LOCKDOWN_PCI_ACCESS
-> > in terms of the command capabilities to filter.
->
-> Yes, the LOCKDOWN_NONE seems wrong here... but it's a pre-existing bug
-> and I didn't want to go down yet another rabbit hole trying to fix it.
-> I'll look at this again once this patch is settled - it may indeed be
-> as simple as replacing LOCKDOWN_NONE with LOCKDOWN_PCI_ACCESS.
+v10: - Replaced dev_pm_opp_from_clk_rate() with dev_pm_opp_get_current(),
+       as was requested by Viresh Kumar.
 
-At this point you should be well aware of my distaste for merging
-patches that have known bugs in them.  Yes, this is a pre-existing
-condition, but it seems well within the scope of this work to address
-it as well.
+     - Added more comments to the code and extended commit message,
+       as was requested by Viresh Kumar and Ulf Hansson.
 
-This isn't something that is going to get merged while the merge
-window is open, so at the very least you've got almost two weeks to
-sort this out - please do that.
+     - Renamed get_performance_state() to dev_get_performance_state(),
+       as was requested by Ulf Hansson.
+
+     - Factored out 'performance' code out of __genpd_dev_pm_attach() into
+       a separate function genpd_dev_initialize_performance_state(), as was
+       requested by Ulf Hansson.
+
+     - Removed dev_suspended argument from dev_get_performance_state(),
+       as was requested by Ulf Hansson. It's replaced by the usage of
+       pm_runtime_status_suspended(), see genpd_dev_get_current_performance_state().
+
+Dmitry Osipenko (8):
+  opp: Add dev_pm_opp_get_current()
+  opp: Allow dev_pm_opp_set_clkname() to replace released clock
+  opp: Change type of dev_pm_opp_attach_genpd(names) argument
+  PM: domains: Add dev_get_performance_state() callback
+  soc/tegra: pmc: Implement dev_get_performance_state() callback
+  soc/tegra: Add devm_tegra_core_dev_init_opp_table_simple()
+  gpu: host1x: Add host1x_channel_stop()
+  drm/tegra: gr3d: Support generic power domain and runtime PM
+
+ drivers/base/power/domain.c  |  90 ++++++--
+ drivers/gpu/drm/tegra/gr3d.c | 384 ++++++++++++++++++++++++++++++-----
+ drivers/gpu/host1x/channel.c |   8 +
+ drivers/opp/core.c           |  51 ++++-
+ drivers/soc/tegra/pmc.c      | 101 +++++++++
+ include/linux/host1x.h       |   1 +
+ include/linux/pm_domain.h    |   2 +
+ include/linux/pm_opp.h       |  14 +-
+ include/soc/tegra/common.h   |  13 ++
+ 9 files changed, 586 insertions(+), 78 deletions(-)
 
 -- 
-paul moore
-www.paul-moore.com
+2.32.0
+
