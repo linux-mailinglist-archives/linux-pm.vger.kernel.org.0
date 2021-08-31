@@ -2,94 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A133FCBC9
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 18:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABA63FCBF8
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 19:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240219AbhHaQvS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 12:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S239938AbhHaRBd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 13:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240105AbhHaQvS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 12:51:18 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB133C061575
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id n24so25735029ion.10
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
+        with ESMTP id S239820AbhHaRBd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 13:01:33 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245DAC061575
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:00:37 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id c206so15768279ybb.12
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 10:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
-        b=MfjSCVNRe434fYhenU9ffr8sZqfGAcf1uUoqNOVaIRgH+JaKZSNKzJHusmvxK81+C3
-         8CDko/RSC3or7OxXyVLlmiifUT5pRiw5wyL47f3ED22Kad1Ie/Q1cWV7Ruotylp+l4Vp
-         WB40MKtUpWJ1InzLUYKdHuVwCVDgddn42mr+w=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i8PcX2+XWTTfkBhJlaSnXEKAq4tUSIhCVzkx3+YPIzQ=;
+        b=Nxy18LRSUwEYVA5DTKMZAvL4rAk1tRd5SCwCgy3kPwmFcVczamy4c0w8t80hPz1I/f
+         8oOKJSQS8NIvS/huWDDoCBky8SREsb/slcloX8HAqtlcTraI1PlIeKH/xoU347db2UgF
+         eabJg2g/87Heihsq4Usegv+QuGs2SMEnntgqucDklj+OFjAgF3q2pg5JzMYve6GONNS5
+         sFJdlF0RhkvU8VAqHItEVl1SjXA38WyW09y6fjdnVfjszkOKmafamigdLLJdnxZtoFth
+         4+nsV8f0/SqIHX9ShTWLwWECxxvaUdpANLuzGdduu2672mr3I34VfIZJjXwyDJM2nt7P
+         GyWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9DgEycQMGsPFJfjxU5xvxrR4KHhDrk4WSJNzhOW4AfQ=;
-        b=CtNHC39RixCvWsPlI2W1ls8padBu4K6V1Z8p/Iv4EHM1TuisXQFmPgDYIagJLmFl14
-         nf0ybk2EJuxXiqRdzkiwPgsXpybkppGtbyzg9CjOVukRDrcOK+CC9f+rQO9HsmhxGHpS
-         tl/UUt54hqc2NGur6TXj1v+wYzAJ35rJmjpNnYfdYzXJCi9M8Ye5b+BxZkOGZm1xhlOL
-         bqQf2mze936tPEmUyKsxYVbDO7DPm2uNvMJI6mWxtSCvZ9L+ig8cN1H+QiVHJANv5LGo
-         sRDHBJw1qmjFLF4LPQDFZxbhrZZX7ztpzgSFg9dZ22a1WPojmN1xOlBaUsod9rQbG38k
-         +FHA==
-X-Gm-Message-State: AOAM533zdD4oEVjBGjsNcdeRFh+HeDmRYgrQVmqM4VpZJWD14zK4rnnb
-        fa0r0zYOsUrW2SUcEuYngipDfA==
-X-Google-Smtp-Source: ABdhPJyJg5KBLvWmLAPWyRpm+uePjJeTSZiwMFAFjgh5Ssa6EJ4XJ4Xc7U5XLea3QhF1v9iT5FAxQA==
-X-Received: by 2002:a6b:7a03:: with SMTP id h3mr23648569iom.39.1630428622224;
-        Tue, 31 Aug 2021 09:50:22 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 3sm6079565iln.79.2021.08.31.09.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Aug 2021 09:50:21 -0700 (PDT)
-Subject: Re: [PATCH v3 0/2] kselftests: clean configs
-To:     Li Zhijian <lizhijian@cn.fujitsu.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     philip.li@intel.com, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3a386a77-80f5-81c0-5bda-df656c057fa6@linuxfoundation.org>
-Date:   Tue, 31 Aug 2021 10:50:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i8PcX2+XWTTfkBhJlaSnXEKAq4tUSIhCVzkx3+YPIzQ=;
+        b=tFisxPT0c4bRmOWMwfnSqMCVKhYNtlsdFiuTnaXaI5DFZkQQ6h0xo8JS+wDVDjNMNT
+         v8e76K8Y1cis+FSKsobZMkFFKDXCHtksQl13pRyM7xvzq0wfIrfRU0uL9q7Ltni56bD0
+         UlXVAncCWPSa0xinHG/A35oUn2hy7XkDqhtVnAH5ig7nOfiNPA7yW3Iu7AD6joxK9uoW
+         w2pUrbUOjFgeAvfJlEWpn6nOnDjmIQjsr7RBDgk3ergXa6EpJH4lWw8pwZM60xnwfY1i
+         tn00k/9Wt/LR6WtOCjiSelKi9DgVzJgJuYNn115XFXDRNzBxT0TgPgVRz/1VXtaQ/EPs
+         H1Cw==
+X-Gm-Message-State: AOAM530aifkasgKC24XLR6MIbzumgMn7d/RlZzHmn22SgUxVQjm+7e+8
+        P8dsk9EgiNYFUM8aTSvmqUE8V4nmm9CqzEWBbsLAfQ==
+X-Google-Smtp-Source: ABdhPJyf9scnnsIgG/atu8659uQZbS+IseYKqkkKL5AGE9MW5L/11vKlLX+Muk/K6RFkSJiRqA7sQEPY8pv9w5+F+jw=
+X-Received: by 2002:a25:6746:: with SMTP id b67mr33221625ybc.96.1630429236196;
+ Tue, 31 Aug 2021 10:00:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210831102316.280512-1-lizhijian@cn.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 31 Aug 2021 09:59:58 -0700
+Message-ID: <CAGETcx8JDR+5Aj2uwnQJ9sL+8-p=Cxix+P4sP8-ygMQ8_2AcXA@mail.gmail.com>
+Subject: Re: [RFD] drivers: base: A driver's ->sync_state() callback don't get called
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/31/21 4:23 AM, Li Zhijian wrote:
-> 0Day will check if all configs listing under selftests are able
-> to be enabled properly.
-> 
-> For the missing configs, it will report something like:
-> LKP WARN miss config CONFIG_SYNC= of sync/config
-> 
-> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: linux-pm@vger.kernel.org
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> Li Zhijian (2):
->    selftests/sync: Remove the deprecated config SYNC
->    selftests/cpufreq: Rename DEBUG_PI_LIST to DEBUG_PLIST
-> 
->   tools/testing/selftests/cpufreq/config | 2 +-
->   tools/testing/selftests/sync/config    | 1 -
->   2 files changed, 1 insertion(+), 2 deletions(-)
-> 
+On Tue, Aug 31, 2021 at 6:56 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> Hi Saravana, Rafael, Stephen,
+>
+> I have observed an issue with a driver's  ->sync_state() callback that
+> doesn't get called, even if consumers/supplier device links conditions
+> should have been satisfied. I have narrowed down the problem, but I am
+> not sure what is the best solution to fix it, hence I am turning to
+> you for some discussion/advice.
+>
+> I have two test platform drivers, one that matches on the
+> "test,pm-domains-test" compatible string (this driver also has the
+> ->sync_state() callback assigned) and another driver that matches on
+> "test,runtime-pm-test".
+>
+> This is the relevant part in my DTS file:
+>
+>        pm_domain_test {
+>                 compatible = "test,pm-domains-test";
+>
+>                 pdParent: power-domain-parent {
+>                         #power-domain-cells = <0>;
+>                 };
+>
+>                 pdChild: power-domain-child {
+>                         #power-domain-cells = <0>;
+>                         power-domains = <&pdParent>;
+>                 };
+>         };
+>
+>         soctest: soctest {
+>                 compatible = "simple-bus";
+>
+>                 rpmtest0 {
+>                         compatible = "test,runtime-pm-test";
+>                         power-domains = <&pdParent>;
+>                 };
+>         };
+>
+> During boot the fw_devlinks are being created and their corresponding
+> links. With some debug enabled this shows some of the interesting
+> parts that are being printed to the log:
+>
+> [    0.041539] device: 'pm_domain_test': device_add
+> [    0.041629] OF: Not linking pm_domain_test to pm_domain_test - is descendant
+> [    0.041718] device: 'soctest': device_add
+> [    0.041803] OF: Linking rpmtest0 (consumer) to pm_domain_test (supplier)
+> [    0.041829] device: 'platform:pm_domain_test--platform:soctest': device_add
+> [    0.041892] platform soctest: Linked as a sync state only consumer
+> to pm_domain_test
+> [    0.041957] OF:    create child: /soctest/rpmtest0
+> [    0.041995] device: 'soctest:rpmtest0': device_add
+> [    0.042072] device:
+> 'platform:pm_domain_test--platform:soctest:rpmtest0': device_add
+> [    0.042132] devices_kset: Moving soctest:rpmtest0 to end of list
+> [    0.042141] platform soctest:rpmtest0: Linked as a consumer to pm_domain_test
+>
+> The interesting thing here is the "sync state only" link that gets
+> created. I assume there are good reasons for creating this link, even
+> if I fail to understand exactly why.
 
-Thank you. These two patches will be queued up for 5.15
+In general there's a good reason for creating these links from parent
+devices of the consumer to the supplier. It is documented in the code
+under __fw_devlink_link_to_consumers().
 
-thanks,
--- Shuah
+/*
+ * If consumer device is not available yet, make a "proxy"
+ * SYNC_STATE_ONLY link from the consumer's parent device to
+ * the supplier device. This is necessary to make sure the
+ * supplier doesn't get a sync_state() callback before the real
+ * consumer can create a device link to the supplier.
+ *
+ * This proxy link step is needed to handle the case where the
+ * consumer's parent device is added before the supplier.
+ */
+
+and under __fw_devlink_link_to_suppliers().
+
+/*
+ * Make "proxy" SYNC_STATE_ONLY device links to represent the needs of
+ * all the descendants. This proxy link step is needed to handle the
+ * case where the supplier is added before the consumer's parent device
+ * (@dev).
+ */
+
+
+>
+> In any case, the sync state only link never gets dropped, which I
+> assume is because there is no driver getting bound for the "soctest"
+> device (it has only the "simple-bus" compatible).
+
+Yeah, you've identified the problem correctly. I've been thinking
+about this possibility (and all the side effects a fix might have). I
+can send out a fix for this soon (within a week or so).
+
+> In other words, it doesn't matter that both the rpmtest0 and the
+> pm_domain_test devices are probed, thus satisfying the
+> supplier/consumer conditions, the ->sync_state() callback doesn't get
+> called anyway.
+>
+> Can you perhaps help to point me in a direction of how to best fix this problem?
+
+I hope you are okay with me sending a fix.
+
+
+-Saravana
