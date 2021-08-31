@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A14C3FC23E
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 07:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76BE3FC266
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 08:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbhHaFo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 01:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S239500AbhHaGAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 02:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbhHaFo6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 01:44:58 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929E7C061575
-        for <linux-pm@vger.kernel.org>; Mon, 30 Aug 2021 22:44:03 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 2so14039304pfo.8
-        for <linux-pm@vger.kernel.org>; Mon, 30 Aug 2021 22:44:03 -0700 (PDT)
+        with ESMTP id S238470AbhHaGAn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 02:00:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA165C061575
+        for <linux-pm@vger.kernel.org>; Mon, 30 Aug 2021 22:59:48 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id e16so13660397pfc.6
+        for <linux-pm@vger.kernel.org>; Mon, 30 Aug 2021 22:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=UqBdQdIc1fzNjTU9RHl9YOpUIZrWHS1LFDPkwLneJXs=;
-        b=j5mk0SZIe3snpwuRmEln9EFwlT0U/hKOO7z9iUEpz0buMam0I/rss8GK5b9CSG0XhA
-         3lfBXHErBA7Nc9rvGpp09A9QDcrk5kpQwZSdu8cUldWPnptpgjNkplNjkzmng9t1CRK+
-         HdxT7FXaNgySpSuOrQC46kfVW3JAZDJcOSYXzjeN2QvZuiV3ZYzZyKLk+GF9E26plfpX
-         AF+h0WqT4vBXKzU1cglphIVNkz2w9psUglDNrRd2nQMxbGE1//TGXPFEKA5XK2nSeEd7
-         OuGQgQSPoSvo3iRYRQuybXLQMmU/Z1SzUUWiVjUgNp+2rPsVEW8XoeP+5Xx8jn/du+8I
-         r01A==
+        bh=b9OGeMyB8RoeFTfP33aJZL2Bo/kdCU6sSM8rp+lcdJg=;
+        b=PZWS70RH6VCAV1XWb6ILurWrsIWobamRQY7xXcd8/To8ZCqzuGl66oib4Th1CKvXkz
+         E860AZJw+8CEmPBsccIyTnfhBZbdmFrtJPQHy1aQrONaTYbVMEZ7VUtKmntFNNsEO6LW
+         A/k9sgEbt5UGBiLUIZ9iWiDiyVHUsqbSWrP8nSmotblScQVTBELIjLlY4LpkatMnPnF9
+         tbWk3XigO4t86oIC+bBH8VSLwDASoC9UG69MBwd9ARA1HQr7jz0lQof/I2P9Wu0KnZ/8
+         Y7NAShNvfr70C1FB9DAAUHtG7xtUyKsXjAdoLhA6iIKzOyWZDW6JxNCE9FW+k6brWvhl
+         1VXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=UqBdQdIc1fzNjTU9RHl9YOpUIZrWHS1LFDPkwLneJXs=;
-        b=ToIFH/MfChZ3b8W5S2/zo4lYUlVM/4cHEvvj6PQaDqTTQN3rn0HTubiVh0PTRruoOe
-         ouCAwQfAbd+DkdKPgydB3JtoWG5EW2m3odWc9GCWtB85TkceUPDZLz7cOlrwtKbvTNZa
-         Xz9DnFgJ4gl6NfRarxEKzhUd0+k+iWO1pGfP1FPJ0ZHvKZgTaKaDeKGCmmOV+ptmbtx+
-         qkVd9cUj3N/E/UPN6hkfRkQzLWmlxbpaCmuZr+Ni6RJYprAApcN2tN8VEhea6ADWzjGU
-         DCzVh2+tqFBvVoKN2CWmAljgmDJ9FcoSZkezVLNAbDOvpdWoPjAx++8iC49vn46nW2+a
-         AjCw==
-X-Gm-Message-State: AOAM531glabRsjSWuLZlrhLIZFHRRM92JtbO7CNwPtmrpZsWnmZDA4kU
-        idZXE25Orvzpem3O1D3X8MnVXg==
-X-Google-Smtp-Source: ABdhPJwvM6ZgWyN5pOEE2iOQ5FiWcQuYKXNb4jv3JNbJ7glftXgcjTl6COIjf/dbDZ974IvJ2JNnMw==
-X-Received: by 2002:a65:4581:: with SMTP id o1mr24848959pgq.349.1630388643003;
-        Mon, 30 Aug 2021 22:44:03 -0700 (PDT)
+        bh=b9OGeMyB8RoeFTfP33aJZL2Bo/kdCU6sSM8rp+lcdJg=;
+        b=QyGut3BuIv7Sl266dqTFmBbv4oUCWO+nBUHLxwxfdc02OWVNcleUBMTgo3kuqrmdlZ
+         r65w8KoFCd3MAvMvVWvq0hF9IqSbM14SP9lowYgUMPTTkLPJXv6TMtAbkSwBF21lrRzK
+         B3bMnw0UOSu5Qp2CmumVwogyhJgXiHkf3kdKNJIFr1Pq7aJH1fTdGVIibdCQy+Uo/nlW
+         vl6FB26kyARPtd2ySk4pn30edU1z+sqialPYNVZoqUiiWd8WSAWCtSAMa+UjyADsKM7p
+         NG9H7r6Bl2i65mf89ZEhUKmCCDXAqN77TCkimOjC/TD6uRKlfULiMBKHpyMKoRYisIZD
+         aVTA==
+X-Gm-Message-State: AOAM530lWaU0VBQ7KVwhBDIPmtwUcZcMdI/rB37gUBCY+T5Eje7oH4ZB
+        tRr0649oBFuXr57Ex3rW3/B5Pw==
+X-Google-Smtp-Source: ABdhPJx6MW29oPmzgbiPjCDkuEQv7KOXDZb+eT+EFYQATDpuFpFcayVQ7Y8sphVo++de+f1fLvwTNg==
+X-Received: by 2002:a05:6a00:238e:b029:35c:c5e:b82d with SMTP id f14-20020a056a00238eb029035c0c5eb82dmr26823448pfc.33.1630389588390;
+        Mon, 30 Aug 2021 22:59:48 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id y12sm1258220pjm.42.2021.08.30.22.44.02
+        by smtp.gmail.com with ESMTPSA id b18sm16132779pfi.199.2021.08.30.22.59.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Aug 2021 22:44:02 -0700 (PDT)
-Date:   Tue, 31 Aug 2021 11:14:00 +0530
+        Mon, 30 Aug 2021 22:59:47 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 11:29:45 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 5.15-rc1
-Message-ID: <20210831054400.voq3pxldkxezqldn@vireshk-i7>
+Subject: [GIT PULL] cpufreq/arm updates for 5.15-rc1
+Message-ID: <20210831055945.cnyi2qheipfv2q3q@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,7 +63,16 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Rafael,
 
-This pull request moves the OPP bindings to DT schema (Rob Herring).
+This pull request contains:
+
+- Updates cpufreq-dt blocklist with more platforms (Bjorn Andersson).
+
+- Allow freq changes from any CPU for qcom-hw driver (Taniya Das).
+
+- Add DSVS interrupt's support for qcom-hw driver (Thara Gopinath).
+
+- A new callback (->register_em()) to register EM at a more convenient
+  point of time.
 
 Thanks.
 
@@ -71,45 +80,51 @@ Thanks.
 Viresh
 
 -------------------------8<-------------------------
-The following changes since commit 19526d092ceb32d619fce73fe0bdca4370890124:
+The following changes since commit 484f2b7c61b9ae58cc00c5127bcbcd9177af8dfe:
 
-  opp: core: Check for pending links before reading required_opp pointers (2021-08-23 12:44:55 +0530)
+  cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant (2021-08-09 09:31:22 +0530)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
 
-for you to fetch changes up to 94274f20f6bf5eb0099bbf7e133aac1f5cd087e8:
+for you to fetch changes up to f0712ace7fe0723b40733c3b98591d34c1b0bfb9:
 
-  dt-bindings: opp: Convert to DT schema (2021-08-23 12:44:55 +0530)
+  cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag (2021-08-30 10:43:35 +0530)
 
 ----------------------------------------------------------------
-Rob Herring (3):
-      ARM: dts: omap: Drop references to opp.txt
-      dt-bindings: Clean-up OPP binding node names in examples
-      dt-bindings: opp: Convert to DT schema
+Bjorn Andersson (1):
+      cpufreq: blocklist more Qualcomm platforms in cpufreq-dt-platdev
 
- .../devicetree/bindings/cpufreq/cpufreq-dt.txt     |   2 +-
- .../bindings/cpufreq/cpufreq-mediatek.txt          |   2 +-
- .../devicetree/bindings/cpufreq/cpufreq-st.txt     |   6 +-
- .../bindings/cpufreq/nvidia,tegra20-cpufreq.txt    |   2 +-
- .../devicetree/bindings/devfreq/rk3399_dmc.txt     |   2 +-
- .../devicetree/bindings/gpu/arm,mali-bifrost.yaml  |   2 +-
- .../devicetree/bindings/gpu/arm,mali-midgard.yaml  |   2 +-
- .../bindings/interconnect/fsl,imx8m-noc.yaml       |   4 +-
- .../opp/allwinner,sun50i-h6-operating-points.yaml  |   4 +
- Documentation/devicetree/bindings/opp/opp-v1.yaml  |  51 ++
- .../devicetree/bindings/opp/opp-v2-base.yaml       | 214 +++++++
- Documentation/devicetree/bindings/opp/opp-v2.yaml  | 475 ++++++++++++++++
- Documentation/devicetree/bindings/opp/opp.txt      | 622 ---------------------
- Documentation/devicetree/bindings/opp/qcom-opp.txt |   2 +-
- .../bindings/opp/ti-omap5-opp-supply.txt           |   2 +-
- .../devicetree/bindings/power/power-domain.yaml    |   2 +-
- arch/arm/boot/dts/omap34xx.dtsi                    |   1 -
- arch/arm/boot/dts/omap36xx.dtsi                    |   1 -
- 18 files changed, 757 insertions(+), 639 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v1.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-base.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/opp.txt
+Taniya Das (1):
+      cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag
+
+Thara Gopinath (1):
+      cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
+
+Viresh Kumar (10):
+      cpufreq: vexpress: Set CPUFREQ_IS_COOLING_DEV flag
+      cpufreq: Add callback to register with energy model
+      cpufreq: dt: Use .register_em() to register with energy model
+      cpufreq: imx6q: Use .register_em() to register with energy model
+      cpufreq: mediatek: Use .register_em() to register with energy model
+      cpufreq: omap: Use .register_em() to register with energy model
+      cpufreq: qcom-cpufreq-hw: Use .register_em() to register with energy model
+      cpufreq: scpi: Use .register_em() to register with energy model
+      cpufreq: vexpress: Use .register_em() to register with energy model
+      cpufreq: scmi: Use .register_em() to register with energy model
+
+ drivers/base/arch_topology.c           |   2 +
+ drivers/cpufreq/cpufreq-dt-platdev.c   |   4 +
+ drivers/cpufreq/cpufreq-dt.c           |   3 +-
+ drivers/cpufreq/cpufreq.c              |  13 +++
+ drivers/cpufreq/imx6q-cpufreq.c        |   2 +-
+ drivers/cpufreq/mediatek-cpufreq.c     |   3 +-
+ drivers/cpufreq/omap-cpufreq.c         |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c      | 151 ++++++++++++++++++++++++++++++++-
+ drivers/cpufreq/scmi-cpufreq.c         |  65 +++++++++-----
+ drivers/cpufreq/scpi-cpufreq.c         |   3 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c |  25 +-----
+ include/linux/cpufreq.h                |  14 +++
+ 12 files changed, 233 insertions(+), 54 deletions(-)
 
