@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311343FC4D5
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 11:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6853FC4E6
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Aug 2021 11:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240588AbhHaJJT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Aug 2021 05:09:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40285 "EHLO
+        id S240616AbhHaJKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Aug 2021 05:10:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39438 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240581AbhHaJJR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 05:09:17 -0400
+        by vger.kernel.org with ESMTP id S240608AbhHaJKh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Aug 2021 05:10:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630400902;
+        s=mimecast20190719; t=1630400982;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lCeb7MSVHIA6AQvPBMrpCMcewt6C5Hp/EtiNe37zzes=;
-        b=B+oIukgbrgozFILzt9PAyuNbD9RZLjLFn4lm5mkXhUNbbMD7dlg+3x/q6nbz6asE11HReP
-        qtS8mJSKyvqpozYIJj76961abq3wCdio0ClrMMem3aEWPxYdSFUofOot8nh0uQ9je1Za9S
-        BvFkbNsmw3TfivXM7xRRv0a3JNwFVPg=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-240-cCEz92cVPYS7f2bOjwug4w-1; Tue, 31 Aug 2021 05:08:20 -0400
-X-MC-Unique: cCEz92cVPYS7f2bOjwug4w-1
-Received: by mail-yb1-f200.google.com with SMTP id m10-20020a25d40a000000b00598bbbf467dso1099105ybf.1
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 02:08:20 -0700 (PDT)
+        bh=KqIomsJD8qkvJRmtf6AOcHNJotQV38aV9t/Y65DfWRs=;
+        b=LxeTv/7ttnAXoIUrv1ZolVKo2n7VM5GwGdLLbSyK4qohl1T3uPogKI+XdYYnG/UjWcRKHX
+        BG/Ee/tZDGyg3Wz92TpFWxOW7j1IO2yzUUp7UrxCJkwLPaDqE6un2HANXZRqBSFSbsik5H
+        VjRUYjzyf+h45xCxcuI5Ds88+ti0jcg=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-306-e-Zlhz4WO0G3qBGlBXHyEg-1; Tue, 31 Aug 2021 05:09:41 -0400
+X-MC-Unique: e-Zlhz4WO0G3qBGlBXHyEg-1
+Received: by mail-yb1-f197.google.com with SMTP id h143-20020a25d095000000b0059c2e43cd3eso5299375ybg.12
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 02:09:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lCeb7MSVHIA6AQvPBMrpCMcewt6C5Hp/EtiNe37zzes=;
-        b=qKtTYCdSctIFwpMNl42DthHT8IK49T1I6rM7Ebwf0Gkun3FPIoeitnAPH2BTq8fQx4
-         SFmfORkQwvd3ezLjWIHpjpwEYoUOI7HLR8g2TRI4gOAn3RMcHUbXD+ulCHMsvqLZ8FXc
-         SY7FtLtc5sVzYtjxcPF1aBMC2ieGbizA1eNdHnurrRNDwDXGKPeqQNisqjv+tYA+FUV9
-         Y37XijjZQZ8DIfgXtuiRbYFP29uKd3H8p6UGYJ+8FUMnmGfkB6PlvWCXLtesmwOGxqKe
-         OJ5wS6MKWEFBq1YMu8RkjwuD7Ef6L/2cgbA/BEtiRY+7i2dKYNJYJl+6CbjM3TuumM4t
-         OhOA==
-X-Gm-Message-State: AOAM530rCM70VcKOhIhha9It/5sjbaLYDQvoYjb6QjFIm9LtzFZQ45cl
-        3nucGLgOnTZUeY30i3MWZLPLtEg6EiFJh7/OG38q1Rh5miiTieWCB95u8DZiOuQfHgcrpyraK+j
-        mPkNwfBblpwgbCiOeMjwHdn5co/8Y3pAhxSg=
-X-Received: by 2002:a25:c184:: with SMTP id r126mr28651668ybf.123.1630400899645;
-        Tue, 31 Aug 2021 02:08:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy4ZNnqHdPHd1KpwqFLFV6AFeVHb5LZ7Jb5RG2vtJXhk7vybNwPbdTc2aQhHuASLbfSbAuaEwPm90oIL61rhUM=
-X-Received: by 2002:a25:c184:: with SMTP id r126mr28651621ybf.123.1630400899378;
- Tue, 31 Aug 2021 02:08:19 -0700 (PDT)
+        bh=KqIomsJD8qkvJRmtf6AOcHNJotQV38aV9t/Y65DfWRs=;
+        b=Vbt5E5krAytmlfaPvWebNgR+VHybKEJ3Zik26k0qApJzTPQoEgbPcgwfQ+O1ZUkz5E
+         wJxQXuh+SYNtUiKJHPZuvtiuPvd1Hu6YeMTrqsCPk8bCgaEfvHxPR9PjEVBxTH9kUZdV
+         eJz1wJgrm4svAMz0YDl0KWScaes3RPcguC/7IcpfnbUZdcPWulIrqhxt98TilicEKlbn
+         9uBM1Wjoyjpw5BoThWOl/AQVG9CIC1pa1pysu1jwzmd94SvmNGQ/sdrerHQ0kkHXboqN
+         1vpBI/RFlexX4Tuj5s7DMTkshp68OoV0GI8NqjBbWp8gCTFj/c0jgNPyrJwsgLLfwBAg
+         Ggbg==
+X-Gm-Message-State: AOAM530K4QXQrqeisJNxgWCcPa5LPSpsdoVLuc+tqXx28pOc/RaVrNzu
+        g4Jjnr8D6RGoPJhi0m7hR9f3jihPdDODiTi9uCEF/PjrpGpZWwgYUWh7Zx9vUIRYkwD3Vbl1PD7
+        X0rwXQgpfbgXHcC7mvqZrNSCZd0nxu6nFNdA=
+X-Received: by 2002:a25:1d08:: with SMTP id d8mr29534404ybd.377.1630400980464;
+        Tue, 31 Aug 2021 02:09:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzoUYVGjsHQ1mAV96NVBWIdFVB3TZpqWc7BWtvr/Mg648rQQ+7P7WYMOAhTFTS/Li+BMqOUSleNc4ReksuZGrg=
+X-Received: by 2002:a25:1d08:: with SMTP id d8mr29534365ybd.377.1630400980209;
+ Tue, 31 Aug 2021 02:09:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210616085118.1141101-1-omosnace@redhat.com> <CAHC9VhSr2KpeBXuyoHR3_hs+qczFUaBx0oCSMfBBA5UNYU+0KA@mail.gmail.com>
-In-Reply-To: <CAHC9VhSr2KpeBXuyoHR3_hs+qczFUaBx0oCSMfBBA5UNYU+0KA@mail.gmail.com>
+References: <20210616085118.1141101-1-omosnace@redhat.com> <CAPcyv4jvR8CT4rYODR5KUHNdiqMwQSwJZ+OkVf61kLT3JfjC_Q@mail.gmail.com>
+In-Reply-To: <CAPcyv4jvR8CT4rYODR5KUHNdiqMwQSwJZ+OkVf61kLT3JfjC_Q@mail.gmail.com>
 From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Tue, 31 Aug 2021 11:08:08 +0200
-Message-ID: <CAFqZXNvJtMOfLk-SLt2S2qt=+-x8fm9jS3NKxFoT0_5d2=8Ckg@mail.gmail.com>
+Date:   Tue, 31 Aug 2021 11:09:29 +0200
+Message-ID: <CAFqZXNtuH0329Xvcb415Kar-=o6wwrkFuiP8BZ_2OQhHLqkkAg@mail.gmail.com>
 Subject: Re: [PATCH v3] lockdown,selinux: fix wrong subject in some SELinux
  lockdown checks
-To:     Paul Moore <paul@paul-moore.com>
+To:     Dan Williams <dan.j.williams@intel.com>
 Cc:     Linux Security Module list 
         <linux-security-module@vger.kernel.org>,
         James Morris <jmorris@namei.org>,
@@ -62,26 +62,28 @@ Cc:     Linux Security Module list
         Steffen Klassert <steffen.klassert@secunet.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S . Miller" <davem@davemloft.net>,
+        Paul Moore <paul@paul-moore.com>,
         Stephen Smalley <stephen.smalley.work@gmail.com>,
         SElinux list <selinux@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-efi@vger.kernel.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        X86 ML <x86@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, linux-efi <linux-efi@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
         linux-serial@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        kexec@lists.infradead.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
+        Netdev <netdev@vger.kernel.org>,
+        Kexec Mailing List <kexec@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 5:40 AM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Jun 16, 2021 at 4:51 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+On Sat, Jun 19, 2021 at 12:18 AM Dan Williams <dan.j.williams@intel.com> wrote:
+> On Wed, Jun 16, 2021 at 1:51 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
 > >
 > > Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
 > > lockdown") added an implementation of the locked_down LSM hook to
@@ -140,112 +142,32 @@ On Fri, Jun 18, 2021 at 5:40 AM Paul Moore <paul@paul-moore.com> wrote:
 > > Improvements-suggested-by: Paul Moore <paul@paul-moore.com>
 > > Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
 > > Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
->
-> This seems reasonable to me, but before I merge it into the SELinux
-> tree I think it would be good to get some ACKs from the relevant
-> subsystem folks.  I don't believe we ever saw a response to the last
-> question for the PPC folks, did we?
-
-Can we move this forward somehow, please?
-
-Quoting the yet-unanswered question from the v2 thread for convenience:
-
-> > > The callers migrated to the new hook, passing NULL as cred:
-> > > 1. arch/powerpc/xmon/xmon.c
-[...]
+> [..]
+> > diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> > index 2acc6173da36..c1747b6555c7 100644
+> > --- a/drivers/cxl/mem.c
+> > +++ b/drivers/cxl/mem.c
+> > @@ -568,7 +568,7 @@ static bool cxl_mem_raw_command_allowed(u16 opcode)
+> >         if (!IS_ENABLED(CONFIG_CXL_MEM_RAW_COMMANDS))
+> >                 return false;
 > >
-> > This definitely sounds like kernel_t based on the description above.
+> > -       if (security_locked_down(LOCKDOWN_NONE))
+> > +       if (security_locked_down(current_cred(), LOCKDOWN_NONE))
 >
-> Here I'm a little concerned that the hook might be called from some
-> unusual interrupt, which is not masked by spin_lock_irqsave()... We
-> ran into this with PMI (Platform Management Interrupt) before, see
-> commit 5ae5fbd21079 ("powerpc/perf: Fix handling of privilege level
-> checks in perf interrupt context"). While I can't see anything that
-> would suggest something like this happening here, the whole thing is
-> so foreign to me that I'm wary of making assumptions :)
+> Acked-by: Dan Williams <dan.j.williams@intel.com>
 >
-> @Michael/PPC devs, can you confirm to us that xmon_is_locked_down() is
-> only called from normal syscall/interrupt context (as opposed to
-> something tricky like PMI)?
+> ...however that usage looks wrong. The expectation is that if kernel
+> integrity protections are enabled then raw command access should be
+> disabled. So I think that should be equivalent to LOCKDOWN_PCI_ACCESS
+> in terms of the command capabilities to filter.
 
-I strongly suspect the answer will be just "Of course it is, why would
-you even ask such a silly question?", but please let's have it on
-record so we can finally get this patch merged...
-
-
-> > ---
-> >
-> > v3:
-> > - add the cred argument to security_locked_down() and adapt all callers
-> > - keep using current_cred() in BPF, as the hook calls have been shifted
-> >   to program load time (commit ff40e51043af ("bpf, lockdown, audit: Fix
-> >   buggy SELinux lockdown permission checks"))
-> > - in SELinux, don't ignore hook calls where cred == NULL, but use
-> >   SECINITSID_KERNEL as the subject instead
-> > - update explanations in the commit message
-> >
-> > v2: https://lore.kernel.org/lkml/20210517092006.803332-1-omosnace@redhat.com/
-> > - change to a single hook based on suggestions by Casey Schaufler
-> >
-> > v1: https://lore.kernel.org/lkml/20210507114048.138933-1-omosnace@redhat.com/
-> >
-> >  arch/powerpc/xmon/xmon.c             |  4 ++--
-> >  arch/x86/kernel/ioport.c             |  4 ++--
-> >  arch/x86/kernel/msr.c                |  4 ++--
-> >  arch/x86/mm/testmmiotrace.c          |  2 +-
-> >  drivers/acpi/acpi_configfs.c         |  2 +-
-> >  drivers/acpi/custom_method.c         |  2 +-
-> >  drivers/acpi/osl.c                   |  3 ++-
-> >  drivers/acpi/tables.c                |  2 +-
-> >  drivers/char/mem.c                   |  2 +-
-> >  drivers/cxl/mem.c                    |  2 +-
-> >  drivers/firmware/efi/efi.c           |  2 +-
-> >  drivers/firmware/efi/test/efi_test.c |  2 +-
-> >  drivers/pci/pci-sysfs.c              |  6 +++---
-> >  drivers/pci/proc.c                   |  6 +++---
-> >  drivers/pci/syscall.c                |  2 +-
-> >  drivers/pcmcia/cistpl.c              |  2 +-
-> >  drivers/tty/serial/serial_core.c     |  2 +-
-> >  fs/debugfs/file.c                    |  2 +-
-> >  fs/debugfs/inode.c                   |  2 +-
-> >  fs/proc/kcore.c                      |  2 +-
-> >  fs/tracefs/inode.c                   |  2 +-
-> >  include/linux/lsm_hook_defs.h        |  2 +-
-> >  include/linux/lsm_hooks.h            |  1 +
-> >  include/linux/security.h             |  4 ++--
-> >  kernel/bpf/helpers.c                 | 10 ++++++----
-> >  kernel/events/core.c                 |  2 +-
-> >  kernel/kexec.c                       |  2 +-
-> >  kernel/kexec_file.c                  |  2 +-
-> >  kernel/module.c                      |  2 +-
-> >  kernel/params.c                      |  2 +-
-> >  kernel/power/hibernate.c             |  3 ++-
-> >  kernel/trace/bpf_trace.c             | 20 ++++++++++++--------
-> >  kernel/trace/ftrace.c                |  4 ++--
-> >  kernel/trace/ring_buffer.c           |  2 +-
-> >  kernel/trace/trace.c                 | 10 +++++-----
-> >  kernel/trace/trace_events.c          |  2 +-
-> >  kernel/trace/trace_events_hist.c     |  4 ++--
-> >  kernel/trace/trace_events_synth.c    |  2 +-
-> >  kernel/trace/trace_events_trigger.c  |  2 +-
-> >  kernel/trace/trace_kprobe.c          |  6 +++---
-> >  kernel/trace/trace_printk.c          |  2 +-
-> >  kernel/trace/trace_stack.c           |  2 +-
-> >  kernel/trace/trace_stat.c            |  2 +-
-> >  kernel/trace/trace_uprobe.c          |  4 ++--
-> >  net/xfrm/xfrm_user.c                 | 11 +++++++++--
-> >  security/lockdown/lockdown.c         |  3 ++-
-> >  security/security.c                  |  4 ++--
-> >  security/selinux/hooks.c             |  7 +++++--
-> >  48 files changed, 97 insertions(+), 77 deletions(-)
->
-> --
-> paul moore
-> www.paul-moore.com
->
+Yes, the LOCKDOWN_NONE seems wrong here... but it's a pre-existing bug
+and I didn't want to go down yet another rabbit hole trying to fix it.
+I'll look at this again once this patch is settled - it may indeed be
+as simple as replacing LOCKDOWN_NONE with LOCKDOWN_PCI_ACCESS.
 
 --
 Ondrej Mosnacek
 Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc
+Red Hat, Inc.
 
