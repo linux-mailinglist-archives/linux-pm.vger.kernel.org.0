@@ -2,197 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6898A3FD962
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 14:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83373FDA08
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 15:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244037AbhIAMRj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 08:17:39 -0400
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:57226 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244028AbhIAMRg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 08:17:36 -0400
-Date:   Wed, 01 Sep 2021 12:16:29 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1630498595;
-        bh=gJxYhcWcE6Z1Ka9oTpUEQ6eNRdg3NGC2Xf2gJSDdzCA=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=KgqoJYAeYBvjDqKNhThFACvtuZexzJNVTFyVvpTGrn1vWWig64ySd9s9XjlnzjJBl
-         3VoW53KLr/iSXtvaK/MjJk6U3+L3aiRak3v4ExBNS+wTRDo8vUfqW8qWNsmPYjsdDX
-         Vkfys7MSDbwyE1OpAdc4KJUYH8Lc6MoH/7s7+Hwg=
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v4 5/5] arm64: dts: qcom: msm8996: Add interconnect support
-Message-ID: <20210901121518.152481-6-y.oudjana@protonmail.com>
-In-Reply-To: <20210901121518.152481-1-y.oudjana@protonmail.com>
-References: <20210901121518.152481-1-y.oudjana@protonmail.com>
+        id S244540AbhIAM3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 08:29:52 -0400
+Received: from mga07.intel.com ([134.134.136.100]:35131 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244180AbhIAM3Y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Sep 2021 08:29:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="282448397"
+X-IronPort-AV: E=Sophos;i="5.84,369,1620716400"; 
+   d="scan'208";a="282448397"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2021 05:27:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,369,1620716400"; 
+   d="scan'208";a="690650862"
+Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Sep 2021 05:27:56 -0700
+Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mLPLP-0007tk-SE; Wed, 01 Sep 2021 12:27:55 +0000
+Date:   Wed, 01 Sep 2021 20:27:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 103d2fac60d07d241340ddcfdc1450896ac39e09
+Message-ID: <612f71b3./Xh/8XiBI7cMyYx5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add interconnect providers for the multiple NoCs available on the platform,
-and assign interconnects used by some blocks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 103d2fac60d07d241340ddcfdc1450896ac39e09  Merge branches 'pm-opp' and 'pm-cpufreq' into linux-next
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+elapsed time: 1434m
+
+configs tested: 143
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210831
+mips                        workpad_defconfig
+i386                             alldefconfig
+powerpc                    mvme5100_defconfig
+sh                            titan_defconfig
+arm                           u8500_defconfig
+powerpc                     redwood_defconfig
+sparc                            alldefconfig
+arc                           tb10x_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arc                     nsimosci_hs_defconfig
+arm                        trizeps4_defconfig
+nds32                            alldefconfig
+mips                           ip27_defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                           jazz_defconfig
+arm                         vf610m4_defconfig
+mips                      maltaaprp_defconfig
+sh                           se7750_defconfig
+powerpc                   lite5200b_defconfig
+arm                            mmp2_defconfig
+arm                             rpc_defconfig
+csky                             alldefconfig
+arc                                 defconfig
+arm                         lpc32xx_defconfig
+powerpc                       eiger_defconfig
+mips                        nlm_xlp_defconfig
+mips                           mtx1_defconfig
+arm                   milbeaut_m10v_defconfig
+powerpc                     tqm8560_defconfig
+arm                           viper_defconfig
+arm                         hackkit_defconfig
+sh                                  defconfig
+xtensa                       common_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                          lboxre2_defconfig
+powerpc                    sam440ep_defconfig
+arm                         socfpga_defconfig
+sh                        sh7757lcr_defconfig
+s390                       zfcpdump_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                             mxs_defconfig
+arc                          axs101_defconfig
+openrisc                         alldefconfig
+mips                           ip32_defconfig
+mips                        bcm63xx_defconfig
+arc                        vdk_hs38_defconfig
+m68k                        mvme16x_defconfig
+sh                               j2_defconfig
+arm                       versatile_defconfig
+sh                            shmin_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20210831
+x86_64               randconfig-a001-20210831
+x86_64               randconfig-a003-20210831
+x86_64               randconfig-a002-20210831
+x86_64               randconfig-a004-20210831
+x86_64               randconfig-a006-20210831
+i386                 randconfig-a005-20210831
+i386                 randconfig-a002-20210831
+i386                 randconfig-a003-20210831
+i386                 randconfig-a006-20210831
+i386                 randconfig-a004-20210831
+i386                 randconfig-a001-20210831
+i386                 randconfig-a012-20210901
+i386                 randconfig-a015-20210901
+i386                 randconfig-a011-20210901
+i386                 randconfig-a013-20210901
+i386                 randconfig-a014-20210901
+i386                 randconfig-a016-20210901
+arc                  randconfig-r043-20210831
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+i386                 randconfig-c001-20210831
+s390                 randconfig-c005-20210831
+riscv                randconfig-c006-20210831
+powerpc              randconfig-c003-20210831
+mips                 randconfig-c004-20210831
+arm                  randconfig-c002-20210831
+x86_64               randconfig-c007-20210831
+x86_64               randconfig-a014-20210831
+x86_64               randconfig-a015-20210831
+x86_64               randconfig-a013-20210831
+x86_64               randconfig-a016-20210831
+x86_64               randconfig-a012-20210831
+x86_64               randconfig-a011-20210831
+i386                 randconfig-a016-20210831
+i386                 randconfig-a011-20210831
+i386                 randconfig-a015-20210831
+i386                 randconfig-a014-20210831
+i386                 randconfig-a012-20210831
+i386                 randconfig-a013-20210831
+s390                 randconfig-r044-20210831
+hexagon              randconfig-r041-20210831
+hexagon              randconfig-r045-20210831
+riscv                randconfig-r042-20210831
+
 ---
-Changes since v2:
- - Remove interconnect paths from CPUs since cpufreq driver doesn't support=
- icc scaling yet.
-
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 80 +++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index 52df22ab3f6a..6c98869688bc 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/interconnect/qcom,msm8996.h>
- #include <dt-bindings/soc/qcom,apr.h>
- #include <dt-bindings/thermal/thermal.h>
-=20
-@@ -683,6 +684,15 @@ gcc: clock-controller@300000 {
- =09=09=09clock-names =3D "cxo2";
- =09=09};
-=20
-+=09=09bimc: interconnect@408000 {
-+=09=09=09compatible =3D "qcom,msm8996-bimc";
-+=09=09=09reg =3D <0x00408000 0x5a000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_BIMC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_BIMC_A_CLK>;
-+=09=09};
-+
- =09=09tsens0: thermal-sensor@4a9000 {
- =09=09=09compatible =3D "qcom,msm8996-tsens", "qcom,tsens-v2";
- =09=09=09reg =3D <0x004a9000 0x1000>, /* TM */
-@@ -705,6 +715,61 @@ tsens1: thermal-sensor@4ad000 {
- =09=09=09#thermal-sensor-cells =3D <1>;
- =09=09};
-=20
-+=09=09cnoc: interconnect@500000 {
-+=09=09=09compatible =3D "qcom,msm8996-cnoc";
-+=09=09=09reg =3D <0x00500000 0x1000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_CNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_CNOC_A_CLK>;
-+=09=09};
-+
-+=09=09snoc: interconnect@524000 {
-+=09=09=09compatible =3D "qcom,msm8996-snoc";
-+=09=09=09reg =3D <0x00524000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_SNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_SNOC_A_CLK>;
-+=09=09};
-+
-+=09=09a1noc: interconnect@562000 {
-+=09=09=09compatible =3D "qcom,msm8996-a1noc";
-+=09=09=09reg =3D <0x00562000 0x5000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR1_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR1_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09a2noc: interconnect@583000 {
-+=09=09=09compatible =3D "qcom,msm8996-a2noc";
-+=09=09=09reg =3D <0x00583000 0x7000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09mnoc: interconnect@5a4000 {
-+=09=09=09compatible =3D "qcom,msm8996-mnoc";
-+=09=09=09reg =3D <0x005a4000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a", "iface";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_MMAXI_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_MMAXI_A_CLK>,
-+=09=09=09=09 <&mmcc AHB_CLK_SRC>;
-+=09=09};
-+
-+=09=09pnoc: interconnect@5c0000 {
-+=09=09=09compatible =3D "qcom,msm8996-pnoc";
-+=09=09=09reg =3D <0x005c0000 0x3000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_PCNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_PCNOC_A_CLK>;
-+=09=09};
-+
- =09=09tcsr_mutex_regs: syscon@740000 {
- =09=09=09compatible =3D "syscon";
- =09=09=09reg =3D <0x00740000 0x40000>;
-@@ -784,6 +849,11 @@ mdp: mdp@901000 {
- =09=09=09=09assigned-clock-rates =3D <300000000>,
- =09=09=09=09=09 <19200000>;
-=20
-+=09=09=09=09interconnects =3D <&mnoc MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>=
-,
-+=09=09=09=09=09=09<&mnoc MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09=09<&mnoc MASTER_ROTATOR &bimc SLAVE_EBI_CH0>;
-+=09=09=09=09interconnect-names =3D "mdp0-mem", "mdp1-mem", "rotator-mem";
-+
- =09=09=09=09ports {
- =09=09=09=09=09#address-cells =3D <1>;
- =09=09=09=09=09#size-cells =3D <0>;
-@@ -959,6 +1029,9 @@ gpu: gpu@b00000 {
- =09=09=09=09"mem",
- =09=09=09=09"mem_iface";
-=20
-+=09=09=09interconnects =3D <&bimc MASTER_GRAPHICS_3D &bimc SLAVE_EBI_CH0>;
-+=09=09=09interconnect-names =3D "gfx-mem";
-+
- =09=09=09power-domains =3D <&mmcc GPU_GX_GDSC>;
- =09=09=09iommus =3D <&adreno_smmu 0>;
-=20
-@@ -1953,6 +2026,9 @@ venus: video-codec@c00000 {
- =09=09=09=09 <&mmcc VIDEO_AXI_CLK>,
- =09=09=09=09 <&mmcc VIDEO_MAXI_CLK>;
- =09=09=09clock-names =3D "core", "iface", "bus", "mbus";
-+=09=09=09interconnects =3D <&mnoc MASTER_VIDEO_P0 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &mnoc SLAVE_VENUS_CFG>;
-+=09=09=09interconnect-names =3D "video-mem", "cpu-cfg";
- =09=09=09iommus =3D <&venus_smmu 0x00>,
- =09=09=09=09 <&venus_smmu 0x01>,
- =09=09=09=09 <&venus_smmu 0x0a>,
-@@ -2569,6 +2645,10 @@ usb3: usb@6af8800 {
- =09=09=09=09=09  <&gcc GCC_USB30_MASTER_CLK>;
- =09=09=09assigned-clock-rates =3D <19200000>, <120000000>;
-=20
-+=09=09=09interconnects =3D <&a2noc MASTER_USB3 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &snoc SLAVE_USB3>;
-+=09=09=09interconnect-names =3D "usb-ddr", "apps-usb";
-+
- =09=09=09power-domains =3D <&gcc USB30_GDSC>;
- =09=09=09status =3D "disabled";
-=20
---=20
-2.33.0
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
