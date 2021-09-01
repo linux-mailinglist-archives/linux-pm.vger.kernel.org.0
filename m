@@ -2,109 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0E3FD280
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 06:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C873FD29A
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 06:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241827AbhIAEne (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 00:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S233754AbhIAE4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 00:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbhIAEnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 00:43:33 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4F1C061575
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 21:42:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 2so1056782pfo.8
-        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 21:42:37 -0700 (PDT)
+        with ESMTP id S233742AbhIAE4O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 00:56:14 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6546CC061575
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 21:55:18 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id f11-20020a17090aa78b00b0018e98a7cddaso1134365pjq.4
+        for <linux-pm@vger.kernel.org>; Tue, 31 Aug 2021 21:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=aqRbC7OOz0ApYRD7bkXLn6fuH45+VCn9w1jsepqRlwo=;
-        b=rmYbuOxTZ+6f1mjLuKFFeXrXBEq+QAkPP1aN8DhuASGDG4MeFgKpJRvIT/d1WvZkw8
-         /YYMBKdBrUUuXhHKPj4yEFdLRPXmFZYZmmxAy+dZ/rkRhZFLEBjFU7QvXdGW8W8Hv3nx
-         RBFHkE8ldm6CKEmHXxAMtmOCpR/38i4QmyqvEtzbTX3bh6cTVTcabJ6sUdTwptFKxhqc
-         B/r/Rfx2mPPaAM9Ngv1pz4aBNWJ3Vy1cdVIJGUpVy2m783J7M4r9zORinvNj0wFRUM2i
-         j+Z0QP99zMtU+S/APlD4UYvzjdMCibSiY0vX736A4lcESZpPRtcwbUDWPQ2DlPdf5nhy
-         AlhA==
+        bh=mglupvGIB1Xr33jIOfESbjc4dQzLT/JuKDSfHnjbbIc=;
+        b=JH9MIA8L31FDZrNIBZRajDzIV6BtfBcyd0wXMH7hfORoYLj4EzP7OmfBS4ilfIevKH
+         ALFQuAmSAiO3TItMq4PJ1703np/8YLEc52KVNybMHynNCm8HOhcGLhP8WzKv/6L/CNhH
+         8ZT+Zf8ZOilMgEed4ppxUHoRaW58kCt4EPr6Hk72p7/okUxVseDeB9t+LEZbXf63Ba+G
+         P2XDd7F9RgxC6MrbC4EI6NCM+x9D5/iiEN0kvnIkVWz0JcpHV26Sw1boURMblCTjOmLO
+         k+YOTd21ZjPLcJ8NTCWQ5Z/7wWwoyciTIQ+ezl2ZgODTRVk85SG17jzheUGORMqfq0jk
+         QMJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aqRbC7OOz0ApYRD7bkXLn6fuH45+VCn9w1jsepqRlwo=;
-        b=YPxlSRFd//V2qDrgWGVSAtHMX/gh9fFUhW5Mc+iMXSKU379I7KyBNHryzdyqL6PvKx
-         sf7Qj2EjNOuJGwf83KJ9jbyHyzVXj4yrIbQkJPSoL0cAFo+ajDkwif+XmUp6z+xkffr0
-         MTP8JNuft0W2I8AZ28/ZNK1+kM6LGt0+Y+pAmNYaigtqJKswVZbTLd9zgUie8De+RB9i
-         HT3GsY89oRkuQeVKnKjQLlP8jc7QP+Rmfui8vtJFVKuOpUp+vXBPQbi6A6+bJwB+g4Rw
-         PbGchH93G0qHnTU7q3Mpj/V7ta0dVtpusUCNPalYQqBcr38LMGwxavI//q4wxnPMiUx7
-         ocPQ==
-X-Gm-Message-State: AOAM533rygh2U7y7x64JIzipn+3hYT3lhpGfZXwYp37hWAuRQY7cI1IL
-        8s2jdfmFxzk/BZd31qIlAuzyDQ==
-X-Google-Smtp-Source: ABdhPJxBLmO5TuD7amKUzz3cLmrbwBzUCWEtO7lH32rA7hSv3e5M0kUewmugYpzwLQwteyHfKDsIJQ==
-X-Received: by 2002:a62:cf86:0:b029:3e0:7cef:9e03 with SMTP id b128-20020a62cf860000b02903e07cef9e03mr32469702pfg.0.1630471357279;
-        Tue, 31 Aug 2021 21:42:37 -0700 (PDT)
+        bh=mglupvGIB1Xr33jIOfESbjc4dQzLT/JuKDSfHnjbbIc=;
+        b=Ov38EIuqQXdmpl2Mq3Kp3IPbgYCVXP+ggt3wXa+CHMkeEnXWsNmMTf/lpQiBiZtJJm
+         XneugxQrOM91dsemmpZpGsZD3AqY/sMCWQS7Qrx6K18anwwd47BqPHvnMIL13niILkvZ
+         IiC9fC7rLDYLl+163USLPQG+txUxm6JC6rHXAz2nj8KLa7pKruBBhdiXGFmG32+OZRtv
+         OXrVTxwnhlcERNHfwoPO7EyrcMW99P1P2qdr0I7CKhe2SRtOjfLr60oXTDUU78jtct4d
+         XnRI/D9yI+G51sNj+52TkX7ktxCGmfkJchfeAQMOxhudj2jt7RUJ+KpxWOVd0xanONm0
+         g5ig==
+X-Gm-Message-State: AOAM5332D1BJJRvC6zT4R6oX/QgZj0M9AjyI6NlwhwqCds6lXTRHGM5a
+        foBxFiWAcTHFL7MiA0Q5ppVSgbhZGfdDEQ==
+X-Google-Smtp-Source: ABdhPJydRr5ToxoCcGU7P3xip7D6HQ+m4/MWh999r/Vj7VR1cFxegoBrtUckLZtitKRnpKw1AW9RyQ==
+X-Received: by 2002:a17:902:e8c2:b029:123:25ba:e443 with SMTP id v2-20020a170902e8c2b029012325bae443mr8100489plg.29.1630472117916;
+        Tue, 31 Aug 2021 21:55:17 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 31sm22105352pgy.26.2021.08.31.21.42.36
+        by smtp.gmail.com with ESMTPSA id n79sm18481217pfd.167.2021.08.31.21.55.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 21:42:36 -0700 (PDT)
-Date:   Wed, 1 Sep 2021 10:12:35 +0530
+        Tue, 31 Aug 2021 21:55:16 -0700 (PDT)
+Date:   Wed, 1 Sep 2021 10:25:15 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v10 2/8] opp: Allow dev_pm_opp_set_clkname() to replace
- released clock
-Message-ID: <20210901044235.2je35y3ajtctrall@vireshk-i7>
-References: <20210831135450.26070-1-digetx@gmail.com>
- <20210831135450.26070-3-digetx@gmail.com>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     peterz@infradead.org, rjw@rjwysocki.net,
+        vincent.guittot@linaro.org, qperret@google.com,
+        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org
+Subject: Re: [PATCH v6 5/7] cpufreq: Add an interface to mark inefficient
+ frequencies
+Message-ID: <20210901045515.tx6fi7mkip2uznsh@vireshk-i7>
+References: <1630405453-275784-1-git-send-email-vincent.donnefort@arm.com>
+ <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210831135450.26070-3-digetx@gmail.com>
+In-Reply-To: <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31-08-21, 16:54, Dmitry Osipenko wrote:
-> The opp_table->clk is set to error once clock is released by
-> dev_pm_opp_put_clkname(). This doesn't allow to set clock again,
+On 31-08-21, 11:24, Vincent Donnefort wrote:
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index c65a1d7385f8..4e901ebd104d 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -664,13 +664,15 @@ struct governor_attr {
+>  #define CPUFREQ_ENTRY_INVALID	~0u
+>  #define CPUFREQ_TABLE_END	~1u
+>  /* Special Values of .flags field */
+> -#define CPUFREQ_BOOST_FREQ	(1 << 0)
+> +#define CPUFREQ_BOOST_FREQ	 (1 << 0)
 
-I am not sure why are you required to set the clk again here ? I mean,
-users aren't expected to put clkname in the middle of using it. The
-set-name API also checks that the OPP list should be empty in such a
-case.
+You are mixing tabs and spaces here, I am sure some tool complains
+about it, but perhaps if space is before tab.
 
-> until OPP table is re-created from scratch. Check opp_table->clk
-> for both NULL and ERR_PTR to allow the clock's replacement.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/opp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index dde8a5cc948c..602e502d092e 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2146,7 +2146,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
->  	}
->  
->  	/* clk shouldn't be initialized at this point */
-> -	if (WARN_ON(opp_table->clk)) {
-> +	if (WARN_ON(!IS_ERR_OR_NULL(opp_table->clk))) {
->  		ret = -EBUSY;
->  		goto err;
->  	}
-> -- 
-> 2.32.0
+Either keep the new entry unaligned with the above ones or just add a
+tab instead to keep things aligned. Add a tab to CPUFREQ_TABLE_END and
+CPUFREQ_ENTRY_INVALID as well in case then.
 
 -- 
 viresh
