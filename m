@@ -2,249 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1983FE089
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 18:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDA93FE11A
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 19:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344256AbhIARAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 13:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234349AbhIARAs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 13:00:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27376C061575
-        for <linux-pm@vger.kernel.org>; Wed,  1 Sep 2021 09:59:51 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id x27so357987lfu.5
-        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 09:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t8WjY9xngdUy6OvsDh3/CWFvSQy2KcaCN1sVzYIar00=;
-        b=GS9PQ5ZBAKPkQP+GbdP9U8KYEp0JuiDw6ovyYgLIEonW1pM+FuqnDLYZ2cm3pvnwZL
-         yc64UVYyxiF+SC6Ylw/JFukJUMZmNnOebrnE95FYllALz+gIio0GjLywZ/PfRBr+C7Yx
-         0k2SEEWUJX0q9LZSLaxlXyhNESAAFATbY+oXq5dC6WLP1Q28tOK4o4qY0eo9qn7Xc3lv
-         FKyv/A6LWEUYJu5M4S8Zp93EyYDVw98DzqaC0dFGNhiRYzgtPncZFfS7h3xzbPNAqhhp
-         C3IPjUkmJOoITRrQmWj0PI2MwdZxyJ8mCj8hvZavMLBQ7Se3ew8xo/pUOMISbDlu1Zux
-         PQfw==
+        id S236291AbhIAR0i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 13:26:38 -0400
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:42801 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232491AbhIAR0i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 13:26:38 -0400
+Received: by mail-oo1-f48.google.com with SMTP id e206-20020a4a55d7000000b00291379cb2baso90591oob.9
+        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 10:25:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=t8WjY9xngdUy6OvsDh3/CWFvSQy2KcaCN1sVzYIar00=;
-        b=rUkd9Ga1Pqn5r0lcrBtFcQb2R8iiRdMpnS8U1K8et13/K9QQnxuGSFqwHCIGeIkkhh
-         9sFea28rV1x3trmecwbRqQThqcx9yznMkZhqBvqWprzZAclR7Ma47sa021SuV/YQJcBn
-         ip63vJAN9sV6ofVOKPKG3G+i4mK3bt6ZNqjhC+zWZ9FtLefLvc6XyuYcJCvgBVv26THr
-         lxSqPAbKy9hKBiey0rsI7GBipPil2/ouaTr8d2T1ehStP6zy/TOz3xRhXCeGEZJ1x0d5
-         LdW67P8LJHaCATqoFOw3BGGpytnGA4pecZiMC/00ITxawc4FoqPRNfd6jhyLnvx0mTQR
-         qpKg==
-X-Gm-Message-State: AOAM533EW6joYsJ75X7olvigKxECWhisCWBDX/wj4hEjeG3vqh6zRtBB
-        Yim2xDDQOKi4xrDLX3Pj4QfKBC+ociZKlUMtt6HZnQ==
-X-Google-Smtp-Source: ABdhPJyny3XUrz8jbRp3Axy8yyjybmKwnX+mvzOZ21GwLJ+Qmr/zVkOylsu+PJqahnQ7P5+FmIoBXBgYhvv2uqMajGE=
-X-Received: by 2002:a05:6512:1084:: with SMTP id j4mr309860lfg.113.1630515589441;
- Wed, 01 Sep 2021 09:59:49 -0700 (PDT)
+        bh=MD/gO/FcenaMvGS16vg/72/LUgbBcxbMvILblP/AY0Q=;
+        b=mdDXnSra2BTj+3VR+Rkevd5KPKui+3zbVH+sLtAR4DBS31MrEAInCObDHpTRxgrq+y
+         EYFtTc6Y3wLoIlmckUGlxGr4vI1OXl1fRJkx9Uzt4+sIfe6ZURW8LyyESoI0JpYs8oTa
+         PbSQeHtDS6ZhEWHMsockUHy4GtqSh1I9KeAQ2wKslPRSX9dnA3FojsETJEv3uD+iB05a
+         QaOSn4V4zxZacD8kvrHM61I+UCx8HL+dCZZccb57x5bkzwra4+5dHOUHmDAKnxXTlzz2
+         63TSOCczokOxplNgxFaD52XRXrk+sEO23NmxOeGCUsVC/IdMwhpmYpeezpbhDctjzeMg
+         oXqw==
+X-Gm-Message-State: AOAM531HRWrhgGzDbOJhdTe5/756nvr2JN24LzKM+Mcx97MPSLdIj3s9
+        JFIQKO3D7DC6Ce5PAIlv+LTW/gGbyxht5mC1WwjE3tHg
+X-Google-Smtp-Source: ABdhPJwxnOx7kqWtD5ciNV6gxIE+bBZ+gc+Kads8cLNdYIYG/ZC08IsRqUmyc+m46Zt54yV6DWsVfLsFeTGHsccumak=
+X-Received: by 2002:a4a:ca83:: with SMTP id x3mr398597ooq.2.1630517140819;
+ Wed, 01 Sep 2021 10:25:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210831135450.26070-1-digetx@gmail.com> <20210831135450.26070-5-digetx@gmail.com>
-In-Reply-To: <20210831135450.26070-5-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 1 Sep 2021 18:59:12 +0200
-Message-ID: <CAPDyKFp4M30y9UB5Ss54ZfNjL_a6nqbka6Dq7xtGNzb2Mg8WrA@mail.gmail.com>
-Subject: Re: [PATCH v10 4/8] PM: domains: Add dev_get_performance_state() callback
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+References: <1630405453-275784-1-git-send-email-vincent.donnefort@arm.com> <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
+In-Reply-To: <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 1 Sep 2021 19:25:30 +0200
+Message-ID: <CAJZ5v0inVPxV8FXJznEzqvbf5hLihzmB4cMTNX+iQxEEJfyYNQ@mail.gmail.com>
+Subject: Re: [PATCH v6 5/7] cpufreq: Add an interface to mark inefficient frequencies
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 31 Aug 2021 at 15:57, Dmitry Osipenko <digetx@gmail.com> wrote:
+On Tue, Aug 31, 2021 at 12:24 PM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
 >
-> Add optional dev_get_performance_state() callback that retrieves
-> performance state of a device attached to a power domain. The new callback
-> returns performance states of the given device, which should be read out
-> from hardware.
+> Some SoCs such as the sd855 have OPPs within the same policy whose cost is
+> higher than others with a higher frequency. Those OPPs are inefficients
+> and it might be interesting for a governor to not use them.
 >
-> GENPD core assumes that initially performance state of all devices is
-> zero and consumer device driver is responsible for management of the
-> performance state. GENPD core now manages performance state across RPM
-> suspend/resume of consumer devices by dropping and restoring the state,
-> this allowed to move a part of performance management code into GENPD
-> core out of consumer drivers. The part that hasn't been moved to GENPD
-> core yet is the initialization of the performance state.
+> The inefficient interface is composed of two calls:
 >
-> Hardware may be preprogrammed to a specific performance state which
-> isn't zero initially, hence the PD's performance state is inconsistent
-> with hardware at the init time. This requires each consumer driver to
-> explicitly sync the state. For some platforms this is a boilerplate code
-> replicated by each driver.
+>  1. cpufreq_table_set_inefficient() marks a frequency as inefficient.
 >
-> The new callback allows GENPD core to initialize the performance state,
-> allowing to remove the remaining boilerplate code from consumer drivers.
-> Now, when consumer device is resumed for the first time, the performance
-> state is either already set by GENPD core or it will be set in accordance
-> to the hardware state that was retrieved using the new callback when device
-> was attached to a power domain. Still, consumer drivers are free to override
-> the initial performance state configured by GENPD, if necessary.
-
-Thanks for improving the commit message, it makes much better sense now!
-
+>  2. cpufreq_table_update_efficiencies() use the inefficiences marked by the
+>     previous function to generate a mapping inefficient->efficient.
 >
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/base/power/domain.c | 90 +++++++++++++++++++++++++++++++------
->  include/linux/pm_domain.h   |  2 +
->  2 files changed, 79 insertions(+), 13 deletions(-)
+> Resolving an inefficient frequency to an efficient on can then be done
+> by accessing the cpufreq_frequency_table member "efficient". The
+> resolution doesn't guarantee the policy maximum.
 >
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e71..598528abce01 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2644,12 +2644,85 @@ static void genpd_dev_pm_sync(struct device *dev)
->         genpd_queue_power_off_work(pd);
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+>
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index 67e56cf638ef..d3fa38af2aa6 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -365,6 +365,59 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
+>         return set_freq_table_sorted(policy);
 >  }
 >
-> +static int genpd_dev_get_current_performance_state(struct device *dev,
-> +                                                  struct device *base_dev,
-> +                                                  unsigned int index,
-> +                                                  bool *state_default,
-> +                                                  bool *suspended)
+> +/**
+> + * cpufreq_table_update_efficiencies() - Update efficiency resolution
+> + *
+
+I'm not sure what the extra empty line here is for.
+
+> + * @policy:    the &struct cpufreq_policy to update
+> + *
+> + * Allow quick resolution from inefficient frequencies to efficient ones.
+> + * Inefficient frequencies must have been previously marked with
+> + * cpufreq_table_set_inefficient().
+> + *
+> + * Return: %0 on success or a negative errno code
+> + */
+> +int cpufreq_table_update_efficiencies(struct cpufreq_policy *policy)
 > +{
-> +       struct generic_pm_domain *pd = dev_to_genpd(dev);
-> +       int ret;
+> +       struct cpufreq_frequency_table *pos, *table = policy->freq_table;
+> +       enum cpufreq_table_sorting sort = policy->freq_table_sorted;
+> +       int efficient, idx;
 > +
-> +       ret = of_get_required_opp_performance_state(dev->of_node, index);
-> +       if (ret < 0 && ret != -ENODEV && ret != -EOPNOTSUPP) {
-> +               dev_err(dev, "failed to get required performance state for power-domain %s: %d\n",
-> +                       pd->name, ret);
+> +       /* Not supported */
+> +       if (sort == CPUFREQ_TABLE_UNSORTED)
+> +               return -EINVAL;
 > +
-> +               return ret;
-> +       } else if (ret >= 0) {
-> +               *state_default = true;
-> +
-> +               return ret;
+> +       /* The highest frequency is always efficient */
+> +       cpufreq_for_each_valid_entry_idx(pos, table, idx) {
+> +               efficient = idx;
+> +               if (sort == CPUFREQ_TABLE_SORTED_DESCENDING)
+> +                       break;
 > +       }
 > +
-> +       if (pd->dev_get_performance_state) {
-> +               ret = pd->dev_get_performance_state(pd, base_dev);
-> +               if (ret >= 0)
-> +                       *suspended = pm_runtime_status_suspended(base_dev);
-> +               else
-> +                       dev_err(dev, "failed to get performance state of %s for power-domain %s: %d\n",
-> +                               dev_name(base_dev), pd->name, ret);
+> +       for (;;) {
+> +               pos = &table[idx];
 > +
-> +               return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int genpd_dev_initialize_performance_state(struct device *dev,
-> +                                                 struct device *base_dev,
-> +                                                 unsigned int index)
-> +{
-> +       struct generic_pm_domain *pd = dev_to_genpd(dev);
-> +       bool state_default = false, suspended = false;
-> +       int pstate, err;
-> +
-> +       pstate = genpd_dev_get_current_performance_state(dev, base_dev, index,
-> +                                                        &state_default,
-> +                                                        &suspended);
-> +       if (pstate <= 0)
-> +               return pstate;
-> +
-> +       /*
-> +        * If device is suspended, then performance state will be applied
-> +        * on RPM-resume. This prevents potential extra power consumption
-> +        * if device won't be resumed soon.
-> +        *
-> +        * If device is known to be active at the moment, then the performance
-> +        * state should be updated immediately to sync state with hardware.
-> +        */
-> +       if (suspended) {
-> +               dev_gpd_data(dev)->rpm_pstate = pstate;
-> +       } else {
-> +               err = dev_pm_genpd_set_performance_state(dev, pstate);
-> +               if (err) {
-> +                       dev_err(dev, "failed to set performance state for power-domain %s: %d\n",
-> +                               pd->name, err);
-> +                       return err;
+> +               if (pos->frequency != CPUFREQ_ENTRY_INVALID) {
+> +                       if (pos->flags & CPUFREQ_INEFFICIENT_FREQ) {
+> +                               pos->efficient = efficient;
+> +                       } else {
+> +                               pos->efficient = idx;
+> +                               efficient = idx;
+> +                       }
 > +               }
 > +
-> +               if (state_default)
-> +                       dev_gpd_data(dev)->default_pstate = pstate;
+> +               if (sort == CPUFREQ_TABLE_SORTED_ASCENDING) {
+> +                       if (--idx < 0)
+> +                               break;
+> +               } else {
+> +                       if (table[++idx].frequency == CPUFREQ_TABLE_END)
+> +                               break;
+> +               }
 > +       }
 > +
 > +       return 0;
 > +}
-
-As I kind of indicated in my previous reply on the earlier version, I
-think the above code can be made a lot less complicated. Although,
-perhaps I may be missing some points.
-
-Anyway, I will post a couple patches, later this evening or tomorrow,
-to show more exactly what I had in mind. Let's see if that can work
-for you.
-
+> +EXPORT_SYMBOL_GPL(cpufreq_table_update_efficiencies);
 > +
->  static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                                  unsigned int index, bool power_on)
->  {
->         struct of_phandle_args pd_args;
->         struct generic_pm_domain *pd;
-> -       int pstate;
->         int ret;
+>  MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
+>  MODULE_DESCRIPTION("CPUfreq frequency table helpers");
+>  MODULE_LICENSE("GPL");
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index c65a1d7385f8..4e901ebd104d 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -664,13 +664,15 @@ struct governor_attr {
+>  #define CPUFREQ_ENTRY_INVALID  ~0u
+>  #define CPUFREQ_TABLE_END      ~1u
+>  /* Special Values of .flags field */
+> -#define CPUFREQ_BOOST_FREQ     (1 << 0)
+> +#define CPUFREQ_BOOST_FREQ      (1 << 0)
+> +#define CPUFREQ_INEFFICIENT_FREQ (1 << 1)
 >
->         ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
-> @@ -2693,22 +2766,13 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                 return -EPROBE_DEFER;
->         }
+>  struct cpufreq_frequency_table {
+>         unsigned int    flags;
+>         unsigned int    driver_data; /* driver specific data, not used by core */
+>         unsigned int    frequency; /* kHz - doesn't need to be in ascending
+>                                     * order */
+> +       unsigned int    efficient; /* idx of an efficient frequency */
+
+It looks to me like having just one efficient frequency index here may
+not work in general (I'll explain this in a reply to the next patch).
+
+Also, it's a bit weird to kind of point it to self for the efficient ones.
+
+>  };
 >
-> -       /* Set the default performance state */
-> -       pstate = of_get_required_opp_performance_state(dev->of_node, index);
-> -       if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> -               ret = pstate;
-> +       ret = genpd_dev_initialize_performance_state(dev, base_dev, index);
-> +       if (ret)
->                 goto err;
-> -       } else if (pstate > 0) {
-> -               ret = dev_pm_genpd_set_performance_state(dev, pstate);
-> -               if (ret)
-> -                       goto err;
-> -               dev_gpd_data(dev)->default_pstate = pstate;
-> -       }
-> +
->         return 1;
+>  #if defined(CONFIG_CPU_FREQ) && defined(CONFIG_PM_OPP)
+> @@ -762,6 +764,7 @@ int cpufreq_boost_trigger_state(int state);
+>  int cpufreq_boost_enabled(void);
+>  int cpufreq_enable_boost_support(void);
+>  bool policy_has_boost_freq(struct cpufreq_policy *policy);
+> +int cpufreq_table_update_efficiencies(struct cpufreq_policy *policy);
 >
->  err:
-> -       dev_err(dev, "failed to set required performance state for power-domain %s: %d\n",
-> -               pd->name, ret);
->         genpd_remove_device(pd, dev);
->         return ret;
+>  /* Find lowest freq at or above target in a table in ascending order */
+>  static inline int cpufreq_table_find_index_al(struct cpufreq_policy *policy,
+> @@ -1003,6 +1006,29 @@ static inline int cpufreq_table_count_valid_entries(const struct cpufreq_policy
+>
+>         return count;
 >  }
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 67017c9390c8..0a4dd4986f34 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -133,6 +133,8 @@ struct generic_pm_domain {
->                                                  struct dev_pm_opp *opp);
->         int (*set_performance_state)(struct generic_pm_domain *genpd,
->                                      unsigned int state);
-> +       int (*dev_get_performance_state)(struct generic_pm_domain *genpd,
-> +                                        struct device *dev);
->         struct gpd_dev_ops dev_ops;
->         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
->         ktime_t next_wakeup;    /* Maintained by the domain governor */
-> --
-> 2.32.0
+> +
+> +/**
+> + * cpufreq_table_set_inefficient() - Mark a frequency as inefficient
+> + *
+> + * @policy:    the &struct cpufreq_policy containing the inefficient frequency
+> + * @frequency: the inefficient frequency
+> + *
+> + * Once inefficiencies marked, the efficient resolution must be updated with the
+> + * function cpufreq_table_update_efficiencies().
+> + */
+> +static inline void
+> +cpufreq_table_set_inefficient(const struct cpufreq_policy *policy,
+> +                             unsigned int frequency)
+> +{
+> +       struct cpufreq_frequency_table *pos;
+> +
+> +       cpufreq_for_each_valid_entry(pos, policy->freq_table) {
+> +               if (pos->frequency == frequency) {
+> +                       pos->flags |= CPUFREQ_INEFFICIENT_FREQ;
+> +                       break;
+> +               }
+> +       }
+> +}
+>  #else
+>  static inline int cpufreq_boost_trigger_state(int state)
+>  {
+> @@ -1022,6 +1048,16 @@ static inline bool policy_has_boost_freq(struct cpufreq_policy *policy)
+>  {
+>         return false;
+>  }
+> +
+> +static inline void
+> +cpufreq_table_set_inefficient(const struct cpufreq_policy *policy,
+> +                             unsigned int frequency) {}
+> +
+> +static inline int
+> +cpufreq_table_update_efficiencies(struct cpufreq_policy *policy)
+> +{
+> +       return -EINVAL;
+> +}
+>  #endif
 >
-
-Kind regards
-Uffe
+>  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> --
+> 2.7.4
+>
