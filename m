@@ -2,172 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EB53FD452
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 09:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42513FD4B8
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 09:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbhIAHRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 03:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S242673AbhIAHqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 03:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242529AbhIAHRy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 03:17:54 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E15C061760
-        for <linux-pm@vger.kernel.org>; Wed,  1 Sep 2021 00:16:58 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id x4so1882541pgh.1
-        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 00:16:58 -0700 (PDT)
+        with ESMTP id S242663AbhIAHqa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 03:46:30 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35BBC061575
+        for <linux-pm@vger.kernel.org>; Wed,  1 Sep 2021 00:45:32 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id h1so3301327ljl.9
+        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 00:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=fK1hxzGPP+bRHVx+JgiIY9qnUBt2WSwxa8uxIoUSUjk=;
-        b=rwa5g+l6jUuwr8ituGkSlLBoLGT07VYq2buj0bN8iLhrddET1atpcndaUqcz3llVYD
-         Xn3c/EGkgR7lHBQ9vU4yOcVTisK6aL1Ytl7pjwiLrh3HC6Rlvx8RCnlydidOO1IzKBCe
-         y5tkw3igDB+S1Kqu85tCapWzJsve6mopa5hy8bEGtveI55wxbQ/W4vd1I1ZrYR/Jm+dU
-         R8B+V4RtFErDjwGlDZUX/xzlSLPY6GZojQGXxanC2o+iMlVbHYUYPpp2DnpHg2mxmrHS
-         XaulLpTm7trS2CSdxakUTacmaWcEkXfEA61rX7L4T1dsfSGb4JyAyGApBhCgphtHbDRJ
-         WSWQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q+9RrBOFccn/9D7dBw/s/N0F8fFjNEgzNdn47lNPKrc=;
+        b=FKGJ3lWjzpvPGrtNxGT6G4VFJebQWyPpzvgam71kjInaYHyM+py0intKGBcklxB7Vm
+         /PTCu08pJZ2S6Wxa3O+4VodfNcqZUJOeW0cevxWMQ6XApIral13HoA/XcCOx/PmftkNz
+         Dpfy1DwplXXXh7C7Pa0d2NXosXMLIdDLzFzNf/EAztshxGVhZhuP3lq6j6+rmZ6fCj8R
+         WiCq7DFnQCjXMrLH4eKXz0iUBVsS6JFiC70Qe4iztSo0bSOGoQCc3BaXjSk5K2640HSX
+         1g5OXSR7PV5TaQS8g96BNve15DmKWCyq8MgsmkLIHrXT8/OcuXveOpp8i5BJMxV5nNjC
+         QT2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=fK1hxzGPP+bRHVx+JgiIY9qnUBt2WSwxa8uxIoUSUjk=;
-        b=H2yQULAjsWdyflrk5qw+VKUcXg3lox3zgXaHUHXTbd4E8rM53IHU60ALuBW/0x4h0C
-         EqIfIOU+Fml05Xz6k5JbDAqA415v92/acW0bY3XHsd/s2mnw6/Mexb6rXhOLIapoZUxE
-         wXPUhDjQCdEneKsXIyw19R+ZQODOp7kfQcR47jRw/o60kJgH8mJxmre/ZEIu+MiG1XF2
-         4IyU5uHuXyDk392hYXkyEOpCr2bEQ/6zXqStjjenb9dPBGdGyzB9CrZrhbree0DBFJn7
-         pVJpFeXOv9/3Ij+ipvb0j/oe55uzZbCjBN/T9wcziArFDp4eE29gNnAvg5OlwEsEGERH
-         aqzw==
-X-Gm-Message-State: AOAM533iBVe7T01gnmFQDdAOJRA9SIuUzlyscJTEvJ1H9EVv9W70zVwq
-        Ci7oo/QRemp57smkhGe6/mQMVw==
-X-Google-Smtp-Source: ABdhPJymhkj8MgaZ1wwWze96evwPJrZV6MvOLCZbsHYlnr8SdHRIUnwaXQoRe8la8qscdqGhp/EICw==
-X-Received: by 2002:a62:920b:0:b0:3ec:7912:82be with SMTP id o11-20020a62920b000000b003ec791282bemr32461929pfd.34.1630480618067;
-        Wed, 01 Sep 2021 00:16:58 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id j16sm20731066pfi.165.2021.09.01.00.16.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Sep 2021 00:16:57 -0700 (PDT)
-Date:   Wed, 1 Sep 2021 12:46:55 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v10 5/8] soc/tegra: pmc: Implement
- dev_get_performance_state() callback
-Message-ID: <20210901071655.gf6qg7piisddg2a3@vireshk-i7>
-References: <20210831135450.26070-1-digetx@gmail.com>
- <20210831135450.26070-6-digetx@gmail.com>
- <20210901061050.4x3t4cc434zdwx3a@vireshk-i7>
- <7f4f5ab0-cf23-3e27-211e-4dcd8903f96f@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q+9RrBOFccn/9D7dBw/s/N0F8fFjNEgzNdn47lNPKrc=;
+        b=ecDJBbA3KA2mHjY1uH0aZCoGlCiDHgPWOrToyFCuwzZg4KKo8uQfZpEOZvYGUl0OXM
+         EvWzhs0UkjV0yazLLWtJ6iwR9SdV5ZnFC9ejaedR+tvMbcu1e4yZzYSsAogn6YbmQhxU
+         EqDXvSQkJ0BABRZWjyNQDlKbFG0J+Bix0qNaaOgmyVlNqO5t+jhRL6R2np4zO0Ru3yVK
+         gCjHhVJnf/ZiwMzEfuRbduUVei4EjvSgNuoySNYYMGlK/7SV3sKdU7xpcP31LMdJYn/F
+         +XtJxM29GR6NzkDjtT6KDfo4MlOFxOWkIRiimEUxpnrYpjTCvKgH8AbJr3LSEB5F4cfC
+         K66Q==
+X-Gm-Message-State: AOAM530fU5y6yyBDa1hxSu1blzm+XGqx9P1mBNZtLRFIQAkfxHh650hz
+        qxtDg1ryzdV9xNkhttoJzIbw+MgDb7DoL9tYSDGRkQ==
+X-Google-Smtp-Source: ABdhPJxclcj+aMJ6MNFoNcu9bJdIMP2/U1kbfuHJKJjzvx9GeTMHGzCfuZs48naGEM7uonJ5YaFTlZ7rmURn0C3jcI0=
+X-Received: by 2002:a05:651c:158f:: with SMTP id h15mr28634380ljq.249.1630482331278;
+ Wed, 01 Sep 2021 00:45:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7f4f5ab0-cf23-3e27-211e-4dcd8903f96f@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20210831102125.624661-1-ulf.hansson@linaro.org> <CAGETcx868QWj0jMJ+U-eL62jT-LO_LTOw5EcwEKptfFOVa=A5A@mail.gmail.com>
+In-Reply-To: <CAGETcx868QWj0jMJ+U-eL62jT-LO_LTOw5EcwEKptfFOVa=A5A@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 1 Sep 2021 09:44:54 +0200
+Message-ID: <CAPDyKFopTW=ZoB9FYJ-ozRZTnJDTT_gFtz0XDiU-weYb1Q9bkQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] of: property: fw_devlink: Rename 'node_not_dev' to 'optional_con_dev'
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>, DTML <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-09-21, 09:57, Dmitry Osipenko wrote:
-> 01.09.2021 09:10, Viresh Kumar пишет:
-> > So you create the OPP table and just after that you remove it ? Just
-> > to get the current OPP and pstate ? This doesn't look okay.
-> > 
-> > Moreover, this routine must be implemented with the expectation that
-> > the genpd core can call it anytime it wants, not just at the
-> > beginning. And so if the table is already setup by someone else then,
-> > then this all will just fail.
-> 
-> This is not doable using the current OPP API, it doesn't allow to
-> re-use initialized OPP table.
+On Tue, 31 Aug 2021 at 19:31, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Tue, Aug 31, 2021 at 3:21 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > In the struct supplier_bindings the member 'node_not_dev' is described as
+> > "The consumer node containing the property is never a device.", but that
+> > doesn't match the behaviour of the code in of_link_property().
+> >
+> > To make the behaviour consistent with the description, let's rename the
+> > member to "optional_con_dev" and clarify the corresponding comment.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/of/property.c | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/of/property.c b/drivers/of/property.c
+> > index 6c028632f425..2babb1807228 100644
+> > --- a/drivers/of/property.c
+> > +++ b/drivers/of/property.c
+> > @@ -1249,7 +1249,8 @@ static struct device_node *parse_##fname(struct device_node *np,       \
+> >   * @parse_prop.index: For properties holding a list of phandles, this is the
+> >   *                   index into the list
+> >   * @optional: Describes whether a supplier is mandatory or not
+> > - * @node_not_dev: The consumer node containing the property is never a device.
+> > + * @optional_con_dev: The consumer node containing the property may not be a
+> > + *                   device, then try finding one from an ancestor node.
+>
+> Nak. This flag is not about "may not be". This is explicitly for
+> "never a device". It has to do with stuff like remote-endpoint which
+> is never listed under the root node of the device node. Your
+> documentation change is changing the meaning of the flag.
 
-That isn't correct, you can call dev_pm_opp_of_add_table() as many
-times as you want. It will just increase the refcount and return the
-next time.
+Okay, fair enough.
 
-Yes, you can call the APIs like set-clk-name or supported-hw, since
-they are supposed to be set only once.
+Although, as stated in the commit message this isn't the way code
+behaves. Shouldn't we at least make the behaviour consistent with the
+description of the 'node_not_dev' flag?
 
-> The current limitation is okay because genpd core doesn't call
-> routine anytime.
+Along the lines of the below patch then?
 
-Yeah, but is broken by design. People can make changes to genpd core
-later on to call it as many times and they aren't required to have a
-look at all the users to see who abused the API and who didn't.
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 1 Sep 2021 09:28:03 +0200
+Subject: [PATCH] of: property: fw_devlink: Fixup behaviour when 'node_not_dev'
+ is set
 
-> > Can you give the sequence in which the whole thing works out with
-> > respect to the OPP core? who calls
-> > devm_tegra_core_dev_init_opp_table() and when, and when exactly will
-> > this routine get called, etc ?
-> > 
-> 
-> gr3d_probe(struct platform_device *pdev)
+In the struct supplier_bindings the member 'node_not_dev' is described as
+"The consumer node containing the property is never a device.", but that is
+inconsistent with the behaviour of the code in of_link_property(), as it
+calls of_get_compat_node() that starts parsing for a compatible property,
+starting from the node it gets passed to it.
 
-Thanks for this.
+Make the behaviour consistent with the description of the 'node_not_dev'
+flag, by passing the parent node to of_get_compat_node() instead.
 
-> {
-> 	gr3d_init_power(dev)
-> 	{
-> 		static const char * const opp_genpd_names[] = { "3d0", "3d1", NULL };
-> 
-> 		devm_pm_opp_attach_genpd(dev, opp_genpd_names)
-> 		{
-> 			dev_pm_opp_attach_genpd(dev, names, virt_devs)
-> 			{
-> 				// takes and holds table reference
-> 				opp_table = _add_opp_table(dev, false);
-> 
-> 				while (*name) {
-> 					// first attachment succeeds, 
-> 					// second fails with "tegra-gr3d 54180000.gr3d: failed to set OPP clk: -EBUSY"
-> 					dev_pm_domain_attach_by_name(dev, *name)
-> 					{
-> 						tegra_pmc_pd_dev_get_performance_state(dev)
-> 						{
-> 							dev_pm_opp_set_clkname(dev, NULL);
-> 							dev_pm_opp_of_add_table(dev);
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/of/property.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-What you end up doing here is pretty much like
-devm_tegra_core_dev_init_opp_table_simple(), right ?
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index 6c028632f425..16ee017884b8 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1075,6 +1075,17 @@ static struct device_node
+*of_get_compat_node(struct device_node *np)
+        return np;
+ }
 
-> 							opp = dev_pm_opp_get_current(dev);
-> 							dev_pm_opp_of_remove_table(dev);
-> 							dev_pm_opp_put_clkname(opp_table);
++static struct device_node *of_get_compat_node_parent(struct device_node *np)
++{
++       struct device_node *parent, *node;
++
++       parent = of_get_parent(np);
++       node = of_get_compat_node(parent);
++       of_node_put(parent);
++
++       return node;
++}
++
+ /**
+  * of_link_to_phandle - Add fwnode link to supplier from supplier phandle
+  * @con_np: consumer device tree node
+@@ -1416,7 +1427,7 @@ static int of_link_property(struct device_node
+*con_np, const char *prop_name)
+                        struct device_node *con_dev_np;
 
-You shouldn't be required to do this at all.
-
-> 							...
-> 						}
-> 						// opp_table->clk = ERR_PTR(-EINVAL) after the first attachment
-> 					}
-> 				}
-> 			}
-> 		}
-> 	}
-> 
-> 	devm_tegra_core_dev_init_opp_table_simple(&pdev->dev);
-
-Can we make the call at the beginning ? before calling
-gr3d_init_power() ? I mean you should only be required to initialize
-the OPP table just once.
-
-If not, then what about calling
-devm_tegra_core_dev_init_opp_table_simple() from here and from
-tegra_pmc_pd_dev_get_performance_state() as well ?
-
-And update devm_tegra_core_dev_init_opp_table_simple() to call
-dev_pm_opp_get_opp_table() first and return early if the OPP table is
-already initialized ?
-
+                        con_dev_np = s->node_not_dev
+-                                       ? of_get_compat_node(con_np)
++                                       ? of_get_compat_node_parent(con_np)
+                                        : of_node_get(con_np);
+                        matched = true;
+                        i++;
 -- 
-viresh
+2.25.1
+
+[...]
+
+Kind regards
+Uffe
