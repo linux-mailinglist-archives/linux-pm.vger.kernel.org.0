@@ -2,225 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDA93FE11A
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 19:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487233FE1DB
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 20:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbhIAR0i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 13:26:38 -0400
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:42801 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbhIAR0i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 13:26:38 -0400
-Received: by mail-oo1-f48.google.com with SMTP id e206-20020a4a55d7000000b00291379cb2baso90591oob.9
-        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 10:25:41 -0700 (PDT)
+        id S1346793AbhIASMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 14:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346740AbhIASMS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 14:12:18 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB47C0617AD
+        for <linux-pm@vger.kernel.org>; Wed,  1 Sep 2021 11:11:21 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id q3so168180plx.4
+        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 11:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MD/gO/FcenaMvGS16vg/72/LUgbBcxbMvILblP/AY0Q=;
-        b=mdDXnSra2BTj+3VR+Rkevd5KPKui+3zbVH+sLtAR4DBS31MrEAInCObDHpTRxgrq+y
-         EYFtTc6Y3wLoIlmckUGlxGr4vI1OXl1fRJkx9Uzt4+sIfe6ZURW8LyyESoI0JpYs8oTa
-         PbSQeHtDS6ZhEWHMsockUHy4GtqSh1I9KeAQ2wKslPRSX9dnA3FojsETJEv3uD+iB05a
-         QaOSn4V4zxZacD8kvrHM61I+UCx8HL+dCZZccb57x5bkzwra4+5dHOUHmDAKnxXTlzz2
-         63TSOCczokOxplNgxFaD52XRXrk+sEO23NmxOeGCUsVC/IdMwhpmYpeezpbhDctjzeMg
-         oXqw==
-X-Gm-Message-State: AOAM531HRWrhgGzDbOJhdTe5/756nvr2JN24LzKM+Mcx97MPSLdIj3s9
-        JFIQKO3D7DC6Ce5PAIlv+LTW/gGbyxht5mC1WwjE3tHg
-X-Google-Smtp-Source: ABdhPJwxnOx7kqWtD5ciNV6gxIE+bBZ+gc+Kads8cLNdYIYG/ZC08IsRqUmyc+m46Zt54yV6DWsVfLsFeTGHsccumak=
-X-Received: by 2002:a4a:ca83:: with SMTP id x3mr398597ooq.2.1630517140819;
- Wed, 01 Sep 2021 10:25:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=P1wDmtFz8Lif3FZxlLupdIQQQXVQxCXb9ypSALVbfPGn9zXhBM87QVDrksj75pCAP/
+         AN8AI8Sodbl1OBOSo0BHhKKPGZ2Sg8p61vrgwhbQDTMre59PQVaPV6Z7zdxmqjzTpgQ7
+         aUgzC/u0mh5wuzrjthVh23T8nK9gdTyXZUlSiWt2Pqrz5Dg9a01bt2fHdaOStGv3MSul
+         4YFUXAoNqeWcsY0JWNd5YwVNSC6adqP18DssZuW6p1D+EpPl+IDhroNyTwwDlcZRBBmc
+         IiHXsiA1Zl7LrhYoh6etRVAzfd1OquZOtGDjzchxhVDiIkZLrhIbX3fMs6tz/q0NjKAn
+         v2fg==
+X-Gm-Message-State: AOAM530H3ee++AbaTpgc1Oo5RH91FdayVkq16s2JwS8zwXZY6MGgzUBJ
+        RNORHT66v/RNSpjpH+l1XdFtXQIAJk2COeWlOi+STSEe1vy/Dw==
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <1630405453-275784-1-git-send-email-vincent.donnefort@arm.com> <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
-In-Reply-To: <1630405453-275784-6-git-send-email-vincent.donnefort@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Sep 2021 19:25:30 +0200
-Message-ID: <CAJZ5v0inVPxV8FXJznEzqvbf5hLihzmB4cMTNX+iQxEEJfyYNQ@mail.gmail.com>
-Subject: Re: [PATCH v6 5/7] cpufreq: Add an interface to mark inefficient frequencies
-To:     Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 31, 2021 at 12:24 PM Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
->
-> Some SoCs such as the sd855 have OPPs within the same policy whose cost is
-> higher than others with a higher frequency. Those OPPs are inefficients
-> and it might be interesting for a governor to not use them.
->
-> The inefficient interface is composed of two calls:
->
->  1. cpufreq_table_set_inefficient() marks a frequency as inefficient.
->
->  2. cpufreq_table_update_efficiencies() use the inefficiences marked by the
->     previous function to generate a mapping inefficient->efficient.
->
-> Resolving an inefficient frequency to an efficient on can then be done
-> by accessing the cpufreq_frequency_table member "efficient". The
-> resolution doesn't guarantee the policy maximum.
->
-> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
->
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index 67e56cf638ef..d3fa38af2aa6 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -365,6 +365,59 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
->         return set_freq_table_sorted(policy);
->  }
->
-> +/**
-> + * cpufreq_table_update_efficiencies() - Update efficiency resolution
-> + *
+Att: Client
 
-I'm not sure what the extra empty line here is for.
 
-> + * @policy:    the &struct cpufreq_policy to update
-> + *
-> + * Allow quick resolution from inefficient frequencies to efficient ones.
-> + * Inefficient frequencies must have been previously marked with
-> + * cpufreq_table_set_inefficient().
-> + *
-> + * Return: %0 on success or a negative errno code
-> + */
-> +int cpufreq_table_update_efficiencies(struct cpufreq_policy *policy)
-> +{
-> +       struct cpufreq_frequency_table *pos, *table = policy->freq_table;
-> +       enum cpufreq_table_sorting sort = policy->freq_table_sorted;
-> +       int efficient, idx;
-> +
-> +       /* Not supported */
-> +       if (sort == CPUFREQ_TABLE_UNSORTED)
-> +               return -EINVAL;
-> +
-> +       /* The highest frequency is always efficient */
-> +       cpufreq_for_each_valid_entry_idx(pos, table, idx) {
-> +               efficient = idx;
-> +               if (sort == CPUFREQ_TABLE_SORTED_DESCENDING)
-> +                       break;
-> +       }
-> +
-> +       for (;;) {
-> +               pos = &table[idx];
-> +
-> +               if (pos->frequency != CPUFREQ_ENTRY_INVALID) {
-> +                       if (pos->flags & CPUFREQ_INEFFICIENT_FREQ) {
-> +                               pos->efficient = efficient;
-> +                       } else {
-> +                               pos->efficient = idx;
-> +                               efficient = idx;
-> +                       }
-> +               }
-> +
-> +               if (sort == CPUFREQ_TABLE_SORTED_ASCENDING) {
-> +                       if (--idx < 0)
-> +                               break;
-> +               } else {
-> +                       if (table[++idx].frequency == CPUFREQ_TABLE_END)
-> +                               break;
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(cpufreq_table_update_efficiencies);
-> +
->  MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
->  MODULE_DESCRIPTION("CPUfreq frequency table helpers");
->  MODULE_LICENSE("GPL");
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index c65a1d7385f8..4e901ebd104d 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -664,13 +664,15 @@ struct governor_attr {
->  #define CPUFREQ_ENTRY_INVALID  ~0u
->  #define CPUFREQ_TABLE_END      ~1u
->  /* Special Values of .flags field */
-> -#define CPUFREQ_BOOST_FREQ     (1 << 0)
-> +#define CPUFREQ_BOOST_FREQ      (1 << 0)
-> +#define CPUFREQ_INEFFICIENT_FREQ (1 << 1)
->
->  struct cpufreq_frequency_table {
->         unsigned int    flags;
->         unsigned int    driver_data; /* driver specific data, not used by core */
->         unsigned int    frequency; /* kHz - doesn't need to be in ascending
->                                     * order */
-> +       unsigned int    efficient; /* idx of an efficient frequency */
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-It looks to me like having just one efficient frequency index here may
-not work in general (I'll explain this in a reply to the next patch).
+Notification / Notification/ Notification
 
-Also, it's a bit weird to kind of point it to self for the efficient ones.
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
->  };
->
->  #if defined(CONFIG_CPU_FREQ) && defined(CONFIG_PM_OPP)
-> @@ -762,6 +764,7 @@ int cpufreq_boost_trigger_state(int state);
->  int cpufreq_boost_enabled(void);
->  int cpufreq_enable_boost_support(void);
->  bool policy_has_boost_freq(struct cpufreq_policy *policy);
-> +int cpufreq_table_update_efficiencies(struct cpufreq_policy *policy);
->
->  /* Find lowest freq at or above target in a table in ascending order */
->  static inline int cpufreq_table_find_index_al(struct cpufreq_policy *policy,
-> @@ -1003,6 +1006,29 @@ static inline int cpufreq_table_count_valid_entries(const struct cpufreq_policy
->
->         return count;
->  }
-> +
-> +/**
-> + * cpufreq_table_set_inefficient() - Mark a frequency as inefficient
-> + *
-> + * @policy:    the &struct cpufreq_policy containing the inefficient frequency
-> + * @frequency: the inefficient frequency
-> + *
-> + * Once inefficiencies marked, the efficient resolution must be updated with the
-> + * function cpufreq_table_update_efficiencies().
-> + */
-> +static inline void
-> +cpufreq_table_set_inefficient(const struct cpufreq_policy *policy,
-> +                             unsigned int frequency)
-> +{
-> +       struct cpufreq_frequency_table *pos;
-> +
-> +       cpufreq_for_each_valid_entry(pos, policy->freq_table) {
-> +               if (pos->frequency == frequency) {
-> +                       pos->flags |= CPUFREQ_INEFFICIENT_FREQ;
-> +                       break;
-> +               }
-> +       }
-> +}
->  #else
->  static inline int cpufreq_boost_trigger_state(int state)
->  {
-> @@ -1022,6 +1048,16 @@ static inline bool policy_has_boost_freq(struct cpufreq_policy *policy)
->  {
->         return false;
->  }
-> +
-> +static inline void
-> +cpufreq_table_set_inefficient(const struct cpufreq_policy *policy,
-> +                             unsigned int frequency) {}
-> +
-> +static inline int
-> +cpufreq_table_update_efficiencies(struct cpufreq_policy *policy)
-> +{
-> +       return -EINVAL;
-> +}
->  #endif
->
->  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-> --
-> 2.7.4
->
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
+
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
+
+Sincerely,
+
+----
+
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
