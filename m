@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30773FDF1C
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 17:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4EF3FDF22
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 17:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343837AbhIAP5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 11:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S1343905AbhIAP5I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 11:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245022AbhIAP5H (ORCPT
+        with ESMTP id S1343834AbhIAP5H (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 11:57:07 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA35C061575;
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84318C061760;
         Wed,  1 Sep 2021 08:56:10 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 574061FAF9;
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C388E200CF;
         Wed,  1 Sep 2021 17:56:08 +0200 (CEST)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
@@ -32,50 +32,58 @@ Cc:     bjorn.andersson@linaro.org, sboyd@kernel.org, vireshk@kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH 1/2] dt-bindings: opp: qcom-opp: Convert to DT schema
-Date:   Wed,  1 Sep 2021 17:55:58 +0200
-Message-Id: <20210901155559.627491-1-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH 2/2] dt-bindings: opp: Add binding for qcom-cpu-opp
+Date:   Wed,  1 Sep 2021 17:55:59 +0200
+Message-Id: <20210901155559.627491-2-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210901155559.627491-1-angelogioacchino.delregno@somainline.org>
+References: <20210901155559.627491-1-angelogioacchino.delregno@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rewrite the qcom-opp as qcom-level-opp in dt schema format.
+This adds a binding documenting operating-points-v2-kryo-cpu in a
+qcom-cpu-opp.yaml file. Logic is to add any new Qualcomm SoCs CPU
+related OPP compatibles in here.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- .../bindings/opp/qcom-level-opp.yaml          | 68 +++++++++++++++++++
- .../devicetree/bindings/opp/qcom-opp.txt      | 19 ------
- 2 files changed, 68 insertions(+), 19 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/opp/qcom-level-opp.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
+ .../devicetree/bindings/opp/qcom-cpu-opp.yaml | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/opp/qcom-cpu-opp.yaml
 
-diff --git a/Documentation/devicetree/bindings/opp/qcom-level-opp.yaml b/Documentation/devicetree/bindings/opp/qcom-level-opp.yaml
+diff --git a/Documentation/devicetree/bindings/opp/qcom-cpu-opp.yaml b/Documentation/devicetree/bindings/opp/qcom-cpu-opp.yaml
 new file mode 100644
-index 000000000000..65dd2d5d9566
+index 000000000000..b4d83b64228c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/opp/qcom-level-opp.yaml
++++ b/Documentation/devicetree/bindings/opp/qcom-cpu-opp.yaml
 @@ -0,0 +1,68 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/opp/qcom-level-opp.yaml#
++$id: http://devicetree.org/schemas/opp/qcom-cpu-opp.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Qualcomm OPP bindings for fuse and voltage level OPPs
++title: Qualcomm Technologies, Inc. CPU OPP bindings
 +
 +maintainers:
-+  - AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-+  - Niklas Cassel <niklas.cassel@linaro.org>
++  - Ilia Lin <ilia.lin@kernel.org>
 +
 +allOf:
 +  - $ref: opp-v2-base.yaml#
 +
 +properties:
 +  compatible:
-+    const: operating-points-v2-qcom-level
++    const: operating-points-v2-kryo-cpu
++
++  nvmem-cells:
++    description: |
++      A phandle pointing to a nvmem-cells node representing the efuse
++      registers that has information about the speedbin that is used
++      to select the right frequency/voltage value pair.
++    maxItems: 1
 +
 +  opp-shared: true
 +
@@ -87,20 +95,14 @@ index 000000000000..65dd2d5d9566
 +    type: object
 +
 +    properties:
-+      opp-level: true
-+      qcom,opp-fuse-level:
-+        description:
-+          At least one positive value representing the fuse corner or level
-+          associated with this OPP node. In case this is used for CPR >=v3,
-+          multiple array entries are referring to different CPR threads.
-+          Sometimes several corners/levels shares a certain fuse
-+          corner/level. A fuse corner/level contains e.g. ref uV, min uV,
-+          and max uV.
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
++      clock-latency-ns: true
++      opp-hz: true
++      opp-microvolt: true
++      opp-supported-hw: true
++      required-opps: true
 +
 +    required:
-+      - opp-level
-+      - qcom,opp-fuse-level
++      - opp-hz
 +
 +    unevaluatedProperties: false
 +
@@ -108,49 +110,24 @@ index 000000000000..65dd2d5d9566
 +
 +examples:
 +  - |
-+    cpr_opp_table: opp-table-cpr {
-+        compatible = "operating-points-v2-qcom-level";
++    cpu_opp_table: opp-table-cpu {
++        compatible = "operating-points-v2-kryo-cpu";
++        opp-shared;
 +
-+        cpr_opp1: opp1 {
-+            opp-level = <1>;
-+            qcom,opp-fuse-level = <1>;
++        opp-1094400000 {
++            opp-hz = /bits/ 64 <1094400000>;
++            required-opps = <&cpr_opp1>;
 +        };
-+        cpr_opp2: opp2 {
-+            opp-level = <2>;
-+            qcom,opp-fuse-level = <2>;
++        opp-1248000000 {
++            opp-hz = /bits/ 64 <1248000000>;
++            required-opps = <&cpr_opp2>;
 +        };
-+        cpr_opp3: opp3 {
-+            opp-level = <3>;
-+            qcom,opp-fuse-level = <3>;
++        opp-1401600000 {
++            opp-hz = /bits/ 64 <1401600000>;
++            required-opps = <&cpr_opp3>;
 +        };
 +    };
-+
 +...
-diff --git a/Documentation/devicetree/bindings/opp/qcom-opp.txt b/Documentation/devicetree/bindings/opp/qcom-opp.txt
-deleted file mode 100644
-index 41d3e4ff2dc3..000000000000
---- a/Documentation/devicetree/bindings/opp/qcom-opp.txt
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Qualcomm OPP bindings to describe OPP nodes
--
--The bindings are based on top of the operating-points-v2 bindings
--described in Documentation/devicetree/bindings/opp/opp-v2-base.yaml
--Additional properties are described below.
--
--* OPP Table Node
--
--Required properties:
--- compatible: Allow OPPs to express their compatibility. It should be:
--  "operating-points-v2-qcom-level"
--
--* OPP Node
--
--Required properties:
--- qcom,opp-fuse-level: A positive value representing the fuse corner/level
--  associated with this OPP node. Sometimes several corners/levels shares
--  a certain fuse corner/level. A fuse corner/level contains e.g. ref uV,
--  min uV, and max uV.
 -- 
 2.32.0
 
