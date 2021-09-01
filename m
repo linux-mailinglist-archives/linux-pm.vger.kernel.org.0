@@ -2,124 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0183FE5E5
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 02:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CBC3FE634
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 02:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbhIAW6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 18:58:17 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:49851 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbhIAW6Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 18:58:16 -0400
-Received: by mail-io1-f72.google.com with SMTP id k6-20020a6b3c060000b0290568c2302268so18825iob.16
-        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 15:57:19 -0700 (PDT)
+        id S242547AbhIBAAk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 20:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242374AbhIBAAj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 20:00:39 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49199C061757
+        for <linux-pm@vger.kernel.org>; Wed,  1 Sep 2021 16:59:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id x19so219571pfu.4
+        for <linux-pm@vger.kernel.org>; Wed, 01 Sep 2021 16:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVEKpVhauYNJ1ILO18GzLhj0cTIWBln8xn/kIaFE4Zk=;
+        b=a0U/g5gMiauvSfdJA24Q9gAMJsJpAAv3wbzNJjANEkTSQ6ZcazygfvPjXmDvJbfJRN
+         MKOqYJNao/5bmFsusyOH6gziaJLDYcQMlgNIZtCu5osijNKqKn215xzzE2Sv8VKhjhBd
+         6AYwdWpJt+iBBr/bklXqDqTOCrybNX62uH2vI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=JzvGf/ZVsO1K+NhAfNaPsZwtB/ckIo0GMG+20Hi/iqI=;
-        b=D4aSkMhGM49wRUN2/QRdtBzG/8jl+9MfYPHEtbvYI5NhrbFmALMlvOdfRDsOOlnBBQ
-         0ht+JKTV4V5c/w98MGVBiyVOfTFKx0+EE7OApFdUq2WcR2jMnkblyAZXnh7o+OU+e+LC
-         8/O4qWfmvuceqbdHp8Pwuggz8Gb1y/WTWNu3E0qVNWuL8OLP0LvqeGykHZzEhb+rJRLL
-         ax+puG0hWSegj7EJcv/7LXSu3RdSID9K3osgSjJIvLf6s8OlYCjG8dCBjqKZaxoAMH5D
-         erTuV6e7LoANClREP7KoMQ3ZWnzWE+8IMkwKSVD5ZZgmA4Hl/ri6cszrkuot1jOjT+dW
-         ROUA==
-X-Gm-Message-State: AOAM532Ljw4+3PP5BhVIAGWuHhp0XFuzNN/IquAMaydaQr+0+GNGu6wj
-        Pu3s1C9f/Q1FqCFa8Cy68Na9ZrzQjNmQ2BmVvHnvA/Zd+Xt+
-X-Google-Smtp-Source: ABdhPJxxydaj2qVdJGcTWNWOC0RkCOqYZYrKfwzYt3Mem6Lq4W0obWV6dYAXHZZ+C8Y525O6vrUhpfnLov5HW7B1LCA5aVKI92Na
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVEKpVhauYNJ1ILO18GzLhj0cTIWBln8xn/kIaFE4Zk=;
+        b=Z4ohQlgPdMQ1yF5hbvoP0wfASroqvbBs6pKxkypAs7KjP+ad4wDQznVvnUH8ldVzp+
+         Dsd7DTnmYHujv/v+bpWFEP3SLUUNda09UBtt8l+YADAU46Ti4GN4v62XkWoew1pBxNoc
+         0Tsl56HZUyTbWvM47AN4stG5J2PkawSsF7REyhCs2cTmOU5W1jbxLlh2zAt6XXGGFbXg
+         Ch2PcwvSOypLb3EFN0roiU88rL7b6iaMOZ6QuISBPjDI2Fj3h4buOGFcUzveflC68MMm
+         GEG85asJ5sTkWb0tH8Obj9jXRqnjNDDqPiuVNX0bBFZ0TsVT5/bj9pUyhimLdlZSFUh3
+         rTyA==
+X-Gm-Message-State: AOAM531SsZZYX4yxcr471wlVfC9HL7sU8KpxVBAYU373GF6F97hN0PYU
+        0QGl1GWa7AUVV9m26s+fBRdxtg==
+X-Google-Smtp-Source: ABdhPJwDBjoTuTHaB/WX510aqdaeHu3oym+8oKmcYBmdvcvaxzfghosuICAisrlkBSlyr3Mk0uJRFQ==
+X-Received: by 2002:a62:1888:0:b029:3c9:7957:519b with SMTP id 130-20020a6218880000b02903c97957519bmr410778pfy.17.1630540781790;
+        Wed, 01 Sep 2021 16:59:41 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:fbd:3633:cc64:337d])
+        by smtp.gmail.com with UTF8SMTPSA id g2sm104681pfr.35.2021.09.01.16.59.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Sep 2021 16:59:41 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH] power: supply: core: Add psy_has_property()
+Date:   Wed,  1 Sep 2021 16:59:36 -0700
+Message-Id: <20210901165911.1.I61edd8453dd683a125623b4173988b438033c0af@changeid>
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
 MIME-Version: 1.0
-X-Received: by 2002:a5e:dd42:: with SMTP id u2mr165245iop.157.1630537039084;
- Wed, 01 Sep 2021 15:57:19 -0700 (PDT)
-Date:   Wed, 01 Sep 2021 15:57:19 -0700
-In-Reply-To: <00000000000034712e05ca9741e8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000002044305caf6fd02@google.com>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Write in __pm_runtime_resume
-From:   syzbot <syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, len.brown@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pavel@ucw.cz, rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Add the helper psy_has_property() to check whether a power supply
+has a given property and use it instead of ad hoc iterations over
+the property list in multiple locations.
 
-HEAD commit:    835d31d319d9 Merge tag 'media/v5.15-1' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1374b85d300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c32e23fada3a0e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=7d41312fe3f123a6f605
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fde215300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11aa9149300000
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7d41312fe3f123a6f605@syzkaller.appspotmail.com
+ drivers/power/supply/power_supply_core.c | 65 ++++++++++++++----------
+ 1 file changed, 37 insertions(+), 28 deletions(-)
 
-Bluetooth: : Invalid header checksum
-Bluetooth: : Invalid header checksum
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: null-ptr-deref in atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
-BUG: KASAN: null-ptr-deref in __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
-Write of size 4 at addr 0000000000000388 by task kworker/u4:4/244
-
-CPU: 1 PID: 244 Comm: kworker/u4:4 Not tainted 5.14.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_unbound flush_to_ldisc
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
- __kasan_report mm/kasan/report.c:423 [inline]
- kasan_report.cold+0x66/0xdf mm/kasan/report.c:436
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
- __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
- pm_runtime_get include/linux/pm_runtime.h:370 [inline]
- h5_recv+0x2c4/0x680 drivers/bluetooth/hci_h5.c:590
- hci_uart_tty_receive+0x24d/0x710 drivers/bluetooth/hci_ldisc.c:613
- tty_ldisc_receive_buf+0x14d/0x190 drivers/tty/tty_buffer.c:475
- tty_port_default_receive_buf+0x6e/0xa0 drivers/tty/tty_port.c:39
- receive_buf drivers/tty/tty_buffer.c:491 [inline]
- flush_to_ldisc+0x20d/0x380 drivers/tty/tty_buffer.c:543
- process_one_work+0x9bf/0x16b0 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3e5/0x4d0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-==================================================================
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 244 Comm: kworker/u4:4 Tainted: G    B             5.14.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_unbound flush_to_ldisc
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
- panic+0x306/0x73d kernel/panic.c:232
- end_report mm/kasan/report.c:103 [inline]
- end_report.cold+0x5a/0x5a mm/kasan/report.c:88
- __kasan_report mm/kasan/report.c:426 [inline]
- kasan_report.cold+0x71/0xdf mm/kasan/report.c:436
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
- __pm_runtime_resume+0x154/0x180 drivers/base/power/runtime.c:1105
- pm_runtime_get include/linux/pm_runtime.h:370 [inline]
- h5_recv+0x2c4/0x680 drivers/bluetooth/hci_h5.c:590
- hci_uart_tty_receive+0x24d/0x710 drivers/bluetooth/hci_ldisc.c:613
- tty_ldisc_receive_buf+0x14d/0x190 drivers/tty/tty_buffer.c:475
- tty_port_default_receive_buf+0x6e/0xa0 drivers/tty/tty_port.c:39
- receive_buf drivers/tty/tty_buffer.c:491 [inline]
- flush_to_ldisc+0x20d/0x380 drivers/tty/tty_buffer.c:543
- process_one_work+0x9bf/0x16b0 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3e5/0x4d0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index d99e2f11c183..9309b33ed3ec 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -956,26 +956,41 @@ static struct thermal_zone_device_ops psy_tzd_ops = {
+ 	.get_temp = power_supply_read_temp,
+ };
+ 
++static bool psy_has_property(const struct power_supply_desc *psy_desc,
++			     enum power_supply_property psp)
++{
++	bool found = false;
++	int i;
++
++	for (i = 0; i < psy_desc->num_properties; i++) {
++		if (psy_desc->properties[i] == psp) {
++			found = true;
++			break;
++		}
++	}
++
++	return found;
++}
++
+ static int psy_register_thermal(struct power_supply *psy)
+ {
+-	int i, ret;
++	int ret;
+ 
+ 	if (psy->desc->no_thermal)
+ 		return 0;
+ 
+ 	/* Register battery zone device psy reports temperature */
+-	for (i = 0; i < psy->desc->num_properties; i++) {
+-		if (psy->desc->properties[i] == POWER_SUPPLY_PROP_TEMP) {
+-			psy->tzd = thermal_zone_device_register(psy->desc->name,
+-					0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
+-			if (IS_ERR(psy->tzd))
+-				return PTR_ERR(psy->tzd);
+-			ret = thermal_zone_device_enable(psy->tzd);
+-			if (ret)
+-				thermal_zone_device_unregister(psy->tzd);
+-			return ret;
+-		}
++	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
++		psy->tzd = thermal_zone_device_register(psy->desc->name,
++				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
++		if (IS_ERR(psy->tzd))
++			return PTR_ERR(psy->tzd);
++		ret = thermal_zone_device_enable(psy->tzd);
++		if (ret)
++			thermal_zone_device_unregister(psy->tzd);
++		return ret;
+ 	}
++
+ 	return 0;
+ }
+ 
+@@ -1046,18 +1061,14 @@ static const struct thermal_cooling_device_ops psy_tcd_ops = {
+ 
+ static int psy_register_cooler(struct power_supply *psy)
+ {
+-	int i;
+-
+ 	/* Register for cooling device if psy can control charging */
+-	for (i = 0; i < psy->desc->num_properties; i++) {
+-		if (psy->desc->properties[i] ==
+-				POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT) {
+-			psy->tcd = thermal_cooling_device_register(
+-							(char *)psy->desc->name,
+-							psy, &psy_tcd_ops);
+-			return PTR_ERR_OR_ZERO(psy->tcd);
+-		}
++	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT)) {
++		psy->tcd = thermal_cooling_device_register(
++			(char *)psy->desc->name,
++			psy, &psy_tcd_ops);
++		return PTR_ERR_OR_ZERO(psy->tcd);
+ 	}
++
+ 	return 0;
+ }
+ 
+@@ -1095,7 +1106,7 @@ __power_supply_register(struct device *parent,
+ {
+ 	struct device *dev;
+ 	struct power_supply *psy;
+-	int i, rc;
++	int rc;
+ 
+ 	if (!parent)
+ 		pr_warn("%s: Expected proper parent device for '%s'\n",
+@@ -1104,11 +1115,9 @@ __power_supply_register(struct device *parent,
+ 	if (!desc || !desc->name || !desc->properties || !desc->num_properties)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	for (i = 0; i < desc->num_properties; ++i) {
+-		if ((desc->properties[i] == POWER_SUPPLY_PROP_USB_TYPE) &&
+-		    (!desc->usb_types || !desc->num_usb_types))
+-			return ERR_PTR(-EINVAL);
+-	}
++	if (psy_has_property(desc, POWER_SUPPLY_PROP_USB_TYPE) &&
++	    (!desc->usb_types || !desc->num_usb_types))
++		return ERR_PTR(-EINVAL);
+ 
+ 	psy = kzalloc(sizeof(*psy), GFP_KERNEL);
+ 	if (!psy)
+-- 
+2.33.0.153.gba50c8fa24-goog
 
