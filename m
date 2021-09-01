@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CF83FD950
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 14:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861963FD952
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 14:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243982AbhIAMRA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 08:17:00 -0400
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:40001 "EHLO
+        id S243991AbhIAMRC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 08:17:02 -0400
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:57213 "EHLO
         mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243981AbhIAMQ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 08:16:59 -0400
-Date:   Wed, 01 Sep 2021 12:15:48 +0000
+        with ESMTP id S243984AbhIAMRB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 08:17:01 -0400
+Date:   Wed, 01 Sep 2021 12:15:55 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1630498559;
-        bh=dRoyhfnVNodGny7+/CMR/XiTx1YCPaGARCjlTzQC/j8=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=WME4xoblxy100bfiC2U/LACbKCBORGhywNVRpzNtxkE0Fka5dh1r8DTsfE2AiWCzM
-         jm5vA+1gubWfgYMzlx+YoJuKibC7nzTgbu1itjKpbzRlycOftZ4TzxTlVlZcQcrTvX
-         FXQHF+BKiop43v+qm1QIDrHtPc66cNyqeJyEX2Tc=
+        s=protonmail; t=1630498558;
+        bh=VCZ9OYkllvRq2g3K82+SV7lUCB4LhW30+dAjGIrb/eU=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Ljdx/x+Duxh3fOu+CYwPP5bum7zg++FDAkfMDLMRrfPdy0UaRo2uBMkjM6RK9GKHg
+         cKrgZhpTms0N3V8PuKUcxj2iOqpboW2zGENqSr48Hh8hm5cTYVGxQBydkypKzg5OHs
+         XQPWOlMg+/+FWkLqieJ4L4Z9veTjb5eOasbyQq/M=
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Georgi Djakov <djakov@kernel.org>,
@@ -29,8 +29,10 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v4 0/5] interconnect: qcom: Add MSM8996 interconnect driver
-Message-ID: <20210901121518.152481-1-y.oudjana@protonmail.com>
+Subject: [PATCH v4 1/5] interconnect: qcom: sdm660: Commonize RPM-QoS
+Message-ID: <20210901121518.152481-2-y.oudjana@protonmail.com>
+In-Reply-To: <20210901121518.152481-1-y.oudjana@protonmail.com>
+References: <20210901121518.152481-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -43,55 +45,1130 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds a driver for interconnects on MSM8996. This fixes some rar=
-e display underflows
-and provides a slight heat reduction.
+SoCs such as MSM8996 also control bus QoS in a similar fashion to SDM660,
+with some paths being controlled by RPM and others directly by the AP.
+Move relevant functions and defines to a new object so that they can be use=
+d
+in multiple drivers.
 
-The driver currently supports all NoCs on MSM8996 except a0noc, due to some=
- issues with writing
-to its registers.
-
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
 Changes since v3:
- - Expand DEFINE_QNODE macros in msm8996.c.
  - Commonize probe function.
  - Don't rename qcom_icc_set in icc-rpmh since it's no longer needed.
- - Code style fixes.
-Changes since v2:
- - Dual-license qcom,msm8996.h and move it to the dt bindings patch
- - Remove interconnect paths from CPUs since cpufreq driver doesn't support=
- icc scaling yet.
 Changes since v1:
  - Split first patch into 2 patches, one for renaming qcom_icc_set in icc-r=
 pmh, and another
    one for the actual commonization.
- - Revert unnecessary move of include line in sdm660.c=20
+ - Revert unnecessary move of include line in sdm660.c
 
-Yassine Oudjana (5):
-  interconnect: qcom: sdm660: Commonize RPM-QoS
-  dt-bindings: interconnect: Move SDM660 to a new RPM-QoS file
-  dt-bindings: interconnect: Add Qualcomm MSM8996 DT bindings
-  interconnect: qcom: Add MSM8996 interconnect provider driver
-  arm64: dts: qcom: msm8996: Add interconnect support
-
- .../{qcom,sdm660.yaml =3D> qcom,rpm-qos.yaml}   |   23 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi         |   80 +
- drivers/interconnect/qcom/Kconfig             |   14 +-
- drivers/interconnect/qcom/Makefile            |    4 +
- drivers/interconnect/qcom/icc-rpm-qos.c       |  358 +++
- drivers/interconnect/qcom/icc-rpm-qos.h       |  135 +
- drivers/interconnect/qcom/msm8996.c           | 2781 +++++++++++++++++
- drivers/interconnect/qcom/msm8996.h           |  149 +
- drivers/interconnect/qcom/sdm660.c            |  487 +--
- .../dt-bindings/interconnect/qcom,msm8996.h   |  163 +
- 10 files changed, 3725 insertions(+), 469 deletions(-)
- rename Documentation/devicetree/bindings/interconnect/{qcom,sdm660.yaml =
-=3D> qcom,rpm-qos.yaml} (82%)
+ drivers/interconnect/qcom/Kconfig       |   5 +-
+ drivers/interconnect/qcom/Makefile      |   2 +
+ drivers/interconnect/qcom/icc-rpm-qos.c | 358 +++++++++++++++++
+ drivers/interconnect/qcom/icc-rpm-qos.h | 135 +++++++
+ drivers/interconnect/qcom/sdm660.c      | 487 ++----------------------
+ 5 files changed, 522 insertions(+), 465 deletions(-)
  create mode 100644 drivers/interconnect/qcom/icc-rpm-qos.c
  create mode 100644 drivers/interconnect/qcom/icc-rpm-qos.h
- create mode 100644 drivers/interconnect/qcom/msm8996.c
- create mode 100644 drivers/interconnect/qcom/msm8996.h
- create mode 100644 include/dt-bindings/interconnect/qcom,msm8996.h
 
+diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/=
+Kconfig
+index daf1e25f6042..9e4303350afb 100644
+--- a/drivers/interconnect/qcom/Kconfig
++++ b/drivers/interconnect/qcom/Kconfig
+@@ -96,7 +96,7 @@ config INTERCONNECT_QCOM_SDM660
+ =09tristate "Qualcomm SDM660 interconnect driver"
+ =09depends on INTERCONNECT_QCOM
+ =09depends on QCOM_SMD_RPM
+-=09select INTERCONNECT_QCOM_SMD_RPM
++=09select INTERCONNECT_QCOM_SMD_RPM_QOS
+ =09help
+ =09  This is a driver for the Qualcomm Network-on-Chip on sdm660-based
+ =09  platforms.
+@@ -148,3 +148,6 @@ config INTERCONNECT_QCOM_SM8350
+=20
+ config INTERCONNECT_QCOM_SMD_RPM
+ =09tristate
++
++config INTERCONNECT_QCOM_SMD_RPM_QOS
++=09tristate
+diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom=
+/Makefile
+index 69300b1d48ef..03a5a1e9c45e 100644
+--- a/drivers/interconnect/qcom/Makefile
++++ b/drivers/interconnect/qcom/Makefile
+@@ -17,6 +17,7 @@ qnoc-sm8150-objs=09=09=09:=3D sm8150.o
+ qnoc-sm8250-objs=09=09=09:=3D sm8250.o
+ qnoc-sm8350-objs=09=09=09:=3D sm8350.o
+ icc-smd-rpm-objs=09=09=09:=3D smd-rpm.o icc-rpm.o
++icc-smd-rpm-qos-objs=09=09=09:=3D smd-rpm.o icc-rpm-qos.o
+=20
+ obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) +=3D icc-bcm-voter.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_MSM8916) +=3D qnoc-msm8916.o
+@@ -35,3 +36,4 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) +=3D qnoc-sm8150.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) +=3D qnoc-sm8250.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) +=3D qnoc-sm8350.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) +=3D icc-smd-rpm.o
++obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM_QOS) +=3D icc-smd-rpm-qos.o
+diff --git a/drivers/interconnect/qcom/icc-rpm-qos.c b/drivers/interconnect=
+/qcom/icc-rpm-qos.c
+new file mode 100644
+index 000000000000..3f0b16caa812
+--- /dev/null
++++ b/drivers/interconnect/qcom/icc-rpm-qos.c
+@@ -0,0 +1,358 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
++ */
++
++#include <linux/clk.h>
++#include <linux/device.h>
++#include <linux/interconnect-provider.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++
++#include "smd-rpm.h"
++#include "icc-rpm-qos.h"
++
++static int qcom_icc_bimc_set_qos_health(struct regmap *rmap,
++=09=09=09=09=09struct qcom_icc_qos *qos,
++=09=09=09=09=09int regnum)
++{
++=09u32 val;
++=09u32 mask;
++
++=09val =3D qos->prio_level;
++=09mask =3D M_BKE_HEALTH_CFG_PRIOLVL_MASK;
++
++=09val |=3D qos->areq_prio << M_BKE_HEALTH_CFG_AREQPRIO_SHIFT;
++=09mask |=3D M_BKE_HEALTH_CFG_AREQPRIO_MASK;
++
++=09/* LIMITCMDS is not present on M_BKE_HEALTH_3 */
++=09if (regnum !=3D 3) {
++=09=09val |=3D qos->limit_commands << M_BKE_HEALTH_CFG_LIMITCMDS_SHIFT;
++=09=09mask |=3D M_BKE_HEALTH_CFG_LIMITCMDS_MASK;
++=09}
++
++=09return regmap_update_bits(rmap,
++=09=09=09=09  M_BKE_HEALTH_CFG_ADDR(regnum, qos->qos_port),
++=09=09=09=09  mask, val);
++}
++
++static int qcom_icc_set_bimc_qos(struct icc_node *src, u64 max_bw,
++=09=09=09=09 bool bypass_mode)
++{
++=09struct qcom_icc_provider *qp;
++=09struct qcom_icc_node *qn;
++=09struct icc_provider *provider;
++=09u32 mode =3D NOC_QOS_MODE_BYPASS;
++=09u32 val =3D 0;
++=09int i, rc =3D 0;
++
++=09qn =3D src->data;
++=09provider =3D src->provider;
++=09qp =3D to_qcom_provider(provider);
++
++=09if (qn->qos.qos_mode !=3D -1)
++=09=09mode =3D qn->qos.qos_mode;
++
++=09/* QoS Priority: The QoS Health parameters are getting considered
++=09 * only if we are NOT in Bypass Mode.
++=09 */
++=09if (mode !=3D NOC_QOS_MODE_BYPASS) {
++=09=09for (i =3D 3; i >=3D 0; i--) {
++=09=09=09rc =3D qcom_icc_bimc_set_qos_health(qp->regmap,
++=09=09=09=09=09=09=09  &qn->qos, i);
++=09=09=09if (rc)
++=09=09=09=09return rc;
++=09=09}
++
++=09=09/* Set BKE_EN to 1 when Fixed, Regulator or Limiter Mode */
++=09=09val =3D 1;
++=09}
++
++=09return regmap_update_bits(qp->regmap, M_BKE_EN_ADDR(qn->qos.qos_port),
++=09=09=09=09  M_BKE_EN_EN_BMASK, val);
++}
++
++static int qcom_icc_noc_set_qos_priority(struct regmap *rmap,
++=09=09=09=09=09 struct qcom_icc_qos *qos)
++{
++=09u32 val;
++=09int rc;
++
++=09/* Must be updated one at a time, P1 first, P0 last */
++=09val =3D qos->areq_prio << NOC_QOS_PRIORITY_P1_SHIFT;
++=09rc =3D regmap_update_bits(rmap, NOC_QOS_PRIORITYn_ADDR(qos->qos_port),
++=09=09=09=09NOC_QOS_PRIORITY_MASK, val);
++=09if (rc)
++=09=09return rc;
++
++=09val =3D qos->prio_level << NOC_QOS_PRIORITY_P0_SHIFT;
++=09return regmap_update_bits(rmap, NOC_QOS_PRIORITYn_ADDR(qos->qos_port),
++=09=09=09=09  NOC_QOS_PRIORITY_MASK, val);
++}
++
++static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
++{
++=09struct qcom_icc_provider *qp;
++=09struct qcom_icc_node *qn;
++=09struct icc_provider *provider;
++=09u32 mode =3D NOC_QOS_MODE_BYPASS;
++=09int rc =3D 0;
++
++=09qn =3D src->data;
++=09provider =3D src->provider;
++=09qp =3D to_qcom_provider(provider);
++
++=09if (qn->qos.qos_port < 0) {
++=09=09dev_dbg(src->provider->dev,
++=09=09=09"NoC QoS: Skipping %s: vote aggregated on parent.\n",
++=09=09=09qn->name);
++=09=09return 0;
++=09}
++
++=09if (qn->qos.qos_mode !=3D -1)
++=09=09mode =3D qn->qos.qos_mode;
++
++=09if (mode =3D=3D NOC_QOS_MODE_FIXED) {
++=09=09dev_dbg(src->provider->dev, "NoC QoS: %s: Set Fixed mode\n",
++=09=09=09qn->name);
++=09=09rc =3D qcom_icc_noc_set_qos_priority(qp->regmap, &qn->qos);
++=09=09if (rc)
++=09=09=09return rc;
++=09} else if (mode =3D=3D NOC_QOS_MODE_BYPASS) {
++=09=09dev_dbg(src->provider->dev, "NoC QoS: %s: Set Bypass mode\n",
++=09=09=09qn->name);
++=09}
++
++=09return regmap_update_bits(qp->regmap,
++=09=09=09=09  NOC_QOS_MODEn_ADDR(qn->qos.qos_port),
++=09=09=09=09  NOC_QOS_MODEn_MASK, mode);
++}
++
++static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
++{
++=09struct qcom_icc_provider *qp =3D to_qcom_provider(node->provider);
++=09struct qcom_icc_node *qn =3D node->data;
++
++=09dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
++
++=09if (qp->is_bimc_node)
++=09=09return qcom_icc_set_bimc_qos(node, sum_bw,
++=09=09=09=09(qn->qos.qos_mode =3D=3D NOC_QOS_MODE_BYPASS));
++
++=09return qcom_icc_set_noc_qos(node, sum_bw);
++}
++
++static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
++{
++=09int ret =3D 0;
++
++=09if (mas_rpm_id !=3D -1) {
++=09=09ret =3D qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
++=09=09=09=09=09    RPM_BUS_MASTER_REQ,
++=09=09=09=09=09    mas_rpm_id,
++=09=09=09=09=09    sum_bw);
++=09=09if (ret) {
++=09=09=09pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
++=09=09=09       mas_rpm_id, ret);
++=09=09=09return ret;
++=09=09}
++=09}
++
++=09if (slv_rpm_id !=3D -1) {
++=09=09ret =3D qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
++=09=09=09=09=09    RPM_BUS_SLAVE_REQ,
++=09=09=09=09=09    slv_rpm_id,
++=09=09=09=09=09    sum_bw);
++=09=09if (ret) {
++=09=09=09pr_err("qcom_icc_rpm_smd_send slv %d error %d\n",
++=09=09=09       slv_rpm_id, ret);
++=09=09=09return ret;
++=09=09}
++=09}
++
++=09return ret;
++}
++
++static int qcom_icc_rpm_qos_set(struct icc_node *src, struct icc_node *dst=
+)
++{
++=09struct qcom_icc_provider *qp;
++=09struct qcom_icc_node *qn;
++=09struct icc_provider *provider;
++=09struct icc_node *n;
++=09u64 sum_bw;
++=09u64 max_peak_bw;
++=09u64 rate;
++=09u32 agg_avg =3D 0;
++=09u32 agg_peak =3D 0;
++=09int ret, i;
++
++=09qn =3D src->data;
++=09provider =3D src->provider;
++=09qp =3D to_qcom_provider(provider);
++
++=09list_for_each_entry(n, &provider->nodes, node_list)
++=09=09provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
++=09=09=09=09    &agg_avg, &agg_peak);
++
++=09sum_bw =3D icc_units_to_bps(agg_avg);
++=09max_peak_bw =3D icc_units_to_bps(agg_peak);
++
++=09if (!qn->qos.ap_owned) {
++=09=09/* send bandwidth request message to the RPM processor */
++=09=09ret =3D qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
++=09=09if (ret)
++=09=09=09return ret;
++=09} else if (qn->qos.qos_mode !=3D -1) {
++=09=09/* set bandwidth directly from the AP */
++=09=09ret =3D qcom_icc_qos_set(src, sum_bw);
++=09=09if (ret)
++=09=09=09return ret;
++=09}
++
++=09rate =3D max(sum_bw, max_peak_bw);
++
++=09do_div(rate, qn->buswidth);
++
++=09if (qn->rate =3D=3D rate)
++=09=09return 0;
++
++=09for (i =3D 0; i < qp->num_clks; i++) {
++=09=09ret =3D clk_set_rate(qp->bus_clks[i].clk, rate);
++=09=09if (ret) {
++=09=09=09pr_err("%s clk_set_rate error: %d\n",
++=09=09=09       qp->bus_clks[i].id, ret);
++=09=09=09return ret;
++=09=09}
++=09}
++
++=09qn->rate =3D rate;
++
++=09return 0;
++}
++
++int qcom_icc_rpm_qos_probe(struct platform_device *pdev, size_t cd_size, i=
+nt cd_num,
++=09       const struct clk_bulk_data *cd, bool is_bimc)
++{
++=09struct device *dev =3D &pdev->dev;
++=09const struct qcom_icc_desc *desc;
++=09struct icc_onecell_data *data;
++=09struct icc_provider *provider;
++=09struct qcom_icc_node **qnodes;
++=09struct qcom_icc_provider *qp;
++=09struct icc_node *node;
++=09struct resource *res;
++=09size_t num_nodes, i;
++=09int ret;
++
++=09/* wait for the RPM proxy */
++=09if (!qcom_icc_rpm_smd_available())
++=09=09return -EPROBE_DEFER;
++
++=09desc =3D of_device_get_match_data(dev);
++=09if (!desc)
++=09=09return -EINVAL;
++
++=09qnodes =3D desc->nodes;
++=09num_nodes =3D desc->num_nodes;
++
++=09qp =3D devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
++=09if (!qp)
++=09=09return -ENOMEM;
++
++=09data =3D devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
++=09=09=09    GFP_KERNEL);
++=09if (!data)
++=09=09return -ENOMEM;
++
++=09qp->bus_clks =3D devm_kmemdup(dev, cd, cd_size, GFP_KERNEL);
++=09if (!qp->bus_clks)
++=09=09return -ENOMEM;
++
++=09qp->num_clks =3D cd_num;
++
++=09qp->is_bimc_node =3D is_bimc;
++
++=09res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
++=09if (!res)
++=09=09return -ENODEV;
++
++=09qp->mmio =3D devm_ioremap_resource(dev, res);
++=09if (IS_ERR(qp->mmio)) {
++=09=09dev_err(dev, "Cannot ioremap interconnect bus resource\n");
++=09=09return PTR_ERR(qp->mmio);
++=09}
++
++=09qp->regmap =3D devm_regmap_init_mmio(dev, qp->mmio, desc->regmap_cfg);
++=09if (IS_ERR(qp->regmap)) {
++=09=09dev_err(dev, "Cannot regmap interconnect bus resource\n");
++=09=09return PTR_ERR(qp->regmap);
++=09}
++
++=09ret =3D devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
++=09if (ret)
++=09=09return ret;
++
++=09ret =3D clk_bulk_prepare_enable(qp->num_clks, qp->bus_clks);
++=09if (ret)
++=09=09return ret;
++
++=09provider =3D &qp->provider;
++=09INIT_LIST_HEAD(&provider->nodes);
++=09provider->dev =3D dev;
++=09provider->set =3D qcom_icc_rpm_qos_set;
++=09provider->aggregate =3D icc_std_aggregate;
++=09provider->xlate =3D of_icc_xlate_onecell;
++=09provider->data =3D data;
++
++=09ret =3D icc_provider_add(provider);
++=09if (ret) {
++=09=09dev_err(dev, "error adding interconnect provider: %d\n", ret);
++=09=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
++=09=09return ret;
++=09}
++
++=09for (i =3D 0; i < num_nodes; i++) {
++=09=09size_t j;
++
++=09=09node =3D icc_node_create(qnodes[i]->id);
++=09=09if (IS_ERR(node)) {
++=09=09=09ret =3D PTR_ERR(node);
++=09=09=09goto err;
++=09=09}
++
++=09=09node->name =3D qnodes[i]->name;
++=09=09node->data =3D qnodes[i];
++=09=09icc_node_add(node, provider);
++
++=09=09for (j =3D 0; j < qnodes[i]->num_links; j++)
++=09=09=09icc_link_create(node, qnodes[i]->links[j]);
++
++=09=09data->nodes[i] =3D node;
++=09}
++=09data->num_nodes =3D num_nodes;
++=09platform_set_drvdata(pdev, qp);
++
++=09return 0;
++err:
++=09icc_nodes_remove(provider);
++=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
++=09icc_provider_del(provider);
++
++=09return ret;
++}
++EXPORT_SYMBOL_GPL(qcom_icc_rpm_qos_probe);
++
++int qcom_icc_rpm_qos_remove(struct platform_device *pdev)
++{
++=09struct qcom_icc_provider *qp =3D platform_get_drvdata(pdev);
++
++=09icc_nodes_remove(&qp->provider);
++=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
++=09return icc_provider_del(&qp->provider);
++}
++EXPORT_SYMBOL_GPL(qcom_icc_rpm_qos_remove);
+diff --git a/drivers/interconnect/qcom/icc-rpm-qos.h b/drivers/interconnect=
+/qcom/icc-rpm-qos.h
+new file mode 100644
+index 000000000000..a20d3ccc7df0
+--- /dev/null
++++ b/drivers/interconnect/qcom/icc-rpm-qos.h
+@@ -0,0 +1,135 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
++ */
++
++#ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_QOS_H__
++#define __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_QOS_H__
++
++#define RPM_BUS_MASTER_REQ=090x73616d62
++#define RPM_BUS_SLAVE_REQ=090x766c7362
++
++/* BIMC QoS */
++#define M_BKE_REG_BASE(n)=09=09(0x300 + (0x4000 * n))
++#define M_BKE_EN_ADDR(n)=09=09(M_BKE_REG_BASE(n))
++#define M_BKE_HEALTH_CFG_ADDR(i, n)=09(M_BKE_REG_BASE(n) + 0x40 + (0x4 * i=
+))
++
++#define M_BKE_HEALTH_CFG_LIMITCMDS_MASK=090x80000000
++#define M_BKE_HEALTH_CFG_AREQPRIO_MASK=090x300
++#define M_BKE_HEALTH_CFG_PRIOLVL_MASK=090x3
++#define M_BKE_HEALTH_CFG_AREQPRIO_SHIFT=090x8
++#define M_BKE_HEALTH_CFG_LIMITCMDS_SHIFT 0x1f
++
++#define M_BKE_EN_EN_BMASK=09=090x1
++
++/* Valid for both NoC and BIMC */
++#define NOC_QOS_MODE_FIXED=09=090x0
++#define NOC_QOS_MODE_LIMITER=09=090x1
++#define NOC_QOS_MODE_BYPASS=09=090x2
++
++/* NoC QoS */
++#define NOC_PERM_MODE_FIXED=09=091
++#define NOC_PERM_MODE_BYPASS=09=09(1 << NOC_QOS_MODE_BYPASS)
++
++#define NOC_QOS_PRIORITYn_ADDR(n)=09(0x8 + (n * 0x1000))
++#define NOC_QOS_PRIORITY_MASK=09=090xf
++#define NOC_QOS_PRIORITY_P1_SHIFT=090x2
++#define NOC_QOS_PRIORITY_P0_SHIFT=090x3
++
++#define NOC_QOS_MODEn_ADDR(n)=09=09(0xc + (n * 0x1000))
++#define NOC_QOS_MODEn_MASK=09=090x3
++
++#define to_qcom_provider(_provider) \
++=09container_of(_provider, struct qcom_icc_provider, provider)
++
++/**
++ * struct qcom_icc_provider - Qualcomm specific interconnect provider
++ * @provider: generic interconnect provider
++ * @bus_clks: the clk_bulk_data table of bus clocks
++ * @num_clks: the total number of clk_bulk_data entries
++ * @is_bimc_node: indicates whether to use bimc specific setting
++ * @regmap: regmap for QoS registers read/write access
++ * @mmio: NoC base iospace
++ */
++struct qcom_icc_provider {
++=09struct icc_provider provider;
++=09struct clk_bulk_data *bus_clks;
++=09int num_clks;
++=09bool is_bimc_node;
++=09struct regmap *regmap;
++=09void __iomem *mmio;
++};
++
++/**
++ * struct qcom_icc_qos - Qualcomm specific interconnect QoS parameters
++ * @areq_prio: node requests priority
++ * @prio_level: priority level for bus communication
++ * @limit_commands: activate/deactivate limiter mode during runtime
++ * @ap_owned: indicates if the node is owned by the AP or by the RPM
++ * @qos_mode: default qos mode for this node
++ * @qos_port: qos port number for finding qos registers of this node
++ */
++struct qcom_icc_qos {
++=09u32 areq_prio;
++=09u32 prio_level;
++=09bool limit_commands;
++=09bool ap_owned;
++=09int qos_mode;
++=09int qos_port;
++};
++
++/**
++ * struct qcom_icc_node - Qualcomm specific interconnect nodes
++ * @name: the node name used in debugfs
++ * @id: a unique node identifier
++ * @links: an array of nodes where we can go next while traversing
++ * @num_links: the total number of @links
++ * @buswidth: width of the interconnect between a node and the bus (bytes)
++ * @mas_rpm_id: RPM id for devices that are bus masters
++ * @slv_rpm_id: RPM id for devices that are bus slaves
++ * @qos: NoC QoS setting parameters
++ * @rate: current bus clock rate in Hz
++ */
++
++#define MAX_LINKS=0938
++
++struct qcom_icc_node {
++=09unsigned char *name;
++=09u16 id;
++=09u16 links[MAX_LINKS];
++=09u16 num_links;
++=09u16 buswidth;
++=09int mas_rpm_id;
++=09int slv_rpm_id;
++=09struct qcom_icc_qos qos;
++=09u64 rate;
++};
++
++struct qcom_icc_desc {
++=09struct qcom_icc_node **nodes;
++=09size_t num_nodes;
++=09const struct regmap_config *regmap_cfg;
++};
++
++#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,=09\
++=09=09     _ap_owned, _qos_mode, _qos_prio, _qos_port, ...)=09\
++=09=09static struct qcom_icc_node _name =3D {=09=09=09\
++=09=09.name =3D #_name,=09=09=09=09=09=09\
++=09=09.id =3D _id,=09=09=09=09=09=09\
++=09=09.buswidth =3D _buswidth,=09=09=09=09=09\
++=09=09.mas_rpm_id =3D _mas_rpm_id,=09=09=09=09\
++=09=09.slv_rpm_id =3D _slv_rpm_id,=09=09=09=09\
++=09=09.qos.ap_owned =3D _ap_owned,=09=09=09=09\
++=09=09.qos.qos_mode =3D _qos_mode,=09=09=09=09\
++=09=09.qos.areq_prio =3D _qos_prio,=09=09=09=09\
++=09=09.qos.prio_level =3D _qos_prio,=09=09=09=09\
++=09=09.qos.qos_port =3D _qos_port,=09=09=09=09\
++=09=09.num_links =3D ARRAY_SIZE(((int[]){ __VA_ARGS__ })),=09\
++=09=09.links =3D { __VA_ARGS__ },=09=09=09=09\
++=09}
++
++int qcom_icc_rpm_qos_probe(struct platform_device *pdev, size_t cd_size, i=
+nt cd_num,
++=09       const struct clk_bulk_data *cd, bool is_bimc);
++int qcom_icc_rpm_qos_remove(struct platform_device *pdev);
++
++#endif
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom=
+/sdm660.c
+index 632dbdd21915..2fd587e32d04 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -4,7 +4,6 @@
+  * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
+  */
+=20
+-#include <dt-bindings/interconnect/qcom,sdm660.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/interconnect-provider.h>
+@@ -14,42 +13,11 @@
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+-#include <linux/slab.h>
+-
+-#include "smd-rpm.h"
+-
+-#define RPM_BUS_MASTER_REQ=090x73616d62
+-#define RPM_BUS_SLAVE_REQ=090x766c7362
+-
+-/* BIMC QoS */
+-#define M_BKE_REG_BASE(n)=09=09(0x300 + (0x4000 * n))
+-#define M_BKE_EN_ADDR(n)=09=09(M_BKE_REG_BASE(n))
+-#define M_BKE_HEALTH_CFG_ADDR(i, n)=09(M_BKE_REG_BASE(n) + 0x40 + (0x4 * i=
+))
+-
+-#define M_BKE_HEALTH_CFG_LIMITCMDS_MASK=090x80000000
+-#define M_BKE_HEALTH_CFG_AREQPRIO_MASK=090x300
+-#define M_BKE_HEALTH_CFG_PRIOLVL_MASK=090x3
+-#define M_BKE_HEALTH_CFG_AREQPRIO_SHIFT=090x8
+-#define M_BKE_HEALTH_CFG_LIMITCMDS_SHIFT 0x1f
+=20
+-#define M_BKE_EN_EN_BMASK=09=090x1
+-
+-/* Valid for both NoC and BIMC */
+-#define NOC_QOS_MODE_FIXED=09=090x0
+-#define NOC_QOS_MODE_LIMITER=09=090x1
+-#define NOC_QOS_MODE_BYPASS=09=090x2
+-
+-/* NoC QoS */
+-#define NOC_PERM_MODE_FIXED=09=091
+-#define NOC_PERM_MODE_BYPASS=09=09(1 << NOC_QOS_MODE_BYPASS)
+-
+-#define NOC_QOS_PRIORITYn_ADDR(n)=09(0x8 + (n * 0x1000))
+-#define NOC_QOS_PRIORITY_MASK=09=090xf
+-#define NOC_QOS_PRIORITY_P1_SHIFT=090x2
+-#define NOC_QOS_PRIORITY_P0_SHIFT=090x3
++#include <dt-bindings/interconnect/qcom,sdm660.h>
+=20
+-#define NOC_QOS_MODEn_ADDR(n)=09=09(0xc + (n * 0x1000))
+-#define NOC_QOS_MODEn_MASK=09=090x3
++#include "icc-rpm-qos.h"
++#include "smd-rpm.h"
+=20
+ enum {
+ =09SDM660_MASTER_IPA =3D 1,
+@@ -159,105 +127,17 @@ enum {
+ =09SDM660_SNOC,
+ };
+=20
+-#define to_qcom_provider(_provider) \
+-=09container_of(_provider, struct qcom_icc_provider, provider)
+-
+-static const struct clk_bulk_data bus_clocks[] =3D {
++const struct clk_bulk_data bus_clocks[] =3D {
+ =09{ .id =3D "bus" },
+ =09{ .id =3D "bus_a" },
+ };
+=20
+-static const struct clk_bulk_data bus_mm_clocks[] =3D {
++const struct clk_bulk_data bus_mm_clocks[] =3D {
+ =09{ .id =3D "bus" },
+ =09{ .id =3D "bus_a" },
+ =09{ .id =3D "iface" },
+ };
+=20
+-/**
+- * struct qcom_icc_provider - Qualcomm specific interconnect provider
+- * @provider: generic interconnect provider
+- * @bus_clks: the clk_bulk_data table of bus clocks
+- * @num_clks: the total number of clk_bulk_data entries
+- * @is_bimc_node: indicates whether to use bimc specific setting
+- * @regmap: regmap for QoS registers read/write access
+- * @mmio: NoC base iospace
+- */
+-struct qcom_icc_provider {
+-=09struct icc_provider provider;
+-=09struct clk_bulk_data *bus_clks;
+-=09int num_clks;
+-=09bool is_bimc_node;
+-=09struct regmap *regmap;
+-=09void __iomem *mmio;
+-};
+-
+-#define SDM660_MAX_LINKS=0934
+-
+-/**
+- * struct qcom_icc_qos - Qualcomm specific interconnect QoS parameters
+- * @areq_prio: node requests priority
+- * @prio_level: priority level for bus communication
+- * @limit_commands: activate/deactivate limiter mode during runtime
+- * @ap_owned: indicates if the node is owned by the AP or by the RPM
+- * @qos_mode: default qos mode for this node
+- * @qos_port: qos port number for finding qos registers of this node
+- */
+-struct qcom_icc_qos {
+-=09u32 areq_prio;
+-=09u32 prio_level;
+-=09bool limit_commands;
+-=09bool ap_owned;
+-=09int qos_mode;
+-=09int qos_port;
+-};
+-
+-/**
+- * struct qcom_icc_node - Qualcomm specific interconnect nodes
+- * @name: the node name used in debugfs
+- * @id: a unique node identifier
+- * @links: an array of nodes where we can go next while traversing
+- * @num_links: the total number of @links
+- * @buswidth: width of the interconnect between a node and the bus (bytes)
+- * @mas_rpm_id: RPM id for devices that are bus masters
+- * @slv_rpm_id: RPM id for devices that are bus slaves
+- * @qos: NoC QoS setting parameters
+- * @rate: current bus clock rate in Hz
+- */
+-struct qcom_icc_node {
+-=09unsigned char *name;
+-=09u16 id;
+-=09u16 links[SDM660_MAX_LINKS];
+-=09u16 num_links;
+-=09u16 buswidth;
+-=09int mas_rpm_id;
+-=09int slv_rpm_id;
+-=09struct qcom_icc_qos qos;
+-=09u64 rate;
+-};
+-
+-struct qcom_icc_desc {
+-=09struct qcom_icc_node **nodes;
+-=09size_t num_nodes;
+-=09const struct regmap_config *regmap_cfg;
+-};
+-
+-#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,=09\
+-=09=09     _ap_owned, _qos_mode, _qos_prio, _qos_port, ...)=09\
+-=09=09static struct qcom_icc_node _name =3D {=09=09=09\
+-=09=09.name =3D #_name,=09=09=09=09=09=09\
+-=09=09.id =3D _id,=09=09=09=09=09=09\
+-=09=09.buswidth =3D _buswidth,=09=09=09=09=09\
+-=09=09.mas_rpm_id =3D _mas_rpm_id,=09=09=09=09\
+-=09=09.slv_rpm_id =3D _slv_rpm_id,=09=09=09=09\
+-=09=09.qos.ap_owned =3D _ap_owned,=09=09=09=09\
+-=09=09.qos.qos_mode =3D _qos_mode,=09=09=09=09\
+-=09=09.qos.areq_prio =3D _qos_prio,=09=09=09=09\
+-=09=09.qos.prio_level =3D _qos_prio,=09=09=09=09\
+-=09=09.qos.qos_port =3D _qos_port,=09=09=09=09\
+-=09=09.num_links =3D ARRAY_SIZE(((int[]){ __VA_ARGS__ })),=09\
+-=09=09.links =3D { __VA_ARGS__ },=09=09=09=09\
+-=09}
+-
+ DEFINE_QNODE(mas_ipa, SDM660_MASTER_IPA, 8, 59, -1, true, NOC_QOS_MODE_FIX=
+ED, 1, 3, SDM660_SLAVE_A2NOC_SNOC);
+ DEFINE_QNODE(mas_cnoc_a2noc, SDM660_MASTER_CNOC_A2NOC, 8, 146, -1, true, -=
+1, 0, -1, SDM660_SLAVE_A2NOC_SNOC);
+ DEFINE_QNODE(mas_sdcc_1, SDM660_MASTER_SDCC_1, 8, 33, -1, false, -1, 0, -1=
+, SDM660_SLAVE_A2NOC_SNOC);
+@@ -555,348 +435,27 @@ static struct qcom_icc_desc sdm660_snoc =3D {
+ =09.regmap_cfg =3D &sdm660_snoc_regmap_config,
+ };
+=20
+-static int qcom_icc_bimc_set_qos_health(struct regmap *rmap,
+-=09=09=09=09=09struct qcom_icc_qos *qos,
+-=09=09=09=09=09int regnum)
+-{
+-=09u32 val;
+-=09u32 mask;
+-
+-=09val =3D qos->prio_level;
+-=09mask =3D M_BKE_HEALTH_CFG_PRIOLVL_MASK;
+-
+-=09val |=3D qos->areq_prio << M_BKE_HEALTH_CFG_AREQPRIO_SHIFT;
+-=09mask |=3D M_BKE_HEALTH_CFG_AREQPRIO_MASK;
+-
+-=09/* LIMITCMDS is not present on M_BKE_HEALTH_3 */
+-=09if (regnum !=3D 3) {
+-=09=09val |=3D qos->limit_commands << M_BKE_HEALTH_CFG_LIMITCMDS_SHIFT;
+-=09=09mask |=3D M_BKE_HEALTH_CFG_LIMITCMDS_MASK;
+-=09}
+-
+-=09return regmap_update_bits(rmap,
+-=09=09=09=09  M_BKE_HEALTH_CFG_ADDR(regnum, qos->qos_port),
+-=09=09=09=09  mask, val);
+-}
+-
+-static int qcom_icc_set_bimc_qos(struct icc_node *src, u64 max_bw,
+-=09=09=09=09 bool bypass_mode)
++static int sdm660_qnoc_probe(struct platform_device *pdev)
+ {
+-=09struct qcom_icc_provider *qp;
+-=09struct qcom_icc_node *qn;
+-=09struct icc_provider *provider;
+-=09u32 mode =3D NOC_QOS_MODE_BYPASS;
+-=09u32 val =3D 0;
+-=09int i, rc =3D 0;
+-
+-=09qn =3D src->data;
+-=09provider =3D src->provider;
+-=09qp =3D to_qcom_provider(provider);
+-
+-=09if (qn->qos.qos_mode !=3D -1)
+-=09=09mode =3D qn->qos.qos_mode;
+-
+-=09/* QoS Priority: The QoS Health parameters are getting considered
+-=09 * only if we are NOT in Bypass Mode.
+-=09 */
+-=09if (mode !=3D NOC_QOS_MODE_BYPASS) {
+-=09=09for (i =3D 3; i >=3D 0; i--) {
+-=09=09=09rc =3D qcom_icc_bimc_set_qos_health(qp->regmap,
+-=09=09=09=09=09=09=09  &qn->qos, i);
+-=09=09=09if (rc)
+-=09=09=09=09return rc;
+-=09=09}
+-
+-=09=09/* Set BKE_EN to 1 when Fixed, Regulator or Limiter Mode */
+-=09=09val =3D 1;
+-=09}
+-
+-=09return regmap_update_bits(qp->regmap, M_BKE_EN_ADDR(qn->qos.qos_port),
+-=09=09=09=09  M_BKE_EN_EN_BMASK, val);
+-}
+-
+-static int qcom_icc_noc_set_qos_priority(struct regmap *rmap,
+-=09=09=09=09=09 struct qcom_icc_qos *qos)
+-{
+-=09u32 val;
+-=09int rc;
+-
+-=09/* Must be updated one at a time, P1 first, P0 last */
+-=09val =3D qos->areq_prio << NOC_QOS_PRIORITY_P1_SHIFT;
+-=09rc =3D regmap_update_bits(rmap, NOC_QOS_PRIORITYn_ADDR(qos->qos_port),
+-=09=09=09=09NOC_QOS_PRIORITY_MASK, val);
+-=09if (rc)
+-=09=09return rc;
+-
+-=09val =3D qos->prio_level << NOC_QOS_PRIORITY_P0_SHIFT;
+-=09return regmap_update_bits(rmap, NOC_QOS_PRIORITYn_ADDR(qos->qos_port),
+-=09=09=09=09  NOC_QOS_PRIORITY_MASK, val);
+-}
+-
+-static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
+-{
+-=09struct qcom_icc_provider *qp;
+-=09struct qcom_icc_node *qn;
+-=09struct icc_provider *provider;
+-=09u32 mode =3D NOC_QOS_MODE_BYPASS;
+-=09int rc =3D 0;
+-
+-=09qn =3D src->data;
+-=09provider =3D src->provider;
+-=09qp =3D to_qcom_provider(provider);
+-
+-=09if (qn->qos.qos_port < 0) {
+-=09=09dev_dbg(src->provider->dev,
+-=09=09=09"NoC QoS: Skipping %s: vote aggregated on parent.\n",
+-=09=09=09qn->name);
+-=09=09return 0;
+-=09}
+-
+-=09if (qn->qos.qos_mode !=3D -1)
+-=09=09mode =3D qn->qos.qos_mode;
+-
+-=09if (mode =3D=3D NOC_QOS_MODE_FIXED) {
+-=09=09dev_dbg(src->provider->dev, "NoC QoS: %s: Set Fixed mode\n",
+-=09=09=09qn->name);
+-=09=09rc =3D qcom_icc_noc_set_qos_priority(qp->regmap, &qn->qos);
+-=09=09if (rc)
+-=09=09=09return rc;
+-=09} else if (mode =3D=3D NOC_QOS_MODE_BYPASS) {
+-=09=09dev_dbg(src->provider->dev, "NoC QoS: %s: Set Bypass mode\n",
+-=09=09=09qn->name);
+-=09}
+-
+-=09return regmap_update_bits(qp->regmap,
+-=09=09=09=09  NOC_QOS_MODEn_ADDR(qn->qos.qos_port),
+-=09=09=09=09  NOC_QOS_MODEn_MASK, mode);
+-}
+-
+-static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
+-{
+-=09struct qcom_icc_provider *qp =3D to_qcom_provider(node->provider);
+-=09struct qcom_icc_node *qn =3D node->data;
+-
+-=09dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
+-
+-=09if (qp->is_bimc_node)
+-=09=09return qcom_icc_set_bimc_qos(node, sum_bw,
+-=09=09=09=09(qn->qos.qos_mode =3D=3D NOC_QOS_MODE_BYPASS));
+-
+-=09return qcom_icc_set_noc_qos(node, sum_bw);
+-}
+-
+-static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
+-{
+-=09int ret =3D 0;
+-
+-=09if (mas_rpm_id !=3D -1) {
+-=09=09ret =3D qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
+-=09=09=09=09=09    RPM_BUS_MASTER_REQ,
+-=09=09=09=09=09    mas_rpm_id,
+-=09=09=09=09=09    sum_bw);
+-=09=09if (ret) {
+-=09=09=09pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
+-=09=09=09       mas_rpm_id, ret);
+-=09=09=09return ret;
+-=09=09}
+-=09}
+-
+-=09if (slv_rpm_id !=3D -1) {
+-=09=09ret =3D qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
+-=09=09=09=09=09    RPM_BUS_SLAVE_REQ,
+-=09=09=09=09=09    slv_rpm_id,
+-=09=09=09=09=09    sum_bw);
+-=09=09if (ret) {
+-=09=09=09pr_err("qcom_icc_rpm_smd_send slv %d error %d\n",
+-=09=09=09       slv_rpm_id, ret);
+-=09=09=09return ret;
+-=09=09}
+-=09}
+-
+-=09return ret;
+-}
+-
+-static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+-{
+-=09struct qcom_icc_provider *qp;
+-=09struct qcom_icc_node *qn;
+-=09struct icc_provider *provider;
+-=09struct icc_node *n;
+-=09u64 sum_bw;
+-=09u64 max_peak_bw;
+-=09u64 rate;
+-=09u32 agg_avg =3D 0;
+-=09u32 agg_peak =3D 0;
+-=09int ret, i;
+-
+-=09qn =3D src->data;
+-=09provider =3D src->provider;
+-=09qp =3D to_qcom_provider(provider);
+-
+-=09list_for_each_entry(n, &provider->nodes, node_list)
+-=09=09provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
+-=09=09=09=09    &agg_avg, &agg_peak);
+-
+-=09sum_bw =3D icc_units_to_bps(agg_avg);
+-=09max_peak_bw =3D icc_units_to_bps(agg_peak);
+-
+-=09if (!qn->qos.ap_owned) {
+-=09=09/* send bandwidth request message to the RPM processor */
+-=09=09ret =3D qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
+-=09=09if (ret)
+-=09=09=09return ret;
+-=09} else if (qn->qos.qos_mode !=3D -1) {
+-=09=09/* set bandwidth directly from the AP */
+-=09=09ret =3D qcom_icc_qos_set(src, sum_bw);
+-=09=09if (ret)
+-=09=09=09return ret;
+-=09}
+-
+-=09rate =3D max(sum_bw, max_peak_bw);
+-
+-=09do_div(rate, qn->buswidth);
+-
+-=09if (qn->rate =3D=3D rate)
+-=09=09return 0;
+-
+-=09for (i =3D 0; i < qp->num_clks; i++) {
+-=09=09ret =3D clk_set_rate(qp->bus_clks[i].clk, rate);
+-=09=09if (ret) {
+-=09=09=09pr_err("%s clk_set_rate error: %d\n",
+-=09=09=09       qp->bus_clks[i].id, ret);
+-=09=09=09return ret;
+-=09=09}
+-=09}
+-
+-=09qn->rate =3D rate;
+-
+-=09return 0;
+-}
+-
+-static int qnoc_probe(struct platform_device *pdev)
+-{
+-=09struct device *dev =3D &pdev->dev;
+-=09const struct qcom_icc_desc *desc;
+-=09struct icc_onecell_data *data;
+-=09struct icc_provider *provider;
+-=09struct qcom_icc_node **qnodes;
+-=09struct qcom_icc_provider *qp;
+-=09struct icc_node *node;
+-=09struct resource *res;
+-=09size_t num_nodes, i;
+-=09int ret;
+-
+-=09/* wait for the RPM proxy */
+-=09if (!qcom_icc_rpm_smd_available())
+-=09=09return -EPROBE_DEFER;
+-
+-=09desc =3D of_device_get_match_data(dev);
+-=09if (!desc)
+-=09=09return -EINVAL;
+-
+-=09qnodes =3D desc->nodes;
+-=09num_nodes =3D desc->num_nodes;
+-
+-=09qp =3D devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
+-=09if (!qp)
+-=09=09return -ENOMEM;
+-
+-=09data =3D devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
+-=09=09=09    GFP_KERNEL);
+-=09if (!data)
+-=09=09return -ENOMEM;
+-
+-=09if (of_device_is_compatible(dev->of_node, "qcom,sdm660-mnoc")) {
+-=09=09qp->bus_clks =3D devm_kmemdup(dev, bus_mm_clocks,
+-=09=09=09=09=09    sizeof(bus_mm_clocks), GFP_KERNEL);
+-=09=09qp->num_clks =3D ARRAY_SIZE(bus_mm_clocks);
++=09const struct clk_bulk_data *cd;
++=09size_t cd_size;
++=09int cd_num;
++=09bool is_bimc =3D false;
++
++=09if (of_device_is_compatible(pdev->dev.of_node, "qcom,sdm660-mnoc")) {
++=09=09cd =3D bus_mm_clocks;
++=09=09cd_size =3D sizeof(bus_mm_clocks);
++=09=09cd_num =3D ARRAY_SIZE(bus_mm_clocks);
+ =09} else {
+-=09=09if (of_device_is_compatible(dev->of_node, "qcom,sdm660-bimc"))
+-=09=09=09qp->is_bimc_node =3D true;
+-
+-=09=09qp->bus_clks =3D devm_kmemdup(dev, bus_clocks, sizeof(bus_clocks),
+-=09=09=09=09=09    GFP_KERNEL);
+-=09=09qp->num_clks =3D ARRAY_SIZE(bus_clocks);
+-=09}
+-=09if (!qp->bus_clks)
+-=09=09return -ENOMEM;
+-
+-=09res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-=09if (!res)
+-=09=09return -ENODEV;
+-
+-=09qp->mmio =3D devm_ioremap_resource(dev, res);
+-=09if (IS_ERR(qp->mmio)) {
+-=09=09dev_err(dev, "Cannot ioremap interconnect bus resource\n");
+-=09=09return PTR_ERR(qp->mmio);
+-=09}
+-
+-=09qp->regmap =3D devm_regmap_init_mmio(dev, qp->mmio, desc->regmap_cfg);
+-=09if (IS_ERR(qp->regmap)) {
+-=09=09dev_err(dev, "Cannot regmap interconnect bus resource\n");
+-=09=09return PTR_ERR(qp->regmap);
+-=09}
++=09=09if (of_device_is_compatible(pdev->dev.of_node, "qcom,sdm660-bimc"))
++=09=09=09is_bimc =3D true;
+=20
+-=09ret =3D devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
+-=09if (ret)
+-=09=09return ret;
+-
+-=09ret =3D clk_bulk_prepare_enable(qp->num_clks, qp->bus_clks);
+-=09if (ret)
+-=09=09return ret;
+-
+-=09provider =3D &qp->provider;
+-=09INIT_LIST_HEAD(&provider->nodes);
+-=09provider->dev =3D dev;
+-=09provider->set =3D qcom_icc_set;
+-=09provider->aggregate =3D icc_std_aggregate;
+-=09provider->xlate =3D of_icc_xlate_onecell;
+-=09provider->data =3D data;
+-
+-=09ret =3D icc_provider_add(provider);
+-=09if (ret) {
+-=09=09dev_err(dev, "error adding interconnect provider: %d\n", ret);
+-=09=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-=09=09return ret;
++=09=09cd =3D bus_clocks;
++=09=09cd_size =3D sizeof(bus_clocks);
++=09=09cd_num =3D ARRAY_SIZE(bus_clocks);
+ =09}
+=20
+-=09for (i =3D 0; i < num_nodes; i++) {
+-=09=09size_t j;
+-
+-=09=09node =3D icc_node_create(qnodes[i]->id);
+-=09=09if (IS_ERR(node)) {
+-=09=09=09ret =3D PTR_ERR(node);
+-=09=09=09goto err;
+-=09=09}
+-
+-=09=09node->name =3D qnodes[i]->name;
+-=09=09node->data =3D qnodes[i];
+-=09=09icc_node_add(node, provider);
+-
+-=09=09for (j =3D 0; j < qnodes[i]->num_links; j++)
+-=09=09=09icc_link_create(node, qnodes[i]->links[j]);
+-
+-=09=09data->nodes[i] =3D node;
+-=09}
+-=09data->num_nodes =3D num_nodes;
+-=09platform_set_drvdata(pdev, qp);
+-
+-=09return 0;
+-err:
+-=09icc_nodes_remove(provider);
+-=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-=09icc_provider_del(provider);
+-
+-=09return ret;
+-}
+-
+-static int qnoc_remove(struct platform_device *pdev)
+-{
+-=09struct qcom_icc_provider *qp =3D platform_get_drvdata(pdev);
+-
+-=09icc_nodes_remove(&qp->provider);
+-=09clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-=09return icc_provider_del(&qp->provider);
++=09return qcom_icc_rpm_qos_probe(pdev, cd_size, cd_num, cd, is_bimc);
+ }
+=20
+ static const struct of_device_id sdm660_noc_of_match[] =3D {
+@@ -911,8 +470,8 @@ static const struct of_device_id sdm660_noc_of_match[] =
+=3D {
+ MODULE_DEVICE_TABLE(of, sdm660_noc_of_match);
+=20
+ static struct platform_driver sdm660_noc_driver =3D {
+-=09.probe =3D qnoc_probe,
+-=09.remove =3D qnoc_remove,
++=09.probe =3D sdm660_qnoc_probe,
++=09.remove =3D qcom_icc_rpm_qos_remove,
+ =09.driver =3D {
+ =09=09.name =3D "qnoc-sdm660",
+ =09=09.of_match_table =3D sdm660_noc_of_match,
 --=20
 2.33.0
 
