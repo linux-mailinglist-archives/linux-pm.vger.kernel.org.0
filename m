@@ -2,203 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D83373FDA08
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 15:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EE83FDC43
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Sep 2021 15:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244540AbhIAM3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Sep 2021 08:29:52 -0400
-Received: from mga07.intel.com ([134.134.136.100]:35131 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244180AbhIAM3Y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Sep 2021 08:29:24 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="282448397"
-X-IronPort-AV: E=Sophos;i="5.84,369,1620716400"; 
-   d="scan'208";a="282448397"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2021 05:27:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,369,1620716400"; 
-   d="scan'208";a="690650862"
-Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Sep 2021 05:27:56 -0700
-Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mLPLP-0007tk-SE; Wed, 01 Sep 2021 12:27:55 +0000
-Date:   Wed, 01 Sep 2021 20:27:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 103d2fac60d07d241340ddcfdc1450896ac39e09
-Message-ID: <612f71b3./Xh/8XiBI7cMyYx5%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1344088AbhIAMse (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Sep 2021 08:48:34 -0400
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:45752 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346071AbhIAMq3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Sep 2021 08:46:29 -0400
+Received: by mail-ot1-f50.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso3221559otv.12;
+        Wed, 01 Sep 2021 05:45:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o6/i3NZnet89UyQ9e4UbJHMSWylrIr0dvo/VnaEs/+4=;
+        b=qp/PlfbODaNOdNZ3Qms5M/CfXYLcDNGcxMwruFymfGnD18qTFL3erig1tgV34FzIUd
+         mrOxaE0N/9AZR/mqZJO4Nt+ts0tDXKbA5WPt2+eb3DvzRTXYcMn3XZ/732iVhSS4P4RH
+         YctFszQ9dNezYgJcGzrkpHFI8VNbMS47RqPcdxoP5U+I6xioYZpMmr7wt/zUOw4dkFkT
+         kg6ne2BBKQ5lQsxGajoonW1oc08sgGjhjoyx32N26p4pV6tlhtBtJ/QQeUBIVunDIE8s
+         xSXSTQ20nOPCe0qJJAr6v3dvHER/OJVpFTfoI5nAjwgXgVdFWjutVNu875daSQD64TjE
+         kMbA==
+X-Gm-Message-State: AOAM5326ESWjGrF5fO/kr0KSrFFdOIQo5WjzbzGazjxIMV0qi8MIcXXj
+        npKsRfOndwql0PaDwOkEMQ+jZSTPs5BmFxr/uqI=
+X-Google-Smtp-Source: ABdhPJz1ArAHLAscwIWQjhp8pZZZSSKCKqX+ZqvZTsLPtnV2JVffdIdHjP7mJ2V7Ci06i+AqdgwDnNlj8lb5v6Ehj0k=
+X-Received: by 2002:a9d:705d:: with SMTP id x29mr1487576otj.260.1630500327788;
+ Wed, 01 Sep 2021 05:45:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20210819004305.20203-1-deepak.sharma@amd.com> <CAJZ5v0jWX=H=aZ25PzHdH05bRJvtYbGHfyTgH_68k4kfYkZc5A@mail.gmail.com>
+ <951c4f8f-30ee-77d3-afb7-46e45c84213d@amd.com>
+In-Reply-To: <951c4f8f-30ee-77d3-afb7-46e45c84213d@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 1 Sep 2021 14:45:15 +0200
+Message-ID: <CAJZ5v0ic+0MKDbebrxnyxr=rRJbqP4LmB4g1fVVAVJWh98e=MA@mail.gmail.com>
+Subject: Re: [PATCH] x86/ACPI/State: Optimize C3 entry on AMD CPUs
+To:     Deepak Sharma <deesharm@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 103d2fac60d07d241340ddcfdc1450896ac39e09  Merge branches 'pm-opp' and 'pm-cpufreq' into linux-next
+On Wed, Sep 1, 2021 at 4:14 AM Deepak Sharma <deesharm@amd.com> wrote:
+>
+>
+> On 8/25/21 11:07 AM, Rafael J. Wysocki wrote:
+> > On Thu, Aug 19, 2021 at 2:43 AM Deepak Sharma <deepak.sharma@amd.com> wrote:
+> >> AMD CPU which support C3 shares cache. Its not necessary to flush the
+> >> caches in software before entering C3. This will cause performance drop
+> >> for the cores which share some caches. ARB_DIS is not used with current
+> >> AMD C state implementation. So set related flags correctly.
+> >>
+> >> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
+> > Applied as 5.15 material under the edited subject "x86: ACPI: cstate:
+> > Optimize C3 entry on AMD CPUs", thanks!
+>
+> I might need to send subsequent patch for this. Can you please point me
+> to git and branch where this has been merged.
 
-elapsed time: 1434m
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
 
-configs tested: 143
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210831
-mips                        workpad_defconfig
-i386                             alldefconfig
-powerpc                    mvme5100_defconfig
-sh                            titan_defconfig
-arm                           u8500_defconfig
-powerpc                     redwood_defconfig
-sparc                            alldefconfig
-arc                           tb10x_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arc                     nsimosci_hs_defconfig
-arm                        trizeps4_defconfig
-nds32                            alldefconfig
-mips                           ip27_defconfig
-powerpc                 xes_mpc85xx_defconfig
-mips                           jazz_defconfig
-arm                         vf610m4_defconfig
-mips                      maltaaprp_defconfig
-sh                           se7750_defconfig
-powerpc                   lite5200b_defconfig
-arm                            mmp2_defconfig
-arm                             rpc_defconfig
-csky                             alldefconfig
-arc                                 defconfig
-arm                         lpc32xx_defconfig
-powerpc                       eiger_defconfig
-mips                        nlm_xlp_defconfig
-mips                           mtx1_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                     tqm8560_defconfig
-arm                           viper_defconfig
-arm                         hackkit_defconfig
-sh                                  defconfig
-xtensa                       common_defconfig
-xtensa                  nommu_kc705_defconfig
-sh                          lboxre2_defconfig
-powerpc                    sam440ep_defconfig
-arm                         socfpga_defconfig
-sh                        sh7757lcr_defconfig
-s390                       zfcpdump_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                             mxs_defconfig
-arc                          axs101_defconfig
-openrisc                         alldefconfig
-mips                           ip32_defconfig
-mips                        bcm63xx_defconfig
-arc                        vdk_hs38_defconfig
-m68k                        mvme16x_defconfig
-sh                               j2_defconfig
-arm                       versatile_defconfig
-sh                            shmin_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20210831
-x86_64               randconfig-a001-20210831
-x86_64               randconfig-a003-20210831
-x86_64               randconfig-a002-20210831
-x86_64               randconfig-a004-20210831
-x86_64               randconfig-a006-20210831
-i386                 randconfig-a005-20210831
-i386                 randconfig-a002-20210831
-i386                 randconfig-a003-20210831
-i386                 randconfig-a006-20210831
-i386                 randconfig-a004-20210831
-i386                 randconfig-a001-20210831
-i386                 randconfig-a012-20210901
-i386                 randconfig-a015-20210901
-i386                 randconfig-a011-20210901
-i386                 randconfig-a013-20210901
-i386                 randconfig-a014-20210901
-i386                 randconfig-a016-20210901
-arc                  randconfig-r043-20210831
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-i386                 randconfig-c001-20210831
-s390                 randconfig-c005-20210831
-riscv                randconfig-c006-20210831
-powerpc              randconfig-c003-20210831
-mips                 randconfig-c004-20210831
-arm                  randconfig-c002-20210831
-x86_64               randconfig-c007-20210831
-x86_64               randconfig-a014-20210831
-x86_64               randconfig-a015-20210831
-x86_64               randconfig-a013-20210831
-x86_64               randconfig-a016-20210831
-x86_64               randconfig-a012-20210831
-x86_64               randconfig-a011-20210831
-i386                 randconfig-a016-20210831
-i386                 randconfig-a011-20210831
-i386                 randconfig-a015-20210831
-i386                 randconfig-a014-20210831
-i386                 randconfig-a012-20210831
-i386                 randconfig-a013-20210831
-s390                 randconfig-r044-20210831
-hexagon              randconfig-r041-20210831
-hexagon              randconfig-r045-20210831
-riscv                randconfig-r042-20210831
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >> ---
+> >>   arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
+> >>   1 file changed, 15 insertions(+)
+> >>
+> >> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> >> index 7de599eba7f0..62a5986d625a 100644
+> >> --- a/arch/x86/kernel/acpi/cstate.c
+> >> +++ b/arch/x86/kernel/acpi/cstate.c
+> >> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+> >>                   */
+> >>                  flags->bm_control = 0;
+> >>          }
+> >> +       if (c->x86_vendor == X86_VENDOR_AMD) {
+> >> +               /*
+> >> +                * For all AMD CPUs that support C3, caches should not be
+> >> +                * flushed by software while entering C3 type state. Set
+> >> +                * bm->check to 1 so that kernel doesn't need to execute
+> >> +                * cache flush operation.
+> >> +                */
+> >> +               flags->bm_check = 1;
+> >> +               /*
+> >> +                * In current AMD C state implementation ARB_DIS is no longer
+> >> +                * used. So set bm_control to zero to indicate ARB_DIS is not
+> >> +                * required while entering C3 type state.
+> >> +                */
+> >> +               flags->bm_control = 0;
+> >> +       }
+> >>   }
+> >>   EXPORT_SYMBOL(acpi_processor_power_init_bm_check);
+> >>
+> >> --
+> >> 2.25.1
+> >>
