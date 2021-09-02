@@ -2,138 +2,246 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF6D3FEBF1
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 12:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596473FEC6F
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 12:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbhIBKRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Sep 2021 06:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236573AbhIBKRm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 06:17:42 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5463C061575
-        for <linux-pm@vger.kernel.org>; Thu,  2 Sep 2021 03:16:43 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id m4so2544652ljq.8
-        for <linux-pm@vger.kernel.org>; Thu, 02 Sep 2021 03:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Q8gHKZlIfNMsE2pwpZyxC6yykTeyy3ncWsPcdI97ZBw=;
-        b=Oz8M17UZ6Gx8M9KbOtjRmP3bgfiYuuxEHm6LOcO2pUnB9laFx5UVB5VKthK6ntGR0x
-         cgOiXgmpxCBMTPt/U5URfmDm6XbHPMzJPBpI8F9nPcS+UPXKuUjf9oO6SsetA3IbfmGh
-         zjk9F3KXuQ/XWjnP2i6TL9e7xb5KIWe2AoGuVI3F013ag+8+I8dOKA2qxSRwxORsd7WE
-         pju3HKN/TnJi0qfjLLYp9ZNuqr0/mWb+6mbuC8HIyNI4UYHCT0kiYobL4YoyUXJpPTnW
-         8nFlCLi9dH+VxjezfhukcYdstS5keqcN+GyypIPpk2DtDWWXlg9sYWKqg7huXgJyvhP7
-         w0Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Q8gHKZlIfNMsE2pwpZyxC6yykTeyy3ncWsPcdI97ZBw=;
-        b=NYGVfi7ep+Q2j429ObuuRMBhFxkNN9hX2BPn37GqqSL5+zG+VF2deHIujjBrYiPBjM
-         8iHTL8oegZCNe4mQAcERvGhlsypPsAYlqtZ4Lyzu7kObx7qIov19S2LnU/wKhGfQ/QJw
-         6D+kUkm1QwBOGAyJ/2vXVeJOqEeuc5B9Xb1pbUwMcLPlBqf0mdGTcPJ1FuwT1Ya/iIuy
-         Nojet9n7PBmb/KcaZJiUCj+UdRuzJyQz1ZlPXQqe3PXRl8jv5f1Wp9FtQCf3HnK71/Wr
-         OvMVeY6NjYRn9LBxCC4l9ZNfZB0nwH9p3V5nHPn9qyBHXaw2582DiTGgp8BoajwWLe0k
-         qTcg==
-X-Gm-Message-State: AOAM5324so6KWyJXkub8crov3skYPN82eAexPqzztgXwylo88TpDxfby
-        z5ger4WMgE+jE+0Ou6PC/zX9ZQ==
-X-Google-Smtp-Source: ABdhPJzB9h6Twzy69IlKpaCmsSc174yIyH9MuvDLdUFpiBXC0tvx5XVeFz7kIcQaHw3PYf6tMNnYrA==
-X-Received: by 2002:a2e:5758:: with SMTP id r24mr1849768ljd.432.1630577802207;
-        Thu, 02 Sep 2021 03:16:42 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
-        by smtp.gmail.com with ESMTPSA id s4sm155897lfd.53.2021.09.02.03.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 03:16:41 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S241779AbhIBKwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Sep 2021 06:52:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:47178 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245446AbhIBKvp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Sep 2021 06:51:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DADDB1063;
+        Thu,  2 Sep 2021 03:50:46 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D5313F5A1;
+        Thu,  2 Sep 2021 03:50:45 -0700 (PDT)
+Date:   Thu, 2 Sep 2021 11:50:39 +0100
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state() callback to genpd
-Date:   Thu,  2 Sep 2021 12:16:34 +0200
-Message-Id: <20210902101634.827187-4-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210902101634.827187-1-ulf.hansson@linaro.org>
-References: <20210902101634.827187-1-ulf.hansson@linaro.org>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v6 6/7] cpufreq: Skip inefficient frequencies
+Message-ID: <20210902105037.GA136543@e120877-lin.cambridge.arm.com>
+References: <1630405453-275784-1-git-send-email-vincent.donnefort@arm.com>
+ <1630405453-275784-7-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0i5KRkUKvqGbqoxhaNh626bmg3C2F-rZmcqaaqReQF7SQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i5KRkUKvqGbqoxhaNh626bmg3C2F-rZmcqaaqReQF7SQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hardware may be preprogrammed to a specific performance state, which may
-not be zero initially during boot. This may lead to that genpd's current
-performance state becomes inconsistent with the state of the hardware. To
-deal with this, the driver for a device that is being attached to its
-genpd, need to request an initial performance state vote, which is
-typically done by calling some of the OPP APIs while probing.
+On Wed, Sep 01, 2021 at 08:13:24PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Aug 31, 2021 at 12:24 PM Vincent Donnefort
+> <vincent.donnefort@arm.com> wrote:
+> >
+> > CPUFreq governors that do DVFS (i.e. CPUFREQ_GOV_DYNAMIC_SWITCHING flag)
+> > can skip frequencies marked as inefficient, as long as the efficient
+> > frequency found meet the policy maximum requirement.
+> >
+> > Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 7d5f170ecad1..b46fe2d7baf1 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2295,6 +2295,44 @@ __weak struct cpufreq_governor *cpufreq_fallback_governor(void)
+> >         return NULL;
+> >  }
+> >
+> > +static inline bool
+> > +cpufreq_can_skip_inefficiencies(struct cpufreq_policy *policy)
+> 
+> This is not just about the ability to skp the inefficient frequencies,
+> but about whether or not they should be skipped.  Moreover, the
+> inefficient frequencies are not really skipped, but mapped to specific
+> efficient ones.
+> 
+> I would call this function cpufreq_use_efficient_frequencies() or similar.
 
-In some cases this would lead to boilerplate code in the drivers. Let's
-make it possible to avoid this, by adding a new optional callback to genpd
-and invoke it per device during the attach process. In this way, the genpd
-provider driver can inform genpd about the initial performance state that
-is needed for the device.
+Ack.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 8 +++++---
- include/linux/pm_domain.h   | 2 ++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> > +{
+> > +       struct cpufreq_frequency_table *pos;
+> > +       bool valid = false;
+> > +       int idx;
+> > +
+> > +       if (!(policy->governor->flags & CPUFREQ_GOV_DYNAMIC_SWITCHING))
+> > +               return false;
+> > +
+> > +       if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED)
+> > +               return false;
+> > +
+> > +       /* Is there at least one inefficiency ? */
+> > +       cpufreq_for_each_valid_entry(pos, policy->freq_table) {
+> > +               if (pos->flags & CPUFREQ_INEFFICIENT_FREQ) {
+> > +                       valid = true;
+> > +                       break;
+> > +               }
+> > +       }
+> > +
+> > +       if (!valid)
+> > +               return false;
+> > +
+> > +       /*
+> > +        * Has cpufreq_table_update_efficiencies been called? i.e. is the
+> > +        * highest frequency efficient.
+> > +        */
+> > +       cpufreq_for_each_valid_entry_idx(pos, policy->freq_table, idx) {
+> > +               valid = !!(idx == pos->efficient);
+> > +               if (policy->freq_table_sorted ==
+> > +                                       CPUFREQ_TABLE_SORTED_DESCENDING)
+> > +                       break;
+> > +       }
+> > +
+> > +       return valid;
+> > +}
+> > +
+> >  static int cpufreq_init_governor(struct cpufreq_policy *policy)
+> >  {
+> >         int ret;
+> > @@ -2337,6 +2375,7 @@ static int cpufreq_init_governor(struct cpufreq_policy *policy)
+> >         }
+> >
+> >         policy->strict_target = !!(policy->governor->flags & CPUFREQ_GOV_STRICT_TARGET);
+> > +       policy->skip_inefficiencies = cpufreq_can_skip_inefficiencies(policy);
+> >
+> >         return 0;
+> >  }
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 4e901ebd104d..cb09afbf01e2 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -117,6 +117,13 @@ struct cpufreq_policy {
+> >         bool                    strict_target;
+> >
+> >         /*
+> > +        * Set if the CPUFREQ_GOV_DYNAMIC_SWITCHING flag is set for the current
+> > +        * governor and if inefficient frequencies were found in the frequency
+> > +        * table.
+> > +        */
+> > +       bool                    skip_inefficiencies;
+> > +
+> > +       /*
+> >          * Preferred average time interval between consecutive invocations of
+> >          * the driver to set the frequency for this policy.  To be set by the
+> >          * scaling driver (0, which is the default, means no preference).
+> > @@ -972,25 +979,46 @@ static inline int cpufreq_table_find_index_c(struct cpufreq_policy *policy,
+> >                 return cpufreq_table_find_index_dc(policy, target_freq);
+> >  }
+> >
+> > +static inline unsigned int
+> > +cpufreq_frequency_find_efficient(struct cpufreq_policy *policy,
+> > +                                unsigned int idx)
+> > +{
+> > +       struct cpufreq_frequency_table *table = policy->freq_table;
+> > +       unsigned int efficient_idx = table[idx].efficient;
+> > +
+> > +       return table[efficient_idx].frequency <= policy->max ? efficient_idx :
+> > +               idx;
+> 
+> I'm not sure about this.
+> 
+> In the _RELATION_L case table[idx].frequency can be above the policy
+> max, so you may end up running at an inefficient frequency above the
+> policy max, but you won't use an efficient one above it.  Isn't this
+> slightly confusing?
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 800adf831cae..1a6f3538af8d 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2640,13 +2640,15 @@ static void genpd_dev_pm_sync(struct device *dev)
- 	genpd_queue_power_off_work(pd);
- }
- 
--static int genpd_get_default_performance_state(struct device *dev,
-+static int genpd_get_default_performance_state(struct generic_pm_domain *genpd,
-+					       struct device *dev,
- 					       unsigned int index)
- {
- 	int pstate = of_get_required_opp_performance_state(dev->of_node, index);
- 
- 	if (pstate == -ENODEV || pstate == -EOPNOTSUPP)
--		return 0;
-+		pstate = genpd->dev_get_performance_state ?
-+			 genpd->dev_get_performance_state(genpd, dev) : 0;
- 
- 	return pstate;
- }
-@@ -2701,7 +2703,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 	}
- 
- 	/* Set the default performance state */
--	pstate = genpd_get_default_performance_state(dev, index);
-+	pstate = genpd_get_default_performance_state(pd, dev, index);
- 	if (pstate < 0) {
- 		ret = pstate;
- 		goto err;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 21a0577305ef..da694489a05a 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -131,6 +131,8 @@ struct generic_pm_domain {
- 	struct opp_table *opp_table;	/* OPP table of the genpd */
- 	unsigned int (*opp_to_performance_state)(struct generic_pm_domain *genpd,
- 						 struct dev_pm_opp *opp);
-+	int (*dev_get_performance_state)(struct generic_pm_domain *genpd,
-+					 struct device *dev);
- 	int (*set_performance_state)(struct generic_pm_domain *genpd,
- 				     unsigned int state);
- 	struct gpd_dev_ops dev_ops;
--- 
-2.25.1
+This can indeed happen when policy->max isn't equal to an available frequency.
+But nontheless, we can't let the efficient resolution violate the policy->max,
+which is used for thermal capping. The fact that we can overshoot a max
+limit is confusing as well.
 
+So I could add a policy->max sanity, to make sure this value is an actual
+frequency and that RELATION_L will never overshoot that value. Or we can have a
+flag somewhere to indicate thermal capping is happening and we shouldn't skip
+inefficient frequencies.
+
+> 
+> > +}
+> > +
+> >  static inline int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
+> >                                                  unsigned int target_freq,
+> >                                                  unsigned int relation)
+> >  {
+> > +       int idx;
+> > +
+> >         if (unlikely(policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED))
+> >                 return cpufreq_table_index_unsorted(policy, target_freq,
+> >                                                     relation);
+> 
+> Don't you want to take this case into account?
+
+As the inefficient frequencies are only configured by the EM so far, and this
+latter needs sorted frequencies to work, I didn't add support for unsorted
+table.
+
+> 
+> >
+> >         switch (relation) {
+> >         case CPUFREQ_RELATION_L:
+> > -               return cpufreq_table_find_index_l(policy, target_freq);
+> > +               idx = cpufreq_table_find_index_l(policy, target_freq);
+> > +               break;
+> >         case CPUFREQ_RELATION_H:
+> > -               return cpufreq_table_find_index_h(policy, target_freq);
+> > +               idx = cpufreq_table_find_index_h(policy, target_freq);
+> > +               break;
+> >         case CPUFREQ_RELATION_C:
+> > -               return cpufreq_table_find_index_c(policy, target_freq);
+> > +               idx = cpufreq_table_find_index_c(policy, target_freq);
+> > +               break;
+> >         default:
+> >                 WARN_ON_ONCE(1);
+> >                 return 0;
+> >         }
+> > +
+> > +       if (policy->skip_inefficiencies)
+> > +               idx = cpufreq_frequency_find_efficient(policy, idx);
+> 
+> Here, it matters which _RELATION_ is used.  For instance, in the
+> RELATION_H case, the frequency used cannot be above the target, which
+> is not guaranteed now AFAICS.
+
+RELATION_H is used in ondemand, when powersave_bias_target is set. In that
+case, it doesn't seem to be an issue to overshoot the target freq in that case.
+
+> 
+> I would just really skip the inefficient frequencies as though they
+> were not there in the table, and then refine the search to take the
+> inefficient ones into account when the policy max limit is in effect
+> (which also depends on the relation type AFAICS).
+> 
+> In addition to the above, please note that __cpufreq_driver_target()
+> is not only called by governors and at least in the suspend frequency
+> case I don't see why it should be an efficient one even if
+> skip_inefficiencies is set.
+
+Then we need to separate the __cpufreq_driver_target() issued from DVFS
+governors and the others. I can bring back the previous RELATION_E
+and even have RELATION_LE and RELATION_HE to not leave behind
+ondemands's powerbias?
+
+> 
+> > +
+> > +       return idx;
+> >  }
+> >
+> >  static inline int cpufreq_table_count_valid_entries(const struct cpufreq_policy *policy)
+> > --
+> > 2.7.4
+> >
