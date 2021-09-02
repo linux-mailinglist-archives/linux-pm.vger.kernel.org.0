@@ -2,126 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CF73FEAEC
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 11:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F063FEB81
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 11:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244887AbhIBJDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Sep 2021 05:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbhIBJDc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 05:03:32 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEFFC061575
-        for <linux-pm@vger.kernel.org>; Thu,  2 Sep 2021 02:02:34 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id y6so2251409lje.2
-        for <linux-pm@vger.kernel.org>; Thu, 02 Sep 2021 02:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qZWfMSX8wMAWulFpFk0yumlnd8aLSAYEODrPThO+hW0=;
-        b=ctOuK49ceAh0izIbXBGFKtYK3umKm395+zOvmxODultMDVBXDumAtSV4us9u/GtX8f
-         zANgiH/F6HpXzEI54iHJz4+6o81Tqbowx0vFtPdwIbsbxurzrmN98UtGkPvwzBJ5FZ6c
-         D4bf4vWVBQ0627tlmzlA58vLbGHFkFaive6GSlEgpviV1Z7EV5KUA0E34ApzxZ2rFbVN
-         caeS38SXdDtGfXwxIjgy3R05Puo8i+PM065QlF082mTQuOCrfs5HhJFBaaY3jX6WR8lP
-         +qKhF7Xonfed3APeeUfUusSkR3Wq/1kpbkEshbAlBfoqg9ZfG0wUSp06dXM/RyrlO1wt
-         jQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qZWfMSX8wMAWulFpFk0yumlnd8aLSAYEODrPThO+hW0=;
-        b=nF+9+tvrf4azk3VTqFRRf15bke81XpG3sSEXkLLSh/51jJXwSBQMPO+RaCTqvBypJE
-         /sAvX4uCw5KF/pfXVl4QMW3nKPYNpOROMVI7IUSdBWfjsAZzAgh8Ydn6hpSsSrqRyIa3
-         MKguM4pv6tp6y+XdFX1KnW2c0EKlQC1s7kxjlvuS4I14UJnTILK9USxQ0DUr7PXx59d9
-         z2TmYUXberFa0aV6sBxKS0V1p8vK2MOcjp2TxECM5pNV2rB1BDI/K99xNr1C9f1wwfKR
-         c/RQO3Cxek2VF7K1ji3wKBq5TKllSQJLZlMB0eMXtxf+/eLYltYiW+Ti5yiODZFlfp96
-         CAiw==
-X-Gm-Message-State: AOAM5332Or4AxGwTldah8h/NEufxy7eIomWoYrAquBVYrNtg0GufxEmz
-        FHMaCjouJeqy1g6Rxr4/Xxl7Ug==
-X-Google-Smtp-Source: ABdhPJxC9FL/CE2Uc0dvquHeUzF6/9Ta3W9YEHISvKYopat1t+96pMvVAuHGdEZ6lz4F1h2PDEdjFw==
-X-Received: by 2002:a2e:86ce:: with SMTP id n14mr1588757ljj.421.1630573352628;
-        Thu, 02 Sep 2021 02:02:32 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
-        by smtp.gmail.com with ESMTPSA id t12sm137590lfg.151.2021.09.02.02.02.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 02:02:31 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] of: property: fw_devlink: Fixup behaviour when 'node_not_dev' is set
-Date:   Thu,  2 Sep 2021 11:02:21 +0200
-Message-Id: <20210902090221.820254-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        id S245753AbhIBJnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Sep 2021 05:43:53 -0400
+Received: from mail-4325.protonmail.ch ([185.70.43.25]:61473 "EHLO
+        mail-4325.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245185AbhIBJnw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 05:43:52 -0400
+Date:   Thu, 02 Sep 2021 09:42:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1630575772;
+        bh=xRF9eqv4PKo+kZdEnxZf3slEfaXPEv4ICmGtDtFFhr0=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=wf/2sLr+/ZxXhfe0qyapMX8pS587V7p1N27/s2WJgjM3SOUs+CYlEFEHut78r4LcB
+         JEjb4vIvf6QDTkk4B9UWDfaTgdJm5LqSJOomxhnu12RoDcyHDoBtmIkjZm6x1RzLQo
+         WyIJAWORp36Wf43sqL3Qe6yr/w7XzZnKDuzJK2wQ=
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH v4 1/5] interconnect: qcom: sdm660: Commonize RPM-QoS
+Message-ID: <UQVSYQ.02005O7OLITH3@protonmail.com>
+In-Reply-To: <efafd058-ad68-eb0a-af42-40d879ef63d9@linaro.org>
+References: <20210901121518.152481-1-y.oudjana@protonmail.com> <20210901121518.152481-2-y.oudjana@protonmail.com> <9af0f031-101e-53b4-514e-9ead44320f4e@somainline.org> <efafd058-ad68-eb0a-af42-40d879ef63d9@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the struct supplier_bindings the member 'node_not_dev' is described as
-"The consumer node containing the property is never a device.", but that is
-inconsistent with the behaviour of the code in of_link_property(), as it
-calls of_get_compat_node() that starts parsing for a compatible property
-from the node it gets passed to it. The proper behaviour is to start at the
-node's parent, so let's do that.
 
-While at it, let's take the opportunity to update the description of the
-'node_not_dev' flag, as to clarify its purpose.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/of/property.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+On Thu, Sep 2 2021 at 02:01:59 +0400, Dmitry Baryshkov=20
+<dmitry.baryshkov@linaro.org> wrote:
+> On 01/09/2021 21:48, AngeloGioacchino Del Regno wrote:
+>>  Il 01/09/21 14:15, Yassine Oudjana ha scritto:
+>>>  SoCs such as MSM8996 also control bus QoS in a similar fashion to=20
+>>> SDM660,
+>>>  with some paths being controlled by RPM and others directly by the=20
+>>> AP.
+>>>  Move relevant functions and defines to a new object so that they=20
+>>> can
+>>>  be used
+>>>  in multiple drivers.
+>>>=20
+>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>=20
+>>  Hey guys!
+>>=20
+>>  I'm waiting for the interconnect RPM-QoS commonization to be merged=20
+>> as I
+>>  have fresh
+>>  interconnect drivers for MSM8998 and MSM8976, ready to send, that=20
+>> are
+>>  also using
+>>  the very same QoS mechanism as SDM660.
+>=20
+> We were also looking onto this. I'd propose to merge sdm660 code into
+> main icc-rpm.c instead of splitting it into separate file. We have
+> enabled QoS for apq8096 (msm8916) and msm8939. See
+> https://lore.kernel.org/linux-arm-msm/20210818015732.1717810-1-dmitry.bar=
+yshkov@linaro.org/
+> for the reference. I'm waiting for Shawn to publish v2 of his fix,=20
+> then
+> I can post v2 of my patchset.
 
-diff --git a/drivers/of/property.c b/drivers/of/property.c
-index 6c028632f425..a94d007be416 100644
---- a/drivers/of/property.c
-+++ b/drivers/of/property.c
-@@ -1075,6 +1075,17 @@ static struct device_node *of_get_compat_node(struct device_node *np)
- 	return np;
- }
- 
-+static struct device_node *of_get_compat_node_parent(struct device_node *np)
-+{
-+	struct device_node *parent, *node;
-+
-+	parent = of_get_parent(np);
-+	node = of_get_compat_node(parent);
-+	of_node_put(parent);
-+
-+	return node;
-+}
-+
- /**
-  * of_link_to_phandle - Add fwnode link to supplier from supplier phandle
-  * @con_np: consumer device tree node
-@@ -1249,7 +1260,9 @@ static struct device_node *parse_##fname(struct device_node *np,	     \
-  * @parse_prop.index: For properties holding a list of phandles, this is the
-  *		      index into the list
-  * @optional: Describes whether a supplier is mandatory or not
-- * @node_not_dev: The consumer node containing the property is never a device.
-+ * @node_not_dev: The consumer node containing the property is never converted
-+ *		  to a struct device. Instead, parse ancestor nodes for the
-+ *		  compatible property to find a node corresponding to a device.
-  *
-  * Returns:
-  * parse_prop() return values are
-@@ -1416,7 +1429,7 @@ static int of_link_property(struct device_node *con_np, const char *prop_name)
- 			struct device_node *con_dev_np;
- 
- 			con_dev_np = s->node_not_dev
--					? of_get_compat_node(con_np)
-+					? of_get_compat_node_parent(con_np)
- 					: of_node_get(con_np);
- 			matched = true;
- 			i++;
--- 
-2.25.1
+I'll wait for your v2 to post v5 of this series then.
+Please add me to Cc when you send it.
+
+>=20
+>>=20
+>>  Yassine, please check Shawn's recent patches for SDM660=20
+>> interconnect,
+>>  which are
+>>  fixing some bits for the QoS implementation and adding some required
+>>  clocks to the
+>>  SDM660 interconnect driver.
+>>=20
+>>  Adding Shawn to the Ccs as to make him aware of this patch;
+>>  also adding Marijn and Konrad from SoMainline as probably interested
+>>  parties.
+>>=20
+>>  Cheers!
+>>  - Angelo
+>=20
+>=20
+> --
+> With best wishes
+> Dmitry
+
+Thanks,
+Yassine
+
+
+
 
