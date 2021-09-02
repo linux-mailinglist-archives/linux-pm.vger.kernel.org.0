@@ -2,132 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90903FF15E
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 18:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F083FF21B
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 19:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbhIBQ3b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Sep 2021 12:29:31 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:34537 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346312AbhIBQ3Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 12:29:24 -0400
-Received: by mail-oi1-f174.google.com with SMTP id p2so3295690oif.1;
-        Thu, 02 Sep 2021 09:28:25 -0700 (PDT)
+        id S234534AbhIBRLI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Sep 2021 13:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346412AbhIBRLH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 13:11:07 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0384C061575
+        for <linux-pm@vger.kernel.org>; Thu,  2 Sep 2021 10:10:08 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id n126so5190812ybf.6
+        for <linux-pm@vger.kernel.org>; Thu, 02 Sep 2021 10:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZNnGL/XFkRACc5/CvoRAa+dSZMwb3AAvxOKNDcBdSNM=;
+        b=hEwlT3tYR2Y31bwXVcknM/ypCL0SfikclQ4C9fMYjRR1+rQmog4PK6nRvTQKh97yoQ
+         s7Tg5N94Vr/J02byNanGEtllbrHrSb6RualdV5dxuVcNods1HVS2TVSNMZn+8a/W14PU
+         g2y/1Wm73RdC8yZNDuv8cTRi9RQEL1St3o6XG4uzaruoIzKA9jBGbKbGSMsfVjypo6Y1
+         vMPgZORq6yI29cWlIEtFRuHUXmkRh7ZfYD0UIpUvhoSFI6v6rE4mURxeN6qr6IA3ZVEY
+         yHVLboNcPXLpTZqClnttBGFdLWekds8ZR0GDLgbvZoSZ3a9fGNTvcz2SLTjxP+gLIzTQ
+         QCAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yAfF6voZMV5HL2emobgman82UwdzTl9MjI3NYiAvvY8=;
-        b=CvSdputKjf5THPrzwpFEzM7yPK+xb2OENDZHJS3JFjnA8OvXjHsAPEp/LmPpUIMdto
-         xNGi39vhtMJzsYAe3qMY2YztYw2akklDxJrmHa64yaPegF8+eZu44+HkHcpXrJfnKBw8
-         nRkkP+TPD2YBC5NI0rgiJvBM1/QwWajnBvWiCejdrpQNSc7AafLJvurMzs+Urc25R7YX
-         thTj8rq4nH8hoAYXX9ZVoGB0w8cp/5mUXFyEmodBjbiMehh/DzK4ZCbag+7NyxJ0vDsO
-         +p6zornnbmWc0EFOO91Fx4RuIkbhP26kpH6zygXUzx08+8i9AfwxXb03b2pw7vWIIN6r
-         daeg==
-X-Gm-Message-State: AOAM533KKwMzhu7yH7mZnMwGGNSySpPFVH7X5WfuscK4ExJYmcrhI/Vy
-        KVtOpUKuvU1szL79Xh7v89Hi73aK5hm164Cs0lQ=
-X-Google-Smtp-Source: ABdhPJwg0lvNr/QwsNhFe4IobRTfilUwoaE+FI69nZyCe2YopZSoRjuvrS/SxUVf8ud4LCqA44b+ACTfkChQgkY6tt4=
-X-Received: by 2002:aca:afcd:: with SMTP id y196mr2831372oie.71.1630600104769;
- Thu, 02 Sep 2021 09:28:24 -0700 (PDT)
+        bh=ZNnGL/XFkRACc5/CvoRAa+dSZMwb3AAvxOKNDcBdSNM=;
+        b=n4vQw1AvUihfaj3rG0Bs2LULCPos4dHs4GjacPSkubVEO9TzZfgiceD8+gK7KVdTgz
+         G33zJeMmH+s7NcfqmQTKbPIPyRBITDEhUMcmVT/Keq52+GnA8mH33+IifaIn/sD2NZvS
+         BQ2WrOYweQWU1TjviWXvmPwYLr9oRTqM0J0w3eVWFCPkMvjGIyUJ0RXXi8Z4c9ad0qNP
+         8YwNlfGfyItI1t3j4Wqu5lnsKKGxg+RxUPR9PT3vKxU6AKPSvN0u/FoWmTZyWzJFBTAo
+         YgSL3XVTVYwcAMiIRqumdxPCu7elbR3kIhc3fRkzL72WWEGgn0SyIsV/sjNaxJNS6fsQ
+         /UvQ==
+X-Gm-Message-State: AOAM532wtdeJk7IkaMS0pCT5w6S3EosxsrM2y8vrdeFqKzjytbSOSTL2
+        qzUQ5lmAUG34jOl93whsgUtyJvLS4fGQmRQk5SuofA==
+X-Google-Smtp-Source: ABdhPJz2YTSqz5EeiE5FHkhjNK+OPxgcJfPp1zoX7Cf/S0pbqfT5CJ+wPJareJf4D00vVRM27wfYnbzZFVmWZbdh5p0=
+X-Received: by 2002:a5b:50b:: with SMTP id o11mr5830667ybp.466.1630602607975;
+ Thu, 02 Sep 2021 10:10:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210901083442.210230-1-sean@geanix.com>
-In-Reply-To: <20210901083442.210230-1-sean@geanix.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Sep 2021 18:28:14 +0200
-Message-ID: <CAJZ5v0j5dMDSDjhuXaZd=_J5JOP4Z09WUXfjWX_iCcT4RDisCg@mail.gmail.com>
-Subject: Re: [PATCH] PM / suspend: move userspace freeze before disk sync
-To:     Sean Nyekjaer <sean@geanix.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, linux-mtd@lists.infradead.org
+References: <20210902090221.820254-1-ulf.hansson@linaro.org>
+In-Reply-To: <20210902090221.820254-1-ulf.hansson@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 2 Sep 2021 10:09:32 -0700
+Message-ID: <CAGETcx_TLhOf3tVZbWkM0-p8fs1kFUHWTULU3Hp_TBdtZWeZqg@mail.gmail.com>
+Subject: Re: [PATCH] of: property: fw_devlink: Fixup behaviour when
+ 'node_not_dev' is set
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 1, 2021 at 10:35 AM Sean Nyekjaer <sean@geanix.com> wrote:
+On Thu, Sep 2, 2021 at 2:02 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> This fixes an issue where data remains unwritten before suspend.
-
-Well, it doesn't make the issue go away, it just hides it for you and
-it may very well expose it for someone else.
-
-In particular, note that you can compile the kernel with
-CONFIG_SUSPEND_SKIP_SYNC set which makes it not sync at all during
-system-wide suspend and this is a valid case expected to work.  It
-looks like this case doesn't work for you.
-
-> UBI tried to write data, before the mtd device had been unsuspended.
-
-Well, that's the real problem and it can happen regardless of whether
-or not this patch is there.
-
-> Seen on an iMX6ULL board fitted with rawnand flash.
+> In the struct supplier_bindings the member 'node_not_dev' is described as
+> "The consumer node containing the property is never a device.", but that is
+> inconsistent with the behaviour of the code in of_link_property(), as it
+> calls of_get_compat_node() that starts parsing for a compatible property
+> from the node it gets passed to it. The proper behaviour is to start at the
+> node's parent, so let's do that.
 >
-> Before:
-> PM: suspend entry (deep)
-> Filesystems sync: 0.088 seconds
-> Freezing user space processes ... (elapsed 0.000 seconds) done.
-> OOM killer disabled.
-> Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> printk: Suspending console(s) (use no_console_suspend to debug)
-> PM: suspend devices took 0.030 seconds
-> Disabling non-boot CPUs ...
-> ubi0 error: ubi_io_write: error -16 while writing 4096 bytes to PEB 1762:94208, written 0 bytes
+> While at it, let's take the opportunity to update the description of the
+> 'node_not_dev' flag, as to clarify its purpose.
 >
-> After:
-> PM: suspend entry (deep)
-> Freezing user space processes ... (elapsed 0.001 seconds) done.
-> OOM killer disabled.
-> Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> Filesystems sync: 0.060 seconds
-> printk: Suspending console(s) (use no_console_suspend to debug)
-> PM: suspend devices took 0.040 seconds
-> Disabling non-boot CPUs ...
-> PM: resume devices took 0.100 seconds
->
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+
+-Saravana
+
 > ---
+>  drivers/of/property.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
 >
-> Some explanation/discussion here:
-> http://lists.infradead.org/pipermail/linux-mtd/2021-July/087390.html
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 6c028632f425..a94d007be416 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1075,6 +1075,17 @@ static struct device_node *of_get_compat_node(struct device_node *np)
+>         return np;
+>  }
 >
->  kernel/power/suspend.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 87331565e505..4ee3fcbb0e7a 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -562,6 +562,12 @@ static int enter_state(suspend_state_t state)
->         if (state == PM_SUSPEND_TO_IDLE)
->                 s2idle_begin();
->
-> +       pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
-> +       pm_suspend_clear_flags();
-> +       error = suspend_prepare(state);
-> +       if (error)
-> +               goto Unlock;
+> +static struct device_node *of_get_compat_node_parent(struct device_node *np)
+> +{
+> +       struct device_node *parent, *node;
 > +
->  #ifndef CONFIG_SUSPEND_SKIP_SYNC
->         trace_suspend_resume(TPS("sync_filesystems"), 0, true);
->         pr_info("Syncing filesystems ... ");
-> @@ -570,12 +576,6 @@ static int enter_state(suspend_state_t state)
->         trace_suspend_resume(TPS("sync_filesystems"), 0, false);
->  #endif
+> +       parent = of_get_parent(np);
+> +       node = of_get_compat_node(parent);
+> +       of_node_put(parent);
+> +
+> +       return node;
+> +}
+> +
+>  /**
+>   * of_link_to_phandle - Add fwnode link to supplier from supplier phandle
+>   * @con_np: consumer device tree node
+> @@ -1249,7 +1260,9 @@ static struct device_node *parse_##fname(struct device_node *np,       \
+>   * @parse_prop.index: For properties holding a list of phandles, this is the
+>   *                   index into the list
+>   * @optional: Describes whether a supplier is mandatory or not
+> - * @node_not_dev: The consumer node containing the property is never a device.
+> + * @node_not_dev: The consumer node containing the property is never converted
+> + *               to a struct device. Instead, parse ancestor nodes for the
+> + *               compatible property to find a node corresponding to a device.
+>   *
+>   * Returns:
+>   * parse_prop() return values are
+> @@ -1416,7 +1429,7 @@ static int of_link_property(struct device_node *con_np, const char *prop_name)
+>                         struct device_node *con_dev_np;
 >
-> -       pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
-> -       pm_suspend_clear_flags();
-> -       error = suspend_prepare(state);
-> -       if (error)
-> -               goto Unlock;
-> -
->         if (suspend_test(TEST_FREEZER))
->                 goto Finish;
->
+>                         con_dev_np = s->node_not_dev
+> -                                       ? of_get_compat_node(con_np)
+> +                                       ? of_get_compat_node_parent(con_np)
+>                                         : of_node_get(con_np);
+>                         matched = true;
+>                         i++;
 > --
-> 2.33.0
+> 2.25.1
 >
