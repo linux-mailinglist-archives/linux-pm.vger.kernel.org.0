@@ -2,112 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E82F4007F2
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 00:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9D40083C
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 01:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239112AbhICWjU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 18:39:20 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24318 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236815AbhICWjU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Sep 2021 18:39:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10096"; a="283238780"
-X-IronPort-AV: E=Sophos;i="5.85,266,1624345200"; 
-   d="scan'208";a="283238780"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 15:38:19 -0700
-X-IronPort-AV: E=Sophos;i="5.85,266,1624345200"; 
-   d="scan'208";a="429832665"
-Received: from vanchatg-mobl1.gar.corp.intel.com ([10.213.116.178])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 15:38:17 -0700
-Message-ID: <ce0360ab6bdfa8e5dd7f18560570727b500ab1f6.camel@linux.intel.com>
-Subject: Re: Bug: d0e936adbd22 crashes at boot
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Jens Axboe <axboe@kernel.dk>, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org
-Date:   Fri, 03 Sep 2021 15:38:13 -0700
-In-Reply-To: <a6041178-e7d6-4ad9-b96a-91b4702d0305@kernel.dk>
-References: <942f4041-e4e7-1b08-3301-008ab37ff5b8@kernel.dk>
-         <c56cde110210bec6537fe69b495334c6c70c814e.camel@linux.intel.com>
-         <3ac87893-55ba-f2d4-bb1e-382868f12d4c@kernel.dk>
-         <7f115f0476618d34b24ddec772acbbd7c0c4a572.camel@linux.intel.com>
-         <767fe00f-bf31-1eb0-09cc-1be91c633bb4@kernel.dk>
-         <d6bf08cbfd9f29ddb8cf29f522d68efc5c676624.camel@linux.intel.com>
-         <903f2e71-983f-39b8-dd0b-d697616ab63e@kernel.dk>
-         <a6041178-e7d6-4ad9-b96a-91b4702d0305@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        id S1350748AbhICXZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 19:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350746AbhICXZ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 19:25:26 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FC2C061757
+        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 16:24:25 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id i28so1150927ljm.7
+        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 16:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IUwnbvSZ0rkQ9qg3kU6ANLBK6G3PxyD2rj1Sq6Ru594=;
+        b=sUGNY1nPTcv0fVc209lJ/yYIFXgs5/3ZpdMTXfK6IkUFdSDaW4BtX+u5XrbRVE1UzF
+         bcAKLSt9aucssUZqcQKTX0zkfFTAkQw+xunw0LKAJ8avPqlCa1irC8y5M8jAT2P2sDaz
+         fbrHUaUhJhal8sC4tDVOcqzu89CqngfIxaDE0s31Cgx1LQ/L+8XD7ilUgc0nbUM5rZku
+         OYTP5rRNdcuD9kcHB7RXGw6prZcCxD2zgAGBelnTHYYQj/defl81Jx4EOHJQ1Wl/GdVe
+         jAajhz47/DvdoLtA6ovWWV2gA3d8vkZiyZiHUpGXJYUWsTGBGQRYNjmPTfevI9n49krD
+         ziXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IUwnbvSZ0rkQ9qg3kU6ANLBK6G3PxyD2rj1Sq6Ru594=;
+        b=m2+dsHrGvBNHvHX/p54w36bwVHYIsGdTff3P28tAbYNy4CwzvTS+PcY1QMiCebygcC
+         Bmex72KN21miP/6E2yl1ccX3gbdQyI9fgQ+DYP5bf2eHUVVmqTM/OafGyGIlnD5HsDXE
+         ORaPm6wOT+oZYDeu0PRuCjw4BCY5rXGTT3kF4y6e3tsaF/YeLTYguVwhFR8au1VhEb+V
+         nkXU37tLxZxlbMD1/OA33nRxJNbem0eCYiW2btK1H2I/w62Sxqi6/k2a7c7e6bLxpDqX
+         YzL5vXaWbWY9+uEsVCgZ9s/0qlqyRR1uwQlSPkyVOtwBvc4CimOHXle1ZASF/oeeUZCJ
+         eRow==
+X-Gm-Message-State: AOAM5327/o31AJy8lZe1oncVWCJWhHvlG70KSneB+1cl2CDQDefwtZJ/
+        Ixq0a1mQR8mECMqQylYazNJStw==
+X-Google-Smtp-Source: ABdhPJzzpHnQxaDu6ygc9KUcDwCLE7RpQUtyIhbADTpJPk97QOVDcVZPNTHXQUUr8nb0zb1mmpf0IQ==
+X-Received: by 2002:a05:651c:225:: with SMTP id z5mr965852ljn.409.1630711463930;
+        Fri, 03 Sep 2021 16:24:23 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id w3sm56924ljm.13.2021.09.03.16.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Sep 2021 16:24:23 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/11] interconnect: merge AP-owned support into icc-rpm
+Date:   Sat,  4 Sep 2021 02:24:10 +0300
+Message-Id: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2021-09-03 at 14:57 -0600, Jens Axboe wrote:
-> On 9/3/21 2:41 PM, Jens Axboe wrote:
-> > On 9/3/21 12:00 PM, Srinivas Pandruvada wrote:
-> > > Hi Axobe,
-> > > 
-> > > On Fri, 2021-09-03 at 09:00 -0600, Jens Axboe wrote:
-> > > > On 9/3/21 8:38 AM, Srinivas Pandruvada wrote:
-> > > > > On Fri, 2021-09-03 at 08:15 -0600, Jens Axboe wrote:
-> > > > > > On 9/3/21 8:13 AM, Srinivas Pandruvada wrote:
-> > > > > > > Hi Axboe,
-> > > > > > > 
-> > > > > > > Thanks for reporting.
-> > > > > > > On Fri, 2021-09-03 at 07:36 -0600, Jens Axboe wrote:
-> > > > > > > > Hi,
-> > > > > > > > 
-> > > > > > > > Booting Linus's tree causes a crash on my laptop, an x1
-> > > > > > > > gen9.
-> > > > > > > > This
-> > > > > > > > was
-> > > > > > > > a bit
-> > > > > > > > difficult to pin down as it crashes before the display
-> > > > > > > > is up,
-> > > > > > > > but I
-> > > > > > > > managed
-> > > > > > > > to narrow it down to:
-> > > > > > > > 
-> > > > > > > > commit d0e936adbd2250cb03f2e840c6651d18edc22ace
-> > > > > > > > Author: Srinivas Pandruvada < 
-> > > > > > > > srinivas.pandruvada@linux.intel.com>
-> > > > > > > > Date:   Thu Aug 19 19:40:06 2021 -0700
-> > > > > > > > 
-> > > > > > > >     cpufreq: intel_pstate: Process HWP Guaranteed
-> > > > > > > > change
-> > > > > > > > notification
-> > > > > > > > 
-> > > > > > > > which crashes with a NULL pointer deref in
-> > > > > > > > notify_hwp_interrupt() -
-> > > > > > > > > 
-> > > > > > > > queue_delayed_work_on().
-> > > > > > > > 
-> > > > > > > > Reverting this change makes the laptop boot fine again.
-> > > > > > > > 
-> > > > > > > Does this change fixes your issue?
-> > > > > > 
-> > > > > > I would assume so, as it's crashing on cpudata == NULL :-)
-> > > > > > 
-> > > > > > But why is it NULL? Happy to test patches, but the below
-> > > > > > doesn't
-> > > > > > look
-> > > > > > like
-> > > > > > a real fix and more of a work-around.
-> > > > > 
-> > > 
-> > > Please try the attached.
-> > 
-> > I'll give it a test spin right now. Please do add a Reported-by
-> > tag,
-> > though. That's always prudent.
-> 
-> And you can add Tested-by as well, it works for me.
+This patch series merges support for AP-owned and bus QoS from SDM660
+into common code (icc-rpm.c). MSM8916 and MSM8939 support code is
+extended to support these features. As I was touching these drivers, per
+Bjorn's suggestion expand DEFINE_QNODE macros (which makes adding
+QoS support much easier to review).
 
-Thanks. I will add both.
+Dependencies:
+ - https://lore.kernel.org/linux-arm-msm/20210902054915.28689-1-shawn.guo@linaro.org/
+ - https://lore.kernel.org/linux-arm-msm/20210823014003.31391-1-shawn.guo@linaro.org/
+ - https://lore.kernel.org/linux-arm-msm/20210824043435.23190-1-shawn.guo@linaro.org/
 
--Srinivas
-> 
+Changes since v1:
+ - Rebase on top a2noc clocks support patch.
+ - Expand DEFINE_QNODE
+ - Simplify struct qcom_icc_node by moving links to separate array
+
+----------------------------------------------------------------
+Dmitry Baryshkov (11):
+      interconnect: icc-rpm: move bus clocks handling into qnoc_probe
+      interconnect: sdm660: expand DEFINE_QNODE macros
+      interconnect: sdm660: drop default/unused values
+      interconnect: sdm660: merge common code into icc-rpm
+      interconnect: icc-rpm: add support for QoS reg offset
+      interconnect: msm8916: expand DEFINE_QNODE macros
+      interconnect: msm8916: add support for AP-owned nodes
+      interconnect: msm8939: expand DEFINE_QNODE macros
+      interconnect: msm8939: add support for AP-owned nodes
+      interconnect: qcs404: expand DEFINE_QNODE macros
+      interconnect: qcom: drop DEFINE_QNODE macro
+
+ drivers/interconnect/qcom/icc-rpm.c |  263 ++++-
+ drivers/interconnect/qcom/icc-rpm.h |   56 +-
+ drivers/interconnect/qcom/msm8916.c | 1214 ++++++++++++++++++++--
+ drivers/interconnect/qcom/msm8939.c | 1283 +++++++++++++++++++++--
+ drivers/interconnect/qcom/qcs404.c  |  967 +++++++++++++++--
+ drivers/interconnect/qcom/sdm660.c  | 1940 ++++++++++++++++++++++++-----------
+ 6 files changed, 4815 insertions(+), 908 deletions(-)
 
 
