@@ -2,202 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7E4400472
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 20:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A13D40047F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 20:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhICSBj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 14:01:39 -0400
-Received: from mga17.intel.com ([192.55.52.151]:63742 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229929AbhICSBi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Sep 2021 14:01:38 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10096"; a="199704461"
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208,223";a="199704461"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 11:00:38 -0700
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208,223";a="468029941"
-Received: from achiranj-mobl.gar.corp.intel.com ([10.213.105.90])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 11:00:35 -0700
-Message-ID: <d6bf08cbfd9f29ddb8cf29f522d68efc5c676624.camel@linux.intel.com>
-Subject: Re: Bug: d0e936adbd22 crashes at boot
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Jens Axboe <axboe@kernel.dk>, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org
-Date:   Fri, 03 Sep 2021 11:00:31 -0700
-In-Reply-To: <767fe00f-bf31-1eb0-09cc-1be91c633bb4@kernel.dk>
-References: <942f4041-e4e7-1b08-3301-008ab37ff5b8@kernel.dk>
-         <c56cde110210bec6537fe69b495334c6c70c814e.camel@linux.intel.com>
-         <3ac87893-55ba-f2d4-bb1e-382868f12d4c@kernel.dk>
-         <7f115f0476618d34b24ddec772acbbd7c0c4a572.camel@linux.intel.com>
-         <767fe00f-bf31-1eb0-09cc-1be91c633bb4@kernel.dk>
-Content-Type: multipart/mixed; boundary="=-+dSVwqJX7Zgse2q0tlJv"
-User-Agent: Evolution 3.40.0-1 
+        id S1350352AbhICSGV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 14:06:21 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:14032 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349959AbhICSGT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 14:06:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630692319; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=aGdZtz9MTWWljqht2uCxkXmCJ8HbWsZNCst2R0IK2Cc=; b=ey1x015/xyRip/B2GN1ZXP01GyQrYwPokWuFjndD/y3PjB+rFWopRX2i0z00kYWxxHuN7TXv
+ EC2FHy8q4rvFeZQHrNQI2GuS45WSO2xsbE/8bqFCqxe7lwxQD+O3Id99RedPubohDcAMm2se
+ peTsLZx+OvGmi+lXXkCWdStIUnY=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 613263d940d2129ac14742e8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Sep 2021 18:05:13
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 06533C4360C; Fri,  3 Sep 2021 18:05:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 42D33C4338F;
+        Fri,  3 Sep 2021 18:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 42D33C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Fri, 3 Sep 2021 11:05:07 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
+Message-ID: <20210903180507.GB3515@jackp-linux.qualcomm.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-2-pmalani@chromium.org>
+ <20210903064701.GA3515@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210903064701.GA3515@jackp-linux.qualcomm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---=-+dSVwqJX7Zgse2q0tlJv
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-
-Hi Axobe,
-
-On Fri, 2021-09-03 at 09:00 -0600, Jens Axboe wrote:
-> On 9/3/21 8:38 AM, Srinivas Pandruvada wrote:
-> > On Fri, 2021-09-03 at 08:15 -0600, Jens Axboe wrote:
-> > > On 9/3/21 8:13 AM, Srinivas Pandruvada wrote:
-> > > > Hi Axboe,
-> > > > 
-> > > > Thanks for reporting.
-> > > > On Fri, 2021-09-03 at 07:36 -0600, Jens Axboe wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > Booting Linus's tree causes a crash on my laptop, an x1 gen9.
-> > > > > This
-> > > > > was
-> > > > > a bit
-> > > > > difficult to pin down as it crashes before the display is up,
-> > > > > but I
-> > > > > managed
-> > > > > to narrow it down to:
-> > > > > 
-> > > > > commit d0e936adbd2250cb03f2e840c6651d18edc22ace
-> > > > > Author: Srinivas Pandruvada < 
-> > > > > srinivas.pandruvada@linux.intel.com>
-> > > > > Date:   Thu Aug 19 19:40:06 2021 -0700
-> > > > > 
-> > > > >     cpufreq: intel_pstate: Process HWP Guaranteed change
-> > > > > notification
-> > > > > 
-> > > > > which crashes with a NULL pointer deref in
-> > > > > notify_hwp_interrupt() -
-> > > > > > 
-> > > > > queue_delayed_work_on().
-> > > > > 
-> > > > > Reverting this change makes the laptop boot fine again.
-> > > > > 
-> > > > Does this change fixes your issue?
-> > > 
-> > > I would assume so, as it's crashing on cpudata == NULL :-)
-> > > 
-> > > But why is it NULL? Happy to test patches, but the below doesn't
-> > > look
-> > > like
-> > > a real fix and more of a work-around.
+On Thu, Sep 02, 2021 at 11:47:01PM -0700, Jack Pham wrote:
+> Hi Prashant,
+> 
+> On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
+> > Increase the max number of PDO objects to 13, to accommodate the extra
+> > PDOs added as a part of EPR (Extended Power Range) operation introduced
+> > in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
 > > 
-
-Please try the attached.
-
-Thanks,
-Srinivas
-
-> > This platform is sending an HWP interrupt on a CPU which we didn't
-> > yet
-> > bring it up for pstate control. So somehow firmware decided to send
-> > very early during boot, which previously we would have ignored it
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >  include/linux/usb/pd.h | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
 > > 
-> > Actually try this, with more prevention
+> > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> > index 96b7ff66f074..7e8bdca1ce6e 100644
+> > --- a/include/linux/usb/pd.h
+> > +++ b/include/linux/usb/pd.h
+> > @@ -201,7 +201,13 @@ struct pd_message {
+> >  } __packed;
+> >  
+> >  /* PDO: Power Data Object */
+> > -#define PDO_MAX_OBJECTS		7
+> > +
+> > +/*
+> > + * The EPR (Extended Power Range) structure is a superset of the SPR (Standard Power Range)
+> > + * capabilities structure, so set the max number of PDOs to 13 instead of 7. On SPR-only systems,
+> > + * objects 8 through 13 will just be empty.
+> > + */
+> > +#define PDO_MAX_OBJECTS		13
 > 
-> I can give this a whirl.
+> Hmm this might break the recent change I made to UCSI in commit
+> 1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
+> the first 4").
 > 
-> > diff --git a/drivers/cpufreq/intel_pstate.c
-> > b/drivers/cpufreq/intel_pstate.c
-> > index b4ffe6c8a0d0..6ee88d7640ea 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -1645,12 +1645,24 @@ void notify_hwp_interrupt(void)
-> >         if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
-> >                 return;
-> >  
-> > -       rdmsrl(MSR_HWP_STATUS, value);
-> > +       rdmsrl_safe(MSR_HWP_STATUS, &value);
-> >         if (!(value & 0x01))
-> >                 return;
-> >  
-> > +       /*
-> > +        * After hwp_active is set and all_cpu_data is allocated,
-> > there
-> > +        * is small window.
-> > +        */
-> > +       if (!all_cpu_data) {
-> > +               wrmsrl_safe(MSR_HWP_STATUS, 0);
-> > +               return;
-> > +       }
+>  520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_partner)
+>  521 {
+>  522         int ret;
+>  523
+>  524         /* UCSI max payload means only getting at most 4 PDOs at a time */
+>  525         ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+>  526         if (ret < 0)
+>  527                 return;
+>  528
+>  529         con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+>  530         if (con->num_pdos < UCSI_MAX_PDOS)
+>  531                 return;
+>  532
+>  533         /* get the remaining PDOs, if any */
+>  534         ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+>  535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> 				 ^^^^^^^^^^^^^^^
+> This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
+> since that's the most the return payload can carry.  Currently this
+> assumes that we'd only need to request the PPM at most twice to retrieve
+> all the PDOs for up to a maximum of 7 (first request for 4 then again if
+> needed for the remaining 3).  I'm not sure if any existing UCSI FW would
+> be updatable to support more than 7 PDOs in the future, much less
+> support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
+
+Sorry, forgot the footnote with the link to the spec:
+[1] https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/usb-type-c-ucsi-spec.pdf
+
+> offset valid values are 0-7 and anything else "shall not be used", so I
+> don't know how UCSI will eventually cope with EPR without a spec update.
 > 
-> What synchronizes the all_cpu_data setup and the interrupt? Can the
-> interrupt come in while it's still being setup?
+> So if this macro changes to 13 then this call would result in a call to
+> the UCSI GET_PDOS command passing num_pdos == 13-4 = 9 which would
+> probably result in an error from the PPM FW.  So we might need to retain
+> the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
+> this UCSI driver needs to carry its own definition of
+> UCSI_MAX_TOTAL_PDOS=7 instead of using PDO_MAX_OBJECTS?
 > 
-
-
---=-+dSVwqJX7Zgse2q0tlJv
-Content-Disposition: attachment;
-	filename*0=0001-cpufreq-intel_pstate-Fix-for-HWP-interrupt-before-dr.pat;
-	filename*1=ch
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-cpufreq-intel_pstate-Fix-for-HWP-interrupt-before-dr.patch";
-	charset="UTF-8"
-
-RnJvbSAzODBkNWEzNDBlYmViMTcyYzkzYTg3OGZkODRhMTJlN2JmZWE5Y2ZmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2
-YWRhQGxpbnV4LmludGVsLmNvbT4KRGF0ZTogRnJpLCAzIFNlcCAyMDIxIDEwOjQxOjM1IC0wNzAw
-ClN1YmplY3Q6IFtURVNUIFBBVENIXSBjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IEZpeCBmb3IgSFdQ
-IGludGVycnVwdCBiZWZvcmUKIGRyaXZlciBpcyByZWFkeQoKSW4geDEgZ2VuOSBsYXB0b3AsIG9u
-ZSBIV1AgaW50ZXJydXB0IGFycml2ZXMgYmVmb3JlIGRyaXZlciBpcyByZWFkeQp0byBoYW5kbGUg
-b24gdGhhdCBDUFUuIEhlcmUgZmlybXdhcmUgaXMgZW5hYmxpbmcgYW5kIHNlbmRpbmcgYW4KaW50
-ZXJydXB0IGZvciBndWFyYW50ZWUgY2hhbmdlLiBTaW5jZSBkcml2ZXIgZGlkbid0IGhhdmUgY3B1
-ZGF0YQppbml0aWFsaXplZCBpdCB3aWxsIGNhdXNlIE5VTEwgcG9pbnRlciB3aGVuIHRyeWluZyB0
-byBzY2hlZHVsZQpwcm9jZXNzaW5nIG9mIGludGVycnVwdCBpbiBhIHdvcmt3cXVldWUuCgpUbyBh
-dm9pZCB0aGlzIHNldCBhIGNwdW1hc2sgb2YgQ1BVcyBmb3Igd2hpY2ggZHJpdmVyIGhhcyBpbml0
-aWFsaXplZAppbnRlcnJ1cHRzLiBJZiBub3QgaW5pdGlhbGl6ZWQgc2ltcGx5IGNsZWFyIHRoZSBI
-V1Agc3RhdHVzLgoKU2luY2UgdGhlIHNhbWUgdGhpbmcgbWF5IGhhcHBlbiBkdXJpbmcgUzMgcmVz
-dW1lLCBjbGVhciB0aGUgY3B1bWFzawpkdXJpbmcgb2ZmbGluZSBhbmQgbGV0IGl0IHJlY3JlYXRl
-IGl0IGR1cmluZyBvbmxpbmUuCgpTaWduZWQtb2ZmLWJ5OiBTcmluaXZhcyBQYW5kcnV2YWRhIDxz
-cmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4KLS0tCiBkcml2ZXJzL2NwdWZyZXEv
-aW50ZWxfcHN0YXRlLmMgfCAyMyArKysrKysrKysrKysrKysrKysrKysrLQogMSBmaWxlIGNoYW5n
-ZWQsIDIyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgYi9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMK
-aW5kZXggYjRmZmU2YzhhMGQwLi41YWM4NmJmYTEwODAgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY3B1
-ZnJlcS9pbnRlbF9wc3RhdGUuYworKysgYi9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMK
-QEAgLTI5OCw2ICsyOTgsOCBAQCBzdGF0aWMgYm9vbCBod3BfYm9vc3QgX19yZWFkX21vc3RseTsK
-IAogc3RhdGljIHN0cnVjdCBjcHVmcmVxX2RyaXZlciAqaW50ZWxfcHN0YXRlX2RyaXZlciBfX3Jl
-YWRfbW9zdGx5OwogCitzdGF0aWMgY3B1bWFza190IGh3cF9pbnRyX2VuYWJsZV9tYXNrOworCiAj
-aWZkZWYgQ09ORklHX0FDUEkKIHN0YXRpYyBib29sIGFjcGlfcHBjOwogI2VuZGlmCkBAIC0xMDY3
-LDExICsxMDY5LDE1IEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9od3Bfc2V0KHVuc2lnbmVk
-IGludCBjcHUpCiAJd3Jtc3JsX29uX2NwdShjcHUsIE1TUl9IV1BfUkVRVUVTVCwgdmFsdWUpOwog
-fQogCitzdGF0aWMgdm9pZCBpbnRlbF9wc3RhdGVfZGlzYWJsZV9od3BfaW50ZXJydXB0KHN0cnVj
-dCBjcHVkYXRhICpjcHVkYXRhKTsKKwogc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2h3cF9vZmZs
-aW5lKHN0cnVjdCBjcHVkYXRhICpjcHUpCiB7CiAJdTY0IHZhbHVlID0gUkVBRF9PTkNFKGNwdS0+
-aHdwX3JlcV9jYWNoZWQpOwogCWludCBtaW5fcGVyZjsKIAorCWludGVsX3BzdGF0ZV9kaXNhYmxl
-X2h3cF9pbnRlcnJ1cHQoY3B1KTsKKwogCWlmIChib290X2NwdV9oYXMoWDg2X0ZFQVRVUkVfSFdQ
-X0VQUCkpIHsKIAkJLyoKIAkJICogSW4gY2FzZSB0aGUgRVBQIGhhcyBiZWVuIHNldCB0byAicGVy
-Zm9ybWFuY2UiIGJ5IHRoZQpAQCAtMTY0NSwyMCArMTY1MSwzNSBAQCB2b2lkIG5vdGlmeV9od3Bf
-aW50ZXJydXB0KHZvaWQpCiAJaWYgKCFod3BfYWN0aXZlIHx8ICFib290X2NwdV9oYXMoWDg2X0ZF
-QVRVUkVfSFdQX05PVElGWSkpCiAJCXJldHVybjsKIAotCXJkbXNybChNU1JfSFdQX1NUQVRVUywg
-dmFsdWUpOworCXJkbXNybF9zYWZlKE1TUl9IV1BfU1RBVFVTLCAmdmFsdWUpOwogCWlmICghKHZh
-bHVlICYgMHgwMSkpCiAJCXJldHVybjsKIAorCWlmICghY3B1bWFza190ZXN0X2NwdSh0aGlzX2Nw
-dSwgJmh3cF9pbnRyX2VuYWJsZV9tYXNrKSkgeworCQl3cm1zcmxfc2FmZShNU1JfSFdQX1NUQVRV
-UywgMCk7CisJCXJldHVybjsKKwl9CisKIAljcHVkYXRhID0gYWxsX2NwdV9kYXRhW3RoaXNfY3B1
-XTsKIAlzY2hlZHVsZV9kZWxheWVkX3dvcmtfb24odGhpc19jcHUsICZjcHVkYXRhLT5od3Bfbm90
-aWZ5X3dvcmssIG1zZWNzX3RvX2ppZmZpZXMoMTApKTsKIH0KIAorc3RhdGljIHZvaWQgaW50ZWxf
-cHN0YXRlX2Rpc2FibGVfaHdwX2ludGVycnVwdChzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSkKK3sK
-KworCWlmIChjcHVtYXNrX3Rlc3RfYW5kX2NsZWFyX2NwdShjcHVkYXRhLT5jcHUsICZod3BfaW50
-cl9lbmFibGVfbWFzaykpIHsKKwkJd3Jtc3JsX29uX2NwdShjcHVkYXRhLT5jcHUsIE1TUl9IV1Bf
-SU5URVJSVVBULCAweDAwKTsKKwkJY2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZjcHVkYXRhLT5o
-d3Bfbm90aWZ5X3dvcmspOworCX0KK30KKwogc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2VuYWJs
-ZV9od3BfaW50ZXJydXB0KHN0cnVjdCBjcHVkYXRhICpjcHVkYXRhKQogewogCS8qIEVuYWJsZSBI
-V1Agbm90aWZpY2F0aW9uIGludGVycnVwdCBmb3IgZ3VhcmFudGVlZCBwZXJmb3JtYW5jZSBjaGFu
-Z2UgKi8KIAlpZiAoYm9vdF9jcHVfaGFzKFg4Nl9GRUFUVVJFX0hXUF9OT1RJRlkpKSB7CiAJCUlO
-SVRfREVMQVlFRF9XT1JLKCZjcHVkYXRhLT5od3Bfbm90aWZ5X3dvcmssIGludGVsX3BzdGF0ZV9u
-b3RpZnlfd29yayk7CiAJCXdybXNybF9vbl9jcHUoY3B1ZGF0YS0+Y3B1LCBNU1JfSFdQX0lOVEVS
-UlVQVCwgMHgwMSk7CisJCWNwdW1hc2tfc2V0X2NwdShjcHVkYXRhLT5jcHUsICZod3BfaW50cl9l
-bmFibGVfbWFzayk7CiAJfQogfQogCi0tIAoyLjE3LjEKCg==
-
-
---=-+dSVwqJX7Zgse2q0tlJv--
-
+> Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
