@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD1F3FFA13
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 08:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD75A3FFA16
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 08:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236242AbhICGB7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 02:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S242759AbhICGCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 02:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbhICGB7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 02:01:59 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F337C061760;
-        Thu,  2 Sep 2021 23:00:59 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id i28so7877293ljm.7;
-        Thu, 02 Sep 2021 23:00:59 -0700 (PDT)
+        with ESMTP id S238297AbhICGCD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 02:02:03 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D5AC061760;
+        Thu,  2 Sep 2021 23:01:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p38so9660910lfa.0;
+        Thu, 02 Sep 2021 23:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SS3V2W7eXZoP72eB0dNOwnog6SXuQ/C6UHFp2+JfZGw=;
-        b=R9dDX2T14oDoEKx683zCy++Xv/CAPNNlfzWgOaJhaFiOcwdCpmNxJ5SELcoEYEAiFy
-         M9KKB4uXxOB2d7rrmmcTEWdfGN4Yu09YpEgg0YTMr1BTKrcmNoiFH91FoMpnLdz+z3li
-         68V9RLI2aaJjRI015cLpYjuPpSRePCbs9Wbm9z7iO96yBukOUnv2jUCsjh21qIBhN5eL
-         ucdgNuXFLM571qwPSTVw6TZDWAL1diXBnkqpMBQyNCkB1CQCDVlq449Y5zUiKlnRrrwd
-         w0sfS5Cj+xNK/y4anrGdLy7Kkbp8BWb7l43eQrEfV8TdFCmIcVXZHXDyExuazqjdYBtl
-         cwCw==
+        bh=pgs3kLLPKzcjFcrSbgZkVPLdLHwMQc7gUvwcn4k6Fwk=;
+        b=fKqBIrEaXQgsLWgf0iZOXlQ0VJkZkUKWbEEtRyL7rfK9FATg3lmTYsUT3s2cF2NEjb
+         Bt7vCRe3CFwn5bTK8AF7jNWT3D/eo2DGNCTnoy5y3l0vTmqhtJYnOcaOBUAefoSo7Nak
+         SYYV/DYrCUJ0ukcD2yPs725IGwep8AfidmGJh+wFSTS4VTQ05f7k7ijU0269echC8FaU
+         gTo2fQ3ShgW49KnOrWSZH6hL4XKEaPQYfIGw534uRwBTiJKN9N55eOZHNZ+SRoxV/fi7
+         5nb6hGxaqqJJcPgnZPlCZZtQFdyLhWJkEgrDI2BMULg4ZbEqzCVFK3bCKBsoOHLZKTYe
+         BI2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=SS3V2W7eXZoP72eB0dNOwnog6SXuQ/C6UHFp2+JfZGw=;
-        b=RRb+2Z4W3yhOOPXRXjGqME9OCxeUAPio4FqFEzHtq9cyGKsW2dUMqRM+FBiqKikTQh
-         DXWbZXytLfBrR+OeEIEC8//rF/7FU+D0tqhqxNGhaV7PohdtMoY+nDXX9M4aFp8TqWq+
-         L5lFF7KkYVqfIPw7ENzHr2BlW7Mp7vJUjnqEAajphkzclaQN2f1Ug3QSnv8Pv4BxX7s9
-         CjEzQ14ZSfEqn2/vnH7exazl15QDkyfVHcEVt+R8NaB0LjGU1aM6FK9jfQKM0yaBqIXm
-         a1Xm9xBX3zGRyrU+9JSsBTKBusweac6DKZQYt+JTW7hyAvRJOb+5ODrpsNrpivlOIr8/
-         1QXQ==
-X-Gm-Message-State: AOAM532Z8h8EDkie/buZkN6fF/QvoR6xpmJQrjgnG0DoXlyxqcKsSeKz
-        033d9TNNYmL5xs8SmfGuU843UlnzXM8=
-X-Google-Smtp-Source: ABdhPJyJCkOBGaqkZOl8FXnvhO3LuowRf0vib98qqnnyYHT6qHeOk/hFrHs33I31k6easfCeqUMX8w==
-X-Received: by 2002:a05:651c:11c7:: with SMTP id z7mr1606998ljo.464.1630648857737;
-        Thu, 02 Sep 2021 23:00:57 -0700 (PDT)
+        bh=pgs3kLLPKzcjFcrSbgZkVPLdLHwMQc7gUvwcn4k6Fwk=;
+        b=oGxci/E6m3GgtdPqfN5ary+Ztyghtlmk9/SQVhAH2R5J8wjfruLwPkTXBff0eygPfw
+         yIjEo0AoKvFHt++7rXJvb1Nxi/EiNKwxZXD8f6fHI1gAkV9xXIR+AHt8FxlehOeDxCAD
+         EaFxeqBri8/Uwt/p8B6j1N76oSg0Ac0JVkhbuzJeMb9pMjY2AkX9M/et/5T6aHkb0xJj
+         /k3vUz7FCdd48Nv0H6a990EBqt4a17onJl9x33wOot6Ho318QP9nLiK6x8BBBD6iwPtP
+         494r5q5+Iy2r3htHKA443n4UCnh0YDxNHZ97gAwpr423YlxpYfYzVhsO+yqbnzZWArM+
+         Fs9w==
+X-Gm-Message-State: AOAM532HIsNME9keoANrXA6xltMyG3NoQMr1zxaGI/xfc+HwAFokSPhY
+        2ofMWH0fcIljJLBZQxE/t0HnDZ/fDoM=
+X-Google-Smtp-Source: ABdhPJxN+4FC6fCSw3slkr+iUqZZHmtD/YEMsm+izm8dyAttXrN/XDOUHbpAJwY1Y1aOh1ewHzNvbg==
+X-Received: by 2002:a05:6512:3503:: with SMTP id h3mr1462072lfs.564.1630648861576;
+        Thu, 02 Sep 2021 23:01:01 -0700 (PDT)
 Received: from [192.168.2.145] (46-138-26-37.dynamic.spd-mgts.ru. [46.138.26.37])
-        by smtp.googlemail.com with ESMTPSA id u10sm397071lft.252.2021.09.02.23.00.56
+        by smtp.googlemail.com with ESMTPSA id w3sm473175ljm.13.2021.09.02.23.01.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Sep 2021 23:00:57 -0700 (PDT)
-Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
- callback to genpd
+        Thu, 02 Sep 2021 23:01:01 -0700 (PDT)
+Subject: Re: [PATCH 1/3] PM: domains: Drop the performance state vote for a
+ device at detach
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -62,14 +62,14 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20210902101634.827187-1-ulf.hansson@linaro.org>
- <20210902101634.827187-4-ulf.hansson@linaro.org>
+ <20210902101634.827187-2-ulf.hansson@linaro.org>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
-Date:   Fri, 3 Sep 2021 09:00:56 +0300
+Message-ID: <08335cd4-7dc8-3b8b-d63f-374585ffa373@gmail.com>
+Date:   Fri, 3 Sep 2021 09:01:00 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210902101634.827187-4-ulf.hansson@linaro.org>
+In-Reply-To: <20210902101634.827187-2-ulf.hansson@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -78,64 +78,24 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 02.09.2021 13:16, Ulf Hansson пишет:
-> Hardware may be preprogrammed to a specific performance state, which may
-> not be zero initially during boot. This may lead to that genpd's current
-> performance state becomes inconsistent with the state of the hardware. To
-> deal with this, the driver for a device that is being attached to its
-> genpd, need to request an initial performance state vote, which is
-> typically done by calling some of the OPP APIs while probing.
+> When a device is detached from its genpd, genpd loses track of the device,
+> including its performance state vote that may have been requested for it.
 > 
-> In some cases this would lead to boilerplate code in the drivers. Let's
-> make it possible to avoid this, by adding a new optional callback to genpd
-> and invoke it per device during the attach process. In this way, the genpd
-> provider driver can inform genpd about the initial performance state that
-> is needed for the device.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/base/power/domain.c | 8 +++++---
->  include/linux/pm_domain.h   | 2 ++
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 800adf831cae..1a6f3538af8d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2640,13 +2640,15 @@ static void genpd_dev_pm_sync(struct device *dev)
->  	genpd_queue_power_off_work(pd);
->  }
->  
-> -static int genpd_get_default_performance_state(struct device *dev,
-> +static int genpd_get_default_performance_state(struct generic_pm_domain *genpd,
-> +					       struct device *dev,
->  					       unsigned int index)
->  {
->  	int pstate = of_get_required_opp_performance_state(dev->of_node, index);
->  
->  	if (pstate == -ENODEV || pstate == -EOPNOTSUPP)
-> -		return 0;
-> +		pstate = genpd->dev_get_performance_state ?
-> +			 genpd->dev_get_performance_state(genpd, dev) : 0;
->  
->  	return pstate;
->  }
-> @@ -2701,7 +2703,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->  	}
->  
->  	/* Set the default performance state */
-> -	pstate = genpd_get_default_performance_state(dev, index);
-> +	pstate = genpd_get_default_performance_state(pd, dev, index);
+> Rather than relying on the consumer driver to drop the performance state
+> vote for its device, let's do it internally in genpd when the device is
+> getting detached. In this way, we makes sure that the aggregation of the
+> votes in genpd becomes correct.
 
-If base device is suspended, then its performance state is zero.
+This is a dangerous behaviour in a case where performance state
+represents voltage. If hardware is kept active on detachment, say it's
+always-on, then it may be a disaster to drop the voltage for the active
+hardware.
 
-When device will be rpm-resumed, then its performance should be set to
-the default state.
+It's safe to drop performance state only if you assume that there is a
+firmware behind kernel which has its own layer of performance management
+and it will prevent the disaster by saying 'nope, I'm not doing this'.
 
-You're setting performance state of the wrong device, it should be the
-base device and not the virtual domain device.
-
-These all is handled properly by my patch [1]. Hence it's complicated
-for the reason.
-
-[1]
-https://patchwork.ozlabs.org/project/linux-tegra/patch/20210831135450.26070-5-digetx@gmail.com/
+The performance state should be persistent for a device and it should be
+controlled in a conjunction with runtime PM. If platform wants to drop
+performance state to zero on detachment, then this behaviour should be
+specific to that platform.
