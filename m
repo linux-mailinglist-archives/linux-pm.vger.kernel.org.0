@@ -2,153 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6D73FF5B1
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Sep 2021 23:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1F3FFA13
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 08:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347481AbhIBVhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Sep 2021 17:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S236242AbhICGB7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 02:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347471AbhIBVhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Sep 2021 17:37:21 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD13C061575
-        for <linux-pm@vger.kernel.org>; Thu,  2 Sep 2021 14:36:22 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id m26so2695274pff.3
-        for <linux-pm@vger.kernel.org>; Thu, 02 Sep 2021 14:36:22 -0700 (PDT)
+        with ESMTP id S233634AbhICGB7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 02:01:59 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F337C061760;
+        Thu,  2 Sep 2021 23:00:59 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id i28so7877293ljm.7;
+        Thu, 02 Sep 2021 23:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8y6wF+XQ52afzGRquz6577KWZV/UU/rjnNku3tx/TIU=;
-        b=kFc970RVraCTGWGhfGtzUtm6CShTtpLV6TYXR2MBGnvekHUyEEaaQSUT0tUYlYS+Nn
-         uKCZcYkaK0K3mDCNttkgSUi38AOq4FCuXmk+6T4krnNlME6t+hcN8JH3b8HlBqeQ1SK1
-         KzwIWj6/LXmU76t7TWm7sqUfT+P6slzw4wZ0s=
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=SS3V2W7eXZoP72eB0dNOwnog6SXuQ/C6UHFp2+JfZGw=;
+        b=R9dDX2T14oDoEKx683zCy++Xv/CAPNNlfzWgOaJhaFiOcwdCpmNxJ5SELcoEYEAiFy
+         M9KKB4uXxOB2d7rrmmcTEWdfGN4Yu09YpEgg0YTMr1BTKrcmNoiFH91FoMpnLdz+z3li
+         68V9RLI2aaJjRI015cLpYjuPpSRePCbs9Wbm9z7iO96yBukOUnv2jUCsjh21qIBhN5eL
+         ucdgNuXFLM571qwPSTVw6TZDWAL1diXBnkqpMBQyNCkB1CQCDVlq449Y5zUiKlnRrrwd
+         w0sfS5Cj+xNK/y4anrGdLy7Kkbp8BWb7l43eQrEfV8TdFCmIcVXZHXDyExuazqjdYBtl
+         cwCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8y6wF+XQ52afzGRquz6577KWZV/UU/rjnNku3tx/TIU=;
-        b=ZQ1W637lIHFmcLRB1Dn52TCjiv0jQFFg02iSmUR2ZEYWWJFeLwodRmNg9HIDoY2t/H
-         B9cQDlkqxwZXT7uuSmaHH+NIGGxVp1Pum9pzDEN0ue7qt4CTWsIhHqvK0wTiGiJw9AZl
-         9szxRM3WTw19i4Wkjd4WsksfSCTSh8QutanYkocLkuXWFMee8ddgQTssyUk8ijPVlQaU
-         1Tdn0kM4S9iLId5JVbcuEJZnO20LnrXcB5CnHjcwhLsnGpL1T7aveUHzn3Cl4DLfTKN2
-         ehu4pb2YAfU/rxCOPsx8wrYWopMeZUsdzksTN7puFa/AWvUDuy9wXD9tP1CyhWXLWQUx
-         qwMQ==
-X-Gm-Message-State: AOAM533IkMCvJOv0wssLkptnJrfX+5ZJ4O9YWjbwbLAsDJeD/oW7RxDp
-        iEr0l3rlqrbR0aaMjyqW9IhAEg==
-X-Google-Smtp-Source: ABdhPJyYmRju1CuAw4JTzujNjj7+qmkPyWJVyeKPIhKs5FgBhCIzTZw+RvZ6xOVOlv942yLfLLnJKg==
-X-Received: by 2002:aa7:9250:0:b0:3f9:2b90:b34f with SMTP id 16-20020aa79250000000b003f92b90b34fmr237985pfp.7.1630618582491;
-        Thu, 02 Sep 2021 14:36:22 -0700 (PDT)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:d082:352a:f346:411a])
-        by smtp.gmail.com with ESMTPSA id c68sm3167872pfc.150.2021.09.02.14.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 14:36:22 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-pm@vger.kernel.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com, badhri@google.com
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [RFC PATCH 3/3] usb: typec: Add partner power registration call
-Date:   Thu,  2 Sep 2021 14:35:02 -0700
-Message-Id: <20210902213500.3795948-4-pmalani@chromium.org>
-X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
-In-Reply-To: <20210902213500.3795948-1-pmalani@chromium.org>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SS3V2W7eXZoP72eB0dNOwnog6SXuQ/C6UHFp2+JfZGw=;
+        b=RRb+2Z4W3yhOOPXRXjGqME9OCxeUAPio4FqFEzHtq9cyGKsW2dUMqRM+FBiqKikTQh
+         DXWbZXytLfBrR+OeEIEC8//rF/7FU+D0tqhqxNGhaV7PohdtMoY+nDXX9M4aFp8TqWq+
+         L5lFF7KkYVqfIPw7ENzHr2BlW7Mp7vJUjnqEAajphkzclaQN2f1Ug3QSnv8Pv4BxX7s9
+         CjEzQ14ZSfEqn2/vnH7exazl15QDkyfVHcEVt+R8NaB0LjGU1aM6FK9jfQKM0yaBqIXm
+         a1Xm9xBX3zGRyrU+9JSsBTKBusweac6DKZQYt+JTW7hyAvRJOb+5ODrpsNrpivlOIr8/
+         1QXQ==
+X-Gm-Message-State: AOAM532Z8h8EDkie/buZkN6fF/QvoR6xpmJQrjgnG0DoXlyxqcKsSeKz
+        033d9TNNYmL5xs8SmfGuU843UlnzXM8=
+X-Google-Smtp-Source: ABdhPJyJCkOBGaqkZOl8FXnvhO3LuowRf0vib98qqnnyYHT6qHeOk/hFrHs33I31k6easfCeqUMX8w==
+X-Received: by 2002:a05:651c:11c7:: with SMTP id z7mr1606998ljo.464.1630648857737;
+        Thu, 02 Sep 2021 23:00:57 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-26-37.dynamic.spd-mgts.ru. [46.138.26.37])
+        by smtp.googlemail.com with ESMTPSA id u10sm397071lft.252.2021.09.02.23.00.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Sep 2021 23:00:57 -0700 (PDT)
+Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
+ callback to genpd
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210902101634.827187-1-ulf.hansson@linaro.org>
+ <20210902101634.827187-4-ulf.hansson@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
+Date:   Fri, 3 Sep 2021 09:00:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210902101634.827187-4-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a function to register a power supply device for a partner. Also,
-ensure that the registered power supply gets unregistered when the
-partner is removed.
+02.09.2021 13:16, Ulf Hansson пишет:
+> Hardware may be preprogrammed to a specific performance state, which may
+> not be zero initially during boot. This may lead to that genpd's current
+> performance state becomes inconsistent with the state of the hardware. To
+> deal with this, the driver for a device that is being attached to its
+> genpd, need to request an initial performance state vote, which is
+> typically done by calling some of the OPP APIs while probing.
+> 
+> In some cases this would lead to boilerplate code in the drivers. Let's
+> make it possible to avoid this, by adding a new optional callback to genpd
+> and invoke it per device during the attach process. In this way, the genpd
+> provider driver can inform genpd about the initial performance state that
+> is needed for the device.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 8 +++++---
+>  include/linux/pm_domain.h   | 2 ++
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 800adf831cae..1a6f3538af8d 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2640,13 +2640,15 @@ static void genpd_dev_pm_sync(struct device *dev)
+>  	genpd_queue_power_off_work(pd);
+>  }
+>  
+> -static int genpd_get_default_performance_state(struct device *dev,
+> +static int genpd_get_default_performance_state(struct generic_pm_domain *genpd,
+> +					       struct device *dev,
+>  					       unsigned int index)
+>  {
+>  	int pstate = of_get_required_opp_performance_state(dev->of_node, index);
+>  
+>  	if (pstate == -ENODEV || pstate == -EOPNOTSUPP)
+> -		return 0;
+> +		pstate = genpd->dev_get_performance_state ?
+> +			 genpd->dev_get_performance_state(genpd, dev) : 0;
+>  
+>  	return pstate;
+>  }
+> @@ -2701,7 +2703,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>  	}
+>  
+>  	/* Set the default performance state */
+> -	pstate = genpd_get_default_performance_state(dev, index);
+> +	pstate = genpd_get_default_performance_state(pd, dev, index);
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/usb/typec/class.c | 18 +++++++++++++++++-
- drivers/usb/typec/class.h |  2 ++
- include/linux/usb/typec.h |  5 +++++
- 3 files changed, 24 insertions(+), 1 deletion(-)
+If base device is suspended, then its performance state is zero.
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index aeef453aa658..14a898440342 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -845,11 +845,27 @@ EXPORT_SYMBOL_GPL(typec_register_partner);
-  */
- void typec_unregister_partner(struct typec_partner *partner)
- {
--	if (!IS_ERR_OR_NULL(partner))
-+	if (!IS_ERR_OR_NULL(partner)) {
-+		power_supply_unregister(partner->psy);
- 		device_unregister(&partner->dev);
-+	}
- }
- EXPORT_SYMBOL_GPL(typec_unregister_partner);
- 
-+int typec_partner_register_psy(struct typec_partner *partner, const struct power_supply_desc *desc,
-+			       const struct power_supply_config *cfg)
-+{
-+	partner->psy = power_supply_register(&partner->dev, desc, cfg);
-+	if (IS_ERR(partner->psy)) {
-+		dev_err(&partner->dev, "failed to register partner power supply (%ld)\n",
-+				PTR_ERR(partner->psy));
-+		return PTR_ERR(partner->psy);
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_register_psy);
-+
- /* ------------------------------------------------------------------------- */
- /* Type-C Cable Plugs */
- 
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index aef03eb7e152..b75b0f22d982 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -4,6 +4,7 @@
- #define __USB_TYPEC_CLASS__
- 
- #include <linux/device.h>
-+#include <linux/power_supply.h>
- #include <linux/usb/typec.h>
- 
- struct typec_mux;
-@@ -33,6 +34,7 @@ struct typec_partner {
- 	int				num_altmodes;
- 	u16				pd_revision; /* 0300H = "3.0" */
- 	enum usb_pd_svdm_ver		svdm_version;
-+	struct power_supply		*psy;
- };
- 
- struct typec_port {
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index e2e44bb1dad8..905527dab78c 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -22,6 +22,9 @@ struct typec_altmode_ops;
- struct fwnode_handle;
- struct device;
- 
-+struct power_supply_desc;
-+struct power_supply_config;
-+
- enum typec_port_type {
- 	TYPEC_PORT_SRC,
- 	TYPEC_PORT_SNK,
-@@ -132,6 +135,8 @@ int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmod
- struct typec_altmode
- *typec_partner_register_altmode(struct typec_partner *partner,
- 				const struct typec_altmode_desc *desc);
-+int typec_partner_register_psy(struct typec_partner *partner, const struct power_supply_desc *desc,
-+			       const struct power_supply_config *cfg);
- int typec_plug_set_num_altmodes(struct typec_plug *plug, int num_altmodes);
- struct typec_altmode
- *typec_plug_register_altmode(struct typec_plug *plug,
--- 
-2.33.0.153.gba50c8fa24-goog
+When device will be rpm-resumed, then its performance should be set to
+the default state.
 
+You're setting performance state of the wrong device, it should be the
+base device and not the virtual domain device.
+
+These all is handled properly by my patch [1]. Hence it's complicated
+for the reason.
+
+[1]
+https://patchwork.ozlabs.org/project/linux-tegra/patch/20210831135450.26070-5-digetx@gmail.com/
