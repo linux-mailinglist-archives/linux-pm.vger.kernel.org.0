@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D9D40083C
+	by mail.lfdr.de (Postfix) with ESMTP id 9C09E40083E
 	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 01:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350748AbhICXZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 19:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S1350746AbhICXZ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 19:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350746AbhICXZ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 19:25:26 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FC2C061757
-        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 16:24:25 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id i28so1150927ljm.7
-        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 16:24:25 -0700 (PDT)
+        with ESMTP id S242236AbhICXZ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 19:25:27 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706BDC061575
+        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 16:24:26 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id p38so1425824lfa.0
+        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 16:24:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IUwnbvSZ0rkQ9qg3kU6ANLBK6G3PxyD2rj1Sq6Ru594=;
-        b=sUGNY1nPTcv0fVc209lJ/yYIFXgs5/3ZpdMTXfK6IkUFdSDaW4BtX+u5XrbRVE1UzF
-         bcAKLSt9aucssUZqcQKTX0zkfFTAkQw+xunw0LKAJ8avPqlCa1irC8y5M8jAT2P2sDaz
-         fbrHUaUhJhal8sC4tDVOcqzu89CqngfIxaDE0s31Cgx1LQ/L+8XD7ilUgc0nbUM5rZku
-         OYTP5rRNdcuD9kcHB7RXGw6prZcCxD2zgAGBelnTHYYQj/defl81Jx4EOHJQ1Wl/GdVe
-         jAajhz47/DvdoLtA6ovWWV2gA3d8vkZiyZiHUpGXJYUWsTGBGQRYNjmPTfevI9n49krD
-         ziXQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R7uqxjyuLB/A9uxzpuHWctMI9qhXQKpKHnTYkEcX53s=;
+        b=WI36iCTCyFBYI3TbxIuHLUBoZJnJtSghjlixiZs9/sOx3lYK22LgArqHK6GW+vteqJ
+         xfypvXX6PwQnH0ET8TPLDXhYoQqdk+X9hcXwHGWgLyWXqSVZESmNZnPRpCRnDxQCQ8Ra
+         I6gl97htfmXfOYYzjBJjpzsju6XcyUbg6rpXLz5YtmyuPZ/jEgOJozflKOElcyh70m3W
+         MTcTzX0WGNoEPq+A3O4BzeHtK7a7NbPhT0V+PLKWEwvNP+AMCFQaF1g4ueKxOcGM1AYw
+         Msmcpz6fJAk18palYN3pl2aWCTKlS6BjDei27ljJ95rEJ2N97fDo7weQmQbnEiAFb4PL
+         wQtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IUwnbvSZ0rkQ9qg3kU6ANLBK6G3PxyD2rj1Sq6Ru594=;
-        b=m2+dsHrGvBNHvHX/p54w36bwVHYIsGdTff3P28tAbYNy4CwzvTS+PcY1QMiCebygcC
-         Bmex72KN21miP/6E2yl1ccX3gbdQyI9fgQ+DYP5bf2eHUVVmqTM/OafGyGIlnD5HsDXE
-         ORaPm6wOT+oZYDeu0PRuCjw4BCY5rXGTT3kF4y6e3tsaF/YeLTYguVwhFR8au1VhEb+V
-         nkXU37tLxZxlbMD1/OA33nRxJNbem0eCYiW2btK1H2I/w62Sxqi6/k2a7c7e6bLxpDqX
-         YzL5vXaWbWY9+uEsVCgZ9s/0qlqyRR1uwQlSPkyVOtwBvc4CimOHXle1ZASF/oeeUZCJ
-         eRow==
-X-Gm-Message-State: AOAM5327/o31AJy8lZe1oncVWCJWhHvlG70KSneB+1cl2CDQDefwtZJ/
-        Ixq0a1mQR8mECMqQylYazNJStw==
-X-Google-Smtp-Source: ABdhPJzzpHnQxaDu6ygc9KUcDwCLE7RpQUtyIhbADTpJPk97QOVDcVZPNTHXQUUr8nb0zb1mmpf0IQ==
-X-Received: by 2002:a05:651c:225:: with SMTP id z5mr965852ljn.409.1630711463930;
-        Fri, 03 Sep 2021 16:24:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R7uqxjyuLB/A9uxzpuHWctMI9qhXQKpKHnTYkEcX53s=;
+        b=a1hCOAHtrqhth/+TM2YcFQr+UsvOO7lEqNmc6FccZEAtuPSmW96XipsrCXd/72hTy+
+         QzIqFldfsfFxcBIShfcfEEyrtYRx1ezmix8u558D55IsSKs5JcCeIKzBOJKUDEJl0mpZ
+         i/lsRBUzFcjhXNSTjymgoaA6++o17vHywltzFgXKYhCwJhslchpsteHVSKuDnvrudw38
+         dciVBOgYXxd7sNkCayabguDMb4cq3E6acDOoY6M6WtT1okltlAeWxCvQLeqQfnCDEdPY
+         C2Tvh+LHcocKV9E6an3GmAIzX7GafczJrWsnZlwYkctdqEf3qBfAlHztr1lRa5jWwL2U
+         Z/Jw==
+X-Gm-Message-State: AOAM531NlZRKTwVCROVEQdhLjt2JadUfUK22FCnALK4H9QDWwrCwx9nl
+        wNYDnaWWmdu450ygc17M0PpqxQ==
+X-Google-Smtp-Source: ABdhPJx44XaDz7pE+2cD6TLlvDh3L5gFR8mqPzqFJ6IWl5Hl0h9mwgT+/SvWr/3haU1GYTSQ9b6/sg==
+X-Received: by 2002:a05:6512:130f:: with SMTP id x15mr948006lfu.571.1630711464776;
+        Fri, 03 Sep 2021 16:24:24 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id w3sm56924ljm.13.2021.09.03.16.24.22
+        by smtp.gmail.com with ESMTPSA id w3sm56924ljm.13.2021.09.03.16.24.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 16:24:23 -0700 (PDT)
+        Fri, 03 Sep 2021 16:24:24 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,52 +56,224 @@ Cc:     AngeloGioacchino Del Regno
         Shawn Guo <shawn.guo@linaro.org>,
         Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 0/11] interconnect: merge AP-owned support into icc-rpm
-Date:   Sat,  4 Sep 2021 02:24:10 +0300
-Message-Id: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 01/11] interconnect: icc-rpm: move bus clocks handling into qnoc_probe
+Date:   Sat,  4 Sep 2021 02:24:11 +0300
+Message-Id: <20210903232421.1384199-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
+References: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch series merges support for AP-owned and bus QoS from SDM660
-into common code (icc-rpm.c). MSM8916 and MSM8939 support code is
-extended to support these features. As I was touching these drivers, per
-Bjorn's suggestion expand DEFINE_QNODE macros (which makes adding
-QoS support much easier to review).
+All icc-rpm drivers use the same set of bus clocks. Move handling of bus
+clocks to qnoc_probe. This both simplifies the code and allows using
+qnoc_probe as device's probe funcion.
 
-Dependencies:
- - https://lore.kernel.org/linux-arm-msm/20210902054915.28689-1-shawn.guo@linaro.org/
- - https://lore.kernel.org/linux-arm-msm/20210823014003.31391-1-shawn.guo@linaro.org/
- - https://lore.kernel.org/linux-arm-msm/20210824043435.23190-1-shawn.guo@linaro.org/
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/interconnect/qcom/icc-rpm.c | 22 ++++++++++++++--------
+ drivers/interconnect/qcom/icc-rpm.h |  5 ++---
+ drivers/interconnect/qcom/msm8916.c | 13 +------------
+ drivers/interconnect/qcom/msm8939.c | 13 +------------
+ drivers/interconnect/qcom/qcs404.c  | 13 +------------
+ 5 files changed, 19 insertions(+), 47 deletions(-)
 
-Changes since v1:
- - Rebase on top a2noc clocks support patch.
- - Expand DEFINE_QNODE
- - Simplify struct qcom_icc_node by moving links to separate array
-
-----------------------------------------------------------------
-Dmitry Baryshkov (11):
-      interconnect: icc-rpm: move bus clocks handling into qnoc_probe
-      interconnect: sdm660: expand DEFINE_QNODE macros
-      interconnect: sdm660: drop default/unused values
-      interconnect: sdm660: merge common code into icc-rpm
-      interconnect: icc-rpm: add support for QoS reg offset
-      interconnect: msm8916: expand DEFINE_QNODE macros
-      interconnect: msm8916: add support for AP-owned nodes
-      interconnect: msm8939: expand DEFINE_QNODE macros
-      interconnect: msm8939: add support for AP-owned nodes
-      interconnect: qcs404: expand DEFINE_QNODE macros
-      interconnect: qcom: drop DEFINE_QNODE macro
-
- drivers/interconnect/qcom/icc-rpm.c |  263 ++++-
- drivers/interconnect/qcom/icc-rpm.h |   56 +-
- drivers/interconnect/qcom/msm8916.c | 1214 ++++++++++++++++++++--
- drivers/interconnect/qcom/msm8939.c | 1283 +++++++++++++++++++++--
- drivers/interconnect/qcom/qcs404.c  |  967 +++++++++++++++--
- drivers/interconnect/qcom/sdm660.c  | 1940 ++++++++++++++++++++++++-----------
- 6 files changed, 4815 insertions(+), 908 deletions(-)
-
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index 54de49ca7808..394f515cc88d 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -86,8 +86,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	return 0;
+ }
+ 
+-int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
+-	       const struct clk_bulk_data *cd)
++static const char * const bus_clocks[] = {
++	"bus", "bus_a",
++};
++
++int qnoc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	const struct qcom_icc_desc *desc;
+@@ -97,6 +100,8 @@ int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
+ 	struct qcom_icc_provider *qp;
+ 	struct icc_node *node;
+ 	size_t num_nodes, i;
++	const char * const * cds;
++	int cd_num;
+ 	int ret;
+ 
+ 	/* wait for the RPM proxy */
+@@ -110,7 +115,10 @@ int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
+ 	qnodes = desc->nodes;
+ 	num_nodes = desc->num_nodes;
+ 
+-	qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
++	cds = bus_clocks;
++	cd_num = ARRAY_SIZE(bus_clocks);
++
++	qp = devm_kzalloc(dev, struct_size(qp, bus_clks, cd_num), GFP_KERNEL);
+ 	if (!qp)
+ 		return -ENOMEM;
+ 
+@@ -119,12 +127,10 @@ int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	qp->bus_clks = devm_kmemdup(dev, cd, cd_size,
+-				    GFP_KERNEL);
+-	if (!qp->bus_clks)
+-		return -ENOMEM;
+-
++	for (i = 0; i < cd_num; i++)
++		qp->bus_clks[i].id = cds[i];
+ 	qp->num_clks = cd_num;
++
+ 	ret = devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+index 79a6f68249c1..f4b05c20c097 100644
+--- a/drivers/interconnect/qcom/icc-rpm.h
++++ b/drivers/interconnect/qcom/icc-rpm.h
+@@ -22,8 +22,8 @@
+  */
+ struct qcom_icc_provider {
+ 	struct icc_provider provider;
+-	struct clk_bulk_data *bus_clks;
+ 	int num_clks;
++	struct clk_bulk_data bus_clks[];
+ };
+ 
+ /**
+@@ -66,8 +66,7 @@ struct qcom_icc_desc {
+ 	}
+ 
+ 
+-int qnoc_probe(struct platform_device *pdev, size_t cd_size, int cd_num,
+-	       const struct clk_bulk_data *cd);
++int qnoc_probe(struct platform_device *pdev);
+ int qnoc_remove(struct platform_device *pdev);
+ 
+ #endif
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index fc3689c8947a..fc0d48d2997a 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -105,11 +105,6 @@ enum {
+ 	MSM8916_SNOC_PNOC_SLV,
+ };
+ 
+-static const struct clk_bulk_data msm8916_bus_clocks[] = {
+-	{ .id = "bus" },
+-	{ .id = "bus_a" },
+-};
+-
+ DEFINE_QNODE(bimc_snoc_mas, MSM8916_BIMC_SNOC_MAS, 8, -1, -1, MSM8916_BIMC_SNOC_SLV);
+ DEFINE_QNODE(bimc_snoc_slv, MSM8916_BIMC_SNOC_SLV, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_1);
+ DEFINE_QNODE(mas_apss, MSM8916_MASTER_AMPSS_M0, 8, -1, -1, MSM8916_SLAVE_EBI_CH0, MSM8916_BIMC_SNOC_MAS, MSM8916_SLAVE_AMPSS_L2);
+@@ -305,12 +300,6 @@ static struct qcom_icc_desc msm8916_pcnoc = {
+ 	.num_nodes = ARRAY_SIZE(msm8916_pcnoc_nodes),
+ };
+ 
+-static int msm8916_qnoc_probe(struct platform_device *pdev)
+-{
+-	return qnoc_probe(pdev, sizeof(msm8916_bus_clocks),
+-			  ARRAY_SIZE(msm8916_bus_clocks), msm8916_bus_clocks);
+-}
+-
+ static const struct of_device_id msm8916_noc_of_match[] = {
+ 	{ .compatible = "qcom,msm8916-bimc", .data = &msm8916_bimc },
+ 	{ .compatible = "qcom,msm8916-pcnoc", .data = &msm8916_pcnoc },
+@@ -320,7 +309,7 @@ static const struct of_device_id msm8916_noc_of_match[] = {
+ MODULE_DEVICE_TABLE(of, msm8916_noc_of_match);
+ 
+ static struct platform_driver msm8916_noc_driver = {
+-	.probe = msm8916_qnoc_probe,
++	.probe = qnoc_probe,
+ 	.remove = qnoc_remove,
+ 	.driver = {
+ 		.name = "qnoc-msm8916",
+diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
+index 20f31a1b4192..4a5a2ec64960 100644
+--- a/drivers/interconnect/qcom/msm8939.c
++++ b/drivers/interconnect/qcom/msm8939.c
+@@ -110,11 +110,6 @@ enum {
+ 	MSM8939_SNOC_PNOC_SLV,
+ };
+ 
+-static const struct clk_bulk_data msm8939_bus_clocks[] = {
+-	{ .id = "bus" },
+-	{ .id = "bus_a" },
+-};
+-
+ DEFINE_QNODE(bimc_snoc_mas, MSM8939_BIMC_SNOC_MAS, 8, -1, -1, MSM8939_BIMC_SNOC_SLV);
+ DEFINE_QNODE(bimc_snoc_slv, MSM8939_BIMC_SNOC_SLV, 16, -1, 2, MSM8939_SNOC_INT_0, MSM8939_SNOC_INT_1);
+ DEFINE_QNODE(mas_apss, MSM8939_MASTER_AMPSS_M0, 16, -1, -1, MSM8939_SLAVE_EBI_CH0, MSM8939_BIMC_SNOC_MAS, MSM8939_SLAVE_AMPSS_L2);
+@@ -326,12 +321,6 @@ static struct qcom_icc_desc msm8939_pcnoc = {
+ 	.num_nodes = ARRAY_SIZE(msm8939_pcnoc_nodes),
+ };
+ 
+-static int msm8939_qnoc_probe(struct platform_device *pdev)
+-{
+-	return qnoc_probe(pdev, sizeof(msm8939_bus_clocks),
+-			  ARRAY_SIZE(msm8939_bus_clocks), msm8939_bus_clocks);
+-}
+-
+ static const struct of_device_id msm8939_noc_of_match[] = {
+ 	{ .compatible = "qcom,msm8939-bimc", .data = &msm8939_bimc },
+ 	{ .compatible = "qcom,msm8939-pcnoc", .data = &msm8939_pcnoc },
+@@ -342,7 +331,7 @@ static const struct of_device_id msm8939_noc_of_match[] = {
+ MODULE_DEVICE_TABLE(of, msm8939_noc_of_match);
+ 
+ static struct platform_driver msm8939_noc_driver = {
+-	.probe = msm8939_qnoc_probe,
++	.probe = qnoc_probe,
+ 	.remove = qnoc_remove,
+ 	.driver = {
+ 		.name = "qnoc-msm8939",
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index 36a7e30a00be..0f2fff230b13 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -92,11 +92,6 @@ enum {
+ 	QCS404_SLAVE_LPASS,
+ };
+ 
+-static const struct clk_bulk_data qcs404_bus_clocks[] = {
+-	{ .id = "bus" },
+-	{ .id = "bus_a" },
+-};
+-
+ DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+ DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+ DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+@@ -269,12 +264,6 @@ static struct qcom_icc_desc qcs404_snoc = {
+ };
+ 
+ 
+-static int qcs404_qnoc_probe(struct platform_device *pdev)
+-{
+-	return qnoc_probe(pdev, sizeof(qcs404_bus_clocks),
+-			  ARRAY_SIZE(qcs404_bus_clocks), qcs404_bus_clocks);
+-}
+-
+ static const struct of_device_id qcs404_noc_of_match[] = {
+ 	{ .compatible = "qcom,qcs404-bimc", .data = &qcs404_bimc },
+ 	{ .compatible = "qcom,qcs404-pcnoc", .data = &qcs404_pcnoc },
+@@ -284,7 +273,7 @@ static const struct of_device_id qcs404_noc_of_match[] = {
+ MODULE_DEVICE_TABLE(of, qcs404_noc_of_match);
+ 
+ static struct platform_driver qcs404_noc_driver = {
+-	.probe = qcs404_qnoc_probe,
++	.probe = qnoc_probe,
+ 	.remove = qnoc_remove,
+ 	.driver = {
+ 		.name = "qnoc-qcs404",
+-- 
+2.33.0
 
