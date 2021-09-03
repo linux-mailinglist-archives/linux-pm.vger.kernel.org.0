@@ -2,81 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FB83FFCBC
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 11:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A303B3FFCE8
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 11:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbhICJKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 05:10:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47724 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231734AbhICJKA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Sep 2021 05:10:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 22EDB60FA0;
-        Fri,  3 Sep 2021 09:08:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1630660140;
-        bh=DcjjJ2WAyz1ejKxh5caZx2UjPxskQXotN1KC+CVTphM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AXVe52q+2qENaWaDMiNqezmL4BsUWssD8bJgO6b/o7VEIMHLNCgzHRygULaFTLwRR
-         oGz0JvrwOuCyWgZZPRJsgjb88aE0JCr9iBHnqDnHyutHvuocaJmuo0+o0dzEvLEmh3
-         rgQwV9xE7s8/DBL80QGApRESQeCjgwrWCZXPWS2g=
-Date:   Fri, 3 Sep 2021 11:08:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] PM: base: power: don't try to use non-existing RTC
- for storing data
-Message-ID: <YTHmKvYz5j8ZT9Jt@kroah.com>
-References: <20210903084937.19392-1-jgross@suse.com>
- <20210903084937.19392-2-jgross@suse.com>
- <YTHjPbklWVDVaBfK@kroah.com>
- <1b6a8f9c-2a5f-e97e-c89d-5983ceeb20e5@suse.com>
+        id S232257AbhICJS7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 3 Sep 2021 05:18:59 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:33049 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348714AbhICJS7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 05:18:59 -0400
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id BC5AC20005;
+        Fri,  3 Sep 2021 09:17:56 +0000 (UTC)
+Date:   Fri, 3 Sep 2021 11:17:55 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] PM / suspend: move userspace freeze before disk sync
+Message-ID: <20210903111755.0972850d@xps13>
+In-Reply-To: <20210903081751.3qq36nrksucqthss@skn-laptop>
+References: <20210901083442.210230-1-sean@geanix.com>
+        <CAJZ5v0j5dMDSDjhuXaZd=_J5JOP4Z09WUXfjWX_iCcT4RDisCg@mail.gmail.com>
+        <20210903081751.3qq36nrksucqthss@skn-laptop>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b6a8f9c-2a5f-e97e-c89d-5983ceeb20e5@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 03, 2021 at 11:01:58AM +0200, Juergen Gross wrote:
-> On 03.09.21 10:56, Greg Kroah-Hartman wrote:
-> > On Fri, Sep 03, 2021 at 10:49:36AM +0200, Juergen Gross wrote:
-> > > In there is no legacy RTC device, don't try to use it for storing trace
-> > > data across suspend/resume.
-> > > 
-> > > Cc: <stable@vger.kernel.org>
-> > > Signed-off-by: Juergen Gross <jgross@suse.com>
-> > > ---
-> > >   drivers/base/power/trace.c | 10 ++++++++++
-> > >   1 file changed, 10 insertions(+)
-> > > 
-> > > diff --git a/drivers/base/power/trace.c b/drivers/base/power/trace.c
-> > > index a97f33d0c59f..b7c80849455c 100644
-> > > --- a/drivers/base/power/trace.c
-> > > +++ b/drivers/base/power/trace.c
-> > > @@ -13,6 +13,7 @@
-> > >   #include <linux/export.h>
-> > >   #include <linux/rtc.h>
-> > >   #include <linux/suspend.h>
-> > > +#include <linux/init.h>
-> > >   #include <linux/mc146818rtc.h>
-> > > @@ -165,6 +166,9 @@ void generate_pm_trace(const void *tracedata, unsigned int user)
-> > >   	const char *file = *(const char **)(tracedata + 2);
-> > >   	unsigned int user_hash_value, file_hash_value;
-> > > +	if (!x86_platform.legacy.rtc)
-> > > +		return 0;
+Hi Sean,
+
+sean@geanix.com wrote on Fri, 3 Sep 2021 10:17:51 +0200:
+
+> On Thu, Sep 02, 2021 at 06:28:14PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Sep 1, 2021 at 10:35 AM Sean Nyekjaer <sean@geanix.com> wrote:  
+> > >
+> > > This fixes an issue where data remains unwritten before suspend.  
 > > 
-> > Why does the driver core code here care about a platform/arch-specific
-> > thing at all?  Did you just break all other arches?
+> > Well, it doesn't make the issue go away, it just hides it for you and
+> > it may very well expose it for someone else.  
 > 
-> This file is only compiled for x86. It depends on CONFIG_PM_TRACE_RTC,
-> which has a "depends on X86" attribute.
+> OK
+> 
+> > 
+> > In particular, note that you can compile the kernel with
+> > CONFIG_SUSPEND_SKIP_SYNC set which makes it not sync at all during
+> > system-wide suspend and this is a valid case expected to work.  It
+> > looks like this case doesn't work for you.
+> >   
+> > > UBI tried to write data, before the mtd device had been unsuspended.  
+> > 
+> > Well, that's the real problem and it can happen regardless of whether
+> > or not this patch is there.  
+> 
+> How to fix it then?
+> We can't live with devices that bricks on unsuspend :/
 
-Odd, and not obvious at all :(
+We then need to focus on UBI/UBIFS implementation (Richard is currently
+off), maybe there is more logic than just a basic retry to implement.
 
-Ok, I'll let Rafael review this...
+Thanks,
+Miquèl
