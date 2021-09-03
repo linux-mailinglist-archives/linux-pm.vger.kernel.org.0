@@ -2,196 +2,1948 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774BA40010E
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 16:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570FD400134
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 16:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbhICOLZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 10:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S235394AbhICO1H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 10:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349292AbhICOLY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 10:11:24 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C50C061575
-        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 07:10:24 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id y6so9846875lje.2
-        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 07:10:24 -0700 (PDT)
+        with ESMTP id S1349252AbhICO1H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 10:27:07 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BEBC061575;
+        Fri,  3 Sep 2021 07:26:06 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u16so8494460wrn.5;
+        Fri, 03 Sep 2021 07:26:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NDS6YJmd/noHrYYtuM8pVUla/Klqh7LYxtrcl5B7ItY=;
-        b=QBR2HY/QPe/Vl0J+eQhyqQ/usGN09vHnW7HmWPI2aWxrVEafw6jVIUut+6Lph1YHur
-         mCTKHYIuieR6CxnvXgWgemrdgl+9/peFsPEWuWNcZeZ+54rua3xRGDcHPXzELcYkcXmC
-         Qm43tRxLZwLQeSnXNXDFzhAZM7wyx2nNyxtKAnqvkO/7LE+wq2l4GjvLMdJ7oWGd1r6m
-         B+uSmhJR5fiId2PQgxaYbrkpdOXDPb34GjZj90AyftqnFhUqg+IKc+f3RuCxvXY3hiJi
-         evCr3FQBg7suCge/ZcEdX71qRGVvl1OBotAZRpP2GUgUPdOAZ1VmTQ43oWTUXU7b+uYw
-         VZyA==
+        d=gmail.com; s=20210112;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lDQYZZpfnLrPKjgoVKP7UcBSLvyhCqYUYZyT14wdIXI=;
+        b=AweR5hpacVe+/G5Ee3SrksUW88u7o8Zh/lgKw9AfH/iBbbKUJCTebCzOQxVQZGiuVZ
+         F8jIMrdk+ozXwL+WfpFzqNKfLvZKH4AT1a4WhiBTpFtALCqzs26KsJ8NXWulhZZOZMiB
+         /WzfF7LtI/O8dw2nL6otqm4RtiaH+i+CfY5CL+B/bkUIs0vliFv2jqUyYWNNYx+Gc4DQ
+         xmD+UVKkULh7FcRJeTrxhxK9FMj0sG0PmA3en3Vx0gknJ6vH0zDCcHRwGjg+pE/0L+QP
+         UTFvZdU1+3jHBbGLV3Ew8vgrThq/EuPMm41oAK7aQOjht/F6PFcAp5JfVlWSqVfy0qXQ
+         9i2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NDS6YJmd/noHrYYtuM8pVUla/Klqh7LYxtrcl5B7ItY=;
-        b=aiRTsradaMm1lZs4xXuZDVz39oqX82Db/lrpM1fnqjxvUyx6z2SOuHrdVzb/CZsOok
-         W7g1h2hbVVKRCPl7JgxsImbnJETl5aEJo7eCv4FhRU1lYXy+yPmcSSUV98aB0zj5wZj9
-         jufkiBJ+bHJEQ5TkI3UF/Y35OMiBsVeWozwH6NNfAvGkaVQsiCNfvu+niIYpmWTdlTEO
-         o/kqhsMA+CmbF6R1BzdwZhRa8erLU52vsIn0T40jj2icv1K3QZshckwtSkSvQY3bUpOw
-         6+h0qDYzoq18SK/4/CoXjt+uZzcRCpOdvNrc8KKdpKSwq1Bb3sR4zTu2rE8hrLxD8B8q
-         rCXw==
-X-Gm-Message-State: AOAM533X9msjXoKnDXvFBPJaybUppEGeuK1dVfAd8v7Z5yBb9+GYcNUG
-        8cAXCG6kKfHw+bPDzRuVmvihfuYn7T7AAVZPPES0BA==
-X-Google-Smtp-Source: ABdhPJwv/248n9Ft4WU8cznJsZHlnvsHtGB1e7bT+U/yuQFkx9KgXmnFzttHnM+hzuMrwDgOl9zmkhFyAT5IxAWEm/o=
-X-Received: by 2002:a2e:9b0b:: with SMTP id u11mr3027919lji.463.1630678222026;
- Fri, 03 Sep 2021 07:10:22 -0700 (PDT)
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lDQYZZpfnLrPKjgoVKP7UcBSLvyhCqYUYZyT14wdIXI=;
+        b=fZid8IfE5bMj2IgO68lBWr3CWsZQtgwxOeoUo4xADNlwkNAyu7zYeOY740AWouY2ck
+         68qsFnvr7Ju11PGTlefaR6Bq6n/y3c8PX93qJHUoO2g6hXGKTYC8rNelAlkLXPzy38oQ
+         ZnAF736wUnPrNYSz7UB8aByIQbbF8M/JomlZVw7xhEE0RPPZnNHA1/XGJrM93Y4/vngd
+         ussvBEvQeVwTkLr0qwSk/4Zxhr6W/209NhP3ms+vvLacbQ59xb7w6W0JZGNFscK34ejQ
+         8IAye4TNidNmUCqCuOuedeluVcgeZkjo7kdVVey83GKWgctIGpniKyYvw0PqvzcpBM+n
+         GNPg==
+X-Gm-Message-State: AOAM532FjKiAQ7+/bNjHhEvsBdXPjJSdLqyexzwkdKYY8+bEqhQYE3vb
+        1mGLPzoNSN6xfRkln1x+ZyU=
+X-Google-Smtp-Source: ABdhPJzi/UnI9rTrplBXGcuTHej/920vGobO1qad1Km4fdKGlaNcPOEnnBRTMjqrJY0f/0vvN9FzPA==
+X-Received: by 2002:a5d:6cb0:: with SMTP id a16mr4497669wra.245.1630679164559;
+        Fri, 03 Sep 2021 07:26:04 -0700 (PDT)
+Received: from ziggy.stardust ([37.223.140.66])
+        by smtp.gmail.com with ESMTPSA id y15sm4748951wrw.64.2021.09.03.07.26.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Sep 2021 07:26:03 -0700 (PDT)
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210721070904.15636-1-roger.lu@mediatek.com>
+ <20210721070904.15636-4-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v20 3/7] soc: mediatek: SVS: introduce MTK SVS engine
+Message-ID: <495a2300-ca65-9caf-1522-1c44e5892c39@gmail.com>
+Date:   Fri, 3 Sep 2021 16:26:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20210902101634.827187-1-ulf.hansson@linaro.org>
- <20210902101634.827187-4-ulf.hansson@linaro.org> <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
- <CAPDyKFr2oQnKOhKhWt_9VyBoe=HQ7Y0uZUMKTcZ05a7G9RaBYA@mail.gmail.com> <1124dae5-478f-f0ca-ea91-b6945f7c9254@gmail.com>
-In-Reply-To: <1124dae5-478f-f0ca-ea91-b6945f7c9254@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 3 Sep 2021 16:09:45 +0200
-Message-ID: <CAPDyKFqE+thX0pLTg9d-ds7Tj3hsB78EmDB1Cryh26tN3kvQDA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
- callback to genpd
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210721070904.15636-4-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 3 Sept 2021 at 12:06, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 03.09.2021 11:55, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Fri, 3 Sept 2021 at 08:00, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 02.09.2021 13:16, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> Hardware may be preprogrammed to a specific performance state, which =
-may
-> >>> not be zero initially during boot. This may lead to that genpd's curr=
-ent
-> >>> performance state becomes inconsistent with the state of the hardware=
-. To
-> >>> deal with this, the driver for a device that is being attached to its
-> >>> genpd, need to request an initial performance state vote, which is
-> >>> typically done by calling some of the OPP APIs while probing.
-> >>>
-> >>> In some cases this would lead to boilerplate code in the drivers. Let=
-'s
-> >>> make it possible to avoid this, by adding a new optional callback to =
-genpd
-> >>> and invoke it per device during the attach process. In this way, the =
-genpd
-> >>> provider driver can inform genpd about the initial performance state =
-that
-> >>> is needed for the device.
-> >>>
-> >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> >>> ---
-> >>>  drivers/base/power/domain.c | 8 +++++---
-> >>>  include/linux/pm_domain.h   | 2 ++
-> >>>  2 files changed, 7 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.=
-c
-> >>> index 800adf831cae..1a6f3538af8d 100644
-> >>> --- a/drivers/base/power/domain.c
-> >>> +++ b/drivers/base/power/domain.c
-> >>> @@ -2640,13 +2640,15 @@ static void genpd_dev_pm_sync(struct device *=
-dev)
-> >>>       genpd_queue_power_off_work(pd);
-> >>>  }
-> >>>
-> >>> -static int genpd_get_default_performance_state(struct device *dev,
-> >>> +static int genpd_get_default_performance_state(struct generic_pm_dom=
-ain *genpd,
-> >>> +                                            struct device *dev,
-> >>>                                              unsigned int index)
-> >>>  {
-> >>>       int pstate =3D of_get_required_opp_performance_state(dev->of_no=
-de, index);
-> >>>
-> >>>       if (pstate =3D=3D -ENODEV || pstate =3D=3D -EOPNOTSUPP)
-> >>> -             return 0;
-> >>> +             pstate =3D genpd->dev_get_performance_state ?
-> >>> +                      genpd->dev_get_performance_state(genpd, dev) :=
- 0;
-> >>>
-> >>>       return pstate;
-> >>>  }
-> >>> @@ -2701,7 +2703,7 @@ static int __genpd_dev_pm_attach(struct device =
-*dev, struct device *base_dev,
-> >>>       }
-> >>>
-> >>>       /* Set the default performance state */
-> >>> -     pstate =3D genpd_get_default_performance_state(dev, index);
-> >>> +     pstate =3D genpd_get_default_performance_state(pd, dev, index);
-> >>
-> >> If base device is suspended, then its performance state is zero.
-> >>
-> >> When device will be rpm-resumed, then its performance should be set to
-> >> the default state.
-> >> You're setting performance state of the wrong device, it should be the
-> Are you okay with my variant of handling the suspended device?
 
-Not sure if you intended to post this line?
 
-In any case, I am happy to help and review to move things forward.
+On 21/07/2021 09:09, Roger Lu wrote:
+> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> which calculates suitable SVS bank voltages to OPP voltage table.
+> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>  drivers/soc/mediatek/Kconfig   |   10 +
+>  drivers/soc/mediatek/Makefile  |    1 +
+>  drivers/soc/mediatek/mtk-svs.c | 1720 ++++++++++++++++++++++++++++++++
 
->
->
-> >> base device and not the virtual domain device.
-> >
-> > No I am not. :-) Let me elaborate.
-> >
-> > For the single PM domain case, 'dev' and 'base_dev' are pointing to
-> > the same device. So this works fine.
-> >
-> > For the multiple PM domain case or when attaching goes via
-> > genpd_dev_pm_attach_by_id(), 'dev' is the virtual device registered in
-> > genpd_dev_pm_attach_by_id(). In this case, it's 'dev' that is becoming
-> > attached to genpd and not the 'base_dev'. Note also that, runtime PM
-> > has not been enabled for 'dev' yet at this point and 'dev' has been
-> > assigned the same OF node as 'base_dev", to allow OF parsing to work
-> > as is for it.
-> >
-> > Moreover, to deal with runtime PM in the multiple PM domain case, the
-> > consumer driver should create a device link. Along the lines of this:
-> > device_link_add(base_dev, dev, DL_FLAG_PM_RUNTIME |
-> > DL_FLAG_STATELESS), thus assigning the virtual device ('dev') as the
-> > supplier for its consumer device ('base_dev').
-> >
-> >>
-> >> These all is handled properly by my patch [1]. Hence it's complicated
-> >> for the reason.
-> >
-> > See above. It shouldn't have to be complicated. If it still is, there
-> > is something to fix for the multiple PM domain case.
-> >> [1]
-> Alright, it actually works now on Tegra using the dev in the callback
-> for the case of multiple domains, I re-checked it. Previously, when I
-> tried that, there was a conflict in regards to OPP usage, I don't
-> remember details anymore. Maybe the recent changes that were suggested
-> by Viresh helped with that. So yes, there is no need to pass the base
-> device anymore.
+That's a lot of code. Are you sure you tried hard to just implement basic
+functionality. It'll take a long time to even understand what the driver does
+etc. If there is a minimal working version that is smaller, then that could be a
+good starting point for review.
 
-Great! So, it seems like $subject patch should be a way forward for you the=
-n?
+For example, leave alone monitor mode for now, as not all banks use it, and we
+can live with it disabled due to missing efuse data.
 
-BTW, I forgot to add your Suggested-by: tag for the patch, you
-certainly deserve at least that. Or perhaps you are fine with
-co-developed by tag?
+Please see below some random comments. I wasn't able to read and understand the
+whole driver but I have doubts about some basic building blocks of it.
 
-Kind regards
-Uffe
+>  3 files changed, 1731 insertions(+)
+>  create mode 100644 drivers/soc/mediatek/mtk-svs.c
+> 
+> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+> index fdd8bc08569e..3c3eedea35f7 100644
+> --- a/drivers/soc/mediatek/Kconfig
+> +++ b/drivers/soc/mediatek/Kconfig
+> @@ -73,4 +73,14 @@ config MTK_MMSYS
+>  	  Say yes here to add support for the MediaTek Multimedia
+>  	  Subsystem (MMSYS).
+>  
+> +config MTK_SVS
+> +	tristate "MediaTek Smart Voltage Scaling(SVS)"
+> +	depends on MTK_EFUSE && NVMEM
+> +	help
+> +	  The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> +	  which has several controllers(banks) for calculating suitable
+> +	  voltage to different power domains(CPU/GPU/CCI) according to
+> +	  chip process corner, temperatures and other factors. Then DVFS
+> +	  driver could apply SVS bank voltage to PMIC/Buck.
+> +
+>  endmenu
+> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
+> index 90270f8114ed..0e9e703c931a 100644
+> --- a/drivers/soc/mediatek/Makefile
+> +++ b/drivers/soc/mediatek/Makefile
+> @@ -7,3 +7,4 @@ obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
+>  obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
+>  obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
+>  obj-$(CONFIG_MTK_MMSYS) += mtk-mutex.o
+> +obj-$(CONFIG_MTK_SVS) += mtk-svs.o
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> new file mode 100644
+> index 000000000000..013667752ec2
+> --- /dev/null
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -0,0 +1,1720 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2020 MediaTek Inc.
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/completion.h>
+> +#include <linux/device.h>
+> +#include <linux/init.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/kthread.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/pm_qos.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/reset.h>
+> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/thermal.h>
+> +
+> +/* svs bank 1-line sw id */
+> +#define SVSB_CPU_LITTLE			BIT(0)
+> +#define SVSB_CPU_BIG			BIT(1)
+> +#define SVSB_CCI			BIT(2)
+> +#define SVSB_GPU			BIT(3)
+> +
+> +/* svs bank mode support */
+> +#define SVSB_MODE_ALL_DISABLE		0
+> +#define SVSB_MODE_INIT01		BIT(1)
+> +#define SVSB_MODE_INIT02		BIT(2)
+> +#define SVSB_MODE_MON			BIT(3)
+> +
+> +/* svs bank volt flags */
+> +#define SVSB_INIT01_VOLT_IGNORE		BIT(1)
+> +#define SVSB_INIT01_VOLT_INC_ONLY	BIT(2)
+> +#define SVSB_INIT02_RM_DVTFIXED		BIT(8)
+> +#define SVSB_MON_VOLT_IGNORE		BIT(16)
+
+Some flags get never set so they are not used. Please clean up the driver.
+
+> +
+> +/* svs bank common setting */
+> +#define SVSB_DET_CLK_EN			BIT(31)
+> +#define SVSB_TZONE_HIGH_TEMP_MAX	U32_MAX
+> +#define SVSB_RUNCONFIG_DEFAULT		0x80000000
+> +#define SVSB_DC_SIGNED_BIT		0x8000
+> +#define SVSB_INTEN_INIT0x		0x00005f01
+> +#define SVSB_INTEN_MONVOPEN		0x00ff0000
+> +#define SVSB_EN_OFF			0x0
+> +#define SVSB_EN_MASK			0x7
+> +#define SVSB_EN_INIT01			0x1
+> +#define SVSB_EN_INIT02			0x5
+> +#define SVSB_EN_MON			0x2
+> +#define SVSB_INTSTS_MONVOP		0x00ff0000
+
+Same value used for register INTEN and INTSTS.
+I suppose INTEN enables the interrupt. Is there any HW functionality to write to
+INTSTS though? It seems it is just used to flag an interrupt as handeled.
+
+> +#define SVSB_INTSTS_COMPLETE		0x1
+> +#define SVSB_INTSTS_CLEAN		0x00ffffff
+> +
+> +static DEFINE_SPINLOCK(mtk_svs_lock);
+> +
+> +/*
+> + * enum svsb_phase - svs bank phase enumeration
+> + * @SVSB_PHASE_INIT01: basic init for svs bank
+> + * @SVSB_PHASE_INIT02: svs bank can provide voltages
+> + * @SVSB_PHASE_MON: svs bank can provide voltages with thermal effect
+> + * @SVSB_PHASE_ERROR: svs bank encounters unexpected condition
+> + *
+> + * Each svs bank has its own independent phase. We enable each svs bank by
+> + * running their phase orderly. However, When svs bank encounters unexpected
+> + * condition, it will fire an irq (PHASE_ERROR) to inform svs software.
+> + *
+> + * svs bank general phase-enabled order:
+> + * SVSB_PHASE_INIT01 -> SVSB_PHASE_INIT02 -> SVSB_PHASE_MON
+> + */
+> +enum svsb_phase {
+> +	SVSB_PHASE_ERROR = 0,
+> +	SVSB_PHASE_INIT01,
+> +	SVSB_PHASE_INIT02,
+> +	SVSB_PHASE_MON,
+> +};
+> +
+> +enum svs_reg_index {
+> +	DESCHAR = 0,
+> +	TEMPCHAR,
+> +	DETCHAR,
+> +	AGECHAR,
+> +	DCCONFIG,
+> +	AGECONFIG,
+> +	FREQPCT30,
+> +	FREQPCT74,
+> +	LIMITVALS,
+> +	VBOOT,
+> +	DETWINDOW,
+> +	CONFIG,
+> +	TSCALCS,
+> +	RUNCONFIG,
+> +	SVSEN,
+> +	INIT2VALS,
+> +	DCVALUES,
+> +	AGEVALUES,
+> +	VOP30,
+> +	VOP74,
+> +	TEMP,
+> +	INTSTS,
+> +	INTSTSRAW,
+> +	INTEN,
+> +	CHKINT,
+> +	CHKSHIFT,
+> +	STATUS,
+> +	VDESIGN30,
+> +	VDESIGN74,
+> +	DVT30,
+> +	DVT74,
+> +	AGECOUNT,
+> +	SMSTATE0,
+> +	SMSTATE1,
+> +	CTL0,
+> +	DESDETSEC,
+> +	TEMPAGESEC,
+> +	CTRLSPARE0,
+> +	CTRLSPARE1,
+> +	CTRLSPARE2,
+> +	CTRLSPARE3,
+> +	CORESEL,
+> +	THERMINTST,
+> +	INTST,
+> +	THSTAGE0ST,
+> +	THSTAGE1ST,
+> +	THSTAGE2ST,
+> +	THAHBST0,
+> +	THAHBST1,
+> +	SPARE0,
+> +	SPARE1,
+> +	SPARE2,
+> +	SPARE3,
+> +	THSLPEVEB,
+> +};
+> +
+> +static const u32 svs_regs_v2[] = {
+> +	[DESCHAR]		= 0xc00,
+> +	[TEMPCHAR]		= 0xc04,
+> +	[DETCHAR]		= 0xc08,
+> +	[AGECHAR]		= 0xc0c,
+> +	[DCCONFIG]		= 0xc10,
+> +	[AGECONFIG]		= 0xc14,
+> +	[FREQPCT30]		= 0xc18,
+> +	[FREQPCT74]		= 0xc1c,
+> +	[LIMITVALS]		= 0xc20,
+> +	[VBOOT]			= 0xc24,
+> +	[DETWINDOW]		= 0xc28,
+> +	[CONFIG]		= 0xc2c,
+> +	[TSCALCS]		= 0xc30,
+> +	[RUNCONFIG]		= 0xc34,
+> +	[SVSEN]			= 0xc38,
+> +	[INIT2VALS]		= 0xc3c,
+> +	[DCVALUES]		= 0xc40,
+> +	[AGEVALUES]		= 0xc44,
+> +	[VOP30]			= 0xc48,
+> +	[VOP74]			= 0xc4c,
+> +	[TEMP]			= 0xc50,
+> +	[INTSTS]		= 0xc54,
+> +	[INTSTSRAW]		= 0xc58,
+> +	[INTEN]			= 0xc5c,
+> +	[CHKINT]		= 0xc60,
+> +	[CHKSHIFT]		= 0xc64,
+> +	[STATUS]		= 0xc68,
+> +	[VDESIGN30]		= 0xc6c,
+> +	[VDESIGN74]		= 0xc70,
+> +	[DVT30]			= 0xc74,
+> +	[DVT74]			= 0xc78,
+> +	[AGECOUNT]		= 0xc7c,
+> +	[SMSTATE0]		= 0xc80,
+> +	[SMSTATE1]		= 0xc84,
+> +	[CTL0]			= 0xc88,
+> +	[DESDETSEC]		= 0xce0,
+> +	[TEMPAGESEC]		= 0xce4,
+> +	[CTRLSPARE0]		= 0xcf0,
+> +	[CTRLSPARE1]		= 0xcf4,
+> +	[CTRLSPARE2]		= 0xcf8,
+> +	[CTRLSPARE3]		= 0xcfc,
+> +	[CORESEL]		= 0xf00,
+> +	[THERMINTST]		= 0xf04,
+> +	[INTST]			= 0xf08,
+> +	[THSTAGE0ST]		= 0xf0c,
+> +	[THSTAGE1ST]		= 0xf10,
+> +	[THSTAGE2ST]		= 0xf14,
+> +	[THAHBST0]		= 0xf18,
+> +	[THAHBST1]		= 0xf1c,
+> +	[SPARE0]		= 0xf20,
+> +	[SPARE1]		= 0xf24,
+> +	[SPARE2]		= 0xf28,
+> +	[SPARE3]		= 0xf2c,
+> +	[THSLPEVEB]		= 0xf30,
+> +};
+> +
+> +/*
+> + * struct thermal_parameter - This is for storing thermal efuse data.
+> + * We calculate thermal efuse data to produce "mts" and "bts" for
+> + * svs bank mon mode.
+> + */
+> +struct thermal_parameter {
+> +	int adc_ge_t;
+> +	int adc_oe_t;
+> +	int ge;
+> +	int oe;
+> +	int gain;
+> +	int o_vtsabb;
+> +	int o_vtsmcu1;
+> +	int o_vtsmcu2;
+> +	int o_vtsmcu3;
+> +	int o_vtsmcu4;
+> +	int o_vtsmcu5;
+> +	int degc_cali;
+> +	int adc_cali_en_t;
+> +	int o_slope;
+> +	int o_slope_sign;
+> +	int ts_id;
+> +};
+> +
+> +/*
+> + * struct svs_platform - svs platform data
+> + * @dev: svs platform device
+> + * @base: svs platform register address base
+> + * @main_clk: main clock for svs bank
+> + * @pbank: phandle of svs bank and needs to be protected by spin_lock
+> + * @banks: phandle of the banks that support
+> + * @efuse_parsing: phandle of efuse parsing function
+> + * @irqflags: irq settings flags
+> + * @rst: svs reset control
+> + * @regs: phandle to the registers map
+
+Please review the comments here. Most of the so called phandle aren't phandle at
+all. E.g. efuse_parsing is a function pointer.
+
+> + * @efuse_num: the total number of svs platform efuse
+> + * @tefuse_num: the total number of thermal efuse
+> + * @bank_num: the total number of banks
+> + * @efuse_check: the svs efuse check index
+> + * @efuse: svs platform efuse data received from NVMEM framework
+> + * @tefuse: thermal efuse data received from NVMEM framework
+> + * @name: svs platform name
+
+Please make sure comments and struct members are aligned. E.g. 'name' is not the
+last member of the struct.
+
+> + */
+> +struct svs_platform {
+> +	struct device *dev;
+> +	void __iomem *base;
+> +	struct clk *main_clk;
+> +	struct svs_bank *pbank;
+> +	struct svs_bank *banks;
+> +	bool (*efuse_parsing)(struct svs_platform *svsp);
+> +	unsigned long irqflags;
+> +	struct reset_control *rst;
+> +	const u32 *regs;
+> +	char *name;
+> +	size_t efuse_num;
+> +	size_t tefuse_num;
+> +	u32 bank_num;
+> +	u32 efuse_check;
+> +	u32 *efuse;
+> +	u32 *tefuse;
+> +};
+> +
+> +/*
+> + * struct svs_bank - svs bank representation
+> + * @dev: svs bank device
+> + * @opp_dev: device for opp table/buck control
+> + * @pd_dev: power domain device for SoC mtcmos control
+> + * @init_completion: the timeout completion for bank init
+> + * @buck: phandle of the regulator
+> + * @lock: mutex lock to protect voltage update process
+> + * @phase: bank current phase
+> + * @name: bank name
+> + * @tzone_name: thermal zone name
+> + * @buck_name: regulator name
+> + * @suspended: suspend flag of this bank
+> + * @pd_req: bank's power-domain on request
+> + * @enable_pm_runtime_ever: bank enables pm-runtime flag
+> + * @set_freqs_pct: phandle of set frequencies percent function
+> + * @get_vops: phandle of get bank voltages function
+> + * @volt_offset: bank voltage offset controlled by svs software
+> + * @mode_support: bank mode support.
+> + * @opp_freqs: signed-off frequencies from default opp table
+> + * @opp_volts: signed-off voltages from default opp table
+> + * @freqs_pct: percent of "opp_freqs / freq_base" for bank init
+> + * @volts: bank voltages
+> + * @freq_base: reference frequency for bank init
+> + * @vboot: voltage request for bank init01 stage only
+> + * @volt_step: bank voltage step
+> + * @volt_base: bank voltage base
+> + * @volt_flags: bank voltage flags
+> + * @vmax: bank voltage maximum
+> + * @vmin: bank voltage minimum
+> + * @temp: bank temperature
+> + * @temp_upper_bound: bank temperature upper bound
+> + * @temp_lower_bound: bank temperature lower bound
+> + * @tzone_high_temp: thermal zone high temperature threshold
+> + * @tzone_high_temp_offset: thermal zone high temperature offset
+> + * @tzone_low_temp: thermal zone low temperature threshold
+> + * @tzone_low_temp_offset: thermal zone low temperature offset
+> + * @core_sel: bank selection
+> + * @opp_count: bank opp count
+> + * @int_st: bank interrupt identification
+> + * @sw_id: bank software identification
+> + * @ctl0: bank thermal sensor selection
+> + * @cpu_id: cpu core id for SVS CPU only
+> + *
+> + * Other structure members which are not listed above are svs platform
+> + * efuse data for bank init
+> + */
+> +struct svs_bank {
+> +	struct device *dev;
+> +	struct device *opp_dev;
+> +	struct device *pd_dev;
+> +	struct completion init_completion;
+> +	struct regulator *buck;
+> +	struct mutex lock;	/* lock to protect voltage update process */
+> +	enum svsb_phase phase;
+> +	char *name;
+> +	char *tzone_name;
+> +	char *buck_name;
+> +	bool suspended;
+> +	bool pd_req;
+> +	bool enable_pm_runtime_ever;
+> +	void (*set_freqs_pct)(struct svs_platform *svsp);
+> +	void (*get_vops)(struct svs_platform *svsp);
+> +	s32 volt_offset;
+> +	u32 mode_support;
+
+In which concrete case do we need this? When we suspend before probe (svs_start)
+has finished?
+Please explain why we need that at all. I think a one-bit flag that shows us if
+a bank supports monitor mode should be enough.
+
+> +	u32 opp_freqs[16];
+> +	u32 opp_volts[16];
+> +	u32 freqs_pct[16];
+> +	u32 volts[16];
+> +	u32 freq_base;
+> +	u32 vboot;
+> +	u32 volt_step;
+> +	u32 volt_base;
+> +	u32 volt_flags;
+> +	u32 vmax;
+> +	u32 vmin;
+> +	u32 bts;
+> +	u32 mts;
+> +	u32 bdes;
+> +	u32 mdes;
+> +	u32 mtdes;
+> +	u32 dcbdet;
+> +	u32 dcmdet;
+> +	u32 dthi;
+> +	u32 dtlo;
+> +	u32 det_window;
+> +	u32 det_max;
+> +	u32 age_config;
+> +	u32 age_voffset_in;
+> +	u32 agem;
+> +	u32 dc_config;
+> +	u32 dc_voffset_in;
+> +	u32 dvt_fixed;
+> +	u32 vco;
+> +	u32 chk_shift;
+> +	u32 temp;
+> +	u32 temp_upper_bound;
+> +	u32 temp_lower_bound;
+> +	u32 tzone_high_temp;
+> +	u32 tzone_high_temp_offset;
+> +	u32 tzone_low_temp;
+> +	u32 tzone_low_temp_offset;
+> +	u32 core_sel;
+> +	u32 opp_count;
+> +	u32 int_st;
+> +	u32 sw_id;
+> +	u32 ctl0;
+> +	u32 cpu_id;
+> +};
+> +
+> +static u32 percent(u32 numerator, u32 denominator)
+> +{
+> +	/* If not divide 1000, "numerator * 100" will have data overflow. */
+> +	numerator /= 1000;
+> +	denominator /= 1000;
+> +
+> +	return DIV_ROUND_UP(numerator * 100, denominator);
+> +}
+> +
+> +static u32 svs_readl(struct svs_platform *svsp, enum svs_reg_index rg_i)
+> +{
+> +	return readl(svsp->base + svsp->regs[rg_i]);
+> +}
+> +
+> +static void svs_writel(struct svs_platform *svsp, u32 val,
+> +		       enum svs_reg_index rg_i)
+> +{
+> +	writel(val, svsp->base + svsp->regs[rg_i]);
+> +}
+
+Read write functions don't add a great deal, why did you decide to ecapsualte them?
+Why not use [writel,readl]_relaxed?
+
+> +
+> +static void svs_switch_bank(struct svs_platform *svsp)
+
+
+
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+
+Reading the comment, pbank needs to be protected by spin_lock but isn't here.
+What's wrong, the comment or the function?
+
+> +
+> +	svs_writel(svsp, svsb->core_sel, CORESEL);
+> +}
+> +
+> +static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt, u32 svsb_volt_step,
+> +				     u32 svsb_volt_base)
+> +{
+> +	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
+> +}
+> +
+> +static int svs_get_bank_zone_temperature(const char *tzone_name,
+> +					 int *tzone_temp)
+> +{
+> +	struct thermal_zone_device *tzd;
+> +
+> +	tzd = thermal_zone_get_zone_by_name(tzone_name);
+> +	if (IS_ERR(tzd))
+> +		return PTR_ERR(tzd);
+> +
+> +	return thermal_zone_get_temp(tzd, tzone_temp);
+> +}
+> +
+> +static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
+> +{
+> +	int tzone_temp = 0, ret = -EPERM;
+> +	u32 i, svsb_volt, opp_volt, temp_offset = 0;
+> +
+> +	mutex_lock(&svsb->lock);
+> +
+> +	/*
+> +	 * If svs bank is suspended, it means signed-off voltages are applied.
+> +	 * Don't need to update opp voltage anymore.
+> +	 */
+> +	if (svsb->suspended && !force_update) {
+> +		dev_notice(svsb->dev, "bank is suspended\n");
+> +		ret = -EPERM;
+> +		goto unlock_mutex;
+> +	}
+> +
+> +	/* Get thermal effect */
+> +	if (svsb->phase == SVSB_PHASE_MON) {
+> +		if (svsb->temp > svsb->temp_upper_bound &&
+> +		    svsb->temp < svsb->temp_lower_bound) {
+> +			dev_warn(svsb->dev, "svsb temp = 0x%x?\n", svsb->temp);
+> +			ret = -EINVAL;
+> +			goto unlock_mutex;
+> +		}
+> +
+> +		ret = svs_get_bank_zone_temperature(svsb->tzone_name,
+> +						    &tzone_temp);
+> +		if (ret) {
+> +			dev_err(svsb->dev, "no %s? (%d), run default volts\n",
+> +				svsb->tzone_name, ret);
+> +			svsb->phase = SVSB_PHASE_ERROR;
+> +		}
+> +
+> +		if (tzone_temp >= svsb->tzone_high_temp)
+> +			temp_offset += svsb->tzone_high_temp_offset;
+> +		else if (tzone_temp <= svsb->tzone_low_temp)
+> +			temp_offset += svsb->tzone_low_temp_offset;
+> +	}
+> +
+> +	/* vmin <= svsb_volt (opp_volt) <= signed-off (default) voltage */
+> +	for (i = 0; i < svsb->opp_count; i++) {
+> +		if (svsb->phase == SVSB_PHASE_MON) {
+> +			svsb_volt = max(svsb->volts[i] + svsb->volt_offset +
+> +					temp_offset, svsb->vmin);
+> +			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
+> +							     svsb->volt_step,
+> +							     svsb->volt_base);
+> +		} else if (svsb->phase == SVSB_PHASE_INIT02) {
+> +			svsb_volt = max(svsb->volts[i] + svsb->volt_offset,
+> +					svsb->vmin);
+> +			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
+> +							     svsb->volt_step,
+> +							     svsb->volt_base);
+> +		} else if (svsb->phase == SVSB_PHASE_ERROR) {
+> +			opp_volt = svsb->opp_volts[i];
+> +		} else {
+> +			dev_err(svsb->dev, "unknown phase: %u?\n", svsb->phase);
+> +			ret = -EINVAL;
+> +			goto unlock_mutex;
+> +		}
+> +
+> +		opp_volt = min(opp_volt, svsb->opp_volts[i]);
+> +		ret = dev_pm_opp_adjust_voltage(svsb->opp_dev,
+> +						svsb->opp_freqs[i],
+> +						opp_volt, opp_volt,
+> +						svsb->opp_volts[i]);
+> +		if (ret) {
+> +			dev_err(svsb->dev, "set voltage fail: %d\n", ret);
+> +			goto unlock_mutex;
+> +		}
+> +	}
+> +
+> +unlock_mutex:
+> +	mutex_unlock(&svsb->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1, u32 fx)
+> +{
+> +	u32 vx;
+> +
+> +	if (v0 == v1 || f0 == f1)
+> +		return v0;
+> +
+> +	/* *100 to have decimal fraction factor */
+> +	vx = (v0 * 100) - ((((v0 - v1) * 100) / (f0 - f1)) * (f0 - fx));
+> +
+> +	return DIV_ROUND_UP(vx, 100);
+> +}
+> +
+> +static void svs_get_vops_v2(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +	u32 temp, i;
+> +
+> +	if (svsb->phase == SVSB_PHASE_MON &&
+> +	    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
+> +		return;
+> +
+> +	temp = svs_readl(svsp, VOP74);
+> +	svsb->volts[14] = (temp >> 24) & GENMASK(7, 0);
+> +	svsb->volts[12] = (temp >> 16) & GENMASK(7, 0);
+> +	svsb->volts[10] = (temp >> 8)  & GENMASK(7, 0);
+> +	svsb->volts[8] = (temp & GENMASK(7, 0));
+> +
+> +	temp = svs_readl(svsp, VOP30);
+> +	svsb->volts[6] = (temp >> 24) & GENMASK(7, 0);
+> +	svsb->volts[4] = (temp >> 16) & GENMASK(7, 0);
+> +	svsb->volts[2] = (temp >> 8)  & GENMASK(7, 0);
+> +	svsb->volts[0] = (temp & GENMASK(7, 0));
+> +
+> +	for (i = 0; i <= 12; i += 2)
+> +		svsb->volts[i + 1] =
+> +			interpolate(svsb->freqs_pct[i],
+> +				    svsb->freqs_pct[i + 2],
+> +				    svsb->volts[i],
+> +				    svsb->volts[i + 2],
+> +				    svsb->freqs_pct[i + 1]);
+> +
+> +	svsb->volts[15] =
+> +		interpolate(svsb->freqs_pct[12],
+> +			    svsb->freqs_pct[14],
+> +			    svsb->volts[12],
+> +			    svsb->volts[14],
+> +			    svsb->freqs_pct[15]);
+> +
+> +	if (svsb->volt_flags & SVSB_INIT02_RM_DVTFIXED)
+> +		for (i = 0; i < svsb->opp_count; i++)
+> +			svsb->volts[i] -= svsb->dvt_fixed;
+> +}
+> +
+> +static void svs_set_freqs_pct_v2(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +
+> +	svs_writel(svsp,
+> +		   (svsb->freqs_pct[14] << 24) |
+> +		   (svsb->freqs_pct[12] << 16) |
+> +		   (svsb->freqs_pct[10] << 8) |
+> +		   svsb->freqs_pct[8],
+> +		   FREQPCT74);
+> +
+> +	svs_writel(svsp,
+> +		   (svsb->freqs_pct[6] << 24) |
+> +		   (svsb->freqs_pct[4] << 16) |
+> +		   (svsb->freqs_pct[2] << 8) |
+> +		   svsb->freqs_pct[0],
+> +		   FREQPCT30);
+> +}
+> +
+> +static void svs_set_bank_phase(struct svs_platform *svsp,
+> +			       enum svsb_phase target_phase)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +	u32 des_char, temp_char, det_char, limit_vals;
+> +	u32 init2vals, ts_calcs, val, filter, i;
+> +
+> +	svs_switch_bank(svsp);
+> +
+> +	des_char = (svsb->bdes << 8) | svsb->mdes;
+> +	svs_writel(svsp, des_char, DESCHAR);
+> +
+> +	temp_char = (svsb->vco << 16) | (svsb->mtdes << 8) | svsb->dvt_fixed;
+> +	svs_writel(svsp, temp_char, TEMPCHAR);
+> +
+> +	det_char = (svsb->dcbdet << 8) | svsb->dcmdet;
+> +	svs_writel(svsp, det_char, DETCHAR);
+> +
+> +	svs_writel(svsp, svsb->dc_config, DCCONFIG);
+> +	svs_writel(svsp, svsb->age_config, AGECONFIG);
+> +
+> +	if (!svsb->agem) {
+> +		svs_writel(svsp, SVSB_RUNCONFIG_DEFAULT, RUNCONFIG);
+
+All banks have agem (whatever it means) set to zero, so else branch does only
+bloat the code here. Please review the whole driver for this kind of cases to
+trim the code size down. Once the driver got accepted, adding 'agem' support
+will be an easy reviewable patch.
+
+> +	} else {
+> +		val = 0x0;
+> +
+> +		for (i = 0; i < 24; i += 2) {
+> +			filter = 0x3 << i;
+> +
+> +			if (!(svsb->age_config & filter))
+> +				val |= (0x1 << i);
+> +			else
+> +				val |= (svsb->age_config & filter);
+> +		}
+> +		svs_writel(svsp, val, RUNCONFIG);
+> +	}
+> +
+> +	svsb->set_freqs_pct(svsp);
+> +
+> +	limit_vals = (svsb->vmax << 24) | (svsb->vmin << 16) |
+> +		     (svsb->dthi << 8) | svsb->dtlo;
+> +	svs_writel(svsp, limit_vals, LIMITVALS);
+> +	svs_writel(svsp, svsb->vboot, VBOOT);
+> +	svs_writel(svsp, svsb->det_window, DETWINDOW);
+> +	svs_writel(svsp, svsb->det_max, CONFIG);
+> +
+> +	if (svsb->chk_shift)
+> +		svs_writel(svsp, svsb->chk_shift, CHKSHIFT);
+> +
+> +	if (svsb->ctl0)
+> +		svs_writel(svsp, svsb->ctl0, CTL0);
+> +
+> +	svs_writel(svsp, SVSB_INTSTS_CLEAN, INTSTS);
+> +
+> +	switch (target_phase) {
+> +	case SVSB_PHASE_INIT01:
+> +		svs_writel(svsp, SVSB_INTEN_INIT0x, INTEN);
+> +		svs_writel(svsp, SVSB_EN_INIT01, SVSEN);
+> +		break;
+> +	case SVSB_PHASE_INIT02:
+> +		svs_writel(svsp, SVSB_INTEN_INIT0x, INTEN);
+> +		init2vals = (svsb->age_voffset_in << 16) | svsb->dc_voffset_in;
+> +		svs_writel(svsp, init2vals, INIT2VALS);
+> +		svs_writel(svsp, SVSB_EN_INIT02, SVSEN);
+> +		break;
+> +	case SVSB_PHASE_MON:
+> +		ts_calcs = (svsb->bts << 12) | svsb->mts;
+> +		svs_writel(svsp, ts_calcs, TSCALCS);
+> +		svs_writel(svsp, SVSB_INTEN_MONVOPEN, INTEN);
+> +		svs_writel(svsp, SVSB_EN_MON, SVSEN);
+> +		break;
+> +	default:
+> +		WARN_ON(1);
+> +		break;
+> +	}
+> +}
+> +
+> +static inline void svs_init01_isr_handler(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +
+> +	dev_info(svsb->dev, "%s: VDN74~30:0x%08x~0x%08x, DC:0x%08x\n",
+> +		 __func__, svs_readl(svsp, VDESIGN74),
+> +		 svs_readl(svsp, VDESIGN30), svs_readl(svsp, DCVALUES));
+> +
+> +	svsb->phase = SVSB_PHASE_INIT01;
+> +	svsb->dc_voffset_in = ~(svs_readl(svsp, DCVALUES) & GENMASK(15, 0)) + 1;
+> +	if (svsb->volt_flags & SVSB_INIT01_VOLT_IGNORE ||
+> +	    (svsb->dc_voffset_in & SVSB_DC_SIGNED_BIT &&
+> +	     svsb->volt_flags & SVSB_INIT01_VOLT_INC_ONLY))
+> +		svsb->dc_voffset_in = 0;
+> +
+> +	svsb->age_voffset_in = svs_readl(svsp, AGEVALUES) & GENMASK(15, 0);
+> +
+> +	svs_writel(svsp, SVSB_EN_OFF, SVSEN);
+> +	svs_writel(svsp, SVSB_INTSTS_COMPLETE, INTSTS);
+> +
+> +	/* svs init01 clock gating */
+> +	svsb->core_sel &= ~SVSB_DET_CLK_EN;
+> +}
+> +
+> +static inline void svs_init02_isr_handler(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +
+> +	dev_info(svsb->dev, "%s: VOP74~30:0x%08x~0x%08x, DC:0x%08x\n",
+> +		 __func__, svs_readl(svsp, VOP74), svs_readl(svsp, VOP30),
+> +		 svs_readl(svsp, DCVALUES));
+> +
+> +	svsb->phase = SVSB_PHASE_INIT02;
+> +	svsb->get_vops(svsp);
+> +
+> +	svs_writel(svsp, SVSB_EN_OFF, SVSEN);
+> +	svs_writel(svsp, SVSB_INTSTS_COMPLETE, INTSTS);
+> +}
+> +
+> +static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +
+> +	svsb->phase = SVSB_PHASE_MON;
+> +	svsb->temp = svs_readl(svsp, TEMP) & GENMASK(7, 0);
+> +	svsb->get_vops(svsp);
+> +
+> +	svs_writel(svsp, SVSB_INTSTS_MONVOP, INTSTS);
+> +}
+> +
+> +static inline void svs_error_isr_handler(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +
+> +	dev_err(svsb->dev, "%s: CORESEL = 0x%08x\n",
+> +		__func__, svs_readl(svsp, CORESEL));
+> +	dev_err(svsb->dev, "SVSEN = 0x%08x, INTSTS = 0x%08x\n",
+> +		svs_readl(svsp, SVSEN), svs_readl(svsp, INTSTS));
+> +	dev_err(svsb->dev, "SMSTATE0 = 0x%08x, SMSTATE1 = 0x%08x\n",
+> +		svs_readl(svsp, SMSTATE0), svs_readl(svsp, SMSTATE1));
+> +	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl(svsp, TEMP));
+> +
+> +	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
+> +	svsb->phase = SVSB_PHASE_ERROR;
+> +
+> +	svs_writel(svsp, SVSB_EN_OFF, SVSEN);
+> +	svs_writel(svsp, SVSB_INTSTS_CLEAN, INTSTS);
+> +}
+> +
+> +static irqreturn_t svs_isr(int irq, void *data)
+> +{
+> +	struct svs_platform *svsp = data;
+> +	struct svs_bank *svsb = NULL;
+> +	unsigned long flags;
+> +	u32 idx, int_sts, svs_en;
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +		WARN_ON(!svsb);
+> +
+> +		spin_lock_irqsave(&mtk_svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +
+> +		/* Find out which svs bank fires interrupt */
+> +		if (svsb->int_st & svs_readl(svsp, INTST)) {
+
+Why are you looping over all banks to find out which bank got a pending
+interrupt? Couldn't we just read INTST and handle pending interrupts shown in
+that register?
+
+> +			spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +			continue;
+> +		}
+> +
+> +		if (!svsb->suspended) {
+
+An interrupt can fire for a suspended bank? Is that an HW limitation? Further
+more, do we need that at all? Can't we just disable interrupts globally in
+suspend and enable them in resume. It seems you are trying to work around some
+race condition between suspend/resume in an interrupt occuring.
+
+> +			svs_switch_bank(svsp);
+> +			int_sts = svs_readl(svsp, INTSTS);
+> +			svs_en = svs_readl(svsp, SVSEN) & SVSB_EN_MASK;
+> +
+> +			if (int_sts == SVSB_INTSTS_COMPLETE &&
+
+SVSB_INTSTS_COMPLETE get's written to int_sts in the different state ISR
+handlers. So it seems as if this is used for a race condition betweeen having
+finished svs_init_0[1-2]_isr_handler. Can't we just mask the interrupt until the
+handler is done?
+
+> +			    svs_en == SVSB_EN_INIT01)
+> +				svs_init01_isr_handler(svsp);
+> +			else if (int_sts == SVSB_INTSTS_COMPLETE &&
+> +				 svs_en == SVSB_EN_INIT02)
+> +				svs_init02_isr_handler(svsp);
+> +			else if (int_sts & SVSB_INTSTS_MONVOP)
+> +				svs_mon_mode_isr_handler(svsp);
+> +			else
+> +				svs_error_isr_handler(svsp);
+> +		}
+> +
+> +		spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +		break;
+> +	}
+> +
+> +	if (svsb->phase != SVSB_PHASE_INIT01)
+> +		svs_adjust_pm_opp_volts(svsb, false);
+> +
+> +	if (svsb->phase == SVSB_PHASE_INIT01 ||
+> +	    svsb->phase == SVSB_PHASE_INIT02)
+> +		complete(&svsb->init_completion);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void svs_mon_mode(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb;
+> +	unsigned long flags;
+> +	u32 idx;
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (!(svsb->mode_support & SVSB_MODE_MON))
+> +			continue;
+> +
+> +		spin_lock_irqsave(&mtk_svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +		svs_set_bank_phase(svsp, SVSB_PHASE_MON);
+> +		spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +	}
+> +}
+> +
+> +static int svs_init02(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb;
+> +	unsigned long flags, time_left;
+> +	u32 idx;
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (!(svsb->mode_support & SVSB_MODE_INIT02))
+> +			continue;
+> +
+> +		reinit_completion(&svsb->init_completion);
+> +		spin_lock_irqsave(&mtk_svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +		svs_set_bank_phase(svsp, SVSB_PHASE_INIT02);
+> +		spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +
+> +		time_left =
+> +			wait_for_completion_timeout(&svsb->init_completion,
+> +						    msecs_to_jiffies(5000));
+> +		if (!time_left) {
+> +			dev_err(svsb->dev, "init02 completion timeout\n");
+> +			return -EBUSY;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int svs_init01(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb;
+> +	struct pm_qos_request *qos_request;
+> +	unsigned long flags, time_left;
+> +	bool search_done;
+> +	int ret = 0;
+> +	u32 opp_freqs, opp_vboot, buck_volt, idx, i;
+> +
+> +	qos_request = kzalloc(sizeof(*qos_request), GFP_KERNEL);
+> +	if (!qos_request)
+> +		return -ENOMEM;
+> +
+> +	/* Let CPUs leave idle-off state for initializing svs_init01. */
+> +	cpu_latency_qos_add_request(qos_request, 0);
+> +
+> +	/*
+> +	 * Sometimes two svs banks use the same buck.
+> +	 * Therefore, we set each svs bank to vboot voltage first.
+> +	 */
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (!(svsb->mode_support & SVSB_MODE_INIT01))
+> +			continue;
+> +
+> +		search_done = false;
+> +
+> +		if (svsb->pd_req) {
+> +			ret = regulator_enable(svsb->buck);
+> +			if (ret) {
+> +				dev_err(svsb->dev, "%s enable fail: %d\n",
+> +					svsb->buck_name, ret);
+> +				goto init01_finish;
+> +			}
+> +
+> +			if (!pm_runtime_enabled(svsb->pd_dev)) {
+> +				pm_runtime_enable(svsb->pd_dev);
+> +				svsb->enable_pm_runtime_ever = true;
+> +			}
+> +
+> +			ret = pm_runtime_get_sync(svsb->pd_dev);
+> +			if (ret < 0) {
+> +				dev_err(svsb->dev, "mtcmos on fail: %d\n", ret);
+> +				goto init01_finish;
+> +			}
+> +		}
+> +
+> +		if (regulator_set_mode(svsb->buck, REGULATOR_MODE_FAST))
+> +			dev_notice(svsb->dev, "set fast mode fail\n");
+> +
+> +		/*
+> +		 * Find the fastest freq that can be run at vboot and
+> +		 * fix to that freq until svs_init01 is done.
+> +		 */
+> +		opp_vboot = svs_bank_volt_to_opp_volt(svsb->vboot,
+> +						      svsb->volt_step,
+> +						      svsb->volt_base);
+> +
+> +		for (i = 0; i < svsb->opp_count; i++) {
+> +			opp_freqs = svsb->opp_freqs[i];
+> +			if (!search_done && svsb->opp_volts[i] <= opp_vboot) {
+> +				ret = dev_pm_opp_adjust_voltage(svsb->opp_dev,
+> +								opp_freqs,
+> +								opp_vboot,
+> +								opp_vboot,
+> +								opp_vboot);
+> +				if (ret) {
+> +					dev_err(svsb->dev,
+> +						"set voltage fail: %d\n", ret);
+> +					goto init01_finish;
+> +				}
+> +
+> +				search_done = true;
+> +			} else {
+> +				dev_pm_opp_disable(svsb->opp_dev,
+> +						   svsb->opp_freqs[i]);
+> +			}
+> +		}
+> +	}
+> +
+> +	/* svs bank init01 begins */
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (!(svsb->mode_support & SVSB_MODE_INIT01))
+> +			continue;
+> +
+> +		opp_vboot = svs_bank_volt_to_opp_volt(svsb->vboot,
+> +						      svsb->volt_step,
+> +						      svsb->volt_base);
+> +
+> +		buck_volt = regulator_get_voltage(svsb->buck);
+> +		if (buck_volt != opp_vboot) {
+> +			dev_err(svsb->dev,
+> +				"buck voltage: %u, expected vboot: %u\n",
+> +				buck_volt, opp_vboot);
+> +			ret = -EPERM;
+> +			goto init01_finish;
+> +		}
+> +
+> +		spin_lock_irqsave(&mtk_svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +		svs_set_bank_phase(svsp, SVSB_PHASE_INIT01);
+> +		spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +
+> +		time_left =
+> +			wait_for_completion_timeout(&svsb->init_completion,
+> +						    msecs_to_jiffies(5000));
+> +		if (!time_left) {
+> +			dev_err(svsb->dev, "init01 completion timeout\n");
+> +			ret = -EBUSY;
+> +			goto init01_finish;
+> +		}
+> +	}
+> +
+> +init01_finish:
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (!(svsb->mode_support & SVSB_MODE_INIT01))
+> +			continue;
+> +
+> +		for (i = 0; i < svsb->opp_count; i++)
+> +			dev_pm_opp_enable(svsb->opp_dev, svsb->opp_freqs[i]);
+> +
+> +		if (regulator_set_mode(svsb->buck, REGULATOR_MODE_NORMAL))
+> +			dev_notice(svsb->dev, "fail to set normal mode\n");
+> +
+> +		if (svsb->pd_req) {
+> +			if (pm_runtime_put_sync(svsb->pd_dev))
+> +				dev_err(svsb->dev, "mtcmos off fail\n");
+> +
+> +			if (svsb->enable_pm_runtime_ever) {
+> +				pm_runtime_disable(svsb->pd_dev);
+> +				svsb->enable_pm_runtime_ever = false;
+> +			}
+> +
+> +			if (regulator_disable(svsb->buck))
+> +				dev_err(svsb->dev, "%s disable fail: %d\n",
+> +					svsb->buck_name, ret);
+> +		}
+> +	}
+> +
+> +	cpu_latency_qos_remove_request(qos_request);
+> +	kfree(qos_request);
+> +
+> +	return ret;
+> +}
+> +
+> +static int svs_start(struct svs_platform *svsp)
+> +{
+> +	int ret;
+> +
+> +	ret = svs_init01(svsp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = svs_init02(svsp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	svs_mon_mode(svsp);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct device *svs_get_subsys_device(struct svs_platform *svsp,
+> +					    const char *node_name)
+> +{
+> +	struct platform_device *pdev;
+> +	struct device_node *np;
+> +
+> +	np = of_find_node_by_name(NULL, node_name);
+> +	if (!np) {
+> +		dev_err(svsp->dev, "cannot find %s node\n", node_name);
+> +		return ERR_PTR(-ENODEV);
+> +	}
+> +
+> +	pdev = of_find_device_by_node(np);
+> +	if (!pdev) {
+> +		of_node_put(np);
+> +		dev_err(svsp->dev, "cannot find pdev by %s\n", node_name);
+> +		return ERR_PTR(-ENXIO);
+> +	}
+> +
+> +	of_node_put(np);
+> +
+> +	return &pdev->dev;
+> +}
+> +
+> +static struct device *svs_add_device_link(struct svs_platform *svsp,
+> +					  const char *node_name)
+> +{
+> +	struct device *dev;
+> +	struct device_link *sup_link;
+> +
+> +	if (!node_name) {
+> +		dev_err(svsp->dev, "node name cannot be null\n");
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+> +	dev = svs_get_subsys_device(svsp, node_name);
+> +	if (IS_ERR(dev))
+> +		return dev;
+> +
+> +	sup_link = device_link_add(svsp->dev, dev,
+> +				   DL_FLAG_AUTOREMOVE_CONSUMER);
+> +	if (!sup_link) {
+> +		dev_err(svsp->dev, "sup_link is NULL\n");
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+> +	if (sup_link->supplier->links.status != DL_DEV_DRIVER_BOUND)
+> +		return ERR_PTR(-EPROBE_DEFER);
+> +
+> +	return dev;
+> +}
+> +
+> +static int svs_resource_setup(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb;
+> +	struct dev_pm_opp *opp;
+> +	unsigned long freq;
+> +	int count, ret;
+> +	u32 idx, i;
+> +
+> +	dev_set_drvdata(svsp->dev, svsp);
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		switch (svsb->sw_id) {
+> +		case SVSB_CPU_LITTLE:
+> +			svsb->name = "SVSB_CPU_LITTLE";
+> +			break;
+> +		case SVSB_CPU_BIG:
+> +			svsb->name = "SVSB_CPU_BIG";
+> +			break;
+> +		case SVSB_CCI:
+> +			svsb->name = "SVSB_CCI";
+> +			break;
+> +		case SVSB_GPU:
+> +			svsb->name = "SVSB_GPU";
+> +			break;
+
+Why not set the name dircetly in svs_mt8183_banks?
+
+> +		default:
+> +			WARN_ON(1);
+> +			return -EINVAL;
+> +		}
+> +
+> +		svsb->dev = devm_kzalloc(svsp->dev, sizeof(*svsb->dev),
+> +					 GFP_KERNEL);
+> +		if (!svsb->dev)
+> +			return -ENOMEM;
+> +
+> +		ret = dev_set_name(svsb->dev, "%s", svsb->name);
+> +		if (ret)
+> +			return ret;
+> +
+> +		dev_set_drvdata(svsb->dev, svsp);
+> +
+> +		ret = dev_pm_opp_of_add_table(svsb->opp_dev);
+> +		if (ret) {
+> +			dev_err(svsb->dev, "add opp table fail: %d\n", ret);
+> +			return ret;
+> +		}
+> +
+> +		mutex_init(&svsb->lock);
+> +		init_completion(&svsb->init_completion);
+> +
+> +		svsb->buck = devm_regulator_get_optional(svsb->opp_dev,
+> +							 svsb->buck_name);
+> +		if (IS_ERR(svsb->buck)) {
+> +			dev_err(svsb->dev, "cannot get \"%s-supply\"\n",
+> +				svsb->buck_name);
+> +			return PTR_ERR(svsb->buck);
+> +		}
+> +
+> +		count = dev_pm_opp_get_opp_count(svsb->opp_dev);
+> +		if (svsb->opp_count != count) {
+> +			dev_err(svsb->dev,
+> +				"opp_count not \"%u\" but get \"%d\"?\n",
+> +				svsb->opp_count, count);
+> +			return count;
+> +		}
+> +
+> +		for (i = 0, freq = U32_MAX; i < svsb->opp_count; i++, freq--) {
+> +			opp = dev_pm_opp_find_freq_floor(svsb->opp_dev, &freq);
+> +			if (IS_ERR(opp)) {
+> +				dev_err(svsb->dev, "cannot find freq = %ld\n",
+> +					PTR_ERR(opp));
+> +				return PTR_ERR(opp);
+> +			}
+> +
+> +			svsb->opp_freqs[i] = freq;
+> +			svsb->opp_volts[i] = dev_pm_opp_get_voltage(opp);
+> +			svsb->freqs_pct[i] = percent(svsb->opp_freqs[i],
+> +						     svsb->freq_base);
+> +			dev_pm_opp_put(opp);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
+
+Is it me or do we always return true? Please make sure that the code is clean
+and return types make sense.
+
+> +{
+> +	struct thermal_parameter tp;
+> +	struct svs_bank *svsb;
+> +	bool mon_mode_support = true;
+> +	int format[6], x_roomt[6], tb_roomt = 0;
+> +	struct nvmem_cell *cell;
+> +	u32 idx, i, ft_pgm, mts, temp0, temp1, temp2;
+> +
+> +	for (i = 0; i < svsp->efuse_num; i++)
+> +		if (svsp->efuse[i])
+> +			dev_info(svsp->dev, "M_HW_RES%d: 0x%08x\n",
+> +				 i, svsp->efuse[i]);
+> +
+> +	/* Svs efuse parsing */
+> +	ft_pgm = (svsp->efuse[0] >> 4) & GENMASK(3, 0);
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		if (ft_pgm <= 1)
+> +			svsb->volt_flags |= SVSB_INIT01_VOLT_IGNORE;
+> +
+> +		switch (svsb->sw_id) {
+> +		case SVSB_CPU_LITTLE:
+> +			svsb->bdes = svsp->efuse[16] & GENMASK(7, 0);
+> +			svsb->mdes = (svsp->efuse[16] >> 8) & GENMASK(7, 0);
+> +			svsb->dcbdet = (svsp->efuse[16] >> 16) & GENMASK(7, 0);
+> +			svsb->dcmdet = (svsp->efuse[16] >> 24) & GENMASK(7, 0);
+> +			svsb->mtdes  = (svsp->efuse[17] >> 16) & GENMASK(7, 0);
+> +
+> +			if (ft_pgm <= 3)
+> +				svsb->volt_offset += 10;
+> +			else
+> +				svsb->volt_offset += 2;
+> +			break;
+> +		case SVSB_CPU_BIG:
+> +			svsb->bdes = svsp->efuse[18] & GENMASK(7, 0);
+> +			svsb->mdes = (svsp->efuse[18] >> 8) & GENMASK(7, 0);
+> +			svsb->dcbdet = (svsp->efuse[18] >> 16) & GENMASK(7, 0);
+> +			svsb->dcmdet = (svsp->efuse[18] >> 24) & GENMASK(7, 0);
+> +			svsb->mtdes  = svsp->efuse[17] & GENMASK(7, 0);
+> +
+> +			if (ft_pgm <= 3)
+> +				svsb->volt_offset += 15;
+> +			else
+> +				svsb->volt_offset += 12;
+> +			break;
+> +		case SVSB_CCI:
+> +			svsb->bdes = svsp->efuse[4] & GENMASK(7, 0);
+> +			svsb->mdes = (svsp->efuse[4] >> 8) & GENMASK(7, 0);
+> +			svsb->dcbdet = (svsp->efuse[4] >> 16) & GENMASK(7, 0);
+> +			svsb->dcmdet = (svsp->efuse[4] >> 24) & GENMASK(7, 0);
+> +			svsb->mtdes  = (svsp->efuse[5] >> 16) & GENMASK(7, 0);
+> +
+> +			if (ft_pgm <= 3)
+> +				svsb->volt_offset += 10;
+> +			else
+> +				svsb->volt_offset += 2;
+> +			break;
+> +		case SVSB_GPU:
+> +			svsb->bdes = svsp->efuse[6] & GENMASK(7, 0);
+> +			svsb->mdes = (svsp->efuse[6] >> 8) & GENMASK(7, 0);
+> +			svsb->dcbdet = (svsp->efuse[6] >> 16) & GENMASK(7, 0);
+> +			svsb->dcmdet = (svsp->efuse[6] >> 24) & GENMASK(7, 0);
+> +			svsb->mtdes  = svsp->efuse[5] & GENMASK(7, 0);
+> +
+> +			if (ft_pgm >= 2) {
+> +				svsb->freq_base = 800000000; /* 800MHz */
+> +				svsb->dvt_fixed = 2;
+> +			}
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Get thermal efuse by nvmem */
+> +	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
+> +	if (IS_ERR_OR_NULL(cell)) {
+> +		dev_err(svsp->dev, "no thermal cell, no mon mode\n");
+> +		for (idx = 0; idx < svsp->bank_num; idx++) {
+> +			svsb = &svsp->banks[idx];
+> +			svsb->mode_support &= ~SVSB_MODE_MON;
+> +		}
+> +
+> +		return true;
+> +	}
+> +
+> +	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_num);
+> +	svsp->tefuse_num /= sizeof(u32);
+> +	nvmem_cell_put(cell);
+> +
+> +	/* Thermal efuse parsing */
+> +	tp.adc_ge_t = (svsp->tefuse[1] >> 22) & GENMASK(9, 0);
+> +	tp.adc_oe_t = (svsp->tefuse[1] >> 12) & GENMASK(9, 0);
+> +
+> +	tp.o_vtsmcu1 = (svsp->tefuse[0] >> 17) & GENMASK(8, 0);
+> +	tp.o_vtsmcu2 = (svsp->tefuse[0] >> 8) & GENMASK(8, 0);
+> +	tp.o_vtsmcu3 = svsp->tefuse[1] & GENMASK(8, 0);
+> +	tp.o_vtsmcu4 = (svsp->tefuse[2] >> 23) & GENMASK(8, 0);
+> +	tp.o_vtsmcu5 = (svsp->tefuse[2] >> 5) & GENMASK(8, 0);
+> +	tp.o_vtsabb = (svsp->tefuse[2] >> 14) & GENMASK(8, 0);
+> +
+> +	tp.degc_cali = (svsp->tefuse[0] >> 1) & GENMASK(5, 0);
+> +	tp.adc_cali_en_t = svsp->tefuse[0] & BIT(0);
+> +	tp.o_slope_sign = (svsp->tefuse[0] >> 7) & BIT(0);
+> +
+> +	tp.ts_id = (svsp->tefuse[1] >> 9) & BIT(0);
+> +	tp.o_slope = (svsp->tefuse[0] >> 26) & GENMASK(5, 0);
+> +
+> +	if (tp.adc_cali_en_t == 1) {
+> +		if (!tp.ts_id)
+> +			tp.o_slope = 0;
+> +
+> +		if (tp.adc_ge_t < 265 || tp.adc_ge_t > 758 ||
+> +		    tp.adc_oe_t < 265 || tp.adc_oe_t > 758 ||
+> +		    tp.o_vtsmcu1 < -8 || tp.o_vtsmcu1 > 484 ||
+> +		    tp.o_vtsmcu2 < -8 || tp.o_vtsmcu2 > 484 ||
+> +		    tp.o_vtsmcu3 < -8 || tp.o_vtsmcu3 > 484 ||
+> +		    tp.o_vtsmcu4 < -8 || tp.o_vtsmcu4 > 484 ||
+> +		    tp.o_vtsmcu5 < -8 || tp.o_vtsmcu5 > 484 ||
+> +		    tp.o_vtsabb < -8 || tp.o_vtsabb > 484 ||
+> +		    tp.degc_cali < 1 || tp.degc_cali > 63) {
+> +			dev_err(svsp->dev, "bad thermal efuse, no mon mode\n");
+> +			mon_mode_support = false;
+> +		}
+> +	} else {
+> +		dev_err(svsp->dev, "no thermal efuse, no mon mode\n");
+> +		mon_mode_support = false;
+> +	}
+> +
+> +	if (!mon_mode_support) {
+> +		for (idx = 0; idx < svsp->bank_num; idx++) {
+> +			svsb = &svsp->banks[idx];
+> +			svsb->mode_support &= ~SVSB_MODE_MON;
+> +		}
+> +
+> +		return true;
+> +	}
+> +
+> +	tp.ge = ((tp.adc_ge_t - 512) * 10000) / 4096;
+> +	tp.oe = (tp.adc_oe_t - 512);
+> +	tp.gain = (10000 + tp.ge);
+> +
+> +	format[0] = (tp.o_vtsmcu1 + 3350 - tp.oe);
+> +	format[1] = (tp.o_vtsmcu2 + 3350 - tp.oe);
+> +	format[2] = (tp.o_vtsmcu3 + 3350 - tp.oe);
+> +	format[3] = (tp.o_vtsmcu4 + 3350 - tp.oe);
+> +	format[4] = (tp.o_vtsmcu5 + 3350 - tp.oe);
+> +	format[5] = (tp.o_vtsabb + 3350 - tp.oe);
+> +
+> +	for (i = 0; i < 6; i++)
+> +		x_roomt[i] = (((format[i] * 10000) / 4096) * 10000) / tp.gain;
+> +
+> +	temp0 = (10000 * 100000 / tp.gain) * 15 / 18;
+> +
+> +	if (!tp.o_slope_sign)
+> +		mts = (temp0 * 10) / (1534 + tp.o_slope * 10);
+> +	else
+> +		mts = (temp0 * 10) / (1534 - tp.o_slope * 10);
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +		svsb->mts = mts;
+> +
+> +		switch (svsb->sw_id) {
+> +		case SVSB_CPU_LITTLE:
+> +			tb_roomt = x_roomt[3];
+> +			break;
+> +		case SVSB_CPU_BIG:
+> +			tb_roomt = x_roomt[4];
+> +			break;
+> +		case SVSB_CCI:
+> +			tb_roomt = x_roomt[3];
+> +			break;
+> +		case SVSB_GPU:
+> +			tb_roomt = x_roomt[1];
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		temp0 = (tp.degc_cali * 10 / 2);
+> +		temp1 = ((10000 * 100000 / 4096 / tp.gain) *
+> +			 tp.oe + tb_roomt * 10) * 15 / 18;
+> +
+> +		if (!tp.o_slope_sign)
+> +			temp2 = temp1 * 100 / (1534 + tp.o_slope * 10);
+> +		else
+> +			temp2 = temp1 * 100 / (1534 - tp.o_slope * 10);
+> +
+> +		svsb->bts = (temp0 + temp2 - 250) * 4 / 10;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool svs_is_supported(struct svs_platform *svsp)
+> +{
+> +	struct nvmem_cell *cell;
+> +
+> +	/* Get svs efuse by nvmem */
+> +	cell = nvmem_cell_get(svsp->dev, "svs-calibration-data");
+> +	if (IS_ERR_OR_NULL(cell)) {
+> +		dev_err(svsp->dev,
+> +			"no \"svs-calibration-data\" from dts? disable svs\n");
+> +		return false;
+> +	}
+> +
+> +	svsp->efuse = nvmem_cell_read(cell, &svsp->efuse_num);
+> +	svsp->efuse_num /= sizeof(u32);
+> +	nvmem_cell_put(cell);
+> +
+> +	if (!svsp->efuse[svsp->efuse_check]) {
+> +		dev_err(svsp->dev, "svs_efuse[%u] = 0x%x?\n",
+> +			svsp->efuse_check, svsp->efuse[svsp->efuse_check]);
+> +		return false;
+> +	}
+> +
+> +	return svsp->efuse_parsing(svsp);
+> +}
+> +
+> +static int svs_suspend(struct device *dev)
+> +{
+> +	struct svs_platform *svsp = dev_get_drvdata(dev);
+> +	struct svs_bank *svsb;
+> +	unsigned long flags;
+> +	int ret;
+> +	u32 idx;
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		/* Wait if svs_isr() is still in process. */
+> +		spin_lock_irqsave(&mtk_svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +		svs_switch_bank(svsp);
+> +		svs_writel(svsp, SVSB_EN_OFF, SVSEN);
+> +		svs_writel(svsp, SVSB_INTSTS_CLEAN, INTSTS);
+> +		spin_unlock_irqrestore(&mtk_svs_lock, flags);
+> +
+> +		svsb->suspended = true;
+> +		if (svsb->phase != SVSB_PHASE_INIT01) {
+> +			svsb->phase = SVSB_PHASE_ERROR;
+> +			svs_adjust_pm_opp_volts(svsb, true);
+> +		}
+> +	}
+> +
+> +	ret = reset_control_assert(svsp->rst);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "cannot assert reset %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	clk_disable_unprepare(svsp->main_clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int svs_resume(struct device *dev)
+> +{
+> +	struct svs_platform *svsp = dev_get_drvdata(dev);
+> +	struct svs_bank *svsb;
+> +	int ret;
+> +	u32 idx;
+> +
+> +	ret = clk_prepare_enable(svsp->main_clk);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "cannot enable main_clk, disable svs\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = reset_control_deassert(svsp->rst);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "cannot deassert reset %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +		svsb->suspended = false;
+> +	}
+> +
+> +	ret = svs_init02(svsp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	svs_mon_mode(svsp);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct svs_bank svs_mt8183_banks[] = {
+> +	{
+> +		.sw_id			= SVSB_CPU_LITTLE,
+> +		.set_freqs_pct		= svs_set_freqs_pct_v2,
+> +		.get_vops		= svs_get_vops_v2,
+> +		.cpu_id			= 0,
+> +		.tzone_name		= "tzts4",
+> +		.buck_name		= "proc",
+> +		.pd_req			= false,
+> +		.volt_flags		= SVSB_INIT01_VOLT_INC_ONLY,
+> +		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02,
+> +		.opp_count		= 16,
+> +		.freq_base		= 1989000000,
+> +		.vboot			= 0x30,
+> +		.volt_step		= 6250,
+> +		.volt_base		= 500000,
+> +		.volt_offset		= 0,
+> +		.vmax			= 0x64,
+> +		.vmin			= 0x18,
+> +		.dthi			= 0x1,
+> +		.dtlo			= 0xfe,
+> +		.det_window		= 0xa28,
+> +		.det_max		= 0xffff,
+> +		.age_config		= 0x555555,
+> +		.agem			= 0,
+> +		.dc_config		= 0x555555,
+> +		.dvt_fixed		= 0x7,
+> +		.vco			= 0x10,
+> +		.chk_shift		= 0x77,
+> +		.temp_upper_bound	= 0x64,
+> +		.temp_lower_bound	= 0xb2,
+> +		.tzone_high_temp	= SVSB_TZONE_HIGH_TEMP_MAX,
+> +		.tzone_low_temp		= 25000,
+> +		.tzone_low_temp_offset	= 0,
+> +		.core_sel		= 0x8fff0000,
+> +		.int_st			= BIT(0),
+> +		.ctl0			= 0x00010001,
+
+Can we try to make that data structure smaller. I'm struggeling to understand
+how this all works together.
+Apart from that I think it would make sense to describe the banks in DT. Maybe
+we can find a way then to create the device links using phandles instead of
+hard-code that.
+Please try to find a balanca between information in DTS and information
+hardcoded in the driver. As for example done for mkt-pm-domains driver.
+
+> +	},
+> +	{
+> +		.sw_id			= SVSB_CPU_BIG,
+> +		.set_freqs_pct		= svs_set_freqs_pct_v2,
+> +		.get_vops		= svs_get_vops_v2,
+> +		.cpu_id			= 4,
+> +		.tzone_name		= "tzts5",
+> +		.buck_name		= "proc",
+> +		.pd_req			= false,
+> +		.volt_flags		= SVSB_INIT01_VOLT_INC_ONLY,
+> +		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02,
+> +		.opp_count		= 16,
+> +		.freq_base		= 1989000000,
+> +		.vboot			= 0x30,
+> +		.volt_step		= 6250,
+> +		.volt_base		= 500000,
+> +		.volt_offset		= 0,
+> +		.vmax			= 0x58,
+> +		.vmin			= 0x10,
+> +		.dthi			= 0x1,
+> +		.dtlo			= 0xfe,
+> +		.det_window		= 0xa28,
+> +		.det_max		= 0xffff,
+> +		.age_config		= 0x555555,
+> +		.agem			= 0,
+> +		.dc_config		= 0x555555,
+> +		.dvt_fixed		= 0x7,
+> +		.vco			= 0x10,
+> +		.chk_shift		= 0x77,
+> +		.temp_upper_bound	= 0x64,
+> +		.temp_lower_bound	= 0xb2,
+> +		.tzone_high_temp	= SVSB_TZONE_HIGH_TEMP_MAX,
+> +		.tzone_low_temp		= 25000,
+> +		.tzone_low_temp_offset	= 0,
+> +		.core_sel		= 0x8fff0001,
+> +		.int_st			= BIT(1),
+> +		.ctl0			= 0x00000001,
+> +	},
+> +	{
+> +		.sw_id			= SVSB_CCI,
+> +		.set_freqs_pct		= svs_set_freqs_pct_v2,
+> +		.get_vops		= svs_get_vops_v2,
+> +		.tzone_name		= "tzts4",
+> +		.buck_name		= "proc",
+> +		.pd_req			= false,
+> +		.volt_flags		= SVSB_INIT01_VOLT_INC_ONLY,
+> +		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02,
+> +		.opp_count		= 16,
+> +		.freq_base		= 1196000000,
+> +		.vboot			= 0x30,
+> +		.volt_step		= 6250,
+> +		.volt_base		= 500000,
+> +		.volt_offset		= 0,
+> +		.vmax			= 0x64,
+> +		.vmin			= 0x18,
+> +		.dthi			= 0x1,
+> +		.dtlo			= 0xfe,
+> +		.det_window		= 0xa28,
+> +		.det_max		= 0xffff,
+> +		.age_config		= 0x555555,
+> +		.agem			= 0,
+> +		.dc_config		= 0x555555,
+> +		.dvt_fixed		= 0x7,
+> +		.vco			= 0x10,
+> +		.chk_shift		= 0x77,
+> +		.temp_upper_bound	= 0x64,
+> +		.temp_lower_bound	= 0xb2,
+> +		.tzone_high_temp	= SVSB_TZONE_HIGH_TEMP_MAX,
+> +		.tzone_low_temp		= 25000,
+> +		.tzone_low_temp_offset	= 0,
+> +		.core_sel		= 0x8fff0002,
+> +		.int_st			= BIT(2),
+> +		.ctl0			= 0x00100003,
+> +	},
+> +	{
+> +		.sw_id			= SVSB_GPU,
+> +		.set_freqs_pct		= svs_set_freqs_pct_v2,
+> +		.get_vops		= svs_get_vops_v2,
+> +		.tzone_name		= "tzts2",
+> +		.buck_name		= "mali",
+> +		.pd_req			= true,
+> +		.volt_flags		= SVSB_INIT01_VOLT_INC_ONLY,
+> +		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02 |
+> +					  SVSB_MODE_MON,
+> +		.opp_count		= 16,
+> +		.freq_base		= 900000000,
+> +		.vboot			= 0x30,
+> +		.volt_step		= 6250,
+> +		.volt_base		= 500000,
+> +		.volt_offset		= 0,
+> +		.vmax			= 0x40,
+> +		.vmin			= 0x14,
+> +		.dthi			= 0x1,
+> +		.dtlo			= 0xfe,
+> +		.det_window		= 0xa28,
+> +		.det_max		= 0xffff,
+> +		.age_config		= 0x555555,
+> +		.agem			= 0,
+> +		.dc_config		= 0x555555,
+> +		.dvt_fixed		= 0x3,
+> +		.vco			= 0x10,
+> +		.chk_shift		= 0x77,
+> +		.temp_upper_bound	= 0x64,
+> +		.temp_lower_bound	= 0xb2,
+> +		.tzone_high_temp	= SVSB_TZONE_HIGH_TEMP_MAX,
+> +		.tzone_low_temp		= 25000,
+> +		.tzone_low_temp_offset	= 3,
+> +		.core_sel		= 0x8fff0003,
+> +		.int_st			= BIT(3),
+> +		.ctl0			= 0x00050001,
+> +	},
+> +};
+> +
+> +static int svs_get_svs_mt8183_platform_data(struct svs_platform *svsp)
+> +{
+> +	struct device *dev;
+> +	struct svs_bank *svsb;
+> +	u32 idx;
+> +
+> +	svsp->name = "mt8183-svs";
+> +	svsp->banks = svs_mt8183_banks;
+> +	svsp->efuse_parsing = svs_mt8183_efuse_parsing;
+> +	svsp->regs = svs_regs_v2;
+> +	svsp->irqflags = IRQF_TRIGGER_LOW;
+> +	svsp->rst = NULL;
+> +	svsp->bank_num = ARRAY_SIZE(svs_mt8183_banks);
+> +	svsp->efuse_check = 2;
+> +
+
+We are mixing up platform data with a SoC specific probe function, please split
+that.
+
+> +	dev = svs_add_device_link(svsp, "thermal");
+> +	if (IS_ERR(dev))
+> +		return PTR_ERR(dev);
+> +
+> +	for (idx = 0; idx < svsp->bank_num; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		switch (svsb->sw_id) {
+> +		case SVSB_CPU_LITTLE:
+> +		case SVSB_CPU_BIG:
+> +			svsb->opp_dev = get_cpu_device(svsb->cpu_id);
+> +			break;
+> +		case SVSB_CCI:
+> +			svsb->opp_dev = svs_add_device_link(svsp, "cci");
+> +			break;
+> +		case SVSB_GPU:
+> +			svsb->opp_dev = svs_add_device_link(svsp, "mali");
+> +			svsb->pd_dev = svs_add_device_link(svsp,
+> +							   "mali_gpu_core2");
+> +			if (IS_ERR(svsb->pd_dev))
+> +				return PTR_ERR(svsb->pd_dev);
+> +			break;
+> +		default:
+> +			WARN_ON(1);
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (IS_ERR(svsb->opp_dev))
+> +			return PTR_ERR(svsb->opp_dev);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mtk_svs_of_match[] = {
+> +	{
+> +		.compatible = "mediatek,mt8183-svs",
+> +		.data = &svs_get_svs_mt8183_platform_data,
+> +	}, {
+> +		/* Sentinel */
+> +	},
+> +};
+> +
+> +static int svs_probe(struct platform_device *pdev)
+> +{
+> +	int (*svs_get_svs_platform_data)(struct svs_platform *svsp);
+> +	struct svs_platform *svsp;
+> +	unsigned int svsp_irq;
+> +	int ret;
+> +
+> +	svsp = devm_kzalloc(&pdev->dev, sizeof(*svsp), GFP_KERNEL);
+> +	if (!svsp)
+> +		return -ENOMEM;
+> +
+> +	svs_get_svs_platform_data = of_device_get_match_data(&pdev->dev);
+> +	if (!svs_get_svs_platform_data) {
+> +		dev_err(svsp->dev, "no svs platform data? why?\n");
+> +		return -EPERM;
+> +	}
+> +
+> +	svsp->dev = &pdev->dev;
+> +	ret = svs_get_svs_platform_data(svsp);
+> +	if (ret) {
+> +		dev_err_probe(svsp->dev, ret, "fail to get svsp data\n");
+> +		return ret;
+> +	}
+> +
+> +	if (!svs_is_supported(svsp)) {
+
+If svs is not supported, the device node shouldn't be enabled.
+
+> +		dev_notice(svsp->dev, "svs is not supported\n");
+> +		return -EPERM;
+> +	}
+> +
+> +	ret = svs_resource_setup(svsp);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "svs resource setup fail: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	svsp_irq = irq_of_parse_and_map(svsp->dev->of_node, 0);
+> +	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> +					svsp->irqflags | IRQF_ONESHOT,
+> +					svsp->name, svsp);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+> +			svsp_irq, ret);
+> +		return ret;
+> +	}
+> +
+> +	svsp->main_clk = devm_clk_get(svsp->dev, "main");
+> +	if (IS_ERR(svsp->main_clk)) {
+> +		dev_err(svsp->dev, "failed to get clock: %ld\n",
+> +			PTR_ERR(svsp->main_clk));
+> +		return PTR_ERR(svsp->main_clk);
+> +	}
+> +
+> +	ret = clk_prepare_enable(svsp->main_clk);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "cannot enable main clk: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	svsp->base = of_iomap(svsp->dev->of_node, 0);
+> +	if (IS_ERR_OR_NULL(svsp->base)) {
+> +		dev_err(svsp->dev, "cannot find svs register base\n");
+> +		ret = -EINVAL;
+> +		goto svs_probe_clk_disable;
+> +	}
+> +
+> +	ret = svs_start(svsp);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "svs start fail: %d\n", ret);
+> +		goto svs_probe_iounmap;
+> +	}
+> +
+> +	return 0;
+> +
+> +svs_probe_iounmap:
+> +	iounmap(svsp->base);
+> +
+> +svs_probe_clk_disable:
+> +	clk_disable_unprepare(svsp->main_clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(svs_pm_ops, svs_suspend, svs_resume);
+> +
+> +static struct platform_driver svs_driver = {
+> +	.probe	= svs_probe,
+> +	.driver	= {
+> +		.name		= "mtk-svs",
+> +		.pm		= &svs_pm_ops,
+> +		.of_match_table	= of_match_ptr(mtk_svs_of_match),
+> +	},
+> +};
+> +
+> +module_platform_driver(svs_driver);
+> +
+> +MODULE_AUTHOR("Roger Lu <roger.lu@mediatek.com>");
+> +MODULE_DESCRIPTION("MediaTek SVS driver");
+> +MODULE_LICENSE("GPL v2");
+> 
