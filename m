@@ -2,356 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B01DB3FFE53
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 12:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044DB4000F3
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Sep 2021 16:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348049AbhICKlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 06:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
+        id S244601AbhICOFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 10:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347977AbhICKln (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 06:41:43 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D854C061575;
-        Fri,  3 Sep 2021 03:40:43 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b10so7624814wru.0;
-        Fri, 03 Sep 2021 03:40:43 -0700 (PDT)
+        with ESMTP id S235068AbhICOFf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 10:05:35 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87A4C061757
+        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 07:04:35 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t19so11951065lfe.13
+        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 07:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nRpUBKoD2Qc6noVZ4Y4NpGJIU0gjshS75iBQB9zMpy8=;
-        b=V9DGIMtPYt9W0EUZOwpvvbsDaz13dnCLH2rE+WwNlpWVsU4sQaUwc7zHHuyhls5T6v
-         6wtZXoLsekCvm79RfEd2jn8BPGRbrWWs5n09EluRcbcq2jGlj0jVZQ9fdf3y7KXCTFpE
-         RT43XKqCmoCabMJ0CIBUb45ogsZ5oyOCsxsz9UpxNuwKKPOhWfsQ/o+pkZlQw6GFguv7
-         7PHQssHoviWtVkcp3/MaVlYWk9nnXW33At7rQ+5B7hFWm3RBcPoBWbHc/kY59AH7NTOs
-         7FcJSWPPy3ikCrOMrFQqIY/8tURuT9sT/8fWXz05yDY1Tkg0Kj3ASwFWhWMEg17rW/hS
-         JVEg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sSgMe6jO7xnpGx2tRPpBBTj9lsn9JwdSXq1ZWNG03/M=;
+        b=rvDoigY4cruxeRTZs+bhQzHXKT3VjFr4e/H7h+cD0NLeK/FeRpzslf5ZAmDeXOg7Mq
+         AshatvKefj52y10+jKbCXd/91DGeT8RiJPL1xj5Wtfpk33fHYOLkDwgu9pRI6lug61AV
+         fZ/L8xdAMXW3+klI27chBrjkdd1/vFbtbfmrqzINMqIDhe9wqUWC0Li5rAb8Rjbc2u7f
+         a9Wnvaw89HHUL9bniTze4k82ZG+qOLrk+KmNTLc7UZ55I5M2l9vZRsIL2VCtmf/hJiU+
+         FS8D0SDahwDWYwTKd0Co345S5WPe2mE6y8xwI7xKAGDjruPgiWsYxNwfggUSDJc7EeUd
+         jd8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nRpUBKoD2Qc6noVZ4Y4NpGJIU0gjshS75iBQB9zMpy8=;
-        b=CZTyCdeB5Va5M+pnPLmVGcmT4Enow/fd91fIIBM+0QO1FALjVSisQDyw5infqg7+7m
-         ZN/IMKGQboA5kh8JEOJo+EH0oeiH37xX+UcJtcF05bcuEsj+GGxMLDmQpo91RyT0Mks6
-         ZRbCEEaff2vk8nZwYE1jHCFQX7Zh/kR2tuxW9D6rTCeZZEQ03fs2LC54BL2TlPzQXrzA
-         F878QTGtcZ90epMARglbes4dCBRzvxK+jRwETy5RbcxAJJwoEfprmkz5yDDVGltDxlsx
-         Ps8Bqce9bb7/UY6edQmHz9lOq3oiSP43g+YdZfa0UHaXHWKZ9/+GAnoIhVQcutKbBbxU
-         Ntxg==
-X-Gm-Message-State: AOAM532JJT+L70NZ45hLWKi160O9tth6EThwEDGAslP/VQ59NrYQCT2h
-        699V69yjCa7f3WqcEm7WmNg=
-X-Google-Smtp-Source: ABdhPJygMcEsTKYxWfkujXhXEo9X8ysv08YMDZ9nnstdTDNHuMVulrfsqK2tQgqJBloNocuiTbaPPQ==
-X-Received: by 2002:adf:eb8d:: with SMTP id t13mr3323097wrn.4.1630665641998;
-        Fri, 03 Sep 2021 03:40:41 -0700 (PDT)
-Received: from ziggy.stardust ([37.223.140.66])
-        by smtp.gmail.com with ESMTPSA id z9sm4413006wre.11.2021.09.03.03.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Sep 2021 03:40:41 -0700 (PDT)
-To:     Michael Kao <michael.kao@mediatek.com>, fan.chen@mediatek.com,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tzung-Bi Shih <tzungbi@google.com>
-References: <20201223074944.2061-1-michael.kao@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] arm64: dts: mt8192: add thermal zones, cooling map and
- trips
-Message-ID: <55bdd2fb-1379-4e98-0a78-a18bfb7d0fb8@gmail.com>
-Date:   Fri, 3 Sep 2021 12:40:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sSgMe6jO7xnpGx2tRPpBBTj9lsn9JwdSXq1ZWNG03/M=;
+        b=Vqr2rCfpMS6wO7HY5WzcexFcfewgKt7RbFBr0RGUDeENIY+o+ejUmTKOCKB2HqPYjD
+         WpsIgSJSXAAR7q+ENZmPUmBDeFU+GVKuWtEyS+RFHOJk+5sJG3NbOmIcZ3tSwOj0Wo4t
+         pKn4d4mdjtxBIHjuIiS7F4Drow0BI0wO8XTleBsGM3V/NvpNuo8AJhlVuPbzwE6qkNLM
+         mF5EVxDV54jZcQKPt+RrKX8QLke+D3f/WjoMQlmtcn9EQPwpeII0Ou4P0roBjvFk7B72
+         JHQZuB+VQK8FNeffyqv6zEujYawVK9A/BAdyTTtCilKCot0jtIo8nMrHri8blal1viK+
+         Ob+A==
+X-Gm-Message-State: AOAM533nwMpNHWIgBPxgcM+2/zlj0OU3PjWyiU6E7NmmmazsU5g9B8pf
+        fBwr6/pIEZG3Tv8ADU/o0TwaBJZSIjUv3wPyjJ+oMw==
+X-Google-Smtp-Source: ABdhPJwLX1bWYt8jcuZqjDpgjcYrm0IuHl4c8OMxpt1GGMcSijXKANRPJNpt4cJRX1gNjfc9oLeX0gjQzvqQxLFdz80=
+X-Received: by 2002:a19:ac42:: with SMTP id r2mr2840448lfc.167.1630677873121;
+ Fri, 03 Sep 2021 07:04:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201223074944.2061-1-michael.kao@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210902101634.827187-1-ulf.hansson@linaro.org>
+ <20210902101634.827187-2-ulf.hansson@linaro.org> <08335cd4-7dc8-3b8b-d63f-374585ffa373@gmail.com>
+ <CAPDyKFofrEj2LdqXh-L256b2Tcz=qYQgzTUBVuvx0rOR58SrVg@mail.gmail.com> <b597c805-e346-8c23-5014-cbb116e88075@gmail.com>
+In-Reply-To: <b597c805-e346-8c23-5014-cbb116e88075@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 3 Sep 2021 16:03:56 +0200
+Message-ID: <CAPDyKFrWofUKhbhvwTCjiFwJD8-Pzi8UMzU7ZjYLKm2j1HeeBg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] PM: domains: Drop the performance state vote for a
+ device at detach
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, 3 Sept 2021 at 11:58, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 03.09.2021 11:22, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Fri, 3 Sept 2021 at 08:01, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> 02.09.2021 13:16, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>> When a device is detached from its genpd, genpd loses track of the de=
+vice,
+> >>> including its performance state vote that may have been requested for=
+ it.
+> >>>
+> >>> Rather than relying on the consumer driver to drop the performance st=
+ate
+> >>> vote for its device, let's do it internally in genpd when the device =
+is
+> >>> getting detached. In this way, we makes sure that the aggregation of =
+the
+> >>> votes in genpd becomes correct.
+> >>
+> >> This is a dangerous behaviour in a case where performance state
+> >> represents voltage. If hardware is kept active on detachment, say it's
+> >> always-on, then it may be a disaster to drop the voltage for the activ=
+e
+> >> hardware.
+> >>
+> >> It's safe to drop performance state only if you assume that there is a
+> >> firmware behind kernel which has its own layer of performance manageme=
+nt
+> >> and it will prevent the disaster by saying 'nope, I'm not doing this'.
+> >>
+> >> The performance state should be persistent for a device and it should =
+be
+> >> controlled in a conjunction with runtime PM. If platform wants to drop
+> >> performance state to zero on detachment, then this behaviour should be
+> >> specific to that platform.
+> >
+> > I understand your concern, but at this point, genpd can't help to fix t=
+his.
+> >
+> > Genpd has no information about the device, unless it's attached to it.
+> > For now and for these always on HWs, we simply need to make sure the
+> > device stays attached, in one way or the other.
+>
+> This indeed requires to redesign GENPD to make it more coupled with a
+> device, but this is not a real problem for any of the current API users
+> AFAIK. Ideally the state should be persistent to make API more universal.
 
+Right. In fact this has been discussed in the past. In principle, the
+idea was to attach to genpd at device registration, rather than at
+driver probe.
 
-On 23/12/2020 08:49, Michael Kao wrote:
-> Add thermal zone node to support mt8192 read temperature.
-> Thermal throttle will start at 68C and the
-> target temperature is 85C.
-> 
-> This patch depends on [1].
+Although, this is not very easy to implement - and it seems like the
+churns to do, have not been really worth it. At least so far.
 
-Please provide this kind of information below the three dashes '---'. Otherwise
-this will end up in the commit message.
+>
+> Since for today we assume that device should be suspended at the time of
+> the detachment (if the default OPP state isn't used), it may be better
+> to add a noisy warning message if pstate!=3D0, keeping the state untouche=
+d
+> if it's not zero.
 
-> 
-> [1]https://patchwork.kernel.org/project/linux-mediatek/patch/20201221061018.18503-3-Yz.Wu@mediatek.com/
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 169 +++++++++++++++++++++++
->  1 file changed, 169 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 4a0d941aec30..4020e40a092a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -9,6 +9,7 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
-> +#include <dt-bindings/thermal/thermal.h>
->  
->  / {
->  	compatible = "mediatek,mt8192";
-> @@ -42,6 +43,7 @@
->  			clock-frequency = <1701000000>;
->  			next-level-cache = <&l2_0>;
->  			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu1: cpu@100 {
-> @@ -52,6 +54,7 @@
->  			clock-frequency = <1701000000>;
->  			next-level-cache = <&l2_0>;
->  			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu2: cpu@200 {
-> @@ -62,6 +65,7 @@
->  			clock-frequency = <1701000000>;
->  			next-level-cache = <&l2_0>;
->  			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu3: cpu@300 {
-> @@ -72,6 +76,7 @@
->  			clock-frequency = <1701000000>;
->  			next-level-cache = <&l2_0>;
->  			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu4: cpu@400 {
-> @@ -82,6 +87,7 @@
->  			clock-frequency = <2171000000>;
->  			next-level-cache = <&l2_1>;
->  			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu5: cpu@500 {
-> @@ -92,6 +98,7 @@
->  			clock-frequency = <2171000000>;
->  			next-level-cache = <&l2_1>;
->  			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu6: cpu@600 {
-> @@ -102,6 +109,7 @@
->  			clock-frequency = <2171000000>;
->  			next-level-cache = <&l2_1>;
->  			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu7: cpu@700 {
-> @@ -112,6 +120,7 @@
->  			clock-frequency = <2171000000>;
->  			next-level-cache = <&l2_1>;
->  			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->  		};
->  
->  		cpu-map {
-> @@ -178,6 +187,140 @@
->  		method = "smc";
->  	};
->  
-> +	thermal-zones {
-> +		soc_max {
-> +			polling-delay = <1000>; /* milliseconds */
-> +			polling-delay-passive = <1000>; /* milliseconds */
-> +			thermal-sensors = <&lvts 0>;
-> +			sustainable-power = <1500>;
-> +
-> +			trips {
-> +				threshold: trip-point@0 {
-> +					temperature = <68000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				target: target@1 {
+That would just be very silly in my opinion.
 
-Please review the node names.
+When the device is detached (suspended or not), it may cause it's PM
+domain to be powered off - and there is really nothing we can do about
+that from the genpd point of view.
 
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				soc_max_crit: soc_max_crit@0 {
-> +					temperature = <115000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&target>;
-> +					cooling-device = <&cpu0
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu1
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu2
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu3
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>;
-> +					contribution = <3072>;
+As stated, the only current short term solution is to avoid detaching
+the device. Anything else, would just be papering of the issue.
 
-By binding description value is in per-cent, 3072 does not make sense.
-
-> +				};
-> +				map1 {
-> +					trip = <&target>;
-> +					cooling-device = <&cpu4
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu5
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu6
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>,
-> +							 <&cpu7
-> +						THERMAL_NO_LIMIT
-> +						THERMAL_NO_LIMIT>;
-> +					contribution = <1024>;
-
-Same here.
-
-> +				};
-> +			};
-> +		};
-
-New line here.
-
-> +		cpu_big1 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 1>;
-> +		};
-> +		cpu_big2 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 2>;
-> +		};
-> +		cpu_big3 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 3>;
-> +		};
-> +		cpu_big4 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 4>;
-> +		};
-> +		cci1 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 5>;
-> +		};
-> +		cci2 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 6>;
-> +		};
-> +		cpu_little1 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 7>;
-> +		};
-> +		cpu_little2 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 8>;
-> +		};
-> +		apu {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 9>;
-> +		};
-> +		mlda {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 10>;
-> +		};
-> +		gpu1 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 11>;
-> +		};
-> +		gpu2 {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 12>;
-> +		};
-> +		infra {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 13>;
-> +		};
-> +		camsys {
-> +			polling-delay = <0>; /* milliseconds */
-> +			polling-delay-passive = <0>; /* milliseconds */
-> +			thermal-sensors = <&lvts 14>;
-> +		};
-
-I think I'm missing something. We are creating a whole bunch of thermal zones,
-but no trip points neither cooling maps for them. What are the needed for?
-
-> +	};
-> +
->  	timer: timer {
->  		compatible = "arm,armv8-timer";
->  		interrupt-parent = <&gic>;
-> @@ -224,6 +367,10 @@
->  			compatible = "mediatek,mt8192-infracfg", "syscon";
->  			reg = <0 0x10001000 0 0x1000>;
->  			#clock-cells = <1>;
-> +			ti,reset-bits = <
-> +				0x120 0 0x124 0 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-> +				0x730 12 0x734 12 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-> +			>;
-
-How is that related to the commit message? Looks to me like a separate patch.
-
->  		};
->  
->  		pericfg: syscon@10003000 {
-> @@ -318,6 +465,24 @@
->  			status = "disabled";
->  		};
->  
-> +		lvts: lvts@1100b000 {
-> +			compatible = "mediatek,mt6873-lvts";
-
-This driver is not upstream. Please provide a link to the submission of the
-latest version so that I can track progress.
-
-Regards,
-Matthias
+Kind regards
+Uffe
