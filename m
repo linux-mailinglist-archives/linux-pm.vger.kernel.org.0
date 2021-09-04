@@ -2,73 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4120400B24
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 13:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904D5400B8F
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 15:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbhIDLQS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Sep 2021 07:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbhIDLQS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Sep 2021 07:16:18 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF3AC061575
-        for <linux-pm@vger.kernel.org>; Sat,  4 Sep 2021 04:15:16 -0700 (PDT)
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        id S236564AbhIDNzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Sep 2021 09:55:02 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:54298 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234825AbhIDNzC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Sep 2021 09:55:02 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id 668a5ada6cd29530; Sat, 4 Sep 2021 15:53:59 +0200
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id AC6D51F635;
-        Sat,  4 Sep 2021 13:15:14 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: sdm660: Use icc_sync_state
-Date:   Sat,  4 Sep 2021 13:14:52 +0200
-Message-Id: <20210904111452.248804-1-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.33.0
+        by v370.home.net.pl (Postfix) with ESMTPSA id DF72A66A3B0;
+        Sat,  4 Sep 2021 15:53:58 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 0/2] cpufreq: intel_pstate: hybrid: Simplify HWP perf levels calibration
+Date:   Sat, 04 Sep 2021 15:49:04 +0200
+Message-ID: <11837325.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddruddvledgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdii
+ hhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Call icc_sync_state after consumers are probed, so that bus bandwidth
-doesn't stick at maximum anymore.
+Hi All,
 
-Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/interconnect/qcom/sdm660.c | 1 +
- 1 file changed, 1 insertion(+)
+The intel_pstate's code calibrating the HWP performance levels on hybrid
+processors can be made simpler, which is the purpose of this series.
 
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index 384dd3661757..21fcd1c85398 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -1711,6 +1711,7 @@ static struct platform_driver sdm660_noc_driver = {
- 	.driver = {
- 		.name = "qnoc-sdm660",
- 		.of_match_table = sdm660_noc_of_match,
-+		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(sdm660_noc_driver);
--- 
-2.33.0
+Please refer to the patch changelogs for details.
+
+Thanks!
+
+
 
