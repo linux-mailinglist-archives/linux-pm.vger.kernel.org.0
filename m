@@ -2,104 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E261400853
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 01:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AEF4008D0
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Sep 2021 03:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350770AbhICXZg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Sep 2021 19:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350772AbhICXZf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 19:25:35 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C89CC061764
-        for <linux-pm@vger.kernel.org>; Fri,  3 Sep 2021 16:24:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id t12so1315077lfg.9
-        for <linux-pm@vger.kernel.org>; Fri, 03 Sep 2021 16:24:34 -0700 (PDT)
+        id S236114AbhIDAfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Sep 2021 20:35:36 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:12191 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350596AbhIDAfe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Sep 2021 20:35:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kd2nb9s2Osi8MHIbxM1lxmxPOFNi6CuNMu2QVLL3eSM=;
-        b=A0iD2EDzSQdJZv8n6FQutX3dJCkT59Q64Yxf6q6obbCwFZdilR4HHsjrto8qUvxGkI
-         oIpYFABP8TeWMJS2neJ5wyk1vCPnAdY134lE/LbiT4QYe90ct1NEGG5Sp6IHoxoE3ldI
-         LNRC+Pvw63SaD5SgLTA+5aaTisjPXgS9V95iq6ZdbVHouzZM59bNOnG7sFRgqzFywNtq
-         IEqLqntxXcwEuIeaQ6C0ZC2/PUPjiQLNX3t7hadsdxar1wnpixmIZbbiQtSk3twQ3I0F
-         IptoKWrIr1kKNX33WomwS5l+mcqOQuSecFoy8jN6avi6bNMRHAaaUuwgZkV+MMmrRzRr
-         nUTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kd2nb9s2Osi8MHIbxM1lxmxPOFNi6CuNMu2QVLL3eSM=;
-        b=h3veMtyxCzmCPjlef3nliOQ5Z2k6scpPjtHSkmk2p4nD7a1KbtjPVTeoC0TdRMLtPK
-         HWTn0nlg8iHYcWYth962FzmmCEvEcUUmpJSH1epCCmv48Qs78BCiOE0ck4xZcBUSk4CO
-         rqxC11k5sHBSa7GKhZYWIakTPUPJY6+4qr44eTshDWAQ4ZZQFrZsyt98he6myQUINXWY
-         R1LUdo83LUssCCl1Gx0iVb8fcAwtKC2uBDkZG9CRCR9Hx1b2768SQbIFnh+gVwG2NYA4
-         NKTGY0EjX4Risb5+DRIhwTiMEFqytSET//FzUofbKPFeigbBT5lk9MBSeEQonVdDGryn
-         rrEA==
-X-Gm-Message-State: AOAM531VNmY1VBZkcoMN69RwCMx+VYyDuaSztVyYnwLHmgE9+5ENLLOl
-        HIWk6NdoVuMwf+VAprcO9P2+Mw==
-X-Google-Smtp-Source: ABdhPJySNODxIOP2Bfc1YjijH4vbrowWq33m1D+oiNuIvdm3Sef38Fc4KeqIemunD5hQnGntN51urQ==
-X-Received: by 2002:a19:c1cc:: with SMTP id r195mr953895lff.504.1630711472895;
-        Fri, 03 Sep 2021 16:24:32 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id w3sm56924ljm.13.2021.09.03.16.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 16:24:32 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 11/11] interconnect: qcom: drop DEFINE_QNODE macro
-Date:   Sat,  4 Sep 2021 02:24:21 +0300
-Message-Id: <20210903232421.1384199-12-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
-References: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1630715674; x=1662251674;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=H+0sThsCk1GXhtCO6un41ezE/YNTdH11kjUn+GY8Vz8=;
+  b=oBQrAE/3lJKyeLyhnDmuMQHqYSWtU2GdiC+VlBkNOqciFUrpqnKTn2KO
+   Rtx08n6mqfbImVK27LVPANNjQW9kiDYFw51jKhXspEtCpTimU01I3o7Q0
+   ZWvh+lfMy63ragmxYnZq0NTAvGXLhNO7t5OaT95Ilc3LSxAyJGvzsN2hJ
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 03 Sep 2021 17:34:33 -0700
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 17:34:33 -0700
+Received: from hu-subbaram-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Fri, 3 Sep 2021 17:34:32 -0700
+From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] thermal: Fix a NULL pointer dereference
+Date:   Fri, 3 Sep 2021 17:34:19 -0700
+Message-ID: <1630715659-5058-1-git-send-email-quic_subbaram@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Drop DEFINE_QNODE macro which has become unused.
+of_parse_thermal_zones() parses the thermal-zones node and registers a
+thermal_zone device for each subnode. However, if a thermal zone is
+consuming a thermal sensor and that thermal sensor device hasn't probed
+yet, an attempt to set trip_point_*_temp for that thermal zone device
+can cause a NULL pointer dereference. Fix it.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+ console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
+ ...
+ Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+ ...
+ Call trace:
+  of_thermal_set_trip_temp+0x40/0xc4
+  trip_point_temp_store+0xc0/0x1dc
+  dev_attr_store+0x38/0x88
+  sysfs_kf_write+0x64/0xc0
+  kernfs_fop_write_iter+0x108/0x1d0
+  vfs_write+0x2f4/0x368
+  ksys_write+0x7c/0xec
+  __arm64_sys_write+0x20/0x30
+  el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
+  do_el0_svc+0x28/0xa0
+  el0_svc+0x14/0x24
+  el0_sync_handler+0x88/0xec
+  el0_sync+0x1c0/0x200
+
+Cc: stable@vger.kernel.org
+Suggested-by: David Collins <quic_collinsd@quicinc.com>
+Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
 ---
- drivers/interconnect/qcom/icc-rpm.h | 14 --------------
- 1 file changed, 14 deletions(-)
+ drivers/thermal/thermal_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index f6746dabdf28..0b53fae089ac 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -82,20 +82,6 @@ struct qcom_icc_desc {
- 	unsigned int qos_offset;
- };
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 6379f26..ba53252 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -301,7 +301,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 	if (trip >= data->ntrips || trip < 0)
+ 		return -EDOM;
  
--#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,	\
--		     ...)						\
--		static const u16 _name ## _links[] = { __VA_ARGS__ };	\
--		\
--		static struct qcom_icc_node _name = {			\
--		.name = #_name,						\
--		.id = _id,						\
--		.buswidth = _buswidth,					\
--		.mas_rpm_id = _mas_rpm_id,				\
--		.slv_rpm_id = _slv_rpm_id,				\
--		.num_links = ARRAY_SIZE(_name ## _links),		\
--		.links = _name ## _links,				\
--	}
--
- /* Valid for both NoC and BIMC */
- #define NOC_QOS_MODE_INVALID		-1
- #define NOC_QOS_MODE_FIXED		0x0
+-	if (data->ops->set_trip_temp) {
++	if (data->ops && data->ops->set_trip_temp) {
+ 		int ret;
+ 
+ 		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
 -- 
-2.33.0
+2.7.4
 
