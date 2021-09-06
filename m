@@ -2,77 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B4B401685
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 08:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9106B4017B6
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 10:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbhIFGm5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Sep 2021 02:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239685AbhIFGm5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 02:42:57 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3505C061575
-        for <linux-pm@vger.kernel.org>; Sun,  5 Sep 2021 23:41:52 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i6so8148416wrv.2
-        for <linux-pm@vger.kernel.org>; Sun, 05 Sep 2021 23:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=9ZKBQ6Qo+MKbRqA4C0CUyn4v2spzBO/uH3YajAUeuHc=;
-        b=WrxXPTSexnqL9ywJmzn29EAd7m3zOxJI9r9q5J3R101rdaArwAA0ep2fVZRzubhJUe
-         pJsKDflQ6zYIy3POZz+IcQbUisMU5vPhHMJ8lWf8qkPsd26d+g7xT+vpdAL8nUGB+jIr
-         +oVjS8NOiSV+FVJl+FxgFK9n76oa2tBEoLBTTH3MzyqILrp4HT7WZ7sopFdbhbXYCGwx
-         +Yd50SwwpSjwR2tPgENMUXdWbzGiUzc40ee3Wzh7KSyr73NO/THLq5A6dBFWmDlCxMJ/
-         QYt2w5KTSo3h/LSVYkz1mwuL0Gl17xvzMinqfFIf3h4XLLmJEb/pivhx8etbey9PRZLq
-         dmvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=9ZKBQ6Qo+MKbRqA4C0CUyn4v2spzBO/uH3YajAUeuHc=;
-        b=HRA57v2lkieGaF/2h6Cd1fp78a9M9oucjXrgPc6j113Pfy0fVfgnZVz92aDdCWIDgH
-         7xwklELavvpPO5htHSOMrjr8FPeXEVKjBk/iqacPxsdGHjk7Mqj9GOVA5fMHLZURzuKP
-         V9ZBDm2WT0Qh1vRB9ThLzyx90WVTs7q9HFj/CUkzgbBVYNcp2EY8WZh8yF6YVWs+a1Oy
-         pWC6bH4F5/U81SjTQAKEdRmBVzSRjjEfE/hjJJmFueNh4dVP/R6xl0aJOBiHC53sB6gw
-         jUTikDoa2p8b5O7p/UkQFeCDz1sJsJay5Uo/rkDb8ZBbUmxdur9rG+b6FxQHTNLGTrY8
-         AZzw==
-X-Gm-Message-State: AOAM530P8kBN4VxWRLJyyyaXFRnQF6CRCfAkHWNOSljHYte9qEtiEIpR
-        HDk8Odsbw9rm0sAUsTs5dP5ruvE8D1lyrD9NbAE=
-X-Google-Smtp-Source: ABdhPJzZ3mZbr/OrWTb0N/GHJVydPgMaL50t4Xg3CrXMleDnFpRQ6fr9wVjfN7uwN/IUbBtNnHtdbKIjd+hL9PvzZS8=
-X-Received: by 2002:adf:e0cd:: with SMTP id m13mr11450350wri.137.1630910510922;
- Sun, 05 Sep 2021 23:41:50 -0700 (PDT)
+        id S240039AbhIFISr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Sep 2021 04:18:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:53380 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239780AbhIFISq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Sep 2021 04:18:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09478D6E;
+        Mon,  6 Sep 2021 01:17:42 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 917373F73D;
+        Mon,  6 Sep 2021 01:17:40 -0700 (PDT)
+Date:   Mon, 6 Sep 2021 09:17:34 +0100
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v6 6/7] cpufreq: Skip inefficient frequencies
+Message-ID: <20210906081733.GA4151@e120877-lin.cambridge.arm.com>
+References: <1630405453-275784-1-git-send-email-vincent.donnefort@arm.com>
+ <1630405453-275784-7-git-send-email-vincent.donnefort@arm.com>
+ <CAJZ5v0i5KRkUKvqGbqoxhaNh626bmg3C2F-rZmcqaaqReQF7SQ@mail.gmail.com>
+ <20210902105037.GA136543@e120877-lin.cambridge.arm.com>
+ <CAJZ5v0iRJuyup2M16snP+BdJSKToSQ4QiFnrCoZn1j2KYhLEGA@mail.gmail.com>
+ <20210902134927.GA147718@e120877-lin.cambridge.arm.com>
+ <CAJZ5v0hi=YDiO79YWPDHcHEVypwv7++Qjmz7JAjOs9O6ooGy+g@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a1c:ac89:0:0:0:0:0 with HTTP; Sun, 5 Sep 2021 23:41:48 -0700 (PDT)
-Reply-To: michaelrachid7@gmail.com
-From:   Michael Rachid <davidbaldwin378@gmail.com>
-Date:   Mon, 6 Sep 2021 07:41:48 +0100
-Message-ID: <CAH6Vp6nXS5dh2XVRtgLKAa3rtWHXwe7uXyd2ituVQKjSfHwPiQ@mail.gmail.com>
-Subject: =?UTF-8?B?UHJvcG9zYWwgLyDUsdW81aHVu9Wh1oDVr9W41oLVqdW11bjWgtW2IEFycmFqYXJrdXQ=?=
-        =?UTF-8?B?4oCZeXVu?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hi=YDiO79YWPDHcHEVypwv7++Qjmz7JAjOs9O6ooGy+g@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-1Y3Vq9aA1aXVrNWrINWo1bbVr9Wl1oAsDQoNCtS11b0g1aPWgNW41oLVtCDVpdW0INWx1aXVpiDV
-q9W0INWi1avVptW21aXVvSDVodW81aHVu9Wh1oDVr9WrINW01aHVvdWr1bYg1b/VpdWy1aXVr9Wh
-1oHVttWl1azVuNaCINWw1aHVtNWh1oAsINW41oDVqCDVpdW9DQrVr9aB1aHVttWv1aHVttWh1bXV
-qyDVrNW41oLVrtWl1awg1bHVpdWmINWw1aXVvzoNCtWG1aXWgNWj1oDVodW+1b7VodWuINWnINWw
-1avVvdW41oLVtiDVtNWr1azVq9W41bYg1aTVuNWs1aHWgDog1YDVodW01bjVptW+1aHVriDVpdWy
-1aXWhCwg1bjWgCDVodW01aXVtiDVq9W21bkg1oXWgNWr1bbVodWv1aHVtg0K1acg1ocg1aHVvNWh
-1bbWgSDVvNWr1b3Vr9Wl1oDVqzoNCtWN1avWgNW41b4g1bbVt9Wl1oQg1bHVpdaAINWw1aXVv9Wh
-1oTWgNaE1oDVuNaC1anVtdW41oLVttWoOg0KDQrVhNWh1bXWhNWsINWM1aHVudWr1aQuDQpTaXJl
-bGkgeW5rZXIsDQoNClllcyBncnVtIHllbSBkemV6IGltIGJpem5lcyBhcnJhamFya2kgbWFzaW4g
-dGVnaGVrYXRz4oCZbmVsdSBoYW1hciwgdm9yeQ0KeWVzIGt0c+KAmWFua2FuYXlpIGx1dHNlbCBk
-emV6IGhldDoNCk5lcmdyYXZ2YXRzIGUgaGlzdW4gbWlsaW9uIGRvbGFyOiBIYW1venZhdHMgeWVn
-aGVr4oCZLCB2b3IgYW1lbiBpbmNo4oCZDQpvcmluYWthbiBlIHlldiBhcnJhbnRz4oCZIHJyaXNr
-ZXJpOg0KU2lyb3YgbnNoZWvigJkgZHplciBoZXRha+KAmXJr4oCZcnV04oCZeXVueToNCg0KTWF5
-a+KAmWwgUnJhY2jigJlpZC4NCg0KDQoNCkRlYXIgZnJpZW5kLA0KDQpJIHdyaXRlIHRvIGluZm9y
-bSB5b3UgYWJvdXQgYSBidXNpbmVzcyBwcm9wb3NhbCBJIGhhdmUgd2hpY2ggSSB3b3VsZA0KbGlr
-ZSB0byBoYW5kbGUgd2l0aCB5b3UuDQpGaWZ0eSBtaWxsaW9uIGRvbGxhcnMgaXMgaW52b2x2ZWQu
-IEJlIHJlc3QgYXNzdXJlZCB0aGF0IGV2ZXJ5dGhpbmcgaXMNCmxlZ2FsIGFuZCByaXNrIGZyZWUu
-DQpLaW5kbHkgaW5kaWNhdGUgeW91ciBpbnRlcmVzdC4NCg0KTWljaGFlbCBSYWNoaWQuDQo=
+[...]
+
+> > >
+> > > Moreover, if only efficient frequencies are to be used, RELATION_L
+> > > needs to return min(policy->max, the closest efficient frequency equal
+> > > to or above the target).
+> >
+> > You mean, never returning an inefficient frequency, unless there are no
+> > efficient ones in the range policy->min policy->max ?
+> 
+> No, that's not what I mean.
+> 
+> First note that the target here is clamped between the policy min and
+> max.  Also bear in mind that each of them is a frequency from the
+> table, either efficient or inefficient.
+> 
+> In the first step, search through the efficient frequencies only.
+> That will return you something at or above the target.  If it is at
+> the target, you're done.  If it is above the target, it may be either
+> within or above the policy max.  If it is within the policy max,
+> you're done.  If it is above the policy max, you need to search
+> through the inefficient frequencies between the target and the policy
+> max (and you know that there is at least one - the policy max itself).
+> 
+> So what I said previously wasn't particularly precise, sorry about that.
+
+I might have missed something but it seems equivalent to what's currently done:
+
+Find the appropriate frequency, if inefficient go to the efficient one, if
+above policy->max return the original inefficient frequency.
