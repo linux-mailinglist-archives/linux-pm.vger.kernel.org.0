@@ -2,573 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA4E402039
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 21:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC23402068
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 21:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343619AbhIFTGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Sep 2021 15:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S233894AbhIFTef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Sep 2021 15:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343637AbhIFTER (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 15:04:17 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCDFC0612E7
-        for <linux-pm@vger.kernel.org>; Mon,  6 Sep 2021 12:03:12 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id k5-20020a05600c1c8500b002f76c42214bso117553wms.3
-        for <linux-pm@vger.kernel.org>; Mon, 06 Sep 2021 12:03:12 -0700 (PDT)
+        with ESMTP id S231854AbhIFTee (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 15:34:34 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF26C061575;
+        Mon,  6 Sep 2021 12:33:29 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id j12so12815724ljg.10;
+        Mon, 06 Sep 2021 12:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PrXv/wu5+2xz1OqU+KV03WZYjjYug3+71/FUae8j/xc=;
-        b=Vcjx3Ovj92IS7H7bkD+k9aJ+gUrTIrUNJIy+njKrAu1r7X10anEiGicyINEdvlv94j
-         qqyz8V1qpGt5rXovE7XjwYg+KQNs+0rAC4KnoFdo2Wa3NzZh7qbXjzrLwp4mwKMbo2zr
-         pqm8qV3iLB/GgEJD12JsiE0UIR32tbsLYzBlqEb+6PNWHiBPqyg4ThtQ8ObZcyXHU4yl
-         W8NAp8N4RGTUw60XA/unH/+3Fbe41oofQuSPisVs+dFEEZblgjM2AGT4/NE1MAj6vgd6
-         tgn4np/CV2UFt54Nt2VPjJXUDro30ZtF0KqtqkaIOv29OOOAR3nzpRqman4dKnzNZEgT
-         Nscg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Z/mU7ZTny5JnC2UE3lGGBUWEw5TvasZB+QO6SG1MCGs=;
+        b=TiYbIgsx0V050p9o+tDPXbcrEgnJOkryGEOAYjBN2krSbJZXyHyozKyF9y6VCpNpdS
+         orFZ9eySJPUHtiiQ1Af5R5W5QZ6iL+5GcDL+9yeCRFQ0JiO/Tphc9CEOrdnpuX6iV2z7
+         HADJPJRdyQFgAqTC/02BY+dmgwA0QSyG2UmTHYTNzKeoaQNLretR4UvQYjW1r1hryBPh
+         2JjulXyiN0u0sZZF+02w4beoU75btRntzFm4PhwbXs3KDBFhmMO5tFIiSJp/Wv5jlV3g
+         v8CKNwIawIq4CZbrxki1wFLAdVPCrTtihOllPw7S6slYJBcDbD9WMywgubaTC68k1QYH
+         ObAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PrXv/wu5+2xz1OqU+KV03WZYjjYug3+71/FUae8j/xc=;
-        b=DWLn/hHpV1x4h8me+ZdA81iYmlxvm8UzFTmqAepygQ76HHiZMH/5aRf/T0XSGrO0VW
-         8cKFJVeip8NXPomBV1UjOd4XVX+4HXDk1OOrDCl0a3quTATRJk7lon5js2TLW4p60rci
-         xKC/hy4bkcFK3Tsd9AJybfKdAelqGXgjpmXKUVXFwi2uVNs7UTAQ5kHgGFGwc61vo4mF
-         KNHNcSkOEXsS+QWOhstY7JDloqFEAxjgWig5xpCKncPDvsJK62490KD+JrDy6n1yXDwv
-         dOiS6y5hZhugmvm+9dsrNq2Hzszeoz8VSou/jROtq/tMwH7k/Di62uuRCM3HIphtOT18
-         OCdA==
-X-Gm-Message-State: AOAM5327bcHkA1DzDYzkiFALCG2sq5wjUF00cZIic6Fri0XvIGfVOwpK
-        gTUMg5vksPWZJNtoEchCV4goNw==
-X-Google-Smtp-Source: ABdhPJzLXmw1GyIBqhyf2WiwirnYR4d3Jv3ImlNIm4Sz5EehflT5KrzNLpCDj171BjxB5chNCgFnZw==
-X-Received: by 2002:a1c:7f84:: with SMTP id a126mr503692wmd.33.1630954991014;
-        Mon, 06 Sep 2021 12:03:11 -0700 (PDT)
-Received: from localhost.localdomain ([2001:861:3a81:3690:b885:8dcf:f8c6:7841])
-        by smtp.gmail.com with ESMTPSA id p4sm324750wmc.11.2021.09.06.12.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Sep 2021 12:03:10 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, gpain@baylibre.com,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH 2/2] thermal: add a virtual sensor to aggregate temperatures
-Date:   Mon,  6 Sep 2021 21:04:54 +0200
-Message-Id: <20210906190454.114751-3-abailon@baylibre.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210906190454.114751-1-abailon@baylibre.com>
-References: <20210906190454.114751-1-abailon@baylibre.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Z/mU7ZTny5JnC2UE3lGGBUWEw5TvasZB+QO6SG1MCGs=;
+        b=IUeWayyfy5EBR+hfS5Mf5QNzFrkeKCxg8ucf/pW6fHsyKC4gZx3Iqd04ayD0xTXh49
+         E5me64BExIMkSYENc42qiyB3QIlK7O4EV99vMxOMk8gdYfJ4Qn2oLZFSA0ISF2m4CxG6
+         8oYvyqCYdrh/sT/+72CFXh04pu9KiyQCevlJSRNIjjig10/zcezst8KIkXBab536XIxV
+         lDLDhgotTdQBk/wYNKID8NXHzp+LGqZfxa6V6aqR55xuQDNAr6doid/3jhIuG/FfFFvy
+         AuL2u7gv+ODkTw6JpJetJimb5GKAuyS2jzOhzLLcj0tjLBwcCBfDmhwLyKmmJGeGoUO2
+         wkag==
+X-Gm-Message-State: AOAM530SydPl4v0fz9ImFlOIX2Pj13Nb3A0nDfP6DXwsZPxnKVHTqAmU
+        1L16gRZxC7ifJyEi7AUaTWJQHtl+QNM=
+X-Google-Smtp-Source: ABdhPJxVJMdiokrrTDwyhv99ACVlXJgbdwy+GXg7QPlvbB8Ux2CsCxa0UjBOltqFe9M4CF2fN6SPdQ==
+X-Received: by 2002:a2e:90ca:: with SMTP id o10mr12168334ljg.67.1630956807540;
+        Mon, 06 Sep 2021 12:33:27 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-3-129.dynamic.spd-mgts.ru. [46.138.3.129])
+        by smtp.googlemail.com with ESMTPSA id y16sm810359lfs.145.2021.09.06.12.33.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Sep 2021 12:33:26 -0700 (PDT)
+Subject: Re: [PATCH 1/3] PM: domains: Drop the performance state vote for a
+ device at detach
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210902101634.827187-1-ulf.hansson@linaro.org>
+ <20210902101634.827187-2-ulf.hansson@linaro.org>
+ <08335cd4-7dc8-3b8b-d63f-374585ffa373@gmail.com>
+ <CAPDyKFofrEj2LdqXh-L256b2Tcz=qYQgzTUBVuvx0rOR58SrVg@mail.gmail.com>
+ <b597c805-e346-8c23-5014-cbb116e88075@gmail.com>
+ <CAPDyKFrWofUKhbhvwTCjiFwJD8-Pzi8UMzU7ZjYLKm2j1HeeBg@mail.gmail.com>
+ <6603212d-f36c-afff-6222-8125de5b7b79@gmail.com>
+ <CAPDyKFoyszG2Wo3jbXK562XgpqXns_GPqm7nNu8WOdMCXYUOMQ@mail.gmail.com>
+ <66fbbc69-3e16-e07c-4e25-48d59d69fd3c@gmail.com>
+ <CAPDyKFqqdgr2DHf1Fidj3ksPHe3XgwvCo8SbQ2Cmnc5y1PDvMw@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7ee1a2eb-67d7-dcad-6039-05129d3822ec@gmail.com>
+Date:   Mon, 6 Sep 2021 22:33:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <CAPDyKFqqdgr2DHf1Fidj3ksPHe3XgwvCo8SbQ2Cmnc5y1PDvMw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds a virtual thermal sensor that reads temperature from
-hardware sensor and return an aggregated temperature.
-Currently, this only return the max temperature.
+06.09.2021 20:34, Ulf Hansson пишет:
+> On Mon, 6 Sept 2021 at 16:11, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 06.09.2021 13:24, Ulf Hansson пишет:
+>>> On Sun, 5 Sept 2021 at 10:26, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>
+>>>> 03.09.2021 17:03, Ulf Hansson пишет:
+>>>>> On Fri, 3 Sept 2021 at 11:58, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>>>
+>>>>>> 03.09.2021 11:22, Ulf Hansson пишет:
+>>>>>>> On Fri, 3 Sept 2021 at 08:01, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>>>>>
+>>>>>>>> 02.09.2021 13:16, Ulf Hansson пишет:
+>>>>>>>>> When a device is detached from its genpd, genpd loses track of the device,
+>>>>>>>>> including its performance state vote that may have been requested for it.
+>>>>>>>>>
+>>>>>>>>> Rather than relying on the consumer driver to drop the performance state
+>>>>>>>>> vote for its device, let's do it internally in genpd when the device is
+>>>>>>>>> getting detached. In this way, we makes sure that the aggregation of the
+>>>>>>>>> votes in genpd becomes correct.
+>>>>>>>>
+>>>>>>>> This is a dangerous behaviour in a case where performance state
+>>>>>>>> represents voltage. If hardware is kept active on detachment, say it's
+>>>>>>>> always-on, then it may be a disaster to drop the voltage for the active
+>>>>>>>> hardware.
+>>>>>>>>
+>>>>>>>> It's safe to drop performance state only if you assume that there is a
+>>>>>>>> firmware behind kernel which has its own layer of performance management
+>>>>>>>> and it will prevent the disaster by saying 'nope, I'm not doing this'.
+>>>>>>>>
+>>>>>>>> The performance state should be persistent for a device and it should be
+>>>>>>>> controlled in a conjunction with runtime PM. If platform wants to drop
+>>>>>>>> performance state to zero on detachment, then this behaviour should be
+>>>>>>>> specific to that platform.
+>>>>>>>
+>>>>>>> I understand your concern, but at this point, genpd can't help to fix this.
+>>>>>>>
+>>>>>>> Genpd has no information about the device, unless it's attached to it.
+>>>>>>> For now and for these always on HWs, we simply need to make sure the
+>>>>>>> device stays attached, in one way or the other.
+>>>>>>
+>>>>>> This indeed requires to redesign GENPD to make it more coupled with a
+>>>>>> device, but this is not a real problem for any of the current API users
+>>>>>> AFAIK. Ideally the state should be persistent to make API more universal.
+>>>>>
+>>>>> Right. In fact this has been discussed in the past. In principle, the
+>>>>> idea was to attach to genpd at device registration, rather than at
+>>>>> driver probe.
+>>>>>
+>>>>> Although, this is not very easy to implement - and it seems like the
+>>>>> churns to do, have not been really worth it. At least so far.
+>>>>>
+>>>>>>
+>>>>>> Since for today we assume that device should be suspended at the time of
+>>>>>> the detachment (if the default OPP state isn't used), it may be better
+>>>>>> to add a noisy warning message if pstate!=0, keeping the state untouched
+>>>>>> if it's not zero.
+>>>>>
+>>>>> That would just be very silly in my opinion.
+>>>>>
+>>>>> When the device is detached (suspended or not), it may cause it's PM
+>>>>> domain to be powered off - and there is really nothing we can do about
+>>>>> that from the genpd point of view.
+>>>>>
+>>>>> As stated, the only current short term solution is to avoid detaching
+>>>>> the device. Anything else, would just be papering of the issue.
+>>>>
+>>>> What about to re-evaluate the performance state of the domain after
+>>>> detachment instead of setting the state to zero?
+>>>
+>>> I am not suggesting to set the performance state of the genpd to zero,
+>>> but to drop a potential vote for a performance state for the *device*
+>>> that is about to be detached.
+>>
+>> By removing the vote of the *device*, you will drop the performance
+>> state of the genpd. If device is active and it's wrong to drop its
+>> state, then you may cause the damage.
+>>
+>>> Calling genpd_set_performance_state(dev, 0), during detach will have
+>>> the same effect as triggering a re-evaluation of the performance state
+>>> for the genpd, but after the detach.
+>>
+>> Yes
+>>
+>>>> This way PD driver may
+>>>> take an action on detachment if performance isn't zero, before hardware
+>>>> is crashed, for example it may emit a warning.
+>>>
+>>> Not sure I got that. Exactly when do you want to emit a warning and
+>>> for what reason?
+>>>
+>>> Do you want to add a check somewhere to see if
+>>> 'gpd_data->performance_state' is non zero - and then print a warning?
+>>
+>> I want to check the 'gpd_data->performance_state' from the detachment
+>> callback and emit the warning + lock further performance changes in the
+>> PD driver since it's a error condition.
+> 
+> Alright, so if I understand correctly, you intend to do the check for
+> the "error condition" of the device in the genpd->detach_dev()
+> callback?
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- drivers/thermal/Kconfig          |   8 +
- drivers/thermal/Makefile         |   1 +
- drivers/thermal/virtual-sensor.h |  51 ++++
- drivers/thermal/virtual_sensor.c | 400 +++++++++++++++++++++++++++++++
- 4 files changed, 460 insertions(+)
- create mode 100644 drivers/thermal/virtual-sensor.h
- create mode 100644 drivers/thermal/virtual_sensor.c
+Yes
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 7a4ba50ba97d0..23dc903da2fc5 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -228,6 +228,14 @@ config THERMAL_MMIO
- 	  register or shared memory, is a potential candidate to work with this
- 	  driver.
- 
-+config VIRTUAL_THERMAL
-+	tristate "Generic virtual thermal sensor driver"
-+	depends on THERMAL_OF || COMPILE_TEST
-+	help
-+	  This option enables the generic thermal sensor aggregator.
-+	  This driver creates a thermal sensor that reads the hardware sensors
-+	  and aggregate the temperature.
-+
- config HISI_THERMAL
- 	tristate "Hisilicon thermal driver"
- 	depends on ARCH_HISI || COMPILE_TEST
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 9729a2b089919..76dfa1d61bfc5 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_VIRTUAL_THERMAL) += virtual_sensor.o
-diff --git a/drivers/thermal/virtual-sensor.h b/drivers/thermal/virtual-sensor.h
-new file mode 100644
-index 0000000000000..e024d434856c7
---- /dev/null
-+++ b/drivers/thermal/virtual-sensor.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 BayLibre
-+ */
-+
-+#ifndef __THERMAL_VIRTUAL_SENSOR_H__
-+#define __THERMAL_VIRTUAL_SENSOR_H__
-+
-+struct virtual_sensor;
-+struct virtual_sensor_data;
-+
-+#ifdef CONFIG_VIRTUAL_THERMAL
-+struct virtual_sensor_data *
-+thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
-+				const struct thermal_zone_of_device_ops *ops);
-+void thermal_virtual_sensor_unregister(struct device *dev,
-+				       struct virtual_sensor_data *sensor_data);
-+struct virtual_sensor_data *
-+devm_thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
-+				     const struct thermal_zone_of_device_ops *ops);
-+
-+void devm_thermal_virtual_sensor_unregister(struct device *dev,
-+					    struct virtual_sensor *sensor);
-+#else
-+static inline struct virtual_sensor_data *
-+thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
-+				const struct thermal_zone_of_device_ops *ops)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
-+
-+void thermal_virtual_sensor_unregister(struct device *dev,
-+				       struct virtual_sensor_data *sensor_data)
-+{
-+}
-+
-+static inline struct virtual_sensor_data *
-+devm_thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
-+				     const struct thermal_zone_of_device_ops *ops)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
-+
-+static inline
-+void devm_thermal_virtual_sensor_unregister(struct device *dev,
-+					    struct virtual_sensor *sensor)
-+{
-+}
-+#endif
-+
-+#endif /* __THERMAL_VIRTUAL_SENSOR_H__ */
-diff --git a/drivers/thermal/virtual_sensor.c b/drivers/thermal/virtual_sensor.c
-new file mode 100644
-index 0000000000000..e5bb0ef9adb39
---- /dev/null
-+++ b/drivers/thermal/virtual_sensor.c
-@@ -0,0 +1,400 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 BayLibre
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/export.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/slab.h>
-+#include <linux/thermal.h>
-+#include <linux/types.h>
-+#include <linux/string.h>
-+
-+#include <dt-bindings/thermal/virtual-sensor.h>
-+
-+#include "virtual-sensor.h"
-+
-+struct virtual_sensor_data {
-+	struct list_head node;
-+
-+	/* sensor interface */
-+	int id;
-+	void *sensor_data;
-+	const struct thermal_zone_of_device_ops *ops;
-+};
-+
-+struct virtual_sensor {
-+	int count;
-+	struct virtual_sensor_data *sensors;
-+	struct thermal_zone_device *tzd;
-+
-+	struct list_head node;
-+};
-+
-+static LIST_HEAD(thermal_sensors);
-+static LIST_HEAD(virtual_sensors);
-+
-+static int virtual_sensor_get_temp_max(void *data, int *temperature)
-+{
-+	struct virtual_sensor *sensor = data;
-+	int max_temp = INT_MIN;
-+	int temp;
-+	int i;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		struct virtual_sensor_data *hw_sensor;
-+
-+		hw_sensor = &sensor->sensors[i];
-+		if (!hw_sensor->ops)
-+			return -ENODEV;
-+
-+		hw_sensor->ops->get_temp(hw_sensor->sensor_data, &temp);
-+		max_temp = max(max_temp, temp);
-+	}
-+
-+	*temperature = max_temp;
-+
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops virtual_sensor_max_ops = {
-+	.get_temp = virtual_sensor_get_temp_max,
-+};
-+
-+static int virtual_sensor_get_temp_min(void *data, int *temperature)
-+{
-+	struct virtual_sensor *sensor = data;
-+	int min_temp = INT_MAX;
-+	int temp;
-+	int i;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		struct virtual_sensor_data *hw_sensor;
-+
-+		hw_sensor = &sensor->sensors[i];
-+		if (!hw_sensor->ops)
-+			return -ENODEV;
-+
-+		hw_sensor->ops->get_temp(hw_sensor->sensor_data, &temp);
-+		min_temp = min(min_temp, temp);
-+	}
-+
-+	*temperature = min_temp;
-+
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops virtual_sensor_min_ops = {
-+	.get_temp = virtual_sensor_get_temp_min,
-+};
-+
-+static int do_avg(int val1, int val2)
-+{
-+	return ((val1) / 2) + ((val2) / 2) + (((val1) % 2 + (val2) % 2) / 2);
-+}
-+
-+static int virtual_sensor_get_temp_avg(void *data, int *temperature)
-+{
-+	struct virtual_sensor *sensor = data;
-+	int avg_temp = 0;
-+	int temp;
-+	int i;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		struct virtual_sensor_data *hw_sensor;
-+
-+		hw_sensor = &sensor->sensors[i];
-+		if (!hw_sensor->ops)
-+			return -ENODEV;
-+
-+		hw_sensor->ops->get_temp(hw_sensor->sensor_data, &temp);
-+		avg_temp = do_avg(avg_temp, temp);
-+	}
-+
-+	*temperature = avg_temp;
-+
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops virtual_sensor_avg_ops = {
-+	.get_temp = virtual_sensor_get_temp_avg,
-+};
-+
-+static int register_virtual_sensor(struct virtual_sensor *sensor,
-+				    struct of_phandle_args args,
-+				    int index)
-+{
-+	struct virtual_sensor_data *sensor_data;
-+	int id;
-+
-+	list_for_each_entry(sensor_data, &thermal_sensors, node) {
-+		id = args.args_count ? args.args[0] : 0;
-+		if (sensor_data->id == id) {
-+			memcpy(&sensor->sensors[index], sensor_data,
-+				sizeof(*sensor_data));
-+			return 0;
-+		}
-+	}
-+
-+	return -ENODEV;
-+}
-+
-+static int virtual_sensor_probe(struct platform_device *pdev)
-+{
-+	const struct thermal_zone_of_device_ops *ops;
-+	struct virtual_sensor *sensor;
-+	struct device *dev = &pdev->dev;
-+	struct of_phandle_args args;
-+	u32 type;
-+	int ret;
-+	int i;
-+
-+	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-+	if (!sensor)
-+		return -ENOMEM;
-+
-+	sensor->count = of_count_phandle_with_args(dev->of_node,
-+						   "thermal-sensors",
-+						   "#thermal-sensor-cells");
-+	if (sensor->count <= 0)
-+		return -EINVAL;
-+
-+	sensor->sensors = devm_kmalloc_array(dev, sensor->count,
-+					     sizeof(*sensor->sensors),
-+					     GFP_KERNEL);
-+	if (!sensor->sensors)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		ret = of_parse_phandle_with_args(dev->of_node,
-+						 "thermal-sensors",
-+						 "#thermal-sensor-cells",
-+						 i,
-+						 &args);
-+		if (ret)
-+			return ret;
-+
-+		ret = register_virtual_sensor(sensor, args, i);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = of_property_read_u32(dev->of_node, "type", &type);
-+	if (ret)
-+		return ret;
-+
-+	switch (type) {
-+	case VIRTUAL_SENSOR_MAX:
-+		ops = &virtual_sensor_max_ops;
-+		break;
-+	case VIRTUAL_SENSOR_MIN:
-+		ops = &virtual_sensor_min_ops;
-+		break;
-+	case VIRTUAL_SENSOR_AVG:
-+		ops = &virtual_sensor_avg_ops;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	sensor->tzd = devm_thermal_zone_of_sensor_register(dev, 0, sensor, ops);
-+	if (IS_ERR(sensor->tzd))
-+		return PTR_ERR(sensor->tzd);
-+
-+	platform_set_drvdata(pdev, sensor);
-+	list_add(&sensor->node, &virtual_sensors);
-+
-+	return 0;
-+}
-+
-+static int virtual_sensor_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct virtual_sensor *sensor;
-+
-+	sensor = platform_get_drvdata(pdev);
-+	list_del(&sensor->node);
-+
-+	devm_thermal_zone_of_sensor_unregister(dev, sensor->tzd);
-+	devm_kfree(dev, sensor->sensors);
-+	devm_kfree(dev, sensor);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id virtual_sensor_of_match[] = {
-+	{
-+		.compatible = "virtual,thermal-sensor",
-+	},
-+	{
-+	},
-+};
-+MODULE_DEVICE_TABLE(of, thermal_aggr_of_match);
-+
-+static struct platform_driver virtual_sensor = {
-+	.probe = virtual_sensor_probe,
-+	.remove = virtual_sensor_remove,
-+	.driver = {
-+		.name = "virtual-sensor",
-+		.of_match_table = virtual_sensor_of_match,
-+	},
-+};
-+
-+/**
-+ * thermal_virtual_sensor_register - registers a sensor that could by a virtual
-+ * sensor
-+ * @dev: a valid struct device pointer of a sensor device. Must contain
-+ *       a valid .of_node, for the sensor node.
-+ * @sensor_id: a sensor identifier, in case the sensor IP has more
-+ *             than one sensors
-+ * @data: a private pointer (owned by the caller) that will be passed
-+ *        back, when a temperature reading is needed.
-+ * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-+ *
-+ * This function will register a thermal sensor to make it available for later
-+ * usage by a virtual sensor.
-+ *
-+ * The thermal zone temperature is provided by the @get_temp function
-+ * pointer. When called, it will have the private pointer @data back.
-+ *
-+ * Return: On success returns a valid struct thermal_zone_device,
-+ * otherwise, it returns a corresponding ERR_PTR(). Caller must
-+ * check the return value with help of IS_ERR() helper.
-+ */
-+struct virtual_sensor_data *thermal_virtual_sensor_register(
-+	struct device *dev, int sensor_id, void *data,
-+	const struct thermal_zone_of_device_ops *ops)
-+{
-+	struct virtual_sensor_data *sensor_data;
-+
-+	sensor_data = devm_kzalloc(dev, sizeof(*sensor_data), GFP_KERNEL);
-+	if (!sensor_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	sensor_data->id = sensor_id;
-+	sensor_data->sensor_data = data;
-+	sensor_data->ops = ops;
-+
-+	list_add(&sensor_data->node, &thermal_sensors);
-+
-+	return sensor_data;
-+}
-+EXPORT_SYMBOL_GPL(thermal_virtual_sensor_register);
-+
-+/**
-+ * thermal_virtual_sensor_unregister - unregisters a sensor
-+ * @dev: a valid struct device pointer of a sensor device.
-+ * @sensor_data: a pointer to struct virtual_sensor_data to unregister.
-+ *
-+ * This function removes the sensor from the list of available thermal sensors.
-+ * If the sensor is in use, then the next call to .get_temp will return -ENODEV.
-+ */
-+void thermal_virtual_sensor_unregister(struct device *dev,
-+				       struct virtual_sensor_data *sensor_data)
-+{
-+	struct virtual_sensor_data *temp;
-+	struct virtual_sensor *sensor;
-+	int i;
-+
-+	list_del(&sensor_data->node);
-+
-+	list_for_each_entry(sensor, &virtual_sensors, node) {
-+		for (i = 0; i < sensor->count; i++) {
-+			temp = &sensor->sensors[i];
-+			if (temp->id == sensor_data->id &&
-+				temp->sensor_data == sensor_data->sensor_data) {
-+				temp->ops = NULL;
-+			}
-+		}
-+	}
-+	devm_kfree(dev, sensor_data);
-+}
-+EXPORT_SYMBOL_GPL(thermal_virtual_sensor_unregister);
-+
-+static void devm_thermal_virtual_sensor_release(struct device *dev, void *res)
-+{
-+	thermal_virtual_sensor_unregister(dev,
-+					  *(struct virtual_sensor_data **)res);
-+}
-+
-+static int devm_thermal_virtual_sensor_match(struct device *dev, void *res,
-+					     void *data)
-+{
-+	struct virtual_sensor_data **r = res;
-+
-+	if (WARN_ON(!r || !*r))
-+		return 0;
-+
-+	return *r == data;
-+}
-+
-+
-+/**
-+ * devm_thermal_virtual_sensor_register - Resource managed version of
-+ *				thermal_virtual_sensor_register()
-+ * @dev: a valid struct device pointer of a sensor device. Must contain
-+ *       a valid .of_node, for the sensor node.
-+ * @sensor_id: a sensor identifier, in case the sensor IP has more
-+ *	       than one sensors
-+ * @data: a private pointer (owned by the caller) that will be passed
-+ *	  back, when a temperature reading is needed.
-+ * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-+ *
-+ * Refer thermal_zone_of_sensor_register() for more details.
-+ *
-+ * Return: On success returns a valid struct virtual_sensor_data,
-+ * otherwise, it returns a corresponding ERR_PTR(). Caller must
-+ * check the return value with help of IS_ERR() helper.
-+ * Registered virtual_sensor_data device will automatically be
-+ * released when device is unbounded.
-+ */
-+struct virtual_sensor_data *devm_thermal_virtual_sensor_register(
-+	struct device *dev, int sensor_id,
-+	void *data, const struct thermal_zone_of_device_ops *ops)
-+{
-+	struct virtual_sensor_data **ptr, *sensor_data;
-+
-+	ptr = devres_alloc(devm_thermal_virtual_sensor_release, sizeof(*ptr),
-+			   GFP_KERNEL);
-+	if (!ptr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	sensor_data = thermal_virtual_sensor_register(dev, sensor_id, data, ops);
-+	if (IS_ERR(sensor_data)) {
-+		devres_free(ptr);
-+		return sensor_data;
-+	}
-+
-+	*ptr = sensor_data;
-+	devres_add(dev, ptr);
-+
-+	return sensor_data;
-+}
-+EXPORT_SYMBOL_GPL(devm_thermal_virtual_sensor_register);
-+
-+/**
-+ * devm_thermal_virtual_sensor_unregister - Resource managed version of
-+ *				thermal_virtual_sensor_unregister().
-+ * @dev: Device for which resource was allocated.
-+ * @sensor: a pointer to struct thermal_zone_device where the sensor is registered.
-+ *
-+ * This function removes the sensor from the list of sensors registered with
-+ * devm_thermal_virtual_sensor_register() API.
-+ * Normally this function will not need to be called and the resource
-+ * management code will ensure that the resource is freed.
-+ */
-+void devm_thermal_virtual_sensor_unregister(struct device *dev,
-+					    struct virtual_sensor *sensor)
-+{
-+	WARN_ON(devres_release(dev, devm_thermal_virtual_sensor_release,
-+			       devm_thermal_virtual_sensor_match, sensor));
-+}
-+EXPORT_SYMBOL_GPL(devm_thermal_virtual_sensor_unregister);
-+
-+module_platform_driver(virtual_sensor);
-+MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
-+MODULE_DESCRIPTION("Virtual thermal sensor");
-+MODULE_LICENSE("GPL v2");
--- 
-2.31.1
+> What exactly do you intend to do beyond this point, if you detect the
+> "error condition"? Locking further changes of the performance state
+> seems fragile too, especially if some other device/driver requires the
+> performance state to be raised. It sounds like you simply need to call
+> BUG_ON() then?
 
+I can lock it to high performance state.
+
+> Also note that a very similar problem exists, *before* the device gets
+> attached in the first place. More precisely, nothing prevents the
+> performance state from being set to a non-compatible value for an
+> always-on HW/device that hasn't been attached yet. So maybe you need
+> to set the maximum performance state at genpd initializations, then
+> use the ->sync_state() callback to very that all consumers have been
+> attached to the genpd provider, before allowing the state to be
+> changed/lowered?
+
+That is already done by the PD driver.
+
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/tegra/pmc.c#L3790
