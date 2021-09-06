@@ -2,265 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B90401FAD
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 20:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1164401FC1
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 20:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbhIFS16 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 6 Sep 2021 14:27:58 -0400
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:43841 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245097AbhIFS1O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 14:27:14 -0400
-Received: by mail-oo1-f48.google.com with SMTP id y16-20020a4ad6500000b0290258a7ff4058so2197683oos.10;
-        Mon, 06 Sep 2021 11:26:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BVmeNacfQjfXr9muf65BMgwZ9meaGbashp3T2U1wQ4Q=;
-        b=VzEqqDOXr7ANGm/E1U99fcZcJCfhaQTVDhN8VXw1wXcZSxp7y1DRLahkY6ZFSoXzNM
-         x2B4tUw8aPNYGSLwmKDaMHStcOEa46brW/2vAkKyUg0ZpY70Tr7sUax4ktChBsS2Rh9r
-         e8koQhV4/NYYMa+1FMjS/4D7n/9GkbhPtkhsN7KoOqnAq1TqpUPh4A+YdyHtdjOsMDZ4
-         6IwGQKX92Ef8FrG+00Bqcy7MrYOIgJQEtjdFqs5sGgtynKRxWfEKrUyDUVbx6QzEUVyU
-         UyVKxv4XVusjR6HJbGdN8cuUIF3EMq88a5FceA/TIcg+3qL3TKWxAqDzmS9StCcERvFB
-         l2ug==
-X-Gm-Message-State: AOAM531eiFITR3XOFms7bQ8l+Q7euWuS8AxgfcStoKPlGMl49hIyksqq
-        BP/bN4WocH8V0ccsEgA/B7WVPV/pD6YQp3F9Anc=
-X-Google-Smtp-Source: ABdhPJwWSE4cggjd8TvsuiT0WvL04CBszBORdZf798NbtZse5WcLTx6Voeth+mgGEAPNeck3JWB8i2Ncx2W7LFBoxUM=
-X-Received: by 2002:a4a:ca83:: with SMTP id x3mr14920538ooq.2.1630952768753;
- Mon, 06 Sep 2021 11:26:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210904053703.581297-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0hQp8Hxf__tL22s0oOcTym5mx9tND34ijufTDE3_NSW6A@mail.gmail.com>
- <926ac4b9-1bb5-e96e-ded3-6461f7a215b7@kernel.dk> <b1d5b6daacef349eb6fcc23ce7264e4786d1d9f4.camel@linux.intel.com>
- <CAJZ5v0jaXnw0zjpnsb81Hauy4-ApuULfQaaLG10qqL67H-YTNA@mail.gmail.com>
- <8dc57921f157b154e4af2dba26ce697dc4d4fcc2.camel@linux.intel.com>
- <CAJZ5v0jLmziZZEqEk-D+b6jD7UUPmeb7MQW1ZptdHTk-2c9nMg@mail.gmail.com> <584a4fad09048e3ea0dbc3515b2e909b745177dd.camel@linux.intel.com>
-In-Reply-To: <584a4fad09048e3ea0dbc3515b2e909b745177dd.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Sep 2021 20:25:57 +0200
-Message-ID: <CAJZ5v0iH3TacxX3gzBS5cah7SnmDWbmHz=WCujQJpmEggGhLhg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix for HWP interrupt before
- driver is ready
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
+        id S230263AbhIFShC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Sep 2021 14:37:02 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:44097 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229635AbhIFShC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 14:37:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1630953357; x=1662489357;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zyMK5O/PHL1QnpDxO+QE66IrpDGM25Huc+ptLFymepw=;
+  b=MFTS+78AoJZrkCoTXnpgUtFWG7gCoNzRR627Cg12Vs7JPOmrGLReUJWg
+   r+xCgBdkNIMgpWH8DL3t4zkQtK2ByA4jXGOaq6hv4cTrUFs2hKEuJfEP6
+   y/lqyC2OPqZRHOue7XBKT+RrBFcU9lEU0wL8Rm+lhVbTmIWQqNBUQ9dCi
+   8=;
+X-IronPort-AV: E=Sophos;i="5.85,273,1624320000"; 
+   d="scan'208";a="157935869"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 06 Sep 2021 18:35:49 +0000
+Received: from EX13D16EUB004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com (Postfix) with ESMTPS id EA0A4A1EBF;
+        Mon,  6 Sep 2021 18:35:47 +0000 (UTC)
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D16EUB004.ant.amazon.com (10.43.166.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Mon, 6 Sep 2021 18:35:46 +0000
+Received: from dev-dsk-anelkz-1b-031e727b.eu-west-1.amazon.com (10.13.225.27)
+ by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP Server id
+ 15.0.1497.23 via Frontend Transport; Mon, 6 Sep 2021 18:35:45 +0000
+Received: by dev-dsk-anelkz-1b-031e727b.eu-west-1.amazon.com (Postfix, from userid 14141144)
+        id F0A6F593A; Mon,  6 Sep 2021 18:35:44 +0000 (UTC)
+From:   Anel Orazgaliyeva <anelkz@amazon.de>
+CC:     <anelkz@amazon.de>, Aman Priyadarshi <apeureka@amazon.de>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpuidle: Fix memory leaks
+Date:   Mon, 6 Sep 2021 18:34:40 +0000
+Message-ID: <20210906183440.85710-1-anelkz@amazon.de>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 6, 2021 at 8:14 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Mon, 2021-09-06 at 19:54 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Sep 6, 2021 at 7:23 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > On Mon, 2021-09-06 at 18:58 +0200, Rafael J. Wysocki wrote:
-> > > > On Mon, Sep 6, 2021 at 6:55 PM Srinivas Pandruvada
-> > > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > > >
-> > > > > On Mon, 2021-09-06 at 10:43 -0600, Jens Axboe wrote:
-> > > > > > On 9/6/21 10:17 AM, Rafael J. Wysocki wrote:
-> > > > > > > On Sat, Sep 4, 2021 at 7:37 AM Srinivas Pandruvada
-> > > > > > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > > > > > >
-> > > > > > > > In Lenovo X1 gen9 laptop, HWP interrupts arrive before
-> > > > > > > > driver
-> > > > > > > > is
-> > > > > > > > ready
-> > > > > > > > to handle on that CPU. Basically didn't even allocated
-> > > > > > > > memory
-> > > > > > > > for
-> > > > > > > > per
-> > > > > > > > cpu data structure and not even started interrupt enable
-> > > > > > > > process
-> > > > > > > > on that
-> > > > > > > > CPU. So interrupt handler observes a NULL pointer to
-> > > > > > > > schedule
-> > > > > > > > work.
-> > > > > > > >
-> > > > > > > > This interrupt was probably for SMM, but since it is
-> > > > > > > > redirected
-> > > > > > > > to
-> > > > > > > > OS by OSC call, OS receives it, but not ready to handle.
-> > > > > > > > That
-> > > > > > > > redirection
-> > > > > > > > of interrupt to OS was also done to solve one SMM crash on
-> > > > > > > > Yoga
-> > > > > > > > 260 for
-> > > > > > > > HWP interrupt a while back.
-> > > > > > > >
-> > > > > > > > To solve this the HWP interrupt handler should ignore such
-> > > > > > > > request if the
-> > > > > > > > driver is not ready. This will require some flag to wait
-> > > > > > > > till
-> > > > > > > > the
-> > > > > > > > driver
-> > > > > > > > setup a workqueue to handle on a CPU. We can't simply
-> > > > > > > > assume
-> > > > > > > > cpudata to
-> > > > > > > > be NULL and avoid processing as it may not be NULL but data
-> > > > > > > > structure is
-> > > > > > > > not in consistent state.
-> > > > > > > >
-> > > > > > > > So created a cpumask which sets the CPU on which interrupt
-> > > > > > > > was
-> > > > > > > > setup. If
-> > > > > > > > not setup, simply clear the interrupt status and return.
-> > > > > > > > Since
-> > > > > > > > the
-> > > > > > > > similar issue can happen during S3 resume, clear the bit
-> > > > > > > > during
-> > > > > > > > offline.
-> > > > > > > >
-> > > > > > > > Since interrupt timing may be before HWP is enabled, use
-> > > > > > > > safe
-> > > > > > > > MSR
-> > > > > > > > read
-> > > > > > > > writes as before the change for HWP interrupt.
-> > > > > > > >
-> > > > > > > > Fixes: d0e936adbd22 ("cpufreq: intel_pstate: Process HWP
-> > > > > > > > Guaranteed change notification")
-> > > > > > > > Reported-and-tested-by: Jens Axboe <axboe@kernel.dk>
-> > > > > > > > Signed-off-by: Srinivas Pandruvada <
-> > > > > > > > srinivas.pandruvada@linux.intel.com>
-> > > > > > > > ---
-> > > > > > > >  drivers/cpufreq/intel_pstate.c | 23
-> > > > > > > > ++++++++++++++++++++++-
-> > > > > > > >  1 file changed, 22 insertions(+), 1 deletion(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > > > > > > b/drivers/cpufreq/intel_pstate.c
-> > > > > > > > index b4ffe6c8a0d0..5ac86bfa1080 100644
-> > > > > > > > --- a/drivers/cpufreq/intel_pstate.c
-> > > > > > > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > > > > > > @@ -298,6 +298,8 @@ static bool hwp_boost __read_mostly;
-> > > > > > > >
-> > > > > > > >  static struct cpufreq_driver *intel_pstate_driver
-> > > > > > > > __read_mostly;
-> > > > > > > >
-> > > > > > > > +static cpumask_t hwp_intr_enable_mask;
-> > > > > > > > +
-> > > > > > > >  #ifdef CONFIG_ACPI
-> > > > > > > >  static bool acpi_ppc;
-> > > > > > > >  #endif
-> > > > > > > > @@ -1067,11 +1069,15 @@ static void
-> > > > > > > > intel_pstate_hwp_set(unsigned
-> > > > > > > > int cpu)
-> > > > > > > >         wrmsrl_on_cpu(cpu, MSR_HWP_REQUEST, value);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +static void intel_pstate_disable_hwp_interrupt(struct
-> > > > > > > > cpudata
-> > > > > > > > *cpudata);
-> > > > > > > > +
-> > > > > > > >  static void intel_pstate_hwp_offline(struct cpudata *cpu)
-> > > > > > > >  {
-> > > > > > > >         u64 value = READ_ONCE(cpu->hwp_req_cached);
-> > > > > > > >         int min_perf;
-> > > > > > > >
-> > > > > > > > +       intel_pstate_disable_hwp_interrupt(cpu);
-> > > > > > > > +
-> > > > > > > >         if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-> > > > > > > >                 /*
-> > > > > > > >                  * In case the EPP has been set to
-> > > > > > > > "performance"
-> > > > > > > > by the
-> > > > > > > > @@ -1645,20 +1651,35 @@ void notify_hwp_interrupt(void)
-> > > > > > > >         if (!hwp_active ||
-> > > > > > > > !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
-> > > > > > > >                 return;
-> > > > > > > >
-> > > > > > > > -       rdmsrl(MSR_HWP_STATUS, value);
-> > > > > > > > +       rdmsrl_safe(MSR_HWP_STATUS, &value);
-> > > > > > > >         if (!(value & 0x01))
-> > > > > > > >                 return;
-> > > > > > > >
-> > > > > > > > +       if (!cpumask_test_cpu(this_cpu,
-> > > > > > > > &hwp_intr_enable_mask)) {
-> > > > > > > > +               wrmsrl_safe(MSR_HWP_STATUS, 0);
-> > > > > > > > +               return;
-> > > > > > > > +       }
-> > > > > > >
-> > > > > > > Without additional locking, there is a race between this and
-> > > > > > > intel_pstate_disable_hwp_interrupt().
-> > > > > > >
-> > > > > > > 1. notify_hwp_interrupt() checks hwp_intr_enable_mask() and
-> > > > > > > the
-> > > > > > > target
-> > > > > > > CPU is in there, so it will go for scheduling the delayed
-> > > > > > > work.
-> > > > > > > 2. intel_pstate_disable_hwp_interrupt() runs between the
-> > > > > > > check
-> > > > > > > and
-> > > > > > > the
-> > > > > > > cpudata load below.
-> > > > > > > 3. hwp_notify_work is scheduled on the CPU that isn't there
-> > > > > > > in
-> > > > > > > the
-> > > > > > > mask any more.
-> > > > > >
-> > > > > > I noticed that too, not clear to me how much of an issue that
-> > > > > > is
-> > > > > > in
-> > > > > > practice. But there's definitely a race there.
-> > > > > Glad to see how this is possible from code running in ISR
-> > > > > context.
-> > > >
-> > > > intel_pstate_disable_hwp_interrupt() may very well run on a
-> > > > different
-> > > > CPU in parallel with the interrupt handler running on this CPU.  Or
-> > > > is
-> > > > this not possible for some reason?
-> > > I see the offline callback is called from cpufreq core from hotplug
-> > > online/offline callback. So this should run the call on the target
-> > > CPU.
-> > > From Documentation
-> > > "The states CPUHP_AP_OFFLINE … CPUHP_AP_ONLINE are invoked just the
-> > > after the CPU has been brought up. The interrupts are off and the
-> > > scheduler is not yet active on this CPU. Starting with
-> > > CPUHP_AP_OFFLINE
-> > > the callbacks are invoked on the target CPU."
-> > >
-> > > The only other place it is called is from subsys remove callback. Not
-> > > sure how can you remove cpufreq subsys on fly.
-> >
-> > cpufreq_unregister_driver() causes this to happen.
-> >
-> > > Let's say it is possible:
-> > > While running ISR on a local CPU, how can someone pull the CPU before
-> > > its completion? If the CPU is going away after that, the workqueue is
-> > > unbounded. So it will run on some other CPU, here if that happens it
-> > > will call cpufreq update policy, which will be harmless.
-> >
-> > Well, it looks to me like if you are super-unlucky, the ISR may run on
-> > the local CPU in parallel with intel_pstate_update_status() running on
-> > a remote one and so dereferencing cpudata from it is generally unsafe.
-> > In theory.  In practice it is unlikely to become problematic for
-> > timing reasons AFAICS.
-> >
-> >
-> We are handling offline for other thermal interrupt sources from same
-> interrupt in therm-throt.c, where we do similar in offline path (by
-> TGLX). If cpufreq offline can cause such issue of changing CPU,
+Commit c343bf1ba5ef ("cpuidle: Fix three reference count leaks")
+fixes the cleanup of kobjects; however, it removes kfree() calls
+altogether, leading to memory leaks.
 
-This is not cpufreq offline, but intel_pstate_update_status() which
-may be triggered via sysfs.  And again, the theoretically problematic
-thing is dereferencing cpudata (which may be cleared by a remote CPU)
-from the interrupt handler without protection.
+Fix those and also defer the initialization of dev->kobj_dev until
+after the error check, so that we do not end up with a dangling
+pointer.
 
-> I can call intel_pstate_disable_hwp_interrupt() via override from
-> https://elixir.bootlin.com/linux/latest/C/ident/thermal_throttle_offline
-> after masking APIC interrupt.
+Signed-off-by: Anel Orazgaliyeva <anelkz@amazon.de>
+Suggested-by: Aman Priyadarshi <apeureka@amazon.de>
+---
+ drivers/cpuidle/sysfs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-But why would using RCU be harder than this?
+diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+index 53ec9585ccd4..469e18547d06 100644
+--- a/drivers/cpuidle/sysfs.c
++++ b/drivers/cpuidle/sysfs.c
+@@ -488,6 +488,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
+ 					   &kdev->kobj, "state%d", i);
+ 		if (ret) {
+ 			kobject_put(&kobj->kobj);
++			kfree(kobj);
+ 			goto error_state;
+ 		}
+ 		cpuidle_add_s2idle_attr_group(kobj);
+@@ -619,6 +620,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
+ 				   &kdev->kobj, "driver");
+ 	if (ret) {
+ 		kobject_put(&kdrv->kobj);
++		kfree(kdrv);
+ 		return ret;
+ 	}
+ 
+@@ -705,7 +707,6 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
+ 	if (!kdev)
+ 		return -ENOMEM;
+ 	kdev->dev = dev;
+-	dev->kobj_dev = kdev;
+ 
+ 	init_completion(&kdev->kobj_unregister);
+ 
+@@ -713,9 +714,11 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
+ 				   "cpuidle");
+ 	if (error) {
+ 		kobject_put(&kdev->kobj);
++		kfree(kdev);
+ 		return error;
+ 	}
+ 
++	dev->kobj_dev = kdev;
+ 	kobject_uevent(&kdev->kobj, KOBJ_ADD);
+ 
+ 	return 0;
+-- 
+2.32.0
 
-Also please note that on RT kernels interrupt handlers are run in threads.
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
