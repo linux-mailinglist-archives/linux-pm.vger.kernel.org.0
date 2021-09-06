@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD4740140B
+	by mail.lfdr.de (Postfix) with ESMTP id 252DE40140A
 	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 03:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241004AbhIFBcN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S241023AbhIFBcN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sun, 5 Sep 2021 21:32:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48676 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:47740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351786AbhIFBbD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 5 Sep 2021 21:31:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19824610CC;
-        Mon,  6 Sep 2021 01:24:24 +0000 (UTC)
+        id S1351876AbhIFBbM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 5 Sep 2021 21:31:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D44E610E9;
+        Mon,  6 Sep 2021 01:24:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630891464;
-        bh=nup1VEPDadJYUtHHiAk5JlOcP7Bm6E25hV0DQVm78U8=;
+        s=k20201202; t=1630891480;
+        bh=JifHhx+EBGhP58xdE9xvOTkvASS6jgkYw5vlP1T2aoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H098EKp5wudgM13d/oTAMru6g63WHkFmuUOp46KkXASobTqzxbBk2YSgfww+antin
-         gfCBJT9xdoyQcLJB6zNgfcjwKcxqUHxz7Dt2zfKfmsldFbuOGuliLsEv9QSu1v4H0a
-         05jErg6ch22+9jI8SdhVYPVVn7lEBZQrU3M0ukuPBUko5O3gKUitSshg+VWtkKme4a
-         NdGhps/LAsizo6lzCnBVOjBbtEudY0LsFCEmbQ9Ps16ETqCxFPZOODUdH77GrqVWcl
-         dGz+C1AoCDEhT/PyI6co45uBMPm7dkihO1O3U0daLxpj5GWRpAjx3rsPoz+WEFPbSL
-         X6lU1ZQgDVXXQ==
+        b=LCxtilwDQHeDhzgmmjmB1FZ53JySs+tcTq0RLVW7Zi4Dx6787j4k3DRJEUkZtjEqA
+         aF1b95bcTqg3MwGUc/RjA1XlgOxHKbR2tRYrqHejv1Kl6T0g+Syx/70g8CtD1vRazn
+         Auwiuxjwjmuqlw/qz7PVVLQdh0MWjsdMDaUmB6CI2CH3d5XcI8gOXl+KnThVKt6lF0
+         faoBtbbSDKkNdqzFMNhOBHYmwVmF+CGsn02nFIYuMgrWwqLhwYTkYRtbTXYa3gjq6X
+         GiXwX+025k4GptLUveYay/n3BtPrLDj/nTfccimhRuAV2HdVbe+4dxv8AQrC0k6Xus
+         38l/fPWMw4efg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 07/14] power: supply: max17042_battery: fix typo in MAx17042_TOFF
-Date:   Sun,  5 Sep 2021 21:24:08 -0400
-Message-Id: <20210906012415.931147-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 4/9] power: supply: max17042_battery: fix typo in MAx17042_TOFF
+Date:   Sun,  5 Sep 2021 21:24:29 -0400
+Message-Id: <20210906012435.931318-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210906012415.931147-1-sashal@kernel.org>
-References: <20210906012415.931147-1-sashal@kernel.org>
+In-Reply-To: <20210906012435.931318-1-sashal@kernel.org>
+References: <20210906012435.931318-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -50,14 +50,14 @@ Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/max17042_battery.c | 2 +-
- include/linux/power/max17042_battery.h  | 2 +-
+ drivers/power/max17042_battery.c       | 2 +-
+ include/linux/power/max17042_battery.h | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+diff --git a/drivers/power/max17042_battery.c b/drivers/power/max17042_battery.c
 index da7a75f82489..249b0758dae6 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
+--- a/drivers/power/max17042_battery.c
++++ b/drivers/power/max17042_battery.c
 @@ -644,7 +644,7 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
  	struct max17042_config_data *config = chip->pdata->config_data;
  
