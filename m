@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ADE4013FA
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 03:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6DC4013FE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 03:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbhIFBcJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Sep 2021 21:32:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47506 "EHLO mail.kernel.org"
+        id S240822AbhIFBcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Sep 2021 21:32:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351399AbhIFBa0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 5 Sep 2021 21:30:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8BE3761207;
-        Mon,  6 Sep 2021 01:23:39 +0000 (UTC)
+        id S1351564AbhIFBal (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 5 Sep 2021 21:30:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 674D6610A1;
+        Mon,  6 Sep 2021 01:23:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630891420;
-        bh=CwvneTM56x0pcK6CzsIx9OVRJSgDvKII45r5zGe59I0=;
+        s=k20201202; t=1630891437;
+        bh=4BNyclt2xyuxOPVQDdOFEusbcZXv+dYM7A/mjwdtuoQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BOlUAi2O4qADdXYhztvmylYdAtKd83l/BXB1xHkwFuhA+am6yOXLNHLehv0YGLhZN
-         NakhCdf5CdKJ+sNM9GSV1/o/MLAdljvT6afdjXFCzZB2KR6FHLE9pwgywjz6qDik/c
-         02YKmSraQvJq2dScwUoYCEuy1zmoxuNpW93hBcCeaH73FPMF6ASJw6ubEUY2TpHR7T
-         LQfLJnGvk8fM6q6ntuSKBaVXy1zpQAUpiFsE3H6zpRejDpyF7BcHJD1RQg0MpLSvfy
-         7XTvHQ1C374jVFtqdgf0nU0iLoM+t0lNfaEyAsWYePjjNQIMXTgrRrCcJiq1AjAAtl
-         SE2lH8sz8mllQ==
+        b=nnBqIaZI968mQzz3LXZ+R/GJomBiw92nKSFuPrefM9sr/xzivK0KtF2/eHJZEVESa
+         F+ukcPuJPJkcDojuI8ygz4AV+CnhstD4T1eDfLgn1GfyTCBP6ksHpzxjvdbzK+wyuB
+         wj5Jte3O8Qa60ThMJV7PRXHPM5r5qg1SJfLCn/vgNiitGnkZRO19trodB79oRpYqXZ
+         FdtC/Kl0l/hauAFxY9ku+aXH317WrBoMsp5cJUxlMKH77FZm4Pged9sAgphc2VHhuB
+         BdD4w/Bzp+Qn+FJX7JYu9KIt16TMwke/MNi4Hr68tRJiJRcyBHyDMvNvrLnwLUC7K/
+         TsrQ//13rJHXg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/23] power: supply: max17042_battery: fix typo in MAx17042_TOFF
-Date:   Sun,  5 Sep 2021 21:23:13 -0400
-Message-Id: <20210906012322.930668-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 03/17] power: supply: axp288_fuel_gauge: Report register-address on readb / writeb errors
+Date:   Sun,  5 Sep 2021 21:23:38 -0400
+Message-Id: <20210906012352.930954-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210906012322.930668-1-sashal@kernel.org>
-References: <20210906012322.930668-1-sashal@kernel.org>
+In-Reply-To: <20210906012352.930954-1-sashal@kernel.org>
+References: <20210906012352.930954-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,44 +42,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit ed0d0a0506025f06061325cedae1bbebd081620a ]
+[ Upstream commit caa534c3ba40c6e8352b42cbbbca9ba481814ac8 ]
 
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+When fuel_gauge_reg_readb()/_writeb() fails, report which register we
+were trying to read / write when the error happened.
+
+Also reword the message a bit:
+- Drop the axp288 prefix, dev_err() already prints this
+- Switch from telegram / abbreviated style to a normal sentence, aligning
+  the message with those from fuel_gauge_read_*bit_word()
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/max17042_battery.c | 2 +-
- include/linux/power/max17042_battery.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/axp288_fuel_gauge.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 00a3a581e079..8618dbb72392 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -740,7 +740,7 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
- 	struct max17042_config_data *config = chip->pdata->config_data;
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index a8dcabc32721..1fe18c365c87 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -142,7 +142,7 @@ static int fuel_gauge_reg_readb(struct axp288_fg_info *info, int reg)
+ 	}
  
- 	max17042_override_por(map, MAX17042_TGAIN, config->tgain);
--	max17042_override_por(map, MAx17042_TOFF, config->toff);
-+	max17042_override_por(map, MAX17042_TOFF, config->toff);
- 	max17042_override_por(map, MAX17042_CGAIN, config->cgain);
- 	max17042_override_por(map, MAX17042_COFF, config->coff);
+ 	if (ret < 0) {
+-		dev_err(&info->pdev->dev, "axp288 reg read err:%d\n", ret);
++		dev_err(&info->pdev->dev, "Error reading reg 0x%02x err: %d\n", reg, ret);
+ 		return ret;
+ 	}
  
-diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
-index a7ed29baf44a..86e5ad8aeee4 100644
---- a/include/linux/power/max17042_battery.h
-+++ b/include/linux/power/max17042_battery.h
-@@ -82,7 +82,7 @@ enum max17042_register {
- 	MAX17042_RelaxCFG	= 0x2A,
- 	MAX17042_MiscCFG	= 0x2B,
- 	MAX17042_TGAIN		= 0x2C,
--	MAx17042_TOFF		= 0x2D,
-+	MAX17042_TOFF		= 0x2D,
- 	MAX17042_CGAIN		= 0x2E,
- 	MAX17042_COFF		= 0x2F,
+@@ -156,7 +156,7 @@ static int fuel_gauge_reg_writeb(struct axp288_fg_info *info, int reg, u8 val)
+ 	ret = regmap_write(info->regmap, reg, (unsigned int)val);
  
+ 	if (ret < 0)
+-		dev_err(&info->pdev->dev, "axp288 reg write err:%d\n", ret);
++		dev_err(&info->pdev->dev, "Error writing reg 0x%02x err: %d\n", reg, ret);
+ 
+ 	return ret;
+ }
 -- 
 2.30.2
 
