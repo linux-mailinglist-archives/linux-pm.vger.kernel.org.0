@@ -2,125 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD606401113
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Sep 2021 19:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F907401273
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 03:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbhIERsk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Sep 2021 13:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235508AbhIERsj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Sep 2021 13:48:39 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDACC061575;
-        Sun,  5 Sep 2021 10:47:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id x11so8626821ejv.0;
-        Sun, 05 Sep 2021 10:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QboeAPIj7q4xYx6MRMC7Q7dkylvLtoIsEfoKZWMl7EI=;
-        b=PHzbwSxBuU+mOLEBcNDRVmH/3cVAyv/EcPAG4r4oVh5ef5VXgRtVZILa31pDVMfPVU
-         iF4lhCVoHI053siTkzpyQ+jP6wQUGW334epu6y6ScLVtmfGzCz+L/N0dy/Tc4/AEIr8q
-         wYy3HjglIz5JInnxv9f0jTkB/qopjySSmp+UdZiuVHhuD+69ARv3e7cuYCvRtxwdxkqo
-         Vx36BFH3zzoahBazuarmcN9T4DRwixf2KR0PthoCrjresTNfuxQjYX91cgWhBc9x38P3
-         9WCGU+86FqoOZboE8Dff1IA1QexLFIyitYegdxx6ALQM6nmWk9l16RUCWCf2C4bFr72S
-         CD1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QboeAPIj7q4xYx6MRMC7Q7dkylvLtoIsEfoKZWMl7EI=;
-        b=dV5GQtUJPOaucsDYNzdg/XA+PJo9ujAZt4Oz6c/ayH5VZyDkt0njROQIAnsONUuV/q
-         cyvxxB1RL5XsQahvzi+K0aquVuVf1L84lZdRERVzDyC4s/onHRsj3AVzG0OhKE2OmtIB
-         +m2XcaJZz6RWUy9IzQ29GH9ueUQ1xKa8Ut+YqzoZLZiHsQvknZ04UHLUfpRp+WMUhEAt
-         E1Tq/UhoZL3pdV1eOIrCKqy5drQwAeu4zg/uQ0eX5d8I0g7+bc01jPm7XBu+mh45tdVL
-         gaqk69Ii+n/olnfIbowJ8yQMZfE8Qb1S/usWsqX4/ZpefvbiSe3MINPj7PqPgrTav6P1
-         ZSAg==
-X-Gm-Message-State: AOAM532sZPCMhQLdKCw9KFHzmG+eLH3wQgQrenZOXL82deYqxYHM+OEE
-        qaWwy6pIZpRbzdmS4vWesgM=
-X-Google-Smtp-Source: ABdhPJyZcx0foOr2Kvb2vzkM5aprQd4iqZZueHVT/jssgrfXHI3pwZYdOVU0awzLKSTLLHj8P3J7nA==
-X-Received: by 2002:a17:906:417:: with SMTP id d23mr9991169eja.383.1630864054059;
-        Sun, 05 Sep 2021 10:47:34 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (host-79-19-158-155.retail.telecomitalia.it. [79.19.158.155])
-        by smtp.googlemail.com with ESMTPSA id j13sm3165986edt.72.2021.09.05.10.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Sep 2021 10:47:33 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH 2/2] drivers: thermal: tsens: add timeout to get_tem_tsens_valid
-Date:   Sun,  5 Sep 2021 19:47:08 +0200
-Message-Id: <20210905174708.4605-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210905174708.4605-1-ansuelsmth@gmail.com>
-References: <20210905174708.4605-1-ansuelsmth@gmail.com>
+        id S238612AbhIFBVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Sep 2021 21:21:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37418 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238600AbhIFBVC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 5 Sep 2021 21:21:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 53D276103B;
+        Mon,  6 Sep 2021 01:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630891199;
+        bh=kYE7q/97/cZLRwMz+Y9oBLEiPSDWSS9iWWIdA4NHOsw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fAK/U/AW1fmr/JJvokjyxuR3aVY5QCIOFFePums5kk0GM83qWi1nFpzW0YmIwms87
+         ezlvyv0JTQ5EaWsqSuNt9TDEz4obbcZGJBZCWeHyTAcLHcxfzv2FTRgjkB+m+pvvdh
+         ehM7ninXdxYLdBaSWRggQpaEmim6EahZZz0WmenTJoWGVDUqzIZ6iebb0qXd0WdO7s
+         Tx3UAnGMjyrHOe9yUOy9Q4eLiN1PFKANEIZGb5MiNv8Jfn0u5C6vZcykHyg7DX7bmd
+         Taz4MHOExZ2lChYsMTRjKm+TlqkuK6ROfgsDmUYgy8Fr2SGTG6AAnFYdf6NzbJ65a6
+         iOgcyvinjrs/w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 06/47] power: supply: axp288_fuel_gauge: Report register-address on readb / writeb errors
+Date:   Sun,  5 Sep 2021 21:19:10 -0400
+Message-Id: <20210906011951.928679-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210906011951.928679-1-sashal@kernel.org>
+References: <20210906011951.928679-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function can loop and lock the system if for whatever reason the bit
-for the target sensor is NEVER valid. This is the case if a sensor is
-disabled by the factory and the valid bit is never reported as actually
-valid. Add a timeout check and exit if a timeout occurs. As this is
-a very rare condition, handle the timeout only if the first read fails.
+From: Hans de Goede <hdegoede@redhat.com>
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+[ Upstream commit caa534c3ba40c6e8352b42cbbbca9ba481814ac8 ]
+
+When fuel_gauge_reg_readb()/_writeb() fails, report which register we
+were trying to read / write when the error happened.
+
+Also reword the message a bit:
+- Drop the axp288 prefix, dev_err() already prints this
+- Switch from telegram / abbreviated style to a normal sentence, aligning
+  the message with those from fuel_gauge_read_*bit_word()
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/qcom/tsens.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ drivers/power/supply/axp288_fuel_gauge.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index b1162e566a70..38afde1a599f 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -599,6 +599,7 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
- 	int hw_id = s->hw_id;
- 	u32 temp_idx = LAST_TEMP_0 + hw_id;
- 	u32 valid_idx = VALID_0 + hw_id;
-+	unsigned long timeout;
- 	u32 valid;
- 	int ret;
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index 2ba2d8d6b8e6..d1bcc52e67c3 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -147,7 +147,7 @@ static int fuel_gauge_reg_readb(struct axp288_fg_info *info, int reg)
+ 	}
  
-@@ -607,13 +608,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
- 		ret = regmap_field_read(priv->rf[valid_idx], &valid);
- 		if (ret)
- 			return ret;
--		while (!valid) {
--			/* Valid bit is 0 for 6 AHB clock cycles.
--			 * At 19.2MHz, 1 AHB clock is ~60ns.
--			 * We should enter this loop very, very rarely.
--			 */
--			ndelay(400);
--			ret = regmap_field_read(priv->rf[valid_idx], &valid);
-+
-+		if (!valid) {
-+			timeout = jiffies + msecs_to_jiffies(20);
-+
-+			do {
-+				/* Valid bit is 0 for 6 AHB clock cycles.
-+				 * At 19.2MHz, 1 AHB clock is ~60ns.
-+				 * We should enter this loop very, very rarely.
-+				 */
-+				ndelay(400);
-+				ret = regmap_field_read(priv->rf[valid_idx], &valid);
-+				if (valid || ret)
-+					break;
-+			} while (!(ret = time_after_eq(jiffies, timeout)));
-+
- 			if (ret)
- 				return ret;
- 		}
+ 	if (ret < 0) {
+-		dev_err(&info->pdev->dev, "axp288 reg read err:%d\n", ret);
++		dev_err(&info->pdev->dev, "Error reading reg 0x%02x err: %d\n", reg, ret);
+ 		return ret;
+ 	}
+ 
+@@ -161,7 +161,7 @@ static int fuel_gauge_reg_writeb(struct axp288_fg_info *info, int reg, u8 val)
+ 	ret = regmap_write(info->regmap, reg, (unsigned int)val);
+ 
+ 	if (ret < 0)
+-		dev_err(&info->pdev->dev, "axp288 reg write err:%d\n", ret);
++		dev_err(&info->pdev->dev, "Error writing reg 0x%02x err: %d\n", reg, ret);
+ 
+ 	return ret;
+ }
 -- 
-2.32.0
+2.30.2
 
