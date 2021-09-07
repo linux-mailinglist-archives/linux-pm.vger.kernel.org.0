@@ -2,96 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72704402287
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 05:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5D2402295
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 06:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbhIGDls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Sep 2021 23:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S229512AbhIGEBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Sep 2021 00:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbhIGDlr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 23:41:47 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C77BC061575
-        for <linux-pm@vger.kernel.org>; Mon,  6 Sep 2021 20:40:42 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 8so8551452pga.7
-        for <linux-pm@vger.kernel.org>; Mon, 06 Sep 2021 20:40:42 -0700 (PDT)
+        with ESMTP id S229491AbhIGEBG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 00:01:06 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF23C061575
+        for <linux-pm@vger.kernel.org>; Mon,  6 Sep 2021 21:00:00 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id j1so5437959pjv.3
+        for <linux-pm@vger.kernel.org>; Mon, 06 Sep 2021 21:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FLF8sSQwhUS0+086sW1fmjexR33ZrApxSNSkWts8YRM=;
-        b=nzh+u2Y81255wZnH+V4MUL8B8sO+5Od0TvnyoGtBXBxvY3GWkCS05hqcZ1FiPp66Y+
-         H/aLuFSamvMQxn4nX3sCYvr1vDDohLl/5eNT3FtPx/KARSpyx2ftPvZz45NpEUAFAaN3
-         nuqAcYDkZ/HcRrm6WqcyMuKl29Fr4l0lLirCtuq68ivwpbzUOj+5jaU/S74iEUJoxRqV
-         Z/OLrLKs0O9bgfqMMgAsFQe8eBvb5Apzznl+Q3EF6QquxxEgfL1NhqCeEOD/tzrOfVQc
-         j9FiRz3DOiSqILowuXrF1KILiP0Y/bHQvTid/J3SQIpAupZty6vyz4/uTkMkih+VObuO
-         /YRg==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=P6N3k+v1QsznvPwsyxxss9FzEDb00hjXghyZ/Ozv+70=;
+        b=OOmqWnecN2I5UcwBMEH+WWiX2uoqCSoT7ukfHGM+idFyxWhr0NVvIijMQhsGL+lGHm
+         D8QrTZL4buhjO2vL0DKGJT2hVkHsg5L63MKVAxFht7ZxkOIe9owWaj+Wsasg5x/rej3s
+         xt5vmF8AjTVPWXCX9rz1Ayr9uT2N5eMgC0w7nmIZAD1yVsSC7/SwDU6ECjvGWKZVJ4jc
+         6gt3uNUdq+CXqnvtBxlPPBLZRIVCzHGtMAMUu6Q9xzw41TSe3ba4CL1kYpOtouRjF5fp
+         sPWUrklEcfEOnK1pL71Xgkda8IVUNKE4c+PYYfXBtcLrQwI060vqR5lrvno511rSHfa6
+         oWNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FLF8sSQwhUS0+086sW1fmjexR33ZrApxSNSkWts8YRM=;
-        b=QK9yOmyXx8zxUZSANDdbKMCke53gf9yRFM5DD/w8nCy2NWhCRWu87X1mP+wd0GbQ5w
-         GGSMLi66qO1oPEKJcjyAJc7m8vP/0GQtU6UmjRtez1cls3257yJA/0FOdda4capXUlGG
-         J5mhyEWYbz0iIdh5yipzUeCf1hJEcwWHehTtvV6kedqKjLOHaAFAMEOyo1lRp1cjqWC9
-         TYPPNt93AbiYB+i8txSGoJ35cXn2woCvOZeZLS4QxMxZm9yFMMgZiSAmtfDdBL6WVSiy
-         +Qhpher57FjsK//xerWnOHZvbHjsLJIESZIT+osPEINzPCMdi63mBXE4SEK9k6iPlCX0
-         sJ0A==
-X-Gm-Message-State: AOAM5305+KKiZHKH8+FdCa6Uz1tHGUM9uKVw2JAKPkIsc6rhs5PlpVrK
-        yb5PTj2667CEJUSY1EA3MhcQhw==
-X-Google-Smtp-Source: ABdhPJzsv/eia/hjQn1pbmQ2OENxmUodBBxcmYX5Fn6l3uMclKCItBuOiSE4NrFHNe0VdaUoPx8Y0A==
-X-Received: by 2002:a63:3c4d:: with SMTP id i13mr15152019pgn.54.1630986041664;
-        Mon, 06 Sep 2021 20:40:41 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=P6N3k+v1QsznvPwsyxxss9FzEDb00hjXghyZ/Ozv+70=;
+        b=PQLezJz5+m8bmjj4s6bhZyxQ9ZC4z5fCASWqmG7u3dDKRD8DpsHNPeNfeLrYIWH+1o
+         jSd7fljzb0ajqG8wI7gTYdHYm5XVaBg7KVD+qlz4TeUV8OoRp97/UeE5RwG1xnoQn761
+         xKWolSAQYNAVIVNc6mZACYFsIrRgMV6+lieDeG9yb4z9Imm/hGFQ+D3h3sis15bNYF2q
+         tM+/5j6uYHrdgtMqrmcj99gHaMGVj5utrNUPSd3mJ/0zb89iYUx9NboJrN1TvYYO+Pyp
+         MsRhLBsf+QxDK0oSnJ+xzzVh0ga/T5n5+HhA+1JWUv8hyuNaF3XIeEARnnc2CtFOXdW5
+         QWBw==
+X-Gm-Message-State: AOAM532ju1RxGI+0mrMgjkicRDKTtdVFyBu4eYwvK1aTdO9DyAK9UZtf
+        SdDXKm4mMqCGexJFvd/Ylulzmw==
+X-Google-Smtp-Source: ABdhPJyuaiQhAzfQiFVi+AnFMbHG90nR4zMk7Kh69V8Vj10wX7OabufWY3ccB+HfZflaDuO0xDUG2g==
+X-Received: by 2002:a17:90b:ec9:: with SMTP id gz9mr2428127pjb.24.1630987200081;
+        Mon, 06 Sep 2021 21:00:00 -0700 (PDT)
 Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id b16sm8897166pfr.138.2021.09.06.20.40.40
+        by smtp.gmail.com with ESMTPSA id l19sm792155pjq.10.2021.09.06.20.59.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Sep 2021 20:40:40 -0700 (PDT)
-Date:   Tue, 7 Sep 2021 09:10:38 +0530
+        Mon, 06 Sep 2021 20:59:59 -0700 (PDT)
+Date:   Tue, 7 Sep 2021 09:29:57 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
- callback to genpd
-Message-ID: <20210907034038.ncx5nas6mhrk4u3r@vireshk-i7>
-References: <20210902101634.827187-1-ulf.hansson@linaro.org>
- <20210902101634.827187-4-ulf.hansson@linaro.org>
- <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
- <CAPDyKFr2oQnKOhKhWt_9VyBoe=HQ7Y0uZUMKTcZ05a7G9RaBYA@mail.gmail.com>
- <1124dae5-478f-f0ca-ea91-b6945f7c9254@gmail.com>
- <CAPDyKFqE+thX0pLTg9d-ds7Tj3hsB78EmDB1Cryh26tN3kvQDA@mail.gmail.com>
- <3d92711f-ce30-2c19-c6a4-bb77d32df2dd@gmail.com>
- <CAPDyKFpJU3g2OzJeR9KUdtN-8wJsDckqVAMQMHBV=enu=DfURg@mail.gmail.com>
- <fbca049a-e673-1598-658f-a7bb5de52f18@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm updates for 5.15-rc1 - part 2
+Message-ID: <20210907035957.lczjqwtwmt4qomcm@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fbca049a-e673-1598-658f-a7bb5de52f18@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06-09-21, 17:35, Dmitry Osipenko wrote:
-> Viresh, are you okay with going back to the variant with the
-> dev_pm_opp_sync() helper?
+Hi Rafael,
 
-I have missed a lot of stuff in between and wasn't following this
-carefully as I thought my half was resolved :)
+This pull request adds a new cpufreq driver for Mediatek, which had
+been going through reviews since last one year.
 
-Can you describe what to propose to do again ? From what I remember,
-doing this one time from probe() is okay, doing it from
-suspend/resume, not so much.
+Thanks.
 
--- 
-viresh
+--
+Viresh
+
+-------------------------8<-------------------------
+The following changes since commit f0712ace7fe0723b40733c3b98591d34c1b0bfb9:
+
+  cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag (2021-08-30 10:43:35 +0530)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+
+for you to fetch changes up to 4855e26bcf4d28956f3e33231b961610a0d4a72d:
+
+  cpufreq: mediatek-hw: Add support for CPUFREQ HW (2021-09-06 15:15:19 +0530)
+
+----------------------------------------------------------------
+Hector.Yuan (3):
+      dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
+      cpufreq: Add of_perf_domain_get_sharing_cpumask
+      cpufreq: mediatek-hw: Add support for CPUFREQ HW
+
+ .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  70 +++++
+ drivers/cpufreq/Kconfig.arm                        |  12 +
+ drivers/cpufreq/Makefile                           |   1 +
+ drivers/cpufreq/mediatek-cpufreq-hw.c              | 308 +++++++++++++++++++++
+ include/linux/cpufreq.h                            |  58 +++-
+ 5 files changed, 448 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+ create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
+
