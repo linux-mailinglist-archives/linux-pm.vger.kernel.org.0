@@ -2,94 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AE54029F2
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 15:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BDE402A02
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 15:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344817AbhIGNmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Sep 2021 09:42:42 -0400
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:43739 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344760AbhIGNmm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 09:42:42 -0400
-Received: by mail-ot1-f47.google.com with SMTP id x10-20020a056830408a00b004f26cead745so12773560ott.10;
-        Tue, 07 Sep 2021 06:41:36 -0700 (PDT)
+        id S1344625AbhIGNpm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Sep 2021 09:45:42 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:42784 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344269AbhIGNpl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 09:45:41 -0400
+Received: by mail-ot1-f53.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so12779247otk.9
+        for <linux-pm@vger.kernel.org>; Tue, 07 Sep 2021 06:44:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vtwlrY+3E/w0K10z05i9TDnzVL9Tq5TYd9aqQbks3tY=;
-        b=aREyV3FAqdslzbRNvOH3LLxMqyLQ6ytYScKw0Hwmxlig/32+AFFRLD65ndtbsNYHyE
-         QUSdO96YGEu5CxQloIh0upUQKKn4eZWQ3DmSUI5jFFwiWmyuh2NvJNNtg3Tu7bwXq7qm
-         GxI5OJMQByNvYeU7UXFbzYYFgY/diql1jkjoj74+LqqZFxD5p0FCz66j3YMMYL9IYhH9
-         Gs6g0/1EgpH9KxqtwFwN5hT8Eq4TwQ7jyHdyoSdUyrrc0zg80VXhA/dWCKIv5rnhg07G
-         ecKmbQGWGsYztuXE2jIlADma68xp/Zk4TMAfn58oKyeWLTCkkBQ4+euMcdTAeC/e/WvE
-         GAfg==
-X-Gm-Message-State: AOAM533k5t+Bne/8YPILR2hG7rFb3E9Ds0LKx0fElNQ/TszyfWZ1tnPR
-        lPPXvs+jMK2osw5VIOjPSqmGgQzUkmcXPlpJ6+k=
-X-Google-Smtp-Source: ABdhPJwLHmRO9sE3kzyHDxsYhh2rZ81ElftO2O+91bzWQPqS0QWZopNz16BSnJXxXwhoYnY+5Xtsn+RJ8rITwtPx+ho=
-X-Received: by 2002:a9d:6945:: with SMTP id p5mr15455234oto.301.1631022094445;
- Tue, 07 Sep 2021 06:41:34 -0700 (PDT)
+        bh=VAPBKOYhzV7jRm1mG5VVCuPsX4TO1sLalKxGJg79RkU=;
+        b=qkQLA/6A76dVW0wuxjaNUCWnTp6uMtHgnj+cpN4QJzFiXyw+qPwwpAuOFeyiz8hq8h
+         bfDI7HqPRA4PlyK1FHZdLl3Ks6Ykaoed7lqvpCbDFnTiYFgwQmWiapx+dnD/OKHLmg2q
+         X4HtBV2YDOTb1krXH3qPKq4GQZV117Ge0KMrgnQaPt/b0QZTpCGCBQba6MlzQx06kuAN
+         /Xpb/320QR8b5PGu00Odhm0I2czD+gdtw8s3WR3iO+EmG9FHPhpsbihwSswiRHiAwez9
+         1uzlGgfFrACo6GlMEUbwJSHLslXoReUJziCqvOP0yEx1RqV2i87LaxQdQ3UFYqsPEgZM
+         B7sA==
+X-Gm-Message-State: AOAM531rmdjGAUiUQGSZrH+fkf/HUmefXnSaMDvn56870vc87YvRzT/Y
+        WeeFbiRx79mL864prrDV/HvVnh7b5j0TiU8mQEoFL6SI
+X-Google-Smtp-Source: ABdhPJzAeM4CpyzxDTx0rvqOebTK684lOuJig61SoxWfSRPFSpdzJNgOPXK6wg+V4SvmGrgWghwizeVHHhMkF9C5faY=
+X-Received: by 2002:a9d:6945:: with SMTP id p5mr15466292oto.301.1631022275101;
+ Tue, 07 Sep 2021 06:44:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210904053703.581297-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0hQp8Hxf__tL22s0oOcTym5mx9tND34ijufTDE3_NSW6A@mail.gmail.com>
- <926ac4b9-1bb5-e96e-ded3-6461f7a215b7@kernel.dk> <b1d5b6daacef349eb6fcc23ce7264e4786d1d9f4.camel@linux.intel.com>
- <CAJZ5v0jaXnw0zjpnsb81Hauy4-ApuULfQaaLG10qqL67H-YTNA@mail.gmail.com>
- <8dc57921f157b154e4af2dba26ce697dc4d4fcc2.camel@linux.intel.com>
- <CAJZ5v0jLmziZZEqEk-D+b6jD7UUPmeb7MQW1ZptdHTk-2c9nMg@mail.gmail.com>
- <584a4fad09048e3ea0dbc3515b2e909b745177dd.camel@linux.intel.com>
- <CAJZ5v0iH3TacxX3gzBS5cah7SnmDWbmHz=WCujQJpmEggGhLhg@mail.gmail.com> <980bc41a8bedbd81c199a78ce9f2ab2ef7b9341f.camel@linux.intel.com>
-In-Reply-To: <980bc41a8bedbd81c199a78ce9f2ab2ef7b9341f.camel@linux.intel.com>
+References: <20210907035957.lczjqwtwmt4qomcm@vireshk-i7>
+In-Reply-To: <20210907035957.lczjqwtwmt4qomcm@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Sep 2021 15:41:23 +0200
-Message-ID: <CAJZ5v0hLXuF8HXcW61TqiBxYnskkb-nkah=XzX2SH8EKGJB-RA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix for HWP interrupt before
- driver is ready
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Tue, 7 Sep 2021 15:44:24 +0200
+Message-ID: <CAJZ5v0i9ip50Wc03XytA7Afp6-fxmSYO9qAA-ZcLHMtCpB0s4A@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.15-rc1 - part 2
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 6, 2021 at 9:57 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Tue, Sep 7, 2021 at 6:00 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Mon, 2021-09-06 at 20:25 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Sep 6, 2021 at 8:14 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > On Mon, 2021-09-06 at 19:54 +0200, Rafael J. Wysocki wrote:
-> > > >
-> [...]
+> Hi Rafael,
 >
-> > > >
-> > > We are handling offline for other thermal interrupt sources from
-> > > same
-> > > interrupt in therm-throt.c, where we do similar in offline path (by
-> > > TGLX). If cpufreq offline can cause such issue of changing CPU,
-> >
-> > This is not cpufreq offline, but intel_pstate_update_status() which
-> > may be triggered via sysfs.  And again, the theoretically problematic
-> > thing is dereferencing cpudata (which may be cleared by a remote CPU)
-> > from the interrupt handler without protection.
+> This pull request adds a new cpufreq driver for Mediatek, which had
+> been going through reviews since last one year.
 >
-> This will be a problem.
+> Thanks.
 >
-> >
-> > > I can call intel_pstate_disable_hwp_interrupt() via override from
-> > > https://elixir.bootlin.com/linux/latest/C/ident/thermal_throttle_offline
-> > > after masking APIC interrupt.
-> >
-> > But why would using RCU be harder than this?
-> I think, this will require all_cpu_data and cpu_data to be rcu
-> protected. This needs to be well tested.
+> --
+> Viresh
 >
-> I think better to revert the patch for the next release.
+> -------------------------8<-------------------------
+> The following changes since commit f0712ace7fe0723b40733c3b98591d34c1b0bfb9:
+>
+>   cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag (2021-08-30 10:43:35 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>
+> for you to fetch changes up to 4855e26bcf4d28956f3e33231b961610a0d4a72d:
+>
+>   cpufreq: mediatek-hw: Add support for CPUFREQ HW (2021-09-06 15:15:19 +0530)
 
-Done, thanks!
+Pulled, thanks!
