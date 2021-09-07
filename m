@@ -2,321 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEC3402C4F
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 18:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3629A402CFD
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 18:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhIGQDT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Sep 2021 12:03:19 -0400
-Received: from mga11.intel.com ([192.55.52.93]:29275 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230094AbhIGQDS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 7 Sep 2021 12:03:18 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10099"; a="217079702"
-X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
-   d="scan'208";a="217079702"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 09:01:35 -0700
-X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
-   d="scan'208";a="546937190"
-Received: from jbolland-mobl.gar.corp.intel.com ([10.213.119.67])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 09:01:31 -0700
-Message-ID: <2a1b000cd101737400f6320ef18c0143d3a5145b.camel@linux.intel.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Add Icelake servers support
- in no-HWP mode
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Tue, 07 Sep 2021 09:01:23 -0700
-In-Reply-To: <CAAYoRsXK79PspEUh9pqgj2OGQnxQONkEeK-7af3=5frBzAqULQ@mail.gmail.com>
-References: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
-         <20210513132051.31465-1-ggherdovich@suse.cz>
-         <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
-         <067ee60e47a0350d01f0c3f216c1032818044b36.camel@suse.cz>
-         <CAAYoRsX0xJf1mm1a_YUCzDy86r8q4QE98iVtS1AMLaUx+KTgQQ@mail.gmail.com>
-         <CAAYoRsXK79PspEUh9pqgj2OGQnxQONkEeK-7af3=5frBzAqULQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        id S1344451AbhIGQkU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Sep 2021 12:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344145AbhIGQkT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 12:40:19 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D03C061757
+        for <linux-pm@vger.kernel.org>; Tue,  7 Sep 2021 09:39:13 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z1so13723335ioh.7
+        for <linux-pm@vger.kernel.org>; Tue, 07 Sep 2021 09:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=AQSygVQR7X2p3idaY2kblM6hHvDCfsOME2h6aqCtJ1E=;
+        b=J9wKA2u//rt2N18EvKurLQs1GYvrydFPT69DIE8jqvK5Vpht4Wxy/HB56V4oPgYinq
+         1//uIpWNYkyykf3cXw5GwzRzSNBA+8ixPI20f3Blmalav1y3CGExTXh+JLs3eJ61ivv1
+         b7cbY3MkyIVaPUf3yyqPvxK6OBqnt2Cx5QiOPZnVPHJ4y1uVfgf5lqn5o6WpgeBPe1ud
+         4uEZklUCj9aLkMN2ftXy1kyT6d7yoTDwgmnBnKu1X1GkXW0/3vSNctlhW4AjF3nKvLmE
+         VCVNmGGna35wLb6uHqq+BGApQC92/5qYkNnbTaNlntssGOPxgOtbawJp2Vq8nX1fjaYg
+         dmzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=AQSygVQR7X2p3idaY2kblM6hHvDCfsOME2h6aqCtJ1E=;
+        b=BeCtJfSJbdNeAet9e8fLnbjgfinBNeZ3WQmbVTZo0HexyPY9fMhV9IS52TBTuC6t08
+         Oyy7ZkZWj+Ie3rfGevWFYLW2+25v4B5nGuVLOES9LdfzaqgHggnBRCtIymzajDUBkrFr
+         PNZmKgZ/6N4jSAs82AJdts1E/FUY2xlAhg/0/FcPECDygAI3rbgQorScpCjBP3q3R/N0
+         uFyblMv5icwocKS+dU9+xUw9R7qa9r+s4Y2S7PD1kWvoVUk4bIJLVapbF8nKQ0kl1dy7
+         UMZqq13/BwsG0Kes73ho+LdFsA1bL4C6RLBE7yrExdzoummqiybx3xqRcSkC0t96q9T4
+         vNgg==
+X-Gm-Message-State: AOAM533wrVZ9Nro7cc2jrfhj43yPUEQTEs1KCnWeuvBCuMrBbeirritm
+        034nAkiQAxPzin7/BzkicVGvOYcR+6AKjogwts8=
+X-Google-Smtp-Source: ABdhPJwS84Fo64mI7QO8+1acNeBj59dyW9yjpUGkzz1OJsk0mCniz8QEjs7KXwrHzcuHXAat/C78ddMIVImiZHvfSWU=
+X-Received: by 2002:a6b:b842:: with SMTP id i63mr12245025iof.115.1631032752746;
+ Tue, 07 Sep 2021 09:39:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4f:44c2:0:0:0:0:0 with HTTP; Tue, 7 Sep 2021 09:39:10 -0700 (PDT)
+Reply-To: shawnhayden424@gmail.com
+From:   Shawn Hayden <sophiebrandon679@gmail.com>
+Date:   Tue, 7 Sep 2021 17:39:10 +0100
+Message-ID: <CAFXeZCQZ_sdiz6_9VN6O5Ekwvq+VhNFQUVpGf5umuNvpq6OzGA@mail.gmail.com>
+Subject: =?UTF-8?B?Q2hhcml0eS/UstWh1oDVpdWj1bjWgNWu1bjWgtWp1bXVuNaC1bYgQmFyZWdvcnRzdXQ=?=
+        =?UTF-8?B?4oCZeXVu?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-
-On Tue, 2021-09-07 at 08:45 -0700, Doug Smythies wrote:
-> Hi all,
-> 
-> Recent ASUS BIOS updates have changed the default system
-> response for this old thread, rendering "intel_pstate=no_hwp"
-> useless.
-> 
-> It also raises a question: If BIOS has forced HWP, then how do we
-> prevent the acpi-cpufreq driver from being used? Read on.
-
-Does BIOS has option to enable Intel speed shift with no legacy
-support?
-Then this option will not populate ACPI _PSS table.
-
-> 
-> On Fri, May 14, 2021 at 3:12 PM Doug Smythies <dsmythies@telus.net>
-> wrote:
-> > 
-> > On Fri, May 14, 2021 at 1:33 PM Giovanni Gherdovich <  
-> > ggherdovich@suse.cz> wrote:
-> > > On Fri, 2021-05-14 at 08:31 -0700, Doug Smythies wrote:
-> ...
-> > > 
-> > > when COMETLAKE is not in that list, can you confirm that if you
-> > > go into the
-> > > BIOS config at boot, and disable HWP from there, then
-> > > intel_pstate does *not* load?
-> > 
-> > Yes, already tested before my original reply.
-> > 
-> > > Does it say "intel_pstate: CPU model not supported" in the dmesg
-> > > log?
-> > 
-> > That I did not check, but if I boot now with an unmodified kernel
-> > 5.13-rc1 (i.e. without this patch):
-> > 
-> > [    0.369323] intel_pstate: CPU model not supported
-> > 
-> > > The control may be somewhere around "power mangement" in the BIOS
-> > > config, and
-> > > may be called "Enable/disable Intel Speed Shift".
-> > 
-> > Yes.
-> > 
-> > > I'm asking because I've just checked on two Dell laptops, one
-> > > Skylake and the
-> > > other Kabylake, and the menu is there in the BIOS config to
-> > > disable HWP,
-> > > but if I disable it... nothing happens. "lscpu" shows all the hwp
-> > > flags as usual:
-> > 
-> > Motherboard here is ASUS PRIME Z490-A.
-> > CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> > 
-> > >     # lscpu | grep Flags | tr ' ' '\n' | grep hwp
-> > >     hwp
-> > >     hwp_notify
-> > >     hwp_act_window
-> > >     hwp_epp
-> > 
-> > Here, for some reason I have to do it this way (sudo) or your
-> > command
-> > doesn't work properly. Results herein confirmed by looking at the
-> > "Flags" output manually without filtering:
-> > 
-> > intel_speed_shift = Disabled in BIOS:
-> > 
-> > doug@s19:~$ sudo lscpu | tr ' ' '\n' | grep hwp
-> > doug@s19:~$
-> > 
-> > intel_speed_shift = Auto in BIOS
-> > 
-> > $ sudo lscpu | tr ' ' '\n' | grep hwp
-> > hwp
-> > hwp_notify
-> > hwp_act_window
-> > hwp_epp
-> > 
-> > > and turbostat gives me:
-> > > 
-> > >     # turbostat -Summary -i 1 : 2>&1 | grep MSR_PM_ENABLE
-> > >     cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
-> > 
-> > Here:
-> > 
-> > intel_speed_shift = Disabled in BIOS:
-> > 
-> > root@s19:/home/doug#
-> > /home/doug/temp-k-git/linux/tools/power/x86/turbostat/turbostat
-> > -Summary -i 1 : 2>&1 | grep MSR_PM_ENABLE
-> > root@s19:/home/doug#
-> > 
-> > intel_speed_shift = Auto in BIOS (the default setting)
-> > 
-> > root@s19:/home/doug#
-> > /home/doug/temp-k-git/linux/tools/power/x86/turbostat/turbostat
-> > -Summary -i 1 : 2>&1 | grep MSR_PM_ENABLE
-> > cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
-> > 
-> > or with "intel_pstate=no_hwp"
-> > 
-> > root@s19:/home/doug#
-> > /home/doug/temp-k-git/linux/tools/power/x86/turbostat/turbostat
-> > -Summary -i 1 : 2>&1 | grep MSR_PM_ENABLE
-> > cpu0: MSR_PM_ENABLE: 0x00000000 (No-HWP)
-> > 
-> > > Which is to say, on the Intel client machines I have, the
-> > > firmware doesn't
-> > > seem to be able to hide HWP from the OS. Buggy BIOS? Maybe, the
-> > > fact of the
-> > > matter is, I wouldn't need to add, say, KABYLAKE to that list,
-> > > based on my
-> > > experience.
-> > 
-> > My experience (hardware) differs from yours with respect to this.
-> > 
-> > > The other side of the issue is that, from my understanding, the
-> > > preferred/supported way to disable HWP is to boot with
-> > > intel_pstate=no_hwp,
-> 
-> Previous correspondence was with BIOS version 1003. There have been 3
-> BIOS
-> releases since then (at least that I know of), 2103, 2201, 2301, and
-> all of them
-> have changed the behaviour of the "Auto" setting for Intel Speed
-> Shift
-> Technology BIOS setting, forcing it on upon transfer of control to
-> the OS.
-> 
-> Where with "intel_pstate=no_hwp" one used to get 0 for MSR_PM_ENABLE
-> (0x770) they now get 1.
-
-So they are forcing Out of band OOB mode. 
-Does bit 8 or 18 in MSR 0x1aa is set? 
-
-Thanks,
-Srinivas
-
-> 
-> That was for my ASUS Z490-P Motherboard.
-> For my ASUS Z390-A Motherboard (actually a windows 10 computer now),
-> with an older BIOS, things still work properly for
-> "intel_pstate=no_hwp", and
-> while there is a newer BIOS, I will not install it as it is also not
-> possible to
-> rollback.
-> 
-> I have had an escalation in progress with ASUS about this for about a
-> month,
-> and while they have been responsive we have communications/language
-> issues and have yet to even agree that there is an issue.
-> 
-> I have been working with this incomplete patch:
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c
-> b/drivers/cpufreq/intel_pstate.c
-> index bb4549959b11..7dcc51ee56ea 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
-> 
->  static int __init intel_pstate_setup(char *str)
->  {
-> +       /* The following needs to be conditional on CPUID with EAX 6
-> */
-> +       /* CPUID.06H:EAX[bit 7], which I do not know how to do. */
-> +       /* Avoid doing checking and printing multiple times, */
-> +       /* which I do not know why it does. */
-> +       if(!force_load){
-> +               if(intel_pstate_hwp_is_enabled()){
-> +                       pr_info("HWP enabled by BIOS\n");
-> +                       force_load = 1;
-> +               }
-> +       }
->         if (!str)
->                 return -EINVAL;
-> 
-> -       if (!strcmp(str, "disable"))
-> +       if (!strcmp(str, "disable") && !force_load)
->                 no_load = 1;
-> -       else if (!strcmp(str, "active"))
-> +       if (!strcmp(str, "active") && !no_load)
->                 default_driver = &intel_pstate;
->         else if (!strcmp(str, "passive"))
->                 default_driver = &intel_cpufreq;
-> 
-> -       if (!strcmp(str, "no_hwp")) {
-> +       if (!strcmp(str, "no_hwp") && !force_load) {
->                 pr_info("HWP disabled\n");
->                 no_hwp = 1;
->         }
-> 
-> Which has troubles when HWP has been disabled by BIOS, but otherwise
-> works well.
-> 
-> HWP Disabled by BIOS:
-> 
-> doug@s19:~$ sudo dmesg | grep intel_pstate
-> [sudo] password for doug:
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=314 intel_pstate=active intel_pstate=no_hwp
-> msr.allow_writes=on cpuidle.governor=teo
-> [    0.000000]  intel_pstate_setup+0x24/0x151
-> [    0.000000]  intel_pstate_setup+0x24/0x151
-> [    0.000000] intel_pstate: HWP disabled
-> [    0.051278] Kernel command line:
-> BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=314 intel_pstate=active intel_pstate=no_hwp
-> msr.allow_writes=on cpuidle.governor=teo
-> [    0.393236] intel_pstate: Intel P-state driver initializing
-> 
-> HWP force enabled by BIOS, which is the only other option with the
-> newer BIOS:
-> 
-> doug@s19:~$ sudo dmesg | grep intel_pstate
-> [sudo] password for doug:
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=314 intel_pstate=active intel_pstate=no_hwp
-> msr.allow_writes=on cpuidle.governor=teo
-> [    0.000000] intel_pstate: HWP enabled by BIOS
-> [    0.049205] Kernel command line:
-> BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=314 intel_pstate=active intel_pstate=no_hwp
-> msr.allow_writes=on cpuidle.governor=teo
-> [    0.370662] intel_pstate: Intel P-state driver initializing
-> [    0.371590] intel_pstate: HWP enabled
-> 
-> HWP forced by BIOS, disable intel_pstate:
-> 
-> doug@s19:~$ sudo dmesg | grep intel_pstate
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=300 intel_pstate=disable msr.allow_writes=on
-> cpuidle.governor=teo
-> [    0.000000] intel_pstate: HWP enabled by BIOS
-> [    0.049133] Kernel command line:
-> BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate4
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=300 intel_pstate=disable msr.allow_writes=on
-> cpuidle.governor=teo
-> [    0.370519] intel_pstate: Intel P-state driver initializing
-> [    0.371451] intel_pstate: HWP enabled
-> doug@s19:~$ cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_driver
-> intel_pstate
-> 
-> HWP forced by BIOS, disable intel_pstate:, unpatched kernel 5.14:
-> 
-> doug@s19:~$ sudo dmesg | grep intel_pstate
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.14.0-stock
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=300 intel_pstate=disable msr.allow_writes=on
-> cpuidle.governor=teo
-> [    0.049108] Kernel command line:
-> BOOT_IMAGE=/boot/vmlinuz-5.14.0-stock
-> root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1
-> consoleblank=300 intel_pstate=disable msr.allow_writes=on
-> cpuidle.governor=teo
-> doug@s19:~$ cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_driver
-> acpi-cpufreq
-> doug@s19:~$ sudo rdmsr 0x770
-> 1
-> 
-> Observe the driver ended up as acpi-cpufreq, but with HWP enabled.
-> 
-> ... Doug
-
-
+1Y3Vq9aA1aXVrNWrINWo1bbVr9Wl1oAsDQoNCtS11b0g1LHVvtW91b/WgNWh1azVq9Wh1bXVqyDW
+hNWh1bLVodaE1aHWgdWrINWl1bQsINWh1brWgNW41oLVtCDVpdW0INSx1YTVhiAt1bjWgtW0INaH
+INW81avVpdWs1anVuNaAINWl1bQgMzUg1b/VodaA1b7VoQ0K1aHVt9Wt1aHVv9Wh1bbWhNWh1bXV
+q9W2INaD1bjWgNWx1bjVvg0K1oPVuNaA1bHVodW81bjWgtWp1bXVuNaC1bY6INWO1aXWgNW71aXW
+gNW9INW+1aHWgNWh1a/VvtWl1oHVqyBDb3ZpZC0xOSDVvtWr1oDVuNaC1b3VuNW+INaHINWk1oDV
+oSDVutWh1b/Vs9Wh1bzVuNW+DQrVq9W0INW/1aHWgNWr1oTVqywg1aXVvSDVudWl1bQg1a/VodaA
+1a7VuNaC1bQsINW41oAg1a/VodaA1bjVsiDVpdW0INWj1bjVtdWh1b/Wh9Wl1awg1b3VoTog1LXV
+vSDVqdWp1b7VodWu1bbVqyDVv9Wh1a8g1aXVtCDVpdWy1aXVrCDVoQ0K1bTVqyDWhNWh1bbVqyDW
+hdaALCDWhyDVpdW9INW51aXVtCDVr9Wh1oDVuNWyINWv1bXVodW21oTVvSDVo9W21aXVrCDWg9W4
+1bLVuNW+OiDUtdW9INWv1aHWgNW41bIg1aXVtCA1NSDVtNWr1azVq9W41bYNCtSx1YTVhiDVpNW4
+1azVodaAINW21b7Vq9aA1aHVotWl1oDVpdWsINWi1aHWgNWl1aPVuNaA1a7VuNaC1anVtdWh1bbV
+qCwNCtWw1aHVv9Wv1aHVutWl1b0g1aHVstaE1aHVv9W21aXWgNWr1bYg1oXVo9W21aXVrNW41oIg
+1bDVodW01aHWgDog1LHVttaB1bXVodWsINW/1aHWgNWrINWl1b0g1a/VuNaA1oHWgNWl1oHVqyDV
+r9W21bjVu9W9DQrWhNWh1bLWgdWv1aXVstWr1oEsINaHINWr1bQg1bTVq9Wh1a8g1bjWgNWk1avV
+tiDWhNaA1bjVttWr1a8g1bDVq9W+1aHVttWkINWnDQrVrdWh1bLVodW01bjVrCwg1bjVviDVtNW9
+1a3VpdaBINWr1bQg1b/WgNWh1bTVodWk1oDVodWuINWi1bjVrNW41oAg1bTVq9W71bjWgdW21aXW
+gNWoOg0K1YDVq9W+1aHVttWkINWw1avVvtWh1bbVpCDVodW21a/VuNWy1bbVuNaC1bQg1brVodW8
+1a/VodWuINWdINWh1bzVodW21oEg1aPVuNW11aHVv9aH1bTVodW2INWw1bjWgtW11b0g1bjWgtW2
+1aXVttWh1azVuNaCLCDVtNWh1bLVqdW41oLVtCDVpdW0DQrVpNW41oIg1avVttWxINaF1aPVttWl
+1oHVq9aAINWv1aHVv9Wh1oDVpdWsINWr1bQg1b7VpdaA1bvVq9W2INaB1aHVttWv1bjWgtWp1bXV
+uNaC1bbVqDog1Y3VoSDWgdWh1bbVr9W41oLVqdW11bjWgtW2INWnLCDVuNaA1agNCtWv1a7VodW8
+1aHVtdWrINWr1bbVsQ0K1bjWgNW61aXVvSDVodWy1aHVudWh1bbWhCDUsdW91b/VrtW41oLVtiDV
+q9W0INWw1bjVo9W41oIg1ocg1avVtCDVtNWl1bLWhNWl1oDVqyDVqdW41bLVuNaC1anVtdWh1bYg
+1bDVodW01aHWgDog1LXVqdWlIOKAi+KAi9W61aHVv9aA1aHVvdW/INWl1oQNCtaHINW61aHVv9aA
+1aHVvdW/INWnINaF1aPVttWl1awsINWt1bbVpNaA1bjWgtW0INWl1bQg1brVodW/1aHVvdWt1aHV
+ttWl1oQg1avVttWxLCDWhyDVpdW9INWx1aXVpiDVtNWh1bbWgNWh1bTVodW91bbVpdaADQrVr9W/
+1aHVtDog1LXVvSDVo9Wr1b/VpdW0LCDVuNaAINWl1b0NCtWv1aHWgNW41bIg1acg1b7VvdW/1aHV
+sNWl1awg1oTVpdWmOiDVldWj1bbVpdaB1aXWhCwg1a3VttWk1oDVuNaC1bQg1aXVtC4NCg0K1YDV
+odaA1aPVodW21oTVttWl1oDVuNW+Lg0KDQrVh9W41bYg1YDVpdW11aTVpdW2Lg0KDQpTaXJlbGkg
+eW5rZXIsDQoNClllcyBBdnN0cmFsaWF5aSBr4oCZYWdoYWvigJlhdHPigJlpIHllbSwgYXBydW0g
+eWVtIEFNTiAtdW0geWV2IHJyaXllbHTigJl2b3INCnllbSAzNSB0YXJ2YSBhc2hraGF0YW5r4oCZ
+YXlpbiBw4oCZdm9yZHpvdg0KcOKAmXZvcmR6YXJydXTigJl5dW46IFZlcmplcnMgdmFyYWt2ZXRz
+4oCZaSBDb3ZpZC0xOSB2aXJ1c292IHlldiBkcmEgcGF0Y2hhcnJvdg0KaW0gdGFyaWvigJlpLCB5
+ZXMgY2jigJllbSBrYXJ0c3VtLCB2b3Iga2Fyb2doIHllbSBnb3lhdGV2ZWwgc2E6IFllcw0KdOKA
+mXTigJl2YXRzbmkgdGFrIHllbSB5ZWdoZWwgYQ0KbWkga+KAmWFuaSBvciwgeWV2IHllcyBjaOKA
+mWVtIGthcm9naCBreWFua+KAmXMgZ25lbCBw4oCZdm9naG92OiBZZXMga2Fyb2doDQp5ZW0gNTUg
+bWlsaW9uIEFNTiBkb2xhciBudmlyYWJlcmVsIGJhcmVnb3J0c3V04oCZeWFueSwNCmhhdGthcGVz
+IGFnaGvigJlhdG5lcmluIG9nbmVsdSBoYW1hcjogQW50c+KAmXlhbCB0YXJpIHllcyBrb3J0c+KA
+mXJldHPigJlpDQprbm9qcyBr4oCZYWdodHPigJlrZWdoaXRz4oCZLCB5ZXYgaW0gbWlhayB2b3Jk
+aW4ga+KAmXJvbmlrIGhpdmFuZCBlDQpraGFnaGFtb2wsIG92IG1za2hldHPigJkgaW0gdHJhbWFk
+cmF0cyBib2xvciBtaWpvdHPigJluZXJ5Og0KSGl2YW5kIGhpdmFuZCBhbmtvZ2hudW0gcGFycmth
+dHMg1Z0gYXJyYW50c+KAmSBnb3lhdGV2bWFuIGh1eXMgdW5lbmFsdSwNCm1hZ2h04oCZdW0geWVt
+DQpkdSBpbmR6IG9nbmV0c+KAmWlyIGthdGFyZWwgaW0gdmVyamluIHRz4oCZYW5rdXTigJl5dW55
+OiBTYSB0c+KAmWFua3V04oCZeXVuIGUsDQp2b3J5IGt0c2FycmF5aSBpbmR6DQp2b3JwZXMgYWdo
+YWNo4oCZYW5r4oCZIEFzdHRzdW4gaW0gaG9ndSB5ZXYgaW0gbWVnaGvigJllcmkgdOKAmXZvZ2h1
+dOKAmXlhbg0KaGFtYXI6IFlldOKAmWUg4oCL4oCLcGF0cmFzdCB5ZWvigJkNCnlldiBwYXRyYXN0
+IGUgb2duZWwsIGtobmRydW0geWVtIHBhdGFza2hhbmVr4oCZIGluZHosIHlldiB5ZXMgZHpleg0K
+bWFucmFtYXNuZXIga3RhbTogWWVzIGdpdGVtLCB2b3IgeWVzDQprYXJvZ2ggZSB2c3RhaGVsIGvi
+gJllejogT2duZXRz4oCZZWvigJksIGtobmRydW0geWVtLg0KDQpIYXJnYW5r4oCZbmVyb3YuDQoN
+ClNob24gSGV5ZGVuLg0KDQoNCg0KRGVhciBmcmllbmQsDQoNCkkgYW0gYW4gQXVzdHJhbGlhbiBj
+aXRpemVuIGxpdmluZyBpbiB0aGUgVVNBIGFuZCBhIHJlYWx0b3Igd2l0aCAzNSB5ZWFycyBvZg0K
+ZXhwZXJpZW5jZS4gSSByZWNlbnRseSBiZWNhbWUgaW5mZWN0ZWQgd2l0aCB0aGUgQ292aWQtMTkg
+dmlydXMgYW5kIGR1ZSB0bw0KbXkgYWdlLCBJIGRvbid0IHRoaW5rIEkgY2FuIHN1cnZpdmUgdGhp
+cy4gSSBoYXZlIGJlZW4gdW5kZXIgb3h5Z2VuIGZvciBhDQpmZXcgZGF5cyBhbmQgSSBjYW4ndCBi
+dXkgbXkgbGlmZSB3aXRoIG1vbmV5LiBJIGNvdWxkIGRvbmF0ZSA1NW1pbGxpb24NClVTRCB0byBj
+aGFyaXR5LA0KZXNwZWNpYWxseSB0byBoZWxwIHRoZSBwb29yLiBMYXN0IHllYXIgSSBsb3N0IG15
+IHdpZmUgdG8gY2FuY2VyIGFuZCBteQ0Kb25seSBzb24gaXMgYSBjaHJvbmljDQpnYW1ibGVyIHdo
+byBzcXVhbmRlcmVkIGFsbCB0aGUgZnVuZHMgSSBnYXZlIHRvIGhpbS4NCkx5aW5nIGluIG15IHNp
+Y2sgYmVkLCB3aXRoIG5vIGhvcGUgb2Ygc3Vydml2YWwsIEkgd2lzaA0KeW91IGhlbHBlZCBtZSBm
+dWxmaWxsIG15IGxhc3Qgd2lzaC4gVGhpcyBpcyBhIHdpc2ggdGhhdCB3aWxsIHNlcnZlIG1lDQph
+cyBhIHBsZWEgdG8gR29kIGZvciBteSBzb3VsIGFuZCBteSBmb3JnaXZlbmVzcyBvZiBzaW5zLiBJ
+ZiB5b3UgYXJlIHdpbGxpbmcNCmFuZCByZWFkeSB0byBoZWxwLCBwbGVhc2UgYW5zd2VyIG1lIGFu
+ZCBJIHdpbGwgZ2l2ZSB5b3UgZGV0YWlscy4gSSBrbm93IEkNCmNhbiB0cnVzdCB5b3UuIEhlbHAg
+bWUgcGxlYXNlLg0KDQpLaW5kIHJlZ2FyZHMsDQoNClNoYXduIEhheWRlbi4NCg==
