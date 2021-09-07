@@ -2,102 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82A402EEA
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 21:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FECC402F82
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 22:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346076AbhIGTYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Sep 2021 15:24:21 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:46970 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346056AbhIGTYR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 15:24:17 -0400
-Received: by mail-oi1-f173.google.com with SMTP id w144so214210oie.13;
-        Tue, 07 Sep 2021 12:23:11 -0700 (PDT)
+        id S1346363AbhIGUR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Sep 2021 16:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345229AbhIGUR2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 16:17:28 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6CC061575
+        for <linux-pm@vger.kernel.org>; Tue,  7 Sep 2021 13:16:22 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s3so471819ljp.11
+        for <linux-pm@vger.kernel.org>; Tue, 07 Sep 2021 13:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CBVcB3gRmZKLrv7PpY2nYU2VNEBB5GvLFn0wO6q1ZJs=;
+        b=ggo61pACO5GBYx7im/OQaKvU+weL5b60LiGjFknBmwit+YjKmtAKdJxGjrNe74l6xZ
+         aK4Uzq1GvrzT/2D4NnOq1hvDbVsoleOMjGOX0IObGey/+iRXnJkePTgrC+5Gv0hsYBMt
+         q7Vb+ihtM5ctw+2r1rH9q6xOYoudE3X/lfyzxDlwbG/AVNQOMGppgc59vIDtZExJhvHI
+         xEigsibhU0Ay5Zwwp4gnSz5h+mjBw2kFm+UoxvAI/6I74134d2+M0Zqym3Uv/W4/pIpd
+         aKa+FR1ZTspVMKHfN2qAVhZpljzfziGzVM7CcBvea14OFlk9XRVIel5E7Lp5AT887P7g
+         4zhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6BJUSy7ZuZKYt9ryvhuAcYMqADTMlcTk8t8PG14IBng=;
-        b=eP6G28L09y11NyH9/uCYG/00IkSb0fMlsSZXg3vyHbbVenVT+y6dxef5wVrM98pAe6
-         1uSk37OHdbsdPApCrGi6rYu+xjkmhu0735HN9uZUtZhs1zAe5mVqfzkcuyHBVdBxM0pr
-         Bkq0LTKYuVKo9A/OSpNOm7kHGE4CdhrVkAD3SYicXxIHcmvWmdIMccebcGfM9gCjx53T
-         lGOUAbPh2S/t84rzV0vjd92VktPE3jPxuCV5tOd81YDNcq2wIqD0WOjVBEEIesddZE4V
-         FJlyWRjDtXWeNVmXG2vZkN/v8wI7jdWObu5ZdS5O1eanDfGOn0NPm6WpbNmP1FsIuOEl
-         dtXQ==
-X-Gm-Message-State: AOAM531qmDdtxVTwGKPbLWjm+c+XR5z8wq39T0oAg58tV3mXPmZmMoe3
-        ZGZhl+1Urm2N/VbsZuBe2qqMiHdVcsHe2f1f/Y2PDI8K
-X-Google-Smtp-Source: ABdhPJwk4TBgNGvld9R9q2flqqzH2YVJpwLNkfZBk8HuP/Q1K3Xl/kA7/xDixPYEi8eNX71pkGsY3CBEQh6GXOINWqs=
-X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr4058235ois.69.1631042590849;
- Tue, 07 Sep 2021 12:23:10 -0700 (PDT)
+        bh=CBVcB3gRmZKLrv7PpY2nYU2VNEBB5GvLFn0wO6q1ZJs=;
+        b=aJjTk5DaYBzGfrhfgVlk02Cdf1fjUNzxkxi1qjVUp+1PGltuRkehOCauneb5ZRA+yW
+         aPwpytNx582OXrz0DfPsvhxR370qE1g0OgsGkf1fj+FUnDtmszi6vKyGe3T02qYCTdPr
+         3vc5/0dyTOzcRjSHcjigkMEbbj3Iqk8MK+fchU56ZLEFuOBb4g6wkX+MUZJINVaCbvOI
+         bRNXM4gdoqL2LElCDwOXXIQHQQlUOzDPHa7N4jQP2gtb7lyMb71Ynz+JG7sKJlxLK6dr
+         uKP2KwWAfKhOAHws4QA3ksjYXKRB/AEcRhjZCVk3DNl3CPFwHlqggSViKTrZtk5+6OZC
+         JdVA==
+X-Gm-Message-State: AOAM533xDW3YbtwdMCYv+XoD5PK0XTpuYTWHDzHBUBLkPklfyR3JLR+2
+        NGqqFg9r/W2hcGTDKsYbD9L8P/jmAX79dPN4eW53tw==
+X-Google-Smtp-Source: ABdhPJxseSKURdHcnn+fgBOBFJDfN6A4190MF+lZkTi4mDmPk2g0JcxbePPVJAaKLuhlpcRFOgz1FwR2khBwzC48lLI=
+X-Received: by 2002:a05:651c:1121:: with SMTP id e1mr30522ljo.468.1631045780336;
+ Tue, 07 Sep 2021 13:16:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <1631013863-43141-1-git-send-email-psodagud@codeaurora.org>
-In-Reply-To: <1631013863-43141-1-git-send-email-psodagud@codeaurora.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Sep 2021 21:22:59 +0200
-Message-ID: <CAJZ5v0i1X--QwB1yjZLUCofnx5BQbr_f9d-gNOHSK1m-Bfk8bw@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: sleep: core: Avoid setting power.must_resume to false
-To:     Prasad Sodagudi <psodagud@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
+References: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
+ <20210513132051.31465-1-ggherdovich@suse.cz> <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
+ <067ee60e47a0350d01f0c3f216c1032818044b36.camel@suse.cz> <CAAYoRsX0xJf1mm1a_YUCzDy86r8q4QE98iVtS1AMLaUx+KTgQQ@mail.gmail.com>
+ <CAAYoRsXK79PspEUh9pqgj2OGQnxQONkEeK-7af3=5frBzAqULQ@mail.gmail.com> <2a1b000cd101737400f6320ef18c0143d3a5145b.camel@linux.intel.com>
+In-Reply-To: <2a1b000cd101737400f6320ef18c0143d3a5145b.camel@linux.intel.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 7 Sep 2021 13:16:10 -0700
+Message-ID: <CAAYoRsVeMCivVBp-q_9N23BDOVvkc8ZLS3mubnz+4TREZ9Cz_A@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: Add Icelake servers support in
+ no-HWP mode
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 7, 2021 at 1:24 PM Prasad Sodagudi <psodagud@codeaurora.org> wrote:
->
-> There are variables(power.may_skip_resume and dev->power.must_resume)
-> and DPM_FLAG_MAY_SKIP_RESUME flags to control the resume of devices after
-> a system wide suspend transition.
->
-> Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver allows
-> its "noirq" and "early" resume callbacks to be skipped if the device
-> can be left in suspend after a system-wide transition into the working
-> state. PM core determines that the driver's "noirq" and "early" resume
-> callbacks should be skipped or not with dev_pm_skip_resume() function by
-> checking power.may_skip_resume variable.
->
-> power.must_resume variable is getting set to false in __device_suspend()
-> function without checking device's DPM_FLAG_MAY_SKIP_RESUME settings.
-> In problematic scenario, where all the devices in the suspend_late
-> stage are successful and some device can fail to suspend in
-> suspend_noirq phase. So some devices successfully suspended in suspend_late
-> stage are not getting chance to execute __device_suspend_noirq()
-> to set dev->power.must_resume variable to true and not getting
-> resumed in early_resume phase.
->
-> Add a check for device's DPM_FLAG_MAY_SKIP_RESUME flag before
-> setting power.must_resume variable in __device_suspend function.
->
-> Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
-> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
-> ---
->  V4 -> V5: Fix coding style
->  V3 -> V4: Remove dev->power.usage_count variable check
->  V2 -> V3: Format issues patch posting
->  V1 -> V2: Fixed indentation and commit text to include scenario
->  drivers/base/power/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index d568772..cbea78e 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1642,7 +1642,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
->         }
->
->         dev->power.may_skip_resume = true;
-> -       dev->power.must_resume = false;
-> +       dev->power.must_resume = !dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME);
->
->         dpm_watchdog_set(&wd, dev);
->         device_lock(dev);
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+Hi Srinivas, Thank you for your reply.
 
-Applied as 5.15-rc material, thanks!
+On Tue, Sep 7, 2021 at 9:01 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+> On Tue, 2021-09-07 at 08:45 -0700, Doug Smythies wrote:
+>>
+> > Recent ASUS BIOS updates have changed the default system
+> > response for this old thread, rendering "intel_pstate=no_hwp"
+> > useless.
+> >
+> > It also raises a question: If BIOS has forced HWP, then how do we
+> > prevent the acpi-cpufreq driver from being used? Read on.
+>
+> Does BIOS has option to enable Intel speed shift with no legacy
+> support?
+> Then this option will not populate ACPI _PSS table.
+
+The option is there no matter what.
+I have tried every variation of legacy or no legacy that
+I can find. Currently:
+Current boot mode:   UEFI Firmware mode
+SecureBoot:          disabled
+
+>
+> >
+> > On Fri, May 14, 2021 at 3:12 PM Doug Smythies <dsmythies@telus.net>
+> > wrote:
+> > >
+> > > On Fri, May 14, 2021 at 1:33 PM Giovanni Gherdovich <
+> > > ggherdovich@suse.cz> wrote:
+> > > > On Fri, 2021-05-14 at 08:31 -0700, Doug Smythies wrote:
+> > ...
+> > > >
+...
+> > Previous correspondence was with BIOS version 1003. There have been 3
+> > BIOS
+> > releases since then (at least that I know of), 2103, 2201, 2301, and
+> > all of them
+> > have changed the behaviour of the "Auto" setting for Intel Speed
+> > Shift
+> > Technology BIOS setting, forcing it on upon transfer of control to
+> > the OS.
+> >
+> > Where with "intel_pstate=no_hwp" one used to get 0 for MSR_PM_ENABLE
+> > (0x770) they now get 1.
+>
+> So they are forcing Out of band OOB mode.
+> Does bit 8 or 18 in MSR 0x1aa is set?
+
+No.
+
+Here is the output from my msr reader/decoder program.
+Kernel 5.14 (unpatched).
+intel_pstate=disable
+BIOS setting "Auto" for Intel Speed Shift,
+Driver: acpi-cpufreq
+
+doug@s19:~$ sudo c/msr-decoder
+How many CPUs?: 12
+8.) 0x198: IA32_PERF_STATUS     : CPU 0-11 :  45 :  45 :  45 :  45 :
+45 :  45 :  45 :  45 :  45 :  45 :  45 :  45 :
+B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+1.) 0x19C: IA32_THERM_STATUS: 88450000
+2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled
+OOB Bit 8 reset OOB Bit 18 reset
+3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88410000
+4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+5.) 0x771: IA32_HWP_CAPABILITIES (performance): 10B2930 : high 48 :
+guaranteed 41 : efficient 11 : lowest 1
+6.) 0x774: IA32_HWP_REQUEST:    CPU 0-11 :
+    raw: 80003001 : 80003001 : 80003001 : 80003001 : 80003001 :
+80003001 : 80003001 : 80003001 : 80003001 : 80003001 : 80003001 :
+80003001 :
+    min:        1 :        1 :        1 :        1 :        1 :
+1 :        1 :        1 :        1 :        1 :        1 :        1 :
+    max:       48 :       48 :       48 :       48 :       48 :
+48 :       48 :       48 :       48 :       48 :       48 :       48 :
+    des:        0 :        0 :        0 :        0 :        0 :
+0 :        0 :        0 :        0 :        0 :        0 :        0 :
+    epp:      128 :      128 :      128 :      128 :      128 :
+128 :      128 :      128 :      128 :      128 :      128 :      128
+:
+    act:        0 :        0 :        0 :        0 :        0 :
+0 :        0 :        0 :        0 :        0 :        0 :        0 :
+7.) 0x777: IA32_HWP_STATUS: 0 : high 0 : guaranteed 0 : efficient 0 : lowest 0
+
+...
+
+... Doug
