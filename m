@@ -2,91 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5162D402095
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Sep 2021 22:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72704402287
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Sep 2021 05:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244008AbhIFT6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Sep 2021 15:58:07 -0400
-Received: from mga14.intel.com ([192.55.52.115]:49114 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231432AbhIFT6F (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 6 Sep 2021 15:58:05 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10099"; a="219723931"
-X-IronPort-AV: E=Sophos;i="5.85,273,1624345200"; 
-   d="scan'208";a="219723931"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 12:57:00 -0700
-X-IronPort-AV: E=Sophos;i="5.85,273,1624345200"; 
-   d="scan'208";a="579729714"
-Received: from ibelagox-mobl1.gar.corp.intel.com ([10.213.76.130])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 12:56:56 -0700
-Message-ID: <980bc41a8bedbd81c199a78ce9f2ab2ef7b9341f.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix for HWP interrupt before
- driver is ready
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        id S233882AbhIGDls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Sep 2021 23:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233777AbhIGDlr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Sep 2021 23:41:47 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C77BC061575
+        for <linux-pm@vger.kernel.org>; Mon,  6 Sep 2021 20:40:42 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 8so8551452pga.7
+        for <linux-pm@vger.kernel.org>; Mon, 06 Sep 2021 20:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FLF8sSQwhUS0+086sW1fmjexR33ZrApxSNSkWts8YRM=;
+        b=nzh+u2Y81255wZnH+V4MUL8B8sO+5Od0TvnyoGtBXBxvY3GWkCS05hqcZ1FiPp66Y+
+         H/aLuFSamvMQxn4nX3sCYvr1vDDohLl/5eNT3FtPx/KARSpyx2ftPvZz45NpEUAFAaN3
+         nuqAcYDkZ/HcRrm6WqcyMuKl29Fr4l0lLirCtuq68ivwpbzUOj+5jaU/S74iEUJoxRqV
+         Z/OLrLKs0O9bgfqMMgAsFQe8eBvb5Apzznl+Q3EF6QquxxEgfL1NhqCeEOD/tzrOfVQc
+         j9FiRz3DOiSqILowuXrF1KILiP0Y/bHQvTid/J3SQIpAupZty6vyz4/uTkMkih+VObuO
+         /YRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FLF8sSQwhUS0+086sW1fmjexR33ZrApxSNSkWts8YRM=;
+        b=QK9yOmyXx8zxUZSANDdbKMCke53gf9yRFM5DD/w8nCy2NWhCRWu87X1mP+wd0GbQ5w
+         GGSMLi66qO1oPEKJcjyAJc7m8vP/0GQtU6UmjRtez1cls3257yJA/0FOdda4capXUlGG
+         J5mhyEWYbz0iIdh5yipzUeCf1hJEcwWHehTtvV6kedqKjLOHaAFAMEOyo1lRp1cjqWC9
+         TYPPNt93AbiYB+i8txSGoJ35cXn2woCvOZeZLS4QxMxZm9yFMMgZiSAmtfDdBL6WVSiy
+         +Qhpher57FjsK//xerWnOHZvbHjsLJIESZIT+osPEINzPCMdi63mBXE4SEK9k6iPlCX0
+         sJ0A==
+X-Gm-Message-State: AOAM5305+KKiZHKH8+FdCa6Uz1tHGUM9uKVw2JAKPkIsc6rhs5PlpVrK
+        yb5PTj2667CEJUSY1EA3MhcQhw==
+X-Google-Smtp-Source: ABdhPJzsv/eia/hjQn1pbmQ2OENxmUodBBxcmYX5Fn6l3uMclKCItBuOiSE4NrFHNe0VdaUoPx8Y0A==
+X-Received: by 2002:a63:3c4d:: with SMTP id i13mr15152019pgn.54.1630986041664;
+        Mon, 06 Sep 2021 20:40:41 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id b16sm8897166pfr.138.2021.09.06.20.40.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Sep 2021 20:40:40 -0700 (PDT)
+Date:   Tue, 7 Sep 2021 09:10:38 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 06 Sep 2021 12:56:53 -0700
-In-Reply-To: <CAJZ5v0iH3TacxX3gzBS5cah7SnmDWbmHz=WCujQJpmEggGhLhg@mail.gmail.com>
-References: <20210904053703.581297-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0hQp8Hxf__tL22s0oOcTym5mx9tND34ijufTDE3_NSW6A@mail.gmail.com>
-         <926ac4b9-1bb5-e96e-ded3-6461f7a215b7@kernel.dk>
-         <b1d5b6daacef349eb6fcc23ce7264e4786d1d9f4.camel@linux.intel.com>
-         <CAJZ5v0jaXnw0zjpnsb81Hauy4-ApuULfQaaLG10qqL67H-YTNA@mail.gmail.com>
-         <8dc57921f157b154e4af2dba26ce697dc4d4fcc2.camel@linux.intel.com>
-         <CAJZ5v0jLmziZZEqEk-D+b6jD7UUPmeb7MQW1ZptdHTk-2c9nMg@mail.gmail.com>
-         <584a4fad09048e3ea0dbc3515b2e909b745177dd.camel@linux.intel.com>
-         <CAJZ5v0iH3TacxX3gzBS5cah7SnmDWbmHz=WCujQJpmEggGhLhg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
+ callback to genpd
+Message-ID: <20210907034038.ncx5nas6mhrk4u3r@vireshk-i7>
+References: <20210902101634.827187-1-ulf.hansson@linaro.org>
+ <20210902101634.827187-4-ulf.hansson@linaro.org>
+ <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
+ <CAPDyKFr2oQnKOhKhWt_9VyBoe=HQ7Y0uZUMKTcZ05a7G9RaBYA@mail.gmail.com>
+ <1124dae5-478f-f0ca-ea91-b6945f7c9254@gmail.com>
+ <CAPDyKFqE+thX0pLTg9d-ds7Tj3hsB78EmDB1Cryh26tN3kvQDA@mail.gmail.com>
+ <3d92711f-ce30-2c19-c6a4-bb77d32df2dd@gmail.com>
+ <CAPDyKFpJU3g2OzJeR9KUdtN-8wJsDckqVAMQMHBV=enu=DfURg@mail.gmail.com>
+ <fbca049a-e673-1598-658f-a7bb5de52f18@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbca049a-e673-1598-658f-a7bb5de52f18@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-09-06 at 20:25 +0200, Rafael J. Wysocki wrote:
-> On Mon, Sep 6, 2021 at 8:14 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > On Mon, 2021-09-06 at 19:54 +0200, Rafael J. Wysocki wrote:
-> > > 
-[...]
+On 06-09-21, 17:35, Dmitry Osipenko wrote:
+> Viresh, are you okay with going back to the variant with the
+> dev_pm_opp_sync() helper?
 
-> > > 
-> > We are handling offline for other thermal interrupt sources from
-> > same
-> > interrupt in therm-throt.c, where we do similar in offline path (by
-> > TGLX). If cpufreq offline can cause such issue of changing CPU,
-> 
-> This is not cpufreq offline, but intel_pstate_update_status() which
-> may be triggered via sysfs.  And again, the theoretically problematic
-> thing is dereferencing cpudata (which may be cleared by a remote CPU)
-> from the interrupt handler without protection.
+I have missed a lot of stuff in between and wasn't following this
+carefully as I thought my half was resolved :)
 
-This will be a problem.
+Can you describe what to propose to do again ? From what I remember,
+doing this one time from probe() is okay, doing it from
+suspend/resume, not so much.
 
-> 
-> > I can call intel_pstate_disable_hwp_interrupt() via override from
-> > https://elixir.bootlin.com/linux/latest/C/ident/thermal_throttle_offline
-> > after masking APIC interrupt.
-> 
-> But why would using RCU be harder than this?
-I think, this will require all_cpu_data and cpu_data to be rcu
-protected. This needs to be well tested.
-
-I think better to revert the patch for the next release.
-
-Thanks,
-Srinivas
-
-> 
-> Also please note that on RT kernels interrupt handlers are run in
-> threads.
-
-
+-- 
+viresh
