@@ -2,81 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B5D4035DA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 10:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07951403747
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 11:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348038AbhIHID7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 04:03:59 -0400
-Received: from mx21.baidu.com ([220.181.3.85]:56556 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1347897AbhIHIDw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Sep 2021 04:03:52 -0400
-Received: from BC-Mail-EX04.internal.baidu.com (unknown [172.31.51.44])
-        by Forcepoint Email with ESMTPS id 721F3CE77DF3C7725F9C;
-        Wed,  8 Sep 2021 16:02:34 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BC-Mail-EX04.internal.baidu.com (172.31.51.44) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2242.12; Wed, 8 Sep 2021 16:02:33 +0800
-Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 8 Sep 2021 16:02:33 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     <caihuoqing@baidu.com>
-CC:     Niklas Cassel <nks@flawful.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 6/6] soc: qcom: rpmh-rsc: Make use of the helper function devm_platform_ioremap_resource_byname()
-Date:   Wed, 8 Sep 2021 16:02:16 +0800
-Message-ID: <20210908080216.1301-6-caihuoqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210908080216.1301-1-caihuoqing@baidu.com>
-References: <20210908080216.1301-1-caihuoqing@baidu.com>
+        id S1348038AbhIHJxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 05:53:14 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57212 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347816AbhIHJxN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Sep 2021 05:53:13 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1889pv8q000578;
+        Wed, 8 Sep 2021 04:51:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1631094717;
+        bh=ZH8pzkbAkHXLm6quT3qHQ6oWLqH4LVeVk9aPRMmCQSM=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=FA8IhScYdHAssuDCnjUu8S7SQrNVCMqUOhynqzYR5H3ffQXWLmJ0GrVg8wExs0ykx
+         WgAyr93FeWrWOaxPF4RRsizDg/9zt+OYIZUl9iMJSBJEy+eEyD02fTKQnTwd1mOuVF
+         9md3XxmEGO83zX5hj5Z0doXnL2g/9zsTt7xMmFZw=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1889pvdP005838
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Sep 2021 04:51:57 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
+ Sep 2021 04:51:57 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 8 Sep 2021 04:51:57 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1889psYj068724;
+        Wed, 8 Sep 2021 04:51:55 -0500
+Subject: Re: [PATCH 1/3] soc: ti: k3-ringacc: Make use of the helper function
+ devm_platform_ioremap_resource_byname()
+To:     Cai Huoqing <caihuoqing@baidu.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>
+CC:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+References: <20210908071310.432-1-caihuoqing@baidu.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <91d50073-9f23-5e69-6e52-52b11d80071b@ti.com>
+Date:   Wed, 8 Sep 2021 12:51:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BC-Mail-Ex11.internal.baidu.com (172.31.51.51) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+In-Reply-To: <20210908071310.432-1-caihuoqing@baidu.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the devm_platform_ioremap_resource_byname() helper instead of
-calling platform_get_resource_byname() and devm_ioremap_resource()
-separately
 
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
----
-v1->v2: [PATCH 6/6] Fix typo 'dri_id'->'drv_id'
-v2->v3: Just send it as a series
 
- drivers/soc/qcom/rpmh-rsc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 08/09/2021 10:13, Cai Huoqing wrote:
+> Use the devm_platform_ioremap_resource_byname() helper instead of
+> calling platform_get_resource_byname() and devm_ioremap_resource()
+> separately
+> 
+> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+> ---
+>   drivers/soc/ti/k3-ringacc.c | 18 +++++-------------
+>   1 file changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index e749a2b285d8..2834c6efc16b 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -910,7 +910,6 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
- {
- 	struct device_node *dn = pdev->dev.of_node;
- 	struct rsc_drv *drv;
--	struct resource *res;
- 	char drv_id[10] = {0};
- 	int ret, irq;
- 	u32 solver_config;
-@@ -941,8 +940,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
- 		drv->name = dev_name(&pdev->dev);
- 
- 	snprintf(drv_id, ARRAY_SIZE(drv_id), "drv-%d", drv->id);
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, drv_id);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_ioremap_resource_byname(pdev, drv_id);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
+Thank you.
+Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
+
+
 -- 
-2.25.1
-
+Best regards,
+grygorii
