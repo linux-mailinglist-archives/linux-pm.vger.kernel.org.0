@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9164034F2
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 09:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CAC4034F6
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 09:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348709AbhIHHMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 03:12:48 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:57816 "EHLO baidu.com"
+        id S1347387AbhIHHMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 03:12:52 -0400
+Received: from mx21.baidu.com ([220.181.3.85]:57968 "EHLO baidu.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348636AbhIHHMr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Sep 2021 03:12:47 -0400
-Received: from BC-Mail-Ex30.internal.baidu.com (unknown [172.31.51.24])
-        by Forcepoint Email with ESMTPS id 3224E2BA1E951A9254FA;
-        Wed,  8 Sep 2021 15:11:38 +0800 (CST)
+        id S1348733AbhIHHMv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 03:12:51 -0400
+Received: from BC-Mail-Ex29.internal.baidu.com (unknown [172.31.51.23])
+        by Forcepoint Email with ESMTPS id 742E91BCB78B461E2E17;
+        Wed,  8 Sep 2021 15:11:41 +0800 (CST)
 Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BC-Mail-Ex30.internal.baidu.com (172.31.51.24) with Microsoft SMTP Server
+ BC-Mail-Ex29.internal.baidu.com (172.31.51.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2242.12; Wed, 8 Sep 2021 15:11:37 +0800
+ 15.1.2242.12; Wed, 8 Sep 2021 15:11:41 +0800
 Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
  BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 8 Sep 2021 15:11:36 +0800
+ 15.1.2308.14; Wed, 8 Sep 2021 15:11:40 +0800
 From:   Cai Huoqing <caihuoqing@baidu.com>
 To:     <caihuoqing@baidu.com>
 CC:     Neil Armstrong <narmstrong@baylibre.com>,
@@ -47,9 +47,9 @@ CC:     Neil Armstrong <narmstrong@baylibre.com>,
         <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>
-Subject: [PATCH 1/2] soc: fsl: guts: Make use of the helper function devm_platform_ioremap_resource()
-Date:   Wed, 8 Sep 2021 15:11:13 +0800
-Message-ID: <20210908071123.348-3-caihuoqing@baidu.com>
+Subject: [PATCH] soc: ixp4xx/qmgr: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Wed, 8 Sep 2021 15:11:14 +0800
+Message-ID: <20210908071123.348-4-caihuoqing@baidu.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210908071123.348-1-caihuoqing@baidu.com>
 References: <20210908071123.348-1-caihuoqing@baidu.com>
@@ -68,30 +68,27 @@ separately
 
 Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 ---
- drivers/soc/fsl/guts.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/soc/ixp4xx/ixp4xx-qmgr.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
-index d5e9a5f2c087..072473a16f4d 100644
---- a/drivers/soc/fsl/guts.c
-+++ b/drivers/soc/fsl/guts.c
-@@ -140,7 +140,6 @@ static int fsl_guts_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
+diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+index 9154c7029b05..72b5a10e3104 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
++++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+@@ -377,13 +377,9 @@ static int ixp4xx_qmgr_probe(struct platform_device *pdev)
+ 	int i, err;
+ 	irq_handler_t handler1, handler2;
  	struct device *dev = &pdev->dev;
 -	struct resource *res;
- 	const struct fsl_soc_die_attr *soc_die;
- 	const char *machine;
- 	u32 svr;
-@@ -152,8 +151,7 @@ static int fsl_guts_probe(struct platform_device *pdev)
- 
- 	guts->little_endian = of_property_read_bool(np, "little-endian");
+ 	int irq1, irq2;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	guts->regs = devm_ioremap_resource(dev, res);
-+	guts->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(guts->regs))
- 		return PTR_ERR(guts->regs);
+-	if (!res)
+-		return -ENODEV;
+-	qmgr_regs = devm_ioremap_resource(dev, res);
++	qmgr_regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(qmgr_regs))
+ 		return PTR_ERR(qmgr_regs);
  
 -- 
 2.25.1
