@@ -2,161 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34F6403A16
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 14:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4173B403B2A
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 16:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348327AbhIHMoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 08:44:04 -0400
-Received: from mga01.intel.com ([192.55.52.88]:9982 "EHLO mga01.intel.com"
+        id S237442AbhIHOGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 10:06:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:47072 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234005AbhIHMoD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Sep 2021 08:44:03 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10100"; a="242769383"
-X-IronPort-AV: E=Sophos;i="5.85,277,1624345200"; 
-   d="scan'208";a="242769383"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 05:42:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,277,1624345200"; 
-   d="scan'208";a="524815432"
-Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Sep 2021 05:42:53 -0700
-Received: from kbuild by 730d49888f40 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mNwui-00029g-R8; Wed, 08 Sep 2021 12:42:52 +0000
-Date:   Wed, 08 Sep 2021 20:42:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 7d0798a20c777f0726d75b686224b15444d491f1
-Message-ID: <6138afab.2Dgwf19YXvbB6ciZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229600AbhIHOGu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 10:06:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A08D6D;
+        Wed,  8 Sep 2021 07:05:42 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (e120877-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A880B3F766;
+        Wed,  8 Sep 2021 07:05:40 -0700 (PDT)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        vincent.guittot@linaro.org, qperret@google.com
+Cc:     linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v7 0/9] Inefficient OPPs
+Date:   Wed,  8 Sep 2021 15:05:21 +0100
+Message-Id: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 7d0798a20c777f0726d75b686224b15444d491f1  Merge branches 'pm-sleep', 'pm-em', 'pm-cpufreq-next' and 'acpi-scan' into bleeding-edge
+Hi all,
 
-elapsed time: 1015m
+Here's the new version for the inefficient OPPs. This patch-set is based on the
+following series from Viresh:
 
-configs tested: 102
-configs skipped: 3
+  [PATCH V3 0/9] Add callback to register with energy model
+  https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The main change in this version is the re-introduction of CPUFREQ_RELATION_E,
+as a relation flag. When set, all relations will try to resolve a frequency
+across efficient frequencies only.
 
-gcc tested configs:
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-i386                 randconfig-c001-20210908
-arc                         haps_hs_defconfig
-mips                          ath79_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                      ppc44x_defconfig
-sh                          sdk7780_defconfig
-sh                        edosk7760_defconfig
-powerpc                     tqm8540_defconfig
-arm                         orion5x_defconfig
-mips                           ci20_defconfig
-mips                      pic32mzda_defconfig
-mips                        maltaup_defconfig
-arm                       versatile_defconfig
-arm                          imote2_defconfig
-arm                       netwinder_defconfig
-sh                           se7343_defconfig
-arm                            dove_defconfig
-powerpc                 mpc8315_rdb_defconfig
-mips                      maltaaprp_defconfig
-x86_64               randconfig-c001-20210908
-arm                  randconfig-c002-20210908
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210906
-i386                 randconfig-a004-20210906
-i386                 randconfig-a006-20210906
-i386                 randconfig-a002-20210906
-i386                 randconfig-a003-20210906
-i386                 randconfig-a001-20210906
-arc                  randconfig-r043-20210906
-x86_64               randconfig-a006-20210906
-x86_64               randconfig-a004-20210906
-x86_64               randconfig-a003-20210906
-x86_64               randconfig-a005-20210906
-x86_64               randconfig-a001-20210906
-x86_64               randconfig-a002-20210906
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+A bit of context:
 
-clang tested configs:
-x86_64               randconfig-a011-20210906
-x86_64               randconfig-a016-20210906
-x86_64               randconfig-a012-20210906
-x86_64               randconfig-a015-20210906
-x86_64               randconfig-a014-20210906
-x86_64               randconfig-a013-20210906
-i386                 randconfig-a012-20210906
-i386                 randconfig-a015-20210906
-i386                 randconfig-a011-20210906
-i386                 randconfig-a013-20210906
-i386                 randconfig-a014-20210906
-i386                 randconfig-a016-20210906
-riscv                randconfig-r042-20210906
-hexagon              randconfig-r045-20210906
-s390                 randconfig-r044-20210906
-hexagon              randconfig-r041-20210906
+We (Power team in Arm) are working with an experimental kernel for the
+Google's Pixel4 to evaluate and improve the current mainline performance
+and energy consumption on a real life device with Android.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The SD855 SoC found in this phone has several OPPs that are inefficient.
+I.e. despite a lower frequency, they have a greater cost. (That cost being
+fmax * OPP power / OPP freq). This issue is twofold. First of course,
+running a specific workload at an inefficient OPP is counterproductive
+since it wastes wasting energy. But also, inefficient OPPs make a
+performance domain less appealing for task placement than it really is.
+
+We evaluated the change presented here by running 30 iterations of Android
+PCMark "Work 2.0 Performance". While we did not see any statistically
+significant performance impact, this change allowed to drastically improve
+the idle time residency.
+
+
+                           |   Running   |  WFI [1]  |    Idle   |
+   ------------------------+-------------+-----------+-----------+
+   Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+   ------------------------+-------------+-----------+-----------+
+   Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+   ------------------------+-------------+-----------+-----------+
+   Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+   ------------------------+-------------+-----------+-----------+
+
+On the SD855, the inefficient OPPs are found on the little cluster. By
+removing them from the Energy Model, we make the most efficient CPUs more
+appealing for task placement, helping to reduce the running time for the
+medium and big CPUs. Increasing idle time is crucial for this platform due
+to the substantial energy cost differences among the clusters. Also,
+despite not appearing in the statistics (the idle driver used here doesn't
+report it), we can speculate that we also improve the cluster idle time.
+
+[1] WFI: Wait for interrupt.
+
+Changelog since v6:
+  - Bring back CPUFREQ_RELATION_E as a relation flag.
+  - Make the policy min/max hard limits.
+  - Remove the "efficient" member from the freq_table that was pointing to the
+    next efficient frequency.
+
+Changelog since v5:
+  - EM setup inefficient frequencies in CPUFreq, instead of CPUFreq settings its
+    own inefficient frequencies from EM.
+
+Changelog since v4:
+  - Remove CPUFREQ_RELATION_E.
+  - Skip inefficient OPPs for all governors with CPUFREQ_GOV_DYNAMIC_SWITCHING
+  - Remove CPUFREQ_READ_ENERGY_MODEL in favor of the register_em callback.
+
+Changelog since v3:
+  - New freq-table relation CPUFREQ_RELATION_E.
+  - New CPUFreq driver flag CPUFREQ_READ_ENERGY_MODEL.
+  - EM flag to skip or not inefficiencies (driven by CPUFreq).
+  - Fix infinite loop in set_freq_table_efficiencies().
+
+Changelog since v2:
+  - Add separated support for inefficiencies into CPUFreq.
+  - Collect Reviewed-by for the first patch.
+
+Changelog since v1:
+  - Remove the Look-up table as the numbers weren't strong enough to
+
+
+Vincent Donnefort (9):
+  PM / EM: Fix inefficient states detection
+  PM / EM: Mark inefficient states
+  PM / EM: Extend em_perf_domain with a flag field
+  PM / EM: Allow skipping inefficient states
+  cpufreq: Make policy min/max hard requirements
+  cpufreq: Add an interface to mark inefficient frequencies
+  cpufreq: Introducing CPUFREQ_RELATION_E
+  cpufreq: Use CPUFREQ_RELATION_E in DVFS governors
+  PM / EM: Mark inefficiencies in CPUFreq
+
+ drivers/cpufreq/acpi-cpufreq.c         |   3 +-
+ drivers/cpufreq/amd_freq_sensitivity.c |   3 +-
+ drivers/cpufreq/cpufreq.c              |  19 +++-
+ drivers/cpufreq/cpufreq_conservative.c |   6 +-
+ drivers/cpufreq/cpufreq_ondemand.c     |  16 ++--
+ drivers/cpufreq/powernv-cpufreq.c      |   4 +-
+ drivers/cpufreq/s5pv210-cpufreq.c      |   2 +-
+ include/linux/cpufreq.h                | 169 ++++++++++++++++++++++++++-------
+ include/linux/energy_model.h           |  68 +++++++++++--
+ kernel/power/energy_model.c            |  86 +++++++++++++----
+ 10 files changed, 301 insertions(+), 75 deletions(-)
+
+-- 
+2.7.4
+
