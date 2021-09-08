@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D826C403C1D
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 17:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02133403C1B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 17:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351995AbhIHPCj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 11:02:39 -0400
-Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:63968
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S1349550AbhIHPCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 11:02:36 -0400
+Received: from mail-mw2nam08on2077.outbound.protection.outlook.com ([40.107.101.77]:22369
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351975AbhIHPCS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Sep 2021 11:02:18 -0400
+        id S1351992AbhIHPCR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 11:02:17 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FQL5Iadum7jyMKm8Jru4H5FYwWJ5S7CDIPu/0GIhj92DtNZzqyMt1ubatTpTSm3mM3er8Tkmnm2Q0T4vrTy+PbCIKXG81Y6NFavu663jWaelJbrnzwmvSZUrPOXINMiDvuqDCVrSaZIo8H8MaUqak+M97chpESzsYRVZ2RbBOqUpXqxEt2HeWPlBB1IE4yVg4qF5RbhYqef7+ho8jufor/6MACOFcb/4m+c4rMk8HMvKlRSHJPgeGFWSyulNVISDq4w0k/JS/DYmQ8cAu78Pn01RhzGsyVWu6V9pVkH6ArJ1JG1BWRUzzKMY7QqxTEeN2grSGuj0pMwetQiWQ+7BKw==
+ b=jPfFtMwPL2S8BwNSYlWdVApMxLwAD+VM4fcOhQY6D/xjTEB/ubbw/WROKEJhcj3CxWgfBueIHMng23wLDmeTpBXU1+gX+V9yzfNYggUYkB+7GLQzTxyVr0GbKvYKHcj8GQEgBAoxgJ1vx+2nffX3FgqxJubo/bqE47CtrQux7LCTepjsQQTXQL8PIwNj7UDqJEq/cZEzGIgMK61BC1LNux0zjJd4ETxkO/SXWhYLxrs35Py1P2JuWhumPThTZfvmIavot+1nbN+oCIIgGhMtwJydXZZqX9h9jRBMUtdciP8nQS31cILkkGMUWyzUM+GNtnQkfHwC1/dj4c2tx1cwsQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=gko91jc5e7rpbCzfGpPpjqqcyCTjDnAMnKWSe+2E4Dw=;
- b=F6KGAgBlEjoPzG6IFnLJo28Z8Qx6XzvgZ/pmut8AetcdxztGs+coht4MZm6Nhw+o5+qixQjh++QUeARVWudGvbHlBgSDyrpq+sLAdmW1cdKoFBeeeh/zJZoUF9/7BDH4Bs17kWWvqCz6F4gtr0Q52AcAcrNpWOXVkDFgQ6qTMHCPDROD/jl2NS33P+rLXTciw/cgC7j8TQ5VAbB3KkJZFYlrb7jNdrG1S6F6/0z6FQSGsJ08xz/Zr1Dv6E9BSJUxgNidINUBL+k43B8dBvMp0cXBzLjG455qQkDchwELU/wIwYvHAHlawfcUxHChYgdbuzYBwABz69bTHvLzvZw5EA==
+ bh=uUKPiXN0BjWmKPdmk/FZ66q/4HDuKnMNTn7hDLqR47Y=;
+ b=jsv4o1ziVruwSkXKTOrY/cibQf9WBAu8XGvzlH0wVeS70nowIE90KegpuF7xr5nUDoHJgNLR7h6hp1XQPz3mk0rAaoDLdGoK0/k4zGpSwqvOPlRxE0otZ9h9tDmLEe95+ZAqNOR0ugs5zBPby1Qy9IHa6hSDYe0Aj2mrwYf4ICTKYsUNnysj78JZoa2IhLOTZ87B0NggwjqYoP22CKTxvlPdIexfsIhlF7Y2YBjFVxU0Z1KSNUJwfZzMkOo5xrkP7RHdVjEQbiQzbIpgQJqP02cYdhlPgvMR5nvT8EPYU86eekEoYZ/CjJpl8VvwlcyvVghLegz3b/cFhZZA/BSbOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gko91jc5e7rpbCzfGpPpjqqcyCTjDnAMnKWSe+2E4Dw=;
- b=wfyLMWlAFQUAwnY42jXX1xtlHikDBiavSAkGmy3+ueK4/CW3Nr9uSPWNIVodC5Mjm6TJ69hu+cVuch0/TSKXJyZKZH31/o0hbvG2sShtR/k4KDZoAWUl2sNHapjcxycf71n6zmxskQuWiUIUkeGTqDWdjg3zka6S8FHel9aM2QI=
-Received: from MWHPR11CA0037.namprd11.prod.outlook.com (2603:10b6:300:115::23)
- by MWHPR12MB1504.namprd12.prod.outlook.com (2603:10b6:301:c::7) with
+ bh=uUKPiXN0BjWmKPdmk/FZ66q/4HDuKnMNTn7hDLqR47Y=;
+ b=W78/f6aNmn2Qh4AjT66R5ctiufMZ3GdTOnnrHE0j4d38v5DtHofR2rDuI2h+gjkAWKQseOrmtMT4Sdu9rYjmFEU2KrwL5dDDz325dSIB/QAzENgZnqXqsNZcH921SlPuUJ8EhjwyagbXFXSw82ksScloByuER6IrPECM4ngTEcg=
+Received: from MWHPR11CA0038.namprd11.prod.outlook.com (2603:10b6:300:115::24)
+ by DM6PR12MB4203.namprd12.prod.outlook.com (2603:10b6:5:21f::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14; Wed, 8 Sep
- 2021 15:01:07 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19; Wed, 8 Sep
+ 2021 15:01:08 +0000
 Received: from CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:115:cafe::cd) by MWHPR11CA0037.outlook.office365.com
- (2603:10b6:300:115::23) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:300:115:cafe::e9) by MWHPR11CA0038.outlook.office365.com
+ (2603:10b6:300:115::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend
- Transport; Wed, 8 Sep 2021 15:01:07 +0000
+ Transport; Wed, 8 Sep 2021 15:01:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=pass action=none header.from=amd.com;
@@ -45,11 +45,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1NAM11FT036.mail.protection.outlook.com (10.13.174.124) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4500.14 via Frontend Transport; Wed, 8 Sep 2021 15:01:07 +0000
+ 15.20.4500.14 via Frontend Transport; Wed, 8 Sep 2021 15:01:08 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 8 Sep 2021
- 10:00:53 -0500
+ 10:00:57 -0500
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -64,9 +64,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
         Huang Rui <ray.huang@amd.com>
-Subject: [PATCH 02/19] x86/msr: add AMD CPPC MSR definitions
-Date:   Wed, 8 Sep 2021 22:59:44 +0800
-Message-ID: <20210908150001.3702552-3-ray.huang@amd.com>
+Subject: [PATCH 03/19] ACPI: CPPC: add cppc enable register function
+Date:   Wed, 8 Sep 2021 22:59:45 +0800
+Message-ID: <20210908150001.3702552-4-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210908150001.3702552-1-ray.huang@amd.com>
 References: <20210908150001.3702552-1-ray.huang@amd.com>
@@ -78,66 +78,116 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 590a14db-34a9-4488-a22e-08d972d97caf
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1504:
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1504C5D5B9F3C6DA0DF04A4DECD49@MWHPR12MB1504.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
+X-MS-Office365-Filtering-Correlation-Id: e77b2fe8-9366-46be-a82f-08d972d97d15
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4203:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4203AFD86670B8C8BA682175ECD49@DM6PR12MB4203.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yA2JjAipvYTpw6Zzy3NIMWP+UxbMRXLKy0MF84nG9SN2NE0yM3xGZBERPp2TiIZCRqcGbO8kyKCK/1i5ZQIxJrC5/eiCRuwAGjyOJSUzBVNbK5y4nZbjG5SCBdhddO5XHQhZR+FgBxT/m9sZ9NgTiljpqKW/L0f1M0EoNVhsA/r52I2OOVtXj9ciHnTXoFCmFPAVReCyXG78b594e/7HXoIRHUv1tzhJO8VuIc+EJNi2FEhX6GFfVaI4MhD+L1YiUebzrkPd4WUCevUm2/UY3pe36wfJhVXXlJcFN50Zunyj1QM1IUCLX0ciExYeclvweobpo/e8SumxzHGY5K0quY0fzUbqUWw11clS7Wv3tinHrRPVucihgtvQWvudKloT+nekpkEeXyBdj0/UrjtU1ABVIeJQXQ6jFL/gQexv61yekzmieHXQnaug17/W0/X0xUxVCB5NYsimaK8omZmUG5Ane7ImOh+R7Tq5ttHNQnu/exupusci2iwcGMtdkCALnBEQmpxCF9k5Z0X6nqfzcpCVtlHVUItsG+MLmpY02pjh058eL0yrJjeZ9eDrA6Tl57XO1Bl+X2/wE/85a0rO3lCUEGDBA4QkqJbXMPFVYB/aV8JEYKJ0YsF2ISN6PvYg13Q+CtHqSkplm9ukxUKigub2sLVsNLC6oTpmtE63uq4VqGjdCWIsDEZv6RsolYKzN4Feg/rTgbjAI/y8phuw54nfxaPEW/kxGZx2//zUYTM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(376002)(46966006)(36840700001)(47076005)(4326008)(16526019)(5660300002)(186003)(8676002)(7696005)(426003)(26005)(336012)(82740400003)(316002)(110136005)(70586007)(70206006)(54906003)(81166007)(2906002)(36756003)(36860700001)(1076003)(356005)(478600001)(82310400003)(6666004)(86362001)(8936002)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: zqsj8A/X89bopYaXeEgRsj+hfNEzJ8pkcD4vhf9MV/8BcQiDJSKCFrOyD3DKsVcoMEpx/NWhP1COaIQD/+gBx/j88utC33jpPbPQ4k2pOeyOOBCEZlenXwSunF5VfDJPDCqGmNoxFN/hfD85LlSip2mGQkPEk5GfRRZF+cXa2ihJgHJPlZVekwOVe9ATjBi6VAx10SKdFaax97OniCZlJ49wM0hSCYutr/0RRd6MxbPHKOvLSFsGgmGnfJ2QJZgB3znS+vkAr8vIlco/m8ezUO0XmUWFIYnnPz2vLjNqKWjsRDFBcLWSCj0DAf9REsMWcpdY0AcgPuI7oAOSHS19x4hu+4ChklYdWwJac6+7xc4YIKyBkJVb/RLbN4SrxAFcQx/dW/itjVg+bB0MwTGJ08VD/sSqTuprUh7n8C+gHl4TN9/sp8NP+q9vUNFSRPhnNJjy35t33vAtD+KeQxTpvWd5GVS52mSD9E4CRHXwwCsVL48MKfmG9RTPbfNY6NvKmMgeueGAWrwzk7MWaevL2YyNNfvzMD+qz4AhaFPxPnnHtVShSdYMFF9pRYdHOfg8+zd7sYW2gWP2wirBrrNjz8SmwdN+DMAGiogRFeV/FQvP0BU3YV0Vvj/hKB73SuQCjHbVJ0Tr/wOLktFIjgTH+O33WUeaYg6cRY78JAP7Fz5T9//wG6fQpR845vojJkJRE46O/NzZOktltROqtOUi29i/toZ4Rg4pcvVXwGuQLBY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(2906002)(36756003)(356005)(7696005)(1076003)(54906003)(70586007)(110136005)(81166007)(6666004)(86362001)(36860700001)(8676002)(26005)(4326008)(47076005)(5660300002)(2616005)(316002)(16526019)(186003)(336012)(426003)(8936002)(83380400001)(70206006)(82310400003)(508600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2021 15:01:07.3331
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2021 15:01:08.0037
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 590a14db-34a9-4488-a22e-08d972d97caf
+X-MS-Exchange-CrossTenant-Network-Message-Id: e77b2fe8-9366-46be-a82f-08d972d97d15
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1504
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4203
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-AMD CPPC (Collaborative Processor Performance Control) function uses MSR
-registers to manage the performance hints. So add the MSR register macro
-here.
+From: Jinzhou Su <Jinzhou.Su@amd.com>
 
+Export the cppc enable register function for future use.
+
+Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/acpi/cppc_acpi.c | 42 ++++++++++++++++++++++++++++++++++++++++
+ include/acpi/cppc_acpi.h |  5 +++++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index a7c413432b33..ce42e15cf303 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -486,6 +486,23 @@
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index a4d4eebba1da..de4b30545215 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1220,6 +1220,48 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ }
+ EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
  
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
- 
-+/* AMD Collaborative Processor Performance Control MSRs */
-+#define MSR_AMD_CPPC_CAP1		0xc00102b0
-+#define MSR_AMD_CPPC_ENABLE		0xc00102b1
-+#define MSR_AMD_CPPC_CAP2		0xc00102b2
-+#define MSR_AMD_CPPC_REQ		0xc00102b3
-+#define MSR_AMD_CPPC_STATUS		0xc00102b4
++/**
++ * cppc_set_enable - Set to enable CPPC register.
++ * @cpu: CPU for which to enable CPPC register.
++ * @enable: enable field to write into share memory.
++ *
++ * Return: 0 for success, -ERRNO otherwise.
++ */
++int cppc_set_enable(int cpu, u32 enable)
++{
++	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
++	struct cpc_register_resource *enable_reg;
++	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
++	struct cppc_pcc_data *pcc_ss_data = NULL;
++	int ret = -1;
 +
-+#define CAP1_LOWEST_PERF(x)	(((x) >> 0) & 0xff)
-+#define CAP1_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
-+#define CAP1_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
-+#define CAP1_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
++	if (!cpc_desc) {
++		pr_debug("No CPC descriptor for CPU:%d\n", cpu);
++		return -ENODEV;
++	}
 +
-+#define REQ_MAX_PERF(x)		(((x) & 0xff) << 0)
-+#define REQ_MIN_PERF(x)		(((x) & 0xff) << 8)
-+#define REQ_DES_PERF(x)		(((x) & 0xff) << 16)
-+#define REQ_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
++	enable_reg = &cpc_desc->cpc_regs[ENABLE];
 +
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
- 
++	if (CPC_IN_PCC(enable_reg)) {
++
++		if (pcc_ss_id < 0)
++			return -EIO;
++
++		ret = cpc_write(cpu, enable_reg, enable);
++		if (ret)
++			return ret;
++
++		pcc_ss_data = pcc_data[pcc_ss_id];
++
++		down_write(&pcc_ss_data->pcc_lock);
++		send_pcc_cmd(pcc_ss_id, CMD_WRITE);
++		up_write(&pcc_ss_data->pcc_lock);
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cppc_set_enable);
++
+ /**
+  * cppc_set_perf - Set a CPU's performance controls.
+  * @cpu: CPU for which to set performance controls.
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 9f4985b4d64d..3fdae40a75fc 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -137,6 +137,7 @@ struct cppc_cpudata {
+ extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+ extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
++extern int cppc_set_enable(int cpu, u32 enable);
+ extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+ extern bool acpi_cpc_valid(void);
+ extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+@@ -157,6 +158,10 @@ static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+ {
+ 	return -ENOTSUPP;
+ }
++static inline int cppc_set_enable(int cpu, u32 enable)
++{
++	return -ENOTSUPP;
++}
+ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+ {
+ 	return -ENOTSUPP;
 -- 
 2.25.1
 
