@@ -2,183 +2,283 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45763403C8F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 17:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D227B403D72
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 18:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349610AbhIHPfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 11:35:22 -0400
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:38529 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbhIHPfW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Sep 2021 11:35:22 -0400
-Received: by mail-oi1-f179.google.com with SMTP id bd1so3586457oib.5;
-        Wed, 08 Sep 2021 08:34:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=83jEoiM0ZDoIZ+9YoaEUGK/l0iVM2e6CvU/M4LGLntQ=;
-        b=25YT7HxeLLtY79q0uS4m1A70KfGS5pQPGXSpzRizgQ8Nc72rElabF56zz2a2rEKYO0
-         PnK7mjCLmsF6qndlTHY52mJKiQu3SKUqMnDaPTwkYz3ZtfITLxicLFZcfmgHkHKlx6RB
-         i1xk+GXMM02pKqX5KQxnKq67Uzc7A0SuhY+86lWhM/HYxuMSm/iA9Xg4uXKk5qbYvx1u
-         IqX+vVxqLwn26JW5eOYK7MhnNXhcZ+xXJ9jDscKFBgI0zrpJsCp40to1z384fs6C5Exf
-         R+ufk2Kwz86VEDqz1q4FxrO63g4YnSL7Hbp6FEoyeXsA9qhdKQAM3rrSjgSnt5wi6au2
-         t07A==
-X-Gm-Message-State: AOAM530W1VXwZuB66eQJvSWfm6pmeth/wbNT4sNSmRQDThFc3fOI8/F7
-        5pogQrHVvSohJVHnRuP9mB/eAQmz1L+d0HSAviEYDd9s/GY=
-X-Google-Smtp-Source: ABdhPJzBiNI0BWFQw0ZS7oFvDcl9cR3u7nEplbvg4S83Le5hfLdavZoDzNL0DM/eli/rI3plGXUCUEewVDS5NufunaU=
-X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr2656528ois.69.1631115254083;
- Wed, 08 Sep 2021 08:34:14 -0700 (PDT)
+        id S237223AbhIHQRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 12:17:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38232 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230091AbhIHQRn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 12:17:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E009160F5E;
+        Wed,  8 Sep 2021 16:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631117795;
+        bh=cVjCpS9RWucjZ2Pri7vZ4FvnLiH/GbYavZwf0VFtOYA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O9BCRF0bDQGGb30SZ+HYiindSLiaw2+SFpmxvtNYoC+6n8M7RmM5AOY9MOTbMU55V
+         XyDtd5TjqDuRkxH+9WPPNl5boINNnQM4jj1y3jur5VpmEb0Et3XKafyBNCQBlYftB7
+         VE4LosP+vnYm54vjV7Yv+hE2NSBYtMYj3IqKOp4HnVBMwctF03YwzRFmy+6ivHFqr7
+         KaJW3lQ8INqyx7MzJU7jf1gaqk6u4Egs9OY8ZOqm+B9N29yQO3QUJiwED8Iu4VShA4
+         yjlz5ktuNBdFj0UaZyizBPYZiusmbblrIXshNBe0f5QFxPBror9k87alfuE6clY+8M
+         z4AwTpn1JIAag==
+From:   Antoine Tenart <atenart@kernel.org>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        srinivas.pandruvada@linux.intel.com
+Cc:     Antoine Tenart <atenart@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] thermal: int340x: fix tcc offset on resume
+Date:   Wed,  8 Sep 2021 18:16:32 +0200
+Message-Id: <20210908161632.15520-1-atenart@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Sep 2021 17:34:03 +0200
-Message-ID: <CAJZ5v0iscRcftKWp-mUo6ennD0iPP=dQsZ1uTueycuT5fxAF=w@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.15-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+After upgrading to Linux 5.13.3 I started noticing my laptop would
+shutdown due to overheat (when it should not). It turned out this is due
+to commit fe6a6de6692e ("thermal/drivers/int340x/processor_thermal: Fix tcc setting").
 
-Please pull from the tag
+What happens is this drivers uses a global variable to keep track of the
+tcc offset (tcc_offset_save) and uses it on resume. The issue is this
+variable is initialized to 0, but is only set in
+tcc_offset_degree_celsius_store, i.e. when the tcc offset is explicitly
+set by userspace. If that does not happen, the resume path will set the
+offset to 0 (in my case the h/w default being 3, the offset would become
+too low after a suspend/resume cycle).
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.15-rc1-2
+The issue did not arise before commit fe6a6de6692e, as the function
+setting the offset would return if the offset was 0. This is no longer
+the case (rightfully).
 
-with top-most commit f76c87e8c33766cc6a7bf7461dfac9cebb05b5df
+Fix this by keeping track of the offset in a suspend op, so the right
+value gets restored after a resume if it was not set by userspace.
 
- Merge branch 'pm-opp'
+The logic to restore the offset after a resume was there long before
+commit fe6a6de6692e, but as a value of 0 was considered invalid I'm
+referencing the commit that made the issue possible in the Fixes tag
+instead.
 
-on top of commit 5cbba60596b1f32f637190ca9ed5b1acdadb852c
+Fixes: fe6a6de6692e ("thermal/drivers/int340x/processor_thermal: Fix tcc setting")
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+---
 
- Merge tag 'pm-5.15-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+Hi all,
 
-to receive more power management updates for 5.15-rc1.
+Tbh I'm not familiar with this code and subsystem, I wrote this as it
+does fixes the issue and helps to start a discussion. If the fix looks
+good to you, great, but there might be better ways of fixing this.
 
-These are mostly ARM cpufreq driver updates, including one new
-MediaTek driver that has just passed all of the reviews, with the
-addition of a revert of a recent intel_pstate commit, some core
-cpufreq changes and a DT-related update of the operating performance
-points (OPP) support code.
+It did work on my laptop, but other tests are welcomed!
 
-Specifics:
-
- - Add new cpufreq driver for the MediaTek MT6779 platform called
-   mediatek-hw along with corresponding DT bindings (Hector.Yuan).
-
- - Add DCVS interrupt support to the qcom-cpufreq-hw driver (Thara
-   Gopinath).
-
- - Make the qcom-cpufreq-hw driver set the dvfs_possible_from_any_cpu
-   policy flag (Taniya Das).
-
- - Blocklist more Qualcomm platforms in cpufreq-dt-platdev (Bjorn
-   Andersson).
-
- - Make the vexpress cpufreq driver set the CPUFREQ_IS_COOLING_DEV
-   flag (Viresh Kumar).
-
- - Add new cpufreq driver callback to allow drivers to register
-   with the Energy Model in a consistent way and make several
-   drivers use it (Viresh Kumar).
-
- - Change the remaining users of the .ready() cpufreq driver callback
-   to move the code from it elsewhere and drop it from the cpufreq
-   core (Viresh Kumar).
-
- - Revert recent intel_pstate change adding HWP guaranteed performance
-   change notification support to it that led to problems, because
-   the notification in question is triggered prematurely on some
-   systems (Rafael Wysocki).
-
- - Convert the OPP DT bindings to DT schema and clean them up while
-   at it (Rob Herring).
+One note: I chose not to return an error in suspend, as I'm not sure the
+resume would be called if that happens. If that's not the case, I can
+propagate the issue. Also setting tcc_offset_save to -1 might not be
+needed, if ->suspend is guaranteed to be called before ->resume.
 
 Thanks!
+Antoine
 
+ .../intel/int340x_thermal/int3401_thermal.c   |  8 +++-
+ .../processor_thermal_device.c                | 39 ++++++++++++++-----
+ .../processor_thermal_device.h                |  1 +
+ .../processor_thermal_device_pci.c            | 18 ++++++++-
+ .../processor_thermal_device_pci_legacy.c     |  8 +++-
+ 5 files changed, 62 insertions(+), 12 deletions(-)
 
----------------
+diff --git a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
+index acebc8ba94e2..217786fba185 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
+@@ -44,15 +44,21 @@ static int int3401_remove(struct platform_device *pdev)
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
++static int int3401_thermal_suspend(struct device *dev)
++{
++	return proc_thermal_suspend(dev);
++}
+ static int int3401_thermal_resume(struct device *dev)
+ {
+ 	return proc_thermal_resume(dev);
+ }
+ #else
++#define int3401_thermal_suspend NULL
+ #define int3401_thermal_resume NULL
+ #endif
+ 
+-static SIMPLE_DEV_PM_OPS(int3401_proc_thermal_pm, NULL, int3401_thermal_resume);
++static SIMPLE_DEV_PM_OPS(int3401_proc_thermal_pm, int3401_thermal_suspend,
++			 int3401_thermal_resume);
+ 
+ static struct platform_driver int3401_driver = {
+ 	.probe = int3401_add,
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index 0f0038af2ad4..a8d98f1bd6c6 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -68,8 +68,7 @@ static const struct attribute_group power_limit_attribute_group = {
+ 	.name = "power_limits"
+ };
+ 
+-static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+-			       struct device_attribute *attr, char *buf)
++static int tcc_get_offset(void)
+ {
+ 	u64 val;
+ 	int err;
+@@ -78,8 +77,20 @@ static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+ 	if (err)
+ 		return err;
+ 
+-	val = (val >> 24) & 0x3f;
+-	return sprintf(buf, "%d\n", (int)val);
++	return (val >> 24) & 0x3f;
++}
++
++static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
++					      struct device_attribute *attr,
++					      char *buf)
++{
++	int tcc;
++
++	tcc = tcc_get_offset();
++	if (tcc < 0)
++		return tcc;
++
++	return sprintf(buf, "%d\n", tcc);
+ }
+ 
+ static int tcc_offset_update(unsigned int tcc)
+@@ -107,8 +118,6 @@ static int tcc_offset_update(unsigned int tcc)
+ 	return 0;
+ }
+ 
+-static unsigned int tcc_offset_save;
+-
+ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 				struct device_attribute *attr, const char *buf,
+ 				size_t count)
+@@ -131,8 +140,6 @@ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 	if (err)
+ 		return err;
+ 
+-	tcc_offset_save = tcc;
+-
+ 	return count;
+ }
+ 
+@@ -345,6 +352,18 @@ void proc_thermal_remove(struct proc_thermal_device *proc_priv)
+ }
+ EXPORT_SYMBOL_GPL(proc_thermal_remove);
+ 
++static int tcc_offset_save = -1;
++
++int proc_thermal_suspend(struct device *dev)
++{
++	tcc_offset_save = tcc_get_offset();
++	if (tcc_offset_save < 0)
++		dev_warn(dev, "failed to save offset (%d)\n", tcc_offset_save);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(proc_thermal_suspend);
++
+ int proc_thermal_resume(struct device *dev)
+ {
+ 	struct proc_thermal_device *proc_dev;
+@@ -352,7 +371,9 @@ int proc_thermal_resume(struct device *dev)
+ 	proc_dev = dev_get_drvdata(dev);
+ 	proc_thermal_read_ppcc(proc_dev);
+ 
+-	tcc_offset_update(tcc_offset_save);
++	/* Do not update if saving failed */
++	if (tcc_offset_save >= 0)
++		tcc_offset_update(tcc_offset_save);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index 5a1cfe4864f1..c1d8de6dc3d1 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -83,6 +83,7 @@ void proc_thermal_mbox_remove(struct pci_dev *pdev);
+ int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u32 *cmd_resp);
+ int proc_thermal_add(struct device *dev, struct proc_thermal_device *priv);
+ void proc_thermal_remove(struct proc_thermal_device *proc_priv);
++int proc_thermal_suspend(struct device *dev);
+ int proc_thermal_resume(struct device *dev);
+ int proc_thermal_mmio_add(struct pci_dev *pdev,
+ 			  struct proc_thermal_device *proc_priv,
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index 11dd2e825f4f..b4bcd3fe9eb2 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -314,6 +314,20 @@ static void proc_thermal_pci_remove(struct pci_dev *pdev)
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
++static int proc_thermal_pci_suspend(struct device *dev)
++{
++	struct pci_dev *pdev = to_pci_dev(dev);
++	struct proc_thermal_device *proc_priv;
++	struct proc_thermal_pci *pci_info;
++
++	proc_priv = pci_get_drvdata(pdev);
++	pci_info = proc_priv->priv_data;
++
++	if (!pci_info->no_legacy)
++		return proc_thermal_suspend(dev);
++
++	return 0;
++}
+ static int proc_thermal_pci_resume(struct device *dev)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);
+@@ -335,10 +349,12 @@ static int proc_thermal_pci_resume(struct device *dev)
+ 	return 0;
+ }
+ #else
++#define proc_thermal_pci_suspend NULL
+ #define proc_thermal_pci_resume NULL
+ #endif
+ 
+-static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, NULL, proc_thermal_pci_resume);
++static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
++			 proc_thermal_pci_resume);
+ 
+ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
+index f5fc1791b11e..4571a1a53b84 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
+@@ -107,15 +107,21 @@ static void proc_thermal_pci_remove(struct pci_dev *pdev)
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
++static int proc_thermal_pci_suspend(struct device *dev)
++{
++	return proc_thermal_suspend(dev);
++}
+ static int proc_thermal_pci_resume(struct device *dev)
+ {
+ 	return proc_thermal_resume(dev);
+ }
+ #else
++#define proc_thermal_pci_suspend NULL
+ #define proc_thermal_pci_resume NULL
+ #endif
+ 
+-static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, NULL, proc_thermal_pci_resume);
++static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
++			 proc_thermal_pci_resume);
+ 
+ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, BDW_THERMAL, 0) },
+-- 
+2.31.1
 
-Bjorn Andersson (1):
-      cpufreq: blocklist more Qualcomm platforms in cpufreq-dt-platdev
-
-Hector.Yuan (3):
-      dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
-      cpufreq: Add of_perf_domain_get_sharing_cpumask
-      cpufreq: mediatek-hw: Add support for CPUFREQ HW
-
-Rafael J. Wysocki (1):
-      Revert "cpufreq: intel_pstate: Process HWP Guaranteed change notification"
-
-Rob Herring (3):
-      ARM: dts: omap: Drop references to opp.txt
-      dt-bindings: Clean-up OPP binding node names in examples
-      dt-bindings: opp: Convert to DT schema
-
-Taniya Das (1):
-      cpufreq: qcom-hw: Set dvfs_possible_from_any_cpu cpufreq driver flag
-
-Thara Gopinath (1):
-      cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support
-
-Viresh Kumar (13):
-      cpufreq: vexpress: Set CPUFREQ_IS_COOLING_DEV flag
-      cpufreq: Add callback to register with energy model
-      cpufreq: dt: Use .register_em() to register with energy model
-      cpufreq: imx6q: Use .register_em() to register with energy model
-      cpufreq: mediatek: Use .register_em() to register with energy model
-      cpufreq: omap: Use .register_em() to register with energy model
-      cpufreq: qcom-cpufreq-hw: Use .register_em() to register with energy model
-      cpufreq: scpi: Use .register_em() to register with energy model
-      cpufreq: vexpress: Use .register_em() to register with energy model
-      cpufreq: scmi: Use .register_em() to register with energy model
-      cpufreq: acpi: Remove acpi_cpufreq_cpu_ready()
-      cpufreq: sh: Remove sh_cpufreq_cpu_ready()
-      cpufreq: Remove ready() callback
-
----------------
-
- Documentation/cpu-freq/cpu-drivers.rst             |   3 -
- .../devicetree/bindings/cpufreq/cpufreq-dt.txt     |   2 +-
- .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  70 +++
- .../bindings/cpufreq/cpufreq-mediatek.txt          |   2 +-
- .../devicetree/bindings/cpufreq/cpufreq-st.txt     |   6 +-
- .../bindings/cpufreq/nvidia,tegra20-cpufreq.txt    |   2 +-
- .../devicetree/bindings/devfreq/rk3399_dmc.txt     |   2 +-
- .../devicetree/bindings/gpu/arm,mali-bifrost.yaml  |   2 +-
- .../devicetree/bindings/gpu/arm,mali-midgard.yaml  |   2 +-
- .../bindings/interconnect/fsl,imx8m-noc.yaml       |   4 +-
- .../opp/allwinner,sun50i-h6-operating-points.yaml  |   4 +
- Documentation/devicetree/bindings/opp/opp-v1.yaml  |  51 ++
- .../devicetree/bindings/opp/opp-v2-base.yaml       | 214 +++++++
- Documentation/devicetree/bindings/opp/opp-v2.yaml  | 475 ++++++++++++++++
- Documentation/devicetree/bindings/opp/opp.txt      | 622 ---------------------
- Documentation/devicetree/bindings/opp/qcom-opp.txt |   2 +-
- .../bindings/opp/ti-omap5-opp-supply.txt           |   2 +-
- .../devicetree/bindings/power/power-domain.yaml    |   2 +-
- .../translations/zh_CN/cpu-freq/cpu-drivers.rst    |   2 -
- arch/arm/boot/dts/omap34xx.dtsi                    |   1 -
- arch/arm/boot/dts/omap36xx.dtsi                    |   1 -
- drivers/base/arch_topology.c                       |   2 +
- drivers/cpufreq/Kconfig.arm                        |  12 +
- drivers/cpufreq/Makefile                           |   1 +
- drivers/cpufreq/acpi-cpufreq.c                     |  14 +-
- drivers/cpufreq/cpufreq-dt-platdev.c               |   4 +
- drivers/cpufreq/cpufreq-dt.c                       |   3 +-
- drivers/cpufreq/cpufreq.c                          |  17 +-
- drivers/cpufreq/imx6q-cpufreq.c                    |   2 +-
- drivers/cpufreq/intel_pstate.c                     |  39 --
- drivers/cpufreq/mediatek-cpufreq-hw.c              | 308 ++++++++++
- drivers/cpufreq/mediatek-cpufreq.c                 |   3 +-
- drivers/cpufreq/omap-cpufreq.c                     |   2 +-
- drivers/cpufreq/qcom-cpufreq-hw.c                  | 151 ++++-
- drivers/cpufreq/scmi-cpufreq.c                     |  65 ++-
- drivers/cpufreq/scpi-cpufreq.c                     |   3 +-
- drivers/cpufreq/sh-cpufreq.c                       |  11 -
- drivers/cpufreq/vexpress-spc-cpufreq.c             |  25 +-
- include/linux/cpufreq.h                            |  75 ++-
- 39 files changed, 1441 insertions(+), 767 deletions(-)
