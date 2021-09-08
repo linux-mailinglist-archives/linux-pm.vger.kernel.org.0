@@ -2,199 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D092B403189
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 01:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B74940326A
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 03:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240862AbhIGXaJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Sep 2021 19:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240690AbhIGXaJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Sep 2021 19:30:09 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF9AC06175F
-        for <linux-pm@vger.kernel.org>; Tue,  7 Sep 2021 16:29:02 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id s29so437016pfw.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Sep 2021 16:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=huc226miYakXtQslcOJ5OFd9dcBX+yoxXSmw1/JBDr8=;
-        b=g4QFCzGnJKWqHaVTPchOeRfVnrN2KkPvCP/gI9KbDmC0V7x92NAtrU/9bnOsKqcJv5
-         DBNqQTLuzd/4bv0C4E9Cr28bZNRF0OYpTNgd00YAjWtfjS08ktJsotXMkcW2lnrzTV3q
-         4G9wdJuSLftnVsmdarmsmJ9zUwx4/Gl2ZEbOuhURkRV4CH4A6+fAdexIEeZM13Y4L/au
-         oHk0yxTlw16XOXS/8BNP5gbkx2q3D2WbKCZ0luZtRrY/VRTBVXqM18Kl5cguzhBZvXwn
-         O5a3FOt7R0X+6n/21N+uJfdPD5FIzWWv7NKrpYhbeiWlF0/1snB/CXtefy3SGQoG/JrQ
-         MnTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=huc226miYakXtQslcOJ5OFd9dcBX+yoxXSmw1/JBDr8=;
-        b=SzpwE6rpzOXFLdfX1K7DMlYIVtRYdYhMdcLkuGBozsmtdPBL7bmImF73Aq9ClsgRCX
-         RfpgdZEjeGMel/dWDwtH380i+5QF2UfyvLrtf6dtZRkp7HT5g61/Xn0qUShP17Q+J9Rc
-         cQVYqft/Sh7ZGqjoQWf1vier7RMzyaXULSJGaWDxT7EqMudC+8EXk3gmX37yCUN0aCc0
-         nLSbrKMzynlFz90pcCZ00JSkWq9+P9CkUbJ3LMAKBjJRZ1ifao05Qef4skHczCofMY2r
-         yVWTCPDXFR3GXqfj1p5tQWFbJPiGH9FUjRS26z/Y9D9TZ2Xh064qOCZgABEWkSKvJbRN
-         IQug==
-X-Gm-Message-State: AOAM530TNTTyVqwSKLLzGpmcYcN2bwRTpagpbS29G6UF+FYf4RDfCyKj
-        MV9gfeA2nsB5dstjL4sIsfTGlw==
-X-Google-Smtp-Source: ABdhPJxIQ375xdhgXCCw5RZhtV4j3yygstRnelBaCmxFSUWle29yKPlWQoQ44FqgATE53J2mikyPJQ==
-X-Received: by 2002:a63:f050:: with SMTP id s16mr772788pgj.258.1631057340982;
-        Tue, 07 Sep 2021 16:29:00 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:8525:5337:1a6c:f8af])
-        by smtp.gmail.com with ESMTPSA id z9sm163607pfk.28.2021.09.07.16.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Sep 2021 16:28:59 -0700 (PDT)
-Date:   Tue, 7 Sep 2021 16:28:53 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-pm@vger.kernel.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
-Message-ID: <YTf1tTvfEMzTawwK@google.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-2-pmalani@chromium.org>
- <20210903064701.GA3515@jackp-linux.qualcomm.com>
+        id S1346910AbhIHBzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Sep 2021 21:55:25 -0400
+Received: from mga17.intel.com ([192.55.52.151]:6401 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346901AbhIHBzZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Sep 2021 21:55:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10100"; a="200564784"
+X-IronPort-AV: E=Sophos;i="5.85,276,1624345200"; 
+   d="scan'208";a="200564784"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 18:54:12 -0700
+X-IronPort-AV: E=Sophos;i="5.85,276,1624345200"; 
+   d="scan'208";a="430444463"
+Received: from sbhowmik-mobl.gar.corp.intel.com ([10.215.126.139])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 18:54:09 -0700
+Message-ID: <7fa77e2239dd87004319a799dbea39988b718233.camel@linux.intel.com>
+Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Process HWP Guaranteed
+ change notification
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     xry111@mengyan1223.wang, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, lenb@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Sep 2021 18:54:05 -0700
+In-Reply-To: <00450b0a9efbfde513ea8b445d31657ce5ac2f37.camel@mengyan1223.wang>
+References: <20210820024006.2347720-1-srinivas.pandruvada@linux.intel.com>
+         <20210820024006.2347720-2-srinivas.pandruvada@linux.intel.com>
+         <00450b0a9efbfde513ea8b445d31657ce5ac2f37.camel@mengyan1223.wang>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dU2rkRBfuzWCPsob"
-Content-Disposition: inline
-In-Reply-To: <20210903064701.GA3515@jackp-linux.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Wang,
 
---dU2rkRBfuzWCPsob
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think this is Lenovo system. The FW sends some interrupts prematurely
+before driver is ready,
 
-Hi Jack,
+There is a fix available but We have decided to revert the commit.
 
-On Thu, Sep 02, 2021 at 11:47:01PM -0700, Jack Pham wrote:
-> Hi Prashant,
->=20
-> On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
-> > Increase the max number of PDO objects to 13, to accommodate the extra
-> > PDOs added as a part of EPR (Extended Power Range) operation introduced
-> > in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
-> >=20
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > ---
-> >  include/linux/usb/pd.h | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> > index 96b7ff66f074..7e8bdca1ce6e 100644
-> > --- a/include/linux/usb/pd.h
-> > +++ b/include/linux/usb/pd.h
-> > @@ -201,7 +201,13 @@ struct pd_message {
-> >  } __packed;
-> > =20
-> >  /* PDO: Power Data Object */
-> > -#define PDO_MAX_OBJECTS		7
-> > +
-> > +/*
-> > + * The EPR (Extended Power Range) structure is a superset of the SPR (=
-Standard Power Range)
-> > + * capabilities structure, so set the max number of PDOs to 13 instead=
- of 7. On SPR-only systems,
-> > + * objects 8 through 13 will just be empty.
-> > + */
-> > +#define PDO_MAX_OBJECTS		13
->=20
-> Hmm this might break the recent change I made to UCSI in commit
-> 1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
-> the first 4").
->=20
->  520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_par=
-tner)
->  521 {
->  522         int ret;
->  523
->  524         /* UCSI max payload means only getting at most 4 PDOs at a t=
-ime */
->  525         ret =3D ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDO=
-S);
->  526         if (ret < 0)
->  527                 return;
->  528
->  529         con->num_pdos =3D ret / sizeof(u32); /* number of bytes to 3=
-2-bit PDOs */
->  530         if (con->num_pdos < UCSI_MAX_PDOS)
->  531                 return;
->  532
->  533         /* get the remaining PDOs, if any */
->  534         ret =3D ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
->  535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
-> 				 ^^^^^^^^^^^^^^^
-> This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
-> since that's the most the return payload can carry.  Currently this
-> assumes that we'd only need to request the PPM at most twice to retrieve
-> all the PDOs for up to a maximum of 7 (first request for 4 then again if
-> needed for the remaining 3).  I'm not sure if any existing UCSI FW would
-> be updatable to support more than 7 PDOs in the future, much less
-> support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
-> offset valid values are 0-7 and anything else "shall not be used", so I
-> don't know how UCSI will eventually cope with EPR without a spec update.
->=20
-
-I've had a conversation with Dmitriy Berchanskiy at Intel (the UCSI WG Chai=
-r)
-about this, and it sounds like the UCSI spec is planned on being revved
-(post R2.0) in order to support the additional messages and expanded struct=
-ures
-of USB PD R3.1 around EPR.
-
-> So if this macro changes to 13 then this call would result in a call to
-> the UCSI GET_PDOS command passing num_pdos =3D=3D 13-4 =3D 9 which would
-> probably result in an error from the PPM FW.  So we might need to retain
-> the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
-> this UCSI driver needs to carry its own definition of
-> UCSI_MAX_TOTAL_PDOS=3D7 instead of using PDO_MAX_OBJECTS?
->=20
-
-Prashant mentioned this as well, but maybe it makes sense to define a separ=
-ate
-EPR_PDO_MAX_OBJECTS to handle the EPR case, as there are completely separate
-underlying PD messages (EPR_Source_Capabilities) where we expect up to 13
-objects, and the classic SPR Source and Sink capabilities will still have t=
-he
-7 object limit.
+Please try the patch attached here.
+https://bugzilla.kernel.org/show_bug.cgi?id=214329
 
 Thanks,
-Benson
+Srinivas
 
-> Jack
-> --=20
-> The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+On Wed, 2021-09-08 at 02:13 +0800, Xi Ruoyao wrote:
+> Hi Srinivas,
+> 
+> Sorry for distrubing, but the mainline kernel panics on my system
+> during
+> boot. By reverting this commit the problem seems fixed.
+> 
+> I don't have kdump set up on the system, so I could only took a photo
+> containing (a part of :( ) panic message.  The system is a laptop with
+> Core i7-1065G7.  My kernel config is also attached.
+> 
+> Not sure if there is something wrong in this commit, or there is a
+> firmware bug from the vendor of my laptop.  In the latter case, can we
+> have something in kernel config or cmdline to disable HWP as a
+> workaround?
+> 
+> On Thu, 2021-08-19 at 19:40 -0700, Srinivas Pandruvada wrote:
+> > It is possible that HWP guaranteed ratio is changed in response to
+> > change in power and thermal limits. For example when Intel Speed
+> > Select
+> > performance profile is changed or there is change in TDP, hardware
+> > can
+> > send notifications. It is possible that the guaranteed ratio is
+> > increased. This creates an issue when turbo is disabled, as the old
+> > limits set in MSR_HWP_REQUEST are still lower and hardware will clip
+> > to older limits.
+> > 
+> > This change enables HWP interrupt and process HWP interrupts. When
+> > guaranteed is changed, calls cpufreq_update_policy() so that driver
+> > callbacks are called to update to new HWP limits. This callback
+> > is called from a delayed workqueue of 10ms to avoid frequent updates.
+> > 
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> >  drivers/cpufreq/intel_pstate.c | 39
+> > ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 39 insertions(+)
+> > 
+> > diff --git a/drivers/cpufreq/intel_pstate.c
+> > b/drivers/cpufreq/intel_pstate.c
+> > index bb4549959b11..0fd2375c1f1e 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -32,6 +32,7 @@
+> >  #include <asm/cpu_device_id.h>
+> >  #include <asm/cpufeature.h>
+> >  #include <asm/intel-family.h>
+> > +#include "../drivers/thermal/intel/thermal_interrupt.h"
+> >  
+> >  #define INTEL_PSTATE_SAMPLING_INTERVAL (10 * NSEC_PER_MSEC)
+> >  
+> > @@ -219,6 +220,7 @@ struct global_params {
+> >   * @sched_flags:       Store scheduler flags for possible cross CPU
+> > update
+> >   * @hwp_boost_min:     Last HWP boosted min performance
+> >   * @suspended:         Whether or not the driver has been suspended.
+> > + * @hwp_notify_work:   workqueue for HWP notifications.
+> >   *
+> >   * This structure stores per CPU instance data for all CPUs.
+> >   */
+> > @@ -257,6 +259,7 @@ struct cpudata {
+> >         unsigned int sched_flags;
+> >         u32 hwp_boost_min;
+> >         bool suspended;
+> > +       struct delayed_work hwp_notify_work;
+> >  };
+> >  
+> >  static struct cpudata **all_cpu_data;
+> > @@ -1625,6 +1628,40 @@ static void
+> > intel_pstate_sysfs_hide_hwp_dynamic_boost(void)
+> >  
+> >  /************************** sysfs end ************************/
+> >  
+> > +static void intel_pstate_notify_work(struct work_struct *work)
+> > +{
+> > +       mutex_lock(&intel_pstate_driver_lock);
+> > +       cpufreq_update_policy(smp_processor_id());
+> > +       wrmsrl(MSR_HWP_STATUS, 0);
+> > +       mutex_unlock(&intel_pstate_driver_lock);
+> > +}
+> > +
+> > +void notify_hwp_interrupt(void)
+> > +{
+> > +       unsigned int this_cpu = smp_processor_id();
+> > +       struct cpudata *cpudata;
+> > +       u64 value;
+> > +
+> > +       if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+> > +               return;
+> > +
+> > +       rdmsrl(MSR_HWP_STATUS, value);
+> > +       if (!(value & 0x01))
+> > +               return;
+> > +
+> > +       cpudata = all_cpu_data[this_cpu];
+> > +       schedule_delayed_work_on(this_cpu, &cpudata->hwp_notify_work,
+> > msecs_to_jiffies(10));
+> > +}
+> > +
+> > +static void intel_pstate_enable_hwp_interrupt(struct cpudata
+> > *cpudata)
+> > +{
+> > +       /* Enable HWP notification interrupt for guaranteed
+> > performance change */
+> > +       if (boot_cpu_has(X86_FEATURE_HWP_NOTIFY)) {
+> > +               INIT_DELAYED_WORK(&cpudata->hwp_notify_work,
+> > intel_pstate_notify_work);
+> > +               wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x01);
+> > +       }
+> > +}
+> > +
+> >  static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+> >  {
+> >         /* First disable HWP notification interrupt as we don't
+> > process them */
+> > @@ -1634,6 +1671,8 @@ static void intel_pstate_hwp_enable(struct
+> > cpudata *cpudata)
+> >         wrmsrl_on_cpu(cpudata->cpu, MSR_PM_ENABLE, 0x1);
+> >         if (cpudata->epp_default == -EINVAL)
+> >                 cpudata->epp_default = intel_pstate_get_epp(cpudata,
+> > 0);
+> > +
+> > +       intel_pstate_enable_hwp_interrupt(cpudata);
+> >  }
+> >  
+> >  static int atom_get_min_pstate(void)
+> 
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
 
---dU2rkRBfuzWCPsob
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYTf1tQAKCRBzbaomhzOw
-wlRvAPwPZTx65uU6EEUXq7sH6/pz2lo/Y6+g2Brgeyph8nhZuAD/U0LKYsc1cWoX
-y/jbqXCGXSm7zQBhJ3Xrs0fDV2B2Mw8=
-=gobX
------END PGP SIGNATURE-----
-
---dU2rkRBfuzWCPsob--
