@@ -2,76 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8172A403985
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 14:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34F6403A16
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 14:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348035AbhIHMKy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 08:10:54 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:35376 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351675AbhIHMKy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Sep 2021 08:10:54 -0400
-Received: by mail-ot1-f53.google.com with SMTP id q11-20020a9d4b0b000000b0051acbdb2869so2643869otf.2;
-        Wed, 08 Sep 2021 05:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j7ojHJ1eCmWRZa3pwYfDHA3k+qFmPKIKJn/96r4lWZQ=;
-        b=HKQYV3/aBH2b77KXbYvfooJkUJAD3OCRlWR2BgbyXQ1M0JYsSOSu60pHv7PMVMMUce
-         v+VJgV9xH+74A4Cew96yDQhufXK1XU1Hp4PpaWdxjusbwItkHz/JpsKAsevl4rOeBWY3
-         otWFBY+WzcPRGpbiYrI3bdUXyJvbms1j+qNHnYWjqnuJPJnNgXzko3mSsJ3nsm+hMFiY
-         Prnb2CqEZGf2sr3uOsF5+zMpu8N2GapZgxv0YmZUtGbY4GliidgrTLSbpY9Zz22JhRkW
-         h4Qr5HfJODGDhYb927bmCuFK0ItrStYMZ8oeFt72gP/oG4H9lvv/TB5xmoeHR8hpSyBP
-         4iSw==
-X-Gm-Message-State: AOAM530ndT3qhs2XkbyAD+ZuJ1H/vkyLWRNmUC9TpYagDnRGk0zN1CIB
-        eFucp2aUV1M+vAmdaOGdIg==
-X-Google-Smtp-Source: ABdhPJxWseZDeKVP+HWmuLFENdu1NKMmCTa/qCI19k9RLF4GoYFUHyFtsDm8udD9WFFDAtNTmMM4BA==
-X-Received: by 2002:a05:6830:10c8:: with SMTP id z8mr2643550oto.175.1631102986008;
-        Wed, 08 Sep 2021 05:09:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s14sm407750oiw.8.2021.09.08.05.09.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Sep 2021 05:09:44 -0700 (PDT)
-Received: (nullmailer pid 1869396 invoked by uid 1000);
-        Wed, 08 Sep 2021 12:09:43 -0000
-Date:   Wed, 8 Sep 2021 07:09:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     angelogioacchino.delregno@somainline.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        martin.botka@somainline.org, jamipkettunen@somainline.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        marijn.suijten@somainline.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 1/2] dt-bindings: thermal: tsens: Add msm8992/4
- compatibles
-Message-ID: <YTioBwEEQHWy9Cjf@robh.at.kernel.org>
-References: <20210904211508.317560-1-konrad.dybcio@somainline.org>
+        id S1348327AbhIHMoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 08:44:04 -0400
+Received: from mga01.intel.com ([192.55.52.88]:9982 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234005AbhIHMoD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 08:44:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10100"; a="242769383"
+X-IronPort-AV: E=Sophos;i="5.85,277,1624345200"; 
+   d="scan'208";a="242769383"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 05:42:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,277,1624345200"; 
+   d="scan'208";a="524815432"
+Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Sep 2021 05:42:53 -0700
+Received: from kbuild by 730d49888f40 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mNwui-00029g-R8; Wed, 08 Sep 2021 12:42:52 +0000
+Date:   Wed, 08 Sep 2021 20:42:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 7d0798a20c777f0726d75b686224b15444d491f1
+Message-ID: <6138afab.2Dgwf19YXvbB6ciZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210904211508.317560-1-konrad.dybcio@somainline.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 04 Sep 2021 23:15:07 +0200, Konrad Dybcio wrote:
-> Add the compatibles for msm8992/4 TSENS hardware.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> Changes since v1:
-> - Separate this into a standalone patch
-> 
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 7d0798a20c777f0726d75b686224b15444d491f1  Merge branches 'pm-sleep', 'pm-em', 'pm-cpufreq-next' and 'acpi-scan' into bleeding-edge
 
-Acked-by: Rob Herring <robh@kernel.org>
+elapsed time: 1015m
+
+configs tested: 102
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+i386                 randconfig-c001-20210908
+arc                         haps_hs_defconfig
+mips                          ath79_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      ppc44x_defconfig
+sh                          sdk7780_defconfig
+sh                        edosk7760_defconfig
+powerpc                     tqm8540_defconfig
+arm                         orion5x_defconfig
+mips                           ci20_defconfig
+mips                      pic32mzda_defconfig
+mips                        maltaup_defconfig
+arm                       versatile_defconfig
+arm                          imote2_defconfig
+arm                       netwinder_defconfig
+sh                           se7343_defconfig
+arm                            dove_defconfig
+powerpc                 mpc8315_rdb_defconfig
+mips                      maltaaprp_defconfig
+x86_64               randconfig-c001-20210908
+arm                  randconfig-c002-20210908
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210906
+i386                 randconfig-a004-20210906
+i386                 randconfig-a006-20210906
+i386                 randconfig-a002-20210906
+i386                 randconfig-a003-20210906
+i386                 randconfig-a001-20210906
+arc                  randconfig-r043-20210906
+x86_64               randconfig-a006-20210906
+x86_64               randconfig-a004-20210906
+x86_64               randconfig-a003-20210906
+x86_64               randconfig-a005-20210906
+x86_64               randconfig-a001-20210906
+x86_64               randconfig-a002-20210906
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a011-20210906
+x86_64               randconfig-a016-20210906
+x86_64               randconfig-a012-20210906
+x86_64               randconfig-a015-20210906
+x86_64               randconfig-a014-20210906
+x86_64               randconfig-a013-20210906
+i386                 randconfig-a012-20210906
+i386                 randconfig-a015-20210906
+i386                 randconfig-a011-20210906
+i386                 randconfig-a013-20210906
+i386                 randconfig-a014-20210906
+i386                 randconfig-a016-20210906
+riscv                randconfig-r042-20210906
+hexagon              randconfig-r045-20210906
+s390                 randconfig-r044-20210906
+hexagon              randconfig-r041-20210906
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
