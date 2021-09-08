@@ -2,74 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379DB4033E3
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 07:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CFB40344D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Sep 2021 08:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbhIHFqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Sep 2021 01:46:30 -0400
-Received: from mengyan1223.wang ([89.208.246.23]:36698 "EHLO mengyan1223.wang"
+        id S234558AbhIHGhT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Sep 2021 02:37:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:41236 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243555AbhIHFq2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Sep 2021 01:46:28 -0400
-Received: from [IPv6:240e:35a:103d:5100:dc73:854d:832e:2] (unknown [IPv6:240e:35a:103d:5100:dc73:854d:832e:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 34A9D65A02;
-        Wed,  8 Sep 2021 01:45:14 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1631079920;
-        bh=skXpqGL8omTvkp37HgQuyUQoLphk9IsJFkc3Fq/tg6A=;
-        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
-        b=kZAVUehMGhCegeoX9VZH7FTd8rDLpKPf79aGC7QfgyNfBe32QGh2IhdFHPNagCgUH
-         FaSo38n+YRIqmMpD4XsQ9vA+KwPEf7xisg2ku1D9nrXgyuOjfg4XkJKxcC9+QETbOi
-         O5PUW5BxiT3+G/KsTxJCgfAIL09J7mvhorxWp4dulNyYJl9RvulzcmAuZ99zBRxyOr
-         bk1dg1icAw4X+SiYuLen51Aznq2xtrYeOT22KmszO29lp3g9bCIQgDfHLEJsEE/Xib
-         zfLmRVZrSi589pwj/Imi09Wk5rAOJokid9BLvXYYYe8PnHXqOJNUQcK8Q1gfDNnCDG
-         K2GUL8iAV+o9Q==
-Message-ID: <cc0ea443d738f0e31c47cdc9661b824f27b0020b.camel@mengyan1223.wang>
-Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Process HWP Guaranteed
- change notification
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-Reply-To: xry111@mengyan1223.wang
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, lenb@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xry111@mengyan1223.wang
-Date:   Wed, 08 Sep 2021 13:45:08 +0800
-In-Reply-To: <7fa77e2239dd87004319a799dbea39988b718233.camel@linux.intel.com>
-References: <20210820024006.2347720-1-srinivas.pandruvada@linux.intel.com>
-         <20210820024006.2347720-2-srinivas.pandruvada@linux.intel.com>
-         <00450b0a9efbfde513ea8b445d31657ce5ac2f37.camel@mengyan1223.wang>
-         <7fa77e2239dd87004319a799dbea39988b718233.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        id S229634AbhIHGhT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Sep 2021 02:37:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 909756D;
+        Tue,  7 Sep 2021 23:36:11 -0700 (PDT)
+Received: from [10.57.21.172] (unknown [10.57.21.172])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B65A3F73D;
+        Tue,  7 Sep 2021 23:36:10 -0700 (PDT)
+Subject: Re: [PATCH 1/2] PM: EM: fix kernel-doc comments
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+References: <20210906084453.3068-1-lukasz.luba@arm.com>
+ <CAJZ5v0hSzzkVzO0CuP0sf16p70kppfr6oHU1VDjfuBqt_HVfSw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d68d7050-4226-24d3-22d2-8968e81e6388@arm.com>
+Date:   Wed, 8 Sep 2021 07:36:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0hSzzkVzO0CuP0sf16p70kppfr6oHU1VDjfuBqt_HVfSw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-09-07 at 18:54 -0700, Srinivas Pandruvada wrote:
-> Hi Wang,
+
+
+On 9/7/21 8:22 PM, Rafael J. Wysocki wrote:
+> On Mon, Sep 6, 2021 at 10:46 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+
 > 
-> I think this is Lenovo system. The FW sends some interrupts prematurely
-> before driver is ready,
-
-It's not Lenovo, but I think this kind of FW bugs exist in wild.
-
-> There is a fix available but We have decided to revert the commit.
+> Applied as 5.15-rc material along with the [2/2], thanks!
 > 
-> Please try the patch attached here.
-> https://bugzilla.kernel.org/show_bug.cgi?id=214329
 
-I can confirm it fixed the issue (at least on my machine :).
+Thank you Rafael!
 
-Thanks!
-
--- 
-Xi Ruoyao <xry111@mengyan1223.wang>
-School of Aerospace Science and Technology, Xidian University
-
+Regards,
+Lukasz
