@@ -2,81 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A71405C6D
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 19:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903FF405CD2
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 20:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241252AbhIIR7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 13:59:43 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35390 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237205AbhIIR7n (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Sep 2021 13:59:43 -0400
-Received: from zn.tnic (p200300ec2f0e45009795463d03f535a2.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:4500:9795:463d:3f5:35a2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 48C2A1EC04D6;
-        Thu,  9 Sep 2021 19:58:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1631210308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAQ32i/uilW2AnN+2fKp4zP0VR9Mk/umGQrt9CT52ew=;
-        b=JGKcL1wEwc2cxYXvu+M/NENv4Yz2GKdaToYJeE4yFTiJeIcfkNewGXeZchxnuON6ZZ8FT0
-        soQu/nDGee05dSCkX754alY3Z+y8jp+DNJTSa4o0LpTQ0Un8v7RcU6G6Ud1gCMePqOw726
-        /uEIBYsZXjcZ6Vzy+l6VSme7/c4nHxg=
-Date:   Thu, 9 Sep 2021 19:58:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 01/19] x86/cpufreatures: add AMD CPPC extension feature
- flag
-Message-ID: <YTpLO6M2C0IqJ9XC@zn.tnic>
-References: <20210908150001.3702552-1-ray.huang@amd.com>
- <20210908150001.3702552-2-ray.huang@amd.com>
+        id S242783AbhIISXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 14:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237172AbhIISXl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 14:23:41 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E03C061574;
+        Thu,  9 Sep 2021 11:22:31 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id w7so2639609pgk.13;
+        Thu, 09 Sep 2021 11:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=THDmTfHZykGsHbd1gtfdTxOoLuq5Az1VG+vSuI4psxk=;
+        b=igkhAs5QpU9f7ASWfI2X6KygkBVpIHey74T4av01cepYcCISygoFfC6q5izgX25c66
+         CXa0w3w6Gd31kbqmGrJcn+mc7dUM2nYTaRx6FuoU42rD48Nt9qxQ/j62HTPD8lVOS5KP
+         krCYgP4oe5t3S0x5aqzmNQFyaBvmCyurLxH2aIT03r5W63uWHnIezTVEmXp9HeEnEQrf
+         svLW0sdgFz8RtjSaKcR/a4Biogjc7Q7iKFZ4BoF4kk3Jsy+sTAwEYxPYd19+/oG8lKUM
+         FNr6FTx4VW0iYkqwpfsBZPuGN81iSencRH69k8buOpGSlWQyfKzDwsL8TDpKPd+MuH8h
+         qItg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=THDmTfHZykGsHbd1gtfdTxOoLuq5Az1VG+vSuI4psxk=;
+        b=rpe7Zc0/My8Db2vZ+g4lZ7Bkprp/ik/HsC8N/7GW/NZDzbGbBP/Q+xeytrcUIDmJkU
+         LgtQAb/Jt2OxdvngJJkJUYk4BR/2RzzUYdMytkFNfWciywCR5wHwwNtxXoRdyKrG+SsX
+         qoKG8n6Wvhf/jbCnRvH/no+kKGzLPIzI0YsTmXQzsWGD5i2J6Osjf33JYYYgdQI7Xvmp
+         DEPtYGrcGLdPZz/olFFOUaUepAzvmyQM4LcYctRWawzzByzA5L694yhVp4EgJ1XR3i9p
+         JtsQK7jTqlSCun4mEghpzQfwE+mr0qKY1PoiiTLqSWgGf/doi93SJiGW2Vi/w1lkZ2sX
+         l/Zw==
+X-Gm-Message-State: AOAM531QSzwGhAs4Iwxe7KF27r9i5zLOqvlQ/3QuZi84Z/5EZqtetASl
+        CcsARCw5FGY9qC7/EbJjOtY=
+X-Google-Smtp-Source: ABdhPJyseSon87U3X17jk42MBDFTPGCZINt4jI5ZxwgBQA3Qvu/fvBdTAURXWlI8s1ehpoebGQjtTw==
+X-Received: by 2002:a05:6a00:2291:b0:412:3db4:908e with SMTP id f17-20020a056a00229100b004123db4908emr4385796pfe.78.1631211750872;
+        Thu, 09 Sep 2021 11:22:30 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y4sm2793855pjw.57.2021.09.09.11.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Sep 2021 11:22:29 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Cai Huoqing <caihuoqing@baidu.com>
+Cc:     =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
+        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] soc: bcm: bcm-pmb: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Thu,  9 Sep 2021 11:22:28 -0700
+Message-Id: <20210909182228.3387009-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210908071417.494-1-caihuoqing@baidu.com>
+References: <20210908071417.494-1-caihuoqing@baidu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210908150001.3702552-2-ray.huang@amd.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 08, 2021 at 10:59:43PM +0800, Huang Rui wrote:
-> Add Collaborative Processor Performance Control Extension feature flag
-> for AMD processors.
+On Wed, 8 Sep 2021 15:14:15 +0800, Cai Huoqing <caihuoqing@baidu.com> wrote:
+> Use the devm_platform_ioremap_resource() helper instead of
+> calling platform_get_resource() and devm_ioremap_resource()
+> separately
 > 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 > ---
->  arch/x86/include/asm/cpufeatures.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index d0ce5cfd3ac1..f7aea50e3371 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -313,6 +313,7 @@
->  #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
->  #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
->  #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
-> +#define X86_FEATURE_AMD_CPPC_EXT	(13*32+27) /* Collaborative Processor Performance Control Extension */
 
-Why not simply X86_FEATURE_AMD_CPPC ?
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+--
+Florian
