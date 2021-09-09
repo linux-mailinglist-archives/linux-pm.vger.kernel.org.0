@@ -2,48 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91C0405996
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAE6405995
 	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242091AbhIIOsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S241324AbhIIOsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 10:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241160AbhIIOru (ORCPT
+        with ESMTP id S230399AbhIIOru (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:47:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18918C0560C2
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:38:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C4C0560C1
+        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:38:42 -0700 (PDT)
 Date:   Thu, 09 Sep 2021 14:38:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1631198321;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=MpdSACoAFKuCZxg8O48eo7DlFKfeMHUllI38es3ZimE=;
-        b=mpILsSt5IVhezuq3dbfnvcBi0x0CeG7d29wePdIg1GCQQbOeBGwTATUBL/UL+PHmEeGzXR
-        g0ctb0bxER2D/rtuuWgvzYjX7lmbwpsrEDgBeFnfZGpZ4ypOBPfgSXD015jxM0NhXYvvBF
-        g7d/gkl5UJrtR2ZekMT0b3pff54bsxvK0ZA6BkDyl5/AgEK8exJpgDdK8ZoD9rlDcMJF2O
-        YTAeSZ1wUHpF0vi1bQZ27MbJ0k7vgsA9jpne/EwADoX757F8wzoBfrO48oJ/M9We+isMyQ
-        MUo+pft2VQQ4to/8qqScc7f65/zdURh6LX7OJKNuK9Sd5PsFwy+/eZyUy07XKw==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Biq+Q5tBUhmjGuj+qmM5i7ZBgsXMtJFhlxMlWMNYNHU=;
+        b=AqgUzxb7ZWuECuoqybKb+0HSDDv84bFaz0BMpHWx/Eb/okq4Yh+Bef1m3it3Yr4HKmqFkj
+        xMXTkrW7P61HH+JSYx/4L+taKDZxbjWrlBbLl1tUwcdcLnN/prRUTpg6ZBvw8fVpk3ffen
+        IJRdOiJeCqQv5f4bI4puBN418bEjDKnuiFZ1Ckso7C6EHiaFVBTPdIP5Qp95w6t7pkYBj2
+        q7GsFgek+5liYbpmGeXhedyunnJS1l67Xnak5pJW4hfISRieUDRmHqakW33BMt4yt75qdb
+        cusAZgGT9YuYvGj7t1Z7T0VjUvRWISYx7tF1PEUkFpz6pcvrAm8sMuaPShGcLg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1631198321;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=MpdSACoAFKuCZxg8O48eo7DlFKfeMHUllI38es3ZimE=;
-        b=4QNu1cKuNUcnzGdhE3NSmPjZ29Gw6IV8QT2wp3HbIbG99f64+FZARMk4NBOIu9vsL/8CaJ
-        3scQayJyxovad1CA==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Biq+Q5tBUhmjGuj+qmM5i7ZBgsXMtJFhlxMlWMNYNHU=;
+        b=jb37IrorLekpG/f8WhrPeVee4EaXcONag/YC6V6HmnYqgE/GVRY1q76LIO/N8Yct/doFQM
+        XgH+EwTV+k1eMfBw==
+From:   "thermal-bot for Rolf Eike Beer" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] MAINTAINERS: Add missing userspace thermal
- tools to the thermal section
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
+Subject: [thermal: thermal/next] thermal/tools/tmon: Improve the Makefile
+Cc:     Rolf Eike Beer <eb@emlix.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <1951386.ZPQrlMDjM2@devpool47>
+References: <1951386.ZPQrlMDjM2@devpool47>
 MIME-Version: 1.0
-Message-ID: <163119832090.25758.5866861181688303140.tip-bot2@tip-bot2>
+Message-ID: <163119832031.25758.14075212047149296535.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -54,35 +60,63 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     21c1e439fd864828b58f783641b3736197ccc813
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//21c1e439fd864828b58f783641b3736197ccc813
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Sat, 14 Aug 2021 13:14:07 +02:00
+Commit-ID:     99d88c30055376b56316d3c431c9873e88208348
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//99d88c30055376b56316d3c431c9873e88208348
+Author:        Rolf Eike Beer <eb@emlix.com>
+AuthorDate:    Fri, 30 Jul 2021 13:49:04 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sat, 14 Aug 2021 13:14:07 +02:00
+CommitterDate: Sat, 14 Aug 2021 15:30:11 +02:00
 
-MAINTAINERS: Add missing userspace thermal tools to the thermal section
+thermal/tools/tmon: Improve the Makefile
 
-Patches related to the tmon which is in tools/thermal are floating around
-since years because it is unclear who takes care of it.
+ - Remove empty macros assignments
+ - Use directory creation parameter for the install tool
+ - Use $OBJ instead of building the list of object for the 'clean' target
 
-Add the missing userspace tools directory related to thermal to fix the
-situation.
+[dlezcano] : Changed title and description
 
+Signed-off-by: Rolf Eike Beer <eb@emlix.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/1951386.ZPQrlMDjM2@devpool47
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ tools/thermal/tmon/Makefile | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a61f4f3..a78f490 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18358,6 +18358,7 @@ F:	drivers/thermal/
- F:	include/linux/cpu_cooling.h
- F:	include/linux/thermal.h
- F:	include/uapi/linux/thermal.h
-+F:	tools/thermal/
+diff --git a/tools/thermal/tmon/Makefile b/tools/thermal/tmon/Makefile
+index 9db867d..3e65087 100644
+--- a/tools/thermal/tmon/Makefile
++++ b/tools/thermal/tmon/Makefile
+@@ -13,7 +13,6 @@ CC?= $(CROSS_COMPILE)gcc
+ PKG_CONFIG?= pkg-config
  
- THERMAL DRIVER FOR AMLOGIC SOCS
- M:	Guillaume La Roque <glaroque@baylibre.com>
+ override CFLAGS+=-D VERSION=\"$(VERSION)\"
+-LDFLAGS+=
+ TARGET=tmon
+ 
+ INSTALL_PROGRAM=install -m 755 -p
+@@ -33,7 +32,6 @@ override CFLAGS += $(shell $(PKG_CONFIG) --cflags $(STATIC) panelw ncursesw 2> /
+ 		     $(PKG_CONFIG) --cflags $(STATIC) panel ncurses 2> /dev/null)
+ 
+ OBJS = tmon.o tui.o sysfs.o pid.o
+-OBJS +=
+ 
+ tmon: $(OBJS) Makefile tmon.h
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS)  -o $(TARGET) $(TMON_LIBS)
+@@ -42,15 +40,13 @@ valgrind: tmon
+ 	 sudo valgrind -v --track-origins=yes --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes ./$(TARGET)  1> /dev/null
+ 
+ install:
+-	- mkdir -p $(INSTALL_ROOT)/$(BINDIR)
+-	- $(INSTALL_PROGRAM) "$(TARGET)" "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
++	- $(INSTALL_PROGRAM) -D "$(TARGET)" "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
+ 
+ uninstall:
+ 	$(DEL_FILE) "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
+ 
+ clean:
+-	find . -name "*.o" | xargs $(DEL_FILE)
+-	rm -f $(TARGET)
++	rm -f $(TARGET) $(OBJS)
+ 
+ dist:
+ 	git tag v$(VERSION)
