@@ -2,64 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF22740599F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67FC4059A9
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241252AbhIIOsa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S242933AbhIIOtx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 10:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241702AbhIIOsT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:48:19 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54359C066408
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:40:32 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id p2so2779055oif.1
-        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 07:40:32 -0700 (PDT)
+        with ESMTP id S1347339AbhIIOto (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:49:44 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D4C0610D0
+        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:46:15 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id q39so2754464oiw.12
+        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 07:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=Jtd5ppqH31n/KLK+cY13LK3FdPrs9pVeJq1VDs1R2lE=;
-        b=KKGZ29/Xf4HSszxMgUaFJTKQv3zzYHHXdnMRgFnoxoqoPD7+ujOeh8GPIkaQkGbDEv
-         7HbNKuK5n6DSdLkMCI5RlHARjoXk/UiZ0U03o12o5SKhmPAFoZSq17w3IeqdKHb10is+
-         kaBZIzzawugaqnYDsC78lTzTyXHSIBJ/QL2iPQQy2EnNmHEGr2kVwSOebIjBK9fx4UzQ
-         RGI82kI7ttS7zyzifIDV2llA0W6lNAE6dST0N9ucTKochfU/6mluLqffFMuyNU6mvy7i
-         ksnRAefIAVGqonBiCzBhPxEcbEfLTHDFiv1abbKMFayxCBycaDXp8BwhokWiqJFYYlp3
-         rxSQ==
+        bh=4ChRY5qZ6aR0j17B+EVqR+PtUGBXRuYLRwVbbRc3ayQ=;
+        b=Bdy8Oa1Hb11ijPET2Ah28GdKVGzh4zPCDc7TwDvHdHJbI+DZL7w641tMGcw+SoYsld
+         q+2qk3yJpM6uhgcWZbXmmvnZAdJS22qe7xyfIEc914mqTlLCY8ZIGRVqCjdLnsEgeFbS
+         e9qPNJCQK++Qvl1bfTODmIsh6vwK9Dn/NTQL8e7WvR27VZyAn/xPk/dwkSg6rusXpv9E
+         Mgaf6IuMo1cs1F7FGLfk/aZ2FZNvigdGQjht7zxBBXjriDJWc6rgoqmpECSzXYuFbdrR
+         U9iWm4dEGaYxTbBbU3v7k9h/yCGnBrfwlJXN+WDv6rdEf3kAnivwpSorZ3XxsIJyxTh5
+         Q8AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Jtd5ppqH31n/KLK+cY13LK3FdPrs9pVeJq1VDs1R2lE=;
-        b=1/URg7Ak+ctgrPcGeg7X2BlPF/YRCCTR/5z6sQeqjhhsxI0Xkm/dUUHJFgVgPlj96p
-         MHjwH1duTS3l40/Xvp8mlyK/Nzzk1tmJD98tn937KhYsBA8f33gLtTFrfIJaDB2/ghQi
-         N2fYAZkw0o8Asib5uT9SJWO3sB1cOY+0J7bdPKlgt+raK2Ob3ANA+KtiTzc1HnUieJfh
-         3QF5qRRjT3Vs07if5GRcYxu8QvOuGQs3k6YKwf3/g9yAzYN5zJA+r/JHDQfJEAVz8OGe
-         5Mx/WbR7bmVgrLklgB+8wD8UxgVBRsrOyR6aLL3n3BA+agNc/p6ffzCaAom90vcKelQF
-         +5Rg==
-X-Gm-Message-State: AOAM5330wILgewoMUKHT/OIc63fywDfgmtvk0xnyrjr2n3lNtO/AIUNF
-        OUcHkWX9nckbLapKOh8Dy1qOw8H/MKwF0vupE4jaVg==
-X-Google-Smtp-Source: ABdhPJw/RybYhxhDG88FRwwrkzIYw9ZgM89JO9ORsmkh9M8pAyrNBjPnRbDyIPYQi1wnphI8HcR4jaSgn3BOjRFp/I0=
-X-Received: by 2002:a54:4f03:: with SMTP id e3mr93670oiy.32.1631198431526;
- Thu, 09 Sep 2021 07:40:31 -0700 (PDT)
+        bh=4ChRY5qZ6aR0j17B+EVqR+PtUGBXRuYLRwVbbRc3ayQ=;
+        b=3DnCf0ejLc6A1agHtXEoQjsiXkuH0z5gzZ1XApaK1EHG4BXfnlnITZNuKk7g794Fa9
+         YkYMK/IAV2/36w0mEaqMYat4z6Zz186XboVVhCEKZsu8P4D/iQqPqSrDuD0oUEyraiqU
+         68ncAl+OyY/gWKWLlJCsSz0Fbk3PZ5Yw86zJbuhZHRAeDJm3z2jpOdlPnvHfK/qFVH1z
+         b7PZmVrH7vyeCByAvNBCzWBHbEVKUPz6iOG/m8rnhiTuAI0V6ukIUXRE3p9XzuXfl559
+         S80DVd20rciz8N+WhD5UTK2VmDFolGbjZZiWzyAt12fAldRORkDjKRVdmqK/5g/3S9EU
+         bYPw==
+X-Gm-Message-State: AOAM533vGBa4lO0aOf9VmGimCC5iNGo92cNMwsYEFRT/mSdoZFwNw2L5
+        K67W8p7vwyEVsduNP40MOFdYcIsKSrGyGSqrSTT7Hw==
+X-Google-Smtp-Source: ABdhPJwHQGIIX3mQpLaPVGGhUXiOunthEmnUWyGqehpl9+g7ZtzzosgPE0btauYypXuazb5o8pgdTtVGFGGodUWjkBo=
+X-Received: by 2002:a54:4f03:: with SMTP id e3mr115395oiy.32.1631198774476;
+ Thu, 09 Sep 2021 07:46:14 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210902101634.827187-1-ulf.hansson@linaro.org>
- <20210902101634.827187-4-ulf.hansson@linaro.org> <4e36e732-6ca3-1d00-e6dd-38bb8877577b@gmail.com>
- <CAPDyKFr2oQnKOhKhWt_9VyBoe=HQ7Y0uZUMKTcZ05a7G9RaBYA@mail.gmail.com>
- <1124dae5-478f-f0ca-ea91-b6945f7c9254@gmail.com> <CAPDyKFqE+thX0pLTg9d-ds7Tj3hsB78EmDB1Cryh26tN3kvQDA@mail.gmail.com>
- <3d92711f-ce30-2c19-c6a4-bb77d32df2dd@gmail.com> <CAPDyKFpJU3g2OzJeR9KUdtN-8wJsDckqVAMQMHBV=enu=DfURg@mail.gmail.com>
- <fbca049a-e673-1598-658f-a7bb5de52f18@gmail.com> <CAPDyKFqw2tp3-J8dW03Kqw9xC_gO7nWfEckMvT3=zB0AbR8jeA@mail.gmail.com>
- <1ca9a2d5-e89a-5bbd-2ecc-01f1c4a820ae@gmail.com>
-In-Reply-To: <1ca9a2d5-e89a-5bbd-2ecc-01f1c4a820ae@gmail.com>
+ <20210902101634.827187-2-ulf.hansson@linaro.org> <08335cd4-7dc8-3b8b-d63f-374585ffa373@gmail.com>
+ <CAPDyKFofrEj2LdqXh-L256b2Tcz=qYQgzTUBVuvx0rOR58SrVg@mail.gmail.com>
+ <b597c805-e346-8c23-5014-cbb116e88075@gmail.com> <CAPDyKFrWofUKhbhvwTCjiFwJD8-Pzi8UMzU7ZjYLKm2j1HeeBg@mail.gmail.com>
+ <6603212d-f36c-afff-6222-8125de5b7b79@gmail.com> <CAPDyKFoyszG2Wo3jbXK562XgpqXns_GPqm7nNu8WOdMCXYUOMQ@mail.gmail.com>
+ <66fbbc69-3e16-e07c-4e25-48d59d69fd3c@gmail.com> <CAPDyKFqqdgr2DHf1Fidj3ksPHe3XgwvCo8SbQ2Cmnc5y1PDvMw@mail.gmail.com>
+ <7ee1a2eb-67d7-dcad-6039-05129d3822ec@gmail.com> <CAPDyKFoFPpPPd0cUDRhqzXzXaQyNAv7UZToTaHnGXY30QXNB9g@mail.gmail.com>
+ <71618f83-de5b-1180-60f4-8561c4f655a9@gmail.com>
+In-Reply-To: <71618f83-de5b-1180-60f4-8561c4f655a9@gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 9 Sep 2021 16:39:54 +0200
-Message-ID: <CAPDyKFoFCVcjrGXQ56y0iSNPhE8-orpZiHvnAQTQW1b8oW4f5A@mail.gmail.com>
-Subject: Re: [PATCH 3/3] PM: domains: Add a ->dev_get_performance_state()
- callback to genpd
+Date:   Thu, 9 Sep 2021 16:45:38 +0200
+Message-ID: <CAPDyKFoV9MOUvu0GLyW-WmNzXbGyFomcug9aTEB-pH32gRHYnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] PM: domains: Drop the performance state vote for a
+ device at detach
 To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -77,45 +78,40 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, 9 Sept 2021 at 15:48, Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> 07.09.2021 12:57, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > I don't mind extending the genpd API, but it needs to serve a good purp=
-ose.
+> 07.09.2021 13:16, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+> >>> Also note that a very similar problem exists, *before* the device get=
+s
+> >>> attached in the first place. More precisely, nothing prevents the
+> >>> performance state from being set to a non-compatible value for an
+> >>> always-on HW/device that hasn't been attached yet. So maybe you need
+> >>> to set the maximum performance state at genpd initializations, then
+> >>> use the ->sync_state() callback to very that all consumers have been
+> >>> attached to the genpd provider, before allowing the state to be
+> >>> changed/lowered?
+> >>
+> >> That is already done by the PD driver.
+> >>
+> >> https://elixir.bootlin.com/linux/latest/source/drivers/soc/tegra/pmc.c=
+#L3790
 > >
-> > As I said earlier, genpd doesn't know nor can control how the consumer
-> > driver deploys runtime PM. Unfortunately, that also includes genpd
-> > providers, as the behavior isn't a platform or PM domain specific
-> > thing. This means genpd needs to be generic enough so it works for all
-> > cases.
+> > Yes, I already knew that, but forgot it. :-) Thanks for the pointer.
+> > Let me rethink the approach.
 > >
-> > In the $subject patch, we rely on the pm_runtime_suspended() check in
-> > dev_pm_genpd_set_performance_state(), which should work for all cases,
-> > even if it may be sub-optimal for some scenarios.
-> >
-> > Note that, in the approach your suggested [1],
-> > pm_runtime_status_suspended() is used instead. This doesn't work when
-> > a consumer driver doesn't enable runtime PM - or calls
-> > pm_runtime_set_active() during ->probe(), because
-> > genpd_runtime_resume() won't be invoked to restore the gpd->rpm_state.
-> >
-> > That said, I wouldn't mind to simply skip adding the
-> > ->dev_get_performance_state() all together, if that is what you
-> > prefer? In this way, it becomes the responsibility for the consumer
-> > driver to do right thing, with the cost of some boilerplate code added
-> > in its ->probe() routine.
+> > In a way, it kind of sounds like this is a generic problem - so
+> > perhaps we should think of adding a ->withdraw_sync_state() callback
+> > that can be assigned by provider drivers, to get informed when a
+> > consumer driver is getting unbinded.
 >
-> Until a day ago, it wasn't clear to me that consumer drivers now can set
-> up rpm_pstate during probe(), which is a cleaner solution that works
-> well. So let's skip adding the questionable ->dev_get_performance_state()=
-.
->
-> The boilerplate code in the probe() is minimal in comparison to a
-> previous variant with the state-syncing done by rpm-resume callbacks of
-> consumer drivers, it's good enough.
+> Not sure, doesn't feel to me that this is necessary for today. A bit too
+> cumbersome for a simple sanity-check, IMO.
 
-Alright, that sounds good to me as well.
+Maybe, but I can bring it up with the fw_devlinks people to see what they t=
+hink.
 
-I am happy to help with review of the consumer driver changes, just
-keep me posted.
+In any case, we should not move forward with $subject patch as is.
 
-Thanks and kind regards
+Let me think about it.
+
+Kind regards
 Uffe
