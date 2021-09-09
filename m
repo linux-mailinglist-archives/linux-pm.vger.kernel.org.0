@@ -2,97 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E48405CFA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 20:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A270405D13
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 20:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbhIISs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 14:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbhIISs3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 14:48:29 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EBAC061574;
-        Thu,  9 Sep 2021 11:47:19 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 6so3782137oiy.8;
-        Thu, 09 Sep 2021 11:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qwRbqLlU+vBHhW47NisueHvIdwrZ6Y450qWdiG8r04I=;
-        b=IEjG7MIbBit01JAJsfL5xw6XzdLMiYT2+87sCixlJI06HjAKa8YhHwriizaoCci/NS
-         Ym0sLagJeuHTfDYYluYYljTDosrYAneJtpHaRPOfV2vh2yHlceWYGfLKxxBYk956Bafb
-         jCEJ/J97pZcbkZImJ7Re9Xrl0dIuofp21PFjfu2aqsnUYmy0xB3/KpNPEOlJWpa63Z5I
-         5vmWwerYB7qLzlhjvyYq7cSqpDvy5fx5Js6pZGK3PYjesv44hC5Q2iLgLISwiaFAlpJo
-         o2TslzGHMkNGtbWaNrRAjMauhxcIy6aICpt46t/mNxeI6kIbV7LsNuUFi1mPO6kaijvF
-         DF5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=qwRbqLlU+vBHhW47NisueHvIdwrZ6Y450qWdiG8r04I=;
-        b=8KKAmFGaVYY1VZ4fx0W6uP11CCWxTrbUmFISgsp/SaSlzytocTUEd4vMAYd/xOa9d1
-         R6A2rwHdz3VDaug9xr6RYAahvge7PevIWvrDZzYWzm+OghH5/KI0YhAa38sy6GPRDaa3
-         NmQwI1yeizKOtwg2Utu0t6+B8XADPS+40nuX3dY0Jd07gQjq73HsIbis2BYFlK55tsKA
-         fC0y4XJQrgwjb7Hhpb9TNOoDOzM/Kj7aJBu2CSJhJzJMsdSxaR74PB/G2kC/Lf+hY3NL
-         I+nRuyPngp/SdgHgFn/vHB3oaV97aaOeY5oDQL4pjxYS52O7lGhE8NpOyVmOACQXL6mE
-         xsUA==
-X-Gm-Message-State: AOAM533o259voxgMjwLpw1kuZJCdI3esXwrVbXJVainjYBKoThpU8f0y
-        X21LWddz82EUHtFeiLiwuJ4=
-X-Google-Smtp-Source: ABdhPJxbizi8vQ6oU6WAqJ7E1k0GFTGnx1TglkGdYBFWfzCsOSZTq5LnrTwpxdsgUAWWMzUFqtiCgg==
-X-Received: by 2002:a05:6808:2116:: with SMTP id r22mr1014325oiw.128.1631213238100;
-        Thu, 09 Sep 2021 11:47:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4sm634203oth.4.2021.09.09.11.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 11:47:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] cpufreq: vexpress: Drop unused variable
-Date:   Thu,  9 Sep 2021 11:47:14 -0700
-Message-Id: <20210909184714.153068-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        id S236112AbhIIS65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 14:58:57 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:65140 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235271AbhIIS64 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 14:58:56 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id d43d481c64ac2b61; Thu, 9 Sep 2021 20:57:45 +0200
+Received: from kreacher.localnet (unknown [213.134.181.77])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 260B266A4C2;
+        Thu,  9 Sep 2021 20:57:45 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] MAINTAINERS: Change Rafael's e-mail address
+Date:   Thu, 09 Sep 2021 20:57:44 +0200
+Message-ID: <5509701.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.77
+X-CLIENT-HOSTNAME: 213.134.181.77
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrudefledgudefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffekteethfdvhfefgffhueefleehudeihedujeeutddvfeekvdehtdetteeuieehnecuffhomhgrihhnpegrrhhmrdgtohhmpdhophgvnhhlihhnuhigrdhorhhgpdhkrghnughordhhuhdpkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukedurdejjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdejjedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
+ gh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-arm:allmodconfig fails to build with the following error.
+From: Rafael J. Wysocki <rafael@kernel.org>
 
-drivers/cpufreq/vexpress-spc-cpufreq.c:454:13: error:
-					unused variable 'cur_cluster'
+I have been slow to respond to messages going to rjw@rjwysocki.net
+recently, so change it to rafael@kernel.org (which works better for
+me) in MAINTAINERS.
 
-Remove the unused variable.
-
-Fixes: bb8c26d9387f ("cpufreq: vexpress: Set CPUFREQ_IS_COOLING_DEV flag")
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Rafael J. Wysocki <rafael@kernel.org>
 ---
- drivers/cpufreq/vexpress-spc-cpufreq.c | 1 -
- 1 file changed, 1 deletion(-)
+ MAINTAINERS |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
-index 284b6bd040b1..d295f405c4bb 100644
---- a/drivers/cpufreq/vexpress-spc-cpufreq.c
-+++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
-@@ -451,7 +451,6 @@ static int ve_spc_cpufreq_init(struct cpufreq_policy *policy)
- static int ve_spc_cpufreq_exit(struct cpufreq_policy *policy)
- {
- 	struct device *cpu_dev;
--	int cur_cluster = cpu_to_cluster(policy->cpu);
+Index: linux-pm/MAINTAINERS
+===================================================================
+--- linux-pm.orig/MAINTAINERS
++++ linux-pm/MAINTAINERS
+@@ -333,7 +333,7 @@ S:	Maintained
+ F:	drivers/platform/x86/acer-wmi.c
  
- 	cpu_dev = get_cpu_device(policy->cpu);
- 	if (!cpu_dev) {
--- 
-2.33.0
+ ACPI
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Len Brown <lenb@kernel.org>
+ L:	linux-acpi@vger.kernel.org
+ S:	Supported
+@@ -354,7 +354,7 @@ F:	include/linux/fwnode.h
+ F:	tools/power/acpi/
+ 
+ ACPI APEI
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Len Brown <lenb@kernel.org>
+ R:	James Morse <james.morse@arm.com>
+ R:	Tony Luck <tony.luck@intel.com>
+@@ -402,7 +402,7 @@ S:	Maintained
+ F:	drivers/platform/x86/i2c-multi-instantiate.c
+ 
+ ACPI PMIC DRIVERS
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Len Brown <lenb@kernel.org>
+ R:	Andy Shevchenko <andy@kernel.org>
+ R:	Mika Westerberg <mika.westerberg@linux.intel.com>
+@@ -4797,7 +4797,7 @@ W:	http://www.arm.com/products/processor
+ F:	drivers/cpufreq/vexpress-spc-cpufreq.c
+ 
+ CPU FREQUENCY SCALING FRAMEWORK
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+@@ -4815,7 +4815,7 @@ F:	kernel/sched/cpufreq*.c
+ F:	tools/testing/selftests/cpufreq/
+ 
+ CPU IDLE TIME MANAGEMENT FRAMEWORK
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Daniel Lezcano <daniel.lezcano@linaro.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+@@ -7525,7 +7525,7 @@ W:	ftp://ftp.openlinux.org/pub/people/hc
+ F:	fs/freevxfs/
+ 
+ FREEZER
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Pavel Machek <pavel@ucw.cz>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+@@ -7778,7 +7778,7 @@ S:	Supported
+ F:	drivers/i2c/muxes/i2c-demux-pinctrl.c
+ 
+ GENERIC PM DOMAINS
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Kevin Hilman <khilman@kernel.org>
+ M:	Ulf Hansson <ulf.hansson@linaro.org>
+ L:	linux-pm@vger.kernel.org
+@@ -8244,7 +8244,7 @@ W:	http://drama.obuda.kando.hu/~fero/cgi
+ F:	drivers/video/fbdev/hgafb.c
+ 
+ HIBERNATION (aka Software Suspend, aka swsusp)
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Pavel Machek <pavel@ucw.cz>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+@@ -14838,7 +14838,7 @@ F:	kernel/time/*timer*
+ F:	kernel/time/namespace.c
+ 
+ POWER MANAGEMENT CORE
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+ B:	https://bugzilla.kernel.org
+@@ -17775,7 +17775,7 @@ F:	arch/sh/
+ F:	drivers/sh/
+ 
+ SUSPEND TO RAM
+-M:	"Rafael J. Wysocki" <rjw@rjwysocki.net>
++M:	"Rafael J. Wysocki" <rafael@kernel.org>
+ M:	Len Brown <len.brown@intel.com>
+ M:	Pavel Machek <pavel@ucw.cz>
+ L:	linux-pm@vger.kernel.org
+
+
 
