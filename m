@@ -2,200 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BE8404845
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 12:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5248C404924
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 13:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbhIIKO6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 06:14:58 -0400
-Received: from mail-dm6nam11on2082.outbound.protection.outlook.com ([40.107.223.82]:52929
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229980AbhIIKO5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Sep 2021 06:14:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FOYOhFLVoekUFXeusZb0cXysqEUI+znZuUrm88KUM29HE2KU7FpB4hqYsb1ZLZj7CKHsN+lhs3KAj4v+HIgSn1mEBv1xQDvNYqPTRwg7Aa34Tp6hA4zxekPPY+0er92VFkBBD4MSEg2zYvPpLnvqiAHwu+DvWzsVS4QMV55dlx/fiB7sMt07Gl14AXNyiATNyS/LJwnOaBjY+gjQSjsRPMe4fiYfGkyMmZeK3t9To0txzT8U9rtCP/oEADvjW2yLiocKYkMZoOs0LT8/HGD58FYupllK99zKALwg2NYXHkR+RFjRPN1YKqDEGImMG0KFZPtgVEppctd98TKPfy7OJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=w508ZaL1ZoIpEhRxkDCJ4Yu40WkhzNdXVU+J9ivvXaA=;
- b=bPQROX1UoZBXP+OUEqUE5f/m4rj3H5Xd0IHKkIu6IONF9SEc5fv6/0SIQAFrqc5JdZD4DcbMiYk56bC3TjVnMc5elU0SDf4fi2ICb5H3GmqtlYOXbT7umX+LGF2xidDIkJ59vojhWxPK83yfp6gbQf4/UqhJug828tbopUQ3Z1wXix+xZZYAyU080siLDz3tLAQu/Po1MAvI22VQmj/0kxYOGt355oqs39tJfyNiNpr700taFV05174jFDAi53UlcsZy2O0tfG6ezdMhAe2tJ9r5MWit6FmQI+jg2azjSEWTCzjhbmLZr3sDTE08oO1iHiuWjtvBMTyRIqNojWbAcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w508ZaL1ZoIpEhRxkDCJ4Yu40WkhzNdXVU+J9ivvXaA=;
- b=DqP6xztIcORwrwOb/8t2MvwEFnvRJD+5dhKctegR2U2zH7mcPCrMENTURiVErwe6jlrnAQXSbKUdF/Jm6ypvX1rDsLqjGDeM5aUxlcZ6hUi48g5n0X3eew47FELNBzYfYk0HAvOT9MTr8vE3r6qRe/kgQyJeNDz9YncUzDNfIHU=
-Received: from DS7PR03CA0024.namprd03.prod.outlook.com (2603:10b6:5:3b8::29)
- by DM5PR12MB1338.namprd12.prod.outlook.com (2603:10b6:3:71::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.22; Thu, 9 Sep
- 2021 10:13:47 +0000
-Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::f1) by DS7PR03CA0024.outlook.office365.com
- (2603:10b6:5:3b8::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16 via Frontend
- Transport; Thu, 9 Sep 2021 10:13:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4500.14 via Frontend Transport; Thu, 9 Sep 2021 10:13:47 +0000
-Received: from hr-amd (10.180.168.240) by SATLEXMB04.amd.com (10.181.40.145)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Thu, 9 Sep 2021
- 05:13:43 -0500
-Date:   Thu, 9 Sep 2021 18:12:48 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Fontenot, Nathan" <Nathan.Fontenot@amd.com>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Borislav Petkov" <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 08/19] cpufreq: amd: add boost mode support for amd-pstate
-Message-ID: <20210909101248.GE3702717@hr-amd>
-References: <20210908150001.3702552-1-ray.huang@amd.com>
- <20210908150001.3702552-9-ray.huang@amd.com>
- <a2718365-5975-5c91-350f-fe9098b4de7b@amd.com>
+        id S236014AbhIILU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 07:20:27 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:43671 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234993AbhIILT4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 07:19:56 -0400
+Received: by mail-ot1-f44.google.com with SMTP id x10-20020a056830408a00b004f26cead745so1982469ott.10;
+        Thu, 09 Sep 2021 04:18:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KB4OAq1FA2ibjg5GPYhy0r8vL3pcy4KSo6N7CuRv9t0=;
+        b=rPT8Ht9djkYZO7tpf/XG4G6u4N0u3x69s3X31gq8kSp0Jezqv0AmxopmRUbJW3dg2T
+         ZQgQNnonZ7XRVeMWkDwUMGAOlmJv/NFG9O69NNOl3ytyku0xpfwM6Zfws65a/N8a4sCG
+         hQa2j5f7vG0eqLZilBBq4Z3zOxU58YflXG8zZf0hhgE83E3y/936SOyZKzX2zC0UySYX
+         KSWtZ03TvtiPd+9ZYkuzWVeviGUK4mk1IVUQTNkGqonm9NIcRTTpffIIigxFEy3//zEs
+         Ijzi1kwdGmIkhvoJKgqt4JJ2Jw0F2mikE5RiJ8IpmqPzDi2tyNnp9WcvWFGW0xknbRto
+         KDPw==
+X-Gm-Message-State: AOAM530T6vh6//zPqJK2fXjlc8muUdstfF/1zXwuKetnrm0it+hPLWMc
+        zeCfZALhfM3BifPOnPtPR1+KM9fm1XjfL+IjYtM=
+X-Google-Smtp-Source: ABdhPJz9VuZXyIc9RMeckXxDqTc7BW4njRZot0Sok+1ydJryCzKVqARZ0F5XmXgWRueJFJliuGfdqVBpgcb9plJweBg=
+X-Received: by 2002:a05:6830:34b:: with SMTP id h11mr2006848ote.319.1631186326826;
+ Thu, 09 Sep 2021 04:18:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <a2718365-5975-5c91-350f-fe9098b4de7b@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 520be7cd-dafa-4b79-acd1-08d9737a832d
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1338:
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1338720FE4087FC2A051209AECD59@DM5PR12MB1338.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IZ3Hb5wPH43w01HWNjfBkiVnuPDNSYGspv44i9fFYiP1gW6yA/mlaTy6SRYXOUqkzA/mVY4F8tD3G/IWomo89T0TjXHmv9M/Ku+HeXyfo60PFGLKg1le5lHtH7WV7Yllhr44HXJcPLnKvje/WFYyI3lWz5L6gzSkKgCiD/02ObPM3RpBYo2UZfFs/BoYigoldLaQLwIsZeej/LIlAqTjChQkRWGh6STRCCdVxvgIHaJM1E6IwbTT6RueUiSpz0LwbUM5W0TF6Kraj9Uu26yBmi3okqR4qz/qMHMi2aWFjIO/QYQtgrUYYaz5y1q+v499dbCHgUv0RaKF5W8uaRIO91TNZzLPJbehJmmYzhAcJfVpJ6zs6WLWeFqadNBrE3Gi9kkZhYmFCUEHRsSvcBn558hYnZl0M8IBtNb5kdpK/fZAGg2EXB7mpbXJ08isfLzTT898MPPo6OoYo2qSGHg8bmL1H56Q0S+NoiEVOPiHLe0zoMlenbg54R9qvjVLWbxBmOmIxcVYU4KiEoMpmsgEyfHV/ZUdBddMfZ02gKfBcCZP4bi5+ntr3bC2PUx7FLtZnAKCJYB/F4HQ3xvzmkOoRso6FONnwywEeTQszu/pfTFm222GFCNfHBt/nKV9e42SjUctHFdGO675SwP+bbkuLI0sBXBMdYDrqpfslPS+8nhmF/aVjypoWNmW3RgjHZXpC1gQj3GGLPqTAO3YbTd04WrEQqGjJ7tpKK4Tzz6KZP8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(39860400002)(376002)(136003)(396003)(36840700001)(46966006)(86362001)(33656002)(356005)(81166007)(2906002)(55016002)(36860700001)(8936002)(82740400003)(8676002)(426003)(336012)(1076003)(47076005)(316002)(33716001)(9686003)(54906003)(4326008)(6862004)(70586007)(82310400003)(70206006)(53546011)(16526019)(186003)(478600001)(6636002)(83380400001)(5660300002)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2021 10:13:47.2729
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 520be7cd-dafa-4b79-acd1-08d9737a832d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1338
+References: <20210909034802.1708-1-dsmythies@telus.net> <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
+In-Reply-To: <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Sep 2021 13:18:35 +0200
+Message-ID: <CAJZ5v0gn8rpTiVqkXgGqPFDH8-BKTYGiypM-2A2q1jJLm6HbCQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Override parameters if HWP forced
+ by BIOS
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <doug.smythies@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 02:24:54AM +0800, Fontenot, Nathan wrote:
-> On 9/8/2021 9:59 AM, Huang Rui wrote:
-> > If the sbios supports the boost mode of amd-pstate, let's switch to
-> > boost enabled by default.
-> > 
-> > Signed-off-by: Huang Rui <ray.huang@amd.com>
+On Thu, Sep 9, 2021 at 8:52 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
+> > If HWP has been already been enabled by BIOS, it may be
+> > necessary to override some kernel command line parameters.
+> > Once it has been enabled it requires a reset to be disabled.
+> >
+> > Signed-off-by: Doug Smythies <dsmythies@telus.net>
 > > ---
-> >  drivers/cpufreq/amd-pstate.c | 50 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> > 
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index ea965a122431..67a9a117f524 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -75,6 +75,8 @@ struct amd_cpudata {
-> >  	u32	min_freq;
-> >  	u32	nominal_freq;
-> >  	u32	lowest_nonlinear_freq;
-> > +
-> > +	bool	boost_supported;
-> >  };
-> >  
-> >  struct amd_pstate_perf_funcs {
-> > @@ -229,6 +231,19 @@ amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
-> >  				      max_perf, fast_switch);
-> >  }
-> >  
-> > +static bool amd_pstate_boost_supported(struct amd_cpudata *cpudata)
-> > +{
-> > +	u32 highest_perf, nominal_perf;
-> > +
-> > +	highest_perf = READ_ONCE(cpudata->highest_perf);
-> > +	nominal_perf = READ_ONCE(cpudata->nominal_perf);
-> > +
-> > +	if (highest_perf > nominal_perf)
-> > +		return true;
-> > +
-> > +	return false;
-> > +}
-> > +
-> >  static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+> >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
+> >  1 file changed, 16 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/intel_pstate.c
+> > b/drivers/cpufreq/intel_pstate.c
+> > index bb4549959b11..073bae5d4498 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
+> >                  */
+> >                 if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
+> >                     intel_pstate_hwp_is_enabled()) {
+> > -                       hwp_active++;
+> > +                       hwp_active = 1;
+> Why this change?
+
+I think hwp_active can be changed to bool and then it would make sense
+to update this line.
+
+> >                         hwp_mode_bdw = id->driver_data;
+> >                         intel_pstate.attr = hwp_cpufreq_attrs;
+> >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
+> > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
+> >
+> >  static int __init intel_pstate_setup(char *str)
 > >  {
-> >  	cpufreq_verify_within_cpu_limits(policy);
-> > @@ -402,6 +417,37 @@ static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
-> >  	return lowest_nonlinear_freq * 1000;
-> >  }
-> >  
-> > +static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
-> > +{
-> > +	struct amd_cpudata *cpudata = policy->driver_data;
-> > +	int ret;
-> > +
-> > +	if (!cpudata->boost_supported) {
-> > +		pr_err("Boost mode is not supported by this processor or SBIOS\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (state)
-> > +		policy->cpuinfo.max_freq = cpudata->max_freq;
-> > +	else
-> > +		policy->cpuinfo.max_freq = cpudata->nominal_freq;
-> > +
-> > +	policy->max = policy->cpuinfo.max_freq;
-> > +
-> > +	ret = freq_qos_update_request(&cpudata->req[1],
-> > +				      policy->cpuinfo.max_freq);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void amd_pstate_boost_init(struct amd_cpudata *cpudata)
-> > +{
-> > +	cpudata->boost_supported = true;
-> > +	amd_pstate_driver.boost_enabled = true;
-> > +}
-> > +
-> >  static int amd_pstate_init_freqs_in_cpudata(struct amd_cpudata *cpudata,
-> >  					    u32 max_freq, u32 min_freq,
-> >  					    u32 nominal_freq,
-> > @@ -504,6 +550,9 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> >  
-> >  	policy->driver_data = cpudata;
-> >  
-> > +	if (amd_pstate_boost_supported(cpudata))
-> > +		amd_pstate_boost_init(cpudata);
-> 
-> Is there any reason to not merge amd_pstate_boost_supported() and
-> amd_pstate_boost_init() into a single function? I don't see that
-> amd_pstate_boost_supported() is called anywhere else.
-> 
+> > +       /*
+> > +        * If BIOS is forcing HWP, then parameter
+> > +        * overrides might be needed. Only print
+> > +        * the message once, and regardless of
+> > +        * any overrides.
+> > +        */
+> > +       if(!hwp_active
+> This part of code is from early_param, Is it possible that
+> hwp_active is not 0?
 
-Sounds reasonable. Will update it in V2 as well.
+Well, it wouldn't matter even if it were nonzero.  This check is just
+pointless anyway.
 
-Thanks,
-Ray
+> > && boot_cpu_has(X86_FEATURE_HWP))
+> > +               if(intel_pstate_hwp_is_enabled()){
+
+This should be
+
+if (boot_cpu_has(X86_FEATURE_HWP) && intel_pstate_hwp_is_enabled()) {
+
+> > +                       pr_info("HWP enabled by BIOS\n");
+> > +                       hwp_active = 1;
+> > +               }
+> >         if (!str)
+> >                 return -EINVAL;
+> >
+> > -       if (!strcmp(str, "disable"))
+> > +       if (!strcmp(str, "disable") && !hwp_active)
+> >                 no_load = 1;
+> > -       else if (!strcmp(str, "active"))
+> > +       if (!strcmp(str, "active"))
+> >                 default_driver = &intel_pstate;
+> > -       else if (!strcmp(str, "passive"))
+> > +       if (!strcmp(str, "passive"))
+> >                 default_driver = &intel_cpufreq;
+>
+> Why "else if" changed to "if" ?
+>
+> > -
+> > -       if (!strcmp(str, "no_hwp")) {
+> > +       if (!strcmp(str, "no_hwp") && !hwp_active) {
+> >                 pr_info("HWP disabled\n");
+> >                 no_hwp = 1;
+> >         }
+>
