@@ -2,176 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B30405BEB
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 19:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9FA405C30
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 19:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbhIIRXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 13:23:41 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:41778 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbhIIRXl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 13:23:41 -0400
-Received: by mail-ot1-f51.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso3407067ota.8;
-        Thu, 09 Sep 2021 10:22:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Fx5iAv26f2jc9QufU/pqxgt/pcPtLv+J3rZogchJXY=;
-        b=qritL5ikhihmcWS7hcKMQCsSdQQGGvF8wjuMIJFpnrqxbLqJLDxZLb43gS5SAy4j1T
-         FbOsUlByJD6Wf9OqvKdis+CVIfwrV7bd7nFS2SwqgF40TdcaffCVxl6+Te/BwsdHXI2E
-         nTlAih7izDZtH5DCTnUeo2zxWOgA98raUIDkSp+4HT1HOQBzI7wLfSZN5mPLhVemyfvL
-         BBqgKYUJT3mXB2CtAUIXQ7hkF5SW0Y71LLakE/0WrD5QHHjZ9oVvdJBm4vdwhV/RxEQ8
-         pqxqJA9aMM2uQdSSG0HtuZxrli5FQfj/1Ub1LIePecbsneo6aFaM89Sn44Q+LlvuT/A9
-         3D+g==
-X-Gm-Message-State: AOAM532wwOIyMjwBmcLarf/wLHSvn1q6VwSKIpqxbREawty2eliePjPE
-        cCjlrmkhZ+ysyveFPSKYxn85+vEipoIM20dxH34=
-X-Google-Smtp-Source: ABdhPJzQZBEQP7S5RZx0Q4b7N7BiBUhbxmrCgBjU1n12erZfn8OWOdPumX2019E9flOn5X0bGt97slbFezvgyAR4GM4=
-X-Received: by 2002:a9d:6945:: with SMTP id p5mr799989oto.301.1631208151039;
- Thu, 09 Sep 2021 10:22:31 -0700 (PDT)
+        id S237243AbhIIRiu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 13:38:50 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:58532 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237196AbhIIRit (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 13:38:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631209060; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=PTKwND18GTvzMXMd9Pj/sAGi6KOZ6yqrs5Kgcg+92QE=; b=Ntr5CVIDP4iK4q0nqUZ+kIy97zwJvvH6EmoLTrPbeCT3xtARZy9/hToaifZJuA3X/EXANJvB
+ fs74uOvBrvvf5KzH8NMxQ2ylsXJPVlSrgVUZsqJynCu0RymTFPVv0mCbNKEOlze7t5ymJOp3
+ g2IIBB85sjFMcIRGEFxlnsa3IL0=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 613a4649aa8996eab70cee38 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 09 Sep 2021 17:37:13
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 50E10C43618; Thu,  9 Sep 2021 17:37:13 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B6290C4338F;
+        Thu,  9 Sep 2021 17:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org B6290C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Thu, 9 Sep 2021 10:37:09 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Benson Leung <bleung@google.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
+Message-ID: <20210909173709.GB20111@jackp-linux.qualcomm.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-2-pmalani@chromium.org>
+ <20210903064701.GA3515@jackp-linux.qualcomm.com>
+ <YTf1tTvfEMzTawwK@google.com>
 MIME-Version: 1.0
-References: <20210909034802.1708-1-dsmythies@telus.net> <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
- <CAJZ5v0gn8rpTiVqkXgGqPFDH8-BKTYGiypM-2A2q1jJLm6HbCQ@mail.gmail.com>
- <CAAYoRsWdFwiwo8j2Nc-vhk2mnoZqJC9fyS7URtEz3E1VxfNbLQ@mail.gmail.com> <CAJZ5v0hO7SajJ5HFVDcma6nOfzy-289MdwUSiJbY8Hm3mxvXnQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hO7SajJ5HFVDcma6nOfzy-289MdwUSiJbY8Hm3mxvXnQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Sep 2021 19:22:19 +0200
-Message-ID: <CAJZ5v0j1JjLr0co06yJCCNV2p06e91Zh7tkMXoGTE=waB5Xo1Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Override parameters if HWP forced
- by BIOS
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000065d88b05cb933e95"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YTf1tTvfEMzTawwK@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---00000000000065d88b05cb933e95
-Content-Type: text/plain; charset="UTF-8"
+Hi Benson,
 
-On Thu, Sep 9, 2021 at 6:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Sep 9, 2021 at 3:20 PM Doug Smythies <dsmythies@telus.net> wrote:
-> >
-> > On Thu, Sep 9, 2021 at 4:18 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Thu, Sep 9, 2021 at 8:52 AM Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > >
-> > > > On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
-> > > > > If HWP has been already been enabled by BIOS, it may be
-> > > > > necessary to override some kernel command line parameters.
-> > > > > Once it has been enabled it requires a reset to be disabled.
-> > > > >
-> > > > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > > > ---
-> > > > >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
-> > > > >  1 file changed, 16 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > > > b/drivers/cpufreq/intel_pstate.c
-> > > > > index bb4549959b11..073bae5d4498 100644
-> > > > > --- a/drivers/cpufreq/intel_pstate.c
-> > > > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > > > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
-> > > > >                  */
-> > > > >                 if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
-> > > > >                     intel_pstate_hwp_is_enabled()) {
-> > > > > -                       hwp_active++;
-> > > > > +                       hwp_active = 1;
-> > > > Why this change?
-> > >
-> > > I think hwp_active can be changed to bool and then it would make sense
-> > > to update this line.
-> > >
-> > > > >                         hwp_mode_bdw = id->driver_data;
-> > > > >                         intel_pstate.attr = hwp_cpufreq_attrs;
-> > > > >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
-> > > > > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
-> > > > >
-> > > > >  static int __init intel_pstate_setup(char *str)
-> > > > >  {
-> > > > > +       /*
-> > > > > +        * If BIOS is forcing HWP, then parameter
-> > > > > +        * overrides might be needed. Only print
-> > > > > +        * the message once, and regardless of
-> > > > > +        * any overrides.
-> > > > > +        */
-> > > > > +       if(!hwp_active
-> > > > This part of code is from early_param, Is it possible that
-> > > > hwp_active is not 0?
-> > >
-> > > Well, it wouldn't matter even if it were nonzero.  This check is just
-> > > pointless anyway.
-> > >
-> > > > > && boot_cpu_has(X86_FEATURE_HWP))
-> > > > > +               if(intel_pstate_hwp_is_enabled()){
-> > >
-> > > This should be
-> > >
-> > > if (boot_cpu_has(X86_FEATURE_HWP) && intel_pstate_hwp_is_enabled()) {
-> >
-> > Disagree.
-> > This routine gets executed once per intel_pstate related grub command
-> > line entry. The purpose of the "if(!hwp_active" part is to prevent the
-> > printing of the message to the logs multiple times.
->
-> Ah OK.  Fair enough.
->
-> You can do all of the checks in one conditional, though.  They will be
-> processed left-to-right anyway.
->
-> But then it would be good to avoid calling
-> intel_pstate_hwp_is_enabled() multiple times if it returns false.
->
-> And having said all that I'm not sure why you are trying to make
-> no_hwp depend on !hwp_active?  I will not be taken into account anyway
-> if intel_pstate_hwp_is_enabled() returns 'true'?
->
-> So if no_hwp is covered regardless, you may move the
-> intel_pstate_hwp_is_enabled() inside the no_load conditional.
->
-> Alternatively, and I would do that, intel_pstate_hwp_is_enabled()
-> could be evaluated earlier in intel_pstate_init() and if it returned
-> 'true', both no_load and no_hwp would be disregarded.
+On Tue, Sep 07, 2021 at 04:28:53PM -0700, Benson Leung wrote:
+> Hi Jack,
+> 
+> On Thu, Sep 02, 2021 at 11:47:01PM -0700, Jack Pham wrote:
+> > Hi Prashant,
+> > 
+> > On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
+> > > Increase the max number of PDO objects to 13, to accommodate the extra
+> > > PDOs added as a part of EPR (Extended Power Range) operation introduced
+> > > in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
+> > > 
+> > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > > ---
+> > >  include/linux/usb/pd.h | 8 +++++++-
+> > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> > > index 96b7ff66f074..7e8bdca1ce6e 100644
+> > > --- a/include/linux/usb/pd.h
+> > > +++ b/include/linux/usb/pd.h
+> > > @@ -201,7 +201,13 @@ struct pd_message {
+> > >  } __packed;
+> > >  
+> > >  /* PDO: Power Data Object */
+> > > -#define PDO_MAX_OBJECTS		7
+> > > +
+> > > +/*
+> > > + * The EPR (Extended Power Range) structure is a superset of the SPR (Standard Power Range)
+> > > + * capabilities structure, so set the max number of PDOs to 13 instead of 7. On SPR-only systems,
+> > > + * objects 8 through 13 will just be empty.
+> > > + */
+> > > +#define PDO_MAX_OBJECTS		13
+> > 
+> > Hmm this might break the recent change I made to UCSI in commit
+> > 1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
+> > the first 4").
+> > 
+> >  520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_partner)
+> >  521 {
+> >  522         int ret;
+> >  523
+> >  524         /* UCSI max payload means only getting at most 4 PDOs at a time */
+> >  525         ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> >  526         if (ret < 0)
+> >  527                 return;
+> >  528
+> >  529         con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> >  530         if (con->num_pdos < UCSI_MAX_PDOS)
+> >  531                 return;
+> >  532
+> >  533         /* get the remaining PDOs, if any */
+> >  534         ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> >  535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> > 				 ^^^^^^^^^^^^^^^
+> > This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
+> > since that's the most the return payload can carry.  Currently this
+> > assumes that we'd only need to request the PPM at most twice to retrieve
+> > all the PDOs for up to a maximum of 7 (first request for 4 then again if
+> > needed for the remaining 3).  I'm not sure if any existing UCSI FW would
+> > be updatable to support more than 7 PDOs in the future, much less
+> > support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
+> > offset valid values are 0-7 and anything else "shall not be used", so I
+> > don't know how UCSI will eventually cope with EPR without a spec update.
+> > 
+> 
+> I've had a conversation with Dmitriy Berchanskiy at Intel (the UCSI WG Chair)
+> about this, and it sounds like the UCSI spec is planned on being revved
+> (post R2.0) in order to support the additional messages and expanded structures
+> of USB PD R3.1 around EPR.
 
-Something like the attached, for the record.
+Good to know! Look forward to seeing it once it's ready.
 
---00000000000065d88b05cb933e95
-Content-Type: text/x-patch; charset="US-ASCII"; name="intel_pstate-arguments.patch"
-Content-Disposition: attachment; filename="intel_pstate-arguments.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ktd76dn70>
-X-Attachment-Id: f_ktd76dn70
+I've access to the current R2.0 draft as well, and it looks like there's
+gonna be a bit of work to update this driver to support it.  The big
+standout is the data structure format change to accommodate much larger
+payloads.  So I guess that bridge will be constructed when we get there,
+both for 2.0 and later for EPR.
 
-LS0tCiBkcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgfCAgIDE2ICsrKysrKysrKysrLS0t
-LS0KIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKSW5k
-ZXg6IGxpbnV4LXBtL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYwo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0t
-LSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYworKysgbGludXgt
-cG0vZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCkBAIC0zMjA1LDExICszMjA1LDE1IEBA
-IHN0YXRpYyBpbnQgX19pbml0IGludGVsX3BzdGF0ZV9pbml0KHZvaWQKIAlpZiAoYm9vdF9jcHVf
-ZGF0YS54ODZfdmVuZG9yICE9IFg4Nl9WRU5ET1JfSU5URUwpCiAJCXJldHVybiAtRU5PREVWOwog
-Ci0JaWYgKG5vX2xvYWQpCi0JCXJldHVybiAtRU5PREVWOwotCiAJaWQgPSB4ODZfbWF0Y2hfY3B1
-KGh3cF9zdXBwb3J0X2lkcyk7CiAJaWYgKGlkKSB7CisJCWJvb2wgaHdwX2ZvcmNlZCA9IGludGVs
-X3BzdGF0ZV9od3BfaXNfZW5hYmxlZCgpOworCisJCWlmIChod3BfZm9yY2VkKQorCQkJcHJfaW5m
-bygiSFdQIGVuYWJsZWQgYnkgQklPU1xuIik7CisJCWVsc2UgaWYgKG5vX2xvYWQpCisJCQlyZXR1
-cm4gLUVOT0RFVjsKKwogCQljb3B5X2NwdV9mdW5jcygmY29yZV9mdW5jcyk7CiAJCS8qCiAJCSAq
-IEF2b2lkIGVuYWJsaW5nIEhXUCBmb3IgcHJvY2Vzc29ycyB3aXRob3V0IEVQUCBzdXBwb3J0LApA
-QCAtMzIxOSw4ICszMjIzLDcgQEAgc3RhdGljIGludCBfX2luaXQgaW50ZWxfcHN0YXRlX2luaXQo
-dm9pZAogCQkgKiBJZiBIV1AgaXMgZW5hYmxlZCBhbHJlYWR5LCB0aG91Z2gsIHRoZXJlIGlzIG5v
-IGNob2ljZSBidXQgdG8KIAkJICogZGVhbCB3aXRoIGl0LgogCQkgKi8KLQkJaWYgKCghbm9faHdw
-ICYmIGJvb3RfY3B1X2hhcyhYODZfRkVBVFVSRV9IV1BfRVBQKSkgfHwKLQkJICAgIGludGVsX3Bz
-dGF0ZV9od3BfaXNfZW5hYmxlZCgpKSB7CisJCWlmICgoIW5vX2h3cCAmJiBib290X2NwdV9oYXMo
-WDg2X0ZFQVRVUkVfSFdQX0VQUCkpIHx8IGh3cF9mb3JjZWQpIHsKIAkJCWh3cF9hY3RpdmUrKzsK
-IAkJCWh3cF9tb2RlX2JkdyA9IGlkLT5kcml2ZXJfZGF0YTsKIAkJCWludGVsX3BzdGF0ZS5hdHRy
-ID0gaHdwX2NwdWZyZXFfYXR0cnM7CkBAIC0zMjM2LDYgKzMyMzksOSBAQCBzdGF0aWMgaW50IF9f
-aW5pdCBpbnRlbF9wc3RhdGVfaW5pdCh2b2lkCiAJCQlnb3RvIGh3cF9jcHVfbWF0Y2hlZDsKIAkJ
-fQogCX0gZWxzZSB7CisJCWlmIChub19sb2FkKQorCQkJcmV0dXJuIC1FTk9ERVY7CisKIAkJaWQg
-PSB4ODZfbWF0Y2hfY3B1KGludGVsX3BzdGF0ZV9jcHVfaWRzKTsKIAkJaWYgKCFpZCkgewogCQkJ
-cHJfaW5mbygiQ1BVIG1vZGVsIG5vdCBzdXBwb3J0ZWRcbiIpOwo=
---00000000000065d88b05cb933e95--
+> > So if this macro changes to 13 then this call would result in a call to
+> > the UCSI GET_PDOS command passing num_pdos == 13-4 = 9 which would
+> > probably result in an error from the PPM FW.  So we might need to retain
+> > the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
+> > this UCSI driver needs to carry its own definition of
+> > UCSI_MAX_TOTAL_PDOS=7 instead of using PDO_MAX_OBJECTS?
+> > 
+> 
+> Prashant mentioned this as well, but maybe it makes sense to define a separate
+> EPR_PDO_MAX_OBJECTS to handle the EPR case, as there are completely separate
+> underlying PD messages (EPR_Source_Capabilities) where we expect up to 13
+> objects, and the classic SPR Source and Sink capabilities will still have the
+> 7 object limit.
+
+Sounds good to me FWIW.  Plus this will even avoid unnecessarily
+bloating TCPM's internal {source,sink}_caps and {src,snk}_pdo arrays
+(an additional 96 bytes) prematurely before that driver is ready to be
+updated to handle EPR with all the new messages and states needed.
+
+Thanks,
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
