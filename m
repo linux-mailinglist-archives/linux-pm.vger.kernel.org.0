@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A366140521F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 14:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31A14054B9
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 15:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354327AbhIIMlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 08:41:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45832 "EHLO mail.kernel.org"
+        id S1357539AbhIINBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 09:01:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46026 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353820AbhIIMe6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:34:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF6EC61B73;
-        Thu,  9 Sep 2021 11:53:47 +0000 (UTC)
+        id S1352289AbhIIMtF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:49:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5539F60ED8;
+        Thu,  9 Sep 2021 11:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188428;
-        bh=aTU+1b4wazC1TIH6SB1kj9KOELqj54l04zV4kpkgSrg=;
+        s=k20201202; t=1631188598;
+        bh=MHCT81CLOAfWfwatB+GSh3H35Orvn8JtecjqpHpu6L8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c1mNU5AfSkHWgoKii+HOuKIHFsaL4vxZlm9T5Bwk4Wj0XEUw7slCXrz+erNx5y9YC
-         elXRKpcoWgj/3il/DASM6PqdaqwYmOYqxwAuFG/GIV2EGGw+Y5U9F1bP9EQ/TYz2Bv
-         U+1Cau41qqUiNiljkcX0wIui+80WPnrvhpTuS72nUmlyVu+qwcgqfJQgNyTSMCWosG
-         /lReTyKaXsy6ikgr8N8ARLNhFOZTXBsuwVQj8uF3y2AR3vTXwSUDzseVf6I5rJtNZi
-         PoYx9hI3m7etSothV32mYO+jSSyz3JEk8RGw3MHymJEru4NNYmKjuR5BS+a2lq82pr
-         dLUubYuje+Avg==
+        b=RIOwEj53+kFDV4KRdzkQ94X8LUCnmSJmtTqYR4C/GXAp4YGDdYMYrSR5iynwewECP
+         w1AJVyz5sucepckoRkK/ZZeMtdYg6WEwemyuhk/4Ig/9pYudiuEqDgeAh59QYwtvA3
+         sRFcb+7BW0L1D8NdamN6BH+EJhbC/QeH14jjsrirDiT2lIItoGRH+o7h0xd9SyMit+
+         qj+e6O44AsLncDVNGrXLLnyx/OGcPK5E1EVwj7cFeOZDR6zSBWl7gN0RBx8EpV1ItP
+         acTYr7plC9gz9XfmOB9p1kk1MUF80FnWtcmKAYDonTK7j5/BAUeqhdpYx3+HChs0TU
+         e/pJWQm6qd2XQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
@@ -30,12 +30,12 @@ Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 116/176] opp: Don't print an error if required-opps is missing
-Date:   Thu,  9 Sep 2021 07:50:18 -0400
-Message-Id: <20210909115118.146181-116-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 071/109] opp: Don't print an error if required-opps is missing
+Date:   Thu,  9 Sep 2021 07:54:28 -0400
+Message-Id: <20210909115507.147917-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
-References: <20210909115118.146181-1-sashal@kernel.org>
+In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
+References: <20210909115507.147917-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,7 +65,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index d92a1bfe1690..f83f4f6d7034 100644
+index 603c688fe23d..30cc407c8f93 100644
 --- a/drivers/opp/of.c
 +++ b/drivers/opp/of.c
 @@ -95,15 +95,7 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
@@ -85,7 +85,7 @@ index d92a1bfe1690..f83f4f6d7034 100644
  }
  
  /* The caller must call dev_pm_opp_put_opp_table() after the table is used */
-@@ -1193,7 +1185,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+@@ -996,7 +988,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
  
  	required_np = of_parse_required_opp(np, index);
  	if (!required_np)
