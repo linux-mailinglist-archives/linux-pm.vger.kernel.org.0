@@ -2,146 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAFF4059B7
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152FE4059FB
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 17:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbhIIOyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:54:18 -0400
-Received: from mga14.intel.com ([192.55.52.115]:59540 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236798AbhIIOyQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Sep 2021 10:54:16 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="220486530"
-X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
-   d="scan'208";a="220486530"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 07:53:02 -0700
-X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
-   d="scan'208";a="450002774"
-Received: from njani-mobl1.gar.corp.intel.com ([10.213.113.5])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 07:52:57 -0700
-Message-ID: <9586d66802138dc144836b310ef5b20394c59695.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Override parameters if HWP
- forced by BIOS
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Thu, 09 Sep 2021 07:52:54 -0700
-In-Reply-To: <CAAYoRsVX76Ey9FHhZXdwKWiMdmf0Oi6SKrP2J=XnNgB92sZW1A@mail.gmail.com>
-References: <20210909034802.1708-1-dsmythies@telus.net>
-         <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
-         <CAAYoRsVX76Ey9FHhZXdwKWiMdmf0Oi6SKrP2J=XnNgB92sZW1A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        id S240266AbhIIPDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 11:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236843AbhIIPDE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 11:03:04 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DA0C061575;
+        Thu,  9 Sep 2021 08:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/Y5MADjdN8PfBLXXdisZCNOGIKICg1o3R1wg6sLA0F0=; b=n0r32pBAY1IV9h2w7DoeJMyOoS
+        H1Rzt3uYTOlPQMqb6PcKGFYj7Dny0GAtWGm26Cvk+BNSHpAHOF3wSOaZZ11F0o0NwUcE7iK/8RvIK
+        Fn5DWktzPwzi/oeVOBQpSB8Tdv5qwyzV/xovHdUrVgc0SfiL8IW7P+R8mN/zt0j6YNxV9IPLJabG+
+        zm0KJLt+3y/nrrW2G47diDSC8/AyVLeGM9AOzRZaNlYXIjq+FDt+dDpSXr/y50lfaqZ4B8moxgUm8
+        IcKz9DYX15I29Y/oPAv3iJ9SthEsSAlwNlzjphTEHQLrjb/MBthxEedADbaB7zuRmtsx4M551+6uL
+        Sm8VwI8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mOLYc-001tWu-Rb; Thu, 09 Sep 2021 15:01:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D7CA130004C;
+        Thu,  9 Sep 2021 17:01:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BFB5E20C09044; Thu,  9 Sep 2021 17:01:41 +0200 (CEST)
+Date:   Thu, 9 Sep 2021 17:01:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
+        linux-pm@vger.kernel.org, Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 04/19] cpufreq: amd: introduce a new amd pstate driver to
+ support future processors
+Message-ID: <YToh1Vhei2PyhlW+@hirez.programming.kicks-ass.net>
+References: <20210908150001.3702552-1-ray.huang@amd.com>
+ <20210908150001.3702552-5-ray.huang@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908150001.3702552-5-ray.huang@amd.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-09-09 at 06:30 -0700, Doug Smythies wrote:
-> On Wed, Sep 8, 2021 at 11:33 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
-> > > If HWP has been already been enabled by BIOS, it may be
-> > > necessary to override some kernel command line parameters.
-> > > Once it has been enabled it requires a reset to be disabled.
-> > > 
-> > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > ---
-> > >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
-> > >  1 file changed, 16 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > b/drivers/cpufreq/intel_pstate.c
-> > > index bb4549959b11..073bae5d4498 100644
-> > > --- a/drivers/cpufreq/intel_pstate.c
-> > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
-> > >                  */
-> > >                 if ((!no_hwp &&
-> > > boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
-> > >                     intel_pstate_hwp_is_enabled()) {
-> > > -                       hwp_active++;
-> > > +                       hwp_active = 1;
-> > Why this change?
-> 
-> It was just to keep it at 1, but I agree not absolutely needed.
-> 
-> > 
-> > >                         hwp_mode_bdw = id->driver_data;
-> > >                         intel_pstate.attr = hwp_cpufreq_attrs;
-> > >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
-> > > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
-> > > 
-> > >  static int __init intel_pstate_setup(char *str)
-> > >  {
-> > > +       /*
-> > > +        * If BIOS is forcing HWP, then parameter
-> > > +        * overrides might be needed. Only print
-> > > +        * the message once, and regardless of
-> > > +        * any overrides.
-> > > +        */
-> > > +       if(!hwp_active
-> > This part of code is from early_param, Is it possible that
-> > hwp_active is not 0?
-> 
-> Not at this point, in any testing I did.
-> But I do not know the authoritative answer
-> to your question.
-> 
-But as you explained you want to prevent repeated print of
-"HWP enabled by BIOS". So you need this.
+On Wed, Sep 08, 2021 at 10:59:46PM +0800, Huang Rui wrote:
 
-> > 
-> > > && boot_cpu_has(X86_FEATURE_HWP))
-> > > +               if(intel_pstate_hwp_is_enabled()){
-> > > +                       pr_info("HWP enabled by BIOS\n");
-> > > +                       hwp_active = 1;
-> > > +               }
-> > >         if (!str)
-> > >                 return -EINVAL;
-> > > 
-> > > -       if (!strcmp(str, "disable"))
-> > > +       if (!strcmp(str, "disable") && !hwp_active)
-> > >                 no_load = 1;
-> > > -       else if (!strcmp(str, "active"))
-> > > +       if (!strcmp(str, "active"))
-> > >                 default_driver = &intel_pstate;
-> > > -       else if (!strcmp(str, "passive"))
-> > > +       if (!strcmp(str, "passive"))
-> > >                 default_driver = &intel_cpufreq;
-> > 
-> > Why "else if" changed to "if" ?
-> 
-> Because it doesn't matter anyway and I would
-> have had to figure out another qualifier.
-> This way, and given that this executes once per
-> intel_pstate command line parameter, the code
-> executes the way it used to, overall.
-If someone specified intel_pstate=active, it will also compare with
-"passive" with this change.
+> +struct amd_pstate_perf_funcs {
+> +	int (*enable)(bool enable);
+> +	int (*init_perf)(struct amd_cpudata *cpudata);
+> +	void (*update_perf)(struct amd_cpudata *cpudata,
+> +			    u32 min_perf, u32 des_perf,
+> +			    u32 max_perf, bool fast_switch);
+> +};
 
-Thanks,
-Srinivas
+> +static int
+> +amd_pstate_enable(struct amd_pstate_perf_funcs *funcs, bool enable)
+> +{
+> +	if (!funcs)
+> +		return -EINVAL;
+> +
+> +	return funcs->enable(enable);
+> +}
 
-> 
-> > 
-> > 
-> > Thanks,
-> > Srinivas
-> > 
-> > > -
-> > > -       if (!strcmp(str, "no_hwp")) {
-> > > +       if (!strcmp(str, "no_hwp") && !hwp_active) {
-> > >                 pr_info("HWP disabled\n");
-> > >                 no_hwp = 1;
-> > >         }
-> > 
-> > 
+> +static int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+> +{
+> +	struct amd_pstate_perf_funcs *funcs = cpufreq_get_driver_data();
+> +
+> +	if (!funcs)
+> +		return -EINVAL;
+> +
+> +	return funcs->init_perf(cpudata);
+> +}
 
+> +static int
+> +amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+> +		       u32 des_perf, u32 max_perf, bool fast_switch)
+> +{
+> +	struct amd_pstate_perf_funcs *funcs = cpufreq_get_driver_data();
+> +
+> +	if (!funcs)
+> +		return -EINVAL;
+> +
+> +	funcs->update_perf(cpudata, min_perf, des_perf,
+> +			   max_perf, fast_switch);
+> +
+> +	return 0;
+> +}
 
+> +static struct amd_pstate_perf_funcs pstate_funcs = {
+> +	.enable = pstate_enable,
+> +	.init_perf = pstate_init_perf,
+> +	.update_perf = pstate_update_perf,
+> +};
+
+> +static int __init amd_pstate_init(void)
+> +{
+> +	int ret;
+> +	struct amd_pstate_perf_funcs *funcs;
+
+> +
+> +	funcs = &pstate_funcs;
+
+What is the purpose of this seemingly pointless indirection? Showing off
+how good AMD hardware is at doing retpolines or something?
