@@ -2,70 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903FF405CD2
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 20:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F0405CD5
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 20:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242783AbhIISXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 14:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S244321AbhIISX4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 14:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbhIISXl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 14:23:41 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E03C061574;
-        Thu,  9 Sep 2021 11:22:31 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id w7so2639609pgk.13;
-        Thu, 09 Sep 2021 11:22:31 -0700 (PDT)
+        with ESMTP id S237172AbhIISX4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 14:23:56 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB71C061574;
+        Thu,  9 Sep 2021 11:22:46 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id w8so2657632pgf.5;
+        Thu, 09 Sep 2021 11:22:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=THDmTfHZykGsHbd1gtfdTxOoLuq5Az1VG+vSuI4psxk=;
-        b=igkhAs5QpU9f7ASWfI2X6KygkBVpIHey74T4av01cepYcCISygoFfC6q5izgX25c66
-         CXa0w3w6Gd31kbqmGrJcn+mc7dUM2nYTaRx6FuoU42rD48Nt9qxQ/j62HTPD8lVOS5KP
-         krCYgP4oe5t3S0x5aqzmNQFyaBvmCyurLxH2aIT03r5W63uWHnIezTVEmXp9HeEnEQrf
-         svLW0sdgFz8RtjSaKcR/a4Biogjc7Q7iKFZ4BoF4kk3Jsy+sTAwEYxPYd19+/oG8lKUM
-         FNr6FTx4VW0iYkqwpfsBZPuGN81iSencRH69k8buOpGSlWQyfKzDwsL8TDpKPd+MuH8h
-         qItg==
+        bh=cS1iTpx2iIEsb5X2+pzRvzep4hwsHFWtChlzadUiG9I=;
+        b=bxRmxhOlHYKuobsxPOTAiq3+MtHyF2JYdf41wvryacSPL3lw0hXKl8NFRFNvZ9rYhu
+         PM0PQyjvJX3E0YFeewQAIJVKTMRGRtQVxiHuh2to+5R+7sb7+uNXqeDj3ONnqfWwV4uU
+         OQDHx/3G7zHs8T1iAz9a8ruINiZ7ue+3fsL4g1uEKZ53txJKPB8ceWj9V8OMfuqw772Z
+         9ILftWW0CiB8n4rpiQsEc8SmYOWzZuiJAxCZT0WiI/HjEW2EIJACuAu8tLVwcMP/rrg8
+         rA3NVcdfrmEKafMelBcriWjKm8SQhY10y1NF8eRq4P2zU+cI96CdbxledzSAKkSYrlgL
+         7ilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=THDmTfHZykGsHbd1gtfdTxOoLuq5Az1VG+vSuI4psxk=;
-        b=rpe7Zc0/My8Db2vZ+g4lZ7Bkprp/ik/HsC8N/7GW/NZDzbGbBP/Q+xeytrcUIDmJkU
-         LgtQAb/Jt2OxdvngJJkJUYk4BR/2RzzUYdMytkFNfWciywCR5wHwwNtxXoRdyKrG+SsX
-         qoKG8n6Wvhf/jbCnRvH/no+kKGzLPIzI0YsTmXQzsWGD5i2J6Osjf33JYYYgdQI7Xvmp
-         DEPtYGrcGLdPZz/olFFOUaUepAzvmyQM4LcYctRWawzzByzA5L694yhVp4EgJ1XR3i9p
-         JtsQK7jTqlSCun4mEghpzQfwE+mr0qKY1PoiiTLqSWgGf/doi93SJiGW2Vi/w1lkZ2sX
-         l/Zw==
-X-Gm-Message-State: AOAM531QSzwGhAs4Iwxe7KF27r9i5zLOqvlQ/3QuZi84Z/5EZqtetASl
-        CcsARCw5FGY9qC7/EbJjOtY=
-X-Google-Smtp-Source: ABdhPJyseSon87U3X17jk42MBDFTPGCZINt4jI5ZxwgBQA3Qvu/fvBdTAURXWlI8s1ehpoebGQjtTw==
-X-Received: by 2002:a05:6a00:2291:b0:412:3db4:908e with SMTP id f17-20020a056a00229100b004123db4908emr4385796pfe.78.1631211750872;
-        Thu, 09 Sep 2021 11:22:30 -0700 (PDT)
+        bh=cS1iTpx2iIEsb5X2+pzRvzep4hwsHFWtChlzadUiG9I=;
+        b=cdTaWOuP9bKtDE6IIdIOGJ3ghWz+bo4xRMO7SvXP3qhmM5bzFzZvdcbPYuAYoUf9Kd
+         d5zUBQN6647ZlTQ9oCqf2ctOpRJefQUsIuWYUKw+7/SSmjqPO7oJWdl/4/ImZBLV6g79
+         7kmejvvd706OGGKVGhboSFNUp2nhQK+xfF3YiKPQNPBzQnkB3MuYaRppcJAaxIe5h4IZ
+         YIPEwj73Vc0k3s06T034UOHxuLSozJsw4t62ittXs8DNoPE0sWrLvoXUqfWXE/HePfTZ
+         wDFHjsiEql1P+EEcQcKE5DJx1e8R18cdwlFxU50sSgWCZiZKS8wOkCllcNG6fNLqVjTh
+         ONQg==
+X-Gm-Message-State: AOAM531Q6O7m+DwVCgPdScRPc6q7pieBo38CykHCS+wbxgEDwMdGJ8Ba
+        wBAjESN6UvOhm/0+G5s2wFA=
+X-Google-Smtp-Source: ABdhPJwLmIXWo3nwtew/RnVH4oYPEXF2Dglq2hOuAUcs7ibnTxReTPYMsA0w2diUTbVYQymmt/Bfvw==
+X-Received: by 2002:a63:f512:: with SMTP id w18mr3779280pgh.280.1631211766039;
+        Thu, 09 Sep 2021 11:22:46 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y4sm2793855pjw.57.2021.09.09.11.22.29
+        by smtp.gmail.com with ESMTPSA id h4sm3364867pjc.28.2021.09.09.11.22.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 11:22:29 -0700 (PDT)
+        Thu, 09 Sep 2021 11:22:45 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     bcm-kernel-feedback-list@broadcom.com,
         Cai Huoqing <caihuoqing@baidu.com>
 Cc:     =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
         linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] soc: bcm: bcm-pmb: Make use of the helper function devm_platform_ioremap_resource()
-Date:   Thu,  9 Sep 2021 11:22:28 -0700
-Message-Id: <20210909182228.3387009-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH 2/2] soc: bcm63xx-power: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Thu,  9 Sep 2021 11:22:44 -0700
+Message-Id: <20210909182244.3387118-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210908071417.494-1-caihuoqing@baidu.com>
-References: <20210908071417.494-1-caihuoqing@baidu.com>
+In-Reply-To: <20210908071417.494-2-caihuoqing@baidu.com>
+References: <20210908071417.494-1-caihuoqing@baidu.com> <20210908071417.494-2-caihuoqing@baidu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 8 Sep 2021 15:14:15 +0800, Cai Huoqing <caihuoqing@baidu.com> wrote:
+On Wed, 8 Sep 2021 15:14:16 +0800, Cai Huoqing <caihuoqing@baidu.com> wrote:
 > Use the devm_platform_ioremap_resource() helper instead of
 > calling platform_get_resource() and devm_ioremap_resource()
 > separately
