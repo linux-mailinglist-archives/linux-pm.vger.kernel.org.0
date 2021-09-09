@@ -2,116 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67FC4059A9
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAFF4059B7
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242933AbhIIOtx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347339AbhIIOto (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:49:44 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D4C0610D0
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:46:15 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q39so2754464oiw.12
-        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 07:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4ChRY5qZ6aR0j17B+EVqR+PtUGBXRuYLRwVbbRc3ayQ=;
-        b=Bdy8Oa1Hb11ijPET2Ah28GdKVGzh4zPCDc7TwDvHdHJbI+DZL7w641tMGcw+SoYsld
-         q+2qk3yJpM6uhgcWZbXmmvnZAdJS22qe7xyfIEc914mqTlLCY8ZIGRVqCjdLnsEgeFbS
-         e9qPNJCQK++Qvl1bfTODmIsh6vwK9Dn/NTQL8e7WvR27VZyAn/xPk/dwkSg6rusXpv9E
-         Mgaf6IuMo1cs1F7FGLfk/aZ2FZNvigdGQjht7zxBBXjriDJWc6rgoqmpECSzXYuFbdrR
-         U9iWm4dEGaYxTbBbU3v7k9h/yCGnBrfwlJXN+WDv6rdEf3kAnivwpSorZ3XxsIJyxTh5
-         Q8AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4ChRY5qZ6aR0j17B+EVqR+PtUGBXRuYLRwVbbRc3ayQ=;
-        b=3DnCf0ejLc6A1agHtXEoQjsiXkuH0z5gzZ1XApaK1EHG4BXfnlnITZNuKk7g794Fa9
-         YkYMK/IAV2/36w0mEaqMYat4z6Zz186XboVVhCEKZsu8P4D/iQqPqSrDuD0oUEyraiqU
-         68ncAl+OyY/gWKWLlJCsSz0Fbk3PZ5Yw86zJbuhZHRAeDJm3z2jpOdlPnvHfK/qFVH1z
-         b7PZmVrH7vyeCByAvNBCzWBHbEVKUPz6iOG/m8rnhiTuAI0V6ukIUXRE3p9XzuXfl559
-         S80DVd20rciz8N+WhD5UTK2VmDFolGbjZZiWzyAt12fAldRORkDjKRVdmqK/5g/3S9EU
-         bYPw==
-X-Gm-Message-State: AOAM533vGBa4lO0aOf9VmGimCC5iNGo92cNMwsYEFRT/mSdoZFwNw2L5
-        K67W8p7vwyEVsduNP40MOFdYcIsKSrGyGSqrSTT7Hw==
-X-Google-Smtp-Source: ABdhPJwHQGIIX3mQpLaPVGGhUXiOunthEmnUWyGqehpl9+g7ZtzzosgPE0btauYypXuazb5o8pgdTtVGFGGodUWjkBo=
-X-Received: by 2002:a54:4f03:: with SMTP id e3mr115395oiy.32.1631198774476;
- Thu, 09 Sep 2021 07:46:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210902101634.827187-1-ulf.hansson@linaro.org>
- <20210902101634.827187-2-ulf.hansson@linaro.org> <08335cd4-7dc8-3b8b-d63f-374585ffa373@gmail.com>
- <CAPDyKFofrEj2LdqXh-L256b2Tcz=qYQgzTUBVuvx0rOR58SrVg@mail.gmail.com>
- <b597c805-e346-8c23-5014-cbb116e88075@gmail.com> <CAPDyKFrWofUKhbhvwTCjiFwJD8-Pzi8UMzU7ZjYLKm2j1HeeBg@mail.gmail.com>
- <6603212d-f36c-afff-6222-8125de5b7b79@gmail.com> <CAPDyKFoyszG2Wo3jbXK562XgpqXns_GPqm7nNu8WOdMCXYUOMQ@mail.gmail.com>
- <66fbbc69-3e16-e07c-4e25-48d59d69fd3c@gmail.com> <CAPDyKFqqdgr2DHf1Fidj3ksPHe3XgwvCo8SbQ2Cmnc5y1PDvMw@mail.gmail.com>
- <7ee1a2eb-67d7-dcad-6039-05129d3822ec@gmail.com> <CAPDyKFoFPpPPd0cUDRhqzXzXaQyNAv7UZToTaHnGXY30QXNB9g@mail.gmail.com>
- <71618f83-de5b-1180-60f4-8561c4f655a9@gmail.com>
-In-Reply-To: <71618f83-de5b-1180-60f4-8561c4f655a9@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 9 Sep 2021 16:45:38 +0200
-Message-ID: <CAPDyKFoV9MOUvu0GLyW-WmNzXbGyFomcug9aTEB-pH32gRHYnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] PM: domains: Drop the performance state vote for a
- device at detach
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S237286AbhIIOyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 10:54:18 -0400
+Received: from mga14.intel.com ([192.55.52.115]:59540 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236798AbhIIOyQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Sep 2021 10:54:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="220486530"
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="220486530"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 07:53:02 -0700
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="450002774"
+Received: from njani-mobl1.gar.corp.intel.com ([10.213.113.5])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 07:52:57 -0700
+Message-ID: <9586d66802138dc144836b310ef5b20394c59695.camel@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Override parameters if HWP
+ forced by BIOS
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Thu, 09 Sep 2021 07:52:54 -0700
+In-Reply-To: <CAAYoRsVX76Ey9FHhZXdwKWiMdmf0Oi6SKrP2J=XnNgB92sZW1A@mail.gmail.com>
+References: <20210909034802.1708-1-dsmythies@telus.net>
+         <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
+         <CAAYoRsVX76Ey9FHhZXdwKWiMdmf0Oi6SKrP2J=XnNgB92sZW1A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.40.0-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 9 Sept 2021 at 15:48, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 07.09.2021 13:16, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> ...
-> >>> Also note that a very similar problem exists, *before* the device get=
-s
-> >>> attached in the first place. More precisely, nothing prevents the
-> >>> performance state from being set to a non-compatible value for an
-> >>> always-on HW/device that hasn't been attached yet. So maybe you need
-> >>> to set the maximum performance state at genpd initializations, then
-> >>> use the ->sync_state() callback to very that all consumers have been
-> >>> attached to the genpd provider, before allowing the state to be
-> >>> changed/lowered?
-> >>
-> >> That is already done by the PD driver.
-> >>
-> >> https://elixir.bootlin.com/linux/latest/source/drivers/soc/tegra/pmc.c=
-#L3790
-> >
-> > Yes, I already knew that, but forgot it. :-) Thanks for the pointer.
-> > Let me rethink the approach.
-> >
-> > In a way, it kind of sounds like this is a generic problem - so
-> > perhaps we should think of adding a ->withdraw_sync_state() callback
-> > that can be assigned by provider drivers, to get informed when a
-> > consumer driver is getting unbinded.
->
-> Not sure, doesn't feel to me that this is necessary for today. A bit too
-> cumbersome for a simple sanity-check, IMO.
+On Thu, 2021-09-09 at 06:30 -0700, Doug Smythies wrote:
+> On Wed, Sep 8, 2021 at 11:33 PM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
+> > > If HWP has been already been enabled by BIOS, it may be
+> > > necessary to override some kernel command line parameters.
+> > > Once it has been enabled it requires a reset to be disabled.
+> > > 
+> > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> > > ---
+> > >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
+> > >  1 file changed, 16 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/cpufreq/intel_pstate.c
+> > > b/drivers/cpufreq/intel_pstate.c
+> > > index bb4549959b11..073bae5d4498 100644
+> > > --- a/drivers/cpufreq/intel_pstate.c
+> > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
+> > >                  */
+> > >                 if ((!no_hwp &&
+> > > boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
+> > >                     intel_pstate_hwp_is_enabled()) {
+> > > -                       hwp_active++;
+> > > +                       hwp_active = 1;
+> > Why this change?
+> 
+> It was just to keep it at 1, but I agree not absolutely needed.
+> 
+> > 
+> > >                         hwp_mode_bdw = id->driver_data;
+> > >                         intel_pstate.attr = hwp_cpufreq_attrs;
+> > >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
+> > > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
+> > > 
+> > >  static int __init intel_pstate_setup(char *str)
+> > >  {
+> > > +       /*
+> > > +        * If BIOS is forcing HWP, then parameter
+> > > +        * overrides might be needed. Only print
+> > > +        * the message once, and regardless of
+> > > +        * any overrides.
+> > > +        */
+> > > +       if(!hwp_active
+> > This part of code is from early_param, Is it possible that
+> > hwp_active is not 0?
+> 
+> Not at this point, in any testing I did.
+> But I do not know the authoritative answer
+> to your question.
+> 
+But as you explained you want to prevent repeated print of
+"HWP enabled by BIOS". So you need this.
 
-Maybe, but I can bring it up with the fw_devlinks people to see what they t=
-hink.
+> > 
+> > > && boot_cpu_has(X86_FEATURE_HWP))
+> > > +               if(intel_pstate_hwp_is_enabled()){
+> > > +                       pr_info("HWP enabled by BIOS\n");
+> > > +                       hwp_active = 1;
+> > > +               }
+> > >         if (!str)
+> > >                 return -EINVAL;
+> > > 
+> > > -       if (!strcmp(str, "disable"))
+> > > +       if (!strcmp(str, "disable") && !hwp_active)
+> > >                 no_load = 1;
+> > > -       else if (!strcmp(str, "active"))
+> > > +       if (!strcmp(str, "active"))
+> > >                 default_driver = &intel_pstate;
+> > > -       else if (!strcmp(str, "passive"))
+> > > +       if (!strcmp(str, "passive"))
+> > >                 default_driver = &intel_cpufreq;
+> > 
+> > Why "else if" changed to "if" ?
+> 
+> Because it doesn't matter anyway and I would
+> have had to figure out another qualifier.
+> This way, and given that this executes once per
+> intel_pstate command line parameter, the code
+> executes the way it used to, overall.
+If someone specified intel_pstate=active, it will also compare with
+"passive" with this change.
 
-In any case, we should not move forward with $subject patch as is.
+Thanks,
+Srinivas
 
-Let me think about it.
+> 
+> > 
+> > 
+> > Thanks,
+> > Srinivas
+> > 
+> > > -
+> > > -       if (!strcmp(str, "no_hwp")) {
+> > > +       if (!strcmp(str, "no_hwp") && !hwp_active) {
+> > >                 pr_info("HWP disabled\n");
+> > >                 no_hwp = 1;
+> > >         }
+> > 
+> > 
 
-Kind regards
-Uffe
+
