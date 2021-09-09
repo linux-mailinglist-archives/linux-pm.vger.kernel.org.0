@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAE6405995
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE934405938
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbhIIOsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbhIIOru (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:47:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C4C0560C1
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:38:42 -0700 (PDT)
-Date:   Thu, 09 Sep 2021 14:38:40 -0000
+        id S1344725AbhIIOkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 10:40:00 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:60060 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244879AbhIIOjw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:39:52 -0400
+Date:   Thu, 09 Sep 2021 14:38:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1631198321;
+        s=2020; t=1631198322;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Biq+Q5tBUhmjGuj+qmM5i7ZBgsXMtJFhlxMlWMNYNHU=;
-        b=AqgUzxb7ZWuECuoqybKb+0HSDDv84bFaz0BMpHWx/Eb/okq4Yh+Bef1m3it3Yr4HKmqFkj
-        xMXTkrW7P61HH+JSYx/4L+taKDZxbjWrlBbLl1tUwcdcLnN/prRUTpg6ZBvw8fVpk3ffen
-        IJRdOiJeCqQv5f4bI4puBN418bEjDKnuiFZ1Ckso7C6EHiaFVBTPdIP5Qp95w6t7pkYBj2
-        q7GsFgek+5liYbpmGeXhedyunnJS1l67Xnak5pJW4hfISRieUDRmHqakW33BMt4yt75qdb
-        cusAZgGT9YuYvGj7t1Z7T0VjUvRWISYx7tF1PEUkFpz6pcvrAm8sMuaPShGcLg==
+        bh=l0fBsRaNjLvN8TSv8vAK7C+zHaues0ROUfZtgWDVqUg=;
+        b=1DCV28qgqoJoRqqEBeT6ZPIM+h+/VHeRg8ZwagtQwUd6rMT99bA6MqtKjZlYFWe8jONIZA
+        7SjysyPRlvoyatYBq5/FmWj5YrNEaeLrsqZ5uxDU480fMsAQi/i/oGMRjS+REBqeGVUO15
+        zABGJdU8oKPomhzkvOEF0oTAodhciX6ELYYrjpvjm3szekeMdIofHJw7WfkZ3V3ik1+EE2
+        m8OdpW1h4twatPVlkHCxudoA9bQvkdeGPGxBKs31T0YYVSf8tsC2OWDkKzjo3gceKf7/1f
+        O5FYjHVbIBflKNAKdpKXQs9MrXGzZLJ3qhtT4ihzMDaGlt1M4yS+d4PfQgYMvA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1631198321;
+        s=2020e; t=1631198322;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Biq+Q5tBUhmjGuj+qmM5i7ZBgsXMtJFhlxMlWMNYNHU=;
-        b=jb37IrorLekpG/f8WhrPeVee4EaXcONag/YC6V6HmnYqgE/GVRY1q76LIO/N8Yct/doFQM
-        XgH+EwTV+k1eMfBw==
-From:   "thermal-bot for Rolf Eike Beer" <tip-bot2@linutronix.de>
+        bh=l0fBsRaNjLvN8TSv8vAK7C+zHaues0ROUfZtgWDVqUg=;
+        b=oPSKTOmfbWlB3yddNqY8XzAeCML+iQKCPRbeHCogUL92GMOo5zYdECQwfN1bfEI0UbuQYe
+        BS/IFfpVV4S0GsAg==
+From:   "thermal-bot for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/tools/tmon: Improve the Makefile
-Cc:     Rolf Eike Beer <eb@emlix.com>,
+Subject: [thermal: thermal/next] thermal/drivers/intel_powerclamp: Replace
+ deprecated CPU-hotplug functions.
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <1951386.ZPQrlMDjM2@devpool47>
-References: <1951386.ZPQrlMDjM2@devpool47>
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+In-Reply-To: <20210803141621.780504-20-bigeasy@linutronix.de>
+References: <20210803141621.780504-20-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163119832031.25758.14075212047149296535.tip-bot2@tip-bot2>
+Message-ID: <163119832150.25758.17104675699410065503.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,63 +59,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     99d88c30055376b56316d3c431c9873e88208348
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//99d88c30055376b56316d3c431c9873e88208348
-Author:        Rolf Eike Beer <eb@emlix.com>
-AuthorDate:    Fri, 30 Jul 2021 13:49:04 +02:00
+Commit-ID:     d31eb7c1a2288f61df75558f59328be01a264300
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//d31eb7c1a2288f61df75558f59328be01a264300
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Tue, 03 Aug 2021 16:16:02 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sat, 14 Aug 2021 15:30:11 +02:00
+CommitterDate: Sat, 14 Aug 2021 12:51:42 +02:00
 
-thermal/tools/tmon: Improve the Makefile
+thermal/drivers/intel_powerclamp: Replace deprecated CPU-hotplug functions.
 
- - Remove empty macros assignments
- - Use directory creation parameter for the install tool
- - Use $OBJ instead of building the list of object for the 'clean' target
+The functions get_online_cpus() and put_online_cpus() have been
+deprecated during the CPU hotplug rework. They map directly to
+cpus_read_lock() and cpus_read_unlock().
 
-[dlezcano] : Changed title and description
+Replace deprecated CPU-hotplug functions with the official version.
+The behavior remains unchanged.
 
-Signed-off-by: Rolf Eike Beer <eb@emlix.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/1951386.ZPQrlMDjM2@devpool47
+Link: https://lore.kernel.org/r/20210803141621.780504-20-bigeasy@linutronix.de
 ---
- tools/thermal/tmon/Makefile | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/thermal/intel/intel_powerclamp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/thermal/tmon/Makefile b/tools/thermal/tmon/Makefile
-index 9db867d..3e65087 100644
---- a/tools/thermal/tmon/Makefile
-+++ b/tools/thermal/tmon/Makefile
-@@ -13,7 +13,6 @@ CC?= $(CROSS_COMPILE)gcc
- PKG_CONFIG?= pkg-config
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index b0eb5ec..a5b58ea 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -528,7 +528,7 @@ static int start_power_clamp(void)
  
- override CFLAGS+=-D VERSION=\"$(VERSION)\"
--LDFLAGS+=
- TARGET=tmon
+ 	set_target_ratio = clamp(set_target_ratio, 0U, MAX_TARGET_RATIO - 1);
+ 	/* prevent cpu hotplug */
+-	get_online_cpus();
++	cpus_read_lock();
  
- INSTALL_PROGRAM=install -m 755 -p
-@@ -33,7 +32,6 @@ override CFLAGS += $(shell $(PKG_CONFIG) --cflags $(STATIC) panelw ncursesw 2> /
- 		     $(PKG_CONFIG) --cflags $(STATIC) panel ncurses 2> /dev/null)
+ 	/* prefer BSP */
+ 	control_cpu = 0;
+@@ -542,7 +542,7 @@ static int start_power_clamp(void)
+ 	for_each_online_cpu(cpu) {
+ 		start_power_clamp_worker(cpu);
+ 	}
+-	put_online_cpus();
++	cpus_read_unlock();
  
- OBJS = tmon.o tui.o sysfs.o pid.o
--OBJS +=
- 
- tmon: $(OBJS) Makefile tmon.h
- 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS)  -o $(TARGET) $(TMON_LIBS)
-@@ -42,15 +40,13 @@ valgrind: tmon
- 	 sudo valgrind -v --track-origins=yes --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes ./$(TARGET)  1> /dev/null
- 
- install:
--	- mkdir -p $(INSTALL_ROOT)/$(BINDIR)
--	- $(INSTALL_PROGRAM) "$(TARGET)" "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
-+	- $(INSTALL_PROGRAM) -D "$(TARGET)" "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
- 
- uninstall:
- 	$(DEL_FILE) "$(INSTALL_ROOT)/$(BINDIR)/$(TARGET)"
- 
- clean:
--	find . -name "*.o" | xargs $(DEL_FILE)
--	rm -f $(TARGET)
-+	rm -f $(TARGET) $(OBJS)
- 
- dist:
- 	git tag v$(VERSION)
+ 	return 0;
+ }
