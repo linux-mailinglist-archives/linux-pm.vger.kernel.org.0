@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEFE405991
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A76405994
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Sep 2021 16:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbhIIOsG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 10:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S241257AbhIIOsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 10:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344403AbhIIOru (ORCPT
+        with ESMTP id S241770AbhIIOru (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 10:47:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0320EC0698D9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E90C0698DA
         for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 07:38:40 -0700 (PDT)
-Date:   Thu, 09 Sep 2021 14:38:37 -0000
+Date:   Thu, 09 Sep 2021 14:38:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1631198318;
+        s=2020; t=1631198319;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ugHSDru2y0FT62fGSqDvf6XgsTKwO9yiMRZzZBZQpvI=;
-        b=temOqG7qWh7S3bo9TRzRgTaengrvu+v0JBbAeHesDfr/8eGbcbnqC30JqAi/C+/q8oK3za
-        1fU3dZtc4KforfQDhV5hU/nNUk5d5AHDXeVqr5K1zPYeZvk8Lo8NaQF+HOTnT3hvseA57e
-        HlXWyOymtsVM7/bUCItQrjZgbb+PaIAhteHaO00HPSQ+5EIoMkZfm1raOexdUs3pCBxHTU
-        Gs/qtwfk1i2RsR1PxIcyLtZKuHhaoJlAoopaZIej4JK2CE+OZglc1AdnarHrkaXKX9nAlC
-        RVjfUZgTri9NeOto3AvSeK5tu3XsLElM8gbDvUPGzG7I83llU6wExB3b+jftVw==
+        bh=np9W1rxo1d7pOrc4tYTJbmiesY68gCXYFLZP863RU6Y=;
+        b=AHZcx0Yj2yNOipU5Ny0xBg6d6BIxKuBmiSwBrX/7yC+iYKsw88IhfRTRb1KrEOeAMqiVmo
+        gi+eCCC5pO+XDL673H37gIX5RfpboeH+e5HIPSNqBHJQ1RuT4Rsjm3WptaY+NXVzrxvtgn
+        Krkl9dNIe57fBqXjAjx9e1N6lRs8zGGkEMxANL880Z2PionWf9iWag0pCxjfbjNw08gqbG
+        lX/Olh4rrpB2w8ya51+jMp+mOct/9TIq+IJeuqMQC1sy45PezrNTS7DRDdt35i4Xv1HBND
+        X1PM+V5j24EJg6JDTZrZB7189uwJPnVGqjwSw+hSC/fctMXB9ROApArAtAD/Zg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1631198318;
+        s=2020e; t=1631198319;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ugHSDru2y0FT62fGSqDvf6XgsTKwO9yiMRZzZBZQpvI=;
-        b=HqtW3jvH20IxIjJUVgT6MVZqHvBOqaPjnHkRSSuWFozI46Fz98iBHdCiGxhcGiaGdRoUB3
-        J1PN6G5ovLMrSaBw==
-From:   "thermal-bot for Maxime Ripard" <tip-bot2@linutronix.de>
+        bh=np9W1rxo1d7pOrc4tYTJbmiesY68gCXYFLZP863RU6Y=;
+        b=YlBjFeD81wFXXZ+rXsxbdyOxzz5PtmnlTQTH7hve3nSylsn9X4awbtth6vnHkjurDloD+x
+        GCM/CNG142uJFHDA==
+From:   "thermal-bot for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: Make trips node optional
-Cc:     Amit Kucheria <amitk@kernel.org>,
+Subject: [thermal: thermal/next] thermal/core: Fix
+ thermal_cooling_device_register() prototype
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Jean-Francois Dagenais" <jeff.dagenais@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh@kernel.org>
-In-Reply-To: <20210721140424.725744-34-maxime@cerno.tech>
-References: <20210721140424.725744-34-maxime@cerno.tech>
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20210722090717.1116748-1-arnd@kernel.org>
+References: <20210722090717.1116748-1-arnd@kernel.org>
 MIME-Version: 1.0
-Message-ID: <163119831790.25758.1267778969015204261.tip-bot2@tip-bot2>
+Message-ID: <163119831849.25758.10697845946417166312.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,54 +62,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     22fc857538c3a256563bb796f978b6d4693f5aa3
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//22fc857538c3a256563bb796f978b6d4693f5aa3
-Author:        Maxime Ripard <maxime@cerno.tech>
-AuthorDate:    Wed, 21 Jul 2021 16:04:03 +02:00
+Commit-ID:     fb83610762dd5927212aa62a468dd3b756b57a88
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fb83610762dd5927212aa62a468dd3b756b57a88
+Author:        Arnd Bergmann <arnd@arndb.de>
+AuthorDate:    Thu, 22 Jul 2021 11:06:44 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sat, 14 Aug 2021 15:42:30 +02:00
+CommitterDate: Sat, 14 Aug 2021 15:40:26 +02:00
 
-dt-bindings: thermal: Make trips node optional
+thermal/core: Fix thermal_cooling_device_register() prototype
 
-Even though the previous binding made it a required child node, the
-implementation in Linux never made it mandatory and just ignored thermal
-zones without trip points.
+There are two pairs of declarations for thermal_cooling_device_register()
+and thermal_of_cooling_device_register(), and only one set was changed
+in a recent patch, so the other one now causes a compile-time warning:
 
-This was even effectively encouraged, since the thermal core wouldn't
-allow a thermal sensor to probe without a thermal zone.
+drivers/net/wireless/mediatek/mt76/mt7915/init.c: In function 'mt7915_thermal_init':
+drivers/net/wireless/mediatek/mt76/mt7915/init.c:134:48: error: passing argument 1 of 'thermal_cooling_device_register' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
+  134 |         cdev = thermal_cooling_device_register(wiphy_name(wiphy), phy,
+      |                                                ^~~~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/mediatek/mt76/mt7915/init.c:7:
+include/linux/thermal.h:407:39: note: expected 'char *' but argument is of type 'const char *'
+  407 | thermal_cooling_device_register(char *type, void *devdata,
+      |                                 ~~~~~~^~~~
 
-In the case where you had a thermal device that had multiple sensors but
-with enough knowledge to provide trip points for only a few of them,
-this meant that the only way to make that driver probe was to provide a
-thermal zone without the trips node required by the binding.
+Change the dummy helper functions to have the same arguments as the
+normal version.
 
-This obviously led to a fair number of device trees doing exactly that,
-making the initial binding requirement ineffective.
-
-Let's make it clear by dropping that requirement.
-
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: f991de53a8ab ("thermal: make device_register's type argument const")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20210721140424.725744-34-maxime@cerno.tech
+Link: https://lore.kernel.org/r/20210722090717.1116748-1-arnd@kernel.org
 ---
- Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/thermal.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index 164f715..a07de5e 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -215,7 +215,7 @@ patternProperties:
-       - polling-delay
-       - polling-delay-passive
-       - thermal-sensors
--      - trips
-+
-     additionalProperties: false
- 
- additionalProperties: false
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index d296f3b..8050d92 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -404,12 +404,13 @@ static inline void thermal_zone_device_unregister(
+ 	struct thermal_zone_device *tz)
+ { }
+ static inline struct thermal_cooling_device *
+-thermal_cooling_device_register(char *type, void *devdata,
++thermal_cooling_device_register(const char *type, void *devdata,
+ 	const struct thermal_cooling_device_ops *ops)
+ { return ERR_PTR(-ENODEV); }
+ static inline struct thermal_cooling_device *
+ thermal_of_cooling_device_register(struct device_node *np,
+-	char *type, void *devdata, const struct thermal_cooling_device_ops *ops)
++	const char *type, void *devdata,
++	const struct thermal_cooling_device_ops *ops)
+ { return ERR_PTR(-ENODEV); }
+ static inline struct thermal_cooling_device *
+ devm_thermal_of_cooling_device_register(struct device *dev,
