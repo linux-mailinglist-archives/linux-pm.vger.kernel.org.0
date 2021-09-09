@@ -2,50 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6AC405F53
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 00:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0A0405F8D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 00:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343920AbhIIWSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 18:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S1346285AbhIIW2G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 18:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344616AbhIIWSC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 18:18:02 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049FBC061574
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 15:16:53 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id a22so4365040iok.12
-        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 15:16:52 -0700 (PDT)
+        with ESMTP id S236995AbhIIW14 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 18:27:56 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF1C0613D9
+        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 15:26:08 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id a22so4391434iok.12
+        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 15:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+P2JcKjAsSoxmGdXp+O/QkWzrXRZ4Yp1RixAXUcpagE=;
-        b=enMlHTYGb3Q/1uuRR705TC2ffjiBKCBq+N+e7Sa6mGAawQAqXCA+xu60GW6GNC2INi
-         7cjHFiTH1inXxSsIG3I7S+MMH4WJF1Lzc6tsR/n6v55FqaXMTaihKyDHsvOL0V/mewRi
-         GyC4uArjSMRZgeEo/bO1Ahvz+XghvnQYFMNG8=
+        bh=HDeVT3WFqshrq+NihoAzfrbQ5FIBpToHR9x1cN4iOng=;
+        b=apf0slexUKEP5aKpkMQ8aMdl4MFyrhoNx8EggR3Fto/x87nwipXHpb/U3IC88RFK3d
+         AvtqKaf9GtB7exiRfUhuvEkWvmX3Mr8+UU7/c5bz+hqwrnEOhn3CiKoU6BBn/o9s5LJy
+         yxeZsuu9WtKcdB2o3BciakO3lcIBOc0D1DVU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+P2JcKjAsSoxmGdXp+O/QkWzrXRZ4Yp1RixAXUcpagE=;
-        b=vu/ZqvoFyb3EWNPaPeCOji4vKS32vMZZd6Axm/YtFh4z/8z9pxVdmjrRX2nVEW5sjR
-         tuxz61J2DwrrJ7uZvDyVjswRYrrIFngLV5GBA40LdMYYKXuDyM2BBghypED1Y6QsQ0qh
-         RB8x1boqN/ywFCRJn0S9SICY+X85LqrbqpP5EgEN1OQuh2udxzHJsC4HjWOtmMdp7qpb
-         qfu3BAYz+x5P2TQfJO4gPyAjLFlxFdOHyk+UeLW2yHiv4ExijW5ntW54J148kI/KwEyv
-         RRWMrW+XzXPRz8svEAo1LXjQuOBvP2UUqqkhnimmvv3j3U39VRZTskTNS97a1GczOnvD
-         DCFw==
-X-Gm-Message-State: AOAM532/Ji9SieuhHvuF7lDv3vG5C+D6//AsbonUUo4IbP+9ibAiV/p9
-        oYZz8/qGy11iolFctIcAgrM9Zw==
-X-Google-Smtp-Source: ABdhPJy1BgCvYD7Qnx3OJPvBP7ag/tSPh8rixeiagw5O2qCJiesCg7c9AwfXtneROd0QncFQMRTvtg==
-X-Received: by 2002:a5d:9e09:: with SMTP id h9mr4506574ioh.164.1631225812461;
-        Thu, 09 Sep 2021 15:16:52 -0700 (PDT)
+        bh=HDeVT3WFqshrq+NihoAzfrbQ5FIBpToHR9x1cN4iOng=;
+        b=wpHf0ZVFYdJrnKHC5q1vR0IzIWO/5Py7vf8zrSdyaxfFv+an0J+xHjkJZ+Z7cA40vQ
+         usXHZDTjkX9XW5EzFiNWI4a4UPtsjxiDC+fhbZUM0wopqt9MD2e6+uq0w7srmY0RI6Fv
+         YdQCLJSkgG3t9sYSlgsnBkGmHDop08gapeFEghW8XqeQsFaOgHBYSRAZ57BDPUofxfbn
+         qcPcY/oSsw79H42jPbae6/2qVMq1VkfeeujQriVGqsWAUMHh/mj5C9hDPFXPR5pkX2Mh
+         FjCNubUg6zz8xp1d9Ir47sgdf3kzTu4/Zj1zLaNXN0FO2VRQsfzWe2BFbf7/oG4WxBqn
+         RdfQ==
+X-Gm-Message-State: AOAM532Qu/pQ3Omn5MpDhreI+P2JueLuQDQLPufesysDmFHl7yQdB0lU
+        9VLBnj1oiOnH1Qs3FiKFCT3DOg==
+X-Google-Smtp-Source: ABdhPJzF2jfni/jtrkHIuNeRkbR6OaR2tmvDHyQKs+0UY38IhJFiRWClxGua0Y9vYoqaJageC3hDhQ==
+X-Received: by 2002:a5d:9ac1:: with SMTP id x1mr4463631ion.191.1631226367826;
+        Thu, 09 Sep 2021 15:26:07 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c10sm1501659ilq.77.2021.09.09.15.16.51
+        by smtp.gmail.com with ESMTPSA id t11sm1509339ilf.16.2021.09.09.15.26.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Sep 2021 15:16:51 -0700 (PDT)
-Subject: Re: [PATCH 14/19] cpupower: initial AMD P-state capability
+        Thu, 09 Sep 2021 15:26:07 -0700 (PDT)
+Subject: Re: [PATCH 15/19] cpupower: add amd-pstate sysfs entries into
+ libcpufreq
 To:     Huang Rui <ray.huang@amd.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -60,14 +61,14 @@ Cc:     Deepak Sharma <deepak.sharma@amd.com>,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20210908150001.3702552-1-ray.huang@amd.com>
- <20210908150001.3702552-15-ray.huang@amd.com>
+ <20210908150001.3702552-16-ray.huang@amd.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b030e734-e294-9bf5-ce88-a9e2970da0ef@linuxfoundation.org>
-Date:   Thu, 9 Sep 2021 16:16:50 -0600
+Message-ID: <870445a1-1148-e5d1-08f8-df630466d788@linuxfoundation.org>
+Date:   Thu, 9 Sep 2021 16:26:06 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210908150001.3702552-15-ray.huang@amd.com>
+In-Reply-To: <20210908150001.3702552-16-ray.huang@amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,47 +77,69 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 9/8/21 8:59 AM, Huang Rui wrote:
-> If kernel enables AMD P-state, cpupower won't need to respond ACPI
-> hardware P-states function anymore.
+> These amd-pstate sysfs entries will be used on cpupower for amd-pstate
+> kernel module.
 > 
 
-This commit log doesn't seem to match the code change. I see it
-calling cpupower_amd_pstate_enabled() and setting flags.
+This commit log doesn't make sense. If these sysfs entries are used
+for amd-pstate kernel module, why are they defined here.
+
+Describe how these are used and the relationship between these defines
+and the amd-pstate kernel module
 
 > Signed-off-by: Huang Rui <ray.huang@amd.com>
 > ---
->   tools/power/cpupower/utils/helpers/cpuid.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
+>   tools/power/cpupower/lib/cpufreq.c | 18 +++++++++++++++++-
+>   1 file changed, 17 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/power/cpupower/utils/helpers/cpuid.c b/tools/power/cpupower/utils/helpers/cpuid.c
-> index 72eb43593180..78218c54acca 100644
-> --- a/tools/power/cpupower/utils/helpers/cpuid.c
-> +++ b/tools/power/cpupower/utils/helpers/cpuid.c
-> @@ -149,6 +149,19 @@ int get_cpu_info(struct cpupower_cpu_info *cpu_info)
->   		if (ext_cpuid_level >= 0x80000008 &&
->   		    cpuid_ebx(0x80000008) & (1 << 4))
->   			cpu_info->caps |= CPUPOWER_CAP_AMD_RDPRU;
-> +
-> +		if (cpupower_amd_pstate_enabled(0)) {
-
-What is the reason for calling this function with cpu id = 0?
-
-
-> +			cpu_info->caps |= CPUPOWER_CAP_AMD_PSTATE;
-> +
-> +			/*
-> +			 * If AMD P-state is enabled, the firmware will treat
-> +			 * AMD P-state function as high priority.
-> +			 */
-> +			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB;
-> +			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB_MSR;
-> +			cpu_info->caps &= ~CPUPOWER_CAP_AMD_HW_PSTATE;
-> +			cpu_info->caps &= ~CPUPOWER_CAP_AMD_PSTATEDEF;
-> +		}
->   	}
+> diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+> index c3b56db8b921..3f92ddadaad2 100644
+> --- a/tools/power/cpupower/lib/cpufreq.c
+> +++ b/tools/power/cpupower/lib/cpufreq.c
+> @@ -69,6 +69,14 @@ enum cpufreq_value {
+>   	SCALING_MIN_FREQ,
+>   	SCALING_MAX_FREQ,
+>   	STATS_NUM_TRANSITIONS,
+> +	AMD_PSTATE_HIGHEST_PERF,
+> +	AMD_PSTATE_NOMINAL_PERF,
+> +	AMD_PSTATE_LOWEST_NONLINEAR_PERF,
+> +	AMD_PSTATE_LOWEST_PERF,
+> +	AMD_PSTATE_MAX_FREQ,
+> +	AMD_PSTATE_NOMINAL_FREQ,
+> +	AMD_PSTATE_LOWEST_NONLINEAR_FREQ,
+> +	AMD_PSTATE_MIN_FREQ,
+>   	MAX_CPUFREQ_VALUE_READ_FILES
+>   };
 >   
->   	if (cpu_info->vendor == X86_VENDOR_INTEL) {
+
+These are AMD specific values being added to a common code.
+
+> @@ -80,7 +88,15 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
+>   	[SCALING_CUR_FREQ] = "scaling_cur_freq",
+>   	[SCALING_MIN_FREQ] = "scaling_min_freq",
+>   	[SCALING_MAX_FREQ] = "scaling_max_freq",
+> -	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
+> +	[STATS_NUM_TRANSITIONS] = "stats/total_trans",
+> +	[AMD_PSTATE_HIGHEST_PERF] = "amd_pstate_highest_perf",
+> +	[AMD_PSTATE_NOMINAL_PERF] = "amd_pstate_nominal_perf",
+> +	[AMD_PSTATE_LOWEST_NONLINEAR_PERF] = "amd_pstate_lowest_nonlinear_perf",
+> +	[AMD_PSTATE_LOWEST_PERF] = "amd_pstate_lowest_perf",
+> +	[AMD_PSTATE_MAX_FREQ] = "amd_pstate_max_freq",
+> +	[AMD_PSTATE_NOMINAL_FREQ] = "amd_pstate_nominal_freq",
+> +	[AMD_PSTATE_LOWEST_NONLINEAR_FREQ] = "amd_pstate_lowest_nonlinear_freq",
+> +	[AMD_PSTATE_MIN_FREQ] = "amd_pstate_min_freq"
+>   };
+>   
+>   
 > 
+
+These are AMD specific values being added to a common code.
+It doesn't sound right. What happens if there is a conflict
+between AMD values and another vendor values?
+
+This doesn't seem a good place to add these.
 
 thanks,
 -- Shuah
+
+
