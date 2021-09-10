@@ -2,160 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E2540622C
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 02:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80AF4065D9
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 04:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbhIJAo4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 20:44:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233876AbhIJAV6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:21:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1817D611BF;
-        Fri, 10 Sep 2021 00:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233248;
-        bh=bFudKSCOtqCJSbzerv9YL80dTH1IVwrlA8bgY8TI2qs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FrieefCADGWs7dKCpmXIkMyg0HVrcB0qyO6uI8PYR7gNc/13eAmK9wHPF51FQHHPD
-         ANCYzGpso+DLL+XJSKPyWEELQNbBWJLgxONBgDQbiVw1OMK03I3t3UshyMZ9fqs+9v
-         GCTMBbj6Bx333/ln0cHUSdOZXSAnGm2yxYZhI4xt1V3tsltlpwQ38qj+T/jFt23EWx
-         Yesd3ZLSJoi5j44H1PVh7dYatg+T/BASO9Ii1f3q5DAJpxH05DFTO5iU5xJLs4H8ft
-         ZCN3rgO/0nlT5n1vuEhEAIbHlHffhtgsa1KBKRVa7dSAEPEuSDFMsGQFi7ChGdUzmB
-         QJEentlR9qtvw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 5.10 14/53] cpuidle: pseries: Do not cap the CEDE0 latency in fixup_cede0_latency()
-Date:   Thu,  9 Sep 2021 20:19:49 -0400
-Message-Id: <20210910002028.175174-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210910002028.175174-1-sashal@kernel.org>
-References: <20210910002028.175174-1-sashal@kernel.org>
+        id S229785AbhIJC4f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 22:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhIJC4e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 22:56:34 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6BCC061575
+        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 19:55:24 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id j16so613333pfc.2
+        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 19:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z1DCn45fgjMCQ5dOXTyEr8YoI8mYYmFSGGZ1t4ok398=;
+        b=SyYmiBfuT121U2kQWstr/h0lqnT+GUYyddY2RtuwDAiIx+QVU9o01WKFaaqGddtmsU
+         DsyGOgtfQ2T3G8vHHSHYnzgjV0cCfCsGI+e5tYDKgBT5cANHKyAIstpj/aBeCY/r97xV
+         nbdgIW2kZoofxC/5Hmcdorin1lSO5co6g/Phs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z1DCn45fgjMCQ5dOXTyEr8YoI8mYYmFSGGZ1t4ok398=;
+        b=z+XfBqY2dTQxs/co6W7x7Emq0+dsH8kVcU95Gq3Ma3FsZwWniBOADnQu16ZGr8j/hY
+         OKDQhNh5V/TiMFPCi3yeFgCcaMmejvkmIFVse2IYGaAgZ7rq/uXWtxOKEe1akTtA7uGh
+         kCDstSKqh8rYkmELBWvpvTGhRV0klhX1BW3VzSn2B802o1y9E28kY4YUgmYsUa9pqJgD
+         Tj/SPvK9sJqBthK798xZb/e5kEHe451xBN+q51QsxJCIbhULWH9X1FWhKK7NfP3o6UCq
+         D18IaUXKbq7JLmsw2hss8cxzbR3SpWmdiLj1MPX2ubEyp0zXg/6jQ/OlW1jy08KpSdVp
+         80og==
+X-Gm-Message-State: AOAM532S6aXrdnIEvUxdus3dH32XtyzcKj6031dbbLzx16w0VaZPzPCn
+        N4YyzQC3OYV6jAvitFlYFFj04w==
+X-Google-Smtp-Source: ABdhPJyXKJMH4iL1JkUkb6KeSYYQYWAuY6YIZKAKq4TIuyIAFhfG24f/49fPMpEMqqI33F4vjUeT2w==
+X-Received: by 2002:a63:535f:: with SMTP id t31mr5438886pgl.270.1631242524046;
+        Thu, 09 Sep 2021 19:55:24 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j5sm3415494pjv.56.2021.09.09.19.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Sep 2021 19:55:23 -0700 (PDT)
+Date:   Thu, 9 Sep 2021 19:55:22 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: vexpress: Drop unused variable
+Message-ID: <202109091955.B786058@keescook>
+References: <20210909184714.153068-1-linux@roeck-us.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210909184714.153068-1-linux@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+On Thu, Sep 09, 2021 at 11:47:14AM -0700, Guenter Roeck wrote:
+> arm:allmodconfig fails to build with the following error.
+> 
+> drivers/cpufreq/vexpress-spc-cpufreq.c:454:13: error:
+> 					unused variable 'cur_cluster'
+> 
+> Remove the unused variable.
+> 
+> Fixes: bb8c26d9387f ("cpufreq: vexpress: Set CPUFREQ_IS_COOLING_DEV flag")
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit 71737a6c2a8f801622d2b71567d1ec1e4c5b40b8 ]
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Currently in fixup_cede0_latency() code, we perform the fixup the
-CEDE(0) exit latency value only if minimum advertized extended CEDE
-latency values are less than 10us. This was done so as to not break
-the expected behaviour on POWER8 platforms where the advertised
-latency was higher than the default 10us, which would delay the SMT
-folding on the core.
+I hit this in build testing too.
 
-However, after the earlier patch "cpuidle/pseries: Fixup CEDE0 latency
-only for POWER10 onwards", we can be sure that the fixup of CEDE0
-latency is going to happen only from POWER10 onwards. Hence
-unconditionally use the minimum exit latency provided by the platform.
-
-Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1626676399-15975-3-git-send-email-ego@linux.vnet.ibm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpuidle/cpuidle-pseries.c | 59 ++++++++++++++++---------------
- 1 file changed, 30 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index a2b5c6f60cf0..18747e5287c8 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -346,11 +346,9 @@ static int pseries_cpuidle_driver_init(void)
- static void __init fixup_cede0_latency(void)
- {
- 	struct xcede_latency_payload *payload;
--	u64 min_latency_us;
-+	u64 min_xcede_latency_us = UINT_MAX;
- 	int i;
- 
--	min_latency_us = dedicated_states[1].exit_latency; // CEDE latency
--
- 	if (parse_cede_parameters())
- 		return;
- 
-@@ -358,42 +356,45 @@ static void __init fixup_cede0_latency(void)
- 		nr_xcede_records);
- 
- 	payload = &xcede_latency_parameter.payload;
-+
-+	/*
-+	 * The CEDE idle state maps to CEDE(0). While the hypervisor
-+	 * does not advertise CEDE(0) exit latency values, it does
-+	 * advertise the latency values of the extended CEDE states.
-+	 * We use the lowest advertised exit latency value as a proxy
-+	 * for the exit latency of CEDE(0).
-+	 */
- 	for (i = 0; i < nr_xcede_records; i++) {
- 		struct xcede_latency_record *record = &payload->records[i];
-+		u8 hint = record->hint;
- 		u64 latency_tb = be64_to_cpu(record->latency_ticks);
- 		u64 latency_us = DIV_ROUND_UP_ULL(tb_to_ns(latency_tb), NSEC_PER_USEC);
- 
--		if (latency_us == 0)
--			pr_warn("cpuidle: xcede record %d has an unrealistic latency of 0us.\n", i);
--
--		if (latency_us < min_latency_us)
--			min_latency_us = latency_us;
--	}
--
--	/*
--	 * By default, we assume that CEDE(0) has exit latency 10us,
--	 * since there is no way for us to query from the platform.
--	 *
--	 * However, if the wakeup latency of an Extended CEDE state is
--	 * smaller than 10us, then we can be sure that CEDE(0)
--	 * requires no more than that.
--	 *
--	 * Perform the fix-up.
--	 */
--	if (min_latency_us < dedicated_states[1].exit_latency) {
- 		/*
--		 * We set a minimum of 1us wakeup latency for cede0 to
--		 * distinguish it from snooze
-+		 * We expect the exit latency of an extended CEDE
-+		 * state to be non-zero, it to since it takes at least
-+		 * a few nanoseconds to wakeup the idle CPU and
-+		 * dispatch the virtual processor into the Linux
-+		 * Guest.
-+		 *
-+		 * So we consider only non-zero value for performing
-+		 * the fixup of CEDE(0) latency.
- 		 */
--		u64 cede0_latency = 1;
-+		if (latency_us == 0) {
-+			pr_warn("cpuidle: Skipping xcede record %d [hint=%d]. Exit latency = 0us\n",
-+				i, hint);
-+			continue;
-+		}
- 
--		if (min_latency_us > cede0_latency)
--			cede0_latency = min_latency_us - 1;
-+		if (latency_us < min_xcede_latency_us)
-+			min_xcede_latency_us = latency_us;
-+	}
- 
--		dedicated_states[1].exit_latency = cede0_latency;
--		dedicated_states[1].target_residency = 10 * (cede0_latency);
-+	if (min_xcede_latency_us != UINT_MAX) {
-+		dedicated_states[1].exit_latency = min_xcede_latency_us;
-+		dedicated_states[1].target_residency = 10 * (min_xcede_latency_us);
- 		pr_info("cpuidle: Fixed up CEDE exit latency to %llu us\n",
--			cede0_latency);
-+			min_xcede_latency_us);
- 	}
- 
- }
 -- 
-2.30.2
-
+Kees Cook
