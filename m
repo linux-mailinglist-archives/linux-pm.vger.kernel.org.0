@@ -2,131 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC36C405FB1
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 00:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3750406227
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 02:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbhIIWrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 18:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343850AbhIIWrv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 18:47:51 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A54AC061575
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 15:46:41 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id g9so4452636ioq.11
-        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 15:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=plbVGyQIOThzcyQI2bqq3xPq+wHbHcvpVyb7goK7gHc=;
-        b=fhd4DCBzKorNNb3b4gS2EF2xw/MOHFayRSModD8JqUdvSOildhuQJuK6zX6nQ2h4E2
-         zk1v1N33njT97+FbdqnGmZjoFf84XZ6flA7R/XRID6A+0tT9d2kqLN6679D/gJv0MQzS
-         MHRa8UtzY3HNvn7FLhewwI673tVtg+jQmeIkg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=plbVGyQIOThzcyQI2bqq3xPq+wHbHcvpVyb7goK7gHc=;
-        b=Z34KjFvKQFF/lYhLUnoMmnodiw/LiNMgiHzOY54y8CB2hf69/qOA8Fc7YM3FaViWjZ
-         PPCOChgZX1spzfhwZ/hrdI8PkLam5y0S8wg82WzV3HN90KVEyPFp5Px5vIck8BGI1nw+
-         mDZmcdhzvv7M0FPiKWPUSjQUNreKYNkFdyYh3D7tZV5GXhDzsejMVdvDiM1varBEl2Pv
-         D7yLWef2JDU95Tps2RmIztbXzkcRXQd9KdyMxZRg39H6x3eHOIrdhN3LXox4D7WpTqV0
-         AO535Uq0tEFxmEZLeXT9zPoPLp/tkPY1tgMEeF7jwu+WR+ROUO51ropNh13ac+kCdZvi
-         A0Ug==
-X-Gm-Message-State: AOAM5332MyCBUbH526P0m4zw+N1GhCjPWgXZ6dlhY4GdCf/aBPVSKG89
-        9KnaL4Y08Ij4owxoo2FYZ1B+tA==
-X-Google-Smtp-Source: ABdhPJy62GN9FtqAa/pImo0jtApY7rG/DNxxoAFM+U139IeLn+hpKQEKjpeDUHwSDyP+3o0ThpiJDQ==
-X-Received: by 2002:a6b:28b:: with SMTP id 133mr4590855ioc.107.1631227600907;
-        Thu, 09 Sep 2021 15:46:40 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c11sm1568248ioh.50.2021.09.09.15.46.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Sep 2021 15:46:40 -0700 (PDT)
-Subject: Re: [PATCH 18/19] cpupower: print amd-pstate information on cpupower
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
-        linux-pm@vger.kernel.org
-Cc:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210908150001.3702552-1-ray.huang@amd.com>
- <20210908150001.3702552-19-ray.huang@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <70bef125-398b-8a3c-07f5-a4ebc68dc0c8@linuxfoundation.org>
-Date:   Thu, 9 Sep 2021 16:46:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233001AbhIJAoy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Sep 2021 20:44:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43748 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231374AbhIJASD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:18:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2790611CC;
+        Fri, 10 Sep 2021 00:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631233002;
+        bh=bFudKSCOtqCJSbzerv9YL80dTH1IVwrlA8bgY8TI2qs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Kf5ZmtzKnNNAfOkrH40cAPuU28NoJKEbK5H2O+Hqd0Rt5y0QHH7ZAxhuMy9p/47w1
+         To7lSby4asKtpSGOOQiaaqVnXq12B0eCnlghEAXrjaicD9RaG0p8fH0QGwUz4LbAw7
+         JjY4umt+v/5SpRi81NPZqXWUX8ypOnJ4JPPPzOMFR2r0SU7lvTB+1Pm34Nzp84/zKQ
+         I+2srZcodOCA4NWaqjdX50Ees2c5bkUW6kBAqsreJjamC5AlGArLafk09mFMkCdalr
+         l8HskieXtEBhNk4NIaC4yeqzbXKP7t64UCxogzw8jzRyT2VDsGZgq81iky3ETrMarg
+         hkV8HHvdt8PVQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 5.14 31/99] cpuidle: pseries: Do not cap the CEDE0 latency in fixup_cede0_latency()
+Date:   Thu,  9 Sep 2021 20:14:50 -0400
+Message-Id: <20210910001558.173296-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210910001558.173296-1-sashal@kernel.org>
+References: <20210910001558.173296-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210908150001.3702552-19-ray.huang@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/8/21 9:00 AM, Huang Rui wrote:
-> amd-pstate kernel module is using the fine grain frequency instead of
-> acpi hardware pstate. So the performance and frequency values should be
-> printed in frequency-info.
-> 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> ---
->   tools/power/cpupower/utils/cpufreq-info.c | 27 ++++++++++++++++++++---
->   1 file changed, 24 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-> index f9895e31ff5a..9eabed209adc 100644
-> --- a/tools/power/cpupower/utils/cpufreq-info.c
-> +++ b/tools/power/cpupower/utils/cpufreq-info.c
-> @@ -183,9 +183,30 @@ static int get_boost_mode_x86(unsigned int cpu)
->   	printf(_("    Supported: %s\n"), support ? _("yes") : _("no"));
->   	printf(_("    Active: %s\n"), active ? _("yes") : _("no"));
->   
-> -	if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-> -	     cpupower_cpu_info.family >= 0x10) ||
-> -	     cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
-> +	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-> +	    cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-> +		printf(_("    AMD PSTATE Highest Performance: %u. Maximum Frequency: "),
-> +		       amd_pstate_get_data(cpu, HIGHEST_PERF));
-> +		print_speed(amd_pstate_get_data(cpu, MAX_FREQ));
-> +		printf(".\n");
-> +
-> +		printf(_("    AMD PSTATE Nominal Performance: %u. Nominal Frequency: "),
-> +		       amd_pstate_get_data(cpu, NOMINAL_PERF));
-> +		print_speed(amd_pstate_get_data(cpu, NOMINAL_FREQ));
-> +		printf(".\n");
-> +
-> +		printf(_("    AMD PSTATE Lowest Non-linear Performance: %u. Lowest Non-linear Frequency: "),
-> +		       amd_pstate_get_data(cpu, LOWEST_NONLINEAR_PERF));
-> +		print_speed(amd_pstate_get_data(cpu, LOWEST_NONLINEAR_FREQ));
-> +		printf(".\n");
-> +
-> +		printf(_("    AMD PSTATE Lowest Performance: %u. Lowest Frequency: "),
-> +		       amd_pstate_get_data(cpu, LOWEST_PERF));
-> +		print_speed(amd_pstate_get_data(cpu, MIN_FREQ));
-> +		printf(".\n");
-> +	} else if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-> +		    cpupower_cpu_info.family >= 0x10) ||
-> +		   cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
->   		ret = decode_pstates(cpu, b_states, pstates, &pstate_no);
->   		if (ret)
->   			return ret;
-> 
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-Same issue here - amd specific code sprinkled all over the common routines.
-Needs fixing.
+[ Upstream commit 71737a6c2a8f801622d2b71567d1ec1e4c5b40b8 ]
 
-thanks,
--- Shuah
+Currently in fixup_cede0_latency() code, we perform the fixup the
+CEDE(0) exit latency value only if minimum advertized extended CEDE
+latency values are less than 10us. This was done so as to not break
+the expected behaviour on POWER8 platforms where the advertised
+latency was higher than the default 10us, which would delay the SMT
+folding on the core.
+
+However, after the earlier patch "cpuidle/pseries: Fixup CEDE0 latency
+only for POWER10 onwards", we can be sure that the fixup of CEDE0
+latency is going to happen only from POWER10 onwards. Hence
+unconditionally use the minimum exit latency provided by the platform.
+
+Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/1626676399-15975-3-git-send-email-ego@linux.vnet.ibm.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/cpuidle/cpuidle-pseries.c | 59 ++++++++++++++++---------------
+ 1 file changed, 30 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index a2b5c6f60cf0..18747e5287c8 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -346,11 +346,9 @@ static int pseries_cpuidle_driver_init(void)
+ static void __init fixup_cede0_latency(void)
+ {
+ 	struct xcede_latency_payload *payload;
+-	u64 min_latency_us;
++	u64 min_xcede_latency_us = UINT_MAX;
+ 	int i;
+ 
+-	min_latency_us = dedicated_states[1].exit_latency; // CEDE latency
+-
+ 	if (parse_cede_parameters())
+ 		return;
+ 
+@@ -358,42 +356,45 @@ static void __init fixup_cede0_latency(void)
+ 		nr_xcede_records);
+ 
+ 	payload = &xcede_latency_parameter.payload;
++
++	/*
++	 * The CEDE idle state maps to CEDE(0). While the hypervisor
++	 * does not advertise CEDE(0) exit latency values, it does
++	 * advertise the latency values of the extended CEDE states.
++	 * We use the lowest advertised exit latency value as a proxy
++	 * for the exit latency of CEDE(0).
++	 */
+ 	for (i = 0; i < nr_xcede_records; i++) {
+ 		struct xcede_latency_record *record = &payload->records[i];
++		u8 hint = record->hint;
+ 		u64 latency_tb = be64_to_cpu(record->latency_ticks);
+ 		u64 latency_us = DIV_ROUND_UP_ULL(tb_to_ns(latency_tb), NSEC_PER_USEC);
+ 
+-		if (latency_us == 0)
+-			pr_warn("cpuidle: xcede record %d has an unrealistic latency of 0us.\n", i);
+-
+-		if (latency_us < min_latency_us)
+-			min_latency_us = latency_us;
+-	}
+-
+-	/*
+-	 * By default, we assume that CEDE(0) has exit latency 10us,
+-	 * since there is no way for us to query from the platform.
+-	 *
+-	 * However, if the wakeup latency of an Extended CEDE state is
+-	 * smaller than 10us, then we can be sure that CEDE(0)
+-	 * requires no more than that.
+-	 *
+-	 * Perform the fix-up.
+-	 */
+-	if (min_latency_us < dedicated_states[1].exit_latency) {
+ 		/*
+-		 * We set a minimum of 1us wakeup latency for cede0 to
+-		 * distinguish it from snooze
++		 * We expect the exit latency of an extended CEDE
++		 * state to be non-zero, it to since it takes at least
++		 * a few nanoseconds to wakeup the idle CPU and
++		 * dispatch the virtual processor into the Linux
++		 * Guest.
++		 *
++		 * So we consider only non-zero value for performing
++		 * the fixup of CEDE(0) latency.
+ 		 */
+-		u64 cede0_latency = 1;
++		if (latency_us == 0) {
++			pr_warn("cpuidle: Skipping xcede record %d [hint=%d]. Exit latency = 0us\n",
++				i, hint);
++			continue;
++		}
+ 
+-		if (min_latency_us > cede0_latency)
+-			cede0_latency = min_latency_us - 1;
++		if (latency_us < min_xcede_latency_us)
++			min_xcede_latency_us = latency_us;
++	}
+ 
+-		dedicated_states[1].exit_latency = cede0_latency;
+-		dedicated_states[1].target_residency = 10 * (cede0_latency);
++	if (min_xcede_latency_us != UINT_MAX) {
++		dedicated_states[1].exit_latency = min_xcede_latency_us;
++		dedicated_states[1].target_residency = 10 * (min_xcede_latency_us);
+ 		pr_info("cpuidle: Fixed up CEDE exit latency to %llu us\n",
+-			cede0_latency);
++			min_xcede_latency_us);
+ 	}
+ 
+ }
+-- 
+2.30.2
+
