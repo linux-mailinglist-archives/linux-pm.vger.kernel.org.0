@@ -2,176 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4254065E6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 05:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D85406645
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Sep 2021 06:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbhIJDPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Sep 2021 23:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S229620AbhIJENG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Sep 2021 00:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhIJDPV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Sep 2021 23:15:21 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0CCC061574
-        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 20:14:10 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id m4so880886ljq.8
-        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 20:14:10 -0700 (PDT)
+        with ESMTP id S229507AbhIJENG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Sep 2021 00:13:06 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72B3C061575
+        for <linux-pm@vger.kernel.org>; Thu,  9 Sep 2021 21:11:55 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id h16so1328786lfk.10
+        for <linux-pm@vger.kernel.org>; Thu, 09 Sep 2021 21:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=telus.net; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bK6B6siFp2R2BM6TUH8N5ysmF7Y0kDKTEjp3215w9rk=;
-        b=DlEJ5nSm/ZhKscb+pNcv6KnbMvBSCCb9eTc4Ih068mteoJAspRHhD7KJWCKEilAfCG
-         Hjr+NxxgsNvEYqgE307gAaqkrJL8FY5MDmwJYkU+IbeItk1zVP+5Y0BCNePpqKg1VcmU
-         oS3vtS4mEcdOaBpW+9VMTJZF677zvY4fzi55PA9U/RvXgxpvTFXCG5aaM03fpXPMegP7
-         ghveEmDQiwaNUbJVoidl1ecQiJmlXQbvUEz5L/jiCp0p5zL8Wo98NiImsodDKHjIGI9S
-         a4oCkD75r1U5Id4KxIbLTmjv5OwpksKfOzkk2w6HsfnqjV2du/uhHyN0SaikcZAtXXwy
-         klRg==
+        bh=DxuUJjYQzcMig7TJzqeQbDiwDXMeQY4AlFQzmAL8BFo=;
+        b=caV35vZBF/+tv+N/twTyQQIepPYKrU77+eUwAhhJt3yzpY3fZR+jg6Vj0KzNx1wMlG
+         khJyigYpp6RzraAOG24s+SRBLCuqBhIjY7ndBQ5GL05US8rXNihBIvuEIX2pK4RieWjG
+         6Oma/I6gIdr/zl/fcrcU85RJXRGJOekaW7423Xyfi+lyYoqWbNJSnZowbQOW0g/PO8dB
+         Ip9MKNP9KqFk9e0puoqir2yz4xIKFi6wxSX5IOc1PAdQaFaBE1S6Ud9QaNAmx1MgV/pn
+         OQeQiz/Ap2LiVmj6CAUlJuKzapQNJWxX0fvvO5nkN2r9//rFyQLpLHsbCSRiVgSPwI4L
+         uCNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bK6B6siFp2R2BM6TUH8N5ysmF7Y0kDKTEjp3215w9rk=;
-        b=GbUEWqZ2r1lQG/1hffvp0n8ClDEKFLp2kLmBR+z/1w2Fga5UNdReN7WBOU7PyFj70e
-         96cmYKU7l50HgPjwm+HZFm7Zr+wPSpO0nMGizcHEbf+wVSMJwcjKZx2kTMr6V7itn0qv
-         8d1gni9B7SyNoaFIzrYZWSrlTAPafzkKfJBLm/khuq3ScFk8eKToVdIjEbgSmbURxyPb
-         8tg0EWbAz/JOryXK+cAvBNFsgwSFiyyO5BsnGyA5MT4d17Afhrt1nrTolrn1P4WZpBaZ
-         tBqQgiGxutemNxPPenPWOWoEmTkOEN+CsWun9BGoiPyXLi/NGHx3cbKyeQc6lE8j7Wjq
-         pKVA==
-X-Gm-Message-State: AOAM532+cSofabXJ7Wh/Bhg4F09ePXQBdZXPgluM/qS+MQQKJC69HgzZ
-        dhBmAbGgqJVb96GKFaKH1nXHvUAcpuXvBNQZZiw0Xw==
-X-Google-Smtp-Source: ABdhPJzsegz12iU3PL/5ChduSNONBpMkLy61dVlrLsIGtLttfkSy0+juinSUIkyfA2MoA87aJk+WZyosG8zQamT/UEA=
-X-Received: by 2002:a05:651c:88e:: with SMTP id d14mr2382322ljq.472.1631243649088;
- Thu, 09 Sep 2021 20:14:09 -0700 (PDT)
+        bh=DxuUJjYQzcMig7TJzqeQbDiwDXMeQY4AlFQzmAL8BFo=;
+        b=IfnDmJJBsHo1T+A5oBAkGeLnNUK8/C/aWhTrtd/VoDQK4iHJNltPlE5X8+HPP+tqyA
+         9EwarGrOrGQmK7RhKmDhCngLcnRW5uRMT8hprb30Ec5MTraYBvsnlo+TKJlp0kT3vPZC
+         qQGGeUktWThTfmyiDZ+BB7aRxZMZsrtQIw/DuMZx6KlIDyHosJmct0MqHeVQQBmVIJxh
+         ptbUP7pf+SDQtKFCIXohReBFDCyz0CaHS9JyRUa1MxRAA4b7W5xk6G0gGlM7oDx2OV+5
+         Ps3zZWl6lxtDYDEmYrHaOJo7s8OA7EVXy/UApEJfnMuSKYJT5n9kw5Gh7GTEICCsBog0
+         9Beg==
+X-Gm-Message-State: AOAM531JgX0CC9k9UB3FS07keJpXZoYWD4fe4y0wOPXruwzded07zB+d
+        +WJ3+tRkj2xZgvtwIGIqeOIhquLTZaHyR2ojE55p9Q==
+X-Google-Smtp-Source: ABdhPJzczePxiiiUKaYgpWec1VQ/FQlfTM5oaUvNp5X1nEy/SYSL5rijb8rTiNIik6aTvN83Y9O38gJxtOgp4JBOqSU=
+X-Received: by 2002:a05:6512:695:: with SMTP id t21mr2316218lfe.157.1631247113923;
+ Thu, 09 Sep 2021 21:11:53 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210909034802.1708-1-dsmythies@telus.net> <223a72d91cfda9b13230e4f8cd6a29f853535277.camel@linux.intel.com>
- <CAJZ5v0gn8rpTiVqkXgGqPFDH8-BKTYGiypM-2A2q1jJLm6HbCQ@mail.gmail.com>
- <CAAYoRsWdFwiwo8j2Nc-vhk2mnoZqJC9fyS7URtEz3E1VxfNbLQ@mail.gmail.com>
- <CAJZ5v0hO7SajJ5HFVDcma6nOfzy-289MdwUSiJbY8Hm3mxvXnQ@mail.gmail.com> <CAJZ5v0j1JjLr0co06yJCCNV2p06e91Zh7tkMXoGTE=waB5Xo1Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j1JjLr0co06yJCCNV2p06e91Zh7tkMXoGTE=waB5Xo1Q@mail.gmail.com>
+ <CAAYoRsVX76Ey9FHhZXdwKWiMdmf0Oi6SKrP2J=XnNgB92sZW1A@mail.gmail.com> <9586d66802138dc144836b310ef5b20394c59695.camel@linux.intel.com>
+In-Reply-To: <9586d66802138dc144836b310ef5b20394c59695.camel@linux.intel.com>
 From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 9 Sep 2021 20:14:01 -0700
-Message-ID: <CAAYoRsUun0_tXTEGi6m1L0A9ffRWZ8FbLs1kFEZ0d0QQi+ssQw@mail.gmail.com>
+Date:   Thu, 9 Sep 2021 21:11:46 -0700
+Message-ID: <CAAYoRsUHQoFH4rb2cu5ZgMc8=e7WWZt8qQwZ6eFAtVSD1kghoA@mail.gmail.com>
 Subject: Re: [PATCH] cpufreq: intel_pstate: Override parameters if HWP forced
  by BIOS
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
         dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 9, 2021 at 10:22 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Thu, Sep 9, 2021 at 6:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Thu, Sep 9, 2021 at 3:20 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > On Thu, Sep 9, 2021 at 4:18 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > On Thu, Sep 9, 2021 at 8:52 AM Srinivas Pandruvada
-> > > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > > >
-> > > > > On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
-> > > > > > If HWP has been already been enabled by BIOS, it may be
-> > > > > > necessary to override some kernel command line parameters.
-> > > > > > Once it has been enabled it requires a reset to be disabled.
-> > > > > >
-> > > > > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > > > > ---
-> > > > > >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
-> > > > > >  1 file changed, 16 insertions(+), 6 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > > > > b/drivers/cpufreq/intel_pstate.c
-> > > > > > index bb4549959b11..073bae5d4498 100644
-> > > > > > --- a/drivers/cpufreq/intel_pstate.c
-> > > > > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > > > > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
-> > > > > >                  */
-> > > > > >                 if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
-> > > > > >                     intel_pstate_hwp_is_enabled()) {
-> > > > > > -                       hwp_active++;
-> > > > > > +                       hwp_active = 1;
-> > > > > Why this change?
-> > > >
-> > > > I think hwp_active can be changed to bool and then it would make sense
-> > > > to update this line.
-> > > >
-> > > > > >                         hwp_mode_bdw = id->driver_data;
-> > > > > >                         intel_pstate.attr = hwp_cpufreq_attrs;
-> > > > > >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
-> > > > > > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
-> > > > > >
-> > > > > >  static int __init intel_pstate_setup(char *str)
-> > > > > >  {
-> > > > > > +       /*
-> > > > > > +        * If BIOS is forcing HWP, then parameter
-> > > > > > +        * overrides might be needed. Only print
-> > > > > > +        * the message once, and regardless of
-> > > > > > +        * any overrides.
-> > > > > > +        */
-> > > > > > +       if(!hwp_active
-> > > > > This part of code is from early_param, Is it possible that
-> > > > > hwp_active is not 0?
-> > > >
-> > > > Well, it wouldn't matter even if it were nonzero.  This check is just
-> > > > pointless anyway.
-> > > >
-> > > > > > && boot_cpu_has(X86_FEATURE_HWP))
-> > > > > > +               if(intel_pstate_hwp_is_enabled()){
-> > > >
-> > > > This should be
-> > > >
-> > > > if (boot_cpu_has(X86_FEATURE_HWP) && intel_pstate_hwp_is_enabled()) {
+On Thu, Sep 9, 2021 at 7:53 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+
+> On Thu, 2021-09-09 at 06:30 -0700, Doug Smythies wrote:
+> > On Wed, Sep 8, 2021 at 11:33 PM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
 > > >
-> > > Disagree.
-> > > This routine gets executed once per intel_pstate related grub command
-> > > line entry. The purpose of the "if(!hwp_active" part is to prevent the
-> > > printing of the message to the logs multiple times.
+> > > On Wed, 2021-09-08 at 20:48 -0700, Doug Smythies wrote:
+> > > > If HWP has been already been enabled by BIOS, it may be
+> > > > necessary to override some kernel command line parameters.
+> > > > Once it has been enabled it requires a reset to be disabled.
+> > > >
+> > > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> > > > ---
+> > > >  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++++------
+> > > >  1 file changed, 16 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/drivers/cpufreq/intel_pstate.c
+> > > > b/drivers/cpufreq/intel_pstate.c
+> > > > index bb4549959b11..073bae5d4498 100644
+> > > > --- a/drivers/cpufreq/intel_pstate.c
+> > > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > > @@ -3267,7 +3267,7 @@ static int __init intel_pstate_init(void)
+> > > >                  */
+> > > >                 if ((!no_hwp &&
+> > > > boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
+> > > >                     intel_pstate_hwp_is_enabled()) {
+> > > > -                       hwp_active++;
+> > > > +                       hwp_active = 1;
+> > > Why this change?
 > >
-> > Ah OK.  Fair enough.
+> > It was just to keep it at 1, but I agree not absolutely needed.
 > >
-> > You can do all of the checks in one conditional, though.  They will be
-> > processed left-to-right anyway.
+> > >
+> > > >                         hwp_mode_bdw = id->driver_data;
+> > > >                         intel_pstate.attr = hwp_cpufreq_attrs;
+> > > >                         intel_cpufreq.attr = hwp_cpufreq_attrs;
+> > > > @@ -3347,17 +3347,27 @@ device_initcall(intel_pstate_init);
+> > > >
+> > > >  static int __init intel_pstate_setup(char *str)
+> > > >  {
+> > > > +       /*
+> > > > +        * If BIOS is forcing HWP, then parameter
+> > > > +        * overrides might be needed. Only print
+> > > > +        * the message once, and regardless of
+> > > > +        * any overrides.
+> > > > +        */
+> > > > +       if(!hwp_active
+> > > This part of code is from early_param, Is it possible that
+> > > hwp_active is not 0?
 > >
-> > But then it would be good to avoid calling
-> > intel_pstate_hwp_is_enabled() multiple times if it returns false.
+> > Not at this point, in any testing I did.
+> > But I do not know the authoritative answer
+> > to your question.
 > >
-> > And having said all that I'm not sure why you are trying to make
-> > no_hwp depend on !hwp_active?  I will not be taken into account anyway
-> > if intel_pstate_hwp_is_enabled() returns 'true'?
-> >
-> > So if no_hwp is covered regardless, you may move the
-> > intel_pstate_hwp_is_enabled() inside the no_load conditional.
-> >
-> > Alternatively, and I would do that, intel_pstate_hwp_is_enabled()
-> > could be evaluated earlier in intel_pstate_init() and if it returned
-> > 'true', both no_load and no_hwp would be disregarded.
+> But as you explained you want to prevent repeated print of
+> "HWP enabled by BIOS". So you need this.
 >
-> Something like the attached, for the record.
+> > >
+> > > > && boot_cpu_has(X86_FEATURE_HWP))
+> > > > +               if(intel_pstate_hwp_is_enabled()){
+> > > > +                       pr_info("HWP enabled by BIOS\n");
+> > > > +                       hwp_active = 1;
+> > > > +               }
+> > > >         if (!str)
+> > > >                 return -EINVAL;
+> > > >
+> > > > -       if (!strcmp(str, "disable"))
+> > > > +       if (!strcmp(str, "disable") && !hwp_active)
+> > > >                 no_load = 1;
+> > > > -       else if (!strcmp(str, "active"))
+> > > > +       if (!strcmp(str, "active"))
+> > > >                 default_driver = &intel_pstate;
+> > > > -       else if (!strcmp(str, "passive"))
+> > > > +       if (!strcmp(str, "passive"))
+> > > >                 default_driver = &intel_cpufreq;
+> > >
+> > > Why "else if" changed to "if" ?
+> >
+> > Because it doesn't matter anyway and I would
+> > have had to figure out another qualifier.
+> > This way, and given that this executes once per
+> > intel_pstate command line parameter, the code
+> > executes the way it used to, overall.
+> If someone specified intel_pstate=active, it will also compare with
+> "passive" with this change.
 
-O.K. and Thanks.
-I was trying to avoid this line getting into the log:
-
-[    0.000000] intel_pstate: HWP disabled
-
-only to overridden later by, now, these lines:
-
-[    0.373742] intel_pstate: HWP enabled by BIOS
-[    0.374177] intel_pstate: Intel P-state driver initializing
-[    0.375097] intel_pstate: HWP enabled
-
-Let me see if I can go with your suggestion and get to
-what I had hoped to get in the logs.
-
-By the way, my current command line options are:
-
-[    0.000000] Command line:
-BOOT_IMAGE=/boot/vmlinuz-5.14.0-ipstate9
-root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd
-ro ipv6.disable=1 consoleblank=314 intel_pstate=force
-intel_pstate=active intel_pstate=no_hwp
-msr.allow_writes=on cpuidle.governor=teo
+Disagree.
+As far as I can tell, and I tested, it works as expected.
 
 ... Doug
+
+> > > > -
+> > > > -       if (!strcmp(str, "no_hwp")) {
+> > > > +       if (!strcmp(str, "no_hwp") && !hwp_active) {
+> > > >                 pr_info("HWP disabled\n");
+> > > >                 no_hwp = 1;
+> > > >         }
+> > >
+> > >
+>
+>
