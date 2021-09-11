@@ -2,213 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4307407544
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Sep 2021 08:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CB9407645
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Sep 2021 13:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbhIKGC7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Sep 2021 02:02:59 -0400
-Received: from mga17.intel.com ([192.55.52.151]:59166 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229646AbhIKGC6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 11 Sep 2021 02:02:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10103"; a="201433041"
-X-IronPort-AV: E=Sophos;i="5.85,284,1624345200"; 
-   d="scan'208";a="201433041"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 23:01:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,284,1624345200"; 
-   d="scan'208";a="697481297"
-Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Sep 2021 23:01:45 -0700
-Received: from kbuild by 730d49888f40 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mOw5A-0005A1-HC; Sat, 11 Sep 2021 06:01:44 +0000
-Date:   Sat, 11 Sep 2021 14:00:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 10aed6c075d44bba5c62a13654041e54fc2acb13
-Message-ID: <613c460b.qfdB6kBxOinVhOzT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232239AbhIKLeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Sep 2021 07:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbhIKLeB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Sep 2021 07:34:01 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77728C061574
+        for <linux-pm@vger.kernel.org>; Sat, 11 Sep 2021 04:32:48 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u15so505240wru.6
+        for <linux-pm@vger.kernel.org>; Sat, 11 Sep 2021 04:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:from:subject:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=vxsbFoIk9HYRD3XO/1KdRiZnBW38kIVj5TBw1w/MO6E=;
+        b=XiV+5KhOru+hWb6Yv9sNlSDz4UicdyfmjrVLCqu9D406hVMBk5vGzGp9Z6UWIzSr5i
+         4kPjqbxix3vp8AMrWgSIYPn+5FMqJjyd54PG/ETNG8bT97imQ5n1uPL0Clejg576PDqu
+         XTjfBJUtQUe9Ci91Ww4848LViW1HShACPjCCVQf62CPSFKfTxo9l1tMUdBMy4K0xtbQT
+         F0qQ6UOPckofcnTqO2FH4bG9Kb8PDeXatjFxoi7W5CtGO/qaFiRg6JYD0TIxQasdkob1
+         m8brTfJBjMLbYOhbw0S8WRycA4h7Ug1uOSz2IIEbUISQL2nueOQL3VGzLOKxqv5z3F+U
+         SVxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:from:subject:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=vxsbFoIk9HYRD3XO/1KdRiZnBW38kIVj5TBw1w/MO6E=;
+        b=QoDs4uLzBjr488kMfXiSIWzEsHI7W94Bo/AeL5VjkaS3rz3Hpfp18ElgULS01EIxr+
+         rkf7IBeR+FtsOdTMru2wG5I+GrEe8mGJ7kvfvZjJDsdWpb2NtalU94JF6QbgjvA203zj
+         YYKQAkrq8jo4zkorHoJIBszBem8h5HfCENTcbTJDKlvOF6qZs2cLjuqmgHzfG7hAx2cI
+         ICVZaSUlHDa3tRWXg1aDmzogxj/vt2/qs1z8bpGeiDINkdCh/HQ1TWzuHFP8na0YB67e
+         Czl1YcohhNAco+7pcfmikrSJlWelMFwRh6DgXj/NEFeTF8Me3APd9KEGuY1Cybcs1/5i
+         6/vA==
+X-Gm-Message-State: AOAM531LYrRW6R/uWyNEyI8PQx80cjnl3WOp7ZESEUXPld4Pil+ReCtM
+        J68vOqoC0mhp6iRNXTszHKOv8w==
+X-Google-Smtp-Source: ABdhPJwjMBzR2ffn8jAGFh1AbITe77/i8s+3mSlG9ck2W5/+LbpKcGvQF2SC8tbu3kaeL9bsC7HUvQ==
+X-Received: by 2002:adf:a2c4:: with SMTP id t4mr2784474wra.258.1631359966747;
+        Sat, 11 Sep 2021 04:32:46 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d36c:3c0c:8588:75db? ([2a01:e34:ed2f:f020:d36c:3c0c:8588:75db])
+        by smtp.googlemail.com with ESMTPSA id f23sm1216764wmc.3.2021.09.11.04.32.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Sep 2021 04:32:46 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v5.15-rc1
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Message-ID: <1fc67de6-86b4-3ed5-cab0-cb8412c8e22a@linaro.org>
+Date:   Sat, 11 Sep 2021 13:32:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 10aed6c075d44bba5c62a13654041e54fc2acb13  Merge branch 'pm-misc' into linux-next
 
-elapsed time: 1024m
+Hi Linus,
 
-configs tested: 153
-configs skipped: 3
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210910
-xtensa                    xip_kc705_defconfig
-mips                        bcm47xx_defconfig
-powerpc                     tqm8548_defconfig
-arm                      jornada720_defconfig
-arm                          imote2_defconfig
-powerpc                     akebono_defconfig
-nios2                         3c120_defconfig
-sh                         ap325rxa_defconfig
-m68k                          atari_defconfig
-h8300                    h8300h-sim_defconfig
-m68k                          multi_defconfig
-arm                         s3c6400_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                    gamecube_defconfig
-sh                            migor_defconfig
-microblaze                      mmu_defconfig
-arm                       mainstone_defconfig
-sh                          rsk7269_defconfig
-powerpc                     powernv_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                         ps3_defconfig
-mips                        nlm_xlr_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                           stm32_defconfig
-arm                         assabet_defconfig
-mips                       rbtx49xx_defconfig
-sh                          rsk7264_defconfig
-mips                         tb0287_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                   bluestone_defconfig
-mips                           ip27_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                     tqm8541_defconfig
-m68k                             alldefconfig
-m68k                       m5475evb_defconfig
-powerpc                   microwatt_defconfig
-mips                          ath25_defconfig
-arm                            zeus_defconfig
-arm                      tct_hammer_defconfig
-arm                        magician_defconfig
-powerpc                     tqm8540_defconfig
-microblaze                          defconfig
-powerpc                     mpc5200_defconfig
-arm                  colibri_pxa300_defconfig
-arm                        clps711x_defconfig
-s390                             alldefconfig
-ia64                      gensparse_defconfig
-sh                           se7712_defconfig
-arm                          ixp4xx_defconfig
-ia64                             allyesconfig
-powerpc                      pmac32_defconfig
-arm                         lpc18xx_defconfig
-powerpc                      bamboo_defconfig
-um                                  defconfig
-m68k                       m5208evb_defconfig
-arm                          ep93xx_defconfig
-powerpc                 canyonlands_defconfig
-alpha                            alldefconfig
-powerpc                 mpc8560_ads_defconfig
-arm                         mv78xx0_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                    adder875_defconfig
-parisc                              defconfig
-sh                          r7785rp_defconfig
-arm                           h5000_defconfig
-mips                        workpad_defconfig
-arm                         palmz72_defconfig
-arm                       versatile_defconfig
-x86_64               randconfig-c001-20210910
-arm                  randconfig-c002-20210910
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a013-20210910
-x86_64               randconfig-a016-20210910
-x86_64               randconfig-a012-20210910
-x86_64               randconfig-a011-20210910
-x86_64               randconfig-a014-20210910
-x86_64               randconfig-a015-20210910
-i386                 randconfig-a016-20210910
-i386                 randconfig-a011-20210910
-i386                 randconfig-a012-20210910
-i386                 randconfig-a013-20210910
-i386                 randconfig-a014-20210910
-riscv                randconfig-r042-20210910
-s390                 randconfig-r044-20210910
-arc                  randconfig-r043-20210910
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+are available in the Git repository at:
 
-clang tested configs:
-x86_64               randconfig-c007-20210910
-mips                 randconfig-c004-20210910
-powerpc              randconfig-c003-20210910
-i386                 randconfig-c001-20210910
-s390                 randconfig-c005-20210910
-x86_64               randconfig-a002-20210910
-x86_64               randconfig-a003-20210910
-x86_64               randconfig-a004-20210910
-x86_64               randconfig-a006-20210910
-x86_64               randconfig-a001-20210910
-x86_64               randconfig-a005-20210910
-i386                 randconfig-a004-20210910
-i386                 randconfig-a005-20210910
-i386                 randconfig-a002-20210910
-i386                 randconfig-a006-20210910
-i386                 randconfig-a001-20210910
-i386                 randconfig-a003-20210910
-hexagon              randconfig-r045-20210910
-hexagon              randconfig-r041-20210910
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.15-rc1
+
+for you to fetch changes up to 70ee251ded6ba24c15537f4abb8a318e233d0d1a:
+
+  thermal/drivers/qcom/spmi-adc-tm5: Don't abort probing if a sensor is
+not used (2021-09-09 16:33:29 +0200)
+
+----------------------------------------------------------------
+- Add the tegra3 thermal sensor and fix the compilation testing on
+  tegra by adding a dependency on ARCH_TEGRA along with COMPILE_TEST
+  (Dmitry Osipenko)
+
+- Fix the error code for the exynos when devm_get_clk() fails (Dan
+  Carpenter)
+
+- Add the TCC cooling support for AlderLake platform (Sumeet Pawnikar)
+
+- Add support for hardware trip points for the rcar gen3 thermal
+  driver and store TSC id as unsigned int (Niklas Söderlund)
+
+- Replace the deprecated CPU-hotplug functions get_online_cpus() and
+  put_online_cpus (Sebastian Andrzej Siewior)
+
+- Add the thermal tools directory in the MAINTAINERS file (Daniel
+  Lezcano)
+
+- Fix the Makefile and the cross compilation flags for the userspace
+  'tmon' tool (Rolf Eike Beer)
+
+- Allow to use the IMOK independently from the GDDV on Int340x (Sumeet
+  Pawnikar)
+
+- Fix the stub thermal_cooling_device_register() function prototype
+  which does not match the real function (Arnd Bergmann)
+
+- Make the thermal trip point optional in the DT bindings (Maxime
+  Ripard)
+
+- Fix a typo in a comment in the core code (Geert Uytterhoeven)
+
+- Reduce the verbosity of the trace in the SoC thermal tegra driver
+  (Dmitry Osipenko)
+
+- Add the support for the LMh (Limit Management hardware) driver on
+  the QCom platforms (Thara Gopinath)
+
+- Allow processing of HWP interrupt by adding a weak function in the
+  Intel driver (Srinivas Pandruvada)
+
+- Prevent an abort of the sensor probe is a channel is not used
+  (Matthias Kaehlcke)
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      thermal/core: Fix thermal_cooling_device_register() prototype
+
+Dan Carpenter (1):
+      thermal/drivers/exynos: Fix an error code in exynos_tmu_probe()
+
+Daniel Lezcano (1):
+      MAINTAINERS: Add missing userspace thermal tools to the thermal
+section
+
+Dmitry Osipenko (3):
+      thermal/drivers/tegra: Add driver for Tegra30 thermal sensor
+      thermal/drivers/tegra: Correct compile-testing of drivers
+      thermal/drivers/tegra-soctherm: Silence message about clamped
+temperature
+
+Geert Uytterhoeven (1):
+      thermal: Spelling s/scallbacks/callbacks/
+
+Matthias Kaehlcke (1):
+      thermal/drivers/qcom/spmi-adc-tm5: Don't abort probing if a sensor
+is not used
+
+Maxime Ripard (1):
+      dt-bindings: thermal: Make trips node optional
+
+Niklas Söderlund (2):
+      thermal/drivers/rcar_gen3_thermal: Add support for hardware trip
+points
+      thermal/drivers/rcar_gen3_thermal: Store TSC id as unsigned int
+
+Rolf Eike Beer (2):
+      thermal/tools/tmon: Improve the Makefile
+      tools/thermal/tmon: Add cross compiling support
+
+Sebastian Andrzej Siewior (1):
+      thermal/drivers/intel_powerclamp: Replace deprecated CPU-hotplug
+functions.
+
+Srinivas Pandruvada (1):
+      thermal/drivers/intel: Allow processing of HWP interrupt
+
+Sumeet Pawnikar (2):
+      drivers/thermal/intel: Add TCC cooling support for AlderLake platform
+      thermal/drivers/int340x: Use IMOK independently
+
+Thara Gopinath (3):
+      firmware: qcom_scm: Introduce SCM calls to access LMh
+      thermal/drivers/qcom: Add support for LMh driver
+      dt-bindings: thermal: Add dt binding for QCOM LMh
+
+ .../devicetree/bindings/thermal/qcom-lmh.yaml      |  82 +++
+ .../devicetree/bindings/thermal/thermal-zones.yaml |   2 +-
+ MAINTAINERS                                        |   1 +
+ drivers/firmware/qcom_scm.c                        |  58 ++
+ drivers/firmware/qcom_scm.h                        |   4 +
+ .../intel/int340x_thermal/int3400_thermal.c        |  14 +-
+ drivers/thermal/intel/intel_powerclamp.c           |   4 +-
+ drivers/thermal/intel/intel_tcc_cooling.c          |   2 +
+ drivers/thermal/intel/therm_throt.c                |   7 +-
+ drivers/thermal/intel/thermal_interrupt.h          |   3 +
+ drivers/thermal/qcom/Kconfig                       |  10 +
+ drivers/thermal/qcom/Makefile                      |   1 +
+ drivers/thermal/qcom/lmh.c                         | 232 +++++++
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   6 +
+ drivers/thermal/rcar_gen3_thermal.c                | 110 +++-
+ drivers/thermal/samsung/exynos_tmu.c               |   1 +
+ drivers/thermal/tegra/Kconfig                      |   9 +-
+ drivers/thermal/tegra/Makefile                     |   1 +
+ drivers/thermal/tegra/soctherm.c                   |   4 +-
+ drivers/thermal/tegra/tegra30-tsensor.c            | 673
++++++++++++++++++++++
+ include/linux/qcom_scm.h                           |  14 +
+ include/linux/thermal.h                            |   7 +-
+ tools/thermal/tmon/Makefile                        |  10 +-
+ 23 files changed, 1230 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+ create mode 100644 drivers/thermal/qcom/lmh.c
+ create mode 100644 drivers/thermal/tegra/tegra30-tsensor.c
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
