@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C1C407F88
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Sep 2021 20:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CED3407F83
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Sep 2021 20:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235604AbhILSr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Sep 2021 14:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S235887AbhILSrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Sep 2021 14:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235364AbhILSrZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Sep 2021 14:47:25 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF5C061574;
-        Sun, 12 Sep 2021 11:46:10 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id i25so12205761lfg.6;
-        Sun, 12 Sep 2021 11:46:10 -0700 (PDT)
+        with ESMTP id S234680AbhILSr0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Sep 2021 14:47:26 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CCFC061574;
+        Sun, 12 Sep 2021 11:46:11 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s3so13032199ljp.11;
+        Sun, 12 Sep 2021 11:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5KsYfuNRlvMrE9NTZucMYXQywZC0cvfGbwd3TTvoBus=;
-        b=F6/2gZ2lcI7EMAJusRhiZ0/WloKbWLGv7Pqkl0DzVlelronblNjwRQhrRkeh7NZzSO
-         0n4GUizzOJT9eKx/BmqRPdTEchksRuEczSXJ0xqeh5KOEyk4chmy3OqTgdlgaB3DHyjG
-         1mTws3KxM93MjvLe5iHYN/Hgq+5gBuZ+btCVJQJrOM7IRIpdfCeaFTbiY24/sG77Y2Dz
-         GqPsR4hlOxvzqn+pW15Ti0/OCWEMCCnFJl9Gnq8KaOZVJUc4NdCZCUu5XH3K3fsbZnZV
-         T5xzw2UDGOeVixDEh4aLFp/1JiD0hKstcVfhmN0LckyUMJGu4l1m/pJIzfuOCZqM5HA2
-         KBWw==
+        bh=oZx+fkLQGOQm9/g48OhQPkP+HxC/ux2/6Bzv6o5U8hw=;
+        b=RvONcgMwXanSZ/m652FgRHZAs47qc4f/nJiqCxtCn0NFqmcvwrAnmhfg1CuFkty6yX
+         zZxRein3t+AJS4D6m/sSwu9a2aUP1OoBb1SLQMosNxAhoAIS+k/gPFJcbIQfySzwsFAZ
+         wkzTVyDrKWdw+sUBck72DxFRt2FTeeqeSN+ckyxRs9dgB/vjFOTxo65bWOV/YEe8gwyD
+         vlP1eP6YvCNQlPaYVRMxuaoVjbEAqGEM6LYEEgS8L4+wLhu38Bdm8WwNLPiMXKYyiIhi
+         IGPwhyoSpor4PlVKIEbOUQVOIFuY9t6tt9aJ3tP0vsy5qwaszReN1nICEVy/+OC13tOx
+         x28Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5KsYfuNRlvMrE9NTZucMYXQywZC0cvfGbwd3TTvoBus=;
-        b=by5WzGB4iP/zESgYPLauyljmC55vBMG4g60RyEkZxea4LzRvA4oQGro6QtvRbK/9aF
-         uDPKWNgCRwNSr93jxdMaFH594xPgc1zhgCcSWPSc51yH2sQAI13sY2vhf6XDTJCaQKUG
-         PlIRy7f1AYPHV/tR8arA+a3fJTl6Z/oIQt5jKgUEy4IOnXMOg/L/TtHopfptaj+Jm/o6
-         M7AcmpP+23fTwIX8gdB8zL0DgWvIBzmvuHteyPi0XebH7gWgjpn/RWRTnR72IKFaqRL1
-         y97GwYV3pXFRoM9HOob2Fvwxz98MonKIVN6I18eCynFuzvcOrz/k/mV3BaIeqfCcLjO4
-         VZzA==
-X-Gm-Message-State: AOAM533NJ7nObNYD57yxftjwudIDG2bEcu0Q7jB/GbZF5SvfgAe8m/4T
-        JLsQZ9MuFdLAd13ByNDkPYkgle6+31o=
-X-Google-Smtp-Source: ABdhPJx2aJX677qx18QbIaaMBgBaIgcdcDE4og02j8bJno8wZ2+OMe4JANO5qGz7yOvYXsBWazcVRA==
-X-Received: by 2002:ac2:57cb:: with SMTP id k11mr473082lfo.70.1631472368956;
-        Sun, 12 Sep 2021 11:46:08 -0700 (PDT)
+        bh=oZx+fkLQGOQm9/g48OhQPkP+HxC/ux2/6Bzv6o5U8hw=;
+        b=Ngt4RJct1wRUDpaXFks0DF/xePprpcSKzXMNa9+vm6ipUs7Ptw2uKNS1jqKa2SKH3q
+         xZN3Y/Y3p2KD2y8hhOmlo7p16f1jK6PHe/v+iNYODKG8bD3mIbQo1DcDfRPyLzi0Tx0d
+         fcSZpwk37i+VV1HQzXx0nG0F0b5H/7I6RmiDYsSMEORo8HjvVNRjWXRQNHkfMxO7v9Tv
+         YoaOCuKhTfXIJkGAtBrNQCvpAaG/HAalQzT1Sl3E2tUWMK6Xku+h7bjYsSEAVE1qBXcg
+         3NLKv2r/Dt8LRrOh9HEetiY7ncI2jYLcClr9/yxbjh9mooiOaI5fCxJOkYjaK3KALowd
+         q6vQ==
+X-Gm-Message-State: AOAM5306e0kYY070oSktTc8VSHoZr078Vf1mMQeY6YN9SqT6ev4Fwhhu
+        Q4koGLx6bN+dzXbHAP+qd20=
+X-Google-Smtp-Source: ABdhPJwSX0/yNDmygLn8rBIyXQio8hvAFuX+Qzt5pxB4BKwYGBuhstNzUKLcG42SWlLAXM1YVP93AA==
+X-Received: by 2002:a2e:9c51:: with SMTP id t17mr7295656ljj.478.1631472369642;
+        Sun, 12 Sep 2021 11:46:09 -0700 (PDT)
 Received: from localhost.localdomain (46-138-83-36.dynamic.spd-mgts.ru. [46.138.83.36])
-        by smtp.gmail.com with ESMTPSA id q5sm588570lfg.36.2021.09.12.11.46.08
+        by smtp.gmail.com with ESMTPSA id q5sm588570lfg.36.2021.09.12.11.46.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Sep 2021 11:46:08 -0700 (PDT)
+        Sun, 12 Sep 2021 11:46:09 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,9 +57,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Chanwoo Choi <cw00.choi@samsung.com>
 Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v1 1/4] opp: Add more resource-managed variants of dev_pm_opp_of_add_table()
-Date:   Sun, 12 Sep 2021 21:44:55 +0300
-Message-Id: <20210912184458.17995-2-digetx@gmail.com>
+Subject: [PATCH v1 2/4] PM / devfreq: Add devm_devfreq_add_governor()
+Date:   Sun, 12 Sep 2021 21:44:56 +0300
+Message-Id: <20210912184458.17995-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210912184458.17995-1-digetx@gmail.com>
 References: <20210912184458.17995-1-digetx@gmail.com>
@@ -69,130 +69,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add resource-managed variants of dev_pm_opp_of_add_table_indexed() and
-dev_pm_opp_of_add_table_noclk(), allowing drivers to remove boilerplate
-code.
+Add resource-managed variant of devfreq_add_governor().
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/of.c       | 46 +++++++++++++++++++++++++++++++++++-------
- include/linux/pm_opp.h | 12 +++++++++++
- 2 files changed, 51 insertions(+), 7 deletions(-)
+ drivers/devfreq/devfreq.c  | 26 ++++++++++++++++++++++++++
+ drivers/devfreq/governor.h |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 2a97c6535c4c..bd01ecb1d85c 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -1081,6 +1081,17 @@ static void devm_pm_opp_of_table_release(void *data)
- 	dev_pm_opp_of_remove_table(data);
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 85faa7a5c7d1..d3af000ec290 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -1301,6 +1301,32 @@ int devfreq_add_governor(struct devfreq_governor *governor)
  }
+ EXPORT_SYMBOL(devfreq_add_governor);
  
-+static int devm_of_add_table_indexed(struct device *dev, int index, bool getclk)
++static void devm_devfreq_remove_governor(void *governor)
 +{
-+	int ret;
-+
-+	ret = _of_add_table_indexed(dev, index, getclk);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, devm_pm_opp_of_table_release, dev);
++	devfreq_remove_governor(governor);
 +}
 +
- /**
-  * devm_pm_opp_of_add_table() - Initialize opp table from device tree
-  * @dev:	device pointer used to lookup OPP table.
-@@ -1102,13 +1113,7 @@ static void devm_pm_opp_of_table_release(void *data)
-  */
- int devm_pm_opp_of_add_table(struct device *dev)
- {
--	int ret;
--
--	ret = dev_pm_opp_of_add_table(dev);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, devm_pm_opp_of_table_release, dev);
-+	return devm_of_add_table_indexed(dev, 0, true);
- }
- EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table);
- 
-@@ -1151,6 +1156,19 @@ int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_indexed);
- 
 +/**
-+ * devm_pm_opp_of_add_table_indexed() - Initialize indexed opp table from device tree
-+ * @dev:	device pointer used to lookup OPP table.
-+ * @index:	Index number.
++ * devm_devfreq_add_governor() - Add devfreq governor
++ * @dev:	device which adds devfreq governor
++ * @governor:	the devfreq governor to be added
 + *
-+ * This is a resource-managed variant of dev_pm_opp_of_add_table_indexed().
++ * This is a resource-managed variant of devfreq_add_governor().
 + */
-+int devm_pm_opp_of_add_table_indexed(struct device *dev, int index)
++int devm_devfreq_add_governor(struct device *dev,
++			      struct devfreq_governor *governor)
 +{
-+	return devm_of_add_table_indexed(dev, index, true);
++	int err;
++
++	err = devfreq_add_governor(governor);
++	if (err)
++		return err;
++
++	return devm_add_action_or_reset(dev, devm_devfreq_remove_governor,
++					governor);
 +}
-+EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table_indexed);
++EXPORT_SYMBOL(devm_devfreq_add_governor);
 +
  /**
-  * dev_pm_opp_of_add_table_noclk() - Initialize indexed opp table from device
-  *		tree without getting clk for device.
-@@ -1169,6 +1187,20 @@ int dev_pm_opp_of_add_table_noclk(struct device *dev, int index)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_noclk);
+  * devfreq_remove_governor() - Remove devfreq feature from a device.
+  * @governor:	the devfreq governor to be removed
+diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+index 2d69a0ce6291..0d70a9ad951e 100644
+--- a/drivers/devfreq/governor.h
++++ b/drivers/devfreq/governor.h
+@@ -94,4 +94,7 @@ static inline int devfreq_update_stats(struct devfreq *df)
  
-+/**
-+ * devm_pm_opp_of_add_table_noclk() - Initialize indexed opp table from device
-+ *		tree without getting clk for device.
-+ * @dev:	device pointer used to lookup OPP table.
-+ * @index:	Index number.
-+ *
-+ * This is a resource-managed variant of dev_pm_opp_of_add_table_noclk().
-+ */
-+int devm_pm_opp_of_add_table_noclk(struct device *dev, int index)
-+{
-+	return devm_of_add_table_indexed(dev, index, false);
-+}
-+EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table_noclk);
+ 	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
+ }
 +
- /* CPU device specific helpers */
- 
- /**
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 84150a22fd7c..a95d6fdd20b6 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -439,7 +439,9 @@ static inline int dev_pm_opp_sync_regulators(struct device *dev)
- #if defined(CONFIG_PM_OPP) && defined(CONFIG_OF)
- int dev_pm_opp_of_add_table(struct device *dev);
- int dev_pm_opp_of_add_table_indexed(struct device *dev, int index);
-+int devm_pm_opp_of_add_table_indexed(struct device *dev, int index);
- int dev_pm_opp_of_add_table_noclk(struct device *dev, int index);
-+int devm_pm_opp_of_add_table_noclk(struct device *dev, int index);
- void dev_pm_opp_of_remove_table(struct device *dev);
- int devm_pm_opp_of_add_table(struct device *dev);
- int dev_pm_opp_of_cpumask_add_table(const struct cpumask *cpumask);
-@@ -465,11 +467,21 @@ static inline int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
- 	return -EOPNOTSUPP;
- }
- 
-+static inline int devm_pm_opp_of_add_table_indexed(struct device *dev, int index)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- static inline int dev_pm_opp_of_add_table_noclk(struct device *dev, int index)
- {
- 	return -EOPNOTSUPP;
- }
- 
-+static inline int devm_pm_opp_of_add_table_noclk(struct device *dev, int index)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- static inline void dev_pm_opp_of_remove_table(struct device *dev)
- {
- }
++int devm_devfreq_add_governor(struct device *dev,
++			      struct devfreq_governor *governor);
+ #endif /* _GOVERNOR_H */
 -- 
 2.32.0
 
