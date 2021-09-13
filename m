@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4F3409AF0
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6B8409AED
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345355AbhIMRkE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Sep 2021 13:40:04 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:43672 "EHLO inva020.nxp.com"
+        id S1344544AbhIMRkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 13:40:02 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:58796 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244125AbhIMRjo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 Sep 2021 13:39:44 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CC4AF1A0396;
-        Mon, 13 Sep 2021 19:38:26 +0200 (CEST)
+        id S244247AbhIMRjp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Sep 2021 13:39:45 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B49E02005E2;
+        Mon, 13 Sep 2021 19:38:27 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BE23F1A0394;
-        Mon, 13 Sep 2021 19:38:26 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9CD002005DD;
+        Mon, 13 Sep 2021 19:38:27 +0200 (CEST)
 Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id EF06520363;
-        Mon, 13 Sep 2021 19:38:25 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id CF2F020363;
+        Mon, 13 Sep 2021 19:38:26 +0200 (CEST)
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -39,9 +39,9 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: [RFC 05/19] devfreq: imx8m-ddrc: Use the opps acquired from EL3
-Date:   Mon, 13 Sep 2021 20:38:00 +0300
-Message-Id: <1631554694-9599-6-git-send-email-abel.vesa@nxp.com>
+Subject: [RFC 06/19] devfreq: imx8m-ddrc: Add late system sleep PM ops
+Date:   Mon, 13 Sep 2021 20:38:01 +0300
+Message-Id: <1631554694-9599-7-git-send-email-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
 References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
@@ -50,100 +50,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-i.MX8M platforms get their dram OPPs from the EL3.
-We don't need to duplicate that in the kernel dram dts node.
-We should just trust the OPPs provided by the EL3.
+Seems that, in order to be able to resume from suspend, the dram rate
+needs to be the highest one available. Therefore, add the late system
+suspend/resume PM ops which set the highest rate on suspend and the
+latest one used before suspending on resume.
 
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
- drivers/devfreq/imx8m-ddrc.c | 50 +++---------------------------------
- 1 file changed, 3 insertions(+), 47 deletions(-)
+ drivers/devfreq/imx8m-ddrc.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
-index 583123bf2100..f18a5c3c1c03 100644
+index f18a5c3c1c03..f39741b4a0b0 100644
 --- a/drivers/devfreq/imx8m-ddrc.c
 +++ b/drivers/devfreq/imx8m-ddrc.c
-@@ -321,38 +321,9 @@ static int imx8m_ddrc_init_freq_info(struct device *dev)
- 		if (freq->dram_core_parent_index == 2 &&
- 				freq->dram_alt_parent_index == 0)
- 			return -ENODEV;
--	}
--
--	return 0;
--}
--
--static int imx8m_ddrc_check_opps(struct device *dev)
--{
--	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
--	struct imx8m_ddrc_freq *freq_info;
--	struct dev_pm_opp *opp;
--	unsigned long freq;
--	int i, opp_count;
--
--	/* Enumerate DT OPPs and disable those not supported by firmware */
--	opp_count = dev_pm_opp_get_opp_count(dev);
--	if (opp_count < 0)
--		return opp_count;
--	for (i = 0, freq = 0; i < opp_count; ++i, ++freq) {
--		opp = dev_pm_opp_find_freq_ceil(dev, &freq);
--		if (IS_ERR(opp)) {
--			dev_err(dev, "Failed enumerating OPPs: %ld\n",
--				PTR_ERR(opp));
--			return PTR_ERR(opp);
--		}
--		dev_pm_opp_put(opp);
+@@ -72,6 +72,8 @@ struct imx8m_ddrc {
+ 	struct clk *dram_alt;
+ 	struct clk *dram_apb;
  
--		freq_info = imx8m_ddrc_find_freq(priv, freq);
--		if (!freq_info) {
--			dev_info(dev, "Disable unsupported OPP %luHz %luMT/s\n",
--					freq, DIV_ROUND_CLOSEST(freq, 250000));
--			dev_pm_opp_disable(dev, freq);
--		}
-+		if (dev_pm_opp_add(dev, freq->rate * 250000, 0))
-+			return -ENODEV;
- 	}
- 
- 	return 0;
-@@ -360,7 +331,6 @@ static int imx8m_ddrc_check_opps(struct device *dev)
- 
- static void imx8m_ddrc_exit(struct device *dev)
- {
--	dev_pm_opp_of_remove_table(dev);
- }
- 
- static int imx8m_ddrc_probe(struct platform_device *pdev)
-@@ -407,16 +377,7 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = dev_pm_opp_of_add_table(dev);
--	if (ret < 0) {
--		dev_err(dev, "failed to get OPP table\n");
--		return ret;
--	}
--
--	ret = imx8m_ddrc_check_opps(dev);
--	if (ret < 0)
--		goto err;
--
-+	priv->profile.polling_ms = 1000;
- 	priv->profile.target = imx8m_ddrc_target;
- 	priv->profile.exit = imx8m_ddrc_exit;
- 	priv->profile.get_cur_freq = imx8m_ddrc_get_cur_freq;
-@@ -427,13 +388,8 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->devfreq)) {
- 		ret = PTR_ERR(priv->devfreq);
- 		dev_err(dev, "failed to add devfreq device: %d\n", ret);
--		goto err;
- 	}
- 
--	return 0;
--
--err:
--	dev_pm_opp_of_remove_table(dev);
++	unsigned long suspend_rate;
++	unsigned long resume_rate;
+ 	int freq_count;
+ 	struct imx8m_ddrc_freq freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];
+ };
+@@ -271,6 +273,22 @@ static int imx8m_ddrc_target(struct device *dev, unsigned long *freq, u32 flags)
  	return ret;
  }
  
++static int imx8m_ddrc_suspend(struct device *dev)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++
++	priv->resume_rate = clk_get_rate(priv->dram_core);
++
++	return imx8m_ddrc_target(dev, &priv->suspend_rate, 0);
++}
++
++static int imx8m_ddrc_resume(struct device *dev)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++
++	return imx8m_ddrc_target(dev, &priv->resume_rate, 0);
++}
++
+ static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned long *freq)
+ {
+ 	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+@@ -324,6 +342,9 @@ static int imx8m_ddrc_init_freq_info(struct device *dev)
+ 
+ 		if (dev_pm_opp_add(dev, freq->rate * 250000, 0))
+ 			return -ENODEV;
++
++		if (index ==  0)
++			priv->suspend_rate = freq->rate * 250000;
+ 	}
+ 
+ 	return 0;
+@@ -399,11 +420,16 @@ static const struct of_device_id imx8m_ddrc_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);
+ 
++static const struct dev_pm_ops imx8m_ddrc_pm_ops = {
++	SET_LATE_SYSTEM_SLEEP_PM_OPS(imx8m_ddrc_suspend, imx8m_ddrc_resume)
++};
++
+ static struct platform_driver imx8m_ddrc_platdrv = {
+ 	.probe		= imx8m_ddrc_probe,
+ 	.driver = {
+ 		.name	= "imx8m-ddrc-devfreq",
+-		.of_match_table = imx8m_ddrc_of_match,
++		.pm = &imx8m_ddrc_pm_ops,
++		.of_match_table = of_match_ptr(imx8m_ddrc_of_match),
+ 	},
+ };
+ module_platform_driver(imx8m_ddrc_platdrv);
 -- 
 2.31.1
 
