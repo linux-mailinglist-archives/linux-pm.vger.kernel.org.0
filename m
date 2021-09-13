@@ -2,123 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF52409AAC
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B4F409AC5
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238180AbhIMR3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Sep 2021 13:29:22 -0400
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:44030 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbhIMR3O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Sep 2021 13:29:14 -0400
-Received: by mail-oi1-f170.google.com with SMTP id w19so15013707oik.10;
-        Mon, 13 Sep 2021 10:27:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zdKSajtGE1WLdR1EN0XVNqkFzr63oghr/1GUZ5MQ9jU=;
-        b=WdhH25xgQSSCgQVurnR6FYISzqPuxlYoLOQu2CIZe0zrBk3oeZOJbfaZfbs9xf1hXH
-         4+d24q4BjZgyNE/GW38zPYh0Fj0Yh+HB6XNHr0u/g6E85Ks6FXKAxJ2ANVATcd8l4Kgg
-         PEXUoV/4mrqAWqZq1p7oTBg9TfHtu/lndcMAojv0Jenz97L+fCQam7x4R7n6vsmYYVnN
-         RcY1qdZNfOK4tDr4MMWCM7RAx9HL12EdSXMQJ46du3zyUlzi8TAc1jhq2PdNzqPJSOow
-         63VV7In36LdsWzST7NQXHm/a5+cpIftnFgY1qQXg/nmhttotkVZ2SOo0Ufrev9x7clWp
-         PPpw==
-X-Gm-Message-State: AOAM533eHz5c1bWdHIz2VhJPY2CMOsJbAPhu9NzecH5DmLbmtDpGbVrA
-        8EowRij85PQWSJ++NCM6Pvnwwn8zXBk51Sq/W48=
-X-Google-Smtp-Source: ABdhPJwCVw3Fu91YqcoFNhErZVn6L/bKGxexNKukCG+Ecu6T8MRCWnvEdZbFs2c3COaeJ2K53Y+eExfkfXZmYKYMfbQ=
-X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr8277763ois.69.1631554077926;
- Mon, 13 Sep 2021 10:27:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210912185029.5704-1-dsmythies@telus.net>
-In-Reply-To: <20210912185029.5704-1-dsmythies@telus.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Sep 2021 19:27:47 +0200
-Message-ID: <CAJZ5v0g-fVO8_DGYtSF7e-VYc2Qzu60Ak0VK_f4x-V7dbO=+Eg@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Override parameters if HWP
- forced by BIOS
-To:     Doug Smythies <doug.smythies@gmail.com>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
+        id S243695AbhIMRjk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 13:39:40 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:58644 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242897AbhIMRjj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Sep 2021 13:39:39 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 60EB22005D8;
+        Mon, 13 Sep 2021 19:38:22 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 530CD2005AC;
+        Mon, 13 Sep 2021 19:38:22 +0200 (CEST)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 812EA20363;
+        Mon, 13 Sep 2021 19:38:21 +0200 (CEST)
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: [RFC 00/19] Add interconnect and devfreq support for i.MX8MQ
+Date:   Mon, 13 Sep 2021 20:37:55 +0300
+Message-Id: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 12, 2021 at 8:51 PM Doug Smythies <doug.smythies@gmail.com> wrote:
->
-> If HWP has been already been enabled by BIOS, it may be
-> necessary to override some kernel command line parameters.
-> Once it has been enabled it requires a reset to be disabled.
->
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> ---
->  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++--------
->  1 file changed, 14 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 1097f826ad70..8c176b7dae41 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3205,11 +3205,15 @@ static int __init intel_pstate_init(void)
->         if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
->                 return -ENODEV;
->
-> -       if (no_load)
-> -               return -ENODEV;
-> -
->         id = x86_match_cpu(hwp_support_ids);
->         if (id) {
-> +               bool hwp_forced = intel_pstate_hwp_is_enabled();
-> +
-> +               if (hwp_forced)
-> +                       pr_info("HWP enabled by BIOS\n");
-> +               else if (no_load)
-> +                       return -ENODEV;
-> +
->                 copy_cpu_funcs(&core_funcs);
->                 /*
->                  * Avoid enabling HWP for processors without EPP support,
-> @@ -3219,8 +3223,7 @@ static int __init intel_pstate_init(void)
->                  * If HWP is enabled already, though, there is no choice but to
->                  * deal with it.
->                  */
-> -               if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
-> -                   intel_pstate_hwp_is_enabled()) {
-> +               if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
->                         hwp_active++;
->                         hwp_mode_bdw = id->driver_data;
->                         intel_pstate.attr = hwp_cpufreq_attrs;
-> @@ -3235,7 +3238,11 @@ static int __init intel_pstate_init(void)
->
->                         goto hwp_cpu_matched;
->                 }
-> +               pr_info("HWP not enabled\n");
->         } else {
-> +               if (no_load)
-> +                       return -ENODEV;
-> +
->                 id = x86_match_cpu(intel_pstate_cpu_ids);
->                 if (!id) {
->                         pr_info("CPU model not supported\n");
-> @@ -3314,10 +3321,9 @@ static int __init intel_pstate_setup(char *str)
->         else if (!strcmp(str, "passive"))
->                 default_driver = &intel_cpufreq;
->
-> -       if (!strcmp(str, "no_hwp")) {
-> -               pr_info("HWP disabled\n");
-> +       if (!strcmp(str, "no_hwp"))
->                 no_hwp = 1;
-> -       }
-> +
->         if (!strcmp(str, "force"))
->                 force_load = 1;
->         if (!strcmp(str, "hwp_only"))
-> --
+In vendor tree there is something called busfreq but it is
+non-upstreamable. This approach with interconnect+devfreq gives us the
+same functionality by using already upstream and mature subsystems.
+This series is more of a proof-of-concept.
 
-Applied as 5.15-rc material, thanks!
+Abel Vesa (19):
+  dt-bindings: interconnect: imx8mq: Add missing pl301 and SAI ids
+  devfreq: imx-bus: Switch governor to powersave
+  devfreq: imx-bus: Decouple imx-bus from icc made
+  devfreq: imx8m-ddrc: Change governor to powersave
+  devfreq: imx8m-ddrc: Use the opps acquired from EL3
+  devfreq: imx8m-ddrc: Add late system sleep PM ops
+  interconnect: imx: Switch from imx_icc_node_adj_desc to fsl,icc-id
+    node assignment
+  interconnect: imx8: Remove the imx_icc_node_adj_desc
+  interconnect: imx8mq: Add the pl301_per_m and pl301_wakeup nodes and
+    subnodes
+  interconnect: imx8mq: Add of_match_table
+  interconnect: imx: Add imx_icc_get_bw and imx_icc_aggregate functions
+  arm64: dts: imx8mq: Add fsl,icc-id property to ddrc node
+  arm64: dts: imx8mq: Add fsl,icc-id to noc node
+  arm64: dts: imx8mq: Add all pl301 nodes
+  arm64: dts: imx8mq: Add the interconnect node
+  arm64: dts: imx8mq: Add interconnect properties to icc consumer nodes
+  net: ethernet: fec_main: Add interconnect support
+  mmc: sdhci-esdhc-imx: Add interconnect support
+  arm64: defconfig: Add necessary configs for icc+devfreq on i.MX8MQ
+
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 222 +++++++++++++++++++++-
+ arch/arm64/configs/defconfig              |   9 +-
+ drivers/devfreq/imx-bus.c                 |  42 +---
+ drivers/devfreq/imx8m-ddrc.c              |  78 +++-----
+ drivers/interconnect/imx/imx.c            |  92 +++++----
+ drivers/interconnect/imx/imx.h            |  19 +-
+ drivers/interconnect/imx/imx8mm.c         |  32 +---
+ drivers/interconnect/imx/imx8mn.c         |  28 +--
+ drivers/interconnect/imx/imx8mq.c         |  59 +++---
+ drivers/mmc/host/sdhci-esdhc-imx.c        |  27 +++
+ drivers/net/ethernet/freescale/fec.h      |   3 +
+ drivers/net/ethernet/freescale/fec_main.c |  19 ++
+ include/dt-bindings/interconnect/imx8mq.h |   9 +
+ 13 files changed, 422 insertions(+), 217 deletions(-)
+
+-- 
+2.31.1
+
