@@ -2,135 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C42FB408884
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 11:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CF3408922
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 12:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238809AbhIMJuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Sep 2021 05:50:19 -0400
-Received: from mail-bn8nam12on2054.outbound.protection.outlook.com ([40.107.237.54]:6785
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234476AbhIMJuS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 Sep 2021 05:50:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xd1F8g/tglWkfXPyZftWjcHrPfYtzVLzIM96eZj3WfyEpjVCCSL5pMJcmXIY9RlIwBhpowXelEpyxKHf/JdilTPccrdKzF4p8gBproz7Dm5Vg5KgqjuaX/qmgo6ZuXncSkBcltiKS9rE77vIlEgdUX7ZKAd6gWmu/BwLu2KH5ttgpwNygBhlYDkOTf1OFGL571Tw9ARaMJsqq2zr1hHN869ZKhIJNS1t0E1bGOSwhTB8zu0/QhRCC7uI/nZANpcSHZkhFkxLfLjajIGajsfc5G/QWIy0ChZAU8xAhCLVqvsNtmAhnuTVdk0mUieCmba1VUusDPLu2zSday4o2PygRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=XQktMvw3mK1EhN16ykgpqAV3AxfCoJil+f4ApHYi1vI=;
- b=ZekvPK4BonpefdV2oPjRzF9FkRetUptmEOGslndx7/Q+3nw7ItT7GZKG6tGQb/OWnGMlKil9LwNcHfuV1Uu/osVXzyqHUlikmHzvJblT4aeb2GfkbFp3UZP31/sND6H81lP4y0/91CNFLpZwraVAW6F6ddH3L4+BMCRHjmnd5B/wvWUXYZxW0QyD4eJFSCQQBoSDHYrHI/gAdwehQcd4vU4AzN/1fvj6zCitbBjauY/7VnebkcJKK9nzgNWjnnA1jjqTPYJLG41/e9WaCcJK6ckCEzvNtQ3Ju8FEJ8J4u/CMVrm5lMXmk363McW46ut5wqCwPWIZ7R/5EADwulH2qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XQktMvw3mK1EhN16ykgpqAV3AxfCoJil+f4ApHYi1vI=;
- b=DLctx2Mm/ADEO8qQJV2xe/pkBvwJ/xTHK3oVxeljkLv2yHoDAeuz3wm/2h8q8f6O1fcTSK2PSh/zhzBSfUmUbJmo4NzDGMPlgsTCcIL3cnxAQi117vjMTpNqIsqrOvD6wGwmF/M8j0MgoI5bLjCKVMUJD4itN4oRRc8DfBONEwM=
-Received: from DM5PR04CA0057.namprd04.prod.outlook.com (2603:10b6:3:ef::19) by
- DM5PR1201MB0252.namprd12.prod.outlook.com (2603:10b6:4:5b::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4500.14; Mon, 13 Sep 2021 09:48:59 +0000
-Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:ef:cafe::bd) by DM5PR04CA0057.outlook.office365.com
- (2603:10b6:3:ef::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend
- Transport; Mon, 13 Sep 2021 09:48:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; alien8.de; dkim=none (message not signed)
- header.d=none;alien8.de; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 09:48:59 +0000
-Received: from hr-amd (10.180.168.240) by SATLEXMB04.amd.com (10.181.40.145)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 13 Sep
- 2021 04:48:55 -0500
-Date:   Mon, 13 Sep 2021 17:48:51 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Ingo Molnar" <mingo@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 01/19] x86/cpufreatures: add AMD CPPC extension feature
- flag
-Message-ID: <20210913094851.GB3731830@hr-amd>
-References: <20210908150001.3702552-1-ray.huang@amd.com>
- <20210908150001.3702552-2-ray.huang@amd.com>
- <YTpLO6M2C0IqJ9XC@zn.tnic>
+        id S239156AbhIMKi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 06:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235467AbhIMKi4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Sep 2021 06:38:56 -0400
+X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Sep 2021 03:37:39 PDT
+Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A3EC061574;
+        Mon, 13 Sep 2021 03:37:39 -0700 (PDT)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id PjK4mY9mDpQdWPjK6m2WBC; Mon, 13 Sep 2021 12:36:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1631529389; bh=ts0p47VDy1RuNtn8qktl3hYi7SGUCH+xhpXXyzEAqtw=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=uT8KXGzgjksultoKLa6we++Z5zQLHWwzxQ1lEaWts3V+Qt0LNNuLFKu25NrWVtuZo
+         1LjgM6hHryuY3vq86+RddrMjTRLIOGkgo4SfsdiOrUr48cKtu+vNfkx0MjBiwNcpfO
+         x6kplKvSIXRoXxHHPc0inP48WEZxdSkXCSqJm8OA8GgCSgu+LIvqbVnp4QM5ZYTn7J
+         6MU68wd2j4SMjAOYTSWc5DvNC5MeX1A8pf+1CWNkki8e9D88yU+UdZUnskF6jcxZTb
+         x7hQZjC3/LvQLv9qw4W/mb7PL04dcOPrwcCuvqA4xG8KRGj+HQy9zMnX4rlqCMTzEn
+         tPbVQ1sl7yM4Q==
+Subject: Re: [PATCH v11 22/34] media: dt: bindings: tegra-vde: Convert to
+ schema
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210912200832.12312-1-digetx@gmail.com>
+ <20210912200832.12312-23-digetx@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <0feef7a8-932e-0190-1043-bba7912f9599@xs4all.nl>
+Date:   Mon, 13 Sep 2021 12:36:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YTpLO6M2C0IqJ9XC@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8af216e3-205c-4366-6cfc-08d9769bb5ce
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB0252:
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB0252E9922EBAAB12B975252BECD99@DM5PR1201MB0252.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:597;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GD1gL0neXDTecTymXpIy7CSYd9i72xqb8TrZoZYsE1I9vkCwm0rzgV03M9BI04Rkdt7zZLlIoNCddSD5jDaxKe0FvNuNkNYPP3bGmPoeenVGTO4zePA9QijMeZnqiVGf2QIdCXVt5LK/3xTIWCtBFEGp5x4OqNfJhZnkBIcU/jjd1fv77441k94hDr0EmWCezYuGLi5rTwr6NMf3DzvKKuIQxadZ4sE5bHhg2JNAKM/7RPBttkpPiXYSau9uEAm3s9aLhGl9A//aFx0A+lN6/+Uw5GHkaM94nMer2KNxw4209hdtRHM2V+FNLr8PGJI3tEDYzHCoCeTlVvLwDoWf1LN+QhVFAZ324kUAWREpnDgsSY07Miu7gAMeM+ND3So7ERYHBzQRYNkJVRpQDz+A5KwHoYslzeaRmhXq5kIVoY71OL1N0a+2x4NHKfrM/Vu7MEOJdNqxcuUJ0yLhM3d6ckacvPt8waX+rYa8hTNuJI65WvbpamjtGJ6+IMF3aiBWDEvr+veGP+PLNDXEmWyV7GFZqUxEx+IKEYZ5Fw8nbDY2cw0eEOHSZiaB9o2UwYH5qOsHLqKgZet34BqclhPGS8bMsXdu6lYXfomSusq14mRPtu/PNlEuNi1crEMGRk1OgwbNdJzLPLbMYJQGA7vW7c6KgPrp155vcNT2fb7SaYfFwFQn1BPF2sK938akEQH+CmJ/vDE4OjW2uFIxv79XkNP2fELrEGRaMfLrmaybsRE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39860400002)(396003)(36840700001)(46966006)(478600001)(70586007)(8936002)(82310400003)(5660300002)(356005)(6666004)(186003)(16526019)(47076005)(81166007)(9686003)(2906002)(4326008)(8676002)(70206006)(336012)(36860700001)(33656002)(33716001)(1076003)(55016002)(6916009)(26005)(316002)(82740400003)(54906003)(426003)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 09:48:59.0849
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8af216e3-205c-4366-6cfc-08d9769bb5ce
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0252
+In-Reply-To: <20210912200832.12312-23-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfBdOdOXcUGbOy8OWfAC0zxt/5ZR1EjxHBJ5gYl1f4tGuUDl47qC7VjDg1mAM1PInADc627yzwRlN776HivHd3rTukcU69b8xPC7ACa9E2OCKz91uYxVL
+ 3pdE4kFomOEJlyK5XDfxdXtkeeBC6mOcEhqdqQwH4Zws8gqXIk0y1SM6A/xR4dq6DXJT7ktzTegdDG2vf69Bf1Inc0nSWgZcbClZjXwBh/6PUzQQyvzHLfsA
+ MRCg1hz61XV+l3VOAjxTdsKpAIGBo5kKouuEEKeKcN1jvS8Y8nT2StkOml2QcAp89m6Wk/ljTRQJt50Pf/R0Xpa6GKRLtA+x9Yq2QyyozRGaEmdryuHf2IDp
+ Q6SW4rvA5uBRNutfkivCZXigSZU5qHJ5kw750tkFQIIHV4Q1Hgy7BxRlCWLDxS8PfBn9Lp7H+asKVWAphKn3QHcek/YltS/ABCs0FsZ/YxLaK0+MXtijtE8N
+ 7IoOEhoYPPSuxCJVYRY2UIX6BUYkHxG05T8QxzP2/1OIQgwJfCAP+XbzTGzEjP6pVMvZubLc12lsVJWCTiZdTLStuvHC7VjW/9q0/DSNdZjEcJSwFcQ+5dyU
+ 0eKCP9Dh5LYZT7DIAVFey8OVjpZ9uaftPAxLqk1JoPg7m9mI9PoDMKZdyopexXSAEkA+hIx7xrEvoftuPWB7pcPk0PvijwpFW0auOy3J3kPh/369Sb87TZNZ
+ aPAjyWc0MbC3Mh70ruxm3cUiNK/HT/bmjvtwWG3dOkjR32K9siusAxDnRz9cS4EDVOuoyYuZ13/BO7ElqRAuOx5q0R3emXQu2tGq4Lm3cJIySdIAPOeQHKlC
+ Pt/2uJZ1rD/V8hREozP5HWMpb/VDmz2UKrzSUl/oM93MrtwwA5OReojHDK/jBj047YRvvi048iAM+C77MmGajROkXVOkz5zTgmTdgFpLyczCfSLozwWsOB8/
+ /WmY+e3vD4ivhhMDYTMT1pKxMCf5o0J9NBATSWpd+8gyniN4r86bss3nC+zossl+DEmHbl9DW37wvlJaoD0uAuclOEZkulWi/mTtMePBwtj9f2qDzfpZ1kJ1
+ GMs/9dNnpONv9MRYquVtr/jvyP+/QyoAuPUWqaA14jfh9yQKudX8GRbJ7H3I9R9OnMQUMzEV8DF73tiZK/ez+BpOXxl4QyeKAgjItyGL2Mgf5aO2W51MBFUA
+ vcBqz+fImYuWTCXG/ganwWyK78mkW/C/g6Kw1BNFDg8+AQek3w9LKWRqiiYlFGaouizKDG4jvgu0tfNQQRQWEAI27rJZnQmS9XbIySYi3JeHzJsYHbI/eq12
+ HB9rl2aipViGOkt0q/AYjTyawB5Sw+66uJO0J7XD9CgnHeRUD9T11P5quyCclU6iI5roRQOJt9rwOjTWp5qC2bm5CYZMtQ4P/nzrPZDQSkLzGV+KgPC0vZzo
+ 2tBxqWDknYbfj2P6g7YMu8cpLcqf0WxFjGnH8w==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Boris,
-
-On Fri, Sep 10, 2021 at 01:58:19AM +0800, Borislav Petkov wrote:
-> On Wed, Sep 08, 2021 at 10:59:43PM +0800, Huang Rui wrote:
-> > Add Collaborative Processor Performance Control Extension feature flag
-> > for AMD processors.
-> > 
-> > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > ---
-> >  arch/x86/include/asm/cpufeatures.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> > index d0ce5cfd3ac1..f7aea50e3371 100644
-> > --- a/arch/x86/include/asm/cpufeatures.h
-> > +++ b/arch/x86/include/asm/cpufeatures.h
-> > @@ -313,6 +313,7 @@
-> >  #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
-> >  #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
-> >  #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
-> > +#define X86_FEATURE_AMD_CPPC_EXT	(13*32+27) /* Collaborative Processor Performance Control Extension */
+On 12/09/2021 22:08, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra video decoder binding to schema.
 > 
-> Why not simply X86_FEATURE_AMD_CPPC ?
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-This feature flag indicates the full MSR hardware solution of AMD P-States,
-if it is not set, that means we will go with in shared memory hardware
-solution. So we name this as extension. I will explain the details in the
-commit log at V2. ;-)
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Thanks,
-Ray
+Regards,
+
+	Hans
+
+> ---
+>  .../bindings/media/nvidia,tegra-vde.txt       |  64 -----------
+>  .../bindings/media/nvidia,tegra-vde.yaml      | 107 ++++++++++++++++++
+>  2 files changed, 107 insertions(+), 64 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt b/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
+> deleted file mode 100644
+> index 602169b8aa19..000000000000
+> --- a/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
+> +++ /dev/null
+> @@ -1,64 +0,0 @@
+> -NVIDIA Tegra Video Decoder Engine
+> -
+> -Required properties:
+> -- compatible : Must contain one of the following values:
+> -   - "nvidia,tegra20-vde"
+> -   - "nvidia,tegra30-vde"
+> -   - "nvidia,tegra114-vde"
+> -   - "nvidia,tegra124-vde"
+> -   - "nvidia,tegra132-vde"
+> -- reg : Must contain an entry for each entry in reg-names.
+> -- reg-names : Must include the following entries:
+> -  - sxe
+> -  - bsev
+> -  - mbe
+> -  - ppe
+> -  - mce
+> -  - tfe
+> -  - ppb
+> -  - vdma
+> -  - frameid
+> -- iram : Must contain phandle to the mmio-sram device node that represents
+> -         IRAM region used by VDE.
+> -- interrupts : Must contain an entry for each entry in interrupt-names.
+> -- interrupt-names : Must include the following entries:
+> -  - sync-token
+> -  - bsev
+> -  - sxe
+> -- clocks : Must include the following entries:
+> -  - vde
+> -- resets : Must contain an entry for each entry in reset-names.
+> -- reset-names : Should include the following entries:
+> -  - vde
+> -
+> -Optional properties:
+> -- resets : Must contain an entry for each entry in reset-names.
+> -- reset-names : Must include the following entries:
+> -  - mc
+> -- iommus: Must contain phandle to the IOMMU device node.
+> -
+> -Example:
+> -
+> -video-codec@6001a000 {
+> -	compatible = "nvidia,tegra20-vde";
+> -	reg = <0x6001a000 0x1000 /* Syntax Engine */
+> -	       0x6001b000 0x1000 /* Video Bitstream Engine */
+> -	       0x6001c000  0x100 /* Macroblock Engine */
+> -	       0x6001c200  0x100 /* Post-processing Engine */
+> -	       0x6001c400  0x100 /* Motion Compensation Engine */
+> -	       0x6001c600  0x100 /* Transform Engine */
+> -	       0x6001c800  0x100 /* Pixel prediction block */
+> -	       0x6001ca00  0x100 /* Video DMA */
+> -	       0x6001d800  0x300 /* Video frame controls */>;
+> -	reg-names = "sxe", "bsev", "mbe", "ppe", "mce",
+> -		    "tfe", "ppb", "vdma", "frameid";
+> -	iram = <&vde_pool>; /* IRAM region */
+> -	interrupts = <GIC_SPI  9 IRQ_TYPE_LEVEL_HIGH>, /* Sync token interrupt */
+> -		     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>, /* BSE-V interrupt */
+> -		     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>; /* SXE interrupt */
+> -	interrupt-names = "sync-token", "bsev", "sxe";
+> -	clocks = <&tegra_car TEGRA20_CLK_VDE>;
+> -	reset-names = "vde", "mc";
+> -	resets = <&tegra_car 61>, <&mc TEGRA20_MC_RESET_VDE>;
+> -	iommus = <&mc TEGRA_SWGROUP_VDE>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml b/Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml
+> new file mode 100644
+> index 000000000000..3b6c1f031e04
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/nvidia,tegra-vde.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NVIDIA Tegra Video Decoder Engine
+> +
+> +maintainers:
+> +  - Dmitry Osipenko <digetx@gmail.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra132-vde
+> +              - nvidia,tegra124-vde
+> +              - nvidia,tegra114-vde
+> +              - nvidia,tegra30-vde
+> +          - enum:
+> +              - nvidia,tegra20-vde
+> +      - items:
+> +          - const: nvidia,tegra20-vde
+> +
+> +  reg:
+> +    maxItems: 9
+> +
+> +  reg-names:
+> +    items:
+> +      - const: sxe
+> +      - const: bsev
+> +      - const: mbe
+> +      - const: ppe
+> +      - const: mce
+> +      - const: tfe
+> +      - const: ppb
+> +      - const: vdma
+> +      - const: frameid
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 2
+> +
+> +  reset-names:
+> +    items:
+> +      - const: vde
+> +      - const: mc
+> +
+> +  interrupts:
+> +    maxItems: 3
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: sync-token
+> +      - const: bsev
+> +      - const: sxe
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  iram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle of the SRAM MMIO node.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - resets
+> +  - reset-names
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    video-codec@6001a000 {
+> +      compatible = "nvidia,tegra20-vde";
+> +      reg = <0x6001a000 0x1000>, /* Syntax Engine */
+> +            <0x6001b000 0x1000>, /* Video Bitstream Engine */
+> +            <0x6001c000  0x100>, /* Macroblock Engine */
+> +            <0x6001c200  0x100>, /* Post-processing Engine */
+> +            <0x6001c400  0x100>, /* Motion Compensation Engine */
+> +            <0x6001c600  0x100>, /* Transform Engine */
+> +            <0x6001c800  0x100>, /* Pixel prediction block */
+> +            <0x6001ca00  0x100>, /* Video DMA */
+> +            <0x6001d800  0x300>; /* Video frame controls */
+> +      reg-names = "sxe", "bsev", "mbe", "ppe", "mce",
+> +                  "tfe", "ppb", "vdma", "frameid";
+> +      iram = <&iram>; /* IRAM MMIO region */
+> +      interrupts = <0  9 4>, /* Sync token */
+> +                   <0 10 4>, /* BSE-V */
+> +                   <0 12 4>; /* SXE */
+> +      interrupt-names = "sync-token", "bsev", "sxe";
+> +      clocks = <&clk 61>;
+> +      reset-names = "vde", "mc";
+> +      resets = <&rst 61>, <&mem 13>;
+> +      iommus = <&mem 15>;
+> +    };
+> 
+
