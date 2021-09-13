@@ -2,90 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C982B408E56
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 15:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFC5408F84
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 15:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240500AbhIMNdK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Sep 2021 09:33:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60164 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242842AbhIMNaP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Sep 2021 09:30:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631539738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EH1NecB1TKw1kjh66jwRAJHvDqc2I9dVOEXKTtWVeus=;
-        b=aRO7pFXBZ6H725H+TBXX8OJ0V852Z/Dpomb7h7sCIDozMhDCS4H98KKE1mgBS6YqpzmCQm
-        pEM+lCQo5g16uPY7LBcuNRhv8cZJ9fhogLuO7g2Ijj9wyNmfd4e7rFjmNrO0SKGI7hvnmh
-        u8Fk8Fl8bq5TOH8v+UHorE4CdxKwlDI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-297-qSTfMbPtMGWkj51YuorBoA-1; Mon, 13 Sep 2021 09:28:57 -0400
-X-MC-Unique: qSTfMbPtMGWkj51YuorBoA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1CCD819200C0;
-        Mon, 13 Sep 2021 13:28:56 +0000 (UTC)
-Received: from x1.localdomain (unknown [10.39.193.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BAD3F19724;
-        Mon, 13 Sep 2021 13:28:54 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>
-Subject: [PATCH v3] docs: ABI: sysfs-class-power: Documented cycle_count property
-Date:   Mon, 13 Sep 2021 15:28:53 +0200
-Message-Id: <20210913132853.606265-1-hdegoede@redhat.com>
+        id S242518AbhIMNn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 09:43:57 -0400
+Received: from mga12.intel.com ([192.55.52.136]:49535 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241447AbhIMNlz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Sep 2021 09:41:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10105"; a="201184502"
+X-IronPort-AV: E=Sophos;i="5.85,288,1624345200"; 
+   d="scan'208";a="201184502"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 06:30:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,288,1624345200"; 
+   d="scan'208";a="608982398"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 13 Sep 2021 06:30:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Sep 2021 16:30:08 +0300
+Date:   Mon, 13 Sep 2021 16:30:08 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org, bleung@chromium.org, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210902213500.3795948-3-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit c955fe8e0bdd ("POWER: Add support for cycle_count") added a
-POWER_SUPPLY_PROP_CYCLE_COUNT "cycle_count" property to the set of
-standard power-supply properties, but this was never documented,
-document it now.
+Hi Prashant,
 
-Link: https://gitlab.freedesktop.org/upower/upower/-/issues/152
-Reported-by: Bastien Nocera <hadess@hadess.net>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v3 (aka the really really typo free version)
-- Fix typo in "cycle_count" in Subject
+On Thu, Sep 02, 2021 at 02:35:00PM -0700, Prashant Malani wrote:
+> Add support for reporting Source and Sink Capabilities
+> Power Data Object (PDO) property. These are reported by USB
+> Power Delivery (PD) capable power sources.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  Documentation/ABI/testing/sysfs-class-power | 30 +++++++++++++++++++++
+>  drivers/power/supply/power_supply_sysfs.c   | 18 ++++++++++++-
+>  include/linux/power_supply.h                |  5 ++++
+>  3 files changed, 52 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> index ca830c6cd809..90d4198e6dfb 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -562,6 +562,36 @@ Description:
+>  			      "Unknown", "SDP", "DCP", "CDP", "ACA", "C", "PD",
+>  			      "PD_DRP", "PD_PPS", "BrickID"
+>  
+> +What:		/sys/class/power_supply/<supply_name>/source_cap_pdos
+> +Date:		September 2021
+> +Contact:	linux-pm@vger.kernel.org
+> +Description:
+> +		Reports the Source Capabilities Power Data Objects (PDO) reported by the USB
+> +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent the Source Caps
+> +		for devices which only support Standard Power Range (SPR), whereas PDOs 8-13
+> +		are for Extended Power Range (EPR) capable sources.
+> +		NOTE: The EPR Source Caps message is a superset of the Source Cap message, so on
+> +		SPR-only sources, PDOs 8-13 will be 0.
+> +
+> +		Access: Read-Only
+> +
+> +		Valid values: Represented as a list of 13 32-bit PDO objects in hexadecimal format.
+> +
+> +What:		/sys/class/power_supply/<supply_name>/sink_cap_pdos
+> +Date:		September 2021
+> +Contact:	linux-pm@vger.kernel.org
+> +Description:
+> +		Reports the Sink Capabilities Power Data Objects (PDO) reported by the USB
+> +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent the Sink Caps
+> +		for devices which only support Standard Power Range (SPR), whereas PDOs 8-13
+> +		are for Extended Power Range (EPR) capable sinks.
+> +		NOTE: The EPR Sink Caps message is a superset of the Sink Cap message, so on
+> +		SPR-only sinks, PDOs 8-13 will be 0.
+> +
+> +		Access: Read-Only
+> +
+> +		Valid values: Represented as a list of 13 32-bit PDO objects in hexadecimal format.
 
-Changes in v2:
-- s/Possitive/Positive/
----
- Documentation/ABI/testing/sysfs-class-power | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+My plan is to register a separate power supply for each PDO. So for
+every source PDO and every sink PDO a port has in its capabilities,
+you'll have a separate power supply registered, and the same for the
+partner when it's connected. With every connection there should always
+be one active (online) source psy and active sink psy (if the port is
+source, one of the port's source psys will be active and the partner
+will have the active sink psy, or vise versa - depending on the role).
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index ca830c6cd809..687db552c374 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -480,6 +480,17 @@ Description:
- 
- 		Valid values: Represented in microvolts
- 
-+What:		/sys/class/power_supply/<supply_name>/cycle_count
-+Date:		January 2010
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		Reports the number of full charge + discharge cycles the
-+		battery has undergone.
-+
-+		Access: Read
-+
-+		Valid values: Positive integer representing full cycles
-+
- **USB Properties**
- 
- What:		/sys/class/power_supply/<supply_name>/input_current_limit
+Each PDO represents a "Power Supply" so to me that approach just
+makes the most sense. It will require a bit of work in kernel, however
+in user space it should mean that we only have a single new attribute
+file for the power supplies named "pdo" that returns a single PDO.
+
+Let me know if you guys see any obvious problems with the idea.
+Otherwise, that is how we really need to do this. That will make
+things much more clear in user space. I have a feeling it will make
+things easier in kernel as well in the long run.
+
+Adding Adam and Guenter. It would be good if you guys could comment
+the idea as well.
+
+thanks,
+
 -- 
-2.31.1
-
+heikki
