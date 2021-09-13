@@ -2,120 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43E1409A99
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF52409AAC
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 19:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243789AbhIMRZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Sep 2021 13:25:05 -0400
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:45859 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344302AbhIMRY7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Sep 2021 13:24:59 -0400
-Received: by mail-oi1-f179.google.com with SMTP id j66so2935893oih.12;
-        Mon, 13 Sep 2021 10:23:43 -0700 (PDT)
+        id S238180AbhIMR3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 13:29:22 -0400
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:44030 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233121AbhIMR3O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Sep 2021 13:29:14 -0400
+Received: by mail-oi1-f170.google.com with SMTP id w19so15013707oik.10;
+        Mon, 13 Sep 2021 10:27:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/iVxQRQB36TAj9OZg4tC/QuKQkIXEC+nRLpJKX9NbXo=;
-        b=lmZk2Cdc81A7efq7vCFF0oDXr45tfhZeAHzuCfXDw+v3KskXBfURVxyZ4rE3vtnKie
-         D3FjSkoceW3R9SQ7hsNDBQAXn+bUVGfGJKxta7i9OEW6bp9GS+CmVj4hPMtQ2IbOIl5V
-         kZOzkW9YQQH+c1lDY5MLwjTAzlqAW4XMqx16em7oWjyCvicu9gOH+jStmlyA+9skcsZW
-         Nn+6rFy+DE+VoJiHIWt8/tzgYeBjR/0Yp5KKNBdkVBpahYBBE42qNb5u0OWWkNl8qOMW
-         WT78j/IX3Dy/y1zng4YBtOXo/ogN/FXT/l87Kk2tbZCp7C5OZsqAnxv4So13PTNoQgGr
-         ln3Q==
-X-Gm-Message-State: AOAM532QRYlDLh9XsFUFgrQgZH8PpX04EymR46IpbbDb43uG2l8fJnPZ
-        +/iHS+XA9/mv/dZEhn92oMkbMbFIyu7AY94EuX8=
-X-Google-Smtp-Source: ABdhPJz+IKuBM90R/GwmNMgEM3fziO42XrK3F65t4bfmQqdcGBaLs65Qj4VhMezhc41dGAjaBOhrxIR5kbUhGo4bqHo=
-X-Received: by 2002:aca:afcd:: with SMTP id y196mr8629968oie.71.1631553823574;
- Mon, 13 Sep 2021 10:23:43 -0700 (PDT)
+        bh=zdKSajtGE1WLdR1EN0XVNqkFzr63oghr/1GUZ5MQ9jU=;
+        b=WdhH25xgQSSCgQVurnR6FYISzqPuxlYoLOQu2CIZe0zrBk3oeZOJbfaZfbs9xf1hXH
+         4+d24q4BjZgyNE/GW38zPYh0Fj0Yh+HB6XNHr0u/g6E85Ks6FXKAxJ2ANVATcd8l4Kgg
+         PEXUoV/4mrqAWqZq1p7oTBg9TfHtu/lndcMAojv0Jenz97L+fCQam7x4R7n6vsmYYVnN
+         RcY1qdZNfOK4tDr4MMWCM7RAx9HL12EdSXMQJ46du3zyUlzi8TAc1jhq2PdNzqPJSOow
+         63VV7In36LdsWzST7NQXHm/a5+cpIftnFgY1qQXg/nmhttotkVZ2SOo0Ufrev9x7clWp
+         PPpw==
+X-Gm-Message-State: AOAM533eHz5c1bWdHIz2VhJPY2CMOsJbAPhu9NzecH5DmLbmtDpGbVrA
+        8EowRij85PQWSJ++NCM6Pvnwwn8zXBk51Sq/W48=
+X-Google-Smtp-Source: ABdhPJwCVw3Fu91YqcoFNhErZVn6L/bKGxexNKukCG+Ecu6T8MRCWnvEdZbFs2c3COaeJ2K53Y+eExfkfXZmYKYMfbQ=
+X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr8277763ois.69.1631554077926;
+ Mon, 13 Sep 2021 10:27:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210908214146.8640-1-mario.limonciello@amd.com> <20210908214146.8640-2-mario.limonciello@amd.com>
-In-Reply-To: <20210908214146.8640-2-mario.limonciello@amd.com>
+References: <20210912185029.5704-1-dsmythies@telus.net>
+In-Reply-To: <20210912185029.5704-1-dsmythies@telus.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Sep 2021 19:23:32 +0200
-Message-ID: <CAJZ5v0gip6L0cDxUJq-LsG4khmS0QW=xs5jAQr+OY6i28XBnwg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] x86/acpi: Don't add CPUs that are not online capable
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
+Date:   Mon, 13 Sep 2021 19:27:47 +0200
+Message-ID: <CAJZ5v0g-fVO8_DGYtSF7e-VYc2Qzu60Ak0VK_f4x-V7dbO=+Eg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: Override parameters if HWP
+ forced by BIOS
+To:     Doug Smythies <doug.smythies@gmail.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 8, 2021 at 11:41 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Sun, Sep 12, 2021 at 8:51 PM Doug Smythies <doug.smythies@gmail.com> wrote:
 >
-> A number of systems are showing "hotplug capable" CPUs when they
-> are not really hotpluggable.  This is because the MADT has extra
-> CPU entries to support different CPUs that may be inserted into
-> the socket with different numbers of cores.
+> If HWP has been already been enabled by BIOS, it may be
+> necessary to override some kernel command line parameters.
+> Once it has been enabled it requires a reset to be disabled.
 >
-> Starting with ACPI 6.3 the spec has an Online Capable bit in the
-> MADT used to determine whether or not a CPU is hotplug capable
-> when the enabled bit is not set.
->
-> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html?#local-apic-flags
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-I've added the patches in this series to my queue, but given what this
-one does, I think that it's a bit risky, because it exposes the kernel
-to a new category of possible platform firmware bugs.
-
-For this reason, I'd rather queue it up as 5.16 material (and of
-course x86 reviewer comments are welcome).
-
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
 > ---
->  arch/x86/kernel/acpi/boot.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/cpufreq/intel_pstate.c | 22 ++++++++++++++--------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
 >
-> Changes from v1 -> v2:
->  * Make the change only apply on ACPI 6.3 or later
-> Changes from v2 -> v3:
->  * Make acpi_support_online_capable static and only valid if CONFIG_X86_LOCAL_APIC is defined
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index e55e0c1fad8c..d915f01b582b 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -62,6 +62,7 @@ int acpi_fix_pin2_polarity __initdata;
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 1097f826ad70..8c176b7dae41 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3205,11 +3205,15 @@ static int __init intel_pstate_init(void)
+>         if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+>                 return -ENODEV;
 >
->  #ifdef CONFIG_X86_LOCAL_APIC
->  static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
-> +static bool acpi_support_online_capable;
->  #endif
->
->  #ifdef CONFIG_X86_IO_APIC
-> @@ -138,6 +139,8 @@ static int __init acpi_parse_madt(struct acpi_table_header *table)
->
->                 pr_debug("Local APIC address 0x%08x\n", madt->address);
->         }
-> +       if (madt->header.revision >= 5)
-> +               acpi_support_online_capable = true;
->
->         default_acpi_madt_oem_check(madt->header.oem_id,
->                                     madt->header.oem_table_id);
-> @@ -239,6 +242,12 @@ acpi_parse_lapic(union acpi_subtable_headers * header, const unsigned long end)
->         if (processor->id == 0xff)
->                 return 0;
->
-> +       /* don't register processors that can not be onlined */
-> +       if (acpi_support_online_capable &&
-> +           !(processor->lapic_flags & ACPI_MADT_ENABLED) &&
-> +           !(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
-> +               return 0;
+> -       if (no_load)
+> -               return -ENODEV;
+> -
+>         id = x86_match_cpu(hwp_support_ids);
+>         if (id) {
+> +               bool hwp_forced = intel_pstate_hwp_is_enabled();
 > +
->         /*
->          * We need to register disabled CPU as well to permit
->          * counting disabled CPUs. This allows us to size
-> --
-> 2.25.1
+> +               if (hwp_forced)
+> +                       pr_info("HWP enabled by BIOS\n");
+> +               else if (no_load)
+> +                       return -ENODEV;
+> +
+>                 copy_cpu_funcs(&core_funcs);
+>                 /*
+>                  * Avoid enabling HWP for processors without EPP support,
+> @@ -3219,8 +3223,7 @@ static int __init intel_pstate_init(void)
+>                  * If HWP is enabled already, though, there is no choice but to
+>                  * deal with it.
+>                  */
+> -               if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||
+> -                   intel_pstate_hwp_is_enabled()) {
+> +               if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
+>                         hwp_active++;
+>                         hwp_mode_bdw = id->driver_data;
+>                         intel_pstate.attr = hwp_cpufreq_attrs;
+> @@ -3235,7 +3238,11 @@ static int __init intel_pstate_init(void)
 >
+>                         goto hwp_cpu_matched;
+>                 }
+> +               pr_info("HWP not enabled\n");
+>         } else {
+> +               if (no_load)
+> +                       return -ENODEV;
+> +
+>                 id = x86_match_cpu(intel_pstate_cpu_ids);
+>                 if (!id) {
+>                         pr_info("CPU model not supported\n");
+> @@ -3314,10 +3321,9 @@ static int __init intel_pstate_setup(char *str)
+>         else if (!strcmp(str, "passive"))
+>                 default_driver = &intel_cpufreq;
+>
+> -       if (!strcmp(str, "no_hwp")) {
+> -               pr_info("HWP disabled\n");
+> +       if (!strcmp(str, "no_hwp"))
+>                 no_hwp = 1;
+> -       }
+> +
+>         if (!strcmp(str, "force"))
+>                 force_load = 1;
+>         if (!strcmp(str, "hwp_only"))
+> --
+
+Applied as 5.15-rc material, thanks!
