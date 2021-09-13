@@ -2,61 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7874081B2
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Sep 2021 22:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB09A4083E8
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Sep 2021 07:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbhILUzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Sep 2021 16:55:49 -0400
-Received: from comms.puri.sm ([159.203.221.185]:32798 "EHLO comms.puri.sm"
+        id S237025AbhIMFos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Sep 2021 01:44:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236373AbhILUzs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 Sep 2021 16:55:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id BC49CE030C;
-        Sun, 12 Sep 2021 13:54:33 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2HDY2MG3q67W; Sun, 12 Sep 2021 13:54:33 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
+        id S232931AbhIMFos (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Sep 2021 01:44:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9CCA160E90;
+        Mon, 13 Sep 2021 05:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631511812;
+        bh=JfOTS11ofZ1WJ7YaYx68xEhIutjs54UH5PpkwHsI+04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QvbjFQaqEPkRljspkyxIOnqXkf/5k5l4ypxJmZ3XTHM3m9nWMt2TRuPfZAJlez8Mf
+         99QEJTTwYqz+K3V06MT60o/8gaXi6hzTvwRghfs0gUgO3jsbecfCuADT9d4JxwC9Ah
+         O83Ys4SVL3WJ6LL2EjN5Q4ijS3hszo/8OmlCVK6E=
+Date:   Mon, 13 Sep 2021 07:43:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Anton Vorontsov <anton.vorontsov@linaro.org>,
         Ramakrishna Pallala <ramakrishna.pallala@intel.com>,
         Dirk Brandewie <dirk.brandewie@gmail.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         stable@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: max17042_battery: Prevent int underflow in set_soc_threshold
-Date:   Sun, 12 Sep 2021 22:54:02 +0200
-Message-Id: <20210912205402.160939-2-sebastian.krzyszkowiak@puri.sm>
-In-Reply-To: <20210912205402.160939-1-sebastian.krzyszkowiak@puri.sm>
+Subject: Re: [PATCH 2/2] power: supply: max17042_battery: Prevent int
+ underflow in set_soc_threshold
+Message-ID: <YT7k7tUij9B02Tae@kroah.com>
 References: <20210912205402.160939-1-sebastian.krzyszkowiak@puri.sm>
-Content-Transfer-Encoding: 8bit
+ <20210912205402.160939-2-sebastian.krzyszkowiak@puri.sm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210912205402.160939-2-sebastian.krzyszkowiak@puri.sm>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes: e5f3872d2044 ("max17042: Add support for signalling change in SOC")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/power/supply/max17042_battery.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Sun, Sep 12, 2021 at 10:54:02PM +0200, Sebastian Krzyszkowiak wrote:
+> Fixes: e5f3872d2044 ("max17042: Add support for signalling change in SOC")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> ---
+>  drivers/power/supply/max17042_battery.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index c53980c8432a..caf83b4d622f 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -857,7 +857,8 @@ static void max17042_set_soc_threshold(struct max17042_chip *chip, u16 off)
- 	regmap_read(map, MAX17042_RepSOC, &soc);
- 	soc >>= 8;
- 	soc_tr = (soc + off) << 8;
--	soc_tr |= (soc - off);
-+	if (off < soc)
-+		soc_tr |= soc - off;
- 	regmap_write(map, MAX17042_SALRT_Th, soc_tr);
- }
- 
--- 
-2.33.0
+I know I do not take patches without any changelog text.  Perhaps other
+maintainers are more leniant :(
 
+thanks,
+
+greg k-h
