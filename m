@@ -2,160 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81CD40A740
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Sep 2021 09:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF1840AB7A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Sep 2021 12:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbhINHWg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Sep 2021 03:22:36 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36160
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229591AbhINHWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Sep 2021 03:22:35 -0400
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D35103FDC7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Sep 2021 07:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1631604077;
-        bh=CTieqUfrN3QD2Y917kpYPbjsuUgn/zzRL0HRoSY4mxA=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=V8DyrMwTlNsppkAUjKLe0Pt14bQP1U4xP2T++pOPHm2BQploQMcSaPZWp4FTSCrFD
-         CCf4iyU99bgstDvxyGg+BphVe88WB/hHi5z1gHFmxElvhfqi3c/pDiF6H+6ineWpoT
-         r3R+0/lHTCCsR1t/HH+G5ZYVnkPmlpYAUJCOTbdqRO8Hry/mcSt9xiRdtV4oA8YpIJ
-         KUD6SoAwxko6TCCTYHrQ/+dEdh78ZGQahdFpahATg+UdgplYbUO15Y8xtJgxC7p9xC
-         aV0NJn7lbcvb3iaeEJNb5gnNx+lsJRbzxxc9bAln4AFYx9aTylsHi08Rn2C8ecV+Ig
-         Ybc+iG2n0TQCw==
-Received: by mail-wr1-f71.google.com with SMTP id r15-20020adfce8f000000b0015df1098ccbso2339863wrn.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Sep 2021 00:21:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CTieqUfrN3QD2Y917kpYPbjsuUgn/zzRL0HRoSY4mxA=;
-        b=Jj1kbA6/GJm60eajhPD9AdWUOeLwI5sIK6WwioODbe7MAZZf+lFjJAoe0QOCU6J29v
-         8WIFrZSOvAVrfxdDSjYgfe210Z+5WP+Uv0jecDLkZv2wioQK+i7p2RzLESWgcPFC6nTx
-         7FMHTCaAWFKXo2OeKxGBxNyiEwkVPj1Yr1NowXzGNkdrh9KQB0SED8i6XWkJRgklMKez
-         Qtmo8Z99gaAr25TF/ADa7GSmo4SEqzAh4l2fUzU1orLkw+AHWuGO/uWRKCBEeTnTD3G8
-         mo0gTaVnMjhdryLcuMvBqAm292/c+8x2ZkNCT6QVn+FnrjoUJnGHBAc/AlNiJPFMALNS
-         IiCw==
-X-Gm-Message-State: AOAM532LfbandoSYtYBxEH+X4wy4bGlwqbXNP1+4vfcz/35LNwJERRmU
-        2n8l+Jlz2M1ImlfyyGn7M7RV/y3SzNknNa9R4AIDQ8kSyMVIl05OrfmKJy8Xu+HkE0zNvoCVekI
-        sOD/FrvIDKar5fhaVidg79MRR3OGfHRZcdnZf
-X-Received: by 2002:a05:6000:1569:: with SMTP id 9mr17026230wrz.343.1631604077420;
-        Tue, 14 Sep 2021 00:21:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx6q9GIV+dbbGpUDkzy+9zvc6SY1/R/bzqrROtBxibMIPF3kczBjGgM2zPWhPd5LxWs/YX10w==
-X-Received: by 2002:a05:6000:1569:: with SMTP id 9mr17026215wrz.343.1631604077251;
-        Tue, 14 Sep 2021 00:21:17 -0700 (PDT)
-Received: from [192.168.3.211] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id v17sm9346322wrr.69.2021.09.14.00.21.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Sep 2021 00:21:16 -0700 (PDT)
-Subject: Re: [PATCH 1/2] power: supply: max17042_battery: Clear status bits in
- interrupt handler
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Anton Vorontsov <anton.vorontsov@linaro.org>,
-        Ramakrishna Pallala <ramakrishna.pallala@intel.com>,
-        Dirk Brandewie <dirk.brandewie@gmail.com>,
-        stable@vger.kernel.org, kernel@puri.sm
-References: <20210912205402.160939-1-sebastian.krzyszkowiak@puri.sm>
- <0123524d-b767-5b5b-8b14-60d8cea3c429@canonical.com>
- <5702731.UytLkSCjyO@pliszka>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <6affbb35-7b79-db6e-a346-e74d2ba2e886@canonical.com>
-Date:   Tue, 14 Sep 2021 09:21:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231477AbhINKP1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Sep 2021 06:15:27 -0400
+Received: from mga09.intel.com ([134.134.136.24]:39614 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231389AbhINKP0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Sep 2021 06:15:26 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221988087"
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="221988087"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 03:14:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="609554195"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2021 03:14:03 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Sep 2021 13:14:02 +0300
+Date:   Tue, 14 Sep 2021 13:14:02 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-In-Reply-To: <5702731.UytLkSCjyO@pliszka>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/09/2021 20:32, Sebastian Krzyszkowiak wrote:
-> On poniedziałek, 13 września 2021 15:02:34 CEST Krzysztof Kozlowski wrote:
->> On 12/09/2021 22:54, Sebastian Krzyszkowiak wrote:
->>> The gauge requires us to clear the status bits manually for some alerts
->>> to be properly dismissed. Previously the IRQ was configured to react only
->>> on falling edge, which wasn't technically correct (the ALRT line is active
->>> low), but it had a happy side-effect of preventing interrupt storms
->>> on uncleared alerts from happening.
->>>
->>> Fixes: 7fbf6b731bca ("power: supply: max17042: Do not enforce (incorrect)
->>> interrupt trigger type") Cc: <stable@vger.kernel.org>
->>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
->>> ---
->>>
->>>  drivers/power/supply/max17042_battery.c | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/power/supply/max17042_battery.c
->>> b/drivers/power/supply/max17042_battery.c index
->>> 8dffae76b6a3..c53980c8432a 100644
->>> --- a/drivers/power/supply/max17042_battery.c
->>> +++ b/drivers/power/supply/max17042_battery.c
->>> @@ -876,6 +876,9 @@ static irqreturn_t max17042_thread_handler(int id,
->>> void *dev)> 
->>>  		max17042_set_soc_threshold(chip, 1);
->>>  	
->>>  	}
->>>
->>> +	regmap_clear_bits(chip->regmap, MAX17042_STATUS,
->>> +			  0xFFFF & ~(STATUS_POR_BIT | 
-> STATUS_BST_BIT));
->>> +
->>
->> Are you sure that this was the reason of interrupt storm? Not incorrect
->> SoC value (read from register for ModelGauge m3 while not configuring
->> fuel gauge model).
+Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson kirjoitti:
+> On 13 September 2021 14:30, Heikki Krogerus wrote:
 > 
-> Yes, I am sure. I have observed this on a fully configured max17055 with 
-> ModelGauge m5. It also makes sense to me based on what I read in the code and 
-> datasheets.
+> > > Add support for reporting Source and Sink Capabilities
+> > > Power Data Object (PDO) property. These are reported by USB
+> > > Power Delivery (PD) capable power sources.
+> > >
+> > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > > ---
+> > >  Documentation/ABI/testing/sysfs-class-power | 30 +++++++++++++++++++++
+> > >  drivers/power/supply/power_supply_sysfs.c   | 18 ++++++++++++-
+> > >  include/linux/power_supply.h                |  5 ++++
+> > >  3 files changed, 52 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-power
+> > b/Documentation/ABI/testing/sysfs-class-power
+> > > index ca830c6cd809..90d4198e6dfb 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-power
+> > > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > > @@ -562,6 +562,36 @@ Description:
+> > >  			      "Unknown", "SDP", "DCP", "CDP", "ACA", "C", "PD",
+> > >  			      "PD_DRP", "PD_PPS", "BrickID"
+> > >
+> > > +What:
+> > 	/sys/class/power_supply/<supply_name>/source_cap_pdos
+> > > +Date:		September 2021
+> > > +Contact:	linux-pm@vger.kernel.org
+> > > +Description:
+> > > +		Reports the Source Capabilities Power Data Objects (PDO)
+> > reported by the USB
+> > > +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent
+> > the Source Caps
+> > > +		for devices which only support Standard Power Range (SPR),
+> > whereas PDOs 8-13
+> > > +		are for Extended Power Range (EPR) capable sources.
+> > > +		NOTE: The EPR Source Caps message is a superset of the Source
+> > Cap message, so on
+> > > +		SPR-only sources, PDOs 8-13 will be 0.
+> > > +
+> > > +		Access: Read-Only
+> > > +
+> > > +		Valid values: Represented as a list of 13 32-bit PDO objects in
+> > hexadecimal format.
+> > > +
+> > > +What:
+> > 	/sys/class/power_supply/<supply_name>/sink_cap_pdos
+> > > +Date:		September 2021
+> > > +Contact:	linux-pm@vger.kernel.org
+> > > +Description:
+> > > +		Reports the Sink Capabilities Power Data Objects (PDO) reported
+> > by the USB
+> > > +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent
+> > the Sink Caps
+> > > +		for devices which only support Standard Power Range (SPR),
+> > whereas PDOs 8-13
+> > > +		are for Extended Power Range (EPR) capable sinks.
+> > > +		NOTE: The EPR Sink Caps message is a superset of the Sink Cap
+> > message, so on
+> > > +		SPR-only sinks, PDOs 8-13 will be 0.
+> > > +
+> > > +		Access: Read-Only
+> > > +
+> > > +		Valid values: Represented as a list of 13 32-bit PDO objects in
+> > hexadecimal format.
+> >
+> > My plan is to register a separate power supply for each PDO. So for
+> > every source PDO and every sink PDO a port has in its capabilities,
+> > you'll have a separate power supply registered, and the same for the
+> > partner when it's connected. With every connection there should always
+> > be one active (online) source psy and active sink psy (if the port is
+> > source, one of the port's source psys will be active and the partner
+> > will have the active sink psy, or vise versa - depending on the role).
+> >
+> > Each PDO represents a "Power Supply" so to me that approach just
+> > makes the most sense. It will require a bit of work in kernel, however
+> > in user space it should mean that we only have a single new attribute
+> > file for the power supplies named "pdo" that returns a single PDO.
+> >
+> > Let me know if you guys see any obvious problems with the idea.
+> > Otherwise, that is how we really need to do this. That will make
+> > things much more clear in user space. I have a feeling it will make
+> > things easier in kernel as well in the long run.
+> >
+> > Adding Adam and Guenter. It would be good if you guys could comment
+> > the idea as well.
 > 
-> There were two kinds of storms - the short ones happening on each SOC change 
-> caused by SOC threshold alerts set by max17042_set_soc_threshold which 
-> eventually got cleared by reconfiguring the thresholds; and a huge one 
-> happening when SOC got down to 0% that did not get away until the battery got 
-> charged to at least 1% at which point the thresholds got reconfigured again 
-> (which is how I noticed the underflow fixed by the second patch).
-
-OK, undestood.
-
+> Hi Heikki,
 > 
-> Besides, I also have patches for configuring m5 gauge via DT that I'll send 
-> once I clean them up.
-
-That's cool! Happy to see such work.
-
+> Thanks for CCing me. My two pence worth is that I always envisaged the PSY
+> representation as being 1 PSY for 1 power source. I consider this in a
+> similar manner to the Regulator framework, where 1 regulator can support a range
+> of voltages and currents, but this is covered by 1 regulator instance as it's
+> just a single output. For USB-PD we have a number of options for voltage/current
+> combos, including PPS which is even lower granularity, but it's still only one
+> port. I get the feeling that having PSY instances for each and every PDO might
+> be a little confusing and these will never be concurrent.
 > 
->> You should only clear bits which you are awaken for... Have in mind that
->> in DT-configuration the fuel gauge is most likely broken by missing
->> configuration. With alert enabled, several other config fields should be
->> cleared.
-> 
-> I have checked all the bits in the Status register and aside of Bst, POR and 
-> bunch of "don't-care" bits they're all alert indicators that we either handle 
-> explicitly in the interrupt handler (Smn/Smx) or implicitly via 
-> power_supply_changed (Imn/Imx, Vmn/Vmx, Tmn/Tmx, dSOCi, Bi/Br). The driver 
-> unconditionally enables alerts for SOC thresholds and all the rest stays 
-> effectively disabled at POR; however, a bootloader or firmware may configure it 
-> differently, which may be wanted for things like resuming from suspend when a 
-> bad condition happens. Therefore we need to clear all the bits anyway and I'm 
-> not sure whether iterating through them in a "if set then clear" loop gains us 
-> anything aside of additional lines of code.
+> However, I'd be keen to understand further and see what restrictions/issues are
+> currently present as I probably don't have a complete view of this right now. I
+> wouldn't want to dismiss something out of turn, especially when you obviously
+> have good reason to suggest such an approach.
 
-Seems reasonable, you're right. Could you mention this expolanation in
-commit msg or comment in the code?
+I'm not proposing that we drop the port-psys. I'm sorry if I've been
+unclear about that. The port-psy we can not drop because of several
+reasons. For starters, we still can not assume that USB PD is always
+supported.
 
+What I'm trying to propose is that we take advantage of the
+power-supply framework by building a "dynamic" hierarchy of power
+supplies that supply each other in order to represent the actual
+situation as closely as possible. For example, a port-psy that is
+supplied by port-Fixed-sink-psy that is supplied by
+port-partner-Fixed-source (that is supplied by port-partner-psy).
+Something like that. The only "static" part in the hierarchy is the
+port-psy, as everything else about it can change, even without
+disconnection.
 
-Best regards,
-Krzysztof
+So the port-psy always either supplies another psy or is supplied by
+another psy in this hierarchy, depending on the role of the port. But
+most importantly, the properties of the port-psy itself are _newer_
+adjustable - they are read-only. The psy that supplies the port-psy
+can be adjustable, if it's for example PPS, but not the port-psy
+itself.
+
+The problem with having only a single psy per port (and possibly
+partners) is that it does not work well enough when the capabilities
+change, and the capabilities can really change at any moment, we don't
+need to disconnect for that to happen - simply by plugging another
+device to another port can change the power budget for your port and
+change your capabilities. The biggest problem is when we loose the
+ability to adjust the values if we for example loose the PPS that we
+were using in the middle of operation. The single psy has to attempt
+to handle the situation by adjusting something like the ranges of the
+properties, because it can't change the actual property set itself.
+That is hacky, and to be honest, a little bit risky, because it leaves
+us at the mercy of programmers completely unnecessarily.
+
+With my proposal, if the capabilities change, it only means we rebuild
+the psy hierarchy, and that's it. Nothing else needs to be done in
+kernel, and all changes are super visible and clear in user space.
+
+thanks,
+
+-- 
+heikki
