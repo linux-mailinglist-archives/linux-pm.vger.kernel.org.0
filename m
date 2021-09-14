@@ -2,121 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BC140B59D
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Sep 2021 19:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15FF40B711
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Sep 2021 20:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbhINRKC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Sep 2021 13:10:02 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:41609 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhINRKC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Sep 2021 13:10:02 -0400
-Received: by mail-ot1-f51.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso19522034ota.8;
-        Tue, 14 Sep 2021 10:08:44 -0700 (PDT)
+        id S229946AbhINSmi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Sep 2021 14:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229906AbhINSmh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Sep 2021 14:42:37 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6E2C061574
+        for <linux-pm@vger.kernel.org>; Tue, 14 Sep 2021 11:41:19 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s3so349857ljp.11
+        for <linux-pm@vger.kernel.org>; Tue, 14 Sep 2021 11:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5VMpWRXt0jQuCEr+r0BM8kFoy1D29x31MLf3bnRKZqo=;
+        b=b11SCPjz52oi1yBAOvY57UeyiD8/Ms3ExnET43X/lvFkWoqblZlZUbvHg0+wdNXdFN
+         CtUHC+3qh+hX78zPevGjyIuPDcLVquMk4uXzdJJaQHd+HiaK71IWmxnnp0vIYzGq1JMX
+         AtyJpWb0WCFKDqWlXiWidZUM93Gm0wERsRan+CRsWEpPTJ9gVdeJHf48KYpe8fuEB2uf
+         es8EK1+mpdeMIsqsv4hT+cxjb5HUEsmqU3MV9yeFjEO/Yl4q0xv0YMtOugxPPSgOpVHw
+         Gg1nTijVelp3vnDjGo4pu03Hx1GOjxaum78pSG6eY99ouhpbcGSjX0tb3jl/DYEgF1Gn
+         lV6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FhUnbg+uhSt5ysUwKSnG6H0zuUdL3FIHTzTgcFPDfCs=;
-        b=diSXijtsednguG4SS/DfwdvJH/tnjOVu8IrhKjy3jqitKhcIclTO9+8G5L/VoCDGc2
-         KkQ0glxlS8ZmXLj/iwK29363FnXq9PfhVZ2z/NkwCRrzvOzZ5GSH9IuPQeL3cda8UxpJ
-         dggb59C3nxK9/OvJxlLcacWO20JmVbcuBSaD5c9QKwliLzAsYC0A+LPwcw7PajCAeW5V
-         y+jqQBrhSkCEqA6fY9YeJqOxfajQuDVeMCxw0lMBRAzbI0o7av0cE3+ZIKFGpOqTtoYp
-         jdPFcVt+0ufTZyiR4V+E3XgyL6pDUISfKzS12lE1sKwaQ0/fT7IPzxdypAy1NhfnlJV5
-         wy5Q==
-X-Gm-Message-State: AOAM533oE6Yih0duGuXtfTMpybbzFhi6hcjZ29uqtl8LK/5feRfqJt7I
-        GW+91stI0KimLDo77RU2g2LF2uMe/ai5iUIKiWY=
-X-Google-Smtp-Source: ABdhPJwwNvkCwgKHIXpSxGbqsgqWZFPM80nulHEd5WVGCXkN6rwUTA0/uY5HQm5l3gbFey6QGta7bdShVzTGDm5kdfo=
-X-Received: by 2002:a05:6830:34b:: with SMTP id h11mr15965174ote.319.1631639324158;
- Tue, 14 Sep 2021 10:08:44 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5VMpWRXt0jQuCEr+r0BM8kFoy1D29x31MLf3bnRKZqo=;
+        b=SZNmsfYKYsqSvax8e0WuMzKwIgp+LDJmNuY9whY66j03W7qrnOWylRc+vytj8y/S/b
+         kFGK7VcazM0a+uZSoOirYvE9lkL/zIM/3KvL1iZrx6qM006AhcBd6lfqANnHqjt6M2qU
+         xYdwt4UphcqzNUb9R1lUeyMNbe15EQxjYnJRXi68BJilM+4iEV11vSjvMMqKT1b+GTIT
+         /HjDY3kLtWNAz+FA+EboDxsEJGoXeKRy7rN67gD9i8V1BDJcS8d39jIvk/XPiWJB+Jdn
+         wyJiKzlji5AFerA/XhsLpqI6gUGyc8vwEvUA3Aqu936xu4DM+RAXaf4fXUMK/H1qxeRn
+         0MKg==
+X-Gm-Message-State: AOAM532mm+IsoXyU6ROMH+fmvaztjw4HZl2WwlF3c8a0fj6EA4RNL/Mh
+        LK0GhX2FH637xp+lA+GjHc5ZsYg/JPy1EIiS4UkvTw==
+X-Google-Smtp-Source: ABdhPJyJFg7U0SySGwcX4hh4wxl9aHZdQMr5YsM70bRBO1qYAVvBNFSlNsuAYAWsKhw+uCtIo3ojWd6+04ZNE3bd/P4=
+X-Received: by 2002:a2e:8504:: with SMTP id j4mr16617853lji.352.1631644877772;
+ Tue, 14 Sep 2021 11:41:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210914165623.18972-1-james.morse@arm.com>
-In-Reply-To: <20210914165623.18972-1-james.morse@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Sep 2021 19:08:33 +0200
-Message-ID: <CAJZ5v0juNZA8waQGyxTRQR05gQZa+qi0WksHUcfJSrzyFuMO7Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Destroy mutex before kobject_put()
- frees the memory
-To:     James Morse <james.morse@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hao <haokexin@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+References: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
+ <20210513132051.31465-1-ggherdovich@suse.cz> <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
+ <067ee60e47a0350d01f0c3f216c1032818044b36.camel@suse.cz> <CAAYoRsX0xJf1mm1a_YUCzDy86r8q4QE98iVtS1AMLaUx+KTgQQ@mail.gmail.com>
+ <CAAYoRsXK79PspEUh9pqgj2OGQnxQONkEeK-7af3=5frBzAqULQ@mail.gmail.com>
+ <2a1b000cd101737400f6320ef18c0143d3a5145b.camel@linux.intel.com>
+ <CAAYoRsVeMCivVBp-q_9N23BDOVvkc8ZLS3mubnz+4TREZ9Cz_A@mail.gmail.com>
+ <7abae13c235d74f4789cd93c6c6b0cbf69df243d.camel@linux.intel.com> <CAAYoRsVd4uU7sofcvYWd__evKJTf7HE5mi2ZVDjAYNYWXS3mzQ@mail.gmail.com>
+In-Reply-To: <CAAYoRsVd4uU7sofcvYWd__evKJTf7HE5mi2ZVDjAYNYWXS3mzQ@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 14 Sep 2021 11:41:07 -0700
+Message-ID: <CAAYoRsUnuNL+orjeXpxEE4fyknGGk3Kngk6Gt+hoCHxLYg9D6A@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: Add Icelake servers support in
+ no-HWP mode
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 6:56 PM James Morse <james.morse@arm.com> wrote:
+On Tue, Sep 7, 2021 at 8:43 PM Doug Smythies <dsmythies@telus.net> wrote:
+> On Tue, Sep 7, 2021 at 7:04 PM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > On Tue, 2021-09-07 at 13:16 -0700, Doug Smythies wrote:
+> > > On Tue, Sep 7, 2021 at 9:01 AM Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > > On Tue, 2021-09-07 at 08:45 -0700, Doug Smythies wrote:
+> > > > >
+> > > > > Recent ASUS BIOS updates have changed the default system
+> > > > > response for this old thread, rendering "intel_pstate=3Dno_hwp"
+> > > > > useless.
+> > > > >
+> > > > > It also raises a question: If BIOS has forced HWP, then how do we
+> > > > > prevent the acpi-cpufreq driver from being used? Read on.
+> > > >
+> > > > Does BIOS has option to enable Intel speed shift with no legacy
+> > > > support?
+> > > > Then this option will not populate ACPI _PSS table.
+> > >
+> > > The option is there no matter what.
+> > > I have tried every variation of legacy or no legacy that
+> > > I can find. Currently:
+> > > Current boot mode:   UEFI Firmware mode
+> > > SecureBoot:          disabled
+> > >
+> > > >
+> > > > >
+> > > > > On Fri, May 14, 2021 at 3:12 PM Doug Smythies <
+> > > > > dsmythies@telus.net>
+> > > > > wrote:
+> > > > > >
+> > > > > > On Fri, May 14, 2021 at 1:33 PM Giovanni Gherdovich <
+> > > > > > ggherdovich@suse.cz> wrote:
+> > > > > > > On Fri, 2021-05-14 at 08:31 -0700, Doug Smythies wrote:
+> > > > > ...
+> > > > > > >
+> > > ...
+> > > > > Previous correspondence was with BIOS version 1003. There have
+> > > > > been 3 BIOS
+> > > > > releases since then (at least that I know of), 2103, 2201, 2301,
+> > > > > and all of them have changed the behaviour
+> > > > > of the "Auto" setting for Intel Speed Shift
+> > > > > Technology BIOS setting, forcing it on upon transfer of control
+> > > > > to the OS.
+> > > > >
+> > > > > Where with "intel_pstate=3Dno_hwp" one used to get 0 for
+> > > > > MSR_PM_ENABLE
+> > > > > (0x770) they now get 1.
+> > > >
+> > > > So they are forcing Out of band OOB mode.
+> > > > Does bit 8 or 18 in MSR 0x1aa is set?
+> > >
+> > > No.
+> >
+> > So there is no legacy path. I think you are working with their support.
 >
-> Since commit e5c6b312ce3c ("cpufreq: schedutil: Use kobject release()
-> method to free sugov_tunables") kobject_put() has kfree()d the
-> attr_set before gov_attr_set_put() returns.
+> Yes, for almost a month now, with very little to show for it.
+> We'll see what happens. I did get a message this afternoon:
 >
-> kobject_put() isn't the last user of attr_set in gov_attr_set_put(),
-> the subsequent mutex_destroy() triggers a use-after-free:
-> | BUG: KASAN: use-after-free in mutex_is_locked+0x20/0x60
-> | Read of size 8 at addr ffff000800ca4250 by task cpuhp/2/20
-> |
-> | CPU: 2 PID: 20 Comm: cpuhp/2 Not tainted 5.15.0-rc1 #12369
-> | Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development
-> | Platform, BIOS EDK II Jul 30 2018
-> | Call trace:
-> |  dump_backtrace+0x0/0x380
-> |  show_stack+0x1c/0x30
-> |  dump_stack_lvl+0x8c/0xb8
-> |  print_address_description.constprop.0+0x74/0x2b8
-> |  kasan_report+0x1f4/0x210
-> |  kasan_check_range+0xfc/0x1a4
-> |  __kasan_check_read+0x38/0x60
-> |  mutex_is_locked+0x20/0x60
-> |  mutex_destroy+0x80/0x100
-> |  gov_attr_set_put+0xfc/0x150
-> |  sugov_exit+0x78/0x190
-> |  cpufreq_offline.isra.0+0x2c0/0x660
-> |  cpuhp_cpufreq_offline+0x14/0x24
-> |  cpuhp_invoke_callback+0x430/0x6d0
-> |  cpuhp_thread_fun+0x1b0/0x624
-> |  smpboot_thread_fn+0x5e0/0xa6c
-> |  kthread+0x3a0/0x450
-> |  ret_from_fork+0x10/0x20
+> "Our GTSD is debugging the issue,.
+> When they have the result, they will directly update you."
 >
-> Swap the order of the calls.
+> > In HWP mode does setting scaling min/max frequency has any impact?
 >
-> Fixes: e5c6b312ce3c ("cpufreq: schedutil: Use kobject release() method to free sugov_tunables")
-> Cc: 4.7+ <stable@vger.kernel.org> # 4.7+
-> CC: Kevin Hao <haokexin@gmail.com>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->  drivers/cpufreq/cpufreq_governor_attr_set.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> No. I wouldn't have expected it to, as the system is confused as to who
+> is in charge. The acpi-cpufreq driver thinks it is in charge, but HWP
+> thinks it is.
 >
-> diff --git a/drivers/cpufreq/cpufreq_governor_attr_set.c b/drivers/cpufreq/cpufreq_governor_attr_set.c
-> index 66b05a326910..a6f365b9cc1a 100644
-> --- a/drivers/cpufreq/cpufreq_governor_attr_set.c
-> +++ b/drivers/cpufreq/cpufreq_governor_attr_set.c
-> @@ -74,8 +74,8 @@ unsigned int gov_attr_set_put(struct gov_attr_set *attr_set, struct list_head *l
->         if (count)
->                 return count;
->
-> -       kobject_put(&attr_set->kobj);
->         mutex_destroy(&attr_set->update_lock);
-> +       kobject_put(&attr_set->kobj);
+> The intel_pstate driver works fine.
 
-Doh
+Hi Srinivas,
 
-I should have caught this one, thanks!
+I heard back from ASUS, and they now confirm that they
+did change the behaviour of the "Auto" setting in BIOS
+version 2103. They say they did it to fix an issue with
+ITB3.0, which I assume means Intel Turbo Boost 3.0.
+I'll copy and paste the relevant portion of the email
+below:
 
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(gov_attr_set_put);
-> --
+" I am in direct contact with the engineers.
+Here is the result from their test:
 
-Applied as 5.15-rc material, thanks!
+In BIOS 2103,the =E2=80=9CAuto=E2=80=9D setting transfers control to
+the OS with HWP available and enabled.
+
+This is side effect to fix ITBM3.0 not work after HWP enabled.
+We can remove this patch, but ITBM3.0 will not work when HWP enabled"
+
+Are you familiar with this issue?
+
+I want the original behaviour of the "Auto" setting, as it is
+the only way for control to go to the OS with HWP
+available but disabled.
+
+... Doug
