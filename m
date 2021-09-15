@@ -2,100 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E256D40C156
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 10:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D92440C211
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 10:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236933AbhIOILo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 04:11:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48726 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236965AbhIOILG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Sep 2021 04:11:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD332611AF;
-        Wed, 15 Sep 2021 08:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631693387;
-        bh=u25hOeQbvYR4QZ2+ydh3BaVFfAgOWaJC7fn8kmf4Am4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=S4lAJzytvs7OVbXEWu23VNSM+MDzyUc9GiwKq017B0jFyXvUTDsQsRmRxpUq7DxN9
-         M9bDebwWaYCoN9W8/jip/U7Rl9fU5f5oFTtaAVs5W1bM8M/3GIa+7SncQgPbwuFezX
-         zRcJPVb6HYO+ScE1knq6j9Xo3lCeZgbD/W7Gfrd54Dq6zwk8Dw/nv5M8UrMaCoDYt9
-         s9ACdP11+wYtt2X4pWLvwJZcNHfkGsF8XQP70CnlmafkBflL54olTf3vWh6R/LvN2P
-         h39B4mJ1p4fpNzXuZNqTQLAFlOwoCTytAhT6E2FUzXqUVatVjZ/kRN/PDKApthecMa
-         Uk/okuAUJbV1w==
-Subject: Re: [RFC 01/19] dt-bindings: interconnect: imx8mq: Add missing pl301
- and SAI ids
-To:     Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
- <1631554694-9599-2-git-send-email-abel.vesa@nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-Message-ID: <096f0e8a-2215-6506-330f-a9cbfc8ddfe6@kernel.org>
-Date:   Wed, 15 Sep 2021 11:09:40 +0300
+        id S236951AbhIOI4z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 04:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232888AbhIOI4z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 04:56:55 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852A2C061575;
+        Wed, 15 Sep 2021 01:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GZgd60WrESx2DuwtYGPss1Uw9DuvU+yvrhVYe2f9cRA=; b=sHTDJrIXSoC3UvfuM27ubT+8Hb
+        IeW1e9Fb709cL2+CVWNOaIOrEZasdcRv4a9cBKO062xihPNhCqOiYRAz7lP0zPPkU6SsL4VtiB4hY
+        ZtId0LmB15NOi8h3uOR5dj7MSq2NwMA2NuU5nJTBgSCCPU7qkdmkkXwIqzJeyiD4oZFfzK2a0LF07
+        2rDCtpJE5RsA+kD2jyVDb5fNiARWqlhdZZhB3/AH3rlqcSbcpJYbWjIvJW6J8YDHweJUCkXpHjc20
+        UvXGvnDZV8uI59cAiw+Grw82o4Q+GVJodpTs3cgRzwfUMZ8fth3GKBzN8P/waO1hEh0fe7TvpPvKj
+        zR/ipvOQ==;
+Received: from dsl-hkibng22-54f986-236.dhcp.inet.fi ([84.249.134.236] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <mperttunen@nvidia.com>)
+        id 1mQQhR-000101-KT; Wed, 15 Sep 2021 11:55:25 +0300
+From:   Mikko Perttunen <mperttunen@nvidia.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        krzysztof.kozlowski@canonical.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Subject: [PATCH 1/5] thermal: tegra-bpmp: Handle errors in BPMP response
+Date:   Wed, 15 Sep 2021 11:55:13 +0300
+Message-Id: <20210915085517.1669675-1-mperttunen@nvidia.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <1631554694-9599-2-git-send-email-abel.vesa@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 84.249.134.236
+X-SA-Exim-Mail-From: mperttunen@nvidia.com
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Abel,
+The return value from tegra_bpmp_transfer indicates the success or
+failure of the IPC transaction with BPMP. If the transaction
+succeeded, we also need to check the actual command's result code.
+Add code to do this.
 
-On 13.09.21 20:37, Abel Vesa wrote:
-> According to the bus diagram, there are two more pl301s that need to
-> be added here. The pl301_per_m which is an intermediary node between
-> pl301_main and its masters: usdhc1, usdhc2 and sdma. The pl301_wakeup
-> is an intermediary node between pl301_main and its masters, in this case
-> all the SAIs.
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+ drivers/thermal/tegra/tegra-bpmp-thermal.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Thanks for working on this!
+diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+index 94f1da1dcd69..5affc3d196be 100644
+--- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
++++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+@@ -52,6 +52,8 @@ static int tegra_bpmp_thermal_get_temp(void *data, int *out_temp)
+ 	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
+ 	if (err)
+ 		return err;
++	if (msg.rx.ret)
++		return -EINVAL;
+ 
+ 	*out_temp = reply.get_temp.temp;
+ 
+@@ -63,6 +65,7 @@ static int tegra_bpmp_thermal_set_trips(void *data, int low, int high)
+ 	struct tegra_bpmp_thermal_zone *zone = data;
+ 	struct mrq_thermal_host_to_bpmp_request req;
+ 	struct tegra_bpmp_message msg;
++	int err;
+ 
+ 	memset(&req, 0, sizeof(req));
+ 	req.type = CMD_THERMAL_SET_TRIP;
+@@ -76,7 +79,13 @@ static int tegra_bpmp_thermal_set_trips(void *data, int low, int high)
+ 	msg.tx.data = &req;
+ 	msg.tx.size = sizeof(req);
+ 
+-	return tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
++	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
++	if (err)
++		return err;
++	if (msg.rx.ret)
++		return -EINVAL;
++
++	return 0;
+ }
+ 
+ static void tz_device_update_work_fn(struct work_struct *work)
+@@ -140,6 +149,8 @@ static int tegra_bpmp_thermal_get_num_zones(struct tegra_bpmp *bpmp,
+ 	err = tegra_bpmp_transfer(bpmp, &msg);
+ 	if (err)
+ 		return err;
++	if (msg.rx.ret)
++		return -EINVAL;
+ 
+ 	*num_zones = reply.get_num_zones.num;
+ 
+-- 
+2.32.0
 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->   include/dt-bindings/interconnect/imx8mq.h | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/include/dt-bindings/interconnect/imx8mq.h b/include/dt-bindings/interconnect/imx8mq.h
-> index 1a4cae7f8be2..1953de8af5cb 100644
-> --- a/include/dt-bindings/interconnect/imx8mq.h
-> +++ b/include/dt-bindings/interconnect/imx8mq.h
-> @@ -44,5 +44,14 @@
->   #define IMX8MQ_ICM_PCIE1	26
->   #define IMX8MQ_ICM_PCIE2	27
->   #define IMX8MQ_ICN_MAIN		28
-> +#define IMX8MQ_ICN_PER_M	30
-
-Is there any reason to jump from 28 to 30?
-
-Thanks,
-Georgi
-
-> +
-> +#define IMX8MQ_ICN_WAKEUP	31
-> +#define IMX8MQ_ICM_SAI1		32
-> +#define IMX8MQ_ICM_SAI2		33
-> +#define IMX8MQ_ICM_SAI3		34
-> +#define IMX8MQ_ICM_SAI4		35
-> +#define IMX8MQ_ICM_SAI5		36
-> +#define IMX8MQ_ICM_SAI6		37
->   
->   #endif /* __DT_BINDINGS_INTERCONNECT_IMX8MQ_H */
->
