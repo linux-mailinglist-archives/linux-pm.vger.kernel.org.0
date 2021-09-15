@@ -2,113 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB23140BE76
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 05:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EAC40BF1D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 07:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhIODwi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Sep 2021 23:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbhIODwg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Sep 2021 23:52:36 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A58FC061574;
-        Tue, 14 Sep 2021 20:51:18 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id x7so1414673pfa.8;
-        Tue, 14 Sep 2021 20:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WY/GfQ6Rqj3YqcjxHunRfD2akCMAESTt8w8d4Zhvv5w=;
-        b=cidkH9uNAQVLWGXkGqup50kNyFpt9UfpsxbDMxH4DEWVoSOKCTkJP/9p3l5/DO1wM5
-         6td4Vdmgew2BjUtOCCsxOTSAhsonJGb9pE/r1SI56ZDFDLea3/fSIKUCkQAvoB+OsV5+
-         QjSAzx3IXZ6KuhmgiB1gpvYO8/6siBifHz37BuqW8099S9xdd7Nk5jWFw6fCDlqTC8aH
-         NyONlBFplS9uaHiQZfkTgNCMshDOd4EnjngmGlbFjnF9qvOQb2iXKdgp131w/7ghyxOM
-         SspDxoLm19L9tDIaIn9hgSTQhM+i+29m9whyL44T3HDc6ozEk4+IFtOEpZ16qu+lZtBR
-         Zgvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WY/GfQ6Rqj3YqcjxHunRfD2akCMAESTt8w8d4Zhvv5w=;
-        b=dXSVnf2VkfVexZ5gMvvBLZrbWzF0z2jFp0/dt38LKzZAjUJyab0Dt+5doSqpB5tlw2
-         Skq+yM178I6CjxYkmyGMCle4ck4+5Q9esmiLXLfGp69w8a4TWX6e4SbImiegZcu/geB+
-         1IN4imLbIkKuKzDpJ7C+n6Gu+Vwe6ZVPUPnGAJQPhmQkI3NMs24Tt2txmt+4HPfr35dS
-         ia71VLXk7yhkbbhhhF4QFWXpECEsYPMSP2Pk8tdJIMlgvO2lORUaenA2jkf3+1GuBUV2
-         b/2WlYSodPsZK8IQVTV1x0kNnpRc9keZpwOPrBxju4PwsOEUVATqxOF7c748x9aBl348
-         U34A==
-X-Gm-Message-State: AOAM531u+upPYhKhMF/dXZyoRPfnzrnB9kukz+nStXQvtRvLq8NY5RXA
-        6p7efhYoKvrI1H0/14O3Inn+nW/ZE8Y=
-X-Google-Smtp-Source: ABdhPJxWW7TCDRwjHxpafjz7AYg5hmkid5cCZqZxbl30Qs1pvrqYrInkK8WG54ZWYHUP4u1AlY+C5A==
-X-Received: by 2002:a63:1259:: with SMTP id 25mr18628737pgs.48.1631677877500;
-        Tue, 14 Sep 2021 20:51:17 -0700 (PDT)
-Received: from [172.30.1.2] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id q20sm13131648pgu.31.2021.09.14.20.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Sep 2021 20:51:17 -0700 (PDT)
-Subject: Re: [PATCH v1 4/4] PM / devfreq: tegra30: Check whether
- clk_round_rate() returns zero rate
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20210912184458.17995-1-digetx@gmail.com>
- <20210912184458.17995-5-digetx@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <9fa66405-883a-3653-eb5d-3cd7eee07a0a@gmail.com>
-Date:   Wed, 15 Sep 2021 12:51:11 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230320AbhIOFGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 01:06:40 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:42668 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230164AbhIOFGk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 01:06:40 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631682322; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ugBETG8RPFhO2oquWLf3xrYdA/hgbB7No22OqbY026w=;
+ b=cVU9SeUWg8W14938XSJTEJBiauRgxr+BVZo/DQMPpkd1BK1bbxiWStdDx083EL6v+PCGQwHP
+ kVdcl5ZYH/8pyBsUeUGIGsXQC/KSqBse+msy5b9/Q9cEWoistAAvhJV4Jhid51Xn+w8ro3eu
+ A3fiU/WqdIKCwunNnTx8zyX+/eA=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 61417f0e65c3cc8c630ea6e1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 15 Sep 2021 05:05:18
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0C93AC43618; Wed, 15 Sep 2021 05:05:18 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3C6CCC4338F;
+        Wed, 15 Sep 2021 05:05:17 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20210912184458.17995-5-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 15 Sep 2021 10:35:17 +0530
+From:   okukatla@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        evgreen@google.com, georgi.djakov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdtipton@codeaurora.org, sibis@codeaurora.org,
+        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [v7 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect
+ provider
+In-Reply-To: <CAE-0n51WBdLoJRPs9tWZgdAukJMnkD3V00o7xNYVX77-eToKvw@mail.gmail.com>
+References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
+ <1629458622-4915-4-git-send-email-okukatla@codeaurora.org>
+ <CAE-0n51WBdLoJRPs9tWZgdAukJMnkD3V00o7xNYVX77-eToKvw@mail.gmail.com>
+Message-ID: <749157bdb4613ae370adfb7ba055a2a9@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 21. 9. 13. 오전 3:44, Dmitry Osipenko wrote:
-> EMC clock is always-on and can't be zero. Check whether clk_round_rate()
-> returns zero rate and error out if it does. It can return zero if clock
-> tree isn't initialized properly.
+On 2021-09-04 00:36, Stephen Boyd wrote:
+> Quoting Odelu Kukatla (2021-08-20 04:23:41)
+>> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
+>> SoCs.
+>> 
+>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>> 
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
+>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 53a21d0..cf59b47 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1848,6 +1848,17 @@
+>>                         };
+>>                 };
+>> 
+>> +               epss_l3: interconnect@18590000 {
+>> +                       compatible = "qcom,sc7280-epss-l3";
+>> +                       reg = <0 0x18590000 0 1000>,
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->   drivers/devfreq/tegra30-devfreq.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> Is this supposed to be 0x1000?
 > 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index d83fdc2713ed..65ecf17a36f4 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -891,9 +891,9 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->   		return err;
->   
->   	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
-> -	if (rate < 0) {
-> +	if (rate <= 0) {
->   		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
-> -		return rate;
-> +		return rate ?: -EINVAL;
->   	}
->   
->   	tegra->max_freq = rate / KHZ;
-> 
-
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+No, This is 1000 or 0x3E8.
+>> +                             <0 0x18591000 0 0x100>,
+>> +                             <0 0x18592000 0 0x100>,
+>> +                             <0 0x18593000 0 0x100>;
+>> +                       clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc 
+>> GCC_GPLL0>;
+>> +                       clock-names = "xo", "alternate";
+>> +                       #interconnect-cells = <1>;
+>> +               };
+>> +
+>>                 cpufreq_hw: cpufreq@18591000 {
+>>                         compatible = "qcom,cpufreq-epss";
+>>                         reg = <0 0x18591100 0 0x900>,
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>> Forum,
+>> a Linux Foundation Collaborative Project
+>> 
