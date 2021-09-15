@@ -2,103 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4B140C2DD
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 11:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717B740C413
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 13:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhIOJjg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 05:39:36 -0400
-Received: from mga09.intel.com ([134.134.136.24]:58453 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229785AbhIOJjg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Sep 2021 05:39:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10107"; a="222310760"
-X-IronPort-AV: E=Sophos;i="5.85,295,1624345200"; 
-   d="scan'208";a="222310760"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2021 02:38:17 -0700
-X-IronPort-AV: E=Sophos;i="5.85,295,1624345200"; 
-   d="scan'208";a="544766083"
-Received: from singanam-mobl1.gar.corp.intel.com ([10.213.67.66])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2021 02:38:13 -0700
-Message-ID: <48eef209ab34b7885790bf25fd93163f3eea4795.camel@linux.intel.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Add Icelake servers support
- in no-HWP mode
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Wed, 15 Sep 2021 02:38:10 -0700
-In-Reply-To: <CAAYoRsUnuNL+orjeXpxEE4fyknGGk3Kngk6Gt+hoCHxLYg9D6A@mail.gmail.com>
-References: <fb6c8a4e284a9b6c043f4ac382387b19bd100976.camel@linux.intel.com>
-         <20210513132051.31465-1-ggherdovich@suse.cz>
-         <CAAYoRsUcyFsFWDE=r+aMgDBa6hcgXgtE2jJ_NHas5e4TdgiBTg@mail.gmail.com>
-         <067ee60e47a0350d01f0c3f216c1032818044b36.camel@suse.cz>
-         <CAAYoRsX0xJf1mm1a_YUCzDy86r8q4QE98iVtS1AMLaUx+KTgQQ@mail.gmail.com>
-         <CAAYoRsXK79PspEUh9pqgj2OGQnxQONkEeK-7af3=5frBzAqULQ@mail.gmail.com>
-         <2a1b000cd101737400f6320ef18c0143d3a5145b.camel@linux.intel.com>
-         <CAAYoRsVeMCivVBp-q_9N23BDOVvkc8ZLS3mubnz+4TREZ9Cz_A@mail.gmail.com>
-         <7abae13c235d74f4789cd93c6c6b0cbf69df243d.camel@linux.intel.com>
-         <CAAYoRsVd4uU7sofcvYWd__evKJTf7HE5mi2ZVDjAYNYWXS3mzQ@mail.gmail.com>
-         <CAAYoRsUnuNL+orjeXpxEE4fyknGGk3Kngk6Gt+hoCHxLYg9D6A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        id S232313AbhIOLFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 07:05:40 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:64028 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232468AbhIOLFk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 07:05:40 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18F6h4oX016932;
+        Wed, 15 Sep 2021 07:04:21 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com with ESMTP id 3b301k390t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 07:04:20 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 18FB4JIb056036
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Sep 2021 07:04:19 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.5; Wed, 15 Sep 2021
+ 07:04:18 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.858.5 via Frontend Transport;
+ Wed, 15 Sep 2021 07:04:18 -0400
+Received: from ramonaalexandra-Precision-5520.ad.analog.com ([10.48.65.154])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 18FB4HnH006137;
+        Wed, 15 Sep 2021 07:04:17 -0400
+From:   Ramona Alexandra Nechita <ramona.nechita@analog.com>
+To:     <linux-pm@vger.kernel.org>
+CC:     <sre@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ramona Alexandra Nechita <ramona.nechita@analog.com>
+Subject: [PATCH] power: supply: Specify variations of MAX8903
+Date:   Wed, 15 Sep 2021 14:03:40 +0300
+Message-ID: <20210915110340.17411-1-ramona.nechita@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: ReiOQsyhmahstBOD3o8em38sG9wanA9L
+X-Proofpoint-GUID: ReiOQsyhmahstBOD3o8em38sG9wanA9L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-15_02,2021-09-15_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=998 mlxscore=0 phishscore=0 clxscore=1011 suspectscore=0
+ bulkscore=0 adultscore=0 spamscore=0 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109150072
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-09-14 at 11:41 -0700, Doug Smythies wrote:
-> On Tue, Sep 7, 2021 at 8:43 PM Doug Smythies <dsmythies@telus.net>
-> wrote:
-> > 
+MAX8903 has multiple variations (A-E/G/H/J/N/Y).
+Specified them in the Kconfig and in the file comment.
 
-[...]
+Signed-off-by: Ramona Alexandra Nechita <ramona.nechita@analog.com>
+---
+ drivers/power/supply/Kconfig           | 2 +-
+ drivers/power/supply/max8903_charger.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > The intel_pstate driver works fine.
-> 
-> Hi Srinivas,
-Hi Doug,
-
-> 
-> I heard back from ASUS, and they now confirm that they
-> did change the behaviour of the "Auto" setting in BIOS
-> version 2103. They say they did it to fix an issue with
-> ITB3.0, which I assume means Intel Turbo Boost 3.0.
-> I'll copy and paste the relevant portion of the email
-> below:
-> 
-> " I am in direct contact with the engineers.
-> Here is the result from their test:
-> 
-> In BIOS 2103,the “Auto” setting transfers control to
-> the OS with HWP available and enabled.
-> 
-> This is side effect to fix ITBM3.0 not work after HWP enabled.
-> We can remove this patch, but ITBM3.0 will not work when HWP enabled"
-> 
-> Are you familiar with this issue?
-No. I think they mean that they need to expose ACPI CPPC information.
-It is possible they only expose ACPI CPPC information when HWP feature
-is available. But not sure why it requires HWP enable also. We (on
-Linux) depend on ACPI CPPC for turbo 3.0, but don't require HWP to be
-enabled by default.
-
-
-Thanks,
-Srinivas
-
-
-
-> 
-> I want the original behaviour of the "Auto" setting, as it is
-> the only way for control to go to the OS with HWP
-> available but disabled.
-> 
-> ... Doug
-
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index c84a7b1caeb6..cca779480b1c 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -442,7 +442,7 @@ config CHARGER_ISP1704
+ 	  ISP1707/ISP1704 USB transceivers.
+ 
+ config CHARGER_MAX8903
+-	tristate "MAX8903 Battery DC-DC Charger for USB and Adapter Power"
++	tristate "MAX8903A/B/C/D/E/G/H/J/N/Y Battery DC-DC Charger for USB and Adapter Power"
+ 	help
+ 	  Say Y to enable support for the MAX8903 DC-DC charger and sysfs.
+ 	  The driver supports controlling charger-enable and current-limit
+diff --git a/drivers/power/supply/max8903_charger.c b/drivers/power/supply/max8903_charger.c
+index 0bd39b0cc257..4e5c669e6607 100644
+--- a/drivers/power/supply/max8903_charger.c
++++ b/drivers/power/supply/max8903_charger.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * max8903_charger.c - Maxim 8903 USB/Adapter Charger Driver
++ * max8903_charger.c - Maxim 8903A/B/C/D/E/G/H/J/N/Y USB/Adapter Charger Driver
+  *
+  * Copyright (C) 2011 Samsung Electronics
+  * MyungJoo Ham <myungjoo.ham@samsung.com>
+-- 
+2.25.1
 
