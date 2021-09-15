@@ -2,91 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CF940C0EF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 09:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E256D40C156
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 10:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbhIOHw3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 03:52:29 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44958
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236739AbhIOHw0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 03:52:26 -0400
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AD6A840268
-        for <linux-pm@vger.kernel.org>; Wed, 15 Sep 2021 07:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1631692267;
-        bh=3UuhH6DfF97G63xEabBbDhstzQxGbUL43IU2MzmFk4s=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=UYw9c0j9eac3HCzWQmm3jQ6gJ18zP+LHIMsuEOOoIsof7k7nFQdee+EYcCGmN2D1N
-         nijS9C4zfkM7hNnbEGnEBrKtcI8PnaBWg4WdS91ztGlhCnCEdViv7rqiP306JrbZKY
-         XGBpobvadbOYK2Qnqjt3C1IZAU7NZwkwMq8Z0y8JB3L4+QATTyZOqHHD74LON1QvSP
-         3URttKG9mkhakfKFKQhpnqeZ6VD6e2NbyQwi+TpDFoY7SpCoJFSdXhD7jl9Jt4eIVX
-         CUX7RP9Lk/O3KrrpQM4jU7oGGxNCMPDR2dRq2LhKoeFcecpeZJxesqX9IcpPCAwDEG
-         9L1VfxEUFUs5g==
-Received: by mail-ed1-f69.google.com with SMTP id r11-20020aa7cfcb000000b003d4fbd652b9so1097280edy.14
-        for <linux-pm@vger.kernel.org>; Wed, 15 Sep 2021 00:51:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3UuhH6DfF97G63xEabBbDhstzQxGbUL43IU2MzmFk4s=;
-        b=K/uQyhkvSWKCUFu7UCNj+EYno1vWwdds2F6KuNFuqZnD/Ar8nJRk4MOFKorJ5eFYAQ
-         RxDH2WTqT6UgSChx7AGxp4oHEBwAnQ/+YCjUvxgZ67tyoZA2fVAMX33SFRVX59iCHztE
-         JIWdvNSMaqUIQRNX0WcJEJLO4UAGeDRwg4dbva6y8Ep5LT2xR3HckN7kZ4xlSjJCH61E
-         8JuZ0RvJI97S4TWntQqfJWESUYqpSh7Wscr1pNjn6MUUysHIdVf0hS/RXXz8+jBUk4RG
-         j/5c0/H9g1G9Iv2AxBrnOORZnj2YNMEFUfo6d1ULfIuvsZ4KugvXT3k9xZhU/iUJeIAb
-         f3RQ==
-X-Gm-Message-State: AOAM530F89AmFfgYwZ7d4dK77PbO7fWQHAmQeK7SeXzagG4sL1/M4Wr6
-        IiO5GTOA0CDDFtbkUpFg1MKjvGq27GO3onKX886HScSOoWctyPCmM+FBZSLDyiAFmkWLH1vLa5F
-        AJTQuqBpUn7r41Fp/eAmSVGb1TS8VOBH8RBvs
-X-Received: by 2002:a17:906:9aca:: with SMTP id ah10mr15858278ejc.471.1631692267470;
-        Wed, 15 Sep 2021 00:51:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyZ3105Y/iQTlTiucEVyhs8Y5dCC+GLZzdNSu4AJG3m4GNgDvfkECg7+b3PmxdlHBXvw0U+bA==
-X-Received: by 2002:a17:906:9aca:: with SMTP id ah10mr15858264ejc.471.1631692267342;
-        Wed, 15 Sep 2021 00:51:07 -0700 (PDT)
-Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id n11sm591922edr.51.2021.09.15.00.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Sep 2021 00:51:06 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
+        id S236933AbhIOILo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 04:11:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48726 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236965AbhIOILG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Sep 2021 04:11:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD332611AF;
+        Wed, 15 Sep 2021 08:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631693387;
+        bh=u25hOeQbvYR4QZ2+ydh3BaVFfAgOWaJC7fn8kmf4Am4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=S4lAJzytvs7OVbXEWu23VNSM+MDzyUc9GiwKq017B0jFyXvUTDsQsRmRxpUq7DxN9
+         M9bDebwWaYCoN9W8/jip/U7Rl9fU5f5oFTtaAVs5W1bM8M/3GIa+7SncQgPbwuFezX
+         zRcJPVb6HYO+ScE1knq6j9Xo3lCeZgbD/W7Gfrd54Dq6zwk8Dw/nv5M8UrMaCoDYt9
+         s9ACdP11+wYtt2X4pWLvwJZcNHfkGsF8XQP70CnlmafkBflL54olTf3vWh6R/LvN2P
+         h39B4mJ1p4fpNzXuZNqTQLAFlOwoCTytAhT6E2FUzXqUVatVjZ/kRN/PDKApthecMa
+         Uk/okuAUJbV1w==
+Subject: Re: [RFC 01/19] dt-bindings: interconnect: imx8mq: Add missing pl301
+ and SAI ids
+To:     Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: (subset) [PATCH v2 4/4] ARM: dts: exynos: align PPMU event node names with dtschema
-Date:   Wed, 15 Sep 2021 09:50:58 +0200
-Message-Id: <163169222223.16372.15525688455985156121.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210820150353.161161-4-krzysztof.kozlowski@canonical.com>
-References: <20210820150353.161161-1-krzysztof.kozlowski@canonical.com> <20210820150353.161161-4-krzysztof.kozlowski@canonical.com>
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
+ <1631554694-9599-2-git-send-email-abel.vesa@nxp.com>
+From:   Georgi Djakov <djakov@kernel.org>
+Message-ID: <096f0e8a-2215-6506-330f-a9cbfc8ddfe6@kernel.org>
+Date:   Wed, 15 Sep 2021 11:09:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1631554694-9599-2-git-send-email-abel.vesa@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 20 Aug 2021 17:03:53 +0200, Krzysztof Kozlowski wrote:
-> Use hyphen instead of underscore and align the PPMU event node name with
-> dtschema.
+Hi Abel,
+
+On 13.09.21 20:37, Abel Vesa wrote:
+> According to the bus diagram, there are two more pl301s that need to
+> be added here. The pl301_per_m which is an intermediary node between
+> pl301_main and its masters: usdhc1, usdhc2 and sdma. The pl301_wakeup
+> is an intermediary node between pl301_main and its masters, in this case
+> all the SAIs.
+
+Thanks for working on this!
+
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
+>   include/dt-bindings/interconnect/imx8mq.h | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> 
+> diff --git a/include/dt-bindings/interconnect/imx8mq.h b/include/dt-bindings/interconnect/imx8mq.h
+> index 1a4cae7f8be2..1953de8af5cb 100644
+> --- a/include/dt-bindings/interconnect/imx8mq.h
+> +++ b/include/dt-bindings/interconnect/imx8mq.h
+> @@ -44,5 +44,14 @@
+>   #define IMX8MQ_ICM_PCIE1	26
+>   #define IMX8MQ_ICM_PCIE2	27
+>   #define IMX8MQ_ICN_MAIN		28
+> +#define IMX8MQ_ICN_PER_M	30
 
-Applied, thanks!
+Is there any reason to jump from 28 to 30?
 
-[4/4] ARM: dts: exynos: align PPMU event node names with dtschema
-      commit: fb9b199e562d66af90f61d70eb737fa5e4deac2c
+Thanks,
+Georgi
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +
+> +#define IMX8MQ_ICN_WAKEUP	31
+> +#define IMX8MQ_ICM_SAI1		32
+> +#define IMX8MQ_ICM_SAI2		33
+> +#define IMX8MQ_ICM_SAI3		34
+> +#define IMX8MQ_ICM_SAI4		35
+> +#define IMX8MQ_ICM_SAI5		36
+> +#define IMX8MQ_ICM_SAI6		37
+>   
+>   #endif /* __DT_BINDINGS_INTERCONNECT_IMX8MQ_H */
+>
