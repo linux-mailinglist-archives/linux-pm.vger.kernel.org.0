@@ -2,55 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E353A40CC92
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 20:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F21C40CCA8
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 20:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhIOScw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 14:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S230230AbhIOSiz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 14:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229466AbhIOScv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 14:32:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFD2C061574;
-        Wed, 15 Sep 2021 11:31:32 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id j1so2739614pjv.3;
-        Wed, 15 Sep 2021 11:31:32 -0700 (PDT)
+        with ESMTP id S229466AbhIOSiy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 14:38:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFEDC061574;
+        Wed, 15 Sep 2021 11:37:35 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y8so3478721pfa.7;
+        Wed, 15 Sep 2021 11:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=08DeS9EiRSwxDI4M4feIzMG6iv/hhxkj2trxtcVNueQ=;
-        b=Isi3v0awJAXImI6JZWmC2kzZ2bkcEcvasEWWr1Uwi7NiCeP1wfXBbJyVpuoNNsT83w
-         9G3l42sCUrp77DZ8jyzZ66n3ectwAAYzhrpHdrta/QUXVwpVvOvpBD+ex10WXp3547D5
-         dYzYd+llFo3ThINzmwFJjHDKFJ8ZT1gVZA85RaEgFQig0FG+hncm7Ds2IGHfQfXyzKry
-         hL7+FVZ68T7LQZ0PkhY5CNGH46poBUWWUMfD7Xn1ZtqIBkZFxdlmLd6HKN78ivbF8Sbd
-         AjvhNQ4yjsQ00LoIP3uwA25RKdcMFKevf1GwgqNKMTJplhV5+rnPgl13Iy9CtTeb/T+O
-         mEfQ==
+        bh=cV94EzHynqxjz8HFcaX2Gl0eMBtC8KjOsD+tryLOOkU=;
+        b=Qi3QTMdec7SQPTswOpe8M8UWEo+ojCn/hpzaJwx0AenrBsm3CB5n7xZY38iFgIog4x
+         5IaTMxs68SQC2h028ddJNL10sdifkyjNSIN+VabUMQ9tVghvprofe+tDq06jKmpkumeB
+         ImfO5SsQbfh+ymvVkjhAbiSly2ksc6QNedg/fhWButV6jai3fHmQ2Y93EAbvqdV1DIqR
+         vgQBq70te9042XRaFfjuv0vX6wMSMhGj7dclZ94dh9KhXXJjfYfcpw5s2ZwX8wJTA3gk
+         Ct7NGCMfzIWDi9Mv8ZZRNGaqYrIr8O/IsrPpjYIb8YcUJF6DOh1XQlK057gD8HwM7r5F
+         CIIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=08DeS9EiRSwxDI4M4feIzMG6iv/hhxkj2trxtcVNueQ=;
-        b=wSj7ozeKkv3JwozN0N04h5F/DSrrHfxR8jGp7Ov+qmIeEleweX1Nf3VLg68FZXAOlG
-         m4RVnHrIKCsao2ggektZgf51z4zg8iwwhV8EUHK2rUBBzEgD3txKbmNR8/pg5s9V2I1c
-         x2FKaneENuug52pu5buLcOKYW+jpQDkVTCuC+2CF9yM9UUsp1Jn6JCNuiWF2/DWYwZB9
-         ltnvYXyppzoe0v+tUQQhNy9WmFiuzuu8Zku5V3fz/OIU3UnsKRqorrPTMdtxYAwm3/GQ
-         luhd86/qXLrV4Jml258eHwTgE6ZA0TyjYTXtD4rlSSAWd8Tum96gUbEamwxDxqsHn7er
-         or3g==
-X-Gm-Message-State: AOAM530unkEbjcZjbYWlTPgxpIk1J049yajOO0FX03Vbi48B+27SOYGf
-        sHpjhVdMsJtwcSqmm5fvm29+TNCb3AH1gg==
-X-Google-Smtp-Source: ABdhPJy5KgIo85Vx7NQj8y/nMacZJHdmDudSZt0KB1Xp/n7LV+TMPprGRN6sVBeMfcqm6mepY5u9hg==
-X-Received: by 2002:a17:90b:1c0c:: with SMTP id oc12mr7891665pjb.45.1631730691859;
-        Wed, 15 Sep 2021 11:31:31 -0700 (PDT)
+        bh=cV94EzHynqxjz8HFcaX2Gl0eMBtC8KjOsD+tryLOOkU=;
+        b=Vfqk+5e8p+PyrJgXppJ4PvA80dLbTJItzfhgl7QMzDh2SwjgZ96jRu/qlMPY5sqc3v
+         ECyDLazTP2GZ+EeL0Iwt+knNnBDGhLDMfoZ2lQVNQwO8LnflGc0qAJbSJCYL1jKW0SQZ
+         6Y5Fovsc9ldsQDy24jAIWikbJeOl/iaE+C329Y1Jmu43Oy8mUkPl3dIbVIiAtX2rNoa+
+         AYNndKH9L/GOrVDxmtZanjc8WfpnYiiC04sFbH/Jnw5l4fV6LBLH/Ydkqvindgn0/eF8
+         wYdtCKfGBtfY/+uYqFTLCzeRCy9UFiAVN5n57oKWawXQB5DMsmjfEIWeezrlJhVyPQfm
+         1I3w==
+X-Gm-Message-State: AOAM5337CeXERxCauC8XK0XBxxZSBvAhqOHPV94F14AxX7+L03oRyLux
+        GfNI5OOw6FsowoJ4+xhLAddGoVQaW5hCYQ==
+X-Google-Smtp-Source: ABdhPJxmgDJz4BtqQ1Vw+9YEdTOg3KxZV1Tg9Wt9YYbwjDlqS6f+WsElvlB+ZWG3uClUyMHuYb0EAw==
+X-Received: by 2002:a63:cf44:: with SMTP id b4mr1077978pgj.215.1631731054811;
+        Wed, 15 Sep 2021 11:37:34 -0700 (PDT)
 Received: from [172.30.1.2] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id s192sm657273pgc.23.2021.09.15.11.31.28
+        by smtp.gmail.com with ESMTPSA id j123sm561153pgc.77.2021.09.15.11.37.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Sep 2021 11:31:31 -0700 (PDT)
-Subject: Re: [PATCH v1 4/4] PM / devfreq: tegra30: Check whether
- clk_round_rate() returns zero rate
-From:   Chanwoo Choi <cwchoi00@gmail.com>
+        Wed, 15 Sep 2021 11:37:34 -0700 (PDT)
+Subject: Re: [PATCH v1 2/4] PM / devfreq: Add devm_devfreq_add_governor()
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -62,14 +60,14 @@ To:     Dmitry Osipenko <digetx@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <20210912184458.17995-1-digetx@gmail.com>
- <20210912184458.17995-5-digetx@gmail.com>
- <9fa66405-883a-3653-eb5d-3cd7eee07a0a@gmail.com>
-Message-ID: <e9233eeb-6780-b390-dffa-8de9315effa3@gmail.com>
-Date:   Thu, 16 Sep 2021 03:31:26 +0900
+ <20210912184458.17995-3-digetx@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <329a691d-010f-ca2a-22ef-929fb4495ce7@gmail.com>
+Date:   Thu, 16 Sep 2021 03:37:29 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <9fa66405-883a-3653-eb5d-3cd7eee07a0a@gmail.com>
+In-Reply-To: <20210912184458.17995-3-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -77,37 +75,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21. 9. 15. 오후 12:51, Chanwoo Choi wrote:
-> Hi,
-> 
-> On 21. 9. 13. 오전 3:44, Dmitry Osipenko wrote:
->> EMC clock is always-on and can't be zero. Check whether clk_round_rate()
->> returns zero rate and error out if it does. It can return zero if clock
->> tree isn't initialized properly.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>   drivers/devfreq/tegra30-devfreq.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c 
->> b/drivers/devfreq/tegra30-devfreq.c
->> index d83fdc2713ed..65ecf17a36f4 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -891,9 +891,9 @@ static int tegra_devfreq_probe(struct 
->> platform_device *pdev)
->>           return err;
->>       rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
->> -    if (rate < 0) {
->> +    if (rate <= 0) {
->>           dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
->> -        return rate;
->> +        return rate ?: -EINVAL;
+Hi,
 
-If rate is 0, It doesn't return and fall-through? even if print the 
-error message. 'return rate ?: -EINVAL;' style is strange for me
-because it doesn't specify the 'return value' when rate is true.
+There is ordering dependency between devfreq device and devfreq
+governor. Theoretically, devfreq governor must be released after
+released of devfreq device.
+
+devm_* support the release ordering by the sequence of registration
+in probe()?
+
+On 21. 9. 13. 오전 3:44, Dmitry Osipenko wrote:
+> Add resource-managed variant of devfreq_add_governor().
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>   drivers/devfreq/devfreq.c  | 26 ++++++++++++++++++++++++++
+>   drivers/devfreq/governor.h |  3 +++
+>   2 files changed, 29 insertions(+)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 85faa7a5c7d1..d3af000ec290 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -1301,6 +1301,32 @@ int devfreq_add_governor(struct devfreq_governor *governor)
+>   }
+>   EXPORT_SYMBOL(devfreq_add_governor);
+>   
+> +static void devm_devfreq_remove_governor(void *governor)
+> +{
+> +	devfreq_remove_governor(governor);
+> +}
+> +
+> +/**
+> + * devm_devfreq_add_governor() - Add devfreq governor
+> + * @dev:	device which adds devfreq governor
+> + * @governor:	the devfreq governor to be added
+> + *
+> + * This is a resource-managed variant of devfreq_add_governor().
+> + */
+> +int devm_devfreq_add_governor(struct device *dev,
+> +			      struct devfreq_governor *governor)
+> +{
+> +	int err;
+> +
+> +	err = devfreq_add_governor(governor);
+> +	if (err)
+> +		return err;
+> +
+> +	return devm_add_action_or_reset(dev, devm_devfreq_remove_governor,
+> +					governor);
+> +}
+> +EXPORT_SYMBOL(devm_devfreq_add_governor);
+> +
+>   /**
+>    * devfreq_remove_governor() - Remove devfreq feature from a device.
+>    * @governor:	the devfreq governor to be removed
+> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> index 2d69a0ce6291..0d70a9ad951e 100644
+> --- a/drivers/devfreq/governor.h
+> +++ b/drivers/devfreq/governor.h
+> @@ -94,4 +94,7 @@ static inline int devfreq_update_stats(struct devfreq *df)
+>   
+>   	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
+>   }
+> +
+> +int devm_devfreq_add_governor(struct device *dev,
+> +			      struct devfreq_governor *governor);
+>   #endif /* _GOVERNOR_H */
+> 
 
 
 -- 
