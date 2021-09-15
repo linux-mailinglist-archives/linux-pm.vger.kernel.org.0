@@ -2,86 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E829740C4E9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 14:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0D540C4FF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 14:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbhIOMGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 08:06:52 -0400
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:40809 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237708AbhIOMGv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 08:06:51 -0400
-Received: by mail-oo1-f46.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so804329ooh.7;
-        Wed, 15 Sep 2021 05:05:32 -0700 (PDT)
+        id S232471AbhIOMQ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 08:16:27 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:47037 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236617AbhIOMQ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 08:16:26 -0400
+Received: by mail-oi1-f177.google.com with SMTP id w144so3847064oie.13;
+        Wed, 15 Sep 2021 05:15:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dMf2u34NGnOhwbnxOobe2zbbeVBloCBqlHv3VYYj/vQ=;
-        b=HFJuR5xhvJwW83ZNqldbx5uQaqGY6WCZe99Dsoi/g7YxRQla2+kuJn/zxDNobHJJhE
-         D64lI2juNYnMtQiGFNTQG2BX2AhcRcl4l2InmuDKtcms9uSnfm0z/uGypY99YBIRbf04
-         hEchZFHJOX2lkga5PeCbEGUMooi5p9/4fDjnM53ZFUzHUHx/mFpj7maqaTyIH61qXb79
-         1kwC/ImksmRJCRf8SV1sdtef6OO+V2B7wZ6FVaRKrKxkksgekESXtfOPWs/zy4j40hMm
-         rHBTRVHGc6Hg3rpeQvZFlqnJIPtz5wzN9zSFacPxnxXA0Xs1y83QvTiksB46DbRQsjlI
-         C4NQ==
-X-Gm-Message-State: AOAM530SPH3u5CMUZZt/V+If5c93bK4ZB3c++A9yYrYseUU90iBhTS5m
-        UVikOq34vSQjvHrImErFhqzlX9W6Q/iRkVIWLvM=
-X-Google-Smtp-Source: ABdhPJwaeDCJw4wkhR5ZHBVb9QM2iz4q8UB8AAgsUqRj4I9J/aa9yR156ZHujEIzC1fasNUq+u9txobijOgV3qrwrwg=
-X-Received: by 2002:a4a:a78a:: with SMTP id l10mr17920412oom.30.1631707532223;
- Wed, 15 Sep 2021 05:05:32 -0700 (PDT)
+        bh=EVoKhQMadoazrYqvBJf6sjlsjVA0vPUwCX5n5F/L45k=;
+        b=pC6ut59k0UdWWwzmqciW2y0HNvuTz+loqurzaF943sAoWN66w+jEeXDEI4yQFnEc/k
+         4Ai3cNQynqMHB8nfC8zcslTa3NVAnrch6DRGtFQbR5nep8JO7lFveE7IUWqg4zXDbWZb
+         NJ/nMLoObkXcZ5R2YP6BNg4VKUHHoEqujJq5rxCMygcgp5E56bPEjhVp9UEFmmnl01Li
+         u8RrciORrf6FEMSLbTCl6RPvzXN89GPYqN3qTf7i/wKsI1vJIJ5z+mOTd6zMDtHzZbJV
+         t5uUOryLPYKPEvmF5m//weBGHLFTwNZ15XckrXp6JQJvqG5nVHT/b4TQ+KvWiejHPm8l
+         iCCA==
+X-Gm-Message-State: AOAM533AlmXNUqT2y0mjPlC8L0fFZwo9b1AxUCm9eihuRFgZR/Xv1KBp
+        NwH9qHioZuxOT06VuOI1CVPsJ5GFEl48m2pQ9tc=
+X-Google-Smtp-Source: ABdhPJxiXPyfVZ86C3VvELmHrJtllKoriucpmjNpPoJ++iUpceHQmZsmie3jG5VVjOErZWWEHSmr5E4H3r14jTOif5I=
+X-Received: by 2002:a05:6808:10c1:: with SMTP id s1mr4773694ois.69.1631708107631;
+ Wed, 15 Sep 2021 05:15:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210915022328.56702-1-f.fainelli@gmail.com>
-In-Reply-To: <20210915022328.56702-1-f.fainelli@gmail.com>
+References: <20210906183440.85710-1-anelkz@amazon.de>
+In-Reply-To: <20210906183440.85710-1-anelkz@amazon.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Sep 2021 14:05:20 +0200
-Message-ID: <CAJZ5v0hEjQn-yr29RdpfYcsfqMCv_BK8obZy7kFP1q0SeM0Zxg@mail.gmail.com>
-Subject: Re: [PATCH] PM / sleep: Do not assume that "mem" is always present
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>
+Date:   Wed, 15 Sep 2021 14:14:56 +0200
+Message-ID: <CAJZ5v0ghTGx_1Y5R07pJ9CkTxrMjs=nj2UefeJn6Yh5ud2uP2A@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Fix memory leaks
+To:     Anel Orazgaliyeva <anelkz@amazon.de>
+Cc:     Aman Priyadarshi <apeureka@amazon.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 15, 2021 at 4:23 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Mon, Sep 6, 2021 at 8:35 PM Anel Orazgaliyeva <anelkz@amazon.de> wrote:
 >
-> An implementation of suspend_ops is allowed to reject the PM_SUSPEND_MEM
-> suspend type from its ->valid() callback, we should not assume that it
-> is always present as this is not a correct reflection of what a firmware
-> interface may support.
->
-> Fixes: 406e79385f32 ("PM / sleep: System sleep state selection interface rework")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  kernel/power/suspend.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index eb75f394a059..02e306ad8db8 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -171,8 +171,7 @@ static bool valid_state(suspend_state_t state)
->
->  void __init pm_states_init(void)
->  {
-> -       /* "mem" and "freeze" are always present in /sys/power/state. */
-> -       pm_states[PM_SUSPEND_MEM] = pm_labels[PM_SUSPEND_MEM];
-> +       /* "freeze" is always present in /sys/power/state. */
->         pm_states[PM_SUSPEND_TO_IDLE] = pm_labels[PM_SUSPEND_TO_IDLE];
->         /*
->          * Suspend-to-idle should be supported even without any suspend_ops,
-> @@ -214,6 +213,7 @@ void suspend_set_ops(const struct platform_suspend_ops *ops)
->         }
->         if (valid_state(PM_SUSPEND_MEM)) {
->                 mem_sleep_states[PM_SUSPEND_MEM] = mem_sleep_labels[PM_SUSPEND_MEM];
-> +               pm_states[PM_SUSPEND_MEM] = pm_labels[PM_SUSPEND_MEM];
->                 if (mem_sleep_default >= PM_SUSPEND_MEM)
->                         mem_sleep_current = PM_SUSPEND_MEM;
->         }
-> --
+> Commit c343bf1ba5ef ("cpuidle: Fix three reference count leaks")
+> fixes the cleanup of kobjects; however, it removes kfree() calls
+> altogether, leading to memory leaks.
 
-Applied as 5.16 material, thanks!
+Wait, won't the cleanup be done by cpuidle_free_state_kobj()?
+
+> Fix those and also defer the initialization of dev->kobj_dev until
+> after the error check, so that we do not end up with a dangling
+> pointer.
+>
+> Signed-off-by: Anel Orazgaliyeva <anelkz@amazon.de>
+> Suggested-by: Aman Priyadarshi <apeureka@amazon.de>
+> ---
+>  drivers/cpuidle/sysfs.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 53ec9585ccd4..469e18547d06 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -488,6 +488,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
+>                                            &kdev->kobj, "state%d", i);
+>                 if (ret) {
+>                         kobject_put(&kobj->kobj);
+> +                       kfree(kobj);
+>                         goto error_state;
+>                 }
+>                 cpuidle_add_s2idle_attr_group(kobj);
+> @@ -619,6 +620,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
+>                                    &kdev->kobj, "driver");
+>         if (ret) {
+>                 kobject_put(&kdrv->kobj);
+> +               kfree(kdrv);
+>                 return ret;
+>         }
+>
+> @@ -705,7 +707,6 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
+>         if (!kdev)
+>                 return -ENOMEM;
+>         kdev->dev = dev;
+> -       dev->kobj_dev = kdev;
+>
+>         init_completion(&kdev->kobj_unregister);
+>
+> @@ -713,9 +714,11 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
+>                                    "cpuidle");
+>         if (error) {
+>                 kobject_put(&kdev->kobj);
+> +               kfree(kdev);
+>                 return error;
+>         }
+>
+> +       dev->kobj_dev = kdev;
+>         kobject_uevent(&kdev->kobj, KOBJ_ADD);
+>
+>         return 0;
+> --
+> 2.32.0
+>
+>
+>
+>
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+>
+>
+>
