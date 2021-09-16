@@ -2,128 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856A540D438
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 10:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5245640D4E0
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 10:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbhIPIFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 04:05:14 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:56481 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235039AbhIPIDU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Sep 2021 04:03:20 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1631779266; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=tP+XNZ/9NH4K4GD+4JVcxuh8dLGXglkOiSbkpJxZE3s=;
- b=PWcNNGEDpy7AYnyIZvRmsTVCPTSYuoGGF4z95qv6Syn9UO2h6OxM2FYqZpGJLRFczKXT/evy
- JlLGfKaojdEfwyGMQ7o1z/SAgPJ0GhdMYPv219b7OYUSHy3ue9RseqZl53HDzoWwYl7g/AD+
- hqTiEcqIrDlRet63utaX3OoLO08=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 6142f9a4bd6681d8ed3675a0 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 16 Sep 2021 08:00:36
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 92B98C43617; Thu, 16 Sep 2021 08:00:35 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BBFEBC4360D;
-        Thu, 16 Sep 2021 08:00:34 +0000 (UTC)
+        id S232063AbhIPIsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 04:48:31 -0400
+Received: from mail-dm3nam07on2087.outbound.protection.outlook.com ([40.107.95.87]:15200
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233791AbhIPIsb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Sep 2021 04:48:31 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Km6agQaKTJF+BbyLZyKTnpqwUjkgPc8ROOgtrCl78GiVNPVPPWzmcsktkRJ7TqmoPdgXR9rLpQr1JgJKEiGOzuRbTeIJzzBIu46GVlDEwkoscB1HpN637RKStMbMJBbNxxRMMQnTNBkk0vmMGoXTRFd+ISpUerhVS4Llb8ZZQ/NWKCMG5AWft7zFp3jIEE4zWBizp03LAqY2kU+BcPHR4RZvvgP0ybv7csEkC67WIl34Eve2cd6ytrucAW4gEoXKAciJsHOasbyWDfifrF/w7msfoO2B0ngGPiU3wT7/xXCku2EjY9ZB9pd0e+f/fzSI6SzftG5pEs7GjhAy0ItZGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=48DhawiAwYlhRqkNijUyauzMQTYdleuWgf3etLpP4gA=;
+ b=AOugsF/izfESLWFS1wa9TJ5AHeCpwnVmoPJYWfVdw/MEOdvzw3coPVuB3NL/gPKIxFvy7xWpSyL9bBnl23ntvI5VewBZYoQMlHdPSYsIlfaosbsmji5xJ6gHVhlNI1LMzemODLT1mP0ttnUdYlZ7MM3PPrnbXMhT8MjF60YnJ4gD13VDYks5AwgeaclvHB7ND+lIn1WylqX7cSvr+gtNK7YErl16DPhXhwmS80dtSuGyMVFnkZy2Vahiz8K2vDZaBx5jyvH0F/dYknQfgWJhEbkuBDjEhn/OqTaCzsJBLMXggz/Alu866r1AFzKQhZ9MLqoSgKnVZevDscxcjSoGsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=48DhawiAwYlhRqkNijUyauzMQTYdleuWgf3etLpP4gA=;
+ b=DNj/+wTJNrK2C0kZyCpMqXWI1tlAa700D4EsAH98bDP350VQzPVJHwDIB0RkWjW5a03zkVz2oEEluKzhfkv73yBlS1k4xJsKJH8x23+RDdUSZFLW6N0j4H+EdMgEQsjMjCjRF9kfe7WBB3TAZpnvuDuahYIlGYFShP7OBJIz5kE=
+Received: from DM5PR05CA0002.namprd05.prod.outlook.com (2603:10b6:3:d4::12) by
+ BY5PR12MB4901.namprd12.prod.outlook.com (2603:10b6:a03:1c5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.17; Thu, 16 Sep
+ 2021 08:47:08 +0000
+Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:d4:cafe::4b) by DM5PR05CA0002.outlook.office365.com
+ (2603:10b6:3:d4::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.5 via Frontend
+ Transport; Thu, 16 Sep 2021 08:47:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=pass action=none
+ header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT041.mail.protection.outlook.com (10.13.172.98) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 08:47:08 +0000
+Received: from hr-amd (10.180.168.240) by SATLEXMB04.amd.com (10.181.40.145)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Thu, 16 Sep
+ 2021 03:47:04 -0500
+Date:   Thu, 16 Sep 2021 16:47:04 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH 15/19] cpupower: add amd-pstate sysfs entries into
+ libcpufreq
+Message-ID: <20210916084704.GA3755511@hr-amd>
+References: <20210908150001.3702552-1-ray.huang@amd.com>
+ <20210908150001.3702552-16-ray.huang@amd.com>
+ <870445a1-1148-e5d1-08f8-df630466d788@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 16 Sep 2021 13:30:34 +0530
-From:   okukatla@codeaurora.org
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        evgreen@google.com, georgi.djakov@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
-        okukatla=codeaurora.org@codeaurora.org
-Subject: Re: [v7 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect
- provider
-In-Reply-To: <CAE-0n53g=qGoVAMh_me_W0ksp39WUm2CCwAttcAK+Do5nYXq5g@mail.gmail.com>
-References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
- <1629458622-4915-4-git-send-email-okukatla@codeaurora.org>
- <CAE-0n51WBdLoJRPs9tWZgdAukJMnkD3V00o7xNYVX77-eToKvw@mail.gmail.com>
- <749157bdb4613ae370adfb7ba055a2a9@codeaurora.org>
- <36fe241f845a27b52509274d007948b1@codeaurora.org>
- <CAE-0n53g=qGoVAMh_me_W0ksp39WUm2CCwAttcAK+Do5nYXq5g@mail.gmail.com>
-Message-ID: <49ba33707767f856ff2a868906387b16@codeaurora.org>
-X-Sender: okukatla@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <870445a1-1148-e5d1-08f8-df630466d788@linuxfoundation.org>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 898c3d58-7948-43b8-08cd-08d978ee9147
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4901:
+X-Microsoft-Antispam-PRVS: <BY5PR12MB4901D4A5F61EBAD1724A6236ECDC9@BY5PR12MB4901.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:935;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e1YphP70XODs3OP48BeY5UsxvCkCSSOzCmEcSHQZsYF5YLTnarSImTfUA5xpGULk6mXfAbeiEL9h+eKZdk8vdzya/Ozqo6lXeAlgeKDcqL9ufgWZFYZByxpRA39mNr1+zkXAb7SjKPKYWVEjj7MsETCeJ3qsSc7clmTFhtBNCtjEViOot8LVCNzr3xcRIrFH/fSFsYMZQ6BYZ0HsIEJBPJV5kzSxw4f+g6nOzgE5y52ZpxTIM15tE7PnjcloKZM8RQWKvWJWJtL+WQkqVd2v7KrY8UeIREtxfjCksPte/YIY2u7TAUm0iYr56Uunak5aPbsI/RKpVE6z0Z2G6+YZ2antMYUSNx6GTh422pwOKU3ANI8X8V7hp5igAw1Rn+Fma4x7HMYRuuMbP1Op/P/R7NjmjlZQxPdWN6PDz5g68WQP+Y1zP5eAsUvLRicdQyQ4h91l4zWEX5FiBNvem8E+IKaMKMuhAG4M7kTy3QO7oFR4ufVo26rJ4XHd8nFhpLe6ABj3GlgGGXAA0RFsWvsqF7sgC/HuBhFw968tEAMk0FeNMPqAhHai8eI76DHpU4SW/kM+yqlAVNrtFcrSo38cYqYHAp6qZUqaEk/fubyjxJbobzWRW1cD5LLnWh6n0Jh+/hf+jSQ590jgifvx66c+/IzBZyxdBwV79XnGpmNM+0nWuEv8bsc43+f8p8Xf+o5K/PafOjRKkLgyCYzSPJmKg6VxkHwefJjpVZ20G+9WJXc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(39860400002)(346002)(46966006)(36840700001)(8936002)(82740400003)(33716001)(54906003)(2906002)(8676002)(356005)(478600001)(70206006)(47076005)(81166007)(55016002)(36860700001)(53546011)(336012)(186003)(16526019)(26005)(316002)(82310400003)(86362001)(70586007)(1076003)(6916009)(426003)(5660300002)(4326008)(9686003)(83380400001)(33656002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 08:47:08.3763
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 898c3d58-7948-43b8-08cd-08d978ee9147
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4901
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-09-16 01:10, Stephen Boyd wrote:
-> Quoting okukatla@codeaurora.org (2021-09-14 23:26:19)
->> On 2021-09-15 10:35, okukatla@codeaurora.org wrote:
->> > On 2021-09-04 00:36, Stephen Boyd wrote:
->> >> Quoting Odelu Kukatla (2021-08-20 04:23:41)
->> >>> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
->> >>> SoCs.
->> >>>
->> >>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
->> >>> ---
->> >>>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 11 +++++++++++
->> >>>  1 file changed, 11 insertions(+)
->> >>>
->> >>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> >>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> >>> index 53a21d0..cf59b47 100644
->> >>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> >>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> >>> @@ -1848,6 +1848,17 @@
->> >>>                         };
->> >>>                 };
->> >>>
->> >>> +               epss_l3: interconnect@18590000 {
->> >>> +                       compatible = "qcom,sc7280-epss-l3";
->> >>> +                       reg = <0 0x18590000 0 1000>,
->> >>
->> >> Is this supposed to be 0x1000?
->> >>
->> > No, This is 1000 or 0x3E8.
+On Fri, Sep 10, 2021 at 06:26:06AM +0800, Shuah Khan wrote:
+> On 9/8/21 8:59 AM, Huang Rui wrote:
+> > These amd-pstate sysfs entries will be used on cpupower for amd-pstate
+> > kernel module.
+> > 
 > 
-> Wow ok. Why is it the only size that isn't in hex format? Please try to
-> be consistent and use hex throughout.
+> This commit log doesn't make sense. If these sysfs entries are used
+> for amd-pstate kernel module, why are they defined here.
 > 
-Sure, will update it to hex format in new revision.
->> We have mapped only required registers for L3 scaling, 1000/0x3E8 is
->> suffice.
->> But i will update it to 0x1000 in next revision so that entire clock
->> domain region-0 is mapped.
+> Describe how these are used and the relationship between these defines
+> and the amd-pstate kernel module
 > 
-> Doesn't that conflict with the cpufreq-hw device?
+> > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > ---
+> >   tools/power/cpupower/lib/cpufreq.c | 18 +++++++++++++++++-
+> >   1 file changed, 17 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+> > index c3b56db8b921..3f92ddadaad2 100644
+> > --- a/tools/power/cpupower/lib/cpufreq.c
+> > +++ b/tools/power/cpupower/lib/cpufreq.c
+> > @@ -69,6 +69,14 @@ enum cpufreq_value {
+> >   	SCALING_MIN_FREQ,
+> >   	SCALING_MAX_FREQ,
+> >   	STATS_NUM_TRANSITIONS,
+> > +	AMD_PSTATE_HIGHEST_PERF,
+> > +	AMD_PSTATE_NOMINAL_PERF,
+> > +	AMD_PSTATE_LOWEST_NONLINEAR_PERF,
+> > +	AMD_PSTATE_LOWEST_PERF,
+> > +	AMD_PSTATE_MAX_FREQ,
+> > +	AMD_PSTATE_NOMINAL_FREQ,
+> > +	AMD_PSTATE_LOWEST_NONLINEAR_FREQ,
+> > +	AMD_PSTATE_MIN_FREQ,
+> >   	MAX_CPUFREQ_VALUE_READ_FILES
+> >   };
+> >   
 > 
-epss_l3 maps (0x18590000, size:0x1000) region which cpufreq-hw does not 
-need. I will update size to 0x1000 for this region only.
+> These are AMD specific values being added to a common code.
+> 
+> > @@ -80,7 +88,15 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
+> >   	[SCALING_CUR_FREQ] = "scaling_cur_freq",
+> >   	[SCALING_MIN_FREQ] = "scaling_min_freq",
+> >   	[SCALING_MAX_FREQ] = "scaling_max_freq",
+> > -	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
+> > +	[STATS_NUM_TRANSITIONS] = "stats/total_trans",
+> > +	[AMD_PSTATE_HIGHEST_PERF] = "amd_pstate_highest_perf",
+> > +	[AMD_PSTATE_NOMINAL_PERF] = "amd_pstate_nominal_perf",
+> > +	[AMD_PSTATE_LOWEST_NONLINEAR_PERF] = "amd_pstate_lowest_nonlinear_perf",
+> > +	[AMD_PSTATE_LOWEST_PERF] = "amd_pstate_lowest_perf",
+> > +	[AMD_PSTATE_MAX_FREQ] = "amd_pstate_max_freq",
+> > +	[AMD_PSTATE_NOMINAL_FREQ] = "amd_pstate_nominal_freq",
+> > +	[AMD_PSTATE_LOWEST_NONLINEAR_FREQ] = "amd_pstate_lowest_nonlinear_freq",
+> > +	[AMD_PSTATE_MIN_FREQ] = "amd_pstate_min_freq"
+> >   };
+> >   
+> >   
+> > 
+> 
+> These are AMD specific values being added to a common code.
+> It doesn't sound right. What happens if there is a conflict
+> between AMD values and another vendor values?
+> 
+> This doesn't seem a good place to add these.
+> 
 
->> >>> +                             <0 0x18591000 0 0x100>,
->> >>> +                             <0 0x18592000 0 0x100>,
->> >>> +                             <0 0x18593000 0 0x100>;
->> >>> +                       clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc
->> >>> GCC_GPLL0>;
->> >>> +                       clock-names = "xo", "alternate";
->> >>> +                       #interconnect-cells = <1>;
->> >>> +               };
->> >>> +
->> >>>                 cpufreq_hw: cpufreq@18591000 {
->> >>>                         compatible = "qcom,cpufreq-epss";
->> >>>                         reg = <0 0x18591100 0 0x900>,
+Shuah, thanks for your suggestion, I went through the cpupower patches
+again. And yes, we should not combine the amd specific and common things
+together.
+
+Could I expose a simliar sysfs_cpufreq_get_one_value in cpupower_intern.h
+header, and move amd_pstate_* function implementation into
+utils/helpers/amd.c? It can keep the lib/cpufreq still general.
+
+Thanks,
+Ray
