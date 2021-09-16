@@ -2,174 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D06840E4A8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951A740EAF2
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 21:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344568AbhIPRFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 13:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S232184AbhIPTnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 15:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347629AbhIPRAJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 13:00:09 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C92C0363C2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 09:16:56 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g21so18885281edw.4
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 09:16:56 -0700 (PDT)
+        with ESMTP id S230267AbhIPTne (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 15:43:34 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBC9C061574;
+        Thu, 16 Sep 2021 12:42:13 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so9767071otf.6;
+        Thu, 16 Sep 2021 12:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jHK/xqguCKv/MR4fwXjRmcM93cFgGl6Y32a4+3LOaBY=;
-        b=AEUDd7pV9a8fv9MoUDEB/1YV70rMjNiwVqjYNgqTmuPYQlb1B3XhWOa3d679adVJ1E
-         yucOpTQI81iMxVqcjE4I4GH8h1VX8cX9L+/GbDlsGNjaAVM+nDBZwolEYFKL46Asg7yf
-         aCV1dEkCnEnXFNAm1oYZ/DEX1e0ck8XCctPsdWmi/r2kKFhjLS04LvsSZDvd03uxy3Yi
-         MdVNYkbcdoL3QP80/FjoKc7utwQ48v5GgYsNiYjYmtHubR4bzdsBR9nMYbB9yjptvtWe
-         M09nZawvADViSrIUS5uN8IeAYk3n+awW2JwptYIlPhErLsMeiTVXUAtd+YBsP8EiEaef
-         qrgA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7s0jc31HPLAs0gXkmeRMnAPIKh72hl0mqHTuEnX+aY=;
+        b=dTNR08u17lmNeUCGekNoFNPAymVJ+EvYhpaWHvM3EFTIe2VmVwIoTOF3QkpLsHjlNy
+         pd0ZClvLf/KnscJkMwN7Cs3R9D7Jj6V3TLMQ7a7l6eBdPty6zfyEO31AZJB3zGgDTrap
+         eVOGDptGIcCdVUNVbjRZRoYyFBDX8u93xWyTf/cKc63suVAtFaFxoT6mLog93rEVdhqR
+         d2xPcBOvXbsrw+zL1VBIfrNdWVok02S+E2qE7VTrNcKwnL2FxTdyO2R4/c02HP+Illum
+         D/RfAkEn/55XI9dartV1w7KaIcEO74gjLoEc1GH8vo55PBxNWVGC+F7bklXJrA4KkwRP
+         y9Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jHK/xqguCKv/MR4fwXjRmcM93cFgGl6Y32a4+3LOaBY=;
-        b=RODPK7/AvfNLu71RxNL5IZSQGY0gSFl2TqBG71hKTBXTe6so0DgkDB1k0aG40hkNzo
-         ntB0Kcxdt09PfBwhsALGFZLQqTY4scY7W/oEitt10Vex7QzYfBHkU5OijNGXrE4HpNoI
-         TH/5bHMRjgFwlxGIsHA1O0COU5l2hHpa07Mexva8zvRocyITtqOPFavlWauTtQzE82vy
-         bVniS7FuhwG3cVw+TeC9FaYu7ImT0f03YBrF4PNawR4U/ImVhar1YAUDntsAeTU4if9e
-         an2emgeQyDY1oS33N5myz4uVSsyLsmVoyBwd1Q+yM5fvPwE7rbN5qKaJd+2EA3oboZSY
-         VLvQ==
-X-Gm-Message-State: AOAM531zs8bfuZYYsCoNKQ8V4V7ZLCaniKNaqZuFjM3jrGSo3735ftfY
-        fe8Iv1mj8Qfp+N4iXg11OkYbDrGsjSBX34Qi71FJTw==
-X-Google-Smtp-Source: ABdhPJywm65+5K+5MtjZwOa+gT94NK9qMFMnMUQZ9zRxmdOUE7/YQqlEaOPAkgsSWxQBRmlekY5+t6DIIQjKQFelvXE=
-X-Received: by 2002:a17:906:5ac5:: with SMTP id x5mr7074596ejs.271.1631809014344;
- Thu, 16 Sep 2021 09:16:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7s0jc31HPLAs0gXkmeRMnAPIKh72hl0mqHTuEnX+aY=;
+        b=xOfsQPZ7QEP2VZe1ijfldjjxVcBEqO4WDm2JoQXb+XJDQi82tFno0Wa2X/xfIt/s8g
+         pQVEf4F8IEAW9lkvI8QJzwXMEhC49sFsS2Q/gJRstHsDDUZhMcTBb7xuQvzBVMtXUIcz
+         hRS04QS/SJ8tDPhbpLbZedKLuRt9nHn8n5ilBBS57wYdWCcHs1dT85oULU3q4Y06SALV
+         JgEkQG5OG56QzzmAmg7C6bB/znTrGC6hTB6/qsPcrertdEHWvU2m9TSeNipUQo+VC0wM
+         MNBSxJZB6tF+iFbvuNUiKzpDULHKEd+gbmi226ttk8WP7IVhb/wzMOtLanf7BpLBLtdt
+         6tNw==
+X-Gm-Message-State: AOAM530ybVZYQfYbLjKguX+ZqGkTVL0z+qIWcO7bad2H4hEzHxEbM97O
+        p6PACNfrWXFzalsb9rd4zro=
+X-Google-Smtp-Source: ABdhPJzIoMzJpohFqllA5LVocwtyw6xysu0DyOhL6PvnjBo49cXhoyjk3ExnnR4ZJ2MwsflFQCseig==
+X-Received: by 2002:a9d:71c6:: with SMTP id z6mr6181684otj.382.1631821333103;
+        Thu, 16 Sep 2021 12:42:13 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id c10sm963359ooi.11.2021.09.16.12.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 12:42:12 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, heiko@sntech.de,
+        sre@kernel.org, maccraft123mc@gmail.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v4 RESEND 0/4] power: supply: Add Support for RK817 Charger
+Date:   Thu, 16 Sep 2021 14:42:04 -0500
+Message-Id: <20210916194208.10387-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
- <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 16 Sep 2021 09:16:17 -0700
-Message-ID: <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
-<Adam.Thomson.Opensource@diasemi.com> wrote:
->
-> On 16 September 2021 11:23, Heikki Krogerus wrote:
->
-> > > Thanks for providing the clarification. So you're proposing a port-psy and a
-> > > port-partner-psy that are connected to each other (one supplying the other).
-> > > If PD is not present, those two will exist per port and partner, and there
-> > > will be information about Type-C current (and possibly BC 1.2 and other
-> > > methods?)
-> >
-> > Yes, exactly.
-> >
-> > > Do you have an example hierarchy you could share that explains what it would
-> > > look like in /sys/class/power_supply with PD with Source Caps and Sink Caps on
-> > > both sides?
-> >
-> > I don't yet, but I'll prepare something. I did notice already that the
-> > power supply class does not seem to display the suppliers nor
-> > supplicants in sysfs. But we can always improve the class.
-> >
-> > I probable should not talk about "hierarchy". Maybe taking about
-> > simply "chain" of power supplies is more correct?
-> >
-> > > I think this all makes sense if the connector class is a read interface
-> > > for this info. Have you considered how the type-c connector class and this pd
-> > > psy support will handle dynamic PDO changes for advertisement FROM the
-> > ports?
-> > >
-> > > For example, let's say you wanted the kernel and user to manage two USB-C
-> > ports
-> > > with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
-> > > kernel and user needs to edit the Source Caps on the fly based on load
-> > > balancing.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Adding a few more instances.
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
-Editing Source Caps on the fly is also applicable for handheld devices
-with just  one port !
-For instance, the phone might want to conserve power and limit the
-power supplied to the port partner by adjusting the source caps to
-limit battery drain based on the system conditions.
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-The sink caps can potentially change on the fly as well based on the
-charging phase the handheld device is in. For instance, in the last
-phase of charging (say when the battery is charged to greater than
-80%), it would not make much sense to step down voltage(power losses
-due to conversion) from greater than 5V to battery voltage(say ~4.4V).
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
 
-> > >
-> > > If caps are represented as a group of psys together, how do you as a kernel
-> > > and user create an modify the set of Source_Caps you put out on a port?
-> >
-> > My idea is to utilise the "present" property with the ports. You would
-> > always display all the possible supplies, but only the ones that you
-> > expose in your current capabilities will be present.
-> >
-> > The idea is also that the ports are always supplied by normal power
-> > supplies of type "battery", "AC" and what have you. Those you can use
-> > to see the maximum power your port can get, and to determine the
-> > currently available power by checking the other ports that consume the
-> > same supply.
-> >
-> > So if you need more power for one port, you most likely will need to
-> > attempt to adjust the power levels of the source PDO power supplies of
-> > the other ports that share the base supply (like battery), or possibly
-> > disable them, and that way enable (make present) more source supplies
-> > for your port. That is the idea, but I admit I have not thought of
-> > everything, so I'm not completely sure would it work exactly like
-> > that, but the power balancing should in any case be possible with the
-> > chain of power supplies one way or the other.
-> >
-> > I hope I understood your question correctly, and I hope I was able to
-> > give you an answer :-)
->
-> Thanks for the additional updates. So is the intention here to move control of
-> PDO selection away from TCPM, or add more flexibility to it? As I understand it
-> from previous efforts around all of this, the intention was that TCPM makes the
-> decision as to which PDO to select (and which APDO for PPS) based on the offered
-> capabilities of the source and the sink capabilities which are described in FW.
-> Am just trying to envisage the use-cases here and how the kernel/user is
-> involved in selecting PDOs/voltages/currents.
->
-> IIRC there used to be functions for updating source/sink capabilities but these
-> never had users and were subsequently removed. I guess this would be essentially
-> the functional replacement for those APIs?
->
-> Personally, I think the idea of source/sink PSY instances supplying each other
-> seems reasonable. Right now we represent the external PD/Type-C supply (partner)
-> through TCPM as a PSY instance which is always present for the associated port,
-> although obviously when no source partner exists we're marked as offline. For
-> the partner side I'm guessing the PSY instance will be dynamically
-> created/destroyed? From previous experience PSY classes have tended to be
-> statically included so would be interested in seeing what this looks like in
-> reality.
->
-> Am still unsure on using PSY to expose individual PDOs though and this still
-> feels quite heavyweight. I assume we're not wanting to expose everything in PDOs
-> really, just the voltage/current info? Feels like we should be able to do this
-> with individual properties which a user can be notified of changes to through
-> the normal prop notifier, rather than a collection of PSY class instances.
-> However, I'm happy to be convinced the other way so will await further
-> details. :)
+Changes from V3:
+
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 charger to Odroid Go Advance
+
+ .../devicetree/bindings/mfd/rk808.txt         |  38 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  26 +
+ drivers/mfd/rk808.c                           |  16 +-
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rk817_charger.c          | 959 ++++++++++++++++++
+ include/linux/mfd/rk808.h                     |  87 ++
+ 7 files changed, 1132 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
+-- 
+2.25.1
+
