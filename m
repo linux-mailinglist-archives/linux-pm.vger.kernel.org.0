@@ -2,54 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD5F40D135
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 03:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5231840D138
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 03:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbhIPBbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 21:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S233485AbhIPBcL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 21:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbhIPBbH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 21:31:07 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CC5C061574;
-        Wed, 15 Sep 2021 18:29:47 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id g1so11790519lfj.12;
-        Wed, 15 Sep 2021 18:29:47 -0700 (PDT)
+        with ESMTP id S232068AbhIPBcK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 21:32:10 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D895AC061574;
+        Wed, 15 Sep 2021 18:30:50 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id i25so11898011lfg.6;
+        Wed, 15 Sep 2021 18:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=raE0bEyLLL3+Nq2kPEBUvBEq7TdRxkLowLoERhJ9/Ac=;
-        b=g4j15rkhckQxjBYnwq/XrEcUjCxDj6ZTKy1GTedrX3/dltIG/YDibwMXCH+hiJ7KkU
-         VajoY8i9whD/8NRmVLMKxU0XnjaaFJHsbDOobW3ZobfyaV9dqYvioCVwN5GQsTcSZBr2
-         Ycr0UaB2x4YTthafj8t6Nl05d4FhIwid8f39orpGhbMCK1Dm6ayMkqNnY1AnGsxW4hXa
-         ZizJynUA9QNJGYRLJfjsmKzHzokvIYHtH9Qd+ZepEJCwmo2svbf6y327iwx3P6BFLC0t
-         qyYWtjl5jP6S991arDnK4tBB7htzmY4iuBh4EfmKxO7cT3ZRzQrcCGZ4PbtMjY+F9X6F
-         I1Sw==
+        bh=3dQovcTDsXIknYQ67gp4mApPNz8gnn6QM6bd7xL1nSw=;
+        b=l0nL6hbsJlapzVa4LsVmafBQB1srF+De1IAWnVZB7u62E5wc2sf50U8u4oKd38IJZj
+         YZh9jez/pBUZfSPN6oLobkdbvC6Fb6d1gAvJFrKn+eE9vwfbUAdmiXvLJNiDSDacQ8pk
+         xtAIHUyGAk5sAY/sDE+52TrFHRl8zoFrlsgMFMxNMBfLggqBo7+NIFYCsvQXfHk3RGF9
+         dlH2ZBhXO3kveqSYWIPDB0g6tj8uvybOgX1417FIG2VdQ1nnZSkVCkiDWxDXecbIlKmj
+         STjFi9rLkQaOmYzmPm6YGoQQmZ6/9gT33XxUgYlCu0SD5BewADrlT+ePW21Iqx3/H1XJ
+         MRww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=raE0bEyLLL3+Nq2kPEBUvBEq7TdRxkLowLoERhJ9/Ac=;
-        b=ac+koLDfnMKvmMZo5klIzh91CSRnReyV0N5mgy0RdV8xN/lTcERAwIehgNPBjzWnnf
-         Ye4RTi0BBujHVK90wVq4zJKoh7HevWux5VmTCLQCzPOlhZDf5y3Wk2fwZ7elgktpCBn8
-         AN/IhkVfA6ofyUpjNsGinW1FicWL3X8C7HCUsVlrsdrD4pXkx2538d9qiFU9oE7s2bwW
-         0dC3C+fPtmAoX/wVDK0ywmrUkXkQdkv3kbMEiPcktmiMLA7MAI29gx5BX51WClxI7Yc9
-         OPKYygChfjMRaPA03zXvb2O5TZxRvsKHXnlOnOvurA4LaKvTaMpBdtvyId7e8qsmYPV7
-         LiNg==
-X-Gm-Message-State: AOAM532mRX7vm9XmUQeZh6/VjG9/bwRYjTM+ID6D45ISencw7YYd6V2y
-        Ij/PzGxuBFfLlWVTvUVGqhk0bAh1XJ0=
-X-Google-Smtp-Source: ABdhPJylimLPFeCw/3olzjnbEWukIrSVtmnYWzIPX5QeLtip0hXYqhF1Yy1lQuPu1et4DZlwcufWtg==
-X-Received: by 2002:a05:651c:382:: with SMTP id e2mr2641870ljp.401.1631755786180;
-        Wed, 15 Sep 2021 18:29:46 -0700 (PDT)
+        bh=3dQovcTDsXIknYQ67gp4mApPNz8gnn6QM6bd7xL1nSw=;
+        b=onH6cIADBiz5opB4LgaRpg7RuN3s1WEhe2Zf6jWD1NXJQhNJZx2IXlCws/jYTnDtJu
+         eRr1XrQ9a7QAb8f+D/353j0ziHkZ7zyH98UWyoWQXCi01D/9CH5+W2KwONYt19N5jttv
+         vq3MmfYdqeL6PkSlQQAcpN/IGQdvM6fbsex/RUgfWDq+GY9aW4zvS+uUQ8CKgORm5Pnn
+         aH0cIN5RfFBTdjCqkg/ukIDgwG4VzryIwIUlR9iMHcqrG5BDFTj67Re/VqiaoOvcKx9B
+         ibJeAywk1carGYSe3goEzM3kZ7soevMgGOwNhYlgqaSTnfZks19XTzUBUuZJe6TYxWJk
+         J4Bg==
+X-Gm-Message-State: AOAM530r+URpVt9lX82R4nB0qlUWM3C6WCL3S9eC130xi3H6QxgNK+Cr
+        6gIntxEu8apGtKEhj8uzbJg=
+X-Google-Smtp-Source: ABdhPJzzO+kwRFYOzZlfIQHlpsPaIOdLy8yGQYk0n8682UNkhtVZRRrbex3e203kjCZ7IJU9N3Ph/w==
+X-Received: by 2002:a05:6512:c15:: with SMTP id z21mr2120194lfu.193.1631755849311;
+        Wed, 15 Sep 2021 18:30:49 -0700 (PDT)
 Received: from [192.168.2.145] (94-29-62-67.dynamic.spd-mgts.ru. [94.29.62.67])
-        by smtp.googlemail.com with ESMTPSA id p4sm184969ljc.135.2021.09.15.18.29.45
+        by smtp.googlemail.com with ESMTPSA id s4sm172807ljp.115.2021.09.15.18.30.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Sep 2021 18:29:45 -0700 (PDT)
+        Wed, 15 Sep 2021 18:30:48 -0700 (PDT)
 Subject: Re: [PATCH v1 2/4] PM / devfreq: Add devm_devfreq_add_governor()
-To:     Chanwoo Choi <cwchoi00@gmail.com>,
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
@@ -57,18 +59,16 @@ To:     Chanwoo Choi <cwchoi00@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
 References: <20210912184458.17995-1-digetx@gmail.com>
  <20210912184458.17995-3-digetx@gmail.com>
- <329a691d-010f-ca2a-22ef-929fb4495ce7@gmail.com>
+ <504a75a9-3f39-3aed-2df5-4ca1e7f99afc@gmail.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <535c8517-b983-29d8-6b06-bffe4243aec1@gmail.com>
-Date:   Thu, 16 Sep 2021 04:29:44 +0300
+Message-ID: <2c1b29b3-25fb-0f84-ee04-5d9012a81f3f@gmail.com>
+Date:   Thu, 16 Sep 2021 04:30:47 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <329a691d-010f-ca2a-22ef-929fb4495ce7@gmail.com>
+In-Reply-To: <504a75a9-3f39-3aed-2df5-4ca1e7f99afc@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,14 +76,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-15.09.2021 21:37, Chanwoo Choi пишет:
-> Hi,
+15.09.2021 21:23, Chanwoo Choi пишет:
+> On 21. 9. 13. 오전 3:44, Dmitry Osipenko wrote:
+>> Add resource-managed variant of devfreq_add_governor().
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>   drivers/devfreq/devfreq.c  | 26 ++++++++++++++++++++++++++
+>>   drivers/devfreq/governor.h |  3 +++
+>>   2 files changed, 29 insertions(+)
+>>
+>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>> index 85faa7a5c7d1..d3af000ec290 100644
+>> --- a/drivers/devfreq/devfreq.c
+>> +++ b/drivers/devfreq/devfreq.c
+>> @@ -1301,6 +1301,32 @@ int devfreq_add_governor(struct
+>> devfreq_governor *governor)
+>>   }
+>>   EXPORT_SYMBOL(devfreq_add_governor);
+>>   +static void devm_devfreq_remove_governor(void *governor)
+>> +{
+>> +    devfreq_remove_governor(governor);
 > 
-> There is ordering dependency between devfreq device and devfreq
-> governor. Theoretically, devfreq governor must be released after
-> released of devfreq device.
+> Because devfreq_remove_governor has the return value,
+> you need to check the return value and then print error at least.
 > 
-> devm_* support the release ordering by the sequence of registration
-> in probe()?
+>     WARN_ON(devfreq_remove_governor(governor));
 
-Yes, the release order is always opposite to the registration order.
+...
+>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+>> index 2d69a0ce6291..0d70a9ad951e 100644
+>> --- a/drivers/devfreq/governor.h
+>> +++ b/drivers/devfreq/governor.h
+>> @@ -94,4 +94,7 @@ static inline int devfreq_update_stats(struct
+>> devfreq *df)
+>>         return df->profile->get_dev_status(df->dev.parent,
+>> &df->last_status);
+>>   }
+>> +
+>> +int devm_devfreq_add_governor(struct device *dev,
+>> +                  struct devfreq_governor *governor);
+> 
+> Better to add under devfreq_remove_governor definition in order to
+> gather the similar functions.
+
+I'll change it in v2, thanks.
