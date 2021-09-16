@@ -2,208 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AA040D3B7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 09:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856A540D438
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 10:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbhIPHYY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 03:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234708AbhIPHYX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 03:24:23 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09E5C061766
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id h3so5308750pgb.7
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
-        b=CAU4jQUppKg76S8sxSwN4FATl9tAoUi0pf7tVytHg2CWKGP6dmI4UmJ4aS6EeI3u4b
-         H5+6lrvJ+E6PWvkj22Of5x3zQcPjQaxWGMUShPwQm4Nzak1xjQfDZ4AOASyHjSpwpaHU
-         w8ZFS65wuMpJAqgLD3DS+RzAhWZvZ0N/wHT2VuvgUO2SrS55yuwsKGugQeUF6Ol2v2xM
-         mzFZJOQI1XxmTDcinj85Qj+GooSieocbQvWUvaH5nT6AUoIFSI10E5Uz+lHug7yGybOf
-         sullI8IOsVNPMSAWJIZToPeMcUz8ufMbAEQYiHJmBHGDHhNqP507mZ8X6rxecFZtHIhE
-         HoWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
-        b=3dVoi1+jYO3N0B6qviPJd+JTxRMfu/Zebj+R/vNzy+tt+tqC2rOrsoNqckImaWmV5c
-         rjnq30vQMWo+CrMtLYmT1EebYhyTPVxT8mN4PebDua7e8ittC8bTaRg7RlrWrgpRXN7W
-         7O4c2ulQtj1NO4xmacr3likVqYtOnvBkE0a8n4ot0JXUzIfgr07H1JJDGlsCfTQVjbHY
-         5MpfjKcgRboNquvPJ3oaWM4eJPezbJt0pyYRmYzVu62UtlhqvZKMA8AWno92uSbtiRz6
-         xWBj1bGNbtFNWSklLrvBcAjMViUT7ZA0UAajI9DkXXXaj4O8nAJ3rKEcNxuC1sstUgUV
-         AKKA==
-X-Gm-Message-State: AOAM530cJLyHDrSw1xG3/bwGHvbBFhkaitqc6TiH3SG0MdMpuptVcgXK
-        +W6QKDPZNyaJqB5AbMdW5hPAsg==
-X-Google-Smtp-Source: ABdhPJxrw/i8/N4QcV/OPohGevkmBciVqntAoM3lzV9qrc0fJyPndAZSM9qimFhphx8j3XIivyK8ew==
-X-Received: by 2002:a65:6251:: with SMTP id q17mr3761839pgv.416.1631776982664;
-        Thu, 16 Sep 2021 00:23:02 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:ab:1cc3:dd84:94f3])
-        by smtp.gmail.com with ESMTPSA id c15sm1102192pfn.105.2021.09.16.00.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 00:23:01 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 00:22:55 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        "badhri@google.com" <badhri@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YULwz8NsoA3+vrhA@google.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+        id S234893AbhIPIFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 04:05:14 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:56481 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235039AbhIPIDU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Sep 2021 04:03:20 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631779266; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=tP+XNZ/9NH4K4GD+4JVcxuh8dLGXglkOiSbkpJxZE3s=;
+ b=PWcNNGEDpy7AYnyIZvRmsTVCPTSYuoGGF4z95qv6Syn9UO2h6OxM2FYqZpGJLRFczKXT/evy
+ JlLGfKaojdEfwyGMQ7o1z/SAgPJ0GhdMYPv219b7OYUSHy3ue9RseqZl53HDzoWwYl7g/AD+
+ hqTiEcqIrDlRet63utaX3OoLO08=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 6142f9a4bd6681d8ed3675a0 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 16 Sep 2021 08:00:36
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 92B98C43617; Thu, 16 Sep 2021 08:00:35 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BBFEBC4360D;
+        Thu, 16 Sep 2021 08:00:34 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xat0VWzVRBLGhR0l"
-Content-Disposition: inline
-In-Reply-To: <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 16 Sep 2021 13:30:34 +0530
+From:   okukatla@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        evgreen@google.com, georgi.djakov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdtipton@codeaurora.org, sibis@codeaurora.org,
+        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+        okukatla=codeaurora.org@codeaurora.org
+Subject: Re: [v7 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect
+ provider
+In-Reply-To: <CAE-0n53g=qGoVAMh_me_W0ksp39WUm2CCwAttcAK+Do5nYXq5g@mail.gmail.com>
+References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
+ <1629458622-4915-4-git-send-email-okukatla@codeaurora.org>
+ <CAE-0n51WBdLoJRPs9tWZgdAukJMnkD3V00o7xNYVX77-eToKvw@mail.gmail.com>
+ <749157bdb4613ae370adfb7ba055a2a9@codeaurora.org>
+ <36fe241f845a27b52509274d007948b1@codeaurora.org>
+ <CAE-0n53g=qGoVAMh_me_W0ksp39WUm2CCwAttcAK+Do5nYXq5g@mail.gmail.com>
+Message-ID: <49ba33707767f856ff2a868906387b16@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2021-09-16 01:10, Stephen Boyd wrote:
+> Quoting okukatla@codeaurora.org (2021-09-14 23:26:19)
+>> On 2021-09-15 10:35, okukatla@codeaurora.org wrote:
+>> > On 2021-09-04 00:36, Stephen Boyd wrote:
+>> >> Quoting Odelu Kukatla (2021-08-20 04:23:41)
+>> >>> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
+>> >>> SoCs.
+>> >>>
+>> >>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+>> >>> ---
+>> >>>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 11 +++++++++++
+>> >>>  1 file changed, 11 insertions(+)
+>> >>>
+>> >>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> >>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> >>> index 53a21d0..cf59b47 100644
+>> >>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> >>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> >>> @@ -1848,6 +1848,17 @@
+>> >>>                         };
+>> >>>                 };
+>> >>>
+>> >>> +               epss_l3: interconnect@18590000 {
+>> >>> +                       compatible = "qcom,sc7280-epss-l3";
+>> >>> +                       reg = <0 0x18590000 0 1000>,
+>> >>
+>> >> Is this supposed to be 0x1000?
+>> >>
+>> > No, This is 1000 or 0x3E8.
+> 
+> Wow ok. Why is it the only size that isn't in hex format? Please try to
+> be consistent and use hex throughout.
+> 
+Sure, will update it to hex format in new revision.
+>> We have mapped only required registers for L3 scaling, 1000/0x3E8 is
+>> suffice.
+>> But i will update it to 0x1000 in next revision so that entire clock
+>> domain region-0 is mapped.
+> 
+> Doesn't that conflict with the cpufreq-hw device?
+> 
+epss_l3 maps (0x18590000, size:0x1000) region which cpufreq-hw does not 
+need. I will update size to 0x1000 for this region only.
 
---xat0VWzVRBLGhR0l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Heikki,
-
-On Tue, Sep 14, 2021 at 01:14:02PM +0300, Heikki Krogerus wrote:
-> Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson kirjoitti:
-> >=20
-> > Hi Heikki,
-> >=20
-> > Thanks for CCing me. My two pence worth is that I always envisaged the =
-PSY
-> > representation as being 1 PSY for 1 power source. I consider this in a
-> > similar manner to the Regulator framework, where 1 regulator can suppor=
-t a range
-> > of voltages and currents, but this is covered by 1 regulator instance a=
-s it's
-> > just a single output. For USB-PD we have a number of options for voltag=
-e/current
-> > combos, including PPS which is even lower granularity, but it's still o=
-nly one
-> > port. I get the feeling that having PSY instances for each and every PD=
-O might
-> > be a little confusing and these will never be concurrent.
-> >=20
-> > However, I'd be keen to understand further and see what restrictions/is=
-sues are
-> > currently present as I probably don't have a complete view of this righ=
-t now. I
-> > wouldn't want to dismiss something out of turn, especially when you obv=
-iously
-> > have good reason to suggest such an approach.
->=20
-> I'm not proposing that we drop the port-psys. I'm sorry if I've been
-> unclear about that. The port-psy we can not drop because of several
-> reasons. For starters, we still can not assume that USB PD is always
-> supported.
->=20
-> What I'm trying to propose is that we take advantage of the
-> power-supply framework by building a "dynamic" hierarchy of power
-> supplies that supply each other in order to represent the actual
-> situation as closely as possible. For example, a port-psy that is
-> supplied by port-Fixed-sink-psy that is supplied by
-> port-partner-Fixed-source (that is supplied by port-partner-psy).
-> Something like that. The only "static" part in the hierarchy is the
-> port-psy, as everything else about it can change, even without
-> disconnection.
->=20
-> So the port-psy always either supplies another psy or is supplied by
-> another psy in this hierarchy, depending on the role of the port. But
-> most importantly, the properties of the port-psy itself are _newer_
-> adjustable - they are read-only. The psy that supplies the port-psy
-> can be adjustable, if it's for example PPS, but not the port-psy
-> itself.
->=20
-> The problem with having only a single psy per port (and possibly
-> partners) is that it does not work well enough when the capabilities
-> change, and the capabilities can really change at any moment, we don't
-> need to disconnect for that to happen - simply by plugging another
-> device to another port can change the power budget for your port and
-> change your capabilities. The biggest problem is when we loose the
-> ability to adjust the values if we for example loose the PPS that we
-> were using in the middle of operation. The single psy has to attempt
-> to handle the situation by adjusting something like the ranges of the
-> properties, because it can't change the actual property set itself.
-> That is hacky, and to be honest, a little bit risky, because it leaves
-> us at the mercy of programmers completely unnecessarily.
->=20
-> With my proposal, if the capabilities change, it only means we rebuild
-> the psy hierarchy, and that's it. Nothing else needs to be done in
-> kernel, and all changes are super visible and clear in user space.
->=20
-
-Thanks for providing the clarification. So you're proposing a port-psy and a
-port-partner-psy that are connected to each other (one supplying the other).
-If PD is not present, those two will exist per port and partner, and there
-will be information about Type-C current (and possibly BC 1.2 and other
-methods?)
-
-Do you have an example hierarchy you could share that explains what it would
-look like in /sys/class/power_supply with PD with Source Caps and Sink Caps=
- on
-both sides?
-
-I think this all makes sense if the connector class is a read interface
-for this info. Have you considered how the type-c connector class and this =
-pd
-psy support will handle dynamic PDO changes for advertisement FROM the port=
-s?
-
-For example, let's say you wanted the kernel and user to manage two USB-C p=
-orts
-with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
-kernel and user needs to edit the Source Caps on the fly based on load
-balancing.
-
-If caps are represented as a group of psys together, how do you as a kernel
-and user create an modify the set of Source_Caps you put out on a port?
-
-Thanks,
-Benson
-
-> thanks,
->=20
-> --=20
-> heikki
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---xat0VWzVRBLGhR0l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYULwzwAKCRBzbaomhzOw
-wom1AQCNZ/hwtQBhee1O29UF9wqYqjzyNI6WzWJuXmz4sjeWhAEA74S5yLRF7Vq0
-kvMtyRkRQ+IMZkUJK8w4DM9wIFGXvA4=
-=qhlX
------END PGP SIGNATURE-----
-
---xat0VWzVRBLGhR0l--
+>> >>> +                             <0 0x18591000 0 0x100>,
+>> >>> +                             <0 0x18592000 0 0x100>,
+>> >>> +                             <0 0x18593000 0 0x100>;
+>> >>> +                       clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc
+>> >>> GCC_GPLL0>;
+>> >>> +                       clock-names = "xo", "alternate";
+>> >>> +                       #interconnect-cells = <1>;
+>> >>> +               };
+>> >>> +
+>> >>>                 cpufreq_hw: cpufreq@18591000 {
+>> >>>                         compatible = "qcom,cpufreq-epss";
+>> >>>                         reg = <0 0x18591100 0 0x900>,
