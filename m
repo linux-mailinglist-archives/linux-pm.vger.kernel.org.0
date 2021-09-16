@@ -2,182 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2272140DADB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 15:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D1D40DC80
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 16:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239833AbhIPNPd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 09:15:33 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:22568 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229474AbhIPNPc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 09:15:32 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18GBTAgv004653;
-        Thu, 16 Sep 2021 13:14:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=ZWnTI+y+7ot9SE0qGAkBokHCgsp0qiZ1totNuu0/E4s=;
- b=ITdjKa6AAwTSK/DQnroAlZdOcJxL7EIC7Gjv9WP+0BbPjl6rKfHwwk12lCpBu4FWM++C
- tKYYxCrLMSyAZ2A/a4J5AoJkQaQWfSbOo/kfox44upoJDAsW9/VprvA+rxGWoExfTWtY
- 7JVkocB9TV8efnTkhkXv2AXOEhwJ+7YXwiHDL+nb7BilQHj1EzwF2jSv6p9KOKC6Oo+V
- rMp0YtBRfeqqE9D3xRaxLJVYAyXHXURi9zn/Jw2YCAobdTDNYsuJ6vSgA13Knts3T89H
- 0WOfRDhi6fo6LazmFA9ZnpgpNy1gfvnPhDpeZIo/EOdnMYUPAFRL2KTLmdBBd/NwDVBN 9A== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2020-01-29;
- bh=ZWnTI+y+7ot9SE0qGAkBokHCgsp0qiZ1totNuu0/E4s=;
- b=YrNtsCHwahgA42cHQb56wcssoWfhoZGqRBd7TArpwMoWfRueQIucR7bM06cobQs1x/oo
- kQbnxVXiN13EN8Lw9CmERTzRipTBoboTL2Xcw3u7W0CqL4XrP6qhYnws3yC4nXmA44Fn
- 1anedvVRmh78n7ZpSrngNzjvjIeyqAtyj/sPo/R7ydwUhf0F3RnyuORbHGTC+hscFbCq
- LnXMZfpu4tvbiZH4jpX4d/KKbWLFinuRxPp0PWJCTDt3mlNAC9ZLaxEicd+zDajJscBQ
- E45Fzizw6LLWo/Wu3AjKzRdoafbIE/2kvqo8ZtghIGGfxuG6ql7nqA3uNmoeAEbVpvkY 5w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3b3jy7kctq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Sep 2021 13:14:08 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18GDAU3a078837;
-        Thu, 16 Sep 2021 13:14:07 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by aserp3020.oracle.com with ESMTP id 3b0m99au0a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Sep 2021 13:14:07 +0000
+        id S236801AbhIPONw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 10:13:52 -0400
+Received: from mail-eopbgr10080.outbound.protection.outlook.com ([40.107.1.80]:6266
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235546AbhIPONv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Sep 2021 10:13:51 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jVorG9JZTd2bEbXnpdTMciWYvrzkxLPjvnf56ZZS6p40Va0ykgD8AkqEJ7n0Dc7uwkI7DuWYPodK2RSet9HdQOhTPS7M517aQCV8dLk21x85sLTbknbRebuLrcFLbJ1mk7T5MguvsZM0+4BY79xZTK63D5Shd9rw0UQmcmE70RStkkO1srKxINkiYdeXMS/2yCKizN4QPy9rtgE4Te85yoQBx7Wgdq2wy1CxcBLG3lkoPIqeN2Iqu/J83N9BbAWT+4NqMP0AwoZYNRq6VDZWxF6hwHwgDs4Di+T3zlldbdJtO/Sy3xhjz/CKkEb/wZ5b+2wpx4VxwB7k0SPJxvWWng==
+ b=NC7WJaE8oHJK+7OAv5p+hQPWBl9c46XZNRgyw3E3yCw071KbUp51xDgfGNGE41Gzf5+8vgm4VrYgXzI95xcxd6hcQ28FzYnf6Rvg8zGF0yUj4UZGnadCpOab6hHEIyo+r2OVi+mt3xKQLt9IXMVWCOFTabRk+M3oUhptyJ2roCEsigZsrArCIST4qaaOAzl4awoiom3DKG6viGFqveiGi7ZkqNNKKDTYInEr6DgvnSItmimhAp7jXonHzZDT81EH4wlJ2EXW7SmSQ7UMdE+CnIpPyIJ3btms17lE48R/hBtiT+b2U2bFstMfBMk5ju4aTD7lOl/B1Kpt5BqUb6hSbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=ZWnTI+y+7ot9SE0qGAkBokHCgsp0qiZ1totNuu0/E4s=;
- b=exqeeJ1DZs+NI9/BgG592+qFQpKtW/3q/mVyHVlfmfenqYSG7bS1yLpAo6ecKx4uSGuG3Svr+hgjmVBqxNHuUyjnzpmduVjqjfNr9Gg7RqEBYpdhSSrmK/sMn+Eh91jUoEmZ0kQdT6noknYVE8n01QzVattJmiOWnBb8RSCdAf3ob3QHFyS02LpA0BKifAHFnirZIWy0nuv3Iq5tN+CszDKuJ6D6YixcYIXRWW9HF/8fzPmKfZd31JgdgL0/lENV8reBtdciDXtDAt6tz1TEKH/F4qF9nmfdIv89wAktYOzJc+V1TV6/Ch0RM8iVigqbRqeTM4Wu1S0vMN6eQlHmBg==
+ bh=UkcZcke6wJgmzVzOmfMCgYWsEQyG0lPkVju6t4gx+Wo=;
+ b=WbzGIwK3pX98ut8612VOqzIuyVFa4AaZDUnNLY9SqFRw4aLqHrIzi5yvIAJyw/tQlq7oINLuDglQ9j1CmVuS6DjTPS+I6TvfKS/JkdSPfrwUfDpt/Sdq7IHVHatNKWFrigxYfZm9Ifq5EJJNLctlhuv0FQ+jBlyrSwWCKZN4gXVFYXbitR682ni0mrCLk5y9WCBqv3pde1ZsKbQgyxRdYLXAYqE73UkSllZyT/UlEbF4qNZRd8pFLEiHDiFbuiaz4HPVvHy6cgq9hGloHGEZ5b2fp+1tjwa748E6FuYJ+27xpzqgiZed4Gz5+x/fEf4UGdm3K7SRbrFNv3i7K/r2xg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZWnTI+y+7ot9SE0qGAkBokHCgsp0qiZ1totNuu0/E4s=;
- b=Z89jjVUOYLznPzJZPOwvnyu8vSuO8MCs6poqyRsBRuTjtI7M3uwNdGAC+bJFiMHu0hfTQW7tIINKwQUiEiZAG1BzsiRAUH5Kqi0Jjq14Dk6ldSaEtcHAvmZhxZNqNcFqDlrqYmWVsogOTOICndQDBfseIVDUyOWjZJsTmbC11JI=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=oracle.com;
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR1001MB2159.namprd10.prod.outlook.com
- (2603:10b6:301:2c::24) with Microsoft SMTP Server (version=TLS1_2,
+ bh=UkcZcke6wJgmzVzOmfMCgYWsEQyG0lPkVju6t4gx+Wo=;
+ b=pf5ISLqA2T0YVsMW52HKrnrASi2E9PsLg3eqxCQH12bC0zmMMGo9PzykuUxkEhKw6mwZolVwOsniK8H5mTTtY0+CzgploTgCYYWLlo6pGlrpjL9nhVRHHgLrrDiTskXnOaWLls3/5AFitG4ul9zToOVKoZfJLqStsbZppRq459c=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB9PR10MB4554.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:223::9) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16; Thu, 16 Sep
- 2021 13:14:05 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d409:11b5:5eb2:6be9]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d409:11b5:5eb2:6be9%5]) with mapi id 15.20.4523.016; Thu, 16 Sep 2021
- 13:14:05 +0000
-Date:   Thu, 16 Sep 2021 16:13:42 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] thermal/core: Potential buffer overflow in
- thermal_build_list_of_policies()
-Message-ID: <20210916131342.GB25094@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: PR1P264CA0012.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:19e::17) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+ 2021 14:12:24 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144%5]) with mapi id 15.20.4523.016; Thu, 16 Sep 2021
+ 14:12:23 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>
+CC:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: RE: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Topic: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Index: AQHXoEKRtU4w32eDxEeY6U4KQGzJs6uiBmsAgAAaumCAAUDQAIAC9NuAgAAyawCAAD1scA==
+Date:   Thu, 16 Sep 2021 14:12:23 +0000
+Message-ID: <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+In-Reply-To: <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 93cc2c15-6544-4499-3e46-08d9791c0173
+x-ms-traffictypediagnostic: DB9PR10MB4554:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB9PR10MB4554F2DA8EFF91D43DB2FAE7A7DC9@DB9PR10MB4554.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yD9C4GNgSEjmCZJGYZ4iHqmnd50B9HFCIxGSzJygH43sQ+/MFe0FTq49Pj1qgcj271Bx1BYYfxrIYN7FLqQdyKuqv2ktJ0Ck6ntinrVyKzz3Jw17iT893H/LBSniP2ih/J2T86a8HI8g/InAkPsB/VoJlRUJCpVO6YbRR2zthKXaRExivxLVFLgVfNvf+MKj2VBwNuPIwqsLn+h9c9moasgE3kyngnHuo/IT6uJxu534GHF7zuwF1gDl8is12jtwzBbUzgo2oLLo5nFEfd1Y7Y/n7lirxmkQWn3BJpQpsMUQXMGDdDp+nYN7yB13qVuuxyk8l56falKnfvOp7IpoH8H7dXg3tfe9AaBFs6xADYQKI0yePAP7wp6gMSlciapjUnjdkEjGAz98BBt5GTSOL98LEZ47sAJLTpKwXOh+xJn8T0lJLb9x/b5zUTSXcCJHZyzhNI4NYQDXR7g8DEkMzfM18ELmn4CmcOTJJ85Q1O8hvHjUQHnqOQ/D1WpHk6WoyT0bi0cOU06ROGIW8ld4VXsLTou92P7eH6L+5L4nrruxhECcpDTQTOS4hJ2ByDPEg/hSgLpTKdnKHcZjxkDTbA+yLMfLJlnmsexPd3k0wSiSn/4A4bYIaTuJ+nk5MOl7JJZFIIcEwdUQ8yB/NcQufijaUPI+BlcHs2M3NzG+Xy3yzzSW1EGdB1FkcIQj7y5sq/ecpOb1/uUXqfwIp5iZTA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(346002)(396003)(376002)(39860400002)(6506007)(53546011)(26005)(186003)(76116006)(8676002)(83380400001)(38100700002)(54906003)(122000001)(66476007)(66446008)(38070700005)(66556008)(316002)(2906002)(64756008)(66946007)(33656002)(7696005)(110136005)(71200400001)(478600001)(52536014)(7416002)(8936002)(86362001)(9686003)(5660300002)(4326008)(55016002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vEgrFo31IMk3zDOcsFMqBpYbPPumwl+V3+MgEV2827U4Lsze+hlmpvN0Qpm3?=
+ =?us-ascii?Q?WaEDkh5BHR9ts/EoircIUu9RhSC3S7SGbQ7eMSh2CQIUrWTgElP776bE1jaM?=
+ =?us-ascii?Q?rhETJ2f89mTJeds6CeNvcP7L7rjrafOfBtyCYbNwSwi28U90n31gg3wOoJ5s?=
+ =?us-ascii?Q?mgr8VhVrVIfO5f9raS6UE+j/4A0q3jLlDpVcZpVEkLpTsx0FL5MaBZTlw6oe?=
+ =?us-ascii?Q?M/SZtL2cFD3bqy1UVKLIhlQlZH/yAbJLw4SzNnEhgJfjU+N/cfUnrLng4OKT?=
+ =?us-ascii?Q?U0XnpGklwMgXI/i/W57gJLUZ/uWfDoA/V+nLJzW+3br3tHdotDVvSXsR7ChL?=
+ =?us-ascii?Q?hGqaLBUTv4ijcsIO85xR/TJ0wKBTsGFIf+vDDZLsGkdd1f8iVSONXN7+6Fkk?=
+ =?us-ascii?Q?RVNUVquWyHBL5JT6yfVKvnfSeHs0NqsU3X/deHpC8++h+3kUZ0uTCOU1PEA0?=
+ =?us-ascii?Q?lfLgYlKO1rGNXQzuRq/LFDunZqBCMGThlWjX6bTxp6TSiNqRXlyt+dODzqnX?=
+ =?us-ascii?Q?HnVwGOBnvCrg8wsgNwCoE8dP2U15AUH26MXPmq/CIUepdEOlP8oCA5cEwaeD?=
+ =?us-ascii?Q?Pxdzd11zmYw3SNwSqsqM4y/8NUe+nCMkWNYNkXYBv5/GwSBgNaDIZu2aOMvb?=
+ =?us-ascii?Q?GJ3T2BwebQjEotrgJ++J3srHhseMmKFseHipy11l7QgGKm5YuNTeF9mUOx6V?=
+ =?us-ascii?Q?jP1xjwaH7nvyGt03Ofn80nQh9/yJbvXUhaOyu1cBEqc8PVRLGOnZ3kh0arhL?=
+ =?us-ascii?Q?TkqcGvyxkNOD5VS1nf9UPPhWj3yyQccLGgwkqY8YRH3O+2Sy2sf9pup5MQP/?=
+ =?us-ascii?Q?rIs+eTheD1/44xNCPJ1orUstVKrYBJQMMESAof//gJLXem2hJ0XNSYeEbNND?=
+ =?us-ascii?Q?N7ZLXu/jzkFWb2z9p78WvbpKmIpUjxBkDayo1U803H8g55bg4mMa9ZAMF5eI?=
+ =?us-ascii?Q?TFkKmcSNb2nOLTuYt/nY6jE3cy5R5G4BruTu6wwj+zXKDBzd0/+4QqRwwjn6?=
+ =?us-ascii?Q?qvZPFrgLGqkuots8Da8903nTlei0gwrAxfWBqQGBT6lN3biOcO3IkcSk1rar?=
+ =?us-ascii?Q?coevfMubSNr+gTabHT7T8vd2J1k5Wd7RwP/L7M8sKhD+dFeX5vw8B7nXQISl?=
+ =?us-ascii?Q?ZCSzP14Qw7wZTGBhw1xnR38euCIRQJwD8kg6VEFcQcG50Le6dW/XzWeFtSF5?=
+ =?us-ascii?Q?HYsaZ9xt9dh36wlVOx7QioHnvttLk6clrg9zGBq8YNdJKfxLNkAMpON5k+02?=
+ =?us-ascii?Q?S/BlEGiL5TORDPgseHHwGz0ZuKC1uBHMdZHFKs0xiTVK7DMbqIa/uWQa0yTq?=
+ =?us-ascii?Q?PJ1Z9Nb8pZ8rJZsnlmFM1Fxh?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: from kili (62.8.83.99) by PR1P264CA0012.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:19e::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 13:14:01 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c7f3021-72e5-4985-abb8-08d97913dbce
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2159:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB2159B82A2C1270B2BC0D73348EDC9@MWHPR1001MB2159.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:288;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n/MIc7LC6TbknJJDOuFqCQtpSHWgLdQALbgPQRXBRVDiGrbpufKhj6Ptv/AYn7aCpvKfB0lQi/3BFG7tr3nLehg931W7upCMp7+tVzXohsGjUd7cz+lS/dqqJ7rot+j+vSfLws2AqeTVVmW5jbmhE9TvrnbDK2k2jgUtsLyGG2+plMCs+WJ2HrYUzFJ+urgwTJwCpUt9f5GnXmvIgS62tYbzKjOp4MMztnEztAv/7WdIuh3rDjnQ3i2OSqP6qjgGAbyVvVdf51PpDZbXqTptvLZssPc7wgWzKy76F8uYKFw0kAtfdWCkB9z4ZvQR0iQAn/Cxz/Hv17KlQV9DfCnvKZdG6TH9MiM95x9RP4DgNu0hCZf6lL4BsHQ+UIkt1WZLuw7u/b3MefbODLoV0HGTjx7kzNChkx5x8o6HATgxhWdoSdUO6JdnXugthFXW6C7mheDgvMORz7YQZ6KOqsnVImxVjvJ8qXkuEvS9KW2z0Dmr3N8qPGZSGsLkbMr9KLkI5wi+M3KLTO2ArDcaG+lVqkF/LANbojG/CGrcvsGtNW/RmtWxtAEhzifs/N9ZVNlTULyZWZs4v0mxpwPems+OQf8R+oeDqsb6Uz9XlKg5NOfbfe8/m9ffEekAE28tXG1taqOBmn7iSJxW6uNLJ1J+ArBWsXRDble88JgZjawKCvKfIckWljVI8+x8nUTd9CCGoARGPFkx5POn5gAWGJR+7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(26005)(316002)(9686003)(86362001)(55016002)(956004)(6916009)(54906003)(9576002)(44832011)(52116002)(33716001)(66476007)(66946007)(5660300002)(508600001)(8676002)(1076003)(38350700002)(83380400001)(2906002)(33656002)(6666004)(8936002)(38100700002)(6496006)(186003)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MAARxr6eYEi711e9YSr6zqPLW7/rbdSynv4l1t3ehW8FQlA1Ebc8+65iiQWt?=
- =?us-ascii?Q?QNY32ePq3dqZUoB5FAFVKkayTggRcl1pLbWz9+e03I+94DkPu0ls9VMJzTQH?=
- =?us-ascii?Q?KGnTWrXC8WLflhcbE7yu79OLWir1uAWciqKl3Jw/qRXSURFIN9EsWDtPeHCE?=
- =?us-ascii?Q?c5vkVLtbbHU2TcEq0O7XFlbzom+RGLHHr+47ARGCmyVYy0OK+Wvmn9d0+q6C?=
- =?us-ascii?Q?QV6wMkLxo4bgkc7rRmIkBCt0iw7lfgC9Uj6F67kV1ZnEHy+FH/Pzbi3PuQHB?=
- =?us-ascii?Q?YhnyBm4GVXC4kfEZiiz7w4XaKQChEBlB3xwtFvG1d4Uz1QyCHF1CoHr/rnQz?=
- =?us-ascii?Q?PK7Y3iFkQEiz1SY9jGG8grx/wX+kNSDx/LZYAj1pxJC5HHmnhmskW2JIvYzk?=
- =?us-ascii?Q?fIHSXGy5Mib4aCO55eYfH1Y+nLlZLCzgnkeRbV2DLfUKq1wTCMmUjZTSIxDK?=
- =?us-ascii?Q?lseFF41FZm/J9bKS7+uu0tZ63lxaRE519hMswuduYJ05MySOqd8UC+S2+EbN?=
- =?us-ascii?Q?+6d2KvbFP6hnOV/zv3Pj8iE5LMz6yozRl93kgPPt5uwBPbanu84HPwkUrbDY?=
- =?us-ascii?Q?T4bvhvJRNo86VjgbnA6sEsoUaJFV3OwpUtUr59W6TQkzxCRPsC9jO+3buG0R?=
- =?us-ascii?Q?GbgLT/zSIKckQH2f1oDn5WPLXfU+WZrxsgRRLsam4bVsHEAo5J/0sibv9RAH?=
- =?us-ascii?Q?KpieBt+w6AN8Y5AyStArmsBxh0Gj6BczWT3EpwVzAM01cdwv/GNUHxvkDMjK?=
- =?us-ascii?Q?c2bAnbOPbMMqT3nqMTDjaqbQ++yco9gBviMhjqg8qj2EEZc2eMRlNn7p8LES?=
- =?us-ascii?Q?sS5CmAsmtm2huAPg6+pQm5tv3M38I96dEMsfI0S947Y4vlq/3URGfp9hRILy?=
- =?us-ascii?Q?Cj7xc/8YUZ9t9AD7AdkLgDP05tNBDpyHO4dYLBO056UUV9yIcmDAErQYQO7M?=
- =?us-ascii?Q?Fw0HE2aurI9rrhSXKbcdDVQXFglNI/OcKvcWkkKh6cYrCd3SOCZUlQgm20/W?=
- =?us-ascii?Q?1iWHDuzYG7Lm4hma/gh6kKSgrhl3ZxGkU70pqRK+QGmL9rFIs/PMQp+sFH6w?=
- =?us-ascii?Q?dGt7TQV7e7pN4Myt04giutyc6gCPUSs9t/RSdLDR9DxGxeYAvaJhZMGEmJ6h?=
- =?us-ascii?Q?mJZfs5I/Pu/P5fsHjxlDIf/CzWezLygUpsTtmaCtXNNfNsZbhVhyMmW2Ky91?=
- =?us-ascii?Q?hcIIF709EtQEOszD0Cz4VpiQFoi4RGG3q/FjYoRtkppxKhqGAYaiRqlVf7D3?=
- =?us-ascii?Q?DKOackXf5sZzw0ibVnlTLHHCOFJb7lQc35vlRFfiXUj+QZqSYVBxUNKvjwA6?=
- =?us-ascii?Q?osVrgUELS1Q1IX+hf7M/sQrq?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c7f3021-72e5-4985-abb8-08d97913dbce
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-OriginatorOrg: diasemi.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 13:14:05.1838
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93cc2c15-6544-4499-3e46-08d9791c0173
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2021 14:12:23.7392
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rBUUKyTqYJy13QqMHXzxQ2xQ9IvaCo7tS7WM0sVQq39yfIbgzj/A464bVEDreGsqPZExexOIPgNs3IyrcQZ7sL+gterM/f/moC178jnC/OM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2159
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10108 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
- definitions=main-2109160085
-X-Proofpoint-GUID: reUX4BwQuBBQqpiTJiylA6wWa1KX2IlF
-X-Proofpoint-ORIG-GUID: reUX4BwQuBBQqpiTJiylA6wWa1KX2IlF
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HfkKzZuqdugwk/6OYuLbWNozflziLmHeTE7q+/stm0KxBZrvZs6mTJmr9XLmXbaQ/47QEkjjFBhH0yPg6ih2qYrruWazSZ4ICARhfD6dv8U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB4554
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After printing the list of thermal governors, then this function prints
-a newline character.  The problem is that "size" has not been updated
-after printing the last governor.  This means that it can write one
-character (the NUL terminator) beyond the end of the buffer.
+On 16 September 2021 11:23, Heikki Krogerus wrote:
 
-Get rid of the "size" variable and just use "PAGE_SIZE - count" directly.
+> > Thanks for providing the clarification. So you're proposing a port-psy =
+and a
+> > port-partner-psy that are connected to each other (one supplying the ot=
+her).
+> > If PD is not present, those two will exist per port and partner, and th=
+ere
+> > will be information about Type-C current (and possibly BC 1.2 and other
+> > methods?)
+>=20
+> Yes, exactly.
+>=20
+> > Do you have an example hierarchy you could share that explains what it =
+would
+> > look like in /sys/class/power_supply with PD with Source Caps and Sink =
+Caps on
+> > both sides?
+>=20
+> I don't yet, but I'll prepare something. I did notice already that the
+> power supply class does not seem to display the suppliers nor
+> supplicants in sysfs. But we can always improve the class.
+>=20
+> I probable should not talk about "hierarchy". Maybe taking about
+> simply "chain" of power supplies is more correct?
+>=20
+> > I think this all makes sense if the connector class is a read interface
+> > for this info. Have you considered how the type-c connector class and t=
+his pd
+> > psy support will handle dynamic PDO changes for advertisement FROM the
+> ports?
+> >
+> > For example, let's say you wanted the kernel and user to manage two USB=
+-C
+> ports
+> > with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then=
+ your
+> > kernel and user needs to edit the Source Caps on the fly based on load
+> > balancing.
+> >
+> > If caps are represented as a group of psys together, how do you as a ke=
+rnel
+> > and user create an modify the set of Source_Caps you put out on a port?
+>=20
+> My idea is to utilise the "present" property with the ports. You would
+> always display all the possible supplies, but only the ones that you
+> expose in your current capabilities will be present.
+>=20
+> The idea is also that the ports are always supplied by normal power
+> supplies of type "battery", "AC" and what have you. Those you can use
+> to see the maximum power your port can get, and to determine the
+> currently available power by checking the other ports that consume the
+> same supply.
+>=20
+> So if you need more power for one port, you most likely will need to
+> attempt to adjust the power levels of the source PDO power supplies of
+> the other ports that share the base supply (like battery), or possibly
+> disable them, and that way enable (make present) more source supplies
+> for your port. That is the idea, but I admit I have not thought of
+> everything, so I'm not completely sure would it work exactly like
+> that, but the power balancing should in any case be possible with the
+> chain of power supplies one way or the other.
+>=20
+> I hope I understood your question correctly, and I hope I was able to
+> give you an answer :-)
 
-Fixes: 1b4f48494eb2 ("thermal: core: group functions related to governor handling")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/thermal/thermal_core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Thanks for the additional updates. So is the intention here to move control=
+ of
+PDO selection away from TCPM, or add more flexibility to it? As I understan=
+d it
+from previous efforts around all of this, the intention was that TCPM makes=
+ the
+decision as to which PDO to select (and which APDO for PPS) based on the of=
+fered
+capabilities of the source and the sink capabilities which are described in=
+ FW.
+Am just trying to envisage the use-cases here and how the kernel/user is
+involved in selecting PDOs/voltages/currents.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 97ef9b040b84..51374f4e1cca 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -222,15 +222,14 @@ int thermal_build_list_of_policies(char *buf)
- {
- 	struct thermal_governor *pos;
- 	ssize_t count = 0;
--	ssize_t size = PAGE_SIZE;
- 
- 	mutex_lock(&thermal_governor_lock);
- 
- 	list_for_each_entry(pos, &thermal_governor_list, governor_list) {
--		size = PAGE_SIZE - count;
--		count += scnprintf(buf + count, size, "%s ", pos->name);
-+		count += scnprintf(buf + count, PAGE_SIZE - count, "%s ",
-+				   pos->name);
- 	}
--	count += scnprintf(buf + count, size, "\n");
-+	count += scnprintf(buf + count, PAGE_SIZE - count, "\n");
- 
- 	mutex_unlock(&thermal_governor_lock);
- 
--- 
-2.20.1
+IIRC there used to be functions for updating source/sink capabilities but t=
+hese
+never had users and were subsequently removed. I guess this would be essent=
+ially
+the functional replacement for those APIs?
 
+Personally, I think the idea of source/sink PSY instances supplying each ot=
+her
+seems reasonable. Right now we represent the external PD/Type-C supply (par=
+tner)
+through TCPM as a PSY instance which is always present for the associated p=
+ort,
+although obviously when no source partner exists we're marked as offline. F=
+or
+the partner side I'm guessing the PSY instance will be dynamically
+created/destroyed? From previous experience PSY classes have tended to be
+statically included so would be interested in seeing what this looks like i=
+n
+reality.
+
+Am still unsure on using PSY to expose individual PDOs though and this stil=
+l
+feels quite heavyweight. I assume we're not wanting to expose everything in=
+ PDOs
+really, just the voltage/current info? Feels like we should be able to do t=
+his
+with individual properties which a user can be notified of changes to throu=
+gh
+the normal prop notifier, rather than a collection of PSY class instances.
+However, I'm happy to be convinced the other way so will await further
+details. :)
