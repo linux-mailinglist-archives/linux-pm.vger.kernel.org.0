@@ -2,109 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAA740D83B
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 13:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3D640D857
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 13:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbhIPLSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 07:18:07 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:37088
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236774AbhIPLSG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 07:18:06 -0400
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 15F084015F
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 11:16:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1631791005;
-        bh=UXq/IEFZVtb+dXj3jPcLu567vbwU2ZCcPRqhUQdx3Wk=;
-        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=WTD5jdTjfDXsDAnhuypNh/WzAQBqMsdm0xJWGlpDyyQbF9x2ORj45uW1Z+FLAgEDU
-         nOhXJrrFtcwRgNhMx9Ms6wD+EfE+aRG//eB5OFvQe8gM9Po0EYBln8mIu3ilfaG1/0
-         PwLVlcYZvUYOZANMIibE+va695fIIVe5vbr8ZZmu8IEDwcFqX0iUs/2ZoJw1qU1KxP
-         D2g5b3CcUafigMqgLOFJPXrtO5uBIa1S2l8Jkz2owOnmA3ZTjlPuWCzjeGvDbrllyN
-         GLBmFQw9CnXcXE4vyw6BEYnUDO92TYOy5pdde0oevtAOftLKpr0f1YUxSg9W6PVhXa
-         CGR8UwrtRDByA==
-Received: by mail-wm1-f71.google.com with SMTP id z18-20020a1c7e120000b02902e69f6fa2e0so2980267wmc.9
-        for <linux-pm@vger.kernel.org>; Thu, 16 Sep 2021 04:16:45 -0700 (PDT)
+        id S237459AbhIPLUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 07:20:54 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:43731 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237064AbhIPLUx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 07:20:53 -0400
+Received: by mail-oi1-f176.google.com with SMTP id w19so8544739oik.10;
+        Thu, 16 Sep 2021 04:19:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UXq/IEFZVtb+dXj3jPcLu567vbwU2ZCcPRqhUQdx3Wk=;
-        b=1XO0FdyLbWEAB842WCCtEurQwaXMDVCsiV3o9qKH7q69iwZUj9zGXDFXT4ksdIBluE
-         83CLTbETdxK8O+dTdhWndhsFz8dI1b8FgvNn7PioBa4WszA6RcbRGlIdkotrbcWn0ZsW
-         nx7EAehDkYbWOzcwqiy4kTLyKM7eGsFgPaIUG84rj+WyLYpD1IdSO+NqPRV6kW/X2QGB
-         pqg2KmQhAiWw58paRUtawA/RD0+cCe6uvWQunTy3Y1Bjl+pdmjMWPrEaNRlSrUBlqHa7
-         +23tQPR+D6WrNpmBW4gjRWXCq6GsKzRRsjQkdXgLmFCyKr1yhy8WHHUn1Nf8HuwltRLw
-         nwRQ==
-X-Gm-Message-State: AOAM5314FGs08nu3BW5/V2bVz9r173Ijd32u9rw5Bbhmm5L0dSOwR+h+
-        DqzqsTwPZp60suhJ6sYpV71fZngMFrMjelNX/ufjAhhNRkRNr295twl1Ub9sx6E+a4aHrLsOG8T
-        zbtZ/vn8jHgqyX6KWLj6PUyCDZXhD/teDdjqi
-X-Received: by 2002:adf:b319:: with SMTP id j25mr5491428wrd.256.1631791004637;
-        Thu, 16 Sep 2021 04:16:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyPUYPtugKgY5biMl0OjTAOdNuK5egkmHMFoaDuBJ2DWRk5mx3hS8X+eQzKUYhNjcOhIbqIbg==
-X-Received: by 2002:adf:b319:: with SMTP id j25mr5491411wrd.256.1631791004497;
-        Thu, 16 Sep 2021 04:16:44 -0700 (PDT)
-Received: from [192.168.3.211] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id c30sm3021368wrb.74.2021.09.16.04.16.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Sep 2021 04:16:44 -0700 (PDT)
-Subject: Re: (subset) [PATCH v2 4/4] ARM: dts: exynos: align PPMU event node
- names with dtschema
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20210820150353.161161-1-krzysztof.kozlowski@canonical.com>
- <20210820150353.161161-4-krzysztof.kozlowski@canonical.com>
- <CGME20210915075117eucas1p11e3c07d77f1f0dc43c9e4685665eb494@eucas1p1.samsung.com>
- <163169222223.16372.15525688455985156121.b4-ty@canonical.com>
- <9ed20f4b-ca45-54d3-2577-976a9e55eb9d@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <0212a402-1490-0f8f-005e-32bb6f636a13@canonical.com>
-Date:   Thu, 16 Sep 2021 13:16:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VON8Nnjp5qusGMwNpGbLM9r+qCW1152X1jYimNaZ8w4=;
+        b=JOR5XIE7JsV66nKW9hyNXOvrlARmr3lo+xhyt45Z4P8RNN/hM5dXQdqruofCFBIRjE
+         0RDMVj1I/XOnUCgAI3ALvRd61GlDHBQsX7EyMjJ+4zAkq++EqrofX5ylw55IWpOhUUXo
+         1GLOKXlZxD4IML2THd01VOPGpatLRSBzLu8kwTjYOm7oKJ+sFWtcYSxkWQz0KxIBG5z/
+         CvJRfE9ollPm+Ksn6hFe5glyy11J1fORQKmkv/mQEB4nG0f8qsztPgLDG2pDyEffO29x
+         f5aUfPddghYaQxC8dQiHVoZcKG+MRnOFgRpvr3aZP4rXu+j9amRNBTBXmYWhkkOpkqLU
+         OLDA==
+X-Gm-Message-State: AOAM530MssaQcveJr5xfJwkaKr5cYiFPb3qKyr1oRwjG5kp+3SqVEN1S
+        ycWsOVvXjlWGQEb0QJBEb6HKkQHmxcESX+mhkTk=
+X-Google-Smtp-Source: ABdhPJz9ku/9gW7GHbzapbxZ4TYzzIHJWDeMVSP7XWt2WMgcjo8aa2KCZbOtMfb7YNp/QioJa8tAezYHjHjE9hP5YUY=
+X-Received: by 2002:aca:afcd:: with SMTP id y196mr3304022oie.71.1631791172836;
+ Thu, 16 Sep 2021 04:19:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <9ed20f4b-ca45-54d3-2577-976a9e55eb9d@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210908150001.3702552-1-ray.huang@amd.com> <20210908150001.3702552-5-ray.huang@amd.com>
+ <YToh1Vhei2PyhlW+@hirez.programming.kicks-ass.net> <20210913081134.GA3731830@hr-amd>
+ <YT8SOMBDpB0HWm0d@hirez.programming.kicks-ass.net> <20210913105458.GC3731830@hr-amd>
+ <YT88cJCetaGHUItH@hirez.programming.kicks-ass.net> <20210916100947.GE3755511@hr-amd>
+In-Reply-To: <20210916100947.GE3755511@hr-amd>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Sep 2021 13:19:21 +0200
+Message-ID: <CAJZ5v0i7OHBmQL-WdaiBsYaO2J6kCqW=YzA8jU6nQBJ2nw0JQQ@mail.gmail.com>
+Subject: Re: [PATCH 04/19] cpufreq: amd: introduce a new amd pstate driver to
+ support future processors
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/09/2021 13:15, Marek Szyprowski wrote:
-> Hi Krzysztof,
-> 
-> On 15.09.2021 09:50, Krzysztof Kozlowski wrote:
->> On Fri, 20 Aug 2021 17:03:53 +0200, Krzysztof Kozlowski wrote:
->>> Use hyphen instead of underscore and align the PPMU event node name with
->>> dtschema.
->>>
->>>
->> Applied, thanks!
->>
->> [4/4] ARM: dts: exynos: align PPMU event node names with dtschema
->>        commit: fb9b199e562d66af90f61d70eb737fa5e4deac2c
->>
-> This breaks probing of Exynos event counters, which are needed by the 
-> Exynos DMC driver on Odroid XU3/XU4/HC1 boards. Just check the today's 
-> linux-next. I had no time to analyze which part of the code depends on 
-> the node names though...
+On Thu, Sep 16, 2021 at 12:09 PM Huang Rui <ray.huang@amd.com> wrote:
+>
+> On Mon, Sep 13, 2021 at 07:56:32PM +0800, Peter Zijlstra wrote:
+> > On Mon, Sep 13, 2021 at 06:54:58PM +0800, Huang Rui wrote:
+> > > On Mon, Sep 13, 2021 at 04:56:24PM +0800, Peter Zijlstra wrote:
+> >
+> > > > > 1) Full MSR Support
+> > > > > If current hardware has the full MSR support, we register "pstate_funcs"
+> > > > > callback functions to implement the MSR operations to control the clocks.
+> > > >
+> > > > What's the WRMSR cost for those? I've not really kept track of the MSR
+> > > > costs on AMD platforms, but on Intel it has (luckily) been coming down
+> > > > quite a bit.
+> > >
+> > > Good to know this, I didn't have a chance to give a check. May I know how
+> > > did you test this latency? But MSR is new hardware design for this
+> > > solution, as designer mentioned, the WRMSR is low-latency register model is
+> > > faster than ACPI AML code interpreter.
+> > >
+> > > >
+> > > > > 2) Shared Memory Support
+> > > > > If current hardware doesn't have the full MSR support, that means it only
+> > > > > provides share memory support. We will leverage APIs in cppc_acpi libs with
+> > > > > "cppc_funcs" to implement the target function for the frequency control.
+> > > >
+> > > > Right, the mailbox thing. How is the performance of this vs MSR accesses?
+> > >
+> > > I will give a check. If you have a existing test method that can be used, I
+> > > can check it quickly.
+> >
+> > Oh, I was mostly wondering if using the mailbox as MMIO would be faster
+> > than an MSR, but you've already answered that above. Also:
+> >
+> > > > > 1. As mentioned above, amd-pstate driver can implement
+> > > > > fast_switch/adjust_perf function with full MSR operations that have better
+> > > > > performance for schedutil and other governors.
+> > > >
+> > > > Why couldn't the existing cppc-cpufreq grow this?
+> > >
+> > > Because fast_switch can adjust the frequency directly in the interrupt
+> > > context, if we use the acpi cppc handling with shared memory solution, it
+> > > will have a deadlock. So fast switch needs the control with registers
+> > > directly like acpi-cpufreq and intel-pstate.
+> >
+> > Aah, I see, you're only doing fast_switch support when you have MSRs.
+> > That was totally non-obvious.. :/
+>
+> Yes, I should have written a comment to there. :-)
+> Will update this in V2.
+>
+> >
+> > But then amd_pstate_adjust_perf() could just direct call the pstate
+> > methods and we don't need that indirection *at*all*, right?
+>
+> Hmm, yes, if we use amd_pstate_adjust_perf here, we won't need to call
+> amd_pstate_fast_switch. I saw intel_pstate had adjust_perf and fast_switch
+> at the same time, would you mind to let me know how to distinguish these
+> two use scenario on intel processors?
 
-Thanks for the report. I'll drop the patch from my queue and check later
-the driver.
-
-
-Best regards,
-Krzysztof
+The ->fast_switch() callback is for the use cases in which
+->adjust_perf() cannot be installed, that is basically systems without
+HWP enabled.
