@@ -2,119 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571E540CD56
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Sep 2021 21:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F0340D092
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 02:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhIOTmS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Sep 2021 15:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S232465AbhIPAHW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Sep 2021 20:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbhIOTmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 15:42:18 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD1C061574
-        for <linux-pm@vger.kernel.org>; Wed, 15 Sep 2021 12:40:59 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso5054276otv.12
-        for <linux-pm@vger.kernel.org>; Wed, 15 Sep 2021 12:40:58 -0700 (PDT)
+        with ESMTP id S233102AbhIPAHV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Sep 2021 20:07:21 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE1CC061574;
+        Wed, 15 Sep 2021 17:06:02 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b7so4191171pfo.11;
+        Wed, 15 Sep 2021 17:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=mDzdWtBB1uSsJFNpS+LW0eoU/BmEDcIzioUx3tBX9MQ=;
-        b=Ly9kyawmN861/4Wr1C8M9aEGfTfVB+G/JQ7VM6jBRtd5RWpnuD2lPePwRMRuLavd/Z
-         l8suHz6HXSPxNA92D6B5fDECCdQZfwfXlT/5HCGbUPotXdK7yhmz23qRgEnePR+XiRHf
-         BSt2Q4tYyys9osDsdTtmsmngLHLwlhPe6oNPU=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oVyiYM8UFoFaUWrfFN8pM33BOneT811ec06uhiJtXWU=;
+        b=N+qizs9+ibDsnowUPshEeM0Hb5SDsPaymkn574aYorj3YpGwt2w42A9H1hEtMz+NJY
+         ayTh4I5fLX14fZuJN+GCCk4TNEvy+RsrmquRe8R9nhsI8E307TpUWCC/IJJ2EkJqFiNm
+         QmZcG82rSYzNrL5Q647YoSHG53eXAn/M6raRxEkuopYQo4HMccVVCA9sw4jpiQhkWnTE
+         5odltj+2Wn2Qq5JYYkvB3wj/yy+T1s1Xq0EZzMkxibORiotU6DKYLywOu/7JV0c2UqRB
+         7MSaqDGYxX/sVnvWnGlwFBvxwepDBrBmZf7xsaCHB9lLYXof0eBF9HSFjES6IP0WCN8B
+         H9Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=mDzdWtBB1uSsJFNpS+LW0eoU/BmEDcIzioUx3tBX9MQ=;
-        b=GvMGZCIcK/sNVtPylmsKy2W1sd5qKUltXB9uhjwlAemje4Q5y7OtN279cSshBcC8B3
-         B+w1nRxz8H0RgiITuBbHNNZUyP6EWc0F09CTrh7awJpB/Hale8LaGlngUgmwMj6v9XNN
-         f2qulpuhNGxp/7DlhY5dGL0gNJDz7lPHvCVYgN8Cgi38QJxMo6H2SpWRup5XFGqi6YIu
-         v+0gBBJvIdNIk6ou3kCGwAMt2YfveaYumxsquvSkg3+DqyUogHPVIbcmSVz9GHCt5Jvt
-         LsAJeqbkVA9QerQDMpJ2bpojryqszwIg06tWQNL8TiXeoafaku1Eitt9BBt0j8YhsLkV
-         /u/g==
-X-Gm-Message-State: AOAM532msQcquTjtS9ciwAo3L487Ad4bc3UzFEIqgy0gAEJ8zIjGMVix
-        I36VK/1ufnTf9Ti8DCLDoRg8pX2xnPy+97mqTujyFarJY/E=
-X-Google-Smtp-Source: ABdhPJwivxhkg8fCpBrYDaYtdYT13Ef9VjmdoM5RJyzQ0CrKUqXreux0XnV6qMdYSvfLig+lS8I5BpdTbzuXMDMwPsI=
-X-Received: by 2002:a05:6830:18c7:: with SMTP id v7mr1527419ote.126.1631734858214;
- Wed, 15 Sep 2021 12:40:58 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Sep 2021 12:40:57 -0700
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oVyiYM8UFoFaUWrfFN8pM33BOneT811ec06uhiJtXWU=;
+        b=PNFjwc3Ra4VyvYNpLTdvWuqNS6zTUZbHIG9ubAvchmtx42dsNsIiBV2BaBM5RN8Qjv
+         zjB1B4//voDcUKYrm/aSY7vBVkZxpVyC4eliDuIlrtPhf+TJFiOpRM3j/uxwA3BiNO7f
+         8Yp7rYxsvKZnD2SSmDjXN+9CeXi57Dxh8ltIJKqCjkVHiYKqRwx5+mqpnFxC6Sm6SHM4
+         wj1yXom+8mnjvHGvFzGFNHCdYO9wgSjthMZNKmkb1c6BADOToAWI6P8tMEegLuOJyRN9
+         w++0qdDVFgMhydLi5TTx7mFhAp4US/yDaG+NfWqixO13eDgTeOEaoOgEd1dMBddz4q0A
+         ZsHA==
+X-Gm-Message-State: AOAM53099258h6xkrx9gpxWOuSVfD3eIBbHu254ZgPxBn/d0Su9YGqg/
+        sfPDNzcoGc8c+4tsnNcGllHpY2RXYvU=
+X-Google-Smtp-Source: ABdhPJxFhT4lroYq1bG1qdl5wlsvQ6BLo1tkCx7NL/E7uywREDmYhJULU9+VDwe4kytsESuXD1eNcw==
+X-Received: by 2002:a63:af4b:: with SMTP id s11mr2258974pgo.185.1631750761929;
+        Wed, 15 Sep 2021 17:06:01 -0700 (PDT)
+Received: from [192.168.1.121] (99-44-17-11.lightspeed.irvnca.sbcglobal.net. [99.44.17.11])
+        by smtp.gmail.com with ESMTPSA id l185sm872179pfd.62.2021.09.15.17.06.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Sep 2021 17:06:01 -0700 (PDT)
+Message-ID: <933c889e-dee0-4fc3-bf1a-b3655cabbb28@gmail.com>
+Date:   Wed, 15 Sep 2021 17:05:59 -0700
 MIME-Version: 1.0
-In-Reply-To: <36fe241f845a27b52509274d007948b1@codeaurora.org>
-References: <1629458622-4915-1-git-send-email-okukatla@codeaurora.org>
- <1629458622-4915-4-git-send-email-okukatla@codeaurora.org>
- <CAE-0n51WBdLoJRPs9tWZgdAukJMnkD3V00o7xNYVX77-eToKvw@mail.gmail.com>
- <749157bdb4613ae370adfb7ba055a2a9@codeaurora.org> <36fe241f845a27b52509274d007948b1@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 15 Sep 2021 12:40:57 -0700
-Message-ID: <CAE-0n53g=qGoVAMh_me_W0ksp39WUm2CCwAttcAK+Do5nYXq5g@mail.gmail.com>
-Subject: Re: [v7 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-To:     okukatla@codeaurora.org
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        evgreen@google.com, georgi.djakov@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
-        okukatla=codeaurora.org@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH] thermal: brcmstb_thermal: Interrupt is optional
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20210426213647.704823-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20210426213647.704823-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting okukatla@codeaurora.org (2021-09-14 23:26:19)
-> On 2021-09-15 10:35, okukatla@codeaurora.org wrote:
-> > On 2021-09-04 00:36, Stephen Boyd wrote:
-> >> Quoting Odelu Kukatla (2021-08-20 04:23:41)
-> >>> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-> >>> SoCs.
-> >>>
-> >>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
-> >>> ---
-> >>>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 11 +++++++++++
-> >>>  1 file changed, 11 insertions(+)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> >>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> >>> index 53a21d0..cf59b47 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> >>> @@ -1848,6 +1848,17 @@
-> >>>                         };
-> >>>                 };
-> >>>
-> >>> +               epss_l3: interconnect@18590000 {
-> >>> +                       compatible = "qcom,sc7280-epss-l3";
-> >>> +                       reg = <0 0x18590000 0 1000>,
-> >>
-> >> Is this supposed to be 0x1000?
-> >>
-> > No, This is 1000 or 0x3E8.
 
-Wow ok. Why is it the only size that isn't in hex format? Please try to
-be consistent and use hex throughout.
 
-> We have mapped only required registers for L3 scaling, 1000/0x3E8 is
-> suffice.
-> But i will update it to 0x1000 in next revision so that entire clock
-> domain region-0 is mapped.
+On 4/26/2021 2:36 PM, Florian Fainelli wrote:
+> Utilize platform_get_irq_optional() to silence these messages:
+> 
+> brcmstb_thermal a581500.thermal: IRQ index 0 not found
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Doesn't that conflict with the cpufreq-hw device?
+This patch was never picked up and still applies. Daniel, can you pick 
+it up?
 
-> >>> +                             <0 0x18591000 0 0x100>,
-> >>> +                             <0 0x18592000 0 0x100>,
-> >>> +                             <0 0x18593000 0 0x100>;
-> >>> +                       clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc
-> >>> GCC_GPLL0>;
-> >>> +                       clock-names = "xo", "alternate";
-> >>> +                       #interconnect-cells = <1>;
-> >>> +               };
-> >>> +
-> >>>                 cpufreq_hw: cpufreq@18591000 {
-> >>>                         compatible = "qcom,cpufreq-epss";
-> >>>                         reg = <0 0x18591100 0 0x900>,
+Thanks!
+
+> ---
+>   drivers/thermal/broadcom/brcmstb_thermal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+> index 8df5edef1ded..0cedb8b4f00a 100644
+> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
+> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+> @@ -351,7 +351,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+>   
+>   	priv->thermal = thermal;
+>   
+> -	irq = platform_get_irq(pdev, 0);
+> +	irq = platform_get_irq_optional(pdev, 0);
+>   	if (irq >= 0) {
+>   		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+>   						brcmstb_tmon_irq_thread,
+> 
+
+-- 
+Florian
