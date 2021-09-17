@@ -2,196 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178040F4D2
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 11:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A3440F5F5
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 12:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238889AbhIQJcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 05:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235515AbhIQJcZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 05:32:25 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C5EC061574
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:31:03 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w29so14082690wra.8
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QTIEOKxWLANQY5Sj91t8yOn88f8yDa6LMFP2RHaNCbU=;
-        b=GKjKa7mQ/CCe6yL2G2vt6fueccCqqIcdpTBpt403pgw36KTYxx/xRwKNVVCvnjlxnN
-         hFuNy8EHYO68vINTCh2lakvwsgY0MQRjluMi9brGpT4tkZe3xVdHrFuPgSUgicqF06Cg
-         FHuzn8TTmjiTEncwmE+0iZoOPizXLfGAAi9KDuSUQUSD5OrEORjMMNrIXy6A4HSRuUbZ
-         2RRQzQZzwdSLvUIpG78ztrfBQSlI2iZeojPpmfLp2QrcaZIxIgHk2P3rOTEvCybDQ+Qr
-         rqHgtpW5W3565sOjX0x0+W6l0LHBS/WFSMvchC5L31J7kVXq/W0k/EMOZOj+SnwOjqrQ
-         8jHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QTIEOKxWLANQY5Sj91t8yOn88f8yDa6LMFP2RHaNCbU=;
-        b=0WMF2xmN0goJ09jDUO//H+FmLMglRthBZbBJEQkSAqublCWgrsuHMhwQapCWODsyv0
-         7aSpdn3I1weCXsuZfx6RYCOTIJt1NYViwMot57CK1/aQ+S8p00zzcpKa13mzbcgWNv20
-         kFLLpiyzQGGYXAfAgKtBE7YK/ienw9DGSJr3hkmUkJI1s4Vo1J+vhtuZ3OP7l0vgSjT1
-         VrWggYBST69vBlWfnEGUtPhuywxu4MUetG/GVBOmGlOi7fDZ/umIbO1MyHd91MjXLize
-         2fL36ukI3iOSNMXG7kvhU8X9ApAE5NUTWd7huyRn160XQ60kyL6F+15PLpSMYkEMrc2o
-         43ng==
-X-Gm-Message-State: AOAM533PWDG7kgKhkqwZf5na4saBDmRjcUOQkwxkKNLR7Rn7wEFJIRGW
-        48sA4W/5/4MajI0wg05fql7SiQ==
-X-Google-Smtp-Source: ABdhPJwbOrjqjTlETXUGsgOiKGwf3FZ90pR2q9c3P3vpwSuX6hrzPFMg526xOQKJqu0xjArPDmTesQ==
-X-Received: by 2002:a5d:444a:: with SMTP id x10mr10915654wrr.360.1631871062127;
-        Fri, 17 Sep 2021 02:31:02 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:cf95:6508:8470:7171? ([2a01:e34:ed2f:f020:cf95:6508:8470:7171])
-        by smtp.googlemail.com with ESMTPSA id q19sm10215879wmq.29.2021.09.17.02.31.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 02:31:01 -0700 (PDT)
-Subject: Re: [PATCH v2] thermal: Fix a NULL pointer dereference
-To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Collins <quic_collinsd@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
-        Ram Chandrasekar <rkumbako@codeaurora.org>,
-        stable@vger.kernel.org
-References: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <55999619-22c7-63fd-7006-f91f144e4a60@linaro.org>
-Date:   Fri, 17 Sep 2021 11:31:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S243464AbhIQKcj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 06:32:39 -0400
+Received: from mga05.intel.com ([192.55.52.43]:46384 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243197AbhIQKcd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Sep 2021 06:32:33 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="308315072"
+X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
+   d="scan'208";a="308315072"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 03:31:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
+   d="scan'208";a="546283152"
+Received: from lkp-server01.sh.intel.com (HELO 285e7b116627) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Sep 2021 03:31:01 -0700
+Received: from kbuild by 285e7b116627 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mRB92-00042n-Dq; Fri, 17 Sep 2021 10:31:00 +0000
+Date:   Fri, 17 Sep 2021 18:30:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 668a3514b8a3dccf147a042777d1e569badca8fa
+Message-ID: <61446e37.+Rq0q4xx3L/VISYq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/09/2021 21:01, Subbaraman Narayanamurthy wrote:
-> of_parse_thermal_zones() parses the thermal-zones node and registers a
-> thermal_zone device for each subnode. However, if a thermal zone is
-> consuming a thermal sensor and that thermal sensor device hasn't probed
-> yet, an attempt to set trip_point_*_temp for that thermal zone device
-> can cause a NULL pointer dereference. Fix it.
-> 
->  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
->  ...
->  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
->  ...
->  Call trace:
->   of_thermal_set_trip_temp+0x40/0xc4
->   trip_point_temp_store+0xc0/0x1dc
->   dev_attr_store+0x38/0x88
->   sysfs_kf_write+0x64/0xc0
->   kernfs_fop_write_iter+0x108/0x1d0
->   vfs_write+0x2f4/0x368
->   ksys_write+0x7c/0xec
->   __arm64_sys_write+0x20/0x30
->   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
->   do_el0_svc+0x28/0xa0
->   el0_svc+0x14/0x24
->   el0_sync_handler+0x88/0xec
->   el0_sync+0x1c0/0x200
-> 
-> While at it, fix the possible NULL pointer dereference in other
-> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
-> of_thermal_get_trend().
-> 
-> Cc: stable@vger.kernel.org
-> Suggested-by: David Collins <quic_collinsd@quicinc.com>
-> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-> ---
-> Changes for v2:
-> - Added checks in of_thermal_get_temp(), of_thermal_set_emul_temp(), of_thermal_get_trend().
-> 
->  drivers/thermal/thermal_of.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6379f26..9233f7e 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -89,7 +89,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> -	if (!data->ops->get_temp)
-> +	if (!data->ops || !data->ops->get_temp)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 668a3514b8a3dccf147a042777d1e569badca8fa  Merge branch 'devprop' into bleeding-edge
 
-comment (1)
+elapsed time: 1321m
 
-AFAICT, if data->ops != NULL then data->ops->get_temp is also != NULL
-because of the code allocating/freeing the ops structure.
+configs tested: 105
+configs skipped: 4
 
-The tests can be replaced by (!data->ops), no ?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  		return -EINVAL;
->  
->  	return data->ops->get_temp(data->sensor_data, temp);
-> @@ -186,6 +186,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> +	if (!data->ops || !data->ops->set_emul_temp)
-> +		return -EINVAL;
-> +
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210916
+mips                     loongson1b_defconfig
+sh                           se7712_defconfig
+powerpc                        warp_defconfig
+arm                      integrator_defconfig
+powerpc                 mpc837x_rdb_defconfig
+s390                       zfcpdump_defconfig
+powerpc                      arches_defconfig
+m68k                       m5275evb_defconfig
+mips                        workpad_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                    klondike_defconfig
+sh                           se7343_defconfig
+powerpc                 mpc837x_mds_defconfig
+mips                     loongson2k_defconfig
+powerpc                     tqm8560_defconfig
+xtensa                  cadence_csp_defconfig
+arm                        spear3xx_defconfig
+x86_64               randconfig-c001-20210916
+arm                  randconfig-c002-20210916
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a016-20210916
+x86_64               randconfig-a013-20210916
+x86_64               randconfig-a012-20210916
+x86_64               randconfig-a011-20210916
+x86_64               randconfig-a014-20210916
+x86_64               randconfig-a015-20210916
+i386                 randconfig-a016-20210916
+i386                 randconfig-a015-20210916
+i386                 randconfig-a011-20210916
+i386                 randconfig-a012-20210916
+i386                 randconfig-a013-20210916
+i386                 randconfig-a014-20210916
+riscv                randconfig-r042-20210916
+s390                 randconfig-r044-20210916
+arc                  randconfig-r043-20210916
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-comment (2)
+clang tested configs:
+riscv                randconfig-c006-20210916
+x86_64               randconfig-c007-20210916
+mips                 randconfig-c004-20210916
+powerpc              randconfig-c003-20210916
+arm                  randconfig-c002-20210916
+i386                 randconfig-c001-20210916
+s390                 randconfig-c005-20210916
+x86_64               randconfig-a002-20210916
+x86_64               randconfig-a003-20210916
+x86_64               randconfig-a006-20210916
+x86_64               randconfig-a004-20210916
+x86_64               randconfig-a005-20210916
+x86_64               randconfig-a001-20210916
+i386                 randconfig-a004-20210916
+i386                 randconfig-a005-20210916
+i386                 randconfig-a006-20210916
+i386                 randconfig-a002-20210916
+i386                 randconfig-a003-20210916
+i386                 randconfig-a001-20210916
+hexagon              randconfig-r045-20210916
+hexagon              randconfig-r041-20210916
 
-The test looks pointless here (I mean both of them).
-
-If of_thermal_set_emul_temp() is called it is because the callback was
-set in thermal_zone_of_add_sensor().
-
-This one does:
-
-	tz->ops = ops;
-
-and
-	if (ops->set_emul_temp)
-                tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
-
-If I'm not wrong if we are called, then data->ops &&
-data->ops->set_emul_temp is always true, right ?
-
-
->  	return data->ops->set_emul_temp(data->sensor_data, temp);
->  }
->  
-> @@ -194,7 +197,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> -	if (!data->ops->get_trend)
-> +	if (!data->ops || !data->ops->get_trend)
->  		return -EINVAL;
-
-Same comment as (1)
-
->  	return data->ops->get_trend(data->sensor_data, trip, trend);
-> @@ -301,7 +304,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
->  	if (trip >= data->ntrips || trip < 0)
->  		return -EDOM;
->  
-> -	if (data->ops->set_trip_temp) {
-> +	if (data->ops && data->ops->set_trip_temp) {
-
-Same comment as (2)
-
->  		int ret;
->  
->  		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
