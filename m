@@ -2,93 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 682DE40EB18
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Sep 2021 21:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA93E40EF4A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 04:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbhIPTui (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Sep 2021 15:50:38 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:44940 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbhIPTuh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Sep 2021 15:50:37 -0400
-Received: by mail-ot1-f53.google.com with SMTP id y63-20020a9d22c5000000b005453f95356cso2874995ota.11;
-        Thu, 16 Sep 2021 12:49:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0KsoWtKkhaXMiBJDC0/XxZwnXXQWFGw8B4mYJMIPHr0=;
-        b=SpxCjz1AW/J5PsTvzRCCmPvXqxsy2xGpwFm86c/Vd9vbTwvcR4iNTA4o8ZoXZVqMXO
-         XLxJNJ//imPrevRkKbeFs4T4DJDbFeMGJRxVnlCpnJlIjvtHlSy4T+bmF8ZP+XlLUAky
-         Drb5qdsWDgZf2P7EcB6PrmhGjm9KJcI+gaqIKgWS79+WfTfJjibFkBD61FawGjUuoRDj
-         6aYq8H+Uhc6PsYQnbtYW8DYp+uh3LoMJXnwTZWMfvL1qwpkdLuzMncu+u3CkCfPEhBjP
-         DisHrTMNBbYs4idMLZJ/E5wgURRcMU1VnpdlvcmYkc20Ve8BhWhP8atlAEr9RjFfz3+5
-         63Gw==
-X-Gm-Message-State: AOAM5302EB0H4T3gp1DNrZ8N/gvT83IHzyspEArfQWIAOnIjztPuyXVK
-        DKUiIZhQcg85kvcCUc880g==
-X-Google-Smtp-Source: ABdhPJxEEp/Qsw3alHt8zhmxwHRpVnbr0IilY/Bi03MDyZNTmeQPJrTz7p+nPBP14eKxCi6oX/vdRA==
-X-Received: by 2002:a9d:70cc:: with SMTP id w12mr6143201otj.306.1631821755916;
-        Thu, 16 Sep 2021 12:49:15 -0700 (PDT)
-Received: from robh.at.kernel.org (107-211-252-53.lightspeed.cicril.sbcglobal.net. [107.211.252.53])
-        by smtp.gmail.com with ESMTPSA id z7sm948074oti.65.2021.09.16.12.49.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 12:49:15 -0700 (PDT)
-Received: (nullmailer pid 1377102 invoked by uid 1000);
-        Thu, 16 Sep 2021 19:49:11 -0000
-Date:   Thu, 16 Sep 2021 14:49:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Lucas Stach <dev@lynxeye.de>, linux-mmc@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Nishanth Menon <nm@ti.com>, linux-pwm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        devicetree@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
-        linux-spi@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v11 08/34] dt-bindings: host1x: Document Memory Client
- resets of Host1x, GR2D and GR3D
-Message-ID: <YUOftwuVt7EqtA5I@robh.at.kernel.org>
-References: <20210912200832.12312-1-digetx@gmail.com>
- <20210912200832.12312-9-digetx@gmail.com>
+        id S239317AbhIQCew (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Sep 2021 22:34:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60390 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242894AbhIQCej (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Sep 2021 22:34:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD2C2610C8;
+        Fri, 17 Sep 2021 02:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631845997;
+        bh=oxSEl0L78Bsi4cp4QK3n/uSxdCPFeZyicU0XM9jbVBU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=a2bnpo6BKrxJC3D4H46G93SWj0SFBSF86U0riNRmMfGaFTrBDRuhh85j81Qt3xhv4
+         lJd0LrwjUpYqf+2Z7KWqwxgZ2mAiWKJ/UKrpd8FPmq1+hubhc6eUqxW0qQ5x7cISxo
+         zky6B/QlFfCJYmM9B8p2+axa8tMaujMFCk+5jOow+detiyMSO0O36IipcJAWNzJk+U
+         K8DEF/sY/Qi7A3rtLeobKBaq85VqhCt0enhfQi3C7FsbCHRyne45Y2G7yxMwZr/1oW
+         j0Sx+rEIOxx2wV4f/ixTCD+vdV8F9LBxhFloG4DYZVUnECA3ImAQO4vt81NVSGki0N
+         1N/svWf7KSXjw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
+        rui.zhang@intel.com, linux-renesas-soc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 01/21] thermal/drivers/rcar_gen3_thermal: Store TSC id as unsigned int
+Date:   Thu, 16 Sep 2021 22:32:55 -0400
+Message-Id: <20210917023315.816225-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210912200832.12312-9-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 12 Sep 2021 23:08:06 +0300, Dmitry Osipenko wrote:
-> Memory Client should be blocked before hardware reset is asserted in order
-> to prevent memory corruption and hanging of memory controller.
-> 
-> Document Memory Client resets of Host1x, GR2D and GR3D hardware units.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../bindings/display/tegra/nvidia,tegra20-host1x.txt          | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[ Upstream commit d3a2328e741bf6e9e6bda750e0a63832fa365a74 ]
+
+The TSC id and number of TSC ids should be stored as unsigned int as
+they can't be negative. Fix the datatype of the loop counter 'i' and
+rcar_gen3_thermal_tsc.id to reflect this.
+
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210804091818.2196806-3-niklas.soderlund+renesas@ragnatech.se
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thermal/rcar_gen3_thermal.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index fdf16aa34eb4..702696cf58b6 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -84,7 +84,7 @@ struct rcar_gen3_thermal_tsc {
+ 	struct thermal_zone_device *zone;
+ 	struct equation_coefs coef;
+ 	int tj_t;
+-	int id; /* thermal channel id */
++	unsigned int id; /* thermal channel id */
+ };
+ 
+ struct rcar_gen3_thermal_priv {
+@@ -310,7 +310,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 	const int *ths_tj_1 = of_device_get_match_data(dev);
+ 	struct resource *res;
+ 	struct thermal_zone_device *zone;
+-	int ret, i;
++	unsigned int i;
++	int ret;
+ 
+ 	/* default values if FUSEs are missing */
+ 	/* TODO: Read values from hardware on supported platforms */
+@@ -376,7 +377,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		if (ret < 0)
+ 			goto error_unregister;
+ 
+-		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
++		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
+ 	}
+ 
+ 	priv->num_tscs = i;
+-- 
+2.30.2
+
