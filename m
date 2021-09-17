@@ -2,70 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EB440F486
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 11:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1178040F4D2
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 11:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238492AbhIQJKE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 05:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S238889AbhIQJcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 05:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbhIQJJz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 05:09:55 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C95C061574
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:08:33 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t8so6998998wri.1
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:08:33 -0700 (PDT)
+        with ESMTP id S235515AbhIQJcZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 05:32:25 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C5EC061574
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:31:03 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id w29so14082690wra.8
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/I1Tt1HzjsE75nZdTSIEAGwCXwh62BBwx+UsI2exLfE=;
-        b=g7vbAOuYwlGhiAw9321uxYSPDO4QmS+BNVRgg54rzvRGqw2zAa6COxOrt0WHHGiqd0
-         uM7aePVxRjSQYOkyW4FSx/bmhcVAO6vFcYS1WtWCF9EYw37AiDrqya4pk0xAU/KaevQd
-         c5CcGZQo68v6rxSMr0qrq10qIYGCwbWSxQrc3nL1WaJMA1ENNAgpln9Is4QrBoAJDqO+
-         EqtnQ6Nwv29l0rGeSFmwg9e0WocgUqP04KB1yW/l5hhyuucSmsS384qOrgse9AxGGj1R
-         KEeMdQiRrkTv9PSZShGqhWuQpBySfM8970yf8/fjidJmqn6gcAjaKv+4zHDxfY3h/B/z
-         ThLw==
+        bh=QTIEOKxWLANQY5Sj91t8yOn88f8yDa6LMFP2RHaNCbU=;
+        b=GKjKa7mQ/CCe6yL2G2vt6fueccCqqIcdpTBpt403pgw36KTYxx/xRwKNVVCvnjlxnN
+         hFuNy8EHYO68vINTCh2lakvwsgY0MQRjluMi9brGpT4tkZe3xVdHrFuPgSUgicqF06Cg
+         FHuzn8TTmjiTEncwmE+0iZoOPizXLfGAAi9KDuSUQUSD5OrEORjMMNrIXy6A4HSRuUbZ
+         2RRQzQZzwdSLvUIpG78ztrfBQSlI2iZeojPpmfLp2QrcaZIxIgHk2P3rOTEvCybDQ+Qr
+         rqHgtpW5W3565sOjX0x0+W6l0LHBS/WFSMvchC5L31J7kVXq/W0k/EMOZOj+SnwOjqrQ
+         8jHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/I1Tt1HzjsE75nZdTSIEAGwCXwh62BBwx+UsI2exLfE=;
-        b=1JIpaWuBnLlYKHGeGSr9KF3iHUihhFFCqeO+IArKiEcf6y+NAhsgpgNC74lIDg/FTm
-         FHI2+SfR1Y/Woxfjjq5m6brFqIvKYLHvEHYNX4ejcYdjw9PeuE1tkfdi2JuIEZ0ha3py
-         9TIK/2S0rXUqfKibRGj1ymBmOIWjSpX12zQQ8YecNBEYF7b7Ff2a+1KL5jSpPhav6qbd
-         mzbVIicsoxI1bpZCKAzA65EadcjDC8caI90VU3/diRVMkUbRNcrzcD3buvt6MNGfWW26
-         aF4u7HtZXa/2vOintNXiRMDQHPNub96lD/Zxfw2kxPwTAzMPQ+NZ0cy4Y/sw7+KlxFZe
-         eUVw==
-X-Gm-Message-State: AOAM532jgnaPrbjKGvRMlCPZo1UjrCWVQjw1A4/+ZQr+k5LI7lMTxxqL
-        Qs8gPiuXDaHNCNOXK0+NsuzB2A==
-X-Google-Smtp-Source: ABdhPJwUBCGdpmC3bQGNPhpHns+vpWRXUWfkWp9nmnSGcm2X6UWVp0FLYQO7wVAmPuVCIOurE3k+IA==
-X-Received: by 2002:a5d:6dad:: with SMTP id u13mr10421628wrs.55.1631869711923;
-        Fri, 17 Sep 2021 02:08:31 -0700 (PDT)
+        bh=QTIEOKxWLANQY5Sj91t8yOn88f8yDa6LMFP2RHaNCbU=;
+        b=0WMF2xmN0goJ09jDUO//H+FmLMglRthBZbBJEQkSAqublCWgrsuHMhwQapCWODsyv0
+         7aSpdn3I1weCXsuZfx6RYCOTIJt1NYViwMot57CK1/aQ+S8p00zzcpKa13mzbcgWNv20
+         kFLLpiyzQGGYXAfAgKtBE7YK/ienw9DGSJr3hkmUkJI1s4Vo1J+vhtuZ3OP7l0vgSjT1
+         VrWggYBST69vBlWfnEGUtPhuywxu4MUetG/GVBOmGlOi7fDZ/umIbO1MyHd91MjXLize
+         2fL36ukI3iOSNMXG7kvhU8X9ApAE5NUTWd7huyRn160XQ60kyL6F+15PLpSMYkEMrc2o
+         43ng==
+X-Gm-Message-State: AOAM533PWDG7kgKhkqwZf5na4saBDmRjcUOQkwxkKNLR7Rn7wEFJIRGW
+        48sA4W/5/4MajI0wg05fql7SiQ==
+X-Google-Smtp-Source: ABdhPJwbOrjqjTlETXUGsgOiKGwf3FZ90pR2q9c3P3vpwSuX6hrzPFMg526xOQKJqu0xjArPDmTesQ==
+X-Received: by 2002:a5d:444a:: with SMTP id x10mr10915654wrr.360.1631871062127;
+        Fri, 17 Sep 2021 02:31:02 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:cf95:6508:8470:7171? ([2a01:e34:ed2f:f020:cf95:6508:8470:7171])
-        by smtp.googlemail.com with ESMTPSA id y8sm5986742wrh.44.2021.09.17.02.08.30
+        by smtp.googlemail.com with ESMTPSA id q19sm10215879wmq.29.2021.09.17.02.31.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 02:08:31 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] drivers: thermal: tsens: fix wrong check for tzd
- in irq handlers
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Matthias Kaehlcke <mka@chromium.org>
-References: <20210907212543.20220-1-ansuelsmth@gmail.com>
+        Fri, 17 Sep 2021 02:31:01 -0700 (PDT)
+Subject: Re: [PATCH v2] thermal: Fix a NULL pointer dereference
+To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Collins <quic_collinsd@quicinc.com>,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        stable@vger.kernel.org
+References: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <95c7a633-144c-917b-376f-636b904f8b73@linaro.org>
-Date:   Fri, 17 Sep 2021 11:08:30 +0200
+Message-ID: <55999619-22c7-63fd-7006-f91f144e4a60@linaro.org>
+Date:   Fri, 17 Sep 2021 11:31:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210907212543.20220-1-ansuelsmth@gmail.com>
+In-Reply-To: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,44 +72,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Applied, thanks
-
-On 07/09/2021 23:25, Ansuel Smith wrote:
-> Some device can have some thermal sensor disabled from the factory. The
-> current 2 irq handler functions check all the sensor by default and the
-> check if the sensor was actually registered is wrong. The tzd is
-> actually never set if the registration fail hence the IS_ERR check is
-> wrong.
+On 07/09/2021 21:01, Subbaraman Narayanamurthy wrote:
+> of_parse_thermal_zones() parses the thermal-zones node and registers a
+> thermal_zone device for each subnode. However, if a thermal zone is
+> consuming a thermal sensor and that thermal sensor device hasn't probed
+> yet, an attempt to set trip_point_*_temp for that thermal zone device
+> can cause a NULL pointer dereference. Fix it.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
+>  ...
+>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+>  ...
+>  Call trace:
+>   of_thermal_set_trip_temp+0x40/0xc4
+>   trip_point_temp_store+0xc0/0x1dc
+>   dev_attr_store+0x38/0x88
+>   sysfs_kf_write+0x64/0xc0
+>   kernfs_fop_write_iter+0x108/0x1d0
+>   vfs_write+0x2f4/0x368
+>   ksys_write+0x7c/0xec
+>   __arm64_sys_write+0x20/0x30
+>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
+>   do_el0_svc+0x28/0xa0
+>   el0_svc+0x14/0x24
+>   el0_sync_handler+0x88/0xec
+>   el0_sync+0x1c0/0x200
+> 
+> While at it, fix the possible NULL pointer dereference in other
+> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
+> of_thermal_get_trend().
+> 
+> Cc: stable@vger.kernel.org
+> Suggested-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
 > ---
->  drivers/thermal/qcom/tsens.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes for v2:
+> - Added checks in of_thermal_get_temp(), of_thermal_set_emul_temp(), of_thermal_get_trend().
 > 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 4c7ebd1d3f9c..b1162e566a70 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -417,7 +417,7 @@ static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
->  		const struct tsens_sensor *s = &priv->sensor[i];
->  		u32 hw_id = s->hw_id;
+>  drivers/thermal/thermal_of.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 6379f26..9233f7e 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -89,7 +89,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
+>  {
+>  	struct __thermal_zone *data = tz->devdata;
 >  
-> -		if (IS_ERR(s->tzd))
-> +		if (!s->tzd)
->  			continue;
->  		if (!tsens_threshold_violated(priv, hw_id, &d))
->  			continue;
-> @@ -467,7 +467,7 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->  		const struct tsens_sensor *s = &priv->sensor[i];
->  		u32 hw_id = s->hw_id;
+> -	if (!data->ops->get_temp)
+> +	if (!data->ops || !data->ops->get_temp)
+
+comment (1)
+
+AFAICT, if data->ops != NULL then data->ops->get_temp is also != NULL
+because of the code allocating/freeing the ops structure.
+
+The tests can be replaced by (!data->ops), no ?
+
+>  		return -EINVAL;
 >  
-> -		if (IS_ERR(s->tzd))
-> +		if (!s->tzd)
->  			continue;
->  		if (!tsens_threshold_violated(priv, hw_id, &d))
->  			continue;
+>  	return data->ops->get_temp(data->sensor_data, temp);
+> @@ -186,6 +186,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
+>  {
+>  	struct __thermal_zone *data = tz->devdata;
+>  
+> +	if (!data->ops || !data->ops->set_emul_temp)
+> +		return -EINVAL;
+> +
+
+comment (2)
+
+The test looks pointless here (I mean both of them).
+
+If of_thermal_set_emul_temp() is called it is because the callback was
+set in thermal_zone_of_add_sensor().
+
+This one does:
+
+	tz->ops = ops;
+
+and
+	if (ops->set_emul_temp)
+                tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
+
+If I'm not wrong if we are called, then data->ops &&
+data->ops->set_emul_temp is always true, right ?
+
+
+>  	return data->ops->set_emul_temp(data->sensor_data, temp);
+>  }
+>  
+> @@ -194,7 +197,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
+>  {
+>  	struct __thermal_zone *data = tz->devdata;
+>  
+> -	if (!data->ops->get_trend)
+> +	if (!data->ops || !data->ops->get_trend)
+>  		return -EINVAL;
+
+Same comment as (1)
+
+>  	return data->ops->get_trend(data->sensor_data, trip, trend);
+> @@ -301,7 +304,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
+>  	if (trip >= data->ntrips || trip < 0)
+>  		return -EDOM;
+>  
+> -	if (data->ops->set_trip_temp) {
+> +	if (data->ops && data->ops->set_trip_temp) {
+
+Same comment as (2)
+
+>  		int ret;
+>  
+>  		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
 > 
 
 
