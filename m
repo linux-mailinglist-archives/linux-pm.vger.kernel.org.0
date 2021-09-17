@@ -2,160 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FDF40F67D
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 13:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A61A40F81E
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 14:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242642AbhIQLIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 07:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S232342AbhIQMmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 08:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242772AbhIQLIK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 07:08:10 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3599AC061574;
-        Fri, 17 Sep 2021 04:06:48 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eg28so5572030edb.1;
-        Fri, 17 Sep 2021 04:06:48 -0700 (PDT)
+        with ESMTP id S231951AbhIQMmq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 08:42:46 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAC1C061574
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 05:41:24 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id y132so7237298wmc.1
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 05:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FEIuoSgNcte8p2NJYC8yZXiAswFHmgWs9QpJbtKT01o=;
-        b=SHHqpqlJKVEaAHO1wZamR/xrgz7o7F36L2gGzOvWQ00oC5p9Aunr1rwMy2T70pz9Mb
-         NHp0SYb9+Cr1mS1EI3IN39AZs2um62Z9RY+stzUt9hOUTRoPmLDmxpp5GBan08phlBCU
-         M4JszHrR8d7jFCM5QwOXz0zE+E8ltqbN/h+fTM2nbSncKxUWNjn1Erm1zKbm+k8oC7D/
-         pVp0U9TL0Pi6pVde/cd7+t4FY8t5IH1W692D9BrH0IfXOen3OxUyUsLQPNkVSdkywSlp
-         Fw+gPQS3CEiDP4ZKEQUxAM/CxVdkt8YL1nhEERqsXxhapwVj836KEgNDIii6TXM8FhZ3
-         oVMw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8L9xblep16e49FpEMcjJPX36O9S5sP+1ZMCJZZAcM1A=;
+        b=Zlg0RMyIUnruJRCSbzsnLq+eMG0/29T8sAkvtM0RTiVz7OXX6hiuq45yVy/ffP9kAG
+         fK/F+rRdLOXORF6WTah3UjmgLA4hI4yiHlaZcpYoUgKSchd0v3IAzqkDZT6tqTBnYM3M
+         AD/j+mLGwzIn6TANVTYoDeOXh74nmXJzhF1BZxy4l2FIrj6DSnb4MpBjZCzjCPHapXLo
+         f0fLGvHJ5OoERVjXJ5w2uVlIfm+p9efPfiCg7p0sAvpyKEmgduFHA//+XnOBsL2E+EyN
+         CbSMN+cBxx1HRHywTA7g09A0LeoiWuLy/aCNh78rknd+vZBNqHXjX/TZ0YmHH5ZHc35S
+         nPvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FEIuoSgNcte8p2NJYC8yZXiAswFHmgWs9QpJbtKT01o=;
-        b=yzJxcCDSFD9boRL8ARfBh5BVxyehFfINd48z+US+Ae1ZvLejfSCMl2KpyNBMP/uDHl
-         JjED571OEiiQgofLj8J3UC3tZbP1KQ6xZsIvPFpqIqjEKgHZTBXjm2i7QJxQTP7wUPvt
-         SQtnUH8xfgfTZ7DsIrnoWNPtbacjSm0trOF+i4WZZFB+HUk/w687qIk3sFYRSla+zDFk
-         LA7x9tiFuGJ06Mqjv18x0QY1q1UGLb06OnfG2X+efyZAcgcw0R0jWdUU3Kw2xVMSMIFg
-         DoLUmlg6N2rJJt8R2wQnFXoqNSsjcF69iwoU1HYW06Ly+Inar3i3ZZncqE8zTM4OIoAN
-         wFFg==
-X-Gm-Message-State: AOAM533rYdEth5C/xmt0GDB4AFB6wOTN6jM2pwHkUploLlBuTdJ9SFBM
-        dBcqxEV3NS791NpvBbYsvoOxvfI7s0c=
-X-Google-Smtp-Source: ABdhPJxiu6F+EV0iBSURU8CilU5CnzX6FbVy7CohQtrTm5nP9tmF0nOOetPNso4tVfuQb5iJEoyTiQ==
-X-Received: by 2002:a17:906:2a0d:: with SMTP id j13mr11145527eje.545.1631876806599;
-        Fri, 17 Sep 2021 04:06:46 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-67-254.ip85.fastwebnet.it. [93.42.67.254])
-        by smtp.gmail.com with ESMTPSA id cb10sm2502711edb.18.2021.09.17.04.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 04:06:45 -0700 (PDT)
-Date:   Fri, 17 Sep 2021 13:06:42 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] drivers: thermal: tsens: add timeout to
- get_tem_tsens_valid
-Message-ID: <YUR2wmcMMWtoLDGB@Ansuel-xps.localdomain>
-References: <20210907212543.20220-1-ansuelsmth@gmail.com>
- <20210907212543.20220-2-ansuelsmth@gmail.com>
- <f06f6d13-e659-16e9-5900-2d82596f139c@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8L9xblep16e49FpEMcjJPX36O9S5sP+1ZMCJZZAcM1A=;
+        b=cEfq7DArNQ17IAEzqUSqqKjEpjP4+fxOazuTI2xIKyaDDIjoxbT2Cr0SJWqH7PLsz/
+         /YFenRXG3Tql17N331LaMC78q4mUtmHgWv6Bi9i3cOQKt43rxX/U2g12mUEqT/Q2LWQ2
+         lNFcTyiTRmWNn/1p+T8Uu+Cd285+4RLJppVP+6Pf1T8L6dc5oRZyER9oyjaS34Qpn3GM
+         wfO7jGY2Gko0r5MeUTp8a12oLWY/Wkg/JBMB/UaaQ6MwwR4V26XGxOkFKxF+AWjMTmOO
+         aE1t1LCX5Pjk0U86YqFmZt4PRCzKK1QtuXqNo6eowCWs9NyYf6zUvg//MM+kljT7ylUV
+         VOYA==
+X-Gm-Message-State: AOAM531/W0uAfJyqrEj9RGownPOYxA0RrFyhiMaQt8QS9FH7HFG8K6j5
+        P6KkGXCgFLux9I0cSeFkqWvrNTxctISGcw==
+X-Google-Smtp-Source: ABdhPJzzgR/rHp5puKqSVZrzAs1oIA3JRcqHIp0G7enBP9XWkQb3cpkstNanbqrUyOKT1qlRTkZAtQ==
+X-Received: by 2002:a05:600c:414d:: with SMTP id h13mr14924930wmm.121.1631882483259;
+        Fri, 17 Sep 2021 05:41:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6b11:6374:882d:42a0? ([2a01:e34:ed2f:f020:6b11:6374:882d:42a0])
+        by smtp.googlemail.com with ESMTPSA id l26sm10532391wmi.25.2021.09.17.05.41.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Sep 2021 05:41:22 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] Add a generic virtual thermal sensor
+To:     Alexandre Bailon <abailon@baylibre.com>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
+References: <20210917072732.611140-1-abailon@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bd347d14-0b42-f9ed-bf15-080c929e1cb7@linaro.org>
+Date:   Fri, 17 Sep 2021 14:41:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20210917072732.611140-1-abailon@baylibre.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f06f6d13-e659-16e9-5900-2d82596f139c@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 11:08:15AM +0200, Daniel Lezcano wrote:
-> On 07/09/2021 23:25, Ansuel Smith wrote:
-> > The function can loop and lock the system if for whatever reason the bit
-> > for the target sensor is NEVER valid. This is the case if a sensor is
-> > disabled by the factory and the valid bit is never reported as actually
-> > valid. Add a timeout check and exit if a timeout occurs. As this is
-> > a very rare condition, handle the timeout only if the first read fails.
-> > While at it also rework the function to improve readability.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/thermal/qcom/tsens.c | 40 +++++++++++++++++++++++-------------
-> >  1 file changed, 26 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> > index b1162e566a70..1ff244176beb 100644
-> > --- a/drivers/thermal/qcom/tsens.c
-> > +++ b/drivers/thermal/qcom/tsens.c
-> > @@ -599,26 +599,38 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
-> >  	int hw_id = s->hw_id;
-> >  	u32 temp_idx = LAST_TEMP_0 + hw_id;
-> >  	u32 valid_idx = VALID_0 + hw_id;
-> > +	unsigned long timeout;
-> >  	u32 valid;
-> >  	int ret;
-> >  
-> >  	/* VER_0 doesn't have VALID bit */
-> > -	if (tsens_version(priv) >= VER_0_1) {
-> > +	if (tsens_version(priv) == VER_0)
-> > +		goto get_temp;
-> > +
-> > +	ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> > +	if (ret || valid)
-> > +		goto check_valid;
-> > +
-> > +	timeout = jiffies + msecs_to_jiffies(20);
+On 17/09/2021 09:27, Alexandre Bailon wrote:
+> This series add a virtual thermal sensor.
+> It could be used to get a temperature using some thermal sensors.
+> Currently, the supported operations are max, min and avg.
+> The virtual sensor could be easily extended to support others operations.
 > 
-> Why not use regmap_field_read_poll_timeout() ?
->
+> Note:
+> Currently, thermal drivers must explicitly register their sensors to make them
+> available to the virtual sensor.
+> This doesn't seem a good solution to me and I think it would be preferable to
+> update the framework to register the list of each available sensors.
 
-Ok will convert this to pool_timeout and send v3.
-Thx for the review.
+Why must the drivers do that ?
 
-> > +	do {
-> > +		/* Valid bit is 0 for 6 AHB clock cycles.
-> > +		 * At 19.2MHz, 1 AHB clock is ~60ns.
-> > +		 * We should enter this loop very, very rarely.
-> > +		 */
-> > +		ndelay(400);
-> >  		ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> > -		if (ret)
-> > -			return ret;
-> > -		while (!valid) {
-> > -			/* Valid bit is 0 for 6 AHB clock cycles.
-> > -			 * At 19.2MHz, 1 AHB clock is ~60ns.
-> > -			 * We should enter this loop very, very rarely.
-> > -			 */
-> > -			ndelay(400);
-> > -			ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> > -			if (ret)
-> > -				return ret;
-> > -		}
-> > -	}
-> > +		if (ret || valid)
-> > +			goto check_valid;
-> > +	} while (time_before(jiffies, timeout));
-> > +
-> > +	return -ETIMEDOUT;
-> > +
-> > +check_valid:
-> > +	/* Check ret of valid bit read */
-> > +	if (ret)
-> > +		return ret;
-> >  
-> > +get_temp:
-> >  	/* Valid bit is set, OK to read the temperature */
-> >  	*temp = tsens_hw_to_mC(s, temp_idx);
-> >  
-> > 
+> Changes in v2:
+> - Fix some warnings / errors reported by kernel test robot
+> - rename some struct and functions with a more accurate name
+> - update the dt bindings: rename type attribute to aggregation-function
+> - factorize a little bit the aggregation functions
 > 
+> Alexandre Bailon (2):
+>   dt-bindings: Add bindings for the virtual thermal sensor
+>   thermal: add a virtual sensor to aggregate temperatures
 > 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>  .../thermal/virtual,thermal-sensor.yaml       |  67 +++
+>  drivers/thermal/Kconfig                       |   8 +
+>  drivers/thermal/Makefile                      |   1 +
+>  drivers/thermal/virtual-sensor.h              |  51 +++
+>  drivers/thermal/virtual_sensor.c              | 400 ++++++++++++++++++
+>  include/dt-bindings/thermal/virtual-sensor.h  |  15 +
+>  6 files changed, 542 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+>  create mode 100644 drivers/thermal/virtual-sensor.h
+>  create mode 100644 drivers/thermal/virtual_sensor.c
+>  create mode 100644 include/dt-bindings/thermal/virtual-sensor.h
 > 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
