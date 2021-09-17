@@ -2,71 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040C240FE4A
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 19:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9031F40FF1A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 20:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244090AbhIQRBW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 13:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhIQRBV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 13:01:21 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E34C061574
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 09:59:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z94so32182717ede.8
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 09:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
-        b=c6lNrMRhr/IZR+PbUHJqKQVXZw+9sX1NyFCDiBRYoa6cFq0XS7rRHNBPtOK6xI+/LP
-         0pWQTd3t4ZzB6TrJZMSSMlSdCVuvo4Siv9JmyTZoayUb05SP2tcIbYa2/agp9wJ0g6vz
-         8EpQvBmBzTOe73Ihf9mTv5NhgUKBsX2pD3fHAs+tct+TnJ88iKIprSK91rU3fg/w6F6J
-         Na9iE7K2OryLFonsYxY2B/d4wMmEdtTEGV0Y7G5R8Yj1BPKxz/eyZlQ+sYbKZaYH47ao
-         Z4/BLmhTZ1eTSwxwMdEzLNstag5faUo0bVCWeusLCDik4I4XwvaKrgjQHipY/Qan/oig
-         kCTQ==
+        id S1344187AbhIQSXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 14:23:06 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:39714 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230465AbhIQSXD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 14:23:03 -0400
+Received: by mail-ot1-f51.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so14035899otf.6;
+        Fri, 17 Sep 2021 11:21:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
-        b=nTzOOsgz473M/+CLZ5BIGJA416ur5w2femb6E5lWWkr9KXgnqKLqQTuqt5gYMB17DO
-         GqppC813gk5Q2oUEIEkr1j4I/7xXjOYtf8j4+pJjGb6BO98UE9TU1Vkaql3xVIb5GyUR
-         AWPptmWCEt40QYu5K7HJzS3v/nTRT/aWjEMm+fVWMTc/eITFyKMxMDUuxzYfX8IC7tgj
-         iSf4wcRMvmue/fX2KFLg85DSgfE27daI5pH9KlbXkv8fe/RmD2Zq9Vys5p4CFVcXqNkM
-         zcOOTUjUfboxLH70EqFuYX0dhmqC56b6mLHHFiOfNhByMAPuiQk3Bm8ohuWgzkTwzxEV
-         VZEg==
-X-Gm-Message-State: AOAM532cz32ksfBBR2RzKH0qlDqdfRlQp5DbRPTc+aeO2yLT/Tkf8kKm
-        Nc7BnAOmPIfY7Gcv8sYpJaUMA7bhPTadEGxMj8Y=
-X-Google-Smtp-Source: ABdhPJzZ5pbwiuCiWCiB2jyipG1BD5zybcKfABnNIGMyeUqHBEMd2hOL2YTQvFPI1Gim1amexvS0KDIZL8lR6eTkgbQ=
-X-Received: by 2002:a17:906:5855:: with SMTP id h21mr13021238ejs.230.1631897998011;
- Fri, 17 Sep 2021 09:59:58 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=MtTALbtXM6PObJbmnLKEWXd1r3ADFCs2TpTZwf4bkBM=;
+        b=vEIrgd2wyaRWwg3BiCOaiVUthng1KlssjDPPOCyFesFo6inD7IjAB24q2bfZ34ORrw
+         jLb6La9WtUMsE0tYC2y55c6bOGekekTP15CjROu1ylHaDYzF6hmhONg4eQwCJBa4mJ+H
+         tPSPbWEgvNOYJ2Zn9Ny4yoDnS4uJWrAHU9LnEeQZR84UIKpllkQXWndqO+5K2vEFwUiN
+         s1mm/0C7stdwEgt0yDATb3cLF8fUOtslvnqHjvtv/dqFyS/6aJYnl5euSMdr4YRlqS6+
+         bEeQr7r6MmqxBa8+KdaMgm+yAfasDQTURZXc5SUMVDe86fVf+ZUQv7bQGM5jwdJLprAw
+         itZg==
+X-Gm-Message-State: AOAM5334uOLSs9A10hYjOZMf/dQckQh2DqthXUow2tGLop0t1zG6c0oq
+        8MdqwGwsaE4kCXjWDUdDT2/viXK8DIimZTCpxqWdjpXyXMA=
+X-Google-Smtp-Source: ABdhPJxtRPgmy11EJNiV2sYS6uQeTpyeLzJb2JYM7JssdXrRZZwoN2y7dOaYWGAxECQO31Owa2EykqgsNmt89jw2KfE=
+X-Received: by 2002:a05:6830:34b:: with SMTP id h11mr10896232ote.319.1631902900355;
+ Fri, 17 Sep 2021 11:21:40 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a54:3209:0:0:0:0:0 with HTTP; Fri, 17 Sep 2021 09:59:57
- -0700 (PDT)
-Reply-To: ms.lisahugh000@gmail.com
-From:   MS LISA HUGH <olivier.folly0@gmail.com>
-Date:   Fri, 17 Sep 2021 18:59:57 +0200
-Message-ID: <CAG_GOAu=ROb3LrC=vOq5bqAJo3ZFFxvRPy4-x1_DKOoZJcTvCw@mail.gmail.com>
-Subject: YOU WILL HAVE THE FULL DETAILS >>MS LISA HUGH.
-To:     undisclosed-recipients:;
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Sep 2021 20:21:29 +0200
+Message-ID: <CAJZ5v0jjPkRrtS0qG7vx=Od6MiOixC1UyxjcLeQzfpegGtu9fQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.15-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Friend,
+Hi Linus,
 
-I am Ms Lisa Hugh, work in the department of Audit and accounting
-manager here in the Bank.
+Please pull from the tag
 
-I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
-bank account with your co-operation for both of us benefit.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.15-rc2
 
-Please send the follow below,
+with top-most commit cdef1196608892b9a46caa5f2b64095a7f0be60c
 
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+ cpufreq: schedutil: Destroy mutex before kobject_put() frees the memory
 
-Thanks.
-Ms Lisa Hugh
+on top of commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f
+
+ Linux 5.15-rc1
+
+to receive power management fixes for 5.15-rc2.
+
+These fix two cpufreq issues, one in the intel_pstate driver and one
+in the core.
+
+Specifics:
+
+ - Prevent intel_pstate from avoiding to use HWP, even if instructed
+   to do so via the kernel command line, when HWP has been enabled
+   already by the platform firmware (Doug Smythies).
+
+ - Prevent use-after-free from occurring in the schedutil cpufreq
+   governor on exit by fixing a core helper function that attempts
+   to access memory associated with a kobject after calling
+   kobject_put() on it (James Morse).
+
+Thanks!
+
+
+---------------
+
+Doug Smythies (1):
+      cpufreq: intel_pstate: Override parameters if HWP forced by BIOS
+
+James Morse (1):
+      cpufreq: schedutil: Destroy mutex before kobject_put() frees the memory
+
+---------------
+
+ drivers/cpufreq/cpufreq_governor_attr_set.c |  2 +-
+ drivers/cpufreq/intel_pstate.c              | 22 ++++++++++++++--------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
