@@ -2,166 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A3440F5F5
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 12:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FDF40F67D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 13:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243464AbhIQKcj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 06:32:39 -0400
-Received: from mga05.intel.com ([192.55.52.43]:46384 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243197AbhIQKcd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Sep 2021 06:32:33 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="308315072"
-X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
-   d="scan'208";a="308315072"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 03:31:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
-   d="scan'208";a="546283152"
-Received: from lkp-server01.sh.intel.com (HELO 285e7b116627) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Sep 2021 03:31:01 -0700
-Received: from kbuild by 285e7b116627 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mRB92-00042n-Dq; Fri, 17 Sep 2021 10:31:00 +0000
-Date:   Fri, 17 Sep 2021 18:30:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 668a3514b8a3dccf147a042777d1e569badca8fa
-Message-ID: <61446e37.+Rq0q4xx3L/VISYq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S242642AbhIQLIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 07:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242772AbhIQLIK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 07:08:10 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3599AC061574;
+        Fri, 17 Sep 2021 04:06:48 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eg28so5572030edb.1;
+        Fri, 17 Sep 2021 04:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FEIuoSgNcte8p2NJYC8yZXiAswFHmgWs9QpJbtKT01o=;
+        b=SHHqpqlJKVEaAHO1wZamR/xrgz7o7F36L2gGzOvWQ00oC5p9Aunr1rwMy2T70pz9Mb
+         NHp0SYb9+Cr1mS1EI3IN39AZs2um62Z9RY+stzUt9hOUTRoPmLDmxpp5GBan08phlBCU
+         M4JszHrR8d7jFCM5QwOXz0zE+E8ltqbN/h+fTM2nbSncKxUWNjn1Erm1zKbm+k8oC7D/
+         pVp0U9TL0Pi6pVde/cd7+t4FY8t5IH1W692D9BrH0IfXOen3OxUyUsLQPNkVSdkywSlp
+         Fw+gPQS3CEiDP4ZKEQUxAM/CxVdkt8YL1nhEERqsXxhapwVj836KEgNDIii6TXM8FhZ3
+         oVMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FEIuoSgNcte8p2NJYC8yZXiAswFHmgWs9QpJbtKT01o=;
+        b=yzJxcCDSFD9boRL8ARfBh5BVxyehFfINd48z+US+Ae1ZvLejfSCMl2KpyNBMP/uDHl
+         JjED571OEiiQgofLj8J3UC3tZbP1KQ6xZsIvPFpqIqjEKgHZTBXjm2i7QJxQTP7wUPvt
+         SQtnUH8xfgfTZ7DsIrnoWNPtbacjSm0trOF+i4WZZFB+HUk/w687qIk3sFYRSla+zDFk
+         LA7x9tiFuGJ06Mqjv18x0QY1q1UGLb06OnfG2X+efyZAcgcw0R0jWdUU3Kw2xVMSMIFg
+         DoLUmlg6N2rJJt8R2wQnFXoqNSsjcF69iwoU1HYW06Ly+Inar3i3ZZncqE8zTM4OIoAN
+         wFFg==
+X-Gm-Message-State: AOAM533rYdEth5C/xmt0GDB4AFB6wOTN6jM2pwHkUploLlBuTdJ9SFBM
+        dBcqxEV3NS791NpvBbYsvoOxvfI7s0c=
+X-Google-Smtp-Source: ABdhPJxiu6F+EV0iBSURU8CilU5CnzX6FbVy7CohQtrTm5nP9tmF0nOOetPNso4tVfuQb5iJEoyTiQ==
+X-Received: by 2002:a17:906:2a0d:: with SMTP id j13mr11145527eje.545.1631876806599;
+        Fri, 17 Sep 2021 04:06:46 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-67-254.ip85.fastwebnet.it. [93.42.67.254])
+        by smtp.gmail.com with ESMTPSA id cb10sm2502711edb.18.2021.09.17.04.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Sep 2021 04:06:45 -0700 (PDT)
+Date:   Fri, 17 Sep 2021 13:06:42 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] drivers: thermal: tsens: add timeout to
+ get_tem_tsens_valid
+Message-ID: <YUR2wmcMMWtoLDGB@Ansuel-xps.localdomain>
+References: <20210907212543.20220-1-ansuelsmth@gmail.com>
+ <20210907212543.20220-2-ansuelsmth@gmail.com>
+ <f06f6d13-e659-16e9-5900-2d82596f139c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f06f6d13-e659-16e9-5900-2d82596f139c@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 668a3514b8a3dccf147a042777d1e569badca8fa  Merge branch 'devprop' into bleeding-edge
+On Fri, Sep 17, 2021 at 11:08:15AM +0200, Daniel Lezcano wrote:
+> On 07/09/2021 23:25, Ansuel Smith wrote:
+> > The function can loop and lock the system if for whatever reason the bit
+> > for the target sensor is NEVER valid. This is the case if a sensor is
+> > disabled by the factory and the valid bit is never reported as actually
+> > valid. Add a timeout check and exit if a timeout occurs. As this is
+> > a very rare condition, handle the timeout only if the first read fails.
+> > While at it also rework the function to improve readability.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/thermal/qcom/tsens.c | 40 +++++++++++++++++++++++-------------
+> >  1 file changed, 26 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> > index b1162e566a70..1ff244176beb 100644
+> > --- a/drivers/thermal/qcom/tsens.c
+> > +++ b/drivers/thermal/qcom/tsens.c
+> > @@ -599,26 +599,38 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+> >  	int hw_id = s->hw_id;
+> >  	u32 temp_idx = LAST_TEMP_0 + hw_id;
+> >  	u32 valid_idx = VALID_0 + hw_id;
+> > +	unsigned long timeout;
+> >  	u32 valid;
+> >  	int ret;
+> >  
+> >  	/* VER_0 doesn't have VALID bit */
+> > -	if (tsens_version(priv) >= VER_0_1) {
+> > +	if (tsens_version(priv) == VER_0)
+> > +		goto get_temp;
+> > +
+> > +	ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> > +	if (ret || valid)
+> > +		goto check_valid;
+> > +
+> > +	timeout = jiffies + msecs_to_jiffies(20);
+> 
+> Why not use regmap_field_read_poll_timeout() ?
+>
 
-elapsed time: 1321m
+Ok will convert this to pool_timeout and send v3.
+Thx for the review.
 
-configs tested: 105
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210916
-mips                     loongson1b_defconfig
-sh                           se7712_defconfig
-powerpc                        warp_defconfig
-arm                      integrator_defconfig
-powerpc                 mpc837x_rdb_defconfig
-s390                       zfcpdump_defconfig
-powerpc                      arches_defconfig
-m68k                       m5275evb_defconfig
-mips                        workpad_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                    klondike_defconfig
-sh                           se7343_defconfig
-powerpc                 mpc837x_mds_defconfig
-mips                     loongson2k_defconfig
-powerpc                     tqm8560_defconfig
-xtensa                  cadence_csp_defconfig
-arm                        spear3xx_defconfig
-x86_64               randconfig-c001-20210916
-arm                  randconfig-c002-20210916
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a016-20210916
-x86_64               randconfig-a013-20210916
-x86_64               randconfig-a012-20210916
-x86_64               randconfig-a011-20210916
-x86_64               randconfig-a014-20210916
-x86_64               randconfig-a015-20210916
-i386                 randconfig-a016-20210916
-i386                 randconfig-a015-20210916
-i386                 randconfig-a011-20210916
-i386                 randconfig-a012-20210916
-i386                 randconfig-a013-20210916
-i386                 randconfig-a014-20210916
-riscv                randconfig-r042-20210916
-s390                 randconfig-r044-20210916
-arc                  randconfig-r043-20210916
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-riscv                randconfig-c006-20210916
-x86_64               randconfig-c007-20210916
-mips                 randconfig-c004-20210916
-powerpc              randconfig-c003-20210916
-arm                  randconfig-c002-20210916
-i386                 randconfig-c001-20210916
-s390                 randconfig-c005-20210916
-x86_64               randconfig-a002-20210916
-x86_64               randconfig-a003-20210916
-x86_64               randconfig-a006-20210916
-x86_64               randconfig-a004-20210916
-x86_64               randconfig-a005-20210916
-x86_64               randconfig-a001-20210916
-i386                 randconfig-a004-20210916
-i386                 randconfig-a005-20210916
-i386                 randconfig-a006-20210916
-i386                 randconfig-a002-20210916
-i386                 randconfig-a003-20210916
-i386                 randconfig-a001-20210916
-hexagon              randconfig-r045-20210916
-hexagon              randconfig-r041-20210916
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > +	do {
+> > +		/* Valid bit is 0 for 6 AHB clock cycles.
+> > +		 * At 19.2MHz, 1 AHB clock is ~60ns.
+> > +		 * We should enter this loop very, very rarely.
+> > +		 */
+> > +		ndelay(400);
+> >  		ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> > -		if (ret)
+> > -			return ret;
+> > -		while (!valid) {
+> > -			/* Valid bit is 0 for 6 AHB clock cycles.
+> > -			 * At 19.2MHz, 1 AHB clock is ~60ns.
+> > -			 * We should enter this loop very, very rarely.
+> > -			 */
+> > -			ndelay(400);
+> > -			ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> > -			if (ret)
+> > -				return ret;
+> > -		}
+> > -	}
+> > +		if (ret || valid)
+> > +			goto check_valid;
+> > +	} while (time_before(jiffies, timeout));
+> > +
+> > +	return -ETIMEDOUT;
+> > +
+> > +check_valid:
+> > +	/* Check ret of valid bit read */
+> > +	if (ret)
+> > +		return ret;
+> >  
+> > +get_temp:
+> >  	/* Valid bit is set, OK to read the temperature */
+> >  	*temp = tsens_hw_to_mC(s, temp_idx);
+> >  
+> > 
+> 
+> 
+> -- 
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
