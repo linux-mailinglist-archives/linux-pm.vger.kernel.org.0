@@ -2,64 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C39C040F3A0
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 09:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D47F40F484
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Sep 2021 11:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbhIQH5c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Sep 2021 03:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S233053AbhIQJJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Sep 2021 05:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240123AbhIQH53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 03:57:29 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10E9C061574
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 00:56:07 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id d207-20020a1c1dd8000000b00307e2d1ec1aso6234554wmd.5
-        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 00:56:07 -0700 (PDT)
+        with ESMTP id S232849AbhIQJJm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Sep 2021 05:09:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E42AC061574
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:08:19 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id u15so13992594wru.6
+        for <linux-pm@vger.kernel.org>; Fri, 17 Sep 2021 02:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OFx3SnvSEsaPAlzfle7T2BQ4boIe1CP3FodekGYyb/0=;
-        b=eFzkuMmdf/6JA+T/kB9rUfbXMficAMnnA5Dg818j2oiqoxjPB2ym2a5JzPzL/HvTwQ
-         uJQrldSNNdraw4cwEkyH+f4CtY21JlkEmmNgKfmLBNYgyR5poI/JJJoGHN7q4rm7kAEZ
-         lGtxQjeQnJdliIHC0N1nOrLd/olec+8P14o6aglzhYf2OxvQJkd5c7JWT9pTwepjdk/U
-         B3e+w0bbm75t+VO6NgPqdAduPv65qYJIST2eGvNInQ8ewjicM9rGgmuwSIeeYJhpLpXl
-         obkZanazA0AsvrBkZ9pIU/Nrt0Fr/UY0VqCrEU6GsEFacGQhsuyia2mCerHBU6AskXtl
-         CJCw==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=6H3PgEvJtKdfjyBEYlYykpBnafjbdNton0u/XHPtQkY=;
+        b=e92OBaLRYooNOD8adcQCqfoNoPrMKrhSenSe/RAIl/Q3MEONRS++meOfqRiquzCPTO
+         oFzdPQwEfuP0VJEjRUEEaGWZbd9sV/eORFgkfV2WjjuSyuOQde9tuRB/3a+q56dFq0J/
+         Utg2hQVV5ctHvAP7kerfL32V+CIzQY7p5UvEnHQkEycyxNDa37+Z7tCIAjlG6hQZj3Ha
+         NvRAlYvZqQTS3onGoVZR509VwzDwX500IPRBu9+2WWjaeZ211Up8sIdgULQ52/mP45D3
+         rJ0SMArM3xr79qR1o64ScXD2qWI68PUyv9Z3ecWh6v4Acfd6f+7krIAaXDHi7j7EVIFz
+         VY7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OFx3SnvSEsaPAlzfle7T2BQ4boIe1CP3FodekGYyb/0=;
-        b=s48uKAr1KuWOnb7qWvF+FSG7bLKnF1/+VYbN/lQVuyfv47iSGIMtCvRccQ/rt1BJwY
-         mBzjmgFYyI/aLBgzwbk/QLw1bVmmM1r2BZbDUvN/ViOHpBfHhTAzZV8Vrtl2OkXAJqKu
-         e9nQmU2UroDMPay/hgY4VqsGQifSZRZo1nAkVpqV9XLOlS74ARtM5vyPH/53gFhfcVVy
-         lkoWkmmvbx6fe3ixw+pbwr9v3vdy7Qncxcj/lsxOHq356Sfs7ug/+GfRLczm3XBWUhSx
-         1FUt7N3EkPqVDr4eCxlB+xn28dct3vcWnLxVSkukalDw1GtBxgqAPT5Sk2u7Vh+hrGzx
-         z8Jg==
-X-Gm-Message-State: AOAM53271elgXjbNRMKvJqUc5kcuZgflFXtfj5gwiIOYAvB+lbXBhIcd
-        txD2tBXkzVc4w7HQzEJVe+Pxy3CQhSW5ug==
-X-Google-Smtp-Source: ABdhPJzYbuCIj6mvruOmS7ZSQoHxAMnl9yW/YIl/P2o591+H+r7+mNRbCVZ/Vc4yXEFP0CXaE97TEA==
-X-Received: by 2002:a05:600c:2298:: with SMTP id 24mr8722546wmf.177.1631865366351;
-        Fri, 17 Sep 2021 00:56:06 -0700 (PDT)
+        bh=6H3PgEvJtKdfjyBEYlYykpBnafjbdNton0u/XHPtQkY=;
+        b=u9Gj3Gj+r6Qrp1Rv85eU2jEED0tmGiZenrHBxHpdZGEuL4Fw119ysqE0uEbPhfb3qY
+         yPp4bS2dOLLiM7hHCmUzAizwv5hNh2Onn0lkrJOhQEl1VGrXZNTPsmGdYbFdqAzqeUT8
+         lCQUDoaU0uO8mAyc2IVrkFUj1LGudh0RCJ/als/Ta35pDtnoI6B54bykc3U3hllYFqDv
+         SS4yCBIYmEY1K+J8NXArbCX9+eizugGJcClsbuMskSE+8qlqnGUrnWgVdKsvJUFbL92P
+         ZNl4glYCiPd7MOQp6i2C/OW5W6A6/hHk77xgoFqHVi0OxjkG81eozelNSvecgZjXo2PF
+         CxKg==
+X-Gm-Message-State: AOAM531Nw4myPwnzAPOohW4WmMLRxHMCFMqPaRFfqVAfot7q1AlOOjvW
+        BVs/h1Dmw7zTHQ74ggvx+KB0Sw==
+X-Google-Smtp-Source: ABdhPJzhFXRN7B5ouSQwSKgqj5+f/A/03bCmzpqAegKiAAOn3OFsIbt0Eet7OTCBonqbpgTw3y4NIA==
+X-Received: by 2002:a5d:5229:: with SMTP id i9mr10794836wra.373.1631869697332;
+        Fri, 17 Sep 2021 02:08:17 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:cf95:6508:8470:7171? ([2a01:e34:ed2f:f020:cf95:6508:8470:7171])
-        by smtp.googlemail.com with ESMTPSA id g143sm9987526wme.16.2021.09.17.00.56.05
+        by smtp.googlemail.com with ESMTPSA id m2sm9888055wmm.3.2021.09.17.02.08.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 00:56:05 -0700 (PDT)
-Subject: Re: [PATCH v2 0/2] thermal: int340x: fix tcc offset on resume
-To:     Antoine Tenart <atenart@kernel.org>, rui.zhang@intel.com,
-        amitk@kernel.org, srinivas.pandruvada@linux.intel.com
-Cc:     linux-pm@vger.kernel.org
-References: <20210909085613.5577-1-atenart@kernel.org>
+        Fri, 17 Sep 2021 02:08:16 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] drivers: thermal: tsens: add timeout to
+ get_tem_tsens_valid
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210907212543.20220-1-ansuelsmth@gmail.com>
+ <20210907212543.20220-2-ansuelsmth@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c75002e5-18a6-da14-b903-207f68c2d1cc@linaro.org>
-Date:   Fri, 17 Sep 2021 09:56:04 +0200
+Message-ID: <f06f6d13-e659-16e9-5900-2d82596f139c@linaro.org>
+Date:   Fri, 17 Sep 2021 11:08:15 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210909085613.5577-1-atenart@kernel.org>
+In-Reply-To: <20210907212543.20220-2-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -67,40 +73,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 07/09/2021 23:25, Ansuel Smith wrote:
+> The function can loop and lock the system if for whatever reason the bit
+> for the target sensor is NEVER valid. This is the case if a sensor is
+> disabled by the factory and the valid bit is never reported as actually
+> valid. Add a timeout check and exit if a timeout occurs. As this is
+> a very rare condition, handle the timeout only if the first read fails.
+> While at it also rework the function to improve readability.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  drivers/thermal/qcom/tsens.c | 40 +++++++++++++++++++++++-------------
+>  1 file changed, 26 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index b1162e566a70..1ff244176beb 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -599,26 +599,38 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+>  	int hw_id = s->hw_id;
+>  	u32 temp_idx = LAST_TEMP_0 + hw_id;
+>  	u32 valid_idx = VALID_0 + hw_id;
+> +	unsigned long timeout;
+>  	u32 valid;
+>  	int ret;
+>  
+>  	/* VER_0 doesn't have VALID bit */
+> -	if (tsens_version(priv) >= VER_0_1) {
+> +	if (tsens_version(priv) == VER_0)
+> +		goto get_temp;
+> +
+> +	ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> +	if (ret || valid)
+> +		goto check_valid;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(20);
 
-Applied, thanks
+Why not use regmap_field_read_poll_timeout() ?
 
-On 09/09/2021 10:56, Antoine Tenart wrote:
-> Hi,
-> 
-> This is a follow-up of [1]. As discussed in the initial thread, the fix
-> is now split into two commits: the two commits combined are fixing the
-> issue in a nice way for 5.15, but only the first one is meant to be
-> applied on stable kernels (to avoid conflicts).
-> 
-> The issue this is fixing is described in patch 1. Tl;dr: a
-> suspend/resume cycle can end-up in setting a wrong tcc offset value,
-> which can lead to machines shutting down because of overheating (when
-> they should not).
-> 
-> I've stripped the Acked-by/Tested-by flags from v1 as the patch was
-> split. But the end result for 5.15+ kernels should be the same.
-> 
-> Thanks,
-> Antoine
-> 
-> [1] https://lore.kernel.org/linux-pm/20210908161632.15520-1-atenart@kernel.org/T/
-> 
-> Antoine Tenart (2):
->   thermal: int340x: do not set a wrong tcc offset on resume
->   thermal: int340x: improve the tcc offset saving for suspend/resume
-> 
->  .../intel/int340x_thermal/int3401_thermal.c   |  8 +++-
->  .../processor_thermal_device.c                | 39 ++++++++++++++-----
->  .../processor_thermal_device.h                |  1 +
->  .../processor_thermal_device_pci.c            | 18 ++++++++-
->  .../processor_thermal_device_pci_legacy.c     |  8 +++-
->  5 files changed, 62 insertions(+), 12 deletions(-)
+> +	do {
+> +		/* Valid bit is 0 for 6 AHB clock cycles.
+> +		 * At 19.2MHz, 1 AHB clock is ~60ns.
+> +		 * We should enter this loop very, very rarely.
+> +		 */
+> +		ndelay(400);
+>  		ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> -		if (ret)
+> -			return ret;
+> -		while (!valid) {
+> -			/* Valid bit is 0 for 6 AHB clock cycles.
+> -			 * At 19.2MHz, 1 AHB clock is ~60ns.
+> -			 * We should enter this loop very, very rarely.
+> -			 */
+> -			ndelay(400);
+> -			ret = regmap_field_read(priv->rf[valid_idx], &valid);
+> -			if (ret)
+> -				return ret;
+> -		}
+> -	}
+> +		if (ret || valid)
+> +			goto check_valid;
+> +	} while (time_before(jiffies, timeout));
+> +
+> +	return -ETIMEDOUT;
+> +
+> +check_valid:
+> +	/* Check ret of valid bit read */
+> +	if (ret)
+> +		return ret;
+>  
+> +get_temp:
+>  	/* Valid bit is set, OK to read the temperature */
+>  	*temp = tsens_hw_to_mC(s, temp_idx);
+>  
 > 
 
 
