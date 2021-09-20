@@ -2,121 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6712441154D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Sep 2021 15:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA493411569
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Sep 2021 15:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbhITNLz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Sep 2021 09:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S233770AbhITNWh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Sep 2021 09:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238713AbhITNLy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Sep 2021 09:11:54 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06864C061760
-        for <linux-pm@vger.kernel.org>; Mon, 20 Sep 2021 06:10:26 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id t18so29610904wrb.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Sep 2021 06:10:26 -0700 (PDT)
+        with ESMTP id S239225AbhITNWg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Sep 2021 09:22:36 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37ADC061574;
+        Mon, 20 Sep 2021 06:21:09 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p29so66937590lfa.11;
+        Mon, 20 Sep 2021 06:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=N6K8ConCBxplODVGreBkUy4Oa7+JBEry738dFoxNBUQ=;
-        b=N00YFoVU4+Vq0hKIRzFy48WMm/j4o9Aybke1uNu+tT51OUYjizcIDCxr9bIvObJIb9
-         QAN33timr+kMiH737C9t2T6cD2DPTAhDZJWVV3sS27kZr2MouwFbTd6QtYYs+qjSxITn
-         0kPsfWf+rchHZGOH3z+lWqnemAFte6Eg75H6wE3PF24ZOfJc0Ssalh8JEg5TFfgpcfTA
-         YACIgoU5tRrD24q5Y25flWZel0v9qtpTg5kyCukiXJlo3ZLRs+TS+t69rPvDhB3wowVd
-         O7krWLmvS2wyy7uwqc8GpMM3i4yv8pmjI2Us/qjx50VSgIJpPPfSMTNpJPySx1dE1LwQ
-         AAsQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u6GB2XJ25N7du6+keolf1xpjOAUOuO0nlhOfiMwGosc=;
+        b=WUl9raFZdZmVdrAFxYDDogwBxjqdYpNcL9Oh/UZvzQuu7Gfp5/W2NOpSfqiA51+3iv
+         KEcbq5YHwo87woY05cQBjhpmuHr1x7hFVZW0s5yJh9VD5JCCZY7oX9Rr0tfwgamm81AH
+         9vHPkw1gpBLMT3hICaOn6FAtG4zWmezf4MYTow3IpFOhkWvk2pkTK1EIRKQZNUkjxSRN
+         TCaa/Y2GBjiodXB5j+3AA1iNO/RADOPMmOnz5h1F+nlyTWBkfYW/MDYhK/1aJRLImjLl
+         PVSFEHcwNY5PpEkTL1P2/Nu+VDPYMQgAPHDe1MiBOpQU2nKXVEY/leq8x8vLIdwAVCEq
+         K/6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=N6K8ConCBxplODVGreBkUy4Oa7+JBEry738dFoxNBUQ=;
-        b=H8o5cm6d9wHX2sF0V2Y/fcOGnNppQ8BrQ1GlvxGWRCs9jZMveZkZn9ZkGsh+D9h62y
-         l4kWtDFFkIF8LVXtus/OTYlQOuwer8pFx11LhfvKqQ91hPQoI011U/97TBJVHpRxz6um
-         tiSADPg50CDKsU0bmg2dVEjwhy3+/5FIMaHe9nHhgWuSz4zsO/uIqsf2bfhzJKfUmql+
-         VJqREYKBfYxAZUTiZTejvam6E1jNj2dyrxPu9+nCXikutxyVE/7l2VWZl5rvvF8LhXAi
-         AVCsiJDhrk1xb+wPdShRHXOtHNmCmfd0b4E/vGLyLCIYaweHwKkDH5KBNxgSzNTZFJW9
-         VbnQ==
-X-Gm-Message-State: AOAM532h0P9cOsd7nnQHfO9BdZ7BnkxS8IyiBAZOlQB1LyxtShuaBM6T
-        sKG/eTr0quvVtsnex7HTavDy5w==
-X-Google-Smtp-Source: ABdhPJyBCLWdiZm9YH/EuWmrJ2451uajr6mM2jDd/R8S638gaN3HBh4Y4z+PLCJi+PnGLPl+1+XMuw==
-X-Received: by 2002:a05:600c:3548:: with SMTP id i8mr1796780wmq.106.1632143425503;
-        Mon, 20 Sep 2021 06:10:25 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id k18sm15870527wrh.68.2021.09.20.06.10.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 06:10:24 -0700 (PDT)
-Subject: Re: [PATCH v2 0/2] Add a generic virtual thermal sensor
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
-References: <20210917072732.611140-1-abailon@baylibre.com>
- <bd347d14-0b42-f9ed-bf15-080c929e1cb7@linaro.org>
- <7cddcdb7-4efd-bfdb-3d86-f5862ea0b7fe@baylibre.com>
- <8a9e5f13-6253-2d0d-35a8-789090af4521@linaro.org>
-From:   Alexandre Bailon <abailon@baylibre.com>
-Message-ID: <c395abad-598b-c06a-9252-c8e62c977188@baylibre.com>
-Date:   Mon, 20 Sep 2021 15:12:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u6GB2XJ25N7du6+keolf1xpjOAUOuO0nlhOfiMwGosc=;
+        b=6pokcTIzILjMejCMjjSV0UqSLQKC41Xs1ygieLbj7f9BqXyTz7laKtH2My0xvbbTDJ
+         kWdMDX6O8l250A614KZ7A7P6pmxoDSenjzsVSGWUtASKQ/bQA6d4NBZFCHT8iyofRfpJ
+         t0Q/LFUhCo9LlPZctbMAORenEXGVIUid9VTACKcrHaRDyImbMlw7djuCNQJ7SiXjdkmL
+         a7XKUbraGvISJgSlapqw6MXXhCnZRBZVwmDXlpwNmbFzWs+ntjvj1ahDmwUtIbcoB8/X
+         e9T0QiO5ciluUV/NxTN8Wre11m1RL1tSylf1qRM4fELv05AO+g//yPC49u3lUjqXgpZ8
+         neYA==
+X-Gm-Message-State: AOAM530GW+/KR4aF6c3NtOJTtpuTCVRtiC0nn9tDOAnG28UdQEW3ookI
+        66dYWD9BcO0MWnN4EfSvJ0jIixlPEG/cbow/xS4=
+X-Google-Smtp-Source: ABdhPJx0qPnmu+9JXcNEtDd+hROg13K9h163miZ0QCh31ioY/3l77YNaz2O02/6GOiUyEKu42BKCwwQrPryXg+4Yl9Y=
+X-Received: by 2002:a05:6512:1284:: with SMTP id u4mr1063524lfs.395.1632144033466;
+ Mon, 20 Sep 2021 06:20:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8a9e5f13-6253-2d0d-35a8-789090af4521@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
+In-Reply-To: <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
+From:   Rajaram R <rajaram.officemail@gmail.com>
+Date:   Mon, 20 Sep 2021 18:50:22 +0530
+Message-ID: <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 9/17/21 4:03 PM, Daniel Lezcano wrote:
-> On 17/09/2021 15:33, Alexandre Bailon wrote:
->> Hi Daniel,
->>
->> On 9/17/21 2:41 PM, Daniel Lezcano wrote:
->>> On 17/09/2021 09:27, Alexandre Bailon wrote:
->>>> This series add a virtual thermal sensor.
->>>> It could be used to get a temperature using some thermal sensors.
->>>> Currently, the supported operations are max, min and avg.
->>>> The virtual sensor could be easily extended to support others
->>>> operations.
->>>>
->>>> Note:
->>>> Currently, thermal drivers must explicitly register their sensors to
->>>> make them
->>>> available to the virtual sensor.
->>>> This doesn't seem a good solution to me and I think it would be
->>>> preferable to
->>>> update the framework to register the list of each available sensors.
->>> Why must the drivers do that ?
->> Because there are no central place where thermal sensor are registered.
->> The only other way I found was to update thermal_of.c,
->> to register the thermal sensors and make them available later to the
->> virtual thermal sensor.
->>
->> To work, the virtual thermal need to get the sensor_data the ops from
->> the thermal sensor.
->> And as far I know, this is only registered in thermal_of.c, in the
->> thermal zone data
->> but I can't access it directly from the virtual thermal sensor.
->>
->> How would you do it ?
-> Via the phandles when registering the virtual sensor ?
-As far I know, we can't get the ops or the sensor_data from the phandle 
-of a thermal sensor.
-The closest solution I found so far would be to aggregate the thermal 
-zones instead of thermal sensors.
-thermal_zone_device has the data needed and a thermal zone could be find 
-easily using its name.
-
-But, using a thermal_zone_device, I don't see how to handle module 
-unloading.
-
-Thanks,
-Alexandre
-> Or is the problem you are mentioning related to the sensor module
-> loading after the virtual sensor ?
+On Fri, Sep 17, 2021 at 6:25 AM Badhri Jagan Sridharan
+<badhri@google.com> wrote:
 >
+> On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
+> <Adam.Thomson.Opensource@diasemi.com> wrote:
+> >
+> > On 16 September 2021 11:23, Heikki Krogerus wrote:
+> >
+> > > > Thanks for providing the clarification. So you're proposing a port-psy and a
+> > > > port-partner-psy that are connected to each other (one supplying the other).
+> > > > If PD is not present, those two will exist per port and partner, and there
+> > > > will be information about Type-C current (and possibly BC 1.2 and other
+> > > > methods?)
+> > >
+> > > Yes, exactly.
+
+
+ As Benson mentioned PDOs contain more than power details like USB
+Suspend indicator etc or Type-C only devices as Badhri mentioned here
+may not integrate well with PSY class.  Additionally, it is also
+important to consider cable properties here for power as they also
+have a role to play in the power limits and necessitates change of
+existing PDOs or power limits. ( Type-C Monitor charging a computing
+system does not have captive cables)
+
+Given too many possibilities, would an approach similar to
+gadgetfs/configfs or cpu scaling say like "type-configfs" or "typec
+scaling" ABI framework that allows USB=C port management under one
+path /sys/class/typec that allows:
+
+- Provision to manage USB-C port power (  Power supply class should
+still represent power contract established, as remaining
+characteristics are nested with functional aspects and relevant on a
+power contract failure )
++ dynamically change Rp ( Rp(default) is required to enter USB suspend)
++ Set PDO Policy ( PPS, Fixed, etc)
++ Give back power
++ Expose complete PDO ( As we do for VDOs)
++ Change USB Suspend flag
+
+- Provision for extended messages
++ Provides additional details regarding ports like Get Status etc.
+This shall allow us to take system level decisions.
+
+- Provision to manage USB-C modes
++ Provision to enter modes as provided by interface standards like UCSI
+
+With this user tools like Chrome OS "typecd" be able to use a single
+class and its ABIs to manage USB-C port power and mode. Kindly correct
+me if I am missing something here.
