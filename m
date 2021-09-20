@@ -2,146 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C39DB4111F4
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Sep 2021 11:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82A341121D
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Sep 2021 11:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234870AbhITJkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Sep 2021 05:40:09 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:46538 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbhITJkH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Sep 2021 05:40:07 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210920093835euoutp01e734e6a5edc023a1155339d1eec8431f~mfj0gMuo90671506715euoutp01K
-        for <linux-pm@vger.kernel.org>; Mon, 20 Sep 2021 09:38:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210920093835euoutp01e734e6a5edc023a1155339d1eec8431f~mfj0gMuo90671506715euoutp01K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1632130716;
-        bh=e6isLm0fq/xkM6oDTJGwHszCngzBJExBJzDBgTBtJs0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=l/ElDmCoYjJa66ScBu2HKInHkEAD4KiX1K8uZXGwnOCzdZIkI2isYApN4VrMzvpr6
-         m9Pem7H6dlKDJb/BgdnWvtF8gjWNMlx6FNGCqatR6E12I18pz6vPoi4zQmwWfVSHPL
-         y5EVUGFBo+5s1aq8lhwNQb+DQ/pPqJrvVsyLk+2s=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210920093835eucas1p1c9dda5ed24ec95143ab290b506c8f2b8~mfjz7AyFA0165601656eucas1p1n;
-        Mon, 20 Sep 2021 09:38:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 50.0F.42068.B9658416; Mon, 20
-        Sep 2021 10:38:35 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210920093834eucas1p2a0187690220f466590d390b9775ced84~mfjzKw59e2473024730eucas1p2R;
-        Mon, 20 Sep 2021 09:38:34 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210920093834eusmtrp2bcae9c6411b3f96dcbeba51ad7144439~mfjzJwm1L2829128291eusmtrp22;
-        Mon, 20 Sep 2021 09:38:34 +0000 (GMT)
-X-AuditID: cbfec7f4-c71ff7000002a454-e7-6148569bd40a
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 18.20.31287.A9658416; Mon, 20
-        Sep 2021 10:38:34 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210920093833eusmtip24b53e66487ae49756c55d09b113c5c6e~mfjyXLVVq1258312583eusmtip2n;
-        Mon, 20 Sep 2021 09:38:33 +0000 (GMT)
-Subject: Re: [PATCH v2 0/3] devfreq: exynos-ppmu: conform to dt naming
- convention
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Sylwester Nawrocki <snawrocki@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <04270892-0952-49ca-d9b7-eb8406e283ff@samsung.com>
-Date:   Mon, 20 Sep 2021 11:38:32 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.14.0
+        id S236362AbhITJwp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Sep 2021 05:52:45 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:46449 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231411AbhITJwm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Sep 2021 05:52:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1632131476; x=1663667476;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nG1+qtmEDFsFcOLpAMVYCqRxXWk4yUD9XWvxrO9U8y4=;
+  b=jLq+SBaa4blASjaa/d2Wlu+JetaEfK3mc+tC+KU1pdS3vR3ERnPuzJw3
+   qkba5eENrZIZLP5Q9Kkqpk9+2e+gc60tpT5GBXbBdpGSklXKCIre0aXAS
+   P2rrp6I4YKhqKvGdHzfBeXTtGhIYcb7VoUXn+ufapqjeMglXd0LHsu/Sb
+   UFdqZXkLYnzlzdiXmkbjrDr2/twm5yFlxG8C2HsT3NjHXA0oX5eJbux/p
+   Cb4ICHB/g2MU/WJw0PKs+5ss+qZvJc29G6DulF6f1vhN5Ot5BzAbLrziv
+   /uQqYKhi+P6JZJEB9OBqazqRvOp4CzPcSRdD2dlcRWZagF1976DLEOWRj
+   w==;
+IronPort-SDR: 0/4JdHHAnTdixmi1+h8qKSF54uSsd5GNf0W1J8QZC9s8uYTPpMJgp681X64gAWuhj7lBEo2bBe
+ 4kXlYrPpmdNCiQH0CsXPbfmg7priVDZL29mFJF+MfVQmQR2Yku7xgrslpB/FFMXhQ3zQ9OYrWW
+ hw3yoBWsor6tQXVXgMLVS88DFvyw/JezNNf1jYlToarXcicL4Q5ku4X2MyozxzDlKYnrDNY6c9
+ LGhkXArdP5tbRQTexbsqzfhg0/ngvLA30Wlmk5PHygJbPvV3xDWexjQDl6rz4nENC+yPctb+11
+ pweguuHzFbLzl3nLP/uryNp0
+X-IronPort-AV: E=Sophos;i="5.85,308,1624345200"; 
+   d="scan'208";a="132434705"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Sep 2021 02:51:13 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 20 Sep 2021 02:51:12 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 20 Sep 2021 02:51:09 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <andrew@lunn.ch>, <linux@armlinux.org.uk>, <f.fainelli@gmail.com>,
+        <alexandre.belloni@bootlin.com>, <vladimir.oltean@nxp.com>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [RFC PATCH net-next 00/12] Add lan966x driver
+Date:   Mon, 20 Sep 2021 11:52:06 +0200
+Message-ID: <20210920095218.1108151-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOKsWRmVeSWpSXmKPExsWy7djPc7qzwzwSDZ71ClhsnLGe1eL6l+es
-        FvOPnGO12Pj2B5PF2aY37BabHl9jtbi8aw6bxefeI4wWM87vY7K43biCzaJ17xF2i/anL5kd
-        eDxmNfSyeWxa1cnmsXlJvUffllWMHp83yQWwRnHZpKTmZJalFunbJXBlXJh8hbXgLkfFlT3N
-        7A2Mk9m7GDk5JARMJK7NmsHSxcjFISSwglHi34FeJgjnC6NEx95PzCBVQgKfGSUeTbCD6fi4
-        +gkbRNFyoPiLD4wQzkdGiYk3b7OAVAkLBEucXLsaLCEi8I9JYs/+BYwgCWaBVIn/D3vAxrIJ
-        GEp0ve1iA7F5Bewkmr73gjWzCKhKXP3ZCnagqECyxLS/TcwQNYISJ2c+AavhFHCXaDx+AWqm
-        vMT2t3OYIWxxiVtP5oP9ICHwg0PiTMMhJoi7XSSunN/ADGELS7w6vgUaAjIS/3fCNDQzSjw8
-        t5YdwulhlLjcNIMRospa4s65X0CncgCt0JRYv0sfIuwosWDhEkaQsIQAn8SNt4IQR/BJTNo2
-        nRkizCvR0SYEUa0mMev4Ori1By9cYp7AqDQLyWuzkLwzC8k7sxD2LmBkWcUonlpanJueWmyU
-        l1quV5yYW1yal66XnJ+7iRGYtk7/O/5lB+PyVx/1DjEycTAeYpTgYFYS4U194pYoxJuSWFmV
-        WpQfX1Sak1p8iFGag0VJnDdpy5p4IYH0xJLU7NTUgtQimCwTB6dUA5OxMV/3rL6NM+ZFrM8L
-        7QjgCwuWTK6IL7ylurr39+4nz7/O5PXKZVqpsHRJTFHan8jOs4EH03Q+TIhPZZPIl0+ZdVhW
-        QPv9JvHdN9vVPM66fGNIn6TL7WXLoPu4tsAseecMW4436z5/97apf3STKXyKVfePrWe3rrXp
-        udywwqLAXNT1ivx0dv2TMdsrjG7sFfmhmMUj/sNVjd+Y06Lza/L7O7/X/76ufPa8zJI/JssX
-        f1/oWVz43pV1YpnrOZPmvFWzpwn/DblWF1yel7F40baHNRcn7b0QrJWWsGRG1Zqd9V15tfcV
-        8iP5rM1/Xv13XeVG9eF8xTmHHdaZnAx8pDZ1/f3gv8kJLetyNqXVvFdiKc5INNRiLipOBACp
-        dacpygMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJIsWRmVeSWpSXmKPExsVy+t/xe7qzwjwSDXrmSVlsnLGe1eL6l+es
-        FvOPnGO12Pj2B5PF2aY37BabHl9jtbi8aw6bxefeI4wWM87vY7K43biCzaJ17xF2i/anL5kd
-        eDxmNfSyeWxa1cnmsXlJvUffllWMHp83yQWwRunZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY
-        6hkam8daGZkq6dvZpKTmZJalFunbJehlXJh8hbXgLkfFlT3N7A2Mk9m7GDk5JARMJD6ufsLW
-        xcjFISSwlFHiYsckZoiEjMTJaQ2sELawxJ9rXVBF7xklus78A+sWFgiWOLl2NSOILSLwj0ni
-        0VdDEJtZIFVi+sQP7BANsxgl7rz9CTaJTcBQoustyCRODl4BO4mm770sIDaLgKrE1Z+tYENF
-        BZIl3r7+zgRRIyhxcuYTsBpOAXeJxuMXGCEWmEnM2/yQGcKWl9j+dg6ULS5x68l8pgmMQrOQ
-        tM9C0jILScssJC0LGFlWMYqklhbnpucWG+oVJ+YWl+al6yXn525iBMbptmM/N+9gnPfqo94h
-        RiYOxkOMEhzMSiK8qU/cEoV4UxIrq1KL8uOLSnNSiw8xmgL9M5FZSjQ5H5go8kriDc0MTA1N
-        zCwNTC3NjJXEebfOXRMvJJCeWJKanZpakFoE08fEwSnVwHRI5pkaR6q8kamo8/UDF0KWXtwS
-        pVW7u3Tm+6o9dg0bpnmWbinYOD9HeetysU/6exx4NqlOVN89Syv/b9nSk3leb+fOOSEYGRZs
-        enJqTkBiUnHsJPEsnYAeRlFTCYFVBSFL/u3kDxVerquSvYyhgyUx1eWD4uROxf5H2w8KPhQq
-        yOzWfV3cltq4aE179+bfGz2NDXVsWTgvmU/j87fOYFTzWFzZwdW6mPP9J/b7vybKa75w/Kix
-        J0tswbHdv3gVc8MW7zQLqmLbo363kokvZGuETMb69/9XqBW0i/22OGLBOPWUq1nwbTHNmcd6
-        HXVcV0ywULVcekeiNL04xUf62J8srXD1b2y9dtzLgsSVWIozEg21mIuKEwHHLAXgXAMAAA==
-X-CMS-MailID: 20210920093834eucas1p2a0187690220f466590d390b9775ced84
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20210920071554eucas1p195184c73f79e7bc12ea83cb43e14adc5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210920071554eucas1p195184c73f79e7bc12ea83cb43e14adc5
-References: <CGME20210920071554eucas1p195184c73f79e7bc12ea83cb43e14adc5@eucas1p1.samsung.com>
-        <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20.09.2021 09:15, Krzysztof Kozlowski wrote:
-> My previous patch 3/3 (ARM: dts: exynos: align PPMU event node names
-> with dtschema) caused issues reported by Marek [1].
->
-> Tested on Exynos5422. Testing on Exynso5433 board would be very useful.
+This patch series cover multiple drivers but I have put everything in one
+single series so it would be easier to follow the big picture. Eventually
+this series will be split in multiple ones once we drop the RFC.
 
-Works fine on both 5422 and 5433.
+The Microchip LAN966X is a compact and cost-effective, multi-port Gigabit
+AVB/TSN Ethernet Switches with two integrated 10/100/1000BASE-T PHYs and a
+600 MHz ARM Cortex A7 CPU subsystem. The LAN966X includes eight ports.
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+In addition to the two integrated PHYs, the lAN966X supports up to
+2 RGMII/RMII, up to 3 1000BASE-X/SerDes/ 2.5GBASE-X/KX, and up to
+2 Quad-SGMII/Quad-USGMII interfaces. The LAN966X fully supports the IEEE
+family of Audio Video Bridging (AVB) and Time Sensitive Networking (TSN)
+standards, including the current IEC/IEEE draft 60802 TSN profile,
+which in concert provide high Quality of Service (QoS) for latency
+sensitive traffic streams over Ethernet.
 
-> Changes since v1:
-> 1. New patches 1/3 and 2/3.
-> 2. Patch 3/3: rename event-name to match node name.
->
-> [1] https://lore.kernel.org/linux-samsung-soc/0212a402-1490-0f8f-005e-32bb6f636a13@canonical.com/T/#m570c0257204af553fe11f9122551311beb56c15e
->
-> Best regards,
-> Krzysztof
->
->
-> Krzysztof Kozlowski (3):
->    devfreq: exynos-ppmu: use node names with hyphens
->    devfreq: exynos-ppmu: simplify parsing event-type from DT
->    ARM: dts: exynos: align PPMU event node names with dtschema
->
->   arch/arm/boot/dts/exynos5420.dtsi   | 16 ++++++++--------
->   drivers/devfreq/event/exynos-ppmu.c | 12 +++++++-----
->   2 files changed, 15 insertions(+), 13 deletions(-)
->
-Best regards
+The LAN966X supports TSN domain protection though IEEE 802.1Qci Per Stream
+Filtering and Policing, advanced classification rules, and tunneling by
+adding VLAN tags. Each egress port supports eight priorities. Prior to
+scheduling, traffic can be shaped using dual-leaky bucket shaping,
+IEEE 802.1Qav Credit Based Shaping, and IEEE 802.1Qbv Time Aware Shaping,
+thus also supporting IEEE 802.1Q Enhanced Transmission Selection.
+
+Low latency is possible though latency optimized architecture,
+cut-through, and IEEE 802.1Qbu/802.3br Preemption. For higher traffic
+availability, the LAN966X supports Multiple Spanning Tree, IEEE 802.1CB
+Frame Replication and Elimination for Redundancy, IEC 62439-2 MRP,
+ODVA DLR, in addition to ITU-T G.8031 and G.8032 linear and ring
+protection.
+
+The LAN966X supports IEEE 802.1AS-2020 (gPTP) and IEEE 1588-2019 (PTP)
+time synchronization with time stamping in multiple domains in
+support of Working Clock and Global Time distribution.
+
+The LAN966X can operate either as a standalone switch or as a system
+co-processor with an external host CPU. The external host can manage the
+switch via PCIe or an Ethernet port.
+
+This series provides support for:
+- support for integrated PHY
+- host mode providing register based injection and extraction
+
+More support will be added in future patches.
+
+Horatiu Vultur (12):
+  net: mdio: mscc-miim: Fix the mdio controller
+  net: phy: mchp: Add support for LAN8804 PHY
+  phy: Add lan966x ethernet serdes PHY driver
+  dt-bindings: reset: Add lan966x switch reset bindings
+  reset: lan966x: Add switch reset driver
+  dt-bindings: reset: Add lan966x power reset bindings
+  power: reset: Add lan966x power reset driver
+  dt-bindings: net: lan966x: Add lan966x-switch bindings
+  net: lan966x: add the basic lan966x driver
+  net: lan966x: add port module support
+  net: lan966x: add mactable support
+  net: lan966x: add ethtool configuration and statistics
+
+ .../net/microchip,lan966x-switch.yaml         | 114 ++
+ .../bindings/power/lan966x,power.yaml         |  49 +
+ .../bindings/reset/lan966x,rst.yaml           |  58 +
+ drivers/net/ethernet/microchip/Kconfig        |   1 +
+ drivers/net/ethernet/microchip/Makefile       |   1 +
+ .../net/ethernet/microchip/lan966x/Kconfig    |   7 +
+ .../net/ethernet/microchip/lan966x/Makefile   |   9 +
+ .../microchip/lan966x/lan966x_ethtool.c       | 578 ++++++++++
+ .../ethernet/microchip/lan966x/lan966x_ifh.h  | 173 +++
+ .../ethernet/microchip/lan966x/lan966x_main.c | 994 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_main.h | 192 ++++
+ .../microchip/lan966x/lan966x_phylink.c       |  92 ++
+ .../ethernet/microchip/lan966x/lan966x_port.c | 301 ++++++
+ .../ethernet/microchip/lan966x/lan966x_regs.h | 704 +++++++++++++
+ drivers/net/mdio/mdio-mscc-miim.c             |  14 +-
+ drivers/net/phy/micrel.c                      |  73 ++
+ drivers/phy/microchip/Kconfig                 |   8 +
+ drivers/phy/microchip/Makefile                |   1 +
+ drivers/phy/microchip/lan966x_serdes.c        | 525 +++++++++
+ drivers/phy/microchip/lan966x_serdes_regs.h   | 482 +++++++++
+ drivers/power/reset/Kconfig                   |   6 +
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/lan966x-reset.c           |  90 ++
+ drivers/reset/Kconfig                         |   8 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-lan966x.c                 | 128 +++
+ include/dt-bindings/phy/lan966x_serdes.h      |  14 +
+ include/linux/micrel_phy.h                    |   1 +
+ 28 files changed, 4620 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/lan966x,power.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/lan966x,rst.yaml
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/Kconfig
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/Makefile
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_port.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+ create mode 100644 drivers/phy/microchip/lan966x_serdes.c
+ create mode 100644 drivers/phy/microchip/lan966x_serdes_regs.h
+ create mode 100644 drivers/power/reset/lan966x-reset.c
+ create mode 100644 drivers/reset/reset-lan966x.c
+ create mode 100644 include/dt-bindings/phy/lan966x_serdes.h
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.31.1
 
