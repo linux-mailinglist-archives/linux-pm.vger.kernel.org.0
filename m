@@ -2,91 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9C9410D41
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Sep 2021 22:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B5E410FE3
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Sep 2021 09:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhISUQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Sep 2021 16:16:26 -0400
-Received: from h04mx15.reliablemail.org ([185.76.67.208]:25313 "EHLO
-        h04mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbhISUQ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Sep 2021 16:16:26 -0400
-X-Halon-Out: 6b4b0632-1985-11ec-a232-556aad082471
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ej6wDNMSbiRyM7NQXz7W5SiGUOAZUPKpKRcmJRuBGnk=; b=VeZkz8rVME9DtouD5YomEn1FtZ
-        mSKyKlTF0NkxPfxAlrtrIwa9MbJVfEObr4mcw3oQ2E5v2vJC9hPDgLJEVuNe7Lq1i7EeNVzMsMQ15
-        LFDaEwiZa1h4cL0+NOehEM8S1MEmwXEff+P2UCSm4n22NfrhHLG0QR/A4wsv+uJwupQS6mCbP55d3
-        5OleykHM3P5GqI6u0dB5NGRJ7HoubN2X4kGCVLJw5Hpg720NdacVvs9/1cuc/c+NmOC+A7k/07XG4
-        nIR81gck+EKifpriMo0oCDwES38CcRM88UMn+Hhvlfk5fk8tqt4ym/WqqNDvRbtBhvo5SwMuX3rkP
-        zRMEHhUg==;
-From:   Henrik Grimler <henrik@grimler.se>
-To:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, wolfgit@wiedmeyer.de
-Cc:     Henrik Grimler <henrik@grimler.se>
-Subject: [PATCH 1/1] power: supply: max17042_battery: use VFSOC for capacity when no rsns
-Date:   Sun, 19 Sep 2021 22:07:37 +0200
-Message-Id: <20210919200735.142862-2-henrik@grimler.se>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210919200735.142862-1-henrik@grimler.se>
-References: <20210919200735.142862-1-henrik@grimler.se>
+        id S234711AbhITHRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Sep 2021 03:17:21 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53720
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234692AbhITHRV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Sep 2021 03:17:21 -0400
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B97D540261
+        for <linux-pm@vger.kernel.org>; Mon, 20 Sep 2021 07:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632122151;
+        bh=Wx09CSLf2BUcoT4i99Nl9tot/C6qmojAMi1r7QcpgsQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=F88/hhCqft4SjmFIrnn8SUkG3Rp4QL9B7zzk/rBk4YB1D+eJlpnGO2UQCy4V0iDEu
+         MTWIV2UzYQ8K68r+oyWauJ+LYR0pEqepu1y7pLCKEz7fxTAovmF2zGOrXXTzRgebwj
+         W9tErtYhb/tnyJOjge1sFE6NHQX/2t5EgnIhhMhwA9c8l2Z0XemyQTGiAgOL2snWRc
+         75RrCETwdgEq+ApOaYSmwZ6xTBs1pHmZBMZMPbhAWu/L+runVSp8vgJsf6vyGTowD7
+         m4PuEw3qyDEVCErD6g74M2ddX61nKWNY1STHNpGBfL2SzPOg0uVDXW1uWEpfUSkWV6
+         u739zyFpjt4gA==
+Received: by mail-wr1-f70.google.com with SMTP id v15-20020adff68f000000b0015df51efa18so5460686wrp.16
+        for <linux-pm@vger.kernel.org>; Mon, 20 Sep 2021 00:15:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wx09CSLf2BUcoT4i99Nl9tot/C6qmojAMi1r7QcpgsQ=;
+        b=umlORV2eCkUNWCzWT7X2LkSIkeTTLVp/9K6fX0AI/66Q/1m0f3pmIR7MehZAZDTo9v
+         EhIGVAOwdX86WGMcj2UHvO3RHili6XkDi9ZvK2934VB79iP8JcLFHxXwm/d6CzrhJHWR
+         FTaoiono63D0TlJBfkX5+9QSu1tVoYx3iK2ZeN5+V+PZV4buEj6T9bAUDZMRopWD2fVE
+         OjNCMetYAKEIknFF3BEUwWbAZlXnSdskvgnoPY8YXxRRS4SkAEpfJumqUU3kDku6t6nk
+         vPcgcEWOJe5IrU28CXoaybAbHWbocoNdWWYlThcBT87L+kbbzUH7iu7YcxHA7McvQGZy
+         hgMA==
+X-Gm-Message-State: AOAM530tMbnJBv5Bk8rnq2v9ZDG+Zb312NDqU5D3IVuMzghPKl1pHAMk
+        oS5MqHoT7CNWgKNJkoSiD9MvoastWBv/CWNPvgHrpiczaiEkzjRBSMyIqvtje1bfC3c6xwuiXkg
+        VqgroXYs1FOoQ0szU9YK8/Ut52yKzl0O12FeQ
+X-Received: by 2002:a1c:7e55:: with SMTP id z82mr262578wmc.95.1632122149444;
+        Mon, 20 Sep 2021 00:15:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy+/JWO4KawW9KMTN5QacKUh4LzdTsDtHGOI8eupCw/ohf4m9JVuD9eePbgGFUp8uXDjI5x6g==
+X-Received: by 2002:a1c:7e55:: with SMTP id z82mr262553wmc.95.1632122149216;
+        Mon, 20 Sep 2021 00:15:49 -0700 (PDT)
+Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id x5sm17456153wmk.32.2021.09.20.00.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Sep 2021 00:15:48 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH v2 0/3] devfreq: exynos-ppmu: conform to dt naming convention
+Date:   Mon, 20 Sep 2021 09:15:37 +0200
+Message-Id: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - grimler.se
-X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
-X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
-current sense resistor (rsns), the RepSOC register does not provide an
-accurate state of charge value. The reported value is wrong, and does
-not change over time. VFSOC however, which uses the voltage fuel gauge
-to determine the state of charge, always shows an accurate value.
+Hi,
 
-At least one max170xx driver, found in Asus' Z00D kernel [1], chooses
-how to get the capacity based on if current sense is available or not.
-Lets change the mainline driver to match the Asus Z00D driver's
-behaviour and thereby fix so that correct state of charge values are
-obtained on Galaxy S3.
+My previous patch 3/3 (ARM: dts: exynos: align PPMU event node names
+with dtschema) caused issues reported by Marek [1].
 
-[1] https://github.com/LineageOS/android_kernel_asus_Z00D/blob/c7ab0e3ec5b5/drivers/power/max17042_battery.c#L1103-L1105
+Tested on Exynos5422. Testing on Exynso5433 board would be very useful.
 
-Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-Signed-off-by: Henrik Grimler <henrik@grimler.se>
----
- drivers/power/supply/max17042_battery.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Changes since v1:
+1. New patches 1/3 and 2/3.
+2. Patch 3/3: rename event-name to match node name.
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 622bdae6182c..7233670978d0 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -317,7 +317,10 @@ static int max17042_get_property(struct power_supply *psy,
- 		val->intval = data * 625 / 8;
- 		break;
- 	case POWER_SUPPLY_PROP_CAPACITY:
--		ret = regmap_read(map, MAX17042_RepSOC, &data);
-+		if (chip->pdata->enable_current_sense)
-+			ret = regmap_read(map, MAX17042_RepSOC, &data);
-+		else
-+			ret = regmap_read(map, MAX17042_VFSOC, &data);
- 		if (ret < 0)
- 			return ret;
- 
+[1] https://lore.kernel.org/linux-samsung-soc/0212a402-1490-0f8f-005e-32bb6f636a13@canonical.com/T/#m570c0257204af553fe11f9122551311beb56c15e
+
+Best regards,
+Krzysztof
+
+
+Krzysztof Kozlowski (3):
+  devfreq: exynos-ppmu: use node names with hyphens
+  devfreq: exynos-ppmu: simplify parsing event-type from DT
+  ARM: dts: exynos: align PPMU event node names with dtschema
+
+ arch/arm/boot/dts/exynos5420.dtsi   | 16 ++++++++--------
+ drivers/devfreq/event/exynos-ppmu.c | 12 +++++++-----
+ 2 files changed, 15 insertions(+), 13 deletions(-)
+
 -- 
-2.33.0
+2.30.2
 
