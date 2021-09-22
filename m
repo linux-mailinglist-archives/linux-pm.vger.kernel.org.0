@@ -2,85 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D59414472
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 11:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEEF4145AD
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 11:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbhIVJFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 05:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S234499AbhIVKBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Sep 2021 06:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbhIVJFl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 05:05:41 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EB9C061768
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:04:11 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 17so1985952pgp.4
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:04:11 -0700 (PDT)
+        with ESMTP id S234381AbhIVKBF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 06:01:05 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143EBC061756
+        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:59:36 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t18so5244118wrb.0
+        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=iTGoqFM8qijEpuvk9WwIalanNU02ORS6d7bs4+cIQLs=;
-        b=TJnA2xZSNDmQVyDaUM5cetFg6piHlBIrzLYbLVA/L+yuikwexToDQQOXDpUqjS5BJS
-         ev7wC9FyVgBp+VojUE2hwZt6QDK94hIW9AkUhEfQrr2hUB2TZJd9m7WYBEDERBU0xf7V
-         HLEZKQ8imbD00ECabdcntHNdsmrEVi+ksDWbU5dQUHdjsrnCC5QGeTJtvQW8Dcb6/Gig
-         QJRmam67JS2cURfi0OZZ7UCHS5xrofx7U94cae+w1tvDEISkHYK4ePwn8jA8i6+Hn04x
-         V91ffa8741JrEfnPeR8hzfEW9746pm38IxXqRqxyeSUIbPBHKepHNewauGgvtvdlq0bs
-         n2Vw==
+        d=linaro.org; s=google;
+        h=from:subject:to:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=wVE4R8C/cgi96odywCvgg2C5/wXSs+GANvotR7N/uR8=;
+        b=vIPxreyzdq2HXWtttAy9AphQhkLfK4uZFOBtQWVuzCvfaQaGlSrWfzT6n9N5Pu1YSP
+         Zd7a3y3A3IGxmjlzxIkCpCeIsw7Eq2kpQg0CM1Krp8AgDBTqUiw/OOZHxxjsfBXm45eD
+         Z+8Rfo5CrZawF+BOlX+NfapdsAaLj0Oe1ia7qEIttA25RdJzWdG3KBcfsqExfqTlQwv4
+         iJ/MRD9a2Cydy0LF6BqUeb4De6ZYucwR8khVHCo2vaOpzSERlEr6499w836Fzxg9YV0v
+         Z2P65RxpYuC5rQTq993ssJ0nu7MsFJde5XE4XUrQ7eo75Nhihh4ApWLz1DxRN3J1q2ko
+         Nliw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=iTGoqFM8qijEpuvk9WwIalanNU02ORS6d7bs4+cIQLs=;
-        b=tVXcZPxsAGCTM7kfFWRVfCV1vUduMjBt3CtewuaBYeK/qqRcrxBZtVtGeM5FfeW8Qs
-         gbVQ2BazC9b+ZQ7cjWibidfPCXq6ooSRI1RluuRAXcvDshjWtXjhxy0LE8CCeGHDaDDS
-         vuOB0ohpqpt+i6uGZyHfricmiQS4NtqLZMRlHz6NyDUReEU4fx7rao1EI+mMSG9idh/v
-         hd8fzWZJM4zHjzOJJzlBGMEHiy/lyn33WH74bv43T0r1s5DdXsVaDF/NBiv+F1wZHw2H
-         7YsxFnOYXvS56Oo7f9bzHKbTKpYAlYFTdyhh3kCXj+mAxXdEUTLmCvVKHo+bbBDH4xjK
-         iXXg==
-X-Gm-Message-State: AOAM533bu/lTcG3AkYMzUs5MELxG3k+ttneow3oG0YPCoFIZWbXqtHPB
-        AFAU8pNfMLiI34c3RkFJN+pdYQXNUL3RZF7LgLE=
-X-Google-Smtp-Source: ABdhPJzSBG9U99LUNHcK5yvniZ2TvGsF3RlQLQvBorUg0W0/5QJ3J1WzEmA6R19USIFGxQwjeUn1wqeOl+7hIVPqJUM=
-X-Received: by 2002:a05:6a00:234f:b0:3eb:3ffd:6da2 with SMTP id
- j15-20020a056a00234f00b003eb3ffd6da2mr34198606pfj.15.1632301451198; Wed, 22
- Sep 2021 02:04:11 -0700 (PDT)
+        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=wVE4R8C/cgi96odywCvgg2C5/wXSs+GANvotR7N/uR8=;
+        b=g5NVStKJXmQkNoXihPK+FdUfhSa0A9vZqhpYwdzEM+md8xl0kfpL3YBlLT3lVnmIlg
+         CR3vf8uPc2K028nR0I9J8VF7IClTYZ7IxxkJ+QClt025vl0sle1eZusP6U1xWYufDT0V
+         WwXDBJgiGFZ1xc9KIlkwmbMEkBLPofv42JU7Cl8K7b3CyB+qPNfv2WbKMm/rlzkf82wa
+         b0MbjvXeehwXOuRRRmRiM5VRw+AzTTPZsIogrvqu08RPwWmEA0KMrVKR/H3t1iVhxYkF
+         3BIilCzBkVKiLcsrgf1HHa+/gRPWotbqL0NaUzvbUmb8XxuRuW2x/gg6i0RZhhjkw7Xk
+         Bm+Q==
+X-Gm-Message-State: AOAM531qNDBqMGitF48/AZm2ayWR0OIrB8Hyhw/sf+Fc9Gxaa/kyLHRZ
+        hrk5ASOPW1MPxedAqXrp0q8psEwheHKtzQ==
+X-Google-Smtp-Source: ABdhPJz19tnF6GcYxfblJoxm65IbrNZux22yI1JyMaQb0d5aKNU5H+vy7Ql/aGtLMcNCedy86Mv2Ig==
+X-Received: by 2002:a05:600c:19cb:: with SMTP id u11mr7114787wmq.185.1632304774391;
+        Wed, 22 Sep 2021 02:59:34 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4f54:2a4:2d47:4592? ([2a01:e34:ed2f:f020:4f54:2a4:2d47:4592])
+        by smtp.googlemail.com with ESMTPSA id s2sm1631915wrn.77.2021.09.22.02.59.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Sep 2021 02:59:33 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [RFD] Remove the userspace governor and the cooling device set state
+ sysfs entry
+To:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Message-ID: <d46b5007-428b-5f31-52d9-a964cc60ad92@linaro.org>
+Date:   Wed, 22 Sep 2021 11:59:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:f393:0:0:0:0 with HTTP; Wed, 22 Sep 2021 02:04:10
- -0700 (PDT)
-From:   susan wong <susanwong096@gmail.com>
-Date:   Wed, 22 Sep 2021 02:04:10 -0700
-Message-ID: <CAB_2jog_+wbY0uTEKJXzerAEjzsC2-Y6bHmQ=DR2HGCmzwQDOQ@mail.gmail.com>
-Subject: Dear Beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Beloved,
 
-I am writing this mail to you with heavy tears in my eyes and great
-sorrow in my heart. I am Mrs. Susan Wong. A widow to late Mr. Hamson
-Wong; I am 63 years old, suffering from long time Cancer of the
-breast.
+Hi,
 
-From all indications my condition is really deteriorating and it's
-quite obvious that I won't live more than 2 months according to my
-doctors. I have some funds I inherited from my late loving husband Mr.
-Hamson, the sum of (4,500,000.00 Million Dollars) which he deposited
-in a bank here and I need honest, truthful and God fearing person that
-can use these funds for Charity work, helping the less privileges, and
-30% of this money will be for your time and effort, while 70% goes to
-charities.
+the userspace governor is sending temperature when polling is active and
+trip point crossed events. Nothing else.
 
-1) For the sick, less-privileged
-2) For the Widows and the motherless babies
-3) Orphanages or Charity Home.
+In the other side, the cooling device have their cooling device
+set_cur_state read-writable all the time.
 
-I look forward to your prompt reply from you for more details.
+The thermal framework is wrongly used by userspace as a power capping
+framework by acting on the cooling device opaque state. This one then
+competes with the in-kernel governor decision.
 
-I will like you to write me on my Email address;
-sosanwong123@gmail.com , to enable us discuss in details. I hope
-hearing from you soonest. Thanks for your understanding.
+As the new netlink thermal notification is able to provide the same
+information than the userspace governor.
 
-Yours sincerely
+I propose to remove the userspace governor and the cur_state entry in
+the sysfs exported file.
 
-Mrs. Susan Wong
+The DTPM framework is the right framework to do power capping and
+moreover it deals with the aggregation via the dev pm qos.
+
+Does it make sense ?
+
+  -- Daniel
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
