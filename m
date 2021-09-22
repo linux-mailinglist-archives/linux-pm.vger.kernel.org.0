@@ -2,99 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEEF4145AD
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 11:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D054145A8
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 11:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbhIVKBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 06:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbhIVKBF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 06:01:05 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143EBC061756
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:59:36 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t18so5244118wrb.0
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 02:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:subject:to:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=wVE4R8C/cgi96odywCvgg2C5/wXSs+GANvotR7N/uR8=;
-        b=vIPxreyzdq2HXWtttAy9AphQhkLfK4uZFOBtQWVuzCvfaQaGlSrWfzT6n9N5Pu1YSP
-         Zd7a3y3A3IGxmjlzxIkCpCeIsw7Eq2kpQg0CM1Krp8AgDBTqUiw/OOZHxxjsfBXm45eD
-         Z+8Rfo5CrZawF+BOlX+NfapdsAaLj0Oe1ia7qEIttA25RdJzWdG3KBcfsqExfqTlQwv4
-         iJ/MRD9a2Cydy0LF6BqUeb4De6ZYucwR8khVHCo2vaOpzSERlEr6499w836Fzxg9YV0v
-         Z2P65RxpYuC5rQTq993ssJ0nu7MsFJde5XE4XUrQ7eo75Nhihh4ApWLz1DxRN3J1q2ko
-         Nliw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=wVE4R8C/cgi96odywCvgg2C5/wXSs+GANvotR7N/uR8=;
-        b=g5NVStKJXmQkNoXihPK+FdUfhSa0A9vZqhpYwdzEM+md8xl0kfpL3YBlLT3lVnmIlg
-         CR3vf8uPc2K028nR0I9J8VF7IClTYZ7IxxkJ+QClt025vl0sle1eZusP6U1xWYufDT0V
-         WwXDBJgiGFZ1xc9KIlkwmbMEkBLPofv42JU7Cl8K7b3CyB+qPNfv2WbKMm/rlzkf82wa
-         b0MbjvXeehwXOuRRRmRiM5VRw+AzTTPZsIogrvqu08RPwWmEA0KMrVKR/H3t1iVhxYkF
-         3BIilCzBkVKiLcsrgf1HHa+/gRPWotbqL0NaUzvbUmb8XxuRuW2x/gg6i0RZhhjkw7Xk
-         Bm+Q==
-X-Gm-Message-State: AOAM531qNDBqMGitF48/AZm2ayWR0OIrB8Hyhw/sf+Fc9Gxaa/kyLHRZ
-        hrk5ASOPW1MPxedAqXrp0q8psEwheHKtzQ==
-X-Google-Smtp-Source: ABdhPJz19tnF6GcYxfblJoxm65IbrNZux22yI1JyMaQb0d5aKNU5H+vy7Ql/aGtLMcNCedy86Mv2Ig==
-X-Received: by 2002:a05:600c:19cb:: with SMTP id u11mr7114787wmq.185.1632304774391;
-        Wed, 22 Sep 2021 02:59:34 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:4f54:2a4:2d47:4592? ([2a01:e34:ed2f:f020:4f54:2a4:2d47:4592])
-        by smtp.googlemail.com with ESMTPSA id s2sm1631915wrn.77.2021.09.22.02.59.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 02:59:33 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [RFD] Remove the userspace governor and the cooling device set state
- sysfs entry
-To:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Message-ID: <d46b5007-428b-5f31-52d9-a964cc60ad92@linaro.org>
-Date:   Wed, 22 Sep 2021 11:59:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S234614AbhIVJ75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Sep 2021 05:59:57 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:18198 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234381AbhIVJ75 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 05:59:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1632304707; x=1663840707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=28a3lLNqXtQh35HGEvcVFM9lt13KcNMXr9Ft+baDXFQ=;
+  b=Wq6QUdTKlNEkAAsRIaQTgbijmYim7i/+H4bjxn4Uaj1yhtQeOKw9hVXC
+   xBb+kdhD2rEQnroq5B0UAvK7nFkB6o29rUl27XQgMFTcThUGg9mjZ0EyQ
+   3qxpDqbCs2GG6qqjM9EFESdqKtcPo78l8MBjm77QpMK7dBXSxKLLA6M9I
+   NqsofsNYTdEyqf7lywtFrQTwqMnLW+iy3ZjZ7MX9onn5/J8pT0TQ8/kSz
+   PuB3rxFUXFnK2RYm2CgqXfSyD/x2J8pWON446qakLl6JKeqvyniXuuI4x
+   UbhygwxMEzRtOig7IaKlcctBK/XYuaFQeauL+jkw/fdJiWemRgWl9hDQu
+   Q==;
+IronPort-SDR: dR61EeXGDmxfoVB+BiPAR9niYPzuF3lQhhCvQY4domCSs7BL27IQfZk8owei7OF9cKLheLL+M0
+ V1RvxRNVlpLtHqH3I0Bzy+XKwqIydo/qd30jMElG/2PendTRyeN+ICbSA7D833/ebPYrK1N49b
+ 6ubFEOk3dsUVQi9uHZx5odeIgayL9qFZ2ULevJgtBly0Izo2HsQSwfS2u+JfaRkw6PopmxdL+c
+ SlYhPz8ai77L+iKA2EYH/RntMic9BLgV4+FeuLiiaoOENuMI28CNC232NSdJ7D+K85dcacyP2c
+ cLT6j3p+SfaJpwd0j5eqgajM
+X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
+   d="scan'208";a="145122886"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2021 02:58:25 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 22 Sep 2021 02:58:24 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Wed, 22 Sep 2021 02:58:24 -0700
+Date:   Wed, 22 Sep 2021 11:59:53 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <linux@armlinux.org.uk>, <f.fainelli@gmail.com>,
+        <alexandre.belloni@bootlin.com>, <vladimir.oltean@nxp.com>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH net-next 05/12] reset: lan966x: Add switch reset
+ driver
+Message-ID: <20210922095953.r6xcr2dtx7diavhj@soft-dev3-1.localhost>
+References: <20210920095218.1108151-1-horatiu.vultur@microchip.com>
+ <20210920095218.1108151-6-horatiu.vultur@microchip.com>
+ <YUh6WcEVBigG61y6@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <YUh6WcEVBigG61y6@lunn.ch>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The 09/20/2021 14:11, Andrew Lunn wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Mon, Sep 20, 2021 at 11:52:11AM +0200, Horatiu Vultur wrote:
+> > The lan966x switch SoC has a number of components that can be reset
+> > indiviually, but at least the switch core needs to be in a well defined
+> > state at power on, when any of the lan966x drivers starts to access the
+> > switch core, this reset driver is available.
+> >
+> > The reset driver is loaded early via the postcore_initcall interface, and
+> > will then be available for the other lan966x drivers (SGPIO, SwitchDev etc)
+> > that are loaded next, and the first of them to be loaded can perform the
+> > one-time switch core reset that is needed.
+> 
+> A lot of this looks very similar to
+> reset-microchip-sparx5.c. PROTECT_REG is 0x88 rather than 0x84, but
+> actually using the value is the same. SOFT_RESET_REG is identical.  So
+> rather than adding a new driver, maybe you can generalize
+> reset-microchip-sparx5.c, and add a second compatible string?
 
-Hi,
+You are right, they look similar.
+I will try to add a new compatible string.
 
-the userspace governor is sending temperature when polling is active and
-trip point crossed events. Nothing else.
-
-In the other side, the cooling device have their cooling device
-set_cur_state read-writable all the time.
-
-The thermal framework is wrongly used by userspace as a power capping
-framework by acting on the cooling device opaque state. This one then
-competes with the in-kernel governor decision.
-
-As the new netlink thermal notification is able to provide the same
-information than the userspace governor.
-
-I propose to remove the userspace governor and the cur_state entry in
-the sysfs exported file.
-
-The DTPM framework is the right framework to do power capping and
-moreover it deals with the aggregation via the dev pm qos.
-
-Does it make sense ?
-
-  -- Daniel
+> 
+>         Andrew
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+/Horatiu
