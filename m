@@ -2,138 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3592F414342
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 10:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33546414353
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 10:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbhIVIMD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 04:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S233699AbhIVINY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Sep 2021 04:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbhIVIMC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 04:12:02 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC64CC061574
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 01:10:32 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w17so4128212wrv.10
-        for <linux-pm@vger.kernel.org>; Wed, 22 Sep 2021 01:10:32 -0700 (PDT)
+        with ESMTP id S233383AbhIVINX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 04:13:23 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC12C061574;
+        Wed, 22 Sep 2021 01:11:54 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h3so1855747pgb.7;
+        Wed, 22 Sep 2021 01:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sjfqFtjdJ7BBJE8A/g20sALymYT3IpdH2eEO6YWS1Ds=;
-        b=NNr9niA+rBKeMBi4aYpw3WOaB0s1c/Z+kBCqwKQ3VhAQqBU8VvqNqHRcw8dyFIhbll
-         hAUlZD7/S9i0b6btgaCsEwp1bmXYA6x8BpEif/8Y9WhBiGRmbqtVtTo/n+V+mCrg41In
-         HvvCul9Or1Kx07sjTLimYABtPLaV+xIYyyfNmAjYqH/P41OGQWbgnI7Qwctvl2uRH1Va
-         2Bzub4Uge2VG9mAwAklB4EVK8qnQTzPeYwyWVoZxQckjBv54trntvgB2QC8PLyOGv1Sx
-         xSyoHhlHQZ21hBTt35bBYxvv+oJQfldUXKWwdf5IA+0lCIGu92Sbeb95aVRsMXKdxWke
-         /w8Q==
+        bh=Hl+l5LFSpIDeQUEySt0GHF3c1F9KFKOw7mjaQzOrdXI=;
+        b=I1YF2aKIleMUXgQ9iHtUTpphruTuxaIDUcAZ0pHyK4YspkVeMSCRDsibG1yWpRuAiS
+         9/6bFmDD8RfSGPPjNiYGXaC8iKGZTPYIW2MutyJdJ8zQhJ0AakfYvheE4J5ZwJnjkC5S
+         rPQW+W8yGkGVOxrf6DAzksnHx2dtA+dsRM5HG/jvMGTXV4LKFOy+XMKiEsUSVyCKO7Ak
+         6sRU8pEeFPgDTf4cywnnZj23T4yrSgY5X+1F2+uolWawvpvTdJWH9kYqKg6gAEemJ+yL
+         zUGV2l1cOs62MMZG/1PZS3gL2TxtChlPlvTPShq8+kNgJRV9NZ+QTvIEnH23CkUHfepO
+         de1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=sjfqFtjdJ7BBJE8A/g20sALymYT3IpdH2eEO6YWS1Ds=;
-        b=MdOhOzgUohsnIrJYDxBq3YtW+nvqPpGyeoxIgoa2hrfidZKvDf8jb6Qe0w6kwTb2X8
-         AaP0czbia9jpecZlHWvlNshClRWXtRWd2xoE2BwHu82tGEO99HYI1VISTmhOvK4/n359
-         9YN47piUqqkTd2VlHsl7g6HRE5rhOMWCg7UzHxO5WCqj+RQw1hdk+7SmWucvVo0Dqz8N
-         Nh34LScm1JbJ7RDryIawbdkLpgbKjJQyuT2/pC4c7TWnT3ytsXzHWnqgcTtDomRd3Rrm
-         EhPgAIOoqo1JCt11KU4FSVnLjyxM2Nab2AXCXb3keqPZRUh6fVgmcTcNGaXvEAMXwyI6
-         ZGxA==
-X-Gm-Message-State: AOAM533+YCdR0kqpPPt8c0N9X7RZK4i5z/hPa9Qs2T13110ysCiOqHiR
-        thp7mYY1VQKUOEEwvXR4pKdrLw==
-X-Google-Smtp-Source: ABdhPJxG6e+7AIuhMraVYfb7CeqUJw+ynj10bI0dkQNUJ6u4beKg1vJHhRjSB9PtKdYqRLY11TnjhA==
-X-Received: by 2002:a5d:5541:: with SMTP id g1mr41009909wrw.402.1632298231387;
-        Wed, 22 Sep 2021 01:10:31 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8ccc:47ef:19b:1063? ([2a01:e34:ed2f:f020:8ccc:47ef:19b:1063])
-        by smtp.googlemail.com with ESMTPSA id k18sm1375822wrh.68.2021.09.22.01.10.29
+        bh=Hl+l5LFSpIDeQUEySt0GHF3c1F9KFKOw7mjaQzOrdXI=;
+        b=0AFOD9LJNVYCpudcuQoN7ocJecDZ5R0FYq6E/id2ZVwOIPK/FSI7k2XHH+vlVhgsXZ
+         EyvLeXf6ukemmGUw1ldqgC8PMBAXIsDttQmUt5bDTb/mp0CHF9L3ZAYiwXPaEi1oYJHE
+         6bTze80mAJttYnjlTRqzX2tDEnb3mOTYGhncXJiXyKoBmon3fiXAUt7nzHrvOw9DJ3hj
+         l4xetsfmcrpKGvoGnLlL3QbUHn76IABy+AhIWVp5GQ/MFXKYv+UPpoY22KgovOYn2kmo
+         TFcegPCmQfn1qinkepNLI/ReVKrViqkjy95o0ZdgKvZcuoUiY3xSQuzYAjFSpl57svje
+         uJ7Q==
+X-Gm-Message-State: AOAM533hOE3qqGbESE/951uylNGSNb4dTpy+awERUtDPg50fjWSnAo6F
+        ANnHSDE0NZl41eO++6ft7AGTn9kXBHs=
+X-Google-Smtp-Source: ABdhPJySdvkwKodKuedOd9YnaeTKwiWEaTtE8BOdl3CGeD88OFl53NdTvbqCHmMgygrX+cJ3jUA4Ug==
+X-Received: by 2002:a62:5803:0:b0:447:d62d:161a with SMTP id m3-20020a625803000000b00447d62d161amr10300663pfb.85.1632298313379;
+        Wed, 22 Sep 2021 01:11:53 -0700 (PDT)
+Received: from [172.30.1.2] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id j9sm4785067pjb.33.2021.09.22.01.11.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 01:10:30 -0700 (PDT)
-Subject: Re: [PATCH v2 0/2] Add a generic virtual thermal sensor
-To:     Alexandre Bailon <abailon@baylibre.com>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
-References: <20210917072732.611140-1-abailon@baylibre.com>
- <bd347d14-0b42-f9ed-bf15-080c929e1cb7@linaro.org>
- <7cddcdb7-4efd-bfdb-3d86-f5862ea0b7fe@baylibre.com>
- <8a9e5f13-6253-2d0d-35a8-789090af4521@linaro.org>
- <c395abad-598b-c06a-9252-c8e62c977188@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <794e62ea-d867-3827-de5f-24ddc86c3524@linaro.org>
-Date:   Wed, 22 Sep 2021 10:10:29 +0200
+        Wed, 22 Sep 2021 01:11:52 -0700 (PDT)
+Subject: Re: [PATCH v2 3/4] PM / devfreq: tegra30: Use resource-managed
+ helpers
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210920172249.28206-1-digetx@gmail.com>
+ <20210920172249.28206-4-digetx@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <6acf32f7-99d2-af23-758d-14d503cfdc61@gmail.com>
+Date:   Wed, 22 Sep 2021 17:11:50 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <c395abad-598b-c06a-9252-c8e62c977188@baylibre.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210920172249.28206-4-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/09/2021 15:12, Alexandre Bailon wrote:
+On 21. 9. 21. 오전 2:22, Dmitry Osipenko wrote:
+> Use resource-managed API helpers to simplify driver's probe() function,
+> making code cleaner.
 > 
-> On 9/17/21 4:03 PM, Daniel Lezcano wrote:
->> On 17/09/2021 15:33, Alexandre Bailon wrote:
->>> Hi Daniel,
->>>
->>> On 9/17/21 2:41 PM, Daniel Lezcano wrote:
->>>> On 17/09/2021 09:27, Alexandre Bailon wrote:
->>>>> This series add a virtual thermal sensor.
->>>>> It could be used to get a temperature using some thermal sensors.
->>>>> Currently, the supported operations are max, min and avg.
->>>>> The virtual sensor could be easily extended to support others
->>>>> operations.
->>>>>
->>>>> Note:
->>>>> Currently, thermal drivers must explicitly register their sensors to
->>>>> make them
->>>>> available to the virtual sensor.
->>>>> This doesn't seem a good solution to me and I think it would be
->>>>> preferable to
->>>>> update the framework to register the list of each available sensors.
->>>> Why must the drivers do that ?
->>> Because there are no central place where thermal sensor are registered.
->>> The only other way I found was to update thermal_of.c,
->>> to register the thermal sensors and make them available later to the
->>> virtual thermal sensor.
->>>
->>> To work, the virtual thermal need to get the sensor_data the ops from
->>> the thermal sensor.
->>> And as far I know, this is only registered in thermal_of.c, in the
->>> thermal zone data
->>> but I can't access it directly from the virtual thermal sensor.
->>>
->>> How would you do it ?
->> Via the phandles when registering the virtual sensor ?
-> As far I know, we can't get the ops or the sensor_data from the phandle
-> of a thermal sensor.
-> The closest solution I found so far would be to aggregate the thermal
-> zones instead of thermal sensors.
-> thermal_zone_device has the data needed and a thermal zone could be find
-> easily using its name.
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>   drivers/devfreq/tegra30-devfreq.c | 107 +++++++++++++-----------------
+>   1 file changed, 46 insertions(+), 61 deletions(-)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index 10661eb2aed8..d83fdc2713ed 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -178,7 +178,6 @@ struct tegra_devfreq_soc_data {
+>   
+>   struct tegra_devfreq {
+>   	struct devfreq		*devfreq;
+> -	struct opp_table	*opp_table;
+>   
+>   	struct reset_control	*reset;
+>   	struct clk		*clock;
+> @@ -789,6 +788,39 @@ static struct devfreq_governor tegra_devfreq_governor = {
+>   	.event_handler = tegra_governor_event_handler,
+>   };
+>   
+> +static void devm_tegra_devfreq_deinit_hw(void *data)
+> +{
+> +	struct tegra_devfreq *tegra = data;
+> +
+> +	reset_control_reset(tegra->reset);
+> +	clk_disable_unprepare(tegra->clock);
+> +}
+> +
+> +static int devm_tegra_devfreq_init_hw(struct device *dev,
+> +				      struct tegra_devfreq *tegra)
+> +{
+> +	int err;
+> +
+> +	err = clk_prepare_enable(tegra->clock);
+> +	if (err) {
+> +		dev_err(dev, "Failed to prepare and enable ACTMON clock\n");
+> +		return err;
+> +	}
+> +
+> +	err = devm_add_action_or_reset(dev, devm_tegra_devfreq_deinit_hw,
+> +				       tegra);
+> +	if (err)
+> +		return err;
+> +
+> +	err = reset_control_reset(tegra->reset);
+> +	if (err) {
+> +		dev_err(dev, "Failed to reset hardware: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return err;
+> +}
+> +
+>   static int tegra_devfreq_probe(struct platform_device *pdev)
+>   {
+>   	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+> @@ -842,38 +874,26 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>   		return err;
+>   	}
+>   
+> -	tegra->opp_table = dev_pm_opp_set_supported_hw(&pdev->dev,
+> -						       &hw_version, 1);
+> -	err = PTR_ERR_OR_ZERO(tegra->opp_table);
+> +	err = devm_pm_opp_set_supported_hw(&pdev->dev, &hw_version, 1);
+>   	if (err) {
+>   		dev_err(&pdev->dev, "Failed to set supported HW: %d\n", err);
+>   		return err;
+>   	}
+>   
+> -	err = dev_pm_opp_of_add_table_noclk(&pdev->dev, 0);
+> +	err = devm_pm_opp_of_add_table_noclk(&pdev->dev, 0);
+>   	if (err) {
+>   		dev_err(&pdev->dev, "Failed to add OPP table: %d\n", err);
+> -		goto put_hw;
+> -	}
+> -
+> -	err = clk_prepare_enable(tegra->clock);
+> -	if (err) {
+> -		dev_err(&pdev->dev,
+> -			"Failed to prepare and enable ACTMON clock\n");
+> -		goto remove_table;
+> +		return err;
+>   	}
+>   
+> -	err = reset_control_reset(tegra->reset);
+> -	if (err) {
+> -		dev_err(&pdev->dev, "Failed to reset hardware: %d\n", err);
+> -		goto disable_clk;
+> -	}
+> +	err = devm_tegra_devfreq_init_hw(&pdev->dev, tegra);
+> +	if (err)
+> +		return err;
+>   
+>   	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+>   	if (rate < 0) {
+>   		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+> -		err = rate;
+> -		goto disable_clk;
+> +		return rate;
+>   	}
+>   
+>   	tegra->max_freq = rate / KHZ;
+> @@ -892,52 +912,18 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>   	INIT_DELAYED_WORK(&tegra->cpufreq_update_work,
+>   			  tegra_actmon_delayed_update);
+>   
+> -	err = devfreq_add_governor(&tegra_devfreq_governor);
+> +	err = devm_devfreq_add_governor(&pdev->dev, &tegra_devfreq_governor);
+>   	if (err) {
+>   		dev_err(&pdev->dev, "Failed to add governor: %d\n", err);
+> -		goto remove_opps;
+> +		return err;
+>   	}
+>   
+>   	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
+>   
+> -	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+> -				     "tegra_actmon", NULL);
+> -	if (IS_ERR(devfreq)) {
+> -		err = PTR_ERR(devfreq);
+> -		goto remove_governor;
+> -	}
+> -
+> -	return 0;
+> -
+> -remove_governor:
+> -	devfreq_remove_governor(&tegra_devfreq_governor);
+> -
+> -remove_opps:
+> -	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+> -
+> -	reset_control_reset(tegra->reset);
+> -disable_clk:
+> -	clk_disable_unprepare(tegra->clock);
+> -remove_table:
+> -	dev_pm_opp_of_remove_table(&pdev->dev);
+> -put_hw:
+> -	dev_pm_opp_put_supported_hw(tegra->opp_table);
+> -
+> -	return err;
+> -}
+> -
+> -static int tegra_devfreq_remove(struct platform_device *pdev)
+> -{
+> -	struct tegra_devfreq *tegra = platform_get_drvdata(pdev);
+> -
+> -	devfreq_remove_device(tegra->devfreq);
+> -	devfreq_remove_governor(&tegra_devfreq_governor);
+> -
+> -	reset_control_reset(tegra->reset);
+> -	clk_disable_unprepare(tegra->clock);
+> -
+> -	dev_pm_opp_of_remove_table(&pdev->dev);
+> -	dev_pm_opp_put_supported_hw(tegra->opp_table);
+> +	devfreq = devm_devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+> +					  "tegra_actmon", NULL);
+> +	if (IS_ERR(devfreq))
+> +		return PTR_ERR(devfreq);
+>   
+>   	return 0;
+>   }
+> @@ -967,7 +953,6 @@ MODULE_DEVICE_TABLE(of, tegra_devfreq_of_match);
+>   
+>   static struct platform_driver tegra_devfreq_driver = {
+>   	.probe	= tegra_devfreq_probe,
+> -	.remove	= tegra_devfreq_remove,
+>   	.driver = {
+>   		.name = "tegra-devfreq",
+>   		.of_match_table = tegra_devfreq_of_match,
+> 
 
-Yeah, the concept of the thermal zone and the sensor are very close.
+It is more readable than before. Thanks.
 
-There is the function in thermal_core.h:
-
- -> for_each_thermal_zone()
-
-You should be able for each 'slave' sensor, do a lookup to find the
-corresponding thermal_zone_device_ops.
-
-> But, using a thermal_zone_device, I don't see how to handle module
-> unloading.
-
-I think try_module_get() / module_put() are adequate for this situation
-as it is done on an external module and we can not rely on the exported
-symbols.
-
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
