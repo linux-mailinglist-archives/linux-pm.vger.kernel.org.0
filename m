@@ -2,72 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217E84142E2
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 09:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABA84142FB
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 09:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233303AbhIVHvd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 03:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S233407AbhIVH5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Sep 2021 03:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbhIVHvc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 03:51:32 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CFAC061574;
-        Wed, 22 Sep 2021 00:50:03 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id r2so1784265pgl.10;
-        Wed, 22 Sep 2021 00:50:02 -0700 (PDT)
+        with ESMTP id S233303AbhIVH5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 03:57:11 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF5C061574;
+        Wed, 22 Sep 2021 00:55:42 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id lb1-20020a17090b4a4100b001993f863df2so1615514pjb.5;
+        Wed, 22 Sep 2021 00:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TuwMBP3lxjZDIIIkKMBUehWeZnhQg+0jQoxtba7Hh9I=;
-        b=hXvMvZ6eOBZgNmCdzYTcl+fJpAXjGcrpcqPyIpdNC4uEmypCDQLvizzSoJZi9hCCbp
-         PRW5QSi3xfeqR27vOD8R6M2uaD3gmmXA5LzvgJFa0qCdJKbosCxZSKk62Q1u2H9VMkd3
-         +XmrZ7YO7V26K/V45nvINrCp606jItpb6SbEDGt2fj5i5HeFOQRGp8dwKzAe2T+OH7k4
-         6+wtTwy/7o1ebrYGmFnTPc9vst6Asxlw+iRan5z761Y9yUe5es40AbGMCKJebGR2hPMc
-         eK3lJmhF0rnqkL/Q3yonydEjxnTcY1N05xt5DPLg26CA/YYExkkETH7Zv/ku1X5Xrt9S
-         iPig==
+        bh=a4LVEfaLq327oC+OuEdH7ELI4IIn+exl8gSPSV42DbE=;
+        b=DWmJa+DLG5+58msZw2eol35HwBKnYSQ7t02TLOj6y7kQuax03g9P17nczPrnLMeZ7z
+         3sV0IwuR+61tJIjidNpyn2DIZkYiT8wnQLxkzgVir/0kRS+p3CPni+wg/rV+ywpzeydM
+         G6PgM3M9JIZENg/tHQAUiEO4hzKKj9XEmfOstaWucgBiOgOd4yL1vEJHRESuqkajqhHU
+         xXlTNa42T8o0Hvt334nWGwN64pd36MIqzhFPHlnN2GfOznadFxq047OjLsw2n4/gqCa+
+         iLGPuOD7esCH/C+3dxb6kF5Po1ylFMbEOwmPyIy+qdMEnHf3lUpH9fxWPTvQHlj95XWq
+         0McQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TuwMBP3lxjZDIIIkKMBUehWeZnhQg+0jQoxtba7Hh9I=;
-        b=j+IBKcEwPe0uh4Nnks+tppJ+6C34I3SEsB7Yh7fkjVwN/9r3BS/JzrsPejdWpLBsKe
-         1hlLf3HRjKaGAd5eKY0hE9UlZBbcGMO41j/w3yIt6oUk7ZpvP1OZvEvT3+I8hviEIgy+
-         2HMhChqfMIuWW2muwc8SvgFpzygo8Qwi9qcXK6VypudCDUEIsxiISyVEtnj3T7vTFrYy
-         ropL+6n+oBbRU6qiwnCG8tVVZPUGx+ELdyzT/+22E8I+7flupO8Nu1BHkHyXFpswLx6t
-         f2+lgO2Jc/yBq1wxI1UQY+q4nbsCJkCp6D9UcRa2IyiSqE58Hr7ifvcRuGGxGRaJsgZM
-         E2sA==
-X-Gm-Message-State: AOAM530CQjYZnunYzsZJ53WfKj4r+h2NZq8vieqhBRIJwaaXor+up3JW
-        3xJo53m00Oigrkxl/ox2FYTulmkIc8Q=
-X-Google-Smtp-Source: ABdhPJzpBPdqWkBZslTDJ4YwznbRa3wkyEY3vk9O0PqfEos3Nwntzh+fraHr3XZl3fmaUznxxKludw==
-X-Received: by 2002:a62:1a09:0:b0:435:61bd:2d09 with SMTP id a9-20020a621a09000000b0043561bd2d09mr34578837pfa.71.1632297001840;
-        Wed, 22 Sep 2021 00:50:01 -0700 (PDT)
+        bh=a4LVEfaLq327oC+OuEdH7ELI4IIn+exl8gSPSV42DbE=;
+        b=cmLbtrJ7RUUvd/xxecI9zlxZZ07Qy9bpaHxsVsR/8Q5noCFAmn+rgj4pkO5MUkEdzZ
+         ypTnf3WbaiPSpjvXNLKAobfsN1q1BPSPoEaZ8oKwmGkY4mjgGpqd7qRm93RdCHMkyMe1
+         4MP1r/dKE3JmWlR5zV9iW8U37i4ll6p13h4PKhdGERCrFykllE4fHmD2Gn/wjppF/ZOG
+         IDKLlJaqFIsilclRivv6fcTYHJ2WL/QrfUzsHjvFA9Yy65tM6JiCffDuj++lzZ04vh4V
+         aBXou4AMmC9H8pNtaFJHPGHJEZRu5PPTGVpD0ILMQQC57IKFYXJ/wrB+tBAlrZpP/aqB
+         7ESg==
+X-Gm-Message-State: AOAM531zju8WB1Xl8vIEZUtl1t0OA7ZSJSXnYHGXyZ2mHvpNDrmIaEmc
+        WLipjcu2UUtPLpZs2SXSx+fwK2NLSnA=
+X-Google-Smtp-Source: ABdhPJxrg2xQum3vEzcdb8t6ZMjs25UcmhqVGJerQo4ZN/JiJ7Y3MAG2gCKgEruTaH5l6KhsofKj6w==
+X-Received: by 2002:a17:90a:d516:: with SMTP id t22mr9821382pju.208.1632297341658;
+        Wed, 22 Sep 2021 00:55:41 -0700 (PDT)
 Received: from [172.30.1.2] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id f127sm1387197pfa.25.2021.09.22.00.49.58
+        by smtp.gmail.com with ESMTPSA id d3sm1438903pfn.156.2021.09.22.00.55.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 00:50:01 -0700 (PDT)
-Subject: Re: [PATCH v2 2/4] PM / devfreq: Add devm_devfreq_add_governor()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Wed, 22 Sep 2021 00:55:40 -0700 (PDT)
+Subject: Re: [PATCH v2 1/3] devfreq: exynos-ppmu: use node names with hyphens
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-References: <20210920172249.28206-1-digetx@gmail.com>
- <20210920172249.28206-3-digetx@gmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
+ <20210920071753.38560-1-krzysztof.kozlowski@canonical.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <780208e2-911c-87a0-f97c-0147c6f11c5d@gmail.com>
-Date:   Wed, 22 Sep 2021 16:49:58 +0900
+Message-ID: <83206dd4-c779-1090-9394-2519d4747206@gmail.com>
+Date:   Wed, 22 Sep 2021 16:55:37 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210920172249.28206-3-digetx@gmail.com>
+In-Reply-To: <20210920071753.38560-1-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,69 +76,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21. 9. 21. 오전 2:22, Dmitry Osipenko wrote:
-> Add resource-managed variant of devfreq_add_governor().
+Hi Krzysztof,
+
+On 21. 9. 20. 오후 4:17, Krzysztof Kozlowski wrote:
+> Devicetree naming convention requires device node names to use hyphens
+> instead of underscore, so Exynos5422 devfreq event name
+> "ppmu-event3-dmc0_0" should be "ppmu-event3-dmc0-0".  Newly introduced
+> dtschema enforces this, however the driver still expects old name with
+> an underscore.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Add new events for Exynos5422 while still accepting old name for
+> backwards compatibility.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   drivers/devfreq/devfreq.c  | 26 ++++++++++++++++++++++++++
->   drivers/devfreq/governor.h |  3 +++
->   2 files changed, 29 insertions(+)
+>   drivers/devfreq/event/exynos-ppmu.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 85faa7a5c7d1..4579eefb8fe7 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -1301,6 +1301,32 @@ int devfreq_add_governor(struct devfreq_governor *governor)
->   }
->   EXPORT_SYMBOL(devfreq_add_governor);
+> diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
+> index 17ed980d9099..541bd13ab61d 100644
+> --- a/drivers/devfreq/event/exynos-ppmu.c
+> +++ b/drivers/devfreq/event/exynos-ppmu.c
+> @@ -94,11 +94,16 @@ static struct __exynos_ppmu_events {
+>   	PPMU_EVENT(d1-general),
+>   	PPMU_EVENT(d1-rt),
 >   
-> +static void devm_devfreq_remove_governor(void *governor)
-> +{
-> +	WARN_ON(devfreq_remove_governor(governor));
-> +}
-> +
-> +/**
-> + * devm_devfreq_add_governor() - Add devfreq governor
-> + * @dev:	device which adds devfreq governor
-> + * @governor:	the devfreq governor to be added
-> + *
-> + * This is a resource-managed variant of devfreq_add_governor().
-> + */
-> +int devm_devfreq_add_governor(struct device *dev,
-> +			      struct devfreq_governor *governor)
-> +{
-> +	int err;
-> +
-> +	err = devfreq_add_governor(governor);
-> +	if (err)
-> +		return err;
-> +
-> +	return devm_add_action_or_reset(dev, devm_devfreq_remove_governor,
-> +					governor);
-> +}
-> +EXPORT_SYMBOL(devm_devfreq_add_governor);
-> +
->   /**
->    * devfreq_remove_governor() - Remove devfreq feature from a device.
->    * @governor:	the devfreq governor to be removed
-> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index 2d69a0ce6291..002a7d67e39d 100644
-> --- a/drivers/devfreq/governor.h
-> +++ b/drivers/devfreq/governor.h
-> @@ -84,6 +84,9 @@ void devfreq_update_interval(struct devfreq *devfreq, unsigned int *delay);
->   int devfreq_add_governor(struct devfreq_governor *governor);
->   int devfreq_remove_governor(struct devfreq_governor *governor);
+> -	/* For Exynos5422 SoC */
+> +	/* For Exynos5422 SoC, deprecated (backwards compatible) */
+>   	PPMU_EVENT(dmc0_0),
+>   	PPMU_EVENT(dmc0_1),
+>   	PPMU_EVENT(dmc1_0),
+>   	PPMU_EVENT(dmc1_1),
+> +	/* For Exynos5422 SoC */
+> +	PPMU_EVENT(dmc0-0),
+> +	PPMU_EVENT(dmc0-1),
+> +	PPMU_EVENT(dmc1-0),
+> +	PPMU_EVENT(dmc1-1),
+>   };
 >   
-> +int devm_devfreq_add_governor(struct device *dev,
-> +			      struct devfreq_governor *governor);
-> +
->   int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
->   int devfreq_update_target(struct devfreq *devfreq, unsigned long freq);
->   
+>   static int __exynos_ppmu_find_ppmu_id(const char *edev_name)
 > 
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Applied it. Thanks.
 
 -- 
 Best Regards,
