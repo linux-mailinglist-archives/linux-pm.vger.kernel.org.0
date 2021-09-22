@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABA84142FB
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 09:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656F6414334
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Sep 2021 10:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbhIVH5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 03:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S233349AbhIVIHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Sep 2021 04:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbhIVH5L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 03:57:11 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF5C061574;
-        Wed, 22 Sep 2021 00:55:42 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id lb1-20020a17090b4a4100b001993f863df2so1615514pjb.5;
-        Wed, 22 Sep 2021 00:55:42 -0700 (PDT)
+        with ESMTP id S233336AbhIVIHU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 04:07:20 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDA0C061574;
+        Wed, 22 Sep 2021 01:05:51 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f129so1875358pgc.1;
+        Wed, 22 Sep 2021 01:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a4LVEfaLq327oC+OuEdH7ELI4IIn+exl8gSPSV42DbE=;
-        b=DWmJa+DLG5+58msZw2eol35HwBKnYSQ7t02TLOj6y7kQuax03g9P17nczPrnLMeZ7z
-         3sV0IwuR+61tJIjidNpyn2DIZkYiT8wnQLxkzgVir/0kRS+p3CPni+wg/rV+ywpzeydM
-         G6PgM3M9JIZENg/tHQAUiEO4hzKKj9XEmfOstaWucgBiOgOd4yL1vEJHRESuqkajqhHU
-         xXlTNa42T8o0Hvt334nWGwN64pd36MIqzhFPHlnN2GfOznadFxq047OjLsw2n4/gqCa+
-         iLGPuOD7esCH/C+3dxb6kF5Po1ylFMbEOwmPyIy+qdMEnHf3lUpH9fxWPTvQHlj95XWq
-         0McQ==
+        bh=3vgj0hW3KSHhJ1FNGvvnjMW3NitG36aDXcJz/7heGcA=;
+        b=FAkBVWugynwfJI5lWaQvYEy5zoZ/PcwxIzBamJjPUP+b2SJ39zuwELnOxZD4mWY7qI
+         VL+NRFb28mlUzCzMNFU8j2NXe+OzTklHCFA1mSE3MXf4GK+Sx65lA1keQKFwGlsrg9tU
+         tRonpRLFulMJRQa9KRODt+Cp+UQlzyTtiUHLtMgCsrKSVqTJbk4CqpICjwqwgiMymCpa
+         zVNq1/Yg3KD7mrkYF4M7le9Q4d3Gn8986+7TMsBcQHgo7Q+GySY6qjBPrwQu5mqiJ3iI
+         EdQMGVC+gVV9oJFAEklO3sPTpktjuuiE5r4+kATExB81e4C/gPw5qi069u7USlKJNEiM
+         KluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=a4LVEfaLq327oC+OuEdH7ELI4IIn+exl8gSPSV42DbE=;
-        b=cmLbtrJ7RUUvd/xxecI9zlxZZ07Qy9bpaHxsVsR/8Q5noCFAmn+rgj4pkO5MUkEdzZ
-         ypTnf3WbaiPSpjvXNLKAobfsN1q1BPSPoEaZ8oKwmGkY4mjgGpqd7qRm93RdCHMkyMe1
-         4MP1r/dKE3JmWlR5zV9iW8U37i4ll6p13h4PKhdGERCrFykllE4fHmD2Gn/wjppF/ZOG
-         IDKLlJaqFIsilclRivv6fcTYHJ2WL/QrfUzsHjvFA9Yy65tM6JiCffDuj++lzZ04vh4V
-         aBXou4AMmC9H8pNtaFJHPGHJEZRu5PPTGVpD0ILMQQC57IKFYXJ/wrB+tBAlrZpP/aqB
-         7ESg==
-X-Gm-Message-State: AOAM531zju8WB1Xl8vIEZUtl1t0OA7ZSJSXnYHGXyZ2mHvpNDrmIaEmc
-        WLipjcu2UUtPLpZs2SXSx+fwK2NLSnA=
-X-Google-Smtp-Source: ABdhPJxrg2xQum3vEzcdb8t6ZMjs25UcmhqVGJerQo4ZN/JiJ7Y3MAG2gCKgEruTaH5l6KhsofKj6w==
-X-Received: by 2002:a17:90a:d516:: with SMTP id t22mr9821382pju.208.1632297341658;
-        Wed, 22 Sep 2021 00:55:41 -0700 (PDT)
+        bh=3vgj0hW3KSHhJ1FNGvvnjMW3NitG36aDXcJz/7heGcA=;
+        b=e8HNrhaTTjfcmwLQai4PLyHPYmWL+nJCRjvEgVrZJ69awBa+Cd/HIaZ16ej5bdrxmy
+         ly3TF8SlPPOii48+fffczdK8Gnak98BlFm2hiRRaO2XUaDvcXpsiVaakaf7iFgplaQc4
+         q8B1fYFPVFHMx+5YCxQ7/FzKJf609WeSJN9suyrrECibDsdZhXrl83SMiaLM3A5Q5usn
+         OK472jpHgMhFyd8Bu2SUIuG+zt63Zc7oV9xi94/2ocMZXMxDSYstR0LsSE16UyQfMXi5
+         NYfA33KqGkE1IjFxLDA8s0d6tnjC2pZTyZzSJ9VrJf3oiE8Iu6QmR8Ju+ygWXoEFsPmf
+         a1YQ==
+X-Gm-Message-State: AOAM532AsEo0jmffvcWWnQhAEiB2z/65MQJLkOSilnrdxzGAx1q9aSdV
+        mtEkO3Df2JcCGVUlBaU5WoQ=
+X-Google-Smtp-Source: ABdhPJwdylx2gAkFtmU9FHajYgZBLBBYYbPpvbp7sGfAL2p7//GTWekKTYSd4s/OpU5ahmIuNorN4g==
+X-Received: by 2002:a62:7b14:0:b0:447:c4c9:ce3f with SMTP id w20-20020a627b14000000b00447c4c9ce3fmr12556780pfc.15.1632297950610;
+        Wed, 22 Sep 2021 01:05:50 -0700 (PDT)
 Received: from [172.30.1.2] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id d3sm1438903pfn.156.2021.09.22.00.55.37
+        by smtp.gmail.com with ESMTPSA id c23sm1599245pgb.74.2021.09.22.01.05.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 00:55:40 -0700 (PDT)
-Subject: Re: [PATCH v2 1/3] devfreq: exynos-ppmu: use node names with hyphens
+        Wed, 22 Sep 2021 01:05:50 -0700 (PDT)
+Subject: Re: [PATCH v2 2/3] devfreq: exynos-ppmu: simplify parsing event-type
+ from DT
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -61,14 +62,14 @@ Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 References: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
- <20210920071753.38560-1-krzysztof.kozlowski@canonical.com>
+ <20210920071753.38560-2-krzysztof.kozlowski@canonical.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <83206dd4-c779-1090-9394-2519d4747206@gmail.com>
-Date:   Wed, 22 Sep 2021 16:55:37 +0900
+Message-ID: <35ad437f-7527-e9b1-4819-8f4faa765e26@gmail.com>
+Date:   Wed, 22 Sep 2021 17:05:45 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210920071753.38560-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210920071753.38560-2-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -79,45 +80,50 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Hi Krzysztof,
 
 On 21. 9. 20. 오후 4:17, Krzysztof Kozlowski wrote:
-> Devicetree naming convention requires device node names to use hyphens
-> instead of underscore, so Exynos5422 devfreq event name
-> "ppmu-event3-dmc0_0" should be "ppmu-event3-dmc0-0".  Newly introduced
-> dtschema enforces this, however the driver still expects old name with
-> an underscore.
+> When parsing devicetree, the function of_get_devfreq_events(), for each
+> device child node, iterates over array of possible events "ppmu_events"
+> till it finds one matching by node name.  When match is found the
+> ppmu_events[i] points to element having both the name of the event and
+> the counters ID.
 > 
-> Add new events for Exynos5422 while still accepting old name for
-> backwards compatibility.
+> Each PPMU device child node might have an "event-name" property with the
+> name of the event, however due to the design of devfreq it must be the
+> same as the device node name.  If it is not the same, the devfreq client
+> won't be able to use it via devfreq_event_get_edev_by_phandle().
+> 
+> Since PPMU device child node name must be equal to the "event-name"
+> property (event-name == ppmu_events[i].name), there is no need to find
+> the counters ID by the "event-name".  Instead use ppmu_events[i].id
+> which must be equal to it.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   drivers/devfreq/event/exynos-ppmu.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+>   drivers/devfreq/event/exynos-ppmu.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
 > 
 > diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-> index 17ed980d9099..541bd13ab61d 100644
+> index 541bd13ab61d..9b849d781116 100644
 > --- a/drivers/devfreq/event/exynos-ppmu.c
 > +++ b/drivers/devfreq/event/exynos-ppmu.c
-> @@ -94,11 +94,16 @@ static struct __exynos_ppmu_events {
->   	PPMU_EVENT(d1-general),
->   	PPMU_EVENT(d1-rt),
->   
-> -	/* For Exynos5422 SoC */
-> +	/* For Exynos5422 SoC, deprecated (backwards compatible) */
->   	PPMU_EVENT(dmc0_0),
->   	PPMU_EVENT(dmc0_1),
->   	PPMU_EVENT(dmc1_0),
->   	PPMU_EVENT(dmc1_1),
-> +	/* For Exynos5422 SoC */
-> +	PPMU_EVENT(dmc0-0),
-> +	PPMU_EVENT(dmc0-1),
-> +	PPMU_EVENT(dmc1-0),
-> +	PPMU_EVENT(dmc1-1),
->   };
->   
->   static int __exynos_ppmu_find_ppmu_id(const char *edev_name)
+> @@ -566,13 +566,10 @@ static int of_get_devfreq_events(struct device_node *np,
+>   			 * use default if not.
+>   			 */
+>   			if (info->ppmu_type == EXYNOS_TYPE_PPMU_V2) {
+> -				int id;
+>   				/* Not all registers take the same value for
+>   				 * read+write data count.
+>   				 */
+> -				id = __exynos_ppmu_find_ppmu_id(desc[j].name);
+> -
+> -				switch (id) {
+> +				switch (ppmu_events[i].id) {
+>   				case PPMU_PMNCNT0:
+>   				case PPMU_PMNCNT1:
+>   				case PPMU_PMNCNT2:
 > 
 
 Applied it. Thanks.
+
 
 -- 
 Best Regards,
