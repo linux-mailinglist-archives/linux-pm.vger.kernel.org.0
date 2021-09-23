@@ -2,207 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BF04166F3
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 22:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF8C416718
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 23:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbhIWU41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Sep 2021 16:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbhIWU40 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 16:56:26 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5CDC061574
-        for <linux-pm@vger.kernel.org>; Thu, 23 Sep 2021 13:54:54 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id me1so5265608pjb.4
-        for <linux-pm@vger.kernel.org>; Thu, 23 Sep 2021 13:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2sl6cDl70lCiOkWaoPq6Jy9FcastJB9SyeT8odrB+pk=;
-        b=0i4UK/HJQqCqSeULofhgK3SgBwvnz4SS5rhoAwd9QnGDgt8QU9kFe+6kumw8T7cAsF
-         a0mkV4q8Dd0BZlF2do0NRJOpuWejc+AoirbQQNjjVLROL73GWeAa4CSHXZBdBfMzJyHh
-         L1td5DknMnWHfFHqU4R6U4UWLf6ZsIyN8cfBtLXIpnkVrwMbI3XSC1/+SoGJ89fGkhf9
-         97w7ymMcHH3lwQ9eZGvTFLddeCkEnbB2K03ItWFrlTOisKx7CcG+MjJfRpN+KMRdnj3i
-         zJZi+k4v37Xt0flJYmmmj+tEI6kxlAoNQGiT2B5omGkznf4Ra5QQ6+mRNL8sH6HE2WeJ
-         4pwg==
+        id S243224AbhIWVLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Sep 2021 17:11:10 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:43538 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243174AbhIWVLJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 17:11:09 -0400
+Received: by mail-oi1-f177.google.com with SMTP id w19so11541174oik.10;
+        Thu, 23 Sep 2021 14:09:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2sl6cDl70lCiOkWaoPq6Jy9FcastJB9SyeT8odrB+pk=;
-        b=74mthxeYsDnMu3C8Q/1FmP0udebWdiOMJjsusLlT1kIfpkDNfZs6x09WXvotub6zWP
-         uNavQnddfvYltm4hJHWtQ92NL4ix/P8oQLZeFWySY4qC8Xyys0FFmVJ6384k2ha/7j7y
-         zhjeHC1ES6zUhGEajC1fwZO+7rsvsm7cerY+xYrtvodAHXvpHuWJiNHsqG0eQ+tl1GrE
-         zwpVLm3CXIZQ7zIyy8jZ8eZN6ODYplqet7CPMtf0bkMSw1Y0fQcJjcU7gI+WPWaRwwj0
-         cfDkVll94JxLKFw8nhfooSXBceFRLtaJXwy26KkC9IUn8HRsjX1ryufJxHLnp6P7g6mH
-         p46A==
-X-Gm-Message-State: AOAM530k2cu7zHaYBmA3BI9yuZudagw2FG2aB3VKXNgFWVyu/PZm3qGW
-        FHo/VzMWA3T+uFuJrRuB4pop74SS1pxA9fE6
-X-Google-Smtp-Source: ABdhPJxvwo9r0anENPnP8JEfRQSHj6y1vRbrg/B+sY+YGg4GAhP6zst+857tmJfApoWp/zffPVUDEA==
-X-Received: by 2002:a17:90a:ee82:: with SMTP id i2mr7542107pjz.166.1632430493917;
-        Thu, 23 Sep 2021 13:54:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o15sm6933676pfg.14.2021.09.23.13.54.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ECAcJQ5j3b9V37w+5AU1dCjJzeuc06UOkYf0x/TJhHI=;
+        b=xIdLizm4aubTc3dGOr/JOOrmu/jGmoWQ1B+ry9dtYUiPsD6NfmRoN4HOihRT5Cyc+m
+         26xhWVWU5zolKwopYzzACSCyMQyPhWdae9KYinSfzPY5V2bUmsZtHQw253u+mXUwjWcz
+         hZ3KtcEaJ7G2AQo6VVgkHgs1IBpP9BcRnck4CkZnO85wIlE7eu5bb6ai3XjNu8f5jYq5
+         Vc8mP7zS1F+f+X30oCmD1y+uTkuD3rvthnLu+18HsnIjblgiJ+3d/z5A+JHeqv1LqEfh
+         dI5UbMrEeCVxS35KYOftBanaD2WRfDGWBceNepJmXAnA5kKf5mZTrTvWR3FyQkGAyc2u
+         NRcA==
+X-Gm-Message-State: AOAM5314M/Ns5HRCOV8AJMEoGbhkjzLYg4+Tk7O1cc5lV7jp7CS2BSMl
+        JK3KG9Ggu+n2Da6WjjxcI9fQA//FoA==
+X-Google-Smtp-Source: ABdhPJxgGB/F5m/HUdgfquhEQY/6qPe41K4exPARMH+1jXMEbOmyXEtt37OEluaLbFS8sOex0LCyaQ==
+X-Received: by 2002:aca:645:: with SMTP id 66mr5369149oig.145.1632431377021;
+        Thu, 23 Sep 2021 14:09:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id d10sm1701331ooj.24.2021.09.23.14.09.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 13:54:53 -0700 (PDT)
-Message-ID: <614ce99d.1c69fb81.ffb4e.4272@mx.google.com>
-Date:   Thu, 23 Sep 2021 13:54:53 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 23 Sep 2021 14:09:36 -0700 (PDT)
+Received: (nullmailer pid 3527425 invoked by uid 1000);
+        Thu, 23 Sep 2021 21:09:34 -0000
+Date:   Thu, 23 Sep 2021 16:09:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Lucas Stach <dev@lynxeye.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, David Heidelberg <david@ixit.cz>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-tegra@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nishanth Menon <nm@ti.com>, linux-pwm@vger.kernel.org,
+        linux-staging@lists.linux.dev, Stefan Agner <stefan@agner.ch>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH v12 05/35] dt-bindings: clock: tegra-car: Document new
+ clock sub-nodes
+Message-ID: <YUztDv/KbKVAY7cB@robh.at.kernel.org>
+References: <20210920181145.19543-1-digetx@gmail.com>
+ <20210920181145.19543-6-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.15-rc2-12-g9fa78c37a2e3
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 62 runs,
- 4 regressions (v5.15-rc2-12-g9fa78c37a2e3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210920181145.19543-6-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 62 runs, 4 regressions (v5.15-rc2-12-g9fa78c37a2e3)
+On Mon, 20 Sep 2021 21:11:15 +0300, Dmitry Osipenko wrote:
+> Document sub-nodes which describe Tegra SoC clocks that require a higher
+> voltage of the core power domain in order to operate properly on a higher
+> clock rates.  Each node contains a phandle to OPP table and power domain.
+> 
+> The root PLLs and system clocks don't have any specific device dedicated
+> to them, clock controller is in charge of managing power for them.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/clock/nvidia,tegra20-car.yaml    | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
 
-Regressions Summary
--------------------
-
-platform         | arch  | lab           | compiler | defconfig          | =
-regressions
------------------+-------+---------------+----------+--------------------+-=
------------
-beagle-xm        | arm   | lab-baylibre  | gcc-8    | multi_v7_defconfig | =
-1          =
-
-hip07-d05        | arm64 | lab-collabora | gcc-8    | defconfig          | =
-1          =
-
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
-2          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-2-12-g9fa78c37a2e3/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc2-12-g9fa78c37a2e3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      9fa78c37a2e340ea8d57b78ae9379a4110a70515 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig          | =
-regressions
------------------+-------+---------------+----------+--------------------+-=
------------
-beagle-xm        | arm   | lab-baylibre  | gcc-8    | multi_v7_defconfig | =
-1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/614ce170c5b0e430f099a324
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/614ce170c5b0e430f099a=
-325
-        failing since 48 days (last pass: v5.14-rc3-20-g604483c9d252, first=
- fail: v5.14-rc4-28-g9ac32de19606) =
-
- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig          | =
-regressions
------------------+-------+---------------+----------+--------------------+-=
------------
-hip07-d05        | arm64 | lab-collabora | gcc-8    | defconfig          | =
-1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/614cde3a4bdfefa40999a34f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/614cde3a4bdfefa40999a=
-350
-        failing since 85 days (last pass: pm-5.13-rc8-159-g3304616e985f, fi=
-rst fail: devprop-5.13-rc8-173-ge132b9a1079c) =
-
- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig          | =
-regressions
------------------+-------+---------------+----------+--------------------+-=
------------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
-2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/614cdf12f707facd1499a2ec
-
-  Results:     89 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc2-12-g9fa78=
-c37a2e3/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.rockchip-usb2phy1-probed: https://kernelci.org/test/cas=
-e/id/614cdf12f707facd1499a2f2
-        failing since 72 days (last pass: devprop-5.13-rc8-173-ge132b9a1079=
-c, first fail: v5.14-rc1)
-
-    2021-09-23T20:09:31.565714  /lava-4574279/1/../bin/lava-test-case
-    2021-09-23T20:09:31.577322  <8>[   52.528634] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy1-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.rockchip-usb2phy0-probed: https://kernelci.org/test/cas=
-e/id/614cdf12f707facd1499a2f3
-        failing since 72 days (last pass: devprop-5.13-rc8-173-ge132b9a1079=
-c, first fail: v5.14-rc1)
-
-    2021-09-23T20:09:30.531486  /lava-4574279/1/../bin/lava-test-case
-    2021-09-23T20:09:30.542900  <8>[   51.493501] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy0-probed RESULT=3Dfail>   =
-
- =20
+Reviewed-by: Rob Herring <robh@kernel.org>
