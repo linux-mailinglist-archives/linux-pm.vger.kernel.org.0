@@ -2,188 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AAC415552
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 04:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24564159B4
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 10:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbhIWCDA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Sep 2021 22:03:00 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:29622 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238820AbhIWCC7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Sep 2021 22:02:59 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210923020127epoutp02131748f23f647ed39fdc95306371b16b~nUQiPcRJ60996809968epoutp02j
-        for <linux-pm@vger.kernel.org>; Thu, 23 Sep 2021 02:01:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210923020127epoutp02131748f23f647ed39fdc95306371b16b~nUQiPcRJ60996809968epoutp02j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1632362487;
-        bh=htrpPC8RyjK4PpLp5m+xJVpuwzY4lLsGwaLErTEO478=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Gh767eFbUpPprUSDkEi6RPUUj1/G+ngui9k50LURVnamV2UuoW60Q14NrDTaktJBh
-         5gIXTp2YnhNUgjbV24kafpg1wB7nSYEbrQOrjP0R+JoEtT30YXvLy6JTGNWVBUmppq
-         DkVQfV+Ct+YE5wPwOUFICppV69jafHlck4w0nqfQ=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210923020126epcas1p1d74005ffae2176b488fc05c3f51e560b~nUQhRAeEj1706017060epcas1p1N;
-        Thu, 23 Sep 2021 02:01:26 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.237]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4HFJL43cXJz4x9Q0; Thu, 23 Sep
-        2021 02:01:16 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        47.D2.62504.AEFDB416; Thu, 23 Sep 2021 11:01:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20210923020112epcas1p3552159d3e948679fc1f2ceaec1a3ab75~nUQUx7GL00794907949epcas1p3b;
-        Thu, 23 Sep 2021 02:01:12 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210923020112epsmtrp11e09141904c2fe342f713f0202762a7c~nUQUxIN1E2429924299epsmtrp1Q;
-        Thu, 23 Sep 2021 02:01:12 +0000 (GMT)
-X-AuditID: b6c32a38-79bff7000002f428-26-614bdfeace90
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        42.D6.08750.8EFDB416; Thu, 23 Sep 2021 11:01:12 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210923020112epsmtip26d1b8ad9375c4306ba47a5fe14a2a640~nUQUi184h1897118971epsmtip2_;
-        Thu, 23 Sep 2021 02:01:12 +0000 (GMT)
-Subject: Re: [PATCH v2 3/3] ARM: dts: exynos: align PPMU event node names
- with dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <a7a4e1d3-77a7-a48e-4cbf-36cb06435e9c@samsung.com>
-Date:   Thu, 23 Sep 2021 11:22:20 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S239754AbhIWIDu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Sep 2021 04:03:50 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:49480 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233651AbhIWIDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 04:03:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1632384105; x=1663920105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WYny+JtM14LGY8ybiycqCdBduZdzBrvRWNVNMawq9uo=;
+  b=N13o7zjOJ0LGMSi+CWTue1/2WoGKzA08/Wg8LOCWMnNN+LNDsokdb8XR
+   IF28skOd7JDb3TVpkz3PZg52lvYLqk98TTUU/D9/gVPRUkhSYdNQNaZHL
+   ZkSDEybmw4UVQbIemydiIU5ssM2/KYByowqqUcmHa66iA4e+PK7cCnZ1A
+   grahQ8+0WwXzVmJV2J1T/r2jItI1GIF9PVj+RaskRgf6Syc1mOpXK9Es5
+   92HJzVHGbGfcudlR1BNx6EWU0udWkai8E2HdKUXyZu/OMdvmt83a59/fA
+   C3bUmqLc+QCfmwX+PlaLeWxKbufUTK2wGBcILtN0HSvxFW+XJuKBSARvr
+   g==;
+IronPort-SDR: 8TQx98vnj7J6asqOL3DMtxQAVE6uI+QpIf/19c+/I5MxgRCG0Sd+QDGwV7jPbMaK+704azDPP8
+ uboc08sNjV05bqX72tFSVNUTIy3LycPf6HQJ3xGroq447wJWMfBdM5Tnq0FY2+YRUWy4l9uoKR
+ Yb9lJvTdeFdkWlyI3bAyDv8Yznji4nGq698fNOsV4j0+Bo8/wKojZUARNAXyJYgASyTjgpu77M
+ Nibn/AuWuZpqkk9G12g40lrnbYiyJKM25bdKBlSAGe4VYP3O47Tw38kcTs1d2gm8NNqGFDP+jr
+ rZ7ffdvJkdd5rjVyWBKBtKlr
+X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
+   d="scan'208";a="137634402"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Sep 2021 01:01:07 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 23 Sep 2021 01:01:07 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Thu, 23 Sep 2021 01:01:07 -0700
+Date:   Thu, 23 Sep 2021 10:02:36 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <andrew@lunn.ch>, <f.fainelli@gmail.com>,
+        <alexandre.belloni@bootlin.com>, <vladimir.oltean@nxp.com>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH net-next 10/12] net: lan966x: add port module support
+Message-ID: <20210923080236.mqnb7shs2x6rzmh2@soft-dev3-1.localhost>
+References: <20210920095218.1108151-1-horatiu.vultur@microchip.com>
+ <20210920095218.1108151-11-horatiu.vultur@microchip.com>
+ <YUiSkpRvvL0fvija@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20210920071753.38560-3-krzysztof.kozlowski@canonical.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEJsWRmVeSWpSXmKPExsWy7bCmge6r+96JBu/WS1lsnLGe1WL+kXOs
-        Fhvf/mCyONv0ht1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbe43biCzaJ17xF2i/anL5kd
-        eDxmNfSyeWxa1cnmsXlJvUffllWMHp83yQWwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5ua
-        GRjqGlpamCsp5CXmptoqufgE6Lpl5gCdp6RQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUot
-        SMkpMC3QK07MLS7NS9fLSy2xMjQwMDIFKkzIzmje0cVWsF2w4sSex8wNjHt5uxg5OCQETCTm
-        /+TqYuTiEBLYwShx8ccfJgjnE6PE74P/WSGcz4wS91+uZexi5ATrmHZlMiNEYhejxKzz09kh
-        nPeMEvtaWplAqoQFIiU+zdkJlhARuMYkcWTBSbDBzAKTGCWO/F7OBlLFJqAlsf/FDTCbX0BR
-        4uqPx2A7eAXsJNqP3gSLswioSpz/MZEFxBYVCJM4ua0FqkZQ4uTMJ2BxTgF3ibkTH7KD2MwC
-        4hK3nsxngrDlJba/ncMMslhC4AiHxPx5n9ghnnCR2Lf1C5QtLPHq+BYoW0riZX8blF0tsfLk
-        ETaI5g5GiS37L7BCJIwl9i+dzAQKP2YBTYn1u/QhwooSO3/PZYRYzCfx7msPKySIeSU62oQg
-        SpQlLj+4ywRhS0osbu9km8CoNAvJO7OQvDALyQuzEJYtYGRZxSiWWlCcm55abFhgAo/v5Pzc
-        TYzgxKtlsYNx7tsPeocYmTgYDzFKcDArifB+vuGVKMSbklhZlVqUH19UmpNafIjRFBjAE5ml
-        RJPzgak/ryTe0MTSwMTMyNjEwtDMUEmc99hry0QhgfTEktTs1NSC1CKYPiYOTqkGJuc+iyup
-        v9u7f3cZ7GX5ycu3yP9R9BduvgzhQmVB+ynXl/4+MLlN8O+0V3YKvolJlvM1ZkeeUc9WPzHV
-        8rZFoHfJTskZxzUN1rkrKehP+/ImfqPsLvGm26Xilzomyfzm8mKQaJz88uCFObJnTwnUSu9e
-        vXtvbTrz3uuhMcu+VO7ym++bKXP/Q1nCqlch/TEiyk3tl287F1+q+SyqmR2udUlRt/hCxYvg
-        4pevivxP35Q/cktinhZfmYbLl7fcBW17NG1KJl7ZGqzxau9Ni5VBzBEsBu8O/li7ZcKxTbuW
-        Zsuym/7Ytf6aQtuXgk3ck8Kjn+smLZtf/mmP78cfMjPOyTwz/VXMJCC4oEuT+7nTayWW4oxE
-        Qy3mouJEABd8waJFBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsWy7bCSvO6L+96JBtOeqVhsnLGe1WL+kXOs
-        Fhvf/mCyONv0ht1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbe43biCzaJ17xF2i/anL5kd
-        eDxmNfSyeWxa1cnmsXlJvUffllWMHp83yQWwRnHZpKTmZJalFunbJXBlNO/oYivYLlhxYs9j
-        5gbGvbxdjJwcEgImEtOuTGbsYuTiEBLYwShxfdM6VoiEpMS0i0eZuxg5gGxhicOHiyFq3jJK
-        XGx9wQhSIywQKbHkyCU2kISIwDUmiZ4ta5hBEswCUxglNl3XgOi4zigxb8dsdpAEm4CWxP4X
-        N9hAbH4BRYmrPx6DTeIVsJNoP3oTLM4ioCpx/sdEFhBbVCBMYueSx0wQNYISJ2c+AYtzCrhL
-        zJ34kB1imbrEn3mXoBaLS9x6Mp8JwpaX2P52DvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuK
-        c9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxgiNQS2sH455VH/QOMTJxMB5ilOBgVhLh/XzDK1GI
-        NyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGJnmei4ejpN9d
-        athbamKoKP/ELVGBf3Kkhh9/cKzmzMYlNlF2EfG3w46kqkupd7x9wnqk1/Ro2CvprDePWmpO
-        HeKeK2v0vUZspshlw7iFydkbD7PvL3nmzNpsc6ZVvn1r5dpOH6NNh9nan5/a7e8w4ebk0qYy
-        7wvn3N+7bDFev9+j/+ZvPeuvl26J+H79tSrTsGr+xQBeqykRZqsf67g/e+LgPyNFJ6UhSU0+
-        +HX4r59SU0y5Fi3aVfycIe3kqvq7mza2rYti/1c4Z3Vw/u6GfWtarz/dPf/DnAMMeT8UTS58
-        XN54LHf9c+71JtHv1s+/cyCuj+lXlfcUQVGT55anD+2Tut/bF3/ilcWR72d3rFdiKc5INNRi
-        LipOBABygoQfLwMAAA==
-X-CMS-MailID: 20210923020112epcas1p3552159d3e948679fc1f2ceaec1a3ab75
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210920071811epcas1p1729f8a9c04531be71e305cebda3b84bf
-References: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com>
-        <CGME20210920071811epcas1p1729f8a9c04531be71e305cebda3b84bf@epcas1p1.samsung.com>
-        <20210920071753.38560-3-krzysztof.kozlowski@canonical.com>
+Content-Disposition: inline
+In-Reply-To: <YUiSkpRvvL0fvija@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+The 09/20/2021 14:54, Russell King (Oracle) wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 
-On 9/20/21 4:17 PM, Krzysztof Kozlowski wrote:
-> Use hyphen instead of underscore and align the PPMU event node name with
-> dtschema.  The event-name property must match the node name, by the
-> design of devfreq events and PPMU driver.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  arch/arm/boot/dts/exynos5420.dtsi | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-> index e23e8ffb093f..b2f30bea96ce 100644
-> --- a/arch/arm/boot/dts/exynos5420.dtsi
-> +++ b/arch/arm/boot/dts/exynos5420.dtsi
-> @@ -302,8 +302,8 @@ ppmu_dmc0_0: ppmu@10d00000 {
->  			clocks = <&clock CLK_PCLK_PPMU_DREX0_0>;
->  			clock-names = "ppmu";
->  			events {
-> -				ppmu_event3_dmc0_0: ppmu-event3-dmc0_0 {
-> -					event-name = "ppmu-event3-dmc0_0";
-> +				ppmu_event3_dmc0_0: ppmu-event3-dmc0-0 {
-> +					event-name = "ppmu-event3-dmc0-0";
->  				};
->  			};
->  		};
-> @@ -314,8 +314,8 @@ ppmu_dmc0_1: ppmu@10d10000 {
->  			clocks = <&clock CLK_PCLK_PPMU_DREX0_1>;
->  			clock-names = "ppmu";
->  			events {
-> -				ppmu_event3_dmc0_1: ppmu-event3-dmc0_1 {
-> -					event-name = "ppmu-event3-dmc0_1";
-> +				ppmu_event3_dmc0_1: ppmu-event3-dmc0-1 {
-> +					event-name = "ppmu-event3-dmc0-1";
->  				};
->  			};
->  		};
-> @@ -326,8 +326,8 @@ ppmu_dmc1_0: ppmu@10d60000 {
->  			clocks = <&clock CLK_PCLK_PPMU_DREX1_0>;
->  			clock-names = "ppmu";
->  			events {
-> -				ppmu_event3_dmc1_0: ppmu-event3-dmc1_0 {
-> -					event-name = "ppmu-event3-dmc1_0";
-> +				ppmu_event3_dmc1_0: ppmu-event3-dmc1-0 {
-> +					event-name = "ppmu-event3-dmc1-0";
->  				};
->  			};
->  		};
-> @@ -338,8 +338,8 @@ ppmu_dmc1_1: ppmu@10d70000 {
->  			clocks = <&clock CLK_PCLK_PPMU_DREX1_1>;
->  			clock-names = "ppmu";
->  			events {
-> -				ppmu_event3_dmc1_1: ppmu-event3-dmc1_1 {
-> -					event-name = "ppmu-event3-dmc1_1";
-> +				ppmu_event3_dmc1_1: ppmu-event3-dmc1-1 {
-> +					event-name = "ppmu-event3-dmc1-1";
->  				};
->  			};
->  		};
-> 
+Hi Russell,
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+> 
+> On Mon, Sep 20, 2021 at 11:52:16AM +0200, Horatiu Vultur wrote:
+> > +static void lan966x_cleanup_ports(struct lan966x *lan966x)
+> > +{
+> > +     struct lan966x_port *port;
+> > +     int portno;
+> > +
+> > +     for (portno = 0; portno < lan966x->num_phys_ports; portno++) {
+> > +             port = lan966x->ports[portno];
+> > +             if (!port)
+> > +                     continue;
+> > +
+> > +             if (port->phylink) {
+> > +                     rtnl_lock();
+> > +                     lan966x_port_stop(port->dev);
+> > +                     rtnl_unlock();
+> > +                     port->phylink = NULL;
+> 
+> This leaks the phylink structure. You need to call phylink_destroy().
+> 
+> >  static int lan966x_probe_port(struct lan966x *lan966x, u8 port,
+> >                             phy_interface_t phy_mode)
+> >  {
+> >       struct lan966x_port *lan966x_port;
+> > +     struct phylink *phylink;
+> > +     struct net_device *dev;
+> > +     int err;
+> >
+> >       if (port >= lan966x->num_phys_ports)
+> >               return -EINVAL;
+> >
+> > -     lan966x_port = devm_kzalloc(lan966x->dev, sizeof(*lan966x_port),
+> > -                                 GFP_KERNEL);
+> > +     dev = devm_alloc_etherdev_mqs(lan966x->dev,
+> > +                                   sizeof(struct lan966x_port), 8, 1);
+> > +     if (!dev)
+> > +             return -ENOMEM;
+> >
+> > +     SET_NETDEV_DEV(dev, lan966x->dev);
+> > +     lan966x_port = netdev_priv(dev);
+> > +     lan966x_port->dev = dev;
+> >       lan966x_port->lan966x = lan966x;
+> >       lan966x_port->chip_port = port;
+> >       lan966x_port->pvid = PORT_PVID;
+> >       lan966x->ports[port] = lan966x_port;
+> >
+> > +     dev->max_mtu = ETH_MAX_MTU;
+> > +
+> > +     dev->netdev_ops = &lan966x_port_netdev_ops;
+> > +     dev->needed_headroom = IFH_LEN * sizeof(u32);
+> > +
+> > +     err = register_netdev(dev);
+> > +     if (err) {
+> > +             dev_err(lan966x->dev, "register_netdev failed\n");
+> > +             goto err_register_netdev;
+> > +     }
+> 
+> register_netdev() publishes the network device.
+> 
+> > +
+> > +     lan966x_port->phylink_config.dev = &lan966x_port->dev->dev;
+> > +     lan966x_port->phylink_config.type = PHYLINK_NETDEV;
+> > +     lan966x_port->phylink_config.pcs_poll = true;
+> > +
+> > +     phylink = phylink_create(&lan966x_port->phylink_config,
+> > +                              lan966x_port->fwnode,
+> > +                              phy_mode,
+> > +                              &lan966x_phylink_mac_ops);
+> 
+> phylink_create() should always be called _prior_ to the network device
+> being published. In any case...
+> 
+> > +     if (IS_ERR(phylink))
+> > +             return PTR_ERR(phylink);
+> 
+> If this fails, this function returns an error, but leaves the network
+> device published - which is a bug in itself.
+
+If this fails it should eventually call lan966x_cleaup_ports where the
+net_device will be unregister. But first I will need to make
+phylink_create() be called prior the network device.
+
+> 
+> > +static void lan966x_phylink_mac_link_down(struct phylink_config *config,
+> > +                                       unsigned int mode,
+> > +                                       phy_interface_t interface)
+> > +{
+> 
+> Hmm? Shouldn't this do something?
+
+I don't think I need to do anything here. The current setup is that
+there is a PHY in front of the MAC.
+So when the link partner goes down, the PHY will go down and the MAC
+will still be up. Is this a problem?
+When we force the port to be set down, then in the function
+lan966x_port_stop we actually shutdown the port.
+
+> 
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+/Horatiu
