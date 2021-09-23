@@ -2,172 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24564159B4
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 10:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB113415EB7
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 14:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbhIWIDu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Sep 2021 04:03:50 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:49480 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbhIWIDQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 04:03:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1632384105; x=1663920105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WYny+JtM14LGY8ybiycqCdBduZdzBrvRWNVNMawq9uo=;
-  b=N13o7zjOJ0LGMSi+CWTue1/2WoGKzA08/Wg8LOCWMnNN+LNDsokdb8XR
-   IF28skOd7JDb3TVpkz3PZg52lvYLqk98TTUU/D9/gVPRUkhSYdNQNaZHL
-   ZkSDEybmw4UVQbIemydiIU5ssM2/KYByowqqUcmHa66iA4e+PK7cCnZ1A
-   grahQ8+0WwXzVmJV2J1T/r2jItI1GIF9PVj+RaskRgf6Syc1mOpXK9Es5
-   92HJzVHGbGfcudlR1BNx6EWU0udWkai8E2HdKUXyZu/OMdvmt83a59/fA
-   C3bUmqLc+QCfmwX+PlaLeWxKbufUTK2wGBcILtN0HSvxFW+XJuKBSARvr
-   g==;
-IronPort-SDR: 8TQx98vnj7J6asqOL3DMtxQAVE6uI+QpIf/19c+/I5MxgRCG0Sd+QDGwV7jPbMaK+704azDPP8
- uboc08sNjV05bqX72tFSVNUTIy3LycPf6HQJ3xGroq447wJWMfBdM5Tnq0FY2+YRUWy4l9uoKR
- Yb9lJvTdeFdkWlyI3bAyDv8Yznji4nGq698fNOsV4j0+Bo8/wKojZUARNAXyJYgASyTjgpu77M
- Nibn/AuWuZpqkk9G12g40lrnbYiyJKM25bdKBlSAGe4VYP3O47Tw38kcTs1d2gm8NNqGFDP+jr
- rZ7ffdvJkdd5rjVyWBKBtKlr
-X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
-   d="scan'208";a="137634402"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Sep 2021 01:01:07 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 23 Sep 2021 01:01:07 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Thu, 23 Sep 2021 01:01:07 -0700
-Date:   Thu, 23 Sep 2021 10:02:36 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <andrew@lunn.ch>, <f.fainelli@gmail.com>,
-        <alexandre.belloni@bootlin.com>, <vladimir.oltean@nxp.com>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [RFC PATCH net-next 10/12] net: lan966x: add port module support
-Message-ID: <20210923080236.mqnb7shs2x6rzmh2@soft-dev3-1.localhost>
+        id S241103AbhIWMry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Sep 2021 08:47:54 -0400
+Received: from mail-oo1-f46.google.com ([209.85.161.46]:34662 "EHLO
+        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241116AbhIWMqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 08:46:13 -0400
+Received: by mail-oo1-f46.google.com with SMTP id g4-20020a4ab044000000b002900bf3b03fso2105933oon.1;
+        Thu, 23 Sep 2021 05:44:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yyCfzvwg7rIpGSlFRFU708w/wushQ4Qj9uJQW9oaWkM=;
+        b=EwVXEkrieMOWDaRb19z88majvozBRwUJxYXYnNq+SAtXe8GFCPUbiBX3Kqm+dkB6vX
+         NO42j2n1DQKhWjT45xwLWi6bRJthSkb7jGQocwSSwK75Y1L4R1/rVr++yV7hxujXKKKw
+         e4p/Gfy/1sJZdicNLQPQcBF60GPxUxaQtUHQSSv3/oMPsC+FqhnKdLR++lNbP3XiQMeD
+         GiwpOlbtBgEJGjbNaMzBLcrwGSS1lnmqqI6xsq5lmepwG0++etsbengVoOen37TeVPAe
+         W4LNJnjEw8H8tt0tdbrqdoirkVVRaoQndd/e5Z3fdUN/sFw/IEzV3XFQsQRIVkUsj49M
+         9nPg==
+X-Gm-Message-State: AOAM533aZvYZHtuQyYmI0RNfWaw8K9aqi7sIUkZcgbCR6N2HrlpcMdPy
+        RJ3IV0Qjr7iFE2q0zS8+ag==
+X-Google-Smtp-Source: ABdhPJzXu7gb0sE2NjJ46JZwTbWeh+Ijwxmw3FPbEw8Q6iZMZJ0aBglmL1tLfscRCdYSN9AElFVH5g==
+X-Received: by 2002:a4a:3ecd:: with SMTP id t196mr3527500oot.69.1632401081681;
+        Thu, 23 Sep 2021 05:44:41 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id ay42sm1237921oib.22.2021.09.23.05.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 05:44:41 -0700 (PDT)
+Received: (nullmailer pid 2822288 invoked by uid 1000);
+        Thu, 23 Sep 2021 12:44:40 -0000
+Date:   Thu, 23 Sep 2021 07:44:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        linux@armlinux.org.uk, f.fainelli@gmail.com,
+        alexandre.belloni@bootlin.com, vladimir.oltean@nxp.com,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH net-next 03/12] phy: Add lan966x ethernet serdes PHY
+ driver
+Message-ID: <YUx2uGeXcMFojrXk@robh.at.kernel.org>
 References: <20210920095218.1108151-1-horatiu.vultur@microchip.com>
- <20210920095218.1108151-11-horatiu.vultur@microchip.com>
- <YUiSkpRvvL0fvija@shell.armlinux.org.uk>
+ <20210920095218.1108151-4-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YUiSkpRvvL0fvija@shell.armlinux.org.uk>
+In-Reply-To: <20210920095218.1108151-4-horatiu.vultur@microchip.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 09/20/2021 14:54, Russell King (Oracle) wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Mon, Sep 20, 2021 at 11:52:09AM +0200, Horatiu Vultur wrote:
+> Add the Microchip lan966x ethernet serdes PHY driver for 1G interfaces
+> available in the lan966x SoC.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  drivers/phy/microchip/Kconfig               |   8 +
+>  drivers/phy/microchip/Makefile              |   1 +
+>  drivers/phy/microchip/lan966x_serdes.c      | 525 ++++++++++++++++++++
+>  drivers/phy/microchip/lan966x_serdes_regs.h | 482 ++++++++++++++++++
+>  include/dt-bindings/phy/lan966x_serdes.h    |  14 +
 
-Hi Russell,
+This belongs with the binding change. 
 
-> 
-> On Mon, Sep 20, 2021 at 11:52:16AM +0200, Horatiu Vultur wrote:
-> > +static void lan966x_cleanup_ports(struct lan966x *lan966x)
-> > +{
-> > +     struct lan966x_port *port;
-> > +     int portno;
-> > +
-> > +     for (portno = 0; portno < lan966x->num_phys_ports; portno++) {
-> > +             port = lan966x->ports[portno];
-> > +             if (!port)
-> > +                     continue;
-> > +
-> > +             if (port->phylink) {
-> > +                     rtnl_lock();
-> > +                     lan966x_port_stop(port->dev);
-> > +                     rtnl_unlock();
-> > +                     port->phylink = NULL;
-> 
-> This leaks the phylink structure. You need to call phylink_destroy().
-> 
-> >  static int lan966x_probe_port(struct lan966x *lan966x, u8 port,
-> >                             phy_interface_t phy_mode)
-> >  {
-> >       struct lan966x_port *lan966x_port;
-> > +     struct phylink *phylink;
-> > +     struct net_device *dev;
-> > +     int err;
-> >
-> >       if (port >= lan966x->num_phys_ports)
-> >               return -EINVAL;
-> >
-> > -     lan966x_port = devm_kzalloc(lan966x->dev, sizeof(*lan966x_port),
-> > -                                 GFP_KERNEL);
-> > +     dev = devm_alloc_etherdev_mqs(lan966x->dev,
-> > +                                   sizeof(struct lan966x_port), 8, 1);
-> > +     if (!dev)
-> > +             return -ENOMEM;
-> >
-> > +     SET_NETDEV_DEV(dev, lan966x->dev);
-> > +     lan966x_port = netdev_priv(dev);
-> > +     lan966x_port->dev = dev;
-> >       lan966x_port->lan966x = lan966x;
-> >       lan966x_port->chip_port = port;
-> >       lan966x_port->pvid = PORT_PVID;
-> >       lan966x->ports[port] = lan966x_port;
-> >
-> > +     dev->max_mtu = ETH_MAX_MTU;
-> > +
-> > +     dev->netdev_ops = &lan966x_port_netdev_ops;
-> > +     dev->needed_headroom = IFH_LEN * sizeof(u32);
-> > +
-> > +     err = register_netdev(dev);
-> > +     if (err) {
-> > +             dev_err(lan966x->dev, "register_netdev failed\n");
-> > +             goto err_register_netdev;
-> > +     }
-> 
-> register_netdev() publishes the network device.
-> 
-> > +
-> > +     lan966x_port->phylink_config.dev = &lan966x_port->dev->dev;
-> > +     lan966x_port->phylink_config.type = PHYLINK_NETDEV;
-> > +     lan966x_port->phylink_config.pcs_poll = true;
-> > +
-> > +     phylink = phylink_create(&lan966x_port->phylink_config,
-> > +                              lan966x_port->fwnode,
-> > +                              phy_mode,
-> > +                              &lan966x_phylink_mac_ops);
-> 
-> phylink_create() should always be called _prior_ to the network device
-> being published. In any case...
-> 
-> > +     if (IS_ERR(phylink))
-> > +             return PTR_ERR(phylink);
-> 
-> If this fails, this function returns an error, but leaves the network
-> device published - which is a bug in itself.
-
-If this fails it should eventually call lan966x_cleaup_ports where the
-net_device will be unregister. But first I will need to make
-phylink_create() be called prior the network device.
-
-> 
-> > +static void lan966x_phylink_mac_link_down(struct phylink_config *config,
-> > +                                       unsigned int mode,
-> > +                                       phy_interface_t interface)
-> > +{
-> 
-> Hmm? Shouldn't this do something?
-
-I don't think I need to do anything here. The current setup is that
-there is a PHY in front of the MAC.
-So when the link partner goes down, the PHY will go down and the MAC
-will still be up. Is this a problem?
-When we force the port to be set down, then in the function
-lan966x_port_stop we actually shutdown the port.
-
-> 
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
-
--- 
-/Horatiu
+>  5 files changed, 1030 insertions(+)
+>  create mode 100644 drivers/phy/microchip/lan966x_serdes.c
+>  create mode 100644 drivers/phy/microchip/lan966x_serdes_regs.h
+>  create mode 100644 include/dt-bindings/phy/lan966x_serdes.h
