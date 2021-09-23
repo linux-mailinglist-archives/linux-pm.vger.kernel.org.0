@@ -2,88 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F704165F2
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 21:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7CA416666
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Sep 2021 22:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242842AbhIWTap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Sep 2021 15:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S242982AbhIWUNP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Sep 2021 16:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242796AbhIWTao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 15:30:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAC7C061574;
-        Thu, 23 Sep 2021 12:29:12 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id me5-20020a17090b17c500b0019af76b7bb4so7682000pjb.2;
-        Thu, 23 Sep 2021 12:29:12 -0700 (PDT)
+        with ESMTP id S229932AbhIWUNO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Sep 2021 16:13:14 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CCFC061574
+        for <linux-pm@vger.kernel.org>; Thu, 23 Sep 2021 13:11:42 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id x191so530725pgd.9
+        for <linux-pm@vger.kernel.org>; Thu, 23 Sep 2021 13:11:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=K6wi+PDo5klJHw0C07TYcvmIShMs9WeafBIfQi4IbTI=;
-        b=diooHl3J32d5dKqleEMHH5OoZsDHa8H0WdR/QbIs2hkuzrIX2GhYOEFIIoPph4jH1Q
-         zT+YUe/QyJLOgiQrRGGYLhuzCU5KrF3PloUgs1Cyf32gEpxRY41AEIljPAXfkzKWF1mo
-         ogXvIqcb2wrY/es95vnsuUSl8ka59aRiDwvLLMmxGQ+OxznhGRdbpbftxs+bWwrYsaRE
-         hXXfNTMuLC1IjA8pxyGQuKjT8qiac0eF+GKXtIv8gi0W3FAYVH6k38XAJTcPL+SnggoI
-         A1B6omVja5nj33FMvnuGHLfGtrfG71qJM9006o3XFOTaMMGtf4MjONVj2+4pA5ec2uxr
-         apoA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=V/Lwc1KdOvR1pXOmtO4TbLc3k9RafiBavX/dO8eyQgM=;
+        b=tAW4LLIdV9g2bxVuz3nvqX6uSqWzWIhFDKobdCgrBTAG5YF1TpMNr58zySPaXsb+en
+         8qmPg5WuSreqXL5YxE4CenHahlU8w2hK2h1Sugl0Mb3qQrWPuP0VZ3gY5Bl/8kJDqQKI
+         1lHT/q5TmneirVua7Sh6ELXI6WKRBDiJXwoU+8iy+FhBfMzqRuAhL+PtR9/iddOrZPAY
+         COAh/6m4hPDtpa4FMT888ussBKeNrkY1Vg18o7ISYPXN28FfG4esyZjW6ENc62rBvS7L
+         JDPxTEkyrqqD0TW8GTVhduo3DIzS71IRKLi2NmMp7mXJX6IVU3BBU8XClL3w7Y11tjaW
+         K6pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=K6wi+PDo5klJHw0C07TYcvmIShMs9WeafBIfQi4IbTI=;
-        b=zm3om1WIYYYLsHJHOpP1KfNDDgUHHX3O0kTBVtK2VBQ1dRAwrdOs7X/WWXer8rkDDg
-         OyzWKHI9UgL+PPh6GGPnMTGLRsPjBb2nPYXYVoYxjNi7UgABOsqUn5pgwPJFUahx62Y1
-         8COfXodeJQb7x6IoY/XnbkGHhST0Pgrhp5tuwk0nseMEx/kpNEECnQlUm6qZvamXJSL1
-         c98GhPTJNVrtbV4kq8HepdXzQkT8jRJbrihjSdvTljHaxqKlrXpRpo4sED0MIIIPwqJr
-         yqBdvLBElmaF6igRqVVoyoJFwFVZLXmssvVii4jOI7SHLglvt83cMBRffVFCF9Tw4Ic7
-         +HiQ==
-X-Gm-Message-State: AOAM532Ub9CXWwPSkZJkUWO2rwhQxWE+YETTKSc+jIhrzNQLuk2IT05F
-        ha3SwpTceIuC9o9aM0t85+e2iYA8ErA=
-X-Google-Smtp-Source: ABdhPJxWhRPq9I/MTUwE3mVMN7DpYM4OEOiy++cfwd/fv3w+Apb1Zc18qS/R/22ndhA2pHpUzBiZFg==
-X-Received: by 2002:a17:902:bd8d:b0:13a:8c8:a2b2 with SMTP id q13-20020a170902bd8d00b0013a08c8a2b2mr5614865pls.89.1632425351980;
-        Thu, 23 Sep 2021 12:29:11 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id n22sm7608344pgc.55.2021.09.23.12.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 12:29:11 -0700 (PDT)
-Subject: Re: [PATCH] PM / Suspend: Avoid soft lockup warning with suspend_test
-To:     linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-References: <20210923185106.501848-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <0b44f2c0-bab6-5e6a-e4fb-d9aa89038675@gmail.com>
-Date:   Thu, 23 Sep 2021 12:29:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=V/Lwc1KdOvR1pXOmtO4TbLc3k9RafiBavX/dO8eyQgM=;
+        b=cMFmhO0Y4JvusgjnW3FGiHaRLKXfB8XASApDE3XN9FbF7+TRi78kb8jnOB+jXXr31V
+         fMMw6X1I2nHeyaiKvqlUC0s7BfqqiEfD9Iixr72bzCBZxe7kXx9AM6ryagR9dinqK9Pk
+         va3apS36wYd061wnVgk4cAI+Ye+pHW4fuFrDHeWqnR9doEQlWwiXTnz5LArB/CqdfFfL
+         +haExZ60kNJp06UkhaKQOb/yJB2ZNNpOSdCosne5A5Ylk0eu42q9kvz0+xfvOFOuauT7
+         MoUvsC+82bMf0MRdwUzuzIWfbxVHp0FAICvy5UIQQa27vLdNbwYDrtVSzQ5N3iTJ+sKC
+         A/SA==
+X-Gm-Message-State: AOAM53034NKIQoLAxkhfxOhYxFhKu/jM72w+IqHodmq4E5FqD6+RUtkp
+        5Oqh/4IQpmA6UvoDUMNuuGXnug==
+X-Google-Smtp-Source: ABdhPJyqHc2/Fxv+PQrnJXk6bzgmlOCrnuP0stMFz9o/HySR8JZxsa+fXik+oCutjEZq/yhmpzxFXg==
+X-Received: by 2002:a05:6a00:2a2:b0:43d:ea13:9c06 with SMTP id q2-20020a056a0002a200b0043dea139c06mr6146188pfs.37.1632427902328;
+        Thu, 23 Sep 2021 13:11:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c24sm6458679pfd.120.2021.09.23.13.11.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 13:11:42 -0700 (PDT)
+Message-ID: <614cdf7e.1c69fb81.4e068.3704@mx.google.com>
+Date:   Thu, 23 Sep 2021 13:11:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210923185106.501848-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.15-rc2-12-g9fa78c37a2e3
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.15-rc2-12-g9fa78c37a2e3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/23/21 11:51 AM, Florian Fainelli wrote:
-> When testing with a large (>= 22 seconds) pm_test_delay we can see the
-> NMI soft lockup barfing at us because a task has been blocked for too
-> long. This can be reproduced with:
-> 
-> 	echo devices > /sys/power/pm_test
-> 	echo 30 > /sys/module/suspend/parameters/pm_test_delay
-> 
-> Unroll the loop and touch the NMI watchdog every 1s to avoid the lockup
-> warnings.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc2-12-g9f=
+a78c37a2e3)
 
-Looks like I cannot reproduce the NMI soft lockup warnings with 5.10 and
-newer, however I can easily trigger RCU stalls. Let me sleep on it for a
-bit and see what needs fixing in 5.15 and newer. Any feedback welcome.
--- 
-Florian
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+15-rc2-12-g9fa78c37a2e3/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.15-rc2-12-g9fa78c37a2e3
+Git Commit: 9fa78c37a2e340ea8d57b78ae9379a4110a70515
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
