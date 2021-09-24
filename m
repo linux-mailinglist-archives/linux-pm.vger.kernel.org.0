@@ -2,97 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BC5416D40
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 09:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20B4417038
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 12:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244471AbhIXIA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 04:00:56 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24373 "EHLO mga07.intel.com"
+        id S238892AbhIXKXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 06:23:06 -0400
+Received: from comms.puri.sm ([159.203.221.185]:35400 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237965AbhIXIAz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Sep 2021 04:00:55 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10116"; a="287693777"
-X-IronPort-AV: E=Sophos;i="5.85,319,1624345200"; 
-   d="scan'208";a="287693777"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2021 00:59:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,319,1624345200"; 
-   d="scan'208";a="614332697"
-Received: from powerlab.fi.intel.com (HELO powerlab..) ([10.237.71.25])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Sep 2021 00:59:21 -0700
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH] intel_idle: remove a couple of useless variables
-Date:   Fri, 24 Sep 2021 10:59:20 +0300
-Message-Id: <20210924075920.2087149-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
+        id S229436AbhIXKWw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Sep 2021 06:22:52 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id A6EB5E119D;
+        Fri, 24 Sep 2021 03:21:19 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wtAukYPPuay0; Fri, 24 Sep 2021 03:21:18 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     abel.vesa@nxp.com
+Cc:     a.fatoum@pengutronix.de, adrian.hunter@intel.com,
+        aisheng.dong@nxp.com, catalin.marinas@arm.com,
+        cw00.choi@samsung.com, devicetree@vger.kernel.org,
+        djakov@kernel.org, festevam@gmail.com, kernel@pengutronix.de,
+        kyungmin.park@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        myungjoo.ham@samsung.com, robh@kernel.org, s.hauer@pengutronix.de,
+        shawnguo@kernel.org, ulf.hansson@linaro.org, will.deacon@arm.com,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: Re: [RFC 00/19] Add interconnect and devfreq support for i.MX8MQ
+Date:   Fri, 24 Sep 2021 12:20:26 +0200
+Message-Id: <20210924102026.2679952-1-martin.kepplinger@puri.sm>
+In-Reply-To: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
+References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+hi Abel,
 
-This patch is a cleanup and has no functional impact.
+thank you for the update (this is actually v2 of this RFC right?)!
 
-Remove the 'auto_demotion_disable_flags' and 'disable_promotion_to_c1e' global
-variables because we already have them in the global 'icpu' structure. Other
-'icpu' members like 'use_acpi' are not duplicated, and it's better to be
-consistent on this. Consistency improves readability.
+all in all this runs fine on the imx8mq (Librem 5 and devkit) I use. For all
+the pl301 nodes I'm not yet sure what I can actually test / switch frequencies.
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+But I still have one problem: lcdif/mxfb already has the interconnect dram
+DT property and I use the following call to request bandwidth:
+https://source.puri.sm/martin.kepplinger/linux-next/-/commit/d690e4c021293f938eb2253607f92f5a64f15688
+(mainlining this is on our todo list).
+
+With your patchset, I get:
+
+[    0.792960] genirq: Flags mismatch irq 30. 00000004 (mxsfb-drm) vs. 00000004 (mxsfb-drm)
+[    0.801143] mxsfb 30320000.lcd-controller: Failed to install IRQ handler
+[    0.808058] mxsfb: probe of 30320000.lcd-controller failed with error -16
+
+so the main devfreq user (mxsfb) is not there :) why?
+
+and when I remove the interconnect property from the lcdif DT node, mxsfb
+probes again, but of course it doesn't lower dram freq as needed.
+
+Do I do the icc calls wrong in mxsfb despite it working without your
+patchset, or may there be something wrong on your side that breaks
+the mxsfb IRQ?
+
+again thanks a lot for working on this! I'm always happy to test.
+
+                          martin
+
+
+
 ---
- drivers/idle/intel_idle.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ .../boot/dts/freescale/imx8mq-librem5.dtsi    | 20 -------------------
+ 1 file changed, 20 deletions(-)
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 70c2237a7261..eb28c3059351 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -67,9 +67,6 @@ static unsigned int disabled_states_mask;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+index 6fac6676f412..8496a90f23bf 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+@@ -381,26 +381,6 @@ &A53_3 {
+ 	cpu-supply = <&buck2_reg>;
+ };
  
- static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
- 
--static unsigned long auto_demotion_disable_flags;
--static bool disable_promotion_to_c1e;
+-&ddrc {
+-	operating-points-v2 = <&ddrc_opp_table>;
 -
- struct idle_cpu {
- 	struct cpuidle_state *state_table;
- 
-@@ -1644,7 +1641,7 @@ static void auto_demotion_disable(void)
- 	unsigned long long msr_bits;
- 
- 	rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
--	msr_bits &= ~auto_demotion_disable_flags;
-+	msr_bits &= ~icpu->auto_demotion_disable_flags;
- 	wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
- }
- 
-@@ -1676,10 +1673,10 @@ static int intel_idle_cpu_init(unsigned int cpu)
- 		return -EIO;
- 	}
- 
--	if (auto_demotion_disable_flags)
-+	if (icpu->auto_demotion_disable_flags)
- 		auto_demotion_disable();
- 
--	if (disable_promotion_to_c1e)
-+	if (icpu->disable_promotion_to_c1e)
- 		c1e_promotion_disable();
- 
- 	return 0;
-@@ -1757,8 +1754,6 @@ static int __init intel_idle_init(void)
- 	icpu = (const struct idle_cpu *)id->driver_data;
- 	if (icpu) {
- 		cpuidle_state_table = icpu->state_table;
--		auto_demotion_disable_flags = icpu->auto_demotion_disable_flags;
--		disable_promotion_to_c1e = icpu->disable_promotion_to_c1e;
- 		if (icpu->use_acpi || force_use_acpi)
- 			intel_idle_acpi_cst_extract();
- 	} else if (!intel_idle_acpi_cst_extract()) {
+-	ddrc_opp_table: ddrc-opp-table {
+-		compatible = "operating-points-v2";
+-
+-		opp-25M {
+-			opp-hz = /bits/ 64 <25000000>;
+-		};
+-
+-		opp-100M {
+-			opp-hz = /bits/ 64 <100000000>;
+-		};
+-
+-		opp-800M {
+-			opp-hz = /bits/ 64 <800000000>;
+-		};
+-	};
+-};
+-
+ &dphy {
+ 	status = "okay";
+ };
 -- 
-2.31.1
+2.30.2
 
