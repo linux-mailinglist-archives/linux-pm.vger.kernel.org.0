@@ -2,113 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9554171C1
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 14:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352474174B8
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 15:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245412AbhIXM0V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 08:26:21 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57354
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245444AbhIXM0U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 08:26:20 -0400
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1F98340268
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 12:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632486287;
-        bh=MSnDqZAnVcwcTc3AHKewpUeqeJxfFM7DuBuKMJowR+s=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=D4tguKU5p91J2sbp4k/6hCF9kZztTOz5/WaEejygGLFkojwXmzIftHblUoesLUWPR
-         bkUZWMQg52JR5hWrBFI8j9lSF0DRNdRe3JfyVSsWL7p7kZB6ndGf+Hik19Opsbc721
-         qtjLo3/MZBnmLyeGYqocFORPqAt6j9KSpymFRBFQA4/C34sDBgEFpRyi9a872ULoDU
-         47aPq3OcClictQGspilOw9Ck/3krHKuXyTnSAN6yeWF5amINNtxKNbH5DxzjFVpyZU
-         zyY4oGd31CQDHW4bR/vxl3A5vEJlHUUttmBOfdibdSTXhTCrs7WM7KF9ByoyBZp7ky
-         ZKOAtGWjRfFIg==
-Received: by mail-wr1-f69.google.com with SMTP id s14-20020adff80e000000b001601b124f50so7935156wrp.5
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 05:24:47 -0700 (PDT)
+        id S1343927AbhIXNKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 09:10:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29759 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346752AbhIXNIC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 09:08:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632488788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DzNoSJfz8UWlBA9GOEva3/uiwEVLsfbaUygslX1PjHk=;
+        b=VsGtynVolvQhBfPN7y65ARzdzkZeNPLt/e53XRqJAwiaT9Evr/LBSFDXNx8eUHbD51rhFj
+        KUelCxuISexYQAxoRpsxeruamNNmPbBxP0DA954jsNjTHKykES22k5qmHjVa5XzP77ZHbw
+        YVsOUxiARC0agxI3uSwf4OaVh4+QscE=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-340-10bhD7JOO1Cwj9-J-Tg9wg-1; Fri, 24 Sep 2021 09:06:26 -0400
+X-MC-Unique: 10bhD7JOO1Cwj9-J-Tg9wg-1
+Received: by mail-ed1-f70.google.com with SMTP id n5-20020a05640206c500b003cf53f7cef2so10162625edy.12
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 06:06:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MSnDqZAnVcwcTc3AHKewpUeqeJxfFM7DuBuKMJowR+s=;
-        b=gOjTN1vX9pRp5OrRYitj/syYMexjNxSkQQZif78y5GxdXLsLOqcn5nqnQ9f/RGY5cL
-         2HsOBQmuJKL4CvEUCVpOT2CzHbkpUp1XozWDOCBy2Lt4J3sje220UR6aAQm91xc06+gG
-         zN30REHpBh3rm3mNGT+CAAjd90Kq+I/xGEavBTSds7QelyzjXCInwIyiXsWHCmxgqiks
-         PXAG919ZrDzvsBycIVSuuK8sf2f6gNedxlbdlCJcc84eI+s4PHOvF0i2u8uvRosXYhW2
-         IaFQyI7WR94K6jKgSPMNcqd61fMPYL6Rvsdi0suWeT3g2v/mV06lFQNnHCd4+7LpHUQb
-         VOEg==
-X-Gm-Message-State: AOAM531n2vCvGrPG1L8/K3lGMQmzXhvL6vHfUMCMbbHZMNhaHeU/FvY4
-        KtPtE9m0xptE7Tw8ud0pXGpzPGPBU27Oh/v1nhQsZk5jCRSoOJoe9s5xYKmuF21IFZbfkVTCUV1
-        oEH7gi2U9jjk+NKiepre/OaasllxAftnHB+ja
-X-Received: by 2002:adf:d1eb:: with SMTP id g11mr10955145wrd.31.1632486286849;
-        Fri, 24 Sep 2021 05:24:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxAOjGm4g+OeKFY3HI1DtFoi4p0HEcm9Sz6LIxq1ZeyRYPNibNHr87XSWZMh4Ww7ERtKqE0MQ==
-X-Received: by 2002:adf:d1eb:: with SMTP id g11mr10955133wrd.31.1632486286714;
-        Fri, 24 Sep 2021 05:24:46 -0700 (PDT)
-Received: from localhost.localdomain (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id k18sm7865957wrh.68.2021.09.24.05.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 05:24:46 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DzNoSJfz8UWlBA9GOEva3/uiwEVLsfbaUygslX1PjHk=;
+        b=0J7b6nAKji8TsrY2v+qsnp5SDQbOKIlck6IKGp1GIVmxCnxlOPbiCLQGJ9JDtRBj5M
+         ZSxxYSV+YEBc18Tn69wSt2R/tN52QVh8mMEoM63nAS6wXB+31QpS64y0s45Np/NmOyVn
+         coUIN7t+CDq+x8T8q9AAFadqvLXfxFad3rBK5ep0r3nxtEKMKfOLh+XtiJS7vtS0GzuB
+         Rk/+JPJBfJ7uHxUa1jfelh29cWkN2XBG8JW5rZOY/h+K1feQRUp9+X98hEeHUdDG2jyp
+         NqX8fjaYUXTvdx2lQosMObPc7uojKKeRFBG2wBdGim0gdZqXDpQv3/VPNGk1aytjH4fg
+         SL7w==
+X-Gm-Message-State: AOAM532ekKCkzbig2AdKhyhjZX8guUR66PMHJGkwyKBLDF8Znk3ZLPM5
+        uou2lhsgRJITArJlHuewHmIDe+Rf1iHDe2QV2Y8TQUoKw9B7jW1ydsqGBzitqnGz7Eahhg/n4TR
+        dnsqUNj3k43+kuKYJWeY=
+X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr10652094ejc.188.1632488785548;
+        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzNhVr57TKy2OLV2CObu4gkIwPOKhycrD5Ho86NxP8/1LlBpelW1ktxDmu0qDZjF+7D4sIDTw==
+X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr10652077ejc.188.1632488785367;
+        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id s4sm5064713eja.23.2021.09.24.06.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
+Subject: Re: [PATCH 1/2] MAINTAINERS: power: supply: max17042: add entry with
+ reviewers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Matheus Castello <matheus@castello.eng.br>,
         Sebastian Reichel <sre@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: max17042: extend help/description
-Date:   Fri, 24 Sep 2021 14:24:08 +0200
-Message-Id: <20210924122408.101323-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210924122408.101323-1-krzysztof.kozlowski@canonical.com>
-References: <20210924122408.101323-1-krzysztof.kozlowski@canonical.com>
+References: <20210924115619.52927-1-krzysztof.kozlowski@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <e7983d04-5651-7962-36e0-758d547be761@redhat.com>
+Date:   Fri, 24 Sep 2021 15:06:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210924115619.52927-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reorganize the Kconfig driver description and mention all supported
-models.  This helps when choosing drivers for given system.
+Hi,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/power/supply/Kconfig | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On 9/24/21 1:56 PM, Krzysztof Kozlowski wrote:
+> The Maxim max17042 fuel gauge driver supports several devices used on
+> multiple different boards - both devicetree and ACPI based.  The driver
+> is incomplete and has few known issues.  Fixing these might break other
+> platforms so mention recent contributors who can provide feedback.  This
+> way most of interested parties might help reviewing the patches.
+> 
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 6e4201922f59..ad93b3550d6d 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -381,7 +381,7 @@ config BATTERY_MAX17040
- 	  Driver can be build as a module (max17040_battery).
- 
- config BATTERY_MAX17042
--	tristate "Maxim MAX17042/17047/17050/8997/8966 Fuel Gauge"
-+	tristate "Maxim MAX17042/17047/17050/8997/8966 family Fuel Gauge"
- 	depends on I2C
- 	select REGMAP_I2C
- 	help
-@@ -389,8 +389,11 @@ config BATTERY_MAX17042
- 	  in handheld and portable equipment. The MAX17042 is configured
- 	  to operate with a single lithium cell. MAX8997 and MAX8966 are
- 	  multi-function devices that include fuel gauages that are compatible
--	  with MAX17042. This driver also supports max17047/50 chips which are
--	  improved version of max17042.
-+	  with MAX17042.
-+	  Supported devices: max8966, max8997, max17042, max17047, max17050,
-+	  max17055, max77693, max77849.
-+
-+	  Driver can be build as a module (max17042_battery).
- 
- config BATTERY_MAX1721X
- 	tristate "MAX17211/MAX17215 standalone gas-gauge"
--- 
-2.30.2
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  MAINTAINERS | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 329d3a0a9fdb..da9d5383af04 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11429,6 +11429,16 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.yaml
+>  F:	drivers/iio/proximity/mb1232.c
+>  
+> +MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
+> +R:	Hans de Goede <hdegoede@redhat.com>
+> +R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +R:	Marek Szyprowski <m.szyprowski@samsung.com>
+> +R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> +F:	drivers/power/supply/max17042_battery.c
+> +
+>  MAXIM MAX77650 PMIC MFD DRIVER
+>  M:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>  L:	linux-kernel@vger.kernel.org
+> 
 
