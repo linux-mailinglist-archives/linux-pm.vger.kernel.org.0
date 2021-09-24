@@ -2,137 +2,341 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B0D41711B
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 13:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7603E41714C
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 13:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343582AbhIXLrF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 07:47:05 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:56118
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343584AbhIXLrF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 07:47:05 -0400
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C05993F226
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 11:45:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632483931;
-        bh=Rktmb+c/jmGGJpbEWYmUQWQyyChLN+sZ5YGx4agFeyU=;
-        h=To:References:From:Cc:Subject:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=NRTEA4ywWWGsXNWP4NMGiOwi6Wc92KV3+3Vd1RKb55JSV42MHbhiqvLRHyjjSFTqY
-         gYEKocCR3QPN5qfsMyAnQFY3bDOOnsCWdz3s8/mWhJtzMpbfjmWlSQj/z2AnAW6s49
-         Vm194o/UxmFPyOHovoQT9KU1ers7uBynlWeur4aKxBUkizcrm4wusSIPC/HBaol7px
-         Vc81uMBu6OmOuYY8C63DghgYGBmuU7fb7K39Y/Y3WDjAiQ+tZTL6u1zi43IgWddxGL
-         isIEEpxkLykt8KpzdWQ7TYdaFNMlrh/yfdUZJHpBp4ma/2+6IicQ+BE+afhiPOBKCG
-         WVdzcmbRco0CA==
-Received: by mail-wr1-f70.google.com with SMTP id v15-20020adff68f000000b0015df51efa18so7793301wrp.16
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 04:45:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:references:from:cc:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Rktmb+c/jmGGJpbEWYmUQWQyyChLN+sZ5YGx4agFeyU=;
-        b=R7rNEy0oW8vVRYauJsJTCzLeR0Dy9aWbffqmBi7MW/aNAtSLoEj087cAumfWRD0vO3
-         oX/2jFppSp41cnTbFOVgbhGoEuLdyDRMxwcqIseCY3WN/xOjGQb9e8IRoB9Gfk65J4z3
-         PvO2wVWO+eT5DBYN5yKG0HW+vNpgIBHkvdXs6kVZPbzEP7eZABtuXVcMZmLNHs9TvtqS
-         pnuDcmEtfKMcWSTq+hNSrplekYUGFi+5znFOpRviG3nNCaKanT2js9zzgJ4I+GmKGe7I
-         ZFCKlQEMU6e4sxYtbubwKI74QIM62hCoWQR2H0TuhBiIRrNAjzyN/DmrVIjfbQ4oPFV8
-         LeCg==
-X-Gm-Message-State: AOAM533Fxmi5XOzfcU80hnAMnnR+frxCynNx7IKwm/zOfCHqIZBXuWEN
-        agdSA+hqC64f6udWxKaQ8jfCskuaI6n6fADTo4Ag0Im4Zy6fIPQDWveyXkzlxwRdPQHT6PKSaNF
-        niHTiaGXW51qawbj1JZCOXSUoBaBR2s9E2Oqj
-X-Received: by 2002:a7b:cd0d:: with SMTP id f13mr1573618wmj.183.1632483931094;
-        Fri, 24 Sep 2021 04:45:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkYUFV3B7g5xCWZDPrK8dWvrpcRvuqDvM2ibYLLbikrHkDphlAXQgkW94Kg0w3tSgaQ5hzLQ==
-X-Received: by 2002:a7b:cd0d:: with SMTP id f13mr1573604wmj.183.1632483930884;
-        Fri, 24 Sep 2021 04:45:30 -0700 (PDT)
-Received: from [192.168.0.134] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id h15sm7741993wrc.19.2021.09.24.04.45.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Sep 2021 04:45:30 -0700 (PDT)
-To:     Henrik Grimler <henrik@grimler.se>, sre@kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, wolfgit@wiedmeyer.de
-References: <20210919200735.142862-1-henrik@grimler.se>
- <20210919200735.142862-2-henrik@grimler.se>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH 1/1] power: supply: max17042_battery: use VFSOC for
- capacity when no rsns
-Message-ID: <17ba5aaa-c456-2bb9-1680-ff0a302b412f@canonical.com>
-Date:   Fri, 24 Sep 2021 13:45:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1343726AbhIXLwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 07:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343721AbhIXLwU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 07:52:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3551AC061756
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 04:50:47 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mTjiu-0003ym-DY; Fri, 24 Sep 2021 13:50:36 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mTjis-0007je-3j; Fri, 24 Sep 2021 13:50:34 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: [PATCH v1 1/1] thermal: imx: implement runtime PM support
+Date:   Fri, 24 Sep 2021 13:50:32 +0200
+Message-Id: <20210924115032.29684-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210919200735.142862-2-henrik@grimler.se>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/09/2021 22:07, Henrik Grimler wrote:
-> On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
-> current sense resistor (rsns), the RepSOC register does not provide an
-> accurate state of charge value. The reported value is wrong, and does
-> not change over time. VFSOC however, which uses the voltage fuel gauge
-> to determine the state of charge, always shows an accurate value.
-> 
-> At least one max170xx driver, found in Asus' Z00D kernel [1], chooses
-> how to get the capacity based on if current sense is available or not.
-> Lets change the mainline driver to match the Asus Z00D driver's
-> behaviour and thereby fix so that correct state of charge values are
-> obtained on Galaxy S3.
-> 
-> [1] https://github.com/LineageOS/android_kernel_asus_Z00D/blob/c7ab0e3ec5b5/drivers/power/max17042_battery.c#L1103-L1105
-> 
-> Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-> Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> ---
->  drivers/power/supply/max17042_battery.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index 622bdae6182c..7233670978d0 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -317,7 +317,10 @@ static int max17042_get_property(struct power_supply *psy,
->  		val->intval = data * 625 / 8;
->  		break;
->  	case POWER_SUPPLY_PROP_CAPACITY:
-> -		ret = regmap_read(map, MAX17042_RepSOC, &data);
-> +		if (chip->pdata->enable_current_sense)
-> +			ret = regmap_read(map, MAX17042_RepSOC, &data);
-> +		else
-> +			ret = regmap_read(map, MAX17042_VFSOC, &data);
+Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's local
+data to decide whether to run a measurement") this driver stared using
+irq_enabled flag to make decision to power on/off the thermal core. This
+triggered a regression, where after reaching critical temperature, alarm
+IRQ handler set irq_enabled to false,  disabled thermal core and was not
+able read temperature and disable cooling sequence.
 
-Thanks for the patch. I found also my comments to Wolfgang's patch in
-2016, which you resolve here but I have more. :)
+In case the cooling device is "CPU/GPU freq", the system will run with
+reduce performance until next reboot.
 
-I think my previous message about current sense are not correct. What is
-important is whether ModelGauge is being used/configured. For example
-none of DT platforms support it but ACPI might.
+To solve this issue, we need to move all parts implementing hand made
+runtime power management and let it handle actual runtime PM framework.
 
-There is incoming patch around it:
-https://lore.kernel.org/lkml/5702731.UytLkSCjyO@pliszka/
+Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/thermal/imx_thermal.c | 145 +++++++++++++++++++++-------------
+ 1 file changed, 91 insertions(+), 54 deletions(-)
 
-If you switch to VSSoc, I think you need to modify the SOC Alert Config
-in MiscCFG register (bits 0:1 to 0x1). Otherwise the alerts will be
-generated on different value.
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 2c7473d86a59..1db7ce6221b1 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -15,6 +15,7 @@
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+ #include <linux/nvmem-consumer.h>
++#include <linux/pm_runtime.h>
+ 
+ #define REG_SET		0x4
+ #define REG_CLR		0x8
+@@ -194,6 +195,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
+ };
+ 
+ struct imx_thermal_data {
++	struct device *dev;
+ 	struct cpufreq_policy *policy;
+ 	struct thermal_zone_device *tz;
+ 	struct thermal_cooling_device *cdev;
+@@ -252,44 +254,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	const struct thermal_soc_data *soc_data = data->socdata;
+ 	struct regmap *map = data->tempmon;
+ 	unsigned int n_meas;
+-	bool wait, run_measurement;
+ 	u32 val;
++	int ret;
+ 
+-	run_measurement = !data->irq_enabled;
+-	if (!run_measurement) {
+-		/* Check if a measurement is currently in progress */
+-		regmap_read(map, soc_data->temp_data, &val);
+-		wait = !(val & soc_data->temp_valid_mask);
+-	} else {
+-		/*
+-		 * Every time we measure the temperature, we will power on the
+-		 * temperature sensor, enable measurements, take a reading,
+-		 * disable measurements, power off the temperature sensor.
+-		 */
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			    soc_data->power_down_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			    soc_data->measure_temp_mask);
+-
+-		wait = true;
+-	}
+-
+-	/*
+-	 * According to the temp sensor designers, it may require up to ~17us
+-	 * to complete a measurement.
+-	 */
+-	if (wait)
+-		usleep_range(20, 50);
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	regmap_read(map, soc_data->temp_data, &val);
+ 
+-	if (run_measurement) {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->measure_temp_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->power_down_mask);
+-	}
+-
+ 	if ((val & soc_data->temp_valid_mask) == 0) {
+ 		dev_dbg(&tz->device, "temp measurement never finished\n");
+ 		return -EAGAIN;
+@@ -328,6 +301,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 		enable_irq(data->irq);
+ 	}
+ 
++	pm_runtime_put(data->dev);
++
+ 	return 0;
+ }
+ 
+@@ -335,24 +310,16 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 			   enum thermal_device_mode mode)
+ {
+ 	struct imx_thermal_data *data = tz->devdata;
+-	struct regmap *map = data->tempmon;
+-	const struct thermal_soc_data *soc_data = data->socdata;
+ 
+ 	if (mode == THERMAL_DEVICE_ENABLED) {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->power_down_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->measure_temp_mask);
++		pm_runtime_get(data->dev);
+ 
+ 		if (!data->irq_enabled) {
+ 			data->irq_enabled = true;
+ 			enable_irq(data->irq);
+ 		}
+ 	} else {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->measure_temp_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->power_down_mask);
++		pm_runtime_put(data->dev);
+ 
+ 		if (data->irq_enabled) {
+ 			disable_irq(data->irq);
+@@ -393,6 +360,11 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 			     int temp)
+ {
+ 	struct imx_thermal_data *data = tz->devdata;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* do not allow changing critical threshold */
+ 	if (trip == IMX_TRIP_CRITICAL)
+@@ -406,6 +378,8 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 
+ 	imx_set_alarm_temp(data, temp);
+ 
++	pm_runtime_put(data->dev);
++
+ 	return 0;
+ }
+ 
+@@ -681,6 +655,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	data->dev = &pdev->dev;
++
+ 	map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "fsl,tempmon");
+ 	if (IS_ERR(map)) {
+ 		ret = PTR_ERR(map);
+@@ -801,6 +777,14 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+ 		     data->socdata->measure_temp_mask);
+ 
++	/* the core was configured and enabled just before */
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(data->dev);
++
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		goto disable_runtime_pm;
++
+ 	data->irq_enabled = true;
+ 	ret = thermal_zone_device_enable(data->tz);
+ 	if (ret)
+@@ -814,10 +798,17 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		goto thermal_zone_unregister;
+ 	}
+ 
++	ret = pm_runtime_put(data->dev);
++	if (ret < 0)
++		goto disable_runtime_pm;
++
+ 	return 0;
+ 
+ thermal_zone_unregister:
+ 	thermal_zone_device_unregister(data->tz);
++disable_runtime_pm:
++	pm_runtime_put_noidle(data->dev);
++	pm_runtime_disable(data->dev);
+ clk_disable:
+ 	clk_disable_unprepare(data->thermal_clk);
+ legacy_cleanup:
+@@ -829,13 +820,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ static int imx_thermal_remove(struct platform_device *pdev)
+ {
+ 	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+-	struct regmap *map = data->tempmon;
+ 
+-	/* Disable measurements */
+-	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+-		     data->socdata->power_down_mask);
+-	if (!IS_ERR(data->thermal_clk))
+-		clk_disable_unprepare(data->thermal_clk);
++	pm_runtime_put_noidle(data->dev);
++	pm_runtime_disable(data->dev);
+ 
+ 	thermal_zone_device_unregister(data->tz);
+ 	imx_thermal_unregister_legacy_cooling(data);
+@@ -858,29 +845,79 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
+ 	ret = thermal_zone_device_disable(data->tz);
+ 	if (ret)
+ 		return ret;
++
++	return pm_runtime_force_suspend(data->dev);
++}
++
++static int __maybe_unused imx_thermal_resume(struct device *dev)
++{
++	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_resume(data->dev);
++	if (ret)
++		return ret;
++	/* Enabled thermal sensor after resume */
++	return thermal_zone_device_enable(data->tz);
++}
++
++static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
++{
++	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	const struct thermal_soc_data *socdata = data->socdata;
++	struct regmap *map = data->tempmon;
++	int ret;
++
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
++			   socdata->measure_temp_mask);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
++			   socdata->power_down_mask);
++	if (ret)
++		return ret;
++
+ 	clk_disable_unprepare(data->thermal_clk);
+ 
+ 	return 0;
+ }
+ 
+-static int __maybe_unused imx_thermal_resume(struct device *dev)
++static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	const struct thermal_soc_data *socdata = data->socdata;
++	struct regmap *map = data->tempmon;
+ 	int ret;
+ 
+ 	ret = clk_prepare_enable(data->thermal_clk);
+ 	if (ret)
+ 		return ret;
+-	/* Enabled thermal sensor after resume */
+-	ret = thermal_zone_device_enable(data->tz);
++
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
++			   socdata->power_down_mask);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
++			   socdata->measure_temp_mask);
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * According to the temp sensor designers, it may require up to ~17us
++	 * to complete a measurement.
++	 */
++	usleep_range(20, 50);
++
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+-			 imx_thermal_suspend, imx_thermal_resume);
++static const struct dev_pm_ops imx_thermal_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
++	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
++			   imx_thermal_runtime_resume, NULL)
++};
+ 
+ static struct platform_driver imx_thermal = {
+ 	.driver = {
+-- 
+2.30.2
 
-Different topic:
-When touching Exynos-based boards (like Galaxy S3), please Cc me as
-well, even if I don't pop up in the maintainers.
-
-For max17042 we need to Cc broader group of users, for example using it
-in ACPI platforms. The best is to pick the contributors.
-
-Best regards,
-Krzysztof
