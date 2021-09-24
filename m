@@ -2,130 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85560416B75
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 08:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BC5416D40
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 09:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244165AbhIXGON (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 02:14:13 -0400
-Received: from mail-bn7nam10on2058.outbound.protection.outlook.com ([40.107.92.58]:48608
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244141AbhIXGON (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Sep 2021 02:14:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UWdaIjfS6kKDflztMXUVoYPsaJHV7srmudzoToPVIMjN0i6s5z4EKun/SHacP22UTBTi5oYrezs3l5MF1m9uYaIfBluliEoFefNa3iMZ7VUaAc6wrkIJ1nnFH/Qg8slLM346WwjWBTFqKQxjchMFkoAns+Vmh6SdaC/tEQ2UWPLWTqW/tCywC5jp7GVVdo4KgAHSKyMjmHQrqJa1fHGsqAzISXAg2nSm1dMZ3Hc0qdZtWaYBuYGx3KDOZ/vM19kY0fdokUtB+f/CpNd410GBDe9pdrM+Y2TkxEz1Ura+8/dSl3t4KOx1BPHZySQ8gyKzAwzqJtgdalVivkFspCaxbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=mFaUys2uaSSWqROFJpMpEqvhwicq6BqH6rOZAUipf4s=;
- b=iGB9wuQxlxaBG8X2QvZNwm07e2jnjsEY01QhpFFtcDalp8eWWbQI47Ag7J8GN2rgW1Ka24S5+Ytymb6uJ6m7e5l16gB7tC5oWVHejRuSAmAGUTV0ggRFO+KbnGIxYpmIbjpM4cv/HbuVn2r3Oft7WPvAyulCNP1YGFYf9Wd66o7CzE1yemLOuS+NacJaWsOh27zqflcDJSl9OWRcqU/piyd+f9avBW5g1asmrixD0lU+Mo86bZTPJ2PmfD6Ug0dwtjWD9GVYX2YVEtq3xAbiDYd0UuNBqjWNZKuoW7KRTPQnSzs6pIR0MxJkjscAFwqRnb+vMECEihHHxXgAoN/O6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mFaUys2uaSSWqROFJpMpEqvhwicq6BqH6rOZAUipf4s=;
- b=NxfyfI/FkjLA9z1pA5XkrFLMoiez6AWGvoUXbqGoT5SgWZUkYSjv61IIwyjAmQ2L+So4JckCm7h7Ha0eI4FiWvoIdUr08Nhdsd1ecBJIRCzGa/B1s3IycEcIv12wGRssa7Cb/ma0dJia0qC6a5+t3zH1KUOxPp5BbyKxqye75Gg=
-Received: from BN0PR04CA0120.namprd04.prod.outlook.com (2603:10b6:408:ec::35)
- by BY5PR12MB5527.namprd12.prod.outlook.com (2603:10b6:a03:1d5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13; Fri, 24 Sep
- 2021 06:12:38 +0000
-Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ec:cafe::7a) by BN0PR04CA0120.outlook.office365.com
- (2603:10b6:408:ec::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend
- Transport; Fri, 24 Sep 2021 06:12:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4544.13 via Frontend Transport; Fri, 24 Sep 2021 06:12:37 +0000
-Received: from ubuntu20.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Fri, 24 Sep
- 2021 01:12:35 -0500
-From:   Deepak Sharma <deepak.sharma@amd.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Deepak Sharma <deepak.sharma@amd.com>
-Subject: [RESEND PATCH] x86: ACPI: cstate: Optimize C3 entry on AMD CPUs
-Date:   Thu, 23 Sep 2021 23:12:05 -0700
-Message-ID: <20210924061205.5523-1-deepak.sharma@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S244471AbhIXIA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 04:00:56 -0400
+Received: from mga07.intel.com ([134.134.136.100]:24373 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237965AbhIXIAz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Sep 2021 04:00:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10116"; a="287693777"
+X-IronPort-AV: E=Sophos;i="5.85,319,1624345200"; 
+   d="scan'208";a="287693777"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2021 00:59:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,319,1624345200"; 
+   d="scan'208";a="614332697"
+Received: from powerlab.fi.intel.com (HELO powerlab..) ([10.237.71.25])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Sep 2021 00:59:21 -0700
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
+Subject: [PATCH] intel_idle: remove a couple of useless variables
+Date:   Fri, 24 Sep 2021 10:59:20 +0300
+Message-Id: <20210924075920.2087149-1-dedekind1@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 91210ec2-e0d8-4d4a-813f-08d97f224e7d
-X-MS-TrafficTypeDiagnostic: BY5PR12MB5527:
-X-Microsoft-Antispam-PRVS: <BY5PR12MB5527860A08B3E988394721BCE9A49@BY5PR12MB5527.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /6U/dj4grFEdGlVPCNHgx5qqeQ4iW1HUm3eXtzQNsTJOxB1rllAB0w3Bhmk2DQr0mowTOdz7f2wDMUTz69XkfKKHRRHWS7ezjuyCj2ReNVXs3mfBQ1Hlj2uB2o21MI15qrsdcjYcSDv0eGvIVXVxidAiltnNswbjBFRISOUKkEZE9qhWbEgzIfxF6tlNk0sDPy4ZSbq1pkQ29iEKL/G3HrEOGLF+qbFMvwSnZv4y2yHClYrbueydBZVM9KVuorBzUQutjhtKsVklI5WrRMGhMLw3DflvcfXS+1M2+Fl3gqvFwfpRZ8Hr9bFAjMGhjePtfW68PcGAoCC5swcwI48OE/7zD8p6WX8pnhLnb4cw/uatLz/EM3I0TH4quCY0qUB/PuTChCADCjutthcZvuBU0tJQvd/eujjOhBrmeOfk6ysUdTEdsMEym2orcluXqJZpOFzmATE25JmK7CM7qwx0Juq/v5nqTgkdLM+i/24oEQQBY5nI65r45Cm2MfhZi+4nalcOf0l/huDnX/WmWU/lhX6ldYlbrLhSAm8tN7mXaAtBzi0uHFgGGbvQ107pR1gkkw/0upykotPIOnJ3sC72s4vzAXeXtNrB9Fd7YjU9zHW9kxxjwuz9FMYdD+Tez6sozvrXagXGL3Pl1q40hIiBPKIIxTWIpiLoJVQbONpTiqCzCrJDclhgRX39Q0+l0H+nomCBjNreNekBhZZBNQkqABXW0oNjWucSzGVkNQI3YFg=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(44832011)(36860700001)(70206006)(70586007)(8936002)(54906003)(7696005)(36756003)(316002)(4326008)(26005)(82310400003)(6666004)(2906002)(110136005)(47076005)(336012)(16526019)(356005)(508600001)(5660300002)(2616005)(186003)(8676002)(86362001)(426003)(1076003)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 06:12:37.1109
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91210ec2-e0d8-4d4a-813f-08d97f224e7d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5527
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All Zen or newer CPU which support C3 shares cache. Its not necessary to
-flush the caches in software before entering C3. This will cause drop in
-performance for the cores which share some caches. ARB_DIS is not used
-with current AMD C state implementation. So set related flags correctly.
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
+This patch is a cleanup and has no functional impact.
+
+Remove the 'auto_demotion_disable_flags' and 'disable_promotion_to_c1e' global
+variables because we already have them in the global 'icpu' structure. Other
+'icpu' members like 'use_acpi' are not duplicated, and it's better to be
+consistent on this. Consistency improves readability.
+
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 ---
- arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/idle/intel_idle.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-index 7de599eba7f0..7945eae5b315 100644
---- a/arch/x86/kernel/acpi/cstate.c
-+++ b/arch/x86/kernel/acpi/cstate.c
-@@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
- 		 */
- 		flags->bm_control = 0;
- 	}
-+	if (c->x86_vendor == X86_VENDOR_AMD && c->x86 >= 0x17) {
-+		/*
-+		 * For all AMD Zen or newer CPUs that support C3, caches
-+		 * should not be flushed by software while entering C3
-+		 * type state. Set bm->check to 1 so that kernel doesn't
-+		 * need to execute cache flush operation.
-+		 */
-+		flags->bm_check = 1;
-+		/*
-+		 * In current AMD C state implementation ARB_DIS is no longer
-+		 * used. So set bm_control to zero to indicate ARB_DIS is not
-+		 * required while entering C3 type state.
-+		 */
-+		flags->bm_control = 0;
-+	}
- }
- EXPORT_SYMBOL(acpi_processor_power_init_bm_check);
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 70c2237a7261..eb28c3059351 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -67,9 +67,6 @@ static unsigned int disabled_states_mask;
  
+ static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
+ 
+-static unsigned long auto_demotion_disable_flags;
+-static bool disable_promotion_to_c1e;
+-
+ struct idle_cpu {
+ 	struct cpuidle_state *state_table;
+ 
+@@ -1644,7 +1641,7 @@ static void auto_demotion_disable(void)
+ 	unsigned long long msr_bits;
+ 
+ 	rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
+-	msr_bits &= ~auto_demotion_disable_flags;
++	msr_bits &= ~icpu->auto_demotion_disable_flags;
+ 	wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
+ }
+ 
+@@ -1676,10 +1673,10 @@ static int intel_idle_cpu_init(unsigned int cpu)
+ 		return -EIO;
+ 	}
+ 
+-	if (auto_demotion_disable_flags)
++	if (icpu->auto_demotion_disable_flags)
+ 		auto_demotion_disable();
+ 
+-	if (disable_promotion_to_c1e)
++	if (icpu->disable_promotion_to_c1e)
+ 		c1e_promotion_disable();
+ 
+ 	return 0;
+@@ -1757,8 +1754,6 @@ static int __init intel_idle_init(void)
+ 	icpu = (const struct idle_cpu *)id->driver_data;
+ 	if (icpu) {
+ 		cpuidle_state_table = icpu->state_table;
+-		auto_demotion_disable_flags = icpu->auto_demotion_disable_flags;
+-		disable_promotion_to_c1e = icpu->disable_promotion_to_c1e;
+ 		if (icpu->use_acpi || force_use_acpi)
+ 			intel_idle_acpi_cst_extract();
+ 	} else if (!intel_idle_acpi_cst_extract()) {
 -- 
-2.25.1
+2.31.1
 
