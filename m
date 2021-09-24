@@ -2,132 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07229417ADA
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 20:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CC6417DEA
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Sep 2021 00:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348057AbhIXSVm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 14:21:42 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:40614 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345403AbhIXSVl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 14:21:41 -0400
-Received: by mail-ot1-f45.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so14276934otq.7
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 11:20:08 -0700 (PDT)
+        id S1345479AbhIXWp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 18:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345636AbhIXWp4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 18:45:56 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDC2C0614ED
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 15:44:23 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id r26so16589000oij.2
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 15:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aT6PGCkfFncvQ02pWWpD+cjAoPpE7N0nwI03xARf6nc=;
+        b=PCmlVYezCc+6GF3Gbr0DDg+qJ5lEqnrovDEBcz52iwgdJ4j5VSzh6amczofyFKSVI/
+         NrRCKDI1ZYOjO8Dl6hMlDkZdicT7c3XB5RVQ2LYPz5WB8OTSMg5m0Nq94H6yLNQ78FFq
+         h3OQfQqprhSCoxJUj8p8///J+n4e47B95WsF5ToKLIEWhWSxQPADViwn5RSkGe0uEJRC
+         4KuWWmvQcj72DzCsbGGBPeQI7z3peJ+3nAfMfUWI8LHfr5G8IalTM0e7HJ1CTPRs4XZG
+         p1bTOZ+/McfFVZA10tBdZcMEE5fkLaXQg+Ff0km20CxK7BVCIxHu2xREEaHl3t5nFtFk
+         lV0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gR1+CKDjTRAf2t8Esdx9MPx7eSPdo6EXOjVrCVzRSSQ=;
-        b=ePPf4EXCiMHHnphlW+uKH8EuUTBFwfgqiZjvFep8dJyJyvTxMzp9uQWnv4kbVwGyS4
-         gImhDtcnk9cOcmvG23hWsd4SeC5TrN/KyRu7oi+wsAFl02TtXpe7Ww3vSo8EOSNAlWtg
-         ZYnkus7gvx/U9XFYW5aQbP9a5yDuecnVG+YCmYIlSgOWveygVl8GxVXOO70hCFBA7zYP
-         LAO/JeyIUIoLRervgqDX5QZIDOnBYi04PoSYu42FCOG7W8qSqOIVt+ItZ48g2KodOmSt
-         zcGrh5cgRNb+2K09lNKhPWtJjTbQnGx02JEQPzYPmcuTNhsrchflBqUtSzMd1d4zoYV+
-         nLUQ==
-X-Gm-Message-State: AOAM530qSJIeNWuyuzIFEU350spvwt9K+VxLIi1GrU8d01ZGLZKKIiE5
-        ovAIZp0OeKz3MEeHy2j71aCqhsLkcquYdlnJDpA=
-X-Google-Smtp-Source: ABdhPJwyC/qW2iuR/aziMh/J41hcq/n5eBzw3wJrI1YjY0vWh25LoZIuDJgEJm75HYBwZ2o8szhv0cVaD/npgBhiuZA=
-X-Received: by 2002:a05:6830:165a:: with SMTP id h26mr5538121otr.301.1632507608156;
- Fri, 24 Sep 2021 11:20:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=aT6PGCkfFncvQ02pWWpD+cjAoPpE7N0nwI03xARf6nc=;
+        b=TJwmja4szO7zjNDPzTCEES/Y3iNds3yKqVxBTulW8Cp720dUwo4V50KwuG8gfQaomc
+         FNJ91Knt6ay2egKwOY3fmt3DexVEu6otslXiBAzRUKe4/eZaRP6e7KlUL5bHVUhqJDJ/
+         s9g0Kpf6OA5A+6tXejYUMbGFsuowAFQlXm51Q6mgOWwJRdfjaT22lf74rb9JKy/EZk/H
+         gbW66TiMXqgV1jeX7Nz5Wt5hA/tc5Lhrh/0Hca88Wv2HrpB/evct9DJ773+Dfb/fuMr/
+         q0EehCNPEaziJvlalufMGaibS56x/+8tOAVZPuVpCMt8XZyV9n0aW4kWVffyG7z6++NH
+         NAPA==
+X-Gm-Message-State: AOAM531aLAMcX86uugQlujXN78jvMQvJsZykWrEwsA4NelaQMgD4ZSQX
+        AP01ojrpkAXGpmFX2SYgW5F+rw==
+X-Google-Smtp-Source: ABdhPJzR8TfKHOJ9wfri+64aYAbQV0HcxwGNIVS0ipSncoBUjvD1yYrHw9IuohW36CdYMMqjt/83Cw==
+X-Received: by 2002:aca:e002:: with SMTP id x2mr3454614oig.19.1632523462457;
+        Fri, 24 Sep 2021 15:44:22 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a23sm2374956otp.44.2021.09.24.15.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 15:44:22 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>, Georgi Djakov <djakov@kernel.org>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 3/3] arm64: dts: qcom: sdm630: Add missing a2noc qos clocks
+Date:   Fri, 24 Sep 2021 17:44:20 -0500
+Message-Id: <163252328671.1213592.16008455401574085015.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210824043435.23190-4-shawn.guo@linaro.org>
+References: <20210824043435.23190-1-shawn.guo@linaro.org> <20210824043435.23190-4-shawn.guo@linaro.org>
 MIME-Version: 1.0
-References: <20210924075920.2087149-1-dedekind1@gmail.com> <20210924104504.2430239-1-dedekind1@gmail.com>
-In-Reply-To: <20210924104504.2430239-1-dedekind1@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 24 Sep 2021 20:19:57 +0200
-Message-ID: <CAJZ5v0gn-qAgVLoQXKPttBU5Y1djsT5o5kORJmzEjfbbCV=-YA@mail.gmail.com>
-Subject: Re: [PATCH v2] intel_idle: remove a couple of useless variables
-To:     Artem Bityutskiy <dedekind1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 12:45 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
->
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
->
-> This patch is a cleanup and has no functional impact.
+On Tue, 24 Aug 2021 12:34:35 +0800, Shawn Guo wrote:
+> It adds the missing a2noc clocks required for QoS registers programming
+> per downstream kernel[1].
+> 
+> [1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
+> 
+> 
 
-Are you sure?
+Applied, thanks!
 
-> Remove the 'auto_demotion_disable_flags' and 'disable_promotion_to_c1e' global
-> variables because we already have them in the global 'icpu' structure.
+[3/3] arm64: dts: qcom: sdm630: Add missing a2noc qos clocks
+      commit: 1878f4b7ec9ed013da8a7efb63fed1fbae0215ae
 
-Which is __initdata and these variables aren't.
-
-> Other 'icpu' members like 'use_acpi' are not duplicated,
-
-Because it is not necessary to access them after initialization.
-
-> and it's better to be consistent on this.
-
-Well, the code is as consistent as it can be.
-
->Consistency improves readability.
-
-That's true, but it has no bearing in this particular case IMO.
-
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> ---
->
-> Changes since v1:
->  * fixed crash on a platform for which the driver does not have a table. In
->    this case 'icpu' is NULL and we need to check for NULL in
->    'intel_idle_cpu_init()'.
->
->  drivers/idle/intel_idle.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 70c2237a7261..a73183016dd4 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -67,9 +67,6 @@ static unsigned int disabled_states_mask;
->
->  static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
->
-> -static unsigned long auto_demotion_disable_flags;
-> -static bool disable_promotion_to_c1e;
-> -
->  struct idle_cpu {
->         struct cpuidle_state *state_table;
->
-> @@ -1644,7 +1641,7 @@ static void auto_demotion_disable(void)
->         unsigned long long msr_bits;
->
->         rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
-> -       msr_bits &= ~auto_demotion_disable_flags;
-> +       msr_bits &= ~icpu->auto_demotion_disable_flags;
->         wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
->  }
->
-> @@ -1676,10 +1673,13 @@ static int intel_idle_cpu_init(unsigned int cpu)
->                 return -EIO;
->         }
->
-> -       if (auto_demotion_disable_flags)
-> +       if (!icpu)
-> +               return 0;
-> +
-> +       if (icpu->auto_demotion_disable_flags)
->                 auto_demotion_disable();
->
-> -       if (disable_promotion_to_c1e)
-> +       if (icpu->disable_promotion_to_c1e)
->                 c1e_promotion_disable();
->
->         return 0;
-> @@ -1757,8 +1757,6 @@ static int __init intel_idle_init(void)
->         icpu = (const struct idle_cpu *)id->driver_data;
->         if (icpu) {
->                 cpuidle_state_table = icpu->state_table;
-> -               auto_demotion_disable_flags = icpu->auto_demotion_disable_flags;
-> -               disable_promotion_to_c1e = icpu->disable_promotion_to_c1e;
->                 if (icpu->use_acpi || force_use_acpi)
->                         intel_idle_acpi_cst_extract();
->         } else if (!intel_idle_acpi_cst_extract()) {
-> --
-> 2.31.1
->
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
