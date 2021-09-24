@@ -2,137 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CE241790E
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B70417916
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 18:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344009AbhIXQrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 12:47:37 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:44711 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344010AbhIXQrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 12:47:36 -0400
-Received: by mail-oi1-f178.google.com with SMTP id e24so5323244oig.11
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 09:46:03 -0700 (PDT)
+        id S244986AbhIXQue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 12:50:34 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:34532 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238886AbhIXQud (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 12:50:33 -0400
+Received: by mail-ot1-f41.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so8247882otb.1;
+        Fri, 24 Sep 2021 09:48:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QL1Nkjj0tNEOxNaK4NrjVesmuxMkfYvFU1I8QUE+fDY=;
-        b=VffHxPZuc4fcm1TC94R9s3DjLG3nbPWSmnX3LfCyNjzI1x3/YrFsvfaO151BxwhHfe
-         rZJjT8zv26+8UnoNIU63RGKjKx9lB2c7/I0woMjxJ22IkY6WKIpKE1c2wrFhoJx/yWI8
-         3QA5XLLO1Gb8CHwBf8tnELNjUQjN1ezma4l4fSTg3aa5BXKj2jml+Epd85+6S4n0nCC+
-         fOWRbIFyc5I1p6muXBJrsxe5mlkXN9uf/1EwifpcBKUvxQ91JqrvSynCneXaBB1dVtkA
-         RfxotpP62ZJ8nnGQpC7rBk4+HsLNWrrcNnpIhRm9L826xI4KGIoFe8VA9WzQt6BiLywu
-         fnNQ==
-X-Gm-Message-State: AOAM532dTBB3rnG7qyK9Z5YINleeFU/Ozs9YtNaw22htavZyec38br21
-        Z+W/cqAojPyUM9lrjJONLZCLN2yCFquaTVJifVQoMIrE
-X-Google-Smtp-Source: ABdhPJzNOKfuq5cFl4j1IqGcG5J8E6i2AWe4fVmBlq39QqtCkHIGLN4LssoL4Z+kORoioplYElnxnoWCQHVRBSwM4ac=
-X-Received: by 2002:a05:6808:1816:: with SMTP id bh22mr2206888oib.69.1632501963273;
- Fri, 24 Sep 2021 09:46:03 -0700 (PDT)
+        bh=5K4cABxcVWxR6DLYWr2e4RPFZO80BE4h3PW/K8t1Eik=;
+        b=1YOrA2FEtYT/iWo3VifghQfHCnTk2ZXGDxrC4rfmY3GVreSVYBNeMz5E4qNBI0UzFe
+         bnMucILKrrBcim6zHwcvCDfbHe+3TeHewVQvR9Eyr5RbFEXUjsBkMNge39+z0I9aqZ9/
+         MZlSwTD1Lb1dtCOlZmr25g69rIaSvK5Rob914cLfsHK6r8otPrrljyzTZx7hiR1mzZ3c
+         lqSdbkgPWGSvrRxg3NP22ieFjUU0L+aAAEx/gxPGIyWET2lWirGkXqwIT0vCHaTk1b0G
+         rF3gUShk5QrQOVQ2lL4mk5EpnRwEpWHmHbYIiid+zOjtWTjDe38N8igDEE1IQEPFa35X
+         Vjlw==
+X-Gm-Message-State: AOAM533ZQ8mgTkyIslLM2kQjmxVoXBSMDHqK818yp6ipfXNfZSo5l0nf
+        BQjIP3epuaSA4B/CBI7y4ZAbjrvGSFCMQdGqotY=
+X-Google-Smtp-Source: ABdhPJxrwy3alQD5Z51/akbAkmwWUKeFBOnntyzt8Jj20eqcLlVwTAeCwqUve5VwvLkJzWnzkj780IEQAogdhKCb9b8=
+X-Received: by 2002:a05:6830:165a:: with SMTP id h26mr5158915otr.301.1632502139499;
+ Fri, 24 Sep 2021 09:48:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917072022.3234272-1-dedekind1@gmail.com> <20210917072022.3234272-2-dedekind1@gmail.com>
-In-Reply-To: <20210917072022.3234272-2-dedekind1@gmail.com>
+References: <20210924061205.5523-1-deepak.sharma@amd.com>
+In-Reply-To: <20210924061205.5523-1-deepak.sharma@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 24 Sep 2021 18:45:52 +0200
-Message-ID: <CAJZ5v0gns1EunzRfgDAHDS22aeAXnG_3aiFX3Px=crtER00Gtg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] intel_idle: enable interrupts before C1 on Xeons
-To:     Artem Bityutskiy <dedekind1@gmail.com>
+Date:   Fri, 24 Sep 2021 18:48:48 +0200
+Message-ID: <CAJZ5v0iS+TnkoqCxLa92Na=By53PXY-qW=k4utr_84KYaw+sVQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH] x86: ACPI: cstate: Optimize C3 entry on AMD CPUs
+To:     Deepak Sharma <deepak.sharma@amd.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 9:20 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
+On Fri, Sep 24, 2021 at 8:12 AM Deepak Sharma <deepak.sharma@amd.com> wrote:
 >
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> All Zen or newer CPU which support C3 shares cache. Its not necessary to
+> flush the caches in software before entering C3. This will cause drop in
+> performance for the cores which share some caches. ARB_DIS is not used
+> with current AMD C state implementation. So set related flags correctly.
 >
-> Enable local interrupts before requesting C1 on the last two generations of
-> Intel Xeon platforms: Sky Lake, Cascade Lake, Cooper Lake, Ice Lake.
-> This decreases average C1 interrupt latency by about 5-10%, as measured with
-> the 'wult' tool.
->
-> The '->enter()' function of the driver enters C-states with local interrupts
-> disabled by executing the 'monitor' and 'mwait' pair of instructions. If an
-> interrupt happens, the CPU exits the C-state and continues executing
-> instructions after 'mwait'. It does not jump to the interrupt handler, because
-> local interrupts are disabled. The cpuidle subsystem enables interrupts a bit
-> later, after doing some housekeeping.
->
-> With this patch, we enable local interrupts before requesting C1. In this case,
-> if the CPU wakes up because of an interrupt, it will jump to the interrupt
-> handler right away. The cpuidle housekeeping will be done after the pending
-> interrupt(s) are handled.
->
-> Enabling interrupts before entering a C-state has measurable impact for faster
-> C-states, like C1. Deeper, but slower C-states like C6 do not really benefit
-> from this sort of change, because their latency is a lot higher comparing to
-> the delay added by cpuidle housekeeping.
->
-> This change was also tested with cyclictest and dbench. In case of Ice Lake,
-> the average cyclictest latency decreased by 5.1%, and the average 'dbench'
-> throughput increased by about 0.8%. Both tests were run for 4 hours with only
-> C1 enabled (all other idle states, including 'POLL', were disabled). CPU
-> frequency was pinned to HFM, and uncore frequency was pinned to the maximum
-> value. The other platforms had similar single-digit percentage improvements.
->
-> It is worth noting, that this patch affects 'cpuidle' statistics a tiny bit.
-> Before this patch, C1 residency did not include the interrupt handling time, but
-> with this patch, it will include it. This is similar to what happens in case of
-> the 'POLL' state, which also runs with interrupts enabled.
->
-> Suggested-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> ---
->  drivers/idle/intel_idle.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index e6c543b5ee1d..0b66e25c0e2d 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -88,6 +88,12 @@ static struct cpuidle_state *cpuidle_state_table __initdata;
->
->  static unsigned int mwait_substates __initdata;
->
-> +/*
-> + * Enable interrupts before entering the C-state. On some platforms and for
-> + * some C-states, this may measurably decrease interrupt latency.
-> + */
-> +#define CPUIDLE_FLAG_IRQ_ENABLE                BIT(14)
-> +
->  /*
->   * Enable this state by default even if the ACPI _CST does not list it.
->   */
-> @@ -127,6 +133,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
->         unsigned long eax = flg2MWAIT(state->flags);
->         unsigned long ecx = 1; /* break on interrupt flag */
->
-> +       if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
-> +               local_irq_enable();
-> +
->         mwait_idle_with_hints(eax, ecx);
->
->         return index;
-> @@ -698,7 +707,7 @@ static struct cpuidle_state skx_cstates[] __initdata = {
->         {
->                 .name = "C1",
->                 .desc = "MWAIT 0x00",
-> -               .flags = MWAIT2flg(0x00),
-> +               .flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_IRQ_ENABLE,
->                 .exit_latency = 2,
->                 .target_residency = 2,
->                 .enter = &intel_idle,
-> @@ -727,7 +736,7 @@ static struct cpuidle_state icx_cstates[] __initdata = {
->         {
->                 .name = "C1",
->                 .desc = "MWAIT 0x00",
-> -               .flags = MWAIT2flg(0x00),
-> +               .flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_IRQ_ENABLE,
->                 .exit_latency = 1,
->                 .target_residency = 1,
->                 .enter = &intel_idle,
-> --
+> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
 
-Applied as 5.16 material, thanks!
+I'm planning to take this one unless the x86 maintainers have concerns, thanks.
+
+> ---
+>  arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7de599eba7f0..7945eae5b315 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+>                  */
+>                 flags->bm_control = 0;
+>         }
+> +       if (c->x86_vendor == X86_VENDOR_AMD && c->x86 >= 0x17) {
+> +               /*
+> +                * For all AMD Zen or newer CPUs that support C3, caches
+> +                * should not be flushed by software while entering C3
+> +                * type state. Set bm->check to 1 so that kernel doesn't
+> +                * need to execute cache flush operation.
+> +                */
+> +               flags->bm_check = 1;
+> +               /*
+> +                * In current AMD C state implementation ARB_DIS is no longer
+> +                * used. So set bm_control to zero to indicate ARB_DIS is not
+> +                * required while entering C3 type state.
+> +                */
+> +               flags->bm_control = 0;
+> +       }
+>  }
+>  EXPORT_SYMBOL(acpi_processor_power_init_bm_check);
+>
+> --
+> 2.25.1
+>
