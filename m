@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 352474174B8
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 15:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6064174CA
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 15:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343927AbhIXNKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 09:10:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29759 "EHLO
+        id S1346163AbhIXNKV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 09:10:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58224 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346752AbhIXNIC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 09:08:02 -0400
+        by vger.kernel.org with ESMTP id S1346939AbhIXNIX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 09:08:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632488788;
+        s=mimecast20190719; t=1632488809;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DzNoSJfz8UWlBA9GOEva3/uiwEVLsfbaUygslX1PjHk=;
-        b=VsGtynVolvQhBfPN7y65ARzdzkZeNPLt/e53XRqJAwiaT9Evr/LBSFDXNx8eUHbD51rhFj
-        KUelCxuISexYQAxoRpsxeruamNNmPbBxP0DA954jsNjTHKykES22k5qmHjVa5XzP77ZHbw
-        YVsOUxiARC0agxI3uSwf4OaVh4+QscE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-340-10bhD7JOO1Cwj9-J-Tg9wg-1; Fri, 24 Sep 2021 09:06:26 -0400
-X-MC-Unique: 10bhD7JOO1Cwj9-J-Tg9wg-1
-Received: by mail-ed1-f70.google.com with SMTP id n5-20020a05640206c500b003cf53f7cef2so10162625edy.12
-        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 06:06:26 -0700 (PDT)
+        bh=XrpDYCkSGtlGl8BFk/fwvdAaXH43kLtO8EUnordZx+s=;
+        b=NCd381ndzxhHruytkWuMK9JNxc36L8rAwUp+ZpuFTkqBTNqMaXncr3BBv0oQ6MvK5PHQHq
+        yW3um7qaLyKBgyp+wLmhSKuIx0YyWiGW+EEwLcX3SRRaqCut7Wot8xjMQQX5PUfKfnLnGW
+        6tvMz/b/q0vxz7Fuu4VrcvVTgUU0SIk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-161-jPSp8EfVMM6SaGGaGXKfjg-1; Fri, 24 Sep 2021 09:06:48 -0400
+X-MC-Unique: jPSp8EfVMM6SaGGaGXKfjg-1
+Received: by mail-ed1-f72.google.com with SMTP id r23-20020a50d697000000b003d824845066so10168985edi.8
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 06:06:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=DzNoSJfz8UWlBA9GOEva3/uiwEVLsfbaUygslX1PjHk=;
-        b=0J7b6nAKji8TsrY2v+qsnp5SDQbOKIlck6IKGp1GIVmxCnxlOPbiCLQGJ9JDtRBj5M
-         ZSxxYSV+YEBc18Tn69wSt2R/tN52QVh8mMEoM63nAS6wXB+31QpS64y0s45Np/NmOyVn
-         coUIN7t+CDq+x8T8q9AAFadqvLXfxFad3rBK5ep0r3nxtEKMKfOLh+XtiJS7vtS0GzuB
-         Rk/+JPJBfJ7uHxUa1jfelh29cWkN2XBG8JW5rZOY/h+K1feQRUp9+X98hEeHUdDG2jyp
-         NqX8fjaYUXTvdx2lQosMObPc7uojKKeRFBG2wBdGim0gdZqXDpQv3/VPNGk1aytjH4fg
-         SL7w==
-X-Gm-Message-State: AOAM532ekKCkzbig2AdKhyhjZX8guUR66PMHJGkwyKBLDF8Znk3ZLPM5
-        uou2lhsgRJITArJlHuewHmIDe+Rf1iHDe2QV2Y8TQUoKw9B7jW1ydsqGBzitqnGz7Eahhg/n4TR
-        dnsqUNj3k43+kuKYJWeY=
-X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr10652094ejc.188.1632488785548;
-        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNhVr57TKy2OLV2CObu4gkIwPOKhycrD5Ho86NxP8/1LlBpelW1ktxDmu0qDZjF+7D4sIDTw==
-X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr10652077ejc.188.1632488785367;
-        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
+        bh=XrpDYCkSGtlGl8BFk/fwvdAaXH43kLtO8EUnordZx+s=;
+        b=m7dM5PeyqUb9JwGMsiExP1jEaQxR4DSjPuhNbW1ED9yKLX+grznFU4wq2EkeJH44MT
+         pSzoIf1pyPwmyNFYMnWujgpZwurYbyg1Kf5Gxky7enFEqyAxip2ARP06MXoZY1b0sdT1
+         MpJl7NQ0DDW7tMX3fCwwU6azerSrOkUrawAdIYIRWnztIJ5+ijZ2Ai1rWJm+je58kigk
+         qDvb+K0ziOD7Tr4ACVf1SmdkrbICpqTH+h4mqnHbV0CxM9hKjXWonbbvnRRSJ8y4f7UH
+         kSjwINGiVaT3cVLRMZoPZfaPIaxxOKoqKq3nVgvneHL4Ey/7C47kxq2y7zvFc1rDOwCA
+         eeVQ==
+X-Gm-Message-State: AOAM533BJjsC97k+nkEvBCWl1d9x1fRMQgqrqrr5eV+uaO2ueejiq8v0
+        DGMG9Y5yfC/aTNOjgIPaMEFagl3Q0IJWIoVwBOWih2SGTcCtz8Ha+VSUCNL0x0L8UfsdgZWglEA
+        jRwgJWFgNMK46v7uSPng=
+X-Received: by 2002:a50:d8c5:: with SMTP id y5mr4923907edj.370.1632488807257;
+        Fri, 24 Sep 2021 06:06:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkd2eTmm74wJYnrnmrY5ynC5skg2e8nOgj8Zx3cIjik+p5qGgZwU6/b4rVum1ZIWlUiMmUsw==
+X-Received: by 2002:a50:d8c5:: with SMTP id y5mr4923888edj.370.1632488807064;
+        Fri, 24 Sep 2021 06:06:47 -0700 (PDT)
 Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id s4sm5064713eja.23.2021.09.24.06.06.24
+        by smtp.gmail.com with ESMTPSA id d10sm5965847edx.57.2021.09.24.06.06.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Sep 2021 06:06:25 -0700 (PDT)
-Subject: Re: [PATCH 1/2] MAINTAINERS: power: supply: max17042: add entry with
- reviewers
+        Fri, 24 Sep 2021 06:06:46 -0700 (PDT)
+Subject: Re: [PATCH 1/2] power: supply: max17040: extend help/description
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Iskren Chernev <iskren.chernev@gmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -60,14 +59,14 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sebastian Reichel <sre@kernel.org>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210924115619.52927-1-krzysztof.kozlowski@canonical.com>
+References: <20210924122408.101323-1-krzysztof.kozlowski@canonical.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e7983d04-5651-7962-36e0-758d547be761@redhat.com>
-Date:   Fri, 24 Sep 2021 15:06:24 +0200
+Message-ID: <b71b75c7-966c-7452-907e-44ba0a56964b@redhat.com>
+Date:   Fri, 24 Sep 2021 15:06:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210924115619.52927-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210924122408.101323-1-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,52 +76,55 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On 9/24/21 1:56 PM, Krzysztof Kozlowski wrote:
-> The Maxim max17042 fuel gauge driver supports several devices used on
-> multiple different boards - both devicetree and ACPI based.  The driver
-> is incomplete and has few known issues.  Fixing these might break other
-> platforms so mention recent contributors who can provide feedback.  This
-> way most of interested parties might help reviewing the patches.
+On 9/24/21 2:24 PM, Krzysztof Kozlowski wrote:
+> Reorganize the Kconfig driver description and mention all supported
+> models.  This helps when choosing drivers for given system.
 > 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Thanks, patch looks good to me:
+Thanks, series looks good to me:
 
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+For the series.
 
 Regards,
 
 Hans
 
-
-
 > ---
->  MAINTAINERS | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  drivers/power/supply/Kconfig | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 329d3a0a9fdb..da9d5383af04 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11429,6 +11429,16 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.yaml
->  F:	drivers/iio/proximity/mb1232.c
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index fcc7534edcb2..6e4201922f59 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -366,18 +366,20 @@ config AXP288_FUEL_GAUGE
+>  	  over/under temperature.
 >  
-> +MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
-> +R:	Hans de Goede <hdegoede@redhat.com>
-> +R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +R:	Marek Szyprowski <m.szyprowski@samsung.com>
-> +R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> +F:	drivers/power/supply/max17042_battery.c
+>  config BATTERY_MAX17040
+> -	tristate "Maxim MAX17040 Fuel Gauge"
+> +	tristate "Maxim MAX17040/17041/17043 family Fuel Gauge"
+>  	depends on I2C
+>  	select REGMAP_I2C
+>  	help
+> -	  Maxim models with ModelGauge are fuel-gauge systems for lithium-ion
+> -	  (Li+) batteries in handheld and portable equipment, including
+> -	  max17040, max17041, max17043, max17044, max17048, max17049, max17058,
+> -	  max17059. It is also included in some batteries like max77836.
+> +	  Driver supports Maxim fuel-gauge systems for lithium-ion (Li+)
+> +	  batteries used mainly in handheld and portable equipment.
+> +	  Supported devices: max17040, max17041, max17043, max17044, max17048,
+> +	  max17049, max17058, max17059, max77836.
+>  
+>  	  Driver supports reporting SOC (State of Charge, i.e capacity),
+>  	  voltage and configurable low-SOC wakeup interrupt.
+>  
+> +	  Driver can be build as a module (max17040_battery).
 > +
->  MAXIM MAX77650 PMIC MFD DRIVER
->  M:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
->  L:	linux-kernel@vger.kernel.org
+>  config BATTERY_MAX17042
+>  	tristate "Maxim MAX17042/17047/17050/8997/8966 Fuel Gauge"
+>  	depends on I2C
 > 
 
